@@ -2,283 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5C31698F1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Feb 2020 18:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789CC169B01
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2020 00:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbgBWR3A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 23 Feb 2020 12:29:00 -0500
-Received: from mga01.intel.com ([192.55.52.88]:48896 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726884AbgBWR27 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 23 Feb 2020 12:28:59 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Feb 2020 09:28:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,476,1574150400"; 
-   d="scan'208";a="229650308"
-Received: from ajbergin-mobl.ger.corp.intel.com (HELO localhost) ([10.252.23.203])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2020 09:28:52 -0800
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-sgx@vger.kernel.org
-Cc:     akpm@linux-foundation.org, dave.hansen@intel.com,
-        sean.j.christopherson@intel.com, nhorman@redhat.com,
-        npmccallum@redhat.com, haitao.huang@intel.com,
-        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
-        kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
-        luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
-        cedric.xing@intel.com, puiterwijk@redhat.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v27 20/22] selftests/x86: Add vDSO selftest for SGX
-Date:   Sun, 23 Feb 2020 19:25:57 +0200
-Message-Id: <20200223172559.6912-21-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200223172559.6912-1-jarkko.sakkinen@linux.intel.com>
-References: <20200223172559.6912-1-jarkko.sakkinen@linux.intel.com>
+        id S1727156AbgBWXzn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 23 Feb 2020 18:55:43 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:35007 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726534AbgBWXzn (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 23 Feb 2020 18:55:43 -0500
+Received: by mail-il1-f195.google.com with SMTP id g12so6268120ild.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 23 Feb 2020 15:55:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qyI3k92se2W+CzWDqJQ962MJ9vu6VkRN6rHvKfta26U=;
+        b=j/KKuLEs7pdn63IWEQa5W2BKAA73q3hJpH6zlMmP6pIEkbbEb3Oanr38OoznY4ccPW
+         xHcn6Fng43AAtmSJa5jswP0kB+rWT/fx5+ibV70MZ3Dw94RhtbVW7zmoda6TmYLTGOhs
+         OBwJSiorMzRwpygxL/n/DlwO2rS7s7Z61vandzZaoyw5sYfMFH0G3oz/M8WAmhgK63Tm
+         zLcNRqyxYz3gT1DjD+qj5oMLgbiW3HLUc+xGmWOG6nNcDG8/ShrF2opmVnI6yhgH31sP
+         2uiaEHlchKgE7C0snSpWifQPXV13Yq5H1oTRUPOYa3sFrwxu+nFJqrfAMWUnVDtPDh1H
+         rXAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qyI3k92se2W+CzWDqJQ962MJ9vu6VkRN6rHvKfta26U=;
+        b=Rw2WmbzZwZtE48nt+x6ZNNJZ5nk2+KAYIii66NnTh01Ae4fmlCtU+snM+dl07vHUCp
+         lfXlly1c43wiR4SJs5QDzuMZPUB4t2HFTlqO/OB8JNavChVSg39VGkdLbxmdPYVuL8zu
+         jrXKpWqw8ZVACaXm4z4kTGyJFhXsOWF5CG3p1mn/oKYT3RG4ORL6FiNAn6hmaYmP3vRQ
+         eHulJE15cf8x11+ryljX1ymVWZM41Mmi7EvMgQ6DUwho53p4uzrEiEK/ePNbvVJ24YUd
+         FfePyGZcQzXPFs6YyJp+oSbspIvTcPbiHtPj9N2LnAcUFkqPeWtzyN+WxEvfvQwzMfOq
+         Ru9A==
+X-Gm-Message-State: APjAAAU6zZyUAUWqGUmBZlo0PdRwxt7VXELhXIgU+d3r+q8ebhCR8HsW
+        m6Vq1bK511uzGoiUIJnN6zA9d1+5JkYHTbR6ASB2yQ==
+X-Google-Smtp-Source: APXvYqzUncGfDJnmJi4i2I2hB/7uBR13zm/JcJxswi5r6CS9cRjJPXdXjKw2XLV4txh19hOg+ABZWwjg911r7Ipvjy4=
+X-Received: by 2002:a92:afc5:: with SMTP id v66mr50219366ill.123.1582502142154;
+ Sun, 23 Feb 2020 15:55:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-7-scott.branden@broadcom.com> <20200220074711.GA3261162@kroah.com>
+ <ee53fe6f-53de-87c0-db16-989cc15abbce@broadcom.com> <CAK8P3a0y8RfjEng4AsMr4MAPGMTXduiFOyfUzazgw9c+KVWmYA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0y8RfjEng4AsMr4MAPGMTXduiFOyfUzazgw9c+KVWmYA@mail.gmail.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Sun, 23 Feb 2020 15:55:30 -0800
+Message-ID: <CAOesGMj423YXNhk_vFE0ueNjzbYoD0wQ68jJApewZS8qtVX3=g@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Andy Gross <agross@kernel.org>,
+        Desmond Yan <desmond.yan@broadcom.com>,
+        James Hu <james.hu@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Expand the selftest by invoking the enclave by using
-__vdso_sgx_enter_enclave() in addition to direct ENCLS[EENTER].
+On Sat, Feb 22, 2020 at 12:03 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Feb 21, 2020 at 7:19 PM Scott Branden
+> <scott.branden@broadcom.com> wrote:
+> > On 2020-02-19 11:47 p.m., Greg Kroah-Hartman wrote:
+>
+> > > Have you worked with the V4L developers to tie this into the proper
+> > > in-kernel apis for this type of functionality?
+> > We looked at the V4L model doesn't have any support for anything we are
+> > doing in this driver.
+> > We also want a driver that doesn't care about video.  It could be
+> > offloading crypto or other operations.
+> > We talked with Olof about all of this previously and he said leave it as
+> > a misc driver for now.
+> > He was going to discuss at linux plumbers conference that we need some
+> > sort of offload engine model that such devices could fit into.
+>
+> I see. Have you looked at the "uacce" driver submission? It seems
+> theirs is similar enough that there might be some way to share interfaces.
 
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- tools/testing/selftests/x86/sgx/main.c     | 132 +++++++++++++++++++++
- tools/testing/selftests/x86/sgx/sgx_call.S |  43 +++++++
- tools/testing/selftests/x86/sgx/sgx_call.h |   3 +
- 3 files changed, 178 insertions(+)
+Uacce isn't a driver (or wasn't last time I looked at it, when it had
+a different name). It's more of a framework for standardized direct HW
+access from userspace, and relies on I/O virtualization to keep DMA
+secure/partitioned, etc. VK is more of a classic PCIe device, it'll
+handle DMA to/from the host, etc.
 
-diff --git a/tools/testing/selftests/x86/sgx/main.c b/tools/testing/selftests/x86/sgx/main.c
-index 48ed5fdfb3cb..d97cc3cf0093 100644
---- a/tools/testing/selftests/x86/sgx/main.c
-+++ b/tools/testing/selftests/x86/sgx/main.c
-@@ -21,6 +21,109 @@
- #define PAGE_SIZE  4096
- 
- static const uint64_t MAGIC = 0x1122334455667788ULL;
-+void *eenter;
-+
-+struct vdso_symtab {
-+	Elf64_Sym *elf_symtab;
-+	const char *elf_symstrtab;
-+	Elf64_Word *elf_hashtab;
-+};
-+
-+static void *vdso_get_base_addr(char *envp[])
-+{
-+	Elf64_auxv_t *auxv;
-+	int i;
-+
-+	for (i = 0; envp[i]; i++)
-+		;
-+
-+	auxv = (Elf64_auxv_t *)&envp[i + 1];
-+
-+	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
-+		if (auxv[i].a_type == AT_SYSINFO_EHDR)
-+			return (void *)auxv[i].a_un.a_val;
-+	}
-+
-+	return NULL;
-+}
-+
-+static Elf64_Dyn *vdso_get_dyntab(void *addr)
-+{
-+	Elf64_Ehdr *ehdr = addr;
-+	Elf64_Phdr *phdrtab = addr + ehdr->e_phoff;
-+	int i;
-+
-+	for (i = 0; i < ehdr->e_phnum; i++)
-+		if (phdrtab[i].p_type == PT_DYNAMIC)
-+			return addr + phdrtab[i].p_offset;
-+
-+	return NULL;
-+}
-+
-+static void *vdso_get_dyn(void *addr, Elf64_Dyn *dyntab, Elf64_Sxword tag)
-+{
-+	int i;
-+
-+	for (i = 0; dyntab[i].d_tag != DT_NULL; i++)
-+		if (dyntab[i].d_tag == tag)
-+			return addr + dyntab[i].d_un.d_ptr;
-+
-+	return NULL;
-+}
-+
-+static bool vdso_get_symtab(void *addr, struct vdso_symtab *symtab)
-+{
-+	Elf64_Dyn *dyntab = vdso_get_dyntab(addr);
-+
-+	symtab->elf_symtab = vdso_get_dyn(addr, dyntab, DT_SYMTAB);
-+	if (!symtab->elf_symtab)
-+		return false;
-+
-+	symtab->elf_symstrtab = vdso_get_dyn(addr, dyntab, DT_STRTAB);
-+	if (!symtab->elf_symstrtab)
-+		return false;
-+
-+	symtab->elf_hashtab = vdso_get_dyn(addr, dyntab, DT_HASH);
-+	if (!symtab->elf_hashtab)
-+		return false;
-+
-+	return true;
-+}
-+
-+static unsigned long elf_sym_hash(const char *name)
-+{
-+	unsigned long h = 0, high;
-+
-+	while (*name) {
-+		h = (h << 4) + *name++;
-+		high = h & 0xf0000000;
-+
-+		if (high)
-+			h ^= high >> 24;
-+
-+		h &= ~high;
-+	}
-+
-+	return h;
-+}
-+
-+static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
-+{
-+	Elf64_Word bucketnum = symtab->elf_hashtab[0];
-+	Elf64_Word *buckettab = &symtab->elf_hashtab[2];
-+	Elf64_Word *chaintab = &symtab->elf_hashtab[2 + bucketnum];
-+	Elf64_Sym *sym;
-+	Elf64_Word i;
-+
-+	for (i = buckettab[elf_sym_hash(name) % bucketnum]; i != STN_UNDEF;
-+	     i = chaintab[i]) {
-+		sym = &symtab->elf_symtab[i];
-+		if (!strcmp(name, &symtab->elf_symstrtab[sym->st_name]))
-+			return sym;
-+	}
-+
-+	return NULL;
-+}
- 
- static bool encl_create(int dev_fd, unsigned long bin_size,
- 			struct sgx_secs *secs)
-@@ -218,10 +321,14 @@ bool load_sigstruct(const char *path, void *sigstruct)
- 
- int main(int argc, char *argv[], char *envp[])
- {
-+	struct sgx_enclave_exception exception;
- 	struct sgx_sigstruct sigstruct;
-+	struct vdso_symtab symtab;
-+	Elf64_Sym *eenter_sym;
- 	struct sgx_secs secs;
- 	uint64_t result = 0;
- 	off_t bin_size;
-+	void *addr;
- 	void *bin;
- 
- 	if (!encl_data_map("encl.bin", &bin, &bin_size))
-@@ -243,5 +350,30 @@ int main(int argc, char *argv[], char *envp[])
- 
- 	printf("Output: 0x%lx\n", result);
- 
-+	memset(&exception, 0, sizeof(exception));
-+
-+	addr = vdso_get_base_addr(envp);
-+	if (!addr)
-+		exit(1);
-+
-+	if (!vdso_get_symtab(addr, &symtab))
-+		exit(1);
-+
-+	eenter_sym = vdso_symtab_get(&symtab, "__vdso_sgx_enter_enclave");
-+	if (!eenter_sym)
-+		exit(1);
-+	eenter = addr + eenter_sym->st_value;
-+
-+	printf("Input: 0x%lx\n", MAGIC);
-+
-+	sgx_call_vdso((void *)&MAGIC, &result, 0, NULL, NULL, NULL,
-+		      (void *)secs.base, &exception, NULL);
-+	if (result != MAGIC) {
-+		fprintf(stderr, "0x%lx != 0x%lx\n", result, MAGIC);
-+		exit(1);
-+	}
-+
-+	printf("Output: 0x%lx\n", result);
-+
- 	exit(0);
- }
-diff --git a/tools/testing/selftests/x86/sgx/sgx_call.S b/tools/testing/selftests/x86/sgx/sgx_call.S
-index ca4c7893f9d9..e71f44f7a995 100644
---- a/tools/testing/selftests/x86/sgx/sgx_call.S
-+++ b/tools/testing/selftests/x86/sgx/sgx_call.S
-@@ -21,3 +21,46 @@ sgx_async_exit:
- 	ENCLU
- 	pop	%rbx
- 	ret
-+
-+	.global sgx_call_vdso
-+sgx_call_vdso:
-+	.cfi_startproc
-+	push	%r15
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r15, 0
-+	push	%r14
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r14, 0
-+	push	%r13
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r13, 0
-+	push	%r12
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r12, 0
-+	push	%rbx
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%rbx, 0
-+	push	$0
-+	.cfi_adjust_cfa_offset	8
-+	push	0x48(%rsp)
-+	.cfi_adjust_cfa_offset	8
-+	push	0x48(%rsp)
-+	.cfi_adjust_cfa_offset	8
-+	push	0x48(%rsp)
-+	.cfi_adjust_cfa_offset	8
-+	mov	$2, %eax
-+	call	*eenter(%rip)
-+	add	$0x20, %rsp
-+	.cfi_adjust_cfa_offset	-0x20
-+	pop	%rbx
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r12
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r13
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r14
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r15
-+	.cfi_adjust_cfa_offset	-8
-+	ret
-+	.cfi_endproc
-diff --git a/tools/testing/selftests/x86/sgx/sgx_call.h b/tools/testing/selftests/x86/sgx/sgx_call.h
-index bf72068ada23..a4072c5ecce7 100644
---- a/tools/testing/selftests/x86/sgx/sgx_call.h
-+++ b/tools/testing/selftests/x86/sgx/sgx_call.h
-@@ -8,4 +8,7 @@
- 
- void sgx_call_eenter(void *rdi, void *rsi, void *entry);
- 
-+int sgx_call_vdso(void *rdi, void *rsi, long rdx, void *rcx, void *r8, void *r9,
-+		  void *tcs, struct sgx_enclave_exception *ei, void *cb);
-+
- #endif /* SGX_CALL_H */
--- 
-2.20.1
+> > > Using a tty driver seems like the totally incorrect way to do this, what
+> > > am I missing?
+> > tty driver is used to provide console access to the processors running
+> > on vk.
+> > Data is sent using the bcm_vk_msg interface by read/write operations
+> > from user space.
+> > VK then gets the messages and DMA's the data to/from host memory when
+> > needed to process.
+>
+> In turn here, it sounds like you'd want to look at what drivers/misc/mic/
+> and the mellanox bluefield drivers are doing. As I understand, they have the
+> same requirements for console, but have a nicer approach of providing
+> abstract 'virtio' channels between the PCIe endpoint and the host, and
+> then run regular virtio based drivers (console, tty, block, filesystem,
+> network, ...) along with application specific ones to provide the custom
+> high-level protocols.
 
+This has more value on the device than on the host, as far as I've
+seen it used (if you want to boot Linux on it and have things
+exposed).
+
+virtio isn't necessarily a match if all you really want is a character
+stream for a console and don't need (or have performance requirements
+beyond what virtio offers) other types of communication.
+
+> This is also similar to what the drivers/pci/endpoint
+> (from the other end) as the drivers/ntb (pci host on both ends) frameworks
+> and of course the rpmsg/remoteproc framework do.
+
+remoteproc is more about booting a tightly integrated device on an
+embedded system. Also not a match here IMHO.
+
+> In the long run, I would want much more consolidation between the
+> low-level parts of all these frameworks, but moving your high-level
+> protocols to the same virtio method would sound like a step in the
+> direction towards a generialized framework and easier sharing of
+> the abstractions.
+
+For a simple naive console/character stream, doing something on top of
+hvc might be easier -- it already does polling for you, etc.
+
+Of course, the intent is not to ever use it as a console for the host
+here, so that aspect of hvc isn't useful. But it gives you a bunch of
+other stuff for free with just getchar/putchar interfaces to
+implement.
+
+
+-Olof
