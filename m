@@ -2,154 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 789CC169B01
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2020 00:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2972F16A4D5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Feb 2020 12:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727156AbgBWXzn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 23 Feb 2020 18:55:43 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:35007 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726534AbgBWXzn (ORCPT
+        id S1727185AbgBXLZk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Feb 2020 06:25:40 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:38270 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726778AbgBXLZk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 23 Feb 2020 18:55:43 -0500
-Received: by mail-il1-f195.google.com with SMTP id g12so6268120ild.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 23 Feb 2020 15:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qyI3k92se2W+CzWDqJQ962MJ9vu6VkRN6rHvKfta26U=;
-        b=j/KKuLEs7pdn63IWEQa5W2BKAA73q3hJpH6zlMmP6pIEkbbEb3Oanr38OoznY4ccPW
-         xHcn6Fng43AAtmSJa5jswP0kB+rWT/fx5+ibV70MZ3Dw94RhtbVW7zmoda6TmYLTGOhs
-         OBwJSiorMzRwpygxL/n/DlwO2rS7s7Z61vandzZaoyw5sYfMFH0G3oz/M8WAmhgK63Tm
-         zLcNRqyxYz3gT1DjD+qj5oMLgbiW3HLUc+xGmWOG6nNcDG8/ShrF2opmVnI6yhgH31sP
-         2uiaEHlchKgE7C0snSpWifQPXV13Yq5H1oTRUPOYa3sFrwxu+nFJqrfAMWUnVDtPDh1H
-         rXAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qyI3k92se2W+CzWDqJQ962MJ9vu6VkRN6rHvKfta26U=;
-        b=Rw2WmbzZwZtE48nt+x6ZNNJZ5nk2+KAYIii66NnTh01Ae4fmlCtU+snM+dl07vHUCp
-         lfXlly1c43wiR4SJs5QDzuMZPUB4t2HFTlqO/OB8JNavChVSg39VGkdLbxmdPYVuL8zu
-         jrXKpWqw8ZVACaXm4z4kTGyJFhXsOWF5CG3p1mn/oKYT3RG4ORL6FiNAn6hmaYmP3vRQ
-         eHulJE15cf8x11+ryljX1ymVWZM41Mmi7EvMgQ6DUwho53p4uzrEiEK/ePNbvVJ24YUd
-         FfePyGZcQzXPFs6YyJp+oSbspIvTcPbiHtPj9N2LnAcUFkqPeWtzyN+WxEvfvQwzMfOq
-         Ru9A==
-X-Gm-Message-State: APjAAAU6zZyUAUWqGUmBZlo0PdRwxt7VXELhXIgU+d3r+q8ebhCR8HsW
-        m6Vq1bK511uzGoiUIJnN6zA9d1+5JkYHTbR6ASB2yQ==
-X-Google-Smtp-Source: APXvYqzUncGfDJnmJi4i2I2hB/7uBR13zm/JcJxswi5r6CS9cRjJPXdXjKw2XLV4txh19hOg+ABZWwjg911r7Ipvjy4=
-X-Received: by 2002:a92:afc5:: with SMTP id v66mr50219366ill.123.1582502142154;
- Sun, 23 Feb 2020 15:55:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-7-scott.branden@broadcom.com> <20200220074711.GA3261162@kroah.com>
- <ee53fe6f-53de-87c0-db16-989cc15abbce@broadcom.com> <CAK8P3a0y8RfjEng4AsMr4MAPGMTXduiFOyfUzazgw9c+KVWmYA@mail.gmail.com>
-In-Reply-To: <CAK8P3a0y8RfjEng4AsMr4MAPGMTXduiFOyfUzazgw9c+KVWmYA@mail.gmail.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Sun, 23 Feb 2020 15:55:30 -0800
-Message-ID: <CAOesGMj423YXNhk_vFE0ueNjzbYoD0wQ68jJApewZS8qtVX3=g@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Mon, 24 Feb 2020 06:25:40 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01O87YYb160437;
+        Mon, 24 Feb 2020 08:09:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=corp-2020-01-29;
+ bh=6qKJx4gzfpljmcOcHGiZyzYN7Uu40KJ6LMB+X9Hu3pM=;
+ b=XyvGvgkMuU4oe4Kzr5MzIxqxC+MueWnjd1wupeXsL9K9hXTjjJ6cIu4lDsnEob+ZeSLO
+ bAazjaqCAshQfY2xw1WvrBuTF54mzLT8+JRflg74v7DZCg6dJnLBBU0TN7y8p9tZ0UN3
+ yPWVNQHZltckspOi/qND1jd7zQw0PDfhL20h482qprLNvVhTjFutQ1eWB46kc22OhSeB
+ 4RfxIcLwMZHi3bNkQuV3LoLYsAclXmH9jfdJa3f1fv3zX5ok+ATBKwRBNKJLfn0eXdAh
+ NJxkNQ33cwRn1beht/VJWiNTl5fP1UIyZZc2HIGo/ScUc490uAZP21v0Xzbux6HIAZTy nw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2ybvr4hw5m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Feb 2020 08:09:04 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01O87q9q182572;
+        Mon, 24 Feb 2020 08:09:03 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2ybe10nc98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Feb 2020 08:09:03 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 01O88xmR024337;
+        Mon, 24 Feb 2020 08:08:59 GMT
+Received: from kadam (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 24 Feb 2020 00:08:59 -0800
+Date:   Mon, 24 Feb 2020 11:08:42 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v2 3/7] test_firmware: add partial read support for
+ request_firmware_into_buf
+Message-ID: <20200224080842.GA3308@kadam>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-4-scott.branden@broadcom.com>
+ <20200220084255.GW7838@kadam>
+ <9afab7f8-1b5f-a7bb-6b76-f7b19efb2979@broadcom.com>
+ <4a666590-461d-17f9-5580-31a41869383f@broadcom.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4a666590-461d-17f9-5580-31a41869383f@broadcom.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9540 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002240071
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9540 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ clxscore=1015 adultscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002240071
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Feb 22, 2020 at 12:03 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Feb 21, 2020 at 7:19 PM Scott Branden
-> <scott.branden@broadcom.com> wrote:
-> > On 2020-02-19 11:47 p.m., Greg Kroah-Hartman wrote:
->
-> > > Have you worked with the V4L developers to tie this into the proper
-> > > in-kernel apis for this type of functionality?
-> > We looked at the V4L model doesn't have any support for anything we are
-> > doing in this driver.
-> > We also want a driver that doesn't care about video.  It could be
-> > offloading crypto or other operations.
-> > We talked with Olof about all of this previously and he said leave it as
-> > a misc driver for now.
-> > He was going to discuss at linux plumbers conference that we need some
-> > sort of offload engine model that such devices could fit into.
->
-> I see. Have you looked at the "uacce" driver submission? It seems
-> theirs is similar enough that there might be some way to share interfaces.
+On Fri, Feb 21, 2020 at 05:13:08PM -0800, Scott Branden wrote:
+> > > > +static ssize_t test_dev_config_show_size_t(char *buf, int cfg)
+> > > > +{
+> > > > +    size_t val;
+> > > > +
+> > > > +    mutex_lock(&test_fw_mutex);
+> > > > +    val = cfg;
+> > > > +    mutex_unlock(&test_fw_mutex);
+> > > Both val and cfg are stack variables so there is no need for locking.
+> > > Probably you meant to pass a pointer to cfg?
+> I am following the existing code as was done for
+> test_dev_config_show_bool(),
+> test_dev_config_show_int(),
+> test_dev_config_show_u8()
 
-Uacce isn't a driver (or wasn't last time I looked at it, when it had
-a different name). It's more of a framework for standardized direct HW
-access from userspace, and relies on I/O virtualization to keep DMA
-secure/partitioned, etc. VK is more of a classic PCIe device, it'll
-handle DMA to/from the host, etc.
+Heh.  Yes.  Those are buggy as well.  Good eyes.  Could you send a patch
+to fix them?
 
-> > > Using a tty driver seems like the totally incorrect way to do this, what
-> > > am I missing?
-> > tty driver is used to provide console access to the processors running
-> > on vk.
-> > Data is sent using the bcm_vk_msg interface by read/write operations
-> > from user space.
-> > VK then gets the messages and DMA's the data to/from host memory when
-> > needed to process.
->
-> In turn here, it sounds like you'd want to look at what drivers/misc/mic/
-> and the mellanox bluefield drivers are doing. As I understand, they have the
-> same requirements for console, but have a nicer approach of providing
-> abstract 'virtio' channels between the PCIe endpoint and the host, and
-> then run regular virtio based drivers (console, tty, block, filesystem,
-> network, ...) along with application specific ones to provide the custom
-> high-level protocols.
+regards,
+dan caprnter
 
-This has more value on the device than on the host, as far as I've
-seen it used (if you want to boot Linux on it and have things
-exposed).
-
-virtio isn't necessarily a match if all you really want is a character
-stream for a console and don't need (or have performance requirements
-beyond what virtio offers) other types of communication.
-
-> This is also similar to what the drivers/pci/endpoint
-> (from the other end) as the drivers/ntb (pci host on both ends) frameworks
-> and of course the rpmsg/remoteproc framework do.
-
-remoteproc is more about booting a tightly integrated device on an
-embedded system. Also not a match here IMHO.
-
-> In the long run, I would want much more consolidation between the
-> low-level parts of all these frameworks, but moving your high-level
-> protocols to the same virtio method would sound like a step in the
-> direction towards a generialized framework and easier sharing of
-> the abstractions.
-
-For a simple naive console/character stream, doing something on top of
-hvc might be easier -- it already does polling for you, etc.
-
-Of course, the intent is not to ever use it as a console for the host
-here, so that aspect of hvc isn't useful. But it gives you a bunch of
-other stuff for free with just getchar/putchar interfaces to
-implement.
-
-
--Olof
