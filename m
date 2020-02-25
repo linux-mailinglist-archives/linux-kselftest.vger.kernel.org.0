@@ -2,415 +2,582 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4001F16EFD3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 21:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF2216F08B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 21:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731660AbgBYUMG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 15:12:06 -0500
-Received: from mail-pj1-f73.google.com ([209.85.216.73]:59681 "EHLO
-        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731657AbgBYUMF (ORCPT
+        id S1728383AbgBYUuZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 15:50:25 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46141 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726764AbgBYUuZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 15:12:05 -0500
-Received: by mail-pj1-f73.google.com with SMTP id z5so323245pjq.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 12:12:05 -0800 (PST)
+        Tue, 25 Feb 2020 15:50:25 -0500
+Received: by mail-ot1-f68.google.com with SMTP id g64so787049otb.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 12:50:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=o7uyCNm3PwcTObFLNHL0wKjFetUXQ9LZudj5gbkagCg=;
-        b=CG3sVubIl1XtHpely2x6iI3gAxlI/J9joPRgYReo4LLymfpQyhJPsuUzS6TAmtbK5m
-         wWoQNbvEf3hTv4pAY/G47YzEE1FURpjhZa4Qp6f/+S0FD8wPbhAOI6/Wvq/KXEFngKcO
-         8xpxCcYebMDiL4IUu97BsivOvXK4zXp2qfpPFFsBPYXVq6JmNxr2JUDKVDaq7Nj4GrL4
-         8wauJomThGX+QnNKqqfpj1jh8NqMyZ2kM74F9tQTM9XmjnZ3gF5wL2/yhTQqtjSyzLTB
-         PtAITMiMKM8n20CyIvKwpRzAzQ/tAeRHxM6FCnTsgzmD5rMvv1hzyh+leyeLSktckdMP
-         vLNA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cN7Q4dVydT4xYlRzhXk1sRwtrE826VFs1l2/vxQJcvQ=;
+        b=ltEi9IHcymn8kA5Bo4Q/bznz0r5VMTRacX6R3LcY9xUZ3gClNFcfJIRVk3gRVpQkQX
+         +VE9xCNeUAfxtq5wIkeG95u3mhdPhLQCtHsvHgfRsLVZXjMSAKQOj1cVLFCftpXMsOGS
+         z+FMROp6M+Q7DxtzA7btZo0irkZY/QhK2N2jz/FDvywurbv2KAbuQZVZPahVmp25r5MG
+         qt/hViiWH/XAcpfyYzzQoL8JGKogorzR5nrIMCBxQiutr3g+WPUEHxHcmxRYa1moIpij
+         xyODtMiCAw0boQmMPJ4WOt9xZdnkN/vdbtHWxzmnnVjX/WCpVqWTlkzJUp6moh0ltyZo
+         /PQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=o7uyCNm3PwcTObFLNHL0wKjFetUXQ9LZudj5gbkagCg=;
-        b=hG+mwo7MHX67ENPfAgDPtjg05s1Ob0mVFgTnAZ+L9lL1IKQnZiZf+g2ScH22VlUVhy
-         hndW6sKvawn66s9Q7ySlyGBQjggHROCpGoduY9QTGRUEDPxbuCJKGMS0hKYMGfSOAhZ3
-         7IO2RgHD3C8dKNFwqg2XvQtKs6XfFoFaUQ/wp23z4qFMksa30my3x1OKbJ/9ZFMDX+lO
-         9DvIhhfauZp9taGEHHLCZsgtkaFlO/Oaz/cPnQe6eoc1kilZ9Y1jmTy/jCrekmBReyph
-         18EeayAUwPS7MIoStW+1KYVUlfkMlCCGpieg68kGFOTq+9ri6DP34VaaQDESF/xzqMxy
-         qeGA==
-X-Gm-Message-State: APjAAAUt/WDH/RZlqk8bnYjaRqbp+ruPOEa0DH0+KyAmx1a/Fthl6Snr
-        jPQGRbR7F3m5m0lSwOlK9fo4O5Xs16+/2+ky
-X-Google-Smtp-Source: APXvYqy3QkSKgLaYw5ctE8KDVob2ow1Jd3/T6qCQ2XgvdaOUbMQbU6PUrWwtB3xCN0enaV9K+tgYAQYfzDi3uGyU
-X-Received: by 2002:a63:a4b:: with SMTP id z11mr226540pgk.398.1582661524712;
- Tue, 25 Feb 2020 12:12:04 -0800 (PST)
-Date:   Tue, 25 Feb 2020 12:11:30 -0800
-In-Reply-To: <20200225201130.211124-1-heidifahim@google.com>
-Message-Id: <20200225201130.211124-2-heidifahim@google.com>
-Mime-Version: 1.0
-References: <20200225201130.211124-1-heidifahim@google.com>
-X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
-Subject: [PATCH 2/2] kunit: Run all KUnit tests through allyesconfig
-From:   Heidi Fahim <heidifahim@google.com>
-To:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Cc:     Heidi Fahim <heidifahim@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cN7Q4dVydT4xYlRzhXk1sRwtrE826VFs1l2/vxQJcvQ=;
+        b=iBNWsAkUvJivdNI9NI+jQtIccXRy9nqAhe4QbgpgLVA2jIBAR+10fSUxJo7+MnwiWq
+         n39DrafIerO1/UX0EHMXejQyi7q92cun4utpsnrE74zd3/K9LlgmfTL30Mes4c+/xmNx
+         QDVMTW7GNVcD4aAAQf/HqHGH1H811CEEdmNBjR0WuKpwRD9CkI7EbYjuvso24fFBcQgp
+         TsafGFsZHU6ZvraZdr9d1l1gZ6/BS19jslH5NaLrKGBd3xoWAzHJjIjqEd2+u0sk1XfQ
+         3Fuox0GxXUG8qzK0sD3qjMaCctbwkt3hjio05PVLasU0xq+KCrb2ExVth0V9s+du4DyQ
+         O4AQ==
+X-Gm-Message-State: APjAAAVCY97DBzSH0RwkOd6PPO1wtr1WnUBUXB0zmBWXPOg1I+DNi43s
+        aoGkAkLvL/vg7GnHTSm8X8bE382f2GIz01kgedBYvQ==
+X-Google-Smtp-Source: APXvYqy0mDp21Y+Hj6qrkPvHOelZCXjMBtpFN8Bj28fsPkz/lgS1es5GWIVnhOXNkqbFeOM6C9PbvDEEeYWXWEOuc/Y=
+X-Received: by 2002:a9d:5e8b:: with SMTP id f11mr381742otl.110.1582663823821;
+ Tue, 25 Feb 2020 12:50:23 -0800 (PST)
+MIME-Version: 1.0
+References: <20200224160215.4136-1-mic@digikod.net> <20200224160215.4136-2-mic@digikod.net>
+In-Reply-To: <20200224160215.4136-2-mic@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 25 Feb 2020 21:49:57 +0100
+Message-ID: <CAG48ez1FN0B05r35c-EDuQNoW=5ZTy1iBzksbkt+toqs+_tdqg@mail.gmail.com>
+Subject: Re: [RFC PATCH v14 01/10] landlock: Add object and rule management
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Implemented the functionality to run all KUnit tests through kunit_tool
-by specifying an --alltests flag, which builds UML with allyesconfig
-enabled, and consequently runs every KUnit test. Two new methods have
-been added to kunit_kernel: make_allyesconfig and run_allconfig.
-Firstly, if --alltests is specified, kunit.py triggers build_um_kernel
-which sets jobs to the max number of cpus on the user's computer. This
-is done to shorten the long running time it takes to build and start a
-kernel with all configs enabled. It then calls the make command,
-disables the broken configs that would otherwise prevent UML from
-building, then starts the kernel with all possible configurations
-enabled. All stdout and stderr is sent to test.log and read from there
-then fed through kunit_parser to parse the tests to the user. Also added
-a signal_handler to clean the config in case kunit is interrupted while
-running.
-Tested: Run under different conditions such as testing with
---raw_output, testing program interrupt then immediately running kunit
-again without --alltests and making sure to clean the configs. Formal
-unit tests will be submitted in a future patchset.
+On Mon, Feb 24, 2020 at 5:05 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+> A Landlock object enables to identify a kernel object (e.g. an inode).
+> A Landlock rule is a set of access rights allowed on an object.  Rules
+> are grouped in rulesets that may be tied to a set of processes (i.e.
+> subjects) to enforce a scoped access-control (i.e. a domain).
+>
+> Because Landlock's goal is to empower any process (especially
+> unprivileged ones) to sandbox themselves, we can't rely on a system-wide
+> object identification such as file extended attributes.  Indeed, we need
+> innocuous, composable and modular access-controls.
+>
+> The main challenge with this constraints is to identify kernel objects
+> while this identification is useful (i.e. when a security policy makes
+> use of this object).  But this identification data should be freed once
+> no policy is using it.  This ephemeral tagging should not and may not be
+> written in the filesystem.  We then need to manage the lifetime of a
+> rule according to the lifetime of its object.  To avoid a global lock,
+> this implementation make use of RCU and counters to safely reference
+> objects.
+>
+> A following commit uses this generic object management for inodes.
+[...]
+> diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
+> new file mode 100644
+> index 000000000000..4a321d5b3f67
+> --- /dev/null
+> +++ b/security/landlock/Kconfig
+> @@ -0,0 +1,15 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config SECURITY_LANDLOCK
+> +       bool "Landlock support"
+> +       depends on SECURITY
+> +       default n
 
-Signed-off-by: Heidi Fahim <heidifahim@google.com>
----
- .../kunit/configs/broken_on_uml.config        | 38 ++++++++++
- tools/testing/kunit/kunit.py                  | 37 ++++++----
- tools/testing/kunit/kunit_kernel.py           | 71 +++++++++++++------
- tools/testing/kunit/kunit_parser.py           |  1 +
- tools/testing/kunit/kunit_tool_test.py        | 17 +++--
- 5 files changed, 122 insertions(+), 42 deletions(-)
- create mode 100644 tools/testing/kunit/configs/broken_on_uml.config
+(I think "default n" is implicit?)
 
-diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
-new file mode 100644
-index 000000000000..6d746588d46e
---- /dev/null
-+++ b/tools/testing/kunit/configs/broken_on_uml.config
-@@ -0,0 +1,38 @@
-+# CONFIG_STATIC_LINK is not set
-+# CONFIG_UML_NET_VECTOR is not set
-+# CONFIG_UML_NET_VDE is not set
-+# CONFIG_UML_NET_PCAP is not set
-+# CONFIG_NET_PTP_CLASSIFY is not set
-+# CONFIG_IP_VS is not set
-+# CONFIG_BRIDGE_EBT_BROUTE is not set
-+# CONFIG_BRIDGE_EBT_T_FILTER is not set
-+# CONFIG_BRIDGE_EBT_T_NAT is not set
-+# CONFIG_MTD_NAND_CADENCE is not set
-+# CONFIG_MTD_NAND_NANDSIM is not set
-+# CONFIG_BLK_DEV_NULL_BLK is not set
-+# CONFIG_BLK_DEV_RAM is not set
-+# CONFIG_SCSI_DEBUG is not set
-+# CONFIG_NET_VENDOR_XILINX is not set
-+# CONFIG_NULL_TTY is not set
-+# CONFIG_PTP_1588_CLOCK is not set
-+# CONFIG_PINCTRL_EQUILIBRIUM is not set
-+# CONFIG_DMABUF_SELFTESTS is not set
-+# CONFIG_COMEDI is not set
-+# CONFIG_XIL_AXIS_FIFO is not set
-+# CONFIG_EXFAT_FS is not set
-+# CONFIG_STM_DUMMY is not set
-+# CONFIG_FSI_MASTER_ASPEED is not set
-+# CONFIG_JFS_FS is not set
-+# CONFIG_UBIFS_FS is not set
-+# CONFIG_CRAMFS is not set
-+# CONFIG_CRYPTO_DEV_SAFEXCEL is not set
-+# CONFIG_CRYPTO_DEV_AMLOGIC_GXL is not set
-+# CONFIG_KCOV is not set
-+# CONFIG_LKDTM is not set
-+# CONFIG_REED_SOLOMON_TEST is not set
-+# CONFIG_TEST_RHASHTABLE is not set
-+# CONFIG_TEST_MEMINIT is not set
-+# CONFIG_NETWORK_PHY_TIMESTAMPING is not set
-+# CONFIG_DEBUG_INFO_BTF is not set
-+# CONFIG_PTP_1588_CLOCK_INES is not set
-+# CONFIG_QCOM_CPR is not set
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index e59eb9e7f923..37bd20a2a1c5 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -22,7 +22,9 @@ import kunit_parser
- 
- KunitResult = namedtuple('KunitResult', ['status','result'])
- 
--KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs', 'build_dir', 'defconfig'])
-+KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
-+					   'build_dir', 'defconfig',
-+					   'alltests'])
- 
- class KunitStatus(Enum):
- 	SUCCESS = auto()
-@@ -33,7 +35,7 @@ class KunitStatus(Enum):
- def create_default_kunitconfig():
- 	if not os.path.exists(kunit_kernel.kunitconfig_path):
- 		shutil.copyfile('arch/um/configs/kunit_defconfig',
--				kunit_kernel.kunitconfig_path)
-+				kunit_kernel.KUNITCONFIG_PATH)
- 
- def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
-@@ -46,24 +48,24 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	kunit_parser.print_with_timestamp('Building KUnit Kernel ...')
- 
- 	build_start = time.time()
--	success = linux.build_um_kernel(request.jobs, request.build_dir)
-+	success = linux.build_um_kernel(request.alltests,
-+					request.jobs,
-+					request.build_dir)
- 	build_end = time.time()
- 	if not success:
- 		return KunitResult(KunitStatus.BUILD_FAILURE, 'could not build kernel')
- 
- 	kunit_parser.print_with_timestamp('Starting KUnit Kernel ...')
- 	test_start = time.time()
--
--	test_result = kunit_parser.TestResult(kunit_parser.TestStatus.SUCCESS,
--					      [],
--					      'Tests not Parsed.')
-+	kunit_output = linux.run_kernel(
-+		timeout=None if request.alltests else request.timeout,
-+		alltests=request.alltests,
-+		build_dir=request.build_dir)
- 	if request.raw_output:
--		kunit_parser.raw_output(
--			linux.run_kernel(timeout=request.timeout,
--					 build_dir=request.build_dir))
-+		raw_output = kunit_parser.raw_output(kunit_output)
-+		isolated = list(kunit_parser.isolate_kunit_output(raw_output))
-+		test_result = kunit_parser.parse_test_result(isolated)
- 	else:
--		kunit_output = linux.run_kernel(timeout=request.timeout,
--						build_dir=request.build_dir)
- 		test_result = kunit_parser.parse_run_tests(kunit_output)
- 	test_end = time.time()
- 
-@@ -111,15 +113,19 @@ def main(argv, linux=None):
- 				help='Uses a default .kunitconfig.',
- 				action='store_true')
- 
-+	run_parser.add_argument('--alltests',
-+				help='Run all KUnit tests through allyesconfig',
-+				action='store_true')
-+
- 	cli_args = parser.parse_args(argv)
- 
- 	if cli_args.subcommand == 'run':
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
--			kunit_kernel.kunitconfig_path = os.path.join(
-+			kunit_kernel.KUNITCONFIG_PATH = os.path.join(
- 				cli_args.build_dir,
--				kunit_kernel.kunitconfig_path)
-+				kunit_kernel.KUNITCONFIG_PATH)
- 
- 		if cli_args.defconfig:
- 			create_default_kunitconfig()
-@@ -131,7 +137,8 @@ def main(argv, linux=None):
- 				       cli_args.timeout,
- 				       cli_args.jobs,
- 				       cli_args.build_dir,
--				       cli_args.defconfig)
-+				       cli_args.defconfig,
-+				       cli_args.alltests)
- 		result = run_tests(linux, request)
- 		if result.status != KunitStatus.SUCCESS:
- 			sys.exit(1)
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index cc5d844ecca1..2b0de7d52110 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -10,11 +10,16 @@
- import logging
- import subprocess
- import os
-+import signal
-+
-+from contextlib import ExitStack
- 
- import kunit_config
-+import kunit_parser
- 
- KCONFIG_PATH = '.config'
--kunitconfig_path = '.kunitconfig'
-+KUNITCONFIG_PATH = '.kunitconfig'
-+BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
- 
- class ConfigError(Exception):
- 	"""Represents an error trying to configure the Linux kernel."""
-@@ -40,12 +45,29 @@ class LinuxSourceTreeOperations(object):
- 		if build_dir:
- 			command += ['O=' + build_dir]
- 		try:
--			subprocess.check_output(command)
-+			subprocess.check_output(command, stderr=subprocess.PIPE)
- 		except OSError as e:
- 			raise ConfigError('Could not call make command: ' + e)
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output)
- 
-+	def make_allyesconfig(self):
-+		kunit_parser.print_with_timestamp(
-+			'Enabling all CONFIGs for UML...')
-+		process = subprocess.Popen(
-+			['make', 'ARCH=um', 'allyesconfig'],
-+			stdout=subprocess.DEVNULL,
-+			stderr=subprocess.STDOUT)
-+		process.wait()
-+		kunit_parser.print_with_timestamp(
-+			'Disabling broken configs to run KUnit tests...')
-+		with ExitStack() as es:
-+			config = open(KCONFIG_PATH, 'a')
-+			disable = open(BROKEN_ALLCONFIG_PATH, 'r').read()
-+			config.write(disable)
-+		kunit_parser.print_with_timestamp(
-+			'Starting Kernel with all configs takes a few minutes...')
-+
- 	def make(self, jobs, build_dir):
- 		command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
- 		if build_dir:
-@@ -57,19 +79,16 @@ class LinuxSourceTreeOperations(object):
- 		except subprocess.CalledProcessError as e:
- 			raise BuildError(e.output)
- 
--	def linux_bin(self, params, timeout, build_dir):
-+	def linux_bin(self, params, timeout, build_dir, outfile):
- 		"""Runs the Linux UML binary. Must be named 'linux'."""
- 		linux_bin = './linux'
- 		if build_dir:
- 			linux_bin = os.path.join(build_dir, 'linux')
--		process = subprocess.Popen(
--			[linux_bin] + params,
--			stdin=subprocess.PIPE,
--			stdout=subprocess.PIPE,
--			stderr=subprocess.PIPE)
--		process.wait(timeout=timeout)
--		return process
--
-+		with open(outfile, 'w') as output:
-+			process = subprocess.Popen([linux_bin] + params,
-+						   stdout=output,
-+						   stderr=subprocess.STDOUT)
-+			process.wait(timeout)
- 
- def get_kconfig_path(build_dir):
- 	kconfig_path = KCONFIG_PATH
-@@ -82,8 +101,9 @@ class LinuxSourceTree(object):
- 
- 	def __init__(self):
- 		self._kconfig = kunit_config.Kconfig()
--		self._kconfig.read_from_file(kunitconfig_path)
-+		self._kconfig.read_from_file(KUNITCONFIG_PATH)
- 		self._ops = LinuxSourceTreeOperations()
-+		signal.signal(signal.SIGINT, self.signal_handler)
- 
- 	def clean(self):
- 		try:
-@@ -126,7 +146,10 @@ class LinuxSourceTree(object):
- 			print('Generating .config ...')
- 			return self.build_config(build_dir)
- 
--	def build_um_kernel(self, jobs, build_dir):
-+	def build_um_kernel(self, alltests, jobs, build_dir):
-+		if alltests:
-+			jobs = os.cpu_count()
-+			self._ops.make_allyesconfig()
- 		try:
- 			self._ops.make_olddefconfig(build_dir)
- 			self._ops.make(jobs, build_dir)
-@@ -140,10 +163,18 @@ class LinuxSourceTree(object):
- 			return False
- 		return True
- 
--	def run_kernel(self, args=[], timeout=None, build_dir=''):
--		args.extend(['mem=256M'])
--		process = self._ops.linux_bin(args, timeout, build_dir)
--		with open(os.path.join(build_dir, 'test.log'), 'w') as f:
--			for line in process.stdout:
--				f.write(line.rstrip().decode('ascii') + '\n')
--				yield line.rstrip().decode('ascii')
-+	def run_kernel(self, args=[], alltests=False, build_dir='', timeout=None):
-+		args.extend(['mem=1G']) if alltests else args.extend(['mem=256M'])
-+		outfile = 'test.log'
-+		self._ops.linux_bin(args, timeout, build_dir, outfile)
-+		subprocess.call(['stty', 'sane'])
-+		if alltests:
-+			self.clean()
-+		with open(outfile, 'r') as file:
-+			for line in file:
-+				yield line
-+
-+	def signal_handler(self, sig, frame):
-+		logging.error('Build interruption occurred. Cleaning .config.')
-+		subprocess.call(['stty', 'sane'])
-+		self.clean()
-\ No newline at end of file
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 077b21d42258..5b2051848e2f 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -65,6 +65,7 @@ def isolate_kunit_output(kernel_output):
- def raw_output(kernel_output):
- 	for line in kernel_output:
- 		print(line)
-+		yield line
- 
- DIVIDER = '=' * 60
- 
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 0efae697f396..9ce4c5cdbdaf 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -243,7 +243,8 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 1
--		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(
-+			alltests=False, build_dir='', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_passes_args_fail(self):
-@@ -258,25 +259,27 @@ class KUnitMainTest(unittest.TestCase):
- 
- 	def test_run_raw_output(self):
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
--		kunit.main(['run', '--raw_output'], self.linux_source_mock)
-+		with self.assertRaises(SystemExit) as e:
-+			kunit.main(['run', '--raw_output'], self.linux_source_mock)
-+		assert type(e.exception) == SystemExit
-+		assert e.exception.code == 1
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 1
--		for kall in self.print_mock.call_args_list:
--			assert kall != mock.call(StrContains('Testing complete.'))
--			assert kall != mock.call(StrContains(' 0 tests run'))
- 
- 	def test_run_timeout(self):
- 		timeout = 3453
- 		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
--		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(
-+			alltests=False, build_dir='', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_builddir(self):
- 		build_dir = '.kunit'
- 		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
--		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(
-+			alltests=False, build_dir=build_dir, timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- if __name__ == '__main__':
--- 
-2.25.0.265.gbab2e86ba0-goog
+> +       help
+> +         This selects Landlock, a safe sandboxing mechanism.  It enables=
+ to
+> +         restrict processes on the fly (i.e. enforce an access control p=
+olicy),
+> +         which can complement seccomp-bpf.  The security policy is a set=
+ of access
+> +         rights tied to an object, which could be a file, a socket or a =
+process.
+> +
+> +         See Documentation/security/landlock/ for further information.
+> +
+> +         If you are unsure how to answer this question, answer N.
+[...]
+> diff --git a/security/landlock/object.c b/security/landlock/object.c
+> new file mode 100644
+> index 000000000000..38fbbb108120
+> --- /dev/null
+> +++ b/security/landlock/object.c
+> @@ -0,0 +1,339 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Landlock LSM - Object and rule management
+> + *
+> + * Copyright =C2=A9 2016-2020 Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> + * Copyright =C2=A9 2018-2020 ANSSI
+> + *
+> + * Principles and constraints of the object and rule management:
+> + * - Do not leak memory.
+> + * - Try as much as possible to free a memory allocation as soon as it i=
+s
+> + *   unused.
+> + * - Do not use global lock.
+> + * - Do not charge processes other than the one requesting a Landlock
+> + *   operation.
+> + */
+> +
+> +#include <linux/bug.h>
+> +#include <linux/compiler.h>
+> +#include <linux/compiler_types.h>
+> +#include <linux/err.h>
+> +#include <linux/errno.h>
+> +#include <linux/fs.h>
+> +#include <linux/kernel.h>
+> +#include <linux/list.h>
+> +#include <linux/rbtree.h>
+> +#include <linux/rcupdate.h>
+> +#include <linux/refcount.h>
+> +#include <linux/slab.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/workqueue.h>
+> +
+> +#include "object.h"
+> +
+> +struct landlock_object *landlock_create_object(
+> +               const enum landlock_object_type type, void *underlying_ob=
+ject)
+> +{
+> +       struct landlock_object *object;
+> +
+> +       if (WARN_ON_ONCE(!underlying_object))
+> +               return NULL;
+> +       object =3D kzalloc(sizeof(*object), GFP_KERNEL);
+> +       if (!object)
+> +               return NULL;
+> +       refcount_set(&object->usage, 1);
+> +       refcount_set(&object->cleaners, 1);
+> +       spin_lock_init(&object->lock);
+> +       INIT_LIST_HEAD(&object->rules);
+> +       object->type =3D type;
+> +       WRITE_ONCE(object->underlying_object, underlying_object);
 
+`object` is not globally visible at this point, so WRITE_ONCE() is unnecess=
+ary.
+
+> +       return object;
+> +}
+> +
+> +struct landlock_object *landlock_get_object(struct landlock_object *obje=
+ct)
+> +       __acquires(object->usage)
+> +{
+> +       __acquire(object->usage);
+> +       /*
+> +        * If @object->usage equal 0, then it will be ignored by writers,=
+ and
+> +        * underlying_object->object may be replaced, but this is not an =
+issue
+> +        * for release_object().
+> +        */
+> +       if (object && refcount_inc_not_zero(&object->usage)) {
+> +               /*
+> +                * It should not be possible to get a reference to an obj=
+ect if
+> +                * its underlying object is being terminated (e.g. with
+> +                * landlock_release_object()), because an object is only
+> +                * modifiable through such underlying object.  This is no=
+t the
+> +                * case with landlock_get_object_cleaner().
+> +                */
+> +               WARN_ON_ONCE(!READ_ONCE(object->underlying_object));
+> +               return object;
+> +       }
+> +       return NULL;
+> +}
+> +
+> +static struct landlock_object *get_object_cleaner(
+> +               struct landlock_object *object)
+> +       __acquires(object->cleaners)
+> +{
+> +       __acquire(object->cleaners);
+> +       if (object && refcount_inc_not_zero(&object->cleaners))
+> +               return object;
+> +       return NULL;
+> +}
+
+I don't get this whole "cleaners" thing. Can you give a quick
+description of why this is necessary, and what benefits it has over a
+standard refcounting+RCU scheme? I don't immediately see anything that
+requires this.
+
+> +/*
+> + * There is two cases when an object should be free and the reference to=
+ the
+> + * underlying object should be put:
+> + * - when the last rule tied to this object is removed, which is handled=
+ by
+> + *   landlock_put_rule() and then release_object();
+> + * - when the object is being terminated (e.g. no more reference to an i=
+node),
+> + *   which is handled by landlock_put_object().
+> + */
+> +static void put_object_free(struct landlock_object *object)
+> +       __releases(object->cleaners)
+> +{
+> +       __release(object->cleaners);
+> +       if (!refcount_dec_and_test(&object->cleaners))
+> +               return;
+> +       WARN_ON_ONCE(refcount_read(&object->usage));
+> +       /*
+> +        * Ensures a safe use of @object in the RCU block from
+> +        * landlock_put_rule().
+> +        */
+> +       kfree_rcu(object, rcu_free);
+> +}
+> +
+> +/*
+> + * Destroys a newly created and useless object.
+> + */
+> +void landlock_drop_object(struct landlock_object *object)
+> +{
+> +       if (WARN_ON_ONCE(!refcount_dec_and_test(&object->usage)))
+> +               return;
+> +       __acquire(object->cleaners);
+> +       put_object_free(object);
+> +}
+> +
+> +/*
+> + * Puts the underlying object (e.g. inode) if it is the first request to
+> + * release @object, without calling landlock_put_object().
+> + *
+> + * Return true if this call effectively marks @object as released, false
+> + * otherwise.
+> + */
+> +static bool release_object(struct landlock_object *object)
+> +       __releases(&object->lock)
+> +{
+> +       void *underlying_object;
+> +
+> +       lockdep_assert_held(&object->lock);
+> +
+> +       underlying_object =3D xchg(&object->underlying_object, NULL);
+> +       spin_unlock(&object->lock);
+> +       might_sleep();
+> +       if (!underlying_object)
+> +               return false;
+> +
+> +       switch (object->type) {
+> +       case LANDLOCK_OBJECT_INODE:
+> +               break;
+> +       default:
+> +               WARN_ON_ONCE(1);
+> +       }
+> +       return true;
+> +}
+> +
+> +static void put_object_cleaner(struct landlock_object *object)
+> +       __releases(object->cleaners)
+> +{
+> +       /* Let's try an early lockless check. */
+> +       if (list_empty(&object->rules) &&
+> +                       READ_ONCE(object->underlying_object)) {
+> +               /*
+> +                * Puts @object if there is no rule tied to it and the
+> +                * remaining user is the underlying object.  This check i=
+s
+> +                * atomic because @object->rules and @object->underlying_=
+object
+> +                * are protected by @object->lock.
+> +                */
+> +               spin_lock(&object->lock);
+> +               if (list_empty(&object->rules) &&
+> +                               READ_ONCE(object->underlying_object) &&
+> +                               refcount_dec_if_one(&object->usage)) {
+> +                       /*
+> +                        * Releases @object, in place of
+> +                        * landlock_release_object().
+> +                        *
+> +                        * @object is already empty, implying that all it=
+s
+> +                        * previous rules are already disabled.
+> +                        *
+> +                        * Unbalance the @object->cleaners counter to ref=
+lect
+> +                        * the underlying object release.
+> +                        */
+> +                       if (!WARN_ON_ONCE(!release_object(object))) {
+> +                               __acquire(object->cleaners);
+> +                               put_object_free(object);
+> +                       }
+> +               } else {
+> +                       spin_unlock(&object->lock);
+> +               }
+> +       }
+> +       put_object_free(object);
+> +}
+> +
+> +/*
+> + * Putting an object is easy when the object is being terminated, but it=
+ is
+> + * much more tricky when the reason is that there is no more rule tied t=
+o this
+> + * object.  Indeed, new rules could be added at the same time.
+> + */
+> +void landlock_put_object(struct landlock_object *object)
+> +       __releases(object->usage)
+> +{
+> +       struct landlock_object *object_cleaner;
+> +
+> +       __release(object->usage);
+> +       might_sleep();
+> +       if (!object)
+> +               return;
+> +       /*
+> +        * Guards against concurrent termination to be able to terminate
+> +        * @object if it is empty and not referenced by another rule-appe=
+nder
+> +        * other than the underlying object.
+> +        */
+> +       object_cleaner =3D get_object_cleaner(object);
+> +       if (WARN_ON_ONCE(!object_cleaner)) {
+> +               __release(object->cleaners);
+> +               return;
+> +       }
+> +       /*
+> +        * Decrements @object->usage and if it reach zero, also decrement
+> +        * @object->cleaners.  If both reach zero, then release and free
+> +        * @object.
+> +        */
+> +       if (refcount_dec_and_test(&object->usage)) {
+> +               struct landlock_rule *rule_walker, *rule_walker2;
+> +
+> +               spin_lock(&object->lock);
+> +               /*
+> +                * Disables all the rules tied to @object when it is forb=
+idden
+> +                * to add new rule but still allowed to remove them with
+> +                * landlock_put_rule().  This is crucial to be able to sa=
+fely
+> +                * free a rule according to landlock_rule_is_disabled().
+> +                */
+> +               list_for_each_entry_safe(rule_walker, rule_walker2,
+> +                               &object->rules, list)
+> +                       list_del_rcu(&rule_walker->list);
+> +
+> +               /*
+> +                * Releases @object if it is not already released (e.g. w=
+ith
+> +                * landlock_release_object()).
+> +                */
+> +               release_object(object);
+> +               /*
+> +                * Unbalances the @object->cleaners counter to reflect th=
+e
+> +                * underlying object release.
+> +                */
+> +               __acquire(object->cleaners);
+> +               put_object_free(object);
+> +       }
+> +       put_object_cleaner(object_cleaner);
+> +}
+> +
+> +void landlock_put_rule(struct landlock_object *object,
+> +               struct landlock_rule *rule)
+> +{
+> +       if (!rule)
+> +               return;
+> +       WARN_ON_ONCE(!object);
+> +       /*
+> +        * Guards against a concurrent @object self-destruction with
+> +        * landlock_put_object() or put_object_cleaner().
+> +        */
+> +       rcu_read_lock();
+> +       if (landlock_rule_is_disabled(rule)) {
+> +               rcu_read_unlock();
+> +               if (refcount_dec_and_test(&rule->usage))
+> +                       kfree_rcu(rule, rcu_free);
+> +               return;
+> +       }
+> +       if (refcount_dec_and_test(&rule->usage)) {
+> +               struct landlock_object *safe_object;
+> +
+> +               /*
+> +                * Now, @rule may still be enabled, or in the process of =
+being
+> +                * untied to @object by put_object_cleaner().  However, w=
+e know
+> +                * that @object will not be freed until rcu_read_unlock()=
+ and
+> +                * until @object->cleaners reach zero.  Furthermore, we m=
+ay not
+> +                * be the only one willing to free a @rule linked with @o=
+bject.
+> +                * If we succeed to hold @object with get_object_cleaner(=
+), we
+> +                * know that until put_object_cleaner(), we can safely us=
+e
+> +                * @object to remove @rule.
+> +                */
+> +               safe_object =3D get_object_cleaner(object);
+> +               rcu_read_unlock();
+> +               if (!safe_object) {
+> +                       __release(safe_object->cleaners);
+> +                       /*
+> +                        * We can safely free @rule because it is already
+> +                        * removed from @object's list.
+> +                        */
+> +                       WARN_ON_ONCE(!landlock_rule_is_disabled(rule));
+> +                       kfree_rcu(rule, rcu_free);
+> +               } else {
+> +                       spin_lock(&safe_object->lock);
+> +                       if (!landlock_rule_is_disabled(rule))
+> +                               list_del(&rule->list);
+> +                       spin_unlock(&safe_object->lock);
+> +                       kfree_rcu(rule, rcu_free);
+> +                       put_object_cleaner(safe_object);
+> +               }
+> +       } else {
+> +               rcu_read_unlock();
+> +       }
+> +       /*
+> +        * put_object_cleaner() might sleep, but it is only reachable if
+> +        * !landlock_rule_is_disabled().  Therefore, clean_ref() can not =
+sleep.
+> +        */
+> +       might_sleep();
+> +}
+> +
+> +void landlock_release_object(struct landlock_object __rcu *rcu_object)
+> +{
+> +       struct landlock_object *object;
+> +
+> +       if (!rcu_object)
+> +               return;
+> +       rcu_read_lock();
+> +       object =3D get_object_cleaner(rcu_dereference(rcu_object));
+
+This is not how RCU works. You need the rcu annotation on the access
+to the data structure member (or global variable) that's actually
+being accessed. A "struct foo __rcu *foo" argument is essentially
+always wrong.
+
+> +struct landlock_rule {
+> +       struct landlock_access access;
+> +       /*
+> +        * @list: Linked list with other rules tied to the same object, w=
+hich
+> +        * enable to manage their lifetimes.  This is also used to identi=
+fy if
+> +        * a rule is still valid, thanks to landlock_rule_is_disabled(), =
+which
+> +        * is important in the matching process because the original obje=
+ct
+> +        * address might have been recycled.
+> +        */
+> +       struct list_head list;
+> +       union {
+> +               /*
+> +                * @usage: Number of rulesets pointing to this rule.  Thi=
+s
+> +                * field is never used by RCU readers.
+> +                */
+> +               refcount_t usage;
+> +               struct rcu_head rcu_free;
+> +       };
+> +};
+
+An object that is subject to RCU but whose refcount must not be
+accessed from RCU context? That seems a weird.
+
+> +enum landlock_object_type {
+> +       LANDLOCK_OBJECT_INODE =3D 1,
+> +};
+> +
+> +struct landlock_object {
+> +       /*
+> +        * @usage: Main usage counter, used to tie an object to it's unde=
+rlying
+> +        * object (i.e. create a lifetime) and potentially add new rules.
+
+I can't really follow this by reading this patch on its own. As one
+suggestion to make things at least a bit better, how about documenting
+here that `usage` always reaches zero before `cleaners` does?
+
+> +        */
+> +       refcount_t usage;
+> +       /*
+> +        * @cleaners: Usage counter used to free a rule from @rules (than=
+ks to
+> +        * put_rule()).  Enables to get a reference to this object until =
+it
+> +        * really become freed.  Cf. put_object().
+
+Maybe add: @usage being non-zero counts as one reference to @cleaners.
+Once @cleaners has become zero, the object is freed after an RCU grace
+period.
+
+> +        */
+> +       refcount_t cleaners;
+> +       union {
+> +               /*
+> +                * The use of this struct is controlled by @usage and
+> +                * @cleaners, which makes it safe to union it with @rcu_f=
+ree.
+> +                */
+[...]
+> +               struct rcu_head rcu_free;
+> +       };
+> +};
+[...]
+> +static inline bool landlock_rule_is_disabled(
+> +               struct landlock_rule *rule)
+> +{
+> +       /*
+> +        * Disabling (i.e. unlinking) a landlock_rule is a one-way operat=
+ion.
+> +        * It is not possible to re-enable such a rule, then there is no =
+need
+> +        * for smp_load_acquire().
+> +        *
+> +        * LIST_POISON2 is set by list_del() and list_del_rcu().
+> +        */
+> +       return !rule || READ_ONCE(rule->list.prev) =3D=3D LIST_POISON2;
+
+You're not allowed to do this, the comment above list_del() states:
+
+ * Note: list_empty() on entry does not return true after this, the entry i=
+s
+ * in an undefined state.
+
+If you want to be able to test whether the element is on a list
+afterwards, use stuff like list_del_init().
+
+> +}
