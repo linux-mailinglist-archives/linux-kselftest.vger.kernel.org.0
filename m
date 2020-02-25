@@ -2,50 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A139216EF0C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 20:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCD016EF0E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 20:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbgBYTbS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 14:31:18 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42270 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731492AbgBYTbP (ORCPT
+        id S1731403AbgBYTbj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 14:31:39 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:39389 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730990AbgBYTbj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 14:31:15 -0500
-Received: by mail-pg1-f196.google.com with SMTP id h8so27116pgs.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 11:31:14 -0800 (PST)
+        Tue, 25 Feb 2020 14:31:39 -0500
+Received: by mail-pj1-f65.google.com with SMTP id e9so138609pjr.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 11:31:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=EJ8HPUktc58qJYFrDAIdvsZ1Ei72XTyb2PR3F/Eja5g=;
-        b=mRoO3ximDl17LdEWrFR3sIPemcYle9IAprIuQGT7k9qxAXCZvML8ln5am7XhoUgTIk
-         +aGyOyaTzXGab4oJumoYVV6plrgijKkaIuaHuVKxl10zAQKX22W2JxU/F1CScvPk/dTk
-         mLp8j8X4SciZ9bdFTxukYo0F9vTijuu4ZqEh8=
+        bh=LjIF5pvWGrUI78879PdAqSBU3bcNbfTF07rFtspWBu8=;
+        b=fFXnyBd0a2NmF+EHHVMArs2fG25rJo5+63HS4X3vkbftj5xsCdvkRlVr97DJRJFCHe
+         JVaFRj4VNUAqgFoAuy/ggcbSZXRt3SQgzpjX7id20mhFkSV2rFAQUUhpuw7/HQWELFUt
+         4EMI7P7jcRNlXQCD2I8tUc/niKgZ2/d5fL0QA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EJ8HPUktc58qJYFrDAIdvsZ1Ei72XTyb2PR3F/Eja5g=;
-        b=eyxJYC2lfWFzCz0Gl1j0mPCd/HO6qIdbUmphQZ+FSRYJlgWKtcU4GYnSbwthYXYZcJ
-         gcDwmmPJc2mHiwz8tb4R7cG028RUZNG3qgv4g8gh724M7slxQicYkjaI5z1axzs63ssN
-         uYl7YuoTi9LgatDZ2yJ5ZnM3eGdLtvjLAgjbcpAFSIz6b28XrqkkoY9nGBg/Y6Rxl+La
-         UzRL7XI/ZbJGDvbFKYd3ABj3ilPIfnhEZoGwfj/esk/zK8mCytjBOpkWp0L52krYioRD
-         OHRpsu2LBV8Z10ZJujOkUmSlgwI4VwLyuLZGXhdD6uyy9o7yNsqVrKYG7gULsperjxeq
-         OMPA==
-X-Gm-Message-State: APjAAAXjrXxPo/PvV60RY3IiAvytkKgnvrQ8d0Q4cd/L4Bpy+Um9sdol
-        kWH5Voh2RhRUqJGyU8DvZBapjQ==
-X-Google-Smtp-Source: APXvYqwHIqJ+S/3dOkffGiH+IfUlFNqQf+XT34kSaOfgtD9L5Eh6wi2VrsRkUUKjFze3JGnIcP/gXg==
-X-Received: by 2002:a63:a741:: with SMTP id w1mr80479pgo.131.1582659073819;
-        Tue, 25 Feb 2020 11:31:13 -0800 (PST)
+        bh=LjIF5pvWGrUI78879PdAqSBU3bcNbfTF07rFtspWBu8=;
+        b=i26N6z4Ja2OXsGnXWnDPP5wXkUaOH1bKq8yVVve3Ay5W0vM8cg2CGVLR/qlbiPaGve
+         nFypoQ18wGZ6WEet6+yPDq7KWy6ASS9sBDu3QeNn8rZrqM6kcbhpAzMpodh5BgFW53Yk
+         pfwoleN17pP+1AwH6cWyJbFqAj3dEa5weh8YFlVWlDcf0B6Q9WDFpxhm+f0FXMiEAWVB
+         RuZznvSpT8s+JUxoumNWlLOW7OBmc4gFHgqhqg9Xt7uv9uFhMytI4BzBVDXi5JiEfgrd
+         PZIT8cGWSpCCyYgZOdMUgRJ478wXfaNPiWY7Ob8oxhrLOGvvqyXutyHYyLCFS/d5ecL6
+         +wSg==
+X-Gm-Message-State: APjAAAVrar5rNsQB+7Ig1Jl+kdwZ6kedXsPMMWaeUvflbh6iswo/yIvd
+        OGNTF3CvQBgCobdJWMs716ACSgbYd4Y=
+X-Google-Smtp-Source: APXvYqxFHeb9n/GG477r2zimpBTlAhzVc06DbJB8Vd/0jAZd0Iuu1a8+cVdfiZAM/F+ypXbLFNpsmQ==
+X-Received: by 2002:a17:902:6ac7:: with SMTP id i7mr110637plt.66.1582659097713;
+        Tue, 25 Feb 2020 11:31:37 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r3sm18490808pfg.145.2020.02.25.11.31.12
+        by smtp.gmail.com with ESMTPSA id q13sm19308932pfn.162.2020.02.25.11.31.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2020 11:31:12 -0800 (PST)
-Date:   Tue, 25 Feb 2020 11:31:11 -0800
+        Tue, 25 Feb 2020 11:31:36 -0800 (PST)
+Date:   Tue, 25 Feb 2020 11:31:35 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
         Anders Roxell <anders.roxell@linaro.org>,
         lkft-triage@lists.linaro.org,
@@ -53,66 +54,497 @@ Cc:     "open list:KERNEL SELFTEST FRAMEWORK"
         Will Deacon <will@kernel.org>, ardb@kernel.org,
         "Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>
 Subject: Re: selftests: Linux Kernel Dump Test Module output
-Message-ID: <202002251126.66255B5@keescook>
+Message-ID: <202002251131.3216B3B50C@keescook>
 References: <CA+G9fYu3682XJ2Kw2ZvQdUT80epKc9DWWXgDT1-D_65ajSXNTw@mail.gmail.com>
+ <fcb799d4-f316-60d6-9fd0-0bc1c174e63c@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYu3682XJ2Kw2ZvQdUT80epKc9DWWXgDT1-D_65ajSXNTw@mail.gmail.com>
+In-Reply-To: <fcb799d4-f316-60d6-9fd0-0bc1c174e63c@arm.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 04:39:37PM +0530, Naresh Kamboju wrote:
-> The selftest lkdtm test failed on x86_64 and arm64.
-> am I missing any pre-requisite?
-> [...]
-> ref:
-> https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5.6-rc1-19-g359c92c02bfa/testrun/1212254/log
+On Mon, Feb 17, 2020 at 03:36:59PM +0000, Cristian Marussi wrote:
+> n 17/02/2020 11:09, Naresh Kamboju wrote:
+> > The selftest lkdtm test failed on x86_64 and arm64.
+> > am I missing any pre-requisite?
+> > 
+> > Boot log:
+> > [    3.297812] lkdtm: No crash points registered, enable through debugfs
+> > 
+> 
+> from your logs I cannot deduce anything useful, but in our CI I've got similar issues
+> since the 10/12th of Feb...
+> 
+> TAP version 13
+> 1..71
+> # selftests: lkdtm: PANIC.sh
+> # Cannot find /sys/kernel/debug/provoke-crash/DIRECT (missing CONFIG_LKDTM?)
+> not ok 1 selftests: lkdtm: PANIC.sh # SKIP
+> # selftests: lkdtm: BUG.sh
+> # Cannot find /sys/kernel/debug/provoke-crash/DIRECT (missing CONFIG_LKDTM?)
+> 
+> so I suppose this and a bunch of other (probably new) tests are simply
+> missing a bit of CONFIGs... (but I have still to look into this properly)
+> (not sure if this also is your case either...)
 
-Looking at this, I see debugfs mounted, I see LKDTM enabled, but I see
-the console freak out just as lkdtm starts:
+Did you solve this with loading lkdtm?
 
-[  349.262263] kselftest: Running tests in lkdtm
-#      4	0x0000000000401014 ?? ??0
-0x0000000000401014: ??_??0 #
-#      5	0x00007f9de1221a56 ?? ??0
-0x00007f9de1221a56: ??_??0 #
-#      6	0x0000000000401399 ?? ??0
-0x0000000000401399: ??_??0 #
-#   madvise failed,
-failed,: _ #
-#   addr 0x7f9de1000000
-0x7f9de1000000: _ #
-#   length 0x200000
-0x200000: _ #
-#   src_type 0
-0: _ #
-# Testing guest mode PA-bitsANY, VA-bits48,  4K pages
-guest: mode_PA-bitsANY, #
-# Guest physical address width detected 39
-physical: address_width #
-[FAIL] 11 selftests kvm vmx_dirty_log_test # exit=254
+-Kees
 
-Is a kvm test running at the same time? It just looks like the entire
-console goes silent (which would certainly make the lkdtm tests fail)
-
-> https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5.5-11440-gd1ea35f4cdd4/testrun/1202720/log
-
-Similar happens here, only this time it seems to be gpio tests?
-
-[  363.276824] kselftest: Running tests in lkdtm
-# ./gpio-mockup.sh line 89 ./gpio-mockup-chardev No such file or
-# directory
-line: 89_./gpio-mockup-chardev #
-# GPIO gpio-mockup test with ranges <-1,32,-1,32,-1,32> 
-gpio-mockup: test_with #
-# -1,32,-1,32,-1,32 
-...
-[  407.481225] test_bpf: #0 TAX jited:1 63 62 132 PASS
-
-The console seems broken for over 40 seconds?
+> 
+> Regards
+> 
+> Cristian
+> 
+> 
+> 
+> > Test output log,
+> > --------------------
+> > # selftests lkdtm PANIC.sh
+> > lkdtm: PANIC.sh_ #
+> > # Skipping PANIC crashes entire system
+> > PANIC: crashes_entire #
+> > [SKIP] 1 selftests lkdtm PANIC.sh # SKIP
+> > selftests: lkdtm_PANIC.sh [SKIP]
+> > # selftests lkdtm BUG.sh
+> > lkdtm: BUG.sh_ #
+> > # BUG missing 'kernel BUG at' [FAIL]
+> > missing: 'kernel_BUG #
+> > [FAIL] 2 selftests lkdtm BUG.sh # exit=1
+> > selftests: lkdtm_BUG.sh [FAIL]
+> > # selftests lkdtm WARNING.sh
+> > lkdtm: WARNING.sh_ #
+> > # WARNING missing 'WARNING' [FAIL]
+> > missing: 'WARNING'_[FAIL] #
+> > [FAIL] 3 selftests lkdtm WARNING.sh # exit=1
+> > selftests: lkdtm_WARNING.sh [FAIL]
+> > # selftests lkdtm WARNING_MESSAGE.sh
+> > lkdtm: WARNING_MESSAGE.sh_ #
+> > # WARNING_MESSAGE missing 'message trigger' [FAIL]
+> > missing: 'message_trigger' #
+> > [FAIL] 4 selftests lkdtm WARNING_MESSAGE.sh # exit=1
+> > selftests: lkdtm_WARNING_MESSAGE.sh [FAIL]
+> > # selftests lkdtm EXCEPTION.sh
+> > lkdtm: EXCEPTION.sh_ #
+> > # EXCEPTION missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 5 selftests lkdtm EXCEPTION.sh # exit=1
+> > selftests: lkdtm_EXCEPTION.sh [FAIL]
+> > # selftests lkdtm LOOP.sh
+> > lkdtm: LOOP.sh_ #
+> > # Skipping LOOP Hangs the system
+> > LOOP: Hangs_the #
+> > [SKIP] 6 selftests lkdtm LOOP.sh # SKIP
+> > selftests: lkdtm_LOOP.sh [SKIP]
+> > # selftests lkdtm EXHAUST_STACK.sh
+> > lkdtm: EXHAUST_STACK.sh_ #
+> > # Skipping EXHAUST_STACK Corrupts memory on failure
+> > EXHAUST_STACK: Corrupts_memory #
+> > [SKIP] 7 selftests lkdtm EXHAUST_STACK.sh # SKIP
+> > selftests: lkdtm_EXHAUST_STACK.sh [SKIP]
+> > # selftests lkdtm CORRUPT_STACK.sh
+> > lkdtm: CORRUPT_STACK.sh_ #
+> > # Skipping CORRUPT_STACK Crashes entire system on success
+> > CORRUPT_STACK: Crashes_entire #
+> > [SKIP] 8 selftests lkdtm CORRUPT_STACK.sh # SKIP
+> > selftests: lkdtm_CORRUPT_STACK.sh [SKIP]
+> > # selftests lkdtm CORRUPT_STACK_STRONG.sh
+> > lkdtm: CORRUPT_STACK_STRONG.sh_ #
+> > # Skipping CORRUPT_STACK_STRONG Crashes entire system on success
+> > CORRUPT_STACK_STRONG: Crashes_entire #
+> > [SKIP] 9 selftests lkdtm CORRUPT_STACK_STRONG.sh # SKIP
+> > selftests: lkdtm_CORRUPT_STACK_STRONG.sh [SKIP]
+> > # selftests lkdtm CORRUPT_LIST_ADD.sh
+> > lkdtm: CORRUPT_LIST_ADD.sh_ #
+> > # CORRUPT_LIST_ADD missing 'list_add corruption' [FAIL]
+> > missing: 'list_add_corruption' #
+> > [FAIL] 10 selftests lkdtm CORRUPT_LIST_ADD.sh # exit=1
+> > selftests: lkdtm_CORRUPT_LIST_ADD.sh [FAIL]
+> > # selftests lkdtm CORRUPT_LIST_DEL.sh
+> > lkdtm: CORRUPT_LIST_DEL.sh_ #
+> > # CORRUPT_LIST_DEL missing 'list_del corruption' [FAIL]
+> > missing: 'list_del_corruption' #
+> > [FAIL] 11 selftests lkdtm CORRUPT_LIST_DEL.sh # exit=1
+> > selftests: lkdtm_CORRUPT_LIST_DEL.sh [FAIL]
+> > # selftests lkdtm CORRUPT_USER_DS.sh
+> > lkdtm: CORRUPT_USER_DS.sh_ #
+> > # CORRUPT_USER_DS missing 'Invalid address limit on user-mode return' [FAIL]
+> > missing: 'Invalid_address #
+> > [FAIL] 12 selftests lkdtm CORRUPT_USER_DS.sh # exit=1
+> > selftests: lkdtm_CORRUPT_USER_DS.sh [FAIL]
+> > # selftests lkdtm STACK_GUARD_PAGE_LEADING.sh
+> > lkdtm: STACK_GUARD_PAGE_LEADING.sh_ #
+> > # STACK_GUARD_PAGE_LEADING missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 13 selftests lkdtm STACK_GUARD_PAGE_LEADING.sh # exit=1
+> > selftests: lkdtm_STACK_GUARD_PAGE_LEADING.sh [FAIL]
+> > # selftests lkdtm STACK_GUARD_PAGE_TRAILING.sh
+> > lkdtm: STACK_GUARD_PAGE_TRAILING.sh_ #
+> > # STACK_GUARD_PAGE_TRAILING missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 14 selftests lkdtm STACK_GUARD_PAGE_TRAILING.sh # exit=1
+> > selftests: lkdtm_STACK_GUARD_PAGE_TRAILING.sh [FAIL]
+> > # selftests lkdtm UNSET_SMEP.sh
+> > lkdtm: UNSET_SMEP.sh_ #
+> > # UNSET_SMEP missing 'CR4 bits went missing' [FAIL]
+> > missing: 'CR4_bits #
+> > [FAIL] 15 selftests lkdtm UNSET_SMEP.sh # exit=1
+> > selftests: lkdtm_UNSET_SMEP.sh [FAIL]
+> > # selftests lkdtm DOUBLE_FAULT.sh
+> > lkdtm: DOUBLE_FAULT.sh_ #
+> > # Skipped test 'DOUBLE_FAULT' missing in /sys/kernel/debug/provoke-crash/DIRECT!
+> > test: 'DOUBLE_FAULT'_missing #
+> > [SKIP] 16 selftests lkdtm DOUBLE_FAULT.sh # SKIP
+> > selftests: lkdtm_DOUBLE_FAULT.sh [SKIP]
+> > # selftests lkdtm UNALIGNED_LOAD_STORE_WRITE.sh
+> > lkdtm: UNALIGNED_LOAD_STORE_WRITE.sh_ #
+> > # UNALIGNED_LOAD_STORE_WRITE missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 17 selftests lkdtm UNALIGNED_LOAD_STORE_WRITE.sh # exit=1
+> > selftests: lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh [FAIL]
+> > # selftests lkdtm OVERWRITE_ALLOCATION.sh
+> > lkdtm: OVERWRITE_ALLOCATION.sh_ #
+> > # Skipping OVERWRITE_ALLOCATION Corrupts memory on failure
+> > OVERWRITE_ALLOCATION: Corrupts_memory #
+> > [SKIP] 18 selftests lkdtm OVERWRITE_ALLOCATION.sh # SKIP
+> > selftests: lkdtm_OVERWRITE_ALLOCATION.sh [SKIP]
+> > # selftests lkdtm WRITE_AFTER_FREE.sh
+> > lkdtm: WRITE_AFTER_FREE.sh_ #
+> > # Skipping WRITE_AFTER_FREE Corrupts memory on failure
+> > WRITE_AFTER_FREE: Corrupts_memory #
+> > [SKIP] 19 selftests lkdtm WRITE_AFTER_FREE.sh # SKIP
+> > selftests: lkdtm_WRITE_AFTER_FREE.sh [SKIP]
+> > # selftests lkdtm READ_AFTER_FREE.sh
+> > lkdtm: READ_AFTER_FREE.sh_ #
+> > # READ_AFTER_FREE missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 20 selftests lkdtm READ_AFTER_FREE.sh # exit=1
+> > selftests: lkdtm_READ_AFTER_FREE.sh [FAIL]
+> > # selftests lkdtm WRITE_BUDDY_AFTER_FREE.sh
+> > lkdtm: WRITE_BUDDY_AFTER_FREE.sh_ #
+> > # Skipping WRITE_BUDDY_AFTER_FREE Corrupts memory on failure
+> > WRITE_BUDDY_AFTER_FREE: Corrupts_memory #
+> > [SKIP] 21 selftests lkdtm WRITE_BUDDY_AFTER_FREE.sh # SKIP
+> > selftests: lkdtm_WRITE_BUDDY_AFTER_FREE.sh [SKIP]
+> > # selftests lkdtm READ_BUDDY_AFTER_FREE.sh
+> > lkdtm: READ_BUDDY_AFTER_FREE.sh_ #
+> > # READ_BUDDY_AFTER_FREE missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 22 selftests lkdtm READ_BUDDY_AFTER_FREE.sh # exit=1
+> > selftests: lkdtm_READ_BUDDY_AFTER_FREE.sh [FAIL]
+> > # selftests lkdtm SLAB_FREE_DOUBLE.sh
+> > lkdtm: SLAB_FREE_DOUBLE.sh_ #
+> > # SLAB_FREE_DOUBLE missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 23 selftests lkdtm SLAB_FREE_DOUBLE.sh # exit=1
+> > selftests: lkdtm_SLAB_FREE_DOUBLE.sh [FAIL]
+> > # selftests lkdtm SLAB_FREE_CROSS.sh
+> > lkdtm: SLAB_FREE_CROSS.sh_ #
+> > # SLAB_FREE_CROSS missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 24 selftests lkdtm SLAB_FREE_CROSS.sh # exit=1
+> > selftests: lkdtm_SLAB_FREE_CROSS.sh [FAIL]
+> > # selftests lkdtm SLAB_FREE_PAGE.sh
+> > lkdtm: SLAB_FREE_PAGE.sh_ #
+> > # SLAB_FREE_PAGE missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 25 selftests lkdtm SLAB_FREE_PAGE.sh # exit=1
+> > selftests: lkdtm_SLAB_FREE_PAGE.sh [FAIL]
+> > # selftests lkdtm SOFTLOCKUP.sh
+> > lkdtm: SOFTLOCKUP.sh_ #
+> > # Skipping SOFTLOCKUP Hangs the system
+> > SOFTLOCKUP: Hangs_the #
+> > [SKIP] 26 selftests lkdtm SOFTLOCKUP.sh # SKIP
+> > selftests: lkdtm_SOFTLOCKUP.sh [SKIP]
+> > # selftests lkdtm HARDLOCKUP.sh
+> > lkdtm: HARDLOCKUP.sh_ #
+> > # Skipping HARDLOCKUP Hangs the system
+> > HARDLOCKUP: Hangs_the #
+> > [SKIP] 27 selftests lkdtm HARDLOCKUP.sh # SKIP
+> > selftests: lkdtm_HARDLOCKUP.sh [SKIP]
+> > # selftests lkdtm SPINLOCKUP.sh
+> > lkdtm: SPINLOCKUP.sh_ #
+> > # Skipping SPINLOCKUP Hangs the system
+> > SPINLOCKUP: Hangs_the #
+> > [SKIP] 28 selftests lkdtm SPINLOCKUP.sh # SKIP
+> > selftests: lkdtm_SPINLOCKUP.sh [SKIP]
+> > # selftests lkdtm HUNG_TASK.sh
+> > lkdtm: HUNG_TASK.sh_ #
+> > # Skipping HUNG_TASK Hangs the system
+> > HUNG_TASK: Hangs_the #
+> > [SKIP] 29 selftests lkdtm HUNG_TASK.sh # SKIP
+> > selftests: lkdtm_HUNG_TASK.sh [SKIP]
+> > # selftests lkdtm EXEC_DATA.sh
+> > lkdtm: EXEC_DATA.sh_ #
+> > # EXEC_DATA missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 30 selftests lkdtm EXEC_DATA.sh # exit=1
+> > selftests: lkdtm_EXEC_DATA.sh [FAIL]
+> > # selftests lkdtm EXEC_STACK.sh
+> > lkdtm: EXEC_STACK.sh_ #
+> > # EXEC_STACK missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 31 selftests lkdtm EXEC_STACK.sh # exit=1
+> > selftests: lkdtm_EXEC_STACK.sh [FAIL]
+> > # selftests lkdtm EXEC_KMALLOC.sh
+> > lkdtm: EXEC_KMALLOC.sh_ #
+> > # EXEC_KMALLOC missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 32 selftests lkdtm EXEC_KMALLOC.sh # exit=1
+> > selftests: lkdtm_EXEC_KMALLOC.sh [FAIL]
+> > # selftests lkdtm EXEC_VMALLOC.sh
+> > lkdtm: EXEC_VMALLOC.sh_ #
+> > # EXEC_VMALLOC missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 33 selftests lkdtm EXEC_VMALLOC.sh # exit=1
+> > selftests: lkdtm_EXEC_VMALLOC.sh [FAIL]
+> > # selftests lkdtm EXEC_RODATA.sh
+> > lkdtm: EXEC_RODATA.sh_ #
+> > # EXEC_RODATA missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 34 selftests lkdtm EXEC_RODATA.sh # exit=1
+> > selftests: lkdtm_EXEC_RODATA.sh [FAIL]
+> > # selftests lkdtm EXEC_USERSPACE.sh
+> > lkdtm: EXEC_USERSPACE.sh_ #
+> > # EXEC_USERSPACE missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 35 selftests lkdtm EXEC_USERSPACE.sh # exit=1
+> > selftests: lkdtm_EXEC_USERSPACE.sh [FAIL]
+> > # selftests lkdtm EXEC_NULL.sh
+> > lkdtm: EXEC_NULL.sh_ #
+> > # EXEC_NULL missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 36 selftests lkdtm EXEC_NULL.sh # exit=1
+> > selftests: lkdtm_EXEC_NULL.sh [FAIL]
+> > # selftests lkdtm ACCESS_USERSPACE.sh
+> > lkdtm: ACCESS_USERSPACE.sh_ #
+> > # ACCESS_USERSPACE missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 37 selftests lkdtm ACCESS_USERSPACE.sh # exit=1
+> > selftests: lkdtm_ACCESS_USERSPACE.sh [FAIL]
+> > # selftests lkdtm ACCESS_NULL.sh
+> > lkdtm: ACCESS_NULL.sh_ #
+> > # ACCESS_NULL missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 38 selftests lkdtm ACCESS_NULL.sh # exit=1
+> > selftests: lkdtm_ACCESS_NULL.sh [FAIL]
+> > # selftests lkdtm WRITE_RO.sh
+> > lkdtm: WRITE_RO.sh_ #
+> > # WRITE_RO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 39 selftests lkdtm WRITE_RO.sh # exit=1
+> > selftests: lkdtm_WRITE_RO.sh [FAIL]
+> > # selftests lkdtm WRITE_RO_AFTER_INIT.sh
+> > lkdtm: WRITE_RO_AFTER_INIT.sh_ #
+> > # WRITE_RO_AFTER_INIT missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 40 selftests lkdtm WRITE_RO_AFTER_INIT.sh # exit=1
+> > selftests: lkdtm_WRITE_RO_AFTER_INIT.sh [FAIL]
+> > # selftests lkdtm WRITE_KERN.sh
+> > lkdtm: WRITE_KERN.sh_ #
+> > # WRITE_KERN missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 41 selftests lkdtm WRITE_KERN.sh # exit=1
+> > selftests: lkdtm_WRITE_KERN.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_INC_OVERFLOW.sh
+> > lkdtm: REFCOUNT_INC_OVERFLOW.sh_ #
+> > # REFCOUNT_INC_OVERFLOW missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 42 selftests lkdtm REFCOUNT_INC_OVERFLOW.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_INC_OVERFLOW.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_ADD_OVERFLOW.sh
+> > lkdtm: REFCOUNT_ADD_OVERFLOW.sh_ #
+> > # REFCOUNT_ADD_OVERFLOW missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 43 selftests lkdtm REFCOUNT_ADD_OVERFLOW.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_ADD_OVERFLOW.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+> > lkdtm: REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh_ #
+> > # REFCOUNT_INC_NOT_ZERO_OVERFLOW missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 44 selftests lkdtm REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+> > lkdtm: REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh_ #
+> > # REFCOUNT_ADD_NOT_ZERO_OVERFLOW missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 45 selftests lkdtm REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_DEC_ZERO.sh
+> > lkdtm: REFCOUNT_DEC_ZERO.sh_ #
+> > # REFCOUNT_DEC_ZERO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 46 selftests lkdtm REFCOUNT_DEC_ZERO.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_DEC_ZERO.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_DEC_NEGATIVE.sh
+> > lkdtm: REFCOUNT_DEC_NEGATIVE.sh_ #
+> > # REFCOUNT_DEC_NEGATIVE missing 'Negative detected saturated' [FAIL]
+> > missing: 'Negative_detected #
+> > [FAIL] 47 selftests lkdtm REFCOUNT_DEC_NEGATIVE.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_DEC_NEGATIVE.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+> > lkdtm: REFCOUNT_DEC_AND_TEST_NEGATIVE.sh_ #
+> > # REFCOUNT_DEC_AND_TEST_NEGATIVE missing 'Negative detected saturated' [FAIL]
+> > missing: 'Negative_detected #
+> > [  360.222897] kselftest: Running tests in membarrier
+> > [FAIL] 48 selftests lkdtm REFCOUNT_DEC_AND_TEST_NEGATIVE.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+> > lkdtm: REFCOUNT_SUB_AND_TEST_NEGATIVE.sh_ [  360.455095] kselftest:
+> > Running tests in memfd
+> > #
+> > # REFCOUNT_SUB_AND_TEST_NEGATIVE missing 'Negative detected saturated' [FAIL]
+> > missing: 'Negative_detected #
+> > [FAIL] 49 selftests lkdtm REFCOUNT_SUB_AND_TEST_NEGATIVE.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_INC_ZERO.sh
+> > lkdtm: REFCOUNT_INC_ZERO.sh_ #
+> > # REFCOUNT_INC_ZERO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 50 selftests lkdtm REFCOUNT_INC_ZERO.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_INC_ZERO.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_ADD_ZERO.sh
+> > lkdtm: REFCOUNT_ADD_ZERO.sh_ #
+> > # REFCOUNT_ADD_ZERO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 51 selftests lkdtm REFCOUNT_ADD_ZERO.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_ADD_ZERO.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_INC_SATURATED.sh
+> > lkdtm: REFCOUNT_INC_SATURATED.sh_ #
+> > # REFCOUNT_INC_SATURATED missing 'Saturation detected still saturated' [FAIL]
+> > missing: 'Saturation_detected #
+> > [FAIL] 52 selftests lkdtm REFCOUNT_INC_SATURATED.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_INC_SATURATED.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_DEC_SATURATED.sh
+> > lkdtm: REFCOUNT_DEC_SATURATED.sh_ #
+> > # REFCOUNT_DEC_SATURATED missing 'Saturation detected still saturated' [FAIL]
+> > missing: 'Saturation_detected #
+> > [FAIL] 53 selftests lkdtm REFCOUNT_DEC_SATURATED.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_DEC_SATURATED.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_ADD_SATURATED.sh
+> > lkdtm: REFCOUNT_ADD_SATURATED.sh_ #
+> > # REFCOUNT_ADD_SATURATED missing 'Saturation detected still saturated' [FAIL]
+> > missing: 'Saturation_detected #
+> > [FAIL] 54 selftests lkdtm REFCOUNT_ADD_SATURATED.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_ADD_SATURATED.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+> > lkdtm: REFCOUNT_INC_NOT_ZERO_SATURATED.sh_ #
+> > # REFCOUNT_INC_NOT_ZERO_SATURATED missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 55 selftests lkdtm REFCOUNT_INC_NOT_ZERO_SATURATED.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+> > lkdtm: REFCOUNT_ADD_NOT_ZERO_SATURATED.sh_ #
+> > # REFCOUNT_ADD_NOT_ZERO_SATURATED missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 56 selftests lkdtm REFCOUNT_ADD_NOT_ZERO_SATURATED.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_DEC_AND_TEST_SATURATED.sh
+> > lkdtm: REFCOUNT_DEC_AND_TEST_SATURATED.sh_ #
+> > # REFCOUNT_DEC_AND_TEST_SATURATED missing 'Saturation detected still
+> > saturated' [FAIL]
+> > missing: 'Saturation_detected #
+> > [FAIL] 57 selftests lkdtm REFCOUNT_DEC_AND_TEST_SATURATED.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_SUB_AND_TEST_SATURATED.sh
+> > lkdtm: REFCOUNT_SUB_AND_TEST_SATURATED.sh_ #
+> > # REFCOUNT_SUB_AND_TEST_SATURATED missing 'Saturation detected still
+> > saturated' [FAIL]
+> > missing: 'Saturation_detected #
+> > [FAIL] 58 selftests lkdtm REFCOUNT_SUB_AND_TEST_SATURATED.sh # exit=1
+> > selftests: lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh [FAIL]
+> > # selftests lkdtm REFCOUNT_TIMING.sh
+> > lkdtm: REFCOUNT_TIMING.sh_ #
+> > # Skipping REFCOUNT_TIMING timing only
+> > REFCOUNT_TIMING: timing_only #
+> > [SKIP] 59 selftests lkdtm REFCOUNT_TIMING.sh # SKIP
+> > selftests: lkdtm_REFCOUNT_TIMING.sh [SKIP]
+> > # selftests lkdtm ATOMIC_TIMING.sh
+> > lkdtm: ATOMIC_TIMING.sh_ #
+> > # Skipping ATOMIC_TIMING timing only
+> > ATOMIC_TIMING: timing_only #
+> > [SKIP] 60 selftests lkdtm ATOMIC_TIMING.sh # SKIP
+> > selftests: lkdtm_ATOMIC_TIMING.sh [SKIP]
+> > # selftests lkdtm USERCOPY_HEAP_SIZE_TO.sh
+> > lkdtm: USERCOPY_HEAP_SIZE_TO.sh_ #
+> > # USERCOPY_HEAP_SIZE_TO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 61 selftests lkdtm USERCOPY_HEAP_SIZE_TO.sh # exit=1
+> > selftests: lkdtm_USERCOPY_HEAP_SIZE_TO.sh [FAIL]
+> > # selftests lkdtm USERCOPY_HEAP_SIZE_FROM.sh
+> > lkdtm: USERCOPY_HEAP_SIZE_FROM.sh_ #
+> > # USERCOPY_HEAP_SIZE_FROM missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 62 selftests lkdtm USERCOPY_HEAP_SIZE_FROM.sh # exit=1
+> > selftests: lkdtm_USERCOPY_HEAP_SIZE_FROM.sh [FAIL]
+> > # selftests lkdtm USERCOPY_HEAP_WHITELIST_TO.sh
+> > lkdtm: USERCOPY_HEAP_WHITELIST_TO.sh_ #
+> > # USERCOPY_HEAP_WHITELIST_TO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 63 selftests lkdtm USERCOPY_HEAP_WHITELIST_TO.sh # exit=1
+> > selftests: lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh [FAIL]
+> > # selftests lkdtm USERCOPY_HEAP_WHITELIST_FROM.sh
+> > lkdtm: USERCOPY_HEAP_WHITELIST_FROM.sh_ #
+> > # USERCOPY_HEAP_WHITELIST_FROM missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 64 selftests lkdtm USERCOPY_HEAP_WHITELIST_FROM.sh # exit=1
+> > selftests: lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh [FAIL]
+> > # selftests lkdtm USERCOPY_STACK_FRAME_TO.sh
+> > lkdtm: USERCOPY_STACK_FRAME_TO.sh_ #
+> > # USERCOPY_STACK_FRAME_TO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 65 selftests lkdtm USERCOPY_STACK_FRAME_TO.sh # exit=1
+> > selftests: lkdtm_USERCOPY_STACK_FRAME_TO.sh [FAIL]
+> > # selftests lkdtm USERCOPY_STACK_FRAME_FROM.sh
+> > lkdtm: USERCOPY_STACK_FRAME_FROM.sh_ #
+> > # USERCOPY_STACK_FRAME_FROM missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 66 selftests lkdtm USERCOPY_STACK_FRAME_FROM.sh # exit=1
+> > selftests: lkdtm_USERCOPY_STACK_FRAME_FROM.sh [FAIL]
+> > # selftests lkdtm USERCOPY_STACK_BEYOND.sh
+> > lkdtm: USERCOPY_STACK_BEYOND.sh_ #
+> > # USERCOPY_STACK_BEYOND missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 67 selftests lkdtm USERCOPY_STACK_BEYOND.sh # exit=1
+> > selftests: lkdtm_USERCOPY_STACK_BEYOND.sh [FAIL]
+> > # selftests lkdtm USERCOPY_KERNEL.sh
+> > lkdtm: USERCOPY_KERNEL.sh_ #
+> > # USERCOPY_KERNEL missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 68 selftests lkdtm USERCOPY_KERNEL.sh # exit=1
+> > selftests: lkdtm_USERCOPY_KERNEL.sh [FAIL]
+> > # selftests lkdtm USERCOPY_KERNEL_DS.sh
+> > lkdtm: USERCOPY_KERNEL_DS.sh_ #
+> > # USERCOPY_KERNEL_DS missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 69 selftests lkdtm USERCOPY_KERNEL_DS.sh # exit=1
+> > selftests: lkdtm_USERCOPY_KERNEL_DS.sh [FAIL]
+> > # selftests lkdtm STACKLEAK_ERASING.sh
+> > lkdtm: STACKLEAK_ERASING.sh_ #
+> > # STACKLEAK_ERASING missing 'OK the rest of the thread stack is
+> > properly erased' [FAIL]
+> > missing: 'OK_the #
+> > [FAIL] 70 selftests lkdtm STACKLEAK_ERASING.sh # exit=1
+> > selftests: lkdtm_STACKLEAK_ERASING.sh [FAIL]
+> > # selftests lkdtm CFI_FORWARD_PROTO.sh
+> > lkdtm: CFI_FORWARD_PROTO.sh_ #
+> > # CFI_FORWARD_PROTO missing 'call trace' [FAIL]
+> > missing: 'call_trace' #
+> > [FAIL] 71 selftests lkdtm CFI_FORWARD_PROTO.sh # exit=1
+> > selftests: lkdtm_CFI_FORWARD_PROTO.sh [FAIL]
+> > 
+> > ref:
+> > https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5.6-rc1-19-g359c92c02bfa/testrun/1212254/log
+> > https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5.5-11440-gd1ea35f4cdd4/testrun/1202720/log
+> > 
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
+> > 
+> 
 
 -- 
 Kees Cook
