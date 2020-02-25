@@ -2,179 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DF216F2A8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 23:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E66016F2BF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 23:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727778AbgBYWhl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 17:37:41 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46609 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727918AbgBYWhl (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 17:37:41 -0500
-Received: by mail-pl1-f193.google.com with SMTP id y8so405121pll.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 14:37:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=ujUSpbSlCH5ZCbsE0Im09CK5jyllUEPbsT32AKCmZZ8=;
-        b=DyLkCv60xAdLCmRKcDclI0CdjpCht6vI0Kff3FlLtJ7IJj+r1jKD0DZHiRDVNX9oU2
-         4ILDtH0EHnHCBkWm9pY11x/hcehrKdRPZLnZ0B+wuKFb3zlDp6C5dn106hviyEbF5k2w
-         /2q2TLjsB4pOYE7UmuaRr59Z8/Ete9pGvTXVU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=ujUSpbSlCH5ZCbsE0Im09CK5jyllUEPbsT32AKCmZZ8=;
-        b=cVjmds3JJv3Vx/HRpjjnkzpqPHjjDRMQ5V48FpXOcmaqq3y79jw1dJc9gJEXamr5YZ
-         1AMVngouDQ1XBKq5tSaxyTxtelDYDmVTcggJxj5p3HpNCYGn7SLqpu6zXo0WzqtB05lT
-         /dP4vc0EHvlvHcuoVPzn3CNaBFZolbEWHOf0EUAS8xzlvtdr8/cUZTv4IuzPmO3VvgR9
-         lP4L61JwB/LVHzJykvaYq/PzBB1/RA1KI5+DuJlpLa5W4jMtzfHDvY259cqQCw43UChb
-         AZRw5K36xC7YFmHKUuo2Ion4cSze/7mxIalfmrMPgCorNzAis2Y43Uoon14P+S83kP2C
-         zxbg==
-X-Gm-Message-State: APjAAAV4xkud2Q7e0Hd/f6Opf5HFsf7D3XhzcvB3M0xm/z3r0ghll3bk
-        0LcR1tZ+R6mnF25/XXJhGJJRQw==
-X-Google-Smtp-Source: APXvYqyClLjlKFFh151KqjRXFbjTgwsEjNcVLzqq++3PiVnTCzW7kl9YidPkNzPtFOSSHwlCCAAalw==
-X-Received: by 2002:a17:902:bf41:: with SMTP id u1mr738034pls.207.1582670259870;
-        Tue, 25 Feb 2020 14:37:39 -0800 (PST)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id x12sm111778pfr.47.2020.02.25.14.37.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2020 14:37:39 -0800 (PST)
-Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-7-scott.branden@broadcom.com>
- <20200220074711.GA3261162@kroah.com>
- <ee53fe6f-53de-87c0-db16-989cc15abbce@broadcom.com>
- <CAK8P3a0y8RfjEng4AsMr4MAPGMTXduiFOyfUzazgw9c+KVWmYA@mail.gmail.com>
- <CAOesGMj423YXNhk_vFE0ueNjzbYoD0wQ68jJApewZS8qtVX3=g@mail.gmail.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <d35204c1-054e-ec5b-069b-42a053a3863f@broadcom.com>
-Date:   Tue, 25 Feb 2020 14:37:36 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729078AbgBYWwe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 17:52:34 -0500
+Received: from mga05.intel.com ([192.55.52.43]:63034 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728806AbgBYWwd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 Feb 2020 17:52:33 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 14:52:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,485,1574150400"; 
+   d="scan'208";a="230266734"
+Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.78]) ([134.134.177.78])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Feb 2020 14:52:32 -0800
+Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
+ IA32_FEAT_CTL is configured
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
+        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
+        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
+        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
+        lenb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
+        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
+        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
+ <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
+ <20200225221234.GL9245@linux.intel.com>
+From:   Jacob Keller <jacob.e.keller@intel.com>
+Organization: Intel Corporation
+Message-ID: <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
+Date:   Tue, 25 Feb 2020 14:52:32 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <CAOesGMj423YXNhk_vFE0ueNjzbYoD0wQ68jJApewZS8qtVX3=g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200225221234.GL9245@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Olof/All,
+On 2/25/2020 2:12 PM, Sean Christopherson wrote:
+> On Tue, Feb 25, 2020 at 01:49:13PM -0800, Jacob Keller wrote:
+>> Hi Sean,
+>>
+>> I suspect something is wrong and the features are enabled even though
+>> the BIOS has it disabled, leading to later failure because of this.
+> 
+> Hrm.  On the failing kernel, what are the values of MSR 0x3a for all CPUs,
+> i.e. what's the output of 'sudo rdmsr -a 0x3a'?
+> 
 
-I'm trying to digest all the feedback of what needs to be done.
-I will be fixing up all the valuable comments about general issues but 
-would like to know
-what needs to be done about the tty interface.
+On the old (fedora 30) kernel, every cpu reports as '1'.
 
-The VK devices are configured to write serial data to circular buffers 
-in memory or out a UART.
-When we configure a system using the UART we connect a cable to the host 
-and open a tty device.
-When we don't connect a UART cable to the host we open the tty device in 
-our driver instead.
-In this case the memory is exposed to the host via PCI BAR memory space.
-The bcm-vk host driver then accesses PCI space and presents a tty 
-interface to the host.
-We implemented a tty device to present the tty interface.
-Host doesn't change anything other than opening a different devnode in 
-UART vs. PCI case.
+I can't easily test the failing kernel because it crashes during boot.
 
-Based on all the comments: what interface should we be providing in 
-driver instead?
-
-On 2020-02-23 3:55 p.m., Olof Johansson wrote:
-> On Sat, Feb 22, 2020 at 12:03 AM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Fri, Feb 21, 2020 at 7:19 PM Scott Branden
->> <scott.branden@broadcom.com> wrote:
->>> On 2020-02-19 11:47 p.m., Greg Kroah-Hartman wrote:
->>>> Have you worked with the V4L developers to tie this into the proper
->>>> in-kernel apis for this type of functionality?
->>> We looked at the V4L model doesn't have any support for anything we are
->>> doing in this driver.
->>> We also want a driver that doesn't care about video.  It could be
->>> offloading crypto or other operations.
->>> We talked with Olof about all of this previously and he said leave it as
->>> a misc driver for now.
->>> He was going to discuss at linux plumbers conference that we need some
->>> sort of offload engine model that such devices could fit into.
->> I see. Have you looked at the "uacce" driver submission? It seems
->> theirs is similar enough that there might be some way to share interfaces.
-> Uacce isn't a driver (or wasn't last time I looked at it, when it had
-> a different name). It's more of a framework for standardized direct HW
-> access from userspace, and relies on I/O virtualization to keep DMA
-> secure/partitioned, etc. VK is more of a classic PCIe device, it'll
-> handle DMA to/from the host, etc.
->
->>>> Using a tty driver seems like the totally incorrect way to do this, what
->>>> am I missing?
->>> tty driver is used to provide console access to the processors running
->>> on vk.
->>> Data is sent using the bcm_vk_msg interface by read/write operations
->>> from user space.
->>> VK then gets the messages and DMA's the data to/from host memory when
->>> needed to process.
->> In turn here, it sounds like you'd want to look at what drivers/misc/mic/
->> and the mellanox bluefield drivers are doing. As I understand, they have the
->> same requirements for console, but have a nicer approach of providing
->> abstract 'virtio' channels between the PCIe endpoint and the host, and
->> then run regular virtio based drivers (console, tty, block, filesystem,
->> network, ...) along with application specific ones to provide the custom
->> high-level protocols.
-> This has more value on the device than on the host, as far as I've
-> seen it used (if you want to boot Linux on it and have things
-> exposed).
->
-> virtio isn't necessarily a match if all you really want is a character
-> stream for a console and don't need (or have performance requirements
-> beyond what virtio offers) other types of communication.
->
->> This is also similar to what the drivers/pci/endpoint
->> (from the other end) as the drivers/ntb (pci host on both ends) frameworks
->> and of course the rpmsg/remoteproc framework do.
-> remoteproc is more about booting a tightly integrated device on an
-> embedded system. Also not a match here IMHO.
->
->> In the long run, I would want much more consolidation between the
->> low-level parts of all these frameworks, but moving your high-level
->> protocols to the same virtio method would sound like a step in the
->> direction towards a generialized framework and easier sharing of
->> the abstractions.
-> For a simple naive console/character stream, doing something on top of
-> hvc might be easier -- it already does polling for you, etc.
->
-> Of course, the intent is not to ever use it as a console for the host
-> here, so that aspect of hvc isn't useful. But it gives you a bunch of
-> other stuff for free with just getchar/putchar interfaces to
-> implement.
->
->
-> -Olof
-
+Thanks,
+Jake
