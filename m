@@ -2,108 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED84816EBDD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 17:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434CF16EE57
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 19:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730801AbgBYQ6F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 11:58:05 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:42144 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729867AbgBYQ6F (ORCPT
+        id S1731633AbgBYSt6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 13:49:58 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44042 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730634AbgBYSt5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 11:58:05 -0500
-Received: from mail-pl1-f198.google.com ([209.85.214.198])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1j6dX1-0000Pi-7Q
-        for linux-kselftest@vger.kernel.org; Tue, 25 Feb 2020 16:58:03 +0000
-Received: by mail-pl1-f198.google.com with SMTP id g5so7763707plq.17
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 08:58:03 -0800 (PST)
+        Tue, 25 Feb 2020 13:49:57 -0500
+Received: by mail-pl1-f194.google.com with SMTP id d9so144735plo.11;
+        Tue, 25 Feb 2020 10:49:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=nvwGkkcwwig4eCR4m0+EXyPalZCNu0nCU8n4Iqik970=;
+        b=G7bWyZbHZX8L5mx1qmuUrJ6R/u1VcW6191mW+YfJDBC8HLgDFKfKHWQEOoEJoVhkXn
+         W/y6CCVqFL92NYn57nNRjyHA6lwYbRoweC1yYGHTkJzL53mymmUpJksjTWZ7ySbaPrRB
+         n0dyGnxfMmOFoTSoRJbqDT3MGEuqUxVvZXV12P4m3+0oJWHi3DH5TMF+x/W1qg0hNMxA
+         CLweY4F1EeybVJFQ04jKbevHMx8Vcg43jgMKOzPQ4W+7RIFDB5lRmOdZqHKK6pq4BKkF
+         NJ9ve8xEqDSWGj1UXvCZkB5iZd0pmON/92SSjvdIELk2bdaMvOd6OKLXHoTzYJLCvTa+
+         zcpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Tmq5/QscEAlIKXHg+Ug+knf6u6cqRVBxVv3NqJuFm50=;
-        b=OGxeZMaf05uNwI3s68daxjBpsGm5qvjRlDq8kj5q7ZXxxcDvUB/qRF43VAqUlk1eBu
-         Ly8VHyfWUsDtx4UiQu2hXnOrdsGFVfoqrD3jNM5Xq28gZxPs7Ldi8ZL2rymJW+Un7ND5
-         bkk2mqqIVXdytqc5M28xWtTaNfTcR5nB/MR7qhq5qXv185GMJ09uedZXVR6jb8JaMBkT
-         NRn6V3djj/z5J0TrXU/75zy5O+MaFTv5l7gdZ4TDvE++7s4J1YDTEQa+0sN3pBIseMVn
-         LYD6Ijq0mKUvQakhHwhoJ4+GwbN0WoE91jd6I736BHZ5HuUKpBsv44HiX0SEEG0YypVG
-         x1BA==
-X-Gm-Message-State: APjAAAV4wvWwtOKxng3dMPZtSmJIpud0OeDulgrl8PT68+sXUHr6eF3P
-        mRNdeIYYVSaTj1dAzTyBm9ilx+m0do1QmtGGlJe9q7fPDplZshFij0fkVFgqcsp+mxc34Sqyh3+
-        0Icl3ETpOH/xOZQwbiZjGBFIONCsCH35CnJpx/yBzhdZv
-X-Received: by 2002:a63:7d46:: with SMTP id m6mr56273065pgn.38.1582649881487;
-        Tue, 25 Feb 2020 08:58:01 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzDCUsO23WLo7Kej+kPuOKSIr5NpcgPj7a/xYcGbZxHSW4SNQ4GSRF97BOQStSuVJhPvD3Zbg==
-X-Received: by 2002:a63:7d46:: with SMTP id m6mr56273040pgn.38.1582649881092;
-        Tue, 25 Feb 2020 08:58:01 -0800 (PST)
-Received: from localhost.localdomain (223-137-37-84.emome-ip.hinet.net. [223.137.37.84])
-        by smtp.gmail.com with ESMTPSA id i22sm3558212pgi.69.2020.02.25.08.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2020 08:58:00 -0800 (PST)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org, sboyd@kernel.org, tglx@linutronix.de,
-        john.stultz@linaro.org, joe.lawrence@redhat.com,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=nvwGkkcwwig4eCR4m0+EXyPalZCNu0nCU8n4Iqik970=;
+        b=uHHAIJZKoQDrf7xJVbKS38TFWc1YeoYHpYTP4TKy221TnVQXTOu7e4hwSHjBuSi6r8
+         8fb64eNsBkAbxjN3ZyIvJ+7gkM7ioTMt0wntDZTnzO20DcispTXjQGxblKDNlaRgpLyL
+         wiMANgQ9n6DUCunoH3ulmZoQd4/k0ecflh9IlGCXApc25/eeQ8VAiWMlwZQlhsVskjqB
+         I4xaJEzm9XBSK1s9bDSjNb4HurgOimoQ5rZjEyjLF/Vf0lmOSkW5CeckHBlcFs1jrqeC
+         zlj4VlG13XprAXC853D/uRRl1s0jJiBGhjgt0rAhjTdyWYtayNhJVMSZMwlU2tpVuLQ3
+         3LzQ==
+X-Gm-Message-State: APjAAAXs+N4FNq/SkE71+8CPflZ4wpbrbCFNvOR+Wxad/dEXqxDn/rhI
+        yLmVSTicxG3nv8ivKCnfuOA=
+X-Google-Smtp-Source: APXvYqwqCzAhzlldh7y2QteC8HJxHmiV+T+MgbEcZee4Qfdqy017TQ2Ol+QM4KbM9t0bb8tGyUsHwA==
+X-Received: by 2002:a17:902:bc45:: with SMTP id t5mr56453991plz.239.1582656596777;
+        Tue, 25 Feb 2020 10:49:56 -0800 (PST)
+Received: from JF-EN-C02V905BHTDF.tld ([12.111.169.54])
+        by smtp.gmail.com with ESMTPSA id q9sm14936484pgs.89.2020.02.25.10.49.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Feb 2020 10:49:56 -0800 (PST)
+Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
         linux-kernel@vger.kernel.org
-Subject: [PATCHv2] selftests/timers: Turn off timeout setting
-Date:   Wed, 26 Feb 2020 00:57:49 +0800
-Message-Id: <20200225165749.6399-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.17.1
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200224160215.4136-1-mic@digikod.net>
+From:   J Freyensee <why2jjj.linux@gmail.com>
+Message-ID: <6df3e6b1-ffd1-dacf-2f2d-7df8e5aca668@gmail.com>
+Date:   Tue, 25 Feb 2020 10:49:52 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200224160215.4136-1-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The following 4 tests in timers can take longer than the default 45
-seconds that added in commit 852c8cbf (selftests/kselftest/runner.sh:
-Add 45 second timeout per test) to run:
-  * nsleep-lat - 2m7.350s
-  * set-timer-lat - 2m0.66s
-  * inconsistency-check - 1m45.074s
-  * raw_skew - 2m0.013s
 
-Thus they will be marked as failed with the current 45s setting:
-  not ok 3 selftests: timers: nsleep-lat # TIMEOUT
-  not ok 4 selftests: timers: set-timer-lat # TIMEOUT
-  not ok 6 selftests: timers: inconsistency-check # TIMEOUT
-  not ok 7 selftests: timers: raw_skew # TIMEOUT
 
-Disable the timeout setting for timers can make these tests finish
-properly:
-  ok 3 selftests: timers: nsleep-lat
-  ok 4 selftests: timers: set-timer-lat
-  ok 6 selftests: timers: inconsistency-check
-  ok 7 selftests: timers: raw_skew
+On 2/24/20 8:02 AM, Mickaël Salaün wrote:
 
-https://bugs.launchpad.net/bugs/1864626
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/timers/Makefile | 1 +
- tools/testing/selftests/timers/settings | 1 +
- 2 files changed, 2 insertions(+)
- create mode 100644 tools/testing/selftests/timers/settings
+> ## Syscall
+>
+> Because it is only tested on x86_64, the syscall is only wired up for
+> this architecture.  The whole x86 family (and probably all the others)
+> will be supported in the next patch series.
+General question for u.  What is it meant "whole x86 family will be 
+supported".  32-bit x86 will be supported?
 
-diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
-index 7656c7c..0e73a16 100644
---- a/tools/testing/selftests/timers/Makefile
-+++ b/tools/testing/selftests/timers/Makefile
-@@ -13,6 +13,7 @@ DESTRUCTIVE_TESTS = alarmtimer-suspend valid-adjtimex adjtick change_skew \
- 
- TEST_GEN_PROGS_EXTENDED = $(DESTRUCTIVE_TESTS)
- 
-+TEST_FILES := settings
- 
- include ../lib.mk
- 
-diff --git a/tools/testing/selftests/timers/settings b/tools/testing/selftests/timers/settings
-new file mode 100644
-index 0000000..e7b9417
---- /dev/null
-+++ b/tools/testing/selftests/timers/settings
-@@ -0,0 +1 @@
-+timeout=0
--- 
-2.7.4
+Thanks,
+Jay
 
