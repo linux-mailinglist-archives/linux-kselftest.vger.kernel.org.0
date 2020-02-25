@@ -2,36 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E986316C09F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 13:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA2D16C23A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 14:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbgBYMS4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 07:18:56 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50560 "EHLO mx2.suse.de"
+        id S1729421AbgBYNZf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 08:25:35 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33940 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725788AbgBYMS4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 07:18:56 -0500
+        id S1729317AbgBYNZf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 Feb 2020 08:25:35 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id DD7C2B125;
-        Tue, 25 Feb 2020 12:18:52 +0000 (UTC)
-Subject: Re: [PATCH bpf-next v2 2/5] bpftool: Make probes which emit dmesg
- warnings optional
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        by mx2.suse.de (Postfix) with ESMTP id 839C8AC0C;
+        Tue, 25 Feb 2020 13:25:32 +0000 (UTC)
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Add test for "bpftool
+ feature" command
+To:     Quentin Monnet <quentin@isovalent.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
         Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
 References: <20200221031702.25292-1-mrostecki@opensuse.org>
- <20200221031702.25292-3-mrostecki@opensuse.org>
- <7ab56bb6-0ddb-2c3c-d116-fc01feddba5e@isovalent.com>
- <20200221224428.plbxav3scv6og6kv@ast-mbp>
+ <20200221031702.25292-6-mrostecki@opensuse.org>
+ <d178dc6c-7696-8e58-9df9-887152104a1c@isovalent.com>
 From:   Michal Rostecki <mrostecki@opensuse.org>
 Autocrypt: addr=mrostecki@opensuse.org; keydata=
  mQINBF4whosBEADQd45MN9lBl17sx48EAAfyrc6sVtmf/qyqsQgpJnuLGQTbSdI2Nckz0w04
@@ -77,41 +79,44 @@ Autocrypt: addr=mrostecki@opensuse.org; keydata=
  hjrs3VY5x7TDedJwEr5iMKzvI4NlXNQEjDEltBN88gMvtFo6w8W/bbe6OalIEfs42DS+5KIg
  X91a5VRZRQo853ef/YjTRCZkGhUJ9A5uCLodR14o+C2Lzc3EmJ89awrqiAirZWPuZHCfud+f
  ZURUUA==
-Message-ID: <bd9545a3-71d8-610c-756e-12ce82bc35f8@opensuse.org>
-Date:   Tue, 25 Feb 2020 13:18:51 +0100
+Message-ID: <dbdb9673-dbb4-45e6-918f-9d4cd69ccfef@opensuse.org>
+Date:   Tue, 25 Feb 2020 14:25:31 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200221224428.plbxav3scv6og6kv@ast-mbp>
+In-Reply-To: <d178dc6c-7696-8e58-9df9-887152104a1c@isovalent.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/21/20 11:44 PM, Alexei Starovoitov wrote:
-> On Fri, Feb 21, 2020 at 11:28:05AM +0000, Quentin Monnet wrote:
->>
->> "trace" sounds too generic. If filters are applied again to prog and map
->> types in the future (as you had in v1), this would catch tracepoint and
->> raw_tracepoint program types and stack_trace map type. Or if new helpers
->> with "trace" in their name are added, we skip them too. Can we use something
->> more specific, probably "trace_printk"?
+On 2/21/20 12:28 PM, Quentin Monnet wrote:>> +    def
+test_feature_macros(self):
+>> +        expected_patterns = [
+>> +            b"/\*\*\* System call availability \*\*\*/",
+>> +            b"#define HAVE_BPF_SYSCALL",
+>> +            b"/\*\*\* eBPF program types \*\*\*/",
+>> +            b"#define HAVE.*PROG_TYPE",
+>> +            b"/\*\*\* eBPF map types \*\*\*/",
+>> +            b"#define HAVE.*MAP_TYPE",
+>> +            b"/\*\*\* eBPF helper functions \*\*\*/",
+>> +            b"#define HAVE.*HELPER",
+>> +            b"/\*\*\* eBPF misc features \*\*\*/",
+>> +        ]
+>> +
+>> +        res = bpftool(["feature", "probe", "macros"])
+>> +        for pattern in expected_patterns:
+>> +            self.assertRegex(res, pattern)
 > 
-> +1
+> Could we have (or did I miss it?) a test that compares the output of
+> probes _with_ "full" and _without_ it, to make sure that the only lines
+> that differ are about "bpf_trace_prink" or "bpf_probe_write_user"? Could
+> help determine if we filter out too many elements by mistake.
 > 
->> Thanks for the patch! While I understand you want to keep the changes you
->> have done to use regex, I do not really think they bring much in this
->> version of the patch. As we only want to filter out two specific helpers, it
->> seems to me that it would be much simpler to just compare helper names
->> instead of introducing regular expressions that are not used otherwise. What
->> do you think?
-> 
-> +1
-> I was thinking the same.
-> Or filter by specific integer id of the helper.
-> 
+> Thanks,
+> Quentin
 
-I like the idea of filtering by id. I will do that in v3. Thanks for review!
+Good idea, I will add that test in v3.
