@@ -2,19 +2,19 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA2D16C23A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 14:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C358B16C2CF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 14:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729421AbgBYNZf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 08:25:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:33940 "EHLO mx2.suse.de"
+        id S1729411AbgBYNzP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 08:55:15 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49614 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729317AbgBYNZf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 08:25:35 -0500
+        id S1729680AbgBYNzP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 Feb 2020 08:55:15 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 839C8AC0C;
-        Tue, 25 Feb 2020 13:25:32 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 5F7DBAC5C;
+        Tue, 25 Feb 2020 13:55:13 +0000 (UTC)
 Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Add test for "bpftool
  feature" command
 To:     Quentin Monnet <quentin@isovalent.com>, bpf@vger.kernel.org
@@ -79,8 +79,8 @@ Autocrypt: addr=mrostecki@opensuse.org; keydata=
  hjrs3VY5x7TDedJwEr5iMKzvI4NlXNQEjDEltBN88gMvtFo6w8W/bbe6OalIEfs42DS+5KIg
  X91a5VRZRQo853ef/YjTRCZkGhUJ9A5uCLodR14o+C2Lzc3EmJ89awrqiAirZWPuZHCfud+f
  ZURUUA==
-Message-ID: <dbdb9673-dbb4-45e6-918f-9d4cd69ccfef@opensuse.org>
-Date:   Tue, 25 Feb 2020 14:25:31 +0100
+Message-ID: <c24d2b7a-889b-9294-cd30-6938f00b645a@opensuse.org>
+Date:   Tue, 25 Feb 2020 14:55:12 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
@@ -93,30 +93,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/21/20 12:28 PM, Quentin Monnet wrote:>> +    def
-test_feature_macros(self):
+On 2/21/20 12:28 PM, Quentin Monnet wrote:
+>> +    @default_iface
+>> +    def test_feature_dev(self, iface):
 >> +        expected_patterns = [
->> +            b"/\*\*\* System call availability \*\*\*/",
->> +            b"#define HAVE_BPF_SYSCALL",
->> +            b"/\*\*\* eBPF program types \*\*\*/",
->> +            b"#define HAVE.*PROG_TYPE",
->> +            b"/\*\*\* eBPF map types \*\*\*/",
->> +            b"#define HAVE.*MAP_TYPE",
->> +            b"/\*\*\* eBPF helper functions \*\*\*/",
->> +            b"#define HAVE.*HELPER",
->> +            b"/\*\*\* eBPF misc features \*\*\*/",
+>> +            SECTION_SYSCALL_CONFIG_PATTERN,
+>> +            SECTION_PROGRAM_TYPES_PATTERN,
+>> +            SECTION_MAP_TYPES_PATTERN,
+>> +            SECTION_HELPERS_PATTERN,
+>> +            SECTION_MISC_PATTERN,
 >> +        ]
->> +
->> +        res = bpftool(["feature", "probe", "macros"])
->> +        for pattern in expected_patterns:
->> +            self.assertRegex(res, pattern)
 > 
-> Could we have (or did I miss it?) a test that compares the output of
-> probes _with_ "full" and _without_ it, to make sure that the only lines
-> that differ are about "bpf_trace_prink" or "bpf_probe_write_user"? Could
-> help determine if we filter out too many elements by mistake.
-> 
-> Thanks,
-> Quentin
+> Mixed feeling on the tests with plain output, as we keep telling people
+> that plain output should not be parsed (not reliable, may change). But
+> if you want to run one or two tests with it, why not, I guess.
 
-Good idea, I will add that test in v3.
+I thought about that and yes, testing the plain output is probably
+redundant and makes those tests less readable. However, the only plain
+output test which I would like to keep there is test_feature_macros -
+because I guess that we are not planning to change names or patterns of
+generated macros (or if so, we should test that change).
