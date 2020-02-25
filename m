@@ -2,48 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAB516EFD2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 21:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4001F16EFD3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 21:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730794AbgBYULo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 15:11:44 -0500
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:36621 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731330AbgBYULh (ORCPT
+        id S1731660AbgBYUMG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 15:12:06 -0500
+Received: from mail-pj1-f73.google.com ([209.85.216.73]:59681 "EHLO
+        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731657AbgBYUMF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 15:11:37 -0500
-Received: by mail-pf1-f201.google.com with SMTP id 6so220717pfv.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 12:11:36 -0800 (PST)
+        Tue, 25 Feb 2020 15:12:05 -0500
+Received: by mail-pj1-f73.google.com with SMTP id z5so323245pjq.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 12:12:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=olGEKVt7aKYyoJtZp+gI6XiiDQDvBesIaR/gHj/tn7A=;
-        b=K2D1q8zBCgx/n+QcyDqBI731AccIzgRwSe+YEEKwk/FV872ZqCVGx6U4zHFxmG0SkW
-         NaNR9gm5LJ8oER8c4STYYuXWyx5d5JS1wjYRAACo7RIlaIHMVXErIeKOxjAaJOVcoz7G
-         UZKk6UY7EzHq7CbilnXZg8dLevY5A+MTg5yfn16PDuuSNUtje4Z4zI08xpggXeoUauQX
-         3UVhuoeeuLD5Oq3msIRqYj5GmpGHlXUVIwaUk6TSMjWgwJNEpgDQX0vYDiPrwAhYXnHP
-         K3WC+vF2FvRcoqMTXNff6NtNLztOpPaPJeeV2XwPia5DR6brBhkqAVfVRwOF17zHOhve
-         39QQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=o7uyCNm3PwcTObFLNHL0wKjFetUXQ9LZudj5gbkagCg=;
+        b=CG3sVubIl1XtHpely2x6iI3gAxlI/J9joPRgYReo4LLymfpQyhJPsuUzS6TAmtbK5m
+         wWoQNbvEf3hTv4pAY/G47YzEE1FURpjhZa4Qp6f/+S0FD8wPbhAOI6/Wvq/KXEFngKcO
+         8xpxCcYebMDiL4IUu97BsivOvXK4zXp2qfpPFFsBPYXVq6JmNxr2JUDKVDaq7Nj4GrL4
+         8wauJomThGX+QnNKqqfpj1jh8NqMyZ2kM74F9tQTM9XmjnZ3gF5wL2/yhTQqtjSyzLTB
+         PtAITMiMKM8n20CyIvKwpRzAzQ/tAeRHxM6FCnTsgzmD5rMvv1hzyh+leyeLSktckdMP
+         vLNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=olGEKVt7aKYyoJtZp+gI6XiiDQDvBesIaR/gHj/tn7A=;
-        b=XYl6G5uNdCeI8cChB9LMhPjQ/aQ/bYqZcMps65+25MVCsw7+cBQBCFfTg/nnw+T0uB
-         ZfLjJAKPdoLazgzawEpiVsPC2cbtmImOmsZXdvicpLZ8bSDGO5dgX1/uGjod0At5IJhX
-         cCvoDuga2aDDRnoHiWR8oZegCleks56zFrVcZ9NmDpRxgydYGjwE5wt66qL82sp8i8JE
-         AXsghZLS1TCAFKgi50M/KM9Ro2O6+aArWYbMLTd/bKT1sc634QQ2I+qaRsVEah1RCTO+
-         7jjs+Ibqyvkg6WUnEI9Z4KIob1Y9k2MGPIy6VVNgwmo+rw3jcm3G1I9rL28nVKoHgCHi
-         EEHw==
-X-Gm-Message-State: APjAAAV134FrsSVN9AVAl/4uBpRp/ri/E6rHmqeGsabS780TeC+TA2aD
-        XpcpMxIyBMmA+nkNCmsAJRNo2jd2l4KBsvBV
-X-Google-Smtp-Source: APXvYqxIAKVdXcogeG5IP5XAtbw6nMatG+px/sTtMdYK/slOjhOuTnBjcG3wJc4IYuECo6CZa+5UTgfWnUK89kSC
-X-Received: by 2002:a63:fd17:: with SMTP id d23mr219479pgh.159.1582661496360;
- Tue, 25 Feb 2020 12:11:36 -0800 (PST)
-Date:   Tue, 25 Feb 2020 12:11:29 -0800
-Message-Id: <20200225201130.211124-1-heidifahim@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=o7uyCNm3PwcTObFLNHL0wKjFetUXQ9LZudj5gbkagCg=;
+        b=hG+mwo7MHX67ENPfAgDPtjg05s1Ob0mVFgTnAZ+L9lL1IKQnZiZf+g2ScH22VlUVhy
+         hndW6sKvawn66s9Q7ySlyGBQjggHROCpGoduY9QTGRUEDPxbuCJKGMS0hKYMGfSOAhZ3
+         7IO2RgHD3C8dKNFwqg2XvQtKs6XfFoFaUQ/wp23z4qFMksa30my3x1OKbJ/9ZFMDX+lO
+         9DvIhhfauZp9taGEHHLCZsgtkaFlO/Oaz/cPnQe6eoc1kilZ9Y1jmTy/jCrekmBReyph
+         18EeayAUwPS7MIoStW+1KYVUlfkMlCCGpieg68kGFOTq+9ri6DP34VaaQDESF/xzqMxy
+         qeGA==
+X-Gm-Message-State: APjAAAUt/WDH/RZlqk8bnYjaRqbp+ruPOEa0DH0+KyAmx1a/Fthl6Snr
+        jPQGRbR7F3m5m0lSwOlK9fo4O5Xs16+/2+ky
+X-Google-Smtp-Source: APXvYqy3QkSKgLaYw5ctE8KDVob2ow1Jd3/T6qCQ2XgvdaOUbMQbU6PUrWwtB3xCN0enaV9K+tgYAQYfzDi3uGyU
+X-Received: by 2002:a63:a4b:: with SMTP id z11mr226540pgk.398.1582661524712;
+ Tue, 25 Feb 2020 12:12:04 -0800 (PST)
+Date:   Tue, 25 Feb 2020 12:11:30 -0800
+In-Reply-To: <20200225201130.211124-1-heidifahim@google.com>
+Message-Id: <20200225201130.211124-2-heidifahim@google.com>
 Mime-Version: 1.0
+References: <20200225201130.211124-1-heidifahim@google.com>
 X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
-Subject: [PATCH 1/2] kunit: kunit_parser: making parser more robust
+Subject: [PATCH 2/2] kunit: Run all KUnit tests through allyesconfig
 From:   Heidi Fahim <heidifahim@google.com>
 To:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
@@ -54,525 +58,359 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously, kunit_parser did not properly handle kunit TAP output that
-- had any prefixes (generated from different configs)
-- had unrelated kernel output mixed in the middle of it, which has
-shown up when testing with allyesconfig
-To remove prefixes, the parser looks for the first line that includes
-TAP output, "TAP version 14".  It then determines the length of the
-string before this sequence, and strips that number of characters off
-the beginning of the following lines until the last KUnit output line is
-reached.
-These fixes have been tested with additional tests in the
-KUnitParseTest and their associated logs have also been added.
+Implemented the functionality to run all KUnit tests through kunit_tool
+by specifying an --alltests flag, which builds UML with allyesconfig
+enabled, and consequently runs every KUnit test. Two new methods have
+been added to kunit_kernel: make_allyesconfig and run_allconfig.
+Firstly, if --alltests is specified, kunit.py triggers build_um_kernel
+which sets jobs to the max number of cpus on the user's computer. This
+is done to shorten the long running time it takes to build and start a
+kernel with all configs enabled. It then calls the make command,
+disables the broken configs that would otherwise prevent UML from
+building, then starts the kernel with all possible configurations
+enabled. All stdout and stderr is sent to test.log and read from there
+then fed through kunit_parser to parse the tests to the user. Also added
+a signal_handler to clean the config in case kunit is interrupted while
+running.
+Tested: Run under different conditions such as testing with
+--raw_output, testing program interrupt then immediately running kunit
+again without --alltests and making sure to clean the configs. Formal
+unit tests will be submitted in a future patchset.
 
 Signed-off-by: Heidi Fahim <heidifahim@google.com>
 ---
- tools/testing/kunit/kunit_parser.py           | 54 +++++++--------
- tools/testing/kunit/kunit_tool_test.py        | 69 +++++++++++++++++++
- .../test_data/test_config_printk_time.log     | 31 +++++++++
- .../test_data/test_interrupted_tap_output.log | 37 ++++++++++
- .../test_data/test_kernel_panic_interrupt.log | 25 +++++++
- .../test_data/test_multiple_prefixes.log      | 31 +++++++++
- ..._output_with_prefix_isolated_correctly.log | 33 +++++++++
- .../kunit/test_data/test_pound_no_prefix.log  | 33 +++++++++
- .../kunit/test_data/test_pound_sign.log       | 33 +++++++++
- 9 files changed, 319 insertions(+), 27 deletions(-)
- create mode 100644 tools/testing/kunit/test_data/test_config_printk_time.log
- create mode 100644 tools/testing/kunit/test_data/test_interrupted_tap_output.log
- create mode 100644 tools/testing/kunit/test_data/test_kernel_panic_interrupt.log
- create mode 100644 tools/testing/kunit/test_data/test_multiple_prefixes.log
- create mode 100644 tools/testing/kunit/test_data/test_output_with_prefix_isolated_correctly.log
- create mode 100644 tools/testing/kunit/test_data/test_pound_no_prefix.log
- create mode 100644 tools/testing/kunit/test_data/test_pound_sign.log
+ .../kunit/configs/broken_on_uml.config        | 38 ++++++++++
+ tools/testing/kunit/kunit.py                  | 37 ++++++----
+ tools/testing/kunit/kunit_kernel.py           | 71 +++++++++++++------
+ tools/testing/kunit/kunit_parser.py           |  1 +
+ tools/testing/kunit/kunit_tool_test.py        | 17 +++--
+ 5 files changed, 122 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/kunit/configs/broken_on_uml.config
 
+diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
+new file mode 100644
+index 000000000000..6d746588d46e
+--- /dev/null
++++ b/tools/testing/kunit/configs/broken_on_uml.config
+@@ -0,0 +1,38 @@
++# CONFIG_STATIC_LINK is not set
++# CONFIG_UML_NET_VECTOR is not set
++# CONFIG_UML_NET_VDE is not set
++# CONFIG_UML_NET_PCAP is not set
++# CONFIG_NET_PTP_CLASSIFY is not set
++# CONFIG_IP_VS is not set
++# CONFIG_BRIDGE_EBT_BROUTE is not set
++# CONFIG_BRIDGE_EBT_T_FILTER is not set
++# CONFIG_BRIDGE_EBT_T_NAT is not set
++# CONFIG_MTD_NAND_CADENCE is not set
++# CONFIG_MTD_NAND_NANDSIM is not set
++# CONFIG_BLK_DEV_NULL_BLK is not set
++# CONFIG_BLK_DEV_RAM is not set
++# CONFIG_SCSI_DEBUG is not set
++# CONFIG_NET_VENDOR_XILINX is not set
++# CONFIG_NULL_TTY is not set
++# CONFIG_PTP_1588_CLOCK is not set
++# CONFIG_PINCTRL_EQUILIBRIUM is not set
++# CONFIG_DMABUF_SELFTESTS is not set
++# CONFIG_COMEDI is not set
++# CONFIG_XIL_AXIS_FIFO is not set
++# CONFIG_EXFAT_FS is not set
++# CONFIG_STM_DUMMY is not set
++# CONFIG_FSI_MASTER_ASPEED is not set
++# CONFIG_JFS_FS is not set
++# CONFIG_UBIFS_FS is not set
++# CONFIG_CRAMFS is not set
++# CONFIG_CRYPTO_DEV_SAFEXCEL is not set
++# CONFIG_CRYPTO_DEV_AMLOGIC_GXL is not set
++# CONFIG_KCOV is not set
++# CONFIG_LKDTM is not set
++# CONFIG_REED_SOLOMON_TEST is not set
++# CONFIG_TEST_RHASHTABLE is not set
++# CONFIG_TEST_MEMINIT is not set
++# CONFIG_NETWORK_PHY_TIMESTAMPING is not set
++# CONFIG_DEBUG_INFO_BTF is not set
++# CONFIG_PTP_1588_CLOCK_INES is not set
++# CONFIG_QCOM_CPR is not set
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index e59eb9e7f923..37bd20a2a1c5 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -22,7 +22,9 @@ import kunit_parser
+ 
+ KunitResult = namedtuple('KunitResult', ['status','result'])
+ 
+-KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs', 'build_dir', 'defconfig'])
++KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
++					   'build_dir', 'defconfig',
++					   'alltests'])
+ 
+ class KunitStatus(Enum):
+ 	SUCCESS = auto()
+@@ -33,7 +35,7 @@ class KunitStatus(Enum):
+ def create_default_kunitconfig():
+ 	if not os.path.exists(kunit_kernel.kunitconfig_path):
+ 		shutil.copyfile('arch/um/configs/kunit_defconfig',
+-				kunit_kernel.kunitconfig_path)
++				kunit_kernel.KUNITCONFIG_PATH)
+ 
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+@@ -46,24 +48,24 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	kunit_parser.print_with_timestamp('Building KUnit Kernel ...')
+ 
+ 	build_start = time.time()
+-	success = linux.build_um_kernel(request.jobs, request.build_dir)
++	success = linux.build_um_kernel(request.alltests,
++					request.jobs,
++					request.build_dir)
+ 	build_end = time.time()
+ 	if not success:
+ 		return KunitResult(KunitStatus.BUILD_FAILURE, 'could not build kernel')
+ 
+ 	kunit_parser.print_with_timestamp('Starting KUnit Kernel ...')
+ 	test_start = time.time()
+-
+-	test_result = kunit_parser.TestResult(kunit_parser.TestStatus.SUCCESS,
+-					      [],
+-					      'Tests not Parsed.')
++	kunit_output = linux.run_kernel(
++		timeout=None if request.alltests else request.timeout,
++		alltests=request.alltests,
++		build_dir=request.build_dir)
+ 	if request.raw_output:
+-		kunit_parser.raw_output(
+-			linux.run_kernel(timeout=request.timeout,
+-					 build_dir=request.build_dir))
++		raw_output = kunit_parser.raw_output(kunit_output)
++		isolated = list(kunit_parser.isolate_kunit_output(raw_output))
++		test_result = kunit_parser.parse_test_result(isolated)
+ 	else:
+-		kunit_output = linux.run_kernel(timeout=request.timeout,
+-						build_dir=request.build_dir)
+ 		test_result = kunit_parser.parse_run_tests(kunit_output)
+ 	test_end = time.time()
+ 
+@@ -111,15 +113,19 @@ def main(argv, linux=None):
+ 				help='Uses a default .kunitconfig.',
+ 				action='store_true')
+ 
++	run_parser.add_argument('--alltests',
++				help='Run all KUnit tests through allyesconfig',
++				action='store_true')
++
+ 	cli_args = parser.parse_args(argv)
+ 
+ 	if cli_args.subcommand == 'run':
+ 		if cli_args.build_dir:
+ 			if not os.path.exists(cli_args.build_dir):
+ 				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
++			kunit_kernel.KUNITCONFIG_PATH = os.path.join(
+ 				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
++				kunit_kernel.KUNITCONFIG_PATH)
+ 
+ 		if cli_args.defconfig:
+ 			create_default_kunitconfig()
+@@ -131,7 +137,8 @@ def main(argv, linux=None):
+ 				       cli_args.timeout,
+ 				       cli_args.jobs,
+ 				       cli_args.build_dir,
+-				       cli_args.defconfig)
++				       cli_args.defconfig,
++				       cli_args.alltests)
+ 		result = run_tests(linux, request)
+ 		if result.status != KunitStatus.SUCCESS:
+ 			sys.exit(1)
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index cc5d844ecca1..2b0de7d52110 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -10,11 +10,16 @@
+ import logging
+ import subprocess
+ import os
++import signal
++
++from contextlib import ExitStack
+ 
+ import kunit_config
++import kunit_parser
+ 
+ KCONFIG_PATH = '.config'
+-kunitconfig_path = '.kunitconfig'
++KUNITCONFIG_PATH = '.kunitconfig'
++BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+ 
+ class ConfigError(Exception):
+ 	"""Represents an error trying to configure the Linux kernel."""
+@@ -40,12 +45,29 @@ class LinuxSourceTreeOperations(object):
+ 		if build_dir:
+ 			command += ['O=' + build_dir]
+ 		try:
+-			subprocess.check_output(command)
++			subprocess.check_output(command, stderr=subprocess.PIPE)
+ 		except OSError as e:
+ 			raise ConfigError('Could not call make command: ' + e)
+ 		except subprocess.CalledProcessError as e:
+ 			raise ConfigError(e.output)
+ 
++	def make_allyesconfig(self):
++		kunit_parser.print_with_timestamp(
++			'Enabling all CONFIGs for UML...')
++		process = subprocess.Popen(
++			['make', 'ARCH=um', 'allyesconfig'],
++			stdout=subprocess.DEVNULL,
++			stderr=subprocess.STDOUT)
++		process.wait()
++		kunit_parser.print_with_timestamp(
++			'Disabling broken configs to run KUnit tests...')
++		with ExitStack() as es:
++			config = open(KCONFIG_PATH, 'a')
++			disable = open(BROKEN_ALLCONFIG_PATH, 'r').read()
++			config.write(disable)
++		kunit_parser.print_with_timestamp(
++			'Starting Kernel with all configs takes a few minutes...')
++
+ 	def make(self, jobs, build_dir):
+ 		command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
+ 		if build_dir:
+@@ -57,19 +79,16 @@ class LinuxSourceTreeOperations(object):
+ 		except subprocess.CalledProcessError as e:
+ 			raise BuildError(e.output)
+ 
+-	def linux_bin(self, params, timeout, build_dir):
++	def linux_bin(self, params, timeout, build_dir, outfile):
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+ 		linux_bin = './linux'
+ 		if build_dir:
+ 			linux_bin = os.path.join(build_dir, 'linux')
+-		process = subprocess.Popen(
+-			[linux_bin] + params,
+-			stdin=subprocess.PIPE,
+-			stdout=subprocess.PIPE,
+-			stderr=subprocess.PIPE)
+-		process.wait(timeout=timeout)
+-		return process
+-
++		with open(outfile, 'w') as output:
++			process = subprocess.Popen([linux_bin] + params,
++						   stdout=output,
++						   stderr=subprocess.STDOUT)
++			process.wait(timeout)
+ 
+ def get_kconfig_path(build_dir):
+ 	kconfig_path = KCONFIG_PATH
+@@ -82,8 +101,9 @@ class LinuxSourceTree(object):
+ 
+ 	def __init__(self):
+ 		self._kconfig = kunit_config.Kconfig()
+-		self._kconfig.read_from_file(kunitconfig_path)
++		self._kconfig.read_from_file(KUNITCONFIG_PATH)
+ 		self._ops = LinuxSourceTreeOperations()
++		signal.signal(signal.SIGINT, self.signal_handler)
+ 
+ 	def clean(self):
+ 		try:
+@@ -126,7 +146,10 @@ class LinuxSourceTree(object):
+ 			print('Generating .config ...')
+ 			return self.build_config(build_dir)
+ 
+-	def build_um_kernel(self, jobs, build_dir):
++	def build_um_kernel(self, alltests, jobs, build_dir):
++		if alltests:
++			jobs = os.cpu_count()
++			self._ops.make_allyesconfig()
+ 		try:
+ 			self._ops.make_olddefconfig(build_dir)
+ 			self._ops.make(jobs, build_dir)
+@@ -140,10 +163,18 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return True
+ 
+-	def run_kernel(self, args=[], timeout=None, build_dir=''):
+-		args.extend(['mem=256M'])
+-		process = self._ops.linux_bin(args, timeout, build_dir)
+-		with open(os.path.join(build_dir, 'test.log'), 'w') as f:
+-			for line in process.stdout:
+-				f.write(line.rstrip().decode('ascii') + '\n')
+-				yield line.rstrip().decode('ascii')
++	def run_kernel(self, args=[], alltests=False, build_dir='', timeout=None):
++		args.extend(['mem=1G']) if alltests else args.extend(['mem=256M'])
++		outfile = 'test.log'
++		self._ops.linux_bin(args, timeout, build_dir, outfile)
++		subprocess.call(['stty', 'sane'])
++		if alltests:
++			self.clean()
++		with open(outfile, 'r') as file:
++			for line in file:
++				yield line
++
++	def signal_handler(self, sig, frame):
++		logging.error('Build interruption occurred. Cleaning .config.')
++		subprocess.call(['stty', 'sane'])
++		self.clean()
+\ No newline at end of file
 diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 4ffbae0f6732..077b21d42258 100644
+index 077b21d42258..5b2051848e2f 100644
 --- a/tools/testing/kunit/kunit_parser.py
 +++ b/tools/testing/kunit/kunit_parser.py
-@@ -46,19 +46,21 @@ class TestStatus(Enum):
- 	TEST_CRASHED = auto()
- 	NO_TESTS = auto()
- 
--kunit_start_re = re.compile(r'^TAP version [0-9]+$')
--kunit_end_re = re.compile('List of all partitions:')
-+kunit_start_re = re.compile(r'TAP version [0-9]+$')
-+kunit_end_re = re.compile('(List of all partitions:|'
-+			  'Kernel panic - not syncing: VFS:|reboot: System halted)')
- 
- def isolate_kunit_output(kernel_output):
- 	started = False
- 	for line in kernel_output:
--		if kunit_start_re.match(line):
-+		if kunit_start_re.search(line):
-+			prefix_len = len(line.split('TAP version')[0])
- 			started = True
--			yield line
--		elif kunit_end_re.match(line):
-+			yield line[prefix_len:] if prefix_len > 0 else line
-+		elif kunit_end_re.search(line):
- 			break
- 		elif started:
--			yield line
-+			yield line[prefix_len:] if prefix_len > 0 else line
- 
+@@ -65,6 +65,7 @@ def isolate_kunit_output(kernel_output):
  def raw_output(kernel_output):
  	for line in kernel_output:
-@@ -91,35 +93,33 @@ def print_log(log):
- 	for m in log:
- 		print_with_timestamp(m)
+ 		print(line)
++		yield line
  
--TAP_ENTRIES = re.compile(r'^(TAP|\t?ok|\t?not ok|\t?[0-9]+\.\.[0-9]+|\t?#).*$')
-+TAP_ENTRIES = re.compile(r'(TAP|\t?ok|\t?not ok|\t?[0-9]+\.\.[0-9]+|\t# .*?:.*?).*$')
+ DIVIDER = '=' * 60
  
- def consume_non_diagnositic(lines: List[str]) -> None:
--	while lines and not TAP_ENTRIES.match(lines[0]):
-+	while lines and not TAP_ENTRIES.search(lines[0]):
- 		lines.pop(0)
- 
- def save_non_diagnositic(lines: List[str], test_case: TestCase) -> None:
--	while lines and not TAP_ENTRIES.match(lines[0]):
-+	while lines and not TAP_ENTRIES.search(lines[0]):
- 		test_case.log.append(lines[0])
- 		lines.pop(0)
- 
- OkNotOkResult = namedtuple('OkNotOkResult', ['is_ok','description', 'text'])
- 
--OK_NOT_OK_SUBTEST = re.compile(r'^\t(ok|not ok) [0-9]+ - (.*)$')
-+OK_NOT_OK_SUBTEST = re.compile(r'\t(ok|not ok) [0-9]+ - (.*)$')
- 
--OK_NOT_OK_MODULE = re.compile(r'^(ok|not ok) [0-9]+ - (.*)$')
-+OK_NOT_OK_MODULE = re.compile(r'(ok|not ok) [0-9]+ - (.*)$')
- 
--def parse_ok_not_ok_test_case(lines: List[str],
--			      test_case: TestCase,
--			      expecting_test_case: bool) -> bool:
-+def parse_ok_not_ok_test_case(lines: List[str], test_case: TestCase) -> bool:
- 	save_non_diagnositic(lines, test_case)
- 	if not lines:
--		if expecting_test_case:
--			test_case.status = TestStatus.TEST_CRASHED
--			return True
--		else:
--			return False
-+		test_case.status = TestStatus.TEST_CRASHED
-+		return True
- 	line = lines[0]
- 	match = OK_NOT_OK_SUBTEST.match(line)
-+	while not match and lines:
-+		line = lines.pop(0)
-+		match = OK_NOT_OK_SUBTEST.match(line)
- 	if match:
- 		test_case.log.append(lines.pop(0))
- 		test_case.name = match.group(2)
-@@ -150,12 +150,12 @@ def parse_diagnostic(lines: List[str], test_case: TestCase) -> bool:
- 	else:
- 		return False
- 
--def parse_test_case(lines: List[str], expecting_test_case: bool) -> TestCase:
-+def parse_test_case(lines: List[str]) -> TestCase:
- 	test_case = TestCase()
- 	save_non_diagnositic(lines, test_case)
- 	while parse_diagnostic(lines, test_case):
- 		pass
--	if parse_ok_not_ok_test_case(lines, test_case, expecting_test_case):
-+	if parse_ok_not_ok_test_case(lines, test_case):
- 		return test_case
- 	else:
- 		return None
-@@ -202,7 +202,7 @@ def parse_ok_not_ok_test_suite(lines: List[str], test_suite: TestSuite) -> bool:
- 		test_suite.status = TestStatus.TEST_CRASHED
- 		return False
- 	line = lines[0]
--	match = OK_NOT_OK_MODULE.match(line)
-+	match = OK_NOT_OK_MODULE.search(line)
- 	if match:
- 		lines.pop(0)
- 		if match.group(1) == 'ok':
-@@ -234,11 +234,11 @@ def parse_test_suite(lines: List[str]) -> TestSuite:
- 	expected_test_case_num = parse_subtest_plan(lines)
- 	if not expected_test_case_num:
- 		return None
--	test_case = parse_test_case(lines, expected_test_case_num > 0)
--	expected_test_case_num -= 1
--	while test_case:
-+	while expected_test_case_num > 0:
-+		test_case = parse_test_case(lines)
-+		if not test_case:
-+			break
- 		test_suite.cases.append(test_case)
--		test_case = parse_test_case(lines, expected_test_case_num > 0)
- 		expected_test_case_num -= 1
- 	if parse_ok_not_ok_test_suite(lines, test_suite):
- 		test_suite.status = bubble_up_test_case_errors(test_suite)
-@@ -250,7 +250,7 @@ def parse_test_suite(lines: List[str]) -> TestSuite:
- 		print('failed to parse end of suite' + lines[0])
- 		return None
- 
--TAP_HEADER = re.compile(r'^TAP version 14$')
-+TAP_HEADER = re.compile(r'TAP version 14$')
- 
- def parse_tap_header(lines: List[str]) -> bool:
- 	consume_non_diagnositic(lines)
 diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index cba97756ac4a..0efae697f396 100755
+index 0efae697f396..9ce4c5cdbdaf 100755
 --- a/tools/testing/kunit/kunit_tool_test.py
 +++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -108,6 +108,36 @@ class KUnitParserTest(unittest.TestCase):
- 		self.assertContains('ok 1 - example', result)
- 		file.close()
+@@ -243,7 +243,8 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['run'], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+ 		assert self.linux_source_mock.run_kernel.call_count == 1
+-		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
++		self.linux_source_mock.run_kernel.assert_called_once_with(
++			alltests=False, build_dir='', timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
  
-+	def test_output_with_prefix_isolated_correctly(self):
-+		log_path = get_absolute_path(
-+			'test_data/test_pound_sign.log')
-+		with open(log_path) as file:
-+			result = kunit_parser.isolate_kunit_output(file.readlines())
-+		self.assertContains('TAP version 14\n', result)
-+		self.assertContains('	# Subtest: kunit-resource-test', result)
-+		self.assertContains('	1..5', result)
-+		self.assertContains('	ok 1 - kunit_resource_test_init_resources', result)
-+		self.assertContains('	ok 2 - kunit_resource_test_alloc_resource', result)
-+		self.assertContains('	ok 3 - kunit_resource_test_destroy_resource', result)
-+		self.assertContains(' foo bar 	#', result)
-+		self.assertContains('	ok 4 - kunit_resource_test_cleanup_resources', result)
-+		self.assertContains('	ok 5 - kunit_resource_test_proper_free_ordering', result)
-+		self.assertContains('ok 1 - kunit-resource-test', result)
-+		self.assertContains(' foo bar 	# non-kunit output', result)
-+		self.assertContains('	# Subtest: kunit-try-catch-test', result)
-+		self.assertContains('	1..2', result)
-+		self.assertContains('	ok 1 - kunit_test_try_catch_successful_try_no_catch',
-+				    result)
-+		self.assertContains('	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch',
-+				    result)
-+		self.assertContains('ok 2 - kunit-try-catch-test', result)
-+		self.assertContains('	# Subtest: string-stream-test', result)
-+		self.assertContains('	1..3', result)
-+		self.assertContains('	ok 1 - string_stream_test_empty_on_creation', result)
-+		self.assertContains('	ok 2 - string_stream_test_not_empty_after_add', result)
-+		self.assertContains('	ok 3 - string_stream_test_get_string', result)
-+		self.assertContains('ok 3 - string-stream-test', result)
-+
- 	def test_parse_successful_test_log(self):
- 		all_passed_log = get_absolute_path(
- 			'test_data/test_is_test_passed-all_passed.log')
-@@ -150,6 +180,45 @@ class KUnitParserTest(unittest.TestCase):
- 			result.status)
- 		file.close()
+ 	def test_run_passes_args_fail(self):
+@@ -258,25 +259,27 @@ class KUnitMainTest(unittest.TestCase):
  
-+	def test_ignores_prefix_printk_time(self):
-+		prefix_log = get_absolute_path(
-+			'test_data/test_config_printk_time.log')
-+		with open(prefix_log) as file:
-+			result = kunit_parser.parse_run_tests(file.readlines())
-+		self.assertEqual('kunit-resource-test', result.suites[0].name)
-+
-+	def test_ignores_multiple_prefixes(self):
-+		prefix_log = get_absolute_path(
-+			'test_data/test_multiple_prefixes.log')
-+		with open(prefix_log) as file:
-+			result = kunit_parser.parse_run_tests(file.readlines())
-+		self.assertEqual('kunit-resource-test', result.suites[0].name)
-+
-+	def test_prefix_mixed_kernel_output(self):
-+		mixed_prefix_log = get_absolute_path(
-+			'test_data/test_interrupted_tap_output.log')
-+		with open(mixed_prefix_log) as file:
-+			result = kunit_parser.parse_run_tests(file.readlines())
-+		self.assertEqual('kunit-resource-test', result.suites[0].name)
-+
-+	def test_prefix_poundsign(self):
-+		pound_log = get_absolute_path('test_data/test_pound_sign.log')
-+		with open(pound_log) as file:
-+			result = kunit_parser.parse_run_tests(file.readlines())
-+		self.assertEqual('kunit-resource-test', result.suites[0].name)
-+
-+	def test_kernel_panic_end(self):
-+		panic_log = get_absolute_path('test_data/test_kernel_panic_interrupt.log')
-+		with open(panic_log) as file:
-+			result = kunit_parser.parse_run_tests(file.readlines())
-+		self.assertEqual('kunit-resource-test', result.suites[0].name)
-+
-+	def test_pound_no_prefix(self):
-+		pound_log = get_absolute_path('test_data/test_pound_no_prefix.log')
-+		with open(pound_log) as file:
-+			result = kunit_parser.parse_run_tests(file.readlines())
-+		self.assertEqual('kunit-resource-test', result.suites[0].name)
-+
- class StrContains(str):
- 	def __eq__(self, other):
- 		return self in other
-diff --git a/tools/testing/kunit/test_data/test_config_printk_time.log b/tools/testing/kunit/test_data/test_config_printk_time.log
-new file mode 100644
-index 000000000000..c02ca773946d
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_config_printk_time.log
-@@ -0,0 +1,31 @@
-+[    0.060000] printk: console [mc-1] enabled
-+[    0.060000] random: get_random_bytes called from init_oops_id+0x35/0x40 with crng_init=0
-+[    0.060000] TAP version 14
-+[    0.060000] 	# Subtest: kunit-resource-test
-+[    0.060000] 	1..5
-+[    0.060000] 	ok 1 - kunit_resource_test_init_resources
-+[    0.060000] 	ok 2 - kunit_resource_test_alloc_resource
-+[    0.060000] 	ok 3 - kunit_resource_test_destroy_resource
-+[    0.060000] 	ok 4 - kunit_resource_test_cleanup_resources
-+[    0.060000] 	ok 5 - kunit_resource_test_proper_free_ordering
-+[    0.060000] ok 1 - kunit-resource-test
-+[    0.060000] 	# Subtest: kunit-try-catch-test
-+[    0.060000] 	1..2
-+[    0.060000] 	ok 1 - kunit_test_try_catch_successful_try_no_catch
-+[    0.060000] 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
-+[    0.060000] ok 2 - kunit-try-catch-test
-+[    0.060000] 	# Subtest: string-stream-test
-+[    0.060000] 	1..3
-+[    0.060000] 	ok 1 - string_stream_test_empty_on_creation
-+[    0.060000] 	ok 2 - string_stream_test_not_empty_after_add
-+[    0.060000] 	ok 3 - string_stream_test_get_string
-+[    0.060000] ok 3 - string-stream-test
-+[    0.060000] List of all partitions:
-+[    0.060000] No filesystem could mount root, tried:
-+[    0.060000]
-+[    0.060000] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(98,0)
-+[    0.060000] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-rc1-gea2dd7c0875e-dirty #2
-+[    0.060000] Stack:
-+[    0.060000]  602086f8 601bc260 705c0000 705c0000
-+[    0.060000]  602086f8 6005fcec 705c0000 6002c6ab
-+[    0.060000]  6005fcec 601bc260 705c0000 3000000010
-\ No newline at end of file
-diff --git a/tools/testing/kunit/test_data/test_interrupted_tap_output.log b/tools/testing/kunit/test_data/test_interrupted_tap_output.log
-new file mode 100644
-index 000000000000..5c73fb3a1c6f
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_interrupted_tap_output.log
-@@ -0,0 +1,37 @@
-+[    0.060000] printk: console [mc-1] enabled
-+[    0.060000] random: get_random_bytes called from init_oops_id+0x35/0x40 with crng_init=0
-+[    0.060000] TAP version 14
-+[    0.060000] 	# Subtest: kunit-resource-test
-+[    0.060000] 	1..5
-+[    0.060000] 	ok 1 - kunit_resource_test_init_resources
-+[    0.060000] 	ok 2 - kunit_resource_test_alloc_resource
-+[    0.060000] 	ok 3 - kunit_resource_test_destroy_resource
-+[    0.060000] kAFS: Red Hat AFS client v0.1 registering.
-+[    0.060000] FS-Cache: Netfs 'afs' registered for caching
-+[    0.060000] *** VALIDATE kAFS ***
-+[    0.060000] Btrfs loaded, crc32c=crc32c-generic, debug=on, assert=on, integrity-checker=on, ref-verify=on
-+[    0.060000] BTRFS: selftest: sectorsize: 4096  nodesize: 4096
-+[    0.060000] BTRFS: selftest: running btrfs free space cache tests
-+[    0.060000] 	ok 4 - kunit_resource_test_cleanup_resources
-+[    0.060000] 	ok 5 - kunit_resource_test_proper_free_ordering
-+[    0.060000] ok 1 - kunit-resource-test
-+[    0.060000] 	# Subtest: kunit-try-catch-test
-+[    0.060000] 	1..2
-+[    0.060000] 	ok 1 - kunit_test_try_catch_successful_try_no_catch
-+[    0.060000] 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
-+[    0.060000] ok 2 - kunit-try-catch-test
-+[    0.060000] 	# Subtest: string-stream-test
-+[    0.060000] 	1..3
-+[    0.060000] 	ok 1 - string_stream_test_empty_on_creation
-+[    0.060000] 	ok 2 - string_stream_test_not_empty_after_add
-+[    0.060000] 	ok 3 - string_stream_test_get_string
-+[    0.060000] ok 3 - string-stream-test
-+[    0.060000] List of all partitions:
-+[    0.060000] No filesystem could mount root, tried:
-+[    0.060000]
-+[    0.060000] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(98,0)
-+[    0.060000] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-rc1-gea2dd7c0875e-dirty #2
-+[    0.060000] Stack:
-+[    0.060000]  602086f8 601bc260 705c0000 705c0000
-+[    0.060000]  602086f8 6005fcec 705c0000 6002c6ab
-+[    0.060000]  6005fcec 601bc260 705c0000 3000000010
-\ No newline at end of file
-diff --git a/tools/testing/kunit/test_data/test_kernel_panic_interrupt.log b/tools/testing/kunit/test_data/test_kernel_panic_interrupt.log
-new file mode 100644
-index 000000000000..c045eee75f27
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_kernel_panic_interrupt.log
-@@ -0,0 +1,25 @@
-+[    0.060000] printk: console [mc-1] enabled
-+[    0.060000] random: get_random_bytes called from init_oops_id+0x35/0x40 with crng_init=0
-+[    0.060000] TAP version 14
-+[    0.060000] 	# Subtest: kunit-resource-test
-+[    0.060000] 	1..5
-+[    0.060000] 	ok 1 - kunit_resource_test_init_resources
-+[    0.060000] 	ok 2 - kunit_resource_test_alloc_resource
-+[    0.060000] 	ok 3 - kunit_resource_test_destroy_resource
-+[    0.060000] 	ok 4 - kunit_resource_test_cleanup_resources
-+[    0.060000] 	ok 5 - kunit_resource_test_proper_free_ordering
-+[    0.060000] ok 1 - kunit-resource-test
-+[    0.060000] 	# Subtest: kunit-try-catch-test
-+[    0.060000] 	1..2
-+[    0.060000] 	ok 1 - kunit_test_try_catch_successful_try_no_catch
-+[    0.060000] 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
-+[    0.060000] ok 2 - kunit-try-catch-test
-+[    0.060000] 	# Subtest: string-stream-test
-+[    0.060000] 	1..3
-+[    0.060000] 	ok 1 - string_stream_test_empty_on_creation
-+[    0.060000] 	Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(98,0)
-+[    0.060000] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-rc1-gea2dd7c0875e-dirty #2
-+[    0.060000] Stack:
-+[    0.060000]  602086f8 601bc260 705c0000 705c0000
-+[    0.060000]  602086f8 6005fcec 705c0000 6002c6ab
-+[    0.060000]  6005fcec 601bc260 705c0000 3000000010
-\ No newline at end of file
-diff --git a/tools/testing/kunit/test_data/test_multiple_prefixes.log b/tools/testing/kunit/test_data/test_multiple_prefixes.log
-new file mode 100644
-index 000000000000..bc48407dcc36
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_multiple_prefixes.log
-@@ -0,0 +1,31 @@
-+[    0.060000][    T1] printk: console [mc-1] enabled
-+[    0.060000][    T1] random: get_random_bytes called from init_oops_id+0x35/0x40 with crng_init=0
-+[    0.060000][    T1] TAP version 14
-+[    0.060000][    T1] 	# Subtest: kunit-resource-test
-+[    0.060000][    T1] 	1..5
-+[    0.060000][    T1] 	ok 1 - kunit_resource_test_init_resources
-+[    0.060000][    T1] 	ok 2 - kunit_resource_test_alloc_resource
-+[    0.060000][    T1] 	ok 3 - kunit_resource_test_destroy_resource
-+[    0.060000][    T1] 	ok 4 - kunit_resource_test_cleanup_resources
-+[    0.060000][    T1] 	ok 5 - kunit_resource_test_proper_free_ordering
-+[    0.060000][    T1] ok 1 - kunit-resource-test
-+[    0.060000][    T1] 	# Subtest: kunit-try-catch-test
-+[    0.060000][    T1] 	1..2
-+[    0.060000][    T1] 	ok 1 - kunit_test_try_catch_successful_try_no_catch
-+[    0.060000][    T1] 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
-+[    0.060000][    T1] ok 2 - kunit-try-catch-test
-+[    0.060000][    T1] 	# Subtest: string-stream-test
-+[    0.060000][    T1] 	1..3
-+[    0.060000][    T1] 	ok 1 - string_stream_test_empty_on_creation
-+[    0.060000][    T1] 	ok 2 - string_stream_test_not_empty_after_add
-+[    0.060000][    T1] 	ok 3 - string_stream_test_get_string
-+[    0.060000][    T1] ok 3 - string-stream-test
-+[    0.060000][    T1] List of all partitions:
-+[    0.060000][    T1] No filesystem could mount root, tried:
-+[    0.060000][    T1]
-+[    0.060000][    T1] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(98,0)
-+[    0.060000][    T1] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-rc1-gea2dd7c0875e-dirty #2
-+[    0.060000][    T1] Stack:
-+[    0.060000][    T1]  602086f8 601bc260 705c0000 705c0000
-+[    0.060000][    T1]  602086f8 6005fcec 705c0000 6002c6ab
-+[    0.060000][    T1]  6005fcec 601bc260 705c0000 3000000010
-\ No newline at end of file
-diff --git a/tools/testing/kunit/test_data/test_output_with_prefix_isolated_correctly.log b/tools/testing/kunit/test_data/test_output_with_prefix_isolated_correctly.log
-new file mode 100644
-index 000000000000..0f87cdabebb0
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_output_with_prefix_isolated_correctly.log
-@@ -0,0 +1,33 @@
-+[    0.060000] printk: console [mc-1] enabled
-+[    0.060000] random: get_random_bytes called from init_oops_id+0x35/0x40 with crng_init=0
-+[    0.060000] TAP version 14
-+[    0.060000] 	# Subtest: kunit-resource-test
-+[    0.060000] 	1..5
-+[    0.060000] 	ok 1 - kunit_resource_test_init_resources
-+[    0.060000] 	ok 2 - kunit_resource_test_alloc_resource
-+[    0.060000] 	ok 3 - kunit_resource_test_destroy_resource
-+[    0.060000]  foo bar 	#
-+[    0.060000] 	ok 4 - kunit_resource_test_cleanup_resources
-+[    0.060000] 	ok 5 - kunit_resource_test_proper_free_ordering
-+[    0.060000] ok 1 - kunit-resource-test
-+[    0.060000]  foo bar 	# non-kunit output
-+[    0.060000] 	# Subtest: kunit-try-catch-test
-+[    0.060000] 	1..2
-+[    0.060000] 	ok 1 - kunit_test_try_catch_successful_try_no_catch
-+[    0.060000] 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
-+[    0.060000] ok 2 - kunit-try-catch-test
-+[    0.060000] 	# Subtest: string-stream-test
-+[    0.060000] 	1..3
-+[    0.060000] 	ok 1 - string_stream_test_empty_on_creation
-+[    0.060000] 	ok 2 - string_stream_test_not_empty_after_add
-+[    0.060000] 	ok 3 - string_stream_test_get_string
-+[    0.060000] ok 3 - string-stream-test
-+[    0.060000] List of all partitions:
-+[    0.060000] No filesystem could mount root, tried:
-+[    0.060000]
-+[    0.060000] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(98,0)
-+[    0.060000] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-rc1-gea2dd7c0875e-dirty #2
-+[    0.060000] Stack:
-+[    0.060000]  602086f8 601bc260 705c0000 705c0000
-+[    0.060000]  602086f8 6005fcec 705c0000 6002c6ab
-+[    0.060000]  6005fcec 601bc260 705c0000 3000000010
-\ No newline at end of file
-diff --git a/tools/testing/kunit/test_data/test_pound_no_prefix.log b/tools/testing/kunit/test_data/test_pound_no_prefix.log
-new file mode 100644
-index 000000000000..2ceb360be7d5
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_pound_no_prefix.log
-@@ -0,0 +1,33 @@
-+ printk: console [mc-1] enabled
-+ random: get_random_bytes called from init_oops_id+0x35/0x40 with crng_init=0
-+ TAP version 14
-+ 	# Subtest: kunit-resource-test
-+ 	1..5
-+ 	ok 1 - kunit_resource_test_init_resources
-+ 	ok 2 - kunit_resource_test_alloc_resource
-+ 	ok 3 - kunit_resource_test_destroy_resource
-+  foo bar 	#
-+ 	ok 4 - kunit_resource_test_cleanup_resources
-+ 	ok 5 - kunit_resource_test_proper_free_ordering
-+ ok 1 - kunit-resource-test
-+  foo bar 	# non-kunit output
-+ 	# Subtest: kunit-try-catch-test
-+ 	1..2
-+ 	ok 1 - kunit_test_try_catch_successful_try_no_catch
-+ 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
-+ ok 2 - kunit-try-catch-test
-+ 	# Subtest: string-stream-test
-+ 	1..3
-+ 	ok 1 - string_stream_test_empty_on_creation
-+ 	ok 2 - string_stream_test_not_empty_after_add
-+ 	ok 3 - string_stream_test_get_string
-+ ok 3 - string-stream-test
-+ List of all partitions:
-+ No filesystem could mount root, tried:
-+
-+ Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(98,0)
-+ CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-rc1-gea2dd7c0875e-dirty #2
-+ Stack:
-+  602086f8 601bc260 705c0000 705c0000
-+  602086f8 6005fcec 705c0000 6002c6ab
-+  6005fcec 601bc260 705c0000 3000000010
-\ No newline at end of file
-diff --git a/tools/testing/kunit/test_data/test_pound_sign.log b/tools/testing/kunit/test_data/test_pound_sign.log
-new file mode 100644
-index 000000000000..0f87cdabebb0
---- /dev/null
-+++ b/tools/testing/kunit/test_data/test_pound_sign.log
-@@ -0,0 +1,33 @@
-+[    0.060000] printk: console [mc-1] enabled
-+[    0.060000] random: get_random_bytes called from init_oops_id+0x35/0x40 with crng_init=0
-+[    0.060000] TAP version 14
-+[    0.060000] 	# Subtest: kunit-resource-test
-+[    0.060000] 	1..5
-+[    0.060000] 	ok 1 - kunit_resource_test_init_resources
-+[    0.060000] 	ok 2 - kunit_resource_test_alloc_resource
-+[    0.060000] 	ok 3 - kunit_resource_test_destroy_resource
-+[    0.060000]  foo bar 	#
-+[    0.060000] 	ok 4 - kunit_resource_test_cleanup_resources
-+[    0.060000] 	ok 5 - kunit_resource_test_proper_free_ordering
-+[    0.060000] ok 1 - kunit-resource-test
-+[    0.060000]  foo bar 	# non-kunit output
-+[    0.060000] 	# Subtest: kunit-try-catch-test
-+[    0.060000] 	1..2
-+[    0.060000] 	ok 1 - kunit_test_try_catch_successful_try_no_catch
-+[    0.060000] 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
-+[    0.060000] ok 2 - kunit-try-catch-test
-+[    0.060000] 	# Subtest: string-stream-test
-+[    0.060000] 	1..3
-+[    0.060000] 	ok 1 - string_stream_test_empty_on_creation
-+[    0.060000] 	ok 2 - string_stream_test_not_empty_after_add
-+[    0.060000] 	ok 3 - string_stream_test_get_string
-+[    0.060000] ok 3 - string-stream-test
-+[    0.060000] List of all partitions:
-+[    0.060000] No filesystem could mount root, tried:
-+[    0.060000]
-+[    0.060000] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(98,0)
-+[    0.060000] CPU: 0 PID: 1 Comm: swapper Not tainted 5.4.0-rc1-gea2dd7c0875e-dirty #2
-+[    0.060000] Stack:
-+[    0.060000]  602086f8 601bc260 705c0000 705c0000
-+[    0.060000]  602086f8 6005fcec 705c0000 6002c6ab
-+[    0.060000]  6005fcec 601bc260 705c0000 3000000010
-\ No newline at end of file
+ 	def test_run_raw_output(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+-		kunit.main(['run', '--raw_output'], self.linux_source_mock)
++		with self.assertRaises(SystemExit) as e:
++			kunit.main(['run', '--raw_output'], self.linux_source_mock)
++		assert type(e.exception) == SystemExit
++		assert e.exception.code == 1
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+ 		assert self.linux_source_mock.run_kernel.call_count == 1
+-		for kall in self.print_mock.call_args_list:
+-			assert kall != mock.call(StrContains('Testing complete.'))
+-			assert kall != mock.call(StrContains(' 0 tests run'))
+ 
+ 	def test_run_timeout(self):
+ 		timeout = 3453
+ 		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+-		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
++		self.linux_source_mock.run_kernel.assert_called_once_with(
++			alltests=False, build_dir='', timeout=timeout)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+ 	def test_run_builddir(self):
+ 		build_dir = '.kunit'
+ 		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+-		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
++		self.linux_source_mock.run_kernel.assert_called_once_with(
++			alltests=False, build_dir=build_dir, timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+ if __name__ == '__main__':
 -- 
 2.25.0.265.gbab2e86ba0-goog
 
