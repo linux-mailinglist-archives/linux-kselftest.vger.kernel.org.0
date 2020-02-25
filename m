@@ -2,110 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2397B16C474
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 15:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5ADD16E9C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Feb 2020 16:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730922AbgBYOyr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 09:54:47 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35179 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730646AbgBYOyr (ORCPT
+        id S1730616AbgBYPQY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 10:16:24 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:50650 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730777AbgBYPQY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 09:54:47 -0500
-Received: by mail-wr1-f66.google.com with SMTP id w12so15095484wrt.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 06:54:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y++kI/5dCtw5fZaeSgXh8lWKMSaGQmRYxWkHHDDsYEE=;
-        b=jGWepyEIkZ1p0tED+rauWwmW4k3RG+6zN0X4+Bky/2ByebPFpB9k5sL2WKPs6Odb+c
-         E5MFAI285mX4zdtjqORrRKQDBBJwXm1myO7nslK+AtFUxk5GUzxOs1R8v73pHgKaV2X0
-         7R/bLi/0hyOhShc0bz1uYhtozSNWxm0TGVRbDAkkvl0P/UQ1ljuyPwdVM1Nj0jSzRkLz
-         hmkndN0H37fZzshO4I7DzEGHOxlvrPfvsAt9p7Naj81CWN4vKqrl+nuY6mZlh+N4Rj07
-         7gnDQ/sDjdKgaWRUy/RfRO+i8ZglHkuBPTxsb18n4eB0SPCdfQsiuh1wa857P0BP4fUo
-         TgIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=y++kI/5dCtw5fZaeSgXh8lWKMSaGQmRYxWkHHDDsYEE=;
-        b=FUb3/RI6dldZYtXzw4TY9gULX9QKQqAMGVmx50/EzekvvkQ6Sl6fhYXOJzlXLEbxJv
-         DMY7hHW3lXQZgWCw0TXbp6LS3pUfurg2rOrNPlrhrdYtDHvSEH0uoPqHTr4ZCDSiFg+Y
-         9WVNDPV21vf+EcY7rRkBxU2Pq0Z5V7OOweH6zM8njCIO0+lRWplXnYj9q1ICgNjWzSxb
-         NkWcNGD+jMrrTmogONn0RxL9lKCPPvxXwz51Ol67wt1dm2Uo0QNpli7YYGRIn3AXGlIi
-         keGlxyk9BJwQQoNxg2blLHRIA2S/jkTX/wPi++kxW/L8N/g5ICOL49FXnz8f5VdBW43q
-         a2HA==
-X-Gm-Message-State: APjAAAVMLYOuFivbg0xsegB2MSfyFj6x67uaIRx4HCvp2aRR+YaD7MIi
-        7hVFapnTHamUAB6MIAr7leZy63m7i/Y=
-X-Google-Smtp-Source: APXvYqwfSaJ8pCA6BhtoWHv0t8xFZnZrK/CzrI1X29nZWXWlh6LSoOIjxsxgH2SsHYgerYZIkRUP+w==
-X-Received: by 2002:adf:f244:: with SMTP id b4mr20457380wrp.413.1582642485266;
-        Tue, 25 Feb 2020 06:54:45 -0800 (PST)
-Received: from [192.168.1.10] ([194.35.116.65])
-        by smtp.gmail.com with ESMTPSA id v131sm4674454wme.23.2020.02.25.06.54.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2020 06:54:44 -0800 (PST)
-Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Add test for "bpftool
- feature" command
-To:     Michal Rostecki <mrostecki@opensuse.org>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20200221031702.25292-1-mrostecki@opensuse.org>
- <20200221031702.25292-6-mrostecki@opensuse.org>
- <d178dc6c-7696-8e58-9df9-887152104a1c@isovalent.com>
- <c24d2b7a-889b-9294-cd30-6938f00b645a@opensuse.org>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <424b3804-a6ec-750c-bc90-753bbdf512ce@isovalent.com>
-Date:   Tue, 25 Feb 2020 14:54:43 +0000
+        Tue, 25 Feb 2020 10:16:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1582643783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rwYYWU17L3iTa//T0R9PqKtki3pU+tfr/muWRaBusrw=;
+        b=gxCyUUsL1FceJzvBrb9eL+66i8dyTly7k8V4nytLueU5iW4wQWLw5GuOaDgjH0Fz6jYxOU
+        JscMWpDAN/g7lOExo6L2ibFOVFeqWipwuV9pIA51kYIiEadmX+LeZYBl9FRk/02469r8DD
+        ggrmT/avJA8g49sRcoViiiqmmDXHNwk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-73-3SjZgVAVPT6ZgjRFlciJYQ-1; Tue, 25 Feb 2020 10:16:13 -0500
+X-MC-Unique: 3SjZgVAVPT6ZgjRFlciJYQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 24A4E800D5E;
+        Tue, 25 Feb 2020 15:16:12 +0000 (UTC)
+Received: from [10.18.17.119] (dhcp-17-119.bos.redhat.com [10.18.17.119])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 897735C241;
+        Tue, 25 Feb 2020 15:16:11 +0000 (UTC)
+Subject: Re: [PATCH] selftests/timers: Turn off timeout setting
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org, sboyd@kernel.org,
+        tglx@linutronix.de, john.stultz@linaro.org
+References: <20200225101809.9986-1-po-hsu.lin@canonical.com>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Message-ID: <6ee3dd78-675b-ac0e-87ce-96a7766d597b@redhat.com>
+Date:   Tue, 25 Feb 2020 10:16:10 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <c24d2b7a-889b-9294-cd30-6938f00b645a@opensuse.org>
+In-Reply-To: <20200225101809.9986-1-po-hsu.lin@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2020-02-25 14:55 UTC+0100 ~ Michal Rostecki <mrostecki@opensuse.org>
-> On 2/21/20 12:28 PM, Quentin Monnet wrote:
->>> +    @default_iface
->>> +    def test_feature_dev(self, iface):
->>> +        expected_patterns = [
->>> +            SECTION_SYSCALL_CONFIG_PATTERN,
->>> +            SECTION_PROGRAM_TYPES_PATTERN,
->>> +            SECTION_MAP_TYPES_PATTERN,
->>> +            SECTION_HELPERS_PATTERN,
->>> +            SECTION_MISC_PATTERN,
->>> +        ]
->>
->> Mixed feeling on the tests with plain output, as we keep telling people
->> that plain output should not be parsed (not reliable, may change). But
->> if you want to run one or two tests with it, why not, I guess.
+On 2/25/20 5:18 AM, Po-Hsu Lin wrote:
+> Tests in timers especially nsleep-lat, set-timer-lat,
+> inconsistency-check and raw_skew these 4 tests can take longer than
+> the default 45 seconds that introduced in commit 852c8cbf
+> (selftests/kselftest/runner.sh: Add 45 second timeout per test) to run.
 > 
-> I thought about that and yes, testing the plain output is probably
-> redundant and makes those tests less readable. However, the only plain
-> output test which I would like to keep there is test_feature_macros -
-> because I guess that we are not planning to change names or patterns of
-> generated macros (or if so, we should test that change).
+> Disable the timeout setting for timers instead of looking for an proper
+> value to make it more general.
+> 
+> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> ---
+>   tools/testing/selftests/timers/settings | 1 +
+>   1 file changed, 1 insertion(+)
+>   create mode 100644 tools/testing/selftests/timers/settings
+> 
+> diff --git a/tools/testing/selftests/timers/settings b/tools/testing/selftests/timers/settings
+> new file mode 100644
+> index 0000000..e7b9417
+> --- /dev/null
+> +++ b/tools/testing/selftests/timers/settings
+> @@ -0,0 +1 @@
+> +timeout=0
 > 
 
-I did not mentally include the header/macros output in “plain output”, 
-but yeah I guess I was not explicit on this one. So: Agreed, with 
-“macros” it should not change and it is welcome in the tests, feel free 
-to keep it :)
+Hi,
 
-Quentin
+Michael recently posted a patch that adds the various selftest settings 
+files to the TEST_FILES list, ensuring that they get copied to the 
+install directory along with the tests:
+
+https://lore.kernel.org/linux-kselftest/20200220044241.2878-1-mpe@ellerman.id.au/
+
+I think if you add that to the corresponding Makefile, you should be set.
+
+Regards,
+
+-- Joe
+
