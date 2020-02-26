@@ -2,150 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D50170291
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 16:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D05A17029E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 16:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728172AbgBZPeO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Feb 2020 10:34:14 -0500
-Received: from www62.your-server.de ([213.133.104.62]:39488 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727348AbgBZPeO (ORCPT
+        id S1728337AbgBZPfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Feb 2020 10:35:44 -0500
+Received: from smtp-sh2.infomaniak.ch ([128.65.195.6]:40631 "EHLO
+        smtp-sh2.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728145AbgBZPfn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Feb 2020 10:34:14 -0500
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1j6yhM-0000ZO-4z; Wed, 26 Feb 2020 16:34:08 +0100
-Received: from [2001:1620:665:0:5795:5b0a:e5d5:5944] (helo=linux-3.fritz.box)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1j6yhL-000Hiz-KN; Wed, 26 Feb 2020 16:34:07 +0100
-Subject: Re: [PATCH bpf-next v3 5/5] selftests/bpf: Add test for "bpftool
- feature" command
-To:     Michal Rostecki <mrostecki@opensuse.org>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org
-References: <20200225194446.20651-1-mrostecki@opensuse.org>
- <20200225194446.20651-6-mrostecki@opensuse.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d0c40cd0-f9db-c6cb-5b46-79145311050d@iogearbox.net>
-Date:   Wed, 26 Feb 2020 16:34:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 26 Feb 2020 10:35:43 -0500
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+        by smtp-sh2.infomaniak.ch (8.14.4/8.14.4/Debian-8+deb8u2) with ESMTP id 01QFZ3Zc056663
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 26 Feb 2020 16:35:03 +0100
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48SKcN1RPGzlhMhj;
+        Wed, 26 Feb 2020 16:35:00 +0100 (CET)
+Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
+To:     J Freyensee <why2jjj.linux@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200224160215.4136-1-mic@digikod.net>
+ <6df3e6b1-ffd1-dacf-2f2d-7df8e5aca668@gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <5ec24e38-1a6f-590a-3b30-50caae177e9b@digikod.net>
+Date:   Wed, 26 Feb 2020 16:34:59 +0100
+User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <20200225194446.20651-6-mrostecki@opensuse.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <6df3e6b1-ffd1-dacf-2f2d-7df8e5aca668@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25734/Tue Feb 25 15:06:17 2020)
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/25/20 8:44 PM, Michal Rostecki wrote:
-> Add Python module with tests for "bpftool feature" command, which mainly
-> wheck whether the "full" option is working properly.
 
-nit, typo: wheck
-
+On 25/02/2020 19:49, J Freyensee wrote:
 > 
-> Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
+> 
+> On 2/24/20 8:02 AM, Mickaël Salaün wrote:
+> 
+>> ## Syscall
+>>
+>> Because it is only tested on x86_64, the syscall is only wired up for
+>> this architecture.  The whole x86 family (and probably all the others)
+>> will be supported in the next patch series.
+> General question for u.  What is it meant "whole x86 family will be
+> supported".  32-bit x86 will be supported?
 
-Ptal, when running the test I'm getting the following error:
-
-root@tank:~/bpf-next/tools/testing/selftests/bpf# ./test_bpftool.sh
-test_feature_dev_json (test_bpftool.TestBpftool) ... ERROR
-test_feature_kernel (test_bpftool.TestBpftool) ... ERROR
-test_feature_kernel_full (test_bpftool.TestBpftool) ... ERROR
-test_feature_kernel_full_vs_not_full (test_bpftool.TestBpftool) ... ERROR
-test_feature_macros (test_bpftool.TestBpftool) ... ERROR
-
-======================================================================
-ERROR: test_feature_dev_json (test_bpftool.TestBpftool)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 58, in wrapper
-     return f(*args, iface, **kwargs)
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 83, in test_feature_dev_json
-     res = bpftool_json(["feature", "probe", "dev", iface])
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 43, in bpftool_json
-     res = _bpftool(args)
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 34, in _bpftool
-     res = subprocess.run(_args, capture_output=True)
-   File "/usr/lib/python3.6/subprocess.py", line 423, in run
-     with Popen(*popenargs, **kwargs) as process:
-TypeError: __init__() got an unexpected keyword argument 'capture_output'
-
-======================================================================
-ERROR: test_feature_kernel (test_bpftool.TestBpftool)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 94, in test_feature_kernel
-     bpftool_json(["feature", "probe", "kernel"]),
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 43, in bpftool_json
-     res = _bpftool(args)
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 34, in _bpftool
-     res = subprocess.run(_args, capture_output=True)
-   File "/usr/lib/python3.6/subprocess.py", line 423, in run
-     with Popen(*popenargs, **kwargs) as process:
-TypeError: __init__() got an unexpected keyword argument 'capture_output'
-
-======================================================================
-ERROR: test_feature_kernel_full (test_bpftool.TestBpftool)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 122, in test_feature_kernel_full
-     bpftool_json(["feature", "probe", "kernel", "full"]),
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 43, in bpftool_json
-     res = _bpftool(args)
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 34, in _bpftool
-     res = subprocess.run(_args, capture_output=True)
-   File "/usr/lib/python3.6/subprocess.py", line 423, in run
-     with Popen(*popenargs, **kwargs) as process:
-TypeError: __init__() got an unexpected keyword argument 'capture_output'
-
-======================================================================
-ERROR: test_feature_kernel_full_vs_not_full (test_bpftool.TestBpftool)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 147, in test_feature_kernel_full_vs_not_full
-     full_res = bpftool_json(["feature", "probe", "full"])
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 43, in bpftool_json
-     res = _bpftool(args)
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 34, in _bpftool
-     res = subprocess.run(_args, capture_output=True)
-   File "/usr/lib/python3.6/subprocess.py", line 423, in run
-     with Popen(*popenargs, **kwargs) as process:
-TypeError: __init__() got an unexpected keyword argument 'capture_output'
-
-======================================================================
-ERROR: test_feature_macros (test_bpftool.TestBpftool)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 177, in test_feature_macros
-     res = bpftool(["feature", "probe", "macros"])
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 39, in bpftool
-     return _bpftool(args, json=False).decode("utf-8")
-   File "/root/bpf-next/tools/testing/selftests/bpf/test_bpftool.py", line 34, in _bpftool
-     res = subprocess.run(_args, capture_output=True)
-   File "/usr/lib/python3.6/subprocess.py", line 423, in run
-     with Popen(*popenargs, **kwargs) as process:
-TypeError: __init__() got an unexpected keyword argument 'capture_output'
-
-----------------------------------------------------------------------
-Ran 5 tests in 0.001s
-
-FAILED (errors=5)
+Yes, I was referring to x86_32, x86_64 and x32, but all architectures
+should be supported.
