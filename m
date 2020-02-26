@@ -2,228 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E4C16F45E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 01:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E370516F46C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 01:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728756AbgBZAdg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Feb 2020 19:33:36 -0500
-Received: from mail-il1-f180.google.com ([209.85.166.180]:41364 "EHLO
-        mail-il1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728865AbgBZAdd (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Feb 2020 19:33:33 -0500
-Received: by mail-il1-f180.google.com with SMTP id f10so830247ils.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Feb 2020 16:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=cF+cf0TvkH5gluf6NeH9N2EMiwXac4QQvmLsm1w4peg=;
-        b=LzQ3sDXI5B9SS8btnv7UsZwmgPQT1E2mlEvqy1i+cvj41J+Ovgq6F1UVuAEgImU+Gr
-         4lHglaykDuUOxBe9ORomJhj71jtlpwtHfZ0Cnl+nwD6zDhc6H3NFuy1K4I7anPv5G/sG
-         gQSFoj9KapxLN7rA0UJodWSB3amwaA+Afd8RM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=cF+cf0TvkH5gluf6NeH9N2EMiwXac4QQvmLsm1w4peg=;
-        b=dfmYljKy/4zuqr9bC8FeSvOiNFHFA6TLeWBUlmgNxt9TvNydwsm2p9feusbnKUHGEu
-         FKqbOTIqEmkwCDAluiG0cryjhULDsGRJNUc6A9KRSFoc9gp/sdmVJaHOKZmzKG6ypwxo
-         Od5L80ToLMHvhRKQ3pw05UoEdZ0VBNcjhDN7rvGyKKYqM9x2vvp/0S9JUIaYjzUqMaAo
-         rCp6thwb65CfCJg9xllnrDBFaTEovmh0pzz14dQa3+f+XItayN6LAS3W87H+bG9XO95D
-         dEuSGBJOj/XNG/zp03Al4YE23TRLd40GzFAxfL0V8WBWwU3OZOWiMqG1adPTJWyn5D14
-         i76w==
-X-Gm-Message-State: APjAAAUhLykQ3revF/vxeVvIExU0IIvKjJT0aiTmc01CuiViXR+eK5LL
-        NXey2XJ2F5PRqu8OV6nqUzk4huxPApc=
-X-Google-Smtp-Source: APXvYqyAvDBmc4k6IovdR72VFQDAWbh7Erl6Plnv0T9BmtvK9APLkVvmjUyCnZA9zQ94gKHtPU+UWg==
-X-Received: by 2002:a92:8458:: with SMTP id l85mr1425672ild.296.1582677212122;
-        Tue, 25 Feb 2020 16:33:32 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id o76sm140657ili.8.2020.02.25.16.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2020 16:33:31 -0800 (PST)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest kunit update for Linux 5.6-rc4
-Message-ID: <728b8941-6687-d3b3-2156-1d74ee4dc3db@linuxfoundation.org>
-Date:   Tue, 25 Feb 2020 17:33:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729081AbgBZAlt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Feb 2020 19:41:49 -0500
+Received: from mga14.intel.com ([192.55.52.115]:32514 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728865AbgBZAlt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 Feb 2020 19:41:49 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 16:41:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,486,1574150400"; 
+   d="scan'208";a="230289859"
+Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.78]) ([134.134.177.78])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Feb 2020 16:41:47 -0800
+Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
+ IA32_FEAT_CTL is configured
+From:   Jacob Keller <jacob.e.keller@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
+        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
+        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
+        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
+        lenb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
+        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
+        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
+ <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
+ <20200225221234.GL9245@linux.intel.com>
+ <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
+ <20200225232900.GO9245@linux.intel.com>
+ <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
+Organization: Intel Corporation
+Message-ID: <ee8e2b4d-9448-48e0-feb9-410059577fe3@intel.com>
+Date:   Tue, 25 Feb 2020 16:41:47 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------EAD8E6D2B4D83A7CBD97E73B"
+In-Reply-To: <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------EAD8E6D2B4D83A7CBD97E73B
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On 2/25/2020 3:54 PM, Jacob Keller wrote:
+> 
+> I reverted the suggested commit and added some prints:
+> 
+> [   26.056398] X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> [   26.062426] X86_FEATURE_VMX is enabled
+> [   26.066923] kvm: disabled by bios
+> 
+> So the old code flow is finding KVM to be disabled, but both features
+> are set...
+> 
+> The code that sets this is run first:
+> 
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_LOCKED is set
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_INSIDE_SMX is unset
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is unset
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: MSR locked by bios
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: VMX (outside TXT) disabled by BIOS
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: disabling X86_FEATURE_VMX
+> 
+> But somehow... it is still set later...
+> 
+> So there's something weird going on. Maybe "boot_cpu_has" in the
+> vmx_disabled_by_bios is wrong? Hmm.
+> 
 
-Hi Linus,
+I added even more pr_warns, giving me the following diff after reverting
+the suggested commit:
 
-Please pull the following Kselftest kunit update for Linux 5.6-rc4.
+> 
+> 
+> diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
+> index 0268185bef94..a86619acab80 100644
+> --- a/arch/x86/kernel/cpu/feat_ctl.c
+> +++ b/arch/x86/kernel/cpu/feat_ctl.c
+> @@ -97,13 +97,27 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
+>         bool tboot = tboot_enabled();
+>         u64 msr;
+> 
+> +       pr_warn("before X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("before X86_FEATURE_VMX is %s\n",
+> +                       cpu_has(c, X86_FEATURE_VMX) ? "enabled" : "disabled");
+> +
+>         if (rdmsrl_safe(MSR_IA32_FEAT_CTL, &msr)) {
+>                 clear_cpu_cap(c, X86_FEATURE_VMX);
+>                 return;
+>         }
+> 
+> -       if (msr & FEAT_CTL_LOCKED)
+> +       pr_warn("FEAT_CTL_LOCKED is %s\n",
+> +                       msr & FEAT_CTL_LOCKED ? "set" : "unset");
+> +       pr_warn("FEAT_CTL_VMX_ENABLED_INSIDE_SMX is %s\n",
+> +                       msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX ? "set" : "unset");
+> +       pr_warn("FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is %s\n",
+> +                       msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX ? "set" : "unset");
+> +
+> +       if (msr & FEAT_CTL_LOCKED) {
+> +               pr_warn("MSR locked by bios\n");
+>                 goto update_caps;
+> +       }
+> 
+>         /*
+>          * Ignore whatever value BIOS left in the MSR to avoid enabling random
+> @@ -136,10 +150,16 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
+>                 if (IS_ENABLED(CONFIG_KVM_INTEL))
+>                         pr_err_once("VMX (%s TXT) disabled by BIOS\n",
+>                                     tboot ? "inside" : "outside");
+> +               pr_warn("disabling X86_FEATURE_VMX\n");
+>                 clear_cpu_cap(c, X86_FEATURE_VMX);
+>         } else {
+>  #ifdef CONFIG_X86_VMX_FEATURE_NAMES
+>                 init_vmx_capabilities(c);
+>  #endif
+>         }
+> +
+> +       pr_warn("after X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("after X86_FEATURE_VMX is %s\n",
+> +                       cpu_has(c, X86_FEATURE_VMX) ? "enabled" : "disabled");
+>  }
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index a2e18e60c2db..550f8d556251 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2222,6 +2222,16 @@ static __init int vmx_disabled_by_bios(void)
+>  {
+>         u64 msr;
+> 
+> +       pr_warn("boot X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("boot X86_FEATURE_VMX is %s\n",
+> +                       boot_cpu_has(X86_FEATURE_VMX) ? "enabled" : "disabled");
+> +
+> +       pr_warn("this_cpu X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       this_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("this_cpu X86_FEATURE_VMX is %s\n",
+> +                       this_cpu_has(X86_FEATURE_VMX) ? "enabled" : "disabled");
+> +
+>         rdmsrl(MSR_IA32_FEAT_CTL, msr);
+> 
+>         if (unlikely(!(msr & FEAT_CTL_LOCKED)))
 
-This Kselftest kunit update consists of fixes to documentation and
-run-time tool from Brendan Higgins and Heidi Fahim.
+With this, I see the following output for each CPU, starting with boot CPU:
 
-diff is attached.
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_MSR_IA32_FEAT_CTL is disabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_VMX is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_LOCKED is set
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_INSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: MSR locked by bios
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: VMX (outside TXT) disabled by BIOS
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: disabling X86_FEATURE_VMX
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_VMX is disabled
+And for each of the SMP CPUs:
 
-thanks,
--- Shuah
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_MSR_IA32_FEAT_CTL is disabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_VMX is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_LOCKED is set
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_INSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: MSR locked by bios
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: disabling X86_FEATURE_VMX
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_VMX is disabled
 
-----------------------------------------------------------------
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+But when we finally go to check kvm:
 
-   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: boot X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: boot X86_FEATURE_VMX is enabled
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: this_cpu X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: this_cpu X86_FEATURE_VMX is enabled
 
-are available in the Git repository at:
+I tried checking both boot and this_cpu, just in case.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-kunit-5.6-rc4
+Somehow the things are being restored/re-enabled. I can't figure out
+where this even happens. At a glance it's not even obvious to me where
+the original features get set, and nothing seems to obviously set these
+flags....
 
-for you to fetch changes up to be886ba90cce2fb2f5a4dbcda8f3be3fd1b2f484:
+Thanks,
+Jake
 
-   kunit: run kunit_tool from any directory (2020-02-19 15:58:07 -0700)
-
-----------------------------------------------------------------
-linux-kselftest-kunit-5.6-rc4
-
-This Kselftest kunit update consists of fixes to documentation and
-run-time tool from Brendan Higgins and Heidi Fahim.
-
-----------------------------------------------------------------
-Brendan Higgins (1):
-       Documentation: kunit: fixed sphinx error in code block
-
-Heidi Fahim (2):
-       kunit: test: Improve error messages for kunit_tool when 
-kunitconfig is invalid
-       kunit: run kunit_tool from any directory
-
-  Documentation/dev-tools/kunit/usage.rst |  1 +
-  tools/testing/kunit/kunit.py            | 12 ++++++++++++
-  tools/testing/kunit/kunit_kernel.py     | 28 ++++++++++++++++------------
-  3 files changed, 29 insertions(+), 12 deletions(-)
-
-----------------------------------------------------------------
-
---------------EAD8E6D2B4D83A7CBD97E73B
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-5.6-rc4.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-5.6-rc4.diff"
-
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 7cd56a1993b1..607758a66a99 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -551,6 +551,7 @@ options to your ``.config``:
- Once the kernel is built and installed, a simple
- 
- .. code-block:: bash
-+
- 	modprobe example-test
- 
- ...will run the tests.
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index e59eb9e7f923..180ad1e1b04f 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -24,6 +24,8 @@ KunitResult = namedtuple('KunitResult', ['status','result'])
- 
- KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs', 'build_dir', 'defconfig'])
- 
-+KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
-+
- class KunitStatus(Enum):
- 	SUCCESS = auto()
- 	CONFIG_FAILURE = auto()
-@@ -35,6 +37,13 @@ def create_default_kunitconfig():
- 		shutil.copyfile('arch/um/configs/kunit_defconfig',
- 				kunit_kernel.kunitconfig_path)
- 
-+def get_kernel_root_path():
-+	parts = sys.argv[0] if not __file__ else __file__
-+	parts = os.path.realpath(parts).split('tools/testing/kunit')
-+	if len(parts) != 2:
-+		sys.exit(1)
-+	return parts[0]
-+
- def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
- 	config_start = time.time()
-@@ -114,6 +123,9 @@ def main(argv, linux=None):
- 	cli_args = parser.parse_args(argv)
- 
- 	if cli_args.subcommand == 'run':
-+		if get_kernel_root_path():
-+			os.chdir(get_kernel_root_path())
-+
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index cc5d844ecca1..d99ae75ef72f 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -93,6 +93,20 @@ class LinuxSourceTree(object):
- 			return False
- 		return True
- 
-+	def validate_config(self, build_dir):
-+		kconfig_path = get_kconfig_path(build_dir)
-+		validated_kconfig = kunit_config.Kconfig()
-+		validated_kconfig.read_from_file(kconfig_path)
-+		if not self._kconfig.is_subset_of(validated_kconfig):
-+			invalid = self._kconfig.entries() - validated_kconfig.entries()
-+			message = 'Provided Kconfig is not contained in validated .config. Following fields found in kunitconfig, ' \
-+					  'but not in .config: %s' % (
-+					', '.join([str(e) for e in invalid])
-+			)
-+			logging.error(message)
-+			return False
-+		return True
-+
- 	def build_config(self, build_dir):
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if build_dir and not os.path.exists(build_dir):
-@@ -103,12 +117,7 @@ class LinuxSourceTree(object):
- 		except ConfigError as e:
- 			logging.error(e)
- 			return False
--		validated_kconfig = kunit_config.Kconfig()
--		validated_kconfig.read_from_file(kconfig_path)
--		if not self._kconfig.is_subset_of(validated_kconfig):
--			logging.error('Provided Kconfig is not contained in validated .config!')
--			return False
--		return True
-+		return self.validate_config(build_dir)
- 
- 	def build_reconfig(self, build_dir):
- 		"""Creates a new .config if it is not a subset of the .kunitconfig."""
-@@ -133,12 +142,7 @@ class LinuxSourceTree(object):
- 		except (ConfigError, BuildError) as e:
- 			logging.error(e)
- 			return False
--		used_kconfig = kunit_config.Kconfig()
--		used_kconfig.read_from_file(get_kconfig_path(build_dir))
--		if not self._kconfig.is_subset_of(used_kconfig):
--			logging.error('Provided Kconfig is not contained in final config!')
--			return False
--		return True
-+		return self.validate_config(build_dir)
- 
- 	def run_kernel(self, args=[], timeout=None, build_dir=''):
- 		args.extend(['mem=256M'])
-
---------------EAD8E6D2B4D83A7CBD97E73B--
