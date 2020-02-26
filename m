@@ -2,109 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A42661707E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 19:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D07C170803
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 19:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbgBZSnh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Feb 2020 13:43:37 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:33449 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbgBZSnh (ORCPT
+        id S1727145AbgBZStb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Feb 2020 13:49:31 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45503 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727084AbgBZStb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Feb 2020 13:43:37 -0500
-Received: by mail-io1-f68.google.com with SMTP id z8so297103ioh.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2020 10:43:37 -0800 (PST)
+        Wed, 26 Feb 2020 13:49:31 -0500
+Received: by mail-pf1-f195.google.com with SMTP id 2so205062pfg.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Feb 2020 10:49:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a9lte+fOFVwIvTxY0D7kbm+KY6FljHyVVBNSpRiNzyM=;
-        b=OucBm0ZhnE71Y6NLaHS+8+OxDn0OXDGuas9PRChmy3QLD0bVR75NCbyTbysiQKfv+5
-         tgnJ96uTgDVWcOMM/h7OtqLUnDPZw70AvkLeDgpR2Xdako1sEqaK0hp+ugfXxgUlO/Bg
-         D4GSs/1E98Z9r5M5JPSCCVNru12XZSg9js6PY=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UE7SLV8s468yZbq8qcSb4sRo6dYTH3lmVINJK2pF/Rc=;
+        b=jA2Um2bnLQg3BAkezzgjpMtGTg858Rxq4CJkWx4LfvljkkqPbfDzwR3l96lR+/xhJB
+         VQkuio7/ZKPo9ZxiSc0BWA53DDAaxEC4Kig/1/MAwMPzTkxW0LsjsO9qRUWAG3+LwdxJ
+         bBcXP/Qq5cZkrwppbFNmSDm9gDmJqMY2Rb5Z0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a9lte+fOFVwIvTxY0D7kbm+KY6FljHyVVBNSpRiNzyM=;
-        b=FtrRMZ3WtkGrjIhH8KOpPClGOI8lwyUc5PR4Y+HeIBkeuhrN92RbDIEG14P00uQ3Iu
-         2ncDjA722I7YJSdTN0bHG9uSPgiqbebQDZMhGR5BnvCCiyG5067SpLrXpNAkAF2jMXHK
-         JFFYBgQVCtdcK4fvHHiYVfCncivlNgOQ84MoC8jRpnwYusNCl3KV+3nk4BqzU8+TAsE6
-         BkWy4KQPhg32kSwMdbT4AM09MvazTXMEGRXWA3ZOpQIvEvMUkLaDaFBATtMS8x+KhHF8
-         rDY1iD6HFxwtXbAhs9+13m5+QiyOxU4+UsEk4Qa6GtdMY3zDRIios3IwbhVKYgxc2P+r
-         DH0Q==
-X-Gm-Message-State: APjAAAUh2fXAPyJlt5apXG04m2MxpkjCzL14EllTEGxWA5LozDn+a38b
-        ZEh3C+vZpyFac7LRAzVsml1tvw==
-X-Google-Smtp-Source: APXvYqy+pCE4nTPCtile37Mod0xvFRqxBv28FMYOV6K0DBWl5tfRZlfaid7fmF8zL+YAb6vyUG5KJw==
-X-Received: by 2002:a6b:cf0a:: with SMTP id o10mr5292089ioa.267.1582742616682;
-        Wed, 26 Feb 2020 10:43:36 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c24sm765230iom.0.2020.02.26.10.43.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2020 10:43:36 -0800 (PST)
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.6-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UE7SLV8s468yZbq8qcSb4sRo6dYTH3lmVINJK2pF/Rc=;
+        b=fcSmsO/TUMCNjYJunjY0skKSR0F3BhGqluhUcw79TZwrgezigC8OMHNgvJ7IwKTEOj
+         gm3AByI1aplHidnkcF15XHnW89OfOFpNVboLnFJy3AqmJe4BbpET91W1nXYINUOVZGhh
+         gAciMlpX0VDv7uzJbg4K1akxXZ3ZoEXtzRn97z8PtQh3XlDAhGGn5mJwuA6g2bfHCXtD
+         sv3dKwiE+VorLd2QBRpmhR9YVEcZVfIKNU8rh47V5ffZxq5iVY6WxSc5uZz8QBNbM1RM
+         DSTN4vWX7/Q1+weGx4cBc5iCVq6nOUUOikEiTtGxa4+mL/cz4KJ2TuLbcIHb010+xU5k
+         XT4w==
+X-Gm-Message-State: APjAAAUnQuBPXnHD3/+OdrObkLdIYgcYzxJimc5hKSh+1rGyHLknHabs
+        APM4cFu7WxmLRuQUk6s2Ewubjw==
+X-Google-Smtp-Source: APXvYqxlTjlN/5RWPR7YFQfgZ7nC8YLL0uLCegeK1cb0d8ZefgQ7K7KigIJMn16KLKQbCje1JbcnoA==
+X-Received: by 2002:a63:cc4c:: with SMTP id q12mr198639pgi.443.1582742970078;
+        Wed, 26 Feb 2020 10:49:30 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k63sm3578966pjb.10.2020.02.26.10.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2020 10:49:29 -0800 (PST)
+Date:   Wed, 26 Feb 2020 10:49:28 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
-References: <94b64a48-a337-63c4-c504-7e9b0c29a7c6@linuxfoundation.org>
- <CAHk-=whGqq1XyJgYr+Mrx7Po2d2JVRvroSigxzQ+C6jCcU7uqw@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7764e4a5-1efc-2560-3766-bfce826af985@linuxfoundation.org>
-Date:   Wed, 26 Feb 2020 11:43:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        open list <linux-kernel@vger.kernel.org>, ankita@in.ibm.com,
+        Will Deacon <will@kernel.org>, ardb@kernel.org,
+        "Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>
+Subject: Re: selftests: Linux Kernel Dump Test Module output
+Message-ID: <202002261048.E9417B65D@keescook>
+References: <CA+G9fYu3682XJ2Kw2ZvQdUT80epKc9DWWXgDT1-D_65ajSXNTw@mail.gmail.com>
+ <fcb799d4-f316-60d6-9fd0-0bc1c174e63c@arm.com>
+ <202002251131.3216B3B50C@keescook>
+ <b485a8a9-5312-ca77-d091-3dbfac33ec5b@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=whGqq1XyJgYr+Mrx7Po2d2JVRvroSigxzQ+C6jCcU7uqw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b485a8a9-5312-ca77-d091-3dbfac33ec5b@arm.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/26/20 11:14 AM, Linus Torvalds wrote:
-> On Tue, Feb 25, 2020 at 3:26 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> - Declutter git status fix from Christophe Leroy
-> 
-> I've pulled this, but just for future reference (and hoping for a
-> future cleanup patch): instead of putting things in the global
-> .gitignore file, do it in the relevant local one.
-> 
-> So you could just have added
-> 
->    *.sh
->    !run.sh
-> 
-> in 'tools/testing/selftests/lkdtm/.gitignore' instead of doing
-> 
->    # Generated lkdtm tests
->    /tools/testing/selftests/lkdtm/*.sh
->    !/tools/testing/selftests/lkdtm/run.sh
-> 
-> in the top-level one.
-> 
-> That keeps things much better separated. It also incidentally means
-> that if a directory gets renamed, the gitignore file just "magically"
-> continues to work (if you rename the actual files themselves that are
-> named in gitignore, then that's obviously a different thing).
-> 
-> If you put it in the leaf directory, it also means that you don't need
-> the '/' at the beginning, because the local gitignore entries will
-> only affect that subdirectory (and any subdirectories under it).
-> 
-> So please put only "global" gitignore patterns in the top-level gitignore file.
-> 
->                Linus
-> 
+On Wed, Feb 26, 2020 at 11:53:37AM +0000, Cristian Marussi wrote:
+> Sorry I lost track of this thread....tested now on v5.6rc3 on arm64 on a local
+> setup (not proper CI) with CONFIG_LKDTM=y and solves the above issue. (missing CONFIG_LKDTM?)
 
-Thanks. I will keep this mind as I review these kinds of patches.
+Great!
 
--- Shuah
+> Looking at the general run though I have anyway a bunch of SKIP similar to Naresh
+> 
+> ./run_kselftest.sh 2>/dev/null | grep "SKIP"
+> not ok 1 selftests: lkdtm: PANIC.sh # SKIP
+> not ok 6 selftests: lkdtm: LOOP.sh # SKIP
+> not ok 7 selftests: lkdtm: EXHAUST_STACK.sh # SKIP
+> not ok 8 selftests: lkdtm: CORRUPT_STACK.sh # SKIP
+> not ok 9 selftests: lkdtm: CORRUPT_STACK_STRONG.sh # SKIP
+> not ok 15 selftests: lkdtm: UNSET_SMEP.sh # SKIP
+> not ok 16 selftests: lkdtm: DOUBLE_FAULT.sh # SKIP
+> not ok 18 selftests: lkdtm: OVERWRITE_ALLOCATION.sh # SKIP
+> not ok 19 selftests: lkdtm: WRITE_AFTER_FREE.sh # SKIP
+> not ok 21 selftests: lkdtm: WRITE_BUDDY_AFTER_FREE.sh # SKIP
+> not ok 26 selftests: lkdtm: SOFTLOCKUP.sh # SKIP
+> not ok 27 selftests: lkdtm: HARDLOCKUP.sh # SKIP
+> not ok 28 selftests: lkdtm: SPINLOCKUP.sh # SKIP
+> not ok 29 selftests: lkdtm: HUNG_TASK.sh # SKIP
+> not ok 59 selftests: lkdtm: REFCOUNT_TIMING.sh # SKIP
+> not ok 60 selftests: lkdtm: ATOMIC_TIMING.sh # SKIP
+> 
+> BUT, if I look at one LKDTM test script
+> (lkdtm/USERCOPY_STACK_FRAME_TO.sh):
+> 
+> ...
+> # If the test is commented out, report a skip
+> if echo "$test" | grep -q '^#' ; then
+> ...
+> 
+> and in fact:
+> 
+> root@sqwt-ubuntu:/opt/ksft# cat lkdtm/tests.txt | grep ^#
+> #PANIC
+> #LOOP Hangs the system
+> #EXHAUST_STACK Corrupts memory on failure
+> #CORRUPT_STACK Crashes entire system on success
+> #CORRUPT_STACK_STRONG Crashes entire system on success
+> #OVERWRITE_ALLOCATION Corrupts memory on failure
+> #WRITE_AFTER_FREE Corrupts memory on failure
+> #WRITE_BUDDY_AFTER_FREE Corrupts memory on failure
+> #SOFTLOCKUP Hangs the system
+> #HARDLOCKUP Hangs the system
+> #SPINLOCKUP Hangs the system
+> #HUNG_TASK Hangs the system
+> #REFCOUNT_TIMING timing only
+> #ATOMIC_TIMING timing only
+> 
+> so only two of the above tests are in fact unexpectedly skipped.
 
+Yup, that is operating as expected. :)
+
+> not ok 15 selftests: lkdtm: UNSET_SMEP.sh # SKIP
+> not ok 16 selftests: lkdtm: DOUBLE_FAULT.sh # SKIP
+
+These are x86-specific, so that is correct as well.
+
+Thanks for following up!
+
+-- 
+Kees Cook
