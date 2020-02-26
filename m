@@ -2,73 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D05A17029E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 16:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 328EC170298
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Feb 2020 16:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728337AbgBZPfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Feb 2020 10:35:44 -0500
-Received: from smtp-sh2.infomaniak.ch ([128.65.195.6]:40631 "EHLO
-        smtp-sh2.infomaniak.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728145AbgBZPfn (ORCPT
+        id S1728212AbgBZPfY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Feb 2020 10:35:24 -0500
+Received: from www62.your-server.de ([213.133.104.62]:39820 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728145AbgBZPfY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Feb 2020 10:35:43 -0500
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-        by smtp-sh2.infomaniak.ch (8.14.4/8.14.4/Debian-8+deb8u2) with ESMTP id 01QFZ3Zc056663
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 26 Feb 2020 16:35:03 +0100
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48SKcN1RPGzlhMhj;
-        Wed, 26 Feb 2020 16:35:00 +0100 (CET)
-Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
-To:     J Freyensee <why2jjj.linux@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20200224160215.4136-1-mic@digikod.net>
- <6df3e6b1-ffd1-dacf-2f2d-7df8e5aca668@gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <5ec24e38-1a6f-590a-3b30-50caae177e9b@digikod.net>
-Date:   Wed, 26 Feb 2020 16:34:59 +0100
-User-Agent: 
+        Wed, 26 Feb 2020 10:35:24 -0500
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1j6yiV-0000f0-Ux; Wed, 26 Feb 2020 16:35:21 +0100
+Received: from [2001:1620:665:0:5795:5b0a:e5d5:5944] (helo=linux-3.fritz.box)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1j6yiV-000QnW-GW; Wed, 26 Feb 2020 16:35:19 +0100
+Subject: Re: [PATCH bpf-next v3 2/5] bpftool: Make probes which emit dmesg
+ warnings optional
+To:     Michal Rostecki <mrostecki@opensuse.org>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+References: <20200225194446.20651-1-mrostecki@opensuse.org>
+ <20200225194446.20651-3-mrostecki@opensuse.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <9398747e-2ebe-074b-afea-3d0ba7555479@iogearbox.net>
+Date:   Wed, 26 Feb 2020 16:35:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <6df3e6b1-ffd1-dacf-2f2d-7df8e5aca668@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200225194446.20651-3-mrostecki@opensuse.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.2/25734/Tue Feb 25 15:06:17 2020)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 2/25/20 8:44 PM, Michal Rostecki wrote:
+> Probes related to bpf_probe_write_user and bpf_trace_printk helpers emit
+> dmesg warnings which might be confusing for people running bpftool on
+> production environments. This change filters them out by default and
+> introduces the new positional argument "full" which enables all
+> available probes.
+> 
+> Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
+[...]
+> +		/* Skip helper functions which emit dmesg messages when not in
+> +		 * the full mode.
+> +		 */
+> +		switch (id) {
+> +		case 6: /* trace_printk */
+> +		case 36: /* probe_write_user */
 
-On 25/02/2020 19:49, J Freyensee wrote:
-> 
-> 
-> On 2/24/20 8:02 AM, Mickaël Salaün wrote:
-> 
->> ## Syscall
->>
->> Because it is only tested on x86_64, the syscall is only wired up for
->> this architecture.  The whole x86 family (and probably all the others)
->> will be supported in the next patch series.
-> General question for u.  What is it meant "whole x86 family will be
-> supported".  32-bit x86 will be supported?
+Please fix this into the actual enum above, then also the comment is not needed.
 
-Yes, I was referring to x86_32, x86_64 and x32, but all architectures
-should be supported.
+> +			if (!full_mode)
+> +				continue;
+> +			/* fallthrough */
+> +		default:
+> +			probe_helper_for_progtype(prog_type, supported_type,
+> +						  define_prefix, id, ptype_name,
+> +						  ifindex);
+>   		}
+>   	}
