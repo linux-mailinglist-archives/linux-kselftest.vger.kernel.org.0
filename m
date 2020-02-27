@@ -2,60 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA53171D4C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2020 15:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF19171FBF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2020 15:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389725AbgB0OTj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Feb 2020 09:19:39 -0500
-Received: from mail-qv1-f65.google.com ([209.85.219.65]:35253 "EHLO
-        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389577AbgB0OTj (ORCPT
+        id S1731876AbgB0OiS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Feb 2020 09:38:18 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36357 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731974AbgB0N4c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Feb 2020 09:19:39 -0500
-Received: by mail-qv1-f65.google.com with SMTP id u10so1605951qvi.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 06:19:37 -0800 (PST)
+        Thu, 27 Feb 2020 08:56:32 -0500
+Received: by mail-pl1-f194.google.com with SMTP id a6so1191903plm.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 05:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bKLgWE8g0xV/N18tYpmVBS56HF0TogVDWNcIbg8xK6c=;
-        b=as2dYBPXmgPeAJI1tbfp3eHkefI/oZIQ1aydQx2b8K1SsCFms7QNJL5/Jbmo0fGkYU
-         03F/jQDJ7QXcMLcYrWrS9HQFOvu7hpmytwWZ8hSqDXm08teb+8NZA0zbf7h45KaXq9vj
-         p/olJbZz4Hua5/zGni3Q658pbtm4EmNM1mDnwaeKPooDc957GAgwSAIi63finA1XDOvE
-         oGP5OBdVWq02AySt/qOMX3mkvkruP8xZ1ld8TPBhHDtvhx+FgkQZsEfDX8Dtx7qjS8Up
-         Wm2lQAcLmev80AlugkohkxN0+StWHdHTKz3iZ82D4eTZBEQr8ckbvMVcRrH+1nxegm/q
-         dzsQ==
+        bh=C4oVbWZsDjkczADX1E+Ggf+CTZ9yneGghFA2KUHY0RU=;
+        b=UpFbP/+/0cu+4b1dt2vgXDKzvGInh5JQxrQVzz+3jIMnQR7n+eDHh2F33JvVlGZWl2
+         C8D32Hqyo0AbmL2l0qslENzOpLFZ+KKDeGin1u4cqcj+gIsrFnuaiULBmH+uWjC4rIbS
+         Ts0JCqnh7SwC1Noi7wA5MaX2dNIetfKxBl4l7LJIvClw4vStjkn7iosy9Vz4KaYFPkrO
+         l0P+ef6TCu7FlGs7CwW7KUkFb2x4UiRMbakOGBBalZN2AFJ8shEO32OF+3/uvFvL/gA7
+         Q3SyzXf04A4VREESorimmniZCwPBOT0cR1K8zVJTccBTXv7nIwsR1JzQSzLcdkGgwh2+
+         R+Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bKLgWE8g0xV/N18tYpmVBS56HF0TogVDWNcIbg8xK6c=;
-        b=Hliq23VzjpzCg/cIuxgw0t9FvRknt+vfKyQjx4/sU0YGUb4+zmR75HxHLbBiItIl9G
-         /QElwUGmha8EaDIgKnBrxV4uOxqaW5/p56jluJbuYiiIXqYrciYEdH+sJFp3yZ8H0phl
-         3CLr0Ydj1JlyImlri288WETMLBq+oKfsx+HR5hw5rpsDJbW+X1/NsIwbswNh51PfYNT5
-         LvnCBToWtahqx3NZ+k+JJMInojEiwgv/gPP+OWmLTMXq65jswhMXJbXKYiJx8NDspqbF
-         Gp1R0X1uSw/7ijRBQqclS0IX6FRYQTkkmIBOw52/f884PqFEWO8EZEMT09OkrtLPpPVe
-         YD1w==
-X-Gm-Message-State: APjAAAV1L6Td/DaX6VPvCheBASxfTL/bdfO4NFfEUt8nibnv7vzTHO/d
-        C5k/x0g0OmUgC+Mh/Q3qlIfvhCa7a4m/FBg/DJSFFg==
-X-Google-Smtp-Source: APXvYqzrl972avb0sa1bafrBLi8jmkszsvRM+cJhQxJuMiX82XUo+WJOPkpfe7vw9qjxLobJOFM0IKrTS/U69F3RloA=
-X-Received: by 2002:ad4:4e50:: with SMTP id eb16mr5383451qvb.34.1582813176458;
- Thu, 27 Feb 2020 06:19:36 -0800 (PST)
+        bh=C4oVbWZsDjkczADX1E+Ggf+CTZ9yneGghFA2KUHY0RU=;
+        b=Nzn7Ypv1r4qpig1ekNBVkR4MZmR2Tf2zRpsu36f5AbG1mfdOogltf6VyvSN0cTmqZQ
+         q4a6Ky/WxkDyhJt+Yge0HxzrmpUSXNenvAuyhusQYxaH3cdNPMYxsPoD4T8xdax/F96K
+         EU/ntn5zw6jF/Wgnwo2hGc/NdR/5HGaPAN7Bhcv2cASm3qUrbF8rYuU7P3nVVK+n+mPG
+         iM1zcQLi/KoEp5gzxShoXufwS2Vcf1hUYzptWhRSkqartIwOXj+yF1hD3ruZVXNcsTJY
+         7MB4tmt+5P+XsDPdLmOrURDgtwWQz7sV3vfMVG49Z05D+EJA5eQTxWMgiZ8w4WV+RD9T
+         jIhw==
+X-Gm-Message-State: APjAAAXGD+TY8kqqv6O7uin3iYthlHVWDHoH4T4jrg/pWnLQxozM1hZ3
+        l7dyLv3UflGunAFueJndff5/cL40mI8GhjA9NWoc/Q==
+X-Google-Smtp-Source: APXvYqz983weEs2tO2vxp3ZVZ5AWeindBCoEdJ1gZmDRXBiYl/vEGCJuakLsJL0uNynReb9zZo/tHcjxDjFYxuFy96k=
+X-Received: by 2002:a17:902:8682:: with SMTP id g2mr4583665plo.336.1582811789766;
+ Thu, 27 Feb 2020 05:56:29 -0800 (PST)
 MIME-Version: 1.0
 References: <20200227024301.217042-1-trishalfonso@google.com>
 In-Reply-To: <20200227024301.217042-1-trishalfonso@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 27 Feb 2020 15:19:24 +0100
-Message-ID: <CACT4Y+Z_fGz2zVpco4kuGOVeCK=jv4zH0q9Uj5Hv5TAFxY3yRg@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 27 Feb 2020 14:56:18 +0100
+Message-ID: <CAAeHK+yA1ibD2yYT++==pc5PLKfisFv3ieru54PDDYF4EE_Hfg@mail.gmail.com>
 Subject: Re: [RFC PATCH 1/2] Port KASAN Tests to KUnit
 To:     Patricia Alfonso <trishalfonso@google.com>
 Cc:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>, vincent.guittot@linaro.org,
-        LKML <linux-kernel@vger.kernel.org>,
+        davidgow@google.com, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, LKML <linux-kernel@vger.kernel.org>,
         kasan-dev <kasan-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com
@@ -65,8 +64,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-.On Thu, Feb 27, 2020 at 3:44 AM Patricia Alfonso
-<trishalfonso@google.com> wrote:
+On Thu, Feb 27, 2020 at 3:44 AM 'Patricia Alfonso' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
 >
 > Transfer all previous tests for KASAN to KUnit so they can be run
 > more easily. With proper KASAN integration into KUnit, developers can
@@ -82,6 +81,11 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 > ---
 > The KUnit version of these tests could be in addition to the existing
 > tests if that is preferred.
+
+Will it be possible to run KASAN tests with KUnit on arbitrary
+hardware/vm with arbitrary architecture (like it is possible now by
+loading test_kasan.ko)?
+
 >
 >  lib/Kconfig.kasan |   2 +-
 >  lib/test_kasan.c  | 352 +++++++++++++++++++++-------------------------
@@ -451,9 +455,6 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 > -}
 > -
 > -static noinline void __init kasan_stack_oob(void)
-
-Let's keep it but also make dependent on CONFIG_KASAN_STACK
-
 > -{
 > -       char stack_array[10];
 > -       volatile int i = 0;
@@ -479,20 +480,6 @@ Let's keep it but also make dependent on CONFIG_KASAN_STACK
 >
 > -static noinline void __init copy_user_test(void)
 > +#if (CONFIG_KASAN_STACK == 1)
-
-The more common syntax for this is:
-
-#ifdef CONFIG_KASAN_STACK
-
-but it would even better to do:
-
-if (IS_ENABLED(CONFIG_KASAN_STACK))
-
-and return early. This way we at least test compilation (e.g.
-CONFIG_KASAN_STACK is not supported on your arch, you change tests and
-build break them because they were not even compiled).
-
-
 > +static noinline void kasan_stack_oob(void)
 >  {
 > -       char *kmem;
@@ -515,10 +502,6 @@ build break them because they were not even compiled).
 > -
 > -       pr_info("out-of-bounds in copy_from_user()\n");
 > -       unused = copy_from_user(kmem, usermem, size + 1);
-
-Why is all of this removed?
-Most of these tests are hard earned and test some special corner cases.
-
 > -
 > -       pr_info("out-of-bounds in copy_to_user()\n");
 > -       unused = copy_to_user(usermem, kmem, size + 1);
@@ -651,16 +634,7 @@ Most of these tests are hard earned and test some special corner cases.
 >
 > -       pr_info("use-after-free in strcmp\n");
 >         strcmp(ptr, "2");
-
-Such tests now need to be split into multiple tests, one error per
-test. Otherwise they don't test what they are supposed to test (each
-of these produces an error).
-Well, I mean, currently they don't test anything at all, but with
-kunit we actually can test this, so it would be good to actually test
-what this test was supposed to test :)
-This applies to other tests as well.
-
-
+>
 > -       pr_info("use-after-free in strncmp\n");
 >         strncmp(ptr, "2", 1);
 >
@@ -740,12 +714,6 @@ This applies to other tests as well.
 >
 > -static noinline void __init kmalloc_double_kzfree(void)
 > +static noinline void kmalloc_double_kzfree(void)
-
-Since it seems we will need v2, it will help if you move these
-mechanical diffs to a separate patch. I mean removal of __init and
-pr_info. These produce lots of changes and it's hard to separate out
-more meaningful changes from this mechanical noise.
-
 >  {
 >         char *ptr;
 >         size_t size = 16;
@@ -763,23 +731,7 @@ more meaningful changes from this mechanical noise.
 > +static void kunit_test_oob(struct kunit *test)
 > +{
 > +       KUNIT_EXPECT_KASAN_FAIL(test, kmalloc_oob_right());
-
-I think the 2 patches need to be reordered. This
-KUNIT_EXPECT_KASAN_FAIL is introduced only in the next patch. This
-will break build during bisections.
-
 > +       KUNIT_EXPECT_KASAN_FAIL(test, kmalloc_oob_left());
-
-I am wondering if it makes sense to have the "KASAN_FAIL" part be part
-of the test itself. It will make the test and assertion local to each
-other. I hope later we will add some negative tests as well (without
-kasan errors), then people will start copy-pasting these macros and
-it's possible I copy-paste macro that checks that the test does not
-produce kasan error for my test, which I actually want the macro that
-checks for report. Then if my test does not fail, it will be
-unnoticed. I may be good to have assertion local to the test itself.
-Thoughts?
-
 > +       KUNIT_EXPECT_KASAN_FAIL(test, kmalloc_node_oob_right());
 > +       KUNIT_EXPECT_KASAN_FAIL(test, kmalloc_large_oob_right());
 > +       KUNIT_EXPECT_KASAN_FAIL(test, kmalloc_oob_krealloc_more());
@@ -971,3 +923,7 @@ Thoughts?
 > --
 > 2.25.0.265.gbab2e86ba0-goog
 >
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20200227024301.217042-1-trishalfonso%40google.com.
