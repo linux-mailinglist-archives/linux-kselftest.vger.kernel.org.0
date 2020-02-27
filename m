@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6AF17207C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2020 15:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E651720D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2020 15:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731348AbgB0OnX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Feb 2020 09:43:23 -0500
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:36510 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731060AbgB0OnW (ORCPT
+        id S1730951AbgB0OpX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Feb 2020 09:45:23 -0500
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:34814 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730112AbgB0OpX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Feb 2020 09:43:22 -0500
-Received: by mail-vs1-f66.google.com with SMTP id a2so1984431vso.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 06:43:22 -0800 (PST)
+        Thu, 27 Feb 2020 09:45:23 -0500
+Received: by mail-vs1-f65.google.com with SMTP id g15so1999298vsf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 06:45:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z+isuoKHbYPGILyMICbGR0T5QiMYRy4J1XMZ/c0MyCE=;
-        b=dsz/dd+K0I4XD1YrhrhPrHHrR191LtRyLN7aW8hmkbZPgrrvlzPCU2Smg1NEu36eT6
-         KHLffuYRjxM41BUOtcI6irVNls7ebDoaPsitXlh9zLNYML4FI9hSwEqIRBSYmpQPdrk6
-         +5Jc5auj6M+JJe2bJ1uLklew3o9sgGElGwB3XYKUXjOLArCJ0cpQkL84PKxdozFzjvc+
-         KIlGHGfjb2TATOqqIOqDSze6qeAqyF/kaKk98t/jbfQT0r2qx6PrOxDMGQ4f7S6IIwmt
-         dbHDeywyho5NjaxRwEKTM+v75sCIpKtLn9ske4II8+0vX697sx2/ui4at3opVGGi2eJP
-         BmMA==
+         :cc:content-transfer-encoding;
+        bh=uIt9DyZ9nPgtt+YVHDl4cWP+F6uXmWHM0NievYA3/mQ=;
+        b=VQBU8iu2uCPmMFA6ZKYuIFOaqxlIebNshhGY19HbX6TJSpWpKgmpqa+OiCriOvOtfU
+         SURggXzLsOrJPCaj2ZcunCf16QRKxHwV+Tln/q+jGedzB6sCrBuhKpDYKEMg60GJWWMK
+         lMR1htPczf5Po2JHrIdWjlWPXyunGfIE0XuEU0NbogWA9f50GQK7Q6rxJWyoq6XXTFpR
+         rtG323NNbZowjcYgEr8VNhaRP1Ml4MBs1jk546H6xPLSyU4wF883j7mE9+h51e1Hjl7h
+         6ZdSg6VS9SDba70F7hxyUJZGRa0WA/PbzdcftGgzs0iJkWdF5j8GuiPhpb8sAjPaK7yM
+         zATA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z+isuoKHbYPGILyMICbGR0T5QiMYRy4J1XMZ/c0MyCE=;
-        b=Z3/90eeSXyqPCMcu2thOljWS8SlQBNN2uKERg+j/izC/v55gAW7aJNe7P1HM+iZTzH
-         uWZr0kNY4q+AMTX7HF13J153aanoc8bkXC9fmWDl/AT6dcfhcP7NYcRE5P7GSaHS+U0w
-         rojfYTfb5AJ9XVkgraKs2XnDM2TE9+zRh7xVAMqG/MiVgzocxVLypo+Za3S+T3rYojOj
-         jqSSY5jNhSQuO+xzJZxe7aYr8M03yRjjVZLsyVeVjpcFsxBhXD5RcRnfn2JAzKoq1txY
-         gZRTkccQ4rTpCCMfpRTre9CP7UGCacNlZErWfDy346QuOXpSAOYVVFjW9Bg6U4vJ3KNm
-         s9ow==
-X-Gm-Message-State: APjAAAXJSAcrcKaIRPeWRJ4MmMtwM/RDszF9k/fUmSRDpKH2sVBISCjf
-        oVYbQLwpFIyiTaglmOF9ZEWXrOt+AkAfZD6SMHI1hA==
-X-Google-Smtp-Source: APXvYqwcq58o1fQ/mxg6LapwJjViDpXeZMxMof5dGvU3nXZs+HFFCPF/LbTlE/gRBPnnUHHPHu5q3xLtm8y/xdFNsQ0=
-X-Received: by 2002:a67:f318:: with SMTP id p24mr2787324vsf.240.1582814601592;
- Thu, 27 Feb 2020 06:43:21 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uIt9DyZ9nPgtt+YVHDl4cWP+F6uXmWHM0NievYA3/mQ=;
+        b=IsXbC/mpxA/37UREK66X55AcgpH5zoSr6ycrH0v8budjJ87j9//WgFQo0bbC1+2K6Q
+         4mvXgOLG4/3KjoAlQvWvM5gqCUuO34wqCd+bJGwyy8XKYTofegoYy01cWU0ZqUyN1AF7
+         mBZsd8sk8n/0UfH2DW2fIGQKkIRoFM1xjUZrkY1K1Ha23SfPKUg78u3QTrZi+01R6H4P
+         QLh6CsiYsC5sLOyf2coYi97mQ6D1wgqLOplgIpF1Rr5nB39vBVIFsqCH0Ul8CooK4PNz
+         /1MDTWm1A4NVpZtGtkuyhgldekotUjhMHOEmCfCPHm3YaJNuGWI57TxInLNse1w9juHD
+         AAEw==
+X-Gm-Message-State: APjAAAUnDQi+uUpzkW7bQRR+Bd4kOcGf7XOX1OWi3LtwkhZn0O/to8JO
+        3AGVM7aCNVMO0LODKzhs4ZNPbWUmnAdIrvGivYr67A==
+X-Google-Smtp-Source: APXvYqx24Fufs8kygldW8udN7qzYKu0xpi9B+mGtQ5uymR1YOJw2PzRkveUvacDSqSxOOr5eo6UFeHhjaqb2/JA/bRg=
+X-Received: by 2002:a67:f318:: with SMTP id p24mr2792811vsf.240.1582814722123;
+ Thu, 27 Feb 2020 06:45:22 -0800 (PST)
 MIME-Version: 1.0
 References: <20200227024301.217042-1-trishalfonso@google.com> <20200227024301.217042-2-trishalfonso@google.com>
 In-Reply-To: <20200227024301.217042-2-trishalfonso@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 27 Feb 2020 15:43:10 +0100
-Message-ID: <CACT4Y+YFewcbRnY62wLHueVNwyXCSZwO8K7SUR2cg=pxZv8uZA@mail.gmail.com>
+Date:   Thu, 27 Feb 2020 15:45:10 +0100
+Message-ID: <CACT4Y+b0LHp15GNchK_TPxaqX8zscqgBw-Jm2Y3yq8Bn=dRbeQ@mail.gmail.com>
 Subject: Re: [RFC PATCH 2/2] KUnit: KASAN Integration
 To:     Patricia Alfonso <trishalfonso@google.com>
 Cc:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
@@ -60,6 +60,7 @@ Cc:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -78,37 +79,36 @@ On Thu, Feb 27, 2020 at 3:44 AM 'Patricia Alfonso' via kasan-dev
 >  - This prints "line# has passed" or "line# has failed"
 >
 > Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
-> ---
-> If anyone has any suggestions on how best to print the failure
-> messages, please share!
->
-> One issue I have found while testing this is the allocation fails in
-> kmalloc_pagealloc_oob_right() sometimes, but not consistently. This
-> does cause the test to fail on the KUnit side, as expected, but it
-> seems to skip all the tests before this one because the output starts
-> with this failure instead of with the first test, kmalloc_oob_right().
 
-I don't follow this... we don't check output in any way, so how does
-output affect execution?...
+This does not build for me:
+
+$ make
+scripts/kconfig/conf  --syncconfig Kconfig
+  CC      arch/x86/kernel/asm-offsets.s
+  UPD     include/generated/asm-offsets.h
+  CALL    scripts/checksyscalls.sh
+  CALL    scripts/atomic/check-atomics.sh
+  DESCEND  objtool
+  CC      init/main.o
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/kasan.h:15,
+                 from ./include/linux/slab.h:136,
+                 from ./include/kunit/test.h:16,
+                 from ./include/linux/sched.h:35,
+                 from ./include/linux/ioprio.h:5,
+                 from ./include/linux/fs.h:39,
+                 from ./include/linux/proc_fs.h:9,
+                 from init/main.c:18:
+./arch/x86/include/asm/uaccess.h: In function =E2=80=98set_fs=E2=80=99:
+./arch/x86/include/asm/uaccess.h:31:9: error: dereferencing pointer to
+incomplete type =E2=80=98struct task_struct=E2=80=99
+   31 |  current->thread.addr_limit =3D fs;
+      |         ^~
+make[1]: *** [scripts/Makefile.build:268: init/main.o] Error 1
+make: *** [Makefile:1681: init] Error 2
 
 
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -141,7 +141,7 @@ class LinuxSourceTree(object):
->                 return True
->
->         def run_kernel(self, args=[], timeout=None, build_dir=''):
-> -               args.extend(['mem=256M'])
-> +               args.extend(['mem=256M', 'kasan_multi_shot'])
-
-This is better done somewhere else (different default value if
-KASAN_TEST is enabled or something). Or overridden in the KASAN tests.
-Not everybody uses tools/testing/kunit/kunit_kernel.py and this seems
-to be a mandatory part now. This means people will always hit this, be
-confused, figure out they need to flip the value, and only then be
-able to run kunit+kasan.
-
-
->                 process = self._ops.linux_bin(args, timeout, build_dir)
->                 with open(os.path.join(build_dir, 'test.log'), 'w') as f:
->                         for line in process.stdout:
+On bfdc6d91a25f4545bcd1b12e3219af4838142ef1 config:
+https://pastebin.com/raw/nwnL2N9w
