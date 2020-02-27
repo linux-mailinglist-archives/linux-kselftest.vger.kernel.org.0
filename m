@@ -2,85 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD4C172629
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2020 19:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57D81727FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Feb 2020 19:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729802AbgB0SJy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Feb 2020 13:09:54 -0500
-Received: from mga05.intel.com ([192.55.52.43]:29054 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729563AbgB0SJy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Feb 2020 13:09:54 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Feb 2020 10:09:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,492,1574150400"; 
-   d="scan'208";a="437125047"
-Received: from unknown (HELO [134.134.177.87]) ([134.134.177.87])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Feb 2020 10:09:52 -0800
-Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
- IA32_FEAT_CTL is configured
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
-        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
-        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
-        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
-        lenb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
-        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
-        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
- <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
- <20200227021221.GA14478@linux.intel.com>
-From:   Jacob Keller <jacob.e.keller@intel.com>
-Organization: Intel Corporation
-Message-ID: <38e05b7a-aea2-1da1-56b5-1505615c55fb@intel.com>
-Date:   Thu, 27 Feb 2020 10:09:51 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1729172AbgB0StZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Feb 2020 13:49:25 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33278 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726805AbgB0StZ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 27 Feb 2020 13:49:25 -0500
+Received: by mail-pf1-f193.google.com with SMTP id n7so295444pfn.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 10:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sGeaLHlnGkG2EKVANYEasocr4XU2jYAIuDOZRJsT7Oo=;
+        b=XyXxJgvedHV34V4WJqX+Hr1W3blvQ9Hasu/MLokQnm07W62Yj4XxYbDLBD+Oub9RHL
+         LL1VgVjONRaR6ahJdPhB2b02mAwIwDg/WoQbB1E16zQJR9KVxb5Ap9cDaN80E1YWkkAG
+         XMR45E0mtgatAGy5A/oijIwby9+b7QygKEBYrjZw6eRmifq6pJr+8YZrOZMz8yE1RKDT
+         JmyvlF7U3P/vmhWuJ56dadoFI1e0Z2fibqXWNajTLAD8CpQm79ErQMfaAn/GHKT7OX+6
+         8MB/26+0SzXiBTIZLUOylD6Fe31YzRhW2c6HGUjMrJr8f0CLEWIa1bmvfmteoHDMFg7g
+         RpEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sGeaLHlnGkG2EKVANYEasocr4XU2jYAIuDOZRJsT7Oo=;
+        b=JF5NFU7mDQRkVF6+3IH1kbwGhoMW7NzkJCPZ0e/bxg5m9BBHP5W3w3kYHeEWuHlsAa
+         F/pQUWo/+qao3ia96mOh3TjzKIu6/J/oI7G9QsniJL9ez9DlrDuZtt6TCD+k5B4WGUNi
+         5iDPPyE03v/orrruLBJOQHZ2Fi4D+nPbe9myHPhBcn3gWugInTgTJ3vQmFIMOIJ4se4q
+         QIOPvqM10qlrR3ShSC6wN60E+x3H+QAt4ofXVZ0ikg5L+CN0S6bwQDQBAA1wuCD9iq3Q
+         D8h3644bo2tcPKzQxF9wB1R5lQYWy5RPAoHY05AVtdUzbSQJd3bWUSsb97w94c6MyZ1s
+         g9jw==
+X-Gm-Message-State: APjAAAUqsmD7kAu2djSAXMWMqLLoZxSkHHVcdQTAl+r4gVf16Oa/egMN
+        P3TW2NgIXCq0blszVHElIe04wgMIXow/YaHv6wil8ZPFRYYHDg==
+X-Google-Smtp-Source: APXvYqymmOgdXa7CniObsx9VEGVRv2HX0Gml6mbnSA0rHlXFD0LPmOU7h+ebHH3tu2QnqHoViA3n/JuGoldtb3q0fdE=
+X-Received: by 2002:a63:fd17:: with SMTP id d23mr711822pgh.159.1582829364378;
+ Thu, 27 Feb 2020 10:49:24 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200227021221.GA14478@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200227063134.261636-1-gthelen@google.com>
+In-Reply-To: <20200227063134.261636-1-gthelen@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 27 Feb 2020 10:49:13 -0800
+Message-ID: <CAFd5g45X_jW6=8XZ8JY3iMgO1wc92wec4WsKCqJvDmjss5d=5A@mail.gmail.com>
+Subject: Re: [PATCH] kunit: add --make_options
+To:     Greg Thelen <gthelen@google.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/26/2020 6:12 PM, Sean Christopherson wrote:
-> On Tue, Feb 25, 2020 at 01:49:13PM -0800, Jacob Keller wrote:
-> 
-> One other thing that's been bothering me; you mention in a later email that
-> this bug resulting in a crash during boot.  The low timestamps also suggest
-> the system is fairly early in its bringup.
-> 
-> But KVM only does VMXON when it actually creates a VM[*].  During boot I
-> would expect the bug to result in KVM being incorrectly loaded/enabled, but
-> that alone wouldn't trigger a crash.
+On Wed, Feb 26, 2020 at 10:31 PM Greg Thelen <gthelen@google.com> wrote:
+>
+> The kunit.py utility builds an ARCH=um kernel and then runs it.  Add
+> optional --make_options flag to kunit.py allowing for the operator to
+> specify extra build options.
+>
+> This allows use of the clang compiler for kunit:
+>   tools/testing/kunit/kunit.py run --defconfig \
+>     --make_options CC=clang --make_options HOSTCC=clang
+>
+> Signed-off-by: Greg Thelen <gthelen@google.com>
 
-It crashes during hardware enable, specifically in the kvm_cpu_vmxon
-during the hardware_enable() function.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-It doesn't crash until near the end of bootup, and it didn't crash when
-I kept the system in single-user boot mode.
-
-> 
-> I assume/hope your system is automatically running some form of virt
-> process at boot?  Not that there's anything wrong with that, it's just
-> suprising and I want to make sure there's not something really funky going
-> on.
-> 
-
-The system has libvirtd enabled. My guess is that libvirtd starts up and
-enables hardware. I don't see any actual virtual machines enabled, but I
-think you're right that this is why it crashes.
-
-Thanks,
-Jake
+Thanks! This is something we have been meaning to do for a while!
