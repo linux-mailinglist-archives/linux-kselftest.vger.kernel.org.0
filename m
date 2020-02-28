@@ -2,145 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBD8173EE9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 18:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAD2173FD9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 19:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725886AbgB1Rxi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Feb 2020 12:53:38 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:36689 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgB1Rxi (ORCPT
+        id S1726118AbgB1Snf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Feb 2020 13:43:35 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:46750 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbgB1Snf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Feb 2020 12:53:38 -0500
-Received: by mail-qk1-f193.google.com with SMTP id f3so3807810qkh.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2020 09:53:37 -0800 (PST)
+        Fri, 28 Feb 2020 13:43:35 -0500
+Received: by mail-io1-f68.google.com with SMTP id e7so4464870ioe.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2020 10:43:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7A81NCRtl/YMUGoXqhguAxYpB741arq6+hyuPYrsxj8=;
-        b=sY0DpGEQqcJV+Om5EC5uuAuFwKAdjsRvhCmg7xEn8ttC+eOSqdtl9G7psxfJzUGzyq
-         CFgexnJMO3BoZGn/iSzwSiVKiNzwcPPDrFaf2Kub18f4onnWtjyleou7j3D2qhFdanI8
-         98t3lMngB6DyG5RzEw7SjgPkXdKjFb3VE9dGVTR5oeAa+IK8b22h9bpLrpLx/BgQzkUe
-         Toz5kRGpIoqs7+ZszYosKGlJnWIVNnjOECOmsMnWFqnLNWmKzGIpmPLHE0mrnCM6fr0q
-         CIvoVZX6V+zY/5T2ce6U9NoaV0KO+J1Ir2Q/sD+StqT1lsJW9n9C8bqwLC/RPl6XtCpv
-         6fyA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=moBvHo+PTilRWFkHOSs3qSLIv/tOzADb8Es4P0sl9A4=;
+        b=SsiA+gq4Oo+ubZQXvcRExrh5NfW6GLe9g4JUQI/KH4QsPvKRz4QNqomuzJzwyk7YDa
+         lMTgOTmFuYCvxYc5xXgthDOExlRMgtWcfRrgkCotfmYIALKHgnSgXtUONERx+9ZPRnWA
+         +skhwvRdMP3b21fpLh78V52Ee8lz1/l1XMfvk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7A81NCRtl/YMUGoXqhguAxYpB741arq6+hyuPYrsxj8=;
-        b=kur4GhjbaM9XmeyQYXyfgHTQhNXFKQiiX5dVJ2PrRbdKcSuJGvLb6DmPI1wec74zCU
-         FSLDGeKpleKIjdYtmb8ZIZoBtiUz9Bp5684TL+H4WfAkj5fSGTKbYuBRsTcryP4ioGbm
-         naguPhmT1q0tKXJUUuMRd2wMs99YB4GFwFAbrBECm0YyBoqPNiBGO8v1hSv1VVdAt1b/
-         1ZnESj4CZ3l68QXVWoGn4qOzAcknPdDYF700ECPF2J/6D7uJqftsbGfYAT3kZjOEANtD
-         ZeT1aLFo5X3PW34vAy3wxg3B4LlJqvGGTUD+rbTR0tNgvG72hj839Ck0LFOQ7PzixdbY
-         PtJg==
-X-Gm-Message-State: APjAAAWxmvx2zJmAIBTcKIiO+KsvxxR5Q6dPw34nMLDKYl5+Q6o69Pb8
-        cK2UzJ6GEqTMptLstm8WN4B14Ge0Hfrcjxd4yr3Y
-X-Google-Smtp-Source: APXvYqxuUZyxP1RTj056y0C7X/UxFsJhJD3+Tlwcqh1VF5LE+BUAzmAANREZPS01D5w3HfGzooO7MBqD5Ciibnynh/Y=
-X-Received: by 2002:ae9:f301:: with SMTP id p1mr5320690qkg.422.1582912416914;
- Fri, 28 Feb 2020 09:53:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20200228012036.15682-1-brendanhiggins@google.com>
- <20200228012036.15682-2-brendanhiggins@google.com> <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
-In-Reply-To: <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
-From:   Iurii Zaikin <yzaikin@google.com>
-Date:   Fri, 28 Feb 2020 09:53:00 -0800
-Message-ID: <CAAXuY3qnButVR4hRQcsUbUsvLFg9cSvxSe15uG82T=j+QSQUqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/7] vmlinux.lds.h: add linker section for KUnit test suites
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=moBvHo+PTilRWFkHOSs3qSLIv/tOzADb8Es4P0sl9A4=;
+        b=oQTlnWFKGYbIqzYi0DX/7ivGmAfEFm0m00MFRExrJMmH/vHJjzSSh0WvLoYydeqw+t
+         4pXZNra0lRVCVIp699GUMv7BKxj6y3qsXaaT5oF2GfusEW6CAnsRiWf+VTGH2ZfCwVFd
+         upleSU0PUeFyOYV1a/ho91K0DiuQr28O4NNA8kJhg+o7mKhp+wH1DutXIO4VPxbXxiNE
+         XnzIrLj44/lddHaSFoy2EX2jo+q01TAATer3/aPQGw9uQOTHJrKfbd6Of3WdQA745HnH
+         Ci8JGQD2SOmPzA05QgZVAyDNWgTb7eUCZt4Cp+mW7SnMc1uGXzlL3f55uMUpsXYslrQV
+         VnAg==
+X-Gm-Message-State: APjAAAV1Z69UZ2wOvqkjJIbxXwJ73jTv1/e0cH97RaUCpa328P7PDlfW
+        tMD1gsu3NIsZkWtY5cl8xktz7Q==
+X-Google-Smtp-Source: APXvYqwcG8lwkJgB3d/ZO1F4ZoMeFM/E3+QmylfeUoe+iG4RNtc5jkbVqye8lQKuc9S4XFj6YfaKnA==
+X-Received: by 2002:a05:6638:501:: with SMTP id i1mr4392752jar.25.1582915414850;
+        Fri, 28 Feb 2020 10:43:34 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g16sm2150292ioc.13.2020.02.28.10.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Feb 2020 10:43:34 -0800 (PST)
+Subject: Re: [ANN] Kselftest integration into Kernel CI
+To:     "Bird, Tim" <Tim.Bird@sony.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <3b3dc707-7ae7-955b-69fe-b9abe9ae26c5@linuxfoundation.org>
+ <MWHPR13MB08954921D3B29D9AA824A2A0FDE80@MWHPR13MB0895.namprd13.prod.outlook.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f361d23d-f721-ab2c-6797-3b04f0616567@linuxfoundation.org>
+Date:   Fri, 28 Feb 2020 11:43:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <MWHPR13MB08954921D3B29D9AA824A2A0FDE80@MWHPR13MB0895.namprd13.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We went with this alignment precisely because it's the largest that
-any supported arch may possibly need. The problem as I understood it
-was that the compiler, seeing a bunch of pointers decided to put them
-at the memory-access efficient alignment rather than at the section
-start. Remember that the section start used to be unaligned for some
-reason. Note that the alignment that is a multiple of smaller
-alignment is still aligned wrt the smaller alignment, so the compiler
-shouldn't need to put the pointers elsewhere.
-I wonder if there's a more robust way of forcing the compiler to put
-the pointers right at the section start and insert no gaps between
-them than playing with alignment.
+On 2/28/20 10:50 AM, Bird, Tim wrote:
+> 
+> 
+>> -----Original Message-----
+>> From:  Shuah Khan
+>>
+>> Integrating Kselftest into Kernel CI rings depends on Kselftest build
+>> and install framework to support Kernel CI use-cases. I am kicking off
+>> an effort to support Kselftest runs in Kernel CI rings. Running these
+>> tests in Kernel CI rings will help quality of kernel releases, both
+>> stable and mainline.
+>>
+>> What is required for full support?
+>>
+>> 1. Cross-compilation & relocatable build support
+>> 2. Generates objects in objdir/kselftest without cluttering main objdir
+>> 3. Leave source directory clean
+>> 4. Installs correctly in objdir/kselftest/kselftest_install and adds
+>>      itself to run_kselftest.sh script generated during install.
+>>
+>> Note that install step is necessary for all files to be installed for
+>> run time support.
+>>
+>> I looked into the current status and identified problems. The work is
+>> minimal to add full support. Out of 80+ tests, 7 fail to cross-build
+>> and 1 fails to install correctly.
+>>
+>> List is below:
+>>
+>> Tests fails to build: bpf, capabilities, kvm, memfd, mqueue, timens, vm
+>> Tests fail to install: android (partial failure)
+>> Leaves source directory dirty: bpf, seccomp
+>>
+>> I have patches ready for the following issues:
+>>
+>> Kselftest objects (test dirs) clutter top level object directory.
+>> seccomp_bpf generates objects in the source directory.
+>>
+>> I created a topic branch to collect all the patches:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kernelci
+>>
+>> I am going to start working on build problems. If anybody is
+>> interested in helping me with this effort, don't hesitate to
+>> contact me. I first priority is fixing build and install and
+>> then look into tests that leave the source directory dirty.
+> 
+> I'm interested in this.  I'd like the same cleanups in order to run
+> kselftest in Fuego, and I can try it with additional toolchains
+> and boards.  Unfortunately, in terms of running tests, almost all
+> the boards in my lab are running old kernels.  So the tests results
+> aren't useful for upstream work.  But I can still test
+> compilation and install issues, for the kselftest tests themselves.
+> 
 
-On Thu, Feb 27, 2020 at 11:22 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Thu, Feb 27, 2020 at 5:20 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > Add a linker section where KUnit can put references to its test suites.
-> > This patch is the first step in transitioning to dispatching all KUnit
-> > tests from a centralized executor rather than having each as its own
-> > separate late_initcall.
-> >
-> > Co-developed-by: Iurii Zaikin <yzaikin@google.com>
-> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
-> >  include/asm-generic/vmlinux.lds.h | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> > index e00f41aa8ec4f..99a866f49cb3d 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -856,6 +856,13 @@
-> >                 KEEP(*(.con_initcall.init))                             \
-> >                 __con_initcall_end = .;
-> >
-> > +/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
-> > +#define KUNIT_TEST_SUITES                                              \
-> > +               . = ALIGN(8);                                           \
->
-> After posting this, I saw I had gotten an email from 0day[1]. After
-> some investigation, I discovered that this 8 byte alignment works for
-> x86 64 bit fine, but only *sometimes* for 32 bit. 4 byte alignment
-> seems to work in all cases (so far). I am not sure why we went with
-> such a large alignment in hindsight. In any case, I should have a
-> fixed revision out pretty soon.
->
-> > +               __kunit_suites_start = .;                               \
-> > +               KEEP(*(.kunit_test_suites))                             \
-> > +               __kunit_suites_end = .;
-> > +
-> >  #ifdef CONFIG_BLK_DEV_INITRD
-> >  #define INIT_RAM_FS                                                    \
-> >         . = ALIGN(4);                                                   \
-> > @@ -1024,6 +1031,7 @@
-> >                 INIT_CALLS                                              \
-> >                 CON_INITCALL                                            \
-> >                 INIT_RAM_FS                                             \
-> > +               KUNIT_TEST_SUITES                                       \
-> >         }
-> >
-> >  #define BSS_SECTION(sbss_align, bss_align, stop_align)                 \
-> > --
->
-> [1] https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/4I4UW4OAT63ETMIEUJQTOF3BFTMO6ROD/
+Testing compilation and install issues is very valuable. This is one
+area that hasn't been test coverage compared to running tests. So it
+great if you can help with build/install on linux-next to catch
+problems in new tests. I am finding that older tests have been stable
+and as new tests come in, we tend to miss catching these types of
+problems.
+
+Especially cross-builds and installs on arm64 and others.
+
+>>
+>> Detailed report can be found here:
+>>
+>> https://drive.google.com/file/d/11nnWOKIzzOrE4EiucZBn423lzSU_eNNv/view?usp=sharing
+> 
+> Is there anything you'd like me to look at specifically?  Do you want me to start
+> at the bottom of the list and work up?  I could look at 'vm' or 'timens'.
+> 
+
+Yes you can start with vm and timens.
+
+thanks,
+-- Shuah
