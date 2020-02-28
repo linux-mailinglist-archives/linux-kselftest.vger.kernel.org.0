@@ -2,130 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEA2172D72
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 01:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8E6172E23
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 02:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730306AbgB1Agg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Feb 2020 19:36:36 -0500
-Received: from mail-pj1-f54.google.com ([209.85.216.54]:37052 "EHLO
-        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730184AbgB1Agg (ORCPT
+        id S1730463AbgB1BU5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Feb 2020 20:20:57 -0500
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:36560 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730442AbgB1BU5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Feb 2020 19:36:36 -0500
-Received: by mail-pj1-f54.google.com with SMTP id m13so518178pjb.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 16:36:35 -0800 (PST)
+        Thu, 27 Feb 2020 20:20:57 -0500
+Received: by mail-qk1-f201.google.com with SMTP id d2so1419814qko.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 17:20:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ecjs5n8zwN/9MsVfX6exqhP2XFiFuVu/JHGa+4oDJtc=;
-        b=ES/p+9CII3zuPnEnjew7hIvK058/D5Rzlh3DNVA0W7HBD9ZoaCbcFvP9g95cwWv6Bd
-         8QxT+AIkangkqK5XZwAJXNpUQ8mI84c0lrhZeadwaazQkTc6PKHt4XBUJ0LdDdcDvQDT
-         2mcFoK7LyDN2R4uy/yj4vnU9TkBwapAEVDs4JFAoPuU+1LYWpNMr2xmfxhzz8zD/FgMc
-         VtNjb5P2kOk4VDl2mP2/OXxGpEugB+8aSLWssJocVpT9p2xhmmTR/vgAe7i2B8BFobow
-         LQ5GWz9trKkAHbyT0H8DJGOEH8OzaYYagd0N/aHFHKCy85+mBQEI7e1ynMtywIKwshSU
-         JRCQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=UxlFvDl+mYUOihiySIoFvbuwiyqTD12ewe+CWWzU0ro=;
+        b=Cc0JuZTfhaIDHKNZM37wEYgZzqrbvgr4Kpn3pNKsq4dpXHFoVOP/Iy5EaG8MPe0qHM
+         fqaKBpOtGroaVggoO0eF0KR+YehCClaj/Fe6Id9L8BwOyhmJPWqN9SqFrmwV1nMGBhYG
+         3By6Lr+I1WyhWZyW9wmCgDsFO7Rxty9/jcF6ClbLWK9kpirrBKtj1cNL9AN8bXAhQtTl
+         iBWN4ey/UqpntnkjYAfHHiMifGNshfQBWvKDt1AlkCaOsbEk/qxvpEVWm3gdz8Z47PdR
+         CVNrCbYHxZXcU6vawXUsmqm9jUqvKhaV6R3SAMk2XWXdWBznnf4nrx5vUJyFAgtSyPzD
+         0lLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ecjs5n8zwN/9MsVfX6exqhP2XFiFuVu/JHGa+4oDJtc=;
-        b=TCWXDyG0nYGTdauBa9+JHYGCCu3fIa1P+yFd/PP8GLciTXm4vYUswCd5Fi4Si0phGR
-         eH/qAp5hUjXalP9tS3cj1mkFKwMBChYZzBqdMn9mtDhbpAIQi1j0LZ+fgdXzpHfkWDM9
-         ZBTkr8gsVJJXXyD7f2C1TaLipr0RtTwTpnOE8qcRBN3OFNxVfEUMtvpgZt5PgWWIlZky
-         Sz5qmSsphSDJ4LMNGoNOCCegdFKVo1rpbhwPeOVunYkfv7CO2CMWtWN5WedpkKa1PzZW
-         KodpMGU+sPLsu4r/JWxt/WsiEOf0g5UoFsuu1QaW/i/xPDMl1AoOHKcLi3VsRGWEa0KS
-         bzlw==
-X-Gm-Message-State: APjAAAUs9tV5zR89cyxbIY50o75BskmgiatZAELZb2aNbtaPw7smOdiR
-        NFmN8Dzap0/dHWHBZdPLgr0UjQajlFC0UgTi0DtPiQ==
-X-Google-Smtp-Source: APXvYqzydJIXOtxTzekybI/ez2R/Ic2Dsh7bais/fao6j35qpckyCLsm/Za0Xaa6ECQoolTjS+XZA+G/7J7o8rH26E4=
-X-Received: by 2002:a17:90a:6c26:: with SMTP id x35mr1629902pjj.84.1582850195008;
- Thu, 27 Feb 2020 16:36:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20200225201130.211124-1-heidifahim@google.com>
- <20200225222221.GA144971@google.com> <CAMVcs3sUtx17C0SeE435Q5aehE_F2RkoQxJWzeJK5v47GgFjBg@mail.gmail.com>
-In-Reply-To: <CAMVcs3sUtx17C0SeE435Q5aehE_F2RkoQxJWzeJK5v47GgFjBg@mail.gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=UxlFvDl+mYUOihiySIoFvbuwiyqTD12ewe+CWWzU0ro=;
+        b=O4ltoxuxcuKUz3K83n/NnfKMAIFcTH8s2j1x2EE2BQ8RQ+C2clXiHeJ2mztuyMbTHg
+         rMUetyhrcGKPti7sCUTYe7Ke5JzK9cPWBlK3WsaaC5H5iI3lEAtrFX+vUZXSZvBVb28t
+         WDwh4KAjS/YQXw8jA4CJhZ/zLcvqJuCky4PeEPBjPTGfdWlbtkr9G7I1kOtJHe7fwf31
+         GJbBV0TYoCkaru4L36gCFthLZeLvUM+Dqmng3WkujIwftZXSQP1SRzkwZ5eOTfc0Gi0u
+         1nTk91mC8KU4gHomas+lxHxJRNMzvwS+TM+7iP2HQyfeqpFHalH7ackTtbAD2anTKXVo
+         FPVQ==
+X-Gm-Message-State: APjAAAXEoqwjHmsehJ7H1bLUl8GZcd7px8eAV+6wjcsMBDoh9t2pk7nu
+        QwIWfQJ3ZcgKIeNLMzeyc3o09qcTzdkVGudTNn09wg==
+X-Google-Smtp-Source: APXvYqxBgrAvVVUr+eI3w9pSyj8Z2/ifloxhO80OhuCfxDoH9J4UCvD3tbTVrS4n5PAVeq88ixanzwm/QJ1cJqGp96pfXQ==
+X-Received: by 2002:a05:620a:2288:: with SMTP id o8mr2477361qkh.368.1582852855324;
+ Thu, 27 Feb 2020 17:20:55 -0800 (PST)
+Date:   Thu, 27 Feb 2020 17:20:29 -0800
+Message-Id: <20200228012036.15682-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+Subject: [PATCH v3 0/7] kunit: create a centralized executor to dispatch all
+ KUnit tests
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 27 Feb 2020 16:36:22 -0800
-Message-ID: <CAFd5g44ZMYigCbg4u7_Bfhgqt-hPJRbumoHNf3Buz50fkm_Y7g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: kunit_parser: making parser more robust
-To:     Heidi Fahim <heidifahim@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
+To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
+        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, rppt@linux.ibm.com,
+        frowand.list@gmail.com
+Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        mcgrof@kernel.org, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 4:09 PM Heidi Fahim <heidifahim@google.com> wrote:
->
-> > >
-> > > -TAP_ENTRIES = re.compile(r'^(TAP|\t?ok|\t?not ok|\t?[0-9]+\.\.[0-9]+|\t?#).*$')
-> > > +TAP_ENTRIES = re.compile(r'(TAP|\t?ok|\t?not ok|\t?[0-9]+\.\.[0-9]+|\t# .*?:.*?).*$')
-> >
-> > Since you now strip off prefixes using length, does the old TAP regex no
-> > longer work?
-> >
->
-> Using old regex (i.e. match instead of search) still works - do you
-> prefer this be reverted where possible or be changed to search? Search
-> is a little more relaxed when it comes to alignment of the TAP output
-> (i.e. some lines could have extra leading whitespaces), but right now
-> is not necessary.
+## TL;DR
 
-I would prefer keeping the old regexes. It makes the change smaller. I
-also would prefer to not relax the alignment if we don't need to.
+This patchset adds a centralized executor to dispatch tests rather than
+relying on late_initcall to schedule each test suite separately along
+with a couple of new features that depend on it.
 
-> > >  def consume_non_diagnositic(lines: List[str]) -> None:
-> > > -     while lines and not TAP_ENTRIES.match(lines[0]):
-> > > +     while lines and not TAP_ENTRIES.search(lines[0]):
-> > >               lines.pop(0)
-> > >
-> > >  def save_non_diagnositic(lines: List[str], test_case: TestCase) -> None:
-> > > -     while lines and not TAP_ENTRIES.match(lines[0]):
-> > > +     while lines and not TAP_ENTRIES.search(lines[0]):
-> > >               test_case.log.append(lines[0])
-> > >               lines.pop(0)
-> > >
-> > >  OkNotOkResult = namedtuple('OkNotOkResult', ['is_ok','description', 'text'])
+Also, sorry for the delay in getting this new revision out. I have been
+really busy for the past couple weeks.
 
-[...]
+## What am I trying to do?
 
-> > > @@ -234,11 +234,11 @@ def parse_test_suite(lines: List[str]) -> TestSuite:
-> > >       expected_test_case_num = parse_subtest_plan(lines)
-> > >       if not expected_test_case_num:
-> > >               return None
-> > > -     test_case = parse_test_case(lines, expected_test_case_num > 0)
-> > > -     expected_test_case_num -= 1
-> > > -     while test_case:
-> > > +     while expected_test_case_num > 0:
-> > > +             test_case = parse_test_case(lines)
-> > > +             if not test_case:
-> > > +                     break
-> > >               test_suite.cases.append(test_case)
-> > > -             test_case = parse_test_case(lines, expected_test_case_num > 0)
-> > >               expected_test_case_num -= 1
-> >
-> > Do we use this variable anymore?
->
-> Yes, this decides whether we are expecting another test case or if
-> we've completed the test suite
+Conceptually, I am trying to provide a mechanism by which test suites
+can be grouped together so that they can be reasoned about collectively.
+The last two of three patches in this series add features which depend
+on this:
 
-Ah gotcha. Sorry, I am not sure how I missed that.
+PATCH 5/7 Prints out a test plan[1] right before KUnit tests are run;
+          this is valuable because it makes it possible for a test
+          harness to detect whether the number of tests run matches the
+          number of tests expected to be run, ensuring that no tests
+          silently failed. The test plan includes a count of tests that
+          will run. With the centralized executor, the tests are located
+          in a single data structure and thus can be counted.
 
-> > >       if parse_ok_not_ok_test_suite(lines, test_suite):
-> > >               test_suite.status = bubble_up_test_case_errors(test_suite)
-> > > @@ -250,7 +250,7 @@ def parse_test_suite(lines: List[str]) -> TestSuite:
-> > >               print('failed to parse end of suite' + lines[0])
-> > >               return None
-> > >
-> > > -TAP_HEADER = re.compile(r'^TAP version 14$')
-> > > +TAP_HEADER = re.compile(r'TAP version 14$')
-> > >
-> > >  def parse_tap_header(lines: List[str]) -> bool:
-> > >       consume_non_diagnositic(lines)
+PATCH 6/7 Add a new kernel command-line option which allows the user to
+          specify that the kernel poweroff, halt, or reboot after
+          completing all KUnit tests; this is very handy for running
+          KUnit tests on UML or a VM so that the UML/VM process exits
+          cleanly immediately after running all tests without needing a
+          special initramfs. The centralized executor provides a
+          definitive point when all tests have completed and the
+          poweroff, halt, or reboot could occur.
 
-Cheers!
+In addition, by dispatching tests from a single location, we can
+guarantee that all KUnit tests run after late_init is complete, which
+was a concern during the initial KUnit patchset review (this has not
+been a problem in practice, but resolving with certainty is nevertheless
+desirable).
+
+Other use cases for this exist, but the above features should provide an
+idea of the value that this could provide.
+
+## Changes since last revision:
+- On patch 7/7, I added some additional wording around the
+  kunit_shutdown command line option explaining that it runs after
+  built-in tests as suggested by Frank.
+- On the coverletter, I improved some wording and added a missing link.
+  I also specified the base-commit for the series.
+- Frank asked for some changes to the documentation; however, David is
+  taking care of that in a separate patch[2], so I did not make those
+  changes here. There will be some additional changes necessary
+  after David's patch is applied.
+
+Alan Maguire (1):
+  kunit: test: create a single centralized executor for all tests
+
+Brendan Higgins (5):
+  vmlinux.lds.h: add linker section for KUnit test suites
+  arch: um: add linker section for KUnit test suites
+  init: main: add KUnit to kernel init
+  kunit: test: add test plan to KUnit TAP format
+  Documentation: Add kunit_shutdown to kernel-parameters.txt
+
+David Gow (1):
+  kunit: Add 'kunit_shutdown' option
+
+ .../admin-guide/kernel-parameters.txt         |  8 ++
+ arch/um/include/asm/common.lds.S              |  4 +
+ include/asm-generic/vmlinux.lds.h             |  8 ++
+ include/kunit/test.h                          | 82 ++++++++++++-------
+ init/main.c                                   |  4 +
+ lib/kunit/Makefile                            |  3 +-
+ lib/kunit/executor.c                          | 71 ++++++++++++++++
+ lib/kunit/test.c                              | 11 ---
+ tools/testing/kunit/kunit_kernel.py           |  2 +-
+ tools/testing/kunit/kunit_parser.py           | 76 ++++++++++++++---
+ .../test_is_test_passed-all_passed.log        |  1 +
+ .../test_data/test_is_test_passed-crash.log   |  1 +
+ .../test_data/test_is_test_passed-failure.log |  1 +
+ 13 files changed, 218 insertions(+), 54 deletions(-)
+ create mode 100644 lib/kunit/executor.c
+
+
+base-commit: a2f0b878c3ca531a1706cb2a8b079cea3b17bafc
+
+[1] https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#the-plan
+[2] https://patchwork.kernel.org/patch/11383635/
+
+-- 
+2.25.1.481.gfbce0eb801-goog
+
