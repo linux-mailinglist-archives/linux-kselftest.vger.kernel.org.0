@@ -2,137 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8D2173EDC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 18:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBD8173EE9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 18:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbgB1Ruk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Feb 2020 12:50:40 -0500
-Received: from mail-eopbgr690119.outbound.protection.outlook.com ([40.107.69.119]:25253
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725730AbgB1Ruk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Feb 2020 12:50:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WVDiCJRCVPQ6welWKvULgrlF0ay1MBeUcyNPVPaokz4wvBDWmDhbqGkV9xQ9WQOBDMQ2tu6OfRs+SpKdf7tgFAIp0st/rBtrhdS/kEc6oERK0oJPOxkJYErRRX60DoF10pHp1i/y2s5WugMK219m12bgLbC2Pr9JsWwEPR1ZYRoFfYZLNudp0jmW17aJjUDC7Ou4huaG+w1CsgFecmhlwCVzO7nvLUVVZvOu4BYziUZOeaJt8IgQrqqWEtPcPPstpNPbiojRGqGqdc+3li0ByYGGPU3QNsaSSsuKs9sW01jXwlA1iFs1Ju3Gp6nQTcKwdkRvX9jqDzcRgYRMPTkzyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rt5siaVNUqRjf+wRM/KJSdw+qKyOKCzvS4Y684dnM1Y=;
- b=kK9276ljdxl5bQ63/CocRbHIrfVAdFKjanjuV5IH+Y17lt4jc0diBewMslRaZeIS3vkT32eWhczrZg/hNKB+Yd6tDGy+F82h6MpAfvejp1ZEZnHk568RRAkpIpCn0z52sUBSe0NwruEnGjFG8MU1KuuUClyCOR9SLzS6WmTpFmNqd6MCbCATvS3sJcDTQZHBhAuaG+r+dYCOKdut/vtn7ekxqIO9IIrmSc+GFfv9W4/T8Dj57D6Uwbs+OEDn1VEBqilCsaqVsh8VUCGZn6ZJOLmsNtl0rtu1g1SWn3wW9R6MRQFXm4YAZwFzLkL9rZqZXcr9E/t8crTi+zZjVbucyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rt5siaVNUqRjf+wRM/KJSdw+qKyOKCzvS4Y684dnM1Y=;
- b=ZoynmWLV8j+Nf4RWqBZLEgcWaDnKPAPsw0ViTmSOjKjWPjfmRtXejCSfFEOv1sip0CmME/9902kfuHk6mW9ryGYra8BDfEgPzgHzQMhqpOtM2f9B8CqSTKaAdj1KA0zfWMaZGFalwfThKUKQp0UBDemZKydjg8SE+WzLjhkqOYM=
-Received: from MWHPR13MB0895.namprd13.prod.outlook.com (2603:10b6:300:2::27)
- by MWHPR13MB1453.namprd13.prod.outlook.com (2603:10b6:300:11f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.5; Fri, 28 Feb
- 2020 17:50:37 +0000
-Received: from MWHPR13MB0895.namprd13.prod.outlook.com
- ([fe80::7544:fc2:b078:5dcd]) by MWHPR13MB0895.namprd13.prod.outlook.com
- ([fe80::7544:fc2:b078:5dcd%3]) with mapi id 15.20.2772.012; Fri, 28 Feb 2020
- 17:50:37 +0000
-From:   "Bird, Tim" <Tim.Bird@sony.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
+        id S1725886AbgB1Rxi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Feb 2020 12:53:38 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:36689 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbgB1Rxi (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 28 Feb 2020 12:53:38 -0500
+Received: by mail-qk1-f193.google.com with SMTP id f3so3807810qkh.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2020 09:53:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7A81NCRtl/YMUGoXqhguAxYpB741arq6+hyuPYrsxj8=;
+        b=sY0DpGEQqcJV+Om5EC5uuAuFwKAdjsRvhCmg7xEn8ttC+eOSqdtl9G7psxfJzUGzyq
+         CFgexnJMO3BoZGn/iSzwSiVKiNzwcPPDrFaf2Kub18f4onnWtjyleou7j3D2qhFdanI8
+         98t3lMngB6DyG5RzEw7SjgPkXdKjFb3VE9dGVTR5oeAa+IK8b22h9bpLrpLx/BgQzkUe
+         Toz5kRGpIoqs7+ZszYosKGlJnWIVNnjOECOmsMnWFqnLNWmKzGIpmPLHE0mrnCM6fr0q
+         CIvoVZX6V+zY/5T2ce6U9NoaV0KO+J1Ir2Q/sD+StqT1lsJW9n9C8bqwLC/RPl6XtCpv
+         6fyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7A81NCRtl/YMUGoXqhguAxYpB741arq6+hyuPYrsxj8=;
+        b=kur4GhjbaM9XmeyQYXyfgHTQhNXFKQiiX5dVJ2PrRbdKcSuJGvLb6DmPI1wec74zCU
+         FSLDGeKpleKIjdYtmb8ZIZoBtiUz9Bp5684TL+H4WfAkj5fSGTKbYuBRsTcryP4ioGbm
+         naguPhmT1q0tKXJUUuMRd2wMs99YB4GFwFAbrBECm0YyBoqPNiBGO8v1hSv1VVdAt1b/
+         1ZnESj4CZ3l68QXVWoGn4qOzAcknPdDYF700ECPF2J/6D7uJqftsbGfYAT3kZjOEANtD
+         ZeT1aLFo5X3PW34vAy3wxg3B4LlJqvGGTUD+rbTR0tNgvG72hj839Ck0LFOQ7PzixdbY
+         PtJg==
+X-Gm-Message-State: APjAAAWxmvx2zJmAIBTcKIiO+KsvxxR5Q6dPw34nMLDKYl5+Q6o69Pb8
+        cK2UzJ6GEqTMptLstm8WN4B14Ge0Hfrcjxd4yr3Y
+X-Google-Smtp-Source: APXvYqxuUZyxP1RTj056y0C7X/UxFsJhJD3+Tlwcqh1VF5LE+BUAzmAANREZPS01D5w3HfGzooO7MBqD5Ciibnynh/Y=
+X-Received: by 2002:ae9:f301:: with SMTP id p1mr5320690qkg.422.1582912416914;
+ Fri, 28 Feb 2020 09:53:36 -0800 (PST)
+MIME-Version: 1.0
+References: <20200228012036.15682-1-brendanhiggins@google.com>
+ <20200228012036.15682-2-brendanhiggins@google.com> <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
+In-Reply-To: <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
+From:   Iurii Zaikin <yzaikin@google.com>
+Date:   Fri, 28 Feb 2020 09:53:00 -0800
+Message-ID: <CAAXuY3qnButVR4hRQcsUbUsvLFg9cSvxSe15uG82T=j+QSQUqQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] vmlinux.lds.h: add linker section for KUnit test suites
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-CC:     Kevin Hilman <khilman@baylibre.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: RE: [ANN] Kselftest integration into Kernel CI
-Thread-Topic: [ANN] Kselftest integration into Kernel CI
-Thread-Index: AQHV7efNY93z0dF5okyqGlwVqafDw6gw4O9g
-Date:   Fri, 28 Feb 2020 17:50:36 +0000
-Message-ID: <MWHPR13MB08954921D3B29D9AA824A2A0FDE80@MWHPR13MB0895.namprd13.prod.outlook.com>
-References: <3b3dc707-7ae7-955b-69fe-b9abe9ae26c5@linuxfoundation.org>
-In-Reply-To: <3b3dc707-7ae7-955b-69fe-b9abe9ae26c5@linuxfoundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Tim.Bird@sony.com; 
-x-originating-ip: [160.33.195.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: becdf53c-a3e4-4c87-be9a-08d7bc76b7b7
-x-ms-traffictypediagnostic: MWHPR13MB1453:
-x-microsoft-antispam-prvs: <MWHPR13MB1453713A369F386CDEC0061AFDE80@MWHPR13MB1453.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 0327618309
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(189003)(199004)(26005)(54906003)(110136005)(81166006)(478600001)(2906002)(316002)(4326008)(81156014)(8676002)(186003)(9686003)(33656002)(5660300002)(52536014)(7696005)(86362001)(966005)(64756008)(71200400001)(76116006)(8936002)(66446008)(66476007)(6506007)(55016002)(66556008)(66946007);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR13MB1453;H:MWHPR13MB0895.namprd13.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: sony.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: g/CVffjEri7H0HtycEnAh7Gs7XC/9xCrZIEvTlnf1zEKilPaSbao5BrZjEuXLJ+IZZBvTgGb3xDxgxfurQCX3+iuEh9ogGFgnzjDe+9UFzfbabBEVIfswjPjT6W8Y3LOTPp4TB3oR5uBPAm785temVcQODtyhLYk2vY3x711oOJzGa9pyJqZzy5oi9o/Qc2WpuSlQ7rz9PWIPBVb5ktMVlbAw/Es+N7wFG7rSJ5FmI5RaSnBvdKbyqrVICcntybUvrIDeH27Bo5DIokhB53OeSOIFPC0kl8l6uJZIRZnZAckyoy0ngHmKEL5mB0KhZgob+3YyYlOpKb9fblTd68U2ZtrHgOf4HP+obUcPjEDvb5NwriDGfhUWsTcu+GAsb5US8BCaTZJ15V1/H/YRfqm3aut/31tFlwPRmMpJKyEbzV9q7uSWzwoHRqXNqFio1LtdXF1fvHto1LsdBIKmtqVdySINUDKKn4Eq99X6f4xfindPFCcFFK8N/l3h8u6ovWWJpLi2Cw4v4PE6FxCc3BiwA==
-x-ms-exchange-antispam-messagedata: fwMW2rWdXRnA5EzErUHW5R15uLaCCxZzKzQKh2kqQpHIzrJqDlgM/7XJ4bhZV9rN0mIspLIFvcdb/WwkF66HNIg73IMjRyuCIgAyOR65kNXiHSV7ozwfQteisH+ymgoHfNDNCm7t+NujFNShOhH0qw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: becdf53c-a3e4-4c87-be9a-08d7bc76b7b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2020 17:50:36.5952
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KwOoM7aSWeJy77JMcXFu0/rPjhQFF6OY581/6msoMn5/VCCU+zUYg20C3O0Bc908TQ9rKXahwX96Gp64QDbi+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR13MB1453
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogIFNodWFoIEtoYW4NCj4g
-DQo+IEludGVncmF0aW5nIEtzZWxmdGVzdCBpbnRvIEtlcm5lbCBDSSByaW5ncyBkZXBlbmRzIG9u
-IEtzZWxmdGVzdCBidWlsZA0KPiBhbmQgaW5zdGFsbCBmcmFtZXdvcmsgdG8gc3VwcG9ydCBLZXJu
-ZWwgQ0kgdXNlLWNhc2VzLiBJIGFtIGtpY2tpbmcgb2ZmDQo+IGFuIGVmZm9ydCB0byBzdXBwb3J0
-IEtzZWxmdGVzdCBydW5zIGluIEtlcm5lbCBDSSByaW5ncy4gUnVubmluZyB0aGVzZQ0KPiB0ZXN0
-cyBpbiBLZXJuZWwgQ0kgcmluZ3Mgd2lsbCBoZWxwIHF1YWxpdHkgb2Yga2VybmVsIHJlbGVhc2Vz
-LCBib3RoDQo+IHN0YWJsZSBhbmQgbWFpbmxpbmUuDQo+IA0KPiBXaGF0IGlzIHJlcXVpcmVkIGZv
-ciBmdWxsIHN1cHBvcnQ/DQo+IA0KPiAxLiBDcm9zcy1jb21waWxhdGlvbiAmIHJlbG9jYXRhYmxl
-IGJ1aWxkIHN1cHBvcnQNCj4gMi4gR2VuZXJhdGVzIG9iamVjdHMgaW4gb2JqZGlyL2tzZWxmdGVz
-dCB3aXRob3V0IGNsdXR0ZXJpbmcgbWFpbiBvYmpkaXINCj4gMy4gTGVhdmUgc291cmNlIGRpcmVj
-dG9yeSBjbGVhbg0KPiA0LiBJbnN0YWxscyBjb3JyZWN0bHkgaW4gb2JqZGlyL2tzZWxmdGVzdC9r
-c2VsZnRlc3RfaW5zdGFsbCBhbmQgYWRkcw0KPiAgICAgaXRzZWxmIHRvIHJ1bl9rc2VsZnRlc3Qu
-c2ggc2NyaXB0IGdlbmVyYXRlZCBkdXJpbmcgaW5zdGFsbC4NCj4gDQo+IE5vdGUgdGhhdCBpbnN0
-YWxsIHN0ZXAgaXMgbmVjZXNzYXJ5IGZvciBhbGwgZmlsZXMgdG8gYmUgaW5zdGFsbGVkIGZvcg0K
-PiBydW4gdGltZSBzdXBwb3J0Lg0KPiANCj4gSSBsb29rZWQgaW50byB0aGUgY3VycmVudCBzdGF0
-dXMgYW5kIGlkZW50aWZpZWQgcHJvYmxlbXMuIFRoZSB3b3JrIGlzDQo+IG1pbmltYWwgdG8gYWRk
-IGZ1bGwgc3VwcG9ydC4gT3V0IG9mIDgwKyB0ZXN0cywgNyBmYWlsIHRvIGNyb3NzLWJ1aWxkDQo+
-IGFuZCAxIGZhaWxzIHRvIGluc3RhbGwgY29ycmVjdGx5Lg0KPiANCj4gTGlzdCBpcyBiZWxvdzoN
-Cj4gDQo+IFRlc3RzIGZhaWxzIHRvIGJ1aWxkOiBicGYsIGNhcGFiaWxpdGllcywga3ZtLCBtZW1m
-ZCwgbXF1ZXVlLCB0aW1lbnMsIHZtDQo+IFRlc3RzIGZhaWwgdG8gaW5zdGFsbDogYW5kcm9pZCAo
-cGFydGlhbCBmYWlsdXJlKQ0KPiBMZWF2ZXMgc291cmNlIGRpcmVjdG9yeSBkaXJ0eTogYnBmLCBz
-ZWNjb21wDQo+IA0KPiBJIGhhdmUgcGF0Y2hlcyByZWFkeSBmb3IgdGhlIGZvbGxvd2luZyBpc3N1
-ZXM6DQo+IA0KPiBLc2VsZnRlc3Qgb2JqZWN0cyAodGVzdCBkaXJzKSBjbHV0dGVyIHRvcCBsZXZl
-bCBvYmplY3QgZGlyZWN0b3J5Lg0KPiBzZWNjb21wX2JwZiBnZW5lcmF0ZXMgb2JqZWN0cyBpbiB0
-aGUgc291cmNlIGRpcmVjdG9yeS4NCj4gDQo+IEkgY3JlYXRlZCBhIHRvcGljIGJyYW5jaCB0byBj
-b2xsZWN0IGFsbCB0aGUgcGF0Y2hlczoNCj4gDQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHVi
-L3NjbS9saW51eC9rZXJuZWwvZ2l0L3NodWFoL2xpbnV4LWtzZWxmdGVzdC5naXQvP2g9a2VybmVs
-Y2kNCj4gDQo+IEkgYW0gZ29pbmcgdG8gc3RhcnQgd29ya2luZyBvbiBidWlsZCBwcm9ibGVtcy4g
-SWYgYW55Ym9keSBpcw0KPiBpbnRlcmVzdGVkIGluIGhlbHBpbmcgbWUgd2l0aCB0aGlzIGVmZm9y
-dCwgZG9uJ3QgaGVzaXRhdGUgdG8NCj4gY29udGFjdCBtZS4gSSBmaXJzdCBwcmlvcml0eSBpcyBm
-aXhpbmcgYnVpbGQgYW5kIGluc3RhbGwgYW5kDQo+IHRoZW4gbG9vayBpbnRvIHRlc3RzIHRoYXQg
-bGVhdmUgdGhlIHNvdXJjZSBkaXJlY3RvcnkgZGlydHkuDQoNCkknbSBpbnRlcmVzdGVkIGluIHRo
-aXMuICBJJ2QgbGlrZSB0aGUgc2FtZSBjbGVhbnVwcyBpbiBvcmRlciB0byBydW4NCmtzZWxmdGVz
-dCBpbiBGdWVnbywgYW5kIEkgY2FuIHRyeSBpdCB3aXRoIGFkZGl0aW9uYWwgdG9vbGNoYWlucw0K
-YW5kIGJvYXJkcy4gIFVuZm9ydHVuYXRlbHksIGluIHRlcm1zIG9mIHJ1bm5pbmcgdGVzdHMsIGFs
-bW9zdCBhbGwNCnRoZSBib2FyZHMgaW4gbXkgbGFiIGFyZSBydW5uaW5nIG9sZCBrZXJuZWxzLiAg
-U28gdGhlIHRlc3RzIHJlc3VsdHMNCmFyZW4ndCB1c2VmdWwgZm9yIHVwc3RyZWFtIHdvcmsuICBC
-dXQgSSBjYW4gc3RpbGwgdGVzdA0KY29tcGlsYXRpb24gYW5kIGluc3RhbGwgaXNzdWVzLCBmb3Ig
-dGhlIGtzZWxmdGVzdCB0ZXN0cyB0aGVtc2VsdmVzLg0KDQo+IA0KPiBEZXRhaWxlZCByZXBvcnQg
-Y2FuIGJlIGZvdW5kIGhlcmU6DQo+IA0KPiBodHRwczovL2RyaXZlLmdvb2dsZS5jb20vZmlsZS9k
-LzExbm5XT0tJenpPckU0RWl1Y1pCbjQyM2x6U1VfZU5Odi92aWV3P3VzcD1zaGFyaW5nDQoNCklz
-IHRoZXJlIGFueXRoaW5nIHlvdSdkIGxpa2UgbWUgdG8gbG9vayBhdCBzcGVjaWZpY2FsbHk/ICBE
-byB5b3Ugd2FudCBtZSB0byBzdGFydA0KYXQgdGhlIGJvdHRvbSBvZiB0aGUgbGlzdCBhbmQgd29y
-ayB1cD8gIEkgY291bGQgbG9vayBhdCAndm0nIG9yICd0aW1lbnMnLg0KDQogICAtLSBUaW0NCg0K
+We went with this alignment precisely because it's the largest that
+any supported arch may possibly need. The problem as I understood it
+was that the compiler, seeing a bunch of pointers decided to put them
+at the memory-access efficient alignment rather than at the section
+start. Remember that the section start used to be unaligned for some
+reason. Note that the alignment that is a multiple of smaller
+alignment is still aligned wrt the smaller alignment, so the compiler
+shouldn't need to put the pointers elsewhere.
+I wonder if there's a more robust way of forcing the compiler to put
+the pointers right at the section start and insert no gaps between
+them than playing with alignment.
+
+On Thu, Feb 27, 2020 at 11:22 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Thu, Feb 27, 2020 at 5:20 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > Add a linker section where KUnit can put references to its test suites.
+> > This patch is the first step in transitioning to dispatching all KUnit
+> > tests from a centralized executor rather than having each as its own
+> > separate late_initcall.
+> >
+> > Co-developed-by: Iurii Zaikin <yzaikin@google.com>
+> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> > ---
+> >  include/asm-generic/vmlinux.lds.h | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> > index e00f41aa8ec4f..99a866f49cb3d 100644
+> > --- a/include/asm-generic/vmlinux.lds.h
+> > +++ b/include/asm-generic/vmlinux.lds.h
+> > @@ -856,6 +856,13 @@
+> >                 KEEP(*(.con_initcall.init))                             \
+> >                 __con_initcall_end = .;
+> >
+> > +/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+> > +#define KUNIT_TEST_SUITES                                              \
+> > +               . = ALIGN(8);                                           \
+>
+> After posting this, I saw I had gotten an email from 0day[1]. After
+> some investigation, I discovered that this 8 byte alignment works for
+> x86 64 bit fine, but only *sometimes* for 32 bit. 4 byte alignment
+> seems to work in all cases (so far). I am not sure why we went with
+> such a large alignment in hindsight. In any case, I should have a
+> fixed revision out pretty soon.
+>
+> > +               __kunit_suites_start = .;                               \
+> > +               KEEP(*(.kunit_test_suites))                             \
+> > +               __kunit_suites_end = .;
+> > +
+> >  #ifdef CONFIG_BLK_DEV_INITRD
+> >  #define INIT_RAM_FS                                                    \
+> >         . = ALIGN(4);                                                   \
+> > @@ -1024,6 +1031,7 @@
+> >                 INIT_CALLS                                              \
+> >                 CON_INITCALL                                            \
+> >                 INIT_RAM_FS                                             \
+> > +               KUNIT_TEST_SUITES                                       \
+> >         }
+> >
+> >  #define BSS_SECTION(sbss_align, bss_align, stop_align)                 \
+> > --
+>
+> [1] https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/4I4UW4OAT63ETMIEUJQTOF3BFTMO6ROD/
