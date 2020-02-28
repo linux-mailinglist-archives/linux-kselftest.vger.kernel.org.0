@@ -2,85 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 722DC172CE9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 01:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEA2172D72
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 01:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730207AbgB1ASq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Feb 2020 19:18:46 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36365 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730009AbgB1ASq (ORCPT
+        id S1730306AbgB1Agg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Feb 2020 19:36:36 -0500
+Received: from mail-pj1-f54.google.com ([209.85.216.54]:37052 "EHLO
+        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730184AbgB1Agg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Feb 2020 19:18:46 -0500
-Received: by mail-wm1-f68.google.com with SMTP id f19so1422513wmh.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 16:18:45 -0800 (PST)
+        Thu, 27 Feb 2020 19:36:36 -0500
+Received: by mail-pj1-f54.google.com with SMTP id m13so518178pjb.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 16:36:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ecjs5n8zwN/9MsVfX6exqhP2XFiFuVu/JHGa+4oDJtc=;
+        b=ES/p+9CII3zuPnEnjew7hIvK058/D5Rzlh3DNVA0W7HBD9ZoaCbcFvP9g95cwWv6Bd
+         8QxT+AIkangkqK5XZwAJXNpUQ8mI84c0lrhZeadwaazQkTc6PKHt4XBUJ0LdDdcDvQDT
+         2mcFoK7LyDN2R4uy/yj4vnU9TkBwapAEVDs4JFAoPuU+1LYWpNMr2xmfxhzz8zD/FgMc
+         VtNjb5P2kOk4VDl2mP2/OXxGpEugB+8aSLWssJocVpT9p2xhmmTR/vgAe7i2B8BFobow
+         LQ5GWz9trKkAHbyT0H8DJGOEH8OzaYYagd0N/aHFHKCy85+mBQEI7e1ynMtywIKwshSU
+         JRCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:from
-         :message-id;
-        bh=Ru4d08QosRwi5UKUDayggsg8+1o9m63515MgXLmokW8=;
-        b=IWzNQosQnTNRg6JwrMWL8cZg//T1NJyh5SlPHUMjTe2PM6DLQR3MGn7AS2eR7BUekk
-         VA5Nn/uF2v8nLIeXOf69a/ZxfAiw3Rs/JjYdpQIUz/d7HAqD5lncZpjXlzxYzn2L9+qT
-         kT4TzRbKGFnLcLbXXRDaBz6IpOR5/C8cejdOg+NXuJZ9ccdt0ZLb9HcKn4iAu+zZs0N7
-         fTXfOomi2231KPYtLEHe2GLuZCOO/IlMiLTIDujwkoIrOC/L+M9v7tzG4cHQQhp0VN7n
-         /erES7+A7Wi0za13WP78xe5GPjBJoByVFEb4hAo47CWJO42AtkiEG4vfxJN45019f3X9
-         ovjw==
-X-Gm-Message-State: APjAAAW2zfTCZzgswtNrgrG8jmRgofD6mFYHI/r/I/rnKw/07f+0Z/WO
-        QZcxVA+wxlJ7L99bwY3rn4eKdA==
-X-Google-Smtp-Source: APXvYqy+BY8r4CAlQjGnmuK0o8k329k009mLT7m3y33mtID+0H5FRuAG3RePEOUn51L+FOrcaJrpKA==
-X-Received: by 2002:a05:600c:291d:: with SMTP id i29mr1383321wmd.39.1582849124239;
-        Thu, 27 Feb 2020 16:18:44 -0800 (PST)
-Received: from Google-Pixel-3a.fritz.box (ip5f5bf7ec.dynamic.kabel-deutschland.de. [95.91.247.236])
-        by smtp.gmail.com with ESMTPSA id d17sm9543105wmb.36.2020.02.27.16.18.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2020 16:18:43 -0800 (PST)
-Date:   Fri, 28 Feb 2020 01:18:44 +0100
-User-Agent: K-9 Mail for Android
-In-Reply-To: <966567c7dbaa26a06730d796354f8a086c0ee288.1582847778.git.christophe.leroy@c-s.fr>
-References: <966567c7dbaa26a06730d796354f8a086c0ee288.1582847778.git.christophe.leroy@c-s.fr>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ecjs5n8zwN/9MsVfX6exqhP2XFiFuVu/JHGa+4oDJtc=;
+        b=TCWXDyG0nYGTdauBa9+JHYGCCu3fIa1P+yFd/PP8GLciTXm4vYUswCd5Fi4Si0phGR
+         eH/qAp5hUjXalP9tS3cj1mkFKwMBChYZzBqdMn9mtDhbpAIQi1j0LZ+fgdXzpHfkWDM9
+         ZBTkr8gsVJJXXyD7f2C1TaLipr0RtTwTpnOE8qcRBN3OFNxVfEUMtvpgZt5PgWWIlZky
+         Sz5qmSsphSDJ4LMNGoNOCCegdFKVo1rpbhwPeOVunYkfv7CO2CMWtWN5WedpkKa1PzZW
+         KodpMGU+sPLsu4r/JWxt/WsiEOf0g5UoFsuu1QaW/i/xPDMl1AoOHKcLi3VsRGWEa0KS
+         bzlw==
+X-Gm-Message-State: APjAAAUs9tV5zR89cyxbIY50o75BskmgiatZAELZb2aNbtaPw7smOdiR
+        NFmN8Dzap0/dHWHBZdPLgr0UjQajlFC0UgTi0DtPiQ==
+X-Google-Smtp-Source: APXvYqzydJIXOtxTzekybI/ez2R/Ic2Dsh7bais/fao6j35qpckyCLsm/Za0Xaa6ECQoolTjS+XZA+G/7J7o8rH26E4=
+X-Received: by 2002:a17:90a:6c26:: with SMTP id x35mr1629902pjj.84.1582850195008;
+ Thu, 27 Feb 2020 16:36:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Subject: Re: [PATCH] selftests: pidfd: Add pidfd_fdinfo_test in .gitignore
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Christian Kellner <christian@kellner.me>,
-        Shuah Khan <skhan@linuxfoundation.org>
-CC:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-Message-ID: <DB631DFB-DF8B-4B95-AC50-74F1ED733CAE@ubuntu.com>
+References: <20200225201130.211124-1-heidifahim@google.com>
+ <20200225222221.GA144971@google.com> <CAMVcs3sUtx17C0SeE435Q5aehE_F2RkoQxJWzeJK5v47GgFjBg@mail.gmail.com>
+In-Reply-To: <CAMVcs3sUtx17C0SeE435Q5aehE_F2RkoQxJWzeJK5v47GgFjBg@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 27 Feb 2020 16:36:22 -0800
+Message-ID: <CAFd5g44ZMYigCbg4u7_Bfhgqt-hPJRbumoHNf3Buz50fkm_Y7g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: kunit_parser: making parser more robust
+To:     Heidi Fahim <heidifahim@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On February 28, 2020 1:00:08 AM GMT+01:00, Christophe Leroy <christophe.leroy@c-s.fr> wrote:
->The commit identified below added pidfd_fdinfo_test
->but failed to add it to .gitignore
+On Thu, Feb 27, 2020 at 4:09 PM Heidi Fahim <heidifahim@google.com> wrote:
 >
->Fixes: 2def297ec7fb ("pidfd: add tests for NSpid info in fdinfo")
->Cc: stable@vger.kernel.org
->Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
->---
-> tools/testing/selftests/pidfd/.gitignore | 1 +
-> 1 file changed, 1 insertion(+)
+> > >
+> > > -TAP_ENTRIES = re.compile(r'^(TAP|\t?ok|\t?not ok|\t?[0-9]+\.\.[0-9]+|\t?#).*$')
+> > > +TAP_ENTRIES = re.compile(r'(TAP|\t?ok|\t?not ok|\t?[0-9]+\.\.[0-9]+|\t# .*?:.*?).*$')
+> >
+> > Since you now strip off prefixes using length, does the old TAP regex no
+> > longer work?
+> >
 >
->diff --git a/tools/testing/selftests/pidfd/.gitignore
->b/tools/testing/selftests/pidfd/.gitignore
->index 3a779c084d96..39559d723c41 100644
->--- a/tools/testing/selftests/pidfd/.gitignore
->+++ b/tools/testing/selftests/pidfd/.gitignore
->@@ -2,4 +2,5 @@ pidfd_open_test
-> pidfd_poll_test
-> pidfd_test
-> pidfd_wait
->+pidfd_fdinfo_test
-> pidfd_getfd_test
+> Using old regex (i.e. match instead of search) still works - do you
+> prefer this be reverted where possible or be changed to search? Search
+> is a little more relaxed when it comes to alignment of the TAP output
+> (i.e. some lines could have extra leading whitespaces), but right now
+> is not necessary.
 
-Thanks for spotting this.
-I'll pick this up along with other fixes I have waiting.
+I would prefer keeping the old regexes. It makes the change smaller. I
+also would prefer to not relax the alignment if we don't need to.
 
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> > >  def consume_non_diagnositic(lines: List[str]) -> None:
+> > > -     while lines and not TAP_ENTRIES.match(lines[0]):
+> > > +     while lines and not TAP_ENTRIES.search(lines[0]):
+> > >               lines.pop(0)
+> > >
+> > >  def save_non_diagnositic(lines: List[str], test_case: TestCase) -> None:
+> > > -     while lines and not TAP_ENTRIES.match(lines[0]):
+> > > +     while lines and not TAP_ENTRIES.search(lines[0]):
+> > >               test_case.log.append(lines[0])
+> > >               lines.pop(0)
+> > >
+> > >  OkNotOkResult = namedtuple('OkNotOkResult', ['is_ok','description', 'text'])
+
+[...]
+
+> > > @@ -234,11 +234,11 @@ def parse_test_suite(lines: List[str]) -> TestSuite:
+> > >       expected_test_case_num = parse_subtest_plan(lines)
+> > >       if not expected_test_case_num:
+> > >               return None
+> > > -     test_case = parse_test_case(lines, expected_test_case_num > 0)
+> > > -     expected_test_case_num -= 1
+> > > -     while test_case:
+> > > +     while expected_test_case_num > 0:
+> > > +             test_case = parse_test_case(lines)
+> > > +             if not test_case:
+> > > +                     break
+> > >               test_suite.cases.append(test_case)
+> > > -             test_case = parse_test_case(lines, expected_test_case_num > 0)
+> > >               expected_test_case_num -= 1
+> >
+> > Do we use this variable anymore?
+>
+> Yes, this decides whether we are expecting another test case or if
+> we've completed the test suite
+
+Ah gotcha. Sorry, I am not sure how I missed that.
+
+> > >       if parse_ok_not_ok_test_suite(lines, test_suite):
+> > >               test_suite.status = bubble_up_test_case_errors(test_suite)
+> > > @@ -250,7 +250,7 @@ def parse_test_suite(lines: List[str]) -> TestSuite:
+> > >               print('failed to parse end of suite' + lines[0])
+> > >               return None
+> > >
+> > > -TAP_HEADER = re.compile(r'^TAP version 14$')
+> > > +TAP_HEADER = re.compile(r'TAP version 14$')
+> > >
+> > >  def parse_tap_header(lines: List[str]) -> bool:
+> > >       consume_non_diagnositic(lines)
+
+Cheers!
