@@ -2,114 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7833172F58
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 04:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8773C1731AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Feb 2020 08:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730783AbgB1Dab (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Feb 2020 22:30:31 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:42562 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730779AbgB1Dab (ORCPT
+        id S1726876AbgB1HWn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Feb 2020 02:22:43 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36838 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726561AbgB1HWn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Feb 2020 22:30:31 -0500
-Received: by mail-io1-f67.google.com with SMTP id z1so1905715iom.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 19:30:31 -0800 (PST)
+        Fri, 28 Feb 2020 02:22:43 -0500
+Received: by mail-pl1-f195.google.com with SMTP id a6so903187plm.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 23:22:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=N2BqVG9jx759fspM1MT4M/EZFAbzaNvfYYtJ27AebE4=;
-        b=N2SMZK75zttYmtEci9QhvN9q0T3gR8N1y2DXBkP/FAfwpMtO/qP0D3ol0K302v2fUu
-         yYKz66WG+tqPtRD1YXIihCXjM7C/OmUbJeV+fKDZW0I2ee1I3wlFuD1eA0Lt5akLCjNv
-         BZct/jGS0PIoSVO+53rAqD7EAR0WnJoJfj7D4=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s3S+hpLp5sIHa629tQ1zsw+Nl29dkCf3S5rCd+p6od0=;
+        b=DqCPFLqaEV3M2s53qW4elKNy8mZ/LySa/GTkoXsaZ38GB0BNEZFMAuIuyfxvFtj/fV
+         1g3uI/JWkqGyNoLF4Jt3NsTHuDB+RMx/j7XseHQMBe/Fo4TDmtC3fAXKshQbQFlO4I6m
+         cfAb+BHfSIpKCiRExZ/REITPXUg8Ahf6KlY7hUZxYCbDUAGHkv2zb27FSz1461MYHIde
+         Wq8p2AhQjWWTUZiXgUSLT2DwWlAOjA4gGIOkWQmdNpR/flJG4LDdvW+y9oOf02bqCy7e
+         u7AnfPxh6Lw4KW1xH4BwHLfqkTQUps9lJ6oIgi+BkaAHfCRgVIu3ZC9L0DtHvm+sZdef
+         AsMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=N2BqVG9jx759fspM1MT4M/EZFAbzaNvfYYtJ27AebE4=;
-        b=moEm2sgQBDSLQO2uTsmqJKaJSo5mkVNXnGBBC6qWXoHM9L5AdiBvoC0ge1V4WsqXdX
-         7ORv+gW3S9ZFw6bmNiWm8ZRORNo/xe5BaHLmoVFDYI0bDUMG4zS091vSwo/pYjJA8aLB
-         v1jyRb4DFiq9v/FmIz5DqydAyLUQEvdL1aKZjTIu7TR9Xq8sq/BjJ1TewQXthk8aJnmi
-         xDmNwhmPY1KKylPx5tiEhvjRatmKddV+A7eimLk6JS7+0r/998Ymd30EqTPbY0kUXTzf
-         Nu2U2VxwMYgQ5zD/1KB+qICVml0wyJvcjOKEQcTCA+BVXZSHQnL7JuRPT8R7xS94DZTl
-         284w==
-X-Gm-Message-State: APjAAAUDcLNknI8/f4b+ecj2ZVzr1H+FF0dzFXyb87GMw/EZjznH1Xo7
-        HAkFzrHztIoLG/BbWdA3WqvOSQ==
-X-Google-Smtp-Source: APXvYqxFjEjYwzRJo+N7QAQV/FfJizpn+0hpd4pUy3fw28ntwGYm6O9O1lan6t5XdxvvnlCfMGS8mA==
-X-Received: by 2002:a6b:4e13:: with SMTP id c19mr1974583iob.58.1582860630607;
-        Thu, 27 Feb 2020 19:30:30 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id l2sm2614532ilo.6.2020.02.27.19.30.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2020 19:30:29 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [ANN] Kselftest integration into Kernel CI
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <3b3dc707-7ae7-955b-69fe-b9abe9ae26c5@linuxfoundation.org>
-Date:   Thu, 27 Feb 2020 20:30:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s3S+hpLp5sIHa629tQ1zsw+Nl29dkCf3S5rCd+p6od0=;
+        b=jjdGIFrtEjnBIwkgxKyxXTOyu1xpUsqcOsNqQwNb7fhQBova6CaMPiyxBVT/9pEFzt
+         712l/eFTpL+qCuH6iwOhhBs/SjDxsuiaS3f0Iyj/f5d4j7Xt/vG+P/JoFmMQIUQKgoyM
+         D7w0ewljY0tBfbtucZOCjp5PZNlt+da/uTia4r/VQhaa6dmLhd7FAe1hzuoGONGIcnOy
+         m5B41ztftMzIe6aZ4zSUOxC3EgLbYnADWDt2YXnN9rnPHBviibxawhnIXTfcnPxI3Y7w
+         2oHty2sT0AC+gZa+MWwQ6NTL7GClwOE4r1a6eFtb3LMRuL/v1nfoQxx1FPtKlo7u5Wqx
+         2q7g==
+X-Gm-Message-State: APjAAAUnJILqSIUu+8DrhHoPGkTPEnlwRB/nofBg/Y7RrJ4RQtdBtYjj
+        OGX46x+MrQF0z68tBvClz+dZr7vja3SUeJSml+rnEA==
+X-Google-Smtp-Source: APXvYqzfHO2LjscgalGnPNvJuZJRHFvR5JKj+K4ArJrMoTSjQKwCXbbVKSMib1WlxPMb5cTcx8UR195T8BgeHwMobFY=
+X-Received: by 2002:a17:902:8ec1:: with SMTP id x1mr2808157plo.325.1582874562327;
+ Thu, 27 Feb 2020 23:22:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200228012036.15682-1-brendanhiggins@google.com> <20200228012036.15682-2-brendanhiggins@google.com>
+In-Reply-To: <20200228012036.15682-2-brendanhiggins@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 27 Feb 2020 23:22:31 -0800
+Message-ID: <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] vmlinux.lds.h: add linker section for KUnit test suites
+To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Integrating Kselftest into Kernel CI rings depends on Kselftest build
-and install framework to support Kernel CI use-cases. I am kicking off
-an effort to support Kselftest runs in Kernel CI rings. Running these
-tests in Kernel CI rings will help quality of kernel releases, both
-stable and mainline.
+On Thu, Feb 27, 2020 at 5:20 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> Add a linker section where KUnit can put references to its test suites.
+> This patch is the first step in transitioning to dispatching all KUnit
+> tests from a centralized executor rather than having each as its own
+> separate late_initcall.
+>
+> Co-developed-by: Iurii Zaikin <yzaikin@google.com>
+> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index e00f41aa8ec4f..99a866f49cb3d 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -856,6 +856,13 @@
+>                 KEEP(*(.con_initcall.init))                             \
+>                 __con_initcall_end = .;
+>
+> +/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+> +#define KUNIT_TEST_SUITES                                              \
+> +               . = ALIGN(8);                                           \
 
-What is required for full support?
+After posting this, I saw I had gotten an email from 0day[1]. After
+some investigation, I discovered that this 8 byte alignment works for
+x86 64 bit fine, but only *sometimes* for 32 bit. 4 byte alignment
+seems to work in all cases (so far). I am not sure why we went with
+such a large alignment in hindsight. In any case, I should have a
+fixed revision out pretty soon.
 
-1. Cross-compilation & relocatable build support
-2. Generates objects in objdir/kselftest without cluttering main objdir
-3. Leave source directory clean
-4. Installs correctly in objdir/kselftest/kselftest_install and adds
-    itself to run_kselftest.sh script generated during install.
+> +               __kunit_suites_start = .;                               \
+> +               KEEP(*(.kunit_test_suites))                             \
+> +               __kunit_suites_end = .;
+> +
+>  #ifdef CONFIG_BLK_DEV_INITRD
+>  #define INIT_RAM_FS                                                    \
+>         . = ALIGN(4);                                                   \
+> @@ -1024,6 +1031,7 @@
+>                 INIT_CALLS                                              \
+>                 CON_INITCALL                                            \
+>                 INIT_RAM_FS                                             \
+> +               KUNIT_TEST_SUITES                                       \
+>         }
+>
+>  #define BSS_SECTION(sbss_align, bss_align, stop_align)                 \
+> --
 
-Note that install step is necessary for all files to be installed for
-run time support.
-
-I looked into the current status and identified problems. The work is
-minimal to add full support. Out of 80+ tests, 7 fail to cross-build
-and 1 fails to install correctly.
-
-List is below:
-
-Tests fails to build: bpf, capabilities, kvm, memfd, mqueue, timens, vm
-Tests fail to install: android (partial failure)
-Leaves source directory dirty: bpf, seccomp
-
-I have patches ready for the following issues:
-
-Kselftest objects (test dirs) clutter top level object directory.
-seccomp_bpf generates objects in the source directory.
-
-I created a topic branch to collect all the patches:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kernelci
-
-I am going to start working on build problems. If anybody is
-interested in helping me with this effort, don't hesitate to
-contact me. I first priority is fixing build and install and
-then look into tests that leave the source directory dirty.
-
-Detailed report can be found here:
-
-https://drive.google.com/file/d/11nnWOKIzzOrE4EiucZBn423lzSU_eNNv/view?usp=sharing
-
-thanks,
--- Shuah
+[1] https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/4I4UW4OAT63ETMIEUJQTOF3BFTMO6ROD/
