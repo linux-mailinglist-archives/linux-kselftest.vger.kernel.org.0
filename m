@@ -2,172 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F2017614C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Mar 2020 18:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B92917619D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Mar 2020 18:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727401AbgCBRln (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Mar 2020 12:41:43 -0500
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:36389 "EHLO
+        id S1726451AbgCBRwp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Mar 2020 12:52:45 -0500
+Received: from mail-yw1-f66.google.com ([209.85.161.66]:39385 "EHLO
         mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbgCBRlm (ORCPT
+        with ESMTP id S1726997AbgCBRwm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Mar 2020 12:41:42 -0500
-Received: by mail-yw1-f66.google.com with SMTP id y72so601266ywg.3;
-        Mon, 02 Mar 2020 09:41:41 -0800 (PST)
+        Mon, 2 Mar 2020 12:52:42 -0500
+Received: by mail-yw1-f66.google.com with SMTP id x184so614005ywd.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2020 09:52:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dYlMCFEFqOMadOO8IzsSF9BCCu0uVYKw4ttVJjvihz0=;
-        b=nb2CEkZXcfXtjfKHIGZMNZJPzPN2c5kHU5Fg9XdUWimVElcJtdjh2A7+zv60C/i9pJ
-         8yRcMh815pLGqOJdx5dYFY2fsPmz7qvqLxwKMQ5UL7X0q+JP95rOvRxcEmNy6q4CNf/m
-         C5QnVoh80VVruTlj/BuU/fq6EGnu63P41zlYsFxv6eh+S7wXKhwlW0Op0w+9mk2RQNuU
-         cFsVRUahJMQK3Dib27Xm5BxyPVybJQeH++kSH79o12bY3j1PTkSCyhwEEi0XRNqDNHy1
-         dryssjqF7zUhKHLCMvv14dzqbRnWZUOkyR5l3pdbraJ/L8G0lnyjk+mQbe50Lg6q4m6S
-         xkaA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1IOLrEITmD2P6VvJiuWxnVZVe415X+z+1kv5oi6Hs5w=;
+        b=Ob7ugNbolYcPYQ1RvjJtJ0j6ieNXbuDYZuyXXFLie3EM4zIZNEuw/jW+FdJJFwdv52
+         84g3Wvq7rGW3EoP8iKyZqhcJROlzHsUXVtSD1R1ltJqSdjF+8A/z6QeYocl9NrBNpx3R
+         Flc957tzuSZgDdYcTO8nL15zW1KM/5W+deBWI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dYlMCFEFqOMadOO8IzsSF9BCCu0uVYKw4ttVJjvihz0=;
-        b=pY9sB7bOuSPPy4Q8mGgOiMNPLkZQj21oH+/RSGS4/2njX0O28Z72xsIR3MmjRRAjYo
-         bO8eTdA5p1H6V791Vv+o1rSBGpK6Pkt+iKumAmKF7cbqv9y5Zqj20OXINu3Q08QaPsKP
-         TuUhWdA0qKeTWKb7Ihox/IB3Q378hnkXHC9o7BJ4ZQWbRNn6VG79xJ1B9BQk0f2nsD3+
-         94OyRli7clJh9oPtAqCpHiUuwmBpJD3AWK3JxqvCgvQuvZ1QJQIIBOGkeccbBXVaGnRu
-         cyPIYjtjxn92SCaWVzxnARYz0Owu2LDus/O+HzLsOAFyAJEjH9IvBm4OnXKlRSljJXXi
-         p8YA==
-X-Gm-Message-State: ANhLgQ2jjVXUsYEHIFTrFcm6vl+ShK73ObKZbiYOYC31NniwXwv7iSbG
-        RBHsxUJqFEJ1oNedTNgmAkc=
-X-Google-Smtp-Source: ADFU+vvaOwr52RxWLXDEfPTsHqlNlLjGEZWIP4dr8yNuQgd02OjLw5GbYYNFr0RxFTnS8szXqb3D8A==
-X-Received: by 2002:a81:4417:: with SMTP id r23mr488559ywa.240.1583170900590;
-        Mon, 02 Mar 2020 09:41:40 -0800 (PST)
-Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id q63sm4834263ywg.106.2020.03.02.09.41.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 Mar 2020 09:41:40 -0800 (PST)
-Subject: Re: [PATCH v3 0/7] kunit: create a centralized executor to dispatch
- all KUnit tests
-To:     Brendan Higgins <brendanhiggins@google.com>, jdike@addtoit.com,
-        richard@nod.at, anton.ivanov@cambridgegreys.com, arnd@arndb.de,
-        keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20200228012036.15682-1-brendanhiggins@google.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <da91797a-8640-12c7-8265-94586aacfa4c@gmail.com>
-Date:   Mon, 2 Mar 2020 11:41:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1IOLrEITmD2P6VvJiuWxnVZVe415X+z+1kv5oi6Hs5w=;
+        b=nlKHBIm8rnf7t0cAMBCh7VHfpUCK0+ykfZbQm4bEgP7YfAC3d2SZFyifGdjZ0Blnsg
+         qhalEaY53j+ALRZl0+u30OxgHTvQmR64QmU3b4Q+d4wE388iBFIXfKjkwIeGdonlMuuP
+         t7CCla3sjYHPksqW440yjhFR5LShD/xbwZewQwdqvcO5WWaHWuqrGaGnqLvBvGqbXJ2l
+         Q//Xh/sFvEqKzfJcuE7za1zUDJCd3dwdks85O1TZqvhr5b6Bt6Uh3e6FFqh0ntj2fYi4
+         5QEsdyrUh0uv/OlqehV5Y7l1vuwMwzcC60WeBmPB15FUUFMW5vV1RzfBpFq/23o1VpB2
+         jx1g==
+X-Gm-Message-State: ANhLgQ1oBYMAjkUUYeG5VbU5k0qyYw7P0+ZlRuxTNgVpDy3aewkTiAl5
+        cAcGFoSsM4zJOy660WlfX484sWUCT6I=
+X-Google-Smtp-Source: ADFU+vtTrjoMc5tUiiyE0JH0mOhrWnBS6QqyDly+U6zYsGs1ZXT036o+FBXspqCmHnQNIa3aWaO3BQ==
+X-Received: by 2002:a25:e6c5:: with SMTP id d188mr204741ybh.328.1583171559727;
+        Mon, 02 Mar 2020 09:52:39 -0800 (PST)
+Received: from mail-yw1-f43.google.com (mail-yw1-f43.google.com. [209.85.161.43])
+        by smtp.gmail.com with ESMTPSA id v27sm3697517ywh.93.2020.03.02.09.52.37
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Mar 2020 09:52:37 -0800 (PST)
+Received: by mail-yw1-f43.google.com with SMTP id l5so623812ywd.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2020 09:52:37 -0800 (PST)
+X-Received: by 2002:a81:3888:: with SMTP id f130mr517632ywa.138.1583171556864;
+ Mon, 02 Mar 2020 09:52:36 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200228012036.15682-1-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200227024301.217042-1-trishalfonso@google.com>
+ <CACT4Y+Z_fGz2zVpco4kuGOVeCK=jv4zH0q9Uj5Hv5TAFxY3yRg@mail.gmail.com>
+ <CAKFsvULZqJT3-NxYLsCaHpxemBCdyZN7nFTuQM40096UGqVzgQ@mail.gmail.com> <CACT4Y+YTNZRfKLH1=FibrtGj34MY=naDJY6GWVnpMvgShSLFhg@mail.gmail.com>
+In-Reply-To: <CACT4Y+YTNZRfKLH1=FibrtGj34MY=naDJY6GWVnpMvgShSLFhg@mail.gmail.com>
+From:   Kees Cook <keescook@chromium.org>
+Date:   Mon, 2 Mar 2020 09:52:25 -0800
+X-Gmail-Original-Message-ID: <CAGXu5jKbpbH4sm4sv-74iHa+VzWuvF5v3ci7R-KVt+StRpMESg@mail.gmail.com>
+Message-ID: <CAGXu5jKbpbH4sm4sv-74iHa+VzWuvF5v3ci7R-KVt+StRpMESg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] Port KASAN Tests to KUnit
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Patricia Alfonso <trishalfonso@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/27/20 7:20 PM, Brendan Higgins wrote:
-> ## TL;DR
-> 
-> This patchset adds a centralized executor to dispatch tests rather than
-> relying on late_initcall to schedule each test suite separately along
-> with a couple of new features that depend on it.
-> 
-> Also, sorry for the delay in getting this new revision out. I have been
-> really busy for the past couple weeks.
-> 
-> ## What am I trying to do?
-> 
-> Conceptually, I am trying to provide a mechanism by which test suites
-> can be grouped together so that they can be reasoned about collectively.
-> The last two of three patches in this series add features which depend
-> on this:
-> 
-> PATCH 5/7 Prints out a test plan[1] right before KUnit tests are run;
->           this is valuable because it makes it possible for a test
->           harness to detect whether the number of tests run matches the
->           number of tests expected to be run, ensuring that no tests
->           silently failed. The test plan includes a count of tests that
->           will run. With the centralized executor, the tests are located
->           in a single data structure and thus can be counted.
-> 
-> PATCH 6/7 Add a new kernel command-line option which allows the user to
->           specify that the kernel poweroff, halt, or reboot after
->           completing all KUnit tests; this is very handy for running
->           KUnit tests on UML or a VM so that the UML/VM process exits
->           cleanly immediately after running all tests without needing a
->           special initramfs. The centralized executor provides a
->           definitive point when all tests have completed and the
->           poweroff, halt, or reboot could occur.
-> 
-> In addition, by dispatching tests from a single location, we can
-> guarantee that all KUnit tests run after late_init is complete, which
-> was a concern during the initial KUnit patchset review (this has not
-> been a problem in practice, but resolving with certainty is nevertheless
-> desirable).
-> 
-> Other use cases for this exist, but the above features should provide an
-> idea of the value that this could provide.
-> 
-> ## Changes since last revision:
-> - On patch 7/7, I added some additional wording around the
->   kunit_shutdown command line option explaining that it runs after
->   built-in tests as suggested by Frank.
-> - On the coverletter, I improved some wording and added a missing link.
->   I also specified the base-commit for the series.
+On Sat, Feb 29, 2020 at 10:39 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Sat, Feb 29, 2020 at 2:56 AM Patricia Alfonso
+> <trishalfonso@google.com> wrote:
+> > On Thu, Feb 27, 2020 at 6:19 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+> > >
+> > > .On Thu, Feb 27, 2020 at 3:44 AM Patricia Alfonso
+> > > > -       pr_info("out-of-bounds in copy_from_user()\n");
+> > > > -       unused = copy_from_user(kmem, usermem, size + 1);
+> > >
+> > > Why is all of this removed?
+> > > Most of these tests are hard earned and test some special corner cases.
+> > >
+> > I just moved it inside IS_MODULE(CONFIG_TEST_KASAN) instead because I
+> > don't think there is a way to rewrite this without it being a module.
+>
+> You mean these are unconditionally crashing the machine? If yes,
+> please add a comment about this.
+>
+> Theoretically we could have a notion of "death tests" similar to gunit:
+> https://stackoverflow.com/questions/3698718/what-are-google-test-death-tests
+> KUnit test runner wrapper would need to spawn a separete process per
+> each such test. Under non-KUnit test runner these should probably be
+> disabled by default and only run if specifically requested (a-la
+> --gunit_filter/--gunit_also_run_disabled_tests).
+> Could also be used to test other things that unconditionally panic,
+> e.g. +Kees may be happy for unit tests for some of the
+> hardening/fortification features.
+> I am not asking to bundle this with this change of course.
 
-> - Frank asked for some changes to the documentation; however, David is
->   taking care of that in a separate patch[2], so I did not make those
->   changes here. There will be some additional changes necessary
->   after David's patch is applied.
+A bunch of LKDTM tests can kill the system too. I collected the list
+when building the selftest script for LKDTM:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/lkdtm/tests.txt
 
-Making the documentation changes after David's patches sounds like
-a good plan to me.
+I'm all for unittests (I have earlier kind-of-unit-tests in
+lib/test_user_copy.c lib/test_overflow.c etc), but most of LKDTM is
+designed to be full system-behavior testing ("does the system correct
+BUG the current thread, when some deeper system state is violated?")
 
--Frank
-
-> 
-> Alan Maguire (1):
->   kunit: test: create a single centralized executor for all tests
-> 
-> Brendan Higgins (5):
->   vmlinux.lds.h: add linker section for KUnit test suites
->   arch: um: add linker section for KUnit test suites
->   init: main: add KUnit to kernel init
->   kunit: test: add test plan to KUnit TAP format
->   Documentation: Add kunit_shutdown to kernel-parameters.txt
-> 
-> David Gow (1):
->   kunit: Add 'kunit_shutdown' option
-> 
->  .../admin-guide/kernel-parameters.txt         |  8 ++
->  arch/um/include/asm/common.lds.S              |  4 +
->  include/asm-generic/vmlinux.lds.h             |  8 ++
->  include/kunit/test.h                          | 82 ++++++++++++-------
->  init/main.c                                   |  4 +
->  lib/kunit/Makefile                            |  3 +-
->  lib/kunit/executor.c                          | 71 ++++++++++++++++
->  lib/kunit/test.c                              | 11 ---
->  tools/testing/kunit/kunit_kernel.py           |  2 +-
->  tools/testing/kunit/kunit_parser.py           | 76 ++++++++++++++---
->  .../test_is_test_passed-all_passed.log        |  1 +
->  .../test_data/test_is_test_passed-crash.log   |  1 +
->  .../test_data/test_is_test_passed-failure.log |  1 +
->  13 files changed, 218 insertions(+), 54 deletions(-)
->  create mode 100644 lib/kunit/executor.c
-> 
-> 
-> base-commit: a2f0b878c3ca531a1706cb2a8b079cea3b17bafc
-> 
-> [1] https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#the-plan
-> [2] https://patchwork.kernel.org/patch/11383635/
-> 
-
+-- 
+Kees Cook
