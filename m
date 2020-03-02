@@ -2,118 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B92917619D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Mar 2020 18:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71DB17636D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Mar 2020 20:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726451AbgCBRwp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Mar 2020 12:52:45 -0500
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:39385 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726997AbgCBRwm (ORCPT
+        id S1727413AbgCBTFl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Mar 2020 14:05:41 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:56000 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727372AbgCBTFl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Mar 2020 12:52:42 -0500
-Received: by mail-yw1-f66.google.com with SMTP id x184so614005ywd.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2020 09:52:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1IOLrEITmD2P6VvJiuWxnVZVe415X+z+1kv5oi6Hs5w=;
-        b=Ob7ugNbolYcPYQ1RvjJtJ0j6ieNXbuDYZuyXXFLie3EM4zIZNEuw/jW+FdJJFwdv52
-         84g3Wvq7rGW3EoP8iKyZqhcJROlzHsUXVtSD1R1ltJqSdjF+8A/z6QeYocl9NrBNpx3R
-         Flc957tzuSZgDdYcTO8nL15zW1KM/5W+deBWI=
+        Mon, 2 Mar 2020 14:05:41 -0500
+Received: by mail-pj1-f66.google.com with SMTP id a18so193018pjs.5;
+        Mon, 02 Mar 2020 11:05:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1IOLrEITmD2P6VvJiuWxnVZVe415X+z+1kv5oi6Hs5w=;
-        b=nlKHBIm8rnf7t0cAMBCh7VHfpUCK0+ykfZbQm4bEgP7YfAC3d2SZFyifGdjZ0Blnsg
-         qhalEaY53j+ALRZl0+u30OxgHTvQmR64QmU3b4Q+d4wE388iBFIXfKjkwIeGdonlMuuP
-         t7CCla3sjYHPksqW440yjhFR5LShD/xbwZewQwdqvcO5WWaHWuqrGaGnqLvBvGqbXJ2l
-         Q//Xh/sFvEqKzfJcuE7za1zUDJCd3dwdks85O1TZqvhr5b6Bt6Uh3e6FFqh0ntj2fYi4
-         5QEsdyrUh0uv/OlqehV5Y7l1vuwMwzcC60WeBmPB15FUUFMW5vV1RzfBpFq/23o1VpB2
-         jx1g==
-X-Gm-Message-State: ANhLgQ1oBYMAjkUUYeG5VbU5k0qyYw7P0+ZlRuxTNgVpDy3aewkTiAl5
-        cAcGFoSsM4zJOy660WlfX484sWUCT6I=
-X-Google-Smtp-Source: ADFU+vtTrjoMc5tUiiyE0JH0mOhrWnBS6QqyDly+U6zYsGs1ZXT036o+FBXspqCmHnQNIa3aWaO3BQ==
-X-Received: by 2002:a25:e6c5:: with SMTP id d188mr204741ybh.328.1583171559727;
-        Mon, 02 Mar 2020 09:52:39 -0800 (PST)
-Received: from mail-yw1-f43.google.com (mail-yw1-f43.google.com. [209.85.161.43])
-        by smtp.gmail.com with ESMTPSA id v27sm3697517ywh.93.2020.03.02.09.52.37
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Mar 2020 09:52:37 -0800 (PST)
-Received: by mail-yw1-f43.google.com with SMTP id l5so623812ywd.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2020 09:52:37 -0800 (PST)
-X-Received: by 2002:a81:3888:: with SMTP id f130mr517632ywa.138.1583171556864;
- Mon, 02 Mar 2020 09:52:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20200227024301.217042-1-trishalfonso@google.com>
- <CACT4Y+Z_fGz2zVpco4kuGOVeCK=jv4zH0q9Uj5Hv5TAFxY3yRg@mail.gmail.com>
- <CAKFsvULZqJT3-NxYLsCaHpxemBCdyZN7nFTuQM40096UGqVzgQ@mail.gmail.com> <CACT4Y+YTNZRfKLH1=FibrtGj34MY=naDJY6GWVnpMvgShSLFhg@mail.gmail.com>
-In-Reply-To: <CACT4Y+YTNZRfKLH1=FibrtGj34MY=naDJY6GWVnpMvgShSLFhg@mail.gmail.com>
-From:   Kees Cook <keescook@chromium.org>
-Date:   Mon, 2 Mar 2020 09:52:25 -0800
-X-Gmail-Original-Message-ID: <CAGXu5jKbpbH4sm4sv-74iHa+VzWuvF5v3ci7R-KVt+StRpMESg@mail.gmail.com>
-Message-ID: <CAGXu5jKbpbH4sm4sv-74iHa+VzWuvF5v3ci7R-KVt+StRpMESg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] Port KASAN Tests to KUnit
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Patricia Alfonso <trishalfonso@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gf4KSaQWKca7V96I6NmHZqh2rr9VA3G/cTKK6IvZdwg=;
+        b=M3wS+vGjF7lbZ/LzvbJSTd4fCwPjEpwyFf/ZLO4/MgcJej+bUl+ydkb7bDe/0/y/bD
+         FlyBdFKSQBOu98Ly3sNiEK3q+8YvjAOMT1Sv1EQlHO1TcO1TOvfgTRZw1oubXKVXHdQV
+         bICe/QTdxsr3v3q3AxbzxdJJB8fXUyBDgFTN6rSD/l11w1CtYMj3iHnHRj6+jyNf8Czr
+         PazZJgP1un2PG/fKUNLepXXPb6CvsZmfzuHi/Mvco1LBfDdCZzaiIVZfhAYRCCyh94RI
+         H87wDd/zD2ov9RtUhAVIyAUbZ2vvCz0NZ1wvfALUaB3cTxNcIPNtFwJ3/FLczOoy1M+p
+         rJnw==
+X-Gm-Message-State: ANhLgQ1DFPZYAS+xbicRGYfuaT2KL7Sw+eqOQ0rASa6s0jT1gy5ktw1U
+        JWx1cXyyXlFvDc8NKr+mg64=
+X-Google-Smtp-Source: ADFU+vvJYWwumZLWp/3ZGLRXKr5ovAW9HO2pLmZdmIrQgsVTzmXuWNa7nyU7uRH3KIT0vUQ5VwwsfA==
+X-Received: by 2002:a17:90a:8915:: with SMTP id u21mr350863pjn.87.1583175939331;
+        Mon, 02 Mar 2020 11:05:39 -0800 (PST)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id t63sm22345163pfb.70.2020.03.02.11.05.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2020 11:05:38 -0800 (PST)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 4C2C34035F; Mon,  2 Mar 2020 19:05:37 +0000 (UTC)
+Date:   Mon, 2 Mar 2020 19:05:37 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
         David Gow <davidgow@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch
+ all KUnit tests
+Message-ID: <20200302190537.GC11244@42.do-not-panic.com>
+References: <20191216220555.245089-1-brendanhiggins@google.com>
+ <20200106224022.GX11244@42.do-not-panic.com>
+ <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Feb 29, 2020 at 10:39 PM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Sat, Feb 29, 2020 at 2:56 AM Patricia Alfonso
-> <trishalfonso@google.com> wrote:
-> > On Thu, Feb 27, 2020 at 6:19 AM Dmitry Vyukov <dvyukov@google.com> wrote:
-> > >
-> > > .On Thu, Feb 27, 2020 at 3:44 AM Patricia Alfonso
-> > > > -       pr_info("out-of-bounds in copy_from_user()\n");
-> > > > -       unused = copy_from_user(kmem, usermem, size + 1);
-> > >
-> > > Why is all of this removed?
-> > > Most of these tests are hard earned and test some special corner cases.
-> > >
-> > I just moved it inside IS_MODULE(CONFIG_TEST_KASAN) instead because I
-> > don't think there is a way to rewrite this without it being a module.
->
-> You mean these are unconditionally crashing the machine? If yes,
-> please add a comment about this.
->
-> Theoretically we could have a notion of "death tests" similar to gunit:
-> https://stackoverflow.com/questions/3698718/what-are-google-test-death-tests
-> KUnit test runner wrapper would need to spawn a separete process per
-> each such test. Under non-KUnit test runner these should probably be
-> disabled by default and only run if specifically requested (a-la
-> --gunit_filter/--gunit_also_run_disabled_tests).
-> Could also be used to test other things that unconditionally panic,
-> e.g. +Kees may be happy for unit tests for some of the
-> hardening/fortification features.
-> I am not asking to bundle this with this change of course.
+On Thu, Jan 23, 2020 at 02:40:31PM -0800, Brendan Higgins wrote:
+> On Mon, Jan 6, 2020 at 2:40 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > On Mon, Dec 16, 2019 at 02:05:49PM -0800, Brendan Higgins wrote:
+> > dispatcher could be configurable to run at an arbirary time after boot.
+> > If there are not immediate use cases for that though, then I suppose
+> > this is not a requirement for the dispatcher. But since there exists
+> > another modular test framework with its own dispatcher and it seems the
+> > goal is to merge the work long term, this might preempt the requirement
+> > to define how and when we can dispatch tests post boot.
+> >
+> > And, if we're going to do that, I can suggest that a data structure
+> > instead of just a function init call be used to describe tests to be
+> > placed into an ELF section. With my linker table work this would be
+> > easy, I define section ranges for code describing only executable
+> > routines, but it defines linker tables for when a component in the
+> > kernel would define a data structure, part of which can be a callback.
+> > Such data structure stuffed into an ELF section could allow dynamic
+> > configuration of the dipsatching, even post boot.
+> 
+> The linker table work does sound interesting. Do you have a link?
 
-A bunch of LKDTM tests can kill the system too. I collected the list
-when building the selftest script for LKDTM:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/lkdtm/tests.txt
+Sure
 
-I'm all for unittests (I have earlier kind-of-unit-tests in
-lib/test_user_copy.c lib/test_overflow.c etc), but most of LKDTM is
-designed to be full system-behavior testing ("does the system correct
-BUG the current thread, when some deeper system state is violated?")
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20170620-linker-tables-v8
 
--- 
-Kees Cook
+I had dropped this long ago mostly due to the fact that my use case
+(removal of dead code) was more long term, and not immediate so the
+use case wasn't there yet.
+
+I have been meaning to pick this work up again.
+
+> I was thinking about dynamic dispatching, actually. I thought it would
+> be handy to be able to build all tests into a single kernel and then
+> run different tests on different invocations.
+
+For built-in code it would be up to it to manage that. The linker table
+stuff would just allow a way for you to systematically aggregate
+data into an ELF section in a generic way. It does have a built in
+light weight sort mechanism, if you opt out of that and say wanted
+to do your own order it'd be up to how you program it in on the data
+structure and dispatching after that.
+
+> Also, for post boot dynamic dispatching, you should check out Alan's
+> debugfs patches:
+> 
+> https://lore.kernel.org/linux-kselftest/CAFd5g46657gZ36PaP8Pi999hPPgBU2Kz94nrMspS-AzGwdBF+g@mail.gmail.com/T/#m210cadbeee267e5c5a9253d83b7b7ca723d1f871
+> 
+> They look pretty handy!
+
+Sure.
+
+> > I think this is a good stepping stone forward then, and to allow
+> > dynamic configuration of the dispatcher could mean eventual extensions
+> > to kunit's init stuff to stuff init calls into a data structure which
+> > can then allow configuration of the dispatching. One benefit that the
+> > linker table work *may* be able to help here with is that it allows
+> > an easy way to create kunit specific ordering, at linker time.
+> > There is also an example of addressing / generalizing dynamic / run time
+> > changes of ordering, by using the x86 IOMMU initialization as an
+> > example case. We don't have an easy way to do this today, but if kunit
+> > could benefit from such framework, it'd be another use case for
+> > the linker table work. That is, the ability to easilly allow
+> > dynamically modifying run time ordering of code through ELF sections.
+> >
+> > > In addition, by dispatching tests from a single location, we can
+> > > guarantee that all KUnit tests run after late_init is complete, which
+> > > was a concern during the initial KUnit patchset review (this has not
+> > > been a problem in practice, but resolving with certainty is nevertheless
+> > > desirable).
+> >
+> > Indeed, the concern is just a real semantics limitations. With the tests
+> > *always* running after all subsystem init stuff, we know we'd have a
+> > real full kernel ready.
+> 
+> Yep.
+> 
+> > It does beg the question if this means kunit is happy to not be a tool
+> > to test pre basic setup stuff (terminology used in init.c, meaning prior
+> > to running all init levels). I suspect this is the case.
+> 
+> Not sure. I still haven't seen any cases where this is necessary, so I
+> am not super worried about it. Regardless, I don't think this patchset
+> really changes anything in that regard, we are moving from late_init
+> to after late_init, so it isn't that big of a change for most use
+> cases.
+> 
+> Please share if you can think of some things that need to be tested in
+> early init.
+
+If and when we get to that point we can deal with it then. My instincts
+tell me that for early init code we should probably be specially crafted
+tests and have they should have their own hand crafted dispatchers.
+
+  Luis
