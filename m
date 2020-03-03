@@ -2,174 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E763F1776E6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Mar 2020 14:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8083E1777A9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Mar 2020 14:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728787AbgCCNWP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Mar 2020 08:22:15 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:49160 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728398AbgCCNWP (ORCPT
+        id S1728849AbgCCNqi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Mar 2020 08:46:38 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:37006 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727167AbgCCNqi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Mar 2020 08:22:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lm1J5n5+hScBLK9U43/eb/xDYPs2lcB12KKqXk5s7Z4=; b=APHzxd1VPHRwDBmvnXDJ0inO2d
-        84Aq511ks8CXnnAYNce3jHkai6v1hWnBLyJtWSEk9BRM5Zc1QFl1kqY7EQDRUusPzey5MaU5NK7XS
-        HKyaPCLZZZhjWbZfOxbmsbRlr6vwkM6Uer11AigZDjX37lG+HDqJE3PSZ/cxDsNcoBB1pvvbAzlS5
-        SXMWFj0ctj6ImQnixJpfC/IfZKJwwFtjHhH//jSed5jzAnlsRiTCOVhNJExhvKCje7Q4Y4JR23rj8
-        KaTc7Qw9ZVaAQspH0obkzlY5FwvR/67ec2+xzAahAZOqOeTClJ7IU6jXN0l22KNR+Ctaxooay+za1
-        8cALbTRg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j97Ug-0006Jh-4i; Tue, 03 Mar 2020 13:21:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFC6E3013A4;
-        Tue,  3 Mar 2020 14:19:52 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E99B0210C2866; Tue,  3 Mar 2020 14:21:50 +0100 (CET)
-Date:   Tue, 3 Mar 2020 14:21:50 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        krisman@collabora.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
-        ryao@gentoo.org, dvhart@infradead.org, mingo@redhat.com,
-        z.figura12@gmail.com, steven@valvesoftware.com,
-        steven@liquorix.net, malteskarupke@web.de, carlos@redhat.com,
-        adhemerval.zanella@linaro.org, libc-alpha@sourceware.org
-Subject: Re: 'simple' futex interface [Was: [PATCH v3 1/4] futex: Implement
- mechanism to wait on any of several futexes]
-Message-ID: <20200303132150.GD2596@hirez.programming.kicks-ass.net>
-References: <20200213214525.183689-1-andrealmeid@collabora.com>
- <20200213214525.183689-2-andrealmeid@collabora.com>
- <20200228190717.GM18400@hirez.programming.kicks-ass.net>
- <20200228194958.GO14946@hirez.programming.kicks-ass.net>
- <87tv3aflqm.fsf@nanos.tec.linutronix.de>
- <967d5047-2cb6-d6d8-6107-edb99a4c9696@valvesoftware.com>
- <87o8thg031.fsf@nanos.tec.linutronix.de>
- <beb82055-96fa-cb64-a06e-9d7a0946587b@valvesoftware.com>
- <20200303120050.GC2596@hirez.programming.kicks-ass.net>
- <87pndth9ur.fsf@oldenburg2.str.redhat.com>
+        Tue, 3 Mar 2020 08:46:38 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023DhsGh130026;
+        Tue, 3 Mar 2020 13:46:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=q/dO+I3s/05qSjtTDi1OQBuQj6Qqwpf1k5JIv+SV55I=;
+ b=fw5vxiifYYpyUy8sTrfk8dh5Zv+ZbixJHqWISicmB70PK/nrpzMp0vUd0yuSUyZB6nNe
+ Bfn5yjZJ1JIL6q/q76AYH8Nna/v4EiGdDGbH+aGkqxgtdv/hJ3xNpaEh6eELiPlhLXSC
+ bNAdpoux4X7zX/FfEw6kT/VOdzpA1HXeaubQF0sowJj3h3/LNGXd9fNO0exoh1RQAEhE
+ PyB9cHX6VAvE7XoIU2LjZF91/gZLHTRWYCd9dEOvPIs8D3iOuurlMUpwJ2E/TRxZWgyc
+ ViU0PCFoNxdEW6NfayeqZML6xozyJFaRv51OB/ZuLKrhxViIE0EWVm969PRMBUpg1/sS 1Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2yffcufcd6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 Mar 2020 13:46:29 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023Dh7sU026166;
+        Tue, 3 Mar 2020 13:46:29 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2yg1gxfxs1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 Mar 2020 13:46:29 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 023DkQQc032227;
+        Tue, 3 Mar 2020 13:46:27 GMT
+Received: from [10.152.34.22] (/10.152.34.22)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 03 Mar 2020 05:46:25 -0800
+Subject: Re: [Automated-testing] syzkaller reproducers
+To:     Dmitry Vyukov <dvyukov@google.com>, shuah <shuah@kernel.org>
+Cc:     Cyril Hrubis <chrubis@suse.cz>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        automated-testing@yoctoproject.org, kernelci@groups.io,
+        Dhaval Giani <dhaval.giani@gmail.com>,
+        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
+ <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
+ <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org>
+ <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
+ <20191011180248.GA24089@rei.lan>
+ <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
+ <20191014085414.GB31760@rei.lan>
+ <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
+ <62903a33-8ffc-56b6-de1a-539f10b5de2a@oracle.com>
+ <86bde120-e5fe-4bb1-9b93-769a444500f9@oracle.com>
+ <e8b11b09-37ac-6ae2-0908-b803b4160f7c@oracle.com>
+ <CACT4Y+bShy-3vO3ifNKVcGGNf3X9XA7zL-Ja9-T+gZv5=QNe4w@mail.gmail.com>
+ <8a4dbbb1-f8ba-00ba-41d2-d82a35fc0f81@oracle.com>
+ <CACT4Y+aZ=rBZXdnrU0D-21QqSK0G3vqHU+iD=k0PhGgo3TL6rA@mail.gmail.com>
+From:   George Kennedy <george.kennedy@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <2d593685-b50e-ea2c-a724-818f6b149731@oracle.com>
+Date:   Tue, 3 Mar 2020 08:46:23 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pndth9ur.fsf@oldenburg2.str.redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CACT4Y+aZ=rBZXdnrU0D-21QqSK0G3vqHU+iD=k0PhGgo3TL6rA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9548 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003030105
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9548 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 clxscore=1031
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2003030105
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 03, 2020 at 02:00:12PM +0100, Florian Weimer wrote:
-> * Peter Zijlstra:
-> 
-> > So how about we introduce new syscalls:
-> >
-> >   sys_futex_wait(void *uaddr, unsigned long val, unsigned long flags, ktime_t *timo);
-> >
-> >   struct futex_wait {
-> > 	void *uaddr;
-> > 	unsigned long val;
-> > 	unsigned long flags;
-> >   };
-> >   sys_futex_waitv(struct futex_wait *waiters, unsigned int nr_waiters,
-> > 		  unsigned long flags, ktime_t *timo);
-> >
-> >   sys_futex_wake(void *uaddr, unsigned int nr, unsigned long flags);
-> >
-> >   sys_futex_cmp_requeue(void *uaddr1, void *uaddr2, unsigned int nr_wake,
-> > 			unsigned int nr_requeue, unsigned long cmpval, unsigned long flags);
-> >
-> > Where flags:
-> >
-> >   - has 2 bits for size: 8,16,32,64
-> >   - has 2 more bits for size (requeue) ??
-> >   - has ... bits for clocks
-> >   - has private/shared
-> >   - has numa
-> 
-> What's the actual type of *uaddr?  Does it vary by size (which I assume
-> is in bits?)?  Are there alignment constraints?
-
-Yeah, u8, u16, u32, u64 depending on the size specified in flags.
-Naturally aligned.
-
-> These system calls seemed to be type-polymorphic still, which is
-> problematic for defining a really nice C interface.  I would really like
-> to have a strongly typed interface for this, with a nice struct futex
-> wrapper type (even if it means that we need four of them).
-
-You mean like: futex_wait1(u8 *,...) futex_wait2(u16 *,...)
-futex_wait4(u32 *,...) etc.. ?
-
-I suppose making it 16 or so syscalls (more if we want WAKE_OP or
-requeue across size) is a bit daft, so yeah, sucks.
-
-> Will all architectures support all sizes?  If not, how do we probe which
-> size/flags combinations are supported?
-
-Up to the native word size (long), IOW ILP32 will not support u64.
-
-Overlapping futexes are expressly forbidden, that is:
-
-{
-	u32 var;
-	void *addr = &var;
-}
-
-P0()
-{
-	futex_wait4(addr,...);
-}
-
-P1()
-{
-	futex_wait1(addr+1,...);
-}
-
-Will have one of them return something bad.
 
 
-> > For NUMA I propose that when NUMA_FLAG is set, uaddr-4 will be 'int
-> > node_id', with the following semantics:
-> >
-> >  - on WAIT, node_id is read and when 0 <= node_id <= nr_nodes, is
-> >    directly used to index into per-node hash-tables. When -1, it is
-> >    replaced by the current node_id and an smp_mb() is issued before we
-> >    load and compare the @uaddr.
-> >
-> >  - on WAKE/REQUEUE, it is an immediate index.
-> 
-> Does this mean the first waiter determines the NUMA index, and all
-> future waiters use the same chain even if they are on different nodes?
+On 3/3/2020 3:45 AM, Dmitry Vyukov wrote:
+> Shauh,
+>
+> We've added more reproducers to:
+> https://github.com/dvyukov/syzkaller-repros/tree/master/linux
+>
+> It makes sense to pull in them to the kernel-arts repo. Not sure
+> what's the most convenient way for you since it's not exactly a
+> traditional "patch"? Perhaps you just copy linux/*.c files and commit?
+>
+> George, another throw in of 446 repros ;)
 
-Every new waiter could (re)set node_id, after all, when its not actually
-waiting, nobody cares what's in that field.
+Thank you Dmitry!
+George
 
-> I think documenting this as a node index would be a mistake.  It could
-> be an arbitrary hint for locating the corresponding kernel data
-> structures.
-
-Nah, it allows explicit placement, after all, we have set_mempolicy()
-and sched_setaffinity() and all the other NUMA crud so that programs
-that think they know what they're doing, can do explicit placement.
-
-> > Any invalid value with result in EINVAL.
-> 
-> Using uaddr-4 is slightly tricky with a 64-bit futex value, due to the
-> need to maintain alignment and avoid padding.
-
-Yes, but it works, unlike uaddr+4 :-) Also, 1 and 2 byte futexes and
-NUMA_FLAG are incompatible due to this, but I feel short futexes and
-NUMA don't really make sense anyway, the only reason to use a short
-futex is to save space, so you don't want another 4 bytes for numa on
-top of that anyway.
+>
+>
+>
+> On Mon, Jan 27, 2020 at 6:08 PM George Kennedy
+> <george.kennedy@oracle.com> wrote:
+>>> Hi George,
+>>>
+>>> This was still starred in my inbox, but I never got to actually do
+>>> anything with it. Thanks for pinging me. I thought that the script to
+>>> extract the repros won't work for some reason and that I will need to
+>>> fix it first. But turns out it's still working as-is (I wanted to
+>>> submit some changes that would break it, but I never go to that as
+>>> well. Good! :)).
+>>>
+>>> So here is a new drop in with 692 repros:
+>>> https://github.com/dvyukov/syzkaller-repros/commit/6a06992209c328a3115c89c020f45b844b103573
+>>> Enjoy!
+>>>
+>>> Yes, we have separate managers for each version, the entries in the
+>>> Instances table correspond to syz-manager one-to-one:
+>>> https://syzkaller.appspot.com/upstream
+>>> https://syzkaller.appspot.com/linux-4.19
+>>> https://syzkaller.appspot.com/android-54
+>> Thank you Dmitry!
+>> George
+>>>
+>>>
+>>> On Mon, Jan 27, 2020 at 3:20 PM George Kennedy
+>>> <george.kennedy@oracle.com> wrote:
+>>>> Hi Dmitry,
+>>>>
+>>>> Re-sending this request.
+>>>>
+>>>> Also, how do you track the Upstream branches with Syzkaller? Do you have
+>>>> a version of Syzkaller for each (i.e. 4.14, 4.19, etc)?
+>>>>
+>>>> Thank you,
+>>>> George
+>>>>
+>>>> On 12/6/2019 3:06 PM, George Kennedy wrote:
+>>>>> Hello Dmitry,
+>>>>>
+>>>>> Could we get another drop of the Syzkaller C reproducers?
+>>>>>
+>>>>> Wonder if we could get the drop periodically (i.e. a drop/quarter or a
+>>>>> drop to match a major linux release)?
+>>>>>
+>>>>> Thank you,
+>>>>> George
 
