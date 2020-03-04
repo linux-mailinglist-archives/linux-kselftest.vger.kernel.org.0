@@ -2,91 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEE2178E22
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 11:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78756178F4B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 12:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387921AbgCDKN6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Mar 2020 05:13:58 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:42452 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387912AbgCDKN6 (ORCPT
+        id S1726440AbgCDLHz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Mar 2020 06:07:55 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:34088 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726137AbgCDLHz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Mar 2020 05:13:58 -0500
-Received: by mail-lf1-f66.google.com with SMTP id t21so1011762lfe.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2020 02:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=olVifyTMleE2iedo0uCkocgafSknigkP2OP2Ek8xo9Y=;
-        b=iPqLt7CUHivuNV8QujDV0W6QulaQWe6wT9uZYQ5ZKRMJDmO8MQGos3/IzH+Krr8TzL
-         V1nEmvK5FFV62gRr6+sRztw3JaEsNXJHEpcLHkOLZPkC877v4r1Qx/J/EsqMr2kDeaIJ
-         7RQpEjKYkaijGth3oAl+LoIx5x2nAxyaiWqE0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=olVifyTMleE2iedo0uCkocgafSknigkP2OP2Ek8xo9Y=;
-        b=JcglqhvzpzbDospXMDnR1dvzC6ZeYcYOmt7D4cz9FTlKGX7px7iGxxF6kUIGwzML7C
-         Y3njX44bHL5s0Ay6fiXKCQwrO7yVQHHCDULiMwQLcZ+RPmdtj/DL5nvo+lrYd+e9cMur
-         slaAHJW/hyr9mOZK4gPiqiKTMuaET2wAbsZn1+CnWXH3lewgnedh522bW72/QRzaC/Ua
-         bz7eLQUqFkpqEf5sxCS8ZtQqbRaHqrnrIA+qMgJSdMBwVCP6GYrOVn2Ae5mPkJ/AdzVI
-         PxkZaDX6jElZSfgUcM1zc8fWAkoBqUn6BRb44lBXwemc+8t5gn7/dZG70nKFRmOu0gyB
-         C9jw==
-X-Gm-Message-State: ANhLgQ12JqbLBE7RqYvp7jQd51P5b3/RVDK11DQgmxlozmogqTd2zjEm
-        VNtYABVQ6Ptni/m1cn5nzEEVMQ==
-X-Google-Smtp-Source: ADFU+vsuEdVRpVHa3R4OMO85FbKQo1R+1kABMKY1D8/UloF2u7KmlAOlqXrDgoY2Yx6iLysg/Te0XQ==
-X-Received: by 2002:ac2:5dd3:: with SMTP id x19mr940358lfq.168.1583316835115;
-        Wed, 04 Mar 2020 02:13:55 -0800 (PST)
-Received: from localhost.localdomain ([176.221.114.230])
-        by smtp.gmail.com with ESMTPSA id l7sm341777lfk.65.2020.03.04.02.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 02:13:54 -0800 (PST)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     john.fastabend@gmail.com, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 11/12] selftests: bpf: enable UDP sockmap reuseport tests
-Date:   Wed,  4 Mar 2020 11:13:16 +0100
-Message-Id: <20200304101318.5225-12-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200304101318.5225-1-lmb@cloudflare.com>
-References: <20200304101318.5225-1-lmb@cloudflare.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 4 Mar 2020 06:07:55 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024B46U4167217;
+        Wed, 4 Mar 2020 11:07:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=qk/3ZmWRWb3QGJUEL1xyFS4r4TRjTGBtpUL+aarZ+aA=;
+ b=WRGB97hWT27+P//0oAj6vftOyYbWyV9ZmF/Le5DtQ/ZPnWOBNvTJRx5X0BsiTJQ16dky
+ 2EE7Anwq4J7reb9CsEA0xMAOAspvMa6AUFkGZizgK9ET/UTP/znVaLoV/X+cJ/DIBIxd
+ Qp2M00BEfhq/7noi9/q6m1c4VWuqBBSo/SLV/O+DAN8CUjz9Bo6cdGbylsyFYhiVX5XY
+ oDdSfbf+7KGDkElKxKrj9lT2qG+xffgMOM8e+Yr9WWUz0I42gNEtrBAhrlnZmIq/tm6F
+ kuufLTx7Z4lGkGqTSj776wBZSSCJoCZgSaQXvh7ckElcgMBgIq4COKt3aMRSAnxFlbXh jQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2yffwqwm7d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Mar 2020 11:07:45 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024B3Sh7027604;
+        Wed, 4 Mar 2020 11:07:44 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2yg1h0nbpt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Mar 2020 11:07:44 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 024B7h8m005718;
+        Wed, 4 Mar 2020 11:07:43 GMT
+Received: from dhcp-10-175-165-222.vpn.oracle.com (/10.175.165.222)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 04 Mar 2020 03:07:43 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, frowand.list@gmail.com,
+        gregkh@linuxfoundation.org, shuah@kernel.org
+Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v6 kunit-next 0/4] kunit: add debugfs representation to show results
+Date:   Wed,  4 Mar 2020 11:07:12 +0000
+Message-Id: <1583320036-442-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ suspectscore=3 malwarescore=0 mlxlogscore=995 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003040086
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 suspectscore=3
+ phishscore=0 clxscore=1015 bulkscore=0 adultscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2003040086
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove the guard that disables UDP tests now that sockmap
-has support for them.
+When kunit tests are run on native (i.e. non-UML) environments, the results
+of test execution are often intermixed with dmesg output.  This patch
+series attempts to solve this by providing a debugfs representation
+of the results of the last test run, available as
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- tools/testing/selftests/bpf/prog_tests/select_reuseport.c | 6 ------
- 1 file changed, 6 deletions(-)
+/sys/kernel/debug/kunit/<testsuite>/results
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-index a1dd13b34d4b..821b4146b7b6 100644
---- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-+++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-@@ -805,12 +805,6 @@ static void test_config(int sotype, sa_family_t family, bool inany)
- 	char s[MAX_TEST_NAME];
- 	const struct test *t;
- 
--	/* SOCKMAP/SOCKHASH don't support UDP yet */
--	if (sotype == SOCK_DGRAM &&
--	    (inner_map_type == BPF_MAP_TYPE_SOCKMAP ||
--	     inner_map_type == BPF_MAP_TYPE_SOCKHASH))
--		return;
--
- 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
- 		if (t->need_sotype && t->need_sotype != sotype)
- 			continue; /* test not compatible with socket type */
+Changes since v5:
+
+- replaced undefined behaviour use of snprintf(buf, ..., buf) in kunit_log()
+  with a function to append string to existing log (Frank, patch 1)
+- added clarification on log size limitations to documentation
+  (Frank, patch 4)
+
+Changes since v4:
+
+- added suite-level log expectations to kunit log test (Brendan, patch 2)
+- added log expectations (of it being NULL) for case where
+  CONFIG_KUNIT_DEBUGFS=n to kunit log test (patch 2)
+- added patch 3 which replaces subtest tab indentation with 4 space
+  indentation as per TAP 14 spec (Frank, patch 3)
+
+Changes since v3:
+
+- added CONFIG_KUNIT_DEBUGFS to support conditional compilation of debugfs
+  representation, including string logging (Frank, patch 1)
+- removed unneeded NULL check for test_case in
+  kunit_suite_for_each_test_case() (Frank, patch 1)
+- added kunit log test to verify logging multiple strings works
+  (Frank, patch 2)
+- rephrased description of results file (Frank, patch 3)
+
+Changes since v2:
+
+- updated kunit_status2str() to kunit_status_to_string() and made it
+  static inline in include/kunit/test.h (Brendan)
+- added log string to struct kunit_suite and kunit_case, with log
+  pointer in struct kunit pointing at the case log.  This allows us
+  to collect kunit_[err|info|warning]() messages at the same time
+  as we printk() them.  This solves for the most part the sharing
+  of log messages between test execution and debugfs since we
+  just print the suite log (which contains the test suite preamble)
+  and the individual test logs.  The only exception is the suite-level
+  status, which we cannot store in the suite log as it would mean
+  we'd print the suite and its status prior to the suite's results.
+  (Brendan, patch 1)
+- dropped debugfs-based kunit run patch for now so as not to cause
+  problems with tests currently under development (Brendan)
+- fixed doc issues with code block (Brendan, patch 3)
+
+Changes since v1:
+ - trimmed unneeded include files in lib/kunit/debugfs.c (Greg)
+ - renamed global debugfs functions to be prefixed with kunit_ (Greg)
+ - removed error checking for debugfs operations (Greg)
+
+Alan Maguire (4):
+  kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results display
+  kunit: add log test
+  kunit: subtests should be indented 4 spaces according to TAP
+  kunit: update documentation to describe debugfs representation
+
+ Documentation/dev-tools/kunit/usage.rst |  14 +++
+ include/kunit/test.h                    |  59 +++++++++++--
+ lib/kunit/Kconfig                       |   8 ++
+ lib/kunit/Makefile                      |   4 +
+ lib/kunit/assert.c                      |  79 ++++++++---------
+ lib/kunit/debugfs.c                     | 116 +++++++++++++++++++++++++
+ lib/kunit/debugfs.h                     |  30 +++++++
+ lib/kunit/kunit-test.c                  |  45 +++++++++-
+ lib/kunit/test.c                        | 147 +++++++++++++++++++++++++-------
+ 9 files changed, 421 insertions(+), 81 deletions(-)
+ create mode 100644 lib/kunit/debugfs.c
+ create mode 100644 lib/kunit/debugfs.h
+
 -- 
-2.20.1
+1.8.3.1
 
