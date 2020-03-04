@@ -2,180 +2,273 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 861CF178CDC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 09:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0964178E1F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 11:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387754AbgCDIwZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Mar 2020 03:52:25 -0500
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:1230 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728744AbgCDIwY (ORCPT
+        id S2387857AbgCDKNz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Mar 2020 05:13:55 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:40008 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387872AbgCDKNz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Mar 2020 03:52:24 -0500
+        Wed, 4 Mar 2020 05:13:55 -0500
+Received: by mail-lj1-f195.google.com with SMTP id 143so1338026ljj.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2020 02:13:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1583311944; x=1614847944;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=Kll+TJ1Wu1IFm6GdiF7Rbn4hXVv0O3AYnXmSMG+t02Y=;
-  b=kIMHmdvCB9WIIIHxRYEMK8WKywJYrL4AvRCyYiMngHNrkWrZXP/FTWwU
-   Wicp+3637wS9Mu9ElPoX7qp5D4heyxpv07q/RLJ8HpeqQ6QDxv/U9A+qZ
-   Np8TsML/M/JQUz+oI4OLXFKFqQxBv4wOyHKXaVGF/f8NKDD5zszEv3D3T
-   4=;
-IronPort-SDR: 3e1IRx9eTxYaWHYGZpiT53D4MTPmQC94rn9jHUI1GaCBFKZ1Aej3w1aS97hu7kHuqqKAftgd63
- 5JOv33fR919Q==
-X-IronPort-AV: E=Sophos;i="5.70,513,1574121600"; 
-   d="scan'208";a="20732236"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 04 Mar 2020 08:52:23 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com (Postfix) with ESMTPS id 1A26EA1E2E;
-        Wed,  4 Mar 2020 08:52:19 +0000 (UTC)
-Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 4 Mar 2020 08:52:19 +0000
-Received: from 38f9d3582de7.ant.amazon.com.com (10.43.162.171) by
- EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 4 Mar 2020 08:52:10 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-To:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        <osa-contribution-log@amazon.com>
-Subject: [PATCH] selftests: Add support for argc and argv.
-Date:   Wed, 4 Mar 2020 17:52:04 +0900
-Message-ID: <20200304085204.48118-1-kuniyu@amazon.co.jp>
-X-Mailer: git-send-email 2.17.2 (Apple Git-113)
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qgZ3nu/Bbfdwe+GDZ451yJiCX8ETGH9pPjG5oF9BPog=;
+        b=ySCW+/494DSUY4cH8Co3m45bz7DMpeO9CAnj98zfqwTTzI6K8q1UlVQRUkLGDlt/d7
+         RNSQjkbvG60q9UO7X/8/o4gI+fdQ6QOcPERwiIryv5cZqD696LhWx8/37cYgqtAoTO90
+         OemD9o6+jsOY/Gnl3e3M3hgT0Tq4823cj9Q2Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qgZ3nu/Bbfdwe+GDZ451yJiCX8ETGH9pPjG5oF9BPog=;
+        b=f7bbwrGZkFk61SkV7VVI1kitFK3nkfymYMQEmVtGWlczI29llN+6B4AJOA9Zm4713q
+         xoFnEqlj+264c5uWJgK/0aj3f4CxGCWcaAembsRI+UbOl2xcPAkKQnhZjleBQWJfzF79
+         9POCoJ8tpyDOxg/58sY4ohhugbudaBKeuI5F8PVEgZu6Vs63C23bU7lCyGO9+VaFA8kg
+         4rXF69dgbWyX9QFtx/5ujzvZn9PJ4MrnPEFla04fcy6f5pnVNJPZwxDu1FECwuBnxg4w
+         m7KLlvhI39ZFKAy6hGtcrIi1bXAajPuds7sF0mg2zhWEUdN47lw9G6h3nWogCigKRiSG
+         HoEw==
+X-Gm-Message-State: ANhLgQ3xvEhQMr8/09dyRqBe1q1cI0B9WRPUPtPF90knmYNS5rctPZBv
+        uBFiF0MZn34DBZINvVRrd07Z3A==
+X-Google-Smtp-Source: ADFU+vsHkXTuwBCutx37rT+SHK3e40nGnHVZjL5Auj0/0SfQrk66wtGroFLclar6ISuTu7pr9C04Og==
+X-Received: by 2002:a2e:9094:: with SMTP id l20mr1423596ljg.131.1583316831827;
+        Wed, 04 Mar 2020 02:13:51 -0800 (PST)
+Received: from localhost.localdomain ([176.221.114.230])
+        by smtp.gmail.com with ESMTPSA id l7sm341777lfk.65.2020.03.04.02.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 02:13:51 -0800 (PST)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     john.fastabend@gmail.com, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 09/12] selftests: bpf: don't listen() on UDP sockets
+Date:   Wed,  4 Mar 2020 11:13:14 +0100
+Message-Id: <20200304101318.5225-10-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200304101318.5225-1-lmb@cloudflare.com>
+References: <20200304101318.5225-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.171]
-X-ClientProxiedBy: EX13D04UWB003.ant.amazon.com (10.43.161.231) To
- EX13D04ANC001.ant.amazon.com (10.43.157.89)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently tests are often written in C and shell script. In many cases, the
-script passes some arguments to the C program. However, the helper
-functions do not support arguments, so many tests are written without
-helper functions.
+Most tests for TCP sockmap can be adapted to UDP sockmap if the
+listen call is skipped. Rename listen_loopback, etc. to socket_loopback
+and skip listen() for SOCK_DGRAM.
 
-This patch allows us to handle argc and argv in each tests and makes it
-easier to write tests flexibly with helper functions.
-
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- tools/testing/selftests/kselftest_harness.h | 30 ++++++++++++---------
- 1 file changed, 18 insertions(+), 12 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 47 ++++++++++---------
+ 1 file changed, 25 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 5336b26506ab..75bee67b87fa 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -167,7 +167,8 @@
- #define TEST_SIGNAL(test_name, signal) __TEST_IMPL(test_name, signal)
- 
- #define __TEST_IMPL(test_name, _signal) \
--	static void test_name(struct __test_metadata *_metadata); \
-+	static void test_name(struct __test_metadata *_metadata, \
-+		int argc, char **argv); \
- 	static struct __test_metadata _##test_name##_object = \
- 		{ .name = "global." #test_name, \
- 		  .fn = &test_name, .termsig = _signal, \
-@@ -177,7 +178,9 @@
- 		__register_test(&_##test_name##_object); \
- 	} \
- 	static void test_name( \
--		struct __test_metadata __attribute__((unused)) *_metadata)
-+		struct __test_metadata __attribute__((unused)) *_metadata, \
-+		int __attribute__((unused)) argc, \
-+		char __attribute__((unused)) **argv)
- 
- /**
-  * FIXTURE_DATA(datatype_name) - Wraps the struct name so we have one less
-@@ -293,9 +296,11 @@
- #define __TEST_F_IMPL(fixture_name, test_name, signal, tmout) \
- 	static void fixture_name##_##test_name( \
- 		struct __test_metadata *_metadata, \
--		FIXTURE_DATA(fixture_name) *self); \
-+		FIXTURE_DATA(fixture_name) *self, \
-+		int argc, char **argv); \
- 	static inline void wrapper_##fixture_name##_##test_name( \
--		struct __test_metadata *_metadata) \
-+		struct __test_metadata *_metadata, \
-+		int argc, char **argv) \
- 	{ \
- 		/* fixture data is alloced, setup, and torn down per call. */ \
- 		FIXTURE_DATA(fixture_name) self; \
-@@ -304,7 +309,7 @@
- 		/* Let setup failure terminate early. */ \
- 		if (!_metadata->passed) \
- 			return; \
--		fixture_name##_##test_name(_metadata, &self); \
-+		fixture_name##_##test_name(_metadata, &self, argc, argv); \
- 		fixture_name##_teardown(_metadata, &self); \
- 	} \
- 	static struct __test_metadata \
-@@ -321,7 +326,9 @@
- 	} \
- 	static void fixture_name##_##test_name( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
--		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
-+		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
-+		int __attribute__ ((unused)) argc, \
-+		char __attribute__ ((unused)) **argv)
- 
- /**
-  * TEST_HARNESS_MAIN - Simple wrapper to run the test harness
-@@ -634,7 +641,7 @@
- /* Contains all the information for test execution and status checking. */
- struct __test_metadata {
- 	const char *name;
--	void (*fn)(struct __test_metadata *);
-+	void (*fn)(struct __test_metadata *, int, char **);
- 	int termsig;
- 	int passed;
- 	int trigger; /* extra handler after the evaluation */
-@@ -695,7 +702,7 @@ static inline int __bail(int for_realz, bool no_print, __u8 step)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index b1b2acea0638..4ba41dd26d6b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -230,7 +230,7 @@ static int enable_reuseport(int s, int progfd)
  	return 0;
  }
  
--void __run_test(struct __test_metadata *t)
-+void __run_test(struct __test_metadata *t, int argc, char **argv)
+-static int listen_loopback_reuseport(int family, int sotype, int progfd)
++static int socket_loopback_reuseport(int family, int sotype, int progfd)
  {
- 	pid_t child_pid;
- 	int status;
-@@ -709,7 +716,7 @@ void __run_test(struct __test_metadata *t)
- 		printf("ERROR SPAWNING TEST CHILD\n");
- 		t->passed = 0;
- 	} else if (child_pid == 0) {
--		t->fn(t);
-+		t->fn(t, argc, argv);
- 		/* return the step that failed or 0 */
- 		_exit(t->passed ? 0 : t->step);
- 	} else {
-@@ -755,8 +762,7 @@ void __run_test(struct __test_metadata *t)
- 	alarm(0);
+ 	struct sockaddr_storage addr;
+ 	socklen_t len;
+@@ -249,6 +249,9 @@ static int listen_loopback_reuseport(int family, int sotype, int progfd)
+ 	if (err)
+ 		goto close;
+ 
++	if (sotype == SOCK_DGRAM)
++		return s;
++
+ 	err = xlisten(s, SOMAXCONN);
+ 	if (err)
+ 		goto close;
+@@ -259,9 +262,9 @@ static int listen_loopback_reuseport(int family, int sotype, int progfd)
+ 	return -1;
  }
  
--static int test_harness_run(int __attribute__((unused)) argc,
--			    char __attribute__((unused)) **argv)
-+static int test_harness_run(int argc, char **argv)
+-static int listen_loopback(int family, int sotype)
++static int socket_loopback(int family, int sotype)
  {
- 	struct __test_metadata *t;
- 	int ret = 0;
-@@ -768,7 +774,7 @@ static int test_harness_run(int __attribute__((unused)) argc,
- 	       __test_count, __fixture_count + 1);
- 	for (t = __test_list; t; t = t->next) {
- 		count++;
--		__run_test(t);
-+		__run_test(t, argc, argv);
- 		if (t->passed)
- 			pass_count++;
- 		else
+-	return listen_loopback_reuseport(family, sotype, -1);
++	return socket_loopback_reuseport(family, sotype, -1);
+ }
+ 
+ static void test_insert_invalid(int family, int sotype, int mapfd)
+@@ -333,7 +336,7 @@ static void test_insert_listening(int family, int sotype, int mapfd)
+ 	u32 key;
+ 	int s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -349,7 +352,7 @@ static void test_delete_after_insert(int family, int sotype, int mapfd)
+ 	u32 key;
+ 	int s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -366,7 +369,7 @@ static void test_delete_after_close(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -390,7 +393,7 @@ static void test_lookup_after_insert(int family, int sotype, int mapfd)
+ 	u32 key;
+ 	int s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -417,7 +420,7 @@ static void test_lookup_after_delete(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -439,7 +442,7 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+ 	u32 key, value32;
+ 	int err, s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -470,11 +473,11 @@ static void test_update_listening(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s1 = listen_loopback(family, sotype);
++	s1 = socket_loopback(family, sotype);
+ 	if (s1 < 0)
+ 		return;
+ 
+-	s2 = listen_loopback(family, sotype);
++	s2 = socket_loopback(family, sotype);
+ 	if (s2 < 0)
+ 		goto close_s1;
+ 
+@@ -500,7 +503,7 @@ static void test_destroy_orphan_child(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -534,7 +537,7 @@ static void test_clone_after_delete(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -570,7 +573,7 @@ static void test_accept_after_delete(int family, int sotype, int mapfd)
+ 	socklen_t len;
+ 	u64 value;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s == -1)
+ 		return;
+ 
+@@ -624,7 +627,7 @@ static void test_accept_before_delete(int family, int sotype, int mapfd)
+ 	socklen_t len;
+ 	u64 value;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s == -1)
+ 		return;
+ 
+@@ -735,7 +738,7 @@ static void test_syn_recv_insert_delete(int family, int sotype, int mapfd)
+ 	int err, s;
+ 	u64 value;
+ 
+-	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
++	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -877,7 +880,7 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
+ 
+ 	zero_verdict_count(verd_mapfd);
+ 
+-	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
++	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1009,7 +1012,7 @@ static void redir_to_listening(int family, int sotype, int sock_mapfd,
+ 
+ 	zero_verdict_count(verd_mapfd);
+ 
+-	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
++	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1120,7 +1123,7 @@ static void test_reuseport_select_listening(int family, int sotype,
+ 
+ 	zero_verdict_count(verd_map);
+ 
+-	s = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1174,7 +1177,7 @@ static void test_reuseport_select_connected(int family, int sotype,
+ 
+ 	zero_verdict_count(verd_map);
+ 
+-	s = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1249,11 +1252,11 @@ static void test_reuseport_mixed_groups(int family, int sotype, int sock_map,
+ 	zero_verdict_count(verd_map);
+ 
+ 	/* Create two listeners, each in its own reuseport group */
+-	s1 = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s1 = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s1 < 0)
+ 		return;
+ 
+-	s2 = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s2 = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s2 < 0)
+ 		goto close_srv1;
+ 
 -- 
-2.17.2 (Apple Git-113)
+2.20.1
 
