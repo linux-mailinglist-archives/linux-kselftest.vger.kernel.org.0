@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A461179902
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 20:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EADE617992C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 20:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729302AbgCDT2U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Mar 2020 14:28:20 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:56918 "EHLO
+        id S2387469AbgCDTpM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Mar 2020 14:45:12 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:28420 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728665AbgCDT2R (ORCPT
+        by vger.kernel.org with ESMTP id S1728482AbgCDTpM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Mar 2020 14:28:17 -0500
+        Wed, 4 Mar 2020 14:45:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1583350094;
+        s=mimecast20190719; t=1583351109;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ddCmJnchG7ddEu+kg1f4rZXhrNk22lXtAjVoUaUZxJM=;
-        b=Wo5SLwzUYM/FEr3a5sz1aWDDvmP07/M0j+SjG0aWa7VRQSg70TN5BcsyNONUtiRSCt34aW
-        y5HJQRI0ukLjVywcKOkTkvkFl/5UCFJwIp0CrNTqla+Opz71ta0WKhLJMwQXNv+Udx3Btp
-        8E8aU/WwSqLjOQQJLSoPnFlh2VvocPU=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-235-a0clmLlYMY6oxypEWRyjIw-1; Wed, 04 Mar 2020 14:28:11 -0500
-X-MC-Unique: a0clmLlYMY6oxypEWRyjIw-1
-Received: by mail-io1-f70.google.com with SMTP id m24so2235344iol.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2020 11:28:11 -0800 (PST)
+        bh=MYTlvE225yjHAB1eytiGhLDE5hwDW0XaKRabhRc08M0=;
+        b=ctuYI8KqVnnFNM8Y7t3czTKQ+zMcRzWJBnuhfKNHicQsef/sn4C5qmRgch0snJR71Lfjj+
+        7Yo6MY84J3hL39DLDYK1KriBIko4IUNaZAIltLUt2uBbVoEBeVuu6kwBn5Wwbg+B0L0EHJ
+        3uYAFwv4XHrTH1BgmJlaAzd4ysosWwM=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-354-AN36f1VZP7Wh5jysmm_cPA-1; Wed, 04 Mar 2020 14:45:07 -0500
+X-MC-Unique: AN36f1VZP7Wh5jysmm_cPA-1
+Received: by mail-io1-f69.google.com with SMTP id q13so2255993iob.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2020 11:45:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ddCmJnchG7ddEu+kg1f4rZXhrNk22lXtAjVoUaUZxJM=;
-        b=Azw3E2XnJyT8CUolrlKF6e8/H0fv3PnOXBPgsxOa9n5yBcSOfLmTdYfFv3ptInIvuU
-         Ggm3nIM4XAFf2x90aly4bcSaX8U/cXdEIBpdmbLt7aPp2ri/uTJ6kJVLyNdhDCYXWIp8
-         y4tgHpj2KZYCVQRcWTYpf0KEXq5VV1cic7QT0DR27YP7eT/hocWld3eKNWSAuJt15cl6
-         k3tFxovfLah86L8pnGsAmFZ30GzvzbVOZn84b5v8k/mxPu6Ztl+2FsIMuF/vDbW8jHFU
-         KsyaMINvUL2SFWl97Sn8OZDj+YEBBqi/RmRK8eroOqehESxqwPFBWdDxhbmNMvk6JPxC
-         CQyA==
-X-Gm-Message-State: ANhLgQ2ZbpLPTeWaZJKgDbllFIAhbDmgk3eQAnzOBfNIqUFCJF4pvQIR
-        Nm3kGfrNAQTo7Z+vfIkuRY/krxAZnTryQ6TigfeY9NKxlhHggG91xvEmUJ2nSUXRdkFJSWDn9+e
-        z4cMhq9kKRWyDtVFPmupOG/ZHTGvYZInvjQyh44jdEWaw
-X-Received: by 2002:a92:9a02:: with SMTP id t2mr4062370ili.11.1583350088788;
-        Wed, 04 Mar 2020 11:28:08 -0800 (PST)
-X-Google-Smtp-Source: ADFU+vvkBd2AQEGLOta97fREI3HNu/Ot1f5Mj5+fXn+LAYpK+QRvnex7gK0Udv1sgqXz7eadDuG8IsnOnfpmiQvTX+M=
-X-Received: by 2002:a92:9a02:: with SMTP id t2mr4062321ili.11.1583350088213;
- Wed, 04 Mar 2020 11:28:08 -0800 (PST)
+        bh=MYTlvE225yjHAB1eytiGhLDE5hwDW0XaKRabhRc08M0=;
+        b=WcUTrFa0H6oEYhe1+9e8p91VFfLj8fSF8rv+zdzrfq8j5CCW5NVMeQ6Oh4e6Pt9xYS
+         8h7c5j0ZABbRZQSxAHAyapBV74SAwJvQ6xs/oxDLdgIHl9+xCI6PBcotwejv25N7aBBc
+         zxUrWLAK4VOklREYQ36DOHJWEMiqHovhkEXW61e5BJPSlO5ZIVhUDVm30HiK/AdcFMbK
+         rwf5mxJWOeXTqnc4YeK/JUPJdQvF3M0vC0ZLGLiiZNXi4y6yF8IQrGG1bii51dT+8Rc9
+         j3Z0eVa2yrzqmwQFvL0qFddN93azqpWWsVU6DhvDA1HfowYvDyi5cTDnm2hJ358QWY0L
+         S7DQ==
+X-Gm-Message-State: ANhLgQ1VtZgg5d6+vUiLV75SVGaNtI3JDq6lCt+alwv6MgOtZd1evVIG
+        vo+hHmfsaA58wNv46QY+UVBP1v22r0aQfF23O+qdlYEzQpfuCGC2/38hDQcyXG+x+3B+371zRXt
+        IaN2obw1iwBNfKv4bqUkGg/R4ZlTM8I5IVO0plsttrJET
+X-Received: by 2002:a92:9f4e:: with SMTP id u75mr4211902ili.116.1583351105290;
+        Wed, 04 Mar 2020 11:45:05 -0800 (PST)
+X-Google-Smtp-Source: ADFU+vtrzju66vDtf65j4nIv6rLKTi7YZzB5Dr9+W9RUpGDLtMsvp3V3AIXbOj0UV70NyRS/hFxmZwoXLKT4Qg3XkBU=
+X-Received: by 2002:a92:9f4e:: with SMTP id u75mr4211851ili.116.1583351104713;
+ Wed, 04 Mar 2020 11:45:04 -0800 (PST)
 MIME-Version: 1.0
 References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com> <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
 In-Reply-To: <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
 From:   Nathaniel McCallum <npmccallum@redhat.com>
-Date:   Wed, 4 Mar 2020 14:27:57 -0500
-Message-ID: <CAOASepN1JrD6OEzZycbqOr6_ZVACK=EctEOoQ8oSAEeigMr1Eg@mail.gmail.com>
+Date:   Wed, 4 Mar 2020 14:44:53 -0500
+Message-ID: <CAOASepPRvPL6yggWDa=Cair4yOijsUdYviHk99NaP4gZJRoK3A@mail.gmail.com>
 Subject: Re: [PATCH v28 14/22] selftests/x86: Add a selftest for SGX
 To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -329,7 +329,21 @@ On Tue, Mar 3, 2020 at 6:39 PM Jarkko Sakkinen
 > +
 > +       # Reset status flags.
 > +       add     %rdx, %rdx # OF = SF = AF = CF = 0; ZF = PF = 1
-> +
+
+# Reset status flags.
+add     %rdx, %rdx # OF = SF = AF = CF = 0; ZF = PF = 1
+cld # DF = 0
+
+This was a recent CVE on the SDK. We don't need more people copying
+vulnerable code into their own projects.
+
+Likewise, you should also clear GPRs, reset extended GPU state and
+reset flags before calling encl_body().
+
+Alternatively, drop all the state clearing and simply put a comment in
+for people to do that. My general rule here is to either not provide
+an example at all or provide a secure example that people can copy.
+
 > +       # Prepare EEXIT target by popping the address of the instruction after
 > +       # EENTER to RBX.
 > +       pop     %rbx
@@ -355,26 +369,6 @@ On Tue, Mar 3, 2020 at 6:39 PM Jarkko Sakkinen
 > +       .fill   123, 4, 0
 > +       .fill   1, 4, 0x80000000        # XCOMP_BV[63] = 1, compaction mode
 > +       .fill   12, 4, 0
-
-I find this much more readable:
-
-xsave_area:
-        # Legacy
-        .fill   1, 4, 0x037F            # FCW
-        .fill   5, 4, 0
-        .fill   1, 4, 0x1F80            # MXCSR
-        .fill   1, 4, 0xFFFF            # MXCSR_MASK
-        .fill   60, 8, 0
-
-        # Header
-        .fill   1, 8, 0                 # XSTATE_BV
-        .fill   1, 8, 1 << 63           # XCOMP_BV (compaction mode)
-        .fill   6, 8, 0
-
-Also, since people are likely to copy this code for their own
-enclaves, it would be helpful to document which flags are set in FCW
-and MXCSR.
-
 > +
 > +       .balign 4096
 > +       .space 8192
