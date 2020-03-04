@@ -2,283 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C9C17868B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 00:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE194178795
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Mar 2020 02:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbgCCXkY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Mar 2020 18:40:24 -0500
-Received: from mga11.intel.com ([192.55.52.93]:38119 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728382AbgCCXkY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Mar 2020 18:40:24 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Mar 2020 15:40:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,511,1574150400"; 
-   d="scan'208";a="440790517"
-Received: from kwasilew-mobl.ger.corp.intel.com (HELO localhost) ([10.251.88.57])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Mar 2020 15:40:15 -0800
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-sgx@vger.kernel.org
-Cc:     akpm@linux-foundation.org, dave.hansen@intel.com,
-        sean.j.christopherson@intel.com, nhorman@redhat.com,
-        npmccallum@redhat.com, haitao.huang@intel.com,
-        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
-        kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
-        luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
-        cedric.xing@intel.com, puiterwijk@redhat.com,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v28 22/22] selftests/x86: Add vDSO selftest for SGX
-Date:   Wed,  4 Mar 2020 01:36:09 +0200
-Message-Id: <20200303233609.713348-23-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com>
-References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com>
+        id S2387488AbgCDB0w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Mar 2020 20:26:52 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:50204 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728079AbgCDB0v (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Mar 2020 20:26:51 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a5so117115wmb.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Mar 2020 17:26:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PQY8RMiDBALTBZD5pO37W3Q+lyu+FQ6v+Yh5nlQGZ5o=;
+        b=LVALL7WayJJj9fVXFeWZhiLO1k562kNn8PPwUQ62FCeQ/h660Mp5uxJYRWP5Yp5jGN
+         bH6s3ps5s/3l+hYqMteRYL5QBUDc4se6YnM4kvGAJwCp8ua3Bm9X1F8vEElfpf/SSlf+
+         tdXuDuuPbOkLQxHSMalWwKm1TlapPsLupawQxdH0WZdiGv8kqmic+eVe6J5za/09pIg+
+         4Kq8YWcrOFUguGtsD4Pn5XobpUsB72g60Nvz5gMUYShixkCfRDpZHZ1NGt3Tt8wRMmEZ
+         Ts/bHKl6PD17qhyK/S6VwNfHPrnxGJeWNkHbX1tnzNMiBUPSw3fZE9ovauApTrfiq0s+
+         Uxlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PQY8RMiDBALTBZD5pO37W3Q+lyu+FQ6v+Yh5nlQGZ5o=;
+        b=VEJcKCo4KUUH6PMgcaK8k71IBB//4skc8RTCugdpwfCp5FvdCFyplZ4d5WLUl8ad5b
+         s4mCTjAQyOFn06J9SPqd3dYJ3FtPyIVORoNkM0EGzMhTeBwBeRdwCVqPPJ40N5wpuv/S
+         MGttkJIqLrTRVUv21UNYRtT3ut+wcERSAMEja76ESID2nWM9qVl1RU/d6uRkKKOC3tLv
+         gJXF3SObXl7+vxKp4D7gxvydTVKJp7kMHPdWgb7KoV8YVJRfTE1mCzS91Y5HJYOFG7zb
+         m2o+S2IjdvYEN87btjpZjIZSrJVbnmOlsGdr1JFGsBtmv4ADzA3CXhI4t83xhvMe6Gvg
+         DXcA==
+X-Gm-Message-State: ANhLgQ3txs5QBMxwL2uiDBtf1BiOSPhOO3OPQy5Q4DsIN2AFmst8sTYW
+        mMr6vXA91n8NSLRulH27utSKLh6/dqILbl43MHYbxg==
+X-Google-Smtp-Source: ADFU+vvnH+1bL4NV0ljd5KhdHNpkJzxZzpxkaLTusd/ifrF4jImBz8rBRub4jyXjhEu8R/LjgjUvJAP5IIf8IZ5vPOs=
+X-Received: by 2002:a1c:1d8d:: with SMTP id d135mr445823wmd.107.1583285208997;
+ Tue, 03 Mar 2020 17:26:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200227024301.217042-1-trishalfonso@google.com>
+ <20200227024301.217042-2-trishalfonso@google.com> <CACT4Y+YFewcbRnY62wLHueVNwyXCSZwO8K7SUR2cg=pxZv8uZA@mail.gmail.com>
+ <CAKFsvUJFovti=enpOefqMbtQpeorihQhugH3-1nv0BBwevCwQg@mail.gmail.com> <CACT4Y+Y-zoiRfDWw6KJr1BJO_=yTpFsVaHMng5iaRn9HeJMNaw@mail.gmail.com>
+In-Reply-To: <CACT4Y+Y-zoiRfDWw6KJr1BJO_=yTpFsVaHMng5iaRn9HeJMNaw@mail.gmail.com>
+From:   Patricia Alfonso <trishalfonso@google.com>
+Date:   Tue, 3 Mar 2020 17:26:37 -0800
+Message-ID: <CAKFsvU+ruKWt-BdVz+OX-T9wNEBetqVFACsG1B9ucMS4zHrMBQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] KUnit: KASAN Integration
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Expand the selftest by invoking the enclave by using
-__vdso_sgx_enter_enclave() in addition to direct ENCLS[EENTER].
+On Sat, Feb 29, 2020 at 10:29 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Sat, Feb 29, 2020 at 2:23 AM Patricia Alfonso
+> <trishalfonso@google.com> wrote:
+> > >
+> > > On Thu, Feb 27, 2020 at 3:44 AM 'Patricia Alfonso' via kasan-dev
+> > > <kasan-dev@googlegroups.com> wrote:
+> > > >
+> > > > --- a/tools/testing/kunit/kunit_kernel.py
+> > > > +++ b/tools/testing/kunit/kunit_kernel.py
+> > > > @@ -141,7 +141,7 @@ class LinuxSourceTree(object):
+> > > >                 return True
+> > > >
+> > > >         def run_kernel(self, args=[], timeout=None, build_dir=''):
+> > > > -               args.extend(['mem=256M'])
+> > > > +               args.extend(['mem=256M', 'kasan_multi_shot'])
+> > >
+> > > This is better done somewhere else (different default value if
+> > > KASAN_TEST is enabled or something). Or overridden in the KASAN tests.
+> > > Not everybody uses tools/testing/kunit/kunit_kernel.py and this seems
+> > > to be a mandatory part now. This means people will always hit this, be
+> > > confused, figure out they need to flip the value, and only then be
+> > > able to run kunit+kasan.
+> > >
+> > I agree. Is the best way to do this with "bool multishot =
+> > kasan_save_enable_multi_shot();"  and
+> > "kasan_restore_multi_shot(multishot);" inside test_kasan.c like what
+> > was done in the tests before?
+>
+> This will fix KASAN tests, but not non-KASAN tests running under KUNIT
+> and triggering KASAN reports.
+> You set kasan_multi_shot for all KUNIT tests. I am reading this as
+> that we don't want to abort on the first test that triggered a KASAN
+> report. Or not?
 
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- tools/testing/selftests/x86/sgx/main.c     | 132 +++++++++++++++++++++
- tools/testing/selftests/x86/sgx/sgx_call.S |  43 +++++++
- tools/testing/selftests/x86/sgx/sgx_call.h |   3 +
- 3 files changed, 178 insertions(+)
+I don't think I understand the question, but let me try to explain my
+thinking and see if that resonates with you. We know that the KASAN
+tests will require more than one report, and we want that. For most
+users, since a KASAN error can cause unexpected kernel behavior for
+anything after a KASAN error, it is best for just one unexpected KASAN
+error to be the only error printed to the user, unless they specify
+kasan-multi-shot. The way I understand it, the way to implement this
+is to use  "bool multishot = kasan_save_enable_multi_shot();"  and
+"kasan_restore_multi_shot(multishot);" around the KASAN tests so that
+kasan-multi-shot is temporarily enabled for the tests we expect
+multiple reports. I assume "kasan_restore_multi_shot(multishot);"
+restores the value to what the user input was so after the KASAN tests
+are finished, if the user did not specify kasan-multi-shot and an
+unexpected kasan error is reported, it will print the full report and
+only that first one. Is this understanding correct? If you have a
+better way of implementing this or a better expected behavior, I
+appreciate your thoughts.
 
-diff --git a/tools/testing/selftests/x86/sgx/main.c b/tools/testing/selftests/x86/sgx/main.c
-index 48ed5fdfb3cb..d97cc3cf0093 100644
---- a/tools/testing/selftests/x86/sgx/main.c
-+++ b/tools/testing/selftests/x86/sgx/main.c
-@@ -21,6 +21,109 @@
- #define PAGE_SIZE  4096
- 
- static const uint64_t MAGIC = 0x1122334455667788ULL;
-+void *eenter;
-+
-+struct vdso_symtab {
-+	Elf64_Sym *elf_symtab;
-+	const char *elf_symstrtab;
-+	Elf64_Word *elf_hashtab;
-+};
-+
-+static void *vdso_get_base_addr(char *envp[])
-+{
-+	Elf64_auxv_t *auxv;
-+	int i;
-+
-+	for (i = 0; envp[i]; i++)
-+		;
-+
-+	auxv = (Elf64_auxv_t *)&envp[i + 1];
-+
-+	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
-+		if (auxv[i].a_type == AT_SYSINFO_EHDR)
-+			return (void *)auxv[i].a_un.a_val;
-+	}
-+
-+	return NULL;
-+}
-+
-+static Elf64_Dyn *vdso_get_dyntab(void *addr)
-+{
-+	Elf64_Ehdr *ehdr = addr;
-+	Elf64_Phdr *phdrtab = addr + ehdr->e_phoff;
-+	int i;
-+
-+	for (i = 0; i < ehdr->e_phnum; i++)
-+		if (phdrtab[i].p_type == PT_DYNAMIC)
-+			return addr + phdrtab[i].p_offset;
-+
-+	return NULL;
-+}
-+
-+static void *vdso_get_dyn(void *addr, Elf64_Dyn *dyntab, Elf64_Sxword tag)
-+{
-+	int i;
-+
-+	for (i = 0; dyntab[i].d_tag != DT_NULL; i++)
-+		if (dyntab[i].d_tag == tag)
-+			return addr + dyntab[i].d_un.d_ptr;
-+
-+	return NULL;
-+}
-+
-+static bool vdso_get_symtab(void *addr, struct vdso_symtab *symtab)
-+{
-+	Elf64_Dyn *dyntab = vdso_get_dyntab(addr);
-+
-+	symtab->elf_symtab = vdso_get_dyn(addr, dyntab, DT_SYMTAB);
-+	if (!symtab->elf_symtab)
-+		return false;
-+
-+	symtab->elf_symstrtab = vdso_get_dyn(addr, dyntab, DT_STRTAB);
-+	if (!symtab->elf_symstrtab)
-+		return false;
-+
-+	symtab->elf_hashtab = vdso_get_dyn(addr, dyntab, DT_HASH);
-+	if (!symtab->elf_hashtab)
-+		return false;
-+
-+	return true;
-+}
-+
-+static unsigned long elf_sym_hash(const char *name)
-+{
-+	unsigned long h = 0, high;
-+
-+	while (*name) {
-+		h = (h << 4) + *name++;
-+		high = h & 0xf0000000;
-+
-+		if (high)
-+			h ^= high >> 24;
-+
-+		h &= ~high;
-+	}
-+
-+	return h;
-+}
-+
-+static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
-+{
-+	Elf64_Word bucketnum = symtab->elf_hashtab[0];
-+	Elf64_Word *buckettab = &symtab->elf_hashtab[2];
-+	Elf64_Word *chaintab = &symtab->elf_hashtab[2 + bucketnum];
-+	Elf64_Sym *sym;
-+	Elf64_Word i;
-+
-+	for (i = buckettab[elf_sym_hash(name) % bucketnum]; i != STN_UNDEF;
-+	     i = chaintab[i]) {
-+		sym = &symtab->elf_symtab[i];
-+		if (!strcmp(name, &symtab->elf_symstrtab[sym->st_name]))
-+			return sym;
-+	}
-+
-+	return NULL;
-+}
- 
- static bool encl_create(int dev_fd, unsigned long bin_size,
- 			struct sgx_secs *secs)
-@@ -218,10 +321,14 @@ bool load_sigstruct(const char *path, void *sigstruct)
- 
- int main(int argc, char *argv[], char *envp[])
- {
-+	struct sgx_enclave_exception exception;
- 	struct sgx_sigstruct sigstruct;
-+	struct vdso_symtab symtab;
-+	Elf64_Sym *eenter_sym;
- 	struct sgx_secs secs;
- 	uint64_t result = 0;
- 	off_t bin_size;
-+	void *addr;
- 	void *bin;
- 
- 	if (!encl_data_map("encl.bin", &bin, &bin_size))
-@@ -243,5 +350,30 @@ int main(int argc, char *argv[], char *envp[])
- 
- 	printf("Output: 0x%lx\n", result);
- 
-+	memset(&exception, 0, sizeof(exception));
-+
-+	addr = vdso_get_base_addr(envp);
-+	if (!addr)
-+		exit(1);
-+
-+	if (!vdso_get_symtab(addr, &symtab))
-+		exit(1);
-+
-+	eenter_sym = vdso_symtab_get(&symtab, "__vdso_sgx_enter_enclave");
-+	if (!eenter_sym)
-+		exit(1);
-+	eenter = addr + eenter_sym->st_value;
-+
-+	printf("Input: 0x%lx\n", MAGIC);
-+
-+	sgx_call_vdso((void *)&MAGIC, &result, 0, NULL, NULL, NULL,
-+		      (void *)secs.base, &exception, NULL);
-+	if (result != MAGIC) {
-+		fprintf(stderr, "0x%lx != 0x%lx\n", result, MAGIC);
-+		exit(1);
-+	}
-+
-+	printf("Output: 0x%lx\n", result);
-+
- 	exit(0);
- }
-diff --git a/tools/testing/selftests/x86/sgx/sgx_call.S b/tools/testing/selftests/x86/sgx/sgx_call.S
-index ca4c7893f9d9..e71f44f7a995 100644
---- a/tools/testing/selftests/x86/sgx/sgx_call.S
-+++ b/tools/testing/selftests/x86/sgx/sgx_call.S
-@@ -21,3 +21,46 @@ sgx_async_exit:
- 	ENCLU
- 	pop	%rbx
- 	ret
-+
-+	.global sgx_call_vdso
-+sgx_call_vdso:
-+	.cfi_startproc
-+	push	%r15
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r15, 0
-+	push	%r14
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r14, 0
-+	push	%r13
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r13, 0
-+	push	%r12
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%r12, 0
-+	push	%rbx
-+	.cfi_adjust_cfa_offset	8
-+	.cfi_rel_offset		%rbx, 0
-+	push	$0
-+	.cfi_adjust_cfa_offset	8
-+	push	0x48(%rsp)
-+	.cfi_adjust_cfa_offset	8
-+	push	0x48(%rsp)
-+	.cfi_adjust_cfa_offset	8
-+	push	0x48(%rsp)
-+	.cfi_adjust_cfa_offset	8
-+	mov	$2, %eax
-+	call	*eenter(%rip)
-+	add	$0x20, %rsp
-+	.cfi_adjust_cfa_offset	-0x20
-+	pop	%rbx
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r12
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r13
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r14
-+	.cfi_adjust_cfa_offset	-8
-+	pop	%r15
-+	.cfi_adjust_cfa_offset	-8
-+	ret
-+	.cfi_endproc
-diff --git a/tools/testing/selftests/x86/sgx/sgx_call.h b/tools/testing/selftests/x86/sgx/sgx_call.h
-index bf72068ada23..a4072c5ecce7 100644
---- a/tools/testing/selftests/x86/sgx/sgx_call.h
-+++ b/tools/testing/selftests/x86/sgx/sgx_call.h
-@@ -8,4 +8,7 @@
- 
- void sgx_call_eenter(void *rdi, void *rsi, void *entry);
- 
-+int sgx_call_vdso(void *rdi, void *rsi, long rdx, void *rcx, void *r8, void *r9,
-+		  void *tcs, struct sgx_enclave_exception *ei, void *cb);
-+
- #endif /* SGX_CALL_H */
 -- 
-2.25.0
-
+Thanks,
+Patricia Alfonso
