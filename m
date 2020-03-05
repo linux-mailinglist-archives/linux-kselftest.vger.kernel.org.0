@@ -2,195 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F8117A1CF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 10:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2219F17A386
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 11:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725866AbgCEJDA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Mar 2020 04:03:00 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:34923 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgCEJDA (ORCPT
+        id S1727206AbgCEK6P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Mar 2020 05:58:15 -0500
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:46172 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726048AbgCEK6P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Mar 2020 04:03:00 -0500
-Received: from mail-lf1-f70.google.com ([209.85.167.70])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1j9mPB-0006db-TE
-        for linux-kselftest@vger.kernel.org; Thu, 05 Mar 2020 09:02:58 +0000
-Received: by mail-lf1-f70.google.com with SMTP id q2so1715609lfo.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2020 01:02:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zrSbYIRTjXPuBmdlG/mjTUYNkZeuzj3eG/1piLNpOjc=;
-        b=lsuFl6IP6VTOsXMw7eORJ+QZns1MTTsuYPSNdDQ+o6nquCiYKzY2pmM8MWJgZqldyI
-         Y2/p5RAxHIwcvxrLpmQkvQpwtMD3h6OY3Y+1dsCHvtc4M1zqLQvYMekoxzTvxAaTdyXf
-         X1ARPL4cSmity3F3DdzMpsZ5DSjDH5tryYhRuWyP9myKIGxwzHgTcoNF2o2sype1xicR
-         bwdNsRInjy8no+Sv1CJG2kLDi+9X149g0igMU8sI/+DhcbGBJ2LzR3mDuI0/g2zT9ggD
-         yspKZ9z2BQeET3HnGZy6FPKGvI8zz0WODZBvRKS3WU7CIncYZPqTg/1aa+u3Qco2hKrU
-         Jm+w==
-X-Gm-Message-State: ANhLgQ2+tJ+FOJrS6fAADgrMlu2Z05ZbLGToXh8jnX7+LKxQ22+H3D5R
-        HjWoNVVl1a2SeSoRQUwZzksIuys9yrFCGhdBbmloVQnpXuRNvHe7E8+l8wNWNnFoOIr50gtgAXv
-        yHyU0A/gqXpULe+NFOkj1hokEXtCO2KpT/GB4SlRmBdvO+kvf2w7hNZw4f1kF
-X-Received: by 2002:a2e:570f:: with SMTP id l15mr4709801ljb.236.1583398977218;
-        Thu, 05 Mar 2020 01:02:57 -0800 (PST)
-X-Google-Smtp-Source: ADFU+vt6qfV8GneO9Qxk/ML5cwfUpdwGUMAQ9cLA99DbdPFD0fdAYfOPF1pIXzb0KzrNtVpg5u6CW/KNa/X3H2JyZa4=
-X-Received: by 2002:a2e:570f:: with SMTP id l15mr4709770ljb.236.1583398976762;
- Thu, 05 Mar 2020 01:02:56 -0800 (PST)
+        Thu, 5 Mar 2020 05:58:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1583405894; x=1614941894;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=ojTAuSJDm69Io0P8U0Y2BJzm0Z0TFV7WQiEQVKAfL24=;
+  b=uh8VCLjqJFmwBXmm5Jy/GAxQ7ko1/AJe4Sg8n4GKJLqhW56AiUn2ftAd
+   Ae7SfozF74OSsOiiRrFWuaGKz+adN4OAyGdgSY8Y6Z+BeGkyF1qs6upgw
+   g4Aw0uO34LeBhI0lLO0+yZ9LInusaH2/PYH16SVymBpS9hTlFBkNLwcZe
+   Q=;
+IronPort-SDR: c0YteK+JK7Ka+pOzEod0lDxfv2rQLs+bdcrx8gatT7u4lL5WoPsGJUu1I1ceAdT1WyF4Gd8ZxV
+ /nOvyiCMOThA==
+X-IronPort-AV: E=Sophos;i="5.70,517,1574121600"; 
+   d="scan'208";a="29413309"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 05 Mar 2020 10:58:12 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com (Postfix) with ESMTPS id 05478A1907;
+        Thu,  5 Mar 2020 10:58:10 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 5 Mar 2020 10:58:08 +0000
+Received: from 38f9d3582de7.ant.amazon.com.com (10.43.162.115) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 5 Mar 2020 10:58:04 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     <keescook@chromium.org>
+CC:     <kuni1840@gmail.com>, <kuniyu@amazon.co.jp>,
+        <linux-kselftest@vger.kernel.org>, <luto@amacapital.net>,
+        <osa-contribution-log@amazon.com>, <shuah@kernel.org>,
+        <wad@chromium.org>
+Subject: Re: [PATCH] selftests: Add support for argc and argv.
+Date:   Thu, 5 Mar 2020 19:57:59 +0900
+Message-ID: <20200305105759.53508-1-kuniyu@amazon.co.jp>
+X-Mailer: git-send-email 2.17.2 (Apple Git-113)
+In-Reply-To: <202003041016.38A4956310@keescook>
+References: <202003041016.38A4956310@keescook>
 MIME-Version: 1.0
-References: <20200304131553.27582-1-po-hsu.lin@canonical.com> <87zhcvp89e.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87zhcvp89e.fsf@mpe.ellerman.id.au>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Thu, 5 Mar 2020 17:02:45 +0800
-Message-ID: <CAMy_GT9fr9cq3FrxUEjv+UhFuduqwPzBjeOL25Kp_EPAAmpU2g@mail.gmail.com>
-Subject: Re: [PATCH] selftests/powerpc: Turn off timeout setting for
- benchmarks, dscr, signal, tm
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, benh@kernel.crashing.org,
-        paulus@samba.org, shuah <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.115]
+X-ClientProxiedBy: EX13D04UWA002.ant.amazon.com (10.43.160.31) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 5, 2020 at 3:32 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Po-Hsu Lin <po-hsu.lin@canonical.com> writes:
-> > Some specific tests in powerpc can take longer than the default 45
-> > seconds that added in commit 852c8cbf (selftests/kselftest/runner.sh:
-> > Add 45 second timeout per test) to run, the following test result was
-> > collected across 2 Power8 nodes and 1 Power9 node in our pool:
-> >   powerpc/benchmarks/futex_bench - 52s
-> >   powerpc/dscr/dscr_sysfs_test - 116s
-> >   powerpc/signal/signal_fuzzer - 88s
-> >   powerpc/tm/tm_unavailable_test - 168s
-> >   powerpc/tm/tm-poison - 240s
-> >
-> > Thus they will fail with TIMEOUT error. Disable the timeout setting
-> > for these sub-tests to allow them finish properly.
->
-> I run the powerpc tests with run-parts, rather than the kselftest
-> script, we already have our own test runner with a 120s timeout.
->
-> I didn't think the kselftests runner actually worked with the powerpc
-> tests? Because we override RUN_TESTS.
->
-Hello Michael,
+From:   Kees Cook <keescook@chromium.org>
+Date:   Wed, 4 Mar 2020 10:17:41 -0800
+> On Wed, Mar 04, 2020 at 05:52:04PM +0900, Kuniyuki Iwashima wrote:
+> > Currently tests are often written in C and shell script. In many cases, the
+> > script passes some arguments to the C program. However, the helper
+> > functions do not support arguments, so many tests are written without
+> > helper functions.
+> > 
+> > This patch allows us to handle argc and argv in each tests and makes it
+> > easier to write tests flexibly with helper functions.
+> > 
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> 
+> Interesting! Do you have an example that uses this? I wonder if it might
+> make sense instead to allow extending the struct __test_metadata with
+> test-specific options so that individual tests don't have to re-parse
+> argv every time (the main test running could instead do it once and set
+> variables in struct __test_metadata (or somewhere else).
 
-I have done a small experiment with timeout=1 in settings and use
-run-parts to run the executables, it looks like this change won't
-affect run-parts.
+I added a sample test program at the end of this mail.
 
-Not quite sure about the RUN_TESTS you mentioned here, we're testing
-it with command like:
-sudo make -C linux/tools/testing/selftests TARGETS=powerpc run_tests
-And the timeout setting will take effect with this.
+There are some functions that are not TEST() but are passed __test_metadata to
+in order to use ASSERT_EQ in the function. I did not extend __test_metadata
+because I thought argc and argv would not be used in such functions.
 
-Thanks
+  e.g. kill_thread_or_group() in tools/testing/selftests/seccomp/seccomp_bpf.c
 
-> cheers
->
->
-> > https://bugs.launchpad.net/bugs/1864642
-> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> > ---
-> >  tools/testing/selftests/powerpc/benchmarks/Makefile | 2 ++
-> >  tools/testing/selftests/powerpc/benchmarks/settings | 1 +
-> >  tools/testing/selftests/powerpc/dscr/Makefile       | 2 ++
-> >  tools/testing/selftests/powerpc/dscr/settings       | 1 +
-> >  tools/testing/selftests/powerpc/signal/Makefile     | 2 ++
-> >  tools/testing/selftests/powerpc/signal/settings     | 1 +
-> >  tools/testing/selftests/powerpc/tm/Makefile         | 2 ++
-> >  tools/testing/selftests/powerpc/tm/settings         | 1 +
-> >  8 files changed, 12 insertions(+)
-> >  create mode 100644 tools/testing/selftests/powerpc/benchmarks/settings
-> >  create mode 100644 tools/testing/selftests/powerpc/dscr/settings
-> >  create mode 100644 tools/testing/selftests/powerpc/signal/settings
-> >  create mode 100644 tools/testing/selftests/powerpc/tm/settings
-> >
-> > diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
-> > index d40300a..a32a6ab 100644
-> > --- a/tools/testing/selftests/powerpc/benchmarks/Makefile
-> > +++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
-> > @@ -2,6 +2,8 @@
-> >  TEST_GEN_PROGS := gettimeofday context_switch fork mmap_bench futex_bench null_syscall
-> >  TEST_GEN_FILES := exec_target
-> >
-> > +TEST_FILES := settings
-> > +
-> >  CFLAGS += -O2
-> >
-> >  top_srcdir = ../../../../..
-> > diff --git a/tools/testing/selftests/powerpc/benchmarks/settings b/tools/testing/selftests/powerpc/benchmarks/settings
-> > new file mode 100644
-> > index 0000000..e7b9417
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/powerpc/benchmarks/settings
-> > @@ -0,0 +1 @@
-> > +timeout=0
-> > diff --git a/tools/testing/selftests/powerpc/dscr/Makefile b/tools/testing/selftests/powerpc/dscr/Makefile
-> > index 5df4763..cfa6eed 100644
-> > --- a/tools/testing/selftests/powerpc/dscr/Makefile
-> > +++ b/tools/testing/selftests/powerpc/dscr/Makefile
-> > @@ -3,6 +3,8 @@ TEST_GEN_PROGS := dscr_default_test dscr_explicit_test dscr_user_test \
-> >             dscr_inherit_test dscr_inherit_exec_test dscr_sysfs_test  \
-> >             dscr_sysfs_thread_test
-> >
-> > +TEST_FILES := settings
-> > +
-> >  top_srcdir = ../../../../..
-> >  include ../../lib.mk
-> >
-> > diff --git a/tools/testing/selftests/powerpc/dscr/settings b/tools/testing/selftests/powerpc/dscr/settings
-> > new file mode 100644
-> > index 0000000..e7b9417
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/powerpc/dscr/settings
-> > @@ -0,0 +1 @@
-> > +timeout=0
-> > diff --git a/tools/testing/selftests/powerpc/signal/Makefile b/tools/testing/selftests/powerpc/signal/Makefile
-> > index 113838f..153fafc 100644
-> > --- a/tools/testing/selftests/powerpc/signal/Makefile
-> > +++ b/tools/testing/selftests/powerpc/signal/Makefile
-> > @@ -5,6 +5,8 @@ CFLAGS += -maltivec
-> >  $(OUTPUT)/signal_tm: CFLAGS += -mhtm
-> >  $(OUTPUT)/sigfuz: CFLAGS += -pthread -m64
-> >
-> > +TEST_FILES := settings
-> > +
-> >  top_srcdir = ../../../../..
-> >  include ../../lib.mk
-> >
-> > diff --git a/tools/testing/selftests/powerpc/signal/settings b/tools/testing/selftests/powerpc/signal/settings
-> > new file mode 100644
-> > index 0000000..e7b9417
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/powerpc/signal/settings
-> > @@ -0,0 +1 @@
-> > +timeout=0
-> > diff --git a/tools/testing/selftests/powerpc/tm/Makefile b/tools/testing/selftests/powerpc/tm/Makefile
-> > index b15a1a3..7b99d09 100644
-> > --- a/tools/testing/selftests/powerpc/tm/Makefile
-> > +++ b/tools/testing/selftests/powerpc/tm/Makefile
-> > @@ -7,6 +7,8 @@ TEST_GEN_PROGS := tm-resched-dscr tm-syscall tm-signal-msr-resv tm-signal-stack
-> >       $(SIGNAL_CONTEXT_CHK_TESTS) tm-sigreturn tm-signal-sigreturn-nt \
-> >       tm-signal-context-force-tm tm-poison
-> >
-> > +TEST_FILES := settings
-> > +
-> >  top_srcdir = ../../../../..
-> >  include ../../lib.mk
-> >
-> > diff --git a/tools/testing/selftests/powerpc/tm/settings b/tools/testing/selftests/powerpc/tm/settings
-> > new file mode 100644
-> > index 0000000..e7b9417
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/powerpc/tm/settings
-> > @@ -0,0 +1 @@
-> > +timeout=0
-> > --
-> > 2.7.4
+But, I have not thought about re-parsing, thank you!
+Also I thought up that it is better to pass argc and argv to
+FIXTURE_SETUP/TEARDOWN.
+
+Now I have two idea.
+
+  1. pass argc and argv to FIXTURE_SETUP/TEARDOWN.
+  2. define COMMON_FIXTURE and COMMON_FIXTURE_SETUP/TEARDOWN,
+       and pass COMMON_FIXTURE to all tests.
+       (I think it is not good to extend __test_metadata because argc and
+        argv is not metadata, so it is good to setup another vars with args)
+
+I think each has pros and cons.
+
+1.
+Pros
+  - shell script only has to call a C program once with some arguments and
+      each FIXTURE_SETUP differs from one another
+  - shell script can call the same C program with different arguments and
+      each FIXTURE_SETUP differs from one another
+Cons:
+  - if TEST()s use the same FIXTURE, the same FIXTURE_SETUP is called in each TEST()s.
+
+2.
+Pros:
+  - we do not have to re-parse argc and argv in each TEST()s.
+Cons:
+  - 1. may give more flexibility than 2.
+
+Which would you think is better?
+I would be happy if you tell me another idea!
+
+Thanks.
+
+
+===sample===
+#include "./kselftest_harness.h"
+
+
+TEST(argc_test)
+{
+	int i;
+	for (i = 0; i < argc; i++)
+		TH_LOG("argv[%d]: %s", i, argv[i]);
+}
+
+FIXTURE(argc_f) {
+	int data;
+};
+
+FIXTURE_SETUP(argc_f) {
+	self->data = 92;
+	ASSERT_EQ(92, self->data);
+}
+
+FIXTURE_TEARDOWN(argc_f) {
+}
+
+TEST_F(argc_f, argc_test_f) {
+	int i;
+	for (i = 0; i < argc; i++)
+		TH_LOG("fixture: %d\targv[%d]: %s", self->data, i, argv[i]);
+}
+
+TEST_HARNESS_MAIN
+============
