@@ -2,94 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E0917AA79
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 17:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 727E317AAB5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 17:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbgCEQZm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Mar 2020 11:25:42 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:20717 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725963AbgCEQZm (ORCPT
+        id S1726111AbgCEQli (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Mar 2020 11:41:38 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42496 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbgCEQli (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Mar 2020 11:25:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1583425541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=upBJ1YaaDvvizCIJlD7zDa27JX49RWsGRLEsXBieMeU=;
-        b=ToEOOt4lwDiZOg+Ly3C+UgSxTXRxtg7t8MhwUgr/GTbwteEmaTBIqhA2TaHXlWcXXF+A5/
-        3YmBOJQzDytnYxjbJndBr1jc0yp9Ep7p7r5Mg90YP9y7SqQjdzQUtceQobpDgme62/C0Ad
-        2zJOPXwQkMHQ22Ph+j8hkJjTG4WuiTQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-274-5tI_py84MuaSwXH-EahB0Q-1; Thu, 05 Mar 2020 11:25:37 -0500
-X-MC-Unique: 5tI_py84MuaSwXH-EahB0Q-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EE5D6800D4E;
-        Thu,  5 Mar 2020 16:25:34 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-116-226.ams2.redhat.com [10.36.116.226])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2F7B73893;
-        Thu,  5 Mar 2020 16:25:25 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@collabora.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        krisman@collabora.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
-        ryao@gentoo.org, dvhart@infradead.org, mingo@redhat.com,
-        z.figura12@gmail.com, steven@valvesoftware.com,
-        steven@liquorix.net, malteskarupke@web.de, carlos@redhat.com,
-        adhemerval.zanella@linaro.org, libc-alpha@sourceware.org,
-        linux-api@vger.kernel.org
-Subject: Re: 'simple' futex interface [Was: [PATCH v3 1/4] futex: Implement mechanism to wait on any of several futexes]
-References: <20200228190717.GM18400@hirez.programming.kicks-ass.net>
-        <20200228194958.GO14946@hirez.programming.kicks-ass.net>
-        <87tv3aflqm.fsf@nanos.tec.linutronix.de>
-        <967d5047-2cb6-d6d8-6107-edb99a4c9696@valvesoftware.com>
-        <87o8thg031.fsf@nanos.tec.linutronix.de>
-        <beb82055-96fa-cb64-a06e-9d7a0946587b@valvesoftware.com>
-        <20200303120050.GC2596@hirez.programming.kicks-ass.net>
-        <87pndth9ur.fsf@oldenburg2.str.redhat.com>
-        <20200303132150.GD2596@hirez.programming.kicks-ass.net>
-        <878skhh7og.fsf@oldenburg2.str.redhat.com>
-        <20200303150104.GE2596@hirez.programming.kicks-ass.net>
-        <52406c54-60b3-dcfe-65d8-4c425459e37b@collabora.com>
-Date:   Thu, 05 Mar 2020 17:25:23 +0100
-In-Reply-To: <52406c54-60b3-dcfe-65d8-4c425459e37b@collabora.com>
- (=?utf-8?Q?=22Andr=C3=A9?=
-        Almeida"'s message of "Thu, 5 Mar 2020 13:14:17 -0300")
-Message-ID: <87imji7or0.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Thu, 5 Mar 2020 11:41:38 -0500
+Received: by mail-io1-f65.google.com with SMTP id q128so7166003iof.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2020 08:41:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xJ9IuCwpxwFw+yjT3QnESkIrBNpzfhchcrrtRf86kyQ=;
+        b=EuEZm5h4KIrb8zG2A2yc61eZabzsnffCxSDvlEazTx2aMc+0Te2fTsPoO8W/B6xDtF
+         ZddgiZi1/ibsj/fgNGEGFjcUe6A79b9s3eUyEbiozbEjv7/sPzA2A3EnwhVt44jPCSSn
+         TX4Hf+vFCbIv2cuvcwhbu8MSG2AsDwYuAVrF4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xJ9IuCwpxwFw+yjT3QnESkIrBNpzfhchcrrtRf86kyQ=;
+        b=JDDTDwNBekSyxynJSZOejc08u6MVZSExTd8WWt9CQr+ALV40wOOmTMvj3iQ4fJzvbl
+         u4oAuP0/yErHrJJeWArD376OvjucudkuyLhnvenIbbotQLQXIdhpB8KIQqc8dZetB/rB
+         1oPo1mSlKFJklX+aV17TEybXIeUSFd66eEbdbi/47ZGWvBxKX2Bu2nM58TOaAzZr4mry
+         /Eg9xbHqCmxBy3iISnNRBJkReovwKBnrMq+3Unvwa/e61k4wA9IuFyvJ0IXrEPWREgFk
+         dYvIX0cVHgg81xdX5H7aiVq0Sb4sLceJqPEsURJneNAXp581MNWkMzITHY43pW6cLDbj
+         KZTA==
+X-Gm-Message-State: ANhLgQ2ejAVsj82ICUxE3ux6Ta3DKlxXE2uT9Vs5Oe67E3rJ2CB92c+5
+        YoQaHZz97Ufad9PuGzVmEmUyjw==
+X-Google-Smtp-Source: ADFU+vsOjyY3/T4qkHy41VLOvrwcLfGSPjRT+kAbzxP4YEIQ71dFbU0bx4zo+eS9xrmFRaT1R5Iwiw==
+X-Received: by 2002:a6b:4417:: with SMTP id r23mr7148912ioa.262.1583426496596;
+        Thu, 05 Mar 2020 08:41:36 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id m10sm5467738ioa.65.2020.03.05.08.41.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Mar 2020 08:41:35 -0800 (PST)
+Subject: Re: [PATCH v2 2/4] selftests: Fix seccomp to support relocatable
+ build (O=objdir)
+To:     Kees Cook <keescook@chromium.org>
+Cc:     shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
+        daniel@iogearbox.net, kafai@fb.com, yhs@fb.com, andriin@fb.com,
+        gregkh@linuxfoundation.org, tglx@linutronix.de,
+        khilman@baylibre.com, mpe@ellerman.id.au,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200305003627.31900-1-skhan@linuxfoundation.org>
+ <202003041815.B8C73DEC@keescook>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f4cf1527-4565-9f08-a8a2-9f51022eac63@linuxfoundation.org>
+Date:   Thu, 5 Mar 2020 09:41:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <202003041815.B8C73DEC@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* Andr=C3=A9 Almeida:
+On 3/4/20 7:20 PM, Kees Cook wrote:
+> On Wed, Mar 04, 2020 at 05:36:27PM -0700, Shuah Khan wrote:
+>> Fix seccomp relocatable builds. This is a simple fix to use the
+>> right lib.mk variable TEST_CUSTOM_PROGS to continue to do custom
+>> build to preserve dependency on kselftest_harness.h local header.
+>> This change applies cutom rule to seccomp_bpf seccomp_benchmark
+>> for a simpler logic.
+>>
+>> Uses $(OUTPUT) defined in lib.mk to handle build relocation.
+>>
+>> The following use-cases work with this change:
+>>
+>> In seccomp directory:
+>> make all and make clean
+> 
+> This works.
+> 
+>>
+>>  From top level from main Makefile:
+>> make kselftest-install O=objdir ARCH=arm64 HOSTCC=gcc \
+>>   CROSS_COMPILE=aarch64-linux-gnu- TARGETS=seccomp
+> 
+> This fails for me:
+> 
+> $ make kselftest-install O=objdir ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- TARGETS=seccomp
+> make[1]: Entering directory '/home/kees/src/linux/objdir'
+> make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
+>          ARCH=arm64 -C ../../.. headers_install
+> make[4]: ../scripts/Makefile.build: No such file or directory
+> make[4]: *** No rule to make target '../scripts/Makefile.build'.  Stop.
+> make[3]: *** [Makefile:501: scripts_basic] Error 2
+> make[2]: *** [Makefile:151: khdr] Error 2
+> make[1]: *** [/home/kees/src/linux/Makefile:1221: kselftest-install] Error 2
+> make[1]: Leaving directory '/home/kees/src/linux/objdir'
+> make: *** [Makefile:180: sub-make] Error 2
+> 
+> (My "objdir" is empty)
+> 
+> If I remove O=objdir everything is fine. And see below...
+> 
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>>   tools/testing/selftests/seccomp/Makefile | 19 +++++++++----------
+>>   1 file changed, 9 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+>> index 1760b3e39730..355bcbc0394a 100644
+>> --- a/tools/testing/selftests/seccomp/Makefile
+>> +++ b/tools/testing/selftests/seccomp/Makefile
+>> @@ -1,17 +1,16 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>> -all:
+>> -
+>> -include ../lib.mk
+>> +CFLAGS += -Wl,-no-as-needed -Wall
+>> +LDFLAGS += -lpthread
+>>   
+>>   .PHONY: all clean
+>>   
+>> -BINARIES := seccomp_bpf seccomp_benchmark
+>> -CFLAGS += -Wl,-no-as-needed -Wall
+>> +include ../lib.mk
+>> +
+>> +# OUTPUT set by lib.mk
+>> +TEST_CUSTOM_PROGS := $(OUTPUT)/seccomp_bpf $(OUTPUT)/seccomp_benchmark
+>>   
+>> -seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+>> -	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
+>> +$(TEST_CUSTOM_PROGS): ../kselftest_harness.h
+>>   
+>> -TEST_PROGS += $(BINARIES)
+>> -EXTRA_CLEAN := $(BINARIES)
+>> +all: $(TEST_CUSTOM_PROGS)
+>>   
+>> -all: $(BINARIES)
+>> +EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)
+>> -- 
+>> 2.20.1
+>>
+> 
+> Instead of the TEST_CUSTOM_PROGS+all dance, you can just add an explicit
+> dependency, with the final seccomp/Makefile looking like this:
+> 
+> 
+> # SPDX-License-Identifier: GPL-2.0
+> CFLAGS += -Wl,-no-as-needed -Wall
+> LDFLAGS += -lpthread
+> 
+> TEST_GEN_PROGS := seccomp_bpf seccomp_benchmark
+> 
 
-> Thanks everyone for the feedback around our mechanism. Are the
-> performance benefits of implementing a syscall to wait on a single futex
-> significant enough to maintain it instead of just using
-> `sys_futex_waitv()` with `nr_waiters =3D 1`? If we join both cases in a
-> single interface, we may even add a new member for NUMA hint in `struct
-> futex_wait`.
+TEST_CUSTOM_PROGS is for differentiating test programs that
+can't use lib.mk generic rules. It is appropriate to use
+for seccomp_bpf
 
-Some seccomp user might want to verify the address, and that's easier if
-it's in an argument.  But that's just a rather minor aspect.
+> include ../lib.mk
+> 
+> # Additional dependencies
+> $(OUTPUT)/seccomp_bpf: ../kselftest_harness.h
+> 
+> 
+> (Though this fails in the same way as above when run from the top-level
+> directory.)
+> 
 
-Do you propose to drop the storage requirement for the NUMA hint
-next to the futex completely?
+I didn't see this because I have been the same directory I used
+for relocated cross-build kernel. :(
 
-Thanks,
-Florian
+Thanks for testing this. I know the problem here. all is a dependency
+for install step and $(OUTPUT) is referencing the objdir before it
+gets created. It is a Makefile/lib.mk problem to fix.
+
+I will do a separate patch for this. This will show up in any test
+that is using $(OUTPUT) to relocate objects mainly the ones that
+require custom build rule like seeccomp.
+
+thanks,
+-- Shuah
 
