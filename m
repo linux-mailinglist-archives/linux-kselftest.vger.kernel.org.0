@@ -2,121 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C116117AD74
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 18:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DBA17AE84
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 19:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbgCERmR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Mar 2020 12:42:17 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42991 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbgCERmQ (ORCPT
+        id S1726094AbgCESvx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Mar 2020 13:51:53 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:44288 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbgCESvx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:42:16 -0500
-Received: by mail-pg1-f195.google.com with SMTP id h8so3081673pgs.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Mar 2020 09:42:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WO9CL2c1w4olgPjEPwS6Ra/FLfu00HcXGcMtO9zfexo=;
-        b=PIZuvBOBbK3Zt8CK4II7StLN9lnSky75gasV00eDluG4GZVnGAqsV8rtG2DADakRIV
-         QwSayYbgDZLPql+x0FSzCZf58gV1W67fETimxIpXAEO0CASpdr9y1wzHwq8v9Rt81cES
-         7eaM4UY2J/43MX9y2LuYLagFwi6m425NaHOEg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WO9CL2c1w4olgPjEPwS6Ra/FLfu00HcXGcMtO9zfexo=;
-        b=p3IS4QpSKx8JomZ9uVYLj2Xtztg06yN3Q5ju9mRvGSzw2OmVu9zkRJmOlvuyALrrTk
-         ieqjGYOLaKDEWhq2MLi1fZtGlusa9pzFRkgbw05RpelZSNCSSlf9Kfnh3pki44Lxj0fK
-         dK+wE+MPBQiBQ3e+W0KoDIPRuPOIXqvxWrcwMFkPGlyrkFfeASfe8uHL2Y4hOCDRURox
-         n/4g2kdy3fRBWUwdYeE0Eew2KhxR4GGF9p1wTWheyL+33Xvw3W8HkdNtdX/RLCo6nQje
-         UYAKP+6rnyjScXbT1o6adJTM6aHbKWI6D+ZKC90kHAsFIHAK/ZZbnx4EuiXNfFm3nWGT
-         jVbw==
-X-Gm-Message-State: ANhLgQ0MB1/fEAPsY9ALh+np4BD+HAraWd5dMQayMfOyfx5PdxNr46KW
-        mNquS9TGQVtFoGVvTPI7rZgByg==
-X-Google-Smtp-Source: ADFU+vtufGH9z7DYE4GsADQLUgiWusxt/h6jaf64E8QlBevYNQbgpzzrcR6B/vZM0EejVK/cGcN8Bw==
-X-Received: by 2002:a63:4a58:: with SMTP id j24mr8860917pgl.166.1583430135757;
-        Thu, 05 Mar 2020 09:42:15 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id cq15sm6975221pjb.31.2020.03.05.09.42.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2020 09:42:14 -0800 (PST)
-Date:   Thu, 5 Mar 2020 09:42:13 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
-        daniel@iogearbox.net, kafai@fb.com, yhs@fb.com, andriin@fb.com,
-        gregkh@linuxfoundation.org, tglx@linutronix.de,
-        khilman@baylibre.com, mpe@ellerman.id.au,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] selftests: Fix seccomp to support relocatable
- build (O=objdir)
-Message-ID: <202003050937.BA14B70DEB@keescook>
-References: <20200305003627.31900-1-skhan@linuxfoundation.org>
- <202003041815.B8C73DEC@keescook>
- <f4cf1527-4565-9f08-a8a2-9f51022eac63@linuxfoundation.org>
+        Thu, 5 Mar 2020 13:51:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=Yn5/IW3OYHf5EUn3GzmHogT1LV9Dftj667FAvQnTKI4=; b=VVk6ByjsRM3wpWY+qvfeAVvFex
+        XSR3Yje5R00vVodKBhThEv3KsINHfdyK4sDscmpZv3NRJq5tIIABEiVi6J/lt6WJh2neZ//CU+xSB
+        rECagYV5W63kkDmeLBsfyRon75GkhHqJkKSGoJ46JVs87XqpW19FnOFHt5Pb6lkgecjeDhebwIxD8
+        smPH00JfG0iTvdM6x1U4xwQTwATpB7D5Fj+9WzRaT3+tdzn9MRsVeFpcD07fiTbCRWzLw2l4Tv5Mb
+        t2hFpnkyadlZ6M6P8MxkYKd60qZwJMVKFn+tMcVe3efktI5e/147Vgg9+G1/63fiSBRGQQW0Z1GBk
+        oW6khrUw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j9vas-0005bE-DZ; Thu, 05 Mar 2020 18:51:38 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6FE8E980EDA; Thu,  5 Mar 2020 19:51:36 +0100 (CET)
+Date:   Thu, 5 Mar 2020 19:51:36 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
+Cc:     Florian Weimer <fweimer@redhat.com>,
+        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        krisman@collabora.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
+        ryao@gentoo.org, dvhart@infradead.org, mingo@redhat.com,
+        z.figura12@gmail.com, steven@valvesoftware.com,
+        steven@liquorix.net, malteskarupke@web.de, carlos@redhat.com,
+        adhemerval.zanella@linaro.org, libc-alpha@sourceware.org,
+        linux-api@vger.kernel.org
+Subject: Re: 'simple' futex interface [Was: [PATCH v3 1/4] futex: Implement
+ mechanism to wait on any of several futexes]
+Message-ID: <20200305185136.GB3348@worktop.programming.kicks-ass.net>
+References: <87tv3aflqm.fsf@nanos.tec.linutronix.de>
+ <967d5047-2cb6-d6d8-6107-edb99a4c9696@valvesoftware.com>
+ <87o8thg031.fsf@nanos.tec.linutronix.de>
+ <beb82055-96fa-cb64-a06e-9d7a0946587b@valvesoftware.com>
+ <20200303120050.GC2596@hirez.programming.kicks-ass.net>
+ <87pndth9ur.fsf@oldenburg2.str.redhat.com>
+ <20200303132150.GD2596@hirez.programming.kicks-ass.net>
+ <878skhh7og.fsf@oldenburg2.str.redhat.com>
+ <20200303150104.GE2596@hirez.programming.kicks-ass.net>
+ <52406c54-60b3-dcfe-65d8-4c425459e37b@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <f4cf1527-4565-9f08-a8a2-9f51022eac63@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <52406c54-60b3-dcfe-65d8-4c425459e37b@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 05, 2020 at 09:41:34AM -0700, Shuah Khan wrote:
-> On 3/4/20 7:20 PM, Kees Cook wrote:
-> > Instead of the TEST_CUSTOM_PROGS+all dance, you can just add an explicit
-> > dependency, with the final seccomp/Makefile looking like this:
-> > 
-> > 
-> > # SPDX-License-Identifier: GPL-2.0
-> > CFLAGS += -Wl,-no-as-needed -Wall
-> > LDFLAGS += -lpthread
-> > 
-> > TEST_GEN_PROGS := seccomp_bpf seccomp_benchmark
-> > 
-> 
-> TEST_CUSTOM_PROGS is for differentiating test programs that
-> can't use lib.mk generic rules. It is appropriate to use
-> for seccomp_bpf
+On Thu, Mar 05, 2020 at 01:14:17PM -0300, André Almeida wrote:
 
-I don't follow? This suggested Makefile works for me (i.e. it can use
-the lib.mk generic rules since CFLAGS and LDFLAGS can be customized
-first, and it just adds an additional dependency).
-
-> > include ../lib.mk
+> >   sys_futex_wait(void *uaddr, u64 val, unsigned long flags, ktime_t *timo);
+> >   struct futex_wait {
+> > 	  void *uaddr;
+> > 	  u64 val;
+> > 	  u64 flags;
+> >   };
+> >   sys_futex_waitv(struct futex_wait *waiters, unsigned int nr_waiters,
+> > 		  u64 flags, ktime_t *timo);
+> >   sys_futex_wake(void *uaddr, unsigned int nr, u64 flags);
+> >   sys_futex_cmp_requeue(void *uaddr1, void *uaddr2, unsigned int nr_wake,
+> > 		  unsigned int nr_requeue, u64 cmpval, unsigned long flags);
 > > 
-> > # Additional dependencies
-> > $(OUTPUT)/seccomp_bpf: ../kselftest_harness.h
-
-BTW, I see a lot of other targets that use kselftest_harness.h appear to
-be missing this Makefile dependency, but that's a different problem. :)
-
-> > (Though this fails in the same way as above when run from the top-level
-> > directory.)
+> > And that makes 7 arguments for cmp_requeue, which can't be. Maybe we if
+> > combine nr_wake and nr_requeue in one as 2 u16... ?
+> > 
+> > And then we need to go detector if the platform supports it or not..
 > > 
 > 
-> I didn't see this because I have been the same directory I used
-> for relocated cross-build kernel. :(
-> 
-> Thanks for testing this. I know the problem here. all is a dependency
-> for install step and $(OUTPUT) is referencing the objdir before it
-> gets created. It is a Makefile/lib.mk problem to fix.
-> 
-> I will do a separate patch for this. This will show up in any test
-> that is using $(OUTPUT) to relocate objects mainly the ones that
-> require custom build rule like seeccomp.
+> Thanks everyone for the feedback around our mechanism. Are the
+> performance benefits of implementing a syscall to wait on a single futex
+> significant enough to maintain it instead of just using
+> `sys_futex_waitv()` with `nr_waiters = 1`? If we join both cases in a
+> single interface, we may even add a new member for NUMA hint in `struct
+> futex_wait`.
 
-Okay, cool. It looked to me like it lost track of the top level source
-directory (i.e. "make: entering $output" ... "can't find
-../other/files")
+My consideration was that avoiding the get_user/copy_from_user might
+become measurable on !PTI systems with SMAP.
 
-Anyway, I look forward to the next version and I'll get it tested. :)
-Thanks for fixing this! I really like having a top-level "make" command
-that can extract a single selftest; that's very handy!
-
--- 
-Kees Cook
+But someone would have to build it and measure it before we can be sure
+of course.
