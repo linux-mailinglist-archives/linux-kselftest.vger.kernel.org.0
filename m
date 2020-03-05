@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BECE17ACF4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 18:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DB717AB8F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Mar 2020 18:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727178AbgCERXe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Mar 2020 12:23:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39278 "EHLO mail.kernel.org"
+        id S1727779AbgCEROo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Mar 2020 12:14:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41078 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727195AbgCERNk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:13:40 -0500
+        id S1727768AbgCEROn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:14:43 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 827FA21556;
-        Thu,  5 Mar 2020 17:13:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 518D6208CD;
+        Thu,  5 Mar 2020 17:14:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428420;
+        s=default; t=1583428483;
         bh=IUgSQBIgrx3acAIdWwuai6U1vJC+ObOnP/PsZf5UV9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ng1lynTsrk+X6mYwsrXYvUfmseBAmhMUVgPBqrG6+EAVRZMMzfeNgN9RdjV/+tta5
-         gXgcvMe7JXSXAyLNvB0NcyK5RwKxGGmQDwrXRE40f6pMqZflw2/M+kBCo9Tj/EoZSW
-         OxrJ/Oz9T2Wv5X4lwBW5/oH6EYw4Y1ytl+71PLMM=
+        b=ak/98HxOy7igGca74hn23cNtbLghWQBvZGYpUxjfXWhuGT1uvzVEozDHDYxjvwP9X
+         rzJU1nuc1oBNFt4AoBBoe29AEinwB1hL+cvYvYu61stD4DgBW3giutA99WuTwFy/XW
+         7B0JrYQU1KY9P9BqqHMBblDMYpwHN5LDm9NhO+yM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 22/67] selftests/rseq: Fix out-of-tree compilation
-Date:   Thu,  5 Mar 2020 12:12:23 -0500
-Message-Id: <20200305171309.29118-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 18/58] selftests/rseq: Fix out-of-tree compilation
+Date:   Thu,  5 Mar 2020 12:13:39 -0500
+Message-Id: <20200305171420.29595-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
-References: <20200305171309.29118-1-sashal@kernel.org>
+In-Reply-To: <20200305171420.29595-1-sashal@kernel.org>
+References: <20200305171420.29595-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
