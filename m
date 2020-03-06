@@ -2,97 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1415E17B4D5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 04:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D3717B689
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 07:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbgCFDSI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Mar 2020 22:18:08 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:43210 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726162AbgCFDSI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Mar 2020 22:18:08 -0500
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 9C69BC1D71A2CBE3C756;
-        Fri,  6 Mar 2020 11:18:04 +0800 (CST)
-Received: from localhost (10.173.223.234) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Fri, 6 Mar 2020
- 11:17:56 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <shuah@kernel.org>, <tglx@linutronix.de>, <yuehaibing@huawei.com>,
-        <0x7f454c46@gmail.com>, <avagin@gmail.com>, <dima@arista.com>
-CC:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] selftests/timens: Remove duplicated include <time.h>
-Date:   Fri, 6 Mar 2020 11:17:05 +0800
-Message-ID: <20200306031705.25008-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.173.223.234]
-X-CFilter-Loop: Reflected
+        id S1725873AbgCFGEb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Mar 2020 01:04:31 -0500
+Received: from wind.enjellic.com ([76.10.64.91]:59360 "EHLO wind.enjellic.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725901AbgCFGEa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Mar 2020 01:04:30 -0500
+X-Greylist: delayed 1912 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Mar 2020 01:04:30 EST
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 0265WBpF016522;
+        Thu, 5 Mar 2020 23:32:11 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 0265WAUZ016521;
+        Thu, 5 Mar 2020 23:32:10 -0600
+Date:   Thu, 5 Mar 2020 23:32:10 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-sgx@vger.kernel.org, akpm@linux-foundation.org,
+        dave.hansen@intel.com, sean.j.christopherson@intel.com,
+        nhorman@redhat.com, npmccallum@redhat.com, haitao.huang@intel.com,
+        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
+        kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
+        luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
+        cedric.xing@intel.com, puiterwijk@redhat.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v28 14/22] selftests/x86: Add a selftest for SGX
+Message-ID: <20200306053210.GA16297@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com> <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 05 Mar 2020 23:32:12 -0600 (CST)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove duplicated include.
+On Wed, Mar 04, 2020 at 01:36:01AM +0200, Jarkko Sakkinen wrote:
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- tools/testing/selftests/timens/exec.c   | 1 -
- tools/testing/selftests/timens/procfs.c | 1 -
- tools/testing/selftests/timens/timens.c | 1 -
- tools/testing/selftests/timens/timer.c  | 1 -
- 4 files changed, 4 deletions(-)
+Good evening, I hope the end of the week is going well for everyone.
 
-diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
-index 87b47b5..e40dc5b 100644
---- a/tools/testing/selftests/timens/exec.c
-+++ b/tools/testing/selftests/timens/exec.c
-@@ -11,7 +11,6 @@
- #include <sys/wait.h>
- #include <time.h>
- #include <unistd.h>
--#include <time.h>
- #include <string.h>
- 
- #include "log.h"
-diff --git a/tools/testing/selftests/timens/procfs.c b/tools/testing/selftests/timens/procfs.c
-index 43d93f4..7f14f0f 100644
---- a/tools/testing/selftests/timens/procfs.c
-+++ b/tools/testing/selftests/timens/procfs.c
-@@ -12,7 +12,6 @@
- #include <sys/types.h>
- #include <time.h>
- #include <unistd.h>
--#include <time.h>
- 
- #include "log.h"
- #include "timens.h"
-diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
-index 559d26e..098be7c 100644
---- a/tools/testing/selftests/timens/timens.c
-+++ b/tools/testing/selftests/timens/timens.c
-@@ -10,7 +10,6 @@
- #include <sys/types.h>
- #include <time.h>
- #include <unistd.h>
--#include <time.h>
- #include <string.h>
- 
- #include "log.h"
-diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
-index 0cca7aa..96dba11 100644
---- a/tools/testing/selftests/timens/timer.c
-+++ b/tools/testing/selftests/timens/timer.c
-@@ -11,7 +11,6 @@
- #include <stdio.h>
- #include <stdint.h>
- #include <signal.h>
--#include <time.h>
- 
- #include "log.h"
- #include "timens.h"
--- 
-2.7.4
+> Add a selftest for SGX. It is a trivial test where a simple enclave
+> copies one 64-bit word of memory between two memory locations given
+> to the enclave as arguments. Use ENCLS[EENTER] to invoke the
+> enclave.
 
+Just as a clarification, are you testing the new driver against signed
+production class enclaves in .so format that also include metadata
+layout directives or is the driver just getting tested against the two
+page toy enclave that copies a word of memory from one memory location
+to another?
 
+Our PSW/runtime is currently failing to initialize production class
+enclaves secondary to a return value of -4 from the ENCLU[EINIT]
+instruction, which means the measurement of the loaded enclave has
+failed to match the value in the signature structure.
+
+The same enclave loads fine with the out of kernel driver.  Our
+diagnostics tell us we are feeding identical page streams and
+permissions to the page add ioctl's of both drivers.  The identity
+modulus signature of the signing key for the enclave is being written
+to the launch control registers.
+
+We see the same behavior from both our unit test enclaves and the
+Quoting Enclave from the Intel SGX runtime.
+
+When we ported our runtime loader to the new driver ABI we kept things
+simple and add only a single page at a time in order to replicate the
+behavior of the old driver.
+
+Secondly, we were wondering what distribution you are building the
+self-tests with?  Initial indications are that the selftest signing
+utility doesn't build properly with OpenSSL 1.1.1.
+
+Have a good day.
+
+Dr. Greg
+
+As always,
+Dr. Greg Wettstein, Ph.D, Worker
+IDfusion, LLC               SGX secured infrastructure and
+4206 N. 19th Ave.           autonomously self-defensive platforms.
+Fargo, ND  58102
+PH: 701-281-1686            EMAIL: greg@idfusion.net
+------------------------------------------------------------------------------
+"Don't worry about people stealing your ideas.  If your ideas are any
+ good, you'll have to ram them down people's throats."
+                                -- Howard Aiken
