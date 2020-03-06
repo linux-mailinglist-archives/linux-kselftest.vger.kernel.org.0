@@ -2,133 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 105D417C0DC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 15:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310B417C1F0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 16:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgCFOtV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Mar 2020 09:49:21 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36776 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726866AbgCFOtV (ORCPT
+        id S1726897AbgCFPg0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Mar 2020 10:36:26 -0500
+Received: from mail-pf1-f179.google.com ([209.85.210.179]:37165 "EHLO
+        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbgCFPgZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Mar 2020 09:49:21 -0500
-Received: by mail-wm1-f68.google.com with SMTP id i14so2678848wmb.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2020 06:49:20 -0800 (PST)
+        Fri, 6 Mar 2020 10:36:25 -0500
+Received: by mail-pf1-f179.google.com with SMTP id p14so1287317pfn.4;
+        Fri, 06 Mar 2020 07:36:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=googlenew;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1+4/YwU+Usb1oVmJl3//eNyzmJTWp3zz4UR1oIfLCA4=;
-        b=ehVOXLJ+CwITW97dFDoPyd0CdcL469/JhP/WWjWW77+mY3v64PBKTkfmhKQ153C3jL
-         X8JMXKUeJV5WAYf21tKvLzaaO5HQ665xAfsI6AaqCOWD3jFxiW0A9w9+yeNBkgVl4YBq
-         6Ydt7w6e1gnqUkyEd2xhkqcne0EucC0uBovpHsKSj2mdtNsV+smfZhpErvXT3gS8bKDp
-         GlKcWkwY+HeT0JqIfHt4K/zGb/ir2RfXEfUf3ZsfqOZY88+a+TghVpOxYCfkEomryep9
-         QGY7Zdb7JSUGUIHgZeYUg/QmM1r8VBSjPkKKTXTnkEbd75pcYJEgty09U/Sf8+xp9G5Q
-         8Ylg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=C+EB+uuuB8S9ihmZbiESaEvd2Xd6xGCpZoaRWBSkWAU=;
+        b=iTfMsjvcuEAoDy0MM2MSyIdI3zSNAGNkEr0JqC4aacbRChOMKupNENNMpP4qczbepR
+         Z7fyFTG0ijnE71vR/cZBes9Pdp6yJKzGR6gg9oDgDiG0mgHEP8bjr10MCLdOIHRBfjux
+         UGiKD2iSGzvSr28P1FAKfs/LhOnIh2uvu61w9OcFL5n8SEnjqtfXqo+QADTtJwfYuzGN
+         ecZ3QYMFTu2NXWsmFEZxNuvmRGj8DUJYllIIXpVfDmf+3RkhQ1HMGsxsBkXTOItxH7P+
+         VV9DnGr9y/++3FMrwF7zAsIBhNXx3gIQmOooCc9fFYTyAedETKHCf00PBZq7lkrr92l+
+         TouQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1+4/YwU+Usb1oVmJl3//eNyzmJTWp3zz4UR1oIfLCA4=;
-        b=aUdpXJ/6jwjJrNxoilwtVwz6nO3iaisYt36CCHujwtr5K/Tpup6Z1BncUOJfNJjsDY
-         p8fv+JkOHZgEG7EbfFjlu2ebR9E1mtEtDFhlU5pIRibjwtZXrqietbQqUINX+9voQ6a0
-         y0xrUmaWjh9JLWRLYQqDi59UnWpMHtaE+nNLwDRq45r+8VLLo/+6dNn0cNbzq8dqYVas
-         y4xhO9PRrZlUFIQ23+gocEmIXTbBcg42bVuYIcj8+jSpTnNv+o8DqAst4i1hTqLzsJ+6
-         02ldoYf75spUZYU7+61utacv9Ss7ZRUdOq9iVlfYSUffluXYxGUzn7cp4JX/hHJ18fo3
-         H+fQ==
-X-Gm-Message-State: ANhLgQ06956Kj5yM1lyDvpSEzfMzj0rV/DL89LeSPLMfAKFAnP7OftXx
-        GCrY0GWrgab4rV8UqBcg24ezjg==
-X-Google-Smtp-Source: ADFU+vt02skvUOmOWeCxPPtGgBlvv3qVC+uHoHPL2OtEEJqDaFpuamb9odBmp/vuBHnDMyRkTFU5xQ==
-X-Received: by 2002:a1c:bc84:: with SMTP id m126mr4339612wmf.171.1583506160216;
-        Fri, 06 Mar 2020 06:49:20 -0800 (PST)
-Received: from [10.83.36.153] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id q12sm52080489wrg.71.2020.03.06.06.49.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Mar 2020 06:49:19 -0800 (PST)
-Subject: Re: [PATCH -next] selftests/timens: Remove duplicated include
- <time.h>
-To:     YueHaibing <yuehaibing@huawei.com>, shuah@kernel.org,
-        tglx@linutronix.de, 0x7f454c46@gmail.com, avagin@gmail.com
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200306031705.25008-1-yuehaibing@huawei.com>
-From:   Dmitry Safonov <dima@arista.com>
-Message-ID: <d2dd6da8-b24c-ead8-f66e-2a8c532a8830@arista.com>
-Date:   Fri, 6 Mar 2020 14:49:18 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <20200306031705.25008-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=C+EB+uuuB8S9ihmZbiESaEvd2Xd6xGCpZoaRWBSkWAU=;
+        b=aYI22gJpGUPlYUvhFMRNsve433bUS336+eQHRnhWcBwCsBmM9dJMAm3w4jUn5YjoMm
+         17oSZCGP+lJfxD+szN7Jes4eidKMuqXkt0pmJ75ZPbtZsCOq3+oSuRsxTglRGRlvBDO0
+         E1EE7yZos3uYfXlL3lHft2d31ydk0FTJ7iQFd5H+fKZ3VH7tqvnIuolb4UYdccap9GZ2
+         99fSJV+a1AyTBtxNcvCFNIwh14aIGoSIVtyAdCzZscS5zdrJ0LcEP9QeSq+U45wWaT13
+         5rR7zRmXinB3R8VmXBPhozqjAz8gCaI8aSxGE8z5J+ifwiCoZ2rg/7+/KtQGxSFkAOfb
+         aBkQ==
+X-Gm-Message-State: ANhLgQ1sawAqh/1fHrb9i1awPlkTX5Qnze739fZctuMu3FcqXznX4jP2
+        ZHH1Cd1GbJsWJU7DSOZ4OAg=
+X-Google-Smtp-Source: ADFU+vs2ZGlXc0iCCeCpSyvA+FqOK7+Z1rBLZetlzFY4c2/8EfdopbHkVvCVcLy4aSUOjmqr3a20mg==
+X-Received: by 2002:a62:c5c6:: with SMTP id j189mr4227274pfg.159.1583508984604;
+        Fri, 06 Mar 2020 07:36:24 -0800 (PST)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id b9sm6843235pgi.75.2020.03.06.07.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2020 07:36:23 -0800 (PST)
+Date:   Fri, 06 Mar 2020 07:36:16 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>, john.fastabend@gmail.com,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <5e626df05abb4_17502acca07205b47e@john-XPS-13-9370.notmuch>
+In-Reply-To: <20200304101318.5225-10-lmb@cloudflare.com>
+References: <20200304101318.5225-1-lmb@cloudflare.com>
+ <20200304101318.5225-10-lmb@cloudflare.com>
+Subject: RE: [PATCH bpf-next v3 09/12] selftests: bpf: don't listen() on UDP
+ sockets
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/6/20 3:17 AM, YueHaibing wrote:
-> Remove duplicated include.
+Lorenz Bauer wrote:
+> Most tests for TCP sockmap can be adapted to UDP sockmap if the
+> listen call is skipped. Rename listen_loopback, etc. to socket_loopback
+> and skip listen() for SOCK_DGRAM.
 > 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-
-Thanks for the cleanup,
-
-Reviewed-by: Dmitry Safonov <dima@arista.com>
-
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 > ---
->  tools/testing/selftests/timens/exec.c   | 1 -
->  tools/testing/selftests/timens/procfs.c | 1 -
->  tools/testing/selftests/timens/timens.c | 1 -
->  tools/testing/selftests/timens/timer.c  | 1 -
->  4 files changed, 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
-> index 87b47b5..e40dc5b 100644
-> --- a/tools/testing/selftests/timens/exec.c
-> +++ b/tools/testing/selftests/timens/exec.c
-> @@ -11,7 +11,6 @@
->  #include <sys/wait.h>
->  #include <time.h>
->  #include <unistd.h>
-> -#include <time.h>
->  #include <string.h>
->  
->  #include "log.h"
-> diff --git a/tools/testing/selftests/timens/procfs.c b/tools/testing/selftests/timens/procfs.c
-> index 43d93f4..7f14f0f 100644
-> --- a/tools/testing/selftests/timens/procfs.c
-> +++ b/tools/testing/selftests/timens/procfs.c
-> @@ -12,7 +12,6 @@
->  #include <sys/types.h>
->  #include <time.h>
->  #include <unistd.h>
-> -#include <time.h>
->  
->  #include "log.h"
->  #include "timens.h"
-> diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
-> index 559d26e..098be7c 100644
-> --- a/tools/testing/selftests/timens/timens.c
-> +++ b/tools/testing/selftests/timens/timens.c
-> @@ -10,7 +10,6 @@
->  #include <sys/types.h>
->  #include <time.h>
->  #include <unistd.h>
-> -#include <time.h>
->  #include <string.h>
->  
->  #include "log.h"
-> diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
-> index 0cca7aa..96dba11 100644
-> --- a/tools/testing/selftests/timens/timer.c
-> +++ b/tools/testing/selftests/timens/timer.c
-> @@ -11,7 +11,6 @@
->  #include <stdio.h>
->  #include <stdint.h>
->  #include <signal.h>
-> -#include <time.h>
->  
->  #include "log.h"
->  #include "timens.h"
-> 
+
+Acked-by: John Fastabend <john.fastabend@gmail.com>
