@@ -2,97 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D3717B689
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 07:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E4517BB25
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 12:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725873AbgCFGEb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Mar 2020 01:04:31 -0500
-Received: from wind.enjellic.com ([76.10.64.91]:59360 "EHLO wind.enjellic.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725901AbgCFGEa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Mar 2020 01:04:30 -0500
-X-Greylist: delayed 1912 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Mar 2020 01:04:30 EST
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 0265WBpF016522;
-        Thu, 5 Mar 2020 23:32:11 -0600
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 0265WAUZ016521;
-        Thu, 5 Mar 2020 23:32:10 -0600
-Date:   Thu, 5 Mar 2020 23:32:10 -0600
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-sgx@vger.kernel.org, akpm@linux-foundation.org,
-        dave.hansen@intel.com, sean.j.christopherson@intel.com,
-        nhorman@redhat.com, npmccallum@redhat.com, haitao.huang@intel.com,
-        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
-        kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
-        luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
-        cedric.xing@intel.com, puiterwijk@redhat.com,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v28 14/22] selftests/x86: Add a selftest for SGX
-Message-ID: <20200306053210.GA16297@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com> <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 05 Mar 2020 23:32:12 -0600 (CST)
+        id S1726382AbgCFLFj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Mar 2020 06:05:39 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:43438 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbgCFLFj (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Mar 2020 06:05:39 -0500
+Received: by mail-lf1-f68.google.com with SMTP id s23so1548164lfs.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Mar 2020 03:05:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=z1++nVFGTuI4yzatq/XiQaAMDI3Yr8HfGAnBFDQYjxE=;
+        b=yhHO63LGLvumz8zfcMSFQtWWI9++F1D9YMSXxR/ESnKu7b/fVSO/kPj6H6BHBiRKqP
+         i1auvJ4T6nE9eSuluk16UYNh9+m2YsQxHBoGOXQ6yWJYm3DhUhTHbQB7LIiZlrdiQn+k
+         BK21k/KfL/XpjM7uwL6NwbMop2ZtQ01MH7qsboNSuIAeVKV+B0Nc+BtxyEsYem1e5n6p
+         bthbcWs9L1JVXRShfrDhxSPMConWHWPD11xzGJuhlpIrWKDITOhpHDwB58FVUPq872OA
+         ChIV2VNAlWwxsISWGUQlRPMqNLFCvHXqAcs7TLY++jI3DGtlK/0FsP3DjIXrhl5drfn5
+         1RQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=z1++nVFGTuI4yzatq/XiQaAMDI3Yr8HfGAnBFDQYjxE=;
+        b=C/YksMUJgj2R8iODhqwLixFXzNH27RAVa8oeUDhlYkg2l9ZzusYlqbwrtbHyUV3mxP
+         3lZJ+2ddmgGEa80zCxW155mi0+ebP6zYCfK8p2vVnSFPMMZnr9LinBVjT1rc9hDh9xhH
+         dMoccrLCvm9MNqSOlFKJN+wf+N4FNYb0PMKUY9LbfpvLPNbbko+0T7VbYn3vX34IC6d/
+         /MsHkfHACvKjGetTPlOy2VZf//8LhwcLn8TsKJ+Q0eHEyLgwjfYKFBZlI2eau0WFo4S8
+         V61/55ijLgxtyscxP+k0QjGbtUK7TofgfOfaiwO0Uz1TC++AYdEpI39BTgtKCjo4yCQO
+         U17w==
+X-Gm-Message-State: ANhLgQ3YgY/39SNd6Bd9JoHq5a81IrKQ6kj75fYvIWkKAAEhlS+RZ32f
+        d0/nAeDQZ2ZZYNwMw/e3axW5I1Drfov+k4jkUQ79Eg==
+X-Google-Smtp-Source: ADFU+vvEdrqidqw7zeBJMr22MkzExrfq8xo3qipCGVQTRrZpyDQOZAgJuCn9C4KHZCPaIlkOvD+ENrUHgfUs9g5TN88=
+X-Received: by 2002:a05:6512:3ab:: with SMTP id v11mr1621059lfp.82.1583492734327;
+ Fri, 06 Mar 2020 03:05:34 -0800 (PST)
+MIME-Version: 1.0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 6 Mar 2020 16:35:22 +0530
+Message-ID: <CA+G9fYvORFZm1s89OU9DV9ckSgk4rWj6tRdUTYh3WPrBnzeRgw@mail.gmail.com>
+Subject: WARNING: kernel/bpf/verifier.c:8186 bpf_check+0x2332/0x30a4
+To:     Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 01:36:01AM +0200, Jarkko Sakkinen wrote:
+This is an informative email report,
 
-Good evening, I hope the end of the week is going well for everyone.
+On linux-next while running kselftest bpf test_verifier, the following
+kernel warning reported. But this seems to be NOT a kernel regression
+after reading the commit log.
 
-> Add a selftest for SGX. It is a trivial test where a simple enclave
-> copies one 64-bit word of memory between two memory locations given
-> to the enclave as arguments. Use ENCLS[EENTER] to invoke the
-> enclave.
+Started noticing from 5.6.0-rc3-next-20200226 and still happening on
+5.6.0-rc4-next-20200306.
 
-Just as a clarification, are you testing the new driver against signed
-production class enclaves in .so format that also include metadata
-layout directives or is the driver just getting tested against the two
-page toy enclave that copies a word of memory from one memory location
-to another?
+Suspecting patch,
+commit id 94dacdbd5d2dfa2cffd308f128d78c99f855f5be
+"
+bpf: Tighten the requirements for preallocated hash maps
+<>
+So preallocation _must_ be enforced for all variants of intrusive
+instrumentation.
 
-Our PSW/runtime is currently failing to initialize production class
-enclaves secondary to a return value of -4 from the ENCLU[EINIT]
-instruction, which means the measurement of the loaded enclave has
-failed to match the value in the signature structure.
+Unfortunately immediate enforcement would break backwards compatibility, so
+for now such programs still are allowed to run, but a one time warning is
+emitted in dmesg and the verifier emits a warning in the verifier log as
+well so developers are made aware about this and can fix their programs
+before the enforcement becomes mandatory.
 
-The same enclave loads fine with the out of kernel driver.  Our
-diagnostics tell us we are feeding identical page streams and
-permissions to the page add ioctl's of both drivers.  The identity
-modulus signature of the signing key for the enclave is being written
-to the launch control registers.
+Link: https://lore.kernel.org/bpf/20200224145642.540542802@linutronix.de
+"
+steps to reproduce:
+          steps:
+          - cd /opt/kselftests/default-in-kernel/bpf
+          - ./test_verifier || true
 
-We see the same behavior from both our unit test enclaves and the
-Quoting Enclave from the Intel SGX runtime.
 
-When we ported our runtime loader to the new driver ABI we kept things
-simple and add only a single page at a time in order to replicate the
-behavior of the old driver.
+[    0.000000] Linux version 5.6.0-rc3-next-20200226 (oe-user@oe-host)
+(gcc version 7.3.0 (GCC)) #1 SMP Wed Feb 26 04:46:18 UTC 2020
+<Trim>
+[   54.263845] trace type BPF program uses run-time allocation
+[   54.269438] WARNING: CPU: 1 PID: 473 at
+/usr/src/kernel/kernel/bpf/verifier.c:8186 bpf_check+0x2332/0x30a4
+[   54.280445] Modules linked in: x86_pkg_temp_thermal fuse
+[   54.285759] CPU: 1 PID: 473 Comm: test_verifier Not tainted
+5.6.0-rc3-next-20200226 #1
+[   54.293669] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[   54.301054] RIP: 0010:bpf_check+0x2332/0x30a4
+[   54.305412] Code: ff ff 48 c7 c7 b8 91 5e a8 4c 89 85 10 ff ff ff
+48 89 95 18 ff ff ff 48 89 85 20 ff ff ff c6 05 e1 54 98 01 01 e8 4e
+16 ea ff <0f> 0b 4c 8b 85 10 ff ff ff 48 8b 95 18 ff ff ff 48 8b 85 20
+ff ff
+[   54.324149] RSP: 0018:ffffbf708061bc48 EFLAGS: 00010282
+[   54.329365] RAX: 0000000000000000 RBX: ffffa0a66b5ad200 RCX: 0000000000000000
+[   54.336489] RDX: 0000000000000001 RSI: ffffa0a66fa98d48 RDI: ffffa0a66fa98d48
+[   54.343614] RBP: ffffbf708061bd48 R08: 0000000000000000 R09: 0000000000000000
+[   54.350736] R10: 0000000000000000 R11: 0000000000000000 R12: ffffa0a667a90000
+[   54.357863] R13: 0000000000000004 R14: 0000000000000000 R15: ffffbf7080069058
+[   54.364993] FS:  00007fd8b7cd4740(0000) GS:ffffa0a66fa80000(0000)
+knlGS:0000000000000000
+[   54.373070] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   54.378807] CR2: 000000000098e65c CR3: 0000000231bf6001 CR4: 00000000003606e0
+[   54.385931] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   54.393054] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   54.400180] Call Trace:
+[   54.402633]  ? lockdep_hardirqs_on+0xf6/0x190
+[   54.406993]  ? ktime_get_with_offset+0x7a/0x130
+[   54.411525]  ? trace_hardirqs_on+0x4c/0x100
+[   54.415714]  bpf_prog_load+0x57d/0x6f0
+[   54.419466]  ? __might_fault+0x3e/0x90
+[   54.423221]  ? selinux_bpf+0x5a/0x80
+[   54.426806]  __do_sys_bpf+0xd69/0x1cd0
+[   54.430565]  __x64_sys_bpf+0x1a/0x20
+[   54.434146]  do_syscall_64+0x55/0x200
+[   54.437812]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[   54.442862] RIP: 0033:0x7fd8b6d9af59
+[   54.446441] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00
+00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24
+08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 0f ff 2b 00 f7 d8 64 89
+01 48
+[   54.465179] RSP: 002b:00007ffd5bac5238 EFLAGS: 00000202 ORIG_RAX:
+0000000000000141
+[   54.472743] RAX: ffffffffffffffda RBX: 00007ffd5bac53ec RCX: 00007fd8b6d9af59
+[   54.479867] RDX: 0000000000000078 RSI: 00007ffd5bac52b0 RDI: 0000000000000005
+[   54.486991] RBP: 00007ffd5bac5250 R08: 00007ffd5bac53f8 R09: 00007ffd5bac52b0
+[   54.494115] R10: 000000000098e638 R11: 0000000000000202 R12: 0000000000000005
+[   54.501239] R13: 000000000098e630 R14: 0000000000000001 R15: 0000000000000000
+[   54.508368] irq event stamp: 82014
+[   54.511770] hardirqs last  enabled at (82013): [<ffffffffa6f775ed>]
+console_unlock+0x45d/0x5c0
+[   54.520374] hardirqs last disabled at (82014): [<ffffffffa6e01f3b>]
+trace_hardirqs_off_thunk+0x1a/0x1c
+[   54.529666] softirqs last  enabled at (82000): [<ffffffffa8000338>]
+__do_softirq+0x338/0x43a
+[   54.538096] softirqs last disabled at (81963): [<ffffffffa6f04588>]
+irq_exit+0xb8/0xc0
+[   54.545999] ---[ end trace 75d82c4cbb8fc047 ]---
 
-Secondly, we were wondering what distribution you are building the
-self-tests with?  Initial indications are that the selftest signing
-utility doesn't build properly with OpenSSL 1.1.1.
+metadata:
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git branch: master
+  git describe: next-20200226
+  make_kernelversion: 5.6.0-rc3
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/712/config
 
-Have a good day.
+Full test log,
+https://lkft.validation.linaro.org/scheduler/job/1251016#L1416
+https://lkft.validation.linaro.org/scheduler/job/1269522#L1509
+https://lkft.validation.linaro.org/scheduler/job/1269575#L1501
 
-Dr. Greg
-
-As always,
-Dr. Greg Wettstein, Ph.D, Worker
-IDfusion, LLC               SGX secured infrastructure and
-4206 N. 19th Ave.           autonomously self-defensive platforms.
-Fargo, ND  58102
-PH: 701-281-1686            EMAIL: greg@idfusion.net
-------------------------------------------------------------------------------
-"Don't worry about people stealing your ideas.  If your ideas are any
- good, you'll have to ram them down people's throats."
-                                -- Howard Aiken
+-- 
+Linaro LKFT
+https://lkft.linaro.org
