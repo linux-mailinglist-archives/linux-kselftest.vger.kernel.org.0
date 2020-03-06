@@ -2,128 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D6F17C357
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 17:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3262617C5DC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Mar 2020 20:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbgCFQ57 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Mar 2020 11:57:59 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:57193 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725935AbgCFQ57 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Mar 2020 11:57:59 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-20-vOmmemdGMmSebKCtFim0sQ-1; Fri, 06 Mar 2020 16:57:55 +0000
-X-MC-Unique: vOmmemdGMmSebKCtFim0sQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 6 Mar 2020 16:57:55 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 6 Mar 2020 16:57:55 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        =?iso-8859-1?Q?Andr=E9_Almeida?= <andrealmeid@collabora.com>
-CC:     Florian Weimer <fweimer@redhat.com>,
-        "Pierre-Loup A. Griffais" <pgriffais@valvesoftware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "krisman@collabora.com" <krisman@collabora.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "ryao@gentoo.org" <ryao@gentoo.org>,
-        "dvhart@infradead.org" <dvhart@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "z.figura12@gmail.com" <z.figura12@gmail.com>,
-        "steven@valvesoftware.com" <steven@valvesoftware.com>,
-        "steven@liquorix.net" <steven@liquorix.net>,
-        "malteskarupke@web.de" <malteskarupke@web.de>,
-        "carlos@redhat.com" <carlos@redhat.com>,
-        "adhemerval.zanella@linaro.org" <adhemerval.zanella@linaro.org>,
-        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-Subject: RE: 'simple' futex interface [Was: [PATCH v3 1/4] futex: Implement
- mechanism to wait on any of several futexes]
-Thread-Topic: 'simple' futex interface [Was: [PATCH v3 1/4] futex: Implement
- mechanism to wait on any of several futexes]
-Thread-Index: AQHV8x8l7LKRap7vfU2BMMqcavNvO6g7ya9A
-Date:   Fri, 6 Mar 2020 16:57:54 +0000
-Message-ID: <0271e473ddcf463bb030eb4cbecbe888@AcuMS.aculab.com>
-References: <87tv3aflqm.fsf@nanos.tec.linutronix.de>
- <967d5047-2cb6-d6d8-6107-edb99a4c9696@valvesoftware.com>
- <87o8thg031.fsf@nanos.tec.linutronix.de>
- <beb82055-96fa-cb64-a06e-9d7a0946587b@valvesoftware.com>
- <20200303120050.GC2596@hirez.programming.kicks-ass.net>
- <87pndth9ur.fsf@oldenburg2.str.redhat.com>
- <20200303132150.GD2596@hirez.programming.kicks-ass.net>
- <878skhh7og.fsf@oldenburg2.str.redhat.com>
- <20200303150104.GE2596@hirez.programming.kicks-ass.net>
- <52406c54-60b3-dcfe-65d8-4c425459e37b@collabora.com>
- <20200305185136.GB3348@worktop.programming.kicks-ass.net>
-In-Reply-To: <20200305185136.GB3348@worktop.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726240AbgCFTEW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Mar 2020 14:04:22 -0500
+Received: from mga11.intel.com ([192.55.52.93]:25085 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726194AbgCFTEW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Mar 2020 14:04:22 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 11:04:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,523,1574150400"; 
+   d="scan'208";a="275645693"
+Received: from wbakowsk-mobl.ger.corp.intel.com (HELO localhost) ([10.252.27.142])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Mar 2020 11:04:17 -0800
+Date:   Fri, 6 Mar 2020 21:04:16 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     "Dr. Greg" <greg@enjellic.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-sgx@vger.kernel.org, akpm@linux-foundation.org,
+        dave.hansen@intel.com, sean.j.christopherson@intel.com,
+        nhorman@redhat.com, npmccallum@redhat.com, haitao.huang@intel.com,
+        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
+        kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
+        luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
+        cedric.xing@intel.com, puiterwijk@redhat.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v28 14/22] selftests/x86: Add a selftest for SGX
+Message-ID: <20200306190416.GG7472@linux.intel.com>
+References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com>
+ <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
+ <20200306053210.GA16297@wind.enjellic.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200306053210.GA16297@wind.enjellic.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 05 March 2020 18:52
-+> On Thu, Mar 05, 2020 at 01:14:17PM -0300, André Almeida wrote:
+On Thu, Mar 05, 2020 at 11:32:10PM -0600, Dr. Greg wrote:
+> On Wed, Mar 04, 2020 at 01:36:01AM +0200, Jarkko Sakkinen wrote:
 > 
-> > >   sys_futex_wait(void *uaddr, u64 val, unsigned long flags, ktime_t *timo);
-> > >   struct futex_wait {
-> > > 	  void *uaddr;
-> > > 	  u64 val;
-> > > 	  u64 flags;
-> > >   };
-> > >   sys_futex_waitv(struct futex_wait *waiters, unsigned int nr_waiters,
-> > > 		  u64 flags, ktime_t *timo);
-> > >   sys_futex_wake(void *uaddr, unsigned int nr, u64 flags);
-> > >   sys_futex_cmp_requeue(void *uaddr1, void *uaddr2, unsigned int nr_wake,
-> > > 		  unsigned int nr_requeue, u64 cmpval, unsigned long flags);
-> > >
-> > > And that makes 7 arguments for cmp_requeue, which can't be. Maybe we if
-> > > combine nr_wake and nr_requeue in one as 2 u16... ?
-> > >
-> > > And then we need to go detector if the platform supports it or not..
-> > >
-> >
-> > Thanks everyone for the feedback around our mechanism. Are the
-> > performance benefits of implementing a syscall to wait on a single futex
-> > significant enough to maintain it instead of just using
-> > `sys_futex_waitv()` with `nr_waiters = 1`? If we join both cases in a
-> > single interface, we may even add a new member for NUMA hint in `struct
-> > futex_wait`.
+> Good evening, I hope the end of the week is going well for everyone.
 > 
-> My consideration was that avoiding the get_user/copy_from_user might
-> become measurable on !PTI systems with SMAP.
+> > Add a selftest for SGX. It is a trivial test where a simple enclave
+> > copies one 64-bit word of memory between two memory locations given
+> > to the enclave as arguments. Use ENCLS[EENTER] to invoke the
+> > enclave.
 > 
-> But someone would have to build it and measure it before we can be sure
-> of course.
+> Just as a clarification, are you testing the new driver against signed
+> production class enclaves in .so format that also include metadata
+> layout directives or is the driver just getting tested against the two
+> page toy enclave that copies a word of memory from one memory location
+> to another?
 
-An extra copy_from_user is likely to be noticable.
-It certainly makes recvmsg() slower than recv().
-Especially if the hardended usercopy crap gets involved.
+That is the kind of role kselftests to smoke stuff. Obviously it will
+be refined over time but to do a "hello world" from scratch as an
+enclave was already quite a big effort.
 
-	David
- 
+> Our PSW/runtime is currently failing to initialize production class
+> enclaves secondary to a return value of -4 from the ENCLU[EINIT]
+> instruction, which means the measurement of the loaded enclave has
+> failed to match the value in the signature structure.
+> 
+> The same enclave loads fine with the out of kernel driver.  Our
+> diagnostics tell us we are feeding identical page streams and
+> permissions to the page add ioctl's of both drivers.  The identity
+> modulus signature of the signing key for the enclave is being written
+> to the launch control registers.
+> 
+> We see the same behavior from both our unit test enclaves and the
+> Quoting Enclave from the Intel SGX runtime.
+> 
+> When we ported our runtime loader to the new driver ABI we kept things
+> simple and add only a single page at a time in order to replicate the
+> behavior of the old driver.
+> 
+> Secondly, we were wondering what distribution you are building the
+> self-tests with?  Initial indications are that the selftest signing
+> utility doesn't build properly with OpenSSL 1.1.1.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+I don't use a distribution. I just build user space with BuildRoot
+when I test a kernel.
 
+Do you have a build log available to look at?
+
+/Jarkko
