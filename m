@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8E917CBA6
+	by mail.lfdr.de (Postfix) with ESMTP id E308317CBA7
 	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Mar 2020 04:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727076AbgCGDqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Mar 2020 22:46:17 -0500
-Received: from mga11.intel.com ([192.55.52.93]:57583 "EHLO mga11.intel.com"
+        id S1727097AbgCGDqS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Mar 2020 22:46:18 -0500
+Received: from mga11.intel.com ([192.55.52.93]:57584 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727052AbgCGDqR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Mar 2020 22:46:17 -0500
+        id S1727077AbgCGDqS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Mar 2020 22:46:18 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 19:46:16 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 19:46:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,524,1574150400"; 
-   d="scan'208";a="235036014"
+   d="scan'208";a="235036021"
 Received: from sai-dev-mach.sc.intel.com ([143.183.140.153])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2020 19:46:16 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2020 19:46:17 -0800
 From:   Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
 To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
@@ -27,9 +27,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         james.morse@arm.com, ravi.v.shankar@intel.com,
         fenghua.yu@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org,
         Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
-Subject: [PATCH V1 06/13] selftests/resctrl: Fix MBA/MBM results reporting format
-Date:   Fri,  6 Mar 2020 19:40:47 -0800
-Message-Id: <8179b975778fb1d365f3b5d88b69976332a2f061.1583657204.git.sai.praneeth.prakhya@intel.com>
+Subject: [PATCH V1 07/13] selftests/resctrl: Don't use variable argument list for setup function
+Date:   Fri,  6 Mar 2020 19:40:48 -0800
+Message-Id: <4d2f519c9a67d86e71f8fe6fd281f1e39cfe4e49.1583657204.git.sai.praneeth.prakhya@intel.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <cover.1583657204.git.sai.praneeth.prakhya@intel.com>
 References: <cover.1583657204.git.sai.praneeth.prakhya@intel.com>
@@ -40,129 +40,163 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently MBM/MBA tests use absolute values to check results. But, iMC
-values and MBM resctrl values may vary on different platforms and
-specifically for MBA the values may vary as schemata changes. Hence, use
-percentage instead of absolute values to check tests result.
+struct resctrl_val_param has setup() function that accepts variable
+argument list. But, presently, all the test cases use only 1 argument as
+input and it's struct resctrl_val_param *. So, instead of variable argument
+list, directly pass struct resctrl_val_param * as parameter.
 
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
 ---
- tools/testing/selftests/resctrl/mba_test.c | 24 +++++++++++++-----------
- tools/testing/selftests/resctrl/mbm_test.c | 21 +++++++++++----------
- 2 files changed, 24 insertions(+), 21 deletions(-)
+ tools/testing/selftests/resctrl/cache.c       | 2 +-
+ tools/testing/selftests/resctrl/cat_test.c    | 8 +-------
+ tools/testing/selftests/resctrl/cqm_test.c    | 9 +--------
+ tools/testing/selftests/resctrl/mba_test.c    | 8 +-------
+ tools/testing/selftests/resctrl/mbm_test.c    | 8 +-------
+ tools/testing/selftests/resctrl/resctrl.h     | 2 +-
+ tools/testing/selftests/resctrl/resctrl_val.c | 4 ++--
+ 7 files changed, 8 insertions(+), 33 deletions(-)
 
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index 38dbf4962e33..1cbcd7fbe216 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -243,7 +243,7 @@ int cat_val(struct resctrl_val_param *param)
+ 	/* Test runs until the callback setup() tells the test to stop. */
+ 	while (1) {
+ 		if (strcmp(resctrl_val, "cat") == 0) {
+-			ret = param->setup(1, param);
++			ret = param->setup(param);
+ 			if (ret) {
+ 				ret = 0;
+ 				break;
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 5da43767b973..046c7f285e72 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -27,17 +27,11 @@ unsigned long cache_size;
+  * con_mon grp, mon_grp in resctrl FS.
+  * Run 5 times in order to get average values.
+  */
+-static int cat_setup(int num, ...)
++static int cat_setup(struct resctrl_val_param *p)
+ {
+-	struct resctrl_val_param *p;
+ 	char schemata[64];
+-	va_list param;
+ 	int ret = 0;
+ 
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
+-
+ 	/* Run NUM_OF_RUNS times */
+ 	if (p->num_of_runs >= NUM_OF_RUNS)
+ 		return -1;
+diff --git a/tools/testing/selftests/resctrl/cqm_test.c b/tools/testing/selftests/resctrl/cqm_test.c
+index fb4797cfda09..f27b0363e518 100644
+--- a/tools/testing/selftests/resctrl/cqm_test.c
++++ b/tools/testing/selftests/resctrl/cqm_test.c
+@@ -21,15 +21,8 @@ char cbm_mask[256];
+ unsigned long long_mask;
+ unsigned long cache_size;
+ 
+-static int cqm_setup(int num, ...)
++static int cqm_setup(struct resctrl_val_param *p)
+ {
+-	struct resctrl_val_param *p;
+-	va_list param;
+-
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
+-
+ 	/* Run NUM_OF_RUNS times */
+ 	if (p->num_of_runs >= NUM_OF_RUNS)
+ 		return -1;
 diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 7bf8eaa6204b..165e5123e040 100644
+index 165e5123e040..0f85e5be390d 100644
 --- a/tools/testing/selftests/resctrl/mba_test.c
 +++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -12,7 +12,7 @@
+@@ -22,16 +22,10 @@
+  * con_mon grp, mon_grp in resctrl FS.
+  * For each allocation, run 5 times in order to get average values.
+  */
+-static int mba_setup(int num, ...)
++static int mba_setup(struct resctrl_val_param *p)
+ {
+ 	static int runs_per_allocation, allocation = 100;
+-	struct resctrl_val_param *p;
+ 	char allocation_str[64];
+-	va_list param;
+-
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
  
- #define RESULT_FILE_NAME	"result_mba"
- #define NUM_OF_RUNS		5
--#define MAX_DIFF		300
-+#define MAX_DIFF_PERCENT	5
- #define ALLOCATION_MAX		100
- #define ALLOCATION_MIN		10
- #define ALLOCATION_STEP		10
-@@ -62,31 +62,33 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 	     allocation++) {
- 		unsigned long avg_bw_imc, avg_bw_resc;
- 		unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
--		unsigned long avg_diff;
-+		float avg_diff;
-+		int avg_diff_per;
- 
- 		/*
- 		 * The first run is discarded due to inaccurate value from
- 		 * phase transition.
- 		 */
- 		for (runs = NUM_OF_RUNS * allocation + 1;
--		     runs < NUM_OF_RUNS * allocation + NUM_OF_RUNS ; runs++) {
-+		     runs < NUM_OF_RUNS * allocation + NUM_OF_RUNS; runs++) {
- 			sum_bw_imc += bw_imc[runs];
- 			sum_bw_resc += bw_resc[runs];
- 		}
- 
- 		avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
- 		avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
--		avg_diff = labs((long)(avg_bw_resc - avg_bw_imc));
-+		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-+		avg_diff_per = (int)(avg_diff * 100);
- 
--		printf("%sok MBA schemata percentage %u smaller than %d %%\n",
--		       avg_diff > MAX_DIFF ? "not " : "",
--		       ALLOCATION_MAX - ALLOCATION_STEP * allocation,
--		       MAX_DIFF);
--		tests_run++;
--		printf("# avg_diff: %lu\n", avg_diff);
-+		printf("%sok MBA: diff within %d%% for schemata %u\n",
-+		       avg_diff_per > MAX_DIFF_PERCENT ? "not " : "",
-+		       MAX_DIFF_PERCENT,
-+		       ALLOCATION_MAX - ALLOCATION_STEP * allocation);
- 		printf("# avg_bw_imc: %lu\n", avg_bw_imc);
- 		printf("# avg_bw_resc: %lu\n", avg_bw_resc);
--		if (avg_diff > MAX_DIFF)
-+		printf("# avg_diff_per: %d%%\n", avg_diff_per);
-+		tests_run++;
-+		if (avg_diff_per > MAX_DIFF_PERCENT)
- 			failed = true;
- 	}
- 
+ 	if (runs_per_allocation >= NUM_OF_RUNS)
+ 		runs_per_allocation = 0;
 diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 4700f7453f81..530ec5bec0b9 100644
+index 530ec5bec0b9..9e847641516a 100644
 --- a/tools/testing/selftests/resctrl/mbm_test.c
 +++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -11,7 +11,7 @@
- #include "resctrl.h"
- 
- #define RESULT_FILE_NAME	"result_mbm"
--#define MAX_DIFF		300
-+#define MAX_DIFF_PERCENT	5
- #define NUM_OF_RUNS		5
- 
- static void
-@@ -19,29 +19,30 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
- {
- 	unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
- 	unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
--	long avg_diff = 0;
--	int runs;
-+	float avg_diff = 0;
-+	int runs, avg_diff_per;
- 
- 	/*
- 	 * Discard the first value which is inaccurate due to monitoring setup
- 	 * transition phase.
- 	 */
--	for (runs = 1; runs < NUM_OF_RUNS ; runs++) {
-+	for (runs = 1; runs < NUM_OF_RUNS; runs++) {
- 		sum_bw_imc += bw_imc[runs];
- 		sum_bw_resc += bw_resc[runs];
- 	}
- 
--	avg_bw_imc = sum_bw_imc / 4;
--	avg_bw_resc = sum_bw_resc / 4;
--	avg_diff = avg_bw_resc - avg_bw_imc;
-+	avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
-+	avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
-+	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-+	avg_diff_per = (int)(avg_diff * 100);
- 
- 	printf("%sok MBM: diff within %d%%\n",
--	       labs(avg_diff) > MAX_DIFF ? "not " : "", MAX_DIFF);
--	tests_run++;
--	printf("# avg_diff: %lu\n", labs(avg_diff));
-+	       avg_diff_per > MAX_DIFF_PERCENT ? "not " : "", MAX_DIFF_PERCENT);
- 	printf("# Span (MB): %d\n", span);
- 	printf("# avg_bw_imc: %lu\n", avg_bw_imc);
- 	printf("# avg_bw_resc: %lu\n", avg_bw_resc);
-+	printf("# avg_diff_per: %d%%\n", avg_diff_per);
-+	tests_run++;
+@@ -84,21 +84,15 @@ static int check_results(int span)
+ 	return 0;
  }
  
- static int check_results(int span)
+-static int mbm_setup(int num, ...)
++static int mbm_setup(struct resctrl_val_param *p)
+ {
+-	struct resctrl_val_param *p;
+ 	static int num_of_runs;
+-	va_list param;
+ 	int ret = 0;
+ 
+ 	/* Run NUM_OF_RUNS times */
+ 	if (num_of_runs++ >= NUM_OF_RUNS)
+ 		return -1;
+ 
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
+-
+ 	/* Set up shemata with 100% allocation on the first run. */
+ 	if (num_of_runs == 0)
+ 		ret = write_schemata(p->ctrlgrp, "100", p->cpu_no,
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 39bf59c6b9c5..e320e79bc4d4 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -59,7 +59,7 @@ struct resctrl_val_param {
+ 	char		*bw_report;
+ 	unsigned long	mask;
+ 	int		num_of_runs;
+-	int		(*setup)(int num, ...);
++	int		(*setup)(struct resctrl_val_param *param);
+ };
+ 
+ pid_t bm_pid, ppid;
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 520fea3606d1..271cb5c976f5 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -712,7 +712,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 	while (1) {
+ 		if ((strcmp(resctrl_val, "mbm") == 0) ||
+ 		    (strcmp(resctrl_val, "mba") == 0)) {
+-			ret = param->setup(1, param);
++			ret = param->setup(param);
+ 			if (ret) {
+ 				ret = 0;
+ 				break;
+@@ -722,7 +722,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 			if (ret)
+ 				break;
+ 		} else if (strcmp(resctrl_val, "cqm") == 0) {
+-			ret = param->setup(1, param);
++			ret = param->setup(param);
+ 			if (ret) {
+ 				ret = 0;
+ 				break;
 -- 
 2.7.4
 
