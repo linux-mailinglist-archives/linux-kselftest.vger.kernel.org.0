@@ -2,59 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E550C17DD04
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Mar 2020 11:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8479F17DE5F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Mar 2020 12:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgCIKNM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Mar 2020 06:13:12 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:33248 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbgCIKNM (ORCPT
+        id S1726974AbgCILN2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Mar 2020 07:13:28 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51663 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726918AbgCILN1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Mar 2020 06:13:12 -0400
-Received: by mail-qt1-f196.google.com with SMTP id d22so6564395qtn.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2020 03:13:11 -0700 (PDT)
+        Mon, 9 Mar 2020 07:13:27 -0400
+Received: by mail-wm1-f68.google.com with SMTP id a132so9369620wme.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2020 04:13:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DTJKzFQSjQhbh2x0Oyy+sE5j12gSTOlD7QkiPO1+EYI=;
-        b=ZujUKSXHYcD6kFn/MaNdpODSGOut11qDYS1oYN2JQKR5XeXX/8x/VJi8qQEY1bJHQ6
-         vKb5V/C/9j9JtJUdpViV09+OXyjli/iTaQhT780zHE93D2WG+gr+YrDBH4RXt4yn+W3P
-         9mUWREQi0o5wY3enCkcBetAgcydc/jO7ZbfDEzkQYLMy+rgyWDGkyQmPpBf9I2Vmvp8W
-         ayE1T/0Jl6Ac2woXvtZzORwr24cKBm1OE5d3dkva9PlGjz7pTwWj+GZbLj7KbPnsc3uO
-         vHuh49szSj7XtOlIRgNGxm4D7hjmNKg6dIa4eInG9vtGjq/+xzWFGJNJRJvXuBTvlH2E
-         Otxw==
+        bh=55uiRdkoDOcfMjXmIBGgTWxBo6cVNLF5HZAhtJG09Qo=;
+        b=T+MwXpSFCv8TtcIPXQOLo/ehqfzZc7V3HmI3ofOMLNy0Wvp2yVNoVGlIOm7TqCTvs5
+         bK42YMWKtOubC3AOKn6Bx5AGQbBLsBmiv/wGfuJZy4kpUrxBnB5x+kkOi0CyUwdFV6Rk
+         gbLPPXao982phGCjjwki8P8gejzjPYvkJdD58=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DTJKzFQSjQhbh2x0Oyy+sE5j12gSTOlD7QkiPO1+EYI=;
-        b=UyjPEAXs1sCHdG1KbXLdn9tz6ny3iEujxgQw504wg1SZQcyz0jrUCPvVt1RBtsRyXF
-         4AgVaGai9UckvKxh3MqqnyJthQ9+aHd3iI4xbKhvpCy7svdoc0BoJEO+MffSjIP/BHJ2
-         bkcAmvy69kx0ZHiEw36EgNhI2u0H5v6lO7eVobdShCFvNueTF6LaGOcxSSp+NaBlhETW
-         kA9W5eUqlqd5Qaz/rYccuoMFaMQ3I+bkKDcpv4EenE63zBQKL4JSc0/m+STxzJbqXJwR
-         Q85PlcPfBGLBPLWwgKje2ChrFlGVzoz/012zzqKbhdkQ4LyILdX5Pdsc73pPpq+iL5ai
-         a1lw==
-X-Gm-Message-State: ANhLgQ0i6AuN/syXSE/xAyWYxyqD3joUdDIpYnxfoWUIBIMiCufudfkj
-        Ha+CwZv9oDt5B3ld5+Z+pdSgfUs22ro=
-X-Google-Smtp-Source: ADFU+vtE0MLb2a1/GHq4N3nsmK4DTOWIfQ4YiLKKh4dA+lEfL4j2Bg2AbsZq9IacvbL00AJyGPqvpw==
-X-Received: by 2002:ac8:7158:: with SMTP id h24mr13595919qtp.63.1583748790889;
-        Mon, 09 Mar 2020 03:13:10 -0700 (PDT)
-Received: from dhcp-12-139.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id t3sm20374416qkt.114.2020.03.09.03.13.08
+        bh=55uiRdkoDOcfMjXmIBGgTWxBo6cVNLF5HZAhtJG09Qo=;
+        b=fyx6Obt1ZLug8Biv8uWFj+hNnlKPhQ/V6bzBDmdz8dXL8MVorJDo++sVjpC0ZNXHwH
+         uxyKPy+A4IiaOO2JubU9P7+7PBEqzBdMe4vK0TEXdgkYMxL/+g+ByUy0FviVkI36jajf
+         Q1fjH8BfcPjS9gb5JqmtvGqkTFqEMEoEItQQ5ODIi8AgJsfiAJd8A8q3ISnHbnrR4Y20
+         2DvvRkpri3FkSpy3ftdqMvJGD2jG47OTMSLtdyDWCRm4cgqyJqQPuIzpeC27kVa3XSwm
+         0H36jGWe8pw9MpMdMkWmsyHR753tghcmf2pj27abpAMXlYsSVRNJlDlCNWPk2yT4bQbh
+         k9jQ==
+X-Gm-Message-State: ANhLgQ196R8PamCZP9BcKxdvfk7wUFjS0WJlbCUloPMX20LyFGm1Wk0g
+        AV/j6U3y3JAH34/z83BzEg8rCA==
+X-Google-Smtp-Source: ADFU+vsDspKmQnLy+9e4MN05+pJwgVV2LPfO50xaFIII9Ko+m3/F4t1jo9WJCpDMbx2wN4/3FGxKFA==
+X-Received: by 2002:a7b:cd83:: with SMTP id y3mr19429922wmj.176.1583752404907;
+        Mon, 09 Mar 2020 04:13:24 -0700 (PDT)
+Received: from localhost.localdomain ([2a06:98c0:1000:8250:3dcc:c1d:7f05:4873])
+        by smtp.gmail.com with ESMTPSA id a5sm25732846wmb.37.2020.03.09.04.13.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 03:13:10 -0700 (PDT)
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuahkh@osg.samsung.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Subject: [RFC PATCH 1/1] selftests/run_kselftest.sh: make each test individually selectable
-Date:   Mon,  9 Mar 2020 18:12:56 +0800
-Message-Id: <20200309101256.868-2-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20200309101256.868-1-liuhangbin@gmail.com>
-References: <20200309101256.868-1-liuhangbin@gmail.com>
+        Mon, 09 Mar 2020 04:13:24 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 09/12] selftests: bpf: don't listen() on UDP sockets
+Date:   Mon,  9 Mar 2020 11:12:40 +0000
+Message-Id: <20200309111243.6982-10-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200309111243.6982-1-lmb@cloudflare.com>
+References: <20200309111243.6982-1-lmb@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -62,102 +63,215 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, after generating run_kselftest.sh, there is no way to choose
-which test we could run. All the tests are listed together and we have
-to run all every time. This patch enhanced the run_kselftest.sh to make
-the tests individually selectable.
+Most tests for TCP sockmap can be adapted to UDP sockmap if the
+listen call is skipped. Rename listen_loopback, etc. to socket_loopback
+and skip listen() for SOCK_DGRAM.
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 ---
- tools/testing/selftests/Makefile | 48 +++++++++++++++++++++++++-------
- tools/testing/selftests/lib.mk   |  2 +-
- 2 files changed, 39 insertions(+), 11 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 47 ++++++++++---------
+ 1 file changed, 25 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 6ec503912bea..3d4bc0071849 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -220,13 +220,9 @@ ifdef INSTALL_PATH
- 	@# Ask all targets to emit their test scripts
- 	echo "#!/bin/sh" > $(ALL_SCRIPT)
- 	echo "BASE_DIR=\$$(realpath \$$(dirname \$$0))" >> $(ALL_SCRIPT)
--	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
- 	echo ". ./kselftest/runner.sh" >> $(ALL_SCRIPT)
--	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
--	echo "if [ \"\$$1\" = \"--summary\" ]; then" >> $(ALL_SCRIPT)
--	echo "  logfile=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
--	echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
--	echo "fi" >> $(ALL_SCRIPT)
-+	echo "TESTS=\"$(TARGETS)\"" | tr -s "/-" "_" >> $(ALL_SCRIPT)
-+	echo "" >> $(ALL_SCRIPT);
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index b1b2acea0638..4ba41dd26d6b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -230,7 +230,7 @@ static int enable_reuseport(int s, int progfd)
+ 	return 0;
+ }
  
- 	@# While building run_kselftest.sh skip also non-existent TARGET dirs:
- 	@# they could be the result of a build failure and should NOT be
-@@ -234,15 +230,47 @@ ifdef INSTALL_PATH
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
--		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
--		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
--		echo -n "run_many" >> $(ALL_SCRIPT); \
-+		echo "run_$$TARGET()" | tr -s "/-" "_" >> $(ALL_SCRIPT); \
-+		echo "{" >> $(ALL_SCRIPT); \
-+		echo -e "\t[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
-+		echo -e "\tcd $$TARGET" >> $(ALL_SCRIPT); \
-+		echo -en "\trun_many" >> $(ALL_SCRIPT); \
- 		echo -n "Emit Tests for $$TARGET\n"; \
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
- 		echo "" >> $(ALL_SCRIPT);	    \
--		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
-+		echo -e "\tcd \$$ROOT" >> $(ALL_SCRIPT); \
-+		echo "}" >> $(ALL_SCRIPT); \
-+		echo "" >> $(ALL_SCRIPT); \
- 	done;
+-static int listen_loopback_reuseport(int family, int sotype, int progfd)
++static int socket_loopback_reuseport(int family, int sotype, int progfd)
+ {
+ 	struct sockaddr_storage addr;
+ 	socklen_t len;
+@@ -249,6 +249,9 @@ static int listen_loopback_reuseport(int family, int sotype, int progfd)
+ 	if (err)
+ 		goto close;
  
-+	echo "usage()" >> $(ALL_SCRIPT);
-+	echo "{" >> $(ALL_SCRIPT);
-+	echo -e "\tcat <<EOF" >> $(ALL_SCRIPT);
-+	echo "usage: \$${0##*/} OPTS" >> $(ALL_SCRIPT);
-+	echo -e "\t-s | --summary\t\tOnly print summary info and put detailed log in output.log" >> $(ALL_SCRIPT);
-+	echo -e "\t-t | --tests\t\tTest name you want to run specifically" >> $(ALL_SCRIPT);
-+	echo -e "\t-h | --help\t\tShow this usage info" >> $(ALL_SCRIPT);
-+	echo "EOF" >> $(ALL_SCRIPT);
-+	echo "}" >> $(ALL_SCRIPT);
-+	echo "" >> $(ALL_SCRIPT);
++	if (sotype == SOCK_DGRAM)
++		return s;
 +
-+	echo "while true; do" >> $(ALL_SCRIPT);
-+	echo -e "\tcase \"\$$1\" in" >> $(ALL_SCRIPT);
-+	echo -e "\t-s | --summary ) logfile=\$$BASE_DIR/output.log; cat /dev/null > \$$logfile; shift ;;" >> $(ALL_SCRIPT);
-+	echo -e "\t-t | --tests ) TESTS=\$$2; shift 2 ;;" >> $(ALL_SCRIPT);
-+	echo -e "\t-h | --help ) usage; exit 0;;" >> $(ALL_SCRIPT);
-+	echo -e "\t\"\" ) break;;" >> $(ALL_SCRIPT);
-+	echo -e "\t* ) usage; exit 1;;" >> $(ALL_SCRIPT);
-+	echo -e "\tesac" >> $(ALL_SCRIPT);
-+	echo "done" >> $(ALL_SCRIPT);
-+	echo "" >> $(ALL_SCRIPT);
-+
-+	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
-+	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
-+
-+	echo "for test in \$$TESTS; do" >> $(ALL_SCRIPT); \
-+	echo -e "\trun_\$$test" >> $(ALL_SCRIPT); \
-+	echo "done" >> $(ALL_SCRIPT); \
- 	chmod u+x $(ALL_SCRIPT)
- else
- 	$(error Error: set INSTALL_PATH to use install)
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 3ed0134a764d..c352d6dab91d 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -110,7 +110,7 @@ emit_tests:
- 	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
- 		BASENAME_TEST=`basename $$TEST`;	\
- 		echo "	\\";				\
--		echo -n "	\"$$BASENAME_TEST\"";	\
-+		echo -ne "\t\t\"$$BASENAME_TEST\"";	\
- 	done;						\
+ 	err = xlisten(s, SOMAXCONN);
+ 	if (err)
+ 		goto close;
+@@ -259,9 +262,9 @@ static int listen_loopback_reuseport(int family, int sotype, int progfd)
+ 	return -1;
+ }
  
- # define if isn't already. It is undefined in make O= case.
+-static int listen_loopback(int family, int sotype)
++static int socket_loopback(int family, int sotype)
+ {
+-	return listen_loopback_reuseport(family, sotype, -1);
++	return socket_loopback_reuseport(family, sotype, -1);
+ }
+ 
+ static void test_insert_invalid(int family, int sotype, int mapfd)
+@@ -333,7 +336,7 @@ static void test_insert_listening(int family, int sotype, int mapfd)
+ 	u32 key;
+ 	int s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -349,7 +352,7 @@ static void test_delete_after_insert(int family, int sotype, int mapfd)
+ 	u32 key;
+ 	int s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -366,7 +369,7 @@ static void test_delete_after_close(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -390,7 +393,7 @@ static void test_lookup_after_insert(int family, int sotype, int mapfd)
+ 	u32 key;
+ 	int s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -417,7 +420,7 @@ static void test_lookup_after_delete(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -439,7 +442,7 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+ 	u32 key, value32;
+ 	int err, s;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -470,11 +473,11 @@ static void test_update_listening(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s1 = listen_loopback(family, sotype);
++	s1 = socket_loopback(family, sotype);
+ 	if (s1 < 0)
+ 		return;
+ 
+-	s2 = listen_loopback(family, sotype);
++	s2 = socket_loopback(family, sotype);
+ 	if (s2 < 0)
+ 		goto close_s1;
+ 
+@@ -500,7 +503,7 @@ static void test_destroy_orphan_child(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -534,7 +537,7 @@ static void test_clone_after_delete(int family, int sotype, int mapfd)
+ 	u64 value;
+ 	u32 key;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -570,7 +573,7 @@ static void test_accept_after_delete(int family, int sotype, int mapfd)
+ 	socklen_t len;
+ 	u64 value;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s == -1)
+ 		return;
+ 
+@@ -624,7 +627,7 @@ static void test_accept_before_delete(int family, int sotype, int mapfd)
+ 	socklen_t len;
+ 	u64 value;
+ 
+-	s = listen_loopback(family, sotype);
++	s = socket_loopback(family, sotype);
+ 	if (s == -1)
+ 		return;
+ 
+@@ -735,7 +738,7 @@ static void test_syn_recv_insert_delete(int family, int sotype, int mapfd)
+ 	int err, s;
+ 	u64 value;
+ 
+-	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
++	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -877,7 +880,7 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
+ 
+ 	zero_verdict_count(verd_mapfd);
+ 
+-	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
++	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1009,7 +1012,7 @@ static void redir_to_listening(int family, int sotype, int sock_mapfd,
+ 
+ 	zero_verdict_count(verd_mapfd);
+ 
+-	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
++	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1120,7 +1123,7 @@ static void test_reuseport_select_listening(int family, int sotype,
+ 
+ 	zero_verdict_count(verd_map);
+ 
+-	s = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1174,7 +1177,7 @@ static void test_reuseport_select_connected(int family, int sotype,
+ 
+ 	zero_verdict_count(verd_map);
+ 
+-	s = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s < 0)
+ 		return;
+ 
+@@ -1249,11 +1252,11 @@ static void test_reuseport_mixed_groups(int family, int sotype, int sock_map,
+ 	zero_verdict_count(verd_map);
+ 
+ 	/* Create two listeners, each in its own reuseport group */
+-	s1 = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s1 = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s1 < 0)
+ 		return;
+ 
+-	s2 = listen_loopback_reuseport(family, sotype, reuseport_prog);
++	s2 = socket_loopback_reuseport(family, sotype, reuseport_prog);
+ 	if (s2 < 0)
+ 		goto close_srv1;
+ 
 -- 
-2.19.2
+2.20.1
 
