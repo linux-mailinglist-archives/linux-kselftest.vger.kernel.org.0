@@ -2,259 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B5E180984
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Mar 2020 21:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 102F3180A9A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Mar 2020 22:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726271AbgCJUqj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Mar 2020 16:46:39 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36535 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbgCJUqi (ORCPT
+        id S1726273AbgCJVj3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Mar 2020 17:39:29 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:33493 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgCJVj3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Mar 2020 16:46:38 -0400
-Received: by mail-pg1-f196.google.com with SMTP id c7so1121669pgw.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2020 13:46:36 -0700 (PDT)
+        Tue, 10 Mar 2020 17:39:29 -0400
+Received: by mail-pj1-f67.google.com with SMTP id o21so692817pjs.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2020 14:39:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dHDyU6G/3PWCtvFuoOre6k3J3Ww9bHTi6I8bhr1RLW0=;
-        b=tDPEiTZKCuFr5c8YQDWtpPPSo7JCZb7nKqNKQNeGP9nOeNUhC90ePx39hzySMLqK33
-         QzIq0KL8ZRIeqbeB69KpcCB/RMTclqIJDfoRG0tobaaKa3nCqZHXSag47wP3cM53mHE9
-         wjFx9vgpyPPGqS1xQjAq7xWXCiq1KdfE9+OPhd6FTtG3ypRW6f6l3mul4lcEF66DpTI7
-         7n84nB29mXG0j8Stfr4L8H0zuvTkCXhA0s3QPsBzE6BsrCprl6n+K4Fu76Lap0hu23mt
-         NHIONPSkJEJqLsIZZumc0N+JWzB88aTI705HtK0CPuUHIq2SzvribqanW8ct/ZwcCQnL
-         ne+w==
+        bh=T26zcDKa3B8Ccgr/TpJ2S305/X5TIZGyLp36trF+POo=;
+        b=UlVfj8z2wr/WzpEmGcDaRfms4z9TbAXtAyU2y3qiTLBfcdR4vOgKpoytN1aXHGxzOq
+         XDk/3pE6KS2Cuzy3UvR8Vz6WuZtA0ZFyvoRuMhVkW0iPKzUh9kq0R2L1Shu1OAO9na5P
+         PoRYXmQ3PZgySKo8VTUGwwOFXBiIB0WPYHB3M1S0nZc7HpdTTVfunIENsKTmb2Mhk9sq
+         /UcWyEY/lAB+oPcM9CyTq/ynZq4mvpfEtvyGKzv+z+BQhi7GUik2pSeT0M8V5HmMaOza
+         0SlOk/LV5XNbZ2+nn7CVZIzefIKHhxkgt6HDH5i9dAM6RoigIbJuohA7/IN+mspaxwsO
+         FO4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dHDyU6G/3PWCtvFuoOre6k3J3Ww9bHTi6I8bhr1RLW0=;
-        b=tr6Q4/miQC0dlmcjeEn4qWNo+DdsT3XhuhI5amEsMTUhFiK4+7gfvRz7d8C/51/y8T
-         Pf7O3rzlEfeK19sRz/caoLsagJ4Fk5pvdyXn0ApGupVKosq++c4asm6LpZRY6wxnu/TI
-         BnY0Lca+NlTiCqp/yogK6lfcnPbLsMbmtI8QXoGEBxIHBika3tzluZf4CHFRsyY+SbN7
-         h7S0T4eGL60fuAGbdG01twTcK/Pvl+Ff5Gg61Uufy9AMVkMl/6OuP2Jzg9bSrHxRZ5tA
-         m8BT6wMO7HmMwfn06xKgsIotT1ybJNs6ThjyRuiBS1aOfzQ1DG1lmU2Xh/dN+OUiMzUl
-         gnDA==
-X-Gm-Message-State: ANhLgQ17Q8lJDEYJt93BWHPLr1mW8C55rrpjqm7PnYk1UIPBmlq29FDj
-        29Rtx/mJ6qkg6Zn3y1jdhhzJN+WP/RbTMcjV3uea/w==
-X-Google-Smtp-Source: ADFU+vtebrezbE+L8+EnJ9bmiGBw5xqzW3DLk2kpHmj22qMrFN+n/T0GaAX4j09XTTZS0PnyDxdBlWlsjMyndKyxUOI=
-X-Received: by 2002:a63:650:: with SMTP id 77mr16283706pgg.201.1583873195939;
- Tue, 10 Mar 2020 13:46:35 -0700 (PDT)
+        bh=T26zcDKa3B8Ccgr/TpJ2S305/X5TIZGyLp36trF+POo=;
+        b=rVxLvAi3cxrYLyuC1DpXy5rysgJAvjiHQHKXY/zw1PcXc54Srcy38R8oHWBNm/1NaK
+         7WFEjvtgTHUyyzc8Ol8y6c9Is18Gks0w+dBeKZoxog1RiVtL5kULpM4y4ZnktmAULfjk
+         +eRfl9JFIVl1merX+c02IFb3TGzXjfe0dpYuAbRlk5xDkH9zswQDzDsUMyHRyXukYRuk
+         SjbYTdbz4LOfFyy3bJ8nDjukrNyk4G6CLuDrJwAUwtVJ2wqxL+yKF9VqDbfV6FF35W2k
+         yJsBivyJN+teniExEkxxCNhG5r+MBk+UrUSmeuQi7eX0Qan6pWUpMU7PRrkxhx6DSw25
+         xm1g==
+X-Gm-Message-State: ANhLgQ2RYMJYmAx7/zy9ci5XqtjHplVYIuppCxscSpYbziZ/0M8n+mjh
+        rUpt/Mu0ZprS6oSzb8CzdEsk7gGK9wUnu+fE+XLA4A==
+X-Google-Smtp-Source: ADFU+vsXRA51Z5R8J8QAlzU7dBAeXHMJIO1KbWRLfAi/7Y8ISrxHlkI7cP6T1ce42VyooMGph67CkOVhGhlLFCL8xJY=
+X-Received: by 2002:a17:90a:a587:: with SMTP id b7mr33452pjq.18.1583876367719;
+ Tue, 10 Mar 2020 14:39:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYvRZ9eCE29FjXkv1dQfrdGO3uWp4Tvkip5Z_jsgjVJeAQ@mail.gmail.com>
- <CAHp75VfhKoLtWkLHUyzg6m=rx833qiCVimWJVKU13qrX+aJz-Q@mail.gmail.com>
- <CAFd5g45GbSX1BkuaH=8639ESHi-MCGkpFhEZZpycm9=jQb93rg@mail.gmail.com>
- <CAFd5g47aaE+tGeHPrQmhfi6_nrvi1K4DvtRodh=zN21-uiQ1DQ@mail.gmail.com>
- <20200305223350.GA2852@mara.localdomain> <20200306120525.GC68079@kuha.fi.intel.com>
- <CAFd5g45c9L4BBRNtxtQf_NFr2bR6Wgt9uOHW86gzb6Ozeb0SBA@mail.gmail.com>
- <CAFd5g45cdygYfxGoCkk710tLXFADeLNb+6w-=vhkDMLP9OM7bw@mail.gmail.com> <20200310111837.GA1368052@kuha.fi.intel.com>
-In-Reply-To: <20200310111837.GA1368052@kuha.fi.intel.com>
+References: <20200227024301.217042-1-trishalfonso@google.com>
+ <20200227024301.217042-2-trishalfonso@google.com> <alpine.LRH.2.20.2002271136160.12417@dhcp-10-175-190-15.vpn.oracle.com>
+In-Reply-To: <alpine.LRH.2.20.2002271136160.12417@dhcp-10-175-190-15.vpn.oracle.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 10 Mar 2020 13:46:24 -0700
-Message-ID: <CAFd5g452sDMZToU+FDa-Odbkd_t1708gcRMAZQG+U4LnV=Xqgw@mail.gmail.com>
-Subject: Re: BUG: kernel NULL pointer dereference, address: 00 - ida_free+0x76/0x140
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        hdegoede@redhat.com,
-        "rafael.j.wysocki" <rafael.j.wysocki@intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
+Date:   Tue, 10 Mar 2020 14:39:16 -0700
+Message-ID: <CAFd5g44gVFyxwo4r=7gpPGdvPQoynfEjHhLfyC3_6uaU2oA0Lg@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] KUnit: KASAN Integration
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Patricia Alfonso <trishalfonso@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        David Gow <davidgow@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        lkft-triage@lists.linaro.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+        KUnit Development <kunit-dev@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 4:18 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Thu, Feb 27, 2020 at 6:04 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+
+Sorry for the delay in reviews. I have been preoccupied by some Google
+internal stuff.
+
+> On Wed, 26 Feb 2020, Patricia Alfonso wrote:
 >
-> On Mon, Mar 09, 2020 at 02:43:13PM -0700, Brendan Higgins wrote:
-> > On Mon, Mar 9, 2020 at 1:35 PM Brendan Higgins
-> > <brendanhiggins@google.com> wrote:
-> > >
-> > > On Fri, Mar 6, 2020 at 4:05 AM Heikki Krogerus
-> > > <heikki.krogerus@linux.intel.com> wrote:
-> > > >
-> > > > On Fri, Mar 06, 2020 at 12:33:50AM +0200, Sakari Ailus wrote:
-> > > > > Hi Brendan,
-> > > > >
-> > > > > On Thu, Mar 05, 2020 at 11:51:20AM -0800, Brendan Higgins wrote:
-> > > > > > On Thu, Mar 5, 2020 at 11:40 AM Brendan Higgins
-> > > > > > <brendanhiggins@google.com> wrote:
-> > > > > > >
-> > > > > > > On Thu, Mar 5, 2020 at 11:18 AM Andy Shevchenko
-> > > > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > +Cc: Sakari
-> > > > > > > >
-> > > > > > > > On Thu, Mar 5, 2020 at 6:00 PM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > > > > > > >
-> > > > > > > > > Regression reported on Linux next 5.6.0-rc4-next-20200305 on x86_64,
-> > > > > > > > > i386, arm and arm64. The steps to reproduce is running kselftests lib
-> > > > > > > > > printf.sh test case.
-> > > > > > > > > Which is doing modprobe operations.
-> > > > > > > > >
-> > > > > > > > > BTW, there are few RCU warnings from the boot log.
-> > > > > > > > > Please refer below link for more details.
-> > > > > > > > >
-> > > > > > > > > Steps reproduce by using kselftests,
-> > > > > > > > >
-> > > > > > > > >           - lsmod || true
-> > > > > > > > >           - cd /opt/kselftests/default-in-kernel/lib/
-> > > > > > > > >           - export PATH=/opt/kselftests/default-in-kernel/kselftest:$PATH
-> > > > > > > > >           - ./printf.sh || true
-> > > > > > > > >           - ./bitmap.sh || true
-> > > > > > > > >           - ./prime_numbers.sh || true
-> > > > > > > > >           - ./strscpy.sh || true
-> > > > > > > > >
-> > > > > > > > > x86_64 kernel BUG dump.
-> > > > > > > > > + ./printf.sh
-> > > > > > >
-> > > > > > > Oops, I am wondering if I broke this with my change "Revert "software
-> > > > > > > node: Simplify software_node_release() function"":
-> > > > > > >
-> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d1c19322388d6935b534b494a2c223dd089e30dd
-> > > > > > >
-> > > > > > > I am still investigating, will update later.
-> > > > > >
-> > > > > > Okay, yeah, I am pretty sure I caused the breakage. I got an email
-> > > > > > from kernel test robot a couple days ago that I didn't see:
-> > > > > >
-> > > > > > https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/N3ZN5XH7HK24JVEJ5WSQD2SK6YCDRILR/
-> > > > > >
-> > > > > > It shows the same breakage after applying this change.
-> > > > > >
-> > > > > > I am still investigating how my change broke it, nevertheless.
-> > > > >
-> > > > > As nodes in the tree are being removed, the code before the patch that
-> > > > > "simplified" the software_node_release() function accessed the node's parent
-> > > > > in its release function.
-> > > > >
-> > > > > And if CONFIG_DEBUG_KOBJECT_RELEASE is defined, the release functions are no
-> > > > > longer necessarily called in order, leading to referencing released memory.
-> > > > > Oops!
-> > > > >
-> > > > > So Heikki's patch actually fixed a bug. :-)
-> > > >
-> > > > Well, I think it just hid the problem. It looks like the core
-> > > > (lib/kobject.c) allows the parent kobject to be released before the
-> > > > last child kobject is released. To be honest, that does not sound
-> > > > right to me...
-> > > >
-> > > > I think we can workaround this problem by taking reference to the
-> > > > parent when the child is added, and then releasing it when the child
-> > > > is released, and in that way be guaranteed that the parent will not
-> > > > disappear before the child is fully released, but that still does not
-> > > > feel right. It feels more like the core is not doing it's job to me.
-> > > > The parent just should not be released before its children.
-> > > >
-> > > > Either I'm wrong about that, and we still should take the reference on
-> > > > the parent, or we revert my patch like Brendan proposed and then fix
-> > >
-> > > Either way, isn't it wrong to release the node ID before deleting the
-> > > sysfs entry? I am not sure that my fix was the correct one, but I
-> > > believe the bug that Heidi and I found is actually a bug.
+> > Integrate KASAN into KUnit testing framework.
 >
-> I agree.
+> This is a great idea! Some comments/suggestions below...
 >
-> > > > the core with something like this (warning, I did not even try to
-> > > > compile that):
-> > >
-> > > I will try it out.
-> > >
-> > > > diff --git a/lib/kobject.c b/lib/kobject.c
-> > > > index 83198cb37d8d..ec5774992337 100644
-> > > > --- a/lib/kobject.c
-> > > > +++ b/lib/kobject.c
-> > > > @@ -680,6 +680,12 @@ static void kobject_cleanup(struct kobject *kobj)
-> > > >                 kobject_uevent(kobj, KOBJ_REMOVE);
-> > > >         }
-> > > >
-> > > > +       if (t && t->release) {
-> > > > +               pr_debug("kobject: '%s' (%p): calling ktype release\n",
-> > > > +                        kobject_name(kobj), kobj);
-> > > > +               t->release(kobj);
-> > > > +       }
-> > > > +
-> > > >         /* remove from sysfs if the caller did not do it */
-> > > >         if (kobj->state_in_sysfs) {
-> > > >                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
-> > > > @@ -687,12 +693,6 @@ static void kobject_cleanup(struct kobject *kobj)
-> > > >                 kobject_del(kobj);
-> > > >         }
-> > > >
-> > > > -       if (t && t->release) {
-> > > > -               pr_debug("kobject: '%s' (%p): calling ktype release\n",
-> > > > -                        kobject_name(kobj), kobj);
-> > > > -               t->release(kobj);
-> > > > -       }
-> > > > -
-> > > >         /* free name if we allocated it */
-> > > >         if (name) {
-> > > >                 pr_debug("kobject: '%s': free name\n", name);
+> >  - Fail tests when KASAN reports an error that is not expected
+> >  - Use KUNIT_EXPECT_KASAN_FAIL to expect a KASAN error in KASAN tests
+> >  - KUnit struct added to current task to keep track of the current test
+> > from KASAN code
+> >  - Booleans representing if a KASAN report is expected and if a KASAN
+> >  report is found added to kunit struct
+> >  - This prints "line# has passed" or "line# has failed"
 > >
-> > Alright, so I tried it and it looks like Heikki's suggestion worked.
+> > Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+> > ---
+> > If anyone has any suggestions on how best to print the failure
+> > messages, please share!
 > >
-> > Is everyone comfortable going this route?
+> > One issue I have found while testing this is the allocation fails in
+> > kmalloc_pagealloc_oob_right() sometimes, but not consistently. This
+> > does cause the test to fail on the KUnit side, as expected, but it
+> > seems to skip all the tests before this one because the output starts
+> > with this failure instead of with the first test, kmalloc_oob_right().
+> >
+> >  include/kunit/test.h                | 24 ++++++++++++++++++++++++
+> >  include/linux/sched.h               |  7 ++++++-
+> >  lib/kunit/test.c                    |  7 ++++++-
+> >  mm/kasan/report.c                   | 19 +++++++++++++++++++
+> >  tools/testing/kunit/kunit_kernel.py |  2 +-
+> >  5 files changed, 56 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 2dfb550c6723..2e388f8937f3 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -21,6 +21,8 @@ struct kunit_resource;
+> >  typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
+> >  typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+> >
+> > +void kunit_set_failure(struct kunit *test);
+> > +
+> >  /**
+> >   * struct kunit_resource - represents a *test managed resource*
+> >   * @allocation: for the user to store arbitrary data.
+> > @@ -191,6 +193,9 @@ struct kunit {
+> >        * protect it with some type of lock.
+> >        */
+> >       struct list_head resources; /* Protected by lock. */
+> > +
+> > +     bool kasan_report_expected;
+> > +     bool kasan_report_found;
+> >  };
+> >
 >
-> Hold on. Another way to fix the problem is to increment the parent's
-> reference count before that kobject_del(kobj) is called, and then
-> decrementing it after t->release(kobj) is called. It may be safer to
-> fix the problem like that.
-
-Right, this was your first suggestion above, right? That actually made
-more sense to me, but you seemed skeptical of it due to it being
-messier, which makes sense.
-
-Nevertheless, having children take a reference seems like the right
-thing to do because the children need to degregister themselves from
-the parent. Calling t->release() ahead of kobject_del() seems to
-reintroduce the problem that I pointed out, albeit *much* more
-briefly. If I understand correctly, it is always wrong to have a sysfs
-entry that points to a partially deallocated kobject. Please correct
-me if I am wrong.
-
-So I think there are two solutions: Either we have to ensure that each
-child is deallocated first so we can preserve the kobject_del() and
-then t->release() ordering, or we have to add some sort of "locking"
-mechanism to prevent the kobject from being accessed by anything other
-than the deallocation code until it is fully deallocated; well, it
-would have to prevent any access at all :-). I think it goes without
-saying that this "locking" idea is pretty flawed.
-
-The problem with just having children take a reference is that the
-kobject children already take a reference to their parent, so it seems
-like the kobject should be smart enough to deallocate children rather
-than having swnode have to keep a separate tally of children, no?
-
-Sorry if this all seems obvious, I am not an expert on this part of the kernel.
-
-> My example above proofs that there is the problem, but it changes the
-> order of execution which I think can always have other consequences.
+> Is this needed here? You're testing something pretty
+> specific so it seems wrong to add to the generic
+> kunit resource unless there's a good reason. I see the
+> code around setting these values in mm/kasan/report.c,
+> but I wonder if we could do something more generic.
 >
-> > Also, should I send this fix as a separate patch? Or do people want me
-> > to send an updated revision of my revert patch with the fix?
+> How about the concept of a static resource (assuming a
+> dynamically allocated one is out because it messes
+> with memory allocation tests)? Something like this:
 >
-> This needs to be send in its own separate patch. Ideally it could be
-> send together with the revert in the same series, but I'm not sure
-> that's possible anymore. Didn't Greg pick the revert already?
+> #define kunit_add_static_resource(test, resource_ptr, resource_field)   \
+>         do {                                                            \
+>                 spin_lock(&test->lock);                                 \
+>                 (resource_ptr)->resource_field.init = NULL;             \
+>                 (resource_ptr)->resource_field.free = NULL;             \
+>                 list_add_tail(&(resource_ptr)->resource_field,          \
+>                               &test->resources);                        \
+>                 spin_unlock(&test->lock);                               \
+>         } while (0)
+>
+>
+> Within your kasan code you could then create a kasan-specific
+> structure that embends a kunit_resource, and contains the
+> values you need:
+>
+> struct kasan_report_resource {
+>         struct kunit_resource res;
+>         bool kasan_report_expected;
+>         bool kasan_report_found;
+> };
+>
+> (One thing we'd need to do for such static resources is fix
+> kunit_resource_free() to check if there's a free() function,
+> and if not assume a static resource)
+>
+> If you then create an init() function associated with your
+> kunit suite (which will be run for every case) it can do this:
+>
+> int kunit_kasan_test_init(struct kunit *test)
+> {
+>         kunit_add_static_resource(test, &my_kasan_report_resource, res);
+>         ...
+> }
+>
+> The above should also be used to initialize current->kasan_unit_test
+> instead of doing that in kunit_try_run_case().  With those
+> changes, you don't (I think) need to change anything in core
+> kunit (assuming support for static resources).
+>
+> To retrieve the resource during tests or in kasan context, the
+> method seems to be to use kunit_resource_find(). However, that
+> requires a match function which seems a bit heavyweight for the
+> static case.  We should probably have a default "find by name"
+> or similar function here, and add an optional "name" field
+> to kunit resources to simplify things.  Anyway here you'd
+> use something like:
+>
+>         kasan_report_resource = kunit_resource_find(test, matchfn,
+>                                                     NULL, matchdata);
+>
+>
+> Are there any barriers to taking this sort of approach (apart
+> from the support for static resources not being there yet)?
 
-Sounds good.
-
-I did already let Greg know when he emailed us on backporting the
-patch to stable, and he acked saying he removed them. So as long as
-these are not in the queue for 5.6 (it is not in Linus' tree yet), we
-should be good.
-
-Cheers
+This is a really interesting idea, Alan! I never imagined
+kunit_resources being used this way, and I like it. I saw you sent
+some patches to implement this stuff, so I will withhold further
+comments on that here.
