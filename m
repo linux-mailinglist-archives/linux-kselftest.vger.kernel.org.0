@@ -2,133 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E920180562
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Mar 2020 18:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A373C180801
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Mar 2020 20:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727123AbgCJRry (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Mar 2020 13:47:54 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:39380 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727364AbgCJRro (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Mar 2020 13:47:44 -0400
-Received: by mail-wr1-f65.google.com with SMTP id r15so11969347wrx.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2020 10:47:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=s2UFve1spLe5PfIsM/t2IP38W27VsK6rPhEgeqi2HIU=;
-        b=jSdZCLm8z1rI3LZ3SxCXEel2QDbkIxZzCF2vGUbO68qM+QmWrF1e4E/W60qB/ZbaQJ
-         pqbfQkL/gbldlrpgjPDKgcafiJouEnBqev4A2r01VweiblzFHhZ6mabrDEI3EGSyXldQ
-         FRvm+2oHvQhWCgzDOy33uxz9eA3dnUD+AclPQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=s2UFve1spLe5PfIsM/t2IP38W27VsK6rPhEgeqi2HIU=;
-        b=nnLdRYa9lIjvoDRzRicN0Sf9O/oNIQrcdcKM/aVIl44MVC87xvqPE3TWjQmh1wCV/G
-         fiLmYdWSID2l36xlasgun07EBVX91mDj/t7epoU/d5HDflF93+eAL1/oXMADhF7D8XTa
-         UPeSt+tQGoRPrarDE7sFNfCyQqstZpFdL1nDd+MudFJVaUmWKxPWaA6xpDpZFGTgtYTG
-         7Mf7XfNKBGo2FMxHGnQabqBvBYrK9hOoTg2T8I7iHzQuhq4agei1OcmOCSKu6xkd2dbz
-         zzAahPPqytBf3NzbSj5u22C5aQm8f+A5HrnEcyImze/IATliak2PPM6NvqfAqs5w6aeM
-         10BA==
-X-Gm-Message-State: ANhLgQ3fPnMUnhhULkjcqumg93KJ+Qw8r+Z01c16a2bhBk2fgUtesZ59
-        Ioe2mv3FGn4AKSuxlyToC3Bdfg==
-X-Google-Smtp-Source: ADFU+vsbjmjA39Km027B6MzqwvSgIzkU/t+2bR4rGkw6W/xaR7jhW8Qj7BPN6PQHA/PHwTS1skZhpA==
-X-Received: by 2002:adf:a3c9:: with SMTP id m9mr26516031wrb.349.1583862463547;
-        Tue, 10 Mar 2020 10:47:43 -0700 (PDT)
-Received: from localhost.localdomain ([2a06:98c0:1000:8250:9494:775c:e7b6:e690])
-        by smtp.gmail.com with ESMTPSA id k4sm9118691wrx.27.2020.03.10.10.47.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 10:47:40 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] bpf: sockmap, sockhash: test looking up fds
-Date:   Tue, 10 Mar 2020 17:47:11 +0000
-Message-Id: <20200310174711.7490-6-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200310174711.7490-1-lmb@cloudflare.com>
-References: <20200310174711.7490-1-lmb@cloudflare.com>
+        id S1727082AbgCJT3o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Mar 2020 15:29:44 -0400
+Received: from mga12.intel.com ([192.55.52.136]:21692 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726545AbgCJT3o (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Mar 2020 15:29:44 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 12:29:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,538,1574150400"; 
+   d="scan'208";a="353693892"
+Received: from hhuan26-mobl1.amr.corp.intel.com ([10.254.76.69])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Mar 2020 12:29:41 -0700
+Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
+To:     "Jarkko Sakkinen" <jarkko.sakkinen@linux.intel.com>,
+        "Dr. Greg" <greg@enjellic.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-sgx@vger.kernel.org, akpm@linux-foundation.org,
+        dave.hansen@intel.com, sean.j.christopherson@intel.com,
+        nhorman@redhat.com, npmccallum@redhat.com, haitao.huang@intel.com,
+        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
+        kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
+        luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
+        cedric.xing@intel.com, puiterwijk@redhat.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v28 14/22] selftests/x86: Add a selftest for SGX
+References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com>
+ <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
+ <20200306053210.GA16297@wind.enjellic.com>
+Date:   Tue, 10 Mar 2020 14:29:41 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+From:   "Haitao Huang" <haitao.huang@linux.intel.com>
+Organization: Intel Corp
+Message-ID: <op.0g923rgpwjvjmi@hhuan26-mobl1.amr.corp.intel.com>
+In-Reply-To: <20200306053210.GA16297@wind.enjellic.com>
+User-Agent: Opera Mail/1.0 (Win32)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Make sure that looking up an element from the map succeeds,
-and that the fd is valid by using it an fcntl call.
+On Thu, 05 Mar 2020 23:32:10 -0600, Dr. Greg <greg@enjellic.com> wrote:
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c | 26 ++++++++++++++-----
- 1 file changed, 20 insertions(+), 6 deletions(-)
+> On Wed, Mar 04, 2020 at 01:36:01AM +0200, Jarkko Sakkinen wrote:
+>
+> Good evening, I hope the end of the week is going well for everyone.
+>
+>> Add a selftest for SGX. It is a trivial test where a simple enclave
+>> copies one 64-bit word of memory between two memory locations given
+>> to the enclave as arguments. Use ENCLS[EENTER] to invoke the
+>> enclave.
+>
+> Just as a clarification, are you testing the new driver against signed
+> production class enclaves in .so format that also include metadata
+> layout directives or is the driver just getting tested against the two
+> page toy enclave that copies a word of memory from one memory location
+> to another?
+>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 52aa468bdccd..929e1e77ecc6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -453,7 +453,7 @@ static void test_lookup_after_delete(int family, int sotype, int mapfd)
- 	xclose(s);
- }
- 
--static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
-+static void test_lookup_fd(int family, int sotype, int mapfd)
- {
- 	u32 key, value32;
- 	int err, s;
-@@ -466,7 +466,7 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
- 			       sizeof(value32), 1, 0);
- 	if (mapfd < 0) {
- 		FAIL_ERRNO("map_create");
--		goto close;
-+		goto close_sock;
- 	}
- 
- 	key = 0;
-@@ -475,11 +475,25 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
- 
- 	errno = 0;
- 	err = bpf_map_lookup_elem(mapfd, &key, &value32);
--	if (!err || errno != ENOSPC)
--		FAIL_ERRNO("map_lookup: expected ENOSPC");
-+	if (err) {
-+		FAIL_ERRNO("map_lookup");
-+		goto close_map;
-+	}
- 
-+	if ((int)value32 == s) {
-+		FAIL("return value is identical");
-+		goto close;
-+	}
-+
-+	err = fcntl(value32, F_GETFD);
-+	if (err == -1)
-+		FAIL_ERRNO("fcntl");
-+
-+close:
-+	xclose(value32);
-+close_map:
- 	xclose(mapfd);
--close:
-+close_sock:
- 	xclose(s);
- }
- 
-@@ -1456,7 +1470,7 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		/* lookup */
- 		TEST(test_lookup_after_insert),
- 		TEST(test_lookup_after_delete),
--		TEST(test_lookup_32_bit_value),
-+		TEST(test_lookup_fd),
- 		/* update */
- 		TEST(test_update_existing),
- 		/* races with insert/delete */
+We (Intel SGX SDK/PSW team) tested this driver for enclaves in .so format  
+with metadata. Our 2.8 release supports v24 and 2.9 supports v25+. Both  
+production signed and debug signed enclaves worked.
+
+*Note* we did make some code changes in our runtime for v24+, mainly  
+dealing with src & EPC page alignment for EADD, open one fd per enclave,  
+use -z noexecstack linker option, etc. You can see the changes on GitHub.
+
+> Our PSW/runtime is currently failing to initialize production class
+> enclaves secondary to a return value of -4 from the ENCLU[EINIT]
+> instruction, which means the measurement of the loaded enclave has
+> failed to match the value in the signature structure.
+>
+> The same enclave loads fine with the out of kernel driver.  Our
+> diagnostics tell us we are feeding identical page streams and
+> permissions to the page add ioctl's of both drivers.  The identity
+> modulus signature of the signing key for the enclave is being written
+> to the launch control registers.
+>
+> We see the same behavior from both our unit test enclaves and the
+> Quoting Enclave from the Intel SGX runtime.
+>
+We did not see any issue loading QE in our tests. Please directly email me  
+on this test if you have specific questions.
+
+> When we ported our runtime loader to the new driver ABI we kept things
+> simple and add only a single page at a time in order to replicate the
+> behavior of the old driver.
+>
+> Secondly, we were wondering what distribution you are building the
+> self-tests with?  Initial indications are that the selftest signing
+> utility doesn't build properly with OpenSSL 1.1.1.
+>
+> Have a good day.
+>
+> Dr. Greg
+>
+> As always,
+> Dr. Greg Wettstein, Ph.D, Worker
+> IDfusion, LLC               SGX secured infrastructure and
+> 4206 N. 19th Ave.           autonomously self-defensive platforms.
+> Fargo, ND  58102
+> PH: 701-281-1686            EMAIL: greg@idfusion.net
+> ------------------------------------------------------------------------------
+> "Don't worry about people stealing your ideas.  If your ideas are any
+>  good, you'll have to ram them down people's throats."
+>                                 -- Howard Aiken
+
+
 -- 
-2.20.1
-
+Using Opera's mail client: http://www.opera.com/mail/
