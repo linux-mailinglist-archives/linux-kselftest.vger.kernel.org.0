@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4C51824A5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 23:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632DC1824BC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 23:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729626AbgCKWUF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Mar 2020 18:20:05 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:32863 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729328AbgCKWUE (ORCPT
+        id S1729746AbgCKWXh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Mar 2020 18:23:37 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:53052 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729626AbgCKWXg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Mar 2020 18:20:04 -0400
-Received: by mail-pg1-f201.google.com with SMTP id i29so2173708pgi.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2020 15:20:03 -0700 (PDT)
+        Wed, 11 Mar 2020 18:23:36 -0400
+Received: by mail-pl1-f202.google.com with SMTP id 64so2090841plf.19
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2020 15:23:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=GPGWW1sqDohcwt84cAP0Nr+Zx9nz2MaTy8N1N1fJuDE=;
-        b=ZPl15rxznSlxD5GgkSlOPX9akbIouil42MHvxrlzbWwo1y0qjf69eEFVHyTWebVai0
-         GdglBmYIfU3ZyR7aHCoMy4YC+UC2QfwCiFZQmu8qBAIhhKGW/WPhcrOzSepX4IhPm1Hx
-         H4AtIimUqq1OtBRQDFjlalItsGhjtiLjIiWJP+aMjQrOuGsyH6owTN4R0p+hUlm9N9Ti
-         kx+gK0OpC2eNOvdMWFn/XAsThdz+OjvLX0ooGOqQyofGb9cvrnegPsshcufaMcsaLIjW
-         y32ICO86i/gO4CKRyi09ApOzkBzljIQUt02XgxgeRjKcwzOILSujeXiv5BGhDnVJlW8h
-         Co7w==
+        bh=U1iDEFww1El8Gt3tduRVoHHQdOCf1b56TafCNW0JF/k=;
+        b=sEVwc1UOBv3VuEQdbGvIlYBgWBX9D5LBgKc0pHQga6mdAVXEcAhDqMVylP1BOQq9eF
+         95IpyRVVUevnLdQPbuGavljctufDUdoUnDjn3g0O4BK69JGE3V5pWtp6Oz6RsNT5Auhc
+         Uu52Q47dquYxfNtPVchhlmv88Dbv68m2kIi1urohmXZoVklMGNpDku+awGzifErSK+dd
+         kJMfYOTDi0KUXPa3DXFeeAgqRq6zpEnuU9DLvl5WUrhvGE0jP1CzPvSZdYJg++UXWTV7
+         jdJjwDZnUooCQwEr1xla9kX0a17STbuZlnHJhFk5Yss1ujt5Zgrrk3TeMCYL5p0HILDS
+         fovg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=GPGWW1sqDohcwt84cAP0Nr+Zx9nz2MaTy8N1N1fJuDE=;
-        b=ipxvfAsx+m7g8rDL08AGYIRjzMyhhr2phs9TK8dA+oYWH2EqqaRrR76wMUayHzV46y
-         eEa58Yi3HI50K3X9sF9kSH4XDvX0YqNUEaqGutZc7QwrUQzgwfn9N6B884OwrMupmIub
-         2GF5koKr0mGZRh5Vp2Apm9jlap2L26rziTY79rhOXIqVUEYbT0L97PGJj6QMKkBw7x2D
-         tkNRF+tfaw2SDI6So3FuvoapjrX49H52b/Mo3ODGnWzoFiaPDNcav9C9FRjRME7omOox
-         Ou9sEKQ5rc79CW6+R/7WsXnIxQ/zEUFVSdhgkqqvTCEKugl3KSerpMqnIEZWaqavEmZ1
-         IuKw==
-X-Gm-Message-State: ANhLgQ3NxOhIeza9gCX5lPWX8s8Z4r7wBlIu2061EM0W8ljF6xO75UJG
-        stWw4glFp29ix7rXQZ0SBqM4QMt3ANcFpA==
-X-Google-Smtp-Source: ADFU+vsxQ3D92CawgST7SnnlSygp3NF10J/qTeqgI3/Ud6jkk0/vbRYmejptrZszsYa4Vpb3CcxLpkM92KqrEA==
-X-Received: by 2002:a17:90a:ac05:: with SMTP id o5mr898934pjq.143.1583965202377;
- Wed, 11 Mar 2020 15:20:02 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 15:19:57 -0700
-Message-Id: <20200311221957.258154-1-davidgow@google.com>
+        bh=U1iDEFww1El8Gt3tduRVoHHQdOCf1b56TafCNW0JF/k=;
+        b=Q+dTyNH5EQn1Aiyk3SOzFzQSh8xGbdvyLI4PnD9fL0p+CAK809gbU1Inhms+xPGlEa
+         75YRw3DWQsXG1VBIp58AnDldWIiJF0P7Zy5xBogKHYtjCJemsp8Wj3fA1FLGtRwWjRcY
+         meGWtjvET9V57l8Oz3qLrY4YjMn6qA823fDmrlYZ731ktPrcXupCix9oiIze3CmRLPs3
+         ApzMAGUhifVdBWtNYXsH9rW5Iin7bXpeO0E2QhDgHkNSrJ6dtfev4aBW/pcgZi1I9i1n
+         OnZrjcIBNYY7CsJ1xXN1Sy+sUVN7bNw/3Iw2QWlq0FiaTumLJzw0ln5wKNZAGOqmho6S
+         FrXw==
+X-Gm-Message-State: ANhLgQ2t3MAO1djdq3n7bzd9/zk7S8embzlrSF1vp5mnRdTtB2M76Fa4
+        D1YseuJgQHRgYTMAer8PlUkQMLYoudrUsA==
+X-Google-Smtp-Source: ADFU+vtPmQMywB2cfUJ8IMDMCSLvMM0dwQYxNSolQ4ed+sEYHP4nCR3VOvylDNPizZTqIGFDCYaWDmt8o2dbUw==
+X-Received: by 2002:a63:cb:: with SMTP id 194mr1177160pga.37.1583965413686;
+ Wed, 11 Mar 2020 15:23:33 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 15:21:58 -0700
+Message-Id: <20200311222157.259707-1-davidgow@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
 Subject: [RFC PATCH kunit-next] kunit: kunit_tool: Separate out config/build/exec/parse
 From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <bredanhiggins@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -67,6 +67,8 @@ foundation for future improvements.
 
 Signed-off-by: David Gow <davidgow@google.com>
 ---
+[Whoops: typo-ed Brendan's email. Sorry about that!]
+
 As was briefly disccussed in [1], this change is part of a "separation
 of concerns" in kunit_tool. This should make it easier to integrate
 kunit_tool into other setups.
