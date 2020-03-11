@@ -2,125 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BA8181E1D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 17:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6CC181E9A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 18:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730159AbgCKQkt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Mar 2020 12:40:49 -0400
-Received: from mga01.intel.com ([192.55.52.88]:14056 "EHLO mga01.intel.com"
+        id S1729734AbgCKREy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Mar 2020 13:04:54 -0400
+Received: from mga02.intel.com ([134.134.136.20]:44786 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726314AbgCKQkt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Mar 2020 12:40:49 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1729675AbgCKREy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 11 Mar 2020 13:04:54 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 09:40:48 -0700
-X-ExtLoop1: 1
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 10:03:11 -0700
 X-IronPort-AV: E=Sophos;i="5.70,541,1574150400"; 
-   d="scan'208";a="246083979"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2020 09:40:47 -0700
-Date:   Wed, 11 Mar 2020 09:40:47 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Nathaniel McCallum <npmccallum@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-sgx@vger.kernel.org, akpm@linux-foundation.org,
-        dave.hansen@intel.com, Neil Horman <nhorman@redhat.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
-        "Svahn, Kai" <kai.svahn@intel.com>, bp@alien8.de,
-        Josh Triplett <josh@joshtriplett.org>, luto@kernel.org,
-        kai.huang@intel.com, rientjes@google.com, cedric.xing@intel.com,
-        Patrick Uiterwijk <puiterwijk@redhat.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v28 14/22] selftests/x86: Add a selftest for SGX
-Message-ID: <20200311164047.GG21852@linux.intel.com>
-References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com>
- <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com>
- <CAOASepN1JrD6OEzZycbqOr6_ZVACK=EctEOoQ8oSAEeigMr1Eg@mail.gmail.com>
- <04362c0cf66bf66e8f7c25a531830b9f294d2d09.camel@linux.intel.com>
- <20200311132832.GA75185@linux.intel.com>
+   d="scan'208";a="277447604"
+Received: from rchatre-mobl.amr.corp.intel.com (HELO [10.251.23.31]) ([10.251.23.31])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 11 Mar 2020 10:03:11 -0700
+Subject: Re: [PATCH V1 10/13] selftests/resctrl: Change Cache Allocation
+ Technology (CAT) test
+To:     Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        tony.luck@intel.com, babu.moger@amd.com, james.morse@arm.com,
+        ravi.v.shankar@intel.com, fenghua.yu@intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1583657204.git.sai.praneeth.prakhya@intel.com>
+ <51d0f3c928fbc310c85bac6de20745f69cbc423e.1583657204.git.sai.praneeth.prakhya@intel.com>
+ <4ac6fd87-1393-f247-40ae-5d6e34403e0f@intel.com>
+ <8645c93547ae6c4e35633dbb09d9355219d9e3b2.camel@intel.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+Message-ID: <e22014e5-8ffc-7966-b260-a0665f771ee2@intel.com>
+Date:   Wed, 11 Mar 2020 10:03:08 -0700
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200311132832.GA75185@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <8645c93547ae6c4e35633dbb09d9355219d9e3b2.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 03:28:32PM +0200, Jarkko Sakkinen wrote:
-> On Thu, Mar 05, 2020 at 01:33:28PM +0200, Jarkko Sakkinen wrote:
-> > On Wed, 2020-03-04 at 14:27 -0500, Nathaniel McCallum wrote:
-> > > > > +xsave_area:
-> > > > +       .fill   1, 4, 0x037F            # FCW
-> > > > +       .fill   5, 4, 0
-> > > > +       .fill   1, 4, 0x1F80            # MXCSR
-> > > > +       .fill   1, 4, 0xFFFF            # MXCSR_MASK
-> > > > +       .fill   123, 4, 0
-> > > > +       .fill   1, 4, 0x80000000        # XCOMP_BV[63] = 1, compaction mode
-> > > > +       .fill   12, 4, 0
-> > > 
-> > > I find this much more readable:
-> > 
-> > And I always aim to get things more readable. Thank you.
-> > 
-> > > xsave_area:
-> > >         # Legacy
-> > >         .fill   1, 4, 0x037F            # FCW
-> > >         .fill   5, 4, 0
-> > >         .fill   1, 4, 0x1F80            # MXCSR
-> > >         .fill   1, 4, 0xFFFF            # MXCSR_MASK
-> > >         .fill   60, 8, 0
-> > > 
-> > >         # Header
-> > >         .fill   1, 8, 0                 # XSTATE_BV
-> > >         .fill   1, 8, 1 << 63           # XCOMP_BV (compaction mode)
-> > >         .fill   6, 8, 0
-> > > 
-> > > Also, since people are likely to copy this code for their own
-> > > enclaves, it would be helpful to document which flags are set in FCW
-> > > and MXCSR.
-> > 
-> > It was meant as a test program but I'd guess what you say is true
-> > because it also might be the only alternative user space to Intel's
-> > :-) And a great starting point if you want to do things from scratch.
-> > 
-> > Because I meant it as a smoke test program for SGX, not everything is
-> > too well documented but given the multipurpose use for that code I'll
-> > make the improvements that you are suggesting.
-> 
-> For FPU Control World (FCW), I think 0x037F is not the right value even
-> if section 18.5 in the x86 SDM says that it is the initial value for it.
-> 
-> I took that value from that section.
-> 
-> The reason I think that there is an error in the SDM is that if you look
-> at the section 8.1.5, you'll see that bit 6 is a reserved bit. Thus,
-> does not make to set it on.
-> 
-> I think the legit value ought to be 0x33F i.e. unset bit 6.
+Hi Sai,
 
-Bit 6 is reserved, but it's forced to '1' by the CPU.
+On 3/10/2020 6:59 PM, Sai Praneeth Prakhya wrote:
+> On Tue, 2020-03-10 at 15:14 -0700, Reinette Chatre wrote:
+>> Hi Sai,
+>>
+>> Not just specific to this patch but I think the prevalent use of global
+>> variables that are initialized/used or allocated/released from a variety
+>> of places within the code is creating traps. I seemed to have stumbled
+>> on a few during this review so far but it is hard to keep track of and I
+>> am not confident that I caught them all. Having the code be symmetrical
+>> (allocate and free from same area or initialize and use from same area)
+>> does help to avoid such complexity.
+> 
+> Sure! makes sense. I will try to wrap them up in some meaningful structures to
+> pass around functions and will see if everything still works as expected. If
+> not, I will comment why a particular variable needs to be global.
+> 
+>> This patch and the patch that follows are both quite large and difficult
+>> to keep track of all the collected changes. There seems to be
+>> opportunity for separating it into logical changes. Some of my comments
+>> may be just because I could not keep track of all that is changed at the
+>> same time.
+> 
+> Ok.. makes sense. The main reason this patch and the next patch are large 
+> because they do two things
+> 1. Remove previous CAT/CQM test case
+> 2. Add new CAT/CQM test cases
+> 
+> Since the new test cases are not just logical extensions or fixing some bugs
+> in previous test cases, the patch might not be readable. I am thinking to
+> split this at-least like this
+> 1. A patch to remove CAT test case
+> 2. A patch to remove CQM test case
+> 3. Patches that just add CAT and CQM (without other changes)
+> 
+> Please let me know if you think otherwise
 
-Regardless, IMO it'd be better to drop this code entirely, it's all kinds
-of wonky.  The label says "xsave_area" and implies XSAVE state is being
-loaded, but the code uses FXRSTOR, which will only load x86/MMX/XMM state,
-i.e. the first 512 bytes of the so called xsave_area.
+I think this patch can be split up into logical changes without breaking
+the tests along the way. In my original review I identified two changes
+that can be split out. Other things that can be split out:
+- have CAT test take shareable bits into account
+- enable measurement of cache references (addition of this new perf
+event attribute, hooks to get measurements, etc.)
+- transition CAT test to use "perf rate" measurement instead of "perf count"
+- etc.
 
-The test enclave doesn't touch state managed by XSAVE, let alone put
-secrets into said state.  I see no reason to bother purging anything.
 
-> In any case check:
 > 
-> https://raw.githubusercontent.com/jsakkine-intel/linux-sgx/master/tools/testing/selftests/x86/sgx/encl_bootstrap.S
+>> On 3/6/2020 7:40 PM, Sai Praneeth Prakhya wrote:
+
+[SNIP]
+
+>>> -static struct perf_event_attr pea_llc_miss;
+>>> +static struct perf_event_attr pea_llc_miss, pea_llc_access;
+>>>  static struct read_format rf_cqm;
+>>> -static int fd_lm;
+>>> +static int fd_lm, fd_la;
+>>>  char llc_occup_path[1024];
+>>>  
+>>>  static void initialize_perf_event_attr(void)
+>>> @@ -27,15 +27,30 @@ static void initialize_perf_event_attr(void)
+>>>  	pea_llc_miss.inherit = 1;
+>>>  	pea_llc_miss.exclude_guest = 1;
+>>>  	pea_llc_miss.disabled = 1;
+>>> +
+>>> +	pea_llc_access.type = PERF_TYPE_HARDWARE;
+>>> +	pea_llc_access.size = sizeof(struct perf_event_attr);
+>>> +	pea_llc_access.read_format = PERF_FORMAT_GROUP;
+>>> +	pea_llc_access.exclude_kernel = 1;
+>>> +	pea_llc_access.exclude_hv = 1;
+>>> +	pea_llc_access.exclude_idle = 1;
+>>> +	pea_llc_access.exclude_callchain_kernel = 1;
+>>> +	pea_llc_access.inherit = 1;
+>>> +	pea_llc_access.exclude_guest = 1;
+>>> +	pea_llc_access.disabled = 1;
+>>> +
+>>
+>> This initialization appears to duplicate the initialization done above.
+>> Perhaps this function could be a wrapper that calls an initialization
+>> function with pointer to perf_event_attr that initializes structure the
+>> same?
 > 
-> I.e. both have now a reference:
-> 
-> 1. To the section that describes the default.
-> 2. To the section that describes what the bits mean.
-> 
-> /Jarkko
+> I did think about a wrapper but since pea_llc_access and pea_llc_miss are
+> global variables, I thought passing them as variables might not look good (why
+> do we want to pass a global variable?). I will try and see if I can make these
+> local variables.
+
+My goal was to avoid the duplicated code to initialize them identically.
+It is not clear to me why you think that would not look good. Perhaps I
+have not thought it through correctly ...
+
+Reinette
+
+
