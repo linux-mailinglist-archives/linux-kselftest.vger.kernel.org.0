@@ -2,90 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA61182535
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 23:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E2018256E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 23:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730199AbgCKWx0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Mar 2020 18:53:26 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41344 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729739AbgCKWxY (ORCPT
+        id S2387532AbgCKW6d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Mar 2020 18:58:33 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:42666 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387464AbgCKW6d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Mar 2020 18:53:24 -0400
-Received: by mail-pl1-f195.google.com with SMTP id t14so1797178plr.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2020 15:53:21 -0700 (PDT)
+        Wed, 11 Mar 2020 18:58:33 -0400
+Received: by mail-wr1-f66.google.com with SMTP id v11so4918650wrm.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2020 15:58:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nl0EJrzWK+YJkV8HhMmcT9tiOsgoC3rUQBwiJfZfbmI=;
-        b=mdQ1WL15H3HpBJQ9ftHgqBMXwEFISYk/sfK7fTi55FQDh0twBW0uzYAS0nZYOlg8qr
-         T8RTLWDqnQRX7az06J/CUvqrN72icBlh7vISkIA6yvh7gbaCNrJNFJ85uTk/nBRXRuJh
-         ULJtP4OSouiHhUgQHSOw6Un5Z9ZYk16lYG/qKyfhAWV0w5hS5BZKJBB9l8Oh6oKlJrFR
-         aaUW/b+2TyZzHxXjScPQMAUcO6Msn1ujiKadmARBeakdC4Kb1OYEkkkM4AVM0VmsuwrW
-         D+oluHn4qBKYjXvYCXjvTIfujJ+5146lCDk1HoDYNOxBFkJv4U2UNHEPTXzgVE0jjpRy
-         +swA==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=LhV+oD/2AhMqGMdaGE0+K30kltGWEYirtopneq14RXk=;
+        b=LH9JP/lfNN5+Q63evppzWVWUDG5AxrPRN3YR8XWBwwxz1LM/GdgM+7dPf1dxGbEYBF
+         R5zv1UEDFZsPrFF5dQF35lJteQ7ceVdzXr8t/A85VEhB8hMaOam/oGo3/+AzdikWxlVt
+         W1+JURZoW/A0hN0ynxDi6xiRtpWckrkseBZ43f+2oe3SalY3G5jqrvGKAxGsV2wKGwki
+         TdgGppX9g+0wjFRHU9p5lgl+/t/1NsQCTKwV2MencD2a5lHP1P5f6LKChT4e/2C0n0WA
+         NuOpK+jKGqRir1kqn0jy/+y7OcqLPf0241phJ93V3wV7M2T67gAKpXQtmVvPlqyWYgx+
+         dGZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nl0EJrzWK+YJkV8HhMmcT9tiOsgoC3rUQBwiJfZfbmI=;
-        b=As1e2lkWKQn6cBXQi3O8qyXfx84HT6/HfUSOtD+MWGjqPyQEEL2S/NLpN33KuR5cJA
-         PMVnooTN2QDvUD1DpZLXrAV7cw0DWlsUqXwYntJ+N+L4GnSCwY7pjZQa6XbWUglTm5a9
-         WOGYW/sPQqU+Bcyc1sqx/hysnL1bPUr7CkaLixZJdeY3c1NqAUILDFSHgNeYZklkZQvU
-         PDVfQLwvx+GCR7PYVNdIxcIGvvozrp8SbF1YHywEhhQObtD6yufaFLp4u5QavFWR5zOb
-         o8lNwymyNrOimc8/kzv+pdRe11jA8V8qF4fEe4qE3eClhdgWzmM7f3wEnYepI3o9JZtV
-         lM2A==
-X-Gm-Message-State: ANhLgQ2mYR8KOvLuy0ctGaeYnTCNbsw+GuLfGAXyW6rW9WNi3AVEjlUR
-        qyRPRE5tlc9Y/Nq0bp97UQT1SqkcZEb9hUNja96vLw==
-X-Google-Smtp-Source: ADFU+vvagulKuellazVhh3XheT3knudCK7WIBbsqd7EZUzfcfz1tEE8u7grMDhDQ+9mv3x9w1tIN7Tt6p+akUMEdLoA=
-X-Received: by 2002:a17:902:74cc:: with SMTP id f12mr5209789plt.232.1583967200859;
- Wed, 11 Mar 2020 15:53:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=LhV+oD/2AhMqGMdaGE0+K30kltGWEYirtopneq14RXk=;
+        b=fYKPonJe82+AyZ4Ttyt8OyK+xrODZLqK19CWnu1P/jXSM/KpyuDo6evCuQLxTd/YHF
+         hId+Z1WYus9lyDgI5xAzVV1mYmH/XZ2sP+R2PsNZVk/nO0AwKVxI3okVhLkPjOjw0//p
+         1qk27AjyW35rl4re7WbqYrNGDae7rn5243Bu/9LoifZT1sGxL67/raepqvd3OVAm0Ql3
+         IniLBz+uwBl2ayGvggutGS6jZN7+cC/T9V5NtUwEUr5PLqTvD/kN2sxYYL7czN46VWxA
+         RReXYH5jlezUk1n5dwvVYYB1Mupi6JgYGgFd4c/dpgb3UMyHGkEJcJBR0a5FYmjZ3Qz+
+         2WHw==
+X-Gm-Message-State: ANhLgQ2JYvnuDkmpxUuccbyAaK68FSYjvm9sMwflycqY+bTYlrxqWo48
+        uEpDdz1GcLxes17VImOamA51cw==
+X-Google-Smtp-Source: ADFU+vuYCoeev32raDtVBQgFtQVnnks9GLKDxykXkz5bdn3zGW+CgiEt0eRHhuu9gT7ZP5zKLIS06w==
+X-Received: by 2002:adf:d4ca:: with SMTP id w10mr6652319wrk.407.1583967510997;
+        Wed, 11 Mar 2020 15:58:30 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id t6sm18576401wrr.49.2020.03.11.15.58.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 11 Mar 2020 15:58:30 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, mpe@ellerman.id.au,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] selftests: Fix kselftest O=objdir build from cluttering top level objdir
+In-Reply-To: <58d954867391c90fe0792d87e09a82bda26ba4fc.1583358715.git.skhan@linuxfoundation.org>
+References: <cover.1583358715.git.skhan@linuxfoundation.org> <58d954867391c90fe0792d87e09a82bda26ba4fc.1583358715.git.skhan@linuxfoundation.org>
+Date:   Wed, 11 Mar 2020 15:58:27 -0700
+Message-ID: <7hwo7qijn0.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <1583320036-442-1-git-send-email-alan.maguire@oracle.com> <1583320036-442-4-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1583320036-442-4-git-send-email-alan.maguire@oracle.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 11 Mar 2020 15:53:09 -0700
-Message-ID: <CAFd5g45nFs2zoD2gCq6oQ-orDxe3VbK1FqCpoM9BL6-eHxsJaw@mail.gmail.com>
-Subject: Re: [PATCH v6 kunit-next 3/4] kunit: subtests should be indented 4
- spaces according to TAP
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>, shuah <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 4, 2020 at 3:07 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+Shuah Khan <skhan@linuxfoundation.org> writes:
+
+> make kselftest-all O=objdir builds create generated objects in objdir.
+> This clutters the top level directory with kselftest objects. Fix it
+> to create sub-directory under objdir for kselftest objects.
 >
-> Introduce KUNIT_INDENT macro which corresponds to 4-space indentation,
-> and use it to modify indentation from tab to 4 spaces.
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Only somewhat related to this patch, another problem that wasn't in your
+doci is that the current O= support doesn't support relative paths.
+
+For example, using O=/tmp/build-arm64 works, but O=build-arm64 doesn't.
+Try this:
+
+$ make ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- O=build-arm64 defconfig
+$ make ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- O=build-arm64 kselftest-all
+make[1]: Entering directory '/work/kernel/linux/build-arm64'
+make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
+	ARCH=arm64 -C ../../.. headers_install
+make[4]: ../scripts/Makefile.build: No such file or directory
+make[4]: *** No rule to make target '../scripts/Makefile.build'.  Stop.
+Makefile:500: recipe for target 'scripts_basic' failed
+make[3]: *** [scripts_basic] Error 2
+Makefile:151: recipe for target 'khdr' failed
+make[2]: *** [khdr] Error 2
+/work/kernel/linux/Makefile:1220: recipe for target 'kselftest-all' failed
+make[1]: *** [kselftest-all] Error 2
+make[1]: Leaving directory '/work/kernel/linux/build-arm64'
+Makefile:179: recipe for target 'sub-make' failed
+make: *** [sub-make] Error 2  
+
+Kevin
+
+> ---
+>  tools/testing/selftests/Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> Suggested-by: Frank Rowand <frowand.list@gmail.com>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-
-Sorry for the late comment.
-
-This change looks good except for one thing: kunit_tool
-(tools/testing/kunit/kunit.py) expects the wrong indentation. Can you
-fix it? I think it would be best to fix it in this change so that
-there is point at which it is broken.
-
-Currently, this change breaks it. For example, with
-CONFIG_KUNIT_TEST=y and CONFIG_KUNIT_EXAMPLE_TEST=y. kunit_tool
-reports the following:
-
-Testing complete. 0 tests run. 0 failed. 0 crashed.
-
-I am pretty sure the change needs to happen in
-tools/testing/kunit/kunit_parser.py.
-
-Cheers
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 6ec503912bea..cd77df3e6bb8 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -91,7 +91,7 @@ override LDFLAGS =
+>  override MAKEFLAGS =
+>  endif
+>  
+> -# Append kselftest to KBUILD_OUTPUT to avoid cluttering
+> +# Append kselftest to KBUILD_OUTPUT and O to avoid cluttering
+>  # KBUILD_OUTPUT with selftest objects and headers installed
+>  # by selftests Makefile or lib.mk.
+>  ifdef building_out_of_srctree
+> @@ -99,7 +99,7 @@ override LDFLAGS =
+>  endif
+>  
+>  ifneq ($(O),)
+> -	BUILD := $(O)
+> +	BUILD := $(O)/kselftest
+>  else
+>  	ifneq ($(KBUILD_OUTPUT),)
+>  		BUILD := $(KBUILD_OUTPUT)/kselftest
+> -- 
+> 2.20.1
