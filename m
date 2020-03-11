@@ -2,164 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5695180C1C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 00:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16613180D22
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 02:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbgCJXLv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Mar 2020 19:11:51 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:36761 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727768AbgCJXLv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Mar 2020 19:11:51 -0400
-Received: by mail-il1-f196.google.com with SMTP id h3so241917ils.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Mar 2020 16:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7EYAI63zd18SBq8FB4fUfNf0NU8spud30w3445VcWaM=;
-        b=SOuRvF3fvTblm9CeWolyerj2zGaD3saqUhIuWhjObHc3jGGTBh/v+0w6d+z78Y503p
-         QYu4SglBDGCKdB5ZGG73RSsATC3wnkZEXsCFmLvix43Fa+fpdLPCVWYl5b4EXLJk1Q3Y
-         ew0AE4RdaYLyWgeuhoV35GaoA5m2bPOwMHDj8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7EYAI63zd18SBq8FB4fUfNf0NU8spud30w3445VcWaM=;
-        b=hLfB8/2auXbXLqPU3fco/d4drCUjTcS31c0h9D3xbl5uA1O1ixPKbuL/bxoze3I43Y
-         NvQWsJIFZxU48u7g+zK+tJlGSnfDiFmnd8LqpbtJYd8/zoo3rpSpqvDnwFXLVdcwg9VI
-         JwvpNw7DfGFEezdGEMleZOdHxWAZCnW3ELfHgC8zvAtdFLrvDhUmfeNwebZRn1eElmEj
-         8xGiwoC7OsVuQ7bs586hPHZepSqZLjLB3jFjOJxyAMuQSO4goebNY5E4rfo5E3owpJ+P
-         +Sh9l3ySrc+dnRu6TtPWwqTYiHWyzNpwKJi4d3grkA+acDnUTYJ0uuLNPxTunqknWj3M
-         qIsA==
-X-Gm-Message-State: ANhLgQ0ov7d4BXnupMEpf9yQG2L4maDZ9T4Bq+BKzj0S5BS+4EMrc+66
-        p3yrLV8Qbt218ab7BqzU1k+qtQ==
-X-Google-Smtp-Source: ADFU+vuKjc/Vi167HrNsokZgPEQVficFdi3AwhXRn8+hgEKbKqkwlsSrlMStlkPyqiz7BfLaie+1fw==
-X-Received: by 2002:a92:5c5c:: with SMTP id q89mr382168ilb.195.1583881909799;
-        Tue, 10 Mar 2020 16:11:49 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id z14sm8703570iln.17.2020.03.10.16.11.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Mar 2020 16:11:49 -0700 (PDT)
-Subject: Re: [PATCH v2 2/4] selftests: Fix seccomp to support relocatable
- build (O=objdir)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
-        daniel@iogearbox.net, kafai@fb.com, yhs@fb.com, andriin@fb.com,
-        gregkh@linuxfoundation.org, tglx@linutronix.de,
-        khilman@baylibre.com, mpe@ellerman.id.au,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
-References: <20200305003627.31900-1-skhan@linuxfoundation.org>
- <202003041815.B8C73DEC@keescook>
- <f4cf1527-4565-9f08-a8a2-9f51022eac63@linuxfoundation.org>
- <202003050937.BA14B70DEB@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d125a38f-50aa-dbf1-0fcf-59d4ad4a1441@linuxfoundation.org>
-Date:   Tue, 10 Mar 2020 17:11:47 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727484AbgCKBJY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Mar 2020 21:09:24 -0400
+Received: from mga03.intel.com ([134.134.136.65]:12990 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726463AbgCKBJY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Mar 2020 21:09:24 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 18:09:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,539,1574150400"; 
+   d="scan'208";a="242515528"
+Received: from sai-dev-mach.sc.intel.com ([143.183.140.153])
+  by orsmga003.jf.intel.com with ESMTP; 10 Mar 2020 18:09:22 -0700
+Message-ID: <7a1f93d4516a7de99c5dbc4afd6279d6fe7aa126.camel@intel.com>
+Subject: Re: [PATCH V1 09/13] selftests/resctrl: Modularize fill_buf for new
+ CAT test case
+From:   Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        tony.luck@intel.com, babu.moger@amd.com, james.morse@arm.com,
+        ravi.v.shankar@intel.com, fenghua.yu@intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 10 Mar 2020 18:04:34 -0700
+In-Reply-To: <4c84be1d-8839-2c85-b294-7e3c454240bb@intel.com>
+References: <cover.1583657204.git.sai.praneeth.prakhya@intel.com>
+         <43b368952bb006ee973311d9c9ae0eb53d8e7f60.1583657204.git.sai.praneeth.prakhya@intel.com>
+         <4c84be1d-8839-2c85-b294-7e3c454240bb@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-In-Reply-To: <202003050937.BA14B70DEB@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/5/20 10:42 AM, Kees Cook wrote:
-> On Thu, Mar 05, 2020 at 09:41:34AM -0700, Shuah Khan wrote:
->> On 3/4/20 7:20 PM, Kees Cook wrote:
->>> Instead of the TEST_CUSTOM_PROGS+all dance, you can just add an explicit
->>> dependency, with the final seccomp/Makefile looking like this:
->>>
->>>
->>> # SPDX-License-Identifier: GPL-2.0
->>> CFLAGS += -Wl,-no-as-needed -Wall
->>> LDFLAGS += -lpthread
->>>
->>> TEST_GEN_PROGS := seccomp_bpf seccomp_benchmark
->>>
->>
->> TEST_CUSTOM_PROGS is for differentiating test programs that
->> can't use lib.mk generic rules. It is appropriate to use
->> for seccomp_bpf
+Hi Reinette,
+
+On Tue, 2020-03-10 at 14:59 -0700, Reinette Chatre wrote:
+> Hi Sai,
 > 
-> I don't follow? This suggested Makefile works for me (i.e. it can use
-> the lib.mk generic rules since CFLAGS and LDFLAGS can be customized
-> first, and it just adds an additional dependency).
+> On 3/6/2020 7:40 PM, Sai Praneeth Prakhya wrote:
+> > Currently fill_buf (in-built benchmark) runs as a separate process and it
+> > runs indefinitely looping around given buffer either reading it or writing
+> > to it. But, some future test cases might want to start and stop looping
+> > around the buffer as they see fit. So, modularize fill_buf to support this
+> > use case.
+> > 
+> > Signed-off-by: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
+> > ---
+> >  tools/testing/selftests/resctrl/fill_buf.c | 66 ++++++++++++++++++++-----
+> > -----
+> >  1 file changed, 44 insertions(+), 22 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/resctrl/fill_buf.c
+> > b/tools/testing/selftests/resctrl/fill_buf.c
+> > index 9ede7b63f059..204ae8870a32 100644
+> > --- a/tools/testing/selftests/resctrl/fill_buf.c
+> > +++ b/tools/testing/selftests/resctrl/fill_buf.c
+> > @@ -23,7 +23,7 @@
+> >  #define PAGE_SIZE		(4 * 1024)
+> >  #define MB			(1024 * 1024)
+> >  
+> > -static unsigned char *startptr;
+> > +static unsigned char *startptr, *endptr;
+
+[Snipped.. assuming code over here might not be needed for discussion]
+
+> > +static int use_buffer_forever(int op, char *resctrl_val)
+> > +{
+> > +	int ret;
+> > +
+> >  	if (op == 0)
+> > -		ret = fill_cache_read(start_ptr, end_ptr, resctrl_val);
+> > +		ret = fill_cache_read(resctrl_val);
+> >  	else
+> > -		ret = fill_cache_write(start_ptr, end_ptr, resctrl_val);
+> > +		ret = fill_cache_write(resctrl_val);
+> >  
+> >  	if (ret) {
+> >  		printf("\n Errror in fill cache read/write...\n");
+> >  		return -1;
+> >  	}
+> >  
+> > +	return 0;
+> > +}
+> > +
+> > +static int
+> > +fill_cache(unsigned long long buf_size, int malloc_and_init, int
+> > memflush,
+> > +	   int op, char *resctrl_val)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = init_buffer(buf_size, malloc_and_init, memflush);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = use_buffer_forever(op, resctrl_val);
+> > +	if (ret)
+> > +		return ret;
 > 
+> Should buffer be freed on this error path?
 
-Yeah. TEST_CUSTOM_PROGS isn't really needed for this custom case.
-I can refine it and get rid of the dependency.
+Yes, that's right.. my bad. Will fix it. But the right fix is,
+use_buffer_forever() should not return at all. It's meant to loop around the
+buffer _forever_.
 
->>> include ../lib.mk
->>>
->>> # Additional dependencies
->>> $(OUTPUT)/seccomp_bpf: ../kselftest_harness.h
+> I think the asymmetrical nature of the memory allocation and release
+> creates traps like this.
 > 
-> BTW, I see a lot of other targets that use kselftest_harness.h appear to
-> be missing this Makefile dependency, but that's a different problem. :)
-> 
->>> (Though this fails in the same way as above when run from the top-level
->>> directory.)
->>>
->>
->> I didn't see this because I have been the same directory I used
->> for relocated cross-build kernel. :(
->>
->> Thanks for testing this. I know the problem here. all is a dependency
->> for install step and $(OUTPUT) is referencing the objdir before it
->> gets created. It is a Makefile/lib.mk problem to fix.
->>
+> It may be less error prone to have the pointer returned by init_buffer
+> and the acted on and released within fill_cache(), passed to
+> "use_buffer_forever()" as a parameter.  The buffer size is known here,
+> there is no need to keep an "end pointer" around.
 
-I was way off with my analysis. :(
+The main reason for having "startptr" as a global variable is to free memory
+when fill_buf is killed. fill_buf runs as a separate process (for test cases
+like MBM, MBA and CQM) and when user issues Ctrl_c or when the test kills
+benchmark_pid (i.e. fill_buf), the buffer is freed (please see
+ctrl_handler()).
 
->> I will do a separate patch for this. This will show up in any test
->> that is using $(OUTPUT) to relocate objects mainly the ones that
->> require custom build rule like seeccomp.
-> 
-> Okay, cool. It looked to me like it lost track of the top level source
-> directory (i.e. "make: entering $output" ... "can't find
-> ../other/files")
-> 
+So, I thought, as "startptr" is anyways global, why pass it around as an
+argument? While making this change I thought it's natural to make "endptr"
+global as well because the function didn't really look good to just take
+endptr as an argument without startptr.
 
-Odd that you would have empty objdir in the cross-compile case.
+I do agree that asymmetrical nature of the memory allocation and release might
+create traps, I will try to overcome this for CAT test case (other test cases
+will not need it).
 
-In the cross-compile case, you would have cross-built kernel first in
-the object directory. Your objdir won't be empty.
-
-This is no different from kselftest build dependency on kernel build
-even when srcdir=objdir
-
-So for cross-build case, the following  is the workflow to build kernel
-first and then the tests:
-
-make O=/../objdir ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- 
-defconfig
-
-make O=/../objdir ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- all
-
-make kselftest-install O=/../objdir ARCH=arm64 HOSTCC=gcc 
-CROSS_COMPILE=aarch64-linux-gnu- TARGETS=seccomp
-
-You can isolate a single test when you are do native build:
-
-make kselftest-install O=/../objdir TARGETS=seccomp
-
-The above won't fail even if objdir doesn't exist and/or empty.
-
-thanks,
--- Shuah
-
-
-
-
-
-
+Regards,
+Sai
 
