@@ -2,186 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E83D181F19
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 18:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AEE181F57
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Mar 2020 18:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730235AbgCKRTV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Mar 2020 13:19:21 -0400
-Received: from mga12.intel.com ([192.55.52.136]:51236 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730380AbgCKRTU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Mar 2020 13:19:20 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 10:19:20 -0700
-X-IronPort-AV: E=Sophos;i="5.70,541,1574150400"; 
-   d="scan'208";a="277454902"
-Received: from rchatre-mobl.amr.corp.intel.com (HELO [10.251.23.31]) ([10.251.23.31])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 11 Mar 2020 10:19:19 -0700
-Subject: Re: [PATCH V1 11/13] selftests/resctrl: Change Cache Quality
- Monitoring (CQM) test
-To:     Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        tony.luck@intel.com, babu.moger@amd.com, james.morse@arm.com,
-        ravi.v.shankar@intel.com, fenghua.yu@intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1583657204.git.sai.praneeth.prakhya@intel.com>
- <26086dda86f062bba4116878a012a553503924b2.1583657204.git.sai.praneeth.prakhya@intel.com>
- <e7bd79cf-4da8-7a61-ac09-4d124315fa93@intel.com>
- <cf8fbdebd8096900d47a97f0e23a852d94df257a.camel@intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-Message-ID: <e7c85e35-9efb-77da-a33f-dd9447a6cf07@intel.com>
-Date:   Wed, 11 Mar 2020 10:19:18 -0700
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1730366AbgCKRZP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Mar 2020 13:25:15 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34811 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730193AbgCKRZM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 11 Mar 2020 13:25:12 -0400
+Received: by mail-ot1-f66.google.com with SMTP id j16so2879127otl.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Mar 2020 10:25:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A72FMDEMFI/PWSo7NEjukyYc/xIp+ZKKEp1Vw5reguA=;
+        b=f4NPjv9Kh5RQg8A2ZphMM8k4y/Wqzy++zz4Smc4ns7kb4mTZY5b0MquVoo0oaexG8m
+         KrG4IP7LWnuJLt4DT5ftocqv4S8NUxnJs1n6VKk/nJFqtEd9LZkJ3dRhryovuziWOfjC
+         J1fsmPTGQdVTY4YnZS9hRrCrVnSql9Ru/Y1sw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A72FMDEMFI/PWSo7NEjukyYc/xIp+ZKKEp1Vw5reguA=;
+        b=QpTTF3xYBk0YnyM0EoM+m31eHRx3YoN+bfbizqZxmsbf5h8Gql6sW5fUkUNWYTXsH0
+         SAVK4t7TKgtosh2FG15VMafR6EpacSYpWWailJvXfkOFEHmLZA4zGj5Fa20AqrIXpMtg
+         zVc07J9NEaeEnL0owXnGWNutj6H9KuojYdKJY7qERXU5ksaEqJ0vLoGEZzrY64ODASth
+         0T1ObAXuOoLxBdm1A0zEiUI1JR/FPqV6aojtJHWZV/xU8vBzZAxYAn8tvKdcMsi5xbhM
+         +OLn7HMxlX4Armmxc5Gd2AK8UZ4S9+PNsAFkOZ0vhvM2RzH1sh2RPgQouZG3MQbAch6K
+         iBdA==
+X-Gm-Message-State: ANhLgQ0erxrqxiHnp1M+GQvQz82Nyu/HN2aqg7hErID6lOcDtlk0e0ay
+        F6lnt8vkGMgJTAH3RE24GAoV9qzrA+ctJDqBD1CSqw==
+X-Google-Smtp-Source: ADFU+vtnHEnOBiDu3qXi9GBfF3N93KhAg6bGngtzbVZAuuxAr+3h2KDdAnDf5Jg5otnqUiCg3Co0ZRiZ+uCff88sbto=
+X-Received: by 2002:a05:6820:128:: with SMTP id i8mr1024041ood.45.1583947510588;
+ Wed, 11 Mar 2020 10:25:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cf8fbdebd8096900d47a97f0e23a852d94df257a.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200310174711.7490-1-lmb@cloudflare.com> <20200310174711.7490-6-lmb@cloudflare.com>
+ <87wo7rxal4.fsf@cloudflare.com>
+In-Reply-To: <87wo7rxal4.fsf@cloudflare.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Wed, 11 Mar 2020 17:24:59 +0000
+Message-ID: <CACAyw9_DC5ewgLX=Qrvmbs3i3YvtuLBFbe1Hr6SJtbE+L1P2eQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] bpf: sockmap, sockhash: test looking up fds
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@cloudflare.com>,
+        linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Sai,
+On Wed, 11 Mar 2020 at 13:52, Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>
+> On Tue, Mar 10, 2020 at 06:47 PM CET, Lorenz Bauer wrote:
+> > Make sure that looking up an element from the map succeeds,
+> > and that the fd is valid by using it an fcntl call.
+> >
+> > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> > ---
+> >  .../selftests/bpf/prog_tests/sockmap_listen.c | 26 ++++++++++++++-----
+> >  1 file changed, 20 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> > index 52aa468bdccd..929e1e77ecc6 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> > @@ -453,7 +453,7 @@ static void test_lookup_after_delete(int family, int sotype, int mapfd)
+> >       xclose(s);
+> >  }
+> >
+> > -static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+> > +static void test_lookup_fd(int family, int sotype, int mapfd)
+> >  {
+> >       u32 key, value32;
+> >       int err, s;
+> > @@ -466,7 +466,7 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+> >                              sizeof(value32), 1, 0);
+> >       if (mapfd < 0) {
+> >               FAIL_ERRNO("map_create");
+> > -             goto close;
+> > +             goto close_sock;
+> >       }
+> >
+> >       key = 0;
+> > @@ -475,11 +475,25 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
+> >
+> >       errno = 0;
+> >       err = bpf_map_lookup_elem(mapfd, &key, &value32);
+> > -     if (!err || errno != ENOSPC)
+> > -             FAIL_ERRNO("map_lookup: expected ENOSPC");
+> > +     if (err) {
+> > +             FAIL_ERRNO("map_lookup");
+> > +             goto close_map;
+> > +     }
+> >
+> > +     if ((int)value32 == s) {
+> > +             FAIL("return value is identical");
+> > +             goto close;
+> > +     }
+> > +
+> > +     err = fcntl(value32, F_GETFD);
+> > +     if (err == -1)
+> > +             FAIL_ERRNO("fcntl");
+>
+> I would call getsockopt()/getsockname() to assert that the FD lookup
+> succeeded.  We want to know not only that it's an FD (-EBADFD case), but
+> also that it's associated with a socket (-ENOTSOCK).
+>
+> We can go even further, and compare socket cookies to ensure we got an
+> FD for the expected socket.
 
-On 3/10/2020 7:46 PM, Sai Praneeth Prakhya wrote:
-> On Tue, 2020-03-10 at 15:18 -0700, Reinette Chatre wrote:
->> On 3/6/2020 7:40 PM, Sai Praneeth Prakhya wrote:
->>>  		.mum_resctrlfs	= 0,
->>>  		.filename	= RESULT_FILE_NAME,
->>> -		.mask		= ~(long_mask << n) & long_mask,
->>> -		.span		= cache_size * n / count_of_bits,
->>>  		.num_of_runs	= 0,
->>> -		.setup		= cqm_setup,
->>> +		.setup		= cqm_setup
->>>  	};
->>> +	int ret;
->>> +	char schemata[64];
->>> +	unsigned long long_mask;
->>>  
->>> -	if (strcmp(benchmark_cmd[0], "fill_buf") == 0)
->>> -		sprintf(benchmark_cmd[1], "%lu", param.span);
->>> +	ret = remount_resctrlfs(1);
->>> +	if (ret)
->>> +		return ret;
->>
->> Here resctrl is remounted and followed by some changes to the root
->> group's schemata. That is followed by a call to resctrl_val that
->> attempts to remount resctrl again that will undo all the configurations
->> inbetween.
-> 
-> No, it wouldn't because mum_resctrlfs is 0. When resctrl FS is already mounted
-> and mum_resctrlfs is 0, then remount_resctrlfs() is a noop.
-> 
+Good idea, thanks!
 
-I missed that. Thank you.
+> Also, I'm wondering if we could keep the -ENOSPC case test-covered by
+> temporarily dropping NET_ADMIN capability.
 
-fyi ... when I tried these tests I encountered the following error
-related to unmounting:
+You mean EPERM? ENOSPC isn't reachable, since the map can only be created
+with a map_value of 4 or 8.
 
-[SNIP]
-ok Write schema "L3:1=7fff" to resctrl FS
-ok Write schema "L3:1=ffff" to resctrl FS
-ok Write schema "L3:1=1ffff" to resctrl FS
-ok Write schema "L3:1=3ffff" to resctrl FS
-# Unable to umount resctrl: Device or resource busy
-# Results are displayed in (Bytes)
-ok CQM: diff within 5% for mask 1
-# alloc_llc_cache_size: 2883584
-# avg_llc_occu_resc: 2973696
-ok CQM: diff within 5% for mask 3
-[SNIP]
-
-This seems to originate from resctrl_val() that forces an unmount but if
-that fails the error is not propagated.
-
->>> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c
->>> b/tools/testing/selftests/resctrl/resctrl_val.c
->>> index 271cb5c976f5..c59fad6cb9b0 100644
->>> --- a/tools/testing/selftests/resctrl/resctrl_val.c
->>> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
->>> @@ -705,29 +705,21 @@ int resctrl_val(char **benchmark_cmd, struct
->>> resctrl_val_param *param)
->>>  		goto out;
->>>  	}
->>>  
->>> -	/* Give benchmark enough time to fully run */
->>> -	sleep(1);
->>> -
->>>  	/* Test runs until the callback setup() tells the test to stop. */
->>>  	while (1) {
->>> +		ret = param->setup(param);
->>> +		if (ret) {
->>> +			ret = 0;
->>> +			break;
->>> +		}
->>> +
->>> +		/* Measure vals sleeps for a second */
->>>  		if ((strcmp(resctrl_val, "mbm") == 0) ||
->>>  		    (strcmp(resctrl_val, "mba") == 0)) {
->>> -			ret = param->setup(param);
->>> -			if (ret) {
->>> -				ret = 0;
->>> -				break;
->>> -			}
->>> -
-
-(I refer to the above snippet in my comment below)
-
->>>  			ret = measure_vals(param, &bw_resc_start);
->>>  			if (ret)
->>>  				break;
->>>  		} else if (strcmp(resctrl_val, "cqm") == 0) {
->>> -			ret = param->setup(param);
->>> -			if (ret) {
->>> -				ret = 0;
->>> -				break;
->>> -			}
->>> -			sleep(1);
->>>  			ret = measure_cache_vals(param, bm_pid);
->>>  			if (ret)
->>>  				break;
->>
->> This change affects not just the cache monitoring test. Could this
->> change be extracted into its own patch to be clear what is done here and
->> how it impacts the other tests?
-> 
-> This change shouldn't impact other tests (i.e. CAT) because CAT will not call
-> resctrl_val().
-
-I was referring to the snippet above that seems to impact the "mbm" and
-"mba" tests by moving the call to "param->setup" for the them.
-
-> 
->>> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c
->>> b/tools/testing/selftests/resctrl/resctrlfs.c
->>> index 52452bb0178a..bd81a13ff9df 100644
->>> --- a/tools/testing/selftests/resctrl/resctrlfs.c
->>> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
->>> @@ -365,11 +365,7 @@ void run_benchmark(int signum, siginfo_t *info, void
->>> *ucontext)
->>>  		memflush =  atoi(benchmark_cmd[3]);
->>>  		operation = atoi(benchmark_cmd[4]);
->>>  		sprintf(resctrl_val, "%s", benchmark_cmd[5]);
->>> -
->>> -		if (strcmp(resctrl_val, "cqm") != 0)
->>> -			buffer_span = span * MB;
->>> -		else
->>> -			buffer_span = span;
->>> +		buffer_span = span * MB;
->>
->> This change seems to change the buffer_span used by the other tests. It
->> is not obvious why this change is made to other tests while this commit
->> intends to focus on the cache monitoring test. Perhaps this can be split
->> into a separate patch to make this clear?
-> 
-
-Got it. Thank you.
+>
+> > +
+> > +close:
+> > +     xclose(value32);
+> > +close_map:
+> >       xclose(mapfd);
+> > -close:
+> > +close_sock:
+> >       xclose(s);
+> >  }
+> >
+> > @@ -1456,7 +1470,7 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
+> >               /* lookup */
+> >               TEST(test_lookup_after_insert),
+> >               TEST(test_lookup_after_delete),
+> > -             TEST(test_lookup_32_bit_value),
+> > +             TEST(test_lookup_fd),
+> >               /* update */
+> >               TEST(test_update_existing),
+> >               /* races with insert/delete */
 
 
-Reinette
 
+-- 
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+
+www.cloudflare.com
