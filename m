@@ -2,196 +2,422 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFE0183DA0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 00:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BA4183DA3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 00:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbgCLXy2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Mar 2020 19:54:28 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46293 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbgCLXy2 (ORCPT
+        id S1726608AbgCLX4Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Mar 2020 19:56:16 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:50842 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726830AbgCLX4Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Mar 2020 19:54:28 -0400
-Received: by mail-pf1-f196.google.com with SMTP id c19so4063799pfo.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2020 16:54:27 -0700 (PDT)
+        Thu, 12 Mar 2020 19:56:16 -0400
+Received: by mail-pj1-f66.google.com with SMTP id u10so3218827pjy.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Mar 2020 16:56:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=96Rbgpb7kkNngUmkXNe7bOZpJgfpt4Yqk8FaCmS1/Lo=;
-        b=l0YwtNPqI71Xw09yG4hemwtwExVdI9XB7wFD5olHin0gWn/deihUQpoVrrLwa1uhrK
-         PcFUmte9XRW/PQalDl+tEknTm+Fv9pv/4WEV53beiRTs2FxmMZIv0yMPhSsCJ0eThRQW
-         CbfbibenGXUfEefgG7Bbok+DaQh8eXNyjur6E=
+        bh=ha1DiI22JPihRP88KiCF+gUaXzZwM3GQstV41Ljt2iw=;
+        b=jD0yXdw5FV1elh15O79KsTnk6WVaqaGn1SmKIG4etyFF4SnRZieHu8bw5TLnxkYAiW
+         21gbpMqk9juZxW3qL7DXuJHt4RoJJaFKTa2PqYI1K+KUWF8jElDlK3J6PrF0/WLbmiHg
+         rOHTO3wa74qernA8JnmVWECLgPs8tzY44/xJA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=96Rbgpb7kkNngUmkXNe7bOZpJgfpt4Yqk8FaCmS1/Lo=;
-        b=oyP3ORmevGytHjLy2aGQNPsrBd9L44RI+7DkimKk8Pi8rNMrvcbjHZ6qbZMIdVnqiK
-         oxsDH09jQMiX0TRYWGT4hJg7RkFE3CB4btixKd0veCQz5zto4WfA68+K9FjY6vJmy2JJ
-         TCIbbhmDKjQbFzG7tiSR3KA/8WDEczTYjeuufOeaKXhB1zK7LgQZS3HietLsOJdvrHJC
-         dY9CIC1NNg4IsSt7ZOwt8TO68+zXzQQVJ7E0ammylIkIzI9E4gzW25bVNyuJ/NNLnP1E
-         H2NzpeBbmL8N6Wn/Oii/nuo3kXFIToFOUN6TH5QDxc3TivmJDPgN3RoNeUn6P8BZgIB7
-         PQuw==
-X-Gm-Message-State: ANhLgQ20rKwaYyGQFAG+TZYGcxuDr6pIP60V5HW5kIaOiGuHetxSsGJa
-        Cc0PF4dJh2fEdDpaazrxbLnxOw==
-X-Google-Smtp-Source: ADFU+vsMLfAIQx/sIeqQSB45VWLXRWNP3Bc5xJpum3RASaSb4xhga1HnBfjS3CufxzfCNRQIFbd//w==
-X-Received: by 2002:a62:2f82:: with SMTP id v124mr9150110pfv.120.1584057267058;
-        Thu, 12 Mar 2020 16:54:27 -0700 (PDT)
+        bh=ha1DiI22JPihRP88KiCF+gUaXzZwM3GQstV41Ljt2iw=;
+        b=Tj8nwAyjq6x0HsLAWCTuBLMSYMhZB0fsxy63VH/jaCe2yTeL8Yb5LxpmTr6262kkPH
+         q+vHqNdH/Eh2LwTAXfzBdW1RKVErMFJjocwOrQzzw2W39nAMCVw1JalY/RnU2IpkxEee
+         bkf+nCrImob28zNBkv9faMrjC4apo+y4fou/Qv9n00ZWSQ3pfEOi/OXycbCt1mAKVPdb
+         Jxsv2qOUBzPtKD6ogRotNd3AKBf6fHm8jsqSAr+Uqij/k130ycrGvEf9TbjQttz+bwI2
+         iwFnP+4dUtRjCV11PJYvL5xqV5ThzevFjqawGdrkrpAiS7uF8o7d79/5GX09NZetpjgM
+         vH4Q==
+X-Gm-Message-State: ANhLgQ3CcEcmv9+0x2w8PPFjPrNiuoVsgp59gefVThywSiG3paTXycTU
+        hvYL725GCSjP+nJJUjDX2Fn6lA==
+X-Google-Smtp-Source: ADFU+vvOP8WMxcK8pbUL70aMh1/sbOpuwZhi12tQzOd3iv+5NF0Ycmny0OvmoMZurs05hSm+taBD/g==
+X-Received: by 2002:a17:902:bd42:: with SMTP id b2mr10703260plx.34.1584057373664;
+        Thu, 12 Mar 2020 16:56:13 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l25sm54297260pgn.47.2020.03.12.16.54.26
+        by smtp.gmail.com with ESMTPSA id i3sm7340500pfa.34.2020.03.12.16.56.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 16:54:26 -0700 (PDT)
-Date:   Thu, 12 Mar 2020 16:54:25 -0700
+        Thu, 12 Mar 2020 16:56:12 -0700 (PDT)
+Date:   Thu, 12 Mar 2020 16:56:11 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Todd Kjos <tkjos@android.com>, ard.biesheuvel@linaro.org,
-        ardb@kernel.org, john.stultz@linaro.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        naresh.kamboju@linaro.org, shuah@kernel.org,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>, hridya@google.com,
-        kernel-team@android.com
-Subject: Re: [PATCH 3/3] binderfs_test: switch from /dev to /tmp as mountpoint
-Message-ID: <202003121653.4BC2D43@keescook>
-References: <20200311105309.1742827-1-christian.brauner@ubuntu.com>
- <20200312131531.3615556-1-christian.brauner@ubuntu.com>
- <20200312131531.3615556-3-christian.brauner@ubuntu.com>
+Cc:     ard.biesheuvel@linaro.org, ardb@kernel.org, arve@android.com,
+        gregkh@linuxfoundation.org, hridya@google.com,
+        joel@joelfernandes.org, john.stultz@linaro.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, maco@android.com,
+        naresh.kamboju@linaro.org, shuah@kernel.org, tkjos@android.com,
+        Todd Kjos <tkjos@google.com>
+Subject: Re: [PATCH] binderfs: port to new mount api
+Message-ID: <202003121655.486AB8E3@keescook>
+References: <20200312131531.3615556-1-christian.brauner@ubuntu.com>
+ <20200312212420.4032188-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200312131531.3615556-3-christian.brauner@ubuntu.com>
+In-Reply-To: <20200312212420.4032188-1-christian.brauner@ubuntu.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 02:15:31PM +0100, Christian Brauner wrote:
-> Unprivileged users will be able to create directories in there. The
-> unprivileged test for /dev wouldn't have worked on most systems.
+On Thu, Mar 12, 2020 at 10:24:20PM +0100, Christian Brauner wrote:
+> It's time we port binderfs to the new mount api. We can make use of the
+> new option parser, get nicer infrastructure and it will be easiert if we
+> ever add any new mount options.
 > 
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> This survives testing with the binderfs selftests:
+> 
+> for i in `seq 1 1000`; do ./binderfs_test; done
+> 
+> including the new stress tests I sent out for review today:
+> 
+>  [==========] Running 3 tests from 1 test cases.
+>  [ RUN      ] global.binderfs_stress
+>  [       OK ] global.binderfs_stress
+>  [ RUN      ] global.binderfs_test_privileged
+>  # Tests are not run as root. Skipping privileged tests
+>  [       OK ] global.binderfs_test_privileged
 
-Seems good. (Though would a dynamic location be better?
-mkstemp()-style?)
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+I would use the XFAIL harness infrastructure for these kinds of skips.
 
 -Kees
 
-> ---
->  .../filesystems/binderfs/binderfs_test.c      | 30 +++++++++----------
->  1 file changed, 15 insertions(+), 15 deletions(-)
+>  [ RUN      ] global.binderfs_test_unprivileged
+>  # Allocated new binder device with major 243, minor 4, and name my-binder
+>  # Detected binder version: 8
+>  [       OK ] global.binderfs_test_unprivileged
+>  [==========] 3 / 3 tests passed.
+>  [  PASSED  ]
 > 
-> diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> index 313ffad15614..d6e61998d20a 100644
-> --- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> +++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-> @@ -76,7 +76,7 @@ static void __do_binderfs_test(void)
+> Cc: Todd Kjos <tkjos@google.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> ---
+>  drivers/android/binderfs.c | 200 +++++++++++++++++++------------------
+>  1 file changed, 105 insertions(+), 95 deletions(-)
+> 
+> diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+> index f303106b3362..2c89e0b5a82d 100644
+> --- a/drivers/android/binderfs.c
+> +++ b/drivers/android/binderfs.c
+> @@ -18,7 +18,7 @@
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/mount.h>
+> -#include <linux/parser.h>
+> +#include <linux/fs_parser.h>
+>  #include <linux/radix-tree.h>
+>  #include <linux/sched.h>
+>  #include <linux/seq_file.h>
+> @@ -48,26 +48,30 @@ static dev_t binderfs_dev;
+>  static DEFINE_MUTEX(binderfs_minors_mutex);
+>  static DEFINE_IDA(binderfs_minors);
 >  
->  	change_mountns();
+> -enum {
+> +enum binderfs_param {
+>  	Opt_max,
+>  	Opt_stats_mode,
+> -	Opt_err
+>  };
 >  
-> -	ret = mkdir("/dev/binderfs", 0755);
-> +	ret = mkdir("/tmp/binderfs", 0755);
->  	if (ret < 0) {
->  		if (errno != EEXIST)
->  			ksft_exit_fail_msg(
-> @@ -86,13 +86,13 @@ static void __do_binderfs_test(void)
->  		keep = true;
+>  enum binderfs_stats_mode {
+> -	STATS_NONE,
+> -	STATS_GLOBAL,
+> +	binderfs_stats_mode_unset,
+> +	binderfs_stats_mode_global,
+>  };
+>  
+> -static const match_table_t tokens = {
+> -	{ Opt_max, "max=%d" },
+> -	{ Opt_stats_mode, "stats=%s" },
+> -	{ Opt_err, NULL     }
+> +static const struct constant_table binderfs_param_stats[] = {
+> +	{ "global", binderfs_stats_mode_global },
+> +	{}
+>  };
+>  
+> -static inline struct binderfs_info *BINDERFS_I(const struct inode *inode)
+> +const struct fs_parameter_spec binderfs_fs_parameters[] = {
+> +	fsparam_u32("max",	Opt_max),
+> +	fsparam_enum("stats",	Opt_stats_mode, binderfs_param_stats),
+> +	{}
+> +};
+> +
+> +static inline struct binderfs_info *BINDERFS_SB(const struct super_block *sb)
+>  {
+> -	return inode->i_sb->s_fs_info;
+> +	return sb->s_fs_info;
+>  }
+>  
+>  bool is_binderfs_device(const struct inode *inode)
+> @@ -246,7 +250,7 @@ static long binder_ctl_ioctl(struct file *file, unsigned int cmd,
+>  static void binderfs_evict_inode(struct inode *inode)
+>  {
+>  	struct binder_device *device = inode->i_private;
+> -	struct binderfs_info *info = BINDERFS_I(inode);
+> +	struct binderfs_info *info = BINDERFS_SB(inode->i_sb);
+>  
+>  	clear_inode(inode);
+>  
+> @@ -264,97 +268,85 @@ static void binderfs_evict_inode(struct inode *inode)
+>  	}
+>  }
+>  
+> -/**
+> - * binderfs_parse_mount_opts - parse binderfs mount options
+> - * @data: options to set (can be NULL in which case defaults are used)
+> - */
+> -static int binderfs_parse_mount_opts(char *data,
+> -				     struct binderfs_mount_opts *opts)
+> +static int binderfs_fs_context_parse_param(struct fs_context *fc,
+> +					   struct fs_parameter *param)
+>  {
+> -	char *p, *stats;
+> -	opts->max = BINDERFS_MAX_MINOR;
+> -	opts->stats_mode = STATS_NONE;
+> -
+> -	while ((p = strsep(&data, ",")) != NULL) {
+> -		substring_t args[MAX_OPT_ARGS];
+> -		int token;
+> -		int max_devices;
+> -
+> -		if (!*p)
+> -			continue;
+> -
+> -		token = match_token(p, tokens, args);
+> -		switch (token) {
+> -		case Opt_max:
+> -			if (match_int(&args[0], &max_devices) ||
+> -			    (max_devices < 0 ||
+> -			     (max_devices > BINDERFS_MAX_MINOR)))
+> -				return -EINVAL;
+> -
+> -			opts->max = max_devices;
+> -			break;
+> -		case Opt_stats_mode:
+> -			if (!capable(CAP_SYS_ADMIN))
+> -				return -EINVAL;
+> +	int opt;
+> +	struct binderfs_mount_opts *ctx = fc->fs_private;
+> +	struct fs_parse_result result;
+>  
+> -			stats = match_strdup(&args[0]);
+> -			if (!stats)
+> -				return -ENOMEM;
+> +	opt = fs_parse(fc, binderfs_fs_parameters, param, &result);
+> +	if (opt < 0)
+> +		return opt;
+>  
+> -			if (strcmp(stats, "global") != 0) {
+> -				kfree(stats);
+> -				return -EINVAL;
+> -			}
+> +	switch (opt) {
+> +	case Opt_max:
+> +		if (result.uint_32 > BINDERFS_MAX_MINOR)
+> +			return invalfc(fc, "Bad value for '%s'", param->key);
+>  
+> -			opts->stats_mode = STATS_GLOBAL;
+> -			kfree(stats);
+> -			break;
+> -		default:
+> -			pr_err("Invalid mount options\n");
+> -			return -EINVAL;
+> -		}
+> +		ctx->max = result.uint_32;
+> +		break;
+> +	case Opt_stats_mode:
+> +		if (!capable(CAP_SYS_ADMIN))
+> +			return -EPERM;
+> +
+> +		ctx->stats_mode = result.uint_32;
+> +		break;
+> +	default:
+> +		return invalfc(fc, "Unsupported parameter '%s'", param->key);
 >  	}
 >  
-> -	ret = mount(NULL, "/dev/binderfs", "binder", 0, 0);
-> +	ret = mount(NULL, "/tmp/binderfs", "binder", 0, 0);
->  	if (ret < 0) {
->  		if (errno != ENODEV)
->  			ksft_exit_fail_msg("%s - Failed to mount binderfs\n",
->  					   strerror(errno));
+>  	return 0;
+>  }
 >  
-> -		keep ? : rmdir_protect_errno("/dev/binderfs");
-> +		keep ? : rmdir_protect_errno("/tmp/binderfs");
->  		ksft_exit_skip(
->  			"The Android binderfs filesystem is not available\n");
+> -static int binderfs_remount(struct super_block *sb, int *flags, char *data)
+> +static int binderfs_fs_context_reconfigure(struct fs_context *fc)
+>  {
+> -	int prev_stats_mode, ret;
+> -	struct binderfs_info *info = sb->s_fs_info;
+> +	struct binderfs_mount_opts *ctx = fc->fs_private;
+> +	struct binderfs_info *info = BINDERFS_SB(fc->root->d_sb);
+>  
+> -	prev_stats_mode = info->mount_opts.stats_mode;
+> -	ret = binderfs_parse_mount_opts(data, &info->mount_opts);
+> -	if (ret)
+> -		return ret;
+> +	if (info->mount_opts.stats_mode != ctx->stats_mode)
+> +		return invalfc(fc, "Binderfs stats mode cannot be changed during a remount");
+>  
+> -	if (prev_stats_mode != info->mount_opts.stats_mode) {
+> -		pr_err("Binderfs stats mode cannot be changed during a remount\n");
+> -		info->mount_opts.stats_mode = prev_stats_mode;
+> -		return -EINVAL;
+> -	}
+> +	info->mount_opts.stats_mode = ctx->stats_mode;
+> +	info->mount_opts.max = ctx->max;
+>  
+>  	return 0;
+>  }
+>  
+> -static int binderfs_show_mount_opts(struct seq_file *seq, struct dentry *root)
+> +static int binderfs_show_options(struct seq_file *seq, struct dentry *root)
+>  {
+> -	struct binderfs_info *info;
+> +	struct binderfs_info *info = BINDERFS_SB(root->d_sb);
+>  
+> -	info = root->d_sb->s_fs_info;
+>  	if (info->mount_opts.max <= BINDERFS_MAX_MINOR)
+>  		seq_printf(seq, ",max=%d", info->mount_opts.max);
+> -	if (info->mount_opts.stats_mode == STATS_GLOBAL)
+> +
+> +	switch (info->mount_opts.stats_mode) {
+> +	case binderfs_stats_mode_unset:
+> +		break;
+> +	case binderfs_stats_mode_global:
+>  		seq_printf(seq, ",stats=global");
+> +		break;
+> +	}
+>  
+>  	return 0;
+>  }
+>  
+> +static void binderfs_put_super(struct super_block *sb)
+> +{
+> +	struct binderfs_info *info = sb->s_fs_info;
+> +
+> +	if (info && info->ipc_ns)
+> +		put_ipc_ns(info->ipc_ns);
+> +
+> +	kfree(info);
+> +	sb->s_fs_info = NULL;
+> +}
+> +
+>  static const struct super_operations binderfs_super_ops = {
+>  	.evict_inode    = binderfs_evict_inode,
+> -	.remount_fs	= binderfs_remount,
+> -	.show_options	= binderfs_show_mount_opts,
+> +	.show_options	= binderfs_show_options,
+>  	.statfs         = simple_statfs,
+> +	.put_super	= binderfs_put_super,
+>  };
+>  
+>  static inline bool is_binderfs_control_device(const struct dentry *dentry)
+> @@ -653,10 +645,11 @@ static int init_binder_logs(struct super_block *sb)
+>  	return ret;
+>  }
+>  
+> -static int binderfs_fill_super(struct super_block *sb, void *data, int silent)
+> +static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  {
+>  	int ret;
+>  	struct binderfs_info *info;
+> +	struct binderfs_mount_opts *ctx = fc->fs_private;
+>  	struct inode *inode = NULL;
+>  	struct binderfs_device device_info = { 0 };
+>  	const char *name;
+> @@ -689,16 +682,14 @@ static int binderfs_fill_super(struct super_block *sb, void *data, int silent)
+>  
+>  	info->ipc_ns = get_ipc_ns(current->nsproxy->ipc_ns);
+>  
+> -	ret = binderfs_parse_mount_opts(data, &info->mount_opts);
+> -	if (ret)
+> -		return ret;
+> -
+>  	info->root_gid = make_kgid(sb->s_user_ns, 0);
+>  	if (!gid_valid(info->root_gid))
+>  		info->root_gid = GLOBAL_ROOT_GID;
+>  	info->root_uid = make_kuid(sb->s_user_ns, 0);
+>  	if (!uid_valid(info->root_uid))
+>  		info->root_uid = GLOBAL_ROOT_UID;
+> +	info->mount_opts.max = ctx->max;
+> +	info->mount_opts.stats_mode = ctx->stats_mode;
+>  
+>  	inode = new_inode(sb);
+>  	if (!inode)
+> @@ -730,36 +721,55 @@ static int binderfs_fill_super(struct super_block *sb, void *data, int silent)
+>  			name++;
 >  	}
-> @@ -102,7 +102,7 @@ static void __do_binderfs_test(void)
 >  
->  	memcpy(device.name, "my-binder", strlen("my-binder"));
+> -	if (info->mount_opts.stats_mode == STATS_GLOBAL)
+> +	if (info->mount_opts.stats_mode == binderfs_stats_mode_global)
+>  		return init_binder_logs(sb);
 >  
-> -	fd = open("/dev/binderfs/binder-control", O_RDONLY | O_CLOEXEC);
-> +	fd = open("/tmp/binderfs/binder-control", O_RDONLY | O_CLOEXEC);
->  	if (fd < 0)
->  		ksft_exit_fail_msg(
->  			"%s - Failed to open binder-control device\n",
-> @@ -113,7 +113,7 @@ static void __do_binderfs_test(void)
->  	close(fd);
->  	errno = saved_errno;
->  	if (ret < 0) {
-> -		keep ? : rmdir_protect_errno("/dev/binderfs");
-> +		keep ? : rmdir_protect_errno("/tmp/binderfs");
->  		ksft_exit_fail_msg(
->  			"%s - Failed to allocate new binder device\n",
->  			strerror(errno));
-> @@ -126,9 +126,9 @@ static void __do_binderfs_test(void)
->  	/* binder device allocation test passed */
->  	ksft_inc_pass_cnt();
+>  	return 0;
+>  }
 >  
-> -	fd = open("/dev/binderfs/my-binder", O_CLOEXEC | O_RDONLY);
-> +	fd = open("/tmp/binderfs/my-binder", O_CLOEXEC | O_RDONLY);
->  	if (fd < 0) {
-> -		keep ? : rmdir_protect_errno("/dev/binderfs");
-> +		keep ? : rmdir_protect_errno("/tmp/binderfs");
->  		ksft_exit_fail_msg("%s - Failed to open my-binder device\n",
->  				   strerror(errno));
->  	}
-> @@ -138,7 +138,7 @@ static void __do_binderfs_test(void)
->  	close(fd);
->  	errno = saved_errno;
->  	if (ret < 0) {
-> -		keep ? : rmdir_protect_errno("/dev/binderfs");
-> +		keep ? : rmdir_protect_errno("/tmp/binderfs");
->  		ksft_exit_fail_msg(
->  			"%s - Failed to open perform BINDER_VERSION request\n",
->  			strerror(errno));
-> @@ -150,9 +150,9 @@ static void __do_binderfs_test(void)
->  	/* binder transaction with binderfs binder device passed */
->  	ksft_inc_pass_cnt();
+> -static struct dentry *binderfs_mount(struct file_system_type *fs_type,
+> -				     int flags, const char *dev_name,
+> -				     void *data)
+> +static int binderfs_fs_context_get_tree(struct fs_context *fc)
+>  {
+> -	return mount_nodev(fs_type, flags, data, binderfs_fill_super);
+> +	return get_tree_nodev(fc, binderfs_fill_super);
+>  }
 >  
-> -	ret = unlink("/dev/binderfs/my-binder");
-> +	ret = unlink("/tmp/binderfs/my-binder");
->  	if (ret < 0) {
-> -		keep ? : rmdir_protect_errno("/dev/binderfs");
-> +		keep ? : rmdir_protect_errno("/tmp/binderfs");
->  		ksft_exit_fail_msg("%s - Failed to delete binder device\n",
->  				   strerror(errno));
->  	}
-> @@ -160,12 +160,12 @@ static void __do_binderfs_test(void)
->  	/* binder device removal passed */
->  	ksft_inc_pass_cnt();
+> -static void binderfs_kill_super(struct super_block *sb)
+> +static void binderfs_fs_context_free(struct fs_context *fc)
+>  {
+> -	struct binderfs_info *info = sb->s_fs_info;
+> +	struct binderfs_mount_opts *ctx = fc->fs_private;
+> +
+> +	fc->fs_private = NULL;
+> +	kfree(ctx);
+> +}
 >  
-> -	ret = unlink("/dev/binderfs/binder-control");
-> +	ret = unlink("/tmp/binderfs/binder-control");
->  	if (!ret) {
-> -		keep ? : rmdir_protect_errno("/dev/binderfs");
-> +		keep ? : rmdir_protect_errno("/tmp/binderfs");
->  		ksft_exit_fail_msg("Managed to delete binder-control device\n");
->  	} else if (errno != EPERM) {
-> -		keep ? : rmdir_protect_errno("/dev/binderfs");
-> +		keep ? : rmdir_protect_errno("/tmp/binderfs");
->  		ksft_exit_fail_msg(
->  			"%s - Failed to delete binder-control device but exited with unexpected error code\n",
->  			strerror(errno));
-> @@ -175,8 +175,8 @@ static void __do_binderfs_test(void)
->  	ksft_inc_xfail_cnt();
+> -	kill_litter_super(sb);
+> +static const struct fs_context_operations binderfs_fs_context_ops = {
+> +	.free		= binderfs_fs_context_free,
+> +	.get_tree	= binderfs_fs_context_get_tree,
+> +	.parse_param	= binderfs_fs_context_parse_param,
+> +	.reconfigure	= binderfs_fs_context_reconfigure,
+> +};
 >  
->  on_error:
-> -	ret = umount2("/dev/binderfs", MNT_DETACH);
-> -	keep ?: rmdir_protect_errno("/dev/binderfs");
-> +	ret = umount2("/tmp/binderfs", MNT_DETACH);
-> +	keep ?: rmdir_protect_errno("/tmp/binderfs");
->  	if (ret < 0)
->  		ksft_exit_fail_msg("%s - Failed to unmount binderfs\n",
->  				   strerror(errno));
+> -	if (info && info->ipc_ns)
+> -		put_ipc_ns(info->ipc_ns);
+> +static int binderfs_init_fs_context(struct fs_context *fc)
+> +{
+> +	struct binderfs_mount_opts *ctx;
+>  
+> -	kfree(info);
+> +	ctx = kzalloc(sizeof(struct binderfs_mount_opts), GFP_KERNEL);
+> +	if (!ctx)
+> +		return -ENOMEM;
+> +
+> +	ctx->max = BINDERFS_MAX_MINOR;
+> +	ctx->stats_mode = binderfs_stats_mode_unset;
+> +
+> +	fc->fs_private = ctx;
+> +	fc->ops = &binderfs_fs_context_ops;
+> +
+> +	return 0;
+>  }
+>  
+>  static struct file_system_type binder_fs_type = {
+> -	.name		= "binder",
+> -	.mount		= binderfs_mount,
+> -	.kill_sb	= binderfs_kill_super,
+> -	.fs_flags	= FS_USERNS_MOUNT,
+> +	.name			= "binder",
+> +	.init_fs_context	= binderfs_init_fs_context,
+> +	.parameters		= binderfs_fs_parameters,
+> +	.kill_sb		= kill_litter_super,
+> +	.fs_flags		= FS_USERNS_MOUNT,
+>  };
+>  
+>  int __init init_binderfs(void)
+> 
+> base-commit: f17f06a0c7794d3a7c2425663738823354447472
 > -- 
 > 2.25.1
 > 
