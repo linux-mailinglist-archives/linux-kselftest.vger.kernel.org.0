@@ -2,90 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FBE185032
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 21:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AE3185034
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 21:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbgCMUVD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Mar 2020 16:21:03 -0400
-Received: from www62.your-server.de ([213.133.104.62]:48456 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbgCMUVD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Mar 2020 16:21:03 -0400
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jCqnk-0000G8-Gk; Fri, 13 Mar 2020 21:21:00 +0100
-Received: from [85.7.42.192] (helo=pc-9.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jCqnk-0009P1-68; Fri, 13 Mar 2020 21:21:00 +0100
-Subject: Re: [PATCH bpf-next] tools/bpf: move linux/types.h for selftests and
- bpftool
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Tobias Klauser <tklauser@distanz.ch>
-Cc:     Alexei Starovoitov <ast@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
+        id S1726528AbgCMUWN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Mar 2020 16:22:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47088 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726480AbgCMUWN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 13 Mar 2020 16:22:13 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 851472074D;
+        Fri, 13 Mar 2020 20:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584130932;
+        bh=H+FHiu5LeQLomYOQnyUDjawefKb1s84kHWofbZe/vO8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=A/GfMUp5yVhkxaqCnB4roSCiMSzNGIeviJvl81OxxvITqnF5NB8vv2fYIZ+1/gd73
+         qcyTruHofRExTtWou6mfRmzviF+3DXRGuvpcYMdjgB7IYcf8I0LfPcwNkVomB/k8p+
+         unwTQAqlziKurwjBO1+seHDied5ozItFZTW8KVJk=
+Subject: Re: [PATCH v2 1/2] kunit: kunit_parser: make parser more robust
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Heidi Fahim <heidifahim@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>, arnaldo.melo@gmail.com
-References: <20200313113105.6918-1-tklauser@distanz.ch>
- <CAEf4BzZS9mrJAhQaDOXvYG+3Hob0ntRu3rWNffHTJ82TDN6x6A@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5beb49b7-f73e-5160-38ce-1087e7ee75dc@iogearbox.net>
-Date:   Fri, 13 Mar 2020 21:20:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        KUnit Development <kunit-dev@googlegroups.com>,
+        shuah <shuah@kernel.org>
+References: <20200305200409.239406-1-heidifahim@google.com>
+ <CAFd5g45HSuxcP8_-yaJY4M=Acy14L=FTwY3GT_m-eTVtP6NJhQ@mail.gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <b8777872-189b-b361-6ff4-c7cd51772dfd@kernel.org>
+Date:   Fri, 13 Mar 2020 14:22:11 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZS9mrJAhQaDOXvYG+3Hob0ntRu3rWNffHTJ82TDN6x6A@mail.gmail.com>
+In-Reply-To: <CAFd5g45HSuxcP8_-yaJY4M=Acy14L=FTwY3GT_m-eTVtP6NJhQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25750/Fri Mar 13 14:03:09 2020)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ +acme ]
+On 3/5/20 2:25 PM, Brendan Higgins wrote:
+> On Thu, Mar 5, 2020 at 12:04 PM Heidi Fahim <heidifahim@google.com> wrote:
+>>
+>> Previously, kunit_parser did not properly handle kunit TAP output that
+>> - had any prefixes (generated from different configs e.g.
+>> CONFIG_PRINTK_TIME)
+>> - had unrelated kernel output mixed in the middle of
+>> it, which has shown up when testing with allyesconfig
+>> To remove prefixes, the parser looks for the first line that includes
+>> TAP output, "TAP version 14".  It then determines the length of the
+>> string before this sequence, and strips that number of characters off
+>> the beginning of the following lines until the last KUnit output line is
+>> reached.
+>> These fixes have been tested with additional tests in the
+>> KUnitParseTest and their associated logs have also been added.
+>>
+>> Signed-off-by: Heidi Fahim <heidifahim@google.com>
+> 
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> 
 
-On 3/13/20 5:52 PM, Andrii Nakryiko wrote:
-> On Fri, Mar 13, 2020 at 4:31 AM Tobias Klauser <tklauser@distanz.ch> wrote:
->>
->> Commit fe4eb069edb7 ("bpftool: Use linux/types.h from source tree for
->> profiler build") added a build dependency on tools/testing/selftests/bpf
->> to tools/bpf/bpftool. This is suboptimal with respect to a possible
->> stand-alone build of bpftool.
->>
->> Fix this by moving
->> tools/testing/selftests/bpf/include/uapi/linux/types.h to
->> tools/include/uapi/linux/types.h
->>
->> This requires an adjustment in the include search path order for the
->> tests in tools/testing/selftests/bpf so that tools/include/linux/types.h
->> is selected when building host binaries and
->> tools/include/uapi/linux/types.h is selected when building bpf binaries.
->>
->> Verified by compiling bpftool and the bpf selftests on x86_64 with this
->> change.
-> 
-> Thanks for following up!
-> 
-> My only concern is that tools/include/uapi/ is also used at least by
-> perf and libperf, we need to double check that they are fine with this
-> as well.
-> 
-> Given this is needed for BPF target compilation only, one way to limit
-> the scope of this change would be to have a `#if defined(__bpf__)`
-> check and falling back to "normal" uapi/linux/types.h. Alternatively,
-> we could have a bpf-specific subdirectory and put this header into
-> tools/include/bpf/uapi/linux/types.h.
-> 
-> I don't have any strong preferences, whatever maintainers are happy with.
+Heidi and Brendan,
 
-I would prefer to keep it generic if possible before we take measures of
-making special cases for bpf in tools include infra. Compilation of perf
-and libperf seems fine on my side as well, so I've applied it, thanks!
+git apply is throwing away formatting in
+
+tools/testing/kunit/test_data/test_config_printk_time.log
+
+
+Applying: kunit: kunit_parser: make parser more robust
+.git/rebase-apply/patch:396: space before tab in indent.
+  	# Subtest: kunit-resource-test
+.git/rebase-apply/patch:397: space before tab in indent.
+  	1..5
+.git/rebase-apply/patch:398: space before tab in indent.
+  	ok 1 - kunit_resource_test_init_resources
+.git/rebase-apply/patch:399: space before tab in indent.
+  	ok 2 - kunit_resource_test_alloc_resource
+.git/rebase-apply/patch:400: space before tab in indent.
+  	ok 3 - kunit_resource_test_destroy_resource
+warning: squelched 11 whitespace errors
+warning: 16 lines add whitespace errors.
+
+Can you fix this and resend patches. If apply this as is,
+all the formatting you have in there goes away.
+
+This is what gets applied.
+
+[    0.060000] TAP version 14
+[    0.060000] 	# Subtest: kunit-resource-test
+[    0.060000] 	1..5
+[    0.060000] 	ok 1 - kunit_resource_test_init_resources
+[    0.060000] 	ok 2 - kunit_resource_test_alloc_resource
+[    0.060000] 	ok 3 - kunit_resource_test_destroy_resource
+[    0.060000] 	ok 4 - kunit_resource_test_cleanup_resources
+[    0.060000] 	ok 5 - kunit_resource_test_proper_free_ordering
+[    0.060000] ok 1 - kunit-resource-test
+[    0.060000] 	# Subtest: kunit-try-catch-test
+[    0.060000] 	1..2
+[    0.060000] 	ok 1 - kunit_test_try_catch_successful_try_no_catch
+[    0.060000] 	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
+[    0.060000] ok 2 - kunit-try-catch-test
+[    0.060000] 	# Subtest: string-stream-test
+[    0.060000] 	1..3
+[    0.060000] 	ok 1 - string_stream_test_empty_on_creation
+[    0.060000] 	ok 2 - string_stream_test_not_empty_after_add
+[    0.060000] 	ok 3 - string_stream_test_get_string
+[    0.060000] ok 3 - string-stream-test
+[    0.060000] List of all partitions:
+[    0.060000] No filesystem could mount root, tried:
+
+thanks,
+-- Shuah
