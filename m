@@ -2,412 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ABD184ACF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 16:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61E5184B65
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 16:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726622AbgCMPej (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Mar 2020 11:34:39 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34848 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726446AbgCMPej (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Mar 2020 11:34:39 -0400
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jCmKZ-0001Aa-Fc; Fri, 13 Mar 2020 15:34:35 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     gregkh@linuxfoundation.org, tkjos@android.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org
-Cc:     christian.brauner@ubuntu.com, ard.biesheuvel@linaro.org,
-        ardb@kernel.org, arve@android.com, hridya@google.com,
-        joel@joelfernandes.org, john.stultz@linaro.org,
-        kernel-team@android.com, linux-kselftest@vger.kernel.org,
-        maco@android.com, naresh.kamboju@linaro.org, shuah@kernel.org,
-        Todd Kjos <tkjos@google.com>
-Subject: [PATCH v2] binderfs: port to new mount api
-Date:   Fri, 13 Mar 2020 16:34:27 +0100
-Message-Id: <20200313153427.141789-1-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200312131531.3615556-1-christian.brauner@ubuntu.com>
-References: <20200312131531.3615556-1-christian.brauner@ubuntu.com>
+        id S1726947AbgCMPp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Mar 2020 11:45:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50058 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726926AbgCMPpz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 13 Mar 2020 11:45:55 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DF5E920724;
+        Fri, 13 Mar 2020 15:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584114355;
+        bh=/N1wgZESVKWP6KVjaSbiwILH85i8xFK95LFFyo4x1rE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=D3DD6qqKms7TlPEM19TNtCICsddIc5yjc0fPsOHqZPjCg6WKD+DgYgCS+1XRBAmNN
+         HRdVgTJlHagJl727dl3lDQQCGQCu+X/vcpwxqYa4CLMoICBWruIilp8v/zykq3TZOk
+         P6HBO+KYOjJVSOegcXgBT3z1N69A4EK2S0T4M3T4=
+Subject: Re: [PATCH] kunit/kunit_kernel: Rebuild .config if .kunitconfig is
+ modified
+To:     Russell Currey <ruscur@russell.cc>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     SeongJae Park <sj38.park@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>, shuah <shuah@kernel.org>
+References: <CAFd5g448555=dKFQMbjJ6G=tvtfF5oJgTtTgGx+38Ls3VqHo5g@mail.gmail.com>
+ <20200205021428.8007-1-sj38.park@gmail.com>
+ <CABVgOSmFAZN3KRYkHVg5bb-m-UorB7+9=f9vAqW2ECABzpa9zQ@mail.gmail.com>
+ <CAFd5g45eys-JoaW-sgnkjwysehe4oxUL1THNifc7+v1xkgSRww@mail.gmail.com>
+ <009fe3f5-7b27-46c4-90a7-ff97cbd8c931@www.fastmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <b13a1268-1542-ec1c-3316-c194597f7849@kernel.org>
+Date:   Fri, 13 Mar 2020 09:45:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <009fe3f5-7b27-46c4-90a7-ff97cbd8c931@www.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When I first wrote binderfs the new mount api had not yet landed. Now
-that it has been around for a little while and a bunch of filesystems
-have already been ported we should do so too. When Al sent his
-mount-api-conversion pr he requested that binderfs (and a few others) be
-ported separately. It's time we port binderfs. We can make use of the
-new option parser, get nicer infrastructure and it will be easier if we
-ever add any new mount options.
+On 2/5/20 3:09 PM, Russell Currey wrote:
+> On Thu, Feb 6, 2020, at 7:00 AM, Brendan Higgins wrote:
+>> On Wed, Feb 5, 2020 at 9:58 AM David Gow <davidgow@google.com> wrote:
+>>>
+>>> One thing we'd like to do with kunit_tool is to make its functionality
+>>> a bit more independent: in particular, allowing the configuration,
+>>> running the kernel, and parsing the results to be done independently.
+>>>
+>>> If that's the case, it may make sense for "kunit.py run" or similar to
+>>> not do anything with the .config, and to relegate that to a separate
+>>> "configuration" step, which would allow someone to modify the
+>>> configuration themselves (e.g., using make menuconfig) and re-run the
+>>> tests, but also allow the config to be explicitly regenerated when
+>>> helpful.
+>>>
+>>> Exactly what that'd end up looking like (and to what extent we'd still
+>>> want to support a single command that'd do both) are still up in the
+>>> air: but I think a general "separation of concerns" like this is
+>>> probably the right path forward for kunit_tool.
+>>
+>> You and I have talked about splitting up kunit_tool's functionality
+>> before. I agree with the idea.
+>>
+>> I imagine it that we would have
+>>
+>> - configuration
+>> - running tests
+>> - dmesg/TAP parsing
+>>
+>> as separate runnable scripts. I think that would make it a lot easier
+>> for people with various test bed setups to reuse our code in their
+>> test harness.
+>>
+>> Nevertheless, I think it would also be nice to have, as Ted has
+>> previously suggested, a short easy to remember one line command that
+>> just works; it is easily said, and much harder to do, but I think it
+>> is at odds with the separation of functionality. I guess one solution
+>> might just be to have these three separate tools, and then the classic
+>> kunit.py script that combines the functionalities in a single step, or
+>> as Ted suggested we could have some sort of default "make kunit"
+>> command or something like that. I am not really sure what is best
+>> here.
+>>
+>> It doesn't address the problem of separation of functionality in
+>> anyway, but one way we could achieve the idea of having a command that
+>> just works, is by putting a line in MAINTAINERS file entries that have
+>> a command that a maintainer expects a submitter to run before sending
+>> a patch to LKML. That might at least make it possible to hack together
+>> a single line KUnit command for every relevant MAINTAINERS entry.
+>> (Obviously there is no reason we have to do this particular idea just
+>> for KUnit. We could do this for other tests as well.) Russel, I think
+>> this was your idea at LCA?
+> 
+> Hi Brendan, it wasn't me, it was someone in the audience during questions in my
+> testing talk.  I don't recall who.
+> 
+> They were suggesting a script like get_maintainers - i.e. get_tests - that for a
+> given file/patch/commit it gives you a suggested set of tests, whether that's
+> KUnit you can run there and then, or selftests you can run once it's booted,
+> or maybe external test suites that are relevant.
+> 
 
-This survives testing with the binderfs selftests:
+I like this idea of get_tests type script that could be run separately
+as well as part of check_patch or get_maintainers will serve as a
+reminder or hint to patch submitter.
 
-for i in `seq 1 1000`; do ./binderfs_test; done
+We have some pieces in the MAINTAINERS file now. Selftest files are
+usually listed under subsystem entries. get_tests could leverage
+that and we will definitely more information to for a complete set
+of tests for a subsystem.
 
-including the new stress tests I sent out for review today:
-
- TAP version 13
- 1..1
- # selftests: filesystems/binderfs: binderfs_test
- # [==========] Running 3 tests from 1 test cases.
- # [ RUN      ] global.binderfs_stress
- # [  XFAIL!  ] Tests are not run as root. Skipping privileged tests
- # [==========] Running 3 tests from 1 test cases.
- # [ RUN      ] global.binderfs_stress
- # [       OK ] global.binderfs_stress
- # [ RUN      ] global.binderfs_test_privileged
- # [       OK ] global.binderfs_test_privileged
- # [ RUN      ] global.binderfs_test_unprivileged
- # # Allocated new binder device with major 243, minor 4, and name my-binder
- # # Detected binder version: 8
- # [==========] Running 3 tests from 1 test cases.
- # [ RUN      ] global.binderfs_stress
- # [       OK ] global.binderfs_stress
- # [ RUN      ] global.binderfs_test_privileged
- # [       OK ] global.binderfs_test_privileged
- # [ RUN      ] global.binderfs_test_unprivileged
- # [       OK ] global.binderfs_test_unprivileged
- # [==========] 3 / 3 tests passed.
- # [  PASSED  ]
- ok 1 selftests: filesystems/binderfs: binderfs_test
-
-Cc: Todd Kjos <tkjos@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v2 */
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - Commit message adapted to new stresstest output after porting to
-    XFAIL infrastructure.
-    For the stresstest patchset see:
-    https://lore.kernel.org/r/20200313152420.138777-1-christian.brauner@ubuntu.com
----
- drivers/android/binderfs.c | 200 +++++++++++++++++++------------------
- 1 file changed, 104 insertions(+), 96 deletions(-)
-
-diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
-index f303106b3362..9ecad74183a3 100644
---- a/drivers/android/binderfs.c
-+++ b/drivers/android/binderfs.c
-@@ -18,7 +18,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/mount.h>
--#include <linux/parser.h>
-+#include <linux/fs_parser.h>
- #include <linux/radix-tree.h>
- #include <linux/sched.h>
- #include <linux/seq_file.h>
-@@ -48,26 +48,30 @@ static dev_t binderfs_dev;
- static DEFINE_MUTEX(binderfs_minors_mutex);
- static DEFINE_IDA(binderfs_minors);
- 
--enum {
-+enum binderfs_param {
- 	Opt_max,
- 	Opt_stats_mode,
--	Opt_err
- };
- 
- enum binderfs_stats_mode {
--	STATS_NONE,
--	STATS_GLOBAL,
-+	binderfs_stats_mode_unset,
-+	binderfs_stats_mode_global,
- };
- 
--static const match_table_t tokens = {
--	{ Opt_max, "max=%d" },
--	{ Opt_stats_mode, "stats=%s" },
--	{ Opt_err, NULL     }
-+static const struct constant_table binderfs_param_stats[] = {
-+	{ "global", binderfs_stats_mode_global },
-+	{}
- };
- 
--static inline struct binderfs_info *BINDERFS_I(const struct inode *inode)
-+const struct fs_parameter_spec binderfs_fs_parameters[] = {
-+	fsparam_u32("max",	Opt_max),
-+	fsparam_enum("stats",	Opt_stats_mode, binderfs_param_stats),
-+	{}
-+};
-+
-+static inline struct binderfs_info *BINDERFS_SB(const struct super_block *sb)
- {
--	return inode->i_sb->s_fs_info;
-+	return sb->s_fs_info;
- }
- 
- bool is_binderfs_device(const struct inode *inode)
-@@ -246,7 +250,7 @@ static long binder_ctl_ioctl(struct file *file, unsigned int cmd,
- static void binderfs_evict_inode(struct inode *inode)
- {
- 	struct binder_device *device = inode->i_private;
--	struct binderfs_info *info = BINDERFS_I(inode);
-+	struct binderfs_info *info = BINDERFS_SB(inode->i_sb);
- 
- 	clear_inode(inode);
- 
-@@ -264,97 +268,84 @@ static void binderfs_evict_inode(struct inode *inode)
- 	}
- }
- 
--/**
-- * binderfs_parse_mount_opts - parse binderfs mount options
-- * @data: options to set (can be NULL in which case defaults are used)
-- */
--static int binderfs_parse_mount_opts(char *data,
--				     struct binderfs_mount_opts *opts)
-+static int binderfs_fs_context_parse_param(struct fs_context *fc,
-+					   struct fs_parameter *param)
- {
--	char *p, *stats;
--	opts->max = BINDERFS_MAX_MINOR;
--	opts->stats_mode = STATS_NONE;
--
--	while ((p = strsep(&data, ",")) != NULL) {
--		substring_t args[MAX_OPT_ARGS];
--		int token;
--		int max_devices;
--
--		if (!*p)
--			continue;
--
--		token = match_token(p, tokens, args);
--		switch (token) {
--		case Opt_max:
--			if (match_int(&args[0], &max_devices) ||
--			    (max_devices < 0 ||
--			     (max_devices > BINDERFS_MAX_MINOR)))
--				return -EINVAL;
--
--			opts->max = max_devices;
--			break;
--		case Opt_stats_mode:
--			if (!capable(CAP_SYS_ADMIN))
--				return -EINVAL;
-+	int opt;
-+	struct binderfs_mount_opts *ctx = fc->fs_private;
-+	struct fs_parse_result result;
- 
--			stats = match_strdup(&args[0]);
--			if (!stats)
--				return -ENOMEM;
-+	opt = fs_parse(fc, binderfs_fs_parameters, param, &result);
-+	if (opt < 0)
-+		return opt;
- 
--			if (strcmp(stats, "global") != 0) {
--				kfree(stats);
--				return -EINVAL;
--			}
-+	switch (opt) {
-+	case Opt_max:
-+		if (result.uint_32 > BINDERFS_MAX_MINOR)
-+			return invalfc(fc, "Bad value for '%s'", param->key);
- 
--			opts->stats_mode = STATS_GLOBAL;
--			kfree(stats);
--			break;
--		default:
--			pr_err("Invalid mount options\n");
--			return -EINVAL;
--		}
-+		ctx->max = result.uint_32;
-+		break;
-+	case Opt_stats_mode:
-+		if (!capable(CAP_SYS_ADMIN))
-+			return -EPERM;
-+
-+		ctx->stats_mode = result.uint_32;
-+		break;
-+	default:
-+		return invalfc(fc, "Unsupported parameter '%s'", param->key);
- 	}
- 
- 	return 0;
- }
- 
--static int binderfs_remount(struct super_block *sb, int *flags, char *data)
-+static int binderfs_fs_context_reconfigure(struct fs_context *fc)
- {
--	int prev_stats_mode, ret;
--	struct binderfs_info *info = sb->s_fs_info;
-+	struct binderfs_mount_opts *ctx = fc->fs_private;
-+	struct binderfs_info *info = BINDERFS_SB(fc->root->d_sb);
- 
--	prev_stats_mode = info->mount_opts.stats_mode;
--	ret = binderfs_parse_mount_opts(data, &info->mount_opts);
--	if (ret)
--		return ret;
--
--	if (prev_stats_mode != info->mount_opts.stats_mode) {
--		pr_err("Binderfs stats mode cannot be changed during a remount\n");
--		info->mount_opts.stats_mode = prev_stats_mode;
--		return -EINVAL;
--	}
-+	if (info->mount_opts.stats_mode != ctx->stats_mode)
-+		return invalfc(fc, "Binderfs stats mode cannot be changed during a remount");
- 
-+	info->mount_opts.stats_mode = ctx->stats_mode;
-+	info->mount_opts.max = ctx->max;
- 	return 0;
- }
- 
--static int binderfs_show_mount_opts(struct seq_file *seq, struct dentry *root)
-+static int binderfs_show_options(struct seq_file *seq, struct dentry *root)
- {
--	struct binderfs_info *info;
-+	struct binderfs_info *info = BINDERFS_SB(root->d_sb);
- 
--	info = root->d_sb->s_fs_info;
- 	if (info->mount_opts.max <= BINDERFS_MAX_MINOR)
- 		seq_printf(seq, ",max=%d", info->mount_opts.max);
--	if (info->mount_opts.stats_mode == STATS_GLOBAL)
-+
-+	switch (info->mount_opts.stats_mode) {
-+	case binderfs_stats_mode_unset:
-+		break;
-+	case binderfs_stats_mode_global:
- 		seq_printf(seq, ",stats=global");
-+		break;
-+	}
- 
- 	return 0;
- }
- 
-+static void binderfs_put_super(struct super_block *sb)
-+{
-+	struct binderfs_info *info = sb->s_fs_info;
-+
-+	if (info && info->ipc_ns)
-+		put_ipc_ns(info->ipc_ns);
-+
-+	kfree(info);
-+	sb->s_fs_info = NULL;
-+}
-+
- static const struct super_operations binderfs_super_ops = {
- 	.evict_inode    = binderfs_evict_inode,
--	.remount_fs	= binderfs_remount,
--	.show_options	= binderfs_show_mount_opts,
-+	.show_options	= binderfs_show_options,
- 	.statfs         = simple_statfs,
-+	.put_super	= binderfs_put_super,
- };
- 
- static inline bool is_binderfs_control_device(const struct dentry *dentry)
-@@ -653,10 +644,11 @@ static int init_binder_logs(struct super_block *sb)
- 	return ret;
- }
- 
--static int binderfs_fill_super(struct super_block *sb, void *data, int silent)
-+static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
- {
- 	int ret;
- 	struct binderfs_info *info;
-+	struct binderfs_mount_opts *ctx = fc->fs_private;
- 	struct inode *inode = NULL;
- 	struct binderfs_device device_info = { 0 };
- 	const char *name;
-@@ -689,16 +681,14 @@ static int binderfs_fill_super(struct super_block *sb, void *data, int silent)
- 
- 	info->ipc_ns = get_ipc_ns(current->nsproxy->ipc_ns);
- 
--	ret = binderfs_parse_mount_opts(data, &info->mount_opts);
--	if (ret)
--		return ret;
--
- 	info->root_gid = make_kgid(sb->s_user_ns, 0);
- 	if (!gid_valid(info->root_gid))
- 		info->root_gid = GLOBAL_ROOT_GID;
- 	info->root_uid = make_kuid(sb->s_user_ns, 0);
- 	if (!uid_valid(info->root_uid))
- 		info->root_uid = GLOBAL_ROOT_UID;
-+	info->mount_opts.max = ctx->max;
-+	info->mount_opts.stats_mode = ctx->stats_mode;
- 
- 	inode = new_inode(sb);
- 	if (!inode)
-@@ -730,36 +720,54 @@ static int binderfs_fill_super(struct super_block *sb, void *data, int silent)
- 			name++;
- 	}
- 
--	if (info->mount_opts.stats_mode == STATS_GLOBAL)
-+	if (info->mount_opts.stats_mode == binderfs_stats_mode_global)
- 		return init_binder_logs(sb);
- 
- 	return 0;
- }
- 
--static struct dentry *binderfs_mount(struct file_system_type *fs_type,
--				     int flags, const char *dev_name,
--				     void *data)
-+static int binderfs_fs_context_get_tree(struct fs_context *fc)
- {
--	return mount_nodev(fs_type, flags, data, binderfs_fill_super);
-+	return get_tree_nodev(fc, binderfs_fill_super);
- }
- 
--static void binderfs_kill_super(struct super_block *sb)
-+static void binderfs_fs_context_free(struct fs_context *fc)
- {
--	struct binderfs_info *info = sb->s_fs_info;
-+	struct binderfs_mount_opts *ctx = fc->fs_private;
- 
--	kill_litter_super(sb);
-+	kfree(ctx);
-+}
- 
--	if (info && info->ipc_ns)
--		put_ipc_ns(info->ipc_ns);
-+static const struct fs_context_operations binderfs_fs_context_ops = {
-+	.free		= binderfs_fs_context_free,
-+	.get_tree	= binderfs_fs_context_get_tree,
-+	.parse_param	= binderfs_fs_context_parse_param,
-+	.reconfigure	= binderfs_fs_context_reconfigure,
-+};
- 
--	kfree(info);
-+static int binderfs_init_fs_context(struct fs_context *fc)
-+{
-+	struct binderfs_mount_opts *ctx = fc->fs_private;
-+
-+	ctx = kzalloc(sizeof(struct binderfs_mount_opts), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	ctx->max = BINDERFS_MAX_MINOR;
-+	ctx->stats_mode = binderfs_stats_mode_unset;
-+
-+	fc->fs_private = ctx;
-+	fc->ops = &binderfs_fs_context_ops;
-+
-+	return 0;
- }
- 
- static struct file_system_type binder_fs_type = {
--	.name		= "binder",
--	.mount		= binderfs_mount,
--	.kill_sb	= binderfs_kill_super,
--	.fs_flags	= FS_USERNS_MOUNT,
-+	.name			= "binder",
-+	.init_fs_context	= binderfs_init_fs_context,
-+	.parameters		= binderfs_fs_parameters,
-+	.kill_sb		= kill_litter_super,
-+	.fs_flags		= FS_USERNS_MOUNT,
- };
- 
- int __init init_binderfs(void)
-
-base-commit: f17f06a0c7794d3a7c2425663738823354447472
--- 
-2.25.1
-
+thanks,
+-- Shuah
