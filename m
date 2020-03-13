@@ -2,45 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF55184BF8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 17:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28826184C0C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 17:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726622AbgCMQFb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Mar 2020 12:05:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56436 "EHLO mail.kernel.org"
+        id S1726557AbgCMQKX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Mar 2020 12:10:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57136 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726504AbgCMQFb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Mar 2020 12:05:31 -0400
+        id S1726480AbgCMQKX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 13 Mar 2020 12:10:23 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AFC8B206EB;
-        Fri, 13 Mar 2020 16:05:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5B8CD2072C;
+        Fri, 13 Mar 2020 16:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584115531;
-        bh=Bvh/Q7EbRtajUaWy5dHeFmGlTN0o6U8tvfsJdHTlJ9Q=;
+        s=default; t=1584115822;
+        bh=B47v85trEWvjV/lzKS2P3e07BiG8jYMtvyGlf1skrfw=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Jp5rb4jEwbDeIH0KiE/cAnLC9Yk3FoDiIEM5Pyu6bFo/s8AcLCbAadPrz4L1mnW4e
-         xCbihyWDn+iqc9UrvjS3y/nFMJmYSj9FPSpEpjScOWAYoevoQ0gAEkJAiZh7eejESM
-         N27P6U3pkYbsrZqPZcssCtjlg0c3LxgN5A7u+kJU=
-Subject: Re: [PATCH v4] Documentation: kunit: Make the KUnit documentation
- less UML-specific
-To:     Frank Rowand <frowand.list@gmail.com>,
-        David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net
-Cc:     kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim.Bird@sony.com, Frank Rowand <frank.rowand@sony.com>,
+        b=seaW/ZYd0aXN5SgqyFlnl4kSLtqoDKP8TliSQ3i0Q53m4sCK1YU8bJ1a6qlGaHr4X
+         BrZee8SEmHmW8x9xOjqxZVr0dfAmp4VOxRChmKuYj1Khu6nkenoj1K0KEWcFg15I3P
+         lcd/h45POIXuc49iOEqu8SdveQ9M50HQzZUsJeOU=
+Subject: Re: [PATCH] dma-buf: heaps: bugfix for selftest failure
+To:     Leon He <hexiaolong2008@gmail.com>, sumit.semwal@linaro.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, Leon He <leon.he@unisoc.com>,
         shuah <shuah@kernel.org>
-References: <20200228191821.42412-1-davidgow@google.com>
- <dd15aa59-d2ef-d42e-1a4f-82b42e2ea350@gmail.com>
+References: <1583300076-28392-1-git-send-email-leon.he@unisoc.com>
 From:   shuah <shuah@kernel.org>
-Message-ID: <ec2f35ef-54d2-cd67-5e30-33ce7612a6d4@kernel.org>
-Date:   Fri, 13 Mar 2020 10:05:30 -0600
+Message-ID: <9be2873c-79c2-2d02-f15a-1e6e0ff7e898@kernel.org>
+Date:   Fri, 13 Mar 2020 10:10:21 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <dd15aa59-d2ef-d42e-1a4f-82b42e2ea350@gmail.com>
+In-Reply-To: <1583300076-28392-1-git-send-email-leon.he@unisoc.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -49,51 +45,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/2/20 9:50 AM, Frank Rowand wrote:
-> Hi David,
+On 3/3/20 10:34 PM, Leon He wrote:
+> If the 'name' array in check_vgem() was not initialized to null, the
+> value of name[4] may be random. Which will cause strcmp(name, "vgem")
+> failed.
+
+Nit: "to fail" instead of "failed"
+
+
 > 
-> On 2/28/20 1:18 PM, David Gow wrote:
->> Remove some of the outmoded "Why KUnit" rationale, and move some
->> UML-specific information to the kunit_tool page. Also update the Getting
->> Started guide to mention running tests without the kunit_tool wrapper.
->>
->> Signed-off-by: David Gow <davidgow@google.com>
->> Reviewed-by: Frank Rowand <frank.rowand@sony.com>
->> ---
->> Sorry: I missed a couple of issues in the last version. They're fixed
->> here, and I think this should be ready to go.
->>
->> Changelog:
->>
->> v4:
->> - Fix typo: s/offsers/offers
->> - Talk about KUnit tests running on most "architectures" instead of
->>    "kernel configurations.
->> v3:
->> https://lore.kernel.org/linux-kselftest/20200214235723.254228-1-davidgow@google.com/T/#u
->> - Added a note that KUnit can be used with UML, both with and without
->>    kunit_tool to replace the section moved to kunit_tool.
->> v2:
->> https://lore.kernel.org/linux-kselftest/f99a3d4d-ad65-5fd1-3407-db33f378b1fa@gmail.com/T/
->> - Reinstated the "Why Kunit?" section, minus the comparison with other
->>    testing frameworks (covered in the FAQ), and the description of UML.
->> - Moved the description of UML into to kunit_tool page.
->> - Tidied up the wording around how KUnit is built and run to make it
->>    work
->>    without the UML description.
->> v1:
->> https://lore.kernel.org/linux-kselftest/9c703dea-a9e1-94e2-c12d-3cb0a09e75ac@gmail.com/T/
->> - Initial patch
+> Signed-off-by: Leon He <leon.he@unisoc.com>
+> ---
+>   tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thanks for all the changes.  The documents are now much more understandable
-> and useful.
+> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> index cd5e1f6..21f3d19 100644
+> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> @@ -22,7 +22,7 @@
+>   static int check_vgem(int fd)
+>   {
+>   	drm_version_t version = { 0 };
+> -	char name[5];
+> +	char name[5] = { 0 };
+>   	int ret;
+>   
+>   	version.name_len = 4;
 > 
 
-Is this ready to go? If it goes through doc tree:
+return !strcmp(name, "vgem");
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-Otherwise, I can pic it up.
+While you are at it, why not change strcmp() to strncmp()?
 
 thanks,
 -- Shuah
+
+
