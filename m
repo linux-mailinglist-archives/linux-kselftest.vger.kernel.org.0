@@ -2,91 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9A0184625
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 12:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A500184747
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 13:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbgCMLpM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Mar 2020 07:45:12 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39229 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726406AbgCMLpL (ORCPT
+        id S1726674AbgCMMyK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Mar 2020 08:54:10 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:55745 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726426AbgCMMyK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Mar 2020 07:45:11 -0400
-Received: by mail-wr1-f68.google.com with SMTP id r15so11694485wrx.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2020 04:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dgczSmAqVEJOutEhe8hoKbtoOKkA2cKA5aZcMZeUt7M=;
-        b=UD5SixymeIdkCPNBEKM6X0ZsncWUrK1nGU65RM9f+VyOlBFoPr91ErZu4D6VfKARM0
-         z+hsdamo+rFQVrmdvBKMGL8EuUg8WU6WrRoMmR8DUr2qIGiuJ41UF3gTmnFgy/IVq2g0
-         szQS03Dt4ldXw7klloG6Uzco9zcZMQR1GzhMy3WbmaAJea80ZHn6pFXwKQsP5YzV/ST+
-         pMqjlB0CB1gg2RsXP3XyqlsUmKYKD/+yriKZzJmIiFGThU3uF1zLh7Kh/gFEnHh+TaDq
-         g+2zbTSgHgnh633zpNkrCdkhZFJImsPVmY/vg0uogFE55wiCXMtAq7CQeMbqzDuLEdXP
-         3sLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dgczSmAqVEJOutEhe8hoKbtoOKkA2cKA5aZcMZeUt7M=;
-        b=aR9KsAkNrvhPbgabqIenNlMNdMPRIGBRm13dWqUGOZ2o7fgir5ZxgFm06MAb3HpMLQ
-         PScbzXefWYbZht6nCE7HfuaM29pz9tE74aQM3+b64GCnuQL7PemmKZBcDztqdsQclyzh
-         oZIBGfEYO+Y700jdXWFL4lQU9m+c3RWhtApSpE/su3nhXwJDEKDdI5knCGuubsPQpkMF
-         gvBW9ZM7nofYumdGjkJgGrWRv/thoQnCSixWLWA6ieHRV+SmXjUWsKrXFB6qPxKTQ7nB
-         l2SJyBFyx66RdH+t+CnrB51yq4qxIUtLVL2n6sVyat4GPHRpgUixqwk9YGwau6VJQ6N5
-         AcJg==
-X-Gm-Message-State: ANhLgQ3wswgBJouzG3inDiL/q+R+PbyUarwLelRjy8WqpnNuDowwd098
-        ndSQ+ppqCqFtifbKntIE3p/gOWI9fWc=
-X-Google-Smtp-Source: ADFU+vsFcFvVhNYRTCm5ZSliJazxZsWFUHwpM16BAXz4Mnd+bWt88EWTKrmY4oEXFZncdcyAw1dPhg==
-X-Received: by 2002:adf:e3cc:: with SMTP id k12mr13352414wrm.266.1584099907848;
-        Fri, 13 Mar 2020 04:45:07 -0700 (PDT)
-Received: from [192.168.1.10] ([194.35.118.102])
-        by smtp.gmail.com with ESMTPSA id d7sm5784478wrc.25.2020.03.13.04.45.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Mar 2020 04:45:07 -0700 (PDT)
-Subject: Re: [PATCH bpf-next] tools/bpf: move linux/types.h for selftests and
- bpftool
-To:     Tobias Klauser <tklauser@distanz.ch>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20200313113105.6918-1-tklauser@distanz.ch>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <9dd3dc71-90b6-1557-4459-2b99183bf6a7@isovalent.com>
-Date:   Fri, 13 Mar 2020 11:45:06 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Fri, 13 Mar 2020 08:54:10 -0400
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jCjpF-0003Gu-EH; Fri, 13 Mar 2020 12:54:05 +0000
+Date:   Fri, 13 Mar 2020 13:54:04 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Todd Kjos <tkjos@android.com>, ard.biesheuvel@linaro.org,
+        ardb@kernel.org, john.stultz@linaro.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        naresh.kamboju@linaro.org, shuah@kernel.org,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>, hridya@google.com,
+        kernel-team@android.com
+Subject: Re: [PATCH 2/3] binderfs: add stress test for binderfs binder devices
+Message-ID: <20200313125404.fnsktenn5crufkxr@wittgenstein>
+References: <20200311105309.1742827-1-christian.brauner@ubuntu.com>
+ <20200312131531.3615556-1-christian.brauner@ubuntu.com>
+ <20200312131531.3615556-2-christian.brauner@ubuntu.com>
+ <202003121652.00BBA1D98@keescook>
 MIME-Version: 1.0
-In-Reply-To: <20200313113105.6918-1-tklauser@distanz.ch>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <202003121652.00BBA1D98@keescook>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2020-03-13 12:31 UTC+0100 ~ Tobias Klauser <tklauser@distanz.ch>
-> Commit fe4eb069edb7 ("bpftool: Use linux/types.h from source tree for
-> profiler build") added a build dependency on tools/testing/selftests/bpf
-> to tools/bpf/bpftool. This is suboptimal with respect to a possible
-> stand-alone build of bpftool.
+On Thu, Mar 12, 2020 at 04:53:17PM -0700, Kees Cook wrote:
+> On Thu, Mar 12, 2020 at 02:15:30PM +0100, Christian Brauner wrote:
+> > This adds a stress test that should hopefully help us catch regressions
+> > for [1], [2], and [3].
+> > 
+> > [1]: 2669b8b0c798 ("binder: prevent UAF for binderfs devices")
+> > [2]: f0fe2c0f050d ("binder: prevent UAF for binderfs devices II")
+> > [3]: 211b64e4b5b6 ("binderfs: use refcount for binder control devices too")
+> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 > 
-> Fix this by moving
-> tools/testing/selftests/bpf/include/uapi/linux/types.h to
-> tools/include/uapi/linux/types.h
-> 
-> This requires an adjustment in the include search path order for the
-> tests in tools/testing/selftests/bpf so that tools/include/linux/types.h
-> is selected when building host binaries and
-> tools/include/uapi/linux/types.h is selected when building bpf binaries.
-> 
-> Verified by compiling bpftool and the bpf selftests on x86_64 with this
-> change.
+> Do you care about 80-char line limits? (Or does the selftest tree? There
+> are a few in here...)
 
-Compiles on my setup too.
+They should mostly all be calls to kselftest print functions. I usually
+never wrap them in tests so it's easy to do:
 
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+git grep "Find me this error string"
+
+which becames annoying when you wrap them. :)
