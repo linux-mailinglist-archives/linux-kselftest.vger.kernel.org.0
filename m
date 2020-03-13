@@ -2,103 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AA51849D9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 15:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE4F184A9B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Mar 2020 16:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726911AbgCMOrS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Mar 2020 10:47:18 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:35164 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726595AbgCMOrS (ORCPT
+        id S1726808AbgCMPYh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Mar 2020 11:24:37 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34437 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbgCMPYh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Mar 2020 10:47:18 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02DEeaiT042643;
-        Fri, 13 Mar 2020 14:47:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=FAXjI9acl3BvhqBVLHwTP8ZVKrXH638AdGx3om6kJNQ=;
- b=FhPdlmxIHJvQgls3DVfxUO0C7gZUS4ANPeDN4y7XcZzdaI2Cgt0/cRcXiKIMTn/AyhYi
- Q8iX7/lRGteQgfbGzldQ5ssv0YJZuxHhLqAmdyf645N9wCJlGEuRMiMK0LT62BBicEye
- Z2D5UZNmzW/wg+qZlYF+pKjoC1ICr21nniV59zigMaz9YvQ6iB2q34xiHeLY8DzY/dLF
- wTL7jkj2wd3PKQnOP/bC6BQxueA9hGnJSTQD4c8pqfNvAkSzPzXiQ7nrhaHBIGhyeF5x
- hO3DaWSxR1RNjkOMFvsceUpr7l8Tdslm6DKMNK2hgqFrScvQQ/65kOqhjZivv0zpcAgb jg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2yqtaev7fa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Mar 2020 14:47:10 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02DEcCFW070599;
-        Fri, 13 Mar 2020 14:45:10 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2yqtabb577-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Mar 2020 14:45:10 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02DEj8s5015787;
-        Fri, 13 Mar 2020 14:45:09 GMT
-Received: from dhcp-10-175-173-225.vpn.oracle.com (/10.175.173.225)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 13 Mar 2020 07:45:08 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     brendanhiggins@google.com, frowand.list@gmail.com,
-        gregkh@linuxfoundation.org, shuah@kernel.org
-Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v7 kunit-next 4/4] kunit: update documentation to describe debugfs representation
-Date:   Fri, 13 Mar 2020 14:44:42 +0000
-Message-Id: <1584110682-3837-5-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1584110682-3837-1-git-send-email-alan.maguire@oracle.com>
-References: <1584110682-3837-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=3 adultscore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003130077
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 suspectscore=3
- mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003130077
+        Fri, 13 Mar 2020 11:24:37 -0400
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jCmAt-0000Tg-4F; Fri, 13 Mar 2020 15:24:35 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     gregkh@linuxfoundation.org, tkjos@android.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org
+Cc:     christian.brauner@ubuntu.com, ard.biesheuvel@linaro.org,
+        ardb@kernel.org, arve@android.com, hridya@google.com,
+        joel@joelfernandes.org, john.stultz@linaro.org,
+        kernel-team@android.com, linux-kselftest@vger.kernel.org,
+        maco@android.com, naresh.kamboju@linaro.org, shuah@kernel.org
+Subject: [PATCH v2 1/3] binderfs: port tests to test harness infrastructure
+Date:   Fri, 13 Mar 2020 16:24:18 +0100
+Message-Id: <20200313152420.138777-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200312131531.3615556-1-christian.brauner@ubuntu.com>
+References: <20200312131531.3615556-1-christian.brauner@ubuntu.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Documentation should describe debugfs layout and semantics.
+Makes for nicer output and prepares for additional tests.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Cc: Kees Cook <keescook@chromium.org>:
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
- Documentation/dev-tools/kunit/usage.rst | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+/* v2 */
+- Kees Cook <keescook@chromium.org>:
+  - Switch to XFAIL() to skip tests.
+---
+ .../selftests/filesystems/binderfs/Makefile   |  2 ++
+ .../filesystems/binderfs/binderfs_test.c      | 31 +++++++++----------
+ 2 files changed, 17 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 607758a..473a236 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -591,3 +591,17 @@ able to run one test case per invocation.
+diff --git a/tools/testing/selftests/filesystems/binderfs/Makefile b/tools/testing/selftests/filesystems/binderfs/Makefile
+index 58cb659b56b4..75315d9ba7a9 100644
+--- a/tools/testing/selftests/filesystems/binderfs/Makefile
++++ b/tools/testing/selftests/filesystems/binderfs/Makefile
+@@ -3,4 +3,6 @@
+ CFLAGS += -I../../../../../usr/include/
+ TEST_GEN_PROGS := binderfs_test
  
- .. TODO(brendanhiggins@google.com): Add an actual example of an architecture
-    dependent KUnit test.
++binderfs_test: binderfs_test.c ../../kselftest.h ../../kselftest_harness.h
 +
-+KUnit debugfs representation
-+============================
-+When kunit test suites are initialized, they create an associated directory
-+in /sys/kernel/debug/kunit/<test-suite>.  The directory contains one file
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+index 8c2ed962e1c7..0cfca65e095a 100644
+--- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
++++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
+@@ -15,7 +15,9 @@
+ #include <unistd.h>
+ #include <linux/android/binder.h>
+ #include <linux/android/binderfs.h>
 +
-+- results: "cat results" displays results of each test case and the results
-+  of the entire suite for the last test run.
+ #include "../../kselftest.h"
++#include "../../kselftest_harness.h"
+ 
+ static ssize_t write_nointr(int fd, const void *buf, size_t count)
+ {
+@@ -132,7 +134,7 @@ static void rmdir_protect_errno(const char *dir)
+ 	errno = saved_errno;
+ }
+ 
+-static void __do_binderfs_test(void)
++static int __do_binderfs_test(void)
+ {
+ 	int fd, ret, saved_errno;
+ 	size_t len;
+@@ -160,8 +162,7 @@ static void __do_binderfs_test(void)
+ 					   strerror(errno));
+ 
+ 		keep ? : rmdir_protect_errno("/dev/binderfs");
+-		ksft_exit_skip(
+-			"The Android binderfs filesystem is not available\n");
++		return 1;
+ 	}
+ 
+ 	/* binderfs mount test passed */
+@@ -250,26 +251,24 @@ static void __do_binderfs_test(void)
+ 
+ 	/* binderfs unmount test passed */
+ 	ksft_inc_pass_cnt();
++	return 0;
+ }
+ 
+-static void binderfs_test_privileged()
++TEST(binderfs_test_privileged)
+ {
+ 	if (geteuid() != 0)
+-		ksft_print_msg(
+-			"Tests are not run as root. Skipping privileged tests\n");
+-	else
+-		__do_binderfs_test();
++		XFAIL(return, "Tests are not run as root. Skipping privileged tests");
 +
-+The debugfs representation is primarily of use when kunit test suites are
-+run in a native environment, either as modules or builtin.  Having a way
-+to display results like this is valuable as otherwise results can be
-+intermixed with other events in dmesg output.  The maximum size of each
-+results file is KUNIT_LOG_SIZE bytes (defined in include/kunit/test.h).
++	if (__do_binderfs_test() == 1)
++		XFAIL(return, "The Android binderfs filesystem is not available");
+ }
+ 
+-static void binderfs_test_unprivileged()
++TEST(binderfs_test_unprivileged)
+ {
+ 	change_to_userns();
+-	__do_binderfs_test();
+-}
+ 
+-int main(int argc, char *argv[])
+-{
+-	binderfs_test_privileged();
+-	binderfs_test_unprivileged();
+-	ksft_exit_pass();
++	if (__do_binderfs_test() == 1)
++		XFAIL(return, "The Android binderfs filesystem is not available");
+ }
++
++TEST_HARNESS_MAIN
+
+base-commit: 2c523b344dfa65a3738e7039832044aa133c75fb
 -- 
-1.8.3.1
+2.25.1
 
