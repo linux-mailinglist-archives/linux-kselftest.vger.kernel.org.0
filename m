@@ -2,237 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 855401859A2
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Mar 2020 04:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E59E1859A8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Mar 2020 04:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbgCODTx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 14 Mar 2020 23:19:53 -0400
-Received: from mail-oi1-f201.google.com ([209.85.167.201]:54640 "EHLO
-        mail-oi1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbgCODTx (ORCPT
+        id S1726571AbgCOD2F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 14 Mar 2020 23:28:05 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:41620 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726506AbgCOD2F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 14 Mar 2020 23:19:53 -0400
-Received: by mail-oi1-f201.google.com with SMTP id d131so8412823oif.21
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Mar 2020 20:19:50 -0700 (PDT)
+        Sat, 14 Mar 2020 23:28:05 -0400
+Received: by mail-qt1-f193.google.com with SMTP id i26so1484010qtq.8
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Mar 2020 20:28:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=FbErgK09Aa6nJYkuCUrBRaD9zp6nFWInm5nO78O2flo=;
-        b=dT71Y4c2WVAAB5IgXSTJDnOtQjY8WEF1wVbvbUqQFMxmNoApirL/M5/zncSqkTWE6Z
-         HxLYbw2q2fGPMxH+YEL3s3PiRxC/gMpy7IV5mkJMpAOd2DNHx4hGTYuHHKpO9e13U4FC
-         jXeSBxPA+KubGo6G5pA+Qta1YYirGl6En/wK4D4v+uZPIeTK0fONXbu8vJDV0+8ZWeTi
-         NG2Bw3eDeOfYRyCQLLJxk6lGY91zKrrw3hQ1Zgyzk+xqB7CS0JCODI9kZEWYoz6GOwY3
-         Ca8JPg5Eq2LIzQzqirfpokHY66fl8CSEgS49JqFqXgsH9s4HMA9cOPFblqgAf15da3id
-         zRHw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bFsKuiep4ClLWNIwvV7dTX+4w75us5hu5B1lo4Fci+w=;
+        b=LIHXtFoMK4jkPn13923WHP00ZP321fe642FYhyZH5RiTKEg42E6CsLIqLPMLtXN853
+         YVka50hLwilG/LutVffmM4eqGfP0WibwBtBCSnd1XBeAQx2Vc36hwjr8d+HNPAUcit5P
+         YO+/vlmsRih91vCK+rypmMKBv/T/zQYKBKx0F5A1vKuAp2nnj505HI6BPZsPswX9YQzL
+         4mxuxLVCdzsSAyul/A0kPQ8pW4sB0/XsypxuVl94A91Vk8xbiEbkzbIoKjhuoA5Z0T5q
+         ILHZ3VXfSxEMlpvksyERvwhUg0UOXm4TEfGZXYvXqlF/M4BnlawKBGQCIMLQ3w2AxVTN
+         yhcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=FbErgK09Aa6nJYkuCUrBRaD9zp6nFWInm5nO78O2flo=;
-        b=csSq1xzPILfHF7LEH7vAxL28phqw2c4xUOmgMuYu5QWtF2ivEpuHAB6ryYx5F3M2kU
-         IbGTdp7Mu9VuDuhGiD/TdHJrOkFnHc5L2vehcHEbqF4c0FvDoYwKk/bp3N39thQhCdVs
-         SiTrv3jHh1WVHhifCYEQfUoW8P7Y25SfXdF/lcX4IF6K8AYoAtoD1W2Mj71GZxJLVLqa
-         bdappGkCClt9+kAdKeOE2nl1Cbys4uY8KZXh9TmDCUP51ww+KQRkUz4JLhunipumSh1l
-         TDr948RH1fyiQ9aEnuBmjJ41arxAfRfRV/7+p1DcRPjGRL51zUEdPyCQgvyW88To/H9u
-         +72g==
-X-Gm-Message-State: ANhLgQ2U6tFis9VU5fy0yECJe5v/JYhdUl1CxsaQpK1l6ATvzMOn5Blq
-        1cAMiwK7YYHgvnxmztBaFZAn55FhjHDi
-X-Google-Smtp-Source: ADFU+vs52dttlEPc8eM4+pYO49Ur3CNjHXgYtEqCExzv5cBIAaM+bJG9fw47aVA4R1AoKEK/fteySEH+/lLf
-X-Received: by 2002:a17:90a:240a:: with SMTP id h10mr12636800pje.123.1584167046988;
- Fri, 13 Mar 2020 23:24:06 -0700 (PDT)
-Date:   Fri, 13 Mar 2020 23:24:04 -0700
-In-Reply-To: <4bb8eeef-54ac-86a7-4bc4-8e16fc149c1a@kernel.org>
-Message-Id: <xr93y2s34fp7.fsf@gthelen.svl.corp.google.com>
-Mime-Version: 1.0
-References: <20200227063134.261636-1-gthelen@google.com> <20200229015350.GA26612@ubuntu-m2-xlarge-x86>
- <4bb8eeef-54ac-86a7-4bc4-8e16fc149c1a@kernel.org>
-Subject: Re: [PATCH] kunit: add --make_options
-From:   Greg Thelen <gthelen@google.com>
-To:     shuah <shuah@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        shuah <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bFsKuiep4ClLWNIwvV7dTX+4w75us5hu5B1lo4Fci+w=;
+        b=mvC3k14ht8RNaZ4sdIj3EP8BCuGlqBYOiPtPUsgxcZ+FkKoYb5hPgTfHKKLaERRrT5
+         LYKw9RemMf59RNGfeBT5PPf7byUTlbioRizfmT1oy6kmaJyl1j1KcjC/BUvpzvnxYjhk
+         WbfAr7ApEKO5budBtd6upEd3lawo8LBzoD1oH/jAU+vHETnMaYUCN61meXSbromOjz2j
+         EPbk7Q+CzrlZUqsJqdh52bkpocWT323/13CWy/d1n+yNDxQOVl8kisapSnNGtlzAIUNp
+         YBfoKPIHnm2zfPQ0QQwmnfe/A7b/4LmP7BijluzoqHzZXt5wVOodnPoti8UInVpZe5zS
+         Zgcw==
+X-Gm-Message-State: ANhLgQ0/VnRyxiDfYBt9wpYM6D0L2g4GjPTmtxu4o6lqduNrCWXHfPu7
+        p6mBCoEMc1bzpOiXch6wmLn+liOzv+k=
+X-Google-Smtp-Source: ADFU+vsPu03tHI/dFTUfh/sYeeKb1eTqZGkbcU9vpsVwCD8k9ULECXU2SUDsc+Dq2tqNzZCGPGyhTg==
+X-Received: by 2002:aed:234a:: with SMTP id i10mr19704478qtc.155.1584242882749;
+        Sat, 14 Mar 2020 20:28:02 -0700 (PDT)
+Received: from dhcp-12-139.nay.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 207sm14356921qkf.69.2020.03.14.20.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Mar 2020 20:28:02 -0700 (PDT)
+Date:   Sun, 15 Mar 2020 11:27:56 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     shuah <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 0/1] selftests/run_kselftest.sh: make each test
+ individually selectable
+Message-ID: <20200315032756.GD2159@dhcp-12-139.nay.redhat.com>
+References: <20200309101256.868-1-liuhangbin@gmail.com>
+ <632a1803-cc62-7d54-69ca-88fc13d72966@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <632a1803-cc62-7d54-69ca-88fc13d72966@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-shuah <shuah@kernel.org> wrote:
+On Fri, Mar 13, 2020 at 01:42:52PM -0600, shuah wrote:
+> Hi Hangbin,
+> 
+> On 3/9/20 4:12 AM, Hangbin Liu wrote:
+> > Hi, this patch enhanced the run_kselftest.sh to make the tests individually
+> > selectable. I'm not sure the if I could add the reuslt in the patch commit,
+> > as the log is too long. So I just put the result to the cover-letter:
+> > 
+> > Note: I use `tr -s "/-" "_"` to cover the path name in tests to function name.
+> > e.g. networking/timestamping -> networking_timestamping. I'm not sure if it's
+> > legal in Makefile.
+> 
+> 
+> Please add this to the patch change log. Please run get_maintainers
+> script before sending the patch. My email address you used is very
+> old.
+> 
+> Please include how to run and update the documentation as well.
 
-> On 2/28/20 6:53 PM, Nathan Chancellor wrote:
->> On Wed, Feb 26, 2020 at 10:31:34PM -0800, 'Greg Thelen' via Clang Built Linux wrote:
->>> The kunit.py utility builds an ARCH=um kernel and then runs it.  Add
->>> optional --make_options flag to kunit.py allowing for the operator to
->>> specify extra build options.
->>>
->>> This allows use of the clang compiler for kunit:
->>>    tools/testing/kunit/kunit.py run --defconfig \
->>>      --make_options CC=clang --make_options HOSTCC=clang
->>>
->>> Signed-off-by: Greg Thelen <gthelen@google.com>
->> 
->> Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
->> 
->
-> Please rebase on Linux 5.6-rc5 and resend. I tried applying
-> on Linux 5.6-rc1 as well as 5.6-rc5 and both fail.
->
-> thanks,
-> -- Shuah
+OK, I will, thanks for the feedback and sorry for the inconvenient.
 
-Rebased onto v5.6-rc5 below:
-
-From 0517b2c8b481535fb52bd86e94be1fec9aaeead7 Mon Sep 17 00:00:00 2001
-From: Greg Thelen <gthelen@google.com>
-Date: Wed, 26 Feb 2020 22:31:34 -0800
-Subject: [PATCH v2] kunit: add --make_options
-
-The kunit.py utility builds an ARCH=um kernel and then runs it.  Add
-optional --make_options flag to kunit.py allowing for the operator to
-specify extra build options.
-
-This allows use of the clang compiler for kunit:
-  tools/testing/kunit/kunit.py run --defconfig \
-    --make_options CC=clang --make_options HOSTCC=clang
-
-Signed-off-by: Greg Thelen <gthelen@google.com>
----
- tools/testing/kunit/kunit.py        | 15 +++++++++++----
- tools/testing/kunit/kunit_kernel.py | 24 ++++++++++++++----------
- 2 files changed, 25 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 180ad1e1b04f..1aa4d14dc28d 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -22,7 +22,9 @@ import kunit_parser
- 
- KunitResult = namedtuple('KunitResult', ['status','result'])
- 
--KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs', 'build_dir', 'defconfig'])
-+KunitRequest = namedtuple('KunitRequest', ['raw_output', 'timeout', 'jobs',
-+                                           'build_dir', 'defconfig',
-+                                           'make_options'])
- 
- KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
- 
-@@ -47,7 +49,7 @@ def get_kernel_root_path():
- def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
- 	config_start = time.time()
--	success = linux.build_reconfig(request.build_dir)
-+	success = linux.build_reconfig(request.build_dir, request.make_options)
- 	config_end = time.time()
- 	if not success:
- 		return KunitResult(KunitStatus.CONFIG_FAILURE, 'could not configure kernel')
-@@ -55,7 +57,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	kunit_parser.print_with_timestamp('Building KUnit Kernel ...')
- 
- 	build_start = time.time()
--	success = linux.build_um_kernel(request.jobs, request.build_dir)
-+	success = linux.build_um_kernel(request.jobs, request.build_dir, request.make_options)
- 	build_end = time.time()
- 	if not success:
- 		return KunitResult(KunitStatus.BUILD_FAILURE, 'could not build kernel')
-@@ -120,6 +122,10 @@ def main(argv, linux=None):
- 				help='Uses a default .kunitconfig.',
- 				action='store_true')
- 
-+	run_parser.add_argument('--make_options',
-+				help='X=Y make option, can be repeated.',
-+				action='append')
-+
- 	cli_args = parser.parse_args(argv)
- 
- 	if cli_args.subcommand == 'run':
-@@ -143,7 +149,8 @@ def main(argv, linux=None):
- 				       cli_args.timeout,
- 				       cli_args.jobs,
- 				       cli_args.build_dir,
--				       cli_args.defconfig)
-+				       cli_args.defconfig,
-+				       cli_args.make_options)
- 		result = run_tests(linux, request)
- 		if result.status != KunitStatus.SUCCESS:
- 			sys.exit(1)
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index d99ae75ef72f..27758d6d115b 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -35,8 +35,10 @@ class LinuxSourceTreeOperations(object):
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output)
- 
--	def make_olddefconfig(self, build_dir):
-+	def make_olddefconfig(self, build_dir, make_options):
- 		command = ['make', 'ARCH=um', 'olddefconfig']
-+		if make_options:
-+			command.extend(make_options)
- 		if build_dir:
- 			command += ['O=' + build_dir]
- 		try:
-@@ -46,8 +48,10 @@ class LinuxSourceTreeOperations(object):
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output)
- 
--	def make(self, jobs, build_dir):
-+	def make(self, jobs, build_dir, make_options):
- 		command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
-+		if make_options:
-+			command.extend(make_options)
- 		if build_dir:
- 			command += ['O=' + build_dir]
- 		try:
-@@ -107,19 +111,19 @@ class LinuxSourceTree(object):
- 			return False
- 		return True
- 
--	def build_config(self, build_dir):
-+	def build_config(self, build_dir, make_options):
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if build_dir and not os.path.exists(build_dir):
- 			os.mkdir(build_dir)
- 		self._kconfig.write_to_file(kconfig_path)
- 		try:
--			self._ops.make_olddefconfig(build_dir)
-+			self._ops.make_olddefconfig(build_dir, make_options)
- 		except ConfigError as e:
- 			logging.error(e)
- 			return False
- 		return self.validate_config(build_dir)
- 
--	def build_reconfig(self, build_dir):
-+	def build_reconfig(self, build_dir, make_options):
- 		"""Creates a new .config if it is not a subset of the .kunitconfig."""
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if os.path.exists(kconfig_path):
-@@ -128,17 +132,17 @@ class LinuxSourceTree(object):
- 			if not self._kconfig.is_subset_of(existing_kconfig):
- 				print('Regenerating .config ...')
- 				os.remove(kconfig_path)
--				return self.build_config(build_dir)
-+				return self.build_config(build_dir, make_options)
- 			else:
- 				return True
- 		else:
- 			print('Generating .config ...')
--			return self.build_config(build_dir)
-+			return self.build_config(build_dir, make_options)
- 
--	def build_um_kernel(self, jobs, build_dir):
-+	def build_um_kernel(self, jobs, build_dir, make_options):
- 		try:
--			self._ops.make_olddefconfig(build_dir)
--			self._ops.make(jobs, build_dir)
-+			self._ops.make_olddefconfig(build_dir, make_options)
-+			self._ops.make(jobs, build_dir, make_options)
- 		except (ConfigError, BuildError) as e:
- 			logging.error(e)
- 			return False
--- 
-2.25.1.481.gfbce0eb801-goog
-
+Regards
+Hangbin
