@@ -2,239 +2,434 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF621873C8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Mar 2020 21:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A911873E9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Mar 2020 21:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732515AbgCPUEU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Mar 2020 16:04:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42076 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732436AbgCPUEU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Mar 2020 16:04:20 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 01C3520658;
-        Mon, 16 Mar 2020 20:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584389059;
-        bh=Xwa8ruFtzyte+EsDEJIYBy2/t4S0bIe89Tc3YaQoSr0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c/+y9xa56uhBvkveqc2ysEboJLvoLTXf/DVu2Bi8ddCfYr0BbX1Gb7O6fY/58RCP1
-         6M1/fZzAIJNlgX5yHcQNzJWyLfVhxqnGedbJnlyexDy1KW/9VkO67+B+k+EmbaV07T
-         Fy3LdujZRe+T9pPLpMpsrDzDoCR6KJqZDx5xy1o8=
-Date:   Mon, 16 Mar 2020 13:04:16 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "luto@amacapital.net" <luto@amacapital.net>,
-        "wad@chromium.org" <wad@chromium.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>
-Subject: Re: [PATCH v2 0/4] kselftest: add fixture parameters
-Message-ID: <20200316130416.4ec9103b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <MWHPR13MB08957F02680872A2C30DD7F4FDF90@MWHPR13MB0895.namprd13.prod.outlook.com>
-References: <20200314005501.2446494-1-kuba@kernel.org>
-        <202003132049.3D0CDBB2A@keescook>
-        <MWHPR13MB08957F02680872A2C30DD7F4FDF90@MWHPR13MB0895.namprd13.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1732503AbgCPUVq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Mar 2020 16:21:46 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:36301 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732436AbgCPUVp (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Mar 2020 16:21:45 -0400
+Received: by mail-pg1-f202.google.com with SMTP id b130so12879355pga.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Mar 2020 13:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=0dKXpM+vAToFQ99KFoY4s/h1UvCiGXVGJzVOlRPgN/w=;
+        b=lL1UaDJ33tqQdzKUxp7HqRoiLyuZO479lvU6K9jUmKLpg0o1p4LSgewSvJ2wJzWsYK
+         RVeji6SAfZdkg8w/OOlb/aA5GppJiCyzOIuTDimNye627x0kRPDMO/sVk0Ka/uQMLYGI
+         V8sbQrXBatkbxDemqrL+u4d1aTYPkVNi8PM7Ahm8XZDhy4T2IXt04dCDAOmnJclbME92
+         z2eXHlgn6AfKzhPa5Pujnaja7PShVvF7S0L6WAPUX6EpwT9ZudwrRuaAoneqKLhbXouO
+         bXHeb6ZYoEZZbQUJn2C7DSsftxZAP7oUeRO9KtsztW9zQ+fmMas08bfd9uzqAZqq1g10
+         N8XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=0dKXpM+vAToFQ99KFoY4s/h1UvCiGXVGJzVOlRPgN/w=;
+        b=Nr48Kx3l7hf566JQoioYdmlLmCdfk3n7j59h3gCPidKW63FLmG1VgpG7CbzVhqPsaF
+         iN4dxdJnSXcJDG/DHZ2+gtaeEmVLqEEP6AW+BRLr0W6M7k7Q8Y8yrJxae6F4ektYyIJd
+         Ib+DKQs9L7FLQ3nonCmmBEMqwmRTIitHCbRNUDDhdZZ1EMpU/hmmvptnzI7jKfUzD7aA
+         Qwj0EcTGtYwffMi8HxiML9gRziavUFL4OifqofY46dkbVFTfOLcEhcMYMTYMs2bNg0U1
+         lAC21qp4JsS6YKe1CdFAtJ+A0yBk/XNyiojPWNXhyxuNXfI8BAvSSNVoFWcaMwKm06h6
+         U64w==
+X-Gm-Message-State: ANhLgQ1uolZfLU4VpzUK3s1TxIlR9WZZYMyao+Yh5JetQV1ppLeDDqG9
+        qfj11dityZ2yXjKkMlPE+pSVFKP8gIwdxMTm
+X-Google-Smtp-Source: ADFU+vsklmZkx4fIL8aNLf15/1C/GMKjVqewxq+sntb7vgeAeK+izs7ZtDWLg1kkj0HyrUNTJ7JSPV82/CJAvhX0
+X-Received: by 2002:a17:90b:3683:: with SMTP id mj3mr1254907pjb.153.1584390103472;
+ Mon, 16 Mar 2020 13:21:43 -0700 (PDT)
+Date:   Mon, 16 Mar 2020 13:21:24 -0700
+Message-Id: <20200316202125.15852-1-heidifahim@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+Subject: [PATCH v3 1/2] kunit: kunit_parser: make parser more robust
+From:   Heidi Fahim <heidifahim@google.com>
+To:     shuah@kernel.org, brendanhiggins@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Cc:     Heidi Fahim <heidifahim@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 16 Mar 2020 15:55:12 +0000 Bird, Tim wrote:
-> > -----Original Message-----
-> > From: Kees Cook
-> > 
-> > On Fri, Mar 13, 2020 at 05:54:57PM -0700, Jakub Kicinski wrote:  
-> > > Note that we loose a little bit of type safety
-> > > without passing parameters as an explicit argument.
-> > > If user puts the name of the wrong fixture as argument
-> > > to CURRENT_FIXTURE() it will happily cast the type.  
-> > 
-> > This got me to take a much closer look at things. I really didn't like
-> > needing to repeat the fixture name in CURRENT_FIXTURE() calls, and then
-> > started coming to all the same conclusions you did in your v1, that I
-> > just didn't quite see yet in my first review. :P
+Previously, kunit_parser did not properly handle kunit TAP output that
+- had any prefixes (generated from different configs e.g.
+CONFIG_PRINTK_TIME)
+- had unrelated kernel output mixed in the middle of
+it, which has shown up when testing with allyesconfig
+To remove prefixes, the parser looks for the first line that includes
+TAP output, "TAP version 14".  It then determines the length of the
+string before this sequence, and strips that number of characters off
+the beginning of the following lines until the last KUnit output line is
+reached.
+These fixes have been tested with additional tests in the
+KUnitParseTest and their associated logs have also been added.
 
-No worries, it took me a little bit of internal back and forth to
-produce v1, and it's still not at all perfect :S
+Signed-off-by: Heidi Fahim <heidifahim@google.com>
+---
+Changelog
+ v3:
+ - Addressing Shuah's git apply issues with whitespaces. Marked all
+   files in test_data as binaries in new kunit/ .gitattributes file. The
+   irregular whitespaces here are necessary as they are used for testing
+   the KUnit parser.
+ - Important: please note that now git apply works, however the .log
+   files in /test_data/ may get marked as Untracked files. These should
+   be included in the commit as they are required for
+   kunit_tool_test.py.
 
-> > Apologies for my wishy-washy-ness on this, but here's me talking myself
-> > out of my earlier criticisms:
-> > 
-> > - "I want tests to be run in declaration order" In v1, this is actually
-> >   mostly retained: they're still in declaration order, but they're
-> >   grouped by fixture (which are run in declaration order). That, I think,
-> >   is totally fine. Someone writing code that interleaves between fixtures
-> >   is madness, and having the report retain that ordering seems awful. I
-> >   had thought the declaration ordering was entirely removed, but I see on
-> >   closer inspection that's not true.
-> > 
-> > - "I'd like everything attached to _metadata" This results in the
-> >   type unsafety you call out here. And I stared at your v2 trying to
-> >   find a way around it, but to get the type attached, it has to be
-> >   part of the __TEST_F_IMPL() glue, and that means passing it along
-> >   side "self", which means plumbing it as a function argument
-> >   everywhere.
-> > 
-> > So, again, sorry for asking to iterate on v1 instead of v2, though the
-> > v2 _really_ helped me see the problems better. ;)
-> > 
-> > Something I'd like for v3: instead of "parameters" can we call it
-> > "instances"? It provides a way to run separate instances of the same
-> > fixtures. Those instances have parameters (i.e. struct fields), so I'd
-> > prefer the "instance" naming.  
-> 
-> Could I humbly suggest "variant" as a possible name here?
-> IMHO "instance" carries along some semantics related to object
-> oriented programming, which I think is a bit confusing.  (Maybe that's
-> intentional though, and you prefer that?)
+tools/testing/kunit/.gitattributes            |   1 +
+ tools/testing/kunit/kunit_parser.py           |  40 +++++-----
+ tools/testing/kunit/kunit_tool_test.py        |  69 ++++++++++++++++++
+ .../test_data/test_config_printk_time.log     | Bin 0 -> 1584 bytes
+ .../test_data/test_interrupted_tap_output.log | Bin 0 -> 1982 bytes
+ .../test_data/test_kernel_panic_interrupt.log | Bin 0 -> 1321 bytes
+ .../test_data/test_multiple_prefixes.log      | Bin 0 -> 1832 bytes
+ ..._output_with_prefix_isolated_correctly.log | Bin 0 -> 1655 bytes
+ .../kunit/test_data/test_pound_no_prefix.log  | Bin 0 -> 1193 bytes
+ .../kunit/test_data/test_pound_sign.log       | Bin 0 -> 1655 bytes
+ 10 files changed, 90 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/kunit/.gitattributes
+ create mode 100644 tools/testing/kunit/test_data/test_config_printk_time.log
+ create mode 100644 tools/testing/kunit/test_data/test_interrupted_tap_output.log
+ create mode 100644 tools/testing/kunit/test_data/test_kernel_panic_interrupt.log
+ create mode 100644 tools/testing/kunit/test_data/test_multiple_prefixes.log
+ create mode 100644 tools/testing/kunit/test_data/test_output_with_prefix_isolated_correctly.log
+ create mode 100644 tools/testing/kunit/test_data/test_pound_no_prefix.log
+ create mode 100644 tools/testing/kunit/test_data/test_pound_sign.log
 
-I like parameter or argument, since the data provided to the test 
-is constant, and used to guide the instantiation (i.e. "setup"). 
-"self" looks more like an instance of a class from OOP point of view.
+diff --git a/tools/testing/kunit/.gitattributes b/tools/testing/kunit/.gitattributes
+new file mode 100644
+index 000000000000..5b7da1fc3b8f
+--- /dev/null
++++ b/tools/testing/kunit/.gitattributes
+@@ -0,0 +1 @@
++test_data/* binary
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 4ffbae0f6732..adf86747b07f 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -46,19 +46,21 @@ class TestStatus(Enum):
+ 	TEST_CRASHED = auto()
+ 	NO_TESTS = auto()
+ 
+-kunit_start_re = re.compile(r'^TAP version [0-9]+$')
+-kunit_end_re = re.compile('List of all partitions:')
++kunit_start_re = re.compile(r'TAP version [0-9]+$')
++kunit_end_re = re.compile('(List of all partitions:|'
++			  'Kernel panic - not syncing: VFS:|reboot: System halted)')
+ 
+ def isolate_kunit_output(kernel_output):
+ 	started = False
+ 	for line in kernel_output:
+-		if kunit_start_re.match(line):
++		if kunit_start_re.search(line):
++			prefix_len = len(line.split('TAP version')[0])
+ 			started = True
+-			yield line
+-		elif kunit_end_re.match(line):
++			yield line[prefix_len:] if prefix_len > 0 else line
++		elif kunit_end_re.search(line):
+ 			break
+ 		elif started:
+-			yield line
++			yield line[prefix_len:] if prefix_len > 0 else line
+ 
+ def raw_output(kernel_output):
+ 	for line in kernel_output:
+@@ -108,18 +110,16 @@ OK_NOT_OK_SUBTEST = re.compile(r'^\t(ok|not ok) [0-9]+ - (.*)$')
+ 
+ OK_NOT_OK_MODULE = re.compile(r'^(ok|not ok) [0-9]+ - (.*)$')
+ 
+-def parse_ok_not_ok_test_case(lines: List[str],
+-			      test_case: TestCase,
+-			      expecting_test_case: bool) -> bool:
++def parse_ok_not_ok_test_case(lines: List[str], test_case: TestCase) -> bool:
+ 	save_non_diagnositic(lines, test_case)
+ 	if not lines:
+-		if expecting_test_case:
+-			test_case.status = TestStatus.TEST_CRASHED
+-			return True
+-		else:
+-			return False
++		test_case.status = TestStatus.TEST_CRASHED
++		return True
+ 	line = lines[0]
+ 	match = OK_NOT_OK_SUBTEST.match(line)
++	while not match and lines:
++		line = lines.pop(0)
++		match = OK_NOT_OK_SUBTEST.match(line)
+ 	if match:
+ 		test_case.log.append(lines.pop(0))
+ 		test_case.name = match.group(2)
+@@ -150,12 +150,12 @@ def parse_diagnostic(lines: List[str], test_case: TestCase) -> bool:
+ 	else:
+ 		return False
+ 
+-def parse_test_case(lines: List[str], expecting_test_case: bool) -> TestCase:
++def parse_test_case(lines: List[str]) -> TestCase:
+ 	test_case = TestCase()
+ 	save_non_diagnositic(lines, test_case)
+ 	while parse_diagnostic(lines, test_case):
+ 		pass
+-	if parse_ok_not_ok_test_case(lines, test_case, expecting_test_case):
++	if parse_ok_not_ok_test_case(lines, test_case):
+ 		return test_case
+ 	else:
+ 		return None
+@@ -234,11 +234,11 @@ def parse_test_suite(lines: List[str]) -> TestSuite:
+ 	expected_test_case_num = parse_subtest_plan(lines)
+ 	if not expected_test_case_num:
+ 		return None
+-	test_case = parse_test_case(lines, expected_test_case_num > 0)
+-	expected_test_case_num -= 1
+-	while test_case:
++	while expected_test_case_num > 0:
++		test_case = parse_test_case(lines)
++		if not test_case:
++			break
+ 		test_suite.cases.append(test_case)
+-		test_case = parse_test_case(lines, expected_test_case_num > 0)
+ 		expected_test_case_num -= 1
+ 	if parse_ok_not_ok_test_suite(lines, test_suite):
+ 		test_suite.status = bubble_up_test_case_errors(test_suite)
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index cba97756ac4a..0efae697f396 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -108,6 +108,36 @@ class KUnitParserTest(unittest.TestCase):
+ 		self.assertContains('ok 1 - example', result)
+ 		file.close()
+ 
++	def test_output_with_prefix_isolated_correctly(self):
++		log_path = get_absolute_path(
++			'test_data/test_pound_sign.log')
++		with open(log_path) as file:
++			result = kunit_parser.isolate_kunit_output(file.readlines())
++		self.assertContains('TAP version 14\n', result)
++		self.assertContains('	# Subtest: kunit-resource-test', result)
++		self.assertContains('	1..5', result)
++		self.assertContains('	ok 1 - kunit_resource_test_init_resources', result)
++		self.assertContains('	ok 2 - kunit_resource_test_alloc_resource', result)
++		self.assertContains('	ok 3 - kunit_resource_test_destroy_resource', result)
++		self.assertContains(' foo bar 	#', result)
++		self.assertContains('	ok 4 - kunit_resource_test_cleanup_resources', result)
++		self.assertContains('	ok 5 - kunit_resource_test_proper_free_ordering', result)
++		self.assertContains('ok 1 - kunit-resource-test', result)
++		self.assertContains(' foo bar 	# non-kunit output', result)
++		self.assertContains('	# Subtest: kunit-try-catch-test', result)
++		self.assertContains('	1..2', result)
++		self.assertContains('	ok 1 - kunit_test_try_catch_successful_try_no_catch',
++				    result)
++		self.assertContains('	ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch',
++				    result)
++		self.assertContains('ok 2 - kunit-try-catch-test', result)
++		self.assertContains('	# Subtest: string-stream-test', result)
++		self.assertContains('	1..3', result)
++		self.assertContains('	ok 1 - string_stream_test_empty_on_creation', result)
++		self.assertContains('	ok 2 - string_stream_test_not_empty_after_add', result)
++		self.assertContains('	ok 3 - string_stream_test_get_string', result)
++		self.assertContains('ok 3 - string-stream-test', result)
++
+ 	def test_parse_successful_test_log(self):
+ 		all_passed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-all_passed.log')
+@@ -150,6 +180,45 @@ class KUnitParserTest(unittest.TestCase):
+ 			result.status)
+ 		file.close()
+ 
++	def test_ignores_prefix_printk_time(self):
++		prefix_log = get_absolute_path(
++			'test_data/test_config_printk_time.log')
++		with open(prefix_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
++		self.assertEqual('kunit-resource-test', result.suites[0].name)
++
++	def test_ignores_multiple_prefixes(self):
++		prefix_log = get_absolute_path(
++			'test_data/test_multiple_prefixes.log')
++		with open(prefix_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
++		self.assertEqual('kunit-resource-test', result.suites[0].name)
++
++	def test_prefix_mixed_kernel_output(self):
++		mixed_prefix_log = get_absolute_path(
++			'test_data/test_interrupted_tap_output.log')
++		with open(mixed_prefix_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
++		self.assertEqual('kunit-resource-test', result.suites[0].name)
++
++	def test_prefix_poundsign(self):
++		pound_log = get_absolute_path('test_data/test_pound_sign.log')
++		with open(pound_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
++		self.assertEqual('kunit-resource-test', result.suites[0].name)
++
++	def test_kernel_panic_end(self):
++		panic_log = get_absolute_path('test_data/test_kernel_panic_interrupt.log')
++		with open(panic_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
++		self.assertEqual('kunit-resource-test', result.suites[0].name)
++
++	def test_pound_no_prefix(self):
++		pound_log = get_absolute_path('test_data/test_pound_no_prefix.log')
++		with open(pound_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
++		self.assertEqual('kunit-resource-test', result.suites[0].name)
++
+ class StrContains(str):
+ 	def __eq__(self, other):
+ 		return self in other
+diff --git a/tools/testing/kunit/test_data/test_config_printk_time.log b/tools/testing/kunit/test_data/test_config_printk_time.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..c02ca773946d641291e27d44d73174cc16a17d9d
+GIT binary patch
+literal 1584
+zcmai!-)q}25XYapzv7@T8>=%piIdE*htV+@8zqo+FQEuUKBp$O&PeiF|Mxq^U79*h
+zs}~FTKHvK#-5Pj_k(dcycTn5H_+1K`jH41^UFj&k12k$=V)kzR(%LGMQI*0Lz3ldK
+z(|UBERmtX%TdJTig_lINlSTGXJWi5N;&CeAq44*ht=Y<8@I~~se}7%VU$m|u1M#%~
+z_u>*(&4yk16m|^@L>3)2R$~+nPt4=dC^<Q#9mEiIy!_A0!0%%^9JwKKe1_!ANgvQ5
+za&m^u*s-PdRd#xY)g>y^)CYDj<m3!oTdL8@+#*V{8S)+2_5(kz)f=@wX^ppSq?OnA
+zXL~d5ySq5{*R_OI<X%O(Mr(8~Z%P>s4Rz;38qZzYxAj@0F+G)x&<*QwC<mG7ja-g$
+z=Vo#pBmSVO&SpLtiaOlN4woI?RRF8nw~~z1Ea~}S46z~90oIV09j|iF%~sjTYYsIJ
+zcXNOa54=0>yL`dCmh7*>d7vEleL$_OFG2z??d#nT<VA_Dbsj4oLrs}MMUC-biTo9C
+zQ8DXNeUYDN4F)%+(3}wG4z4wt+mXVb@2eDU_wx)q9ce@EfM-o(c7`5IwBcvGd;fWH
+zB|h}!ua~ze2w493mhu3(riw?Pdr&n$BDi5+Uhxp+@t2IIBN160M_W|mESqbwm?s!z
+zh4n35o?QBsS9;ga4PYk5Vlm4Xyoon@JQFY%i4ODnu<1v5%!nk{s1K(6ON{kQZ3dVp
+N(^Ef_;Eh)-{s9AX)U5yj
 
-Variant sounds good too, although the abbreviation would be VAR?
-Which isn't ideal. 
+literal 0
+HcmV?d00001
 
-But I really don't care so whoever cares the most please speak up :P
+diff --git a/tools/testing/kunit/test_data/test_interrupted_tap_output.log b/tools/testing/kunit/test_data/test_interrupted_tap_output.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..5c73fb3a1c6fd13a9b163a48d02eb33b0315a375
+GIT binary patch
+literal 1982
+zcmah~-A~&v5PxQW#YsG{v8HoBDUo<!Ff=rT5CvWkvRvoVMoH|*c7W`!-#OVzNz;*+
+zIG6kV?)&@*^sqjgGJ2k%Fo|+$2vRGnGla)n27@O+B^DV*pB~?98=)edhp<G)n=@Zj
+z4lPKLkvhai=a8txajgr>ljtjZ9ZkNm*D-^a#H~OYwd7vmgtfWvPH*5DjZL(I!MOc*
+zZy)C6f=sy((vk=QgI1SDV&H{a>VtlNvL)0h3?OLm{2!iseC^X(WV?{V9Y~5?%QdtM
+zIog4Y$gt7XPHcL5F%RLE^7>OapbwB)g37@&>kq)-GO-S+e#?H_>cu=b6LN(iT%(IE
+z9EjK+tP#FY+EC5piok8`;o%`XoL*g?pWgid?*fpdt@Pa)qRq63FzQiN<!C5Rnpdzy
+zMPA7sM7SuICtCGDSc}HhM`|}*n#5HB`6p8}wbWo7Q1O$vqR%a3ceg$f7PGi%0E^OT
+z>XhFU;Fujx0hFd>uD?GdFr`uyIxOliVuJ{_5EAR0Ab2aCJuu!;NtvNgWwEYgCwQ_0
+zTo_%T;ob|bO;lI39l>Vje$e?_gW?S3S~$7dIVr=oxxGz$&43UKuUWV)r9^AvGUHyT
+zbR+NLc$=Ae$lf?g)nbV>+HM|lWla-&5X(mFG+I>QfL<u_oso~ay!Jbyf%695WB~KR
+zRa`4BiPF)U>cV<gJFrSS-rxoGu;C)w+O0n4ep7Uy{km<$ZIkaX{|oktb_M7dXj?%c
+zj7xj~Hf-}<YlxE!ZAF_Ur%R#CBFJ?~JI844dO%6VsEulq{6eG9n^B3RfGBpbm6BAB
+z5FY#_-`BSbIK9CQv`=XBmnv2IMFk65s_EzBS&w~b)1Tekhrr<G@;sz<ex`G}knD>n
+zXo%pNY&qd~OaznuxX%J32egsIFp7>On;lIsh!W!}*xzdUxf3#N#|AKELpGbnGdc_w
+rayVsh#3s_;p6f%~!%YmE#1iFNm430IoQg#U=CA6uosqXj&w%{_Pb*9~
 
-> BTW - Fuego has a similar feature for naming a collection of test
-> parameters with specific values (if I understand this proposed
-> feature correctly).  Fuego's feature was named a long time ago
-> (incorrectly, I think) and it continues to bug me to this day.
-> It was named 'specs', and after giving it considerable thought
-> I've been meaning to change it to 'variants'.
-> 
-> Just a suggestion for consideration.  The fact that Fuego got this
-> wrong is what motivates my suggestion today.  You have to live
-> with this kind of stuff a long time. :-)
-> 
-> We ran into some issues in Fuego with this concept, that motivate
-> the comments below.  I'll use your 'instance' terminology in my comments
-> although the terminology is different in Fuego.
-> 
-> > Also a change in reporting:
-> > 
-> > 	struct __fixture_params_metadata no_param = { .name = "", };
-> > 
-> > Let's make ".name = NULL" here, and then we can detect instantiation:
-> > 
-> > 	printf("[ RUN      ] %s%s%s.%s\n", f->name, p->name ? "." : "",
-> > 				p->name ?: "", t->name);
+literal 0
+HcmV?d00001
 
-Do I have to make it NULL or is it okay to test p->name[0] ?
-That way we can save one ternary operator from the litany..
+diff --git a/tools/testing/kunit/test_data/test_kernel_panic_interrupt.log b/tools/testing/kunit/test_data/test_kernel_panic_interrupt.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..c045eee75f27fefaabf3ba073d9e282721c19a67
+GIT binary patch
+literal 1321
+zcmai!-)q}25XYapzv7@T8=EuPiIdc@htV+@gAvHOmr#T(%c-%gGm^a2|NYK!=cfMA
+z>c!%GpYPr2bUFYnwqR>U>mDkTX_rSJQCln&97^f=_n@?h3zfV(y!19gCs;;sRE~Fh
+z9yd-|kfI=WNDY>d>CAD&%JMAv$R3yBXZE;aaLU{RNTZLub@;-D+P}Z<;IA?^Lk<3F
+z`1k4>_H|65Tm*Sd0-jM8Ya^A{8b|K_ViAsvn1c^q$MgR@Z~1dhy~$3I!3;^2qwLWs
+zaydgL6xd+%D!ZCtWub(wtDc=qIh=tjgOxHoHA-<biK07j943BwR&Sj3s5Q<so)k_#
+z%=RW2hP%3q*R_OH_*sS9T1sVYS{J-EYV7P&8qZxixAj@0)&rFUm7Uh1RC*cjjan{h
+zr)JVQdh}7EoUMF0m34b7JDhiTcLJ)cT*FawNs^8RW5oVcMymoUp)*Mu8Xee1OUfgH
+zKi~He+?@v*972h;c3_ZPQVTR>wazu3v=`I;&EMZ_Kd}!({oCDL1PpdRzC|=Sw^-8b
+z+mop1_P{R^a)MqDn)`6ES}@N@-#aQ1B*{jy?Iu)Sk{Q>)^{Cr>CuANCqrsX5Y`adk
+qwDDsZtQl-rDBFjs-@L}KFqKO7uB5^OxfbyR^W-{?vuvZ$^4UKw_JoN5
 
-> > That'll give us single-instance fixtures an unchanged name:
-> > 
-> > 	fixture.test1
-> > 	fixture.test2  
-> 
-> We ended up in Fuego adding a 'default' instance name for 
-> all tests.  That way, all the parsers don't have to be coded to distinguish
-> if the test identifier includes an instance name or not, which turns
-> out to be a tough problem.
-> 
-> So single-instance tests would be:
->             fixture.default.test1
->             fixture.default.test2
+literal 0
+HcmV?d00001
 
-Interesting! That makes sense to me, thanks for sharing the experience.
-That's why I just appended the param/instance/variant name to the
-fixture name.
+diff --git a/tools/testing/kunit/test_data/test_multiple_prefixes.log b/tools/testing/kunit/test_data/test_multiple_prefixes.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..bc48407dcc36c44665c7d2ac620e42e7caf98481
+GIT binary patch
+literal 1832
+zcma)-UvJYe5Wt_ur#NXZAeQ2^O;;lEfQFC|XsWc0mua$G=h8(@e39+2<=b;^pet<7
+z>X$ed-|znUF1Nr-OvFO)y1NZ;*XbR!wlaR3gC^ssM!0Qs!eTUPU1RZPcka2CRi>aO
+zhYfl;?B%-m=s>HQ)u6Q0KxHZ~iCQPC;=OpBWgo=jT);!+??GF$k>S865wmgqc?G}F
+zx{3^>^Vq4AQ@HBZY})6r?HHI?bktdmNf1WW(#a%?exxm=kPJNemnQ>n=ks3V#t730
+zfipyUj~FA&B7}k+vD6>Mm`518MrFEo&ln9Qi$GdSEm~PxL`k+lzDt`}K!-U!vPREJ
+z>usNC<@NomwVlS?I63rVC@E9rjw)TJH9A*zwG2W-gM5tjROQ|Ecw%+tKUzWP#(C`8
+z9+w;$>p_nAQgHqgexPbz&CqNts&M-UoE&gNrm$&!FUd&FCOkLh7$b!80>hA(14osf
+zFOMpsQzq0Z^uP<0Fn9)W%!Pk+k4egp%6Xs?xIdv))>k1wm&f>*1Z7pD>z&7j$7fd;
+z&`@VQSR#K0TnsE?+A-*Nv<8EDQ)v#Ia|Nz9n#-EQ&#zZG-0bEucsj5Jr30Rko!J_C
+zFv*(7%l7TZ<(YUFGjp-J$w9#C+n1aN-32u~%H4x%xtZaTZF<E&1s>zsWIhpz)oHRp
+zH7$yBEtcmQCPig^52w*4yYfnJW3dA)#8fO7<&rn)T2B`O&PArfe`&vod48xXvQneo
+XtMDf=)eE&A(fy<H-0mz`=aq`zHIoXT
 
-To me global.default.XYZ is a mouthful. so in my example (perhaps that
-should have been part of the cover letter) I got:
+literal 0
+HcmV?d00001
 
-[ RUN      ] global.keysizes             <= non-fixture test
-[       OK ] global.keysizes             
-[ RUN      ] tls_basic.base_base         <= fixture: "tls_basic", no params
-[       OK ] tls_basic.base_base         
-[ RUN      ] tls12.sendfile              <= fixture: "tls", param: "12"
-[       OK ] tls12.sendfile                 
-[ RUN      ] tls13.sendfile              <= fixture: "tls", param: "13"
-[       OK ] tls13.sendfile                 (same fixture, diff param)
+diff --git a/tools/testing/kunit/test_data/test_output_with_prefix_isolated_correctly.log b/tools/testing/kunit/test_data/test_output_with_prefix_isolated_correctly.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..0f87cdabebb098a6a7132661ab482f273ac6ecfd
+GIT binary patch
+literal 1655
+zcmah}O^?$s5IvV)F;XueHpOY1wnXB979k<fs!~}l)yi@lryDi#M7BdW|DJIJ-EKY>
+zUt&$>z4`Rp106PFD@Nx5DwAt>j6tHdSSZ++G6)|)X^|8veY1b*ZG=v-jNzahZ|^*5
+zoU$NALGF+lEFssq<A{~zdHS9`Eus(XY02P}yGM{lAGmk;#Jb!+KX2i;GB!sI;j;U8
+zGKF28P$(C}u_l7RD2ug`D)7dhdpMg#JtH0=grLRqe|YZk=bSDkJA|B%AgOYc7w8aj
+zF@j7fu)$^&3mGCL!oXxYM7tcJm4y<zt}e8L)kGuU%3!4o&x}$WO{!=;4&C6_ZG3$U
+zR~3Lp9h@fzSi7q3kE}OgXPQ6?Cm%;gJnyD9xz4SfEV1x23%9kD%G#_hxHoES?L!>T
+z!#;1vGe@mEEGa5G%tNVMXoCOLa#cI+1ob?ij}ql*<%^-L{c^W(-oo1ssIqbmN6jTs
+zI(lD2SfA<uR-@xBUSy6IL!>=X@ICh{K7jT*(VDv<UtnG<_D60VU<UNepc2OAz5p9{
+z`R)+1yim5WPL-r)b&*1ewRT_--3?GvRoX>$Nxmzil@FtHNd-~uU>hxI95MX*x{Kld
+zEQ{dqiW@QuBw4jSYCP#6AvHL@{kXYd@4EE2+xr+8Y`=YpNr!H+Bqg;cQPG2gJBsB5
+zX)&p2G+WMCU}P8^l$fXKTC&YLQbC#<*TA&5^gAcyv0EF!ip|+(m2Kz}CUU-Fux63;
+jvVXaBGrY#ID3eNFT<I5^%auq5Fn?Y9aTY!rosj(j<eKLf
 
-And users can start inserting underscores themselves if they really
-want. (For TLS I was considering different ciphers but they don't impact
-testing much.)
+literal 0
+HcmV?d00001
 
-> > 
-> > and instanced fixtures will be:
-> > 
-> > 	fixture.wayA.test1
-> > 	fixture.wayA.test2
-> > 	fixture.wayB.test1
-> > 	fixture.wayB.test2
-> >   
-> 
-> Parsing of the test identifiers starts to become a thorny issue 
-> as you get longer and longer sequences of test-name parts
-> (test suite, test fixture, sub-test, test-case, measurement, instance, etc.)
-> It becomes considerably more difficult if  you have more than
-> one optional element in the identifier, so it's useful to
-> avoid any optional element you can.
-> 
-> > 
-> > And finally, since we're in the land of endless macros, I think it
-> > could be possible to make a macro to generate the __register_foo()
-> > routine bodies. By the end of the series there are three nearly identical
-> > functions in the harness for __register_test(), __register_fixture(), and
-> > __register_fixture_instance(). Something like this as an earlier patch to
-> > refactor the __register_test() that can be used by the latter two in their
-> > patches (and counting will likely need to be refactored earlier too):
-> > 
-> > #define __LIST_APPEND(head, item)				\
-> > {								\
-> > 	/* Circular linked list where only prev is circular. */	\
-> > 	if (head == NULL) {					\
-> > 		head = item;					\
-> > 		item->next = NULL;				\
-> > 		item->prev = item;				\
-> > 		return;						\
-> > 	}							\
-> > 	if (__constructor_order == _CONSTRUCTOR_ORDER_FORWARD) {\
-> > 		item->next = NULL;				\
-> > 		item->prev = head->prev;			\
-> > 		item->prev->next = item;			\
-> > 		head->prev = item;				\
-> > 	} else {						\
-> > 		p->next = head;					\
-> > 		p->next->prev = item;				\
-> > 		p->prev = item;					\
-> > 		head = item;					\
-> > 	}							\
-> > }
-> > 
-> > Which should let it be used, ultimately, as:
-> > 
-> > static inline void __register_test(struct __test_metadata *t)
-> > __LIST_APPEND(__test_list, t)
-> > 
-> > static inline void __register_fixture(struct __fixture_metadata *f)
-> > __LIST_APPEND(__fixture_list, f)
-> > 
-> > static inline void
-> > __register_fixture_instance(struct __fixture_metadata *f,
-> > 			    struct __fixture_instance_metadata *p)
-> > __LIST_APPEND(f->instances, p)  
-> 
-> With my suggestion of 'variant', this would change to:
-> 
-> static inline void
-> __register_fixture_variant(struct __fixture_metadata *f,
-> 			    struct __fixture_variant_metadata *p)
-> __LIST_APPEND(f->variants, p)
-> 
-> 
-> Just my 2 cents.
->  -- Tim
+diff --git a/tools/testing/kunit/test_data/test_pound_no_prefix.log b/tools/testing/kunit/test_data/test_pound_no_prefix.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..2ceb360be7d52cbee4b0a5a426456605ded7466e
+GIT binary patch
+literal 1193
+zcmZ{kPmh~05XH~sQ;f8iR$Wq)glvk`L$y_<s#O&!-CnB7GG@r4fCt&8yL|f&c$ct$
+z!UfCzz0vby254<%{4oPf#!-#%r_pip7tpA@#v%f%OhHWs2lO(mW!`&qpjFKPl$IK(
+zOywm}>tt2D7x%05gScM{xU2jvXlo8~06vKbetq7-KeVnQ1IapqHy5z)axUjHICc!h
+z79Dj~V?1m!kSrD{zvu`F#DS5Ij2xJ;_O#^!yFA0PXVMcK*wq=f;Nq7084V>7<jS(`
+zAYGr4>Kc{l+DZE0Dm{a@mRhv3w1|>yf&57h5zMdrJeHXgFl6E}JD|?D-4NP~RK4wE
+zt-QXS#kvf4IK?`q$)p@f={l{^xw5O}uxTjl2h}OyXR6LT(-nm7QOQ@Dgz*bcGuNCv
+zXAtuXRWtLvI(ZI=3`pn%Y+Bz-GE%e5bB~?8zCs)FGALB(Iet}eyAO>vG{h_XFacqE
+z{5B`*sm&ji^FSqVt3j)*uLdJ7i{K|gS=H!z=ds~=>*@j;>Wl|V<S&7*j71hj@Exte
+zL2N3`R@f)F-e?XagWq5G8QhG+37%$pC>`)nb>?X3&cr$Q`SI<??WK4Z!S(JY0|C2l
+zUoxJeYif9&-JNQ=>DZMAulOIpvz#v03lUqL#0ON%qPWsxdzE5bRMz)!!40$bN+0<y
+xun|kK-IQBiB)ML01YC(!3x1}>Q%a<zMm-&}PAv6C<s<cQ__Ee&sK`$u{sZ*XjN1SJ
+
+literal 0
+HcmV?d00001
+
+diff --git a/tools/testing/kunit/test_data/test_pound_sign.log b/tools/testing/kunit/test_data/test_pound_sign.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..0f87cdabebb098a6a7132661ab482f273ac6ecfd
+GIT binary patch
+literal 1655
+zcmah}O^?$s5IvV)F;XueHpOY1wnXB979k<fs!~}l)yi@lryDi#M7BdW|DJIJ-EKY>
+zUt&$>z4`Rp106PFD@Nx5DwAt>j6tHdSSZ++G6)|)X^|8veY1b*ZG=v-jNzahZ|^*5
+zoU$NALGF+lEFssq<A{~zdHS9`Eus(XY02P}yGM{lAGmk;#Jb!+KX2i;GB!sI;j;U8
+zGKF28P$(C}u_l7RD2ug`D)7dhdpMg#JtH0=grLRqe|YZk=bSDkJA|B%AgOYc7w8aj
+zF@j7fu)$^&3mGCL!oXxYM7tcJm4y<zt}e8L)kGuU%3!4o&x}$WO{!=;4&C6_ZG3$U
+zR~3Lp9h@fzSi7q3kE}OgXPQ6?Cm%;gJnyD9xz4SfEV1x23%9kD%G#_hxHoES?L!>T
+z!#;1vGe@mEEGa5G%tNVMXoCOLa#cI+1ob?ij}ql*<%^-L{c^W(-oo1ssIqbmN6jTs
+zI(lD2SfA<uR-@xBUSy6IL!>=X@ICh{K7jT*(VDv<UtnG<_D60VU<UNepc2OAz5p9{
+z`R)+1yim5WPL-r)b&*1ewRT_--3?GvRoX>$Nxmzil@FtHNd-~uU>hxI95MX*x{Kld
+zEQ{dqiW@QuBw4jSYCP#6AvHL@{kXYd@4EE2+xr+8Y`=YpNr!H+Bqg;cQPG2gJBsB5
+zX)&p2G+WMCU}P8^l$fXKTC&YLQbC#<*TA&5^gAcyv0EF!ip|+(m2Kz}CUU-Fux63;
+jvVXaBGrY#ID3eNFT<I5^%auq5Fn?Y9aTY!rosj(j<eKLf
+
+literal 0
+HcmV?d00001
+
+-- 
+2.25.1.481.gfbce0eb801-goog
 
