@@ -2,178 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F7D1875E2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Mar 2020 23:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A541875F4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Mar 2020 23:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732950AbgCPW5E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Mar 2020 18:57:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60338 "EHLO mail.kernel.org"
+        id S1732860AbgCPW7V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Mar 2020 18:59:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732959AbgCPW5C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Mar 2020 18:57:02 -0400
-Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.1])
+        id S1732846AbgCPW7V (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Mar 2020 18:59:21 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95FCA20736;
-        Mon, 16 Mar 2020 22:57:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7237820674;
+        Mon, 16 Mar 2020 22:59:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584399421;
-        bh=3nAKjWdCZeBeNiqg6OAGcwbLIEhlA/etmJ18+qXfLrQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4JN9/1Fq2VH4gi5n2KN9r9yklIktRnGToJRo/hvxjnYnflI5u1hMuLGkz3YJkmZ4
-         qFBQU8Ja4rD9NZd7ZoWuUHQgoclaWaa5quFghLTH6QjbQgRjsAy4ag3X1HL6DBO+qA
-         BOq5L+U88YXPRARAUsxWx4OaMKNTaNujHQboM/E4=
+        s=default; t=1584399560;
+        bh=fDzZ9sd6ydw01iKuGsTPZvhI4ca9FxZByXLxHe4+dg0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nSpTIy3e2KcyQdsDKHo45qOwSCjeLNnFXY7+uaytRmIQv3iJxOAefEebPANBkVTGS
+         MW/QCvsvU5L92AJJP9WvgwoZkT6MFQ4M2Szfa02VbM+zKfDdQCPkQB6DmJMK6uSug0
+         wAh8+VJv4y4uYw+MSNn2ZLVnn+2UltcRnrKOQ1xw=
+Date:   Mon, 16 Mar 2020 15:59:17 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     shuah@kernel.org, keescook@chromium.org
 Cc:     luto@amacapital.net, wad@chromium.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Tim.Bird@sony.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v3 6/6] selftests: tls: run all tests for TLS 1.2 and TLS 1.3
-Date:   Mon, 16 Mar 2020 15:56:47 -0700
-Message-Id: <20200316225647.3129354-8-kuba@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        linux-kernel@vger.kernel.org, kernel-team@fb.com, Tim.Bird@sony.com
+Subject: Re: [PATCH v3 0/6] kselftest: add fixture parameters
+Message-ID: <20200316155917.5ba8db1c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 In-Reply-To: <20200316225647.3129354-1-kuba@kernel.org>
 References: <20200316225647.3129354-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-TLS 1.2 and TLS 1.3 differ in the implementation.
-Use fixture parameters to run all tests for both
-versions, and remove the one-off TLS 1.2 test.
+On Mon, 16 Mar 2020 15:56:40 -0700 Jakub Kicinski wrote:
+> Hi!
+> 
+> Shuah please consider applying to the kselftest tree.
+> 
+> This set is an attempt to make running tests for different
+> sets of data easier. The direct motivation is the tls
+> test which we'd like to run for TLS 1.2 and TLS 1.3,
+> but currently there is no easy way to invoke the same
+> tests with different parameters.
+> 
+> Tested all users of kselftest_harness.h.
+> 
+> v2:
+>  - don't run tests by fixture
+>  - don't pass params as an explicit argument
+> 
+> v3:
+>  - go back to the orginal implementation with an extra
+>    parameter, and running by fixture (Kees);
+>  - add LIST_APPEND helper (Kees);
+>  - add a dot between fixture and param name (Kees);
+>  - rename the params to variants (Tim);
+> 
+> v1: https://lore.kernel.org/netdev/20200313031752.2332565-1-kuba@kernel.org/
+> v2: https://lore.kernel.org/netdev/20200314005501.2446494-1-kuba@kernel.org/
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/net/tls.c | 93 ++++++-------------------------
- 1 file changed, 17 insertions(+), 76 deletions(-)
+Ugh, sorry I forgot to realign things after the rename :S
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 0ea44d975b6c..c5282e62df75 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -101,6 +101,21 @@ FIXTURE(tls)
- 	bool notls;
- };
- 
-+FIXTURE_VARIANT(tls)
-+{
-+	unsigned int tls_version;
-+};
-+
-+FIXTURE_VARIANT_ADD(tls, 12)
-+{
-+	.tls_version = TLS_1_2_VERSION,
-+};
-+
-+FIXTURE_VARIANT_ADD(tls, 13)
-+{
-+	.tls_version = TLS_1_3_VERSION,
-+};
-+
- FIXTURE_SETUP(tls)
- {
- 	struct tls12_crypto_info_aes_gcm_128 tls12;
-@@ -112,7 +127,7 @@ FIXTURE_SETUP(tls)
- 	len = sizeof(addr);
- 
- 	memset(&tls12, 0, sizeof(tls12));
--	tls12.info.version = TLS_1_3_VERSION;
-+	tls12.info.version = variant->tls_version;
- 	tls12.info.cipher_type = TLS_CIPHER_AES_GCM_128;
- 
- 	addr.sin_family = AF_INET;
-@@ -733,7 +748,7 @@ TEST_F(tls, bidir)
- 		struct tls12_crypto_info_aes_gcm_128 tls12;
- 
- 		memset(&tls12, 0, sizeof(tls12));
--		tls12.info.version = TLS_1_3_VERSION;
-+		tls12.info.version = variant->tls_version;
- 		tls12.info.cipher_type = TLS_CIPHER_AES_GCM_128;
- 
- 		ret = setsockopt(self->fd, SOL_TLS, TLS_RX, &tls12,
-@@ -1258,78 +1273,4 @@ TEST(keysizes) {
- 	close(cfd);
- }
- 
--TEST(tls12) {
--	int fd, cfd;
--	bool notls;
--
--	struct tls12_crypto_info_aes_gcm_128 tls12;
--	struct sockaddr_in addr;
--	socklen_t len;
--	int sfd, ret;
--
--	notls = false;
--	len = sizeof(addr);
--
--	memset(&tls12, 0, sizeof(tls12));
--	tls12.info.version = TLS_1_2_VERSION;
--	tls12.info.cipher_type = TLS_CIPHER_AES_GCM_128;
--
--	addr.sin_family = AF_INET;
--	addr.sin_addr.s_addr = htonl(INADDR_ANY);
--	addr.sin_port = 0;
--
--	fd = socket(AF_INET, SOCK_STREAM, 0);
--	sfd = socket(AF_INET, SOCK_STREAM, 0);
--
--	ret = bind(sfd, &addr, sizeof(addr));
--	ASSERT_EQ(ret, 0);
--	ret = listen(sfd, 10);
--	ASSERT_EQ(ret, 0);
--
--	ret = getsockname(sfd, &addr, &len);
--	ASSERT_EQ(ret, 0);
--
--	ret = connect(fd, &addr, sizeof(addr));
--	ASSERT_EQ(ret, 0);
--
--	ret = setsockopt(fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls"));
--	if (ret != 0) {
--		notls = true;
--		printf("Failure setting TCP_ULP, testing without tls\n");
--	}
--
--	if (!notls) {
--		ret = setsockopt(fd, SOL_TLS, TLS_TX, &tls12,
--				 sizeof(tls12));
--		ASSERT_EQ(ret, 0);
--	}
--
--	cfd = accept(sfd, &addr, &len);
--	ASSERT_GE(cfd, 0);
--
--	if (!notls) {
--		ret = setsockopt(cfd, IPPROTO_TCP, TCP_ULP, "tls",
--				 sizeof("tls"));
--		ASSERT_EQ(ret, 0);
--
--		ret = setsockopt(cfd, SOL_TLS, TLS_RX, &tls12,
--				 sizeof(tls12));
--		ASSERT_EQ(ret, 0);
--	}
--
--	close(sfd);
--
--	char const *test_str = "test_read";
--	int send_len = 10;
--	char buf[10];
--
--	send_len = strlen(test_str) + 1;
--	EXPECT_EQ(send(fd, test_str, send_len, 0), send_len);
--	EXPECT_NE(recv(cfd, buf, send_len, 0), -1);
--	EXPECT_EQ(memcmp(buf, test_str, send_len), 0);
--
--	close(fd);
--	close(cfd);
--}
--
- TEST_HARNESS_MAIN
--- 
-2.24.1
-
+I'll send a whitespace-only v4 in a hour, allowing a little bit 
+of time in case there are some comments already.
