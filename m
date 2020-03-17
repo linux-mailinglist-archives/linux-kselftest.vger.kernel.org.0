@@ -2,240 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 440E8188E3E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 20:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DF3188EE6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 21:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbgCQTqZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Mar 2020 15:46:25 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:36652 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726545AbgCQTqZ (ORCPT
+        id S1726549AbgCQUWQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Mar 2020 16:22:16 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:54798 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726813AbgCQUWQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Mar 2020 15:46:25 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 39so7602637otu.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2020 12:46:25 -0700 (PDT)
+        Tue, 17 Mar 2020 16:22:16 -0400
+Received: by mail-pj1-f68.google.com with SMTP id np9so239878pjb.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2020 13:22:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9s2Sb3c4MxnnBmpoBuePNWugbWE68PyhFAR020YyxKI=;
-        b=JI600Y+S7vaaL+M1SlEKgAEtEUPT5Q45PYyhNUPJY82ExiEm4yLvuyoLjANOxrw/L8
-         K0LSxUZhq+pXM1GGwp3j51HMQSJZsaS91TWVYRhmi3aC265XUUVxVsf85Lt6C4FHfODU
-         F+8841uMdqRd6VymvDirqjn9SmklKMzELb2nq4ltyUMq1nVMo8mh6KrYIj6CXSK8975s
-         8Wppxc9EDwI6+CuP2CcdW21eufAGc9NTfDD0XTQ6x9Ta4mXhWmyFq+EubLApEE3PIMY3
-         UluxszB5ZBrGmCkrxM1stsbflxhZ846CG2/SzeG3kVFjDKkewelUAmzGKrdjkzgjSzUp
-         gkCw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZgC1djA04wl+1UG3Cj/HuSgpbFsTOFgzHvgdTKPnNp0=;
+        b=H4CZRE6VMBbEB8Hji3lWwaUwDqxZC4Bg0d0oIh9tBOL3zcGJGcAzVKyygFDdErRQqK
+         XDcn8dp06tPeWFz0YtmiV/5tsttgeqM4wNdTLQw6UsOAORNBPI6LDhW+QOSB430n8xUE
+         QBNl+T73+DJnkrAsh4odZ/nDT9fwkCbgcIHEA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9s2Sb3c4MxnnBmpoBuePNWugbWE68PyhFAR020YyxKI=;
-        b=uY3i4LE73ghmw5GxcRjYB5Vir8BHR8CfUltbHD70ar5bSh5wRoylWx7mRYvX7/9lnH
-         Vwwf22lMmYNlGLt09KI1Um38JQ6tLIsI+0F6ZSVArU8MBMUZLAf0bA6faSraIBalIEMD
-         F805u7RxHSjJh2Njn6/8iFQpbtmRmXJHKsZKU/H7VwQORuEiIrD1g6aWUWXPd3RbCbO/
-         YZ2JP83ZeOW3QFAEnepV0oshPZbuiOPolQhnbiEqzXeMy9AkGUc/rpNApqPQ/jfp+gG8
-         QGj/ND0WGwAPiYMJVD0BNPXUfmtBDoVqkW8hoYw6grS7lIn/VC0WbEMp6aHj9fn8vuUD
-         byKg==
-X-Gm-Message-State: ANhLgQ04DugJwLXSdryrm1uScjUVUyLrUfs3J3D3TuXo8ZGPvFc4h3mY
-        EdMAJyiVvGdq8ZOrPtRYJoaJBK2G28F3gR9uaP0NeA==
-X-Google-Smtp-Source: ADFU+vuKl0l5cSfO5Cy+yKgBZm1XSTGaBWgXbflYl3a2hR5fw7Go07ECSMEPZtHP+SUIHarbwT5aqXaP0EMleeCdfQE=
-X-Received: by 2002:a9d:5e8b:: with SMTP id f11mr858477otl.110.1584474384151;
- Tue, 17 Mar 2020 12:46:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZgC1djA04wl+1UG3Cj/HuSgpbFsTOFgzHvgdTKPnNp0=;
+        b=a/UBo5wnuLD2VMQ/ddQVBtwklFdaoxWebOJth55IylD+ljz5QmF7Amwr8/7VBmECGP
+         TkqJN0TV4evLCwp9RQ5/XSxc9gB+XO4+mjODmu01VBYxEVCYkfCYs28C5+it6Y/H7Duo
+         Bp8JhRnYTW2i0kHjbHlVK/m3AODEM/vi6zCjJk+FGSl6TOrSB8FVSK/tyOm4TR2IGl4t
+         O9LKmS77Pkoo6jqDmRf4GbIFHiVX+c8lUJ1tkmuzbCcljaMna6OJdOOQaIxOTrCCBBYK
+         /FPnUYL8nCMDXmi7LErnQjO2jNo8Fi0a5sQ22zawkZpAqj0yHzR5gBuei18K+X78Za8p
+         J8Ug==
+X-Gm-Message-State: ANhLgQ0E8jiwwTQW5Ps1csPtHVTQ5TYO+Ob6Wv1Ke5XKDzGKTPHJoect
+        f/YGfTlC3GL/O+6AJapwbPV1aA==
+X-Google-Smtp-Source: ADFU+vum1LO9z60NL3vOdRKNvZEfXZRFeaxNqaAhzjZZv6nhKQLnS+tqyBPjXOmirwHuPkOWOfoBdg==
+X-Received: by 2002:a17:90a:324b:: with SMTP id k69mr1022491pjb.50.1584476533955;
+        Tue, 17 Mar 2020 13:22:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v1sm230341pjy.35.2020.03.17.13.22.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2020 13:22:13 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 13:22:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com, Tim.Bird@sony.com
+Subject: Re: [PATCH v3 1/6] selftests/seccomp: use correct FIXTURE macro
+Message-ID: <202003171322.77AD2BA3B@keescook>
+References: <20200316225647.3129354-1-kuba@kernel.org>
+ <20200316225647.3129354-2-kuba@kernel.org>
 MIME-Version: 1.0
-References: <20200224160215.4136-1-mic@digikod.net> <CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com>
- <873d7419-bdd9-8a52-0a9b-dddbe31df4f9@digikod.net> <CAG48ez0=0W5Ok-8nASqZrZ28JboXRRi3gDxV5u6mdcOtzwuRVA@mail.gmail.com>
- <688dda0f-0907-34eb-c19e-3e9e5f613a74@digikod.net>
-In-Reply-To: <688dda0f-0907-34eb-c19e-3e9e5f613a74@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 17 Mar 2020 20:45:57 +0100
-Message-ID: <CAG48ez16yT+zbK1WPxr2TnxrifW5c2DnpFLbWRRLUT_WpuFNmw@mail.gmail.com>
-Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200316225647.3129354-2-kuba@kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 6:50 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> On 17/03/2020 17:19, Jann Horn wrote:
-> > On Thu, Mar 12, 2020 at 12:38 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.=
-net> wrote:
-> >> On 10/03/2020 00:44, Jann Horn wrote:
-> >>> On Mon, Feb 24, 2020 at 5:03 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod=
-.net> wrote:
->
-> [...]
->
-> >>> Aside from those things, there is also a major correctness issue wher=
-e
-> >>> I'm not sure how to solve it properly:
-> >>>
-> >>> Let's say a process installs a filter on itself like this:
-> >>>
-> >>> struct landlock_attr_ruleset ruleset =3D { .handled_access_fs =3D
-> >>> ACCESS_FS_ROUGHLY_WRITE};
-> >>> int ruleset_fd =3D landlock(LANDLOCK_CMD_CREATE_RULESET,
-> >>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
-> >>> struct landlock_attr_path_beneath path_beneath =3D {
-> >>>   .ruleset_fd =3D ruleset_fd,
-> >>>   .allowed_access =3D ACCESS_FS_ROUGHLY_WRITE,
-> >>>   .parent_fd =3D open("/tmp/foobar", O_PATH),
-> >>> };
-> >>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
-> >>> sizeof(path_beneath), &path_beneath);
-> >>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-> >>> struct landlock_attr_enforce attr_enforce =3D { .ruleset_fd =3D rules=
-et_fd };
-> >>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
-> >>> sizeof(attr_enforce), &attr_enforce);
-> >>>
-> >>> At this point, the process is not supposed to be able to write to
-> >>> anything outside /tmp/foobar, right? But what happens if the process
-> >>> does the following next?
-> >>>
-> >>> struct landlock_attr_ruleset ruleset =3D { .handled_access_fs =3D
-> >>> ACCESS_FS_ROUGHLY_WRITE};
-> >>> int ruleset_fd =3D landlock(LANDLOCK_CMD_CREATE_RULESET,
-> >>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
-> >>> struct landlock_attr_path_beneath path_beneath =3D {
-> >>>   .ruleset_fd =3D ruleset_fd,
-> >>>   .allowed_access =3D ACCESS_FS_ROUGHLY_WRITE,
-> >>>   .parent_fd =3D open("/", O_PATH),
-> >>> };
-> >>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
-> >>> sizeof(path_beneath), &path_beneath);
-> >>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-> >>> struct landlock_attr_enforce attr_enforce =3D { .ruleset_fd =3D rules=
-et_fd };
-> >>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
-> >>> sizeof(attr_enforce), &attr_enforce);
-> >>>
-> >>> As far as I can tell from looking at the source, after this, you will
-> >>> have write access to the entire filesystem again. I think the idea is
-> >>> that LANDLOCK_CMD_ENFORCE_RULESET should only let you drop privileges=
-,
-> >>> not increase them, right?
-> >>
-> >> There is an additionnal check in syscall.c:get_path_from_fd(): it is
-> >> forbidden to add a rule with a path which is not accessible (according
-> >> to LANDLOCK_ACCESS_FS_OPEN) thanks to a call to security_file_open(),
-> >> but this is definitely not perfect.
-> >
-> > Ah, I missed that.
-> >
-> >>> I think the easy way to fix this would be to add a bitmask to each
-> >>> rule that says from which ruleset it originally comes, and then let
-> >>> check_access_path() collect these bitmasks from each rule with OR, an=
-d
-> >>> check at the end whether the resulting bitmask is full - if not, at
-> >>> least one of the rulesets did not permit the access, and it should be
-> >>> denied.
-> >>>
-> >>> But maybe it would make more sense to change how the API works
-> >>> instead, and get rid of the concept of "merging" two rulesets
-> >>> together? Instead, we could make the API work like this:
-> >>>
-> >>>  - LANDLOCK_CMD_CREATE_RULESET gives you a file descriptor whose
-> >>> ->private_data contains a pointer to the old ruleset of the process,
-> >>> as well as a pointer to a new empty ruleset.
-> >>>  - LANDLOCK_CMD_ADD_RULE fails if the specified rule would not be
-> >>> permitted by the old ruleset, then adds the rule to the new ruleset
-> >>>  - LANDLOCK_CMD_ENFORCE_RULESET fails if the old ruleset pointer in
-> >>> ->private_data doesn't match the current ruleset of the process, then
-> >>> replaces the old ruleset with the new ruleset.
-> >>>
-> >>> With this, the new ruleset is guaranteed to be a subset of the old
-> >>> ruleset because each of the new ruleset's rules is permitted by the
-> >>> old ruleset. (Unless the directory hierarchy rotates, but in that cas=
-e
-> >>> the inaccuracy isn't much worse than what would've been possible
-> >>> through RCU path walk anyway AFAIK.)
-> >>>
-> >>> What do you think?
-> >>>
-> >>
-> >> I would prefer to add the same checks you described at first (with
-> >> check_access_path), but only when creating a new ruleset with
-> >> merge_ruleset() (which should probably be renamed). This enables not t=
-o
-> >> rely on a parent ruleset/domain until the enforcement, which is the ca=
-se
-> >> anyway.
-> >> Unfortunately this doesn't work for some cases with bind mounts. Becau=
-se
-> >> check_access_path() goes through one path, another (bind mounted) path
-> >> could be illegitimately allowed.
-> >
-> > Hmm... I'm not sure what you mean. At the moment, landlock doesn't
-> > allow any sandboxed process to change the mount hierarchy, right? Can
-> > you give an example where this would go wrong?
->
-> Indeed, a Landlocked process must no be able to change its mount
-> namespace layout. However, bind mounts may already exist.
-> Let's say a process sandbox itself to only access /a in a read-write
-> way.
+On Mon, Mar 16, 2020 at 03:56:41PM -0700, Jakub Kicinski wrote:
+> Quoting kdoc:
+> 
+> FIXTURE_DATA:
+>  * This call may be used when the type of the fixture data
+>  * is needed.  In general, this should not be needed unless
+>  * the *self* is being passed to a helper directly.
+> 
+> FIXTURE:
+>  * Defines the data provided to TEST_F()-defined tests as *self*.  It should be
+>  * populated and cleaned up using FIXTURE_SETUP() and FIXTURE_TEARDOWN().
+> 
+> seccomp should use FIXTURE to declare types.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-So, first policy:
+Acked-by: Kees Cook <keescook@chromium.org>
 
-/a RW
+-Kees
 
-> Then, this process (or one of its children) add a new restriction
-> on /a/b to only be able to read this hierarchy.
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index ee1b727ede04..7bf82fb07f67 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -909,7 +909,7 @@ TEST(ERRNO_order)
+>  	EXPECT_EQ(12, errno);
+>  }
+>  
+> -FIXTURE_DATA(TRAP) {
+> +FIXTURE(TRAP) {
+>  	struct sock_fprog prog;
+>  };
+>  
+> @@ -1020,7 +1020,7 @@ TEST_F(TRAP, handler)
+>  	EXPECT_NE(0, (unsigned long)sigsys->_call_addr);
+>  }
+>  
+> -FIXTURE_DATA(precedence) {
+> +FIXTURE(precedence) {
+>  	struct sock_fprog allow;
+>  	struct sock_fprog log;
+>  	struct sock_fprog trace;
+> @@ -1509,7 +1509,7 @@ void tracer_poke(struct __test_metadata *_metadata, pid_t tracee, int status,
+>  	EXPECT_EQ(0, ret);
+>  }
+>  
+> -FIXTURE_DATA(TRACE_poke) {
+> +FIXTURE(TRACE_poke) {
+>  	struct sock_fprog prog;
+>  	pid_t tracer;
+>  	long poked;
+> @@ -1817,7 +1817,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+>  		change_syscall(_metadata, tracee, -1, -ESRCH);
+>  }
+>  
+> -FIXTURE_DATA(TRACE_syscall) {
+> +FIXTURE(TRACE_syscall) {
+>  	struct sock_fprog prog;
+>  	pid_t tracer, mytid, mypid, parent;
+>  };
+> @@ -2321,7 +2321,7 @@ struct tsync_sibling {
+>  		}							\
+>  	} while (0)
+>  
+> -FIXTURE_DATA(TSYNC) {
+> +FIXTURE(TSYNC) {
+>  	struct sock_fprog root_prog, apply_prog;
+>  	struct tsync_sibling sibling[TSYNC_SIBLINGS];
+>  	sem_t started;
+> -- 
+> 2.24.1
+> 
 
-You mean with the second policy looking like this?
-
-/a RW
-/a/b R
-
-Then the resulting policy would be:
-
-/a RW policy_bitmask=3D0x00000003 (bits 0 and 1 set)
-/a/b R policy_bitmask=3D0x00000002 (bit 1 set)
-required_bits=3D0x00000003 (bits 0 and 1 set)
-
-> The check at insertion
-> time would allow this because this access right is a subset of the
-> access right allowed with the parent directory. However, If /a/b is bind
-> mounted somewhere else, let's say in /private/b, then the second
-> enforcement just gave new access rights to this hierarchy too.
-
-But with the solution I proposed, landlock's path walk would see
-something like this when accessing a file at /private/b/foo:
-/private/b/foo <no rules>
-  policies seen until now: 0x00000000
-/private/b <access: R, policy_bitmask=3D0x00000002>
-  policies seen until now: 0x00000002
-/private <no rules>
-  policies seen until now: 0x00000002
-/ <no rules>
-  policies seen until now: 0x00000002
-
-It wouldn't encounter any rule from the first policy, so the OR of the
-seen policy bitmasks would be 0x00000002, which is not the required
-value 0x00000003, and so the access would be denied.
+-- 
+Kees Cook
