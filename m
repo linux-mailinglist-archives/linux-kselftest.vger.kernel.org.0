@@ -2,61 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65365187B26
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 09:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFE7187B30
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 09:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbgCQI06 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Mar 2020 04:26:58 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:43946 "EHLO
+        id S1725871AbgCQI1v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Mar 2020 04:27:51 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43972 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbgCQI05 (ORCPT
+        with ESMTP id S1725868AbgCQI1v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Mar 2020 04:26:57 -0400
+        Tue, 17 Mar 2020 04:27:51 -0400
 Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jE7Yt-0005u6-E9; Tue, 17 Mar 2020 08:26:55 +0000
-Date:   Tue, 17 Mar 2020 09:26:54 +0100
+        id 1jE7Zj-0005z9-NS; Tue, 17 Mar 2020 08:27:47 +0000
+Date:   Tue, 17 Mar 2020 09:27:46 +0100
 From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux- stable <stable@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Todd Kjos <tkjos@google.com>, Shuah Khan <shuah@kernel.org>,
+To:     Hridya Valsaraju <hridya@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>, tkjos@android.com,
-        ardb@kernel.org, Kees Cook <keescook@chromium.org>,
-        lkft-triage@lists.linaro.org, Basil Eljuse <Basil.Eljuse@arm.com>,
-        YongQin Liu <yongqin.liu@linaro.org>
-Subject: Re: [stable-rc-5.4 and 5.5 ] WARNING: CPU: 3 PID: 2548 at
- /usr/src/kernel/lib/refcount.c:28 refcount_warn_saturate
-Message-ID: <20200317082654.zl6piqg6kbc43ivm@wittgenstein>
-References: <CA+G9fYu06RPexAK-4huCSwYC4=FkuH2QduVpxOgG43ojX2jyBA@mail.gmail.com>
+        Todd Kjos <tkjos@android.com>,
+        LKML <linux-kernel@vger.kernel.org>, ard.biesheuvel@linaro.org,
+        ardb@kernel.org,
+        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        linux-kselftest@vger.kernel.org, Martijn Coenen <maco@android.com>,
+        naresh.kamboju@linaro.org, shuah@kernel.org
+Subject: Re: [PATCH v2 3/3] binderfs: add stress test for binderfs binder
+ devices
+Message-ID: <20200317082746.boc247ieui6cxvsz@wittgenstein>
+References: <20200312131531.3615556-1-christian.brauner@ubuntu.com>
+ <20200313152420.138777-1-christian.brauner@ubuntu.com>
+ <20200313152420.138777-3-christian.brauner@ubuntu.com>
+ <202003131608.DA96ECE4D@keescook>
+ <CA+wgaPNETmZHeiTeV4q1YkJU=yNXfN4hap5KS_cdR7YLJHnF5w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYu06RPexAK-4huCSwYC4=FkuH2QduVpxOgG43ojX2jyBA@mail.gmail.com>
+In-Reply-To: <CA+wgaPNETmZHeiTeV4q1YkJU=yNXfN4hap5KS_cdR7YLJHnF5w@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 01:15:40PM +0530, Naresh Kamboju wrote:
-> While running selftests binderfs_test on stable rc 5.4 and 5.5
-> branches the following
-> warning on arm64, arm, x86_64 and i386.
+On Mon, Mar 16, 2020 at 03:44:44PM -0700, Hridya Valsaraju wrote:
+> On Fri, Mar 13, 2020 at 4:08 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Fri, Mar 13, 2020 at 04:24:20PM +0100, Christian Brauner wrote:
+> > > This adds a stress test that should hopefully help us catch regressions
+> > > for [1], [2], and [3].
+> > >
+> > > [1]: 2669b8b0c798 ("binder: prevent UAF for binderfs devices")
+> > > [2]: f0fe2c0f050d ("binder: prevent UAF for binderfs devices II")
+> > > [3]: 211b64e4b5b6 ("binderfs: use refcount for binder control devices too")
+> > > Cc: Kees Cook <keescook@chromium.org>:
+> > > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> >
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> >
+> > -Kees
+> >
 > 
-> This warning was noticed on Linus's tree and reported [1] and then
-> Christian Brauner investigated this problem.
+> Thank you for creating these tests Christian! I was able to get them
+> running on the cuttlefish platform with the ACK android-mainline
+> branch.
 
-I've sent a fix (You should've been Cced on.) which has made it into
-Greg's tree so should land in mainline soon. I've also made sure to Cc
-stable meaning it should land in all relevant kernels soon after. Please
-see:
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?h=char-misc-linus&id=211b64e4b5b6bd5fdc19cd525c2cc9a90e6b0ec9
-
-Thanks!
+Thank you, Hridya!
 Christian
