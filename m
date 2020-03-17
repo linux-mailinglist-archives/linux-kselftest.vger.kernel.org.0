@@ -2,114 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8510187753
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 02:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD537187AA2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 08:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733047AbgCQBJ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Mar 2020 21:09:59 -0400
-Received: from wind.enjellic.com ([76.10.64.91]:60356 "EHLO wind.enjellic.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733017AbgCQBJ7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Mar 2020 21:09:59 -0400
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 02H17IhN002955;
-        Mon, 16 Mar 2020 20:07:18 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 02H17Irm002954;
-        Mon, 16 Mar 2020 20:07:18 -0500
-Date:   Mon, 16 Mar 2020 20:07:18 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Haitao Huang <haitao.huang@linux.intel.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-sgx@vger.kernel.org, akpm@linux-foundation.org,
-        dave.hansen@intel.com, sean.j.christopherson@intel.com,
-        nhorman@redhat.com, npmccallum@redhat.com, haitao.huang@intel.com,
-        andriy.shevchenko@linux.intel.com, tglx@linutronix.de,
-        kai.svahn@intel.com, bp@alien8.de, josh@joshtriplett.org,
-        luto@kernel.org, kai.huang@intel.com, rientjes@google.com,
-        cedric.xing@intel.com, puiterwijk@redhat.com,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v28 14/22] selftests/x86: Add a selftest for SGX
-Message-ID: <20200317010718.GA2546@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20200303233609.713348-1-jarkko.sakkinen@linux.intel.com> <20200303233609.713348-15-jarkko.sakkinen@linux.intel.com> <20200306053210.GA16297@wind.enjellic.com> <op.0g923rgpwjvjmi@hhuan26-mobl1.amr.corp.intel.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <op.0g923rgpwjvjmi@hhuan26-mobl1.amr.corp.intel.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Mon, 16 Mar 2020 20:07:18 -0500 (CDT)
+        id S1725794AbgCQHp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Mar 2020 03:45:56 -0400
+Received: from mail-lf1-f44.google.com ([209.85.167.44]:41569 "EHLO
+        mail-lf1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725868AbgCQHpz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Mar 2020 03:45:55 -0400
+Received: by mail-lf1-f44.google.com with SMTP id u26so4058352lfu.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2020 00:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=vs60LH3coDU/G583V0oax4DANniSeCRsFOzDHxjS2/I=;
+        b=VD7FvoGMbpcVA/mT+vDg4+K0a/hVm6FOQ0rimtBc+X38Xx11xuKyrySevJG6Rrixw9
+         dM5ndQGygywVqE5pDILq7Iq/SE9h+UtBOUzfJMP8Khx0CWk5gGqi7En4r7SSrscNGBpj
+         ECjS/ydwVDbVO2nHnNuwHA7R7JgA5IOmgp0wuBbzsQ53Realzu4TDqUn9pOlhfAc24tK
+         m+i1jvlkI35IstExqmtWwdcVzBcFNq11jwbyDRD8lKEOxLoF9Lg7PtOKZqO157MybvM4
+         eWzP33dTG+odpONTtvIsN6bgII7irX6Q4OcwgsmriRmgGt757bro2yjlmB+Hm8S6Fzd1
+         iDog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=vs60LH3coDU/G583V0oax4DANniSeCRsFOzDHxjS2/I=;
+        b=Tu00/lpXiykPgJ/gU6xFlbcN24VygE/SQ+G2AXWTCoW46VN6mlWO42EKyhjLMvKhcC
+         x5jUyXxsuEBY1myu7zi1LevFIFdyH11pCG47ctB8f3YsMdvyAI9ydkrOgAPd9WlH1qHx
+         zccfpLlGow3McIIygelY/vN4DwvQhxv/2mqgqN4Khbao+Z/JVwnoSa6s9HYrZenkwryg
+         9wJOlWCVQjB8rsBUKSrBKjxRgcg6mTeqgh/PKW/yEeql/1JjYXLHJ+gYGPggVQXXmTB5
+         hPOjb9SMwyxSygj2v/isejdkN92NkoZE5FORdCnEARs4fd/BKggeJqFraIpIoPg3Bwel
+         jFIg==
+X-Gm-Message-State: ANhLgQ2sH63pB1xI6nPC3evxmfkw8w2McLXanT63Hy7fVdtjg1OQV/po
+        hhYC7y5dw3CIdIquBCoaARAYlUORyGrAn6hBuAr9Vw==
+X-Google-Smtp-Source: ADFU+vtcsO5pokvCVx3QxsusodoDyFnEMJg/zVI/XgUPyMI9XKa92yXHJE/hzm7hsS15MYnL1OpwjZIq4WSkoyAUNu0=
+X-Received: by 2002:ac2:43a8:: with SMTP id t8mr2085415lfl.82.1584431152269;
+ Tue, 17 Mar 2020 00:45:52 -0700 (PDT)
+MIME-Version: 1.0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 17 Mar 2020 13:15:40 +0530
+Message-ID: <CA+G9fYu06RPexAK-4huCSwYC4=FkuH2QduVpxOgG43ojX2jyBA@mail.gmail.com>
+Subject: [stable-rc-5.4 and 5.5 ] WARNING: CPU: 3 PID: 2548 at
+ /usr/src/kernel/lib/refcount.c:28 refcount_warn_saturate
+To:     linux- stable <stable@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Todd Kjos <tkjos@google.com>, Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>, tkjos@android.com,
+        ardb@kernel.org, Kees Cook <keescook@chromium.org>,
+        lkft-triage@lists.linaro.org, Basil Eljuse <Basil.Eljuse@arm.com>,
+        YongQin Liu <yongqin.liu@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 02:29:41PM -0500, Haitao Huang wrote:
+While running selftests binderfs_test on stable rc 5.4 and 5.5
+branches the following
+warning on arm64, arm, x86_64 and i386.
 
-Good evening, I hope the week is going well for everyone.
+This warning was noticed on Linus's tree and reported [1] and then
+Christian Brauner investigated this problem.
 
-> >Just as a clarification, are you testing the new driver against
-> >signed production class enclaves in .so format that also include
-> >metadata layout directives or is the driver just getting tested
-> >against the two page toy enclave that copies a word of memory from
-> >one memory location to another?
+FYI, We are running selftests source from stable rc 5.5 branch.
 
-> We (Intel SGX SDK/PSW team) tested this driver for enclaves in .so
-> format with metadata. Our 2.8 release supports v24 and 2.9 supports
-> v25+. Both production signed and debug signed enclaves worked.
->
-> *Note* we did make some code changes in our runtime for v24+, mainly
-> dealing with src & EPC page alignment for EADD, open one fd per
-> enclave, use -z noexecstack linker option, etc. You can see the
-> changes on GitHub.
+[  224.520090] ------------[ cut here ]------------
+[  224.521202] refcount_t: underflow; use-after-free.
+[  224.522284] WARNING: CPU: 3 PID: 2548 at
+/usr/src/kernel/lib/refcount.c:28 refcount_warn_saturate+0x93/0x100
+[  224.523215] Modules linked in: cls_bpf sch_fq sch_ingress
+algif_hash af_alg fuse [last unloaded: test_bpf]
+[  224.523215] CPU: 3 PID: 2548 Comm: binderfs_test Not tainted 5.5.10-rc1 #1
+[  224.526771] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  224.526771] RIP: 0010:refcount_warn_saturate+0x93/0x100
+[  224.526771] Code: 38 73 62 01 01 e8 3d c2 b6 ff 0f 0b 5d c3 80 3d
+2a 73 62 01 00 75 ab 48 c7 c7 70 b0 00 92 c6 05 1a 73 62 01 01 e8 1d
+c2 b6 ff <0f> 0b 5d c3 80 3d 0d 73 62 01 00 75 8b 48 c7 c7 f8 af 00 92
+c6 05
+[  224.526771] RSP: 0018:ffffaaa081417c58 EFLAGS: 00010286
+[  224.526771] RAX: 0000000000000000 RBX: ffff9e77f1ed2c40 RCX: 0000000000000000
+[  224.526771] RDX: 0000000000000001 RSI: ffff9e77fbd98d48 RDI: ffff9e77fbd98d48
+[  224.526771] RBP: ffffaaa081417c58 R08: 0000000000000000 R09: 0000000000000000
+[  224.526771] R10: 0000000000000000 R11: 0000000000000000 R12: ffff9e77fa99f400
+[  224.526771] R13: ffff9e77ee42bbc0 R14: ffff9e77f1ed2cc8 R15: ffffffff92400300
+[  224.526771] FS:  00007f9e5d8824c0(0000) GS:ffff9e77fbd80000(0000)
+knlGS:0000000000000000
+[  224.526771] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  224.526771] CR2: 00007f9e5d41ff7c CR3: 000000012cbc2000 CR4: 00000000003406e0
+[  224.526771] Call Trace:
+[  224.526771]  binderfs_evict_inode+0x9b/0xc0
+[  224.526771]  evict+0xc8/0x190
+[  224.526771]  iput+0x19c/0x2a0
+[  224.526771]  ? shrink_dentry_list+0x29/0x210
+[  224.526771]  dentry_unlink_inode+0x104/0x110
+[  224.526771]  __dentry_kill+0xda/0x180
+[  224.526771]  shrink_dentry_list+0xe3/0x210
+[  224.526771]  shrink_dcache_parent+0x11c/0x200
+[  224.526771]  do_one_tree+0x12/0x40
+[  224.526771]  shrink_dcache_for_umount+0x2d/0x90
+[  224.526771]  generic_shutdown_super+0x1f/0x120
+[  224.526771]  kill_anon_super+0x12/0x30
+[  224.526771]  kill_litter_super+0x23/0x30
+[  224.526771]  binderfs_kill_super+0x16/0x40
+[  224.526771]  deactivate_locked_super+0x43/0x70
+[  224.526771]  deactivate_super+0x40/0x60
+[  224.526771]  cleanup_mnt+0xbd/0x150
+[  224.526771]  __cleanup_mnt+0x12/0x20
+[  224.526771]  task_work_run+0x90/0xc0
+[  224.526771]  exit_to_usermode_loop+0xf0/0x100
+[  224.526771]  do_syscall_64+0x1bf/0x200
+[  224.526771]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[  224.526771] RIP: 0033:0x7f9e5d3a30c7
+[  224.526771] Code: ad 2b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f
+44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a1 ad 2b 00 f7 d8 64 89
+01 48
+[  224.526771] RSP: 002b:00007ffc35189ee8 EFLAGS: 00000206 ORIG_RAX:
+00000000000000a6
+[  224.526771] RAX: 0000000000000000 RBX: 00007f9e5d882440 RCX: 00007f9e5d3a30c7
+[  224.526771] RDX: 0000000000000000 RSI: 0000000000000002 RDI: 000000000040192c
+[  224.526771] RBP: 0000000000000002 R08: 0000000000000001 R09: 00007f9e5d3e23e0
+[  224.526771] R10: 000000000000079a R11: 0000000000000206 R12: 0000000000000001
+[  224.526771] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[  224.526771] irq event stamp: 1776
+[  224.526771] hardirqs last  enabled at (1775): [<ffffffff909751b8>]
+console_unlock+0x458/0x5c0
+[  224.526771] hardirqs last disabled at (1776): [<ffffffff90801e9b>]
+trace_hardirqs_off_thunk+0x1a/0x1c
+[  224.526771] softirqs last  enabled at (1772): [<ffffffff91a00338>]
+__do_softirq+0x338/0x43a
+[  224.526771] softirqs last disabled at (1761): [<ffffffff90902b28>]
+irq_exit+0xb8/0xc0
+[  224.526771] ---[ end trace a9ce2ef5cd0b3086 ]---
 
-Lots of knobs getting turned at the same time but we sorted out all
-the issues and our runtime is now passing its regression tests with
-the new driver, with an exception that we note below.
+ref:
+https://lkft.validation.linaro.org/scheduler/job/1294041#L8703
+https://lkft.validation.linaro.org/scheduler/job/1294145#L9569
+https://lkft.validation.linaro.org/scheduler/job/1294086#L11063
+https://lkft.validation.linaro.org/scheduler/job/1293967#L9551
 
-I suspect that we might have the only complete and architecturally
-independent runtime implementation so if the new driver is working
-against yours and ours it would seem to be a reasonable test spectrum
-for the driver.
-
-> >We see the same behavior from both our unit test enclaves and the
-> >Quoting Enclave from the Intel SGX runtime.
-
-> We did not see any issue loading QE in our tests. Please directly
-> email me on this test if you have specific questions.
-
-As it turns out the major problem we were running into with respect to
-the QE test was the fact that generic use of atexit() handlers was
-disabled by changes that went into the 2.8 SDK.  Our runtime and SDK
-assume that enclave atexit() handling works.
-
-The enclave UNINIT ECALL is only allowed on runtimes that are
-advertising EDMM support.  That seems excessively restrictive since
-atexit() handling is generically useful for enclaves that are not
-using EDMM.  Our runtime allows EDMM to be disabled and we have
-enclaves that gate on that for security purposes.
-
-On a quasi-related note, it appears that the 1.4 compatibility
-metadata created by post 2.0 signing tools is leaking layout
-descriptors that a version 1.4 runtime doesn't understand.
-
-Do you want to exchange e-mail on this or should we direct
-conversations about these issues with others on your SDK team.
-
-Have a good remainder of the week.
-
-Dr. Greg
-
-As always,
-Dr. Greg Wettstein, Ph.D, Worker      SGX secured infrastructure and
-Enjellic Systems Development, LLC     autonomously self-defensive
-4206 N. 19th Ave.                     platforms.
-Fargo, ND  58102
-PH: 701-281-1686                      EMAIL: greg@enjellic.com
-------------------------------------------------------------------------------
-"All parts should go together without forcing.  You must remember that
- the parts you are reassembling were disassembled by you.  Therefore,
- if you can't get them together again, there must be a reason.  By all
- means, do not use a hammer."
-                                -- IBM maintenance manual, 1925
+[1] https://lore.kernel.org/linux-kselftest/CA+G9fYusdfg7PMfC9Xce-xLT7NiyKSbgojpK35GOm=Pf9jXXrA@mail.gmail.com/
+--
+Linaro LKFT
+https://lkft.linaro.org
