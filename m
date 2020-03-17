@@ -2,71 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EF9188EEB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 21:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B90188EEE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Mar 2020 21:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbgCQUWy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Mar 2020 16:22:54 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46041 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726756AbgCQUWv (ORCPT
+        id S1726730AbgCQUX2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Mar 2020 16:23:28 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:55366 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726721AbgCQUX2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Mar 2020 16:22:51 -0400
-Received: by mail-pg1-f195.google.com with SMTP id m15so12331594pgv.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2020 13:22:50 -0700 (PDT)
+        Tue, 17 Mar 2020 16:23:28 -0400
+Received: by mail-pj1-f67.google.com with SMTP id mj6so240457pjb.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2020 13:23:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=EAIJCbc9UnYGBhZAgTxjslTz10fA3gHJNpsPT5X0d/0=;
-        b=jJwCjEtHgr13odNFCH9H9QGOK6qYtGJmi3Lff6ROgfMdrMnLhXjkrg29YHbzWopzmS
-         02WMyKj3xIe8PhZaCZpLLVBE0XdXPKQtF/G5BDTxtU+8CD4Ixet9A3DgT/fPVZ7CrFBF
-         rpsE+tU61HmBnrjEDwRzixtEsw65RA/HGhmhw=
+        bh=zSe8rWeFlsZU0i7SSuhjlg2s06lvOZ+QgAEbRnXRKCw=;
+        b=L9OCTGRmtGM0cSyfUndXTADSKHCyCWwkd8y+0Iq1lernFN6S/gSBxFugqQCSM3a41w
+         Hbws/X3PlJembs2iaA/CtPF9h3RDr2QAQlu0p0DPMfpKUF1OLPx5ZBh1s0+QBY3G4sHl
+         PxZvzJ7TCTYRkl345izjxFZUqQWGq+Mg5DsjM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EAIJCbc9UnYGBhZAgTxjslTz10fA3gHJNpsPT5X0d/0=;
-        b=V1LRExMukMDdiMb0zU4NFIYOXtyXC4FX/vJVBfkfwBrQARBYRotBaQ7P/tLvaB41o0
-         LwPrd157HjMC9wYr4SBqc/vls2jza6mQztMQA+Ucr1gDeuDX3+akoAm5mwql4Zs+iJ9V
-         xwTf5KpIW7FmWGtN7FKGSEtMKBt+a2xOEqeymNMKVx4wgOIbatq9MzQllwPJbxm52tDs
-         GkOjJcNtV2WrphIeR6BVvTrQDrYjwhgoWTjffx795sZcAXvfXaCC71B59CSIAzAQyZ5z
-         N+X+3L/QxfRBQyievgkw327SCthQKVprEFx0uxNBMV5dJtbBEpIIEKHtyl/u4yB6MX/4
-         2Zhg==
-X-Gm-Message-State: ANhLgQ1Xnx90CyBekdv/TTLio2rlphJxlpdqbSshH4Zii1R727fgQdBx
-        TUFKOm8vVUU8G2aeqpmWplW+0w==
-X-Google-Smtp-Source: ADFU+vsgTPKpKOop85D3za3E34mi1V5jczJYrDVYLZp5wxLbhQu4/38ysB16lWDoiJeHKHqWdqEuEg==
-X-Received: by 2002:a63:6944:: with SMTP id e65mr1017514pgc.406.1584476569477;
-        Tue, 17 Mar 2020 13:22:49 -0700 (PDT)
+        bh=zSe8rWeFlsZU0i7SSuhjlg2s06lvOZ+QgAEbRnXRKCw=;
+        b=fU+net2YAuglYKAKQoxMfg9KHTiHcyXlDOTjnxz4sKbxdNUoVepGyJnMt3VVTTuIht
+         mZLZ6tv/YFuRsHA/HJT4qGWlzQp8/OL3436MqDchIplKC6vPQPaVmtS7uRsQS++9E8AK
+         ESzeXM67B1Aobg2BlrjTM5PrJL1hp1W3cOaICbYwTJhCtBBAXAmzpq9nIJxeNp42faks
+         1igp/NeF3etcVBwogv366lZjz/vUz2zcHvnOx1lkmW/dFpsr7T3RCLaSTC//nf9JxbA0
+         gJcyN0+PrdnhZzFG1dFPvaXl0svxogzE5CmxHn/MfFYMTbDoE6XdlOJtFERglQ7Pkz5f
+         A5zw==
+X-Gm-Message-State: ANhLgQ3nrqEIAxb2lS8U26hX/r2SFlStM9tkIBJ4iwAcQ5aMV9eSC6Uq
+        SqabjGLztjQQFvl3okRHrCNK0Q==
+X-Google-Smtp-Source: ADFU+vv3DNRu8Nu5EhpiP8v6utskBwT0IOzS4pn9YJ+qbpl6DgviLHuFEBc0pWxb6jnlHg7nOiuKZA==
+X-Received: by 2002:a17:90a:bf0b:: with SMTP id c11mr1079314pjs.28.1584476604873;
+        Tue, 17 Mar 2020 13:23:24 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x189sm3965762pfb.1.2020.03.17.13.22.48
+        by smtp.gmail.com with ESMTPSA id h4sm3971934pfg.177.2020.03.17.13.23.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2020 13:22:48 -0700 (PDT)
-Date:   Tue, 17 Mar 2020 13:22:47 -0700
+        Tue, 17 Mar 2020 13:23:24 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 13:23:23 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     shuah@kernel.org, luto@amacapital.net, wad@chromium.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@fb.com, Tim.Bird@sony.com
-Subject: Re: [PATCH v3 2/6] kselftest: factor out list manipulation to a
- helper
-Message-ID: <202003171322.19433D7@keescook>
+Subject: Re: [PATCH v3 3/6] kselftest: create fixture objects
+Message-ID: <202003171323.7A18C455@keescook>
 References: <20200316225647.3129354-1-kuba@kernel.org>
- <20200316225647.3129354-3-kuba@kernel.org>
+ <20200316225647.3129354-4-kuba@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200316225647.3129354-3-kuba@kernel.org>
+In-Reply-To: <20200316225647.3129354-4-kuba@kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 16, 2020 at 03:56:42PM -0700, Jakub Kicinski wrote:
-> Kees suggest to factor out the list append code to a macro,
-> since following commits need it, which leads to code duplication.
+On Mon, Mar 16, 2020 at 03:56:43PM -0700, Jakub Kicinski wrote:
+> Grouping tests by fixture will allow us to parametrize
+> test runs. Create full objects for fixtures.
 > 
-> Suggested-by: Kees Cook <keescook@chromium.org>
+> Add a "global" fixture for tests without a fixture.
+> 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
 Acked-by: Kees Cook <keescook@chromium.org>
@@ -74,69 +74,116 @@ Acked-by: Kees Cook <keescook@chromium.org>
 -Kees
 
 > ---
->  tools/testing/selftests/kselftest_harness.h | 42 ++++++++++++---------
->  1 file changed, 24 insertions(+), 18 deletions(-)
+>  tools/testing/selftests/kselftest_harness.h | 46 ++++++++++++++++-----
+>  1 file changed, 35 insertions(+), 11 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index 5336b26506ab..aaf58fffc8f7 100644
+> index aaf58fffc8f7..0f68943d6f04 100644
 > --- a/tools/testing/selftests/kselftest_harness.h
 > +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -631,6 +631,29 @@
+> @@ -169,8 +169,10 @@
+>  #define __TEST_IMPL(test_name, _signal) \
+>  	static void test_name(struct __test_metadata *_metadata); \
+>  	static struct __test_metadata _##test_name##_object = \
+> -		{ .name = "global." #test_name, \
+> -		  .fn = &test_name, .termsig = _signal, \
+> +		{ .name = #test_name, \
+> +		  .fn = &test_name, \
+> +		  .fixture = &_fixture_global, \
+> +		  .termsig = _signal, \
+>  		  .timeout = TEST_TIMEOUT_DEFAULT, }; \
+>  	static void __attribute__((constructor)) _register_##test_name(void) \
+>  	{ \
+> @@ -212,10 +214,12 @@
+>   * populated and cleaned up using FIXTURE_SETUP() and FIXTURE_TEARDOWN().
+>   */
+>  #define FIXTURE(fixture_name) \
+> +	static struct __fixture_metadata _##fixture_name##_fixture_object = \
+> +		{ .name =  #fixture_name, }; \
+>  	static void __attribute__((constructor)) \
+>  	_register_##fixture_name##_data(void) \
+>  	{ \
+> -		__fixture_count++; \
+> +		__register_fixture(&_##fixture_name##_fixture_object); \
 >  	} \
->  } while (0); OPTIONAL_HANDLER(_assert)
+>  	FIXTURE_DATA(fixture_name)
 >  
-> +/* List helpers */
-> +#define __LIST_APPEND(head, item) \
-> +{ \
-> +	/* Circular linked list where only prev is circular. */ \
-> +	if (head == NULL) { \
-> +		head = item; \
-> +		item->next = NULL; \
-> +		item->prev = item; \
-> +		return;	\
-> +	} \
-> +	if (__constructor_order == _CONSTRUCTOR_ORDER_FORWARD) { \
-> +		item->next = NULL; \
-> +		item->prev = head->prev; \
-> +		item->prev->next = item; \
-> +		head->prev = item; \
-> +	} else { \
-> +		item->next = head; \
-> +		item->next->prev = item; \
-> +		item->prev = item; \
-> +		head = item; \
-> +	} \
+> @@ -309,8 +313,9 @@
+>  	} \
+>  	static struct __test_metadata \
+>  		      _##fixture_name##_##test_name##_object = { \
+> -		.name = #fixture_name "." #test_name, \
+> +		.name = #test_name, \
+>  		.fn = &wrapper_##fixture_name##_##test_name, \
+> +		.fixture = &_##fixture_name##_fixture_object, \
+>  		.termsig = signal, \
+>  		.timeout = tmout, \
+>  	 }; \
+> @@ -654,10 +659,33 @@
+>  	} \
+>  }
+>  
+> +/* Contains all the information about a fixture */
+> +struct __fixture_metadata {
+> +	const char *name;
+> +	struct __fixture_metadata *prev, *next;
+> +} _fixture_global __attribute__((unused)) = {
+> +	.name = "global",
+> +	.prev = &_fixture_global,
+> +};
+> +
+> +static struct __fixture_metadata *__fixture_list = &_fixture_global;
+> +static unsigned int __fixture_count;
+> +static int __constructor_order;
+> +
+> +#define _CONSTRUCTOR_ORDER_FORWARD   1
+> +#define _CONSTRUCTOR_ORDER_BACKWARD -1
+> +
+> +static inline void __register_fixture(struct __fixture_metadata *f)
+> +{
+> +	__fixture_count++;
+> +	__LIST_APPEND(__fixture_list, f);
 > +}
 > +
 >  /* Contains all the information for test execution and status checking. */
 >  struct __test_metadata {
 >  	const char *name;
-> @@ -665,24 +688,7 @@ static int __constructor_order;
->  static inline void __register_test(struct __test_metadata *t)
->  {
->  	__test_count++;
-> -	/* Circular linked list where only prev is circular. */
-> -	if (__test_list == NULL) {
-> -		__test_list = t;
-> -		t->next = NULL;
-> -		t->prev = t;
-> -		return;
-> -	}
-> -	if (__constructor_order == _CONSTRUCTOR_ORDER_FORWARD) {
-> -		t->next = NULL;
-> -		t->prev = __test_list->prev;
-> -		t->prev->next = t;
-> -		__test_list->prev = t;
-> -	} else {
-> -		t->next = __test_list;
-> -		t->next->prev = t;
-> -		t->prev = t;
-> -		__test_list = t;
-> -	}
-> +	__LIST_APPEND(__test_list, t);
+>  	void (*fn)(struct __test_metadata *);
+> +	struct __fixture_metadata *fixture;
+>  	int termsig;
+>  	int passed;
+>  	int trigger; /* extra handler after the evaluation */
+> @@ -670,11 +698,6 @@ struct __test_metadata {
+>  /* Storage for the (global) tests to be run. */
+>  static struct __test_metadata *__test_list;
+>  static unsigned int __test_count;
+> -static unsigned int __fixture_count;
+> -static int __constructor_order;
+> -
+> -#define _CONSTRUCTOR_ORDER_FORWARD   1
+> -#define _CONSTRUCTOR_ORDER_BACKWARD -1
+>  
+>  /*
+>   * Since constructors are called in reverse order, reverse the test
+> @@ -708,7 +731,7 @@ void __run_test(struct __test_metadata *t)
+>  
+>  	t->passed = 1;
+>  	t->trigger = 0;
+> -	printf("[ RUN      ] %s\n", t->name);
+> +	printf("[ RUN      ] %s.%s\n", t->fixture->name, t->name);
+>  	alarm(t->timeout);
+>  	child_pid = fork();
+>  	if (child_pid < 0) {
+> @@ -757,7 +780,8 @@ void __run_test(struct __test_metadata *t)
+>  				status);
+>  		}
+>  	}
+> -	printf("[     %4s ] %s\n", (t->passed ? "OK" : "FAIL"), t->name);
+> +	printf("[     %4s ] %s.%s\n", (t->passed ? "OK" : "FAIL"),
+> +	       t->fixture->name, t->name);
+>  	alarm(0);
 >  }
 >  
->  static inline int __bail(int for_realz, bool no_print, __u8 step)
 > -- 
 > 2.24.1
 > 
