@@ -2,109 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D328C18940B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Mar 2020 03:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2713B189417
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Mar 2020 03:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbgCRCmj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Mar 2020 22:42:39 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:46614 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbgCRCmi (ORCPT
+        id S1726769AbgCRCrj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Mar 2020 22:47:39 -0400
+Received: from mail-lf1-f48.google.com ([209.85.167.48]:34071 "EHLO
+        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726607AbgCRCrj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Mar 2020 22:42:38 -0400
-Received: from mail-pg1-f199.google.com ([209.85.215.199])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1jEOfE-00084l-Nm
-        for linux-kselftest@vger.kernel.org; Wed, 18 Mar 2020 02:42:36 +0000
-Received: by mail-pg1-f199.google.com with SMTP id j19so16073877pgh.14
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Mar 2020 19:42:36 -0700 (PDT)
+        Tue, 17 Mar 2020 22:47:39 -0400
+Received: by mail-lf1-f48.google.com with SMTP id f3so8789263lfc.1;
+        Tue, 17 Mar 2020 19:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O+4NUWZR9n4+H9VOG36R2FnEsYCl9QO/Z2irsj8TMuY=;
+        b=TfpA1v9+IFo+nvdmYx5W4F+Rkhaeh0hE3hLOSa0d6lDHyJM8zbqY+1sVqaPWLiYLR9
+         6wkqCYr5/tlEDljN4TK+iU39tKubnIPYaCJ7iLChzUpyt8Gv6kbgwcAS6bl5hy12eqcB
+         npRrKFFq+okbm2w6TAF1B2HbRtg75fwA/zcKS38lyA34+QNLiP+FaYuTilqtoqOdCFa6
+         8oge0vSPjkUXp1qBu6rEFxIA2CxG3YlWwTHFNkG2LbF/hAZrnLPlAJI+BBTIxMrA6x3e
+         BAXV5m5QTpZ1QDxJwEdiNA2anFqmLqiw9GQXriFNeWoZUc8M26bWDOQjxkB+8UMv9Hl7
+         r4yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=GsOy9t03XGdTipJAvqpux+ltTjSLmiQ456gUIIsZRek=;
-        b=k4AQWEf9b6lF1OXxJnQ9jL98RuURmc2q5zpAu+fqRTrVMYW9tzNtThXhEfEz6+eBvP
-         LY2GBKzOYnwwshGsQfmguJIy3AjmVsLDbMiGkzLEd0AwDthFrGytLVJaQrZdAdPIOJ59
-         aqN0fj6jxO/So9OevB7askk6lj52HJeoPW/M3F7KHAZ8zo8+iIAuimbeHdijHCzzm8/e
-         cvqzdRn4KcNvGxPDb8jJseeVGkkDn5Vrh3w8gywwa866pyCB2/OXGOwkm4QZVGMUxYUe
-         ZFh7sw07K+gVagix4JoFnwDHERH9sR50AsL0zYaBHpF7kkMafqIdyfP4AXyYAy4CwdKm
-         wBcg==
-X-Gm-Message-State: ANhLgQ0NUd5LNj2U/4JkSfcHZtinFZEI0NZU6fkR1Imi4T2JlbN5N9cl
-        T911Q7NcLDH9DQKlezwxv1d0CyreUTx+yl9aGZ+OXOek56rm3JiyFghRRuwcrqvDN1I1U5mSCcZ
-        8B0mu7CYKNeEp3M8oze8+ipBr+EMmJLtWJt2OFmqhqQ4w
-X-Received: by 2002:a63:ba59:: with SMTP id l25mr2360394pgu.68.1584499354991;
-        Tue, 17 Mar 2020 19:42:34 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vss9SUSECX13z9sVq6fy0RmtXj7ZGlEYGUBOwbZ+k+Decq1wFjFrELMFURMZeJhzOfZARn/NQ==
-X-Received: by 2002:a63:ba59:: with SMTP id l25mr2360365pgu.68.1584499354662;
-        Tue, 17 Mar 2020 19:42:34 -0700 (PDT)
-Received: from localhost.localdomain (114-136-162-243.emome-ip.hinet.net. [114.136.162.243])
-        by smtp.gmail.com with ESMTPSA id fz3sm613938pjb.41.2020.03.17.19.42.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2020 19:42:33 -0700 (PDT)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org, sboyd@kernel.org, tglx@linutronix.de,
-        john.stultz@linaro.org, joe.lawrence@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCHv3] selftests/timers: Turn off timeout setting
-Date:   Wed, 18 Mar 2020 10:42:15 +0800
-Message-Id: <20200318024215.5270-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O+4NUWZR9n4+H9VOG36R2FnEsYCl9QO/Z2irsj8TMuY=;
+        b=scez8qwl/DbfHWl679e/A5IDz+7GgDnBEYZokO5n4xRwViTyt0+59ML6P4z+3Rgikk
+         lEwAJ2FawZHHwcfvUxmTOtwuZbKWFciL4RRl4v8KyGJgPctDLBXUbva1EnGjSUH0opr0
+         ImgLZs8zcNQIn1ZWnVQtYr4mfQ59kLWHw+kKIlfQbBHn6tD02838Umd5fQ54lZR9coam
+         t6cf96OBMM8YodV2Y/Q9sxzTLad+HtBNR/Y45O9kDl9iPsGAhzhVJ7/8wHYbHPvPu7VC
+         lSvbL1NiNWIvQehI69jTU4oFVQH4SB2p1muZ+Exa4mhckPKdnv6Kd8lnUk6o06FKDUEe
+         Fl2g==
+X-Gm-Message-State: ANhLgQ18xvuJzvbKSNKaoYN491V7MOGHZA9LS0j1/+BuGUd2RZKtXH3X
+        Vu0Bftwem6/bGsveEs8QjPma29MGyyduEKtm5Cg=
+X-Google-Smtp-Source: ADFU+vuC+GAiuLlKc2ZHzuRFwQtGPBS2O7mnSZSR1EJfI7E9MFQ2dHOCbkH1RAEpF0FnhRkIpBPRNZvipOHaREzoFqU=
+X-Received: by 2002:a19:550c:: with SMTP id n12mr1451958lfe.11.1584499656637;
+ Tue, 17 Mar 2020 19:47:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <1583589765-19344-1-git-send-email-hexiaolong2008@gmail.com> <8613a6fb-1f3f-81e9-54c9-7356ce99cf87@kernel.org>
+In-Reply-To: <8613a6fb-1f3f-81e9-54c9-7356ce99cf87@kernel.org>
+From:   xiaolong he <hexiaolong2008@gmail.com>
+Date:   Wed, 18 Mar 2020 10:47:15 +0800
+Message-ID: <CAN9aa7rj_UwPdeZGrdZzWDE=mR5z77dKHMfOC=c4LNJXXuiByw@mail.gmail.com>
+Subject: Re: [v2] dma-buf: heaps: bugfix for selftest failure
+To:     shuah <shuah@kernel.org>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, Leon He <leon.he@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The following 4 tests in timers can take longer than the default 45
-seconds that added in commit 852c8cbf34d3 ("selftests/kselftest/runner.sh:
-Add 45 second timeout per test") to run:
-  * nsleep-lat - 2m7.350s
-  * set-timer-lat - 2m0.66s
-  * inconsistency-check - 1m45.074s
-  * raw_skew - 2m0.013s
+Dear Shuah:
 
-Thus they will be marked as failed with the current 45s setting:
-  not ok 3 selftests: timers: nsleep-lat # TIMEOUT
-  not ok 4 selftests: timers: set-timer-lat # TIMEOUT
-  not ok 6 selftests: timers: inconsistency-check # TIMEOUT
-  not ok 7 selftests: timers: raw_skew # TIMEOUT
+> > @@ -357,7 +357,7 @@ static int test_alloc_errors(char *heap_name)
+> >       if (heap_fd >= 0)
+> >               close(heap_fd);
+> >
+> > -     return ret;
+> > +     return !ret;
+>
+> This change doesn't make sense. Initializing ret to 0 is a better
+> way to go.
+>
 
-Disable the timeout setting for timers can make these tests finish
-properly:
-  ok 3 selftests: timers: nsleep-lat
-  ok 4 selftests: timers: set-timer-lat
-  ok 6 selftests: timers: inconsistency-check
-  ok 7 selftests: timers: raw_skew
+I don't agree with you about this comment. Initializing ret to 0 can
+not solve this problem.
+Because the ret value will be override by the following
+dmabuf_heap_alloc() calls.
 
-https://bugs.launchpad.net/bugs/1864626
-Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/timers/Makefile | 1 +
- tools/testing/selftests/timers/settings | 1 +
- 2 files changed, 2 insertions(+)
- create mode 100644 tools/testing/selftests/timers/settings
+static int test_alloc_errors(char *heap_name)
+{
+        int ret;
 
-diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
-index 7656c7c..0e73a16 100644
---- a/tools/testing/selftests/timers/Makefile
-+++ b/tools/testing/selftests/timers/Makefile
-@@ -13,6 +13,7 @@ DESTRUCTIVE_TESTS = alarmtimer-suspend valid-adjtimex adjtick change_skew \
- 
- TEST_GEN_PROGS_EXTENDED = $(DESTRUCTIVE_TESTS)
- 
-+TEST_FILES := settings
- 
- include ../lib.mk
- 
-diff --git a/tools/testing/selftests/timers/settings b/tools/testing/selftests/timers/settings
-new file mode 100644
-index 0000000..e7b9417
---- /dev/null
-+++ b/tools/testing/selftests/timers/settings
-@@ -0,0 +1 @@
-+timeout=0
--- 
-2.7.4
+        ret = dmabuf_heap_alloc(...);
+        ...
+        ret = dmabuf_heap_alloc(...);
+        ...
+        ret = dmabuf_heap_alloc_fdflags(...);
+        ...
 
+        return ret;
+}
+
+The purpose for test_alloc_errors() is to pass some invalid parameters
+to dmabuf_heap_alloc()
+and wish it return some errors. So -1 is what we expect from
+test_alloc_errors(). But the code
+in main() will break the loop when the ret value is -1. So I reversed
+the return value in test_alloc_errors().
+
+int main(void)
+{
+        while(...) {
+                ...
+                ret = test_alloc_errors(dir->d_name);
+                if (ret)
+                        break;
+        }
+}
+
+thanks,
+-- Leon
