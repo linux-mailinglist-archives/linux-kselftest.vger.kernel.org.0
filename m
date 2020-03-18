@@ -2,90 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFDD18A08E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Mar 2020 17:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EB918A2A9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Mar 2020 19:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgCRQfq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Mar 2020 12:35:46 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:36114 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726954AbgCRQfp (ORCPT
+        id S1726680AbgCRSyA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Mar 2020 14:54:00 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:43146 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbgCRSyA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Mar 2020 12:35:45 -0400
-Received: by mail-wm1-f67.google.com with SMTP id g62so4124874wme.1;
-        Wed, 18 Mar 2020 09:35:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QfLgkduxAp4htlcsfGDuWI+s08y9/Umq76QtG5EHZo4=;
-        b=seeTap8Uk34sP2mcmhqFEpQzmySl1rVKeAk1WlRql7aZSJrsgsJG/+D+ntVqrpr6G6
-         dpVftFu3J+okk26645m2qhf9RSx2tW6PT6Q01EDveayk/L4vuraRrGahE+H5PPJWV5cV
-         eIfiK0B4b/z44Z0kcTNVZGG/b69Jk5eWmP245eEUhZlxDMaCVltq+3OKQb8KR8dztJ9D
-         5Dgstbz6UQ/DA4ZE12dDwLc6nnC9FVxEX1nxNcmWDTOMp8AxW4wTRdaCe4S6nYnMnie1
-         nHz929WnBUO/IQyXuTzvadIPCg/diwct/UCSGMVMV9+AvaXDfEDoqD3WBkMAsCG+qNto
-         y4Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QfLgkduxAp4htlcsfGDuWI+s08y9/Umq76QtG5EHZo4=;
-        b=E2Yi/8gedy5ZrGLbRxaZ0OTl8nub3IgXiS+ofNTBKFT6O+mykJk52/w+czdSp7G8DX
-         yKDTddSM90Vm+r8BynW6MhptEXaPHQsdtGDG545nA68hawUiN3kY0bPTTq46zulLtUlN
-         X31i47+wZw8wE0118F4AKsUlcTB/xSskEh+/wivPX7CK9Nju9hWeuoMWPQYuutkHMinq
-         +OMvaVBodJJSgWsaCDYWjRWwgoZOBn5VFMj6cVgLJasnxYZNdud07FvRkKCR3dY0fZDf
-         7AXG9FUWQOyXKmxYgMm4Tsq/BWfskmz9jbfmxgK6a1N4gnGAw+QBcyWQIK6a2F1UYHE9
-         VPuA==
-X-Gm-Message-State: ANhLgQ3xb9YGbs2rRQXtlvH/pTnW42lyArssO2oeueWtJJVJpOi+bS5h
-        qjJCYiFOkZ+S9APnz3i6FOo3+T9pIddC6EzyX60=
-X-Google-Smtp-Source: ADFU+vu2QWQkKBtflBTFuidPm1/T1qvuW/Ss7fkj1Lg/0XjTaiO4xSCscQo9uSKn4ue76Y1f9vZtrFyGoxKICkAGlvA=
-X-Received: by 2002:a1c:2504:: with SMTP id l4mr6225840wml.72.1584549343920;
- Wed, 18 Mar 2020 09:35:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200317213222.421100128@goodmis.org> <20200318111345.0516642e@gandalf.local.home>
-In-Reply-To: <20200318111345.0516642e@gandalf.local.home>
-From:   Shuah Khan <shuahkhan@gmail.com>
-Date:   Wed, 18 Mar 2020 10:35:29 -0600
-Message-ID: <CAKocOOPBiHsh6Y6gVcwcaUOv7CD=eqtKM+-6L23WzuCnUyR26A@mail.gmail.com>
-Subject: Re: [RFC][PATCH 12/11] selftest/ftrace: Fix function trigger test to
- handle trace not disabling the tracer
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Peter Wu <peter@lekensteyn.nl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Tom Zanussi <zanussi@kernel.org>,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 18 Mar 2020 14:54:00 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02IIqxQB037904;
+        Wed, 18 Mar 2020 18:53:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=K+2+UW5AAi399IBbiBChcnI5JGEPlrbNpMAbGzARvzA=;
+ b=sJ5AlBNEQdkl+8ujyX224VzsdujrBNWpW4HGxRX2/S0WYIeK64gn9wcuIoGXvx5qOvZH
+ EaD0JRmPebOTjijDpVSVfeSNi2hYLR9L5nRuCUuxfcq5NWCS9sQM+shB6PqOkrwCCcxb
+ YvcSpHuG/qQz845/u1OkDqNAam3SQt04p+6dOno9heqsDgi749NB3v/0nfAblvEMhHOU
+ 2DXGSzwSERP+P65VGelbCtzkdr5MChjNMR+h60jxw6i0wonusgwA5SWmNFPs1YM4po3U
+ qdSwYIoHIBai6yUnLdz07hEvzlZYarCO4MX37YPcLKtAAOk+vtLkRIQoqhPT6eQsoUDm +A== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2yrpprcg9r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Mar 2020 18:53:51 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02IIqjJk188301;
+        Wed, 18 Mar 2020 18:53:50 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2ys8tugg7a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Mar 2020 18:53:44 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02IIrhYM029651;
+        Wed, 18 Mar 2020 18:53:43 GMT
+Received: from dhcp-10-175-176-88.vpn.oracle.com (/10.175.176.88)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 18 Mar 2020 11:53:42 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org
+Cc:     posk@google.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH net] selftests/net: add definition for SOL_DCCP to fix compilation errors for old libc
+Date:   Wed, 18 Mar 2020 18:53:21 +0000
+Message-Id: <1584557601-25202-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9564 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ malwarescore=0 suspectscore=3 mlxlogscore=934 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003180084
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9564 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ suspectscore=3 lowpriorityscore=0 phishscore=0 adultscore=0 clxscore=1011
+ impostorscore=0 priorityscore=1501 spamscore=0 mlxlogscore=996 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003180084
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 9:13 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
->
-> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
->
-> The ftrace selftest "ftrace - test for function traceon/off triggers"
-> enables all events and reads the trace file. Now that the trace file does
-> not disable tracing, and will attempt to continually read new data that is
-> added, the selftest gets stuck reading the trace file. This is because the
-> data added to the trace file will fill up quicker than the reading of it.
->
-> By only enabling scheduling events, the read can keep up with the writes.
-> Instead of enabling all events, only enable the scheduler events.
->
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> ---
->  .../selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc  | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Many systems build/test up-to-date kernels with older libcs, and
+an older glibc (2.17) lacks the definition of SOL_DCCP in
+/usr/include/bits/socket.h (it was added in the 4.6 timeframe).
 
-+  linux-kselttest and my LF email.
+Adding the definition to the test program avoids a compilation
+failure that gets in the way of building tools/testing/selftests/net.
+The test itself will work once the definition is added; either
+skipping due to DCCP not being configured in the kernel under test
+or passing, so there are no other more up-to-date glibc dependencies
+here it seems beyond that missing definition.
 
-thanks,
--- Shuah
+Fixes: 11fb60d1089f ("selftests: net: reuseport_addr_any: add DCCP")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tools/testing/selftests/net/reuseport_addr_any.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/net/reuseport_addr_any.c b/tools/testing/selftests/net/reuseport_addr_any.c
+index c623393..b8475cb2 100644
+--- a/tools/testing/selftests/net/reuseport_addr_any.c
++++ b/tools/testing/selftests/net/reuseport_addr_any.c
+@@ -21,6 +21,10 @@
+ #include <sys/socket.h>
+ #include <unistd.h>
+ 
++#ifndef SOL_DCCP
++#define SOL_DCCP 269
++#endif
++
+ static const char *IP4_ADDR = "127.0.0.1";
+ static const char *IP6_ADDR = "::1";
+ static const char *IP4_MAPPED6 = "::ffff:127.0.0.1";
+-- 
+1.8.3.1
+
