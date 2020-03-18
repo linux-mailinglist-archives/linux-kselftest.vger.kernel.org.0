@@ -2,102 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EB918A2A9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Mar 2020 19:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FD718A895
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Mar 2020 23:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgCRSyA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Mar 2020 14:54:00 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:43146 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726619AbgCRSyA (ORCPT
+        id S1726858AbgCRWt4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Mar 2020 18:49:56 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:33150 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726647AbgCRWt4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Mar 2020 14:54:00 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02IIqxQB037904;
-        Wed, 18 Mar 2020 18:53:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=K+2+UW5AAi399IBbiBChcnI5JGEPlrbNpMAbGzARvzA=;
- b=sJ5AlBNEQdkl+8ujyX224VzsdujrBNWpW4HGxRX2/S0WYIeK64gn9wcuIoGXvx5qOvZH
- EaD0JRmPebOTjijDpVSVfeSNi2hYLR9L5nRuCUuxfcq5NWCS9sQM+shB6PqOkrwCCcxb
- YvcSpHuG/qQz845/u1OkDqNAam3SQt04p+6dOno9heqsDgi749NB3v/0nfAblvEMhHOU
- 2DXGSzwSERP+P65VGelbCtzkdr5MChjNMR+h60jxw6i0wonusgwA5SWmNFPs1YM4po3U
- qdSwYIoHIBai6yUnLdz07hEvzlZYarCO4MX37YPcLKtAAOk+vtLkRIQoqhPT6eQsoUDm +A== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2yrpprcg9r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Mar 2020 18:53:51 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02IIqjJk188301;
-        Wed, 18 Mar 2020 18:53:50 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2ys8tugg7a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Mar 2020 18:53:44 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02IIrhYM029651;
-        Wed, 18 Mar 2020 18:53:43 GMT
-Received: from dhcp-10-175-176-88.vpn.oracle.com (/10.175.176.88)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 18 Mar 2020 11:53:42 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org
-Cc:     posk@google.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH net] selftests/net: add definition for SOL_DCCP to fix compilation errors for old libc
-Date:   Wed, 18 Mar 2020 18:53:21 +0000
-Message-Id: <1584557601-25202-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9564 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
- malwarescore=0 suspectscore=3 mlxlogscore=934 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003180084
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9564 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- suspectscore=3 lowpriorityscore=0 phishscore=0 adultscore=0 clxscore=1011
- impostorscore=0 priorityscore=1501 spamscore=0 mlxlogscore=996 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003180084
+        Wed, 18 Mar 2020 18:49:56 -0400
+Received: by mail-pj1-f65.google.com with SMTP id dw20so1533666pjb.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Mar 2020 15:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Od0623i0mOnU6GdQVJb7G33/cJXn+fiCsgtOaGr94Sc=;
+        b=bcKJVTdDT1JYpAewJcI4hblrF5mrr8fLrj0Q+zYBD5Uw46ZRSS1eSuIvn1zGGCJX8j
+         SOV0kiOl5ftcdJSag/uKO0OCTOGF63UpwInY0LkztaIvEL5frUqdESp7Ad3hNw2smQ06
+         DIWQct2GSiEHpZDBNxisWVtOZlxXfvdS/Kmps=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Od0623i0mOnU6GdQVJb7G33/cJXn+fiCsgtOaGr94Sc=;
+        b=uHYbcATZyVr0UJSYEBjjeWOpTyShw7qbT/ShJCE4lHg71oWT/mnz8IqPb186sLGfGL
+         oi2IyHeaNV6rgkQMZDkyWp3FOn8DwW/WZTIqjH2jv8vdwqDjzTo5Uh6NqYMbkV/YfTXG
+         E1Xc2m9yUZAwweHG+fFFbL6+kUspjcG7o9zBw1K0Ga8fiUYNRgWDr8ouJMYr32zGEDzg
+         +D5DPuzKrI3T0YfPuJtPr1OjZ78JTHyWg/QUDK83XfaJfXBuVrLpeKVPFaWzXaFdKG7n
+         s4WdTv+FOVlZp4f9tyNnrwm4CUjmaoS6MKrOfS2jDgv4fN2AqWM9lZ3CXhP6aMLVGChB
+         XjWg==
+X-Gm-Message-State: ANhLgQ0ZqH1VrFFHpJKp7b1ArgT565AAdBXX2hQr3VO5BtLinwuMTjlj
+        MG5kgqphV6vm1n99EipAo5OCPw==
+X-Google-Smtp-Source: ADFU+vtadZ73ag69PyW66TRpU3y2R+cMnQ1BUGAlWtlcfWsNxCHY1Q0/k9GwNr37EIwluqLR26yKtg==
+X-Received: by 2002:a17:90a:cf86:: with SMTP id i6mr511077pju.158.1584571795086;
+        Wed, 18 Mar 2020 15:49:55 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e14sm71844pfn.196.2020.03.18.15.49.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2020 15:49:54 -0700 (PDT)
+Date:   Wed, 18 Mar 2020 15:49:53 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     shuah@kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        luto@amacapital.net, wad@chromium.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Tim.Bird@sony.com
+Subject: Re: [PATCH v5 0/5] kselftest: add fixture parameters
+Message-ID: <202003181548.930237FD6@keescook>
+References: <20200318010153.40797-1-kuba@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200318010153.40797-1-kuba@kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Many systems build/test up-to-date kernels with older libcs, and
-an older glibc (2.17) lacks the definition of SOL_DCCP in
-/usr/include/bits/socket.h (it was added in the 4.6 timeframe).
+On Tue, Mar 17, 2020 at 06:01:48PM -0700, Jakub Kicinski wrote:
+> Shuah please consider applying to the kselftest tree.
 
-Adding the definition to the test program avoids a compilation
-failure that gets in the way of building tools/testing/selftests/net.
-The test itself will work once the definition is added; either
-skipping due to DCCP not being configured in the kernel under test
-or passing, so there are no other more up-to-date glibc dependencies
-here it seems beyond that missing definition.
+Just to confirm: yes please. Shuah, I'd love to see this land.
 
-Fixes: 11fb60d1089f ("selftests: net: reuseport_addr_any: add DCCP")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/testing/selftests/net/reuseport_addr_any.c | 4 ++++
- 1 file changed, 4 insertions(+)
+-Kees
 
-diff --git a/tools/testing/selftests/net/reuseport_addr_any.c b/tools/testing/selftests/net/reuseport_addr_any.c
-index c623393..b8475cb2 100644
---- a/tools/testing/selftests/net/reuseport_addr_any.c
-+++ b/tools/testing/selftests/net/reuseport_addr_any.c
-@@ -21,6 +21,10 @@
- #include <sys/socket.h>
- #include <unistd.h>
- 
-+#ifndef SOL_DCCP
-+#define SOL_DCCP 269
-+#endif
-+
- static const char *IP4_ADDR = "127.0.0.1";
- static const char *IP6_ADDR = "::1";
- static const char *IP4_MAPPED6 = "::ffff:127.0.0.1";
+> 
+> This set is an attempt to make running tests for different
+> sets of data easier. The direct motivation is the tls
+> test which we'd like to run for TLS 1.2 and TLS 1.3,
+> but currently there is no easy way to invoke the same
+> tests with different parameters.
+> 
+> Tested all users of kselftest_harness.h.
+> 
+> v2:
+>  - don't run tests by fixture
+>  - don't pass params as an explicit argument
+> 
+> v3:
+>  - go back to the orginal implementation with an extra
+>    parameter, and running by fixture (Kees);
+>  - add LIST_APPEND helper (Kees);
+>  - add a dot between fixture and param name (Kees);
+>  - rename the params to variants (Tim);
+> 
+> v4:
+>  - whitespace fixes.
+> 
+> v5 (Kees):
+>  - move a comment;
+>  - remove a temporary variable;
+>  - reword the commit message on patch 4.
+> 
+> v1: https://lore.kernel.org/netdev/20200313031752.2332565-1-kuba@kernel.org/
+> v2: https://lore.kernel.org/netdev/20200314005501.2446494-1-kuba@kernel.org/
+> v3: https://lore.kernel.org/netdev/20200316225647.3129354-1-kuba@kernel.org/
+> v4: https://lore.kernel.org/netdev/20200317010419.3268916-1-kuba@kernel.org/
+> 
+> Jakub Kicinski (5):
+>   kselftest: factor out list manipulation to a helper
+>   kselftest: create fixture objects
+>   kselftest: run tests by fixture
+>   kselftest: add fixture variants
+>   selftests: tls: run all tests for TLS 1.2 and TLS 1.3
+> 
+>  Documentation/dev-tools/kselftest.rst       |   3 +-
+>  tools/testing/selftests/kselftest_harness.h | 234 +++++++++++++++-----
+>  tools/testing/selftests/net/tls.c           |  93 ++------
+>  3 files changed, 202 insertions(+), 128 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+
 -- 
-1.8.3.1
-
+Kees Cook
