@@ -2,59 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6735018DEBC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Mar 2020 09:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4027C18DEEB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Mar 2020 10:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbgCUIUp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Mar 2020 04:20:45 -0400
-Received: from verein.lst.de ([213.95.11.211]:51189 "EHLO verein.lst.de"
+        id S1728071AbgCUJAw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 Mar 2020 05:00:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727961AbgCUIUo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Mar 2020 04:20:44 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id C3FCA68AFE; Sat, 21 Mar 2020 09:20:41 +0100 (CET)
-Date:   Sat, 21 Mar 2020 09:20:41 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Ralph Campbell <rcampbell@nvidia.com>,
+        id S1728008AbgCUJAw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 21 Mar 2020 05:00:52 -0400
+Received: from localhost (unknown [213.57.247.131])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C226820739;
+        Sat, 21 Mar 2020 09:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584781251;
+        bh=vLSdl/mc3zsd4nCLy4M6ojbC+JVBPuYFqgT7LG6glCU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UwTpCNY6QD6ZmwiZ0j/0OyrLMcyYsNlxtW9evMU0dfJuWr105KcFFdZQoDZHHivtx
+         ewk+EGzRSsBaeIVmLnYBZflBWSnznK+5hLsYWBoneOQOqW/dH5iXqRxgzqCFpCuXLp
+         shPA/gsNpFOGWSdygU3CVrjfg2Z1BoDoqVhgNO1A=
+Date:   Sat, 21 Mar 2020 11:00:47 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
         Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Jerome Glisse <jglisse@redhat.com>, kvm-ppc@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-mm@kvack.org,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-rdma@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/4] mm: simplify device private page handling in
- hmm_range_fault
-Message-ID: <20200321082041.GA28613@lst.de>
-References: <7256f88d-809e-4aba-3c46-a223bd8cc521@nvidia.com> <20200317121536.GQ20941@ziepe.ca> <20200317122445.GA11662@lst.de> <20200317122813.GA11866@lst.de> <20200317124755.GR20941@ziepe.ca> <20200317125955.GA12847@lst.de> <24fca825-3b0f-188f-bcf2-fadcf3a9f05a@nvidia.com> <20200319181716.GK20941@ziepe.ca> <89e33770-a0ab-e1ec-d5e5-535edefd3fd3@nvidia.com> <20200320000345.GO20941@ziepe.ca>
+Subject: Re: [PATCH v8 0/3] mm/hmm/test: add self tests for HMM
+Message-ID: <20200321090047.GM514123@unreal>
+References: <20200321003108.22941-1-rcampbell@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200320000345.GO20941@ziepe.ca>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20200321003108.22941-1-rcampbell@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 09:03:45PM -0300, Jason Gunthorpe wrote:
-> > Should tests enable the feature or the feature enable the test?
-> > IMHO, if the feature is being compiled into the kernel, that should
-> > enable the menu item for the test. If the feature isn't selected,
-> > no need to test it :-)
-> 
-> I ment if DEVICE_PRIVATE should be a user selectable option at all, or
-> should it be turned on when a driver like nouveau is selected.
+On Fri, Mar 20, 2020 at 05:31:05PM -0700, Ralph Campbell wrote:
+> This series adds basic self tests for HMM and are intended for Jason
+> Gunthorpe's rdma tree which has a number of HMM patches applied.
+>
+> Changes v7 -> v8:
+> Rebased to Jason's rdma/hmm tree, plus Jason's 6 patch series
+>   "Small hmm_range_fault() cleanups".
+> Applied a number of changes from Jason's comments.
+>
+> Changes v6 -> v7:
+> Rebased to linux-5.6.0-rc6
+> Reverted back to just using mmu_interval_notifier_insert() and making
+>   this series only introduce HMM self tests.
+>
+> Changes v5 -> v6:
+> Rebased to linux-5.5.0-rc6
+> Refactored mmu interval notifier patches
+> Converted nouveau to use the new mmu interval notifier API
+>
+> Changes v4 -> v5:
+> Added mmu interval notifier insert/remove/update callable from the
+>   invalidate() callback
+> Updated HMM tests to use the new core interval notifier API
+>
+> Changes v1 -> v4:
+> https://lore.kernel.org/linux-mm/20191104222141.5173-1-rcampbell@nvidia.com
+>
+> Ralph Campbell (3):
+>   mm/hmm/test: add selftest driver for HMM
+>   mm/hmm/test: add selftests for HMM
+>   MAINTAINERS: add HMM selftests
+>
+>  MAINTAINERS                            |    3 +
+>  include/uapi/linux/test_hmm.h          |   59 ++
 
-I don't think it should be user selectable.  This is an implementation
-detail users can't know about.
+Isn't UAPI folder supposed to be for user-visible interfaces that follow
+the rule of non-breaking user space and not for selftests?
 
-> Is there some downside to enabling DEVICE_PRIVATE?
-
-The option itself adds a little more code to the core kernel, and
-introduces a few additional branches in core mm code.
-
-But more importantly it pulls in the whole pgmap infrastructure.
+Thanks
