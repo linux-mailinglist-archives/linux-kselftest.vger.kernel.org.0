@@ -2,114 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B72C318E77C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Mar 2020 09:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E508018EA73
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Mar 2020 17:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbgCVIKn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 22 Mar 2020 04:10:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40838 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725987AbgCVIKm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 22 Mar 2020 04:10:42 -0400
-Received: from localhost (unknown [213.57.247.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 88E0E20722;
-        Sun, 22 Mar 2020 08:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584864642;
-        bh=2Q5vrn72Xm0DFK1rhozsPFjcLu4nBGHSn0WW/B4hy6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L24eYQEHtPNVXBgXPI6F87X2FZP066Z7WvO/y4nzDz8C3IEcAyT7ngAk7oNGA+29i
-         ZYi8wigGkqhCS04qXfoeKuTSp6qD+ngU2Zp4KEcDEe8mhHXcAhJQ7aL/yiNNjoQp4z
-         66NjEGhMK1JQPwXCQKE7eH+ciL6zOJZqUPgb3rEI=
-Date:   Sun, 22 Mar 2020 10:10:38 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Ralph Campbell <rcampbell@nvidia.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 0/3] mm/hmm/test: add self tests for HMM
-Message-ID: <20200322081038.GG650439@unreal>
-References: <20200321003108.22941-1-rcampbell@nvidia.com>
- <20200321090047.GM514123@unreal>
- <396f0c30-4a49-6a18-ff02-a73ee1a09883@nvidia.com>
- <20200321215505.GW20941@ziepe.ca>
+        id S1726897AbgCVQbT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 22 Mar 2020 12:31:19 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:33310 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbgCVQbR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 22 Mar 2020 12:31:17 -0400
+Received: by mail-oi1-f194.google.com with SMTP id r7so12281682oij.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2020 09:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4iL/vxcmuCGdmEbGF65JPTkLwm3vbSnxis9k9yz7zYU=;
+        b=CFIDTDuboOmS5h57Eudf0IOM+t8BzaWRSenk2qqS+UCiQSEQDcK68Ay6EsBL7FiqJe
+         cRl715GSB3yvnyV3i7HqgOBcSIwatwYdyiCTcrSl2C+rsODPDabazvC5JL3l1e671qS8
+         6MfpFENsIXCidvU9Vg9++kwJWzgjmArPMkjPE0KBnaYGCDbCFBfh1RNcv63cG7m/c5gg
+         lBoDc75R1GAE8xmT4mBSdXZ8FN0ZWlEGz2iPuwsBZ8V6Nuo+ocqDsCSAlIONXFZFFtPy
+         jm09NEk2e+679EIXBmgrgAHwxPLuFyMUkEOgeWPnDRdeGB8Cgf/mXV69Tq2JltuO/L/7
+         8pDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4iL/vxcmuCGdmEbGF65JPTkLwm3vbSnxis9k9yz7zYU=;
+        b=EOU4k2GIvkUuHfvvUjAR89fv44tcdMtwAFsjFdlTof6BeqbbrJ6Pc0QSVPmoyx3/tx
+         RoBpuyIJQL/lmOnDlO0H8QDcT39FGAY6AY82WAynaHkXcZhzDt5xarkAqlmslf9oUmSm
+         nK6FWtF73vkWvq/uL6GFnXjNg3FQyphqEQXqzaDpCk1uO0p4NenCNh0eZkeCiuOneZAe
+         0zqJUWfF4iLjLzTXLN+45bu62bNyUktmBqRpgsCEBDaK+4yTnkz3t1CJ+MoY4p/f2GcQ
+         ef5rS6ue985e9o6B1moM+CmZ9tyojCE/pjMWoc0kDYFhR3QBZB9Q68SL6Mp3GW5NUaHm
+         LmrQ==
+X-Gm-Message-State: ANhLgQ1zrvyGWrcXPZOjH3TRmwaZhm0VZDyHO0SEATvPfNfkxCZoyNdi
+        hd9LxU53DwuwpHLGrh3yebKAzEOA2zJJJR1h2VgFpb69
+X-Google-Smtp-Source: ADFU+vvf96FZtlsIS//BVK2SjBJ0SPGxMqpePrWO3JlyPSAiQzURgqIuQEuzA9/RPMvltp9B0Rl8UZJfYgX3OvsxOoA=
+X-Received: by 2002:aca:ed54:: with SMTP id l81mr14515219oih.69.1584894675252;
+ Sun, 22 Mar 2020 09:31:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200321215505.GW20941@ziepe.ca>
+References: <20200322013525.1095493-1-aquini@redhat.com>
+In-Reply-To: <20200322013525.1095493-1-aquini@redhat.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Sun, 22 Mar 2020 09:31:04 -0700
+Message-ID: <CALvZod4GjRFLRX=S_YFYnJk-kL6tjveYEDOBFS76NqrURERHHQ@mail.gmail.com>
+Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
+ false-negative errors
+To:     Rafael Aquini <aquini@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 21, 2020 at 06:55:05PM -0300, Jason Gunthorpe wrote:
-> On Sat, Mar 21, 2020 at 10:27:46AM -0700, Ralph Campbell wrote:
-> >
-> > On 3/21/20 2:00 AM, Leon Romanovsky wrote:
-> > > On Fri, Mar 20, 2020 at 05:31:05PM -0700, Ralph Campbell wrote:
-> > > > This series adds basic self tests for HMM and are intended for Jason
-> > > > Gunthorpe's rdma tree which has a number of HMM patches applied.
-> > > >
-> > > > Changes v7 -> v8:
-> > > > Rebased to Jason's rdma/hmm tree, plus Jason's 6 patch series
-> > > >    "Small hmm_range_fault() cleanups".
-> > > > Applied a number of changes from Jason's comments.
-> > > >
-> > > > Changes v6 -> v7:
-> > > > Rebased to linux-5.6.0-rc6
-> > > > Reverted back to just using mmu_interval_notifier_insert() and making
-> > > >    this series only introduce HMM self tests.
-> > > >
-> > > > Changes v5 -> v6:
-> > > > Rebased to linux-5.5.0-rc6
-> > > > Refactored mmu interval notifier patches
-> > > > Converted nouveau to use the new mmu interval notifier API
-> > > >
-> > > > Changes v4 -> v5:
-> > > > Added mmu interval notifier insert/remove/update callable from the
-> > > >    invalidate() callback
-> > > > Updated HMM tests to use the new core interval notifier API
-> > > >
-> > > > Changes v1 -> v4:
-> > > > https://lore.kernel.org/linux-mm/20191104222141.5173-1-rcampbell@nvidia.com
-> > > >
-> > > > Ralph Campbell (3):
-> > > >    mm/hmm/test: add selftest driver for HMM
-> > > >    mm/hmm/test: add selftests for HMM
-> > > >    MAINTAINERS: add HMM selftests
-> > > >
-> > > >   MAINTAINERS                            |    3 +
-> > > >   include/uapi/linux/test_hmm.h          |   59 ++
-> > >
-> > > Isn't UAPI folder supposed to be for user-visible interfaces that follow
-> > > the rule of non-breaking user space and not for selftests?
-> > >
-> > > Thanks
-> > >
-> >
-> > Most of the other kernel module tests seem to invoke the test as part of the
-> > module load/init. I'm open to moving it if there is a more appropriate location.
+On Sat, Mar 21, 2020 at 6:35 PM Rafael Aquini <aquini@redhat.com> wrote:
 >
-> Is it even possible to create a user mm_struct and put crazy things in
-> it soley from a kernel module?
+> Changes for commit 9c4e6b1a7027f ("mm, mlock, vmscan: no more skipping pagevecs")
+> break this test expectations on the behavior of mlock syscall family immediately
+> inserting the recently faulted pages into the UNEVICTABLE_LRU, when MCL_ONFAULT is
+> passed to the syscall as part of its flag-set.
 
-I didn't look very closely of what Ralph did in his patchsets, but from
-what I know, if you want in-kernel interface, you use in-kernel module,
-if you want to test user visible uapi, you write application. You don't
-create new UAPI just to test something in the kernel.
-
-Can kunit help here?
-https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html
-
-Thanks
+mlock* syscalls do not provide any guarantee that the pages will be in
+unevictable LRU, only that the pages will not be paged-out. The test
+is checking something very internal to the kernel and this is expected
+to break.
 
 >
-> Jason
+> There is no functional error introduced by the aforementioned commit,
+> but it opens up a time window where the recently faulted and locked pages
+> might yet not be put back into the UNEVICTABLE_LRU, thus causing a
+> subsequent and immediate PFN flag check for the UNEVICTABLE bit
+> to trip on false-negative errors, as it happens with this test.
 >
+> This patch fix the false negative by forcefully resorting to a code path that
+> will call a CPU pagevec drain right after the fault but before the PFN flag
+> check takes place, sorting out the race that way.
+>
+> Fixes: 9c4e6b1a7027f ("mm, mlock, vmscan: no more skipping pagevecs")
+
+This is fixing the actual test and not about fixing the mentioned
+patch. So, this Fixes line is not needed.
