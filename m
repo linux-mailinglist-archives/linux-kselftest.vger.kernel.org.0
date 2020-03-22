@@ -2,127 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7039318E4EB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Mar 2020 22:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE03118E5CF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Mar 2020 02:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728184AbgCUVzK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Mar 2020 17:55:10 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:33238 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgCUVzJ (ORCPT
+        id S1727296AbgCVBfd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 Mar 2020 21:35:33 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:30660 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726859AbgCVBfc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Mar 2020 17:55:09 -0400
-Received: by mail-qt1-f193.google.com with SMTP id d22so8452737qtn.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Mar 2020 14:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CmG5rzS1VTJ/Gtn12pCRpchEX5vnXgpD/KCibm4JPWQ=;
-        b=QXg0ZNos1/J6d1p0hrWrf/BNlal1wCBZAa4x4E5PIa8BDk8jeEY0GblJxuI4oFmQT/
-         NEFlXQButDNW6Sy8rWCrWEBqBlDVBmAq88Oe1Os3P4X8W9sHapEqJpHApMkG11UZBuGc
-         b5c/Qy70trzWRO+uM2yXpARmvj2AlCEyD9eXx6cUiReoJKwIlahoUDHxSd5sVQiu5kWj
-         lVf+vPf/2xCoROinRkXtRalmj0jS8jiUcIn3LB1fR12o0e5z5NIXXdxa+F/1bZGwg4Ye
-         oRdVryO7nhpz8T7n1j5VtSpK27aodaU2eCFv/2TbkyAf3cxW7xJHjI725K50b1LhbcfF
-         k1dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CmG5rzS1VTJ/Gtn12pCRpchEX5vnXgpD/KCibm4JPWQ=;
-        b=IWAMo83OM1qBDWpRjmTSoWvbNawIqVoBjHV35nbFzoDkeCR8lJA1BkCqFLoP8H8Wp2
-         dWcj8jwt3qYdBXoLU4p7EgS+BiTvCvcQxsW+LIK96h0cNSIoePxLtRhnl1bcXkhmjIA/
-         JicsuiqaE3RZfxLSvUepOvvq6/LrKPI1SXH3tRmIw7t9mHJfUgQiz7ZZ1AbXFYW9KOyt
-         szO8TZMPebx2hbEXxhvkPh+uIpfY9J5Ya57oXLDzNjmBBq0p4eMWlwoJtlpf/CpjzMQt
-         ZgEhArUp03HNMP7xdTq61pmShFsdPmUvs23i6x24deOprLzd9TmXu83/B6hjO/p/h84B
-         FQlw==
-X-Gm-Message-State: ANhLgQ2BDlDVXO86DocW4xXmnTEFiHIQT6I9J8cfmUqrOOHkQWJtJHmA
-        KaRpvv6neYrcOsfAGR2Pf6LFHw==
-X-Google-Smtp-Source: ADFU+vv/Zh+hyXfiOpNLqojKXOQJzZZr2FWGVPNjpoK48D71dPO0p426cqJtcyzUzhZk5VY+Qlxcbw==
-X-Received: by 2002:ac8:7499:: with SMTP id v25mr15399957qtq.237.1584827707243;
-        Sat, 21 Mar 2020 14:55:07 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-57-212.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.57.212])
-        by smtp.gmail.com with ESMTPSA id p191sm7884005qke.6.2020.03.21.14.55.06
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 21 Mar 2020 14:55:06 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1jFm5B-0002J4-FR; Sat, 21 Mar 2020 18:55:05 -0300
-Date:   Sat, 21 Mar 2020 18:55:05 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 0/3] mm/hmm/test: add self tests for HMM
-Message-ID: <20200321215505.GW20941@ziepe.ca>
-References: <20200321003108.22941-1-rcampbell@nvidia.com>
- <20200321090047.GM514123@unreal>
- <396f0c30-4a49-6a18-ff02-a73ee1a09883@nvidia.com>
+        Sat, 21 Mar 2020 21:35:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584840931;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vC6nIVunZ7Rm0krd+FFCpzgbO+fh9BWQe1SFxACqKGo=;
+        b=BzHr2XmT+FACUMgfcarWR8idYk4TBRmzuzQhDh1nzlO7IvHP5qVEyeM3jE+wsnGNjGnA3/
+        dXCo+NJPciBtqEWACBu7+UOgFxSAocyem1femmTkeFHP7vAEnlr+ugax1jNUDjn07PT/r0
+        tmCuO/uaveF6Pw2fh0C3lq/IprrQQkM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-211-xaRD8C2UOfGUK-pcPgABGA-1; Sat, 21 Mar 2020 21:35:29 -0400
+X-MC-Unique: xaRD8C2UOfGUK-pcPgABGA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C5638017CC;
+        Sun, 22 Mar 2020 01:35:28 +0000 (UTC)
+Received: from t490s.redhat.com (ovpn-112-44.phx2.redhat.com [10.3.112.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AC9C610002A7;
+        Sun, 22 Mar 2020 01:35:27 +0000 (UTC)
+From:   Rafael Aquini <aquini@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        shakeelb@google.com, akpm@linux-foundation.org
+Subject: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2 false-negative errors
+Date:   Sat, 21 Mar 2020 21:35:25 -0400
+Message-Id: <20200322013525.1095493-1-aquini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <396f0c30-4a49-6a18-ff02-a73ee1a09883@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 21, 2020 at 10:27:46AM -0700, Ralph Campbell wrote:
-> 
-> On 3/21/20 2:00 AM, Leon Romanovsky wrote:
-> > On Fri, Mar 20, 2020 at 05:31:05PM -0700, Ralph Campbell wrote:
-> > > This series adds basic self tests for HMM and are intended for Jason
-> > > Gunthorpe's rdma tree which has a number of HMM patches applied.
-> > > 
-> > > Changes v7 -> v8:
-> > > Rebased to Jason's rdma/hmm tree, plus Jason's 6 patch series
-> > >    "Small hmm_range_fault() cleanups".
-> > > Applied a number of changes from Jason's comments.
-> > > 
-> > > Changes v6 -> v7:
-> > > Rebased to linux-5.6.0-rc6
-> > > Reverted back to just using mmu_interval_notifier_insert() and making
-> > >    this series only introduce HMM self tests.
-> > > 
-> > > Changes v5 -> v6:
-> > > Rebased to linux-5.5.0-rc6
-> > > Refactored mmu interval notifier patches
-> > > Converted nouveau to use the new mmu interval notifier API
-> > > 
-> > > Changes v4 -> v5:
-> > > Added mmu interval notifier insert/remove/update callable from the
-> > >    invalidate() callback
-> > > Updated HMM tests to use the new core interval notifier API
-> > > 
-> > > Changes v1 -> v4:
-> > > https://lore.kernel.org/linux-mm/20191104222141.5173-1-rcampbell@nvidia.com
-> > > 
-> > > Ralph Campbell (3):
-> > >    mm/hmm/test: add selftest driver for HMM
-> > >    mm/hmm/test: add selftests for HMM
-> > >    MAINTAINERS: add HMM selftests
-> > > 
-> > >   MAINTAINERS                            |    3 +
-> > >   include/uapi/linux/test_hmm.h          |   59 ++
-> > 
-> > Isn't UAPI folder supposed to be for user-visible interfaces that follow
-> > the rule of non-breaking user space and not for selftests?
-> > 
-> > Thanks
-> > 
-> 
-> Most of the other kernel module tests seem to invoke the test as part of the
-> module load/init. I'm open to moving it if there is a more appropriate location.
+Changes for commit 9c4e6b1a7027f ("mm, mlock, vmscan: no more skipping pa=
+gevecs")
+break this test expectations on the behavior of mlock syscall family imme=
+diately
+inserting the recently faulted pages into the UNEVICTABLE_LRU, when MCL_O=
+NFAULT is
+passed to the syscall as part of its flag-set.
 
-Is it even possible to create a user mm_struct and put crazy things in
-it soley from a kernel module?
+There is no functional error introduced by the aforementioned commit,
+but it opens up a time window where the recently faulted and locked pages
+might yet not be put back into the UNEVICTABLE_LRU, thus causing a
+subsequent and immediate PFN flag check for the UNEVICTABLE bit
+to trip on false-negative errors, as it happens with this test.
 
-Jason 
+This patch fix the false negative by forcefully resorting to a code path =
+that
+will call a CPU pagevec drain right after the fault but before the PFN fl=
+ag
+check takes place, sorting out the race that way.
+
+Fixes: 9c4e6b1a7027f ("mm, mlock, vmscan: no more skipping pagevecs")
+Signed-off-by: Rafael Aquini <aquini@redhat.com>
+---
+ tools/testing/selftests/vm/mlock2-tests.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/tools/testing/selftests/vm/mlock2-tests.c b/tools/testing/se=
+lftests/vm/mlock2-tests.c
+index 637b6d0ac0d0..26dc320ca3c9 100644
+--- a/tools/testing/selftests/vm/mlock2-tests.c
++++ b/tools/testing/selftests/vm/mlock2-tests.c
+@@ -7,6 +7,7 @@
+ #include <sys/time.h>
+ #include <sys/resource.h>
+ #include <stdbool.h>
++#include <sched.h>
+ #include "mlock2.h"
+=20
+ #include "../kselftest.h"
+@@ -328,6 +329,22 @@ static int test_mlock_lock()
+ 	return ret;
+ }
+=20
++/*
++ * After commit 9c4e6b1a7027f ("mm, mlock, vmscan: no more skipping page=
+vecs")
++ * changes made by calls to mlock* family might not be immediately refle=
+cted
++ * on the LRUs, thus checking the PFN flags might race against pagevec d=
+rain.
++ *
++ * In order to sort out that race, and get the after fault checks consis=
+tent,
++ * the "quick and dirty" trick below is required in order to force a cal=
+l to
++ * lru_add_drain_all() to get the recently MLOCK_ONFAULT pages moved to
++ * the unevictable LRU, as expected by the checks in this selftest.
++ */
++static void force_lru_add_drain_all(void)
++{
++	sched_yield();
++	system("echo 1 > /proc/sys/vm/compact_memory");
++}
++
+ static int onfault_check(char *map)
+ {
+ 	unsigned long page_size =3D getpagesize();
+@@ -343,6 +360,9 @@ static int onfault_check(char *map)
+ 	}
+=20
+ 	*map =3D 'a';
++
++	force_lru_add_drain_all();
++
+ 	page1_flags =3D get_pageflags((unsigned long)map);
+ 	page2_flags =3D get_pageflags((unsigned long)map + page_size);
+=20
+@@ -465,6 +485,8 @@ static int test_lock_onfault_of_present()
+ 		goto unmap;
+ 	}
+=20
++	force_lru_add_drain_all();
++
+ 	page1_flags =3D get_pageflags((unsigned long)map);
+ 	page2_flags =3D get_pageflags((unsigned long)map + page_size);
+ 	page1_flags =3D get_kpageflags(page1_flags & PFN_MASK);
+--=20
+2.24.1
 
