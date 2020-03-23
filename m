@@ -2,47 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E6C18F7C7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Mar 2020 15:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D399018F807
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Mar 2020 16:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbgCWOzy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Mar 2020 10:55:54 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:25190 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725990AbgCWOzx (ORCPT
+        id S1727189AbgCWPBj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Mar 2020 11:01:39 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:40292 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727137AbgCWPBj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Mar 2020 10:55:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584975352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VvGlC8Czl63YZgi4jgzehNhHSqhqg15Zh+SkPrQjW4Y=;
-        b=b2+IEg5ivw1BZv6x2Fk9VUI73gknjBYWVT20KaChIreqB0k2XhmXIuv4iRG2wFHnLQh16D
-        TBbxiGZGOAo0HGk9tQOyQAvIj12BMJdu3p/9Z5Tknrxo6bD5CNWiAbedJexfjXnu2+xOIv
-        AN5y+RvTs2YEdOaM14wVd8LfEXiTROE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-316-K7jnb4PuMQqRo8yGC7qZCg-1; Mon, 23 Mar 2020 10:55:48 -0400
-X-MC-Unique: K7jnb4PuMQqRo8yGC7qZCg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 473131005514;
-        Mon, 23 Mar 2020 14:55:47 +0000 (UTC)
-Received: from optiplex-lnx (unknown [10.33.36.220])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 63A865F904;
-        Mon, 23 Mar 2020 14:55:45 +0000 (UTC)
-Date:   Mon, 23 Mar 2020 10:55:42 -0400
-From:   Rafael Aquini <aquini@redhat.com>
-To:     Michal Hocko <mhocko@kernel.org>
+        Mon, 23 Mar 2020 11:01:39 -0400
+Received: by mail-wm1-f66.google.com with SMTP id a81so9430133wmf.5;
+        Mon, 23 Mar 2020 08:01:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BWEC9ZUJwJUU11ZALKTe1h8BQNjpF356QgpNgKWIUoE=;
+        b=AOJwFAB1resLDZutvmi/+Ua1YOuM3V8Hhym7YQwdnrtmA3HsjJ/D/3vxdQt2lzVuef
+         Zkt6toc903FIYLdJnqGeyWl0+KC6V7X8DSxRQvjcZvbfapr4u2eBamcOP0+/Wzsh1FkZ
+         volmrNfS7NvrqsvvkPw884hir8sZfv0j2o1wXs+G7q/h9eQELhKu++IuTgg2sIgXZado
+         jLeM6XlEMKyGUPa0Wy9762LEEy9I12RQu3/kgF0ecx7KYOVy+NQmJCXIuW0ndGbITJYl
+         fgsPXIY2pIdgLatRRnUuEx7/T3fo+ay2sT8r9s80AgqPJtN4X22j+fFAmloaRZYlMcS9
+         RPOQ==
+X-Gm-Message-State: ANhLgQ1K77hUwP31fePsHuXE+oO2AEBwW76BQeONQzAhCQLFSxO7TFCM
+        tzSVPY82erpijnplXul3b24=
+X-Google-Smtp-Source: ADFU+vsspAc0mN88NYcQRgh9Bxnqb2zzcB6GAD3hGAuDATOrq/kOx0m1rO63Ka+RBS0/ayBdXsvjIA==
+X-Received: by 2002:a05:600c:d4:: with SMTP id u20mr12421355wmm.83.1584975697314;
+        Mon, 23 Mar 2020 08:01:37 -0700 (PDT)
+Received: from localhost (ip-37-188-135-150.eurotel.cz. [37.188.135.150])
+        by smtp.gmail.com with ESMTPSA id k204sm8490964wma.17.2020.03.23.08.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2020 08:01:36 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 16:01:34 +0100
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Rafael Aquini <aquini@redhat.com>
 Cc:     Shakeel Butt <shakeelb@google.com>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-kselftest@vger.kernel.org, shuah@kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
  false-negative errors
-Message-ID: <20200323145542.GC23364@optiplex-lnx>
+Message-ID: <20200323150134.GN7524@dhcp22.suse.cz>
 References: <20200322013525.1095493-1-aquini@redhat.com>
  <CALvZod4GjRFLRX=S_YFYnJk-kL6tjveYEDOBFS76NqrURERHHQ@mail.gmail.com>
  <20200323141659.GA23364@optiplex-lnx>
@@ -51,13 +52,12 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20200323142941.GK7524@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 03:29:41PM +0100, Michal Hocko wrote:
+On Mon 23-03-20 15:29:43, Michal Hocko wrote:
 > On Mon 23-03-20 10:16:59, Rafael Aquini wrote:
 > > On Sun, Mar 22, 2020 at 09:31:04AM -0700, Shakeel Butt wrote:
 > > > On Sat, Mar 21, 2020 at 6:35 PM Rafael Aquini <aquini@redhat.com> wrote:
@@ -81,19 +81,21 @@ On Mon, Mar 23, 2020 at 03:29:41PM +0100, Michal Hocko wrote:
 > > for the functionality correctness.
 > 
 > But mlock (in neither mode) is reall forced to put pages to the
+
+ble I meant to say "is not really forced"
+
 > UNEVICTABLE_LRU for correctness. If the test is really depending on it
 > then the selftest is bogus. A real MCL_ONFAULT test should focus on the
 > user observable contract of this api. And that is that a new mapping
 > doesn't fault in the page during the mlock call but the memory is locked
 > after the memory is faulted in. You can use different methods to observe
 > locked memory - e.g. try to reclaim it and check or check /proc/<pid>/smaps
->
 
-Again, I don't think the test is bogus, although it's (now) expecting
-something that is not guaranteed after the referred commit.
-The check for PG_unevictable set on the page backing up the mapping
-seems reasonable, as the flag is supposed to be there, if everything 
-went on fine after the mlock call. 
-
--- Rafael
-
+I have just checked the testcase and I believe it is really dubious to
+check for page flags. Those are really an internal implementation
+detail. All the available information is available in the
+/proc/<pid>/smaps file which is already parsed in the test so the test
+is easily fixable.
+-- 
+Michal Hocko
+SUSE Labs
