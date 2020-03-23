@@ -2,100 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D399018F807
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Mar 2020 16:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC0018F814
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Mar 2020 16:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgCWPBj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Mar 2020 11:01:39 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:40292 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727137AbgCWPBj (ORCPT
+        id S1725990AbgCWPDL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Mar 2020 11:03:11 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:34417 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727046AbgCWPDL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Mar 2020 11:01:39 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a81so9430133wmf.5;
-        Mon, 23 Mar 2020 08:01:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BWEC9ZUJwJUU11ZALKTe1h8BQNjpF356QgpNgKWIUoE=;
-        b=AOJwFAB1resLDZutvmi/+Ua1YOuM3V8Hhym7YQwdnrtmA3HsjJ/D/3vxdQt2lzVuef
-         Zkt6toc903FIYLdJnqGeyWl0+KC6V7X8DSxRQvjcZvbfapr4u2eBamcOP0+/Wzsh1FkZ
-         volmrNfS7NvrqsvvkPw884hir8sZfv0j2o1wXs+G7q/h9eQELhKu++IuTgg2sIgXZado
-         jLeM6XlEMKyGUPa0Wy9762LEEy9I12RQu3/kgF0ecx7KYOVy+NQmJCXIuW0ndGbITJYl
-         fgsPXIY2pIdgLatRRnUuEx7/T3fo+ay2sT8r9s80AgqPJtN4X22j+fFAmloaRZYlMcS9
-         RPOQ==
-X-Gm-Message-State: ANhLgQ1K77hUwP31fePsHuXE+oO2AEBwW76BQeONQzAhCQLFSxO7TFCM
-        tzSVPY82erpijnplXul3b24=
-X-Google-Smtp-Source: ADFU+vsspAc0mN88NYcQRgh9Bxnqb2zzcB6GAD3hGAuDATOrq/kOx0m1rO63Ka+RBS0/ayBdXsvjIA==
-X-Received: by 2002:a05:600c:d4:: with SMTP id u20mr12421355wmm.83.1584975697314;
-        Mon, 23 Mar 2020 08:01:37 -0700 (PDT)
-Received: from localhost (ip-37-188-135-150.eurotel.cz. [37.188.135.150])
-        by smtp.gmail.com with ESMTPSA id k204sm8490964wma.17.2020.03.23.08.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2020 08:01:36 -0700 (PDT)
-Date:   Mon, 23 Mar 2020 16:01:34 +0100
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Rafael Aquini <aquini@redhat.com>
+        Mon, 23 Mar 2020 11:03:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584975789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C04vHTmtlsvJpQjudnPl4U8KUo7RqEolEs590PlIhK8=;
+        b=Q0zycYaRaJKnXqjULcX09Hg1ZUqgkHQMy2xrahBZDWHRSwHMyw/y2tjIx0Bvz9vqyx99WT
+        2gJ97BbDuIjDlsgRKMHWKC7lUM7aUM3+qD0GPrWsBMXDBSzRAaQ35ej5JSAjUm9Nr+t0Op
+        PzUw//XIQPXjb8Lp1DRqjLmS4AddhAw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-378-UK1BPhOWOhe2y3PD85mHHg-1; Mon, 23 Mar 2020 11:03:05 -0400
+X-MC-Unique: UK1BPhOWOhe2y3PD85mHHg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2EDB3100550D;
+        Mon, 23 Mar 2020 15:03:04 +0000 (UTC)
+Received: from optiplex-lnx (unknown [10.33.36.220])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 50D7F5C1B2;
+        Mon, 23 Mar 2020 15:03:02 +0000 (UTC)
+Date:   Mon, 23 Mar 2020 11:02:59 -0400
+From:   Rafael Aquini <aquini@redhat.com>
+To:     Michal Hocko <mhocko@kernel.org>
 Cc:     Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
 Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
  false-negative errors
-Message-ID: <20200323150134.GN7524@dhcp22.suse.cz>
+Message-ID: <20200323150259.GD23364@optiplex-lnx>
 References: <20200322013525.1095493-1-aquini@redhat.com>
- <CALvZod4GjRFLRX=S_YFYnJk-kL6tjveYEDOBFS76NqrURERHHQ@mail.gmail.com>
- <20200323141659.GA23364@optiplex-lnx>
- <20200323142941.GK7524@dhcp22.suse.cz>
+ <20200321184352.826d3dba38aecc4ff7b32e72@linux-foundation.org>
+ <20200322020326.GB1068248@t490s>
+ <20200321213142.597e23af955de653fc4db7a1@linux-foundation.org>
+ <CALvZod7LiMiK1JtfdvvU3W36cGSUKhhKf6dMZpsNZv6nMiJ5=g@mail.gmail.com>
+ <20200323075208.GC7524@dhcp22.suse.cz>
+ <20200323144240.GB23364@optiplex-lnx>
+ <20200323145106.GM7524@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200323142941.GK7524@dhcp22.suse.cz>
+In-Reply-To: <20200323145106.GM7524@dhcp22.suse.cz>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 23-03-20 15:29:43, Michal Hocko wrote:
-> On Mon 23-03-20 10:16:59, Rafael Aquini wrote:
-> > On Sun, Mar 22, 2020 at 09:31:04AM -0700, Shakeel Butt wrote:
-> > > On Sat, Mar 21, 2020 at 6:35 PM Rafael Aquini <aquini@redhat.com> wrote:
-> > > >
-> > > > Changes for commit 9c4e6b1a7027f ("mm, mlock, vmscan: no more skipping pagevecs")
-> > > > break this test expectations on the behavior of mlock syscall family immediately
-> > > > inserting the recently faulted pages into the UNEVICTABLE_LRU, when MCL_ONFAULT is
-> > > > passed to the syscall as part of its flag-set.
+On Mon, Mar 23, 2020 at 03:51:06PM +0100, Michal Hocko wrote:
+> On Mon 23-03-20 10:42:40, Rafael Aquini wrote:
+> > On Mon, Mar 23, 2020 at 08:52:08AM +0100, Michal Hocko wrote:
+> > > On Sun 22-03-20 09:36:49, Shakeel Butt wrote:
+> > > > On Sat, Mar 21, 2020 at 9:31 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > >
+> > > > > On Sat, 21 Mar 2020 22:03:26 -0400 Rafael Aquini <aquini@redhat.com> wrote:
+> > > > >
+> > > > > > > > + * In order to sort out that race, and get the after fault checks consistent,
+> > > > > > > > + * the "quick and dirty" trick below is required in order to force a call to
+> > > > > > > > + * lru_add_drain_all() to get the recently MLOCK_ONFAULT pages moved to
+> > > > > > > > + * the unevictable LRU, as expected by the checks in this selftest.
+> > > > > > > > + */
+> > > > > > > > +static void force_lru_add_drain_all(void)
+> > > > > > > > +{
+> > > > > > > > + sched_yield();
+> > > > > > > > + system("echo 1 > /proc/sys/vm/compact_memory");
+> > > > > > > > +}
+> > > > > > >
+> > > > > > > What is the sched_yield() for?
+> > > > > > >
+> > > > > >
+> > > > > > Mostly it's there to provide a sleeping gap after the fault, whithout
+> > > > > > actually adding an arbitrary value with usleep().
+> > > > > >
+> > > > > > It's not a hard requirement, but, in some of the tests I performed
+> > > > > > (whithout that sleeping gap) I would still see around 1% chance
+> > > > > > of hitting the false-negative. After adding it I could not hit
+> > > > > > the issue anymore.
+> > > > >
+> > > > > It's concerning that such deep machinery as pagevec draining is visible
+> > > > > to userspace.
+> > > > >
+> > > > 
+> > > > We already have other examples like memcg stats where the
+> > > > optimizations like batching per-cpu stats collection exposes
+> > > > differences to the userspace. I would not be that worried here.
 > > > 
-> > > mlock* syscalls do not provide any guarantee that the pages will be in
-> > > unevictable LRU, only that the pages will not be paged-out. The test
-> > > is checking something very internal to the kernel and this is expected
-> > > to break.
+> > > Agreed! Tests should be more tolerant for counters imprecision.
+> > > Unevictable LRU is an optimization and transition to that list is a
+> > > matter of an internal implementation detail.
+> > >
+> > > > > I suppose that for consistency and correctness we should perform a
+> > > > > drain prior to each read from /proc/*/pagemap.  Presumably this would
+> > > > > be far too expensive.
+> > > > >
+> > > > > Is there any other way?  One such might be to make the MLOCK_ONFAULT
+> > > > > pages bypass the lru_add_pvecs?
+> > > > >
+> > > > 
+> > > > I would rather prefer to have something similar to
+> > > > /proc/sys/vm/stat_refresh which drains the pagevecs.
+> > > 
+> > > No, please don't. Pagevecs draining is by far not the only batching
+> > > scheme we use and an interface like this would promise users to
+> > > effectivelly force flushing all of them.
+> > > 
+> > > Can we simply update the test to be more tolerant to imprecisions
+> > > instead?
+> > > 
 > > 
-> > It was a check expected to be satisfied before the commit, though. 
-> > Getting the mlocked pages inserted directly into the unevictable LRU,
-> > skipping the pagevec, was established behavior before the aforementioned
-> > commit, and even though one could argue userspace should not be aware,
-> > or care, about such inner kernel circles the program in question is not an 
-> > ordinary userspace app, but a kernel selftest that is supposed to check
-> > for the functionality correctness.
+> > I don't think, thouhg, that this particular test case can be entirely
+> > reduced as "counter imprecison".
+> > 
+> > The reason I think this is a different beast, is that having the page
+> > being flagged as PG_unevictable is expected part of the aftermath of
+> > a mlock* call. This selftest is, IMO, correctly verifying that fact,
+> > as it checks the functionality correctness.
+> > 
+> > The problem boils down to the fact that the page would immediately
+> > be flagged as PG_unevictable after the mlock (under MCL_FUTURE|MCL_ONFAULT
+> > semantics) call, and the test was expecting it, and commit 9c4e6b1a7027f
+> > changed that by "delaying" that flag setting.
 > 
-> But mlock (in neither mode) is reall forced to put pages to the
+> As I've tried to explain in other email in this email thread. The test
+> was exploiting a certain user visible side effect. The unevictable flag
+> or the placement on the unevictable LRU list is are not really needed
+> for the user contract correctness. That means that the test is not
+> really correct. Working around that by trying to enforce kernel to
+> comply with the test expectations is just plain wrong at least for two
+> reasons 1) you cannot expect or event do not want userspace to do the
+> same because the behavior might change in the future 2) the test is not
+> really testing for correctness in the first place.
+>
 
-ble I meant to say "is not really forced"
+Sorry, Michal, it seems we keep going back and forth (I just replied to
+your comment on the other thread)
 
-> UNEVICTABLE_LRU for correctness. If the test is really depending on it
-> then the selftest is bogus. A real MCL_ONFAULT test should focus on the
-> user observable contract of this api. And that is that a new mapping
-> doesn't fault in the page during the mlock call but the memory is locked
-> after the memory is faulted in. You can use different methods to observe
-> locked memory - e.g. try to reclaim it and check or check /proc/<pid>/smaps
+The selftest also checks the kernel visible effect, via
+/proc/kpageflags, and that's where it fails after 9c4e6b1a7027f.
 
-I have just checked the testcase and I believe it is really dubious to
-check for page flags. Those are really an internal implementation
-detail. All the available information is available in the
-/proc/<pid>/smaps file which is already parsed in the test so the test
-is easily fixable.
--- 
-Michal Hocko
-SUSE Labs
+As I mentioned before, I think it is a reasonable check, given this
+is a kernel selftest, although we need to compensate it for the
+differences between its expectations and what the kernel is doing
+currently.
+
+-- Rafael
+
