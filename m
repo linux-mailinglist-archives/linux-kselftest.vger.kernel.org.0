@@ -2,99 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6A218F900
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Mar 2020 16:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1324F18FB02
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Mar 2020 18:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727202AbgCWPy7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Mar 2020 11:54:59 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:21838 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727207AbgCWPy7 (ORCPT
+        id S1727724AbgCWRLG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Mar 2020 13:11:06 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:34732 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727257AbgCWRLF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Mar 2020 11:54:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584978898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aONbZkW7VTtlNQ7IX/OP6HCvxPbDTjsQv8h6JUzUnHw=;
-        b=DcupFgfRD/LTA1e5rN6ma/k+cmMcZNVu9B3iwubyfX2QYPS0gJPH2ivaCgV+FxjXEUZNOM
-        ibBSXqpaxa69SWBGNnJAwAMKRqg3Z2IQVPcWfjkZCleJD9CSJOzA0HNu3lfE5qS//Sto75
-        rHM5a/Qjed83xCfixnZpCTpttGTJQRE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-285-8D5ohllOMACo1HLXscfZ1Q-1; Mon, 23 Mar 2020 11:54:56 -0400
-X-MC-Unique: 8D5ohllOMACo1HLXscfZ1Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D86F6800D54;
-        Mon, 23 Mar 2020 15:54:54 +0000 (UTC)
-Received: from optiplex-lnx (unknown [10.33.36.220])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F1CC919C4F;
-        Mon, 23 Mar 2020 15:54:52 +0000 (UTC)
-Date:   Mon, 23 Mar 2020 11:54:49 -0400
-From:   Rafael Aquini <aquini@redhat.com>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
- false-negative errors
-Message-ID: <20200323155449.GG23364@optiplex-lnx>
-References: <20200322020326.GB1068248@t490s>
- <20200321213142.597e23af955de653fc4db7a1@linux-foundation.org>
- <CALvZod7LiMiK1JtfdvvU3W36cGSUKhhKf6dMZpsNZv6nMiJ5=g@mail.gmail.com>
- <20200323075208.GC7524@dhcp22.suse.cz>
- <20200323144240.GB23364@optiplex-lnx>
- <20200323145106.GM7524@dhcp22.suse.cz>
- <20200323150259.GD23364@optiplex-lnx>
- <20200323151256.GP7524@dhcp22.suse.cz>
- <20200323154159.GF23364@optiplex-lnx>
- <20200323155111.GQ7524@dhcp22.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200323155111.GQ7524@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Mon, 23 Mar 2020 13:11:05 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NHAGRO039472;
+        Mon, 23 Mar 2020 17:11:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=YCzgLbBZj5k8qIFVeAOYpztQF0I1eiKCR70BTCEJVNE=;
+ b=eZwZ4T6tF9kC32ji6w2JL764gaCFR9QBe2h5/+r1cHA5ibPrQvp8PwfeE/h2TVR2d41N
+ hYFiO93OF7+i7c4BeDAia4STVYRUPUs4nF9wGTX2TOZnJWBM159Zq9MAawg/kkt7cUsY
+ 95KPE/RltGhKxq2Nxy52wL4C4ERPtKx7KXJDL5tRTeWUv7R8g4MwldF6qRtNc+y5RE2h
+ dId9jFdZ4MNBZ0yo27JofFdX/pT8Qn01QMlw4vsdOmFqbqNFMc9CEULHWdMVkXuQV3Xr
+ 87t0oNL4Toy6u0SW+b6D9cFxozIDpsBx5kXOy62+TmSYvYPRdyJvOKa1RocMHYzh2vFe Jg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2yx8abvu34-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Mar 2020 17:11:00 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NGvVds067395;
+        Mon, 23 Mar 2020 17:10:59 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2yxw914qf6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Mar 2020 17:10:59 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02NHAwOA009796;
+        Mon, 23 Mar 2020 17:10:58 GMT
+Received: from localhost.uk.oracle.com (/10.175.192.214)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 23 Mar 2020 10:10:57 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, shuah@kernel.org,
+        trishalfonso@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 kunit-next 0/2] kunit: extend kunit resources API
+Date:   Mon, 23 Mar 2020 17:10:41 +0000
+Message-Id: <1584983443-27456-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 mlxlogscore=891 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003230090
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ mlxscore=0 adultscore=0 phishscore=0 impostorscore=0 mlxlogscore=955
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003230090
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 04:51:11PM +0100, Michal Hocko wrote:
-> On Mon 23-03-20 11:41:59, Rafael Aquini wrote:
-> > On Mon, Mar 23, 2020 at 04:12:56PM +0100, Michal Hocko wrote:
-> > > On Mon 23-03-20 11:02:59, Rafael Aquini wrote:
-> [...]
-> > > > The selftest also checks the kernel visible effect, via
-> > > > /proc/kpageflags, and that's where it fails after 9c4e6b1a7027f.
-> > > 
-> > > I really fail to see your point. Even if you are right that the self
-> > > test is somehow evaluating the kernel implementation which I am not sure
-> > > is the scope of the selft thest but anyway. The mere fact that the
-> > > kernel test fails on a perfectly valid change should just suggest that
-> > > the test is leading to false positives and therefore should be fixed.
-> > > Your proposed fix is simply suboptimal because it relies on yet another
-> > > side effect which might change anytime in the future and still lead to a
-> > > correctly behaving kernel. See my point?
-> > >
-> > 
-> > OK, I concede your point on the bogusness of checking the page flags in
-> > this particular test and expect certain valuse there, given that no other 
-> > selftest seems to be doing that level of inner kenrel detail scrutiny.
-> > 
-> > I'll repost this fix suggestion getting rif of those related
-> > checkpoints.
-> 
-> Here is what I have after I had to context switch to something else
-> before finishing it. Feel free to reuse if you feel like. It is likely
-> to not even compile.
->
+A recent RFC patch set [1] suggests some additional functionality
+may be needed around kunit resources.  It seems to require
 
-I'm OK with it, if you want to go ahead and do the kill.
+1. support for resources without allocation
+2. support for lookup of such resources
+3. support for access to resources across multiple kernel threads
 
-Thanks 
--- Rafael
+The proposed changes here are designed to address these needs.
+The idea is we first generalize the API to support adding
+resources with static data; then from there we support named
+resources.  The latter support is needed because if we are
+in a different thread context and only have the "struct kunit *"
+to work with, we need a way to identify a resource in lookup.
+
+[1] https://lkml.org/lkml/2020/2/26/1286
+
+Changes since v1:
+ - reformatted longer parameter lists to have one parameter per-line
+   (Brendan, patch 1)
+ - fixed phrasing in various comments to clarify allocation of memory
+   and added comment to kunit resource tests to clarify why
+   kunit_put_resource() is used there (Brendan, patch 1)
+ - changed #define to static inline function (Brendan, patch 2)
+ - simplified kunit_add_named_resource() to use more of existing
+   code for non-named resource (Brendan, patch 2)
+
+Alan Maguire (2):
+  kunit: generalize kunit_resource API beyond allocated resources
+  kunit: add support for named resources
+
+ include/kunit/test.h      | 159 +++++++++++++++++++++++++++-------
+ lib/kunit/kunit-test.c    | 111 +++++++++++++++++++-----
+ lib/kunit/string-stream.c |  14 ++-
+ lib/kunit/test.c          | 211 ++++++++++++++++++++++++++++++++--------------
+ 4 files changed, 371 insertions(+), 124 deletions(-)
+
+-- 
+1.8.3.1
 
