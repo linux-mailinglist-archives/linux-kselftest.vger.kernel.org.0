@@ -2,68 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5811518EA8E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Mar 2020 17:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED5E18F070
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Mar 2020 08:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgCVQkn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 22 Mar 2020 12:40:43 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37816 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgCVQkn (ORCPT
+        id S1727457AbgCWHwM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Mar 2020 03:52:12 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:37756 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727451AbgCWHwM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 22 Mar 2020 12:40:43 -0400
-Received: by mail-ot1-f67.google.com with SMTP id i12so11009516otp.4
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Mar 2020 09:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/NRcff3IU+6Tgzkshu1srIwPGx1YyS4nMPqqG29Ytvw=;
-        b=qOUehZhX/pacNMUrZn/+2SHmA4iod5L4EySZ0kuBn/JxSDPHHsZ4fUjgfRPm5xH/ur
-         QhZW2pgT6REGxos8IW5vtbuWqrcPmZOKZYbh0zucvshGq41tH0oYUvqFq9R52YJ2MSCK
-         ui/JImCB7Ii7rGWqmE83tjH2r0Ktg/7whFLg8eTxxywfklN6+NgCwh9TwZHvrYvDXdXa
-         f8hTK2U4JPZ6vqrGlbaqIyTYMooPNXIMk4L1t2LND7/PBl2spbVXqYl4p9bZ/LCVrcqu
-         LS+UD0HrPB7TiFLSrhB+PyIsdC1e3Tcw4GVy+2xakizAMaqU7c2RcnqGxmVVrmur5Mtk
-         F+ug==
+        Mon, 23 Mar 2020 03:52:12 -0400
+Received: by mail-wm1-f68.google.com with SMTP id d1so13524045wmb.2;
+        Mon, 23 Mar 2020 00:52:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/NRcff3IU+6Tgzkshu1srIwPGx1YyS4nMPqqG29Ytvw=;
-        b=Ken4zp7aT7a0MKREtfVyVVQEEZu83ujCRDbiYIIrx7GTP8/kS/du64LaClMaEHfkhc
-         GirLZB2/q8V432qxtpP1p/jSOuYXP9P1OWPkvzteRWIPbvufFDFtZXvqXo86xxaXNgGy
-         MUPzfj8U819LG7tMCeyLEupXNOr+GYg7BPA0j2mnRHozzWYWC0CHy4TPpZvZpp2VPuq5
-         2bFVE/xSAkGDotRaTQSJRErDUxU2yeKyhugJenbwxioaRk3HvUtJc6y5dePNiODsHymd
-         U0y7UqGf+nKRalRrM3hy2ZfjGtdeKn0fm7knvT8Xhc2iM309hUTFIjzL30lhxPxUO05p
-         lIGQ==
-X-Gm-Message-State: ANhLgQ1uxVnnvgtZkGUp1xGwzZyGeVqIao4BTV7lMvBy0rUldpzOrhnR
-        tJ48K8TNnTvy8BjXxgoCG+zn4Fx0vnxaRZ8fP8aX4g==
-X-Google-Smtp-Source: ADFU+vsVjAmfgADMn2cxBqjZaGcNAPlcChbn032d7ohsMEN24TTue0FnA92UPrFjZQ8PErnKxknKoey9xg0zOjUTle8=
-X-Received: by 2002:a05:6830:1054:: with SMTP id b20mr4151189otp.360.1584895240706;
- Sun, 22 Mar 2020 09:40:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200322013525.1095493-1-aquini@redhat.com> <20200321184352.826d3dba38aecc4ff7b32e72@linux-foundation.org>
- <20200322020326.GB1068248@t490s> <20200321213142.597e23af955de653fc4db7a1@linux-foundation.org>
- <20200322054131.GC1068248@t490s>
-In-Reply-To: <20200322054131.GC1068248@t490s>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Sun, 22 Mar 2020 09:40:29 -0700
-Message-ID: <CALvZod5cC6dzMkLNh0Rt_VcdmcyuJHuSMqTjWYdYVVp9RDkYPA@mail.gmail.com>
-Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
- false-negative errors
-To:     Rafael Aquini <aquini@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jOKDfoqRBe4k58qisxZytfR8oDaOcRrtygxWW35hmxQ=;
+        b=eMvAzVpLjccS/awY1GwiA75b8Hxq7/h1y+jeUIn2RaUPx5z6ptQj+AQU8Lhwtr9EgO
+         WeUw/Oe4VwyR/uS01Se60NU+l4qRtbyJYSiQruY+qLc1QrVuBzlDQgwVyf3nkIX5G1cG
+         aO9CrvTMvHY8HkywthHacSUJHpi/ygTI2fcCQFCWTtalXmaB7Lxk5nGW/744BZRJ6HhJ
+         n4F+DI/MkpTiRVQjg9alXl8PXs1WOmtlYpW29B4Fz7xpT5PYWZ5YLKR5JjT3K3lS1sOn
+         CicoHZdNILuA51VEoxMGJHNQ3PB9yN7PDjEHdavMKBOxpGSRcg+nieQsvmpBmNHPUKuX
+         D1rw==
+X-Gm-Message-State: ANhLgQ2MQ7q3DU8NWAK9BJWyB72OZVyAyEqwfNBtEVWrF20EJWmMqpVM
+        ymb2ehGzIZF/5uJqITIQIEk=
+X-Google-Smtp-Source: ADFU+vsUItBZCj529pyGAXMjTwrfq25uNWscZdXvQuumhHorAO+WpDKaHTBJXE7x+Zr0wdiJVB8K2w==
+X-Received: by 2002:a7b:c308:: with SMTP id k8mr26672662wmj.40.1584949930173;
+        Mon, 23 Mar 2020 00:52:10 -0700 (PDT)
+Received: from localhost (ip-37-188-135-150.eurotel.cz. [37.188.135.150])
+        by smtp.gmail.com with ESMTPSA id g3sm5291039wrm.66.2020.03.23.00.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2020 00:52:09 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 08:52:08 +0100
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Shakeel Butt <shakeelb@google.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Rafael Aquini <aquini@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
+ false-negative errors
+Message-ID: <20200323075208.GC7524@dhcp22.suse.cz>
+References: <20200322013525.1095493-1-aquini@redhat.com>
+ <20200321184352.826d3dba38aecc4ff7b32e72@linux-foundation.org>
+ <20200322020326.GB1068248@t490s>
+ <20200321213142.597e23af955de653fc4db7a1@linux-foundation.org>
+ <CALvZod7LiMiK1JtfdvvU3W36cGSUKhhKf6dMZpsNZv6nMiJ5=g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod7LiMiK1JtfdvvU3W36cGSUKhhKf6dMZpsNZv6nMiJ5=g@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 21, 2020 at 10:41 PM Rafael Aquini <aquini@redhat.com> wrote:
->
-> On Sat, Mar 21, 2020 at 09:31:42PM -0700, Andrew Morton wrote:
+On Sun 22-03-20 09:36:49, Shakeel Butt wrote:
+> On Sat, Mar 21, 2020 at 9:31 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
 > > On Sat, 21 Mar 2020 22:03:26 -0400 Rafael Aquini <aquini@redhat.com> wrote:
 > >
 > > > > > + * In order to sort out that race, and get the after fault checks consistent,
@@ -73,8 +70,8 @@ On Sat, Mar 21, 2020 at 10:41 PM Rafael Aquini <aquini@redhat.com> wrote:
 > > > > > + */
 > > > > > +static void force_lru_add_drain_all(void)
 > > > > > +{
-> > > > > +       sched_yield();
-> > > > > +       system("echo 1 > /proc/sys/vm/compact_memory");
+> > > > > + sched_yield();
+> > > > > + system("echo 1 > /proc/sys/vm/compact_memory");
 > > > > > +}
 > > > >
 > > > > What is the sched_yield() for?
@@ -91,6 +88,15 @@ On Sat, Mar 21, 2020 at 10:41 PM Rafael Aquini <aquini@redhat.com> wrote:
 > > It's concerning that such deep machinery as pagevec draining is visible
 > > to userspace.
 > >
+> 
+> We already have other examples like memcg stats where the
+> optimizations like batching per-cpu stats collection exposes
+> differences to the userspace. I would not be that worried here.
+
+Agreed! Tests should be more tolerant for counters imprecision.
+Unevictable LRU is an optimization and transition to that list is a
+matter of an internal implementation detail.
+ 
 > > I suppose that for consistency and correctness we should perform a
 > > drain prior to each read from /proc/*/pagemap.  Presumably this would
 > > be far too expensive.
@@ -98,29 +104,17 @@ On Sat, Mar 21, 2020 at 10:41 PM Rafael Aquini <aquini@redhat.com> wrote:
 > > Is there any other way?  One such might be to make the MLOCK_ONFAULT
 > > pages bypass the lru_add_pvecs?
 > >
->
-> Well,
->
-> I admit I wasn't taking the approach of changing the kernel because I was
-> thinking it would require a partial, or even full, revert of commit
-> 9c4e6b1a7027f, and that would be increasing complexity, but on a
-> second thought, it seems that we might just be missing:
->
-> diff --git a/mm/swap.c b/mm/swap.c
-> index cf39d24ada2a..b1601228ded4 100644
-> --- a/mm/swap.c
-> +++ b/mm/swap.c
-> @@ -473,6 +473,7 @@ void lru_cache_add_active_or_unevictable(struct page *page,
->                 __mod_zone_page_state(page_zone(page), NR_MLOCK,
->                                     hpage_nr_pages(page));
->                 count_vm_event(UNEVICTABLE_PGMLOCKED);
-> +               SetPageUnevictable(page);
+> 
+> I would rather prefer to have something similar to
+> /proc/sys/vm/stat_refresh which drains the pagevecs.
 
-No, this is not correct. Check __pagevec_lru_add_fn() for
-TestClearPageUnevictable().
+No, please don't. Pagevecs draining is by far not the only batching
+scheme we use and an interface like this would promise users to
+effectivelly force flushing all of them.
 
-As I mentioned in the other email, I think the better solution would
-be to introduce a sysctl to drain the pageves. That way there will not
-be any dependency on compaction as was in your original patch.
+Can we simply update the test to be more tolerant to imprecisions
+instead?
 
-Shakeel
+-- 
+Michal Hocko
+SUSE Labs
