@@ -2,468 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B550191553
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 16:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAD619169F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 17:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727634AbgCXPt1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Mar 2020 11:49:27 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:23406 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727680AbgCXPt0 (ORCPT
+        id S1727273AbgCXQkS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Mar 2020 12:40:18 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:42170 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727161AbgCXQkS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Mar 2020 11:49:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585064964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NGzjp+yA9bB93CfJi8wOB46mp0XvAFc7uJSJUcqH998=;
-        b=MamvcFrzcIS1mDMO8v2rxil4Eq0gXaYWMmyBcC0FPVcVCtp8FaaYUhR+ABwfzBkvYdcVPG
-        yyuBWsCGJj3Mk9+nsxCxreiv0R2/n5LgPfAdKO0oMLVc5+XXx9EVkBR3xoceMDQrjzjzNS
-        I3eBZYyyYSbjq250OwGi2S7YLW5eLrE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-244-DeY8pWBVOzOJtZDtWyEAEA-1; Tue, 24 Mar 2020 11:49:17 -0400
-X-MC-Unique: DeY8pWBVOzOJtZDtWyEAEA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D0C018B5F71;
-        Tue, 24 Mar 2020 15:49:15 +0000 (UTC)
-Received: from optiplex-lnx (unknown [10.33.36.220])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4C9071001DF2;
-        Tue, 24 Mar 2020 15:49:13 +0000 (UTC)
-Date:   Tue, 24 Mar 2020 11:49:10 -0400
-From:   Rafael Aquini <aquini@redhat.com>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        Eric B Munson <emunson@akamai.com>
-Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
- false-negative errors
-Message-ID: <20200324154910.GM23364@optiplex-lnx>
-References: <CALvZod7LiMiK1JtfdvvU3W36cGSUKhhKf6dMZpsNZv6nMiJ5=g@mail.gmail.com>
- <20200323075208.GC7524@dhcp22.suse.cz>
- <20200323144240.GB23364@optiplex-lnx>
- <20200323145106.GM7524@dhcp22.suse.cz>
- <20200323150259.GD23364@optiplex-lnx>
- <20200323151256.GP7524@dhcp22.suse.cz>
- <20200323154159.GF23364@optiplex-lnx>
- <20200323155111.GQ7524@dhcp22.suse.cz>
- <20200323155449.GG23364@optiplex-lnx>
- <20200324154218.GS19542@dhcp22.suse.cz>
+        Tue, 24 Mar 2020 12:40:18 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02OGdEdY166419;
+        Tue, 24 Mar 2020 16:40:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=Z05suOHf2IDzsq2FPAO2+DX7KrqPxW6csjVKUUkFIXw=;
+ b=gg6emeKgunC7p7RGjiJUerU/Uwo15KfvFn7XDFj7zqxWTZtUfQ2n9Yje4bU4h1+j+76q
+ PGp3iuGJgG5dzy/WLXkJuNPFHDpLpLLVewOFZN9o6/JetCpGQg/6ikDOHd8VyjqYQ9rA
+ 0X2qlZf7dOsrQBitgGr2hpQCI4ql2BtpRwztJcKA4L9qX0nOiy0I4B0fD6Ls/SNzSXQl
+ Tnmwpywnw7kGUYUrkXPm+1/46hwiepQECpIY6b3SXoJs+yuqb1Yt3vS1OZWhVHYImhYt
+ HcdpATyKFquNpnEwBl3dMk79FdK+ZOhxZ6wNh6rADwnYpYDdEPSOhMeALIaTBcRkSRnu KA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2ywabr5ef0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Mar 2020 16:40:00 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02OGKTKa091634;
+        Tue, 24 Mar 2020 16:40:00 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2yxw4pmjd7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Mar 2020 16:40:00 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02OGdwIG007862;
+        Tue, 24 Mar 2020 16:39:58 GMT
+Received: from dhcp-10-175-162-99.vpn.oracle.com (/10.175.162.99)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 24 Mar 2020 09:39:57 -0700
+Date:   Tue, 24 Mar 2020 16:39:50 +0000 (GMT)
+From:   Alan Maguire <alan.maguire@oracle.com>
+X-X-Sender: alan@localhost
+To:     Patricia Alfonso <trishalfonso@google.com>
+cc:     davidgow@google.com, brendanhiggins@google.com,
+        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/3] Add KUnit Struct to Current Task
+In-Reply-To: <20200319164227.87419-2-trishalfonso@google.com>
+Message-ID: <alpine.LRH.2.21.2003241635230.30637@localhost>
+References: <20200319164227.87419-1-trishalfonso@google.com> <20200319164227.87419-2-trishalfonso@google.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324154218.GS19542@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=US-ASCII
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9570 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=3
+ spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003240087
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9570 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=3
+ lowpriorityscore=0 malwarescore=0 phishscore=0 priorityscore=1501
+ clxscore=1015 adultscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003240087
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 04:42:18PM +0100, Michal Hocko wrote:
-> [Cc Eric - the email thread starts http://lkml.kernel.org/r/20200322013525.1095493-1-aquini@redhat.com]
+
+On Thu, 19 Mar 2020, Patricia Alfonso wrote:
+
+> In order to integrate debugging tools like KASAN into the KUnit
+> framework, add KUnit struct to the current task to keep track of the
+> current KUnit test.
 > 
-> On Mon 23-03-20 11:54:49, Rafael Aquini wrote:
-> [...]
-> > I'm OK with it, if you want to go ahead and do the kill.
-> 
-> See the patch below
-> 
-> From 07c08f387d036c70239d4060ffd30534cf77a0a5 Mon Sep 17 00:00:00 2001
-> From: Michal Hocko <mhocko@suse.com>
-> Date: Mon, 23 Mar 2020 17:33:46 +0100
-> Subject: [PATCH] selftests: vm: drop dependencies on page flags from mlock2
->  tests
-> 
-> It was noticed that mlock2 tests are failing after 9c4e6b1a7027f
-> ("mm, mlock, vmscan: no more skipping pagevecs") because the patch has
-> changed the timing on when the page is added to the unevictable LRU list
-> and thus gains the unevictable page flag.
-> 
-> The test was just too dependent on the implementation details which were
-> true at the time when it was introduced. Page flags and the timing when
-> they are set is something no userspace should ever depend on. The test
-> should be testing only for the user observable contract of the tested
-> syscalls. Those are defined pretty well for the mlock and there are
-> other means for testing them. In fact this is already done and testing
-> for page flags can be safely dropped to achieve the aimed purpose.
-> Present bits can be checked by /proc/<pid>/smaps RSS field and the
-> locking state by VmFlags although I would argue that Locked: field would
-> be more appropriate.
-> 
-> Drop all the page flag machinery and considerably simplify the test.
-> This should be more robust for future kernel changes while checking the
-> promised contract is still valid.
-> 
-> Reported-by: Rafael Aquini <aquini@redhat.com>
-> Signed-off-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
 > ---
->  tools/testing/selftests/vm/mlock2-tests.c | 233 ++++------------------
->  1 file changed, 37 insertions(+), 196 deletions(-)
+>  include/linux/sched.h | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/vm/mlock2-tests.c b/tools/testing/selftests/vm/mlock2-tests.c
-> index 637b6d0ac0d0..11b2301f3aa3 100644
-> --- a/tools/testing/selftests/vm/mlock2-tests.c
-> +++ b/tools/testing/selftests/vm/mlock2-tests.c
-> @@ -67,59 +67,6 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
->  	return ret;
->  }
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 04278493bf15..1fbfa0634776 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1180,6 +1180,10 @@ struct task_struct {
+>  	unsigned int			kasan_depth;
+>  #endif
 >  
-> -static uint64_t get_pageflags(unsigned long addr)
-> -{
-> -	FILE *file;
-> -	uint64_t pfn;
-> -	unsigned long offset;
-> -
-> -	file = fopen("/proc/self/pagemap", "r");
-> -	if (!file) {
-> -		perror("fopen pagemap");
-> -		_exit(1);
-> -	}
-> -
-> -	offset = addr / getpagesize() * sizeof(pfn);
-> -
-> -	if (fseek(file, offset, SEEK_SET)) {
-> -		perror("fseek pagemap");
-> -		_exit(1);
-> -	}
-> -
-> -	if (fread(&pfn, sizeof(pfn), 1, file) != 1) {
-> -		perror("fread pagemap");
-> -		_exit(1);
-> -	}
-> -
-> -	fclose(file);
-> -	return pfn;
-> -}
-> -
-> -static uint64_t get_kpageflags(unsigned long pfn)
-> -{
-> -	uint64_t flags;
-> -	FILE *file;
-> -
-> -	file = fopen("/proc/kpageflags", "r");
-> -	if (!file) {
-> -		perror("fopen kpageflags");
-> -		_exit(1);
-> -	}
-> -
-> -	if (fseek(file, pfn * sizeof(flags), SEEK_SET)) {
-> -		perror("fseek kpageflags");
-> -		_exit(1);
-> -	}
-> -
-> -	if (fread(&flags, sizeof(flags), 1, file) != 1) {
-> -		perror("fread kpageflags");
-> -		_exit(1);
-> -	}
-> -
-> -	fclose(file);
-> -	return flags;
-> -}
-> -
->  #define VMFLAGS "VmFlags:"
->  
->  static bool is_vmflag_set(unsigned long addr, const char *vmflag)
-> @@ -159,19 +106,13 @@ static bool is_vmflag_set(unsigned long addr, const char *vmflag)
->  #define RSS  "Rss:"
->  #define LOCKED "lo"
->  
-> -static bool is_vma_lock_on_fault(unsigned long addr)
-> +static unsigned long get_value_for_name(unsigned long addr, const char *name)
->  {
-> -	bool ret = false;
-> -	bool locked;
-> -	FILE *smaps = NULL;
-> -	unsigned long vma_size, vma_rss;
->  	char *line = NULL;
-> -	char *value;
->  	size_t size = 0;
-> -
-> -	locked = is_vmflag_set(addr, LOCKED);
-> -	if (!locked)
-> -		goto out;
-> +	char *value_ptr;
-> +	FILE *smaps = NULL;
-> +	unsigned long value = -1UL;
->  
->  	smaps = seek_to_smaps_entry(addr);
->  	if (!smaps) {
-> @@ -180,112 +121,70 @@ static bool is_vma_lock_on_fault(unsigned long addr)
->  	}
->  
->  	while (getline(&line, &size, smaps) > 0) {
-> -		if (!strstr(line, SIZE)) {
-> +		if (!strstr(line, name)) {
->  			free(line);
->  			line = NULL;
->  			size = 0;
->  			continue;
->  		}
->  
-> -		value = line + strlen(SIZE);
-> -		if (sscanf(value, "%lu kB", &vma_size) < 1) {
-> +		value_ptr = line + strlen(name);
-> +		if (sscanf(value_ptr, "%lu kB", &value) < 1) {
->  			printf("Unable to parse smaps entry for Size\n");
->  			goto out;
->  		}
->  		break;
->  	}
->  
-> -	while (getline(&line, &size, smaps) > 0) {
-> -		if (!strstr(line, RSS)) {
-> -			free(line);
-> -			line = NULL;
-> -			size = 0;
-> -			continue;
-> -		}
-> -
-> -		value = line + strlen(RSS);
-> -		if (sscanf(value, "%lu kB", &vma_rss) < 1) {
-> -			printf("Unable to parse smaps entry for Rss\n");
-> -			goto out;
-> -		}
-> -		break;
-> -	}
-> -
-> -	ret = locked && (vma_rss < vma_size);
->  out:
-> -	free(line);
->  	if (smaps)
->  		fclose(smaps);
-> -	return ret;
-> +	free(line);
-> +	return value;
->  }
->  
-> -#define PRESENT_BIT     0x8000000000000000ULL
-> -#define PFN_MASK        0x007FFFFFFFFFFFFFULL
-> -#define UNEVICTABLE_BIT (1UL << 18)
-> -
-> -static int lock_check(char *map)
-> +static bool is_vma_lock_on_fault(unsigned long addr)
->  {
-> -	unsigned long page_size = getpagesize();
-> -	uint64_t page1_flags, page2_flags;
-> +	bool locked;
-> +	unsigned long vma_size, vma_rss;
->  
-> -	page1_flags = get_pageflags((unsigned long)map);
-> -	page2_flags = get_pageflags((unsigned long)map + page_size);
-> +	locked = is_vmflag_set(addr, LOCKED);
-> +	if (!locked)
-> +		return false;
->  
-> -	/* Both pages should be present */
-> -	if (((page1_flags & PRESENT_BIT) == 0) ||
-> -	    ((page2_flags & PRESENT_BIT) == 0)) {
-> -		printf("Failed to make both pages present\n");
-> -		return 1;
-> -	}
-> +	vma_size = get_value_for_name(addr, SIZE);
-> +	vma_rss = get_value_for_name(addr, RSS);
->  
-> -	page1_flags = get_kpageflags(page1_flags & PFN_MASK);
-> -	page2_flags = get_kpageflags(page2_flags & PFN_MASK);
-> +	/* only one page is faulted in */
-> +	return (vma_rss < vma_size);
-> +}
->  
-> -	/* Both pages should be unevictable */
-> -	if (((page1_flags & UNEVICTABLE_BIT) == 0) ||
-> -	    ((page2_flags & UNEVICTABLE_BIT) == 0)) {
-> -		printf("Failed to make both pages unevictable\n");
-> -		return 1;
-> -	}
-> +#define PRESENT_BIT     0x8000000000000000ULL
-> +#define PFN_MASK        0x007FFFFFFFFFFFFFULL
-> +#define UNEVICTABLE_BIT (1UL << 18)
->  
-> -	if (!is_vmflag_set((unsigned long)map, LOCKED)) {
-> -		printf("VMA flag %s is missing on page 1\n", LOCKED);
-> -		return 1;
-> -	}
-> +static int lock_check(unsigned long addr)
-> +{
-> +	bool locked;
-> +	unsigned long vma_size, vma_rss;
->  
-> -	if (!is_vmflag_set((unsigned long)map + page_size, LOCKED)) {
-> -		printf("VMA flag %s is missing on page 2\n", LOCKED);
-> -		return 1;
-> -	}
-> +	locked = is_vmflag_set(addr, LOCKED);
-> +	if (!locked)
-> +		return false;
->  
-> -	return 0;
-> +	vma_size = get_value_for_name(addr, SIZE);
-> +	vma_rss = get_value_for_name(addr, RSS);
+> +#if IS_BUILTIN(CONFIG_KUNIT)
+
+This patch set looks great! You might have noticed I
+refreshed the kunit resources stuff to incorporate
+feedback from Brendan, but I don't think any API changes
+were made that should have consequences for your code
+(I'm building with your patches on top to make sure).
+I'd suggest promoting from RFC to v3 on the next round
+unless anyone objects.
+
+As Dmitry suggested, the above could likely be changed to be
+"#ifdef CONFIG_KUNIT" as kunit can be built as a
+module also. More on this in patch 2..
+
+> +	struct kunit			*kunit_test;
+> +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
 > +
-> +	return (vma_rss == vma_size);
->  }
->  
->  static int unlock_lock_check(char *map)
->  {
-> -	unsigned long page_size = getpagesize();
-> -	uint64_t page1_flags, page2_flags;
-> -
-> -	page1_flags = get_pageflags((unsigned long)map);
-> -	page2_flags = get_pageflags((unsigned long)map + page_size);
-> -	page1_flags = get_kpageflags(page1_flags & PFN_MASK);
-> -	page2_flags = get_kpageflags(page2_flags & PFN_MASK);
-> -
-> -	if ((page1_flags & UNEVICTABLE_BIT) || (page2_flags & UNEVICTABLE_BIT)) {
-> -		printf("A page is still marked unevictable after unlock\n");
-> -		return 1;
-> -	}
-> -
->  	if (is_vmflag_set((unsigned long)map, LOCKED)) {
->  		printf("VMA flag %s is present on page 1 after unlock\n", LOCKED);
->  		return 1;
->  	}
->  
-> -	if (is_vmflag_set((unsigned long)map + page_size, LOCKED)) {
-> -		printf("VMA flag %s is present on page 2 after unlock\n", LOCKED);
-> -		return 1;
-> -	}
-> -
->  	return 0;
->  }
->  
-> @@ -311,7 +210,7 @@ static int test_mlock_lock()
->  		goto unmap;
->  	}
->  
-> -	if (lock_check(map))
-> +	if (!lock_check((unsigned long)map))
->  		goto unmap;
->  
->  	/* Now unlock and recheck attributes */
-> @@ -330,64 +229,18 @@ static int test_mlock_lock()
->  
->  static int onfault_check(char *map)
->  {
-> -	unsigned long page_size = getpagesize();
-> -	uint64_t page1_flags, page2_flags;
-> -
-> -	page1_flags = get_pageflags((unsigned long)map);
-> -	page2_flags = get_pageflags((unsigned long)map + page_size);
-> -
-> -	/* Neither page should be present */
-> -	if ((page1_flags & PRESENT_BIT) || (page2_flags & PRESENT_BIT)) {
-> -		printf("Pages were made present by MLOCK_ONFAULT\n");
-> -		return 1;
-> -	}
-> -
->  	*map = 'a';
-> -	page1_flags = get_pageflags((unsigned long)map);
-> -	page2_flags = get_pageflags((unsigned long)map + page_size);
-> -
-> -	/* Only page 1 should be present */
-> -	if ((page1_flags & PRESENT_BIT) == 0) {
-> -		printf("Page 1 is not present after fault\n");
-> -		return 1;
-> -	} else if (page2_flags & PRESENT_BIT) {
-> -		printf("Page 2 was made present\n");
-> -		return 1;
-> -	}
-> -
-> -	page1_flags = get_kpageflags(page1_flags & PFN_MASK);
-> -
-> -	/* Page 1 should be unevictable */
-> -	if ((page1_flags & UNEVICTABLE_BIT) == 0) {
-> -		printf("Failed to make faulted page unevictable\n");
-> -		return 1;
-> -	}
-> -
->  	if (!is_vma_lock_on_fault((unsigned long)map)) {
->  		printf("VMA is not marked for lock on fault\n");
->  		return 1;
->  	}
->  
-> -	if (!is_vma_lock_on_fault((unsigned long)map + page_size)) {
-> -		printf("VMA is not marked for lock on fault\n");
-> -		return 1;
-> -	}
-> -
->  	return 0;
->  }
->  
->  static int unlock_onfault_check(char *map)
->  {
->  	unsigned long page_size = getpagesize();
-> -	uint64_t page1_flags;
-> -
-> -	page1_flags = get_pageflags((unsigned long)map);
-> -	page1_flags = get_kpageflags(page1_flags & PFN_MASK);
-> -
-> -	if (page1_flags & UNEVICTABLE_BIT) {
-> -		printf("Page 1 is still marked unevictable after unlock\n");
-> -		return 1;
-> -	}
->  
->  	if (is_vma_lock_on_fault((unsigned long)map) ||
->  	    is_vma_lock_on_fault((unsigned long)map + page_size)) {
-> @@ -445,7 +298,6 @@ static int test_lock_onfault_of_present()
->  	char *map;
->  	int ret = 1;
->  	unsigned long page_size = getpagesize();
-> -	uint64_t page1_flags, page2_flags;
->  
->  	map = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
->  		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-> @@ -465,17 +317,6 @@ static int test_lock_onfault_of_present()
->  		goto unmap;
->  	}
->  
-> -	page1_flags = get_pageflags((unsigned long)map);
-> -	page2_flags = get_pageflags((unsigned long)map + page_size);
-> -	page1_flags = get_kpageflags(page1_flags & PFN_MASK);
-> -	page2_flags = get_kpageflags(page2_flags & PFN_MASK);
-> -
-> -	/* Page 1 should be unevictable */
-> -	if ((page1_flags & UNEVICTABLE_BIT) == 0) {
-> -		printf("Failed to make present page unevictable\n");
-> -		goto unmap;
-> -	}
-> -
->  	if (!is_vma_lock_on_fault((unsigned long)map) ||
->  	    !is_vma_lock_on_fault((unsigned long)map + page_size)) {
->  		printf("VMA with present pages is not marked lock on fault\n");
-> @@ -507,7 +348,7 @@ static int test_munlockall()
->  		goto out;
->  	}
->  
-> -	if (lock_check(map))
-> +	if (!lock_check((unsigned long)map))
->  		goto unmap;
->  
->  	if (munlockall()) {
-> @@ -549,7 +390,7 @@ static int test_munlockall()
->  		goto out;
->  	}
->  
-> -	if (lock_check(map))
-> +	if (!lock_check((unsigned long)map))
->  		goto unmap;
->  
->  	if (munlockall()) {
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  	/* Index of current stored address in ret_stack: */
+>  	int				curr_ret_stack;
 > -- 
-> 2.25.1
+> 2.25.1.696.g5e7596f4ac-goog
 > 
-> -- 
-> Michal Hocko
-> SUSE Labs
->
-
-Thanks Michal!
-
- 
-Acked-by: Rafael Aquini <aquini@redhat.com>
-
+> 
