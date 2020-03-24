@@ -2,206 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D591903AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 03:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3881903B5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 03:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbgCXCnt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Mar 2020 22:43:49 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:51336 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727233AbgCXCnt (ORCPT
+        id S1727047AbgCXC4R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Mar 2020 22:56:17 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:40891 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727060AbgCXC4R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Mar 2020 22:43:49 -0400
-Received: by mail-pg1-f201.google.com with SMTP id p13so12454616pgk.18
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2020 19:43:49 -0700 (PDT)
+        Mon, 23 Mar 2020 22:56:17 -0400
+Received: by mail-wm1-f67.google.com with SMTP id a81so1810657wmf.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2020 19:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=eTp3N4nkJswEWjLmdzIEUcgYFIv4LHoTCMr5UceTnC0=;
-        b=duVXYmX1NIIhw9J6zn+cg9qSXCmyMi++byRbDpCbRpCiD7ti/c9Rm5CPc2jadCXJhJ
-         p7g3A2EShDMEmIpClNeZBQitbAuTGQdsOx+ksZtiWw1G/ADsMhGbAqqq545Wdv7CuJF3
-         om7nCpo03Tj0o09fBw8KJiPR7y0pys2siPB9pTGq37c7LO7SI40I6OKKYJKEYFa+KyTJ
-         1MlTRzQhvkOffhzNPMZOk17N/73BHNJ9iyKT0jXO5duJ12pu+buFVW4NDhWMyOnxWF5o
-         8ZTY3rjyua8C/WxifHo2GWcOlHMYVAKGjnboQMEF1wRg2PbXwuaKK9D5jIES9aEUALb0
-         KOnw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/0+7iyULVUw6dbuIVInQO+4nPeWfn4xVz7ibloxImNQ=;
+        b=pygvSvd+eSrvDdmSvX8FjMjj6JJjC9drPpobUWysZJHmY2+uVcZ/CK1j3o67YZSFev
+         7rH2WjQYGKxuNOjOFg+MHVI1bcoY5f0hf6x2eHxK5zhTR4Opqgl4TJ4lHni0I/AE0Yhg
+         t5QlwixxmXc68bdC1BDiwlnLNRKc4fPy/CexA1KMFW/JPN1/EWVb1MD55t6360/gh0Tr
+         WvmGSqyc86YOZeRUPbn5LNVcMXD6H2cZc3+WNrK8It/KS/Fvkhi1g5e6Cs1LVFqrfZEi
+         ce7M60lZ9CwU7UmHn0ok9azJpMCYwYBxhO+KCVpn63hS0jP/NswzeGUTC+OU6wiUAu3l
+         5qOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=eTp3N4nkJswEWjLmdzIEUcgYFIv4LHoTCMr5UceTnC0=;
-        b=jquRY2JSfCt7Yg+KOUVbIsk4cs9eeQeHyKFdoiBdGsauqR42CUs0/JBIIhvk0f0a0B
-         XMIG2wWerfJoToDDWYK+zdDUoqjgtybPMkbQ6MSdqAYvvIbwLeQNiTTf5RayfV2K13PE
-         uj5gI9V/TGaVnvYdcpRz8nZLIWIqbFmjUaTEhjhHrFje+FFZ0Qc/rsB43Aso0Q1A07IC
-         7C4nVYnVLVgvXqieWyDRpDU8RgCZlszx6LAYBhHrvs1Hs8olhBluDPMIu8v9QEhbm6mW
-         Ljol56WTrf+6i32jaekl39CmHrlullv4G3+UC0qEszZwJzHPy5qlnuALjmftO2VxIo/y
-         ItDA==
-X-Gm-Message-State: ANhLgQ1lpgAN/mczZZSDkqdf90Ea/r3goON50Iw2bC+gzxqg3QDAPf2c
-        GtAPK8jqgV9H4jOa2cxz6HategMH22wjtg==
-X-Google-Smtp-Source: ADFU+vuGHAbgKtD4x8SeIZ/cQnb7NuSwVwUtwDW7rT5zLneRNs95ax3biU44QI00wuwqkQPz4oK2sbVyP3HYXQ==
-X-Received: by 2002:a17:90a:8087:: with SMTP id c7mr2633130pjn.148.1585017828493;
- Mon, 23 Mar 2020 19:43:48 -0700 (PDT)
-Date:   Mon, 23 Mar 2020 19:43:33 -0700
-Message-Id: <20200324024333.41663-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
-Subject: [PATCH kunit-next] kunit: kunit_tool: Allow .kunitconfig to disable
- config items
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/0+7iyULVUw6dbuIVInQO+4nPeWfn4xVz7ibloxImNQ=;
+        b=ms6Bv9KMNaLmFO+Uzw9riGZDy6nk3gke9AuMUmHEGUCG1TvKBEahKaVTLYIIZ6BF2X
+         4ucLmbJkUKXe5/M66ZQx3mJIxp8UC+tDNbOgUSGhWCRcx4yUXLu/C+GvbcY3p+UbS3Sr
+         4WNQSy1VVQ+UG8M7bMDh2WwJKJwKNiyFGJLTc37ob4jTUAnrEIOcpKC0IPOqG7e4eyeo
+         KnqjcKtepIX9mri/wrUnO2pG3TxJiLwcjEmYMhvrF6mh+Oo3RKSOUPMp72vHSRKVKTT6
+         SwY/FNLdE049iY3e03EFHibl57sts7E848NBExv2Q/pZNmDKo64xsLhUKiG50ZRundVh
+         LhdA==
+X-Gm-Message-State: ANhLgQ11zcRZ1I/3WRnodnGacbac6MxR65J2w1QMdns6E2C6o74Katvd
+        DkBDcnAtorwQm/AZlgAWBufX+CUGq0Ycd0+1Jc9A5A==
+X-Google-Smtp-Source: ADFU+vtDDkbuzT5Gw8bD3VQH7XBa3+hEnpPF8q/9mh4Mk8cuXyVL3lDQtyD9qM5xo1O9D4wQLY3hbJhIkJv3u9c9FXE=
+X-Received: by 2002:a1c:2404:: with SMTP id k4mr2634050wmk.87.1585018574854;
+ Mon, 23 Mar 2020 19:56:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200323192236.70152-1-brendanhiggins@google.com>
+In-Reply-To: <20200323192236.70152-1-brendanhiggins@google.com>
 From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+Date:   Mon, 23 Mar 2020 19:56:03 -0700
+Message-ID: <CABVgOSkf58zMRhpqoZY3cZuAfujnTwVe14xOMcS6VBC4S2+vEw@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: tool: add missing test data file content
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Heidi Fahim <heidifahim@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rework kunit_tool in order to allow .kunitconfig files to better enforce
-that disabled items in .kunitconfig are disabled in the generated
-.config.
+On Mon, Mar 23, 2020 at 12:22 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> Add a missing raw dmesg test log to test the kunit_tool's dmesg parser.
+> test_prefix_poundsign and test_output_with_prefix_isolated_correctly
+> fail without this test log.
+>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 
-Previously, kunit_tool simply enforced that any line present in
-.kunitconfig was also present in .config, but this could cause problems
-if a config option was disabled in .kunitconfig, but not listed in .config
-due to (for example) having disabled dependencies.
+Tested-by: David Gow <davidgow@google.com>
 
-To fix this, re-work the parser to track config names and values, and
-require values to match unless they are explicitly disabled with the
-"CONFIG_x is not set" comment (or by setting its value to 'n'). Those
-"disabled" values will pass validation if omitted from the .config, but
-not if they have a different value.
+This patch does indeed fix the kunit_tool's unit tests (run with
+./tools/testing/kunit/kunit_tool_test.py).
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- tools/testing/kunit/kunit_config.py    | 41 ++++++++++++++++++++------
- tools/testing/kunit/kunit_tool_test.py | 22 +++++++-------
- 2 files changed, 43 insertions(+), 20 deletions(-)
+Beforehand, it failed with the errors below:
+======================================================================
+ERROR: test_prefix_poundsign (__main__.KUnitParserTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+ File "./tools/testing/kunit/kunit_tool_test.py", line 208, in
+test_prefix_poundsign
+   self.assertEqual('kunit-resource-test', result.suites[0].name)
+IndexError: list index out of range
 
-diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-index ebf3942b23f5..e75063d603b5 100644
---- a/tools/testing/kunit/kunit_config.py
-+++ b/tools/testing/kunit/kunit_config.py
-@@ -9,16 +9,18 @@
- import collections
- import re
- 
--CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_\w+ is not set$'
--CONFIG_PATTERN = r'^CONFIG_\w+=\S+$'
--
--KconfigEntryBase = collections.namedtuple('KconfigEntry', ['raw_entry'])
-+CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
-+CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+)$'
- 
-+KconfigEntryBase = collections.namedtuple('KconfigEntry', ['name', 'value'])
- 
- class KconfigEntry(KconfigEntryBase):
- 
- 	def __str__(self) -> str:
--		return self.raw_entry
-+		if self.value == 'n':
-+			return r'# CONFIG_%s is not set' % (self.name)
-+		else:
-+			return r'CONFIG_%s=%s' % (self.name, self.value)
- 
- 
- class KconfigParseError(Exception):
-@@ -38,7 +40,17 @@ class Kconfig(object):
- 		self._entries.append(entry)
- 
- 	def is_subset_of(self, other: 'Kconfig') -> bool:
--		return self.entries().issubset(other.entries())
-+		for a in self.entries():
-+			found = False
-+			for b in other.entries():
-+				if a.name != b.name:
-+					continue
-+				if a.value != b.value:
-+					return False
-+				found = True
-+			if a.value != 'n' and found == False:
-+				return False
-+		return True
- 
- 	def write_to_file(self, path: str) -> None:
- 		with open(path, 'w') as f:
-@@ -54,9 +66,20 @@ class Kconfig(object):
- 			line = line.strip()
- 			if not line:
- 				continue
--			elif config_matcher.match(line) or is_not_set_matcher.match(line):
--				self._entries.append(KconfigEntry(line))
--			elif line[0] == '#':
-+
-+			match = config_matcher.match(line)
-+			if match:
-+				entry = KconfigEntry(match.group(1), match.group(2))
-+				self.add_entry(entry)
-+				continue
-+
-+			empty_match = is_not_set_matcher.match(line)
-+			if empty_match:
-+				entry = KconfigEntry(empty_match.group(1), 'n')
-+				self.add_entry(entry)
-+				continue
-+
-+			if line[0] == '#':
- 				continue
- 			else:
- 				raise KconfigParseError('Failed to parse: ' + line)
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index ce47e87b633a..984588d6ba95 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -37,7 +37,7 @@ class KconfigTest(unittest.TestCase):
- 		self.assertTrue(kconfig0.is_subset_of(kconfig0))
- 
- 		kconfig1 = kunit_config.Kconfig()
--		kconfig1.add_entry(kunit_config.KconfigEntry('CONFIG_TEST=y'))
-+		kconfig1.add_entry(kunit_config.KconfigEntry('TEST', 'y'))
- 		self.assertTrue(kconfig1.is_subset_of(kconfig1))
- 		self.assertTrue(kconfig0.is_subset_of(kconfig1))
- 		self.assertFalse(kconfig1.is_subset_of(kconfig0))
-@@ -51,15 +51,15 @@ class KconfigTest(unittest.TestCase):
- 
- 		expected_kconfig = kunit_config.Kconfig()
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_UML=y'))
-+			kunit_config.KconfigEntry('UML', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_MMU=y'))
-+			kunit_config.KconfigEntry('MMU', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_TEST=y'))
-+			kunit_config.KconfigEntry('TEST', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_EXAMPLE_TEST=y'))
-+			kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('# CONFIG_MK8 is not set'))
-+			kunit_config.KconfigEntry('MK8', 'n'))
- 
- 		self.assertEqual(kconfig.entries(), expected_kconfig.entries())
- 
-@@ -68,15 +68,15 @@ class KconfigTest(unittest.TestCase):
- 
- 		expected_kconfig = kunit_config.Kconfig()
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_UML=y'))
-+			kunit_config.KconfigEntry('UML', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_MMU=y'))
-+			kunit_config.KconfigEntry('MMU', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_TEST=y'))
-+			kunit_config.KconfigEntry('TEST', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('CONFIG_EXAMPLE_TEST=y'))
-+			kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
- 		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('# CONFIG_MK8 is not set'))
-+			kunit_config.KconfigEntry('MK8', 'n'))
- 
- 		expected_kconfig.write_to_file(kconfig_path)
- 
--- 
-2.25.1.696.g5e7596f4ac-goog
+======================================================================
+FAIL: test_output_with_prefix_isolated_correctly
+(__main__.KUnitParserTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+ File "./tools/testing/kunit/kunit_tool_test.py", line 116, in
+test_output_with_prefix_isolated_correctly
+   self.assertContains('TAP version 14\n', result)
+ File "./tools/testing/kunit/kunit_tool_test.py", line 96, in
+assertContains
+   str(needle) + '" not found in "' + str(haystack) + '"!')
+AssertionError: "TAP version 14
+" not found in "<generator object isolate_kunit_output at 0x7f4e88d85ed0>"!
 
+----------------------------------------------------------------------
+Ran 20 tests in 0.022s
+
+FAILED (failures=1, errors=1)
