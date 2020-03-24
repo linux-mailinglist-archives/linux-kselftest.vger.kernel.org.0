@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D143C1917E8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 18:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA78719181F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 18:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727314AbgCXRnF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Mar 2020 13:43:05 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40734 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727273AbgCXRnF (ORCPT
+        id S1727689AbgCXRs4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Mar 2020 13:48:56 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:33631 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727310AbgCXRs4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Mar 2020 13:43:05 -0400
-Received: by mail-wr1-f66.google.com with SMTP id u10so2248133wro.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2020 10:43:04 -0700 (PDT)
+        Tue, 24 Mar 2020 13:48:56 -0400
+Received: by mail-wr1-f67.google.com with SMTP id a25so22674526wrd.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2020 10:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LbJGyxS21FEV88+GhI3Kztu2LQlp+tbZk/mv+EeL9vg=;
-        b=KrRtb/WCwVOE3Yofiqo25n2GrqCh9MYlYF+pH7YKrj6IqWq9dYdz6dXwjih4odd78a
-         03Mp+nNPPKHkjraIZLyxvYmulBEiCkfqFBo/ySBKTnxpoKWZx5mojmPJYUg1BPl+upOK
-         XpS43pmp5U8ZBf6hNQBfTpPm4+Ads9Qo7RkUz/vs0GHdau/oF8LkV3MaDvhBZrJiAzHK
-         PM48JjJL1kEeBbcJkBe5uz6v+PrkxiSso1YxTD7aDlq9rSb50qbx7v0AZNYbHykeBNld
-         SDSdXFgIddm6rL48/Nmn/u0riy9RzfJ0RJUZ0sbMnm2o2dnkXswDiFePoF91JbsBaTn5
-         VnaA==
+        bh=TzOHB9g3KOGeLI2ijxAL8EBdgHfC4lrNr/2ltbuc77Y=;
+        b=UzoH2I2FTY/43x5y/+X27TaBy4MSRZk6YoxxSda9ZgsFSJJOavyd0PVOCwCFvLH2kf
+         1lwZOyArtktkS38izq82lULyNjOEUb5pCzaGZi9jYz6Dkh/tWBdF/g6qTtUI2XxnuTyf
+         iUe6lrpgdTpXcKKtWcpg+9BG5GV/WWpLAdCnCQWBKr75baAN+LE+kRIbYidhfHK8WeCJ
+         41lcg4rSKPXSVU4OP2wXo/+jKQr098kKuTCdYlR/oZt3norpZYS0TtMex4ykrJt8cVGc
+         hylCWZctBTRhgtBuZR8AJDE/EeEtlpAJeTNML1DH+USLxqkQUKu04gazc2WwrWHWkxl8
+         Uzrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LbJGyxS21FEV88+GhI3Kztu2LQlp+tbZk/mv+EeL9vg=;
-        b=VqahdvTJ4Gs9DFtbUNTXT2Qbgei4xwI7QW8NNFfHlUAFGATJFAk+FCBXquTBD3Ae+Z
-         5OH9+rx4QuWsPxZn0o7ukDfE9XdT2fGmRQwuWwM34GJxfnM8ETFpB99KzoYecquLswW3
-         q42gAFFUBnLvK0aqzX42+Y6CwJUo2YtvANW4q7+As0patKzT+HZc+K5EAVKRbiZgcnKz
-         kaIINKRGgvICK8D/q8h3j1jpth6bes/XTN6rw1oO63snrzQZajGwH2j0/w7VB7BMnTqV
-         M+kvxE7YQ1sQShucmenZA6gZYh6z8HeG2FOllijggjZU/TYTEhvaX/ubUX4ANW2XH9Kr
-         XPLA==
-X-Gm-Message-State: ANhLgQ39S8eKNMyYkNITqGcT9vU31eqlRexMaVO0APAqMeSN2KLJdM7Y
-        AqUf9bdyprJz1DzaIwoBTS69UEj1Wue2sG/6klK7FA==
-X-Google-Smtp-Source: ADFU+vuY55b1i550qyCWvAJDdha/jsXGT7t7S/WR85g/XPJgq8NUulwDyx/KYGRHxtYprPYUQKbl+GKumofr6+Scims=
-X-Received: by 2002:a5d:4ac8:: with SMTP id y8mr37687404wrs.272.1585071783098;
- Tue, 24 Mar 2020 10:43:03 -0700 (PDT)
+        bh=TzOHB9g3KOGeLI2ijxAL8EBdgHfC4lrNr/2ltbuc77Y=;
+        b=BBtcooaclv7G+06LCg2hYzoMFB5XyJsNk6eHcRzt72qcNJRCMbgO/z4rtuKL6p0V2J
+         llZPkGkMN8nzPzluCrGb/HKJOxpTJowk83XWcGPNXHtziZhRPdeOat8NT8xDrlu7zNtW
+         s7do6ndn4YG3YyU+RWe14MB66Kkhc+cIOLofdeOVIkXtN3L7+a12KbpIrTRFXCJy9csz
+         r5PPdT3SjJcfs0AgiGki5emCMx3BLwuOa9q2K75hi7ho+TV14VokPUnVB5lum0iAMcbp
+         Ux8iPCqCOJ0pbv4JBZ1Oga0UctwhV9rNml8VTQZUJo9QNvVQlUwv+yVAi6ok8sDlnx2s
+         d3eA==
+X-Gm-Message-State: ANhLgQ3tia2yfh9C3HZfzR8RN+fjk0V0xrFLeactoWVeEXMb3kaAiJY5
+        qdolLQLbf8xpxPxkZJNqQHgFY2UQ8FV4v3VFZCHuxw==
+X-Google-Smtp-Source: ADFU+vv3p6YM06Db/TDNBgWIMF4qoiVsL3C4E4QOO5ns7h/8ij0/+G9aheTpeLDxHlakVbqiaj3sy5cV+cT1D6s5h/s=
+X-Received: by 2002:adf:efc9:: with SMTP id i9mr17429674wrp.23.1585072133363;
+ Tue, 24 Mar 2020 10:48:53 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200319164227.87419-1-trishalfonso@google.com>
- <20200319164227.87419-2-trishalfonso@google.com> <alpine.LRH.2.21.2003241635230.30637@localhost>
-In-Reply-To: <alpine.LRH.2.21.2003241635230.30637@localhost>
+ <20200319164227.87419-3-trishalfonso@google.com> <alpine.LRH.2.21.2003241640150.30637@localhost>
+In-Reply-To: <alpine.LRH.2.21.2003241640150.30637@localhost>
 From:   Patricia Alfonso <trishalfonso@google.com>
-Date:   Tue, 24 Mar 2020 10:42:51 -0700
-Message-ID: <CAKFsvULUx3qi_kMGJx69ndzCgq=m2xf4XWrYRYBCViud0P7qqA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/3] Add KUnit Struct to Current Task
+Date:   Tue, 24 Mar 2020 10:48:42 -0700
+Message-ID: <CAKFsvUKog1m77u+Jx58OHCXuxNNmw=joDZ-0VZ93FT4H7s0zSQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/3] KUnit: KASAN Integration
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
@@ -69,52 +69,249 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 9:40 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Tue, Mar 24, 2020 at 9:45 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
 >
 > On Thu, 19 Mar 2020, Patricia Alfonso wrote:
 >
-> > In order to integrate debugging tools like KASAN into the KUnit
-> > framework, add KUnit struct to the current task to keep track of the
-> > current KUnit test.
+> > Integrate KASAN into KUnit testing framework.
+> >       - Fail tests when KASAN reports an error that is not expected
+> >       - Use KUNIT_EXPECT_KASAN_FAIL to expect a KASAN error in KASAN tests
+> >       - Expected KASAN reports pass tests and are still printed when run
+> >       without kunit_tool (kunit_tool still bypasses the report due to the
+> >       test passing)
+> >       - KUnit struct in current task used to keep track of the current test
+> >       from KASAN code
+> >
+> > Make use of "[RFC PATCH kunit-next 1/2] kunit: generalize
+> > kunit_resource API beyond allocated resources" and "[RFC PATCH
+> > kunit-next 2/2] kunit: add support for named resources" from Alan
+> > Maguire [1]
+> >       - A named resource is added to a test when a KASAN report is
+> >        expected
+> >         - This resource contains a struct for kasan_data containing
+> >         booleans representing if a KASAN report is expected and if a
+> >         KASAN report is found
+> >
+> > [1] (https://lore.kernel.org/linux-kselftest/1583251361-12748-1-git-send-email-alan.maguire@oracle.com/T/#t)
 > >
 > > Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
 > > ---
-> >  include/linux/sched.h | 4 ++++
-> >  1 file changed, 4 insertions(+)
+> >  include/kunit/test.h | 10 ++++++++++
+> >  lib/kunit/test.c     | 10 +++++++++-
+> >  lib/test_kasan.c     | 37 +++++++++++++++++++++++++++++++++++++
+> >  mm/kasan/report.c    | 33 +++++++++++++++++++++++++++++++++
+> >  4 files changed, 89 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > index 04278493bf15..1fbfa0634776 100644
-> > --- a/include/linux/sched.h
-> > +++ b/include/linux/sched.h
-> > @@ -1180,6 +1180,10 @@ struct task_struct {
-> >       unsigned int                    kasan_depth;
-> >  #endif
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 70ee581b19cd..2ab265f4f76c 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -19,9 +19,19 @@
+> >
+> >  struct kunit_resource;
+> >
+> > +#ifdef CONFIG_KASAN
+> > +/* kasan_data struct is used in KUnit tests for KASAN expected failures */
+> > +struct kunit_kasan_expectation {
+> > +     bool report_expected;
+> > +     bool report_found;
+> > +};
+> > +#endif /* CONFIG_KASAN */
+> > +
+>
+> Above should be moved to mm/kasan/kasan.h I think.
+>
+> >  typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
+> >  typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+> >
+> > +void kunit_set_failure(struct kunit *test);
+> > +
+>
+> Can you explain a bit more about why we need this exported?
+> I see where it's used but I'd just like to make sure I
+> understand what you're trying to do. Thanks!
+>
+I need the ability to set a KUnit test failure from outside the KUnit
+code so that a test that does not expect a KASAN failure, but reaches
+the point in the KASAN code where a report is printed will properly
+fail due to this found KASAN failure.
+
+> >  /**
+> >   * struct kunit_resource - represents a *test managed resource*
+> >   * @data: for the user to store arbitrary data.
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 86a4d9ca0a45..3f927ef45827 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -10,11 +10,12 @@
+> >  #include <linux/kernel.h>
+> >  #include <linux/kref.h>
+> >  #include <linux/sched/debug.h>
+> > +#include <linux/sched.h>
+> >
+> >  #include "string-stream.h"
+> >  #include "try-catch-impl.h"
+> >
+> > -static void kunit_set_failure(struct kunit *test)
+> > +void kunit_set_failure(struct kunit *test)
+> >  {
+> >       WRITE_ONCE(test->success, false);
+> >  }
+> > @@ -237,6 +238,10 @@ static void kunit_try_run_case(void *data)
+> >       struct kunit_suite *suite = ctx->suite;
+> >       struct kunit_case *test_case = ctx->test_case;
+> >
+> > +#if (IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT))
+> > +     current->kunit_test = test;
+> > +#endif /* IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT) */
+> > +
+> >       /*
+> >        * kunit_run_case_internal may encounter a fatal error; if it does,
+> >        * abort will be called, this thread will exit, and finally the parent
+> > @@ -590,6 +595,9 @@ void kunit_cleanup(struct kunit *test)
+> >               spin_unlock(&test->lock);
+> >               kunit_remove_resource(test, res);
+> >       }
+> > +#if (IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT))
+> > +     current->kunit_test = NULL;
+>
+> As per patch 1, I'd suggest changing here and elsewhere to
+> "IS_ENABLED(CONFIG_KUNIT)".
+>
+"IS_ENABLED(CONFIG_KUNIT)" does not work because KASAN is built-in so
+it can't rely on modules so this patchset relies on KUnit being
+built-in.
+
+> > +#endif /* IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT)*/
+> >  }
+> >  EXPORT_SYMBOL_GPL(kunit_cleanup);
+> >
+> > diff --git a/lib/test_kasan.c b/lib/test_kasan.c
+> > index 3872d250ed2c..cf73c6bee81b 100644
+> > --- a/lib/test_kasan.c
+> > +++ b/lib/test_kasan.c
+> > @@ -23,6 +23,43 @@
+> >
+> >  #include <asm/page.h>
+> >
+> > +#include <kunit/test.h>
+> > +
+> > +struct kunit_resource resource;
+> > +struct kunit_kasan_expectation fail_data;
+> > +
+> > +#define KUNIT_SET_KASAN_DATA(test) do { \
+> > +     fail_data.report_expected = true; \
+> > +     fail_data.report_found = false; \
+> > +     kunit_add_named_resource(test, \
+> > +                             NULL, \
+> > +                             NULL, \
+> > +                             &resource, \
+> > +                             "kasan_data", &fail_data); \
+> > +} while (0)
+> > +
+> > +#define KUNIT_DO_EXPECT_KASAN_FAIL(test, condition) do { \
+> > +     struct kunit_resource *resource; \
+> > +     struct kunit_kasan_expectation *kasan_data; \
+> > +     condition; \
+> > +     resource = kunit_find_named_resource(test, "kasan_data"); \
+> > +     kasan_data = resource->data; \
+> > +     KUNIT_EXPECT_EQ(test, \
+> > +                     kasan_data->report_expected, \
+> > +                     kasan_data->report_found); \
+> > +     kunit_put_resource(resource); \
+> > +} while (0)
+> > +
+> > +/**
+> > + * KUNIT_EXPECT_KASAN_FAIL() - Causes a test failure when the expression does
+> > + * not cause a KASAN error.
+> > + *
+> > + */
+> > +#define KUNIT_EXPECT_KASAN_FAIL(test, condition) do { \
+> > +     KUNIT_SET_KASAN_DATA(test); \
+> > +     KUNIT_DO_EXPECT_KASAN_FAIL(test, condition); \
+> > +} while (0)
+> > +
+> >  /*
+> >   * Note: test functions are marked noinline so that their names appear in
+> >   * reports.
+> > diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> > index 5ef9f24f566b..ef3d0f54097e 100644
+> > --- a/mm/kasan/report.c
+> > +++ b/mm/kasan/report.c
+> > @@ -32,6 +32,8 @@
+> >
+> >  #include <asm/sections.h>
+> >
+> > +#include <kunit/test.h>
+> > +
+> >  #include "kasan.h"
+> >  #include "../slab.h"
+> >
+> > @@ -455,12 +457,38 @@ static bool report_enabled(void)
+> >       return !test_and_set_bit(KASAN_BIT_REPORTED, &kasan_flags);
+> >  }
 > >
 > > +#if IS_BUILTIN(CONFIG_KUNIT)
 >
-> This patch set looks great! You might have noticed I
-> refreshed the kunit resources stuff to incorporate
-> feedback from Brendan, but I don't think any API changes
-> were made that should have consequences for your code
-> (I'm building with your patches on top to make sure).
-> I'd suggest promoting from RFC to v3 on the next round
-> unless anyone objects.
+> again we could tweak this to IS_ENABLED(CONFIG_KUNIT); BTW
+> the reason we can compile kunit as a module for these tests
+> is the KASAN tests are tristate themselves. If they were
+> builtin only it wouldn't be possible to build kunit as
+> a module.
 >
-> As Dmitry suggested, the above could likely be changed to be
-> "#ifdef CONFIG_KUNIT" as kunit can be built as a
-> module also. More on this in patch 2..
->
-I suppose this could be changed so that this can be used in possible
-future scenarios, but for now, since built-in things can't rely on
-modules, the KASAN integration relies on KUnit being built-in.
-
-> > +     struct kunit                    *kunit_test;
+> > +void kasan_update_kunit_status(struct kunit *cur_test)
+> > +{
+> > +     struct kunit_resource *resource;
+> > +     struct kunit_kasan_expectation *kasan_data;
+> > +
+> > +     if (kunit_find_named_resource(cur_test, "kasan_data")) {
+> > +             resource = kunit_find_named_resource(cur_test, "kasan_data");
+> > +             kasan_data = resource->data;
+> > +             kasan_data->report_found = true;
+> > +
+> > +             if (!kasan_data->report_expected)
+> > +                     kunit_set_failure(current->kunit_test);
+> > +             else
+> > +                     return;
+> > +     } else
+> > +             kunit_set_failure(current->kunit_test);
+> > +}
 > > +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
 > > +
-> >  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> >       /* Index of current stored address in ret_stack: */
-> >       int                             curr_ret_stack;
+> >  void kasan_report_invalid_free(void *object, unsigned long ip)
+> >  {
+> >       unsigned long flags;
+> >       u8 tag = get_tag(object);
+> >
+> >       object = reset_tag(object);
+> > +
+> > +#if IS_BUILTIN(CONFIG_KUNIT)
+>
+> same comment as above.
+>
+> > +     if (current->kunit_test)
+> > +             kasan_update_kunit_status(current->kunit_test);
+> > +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> > +
+> >       start_report(&flags);
+> >       pr_err("BUG: KASAN: double-free or invalid-free in %pS\n", (void *)ip);
+> >       print_tags(tag, object);
+> > @@ -481,6 +509,11 @@ void __kasan_report(unsigned long addr, size_t size, bool is_write, unsigned lon
+> >       if (likely(!report_enabled()))
+> >               return;
+> >
+> > +#if IS_BUILTIN(CONFIG_KUNIT)
+>
+> here too.
+>
+> > +     if (current->kunit_test)
+> > +             kasan_update_kunit_status(current->kunit_test);
+> > +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> > +
+> >       disable_trace_on_warning();
+> >
+> >       tagged_addr = (void *)addr;
 > > --
 > > 2.25.1.696.g5e7596f4ac-goog
 > >
