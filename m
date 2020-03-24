@@ -2,206 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0272F1913A4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 15:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F341913D5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 16:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728088AbgCXOvk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Mar 2020 10:51:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:36588 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728024AbgCXOvk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Mar 2020 10:51:40 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFB1A1063;
-        Tue, 24 Mar 2020 07:51:39 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBAB23F52E;
-        Tue, 24 Mar 2020 07:51:38 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: [PATCH 3/3] kselftest: Extend vDSO selftest to clock_getres
-Date:   Tue, 24 Mar 2020 14:51:20 +0000
-Message-Id: <20200324145120.42194-4-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200324145120.42194-1-vincenzo.frascino@arm.com>
-References: <20200324145120.42194-1-vincenzo.frascino@arm.com>
+        id S1727682AbgCXPFR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Mar 2020 11:05:17 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:35265 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727270AbgCXPFR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Mar 2020 11:05:17 -0400
+Received: by mail-wr1-f65.google.com with SMTP id d5so9539415wrn.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2020 08:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z37whwAEqv2UhQ238liZabu95DixugSK+aNM/HESChs=;
+        b=koZzPW8Onon8s5EyCubFp/bBT+4QR2ekY8m1b/Ql5hFd2LxT5rbMicbghIQlwGiuoL
+         6rWV6xUHlKEw6RXlfd3ONn61FJ8XrH9auITAHSbhRLOXQmQ3tOHbp7PliOed5widCviT
+         /aU9XENZq1ULLHxVXOuA8YT0nDuPbmyDozB49Vip/gkmXNam5Npqu3+saE1TRSglsNCk
+         IPwKjPoLX2PcRSbFDMP2O33SLKyILoXPIPZ+Q5TkFKEybEC4sft0RnNNvOqOSM9onIxp
+         ko6XL6k39lR+0IAmhVGd6f4BHCcsTtyCvP/t0dmZmr8wOfPu7CGt74vjP+6RIl7QmIKp
+         0BPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z37whwAEqv2UhQ238liZabu95DixugSK+aNM/HESChs=;
+        b=WgeOQ5loxqfAPlW6NHd15xLNYJHItHVdZt0m8d8T8m63I95wearFitKJbHpiEf9p27
+         XD6LDMG0gPgOVVXXLgRMzZr6ZUdlXf2d+LzakIcCHdl9H+wI4GBFOVmpo6rag8EfMHZt
+         Cvwqe8MzXZH+MFdfBvRx/gcxW4S9RdCAPb7Z6i9EJP+1XPt9svu7JwvFZCNkrcZRt9AD
+         zt77f+LiAknOJV9I3U5sqct+K9L8HYFsjRQ1PvDSvRnQGTTz7xot7lPd606uO8kzb3bd
+         dDWv0/0vEWJtHd8bHgrGFMQNFcXvjOCttJOZ3SLcm5B+ZIcc0J64t9Gd/WdS+/CEiGjx
+         431A==
+X-Gm-Message-State: ANhLgQ3YV8vomStxZ7hNIZBkv3ZdBXgxFKoW6YMjFnIYvzpjOVkkE22Z
+        fw308wMxJa80vXDEAXbiBvehjp7pLG+bgaIj/0tung==
+X-Google-Smtp-Source: ADFU+vv5uwUvgJQDSn/3Zx+Rn4R0s1EmrXHv+2/PHWkMDb0cor0QQriDfYgKM2IRY62TlO7H+78iIm49lYZ8Lu3YLT8=
+X-Received: by 2002:adf:efc9:: with SMTP id i9mr16611416wrp.23.1585062314941;
+ Tue, 24 Mar 2020 08:05:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200319164227.87419-1-trishalfonso@google.com>
+ <20200319164227.87419-4-trishalfonso@google.com> <CACT4Y+YHPfP3LP04=Zc4NgyhH8FMJ9m-eU_VPjmk5SmGWo_fTg@mail.gmail.com>
+In-Reply-To: <CACT4Y+YHPfP3LP04=Zc4NgyhH8FMJ9m-eU_VPjmk5SmGWo_fTg@mail.gmail.com>
+From:   Patricia Alfonso <trishalfonso@google.com>
+Date:   Tue, 24 Mar 2020 08:05:03 -0700
+Message-ID: <CAKFsvU+N=8=VmKVdNdf6os26z+vVD=vR=TL5GJtLQhR9FxOJUQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/3] KASAN: Port KASAN Tests to KUnit
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        kunit-dev@googlegroups.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current version of the multiarch vDSO selftest verifies only
-gettimeofday.
+On Tue, Mar 24, 2020 at 4:25 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Thu, Mar 19, 2020 at 5:42 PM 'Patricia Alfonso' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+> >
+> > Transfer all previous tests for KASAN to KUnit so they can be run
+> > more easily. Using kunit_tool, developers can run these tests with their
+> > other KUnit tests and see "pass" or "fail" with the appropriate KASAN
+> > report instead of needing to parse each KASAN report to test KASAN
+> > functionalities. All KASAN reports are still printed to dmesg.
+> >
+> > Stack tests do not work in UML so those tests are protected inside an
+> > "#if IS_ENABLED(CONFIG_KASAN_STACK)" so this only runs if stack
+> > instrumentation is enabled.
+> >
+> > copy_user_test cannot be run in KUnit so there is a separate test file
+> > for those tests, which can be run as before as a module.
+>
+> Hi Patricia,
+>
+> FWIW I've got some conflicts applying this patch on latest linux-next
+> next-20200324. There are some changes to the tests in mm tree I think.
+>
+> Which tree will this go through? I would be nice to resolve these
+> conflicts somehow, but I am not sure how. Maybe the kasan tests
+> changes are merged upstream next windows, and then rebase this?
+>
+> Also, how can I apply this for testing? I assume this is based on some
+> kunit branch? which one?
+>
+Hmm... okay, that sounds like a problem. I will have to look into the
+conflicts. I'm not sure which tree this will go through upstream; I
+expect someone will tell me which is best when the time comes. This is
+based on the kunit branch in the kunit documentation here:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
 
-Extend the vDSO selftest to clock_getres, to verify that the
-syscall and the vDSO library function return the same information.
+> Why the copy_from_user tests can't be converted?
+> It would be very nice to get rid of the modules entirely, rather than
+> having 2 different test procedures because of 2 tests.
+> Or, alternatively can there be other tests in future that can't be
+> converted? Naming it "KASAN_USER" looks somewhat overspecialized. Say
+> tomorrow we have another test that can't run under Kunit, but is not
+> related to copt_from_user, should we create yet another module for it?
+> I think the crux of that is that's a module, so a better name may be
+> "KASAN_TEST_MODULE". Currently all tests that need to run as module
+> are related to copy_from_user, but that's just an implementation
+> detail.
+>
+When I converted the copy_user_tests into KUnit, I was getting a
+kernel panic with a "Segfault with no mm." According to Brendan, since
+KUnit starts a new kthread and is not invoked via a syscall, things
+like copy_to_user won't work in the KUnit framework.
 
-The extension has been used to verify the hrtimer_resoltion fix.
+I agree that the naming is too specific, but is KASAN_TEST_MODULE too
+generic since the current KASAN_TEST can be built as a module? Maybe
+TEST_KASAN can be KUNIT_TEST_KASAN and TEST_KASAN_USER can be
+TEST_KASAN_MODULE...
 
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- tools/testing/selftests/vDSO/Makefile         |   2 +
- .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
- 2 files changed, 126 insertions(+)
- create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
-
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index 46aab4eaccbd..7b096eedfd5d 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -6,6 +6,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
- TEST_GEN_PROGS := $(OUTPUT)/vdso_test
- TEST_GEN_PROGS += $(OUTPUT)/vdso_full_test
-+TEST_GEN_PROGS += $(OUTPUT)/vdso_clock_getres
- ifeq ($(ARCH),x86)
- TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
- endif
-@@ -19,6 +20,7 @@ endif
- all: $(TEST_GEN_PROGS)
- $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
- $(OUTPUT)/vdso_full_test: parse_vdso.c vdso_full_test.c
-+$(OUTPUT)/vdso_clock_getres: vdso_clock_getres.c
- $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
- 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
- 		vdso_standalone_test_x86.c parse_vdso.c \
-diff --git a/tools/testing/selftests/vDSO/vdso_clock_getres.c b/tools/testing/selftests/vDSO/vdso_clock_getres.c
-new file mode 100644
-index 000000000000..15dcee16ff72
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_clock_getres.c
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
-+/*
-+ * vdso_clock_getres.c: Sample code to test clock_getres.
-+ * Copyright (c) 2019 Arm Ltd.
-+ *
-+ * Compile with:
-+ * gcc -std=gnu99 vdso_clock_getres.c
-+ *
-+ * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
-+ * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
-+ * Might work on other architectures.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <elf.h>
-+#include <err.h>
-+#include <fcntl.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <time.h>
-+#include <sys/auxv.h>
-+#include <sys/mman.h>
-+#include <sys/time.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+
-+#include "../kselftest.h"
-+
-+static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
-+{
-+	long ret;
-+
-+	ret = syscall(SYS_clock_getres, _clkid, _ts);
-+
-+	return ret;
-+}
-+
-+const char *vdso_clock_name[12] = {
-+	"CLOCK_REALTIME",
-+	"CLOCK_MONOTONIC",
-+	"CLOCK_PROCESS_CPUTIME_ID",
-+	"CLOCK_THREAD_CPUTIME_ID",
-+	"CLOCK_MONOTONIC_RAW",
-+	"CLOCK_REALTIME_COARSE",
-+	"CLOCK_MONOTONIC_COARSE",
-+	"CLOCK_BOOTTIME",
-+	"CLOCK_REALTIME_ALARM",
-+	"CLOCK_BOOTTIME_ALARM",
-+	"CLOCK_SGI_CYCLE",
-+	"CLOCK_TAI",
-+};
-+
-+/*
-+ * This function calls clock_getres in vdso and by system call
-+ * with different values for clock_id.
-+ *
-+ * Example of output:
-+ *
-+ * clock_id: CLOCK_REALTIME [PASS]
-+ * clock_id: CLOCK_BOOTTIME [PASS]
-+ * clock_id: CLOCK_TAI [PASS]
-+ * clock_id: CLOCK_REALTIME_COARSE [PASS]
-+ * clock_id: CLOCK_MONOTONIC [PASS]
-+ * clock_id: CLOCK_MONOTONIC_RAW [PASS]
-+ * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-+ */
-+static inline int vdso_test_clock(unsigned int clock_id)
-+{
-+	struct timespec x, y;
-+
-+	printf("clock_id: %s", vdso_clock_name[clock_id]);
-+	clock_getres(clock_id, &x);
-+	syscall_clock_getres(clock_id, &y);
-+
-+	if ((x.tv_sec != y.tv_sec) || (x.tv_nsec != y.tv_nsec)) {
-+		printf(" [FAIL]\n");
-+		return KSFT_FAIL;
-+	}
-+
-+	printf(" [PASS]\n");
-+	return KSFT_PASS;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int ret;
-+
-+#if _POSIX_TIMERS > 0
-+
-+#ifdef CLOCK_REALTIME
-+	ret = vdso_test_clock(CLOCK_REALTIME);
-+#endif
-+
-+#ifdef CLOCK_BOOTTIME
-+	ret += vdso_test_clock(CLOCK_BOOTTIME);
-+#endif
-+
-+#ifdef CLOCK_TAI
-+	ret += vdso_test_clock(CLOCK_TAI);
-+#endif
-+
-+#ifdef CLOCK_REALTIME_COARSE
-+	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
-+#endif
-+
-+#ifdef CLOCK_MONOTONIC
-+	ret += vdso_test_clock(CLOCK_MONOTONIC);
-+#endif
-+
-+#ifdef CLOCK_MONOTONIC_RAW
-+	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
-+#endif
-+
-+#ifdef CLOCK_MONOTONIC_COARSE
-+	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
-+#endif
-+
-+#endif
-+	if (ret > 0)
-+		return KSFT_FAIL;
-+
-+	return KSFT_PASS;
-+}
 -- 
-2.25.2
-
+Best,
+Patricia
