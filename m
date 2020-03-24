@@ -2,94 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 541AB190C8C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 12:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A9E1913A0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Mar 2020 15:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727159AbgCXLdE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Mar 2020 07:33:04 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:37989 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727391AbgCXLdE (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Mar 2020 07:33:04 -0400
-Received: by mail-qt1-f196.google.com with SMTP id z12so14598915qtq.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2020 04:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7Qc7uvYUanhBTdoYQFCXEMtsiSU/KMpNbflyVVa/k/0=;
-        b=OK1kyUrgihIZSOJwUiTfwpiYANyW7kApVKmQ41+ImaXUd6xpIUQzC/fBdhJd6QlCtU
-         oOV6vfncP1EW6DCy1bY6KN0oboppZMXnPmlHIxSXvSjDYvnMCxWsYKraHjE4r3DB09UP
-         gnznbW1v5LROUTwb7VS6nbQV/KRcAggzMV/C8CjqHpB9EOCkL7Ft4sV/wD2JgEGuIbwI
-         r94f3QvSrxCo5tRNA+an9IsKvURFkSrk5MibFzg2LP2VY098kj2C1tFT54atLiAOlmph
-         bPR+xlaSuzrnjSslsaH3muNhf39gJfUab7DI9TQtbD4FQuJBwzPeJUr4NAs449zLrAY6
-         A3TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7Qc7uvYUanhBTdoYQFCXEMtsiSU/KMpNbflyVVa/k/0=;
-        b=hGQjs2IXTRUPKuZTTL/Ohixe8YUR/BMr1LWMQvGBVxgitjhfTVXnU0bwc3BrcHfBaS
-         qgPpgAY5q+94xNiXyoYOcfTD3YyH5+5uyO/1JsUJEAci54SclokkdzfgwUMhSvzcKMlG
-         UzG64ou0PLBQO6uGXKUmfWg+6HAWUMyr2hPRHDpe+ZNjML23g4/2QkvILU27rUdQeQj9
-         9MGNSD6PsXkh8TbKZ9DkRkGSC35jkelAJIEYoHh0jjifTz9Iu5olfnd9jr7OFzvd+YDd
-         xlRdt1NtMy4XgnfP1w5kDT864ZdlOSBb2CfTEJYeCnqynoTA3ErBEelkcoN+ese/Ikeb
-         PlUQ==
-X-Gm-Message-State: ANhLgQ0dy95ZVLntL4TnmRYODbUJWSgjI4RTIISHMNGmVkjLUMvAZR9Y
-        5csC/8uQVShN9K5At3a2dKiMdHB2/6B1T/5awqP/mg==
-X-Google-Smtp-Source: ADFU+vtaIDlqEcDPnyVkLDfdein5xnF5prNYs7DXLAe+TaWYWAbSb1st0hXaOIvklJ7ZZ2BZWnsEnu+l8Up+lD0Zfkw=
-X-Received: by 2002:ac8:719a:: with SMTP id w26mr25506964qto.257.1585049581891;
- Tue, 24 Mar 2020 04:33:01 -0700 (PDT)
+        id S1727453AbgCXOvh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Mar 2020 10:51:37 -0400
+Received: from foss.arm.com ([217.140.110.172]:36566 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727065AbgCXOvh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Mar 2020 10:51:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C9681FB;
+        Tue, 24 Mar 2020 07:51:36 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 775303F52E;
+        Tue, 24 Mar 2020 07:51:35 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: [PATCH 0/3] kselftest: Extend vDSO tests
+Date:   Tue, 24 Mar 2020 14:51:17 +0000
+Message-Id: <20200324145120.42194-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.25.2
 MIME-Version: 1.0
-References: <20200319164227.87419-1-trishalfonso@google.com> <20200319164227.87419-2-trishalfonso@google.com>
-In-Reply-To: <20200319164227.87419-2-trishalfonso@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 24 Mar 2020 12:32:50 +0100
-Message-ID: <CACT4Y+bbVtwfYUC_v3V0ZBh2kVwp=PHKq6Jyqiz6BVbLTtL3bQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/3] Add KUnit Struct to Current Task
-To:     Patricia Alfonso <trishalfonso@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 5:42 PM Patricia Alfonso
-<trishalfonso@google.com> wrote:
->
-> In order to integrate debugging tools like KASAN into the KUnit
-> framework, add KUnit struct to the current task to keep track of the
-> current KUnit test.
->
-> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
-> ---
->  include/linux/sched.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 04278493bf15..1fbfa0634776 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1180,6 +1180,10 @@ struct task_struct {
->         unsigned int                    kasan_depth;
->  #endif
->
-> +#if IS_BUILTIN(CONFIG_KUNIT)
-> +       struct kunit                    *kunit_test;
-> +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
-> +
+This series extends the kselftests for the vDSO library making sure: that
+they compile correctly on non x86 platforms, that they can be cross
+compiled and introducing new tests that verify the correctness of the
+library.
 
-Why can't this be used if KUNIT is built as a module?
+The so extended vDSO kselftests have been verified on all the platforms
+supported by the unified vDSO library [1].
+
+The only new patch that this series introduces is the first one, patch 2 and
+patch 3 have already been reviewed in past as part of other series [2] [3].
+
+[1] https://lore.kernel.org/lkml/20190621095252.32307-1-vincenzo.frascino@arm.com
+[2] https://lore.kernel.org/lkml/20190621095252.32307-26-vincenzo.frascino@arm.com
+[3] https://lore.kernel.org/lkml/20190523112116.19233-4-vincenzo.frascino@arm.com
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+Vincenzo Frascino (3):
+  kselftest: Enable vDSO test on non x86 platforms
+  kselftest: Extend vDSO selftest
+  kselftest: Extend vDSO selftest to clock_getres
+
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/vDSO/Makefile         |   6 +-
+ .../selftests/vDSO/vdso_clock_getres.c        | 124 +++++++++
+ tools/testing/selftests/vDSO/vdso_config.h    |  90 +++++++
+ tools/testing/selftests/vDSO/vdso_full_test.c | 244 ++++++++++++++++++
+ 5 files changed, 463 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+ create mode 100644 tools/testing/selftests/vDSO/vdso_config.h
+ create mode 100644 tools/testing/selftests/vDSO/vdso_full_test.c
+
+-- 
+2.25.2
+
