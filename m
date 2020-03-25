@@ -2,54 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E780419346F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 00:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B9193472
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 00:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727395AbgCYXQy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Mar 2020 19:16:54 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:37829 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727389AbgCYXQy (ORCPT
+        id S1727549AbgCYXRM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Mar 2020 19:17:12 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:45022 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727395AbgCYXRM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Mar 2020 19:16:54 -0400
-Received: by mail-io1-f65.google.com with SMTP id q9so4186314iod.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2020 16:16:53 -0700 (PDT)
+        Wed, 25 Mar 2020 19:17:12 -0400
+Received: by mail-il1-f196.google.com with SMTP id j69so3611564ila.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2020 16:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XJCMwzo3yMFuXtW7pmQ5jd39wGw6Oc54qR2LxzO1Ulw=;
-        b=C0vyGHrhuZGj6NBfIGYgu9W6dQu/WqogQ8PgukvtDzdgwH5MJd4UYOU2BvbDQei3Cj
-         U4dZksYJL8O1gDhykPrmSze2eki/fUQwWLe7KKGwX5/xIryRqRnnvXvbuZRhqNBypZjU
-         /G5Fd+n6fKJCONwVzVm9ZD3lYiOCxAk399OA4=
+        bh=DrUjt8nDVmnXm/gavjIg5JPRcKfLAZSvtSkkEAXua/k=;
+        b=RjmhVQsRoIu+fugIXEphOWQXXwrbR0U7o8lWymDH+s3khbIY7/LRMZ3OThF3LwAhei
+         xgCmL4z4GqTUpxho/VqGuDeNXpMKRGxOqt7/iC/LlY1tvimZ1oWmTfj91db8mb5fHNhC
+         +5JBygqDvynJlE7L5rcaTMaLAflMzw/o4zAsE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XJCMwzo3yMFuXtW7pmQ5jd39wGw6Oc54qR2LxzO1Ulw=;
-        b=K7D4dDeo2Ywrl1P8XzRxI84QrtkgHxj0UsyD4H+SJ49bPLeEPfbeOZQXmOV4u9bE6f
-         eQYuAmQDv84P1kgjExuE1Vu303ZL+hc2Q3UeYm7uh3u0YXFTAzJJxlNDBX4HSphDwdpG
-         uladRFV/kdcM+HrCpHUixWPUFKqcEx5X36FnIxPbqe/osd4DEcdIT89ri07ko7AFTk6Z
-         oOGwT75o60NmliBH+g+E1kjyOWVTMmirM0XCRMh6uNJH9ys4jUdAKDhNOk9Y54OtuTTE
-         hi7Fwaomu7LzkQI0ZwhB7KFiiXBuXYxeUnnJxJLBt0+cUDSdssbj6ER+udwsYLMMfZR/
-         vssA==
-X-Gm-Message-State: ANhLgQ3LzqCzDVV3guJvw0J8fmm6uhw7qfN6TaJ6cYVHWpMZ8gvlh8h7
-        1sYrtUmMtIhTOci8VpLTtzbLPw==
-X-Google-Smtp-Source: ADFU+vuDiN8pAems79PXJ/vr0MBd7aVBfGqoYgua2VRPgjMHRcsBA0xkyR8i8tyr3Sdi5Nvq9bXXtQ==
-X-Received: by 2002:a02:86:: with SMTP id 128mr1076385jaa.3.1585178213439;
-        Wed, 25 Mar 2020 16:16:53 -0700 (PDT)
+        bh=DrUjt8nDVmnXm/gavjIg5JPRcKfLAZSvtSkkEAXua/k=;
+        b=AZYAx9+4vJ44YToqDn8fepy4tvV3Uln76lf5PvAIeOgZjaygYRBKGwJupzznYKJTVD
+         QeO3UIpf2ZQqIY665kbBF4l+umc9kyUGJrYiATuNQoLpq6zZynejULsDh/s6N931jV5S
+         Sud7KYC2CjxAetakVUNEaqtZblJ4XYu4kpbDqvIDvJiIstOm0FB2iXH/7zkzT+ypmWOW
+         4uo42xrWGSBmOHKaVxLq7lUGvS5Nyd8AWTb/m4xgMy4VeY8+LJGKBkYXaCXZTSVuSGvY
+         RS+CiH61Z1+W4mZGEcqlnYUWn4Fd38RVteADrTQOfNOjDado+Q0wrWcYzOTxVdqQxsJP
+         kr/w==
+X-Gm-Message-State: ANhLgQ1ot80V3TolcWdc/kqmCJ7vgOgvrZXDegJMVHiRMzmkpUjbwyiS
+        OpLfrn1fberaOmUvBXExi1JjLgit0u8=
+X-Google-Smtp-Source: ADFU+vsV0uKQgaC+DPxZJsuvX3hDBs66N7APb5XhYFy3EkxbDbwMY/ueRcdGw4a/l8TKdfdP3HG7nw==
+X-Received: by 2002:a92:8741:: with SMTP id d1mr6251924ilm.167.1585178231660;
+        Wed, 25 Mar 2020 16:17:11 -0700 (PDT)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id u4sm153818ioc.27.2020.03.25.16.16.52
+        by smtp.gmail.com with ESMTPSA id s69sm202636ild.70.2020.03.25.16.17.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 16:16:52 -0700 (PDT)
+        Wed, 25 Mar 2020 16:17:11 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     shuah@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, keescook@chromium.org,
-        mpe@ellerman.id.au, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: enforce local header dependency in lib.mk
-Date:   Wed, 25 Mar 2020 17:16:49 -0600
-Message-Id: <20200325231649.13049-1-skhan@linuxfoundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: Fix memfd to support relocatable build (O=objdir)
+Date:   Wed, 25 Mar 2020 17:17:09 -0600
+Message-Id: <20200325231709.13122-1-skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,30 +57,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add local header dependency in lib.mk. This enforces the dependency
-blindly even when a test doesn't include the file, with the benefit
-of a simpler common logic without requiring individual tests to have
-special rule for it.
+Fix memfd to support relocatable build (O=objdir). This calls out
+source files necessary to build tests and simplfies the dependency
+enforcement.
+
+Tested the following:
+
+Note that cross-build for fuse_mnt has dependency on -lfuse.
+
+make all
+make clean
+make kselftest-install O=/arm64_build/ ARCH=arm64 HOSTCC=gcc \
+CROSS_COMPILE=aarch64-linux-gnu- TARGETS=memfd
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/lib.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/memfd/Makefile | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 3ed0134a764d..b0556c752443 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -137,7 +137,8 @@ endif
- # Selftest makefiles can override those targets by setting
- # OVERRIDE_TARGETS = 1.
- ifeq ($(OVERRIDE_TARGETS),)
--$(OUTPUT)/%:%.c
-+LOCAL_HDRS := $(selfdir)/kselftest_harness.h $(selfdir)/kselftest.h
-+$(OUTPUT)/%:%.c $(LOCAL_HDRS)
- 	$(LINK.c) $^ $(LDLIBS) -o $@
+diff --git a/tools/testing/selftests/memfd/Makefile b/tools/testing/selftests/memfd/Makefile
+index 53a848109f7b..0a15f9e23431 100644
+--- a/tools/testing/selftests/memfd/Makefile
++++ b/tools/testing/selftests/memfd/Makefile
+@@ -4,9 +4,8 @@ CFLAGS += -I../../../../include/uapi/
+ CFLAGS += -I../../../../include/
+ CFLAGS += -I../../../../usr/include/
  
- $(OUTPUT)/%.o:%.S
+-TEST_GEN_PROGS := memfd_test
++TEST_GEN_PROGS := memfd_test fuse_test fuse_mnt
+ TEST_PROGS := run_fuse_test.sh run_hugetlbfs_test.sh
+-TEST_GEN_FILES := fuse_mnt fuse_test
+ 
+ fuse_mnt.o: CFLAGS += $(shell pkg-config fuse --cflags)
+ 
+@@ -14,7 +13,7 @@ include ../lib.mk
+ 
+ $(OUTPUT)/fuse_mnt: LDLIBS += $(shell pkg-config fuse --libs)
+ 
+-$(OUTPUT)/memfd_test: memfd_test.c common.o
+-$(OUTPUT)/fuse_test: fuse_test.c common.o
++$(OUTPUT)/memfd_test: memfd_test.c common.c
++$(OUTPUT)/fuse_test: fuse_test.c common.c
+ 
+-EXTRA_CLEAN = common.o
++EXTRA_CLEAN = $(OUTPUT)/common.o
 -- 
 2.20.1
 
