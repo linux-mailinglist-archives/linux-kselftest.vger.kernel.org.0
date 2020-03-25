@@ -2,79 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C30B192DEB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Mar 2020 17:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA4B192E49
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Mar 2020 17:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727832AbgCYQNv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Mar 2020 12:13:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727174AbgCYQNv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Mar 2020 12:13:51 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7641720409;
-        Wed, 25 Mar 2020 16:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585152830;
-        bh=z/l7SBBshWOFYbBGR0ClUkeQrd+UBb2CWsZuH43i4Vg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=d5srGXVBWjNKP/w4N+eoVs88y3PQJBDFqAEI8Qpi/R/mv7gG84m3wE1+TDSovJtiw
-         ruLJW+9oq2T58EGMsju0piBrSirMWrctSS4dxMbZ15nrmdYnDSVUnhpvLQhV7keyQr
-         8G3VNE98fkGr35AEvcwLw5c7slY680aAF+jKxojQ=
-Subject: Re: [PATCH v2 0/6] Fix errors when try to build kvm selftests on
- specified output
-To:     Xiaoyao Li <xiaoyao.li@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20200325140133.103236-1-xiaoyao.li@intel.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <8e5a7de6-25f3-7979-c6b9-49e1ea717f8e@kernel.org>
-Date:   Wed, 25 Mar 2020 10:12:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727281AbgCYQeF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Mar 2020 12:34:05 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37458 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727177AbgCYQeF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Mar 2020 12:34:05 -0400
+Received: by mail-pl1-f193.google.com with SMTP id x1so1002740plm.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2020 09:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d/mwcS2k49Q8FtkpWy9oWS3FImYCLq2+zg7rNJhSOZg=;
+        b=cCxSv0lUkGe2EkApXp9qAszTvolABAR+7z9AuUMmHhvDbeRZpWR6Q0bYuAPqFUF6Zp
+         jAqjCTAjkGIbSmWBIMSVXhJN66nTO6w4p8bJGqbMGN0RHan4V/rN4nSpCoCZW/+IZ6Lb
+         BapU1uUUBkAzcg6RjyW9DQk9sAa9zz9BVA+3jFW4plA85kvU4GJN2702eW4e7McqWvGD
+         vqNc4jpN6Islq1dfjZ+sI3gFRBxhl9R7Wxh+vHtiJsDfeEADMZK5MKd2zrcYY7mHxonR
+         FLL/P9nRwVdwkoJlihPemv1VYENWVfU4m5DOYZYY4ZipQAOx0dPlpJrEcWA7pK8BdsOj
+         UcwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d/mwcS2k49Q8FtkpWy9oWS3FImYCLq2+zg7rNJhSOZg=;
+        b=tG0Kn2OxktKSGXa4ajX359vpwS/9RgTA4ZOMGr8MPUpPwQZWpSqvg1HcH27FUwFZeH
+         WfcQJCF5qdXEY40fVYvfEA32shaXWaakWPABPpIbTsLAwAnb0oFbpGIgHd1RuuAquhlz
+         Ba6CJmvuLPbcBcnmanPl83SMfFk83cOWbyqjc4sL2+HnPHFjhl2vj+QaDhr9ukU4vwIP
+         GIpDavz5LW7aeRaPXDF26n9OIsBscjlCajFh8NNLEexb1fKBPt0ygTgwpbPTYlzH2omn
+         Rrlcr4dSYUHtwZbrjVGRwMP5N0MV7d59HE9qrFJktaNSvlJpdS+CGABCNgQVIX8hTvwf
+         dTMA==
+X-Gm-Message-State: ANhLgQ34RbtLvr/wiyMAEr+WmKL/mmnrV4PvcTaTs7BN3mI3qx69xAGC
+        Nt/r757jzpqczzCywNYp3hgnD3/QB6HDoyqi3i48Nw==
+X-Google-Smtp-Source: ADFU+vtCxCivYqNY8mO/9aWa/cKHkQkKuRGcuG8inKcGrdz+TlM7ovpnPxVq4LLDz6GsobBMJqt1oTu+L8Xs6yWLSDM=
+X-Received: by 2002:a17:90a:32c5:: with SMTP id l63mr4814987pjb.47.1585154043671;
+ Wed, 25 Mar 2020 09:34:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200325140133.103236-1-xiaoyao.li@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20191121235058.21653-1-davidgow@google.com> <CAFd5g46Z_vVb92Y-sfWi68=HFy5+kukZXvT9usEEnhBUvPg3AQ@mail.gmail.com>
+ <CABVgOSn1azUN4XujHLsc3NY9fOUPB4Vw6930zc4oR26kxqrwOg@mail.gmail.com>
+In-Reply-To: <CABVgOSn1azUN4XujHLsc3NY9fOUPB4Vw6930zc4oR26kxqrwOg@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 25 Mar 2020 09:33:52 -0700
+Message-ID: <CAFd5g44ZNv-BP_t6M1EWQjXbgBYsA0+oBZ_-nTAmZbE4GNWgpQ@mail.gmail.com>
+Subject: Re: [PATCH kselftest/test] kunit: Always print actual pointer values
+ in asserts
+To:     shuah <shuah@kernel.org>, David Gow <davidgow@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/25/20 8:01 AM, Xiaoyao Li wrote:
-> I attempted to build KVM selftests on a specified dir, unfortunately
-> neither	"make O=/path/to/mydir TARGETS=kvm" in tools/testing/selftests, nor
-> "make OUTPUT=/path/to/mydir" in tools/testing/selftests/kvm work.
-> 
+On Tue, Mar 24, 2020 at 8:33 PM David Gow <davidgow@google.com> wrote:
+>
+> On Tue, Dec 3, 2019 at 3:44 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > On Thu, Nov 21, 2019 at 3:51 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > KUnit assertions and expectations will print the values being tested. If
+> > > these are pointers (e.g., KUNIT_EXPECT_PTR_EQ(test, a, b)), these
+> > > pointers are currently printed with the %pK format specifier, which -- to
+> > > prevent information leaks which may compromise, e.g., ASLR -- are often
+> > > either hashed or replaced with ____ptrval____ or similar, making debugging
+> > > tests difficult.
+> > >
+> > > By replacing %pK with %px as Documentation/core-api/printk-formats.rst
+> > > suggests, we disable this security feature for KUnit assertions and
+> > > expectations, allowing the actual pointer values to be printed. Given
+> > > that KUnit is not intended for use in production kernels, and the
+> > > pointers are only printed on failing tests, this seems like a worthwhile
+> > > tradeoff.
+> >
+> > I agree. However, I also remember that others in the past yelled at me
+> > for assuming that KUnit would not be built into production kernels.
+> >
+> > I feel like +Kees Cook would have a good opinion on this (or will at
+> > least CC the right people).
+> >
+>
+> I'm tempted to take the silence as a sign that no-one is upset by
+> this. Otherwise, consider this a gentle reminder to file any
+> objections you may have. :-)
+>
+> Otherwise, I've confirmed that this still applies cleanly to the
+> latest linux-kselftest/kunit branch, so -- assuming there are no
+> last-minute objections -- this ought to be ready to go.
 
-Please elaborate on the problems you are seeing. I would like you
-to describe in detail the problems you are seeing and how you are
-fixing them in this patch series.
-
-The problem you are fixing here is subdir structure not being
-supported for relocatable builds and the Makefile not being
-able to locate headers files. These are issues, however, these
-need to be fixed in the kvm Makefile.
-
-Please look at arm64, android, futex tests as examples. lib.mk
-and main selftests Makefile allow for overrides for make targets.
-When a test has sub-dir structure and libraries, it is easier to
-handle these in the individual Makefile.
-
-Please fix the problems you are seeing in kvm Makefile.
-
- >I only test the sub TARGET of kvm.
- >In theory, it won't break other TARGET of selftests.
-
-When you change lib.mk which is a common infrastructure, theory
-doesn't help. Statements like this make me very reluctant to
-accept patches. :)
-
-This is one reason why I asked Paolo to drop these patches.
-
-thanks,
--- Shuah
+Shuah, can you pick this up for 5.7?
