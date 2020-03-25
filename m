@@ -2,83 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC87192AF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Mar 2020 15:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C30B192DEB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Mar 2020 17:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgCYOTW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Mar 2020 10:19:22 -0400
-Received: from mga04.intel.com ([192.55.52.120]:42324 "EHLO mga04.intel.com"
+        id S1727832AbgCYQNv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Mar 2020 12:13:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727798AbgCYOTU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Mar 2020 10:19:20 -0400
-IronPort-SDR: vjyoTQg0jyvM4M5OV46TTG/DxYuafbapKcVl0TSyug8xLRNpOnTdzFsMgxahoZva4EkI2hXyyx
- Sx8PLXRMarkg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 07:19:19 -0700
-IronPort-SDR: ux9/FqZYumwPtHqSRHQhRwW6ySALvzV344N9CP/GbSZ+/Lp51W8/VhzNb5xos62WI+MLi4fa9O
- c8smGgnGbOxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,304,1580803200"; 
-   d="scan'208";a="270811117"
-Received: from lxy-clx-4s.sh.intel.com ([10.239.43.39])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Mar 2020 07:19:18 -0700
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-To:     Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
+        id S1727174AbgCYQNv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Mar 2020 12:13:51 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7641720409;
+        Wed, 25 Mar 2020 16:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585152830;
+        bh=z/l7SBBshWOFYbBGR0ClUkeQrd+UBb2CWsZuH43i4Vg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=d5srGXVBWjNKP/w4N+eoVs88y3PQJBDFqAEI8Qpi/R/mv7gG84m3wE1+TDSovJtiw
+         ruLJW+9oq2T58EGMsju0piBrSirMWrctSS4dxMbZ15nrmdYnDSVUnhpvLQhV7keyQr
+         8G3VNE98fkGr35AEvcwLw5c7slY680aAF+jKxojQ=
+Subject: Re: [PATCH v2 0/6] Fix errors when try to build kvm selftests on
+ specified output
+To:     Xiaoyao Li <xiaoyao.li@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: [PATCH v2 6/6] selftests: export INSTALL_HDR_PATH if using "O" to specify output dir
-Date:   Wed, 25 Mar 2020 22:01:33 +0800
-Message-Id: <20200325140133.103236-7-xiaoyao.li@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200325140133.103236-1-xiaoyao.li@intel.com>
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
 References: <20200325140133.103236-1-xiaoyao.li@intel.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <8e5a7de6-25f3-7979-c6b9-49e1ea717f8e@kernel.org>
+Date:   Wed, 25 Mar 2020 10:12:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200325140133.103236-1-xiaoyao.li@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When build kvm selftests in tools/testing/selftests directory with
+On 3/25/20 8:01 AM, Xiaoyao Li wrote:
+> I attempted to build KVM selftests on a specified dir, unfortunately
+> neither	"make O=/path/to/mydir TARGETS=kvm" in tools/testing/selftests, nor
+> "make OUTPUT=/path/to/mydir" in tools/testing/selftests/kvm work.
+> 
 
-	make O=/path/to/kselftests TARGETS=kvm
+Please elaborate on the problems you are seeing. I would like you
+to describe in detail the problems you are seeing and how you are
+fixing them in this patch series.
 
-it fails building some kvm test binaries due to lack of header files.
+The problem you are fixing here is subdir structure not being
+supported for relocatable builds and the Makefile not being
+able to locate headers files. These are issues, however, these
+need to be fixed in the kvm Makefile.
 
-Export INSTALL_HDR_PATH when "O" is specified, so that sub TARGET can get
-the right kernel headers with INSTALL_HDR_PATH.
+Please look at arm64, android, futex tests as examples. lib.mk
+and main selftests Makefile allow for overrides for make targets.
+When a test has sub-dir structure and libraries, it is easier to
+handle these in the individual Makefile.
 
-Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
----
- tools/testing/selftests/Makefile | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Please fix the problems you are seeing in kvm Makefile.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index be22dbe94a4c..f36bc6fd8086 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -110,6 +110,10 @@ ARCH           ?= $(SUBARCH)
- export KSFT_KHDR_INSTALL_DONE := 1
- export BUILD
- 
-+ifneq (1,$(DEFAULT_INSTALL_HDR_PATH))
-+export	INSTALL_HDR_PATH := $(BUILD)/usr
-+endif
-+
- # build and run gpio when output directory is the src dir.
- # gpio has dependency on tools/gpio and builds tools/gpio
- # objects in the src directory in all cases making the src
-@@ -142,7 +146,7 @@ khdr:
- ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
- 	$(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
- else
--	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
-+	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$(INSTALL_HDR_PATH) \
- 		ARCH=$(ARCH) -C $(top_srcdir) headers_install
- endif
- 
--- 
-2.20.1
+ >I only test the sub TARGET of kvm.
+ >In theory, it won't break other TARGET of selftests.
 
+When you change lib.mk which is a common infrastructure, theory
+doesn't help. Statements like this make me very reluctant to
+accept patches. :)
+
+This is one reason why I asked Paolo to drop these patches.
+
+thanks,
+-- Shuah
