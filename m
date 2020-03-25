@@ -2,98 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D41191FCA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Mar 2020 04:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCC71922FF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Mar 2020 09:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727253AbgCYDdt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Mar 2020 23:33:49 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:33556 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727262AbgCYDds (ORCPT
+        id S1726906AbgCYIl0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Mar 2020 04:41:26 -0400
+Received: from mail-qt1-f180.google.com ([209.85.160.180]:45407 "EHLO
+        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726842AbgCYIl0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Mar 2020 23:33:48 -0400
-Received: by mail-wm1-f66.google.com with SMTP id w25so1150349wmi.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Mar 2020 20:33:46 -0700 (PDT)
+        Wed, 25 Mar 2020 04:41:26 -0400
+Received: by mail-qt1-f180.google.com with SMTP id t17so1460122qtn.12;
+        Wed, 25 Mar 2020 01:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KxuOmdAysRZGEQNx/Dz1PYBDsyTNUNG3yM0/E844o6Y=;
-        b=c/J6KOmODiexLZ6eE+Q7byqMIyfu4FnkpMeZwi5gE9T+/EA75ajNsvHCRlueB8QnOi
-         UPH8CyFpthAFT1RAn+oSq/Laqhiwe6iz0lX7V2b42ZkgmNolMn/u3meMsGuTQbge2lpp
-         ECvXCaPxDG6m+v5esskixVqrVPEIYAA7iS7p6u2FfOzeUw4mG9fZRAgqwXG7LtrrCpGT
-         3lVVkWYDpuelkVF2ocK7K8t4uYPDASeO4vKQx1HN65+vgysWC1Z1hF/d5f4Hvk9IVzCI
-         fDsV+k3bXspeMm+Vn3P0QQY0qDG0TY9jDmp0e9+0x/8iM7qlf0cGS4OOoOI+iNa8Qkjj
-         fSWQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5dHRlnhY1cOlvjbJYjummY3c5LxWJZBhIeQ+KSRDH04=;
+        b=USZcfatjfcqBXt2wkzXFWaCMkG5ETt1RVFLHlsS0TadNf80KGUntRge35mdebhVmcd
+         ftpo3VZpvl2C7q2+mLc01DrgI9W+sXwIwgWCpC2HgpmXo64vUePP+EA+gl4fwysLQJj0
+         ywJHpAMW7zUqWLOsrdLOjMDNPO824bM/hE3VE3AzUh6CC3i8Pwbg4B1q+ff5HNBZCR8k
+         yqYQLkHNU5Rqv/SmBd5lGAA/l+0k2ipdcP6miCJi7PC8iTXQiCPGieTkUowkXNiWK0mN
+         q4b5dwwWGO5C42fCuXQMhzCFE+qyq0jYz/ug4yIOtrVoCWU0QmJJUVfeXK0k26HXfEzW
+         YyvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KxuOmdAysRZGEQNx/Dz1PYBDsyTNUNG3yM0/E844o6Y=;
-        b=oG/m22Dl1A3G4XqctWsLU3DAmMgwGSAd3tiMiH3uoszUv8CzN0/VpcfB9MMZo44Y1N
-         Z5Qt7sihx6jQZGtNc7ju5ST2dP5nV7PDr+AFiIxsPHKCpYMjYO1eoGtPHYOoU4unyCgF
-         LxE1q7iYkqQfR+oZjqFpV7wld6G9hHVtDFY0alGDqUDxZa1HxfYLvMH39UkTlrkF14Ss
-         3+glNjuI8xK3w375MnGCM31En7pnghAm7I9ZKorrY2+rl9SdkXIusP2RU/LON/mJyaoq
-         IZLSVVPIF//m+iMY2Kbmsw/fqQfAqaVinVOYXMHlWit/jek75QdjdHkQbhH6lhMQj8wn
-         UitQ==
-X-Gm-Message-State: ANhLgQ3L1jb/k2IrKSGkgzVvIPxJ87euDAAniI5pe3y/wSh+sECi33ne
-        dEG8G/Mn9kpSyIG7dQCKk6EYLEkU1W8r3lCy7VLUqQ==
-X-Google-Smtp-Source: ADFU+vvrBb5PDQiiE02yCmnPwWoxH59MspYVlbdbbf/I+hPVZDRTg4mNSNtH/SjBeMYgKror/eSj+SfdIbQRCwyOkKM=
-X-Received: by 2002:a1c:dc8b:: with SMTP id t133mr1147213wmg.99.1585107225177;
- Tue, 24 Mar 2020 20:33:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5dHRlnhY1cOlvjbJYjummY3c5LxWJZBhIeQ+KSRDH04=;
+        b=M090SIKwXbL3jE9qgspr4RIWPgY7EE14W4QD/xVhlW4BA3fyf9qQ7xCb5AbkyIWxf4
+         xIngqCJBfcF5BpgI8RM/7k9ofWqgIk4sRsdYXP+PAqEXdxiCJCJ0IH63mMD9wSmfeCkQ
+         xmM3ODcNOYztVka9ouzdeaEJuzadQfCy58G3FGCYX+gNe0pp/hLy4U+UOCo+kpYT3YwC
+         4S2nO00Gcl5Fn42G2zTqDlbGldYD9dkfVCI67LzN0datuyE9t4RqrNJsODRZsaaMmkdz
+         uUVod3jwDTeFLXJyX4/OohoyNbMcl0CKRDKJ+gALmZTTe/+XwE/ZD9TOSCZ/jk0RoG6H
+         N8UA==
+X-Gm-Message-State: ANhLgQ2v2nSfHeA1a3VI9jbmJ5J6EayVCsm9lmaOSVJ+71vPms4aZoxf
+        I4GNK3VjzY494qMQC1QKFC3r6rsPznU=
+X-Google-Smtp-Source: ADFU+vuYMb7BRkGxgfrtEsrlAc/ydYu4DWbeUCH+6m3WqRqX0SFUO1wQYgu/36rd0ofpOkv+6k1VvA==
+X-Received: by 2002:ac8:23ed:: with SMTP id r42mr1866634qtr.372.1585125682987;
+        Wed, 25 Mar 2020 01:41:22 -0700 (PDT)
+Received: from dhcp-12-139.nay.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 16sm15259907qkk.79.2020.03.25.01.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2020 01:41:22 -0700 (PDT)
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        David Miller <davem@davemloft.net>,
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net] selftests/net/forwarding: define libs as TEST_PROGS_EXTENDED
+Date:   Wed, 25 Mar 2020 16:41:01 +0800
+Message-Id: <20200325084101.9156-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.19.2
 MIME-Version: 1.0
-References: <20191121235058.21653-1-davidgow@google.com> <CAFd5g46Z_vVb92Y-sfWi68=HFy5+kukZXvT9usEEnhBUvPg3AQ@mail.gmail.com>
-In-Reply-To: <CAFd5g46Z_vVb92Y-sfWi68=HFy5+kukZXvT9usEEnhBUvPg3AQ@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 24 Mar 2020 20:33:33 -0700
-Message-ID: <CABVgOSn1azUN4XujHLsc3NY9fOUPB4Vw6930zc4oR26kxqrwOg@mail.gmail.com>
-Subject: Re: [PATCH kselftest/test] kunit: Always print actual pointer values
- in asserts
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, shuah <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 3, 2019 at 3:44 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Thu, Nov 21, 2019 at 3:51 PM David Gow <davidgow@google.com> wrote:
-> >
-> > KUnit assertions and expectations will print the values being tested. If
-> > these are pointers (e.g., KUNIT_EXPECT_PTR_EQ(test, a, b)), these
-> > pointers are currently printed with the %pK format specifier, which -- to
-> > prevent information leaks which may compromise, e.g., ASLR -- are often
-> > either hashed or replaced with ____ptrval____ or similar, making debugging
-> > tests difficult.
-> >
-> > By replacing %pK with %px as Documentation/core-api/printk-formats.rst
-> > suggests, we disable this security feature for KUnit assertions and
-> > expectations, allowing the actual pointer values to be printed. Given
-> > that KUnit is not intended for use in production kernels, and the
-> > pointers are only printed on failing tests, this seems like a worthwhile
-> > tradeoff.
->
-> I agree. However, I also remember that others in the past yelled at me
-> for assuming that KUnit would not be built into production kernels.
->
-> I feel like +Kees Cook would have a good opinion on this (or will at
-> least CC the right people).
->
+The lib files should not be defined as TEST_PROGS, or we will run them
+in run_kselftest.sh.
 
-I'm tempted to take the silence as a sign that no-one is upset by
-this. Otherwise, consider this a gentle reminder to file any
-objections you may have. :-)
+Also remove ethtool_lib.sh exec permission.
 
-Otherwise, I've confirmed that this still applies cleanly to the
-latest linux-kselftest/kunit branch, so -- assuming there are no
-last-minute objections -- this ought to be ready to go.
+Fixes: 81573b18f26d ("selftests/net/forwarding: add Makefile to install tests")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ .../testing/selftests/net/forwarding/Makefile | 31 ++++++++++---------
+ .../selftests/net/forwarding/ethtool_lib.sh   |  0
+ 2 files changed, 16 insertions(+), 15 deletions(-)
+ mode change 100755 => 100644 tools/testing/selftests/net/forwarding/ethtool_lib.sh
 
-Cheers,
--- David
+diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
+index 44616103508b..250fbb2d1625 100644
+--- a/tools/testing/selftests/net/forwarding/Makefile
++++ b/tools/testing/selftests/net/forwarding/Makefile
+@@ -5,11 +5,7 @@ TEST_PROGS = bridge_igmp.sh \
+ 	bridge_sticky_fdb.sh \
+ 	bridge_vlan_aware.sh \
+ 	bridge_vlan_unaware.sh \
+-	devlink_lib.sh \
+-	ethtool_lib.sh \
+ 	ethtool.sh \
+-	fib_offload_lib.sh \
+-	forwarding.config.sample \
+ 	gre_inner_v4_multipath.sh \
+ 	gre_inner_v6_multipath.sh \
+ 	gre_multipath.sh \
+@@ -21,8 +17,6 @@ TEST_PROGS = bridge_igmp.sh \
+ 	ipip_hier_gre_key.sh \
+ 	ipip_hier_gre_keys.sh \
+ 	ipip_hier_gre.sh \
+-	ipip_lib.sh \
+-	lib.sh \
+ 	loopback.sh \
+ 	mirror_gre_bound.sh \
+ 	mirror_gre_bridge_1d.sh \
+@@ -32,15 +26,11 @@ TEST_PROGS = bridge_igmp.sh \
+ 	mirror_gre_changes.sh \
+ 	mirror_gre_flower.sh \
+ 	mirror_gre_lag_lacp.sh \
+-	mirror_gre_lib.sh \
+ 	mirror_gre_neigh.sh \
+ 	mirror_gre_nh.sh \
+ 	mirror_gre.sh \
+-	mirror_gre_topo_lib.sh \
+ 	mirror_gre_vlan_bridge_1q.sh \
+ 	mirror_gre_vlan.sh \
+-	mirror_lib.sh \
+-	mirror_topo_lib.sh \
+ 	mirror_vlan.sh \
+ 	router_bridge.sh \
+ 	router_bridge_vlan.sh \
+@@ -50,17 +40,12 @@ TEST_PROGS = bridge_igmp.sh \
+ 	router_multipath.sh \
+ 	router.sh \
+ 	router_vid_1.sh \
+-	sch_ets_core.sh \
+ 	sch_ets.sh \
+-	sch_ets_tests.sh \
+-	sch_tbf_core.sh \
+-	sch_tbf_etsprio.sh \
+ 	sch_tbf_ets.sh \
+ 	sch_tbf_prio.sh \
+ 	sch_tbf_root.sh \
+ 	tc_actions.sh \
+ 	tc_chains.sh \
+-	tc_common.sh \
+ 	tc_flower_router.sh \
+ 	tc_flower.sh \
+ 	tc_shblocks.sh \
+@@ -72,4 +57,20 @@ TEST_PROGS = bridge_igmp.sh \
+ 	vxlan_bridge_1q.sh \
+ 	vxlan_symmetric.sh
+ 
++TEST_PROGS_EXTENDED := devlink_lib.sh \
++	ethtool_lib.sh \
++	fib_offload_lib.sh \
++	forwarding.config.sample \
++	ipip_lib.sh \
++	lib.sh \
++	mirror_gre_lib.sh \
++	mirror_gre_topo_lib.sh \
++	mirror_lib.sh \
++	mirror_topo_lib.sh \
++	sch_ets_core.sh \
++	sch_ets_tests.sh \
++	sch_tbf_core.sh \
++	sch_tbf_etsprio.sh \
++	tc_common.sh
++
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/forwarding/ethtool_lib.sh b/tools/testing/selftests/net/forwarding/ethtool_lib.sh
+old mode 100755
+new mode 100644
+-- 
+2.19.2
+
