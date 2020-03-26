@@ -2,97 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BEF19441E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 17:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0DF1945F7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 19:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728390AbgCZQRI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Mar 2020 12:17:08 -0400
-Received: from mail.efficios.com ([167.114.26.124]:56988 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728144AbgCZQRI (ORCPT
+        id S1726267AbgCZSAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Mar 2020 14:00:34 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:32829 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727646AbgCZSAd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Mar 2020 12:17:08 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 3EF6F278187;
-        Thu, 26 Mar 2020 12:17:07 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OhHjHl1pXjeQ; Thu, 26 Mar 2020 12:17:07 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id F3D5C278186;
-        Thu, 26 Mar 2020 12:17:06 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com F3D5C278186
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1585239427;
-        bh=yfGF8y3/6vcwYWjtaZyIkK6AJFhIURCxE/sEYU8BVHM=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=VrkzUYw7ljYE9ZaynEDEZSKCkvSslxsNn7fbwTiQ4EXYQhTJrj8Y8QNql9pH4r4MC
-         4V+VIeXD0L5XNxKi1YYFSJWF2ea+6iq9uXxuWm5MriWRvg9+xBLzd5yftW5otrxDPs
-         Sm7wAKVIsQ4Y/WYCNNbrbJ6XyGm4HPa4lHA3T1sKzGJpWzOQ5hwOnRW6anX6LgDe/B
-         xZ8e40oOR04qFXczRTzzD637M2yiehRUfYCxc6YgbfcjcwAuCoqd7B66jt9HsRh7Rr
-         /yO2IyMVoDo969+6NgK8dpiw88htGlteLMsB5YXivF0LQ1XaCq06ZRvRC/JZB1VETd
-         ygvLkRXYj68Tw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8cLdYGRVPu8v; Thu, 26 Mar 2020 12:17:06 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id E80ED278112;
-        Thu, 26 Mar 2020 12:17:06 -0400 (EDT)
-Date:   Thu, 26 Mar 2020 12:17:06 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Vincent Chen <vincent.chen@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-riscv@lists.infradead.org
-Message-ID: <490218026.13345.1585239426829.JavaMail.zimbra@efficios.com>
-In-Reply-To: <mhng-e1457171-db30-49be-9e98-298f4d1453ed@palmerdabbelt-glaptop1>
-References: <mhng-e1457171-db30-49be-9e98-298f4d1453ed@palmerdabbelt-glaptop1>
-Subject: Re: [PATCH V2 3/3] rseq/selftests: Add support for riscv
+        Thu, 26 Mar 2020 14:00:33 -0400
+Received: by mail-wr1-f66.google.com with SMTP id a25so9043437wrd.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Mar 2020 11:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=IGULUYpzMGusH01Af6yW0ZvhDTOzKMLH2JJyzyrtC6A=;
+        b=NFoplFRrnwUFOhs6HJy8T8YIgOk2VjaosP3n8Wv1V1gTtAubKmOM9IlLwOWJ0aeExG
+         g69kiATIqkmYm2YI3C4pJMZYbL2VWlmKbXKJO/nDU2DgaKP+rPzJlEo2b8j/90zBydTK
+         FvvvDTV0JVJvVm9DO+AX8shcvHWfgQGhOB2hfsueXn28ZfXNpfzpqewitqwWlACJ68Gi
+         cROD0AfS5B3SPp82mPcUDYtrfM6hl35qPzFXY889CYFBNV8GjroOsyLAPPXME9Fhmtmb
+         bl+gwheZ8Ll/0BDcpQBG4J2FOsf1g9kL3fWFcVYoMbGB6x5iOQHJmotKJwup1Ao6d2h5
+         yWZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=IGULUYpzMGusH01Af6yW0ZvhDTOzKMLH2JJyzyrtC6A=;
+        b=eGJua7c4Y9t5maet0unLNQN2r9X6gtHrg2AY1MRdj+jrqCT5Cm5tnsdIst2Z2DcqEb
+         e+CJ7o7C3lDmbP1lYVv5Wti3ZFS17U+KVlcGSsxTPF9IM6O5MBNzNCnDjt4AOQS1KQd1
+         gv5DM6JjYfkc+IGBVTI2M0Q3HaUhvFrOyOxcwBOiKyDXTDEFKQNytftG6xYXRG4xQ0mg
+         Ti7OKFs239ujMC+/oJ4KcsjErhG/BlDw9tsuioNvzMyhzxmFNOENhBcWLDnFMGxIxEgE
+         +uhRy8M78W2oqaiSnr2YzyNv9f3XdIAygg5brvaE09+SnCZlbCr58Vlszv0Ixpq7xfrP
+         PySA==
+X-Gm-Message-State: ANhLgQ0/gui8haHzNYPYx47CipzQL+2QMCsD34vM0ywwxTqyRhImkgKj
+        o3rejnaZPpYsyltPOE9DonJqLA==
+X-Google-Smtp-Source: ADFU+vuTuzSPYUE+FoKI2M4/mFPg1ZSvAPX06lQgP6Zb3F8KSisjaBiHXtXf1jC4TR5KRaSQLQgmLg==
+X-Received: by 2002:adf:a319:: with SMTP id c25mr10512296wrb.197.1585245631971;
+        Thu, 26 Mar 2020 11:00:31 -0700 (PDT)
+Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id x206sm4523916wmg.17.2020.03.26.11.00.31
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 26 Mar 2020 11:00:31 -0700 (PDT)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Thu, 26 Mar 2020 18:00:30 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <891018657.12028.1585245631463.JavaMail.javamailuser@localhost>
+Subject: next-20200326 kselftest results
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3918 (ZimbraWebClient - FF74 (Linux)/8.8.15_GA_3895)
-Thread-Topic: rseq/selftests: Add support for riscv
-Thread-Index: YI3KdsKu7N2vjVdS5o5Dpon/zWRp1A==
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_12027_118598805.1585245630471"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
------ On Mar 26, 2020, at 11:49 AM, Palmer Dabbelt palmer@dabbelt.com wrote:
+------=_Part_12027_118598805.1585245630471
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> On Sun, 08 Mar 2020 22:59:52 PDT (-0700), vincent.chen@sifive.com wrote:
->> Add support for risc-v in the rseq selftests, which covers both
->> 64-bit and 32-bit ISA with little endian mode.
->>
->> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
->> ---
->>  tools/testing/selftests/rseq/param_test.c |  23 ++
->>  tools/testing/selftests/rseq/rseq-riscv.h | 622 ++++++++++++++++++++++++++++++
->>  tools/testing/selftests/rseq/rseq.h       |   2 +
->>  3 files changed, 647 insertions(+)
->>  create mode 100644 tools/testing/selftests/rseq/rseq-riscv.h
-> 
-> There are a ton of checkpatch errors in here.
+Summary
+------------------------------------------------------------------------
+kernel: 5.6.0-rc7
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 89295c59c1f063b533d071ca49d0fa0c0783ca6f
+git describe: next-20200326
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200326
 
-Is it just my mail client or the main issue is:
+Regressions (compared to build next-20200325)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20200325)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
-ERROR: DOS line endings
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
 
-?
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- juno-r2-compat
+- juno-r2-kasan
+- x15 - arm
+- x86_64
+- x86-kasan
 
-As far as other issues are concerned, I know there are a few checkpatch
-false-positives that trigger for my rseq-{$ARCH}.h header, from which rseq-riscv.h
-is derived, because it has issues with extensive use of inline assembly.
+Test Suites
+-----------
 
-Thanks,
 
-Mathieu
+Failures
+------------------------------------------------------------------------
+
+juno-r2:
+
+juno-r2-kasan:
+
+i386:
+
+juno-r2-compat:
+
+x86:
+
+x86-kasan:
+
+hi6220-hikey:
+
+dragonboard-410c:
+
+x15:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_12027_118598805.1585245630471--
