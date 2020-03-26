@@ -2,103 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5EC19480C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 20:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F7D19487C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 21:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgCZT6L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Mar 2020 15:58:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34184 "EHLO mail.kernel.org"
+        id S1727879AbgCZUPA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Mar 2020 16:15:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727446AbgCZT6L (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Mar 2020 15:58:11 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726363AbgCZUPA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 26 Mar 2020 16:15:00 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5784D206E6;
-        Thu, 26 Mar 2020 19:58:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3DCF02070A;
+        Thu, 26 Mar 2020 20:14:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585252690;
-        bh=Iy1Vo9XDp/0w9tjBUq/6qFzyHr6inT+v6uL1ZbBtUtk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uMpnCJ5tcvu2lcbi9CrLyaFTqKO8nrKkLodw/67tQDB4pUcH1IUlEbljKZgJj/2Pk
-         FuhR9hX/G2PewXCK81qSP/9ZNj1s0HHUH6nT4vYnJ74R4ne0m5SkPmpm9+Q3EvodUb
-         xaH56cb6xSHmcHIyH2Y6gUx2FeM/JXExhebkYQU4=
-Date:   Thu, 26 Mar 2020 12:58:09 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Rafael Aquini <aquini@redhat.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        Eric B Munson <emunson@akamai.com>
-Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
- false-negative errors
-Message-Id: <20200326125809.64d92920bcd481cf15207855@linux-foundation.org>
-In-Reply-To: <20200326064909.GB27965@dhcp22.suse.cz>
-References: <20200323144240.GB23364@optiplex-lnx>
-        <20200323145106.GM7524@dhcp22.suse.cz>
-        <20200323150259.GD23364@optiplex-lnx>
-        <20200323151256.GP7524@dhcp22.suse.cz>
-        <20200323154159.GF23364@optiplex-lnx>
-        <20200323155111.GQ7524@dhcp22.suse.cz>
-        <20200323155449.GG23364@optiplex-lnx>
-        <20200324154218.GS19542@dhcp22.suse.cz>
-        <20200324154910.GM23364@optiplex-lnx>
-        <20200325174949.95d8a9de61c6a30a7e0f4582@linux-foundation.org>
-        <20200326064909.GB27965@dhcp22.suse.cz>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        s=default; t=1585253698;
+        bh=o1vMvq4OXn5LTOH+tAFfGSmQddiNm84t7AUPsdzQFuU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ChYsyZVKrOjooEmo6qcud+pXwOAddaMliBnjJ6d/jq56naAHn7gqJvMaXnFyzMqqD
+         M7+kvDPwVeV7QDs/5ja6ycvMAya+St2RxH8s8nW0is6EHpeOilp9xPeOXJF1lnmFmA
+         vI72t0ZThRt5T5zqJ+smP/VOjqsH4AQc+5N7rPC8=
+Subject: Re: [PATCH v8 kunit-next 0/4] kunit: add debugfs representation to
+ show results
+To:     Alan Maguire <alan.maguire@oracle.com>, brendanhiggins@google.com,
+        frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        linux-kselftest@vger.kernel.org
+Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <1585232710-322-1-git-send-email-alan.maguire@oracle.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <2333d91d-2575-87ba-d8bb-60023cc19990@kernel.org>
+Date:   Thu, 26 Mar 2020 14:14:46 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <1585232710-322-1-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 26 Mar 2020 07:49:09 +0100 Michal Hocko <mhocko@kernel.org> wrote:
-
-> On Wed 25-03-20 17:49:49, Andrew Morton wrote:
-> > On Tue, 24 Mar 2020 11:49:10 -0400 Rafael Aquini <aquini@redhat.com> wrote:
-> > 
-> > > Thanks Michal!
-> > > 
-> > >  
-> > > Acked-by: Rafael Aquini <aquini@redhat.com>
-> > 
-> > I'll add
-> > Fixes: 9c4e6b1a7027f ("mm, mlock, vmscan: no more skipping pagevecs")
+On 3/26/20 8:25 AM, Alan Maguire wrote:
+> When kunit tests are run on native (i.e. non-UML) environments, the results
+> of test execution are often intermixed with dmesg output.  This patch
+> series attempts to solve this by providing a debugfs representation
+> of the results of the last test run, available as
 > 
-> Wouldn't be this misleading? It would suggest that this commit is
-> somehow incorrect. I would consider b3b0d09c7a23 ("selftests: vm: add
-> tests for lock on fault") to be a better fit.
-
-Yes, it's a bit misleading.
-
-Or maybe not.  b3b0d09c7a23 was merged in 2015 and worked OK (afaik)
-until 9c4e6b1a7027f came along in 2020.  So arguably, 2020's
-9c4e6b1a7027f was correct but incomplete, since it failed to repair the
-impact upon the test code.
-
-I don't think that kernels prior to 2020's 9c4e6b1a7027f require this
-change(?), so we only need to backport this into 5.6.x, which is what
-my proposed Fixes: and cc:stable expresses.
-
-> > and cc:stable to this.  Any kernel which has 9c4e6b1a7027f will benefit
-> > from this change.
+> /sys/kernel/debug/kunit/<testsuite>/results
 > 
-> OK, makes sense with
-> Cc: stable # with 9c4e6b1a7027f applied
->  
-> > We're getting quite late in the cycle now so I think I'll hold off
-> > merging this up until post-5.7-rc1.  It will still get into the stable
-> > trees, but a bit later.
+> Changes since v7:
 > 
-> No problem. Nothing really urget. Coincidentaly we've just had a report
-> from our partner about this very specific test failure for our
-> enterprise kernel as well.
+> - renamed KUNIT_INDENT[2] to KUNIT_SUBTEST_INDENT, KUNIT_SUBSUBTEST_INDENT
+>    and added more description to their definitions to clarify why they
+>    are defined as they are (Shuah)
+> - defined KUNIT_SUBSUBTEST_INDENT directly as 8 spaces to avoid
+>    checkpatch error (Shuah)
+> 
+> Changes since v6:
+> 
+> - fixed regexp parsing in kunit_parser.py to ensure test results are read
+>    successfully with 4-space indentation (Brendan, patch 3)
+> 
+> Changes since v5:
+> 
+> - replaced undefined behaviour use of snprintf(buf, ..., buf) in
+>    kunit_log() with a function to append string to existing log
+>    (Frank, patch 1)
+> - added clarification on log size limitations to documentation
+>    (Frank, patch 4)
+> 
+> Changes since v4:
+> 
+> - added suite-level log expectations to kunit log test (Brendan, patch 2)
+> - added log expectations (of it being NULL) for case where
+>    CONFIG_KUNIT_DEBUGFS=n to kunit log test (patch 2)
+> - added patch 3 which replaces subtest tab indentation with 4 space
+>    indentation as per TAP 14 spec (Frank, patch 3)
+> 
+> Changes since v3:
+> 
+> - added CONFIG_KUNIT_DEBUGFS to support conditional compilation of debugfs
+>    representation, including string logging (Frank, patch 1)
+> - removed unneeded NULL check for test_case in
+>    kunit_suite_for_each_test_case() (Frank, patch 1)
+> - added kunit log test to verify logging multiple strings works
+>    (Frank, patch 2)
+> - rephrased description of results file (Frank, patch 3)
+> 
+> Changes since v2:
+> 
+> - updated kunit_status2str() to kunit_status_to_string() and made it
+>    static inline in include/kunit/test.h (Brendan)
+> - added log string to struct kunit_suite and kunit_case, with log
+>    pointer in struct kunit pointing at the case log.  This allows us
+>    to collect kunit_[err|info|warning]() messages at the same time
+>    as we printk() them.  This solves for the most part the sharing
+>    of log messages between test execution and debugfs since we
+>    just print the suite log (which contains the test suite preamble)
+>    and the individual test logs.  The only exception is the suite-level
+>    status, which we cannot store in the suite log as it would mean
+>    we'd print the suite and its status prior to the suite's results.
+>    (Brendan, patch 1)
+> - dropped debugfs-based kunit run patch for now so as not to cause
+>    problems with tests currently under development (Brendan)
+> - fixed doc issues with code block (Brendan, patch 3)
+> 
+> Changes since v1:
+>   - trimmed unneeded include files in lib/kunit/debugfs.c (Greg)
+>   - renamed global debugfs functions to be prefixed with kunit_ (Greg)
+>   - removed error checking for debugfs operations (Greg)
+> 
+> Alan Maguire (4):
+>    kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results display
+>    kunit: add log test
+>    kunit: subtests should be indented 4 spaces according to TAP
+>    kunit: update documentation to describe debugfs representation
+> 
+>   Documentation/dev-tools/kunit/usage.rst |  14 +++
+>   include/kunit/test.h                    |  63 ++++++++++++--
+>   lib/kunit/Kconfig                       |   8 ++
+>   lib/kunit/Makefile                      |   4 +
+>   lib/kunit/assert.c                      |  79 ++++++++---------
+>   lib/kunit/debugfs.c                     | 116 +++++++++++++++++++++++++
+>   lib/kunit/debugfs.h                     |  30 +++++++
+>   lib/kunit/kunit-test.c                  |  44 +++++++++-
+>   lib/kunit/test.c                        | 148 +++++++++++++++++++++++++-------
+>   tools/testing/kunit/kunit_parser.py     |  10 +--
+>   10 files changed, 430 insertions(+), 86 deletions(-)
+>   create mode 100644 lib/kunit/debugfs.c
+>   create mode 100644 lib/kunit/debugfs.h
+> 
 
-I assume that your kernel has 2020's 9c4e6b1a7027f?
+Thanks. Applied to linux-kselftest kunit for 5.7-rc1.
 
-> I will just backport the patch as it seems
-> nobody really objects to it.
-
+thanks,
+-- Shuah
