@@ -2,106 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B692193493
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 00:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C25A193513
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 01:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbgCYX23 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Mar 2020 19:28:29 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:43351 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727395AbgCYX22 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Mar 2020 19:28:28 -0400
-Received: by mail-pl1-f196.google.com with SMTP id v23so1414959ply.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Mar 2020 16:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SX3uEj2yupJi2G9dIsEwiUFvEAf2VWTLKIwRxsxm8Yk=;
-        b=KhZ47hmHyZ3plfSihQcc04GhPmya+BN4Yz36ianPP2/QMX6T5nod8hBzA3+bckshYI
-         R8BGgu1kvH5UqrfhV7l5o4PFa2je3PRSR0zU+6aHOtDFb/7Yj29VcJdveO7GJ87Oa3Wc
-         73NNQoSOVpU3uOuGS7812aKtDGxq+de3O1+7Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SX3uEj2yupJi2G9dIsEwiUFvEAf2VWTLKIwRxsxm8Yk=;
-        b=ry9kyw+96Xk9nt2yHmL3z7gED3FPsFQrjky4fFdEYlbAiBTpdMuhS6cxLeclYQOmt6
-         brivehz0CBAyYVps+/yrpBZKy+sGJFYO9nQ7Rfh3w8rtVs4NONJQBLvpa/odMNFng1It
-         AbQc+pk6BlhX/LiuNxHBdnzR1H5hqFz5RzkXS8/Am/jppljTX/eriTcEjAWt2c3krphr
-         rQpSLHBurQ4TcPhLgMgGv/qc5iOHLV3St0cdvchzjwdIKB4tHTaNL8uYEZcddq4albJ2
-         XRZLvqV9H03s1TsT2rRgn3GxBhErrrC1X1EwPg4CjVq9kFi9uQyS38Bi01chqX7tzXqq
-         TOug==
-X-Gm-Message-State: ANhLgQ1BlqM/on16B2OCcqb63V3l3TP5sWGdRZhsmscoNzhOMBIVi69S
-        YWtY76RT52+XRj/XyQtPCdG04A==
-X-Google-Smtp-Source: ADFU+vt0ApjzPBOE0W0mEjIXv58VpXVRZglvlCiDXecmwqCjn6VANpyr6wQRMLJgO8f0u2V7hif+TA==
-X-Received: by 2002:a17:90b:4c45:: with SMTP id np5mr6318836pjb.19.1585178906610;
-        Wed, 25 Mar 2020 16:28:26 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d3sm193028pfn.113.2020.03.25.16.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 16:28:25 -0700 (PDT)
-Date:   Wed, 25 Mar 2020 16:28:24 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, mpe@ellerman.id.au,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: enforce local header dependency in lib.mk
-Message-ID: <202003251627.91036FC@keescook>
-References: <20200325231649.13049-1-skhan@linuxfoundation.org>
+        id S1727539AbgCZApl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Mar 2020 20:45:41 -0400
+Received: from mga04.intel.com ([192.55.52.120]:19082 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727537AbgCZApl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Mar 2020 20:45:41 -0400
+IronPort-SDR: eyZ+Lm8IS52aH2yif8+hSSC4ijUdrrhPYC4Y6mqcPYeIwdnDuTXQd/mCJa3VoO//yJqi89zR2R
+ iQyofA1J25ZQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 17:45:41 -0700
+IronPort-SDR: 9zOY6UgWxTyOVTL3IsoRMu7dl4YEEHlXDJsyVUbZRSeKnqNXMlasBB4Zzh87J/LndN9M9XIFVc
+ mxTxgJEHXspA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,306,1580803200"; 
+   d="scan'208";a="393803360"
+Received: from xiaoyaol-mobl.ccr.corp.intel.com (HELO [10.249.169.99]) ([10.249.169.99])
+  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2020 17:45:38 -0700
+Subject: Re: [PATCH v2 0/6] Fix errors when try to build kvm selftests on
+ specified output
+To:     shuah <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200325140133.103236-1-xiaoyao.li@intel.com>
+ <8e5a7de6-25f3-7979-c6b9-49e1ea717f8e@kernel.org>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+Message-ID: <00b92d64-5991-f102-4bec-7aca8f1ece9a@intel.com>
+Date:   Thu, 26 Mar 2020 08:45:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200325231649.13049-1-skhan@linuxfoundation.org>
+In-Reply-To: <8e5a7de6-25f3-7979-c6b9-49e1ea717f8e@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 25, 2020 at 05:16:49PM -0600, Shuah Khan wrote:
-> Add local header dependency in lib.mk. This enforces the dependency
-> blindly even when a test doesn't include the file, with the benefit
-> of a simpler common logic without requiring individual tests to have
-> special rule for it.
+On 3/26/2020 12:12 AM, shuah wrote:
+> On 3/25/20 8:01 AM, Xiaoyao Li wrote:
+>> I attempted to build KVM selftests on a specified dir, unfortunately
+>> neither    "make O=/path/to/mydir TARGETS=kvm" in 
+>> tools/testing/selftests, nor
+>> "make OUTPUT=/path/to/mydir" in tools/testing/selftests/kvm work.
+>>
 > 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
-style nit below...
-
-> ---
->  tools/testing/selftests/lib.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Please elaborate on the problems you are seeing. I would like you
+> to describe in detail the problems you are seeing and how you are
+> fixing them in this patch series.
 > 
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 3ed0134a764d..b0556c752443 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -137,7 +137,8 @@ endif
->  # Selftest makefiles can override those targets by setting
->  # OVERRIDE_TARGETS = 1.
->  ifeq ($(OVERRIDE_TARGETS),)
-> -$(OUTPUT)/%:%.c
-> +LOCAL_HDRS := $(selfdir)/kselftest_harness.h $(selfdir)/kselftest.h
-> +$(OUTPUT)/%:%.c $(LOCAL_HDRS)
->  	$(LINK.c) $^ $(LDLIBS) -o $@
+> The problem you are fixing here is subdir structure not being
+> supported for relocatable builds and the Makefile not being
+> able to locate headers files. These are issues, however, these
+> need to be fixed in the kvm Makefile
+Maybe I should have sent it as RFC.
 
-It's already in lib.mk as "target:deps" but the tradition for kernel
-make rules has been "target: deps". i.e.:
+OK, then I'll just resend patch 1 in v1 to fix the subdir not created 
+issue for relocatable build, in kvm Makefile. Obviously lib.mk doesn't 
+create it, and you don't allow me to touch lib.mk
 
-$(OUTPUT)/%: %.c $(LOCAL_HDRS)
+About headers issue, since I'm not familiar with Makefile, I don't want 
+to waste any more time on it and I decide to drop them.
 
-But it doesn't actually matter. :)
+I can add a "make mrproper" in my script to do the cleanup as a workaround.
 
--Kees
+And never make kvm selftests in parent dir with
+	make O=/somewhere TARGETS=kvm
+to workaround the header not found issue.
 
->  
->  $(OUTPUT)/%.o:%.S
-> -- 
-> 2.20.1
+> Please look at arm64, android, futex tests as examples. lib.mk
+> and main selftests Makefile allow for overrides for make targets.
+> When a test has sub-dir structure and libraries, it is easier to
+> handle these in the individual Makefile.
 > 
+> Please fix the problems you are seeing in kvm Makefile.
+> 
+>  >I only test the sub TARGET of kvm.
+>  >In theory, it won't break other TARGET of selftests.
+> 
+> When you change lib.mk which is a common infrastructure, theory
+> doesn't help. Statements like this make me very reluctant to
+> accept patches. :)
+> 
+> This is one reason why I asked Paolo to drop these patches.
+> 
+> thanks,
+> -- Shuah
 
--- 
-Kees Cook
