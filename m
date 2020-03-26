@@ -2,432 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D581948DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 21:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20DF194922
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Mar 2020 21:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728792AbgCZU2C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Mar 2020 16:28:02 -0400
-Received: from smtp-1908.mail.infomaniak.ch ([185.125.25.8]:58985 "EHLO
-        smtp-1908.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728796AbgCZU15 (ORCPT
+        id S1728317AbgCZU2z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Mar 2020 16:28:55 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23998 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726363AbgCZU2z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Mar 2020 16:27:57 -0400
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 48pGkw5RH1zlj7tm;
-        Thu, 26 Mar 2020 21:27:52 +0100 (CET)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48pGkw2Sb5zlkchT;
-        Thu, 26 Mar 2020 21:27:52 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v15 10/10] landlock: Add user and kernel documentation
-Date:   Thu, 26 Mar 2020 21:27:31 +0100
-Message-Id: <20200326202731.693608-11-mic@digikod.net>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200326202731.693608-1-mic@digikod.net>
-References: <20200326202731.693608-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 26 Mar 2020 16:28:55 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02QKBIIj005187;
+        Thu, 26 Mar 2020 13:28:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=vpEY5owUP251CpMVMs6pgESngCoQ1uY806QGZ/JvP7w=;
+ b=IMl0L7K0Ypk7Y/een2105NuSulm216r5POMwsVPL0YxwJb+2EkZpaijVQsrNlP/fbLOh
+ e8Oqvhcs3LMhSnTlsivMGfWCpg6RbUEP/IrkOesC+vgK8Oax2ysYdbUD2ezrBU1EnTLc
+ rumxqnbVNVBcebShoqtiTJ+ywxE2fTXMdww= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yx2xpah0f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 26 Mar 2020 13:28:50 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Thu, 26 Mar 2020 13:28:49 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eubu+30euWCH5eiv8iFMlzVdOOqwnuInc9rvWW2+S1iWHrsL0b0UA/IVHRxosn736oDGarQ9c09ZCwhbzp4VMZiEzYt+ym+Hkl0Ko7wHcYDylU2E0vzNPXXjNWk0v+CfnnesYJYniYkH3TMe/9av//bXcORaQ3/uuKEoL5jeC4bv+NRY4gZT/GOFgzLYDNSVHGJRgRiQmaTBHY14Gv3qSy9iCKx31iHXHD0dFEK/LMjgdyCmOLtMVDwCSlSl0ULJ4b+xRYji09iHanJRhoG24KqAGIGuFwaIfeJRgvWKGFZotsjaD+uOfR05DuLnfus4BeX9h6icZcLv73fQ8fsSCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vpEY5owUP251CpMVMs6pgESngCoQ1uY806QGZ/JvP7w=;
+ b=WzG8YPdJqQqE3rd9aiTGaiOOsKoPpKscWZlmCobELRP21OeZ62EyYENf3cs6YFYO8xGrrWMR4umD5APKu1NfdrU9s2yXUoW2AtAlimBjS05XfdnVe2wRD+TtE2ufDagUbdc/7KE450OPlKS10yBCFqC0/TxHdmxCiEyxGCwpI6YaTRQzqsl8DwKNXMVEEqiSh+RhpQBggajC/bbs5l/LolKxCa82F+pc7iGW5+gOCSN8eJezKWRc+N/NTWr+kAyIoEyaP7oWqi5ULUrzue2C2m4vEYKU8UZGBy0bTiUy2+S6yQiNnn/bLgDxL+d4P1TUzZs7e1ip4VWkTiFJhY4Sbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vpEY5owUP251CpMVMs6pgESngCoQ1uY806QGZ/JvP7w=;
+ b=WPSm2evOcf4aggHKM0s3tT3FMg//zpCYB81jkYgNhncpmC1u4skKqVCBWPal4IvhLPBTWO/Vf0KN0sfNrS7FnpodSgLq07OVcbba21VPDlRBWP++Uk/vzKmDW0V3jed6kVF8VQspxAGFs3PHAgw1REcftwFqgue79tmb5NDDcWI=
+Received: from MW3PR15MB3753.namprd15.prod.outlook.com (2603:10b6:303:50::17)
+ by MW3PR15MB3753.namprd15.prod.outlook.com (2603:10b6:303:50::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.20; Thu, 26 Mar
+ 2020 20:28:48 +0000
+Received: from MW3PR15MB3753.namprd15.prod.outlook.com
+ ([fe80::3517:e69:6e78:4f7c]) by MW3PR15MB3753.namprd15.prod.outlook.com
+ ([fe80::3517:e69:6e78:4f7c%7]) with mapi id 15.20.2856.019; Thu, 26 Mar 2020
+ 20:28:48 +0000
+Subject: Re: runqslower build failed on Debian9
+To:     Liu Yiding <liuyd.fnst@cn.fujitsu.com>
+CC:     <linux-kselftest@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <60b05d23-6352-b978-3bf7-5a86466bb297@cn.fujitsu.com>
+From:   Andrii Nakryiko <andriin@fb.com>
+Message-ID: <c1025a74-1d80-5127-2b0a-87465d3dbcd0@fb.com>
+Date:   Thu, 26 Mar 2020 13:28:45 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.5.0
+In-Reply-To: <60b05d23-6352-b978-3bf7-5a86466bb297@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+X-ClientProxiedBy: MWHPR14CA0054.namprd14.prod.outlook.com
+ (2603:10b6:300:81::16) To MW3PR15MB3753.namprd15.prod.outlook.com
+ (2603:10b6:303:50::17)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:2103:51:fde8:f2bb:1332] (2620:10d:c090:400::5:7bf1) by MWHPR14CA0054.namprd14.prod.outlook.com (2603:10b6:300:81::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.19 via Frontend Transport; Thu, 26 Mar 2020 20:28:47 +0000
+X-Originating-IP: [2620:10d:c090:400::5:7bf1]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ea4a4a37-6ec2-4fa8-b39d-08d7d1c449dd
+X-MS-TrafficTypeDiagnostic: MW3PR15MB3753:
+X-Microsoft-Antispam-PRVS: <MW3PR15MB3753D474929BBC55650E6B0FC6CF0@MW3PR15MB3753.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-Forefront-PRVS: 0354B4BED2
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(39860400002)(136003)(396003)(376002)(346002)(366004)(81156014)(16526019)(36756003)(186003)(316002)(31696002)(8676002)(6916009)(86362001)(52116002)(81166006)(6486002)(4326008)(2906002)(31686004)(478600001)(2616005)(8936002)(53546011)(5660300002)(66556008)(66476007)(66946007);DIR:OUT;SFP:1102;SCL:1;SRVR:MW3PR15MB3753;H:MW3PR15MB3753.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
+Received-SPF: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1XO6P8dOovh8g0KbfCG3K/JlVe4f1vZQs190OU30LrNRlGj7YBmLYkhEAaNFc0zLXdxV8uYmVRol0iUaPyyp//aZUfpRTm08RYTtiFu3+bUPapB2omFXW1SfSKyaylFY8+M86w8KYDjGv4d5n7OTAtg6rUOZq0mEH3trdqSvR3+Gm3061riHa7X3nNDMHhFwXDKJ6GYqUsx6DgUypXOU+bYG6CPvNCY5N7BwkYy4raV+ks2Pb3kXC7bT/nnnV2ArMXzOtk050/5v2bD2h6D1oGnyrdWrm6amNVmYQ4H7MJuLsuNBZjtgA7rNvJEVt67Vc2tgtYji9uP2L0b+32YFcYUHNwLVzpPIMY8oTuCQ7WhM/skxxIHl+7mZvjRcaByG/I+FR0RzZ2zoY8Wljida4teapz5abevdyClWPKw5xlN82l+KHjpFYBH98oOGRK4h
+X-MS-Exchange-AntiSpam-MessageData: BrfwHdDS7Nn5VzjttTZShs6CzB23o3bmQZg+zuJN5/44FKXcI2PsfHBqyEHNPeKvhbZX8MN32mpYba98SXX0DBkbsSxqcASNvcv16mC2GxN7gJHgLOZwg5grhbhdrasNUBQ2ppnr0HadOM6NtmquwKTosteVV7IEn3sjwdMVntytk+gfxXS0Tv91UpLE4kwn
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea4a4a37-6ec2-4fa8-b39d-08d7d1c449dd
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2020 20:28:48.0958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qD5d0QoHrFbyVWb21Km9phlvIUqq7uPOYPVswPB5zcgWhecspu+UuZshavHrjpTZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR15MB3753
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-26_12:2020-03-26,2020-03-26 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 malwarescore=0 clxscore=1011 adultscore=0
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003260147
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This documentation can be built with the Sphinx framework.
+On 3/25/20 10:26 PM, Liu Yiding wrote:
+> Hi, Andrii.
+> 
+> I noticed you had added runqslower tool to tools/bpf, so drop this 
+> problem to you.
+> 
+> 
+> Now i failed to run bpf tests since i can't build runqslower.
+> 
+> Testing env: "Debian GNU/Linux 9 (stretch)"
+> 
+> kernel: 5.6.0-rc5
+> 
+> gcc: gcc 6.3
+> 
+> clang: clang-11.
+> 
+> 
+> Description: Build runqslower failed due to build error "incomplete 
+> type" and libbpf show unsupported BTF_KIND:7.
+> 
+> Whole build log please see the attatchment.
+> 
+> 
+> Error info
+> 
+> ```
+> 
+> root@vm-snb-144 ~/linus/tools/bpf# make
+> 
+> Auto-detecting system features:
+> ...                        libbfd: [ on  ]
+> ...        disassembler-four-args: [ OFF ]
+> 
+> [snip]
+> 
+>    INSTALL  bpftool
+>    LINK     bpf_asm
+>    GEN      vmlinux.h
+> libbpf: unsupported BTF_KIND:7    (Many unsupported errors)
+> libbpf: unsupported BTF_KIND:7
+> libbpf: unsupported BTF_KIND:7
+> 
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: James Morris <jmorris@namei.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
----
+Would you be able to share BTF of vmlinux that is used to generate 
+vmlinux.h? Please run in verbose mode: `make V=1` and search for 
+`bpftool btf dump file` command. It should point either to
+/sys/kernel/btf/vmlinux or some other location, depending on how things 
+are set up on your side.
 
-Changes since v14:
-* Fix spelling (contributed by Randy Dunlap).
-* Extend documentation about inheritance and explain layer levels.
-* Remove the use of now-removed access rights.
-* Use GitHub links.
-* Improve kernel documentation.
-* Add section for tests.
-* Update example.
+If it's /sys/kernel/btf/vmlinux, you can just `cat 
+/sys/kernel/btf/vmlinux > my_btf.bin`. If it's some other file, easiest 
+would be to just share that file. If not, it's possible to extract .BTF 
+ELF section, let me know if you need help with that.
 
-Changes since v13:
-* Rewrote the documentation according to the major revamp.
 
-Previous version:
-https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
----
- Documentation/security/index.rst           |   1 +
- Documentation/security/landlock/index.rst  |  18 ++
- Documentation/security/landlock/kernel.rst |  69 +++++++
- Documentation/security/landlock/user.rst   | 227 +++++++++++++++++++++
- 4 files changed, 315 insertions(+)
- create mode 100644 Documentation/security/landlock/index.rst
- create mode 100644 Documentation/security/landlock/kernel.rst
- create mode 100644 Documentation/security/landlock/user.rst
-
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index fc503dd689a7..4d213e76ddf4 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -15,3 +15,4 @@ Security Documentation
-    self-protection
-    siphash
-    tpm/index
-+   landlock/index
-diff --git a/Documentation/security/landlock/index.rst b/Documentation/security/landlock/index.rst
-new file mode 100644
-index 000000000000..2520f8f33f5e
---- /dev/null
-+++ b/Documentation/security/landlock/index.rst
-@@ -0,0 +1,18 @@
-+=========================================
-+Landlock LSM: unprivileged access control
-+=========================================
-+
-+:Author: Mickaël Salaün
-+
-+The goal of Landlock is to enable to restrict ambient rights (e.g.  global
-+filesystem access) for a set of processes.  Because Landlock is a stackable
-+LSM, it makes possible to create safe security sandboxes as new security layers
-+in addition to the existing system-wide access-controls. This kind of sandbox
-+is expected to help mitigate the security impact of bugs or
-+unexpected/malicious behaviors in user-space applications. Landlock empowers
-+any process, including unprivileged ones, to securely restrict themselves.
-+
-+.. toctree::
-+
-+    user
-+    kernel
-diff --git a/Documentation/security/landlock/kernel.rst b/Documentation/security/landlock/kernel.rst
-new file mode 100644
-index 000000000000..0211ef5df06f
---- /dev/null
-+++ b/Documentation/security/landlock/kernel.rst
-@@ -0,0 +1,69 @@
-+==============================
-+Landlock: kernel documentation
-+==============================
-+
-+Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
-+harden a whole system, this feature should be available to any process,
-+including unprivileged ones.  Because such process may be compromised or
-+backdoored (i.e. untrusted), Landlock's features must be safe to use from the
-+kernel and other processes point of view.  Landlock's interface must therefore
-+expose a minimal attack surface.
-+
-+Landlock is designed to be usable by unprivileged processes while following the
-+system security policy enforced by other access control mechanisms (e.g. DAC,
-+LSM).  Indeed, a Landlock rule shall not interfere with other access-controls
-+enforced on the system, only add more restrictions.
-+
-+Any user can enforce Landlock rulesets on their processes.  They are merged and
-+evaluated according to the inherited ones in a way that ensures that only more
-+constraints can be added.
-+
-+Guiding principles for safe access controls
-+===========================================
-+
-+* A Landlock rule shall be focused on access control on kernel objects instead
-+  of syscall filtering (i.e. syscall arguments), which is the purpose of
-+  seccomp-bpf.
-+* To avoid multiple kinds of side-channel attacks (e.g. leak of security
-+  policies, CPU-based attacks), Landlock rules shall not be able to
-+  programmatically communicate with user space.
-+* Kernel access check shall not slow down access request from unsandboxed
-+  processes.
-+* Computation related to Landlock operations (e.g. enforce a ruleset) shall
-+  only impact the processes requesting them.
-+
-+Tests
-+=====
-+
-+Userspace tests for backward compatibility, ptrace restrictions and filesystem
-+support can be found here: `tools/testing/selftests/landlock/`_.
-+
-+Kernel structures
-+=================
-+
-+Object
-+------
-+
-+.. kernel-doc:: security/landlock/object.h
-+    :identifiers:
-+
-+Ruleset and domain
-+------------------
-+
-+A domain is a read-only ruleset tied to a set of subjects (i.e. tasks'
-+credentials).  Each time a ruleset is enforced on a task, the current domain is
-+duplicated and the ruleset is imported as a new layer of rules in the new
-+domain.  Indeed, once in a domain, each rule is tied to a layer level.  To
-+grant access to an object, at least one rule of each layer must allow the
-+requested action on the object.  A task can then only transit to a new domain
-+which is the intersection of the constraints from the current domain and those
-+of a ruleset provided by the task.
-+
-+The definition of a subject is implicit for a task sandboxing itself, which
-+makes the reasoning much easier and helps avoid pitfalls.
-+
-+.. kernel-doc:: security/landlock/ruleset.h
-+    :identifiers:
-+
-+.. Links
-+.. _tools/testing/selftests/landlock/: https://github.com/landlock-lsm/linux/tree/landlock-v15/tools/testing/selftests/landlock/
-diff --git a/Documentation/security/landlock/user.rst b/Documentation/security/landlock/user.rst
-new file mode 100644
-index 000000000000..8f34d1cf1e03
---- /dev/null
-+++ b/Documentation/security/landlock/user.rst
-@@ -0,0 +1,227 @@
-+=================================
-+Landlock: userspace documentation
-+=================================
-+
-+Landlock rules
-+==============
-+
-+A Landlock rule enables to describe an action on an object.  An object is
-+currently a file hierarchy, and the related filesystem actions are defined in
-+`Access rights`_.  A set of rules is aggregated in a ruleset, which can then
-+restrict the thread enforcing it, and its future children.
-+
-+Defining and enforcing a security policy
-+----------------------------------------
-+
-+Before defining a security policy, an application should first probe for the
-+features supported by the running kernel, which is important to be compatible
-+with older kernels.  This can be done thanks to the `landlock` syscall (cf.
-+:ref:`syscall`).
-+
-+.. code-block:: c
-+
-+    struct landlock_attr_features attr_features;
-+
-+    if (landlock(LANDLOCK_CMD_GET_FEATURES, LANDLOCK_OPT_GET_FEATURES,
-+            sizeof(attr_features), &attr_features)) {
-+        perror("Failed to probe the Landlock supported features");
-+        return 1;
-+    }
-+
-+Then, we need to create the ruleset that will contain our rules.  For this
-+example, the ruleset will contain rules which only allow read actions, but
-+write actions will be denied.  The ruleset then needs to handle both of these
-+kind of actions.  To have a backward compatibility, these actions should be
-+ANDed with the supported ones.
-+
-+.. code-block:: c
-+
-+    int ruleset_fd;
-+    struct landlock_attr_ruleset ruleset = {
-+        .handled_access_fs =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_WRITE_FILE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR |
-+            LANDLOCK_ACCESS_FS_LINK_TO |
-+            LANDLOCK_ACCESS_FS_RENAME_FROM |
-+            LANDLOCK_ACCESS_FS_RENAME_TO |
-+            LANDLOCK_ACCESS_FS_RMDIR |
-+            LANDLOCK_ACCESS_FS_UNLINK |
-+            LANDLOCK_ACCESS_FS_MAKE_CHAR |
-+            LANDLOCK_ACCESS_FS_MAKE_DIR |
-+            LANDLOCK_ACCESS_FS_MAKE_REG |
-+            LANDLOCK_ACCESS_FS_MAKE_SOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_FIFO |
-+            LANDLOCK_ACCESS_FS_MAKE_BLOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_SYM,
-+    };
-+
-+    ruleset.handled_access_fs &= attr_features.access_fs;
-+    ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
-+                    LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
-+    if (ruleset_fd < 0) {
-+        perror("Failed to create a ruleset");
-+        return 1;
-+    }
-+
-+We can now add a new rule to this ruleset thanks to the returned file
-+descriptor referring to this ruleset.  The rule will only enable to read the
-+file hierarchy ``/usr``.  Without another rule, write actions would then be
-+denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with the
-+``O_PATH`` flag and fill the &struct landlock_attr_path_beneath with this file
-+descriptor.
-+
-+.. code-block:: c
-+
-+    int err;
-+    struct landlock_attr_path_beneath path_beneath = {
-+        .ruleset_fd = ruleset_fd,
-+        .allowed_access =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR,
-+    };
-+
-+    path_beneath.allowed_access &= attr_features.access_fs;
-+    path_beneath.parent_fd = open("/usr", O_PATH | O_CLOEXEC);
-+    if (path_beneath.parent_fd < 0) {
-+        perror("Failed to open file");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    err = landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
-+            sizeof(path_beneath), &path_beneath);
-+    close(path_beneath.parent_fd);
-+    if (err) {
-+        perror("Failed to update ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+We now have a ruleset with one rule allowing read access to ``/usr`` while
-+denying all accesses featured in ``attr_features.access_fs`` to everything else
-+on the filesystem.  The next step is to restrict the current thread from
-+gaining more privileges (e.g. thanks to a SUID binary).
-+
-+.. code-block:: c
-+
-+    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+        perror("Failed to restrict privileges");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+The current thread is now ready to sandbox itself with the ruleset.
-+
-+.. code-block:: c
-+
-+    struct landlock_attr_enforce attr_enforce = {
-+        .ruleset_fd = ruleset_fd,
-+    };
-+
-+    if (landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
-+            sizeof(attr_enforce), &attr_enforce)) {
-+        perror("Failed to enforce ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    close(ruleset_fd);
-+
-+If the last `landlock` system call succeeds, the current thread is now
-+restricted and this policy will be enforced on all its subsequently created
-+children as well.  Once a thread is landlocked, there is no way to remove its
-+security policy; only adding more restrictions is allowed.  These threads are
-+now in a new Landlock domain, merge of their parent one (if any) with the new
-+ruleset.
-+
-+Full working code can be found in `samples/landlock/sandboxer.c`_.
-+
-+Inheritance
-+-----------
-+
-+Every new thread resulting from a :manpage:`clone(2)` inherits Landlock domain
-+restrictions from its parent.  This is similar to the seccomp inheritance (cf.
-+:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task's
-+:manpage:`credentials(7)`.  For instance, one process's thread may apply
-+Landlock rules to itself, but they will not be automatically applied to other
-+sibling threads (unlike POSIX thread credential changes, cf.
-+:manpage:`nptl(7)`).
-+
-+When a thread sandbox itself, we have the grantee that the related security
-+policy will stay enforced on all this thread's descendants.  This enables to
-+create standalone and modular security policies per application, which will
-+automatically be composed between themselves according to their runtime parent
-+policies.
-+
-+Ptrace restrictions
-+-------------------
-+
-+A sandboxed process has less privileges than a non-sandboxed process and must
-+then be subject to additional restrictions when manipulating another process.
-+To be allowed to use :manpage:`ptrace(2)` and related syscalls on a target
-+process, a sandboxed process should have a subset of the target process rules,
-+which means the tracee must be in a sub-domain of the tracer.
-+
-+.. _syscall:
-+
-+The `landlock` syscall and its arguments
-+========================================
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock
-+
-+Commands
-+--------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_cmd
-+
-+Options
-+-------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: options_intro
-+                  options_get_features options_create_ruleset
-+                  options_add_rule options_enforce_ruleset
-+
-+Attributes
-+----------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_attr_features landlock_attr_ruleset
-+                  landlock_attr_path_beneath landlock_attr_enforce
-+
-+Access rights
-+-------------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: fs_access
-+
-+Questions and answers
-+=====================
-+
-+What about user space sandbox managers?
-+---------------------------------------
-+
-+Using user space process to enforce restrictions on kernel resources can lead
-+to race conditions or inconsistent evaluations (i.e. `Incorrect mirroring of
-+the OS code and state
-+<https://www.ndss-symposium.org/ndss2003/traps-and-pitfalls-practical-problems-system-call-interposition-based-security-tools/>`_).
-+
-+What about namespaces and containers?
-+-------------------------------------
-+
-+Namespaces can help create sandboxes but they are not designed for
-+access-control and then miss useful features for such use case (e.g. no
-+fine-grained restrictions).  Moreover, their complexity can lead to security
-+issues, especially when untrusted processes can manipulate them (cf.
-+`Controlling access to user namespaces <https://lwn.net/Articles/673597/>`_).
-+
-+Additional documentation
-+========================
-+
-+See https://landlock.io
-+
-+.. Links
-+.. _samples/landlock/sandboxer.c: https://github.com/landlock-lsm/linux/tree/landlock-v15/samples/landlock/sandboxer.c
--- 
-2.26.0.rc2
+> [snip]
+> 
+> (Many incomplete type errors)
+> 
+> .output/vmlinux.h:8401:18: error: field has incomplete type 'struct 
+> idt_bits'
+>          struct idt_bits bits;
+>                          ^
+> .output/vmlinux.h:8396:8: note: forward declaration of 'struct idt_bits'
+> struct idt_bits;
+>         ^
+> .output/vmlinux.h:8598:21: error: field has incomplete type 'struct 
+> trace_entry'
+>          struct trace_entry ent;
+>                             ^
+> .output/vmlinux.h:8595:8: note: forward declaration of 'struct trace_entry'
+> struct trace_entry;
+>         ^
+> .output/vmlinux.h:9006:25: error: array has incomplete element type 
+> 'struct cyc2ns_data'
+>          struct cyc2ns_data data[2];
+>                                 ^
+> .output/vmlinux.h:3669:8: note: forward declaration of 'struct cyc2ns_data'
+> struct cyc2ns_data;
+>         ^
+> fatal error: too many errors emitted, stopping now [-ferror-limit=]
+> 20 errors generated.
+> Makefile:56: recipe for target '.output/runqslower.bpf.o' failed
+> make[1]: *** [.output/runqslower.bpf.o] Error 1
+> Makefile:119: recipe for target 'runqslower' failed
+> make: *** [runqslower] Error 2
+> 
+> ```
+> 
+> 
 
