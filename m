@@ -2,89 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08195195445
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Mar 2020 10:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017DB19576D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Mar 2020 13:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727593AbgC0Jma (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Mar 2020 05:42:30 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:48536 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726217AbgC0Jma (ORCPT
+        id S1726900AbgC0Mpz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Mar 2020 08:45:55 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:37154 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726515AbgC0Mpz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Mar 2020 05:42:30 -0400
-Received: from mail-wm1-f72.google.com ([209.85.128.72])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <andrea.righi@canonical.com>)
-        id 1jHlVU-0000Ie-8w
-        for linux-kselftest@vger.kernel.org; Fri, 27 Mar 2020 09:42:28 +0000
-Received: by mail-wm1-f72.google.com with SMTP id n188so4140975wmf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2020 02:42:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ap78OtXZq7aQJZ6TMPBs7AlXvQ7dSNaiueS9qsI4mxo=;
-        b=BHlmYnj8Ge2rNfOfUQPvOnSNFq3lfrWw5TTXtA/HZUK14EEiFhQigtRXQCrNhXOA6k
-         DwyKaGIctlU4X9FMwH1jo8KvVz1O1VeLXl9qA6aIvLSRuSXbgLJ7I8z429uOZ3rcf9Aa
-         yE10+DbcXyk1dukNyYGQduZxPNvY7hJMDBKKv9DXfIdCyeRJtCjx1fA+NbWwdmKWcoIo
-         d+AJwnKucbJdJQJ0j1XYwkwYrzoGKdtbcoglF9xcMwlRHo/1w/HEP2IUhWOiLY1Xybdn
-         0/n/ConOrbHcKtlJ9sjGYU8DOLmqePA17PDaN9vGJcNM9yO/kuEB5hA0TvIecwo1rsB3
-         KuMg==
-X-Gm-Message-State: ANhLgQ3RDo9F5viYNQZJRhC6wHhBGviTo9r/ZgJb8y+Ea328BX84tI12
-        lo6yo9synjTl3k7a0FIMt+0kGZN0/WwMsiOK4sZqtVKDSOt35p+n77ZYyl8BIqmMX4Rpr93wG5T
-        ZnVEOGnhTq5XMKXpUZUOHri9RnGhHrwFN0r/iT8rZ7Eda0w==
-X-Received: by 2002:adf:f8c1:: with SMTP id f1mr3211176wrq.345.1585301782619;
-        Fri, 27 Mar 2020 02:36:22 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vvx5Ju256H8lihDv+l/wpn/owlEL5RgRyERZjbHzg4A1aOGeFUlR72YVLLEH15UgqMSh/gGzQ==
-X-Received: by 2002:adf:f8c1:: with SMTP id f1mr3211156wrq.345.1585301782361;
-        Fri, 27 Mar 2020 02:36:22 -0700 (PDT)
-Received: from localhost (host87-23-dynamic.53-79-r.retail.telecomitalia.it. [79.53.23.87])
-        by smtp.gmail.com with ESMTPSA id c23sm7673665wrb.79.2020.03.27.02.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 02:36:21 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 10:36:20 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kselftest/runner: avoid using timeout when timeout is
- disabled
-Message-ID: <20200327093620.GB1223497@xps-13>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        Fri, 27 Mar 2020 08:45:55 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02RChH00171249;
+        Fri, 27 Mar 2020 12:45:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=MgkCaoDaA5YnVO6nCPkdNH0cYdXW3AT1v3OF33BFz0s=;
+ b=FVkpAm/9dEPCQiCXpvU/X09Xm6i/pHmVryDsN/dBWQhoRrSix0m2y6D7sD5VkHTWCIsU
+ aAgfCwK2xpEAIvKW9XuASc9Xc0bZ5Z0rnayWYjK2ym1/iWK9lvmGLIRrqNaqXXfWooYJ
+ ZCrCUVMBfRehrszJBSk1PGLAHqLN91vZW1Ppa9OwsDjLwD0ZTTSVZKEmGRb+fxq/8wUZ
+ mIRwsbx5tGd0uPqsG76nysAyG/3FeUZscJuTZis0MGW0GIVcWV03iuJdHTGA6SUV1SoJ
+ Y7TctUIhXBTYNFtwx8fd7ex5O1OYD+JkHeNocWCF5gzUDhoVyh+30aYjh3VXtXhluR6b nw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 301459aw66-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Mar 2020 12:45:49 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02RCgi8x071907;
+        Fri, 27 Mar 2020 12:45:48 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2yxw4vsejq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Mar 2020 12:45:48 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02RCjltY005403;
+        Fri, 27 Mar 2020 12:45:47 GMT
+Received: from localhost.uk.oracle.com (/10.175.186.71)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 27 Mar 2020 05:45:46 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, shuah@kernel.org,
+        trishalfonso@google.com, linux-kselftest@vger.kernel.org
+Cc:     kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v3 kunit-next 0/2] kunit: extend kunit resources API
+Date:   Fri, 27 Mar 2020 12:45:20 +0000
+Message-Id: <1585313122-26441-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ spamscore=0 mlxlogscore=991 adultscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003270117
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ adultscore=0 suspectscore=0 impostorscore=0 mlxscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003270117
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Avoid using /usr/bin/timeout unnecessarily if timeout is set to 0
-(disabled) in the "settings" file for a specific test.
+A recent RFC patch set [1] suggests some additional functionality
+may be needed around kunit resources.  It seems to require
 
-NOTE: without this change (and adding timeout=0 in the corresponding
-settings file - tools/testing/selftests/seccomp/settings) the
-seccomp_bpf selftest is always failing with a timeout event during the
-syscall_restart step.
+1. support for resources without allocation
+2. support for lookup of such resources
+3. support for access to resources across multiple kernel threads
 
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- tools/testing/selftests/kselftest/runner.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The proposed changes here are designed to address these needs.
+The idea is we first generalize the API to support adding
+resources with static data; then from there we support named
+resources.  The latter support is needed because if we are
+in a different thread context and only have the "struct kunit *"
+to work with, we need a way to identify a resource in lookup.
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index e84d901f8567..2cd3c8def0f6 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -32,7 +32,7 @@ tap_prefix()
- tap_timeout()
- {
- 	# Make sure tests will time out if utility is available.
--	if [ -x /usr/bin/timeout ] ; then
-+	if [ -x /usr/bin/timeout ] && [ $kselftest_timeout -gt 0 ] ; then
- 		/usr/bin/timeout "$kselftest_timeout" "$1"
- 	else
- 		"$1"
+[1] https://lkml.org/lkml/2020/2/26/1286
+
+Changes since v2:
+ - moved a few functions relating to resource retrieval in patches
+   1 and 2 into include/kunit/test.h and defined as "static inline";
+   this allows built-in consumers to use these functions when KUnit
+   is built as a module
+
+Changes since v1:
+ - reformatted longer parameter lists to have one parameter per-line
+   (Brendan, patch 1)
+ - fixed phrasing in various comments to clarify allocation of memory
+   and added comment to kunit resource tests to clarify why
+   kunit_put_resource() is used there (Brendan, patch 1)
+ - changed #define to static inline function (Brendan, patch 2)
+ - simplified kunit_add_named_resource() to use more of existing
+   code for non-named resource (Brendan, patch 2)
+
+Alan Maguire (2):
+  kunit: generalize kunit_resource API beyond allocated resources
+  kunit: add support for named resources
+
+ include/kunit/test.h      | 211 +++++++++++++++++++++++++++++++++++++++-------
+ lib/kunit/kunit-test.c    | 111 +++++++++++++++++++-----
+ lib/kunit/string-stream.c |  14 ++-
+ lib/kunit/test.c          | 172 ++++++++++++++++++++++---------------
+ 4 files changed, 382 insertions(+), 126 deletions(-)
+
 -- 
-2.25.1
+1.8.3.1
 
