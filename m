@@ -2,199 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35855195A90
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Mar 2020 17:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2081C195E0E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Mar 2020 20:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgC0QDT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Mar 2020 12:03:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726333AbgC0QDT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Mar 2020 12:03:19 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A1A220716;
-        Fri, 27 Mar 2020 16:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585324997;
-        bh=buElJtB4x/XrZOgypEpMPh22nhReLA0geldePbdmD4I=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=viFO5kDP/2s0/3AJx9TFLXHX6SV5+ibd4fa3+p65xOq3D6zaGzSmJwvR+YMS7agDw
-         52hjxt++Nekk6rPPLyuP2m6Hqm4Jn5G1fFpMR48LAHPBT00ULt4GWgmBUIsKIc9VvH
-         0WVB5OKiOkcJhJb7hWddUOndBUJwW3aaEynCjsss=
-Subject: Re: [RFC v3 0/3] Fix errors when try to build kvm selftests on
- specified output
-To:     Xiaoyao Li <xiaoyao.li@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20200326030750.173972-1-xiaoyao.li@intel.com>
- <41d5d89e-79c2-6f7d-de3e-ca3255e910e8@kernel.org>
- <cb445047-ab84-0c49-cfba-ec6933971dc7@intel.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <71a5abdf-07b5-d927-1a08-de8019b3f39f@kernel.org>
-Date:   Fri, 27 Mar 2020 10:03:03 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727607AbgC0TCa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Mar 2020 15:02:30 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:40272 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727185AbgC0TCa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Mar 2020 15:02:30 -0400
+Received: by mail-pj1-f66.google.com with SMTP id kx8so4136806pjb.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Mar 2020 12:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gLHLJMBxOTqwCxIgz1nbKQaYKpREIN6QpIXiV+9902w=;
+        b=YDStaEX6FW0zeNHrPj8m5tYTTJAFB0UA+l8BOnvVb0iWm3a2YpwQubFnKtxYdiX6wc
+         rdc2I0NTNRFu9hkGqsPXL+f+i9piCA2FERCHSuuvGJefKvUhJcv9F0NLyIqWr80Ca13l
+         opXmkVW4bQ0uyg0kgllCYZ2YxRazlzUna1Sf8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gLHLJMBxOTqwCxIgz1nbKQaYKpREIN6QpIXiV+9902w=;
+        b=R8zIPBcLUdc+RPo1pC8IDnWooagyhxtNkaumE9BxMZNmjVqe/MlWdeSaBWukLiljA9
+         LrUoHco8shMIXd9oOTfr3MJDM4J3ZXKkDNKN9dbXr7tGgQIKg1g0tFfdOfMsLl5TpteG
+         Rdm4cZONYKszK4H+8C+4UvnupVezVbEZDDAnzCKlzc8Yq9B6SjqyG/TofBGcixnrr6li
+         y/96HWO3hjgLPb1CyqfFeaAtclApEJBqIMKbkKuqDH8NyA6O2kzElUagU3awCyStN+Qf
+         XmmQ3qF0nuKhnBQU5z9utOvwJMeAEAyEn9wmhhUmT+g3Cw9BeHZXfjUVPCcG4suvLvyy
+         03TA==
+X-Gm-Message-State: ANhLgQ3cy5SZM64O0kOTLYzqaiEA0qCscuxXOUimhYlibrxVOLtWW3Tt
+        axNFjzYAzWaORMTCEqkdViZv2A==
+X-Google-Smtp-Source: ADFU+vvwfXD92DVjRTRsBC244V6nBLBIIAKRK9iqmRYmCFZehEyPmSFv30qn1E9v5K5oldZejZ3zow==
+X-Received: by 2002:a17:90a:2307:: with SMTP id f7mr926623pje.152.1585335746985;
+        Fri, 27 Mar 2020 12:02:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f15sm4696400pfq.100.2020.03.27.12.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 12:02:26 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 12:02:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] selftests/harness: fix spelling mistake "SIGARLM"
+ -> "SIGALRM"
+Message-ID: <202003271202.123FD50@keescook>
+References: <20200327090648.13387-1-colin.king@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <cb445047-ab84-0c49-cfba-ec6933971dc7@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200327090648.13387-1-colin.king@canonical.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/27/20 7:31 AM, Xiaoyao Li wrote:
-> On 3/27/2020 4:57 AM, shuah wrote:
->> On 3/25/20 9:07 PM, Xiaoyao Li wrote:
->>> Hi Shuah,
->>>
->>> Hope you're happy with this version that I only touch KVM's Makefile.
->>>
->>> I attempted to build KVM selftests on a specified dir, unfortunately
->>> neither    "make O=/path/to/mydir TARGETS=kvm" in 
->>> tools/testing/selftests, nor
->>> "make OUTPUT=/path/to/mydir" in tools/testing/selftests/kvm work.
->>>
->>
->> Why are you running "make OUTPUT=/path/to/mydir"
->>
->> It isn't correct.
+On Fri, Mar 27, 2020 at 09:06:48AM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> So what's the meaning of
-> 
-> ifeq (0,$(MAKELEVEL))
->      ifeq ($(OUTPUT),)
->      OUTPUT := $(shell pwd)
->      DEFAULT_INSTALL_HDR_PATH := 1
->      endif
-> endif
-> 
-> in lib.mk?
-> 
+> There a few identical spelling mistakes, fix these.
 
-O is the variable for selftests Makefile and which is handled in
-lib.mk. OUTPUT is internal and shouldn't set when running make.
+Argh, thanks Colin!
 
->>
->> make O=/path/to/mydir is what you have to use. Please main Makefile
->> as well for O= and KBUILD_OUTPUT usages.
->>
->> Please see Documentation/dev-tools/kselftest.rst for use-cases.
->>
->> make O=/path/to/mydir TARGETS=kvm is a right use-case and I can see
->> it will fail to create x86_64 directory.
->>
->> Let's start with the following two commands and try to fix the
->> problems you are seeing.
->>
->> make O=/path/to/mydir in kvm directory (this is supported,
->> however, the following command from the main Makefile is
->> recommended use.)
-> 
-> Of course we can do this, but the "O=/path/to/mydir" only has effect on 
-> header install, the *.o files still generated in kvm/ directory.
-> 
+Acked-by: Kees Cook <keescook@chromium.org>
 
-Right. That is what needs to be fixed. This is the reason for your
-source directory getting dirty when kvm test is built.
-
-> And kvm's INSTALL_HDR_PATH cannot find the right headers.
-> 
-> That's why I choose to use "OUTPUT=/somewhere"
-> 
->>  From main Makefile in kernel srcdir
->> make O=/path/to/mydir TARGETS=kvm
-> 
-> I guess "kernel srcdir" means "kselftest srcdir", i.e., 
-> tools/testing/selftests/ ?
-
-This is kernel source root directory. The command you would
-use is:
-
-make kselftest-all O=/path/to/mydir TARGETS=kvm
+-Kees
 
 > 
-> Well, as I said in the first place, I tried
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  tools/testing/selftests/kselftest_harness.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
->      make O=/path/to/mydir TARGETS=kvm
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index 2902f6a78f8a..2bb8c81fc0b4 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -705,7 +705,7 @@ static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
+>  	/* Sanity check handler execution environment. */
+>  	if (!t) {
+>  		fprintf(TH_LOG_STREAM,
+> -			"no active test in SIGARLM handler!?\n");
+> +			"no active test in SIGALRM handler!?\n");
+>  		abort();
+>  	}
+>  	if (sig != SIGALRM || sig != info->si_signo) {
+> @@ -731,7 +731,7 @@ void __wait_for_test(struct __test_metadata *t)
+>  	if (sigaction(SIGALRM, &action, &saved_action)) {
+>  		t->passed = 0;
+>  		fprintf(TH_LOG_STREAM,
+> -			"%s: unable to install SIGARLM handler\n",
+> +			"%s: unable to install SIGALRM handler\n",
+>  			t->name);
+>  		return;
+>  	}
+> @@ -743,7 +743,7 @@ void __wait_for_test(struct __test_metadata *t)
+>  	if (sigaction(SIGALRM, &saved_action, NULL)) {
+>  		t->passed = 0;
+>  		fprintf(TH_LOG_STREAM,
+> -			"%s: unable to uninstall SIGARLM handler\n",
+> +			"%s: unable to uninstall SIGALRM handler\n",
+>  			t->name);
+>  		return;
+>  	}
+> -- 
+> 2.25.1
 > 
-> but it doesn't work. So I did some fixup, and sent out the Patches.
-> 
 
-Right. It doesn't work for a couple of reasons:
-
-1. The Makefile doesn't create sub-dirs when build is relocatable.
-2. Makes source directory dirty.
-
-> If the patches are wrong, please point it out and give your comments how 
-> to make it right.
-> 
-
-The patches you sent are based on running the command with OUTPUT
-set. That is why I am asking you start with the right use-cases,
-and gave you pointers on tests to refer to that have sub-dirs
-and handle relocatable builds:
-
-futex
-arm64
-android
-
->> Also, just build isn't sufficient for you to be able to run the
->> tests.
->>
->> make kselftest-install O=/path/to/mydir TARGETS=kvm will generate
->> run script.
-> 
-> This command also has the x86_64 directory not created issue.
-> Since it generates header files in kernel_src/usr/include, it doesn't 
-> have headers path issue. But as result, the kernel_src directory is not 
-> clean, this requires me to run "make mrproper", I *really* don't like it.
-> 
-> 
-
-If the test leverages lib.mk headers install logic correctly, you
-shouldn't see this problem.
-
-Yes. It does make the source directory dirty. That is the problem we
-have to fix. I am seeing issues the issue of x86_64 not being created
-in the case of relocatable builds.
-
-Thanks for working on this by the way. It is one of the tests that
-identified as the one doesn't support relocatable builds.
-
-You will see fixes to others I already fixed in
-
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
-
-Start withe the following use0-cases to fix and then test your fixes
-for these use-cases. The goal is to be able to run kvm from target
-directory and source directory staying clean.
-
-You will have to build the kernel first in all of these cases.
-Let's use kselftest-install which is what you would need if you
-want build and then run tests later. Also assuming you are doing
-native build on x86_64.
-
- From main kernel Makefile: (from kernel source root dir)
-
-Builds in the same source directory:
-make kselftest-install TARGETS=kvm
-
-Relocatable build: (from kernel source root dir)
-
-make O=/path/objdir  - build kernel
-make kselftest-install O=/path/objdir TARGETS=kvm
-
- From tools/testing/selftests/kvm directory:
-make O=/path/objdir install
-
-Install step is important especially for relocatable builds,
-as it makes sure all run-time dependencies are copied to the
-target directory.
-
-thanks,
--- Shuah
+-- 
+Kees Cook
