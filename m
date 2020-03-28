@@ -2,155 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA13419649A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Mar 2020 09:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B93D1965CF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Mar 2020 12:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbgC1Ivv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 28 Mar 2020 04:51:51 -0400
-Received: from mga09.intel.com ([134.134.136.24]:27699 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726271AbgC1Ivv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 28 Mar 2020 04:51:51 -0400
-IronPort-SDR: m8kvRmMkW39MJBLjWsF9Jfpa4EG8Uw6SCybEJvZmxwZWd0vI/E2GWpcjvySGhyNcQPp3IH1899
- AAb3zzwbwBbw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2020 01:51:50 -0700
-IronPort-SDR: DnFNzJoKKx4pybnpmbugiNxSEoGLALF6L+Ygzs6p+mB+mGRbQu39tKO1jT86ZiXlwnsVWxtQa7
- 4DLnc1OpyAjQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,315,1580803200"; 
-   d="scan'208";a="394616392"
-Received: from xiaoyaol-mobl.ccr.corp.intel.com (HELO [10.249.174.239]) ([10.249.174.239])
-  by orsmga004.jf.intel.com with ESMTP; 28 Mar 2020 01:51:48 -0700
-Subject: Re: [RFC v3 0/3] Fix errors when try to build kvm selftests on
- specified output
-To:     shuah <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        id S1726258AbgC1Lbv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 28 Mar 2020 07:31:51 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:59310 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbgC1Lbv (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 28 Mar 2020 07:31:51 -0400
+Received: from mail-wr1-f71.google.com ([209.85.221.71])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <andrea.righi@canonical.com>)
+        id 1jI9gr-0003tD-Am
+        for linux-kselftest@vger.kernel.org; Sat, 28 Mar 2020 11:31:49 +0000
+Received: by mail-wr1-f71.google.com with SMTP id y1so6102665wrn.10
+        for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2020 04:31:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qqy0+XOT8WqhQrltX5gCRS9oS4phxUfRkeGmoD35Mjs=;
+        b=fQyvlnbXJjeX9ByFFnmMZgMR3q+OhAuHadVloDqTw22X3wkXOYswstMxS+dtykmBd0
+         gHgaEl10UvQbvILt4vQNP3uhwq8+i5VsKKNYcOf75v9nCMC8jeORZwQUWwZOw9kabwz7
+         8EPNYjd3m3goZmzNr2WLZd2eRc8ra51VMOoJBwrfz+V89voyxcZ3BLxL3hWKfH9XcqoS
+         W3RNZqpdPJ+rzvyEX+aWOuUXCZd258zyNJJRcdAWFvzp0S80c0lXIPSz1gdbM6lf3yHx
+         jMM3dqRvQKiMQ98W2iWNx6jXN1Uwd/IUblgxalomZ7rzprOfddYBmhEFv8P3lRcpnSPy
+         dWbw==
+X-Gm-Message-State: ANhLgQ16nHspIfPbfvjs9k2+3tQAfXHbBIz30JBBBCBK5keK58/mScJF
+        LHI4A40NrAKEqa1XVdSNnszNHOzO+ePnjlY3EwMzG02JFPn9eRMWgsjsNoBNCWA2u1FzzBBcTOw
+        8/psi38gcf0vf+KLlSNZqdUjDBgEoH2+t2Xe7Xu41gfxCgg==
+X-Received: by 2002:a7b:ce81:: with SMTP id q1mr3551438wmj.156.1585395108832;
+        Sat, 28 Mar 2020 04:31:48 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vsG1dGyA/RHZAnl+8bj6tF2K1BBKGwMYgS9zLyphO5tObGfhkWizV9l3ZWrySWsH7pMn9qEzw==
+X-Received: by 2002:a7b:ce81:: with SMTP id q1mr3551418wmj.156.1585395108528;
+        Sat, 28 Mar 2020 04:31:48 -0700 (PDT)
+Received: from localhost ([95.239.127.44])
+        by smtp.gmail.com with ESMTPSA id o14sm11692573wmh.22.2020.03.28.04.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Mar 2020 04:31:47 -0700 (PDT)
+Date:   Sat, 28 Mar 2020 12:31:45 +0100
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20200326030750.173972-1-xiaoyao.li@intel.com>
- <41d5d89e-79c2-6f7d-de3e-ca3255e910e8@kernel.org>
- <cb445047-ab84-0c49-cfba-ec6933971dc7@intel.com>
- <71a5abdf-07b5-d927-1a08-de8019b3f39f@kernel.org>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-Message-ID: <77ad35cf-6332-9381-200e-40b6a3d18070@intel.com>
-Date:   Sat, 28 Mar 2020 16:51:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+Subject: Re: [PATCH] kselftest/runner: avoid using timeout when timeout is
+ disabled
+Message-ID: <20200328113145.GB1371917@xps-13>
+References: <20200327093620.GB1223497@xps-13>
+ <202003271208.0D9A3A48CC@keescook>
 MIME-Version: 1.0
-In-Reply-To: <71a5abdf-07b5-d927-1a08-de8019b3f39f@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202003271208.0D9A3A48CC@keescook>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/28/2020 12:03 AM, shuah wrote:
-> On 3/27/20 7:31 AM, Xiaoyao Li wrote:
->> On 3/27/2020 4:57 AM, shuah wrote:
->>> On 3/25/20 9:07 PM, Xiaoyao Li wrote:
-> The patches you sent are based on running the command with OUTPUT
-> set. 
-
-The issues are also there when I use
-
-   make O=/somewher TARGETS=kvm
-
-from tools/testing/selftests/ directory,
-
-Is it the right usecase?
-
-> That is why I am asking you start with the right use-cases,
-> and gave you pointers on tests to refer to that have sub-dirs
-> and handle relocatable builds:
+On Fri, Mar 27, 2020 at 12:28:05PM -0700, Kees Cook wrote:
+> On Fri, Mar 27, 2020 at 10:36:20AM +0100, Andrea Righi wrote:
+> > Avoid using /usr/bin/timeout unnecessarily if timeout is set to 0
+> > (disabled) in the "settings" file for a specific test.
 > 
-> futex
-> arm64
-> android
-
-I have read the Makefile in futex, arm64, android to learn how they
-deal with subdir, they have Makefile in subdir but kvm doesn't.
-
-I just want to create the subdir as easy as possible, so I follow the 
-method how to create subdir for LIBKVM_OBJ in kvm.
-
-If you dislike it way you can reply it Patch 1 to disclaim clear what 
-you want to fix the subdir.
-
->>> Also, just build isn't sufficient for you to be able to run the
->>> tests.
->>>
->>> make kselftest-install O=/path/to/mydir TARGETS=kvm will generate
->>> run script.
->>
->> This command also has the x86_64 directory not created issue.
->> Since it generates header files in kernel_src/usr/include, it doesn't 
->> have headers path issue. But as result, the kernel_src directory is 
->> not clean, this requires me to run "make mrproper", I *really* don't 
->> like it.
->>
->>
+> That seems to be a reasonable optimization, sure.
 > 
-> If the test leverages lib.mk headers install logic correctly, you
-> shouldn't see this problem.
+> > NOTE: without this change (and adding timeout=0 in the corresponding
+> > settings file - tools/testing/selftests/seccomp/settings) the
+> > seccomp_bpf selftest is always failing with a timeout event during the
+> > syscall_restart step.
 > 
-> Yes. It does make the source directory dirty. That is the problem we
-> have to fix. I am seeing issues the issue of x86_64 not being created
-> in the case of relocatable builds.
-> 
-> Thanks for working on this by the way. It is one of the tests that
-> identified as the one doesn't support relocatable builds.
-> 
-> You will see fixes to others I already fixed in
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next 
-> 
-> 
-> Start withe the following use0-cases to fix and then test your fixes
-> for these use-cases. The goal is to be able to run kvm from target
-> directory and source directory staying clean.
-> 
-> You will have to build the kernel first in all of these cases.
-> Let's use kselftest-install which is what you would need if you
-> want build and then run tests later. Also assuming you are doing
-> native build on x86_64.
-> 
->  From main kernel Makefile: (from kernel source root dir)
-> 
-> Builds in the same source directory:
-> make kselftest-install TARGETS=kvm
-> 
-> Relocatable build: (from kernel source root dir)
-> 
-> make O=/path/objdir  - build kernel
-> make kselftest-install O=/path/objdir TARGETS=kvm
+> This, however, is worrisome. I think there is something else wrong here.
+> I will investigate why the output of seccomp_bpf is weird when running
+> under the runner scripts. Hmmm. The output looks corrupted...
 
-I don't want to build kernel at all.
+Running seccomp_bpf directly (without using runner.sh) shows this error:
 
->  From tools/testing/selftests/kvm directory:
-> make O=/path/objdir install
+ $ sudo ./tools/testing/selftests/seccomp/seccomp_bpf
+ ...
+ seccomp_bpf.c:2839:global.syscall_restart:Expected true (1) == WIFSTOPPED(status) (0)
+ global.syscall_restart: Test terminated by assertion
 
-Oh no. This needs to define INSTALL_PATH, and I don't want to install.
-I just want to build the testcase of kvm to anywhere else to make srcdir 
-clean.
+Instead, running it via /usr/bin/timeout (with timeout disabled):
 
-Besides this command make both kernel src and selftest/kvm dirty.
+  $ sudo /usr/bin/timeout 0 ./tools/testing/selftests/seccomp/seccomp_bpf
+  ...
+  [ RUN      ] TSYNC.siblings_fail_prctl
 
-> Install step is important especially for relocatable builds,
-> as it makes sure all run-time dependencies are copied to the
-> target directory.
-> 
+It gets stuck here forever, basically it's during the execution of
+syscall_restart().
 
-OK.
+I'll investigate more later.
 
-So, again.
-
-is
-
-   make O=/tmp/kvm-selftest -C tools/testing/selftests \
-        TARGETS=kvm install INSTALL_PATH=/home/lxy/kvm-selftest
-
-the right command for me to start on?
+Thanks,
+-Andrea
