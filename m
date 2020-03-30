@@ -2,195 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FB91985B5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Mar 2020 22:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147441986BE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Mar 2020 23:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728709AbgC3Unx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Mar 2020 16:43:53 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:24206 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727328AbgC3Unx (ORCPT
+        id S1728778AbgC3Vom (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Mar 2020 17:44:42 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34016 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728537AbgC3Vom (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Mar 2020 16:43:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585601032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=hH/iO6FDRZxlFvpDCLckIcIJQzohrbkDKXNiBqkh6qA=;
-        b=EFIRA7hXtlh1M0hoGMvu9V/Op36t55Afri3rbemUwhvaKnsmTSLbWCZG9eykVaSQbfbQLV
-        /wZTETGh/2Y21HPKCViD7078ye6e7XL7RjeVqvkLZzCnKE1m3s+w1SpvvScp/uTLf0CPRP
-        W4WGuV8MgixsWf+aL4B3V4kXXI8r8dA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-343-WVIWNsR0MXWxq5PiSYhXpQ-1; Mon, 30 Mar 2020 16:43:51 -0400
-X-MC-Unique: WVIWNsR0MXWxq5PiSYhXpQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 09AD3DB62;
-        Mon, 30 Mar 2020 20:43:50 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-116-15.gru2.redhat.com [10.97.116.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C9B2C19C58;
-        Mon, 30 Mar 2020 20:43:43 +0000 (UTC)
-From:   Wainer dos Santos Moschetta <wainersm@redhat.com>
-To:     kvm@vger.kernel.org, pbonzini@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        david@redhat.com, drjones@redhat.com
-Subject: [PATCH 2/2] selftests: kvm: Add mem_slot_test test
-Date:   Mon, 30 Mar 2020 17:43:10 -0300
-Message-Id: <20200330204310.21736-3-wainersm@redhat.com>
-In-Reply-To: <20200330204310.21736-1-wainersm@redhat.com>
-References: <20200330204310.21736-1-wainersm@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Mon, 30 Mar 2020 17:44:42 -0400
+Received: by mail-pl1-f195.google.com with SMTP id a23so7288514plm.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2020 14:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1yn2EFFvNTosGdc1SZkzpeyxuiukyNodVGp9r67QGVU=;
+        b=bpeZdcqBq24MKzJHBJE91pRfIBpXinPzKbrQ4GX/YeDTXKB01LSPLNTQOt7E44+W7t
+         v8f90McdsutcJ0MlMmHLxq5e8zNWLybnDRxKZBFDQJGPKLQXRdBNu711ZTP5rl0ApKnD
+         nw9VQICDfBeRA7PjxpZTY8/epVSXjmJ6RVtUWemr46HgbWNkO51tzFBuE+6U2bL1LdET
+         Ohl1WtpVMT2z4ylntco43RBk3tFwmi4PZRDz55n9EJhcDvNNQGgIpsGkMhan7FExJuxK
+         ObIDEQGEDS398qO9oGi21vrqJALJAuLDp4B7E6d1rinMCCG9SYAEDeMnpKZBxd7LxhIK
+         Ro4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1yn2EFFvNTosGdc1SZkzpeyxuiukyNodVGp9r67QGVU=;
+        b=DkLODuFVkGEJaMI2yNu9UiqQcIgqve90MA0P1X8Ctuw5YEN5nkATGknxaVFHBQM1Ge
+         EMHNR1E7NjHK6bjSlW5RKzwI+Cl4Na/2deBxwrKY28cUgh7MTmtLUpJQfSj2J8T7fzzk
+         iSOZzU88689ovFaWJ6wKQ+vNYb0lPZC2aUkoYgiCqgd2p1OAL8cv+KwD2geIlHFJr4Tx
+         LYCUROrxP//AXEjkMjbW1GZ0DS2QY+3q2mCfLvoyFD558z7zthrsqyNCRq8zBUh9ixkc
+         61yFtiyMSfyhuvWwqxfQ/GzQbkNtaXCH1okvToj50NjvZ5YTfbvfl+l9k3+fs37vaO4r
+         Mvbg==
+X-Gm-Message-State: AGi0PubSM3C86SgRzPYi6ecBxQuXUFE5axI3ziIUSiSz9+6YoaY7/tu+
+        RzyzS2Sz1x2B+YLfX/LbrTkrl5DJXtse4/HJar4fmQ==
+X-Google-Smtp-Source: APiQypKcBWeA2a78qibOeBIj0+BRUPByPOL1BDH+JU/y0XMU/KhLdSEPtbLI8a7RZPS7k8ND7t77e5s/H8puzIRkEoU=
+X-Received: by 2002:a17:90a:30c3:: with SMTP id h61mr203271pjb.18.1585604680507;
+ Mon, 30 Mar 2020 14:44:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200325225911.131940-1-heidifahim@google.com>
+In-Reply-To: <20200325225911.131940-1-heidifahim@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 30 Mar 2020 14:44:28 -0700
+Message-ID: <CAFd5g45VWGgq=KOWAcM0cRKqrFg2=HhizZhX+0RsV5esWtJwaQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: convert test results to JSON
+To:     Heidi Fahim <heidifahim@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces the mem_slot_test test which checks
-an VM can have added memory slots up to the limit defined in
-KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
-verify it fails as expected.
+On Wed, Mar 25, 2020 at 3:59 PM Heidi Fahim <heidifahim@google.com> wrote:
+>
+> Add a --json flag, which when specified when kunit_tool is run, calls
+> method get_json_result.  This is a method within kunit_json.py that
+> formats KUnit results into a dict conforming to the following KernelCI
+> API test_group spec:
+> https://api.kernelci.org/schema-test-group.html#post.  The user can
+> specify a filename as the value to json in order to store the JSON
+> results under linux/.
+> Tested within kunit_tool_test.py in a new test case called
+> KUnitJsonTest.
+>
+> Signed-off-by: Heidi Fahim <heidifahim@google.com>
 
-Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
----
- tools/testing/selftests/kvm/.gitignore      |  1 +
- tools/testing/selftests/kvm/Makefile        |  3 +
- tools/testing/selftests/kvm/mem_slot_test.c | 92 +++++++++++++++++++++
- 3 files changed, 96 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
-
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 30072c3f52fb..b1b94d50f6a2 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -17,3 +17,4 @@
- /clear_dirty_log_test
- /dirty_log_test
- /kvm_create_max_vcpus
-+/mem_slot_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index d91c53b726e6..070133349403 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -30,16 +30,19 @@ TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
- TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
- TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-+TEST_GEN_PROGS_x86_64 += mem_slot_test
- 
- TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
-+TEST_GEN_PROGS_aarch64 += mem_slot_test
- 
- TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/sync_regs_test
- TEST_GEN_PROGS_s390x += s390x/resets
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-+TEST_GEN_PROGS_s390x += mem_slot_test
- 
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
-new file mode 100644
-index 000000000000..75d2bbd71642
---- /dev/null
-+++ b/tools/testing/selftests/kvm/mem_slot_test.c
-@@ -0,0 +1,92 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * mem_slot_test
-+ *
-+ * Copyright (C) 2020, Red Hat, Inc.
-+ *
-+ * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
-+ * tentative to add further slots should fail.
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <linux/kvm.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+
-+/* Memory region flags */
-+#define MEM_REG_FLAGS KVM_MEM_LOG_DIRTY_PAGES
-+
-+/* Guest VM mode */
-+#define GUEST_VM_MODE VM_MODE_DEFAULT
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vm *vm;
-+	/* Maximum allowed number of memory slots */
-+	uint32_t max_mem_slots;
-+	/* Slot number */
-+	uint32_t slot;
-+	/* Number of pages in a memory region */
-+	uint64_t mem_reg_npages;
-+	/* Memory region size */
-+	uint64_t mem_reg_size;
-+	/* Guest physical memory guest_address */
-+	uint64_t guest_addr;
-+	/* VM page size */
-+	uint64_t vm_page_size;
-+	int ret;
-+
-+	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-+	TEST_ASSERT(max_mem_slots > 0,
-+		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
-+	DEBUG("Allowed number of memory slots: %i\n", max_mem_slots);
-+
-+	vm = vm_create(GUEST_VM_MODE, 0, O_RDWR);
-+
-+	/* Determine the minimal number of pages as possible per region. */
-+	vm_page_size = vm_get_page_size(vm);
-+#ifdef __s390x__
-+	mem_reg_size = 0x100000;
-+#else
-+	uint64_t host_page_size = sysconf(_SC_PAGESIZE);
-+
-+	mem_reg_size = (host_page_size > vm_page_size) ? host_page_size :
-+							 vm_page_size;
-+#endif
-+	mem_reg_npages = mem_reg_size / vm_page_size;
-+	guest_addr = 0x0;
-+
-+	/* Check it can be added memory slots up to the maximum allowed */
-+	DEBUG("Adding slots 0..%i, each memory region with %ldK size\n",
-+	      (max_mem_slots - 1), mem_reg_size >> 10);
-+	for (slot = 0; slot < max_mem_slots; slot++) {
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+					    guest_addr, slot, mem_reg_npages,
-+					    MEM_REG_FLAGS);
-+		guest_addr += mem_reg_size;
-+	}
-+
-+	/* Check it cannot be added memory slots beyond the limit */
-+	guest_addr += mem_reg_size;
-+	void *mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
-+			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	TEST_ASSERT(mem != NULL, "Failed to mmap() host");
-+
-+	struct kvm_userspace_memory_region kvm_region = {
-+		.slot = slot,
-+		.flags = MEM_REG_FLAGS,
-+		.guest_phys_addr = guest_addr,
-+		.memory_size = mem_reg_size,
-+		.userspace_addr = (uint64_t) mem,
-+	};
-+
-+	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION, &kvm_region);
-+	TEST_ASSERT(ret == -1, "Adding one more memory slot should fail");
-+
-+	munmap(mem, mem_reg_size);
-+	kvm_vm_free(vm);
-+
-+	return 0;
-+}
--- 
-2.17.2
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
