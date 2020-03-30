@@ -2,76 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E6B19759D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Mar 2020 09:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEF01979E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Mar 2020 12:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729413AbgC3HZI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Mar 2020 03:25:08 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:37865 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729463AbgC3HZF (ORCPT
+        id S1729596AbgC3Kw6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Mar 2020 06:52:58 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:40868 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729558AbgC3Kwp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Mar 2020 03:25:05 -0400
-Received: by mail-io1-f69.google.com with SMTP id p4so15323461ioo.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2020 00:25:03 -0700 (PDT)
+        Mon, 30 Mar 2020 06:52:45 -0400
+Received: by mail-vs1-f65.google.com with SMTP id w14so1416404vsf.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2020 03:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=I2bZK+Edwp7f1bl38ZDsYZ8gkHoLOp7N+SgwKjOSdbsqnWhmYlKKFyWTTwwdBuA4Vg
+         rwBHnP7ed1EksF/Uo6wi0daOtai1jA53B5b9RrMCwInP8fTj6xlf+N87Jxy7Sxa+QbUF
+         l2GP0Lv6JzwuZiPJAzgKXNfvaR6mAHzPBfBvakflfZ8B4h5bL4zPFQy+qXgn4TFvbTXz
+         A1ohkR077EumDiarvC1dhS/fXXyUHKbnnxfkdMVlwSlZiAQJvL50ZQklv05R+GT0yrBC
+         3q/4vjuGZ1FGpK3Ogg0O4Ce18OqauZECfFoMpKCzkd0qt9LKtlmIkWUwZqPjuntycFFN
+         I7DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=TZJbpgebPbX3Q4FeLfNCFQJD77ggPTwgpCJg6I/5kLk=;
-        b=m6SlSKbbUmrWUFK6m371S/nmwKIHItpB5g2hurWmkXWmTGr6I2xRPi8jZP0Xv1TQlf
-         e/EplEDphbCSRQiJy/WjeN89ZhxlYsfb4JKFkgpJboRi1mJ6cgUbbfq3q3XtRZDmfjSc
-         64b5Fms6Lh+Z032ZxJMFEIyzjT+RiotA4De7VG+BJwMnfDhM0ffv+JPJlchHKPPh32BF
-         NKGbqIdHeAYPmzJVvXxvMppQ7pmN1kITgFYOH260L4A5SI+bwVI0o5kUOP/n/LEGmYBr
-         d6OkaqritUd0yQR8g/JA1pg4eE6u0h3kxODgtQeMYb1hgjXbFrOMfWvO95HkQGYg6aLA
-         m8aw==
-X-Gm-Message-State: ANhLgQ2GZ4KN4P2BEEaHL7GITd+tGeARmqqGikIU07uumlkJ5rUI3lTs
-        rAURRsrDeI5PvkjYz4PyqoqLsxYUxSXpzBa1Zd4+f1H2drAC
-X-Google-Smtp-Source: ADFU+vtBbBt6BuinPFFJY8ewnoDn/U9q2ryhLsaXg+psdNxruEaMqWJqvCEaD1smqkJhUjifXxvNwbU5if/xCAxan2Tj9cQry9q1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=K3d0B84UihtZzT3N4OkZB/STlYl1M1fml2BHLMJ99Y+suMe1OoPepZSqOoEUdgP5CF
+         urLtDVQNdc8xhW0sbNuY0XquKBnkQKL2SwdNA9nhhPz7XRI3tR0cSPNovOil56YsBvTc
+         pmamhcWyLzKI+GgPeszq4Xgho/R5QNSKcj4yMySAJFAkRWhdEZegPNK5t9K4E7iuwdd7
+         RzL3or9CwS9Y7o2jJJb8vztD01YyP0If4A0fw6LY5bVqYcZItL7mLce3bpHUNBxhfXaE
+         Onaln3BuC8jxID8qLv9BNRtiKAfjj7xC3om66QM3ccBZxQkK47GN1/aVE1aLYaffp0L1
+         hbiw==
+X-Gm-Message-State: AGi0PublZkzzX/jssbJ2FLbjbg0fJiXFjEie9zoo6pNzAn0iPkdAYvi3
+        N0psamEurk0tpJBS+L/9UI+rvGfi2tBZtX/tWdY=
+X-Google-Smtp-Source: APiQypIWKERkhJyfw3nllppwlKx4Kg5tACX7YV91IKVmdYpKGJw8tan3l05zjbxOy64C+jzvYjD6e0YtF987t4KsIjw=
+X-Received: by 2002:a67:e24c:: with SMTP id w12mr8442912vse.153.1585565563772;
+ Mon, 30 Mar 2020 03:52:43 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e316:: with SMTP id u22mr9378632ioc.1.1585553103320;
- Mon, 30 Mar 2020 00:25:03 -0700 (PDT)
-Date:   Mon, 30 Mar 2020 00:25:03 -0700
-In-Reply-To: <000000000000aa9a23059f62246a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007effb905a20d5904@google.com>
-Subject: Re: WARNING in sk_stream_kill_queues (4)
-From:   syzbot <syzbot+fbe81b56f7df4c0fb21b@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, aviadye@mellanox.com,
-        borisp@mellanox.com, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davejwatson@fb.com, davem@davemloft.net, edumazet@google.com,
-        jbaron@akamai.com, john.fastabend@gmail.com, kafai@fb.com,
-        kuba@kernel.org, kuznet@ms2.inr.ac.ru,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        ncardwell@google.com, netdev@vger.kernel.org, shuah@kernel.org,
-        soheil@google.com, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
+Received: by 2002:a67:c005:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 03:52:43
+ -0700 (PDT)
+Reply-To: maryalice00.12@postribe.com
+From:   Maryalice Williams <maryalicewilliams730@gmail.com>
+Date:   Mon, 30 Mar 2020 08:52:43 -0200
+Message-ID: <CAKwdjsr+YKgJk7z-UHX7Zo55cx5RUN3-bw03sWcArP4vbM2B5g@mail.gmail.com>
+Subject: Reply For More Details.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-syzbot suspects this bug was fixed by commit:
+-- 
+My dear,
 
-commit b6f6118901d1e867ac9177bbff3b00b185bd4fdc
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Tue Feb 25 19:52:29 2020 +0000
+I am Mrs Maryalice Williams, I want to send you donation of two
+million seven hundred thousand Dollars ($2.7M) for volunteer projects
+in your country due to my ill health that could not permit me. Kindly
+reply for more details, and also send me the following details, as per
+below, your full Name ..........,  Address...........,
+Age...............,  Occupation ...............
 
-    ipv6: restrict IPV6_ADDRFORM operation
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1177dc25e00000
-start commit:   f8788d86 Linux 5.6-rc3
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9833e26bab355358
-dashboard link: https://syzkaller.appspot.com/bug?extid=fbe81b56f7df4c0fb21b
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fd92c3e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11679a81e00000
-
-If the result looks correct, please mark the bug fixed by replying with:
-
-#syz fix: ipv6: restrict IPV6_ADDRFORM operation
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Remain blessed,
+Mrs. Maryalice Williams.
