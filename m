@@ -2,231 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DFE198E24
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Mar 2020 10:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD6E1992CA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Mar 2020 11:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730097AbgCaIQq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Mar 2020 04:16:46 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:34806 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730034AbgCaIQq (ORCPT
+        id S1729997AbgCaJ6j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Mar 2020 05:58:39 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7472 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730182AbgCaJ6i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Mar 2020 04:16:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585642604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P6E3VyXfLxlF9DVTkMR/YxJEZTjAoewX0d81DAmSyDI=;
-        b=A+JueTyiT/2QK7ggnQp6Kl/LhCbt6yMx303NRLc2nT0cDk5D9GozLBqOmxQNoGfjogDwKx
-        frEGD6O3h+djdO8PLJV6ZJIEz4Xa0UCmoZs9wQ+iPLiSfPsTdxuysk6cB/mc7R8pOP78Jn
-        j6tFqDwC+MCGiT9K3Qi9DHy49ZXJinw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-258-MJ3ADzbsPfGZqkLniT-ASg-1; Tue, 31 Mar 2020 04:16:43 -0400
-X-MC-Unique: MJ3ADzbsPfGZqkLniT-ASg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4B3C41005509;
-        Tue, 31 Mar 2020 08:16:42 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.40.193.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 628E660BE0;
-        Tue, 31 Mar 2020 08:16:34 +0000 (UTC)
-Date:   Tue, 31 Mar 2020 10:16:32 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Wainer dos Santos Moschetta <wainersm@redhat.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        david@redhat.com
-Subject: Re: [PATCH 2/2] selftests: kvm: Add mem_slot_test test
-Message-ID: <20200331081632.ithcwuzjyjhiwphy@kamzik.brq.redhat.com>
-References: <20200330204310.21736-1-wainersm@redhat.com>
- <20200330204310.21736-3-wainersm@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200330204310.21736-3-wainersm@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+        Tue, 31 Mar 2020 05:58:38 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02V9Wgb3043389
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 05:58:37 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 303wrw1cj9-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 05:58:36 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Tue, 31 Mar 2020 10:58:24 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 31 Mar 2020 10:58:20 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02V9wTHJ40763428
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Mar 2020 09:58:29 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFCD74C04E;
+        Tue, 31 Mar 2020 09:58:28 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5946C4C04A;
+        Tue, 31 Mar 2020 09:58:26 +0000 (GMT)
+Received: from fir03.in.ibm.com (unknown [9.121.59.65])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Mar 2020 09:58:26 +0000 (GMT)
+From:   Sandipan Das <sandipan@linux.ibm.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org, linux-mm@kvack.org,
+        fweimer@redhat.com, linuxram@us.ibm.com, mhocko@kernel.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
+        shuah@kernel.org
+Subject: [PATCH v19 00/24] selftests, powerpc, x86: Memory Protection Keys
+Date:   Tue, 31 Mar 2020 15:28:01 +0530
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 20033109-0008-0000-0000-00000367B4B4
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20033109-0009-0000-0000-00004A8938CE
+Message-Id: <cover.1585646528.git.sandipan@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-03-31_03:2020-03-30,2020-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 bulkscore=0 malwarescore=0 suspectscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003310086
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 05:43:10PM -0300, Wainer dos Santos Moschetta wrote:
-> This patch introduces the mem_slot_test test which checks
-> an VM can have added memory slots up to the limit defined in
-> KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
-> verify it fails as expected.
-> 
-> Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
-> ---
->  tools/testing/selftests/kvm/.gitignore      |  1 +
->  tools/testing/selftests/kvm/Makefile        |  3 +
->  tools/testing/selftests/kvm/mem_slot_test.c | 92 +++++++++++++++++++++
->  3 files changed, 96 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 30072c3f52fb..b1b94d50f6a2 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -17,3 +17,4 @@
->  /clear_dirty_log_test
->  /dirty_log_test
->  /kvm_create_max_vcpus
-> +/mem_slot_test
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index d91c53b726e6..070133349403 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -30,16 +30,19 @@ TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
->  TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
->  TEST_GEN_PROGS_x86_64 += dirty_log_test
->  TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_x86_64 += mem_slot_test
->  
->  TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
->  TEST_GEN_PROGS_aarch64 += dirty_log_test
->  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_aarch64 += mem_slot_test
->  
->  TEST_GEN_PROGS_s390x = s390x/memop
->  TEST_GEN_PROGS_s390x += s390x/sync_regs_test
->  TEST_GEN_PROGS_s390x += s390x/resets
->  TEST_GEN_PROGS_s390x += dirty_log_test
->  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_s390x += mem_slot_test
->  
->  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
->  LIBKVM += $(LIBKVM_$(UNAME_M))
-> diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
-> new file mode 100644
-> index 000000000000..75d2bbd71642
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/mem_slot_test.c
-> @@ -0,0 +1,92 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * mem_slot_test
-> + *
-> + * Copyright (C) 2020, Red Hat, Inc.
-> + *
-> + * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
-> + * tentative to add further slots should fail.
-> + */
-> +#define _GNU_SOURCE /* for program_invocation_short_name */
-> +#include <linux/kvm.h>
-> +#include <sys/mman.h>
-> +#include <unistd.h>
-> +
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +
-> +/* Memory region flags */
-> +#define MEM_REG_FLAGS KVM_MEM_LOG_DIRTY_PAGES
-> +
-> +/* Guest VM mode */
-> +#define GUEST_VM_MODE VM_MODE_DEFAULT
+Memory protection keys enables an application to protect its address
+space from inadvertent access by its own code.
 
-I'm not sure what the value of the two defines above are. I'd prefer we
-avoid unnecessary renaming. Also, do we need KVM_MEM_LOG_DIRTY_PAGES for
-this test?
+This feature is now enabled on powerpc and has been available since
+4.16-rc1. The patches move the selftests to arch neutral directory
+and enhance their test coverage.
 
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	struct kvm_vm *vm;
-> +	/* Maximum allowed number of memory slots */
-> +	uint32_t max_mem_slots;
-> +	/* Slot number */
-> +	uint32_t slot;
-> +	/* Number of pages in a memory region */
-> +	uint64_t mem_reg_npages;
-> +	/* Memory region size */
-> +	uint64_t mem_reg_size;
-> +	/* Guest physical memory guest_address */
-> +	uint64_t guest_addr;
-> +	/* VM page size */
-> +	uint64_t vm_page_size;
+Tested on powerpc64 and x86_64 (Skylake-SP).
 
-nit: IMO, the variable names above are descriptive enough to drop the
-comments.
+Link to development branch:
+https://github.com/sandip4n/linux/tree/pkey-selftests
 
-> +	int ret;
-> +
-> +	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-> +	TEST_ASSERT(max_mem_slots > 0,
-> +		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
-> +	DEBUG("Allowed number of memory slots: %i\n", max_mem_slots);
+Resending this based on feedback from maintainers who felt this
+can go in via the -mm tree. This has no other changes from the
+last version (v18) apart from being rebased.
 
-DEBUG() no longer exists in kvm/queue. This should now be pr_debug().
+Changelog
+---------
+Link to previous version (v18):
+https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=155970
 
-> +
-> +	vm = vm_create(GUEST_VM_MODE, 0, O_RDWR);
-> +
-> +	/* Determine the minimal number of pages as possible per region. */
-> +	vm_page_size = vm_get_page_size(vm);
-> +#ifdef __s390x__
-> +	mem_reg_size = 0x100000;
-> +#else
-> +	uint64_t host_page_size = sysconf(_SC_PAGESIZE);
-> +
-> +	mem_reg_size = (host_page_size > vm_page_size) ? host_page_size :
-> +							 vm_page_size;
-> +#endif
-> +	mem_reg_npages = mem_reg_size / vm_page_size;
+v19:
+	(1) Rebased on top of latest master.
 
-On kvm/queue the above 11 lines can now all be done with
+v18:
+	(1) Fixed issues with x86 multilib builds based on
+	    feedback from Dave.
+	(2) Moved patch 2 to the end of the series.
 
-  mem_reg_size = SOME_ARBITRARY_MEM_REG_SIZE;
-  mem_reg_npages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, mem_reg_size);
+v17:
+	(1) Fixed issues with i386 builds when running on x86_64
+	    based on feedback from Dave.
+	(2) Replaced patch 6 from previous version with patch 7.
+	    This addresses u64 format specifier related concerns
+	    that Michael had raised in v15.
 
-> +	guest_addr = 0x0;
-> +
-> +	/* Check it can be added memory slots up to the maximum allowed */
-> +	DEBUG("Adding slots 0..%i, each memory region with %ldK size\n",
-> +	      (max_mem_slots - 1), mem_reg_size >> 10);
-> +	for (slot = 0; slot < max_mem_slots; slot++) {
-> +		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-> +					    guest_addr, slot, mem_reg_npages,
-> +					    MEM_REG_FLAGS);
-> +		guest_addr += mem_reg_size;
-> +	}
-> +
-> +	/* Check it cannot be added memory slots beyond the limit */
-> +	guest_addr += mem_reg_size;
+v16:
+	(1) Rebased on top of latest master.
+	(2) Switched to u64 instead of using an arch-dependent
+	    pkey_reg_t type for references to the pkey register
+	    based on suggestions from Dave, Michal and Michael.
+	(3) Removed build time determination of page size based
+	    on suggestion from Michael.
+	(4) Fixed comment before the definition of __page_o_noops()
+	    from patch 13 ("selftests/vm/pkeys: Introduce powerpc
+	    support").
 
-nit: shouldn't be necessary. We already incremented guest_addr on the
-last loop.
+v15:
+	(1) Rebased on top of latest master.
+	(2) Addressed review comments from Dave Hansen.
+	(3) Moved code for getting or setting pkey bits to new
+	    helpers. These changes replace patch 7 of v14.
+	(4) Added a fix which ensures that the correct count of
+	    reserved keys is used across different platforms.
+	(5) Added a fix which ensures that the correct page size
+	    is used as powerpc supports both 4K and 64K pages.
 
-> +	void *mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
-> +			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	TEST_ASSERT(mem != NULL, "Failed to mmap() host");
-> +
-> +	struct kvm_userspace_memory_region kvm_region = {
-> +		.slot = slot,
-> +		.flags = MEM_REG_FLAGS,
-> +		.guest_phys_addr = guest_addr,
-> +		.memory_size = mem_reg_size,
-> +		.userspace_addr = (uint64_t) mem,
-> +	};
-> +
-> +	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION, &kvm_region);
-> +	TEST_ASSERT(ret == -1, "Adding one more memory slot should fail");
+v14:
+	(1) Incorporated another round of comments from Dave Hansen.
 
-Shouldn't we also check that we get the correct errno?
+v13:
+	(1) Incorporated comments for Dave Hansen.
+	(2) Added one more test for correct pkey-0 behavior.
 
-> +
-> +	munmap(mem, mem_reg_size);
-> +	kvm_vm_free(vm);
-> +
-> +	return 0;
-> +}
-> -- 
-> 2.17.2
->
+v12:
+	(1) Fixed the offset of pkey field in the siginfo structure for
+	    x86_64 and powerpc. And tries to use the actual field
+	    if the headers have it defined.
 
-Thanks,
-drew
+v11:
+	(1) Fixed a deadlock in the ptrace testcase.
+
+v10 and prior:
+	(1) Moved the testcase to arch neutral directory.
+	(2) Split the changes into incremental patches.
+
+Desnes A. Nunes do Rosario (1):
+  selftests/vm/pkeys: Fix number of reserved powerpc pkeys
+
+Ram Pai (16):
+  selftests/x86/pkeys: Move selftests to arch-neutral directory
+  selftests/vm/pkeys: Rename all references to pkru to a generic name
+  selftests/vm/pkeys: Move generic definitions to header file
+  selftests/vm/pkeys: Fix pkey_disable_clear()
+  selftests/vm/pkeys: Fix assertion in pkey_disable_set/clear()
+  selftests/vm/pkeys: Fix alloc_random_pkey() to make it really random
+  selftests/vm/pkeys: Introduce generic pkey abstractions
+  selftests/vm/pkeys: Introduce powerpc support
+  selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
+  selftests/vm/pkeys: Improve checks to determine pkey support
+  selftests/vm/pkeys: Associate key on a mapped page and detect access
+    violation
+  selftests/vm/pkeys: Associate key on a mapped page and detect write
+    violation
+  selftests/vm/pkeys: Detect write violation on a mapped
+    access-denied-key page
+  selftests/vm/pkeys: Introduce a sub-page allocator
+  selftests/vm/pkeys: Test correct behaviour of pkey-0
+  selftests/vm/pkeys: Override access right definitions on powerpc
+
+Sandipan Das (5):
+  selftests: vm: pkeys: Use sane types for pkey register
+  selftests: vm: pkeys: Add helpers for pkey bits
+  selftests: vm: pkeys: Use the correct huge page size
+  selftests: vm: pkeys: Use the correct page size on powerpc
+  selftests: vm: pkeys: Fix multilib builds for x86
+
+Thiago Jung Bauermann (2):
+  selftests/vm/pkeys: Move some definitions to arch-specific header
+  selftests/vm/pkeys: Make gcc check arguments of sigsafe_printf()
+
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |  73 ++
+ tools/testing/selftests/vm/pkey-helpers.h     | 225 ++++++
+ tools/testing/selftests/vm/pkey-powerpc.h     | 136 ++++
+ tools/testing/selftests/vm/pkey-x86.h         | 181 +++++
+ .../selftests/{x86 => vm}/protection_keys.c   | 696 ++++++++++--------
+ tools/testing/selftests/x86/.gitignore        |   1 -
+ tools/testing/selftests/x86/Makefile          |   2 +-
+ tools/testing/selftests/x86/pkey-helpers.h    | 219 ------
+ 9 files changed, 1002 insertions(+), 532 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
+ create mode 100644 tools/testing/selftests/vm/pkey-powerpc.h
+ create mode 100644 tools/testing/selftests/vm/pkey-x86.h
+ rename tools/testing/selftests/{x86 => vm}/protection_keys.c (74%)
+ delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
+
+-- 
+2.17.1
 
