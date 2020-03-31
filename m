@@ -2,125 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABE4199BFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Mar 2020 18:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F5F199DFC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Mar 2020 20:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730442AbgCaQpM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Mar 2020 12:45:12 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:43250 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731062AbgCaQpM (ORCPT
+        id S1726315AbgCaS1b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Mar 2020 14:27:31 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:36748 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgCaS1b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Mar 2020 12:45:12 -0400
-Received: by mail-io1-f65.google.com with SMTP id x9so15968793iom.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 09:45:12 -0700 (PDT)
+        Tue, 31 Mar 2020 14:27:31 -0400
+Received: by mail-pj1-f67.google.com with SMTP id nu11so1430267pjb.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 11:27:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=r0JAwdBM8J3oiIGwg0rcW6L9TGV0155fnPxFlRrMlTI=;
-        b=L7qA7P4KvyQENUGj3g9qyx+aJQZAMLmOoPzxBh1yA5Bk03Xq2CItkjuVY2OGxqB7CX
-         glKa7jDokq1Zp7NBiLnr8nacK9Mf1B0LQn0xxYPN1cn5Blr9LibND/FGW0DRCWqpTqyV
-         33RiWiEcuRhHSdbV76m61zgLVSb9MLtdaMOpA=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zLVDD+NzMHaNk3lT9nXy779lPxGGvFl1BeZrYwA43Fw=;
+        b=eZaUbKqBQsAGEDWohcgVWreqYFpuy1mtBi8+zOZFx4hKtYXVoodnXBRoqO5ffqHmyJ
+         s+TE9G2H7Wez9Qr9x1vq0LGjzrhad/x5PKrJ1+UMhBbOBxRBDX7ry0dL3vIHj1k75YVv
+         7NqwAL+5p8OUn3W7fOUI219Glds7agiAj/hLMgByUGeC2b9+fW2EpYPyKoQw6c1z9g3U
+         KtK6Ia2Gx7k5g6CjE4Kc2Bo18fYpsJSHTS25OlRYlqeE/r4+8wLTDR9rmVMqcQ6Y2JtF
+         sUNYHN8gSJS9S2L1MfGM/RZnGtHHdFTIfnHnyhceOUiyeOifHVSMKIDrD/KANnLQ7Th5
+         O28w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=r0JAwdBM8J3oiIGwg0rcW6L9TGV0155fnPxFlRrMlTI=;
-        b=G66L41pgCKauYIAniXSF+NMTrYaSCypzLX/DHpoUKq8dNraqbD1y9U1csNkHL8qBV+
-         9XdGEDrbGlli8rAmwY1pTs/Ywq+sYpwXCErtAcGsa/nndfkTz19P+h2IoAM9Qg+Cqs0p
-         X9izHoOqE2yQKP+9huJV78rBTTJRdbHyxbwJLHJ1LXaO9vJWZJ0AMfQVjL38STHx+Rdw
-         6lP3eZc6NRpSs50KqxyWRhBzQSeCjREuMpG+tXjtuVV4dyvzrBK7yFjHK/HTegZH+O6X
-         Q1gy/5/9TwFn/5vKwMOj4jmP/0lG/3GxpRG3nLrkppN1OGRRRLHZci/oiWnJ8XV6HhlW
-         wbYQ==
-X-Gm-Message-State: ANhLgQ17Sh/S6aoBMD+ZyjvyrByNJbioP0Uqnvqx1u9DZX5+UNmUMIxK
-        8EnKOYUyGV7++jAkDX4qDcVKbQ==
-X-Google-Smtp-Source: ADFU+vsFQNZKvyoiMkGgxc+G61WBxRHne+j8QME+5vN6bWGQEh3/d60UseRLroe6jIzAPjzFyH+EZQ==
-X-Received: by 2002:a6b:5c0d:: with SMTP id z13mr15272201ioh.96.1585673111646;
-        Tue, 31 Mar 2020 09:45:11 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f69sm6011590ilg.10.2020.03.31.09.45.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2020 09:45:10 -0700 (PDT)
-Subject: Re: [PATCH] Makefile: Update kselftest help information
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zLVDD+NzMHaNk3lT9nXy779lPxGGvFl1BeZrYwA43Fw=;
+        b=ACYQWLmgzCqLswBk4+rdLwOpe2a7KfnOeFBb3s5dNYntqu1tpKozuYY3AGdVJ7o3e6
+         A8jj79VROvfSjXzBNtUdpzE7sIAsQr/nZ8/sy0vnWPdyO2op5PAev1dg4lj+IV8j3n6c
+         amRn1CT+Dxx3DbQfnTC9b7ecy2o1qllPe3828DbhU1Sp2ca0bZdo/Qs2eCpGl++07Gf/
+         Pi4waIWqyeFL+pKwGSUcAIeAWOCzgm1tvY1QvMuEtoyjIGm5IGg2yf7IVn4Hxub9HF8S
+         +7/YVKF+iZfqjkbTfl/ffyuZqTmSvqjr/VznBemdyi7DEZMp4zNf71WOZDa81CAIuMlL
+         TUeA==
+X-Gm-Message-State: AGi0PuaGiOQ76deUtlWGzsoF8YaAS9wpwt8+b5H+9bwGy1lZGXSWEfgw
+        Xd3e/7GrDj22BC6OG24SdxWz6GkHX/lRJ3nLjiQ7Pg==
+X-Google-Smtp-Source: APiQypI7iAE735GgCKkeZusjs8UlrOmYraVum5tmyZ7a9ZtEskbpvk2jByn4JUjxs7U3xgaqUrYxkZIAf+J/001kv4E=
+X-Received: by 2002:a17:90a:9f03:: with SMTP id n3mr209849pjp.29.1585679249825;
+ Tue, 31 Mar 2020 11:27:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200330230256.28323-1-vitor@massaru.org>
+In-Reply-To: <20200330230256.28323-1-vitor@massaru.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 31 Mar 2020 11:27:18 -0700
+Message-ID: <CAFd5g47hiPf7Xy0f4YER+HzHHXyUV0dhiQ=2ZXfezEHBcrTuEQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Fix kunit.py run --build_dir='<foo>' fails on
+ "unclean" trees
+To:     Vitor Massaru Iha <vitor@massaru.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200330180711.14393-1-skhan@linuxfoundation.org>
- <CAK7LNARyVVNo8Ck4=s_bkwfxuFXj7MUFr2E_f-oOZEkjgm5Bmg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b580e8ce-1879-c516-72c8-041b2422ad1d@linuxfoundation.org>
-Date:   Tue, 31 Mar 2020 10:45:09 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <CAK7LNARyVVNo8Ck4=s_bkwfxuFXj7MUFr2E_f-oOZEkjgm5Bmg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/31/20 10:11 AM, Masahiro Yamada wrote:
-> On Tue, Mar 31, 2020 at 3:07 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> Update kselftest help information.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->> ---
->>   Makefile | 15 +++++++++------
->>   1 file changed, 9 insertions(+), 6 deletions(-)
->>
->> diff --git a/Makefile b/Makefile
->> index e56bf7ef182d..5e5c770423c7 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -1470,12 +1470,15 @@ help:
->>          @echo  '  nsdeps          - Generate missing symbol namespace dependencies'
->>          @echo  ''
->>          @echo  'Kernel selftest:'
->> -       @echo  '  kselftest       - Build and run kernel selftest (run as root)'
->> -       @echo  '                    Build, install, and boot kernel before'
->> -       @echo  '                    running kselftest on it'
->> -       @echo  '  kselftest-clean - Remove all generated kselftest files'
->> -       @echo  '  kselftest-merge - Merge all the config dependencies of kselftest to existing'
->> -       @echo  '                    .config.'
->> +       @echo  '  kselftest         - Build and run kernel selftest'
->> +       @echo  '                      Build, install, and boot kernel before'
->> +       @echo  '                      running kselftest on it'
->> +       @echo  '                      Run as root for full coverage'
->> +       @echo  '  kselftest-all     - Build kernel selftest'
->> +       @echo  '  kselftest-install - Build and install kernel selftest'
->> +       @echo  '  kselftest-clean   - Remove all generated kselftest files'
->> +       @echo  '  kselftest-merge   - Merge all the config dependencies of'
->> +       @echo  '                      kselftest to existing .config.'
->>          @echo  ''
->>          @$(if $(dtstree), \
->>                  echo 'Devicetree:'; \
->> --
->> 2.20.1
->>
-> 
-> 
-> Applied to linux-kbuild. Thanks.
-
-Thanks.
-
-> 
-> But, if we have more entries in the future,
-> we might want to consider to move these
-> to tools/testing/selftests/Makefile.
-> 
+On Mon, Mar 30, 2020 at 4:03 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
 >
-Agreed.
+> Fix this bug: https://bugzilla.kernel.org/show_bug.cgi?id=205219
+>
+> For some reason, the environment variable ARCH is used instead of ARCH
+> passed as an argument, this patch uses a copy of the env, but using
+> ARCH=um and CROSS_COMPILER='' to avoid this problem.
+>
+> This patch doesn't change the user's environment variables, avoiding
+> side effects.
 
-thanks,
--- Shuah
+Seems reasonable to me.
 
+> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+
+I cannot test this as your patch doesn't apply to our for-next branch
+(kselftest/kunit). You can find it here:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
+
+> ---
+>  tools/testing/kunit/kunit_kernel.py | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index d99ae75ef72f..0cb1f81ac8f2 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -15,6 +15,7 @@ import kunit_config
+>
+>  KCONFIG_PATH = '.config'
+>  kunitconfig_path = '.kunitconfig'
+> +env = dict(os.environ.copy(), ARCH='um', CROSS_COMPILE='')
+>
+>  class ConfigError(Exception):
+>         """Represents an error trying to configure the Linux kernel."""
+> @@ -36,22 +37,22 @@ class LinuxSourceTreeOperations(object):
+>                         raise ConfigError(e.output)
+>
+>         def make_olddefconfig(self, build_dir):
+> -               command = ['make', 'ARCH=um', 'olddefconfig']
+> +               command = ['make', 'olddefconfig']
+>                 if build_dir:
+>                         command += ['O=' + build_dir]
+>                 try:
+> -                       subprocess.check_output(command)
+> +                       subprocess.check_output(command, env=env)
+>                 except OSError as e:
+>                         raise ConfigError('Could not call make command: ' + e)
+>                 except subprocess.CalledProcessError as e:
+>                         raise ConfigError(e.output)
+>
+>         def make(self, jobs, build_dir):
+> -               command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
+> +               command = ['make', '--jobs=' + str(jobs)]
+>                 if build_dir:
+>                         command += ['O=' + build_dir]
+>                 try:
+> -                       subprocess.check_output(command)
+> +                       subprocess.check_output(command, env=env)
+>                 except OSError as e:
+>                         raise BuildError('Could not call execute make: ' + e)
+>                 except subprocess.CalledProcessError as e:
+> @@ -66,7 +67,8 @@ class LinuxSourceTreeOperations(object):
+>                         [linux_bin] + params,
+>                         stdin=subprocess.PIPE,
+>                         stdout=subprocess.PIPE,
+> -                       stderr=subprocess.PIPE)
+> +                       stderr=subprocess.PIPE,
+> +                       env=env)
+>                 process.wait(timeout=timeout)
+>                 return process
+>
+> --
+> 2.21.1
+>
