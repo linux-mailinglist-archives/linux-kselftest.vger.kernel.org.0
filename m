@@ -2,152 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ED3199F41
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Mar 2020 21:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 691E8199F67
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Mar 2020 21:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbgCaTjL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Mar 2020 15:39:11 -0400
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:35736 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgCaTjK (ORCPT
+        id S1727852AbgCaTrU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Mar 2020 15:47:20 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:37801 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727768AbgCaTrT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Mar 2020 15:39:10 -0400
-Received: by mail-yb1-f195.google.com with SMTP id x63so11830162ybx.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 12:39:08 -0700 (PDT)
+        Tue, 31 Mar 2020 15:47:19 -0400
+Received: by mail-qk1-f195.google.com with SMTP id x3so24458911qki.4;
+        Tue, 31 Mar 2020 12:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=CmyCyWagylfuKeKB4BO2p4EHeCrzlGpSPlijLTrzQrE=;
-        b=i3NpJnHq4kSwxmmk+3rXgxdW8Wt5LW4Edf8xpVA/myZ6FFGqWy/Sa+cGk5maohkOQg
-         y8WPF8b84LcU2zQHXVM70zuqSL6ixG4qKmAdHZshTqzvgvpH3/x4nny6bJrgYirLw/Xt
-         e+VOU9zfivBrm990mM3EWL29oUt2b6LNVZQEWsmCGkYJhexuUp9A0JbWWyxZM/vQkx03
-         tzyBPfueZyGMUmSjzf8LtNpzxWmqXsIIpiCLUk7f/1CEBepL5tBomiR3cob+FkM33OPo
-         RQSd9hB1ceYDCHxgX2JI6Y03S00SeRYbcs6RihoC5/E9NC8F49Un2sMHlO+AzuTxlQUa
-         PcPQ==
+        bh=GFR2ebeelxrsVQaEHaa7H8HXE+7opSWH7ZpASGlERsM=;
+        b=d6ldevC9PQKwwsqzRi0EN6gl2z2VxBKwgrNgIFhrmLCCkWMMQOzTLAprn1kcPZuZ10
+         XjFbX2SZCT4fSbmuGB3jzdYOZjQZwW5sBw2P3L/jbb+kMuIDsRkMAvqAC1EK90GjznwP
+         kKs+hCV7J508TWxufgCB7rStezN2Chjy5XqJ9vfE2a9oFSNwFIEoCknByW92N7+VRHgD
+         Uwby5nPHwvDQ2fxfs6WZpczVUGOla1Kt8jhdeXaMyurrDKS1c5vVuEQhXmQpsxUlXGjY
+         P0BAEWX3aOtaMWvr7CwjSgnxgCkpFO5oxWBZxZ9ZAYbAA1X19Of7FCxgNwGhOpp7WfPV
+         guRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CmyCyWagylfuKeKB4BO2p4EHeCrzlGpSPlijLTrzQrE=;
-        b=udhKaf/zsM1d977BbWK7AF8NjnOGoct0J/VTM3A6S2gIWJ1ZQwfRs03ctPkDRX5PmD
-         s0DqXMFFL01UT9bH2bQEWvJea3XUP+7l1g+vdYp6gGFTHeZFaHOMB3kMg3D7Q9PhqMQp
-         zvqopj9Qal/h0BFByP/PZJ0l1kZLiQTzg4fun6JgLdyi+eoFgbfiejETMgk0v6tSbfFQ
-         SVJnydp9JRzWbxlnvqRR4tIrWCN/KJSxhTnRLcoUMtnLpifo2nSenCXn5D66keU/Ssgh
-         NEsqSkFY/dF2EsuY4e5RpOj+v1Ez92WlF2jq3D8+GNxguzvWazmtO1g9mwbEr/u3kpyw
-         rN+g==
-X-Gm-Message-State: ANhLgQ16xQWFyeR/13Jpqv+sjgRcc0qHmENXcRXBg2YFWSWOxcA1ATYz
-        wNufj4UB2qZaVD5GYoNZJEQIMg622RU21i4j0S0HkA==
-X-Google-Smtp-Source: ADFU+vtC9v29cwTvgQzCRkzqmplSAGo2pfpyc7gBVxRCNiuU28PdpgwpW/Ke6FkwW6/6YGQT2lEDfhOzwI5e3wgwWTc=
-X-Received: by 2002:a25:c482:: with SMTP id u124mr31079143ybf.286.1585683547417;
- Tue, 31 Mar 2020 12:39:07 -0700 (PDT)
+        bh=GFR2ebeelxrsVQaEHaa7H8HXE+7opSWH7ZpASGlERsM=;
+        b=kCQtwahfduetiH8hDmGzWxo3b/6jQkSqVfDer8qs6tbOpZxxP93z/6vudfAp6PphQD
+         zf2WYQ/tM+rFUQDRYCoQbMMV+SLjijzr5w8b0aU8m9YIkdpqzpzsiOJ2MKeNJvofpBCO
+         c8zX5sfBx51iNNSvGplyOrDqtynvuBU47Bwg21LfIVNOIZkdyKSlq6NMy3M9rtSwyon2
+         K2NOcf4BZUcgnH8wCQnvdPwYJZuUgNpyiErTznH4dbMLcS6kdAGn/ZZ/J52Lwvq6lXOk
+         iu3eVvbM7LqQ95CP6RCVkTn5OfNUwQfXvSny6kpMzGVVesw6UmSEE5gr+qcbeSlNmAQ5
+         pfpg==
+X-Gm-Message-State: ANhLgQ1YD+zxjbCcs5J7LwGA2u2IlA+eKSFBYEwx5Ts+CF9H2zwoBVc0
+        BhHRkDkiIMI3+idr0dBGSEDmTunX20RPOCEyCHM=
+X-Google-Smtp-Source: ADFU+vsQeYFXMaujLW5040JH0lik5W1Ur57xYxu1+p18j3/IegQJuXKTpgoGz15sWUV8DbDW4cpOi/iH0bqVmJdwakE=
+X-Received: by 2002:a37:6411:: with SMTP id y17mr6917618qkb.437.1585684038877;
+ Tue, 31 Mar 2020 12:47:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200330230256.28323-1-vitor@massaru.org> <CAFd5g47hiPf7Xy0f4YER+HzHHXyUV0dhiQ=2ZXfezEHBcrTuEQ@mail.gmail.com>
-In-Reply-To: <CAFd5g47hiPf7Xy0f4YER+HzHHXyUV0dhiQ=2ZXfezEHBcrTuEQ@mail.gmail.com>
-From:   Vitor Massaru Iha <vitor@massaru.org>
-Date:   Tue, 31 Mar 2020 16:38:30 -0300
-Message-ID: <CADQ6JjUUFsJdgeLNA8XUkSF14H=WWF8y2eNTvQPNXHRQ+p_qBw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix kunit.py run --build_dir='<foo>' fails on
- "unclean" trees
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+References: <60b05d23-6352-b978-3bf7-5a86466bb297@cn.fujitsu.com>
+ <c1025a74-1d80-5127-2b0a-87465d3dbcd0@fb.com> <84a70348-62e3-728b-d934-28e902d40fd0@cn.fujitsu.com>
+ <da95b852-e556-1b56-42eb-b97e1826710c@cn.fujitsu.com> <a2771f66-b7ff-f320-dbd6-0967c189834f@cn.fujitsu.com>
+ <a2b1a025-6a70-c3a5-fc19-155f0266946a@fb.com> <7705ca15-0d63-2e17-b947-51852c196c4b@cn.fujitsu.com>
+In-Reply-To: <7705ca15-0d63-2e17-b947-51852c196c4b@cn.fujitsu.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 31 Mar 2020 12:47:07 -0700
+Message-ID: <CAEf4BzZri8KpwLcoPgjiVx_=QmJ2W9UzBkDqSO2rUWMzWogkKg@mail.gmail.com>
+Subject: Re: runqslower build failed on Debian9
+To:     Liu Yiding <liuyd.fnst@cn.fujitsu.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Philip Li <philip.li@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Brendan,
+On Mon, Mar 30, 2020 at 5:19 PM Liu Yiding <liuyd.fnst@cn.fujitsu.com> wrote:
+>
+>
+> On 3/30/20 2:09 PM, Andrii Nakryiko wrote:
+> > On 3/29/20 5:48 PM, Liu Yiding wrote:
+> >> Add attachment.
+> >>
+> >
+> > Your BTF seems to be invalid. It has struct perf_ibs, which has a
+> > first field `struct pmu pmu` field with valid-looking size of 296
+> > bytes, **but** the type that field points to is not a complete `struct
+> > pmu` definition, but rather just forward declaration. The way it is it
+> > shouldn't be even compilable, because forward declaration of a struct
+> > doesn't specify the size of a struct, so compiler should have rejected
+> > it. So it must be that either DWARF generated by compiler isn't
+> > correct, or there is DWARF -> BTF conversion bug somewhere. Are you
+> > using any special DWARF Kconfig settings? Maybe you can share your
+> > full .config and I might try to repro it on my machine.
+> >
+>
+>  >> Are you using any special DWARF Kconfig settings?
+>
+> Sorry, i'm a newbie at this. I don't know which settings are related to
+> DWARF.
+>
+> Just search keywords.
+>
+> ```
+>
+> liuyd@localhost:~$ cat config-5.6.0-rc5 | grep DWARF
+> # CONFIG_DEBUG_INFO_DWARF4 is not set
+>
+> ```
+>
+> I built attached config on a clear ubuntu machine. Error could be
+> reproduced. So you are right, there is a conflict between kconfigs.
+>
+>
+>  >> Maybe you can share your full .config and I might try to repro it on
+> my machine.
+>
+> Thanks a lot. I attached the broken config.
 
-On Tue, Mar 31, 2020 at 3:27 PM 'Brendan Higgins' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
->
-> On Mon, Mar 30, 2020 at 4:03 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
-> >
-> > Fix this bug: https://bugzilla.kernel.org/show_bug.cgi?id=205219
-> >
-> > For some reason, the environment variable ARCH is used instead of ARCH
-> > passed as an argument, this patch uses a copy of the env, but using
-> > ARCH=um and CROSS_COMPILER='' to avoid this problem.
-> >
-> > This patch doesn't change the user's environment variables, avoiding
-> > side effects.
->
-> Seems reasonable to me.
+Thanks a lot! I think it's due to DEBUG_INFO_REDUCED which produces
+not entirely correct DWARF. I'm asking Slava to disable this config
+when BTF is requested in [0].
 
-There are other problems here, I'll fix it.
+  [0] https://lore.kernel.org/bpf/CAEf4BzadnfAwfa1D0jZb=01Ou783GpK_U7PAYeEJca-L9kdnVA@mail.gmail.com
+
 
 >
-> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
 >
-> I cannot test this as your patch doesn't apply to our for-next branch
-> (kselftest/kunit). You can find it here:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
->
-> > ---
-> >  tools/testing/kunit/kunit_kernel.py | 12 +++++++-----
-> >  1 file changed, 7 insertions(+), 5 deletions(-)
+> > But either way, that warning you get is a valid one, it should be
+> > illegal to have non-pointer forward-declared struct as a type for a
+> > struct member.
 > >
-> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> > index d99ae75ef72f..0cb1f81ac8f2 100644
-> > --- a/tools/testing/kunit/kunit_kernel.py
-> > +++ b/tools/testing/kunit/kunit_kernel.py
-> > @@ -15,6 +15,7 @@ import kunit_config
+> >>
+> >> On 3/30/20 8:46 AM, Liu Yiding wrote:
+> >>> Something wrong with my smtp and this email missed.
+> >>>
+> >>> Send again.
+> >>>
+> >>>
+> >>> On 3/27/20 11:09 AM, Liu Yiding wrote:
+> >>>> Hi, Andrii.
+> >>>>
+> >>>> Thanks for your prompt reply!
+> >>>>
+> >>>> Please check attatchment for my_btf.bin.
+> >>>>
+> >>>>
+> >>>> On 3/27/20 4:28 AM, Andrii Nakryiko wrote:
+> >>>>> Would you be able to share BTF of vmlinux that is used to generate
+> >>>>> vmlinux.h? Please run in verbose mode: `make V=1` and search for
+> >>>>> `bpftool btf dump file` command. It should point either to
+> >>>>> /sys/kernel/btf/vmlinux or some other location, depending on how
+> >>>>> things are set up on your side.
+> >>>>>
+> >>>>> If it's /sys/kernel/btf/vmlinux, you can just `cat
+> >>>>> /sys/kernel/btf/vmlinux > my_btf.bin`. If it's some other file,
+> >>>>> easiest would be to just share that file. If not, it's possible to
+> >>>>> extract .BTF ELF section, let me know if you need help with that.
+> >>>>
 > >
-> >  KCONFIG_PATH = '.config'
-> >  kunitconfig_path = '.kunitconfig'
-> > +env = dict(os.environ.copy(), ARCH='um', CROSS_COMPILE='')
 > >
-> >  class ConfigError(Exception):
-> >         """Represents an error trying to configure the Linux kernel."""
-> > @@ -36,22 +37,22 @@ class LinuxSourceTreeOperations(object):
-> >                         raise ConfigError(e.output)
 > >
-> >         def make_olddefconfig(self, build_dir):
-> > -               command = ['make', 'ARCH=um', 'olddefconfig']
-> > +               command = ['make', 'olddefconfig']
-> >                 if build_dir:
-> >                         command += ['O=' + build_dir]
-> >                 try:
-> > -                       subprocess.check_output(command)
-> > +                       subprocess.check_output(command, env=env)
-> >                 except OSError as e:
-> >                         raise ConfigError('Could not call make command: ' + e)
-> >                 except subprocess.CalledProcessError as e:
-> >                         raise ConfigError(e.output)
-> >
-> >         def make(self, jobs, build_dir):
-> > -               command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
-> > +               command = ['make', '--jobs=' + str(jobs)]
-> >                 if build_dir:
-> >                         command += ['O=' + build_dir]
-> >                 try:
-> > -                       subprocess.check_output(command)
-> > +                       subprocess.check_output(command, env=env)
-> >                 except OSError as e:
-> >                         raise BuildError('Could not call execute make: ' + e)
-> >                 except subprocess.CalledProcessError as e:
-> > @@ -66,7 +67,8 @@ class LinuxSourceTreeOperations(object):
-> >                         [linux_bin] + params,
-> >                         stdin=subprocess.PIPE,
-> >                         stdout=subprocess.PIPE,
-> > -                       stderr=subprocess.PIPE)
-> > +                       stderr=subprocess.PIPE,
-> > +                       env=env)
-> >                 process.wait(timeout=timeout)
-> >                 return process
-> >
-> > --
-> > 2.21.1
-> >
->
 > --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/CAFd5g47hiPf7Xy0f4YER%2BHzHHXyUV0dhiQ%3D2ZXfezEHBcrTuEQ%40mail.gmail.com.
+> Best Regards.
+> Liu Yiding
+>
+>
+>
