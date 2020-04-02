@@ -2,162 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B7B19BF61
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Apr 2020 12:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D1419C0A2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Apr 2020 14:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387709AbgDBKeT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Apr 2020 06:34:19 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:44969 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728612AbgDBKeT (ORCPT
+        id S2387958AbgDBMA3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Apr 2020 08:00:29 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37876 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387985AbgDBMA3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Apr 2020 06:34:19 -0400
-Received: by mail-qk1-f193.google.com with SMTP id j4so3280392qkc.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2020 03:34:18 -0700 (PDT)
+        Thu, 2 Apr 2020 08:00:29 -0400
+Received: by mail-wr1-f66.google.com with SMTP id w10so3895049wrm.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Apr 2020 05:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LEP3RMsbwsrI38M6GC4MFJAeeR3HIT91ewh4ArtAzP0=;
-        b=wNmL09WqNAJCq/Zh7CB+zsPu6hCH6lwgl7TSW86QaaVtklcYMl0UFCOGoLO4c/O+E8
-         48ruYKc3EMXGfuats9p8cObcwf8+STLBDY2OW6ElsvqAvPnPUmePoTj81Lgbs/UIXIyA
-         Ej1wBVNPDC+vArdrWOzb1h7S6DhdVhM+um57UZ5SUVzjIYnnEJyn8cJ7yBCpxVV+4lQW
-         OpZEgAaqLZAJq+MJTZMVOunJlAB5b24LUqtA8Gbze2TCVXVYF7tpfwWFNIVtSzPfWQKx
-         4xnPB2QxUGCgvYMCZv/SHHrk3WkRiWWRiJeEUD7ngt1NQc/O5Ddsy1HqozmlCISuNG0S
-         V7Gg==
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=ucKXgEi1vOsQqsbnW57o6FF0pZp/uz1iSAlKxoKqRDg=;
+        b=ZJw0QIee9xhd85VEl3DTNDEoIpFo3vkXB7Rap/D/kW88yRYUjKTOWbQG3PD734FeHt
+         ABeuGgFlNtGx9DVYfHMeMN0qkXGAhilJYq6XK9GKoxtXgFwcB9D/D3Xs2cFUHmB3Bsx6
+         4J3Ur3oEyu2sDmmoi1nJGiPeLwd1j6eVx48/PHjt+4Nrkf8k5ljMTjZBd6W9e4oPKqOI
+         I9I96Bwrk/mHrxkOTlCWwzge1v62oDOdkqj4vROTREX08sliBUyzMHxmItMD8E7q3Tjh
+         2cLbRhx77yVad9mFVWzgITXoggHhyFgoKcIcyfG1HqTl4NZSnAJa7rSZRpWGmMMOL9Xz
+         IKpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LEP3RMsbwsrI38M6GC4MFJAeeR3HIT91ewh4ArtAzP0=;
-        b=PZr0gCoOrlF10AyGb98mK3yp26HK7YhDNvR7VuAOU50yBxrt94/HB+TIc0796vm+Me
-         e+q43MHuu7z03ochsKHPXkTVoimHfNkwe60bCqYMbOBjoh8MmKA6dP6wgipEkP9Y8/67
-         9W2nCJCeeSO1ynH73hI50spvVPjas5LAEW8asPp2Q91VWoyEyPpO5f8zr6IgdC7KEevm
-         uVH7uGUc3apMYsrUe5eiRa6mqt+7dyN4rkatZPdPNYoi0zt+UI1JfxrEVQ9e4v0dy9Ef
-         phWTih37uX6zZuo5iR056uWXDdKSNc6X8uYJDR8FciXdO9gXgEBc0S4F0Zmhc+KJgpIh
-         65zg==
-X-Gm-Message-State: AGi0PuYjfbIYKfIlA3xOHxfwnCQeRz9ghJR3i+l399tM4tZv6B6bhU9/
-        oCAi8DwtCnUIPS5Iab6TAGr2LLpbUTI5wN0WCQmCfA==
-X-Google-Smtp-Source: APiQypIOWiL9o+vRtZcgU4CkXRpytuU3rlYSZ7U093Yf4i6Z+QL4DvnkmoljSMw2R7FPJC+7DGue8ruoNLwJ0szuoOA=
-X-Received: by 2002:a05:620a:348:: with SMTP id t8mr2337035qkm.407.1585823657756;
- Thu, 02 Apr 2020 03:34:17 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=ucKXgEi1vOsQqsbnW57o6FF0pZp/uz1iSAlKxoKqRDg=;
+        b=TJQIUwuvFB9W3nKR2HBwSGzqLxKziieU3xiYO5smWhu8RMSLLjIIsXR/WgSKgROQdG
+         5XDAR2zr1ZDBw3cwoyzdYfZo2lHUvA3gnUFPBV0hXERpZcdx+r5LKO7J7lRMeej++XKZ
+         qS4dRzVG2K+0/6oNCy/OUX3oh0Yh4JoC07MIYN4TLbgGIDdXbfwEwEGfyoXCSb7acEKD
+         RveEfLNrWP9uydwMw/XFtT7h664H5tNGtbxMeuR3F977bEJi/Fr0RdP0FcHxOBB86H5S
+         aHkhnhI7R/kupvhy8KMMDAP9cugnguKWd1PSe2GI1HhFXAQ3qtwzTjiLxF1sI71bH9It
+         yywg==
+X-Gm-Message-State: AGi0Puaeejo00JEJq1x4vavJff26JbSrFl0IZglRJUpP1NXOhfmH22gE
+        YCYQ3PzdSD6s0PrixFZhD7WL4g==
+X-Google-Smtp-Source: APiQypJ09mltW50+QnglgAinK4tJeCk6Neqrv+PcBAn/irMOgGLeYPlnlvikkRhpOR1FigSh8q+2Cg==
+X-Received: by 2002:a5d:6605:: with SMTP id n5mr3104353wru.303.1585828825440;
+        Thu, 02 Apr 2020 05:00:25 -0700 (PDT)
+Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id y12sm4136326wrn.55.2020.04.02.05.00.24
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 02 Apr 2020 05:00:24 -0700 (PDT)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Thu, 2 Apr 2020 12:00:24 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <62428347.13888.1585828824624.JavaMail.javamailuser@localhost>
+Subject: next-20200402 kselftest results
 MIME-Version: 1.0
-References: <20200401180907.202604-1-trishalfonso@google.com> <20200401180907.202604-3-trishalfonso@google.com>
-In-Reply-To: <20200401180907.202604-3-trishalfonso@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 2 Apr 2020 12:34:05 +0200
-Message-ID: <CACT4Y+a6ijfY9styijimkxw2dd7xXTobw1vbj2kY_=GjhiUOZA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] KASAN: Testing Documentation
-To:     Patricia Alfonso <trishalfonso@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_13887_378510905.1585828824035"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 1, 2020 at 8:09 PM Patricia Alfonso <trishalfonso@google.com> wrote:
->
-> Include documentation on how to test KASAN using CONFIG_TEST_KASAN and
-> CONFIG_TEST_KASAN_USER.
->
-> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+------=_Part_13887_378510905.1585828824035
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+Summary
+------------------------------------------------------------------------
+kernel: 5.6.0
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 17f166b56b2583b97f0f6612cfbbb7f99e6889bb
+git describe: next-20200402
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200402
 
-> ---
->  Documentation/dev-tools/kasan.rst | 70 +++++++++++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
->
-> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-> index c652d740735d..287ba063d9f6 100644
-> --- a/Documentation/dev-tools/kasan.rst
-> +++ b/Documentation/dev-tools/kasan.rst
-> @@ -281,3 +281,73 @@ unmapped. This will require changes in arch-specific code.
->
->  This allows ``VMAP_STACK`` support on x86, and can simplify support of
->  architectures that do not have a fixed module region.
-> +
-> +CONFIG_TEST_KASAN & CONFIG_TEST_KASAN_USER
-> +-------------------------------------------
-> +
-> +``CONFIG_TEST_KASAN`` utilizes the KUnit Test Framework for testing.
-> +This means each test focuses on a small unit of functionality and
-> +there are a few ways these tests can be run.
-> +
-> +Each test will print the KASAN report if an error is detected and then
-> +print the number of the test and the status of the test:
-> +
-> +pass::
-> +
-> +        ok 28 - kmalloc_double_kzfree
-> +or, if kmalloc failed::
-> +
-> +        # kmalloc_large_oob_right: ASSERTION FAILED at lib/test_kasan.c:163
-> +        Expected ptr is not null, but is
-> +        not ok 4 - kmalloc_large_oob_right
-> +or, if a KASAN report was expected, but not found::
-> +
-> +        # kmalloc_double_kzfree: EXPECTATION FAILED at lib/test_kasan.c:629
-> +        Expected kasan_data->report_expected == kasan_data->report_found, but
-> +        kasan_data->report_expected == 1
-> +        kasan_data->report_found == 0
-> +        not ok 28 - kmalloc_double_kzfree
-> +
-> +All test statuses are tracked as they run and an overall status will
-> +be printed at the end::
-> +
-> +        ok 1 - kasan_kunit_test
-> +
-> +or::
-> +
-> +        not ok 1 - kasan_kunit_test
-> +
-> +(1) Loadable Module
-> +~~~~~~~~~~~~~~~~~~~~
-> +
-> +With ``CONFIG_KUNIT`` built-in, ``CONFIG_TEST_KASAN`` can be built as
-> +a loadable module and run on any architecture that supports KASAN
-> +using something like insmod or modprobe.
-> +
-> +(2) Built-In
-> +~~~~~~~~~~~~~
-> +
-> +With ``CONFIG_KUNIT`` built-in, ``CONFIG_TEST_KASAN`` can be built-in
-> +on any architecure that supports KASAN. These and any other KUnit
-> +tests enabled will run and print the results at boot as a late-init
-> +call.
-> +
-> +(3) Using kunit_tool
-> +~~~~~~~~~~~~~~~~~~~~~
-> +
-> +With ``CONFIG_KUNIT`` and ``CONFIG_TEST_KASAN`` built-in, we can also
-> +use kunit_tool to see the results of these along with other KUnit
-> +tests in a more readable way. This will not print the KASAN reports
-> +of tests that passed. Use `KUnit documentation <https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html>`_ for more up-to-date
-> +information on kunit_tool.
-> +
-> +.. _KUnit: https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html
-> +
-> +``CONFIG_TEST_KASAN_USER`` is a set of KASAN tests that could not be
-> +converted to KUnit. These tests can be run only as a module with
-> +``CONFIG_TEST_KASAN_USER`` built as a loadable module and
-> +``CONFIG_KASAN`` built-in. The type of error expected and the
-> +function being run is printed before the expression expected to give
-> +an error. Then the error is printed, if found, and that test
-> +should be interpretted to pass only if the error was the one expected
-> +by the test.
-> --
-> 2.26.0.rc2.310.g2932bb562d-goog
->
+Regressions (compared to build next-20200401)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20200401)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
+
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- juno-r2-compat
+- juno-r2-kasan
+- x15 - arm
+- x86_64
+- x86-kasan
+
+Test Suites
+-----------
+
+
+Failures
+------------------------------------------------------------------------
+
+dragonboard-410c:
+
+juno-r2:
+
+i386:
+
+x86:
+
+juno-r2-kasan:
+
+juno-r2-compat:
+
+x86-kasan:
+
+x15:
+
+hi6220-hikey:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_13887_378510905.1585828824035--
