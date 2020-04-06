@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D83F11A00C8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 00:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D602F1A0101
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 00:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgDFWPL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Apr 2020 18:15:11 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:36682 "EHLO
+        id S1726287AbgDFWTX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Apr 2020 18:19:23 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:39834 "EHLO
         mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726534AbgDFWPI (ORCPT
+        with ESMTP id S1726112AbgDFWTX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Apr 2020 18:15:08 -0400
-Received: by mail-qt1-f194.google.com with SMTP id m33so1219475qtb.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2020 15:15:08 -0700 (PDT)
+        Mon, 6 Apr 2020 18:19:23 -0400
+Received: by mail-qt1-f194.google.com with SMTP id f20so1206498qtq.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2020 15:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=massaru-org.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=j72I6B2yv1MtQdVXUp6mfzONbbVa//fDwmUTKLmhZlM=;
-        b=UmseYPFdd9OfC6LhQ+NAWOTbLOsEpFb06VKPLLcq3VeJFuFwva7Bg5Bglq5Z8WlJBY
-         qazf1OFqJZw0RMObUPU24HzIGgofGjlz7oNnwpQVtW2HYVx2ARu2/gXxzAPRfev3g2Yc
-         0rXQdub7D4sLzZR6PE4GVGQ2vWuokGmZxWF5OWTuynE62r/VRhMq7Ff9Co8wIMde3tid
-         S04vh6x8Xz1q89PJiffvk0mkeb68WqucLMDSzdwWAnj0aLoS/8P+tFDx5Bda5dBRbrBe
-         PHDBXGtw4FvPhYXQFGBfm6kI9quTC/6Hg2alzxea5pWiUzDYf6RXpslx0EyT37QQetYg
-         z9wg==
+        bh=OPrlCY8jQsQXtLUnLDlfV3dzYEfymLtvdW8F4aI7TfY=;
+        b=m3OlceImpplocncT+pL8x7NKjNxj63YBiWKChKASzcRMWdu/2mK+uafJmmE2IkMp55
+         7c/t/K14EDQxUksZXBbiKzHGIbD0VASz5jMxB2pxC8/roVrjtIE1CENOna76aad1iy1q
+         TaTZD9/1D4fpTuwOw/5s9sqoLeUkH3IfdIt5HnV8a82hZmpactr3zehOcO0F/reZASrb
+         1c7mB9NZGyC15MxEENaRqsdEqN6PsJEN0EzkCSOYeMf8y7l1XuzLyfKCDqG7S8+FsiLW
+         Svn9XbAaQ/1gen3RUT/8TaQmqR+bqLNobFkN31jG9qxnLYq12+hPHGFBEOvCEXv5eAJs
+         ThpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=j72I6B2yv1MtQdVXUp6mfzONbbVa//fDwmUTKLmhZlM=;
-        b=b8U9Vkq6aFVYKOKZOtiQTVW175QvvyZnFakaBVy1MCY9iVFv3r7wBkvQuAexv6wXtK
-         Q9V/669E6qNcbHGn0ZJhDzRta61aNVbS2oLetunxvtLgBkBAZ0RLHbY3LO+C6ZxrNvPx
-         sgPOETn5bdK+YL+cy8xk55YLviNbJ65Eli55IkRTF0FkPH08Ipz+vK1qbQZ/3IWfjaGr
-         32Cv799qaJ9TdJD+G5Cw4bPhwTYus9vY1NKaSMXPiTCACrTEHUyyyimwc+8SZiMkweBW
-         OFMkRGghjOHHpfoo8ABzc09CgPSiaN4HdzfcjHVbZZVIpZvuROSR/la7LZJZvKColMWv
-         2Dsw==
-X-Gm-Message-State: AGi0Puaf2JWJu4H6NQ8AX6EuQIze6NGYWoCfsE8T3V/30lTmv7IakxQg
-        /6ZSMYw6FUYAHN6WptDO1nMBfg==
-X-Google-Smtp-Source: APiQypIpf/UbhzyzYpY0P1+j4rwvPJzBNCD6XCGWvf++pPQWMWFWNGNj7BarpYyeNQ+BwIugzCGX4g==
-X-Received: by 2002:aed:32c7:: with SMTP id z65mr1711174qtd.81.1586211307951;
-        Mon, 06 Apr 2020 15:15:07 -0700 (PDT)
+        bh=OPrlCY8jQsQXtLUnLDlfV3dzYEfymLtvdW8F4aI7TfY=;
+        b=bo451i8tbxKE4pCpbIvM9E7uZIm8v56RYJRDq5J/3VunnfF2Pjr6CFG3DMHRx7tSeL
+         Ml8hTBoUXq/yEVCdzsme8GEgjVfPcqjLryMak+sBx19i095JDjclzNvzeLSHnVusmWOC
+         gIZISUe3UWgXRuPI29hjCZqIXUHleMQD0L26KsIBcpFkhnsfGNejQbhqQ6dvliQAU4kE
+         urZdcKVO53Q43fZxoL7GtcqSI5jsXzziC24GhkT/gSlLabdCtzINOi/4AU2VrqROBEmz
+         So4bj4E6bF9aHbpITTBCgzCMFyck7gYDxDJysvW1FMhI+AjEaeghKBCoMpxxitl9Vp1N
+         vQHg==
+X-Gm-Message-State: AGi0PuY+uukRvd9X0NvAA9vlgF4HftMBWZ/gslGo5wGoLhSo530S6Xnt
+        UOLmOR5NTmJsBQJhim/M10fvrQ==
+X-Google-Smtp-Source: APiQypIgCypxzVhSxBHo3S9YP15zDlJ8kCqvoD0wznCPGR7+wsJ5GU1Oq3bn/SWODBllN8dV7NEuKg==
+X-Received: by 2002:ac8:7316:: with SMTP id x22mr1914028qto.4.1586211560566;
+        Mon, 06 Apr 2020 15:19:20 -0700 (PDT)
 Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id e10sm1834923qkl.48.2020.04.06.15.15.05
+        by smtp.gmail.com with ESMTPSA id f1sm14521822qkl.72.2020.04.06.15.19.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 15:15:07 -0700 (PDT)
+        Mon, 06 Apr 2020 15:19:19 -0700 (PDT)
 From:   Vitor Massaru Iha <vitor@massaru.org>
 To:     kunit-dev@googlegroups.com
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         brendanhiggins@google.com, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v3] kunit: Fix kunit.py run --build_dir='<foo>' fails on "unclean" trees
-Date:   Mon,  6 Apr 2020 19:15:03 -0300
-Message-Id: <20200406221503.49760-1-vitor@massaru.org>
+Subject: [PATCH v3, RESEND] kunit: Fix kunit.py run --build_dir='<foo>' fails on "unclean" trees
+Date:   Mon,  6 Apr 2020 19:19:16 -0300
+Message-Id: <20200406221916.50008-1-vitor@massaru.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -151,6 +151,8 @@ index 63dbda2d029f..96216c699fde 100644
  			process.wait(timeout)
  
  
+
+base-commit: 7e63420847ae5f1036e4f7c42f0b3282e73efbc2
 -- 
 2.25.1
 
