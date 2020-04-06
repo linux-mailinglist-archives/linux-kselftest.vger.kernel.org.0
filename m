@@ -2,86 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 423CC19FCBD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Apr 2020 20:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AA01A006B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Apr 2020 23:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgDFSMQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Apr 2020 14:12:16 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:40185 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgDFSMQ (ORCPT
+        id S1726112AbgDFVln (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Apr 2020 17:41:43 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:40918 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725933AbgDFVln (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Apr 2020 14:12:16 -0400
-Received: by mail-pj1-f68.google.com with SMTP id kx8so180554pjb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2020 11:12:15 -0700 (PDT)
+        Mon, 6 Apr 2020 17:41:43 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s8so1327513wrt.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2020 14:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ver6n6MUoiKJ9YQThw8+RbAg+VfgvE+bRaGA1TEZ9VE=;
-        b=vQ3F4e20+rPDeXfCEpsaDzx4gn2vua9DgaFCprSToBwI20LZ5YB4UsBIJfyfRVCQw/
-         Ink+pTcBBewybEaXx8NhUDqYX8w1Dw/rPVxpaIcMBOJUv/wyf3ZSTAsysrxDoksvoQSO
-         fIQ4fEdj10/Ux4gC4Dwl6bekkG5P3XmylDoxXB/x1CZNeuPgacxGKd0niIyMFLCM0lw6
-         n4KXDQTbJXV2JO2k6TDP7q2ntBK6053pabIyqsUvJS+migpswwmAjIk2FFPdLbXpEZ21
-         Zn0OdSBc+7IDjqFnbKm82vd0w9UMPwNmD1cDMyreHkwtazMNAyR+RfJnBTfsPRxlF3Lk
-         vwqA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ilGxnVodtVtLU817wnANQiwj9/w+YdwIbOSYK+2/y6I=;
+        b=X1ag0VG+/UYX8gsBzBK+4NwZYGaeMwVtH/+jFyix8J44fPaPHlbV63AdZs9rvO2UjG
+         lzrkyBOIzLTMd669+tbwiM75LKz6vDg4Il3f0aq6HwE7PfN5j1cfdq5arnAqSLdO4Lkf
+         XPYHg6OT6GPfqKJozHY8HLpAdH+J5v7BKTuNMv+OxRC1/BRDKkTgE1Z/AioA6v08OBD6
+         XlPjXNResmUAY5H/W2U1LkVeLQxNpy1rTr1Asj4pI7eSkgyIKvIhwJ2uyl900I/4DaX5
+         7NKhYe37JKsCi7I8BL1uw1zxPu/QO5dLmHbjtuNFn5l2cT9naRwAe3FKACcBoM9ehWD4
+         SIZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ver6n6MUoiKJ9YQThw8+RbAg+VfgvE+bRaGA1TEZ9VE=;
-        b=N4HxpwyfZDE3dUK9CvcaIiLZ/h4L5knD605iJtvPcsxiCD9LzkDrhUnzdUT+G9ljJ4
-         0cfc8m49YE4skEvijQ3m08NuCJyMLBTfVv0LhtIsR+32yvHN9Oq1Ih0P2XTElbvFq2qa
-         7ONTpjms8PNyb/x2hyWI6dOfLBACRaZNplITMeyjPmSpXFGF+TMpaMgkP2yehF63Th/1
-         qLIbAyHV8o+5bqGPF0otZKtX1tht2HQO8nvR5MmuYx8oREcN3F14L6yIvI+PPijfW+4T
-         Zw2ADSICNz9N/DXSf/V6+EGi/FBnEQjwU8kjiZX/uyDog3DGRs5jG+7ZFexcW+pJRFpB
-         ytkw==
-X-Gm-Message-State: AGi0PubN6JqdIlN5EI76PS/lltPJj3eztuMkgIzTZPwBqpr5KSP95fDs
-        vD7/iCmLMJI2RVJXuo5DXKV628NKw3o2kfL7RpbEXg==
-X-Google-Smtp-Source: APiQypKrJQ4k0jrnTIHHGTaNBKzi/QJwJ+B536oRq/t8JvxDSa97hNj3Szu7UByf6aPQ0mNLznHy80PVB1X5w5GHgBU=
-X-Received: by 2002:a17:90a:9f03:: with SMTP id n3mr639147pjp.29.1586196735041;
- Mon, 06 Apr 2020 11:12:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ilGxnVodtVtLU817wnANQiwj9/w+YdwIbOSYK+2/y6I=;
+        b=ATCc1RM3M+NQG0vs3dqIydqB+KF9gCkpDx2XL7O0U0HBM3/tugo27z6cdo8eQAV6wx
+         AmSSIRCCp28AEqbvHZr0psUztS3IDmNqjPH5nRlrT9/dH1IAWvMmireZs0UFBr2jpOFk
+         IVdZbXvkWfWOcFPRJkyYKxsnSTKAojPlhhCMBrflvKbB7HjpcVFCwmAJYV1mr7h6pIRh
+         h187Va5AlrX8fOSP0Rv1tY0EMkkuVOXGJ+CAKzAV2tvHBHecP6h0fAiJD2symPfjDBu8
+         FgwMxUid3BBVGQWtGRXbw776yJDFbP5ngv3H11AwG6DXSq/ExW+l1se3cVGi20tpUCVJ
+         ysDg==
+X-Gm-Message-State: AGi0PuZsugcK+nQnoWgzNe882Bv2rZXSCgSk2bSGXN8/L67rnG40RKal
+        trpMQdq11aQESHB9mvy5CnU=
+X-Google-Smtp-Source: APiQypLbk6B47CmsGUJn7Yp7dKMmHj6KKgAwJoCBtFXYrg2F+8HS6e5KoJXSBqNZhytgY04d/Dc1HQ==
+X-Received: by 2002:adf:f4cc:: with SMTP id h12mr1278846wrp.171.1586209301445;
+        Mon, 06 Apr 2020 14:41:41 -0700 (PDT)
+Received: from de0709bef958.v.cablecom.net ([185.104.184.118])
+        by smtp.gmail.com with ESMTPSA id j10sm11115813wru.85.2020.04.06.14.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2020 14:41:41 -0700 (PDT)
+From:   Lothar Rubusch <l.rubusch@gmail.com>
+To:     brendanhiggins@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Lothar Rubusch <l.rubusch@gmail.com>
+Subject: [PATCH] Documentation: test.h - fix warnings
+Date:   Mon,  6 Apr 2020 21:41:30 +0000
+Message-Id: <20200406214130.21224-1-l.rubusch@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20200401013639.16388-1-vitor@massaru.org>
-In-Reply-To: <20200401013639.16388-1-vitor@massaru.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 6 Apr 2020 11:12:03 -0700
-Message-ID: <CAFd5g47Ot-MfxzYmU8kfxpfv2pWhgb_2WigouuHnPT+20Ejk_w@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Fix kunit.py run --build_dir='<foo>' fails on
- "unclean" trees
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 6:36 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
->
-> Fix this bug: https://bugzilla.kernel.org/show_bug.cgi?id=205219
->
-> For some reason, the environment variable ARCH is used instead of ARCH
-> passed as an argument, this patch uses a copy of the env, but using
-> ARCH=um and CROSS_COMPILER='' to avoid this problem.
->
-> This patch doesn't change the user's environment variables, avoiding
-> side effects.
->
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+Fix several sphinx warnings at 'make htmldocs'
+- privately declared members not correctly declared as such
+- 'suits' actually is not a function parameter, change declaration to fix
+  warning but keep information in comment
 
-Sorry for the delayed reply. I had two people finish up on my team
-last week and I needed to do some things for that. You now have my
-undivided attention.
+Signed-off-by: Lothar Rubusch <l.rubusch@gmail.com>
+---
+ include/kunit/test.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-So, I tried to apply this patch and it still doesn't apply on
-kselftest/kunit. At this point, basing your changes on torvalds/master
-would be fine since kselftest/kunit just got merged for 5.7.
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 9b0c46a6ca1f..fe4ea388528b 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -175,7 +175,7 @@ struct kunit_suite {
+ 	void (*exit)(struct kunit *test);
+ 	struct kunit_case *test_cases;
+ 
+-	/* private - internal use only */
++	/* private: internal use only. */
+ 	struct dentry *debugfs;
+ 	char *log;
+ };
+@@ -232,7 +232,7 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+  * kunit_test_suites() - used to register one or more &struct kunit_suite
+  *			 with KUnit.
+  *
+- * @suites: a statically allocated list of &struct kunit_suite.
++ * suites - a statically allocated list of &struct kunit_suite.
+  *
+  * Registers @suites with the test framework. See &struct kunit_suite for
+  * more information.
+-- 
+2.20.1
 
-Can you use the --base branch option when you send your next revision
-so I know what branch you are working against (just to be sure)?
