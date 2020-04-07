@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8D81A0342
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 02:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460EA1A0300
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 02:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgDGAIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Apr 2020 20:08:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34588 "EHLO mail.kernel.org"
+        id S1728043AbgDGACV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Apr 2020 20:02:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726928AbgDGABb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Apr 2020 20:01:31 -0400
+        id S1728029AbgDGACU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 Apr 2020 20:02:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A07AD2080C;
-        Tue,  7 Apr 2020 00:01:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 77E9120768;
+        Tue,  7 Apr 2020 00:02:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586217690;
+        s=default; t=1586217739;
         bh=51H9TY8V5noS4FlXlFD3P5jsli5RDi0dx8xUt4ONeBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WOzLd5rE2PdQIUK0DlF6Plp4SVGb8wwfgKmtJG9r7hJUq5HcVlSH/bC8kGqWG/+Mn
-         k/QYuYpvB3iOhnW27S9zaVxtKgkj6IQ2EVDQUlmzBpUwTgKWzT3As9+11aXSxrFpkJ
-         iU40OzbtPJwYjzu+BSFj86y2dxpS/DFTxhxtt0hA=
+        b=mJKh4VGhW0aZnDF4qsInoq2XyxQcnl1VxfUxIk52ofuLXhMMlPfx53TX7FneeweRQ
+         1eMP/YyMOL3BrC+6XRVIMedCH5X74dascO4xe+myUUz8ZrIb13vq2tuKQ6zggpzigV
+         QFcqo/dsUkfgsK5BQYpSavDZVsL1qXaxje4RcnFo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alan Maguire <alan.maguire@oracle.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 25/35] selftests/net: add definition for SOL_DCCP to fix compilation errors for old libc
-Date:   Mon,  6 Apr 2020 20:00:47 -0400
-Message-Id: <20200407000058.16423-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 22/32] selftests/net: add definition for SOL_DCCP to fix compilation errors for old libc
+Date:   Mon,  6 Apr 2020 20:01:40 -0400
+Message-Id: <20200407000151.16768-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200407000058.16423-1-sashal@kernel.org>
-References: <20200407000058.16423-1-sashal@kernel.org>
+In-Reply-To: <20200407000151.16768-1-sashal@kernel.org>
+References: <20200407000151.16768-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
