@@ -2,192 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EFF1A105A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 17:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771AA1A16D9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 22:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729175AbgDGPhx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Apr 2020 11:37:53 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:57608 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729459AbgDGPhw (ORCPT
+        id S1726393AbgDGUbU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Apr 2020 16:31:20 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:56228 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726277AbgDGUbU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Apr 2020 11:37:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586273871;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=yh9o+3NPEgTaI9xXEwkz3z8Y3AmGExFLZ61QmDFzc9s=;
-        b=UI7IksjxoPh08QJSe0rZOH6Gm+8Y4U5bzHu9Sdj+k1XMYk4Lz8QF4Qzc8yqx5Ya06fldvD
-        NXPT/CrlkD1XikqH7AzSpedyE+J4UtVbXHt+uDnxvd3wzTWOVlQMlMkWyj+Uku3+lrSxPr
-        8eT1ELzbCiTqe/YexZP0pIeqxZWfsHo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-159-2ApU4bQ_PBmi4w5zeRuZMQ-1; Tue, 07 Apr 2020 11:37:49 -0400
-X-MC-Unique: 2ApU4bQ_PBmi4w5zeRuZMQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8EB81107ACC9;
-        Tue,  7 Apr 2020 15:37:48 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-116-15.gru2.redhat.com [10.97.116.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 72245272A5;
-        Tue,  7 Apr 2020 15:37:44 +0000 (UTC)
-From:   Wainer dos Santos Moschetta <wainersm@redhat.com>
-To:     pbonzini@redhat.com, kvm@vger.kernel.org
-Cc:     drjones@redhat.com, david@redhat.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 2/2] selftests: kvm: Add mem_slot_test test
-Date:   Tue,  7 Apr 2020 12:37:31 -0300
-Message-Id: <20200407153731.3236-3-wainersm@redhat.com>
-In-Reply-To: <20200407153731.3236-1-wainersm@redhat.com>
-References: <20200407153731.3236-1-wainersm@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Tue, 7 Apr 2020 16:31:20 -0400
+Received: by mail-pj1-f68.google.com with SMTP id fh8so230554pjb.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2020 13:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zKqZWyMQ8V8zQ20un6jU7HEK04ADqKGnxMMnNcQmdRY=;
+        b=a0fZT4bKGAAC/shPL7O9e0uWZrLTjV2ylyJY2sfBmRY6B5ZvfW0dghucSOrpamWJPY
+         JUCYKHnWorr9tUamq/iR4giSU6tjk4oCiShBGmL782UKl0DWVLzfSxGttgdlmHeSMD8n
+         USEybio2T7VuUT2fLczo63Ru53sMFCVzfTlT+mU1Fa/ap6GWDg2VcjCg86jjpviYRHXc
+         Iz7So5F7Udpr9Lbhc79nVirD0nmXaF25Itbm1mm1GG9t2QNB6iWyFMa5OAL092sfbgH8
+         5AztG4ripU+6zZTSDZvgQZCVw8RocoC0t5NurWuTODsqnHquobk+085szhz7aVytbHti
+         ZXwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zKqZWyMQ8V8zQ20un6jU7HEK04ADqKGnxMMnNcQmdRY=;
+        b=SM7NJcwo1fenIu+aYmERJ85Iv9Oixva3VAZYCfFxyvl/yRGgTQW2ZczWh23l7UgIFv
+         suXVRVG62tYQhnlR+sRy7XIFNARdT/BrJzvDteg9FsJcUDh7+72WIyaGoh04JVLlsL+4
+         uT27gaA0PBexWi8keKNQxYBRoyQ3RFmos/9HzeoxHAyu9iSl3gjSoVGvHWbTR/dAzpZg
+         vJ15oDefnStcO9dehPBSzBGHXjKAjg8IFLYqKEt8kCy/T9hUD0J0/2Td7Fw6tF9oSHRG
+         u0nRz6Rp6pXpybC/D1DyGF/VLxIbXFDeaVY4vWLCRF6XSCIt6fle1rx9tE+5XiajXT2h
+         RHoQ==
+X-Gm-Message-State: AGi0PuZjBsa53nlRU9CwplKdSPsm+rBWvAiJrjqb6qEpj+QUa7lN4meA
+        kRnxC7akW751PJ6yOvt3u2zvJMPx+L0kpIhEJd32DA==
+X-Google-Smtp-Source: APiQypKi0NHL1kvG+6WjCjMqalM7lL+WN8MrRtbStR3FlzJY1khKq++r7+B0jHFKqM7izTL5ggeQhNjpij2BSWIXUw4=
+X-Received: by 2002:a17:90a:30c3:: with SMTP id h61mr1246223pjb.18.1586291478614;
+ Tue, 07 Apr 2020 13:31:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200406221916.50008-1-vitor@massaru.org>
+In-Reply-To: <20200406221916.50008-1-vitor@massaru.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Apr 2020 13:31:07 -0700
+Message-ID: <CAFd5g44EGCY0zHfZXekS8GAXHxrf5zeeTW=MHRz0NujKqTsRQg@mail.gmail.com>
+Subject: Re: [PATCH v3, RESEND] kunit: Fix kunit.py run --build_dir='<foo>'
+ fails on "unclean" trees
+To:     Vitor Massaru Iha <vitor@massaru.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces the mem_slot_test test which checks
-an VM can have added memory slots up to the limit defined in
-KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
-verify it fails as expected.
+On Mon, Apr 6, 2020 at 3:19 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
+>
+> Fix this bug: https://bugzilla.kernel.org/show_bug.cgi?id=205219
 
-Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
----
- tools/testing/selftests/kvm/.gitignore      |  1 +
- tools/testing/selftests/kvm/Makefile        |  3 +
- tools/testing/selftests/kvm/mem_slot_test.c | 85 +++++++++++++++++++++
- 3 files changed, 89 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
+I am still seeing the error described in the bug.
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 16877c3daabf..127d27188427 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -21,4 +21,5 @@
- /demand_paging_test
- /dirty_log_test
- /kvm_create_max_vcpus
-+/mem_slot_test
- /steal_time
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 712a2ddd2a27..338b6cdce1a0 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -32,12 +32,14 @@ TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
- TEST_GEN_PROGS_x86_64 += demand_paging_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
- TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-+TEST_GEN_PROGS_x86_64 += mem_slot_test
- TEST_GEN_PROGS_x86_64 += steal_time
- 
- TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
- TEST_GEN_PROGS_aarch64 += demand_paging_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
-+TEST_GEN_PROGS_aarch64 += mem_slot_test
- TEST_GEN_PROGS_aarch64 += steal_time
- 
- TEST_GEN_PROGS_s390x = s390x/memop
-@@ -46,6 +48,7 @@ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
- TEST_GEN_PROGS_s390x += demand_paging_test
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-+TEST_GEN_PROGS_s390x += mem_slot_test
- 
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
-new file mode 100644
-index 000000000000..0588dc2e8e01
---- /dev/null
-+++ b/tools/testing/selftests/kvm/mem_slot_test.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * mem_slot_test
-+ *
-+ * Copyright (C) 2020, Red Hat, Inc.
-+ *
-+ * Test suite for memory region operations.
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <linux/kvm.h>
-+#include <sys/mman.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+
-+/*
-+ * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
-+ * tentative to add further slots should fail.
-+ */
-+static void test_add_max_slots(void)
-+{
-+	int ret;
-+	struct kvm_userspace_memory_region *kvm_region;
-+	struct kvm_vm *vm;
-+	uint32_t max_mem_slots;
-+	uint32_t mem_reg_flags;
-+	uint32_t slot;
-+	uint64_t guest_addr;
-+	uint64_t mem_reg_npages;
-+	uint64_t mem_reg_size;
-+
-+	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-+	TEST_ASSERT(max_mem_slots > 0,
-+		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
-+	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
-+
-+	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-+
-+	/*
-+	 * Uses 1MB sized/aligned memory region since this is the minimal
-+	 * required on s390x.
-+	 */
-+	mem_reg_size = 0x100000;
-+	mem_reg_npages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, mem_reg_size);
-+	mem_reg_flags = 0;
-+
-+	guest_addr = 0x0;
-+
-+	/* Check it can be added memory slots up to the maximum allowed */
-+	pr_info("Adding slots 0..%i, each memory region with %ldK size\n",
-+		(max_mem_slots - 1), mem_reg_size >> 10);
-+	for (slot = 0; slot < max_mem_slots; slot++) {
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+					    guest_addr, slot, mem_reg_npages,
-+					    mem_reg_flags);
-+		guest_addr += mem_reg_size;
-+	}
-+
-+	/* Check it cannot be added memory slots beyond the limit */
-+	void *mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
-+			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "Failed to mmap() host");
-+
-+	kvm_region = malloc(sizeof(struct kvm_userspace_memory_region));
-+	TEST_ASSERT(kvm_region,
-+		    "Failed to malloc() kvm_userspace_memory_region");
-+	kvm_region->slot = slot;
-+	kvm_region->flags = mem_reg_flags;
-+	kvm_region->guest_phys_addr = guest_addr;
-+	kvm_region->userspace_addr = (uint64_t) mem;
-+
-+	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION, kvm_region);
-+	TEST_ASSERT(ret == -1 && errno == EINVAL,
-+		    "Adding one more memory slot should fail with EINVAL");
-+
-+	munmap(mem, mem_reg_size);
-+	free(kvm_region);
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	test_add_max_slots();
-+	return 0;
-+}
--- 
-2.17.2
+Steps to reproduce:
 
+1. tools/testing/kunit/kunit.py run --timeout=60 --jobs=8 --defconfig
+
+2. make ARCH=um mrproper
+
+3. tools/testing/kunit/kunit.py run --timeout=60 --jobs=8 --defconfig
+--build_dir=.kunit
+
+One other note: It should probably be done in another patch, but it
+would be nice if kunit.py would tell you that you need to run mrproper
+when the olddefconfig fails.
+
+> For some reason, the environment variable ARCH is used instead of ARCH
+> passed as an argument, this patch uses a copy of the env, but using
+> ARCH=um and CROSS_COMPILER='' to avoid this problem.
+>
+> This patch doesn't change the user's environment variables, avoiding
+> side effects.
+>
+> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> ---
+> v2:
+>  - Use the correct next branch
+>
+> v3:
+>  - Use torvalds/master branch
+>  - Use base parameter on git send-email
+> ---
+>  tools/testing/kunit/kunit_kernel.py | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 63dbda2d029f..96216c699fde 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -20,6 +20,7 @@ import kunit_parser
+>  KCONFIG_PATH = '.config'
+>  kunitconfig_path = '.kunitconfig'
+>  BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+> +env = dict(os.environ.copy(), ARCH='um', CROSS_COMPILE='')
+>
+>  class ConfigError(Exception):
+>         """Represents an error trying to configure the Linux kernel."""
+> @@ -41,13 +42,15 @@ class LinuxSourceTreeOperations(object):
+>                         raise ConfigError(e.output)
+>
+>         def make_olddefconfig(self, build_dir, make_options):
+> -               command = ['make', 'ARCH=um', 'olddefconfig']
+> +               command = ['make', 'olddefconfig']
+>                 if make_options:
+>                         command.extend(make_options)
+>                 if build_dir:
+>                         command += ['O=' + build_dir]
+>                 try:
+> -                       subprocess.check_output(command, stderr=subprocess.PIPE)
+> +                       subprocess.check_output(command,
+> +                                               stderr=subprocess.PIPE,
+> +                                               env=env)
+>                 except OSError as e:
+>                         raise ConfigError('Could not call make command: ' + e)
+>                 except subprocess.CalledProcessError as e:
+> @@ -57,9 +60,10 @@ class LinuxSourceTreeOperations(object):
+>                 kunit_parser.print_with_timestamp(
+>                         'Enabling all CONFIGs for UML...')
+>                 process = subprocess.Popen(
+> -                       ['make', 'ARCH=um', 'allyesconfig'],
+> +                       ['make', 'allyesconfig'],
+>                         stdout=subprocess.DEVNULL,
+> -                       stderr=subprocess.STDOUT)
+> +                       stderr=subprocess.STDOUT,
+> +                       env=env)
+>                 process.wait()
+>                 kunit_parser.print_with_timestamp(
+>                         'Disabling broken configs to run KUnit tests...')
+> @@ -71,13 +75,13 @@ class LinuxSourceTreeOperations(object):
+>                         'Starting Kernel with all configs takes a few minutes...')
+>
+>         def make(self, jobs, build_dir, make_options):
+> -               command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
+> +               command = ['make', '--jobs=' + str(jobs)]
+>                 if make_options:
+>                         command.extend(make_options)
+>                 if build_dir:
+>                         command += ['O=' + build_dir]
+>                 try:
+> -                       subprocess.check_output(command)
+> +                       subprocess.check_output(command, env=env)
+>                 except OSError as e:
+>                         raise BuildError('Could not call execute make: ' + e)
+>                 except subprocess.CalledProcessError as e:
+> @@ -91,7 +95,8 @@ class LinuxSourceTreeOperations(object):
+>                 with open(outfile, 'w') as output:
+>                         process = subprocess.Popen([linux_bin] + params,
+>                                                    stdout=output,
+> -                                                  stderr=subprocess.STDOUT)
+> +                                                  stderr=subprocess.STDOUT,
+> +                                                  env=env)
+>                         process.wait(timeout)
+>
+>
+>
+> base-commit: 7e63420847ae5f1036e4f7c42f0b3282e73efbc2
+> --
+> 2.25.1
+>
