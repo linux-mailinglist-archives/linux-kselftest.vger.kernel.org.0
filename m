@@ -2,86 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 460EA1A0300
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 02:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E11F1A0636
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 07:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728043AbgDGACV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Apr 2020 20:02:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36642 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728029AbgDGACU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Apr 2020 20:02:20 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 77E9120768;
-        Tue,  7 Apr 2020 00:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586217739;
-        bh=51H9TY8V5noS4FlXlFD3P5jsli5RDi0dx8xUt4ONeBk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mJKh4VGhW0aZnDF4qsInoq2XyxQcnl1VxfUxIk52ofuLXhMMlPfx53TX7FneeweRQ
-         1eMP/YyMOL3BrC+6XRVIMedCH5X74dascO4xe+myUUz8ZrIb13vq2tuKQ6zggpzigV
-         QFcqo/dsUkfgsK5BQYpSavDZVsL1qXaxje4RcnFo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 22/32] selftests/net: add definition for SOL_DCCP to fix compilation errors for old libc
-Date:   Mon,  6 Apr 2020 20:01:40 -0400
-Message-Id: <20200407000151.16768-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200407000151.16768-1-sashal@kernel.org>
-References: <20200407000151.16768-1-sashal@kernel.org>
+        id S1726881AbgDGFMp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Apr 2020 01:12:45 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:37339 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbgDGFMo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Apr 2020 01:12:44 -0400
+Received: by mail-ua1-f65.google.com with SMTP id l18so846459uak.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Apr 2020 22:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=m9m/DCsFRus/zRmIuphflM5sHyenmkMN/TOEnECOGthbLJHVg8u2+iqtFZpNbyb2/k
+         2tLF//qwyXGtNVJKRleGUy+KbEtVjN+06Aw6FbGL98d5M/QEqB9c9SHaIsBPFlQYoUCh
+         Lj+P9EPUGdvyQRip4KeH3oSvDVhqDTV0IJcbcI66BzYP/b9Y/1y4LF++1q0teLhPl3GM
+         v15gBTxOBB8qvH4CNaCnwdm2sugBL+St8qIlm7SqBWweWj6hdsos1F0mjeWO8qJt64R9
+         xl3tya8AfljNAFdSOkZ4tC7INitomO8JQPFHHcp+JAODUsaup01At9KIYDntXEoTQZb0
+         DmdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=R9MgdEC6Wv9VzPDpaT0PRhsozwj8iDlk2fwRmfEogEQFbN4neukvb2kfmD3nBCpFPN
+         XBCDl8wwub64n5V/ZPoScf3Lm8WFupLPJmWAb3Iu4/oVgBj8UWPbTw0DvWdnH+I2YUuf
+         ttEY0YyQU0szlPkRFxaUV2ngxRN3gdX2/ergjy6FPCtxsrG3DnIXeONXz4hT2w11igQE
+         eWTSDMcXlLdhMJxFgneB/WhsEjEpHBw3QvLkWBVCyPYulAuhbdAdiC2UiGi0u8QIwu5/
+         s2NUfs0gB0flo+BQUXnfw+GH5cYQtNkRifdj9m/s1AvDjBgiOqPHeS9wmBN9Y2TYzBnU
+         brAw==
+X-Gm-Message-State: AGi0Pua4pmYoX2Jc3PSLY1nFc1DgEldOYQqQTo9vA388+9cnVbk/w/ko
+        rLo8hfJLgptOmoXwxHDYnb8K4jTFco4EjcVV6ny3eCWgwmg=
+X-Google-Smtp-Source: APiQypIYXniGQUHEpASwiGNjKth4Cu9ElCz4yjrJ2uXbYBYunhfz0887D/TRydUbTstl7MwaeVftG8QxF1P80ST3qos=
+X-Received: by 2002:ab0:a9:: with SMTP id 38mr504317uaj.61.1586236361040; Mon,
+ 06 Apr 2020 22:12:41 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab0:4929:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:12:40 -0700 (PDT)
+From:   SANDRA DEWI <dewisandra154@gmail.com>
+Date:   Tue, 7 Apr 2020 05:12:40 +0000
+Message-ID: <CABRVPWys0xe4CWBkaU0ZXQW+4d=tjDOjyo8cKohc5-VFkWPkcA@mail.gmail.com>
+Subject: whether this is your correct email address or not
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+Dear ,Pastor
 
-[ Upstream commit 83a9b6f639e9f6b632337f9776de17d51d969c77 ]
 
-Many systems build/test up-to-date kernels with older libcs, and
-an older glibc (2.17) lacks the definition of SOL_DCCP in
-/usr/include/bits/socket.h (it was added in the 4.6 timeframe).
 
-Adding the definition to the test program avoids a compilation
-failure that gets in the way of building tools/testing/selftests/net.
-The test itself will work once the definition is added; either
-skipping due to DCCP not being configured in the kernel under test
-or passing, so there are no other more up-to-date glibc dependencies
-here it seems beyond that missing definition.
+I have a client who is an oil business man and he made a fixed deposit
+of $26 million USD in my bank, where I am the director of the branch,
+My client died with his entire family in Jordanian
 
-Fixes: 11fb60d1089f ("selftests: net: reuseport_addr_any: add DCCP")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/net/reuseport_addr_any.c | 4 ++++
- 1 file changed, 4 insertions(+)
+50% of the fund will be for the church  for the work of God,the
+balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
+50% for me
 
-diff --git a/tools/testing/selftests/net/reuseport_addr_any.c b/tools/testing/selftests/net/reuseport_addr_any.c
-index c6233935fed14..b8475cb29be7a 100644
---- a/tools/testing/selftests/net/reuseport_addr_any.c
-+++ b/tools/testing/selftests/net/reuseport_addr_any.c
-@@ -21,6 +21,10 @@
- #include <sys/socket.h>
- #include <unistd.h>
- 
-+#ifndef SOL_DCCP
-+#define SOL_DCCP 269
-+#endif
-+
- static const char *IP4_ADDR = "127.0.0.1";
- static const char *IP6_ADDR = "::1";
- static const char *IP4_MAPPED6 = "::ffff:127.0.0.1";
--- 
-2.20.1
+intervention in the Syrian Civil War 2014 leaving behind no next of
+kin. I Propose to present you as next of kin to claim the funds, if
+interested reply me for full details and how we are to
 
+
+
+proceed to close this deal.
+
+
+
+
+Mrs. Sandra Dewi
+
+
+
+Email  mrsdewi@gmx.com
