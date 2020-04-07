@@ -2,207 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B78E41A1775
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Apr 2020 23:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305A31A183A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 00:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbgDGViy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Apr 2020 17:38:54 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:43027 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726380AbgDGVix (ORCPT
+        id S1726428AbgDGWai (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Apr 2020 18:30:38 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:34737 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726420AbgDGWai (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Apr 2020 17:38:53 -0400
-Received: by mail-qk1-f195.google.com with SMTP id 13so1022986qko.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2020 14:38:52 -0700 (PDT)
+        Tue, 7 Apr 2020 18:30:38 -0400
+Received: by mail-pj1-f66.google.com with SMTP id q16so1519701pje.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2020 15:30:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=isuLobyDtt6EFpFjL8LiFOi1CRIfA1D/367XhIHg364=;
-        b=HfwezzhcKfEVjhsWnYuE+MOwB43m0F5LU/ypxx0eZ+y229VT2wHow55nM/MWJvF7vE
-         KDxFReBiJci6sow5QVNmADUlPNOsA8JJ04CYmAGy1rLGLxLBmnmOysRFqAccjr+sz8cu
-         QR8nuPXJgsqHD/luOvmgr3Dmmr2fiEpx+H568cGpnWCeYP2eR1TQ4E+6CFoby2MED4ky
-         QFZLNyxOQOK/qxeoPO1eNN+B78irxg01lKJtBw1Az8KfaFbnhabIXtb0fNi1iGtLZ3hQ
-         UDo7nq1z6RseGH/V02uty5ZxA7yt9Z4CLaaFcORe+sxANwbM/txD6UvmELaWWa9JowuR
-         jflg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y5B4wxSp02uuFivz7ODBtuslpEN2qFSLVxuus0MTRZI=;
+        b=g+cLm4wFKGfTjBLaTqj9Vw2LvdSG3yyGeKcR+yC9FMrSkOLJEq9No9D8cbxID2xG7P
+         Dnc9swLrPSQrJnFWGO4pokRaj0SWKxLdn1QX5ypxZSN3qE7hX2YKNCkIQo+f7dcxjINM
+         7j47dHfP1PqlNfUSzmSb16+poyLMhlzjH0BF+DgjSPHkbHmfA7hpwiZkoq6za+H6/ftA
+         0ckMaHW/aD1uOkg4SFiVfyd0HyVGyIqHznIJ+oQmXXA5D9OZtRjQIi/5zhojOU/ENjYF
+         2sSsBLhgKtyiBT0b4H+6LZPujAq31yaLROlz8D3CIqY41M1iPLcoWo6PkG4ms4Trc5G4
+         mNEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=isuLobyDtt6EFpFjL8LiFOi1CRIfA1D/367XhIHg364=;
-        b=Z7IoiKNOscZxHDyjBVWbI/KLfipJJomNQpNLB7wQzWU+tf4YhlbFSxBLtx5uJTIDAA
-         Z28m0AXuBarWy84qxgLQMJ7ayZzhGoAXwbevDTpA9LkyysPNjIwVIJwGs5xi+EnE5kV4
-         +3kaqZHB4lz7uD5vinKGE7d7a//pYbFtCe3nybl1Pg8AqekV8k8e6yHc+IiAsYzPTHGp
-         HIVPQhVEkiql1F8ajxGU6TWqR+EkZeSW5tn8H2LbBmZ1WG4FSstLkKrd/M9poFDCNwE5
-         EV0PYEtcfu69spcGIOefEA3g64ruFPg9u+5/ramEZNb8fTaeQwUDbnXcvypyWiEH8UlD
-         aQYw==
-X-Gm-Message-State: AGi0Pubd2pBobeJgosq4oAn+phwrdYkywEwy29Riny27V6nbRHfWaLuK
-        QGBoRMfOyoFsTJUZaZXbTjjE/g==
-X-Google-Smtp-Source: APiQypL9AU+nfBTB36SMyId+ZGOO1XL78KfsEhAHnGSpMqGnUwgpqsUAfmwwldXnBPU3DakKXJm/uA==
-X-Received: by 2002:a37:8044:: with SMTP id b65mr4457520qkd.238.1586295531751;
-        Tue, 07 Apr 2020 14:38:51 -0700 (PDT)
-Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id p38sm18811316qtf.50.2020.04.07.14.38.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2020 14:38:51 -0700 (PDT)
-Message-ID: <0d7d447764a67536885f38b032f888e91db43997.camel@massaru.org>
-Subject: Re: [PATCH v3, RESEND] kunit: Fix kunit.py run --build_dir='<foo>'
- fails on "unclean" trees
-From:   Vitor Massaru Iha <vitor@massaru.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Date:   Tue, 07 Apr 2020 18:38:48 -0300
-In-Reply-To: <CAFd5g44EGCY0zHfZXekS8GAXHxrf5zeeTW=MHRz0NujKqTsRQg@mail.gmail.com>
-References: <20200406221916.50008-1-vitor@massaru.org>
-         <CAFd5g44EGCY0zHfZXekS8GAXHxrf5zeeTW=MHRz0NujKqTsRQg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y5B4wxSp02uuFivz7ODBtuslpEN2qFSLVxuus0MTRZI=;
+        b=NUTm7nBnTd6greLpNl63MdowDbWuRj3eKp8KkKO9ahJ+aEB6/H7sBYjUBlUNKLiX0k
+         Yj8/jUmd3Ym82WmOyJfnndza213MFk1D4kcAQ4P10SAhy0aJ6tS9LQQQnS1HA+3P1OI2
+         6gbrwKcJm8PpYcycKmmNQrjnFRArvnT83iOx07nfxBRNTRCaw/hWTkLooxC6arBrPsH6
+         YyIr0eghn6TGzNiB+JHZ7RxUD/n6I2/YkdobVGs25wqE0x/qmEEiXEEdQhUccsjrbU42
+         0dcqT9hI3Hsz8B5ZWCZwYL8E2pBAen04HtAeSGq1zk3EXBAz+0Pmj5IPBu92euOZu7Kg
+         RRYQ==
+X-Gm-Message-State: AGi0PuZTi4VS9FNsuEuXq3vzL1OChEKVDxB0FSdhnRkxZKoU7J+DoR0n
+        sLccFaloy9p/R3plQ8AsgSfFcssigVUhrZzsM1s=
+X-Google-Smtp-Source: APiQypJpmPf3MioORTeWu4IjYX4Y39mg6ICX+MxsHMYqBDAm5awW/piILGOXuMKl7+rWhMExLao5r2TBFaKG+21XDC4=
+X-Received: by 2002:a17:902:61:: with SMTP id 88mr4564119pla.30.1586298637887;
+ Tue, 07 Apr 2020 15:30:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20200406214130.21224-1-l.rubusch@gmail.com> <CAFd5g448Qz0bGkNCPR+zS-gH-T9A64L1tExgKb_-jQO3bysGOA@mail.gmail.com>
+In-Reply-To: <CAFd5g448Qz0bGkNCPR+zS-gH-T9A64L1tExgKb_-jQO3bysGOA@mail.gmail.com>
+From:   Lothar Rubusch <l.rubusch@gmail.com>
+Date:   Wed, 8 Apr 2020 00:30:01 +0200
+Message-ID: <CAFXKEHYvE5N4go9KvBbMOaCWTT3vsb8M-G1JXTeKNsYBP0R1bg@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: test.h - fix warnings
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Brendan,
-
-On Tue, 2020-04-07 at 13:31 -0700, Brendan Higgins wrote:
-> On Mon, Apr 6, 2020 at 3:19 PM Vitor Massaru Iha <vitor@massaru.org>
-> wrote:
-> > Fix this bug: https://bugzilla.kernel.org/show_bug.cgi?id=205219
-> 
-> I am still seeing the error described in the bug.
-> 
-> Steps to reproduce:
-> 
-> 1. tools/testing/kunit/kunit.py run --timeout=60 --jobs=8 --defconfig
-> 
-> 2. make ARCH=um mrproper
-> 
-> 3. tools/testing/kunit/kunit.py run --timeout=60 --jobs=8 --defconfig
-> --build_dir=.kunit
-
-Thanks. I managed to reproduce the bug. I'm working on it.
-
-> One other note: It should probably be done in another patch, but it
-> would be nice if kunit.py would tell you that you need to run
-> mrproper
-> when the olddefconfig fails.
-
-Sure, I can work on it.
-
-> 
-> > For some reason, the environment variable ARCH is used instead of
-> > ARCH
-> > passed as an argument, this patch uses a copy of the env, but using
-> > ARCH=um and CROSS_COMPILER='' to avoid this problem.
-> > 
-> > This patch doesn't change the user's environment variables,
-> > avoiding
-> > side effects.
-> > 
-> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+On Tue, Apr 7, 2020 at 10:49 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Mon, Apr 6, 2020 at 2:41 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
+> >
+> > Fix several sphinx warnings at 'make htmldocs'
+> > - privately declared members not correctly declared as such
+> > - 'suits' actually is not a function parameter, change declaration to fix
+> >   warning but keep information in comment
+> >
+> > Signed-off-by: Lothar Rubusch <l.rubusch@gmail.com>
+>
+> Thanks for taking care of this!
+>
 > > ---
-> > v2:
-> >  - Use the correct next branch
-> > 
-> > v3:
-> >  - Use torvalds/master branch
-> >  - Use base parameter on git send-email
-> > ---
-> >  tools/testing/kunit/kunit_kernel.py | 19 ++++++++++++-------
-> >  1 file changed, 12 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/tools/testing/kunit/kunit_kernel.py
-> > b/tools/testing/kunit/kunit_kernel.py
-> > index 63dbda2d029f..96216c699fde 100644
-> > --- a/tools/testing/kunit/kunit_kernel.py
-> > +++ b/tools/testing/kunit/kunit_kernel.py
-> > @@ -20,6 +20,7 @@ import kunit_parser
-> >  KCONFIG_PATH = '.config'
-> >  kunitconfig_path = '.kunitconfig'
-> >  BROKEN_ALLCONFIG_PATH =
-> > 'tools/testing/kunit/configs/broken_on_uml.config'
-> > +env = dict(os.environ.copy(), ARCH='um', CROSS_COMPILE='')
-> > 
-> >  class ConfigError(Exception):
-> >         """Represents an error trying to configure the Linux
-> > kernel."""
-> > @@ -41,13 +42,15 @@ class LinuxSourceTreeOperations(object):
-> >                         raise ConfigError(e.output)
-> > 
-> >         def make_olddefconfig(self, build_dir, make_options):
-> > -               command = ['make', 'ARCH=um', 'olddefconfig']
-> > +               command = ['make', 'olddefconfig']
-> >                 if make_options:
-> >                         command.extend(make_options)
-> >                 if build_dir:
-> >                         command += ['O=' + build_dir]
-> >                 try:
-> > -                       subprocess.check_output(command,
-> > stderr=subprocess.PIPE)
-> > +                       subprocess.check_output(command,
-> > +                                               stderr=subprocess.P
-> > IPE,
-> > +                                               env=env)
-> >                 except OSError as e:
-> >                         raise ConfigError('Could not call make
-> > command: ' + e)
-> >                 except subprocess.CalledProcessError as e:
-> > @@ -57,9 +60,10 @@ class LinuxSourceTreeOperations(object):
-> >                 kunit_parser.print_with_timestamp(
-> >                         'Enabling all CONFIGs for UML...')
-> >                 process = subprocess.Popen(
-> > -                       ['make', 'ARCH=um', 'allyesconfig'],
-> > +                       ['make', 'allyesconfig'],
-> >                         stdout=subprocess.DEVNULL,
-> > -                       stderr=subprocess.STDOUT)
-> > +                       stderr=subprocess.STDOUT,
-> > +                       env=env)
-> >                 process.wait()
-> >                 kunit_parser.print_with_timestamp(
-> >                         'Disabling broken configs to run KUnit
-> > tests...')
-> > @@ -71,13 +75,13 @@ class LinuxSourceTreeOperations(object):
-> >                         'Starting Kernel with all configs takes a
-> > few minutes...')
-> > 
-> >         def make(self, jobs, build_dir, make_options):
-> > -               command = ['make', 'ARCH=um', '--jobs=' +
-> > str(jobs)]
-> > +               command = ['make', '--jobs=' + str(jobs)]
-> >                 if make_options:
-> >                         command.extend(make_options)
-> >                 if build_dir:
-> >                         command += ['O=' + build_dir]
-> >                 try:
-> > -                       subprocess.check_output(command)
-> > +                       subprocess.check_output(command, env=env)
-> >                 except OSError as e:
-> >                         raise BuildError('Could not call execute
-> > make: ' + e)
-> >                 except subprocess.CalledProcessError as e:
-> > @@ -91,7 +95,8 @@ class LinuxSourceTreeOperations(object):
-> >                 with open(outfile, 'w') as output:
-> >                         process = subprocess.Popen([linux_bin] +
-> > params,
-> >                                                    stdout=output,
-> > -                                                  stderr=subproces
-> > s.STDOUT)
-> > +                                                  stderr=subproces
-> > s.STDOUT,
-> > +                                                  env=env)
-> >                         process.wait(timeout)
-> > 
-> > 
-> > 
-> > base-commit: 7e63420847ae5f1036e4f7c42f0b3282e73efbc2
-> > --
-> > 2.25.1
-> > 
+> >  include/kunit/test.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 9b0c46a6ca1f..fe4ea388528b 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -175,7 +175,7 @@ struct kunit_suite {
+> >         void (*exit)(struct kunit *test);
+> >         struct kunit_case *test_cases;
+> >
+> > -       /* private - internal use only */
+> > +       /* private: internal use only. */
+> >         struct dentry *debugfs;
+> >         char *log;
+> >  };
+> > @@ -232,7 +232,7 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+> >   * kunit_test_suites() - used to register one or more &struct kunit_suite
+> >   *                      with KUnit.
+> >   *
+> > - * @suites: a statically allocated list of &struct kunit_suite.
+> > + * suites - a statically allocated list of &struct kunit_suite.
+>
+> So, I am pretty sure you can name the variadic arguments and then that
+> gives you a valid parameter to use with kernel doc. Can you try that
+> out?
+>
+You mean the warning "Excess function parameter 'suites' description
+in 'kunit_test_suites'"?
+Honestly, due to the TODO in the same comment section, It seemed to me kind of a
+work-in-progress situation which I didn't dare to interfere.
 
+> >   *
+> >   * Registers @suites with the test framework. See &struct kunit_suite for
+>
+> Also, if my suggestion ends up not working, you should change this
+> line to match.
+>
+
+Sure, sounds interesting I can try to figure out. Thank you for the answer.
+L
