@@ -2,88 +2,320 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F73D1A1885
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 01:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B6A1A1B9C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 07:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbgDGXTG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Apr 2020 19:19:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726380AbgDGXTG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Apr 2020 19:19:06 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 881E720678;
-        Tue,  7 Apr 2020 23:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586301545;
-        bh=esnOlBQUNAip9DDpTR1+DfUPZ+TmrYUp8v+D8D9v8tA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=1TFWy9I5TIiw3c28mE4UrqtkukSnxJWFIHBOllc3WJjbJ/zbh1xK+M5G0b+fvZP5a
-         vui3UXvo1Tvo6xr6UGuvqme0m93+DH6LOd+CaV0mQEDmWFaPriZmIGCa/88jkYchBk
-         jbrl2RTmEj7QxvJ3ZkQPsLJ2ahuPbVW4ca4slgWU=
-Subject: Re: [PATCH] selftests: add 'show_targets' make target
-To:     tbird20d@gmail.com
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tim.bird@sony.com, shuah <shuah@kernel.org>
-References: <1584138204-12238-1-git-send-email-tim.bird@sony.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <03793337-65b3-7b7a-3822-ee32f7d6943f@kernel.org>
-Date:   Tue, 7 Apr 2020 17:19:04 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726192AbgDHFvf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Apr 2020 01:51:35 -0400
+Received: from mail-lj1-f174.google.com ([209.85.208.174]:41667 "EHLO
+        mail-lj1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726146AbgDHFve (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Apr 2020 01:51:34 -0400
+Received: by mail-lj1-f174.google.com with SMTP id n17so6250084lji.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2020 22:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2HvyJt2Voil1Is0cWHCS2tCfsI8zoyI3d/s0aIHNA8Y=;
+        b=jbh0OW5birWM91SV+r9ilildAesnKOH2I0Lc3CadJxVWjfMbNkSW4baxJQlPEF8kW3
+         HHgUkW/ga4JY69VbT2bP3QOrRNSvDBbyg6uSwaWFGU85HCaZTnqxECn8CCsuqSWi4DOB
+         B66Zk5Zx7g6WmfoDic6hSEqQi6XRs1Sj4GPt9Xcr3HmJI0yAnKbh9zAmcvslBI5gV902
+         bglUOu24cRT/Z6andcyfUbFL3yszpfV1VyjAxhy4pqW+BU/aJ4nTk6G4TpG/IJQlHC0g
+         6O4iOHgrnR61c1/zK3eBg+b23fSDmWlxCDNppvwMgFnJsN9iD+gkb/E2pVRJhmKM58Jd
+         QXAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2HvyJt2Voil1Is0cWHCS2tCfsI8zoyI3d/s0aIHNA8Y=;
+        b=GNEv1sXHjtz+Kk5kvIPdvdAZvrqgUguspbVkz9eVYuJ3aM6s53SJOQiLEhoPrCyke6
+         cR/CyBMcEO5QrNk3g2dTjQt4vGIRLoiXGBEGGDrqUeFoL7vlCxSilVXj+hTjcidGhaeJ
+         Xr6C1YnYR3dkfBRRgrhivCm+MJRpGIVtH0Ip2phm00H61llGacwEQO4Lb0stgtxU5IbF
+         fUWKrXk7bO3Xk7660nUTn9R6gYpflk0QMT8DUqE7s4eMkfMUCrCHTwOND+93fFZYfq2j
+         GNLrUdYLweCGA+wE00l5vdsSLJsvz4/PF/Zpqi9pLC1hv6jsqTt7lapX5jN6rpKlv6x0
+         +cKA==
+X-Gm-Message-State: AGi0PubdYXjZLMMyqw1B1WzW07s9MLnfpRLLyEOCU9lL9ITaFGd+PycJ
+        XagHADW1S6/W3j006Syn2NXY4Tr8MghVlgxSMdt/g5FZ
+X-Google-Smtp-Source: APiQypJL2/N1qnzB5lQjtkqwfji5NK3vlOf3tIhEfovIP2dqPOlrnPyNS5dQ9r9E656nhkiZmmaIWejh0DZc2wkUjM8=
+X-Received: by 2002:a2e:6e0f:: with SMTP id j15mr3592366ljc.230.1586325088674;
+ Tue, 07 Apr 2020 22:51:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1584138204-12238-1-git-send-email-tim.bird@sony.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Deepa B <deepa01012015@gmail.com>
+Date:   Wed, 8 Apr 2020 11:21:17 +0530
+Message-ID: <CANmdEh3Ukq6+WbdN49B0uPZqC0Cm=jve=cL9vFv1YYaXHqL63Q@mail.gmail.com>
+Subject: kselftest build error: ../lib.mk: No such file or directory
+To:     linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/13/20 4:23 PM, tbird20d@gmail.com wrote:
-> From: Tim Bird <tim.bird@sony.com>
-> 
-> It is useful for CI systems to be able to query the list
-> of targets provided by kselftest by default, so that they
-> can construct their own loop over the targets if desired.
-> 
-> Signed-off-by: Tim Bird <tim.bird@sony.com>
-> ---
->   tools/testing/selftests/Makefile | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 63430e2..9955e71 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -246,4 +246,7 @@ clean:
->   		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
->   	done;
->   
-> +show_targets:
-> +	@echo $(TARGETS)
-> +
->   .PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
-> 
+Hello,
+I'm running kselftest on Ubuntu 16.04lts.
+Details:
+deepa@deepa-Inspiron-3576:/usr/src/linux-headers-4.15.0-88/Documentation$
+uname -a
+Linux deepa-Inspiron-3576 4.15.0-91-generic #92~16.04.1-Ubuntu SMP Fri
+Feb 28 14:57:22 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
 
-Hi Tim,
+Command:
+deepa@deepa-Inspiron-3576:/usr/src/linux-headers-4.15.0-91-generic$
+make -C tools/testing/selftests
 
-It is useful addition. Output is hard to read though. It would
-be helpful to improve the printing targets.
+Error:
+make: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/android'
+Makefile:7: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/android'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/bpf'
+Makefile:25: ../lib.mk: No such file or directory
+/bin/sh: 1: llc: not found
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/bpf'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/breakpoints'
+Makefile:15: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/breakpoints'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/capabilities'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/capabilities'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpufreq'
+Makefile:7: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpufreq'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpu-hotplug'
+Makefile:6: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpu-hotplug'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/efivarfs'
+Makefile:6: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/efivarfs'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/exec'
+Makefile:11: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/exec'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/filesystems'
+Makefile:7: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/filesystems'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/firmware'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/firmware'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ftrace'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ftrace'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/futex'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/futex'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/gpio'
+Makefile:13: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/gpio'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/intel_pstate'
+Makefile:11: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/intel_pstate'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ipc'
+Makefile:17: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ipc'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/kcmp'
+Makefile:7: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/kcmp'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/lib'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/lib'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/membarrier'
+Makefile:5: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/membarrier'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memfd'
+Makefile:13: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memfd'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memory-hotplug'
+Makefile:4: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memory-hotplug'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mount'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mount'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mqueue'
+Makefile:6: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mqueue'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/net'
+Makefile:14: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/net'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/netfilter'
+Makefile:6: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/netfilter'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/nsfs'
+Makefile:5: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/nsfs'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/powerpc'
+Makefile:40: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/powerpc'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/pstore'
+Makefile:11: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/pstore'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ptrace'
+Makefile:5: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ptrace'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/seccomp'
+Makefile:4: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/seccomp'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sigaltstack'
+Makefile:4: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sigaltstack'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/size'
+Makefile:5: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/size'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/splice'
+Makefile:5: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/splice'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/static_keys'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/static_keys'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sync'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sync'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sysctl'
+Makefile:9: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sysctl'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/timers'
+Makefile:17: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/timers'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/user'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/user'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/vm'
+Makefile:28: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/vm'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/x86'
+Makefile:4: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/x86'
+make[1]: Entering directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/zram'
+Makefile:8: ../lib.mk: No such file or directory
+make[1]: *** No rule to make target '../lib.mk'.  Stop.
+make[1]: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/zram'
+Makefile:73: recipe for target 'all' failed
+make: *** [all] Error 2
+make: Leaving directory
+'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests'
 
-make -C tools/testing/selftests/ show_targets
-make: Entering directory '/lkml/linux_5.7/tools/testing/selftests'
-android arm64 bpf breakpoints capabilities cgroup clone3 cpufreq 
-cpu-hotplug drivers/dma-buf efivarfs exec filesystems 
-filesystems/binderfs filesystems/epoll firmware ftrace futex gpio 
-intel_pstate ipc ir kcmp kexec kvm lib livepatch lkdtm membarrier memfd 
-memory-hotplug mount mqueue net net/forwarding net/mptcp netfilter nsfs 
-pidfd pid_namespace powerpc proc pstore ptrace openat2 rseq rtc seccomp 
-sigaltstack size sparc64 splice static_keys sync sysctl timens timers 
-tmpfs tpm2 user vm x86 zram
 
-thanks,
--- Shuah
+Can you please help us fix?
+Is there an archive available for linux-kselftest? We could check it
+once before posting it to this group.Just to avoid duplicates.
+
+Thanks,
+Deepa
