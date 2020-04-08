@@ -2,218 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 796A31A1CD0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 09:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037721A1E08
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 11:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727232AbgDHHrC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Apr 2020 03:47:02 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51833 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726366AbgDHHrB (ORCPT
+        id S1726632AbgDHJbZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Apr 2020 05:31:25 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:33594 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726436AbgDHJbZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Apr 2020 03:47:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586332020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1arcaLqiwShpjN21yqx0qJmbd250D2huz+f9SVTXzo=;
-        b=GALG11Ee5suoaPMBgJoleaRbAt1KxzIN4BQ6aaOQhOT7MPIYh5VvRUoKTRx4lS9cc4chEo
-        fz9h/VRYK+Ykisxc0Hg1sR6xClF72Fj9zko9fOxNQ5ypsUJkkL6tFnoGRT4/+0GV9TMbPD
-        1hzSMo5Rym0rF4NEZk6pqWcgfhHhkI8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-43-951DvAyvMr-Iq2xJH8E3Tw-1; Wed, 08 Apr 2020 03:46:56 -0400
-X-MC-Unique: 951DvAyvMr-Iq2xJH8E3Tw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B51D107ACCA;
-        Wed,  8 Apr 2020 07:46:55 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.40.193.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A6B2C1C952;
-        Wed,  8 Apr 2020 07:46:47 +0000 (UTC)
-Date:   Wed, 8 Apr 2020 09:46:45 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Wainer dos Santos Moschetta <wainersm@redhat.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org, david@redhat.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] selftests: kvm: Add mem_slot_test test
-Message-ID: <20200408074645.dr6dgybrwwjz2tcp@kamzik.brq.redhat.com>
-References: <20200407153731.3236-1-wainersm@redhat.com>
- <20200407153731.3236-3-wainersm@redhat.com>
+        Wed, 8 Apr 2020 05:31:25 -0400
+Received: by mail-lf1-f65.google.com with SMTP id h6so4660465lfc.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2020 02:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=U4FOr2RB0Xkp5M31fPJH/yewnv/w+8CnOr9geW5TqdQ=;
+        b=usEOvHbEb3uhYdWzO7P06VtHwKYVXajG3/Yh8MHLDPWNHQGsOWWz3oYULJfVn7D5GL
+         nbCAkFDURSXxt4IUtmJxll/BMSayX57NuQWZNGvTo/rLSJy5VmLfqiOggukdSQP8CFfL
+         uUrQ+mAesLXmNiW70T6Uq/CK/dBRsZzSb8j7hC2bcHVUG3jsO0fT/OKOEAv4HkZX3OZ4
+         j+lU5zR2x9cQrCW8UAa9XCh1cp2BeR4jnIEjFtzbqlZqKAUHIsr95c6/dy5d8yizgBIq
+         5LRuvcVIuKKbHJxHmM5em7KpHHgvyoSieMG4cgQgrJF1ZK79yLqOwU9r2lW6u4oDK31I
+         Q/jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=U4FOr2RB0Xkp5M31fPJH/yewnv/w+8CnOr9geW5TqdQ=;
+        b=qYzlfCIVhM6pPBnFyEqVvaZGEGgPIuh0vB3CTaTof1hXOQ4nopxVZ7og0npMKpMI0/
+         BKbWqBFgd3mrUT99TxqR2D5S9dP0rBjjU3w6srjLenGXMrb38JiGkIjNpjgKppOis7CJ
+         hQQUfGopu3BtqZICiHhQZsBe6f4/bCQ1VzepqI1RQdCtS5mRobd6q8dZyty/JSynsfhI
+         +2lCDodEWHzQ9hkftOEJ2evH+s3x6CpRw1CC1dr2YBasakHdlQeK5WMlD3CxJpVLDjFr
+         1BrUS5ioSUFWZ4ez0eMnvUc3qAhlSTMJDwbKA1bM8GfFx+sTfYvdITBFnVCGJ0hrP1No
+         t5Dg==
+X-Gm-Message-State: AGi0PuYHb0TU8NgWIRADysPIAW/CtaMM/E4SCV3qupn6F4s9f8agngxL
+        4u53gAZegC5bFbynoD463ZxN8IgcmbUigA6MLpaqpQ==
+X-Google-Smtp-Source: APiQypKhYSCDUEJUEVy9hktqxHqR/v62qoq+zVwHHwdUO5fOqzCLwr/JZd03yKJMY7UVU9Il3O/JZ2fUDlSTweBlnaY=
+X-Received: by 2002:ac2:4da7:: with SMTP id h7mr3527277lfe.95.1586338283132;
+ Wed, 08 Apr 2020 02:31:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200407153731.3236-3-wainersm@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 8 Apr 2020 15:01:11 +0530
+Message-ID: <CA+G9fYtYRc_mKPDN-Gryw7fhjPNGBUP=KemTXaXR6UBU94M3hw@mail.gmail.com>
+Subject: WARNING: events/ipi.h:36 suspicious rcu_dereference_check() usage!
+To:     linux- stable <stable@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     Masami Hiramatsu <masami.hiramatsu@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        rcu@vger.kernel.org, lkft-triage@lists.linaro.org,
+        Leo Yan <leo.yan@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>, zanussi@kernel.org,
+        svens@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 07, 2020 at 12:37:31PM -0300, Wainer dos Santos Moschetta wrote:
-> This patch introduces the mem_slot_test test which checks
-> an VM can have added memory slots up to the limit defined in
-> KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
-> verify it fails as expected.
-> 
-> Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
-> ---
->  tools/testing/selftests/kvm/.gitignore      |  1 +
->  tools/testing/selftests/kvm/Makefile        |  3 +
->  tools/testing/selftests/kvm/mem_slot_test.c | 85 +++++++++++++++++++++
->  3 files changed, 89 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 16877c3daabf..127d27188427 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -21,4 +21,5 @@
->  /demand_paging_test
->  /dirty_log_test
->  /kvm_create_max_vcpus
-> +/mem_slot_test
->  /steal_time
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 712a2ddd2a27..338b6cdce1a0 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -32,12 +32,14 @@ TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
->  TEST_GEN_PROGS_x86_64 += demand_paging_test
->  TEST_GEN_PROGS_x86_64 += dirty_log_test
->  TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_x86_64 += mem_slot_test
->  TEST_GEN_PROGS_x86_64 += steal_time
->  
->  TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
->  TEST_GEN_PROGS_aarch64 += demand_paging_test
->  TEST_GEN_PROGS_aarch64 += dirty_log_test
->  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_aarch64 += mem_slot_test
->  TEST_GEN_PROGS_aarch64 += steal_time
->  
->  TEST_GEN_PROGS_s390x = s390x/memop
-> @@ -46,6 +48,7 @@ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
->  TEST_GEN_PROGS_s390x += demand_paging_test
->  TEST_GEN_PROGS_s390x += dirty_log_test
->  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_s390x += mem_slot_test
->  
->  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
->  LIBKVM += $(LIBKVM_$(UNAME_M))
-> diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
-> new file mode 100644
-> index 000000000000..0588dc2e8e01
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/mem_slot_test.c
-> @@ -0,0 +1,85 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * mem_slot_test
-> + *
-> + * Copyright (C) 2020, Red Hat, Inc.
-> + *
-> + * Test suite for memory region operations.
-> + */
-> +#define _GNU_SOURCE /* for program_invocation_short_name */
-> +#include <linux/kvm.h>
-> +#include <sys/mman.h>
-> +
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +
-> +/*
-> + * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
-> + * tentative to add further slots should fail.
-> + */
-> +static void test_add_max_slots(void)
-> +{
-> +	int ret;
-> +	struct kvm_userspace_memory_region *kvm_region;
+On arm64 qemu_arm64, juno-r2 and dragonboard-410c while running kselftest ftrace
+on stable rc 5.5.1-rc1 to till today 5.5.16-rc2 and 5.6  found this
+kernel warning.
 
-nit: this doesn't need to be a pointer, requiring the malloc.
+[  386.349099] kselftest: Running tests in ftrace
+[  393.984018]
+[  393.984290] =============================
+[  393.984781] WARNING: suspicious RCU usage
+[  393.988690] 5.6.3-rc2 #1 Not tainted
+[  393.992679] -----------------------------
+[  393.996327] /usr/src/kernel/include/trace/events/ipi.h:36
+suspicious rcu_dereference_check() usage!
+[  394.000241]
+[  394.000241] other info that might help us debug this:
+[  394.000241]
+[  394.009094]
+[  394.009094] RCU used illegally from idle CPU!
+[  394.009094] rcu_scheduler_active = 2, debug_locks = 1
+[  394.017084] RCU used illegally from extended quiescent state!
+[  394.028187] 1 lock held by swapper/3/0:
+[  394.033826]  #0: ffff80001237b6a8 (max_trace_lock){....}, at:
+check_critical_timing+0x7c/0x1a8
+[  394.037480]
+[  394.037480] stack backtrace:
+[  394.046158] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.6.3-rc2 #1
+[  394.050584] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[  394.056663] Call trace:
+[  394.063515]  dump_backtrace+0x0/0x1e0
+[  394.065686]  show_stack+0x24/0x30
+[  394.069505]  dump_stack+0xe8/0x150
+[  394.072805]  lockdep_rcu_suspicious+0xcc/0x110
+[  394.076106]  arch_irq_work_raise+0x208/0x210
+[  394.080533]  __irq_work_queue_local+0x5c/0x80
+[  394.084959]  irq_work_queue+0x38/0x78
+[  394.089212]  __update_max_tr+0x150/0x218
+[  394.092858]  update_max_tr_single.part.82+0x98/0x100
+[  394.096851]  update_max_tr_single+0x1c/0x28
+[  394.101798]  check_critical_timing+0x198/0x1a8
+[  394.105705]  stop_critical_timings+0x128/0x148
+[  394.110221]  cpuidle_enter_state+0x74/0x4f8
+[  394.114645]  cpuidle_enter+0x3c/0x50
+[  394.118726]  call_cpuidle+0x44/0x80
+[  394.122542]  do_idle+0x22c/0x2d0
+[  394.125755]  cpu_startup_entry+0x28/0x48
+[  394.129229]  secondary_start_kernel+0x1b4/0x210
 
-> +	struct kvm_vm *vm;
-> +	uint32_t max_mem_slots;
-> +	uint32_t mem_reg_flags;
-> +	uint32_t slot;
-> +	uint64_t guest_addr;
-> +	uint64_t mem_reg_npages;
-> +	uint64_t mem_reg_size;
-> +
-> +	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-> +	TEST_ASSERT(max_mem_slots > 0,
-> +		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
-> +	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
-> +
-> +	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-> +
-> +	/*
-> +	 * Uses 1MB sized/aligned memory region since this is the minimal
-> +	 * required on s390x.
-> +	 */
-> +	mem_reg_size = 0x100000;
-> +	mem_reg_npages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, mem_reg_size);
-> +	mem_reg_flags = 0;
 
-nit: don't really need mem_reg_flags anymore.
+metadata:
+  git branch: linux-5.5.y and linux-5.6.y
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/juno/lkft/linux-stable-rc-5.5/65/config
 
-> +
-> +	guest_addr = 0x0;
-> +
-> +	/* Check it can be added memory slots up to the maximum allowed */
-> +	pr_info("Adding slots 0..%i, each memory region with %ldK size\n",
-> +		(max_mem_slots - 1), mem_reg_size >> 10);
-> +	for (slot = 0; slot < max_mem_slots; slot++) {
-> +		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-> +					    guest_addr, slot, mem_reg_npages,
-> +					    mem_reg_flags);
-> +		guest_addr += mem_reg_size;
-> +	}
-> +
-> +	/* Check it cannot be added memory slots beyond the limit */
-> +	void *mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
-> +			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+Full test log,
+5.6 test logs,
+https://lkft.validation.linaro.org/scheduler/job/1350627#L12612
+https://lkft.validation.linaro.org/scheduler/job/1350731#L9509
 
-nit: mem is another middle of block declaration that I didn't notice before
+5.5 test logs,
+https://lkft.validation.linaro.org/scheduler/job/1322704#L9777
+https://lkft.validation.linaro.org/scheduler/job/1153369#L9745
+https://lkft.validation.linaro.org/scheduler/job/1351155#L8982
+https://lkft.validation.linaro.org/scheduler/job/1351065#L12349
 
-> +	TEST_ASSERT(mem != MAP_FAILED, "Failed to mmap() host");
-> +
-> +	kvm_region = malloc(sizeof(struct kvm_userspace_memory_region));
-> +	TEST_ASSERT(kvm_region,
-> +		    "Failed to malloc() kvm_userspace_memory_region");
-> +	kvm_region->slot = slot;
-> +	kvm_region->flags = mem_reg_flags;
-> +	kvm_region->guest_phys_addr = guest_addr;
-> +	kvm_region->userspace_addr = (uint64_t) mem;
-
-You're missing memory_size here, and it's not even guaranteed to be zero,
-since we malloc'ed and didn't zero initialize.
-
-Actually, I'd probably just drop kvm_region and use a compound literal
-in the ioctl.
-
-> +
-> +	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION, kvm_region);
-> +	TEST_ASSERT(ret == -1 && errno == EINVAL,
-> +		    "Adding one more memory slot should fail with EINVAL");
-> +
-> +	munmap(mem, mem_reg_size);
-> +	free(kvm_region);
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	test_add_max_slots();
-> +	return 0;
-> +}
-> -- 
-> 2.17.2
->
-
-Thanks,
-drew
-
+--
+Linaro LKFT
+https://lkft.linaro.org
