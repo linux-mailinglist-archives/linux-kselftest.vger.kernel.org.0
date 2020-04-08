@@ -2,79 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4463C1A23C5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 16:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AF41A2499
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 17:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728164AbgDHOHB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Apr 2020 10:07:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42994 "EHLO mail.kernel.org"
+        id S1729333AbgDHPHR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Apr 2020 11:07:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60820 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728159AbgDHOHA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Apr 2020 10:07:00 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727847AbgDHPHQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Apr 2020 11:07:16 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD26D20780;
-        Wed,  8 Apr 2020 14:06:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44972206F5;
+        Wed,  8 Apr 2020 15:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586354820;
-        bh=mwQWgzVnM1Gk3FCn6bt7z1/0O75c4sfpqBfxxPs/al0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gh7bxstm1xQxcj6Pf/epMrYu3OflWzvm5XzwmHvdoWuHVaZrCDtMitxeuZTT5im+L
-         8ntbEZpPrf/BJgbl+SZHwn3dy4pcYd9O8Zqyvweblvr/Q0Ndbw7FDB5ypNHT7CObXT
-         vQTJ87Osa66oVYrL/5pWmbpjesQ87Sz/FMHCyFsc=
-Date:   Wed, 8 Apr 2020 16:06:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        Ben Hutchings <ben.hutchings@codethink.co.uk>,
-        lkft-triage@lists.linaro.org,
-        linux- stable <stable@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 5.6 00/30] 5.6.3-rc2 review
-Message-ID: <20200408140658.GA1251074@kroah.com>
-References: <20200407154752.006506420@linuxfoundation.org>
- <CA+G9fYsyETNoV58oyrBtb2o_vyFi1MPUNkZ9uUZK6uRCg5OK5w@mail.gmail.com>
+        s=default; t=1586358436;
+        bh=QuHEGNN4a+Ol4/SqzFT7wRXfZokugzHBH9s6SUo5j8Q=;
+        h=Subject:To:References:From:Cc:Date:In-Reply-To:From;
+        b=s5fuOcQftmF0VE7ftbATIv52dU+A03FAKQgUt+HED8YYdql9qOu2n2J4b09LNyKbB
+         bX+Bq+Z9fy18L51Mocu2i6aKvS6iSMw8Qub4/03vQq4rfx+QnNhu1Nz18pIekbRxFA
+         EeLPv55IQVJAZgZCUKPP3OkQhedf0pf43vt/x1LY=
+Subject: Re: kselftest build error: ../lib.mk: No such file or directory
+To:     Deepa B <deepa01012015@gmail.com>, linux-kselftest@vger.kernel.org
+References: <CANmdEh3Ukq6+WbdN49B0uPZqC0Cm=jve=cL9vFv1YYaXHqL63Q@mail.gmail.com>
+From:   shuah <shuah@kernel.org>
+Cc:     shuah <shuah@kernel.org>
+Message-ID: <38bb916a-b8b4-143e-48aa-594bc8ff546c@kernel.org>
+Date:   Wed, 8 Apr 2020 09:06:51 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYsyETNoV58oyrBtb2o_vyFi1MPUNkZ9uUZK6uRCg5OK5w@mail.gmail.com>
+In-Reply-To: <CANmdEh3Ukq6+WbdN49B0uPZqC0Cm=jve=cL9vFv1YYaXHqL63Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 03:16:45PM +0530, Naresh Kamboju wrote:
-> On Tue, 7 Apr 2020 at 22:09, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.6.3 release.
-> > There are 30 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 09 Apr 2020 15:46:32 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.6.3-rc2.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.6.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
+On 4/7/20 11:51 PM, Deepa B wrote:
+> Hello,
+> I'm running kselftest on Ubuntu 16.04lts.
+> Details:
+> deepa@deepa-Inspiron-3576:/usr/src/linux-headers-4.15.0-88/Documentation$
+> uname -a
+> Linux deepa-Inspiron-3576 4.15.0-91-generic #92~16.04.1-Ubuntu SMP Fri
+> Feb 28 14:57:22 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
 > 
-> Results from Linaro’s test farm.
-> No regressions on arm64, arm, x86_64, and i386.
+> Command:
+> deepa@deepa-Inspiron-3576:/usr/src/linux-headers-4.15.0-91-generic$
+> make -C tools/testing/selftests
+> 
+> Error:
+> make: Entering directory
+> '/usr/src/linux-headers-4.15.0-91/tools/testing/selftests'
+> make[1]: Entering directory
+> '/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/android'
+> Makefile:7: ../lib.mk: No such file or directory
+> make[1]: *** No rule to make target '../lib.mk'.  Stop.
+> make[1]: Leaving directory
 
-Thanks for testing all of these and letting me know.
+Looks like you are trying to build in /usr/src/linux-headers-4.15.0-88
+This doesn't contain any source files.
 
-greg k-h
+Go down into directorties below selftest or
+
+/usr/src/linux-headers-4.15.0-88/kernel you will see that there are
+no .[ch] files in these directories.
+
+You have to install Ubuntu 16.04lts source package for kernel or
+checkout kernel git repos to build kernel and selftests for that
+kernel from sources.
+
+thanks,
+-- Shuah
+
+
+
