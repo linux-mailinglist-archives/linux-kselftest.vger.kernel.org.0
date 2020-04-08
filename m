@@ -2,320 +2,218 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B6A1A1B9C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 07:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796A31A1CD0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Apr 2020 09:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbgDHFvf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Apr 2020 01:51:35 -0400
-Received: from mail-lj1-f174.google.com ([209.85.208.174]:41667 "EHLO
-        mail-lj1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726146AbgDHFve (ORCPT
+        id S1727232AbgDHHrC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Apr 2020 03:47:02 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51833 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726366AbgDHHrB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Apr 2020 01:51:34 -0400
-Received: by mail-lj1-f174.google.com with SMTP id n17so6250084lji.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Apr 2020 22:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2HvyJt2Voil1Is0cWHCS2tCfsI8zoyI3d/s0aIHNA8Y=;
-        b=jbh0OW5birWM91SV+r9ilildAesnKOH2I0Lc3CadJxVWjfMbNkSW4baxJQlPEF8kW3
-         HHgUkW/ga4JY69VbT2bP3QOrRNSvDBbyg6uSwaWFGU85HCaZTnqxECn8CCsuqSWi4DOB
-         B66Zk5Zx7g6WmfoDic6hSEqQi6XRs1Sj4GPt9Xcr3HmJI0yAnKbh9zAmcvslBI5gV902
-         bglUOu24cRT/Z6andcyfUbFL3yszpfV1VyjAxhy4pqW+BU/aJ4nTk6G4TpG/IJQlHC0g
-         6O4iOHgrnR61c1/zK3eBg+b23fSDmWlxCDNppvwMgFnJsN9iD+gkb/E2pVRJhmKM58Jd
-         QXAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2HvyJt2Voil1Is0cWHCS2tCfsI8zoyI3d/s0aIHNA8Y=;
-        b=GNEv1sXHjtz+Kk5kvIPdvdAZvrqgUguspbVkz9eVYuJ3aM6s53SJOQiLEhoPrCyke6
-         cR/CyBMcEO5QrNk3g2dTjQt4vGIRLoiXGBEGGDrqUeFoL7vlCxSilVXj+hTjcidGhaeJ
-         Xr6C1YnYR3dkfBRRgrhivCm+MJRpGIVtH0Ip2phm00H61llGacwEQO4Lb0stgtxU5IbF
-         fUWKrXk7bO3Xk7660nUTn9R6gYpflk0QMT8DUqE7s4eMkfMUCrCHTwOND+93fFZYfq2j
-         GNLrUdYLweCGA+wE00l5vdsSLJsvz4/PF/Zpqi9pLC1hv6jsqTt7lapX5jN6rpKlv6x0
-         +cKA==
-X-Gm-Message-State: AGi0PubdYXjZLMMyqw1B1WzW07s9MLnfpRLLyEOCU9lL9ITaFGd+PycJ
-        XagHADW1S6/W3j006Syn2NXY4Tr8MghVlgxSMdt/g5FZ
-X-Google-Smtp-Source: APiQypJL2/N1qnzB5lQjtkqwfji5NK3vlOf3tIhEfovIP2dqPOlrnPyNS5dQ9r9E656nhkiZmmaIWejh0DZc2wkUjM8=
-X-Received: by 2002:a2e:6e0f:: with SMTP id j15mr3592366ljc.230.1586325088674;
- Tue, 07 Apr 2020 22:51:28 -0700 (PDT)
+        Wed, 8 Apr 2020 03:47:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586332020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y1arcaLqiwShpjN21yqx0qJmbd250D2huz+f9SVTXzo=;
+        b=GALG11Ee5suoaPMBgJoleaRbAt1KxzIN4BQ6aaOQhOT7MPIYh5VvRUoKTRx4lS9cc4chEo
+        fz9h/VRYK+Ykisxc0Hg1sR6xClF72Fj9zko9fOxNQ5ypsUJkkL6tFnoGRT4/+0GV9TMbPD
+        1hzSMo5Rym0rF4NEZk6pqWcgfhHhkI8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-43-951DvAyvMr-Iq2xJH8E3Tw-1; Wed, 08 Apr 2020 03:46:56 -0400
+X-MC-Unique: 951DvAyvMr-Iq2xJH8E3Tw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B51D107ACCA;
+        Wed,  8 Apr 2020 07:46:55 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.40.193.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A6B2C1C952;
+        Wed,  8 Apr 2020 07:46:47 +0000 (UTC)
+Date:   Wed, 8 Apr 2020 09:46:45 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Wainer dos Santos Moschetta <wainersm@redhat.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org, david@redhat.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] selftests: kvm: Add mem_slot_test test
+Message-ID: <20200408074645.dr6dgybrwwjz2tcp@kamzik.brq.redhat.com>
+References: <20200407153731.3236-1-wainersm@redhat.com>
+ <20200407153731.3236-3-wainersm@redhat.com>
 MIME-Version: 1.0
-From:   Deepa B <deepa01012015@gmail.com>
-Date:   Wed, 8 Apr 2020 11:21:17 +0530
-Message-ID: <CANmdEh3Ukq6+WbdN49B0uPZqC0Cm=jve=cL9vFv1YYaXHqL63Q@mail.gmail.com>
-Subject: kselftest build error: ../lib.mk: No such file or directory
-To:     linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200407153731.3236-3-wainersm@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
-I'm running kselftest on Ubuntu 16.04lts.
-Details:
-deepa@deepa-Inspiron-3576:/usr/src/linux-headers-4.15.0-88/Documentation$
-uname -a
-Linux deepa-Inspiron-3576 4.15.0-91-generic #92~16.04.1-Ubuntu SMP Fri
-Feb 28 14:57:22 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+On Tue, Apr 07, 2020 at 12:37:31PM -0300, Wainer dos Santos Moschetta wrote:
+> This patch introduces the mem_slot_test test which checks
+> an VM can have added memory slots up to the limit defined in
+> KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
+> verify it fails as expected.
+> 
+> Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/.gitignore      |  1 +
+>  tools/testing/selftests/kvm/Makefile        |  3 +
+>  tools/testing/selftests/kvm/mem_slot_test.c | 85 +++++++++++++++++++++
+>  3 files changed, 89 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index 16877c3daabf..127d27188427 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -21,4 +21,5 @@
+>  /demand_paging_test
+>  /dirty_log_test
+>  /kvm_create_max_vcpus
+> +/mem_slot_test
+>  /steal_time
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 712a2ddd2a27..338b6cdce1a0 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -32,12 +32,14 @@ TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
+>  TEST_GEN_PROGS_x86_64 += demand_paging_test
+>  TEST_GEN_PROGS_x86_64 += dirty_log_test
+>  TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
+> +TEST_GEN_PROGS_x86_64 += mem_slot_test
+>  TEST_GEN_PROGS_x86_64 += steal_time
+>  
+>  TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += demand_paging_test
+>  TEST_GEN_PROGS_aarch64 += dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+> +TEST_GEN_PROGS_aarch64 += mem_slot_test
+>  TEST_GEN_PROGS_aarch64 += steal_time
+>  
+>  TEST_GEN_PROGS_s390x = s390x/memop
+> @@ -46,6 +48,7 @@ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
+>  TEST_GEN_PROGS_s390x += demand_paging_test
+>  TEST_GEN_PROGS_s390x += dirty_log_test
+>  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+> +TEST_GEN_PROGS_s390x += mem_slot_test
+>  
+>  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
+>  LIBKVM += $(LIBKVM_$(UNAME_M))
+> diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
+> new file mode 100644
+> index 000000000000..0588dc2e8e01
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/mem_slot_test.c
+> @@ -0,0 +1,85 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * mem_slot_test
+> + *
+> + * Copyright (C) 2020, Red Hat, Inc.
+> + *
+> + * Test suite for memory region operations.
+> + */
+> +#define _GNU_SOURCE /* for program_invocation_short_name */
+> +#include <linux/kvm.h>
+> +#include <sys/mman.h>
+> +
+> +#include "test_util.h"
+> +#include "kvm_util.h"
+> +
+> +/*
+> + * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
+> + * tentative to add further slots should fail.
+> + */
+> +static void test_add_max_slots(void)
+> +{
+> +	int ret;
+> +	struct kvm_userspace_memory_region *kvm_region;
 
-Command:
-deepa@deepa-Inspiron-3576:/usr/src/linux-headers-4.15.0-91-generic$
-make -C tools/testing/selftests
+nit: this doesn't need to be a pointer, requiring the malloc.
 
-Error:
-make: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/android'
-Makefile:7: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/android'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/bpf'
-Makefile:25: ../lib.mk: No such file or directory
-/bin/sh: 1: llc: not found
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/bpf'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/breakpoints'
-Makefile:15: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/breakpoints'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/capabilities'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/capabilities'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpufreq'
-Makefile:7: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpufreq'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpu-hotplug'
-Makefile:6: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/cpu-hotplug'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/efivarfs'
-Makefile:6: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/efivarfs'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/exec'
-Makefile:11: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/exec'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/filesystems'
-Makefile:7: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/filesystems'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/firmware'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/firmware'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ftrace'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ftrace'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/futex'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/futex'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/gpio'
-Makefile:13: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/gpio'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/intel_pstate'
-Makefile:11: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/intel_pstate'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ipc'
-Makefile:17: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ipc'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/kcmp'
-Makefile:7: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/kcmp'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/lib'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/lib'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/membarrier'
-Makefile:5: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/membarrier'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memfd'
-Makefile:13: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memfd'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memory-hotplug'
-Makefile:4: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/memory-hotplug'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mount'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mount'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mqueue'
-Makefile:6: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/mqueue'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/net'
-Makefile:14: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/net'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/netfilter'
-Makefile:6: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/netfilter'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/nsfs'
-Makefile:5: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/nsfs'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/powerpc'
-Makefile:40: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/powerpc'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/pstore'
-Makefile:11: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/pstore'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ptrace'
-Makefile:5: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/ptrace'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/seccomp'
-Makefile:4: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/seccomp'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sigaltstack'
-Makefile:4: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sigaltstack'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/size'
-Makefile:5: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/size'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/splice'
-Makefile:5: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/splice'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/static_keys'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/static_keys'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sync'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sync'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sysctl'
-Makefile:9: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/sysctl'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/timers'
-Makefile:17: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/timers'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/user'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/user'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/vm'
-Makefile:28: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/vm'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/x86'
-Makefile:4: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/x86'
-make[1]: Entering directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/zram'
-Makefile:8: ../lib.mk: No such file or directory
-make[1]: *** No rule to make target '../lib.mk'.  Stop.
-make[1]: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests/zram'
-Makefile:73: recipe for target 'all' failed
-make: *** [all] Error 2
-make: Leaving directory
-'/usr/src/linux-headers-4.15.0-91/tools/testing/selftests'
+> +	struct kvm_vm *vm;
+> +	uint32_t max_mem_slots;
+> +	uint32_t mem_reg_flags;
+> +	uint32_t slot;
+> +	uint64_t guest_addr;
+> +	uint64_t mem_reg_npages;
+> +	uint64_t mem_reg_size;
+> +
+> +	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
+> +	TEST_ASSERT(max_mem_slots > 0,
+> +		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
+> +	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
+> +
+> +	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
+> +
+> +	/*
+> +	 * Uses 1MB sized/aligned memory region since this is the minimal
+> +	 * required on s390x.
+> +	 */
+> +	mem_reg_size = 0x100000;
+> +	mem_reg_npages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, mem_reg_size);
+> +	mem_reg_flags = 0;
 
+nit: don't really need mem_reg_flags anymore.
 
-Can you please help us fix?
-Is there an archive available for linux-kselftest? We could check it
-once before posting it to this group.Just to avoid duplicates.
+> +
+> +	guest_addr = 0x0;
+> +
+> +	/* Check it can be added memory slots up to the maximum allowed */
+> +	pr_info("Adding slots 0..%i, each memory region with %ldK size\n",
+> +		(max_mem_slots - 1), mem_reg_size >> 10);
+> +	for (slot = 0; slot < max_mem_slots; slot++) {
+> +		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
+> +					    guest_addr, slot, mem_reg_npages,
+> +					    mem_reg_flags);
+> +		guest_addr += mem_reg_size;
+> +	}
+> +
+> +	/* Check it cannot be added memory slots beyond the limit */
+> +	void *mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
+> +			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+nit: mem is another middle of block declaration that I didn't notice before
+
+> +	TEST_ASSERT(mem != MAP_FAILED, "Failed to mmap() host");
+> +
+> +	kvm_region = malloc(sizeof(struct kvm_userspace_memory_region));
+> +	TEST_ASSERT(kvm_region,
+> +		    "Failed to malloc() kvm_userspace_memory_region");
+> +	kvm_region->slot = slot;
+> +	kvm_region->flags = mem_reg_flags;
+> +	kvm_region->guest_phys_addr = guest_addr;
+> +	kvm_region->userspace_addr = (uint64_t) mem;
+
+You're missing memory_size here, and it's not even guaranteed to be zero,
+since we malloc'ed and didn't zero initialize.
+
+Actually, I'd probably just drop kvm_region and use a compound literal
+in the ioctl.
+
+> +
+> +	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION, kvm_region);
+> +	TEST_ASSERT(ret == -1 && errno == EINVAL,
+> +		    "Adding one more memory slot should fail with EINVAL");
+> +
+> +	munmap(mem, mem_reg_size);
+> +	free(kvm_region);
+> +	kvm_vm_free(vm);
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	test_add_max_slots();
+> +	return 0;
+> +}
+> -- 
+> 2.17.2
+>
 
 Thanks,
-Deepa
+drew
+
