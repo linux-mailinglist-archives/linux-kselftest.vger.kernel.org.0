@@ -2,128 +2,254 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5ABB1A2F33
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Apr 2020 08:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9281A3118
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Apr 2020 10:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbgDIG2O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Apr 2020 02:28:14 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37190 "EHLO
+        id S1725987AbgDIImc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Apr 2020 04:42:32 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:41025 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgDIG2O (ORCPT
+        with ESMTP id S1725783AbgDIImc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 02:28:14 -0400
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        Thu, 9 Apr 2020 04:42:32 -0400
+Received: from 1.general.ppisati.uk.vpn ([10.172.193.134] helo=canonical.com)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
-        (envelope-from <andrea.righi@canonical.com>)
-        id 1jMQfd-0006SY-8l
-        for linux-kselftest@vger.kernel.org; Thu, 09 Apr 2020 06:28:13 +0000
-Received: by mail-wr1-f69.google.com with SMTP id w12so5801988wrl.23
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Apr 2020 23:28:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Grm86vreVjyXAquqlbQvZFBa/TkelVHJfq7HxYo2C00=;
-        b=lVp3yqYQZtlVy0M6PCYQ4xpmXzwXoePm8ZsqGLRZMTeGzHQ1icIeXiTzmq5g+a6oXV
-         noxF+lDkdlhdn7QA6A/7YWWiziCqdr15VB14WhAWTiDuSJnx4rcHYE2UgJDvb+xYjG0P
-         uAeKDIX9m3Ki9TaWyG7G2FixfjJNjMEd8jomzmQYSxGOsJ8NmFP/DfkQu+QANSxVKO3y
-         U9aqq8DN2wrT4cLPPUEZ6u7hO2ZTTBpxeAQtzhazBgswu8OmCem95Yx2KVQCQW45j/+6
-         Eb342tDFr4ruj1ciWqhMpNQVIN9LpG6pxDSrraKZEpHRLteHjPf/aC0r8XD4JM46/MEA
-         RI0w==
-X-Gm-Message-State: AGi0PubeTu0HI4gupIJXD7WtIhjCVZmUTOv6hrspH7qOko3GbibazNW5
-        pRtsHKFMi+vq/O1Qe8aPAURwLDfSKmk5+/bzsWuHoJoUOklJO7/sTDr5422zsaJdzSiE2RAeFRc
-        68mTVaOE289EjVMJHCSGxV3aWxPtIUmvgd8pPo2+Zq6ufnA==
-X-Received: by 2002:adf:f5cb:: with SMTP id k11mr11853749wrp.387.1586413692689;
-        Wed, 08 Apr 2020 23:28:12 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKQyxthAz+T5O7I6EbD5MfLeGRUxaOObbdGtSBFdRt4dwDRANM19mIiV3J17/2Ff2rDXxgdww==
-X-Received: by 2002:adf:f5cb:: with SMTP id k11mr11853722wrp.387.1586413692360;
-        Wed, 08 Apr 2020 23:28:12 -0700 (PDT)
-Received: from localhost (host123-127-dynamic.36-79-r.retail.telecomitalia.it. [79.36.127.123])
-        by smtp.gmail.com with ESMTPSA id l15sm2442959wmi.48.2020.04.08.23.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2020 23:28:11 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 08:28:10 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/runner: avoid using timeout when timeout is
- disabled
-Message-ID: <20200409062810.GB49260@xps-13>
-References: <20200327093620.GB1223497@xps-13>
- <202003271208.0D9A3A48CC@keescook>
+        (envelope-from <paolo.pisati@canonical.com>)
+        id 1jMSlT-0000Km-Lv; Thu, 09 Apr 2020 08:42:23 +0000
+Date:   Thu, 9 Apr 2020 10:42:23 +0200
+From:   Paolo Pisati <paolo.pisati@canonical.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: selftests/bpf: test_maps: libbpf: Error loading .BTF into kernel:
+ -22. Failed to load SK_SKB verdict prog
+Message-ID: <20200409084223.GA72109@harukaze>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202003271208.0D9A3A48CC@keescook>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 12:28:05PM -0700, Kees Cook wrote:
-> On Fri, Mar 27, 2020 at 10:36:20AM +0100, Andrea Righi wrote:
-> > Avoid using /usr/bin/timeout unnecessarily if timeout is set to 0
-> > (disabled) in the "settings" file for a specific test.
-> 
-> That seems to be a reasonable optimization, sure.
-> 
-> > NOTE: without this change (and adding timeout=0 in the corresponding
-> > settings file - tools/testing/selftests/seccomp/settings) the
-> > seccomp_bpf selftest is always failing with a timeout event during the
-> > syscall_restart step.
-> 
-> This, however, is worrisome. I think there is something else wrong here.
-> I will investigate why the output of seccomp_bpf is weird when running
-> under the runner scripts. Hmmm. The output looks corrupted...
-> 
-> -Kees
+test_maps fails consistently on x86-64 5.4.y (5.4.31 and defconfig +
+tools/testing/selftests/bpf/config in this case) and dumps this output:
 
-Hi Kees,
+~/linux/tools/testing/selftests/bpf$ sudo ./test_maps
+libbpf: Error loading BTF: Invalid argument(22)
+libbpf: magic: 0xeb9f
+version: 1
+flags: 0x0
+hdr_len: 24
+type_off: 0
+type_len: 780
+str_off: 780
+str_len: 854
+btf_total_size: 1658
+[1] PTR (anon) type_id=2
+[2] STRUCT __sk_buff size=176 vlen=31
+	len type_id=3 bits_offset=0
+	pkt_type type_id=3 bits_offset=32
+	mark type_id=3 bits_offset=64
+	queue_mapping type_id=3 bits_offset=96
+	protocol type_id=3 bits_offset=128
+	vlan_present type_id=3 bits_offset=160
+	vlan_tci type_id=3 bits_offset=192
+	vlan_proto type_id=3 bits_offset=224
+	priority type_id=3 bits_offset=256
+	ingress_ifindex type_id=3 bits_offset=288
+	ifindex type_id=3 bits_offset=320
+	tc_index type_id=3 bits_offset=352
+	cb type_id=5 bits_offset=384
+	hash type_id=3 bits_offset=544
+	tc_classid type_id=3 bits_offset=576
+	data type_id=3 bits_offset=608
+	data_end type_id=3 bits_offset=640
+	napi_id type_id=3 bits_offset=672
+	family type_id=3 bits_offset=704
+	remote_ip4 type_id=3 bits_offset=736
+	local_ip4 type_id=3 bits_offset=768
+	remote_ip6 type_id=7 bits_offset=800
+	local_ip6 type_id=7 bits_offset=928
+	remote_port type_id=3 bits_offset=1056
+	local_port type_id=3 bits_offset=1088
+	data_meta type_id=3 bits_offset=1120
+	(anon) type_id=8 bits_offset=1152
+	tstamp type_id=10 bits_offset=1216
+	wire_len type_id=3 bits_offset=1280
+	gso_segs type_id=3 bits_offset=1312
+	(anon) type_id=12 bits_offset=1344
+[3] TYPEDEF __u32 type_id=4
+[4] INT unsigned int size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[5] ARRAY (anon) type_id=3 index_type_id=6 nr_elems=5
+[6] INT __ARRAY_SIZE_TYPE__ size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[7] ARRAY (anon) type_id=3 index_type_id=6 nr_elems=4
+[8] UNION (anon) size=8 vlen=1
+	flow_keys type_id=9 bits_offset=0
+[9] PTR (anon) type_id=23
+[10] TYPEDEF __u64 type_id=11
+[11] INT long long unsigned int size=8 bits_offset=0 nr_bits=64 encoding=(none)
+[12] UNION (anon) size=8 vlen=1
+	sk type_id=13 bits_offset=0
+[13] PTR (anon) type_id=24
+[14] FUNC_PROTO (anon) return=15 args=(1 skb)
+[15] INT int size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+[16] FUNC bpf_prog1 type_id=14 vlen != 0
 
-a quick update on this.
+libbpf: Error loading .BTF into kernel: -22.
+libbpf: Error loading BTF: Invalid argument(22)
+libbpf: magic: 0xeb9f
+version: 1
+flags: 0x0
+hdr_len: 24
+type_off: 0
+type_len: 440
+str_off: 440
+str_len: 564
+btf_total_size: 1028
+[1] PTR (anon) type_id=2
+[2] STRUCT sk_msg_md size=72 vlen=10
+	(anon) type_id=3 bits_offset=0
+	(anon) type_id=5 bits_offset=64
+	family type_id=6 bits_offset=128
+	remote_ip4 type_id=6 bits_offset=160
+	local_ip4 type_id=6 bits_offset=192
+	remote_ip6 type_id=8 bits_offset=224
+	local_ip6 type_id=8 bits_offset=352
+	remote_port type_id=6 bits_offset=480
+	local_port type_id=6 bits_offset=512
+	size type_id=6 bits_offset=544
+[3] UNION (anon) size=8 vlen=1
+	data type_id=4 bits_offset=0
+[4] PTR (anon) type_id=0
+[5] UNION (anon) size=8 vlen=1
+	data_end type_id=4 bits_offset=0
+[6] TYPEDEF __u32 type_id=7
+[7] INT unsigned int size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[8] ARRAY (anon) type_id=6 index_type_id=9 nr_elems=4
+[9] INT __ARRAY_SIZE_TYPE__ size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[10] FUNC_PROTO (anon) return=11 args=(1 msg)
+[11] INT int size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+[12] FUNC bpf_prog1 type_id=10 vlen != 0
 
-After further investigation Cascardo (added in cc) found that the
-culprit of this issue was the usage of nanosleep() vs clock_nanosleep()
-in glibc. He already sent a fix for this:
+libbpf: Error loading .BTF into kernel: -22.
+libbpf: Error loading BTF: Invalid argument(22)
+libbpf: magic: 0xeb9f
+version: 1
+flags: 0x0
+hdr_len: 24
+type_off: 0
+type_len: 1300
+str_off: 1300
+str_len: 907
+btf_total_size: 2231
+[1] STRUCT (anon) size=32 vlen=4
+	type type_id=2 bits_offset=0
+	max_entries type_id=6 bits_offset=64
+	key_size type_id=8 bits_offset=128
+	value_size type_id=8 bits_offset=192
+[2] PTR (anon) type_id=4
+[3] INT int size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
+[4] ARRAY (anon) type_id=3 index_type_id=5 nr_elems=15
+[5] INT __ARRAY_SIZE_TYPE__ size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[6] PTR (anon) type_id=7
+[7] ARRAY (anon) type_id=3 index_type_id=5 nr_elems=20
+[8] PTR (anon) type_id=9
+[9] ARRAY (anon) type_id=3 index_type_id=5 nr_elems=4
+[10] VAR sock_map_rx type_id=1 linkage=1
+[11] STRUCT (anon) size=32 vlen=4
+	type type_id=2 bits_offset=0
+	max_entries type_id=6 bits_offset=64
+	key_size type_id=8 bits_offset=128
+	value_size type_id=8 bits_offset=192
+[12] VAR sock_map_tx type_id=11 linkage=1
+[13] STRUCT (anon) size=32 vlen=4
+	type type_id=2 bits_offset=0
+	max_entries type_id=6 bits_offset=64
+	key_size type_id=8 bits_offset=128
+	value_size type_id=8 bits_offset=192
+[14] VAR sock_map_msg type_id=13 linkage=1
+[15] STRUCT (anon) size=32 vlen=4
+	type type_id=16 bits_offset=0
+	max_entries type_id=6 bits_offset=64
+	key type_id=18 bits_offset=128
+	value type_id=18 bits_offset=192
+[16] PTR (anon) type_id=17
+[17] ARRAY (anon) type_id=3 index_type_id=5 nr_elems=2
+[18] PTR (anon) type_id=3
+[19] VAR sock_map_break type_id=15 linkage=1
+[20] PTR (anon) type_id=21
+[21] STRUCT __sk_buff size=176 vlen=31
+	len type_id=22 bits_offset=0
+	pkt_type type_id=22 bits_offset=32
+	mark type_id=22 bits_offset=64
+	queue_mapping type_id=22 bits_offset=96
+	protocol type_id=22 bits_offset=128
+	vlan_present type_id=22 bits_offset=160
+	vlan_tci type_id=22 bits_offset=192
+	vlan_proto type_id=22 bits_offset=224
+	priority type_id=22 bits_offset=256
+	ingress_ifindex type_id=22 bits_offset=288
+	ifindex type_id=22 bits_offset=320
+	tc_index type_id=22 bits_offset=352
+	cb type_id=24 bits_offset=384
+	hash type_id=22 bits_offset=544
+	tc_classid type_id=22 bits_offset=576
+	data type_id=22 bits_offset=608
+	data_end type_id=22 bits_offset=640
+	napi_id type_id=22 bits_offset=672
+	family type_id=22 bits_offset=704
+	remote_ip4 type_id=22 bits_offset=736
+	local_ip4 type_id=22 bits_offset=768
+	remote_ip6 type_id=25 bits_offset=800
+	local_ip6 type_id=25 bits_offset=928
+	remote_port type_id=22 bits_offset=1056
+	local_port type_id=22 bits_offset=1088
+	data_meta type_id=22 bits_offset=1120
+	(anon) type_id=26 bits_offset=1152
+	tstamp type_id=28 bits_offset=1216
+	wire_len type_id=22 bits_offset=1280
+	gso_segs type_id=22 bits_offset=1312
+	(anon) type_id=30 bits_offset=1344
+[22] TYPEDEF __u32 type_id=23
+[23] INT unsigned int size=4 bits_offset=0 nr_bits=32 encoding=(none)
+[24] ARRAY (anon) type_id=22 index_type_id=5 nr_elems=5
+[25] ARRAY (anon) type_id=22 index_type_id=5 nr_elems=4
+[26] UNION (anon) size=8 vlen=1
+	flow_keys type_id=27 bits_offset=0
+[27] PTR (anon) type_id=41
+[28] TYPEDEF __u64 type_id=29
+[29] INT long long unsigned int size=8 bits_offset=0 nr_bits=64 encoding=(none)
+[30] UNION (anon) size=8 vlen=1
+	sk type_id=31 bits_offset=0
+[31] PTR (anon) type_id=42
+[32] FUNC_PROTO (anon) return=3 args=(20 skb)
+[33] FUNC bpf_prog2 type_id=32 vlen != 0
 
-https://lkml.org/lkml/2020/4/8/968
+libbpf: Error loading .BTF into kernel: -22.
+Failed to load SK_SKB verdict prog
 
-Without this we are getting the following error:
+~/linux/tools/testing/selftests/bpf$ find . -name sockmap_\*prog.o
+./sockmap_verdict_prog.o
+./sockmap_tcp_msg_prog.o
+./alu32/sockmap_verdict_prog.o
+./alu32/sockmap_tcp_msg_prog.o
+./alu32/sockmap_parse_prog.o
+./sockmap_parse_prog.o
 
- seccomp_bpf.c:2839:global.syscall_restart:Expected true (1) == WIFSTOPPED(status) (0)
- # global.syscall_restart: Test terminated by assertion
+$ dpkg -l | grep clang
+ii  clang                            1:10.0-50~exp1                      amd64 C, C++ and Objective-C compiler (LLVM based)
+ii  clang-10                         1:10.0.0-2ubuntu2                   amd64 C, C++ and Objective-C compiler
+ii  libclang-common-10-dev           1:10.0.0-2ubuntu2                   amd64 Clang library - Common development package
+ii  libclang-cpp10                   1:10.0.0-2ubuntu2                   amd64 C++ interface to the Clang library
+ii  libclang1-10                     1:10.0.0-2ubuntu2                   amd64 C interface to the Clang library
 
-I still think my timeout optimization patch can be useful, but for this
-particular problem we should definitely apply Cascardo's fix.
-
-Thanks,
--Andrea
-
-> 
-> > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> > ---
-> >  tools/testing/selftests/kselftest/runner.sh | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> > index e84d901f8567..2cd3c8def0f6 100644
-> > --- a/tools/testing/selftests/kselftest/runner.sh
-> > +++ b/tools/testing/selftests/kselftest/runner.sh
-> > @@ -32,7 +32,7 @@ tap_prefix()
-> >  tap_timeout()
-> >  {
-> >  	# Make sure tests will time out if utility is available.
-> > -	if [ -x /usr/bin/timeout ] ; then
-> > +	if [ -x /usr/bin/timeout ] && [ $kselftest_timeout -gt 0 ] ; then
-> >  		/usr/bin/timeout "$kselftest_timeout" "$1"
-> >  	else
-> >  		"$1"
-> > -- 
-> > 2.25.1
-> > 
-> 
-> -- 
-> Kees Cook
+Full log of "TARGETS=bpf run_tests" is available here: https://paste.ubuntu.com/p/MTkWD63Zgc/
+-- 
+bye,
+p.
