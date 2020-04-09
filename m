@@ -2,167 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF52F1A3BC7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Apr 2020 23:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D9E1A3BE8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Apr 2020 23:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727258AbgDIVQs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Apr 2020 17:16:48 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:33249 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726964AbgDIVQr (ORCPT
+        id S1727473AbgDIV16 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Apr 2020 17:27:58 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40446 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727441AbgDIV16 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 17:16:47 -0400
-Received: by mail-pl1-f193.google.com with SMTP id ay1so4312330plb.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2020 14:16:45 -0700 (PDT)
+        Thu, 9 Apr 2020 17:27:58 -0400
+Received: by mail-wr1-f66.google.com with SMTP id s8so13722188wrt.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2020 14:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Eg9/ypr2QMi2cg+O5eic347O/arPnZLJt3LRgonxSZo=;
-        b=mwuDe7kp2pcmJRWBNYoiisfC7kXQ9bXDuWhVoVPCkECTCbFgNoJ+TPP8URgOJfFXiB
-         EG5QleVQTQ6x89Exe/UZC0tNPQm0HT4HR9EkoDe96SqHH8e1L4E4M9+sANWAWJBRLIfg
-         Keo1oGO3cp5bAwkguPfZvC632jw3sjUVo8nByQKjsDwDS0sfQLq8TV+l90eBTGf3VBuC
-         3nrgmHuD4x0toF48p6a9N2hxZZw4Z6QiA8SEe+zsOLm9oFJUvsA4T+SspPV2qS9nZwq/
-         vkklVO4rz7/Cd0JkVAfei2lu4BirT6Zd54vldtXKd+a/oPCY102JFQOT48C5JrMNypby
-         e6HA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E7oerwfYi5D6aB3fBRGjdjpq86Nisdn+2mRbfBbXTfU=;
+        b=iHX5YPglxpGUsEsUacaDoxCH4nwhX49d/1kOEOn2UhKzUEgYxSAfiPeUKEh3gI7xCm
+         0hh+Tw3Rq8UyVpuSSg2MH1r5a4JPkd92GB/K08QVUs7hGbjp4t0lSAqi4ofqvPbMrrY/
+         tF1lskRdCqvYmM2n1pu3oppwtySJzbeDeGKReCuAwtRsHXQ6LP76v8pQ/gpp5jGCu0oF
+         tGxIs9Z5C6KbWISLPGd2oCwc11rkiRLP3AhyqJBa29ds3Y/B8aWJmChB9QwMtrqZtMYV
+         mYAG28aEFPelwh8SD98KzhwpQFm7eOhZZsJ9CQZ524QE+GKVNKD3tbFKH+oduqi2yhip
+         KgyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Eg9/ypr2QMi2cg+O5eic347O/arPnZLJt3LRgonxSZo=;
-        b=d98Qizc1gBLRVwkBghCju6suIRokG4ZAcJyZUcbW+wTlca7NFxWdn4FeTUo+u1S0q5
-         DaM6rIEDvCc9ulcDhBLh+BXbSdPEm+FzAgWh0wyXKZE//qXm+8gbRZNCV+HaRoGFiBvM
-         mEvQ+wzyBTQ7g44LDAriEp0KC5bdLeOYJoTY2r/i2gLT16JCf59Vno2a0EnXbjNpoNGN
-         8aucZ0VqVKq0oMGVw9Wt359hcZYVMwVCuvFPZaZzirt510zt5r5zfzkliVhacCAGJw5J
-         P1peBC1Y59JoqCvBclLrdWI5UKLw0E7Jlg+j7gzyuRBvGF5Y3YeK8ZOqnAXZgYhwmmEl
-         rUKw==
-X-Gm-Message-State: AGi0PubIIBYkz5RrhWZPO1CccC736FhT191fq6otETaXmFMMFCKUSLta
-        aK+OEB0yy/rTpKNhx6WcqkHC4ZJJi4tnjwf34ETPDw==
-X-Google-Smtp-Source: APiQypLzxBThAvbjBG4L6Cm3iSVLL2rrA5MTmxJNo193/7FlGLhUGQ6bHd6XcntGhMaIqE80CJjh4MfFI/OBmb/9ZyI=
-X-Received: by 2002:a17:902:8ec1:: with SMTP id x1mr1503078plo.325.1586467004720;
- Thu, 09 Apr 2020 14:16:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E7oerwfYi5D6aB3fBRGjdjpq86Nisdn+2mRbfBbXTfU=;
+        b=sfrHn82/4DuCToEKzWqlNiKQyVYzxAh2MVp3RQb48E3Izc6XXYar+ftWgS1Nm0yZez
+         tnC39fdGRf5SQsuYBF6xcVXNAGP7CDKt5Ms3moodkqGpCSYvD/BdCHT5qs99hHxrxC6q
+         q6i3eQ9NVlsZ33Pja/cQlaUkJNcNBVvzsd0LNfJcgse8v2kJ4OyeV3dLiaalAcWFgQx6
+         UosuxKXUqcGy+BIgCb7sAfA1JtnEIFmx7uI6QX1IzAqwVPtjEmQXDsf5m3Dqv9PMESCb
+         Wt/KKtPU5q1DmMFeKBnF3O7hSz/w+x/y95mcmHXSlQzFEy7QPMQADBACbXdf691UEPrq
+         j3nA==
+X-Gm-Message-State: AGi0PuZvxSw+PB0uvql2DMQXhjgNWjzpkPctK7i+5dEfHtcMLiWOHm1u
+        1R2OxNeutyRRSkUEUDJia7I=
+X-Google-Smtp-Source: APiQypLx6tpBwq1ESB5a/v9Jfy67kJSS8eDEfS8yyo1v7N3QPavr4CycWzemkRx3nWFUg0DmIfNoGg==
+X-Received: by 2002:a5d:5273:: with SMTP id l19mr1177148wrc.42.1586467677193;
+        Thu, 09 Apr 2020 14:27:57 -0700 (PDT)
+Received: from 0339e8fc5325.v.cablecom.net ([45.87.212.59])
+        by smtp.gmail.com with ESMTPSA id i25sm2122480wml.43.2020.04.09.14.27.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2020 14:27:56 -0700 (PDT)
+From:   Lothar Rubusch <l.rubusch@gmail.com>
+To:     brendanhiggins@google.com, corbet@lwn.net
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Lothar Rubusch <l.rubusch@gmail.com>
+Subject: [PATCH v3] Documentation: test.h - fix warnings
+Date:   Thu,  9 Apr 2020 21:27:37 +0000
+Message-Id: <20200409212737.1943-1-l.rubusch@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20200408205024.22119-1-l.rubusch@gmail.com> <CAFd5g47O07Gk6BixQV6iQpcERU_xVbBtRaUyXGaOO7Axcma+iQ@mail.gmail.com>
- <CAFXKEHY0pBmUhEMAVgOJ+zzaxWxEFcGQqa7ry+qF30wWs5=B4w@mail.gmail.com>
- <CAFd5g47037poE7w6GUasV90-BNBMcg0+uCQjikqpCuYwDJ4euw@mail.gmail.com> <CAFXKEHYU-t2Xt_Q9-CN=G_v17_jj1mO1bBcA7mtYFq0zxyus2Q@mail.gmail.com>
-In-Reply-To: <CAFXKEHYU-t2Xt_Q9-CN=G_v17_jj1mO1bBcA7mtYFq0zxyus2Q@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 9 Apr 2020 14:16:33 -0700
-Message-ID: <CAFd5g445TiNfTD3bMnqgtts0iGsb9tFnzK6CyMjcW_9hcsG+dQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: test.h - fix warnings
-To:     Lothar Rubusch <l.rubusch@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 9, 2020 at 1:51 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
->
-> On Thu, Apr 9, 2020 at 10:00 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > On Wed, Apr 8, 2020 at 2:17 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
-> > >
-> > > On Wed, Apr 8, 2020 at 10:56 PM Brendan Higgins
-> > > <brendanhiggins@google.com> wrote:
-> > > >
-> > > > On Wed, Apr 8, 2020 at 1:50 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
+Fix warnings at 'make htmldocs', and formatting issues in the resulting
+documentation.
 
-[...]
+- test.h: Fix some typos in kernel-doc parameter description.
 
-> > > > > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > > > > index 9b0c46a6ca1f..16d548b795b5 100644
-> > > > > --- a/include/kunit/test.h
-> > > > > +++ b/include/kunit/test.h
-> > > > > @@ -175,7 +175,7 @@ struct kunit_suite {
-> > > > >         void (*exit)(struct kunit *test);
-> > > > >         struct kunit_case *test_cases;
-> > > > >
-> > > > > -       /* private - internal use only */
-> > > > > +       /* private: internal use only */
-> > > > >         struct dentry *debugfs;
-> > > > >         char *log;
-> > > > >  };
-> > > > > @@ -232,7 +232,8 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
-> > > > >   * kunit_test_suites() - used to register one or more &struct kunit_suite
-> > > > >   *                      with KUnit.
-> > > > >   *
-> > > > > - * @suites: a statically allocated list of &struct kunit_suite.
-> > > > > + * @...: a statically allocated list of &struct kunit_suite, assigned
-> > > > > + *           to the pointer @suites.
-> > > > >   *
-> > > > >   * Registers @suites with the test framework. See &struct kunit_suite for
-> > > >
-> > > > Can you change the @suites param here to match @...?
-> > >
-> > > You mean, in "Registers @suites with the test framework" to something
-> > > rather like "Registers @... with"?
-> > > Hum, franckly I think, in the documentation it reads better having the
-> > > name "suites", that's why I tried to
-> > > append a hint, that a passed list of struct kunit_suite initializes
-> > > the pointer "suites". Then further in the doc
-> > > refered as suites, I think it becomes clear. But let me know. Shall I
-> > > use @... instead?
-> >
-> > I agree that it doesn't read as well, but I like having the proper
-> > syntax highlighting and consistent naming over a mix and match.
->
-> I'll have another look on the syntax highlighting, leave out the api page
-> removal and then resubmit. No problem. Thank you for all your patience!!
-> I really appreciate if I can contribute to something!
->
->
-> > Another alternative would be to replace `...` with `suites...` and
-> > then @suites should work.
-> >
-> > Either way is fine with me; it's a nasty macro anyway.
->
-> Yeah, that's what I read in the kernel-doc perl, too. Changing '...'
-> to 'suites...'
-> is a code change, though. Possible, but IMHO would be a different patch.
+- Documentation/*.rst: Fixing formatting issues, and a duplicate label
+  issue, since using sphinx.ext.autosectionlabel in conf.py, referes to
+  headers are generated automatically and sphinx will not complain about
+  identical headers among documents anymore.
 
-Good thought; that would usually be true most likely; however, in this
-case the documentation issue is in a comment in a code file, so no
-matter how you look at it, it is a code change. Also, it's such a
-minor change and since most of the KUnit code and documentation
-changes both go through the KUnit branch of the Kselftest tree anyway,
-so I think it's fine to just keep it all in one patch.
+  The downside is, automatically generated header labels within one
+  document now cannot be overwritten manually anymore. Thus duplicate
+  headers within one document have to have different wording, i.e. this
+  patch modifies some headers.
 
-> Actually, should we fix up the code for having a nicer documentation?!!
+- Documentation/api/*: Flipping over to a page "API" containing a single
+  link to another page "API" seems like a formatting issue. The patch
+  removes one level of indirection.
 
-Yes! Or at least I think so. Good documentation can be just as
-important, even more important than good code. I know there are plenty
-of developers that disagree with me on this point, but given what we
-are trying to do with KUnit, I say we are actually one of the places
-where our documentation is of utmost importance.
+v2: Several documentation fixes
 
-Still, great question to ask. Different kernel developers feel very
-differently about this point, and with good reason: some parts of the
-kernel will only really be used by people who can be expected to read
-all the relevant code, whereas other parts of the kernel may be used
-directly by a huge number of people most of which can't be expected to
-read all the code. It would make sense that these two groups of people
-would find different value in documentation.
+v3: Do not touch API documentation index
 
-> Somehow this feels like the next patches should go rather to sphinx/kernel-doc.
+Signed-off-by: Lothar Rubusch <l.rubusch@gmail.com>
+---
+ Documentation/dev-tools/kunit/start.rst | 13 ++++++++-----
+ Documentation/dev-tools/kunit/usage.rst |  4 ++--
+ include/kunit/test.h                    |  7 ++++---
+ 3 files changed, 14 insertions(+), 10 deletions(-)
 
-Not sure what you mean by this.
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index e1c5ce80ce12..bb112cf70624 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -32,15 +32,17 @@ test targets as well. The ``.kunitconfig`` should also contain any other config
+ options required by the tests.
+ 
+ A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
++
+ .. code-block:: bash
+ 
+ 	cd $PATH_TO_LINUX_REPO
+ 	cp arch/um/configs/kunit_defconfig .kunitconfig
+ 
+ You can then add any other Kconfig options you wish, e.g.:
++
+ .. code-block:: none
+ 
+-        CONFIG_LIST_KUNIT_TEST=y
++	CONFIG_LIST_KUNIT_TEST=y
+ 
+ :doc:`kunit_tool <kunit-tool>` will ensure that all config options set in
+ ``.kunitconfig`` are set in the kernel ``.config`` before running the tests.
+@@ -54,8 +56,8 @@ using.
+    other tools (such as make menuconfig) to adjust other config options.
+ 
+ 
+-Running the tests
+------------------
++Running the tests (KUnit Wrapper)
++---------------------------------
+ 
+ To make sure that everything is set up correctly, simply invoke the Python
+ wrapper from your kernel repo:
+@@ -105,8 +107,9 @@ have config options ending in ``_KUNIT_TEST``.
+ KUnit and KUnit tests can be compiled as modules: in this case the tests in a
+ module will be run when the module is loaded.
+ 
+-Running the tests
+------------------
++
++Running the tests (w/o KUnit Wrapper)
++-------------------------------------
+ 
+ Build and run your kernel as usual. Test output will be written to the kernel
+ log in `TAP <https://testanything.org/>`_ format.
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 473a2361ec37..3c3fe8b5fecc 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -595,7 +595,7 @@ able to run one test case per invocation.
+ KUnit debugfs representation
+ ============================
+ When kunit test suites are initialized, they create an associated directory
+-in /sys/kernel/debug/kunit/<test-suite>.  The directory contains one file
++in ``/sys/kernel/debug/kunit/<test-suite>``.  The directory contains one file
+ 
+ - results: "cat results" displays results of each test case and the results
+   of the entire suite for the last test run.
+@@ -604,4 +604,4 @@ The debugfs representation is primarily of use when kunit test suites are
+ run in a native environment, either as modules or builtin.  Having a way
+ to display results like this is valuable as otherwise results can be
+ intermixed with other events in dmesg output.  The maximum size of each
+-results file is KUNIT_LOG_SIZE bytes (defined in include/kunit/test.h).
++results file is KUNIT_LOG_SIZE bytes (defined in ``include/kunit/test.h``).
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 9b0c46a6ca1f..b8a8434443b0 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -175,7 +175,7 @@ struct kunit_suite {
+ 	void (*exit)(struct kunit *test);
+ 	struct kunit_case *test_cases;
+ 
+-	/* private - internal use only */
++	/* private: internal use only */
+ 	struct dentry *debugfs;
+ 	char *log;
+ };
+@@ -232,12 +232,13 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+  * kunit_test_suites() - used to register one or more &struct kunit_suite
+  *			 with KUnit.
+  *
+- * @suites: a statically allocated list of &struct kunit_suite.
++ * @...: a statically allocated list of &struct kunit_suite, assigned
++ *           to the pointer @suites.
+  *
+  * Registers @suites with the test framework. See &struct kunit_suite for
+  * more information.
+  *
+- * When builtin,  KUnit tests are all run as late_initcalls; this means
++ * When builtin, KUnit tests are all run as late_initcalls; this means
+  * that they cannot test anything where tests must run at a different init
+  * phase. One significant restriction resulting from this is that KUnit
+  * cannot reliably test anything that is initialize in the late_init phase;
+-- 
+2.20.1
 
-> Anyway, this patch is all about documentation.
-> A code change must be tested and verified and IMHO might be a different story.
-
-True, all code changes should be tested (I think all docs changes
-should be tested too :-) ), but testing this code here is really easy.
-You can test it with the following command:
-
-./tools/testing/kunit/kunit.py run --timeout=60 --jobs=8 --defconfig
-
->
-> Happy Easter!
-
-Happy Easter!
