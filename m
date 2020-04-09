@@ -2,177 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A104A1A3C3F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 00:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4209F1A3C67
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 00:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727033AbgDIWJ1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Apr 2020 18:09:27 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:52516 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727009AbgDIWJ0 (ORCPT
+        id S1726725AbgDIW3K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Apr 2020 18:29:10 -0400
+Received: from mail-yb1-f201.google.com ([209.85.219.201]:47565 "EHLO
+        mail-yb1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726679AbgDIW3K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 18:09:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586470166;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=2/vT38a92CxMDV5AySIIMoRmqL/zw+wuSd/gBRwuZNI=;
-        b=HysT26o22kYZmbhSvUdKjg5gN38/iwvsPdTmK+EnwTxCiNSBM8DbhVqalFvJmaRY/iCCuE
-        RTqvT3AoTlHh2u5+/b5nLqD0ANpkHpZBBD3AFO4U0G7dixmVigtSEpwy6zvOQmhhQ0Cz17
-        XxTPbq5ahAxoeVWC6REe8Nzp4xwwSEA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-277-hT0rB7c6MXSRdmznRLPhhA-1; Thu, 09 Apr 2020 18:09:24 -0400
-X-MC-Unique: hT0rB7c6MXSRdmznRLPhhA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 126988017F5;
-        Thu,  9 Apr 2020 22:09:23 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-116-15.gru2.redhat.com [10.97.116.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 77FD19D348;
-        Thu,  9 Apr 2020 22:09:19 +0000 (UTC)
-From:   Wainer dos Santos Moschetta <wainersm@redhat.com>
-To:     pbonzini@redhat.com, kvm@vger.kernel.org
-Cc:     drjones@redhat.com, david@redhat.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, krish.sadhukhan@oracle.com
-Subject: [PATCH v5 2/2] selftests: kvm: Add mem_slot_test test
-Date:   Thu,  9 Apr 2020 19:09:05 -0300
-Message-Id: <20200409220905.26573-3-wainersm@redhat.com>
-In-Reply-To: <20200409220905.26573-1-wainersm@redhat.com>
-References: <20200409220905.26573-1-wainersm@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        Thu, 9 Apr 2020 18:29:10 -0400
+Received: by mail-yb1-f201.google.com with SMTP id 187so616991ybk.14
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2020 15:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=b/dOwLUQ4awW4wuKHSakVt1acQwI+Qy4HT+dV/1grog=;
+        b=hfIVKWB9CrLwkogy2lQycBLjkgKykYZdXEoOucLUgnRzUanF+7JiWU8/NvmVGRVWLb
+         +APd/xNaW/JS89RTqAYHh4LEWmIzgZrzaTo1B5PZlOZDnOljuapxKPZx5OwP4hUKqnoS
+         I0smuTEqekWowtpi9u0JCFtSASGRFiWwnVzw+CV71ZIVQR/KcfLpIVyj70/Eteztc3iR
+         td6cq8g7YsvT7FFJ1wHPbx6711Y7o5p194BZJGXNZ4OdHiVgdehvjB32k8H13eCPp882
+         xAnwSpKo6bFo0TCtggzMAHtd6g2Fdc0/LCrmBhjFuz16MrcBUn9yp9Qr9BgFFJBl2FRa
+         4eWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=b/dOwLUQ4awW4wuKHSakVt1acQwI+Qy4HT+dV/1grog=;
+        b=DXKHJlEvZp1+pLMOt9KobirO4RZz+0mfGEtlqo89kNxkRldU2ORPXlDe7UYw708xJX
+         Hwjl2xxcn8J5R4dq9kSMWTAmAzCu92wzDa1xuFFhmHRIYKkYlffG5TR9r3WrXfcZCdZR
+         xixO1NcwizhQnib/PkeAxWTcHvq+9nHXg9l5Bo5sC9o1W+Uh7LJps7t2PUPV6uAcHgM2
+         QzWwhsb8HLFBgkIr3Hq/lKW2Ngi+1x7mb7FNLp3ZZrJbw1Re0UnADdVCFD9U3/QZkHMM
+         owp45wvu2Ox/Wm9KyLGzJxpLBclXLO2WgExxU03WCnEYZGfbsGM6PeEOuQsBz1x3ELa6
+         z1Ig==
+X-Gm-Message-State: AGi0PuarsWY8m2RfugC6bYmdMOyHPJAJ1XPLnKIuNm1bukYrVbzmq0LQ
+        7+l7MG/olPaNJV9n+aDy16AW23xlK8tUzqqqacuaQQ==
+X-Google-Smtp-Source: APiQypL0JMSLASw3TiGOXOIT90FuwqpyH1o4LzS3LkTNHHKAR/YLE8LjcXI7t2Xw+OUppoTbkFA+zzYem8vjJZvmOz0WWA==
+X-Received: by 2002:a05:6902:4c2:: with SMTP id v2mr3076158ybs.225.1586471349465;
+ Thu, 09 Apr 2020 15:29:09 -0700 (PDT)
+Date:   Thu,  9 Apr 2020 15:28:50 -0700
+Message-Id: <20200409222850.238805-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.0.110.g2183baf09c-goog
+Subject: [PATCH v1] kunit: relax regex for .config entries to allow spaces
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah@kernel.org, davidgow@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces the mem_slot_test test which checks
-an VM can have added memory slots up to the limit defined in
-KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
-verify it fails as expected.
+From: Daniel Latypov <dlatypov@google.com>
 
-Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
-Reviewed-by: Andrew Jones <drjones@redhat.com>
+kunit parses .config in the `build_reconfig()` of `run_tests()`.
+Problematically, the current regex '^CONFIG_\w+=\S+$' does not allow for
+spaces anywhere after the "=", even the option is a string.
+
+So kunit will refuse to run if the existing .config has something like
+  CONFIG_CMDLINE="something and_something_else"
+even if kunit.py will drop this entry when it regenerates the .config!
+
+So relax the regex to allow entries that match `CONFIG_\w+=".*"` as a
+minimal change. The question remains as to whether we should do any
+validation of the string after the "=", however.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- tools/testing/selftests/kvm/.gitignore      |  1 +
- tools/testing/selftests/kvm/Makefile        |  3 +
- tools/testing/selftests/kvm/mem_slot_test.c | 69 +++++++++++++++++++++
- 3 files changed, 73 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
+ tools/testing/kunit/kunit_config.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 16877c3daabf..127d27188427 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -21,4 +21,5 @@
- /demand_paging_test
- /dirty_log_test
- /kvm_create_max_vcpus
-+/mem_slot_test
- /steal_time
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 712a2ddd2a27..338b6cdce1a0 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -32,12 +32,14 @@ TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
- TEST_GEN_PROGS_x86_64 += demand_paging_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
- TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-+TEST_GEN_PROGS_x86_64 += mem_slot_test
- TEST_GEN_PROGS_x86_64 += steal_time
+diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+index e75063d603b5..0733796b0e32 100644
+--- a/tools/testing/kunit/kunit_config.py
++++ b/tools/testing/kunit/kunit_config.py
+@@ -10,7 +10,7 @@ import collections
+ import re
  
- TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
- TEST_GEN_PROGS_aarch64 += demand_paging_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
-+TEST_GEN_PROGS_aarch64 += mem_slot_test
- TEST_GEN_PROGS_aarch64 += steal_time
+ CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+-CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+)$'
++CONFIG_PATTERN = r'^CONFIG_(\w+)=(".*"|\S+)$'
  
- TEST_GEN_PROGS_s390x = s390x/memop
-@@ -46,6 +48,7 @@ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
- TEST_GEN_PROGS_s390x += demand_paging_test
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-+TEST_GEN_PROGS_s390x += mem_slot_test
+ KconfigEntryBase = collections.namedtuple('KconfigEntry', ['name', 'value'])
  
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
-new file mode 100644
-index 000000000000..3cab22fa6bd6
---- /dev/null
-+++ b/tools/testing/selftests/kvm/mem_slot_test.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * mem_slot_test
-+ *
-+ * Copyright (C) 2020, Red Hat, Inc.
-+ *
-+ * Test suite for memory region operations.
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <linux/kvm.h>
-+#include <sys/mman.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+
-+/*
-+ * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
-+ * tentative to add further slots should fail.
-+ */
-+static void test_add_max_slots(void)
-+{
-+	int ret;
-+	struct kvm_vm *vm;
-+	uint32_t max_mem_slots;
-+	uint32_t slot;
-+	uint64_t guest_addr = 0x0;
-+	uint64_t mem_reg_npages;
-+	uint64_t mem_reg_size = 0x100000; /* Aligned 1MB is needed for s390x */
-+	void *mem;
-+
-+	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-+	TEST_ASSERT(max_mem_slots > 0,
-+		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
-+	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
-+
-+	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-+
-+	mem_reg_npages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, mem_reg_size);
-+
-+	/* Check it can be added memory slots up to the maximum allowed */
-+	pr_info("Adding slots 0..%i, each memory region with %ldK size\n",
-+		(max_mem_slots - 1), mem_reg_size >> 10);
-+	for (slot = 0; slot < max_mem_slots; slot++) {
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+					    guest_addr, slot, mem_reg_npages,
-+					    0);
-+		guest_addr += mem_reg_size;
-+	}
-+
-+	/* Check it cannot be added memory slots beyond the limit */
-+	mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "Failed to mmap() host");
-+
-+	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION,
-+		    &(struct kvm_userspace_memory_region) {slot, 0, guest_addr,
-+		    mem_reg_size, (uint64_t) mem});
-+	TEST_ASSERT(ret == -1 && errno == EINVAL,
-+		    "Adding one more memory slot should fail with EINVAL");
-+
-+	munmap(mem, mem_reg_size);
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	test_add_max_slots();
-+	return 0;
-+}
+
+base-commit: c0cc271173b2e1c2d8d0ceaef14e4dfa79eefc0d
 -- 
-2.17.2
+2.26.0.110.g2183baf09c-goog
 
