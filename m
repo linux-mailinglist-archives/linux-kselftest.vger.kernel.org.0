@@ -2,192 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 153EF1A311F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Apr 2020 10:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADDF1A3170
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Apr 2020 11:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgDIIoE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Apr 2020 04:44:04 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:36235 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725783AbgDIIoC (ORCPT
+        id S1725862AbgDIJBo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Apr 2020 05:01:44 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39178 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726470AbgDIJBl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 04:44:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586421842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uQKpffnCoC6BT0R2gqVX5COY810824MTw4KX1Q4Nozs=;
-        b=VxRdrVTB7It40w94UO4dG39fHZtM4N7VYjGJJz/nJKJ6m1mm34mQ82DznhpR1XIVb/ONDc
-        XkTI+yb1jRGqwqG4WCKGa4jsKrejrhQNvsAZKc7W9kKftqab6jaKqt/rYa2R3APGaMndCp
-        JvbcQQ7q6W/5Qk37XNRmcNr93KU+9ac=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-197-3mGfnDCcNgKxAe1hYT61mg-1; Thu, 09 Apr 2020 04:43:58 -0400
-X-MC-Unique: 3mGfnDCcNgKxAe1hYT61mg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6FDA685EE6B;
-        Thu,  9 Apr 2020 08:43:57 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.40.194.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F1F5D5E037;
-        Thu,  9 Apr 2020 08:43:50 +0000 (UTC)
-Date:   Thu, 9 Apr 2020 10:43:47 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Wainer dos Santos Moschetta <wainersm@redhat.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org, david@redhat.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] selftests: kvm: Add mem_slot_test test
-Message-ID: <20200409084347.267pvadbgjmh4wyk@kamzik.brq.redhat.com>
-References: <20200408220818.4306-1-wainersm@redhat.com>
- <20200408220818.4306-3-wainersm@redhat.com>
+        Thu, 9 Apr 2020 05:01:41 -0400
+Received: by mail-lf1-f67.google.com with SMTP id m2so7326247lfo.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Apr 2020 02:01:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=bL9ifUNW59crmzsbt6dLo+loyDPtO9QCB/tGi8Xv10s=;
+        b=yit1NHNGe2LMUd6uNWHOj/JoYnC//4fbuMT69yswwnLXwr/x/l8GKovnWAwpEbD+fn
+         hHekbdd4URx8tlZPLkkaHboAvu8zSZYZ/SzQoxZG3AHKgiRS/cYIo2/qEORnXX0Vvvo5
+         mOOfG9pxdE2RcEgM3c64JAXbtPhrBhyxHg5uzfezcvr8ZAzCh2lk+yuZoxFGseUdaIE7
+         Q38il3/mkWwBj7pTVK9lacERVuhl/a+05OUEhMW5l9GHR8/l15N9q8o20HQmb1zanELy
+         bNxBgD6mvQmgGTzYDxND+ji8oAcQz1iBYZiKht+oWGgYYluryXuJwSgHyhp0/33CpMQ/
+         oW3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=bL9ifUNW59crmzsbt6dLo+loyDPtO9QCB/tGi8Xv10s=;
+        b=Ww9/zu7YhWCSsKXNixdEdluC1vvMswrXxOHKfFbLtN9ircNNnIvp7ioxMIo/JaITVB
+         ctT6S8+47ecccDEp8d90uFj4KAuyMZDofCAkqA2k8kt2fsNULEXEadMUkRxyo+C4omsW
+         SVXKY/wKtb148zw9J2JYsD6S9FlvjGe6FSInX7psFtGH8VfDZTawKTjBNrb2loKlfu77
+         9Rj4ZHXGAyEHKMvfS8MoytSMSZwrQ69mVwrE9YleeDFdYLgIJuCsmPf3+A7Zi35AvfaE
+         hJ/UZh1A4IAXGKGb7Q42hR4RbgHAEPxmw18i9Ddzqi9kMkM6n/n+6sKMZWKXj6EX2o37
+         iCsw==
+X-Gm-Message-State: AGi0PuZ5Bgj4BBI+mRk4o/HT3JODNSegwIvWSoc8CBeT2O1VzEmzyqtY
+        FdE/ai2AjmFF3LzYIQyN1X/5jA+QhCMx7IEHIoTiMKPnxDo=
+X-Google-Smtp-Source: APiQypKELkgKiHNjicowPErrJEQbXbFPe6vvVay3gM3VtClfJFqU4xTmZR5uCDhTkctQxTqVbbHKgZL59q1r5hl9XvM=
+X-Received: by 2002:a19:c64b:: with SMTP id w72mr7087057lff.82.1586422896545;
+ Thu, 09 Apr 2020 02:01:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200408220818.4306-3-wainersm@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 9 Apr 2020 14:31:24 +0530
+Message-ID: <CA+G9fYtMupyHuEsdUwSGQu6czFO7xhe45Km_=DJ8P1v7wpto7Q@mail.gmail.com>
+Subject: memfd/fuse_test: BUG: kernel NULL pointer dereference, address: 00000041
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linux-fsdevel@vger.kernel.org
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Hugh Dickins <hughd@google.com>, ngeoffray@google.com,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, miklos@szeredi.hu,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 07:08:18PM -0300, Wainer dos Santos Moschetta wrote:
-> This patch introduces the mem_slot_test test which checks
-> an VM can have added memory slots up to the limit defined in
-> KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
-> verify it fails as expected.
-> 
-> Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
-> ---
->  tools/testing/selftests/kvm/.gitignore      |  1 +
->  tools/testing/selftests/kvm/Makefile        |  3 +
->  tools/testing/selftests/kvm/mem_slot_test.c | 76 +++++++++++++++++++++
->  3 files changed, 80 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 16877c3daabf..127d27188427 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -21,4 +21,5 @@
->  /demand_paging_test
->  /dirty_log_test
->  /kvm_create_max_vcpus
-> +/mem_slot_test
->  /steal_time
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 712a2ddd2a27..338b6cdce1a0 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -32,12 +32,14 @@ TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
->  TEST_GEN_PROGS_x86_64 += demand_paging_test
->  TEST_GEN_PROGS_x86_64 += dirty_log_test
->  TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_x86_64 += mem_slot_test
->  TEST_GEN_PROGS_x86_64 += steal_time
->  
->  TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
->  TEST_GEN_PROGS_aarch64 += demand_paging_test
->  TEST_GEN_PROGS_aarch64 += dirty_log_test
->  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_aarch64 += mem_slot_test
->  TEST_GEN_PROGS_aarch64 += steal_time
->  
->  TEST_GEN_PROGS_s390x = s390x/memop
-> @@ -46,6 +48,7 @@ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
->  TEST_GEN_PROGS_s390x += demand_paging_test
->  TEST_GEN_PROGS_s390x += dirty_log_test
->  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-> +TEST_GEN_PROGS_s390x += mem_slot_test
->  
->  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
->  LIBKVM += $(LIBKVM_$(UNAME_M))
-> diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
-> new file mode 100644
-> index 000000000000..7c1009f0bc07
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/mem_slot_test.c
-> @@ -0,0 +1,76 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * mem_slot_test
-> + *
-> + * Copyright (C) 2020, Red Hat, Inc.
-> + *
-> + * Test suite for memory region operations.
-> + */
-> +#define _GNU_SOURCE /* for program_invocation_short_name */
-> +#include <linux/kvm.h>
-> +#include <sys/mman.h>
-> +
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +
-> +/*
-> + * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
-> + * tentative to add further slots should fail.
-> + */
-> +static void test_add_max_slots(void)
-> +{
-> +	int ret;
-> +	struct kvm_vm *vm;
-> +	uint32_t max_mem_slots;
-> +	uint32_t slot;
-> +	uint64_t guest_addr;
-> +	uint64_t mem_reg_npages;
-> +	uint64_t mem_reg_size;
-> +	void *mem;
-> +
-> +	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-> +	TEST_ASSERT(max_mem_slots > 0,
-> +		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
-> +	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
-> +
-> +	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-> +
-> +	/*
-> +	 * Uses 1MB sized/aligned memory region since this is the minimal
-> +	 * required on s390x.
-> +	 */
-> +	mem_reg_size = 0x100000;
-> +	mem_reg_npages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, mem_reg_size);
-> +
-> +	guest_addr = 0x0;
-> +
-> +	/* Check it can be added memory slots up to the maximum allowed */
-> +	pr_info("Adding slots 0..%i, each memory region with %ldK size\n",
-> +		(max_mem_slots - 1), mem_reg_size >> 10);
-> +	for (slot = 0; slot < max_mem_slots; slot++) {
-> +		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-> +					    guest_addr, slot, mem_reg_npages,
-> +					    0);
-> +		guest_addr += mem_reg_size;
-> +	}
-> +
-> +	/* Check it cannot be added memory slots beyond the limit */
-> +	mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
-> +		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	TEST_ASSERT(mem != MAP_FAILED, "Failed to mmap() host");
-> +
-> +	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION,
-> +		    &(struct kvm_userspace_memory_region) {slot, 0, guest_addr,
-> +		    mem_reg_size, (uint64_t) mem});
-> +	TEST_ASSERT(ret == -1 && errno == EINVAL,
-> +		    "Adding one more memory slot should fail with EINVAL");
-> +
-> +	munmap(mem, mem_reg_size);
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	test_add_max_slots();
-> +	return 0;
-> +}
-> -- 
-> 2.17.2
->
+While running kselftest memfd fuse_test test case kernel BUG found on
+i386 kernel running x86_64 device running Linux-next
+5.6.0-next-20200408 kernel version.
 
-Reviewed-by: Andrew Jones <drjones@redhat.com>
+Linux version 5.6.0-next-20200408 (oe-user@oe-host) (gcc version 7.3.0
+(GCC), GNU ld (GNU Binutils) 2.30.0.20180208) #1 SMP Wed Apr 8
+04:48:57 UTC 2020
+<>
+[  452.885727] kselftest: Running tests in memfd
+[  452.974683] audit: type=1701 audit(1586366703.840:87435):
+auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=13617
+comm=\"fuse_test\"
+exe=\"/opt/kselftests/default-in-kernel/memfd/fuse_test\" sig=6 res=1
+[  452.975400] BUG: kernel NULL pointer dereference, address: 00000041
+[  452.999344] #PF: supervisor read access in kernel mode
+[  453.004475] #PF: error_code(0x0000) - not-present page
+[  453.009605] *pde = 00000000
+[  453.012482] Oops: 0000 [#2] SMP
+[  453.015619] CPU: 1 PID: 13617 Comm: fuse_test Tainted: G      D W
+      5.6.0-next-20200408 #1
+[  453.024388] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[  453.031862] EIP: __kmalloc+0xa2/0x310
+[  453.035525] Code: 9c 01 00 00 89 75 e4 8b 07 64 8b 50 04 64 03 05
+d8 92 bd cb 8b 08 85 c9 89 4d f0 0f 84 07 02 00 00 8b 75 f0 8b 47 14
+8d 4a 01 <8b> 1c 06 89 f0 8b 37 64 0f c7 0e 75 d0 8b 75 e4 8b 47 14 0f
+18 04
+[  453.054264] EAX: 00000040 EBX: 00000cc0 ECX: 000045c3 EDX: 000045c2
+[  453.060519] ESI: 00000001 EDI: f5403680 EBP: e1effcb8 ESP: e1effc98
+[  453.066776] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00010202
+[  453.073555] CR0: 80050033 CR2: 00000041 CR3: 216ee000 CR4: 003406d0
+[  453.079812] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  453.086067] DR6: fffe0ff0 DR7: 00000400
+[  453.089898] Call Trace:
+[  453.092345]  ? elf_core_dump+0x520/0x16a0
+[  453.096357]  elf_core_dump+0x520/0x16a0
+[  453.100215]  ? kmem_cache_free+0xeb/0x2e0
+[  453.104236]  do_coredump+0x617/0x1070
+[  453.107911]  ? trace_hardirqs_off+0x1d/0xf0
+[  453.112095]  ? lock_acquire+0x81/0x320
+[  453.115850]  get_signal+0xaa8/0xb40
+[  453.119341]  do_signal+0x23/0x630
+[  453.122659]  ? _raw_spin_unlock_irq+0x22/0x30
+[  453.127019]  ? __set_current_blocked+0x47/0x50
+[  453.131468]  exit_to_usermode_loop+0x6a/0xd0
+[  453.135736]  do_fast_syscall_32+0x297/0x330
+[  453.139914]  entry_SYSENTER_32+0xaa/0x102
+[  453.143916] EIP: 0xb7f1bce1
+[  453.146706] Code: 5e 5d c3 8d b6 00 00 00 00 b8 40 42 0f 00 eb c1
+8b 04 24 c3 8b 1c 24 c3 8b 34 24 c3 8b 3c 24 c3 90 51 52 55 89 e5 0f
+34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
+8d 76
+[  453.165444] EAX: 00000000 EBX: 00000002 ECX: bfb63cc0 EDX: 00000000
+[  453.171700] ESI: 00000008 EDI: 00000000 EBP: bfb63cc0 ESP: bfb63cb0
+[  453.177957] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
+[  453.184737] Modules linked in: test_printf(+) cls_bpf sch_fq
+sch_ingress algif_hash x86_pkg_temp_thermal fuse [last unloaded:
+test_strscpy]
+[  453.197292] CR2: 0000000000000041
+[  453.200612] ---[ end trace 4ae6b60cdb1cebfa ]---
+[  453.205222] EIP: ida_free+0x61/0x130
+[  453.208794] Code: 00 c7 45 e8 00 00 00 00 c7 45 ec 00 00 00 00 0f
+88 c4 00 00 00 89 d3 e8 6d 60 8a 00 89 c7 8d 45 d8 e8 c3 1a 01 00 a8
+01 75 3f <0f> a3 30 72 72 8b 45 d8 89 fa e8 40 62 8a 00 53 68 e8 db 80
+cb e8
+[  453.227529] EAX: 00000000 EBX: 00000000 ECX: f37c3540 EDX: 00000000
+[  453.233787] ESI: 00000000 EDI: 00000246 EBP: e1e75cdc ESP: e1e75cb0
+[  453.240043] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00010046
+[  453.246820] CR0: 80050033 CR2: 00000041 CR3: 216ee000 CR4: 003406d0
+[  453.253077] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  453.259334] DR6: fffe0ff0 DR7: 00000400
+[  453.263176] BUG: sleeping function called from invalid context at
+/usr/src/kernel/include/linux/percpu-rwsem.h:49
+[  453.273445] in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid:
+13617, name: fuse_test
+[  453.281615] INFO: lockdep is turned off.
+[  453.285533] irq event stamp: 0
+[  453.288585] hardirqs last  enabled at (0): [<00000000>] 0x0
+[  453.294173] hardirqs last disabled at (0): [<ca6ed9ea>]
+copy_process+0x3ea/0x17d0
+[  453.301672] softirqs last  enabled at (0): [<ca6ed9ea>]
+copy_process+0x3ea/0x17d0
+[  453.309172] softirqs last disabled at (0): [<00000000>] 0x0
+[  453.314741] CPU: 1 PID: 13617 Comm: fuse_test Tainted: G      D W
+      5.6.0-next-20200408 #1
+[  453.323519] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[  453.330988] Call Trace:
+[  453.333435]  dump_stack+0x6e/0x96
+[  453.336754]  ___might_sleep+0x14d/0x240
+[  453.340592]  __might_sleep+0x33/0x80
+[  453.344173]  exit_signals+0x2a/0x2d0
+[  453.347750]  do_exit+0x8e/0xb40
+[  453.350889]  ? exit_to_usermode_loop+0x6a/0xd0
+[  453.355336]  rewind_stack_do_exit+0x11/0x13
+[  453.359519] EIP: 0xb7f1bce1
+[  453.362308] Code: 5e 5d c3 8d b6 00 00 00 00 b8 40 42 0f 00 eb c1
+8b 04 24 c3 8b 1c 24 c3 8b 34 24 c3 8b 3c 24 c3 90 51 52 55 89 e5 0f
+34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
+8d 76
+[  453.381044] EAX: 00000000 EBX: 00000002 ECX: bfb63cc0 EDX: 00000000
+[  453.387303] ESI: 00000008 EDI: 00000000 EBP: bfb63cc0 ESP: bfb63cb0
+[  453.393560] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
 
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-core2-32/lkft/linux-next/745/config
+
+Full test log,
+https://lkft.validation.linaro.org/scheduler/job/1352031#L10567
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
