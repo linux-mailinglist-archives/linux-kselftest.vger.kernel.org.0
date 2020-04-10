@@ -2,197 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE461A4AB5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 21:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70DE1A4B1C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 22:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726263AbgDJTlT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Apr 2020 15:41:19 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:53923 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726203AbgDJTlT (ORCPT
+        id S1726687AbgDJU0V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Apr 2020 16:26:21 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43305 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726663AbgDJU0V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Apr 2020 15:41:19 -0400
-Received: by mail-pj1-f68.google.com with SMTP id l36so1138589pjb.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2020 12:41:19 -0700 (PDT)
+        Fri, 10 Apr 2020 16:26:21 -0400
+Received: by mail-pf1-f196.google.com with SMTP id l1so1472005pff.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2020 13:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5OvqZpMSxpDga8tOOgnXo4SkZH42ToDKFuwSO8UOXzk=;
-        b=Q6y07q886RK5lH9vSzLnampP7GAEl//DAgL/A/Y39qj2SNSE2Z4hGkLqU1o9Wb4l8s
-         M8pt0DTF+cmGDsKpVAJskD7BGUq2y0wc1M2V42uKkifyfIf5htwXJErvIhNahgbjGjbe
-         HrtWF5RmcxdQ0W9YxXJBS05SYFGjg+Nm1fY/sc6fttQmYCEoQPEwwVIYJUEsF527F5Bs
-         Li6Yi0oXbmyRxuyCfmSMydnwr+TpUY/utpbvfoo+Bn6PqAR1ouW/Ra9vtiS0qJ2m8RZe
-         PYs4GFUhsMf+o0upksaNGLln3nwMqedZl+RriM9ndjQsMmC6We3FIKOM64oW9P+cUUFQ
-         lqig==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pcawoXzVUnVmK13P4l97Pnws9LJgqOmSgo+Ma/dSWps=;
+        b=Rb6Q1NVncgv/6LrQjHpG/fCd/Eq6dDMbjtn14iX378Is2HtKxpf1KzcdRcUJQKpAjE
+         3jcUokjzBmfZ9DcloypWm67fUYTHSXQ6SvuNJv4raI7UAROw25onxDiiZ9BSo6QulpKp
+         4p05bqg7iV9Mh551htKgXjmTu+kRXOvAM+ZfI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5OvqZpMSxpDga8tOOgnXo4SkZH42ToDKFuwSO8UOXzk=;
-        b=aPqWyKuW894Bw45D/TuYdsW1MsDnliACH+jmhd0Bq3AzhJNsPYcj0XIeG/bBsZQQwQ
-         5lrTY9aNhMQWnNR0QKAVBu0f54b57hYOPfvzN5XLPk1PaQkiY/uDVckidLmvvD8yBABP
-         s95ZgH5bgIQD68F+4f1RnM9oQ6EcEg5nJmcEd5DB2b7sU1zt7ipL2sLot+A0VDRVlVRQ
-         Q8rmFDu6v1lGcWxTzgTOTzVn42dk/9BMu89VzWq0UZyqo/JplxmoZDs3YQfQPkQIkEqZ
-         NPDZpL9DXZhbB1WHpYIc/MhG3HMZNbqtor93dasvk1ERzCfcK5WRiO4KGjy8Y0RG9JQX
-         R33g==
-X-Gm-Message-State: AGi0PuasvF6M+vz0yaf6aA1JzS+gSzueRt5oH2n+quxygMXB0H9p4kNJ
-        BKtiLF1CxkmEQK/H+KY+ISRL7YIqo1cvomensHs=
-X-Google-Smtp-Source: APiQypKIJob2axNHWnUh+pQfoVUlyN394QVStQK2YbpymlVcYBNGz9NZaQKb9qBGidgT5nI4vdo+nG65FXR9V1ddAFU=
-X-Received: by 2002:a17:902:8546:: with SMTP id d6mr6118772plo.280.1586547678699;
- Fri, 10 Apr 2020 12:41:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pcawoXzVUnVmK13P4l97Pnws9LJgqOmSgo+Ma/dSWps=;
+        b=sLrEHsHNsbUfBh8RS4lY9mBuTPaVYlH9AVin4w6r7J09CukDzVoZ9AFnH//HaqtHFk
+         K0r6Gjk5Gxr7t5+TlfMemDpDpqojqLVjHjJMxrZNHUjsd/F85vTDdpqz0TVLR8TcNAt2
+         G+Gx+ZpRwMGD1sfjBFBlrYzNqbCM8vicr0mfp9PY9TGXqwtsBADIvn4WMUyB9ajUeuha
+         6N6cV1bSL8d6JltwCUjRxMsDN/NtmxyP0ExjOEY2KE7ZS/ZhtZ/gRlHj4rR01pkWl150
+         r5g6kzGctg/fgZxmqRh9fewopsOGQYvA2v6VmAOoG/dkXWSHdBWJzcmhx4g9OtQoA+5j
+         48/Q==
+X-Gm-Message-State: AGi0PuZqOQnfcYx92+TUz2ALZE4urPe0tNqt3GgtSB/61NPr3uoH7wHJ
+        iRXLE3bmQfbP1QCu1paC9ARZGQ==
+X-Google-Smtp-Source: APiQypK9ltyvL2bWmmEFCII0i4yr4OAUIQsB6jy+736q8Ru3rDmgBOTO/4ND99RcHfaRdLuItB72Rw==
+X-Received: by 2002:aa7:9f98:: with SMTP id z24mr6906759pfr.122.1586550380256;
+        Fri, 10 Apr 2020 13:26:20 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u13sm2582831pjb.45.2020.04.10.13.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2020 13:26:19 -0700 (PDT)
+Date:   Fri, 10 Apr 2020 13:26:18 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luto@amacapital.net, wad@chromium.org, shuah@kernel.org
+Subject: Re: [PATCH] selftests/seccomp: allow clock_nanosleep instead of
+ nanosleep
+Message-ID: <202004101325.CF69610F77@keescook>
+References: <20200408235753.8566-1-cascardo@canonical.com>
 MIME-Version: 1.0
-References: <20200408205024.22119-1-l.rubusch@gmail.com> <CAFd5g47O07Gk6BixQV6iQpcERU_xVbBtRaUyXGaOO7Axcma+iQ@mail.gmail.com>
- <CAFXKEHY0pBmUhEMAVgOJ+zzaxWxEFcGQqa7ry+qF30wWs5=B4w@mail.gmail.com>
- <CAFd5g47037poE7w6GUasV90-BNBMcg0+uCQjikqpCuYwDJ4euw@mail.gmail.com>
- <CAFXKEHYU-t2Xt_Q9-CN=G_v17_jj1mO1bBcA7mtYFq0zxyus2Q@mail.gmail.com> <CAFd5g445TiNfTD3bMnqgtts0iGsb9tFnzK6CyMjcW_9hcsG+dQ@mail.gmail.com>
-In-Reply-To: <CAFd5g445TiNfTD3bMnqgtts0iGsb9tFnzK6CyMjcW_9hcsG+dQ@mail.gmail.com>
-From:   Lothar Rubusch <l.rubusch@gmail.com>
-Date:   Fri, 10 Apr 2020 21:40:42 +0200
-Message-ID: <CAFXKEHYnaKutRTkb07TY5imWROsXzPwRQt=mdZupXw1VvXQa3g@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: test.h - fix warnings
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200408235753.8566-1-cascardo@canonical.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 9, 2020 at 11:16 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Thu, Apr 9, 2020 at 1:51 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
-> >
-> > On Thu, Apr 9, 2020 at 10:00 PM Brendan Higgins
-> > <brendanhiggins@google.com> wrote:
-> > >
-> > > On Wed, Apr 8, 2020 at 2:17 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
-> > > >
-> > > > On Wed, Apr 8, 2020 at 10:56 PM Brendan Higgins
-> > > > <brendanhiggins@google.com> wrote:
-> > > > >
-> > > > > On Wed, Apr 8, 2020 at 1:50 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
->
-> [...]
->
-> > > > > > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > > > > > index 9b0c46a6ca1f..16d548b795b5 100644
-> > > > > > --- a/include/kunit/test.h
-> > > > > > +++ b/include/kunit/test.h
-> > > > > > @@ -175,7 +175,7 @@ struct kunit_suite {
-> > > > > >         void (*exit)(struct kunit *test);
-> > > > > >         struct kunit_case *test_cases;
-> > > > > >
-> > > > > > -       /* private - internal use only */
-> > > > > > +       /* private: internal use only */
-> > > > > >         struct dentry *debugfs;
-> > > > > >         char *log;
-> > > > > >  };
-> > > > > > @@ -232,7 +232,8 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
-> > > > > >   * kunit_test_suites() - used to register one or more &struct kunit_suite
-> > > > > >   *                      with KUnit.
-> > > > > >   *
-> > > > > > - * @suites: a statically allocated list of &struct kunit_suite.
-> > > > > > + * @...: a statically allocated list of &struct kunit_suite, assigned
-> > > > > > + *           to the pointer @suites.
-> > > > > >   *
-> > > > > >   * Registers @suites with the test framework. See &struct kunit_suite for
-> > > > >
-> > > > > Can you change the @suites param here to match @...?
-> > > >
-> > > > You mean, in "Registers @suites with the test framework" to something
-> > > > rather like "Registers @... with"?
-> > > > Hum, franckly I think, in the documentation it reads better having the
-> > > > name "suites", that's why I tried to
-> > > > append a hint, that a passed list of struct kunit_suite initializes
-> > > > the pointer "suites". Then further in the doc
-> > > > refered as suites, I think it becomes clear. But let me know. Shall I
-> > > > use @... instead?
-> > >
-> > > I agree that it doesn't read as well, but I like having the proper
-> > > syntax highlighting and consistent naming over a mix and match.
-> >
-> > I'll have another look on the syntax highlighting, leave out the api page
-> > removal and then resubmit. No problem. Thank you for all your patience!!
-> > I really appreciate if I can contribute to something!
-> >
-> >
-> > > Another alternative would be to replace `...` with `suites...` and
-> > > then @suites should work.
-> > >
-> > > Either way is fine with me; it's a nasty macro anyway.
-> >
-> > Yeah, that's what I read in the kernel-doc perl, too. Changing '...'
-> > to 'suites...'
-> > is a code change, though. Possible, but IMHO would be a different patch.
->
-> Good thought; that would usually be true most likely; however, in this
-> case the documentation issue is in a comment in a code file, so no
-> matter how you look at it, it is a code change. Also, it's such a
-> minor change and since most of the KUnit code and documentation
-> changes both go through the KUnit branch of the Kselftest tree anyway,
-> so I think it's fine to just keep it all in one patch.
+On Wed, Apr 08, 2020 at 08:57:53PM -0300, Thadeu Lima de Souza Cascardo wrote:
+> glibc 2.31 calls clock_nanosleep when its nanosleep function is used. So
+> the restart_syscall fails after that. In order to deal with it, we trace
+> clock_nanosleep and nanosleep. Then we check for either.
+> 
+> This works just fine on systems with both glibc 2.30 and glibc 2.31,
+> whereas it failed before on a system with glibc 2.31.
+> 
+> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-Absolutely Agree, this is cosmetics. Anyway, personally I'm also learning how
-to write to the community, i.e. I try to be careful. Thanks for the support!
+Thanks for this! I'm trying to determine if all architectures have
+__NR_clock_nanosleep ... got some test builds running now, but if it all
+builds fine, then I'll get this sent to Linus for -rc2.
 
-> > Actually, should we fix up the code for having a nicer documentation?!!
->
-> Yes! Or at least I think so. Good documentation can be just as
-> important, even more important than good code. I know there are plenty
-> of developers that disagree with me on this point, but given what we
-> are trying to do with KUnit, I say we are actually one of the places
-> where our documentation is of utmost importance.
+-Kees
 
-Ah, this is actually not what I meant. I fully agree with you, good generated
-documentation is essential. I wanted to say, In a way I would prefer changing
-the scripts, rather than the sources to obtain better documentation.
-Practically it's easier to adjust the source directly.
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 89fb3e0b552e..c0aa46ce14f6 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -2803,12 +2803,13 @@ TEST(syscall_restart)
+>  			 offsetof(struct seccomp_data, nr)),
+>  
+>  #ifdef __NR_sigreturn
+> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_sigreturn, 6, 0),
+> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_sigreturn, 7, 0),
+>  #endif
+> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_read, 5, 0),
+> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_exit, 4, 0),
+> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_rt_sigreturn, 3, 0),
+> -		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_nanosleep, 4, 0),
+> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_read, 6, 0),
+> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_exit, 5, 0),
+> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_rt_sigreturn, 4, 0),
+> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_nanosleep, 5, 0),
+> +		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_clock_nanosleep, 4, 0),
+>  		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_restart_syscall, 4, 0),
+>  
+>  		/* Allow __NR_write for easy logging. */
+> @@ -2895,7 +2896,8 @@ TEST(syscall_restart)
+>  	ASSERT_EQ(PTRACE_EVENT_SECCOMP, (status >> 16));
+>  	ASSERT_EQ(0, ptrace(PTRACE_GETEVENTMSG, child_pid, NULL, &msg));
+>  	ASSERT_EQ(0x100, msg);
+> -	EXPECT_EQ(__NR_nanosleep, get_syscall(_metadata, child_pid));
+> +	ret = get_syscall(_metadata, child_pid);
+> +	EXPECT_TRUE(ret == __NR_nanosleep || ret == __NR_clock_nanosleep);
+>  
+>  	/* Might as well check siginfo for sanity while we're here. */
+>  	ASSERT_EQ(0, ptrace(PTRACE_GETSIGINFO, child_pid, NULL, &info));
+> -- 
+> 2.20.1
+> 
 
-> Still, great question to ask. Different kernel developers feel very
-> differently about this point, and with good reason: some parts of the
-> kernel will only really be used by people who can be expected to read
-> all the relevant code, whereas other parts of the kernel may be used
-> directly by a huge number of people most of which can't be expected to
-> read all the code. It would make sense that these two groups of people
-> would find different value in documentation.
->
-> > Somehow this feels like the next patches should go rather to sphinx/kernel-doc.
->
-> Not sure what you mean by this.
-
-Generally I see the limitation in the kernel-doc scripts not allowing
-for an anotation
-for a better naming an unnamed variadics. I mean changing the source
-according to
-the limitations of the scripts, is still kind of reasonable, low prio,
-low effort, easy...
-Alternatively, extending the scripts may add more flexibility.
-I saw worse things at the sphinx documentation e.g. duplicate label
-warnings when
-using same headers inside the same document and sphinx.ext.autosection label
-active - which makes me feel like this should be rather patched, than
-rewritten in
-the docs to fit that quirk of sphinx. Getting offtopic..
-
-> > Anyway, this patch is all about documentation.
-> > A code change must be tested and verified and IMHO might be a different story.
->
-> True, all code changes should be tested (I think all docs changes
-> should be tested too :-) ), but testing this code here is really easy.
-> You can test it with the following command:
->
-> ./tools/testing/kunit/kunit.py run --timeout=60 --jobs=8 --defconfig
-
-This is just awesome. Yesterday I was too lazy to still try anything.
-Thank you, I appreciate. I'll play around with that the next days.
-
-> >
-> > Happy Easter!
->
-> Happy Easter! (again)
-L
+-- 
+Kees Cook
