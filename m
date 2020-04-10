@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D16371A3F66
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 05:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA7E1A4099
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 05:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgDJDse (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Apr 2020 23:48:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60188 "EHLO mail.kernel.org"
+        id S1727520AbgDJDte (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Apr 2020 23:49:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728219AbgDJDse (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:48:34 -0400
+        id S1728557AbgDJDtd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:49:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6530321775;
-        Fri, 10 Apr 2020 03:48:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 398BC2173E;
+        Fri, 10 Apr 2020 03:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490514;
+        s=default; t=1586490574;
         bh=vDbC//cFoiarsCOyRPOI0FBifzs1I3USmWge+kKgjaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QURg+QSybFVq+7WoXWm9/8Xuzj78o+y+TCIfiafe/Df50L95CMwHxvweWLXqYV+yr
-         YiFOhFdUe81CsjXOpYGIWui7ZmG70xNLNe13ZdhPF06oAV2bxT2SgwcNmH45ok8HW4
-         h+VN9UD4igDDAQd2bGRbtyNmwYsJezPT37thHAn4=
+        b=kg9qt/TJ/M84Cru6YQCBOy2MhodVjaeHfnThhShbcSqsEUIXvKvKHs/J7XhI25O1e
+         2o9tFDCSNOIadXyLhx6kOQdeTtm8IUhy5IsHRsNTFgttX/1cTzhBGqtIN0KjI/jYwO
+         tcMxhdKl3d+jH/GG4eGKbegn4t1U6JliA3FS7dys=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>,
         kbuild test robot <lkp@intel.com>,
         Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 28/56] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
-Date:   Thu,  9 Apr 2020 23:47:32 -0400
-Message-Id: <20200410034800.8381-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 20/46] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
+Date:   Thu,  9 Apr 2020 23:48:43 -0400
+Message-Id: <20200410034909.8922-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410034800.8381-1-sashal@kernel.org>
-References: <20200410034800.8381-1-sashal@kernel.org>
+In-Reply-To: <20200410034909.8922-1-sashal@kernel.org>
+References: <20200410034909.8922-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
