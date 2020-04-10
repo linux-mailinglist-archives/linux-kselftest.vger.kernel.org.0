@@ -2,117 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BA31A4B2D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 22:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221D41A4B3E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Apr 2020 22:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726651AbgDJUdY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Apr 2020 16:33:24 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37021 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726177AbgDJUdY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Apr 2020 16:33:24 -0400
-Received: by mail-pg1-f194.google.com with SMTP id r4so1433986pgg.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Apr 2020 13:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3VeSa8pV4LRZev++4MmnF0GN7JR51rFLh2o6ZJifmAs=;
-        b=jrzlTQ4zdnZt7yMEIDuwDMWO3hz3GVEpyJPo5quceb4/5aZLT5RQmyhbVKwifjEEUG
-         hURrfWz3QIOt/M/ZYhkHMhC6hKM11ZkN4eNEJM+OnVnsoZKW6aWbFSXinKOjgS1VdfLc
-         XzE74MI0cKHp4GYbHA/Z7kI+HejX/8cS+hYqo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3VeSa8pV4LRZev++4MmnF0GN7JR51rFLh2o6ZJifmAs=;
-        b=rXGg82qZVcT+YyNrdc7guPqVRcaJ3M2EuV41GhuzVOJvba0q1dpdhzAQCfemDug+/q
-         LHMCCvMFE1IijitY1hYoDJ0+EYA8i/qeYmtewAP4y/Amwu20b7QnbT4nIsk3+l+nP6Cb
-         Sa1wC483Z16flfxjgBZ+79yqxtCt3+r6Cu+3H07HZLwQIQZKlqC/FDXtqiZwev0crs2k
-         ltrHZzyOyCCFcxvL/BzZ9DmM7PpF8Mvsv4rY9ujN7VVqXD1dQiO9RKMfKN2Sa1oAtCMj
-         L+BdayChE5u7KGMVBHQf3HYML1kmC2LZJi33Y5gaRwoZ8+JJOtszhxsGBqBBwl3CEeAq
-         WZww==
-X-Gm-Message-State: AGi0PuY2sMrnyo6uZbZWg5XSBdue5XFFPS4IAa3Q3zXK6maLGeK57aLP
-        kCov6vr9WZoGEyeQ66I7bz37KnmIy7Y=
-X-Google-Smtp-Source: APiQypKwWhdj3p5I+4a9Tpd3IaQXmZGUjW4MMH2e1m01FpwA4MOY4JVpvA3oJd2g521/IWyAeRdhzA==
-X-Received: by 2002:a63:cd03:: with SMTP id i3mr5827120pgg.395.1586550801789;
-        Fri, 10 Apr 2020 13:33:21 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c15sm2214815pgk.66.2020.04.10.13.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2020 13:33:20 -0700 (PDT)
-Date:   Fri, 10 Apr 2020 13:33:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/runner: allow to properly deliver signals to
- tests
-Message-ID: <202004101330.1E1963B5C2@keescook>
-References: <20200410100259.GA457752@xps-13>
+        id S1726712AbgDJUj1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Apr 2020 16:39:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47184 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726706AbgDJUj1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Apr 2020 16:39:27 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2D7C020936;
+        Fri, 10 Apr 2020 20:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586551167;
+        bh=fx/YNx4dh/aRYlOkh+d8yQlgMojYPrhWbJbg1ZKbAn4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=jURIy8M8FEXXB1EpC8iZakWlnt+L9s03r6fN4IvDeGeFcgziPpQvGZFT0T4ru1dDU
+         +u6gVkEECNvjwZNRyc/DhrSvze9xqhZSdg4xko38D4yMY7FSPjBxjZXlk9vRKMKZ0Q
+         LwH6LMx17f7XJnJr8KGaf0Ji+hY1leOfEZThBNbc=
+Subject: Re: [PATCH] selftests/seccomp: allow clock_nanosleep instead of
+ nanosleep
+To:     Kees Cook <keescook@chromium.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luto@amacapital.net, wad@chromium.org, shuah <shuah@kernel.org>
+References: <20200408235753.8566-1-cascardo@canonical.com>
+ <202004101328.075568852D@keescook>
+From:   shuah <shuah@kernel.org>
+Message-ID: <0d4e5356-d40a-8d17-1c61-d5c3c92fd11e@kernel.org>
+Date:   Fri, 10 Apr 2020 14:38:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200410100259.GA457752@xps-13>
+In-Reply-To: <202004101328.075568852D@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 12:02:59PM +0200, Andrea Righi wrote:
-> While running seccomp_bpf, kill_after_ptrace() gets stuck if we run it
-> via /usr/bin/timeout (that is the default), until the timeout expires.
+On 4/10/20 2:29 PM, Kees Cook wrote:
+> On Wed, Apr 08, 2020 at 08:57:53PM -0300, Thadeu Lima de Souza Cascardo wrote:
+>> glibc 2.31 calls clock_nanosleep when its nanosleep function is used. So
+>> the restart_syscall fails after that. In order to deal with it, we trace
+>> clock_nanosleep and nanosleep. Then we check for either.
+>>
+>> This works just fine on systems with both glibc 2.30 and glibc 2.31,
+>> whereas it failed before on a system with glibc 2.31.
+>>
+>> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 > 
-> This is because /usr/bin/timeout is preventing to properly deliver
-> signals to ptrace'd children (SIGSYS in this case).
+> Actually, sorry, this should go via Shuah's tree. :) Shuah, do you have
+> anything going Linus's way already for -rc2?
 > 
-> This problem can be easily reproduced by running:
-> 
->  $ sudo make TARGETS=seccomp kselftest
->  ...
-> 
->  # [ RUN      ] TRACE_syscall.skip_a#
->  not ok 1 selftests: seccomp: seccomp_bpf # TIMEOUT
-> 
-> The test is hanging at this point until the timeout expires and then it
-> reports the timeout error.
-> 
-> Prevent this problem by passing --foreground to /usr/bin/timeout,
-> allowing to properly deliver signals to children processes.
-
-Interesting! This seems a poor behavior on "timeout"'s part. Is it
-setting a signal mask? Hmpf. Thanks for tracking this down!  This seems
-like the best solution now, so:
-
-Acked-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
-> 
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> ---
->  tools/testing/selftests/kselftest/runner.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> index e84d901f8567..676b3a8b114d 100644
-> --- a/tools/testing/selftests/kselftest/runner.sh
-> +++ b/tools/testing/selftests/kselftest/runner.sh
-> @@ -33,7 +33,7 @@ tap_timeout()
->  {
->  	# Make sure tests will time out if utility is available.
->  	if [ -x /usr/bin/timeout ] ; then
-> -		/usr/bin/timeout "$kselftest_timeout" "$1"
-> +		/usr/bin/timeout --foreground "$kselftest_timeout" "$1"
->  	else
->  		"$1"
->  	fi
-> -- 
-> 2.25.1
+> Acked-by: Kees Cook <keescook@chromium.org>
 > 
 
--- 
-Kees Cook
+I have a few patches for rc2. I will pick this up.
+
+thanks,
+-- Shuah
