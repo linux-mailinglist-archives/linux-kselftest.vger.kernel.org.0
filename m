@@ -1,84 +1,66 @@
 Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3BC1A5F28
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Apr 2020 17:02:33 +0200 (CEST)
+Received: from vger.kernel.org (unknown [209.132.180.67])
+	by mail.lfdr.de (Postfix) with ESMTP id 221C11A5F7E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Apr 2020 19:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbgDLPCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Apr 2020 11:02:33 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:34914 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726805AbgDLPCc (ORCPT
+        id S1727201AbgDLRPG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 Apr 2020 13:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:59792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727196AbgDLRPG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Apr 2020 11:02:32 -0400
-Received: by mail-wm1-f66.google.com with SMTP id r26so7695219wmh.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 08:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=easyb-ch.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=0yqa+EKJqOMZqIixsYzmlt55IzP82TkpcbHu7uxFT4o=;
-        b=i7Z8LvyenibZTZyXkEsEEE3K8RDOujJ5674sYvNfURpQHNE2oBiWWT7e/r2jmyhWQD
-         y1+2fnERImX69QvnWOISWrNrpamrprTbjTLcqfhrku9LoEMEmGG9qEuMsikEqSsaxSqK
-         Y79t6ml2mxu6Bg8wZRcptCDJfETVDXs2SZK8GQltSXQNOiaJe/6CdZyheSlXoFomAFYU
-         BHejmk7ZGe37MV75QLmNKF23jBsXVadUdm/DzLwRTeJn8gbN5K6kRtSZybzhaMVIOrrG
-         kkpACiuBfCAkHXBTZasQv7jicUw7dN29mk5V0RP+E4nBX49iA5hmeuiTzHvVhCaBoAUV
-         g05g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=0yqa+EKJqOMZqIixsYzmlt55IzP82TkpcbHu7uxFT4o=;
-        b=HnYcKYo6mIIZeaEY3RdCCstVZtKUqZ/zVHo6Ij8+VvDb8dDvDqbKkEPIccfVzRMV0v
-         zP4zBi/27jR6Nbfx6MAN8COUmuTr3MKpGoszrcqJZHdBFVoscQOK3Yv4FT7Dcl+UO6sQ
-         dcV2LZlntEevTirMK8yV4ZavNNFHyI54c/ECDWBOkfpbcejF6Ofq7cCPwJzE1gR1y2bG
-         lpTfwY/KVDgx9O5rTySqqMl1SQGR1SXRuvJmz3SU2dHPO1PDW45pc8hVcmgKjUdqzZky
-         TelFT7TnfJc9JFhcOtWC0n/5rEhkjsChwaftC0wZphG1g5Gm+j5t0xeO/6sLf2Nw+aso
-         e17A==
-X-Gm-Message-State: AGi0PuY8RiBt0WTaJ5/jOg7oh2s/ulWbW65dZEIfkfyVbQOjBk8ogIQ0
-        5n65ujhEuJXHVEyy4Ff1umgLV1Tlz1I=
-X-Google-Smtp-Source: APiQypJ5G4BL6g1G/EhYOU8fMFTZs+je8F9lWXNuf0JLZA90eJeTelxDQNlTSUguKI6gLklzRQKBzw==
-X-Received: by 2002:a1c:a553:: with SMTP id o80mr14005777wme.159.1586703750678;
-        Sun, 12 Apr 2020 08:02:30 -0700 (PDT)
-Received: from ?IPv6:2001:1715:4e3a:130:cca:5c89:8758:a721? ([2001:1715:4e3a:130:cca:5c89:8758:a721])
-        by smtp.gmail.com with ESMTPSA id i13sm5808364wro.50.2020.04.12.08.02.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 Apr 2020 08:02:30 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.5\))
-Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
- compatible
-From:   Ezra Buehler <ezra@easyb.ch>
-In-Reply-To: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
-Date:   Sun, 12 Apr 2020 17:02:27 +0200
+        Sun, 12 Apr 2020 13:15:06 -0400
+X-Greylist: delayed 464 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Apr 2020 13:15:06 EDT
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC26C0A3BF0;
+        Sun, 12 Apr 2020 10:07:22 -0700 (PDT)
+IronPort-SDR: lQDYthYjuAhHSUjxlcGVfMtCP9BdVf6pRYeZsIEuLVgv+aw+RpPPs5rzS9wUfFIRnTXLOuamr0
+ GUJasPAqg8Yw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 10:07:22 -0700
+IronPort-SDR: SmiQxsz75gR7NkwXRwXj40onoVS8+6VYMMeh1GH4lu/xkkcnBrYaSGbxy/tBJmQF4cCgOa6TwY
+ sgONkR7vLNfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,375,1580803200"; 
+   d="scan'208";a="453997712"
+Received: from apresura-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.246])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2020 10:07:20 -0700
+Date:   Sun, 12 Apr 2020 20:07:19 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Ezra Buehler <ezra@easyb.ch>
 Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-integrity@vger.kernel.org,
         Tadeusz Struk <tadeusz.struk@intel.com>,
         open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
+Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
+ compatible
+Message-ID: <20200412170719.GA324408@linux.intel.com>
 References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-X-Mailer: Apple Mail (2.3445.9.5)
+ <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jarkkon,
+On Sun, Apr 12, 2020 at 05:02:27PM +0200, Ezra Buehler wrote:
+> Hi Jarkkon,
+> 
+> > On 12 Apr 2020, at 16:36, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> > +        except ProtocolError(e):
+> 
+> Should this not be
+> 
+>         except ProtocolError as e:
 
-> On 12 Apr 2020, at 16:36, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
-> +        except ProtocolError(e):
+Unless there is a functional difference, does it matter?
 
-Should this not be
-
-        except ProtocolError as e:
-
-?
-
-Cheers,
-Ezra.
-
+/Jarkko
