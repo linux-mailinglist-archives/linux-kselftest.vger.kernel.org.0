@@ -2,131 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C9D1A5D9E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Apr 2020 11:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941481A5EE4
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Apr 2020 16:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbgDLJAa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Apr 2020 05:00:30 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:51806 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725832AbgDLJAa (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Apr 2020 05:00:30 -0400
-Received: by mail-wm1-f67.google.com with SMTP id x4so6733501wmj.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 02:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:subject:mime-version;
-        bh=i7CrezMH1BB6PxH9h4jBxLFwO/aZ728RfGaUGfKcCxI=;
-        b=etbOYA+KdLlUhaNVCY2d4ec6hq/iU6DGko7GIcF8tVoc0ocOczTj50nbMIFpXv8pMj
-         R2WQudUgRetyKl7vC9SIF8Mt669iRSnkpGU/ETBbLTEqVJFaBuAY3Z7cTRt25W5Rt+cn
-         Q1rwOq1rNL9wn8zVO6zGrK038EBwkDs6Eb0Pb11x1IzYvD1myltrDHFSSfV/VO0NVtPK
-         7LTycbeiuwB/FILUUDaYOS2AfhXc3BGQ1zlfarMMVEuFRluotuJSyHtcLFNML3P9z0or
-         Zls/p0CiCtTsO/OBZ4p0ilim/Wqe3McOfQEQQbXDGvFy+srFKjQx240lSJssy+a5PQQr
-         WrZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
-        bh=i7CrezMH1BB6PxH9h4jBxLFwO/aZ728RfGaUGfKcCxI=;
-        b=iRUztPazx8RlEsfSawInYJhSRG4c5VTIlG3/yrDoP9U58PM4VXvfJqMcSv2qL4GxJF
-         jI5mPhIKwIy6anXDYcUHo7nEjLsRNJIXyGlzG5XBj7adutmFwLN++1cdZYVIVsFXMV+e
-         1IOCDtCB6zK53YNmhTGOIWouPEq2mxb9Nm37y82kDA0FYaofLWH1yXBhUcq1fewHr3Cg
-         vAUjxrZx4x86cfyJiMDNt7Jbo7gwVc1JJ7d4Pmpi0zY4nqIti9uf9TmtVHL7wdUjlVZk
-         8zwTzs3IyoQlfHNR93bPDh2GRNhofp0ok1WzNaihYKSgnDtXnKxHbis66pb+ykxda7C+
-         hhUQ==
-X-Gm-Message-State: AGi0PubnHCd0lglrFjVbduW8kiIW2aFh1Z9YgjOrvnrM30uAHPaoNK8H
-        htJByIZmyDBDamubAJvWkwCBluJnOSw=
-X-Google-Smtp-Source: APiQypLYBUU5I32OIACHzBwOLZvgBK15eCSp/WvPkCEf6PU11EVslwYUfozWGxMaNzPJE3S7xWTCCA==
-X-Received: by 2002:a7b:c4c9:: with SMTP id g9mr13205553wmk.171.1586682029546;
-        Sun, 12 Apr 2020 02:00:29 -0700 (PDT)
-Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id h188sm10320333wme.8.2020.04.12.02.00.28
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Sun, 12 Apr 2020 02:00:29 -0700 (PDT)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Sun, 12 Apr 2020 09:00:28 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <1384417092.17074.1586682029011.JavaMail.javamailuser@localhost>
-Subject: next-20200412 kselftest results
+        id S1727065AbgDLOL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 Apr 2020 10:11:26 -0400
+Received: from mga07.intel.com ([134.134.136.100]:57266 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726805AbgDLOL0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 12 Apr 2020 10:11:26 -0400
+IronPort-SDR: 7jqYE0Hh2SrjJnTWDHl1/XOTjdYluOn4wHPcNMqQ83w0r72Z6+RNIqej9IIeUoUrfKnyb/vmN4
+ mEI1eBOZ9Utg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 07:11:23 -0700
+IronPort-SDR: YcF9grRNMDlNiy+jJV6ObXJCi7szAvUALbUtLto5Lo6282uVrQe3ew4QxGUyba7qEbbivq1+ls
+ 5wT6Yk3yOGKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,374,1580803200"; 
+   d="scan'208";a="287651096"
+Received: from apresura-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.246])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2020 07:11:21 -0700
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests/tpm: Fix runtime error
+Date:   Sun, 12 Apr 2020 17:11:17 +0300
+Message-Id: <20200412141118.70688-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_17073_1517993589.1586682028238"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_17073_1517993589.1586682028238
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+There is some random clutter in test_smoke.sh:
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.6.0
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: d2a22790db7075dbd0738d24d1c5ee4611421c4c
-git describe: next-20200412
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200412
+  ./test_smoke.sh: line 3: self.flags: command not found
 
-Regressions (compared to build next-20200411)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20200411)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
+Remove it.
 
-In total:
-------------------------------------------------------------------------
-Ran 0 total tests in the following environments and test suites.
-pass 0
-fail 0
-xfail 0
-skip 0
+Fixes: b32694cd0724 ("Kernel selftests: tpm2: check for tpm support")
+Cc: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+I rely on these tests and this was not even cc'd to me and obviously
+was untested. There is neither reviewed-by nor tested-by tags in the
+commit (not to mention some cosmetic things like short summary
+formatted wrong and the extra newline character).
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- juno-r2-compat
-- juno-r2-kasan
-- x86_64
-- x86-kasan
+Please do not do this next time. Thanks.
+ tools/testing/selftests/tpm2/test_smoke.sh | 2 --
+ 1 file changed, 2 deletions(-)
 
-Test Suites
------------
-
-
-Failures
-------------------------------------------------------------------------
-
-juno-r2:
-
-i386:
-
-juno-r2-compat:
-
-juno-r2-kasan:
-
-x86:
-
-dragonboard-410c:
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
+diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+index b630c7b5950a..e55d3e400666 100755
+--- a/tools/testing/selftests/tpm2/test_smoke.sh
++++ b/tools/testing/selftests/tpm2/test_smoke.sh
+@@ -1,11 +1,9 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+-self.flags = flags
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
+-
+ if [ -f /dev/tpm0 ] ; then
+ 	python -m unittest -v tpm2_tests.SmokeTest
+ 	python -m unittest -v tpm2_tests.AsyncTest
 -- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_17073_1517993589.1586682028238--
+2.25.1
+
