@@ -2,127 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BED291A659A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 13:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CCE1A65D3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 13:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbgDML3m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Apr 2020 07:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S1729220AbgDMLt7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Apr 2020 07:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727792AbgDML3m (ORCPT
+        with ESMTP id S1729201AbgDMLt5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Apr 2020 07:29:42 -0400
-X-Greylist: delayed 482 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Apr 2020 07:29:42 EDT
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB84C0A3BDC
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2020 04:21:39 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id r24so8345498ljd.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2020 04:21:39 -0700 (PDT)
+        Mon, 13 Apr 2020 07:49:57 -0400
+X-Greylist: delayed 528 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Apr 2020 07:49:57 EDT
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE14C00860A
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2020 04:41:09 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id g6so4327453pgs.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2020 04:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TfybxCS9KvV17UPheJnqSM+e/cLRrV8TeDHR7AgRiYw=;
-        b=y88rwGl/RjfrMbIPOK7+s+NQx1aoXwZDd8G3Aln6CMeD6UrIUasDet6IZZcqT9dOg3
-         l4Nv3vQFImsFKN8Wer2g6roOIKKoWwGPTIPRR2BDmBgiuGNzPbldm5GlyKxYeioexKSM
-         oGygbWZZ+ma2QaheiQrXtpCSqLrG1Ue+y1CEC5+cpb5b2ujPN3zfjQNxtDr5KIgCSYPo
-         +Rj0dQk0vBVucBeDXA94ZYtSYVmc7M6iasr8XMAVU7DJ08AjFPmtZGSbwo7oeH4C6MtN
-         W/eUnnA5mlK8b3G1nJCBEJp7l89bzD+tCMbv/jN17QQ5fXLGWtDv4POsulXDupmsSIlP
-         SEqA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
+        b=HxOaFJZljqXQIeSLw7dw+YeTIVe76Yo57NkC3rYQjPPsruaWLZEetJYgTw7mDA7iYw
+         4KM/sQKuVdxfTyBgHy0QGrcgvhBAp/s2WR+7lhwMEms7c5U3ARzlxX4w9gHN6kyIVCTo
+         InVjjBwajQbgYMLlLr/dGAnfAOq75HLmi2bmQShdg5UrDH6ZNHdmpjirCjsFE3E+W3lI
+         4HPNdhIk9GHy3wOVy8qt79oLhQ3V0WJ+l2R8YfTk5No8OB207Mc1ssyzLdiNdU6iDIon
+         HSnId1sWR9JHq8BkscMOY+TVCS7WuDDdfTSRJRDObUGUY3pKdsd/NGq97n4qtv5szVJr
+         IEMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TfybxCS9KvV17UPheJnqSM+e/cLRrV8TeDHR7AgRiYw=;
-        b=nsiuC0mKLakCFSo1TKtjVk3WWHPdMfg/QQUDVi33XDYYBl2MyXS1qre2CvQ10JfrBn
-         ww0AVloE2DzxaiiYLblOslxtuWI1LmzEcHVSNMISufsDAELA38+fVz0WK+Q/raM1UOUK
-         UREpReiXfoJyJXZexhn3JYLYqkD0rvpLU/BwJTtBEAMoP3w++B4tFU1LG23z/D5IRBgY
-         O9TmwK81I8awB2hHHeIkZOZHN7vQd8T33K49KfjFAccrmVwTSfnBfBrjvC1OeT04w6I0
-         epNR5fsBvp70a37g2GgzkpAIYE9/Z8kQDl8R6VmTFbggPRnoM0/1lLcIM8/quIo8airN
-         HGjA==
-X-Gm-Message-State: AGi0PubgbS+aN5pm06STvGMRu/RRBPVCWhmmunIUOnquRMBZI8kskRB6
-        ZdSltWFVemUVBCdV6x2JCuSuzpHlkXfXXTpUTA17Ug==
-X-Google-Smtp-Source: APiQypKZxajlMe0BodxfJkVJg9NJCcYeXNTqOwy0OQAXKiMOpmeX9tR3Jo8ny+juQeVyUWeXVPsZc/KvhmVF+uDhGws=
-X-Received: by 2002:a2e:a495:: with SMTP id h21mr10092859lji.123.1586776897822;
- Mon, 13 Apr 2020 04:21:37 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=qlKWExEze9qCqlwbpw1q4+d2Zjr4ETGVa64TcX+dTlk=;
+        b=ouqXVFZQlLQ4moeWI2Btgm9vbUZS55hWVonrWuP8I6+MRVX6KdLatsbw05QCf62Xqf
+         kZJJS6mNKbia8s4FX+xMALmI2APao8g+63GNdDtb3jP9xq0kw1nNaFsuDcd/Kzg+CYDm
+         LHGKwbVqk1hdmxS76wbaWOGAm3avHtMBgXZK42+ZM6qFXGMHsvSbeUnPF7QxSau60GRa
+         Vt2s8P6c2eIvozrzWR11CQx8RQ4Au80Muhg6e8S1ZFppmWZRV4Q2dNZMNWSTaWBDcfSx
+         hjdCIoooGXDOiPCL+PVxuQebLEbPNf49bQnJbEi///RI9HOn1esGLNLMT9/FnMHRMl0n
+         MBVg==
+X-Gm-Message-State: AGi0PuagVlIuOuQ3jEuH6dJ2/jc/DmWS69HaVaPlhO2lDhExw4HDzxWJ
+        WUDFA/QOYWvyhWYKrD6fHOesdjhzaJVQ0PHhh55e7wo=
+X-Google-Smtp-Source: APiQypJ8Xf5JZIaJmuakcegBHklRN/w3ObzOY1fG2hZhiF0393fUgrxf6qaSVcLD5pLEm/4TEQgoj9oGK8tQ5EeyGAU=
+X-Received: by 2002:a05:6e02:c8f:: with SMTP id b15mr14965961ile.35.1586778068198;
+ Mon, 13 Apr 2020 04:41:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYsRGvkqtpdGv_aVr+Hn17KgYq04Q=EE=pB774qVxRqOeg@mail.gmail.com>
- <20200412214150.GB38470@xz-x1>
-In-Reply-To: <20200412214150.GB38470@xz-x1>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 13 Apr 2020 16:51:25 +0530
-Message-ID: <CA+G9fYvARTCKjbfHYEbfOjtn_s7desuAToOF4g+Z_fztzZ-myw@mail.gmail.com>
-Subject: Re: i386: selftests: vm: compaction_test: BUG: kernel NULL pointer
- dereference, address: 00000000
-To:     Peter Xu <peterx@redhat.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leonardo Bras <leonardo@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jules Irenge <jbi.octave@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Minchan Kim <minchan@kernel.org>, Mel Gorman <mgorman@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Mateusz Nosek <mateusznosek0@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hillf Danton <hdanton@sina.com>
+Received: by 2002:a02:5e49:0:0:0:0:0 with HTTP; Mon, 13 Apr 2020 04:41:07
+ -0700 (PDT)
+Reply-To: mgbenin903@gmail.com
+From:   Barrister Robert Richter UN-Attorney at Law Court-Benin 
+        <info.zennitbankplcnigerian@gmail.com>
+Date:   Mon, 13 Apr 2020 13:41:07 +0200
+Message-ID: <CABHzvrm3rWryg1yAooKeHwdxzrKD47PRAEfC+ay1A6i5z3Wdiw@mail.gmail.com>
+Subject: I have already sent you first payment US$5000.00 this morning through
+ MONEY Gram service.it is available to pick up in address now.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 13 Apr 2020 at 03:12, Peter Xu <peterx@redhat.com> wrote:
-> And since this one is very easy to reproduce, I finally noticed that
-> we have wrongly enabled uffd-wp on x86_32, which is definely not going
-> to work... Because we'll use bit 2 of swap entry assuming that's the
-> uffd-wp bit, while that's part of swp offset on 32bit systems.
->
-> Naresh, could you try whether below change fixes the issue for you?
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 8d078642b4be..7ac524d1316e 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -149,7 +149,7 @@ config X86
->         select HAVE_ARCH_TRACEHOOK
->         select HAVE_ARCH_TRANSPARENT_HUGEPAGE
->         select HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD if X86_64
-> -       select HAVE_ARCH_USERFAULTFD_WP         if USERFAULTFD
-> +       select HAVE_ARCH_USERFAULTFD_WP         if X86_64 && USERFAULTFD
->         select HAVE_ARCH_VMAP_STACK             if X86_64
->         select HAVE_ARCH_WITHIN_STACK_FRAMES
->         select HAVE_ASM_MODVERSIONS
->
+ATTN DEAR BENEFICIARY.
 
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+GOOD NEWS.
 
-The above patch tested and did not notice the crash.
-+ cd /opt/kselftests/default-in-kernel/vm/
-+ ./compaction_test
-No of huge pages allocated = 297
-+ ./compaction_test
-[   46.059785] kauditd_printk_skb: 15 callbacks suppressed
-[   46.059786] audit: type=1334 audit(1586776582.927:25): prog-id=17 op=UNLOAD
-[   46.071997] audit: type=1334 audit(1586776582.927:26): prog-id=16 op=UNLOAD
-No of huge pages allocated = 160
+I have already sent you first payment US$5000.00 this morning through
+MONEY Gram service.it is available to pick up in address now.
 
-Full test log,
-https://lkft.validation.linaro.org/scheduler/job/1362495#L1308
+So we advise you to Contact This Money Gram office to pick up your
+transfer $US5000.00 today.
 
-Build artifacts.
-https://builds.tuxbuild.com/w0ol7cCsGan0wzPp7bNqkg/
 
-- Naresh
+Note that your compensation payment funds is total amount $US2.800,000
+Million Dollars.We have instructed the Money Gram Agent,Mr. James
+Gadner to keep sending the transfer to you daily, but the maximum
+amount you will be receiving everyday is US$5000.00. Contact Agent now
+to pick up your first payment $US5000.00 immediately.
+
+Contact Person, Mr. James Gadner, Dir. Money Gram Benin.
+Email: mgbenin903@gmail.com
+Telephone Numbers: +229 62819378/ +229 98477762
+
+HERE IS YOUR PAYMENT DETAILS FOR THE FIRST =C2=A3US5000.00 SENT TODAY.
+
+Track View Website link:
+https://secure.moneygram.com/track
+Sender=E2=80=99s First name: David
+Sender=E2=80=99s Last Name: Joiner
+Money Transfer Control Number (MTCN) (REFERENCE)# 26046856
+
+Contact the Mmoney Gram Urgent and reconfirm your address to the
+office before, they will allow you to pick up the transfer today.
+
+HERE IS WHAT REQUIRED OF YOU.
+
+YOUR FULL NAME---------
+ADDRESS--------------
+COUNTRY-----------------------------
+TELEPHONE NUMBERS-----------------
+
+Note, I paid the transfer fee for you, but only you are required to
+send to the office is $75 only,Been Your Payment File activation fee,
+Send once you contact the office,before you can able to pick up your
+transfer today.
+
+Let me know once you pick up first payment today.
+
+Barrister Robert Richter UN-Attorney at Law Court-Benin
