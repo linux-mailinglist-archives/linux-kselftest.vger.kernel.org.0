@@ -2,144 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BBB1A60C0
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Apr 2020 23:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8C31A624A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 07:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728344AbgDLVmA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Apr 2020 17:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:50300 "EHLO
+        id S1728784AbgDMFC0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Apr 2020 01:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727363AbgDLVmA (ORCPT
+        with ESMTP id S1728739AbgDMFC0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Apr 2020 17:42:00 -0400
-Received: from us-smtp-delivery-1.mimecast.com (us-smtp-2.mimecast.com [205.139.110.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FA7C0A3BF5
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 14:42:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586727719;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cZgZS3VL9u0IfZZxKaJedf/PTKndLbqxtt6EqiRUq98=;
-        b=Csj+WSbQRiNSZFMZYrdYh08sUHrUTjaS8W8HqaiwJDSyhhWoW1vRpG2f2sH67tj1X1NtTz
-        Pdt+vADwGxXtNe7+q4kub2Qv3mBZ/WVvwxwCYpOHcglgcr1FeM1F1i/oDegy0palWluEsL
-        bzVU+RBhsie/hGocB+/24XxluJ+bU08=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-316-C_W_-vKMPTaTgAbori2cpw-1; Sun, 12 Apr 2020 17:41:55 -0400
-X-MC-Unique: C_W_-vKMPTaTgAbori2cpw-1
-Received: by mail-qt1-f199.google.com with SMTP id z8so7363911qtu.17
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 14:41:55 -0700 (PDT)
+        Mon, 13 Apr 2020 01:02:26 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9500C0A3BE0
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 22:02:24 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id i10so8980341wrv.10
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 22:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=easyb-ch.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Uqitgnmn7ZCl0pMBz3WS3gLsMoIlng512epuA2Wtd/8=;
+        b=sKSBJtsCloD3LSgreeEK44eNxCI0BWQDTRrsWkePiQTbjionW0UytbDp0pn1kbOYRh
+         v4G2uToQMrAEg6CM4JRucUjfitktldAGC7zsUTaBQBcCAZq6u2d5frmyQNietMffpJyX
+         UDC8mIBANdaKy/mFbuIT6fNd9ODu1L36YdUi7C9b2uKItbyl549DdEzWVKE9aKaGhhHx
+         FXnlD3+1cHX4X6XTaDHq7jCoy4zBTgXR0XADL/UHbI8QMcMriuO8eiIBP+kEDM4VRLRb
+         E5YTO48GnfP3I6fu52HXeAHa7jLV3L+4ccU8m7B5H+QII8IeVm40qRbK66+D9z8B4yep
+         uicQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cZgZS3VL9u0IfZZxKaJedf/PTKndLbqxtt6EqiRUq98=;
-        b=JvyKuZ+2yD1YL7VtKU+DkiydIgMAT9W+k+US+iO6HRORuI/t0ccteCCv0i12PeEEBi
-         1xsw1YW9s73MYm8NVuTVWQAaBcYq/CbDwna8iQyO5FNaJEwoADuIuZvtSQjpI31/FJFr
-         730x1YZR9ZyH9XFC6MEWP8DvtpLknep6zu+Qu5tsWV+mYHZUNys66KP7mzh8N7rZs1gT
-         ra6yTMzjy2B3aG6dkCNO5QK5pWh7bxdnidVyiZr7lkkvGGD881go9Lrgul2BaeDeV/fj
-         UeeYNp79mgze0/5fLN0G4q9pF8ZYI1c9IgHCYXPkF0VkC3rHCYJfFjwKjrDTg4ml/uGN
-         ZIKA==
-X-Gm-Message-State: AGi0PuZ06b6pT2xWWQqlMvGm7bi1yhlen3fumKOaYoIjrBI52wlWHBNr
-        cBkSVn2IXu8u/G4sTRw1U7wya0EHUgrd+w3tgJAKxlIX764GOj0djBFisaRqFmItVIdYFDIZn/q
-        CEEVSO5QjoKjsSRf4PHh2guntlh5N
-X-Received: by 2002:ac8:7408:: with SMTP id p8mr8849265qtq.82.1586727714587;
-        Sun, 12 Apr 2020 14:41:54 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLYhh5/2KJDBWWaSqKpz9rNtf6twGnt8bcq4F1iR6WS2PijfIjU2a+iOx4m4OwZ4jGuWFBpvg==
-X-Received: by 2002:ac8:7408:: with SMTP id p8mr8849243qtq.82.1586727714223;
-        Sun, 12 Apr 2020 14:41:54 -0700 (PDT)
-Received: from xz-x1 ([2607:9880:19c0:32::2])
-        by smtp.gmail.com with ESMTPSA id j92sm1505197qtd.58.2020.04.12.14.41.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Apr 2020 14:41:53 -0700 (PDT)
-Date:   Sun, 12 Apr 2020 17:41:50 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leonardo Bras <leonardo@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jules Irenge <jbi.octave@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Minchan Kim <minchan@kernel.org>, Mel Gorman <mgorman@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Mateusz Nosek <mateusznosek0@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: i386: selftests: vm: compaction_test: BUG: kernel NULL pointer
- dereference, address: 00000000
-Message-ID: <20200412214150.GB38470@xz-x1>
-References: <CA+G9fYsRGvkqtpdGv_aVr+Hn17KgYq04Q=EE=pB774qVxRqOeg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsRGvkqtpdGv_aVr+Hn17KgYq04Q=EE=pB774qVxRqOeg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Uqitgnmn7ZCl0pMBz3WS3gLsMoIlng512epuA2Wtd/8=;
+        b=jZh6w771QPyUTT5vP5C+pG9MdVeRYGknozYRhmFoL3siqWvDQAfwXLgtzW8TxrLYRB
+         xBg7PzR3aEqqOLFeD5XKnvXVwq6cgLNwAvPwrGTsqYxGWsL5gi3LUT5TfgiRFPQn6JQo
+         UE/1nxRzc3fXbGelGrc1cS91KC2BPGKtPGzHN1NXkp59JU7J39O5IyuRMMjxM/2xDehu
+         DLVXkaLfeOTX26Gt2HvPLHNr0aSGL7XMtKTmdMB96FB2hZxgTBurSwWHd7/CWptynbAZ
+         m2nG1LCocVwunP7ePJBSygvUxlmFVlx//rm1MITJfo8I+jza1o5Bn29zjNPyC9o92VGP
+         zZSA==
+X-Gm-Message-State: AGi0PuZ+U9kF8tUWPNdGaCEzdjOT1+W26BBzb36o0VENg/uK7BIOLz7Q
+        3Nvbi3r7v1ycNcFjEoFcTZIW+A==
+X-Google-Smtp-Source: APiQypLbyb568HVT5hQ6wehhmaAyAaPlxe8QRbk2/eNkRJT431aBvydNGYoyK+gWeCPpIbmv/vC6Mw==
+X-Received: by 2002:a5d:6a46:: with SMTP id t6mr16353193wrw.93.1586754143460;
+        Sun, 12 Apr 2020 22:02:23 -0700 (PDT)
+Received: from ?IPv6:2001:1715:4e3a:130:710e:1dde:8fec:143e? ([2001:1715:4e3a:130:710e:1dde:8fec:143e])
+        by smtp.gmail.com with ESMTPSA id c190sm13151557wme.10.2020.04.12.22.02.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 12 Apr 2020 22:02:23 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.5\))
+Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
+ compatible
+From:   Ezra Buehler <ezra@easyb.ch>
+In-Reply-To: <20200412170719.GA324408@linux.intel.com>
+Date:   Mon, 13 Apr 2020 07:02:20 +0200
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <531D50E8-E8FC-402E-9226-6000E8B6E960@easyb.ch>
+References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
+ <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
+ <20200412170719.GA324408@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+X-Mailer: Apple Mail (2.3445.9.5)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Naresh,
+Hi Jarkko,
 
-On Sun, Apr 12, 2020 at 12:24:57PM +0530, Naresh Kamboju wrote:
-> On Linux mainline kernel 5.6.0 running kselftest vm compaction_test on i386
->  kernel running on x86_64 devices we have noticed this Kernel BUG followed by
-> Kernel panic.
-> 
-> BUG: kernel NULL pointer dereference, address: 00000000
-> Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000009
-> 
-> Steps to reproduce:
-> --------------------------
-> # cd /opt/kselftests/default-in-kernel/vm/
-> # ./compaction_test
-> 
-> [   45.955706] kauditd_printk_skb: 15 callbacks suppressed
-> [   45.955707] audit: type=1334 audit(1586671685.974:25): prog-id=13 op=UNLOAD
-> [   45.968082] audit: type=1334 audit(1586671685.974:26): prog-id=12 op=UNLOAD
-> [   46.008163] get_swap_device: Bad swap file entry 7007504a
-> [   46.013647] BUG: kernel NULL pointer dereference, address: 00000000
+On 12 Apr 2020, at 19:07, Jarkko Sakkinen =
+<jarkko.sakkinen@linux.intel.com> wrote:
+>=20
+> On Sun, Apr 12, 2020 at 05:02:27PM +0200, Ezra Buehler wrote:
+>> Hi Jarkkon,
+>>=20
+>>> On 12 Apr 2020, at 16:36, Jarkko Sakkinen =
+<jarkko.sakkinen@linux.intel.com> wrote:
+>>> +        except ProtocolError(e):
+>>=20
+>> Should this not be
+>>=20
+>>        except ProtocolError as e:
+>=20
+> Unless there is a functional difference, does it matter?
+>=20
+> /Jarkko
 
-I suspect this is the same issue with:
+Well, your patch confuses me a lot. It looks to me like you are passing
+the undefined `e` variable to the constructor.
 
-https://lore.kernel.org/lkml/20200410002518.GG8179@shao2-debian/
+When I run flake8 on it I get following error (among others):
 
-And since this one is very easy to reproduce, I finally noticed that
-we have wrongly enabled uffd-wp on x86_32, which is definely not going
-to work... Because we'll use bit 2 of swap entry assuming that's the
-uffd-wp bit, while that's part of swp offset on 32bit systems.
+    F821 undefined name 'e'
 
-Naresh, could you try whether below change fixes the issue for you?
+What I suggested is the standard syntax:
+https://docs.python.org/3/tutorial/errors.html
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 8d078642b4be..7ac524d1316e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -149,7 +149,7 @@ config X86
-        select HAVE_ARCH_TRACEHOOK
-        select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-        select HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD if X86_64
--       select HAVE_ARCH_USERFAULTFD_WP         if USERFAULTFD
-+       select HAVE_ARCH_USERFAULTFD_WP         if X86_64 && USERFAULTFD
-        select HAVE_ARCH_VMAP_STACK             if X86_64
-        select HAVE_ARCH_WITHIN_STACK_FRAMES
-        select HAVE_ASM_MODVERSIONS
+Did you test this? You should get an error as soon as an exception
+occurs.
 
-Thanks,
-
--- 
-Peter Xu
+Cheers,
+Ezra.
 
