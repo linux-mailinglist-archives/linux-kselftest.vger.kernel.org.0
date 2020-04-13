@@ -2,139 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A48C21A67A3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 16:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F8E1A686B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 17:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730436AbgDMOOp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Apr 2020 10:14:45 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:56957 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730372AbgDMOOp (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Apr 2020 10:14:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586787282;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9pz4ecCGHpD54VRs30aCWNG0g9ZT3H7m50d0kjdfWfs=;
-        b=BT8kkx8V53MnLDfjY2/H6exCCxn6rQ0L9/FXUzbCT2CHFJYmb4lQsLV9OxgVHQeZ+k4b//
-        W08CfTXLcD1yZ28W9Eyo3w/jc9MSfveNjIajNVo936Jufa1OdTY8/I+Z4w8gn/iM3JbkEC
-        Ww6c7Cw7YBiCrQS83BgRdRDZOcz2lCk=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-316-ew7LhxwqM2ez-Y-Ai5_ZmQ-1; Mon, 13 Apr 2020 10:14:33 -0400
-X-MC-Unique: ew7LhxwqM2ez-Y-Ai5_ZmQ-1
-Received: by mail-qv1-f70.google.com with SMTP id v11so2779137qvw.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Apr 2020 07:14:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9pz4ecCGHpD54VRs30aCWNG0g9ZT3H7m50d0kjdfWfs=;
-        b=AwCIhBeXqCHhaJFo8YmnTZslAbzU6+esZv3aNv2I7K4kzC6Et6y0NvYhjF5GfVX+GL
-         JZDI08lX/jwiih1B52Y4ulb9Mt41cIHIa8OgU/BEiP3AmlczorQgqbY7cZl7KxDhAkmz
-         3isSjUJWlxsz/jqycGYlrlRa6Fuq/I0L4ffQiEYH1eHL4mVCGGXlL+T2E7pz7GYFNojS
-         PJ1Zyx3ZQY3HMs/nnyOHDloVaxgWGhvD/tO9du3cpUCKQPQ56+J1gzSEDD6JlcRh0SDL
-         qTA9xdS8M09KBQXR0avHUz/GNWc68zVPWY95YxfbVwUfoyTxMCKvfomKEo+WkoerlKzs
-         O11g==
-X-Gm-Message-State: AGi0PuZrQu09RW/sfsPCE9refzwl+a7Ig6/3zhHAr13ePaMSnMMD4UjJ
-        5MGMWNh8M/473C5REfxzNK+YpL4MRkmH9QPzzaEWm1rNn/vA0RNKThZpNu/2IQXBJUwrhvG3BWZ
-        cGwRIrwcTd/QFvHph2abN2bip2nI1
-X-Received: by 2002:a37:bb01:: with SMTP id l1mr16169751qkf.37.1586787272943;
-        Mon, 13 Apr 2020 07:14:32 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLcyXUmdwZ9EVtC8gVeFjagGEC3vAwbmtSkkop0oHmZV9eVJO4cB8zuzUmSpI+KklOCOl2lAQ==
-X-Received: by 2002:a37:bb01:: with SMTP id l1mr16169713qkf.37.1586787272633;
-        Mon, 13 Apr 2020 07:14:32 -0700 (PDT)
-Received: from xz-x1 ([2607:9880:19c0:32::2])
-        by smtp.gmail.com with ESMTPSA id w2sm2374972qtv.42.2020.04.13.07.14.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 07:14:31 -0700 (PDT)
-Date:   Mon, 13 Apr 2020 10:14:29 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leonardo Bras <leonardo@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jules Irenge <jbi.octave@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Minchan Kim <minchan@kernel.org>, Mel Gorman <mgorman@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Mateusz Nosek <mateusznosek0@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: i386: selftests: vm: compaction_test: BUG: kernel NULL pointer
- dereference, address: 00000000
-Message-ID: <20200413141429.GE38470@xz-x1>
-References: <CA+G9fYsRGvkqtpdGv_aVr+Hn17KgYq04Q=EE=pB774qVxRqOeg@mail.gmail.com>
- <20200412214150.GB38470@xz-x1>
- <CA+G9fYvARTCKjbfHYEbfOjtn_s7desuAToOF4g+Z_fztzZ-myw@mail.gmail.com>
+        id S1729524AbgDMPCM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Apr 2020 11:02:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33174 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728537AbgDMPCL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 13 Apr 2020 11:02:11 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 08E5A20656;
+        Mon, 13 Apr 2020 15:02:09 +0000 (UTC)
+Date:   Mon, 13 Apr 2020 11:02:07 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Xiao Yang <yangx.jy@cn.fujitsu.com>
+Cc:     <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-trace-devel@vger.kernel.org>
+Subject: Re: [PATCH] tracing: Fix the race between registering 'snapshot'
+ event trigger and triggering 'snapshot' operation
+Message-ID: <20200413110207.01a48591@gandalf.local.home>
+In-Reply-To: <20200413071252.13720-1-yangx.jy@cn.fujitsu.com>
+References: <20200413071252.13720-1-yangx.jy@cn.fujitsu.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvARTCKjbfHYEbfOjtn_s7desuAToOF4g+Z_fztzZ-myw@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 13, 2020 at 04:51:25PM +0530, Naresh Kamboju wrote:
-> On Mon, 13 Apr 2020 at 03:12, Peter Xu <peterx@redhat.com> wrote:
-> > And since this one is very easy to reproduce, I finally noticed that
-> > we have wrongly enabled uffd-wp on x86_32, which is definely not going
-> > to work... Because we'll use bit 2 of swap entry assuming that's the
-> > uffd-wp bit, while that's part of swp offset on 32bit systems.
-> >
-> > Naresh, could you try whether below change fixes the issue for you?
-> >
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 8d078642b4be..7ac524d1316e 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -149,7 +149,7 @@ config X86
-> >         select HAVE_ARCH_TRACEHOOK
-> >         select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> >         select HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD if X86_64
-> > -       select HAVE_ARCH_USERFAULTFD_WP         if USERFAULTFD
-> > +       select HAVE_ARCH_USERFAULTFD_WP         if X86_64 && USERFAULTFD
-> >         select HAVE_ARCH_VMAP_STACK             if X86_64
-> >         select HAVE_ARCH_WITHIN_STACK_FRAMES
-> >         select HAVE_ASM_MODVERSIONS
-> >
-> 
-> Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> 
-> The above patch tested and did not notice the crash.
-> + cd /opt/kselftests/default-in-kernel/vm/
-> + ./compaction_test
-> No of huge pages allocated = 297
-> + ./compaction_test
-> [   46.059785] kauditd_printk_skb: 15 callbacks suppressed
-> [   46.059786] audit: type=1334 audit(1586776582.927:25): prog-id=17 op=UNLOAD
-> [   46.071997] audit: type=1334 audit(1586776582.927:26): prog-id=16 op=UNLOAD
-> No of huge pages allocated = 160
-> 
-> Full test log,
-> https://lkft.validation.linaro.org/scheduler/job/1362495#L1308
-> 
-> Build artifacts.
-> https://builds.tuxbuild.com/w0ol7cCsGan0wzPp7bNqkg/
+On Mon, 13 Apr 2020 15:12:52 +0800
+Xiao Yang <yangx.jy@cn.fujitsu.com> wrote:
 
-Thanks!  I'll post a formal patch soon.
+> Traced event can trigger 'snapshot' operation(i.e. calls snapshot_trigger()
+> or snapshot_count_trigger()) when register_snapshot_trigger() has completed
+> registration but doesn't allocate spare buffer for 'snapshot' event trigger.
+> 'snapshot' operation always detects the lack of allocated buffer in the rare
+> case so make register_snapshot_trigger() allocate spare buffer first.
+> 
+> trigger-snapshot.tc in kselftest reproduces the issue on slow vm:
+> -----------------------------------------------------------
+> cat trace
+> ...
+> ftracetest-3028  [002] ....   236.784290: sched_process_fork: comm=ftracetest pid=3028 child_comm=ftracetest child_pid=3036
+>      <...>-2875  [003] ....   240.460335: tracing_snapshot_instance_cond: *** SNAPSHOT NOT ALLOCATED ***
+>      <...>-2875  [003] ....   240.460338: tracing_snapshot_instance_cond: *** stopping trace here!   ***
+> -----------------------------------------------------------
+> 
+> Signed-off-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
+> ---
+>  kernel/trace/trace_events_trigger.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+> index dd34a1b46a86..00e54cdcef3e 100644
+> --- a/kernel/trace/trace_events_trigger.c
+> +++ b/kernel/trace/trace_events_trigger.c
+> @@ -1088,9 +1088,13 @@ register_snapshot_trigger(char *glob, struct event_trigger_ops *ops,
+>  			  struct event_trigger_data *data,
+>  			  struct trace_event_file *file)
+>  {
+> -	int ret = register_trigger(glob, ops, data, file);
+> +	int alloc_ret, ret;
+>  
+> -	if (ret > 0 && tracing_alloc_snapshot_instance(file->tr) != 0) {
+> +	alloc_ret = tracing_alloc_snapshot_instance(file->tr);
+> +
+> +	ret = register_trigger(glob, ops, data, file);
+> +
+> +	if (ret > 0 && alloc_ret != 0) {
+>  		unregister_trigger(glob, ops, data, file);
+>  		ret = 0;
+>  	}
 
--- 
-Peter Xu
 
+Why register if the allocation failed? Just switch the logic:
+
+	int ret = tracing_alloc_snapshot_instance(file->tr);
+
+	if (ret != 0)
+		return 0;
+
+	return register_trigger(glob, ops, data, file);
+
+
+-- Steve
