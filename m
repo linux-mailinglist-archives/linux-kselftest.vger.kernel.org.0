@@ -2,109 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8C31A624A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 07:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA8E1A63A3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 09:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728784AbgDMFC0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Apr 2020 01:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:37220 "EHLO
+        id S1729277AbgDMH0P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Apr 2020 03:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:60290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728739AbgDMFC0 (ORCPT
+        with ESMTP id S1727612AbgDMH0P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Apr 2020 01:02:26 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9500C0A3BE0
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 22:02:24 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id i10so8980341wrv.10
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Apr 2020 22:02:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=easyb-ch.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Uqitgnmn7ZCl0pMBz3WS3gLsMoIlng512epuA2Wtd/8=;
-        b=sKSBJtsCloD3LSgreeEK44eNxCI0BWQDTRrsWkePiQTbjionW0UytbDp0pn1kbOYRh
-         v4G2uToQMrAEg6CM4JRucUjfitktldAGC7zsUTaBQBcCAZq6u2d5frmyQNietMffpJyX
-         UDC8mIBANdaKy/mFbuIT6fNd9ODu1L36YdUi7C9b2uKItbyl549DdEzWVKE9aKaGhhHx
-         FXnlD3+1cHX4X6XTaDHq7jCoy4zBTgXR0XADL/UHbI8QMcMriuO8eiIBP+kEDM4VRLRb
-         E5YTO48GnfP3I6fu52HXeAHa7jLV3L+4ccU8m7B5H+QII8IeVm40qRbK66+D9z8B4yep
-         uicQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Uqitgnmn7ZCl0pMBz3WS3gLsMoIlng512epuA2Wtd/8=;
-        b=jZh6w771QPyUTT5vP5C+pG9MdVeRYGknozYRhmFoL3siqWvDQAfwXLgtzW8TxrLYRB
-         xBg7PzR3aEqqOLFeD5XKnvXVwq6cgLNwAvPwrGTsqYxGWsL5gi3LUT5TfgiRFPQn6JQo
-         UE/1nxRzc3fXbGelGrc1cS91KC2BPGKtPGzHN1NXkp59JU7J39O5IyuRMMjxM/2xDehu
-         DLVXkaLfeOTX26Gt2HvPLHNr0aSGL7XMtKTmdMB96FB2hZxgTBurSwWHd7/CWptynbAZ
-         m2nG1LCocVwunP7ePJBSygvUxlmFVlx//rm1MITJfo8I+jza1o5Bn29zjNPyC9o92VGP
-         zZSA==
-X-Gm-Message-State: AGi0PuZ+U9kF8tUWPNdGaCEzdjOT1+W26BBzb36o0VENg/uK7BIOLz7Q
-        3Nvbi3r7v1ycNcFjEoFcTZIW+A==
-X-Google-Smtp-Source: APiQypLbyb568HVT5hQ6wehhmaAyAaPlxe8QRbk2/eNkRJT431aBvydNGYoyK+gWeCPpIbmv/vC6Mw==
-X-Received: by 2002:a5d:6a46:: with SMTP id t6mr16353193wrw.93.1586754143460;
-        Sun, 12 Apr 2020 22:02:23 -0700 (PDT)
-Received: from ?IPv6:2001:1715:4e3a:130:710e:1dde:8fec:143e? ([2001:1715:4e3a:130:710e:1dde:8fec:143e])
-        by smtp.gmail.com with ESMTPSA id c190sm13151557wme.10.2020.04.12.22.02.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 Apr 2020 22:02:23 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.5\))
-Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
- compatible
-From:   Ezra Buehler <ezra@easyb.ch>
-In-Reply-To: <20200412170719.GA324408@linux.intel.com>
-Date:   Mon, 13 Apr 2020 07:02:20 +0200
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <531D50E8-E8FC-402E-9226-6000E8B6E960@easyb.ch>
-References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
- <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
- <20200412170719.GA324408@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-X-Mailer: Apple Mail (2.3445.9.5)
+        Mon, 13 Apr 2020 03:26:15 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2657C008651;
+        Mon, 13 Apr 2020 00:26:14 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.72,377,1580745600"; 
+   d="scan'208";a="88939532"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 13 Apr 2020 15:26:13 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id A6AFD50A9999;
+        Mon, 13 Apr 2020 15:15:42 +0800 (CST)
+Received: from G08CNEXCHPEKD02.g08.fujitsu.local (10.167.33.83) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Mon, 13 Apr 2020 15:26:13 +0800
+Received: from Fedora-31.g08.fujitsu.local (10.167.220.31) by
+ G08CNEXCHPEKD02.g08.fujitsu.local (10.167.33.89) with Microsoft SMTP Server
+ id 14.3.439.0; Mon, 13 Apr 2020 15:26:09 +0800
+From:   Xiao Yang <yangx.jy@cn.fujitsu.com>
+To:     <rostedt@goodmis.org>, <mingo@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-trace-devel@vger.kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>
+Subject: [PATCH] tracing: Fix the race between registering 'snapshot' event trigger and triggering 'snapshot' operation
+Date:   Mon, 13 Apr 2020 15:12:52 +0800
+Message-ID: <20200413071252.13720-1-yangx.jy@cn.fujitsu.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: A6AFD50A9999.ACC61
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: yangx.jy@cn.fujitsu.com
+X-Spam-Status: No
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jarkko,
+Traced event can trigger 'snapshot' operation(i.e. calls snapshot_trigger()
+or snapshot_count_trigger()) when register_snapshot_trigger() has completed
+registration but doesn't allocate spare buffer for 'snapshot' event trigger.
+'snapshot' operation always detects the lack of allocated buffer in the rare
+case so make register_snapshot_trigger() allocate spare buffer first.
 
-On 12 Apr 2020, at 19:07, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->=20
-> On Sun, Apr 12, 2020 at 05:02:27PM +0200, Ezra Buehler wrote:
->> Hi Jarkkon,
->>=20
->>> On 12 Apr 2020, at 16:36, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->>> +        except ProtocolError(e):
->>=20
->> Should this not be
->>=20
->>        except ProtocolError as e:
->=20
-> Unless there is a functional difference, does it matter?
->=20
-> /Jarkko
+trigger-snapshot.tc in kselftest reproduces the issue on slow vm:
+-----------------------------------------------------------
+cat trace
+...
+ftracetest-3028  [002] ....   236.784290: sched_process_fork: comm=ftracetest pid=3028 child_comm=ftracetest child_pid=3036
+     <...>-2875  [003] ....   240.460335: tracing_snapshot_instance_cond: *** SNAPSHOT NOT ALLOCATED ***
+     <...>-2875  [003] ....   240.460338: tracing_snapshot_instance_cond: *** stopping trace here!   ***
+-----------------------------------------------------------
 
-Well, your patch confuses me a lot. It looks to me like you are passing
-the undefined `e` variable to the constructor.
+Signed-off-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
+---
+ kernel/trace/trace_events_trigger.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-When I run flake8 on it I get following error (among others):
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index dd34a1b46a86..00e54cdcef3e 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -1088,9 +1088,13 @@ register_snapshot_trigger(char *glob, struct event_trigger_ops *ops,
+ 			  struct event_trigger_data *data,
+ 			  struct trace_event_file *file)
+ {
+-	int ret = register_trigger(glob, ops, data, file);
++	int alloc_ret, ret;
+ 
+-	if (ret > 0 && tracing_alloc_snapshot_instance(file->tr) != 0) {
++	alloc_ret = tracing_alloc_snapshot_instance(file->tr);
++
++	ret = register_trigger(glob, ops, data, file);
++
++	if (ret > 0 && alloc_ret != 0) {
+ 		unregister_trigger(glob, ops, data, file);
+ 		ret = 0;
+ 	}
+-- 
+2.25.1
 
-    F821 undefined name 'e'
 
-What I suggested is the standard syntax:
-https://docs.python.org/3/tutorial/errors.html
-
-Did you test this? You should get an error as soon as an exception
-occurs.
-
-Cheers,
-Ezra.
 
