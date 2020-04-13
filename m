@@ -2,93 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F8E1A686B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 17:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79571A69F7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Apr 2020 18:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729524AbgDMPCM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Apr 2020 11:02:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33174 "EHLO mail.kernel.org"
+        id S1731589AbgDMQan (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Apr 2020 12:30:43 -0400
+Received: from mga12.intel.com ([192.55.52.136]:5348 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728537AbgDMPCL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Apr 2020 11:02:11 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08E5A20656;
-        Mon, 13 Apr 2020 15:02:09 +0000 (UTC)
-Date:   Mon, 13 Apr 2020 11:02:07 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Xiao Yang <yangx.jy@cn.fujitsu.com>
-Cc:     <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        <linux-trace-devel@vger.kernel.org>
-Subject: Re: [PATCH] tracing: Fix the race between registering 'snapshot'
- event trigger and triggering 'snapshot' operation
-Message-ID: <20200413110207.01a48591@gandalf.local.home>
-In-Reply-To: <20200413071252.13720-1-yangx.jy@cn.fujitsu.com>
-References: <20200413071252.13720-1-yangx.jy@cn.fujitsu.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1731587AbgDMQam (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 13 Apr 2020 12:30:42 -0400
+IronPort-SDR: 0UjSJ/RMfCiNIX0Hh3JAdOmfgE0+nvpvGr9R1lCZzMTkujWXkRbXhHGq7f+xKllFwPbD+NdFmR
+ YrQ68/LQiEnQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2020 09:30:42 -0700
+IronPort-SDR: YrPaTfiJBoTLNJE0b55d6fX275Obm/Ipg/2Y6SdKePOLQjN8gmg8/wMGZv8V3anyfg+1V056T+
+ 3SYUxrodWw1Q==
+X-IronPort-AV: E=Sophos;i="5.72,378,1580803200"; 
+   d="scan'208";a="256226157"
+Received: from rchatre-mobl.amr.corp.intel.com (HELO [10.254.108.87]) ([10.254.108.87])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2020 09:30:41 -0700
+Subject: Re: linux-5.7-rc1/tools/testing/selftests/resctrl/cqm_test.c:89:15:
+ error: Buffer is accessed out of bounds
+To:     David Binderman <dcb314@hotmail.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
+References: <DB7PR08MB38010E1B93EEE780A48EBBB39CDD0@DB7PR08MB3801.eurprd08.prod.outlook.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+Message-ID: <fcc738e6-0cff-d605-2e28-cd756921c981@intel.com>
+Date:   Mon, 13 Apr 2020 09:30:38 -0700
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <DB7PR08MB38010E1B93EEE780A48EBBB39CDD0@DB7PR08MB3801.eurprd08.prod.outlook.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 13 Apr 2020 15:12:52 +0800
-Xiao Yang <yangx.jy@cn.fujitsu.com> wrote:
++Sai
 
-> Traced event can trigger 'snapshot' operation(i.e. calls snapshot_trigger()
-> or snapshot_count_trigger()) when register_snapshot_trigger() has completed
-> registration but doesn't allocate spare buffer for 'snapshot' event trigger.
-> 'snapshot' operation always detects the lack of allocated buffer in the rare
-> case so make register_snapshot_trigger() allocate spare buffer first.
+On 4/13/2020 2:43 AM, David Binderman wrote:
+> Hello there,
 > 
-> trigger-snapshot.tc in kselftest reproduces the issue on slow vm:
-> -----------------------------------------------------------
-> cat trace
-> ...
-> ftracetest-3028  [002] ....   236.784290: sched_process_fork: comm=ftracetest pid=3028 child_comm=ftracetest child_pid=3036
->      <...>-2875  [003] ....   240.460335: tracing_snapshot_instance_cond: *** SNAPSHOT NOT ALLOCATED ***
->      <...>-2875  [003] ....   240.460338: tracing_snapshot_instance_cond: *** stopping trace here!   ***
-> -----------------------------------------------------------
+> Source code is
 > 
-> Signed-off-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
-> ---
->  kernel/trace/trace_events_trigger.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>    while (fgets(temp, 1024, fp)) {
 > 
-> diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
-> index dd34a1b46a86..00e54cdcef3e 100644
-> --- a/kernel/trace/trace_events_trigger.c
-> +++ b/kernel/trace/trace_events_trigger.c
-> @@ -1088,9 +1088,13 @@ register_snapshot_trigger(char *glob, struct event_trigger_ops *ops,
->  			  struct event_trigger_data *data,
->  			  struct trace_event_file *file)
->  {
-> -	int ret = register_trigger(glob, ops, data, file);
-> +	int alloc_ret, ret;
->  
-> -	if (ret > 0 && tracing_alloc_snapshot_instance(file->tr) != 0) {
-> +	alloc_ret = tracing_alloc_snapshot_instance(file->tr);
-> +
-> +	ret = register_trigger(glob, ops, data, file);
-> +
-> +	if (ret > 0 && alloc_ret != 0) {
->  		unregister_trigger(glob, ops, data, file);
->  		ret = 0;
->  	}
+> but
+> 
+>     char *token_array[8], temp[512];
+> 
+> Use of compiler flag -D_FORTIFY_SOURCE=2 would have found the problem.
+> For example:
+> 
+> # include <stdio.h>
+> 
+> extern void g( int);
+> 
+> void
+> f( FILE * fp)
+> {
+> 	char buf[ 100];
+> 
+> 	while (fgets( buf, 200, fp) != 0)
+> 	{
+> 		g( 1);
+> 	}
+> }
+> 
+> gives
+> 
+> $ /home/dcb/gcc/results/bin/gcc -c -g -O2 -D_FORTIFY_SOURCE=2 apr13c.cc
+> In file included from /usr/include/stdio.h:867,
+>                  from apr13c.cc:2:
+> In function ‘char* fgets(char*, int, FILE*)’,
+>     inlined from ‘void f(FILE*)’ at apr13c.cc:11:14:
+> /usr/include/bits/stdio2.h:263:26: warning: call to ‘__fgets_chk_warn’ declared with attribute warning: fgets called with bigger size than length of destination buffer [-Wattribute-warning]
+> 
+> I suggest switch on compiler flag -D_FORTIFY_SOURCE=2 in
+> all development builds.
+> 
+
+Thank you very much for catching this David.
+
+Sai: could you include this fix in your upcoming series of fixes? Using
+the pattern of "fgets(buf, sizeof(buf), ...)" instead of hard coding the
+size should be helpful here.
+
+Reinette
 
 
-Why register if the allocation failed? Just switch the logic:
 
-	int ret = tracing_alloc_snapshot_instance(file->tr);
-
-	if (ret != 0)
-		return 0;
-
-	return register_trigger(glob, ops, data, file);
-
-
--- Steve
