@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CED401A8EC6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 00:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C3D1A8EE8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 01:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633636AbgDNWvE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Apr 2020 18:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
+        id S2440989AbgDNXJ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Apr 2020 19:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729551AbgDNWvA (ORCPT
+        by vger.kernel.org with ESMTP id S2437942AbgDNXJ4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Apr 2020 18:51:00 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E37EC061A0C
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 15:51:00 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id 20so7233750qkl.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 15:51:00 -0700 (PDT)
+        Tue, 14 Apr 2020 19:09:56 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1343DC061A0E
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 16:09:56 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id i19so8893935qtp.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 16:09:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=massaru-org.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=8GmpDGYHNWO1HVRGOCC1HUE41KMOfYWwP4MYA86x9Hs=;
-        b=sVFynu6uxe/1IYpgyK5vHozGoALV27D0esYW0h/gqLr0R7i12qBcB6m3tuCoCBvSR/
-         BarOB3ND2X8zcoVR8cG93fmbKXTwES+Bn+7jDRt+FBXoQbaacVQVx8McUH/AmdkYxbok
-         63d5rf8DlAcQa7ADrPPCgPYw/57YH73qGw116x0sBUJRgUGLbVs/ytJr8gpCbqdD5ZvV
-         OrGNjkvwP3rRhDPyjAAG6rolsWKXGZRj0Kaw1o1pkr7pArW8k6v1bvq/CXlpai1WXOua
-         qU6t2iP7oSQPBPr8zmP6wqJUMsS3B03rNjKLW6BqaAQfxhEff/kntWZTIyXIafVTGvZM
-         BGhA==
+        b=d/XycrnOIE9zVNs85mQ8kiqfaX2FAKRGtTainrFJ0IzS2KMbTBKck6+HKcl12KMfi/
+         mLyCl0M1OBOJwXwZ3mkeZWf734twgkheW3CbMFKK9vgo54UnwfYGSfuqlmm2nneOODqY
+         lFI2ztDOic5VkmRttn366D+g3jqOHNKyx6SEMuHpgfwN4dMbeYlKBWMp7+Sx0VtOHgkw
+         QAB6RJyglN5wdqlfuhGUcdCQiEH3Z01NDBhyXZH9qCDuhlHStFTK31cHPnoZ3HSzOw1n
+         zELCk4JBQJoOxdIR6Znl2rOgnjsEmPOnLC0nGGBLDO2jdXjzhoB0uXDpMRgRXyQfNDmR
+         X8Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=8GmpDGYHNWO1HVRGOCC1HUE41KMOfYWwP4MYA86x9Hs=;
-        b=N7MdR7tbxLDPrsFtnXIXndMZcz91wPwyrZGD9uSjFl+SRUq3YhDXeep7+02TsLecpJ
-         /UVzlZx0oRNgyNgV3DkE7lg9sqk7s5+lSRvmdWy16PT7QKWdbOH1dnMEDKFDCm/nfDMw
-         ofJKXqqUTiP3fygK4S8m4smLtJrZiZEKdPeFN/JixVMG8ypluas23N9N5iLS7ylGatec
-         z1d8Fkji8zTUUdnsNeTi9eu8YYLKIPJhtmRQcTHdR2m39U0aPkgVLvgJKwkj+8sE8nnR
-         Qsi0v7mm1Hor+0j9/g6WtBA6uzwMgfLpRwjKUXYMM0lUt1Pm5aeCljFDEngF3uMbgcYN
-         KIGQ==
-X-Gm-Message-State: AGi0PuaCypwD7g7G3K+f2Qof33PEfLt0qfwKQJLLI9595fvoliYndE/S
-        /mhp59lUYisTBbydXXkhKA20CA==
-X-Google-Smtp-Source: APiQypJcvNv4pDReOcJEKCheR7ohpA3eksDlyYI4BNeYNc+nCmyMn5w0jJ+afnHpid9Nx37EUAFj3A==
-X-Received: by 2002:a37:4ed5:: with SMTP id c204mr23485573qkb.328.1586904659318;
-        Tue, 14 Apr 2020 15:50:59 -0700 (PDT)
+        b=BaMX2Nt2kZqwCkB790BwxaU8Go98iwz46LkB2YH3DLFgJr0Ktf/8VvtqvsfV/2l7FY
+         oZWihl56LASxljSndLHjRf1QhYSqekthmG28VcqFhS14bq7qVM8t7H2QSy5dw8LUgcLr
+         7FNdXshiakdcvrmhoKIaC4DLMXceO4Chr+ulqcT+jwSzLp41RXIK1WFTztQLTjrkSx/n
+         zw6yXNcrE5Dncr+gumxdfeISjkDfbtUHLXOkD6hEO1LkqBn+kkUnkgg6aRjhHemcvnyf
+         xMEvVE0Op/0iirDaYLIW/M8tiKRWOg0yLq7IrGqHvEQxZJYsUliPt02IZ/rJ5OevM3sl
+         00vQ==
+X-Gm-Message-State: AGi0PuaBWKeLwW7WszYLnFzk210O4svxphIrdds80KL9v/v6hzvHAnpN
+        h8+OOKGwcG7bhAxn54YG8EsMWg==
+X-Google-Smtp-Source: APiQypIq7HA/Rl7AQcDjE3FdKvf8IBKg1xI6rru45NLF9fLflB46Gk0TTOpZ6L0hLOq23HmizGMYBQ==
+X-Received: by 2002:ac8:16e4:: with SMTP id y33mr19301422qtk.4.1586905795146;
+        Tue, 14 Apr 2020 16:09:55 -0700 (PDT)
 Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id j90sm11747701qte.20.2020.04.14.15.50.57
+        by smtp.gmail.com with ESMTPSA id f1sm11455084qkl.72.2020.04.14.16.09.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 15:50:58 -0700 (PDT)
+        Tue, 14 Apr 2020 16:09:54 -0700 (PDT)
 From:   Vitor Massaru Iha <vitor@massaru.org>
 To:     kunit-dev@googlegroups.com
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.or,
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         brendanhiggins@google.com, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] kunit: use --build_dir=.kunit as default
-Date:   Tue, 14 Apr 2020 19:50:54 -0300
-Message-Id: <20200414225054.81721-1-vitor@massaru.org>
+Subject: [RESEND] kunit: use --build_dir=.kunit as default
+Date:   Tue, 14 Apr 2020 20:09:50 -0300
+Message-Id: <20200414230950.83665-1-vitor@massaru.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
