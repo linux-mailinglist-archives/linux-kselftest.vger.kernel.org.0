@@ -2,134 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E401A8EB2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 00:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED401A8EC6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 00:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729969AbgDNWjB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Apr 2020 18:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S2633636AbgDNWvE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Apr 2020 18:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729629AbgDNWi7 (ORCPT
+        by vger.kernel.org with ESMTP id S1729551AbgDNWvA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Apr 2020 18:38:59 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D771AC061A0C;
-        Tue, 14 Apr 2020 15:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=5JBZjn7sy5GQCd0bRK3Ru9SkD6beDun/x68fbss5o7E=; b=oU9Ij/oNfaefY44bgvBm5o1a42
-        Mn5zWr00gZJ9EkND9EkEp2nxCWFvFaV/9qKVALtZXgm/Eig4RoJQkvJKw+AFTobpnVL0HyWA4mBLS
-        zAFLTPuEbY0+spcUsStPCfNIkzTZOfeoP2FwBZe/Ngo0+dolVEixoQDCAIgvT3OemekSLJHidwlLD
-        P57PeW6dktFb+AaN/HdnMcEGjzqU/1bX48hpcGLmtvwOg7niEhnKI0IW/XeXtqid23y0+U3i6uokN
-        lDmiVU0kZLpIxVyHy96nItHc+mtlX/zY+LiyBguHJbZ1LHr/hCHlcsml8lEVW/yLcy1nsrX5feLUG
-        Gxfz23Sw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jOUCg-0005Kp-UP; Tue, 14 Apr 2020 22:38:51 +0000
-Subject: Re: [PATCH v1] kobject: make sure parent is not released before
- children
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        gregkh@linuxfoundation.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, naresh.kamboju@linaro.org,
-        sakari.ailus@linux.intel.com, andy.shevchenko@gmail.com,
-        hdegoede@redhat.com, rafael.j.wysocki@intel.com,
-        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, andriy.shevchenko@linux.intel.com,
-        shuah@kernel.org, anders.roxell@linaro.org,
-        lkft-triage@lists.linaro.org, linux@rasmusvillemoes.dk,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <20200414204240.186377-1-brendanhiggins@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <71775e76-6175-d64b-0f4e-1beeb6b589b3@infradead.org>
-Date:   Tue, 14 Apr 2020 15:38:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 14 Apr 2020 18:51:00 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E37EC061A0C
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 15:51:00 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id 20so7233750qkl.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 15:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8GmpDGYHNWO1HVRGOCC1HUE41KMOfYWwP4MYA86x9Hs=;
+        b=sVFynu6uxe/1IYpgyK5vHozGoALV27D0esYW0h/gqLr0R7i12qBcB6m3tuCoCBvSR/
+         BarOB3ND2X8zcoVR8cG93fmbKXTwES+Bn+7jDRt+FBXoQbaacVQVx8McUH/AmdkYxbok
+         63d5rf8DlAcQa7ADrPPCgPYw/57YH73qGw116x0sBUJRgUGLbVs/ytJr8gpCbqdD5ZvV
+         OrGNjkvwP3rRhDPyjAAG6rolsWKXGZRj0Kaw1o1pkr7pArW8k6v1bvq/CXlpai1WXOua
+         qU6t2iP7oSQPBPr8zmP6wqJUMsS3B03rNjKLW6BqaAQfxhEff/kntWZTIyXIafVTGvZM
+         BGhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8GmpDGYHNWO1HVRGOCC1HUE41KMOfYWwP4MYA86x9Hs=;
+        b=N7MdR7tbxLDPrsFtnXIXndMZcz91wPwyrZGD9uSjFl+SRUq3YhDXeep7+02TsLecpJ
+         /UVzlZx0oRNgyNgV3DkE7lg9sqk7s5+lSRvmdWy16PT7QKWdbOH1dnMEDKFDCm/nfDMw
+         ofJKXqqUTiP3fygK4S8m4smLtJrZiZEKdPeFN/JixVMG8ypluas23N9N5iLS7ylGatec
+         z1d8Fkji8zTUUdnsNeTi9eu8YYLKIPJhtmRQcTHdR2m39U0aPkgVLvgJKwkj+8sE8nnR
+         Qsi0v7mm1Hor+0j9/g6WtBA6uzwMgfLpRwjKUXYMM0lUt1Pm5aeCljFDEngF3uMbgcYN
+         KIGQ==
+X-Gm-Message-State: AGi0PuaCypwD7g7G3K+f2Qof33PEfLt0qfwKQJLLI9595fvoliYndE/S
+        /mhp59lUYisTBbydXXkhKA20CA==
+X-Google-Smtp-Source: APiQypJcvNv4pDReOcJEKCheR7ohpA3eksDlyYI4BNeYNc+nCmyMn5w0jJ+afnHpid9Nx37EUAFj3A==
+X-Received: by 2002:a37:4ed5:: with SMTP id c204mr23485573qkb.328.1586904659318;
+        Tue, 14 Apr 2020 15:50:59 -0700 (PDT)
+Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
+        by smtp.gmail.com with ESMTPSA id j90sm11747701qte.20.2020.04.14.15.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 15:50:58 -0700 (PDT)
+From:   Vitor Massaru Iha <vitor@massaru.org>
+To:     kunit-dev@googlegroups.com
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.or,
+        brendanhiggins@google.com, skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] kunit: use --build_dir=.kunit as default
+Date:   Tue, 14 Apr 2020 19:50:54 -0300
+Message-Id: <20200414225054.81721-1-vitor@massaru.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20200414204240.186377-1-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/14/20 1:42 PM, Brendan Higgins wrote:
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> 
-> Previously, kobjects were released before the associated kobj_types;
-> this can cause a kobject deallocation to fail when the kobject has
-> children; an example of this is in software_node_unregister_nodes(); it
-> calls release on the parent before children meaning that children can be
-> released after the parent, which may be needed for removal.
-> 
-> So, take a reference to the parent before we delete a node to ensure
-> that the parent is not released before the children.
-> 
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Fixes: 7589238a8cf3 ("Revert "software node: Simplify software_node_release() function"")
-> Link: https://lore.kernel.org/linux-kselftest/CAFd5g44s5NQvT8TG_x4rwbqoa7zWzkV0TX+ETZoQdOB7OwXCPQ@mail.gmail.com/T/#m71f37f3985f2abd7209c8ca8e0fa4edc45e171d6
-> Co-developed-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+To make KUnit easier to use, and to avoid overwriting object and
+.config files, the default KUnit build directory is set to .kunit
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+ * Related bug: https://bugzilla.kernel.org/show_bug.cgi?id=205221
 
-Fixes the lib/test_printf.ko use-after-free on linux-next 20200410
-that I reported last week.
+Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+---
+ tools/testing/kunit/kunit.py | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-
-> ---
-> 
-> This patch is based on the diff written by Heikki linked above.
-> 
-> Heikki, can you either reply with a Signed-off-by? Otherwise, I can
-> resend with me as the author and I will list you as the Co-developed-by.
-> 
-> Sorry for all the CCs: I just want to make sure everyone who was a party
-> to the original bug sees this.
-> 
-> ---
->  lib/kobject.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/lib/kobject.c b/lib/kobject.c
-> index 83198cb37d8d..5921e2470b46 100644
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -663,6 +663,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
->   */
->  static void kobject_cleanup(struct kobject *kobj)
->  {
-> +	struct kobject *parent = kobj->parent;
->  	struct kobj_type *t = get_ktype(kobj);
->  	const char *name = kobj->name;
->  
-> @@ -680,6 +681,9 @@ static void kobject_cleanup(struct kobject *kobj)
->  		kobject_uevent(kobj, KOBJ_REMOVE);
->  	}
->  
-> +	/* make sure the parent is not released before the (last) child */
-> +	kobject_get(parent);
-> +
->  	/* remove from sysfs if the caller did not do it */
->  	if (kobj->state_in_sysfs) {
->  		pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
-> @@ -693,6 +697,8 @@ static void kobject_cleanup(struct kobject *kobj)
->  		t->release(kobj);
->  	}
->  
-> +	kobject_put(parent);
-> +
->  	/* free name if we allocated it */
->  	if (name) {
->  		pr_debug("kobject: '%s': free name\n", name);
-> 
-> base-commit: 8632e9b5645bbc2331d21d892b0d6961c1a08429
-> 
-
-Thanks.
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 7dca74774dd2..5da190c79481 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -116,7 +116,7 @@ def main(argv, linux=None):
+ 	run_parser.add_argument('--build_dir',
+ 				help='As in the make command, it specifies the build '
+ 				'directory.',
+-				type=str, default='', metavar='build_dir')
++				type=str, default='.kunit', metavar='build_dir')
+ 
+ 	run_parser.add_argument('--defconfig',
+ 				help='Uses a default .kunitconfig.',
+@@ -136,12 +136,11 @@ def main(argv, linux=None):
+ 		if get_kernel_root_path():
+ 			os.chdir(get_kernel_root_path())
+ 
+-		if cli_args.build_dir:
+-			if not os.path.exists(cli_args.build_dir):
+-				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
+-				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
++		if not os.path.exists(cli_args.build_dir):
++			os.mkdir(cli_args.build_dir)
++		kunit_kernel.kunitconfig_path = os.path.join(
++			cli_args.build_dir,
++			kunit_kernel.kunitconfig_path)
+ 
+ 		if cli_args.defconfig:
+ 			create_default_kunitconfig()
 -- 
-~Randy
+2.25.1
 
