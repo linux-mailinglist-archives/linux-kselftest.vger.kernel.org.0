@@ -2,221 +2,295 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 519271A8539
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 18:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721BA1A8AA7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 21:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391841AbgDNQjA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Apr 2020 12:39:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49894 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391830AbgDNQi6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Apr 2020 12:38:58 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C23D20678;
-        Tue, 14 Apr 2020 16:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586882337;
-        bh=fh0CwTg9fVCUTMCmRwDo30VJ7gsfT2UR0AmvRtpphIQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=eeFdZnCdLKvn1k846cWdOhUR8u4BkQgLABxQymSIwfnjsTJahYe3UzAO6QMUQ/OEf
-         DXiVWQriEBloZXhonjlKOLh/+e2VMDpmwzTRWchYvhcuLPYQqBTKvC6eGHgBNvSyOh
-         ya7cvVU35j0clIOn1S4K4ZmSrFBdISAQwpOZiDUY=
-Subject: Re: [PATCH] selftest: add a script to perform selftest compile tests
-To:     "Bird, Tim" <Tim.Bird@sony.com>, Tim Bird <tim@bird.org>
-Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tbird20d@gmail.com" <tbird20d@gmail.com>, shuah <shuah@kernel.org>
-References: <86508e9d-4aff-d9a0-3783-971a4686ccd1@bird.org>
- <9c2a8679-eb90-8dd1-43f6-40ce0a842c87@kernel.org>
- <CY4PR13MB1527E216D153ADDFE747F485FDDA0@CY4PR13MB1527.namprd13.prod.outlook.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <56a085c6-96fa-d5ad-086f-359dd3008fed@kernel.org>
-Date:   Tue, 14 Apr 2020 10:38:56 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1730223AbgDNT02 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Apr 2020 15:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730114AbgDNTYq (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Apr 2020 15:24:46 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC537C08ED7D
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 12:18:42 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ng8so5727533pjb.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 12:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9+M6Pn4GgRujfdty6eeHXakq5Khx9VZcPgigNopm4jo=;
+        b=twJvBaXa02w3g8WiVFlHn8ntYIdw/yIj1nUgMG/eakdQZmhF2XqZHd4odiS+31mS2e
+         gzU3L49LtqK4GPDrA9HNak8MZ6J/hYs5psatwpEVxuYWYUlwbsExTl95hQEb4LqaDr2c
+         zwfw02wJHR74A/V9wZITuDkw5c1evZWm2UyJGAGeB4A64G0D4/4p9gaFhdqoE0wkhyYV
+         0jY31Y9N9PIdddsA9gMIURAY6XHkARexddMUDUf4q71Gx5WUvcB3qFCNgsI6nmXlnWw4
+         9LrK7Zodk8m24WEIQyO9gq7zeFNq0KykMBQ6xlnw35gFZCH0qbm8VzdiR0kwc2O7YZXX
+         I8Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9+M6Pn4GgRujfdty6eeHXakq5Khx9VZcPgigNopm4jo=;
+        b=fW8QONKPl6nlvmWfZb85uF5sGhAm3HGeOGLAB3x90YlprIEY/CZ2UKwouLFuaQn3kV
+         9eeaeX0hfCSUJXUd46ICb0AQUPDDxTQievoD/cOoJf8HomU0HcDXMVulWW+/RjtXYmhM
+         kpBT8xW1djV0/e0EEG8AqCqfTHGWxtF1O+SQgASHpXajFk7w6oC3Rrb7NPBHewAxGqJF
+         3bw9md+bKk3b6AQBSDnr2g27xkCzWwMpj5SNQ/Y+ipNzTif3I5Gkdi6VuPohCEGw47Nt
+         qXdxIdn4xek5SZMmQ5OXw6YEzs1QYUZwcSV7kGoRmkIrhqoRQHGdhldERwfnuMpQHgNj
+         cESQ==
+X-Gm-Message-State: AGi0PuZxXZeOpk0qBuS8+BdVllrF+2JBuRKEore72q+h/J1GMOMVye7O
+        fAEsLQ1xuSOW+DNWeMYhy2nYBPEnVvWP0oHNFryshQ==
+X-Google-Smtp-Source: APiQypLxakUPPheSHg62X3tD+BdDedT+hk8I8o/owKCoH/az+/mxqtzznke01AUARkTEVXaIiQG4iR9uVn96qodXtw4=
+X-Received: by 2002:a17:902:8ec1:: with SMTP id x1mr1362004plo.325.1586891921911;
+ Tue, 14 Apr 2020 12:18:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CY4PR13MB1527E216D153ADDFE747F485FDDA0@CY4PR13MB1527.namprd13.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAFd5g45GbSX1BkuaH=8639ESHi-MCGkpFhEZZpycm9=jQb93rg@mail.gmail.com>
+ <CAFd5g47aaE+tGeHPrQmhfi6_nrvi1K4DvtRodh=zN21-uiQ1DQ@mail.gmail.com>
+ <20200305223350.GA2852@mara.localdomain> <20200306120525.GC68079@kuha.fi.intel.com>
+ <CAFd5g45c9L4BBRNtxtQf_NFr2bR6Wgt9uOHW86gzb6Ozeb0SBA@mail.gmail.com>
+ <CAFd5g45cdygYfxGoCkk710tLXFADeLNb+6w-=vhkDMLP9OM7bw@mail.gmail.com>
+ <20200310111837.GA1368052@kuha.fi.intel.com> <CAFd5g452sDMZToU+FDa-Odbkd_t1708gcRMAZQG+U4LnV=Xqgw@mail.gmail.com>
+ <CA+G9fYuwv+TEhgi46pjs2-GCe0mmMHyki9nAokvGCEA2syK5Dg@mail.gmail.com>
+ <CAFd5g46Bwd8HS9-xjHLh_rB59Nfw8iAnM6aFe0QPcveewDUT6g@mail.gmail.com> <20200414081513.GD2828150@kuha.fi.intel.com>
+In-Reply-To: <20200414081513.GD2828150@kuha.fi.intel.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 14 Apr 2020 12:18:30 -0700
+Message-ID: <CAFd5g46KeNu6bmDHBiJtGqEBQEyo1ooh=wK_PJbNih+2UCLoNQ@mail.gmail.com>
+Subject: Re: BUG: kernel NULL pointer dereference, address: 00 - ida_free+0x76/0x140
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "rafael.j.wysocki" <rafael.j.wysocki@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/14/20 10:06 AM, Bird, Tim wrote:
->> -----Original Message-----
->> From: shuah <shuah@kernel.org>
->>
->> On 4/13/20 4:15 PM, Tim Bird wrote:
->>> From: Tim Bird <tim.bird@sony.com>
->>>
->>> Add ksft-compile-test.sh.  This is a program used to test
->>> cross-compilation and installation of selftest tests.
->>>
->>> See the test usage for help
->>>
->>> This program currently tests 3 scenarios out of a larger matrix
->>> of possibly interesting scenarios.  For each scenario, it conducts
->>> multiple tests for correctness.  This version tests:
->>>    1) does the test compile
->>
->> Is it necessary to write this long a script? Could we just parse
->> the "kselftest
-> ???
-> 
-
-Sorry for the dangling sentence. :) Can we parse the make kselftest-all
-output instead?
-
->>>    2) is the kernel source directory clean after the compile
->>
->> Can you use make mrproper and see if anything needs cleaning?
-> I'll check into this.  Does 'make mrproper' return an error code if
-> it found something that needed cleaning?  Or do I have to parse
-> stuff.  The actual code to check if the directory is clean is pretty
-> short.
-> 
->>
->>>    3) does the test install operation succeed
->>>    4) does the test run script reference the test
->>>
->>
->> I like the idea of being able to test, however I am not convinced
->> you would need a whole new script for it.
-> 
-> The current build system is broken in a few different ways.
-> I have only enabled a few test cases out of the test matrix, to
-> be able to isolate some of the obvious problems from individual
-> target areas.  One of the reasons I wrote a full script was to more easily
-> enable additional tests, once functionality in the current build
-> system was fixed, to notify us of regressions going forward.
-> 
->>
-
-I still want to see a way to use output from build and install
-steps and parse it, instead of a whole new script.
-
->>
->>> Signed-off-by: Tim Bird <tim.bird@sony.com>
->>> ---
->>>    MAINTAINERS                                  |   6 +
->>>    tools/testing/selftests/ksft-compile-test.sh | 567 +++++++++++++++++++++++++++
->>>    2 files changed, 573 insertions(+)
->>>    create mode 100755 tools/testing/selftests/ksft-compile-test.sh
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index cc1d18c..a6289c7 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -9127,6 +9127,12 @@ S:	Maintained
->>>    F:	tools/testing/selftests/
->>>    F:	Documentation/dev-tools/kselftest*
->>>
->>> +KERNEL SELFTEST SELFTEST
->>> +M:	Tim Bird <tim.bird@sony.com>
->>> +L:	linux-kselftest@vger.kernel.org
->>> +S:	Maintained
->>> +F:	tools/testing/selftests/ksft-compile-test.sh
->>> +
->>
->> Please don't add another entry to the MAINTAINERS file just
->> for a shell script under tools/testing/selftests
->>
->> This doesn't make sense.
-> OK. I only added this to eliminate a checkpatch.pl warning.
-> It seems like overkill to me also, but I was trying to obey the tools.
-> :-)
-> 
-> Maybe that warning from checkpatch is too aggressive?
-> 
-
-Yeah. checkpatch warn in this case is reminder in case a new entry
-is needed. A new entry isn't necessary in most cases.
-
->>
->>>    KERNEL UNIT TESTING FRAMEWORK (KUnit)
->>>    M:	Brendan Higgins <brendanhiggins@google.com>
->>>    L:	linux-kselftest@vger.kernel.org
->>> diff --git a/tools/testing/selftests/ksft-compile-test.sh b/tools/testing/selftests/ksft-compile-test.sh
->>> new file mode 100755
->>> index 0000000..e36e858
->>> --- /dev/null
->>> +++ b/tools/testing/selftests/ksft-compile-test.sh
->>> @@ -0,0 +1,567 @@
->>> +#!/bin/bash
->>> +# SPDX-License-Identifier: GPL-2.0-only OR MIT
->>> +#
->>> +# ksft-compile-test.sh - test compiling Linux kernel selftests under lots of
->>> +#   different configurations.  This is used to check that cross-compilation
->>> +#   and install works properly for a newly submitted test target, and
->>> +#   also that changes to existing test Makefiles don't regress with regard to
->>> +#   this functionality.
->>> +#
->>> +# Copyright 2020 Sony Corporation
->>> +#
->>> +# Here are the things that Shuah Kahn asked for on 3/6/2020
->>> +# 1. Cross-compilation & relocatable build support
->>> +# 2. Generates objects in objdir/kselftest without cluttering main objdir
->>> +# 3. Leave source directory clean
->>> +# 4. Installs correctly in objdir/kselftest/kselftest_install and adds
->>> +#        itself to run_kselftest.sh script generated during install.
->>> +#
->>
->> I was asking for fixes to individual tests.
-> Well, I used this to find some things to fix.  I have some patches queued,
-> but I thought the tool might be useful for others.  I'll send the patches
-> instead of posting the tool.
-> 
->>
->>> +# Would be nice to make sure other features also work:
->>> +# 5. can use absolute, relative, or current directory for output directory
->>> +# 6. can use ~ in output directory path
->>> +#
->>
->> I do think this can be achieved with a simpler script wrapper around
->> existing commands and kselftest_install.sh instead of writing a whole
->> new shell script.
-> 
-> Well, my pain point is the build system itself, not kselftest_install.sh.
-> There are still some bugs in the build system, and it appears that people
-> still sometimes submit new tests with subtle problems compiling under
-> different build configurations.
-> 
-
-Agreed. I think it is still a better idea to parse to find error and
-display them.
-
-> My goal was to be able to test a whole matrix of build configurations,
-> to detect these problems.  But making a generic system to test a matrix
-> of configurations requires more than just putting together a few wrapper
-> scripts.  However, I'm not as familiar with the existing commands as you
-> are, so maybe I missed some functionality I could reuse.
-> 
-
-Right. Hence the reason why I am asking if you explored using exiting
-parsing build and install output. Approaching this as a parsing also
-reduces maintenance overhead for this script. I am not questioning the
-value of the script, I am asking about the approach.
-
-> One of the significant problems here, IMO, is that since most kernel developers
-> don't cross-compile, it introduces a whole range of potential
-> errors in the build system that they can't really test for.
+On Tue, Apr 14, 2020 at 1:15 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
 >
+> Hi,
+>
+> On Tue, Apr 07, 2020 at 01:56:16PM -0700, Brendan Higgins wrote:
+> > On Tue, Apr 7, 2020 at 2:25 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > On Wed, 11 Mar 2020 at 02:16, Brendan Higgins <brendanhiggins@google.com> wrote:
+> > > > > > > > > > > > > Steps reproduce by using kselftests,
+> > > > > > > > > > > > >
+> > > > > > > > > > > > >           - lsmod || true
+> > > > > > > > > > > > >           - cd /opt/kselftests/default-in-kernel/lib/
+> > > > > > > > > > > > >           - export PATH=/opt/kselftests/default-in-kernel/kselftest:$PATH
+> > > > > > > > > > > > >           - ./printf.sh || true
+> > > > > > > > > > > > >           - ./bitmap.sh || true
+> > > > > > > > > > > > >           - ./prime_numbers.sh || true
+> > > > > > > > > > > > >           - ./strscpy.sh || true
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > x86_64 kernel BUG dump.
+> > > > > > > > > > > > > + ./printf.sh
+> > > > > > > > > > >
+> > > > > > > > > > > Oops, I am wondering if I broke this with my change "Revert "software
+> > > > > > > > > > > node: Simplify software_node_release() function"":
+> > > > > > > > > > >
+> > > > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d1c19322388d6935b534b494a2c223dd089e30dd
+> > > > > > > > > > >
+> > > > > > > > > > > I am still investigating, will update later.
+> > > > > > > > > >
+> > > > > > > > > > Okay, yeah, I am pretty sure I caused the breakage. I got an email
+> > > > > > > > > > from kernel test robot a couple days ago that I didn't see:
+> > > > > > > > > >
+> > > > > > > > > > https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/N3ZN5XH7HK24JVEJ5WSQD2SK6YCDRILR/
+> > > > > > > > > >
+> > > > > > > > > > It shows the same breakage after applying this change.
+> > > > > > > > > >
+> > > > > > > > > > I am still investigating how my change broke it, nevertheless.
+> > > > > > > > >
+> > > > > > > > > As nodes in the tree are being removed, the code before the patch that
+> > > > > > > > > "simplified" the software_node_release() function accessed the node's parent
+> > > > > > > > > in its release function.
+> > > > > > > > >
+> > > > > > > > > And if CONFIG_DEBUG_KOBJECT_RELEASE is defined, the release functions are no
+> > > > > > > > > longer necessarily called in order, leading to referencing released memory.
+> > > > > > > > > Oops!
+> > > > > > > > >
+> > > > > > > > > So Heikki's patch actually fixed a bug. :-)
+> > > > > > > >
+> > > > > > > > Well, I think it just hid the problem. It looks like the core
+> > > > > > > > (lib/kobject.c) allows the parent kobject to be released before the
+> > > > > > > > last child kobject is released. To be honest, that does not sound
+> > > > > > > > right to me...
+> > > > > > > >
+> > > > > > > > I think we can workaround this problem by taking reference to the
+> > > > > > > > parent when the child is added, and then releasing it when the child
+> > > > > > > > is released, and in that way be guaranteed that the parent will not
+> > > > > > > > disappear before the child is fully released, but that still does not
+> > > > > > > > feel right. It feels more like the core is not doing it's job to me.
+> > > > > > > > The parent just should not be released before its children.
+> > > > > > > >
+> > > > > > > > Either I'm wrong about that, and we still should take the reference on
+> > > > > > > > the parent, or we revert my patch like Brendan proposed and then fix
+> > > > > > >
+> > > > > > > Either way, isn't it wrong to release the node ID before deleting the
+> > > > > > > sysfs entry? I am not sure that my fix was the correct one, but I
+> > > > > > > believe the bug that Heidi and I found is actually a bug.
+> > > > >
+> > > > > I agree.
+> > > > >
+> > > > > > > > the core with something like this (warning, I did not even try to
+> > > > > > > > compile that):
+> > > > > > >
+> > > > > > > I will try it out.
+> > > > > > >
+> > > > > > > > diff --git a/lib/kobject.c b/lib/kobject.c
+> > > > > > > > index 83198cb37d8d..ec5774992337 100644
+> > > > > > > > --- a/lib/kobject.c
+> > > > > > > > +++ b/lib/kobject.c
+> > > > > > > > @@ -680,6 +680,12 @@ static void kobject_cleanup(struct kobject *kobj)
+> > > > > > > >                 kobject_uevent(kobj, KOBJ_REMOVE);
+> > > > > > > >         }
+> > > > > > > >
+> > > > > > > > +       if (t && t->release) {
+> > > > > > > > +               pr_debug("kobject: '%s' (%p): calling ktype release\n",
+> > > > > > > > +                        kobject_name(kobj), kobj);
+> > > > > > > > +               t->release(kobj);
+> > > > > > > > +       }
+> > > > > > > > +
+> > > > > > > >         /* remove from sysfs if the caller did not do it */
+> > > > > > > >         if (kobj->state_in_sysfs) {
+> > > > > > > >                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
+> > > > > > > > @@ -687,12 +693,6 @@ static void kobject_cleanup(struct kobject *kobj)
+> > > > > > > >                 kobject_del(kobj);
+> > > > > > > >         }
+> > > > > > > >
+> > > > > > > > -       if (t && t->release) {
+> > > > > > > > -               pr_debug("kobject: '%s' (%p): calling ktype release\n",
+> > > > > > > > -                        kobject_name(kobj), kobj);
+> > > > > > > > -               t->release(kobj);
+> > > > > > > > -       }
+> > > > > > > > -
+> > > > > > > >         /* free name if we allocated it */
+> > > > > > > >         if (name) {
+> > > > > > > >                 pr_debug("kobject: '%s': free name\n", name);
+> > > > > >
+> > > > > > Alright, so I tried it and it looks like Heikki's suggestion worked.
+> > > > > >
+> > > > > > Is everyone comfortable going this route?
+> > > > >
+> > > > > Hold on. Another way to fix the problem is to increment the parent's
+> > > > > reference count before that kobject_del(kobj) is called, and then
+> > > > > decrementing it after t->release(kobj) is called. It may be safer to
+> > > > > fix the problem like that.
+> > > >
+> > > > Right, this was your first suggestion above, right? That actually made
+> > > > more sense to me, but you seemed skeptical of it due to it being
+> > > > messier, which makes sense.
+> > > >
+> > > > Nevertheless, having children take a reference seems like the right
+> > > > thing to do because the children need to degregister themselves from
+> > > > the parent. Calling t->release() ahead of kobject_del() seems to
+> > > > reintroduce the problem that I pointed out, albeit *much* more
+> > > > briefly. If I understand correctly, it is always wrong to have a sysfs
+> > > > entry that points to a partially deallocated kobject. Please correct
+> > > > me if I am wrong.
+> > > >
+> > > > So I think there are two solutions: Either we have to ensure that each
+> > > > child is deallocated first so we can preserve the kobject_del() and
+> > > > then t->release() ordering, or we have to add some sort of "locking"
+> > > > mechanism to prevent the kobject from being accessed by anything other
+> > > > than the deallocation code until it is fully deallocated; well, it
+> > > > would have to prevent any access at all :-). I think it goes without
+> > > > saying that this "locking" idea is pretty flawed.
+> > > >
+> > > > The problem with just having children take a reference is that the
+> > > > kobject children already take a reference to their parent, so it seems
+> > > > like the kobject should be smart enough to deallocate children rather
+> > > > than having swnode have to keep a separate tally of children, no?
+> > > >
+> > > > Sorry if this all seems obvious, I am not an expert on this part of the kernel.
+> > > >
+> > > > > My example above proofs that there is the problem, but it changes the
+> > > > > order of execution which I think can always have other consequences.
+> > > > >
+> > > > > > Also, should I send this fix as a separate patch? Or do people want me
+> > > > > > to send an updated revision of my revert patch with the fix?
+> > > > >
+> > > > > This needs to be send in its own separate patch. Ideally it could be
+> > > > > send together with the revert in the same series, but I'm not sure
+> > > > > that's possible anymore. Didn't Greg pick the revert already?
+> > > >
+> > > > Sounds good.
+> > > >
+> > > > I did already let Greg know when he emailed us on backporting the
+> > > > patch to stable, and he acked saying he removed them. So as long as
+> > > > these are not in the queue for 5.6 (it is not in Linus' tree yet), we
+> > > > should be good.
+> > >
+> > > The reported bug is still noticed on Linux mainline master branch
+> > > The Kernel BUG noticed on x86_64 and i386 running selftest on Linux
+> > > mainline kernel 5.6.0.
+> >
+> > Oh sorry, I thought that this patch was dropped from the maintainer's
+> > for-next branch.
+> >
+> > Heikki, what do you think about my suggestion of having kobject
+> > deallocate its children?
+>
+> I'm not sure what was this suggestion?
+>
+> > In the meantime, are people cool with the patch that Heikki proposed
+> > as a temporary mitigation? I think my solution might be a bit more
+> > involved. If I don't hear anything back, I will send out Heikki's
+> > suggestion as a patch.
+>
+> Why not just take the reference to the parent like I proposed?
+>
+> diff --git a/lib/kobject.c b/lib/kobject.c
+> index 83198cb37d8d..173046c423f8 100644
+> --- a/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -663,6 +663,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
+>   */
+>  static void kobject_cleanup(struct kobject *kobj)
+>  {
+> +       struct kobject *parent = kobj->parent;
+>         struct kobj_type *t = get_ktype(kobj);
+>         const char *name = kobj->name;
+>
+> @@ -680,6 +681,9 @@ static void kobject_cleanup(struct kobject *kobj)
+>                 kobject_uevent(kobj, KOBJ_REMOVE);
+>         }
+>
+> +       /* make sure the parent is not released before the (last) child */
+> +       kobject_get(parent)
+> +
+>         /* remove from sysfs if the caller did not do it */
+>         if (kobj->state_in_sysfs) {
+>                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
+> @@ -693,6 +697,8 @@ static void kobject_cleanup(struct kobject *kobj)
+>                 t->release(kobj);
+>         }
+>
+> +       kobject_put(parent);
+> +
+>         /* free name if we allocated it */
+>         if (name) {
+>                 pr_debug("kobject: '%s': free name\n", name);
 
-We have efforts such as lkft and soon kernelci do cross-compiles.
-powerpc tests have good coverage and so do arm. The problem is tests
-that can run on multiple architectures at times come in without good
-support.
+Ah, I think that will work. Sorry, I just thought that was a bit
+kludgy, but if you are okay with doing it that way, I think it will
+work.
 
->I'm happy to leave this outside the kernel tree, and provide 'testing as a service'
->  >by Fuego!) to find bugs in the kselftest build system.  In that case, 
-I'll just report
->bugs that this finds (along with fixes where possible).
-Testing as service by Fuego and fixes to problems you find is great.
-
-thanks,
--- Shuah
-
+I will try it and send out a patch.
