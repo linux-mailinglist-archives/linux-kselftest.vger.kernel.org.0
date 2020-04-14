@@ -2,311 +2,492 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 621B71A8D48
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 23:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452481A8D93
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 23:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731764AbgDNVG1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Apr 2020 17:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
+        id S2633790AbgDNVWP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Apr 2020 17:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2633698AbgDNVGX (ORCPT
+        by vger.kernel.org with ESMTP id S2633788AbgDNVWM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Apr 2020 17:06:23 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C6EC061A0E
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 14:06:23 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id i3so485163pgk.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 14:06:23 -0700 (PDT)
+        Tue, 14 Apr 2020 17:22:12 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD12C061A0E
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 14:22:12 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id s18so11483300ioe.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2020 14:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3UvKGtfoV0Ab32vRdr+A6Zs78juH/jsZy4Qb8qV2VBM=;
-        b=NmI1aKh3fNiZ7q6mGa1CY2Xphm7W/86aLKU/xiEPRgHYCvdtOF4npN5ImLGt5z7zS1
-         bjui72TB7vCN3Ihfic9xLlS0qkRQ/s7RC6OgNDLko2SlWQcQiLoaxLzRySZrCcKGyNdZ
-         c2ohqf48YZAO7+LaPru0/QPOc+Ob4IKBbu71kWvjOATeDL0FoDQNMHQuZodPCep5mMdC
-         siBnJb1DZ4qrZrcQqLwXA+3HKXS+eZ9bEfXDBzUF1+cpQOVU8FcWhqxZTjZqPp71Z83n
-         OYNa7tBorgTtSaafNbRdxZ1nkXcP1LSE2ln/uPRtXgfXz+gjhY89gV+wN5GhFKnQBot2
-         DEfg==
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ilwZvdttSDEf//UskpYPZ2Zul+38PvYFS4ITo0BhVJA=;
+        b=iWtWvCpFojn+zp72PxXsySj8a1IOuguJWRadY2He89g2jKfIrkDIDsZxFKL266KGki
+         VYt1qRq7ugoU9K4KY7Px5/NNCBfQ1fIiDGwwyuvslEupGI/fPEvW040+9Xk50MTZ7qCg
+         SVeBk8S2orjp+O9htqCVs4kx+7F5x4QyWIjH4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3UvKGtfoV0Ab32vRdr+A6Zs78juH/jsZy4Qb8qV2VBM=;
-        b=T5I8bQYs0dJ+msJXvPLgFDpj6O7PrO/wIErSuaMc9Ors8Tbij8dqdWIUr//X93i9pv
-         x7isHDyfFdmupabCnVj2iiRC5I3mz1lDAlU2e8Gn/m21i6/R4ssfoJK8DLBUs9ufe+RU
-         LMWXiwTDm/ygPC9aA6QgGjKy5XMydv+Zt4XR6hsCr4c5JCbxPdgYIkHE0DD/1Svlsph9
-         NZzD3orVib6G4YihNat/KMXDTVGP7WbtA86hgWTJ9lPQRrJADy6bdeLZJ0rvxqO7Fw/Y
-         coiUzTYbhppEBryv96OC4/qPCZl8d2XqKNTpF3xASDkU1jqPoMmJ5+8UhKqpSkG8SNK0
-         kDew==
-X-Gm-Message-State: AGi0PuaEWDzSt51A5KhbiLgdx8QWNFg4vjHzcO39mgybcJhSI33awkFv
-        kgQ6gY3cJeutPnziBoKQhMj4yOuIuizdbaV+po9Ksg==
-X-Google-Smtp-Source: APiQypJSOr24T/kguntD7Zk4YDXQavG7g2d5ycUzc+E8+Az5udZcbG54+2+ZBYe2KO8mdJQcNUB8sQqwb/ie6G6H30I=
-X-Received: by 2002:a62:8343:: with SMTP id h64mr26164739pfe.166.1586898382787;
- Tue, 14 Apr 2020 14:06:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ilwZvdttSDEf//UskpYPZ2Zul+38PvYFS4ITo0BhVJA=;
+        b=I4AlkXkNWg5YgtQPcoBrg4ML5rgL4zjSSvB2NZBAxgK/QPUVmbCc42OrFp102uh9gh
+         pLcFPL7IqrE+4azS5oer8W2WiHmA9xjVCAdzM/JPpHuQG1T4mfoiIrMHwVC1bPa7Se8s
+         C6AdONTeN6/UdDdPBV0WzE1ODLvClAAqXChJ1fqgbXjbo7FV9b9nvrsXUlNJs8g3lwyq
+         mz1WmIsYfse8isLIHJEuXtHU0hAcAWWdiB4ljSg1tNrECfXYwC69o6yqugUj47sNVHxK
+         uumPh+7m1uVHZwz0sRqw9WESDnkukb4A6wVmJnFJMRvi03u6YEoUX3Fl+4ctwxSq6q42
+         aBxw==
+X-Gm-Message-State: AGi0PuZaAFVoF8Bo+fHCFVscpUrxw5s/jjN28GkUqzsv89yBykMLh10z
+        kSnyY0jPt1XUC7dis5nomRObJw==
+X-Google-Smtp-Source: APiQypL/Ae/ff0zNVb9OVOr0KWtWAAM2/DX8BUZnYx+4o1BcRxeK60TWgr07hBr4eYrJYptq/2yxcA==
+X-Received: by 2002:a05:6602:1da:: with SMTP id w26mr23430071iot.191.1586899331545;
+        Tue, 14 Apr 2020 14:22:11 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id q29sm5217326ill.65.2020.04.14.14.22.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 14:22:10 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, bamv2005@gmail.com, skhan@linuxfoundation.org,
+        khilman@baylibre.com
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: add build/cross-build dependency check script
+Date:   Tue, 14 Apr 2020 15:22:08 -0600
+Message-Id: <20200414212208.21667-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <CAFd5g45GbSX1BkuaH=8639ESHi-MCGkpFhEZZpycm9=jQb93rg@mail.gmail.com>
- <CAFd5g47aaE+tGeHPrQmhfi6_nrvi1K4DvtRodh=zN21-uiQ1DQ@mail.gmail.com>
- <20200305223350.GA2852@mara.localdomain> <20200306120525.GC68079@kuha.fi.intel.com>
- <CAFd5g45c9L4BBRNtxtQf_NFr2bR6Wgt9uOHW86gzb6Ozeb0SBA@mail.gmail.com>
- <CAFd5g45cdygYfxGoCkk710tLXFADeLNb+6w-=vhkDMLP9OM7bw@mail.gmail.com>
- <20200310111837.GA1368052@kuha.fi.intel.com> <CAFd5g452sDMZToU+FDa-Odbkd_t1708gcRMAZQG+U4LnV=Xqgw@mail.gmail.com>
- <CA+G9fYuwv+TEhgi46pjs2-GCe0mmMHyki9nAokvGCEA2syK5Dg@mail.gmail.com>
- <CAFd5g46Bwd8HS9-xjHLh_rB59Nfw8iAnM6aFe0QPcveewDUT6g@mail.gmail.com>
- <20200414081513.GD2828150@kuha.fi.intel.com> <CAFd5g46KeNu6bmDHBiJtGqEBQEyo1ooh=wK_PJbNih+2UCLoNQ@mail.gmail.com>
- <CAFd5g44s5NQvT8TG_x4rwbqoa7zWzkV0TX+ETZoQdOB7OwXCPQ@mail.gmail.com>
-In-Reply-To: <CAFd5g44s5NQvT8TG_x4rwbqoa7zWzkV0TX+ETZoQdOB7OwXCPQ@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 14 Apr 2020 14:06:11 -0700
-Message-ID: <CAFd5g46Sxtc44hK=T_vo7CfYu-GROkuweDk_nz6uoJYaVgMOeg@mail.gmail.com>
-Subject: Re: BUG: kernel NULL pointer dereference, address: 00 - ida_free+0x76/0x140
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "rafael.j.wysocki" <rafael.j.wysocki@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        lkft-triage@lists.linaro.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 12:27 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Tue, Apr 14, 2020 at 12:18 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > On Tue, Apr 14, 2020 at 1:15 AM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Tue, Apr 07, 2020 at 01:56:16PM -0700, Brendan Higgins wrote:
-> > > > On Tue, Apr 7, 2020 at 2:25 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > > >
-> > > > > On Wed, 11 Mar 2020 at 02:16, Brendan Higgins <brendanhiggins@google.com> wrote:
-> > > > > > > > > > > > > > > Steps reproduce by using kselftests,
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > >           - lsmod || true
-> > > > > > > > > > > > > > >           - cd /opt/kselftests/default-in-kernel/lib/
-> > > > > > > > > > > > > > >           - export PATH=/opt/kselftests/default-in-kernel/kselftest:$PATH
-> > > > > > > > > > > > > > >           - ./printf.sh || true
-> > > > > > > > > > > > > > >           - ./bitmap.sh || true
-> > > > > > > > > > > > > > >           - ./prime_numbers.sh || true
-> > > > > > > > > > > > > > >           - ./strscpy.sh || true
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > x86_64 kernel BUG dump.
-> > > > > > > > > > > > > > > + ./printf.sh
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Oops, I am wondering if I broke this with my change "Revert "software
-> > > > > > > > > > > > > node: Simplify software_node_release() function"":
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d1c19322388d6935b534b494a2c223dd089e30dd
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > I am still investigating, will update later.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Okay, yeah, I am pretty sure I caused the breakage. I got an email
-> > > > > > > > > > > > from kernel test robot a couple days ago that I didn't see:
-> > > > > > > > > > > >
-> > > > > > > > > > > > https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/N3ZN5XH7HK24JVEJ5WSQD2SK6YCDRILR/
-> > > > > > > > > > > >
-> > > > > > > > > > > > It shows the same breakage after applying this change.
-> > > > > > > > > > > >
-> > > > > > > > > > > > I am still investigating how my change broke it, nevertheless.
-> > > > > > > > > > >
-> > > > > > > > > > > As nodes in the tree are being removed, the code before the patch that
-> > > > > > > > > > > "simplified" the software_node_release() function accessed the node's parent
-> > > > > > > > > > > in its release function.
-> > > > > > > > > > >
-> > > > > > > > > > > And if CONFIG_DEBUG_KOBJECT_RELEASE is defined, the release functions are no
-> > > > > > > > > > > longer necessarily called in order, leading to referencing released memory.
-> > > > > > > > > > > Oops!
-> > > > > > > > > > >
-> > > > > > > > > > > So Heikki's patch actually fixed a bug. :-)
-> > > > > > > > > >
-> > > > > > > > > > Well, I think it just hid the problem. It looks like the core
-> > > > > > > > > > (lib/kobject.c) allows the parent kobject to be released before the
-> > > > > > > > > > last child kobject is released. To be honest, that does not sound
-> > > > > > > > > > right to me...
-> > > > > > > > > >
-> > > > > > > > > > I think we can workaround this problem by taking reference to the
-> > > > > > > > > > parent when the child is added, and then releasing it when the child
-> > > > > > > > > > is released, and in that way be guaranteed that the parent will not
-> > > > > > > > > > disappear before the child is fully released, but that still does not
-> > > > > > > > > > feel right. It feels more like the core is not doing it's job to me.
-> > > > > > > > > > The parent just should not be released before its children.
-> > > > > > > > > >
-> > > > > > > > > > Either I'm wrong about that, and we still should take the reference on
-> > > > > > > > > > the parent, or we revert my patch like Brendan proposed and then fix
-> > > > > > > > >
-> > > > > > > > > Either way, isn't it wrong to release the node ID before deleting the
-> > > > > > > > > sysfs entry? I am not sure that my fix was the correct one, but I
-> > > > > > > > > believe the bug that Heidi and I found is actually a bug.
-> > > > > > >
-> > > > > > > I agree.
-> > > > > > >
-> > > > > > > > > > the core with something like this (warning, I did not even try to
-> > > > > > > > > > compile that):
-> > > > > > > > >
-> > > > > > > > > I will try it out.
-> > > > > > > > >
-> > > > > > > > > > diff --git a/lib/kobject.c b/lib/kobject.c
-> > > > > > > > > > index 83198cb37d8d..ec5774992337 100644
-> > > > > > > > > > --- a/lib/kobject.c
-> > > > > > > > > > +++ b/lib/kobject.c
-> > > > > > > > > > @@ -680,6 +680,12 @@ static void kobject_cleanup(struct kobject *kobj)
-> > > > > > > > > >                 kobject_uevent(kobj, KOBJ_REMOVE);
-> > > > > > > > > >         }
-> > > > > > > > > >
-> > > > > > > > > > +       if (t && t->release) {
-> > > > > > > > > > +               pr_debug("kobject: '%s' (%p): calling ktype release\n",
-> > > > > > > > > > +                        kobject_name(kobj), kobj);
-> > > > > > > > > > +               t->release(kobj);
-> > > > > > > > > > +       }
-> > > > > > > > > > +
-> > > > > > > > > >         /* remove from sysfs if the caller did not do it */
-> > > > > > > > > >         if (kobj->state_in_sysfs) {
-> > > > > > > > > >                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
-> > > > > > > > > > @@ -687,12 +693,6 @@ static void kobject_cleanup(struct kobject *kobj)
-> > > > > > > > > >                 kobject_del(kobj);
-> > > > > > > > > >         }
-> > > > > > > > > >
-> > > > > > > > > > -       if (t && t->release) {
-> > > > > > > > > > -               pr_debug("kobject: '%s' (%p): calling ktype release\n",
-> > > > > > > > > > -                        kobject_name(kobj), kobj);
-> > > > > > > > > > -               t->release(kobj);
-> > > > > > > > > > -       }
-> > > > > > > > > > -
-> > > > > > > > > >         /* free name if we allocated it */
-> > > > > > > > > >         if (name) {
-> > > > > > > > > >                 pr_debug("kobject: '%s': free name\n", name);
-> > > > > > > >
-> > > > > > > > Alright, so I tried it and it looks like Heikki's suggestion worked.
-> > > > > > > >
-> > > > > > > > Is everyone comfortable going this route?
-> > > > > > >
-> > > > > > > Hold on. Another way to fix the problem is to increment the parent's
-> > > > > > > reference count before that kobject_del(kobj) is called, and then
-> > > > > > > decrementing it after t->release(kobj) is called. It may be safer to
-> > > > > > > fix the problem like that.
-> > > > > >
-> > > > > > Right, this was your first suggestion above, right? That actually made
-> > > > > > more sense to me, but you seemed skeptical of it due to it being
-> > > > > > messier, which makes sense.
-> > > > > >
-> > > > > > Nevertheless, having children take a reference seems like the right
-> > > > > > thing to do because the children need to degregister themselves from
-> > > > > > the parent. Calling t->release() ahead of kobject_del() seems to
-> > > > > > reintroduce the problem that I pointed out, albeit *much* more
-> > > > > > briefly. If I understand correctly, it is always wrong to have a sysfs
-> > > > > > entry that points to a partially deallocated kobject. Please correct
-> > > > > > me if I am wrong.
-> > > > > >
-> > > > > > So I think there are two solutions: Either we have to ensure that each
-> > > > > > child is deallocated first so we can preserve the kobject_del() and
-> > > > > > then t->release() ordering, or we have to add some sort of "locking"
-> > > > > > mechanism to prevent the kobject from being accessed by anything other
-> > > > > > than the deallocation code until it is fully deallocated; well, it
-> > > > > > would have to prevent any access at all :-). I think it goes without
-> > > > > > saying that this "locking" idea is pretty flawed.
-> > > > > >
-> > > > > > The problem with just having children take a reference is that the
-> > > > > > kobject children already take a reference to their parent, so it seems
-> > > > > > like the kobject should be smart enough to deallocate children rather
-> > > > > > than having swnode have to keep a separate tally of children, no?
-> > > > > >
-> > > > > > Sorry if this all seems obvious, I am not an expert on this part of the kernel.
-> > > > > >
-> > > > > > > My example above proofs that there is the problem, but it changes the
-> > > > > > > order of execution which I think can always have other consequences.
-> > > > > > >
-> > > > > > > > Also, should I send this fix as a separate patch? Or do people want me
-> > > > > > > > to send an updated revision of my revert patch with the fix?
-> > > > > > >
-> > > > > > > This needs to be send in its own separate patch. Ideally it could be
-> > > > > > > send together with the revert in the same series, but I'm not sure
-> > > > > > > that's possible anymore. Didn't Greg pick the revert already?
-> > > > > >
-> > > > > > Sounds good.
-> > > > > >
-> > > > > > I did already let Greg know when he emailed us on backporting the
-> > > > > > patch to stable, and he acked saying he removed them. So as long as
-> > > > > > these are not in the queue for 5.6 (it is not in Linus' tree yet), we
-> > > > > > should be good.
-> > > > >
-> > > > > The reported bug is still noticed on Linux mainline master branch
-> > > > > The Kernel BUG noticed on x86_64 and i386 running selftest on Linux
-> > > > > mainline kernel 5.6.0.
-> > > >
-> > > > Oh sorry, I thought that this patch was dropped from the maintainer's
-> > > > for-next branch.
-> > > >
-> > > > Heikki, what do you think about my suggestion of having kobject
-> > > > deallocate its children?
-> > >
-> > > I'm not sure what was this suggestion?
-> > >
-> > > > In the meantime, are people cool with the patch that Heikki proposed
-> > > > as a temporary mitigation? I think my solution might be a bit more
-> > > > involved. If I don't hear anything back, I will send out Heikki's
-> > > > suggestion as a patch.
-> > >
-> > > Why not just take the reference to the parent like I proposed?
-> > >
-> > > diff --git a/lib/kobject.c b/lib/kobject.c
-> > > index 83198cb37d8d..173046c423f8 100644
-> > > --- a/lib/kobject.c
-> > > +++ b/lib/kobject.c
-> > > @@ -663,6 +663,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
-> > >   */
-> > >  static void kobject_cleanup(struct kobject *kobj)
-> > >  {
-> > > +       struct kobject *parent = kobj->parent;
-> > >         struct kobj_type *t = get_ktype(kobj);
-> > >         const char *name = kobj->name;
-> > >
-> > > @@ -680,6 +681,9 @@ static void kobject_cleanup(struct kobject *kobj)
-> > >                 kobject_uevent(kobj, KOBJ_REMOVE);
-> > >         }
-> > >
-> > > +       /* make sure the parent is not released before the (last) child */
-> > > +       kobject_get(parent)
-> > > +
-> > >         /* remove from sysfs if the caller did not do it */
-> > >         if (kobj->state_in_sysfs) {
-> > >                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
-> > > @@ -693,6 +697,8 @@ static void kobject_cleanup(struct kobject *kobj)
-> > >                 t->release(kobj);
-> > >         }
-> > >
-> > > +       kobject_put(parent);
-> > > +
-> > >         /* free name if we allocated it */
-> > >         if (name) {
-> > >                 pr_debug("kobject: '%s': free name\n", name);
-> >
-> > Ah, I think that will work. Sorry, I just thought that was a bit
-> > kludgy, but if you are okay with doing it that way, I think it will
-> > work.
-> >
-> > I will try it and send out a patch.
->
-> I think I am also going to send out a new test case, in a separate
-> patch of course, that exercises this logic. Kind of annoying having
-> the printf test catching this.
+Add build/cross-build dependency check script kselftest_deps.sh
+This script does the following:
 
-For anyone interested, I sent out an RFC for this test case here:
+Usage: ./kselftest_deps.sh -[p] <compiler> [test_name]
 
-https://lore.kernel.org/lkml/20200414210142.191327-1-brendanhiggins@google.com/T/#u
+	kselftest_deps.sh [-p] gcc
+	kselftest_deps.sh [-p] gcc vm
+	kselftest_deps.sh [-p] aarch64-linux-gnu-gcc
+	kselftest_deps.sh [-p] aarch64-linux-gnu-gcc vm
+
+- Should be run in selftests directory in the kernel repo.
+- Checks if Kselftests can be built/cross-built on a system.
+- Parses all test/sub-test Makefile to find library dependencies.
+- Runs compile test on a trivial C file with LDLIBS specified
+  in the test Makefiles to identify missing library dependencies.
+- Prints suggested target list for a system filtering out tests
+  failed the build dependency check from the TARGETS in Selftests
+  the main Makefile when optional -p is specified.
+- Prints pass/fail dependency check for each tests/sub-test.
+- Prints pass/fail targets and libraries.
+- Default: runs dependency checks on all tests.
+- Optional test name can be specified to check dependencies for it.
+
+To make LDLIBS parsing easier
+- change gpio and memfd Makefiles to use the same temporary variable used
+  to find and add libraries to LDLIBS.
+- simlify LDLIBS append logic in intel_pstate/Makefile.
+
+Results from run on x86_64 system (trimmed detailed pass/fail list):
+========================================================
+Kselftest Dependency Check for [./kselftest_deps.sh gcc ] results...
+========================================================
+Checked tests defining LDLIBS dependencies
+--------------------------------------------------------
+Total tests with Dependencies:
+55 Pass: 53 Fail: 2
+--------------------------------------------------------
+Targets passed build dependency check on system:
+bpf capabilities filesystems futex gpio intel_pstate membarrier memfd
+mqueue net powerpc ptp rseq rtc safesetid timens timers vDSO vm
+--------------------------------------------------------
+FAIL: netfilter/Makefile dependency check: -lmnl
+FAIL: gpio/Makefile dependency check: -lmount
+--------------------------------------------------------
+Targets failed build dependency check on system:
+gpio netfilter
+--------------------------------------------------------
+Missing libraries system
+-lmnl -lmount
+--------------------------------------------------------
+========================================================
+
+Results from run on x86_64 system with aarch64-linux-gnu-gcc:
+(trimmed detailed pass/fail list):
+========================================================
+Kselftest Dependency Check for [./kselftest_deps.sh aarch64-linux-gnu-gcc ]
+results...
+========================================================
+Checked tests defining LDLIBS dependencies
+--------------------------------------------------------
+Total tests with Dependencies:
+55 Pass: 41 Fail: 14
+--------------------------------------------------------
+Targets failed build dependency check on system:
+bpf capabilities filesystems futex gpio intel_pstate membarrier memfd
+mqueue net powerpc ptp rseq rtc timens timers vDSO vm
+--------------------------------------------------------
+--------------------------------------------------------
+Targets failed build dependency check on system:
+bpf capabilities gpio memfd mqueue net netfilter safesetid vm
+--------------------------------------------------------
+Missing libraries system
+-lcap -lcap-ng -lelf -lfuse -lmnl -lmount -lnuma -lpopt -lz
+--------------------------------------------------------
+========================================================
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/gpio/Makefile         |  12 +-
+ tools/testing/selftests/intel_pstate/Makefile |   2 +-
+ tools/testing/selftests/kselftest_deps.sh     | 272 ++++++++++++++++++
+ tools/testing/selftests/memfd/Makefile        |  14 +-
+ 4 files changed, 291 insertions(+), 9 deletions(-)
+ create mode 100755 tools/testing/selftests/kselftest_deps.sh
+
+diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+index 0bb80619db58..32bdc978a711 100644
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -1,13 +1,13 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-MOUNT_CFLAGS := $(shell pkg-config --cflags mount 2>/dev/null)
+-MOUNT_LDLIBS := $(shell pkg-config --libs mount 2>/dev/null)
+-ifeq ($(MOUNT_LDLIBS),)
+-MOUNT_LDLIBS := -lmount -I/usr/include/libmount
++VAR_CFLAGS := $(shell pkg-config --cflags mount 2>/dev/null)
++VAR_LDLIBS := $(shell pkg-config --libs mount 2>/dev/null)
++ifeq ($(VAR_LDLIBS),)
++VAR_LDLIBS := -lmount -I/usr/include/libmount
+ endif
+ 
+-CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ $(MOUNT_CFLAGS)
+-LDLIBS += $(MOUNT_LDLIBS)
++CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ $(VAR_CFLAGS)
++LDLIBS += $(VAR_LDLIBS)
+ 
+ TEST_PROGS := gpio-mockup.sh
+ TEST_FILES := gpio-mockup-sysfs.sh
+diff --git a/tools/testing/selftests/intel_pstate/Makefile b/tools/testing/selftests/intel_pstate/Makefile
+index 7340fd6a9a9f..39f0fa2a8fd6 100644
+--- a/tools/testing/selftests/intel_pstate/Makefile
++++ b/tools/testing/selftests/intel_pstate/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS := $(CFLAGS) -Wall -D_GNU_SOURCE
+-LDLIBS := $(LDLIBS) -lm
++LDLIBS += -lm
+ 
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+diff --git a/tools/testing/selftests/kselftest_deps.sh b/tools/testing/selftests/kselftest_deps.sh
+new file mode 100755
+index 000000000000..bb9c22e7af0e
+--- /dev/null
++++ b/tools/testing/selftests/kselftest_deps.sh
+@@ -0,0 +1,272 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# kselftest_deps.sh
++#
++# Checks for kselftest build dependencies on the build system.
++# Copyright (c) 2020 Shuah Khan <skhan@linuxfoundation.org>
++#
++#
++
++usage()
++{
++
++echo -e "Usage: $0 -[p] <compiler> [test_name]\n"
++echo -e "\tkselftest_deps.sh [-p] gcc"
++echo -e "\tkselftest_deps.sh [-p] gcc vm"
++echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc"
++echo -e "\tkselftest_deps.sh [-p] aarch64-linux-gnu-gcc vm\n"
++echo "- Should be run in selftests directory in the kernel repo."
++echo "- Checks if Kselftests can be built/cross-built on a system."
++echo "- Parses all test/sub-test Makefile to find library dependencies."
++echo "- Runs compile test on a trivial C file with LDLIBS specified"
++echo "  in the test Makefiles to identify missing library dependencies."
++echo "- Prints suggested target list for a system filtering out tests"
++echo "  failed the build dependency check from the TARGETS in Selftests"
++echo "  main Makefile when optional -p is specified."
++echo "- Prints pass/fail dependency check for each tests/sub-test."
++echo "- Prints pass/fail targets and libraries."
++echo "- Default: runs dependency checks on all tests."
++echo "- Optional test name can be specified to check dependencies for it."
++exit 1
++
++}
++
++# Start main()
++main()
++{
++
++base_dir=`pwd`
++# Make sure we're in the selftests top-level directory.
++if [ $(basename "$base_dir") !=  "selftests" ]; then
++	echo -e "\tPlease run $0 in"
++	echo -e "\ttools/testing/selftests directory ..."
++	exit 1
++fi
++
++print_targets=0
++
++while getopts "p" arg; do
++    case $arg in
++        p)
++		print_targets=1
++	shift;;
++    esac
++done
++
++if [ $# -eq 0 ]
++then
++	usage
++fi
++
++# Compiler
++CC=$1
++
++tmp_file=$(mktemp).c
++trap "rm -f $tmp_file.o $tmp_file $tmp_file.bin" EXIT
++#echo $tmp_file
++
++pass=$(mktemp).out
++trap "rm -f $pass" EXIT
++#echo $pass
++
++fail=$(mktemp).out
++trap "rm -f $fail" EXIT
++#echo $fail
++
++# Generate tmp source fire for compile test
++cat << "EOF" > $tmp_file
++int main()
++{
++}
++EOF
++
++# Save results
++total_cnt=0
++fail_trgts=()
++fail_libs=()
++fail_cnt=0
++pass_trgts=()
++pass_libs=()
++pass_cnt=0
++
++# Get all TARGETS from selftests Makefile
++targets=$(egrep "^TARGETS +|^TARGETS =" Makefile | cut -d "=" -f2)
++
++# Single test case
++if [ $# -eq 2 ]
++then
++	test=$2/Makefile
++
++	l1_test $test
++	l2_test $test
++	l3_test $test
++
++	print_results $1 $2
++	exit $?
++fi
++
++# Level 1: LDLIBS set static.
++#
++# Find all LDLIBS set statically for all executables built by a Makefile
++# and filter out VAR_LDLIBS to discard the following:
++# 	gpio/Makefile:LDLIBS += $(VAR_LDLIBS)
++# Append space at the end of the list to append more tests.
++
++l1_tests=$(grep -r --include=Makefile "^LDLIBS" | \
++		grep -v "VAR_LDLIBS" | awk -F: '{print $1}')
++
++# Level 2: LDLIBS set dynamically.
++#
++# Level 2
++# Some tests have multiple valid LDLIBS lines for individual sub-tests
++# that need dependency checks. Find them and append them to the tests
++# e.g: vm/Makefile:$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
++# Filter out VAR_LDLIBS to discard the following:
++# 	memfd/Makefile:$(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
++# Append space at the end of the list to append more tests.
++
++l2_tests=$(grep -r --include=Makefile ": LDLIBS" | \
++		grep -v "VAR_LDLIBS" | awk -F: '{print $1}')
++
++# Level 3
++# gpio,  memfd and others use pkg-config to find mount and fuse libs
++# respectively and save it in VAR_LDLIBS. If pkg-config doesn't find
++# any, VAR_LDLIBS set to default.
++# Use the default value and filter out pkg-config for dependency check.
++# e.g:
++# gpio/Makefile
++#	VAR_LDLIBS := $(shell pkg-config --libs mount) 2>/dev/null)
++# memfd/Makefile
++#	VAR_LDLIBS := $(shell pkg-config fuse --libs 2>/dev/null)
++
++l3_tests=$(grep -r --include=Makefile "^VAR_LDLIBS" | \
++       		grep -v "pkg-config" | awk -F: '{print $1}')
++
++#echo $l1_tests
++#echo $l2_1_tests
++#echo $l3_tests
++
++all_tests
++print_results $1 $2
++
++exit $?
++}
++# end main()
++
++all_tests()
++{
++	for test in $l1_tests; do
++		l1_test $test
++	done
++
++	for test in $l2_tests; do
++		l2_test $test
++	done
++
++	for test in $l3_tests; do
++		l3_test $test
++	done
++}
++
++# Use same parsing used for l1_tests and pick libraries this time.
++l1_test()
++{
++	test_libs=$(grep --include=Makefile "^LDLIBS" $test | \
++			grep -v "VAR_LDLIBS" | \
++			sed -e 's/\:/ /' | \
++	       		sed -e 's/+/ /' | cut -d "=" -f 2)
++
++	check_libs $test $test_libs
++}
++
++# Use same parsing used for l2__tests and pick libraries this time.
++l2_test()
++{
++	test_libs=$(grep --include=Makefile ": LDLIBS" $test | \
++			grep -v "VAR_LDLIBS" | \
++			sed -e 's/\:/ /' | sed -e 's/+/ /' | \
++			cut -d "=" -f 2)
++
++	check_libs $test $test_libs
++}
++
++l3_test()
++{
++	test_libs=$(grep --include=Makefile "^VAR_LDLIBS" $test | \
++			grep -v "pkg-config" | sed -e 's/\:/ /' |
++			sed -e 's/+/ /' | cut -d "=" -f 2)
++
++	check_libs $test $test_libs
++}
++
++check_libs()
++{
++
++if [[ ! -z "${test_libs// }" ]]
++then
++
++	#echo $test_libs
++
++	for lib in $test_libs; do
++
++	let total_cnt+=1
++	$CC -o $tmp_file.bin $lib $tmp_file > /dev/null 2>&1
++	if [ $? -ne 0 ]; then
++		echo "FAIL: $test dependency check: $lib" >> $fail
++		let fail_cnt+=1
++		fail_libs+="$lib "
++		fail_target=$(echo "$test" | cut -d "/" -f1)
++		fail_trgts+="$fail_target "
++		targets=$(echo "$targets" | grep -v "$fail_target")
++	else
++		echo "PASS: $test dependency check passed $lib" >> $pass
++		let pass_cnt+=1
++		pass_libs+="$lib "
++		pass_trgts+="$(echo "$test" | cut -d "/" -f1) "
++	fi
++
++	done
++fi
++}
++
++print_results()
++{
++	echo -e "========================================================";
++	echo -e "Kselftest Dependency Check for [$0 $1 $2] results..."
++
++	if [ $print_targets -ne 0 ]
++	then
++	echo -e "Suggested Selftest Targets for your configuration:"
++	echo -e "$targets";
++	fi
++
++	echo -e "========================================================";
++	echo -e "Checked tests defining LDLIBS dependencies"
++	echo -e "--------------------------------------------------------";
++	echo -e "Total tests with Dependencies:"
++	echo -e "$total_cnt Pass: $pass_cnt Fail: $fail_cnt";
++
++	if [ $pass_cnt -ne 0 ]; then
++	echo -e "--------------------------------------------------------";
++	cat $pass
++	echo -e "--------------------------------------------------------";
++	echo -e "Targets passed build dependency check on system:"
++	echo -e "$(echo "$pass_trgts" | xargs -n1 | sort -u | xargs)"
++	fi
++
++	if [ $fail_cnt -ne 0 ]; then
++	echo -e "--------------------------------------------------------";
++	cat $fail
++	echo -e "--------------------------------------------------------";
++	echo -e "Targets failed build dependency check on system:"
++	echo -e "$(echo "$fail_trgts" | xargs -n1 | sort -u | xargs)"
++	echo -e "--------------------------------------------------------";
++	echo -e "Missing libraries system"
++	echo -e "$(echo "$fail_libs" | xargs -n1 | sort -u | xargs)"
++	fi
++
++	echo -e "--------------------------------------------------------";
++	echo -e "========================================================";
++}
++
++main "$@"
+diff --git a/tools/testing/selftests/memfd/Makefile b/tools/testing/selftests/memfd/Makefile
+index 187b14cad00c..4da8b565fa32 100644
+--- a/tools/testing/selftests/memfd/Makefile
++++ b/tools/testing/selftests/memfd/Makefile
+@@ -8,11 +8,21 @@ TEST_GEN_PROGS := memfd_test
+ TEST_PROGS := run_fuse_test.sh run_hugetlbfs_test.sh
+ TEST_GEN_FILES := fuse_test fuse_mnt
+ 
+-fuse_mnt.o: CFLAGS += $(shell pkg-config fuse --cflags)
++VAR_CFLAGS := $(shell pkg-config fuse --cflags 2>/dev/null)
++ifeq ($(VAR_CFLAGS),)
++VAR_CFLAGS := -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse
++endif
++
++VAR_LDLIBS := $(shell pkg-config fuse --libs 2>/dev/null)
++ifeq ($(VAR_LDLIBS),)
++VAR_LDLIBS := -lfuse -pthread
++endif
++
++fuse_mnt.o: CFLAGS += $(VAR_CFLAGS)
+ 
+ include ../lib.mk
+ 
+-$(OUTPUT)/fuse_mnt: LDLIBS += $(shell pkg-config fuse --libs)
++$(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
+ 
+ $(OUTPUT)/memfd_test: memfd_test.c common.c
+ $(OUTPUT)/fuse_test: fuse_test.c common.c
+-- 
+2.20.1
+
