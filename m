@@ -2,208 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB011A842C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 18:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519271A8539
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 18:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388127AbgDNQG7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Apr 2020 12:06:59 -0400
-Received: from mail-co1nam11on2118.outbound.protection.outlook.com ([40.107.220.118]:32193
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728527AbgDNQG5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Apr 2020 12:06:57 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gCmmCR3/aMkcglCDr4CSyd4lUZbcoOx+J3b/iZVTRyNXvjs/T/GgFemT8x54q2rVkqrfhBFJ+vDDBP46t724/4aNbznbHGcu70uJzp6c194Eumkke8sLWEgEls7eM3dQqxI636h+jywscre+Sv1MxhQ8VId33awWryyeZYkrmEH01v7trCcd2+lgqOOE9I8HRNGccIFpuwksBERit3GtBQbvt1IJaHVDVX3RgFs5n/ahkIX+HjosRahHA8oBA1EJ2imzLge4qubgQou6i24+0cgOpeYZK+wEZ5yBA/mXM5ie0Q8qdnl0wEoYJ6thFFz7O1/fpactEDjT3GDXkZyC6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m/10cv2/FhBZkoA42wDrUY502MMUdMLaZLNeN09ntOQ=;
- b=YF1K9RsRvmtlEsDNTXV+/Rb/mOV9y9QigPWw3WutgmgYaL0kjIDIVuhxAu4yk5a2K3wUagD5fbVXiUEVQIlNWYVppF9V2pBDfQ3gnDp0ssCNEG1Aaydt6/Yw0Ih7iB4y7W3NCT1EFJ9E7i7btC/PF2X3UlJJBY1EeN1zMx+wqhs8qNA8vDlYYh05WnP5ABUgAcSkxdJOvVMmNhvdLZhia2KMknZthP524JweOw2VZo72q1ZbcieIKffcOrFQF1+fuXnxYHCxlHZysX+GW7G8UMfx/lix37J9DXzPC6BhQkQiKt4UdCtAxaD1T6HcUZCcMudsoFGdgWLYhGlGqcHbqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m/10cv2/FhBZkoA42wDrUY502MMUdMLaZLNeN09ntOQ=;
- b=wcS5MycLtKT6wNsCvSdW1V+kAW6Gaj/DeZla9/X0FxJsXcP+pUSW3qnRsROvNSvhhDcyMGyEsY3ZIYlx8L+313oXN6CBqUlnDXa7SMgkmt6SgXIza3HG78CPJpsTCCtXZFxEAmUm95tnPUPc4GJ+Qd6CJx2GejOzxOBFfyUSEO0=
-Received: from CY4PR13MB1527.namprd13.prod.outlook.com (2603:10b6:903:12f::23)
- by CY4PR13MB1639.namprd13.prod.outlook.com (2603:10b6:903:162::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.21; Tue, 14 Apr
- 2020 16:06:51 +0000
-Received: from CY4PR13MB1527.namprd13.prod.outlook.com
- ([fe80::d0e0:9b39:db76:e937]) by CY4PR13MB1527.namprd13.prod.outlook.com
- ([fe80::d0e0:9b39:db76:e937%11]) with mapi id 15.20.2921.024; Tue, 14 Apr
- 2020 16:06:51 +0000
-From:   "Bird, Tim" <Tim.Bird@sony.com>
-To:     shuah <shuah@kernel.org>, Tim Bird <tim@bird.org>
-CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        id S2391841AbgDNQjA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Apr 2020 12:39:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391830AbgDNQi6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Apr 2020 12:38:58 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6C23D20678;
+        Tue, 14 Apr 2020 16:38:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586882337;
+        bh=fh0CwTg9fVCUTMCmRwDo30VJ7gsfT2UR0AmvRtpphIQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=eeFdZnCdLKvn1k846cWdOhUR8u4BkQgLABxQymSIwfnjsTJahYe3UzAO6QMUQ/OEf
+         DXiVWQriEBloZXhonjlKOLh/+e2VMDpmwzTRWchYvhcuLPYQqBTKvC6eGHgBNvSyOh
+         ya7cvVU35j0clIOn1S4K4ZmSrFBdISAQwpOZiDUY=
+Subject: Re: [PATCH] selftest: add a script to perform selftest compile tests
+To:     "Bird, Tim" <Tim.Bird@sony.com>, Tim Bird <tim@bird.org>
+Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tbird20d@gmail.com" <tbird20d@gmail.com>
-Subject: RE: [PATCH] selftest: add a script to perform selftest compile tests
-Thread-Topic: [PATCH] selftest: add a script to perform selftest compile tests
-Thread-Index: AQHWEeEq9qe4jF/IiEiNeCIfpwft+ah4vpqAgAABa/A=
-Date:   Tue, 14 Apr 2020 16:06:50 +0000
-Message-ID: <CY4PR13MB1527E216D153ADDFE747F485FDDA0@CY4PR13MB1527.namprd13.prod.outlook.com>
+        "tbird20d@gmail.com" <tbird20d@gmail.com>, shuah <shuah@kernel.org>
 References: <86508e9d-4aff-d9a0-3783-971a4686ccd1@bird.org>
  <9c2a8679-eb90-8dd1-43f6-40ce0a842c87@kernel.org>
-In-Reply-To: <9c2a8679-eb90-8dd1-43f6-40ce0a842c87@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Tim.Bird@sony.com; 
-x-originating-ip: [160.33.195.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5575a10b-82a9-4483-b35a-08d7e08dd7c9
-x-ms-traffictypediagnostic: CY4PR13MB1639:
-x-microsoft-antispam-prvs: <CY4PR13MB1639CFE4A1B0C31D52F03B59FDDA0@CY4PR13MB1639.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0373D94D15
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR13MB1527.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(66946007)(81156014)(33656002)(71200400001)(8936002)(26005)(55016002)(9686003)(4326008)(7696005)(52536014)(2906002)(8676002)(5660300002)(64756008)(66446008)(186003)(66476007)(66556008)(316002)(110136005)(478600001)(86362001)(76116006)(6506007)(54906003)(53546011);DIR:OUT;SFP:1102;
-received-spf: None (protection.outlook.com: sony.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SGspfd6zUIr9C6OVEfuOaREMkP6RbmD7ElKyWdZZXVg9mXEixI427H48q4keruaHZbEtuikuPs0dbxZpN63igoKQYLvFqGWq0P7yXG4vXqGG7BS/IKTPeQZRiSXfV7ooEafDDLilI7I2yVgbDuS8MTVJ4JUR94L5ElHgVEuvjK4EGmvwfOppwy4/j4UlRNGbotvkD0HcPHnCitVUERH6fc/m9WTooxl4371W1HAe+ATYRZMeCjIdd7GuXMhOgabGhqWb0GwbCbA/i5oiOBLA4mULYiWEi/bc4SdPQKKAuzlPf1QPmU6xK7jyo2GquX3WnWRu23UWfE8I4Sw0r9PnBabXl5eyeLs8FO5i3D790TOxSplb1ZA2ghmurHEMhUQw4OKPFVfZxWrmpJzg41VgkGMDaehecqns1Ot0X8rv7Y60rYn8z1wMExor0XF3mx4i
-x-ms-exchange-antispam-messagedata: 4Md8uem6p9Ske+WCVM12oYLOlxDOc07SYL9onPBo6YIOjIWIG43hA+CRMt6IUszy9Ui877k4jEKBTkK5X4I4WdYw6a3C6YDaw1G4oTtzxwkwoGT6BarMh2cJRluzS2v4C7pKIYk6rnq1s83e20W9aw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <CY4PR13MB1527E216D153ADDFE747F485FDDA0@CY4PR13MB1527.namprd13.prod.outlook.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <56a085c6-96fa-d5ad-086f-359dd3008fed@kernel.org>
+Date:   Tue, 14 Apr 2020 10:38:56 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5575a10b-82a9-4483-b35a-08d7e08dd7c9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2020 16:06:50.9706
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uIv15Gpbz89imdOkVxkJfNqx0I0pQqkqhN+71G5Rr9+kvGb6ozlpnbkf97CUEE3eNWR8Hx2uRLh31uQs+7fdwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR13MB1639
+In-Reply-To: <CY4PR13MB1527E216D153ADDFE747F485FDDA0@CY4PR13MB1527.namprd13.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBzaHVhaCA8c2h1YWhAa2VybmVs
-Lm9yZz4NCj4gDQo+IE9uIDQvMTMvMjAgNDoxNSBQTSwgVGltIEJpcmQgd3JvdGU6DQo+ID4gRnJv
-bTogVGltIEJpcmQgPHRpbS5iaXJkQHNvbnkuY29tPg0KPiA+DQo+ID4gQWRkIGtzZnQtY29tcGls
-ZS10ZXN0LnNoLiAgVGhpcyBpcyBhIHByb2dyYW0gdXNlZCB0byB0ZXN0DQo+ID4gY3Jvc3MtY29t
-cGlsYXRpb24gYW5kIGluc3RhbGxhdGlvbiBvZiBzZWxmdGVzdCB0ZXN0cy4NCj4gPg0KPiA+IFNl
-ZSB0aGUgdGVzdCB1c2FnZSBmb3IgaGVscA0KPiA+DQo+ID4gVGhpcyBwcm9ncmFtIGN1cnJlbnRs
-eSB0ZXN0cyAzIHNjZW5hcmlvcyBvdXQgb2YgYSBsYXJnZXIgbWF0cml4DQo+ID4gb2YgcG9zc2li
-bHkgaW50ZXJlc3Rpbmcgc2NlbmFyaW9zLiAgRm9yIGVhY2ggc2NlbmFyaW8sIGl0IGNvbmR1Y3Rz
-DQo+ID4gbXVsdGlwbGUgdGVzdHMgZm9yIGNvcnJlY3RuZXNzLiAgVGhpcyB2ZXJzaW9uIHRlc3Rz
-Og0KPiA+ICAgMSkgZG9lcyB0aGUgdGVzdCBjb21waWxlDQo+IA0KPiBJcyBpdCBuZWNlc3Nhcnkg
-dG8gd3JpdGUgdGhpcyBsb25nIGEgc2NyaXB0PyBDb3VsZCB3ZSBqdXN0IHBhcnNlDQo+IHRoZSAi
-a3NlbGZ0ZXN0DQo/Pz8NCg0KPiA+ICAgMikgaXMgdGhlIGtlcm5lbCBzb3VyY2UgZGlyZWN0b3J5
-IGNsZWFuIGFmdGVyIHRoZSBjb21waWxlDQo+IA0KPiBDYW4geW91IHVzZSBtYWtlIG1ycHJvcGVy
-IGFuZCBzZWUgaWYgYW55dGhpbmcgbmVlZHMgY2xlYW5pbmc/DQpJJ2xsIGNoZWNrIGludG8gdGhp
-cy4gIERvZXMgJ21ha2UgbXJwcm9wZXInIHJldHVybiBhbiBlcnJvciBjb2RlIGlmDQppdCBmb3Vu
-ZCBzb21ldGhpbmcgdGhhdCBuZWVkZWQgY2xlYW5pbmc/ICBPciBkbyBJIGhhdmUgdG8gcGFyc2UN
-CnN0dWZmLiAgVGhlIGFjdHVhbCBjb2RlIHRvIGNoZWNrIGlmIHRoZSBkaXJlY3RvcnkgaXMgY2xl
-YW4gaXMgcHJldHR5DQpzaG9ydC4NCg0KPiANCj4gPiAgIDMpIGRvZXMgdGhlIHRlc3QgaW5zdGFs
-bCBvcGVyYXRpb24gc3VjY2VlZA0KPiA+ICAgNCkgZG9lcyB0aGUgdGVzdCBydW4gc2NyaXB0IHJl
-ZmVyZW5jZSB0aGUgdGVzdA0KPiA+DQo+IA0KPiBJIGxpa2UgdGhlIGlkZWEgb2YgYmVpbmcgYWJs
-ZSB0byB0ZXN0LCBob3dldmVyIEkgYW0gbm90IGNvbnZpbmNlZA0KPiB5b3Ugd291bGQgbmVlZCBh
-IHdob2xlIG5ldyBzY3JpcHQgZm9yIGl0Lg0KDQpUaGUgY3VycmVudCBidWlsZCBzeXN0ZW0gaXMg
-YnJva2VuIGluIGEgZmV3IGRpZmZlcmVudCB3YXlzLg0KSSBoYXZlIG9ubHkgZW5hYmxlZCBhIGZl
-dyB0ZXN0IGNhc2VzIG91dCBvZiB0aGUgdGVzdCBtYXRyaXgsIHRvDQpiZSBhYmxlIHRvIGlzb2xh
-dGUgc29tZSBvZiB0aGUgb2J2aW91cyBwcm9ibGVtcyBmcm9tIGluZGl2aWR1YWwNCnRhcmdldCBh
-cmVhcy4gIE9uZSBvZiB0aGUgcmVhc29ucyBJIHdyb3RlIGEgZnVsbCBzY3JpcHQgd2FzIHRvIG1v
-cmUgZWFzaWx5DQplbmFibGUgYWRkaXRpb25hbCB0ZXN0cywgb25jZSBmdW5jdGlvbmFsaXR5IGlu
-IHRoZSBjdXJyZW50IGJ1aWxkDQpzeXN0ZW0gd2FzIGZpeGVkLCB0byBub3RpZnkgdXMgb2YgcmVn
-cmVzc2lvbnMgZ29pbmcgZm9yd2FyZC4NCg0KPiANCj4gDQo+ID4gU2lnbmVkLW9mZi1ieTogVGlt
-IEJpcmQgPHRpbS5iaXJkQHNvbnkuY29tPg0KPiA+IC0tLQ0KPiA+ICAgTUFJTlRBSU5FUlMgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDYgKw0KPiA+ICAgdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMva3NmdC1jb21waWxlLXRlc3Quc2ggfCA1NjcgKysrKysrKysrKysrKysrKysr
-KysrKysrKysrDQo+ID4gICAyIGZpbGVzIGNoYW5nZWQsIDU3MyBpbnNlcnRpb25zKCspDQo+ID4g
-ICBjcmVhdGUgbW9kZSAxMDA3NTUgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NmdC1jb21waWxl
-LXRlc3Quc2gNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJT
-DQo+ID4gaW5kZXggY2MxZDE4Yy4uYTYyODljNyAxMDA2NDQNCj4gPiAtLS0gYS9NQUlOVEFJTkVS
-Uw0KPiA+ICsrKyBiL01BSU5UQUlORVJTDQo+ID4gQEAgLTkxMjcsNiArOTEyNywxMiBAQCBTOglN
-YWludGFpbmVkDQo+ID4gICBGOgl0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy8NCj4gPiAgIEY6CURv
-Y3VtZW50YXRpb24vZGV2LXRvb2xzL2tzZWxmdGVzdCoNCj4gPg0KPiA+ICtLRVJORUwgU0VMRlRF
-U1QgU0VMRlRFU1QNCj4gPiArTToJVGltIEJpcmQgPHRpbS5iaXJkQHNvbnkuY29tPg0KPiA+ICtM
-OglsaW51eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3JnDQo+ID4gK1M6CU1haW50YWluZWQNCj4g
-PiArRjoJdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NmdC1jb21waWxlLXRlc3Quc2gNCj4gPiAr
-DQo+IA0KPiBQbGVhc2UgZG9uJ3QgYWRkIGFub3RoZXIgZW50cnkgdG8gdGhlIE1BSU5UQUlORVJT
-IGZpbGUganVzdA0KPiBmb3IgYSBzaGVsbCBzY3JpcHQgdW5kZXIgdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMNCj4gDQo+IFRoaXMgZG9lc24ndCBtYWtlIHNlbnNlLg0KT0suIEkgb25seSBhZGRlZCB0
-aGlzIHRvIGVsaW1pbmF0ZSBhIGNoZWNrcGF0Y2gucGwgd2FybmluZy4NCkl0IHNlZW1zIGxpa2Ug
-b3ZlcmtpbGwgdG8gbWUgYWxzbywgYnV0IEkgd2FzIHRyeWluZyB0byBvYmV5IHRoZSB0b29scy4N
-CjotKQ0KDQpNYXliZSB0aGF0IHdhcm5pbmcgZnJvbSBjaGVja3BhdGNoIGlzIHRvbyBhZ2dyZXNz
-aXZlPw0KDQo+IA0KPiA+ICAgS0VSTkVMIFVOSVQgVEVTVElORyBGUkFNRVdPUksgKEtVbml0KQ0K
-PiA+ICAgTToJQnJlbmRhbiBIaWdnaW5zIDxicmVuZGFuaGlnZ2luc0Bnb29nbGUuY29tPg0KPiA+
-ICAgTDoJbGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZw0KPiA+IGRpZmYgLS1naXQgYS90
-b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2Z0LWNvbXBpbGUtdGVzdC5zaCBiL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2tzZnQtY29tcGlsZS10ZXN0LnNoDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA3
-NTUNCj4gPiBpbmRleCAwMDAwMDAwLi5lMzZlODU4DQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsr
-KyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZnQtY29tcGlsZS10ZXN0LnNoDQo+ID4gQEAg
-LTAsMCArMSw1NjcgQEANCj4gPiArIyEvYmluL2Jhc2gNCj4gPiArIyBTUERYLUxpY2Vuc2UtSWRl
-bnRpZmllcjogR1BMLTIuMC1vbmx5IE9SIE1JVA0KPiA+ICsjDQo+ID4gKyMga3NmdC1jb21waWxl
-LXRlc3Quc2ggLSB0ZXN0IGNvbXBpbGluZyBMaW51eCBrZXJuZWwgc2VsZnRlc3RzIHVuZGVyIGxv
-dHMgb2YNCj4gPiArIyAgIGRpZmZlcmVudCBjb25maWd1cmF0aW9ucy4gIFRoaXMgaXMgdXNlZCB0
-byBjaGVjayB0aGF0IGNyb3NzLWNvbXBpbGF0aW9uDQo+ID4gKyMgICBhbmQgaW5zdGFsbCB3b3Jr
-cyBwcm9wZXJseSBmb3IgYSBuZXdseSBzdWJtaXR0ZWQgdGVzdCB0YXJnZXQsIGFuZA0KPiA+ICsj
-ICAgYWxzbyB0aGF0IGNoYW5nZXMgdG8gZXhpc3RpbmcgdGVzdCBNYWtlZmlsZXMgZG9uJ3QgcmVn
-cmVzcyB3aXRoIHJlZ2FyZCB0bw0KPiA+ICsjICAgdGhpcyBmdW5jdGlvbmFsaXR5Lg0KPiA+ICsj
-DQo+ID4gKyMgQ29weXJpZ2h0IDIwMjAgU29ueSBDb3Jwb3JhdGlvbg0KPiA+ICsjDQo+ID4gKyMg
-SGVyZSBhcmUgdGhlIHRoaW5ncyB0aGF0IFNodWFoIEthaG4gYXNrZWQgZm9yIG9uIDMvNi8yMDIw
-DQo+ID4gKyMgMS4gQ3Jvc3MtY29tcGlsYXRpb24gJiByZWxvY2F0YWJsZSBidWlsZCBzdXBwb3J0
-DQo+ID4gKyMgMi4gR2VuZXJhdGVzIG9iamVjdHMgaW4gb2JqZGlyL2tzZWxmdGVzdCB3aXRob3V0
-IGNsdXR0ZXJpbmcgbWFpbiBvYmpkaXINCj4gPiArIyAzLiBMZWF2ZSBzb3VyY2UgZGlyZWN0b3J5
-IGNsZWFuDQo+ID4gKyMgNC4gSW5zdGFsbHMgY29ycmVjdGx5IGluIG9iamRpci9rc2VsZnRlc3Qv
-a3NlbGZ0ZXN0X2luc3RhbGwgYW5kIGFkZHMNCj4gPiArIyAgICAgICAgaXRzZWxmIHRvIHJ1bl9r
-c2VsZnRlc3Quc2ggc2NyaXB0IGdlbmVyYXRlZCBkdXJpbmcgaW5zdGFsbC4NCj4gPiArIw0KPiAN
-Cj4gSSB3YXMgYXNraW5nIGZvciBmaXhlcyB0byBpbmRpdmlkdWFsIHRlc3RzLg0KV2VsbCwgSSB1
-c2VkIHRoaXMgdG8gZmluZCBzb21lIHRoaW5ncyB0byBmaXguICBJIGhhdmUgc29tZSBwYXRjaGVz
-IHF1ZXVlZCwNCmJ1dCBJIHRob3VnaHQgdGhlIHRvb2wgbWlnaHQgYmUgdXNlZnVsIGZvciBvdGhl
-cnMuICBJJ2xsIHNlbmQgdGhlIHBhdGNoZXMNCmluc3RlYWQgb2YgcG9zdGluZyB0aGUgdG9vbC4N
-Cg0KPiANCj4gPiArIyBXb3VsZCBiZSBuaWNlIHRvIG1ha2Ugc3VyZSBvdGhlciBmZWF0dXJlcyBh
-bHNvIHdvcms6DQo+ID4gKyMgNS4gY2FuIHVzZSBhYnNvbHV0ZSwgcmVsYXRpdmUsIG9yIGN1cnJl
-bnQgZGlyZWN0b3J5IGZvciBvdXRwdXQgZGlyZWN0b3J5DQo+ID4gKyMgNi4gY2FuIHVzZSB+IGlu
-IG91dHB1dCBkaXJlY3RvcnkgcGF0aA0KPiA+ICsjDQo+IA0KPiBJIGRvIHRoaW5rIHRoaXMgY2Fu
-IGJlIGFjaGlldmVkIHdpdGggYSBzaW1wbGVyIHNjcmlwdCB3cmFwcGVyIGFyb3VuZA0KPiBleGlz
-dGluZyBjb21tYW5kcyBhbmQga3NlbGZ0ZXN0X2luc3RhbGwuc2ggaW5zdGVhZCBvZiB3cml0aW5n
-IGEgd2hvbGUNCj4gbmV3IHNoZWxsIHNjcmlwdC4NCg0KV2VsbCwgbXkgcGFpbiBwb2ludCBpcyB0
-aGUgYnVpbGQgc3lzdGVtIGl0c2VsZiwgbm90IGtzZWxmdGVzdF9pbnN0YWxsLnNoLg0KVGhlcmUg
-YXJlIHN0aWxsIHNvbWUgYnVncyBpbiB0aGUgYnVpbGQgc3lzdGVtLCBhbmQgaXQgYXBwZWFycyB0
-aGF0IHBlb3BsZQ0Kc3RpbGwgc29tZXRpbWVzIHN1Ym1pdCBuZXcgdGVzdHMgd2l0aCBzdWJ0bGUg
-cHJvYmxlbXMgY29tcGlsaW5nIHVuZGVyDQpkaWZmZXJlbnQgYnVpbGQgY29uZmlndXJhdGlvbnMu
-DQoNCk15IGdvYWwgd2FzIHRvIGJlIGFibGUgdG8gdGVzdCBhIHdob2xlIG1hdHJpeCBvZiBidWls
-ZCBjb25maWd1cmF0aW9ucywNCnRvIGRldGVjdCB0aGVzZSBwcm9ibGVtcy4gIEJ1dCBtYWtpbmcg
-YSBnZW5lcmljIHN5c3RlbSB0byB0ZXN0IGEgbWF0cml4DQpvZiBjb25maWd1cmF0aW9ucyByZXF1
-aXJlcyBtb3JlIHRoYW4ganVzdCBwdXR0aW5nIHRvZ2V0aGVyIGEgZmV3IHdyYXBwZXINCnNjcmlw
-dHMuICBIb3dldmVyLCBJJ20gbm90IGFzIGZhbWlsaWFyIHdpdGggdGhlIGV4aXN0aW5nIGNvbW1h
-bmRzIGFzIHlvdQ0KYXJlLCBzbyBtYXliZSBJIG1pc3NlZCBzb21lIGZ1bmN0aW9uYWxpdHkgSSBj
-b3VsZCByZXVzZS4NCg0KT25lIG9mIHRoZSBzaWduaWZpY2FudCBwcm9ibGVtcyBoZXJlLCBJTU8s
-IGlzIHRoYXQgc2luY2UgbW9zdCBrZXJuZWwgZGV2ZWxvcGVycw0KZG9uJ3QgY3Jvc3MtY29tcGls
-ZSwgaXQgaW50cm9kdWNlcyBhIHdob2xlIHJhbmdlIG9mIHBvdGVudGlhbA0KZXJyb3JzIGluIHRo
-ZSBidWlsZCBzeXN0ZW0gdGhhdCB0aGV5IGNhbid0IHJlYWxseSB0ZXN0IGZvci4NCg0KVGhlIHJl
-YXNvbiB0aGF0IHRoZSBzY3JpcHQgaXMgc28gbG9uZyBpcyB0aGF0IGl0IHRyaWVzIHRvIGJlIGJ1
-bGxldC1wcm9vZg0KaW4gdGhlIGZhY2Ugb2YgcnVubmluZyBvbiBkaWZmZXJlbnQgc3lzdGVtcyB3
-aXRoIGRpZmZlcmVudCBidWlsZCBjb25maWd1cmF0aW9ucy4NCkV2ZW4gYXQgdGhhdCwgdGhpcyBp
-cyBhIGZpcnN0IGRyYWZ0IG9mIHRoZSB0ZXN0LiAgVG8gbWFrZSBpdCBldmVuIG1vcmUgcmVzaWxp
-ZW50DQphbmQgdXNlZnVsLCBJIHdvdWxkIGV4cGVjdCB0aGUgc2NyaXB0IHRvIGdldCBldmVuIGxv
-bmdlciBhcyBhZGRpdGlvbmFsIGJ1aWxkDQpjb25maWd1cmF0aW9ucyBhcmUgYWRkZWQsIGFuZCBk
-aWZmZXJlbnQgdGVzdHMgZm9yIGNvcnJlY3RuZXNzIGFyZSBhZGRlZC4NCg0KSSBvcmlnaW5hbGx5
-IHdyb3RlIHRoaXMgYXMgYSBGdWVnbyB0ZXN0LCBidXQgdGhlbiB0aG91Z2h0IHRoYXQgb3RoZXIg
-a2VybmVsIENJDQpzeXN0ZW1zIG1pZ2h0IHdhbnQgdG8gdXNlIGl0IGFzIHdlbGwgdG8gdGVzdCB0
-aGVpciBrc2VsZnRlc3QgYnVpbGQgY29uZmlndXJhdGlvbnMuDQpTbyBJIHJlLXdyb3RlIGl0IGFz
-IGEgZ2VuZXJpYywgc3RhbmRhbG9uZSBzY3JpcHQsIHNvIHRoYXQgb3RoZXJzIGNvdWxkIHVzZSBp
-dC4NCg0KSSdtIGhhcHB5IHRvIGxlYXZlIHRoaXMgb3V0c2lkZSB0aGUga2VybmVsIHRyZWUsIGFu
-ZCBwcm92aWRlICd0ZXN0aW5nIGFzIGEgc2VydmljZScNCihieSBGdWVnbyEpIHRvIGZpbmQgYnVn
-cyBpbiB0aGUga3NlbGZ0ZXN0IGJ1aWxkIHN5c3RlbS4gIEluIHRoYXQgY2FzZSwgSSdsbCBqdXN0
-IHJlcG9ydA0KYnVncyB0aGF0IHRoaXMgZmluZHMgKGFsb25nIHdpdGggZml4ZXMgd2hlcmUgcG9z
-c2libGUpLg0KDQpOb3RlIHRoYXQgSSdtIG5vdCByZWNvbW1lbmRpbmcgYWRkaW5nIHRoaXMgdG8g
-VEFSR0VUUy4gIEkgY29uc2lkZXJlZCBwdXR0aW5nIHRoZQ0Kc2NyaXB0IGl0c2VsZiBpbiB0aGUg
-dG9vbHMgZGlyZWN0b3J5LCBpbnN0ZWFkIG9mIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzLCBhcyBJ
-IHRob3VnaHQgdGhhdA0KbWF5YmUgaXQgc2hvdWxkIGJlIHNlcGFyYXRlIGZyb20gdGhlIHJlc3Qg
-b2YgdGhlIHNlbGZ0ZXN0IGluZnJhc3RydWN0dXJlLiAgSW4gYW55IGV2ZW50LA0Kbm8gb25lIG5l
-ZWRzIHRvIHJ1biB0aGlzIGlmIHRoZXkgZG9uJ3Qgd2FudCB0by4gDQoNClBsZWFzZSBjb25maXJt
-IHRoYXQgeW91J2QgcmF0aGVyIG5vdCBzZWUgdGhpcyBpbiB0cmVlLCBhbmQgSSdsbCBmb2N1cyBt
-eSBlZmZvcnRzIGVsc2V3aGVyZS4NCiAtLSBUaW0NCg0K
+On 4/14/20 10:06 AM, Bird, Tim wrote:
+>> -----Original Message-----
+>> From: shuah <shuah@kernel.org>
+>>
+>> On 4/13/20 4:15 PM, Tim Bird wrote:
+>>> From: Tim Bird <tim.bird@sony.com>
+>>>
+>>> Add ksft-compile-test.sh.  This is a program used to test
+>>> cross-compilation and installation of selftest tests.
+>>>
+>>> See the test usage for help
+>>>
+>>> This program currently tests 3 scenarios out of a larger matrix
+>>> of possibly interesting scenarios.  For each scenario, it conducts
+>>> multiple tests for correctness.  This version tests:
+>>>    1) does the test compile
+>>
+>> Is it necessary to write this long a script? Could we just parse
+>> the "kselftest
+> ???
+> 
+
+Sorry for the dangling sentence. :) Can we parse the make kselftest-all
+output instead?
+
+>>>    2) is the kernel source directory clean after the compile
+>>
+>> Can you use make mrproper and see if anything needs cleaning?
+> I'll check into this.  Does 'make mrproper' return an error code if
+> it found something that needed cleaning?  Or do I have to parse
+> stuff.  The actual code to check if the directory is clean is pretty
+> short.
+> 
+>>
+>>>    3) does the test install operation succeed
+>>>    4) does the test run script reference the test
+>>>
+>>
+>> I like the idea of being able to test, however I am not convinced
+>> you would need a whole new script for it.
+> 
+> The current build system is broken in a few different ways.
+> I have only enabled a few test cases out of the test matrix, to
+> be able to isolate some of the obvious problems from individual
+> target areas.  One of the reasons I wrote a full script was to more easily
+> enable additional tests, once functionality in the current build
+> system was fixed, to notify us of regressions going forward.
+> 
+>>
+
+I still want to see a way to use output from build and install
+steps and parse it, instead of a whole new script.
+
+>>
+>>> Signed-off-by: Tim Bird <tim.bird@sony.com>
+>>> ---
+>>>    MAINTAINERS                                  |   6 +
+>>>    tools/testing/selftests/ksft-compile-test.sh | 567 +++++++++++++++++++++++++++
+>>>    2 files changed, 573 insertions(+)
+>>>    create mode 100755 tools/testing/selftests/ksft-compile-test.sh
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index cc1d18c..a6289c7 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -9127,6 +9127,12 @@ S:	Maintained
+>>>    F:	tools/testing/selftests/
+>>>    F:	Documentation/dev-tools/kselftest*
+>>>
+>>> +KERNEL SELFTEST SELFTEST
+>>> +M:	Tim Bird <tim.bird@sony.com>
+>>> +L:	linux-kselftest@vger.kernel.org
+>>> +S:	Maintained
+>>> +F:	tools/testing/selftests/ksft-compile-test.sh
+>>> +
+>>
+>> Please don't add another entry to the MAINTAINERS file just
+>> for a shell script under tools/testing/selftests
+>>
+>> This doesn't make sense.
+> OK. I only added this to eliminate a checkpatch.pl warning.
+> It seems like overkill to me also, but I was trying to obey the tools.
+> :-)
+> 
+> Maybe that warning from checkpatch is too aggressive?
+> 
+
+Yeah. checkpatch warn in this case is reminder in case a new entry
+is needed. A new entry isn't necessary in most cases.
+
+>>
+>>>    KERNEL UNIT TESTING FRAMEWORK (KUnit)
+>>>    M:	Brendan Higgins <brendanhiggins@google.com>
+>>>    L:	linux-kselftest@vger.kernel.org
+>>> diff --git a/tools/testing/selftests/ksft-compile-test.sh b/tools/testing/selftests/ksft-compile-test.sh
+>>> new file mode 100755
+>>> index 0000000..e36e858
+>>> --- /dev/null
+>>> +++ b/tools/testing/selftests/ksft-compile-test.sh
+>>> @@ -0,0 +1,567 @@
+>>> +#!/bin/bash
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR MIT
+>>> +#
+>>> +# ksft-compile-test.sh - test compiling Linux kernel selftests under lots of
+>>> +#   different configurations.  This is used to check that cross-compilation
+>>> +#   and install works properly for a newly submitted test target, and
+>>> +#   also that changes to existing test Makefiles don't regress with regard to
+>>> +#   this functionality.
+>>> +#
+>>> +# Copyright 2020 Sony Corporation
+>>> +#
+>>> +# Here are the things that Shuah Kahn asked for on 3/6/2020
+>>> +# 1. Cross-compilation & relocatable build support
+>>> +# 2. Generates objects in objdir/kselftest without cluttering main objdir
+>>> +# 3. Leave source directory clean
+>>> +# 4. Installs correctly in objdir/kselftest/kselftest_install and adds
+>>> +#        itself to run_kselftest.sh script generated during install.
+>>> +#
+>>
+>> I was asking for fixes to individual tests.
+> Well, I used this to find some things to fix.  I have some patches queued,
+> but I thought the tool might be useful for others.  I'll send the patches
+> instead of posting the tool.
+> 
+>>
+>>> +# Would be nice to make sure other features also work:
+>>> +# 5. can use absolute, relative, or current directory for output directory
+>>> +# 6. can use ~ in output directory path
+>>> +#
+>>
+>> I do think this can be achieved with a simpler script wrapper around
+>> existing commands and kselftest_install.sh instead of writing a whole
+>> new shell script.
+> 
+> Well, my pain point is the build system itself, not kselftest_install.sh.
+> There are still some bugs in the build system, and it appears that people
+> still sometimes submit new tests with subtle problems compiling under
+> different build configurations.
+> 
+
+Agreed. I think it is still a better idea to parse to find error and
+display them.
+
+> My goal was to be able to test a whole matrix of build configurations,
+> to detect these problems.  But making a generic system to test a matrix
+> of configurations requires more than just putting together a few wrapper
+> scripts.  However, I'm not as familiar with the existing commands as you
+> are, so maybe I missed some functionality I could reuse.
+> 
+
+Right. Hence the reason why I am asking if you explored using exiting
+parsing build and install output. Approaching this as a parsing also
+reduces maintenance overhead for this script. I am not questioning the
+value of the script, I am asking about the approach.
+
+> One of the significant problems here, IMO, is that since most kernel developers
+> don't cross-compile, it introduces a whole range of potential
+> errors in the build system that they can't really test for.
+>
+
+We have efforts such as lkft and soon kernelci do cross-compiles.
+powerpc tests have good coverage and so do arm. The problem is tests
+that can run on multiple architectures at times come in without good
+support.
+
+>I'm happy to leave this outside the kernel tree, and provide 'testing as a service'
+>  >by Fuego!) to find bugs in the kselftest build system.  In that case, 
+I'll just report
+>bugs that this finds (along with fixes where possible).
+Testing as service by Fuego and fixes to problems you find is great.
+
+thanks,
+-- Shuah
+
