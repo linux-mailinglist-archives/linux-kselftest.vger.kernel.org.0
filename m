@@ -2,83 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8A91A7377
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 08:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BDE1A74F3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Apr 2020 09:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405853AbgDNGRN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Apr 2020 02:17:13 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45492 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2405855AbgDNGRM (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Apr 2020 02:17:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586845030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DOrTl4YvBq5Mc/4tt5fmz7abkbkAWLtGCwVC/yQsB/U=;
-        b=QvZ7pCmq0TCfuHCewRZ1S6GuNsFlu4mdFcjkULnxnhnz+To2zSqZG01T55tdhA/5Y6/Crg
-        zBond/FWYHfhXAseF2iUpbedKMUAAyxp6YvkEetGBeJ4cUwD3hz2UaTTabEpnkzpp1wAxf
-        wM/U3VYcLyjbUuOo+JwV6kCh/Z9riBc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-362-5IYuHBlQO_yDrdlI2Zhw9g-1; Tue, 14 Apr 2020 02:17:06 -0400
-X-MC-Unique: 5IYuHBlQO_yDrdlI2Zhw9g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6CAFD800D5C;
-        Tue, 14 Apr 2020 06:17:05 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.40.193.1])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 247D65D9CD;
-        Tue, 14 Apr 2020 06:16:57 +0000 (UTC)
-Date:   Tue, 14 Apr 2020 08:16:54 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Wainer dos Santos Moschetta <wainersm@redhat.com>,
-        pbonzini@redhat.com, kvm@vger.kernel.org, david@redhat.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krish.sadhukhan@oracle.com
-Subject: Re: [PATCH v5 0/2] selftests: kvm: Introduce the mem_slot_test test
-Message-ID: <20200414061654.qhuo3hsslz32qwgc@kamzik.brq.redhat.com>
-References: <20200409220905.26573-1-wainersm@redhat.com>
- <20200410204509.GK22482@linux.intel.com>
+        id S2406753AbgDNHio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Apr 2020 03:38:44 -0400
+Received: from mga14.intel.com ([192.55.52.115]:17094 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406749AbgDNHil (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Apr 2020 03:38:41 -0400
+IronPort-SDR: AhOc6Pk2gJj8rAGBrfVsURJ7Iv+qYdSfVVNdQ6GZe2VOfqZ6aNHw9V9mI4MaSDt61opLn/v2ZM
+ LcVwHQX05CRQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 00:38:40 -0700
+IronPort-SDR: u+NegoB65VxBLzzbNz52A3oNkKqeXE5OURkh1WIUBU5g3XZQN7g+CDWy+Kk8vwu0Oqk7NcgKYc
+ JSlvyFo/rVVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,381,1580803200"; 
+   d="scan'208";a="399872713"
+Received: from elenamax-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.42.208])
+  by orsmga004.jf.intel.com with ESMTP; 14 Apr 2020 00:38:15 -0700
+Date:   Tue, 14 Apr 2020 10:38:06 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Ezra Buehler <ezra@easyb.ch>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/tpm2: Change exception handling to be Python 3
+ compatible
+Message-ID: <20200414073806.GE8403@linux.intel.com>
+References: <20200412143656.72955-1-jarkko.sakkinen@linux.intel.com>
+ <1FE03B4F-C42C-4B5F-A4B5-8169705911FA@easyb.ch>
+ <20200412170719.GA324408@linux.intel.com>
+ <531D50E8-E8FC-402E-9226-6000E8B6E960@easyb.ch>
+ <20200413180440.GA10917@linux.intel.com>
+ <D670A3F7-6FE2-4A07-8251-680C2ED27764@easyb.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200410204509.GK22482@linux.intel.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <D670A3F7-6FE2-4A07-8251-680C2ED27764@easyb.ch>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 01:45:09PM -0700, Sean Christopherson wrote:
-> On Thu, Apr 09, 2020 at 07:09:03PM -0300, Wainer dos Santos Moschetta wrote:
-> > This series introduces a new KVM selftest (mem_slot_test) that goal
-> > is to verify memory slots can be added up to the maximum allowed. An
-> > extra slot is attempted which should occur on error.
-> > 
-> > The patch 01 is needed so that the VM fd can be accessed from the
-> > test code (for the ioctl call attempting to add an extra slot).
-> > 
-> > I ran the test successfully on x86_64, aarch64, and s390x.  This
-> > is why it is enabled to build on those arches.
+On Tue, Apr 14, 2020 at 07:45:33AM +0200, Ezra Buehler wrote:
+> Hi Jarkko,
 > 
-> Any objection to folding these patches into a series I have to clean up
-> set_memory_region_test (which was mentioned in a prior version) and add
-> this as a testcase to set_memory_region_test instead of creating a whole
-> new test?
+> On 13 Apr 2020, at 20:04, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> > 
+> > On Mon, Apr 13, 2020 at 07:02:20AM +0200, Ezra Buehler wrote:
+> >> Hi Jarkko,
+> >> 
+> >> On 12 Apr 2020, at 19:07, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> >>> 
+> >>> On Sun, Apr 12, 2020 at 05:02:27PM +0200, Ezra Buehler wrote:
+> >>>> Hi Jarkkon,
+> >>>> 
+> >>>>> On 12 Apr 2020, at 16:36, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> >>>>> +        except ProtocolError(e):
+> >>>> 
+> >>>> Should this not be
+> >>>> 
+> >>>>       except ProtocolError as e:
+> >>> 
+> >>> Unless there is a functional difference, does it matter?
+> >>> 
+> >>> /Jarkko
+> >> 
+> >> Well, your patch confuses me a lot. It looks to me like you are passing
+> >> the undefined `e` variable to the constructor.
+> >> 
+> >> When I run flake8 on it I get following error (among others):
+> >> 
+> >>    F821 undefined name 'e'
+> > 
+> > I don't know what flake8 is.
 > 
-> A large chunk of set_memory_region_test will still be x86_64 only, but
-> having the test reside in common code will hopefully make it easier to
-> extend to other architectures.
->
+> https://flake8.pycqa.org/en/latest/
+> 
+> >> What I suggested is the standard syntax:
+> >> https://docs.python.org/3/tutorial/errors.html
+> > 
+> > It passed the Python 3 interpreter.
+> 
+> That is because it is technically valid syntax.
+> 
+> >> Did you test this? You should get an error as soon as an exception
+> >> occurs.
+> > 
+> > Yes. Interpreter did not complain. I did not know that the language
+> > is broken that way that you have to exercise the code path to get
+> > a syntax error.
+> 
+> That is due to the dynamic nature of Python. You won’t get a syntax
+> error. You will get an exception:
+> 
+>     NameError: name 'e' is not defined
+> 
+> Python has to assume that `e` might be defined at runtime. However,
+> style checkers will complain.
 
-Yes, that would be my preference as well. Eventually I decided it could be
-done later, but I still prefer it being done from the beginning.
+OK, I'm aware about the dynamic nature but in this case it is somewhat
+counter intuitive since it is part of the exception clause. You'd except
+the Python interpreter to complain.
 
-Thanks,
-drew 
+So, is Flake8 like the standard to be used?
 
+/Jarkko
