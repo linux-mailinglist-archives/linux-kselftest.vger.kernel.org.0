@@ -2,132 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012E81AB20C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 21:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649411AB265
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 22:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436832AbgDOTw7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Apr 2020 15:52:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406367AbgDOTw6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Apr 2020 15:52:58 -0400
-Received: from localhost (unknown [213.57.247.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 57BFE20768;
-        Wed, 15 Apr 2020 19:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586980377;
-        bh=VIJbq8z+EJopl5dPNKugVY1RH2ciDkjwJJAVLC+WXtw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T8SIg/rAhUuNpb63I3FxCT/9WF5sH257PdsEZjlN4Rasbbf3cmMzAtM6ilEvTxw39
-         S98cbtdUeOFq2LGC7LWxu3SVaCBsf6cmg5BfgZA8olpGkIuQsZLqavp5h0391M6izK
-         z+qYrsyH750BlDWEYAabXcP0W3fq8ervDj5XG0bM=
-Date:   Wed, 15 Apr 2020 22:52:47 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@mellanox.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 0/3] mm/hmm/test: add self tests for HMM
-Message-ID: <20200415195247.GB1309273@unreal>
-References: <20200321003108.22941-1-rcampbell@nvidia.com>
- <20200415144125.GU11945@mellanox.com>
- <6d7adb28-96a0-5dc5-e85e-68fca2db403a@nvidia.com>
- <20200415192952.GA1309273@unreal>
- <1b94e41d-2335-0cb4-9605-cf9f404900c9@nvidia.com>
+        id S2437923AbgDOUSv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Apr 2020 16:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2437935AbgDOUSs (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Apr 2020 16:18:48 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF79C061A0C
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2020 13:18:47 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id h2so1255150wmb.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2020 13:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7FfNEBfV3TFTX3qa/NDoi50G8mCvUf7eehHRIrFRWzI=;
+        b=BnWVoHZUl/O8nAukbV0dMQ2s/QWAjeQf3Czsw19PNnAVk3lyk+kaN4X1reP1StQaHY
+         DmmG6i0OgttDsEFgAnh9dg/EC8pYjRwPoxSLdQTVOubbykCK3qkzxSnrQrh4ifwMyl+B
+         ufhg52/vOfj2cnIiSPLYmZfqer0VYYeLjqB+AsVNyXOO/g9Ubif7uVFS9gdisCuBaCkU
+         lktGfmGBSFki4QPpCvL0ltgdEDLvp8pdKTpjf9Y2fyjCeTbwB2DeiSxrwSqSyFMOJvUS
+         rXbRwmOnH53fii38bKuC1N2mgcSOKF1UDJZNmXaq9CDfHQ7zvYyVyHaBwoKXQuhuY3ZC
+         tWGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7FfNEBfV3TFTX3qa/NDoi50G8mCvUf7eehHRIrFRWzI=;
+        b=KTxdMc14SLeDAJdO1oW1J3EN6cq+NS5e+P6EwqQJgyUFqtMPkOd9ruVTzuQ7x4qD3M
+         o6OlEpXKM0VGFSkho++hrO0l6iB+bsaUm4kBEvZMpmnwM2FgFWHpvbFX+/yixwk4gh4h
+         QxAehvg+hy1Vhm/POuTPnezahKiTyerQDsfDnm5ePFGudfI1zhonlC0N7p9aIlSn9eAj
+         Gq+JakEk7peUgfn9un6Amjx3oQmSvE3nvP6ZJyJ6WlNJRolxweD+GBY/zFCvJhFj0Ijt
+         GGD3cOdJ8TMvVfFseOPMc3by0mkBti+6wHHwMpEABsAXwoHNdlf9jM3EOX2WTfraEaoZ
+         QOAw==
+X-Gm-Message-State: AGi0PuaV7KJfIw+VwNRcNTldeIj1lmrhmPPxRtfMuYb42CSTNCTWBLUm
+        InsSmcn5GrkOFmP7VGwy5T8=
+X-Google-Smtp-Source: APiQypJJocBsLdRgkShkFKJTQvJOwn2B/r6JqOBstaxiU9VhTPJEzbfAR1U+Gh5QFiTvisKn4oT72Q==
+X-Received: by 2002:a1c:2e0a:: with SMTP id u10mr993505wmu.146.1586981925929;
+        Wed, 15 Apr 2020 13:18:45 -0700 (PDT)
+Received: from 6a74d957ff6d.v.cablecom.net ([45.87.212.54])
+        by smtp.gmail.com with ESMTPSA id h3sm19224891wrm.73.2020.04.15.13.18.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2020 13:18:45 -0700 (PDT)
+From:   Lothar Rubusch <l.rubusch@gmail.com>
+To:     brendanhiggins@google.com, corbet@lwn.net
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Lothar Rubusch <l.rubusch@gmail.com>
+Subject: [PATCH v5] Documentation: test.h - fix warnings
+Date:   Wed, 15 Apr 2020 20:16:53 +0000
+Message-Id: <20200415201653.106-1-l.rubusch@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b94e41d-2335-0cb4-9605-cf9f404900c9@nvidia.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 12:39:45PM -0700, Ralph Campbell wrote:
->
-> On 4/15/20 12:29 PM, Leon Romanovsky wrote:
-> > On Wed, Apr 15, 2020 at 10:28:23AM -0700, Ralph Campbell wrote:
-> > >
-> > > On 4/15/20 7:41 AM, Jason Gunthorpe wrote:
-> > > > On Fri, Mar 20, 2020 at 05:31:05PM -0700, Ralph Campbell wrote:
-> > > > > This series adds basic self tests for HMM and are intended for Jason
-> > > > > Gunthorpe's rdma tree which has a number of HMM patches applied.
-> > > >
-> > > > Here are some hunks I noticed while testing this:
-> > > >
-> > > > --- a/lib/Kconfig.debug
-> > > > +++ b/lib/Kconfig.debug
-> > > > @@ -2201,7 +2201,8 @@ config TEST_MEMINIT
-> > > >    config TEST_HMM
-> > > >    	tristate "Test HMM (Heterogeneous Memory Management)"
-> > > > -	depends on DEVICE_PRIVATE
-> > > > +	depends on TRANSPARENT_HUGEPAGE
-> > > > +	select DEVICE_PRIVATE
-> > > >    	select HMM_MIRROR
-> > > >    	select MMU_NOTIFIER
-> > > >    	help
-> > > >
-> > > > It fails testing if TRANSPARENT_HUGEPAGE is not on
-> > > >
-> > > > @@ -1097,6 +1071,7 @@ static int dmirror_device_init(struct dmirror_device *mdevice, int id)
-> > > >    	spin_lock_init(&mdevice->lock);
-> > > >    	cdev_init(&mdevice->cdevice, &dmirror_fops);
-> > > > +	mdevice->cdevice.owner = THIS_MODULE;
-> > > >    	ret = cdev_add(&mdevice->cdevice, dev, 1);
-> > > >    	if (ret)
-> > > >    		return ret;
-> > > >
-> > > > The use of cdev without a struct device is super weird, but it still
-> > > > needs this
-> > > >
-> > > > diff --git a/tools/testing/selftests/vm/test_hmm.sh b/tools/testing/selftests/vm/test_hmm.sh
-> > > > index 461e4a99a362cf..0647b525a62564 100755
-> > > > --- a/tools/testing/selftests/vm/test_hmm.sh
-> > > > +++ b/tools/testing/selftests/vm/test_hmm.sh
-> > > > @@ -59,7 +59,7 @@ run_smoke()
-> > > >    	echo "Running smoke test. Note, this test provides basic coverage."
-> > > >    	load_driver
-> > > > -	./hmm-tests
-> > > > +	$(dirname "${BASH_SOURCE[0]}")/hmm-tests
-> > > >    	unload_driver
-> > > >    }
-> > > >
-> > > > Make it runnably reliably
-> > > >
-> > > > Jason
-> > >
-> > > Thanks for the fixes. I'll apply these and send a v9.
-> > > I will also add missing calls to release_mem_region() to free the reserved device private
-> > > addresses.
-> >
-> > If you decide to ignore my request to avoid addition of special header
-> > file to UAPI, at least don't copy and install that file without some
-> > special CONFIG option (TEST_HMM ???) requested by the users. It also
-> > will be good to get Acked-by on this change from HMM people.
-> >
-> > However, I still think that include/uapi/linux/test_hmm.h opens
-> > pandora box of having UAPI files without real promise to keep it
-> > backward compatible.
-> >
-> > Thanks
->
-> I think that is a valid point. I would expect the test<->driver UAPI to track the kernel
-> version since the sources are "released" together. I suppose a version number could be
-> included in the request structure to handle mismatch driver and test program but that
-> may be overkill.
+Fix warnings at 'make htmldocs', and formatting issues in the resulting
+documentation.
 
-Yes, it is really overkill.
+- test.h: Fix annotation in kernel-doc parameter description.
 
-> Are you suggesting that include/linux/test_hmm.h is a better location?
+- Documentation/*.rst: Fixing formatting issues, and a duplicate label
+  issue due to usage of sphinx.ext.autosectionlabel and identical labels
+  within one document (sphinx warning)
 
-It is one of options, another option maybe similar to that is done in
-scripts/mod/modpost.c [1], where C file is generated on the fly.
+Signed-off-by: Lothar Rubusch <l.rubusch@gmail.com>
+---
+v2: Several documentation fixes
 
-[1] https://lore.kernel.org/netdev/20200415133648.1306956-5-leon@kernel.org
+v3: Do not touch API documentation index
+
+v4: Replace macro argument in test.h by named variadic argument
+
+v5: Patch format fixed
+
+NB: checkpatch.pl will complain about flow control statements (i.e. usage
+    of "return") within the macro kunit_test_suites(suites_list...).
+
+Better? I feel I'm making you a lot of extra work. I'm really sorry for
+all this fuzz!
+
+ Documentation/dev-tools/kunit/start.rst | 13 ++++++++-----
+ Documentation/dev-tools/kunit/usage.rst |  4 ++--
+ include/kunit/test.h                    | 12 ++++++------
+ 3 files changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index e1c5ce80ce12..bb112cf70624 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -32,15 +32,17 @@ test targets as well. The ``.kunitconfig`` should also contain any other config
+ options required by the tests.
+ 
+ A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
++
+ .. code-block:: bash
+ 
+ 	cd $PATH_TO_LINUX_REPO
+ 	cp arch/um/configs/kunit_defconfig .kunitconfig
+ 
+ You can then add any other Kconfig options you wish, e.g.:
++
+ .. code-block:: none
+ 
+-        CONFIG_LIST_KUNIT_TEST=y
++	CONFIG_LIST_KUNIT_TEST=y
+ 
+ :doc:`kunit_tool <kunit-tool>` will ensure that all config options set in
+ ``.kunitconfig`` are set in the kernel ``.config`` before running the tests.
+@@ -54,8 +56,8 @@ using.
+    other tools (such as make menuconfig) to adjust other config options.
+ 
+ 
+-Running the tests
+------------------
++Running the tests (KUnit Wrapper)
++---------------------------------
+ 
+ To make sure that everything is set up correctly, simply invoke the Python
+ wrapper from your kernel repo:
+@@ -105,8 +107,9 @@ have config options ending in ``_KUNIT_TEST``.
+ KUnit and KUnit tests can be compiled as modules: in this case the tests in a
+ module will be run when the module is loaded.
+ 
+-Running the tests
+------------------
++
++Running the tests (w/o KUnit Wrapper)
++-------------------------------------
+ 
+ Build and run your kernel as usual. Test output will be written to the kernel
+ log in `TAP <https://testanything.org/>`_ format.
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 473a2361ec37..3c3fe8b5fecc 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -595,7 +595,7 @@ able to run one test case per invocation.
+ KUnit debugfs representation
+ ============================
+ When kunit test suites are initialized, they create an associated directory
+-in /sys/kernel/debug/kunit/<test-suite>.  The directory contains one file
++in ``/sys/kernel/debug/kunit/<test-suite>``.  The directory contains one file
+ 
+ - results: "cat results" displays results of each test case and the results
+   of the entire suite for the last test run.
+@@ -604,4 +604,4 @@ The debugfs representation is primarily of use when kunit test suites are
+ run in a native environment, either as modules or builtin.  Having a way
+ to display results like this is valuable as otherwise results can be
+ intermixed with other events in dmesg output.  The maximum size of each
+-results file is KUNIT_LOG_SIZE bytes (defined in include/kunit/test.h).
++results file is KUNIT_LOG_SIZE bytes (defined in ``include/kunit/test.h``).
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 9b0c46a6ca1f..47e61e1d5337 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -175,7 +175,7 @@ struct kunit_suite {
+ 	void (*exit)(struct kunit *test);
+ 	struct kunit_case *test_cases;
+ 
+-	/* private - internal use only */
++	/* private: internal use only */
+ 	struct dentry *debugfs;
+ 	char *log;
+ };
+@@ -232,12 +232,12 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+  * kunit_test_suites() - used to register one or more &struct kunit_suite
+  *			 with KUnit.
+  *
+- * @suites: a statically allocated list of &struct kunit_suite.
++ * @suites_list...: a statically allocated list of &struct kunit_suite.
+  *
+- * Registers @suites with the test framework. See &struct kunit_suite for
++ * Registers @suites_list with the test framework. See &struct kunit_suite for
+  * more information.
+  *
+- * When builtin,  KUnit tests are all run as late_initcalls; this means
++ * When builtin, KUnit tests are all run as late_initcalls; this means
+  * that they cannot test anything where tests must run at a different init
+  * phase. One significant restriction resulting from this is that KUnit
+  * cannot reliably test anything that is initialize in the late_init phase;
+@@ -253,8 +253,8 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+  * tests from the same place, and at the very least to do so after
+  * everything else is definitely initialized.
+  */
+-#define kunit_test_suites(...)						\
+-	static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};	\
++#define kunit_test_suites(suites_list...)				\
++	static struct kunit_suite *suites[] = {suites_list, NULL};	\
+ 	static int kunit_test_suites_init(void)				\
+ 	{								\
+ 		return __kunit_test_suites_init(suites);		\
+-- 
+2.20.1
+
