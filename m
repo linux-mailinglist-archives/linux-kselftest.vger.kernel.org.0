@@ -2,125 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE9B1A92F8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 08:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39ED51A9313
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Apr 2020 08:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393488AbgDOGMA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Apr 2020 02:12:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731298AbgDOGL6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Apr 2020 02:11:58 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 97C0820737;
-        Wed, 15 Apr 2020 06:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586931118;
-        bh=6pe4+qaI7ju1Sn4wwK8IEsC+9CafQ0CfM86Yc2BJYys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NMwl6bwrm7LYbjWQghiA1uHB2jlaKSVoPOoQ5oMcUlOV3jsvnLpwtWLt7yWEsFnKt
-         LTT8/5ozJsp3O1QR6xEK9mUKJWHses15cO0jAi8TPYH1/mGVbDjSyIhxRm44YufI2S
-         5fif3j2wUzVFn1B99967fEl3zbIQwCsIArdtX3jk=
-Date:   Wed, 15 Apr 2020 08:11:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        naresh.kamboju@linaro.org, sakari.ailus@linux.intel.com,
-        andy.shevchenko@gmail.com, hdegoede@redhat.com,
-        rafael.j.wysocki@intel.com, linux-kselftest@vger.kernel.org,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        andriy.shevchenko@linux.intel.com, shuah@kernel.org,
-        anders.roxell@linaro.org, lkft-triage@lists.linaro.org,
-        linux@rasmusvillemoes.dk,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH v1] kobject: make sure parent is not released before
- children
-Message-ID: <20200415061154.GA2496263@kroah.com>
-References: <20200414204240.186377-1-brendanhiggins@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200414204240.186377-1-brendanhiggins@google.com>
+        id S2634769AbgDOGSW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Apr 2020 02:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2634767AbgDOGST (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Apr 2020 02:18:19 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B24C061A0C;
+        Tue, 14 Apr 2020 23:18:18 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 2so998400pgp.11;
+        Tue, 14 Apr 2020 23:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Z6dDXrpHCpb7QojGdJNeUUCIdrdGWNtgqpKwnuCk6j0=;
+        b=eLOWgaBqZYmjC9zj5lo0gSh2lMVT5vngHBkvkm8lJA/2MOQ1VFcbzk1ZgN83e56OFb
+         c2AeijNIzKQ1lvhspUZB6eDBAU2u5Qi62C4B+BoDAKg/we66nv2IXSRGO4CT7fg/zMkT
+         iwe/uTS+VxHP8Zl7HWyCAE9oY/Xt17fHezxHq0L4yJwsBBsQ+W40B5BTWX1I9xMoG/La
+         mETMuyOLtjD1q7onc30R3GCBvNwBeF/BhlC48SW6ZB7w4Clym64C1J8qgvamhtYEcfyM
+         QJoq9T5Q+rVsg+fRzIS9flb0fPk3MkIJviMso5H6DOEZsd70n8Wv29nmJ76RQDjAbuiN
+         pcxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Z6dDXrpHCpb7QojGdJNeUUCIdrdGWNtgqpKwnuCk6j0=;
+        b=C1MlqazwCF8aSCqg/OuLq12/o9A1z0pklmuayJwiRmAyQy8hpAp3mGBNmmN9ClkozZ
+         8C6PeF6fe5TF76GzpHvPpYQzwBpcYdEEqbmWxN5k3PXrEusWbbauHA+VfDiPvjJGH3OR
+         8d9LP3k1QeJ38r4Mh7LCRNbxsq7JJ5Cq/6hw5KewmCNliAgMISRc4Fvv5qErzcxKxYFd
+         5JNfRrPJFhOWiEpOwweDaAGU7RatAfA3a5RJhIJlt0I3QcIZbytzh/Iyy8Tmf26GOQft
+         bdQIp0duuSD8WZym263bBf+K5eQsur8QNiRXUmvlyJSnsBAyqNSYJDKXzBRqV1MaIrBr
+         5BbQ==
+X-Gm-Message-State: AGi0PuYmodNuEFLKHAtDNVZkSf9KSLdhT1YuhTcnZnaJJY6tqZDlVvSi
+        dxfhaP5tFU+cAvERxa96PQ8=
+X-Google-Smtp-Source: APiQypIMB3BTefjO/UkPylwPC1Tp3Dk9VsE2452jM37H/UaMqGX6nhVLVm04Cdjr6QH7Ui2+q+URDQ==
+X-Received: by 2002:a63:f45:: with SMTP id 5mr24543924pgp.31.1586931498023;
+        Tue, 14 Apr 2020 23:18:18 -0700 (PDT)
+Received: from laptop.hsd1.wa.comcast.net ([2601:600:817f:a132:df3e:521d:99d5:710d])
+        by smtp.gmail.com with ESMTPSA id e22sm11694502pgh.14.2020.04.14.23.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 23:18:17 -0700 (PDT)
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrei Vagin <avagin@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH] selftests/timens: handle a case when alarm clocks are not supported
+Date:   Tue, 14 Apr 2020 23:18:02 -0700
+Message-Id: <20200415061802.722485-1-avagin@gmail.com>
+X-Mailer: git-send-email 2.17.2
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 01:42:40PM -0700, Brendan Higgins wrote:
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> 
-> Previously, kobjects were released before the associated kobj_types;
-> this can cause a kobject deallocation to fail when the kobject has
-> children; an example of this is in software_node_unregister_nodes(); it
-> calls release on the parent before children meaning that children can be
-> released after the parent, which may be needed for removal.
+This can happen if a testing node doesn't have RTC (real time clock)
+hardware or it doesn't support alarms.
 
-The simple solution for this is "don't do this" :)
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Signed-off-by: Andrei Vagin <avagin@gmail.com>
+---
+ tools/testing/selftests/timens/clock_nanosleep.c |  2 +-
+ tools/testing/selftests/timens/timens.c          |  2 +-
+ tools/testing/selftests/timens/timens.h          | 13 ++++++++++++-
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
-> So, take a reference to the parent before we delete a node to ensure
-> that the parent is not released before the children.
-> 
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Fixes: 7589238a8cf3 ("Revert "software node: Simplify software_node_release() function"")
-> Link: https://lore.kernel.org/linux-kselftest/CAFd5g44s5NQvT8TG_x4rwbqoa7zWzkV0TX+ETZoQdOB7OwXCPQ@mail.gmail.com/T/#m71f37f3985f2abd7209c8ca8e0fa4edc45e171d6
-> Co-developed-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
-> 
-> This patch is based on the diff written by Heikki linked above.
-> 
-> Heikki, can you either reply with a Signed-off-by? Otherwise, I can
-> resend with me as the author and I will list you as the Co-developed-by.
-> 
-> Sorry for all the CCs: I just want to make sure everyone who was a party
-> to the original bug sees this.
-> 
-> ---
->  lib/kobject.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/lib/kobject.c b/lib/kobject.c
-> index 83198cb37d8d..5921e2470b46 100644
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -663,6 +663,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
->   */
->  static void kobject_cleanup(struct kobject *kobj)
->  {
-> +	struct kobject *parent = kobj->parent;
->  	struct kobj_type *t = get_ktype(kobj);
->  	const char *name = kobj->name;
->  
-> @@ -680,6 +681,9 @@ static void kobject_cleanup(struct kobject *kobj)
->  		kobject_uevent(kobj, KOBJ_REMOVE);
->  	}
->  
-> +	/* make sure the parent is not released before the (last) child */
-> +	kobject_get(parent);
-> +
->  	/* remove from sysfs if the caller did not do it */
->  	if (kobj->state_in_sysfs) {
->  		pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
-> @@ -693,6 +697,8 @@ static void kobject_cleanup(struct kobject *kobj)
->  		t->release(kobj);
->  	}
->  
-> +	kobject_put(parent);
-> +
+diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
+index 8e7b7c72ef65..72d41b955fb2 100644
+--- a/tools/testing/selftests/timens/clock_nanosleep.c
++++ b/tools/testing/selftests/timens/clock_nanosleep.c
+@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
+ 
+ 	ksft_set_plan(4);
+ 
+-	check_config_posix_timers();
++	check_supported_timers();
+ 
+ 	if (unshare_timens())
+ 		return 1;
+diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
+index 559d26e21ba0..07feebe8e53e 100644
+--- a/tools/testing/selftests/timens/timens.c
++++ b/tools/testing/selftests/timens/timens.c
+@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
+ 
+ 	nscheck();
+ 
+-	check_config_posix_timers();
++	check_supported_timers();
+ 
+ 	ksft_set_plan(ARRAY_SIZE(clocks) * 2);
+ 
+diff --git a/tools/testing/selftests/timens/timens.h b/tools/testing/selftests/timens/timens.h
+index e09e7e39bc52..d4fc52d47146 100644
+--- a/tools/testing/selftests/timens/timens.h
++++ b/tools/testing/selftests/timens/timens.h
+@@ -14,15 +14,26 @@
+ #endif
+ 
+ static int config_posix_timers = true;
++static int config_alarm_timers = true;
+ 
+-static inline void check_config_posix_timers(void)
++static inline void check_supported_timers(void)
+ {
++	struct timespec ts;
++
+ 	if (timer_create(-1, 0, 0) == -1 && errno == ENOSYS)
+ 		config_posix_timers = false;
++
++	if (clock_gettime(CLOCK_BOOTTIME_ALARM, &ts) == -1 && errno == EINVAL)
++		config_alarm_timers = false;
+ }
+ 
+ static inline bool check_skip(int clockid)
+ {
++	if (!config_alarm_timers && clockid == CLOCK_BOOTTIME_ALARM) {
++		ksft_test_result_skip("CLOCK_BOOTTIME_ALARM isn't supported\n");
++		return true;
++	}
++
+ 	if (config_posix_timers)
+ 		return false;
+ 
+-- 
+2.24.1
 
-No, please don't do this.
-
-A child device should have always incremented the parent already if it
-was correctly registered.  We have had this patch been proposed multiple
-times over the years, and every time it was, we said no and went and
-fixed the real issue which was with the user of the interface.
-
-So, what code is causing this to happen?  What parent firmware device is
-being removed that the code didn't walk the tree properly and remove the
-children first?
-
-thanks,
-
-greg k-h
