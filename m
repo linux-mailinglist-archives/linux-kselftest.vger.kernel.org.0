@@ -2,106 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B851AB4C1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Apr 2020 02:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917511AB799
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Apr 2020 08:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391723AbgDPA3P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Apr 2020 20:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729382AbgDPA3M (ORCPT
+        id S2407243AbgDPGAR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Apr 2020 02:00:17 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33195 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407207AbgDPGAP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Apr 2020 20:29:12 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0364C061A0C
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2020 17:29:12 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id 8so4960199oiy.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2020 17:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GeXd8f9J30PgVFJ7Z+WgbUhdu7rs2z9sqFP5jQ5Rms4=;
-        b=fkzxHgIOqEjwuIosHr9XmQjcVbxGyuyyncMmIKtBRy2n1ATDf9hSL8qMF8+8CCdDyA
-         wououMrcJsN/rDXNRAzh59RbkXQpLrJ0BNFC4X1fEwtKE8izrLemCYJZsVeRrPfxJITu
-         wkI5ti8qldm3gUdm95Zq5S+B6IleEGfxZ31au8kCUg+w39Fq8riSYOHkd1CyGMzPjQXL
-         9l9Z8YgX35Q1cIQgH0i9nYi0TXXTbgLFEsAd4/mId92Z6HWufi2SVoucENSPZOK5Z30q
-         HiErD0IrYQ8+hAlaLCpqdV/U/1SEpWoRWOsgu4IzMphWBg7nJRo5hw6Td0LQDZ3PdnUh
-         5dNQ==
+        Thu, 16 Apr 2020 02:00:15 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c138so1203914pfc.0;
+        Wed, 15 Apr 2020 23:00:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GeXd8f9J30PgVFJ7Z+WgbUhdu7rs2z9sqFP5jQ5Rms4=;
-        b=bWgT6zzhf1ACoiRjohnmFE7vqbjxtHdp3R/zVnvqP8GE6LKsF42osg8icakwe6o7Dh
-         bsz9aw6oDb69hg+bjPGgq3yUZtVAbTcqO4BzGRM1S7HKVVctEP/9R+EMiyJLnQgeSP1Z
-         E089xvu3oI36tSkVq87GNNlCQVWjLF18xdLG9aVfZNBnF4hMVp56PdZc5HnA2iim0lK9
-         G9sL+wi6isRHeFJBp0Q5MsysX8rDq2uCZcEuieJS1/ec7mPfHLNfBndhAhYINE+C+f5N
-         nrjevfJoaGujkh4gx8dX4RaV1PhzGCpReYkSWWApMBYP7yPawV+UxA1BxTBE1wVkksSQ
-         VBHw==
-X-Gm-Message-State: AGi0PualjcIyAnf/wiI1cqpTA5wqvmaaacGJfWwtvbkDpeFQyjCHpB0B
-        rpqKLAt+CzFW5D/HGoCkmfNmKX/soaEclP1H+/EeTtJn
-X-Google-Smtp-Source: APiQypKqxX1Fl3V2SnfLeZZgj6SmNm3X1EEdrsgQfCYgSGa09GLLNNURx+AKzwqwjs7SlbDusY22alHpQpyRzJdkTLk=
-X-Received: by 2002:aca:5d83:: with SMTP id r125mr1414954oib.8.1586996951792;
- Wed, 15 Apr 2020 17:29:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200416002616.1456-1-rcampbell@nvidia.com>
-In-Reply-To: <20200416002616.1456-1-rcampbell@nvidia.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Wed, 15 Apr 2020 17:29:00 -0700
-Message-ID: <CAHS8izNenS4ZW3fxFtJ-jzZ9QwP192N3KPB7n6qQrVcoP8PNgg@mail.gmail.com>
-Subject: Re: [PATCH] hugetlb_cgroup: remove unused variable 'i'
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     linux-kselftest@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FAXeeAl+06npcabuQvuYuTP3jQapHCqy0Znm1m8x2B8=;
+        b=iP6f3iMHUfMmkbuyoThhrT00qQSQkzJMJmkB8O0Y6zk/6F7bDP1uwppX7Ax1n4pc0m
+         ij1axBsmWvIKBXyZVsPULpNtPE97C1YVNJHXsgMVYkUx/qnO7/xhZJoiIRtRoZsVZ0lV
+         XfcrzdjOqL4ifTecs2St0d40XmxWfmXAg2rHaGFqgMmgSvpzCbwcc+wiEACnfpEgMFZC
+         YfVCzOC1WsULzNqy77dVUy8pnfDfqFx8q1Ng3CO4DBWR6qnuMeGHZbNniN0nCaSjQYKp
+         vks11fANGSBanXTx6szcEvbfU4jKldxecEvXYW0Z/9k+kAbqd/DP/nzg+MiU5NihyX2b
+         jg/w==
+X-Gm-Message-State: AGi0PuaWQf+05rcZJG6RiUM1IEFoxQO/TwtlbKGANikoY+BS79aPoIsh
+        YSL/DhntgM98mh3ZUWHe2uM=
+X-Google-Smtp-Source: APiQypICnolUc2W/UZn/odHanFGW9jsn8iT5iFZCqWPgDqKQJOk8NCqaY2uIAeFAHoAedVh6nx2WBg==
+X-Received: by 2002:a63:a07:: with SMTP id 7mr29039722pgk.261.1587016814132;
+        Wed, 15 Apr 2020 23:00:14 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id z7sm6449944pff.47.2020.04.15.23.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2020 23:00:12 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id E2FE740277; Thu, 16 Apr 2020 06:00:11 +0000 (UTC)
+Date:   Thu, 16 Apr 2020 06:00:11 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH] test_firmware: remove unnecessary test_fw_mutex in
+ test_dev_config_show_xxx
+Message-ID: <20200416060011.GK11244@42.do-not-panic.com>
+References: <20200415002517.4328-1-scott.branden@broadcom.com>
+ <202004142010.C0847F5@keescook>
+ <e2b95fde-0ab7-c0d1-2c64-cceffc458673@broadcom.com>
+ <202004150943.01DF9E85@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202004150943.01DF9E85@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 5:26 PM Ralph Campbell <rcampbell@nvidia.com> wrote=
-:
->
-> Compiling tests in tools/testing/selftests/vm/ results in a C compiler
-> warning:
->
-> write_to_hugetlbfs.c: In function =E2=80=98main=E2=80=99:
-> write_to_hugetlbfs.c:77:16: warning: unused variable =E2=80=98i=E2=80=99
->    77 |  unsigned long i;
->
-> Delete the unused variable.
->
-> Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation test=
-s")
-> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+On Wed, Apr 15, 2020 at 09:44:31AM -0700, Kees Cook wrote:
+> On Wed, Apr 15, 2020 at 09:28:18AM -0700, Scott Branden wrote:
+> > Hi Kees,
+> > 
+> > On 2020-04-14 8:10 p.m., Kees Cook wrote:
+> > > On Tue, Apr 14, 2020 at 05:25:17PM -0700, Scott Branden wrote:
+> > > > Remove unnecessary use of test_fw_mutex in test_dev_config_show_xxx
+> > > > functions that show simple bool, int, and u8.
+> > > I would expect at least a READ_ONCE(), yes?
+> > I don't understand why you need a READ_ONCE when removing a mutex around an
+> > assignment
+> > of a parameter passed into a function being assigned to a local variable.
+> > 
+> > Could you please explain your expectations.
+> 
+> Oops, yes, you're right. I misread and was thinking this was reading
+> from a global. This looks fine.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Whoops, sorry about that.
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
-
-> ---
->  tools/testing/selftests/vm/write_to_hugetlbfs.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/vm/write_to_hugetlbfs.c b/tools/test=
-ing/selftests/vm/write_to_hugetlbfs.c
-> index 110bc4e4015d..6a2caba19ee1 100644
-> --- a/tools/testing/selftests/vm/write_to_hugetlbfs.c
-> +++ b/tools/testing/selftests/vm/write_to_hugetlbfs.c
-> @@ -74,8 +74,6 @@ int main(int argc, char **argv)
->         int write =3D 0;
->         int reserve =3D 1;
->
-> -       unsigned long i;
-> -
->         if (signal(SIGINT, sig_handler) =3D=3D SIG_ERR)
->                 err(1, "\ncan't catch SIGINT\n");
->
-> --
-> 2.25.2
->
+  Luis
