@@ -2,87 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0BA1AD1F8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Apr 2020 23:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E349E1AD317
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 01:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728196AbgDPVgo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Apr 2020 17:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726362AbgDPVgn (ORCPT
+        id S1727896AbgDPXML (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Apr 2020 19:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726385AbgDPXML (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Apr 2020 17:36:43 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A65C061A0C;
-        Thu, 16 Apr 2020 14:36:43 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id kb16so123931pjb.1;
-        Thu, 16 Apr 2020 14:36:43 -0700 (PDT)
+        Thu, 16 Apr 2020 19:12:11 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7302C061A41
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2020 16:12:10 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id g2so217652plo.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2020 16:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1o7BPb0GVWolvbnYGNa4anj2OLOJ9OUneM1dO5eCLAU=;
-        b=mehCI6v6DtYopZC6FTPD5c94h9Nxmofof05DThsQ2PnH9SGy5FAgIXOwMDbN91rn0l
-         qVfdtNG/VAoqHAQbOh0Mgn9jL7DdeSQEzPY8kMS0JLrOjgcaH6QZKSGhb7hyncVxQ/sY
-         Rw7uyq6o4PC333Mhsur4F+wlqaeoQdpFvqkEOVNXfuFVyPKxyG0pDGao16Vuxu2WTNpO
-         bpsxSFo+x1JOAo/FPu3TWSA4fzGxdqALCOA6uXUb/0e0zLV4WvN/C+Vg0zS0ckzt7x43
-         PDYd8JaPISW3DkyKjG6yBPoXmgITSpvQ4YG4CxX0hV6vJqSrVGBzzfFJs4w+zcqGJ6J/
-         QBIw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qHnZMVe5Y7EDy73UocFbOqkOic/ITzFdjJim0WbrCVg=;
+        b=n9LgZ0jVDeOIG0dfjM08EFewOl7JGzK1/ZndCN6VfuY6rsSsFEtpwkN3C6cLgd1uzQ
+         aEZqc4K0sm8GJmecM+3Pc/OF6Ym6gj18zcOl5Qo7H1p/2YUXyuT6WzJAuvdd4mpm3S1b
+         ccnvtOaThM3rMC456ydHEv88YQQa+vz/Cmocsa5AQb9pABrf/zoniuCCNIcFgzr78p1A
+         Nq+ALGXBXXZB4F/OGrqGfbQ6Y79gvKlk3qY31sBqKnHGDKdtqNtax3gK5jk9YB/6bX1s
+         TRo54mCyR5uuJ38KnuIY9bC2dCmr2/cWYJet3e9gzl7rinBbfuAzIYLDz/rp2NnTGOf9
+         BI6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1o7BPb0GVWolvbnYGNa4anj2OLOJ9OUneM1dO5eCLAU=;
-        b=NsF5Yrmpi/dM13kvxbV28SMKKpK79088LPyQnjBdwoeh4vJcW/MwWj/yJ+2Qs2pofN
-         rARYuFkVnd3QqSfF8JAMLcc4hu0CHMMuVAdy3Lac3xK8UUuBpfEPvy66+ncdhqPSg8pH
-         pSwhddtm84jVIDLl78BiO/56tXy7m43Sl85tCFOn/oxFbx2dVMN8U4GDuPq/DCS4bsqT
-         j17Wkgr6tcDrvFbBfabix27mJBIQUqmbA1sSM+NLvz79nYBUSQPNcjnxHsBp9y3OAmTa
-         vpJV0k85E+tx7VKnNFC2OAGGkD0by9U+MgBnjKhKltikB41ZATS+3AFQuWe7fElMRKDX
-         3SFA==
-X-Gm-Message-State: AGi0PubWESK5F9I8Br/Hzi3dxrQyw79bEJuLQvEmDp/HNn/2tjiv/UAR
-        5RPiuKG9IEvi/Oapy/K2ZaM=
-X-Google-Smtp-Source: APiQypKTPnpYGVyGYuolfnSB52zBeTX5UpSC599aDjLQV8GP9Qc4O86qmnfbZ8OKWGG8oL7yW3oXOQ==
-X-Received: by 2002:a17:90a:ca8c:: with SMTP id y12mr386759pjt.195.1587073002361;
-        Thu, 16 Apr 2020 14:36:42 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:fff8])
-        by smtp.gmail.com with ESMTPSA id j32sm4915911pgb.55.2020.04.16.14.36.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 14:36:41 -0700 (PDT)
-Date:   Thu, 16 Apr 2020 14:36:39 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Paolo Pisati <paolo.pisati@canonical.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: selftests/bpf: test_maps: libbpf: Error loading .BTF into
- kernel: -22. Failed to load SK_SKB verdict prog
-Message-ID: <20200416213639.tyl27wr3z5tdecui@ast-mbp.dhcp.thefacebook.com>
-References: <20200409084223.GA72109@harukaze>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qHnZMVe5Y7EDy73UocFbOqkOic/ITzFdjJim0WbrCVg=;
+        b=neAUfauXCLkEAJz5r4XaW7heg2/orToXa86066FnD51l7v0tUZsHZi8NcT7g6FTdAD
+         AFXrM796uIJDiYwWwnoWN5oJbPnJ7GYmaRmeT3Z+1Hco/fMS+Owfdi07VeHB7RDhqoCS
+         SNemCJ9Q5SAF/3bM1wN3H2Tdl9WQ24+R8Grw+EG1KHITLwV3wMSenVT2BTLgi6m+8UaJ
+         LBYfvyD64ei40nhQCzorWTLU/Y/Aa91eNa8D7p2AJfaAzdACk6bgS+BRDviuDKJ6ycl0
+         dDGakPpS0KdJwODkSrwWV6GFQ3ZQYpgHKQC9q+5AHOT3w1cJENI7+ZngO9oOyKlt263B
+         bi/g==
+X-Gm-Message-State: AGi0PuakZ7W/GQyvM5pE0pDw04wTpj6WpkI9O9Y/6FVA9FitnpRG6PXh
+        gzP4/rLXo80H8JF59TjOIS0t2lK2z0GQ5vHwHv5sFg==
+X-Google-Smtp-Source: APiQypJzSIA7M8WieLTPiRB0Atlxe05VI645b6MAkDHdrAbIL8/iKZz4Cfptd+4ZR7WHMXeYTkLG5HT32gZYTfR/mK8=
+X-Received: by 2002:a17:90a:3568:: with SMTP id q95mr852976pjb.47.1587078730154;
+ Thu, 16 Apr 2020 16:12:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200409084223.GA72109@harukaze>
+References: <20200414230950.83665-1-vitor@massaru.org>
+In-Reply-To: <20200414230950.83665-1-vitor@massaru.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 16 Apr 2020 16:11:58 -0700
+Message-ID: <CAFd5g47CaeEBiJsiSUtihHQF+OGpfCg76dS2ys2mwy2qn_L5-w@mail.gmail.com>
+Subject: Re: [RESEND] kunit: use --build_dir=.kunit as default
+To:     Vitor Massaru Iha <vitor@massaru.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 10:42:23AM +0200, Paolo Pisati wrote:
-> test_maps fails consistently on x86-64 5.4.y (5.4.31 and defconfig +
-> tools/testing/selftests/bpf/config in this case) and dumps this output:
-> 
-> ~/linux/tools/testing/selftests/bpf$ sudo ./test_maps
-> libbpf: Error loading BTF: Invalid argument(22)
-> libbpf: magic: 0xeb9f
-> libbpf: Error loading .BTF into kernel: -22.
-> libbpf: Error loading BTF: Invalid argument(22)
-> libbpf: magic: 0xeb9f
-> 
-> libbpf: Error loading .BTF into kernel: -22.
-> Failed to load SK_SKB verdict prog
+On Tue, Apr 14, 2020 at 4:09 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
+>
+> To make KUnit easier to use, and to avoid overwriting object and
+> .config files, the default KUnit build directory is set to .kunit
+>
+>  * Related bug: https://bugzilla.kernel.org/show_bug.cgi?id=205221
+>
+> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
 
-I've been trying to reproduce on the latest bpf tree and couldn't.
-Does it reproduce for you on the latest?
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
