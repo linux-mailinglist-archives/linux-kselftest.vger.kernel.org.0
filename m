@@ -2,108 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8902D1ADAAD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 12:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7189B1ADC52
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 13:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgDQKEB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Apr 2020 06:04:01 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:46812 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727789AbgDQKEB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Apr 2020 06:04:01 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03H9veQY030546;
-        Fri, 17 Apr 2020 10:03:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2020-01-29;
- bh=dKO7ialKD2AiGPTJR46eRoXOPRYf6fFf+AEC/fzDvXM=;
- b=oRilH+G7Gvipo30QtdCGbuFyuso2wMFt4B9F0v4aRwYeTrgAT8Ar8ToIYI9aCB1WNl1O
- BbjFJ+V8MiXSwtWXOzxLzCfKxiEw/Di3Svh9i32gOJL6+53Jq6E0zv2xUsDDUuX2bFqY
- lOAVIL4qU94DIe8AiKEkJhAlKLt229OF74o3jZfQlFskePn5lQD5E8IzlAEIPAfMgV2M
- d4Q5DxGcutqfTiqKNFrQFehP6bwj99000rgie8wA0ukzV0WFQ9OpyFVMskRTdIKm1sY/
- mamLBDmpayhoVuUlOMVyrTJIOKBv+qADn4Jt2/s9D8iFZ0cSNQ7VRQtEzMzkJPgP4SC0 Bw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 30e0aabtd3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Apr 2020 10:03:54 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03H9vvxF046488;
-        Fri, 17 Apr 2020 10:03:53 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 30dyp2655j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Apr 2020 10:03:53 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03HA3qWK032622;
-        Fri, 17 Apr 2020 10:03:52 GMT
-Received: from dhcp-10-175-205-33.vpn.oracle.com (/10.175.205.33)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 17 Apr 2020 03:03:51 -0700
-Date:   Fri, 17 Apr 2020 11:03:43 +0100 (BST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@localhost
-To:     Marco Elver <elver@google.com>
-cc:     linux-kernel@vger.kernel.org, brendanhiggins@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        alan.maguire@oracle.com, frank.rowand@sony.com,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH] kunit: Add missing newline in summary message
-In-Reply-To: <20200416114256.226329-1-elver@google.com>
-Message-ID: <alpine.LRH.2.21.2004171103160.32364@localhost>
-References: <20200416114256.226329-1-elver@google.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1730436AbgDQLkC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Apr 2020 07:40:02 -0400
+Received: from mga05.intel.com ([192.55.52.43]:29509 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730267AbgDQLkC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Apr 2020 07:40:02 -0400
+IronPort-SDR: gOSgi6dyB2HIpaZ4iiiCka2axyLdwUgYFHVRdlHIsXgNrS7sibASaFZhpQoY+U+iW5tWZAtpYx
+ FXmZkjNGaUoQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2020 04:40:01 -0700
+IronPort-SDR: oP0RLO0DDSPGTTioOXJpCXJ8YdMDAAAJUCRYNC+hjLaVGun12dGAjHLNZpbvsmG2nHw1KVzkMS
+ GuXeyDqlKQ2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,394,1580803200"; 
+   d="scan'208";a="364307781"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 17 Apr 2020 04:39:57 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 17 Apr 2020 14:39:56 +0300
+Date:   Fri, 17 Apr 2020 14:39:56 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        linux-kselftest@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, anders.roxell@linaro.org,
+        lkft-triage@lists.linaro.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v1] kobject: make sure parent is not released before
+ children
+Message-ID: <20200417113956.GA3728594@kuha.fi.intel.com>
+References: <20200414204240.186377-1-brendanhiggins@google.com>
+ <20200415061154.GA2496263@kroah.com>
+ <20200415084653.GM2828150@kuha.fi.intel.com>
+ <CAJZ5v0hNemTDVa_S-FfVMbrKjM-RWYoHh88asnUvTNxZinY2cw@mail.gmail.com>
+ <20200415131018.GO2828150@kuha.fi.intel.com>
+ <20200415133122.GB3461248@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9593 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=3
- malwarescore=0 phishscore=0 spamscore=0 adultscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004170078
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9593 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011
- impostorscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
- suspectscore=3 adultscore=0 spamscore=0 malwarescore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004170078
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200415133122.GB3461248@kroah.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 16 Apr 2020, Marco Elver wrote:
+Hi,
 
-> Add missing newline, as otherwise flushing of the final summary message
-> to the console log can be delayed.
+> > > An alternative might be to define something like __kobject_del() doing
+> > > everything that kobject_del() does *without* the
+> > > kobject_put(kobj->parent).
+> > > 
+> > > Then, kobject_del() could be defined as something like (pseudocode):
+> > > 
+> > > kobject_del(kobj)
+> > > {
+> > >     kobject *perent = kobj->parent;
+> > > 
+> > >     __kobject_del(kobj);
+> > >     kobject_put(parent);
+> > > }
+> > > 
+> > > and kobject_cleanup() could call __kobject_del() instead of
+> > > kobject_del() and then do the last kobject_put(parent) when it is done
+> > > with the child.
+> > > 
+> > > Would that work?
+> > 
+> > I think so. Greg, what do you think?
 > 
-> Fixes: e2219db280e3 ("kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results display")
-> Signed-off-by: Marco Elver <elver@google.com>
+> Hm, maybe.  Can someone test it out with the reproducer?
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Brendan, or Randy! Can you guys test Rafael's proposal? I think it
+would look like this:
 
-Thanks for finding/fixing this!
+diff --git a/lib/kobject.c b/lib/kobject.c
+index 83198cb37d8d..2bd631460e18 100644
+--- a/lib/kobject.c
++++ b/lib/kobject.c
+@@ -599,14 +599,7 @@ int kobject_move(struct kobject *kobj, struct kobject *new_parent)
+ }
+ EXPORT_SYMBOL_GPL(kobject_move);
+ 
+-/**
+- * kobject_del() - Unlink kobject from hierarchy.
+- * @kobj: object.
+- *
+- * This is the function that should be called to delete an object
+- * successfully added via kobject_add().
+- */
+-void kobject_del(struct kobject *kobj)
++static void __kobject_del(struct kobject *kobj)
+ {
+        struct kernfs_node *sd;
+        const struct kobj_type *ktype;
+@@ -625,9 +618,23 @@ void kobject_del(struct kobject *kobj)
+ 
+        kobj->state_in_sysfs = 0;
+        kobj_kset_leave(kobj);
+-       kobject_put(kobj->parent);
+        kobj->parent = NULL;
+ }
++
++/**
++ * kobject_del() - Unlink kobject from hierarchy.
++ * @kobj: object.
++ *
++ * This is the function that should be called to delete an object
++ * successfully added via kobject_add().
++ */
++void kobject_del(struct kobject *kobj)
++{
++       struct kobject *parent = kobj->parent;
++
++       __kobject_del(kobj);
++       kobject_put(parent);
++}
+ EXPORT_SYMBOL(kobject_del);
+ 
+ /**
+@@ -663,6 +670,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
+  */
+ static void kobject_cleanup(struct kobject *kobj)
+ {
++       struct kobject *parent = kobj->parent;
+        struct kobj_type *t = get_ktype(kobj);
+        const char *name = kobj->name;
+ 
+@@ -684,7 +692,7 @@ static void kobject_cleanup(struct kobject *kobj)
+        if (kobj->state_in_sysfs) {
+                pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
+                         kobject_name(kobj), kobj);
+-               kobject_del(kobj);
++               __kobject_del(kobj);
+        }
+ 
+        if (t && t->release) {
+@@ -698,6 +706,8 @@ static void kobject_cleanup(struct kobject *kobj)
+                pr_debug("kobject: '%s': free name\n", name);
+                kfree_const(name);
+        }
++
++       kobject_put(parent);
+ }
 
-Alan
+ #ifdef CONFIG_DEBUG_KOBJECT_RELEASE
 
-> ---
->  lib/kunit/test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 7a6430a7fca0..ccb2ffad8dcf 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -93,7 +93,7 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
->  	 * representation.
->  	 */
->  	if (suite)
-> -		pr_info("%s %zd - %s",
-> +		pr_info("%s %zd - %s\n",
->  			kunit_status_to_string(is_ok),
->  			test_number, description);
->  	else
-> -- 
-> 2.26.1.301.g55bc3eb7cb9-goog
-> 
-> 
+
+thanks,
+
+-- 
+heikki
