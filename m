@@ -2,287 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0ECC1AD766
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 09:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC321AD9DE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 11:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729024AbgDQH2c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Apr 2020 03:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S1730233AbgDQJ2T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Apr 2020 05:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729031AbgDQH2b (ORCPT
+        with ESMTP id S1729987AbgDQJ2S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Apr 2020 03:28:31 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAFFC061A10
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2020 00:28:30 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id f13so552755ybk.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2020 00:28:30 -0700 (PDT)
+        Fri, 17 Apr 2020 05:28:18 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33841C061A0C;
+        Fri, 17 Apr 2020 02:28:18 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id ng8so856815pjb.2;
+        Fri, 17 Apr 2020 02:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=On7hVCbW2gcS9q0JDyZWMLbVPnO3Eh9J4fUzmD1tbQ0=;
-        b=bS/dLkSQban7jd6y4myL5w5wx2c8pUnyO1DcxXiqM9WbFXTYsuslxNhFNyQf4cu1u8
-         zOeFQFRMxYq7hYewFJ43mP9le1XPRfs+1kJSSWBE+Qh6PDeExkJ47KW9pJXioqUMuetA
-         Pm6HPHcOGOy5LjsbF/h+9z1EHJp8Rj+9yDEw7IBRzqVq+aAy5KUGeOXVNiWvLqgYckdE
-         rAUK+WvEr3wBBvVczmrkBA/G5Br5EKWcwR0c54AOUHK9yDCGSryZjlH6DJAFCd/gb/dw
-         jvO16F1f6ZDdjKmZCwzB3BWPWgGIM63XdmIFnlkQyXCtFAJ3U+TjM5plx/zv1qjVkIkj
-         cByg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=mud2l24rltk7uz7NfJ1c85N1cu3yPrMi7djTErSnOqU=;
+        b=vc5DC1093lQFHdM1jrQJQNYSV1EiEy/xW07n2puLWpbVi5RlxW7/bLGEqOI8i/DESw
+         5FZkNogpz5zp99WdsrpAcLE5OptYNIPvJ+hvX//QVnzTpqs+71Qyn+zX9xMaJ9csGLg+
+         U+n3CV9kdkeBXU/W7b93UeVoyHgFUnA2CgbZS4RCECgmBEIf4Ir8eoqVfjB4OF3+UWZk
+         QAip2WgLhpUE8N0kQBInvlsbRyzH6oSPSo8+6DoAQTeUIjA+Ml4lGKInErz7si+mhNdL
+         egyR/BmHbb91Dy1ZPP6QV98pNdNjlqgg20vfiI+k6plnDx0rkElsRQVLIP1xxVo0x/5N
+         pR3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=On7hVCbW2gcS9q0JDyZWMLbVPnO3Eh9J4fUzmD1tbQ0=;
-        b=QU25MtPINTaRwaRLUnU+lApbSpJCJxaNVoSCnt8UdD6NMhhGZ30wizQEvWblxObuIm
-         1weiPHeMBb67Wjx52HLKEEdvhTwNiJT+KeDw7YtVI3ixtP/82cvU8fyH4DGFFsd9CqOD
-         HZoftEMvwwcID0FmnhMTYqDotn2bzxHDdw8x5D+ftEDU2kavOauMgfBCSnMpKbAH1n2V
-         PgrUkocTlFlRBmQsJNMaACjjJGMXsfS+dkstx4cGNXhUqcnki3gHCc3dR+0DPvd8WoAN
-         1R6PgW2KZqm0GkxeYAOekD+YtHmiTOOJi07NTwdFT74VaHtzaV+Ug80VEgsXtuiVltL8
-         4m8w==
-X-Gm-Message-State: AGi0Pubj7+a0NZCndePagwCrLF9DrFGUAp5Qij1ZzHa8CDmo4i+A/sGd
-        ApKgA0Z/wnb+ryIkYWG+7IUy0fkctY0xFu/j8MnW/A==
-X-Google-Smtp-Source: APiQypInZkaM/ry/YsRbuA3oLQ9PQPQY+dGDQQalzfHUmOiSvHzMxzivb0NAMQs4Ea7F2eyxlHvanDsb6h7WBEL/QGs=
-X-Received: by 2002:a5b:d51:: with SMTP id f17mr3309919ybr.87.1587108509964;
- Fri, 17 Apr 2020 00:28:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYtYRc_mKPDN-Gryw7fhjPNGBUP=KemTXaXR6UBU94M3hw@mail.gmail.com>
- <CAA93ih2To3YN=L7VSa_RzVRV5OH9DTffd0zdKWB2M4CfE0Gp1Q@mail.gmail.com> <20200417071543.GA7316@leoy-ThinkPad-X240s>
-In-Reply-To: <20200417071543.GA7316@leoy-ThinkPad-X240s>
-From:   Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Date:   Fri, 17 Apr 2020 16:28:18 +0900
-Message-ID: <CAA93ih2XMkRRvnqZhUoHy3v8+pEJDFGckOrG8OU4Y32SCft_wA@mail.gmail.com>
-Subject: Re: WARNING: events/ipi.h:36 suspicious rcu_dereference_check() usage!
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux- stable <stable@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        rcu@vger.kernel.org, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>, zanussi@kernel.org,
-        svens@linux.ibm.com, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=mud2l24rltk7uz7NfJ1c85N1cu3yPrMi7djTErSnOqU=;
+        b=ql/2GL/ANsFMtT05lPBK3iQ7Fj3FsTTaHW2bysz0A+tEDOZYXOl/GZL9Go5DUDRVRD
+         oBM1eHoOXcx9P5TzucltAswIT/fs2DkHJfsqbX21xlnthaJx4BBaWL+hM0ymmf1YlEvy
+         uKyzCOs/kAVnEaXasrLjZ3ToZpxx1paMjSr/V9YuvmfVxZPVa2aANxkd95YIW0ByX2c+
+         LajrcrkoF9t18mdNHfK0Jyo2a329XcPzYzHCNOGzGC8svBQ5Nx3zSYlFhSFh5o2tqijl
+         /m8nwKFHRtOqJ50goUEvUT8eHWDNvo9EtuCyNEZk4MGeC3G+CO1VGWwTI7WpRIe1s1Vj
+         5lzQ==
+X-Gm-Message-State: AGi0PuaEFk1+/muJnu0qf0Gl/kP1kBpUpIINh0eVxxGICCmY2jehhbvF
+        hvCraJfWeHXV7OGEMYDTqvA=
+X-Google-Smtp-Source: APiQypI44w7N7kV7q0nuZjqIxe3+gPqLsO8N+HYL1hgQ4UomT+clbnmIwUTS7Z0xUC8jJ5bvQchmFw==
+X-Received: by 2002:a17:90a:be12:: with SMTP id a18mr3156831pjs.162.1587115697547;
+        Fri, 17 Apr 2020 02:28:17 -0700 (PDT)
+Received: from laptop.hsd1.wa.comcast.net ([2601:600:817f:a132:df3e:521d:99d5:710d])
+        by smtp.gmail.com with ESMTPSA id 132sm19347742pfc.183.2020.04.17.02.28.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 02:28:16 -0700 (PDT)
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrei Vagin <avagin@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH v2] selftests/timens: handle a case when alarm clocks are not supported
+Date:   Fri, 17 Apr 2020 02:28:10 -0700
+Message-Id: <20200417092810.872455-1-avagin@gmail.com>
+X-Mailer: git-send-email 2.17.2
+In-Reply-To: <20200415061802.722485-1-avagin@gmail.com>
+References: <20200415061802.722485-1-avagin@gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Leo,
+This can happen if a testing node doesn't have RTC (real time clock)
+hardware or it doesn't support alarms.
 
-2020=E5=B9=B44=E6=9C=8817=E6=97=A5(=E9=87=91) 16:15 Leo Yan <leo.yan@linaro=
-.org>:
->
-> On Fri, Apr 17, 2020 at 03:53:27PM +0900, Masami Hiramatsu wrote:
-> > Hello,
-> >
-> > It seems that *arm/arm64 specific* IPI trace event has caused this issu=
-e.
-> > From the stacktrace, __update_max_tr() is invoked from do_idle() contex=
-t.
-> >
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Signed-off-by: Andrei Vagin <avagin@gmail.com>
+---
+v2: fix timer.c and timerfd.c too.
 
-Good point! Yes, we can use trace_ipi_raise_rcuidle() to fix that.
+ tools/testing/selftests/timens/clock_nanosleep.c |  2 +-
+ tools/testing/selftests/timens/timens.c          |  2 +-
+ tools/testing/selftests/timens/timens.h          | 13 ++++++++++++-
+ tools/testing/selftests/timens/timer.c           |  5 +++++
+ tools/testing/selftests/timens/timerfd.c         |  5 +++++
+ 5 files changed, 24 insertions(+), 3 deletions(-)
 
-Thank you,
+diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
+index 8e7b7c72ef65..72d41b955fb2 100644
+--- a/tools/testing/selftests/timens/clock_nanosleep.c
++++ b/tools/testing/selftests/timens/clock_nanosleep.c
+@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
+ 
+ 	ksft_set_plan(4);
+ 
+-	check_config_posix_timers();
++	check_supported_timers();
+ 
+ 	if (unshare_timens())
+ 		return 1;
+diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
+index 098be7c83be3..52b6a1185f52 100644
+--- a/tools/testing/selftests/timens/timens.c
++++ b/tools/testing/selftests/timens/timens.c
+@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
+ 
+ 	nscheck();
+ 
+-	check_config_posix_timers();
++	check_supported_timers();
+ 
+ 	ksft_set_plan(ARRAY_SIZE(clocks) * 2);
+ 
+diff --git a/tools/testing/selftests/timens/timens.h b/tools/testing/selftests/timens/timens.h
+index e09e7e39bc52..d4fc52d47146 100644
+--- a/tools/testing/selftests/timens/timens.h
++++ b/tools/testing/selftests/timens/timens.h
+@@ -14,15 +14,26 @@
+ #endif
+ 
+ static int config_posix_timers = true;
++static int config_alarm_timers = true;
+ 
+-static inline void check_config_posix_timers(void)
++static inline void check_supported_timers(void)
+ {
++	struct timespec ts;
++
+ 	if (timer_create(-1, 0, 0) == -1 && errno == ENOSYS)
+ 		config_posix_timers = false;
++
++	if (clock_gettime(CLOCK_BOOTTIME_ALARM, &ts) == -1 && errno == EINVAL)
++		config_alarm_timers = false;
+ }
+ 
+ static inline bool check_skip(int clockid)
+ {
++	if (!config_alarm_timers && clockid == CLOCK_BOOTTIME_ALARM) {
++		ksft_test_result_skip("CLOCK_BOOTTIME_ALARM isn't supported\n");
++		return true;
++	}
++
+ 	if (config_posix_timers)
+ 		return false;
+ 
+diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
+index 96dba11ebe44..5e7f0051bd7b 100644
+--- a/tools/testing/selftests/timens/timer.c
++++ b/tools/testing/selftests/timens/timer.c
+@@ -22,6 +22,9 @@ int run_test(int clockid, struct timespec now)
+ 	timer_t fd;
+ 	int i;
+ 
++	if (check_skip(clockid))
++		return 0;
++
+ 	for (i = 0; i < 2; i++) {
+ 		struct sigevent sevp = {.sigev_notify = SIGEV_NONE};
+ 		int flags = 0;
+@@ -74,6 +77,8 @@ int main(int argc, char *argv[])
+ 
+ 	nscheck();
+ 
++	check_supported_timers();
++
+ 	ksft_set_plan(3);
+ 
+ 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
+diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
+index eff1ec5ff215..9edd43d6b2c1 100644
+--- a/tools/testing/selftests/timens/timerfd.c
++++ b/tools/testing/selftests/timens/timerfd.c
+@@ -28,6 +28,9 @@ int run_test(int clockid, struct timespec now)
+ 	long long elapsed;
+ 	int fd, i;
+ 
++	if (check_skip(clockid))
++		return 0;
++
+ 	if (tclock_gettime(clockid, &now))
+ 		return pr_perror("clock_gettime(%d)", clockid);
+ 
+@@ -81,6 +84,8 @@ int main(int argc, char *argv[])
+ 
+ 	nscheck();
+ 
++	check_supported_timers();
++
+ 	ksft_set_plan(3);
+ 
+ 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
+-- 
+2.24.1
 
-> > ------
-> > __update_max_tr(struct trace_array *tr, struct task_struct *tsk, int cp=
-u)
-> > {
-> > [SNIP]
-> >         /* record this tasks comm */
-> >         tracing_record_cmdline(tsk);
-> >         latency_fsnotify(tr);  <<------here
-> > }
-> > ------
-> > And via latency_fsnotify(), it calls irq_work_queue().
-> >
-> > ------
-> > void latency_fsnotify(struct trace_array *tr)
-> > {
-> >         if (!fsnotify_wq)
-> >                 return;
-> >         /*
-> >          * We cannot call queue_work(&tr->fsnotify_work) from here beca=
-use it's
-> >          * possible that we are called from __schedule() or do_idle(), =
-which
-> >          * could cause a deadlock.
-> >          */
-> >         irq_work_queue(&tr->fsnotify_irqwork); <<------- here
-> > }
-> > ------
-> > Please NOTE(*) that the above comment said that irq_work_queue()
-> > should be SAFE from calling in do_idle(), this means it doesn't touch
-> > any RCU.
-> >
-> > And the irq_work_queue() finally kicks IPI via arch_irq_work_raise()
-> > which causes an IPI.
-> >
-> > --------<arm64: arch/arm64/kernel/smp.c>--------
-> > #ifdef CONFIG_IRQ_WORK
-> > void arch_irq_work_raise(void)
-> > {
-> >         if (__smp_cross_call)
-> >                 smp_cross_call(cpumask_of(smp_processor_id()), IPI_IRQ_=
-WORK);
-> > }
-> > #endif
-> >
-> > static void smp_cross_call(const struct cpumask *target, unsigned int i=
-pinr)
-> > {
-> >         trace_ipi_raise(target, ipi_types[ipinr]);  <<----- This
-> > causes a warning!
-> >         __smp_cross_call(target, ipinr);
-> > }
-> > -------
-> > And trace_* macro touch the RCU. See include/linux/tracepoint.h:231
-> > ------
-> > #define __DECLARE_TRACE(name, proto, args, cond, data_proto, data_args)=
- \
-> >         extern struct tracepoint __tracepoint_##name;                  =
- \
-> >         static inline void trace_##name(proto)                         =
- \
-> >         {                                                              =
- \
-> >                 if (static_key_false(&__tracepoint_##name.key))        =
- \
-> >                         __DO_TRACE(&__tracepoint_##name,               =
- \
-> >                                 TP_PROTO(data_proto),                  =
- \
-> >                                 TP_ARGS(data_args),                    =
- \
-> >                                 TP_CONDITION(cond), 0);                =
- \
-> >                 if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {            =
- \
-> >                         rcu_read_lock_sched_notrace();                 =
- \
-> >                         rcu_dereference_sched(__tracepoint_##name.funcs=
-);\
-> >                         rcu_read_unlock_sched_notrace();               =
- \
-> >                 }                                                      =
- \
-> >         }
-> > ------
-> >
-> > BTW, this ipi_raise trace event is only used in arm/arm64.
-> >
-> > $ git grep trace_ipi_raise
-> > arch/arm/kernel/smp.c:  trace_ipi_raise_rcuidle(target, ipi_types[ipinr=
-]);
-> > arch/arm64/kernel/smp.c:        trace_ipi_raise(target, ipi_types[ipinr=
-]);
-> > include/trace/events/ipi.h: * __tracepoint_string, ideally the same as
-> > used with trace_ipi_raise
-> > include/trace/events/ipi.h: * __tracepoint_string, ideally the same as
-> > used with trace_ipi_raise for
-> >
-> > Thus, this only occurs on arm64 platform, but not on x86.
-> >
-> > To fix this, maybe we need to remove this event or mark this is under
-> > rcu watched (but is it really watched?)
->
-> Good analysis, Masami :)
->
-> Seems to me, Arm64 should study Arm platform to change using
-> trace_ipi_raise_rcuidle() to work around the restriction so can allow the
-> event to work in idle context?
->
-> Thanks,
-> Leo
->
-> > 2020=E5=B9=B44=E6=9C=888=E6=97=A5(=E6=B0=B4) 18:31 Naresh Kamboju <nare=
-sh.kamboju@linaro.org>:
-> >
-> > >
-> > > On arm64 qemu_arm64, juno-r2 and dragonboard-410c while running kself=
-test ftrace
-> > > on stable rc 5.5.1-rc1 to till today 5.5.16-rc2 and 5.6  found this
-> > > kernel warning.
-> > >
-> > > [  386.349099] kselftest: Running tests in ftrace
-> > > [  393.984018]
-> > > [  393.984290] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > [  393.984781] WARNING: suspicious RCU usage
-> > > [  393.988690] 5.6.3-rc2 #1 Not tainted
-> > > [  393.992679] -----------------------------
-> > > [  393.996327] /usr/src/kernel/include/trace/events/ipi.h:36
-> > > suspicious rcu_dereference_check() usage!
-> > > [  394.000241]
-> > > [  394.000241] other info that might help us debug this:
-> > > [  394.000241]
-> > > [  394.009094]
-> > > [  394.009094] RCU used illegally from idle CPU!
-> > > [  394.009094] rcu_scheduler_active =3D 2, debug_locks =3D 1
-> > > [  394.017084] RCU used illegally from extended quiescent state!
-> > > [  394.028187] 1 lock held by swapper/3/0:
-> > > [  394.033826]  #0: ffff80001237b6a8 (max_trace_lock){....}, at:
-> > > check_critical_timing+0x7c/0x1a8
-> > > [  394.037480]
-> > > [  394.037480] stack backtrace:
-> > > [  394.046158] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.6.3-rc2 #1
-> > > [  394.050584] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SB=
-C (DT)
-> > > [  394.056663] Call trace:
-> > > [  394.063515]  dump_backtrace+0x0/0x1e0
-> > > [  394.065686]  show_stack+0x24/0x30
-> > > [  394.069505]  dump_stack+0xe8/0x150
-> > > [  394.072805]  lockdep_rcu_suspicious+0xcc/0x110
-> > > [  394.076106]  arch_irq_work_raise+0x208/0x210
-> > > [  394.080533]  __irq_work_queue_local+0x5c/0x80
-> > > [  394.084959]  irq_work_queue+0x38/0x78
-> > > [  394.089212]  __update_max_tr+0x150/0x218
-> > > [  394.092858]  update_max_tr_single.part.82+0x98/0x100
-> > > [  394.096851]  update_max_tr_single+0x1c/0x28
-> > > [  394.101798]  check_critical_timing+0x198/0x1a8
-> > > [  394.105705]  stop_critical_timings+0x128/0x148
-> > > [  394.110221]  cpuidle_enter_state+0x74/0x4f8
-> > > [  394.114645]  cpuidle_enter+0x3c/0x50
-> > > [  394.118726]  call_cpuidle+0x44/0x80
-> > > [  394.122542]  do_idle+0x22c/0x2d0
-> > > [  394.125755]  cpu_startup_entry+0x28/0x48
-> > > [  394.129229]  secondary_start_kernel+0x1b4/0x210
-> > >
-> > >
-> > > metadata:
-> > >   git branch: linux-5.5.y and linux-5.6.y
-> > >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/li=
-nux-stable-rc.git
-> > >   kernel-config:
-> > > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/juno/lkft/lin=
-ux-stable-rc-5.5/65/config
-> > >
-> > > Full test log,
-> > > 5.6 test logs,
-> > > https://lkft.validation.linaro.org/scheduler/job/1350627#L12612
-> > > https://lkft.validation.linaro.org/scheduler/job/1350731#L9509
-> > >
-> > > 5.5 test logs,
-> > > https://lkft.validation.linaro.org/scheduler/job/1322704#L9777
-> > > https://lkft.validation.linaro.org/scheduler/job/1153369#L9745
-> > > https://lkft.validation.linaro.org/scheduler/job/1351155#L8982
-> > > https://lkft.validation.linaro.org/scheduler/job/1351065#L12349
-> > >
-> > > --
-> > > Linaro LKFT
-> > > https://lkft.linaro.org
-> >
-> >
-> >
-> > --
-> > Masami Hiramatsu
-
-
-
---=20
-Masami Hiramatsu
