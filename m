@@ -2,188 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512B71AE1D8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 18:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F98A1AE8C4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 01:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729768AbgDQQIT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Apr 2020 12:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729581AbgDQQIT (ORCPT
+        id S1726381AbgDQXzO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Apr 2020 19:55:14 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:15693 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725784AbgDQXzL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:08:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000D6C061A0C;
-        Fri, 17 Apr 2020 09:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=sQLrPZSB292xgwYR3ECM5Xmr1WY3xujzeEDsJwOuSKk=; b=RGrzQRJQG0jA774P/2t+rp/Pnb
-        VB13vmxbZKRTHp9y6xPbdxOkMBFZM9xMJwioP8UiTWMotWZ/Q8IDrAPxgc6SCQwqP+QEwqxF/QFEj
-        1GthXpsRwlTNdCwQlFFEo3D1qacEidIuQ0CZSS/NrdS9QxgHQu3ehvWJnYsYsm1F+eDhnFp+ddvNd
-        ba3q4rX3Qwva8+QxYVyu2Y0hKZAySU/CWK1pxdpvVZHN2euWqpEhoYQSMAEhQuCB5CBzHPQgPogiI
-        vGWii6zH8k8aUHyC+Br/K7bJjYP515BFVwlBnQHu7epiGeF8yjOAtXarngabuyj0jBRGvzQyz7AHQ
-        3xuADlYg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jPTXK-0003s9-GV; Fri, 17 Apr 2020 16:08:14 +0000
-Subject: Re: [PATCH v1] kobject: make sure parent is not released before
- children
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        linux-kselftest@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>, anders.roxell@linaro.org,
-        lkft-triage@lists.linaro.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20200414204240.186377-1-brendanhiggins@google.com>
- <20200415061154.GA2496263@kroah.com>
- <20200415084653.GM2828150@kuha.fi.intel.com>
- <CAJZ5v0hNemTDVa_S-FfVMbrKjM-RWYoHh88asnUvTNxZinY2cw@mail.gmail.com>
- <20200415131018.GO2828150@kuha.fi.intel.com>
- <20200415133122.GB3461248@kroah.com>
- <20200417113956.GA3728594@kuha.fi.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <e946febc-a1d6-6392-bb00-bc6a65d93c5a@infradead.org>
-Date:   Fri, 17 Apr 2020 09:08:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Fri, 17 Apr 2020 19:55:11 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e9a41a40000>; Fri, 17 Apr 2020 16:54:12 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 17 Apr 2020 16:55:11 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 17 Apr 2020 16:55:11 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 17 Apr
+ 2020 23:55:06 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 17 Apr 2020 23:55:06 +0000
+Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e9a41d90001>; Fri, 17 Apr 2020 16:55:06 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Ralph Campbell" <rcampbell@nvidia.com>
+Subject: [PATCH v9 0/3] mm/hmm/test: add self tests for HMM
+Date:   Fri, 17 Apr 2020 16:54:55 -0700
+Message-ID: <20200417235458.13462-1-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20200417113956.GA3728594@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1587167652; bh=jXe1h9wiaq7PvwMYbpcxTu8towIVS5zrK8zscgA10h0=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:Content-Type:Content-Transfer-Encoding;
+        b=Cc1JzmWDg1VMol1croxpnpCYVltbXWmaVHTaQe7iQemi04JchWJEZxKwGmPQehagY
+         kwbJdINTtwsl79S99RKAu/LDb8frNI1B1uCIfR8DSeupYTi443T7S/FMGmm/2O//A2
+         PnDLj4wcUh6EJKG+eAYiEBfB6QKLh+Wj1iK4E8sbTN4cUms/KQCvA2q8m/9V4CWCKa
+         j+lKCfEH5l4Rd3x1ZMj/ednjz5SCidswcVioKDZd/iaVbM2YvFCH1K5KyM2+WOt3aN
+         OB0THU1FdknQmeArErLxKQRAQO6K1EX69/3tnwD8bf8R1Gwpk67LgK6aMjySZfvaTT
+         aww+gJkFd9Viw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/17/20 4:39 AM, Heikki Krogerus wrote:
-> Hi,
-> 
->>>> An alternative might be to define something like __kobject_del() doing
->>>> everything that kobject_del() does *without* the
->>>> kobject_put(kobj->parent).
->>>>
->>>> Then, kobject_del() could be defined as something like (pseudocode):
->>>>
->>>> kobject_del(kobj)
->>>> {
->>>>     kobject *perent = kobj->parent;
->>>>
->>>>     __kobject_del(kobj);
->>>>     kobject_put(parent);
->>>> }
->>>>
->>>> and kobject_cleanup() could call __kobject_del() instead of
->>>> kobject_del() and then do the last kobject_put(parent) when it is done
->>>> with the child.
->>>>
->>>> Would that work?
->>>
->>> I think so. Greg, what do you think?
->>
->> Hm, maybe.  Can someone test it out with the reproducer?
-> 
-> Brendan, or Randy! Can you guys test Rafael's proposal? I think it
-> would look like this:
+This series adds basic self tests for HMM and are intended for Jason
+Gunthorpe's rdma tree since I believe he is planning to make some HMM
+related changes that this can help test.
 
-patch is whitespace-damaged. did you copy-paste it from a screen?
+Changes v8 -> v9:
+Rebased to linux-5.7.0-rc1.
+Moved include/uapi/linux/test_hmm.h to lib/test_hmm_uapi.h
+Added calls to release_mem_region() to free device private addresses
+Applied Jason's suggested changes for v8.
+Added a check for no VMA read access before migrating to device private
+  memory.
 
+Changes v7 -> v8:
+Rebased to Jason's rdma/hmm tree, plus Jason's 6 patch series
+  "Small hmm_range_fault() cleanups".
+Applied a number of changes from Jason's comments.
 
-Anyway, it works for me. I loaded & unloaded test_printf.ko 5 times
-without a problem.
+Changes v6 -> v7:
+Rebased to linux-5.6.0-rc6
+Reverted back to just using mmu_interval_notifier_insert() and making
+  this series only introduce HMM self tests.
 
-Thanks.
+Changes v5 -> v6:
+Rebased to linux-5.5.0-rc6
+Refactored mmu interval notifier patches
+Converted nouveau to use the new mmu interval notifier API
 
-> diff --git a/lib/kobject.c b/lib/kobject.c
-> index 83198cb37d8d..2bd631460e18 100644
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -599,14 +599,7 @@ int kobject_move(struct kobject *kobj, struct kobject *new_parent)
->  }
->  EXPORT_SYMBOL_GPL(kobject_move);
->  
-> -/**
-> - * kobject_del() - Unlink kobject from hierarchy.
-> - * @kobj: object.
-> - *
-> - * This is the function that should be called to delete an object
-> - * successfully added via kobject_add().
-> - */
-> -void kobject_del(struct kobject *kobj)
-> +static void __kobject_del(struct kobject *kobj)
->  {
->         struct kernfs_node *sd;
->         const struct kobj_type *ktype;
-> @@ -625,9 +618,23 @@ void kobject_del(struct kobject *kobj)
->  
->         kobj->state_in_sysfs = 0;
->         kobj_kset_leave(kobj);
-> -       kobject_put(kobj->parent);
->         kobj->parent = NULL;
->  }
-> +
-> +/**
-> + * kobject_del() - Unlink kobject from hierarchy.
-> + * @kobj: object.
-> + *
-> + * This is the function that should be called to delete an object
-> + * successfully added via kobject_add().
-> + */
-> +void kobject_del(struct kobject *kobj)
-> +{
-> +       struct kobject *parent = kobj->parent;
-> +
-> +       __kobject_del(kobj);
-> +       kobject_put(parent);
-> +}
->  EXPORT_SYMBOL(kobject_del);
->  
->  /**
-> @@ -663,6 +670,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
->   */
->  static void kobject_cleanup(struct kobject *kobj)
->  {
-> +       struct kobject *parent = kobj->parent;
->         struct kobj_type *t = get_ktype(kobj);
->         const char *name = kobj->name;
->  
-> @@ -684,7 +692,7 @@ static void kobject_cleanup(struct kobject *kobj)
->         if (kobj->state_in_sysfs) {
->                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
->                          kobject_name(kobj), kobj);
-> -               kobject_del(kobj);
-> +               __kobject_del(kobj);
->         }
->  
->         if (t && t->release) {
-> @@ -698,6 +706,8 @@ static void kobject_cleanup(struct kobject *kobj)
->                 pr_debug("kobject: '%s': free name\n", name);
->                 kfree_const(name);
->         }
-> +
-> +       kobject_put(parent);
->  }
-> 
->  #ifdef CONFIG_DEBUG_KOBJECT_RELEASE
-> 
-> 
-> thanks,
-> 
+Changes v4 -> v5:
+Added mmu interval notifier insert/remove/update callable from the
+  invalidate() callback
+Updated HMM tests to use the new core interval notifier API
 
+Changes v1 -> v4:
+https://lore.kernel.org/linux-mm/20191104222141.5173-1-rcampbell@nvidia.com
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Ralph Campbell (3):
+  mm/hmm/test: add selftest driver for HMM
+  mm/hmm/test: add selftests for HMM
+  MAINTAINERS: add HMM selftests
+
+ MAINTAINERS                            |    3 +
+ lib/Kconfig.debug                      |   13 +
+ lib/Makefile                           |    1 +
+ lib/test_hmm.c                         | 1175 ++++++++++++++++++++
+ lib/test_hmm_uapi.h                    |   59 +
+ tools/testing/selftests/vm/.gitignore  |    1 +
+ tools/testing/selftests/vm/Makefile    |    3 +
+ tools/testing/selftests/vm/config      |    2 +
+ tools/testing/selftests/vm/hmm-tests.c | 1359 ++++++++++++++++++++++++
+ tools/testing/selftests/vm/run_vmtests |   16 +
+ tools/testing/selftests/vm/test_hmm.sh |   97 ++
+ 11 files changed, 2729 insertions(+)
+ create mode 100644 lib/test_hmm.c
+ create mode 100644 lib/test_hmm_uapi.h
+ create mode 100644 tools/testing/selftests/vm/hmm-tests.c
+ create mode 100755 tools/testing/selftests/vm/test_hmm.sh
+
+--=20
+2.25.2
+
