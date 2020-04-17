@@ -2,62 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6E11ADEBC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 15:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5531ADEE6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Apr 2020 16:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730779AbgDQNud (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Apr 2020 09:50:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38844 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730709AbgDQNuc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Apr 2020 09:50:32 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B09FE2087E;
-        Fri, 17 Apr 2020 13:50:30 +0000 (UTC)
-Date:   Fri, 17 Apr 2020 09:50:28 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux- stable <stable@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        rcu@vger.kernel.org, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>, zanussi@kernel.org,
-        svens@linux.ibm.com, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: WARNING: events/ipi.h:36 suspicious rcu_dereference_check()
- usage!
-Message-ID: <20200417095028.25a64f58@gandalf.local.home>
-In-Reply-To: <20200417071543.GA7316@leoy-ThinkPad-X240s>
-References: <CA+G9fYtYRc_mKPDN-Gryw7fhjPNGBUP=KemTXaXR6UBU94M3hw@mail.gmail.com>
-        <CAA93ih2To3YN=L7VSa_RzVRV5OH9DTffd0zdKWB2M4CfE0Gp1Q@mail.gmail.com>
-        <20200417071543.GA7316@leoy-ThinkPad-X240s>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1730805AbgDQN72 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Apr 2020 09:59:28 -0400
+Received: from [199.76.72.254] ([199.76.72.254]:8032 "EHLO pop02.odn.ne.jp"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730563AbgDQN72 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Apr 2020 09:59:28 -0400
+X-Greylist: delayed 11504 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Apr 2020 09:59:28 EDT
+Reply-To: info@free221.com
+From:   "Felix" <adi@pop02.odn.ne.jp>
+To:     linux-kselftest@vger.kernel.org
+Subject: Reply for more information
+Date:   17 Apr 2020 14:58:59 +0100
+Message-ID: <20200417145859.8F44BCC6C2177973@pop02.odn.ne.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 17 Apr 2020 15:15:43 +0800
-Leo Yan <leo.yan@linaro.org> wrote:
-
-> Good analysis, Masami :)
-
-Agreed. Nice work Masami!
-
-> 
-> Seems to me, Arm64 should study Arm platform to change using
-> trace_ipi_raise_rcuidle() to work around the restriction so can allow the
-> event to work in idle context?
-
-Also agree. Looks to need the rcuidle() variant.
-
--- Steve
+Hi,
+ 
+My name is felix. I have a quick and easy business offer that 
+will benefit us both immensely. The amount involved is over 9.4 
+Milli0n in US d0llars.
+ 
+I await your immediate reply so that I can give full details.
+ 
+Rgds
+ 
+Felix
