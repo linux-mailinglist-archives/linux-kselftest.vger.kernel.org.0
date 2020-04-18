@@ -2,175 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A45BC1AEC2D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 13:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2F91AECEF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 15:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbgDRLr7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Apr 2020 07:47:59 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:34200 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725857AbgDRLr6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 07:47:58 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IBiRl5096448;
-        Sat, 18 Apr 2020 11:47:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=81gTzqIjlHBm7QAubrLSzvHClUl9G4hCGInOrxEy1uU=;
- b=hyR3wxbbq99P3U4oKqLG0qsVhsZ3X6XJQAV9I/kjDU6DQ+val8+dJnlx3RP7LU1iV2dm
- RCi4MRsxCYRXqwN0RN0Y/WtBXgRi3+jjInIKGhczqlcLGS7ujElhIbY5La5HOk6MPVe1
- jpV5nFxqta/pwf+N9DosRlL/8U75tIm+qlsNacla3rIuZRp3d9/Lkn4t/uzGc4PibP1g
- 2+Od9dLbdgdM/cnaXAvLJqu87C60e0maid9przZ1lUoNss/NWfCaEAff97GJz2tZ33Zg
- RRJxZPV2DvyGOU+Vk9dFGhaDQjQiVlBn9z4ZfrGbsxjJ1wb1MwirRKl2ZFH+6S7O3ytK nQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 30fxkjr79d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 11:47:43 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IBg0Y2044227;
-        Sat, 18 Apr 2020 11:47:43 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 30fpnrttd8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 11:47:43 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03IBlfw8003405;
-        Sat, 18 Apr 2020 11:47:41 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 18 Apr 2020 04:47:40 -0700
-Date:   Sat, 18 Apr 2020 14:47:25 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
+        id S1726597AbgDRNsv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Apr 2020 09:48:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55442 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726581AbgDRNsv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 18 Apr 2020 09:48:51 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 57CC522251;
+        Sat, 18 Apr 2020 13:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587217730;
+        bh=tJx2Pw8jARz8g4y2ONxmN/CJIrowA+R2SLrDY7KpChs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=wMISkFbdygIIEkHJr0ePKnGQPKNIFQSqQaU0ycKemhEWkoATXOFfbqGeTKHYXLCOu
+         OCQGH243gKG8VwhvZzQ7yBIpfaJAa+Jm8+HapJBGicP+hAY/NBu0e+pd3D2TS8Jhbb
+         1buLvuIzrb+SB8Q47cRufJ4xf4b2Doy4uJmaYJOE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
-Message-ID: <20200418114725.GF12862@kadam>
-References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-7-scott.branden@broadcom.com>
- <20200220104321.GX7838@kadam>
- <63c9dcda-7a31-78a7-1d11-9d9af38add46@broadcom.com>
- <20200418114516.GE12862@kadam>
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeff Vander Stoep <jeffv@google.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Kees Cook <keescook@chromium.org>, NeilBrown <neilb@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 28/73] selftests: kmod: fix handling test numbers above 9
+Date:   Sat, 18 Apr 2020 09:47:30 -0400
+Message-Id: <20200418134815.6519-28-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200418134815.6519-1-sashal@kernel.org>
+References: <20200418134815.6519-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200418114516.GE12862@kadam>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9594 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180096
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9594 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
- adultscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
- suspectscore=0 mlxlogscore=999 impostorscore=0 clxscore=1011
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180096
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 02:45:16PM +0300, Dan Carpenter wrote:
-> On Fri, Apr 17, 2020 at 02:49:11PM -0700, Scott Branden wrote:
-> > > > +static int bcm_vk_dma_alloc(struct device *dev,
-> > > > +			    struct bcm_vk_dma *dma,
-> > > > +			    int direction,
-> > > > +			    struct _vk_data *vkdata)
-> > > > +{
-> > > > +	dma_addr_t addr, sg_addr;
-> > > > +	int err;
-> > > > +	int i;
-> > > > +	int offset;
-> > > > +	uint32_t size;
-> > > > +	uint32_t remaining_size;
-> > > > +	uint32_t transfer_size;
-> > > > +	uint64_t data;
-> > > > +	unsigned long first, last;
-> > > > +	struct _vk_data *sgdata;
-> > > > +
-> > > > +	/* Get 64-bit user address */
-> > > > +	data = get_unaligned(&(vkdata->address));
-> > > Extra parens.
-> > removed
-> > > 
-> > > > +
-> > > > +	/* offset into first page */
-> > > > +	offset = offset_in_page(data);
-> > > > +
-> > > > +	/* Calculate number of pages */
-> > > > +	first = (data & PAGE_MASK) >> PAGE_SHIFT;
-> > > > +	last  = ((data + vkdata->size - 1) & PAGE_MASK) >> PAGE_SHIFT;
-> > > > +	dma->nr_pages = last - first + 1;
-> > > > +
-> > > > +	/* Allocate DMA pages */
-> > > > +	dma->pages = kmalloc_array(dma->nr_pages,
-> > > > +				   sizeof(struct page *),
-> > > > +				   GFP_KERNEL);
-> > > > +	if (dma->pages == NULL)
-> > > > +		return -ENOMEM;
-> > > > +
-> > > > +	dev_dbg(dev, "Alloc DMA Pages [0x%llx+0x%x => %d pages]\n",
-> > > > +		data, vkdata->size, dma->nr_pages);
-> > > > +
-> > > > +	dma->direction = direction;
-> > > > +
-> > > > +	/* Get user pages into memory */
-> > > > +	err = get_user_pages_fast(data & PAGE_MASK,
-> > > > +				  dma->nr_pages,
-> > > > +				  direction == DMA_FROM_DEVICE,
-> > > > +				  dma->pages);
-> > > > +	if (err != dma->nr_pages) {
-> > > > +		dma->nr_pages = (err >= 0) ? err : 0;
-> > > > +		dev_err(dev, "get_user_pages_fast, err=%d [%d]\n",
-> > > > +			err, dma->nr_pages);
-> > > > +		return err < 0 ? err : -EINVAL;
-> > > > +	}
-> > > > +
-> > > > +	/* Max size of sg list is 1 per mapped page + fields at start */
-> > > > +	dma->sglen = (dma->nr_pages * sizeof(*sgdata)) +
-> > > > +		     (sizeof(uint32_t) * SGLIST_VKDATA_START);
-> > > > +
-> > > > +	/* Allocate sglist */
-> > > > +	dma->sglist = dma_alloc_coherent(dev,
-> > > > +					 dma->sglen,
-> > > > +					 &dma->handle,
-> > > > +					 GFP_KERNEL);
-> > > 
-> > > 	dma->sglist = dma_alloc_coherent(dev, dma->sglen, &dma->handle,
-> > > 					 GFP_KERNEL);
-> > done
-> > > 
-> > > 
-> > > 
-> > > > +	if (!dma->sglist)
-> > > > +		return -ENOMEM;
-> > > No cleanup?
-> > what needs to be cleaned up?
-> 
-> dma->pages should be freed probably?  And a put_user_pages_fast()?
+From: Eric Biggers <ebiggers@google.com>
 
-Sorry put_user_pages_fast() isn't a function.  My bad.
+[ Upstream commit 6d573a07528308eb77ec072c010819c359bebf6e ]
 
-regards,
-dan carpenter
+get_test_count() and get_test_enabled() were broken for test numbers
+above 9 due to awk interpreting a field specification like '$0010' as
+octal rather than decimal.  Fix it by stripping the leading zeroes.
+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jeff Vander Stoep <jeffv@google.com>
+Cc: Jessica Yu <jeyu@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: NeilBrown <neilb@suse.com>
+Link: http://lkml.kernel.org/r/20200318230515.171692-5-ebiggers@kernel.org
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kmod/kmod.sh | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index 8b944cf042f6c..315a43111e046 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -505,18 +505,23 @@ function test_num()
+ 	fi
+ }
+ 
+-function get_test_count()
++function get_test_data()
+ {
+ 	test_num $1
+-	TEST_DATA=$(echo $ALL_TESTS | awk '{print $'$1'}')
++	local field_num=$(echo $1 | sed 's/^0*//')
++	echo $ALL_TESTS | awk '{print $'$field_num'}'
++}
++
++function get_test_count()
++{
++	TEST_DATA=$(get_test_data $1)
+ 	LAST_TWO=${TEST_DATA#*:*}
+ 	echo ${LAST_TWO%:*}
+ }
+ 
+ function get_test_enabled()
+ {
+-	test_num $1
+-	TEST_DATA=$(echo $ALL_TESTS | awk '{print $'$1'}')
++	TEST_DATA=$(get_test_data $1)
+ 	echo ${TEST_DATA#*:*:}
+ }
+ 
+-- 
+2.20.1
+
