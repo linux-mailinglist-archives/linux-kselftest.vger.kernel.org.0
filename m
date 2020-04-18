@@ -2,120 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1D01AEA77
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 09:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66671AEC2C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 13:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725849AbgDRHTI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Apr 2020 03:19:08 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33239 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725843AbgDRHTI (ORCPT
+        id S1725994AbgDRLsB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Apr 2020 07:48:01 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:50470 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725914AbgDRLsA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 03:19:08 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c138so2235284pfc.0;
-        Sat, 18 Apr 2020 00:19:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2tfGw4d3u9g+UFPVZL7i7ytHNA18syakdIUbMPCw9fk=;
-        b=HzHlBUoziKV7IAShIZZsEWav/DMYjBrKBtYchLX3Fo0TPZZEKF9Ge4VSCqgOOlEXjU
-         WDkV5DUMaepFrdsePtQbU47Z7ua3RG51ENgwMh8v96+2zIs83jD4BkKIp5HW6n9VGC9c
-         LllGG18g7qouxPZGNaF4dPVhDFydaBJOTYkWA2mzjOC7GGbR83BYr9BpCe7r7dqZctdS
-         oysofCc6KqIg0LoJgVUjd0pojQRGrPXd0uY3jXWJuuMyCE0dizxaGKl69dClvatMCqCq
-         tZpR37qpWdffhQX0aD4NEIGHgsK6DYIJAwJBljmlUYnN6mPARR8H+tFXjAOI2ew/qlvw
-         gu7g==
-X-Gm-Message-State: AGi0PuZlh/9MPH2C5PIDa66Y3kvJdznbZtnhUImAaYIye1RqhCOF6u60
-        0SFDxgfESWCZfw6mXZGNZqA=
-X-Google-Smtp-Source: APiQypI+72yk06Cjr8OXYOo8eGUbph5RuNlA8q6scYKXCohp1d6WX75FGadX+ZCWl4kUqBub0DIRGA==
-X-Received: by 2002:a63:585c:: with SMTP id i28mr6721801pgm.363.1587194347313;
-        Sat, 18 Apr 2020 00:19:07 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id 192sm3346445pfu.182.2020.04.18.00.19.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2020 00:19:06 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 68C5B4028E; Sat, 18 Apr 2020 07:19:05 +0000 (UTC)
-Date:   Sat, 18 Apr 2020 07:19:05 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Jessica Yu <jeyu@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH 3/4] kmod: Return directly if module name is empty in
- request_module()
-Message-ID: <20200418071905.GE11244@42.do-not-panic.com>
-References: <1587187200-13109-1-git-send-email-yangtiezhu@loongson.cn>
- <1587187200-13109-3-git-send-email-yangtiezhu@loongson.cn>
- <20200418054519.GX11244@42.do-not-panic.com>
- <CAB=NE6XD7XCmsTAg3+mw=b8WZnKJiwha5t4DBJFt5w+b_DsNkg@mail.gmail.com>
- <b9c6e6e6-571a-b957-755f-72f2b0f538c5@loongson.cn>
+        Sat, 18 Apr 2020 07:48:00 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IBhXbT004545;
+        Sat, 18 Apr 2020 11:47:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=geNGJb1RrJxWb0w/CU4ApZuniBkI/7P5uf5lu013oAE=;
+ b=t2iSbsfziUEBwdbtU8HZdZhnoP9Vand4ApDhgnJUZ4o9BGyClCEImEMJ0brOkJVANNwR
+ UbL0fP90ajYf1W6YOmJ0g650cMH3gTTj7Tc9i+fDQefuytufhmyt2Jw7U56YpdIXtPeY
+ SfXxeoG+Fn73nxbrM3zqthIaVqikAPGo2PhfMidYcto13GemuC59LgFwgjTiULN7po7h
+ I8re3ZWnFfQFQ2FRnb0TBmzgQ5LVvyFIOhuyy8Bpwo91jKlWTte91/UR2we87MpxE4ix
+ QywSCbPc+IxQH6S0u3W6UFolnimIMtgg6wzgwAIuXUy/M0PbSEEyayf5EUePsCoUrhMu ZQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 30fsgkgyx5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 18 Apr 2020 11:47:43 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IBhDWx187986;
+        Sat, 18 Apr 2020 11:45:42 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 30frvkqcut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 18 Apr 2020 11:45:42 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03IBjWXk014081;
+        Sat, 18 Apr 2020 11:45:32 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 18 Apr 2020 04:45:31 -0700
+Date:   Sat, 18 Apr 2020 14:45:16 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Desmond Yan <desmond.yan@broadcom.com>,
+        James Hu <james.hu@broadcom.com>
+Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
+Message-ID: <20200418114516.GE12862@kadam>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-7-scott.branden@broadcom.com>
+ <20200220104321.GX7838@kadam>
+ <63c9dcda-7a31-78a7-1d11-9d9af38add46@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b9c6e6e6-571a-b957-755f-72f2b0f538c5@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <63c9dcda-7a31-78a7-1d11-9d9af38add46@broadcom.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9594 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004180096
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9594 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
+ spamscore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004180096
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 01:58:45PM +0800, Tiezhu Yang wrote:
-> On 04/18/2020 01:48 PM, Luis Chamberlain wrote:
-> > On Fri, Apr 17, 2020 at 11:45 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > On Sat, Apr 18, 2020 at 01:19:59PM +0800, Tiezhu Yang wrote:
-> > > > If module name is empty, it is better to return directly at the beginning
-> > > > of request_module() without doing the needless call_modprobe() operation.
-> > > > 
-> > > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > > > ---
-> > > >   kernel/kmod.c | 5 +++++
-> > > >   1 file changed, 5 insertions(+)
-> > > > 
-> > > > diff --git a/kernel/kmod.c b/kernel/kmod.c
-> > > > index 3cd075c..5851444 100644
-> > > > --- a/kernel/kmod.c
-> > > > +++ b/kernel/kmod.c
-> > > > @@ -28,6 +28,8 @@
-> > > > 
-> > > >   #include <trace/events/module.h>
-> > > > 
-> > > > +#define MODULE_NOT_FOUND 256
-> > > > +
-> > > >   /*
-> > > >    * Assuming:
-> > > >    *
-> > > > @@ -144,6 +146,9 @@ int __request_module(bool wait, const char *fmt, ...)
-> > > >        if (ret >= MODULE_NAME_LEN)
-> > > >                return -ENAMETOOLONG;
-> > > > 
-> > > > +     if (strlen(module_name) == 0)
-> > > > +             return MODULE_NOT_FOUND;
-> > > I'd rather we just use something standard like -EINVAL.
-> > > What do we return if its not found? Then use that value.
-> > Also, are we testing for this condition yet? If not can we add one?
-> 
-> Yes, kmod_test_0001_driver() in tools/testing/selftests/kmod/kmod.sh tests
-> this case and expects result MODULE_NOT_FOUND which is 256.
+On Fri, Apr 17, 2020 at 02:49:11PM -0700, Scott Branden wrote:
+> > > +static int bcm_vk_dma_alloc(struct device *dev,
+> > > +			    struct bcm_vk_dma *dma,
+> > > +			    int direction,
+> > > +			    struct _vk_data *vkdata)
+> > > +{
+> > > +	dma_addr_t addr, sg_addr;
+> > > +	int err;
+> > > +	int i;
+> > > +	int offset;
+> > > +	uint32_t size;
+> > > +	uint32_t remaining_size;
+> > > +	uint32_t transfer_size;
+> > > +	uint64_t data;
+> > > +	unsigned long first, last;
+> > > +	struct _vk_data *sgdata;
+> > > +
+> > > +	/* Get 64-bit user address */
+> > > +	data = get_unaligned(&(vkdata->address));
+> > Extra parens.
+> removed
+> > 
+> > > +
+> > > +	/* offset into first page */
+> > > +	offset = offset_in_page(data);
+> > > +
+> > > +	/* Calculate number of pages */
+> > > +	first = (data & PAGE_MASK) >> PAGE_SHIFT;
+> > > +	last  = ((data + vkdata->size - 1) & PAGE_MASK) >> PAGE_SHIFT;
+> > > +	dma->nr_pages = last - first + 1;
+> > > +
+> > > +	/* Allocate DMA pages */
+> > > +	dma->pages = kmalloc_array(dma->nr_pages,
+> > > +				   sizeof(struct page *),
+> > > +				   GFP_KERNEL);
+> > > +	if (dma->pages == NULL)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	dev_dbg(dev, "Alloc DMA Pages [0x%llx+0x%x => %d pages]\n",
+> > > +		data, vkdata->size, dma->nr_pages);
+> > > +
+> > > +	dma->direction = direction;
+> > > +
+> > > +	/* Get user pages into memory */
+> > > +	err = get_user_pages_fast(data & PAGE_MASK,
+> > > +				  dma->nr_pages,
+> > > +				  direction == DMA_FROM_DEVICE,
+> > > +				  dma->pages);
+> > > +	if (err != dma->nr_pages) {
+> > > +		dma->nr_pages = (err >= 0) ? err : 0;
+> > > +		dev_err(dev, "get_user_pages_fast, err=%d [%d]\n",
+> > > +			err, dma->nr_pages);
+> > > +		return err < 0 ? err : -EINVAL;
+> > > +	}
+> > > +
+> > > +	/* Max size of sg list is 1 per mapped page + fields at start */
+> > > +	dma->sglen = (dma->nr_pages * sizeof(*sgdata)) +
+> > > +		     (sizeof(uint32_t) * SGLIST_VKDATA_START);
+> > > +
+> > > +	/* Allocate sglist */
+> > > +	dma->sglist = dma_alloc_coherent(dev,
+> > > +					 dma->sglen,
+> > > +					 &dma->handle,
+> > > +					 GFP_KERNEL);
+> > 
+> > 	dma->sglist = dma_alloc_coherent(dev, dma->sglen, &dma->handle,
+> > 					 GFP_KERNEL);
+> done
+> > 
+> > 
+> > 
+> > > +	if (!dma->sglist)
+> > > +		return -ENOMEM;
+> > No cleanup?
+> what needs to be cleaned up?
 
-OK I see now I had put:
+dma->pages should be freed probably?  And a put_user_pages_fast()?
 
-errno_name_to_val()                                                             
-{                                                                               
-        case "$1" in                                                            
-	# kmod calls modprobe and upon of a module not found                    
-	# modprobe returns just 1... However in the
-	# kernel we *sometimes* see 256... 
-	MODULE_NOT_FOUND)                                                       
-		echo 256;;
+regards,
+dan carpenter
 
-I found that through testing, however there was nothing set in stone,
-nothing documented. While you are at it, can you find the places where
-this is returned in the kernel code? We should clear this up and
-se things straight. We cannot change what we gave userspace already
-though.
-
-  Luis
