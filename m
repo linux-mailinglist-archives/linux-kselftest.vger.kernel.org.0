@@ -2,39 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A47581AEF52
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 16:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5751AF066
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 16:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbgDROmU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Apr 2020 10:42:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52250 "EHLO mail.kernel.org"
+        id S1728432AbgDROms (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Apr 2020 10:42:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53142 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728290AbgDROmR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:42:17 -0400
+        id S1728425AbgDROmr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:42:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E91E21D82;
-        Sat, 18 Apr 2020 14:42:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 959E321D82;
+        Sat, 18 Apr 2020 14:42:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587220936;
-        bh=6EANkOU5+JVh6iSfkdwyirWkAQqzQTK44M4nd2mmmsA=;
+        s=default; t=1587220967;
+        bh=wWcxu4OCfXEK46Bg8kOK4Q6L/CNCdcIft+WVM10h9XI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pifqaDuKwsz927WEe2zjlj3b8rWeIQ3Z2YdRSjPsuDxwnD9iopFKUsBp8gmYWp0Ev
-         70snWwSdyurF+O7UqfyV+yuegjM0CB5EgoaA/kmlET5hwl7G95SXcTnkTU0lrXqjNZ
-         BCvrFwFF97Wq0dvDzSrK5vM1YJK0BAQG6PmMJVfM=
+        b=xPQwrTaA3xlN+eJCzkR8XxmlssJbjVeVAF3Sv/CnEGfKucsVW26NACTTuzxYIt277
+         GdEe1EGlFW8WTDx3cCpowA4AUd9tCFVJIhWLczBVMSyrj/iMWQ1yzl4qb8Y0MjdGgV
+         nwoKrg5r2vxg9N3RzMJIQJWiIpaywN/8mQw54uJs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Miroslav Benes <mbenes@suse.cz>,
+Cc:     Eric Biggers <ebiggers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeff Vander Stoep <jeffv@google.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Kees Cook <keescook@chromium.org>, NeilBrown <neilb@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 72/78] tracing/selftests: Turn off timeout setting
-Date:   Sat, 18 Apr 2020 10:40:41 -0400
-Message-Id: <20200418144047.9013-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 15/47] selftests: kmod: fix handling test numbers above 9
+Date:   Sat, 18 Apr 2020 10:41:55 -0400
+Message-Id: <20200418144227.9802-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418144047.9013-1-sashal@kernel.org>
-References: <20200418144047.9013-1-sashal@kernel.org>
+In-Reply-To: <20200418144227.9802-1-sashal@kernel.org>
+References: <20200418144227.9802-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,33 +51,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+From: Eric Biggers <ebiggers@google.com>
 
-[ Upstream commit b43e78f65b1d35fd3e13c7b23f9b64ea83c9ad3a ]
+[ Upstream commit 6d573a07528308eb77ec072c010819c359bebf6e ]
 
-As the ftrace selftests can run for a long period of time, disable the
-timeout that the general selftests have. If a selftest hangs, then it
-probably means the machine will hang too.
+get_test_count() and get_test_enabled() were broken for test numbers
+above 9 due to awk interpreting a field specification like '$0010' as
+octal rather than decimal.  Fix it by stripping the leading zeroes.
 
-Link: https://lore.kernel.org/r/alpine.LSU.2.21.1911131604170.18679@pobox.suse.cz
-
-Suggested-by: Miroslav Benes <mbenes@suse.cz>
-Tested-by: Miroslav Benes <mbenes@suse.cz>
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jeff Vander Stoep <jeffv@google.com>
+Cc: Jessica Yu <jeyu@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: NeilBrown <neilb@suse.com>
+Link: http://lkml.kernel.org/r/20200318230515.171692-5-ebiggers@kernel.org
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/ftrace/settings | 1 +
- 1 file changed, 1 insertion(+)
- create mode 100644 tools/testing/selftests/ftrace/settings
+ tools/testing/selftests/kmod/kmod.sh | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/settings b/tools/testing/selftests/ftrace/settings
-new file mode 100644
-index 0000000000000..e7b9417537fbc
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/settings
-@@ -0,0 +1 @@
-+timeout=0
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index 0a76314b44149..1f118916a83e4 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -505,18 +505,23 @@ function test_num()
+ 	fi
+ }
+ 
+-function get_test_count()
++function get_test_data()
+ {
+ 	test_num $1
+-	TEST_DATA=$(echo $ALL_TESTS | awk '{print $'$1'}')
++	local field_num=$(echo $1 | sed 's/^0*//')
++	echo $ALL_TESTS | awk '{print $'$field_num'}'
++}
++
++function get_test_count()
++{
++	TEST_DATA=$(get_test_data $1)
+ 	LAST_TWO=${TEST_DATA#*:*}
+ 	echo ${LAST_TWO%:*}
+ }
+ 
+ function get_test_enabled()
+ {
+-	test_num $1
+-	TEST_DATA=$(echo $ALL_TESTS | awk '{print $'$1'}')
++	TEST_DATA=$(get_test_data $1)
+ 	echo ${TEST_DATA#*:*:}
+ }
+ 
 -- 
 2.20.1
 
