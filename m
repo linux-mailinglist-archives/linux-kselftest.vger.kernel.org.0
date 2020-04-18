@@ -2,130 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 758401AF2DA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 19:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C361AF2D8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 19:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbgDRR0I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Apr 2020 13:26:08 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:46494 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbgDRR0G (ORCPT
+        id S1727830AbgDRR0E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Apr 2020 13:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726121AbgDRR0D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 13:26:06 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IHPocp016214;
-        Sat, 18 Apr 2020 17:26:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=8KrJ/JRh4q1VXJvhPAIpwPjIhjwroyl2FF43PveML6I=;
- b=AOmyP6C8oWDNi5l/CoyTfkazqoakk5toheHi6EoXt7Z1/lOHPDliNJz6O6Y7UftMvuHg
- LB1O+I04Z5Gp+xiGHjJwYHftFt/+FQ43iWeZewL1MbEdRUGyoVXW02c4x8tY91YAyX4U
- fcairSM6SODbk+Nkx+lg59B6jt7B1/FRFul5rN+9yEkYINLqb6O5+jiuRpyCMkmNbZpO
- 35n4T/T65sOSJar7E2xMu91beP+nTzaMOCthE8V5o96xjeKX3WOQuYG8BkJ2glYMB9td
- ELRgm5W0PvVN68E/3FflwPmer6a9diz8lb/iAOQaPrShjxP5Qqk3b4F9I5J2+4XQg6rq lg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 30fxkjrrwf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 17:26:02 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IHLMsG077591;
-        Sat, 18 Apr 2020 17:26:01 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 30fqka2fdx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 17:26:01 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03IHQ0mI015260;
-        Sat, 18 Apr 2020 17:26:00 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 18 Apr 2020 10:26:00 -0700
-Date:   Sat, 18 Apr 2020 20:25:54 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     brendanhiggins@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [bug report] kunit: test: add support for test abort
-Message-ID: <20200418172554.GA802865@mwanda>
+        Sat, 18 Apr 2020 13:26:03 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A810BC061A41
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2020 10:26:03 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id w65so2728772pfc.12
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2020 10:26:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=OMU4gc4xJrsz9oC2mAccr/thZgznAgM1yG5wcPECHkg=;
+        b=hGVK77kM162LwI61a0prF7TRDY3sTb+b5wvtpmeTOvBZSjhXTZ4KtYe+4KIMRdV7i7
+         sATr30xlpwsSy5LoneFDQ5Lm4qNwy1XZPOpsYs7AdIdCkSILl9o/eKhblnMatJ/DQ099
+         6O0bWbR+0j5NV+t/XiLqUMrAO+Rybib+2O03c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=OMU4gc4xJrsz9oC2mAccr/thZgznAgM1yG5wcPECHkg=;
+        b=X6cry23J+RyejeyUxBqWiD1zgDgjyoWiz3PyEPOsOIpn4mID03hJ4C1fhj3mFKieo/
+         41zlUP5I6LCniiEHpelM5T9X6jyAsWMyWbdxAcRM1U/j10BQKokYWlVCVABaS0zkrJ9G
+         vggxEb9byTHouQDtXcRNHnnw82eK48hJJUVzsGd5Y47Hlo8/8CgoSuSN0quLCPNwiQqa
+         RA2JvbE1P0AvDe74mjjSdUDumNlPU+YAgYGZnNLxNJrDOMcU98kPk7mr6dlW6U7nCPjC
+         omaPjcE00Fl/1OPtcX7TmDrNFbf0hyCIPsz9RyHtBIYAa04Eqvpc9bmZPpFWj6/9YNHt
+         8KCw==
+X-Gm-Message-State: AGi0PuaIHtfPOJ3rVT1jhUVAn8P8GpXyGeDk0gCsksPLnzOsXAuPbaiX
+        A2AKAPgMyCU6UAFXMZLEoOJEFLn51nUYXw==
+X-Google-Smtp-Source: APiQypI6VuVoh62mvFQq+xqE0yByeQ09p8pjSnT53bNRHnXhxn5ZoHPk2hUCiKeRmM+zA4cvz4Ls8Q==
+X-Received: by 2002:a62:d086:: with SMTP id p128mr9463319pfg.241.1587230762967;
+        Sat, 18 Apr 2020 10:26:02 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id u13sm9211650pjb.45.2020.04.18.10.25.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Apr 2020 10:26:02 -0700 (PDT)
+From:   Scott Branden <scott.branden@broadcom.com>
+Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Desmond Yan <desmond.yan@broadcom.com>,
+        James Hu <james.hu@broadcom.com>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-7-scott.branden@broadcom.com>
+ <20200220104321.GX7838@kadam>
+ <63c9dcda-7a31-78a7-1d11-9d9af38add46@broadcom.com>
+ <20200418114516.GE12862@kadam> <20200418114725.GF12862@kadam>
+Message-ID: <c781505e-5bbd-a259-4c2d-4481db3fabde@broadcom.com>
+Date:   Sat, 18 Apr 2020 10:25:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9595 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=705 adultscore=0
- spamscore=0 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
- suspectscore=3 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180146
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9595 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
- adultscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
- suspectscore=3 mlxlogscore=773 impostorscore=0 clxscore=1011
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180146
+In-Reply-To: <20200418114725.GF12862@kadam>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Brendan Higgins,
+Thanks Dan, I'll send out new version as soon as my other patch (you had 
+requested for test_fx mutex cleanups)
+https://lore.kernel.org/linux-arm-msm/20200415002517.4328-1-scott.branden@broadcom.com/
 
-The patch 5f3e06208920: "kunit: test: add support for test abort"
-from Sep 23, 2019, leads to the following static checker warning:
+hits the linux-next tree so this patch series will apply cleanly to 
+linux-next.
 
-	lib/kunit/try-catch.c:93 kunit_try_catch_run()
-	misplaced newline? '    # %s: Unknown error: %d
 
-lib/kunit/try-catch.c
-    58  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-    59  {
-    60          DECLARE_COMPLETION_ONSTACK(try_completion);
-    61          struct kunit *test = try_catch->test;
-    62          struct task_struct *task_struct;
-    63          int exit_code, time_remaining;
-    64  
-    65          try_catch->context = context;
-    66          try_catch->try_completion = &try_completion;
-    67          try_catch->try_result = 0;
-    68          task_struct = kthread_run(kunit_generic_run_threadfn_adapter,
-    69                                    try_catch,
-    70                                    "kunit_try_catch_thread");
-    71          if (IS_ERR(task_struct)) {
-    72                  try_catch->catch(try_catch->context);
-    73                  return;
-    74          }
-    75  
-    76          time_remaining = wait_for_completion_timeout(&try_completion,
-    77                                                       kunit_test_timeout());
-    78          if (time_remaining == 0) {
-    79                  kunit_err(test, "try timed out\n");
-                                                      ^^
-The kunit_log() macro adds its own newline.  Most of the callers add
-a newline.  It should be the callers add a newline because that's how
-everything else works in the kernel.
 
-The dev_printk() stuff will sometimes add a newline, but never a
-duplicate newline.  In other words, it's slightly complicated.  But
-basically the caller should add a newline.
 
-    80                  try_catch->try_result = -ETIMEDOUT;
-    81          }
-    82  
-    83          exit_code = try_catch->try_result;
-    84  
-    85          if (!exit_code)
-    86                  return;
-    87  
-    88          if (exit_code == -EFAULT)
-    89                  try_catch->try_result = 0;
-    90          else if (exit_code == -EINTR)
-    91                  kunit_err(test, "wake_up_process() was never called\n");
-                                                                           ^^
+On 2020-04-18 4:47 a.m., Dan Carpenter wrote:
+> On Sat, Apr 18, 2020 at 02:45:16PM +0300, Dan Carpenter wrote:
+>> On Fri, Apr 17, 2020 at 02:49:11PM -0700, Scott Branden wrote:
+>>>>> +static int bcm_vk_dma_alloc(struct device *dev,
+>>>>> +			    struct bcm_vk_dma *dma,
+>>>>> +			    int direction,
+>>>>> +			    struct _vk_data *vkdata)
+>>>>> +{
+>>>>> +	dma_addr_t addr, sg_addr;
+>>>>> +	int err;
+>>>>> +	int i;
+>>>>> +	int offset;
+>>>>> +	uint32_t size;
+>>>>> +	uint32_t remaining_size;
+>>>>> +	uint32_t transfer_size;
+>>>>> +	uint64_t data;
+>>>>> +	unsigned long first, last;
+>>>>> +	struct _vk_data *sgdata;
+>>>>> +
+>>>>> +	/* Get 64-bit user address */
+>>>>> +	data = get_unaligned(&(vkdata->address));
+>>>> Extra parens.
+>>> removed
+>>>>> +
+>>>>> +	/* offset into first page */
+>>>>> +	offset = offset_in_page(data);
+>>>>> +
+>>>>> +	/* Calculate number of pages */
+>>>>> +	first = (data & PAGE_MASK) >> PAGE_SHIFT;
+>>>>> +	last  = ((data + vkdata->size - 1) & PAGE_MASK) >> PAGE_SHIFT;
+>>>>> +	dma->nr_pages = last - first + 1;
+>>>>> +
+>>>>> +	/* Allocate DMA pages */
+>>>>> +	dma->pages = kmalloc_array(dma->nr_pages,
+>>>>> +				   sizeof(struct page *),
+>>>>> +				   GFP_KERNEL);
+>>>>> +	if (dma->pages == NULL)
+>>>>> +		return -ENOMEM;
+>>>>> +
+>>>>> +	dev_dbg(dev, "Alloc DMA Pages [0x%llx+0x%x => %d pages]\n",
+>>>>> +		data, vkdata->size, dma->nr_pages);
+>>>>> +
+>>>>> +	dma->direction = direction;
+>>>>> +
+>>>>> +	/* Get user pages into memory */
+>>>>> +	err = get_user_pages_fast(data & PAGE_MASK,
+>>>>> +				  dma->nr_pages,
+>>>>> +				  direction == DMA_FROM_DEVICE,
+>>>>> +				  dma->pages);
+>>>>> +	if (err != dma->nr_pages) {
+>>>>> +		dma->nr_pages = (err >= 0) ? err : 0;
+>>>>> +		dev_err(dev, "get_user_pages_fast, err=%d [%d]\n",
+>>>>> +			err, dma->nr_pages);
+>>>>> +		return err < 0 ? err : -EINVAL;
+>>>>> +	}
+>>>>> +
+>>>>> +	/* Max size of sg list is 1 per mapped page + fields at start */
+>>>>> +	dma->sglen = (dma->nr_pages * sizeof(*sgdata)) +
+>>>>> +		     (sizeof(uint32_t) * SGLIST_VKDATA_START);
+>>>>> +
+>>>>> +	/* Allocate sglist */
+>>>>> +	dma->sglist = dma_alloc_coherent(dev,
+>>>>> +					 dma->sglen,
+>>>>> +					 &dma->handle,
+>>>>> +					 GFP_KERNEL);
+>>>> 	dma->sglist = dma_alloc_coherent(dev, dma->sglen, &dma->handle,
+>>>> 					 GFP_KERNEL);
+>>> done
+>>>>
+>>>>> +	if (!dma->sglist)
+>>>>> +		return -ENOMEM;
+>>>> No cleanup?
+>>> what needs to be cleaned up?
+>> dma->pages should be freed probably?  And a put_user_pages_fast()?
+> Sorry put_user_pages_fast() isn't a function.  My bad.
+>
+> regards,
+> dan carpenter
 
-    92          else if (exit_code)
-    93                  kunit_err(test, "Unknown error: %d\n", exit_code);
-                                                          ^^
-
-    94  
-    95          try_catch->catch(try_catch->context);
-    96  }
-
-regards,
-dan carpenter
