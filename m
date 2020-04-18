@@ -2,72 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9AF1AEA04
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 07:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4521AEA0C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 07:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725983AbgDRFUT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Apr 2020 01:20:19 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34254 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725849AbgDRFUS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 01:20:18 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9wAjppe2UQpAA--.8S5;
-        Sat, 18 Apr 2020 13:20:03 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Luis Chamberlain <mcgrof@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH 4/4] test_kmod: Avoid potential double free in trigger_config_run_type()
-Date:   Sat, 18 Apr 2020 13:20:00 +0800
-Message-Id: <1587187200-13109-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1587187200-13109-1-git-send-email-yangtiezhu@loongson.cn>
+        id S1725862AbgDRFpY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Apr 2020 01:45:24 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:33688 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725300AbgDRFpX (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 18 Apr 2020 01:45:23 -0400
+Received: by mail-pf1-f194.google.com with SMTP id c138so2159952pfc.0;
+        Fri, 17 Apr 2020 22:45:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TlYz2PK5MXvRAFEYvsWdBeIsqwyb7mjoCnGHKrdEVCQ=;
+        b=MAkxwCht/DckWQFexzv7j8sfSxkYOznHTrYBs1oR+mnBMuL2DsbPYnqMKGwR2AnHP7
+         zTTYqYkJOo+2VFtr0YE/I8adkZeMpWppjP+45Z4xijdefhvGt3jyb2hDvi2vNIryeDik
+         FwXfV/TmoKpKVuj+6j6elSm02REtdvSfEWJIZ1yNhj5E0+EjiaXi90/RUbnJHR9ffPzh
+         ydIiJQqZXdNdVMRZC+qdD3I3QpX+Xfdbtgx8DZ0lTZzNKPGOKYSNDavnbNQj4as7X8Pg
+         NPdTvMD5IX7dEwzjRFbnJTOAQzgs4l9/MsndY0FaQ9tvT71xwCWj6lW7/G7xZvteLnCP
+         DDCQ==
+X-Gm-Message-State: AGi0PuaYEiMGbVIPIEBNGAjJYGK+mvPDbAcjiu+1oNFnOakl0zFSdEHn
+        AYxzKho78K3NlZlhUYrJyjWuqyUd0nU=
+X-Google-Smtp-Source: APiQypLuOOOCgjF5AyNfkhPofM0QVO9zF/P5ScwbFYo+baECumfyKSNcjqHKN6cTXICi6Mna0bQFmw==
+X-Received: by 2002:a63:6cc5:: with SMTP id h188mr6334764pgc.337.1587188721519;
+        Fri, 17 Apr 2020 22:45:21 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id y126sm15284065pgy.91.2020.04.17.22.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 22:45:19 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 3F0A34028E; Sat, 18 Apr 2020 05:45:19 +0000 (UTC)
+Date:   Sat, 18 Apr 2020 05:45:19 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH 3/4] kmod: Return directly if module name is empty in
+ request_module()
+Message-ID: <20200418054519.GX11244@42.do-not-panic.com>
 References: <1587187200-13109-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxj9wAjppe2UQpAA--.8S5
-X-Coremail-Antispam: 1UD129KBjvdXoWrtF4ruw4xuryxZw1fXw4Utwb_yoWxKwc_Ca
-        47Jr1DWr1UJrZ8uw13Z395ZF4kta4Utr4rXr4DKFWUWFy2qr9Fg348tr1DZasxW3y5JFZI
-        g3yvyFn2vr4UujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbhxFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4rMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUZjjPUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+ <1587187200-13109-3-git-send-email-yangtiezhu@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1587187200-13109-3-git-send-email-yangtiezhu@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It should set config->test_fs instead of config->test_driver as NULL
-after kfree_const(config->test_fs) to avoid potential double free.
+On Sat, Apr 18, 2020 at 01:19:59PM +0800, Tiezhu Yang wrote:
+> If module name is empty, it is better to return directly at the beginning
+> of request_module() without doing the needless call_modprobe() operation.
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  kernel/kmod.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/kmod.c b/kernel/kmod.c
+> index 3cd075c..5851444 100644
+> --- a/kernel/kmod.c
+> +++ b/kernel/kmod.c
+> @@ -28,6 +28,8 @@
+>  
+>  #include <trace/events/module.h>
+>  
+> +#define MODULE_NOT_FOUND 256
+> +
+>  /*
+>   * Assuming:
+>   *
+> @@ -144,6 +146,9 @@ int __request_module(bool wait, const char *fmt, ...)
+>  	if (ret >= MODULE_NAME_LEN)
+>  		return -ENAMETOOLONG;
+>  
+> +	if (strlen(module_name) == 0)
+> +		return MODULE_NOT_FOUND;
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- lib/test_kmod.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'd rather we just use something standard like -EINVAL.
+What do we return if its not found? Then use that value.
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index e651c37..eab5277 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -745,7 +745,7 @@ static int trigger_config_run_type(struct kmod_test_device *test_dev,
- 		break;
- 	case TEST_KMOD_FS_TYPE:
- 		kfree_const(config->test_fs);
--		config->test_driver = NULL;
-+		config->test_fs = NULL;
- 		copied = config_copy_test_fs(config, test_str,
- 					     strlen(test_str));
- 		break;
--- 
-2.1.0
-
+> +
+>  	ret = security_kernel_module_request(module_name);
+>  	if (ret)
+>  		return ret;
+> -- 
+> 2.1.0
+> 
