@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2F91AECEF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 15:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF1F1AEDF2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Apr 2020 16:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbgDRNsv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Apr 2020 09:48:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55442 "EHLO mail.kernel.org"
+        id S1726651AbgDROJo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Apr 2020 10:09:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37336 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726581AbgDRNsv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 09:48:51 -0400
+        id S1726629AbgDROJn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:09:43 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 57CC522251;
-        Sat, 18 Apr 2020 13:48:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B878322202;
+        Sat, 18 Apr 2020 14:09:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587217730;
+        s=default; t=1587218983;
         bh=tJx2Pw8jARz8g4y2ONxmN/CJIrowA+R2SLrDY7KpChs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wMISkFbdygIIEkHJr0ePKnGQPKNIFQSqQaU0ycKemhEWkoATXOFfbqGeTKHYXLCOu
-         OCQGH243gKG8VwhvZzQ7yBIpfaJAa+Jm8+HapJBGicP+hAY/NBu0e+pd3D2TS8Jhbb
-         1buLvuIzrb+SB8Q47cRufJ4xf4b2Doy4uJmaYJOE=
+        b=RzMwsvXSPskeRWMQL7uEYBYEG9Fikd2D4k05zx7KGtMAnj5fZK8Yig7NF1mNnS4dR
+         T30rki3ntpaQ1SqH1NaNnCj6IgvsXpY1BLeZWN1lx6TpVEm+lPRdoGBobloDC3S/tV
+         LqYjP3aA2E1qgfPxB5ERZ7o9OI2yoreMoO9wUt54=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Eric Biggers <ebiggers@google.com>,
@@ -36,12 +36,12 @@ Cc:     Eric Biggers <ebiggers@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 28/73] selftests: kmod: fix handling test numbers above 9
-Date:   Sat, 18 Apr 2020 09:47:30 -0400
-Message-Id: <20200418134815.6519-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 26/75] selftests: kmod: fix handling test numbers above 9
+Date:   Sat, 18 Apr 2020 10:08:21 -0400
+Message-Id: <20200418140910.8280-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418134815.6519-1-sashal@kernel.org>
-References: <20200418134815.6519-1-sashal@kernel.org>
+In-Reply-To: <20200418140910.8280-1-sashal@kernel.org>
+References: <20200418140910.8280-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
