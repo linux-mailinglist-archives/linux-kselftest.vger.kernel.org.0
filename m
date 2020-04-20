@@ -2,84 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0797D1AF79F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Apr 2020 08:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD621AFF6F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 03:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725910AbgDSGum (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Apr 2020 02:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbgDSGum (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Apr 2020 02:50:42 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A76C061A0C;
-        Sat, 18 Apr 2020 23:50:42 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id a22so3018701pjk.5;
-        Sat, 18 Apr 2020 23:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=faCl+8ZdE3Gy4jCSPjdomHs/AyJheMf/bvgsQt1IIJs=;
-        b=RAHAuRv6/BuQnAO2lg2sC/7E39P9HHXhLczNqLTyBWu3c5DeblViwTr7+PESUbW192
-         mUuvzBRSlDLoFjQPRgfvKgqVn+z3l1p+iUi60OMBVVyImabQG/5QsiD+u3pffnY9YsSN
-         vXIL379sJDRUDrjkYu6cagCunIrU1HK5fEap112EAGILsJ3GIVQy7nPiUBRNkXExgd3U
-         Kn3J2Tj6T8Dqr3VE2Vs/aQ2loOkGpD9K9yqBb2x6X5tLsz9N+AWR19HuONzOYqyb8I7P
-         AVBaRo+vNxC1Rv8wIbZ3I9VvhzYeoNPGIAtPQGbWc5OUwES/a5JVrKZq+7N33Am/wggX
-         VTWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=faCl+8ZdE3Gy4jCSPjdomHs/AyJheMf/bvgsQt1IIJs=;
-        b=Z9AcFFezA8U7JMRa+E8WUFj672V2w3GjQIPlAUPoBeL9fgfWlYYSK1aziAXdJfCht3
-         mkEKEaEI63MEICoqFgo8vF32qiHH+pBHbvwiVdLLt1oKPmJ570bzhAGhnGVGG7MyIAJ0
-         7bxzsDV41B1O17yIh8ecJ0wuIjviZEJrhaKtzrX5XesfPveskVqyZvkIpMGsbBN8fcnZ
-         Zi+fjK98M/j2KW5/j5kb8kKHjfWUXbJcX5sHyoQnK3P3B4GoaLAcsve+j9UfJKa/dHp6
-         8IuVvcv5xKP0/j7KHJbX+mRp04RTjvFk7K9V87oJRwbCyOSjBrGSLAE88Xa4Chmicxj5
-         U25g==
-X-Gm-Message-State: AGi0PuYGAkEB0/iALstgBq/oTskst2HeckwqvMyWTo28CbuxzdxsVIvT
-        XFzWFGvUV1BzDjBue/QCPzmPAzbg9HU=
-X-Google-Smtp-Source: APiQypKIbqSbuU86TBmODhvzaCr46wfo1a/l91UDmnufP0sw6M7+ogneuwSR5aJ9EP7R0hdgk2GTww==
-X-Received: by 2002:a17:90a:cb0b:: with SMTP id z11mr11610125pjt.62.1587279041802;
-        Sat, 18 Apr 2020 23:50:41 -0700 (PDT)
-Received: from CentOS76.localdomain.localdomain ([27.59.158.48])
-        by smtp.gmail.com with ESMTPSA id l15sm22573953pgk.59.2020.04.18.23.50.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 18 Apr 2020 23:50:41 -0700 (PDT)
-From:   jagdsh.linux@gmail.com
-To:     shuah@kernel.org, akpm@linux-foundation.org, bgeffon@google.com
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jagadeesh Pagadala <jagdsh.linux@gmail.com>
-Subject: [PATCH] tools/testing/selftests/vm: Remove duplicate headers
-Date:   Sun, 19 Apr 2020 12:19:44 +0530
-Message-Id: <1587278984-18847-1-git-send-email-jagdsh.linux@gmail.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1726402AbgDTBHW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Apr 2020 21:07:22 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:53906 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726386AbgDTBHU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 19 Apr 2020 21:07:20 -0400
+Received: from [10.130.0.79] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH2rB9ZxegukpAA--.17S3;
+        Mon, 20 Apr 2020 09:07:15 +0800 (CST)
+Subject: Re: [PATCH 4/4] test_kmod: Avoid potential double free in
+ trigger_config_run_type()
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        linux-kselftest@vger.kernel.org
+References: <53bf9145-db17-9123-2489-540eaf2733a6@web.de>
+Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <a917be73-202b-8e38-6039-cccda3e59a5f@loongson.cn>
+Date:   Mon, 20 Apr 2020 09:07:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <53bf9145-db17-9123-2489-540eaf2733a6@web.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxH2rB9ZxegukpAA--.17S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrWr4xJrWxZw4xXFyxWr4rXwb_yoWxArc_ur
+        y3JFykX3yUCasxuFsrW393JrZIgay5X3s5WrnrGay2kwnFvan7uaykJrsaqw4rG39xJrsI
+        krZYvr9rZr17CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
+        r21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jagadeesh Pagadala <jagdsh.linux@gmail.com>
+On 04/19/2020 01:23 AM, Markus Elfring wrote:
+>> It should set config->test_fs instead of config->test_driver as NULL
+>> after kfree_const(config->test_fs) to avoid potential double free.
+> I suggest to improve this change description.
+>
+> * How do you think about a wording variant like the following?
+>
+>    Reset the member “test_fs” of the test configuration after a call
+>    of the function “kfree_const” to a null pointer so that a double
+>    memory release will not be performed.
+>
+> * Would you like to add the tag “Fixes”?
+>
+> Regards,
+> Markus
 
-Code cleanup: Remove duplicate headers which are included twice.
+OK, I will send a v2 patch with the updated commit message and "Fixes" tag.
 
-Signed-off-by: Jagadeesh Pagadala <jagdsh.linux@gmail.com>
----
- tools/testing/selftests/vm/mremap_dontunmap.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/mremap_dontunmap.c b/tools/testing/selftests/vm/mremap_dontunmap.c
-index ee06cb0..3a7b5ef 100644
---- a/tools/testing/selftests/vm/mremap_dontunmap.c
-+++ b/tools/testing/selftests/vm/mremap_dontunmap.c
-@@ -11,7 +11,6 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
--#include <stdlib.h>
- #include <unistd.h>
- 
- #include "../kselftest.h"
--- 
-1.8.3.1
+Thanks,
+Tiezhu Yang
 
