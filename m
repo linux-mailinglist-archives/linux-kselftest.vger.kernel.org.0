@@ -2,106 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCC61B1441
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 20:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84E71B14CE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 20:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgDTSTf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Apr 2020 14:19:35 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41302 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726123AbgDTSTf (ORCPT
+        id S1727972AbgDTSiI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Apr 2020 14:38:08 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14145 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727931AbgDTSiI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 14:19:35 -0400
-Received: by mail-pl1-f193.google.com with SMTP id d24so4248735pll.8;
-        Mon, 20 Apr 2020 11:19:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=T7v8hOkx9WmIy3YT7d2v0dE+Bx4o1hmDGi8iBopJx8s=;
-        b=BsySMqaAcPXGGn3krkyUXsewJQoYTRz0tKGMsHlPAXRyPv/5fPKZdgkH+UAFvykbhO
-         NznnhAHnSm4GCUKUO3IFUdGpkLi2CJgwjcgOUVkINLB+MWy5xbdWRvAhI4Qxmf0NuPhM
-         4ie+r/3mGnUJ3rmM9PJbJIaBsYnm1fuZx9BMokJecGwCxBg2cx2DJX1rF8qjuYJ/PWcC
-         anG6IUNazIOCuq/uqGvz8wFC2yd9sYkiJFFdYOCar6htV78ITfMgrFop03Wi+NkxfgCd
-         t4aQ1XzTn1RrxgE1gOr4emu8DySnxBh0po9L6gmlc9KWu8Q1XgCr8hYKeezaIzsZ1A34
-         Q+4A==
-X-Gm-Message-State: AGi0PuZtpZY1CA0GG0e6YLTjwakBJGhfVzWlSf3cE3033BsJXlvRzX13
-        xb3gjY19tagqnpuIZ24CCfcMBLhG/W0=
-X-Google-Smtp-Source: APiQypIXOYg11jQH19yBATdPxBOUTTvM6LmfAQB6BGlPXyvZz1WWKkiNQzkriWbPYZ8XEQCiV4mz3w==
-X-Received: by 2002:a17:90a:1955:: with SMTP id 21mr750807pjh.133.1587406772794;
-        Mon, 20 Apr 2020 11:19:32 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id j14sm35043pjm.27.2020.04.20.11.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 11:19:31 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 12DF74028E; Mon, 20 Apr 2020 18:19:31 +0000 (UTC)
-Date:   Mon, 20 Apr 2020 18:19:31 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH v3 3/4] kmod: Return directly if module name is empty in
- request_module()
-Message-ID: <20200420181931.GJ11244@42.do-not-panic.com>
-References: <1587386035-5188-1-git-send-email-yangtiezhu@loongson.cn>
- <1587386035-5188-4-git-send-email-yangtiezhu@loongson.cn>
+        Mon, 20 Apr 2020 14:38:08 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e9deb9d0000>; Mon, 20 Apr 2020 11:36:13 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 20 Apr 2020 11:38:07 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 20 Apr 2020 11:38:07 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Apr
+ 2020 18:38:07 +0000
+Received: from rcampbell-dev.nvidia.com (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Apr
+ 2020 18:38:04 +0000
+Subject: Re: [PATCH v9 3/3] MAINTAINERS: add HMM selftests
+To:     Joe Perches <joe@perches.com>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20200417235458.13462-1-rcampbell@nvidia.com>
+ <20200417235458.13462-4-rcampbell@nvidia.com>
+ <13a8e8efd56d00945e375760f7f065fb020287a1.camel@perches.com>
+X-Nvconfidentiality: public
+From:   Ralph Campbell <rcampbell@nvidia.com>
+Message-ID: <e2006240-27b8-ceef-68bf-2769d2a77ccd@nvidia.com>
+Date:   Mon, 20 Apr 2020 11:38:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1587386035-5188-4-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <13a8e8efd56d00945e375760f7f065fb020287a1.camel@perches.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1587407773; bh=GJO2T/9pMFVSG1zuEWD7YSOrm1UFp+OyX1sarWLp1Q4=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=qdR0buXekI0fSG1y/vcH+5q5zr2hB8qT2ACM0FV9Z+iN+ZS5y0IF4H50jZNsBIMvn
+         Mm8Dmji15xrUgzyYjObLxvQtgVRP+lsHL+3KagOM+1/lVSJqHCTjvX6OWFat9hJMjp
+         ghUHzyVXNzgIDGvQSMb+VnodCQeAjhiUbO0viX7k7mvtGPM3mMxq1q6heoDuMfnIgI
+         tkOow5KGZfkSD+/WL1roUKAhTSLLoM8eHzRrdV22OsCMOyClEFoi8jIwJVRacrkO2T
+         kKw8H8pk1LLchbd3BY+31Y6ifu6keFUP4WK/EfAgE7m/qks2yo/8ReyGzOK0OYvOQy
+         CXSFL5Rjpw36g==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 20, 2020 at 08:33:54PM +0800, Tiezhu Yang wrote:
-> If module name is empty, it is better to return directly at the beginning
-> of request_module() without doing the needless call_modprobe() operation.
-> 
-> Call trace:
-> 
-> request_module()
->       |
->       |
-> __request_module()
->       |
->       |
-> call_modprobe()
->       |
->       |
-> call_usermodehelper_exec() -- retval = sub_info->retval;
->       |
->       |
-> call_usermodehelper_exec_work()
->       |
->       |
-> call_usermodehelper_exec_sync() -- sub_info->retval = ret;
->       |
->       | --> call_usermodehelper_exec_async() --> do_execve()
->       |
-> kernel_wait4(pid, (int __user *)&ret, 0, NULL);
-> 
-> sub_info->retval is 256 after call kernel_wait4(), the function
-> call_usermodehelper_exec() returns sub_info->retval which is 256,
-> then call_modprobe() and __request_module() returns 256.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-Thanks for looking into this. I still cannot find where
-userspace it returns 256. Can you? If I run modprobe without
-an argument I see 1 returned.
+On 4/17/20 5:59 PM, Joe Perches wrote:
+> On Fri, 2020-04-17 at 16:54 -0700, Ralph Campbell wrote:
+>> Add files for HMM selftests.
+>>
+>> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+>> ---
+>>   MAINTAINERS | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index e64e5db31497..072921b7bae2 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7729,6 +7729,9 @@ S:	Maintained
+>>   F:	Documentation/vm/hmm.rst
+>>   F:	include/linux/hmm*
+>>   F:	mm/hmm*
+>> +F:	include/uapi/linux/test_hmm*
+>> +F:	lib/test_hmm*
+>> +F:	tools/testing/selftests/vm/*hmm*
+> 
+> file patterns in alphabetic order please:
+> 
+> F	Documentation/vm/hmm.rst
+> F:	include/linux/hmm*
+> F:	include/uapi/linux/test_hmm*
+> F:	lib/test_hmm*
+> F:	mm/hmm*
+> F:	tools/testing/selftests/vm/*hmm*	
+> 
 
-At least kmod [0] has a series of cmd helper structs, the one for modprobe
-seems to be kmod_cmd_compat_modprobe, and I can see -1 returned which
-can be converted to 255. It can also return EXIT_FAILURE or EXIT_SUCCESS
-and /usr/include/stdlib.h defines these as 1 and 0 respectively.
-
-https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/
-
-  Luis
+No problem. Will fix in the next posting.
+Thanks.
