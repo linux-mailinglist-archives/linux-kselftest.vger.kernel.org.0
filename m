@@ -2,132 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BD31B1131
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 18:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58011B11E2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 18:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726432AbgDTQLk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Apr 2020 12:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S1726788AbgDTQky (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Apr 2020 12:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725958AbgDTQLk (ORCPT
+        by vger.kernel.org with ESMTP id S1726728AbgDTQkG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:11:40 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7885BC061A0C
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:11:40 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id h69so5277975pgc.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:11:40 -0700 (PDT)
+        Mon, 20 Apr 2020 12:40:06 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36914C061A10
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:30 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id f13so12941223wrm.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KEO68H9LWxUP8e7V9qIEZ4RFCwqXB+4bdYHYEcs5ssU=;
-        b=AOyItZaa1cf6ofqtJl1E1UyuujFCehxcBbtHwHSAHnRzg2vnQXHPdHcChTJn5kxN6B
-         EeaQtKuUJoHl6IN/NzdZb4yITxbBeodZg09MMNGygDJi6GLVqWdqKEkVocOUohoHW2ZL
-         vN1pg3ku8nh/exZJjBqI4vltQcqt+HHcThFvVI0908UFCHXjuRwaA+slyK9q+5X5EzLx
-         YMf84ZbB0tMIXS0iHwdPDYsVQrNj9Au3ZA0hUd4wwmFWAlHATg6AAwNWvuES33cH/Z9V
-         PxEP15DwFmt8eP/WH/znIkz5rx4ogwMRZS9Tlsyf6lLjKD7jZmvPlrl3uUgpUnu79pPH
-         5EJw==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=y6BXvIfk0R/gZ0twMeBQX3iT31MGytnoVIMSO2j5UM0=;
+        b=aum878dLf5/Y73XSxFsTat47TJHjOeeg6LINMRbsCZDiJlT48QPf0++SYSxzUx6CvN
+         bP3h04KO1U856CbHH3qzKQxtE2Stix58x5qHJ4KxpWNlK7l9DFAVmhwM9jnbliYXnJmb
+         VzRvCxVX2K9PVqBCJYdvPhCKFzQBjxMWyUR+A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KEO68H9LWxUP8e7V9qIEZ4RFCwqXB+4bdYHYEcs5ssU=;
-        b=O7/CbXrYZt8BOx4OuiqXFNjnnto8XZUi5iL641zKhtvdJ6LZqqhr3hDnAkqpUhaP7L
-         4kY97HtiswbYvsNP5hZPU8x06zzXI7Y3LAR/xAFkxQlGCWMU7N8ziOfmgv8rKNqcMLy6
-         h8+mHyvdxfhgdOI8hm/KoUiVo716m+wb6no6OlRZzKuKAjcgIUvR0w7NA0KIBLmxNgSX
-         6gR9l5n7dnzDro2BWrhuLoFTbzDrb+b1Ub4K1rDkhQS9KIeC9q3cz7WEk1ZZf+vBUEV8
-         tL4kwoqtck38uSUnC61hi3Kf+G6OU7EWIQTTj5fufQ3czmX0XgF+aToopgBYYRPziUtu
-         naWg==
-X-Gm-Message-State: AGi0PuaJJ5jiWiGdr2men04uc2k3S7vXfvOi1g7PQEzWZkvcfSGTMsSc
-        cia/HDko+cl06Hm/kMoYJUVlSwkRdnHsiVqIewnYdAA4
-X-Google-Smtp-Source: APiQypLk63D8vwXRkZXdPPbMeBIl9gET7jIvY60vpotreHbVObfVflSlVmvHjtNKUDloHkgGG6Vc+AW80Pd0gfR8JaQ=
-X-Received: by 2002:a63:1007:: with SMTP id f7mr15218133pgl.384.1587399099757;
- Mon, 20 Apr 2020 09:11:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200418172554.GA802865@mwanda>
-In-Reply-To: <20200418172554.GA802865@mwanda>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 20 Apr 2020 09:11:28 -0700
-Message-ID: <CAFd5g46mUAbxtnnEMx2+-mQbryFpr+SENgcvV34kcKsYNy2s_Q@mail.gmail.com>
-Subject: Re: [bug report] kunit: test: add support for test abort
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=y6BXvIfk0R/gZ0twMeBQX3iT31MGytnoVIMSO2j5UM0=;
+        b=HHIRrVlJa1nQnLrN2HytWL+pSt7HL+zITPlyWGpHAoiusaSrQIl6tUv6tncJtidBgF
+         Um2qDcuKw8vkrQiSVgcKdoGzPPICCqSC1EZcWJeVwSFyPlNqoE8AWF021Bw9v1HVg9q/
+         ZgITQ23RYZUIYy8IQS4hbA3ZRNwvZFDHRUcWrjO5cXbmK12vR/iaPoGGBE6wBe0nlJrQ
+         LaMugzMHwYAnb1lCVBJzARHp0a/hmwUT4f5WovePr7tPgLJ7jMy5EvBCPAR0PFB/NsNL
+         EVHQSL1xjtI2LJ84jHjMAhBOb+CunF+w7VEw7fPRUVx5Zbeuq6YQiS4gPukD+Y50k2fE
+         WqNw==
+X-Gm-Message-State: AGi0PuYUWXv2CBZUQ7DVHAAGbyTegNHyHzlfA+n3caexbGmOIdszOfJo
+        2L/Xia+3yRBteA87iR1IimGNJA==
+X-Google-Smtp-Source: APiQypK0GeQ9aWgjyRkEgInVfvj7aKu6g0F7ig6yHsVbodIn5FHUwC9TJ6Lfy8OKLglWlXCBO27LYw==
+X-Received: by 2002:a05:6000:110a:: with SMTP id z10mr19362693wrw.389.1587400108867;
+        Mon, 20 Apr 2020 09:28:28 -0700 (PDT)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id 36sm14882wrc.35.2020.04.20.09.28.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 09:28:27 -0700 (PDT)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH v3 0/7] firmware: add partial read support in request_firmware_into_buf
+Date:   Mon, 20 Apr 2020 09:28:02 -0700
+Message-Id: <20200420162809.17529-1-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 10:26 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> Hello Brendan Higgins,
->
-> The patch 5f3e06208920: "kunit: test: add support for test abort"
-> from Sep 23, 2019, leads to the following static checker warning:
->
->         lib/kunit/try-catch.c:93 kunit_try_catch_run()
->         misplaced newline? '    # %s: Unknown error: %d
->
-> lib/kunit/try-catch.c
->     58  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
->     59  {
->     60          DECLARE_COMPLETION_ONSTACK(try_completion);
->     61          struct kunit *test = try_catch->test;
->     62          struct task_struct *task_struct;
->     63          int exit_code, time_remaining;
->     64
->     65          try_catch->context = context;
->     66          try_catch->try_completion = &try_completion;
->     67          try_catch->try_result = 0;
->     68          task_struct = kthread_run(kunit_generic_run_threadfn_adapter,
->     69                                    try_catch,
->     70                                    "kunit_try_catch_thread");
->     71          if (IS_ERR(task_struct)) {
->     72                  try_catch->catch(try_catch->context);
->     73                  return;
->     74          }
->     75
->     76          time_remaining = wait_for_completion_timeout(&try_completion,
->     77                                                       kunit_test_timeout());
->     78          if (time_remaining == 0) {
->     79                  kunit_err(test, "try timed out\n");
->                                                       ^^
-> The kunit_log() macro adds its own newline.  Most of the callers add
-> a newline.  It should be the callers add a newline because that's how
-> everything else works in the kernel.
+This patch series adds partial read support in request_firmware_into_buf.
+In order to accept the enhanced API it has been requested that kernel
+selftests and upstreamed driver utilize the API enhancement and so
+are included in this patch series.
 
-Whoops, I thought I removed that extra newline.
+Also in this patch series is the addition of a new Broadcom VK driver
+utilizing the new request_firmware_into_buf enhanced API.
 
-Thanks! I will look into this.
+Changes from v2:
+ - remove unnecessary code and mutex locks in lib/test_firmware.c
+ - remove VK_IOCTL_ACCESS_BAR support from driver and use pci sysfs instead
+ - remove bitfields
+ - remove Kconfig default m
+ - adjust formatting and some naming based on feedback
+ - fix error handling conditions
+ - use appropriate return codes
+ - use memcpy_toio instead of direct access to PCIE bar
+ - 
 
-> The dev_printk() stuff will sometimes add a newline, but never a
-> duplicate newline.  In other words, it's slightly complicated.  But
-> basically the caller should add a newline.
->
->     80                  try_catch->try_result = -ETIMEDOUT;
->     81          }
->     82
->     83          exit_code = try_catch->try_result;
->     84
->     85          if (!exit_code)
->     86                  return;
->     87
->     88          if (exit_code == -EFAULT)
->     89                  try_catch->try_result = 0;
->     90          else if (exit_code == -EINTR)
->     91                  kunit_err(test, "wake_up_process() was never called\n");
->                                                                            ^^
->
->     92          else if (exit_code)
->     93                  kunit_err(test, "Unknown error: %d\n", exit_code);
->                                                           ^^
->
->     94
->     95          try_catch->catch(try_catch->context);
->     96  }
->
-> regards,
-> dan carpenter
+Scott Branden (7):
+  fs: introduce kernel_pread_file* support
+  firmware: add offset to request_firmware_into_buf
+  test_firmware: add partial read support for request_firmware_into_buf
+  firmware: test partial file reads of request_firmware_into_buf
+  bcm-vk: add bcm_vk UAPI
+  misc: bcm-vk: add Broadcom VK driver
+  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
+
+ MAINTAINERS                                   |    7 +
+ drivers/base/firmware_loader/firmware.h       |    5 +
+ drivers/base/firmware_loader/main.c           |   52 +-
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/bcm-vk/Kconfig                   |   41 +
+ drivers/misc/bcm-vk/Makefile                  |   12 +
+ drivers/misc/bcm-vk/bcm_vk.h                  |  406 +++++
+ drivers/misc/bcm-vk/bcm_vk_dev.c              | 1179 ++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_legacy.c           |   89 ++
+ drivers/misc/bcm-vk/bcm_vk_msg.c              | 1420 +++++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.h              |  215 +++
+ drivers/misc/bcm-vk/bcm_vk_sg.c               |  271 ++++
+ drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
+ drivers/misc/bcm-vk/bcm_vk_tty.c              |  323 ++++
+ drivers/soc/qcom/mdt_loader.c                 |    7 +-
+ fs/exec.c                                     |   96 +-
+ include/linux/firmware.h                      |    8 +-
+ include/linux/fs.h                            |   20 +
+ include/uapi/linux/misc/bcm_vk.h              |   99 ++
+ lib/test_firmware.c                           |  144 +-
+ .../selftests/firmware/fw_filesystem.sh       |   80 +
+ 22 files changed, 4487 insertions(+), 49 deletions(-)
+ create mode 100644 drivers/misc/bcm-vk/Kconfig
+ create mode 100644 drivers/misc/bcm-vk/Makefile
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_legacy.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
+ create mode 100644 include/uapi/linux/misc/bcm_vk.h
+
+-- 
+2.17.1
+
