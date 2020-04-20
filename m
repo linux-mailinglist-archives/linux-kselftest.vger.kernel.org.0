@@ -2,104 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAD71B11EC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 18:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D761B1241
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 18:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726967AbgDTQlG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Apr 2020 12:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
+        id S1725784AbgDTQtb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Apr 2020 12:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726596AbgDTQkG (ORCPT
+        by vger.kernel.org with ESMTP id S1725774AbgDTQta (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:40:06 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF579C025489
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:29:09 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j1so7545521wrt.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:29:09 -0700 (PDT)
+        Mon, 20 Apr 2020 12:49:30 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63197C061A0C
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:49:30 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id d17so5354039pgo.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:49:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=7w9nmNBGsjZ8g1AxOpY7S0OshnRpEqggc1V4tLkIMBE=;
-        b=Lu423NaxJcOuv3tL9qo5zCo91sQCGKojRmKGPt5ASvT/+1z21bFxziGVKdJ1lHgqC0
-         Xy+A4Dn7LEKPZ2eJiWMDqlklvuTPBgebuQmMuqSeCArvmUO7MtS2zsv8PLlrv3BDdVWU
-         6a8w7IS2I3moR0lRjQhdc5iTncFpasLv8ZKSo=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2yvI22+u+gf9MypeTzZela5sCiKd871YLPLu1ATUeBk=;
+        b=GxgFXMK2rL0HnR0HxmuJ2hgV61hAWHC2J6x6EEfY2BMzNDUfsfr4hotTf0FRdlCPt+
+         Rvepb9Hka80bMuFrumwybzQHSQy+Yv0ctg4EnJq9owlquXt/LJ65biZedGtAoak6JObw
+         MuolE9od/S/Nr71GwAl+yoF0rTT2Cm/NQnXPQQWwdoIGh43ZVji4sPiQvwR1yqm9SPi3
+         ZMbo9nMEBvOOKWAnXeCkyb/j8uaQUYpcJHNB3v2leaL9ZMnoHrF/32U5FPGE0dYBoAye
+         NPzTO8zCOLdVQ3NdONA10/onsZWxExGCbIFUzaEUAWnQtkFk1zO/UF+N8Gp+94S2f9W/
+         +3ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=7w9nmNBGsjZ8g1AxOpY7S0OshnRpEqggc1V4tLkIMBE=;
-        b=Gb3IiAWd93w8fXbEBf07/YcAGiKzbxffMClZojB6jSHHRLd/8HV2PGmXHjlettUcUO
-         oCSICbtgREbwMn4F640AePyS4U1BrRRQFN/bPpkwrOFt2AgEMi2kxStXTa2EAnULJ/FG
-         Ydr+VREwedj7Z4P21XCiAuA8zGOdXFItY44XzHRnABS2gA+4rKV9ss6jvB8mrnd1ZcKn
-         R41l7VdkfI3A5JijOV3CHHZs+V/BxzwlttzxyeTz+Pano/NyDuTZjiT2mJj+BI1nYjOP
-         c4DcSo16Arv8Ieq3LWfMeuwj3+7xsQ4/r+VRaCNNxCeK6cepPreQh9Zkq17zppvoObrH
-         n+Yw==
-X-Gm-Message-State: AGi0PuZ7TPLmx5HGOrDEEORKnffqnQupd9ZfS/O4A8bqwTM1KTqslhE6
-        1Y3dwaQdM8w6VAvh02zleeD2cQ==
-X-Google-Smtp-Source: APiQypKPXicdNeBpGeejqBN55m76c7gdscTrrUzk+O2mrsEu1hvr1swh/4BLxL2SP5wH9fOGY+aP9w==
-X-Received: by 2002:adf:bb84:: with SMTP id q4mr18506761wrg.141.1587400148536;
-        Mon, 20 Apr 2020 09:29:08 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id 36sm14882wrc.35.2020.04.20.09.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 09:29:07 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v3 7/7] MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
-Date:   Mon, 20 Apr 2020 09:28:09 -0700
-Message-Id: <20200420162809.17529-8-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200420162809.17529-1-scott.branden@broadcom.com>
-References: <20200420162809.17529-1-scott.branden@broadcom.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2yvI22+u+gf9MypeTzZela5sCiKd871YLPLu1ATUeBk=;
+        b=p459AWG40DTrvDLmE/Q0ihi2B2OgtOuH4+uezsez0hylWqRr4Yi0k/wlFTyy7F2ozF
+         RdmEDtf2ZITVyqUWgTfP1WmiZ2bj8Bxgu+S5iXEs0AqZMjC3f70pZgwiNh4xmmQJJ31h
+         LCqc1wZ82br/WiQXCbhIaAB5iKm5v+jsUKCrpGqKF2gCnXEn44mTRkF6/LGQUHc761JD
+         h3k+WQzuUv9xeQKNH7NtrX0KyE8PGGCuQF8L6HIL3QInpTVioiRZnp2q8v3p0GajJ7Ox
+         kZndGwYFjNpJwU1R/KiPR3AVdOakzalcQo17f2SKoibqUeUHoK7om4nZShUQFNoYh2IW
+         w/yg==
+X-Gm-Message-State: AGi0Pub/IX6+KZHAmP4f/x9MLWbXAbGd76eaHApJJmMWEPF8JXB1EZaP
+        7207xf/s+s4r9j7feR1DJLYKT4E2kO5t1AvdstX72w==
+X-Google-Smtp-Source: APiQypJAptSKDPqDUjCokIUFPP2sEcqLJFp/eeN8JZNdVnqASMauA0erPS1uMYEJXo5BV/Q9vv53Z7IwabW/O9TPK60=
+X-Received: by 2002:a63:1007:: with SMTP id f7mr15364892pgl.384.1587401369605;
+ Mon, 20 Apr 2020 09:49:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200415201653.106-1-l.rubusch@gmail.com>
+In-Reply-To: <20200415201653.106-1-l.rubusch@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 20 Apr 2020 09:49:18 -0700
+Message-ID: <CAFd5g47tOo2fQCc4GSFAist9b3pef0C6fYiV9bOf=sdfgAyd8g@mail.gmail.com>
+Subject: Re: [PATCH v5] Documentation: test.h - fix warnings
+To:     Lothar Rubusch <l.rubusch@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add maintainer entry for new Broadcom VK Driver
+On Wed, Apr 15, 2020 at 1:18 PM Lothar Rubusch <l.rubusch@gmail.com> wrote:
+>
+> Fix warnings at 'make htmldocs', and formatting issues in the resulting
+> documentation.
+>
+> - test.h: Fix annotation in kernel-doc parameter description.
+>
+> - Documentation/*.rst: Fixing formatting issues, and a duplicate label
+>   issue due to usage of sphinx.ext.autosectionlabel and identical labels
+>   within one document (sphinx warning)
+>
+> Signed-off-by: Lothar Rubusch <l.rubusch@gmail.com>
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e64e5db31497..ca6a66c09db3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3610,6 +3610,13 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/ethernet/broadcom/tg3.*
- 
-+BROADCOM VK DRIVER
-+M:	Scott Branden <scott.branden@broadcom.com>
-+L:	bcm-kernel-feedback-list@broadcom.com
-+S:	Supported
-+F:	drivers/misc/bcm-vk/
-+F:	include/uapi/linux/misc/bcm_vk.h
-+
- BROCADE BFA FC SCSI DRIVER
- M:	Anil Gurumurthy <anil.gurumurthy@qlogic.com>
- M:	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
--- 
-2.17.1
+FYI: I already gave you a Reviewed-by. In the future, please add
+Reviewed-bys you get to any follow-up patches. (You don't have to do
+anything if you get a Reviewed-by and don't have to send follow-up
+revisions.)
 
+Let me know if you have any questions about how this works.
+
+> ---
+> v2: Several documentation fixes
+>
+> v3: Do not touch API documentation index
+>
+> v4: Replace macro argument in test.h by named variadic argument
+>
+> v5: Patch format fixed
+>
+> NB: checkpatch.pl will complain about flow control statements (i.e. usage
+>     of "return") within the macro kunit_test_suites(suites_list...).
+
+Yeah, it's a "bad code smell", but not necessarily always wrong, so
+right now we don't have anything better than to just always warn and
+sometimes ignore.
+
+> Better?
+
+Looks good to me!
+
+> I feel I'm making you a lot of extra work. I'm really sorry for
+> all this fuzz!
+
+No worries. Our documentation/on-boarding processes are at best not
+very good and at worst non-existent, so this is pretty much just par
+for the course.
+
+Thanks for sticking with this! I know getting up to speed on upstream
+Linux kernel development can be painful and tedious. I have been there
+myself, and I still make lots of silly mistakes. :-)
+
+Sorry, if I ever seemed impatient: I am not annoyed. I respond to
+dozens of emails everyday, so I can sometimes get rather terse as a
+result of trying to be expedient. I hope you understand!
+
+Trust me, once you go to a Linux conference and you meet some devs,
+you will find that in person, most of us are super nice people, even
+the ones who can *seem* mean and frustrated on the list.
+
+Thanks for the patch! Hope to see you around in the community!
