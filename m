@@ -2,94 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D7B1B14D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 20:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECFB1B16D2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 22:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbgDTSj2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Apr 2020 14:39:28 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:4729 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726492AbgDTSj2 (ORCPT
+        id S1726006AbgDTUXL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Apr 2020 16:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725988AbgDTUXK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 14:39:28 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e9dec220002>; Mon, 20 Apr 2020 11:38:26 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 20 Apr 2020 11:39:27 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 20 Apr 2020 11:39:27 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Apr
- 2020 18:39:27 +0000
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Apr
- 2020 18:39:26 +0000
-Subject: Re: [PATCH v9 3/3] MAINTAINERS: add HMM selftests
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Jerome Glisse" <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        Jason Gunthorpe <jgg@mellanox.com>,
+        Mon, 20 Apr 2020 16:23:10 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2334BC061A10
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 13:23:10 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id u15so11553868ljd.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 13:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CuRp/kkTGXEMux5bgsIo3QW+RdRZxdATUglGSRF3hAg=;
+        b=c5S3+Z5nEopbu09u5DjyVYMtQfUwx7xcO7OiL/GTmj2QqkZy/KM/OvgBGCCJQugEl7
+         s6r/w8EYr8aljdzxYprJ07sXIvRPAgw58EhTUhgUJKIavNbBiScdXVZYCXmlQ+LxxI8B
+         8luq4d1ebkxREBHZmWjpTFMo5qLJWzg5A0XYtPkRPIx4OFABhOvacveltjJc5Wdda7mx
+         3k5HfOTiJxkyjX2ZJKJi2OCmJGleHmT8Qb2ZggMD2mVFt1y9/00XrOgUhz303UrbHTTn
+         RKw3ufXsHZlocyVOTMnJ7bxflOhCfoIqXjfr6b5Qmlu9zXnhzLVXmlsnDgJ56eHRYH6S
+         5YUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CuRp/kkTGXEMux5bgsIo3QW+RdRZxdATUglGSRF3hAg=;
+        b=Mx1d0h9v1o5P0Im3N6kyDUcbW3FhnT1W+LwtOlFLbt8v74RGLcv3PnICwN/9zK64+K
+         wJguobtvGsG7ABbSjjA1OR8i9JxHA0VioS/CNc5sAf6gVfsdIsbJvhzQOh5vgQX3tp2J
+         2fB5evkSw7YDvL45+B/BUr4jdDZitCq6e4uU/qfwiv8iWNx786X8tw6hIsOdUPOfxG1W
+         e3jeQHaZ8hUr8LOMTGwMmsP0MbHuSiG7TXQLDQBQrjK9a72ff4fu9n4/5AbyTm7jI3i4
+         J87gkPbXV7Tn48jsERTzj5oYQjpDbtQFRLLUyxcJJx2r5DDJ26Okk2Rqy9P5CEswjDbE
+         5yBA==
+X-Gm-Message-State: AGi0PuYT8culk6qtPaIkevcAQTTVZV+ZXyaISAvlpRuVqlTv+wbX9JeZ
+        DC69Ghwd4oYOLIPdCOhTTv5VqA==
+X-Google-Smtp-Source: APiQypIe7ofdBVgkbqdERU9/MDZTLo5v/el4i+71zRDMmRE4Q9LM7F+EC7G8sK2mDnu0mQPPmuMGzg==
+X-Received: by 2002:a2e:8805:: with SMTP id x5mr11577593ljh.223.1587414188514;
+        Mon, 20 Apr 2020 13:23:08 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id x24sm344419lfc.6.2020.04.20.13.23.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 13:23:07 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 07398103037; Mon, 20 Apr 2020 23:23:12 +0300 (+03)
+Date:   Mon, 20 Apr 2020 23:23:11 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Colin King <colin.king@canonical.com>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zi Yan <ziy@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20200417235458.13462-1-rcampbell@nvidia.com>
- <20200417235458.13462-4-rcampbell@nvidia.com> <20200418060651.GI3083@unreal>
-X-Nvconfidentiality: public
-From:   Ralph Campbell <rcampbell@nvidia.com>
-Message-ID: <95f046e5-74c4-cb34-c7a0-056d47e131cb@nvidia.com>
-Date:   Mon, 20 Apr 2020 11:39:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][V2][next] selftests: khugepaged: fix several spelling
+ mistakes
+Message-ID: <20200420202311.srpxl7jrbdjus642@box>
+References: <20200420084241.65433-1-colin.king@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <20200418060651.GI3083@unreal>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1587407906; bh=UO48xKNQQkbx0fToE/eGIFWIt+8G+Q0r/bKLmM4b5VI=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=kQXIwptChFeHtXFhW/NZVAWCUcyDN1AFmkVJszwzOlnCtzrAIkZFy+p/WU8c20lX+
-         gf/9Hgl4TJYcIztiIlHwN470CqvFV89LJEeDlDxO3cvWB7RKbc5UtyDgixJ4s+86oJ
-         Pt+FMveMttbKPLRgnewlKXzsqf9n10I4PKFp8nbaGGe/0WpLnQlq9kmtw21bt6XXwf
-         ALib0Lzlkb8/iIN3SL2T8eXrhwL+IU/MEuBp7nX/X8tpaVyJyGtlhRT3rqr3yhkpQc
-         jtKCbf9qtVijfwCN8XRIQnzcH6KdGPe70Ow8YAP7fuazdUpW61tJZDqsciFGoPfzSd
-         Y19u1ZETdBNYw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200420084241.65433-1-colin.king@canonical.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-On 4/17/20 11:06 PM, Leon Romanovsky wrote:
-> On Fri, Apr 17, 2020 at 04:54:58PM -0700, Ralph Campbell wrote:
->> Add files for HMM selftests.
->>
->> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
->> ---
->>   MAINTAINERS | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index e64e5db31497..072921b7bae2 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -7729,6 +7729,9 @@ S:	Maintained
->>   F:	Documentation/vm/hmm.rst
->>   F:	include/linux/hmm*
->>   F:	mm/hmm*
->> +F:	include/uapi/linux/test_hmm*
+On Mon, Apr 20, 2020 at 09:42:41AM +0100, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> This line is not needed anymore.
+> There a are several spelling mistakes in various messages. Fix these.
 > 
-> Thanks
+> There are three spelling mistakes in various messages. Fix these.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Thank you. I'll fix this in the next posting.
+Thanks a lot.
+
+Andrew, could you fold them in? Or should I resend?
+
+-- 
+ Kirill A. Shutemov
