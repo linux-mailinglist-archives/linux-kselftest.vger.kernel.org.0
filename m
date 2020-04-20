@@ -2,89 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECFB1B16D2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 22:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A96F1B18FD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Apr 2020 00:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726006AbgDTUXL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Apr 2020 16:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
+        id S1726181AbgDTWDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Apr 2020 18:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgDTUXK (ORCPT
+        with ESMTP id S1726056AbgDTWDy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 16:23:10 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2334BC061A10
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 13:23:10 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id u15so11553868ljd.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 13:23:10 -0700 (PDT)
+        Mon, 20 Apr 2020 18:03:54 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBB9C061A0E
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 15:03:53 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 145so3355502pfw.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 15:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CuRp/kkTGXEMux5bgsIo3QW+RdRZxdATUglGSRF3hAg=;
-        b=c5S3+Z5nEopbu09u5DjyVYMtQfUwx7xcO7OiL/GTmj2QqkZy/KM/OvgBGCCJQugEl7
-         s6r/w8EYr8aljdzxYprJ07sXIvRPAgw58EhTUhgUJKIavNbBiScdXVZYCXmlQ+LxxI8B
-         8luq4d1ebkxREBHZmWjpTFMo5qLJWzg5A0XYtPkRPIx4OFABhOvacveltjJc5Wdda7mx
-         3k5HfOTiJxkyjX2ZJKJi2OCmJGleHmT8Qb2ZggMD2mVFt1y9/00XrOgUhz303UrbHTTn
-         RKw3ufXsHZlocyVOTMnJ7bxflOhCfoIqXjfr6b5Qmlu9zXnhzLVXmlsnDgJ56eHRYH6S
-         5YUA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GkO5OPMfjblm2nsbFSt6vLqg6Y5q/RvWe2WQ/AkzzSw=;
+        b=RLT9hDOhYDaVrOb3NQXEzKxLHu29Fry2nuuaORCMrniqJ6qFBrzkqExYtQsHcw+PV3
+         7O6N4Js3skiA85xYqwa4OXyxNXaoSVywnwsyGIBQPrrbuM+9qedw62FvSYonGlzH53Vp
+         1ZRz9H3HA+v1LH386c5pUp+6yQc6fYgdisIlUJGHsnvepCqAHnzS4jBNtwViMFUv8EW4
+         j5IxVqiUy04j74GBYjPPr3O8I8HZonBfK2NKdS4ew22JAAKHNLOE0aAsC1XkNJ1z2jbh
+         cgvOnISKLT1x4FXcUcTTYnqEbZpOq81T25jZLx2CWYni87ck/VIgHgmrqSacW5pVV4Oh
+         aJLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CuRp/kkTGXEMux5bgsIo3QW+RdRZxdATUglGSRF3hAg=;
-        b=Mx1d0h9v1o5P0Im3N6kyDUcbW3FhnT1W+LwtOlFLbt8v74RGLcv3PnICwN/9zK64+K
-         wJguobtvGsG7ABbSjjA1OR8i9JxHA0VioS/CNc5sAf6gVfsdIsbJvhzQOh5vgQX3tp2J
-         2fB5evkSw7YDvL45+B/BUr4jdDZitCq6e4uU/qfwiv8iWNx786X8tw6hIsOdUPOfxG1W
-         e3jeQHaZ8hUr8LOMTGwMmsP0MbHuSiG7TXQLDQBQrjK9a72ff4fu9n4/5AbyTm7jI3i4
-         J87gkPbXV7Tn48jsERTzj5oYQjpDbtQFRLLUyxcJJx2r5DDJ26Okk2Rqy9P5CEswjDbE
-         5yBA==
-X-Gm-Message-State: AGi0PuYT8culk6qtPaIkevcAQTTVZV+ZXyaISAvlpRuVqlTv+wbX9JeZ
-        DC69Ghwd4oYOLIPdCOhTTv5VqA==
-X-Google-Smtp-Source: APiQypIe7ofdBVgkbqdERU9/MDZTLo5v/el4i+71zRDMmRE4Q9LM7F+EC7G8sK2mDnu0mQPPmuMGzg==
-X-Received: by 2002:a2e:8805:: with SMTP id x5mr11577593ljh.223.1587414188514;
-        Mon, 20 Apr 2020 13:23:08 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id x24sm344419lfc.6.2020.04.20.13.23.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 13:23:07 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 07398103037; Mon, 20 Apr 2020 23:23:12 +0300 (+03)
-Date:   Mon, 20 Apr 2020 23:23:11 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Colin King <colin.king@canonical.com>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zi Yan <ziy@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][V2][next] selftests: khugepaged: fix several spelling
- mistakes
-Message-ID: <20200420202311.srpxl7jrbdjus642@box>
-References: <20200420084241.65433-1-colin.king@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GkO5OPMfjblm2nsbFSt6vLqg6Y5q/RvWe2WQ/AkzzSw=;
+        b=LascA46FmOv1jLxz5IEFw2bYDlrnHPA8lV31kMJ8mWPsMZ4KkvKMKkys6L5zsNohQV
+         2DHDxTQhGzgb0F29Jean67AmfzrlFOlEXAnF1zSl8O4pzlsIRbuM35dSPtJMhjNXQ8tO
+         iqjVOdTZEdO1Pg3f6ltOK/51z/2ahysowKuLmgOeA56kzr2pyiCfOKTkRwZbQAbX03X8
+         rbwJqSjdoHD2XcVt5Yf88CbaUgJsFrl/bg9vl37C9EUCkOCbD1xrbF4I3cYKLnSBDi4H
+         7KTP4NUQ2VGzi6vj7s46ztTNYagGTjN9Dr74OHr5bd1U2havfg8B3CJz94xleUF20tT1
+         gLhg==
+X-Gm-Message-State: AGi0PualjawDQfgKm+SZK3oRn0uFD9kns4+jDEZT3uEPZrFQlKJSi20V
+        CZy69vd9UjE+p7MnNdAgLMeYIMhQExNxO1unvJWj/w==
+X-Google-Smtp-Source: APiQypJGQucPtvq3CfgTMf+OFHwpcjA3gKWb5P46VJ8NpuN6PgcSGXR/Vs8ghz34ahJqfBcHm2ZuGC6xF+srQY+GuVo=
+X-Received: by 2002:a63:cf10:: with SMTP id j16mr18229361pgg.201.1587420232829;
+ Mon, 20 Apr 2020 15:03:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200420084241.65433-1-colin.king@canonical.com>
+References: <20200414204240.186377-1-brendanhiggins@google.com>
+ <20200415061154.GA2496263@kroah.com> <20200415084653.GM2828150@kuha.fi.intel.com>
+ <CAJZ5v0hNemTDVa_S-FfVMbrKjM-RWYoHh88asnUvTNxZinY2cw@mail.gmail.com>
+ <20200415131018.GO2828150@kuha.fi.intel.com> <20200415133122.GB3461248@kroah.com>
+ <20200417113956.GA3728594@kuha.fi.intel.com> <e946febc-a1d6-6392-bb00-bc6a65d93c5a@infradead.org>
+In-Reply-To: <e946febc-a1d6-6392-bb00-bc6a65d93c5a@infradead.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 20 Apr 2020 15:03:41 -0700
+Message-ID: <CAFd5g46AVqzQN+7eFQZV64vcZtJOS1V9QUX2zh74e=RtEmOLZg@mail.gmail.com>
+Subject: Re: [PATCH v1] kobject: make sure parent is not released before children
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 20, 2020 at 09:42:41AM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> There a are several spelling mistakes in various messages. Fix these.
-> 
-> There are three spelling mistakes in various messages. Fix these.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+On Fri, Apr 17, 2020 at 9:08 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> On 4/17/20 4:39 AM, Heikki Krogerus wrote:
+> > Hi,
+> >
+> >>>> An alternative might be to define something like __kobject_del() doing
+> >>>> everything that kobject_del() does *without* the
+> >>>> kobject_put(kobj->parent).
+> >>>>
+> >>>> Then, kobject_del() could be defined as something like (pseudocode):
+> >>>>
+> >>>> kobject_del(kobj)
+> >>>> {
+> >>>>     kobject *perent = kobj->parent;
+> >>>>
+> >>>>     __kobject_del(kobj);
+> >>>>     kobject_put(parent);
+> >>>> }
+> >>>>
+> >>>> and kobject_cleanup() could call __kobject_del() instead of
+> >>>> kobject_del() and then do the last kobject_put(parent) when it is done
+> >>>> with the child.
+> >>>>
+> >>>> Would that work?
+> >>>
+> >>> I think so. Greg, what do you think?
+> >>
+> >> Hm, maybe.  Can someone test it out with the reproducer?
+> >
+> > Brendan, or Randy! Can you guys test Rafael's proposal? I think it
+> > would look like this:
+>
+> patch is whitespace-damaged. did you copy-paste it from a screen?
+>
+>
+> Anyway, it works for me. I loaded & unloaded test_printf.ko 5 times
+> without a problem.
 
-Thanks a lot.
+I just tried it as well. I also noticed some whitespace corruption,
+but it otherwise worked against the KUnit reproducer I wrote:
 
-Andrew, could you fold them in? Or should I resend?
+https://lore.kernel.org/patchwork/patch/1224002/
 
--- 
- Kirill A. Shutemov
+Thanks!
+
+> Thanks.
+>
+> > diff --git a/lib/kobject.c b/lib/kobject.c
+> > index 83198cb37d8d..2bd631460e18 100644
+> > --- a/lib/kobject.c
+> > +++ b/lib/kobject.c
+> > @@ -599,14 +599,7 @@ int kobject_move(struct kobject *kobj, struct kobject *new_parent)
+> >  }
+> >  EXPORT_SYMBOL_GPL(kobject_move);
+> >
+> > -/**
+> > - * kobject_del() - Unlink kobject from hierarchy.
+> > - * @kobj: object.
+> > - *
+> > - * This is the function that should be called to delete an object
+> > - * successfully added via kobject_add().
+> > - */
+> > -void kobject_del(struct kobject *kobj)
+> > +static void __kobject_del(struct kobject *kobj)
+> >  {
+> >         struct kernfs_node *sd;
+> >         const struct kobj_type *ktype;
+> > @@ -625,9 +618,23 @@ void kobject_del(struct kobject *kobj)
+> >
+> >         kobj->state_in_sysfs = 0;
+> >         kobj_kset_leave(kobj);
+> > -       kobject_put(kobj->parent);
+> >         kobj->parent = NULL;
+> >  }
+> > +
+> > +/**
+> > + * kobject_del() - Unlink kobject from hierarchy.
+> > + * @kobj: object.
+> > + *
+> > + * This is the function that should be called to delete an object
+> > + * successfully added via kobject_add().
+> > + */
+> > +void kobject_del(struct kobject *kobj)
+> > +{
+> > +       struct kobject *parent = kobj->parent;
+> > +
+> > +       __kobject_del(kobj);
+> > +       kobject_put(parent);
+> > +}
+> >  EXPORT_SYMBOL(kobject_del);
+> >
+> >  /**
+> > @@ -663,6 +670,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
+> >   */
+> >  static void kobject_cleanup(struct kobject *kobj)
+> >  {
+> > +       struct kobject *parent = kobj->parent;
+> >         struct kobj_type *t = get_ktype(kobj);
+> >         const char *name = kobj->name;
+> >
+> > @@ -684,7 +692,7 @@ static void kobject_cleanup(struct kobject *kobj)
+> >         if (kobj->state_in_sysfs) {
+> >                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
+> >                          kobject_name(kobj), kobj);
+> > -               kobject_del(kobj);
+> > +               __kobject_del(kobj);
+> >         }
+> >
+> >         if (t && t->release) {
+> > @@ -698,6 +706,8 @@ static void kobject_cleanup(struct kobject *kobj)
+> >                 pr_debug("kobject: '%s': free name\n", name);
+> >                 kfree_const(name);
+> >         }
+> > +
+> > +       kobject_put(parent);
+> >  }
+> >
+> >  #ifdef CONFIG_DEBUG_KOBJECT_RELEASE
+> >
+> >
+> > thanks,
+> >
+>
+>
+> --
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
