@@ -2,91 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C21A41B0968
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 14:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BD31B1131
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Apr 2020 18:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgDTMeI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Apr 2020 08:34:08 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:52256 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725886AbgDTMeE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 08:34:04 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb9uzlp1eHSgqAA--.29S6;
-        Mon, 20 Apr 2020 20:34:00 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v3 4/4] test_kmod: Avoid potential double free in trigger_config_run_type()
-Date:   Mon, 20 Apr 2020 20:33:55 +0800
-Message-Id: <1587386035-5188-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1587386035-5188-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1587386035-5188-1-git-send-email-yangtiezhu@loongson.cn>
+        id S1726432AbgDTQLk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Apr 2020 12:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725958AbgDTQLk (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 20 Apr 2020 12:11:40 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7885BC061A0C
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:11:40 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id h69so5277975pgc.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KEO68H9LWxUP8e7V9qIEZ4RFCwqXB+4bdYHYEcs5ssU=;
+        b=AOyItZaa1cf6ofqtJl1E1UyuujFCehxcBbtHwHSAHnRzg2vnQXHPdHcChTJn5kxN6B
+         EeaQtKuUJoHl6IN/NzdZb4yITxbBeodZg09MMNGygDJi6GLVqWdqKEkVocOUohoHW2ZL
+         vN1pg3ku8nh/exZJjBqI4vltQcqt+HHcThFvVI0908UFCHXjuRwaA+slyK9q+5X5EzLx
+         YMf84ZbB0tMIXS0iHwdPDYsVQrNj9Au3ZA0hUd4wwmFWAlHATg6AAwNWvuES33cH/Z9V
+         PxEP15DwFmt8eP/WH/znIkz5rx4ogwMRZS9Tlsyf6lLjKD7jZmvPlrl3uUgpUnu79pPH
+         5EJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KEO68H9LWxUP8e7V9qIEZ4RFCwqXB+4bdYHYEcs5ssU=;
+        b=O7/CbXrYZt8BOx4OuiqXFNjnnto8XZUi5iL641zKhtvdJ6LZqqhr3hDnAkqpUhaP7L
+         4kY97HtiswbYvsNP5hZPU8x06zzXI7Y3LAR/xAFkxQlGCWMU7N8ziOfmgv8rKNqcMLy6
+         h8+mHyvdxfhgdOI8hm/KoUiVo716m+wb6no6OlRZzKuKAjcgIUvR0w7NA0KIBLmxNgSX
+         6gR9l5n7dnzDro2BWrhuLoFTbzDrb+b1Ub4K1rDkhQS9KIeC9q3cz7WEk1ZZf+vBUEV8
+         tL4kwoqtck38uSUnC61hi3Kf+G6OU7EWIQTTj5fufQ3czmX0XgF+aToopgBYYRPziUtu
+         naWg==
+X-Gm-Message-State: AGi0PuaJJ5jiWiGdr2men04uc2k3S7vXfvOi1g7PQEzWZkvcfSGTMsSc
+        cia/HDko+cl06Hm/kMoYJUVlSwkRdnHsiVqIewnYdAA4
+X-Google-Smtp-Source: APiQypLk63D8vwXRkZXdPPbMeBIl9gET7jIvY60vpotreHbVObfVflSlVmvHjtNKUDloHkgGG6Vc+AW80Pd0gfR8JaQ=
+X-Received: by 2002:a63:1007:: with SMTP id f7mr15218133pgl.384.1587399099757;
+ Mon, 20 Apr 2020 09:11:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxb9uzlp1eHSgqAA--.29S6
-X-Coremail-Antispam: 1UD129KBjvdXoW7WryUur17WFWUWry7Zw1fWFg_yoWDCwb_uF
-        17Jr1DWw1UJFya9w13uws3ZFs7ta4Utr18Zrs7tay7Gryaqr9xX3s5trn5XasxW398trWS
-        g390yFn29wsxujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbhAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr
-        1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5JwCF04
-        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUe73vUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+References: <20200418172554.GA802865@mwanda>
+In-Reply-To: <20200418172554.GA802865@mwanda>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 20 Apr 2020 09:11:28 -0700
+Message-ID: <CAFd5g46mUAbxtnnEMx2+-mQbryFpr+SENgcvV34kcKsYNy2s_Q@mail.gmail.com>
+Subject: Re: [bug report] kunit: test: add support for test abort
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Reset the member "test_fs" of the test configuration after a call
-of the function "kfree_const" to a null pointer so that a double
-memory release will not be performed.
+On Sat, Apr 18, 2020 at 10:26 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> Hello Brendan Higgins,
+>
+> The patch 5f3e06208920: "kunit: test: add support for test abort"
+> from Sep 23, 2019, leads to the following static checker warning:
+>
+>         lib/kunit/try-catch.c:93 kunit_try_catch_run()
+>         misplaced newline? '    # %s: Unknown error: %d
+>
+> lib/kunit/try-catch.c
+>     58  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
+>     59  {
+>     60          DECLARE_COMPLETION_ONSTACK(try_completion);
+>     61          struct kunit *test = try_catch->test;
+>     62          struct task_struct *task_struct;
+>     63          int exit_code, time_remaining;
+>     64
+>     65          try_catch->context = context;
+>     66          try_catch->try_completion = &try_completion;
+>     67          try_catch->try_result = 0;
+>     68          task_struct = kthread_run(kunit_generic_run_threadfn_adapter,
+>     69                                    try_catch,
+>     70                                    "kunit_try_catch_thread");
+>     71          if (IS_ERR(task_struct)) {
+>     72                  try_catch->catch(try_catch->context);
+>     73                  return;
+>     74          }
+>     75
+>     76          time_remaining = wait_for_completion_timeout(&try_completion,
+>     77                                                       kunit_test_timeout());
+>     78          if (time_remaining == 0) {
+>     79                  kunit_err(test, "try timed out\n");
+>                                                       ^^
+> The kunit_log() macro adds its own newline.  Most of the callers add
+> a newline.  It should be the callers add a newline because that's how
+> everything else works in the kernel.
 
-Fixes: d9c6a72d6fa2 ("kmod: add test driver to stress test the module loader")
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+Whoops, I thought I removed that extra newline.
 
-v3:
-  - use the quotes with correct format in the commit message,
-    sorry for that
+Thanks! I will look into this.
 
-v2:
-  - update the commit message suggested by Markus Elfring
-  - add the Fixes tag
-
- lib/test_kmod.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index e651c37..eab5277 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -745,7 +745,7 @@ static int trigger_config_run_type(struct kmod_test_device *test_dev,
- 		break;
- 	case TEST_KMOD_FS_TYPE:
- 		kfree_const(config->test_fs);
--		config->test_driver = NULL;
-+		config->test_fs = NULL;
- 		copied = config_copy_test_fs(config, test_str,
- 					     strlen(test_str));
- 		break;
--- 
-2.1.0
-
+> The dev_printk() stuff will sometimes add a newline, but never a
+> duplicate newline.  In other words, it's slightly complicated.  But
+> basically the caller should add a newline.
+>
+>     80                  try_catch->try_result = -ETIMEDOUT;
+>     81          }
+>     82
+>     83          exit_code = try_catch->try_result;
+>     84
+>     85          if (!exit_code)
+>     86                  return;
+>     87
+>     88          if (exit_code == -EFAULT)
+>     89                  try_catch->try_result = 0;
+>     90          else if (exit_code == -EINTR)
+>     91                  kunit_err(test, "wake_up_process() was never called\n");
+>                                                                            ^^
+>
+>     92          else if (exit_code)
+>     93                  kunit_err(test, "Unknown error: %d\n", exit_code);
+>                                                           ^^
+>
+>     94
+>     95          try_catch->catch(try_catch->context);
+>     96  }
+>
+> regards,
+> dan carpenter
