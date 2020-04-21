@@ -2,208 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A96F1B18FD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Apr 2020 00:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED901B1C1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Apr 2020 04:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbgDTWDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Apr 2020 18:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726056AbgDTWDy (ORCPT
+        id S1726599AbgDUCqU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Apr 2020 22:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725829AbgDUCqT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 18:03:54 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBB9C061A0E
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 15:03:53 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 145so3355502pfw.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 15:03:53 -0700 (PDT)
+        Mon, 20 Apr 2020 22:46:19 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78445C061A0E;
+        Mon, 20 Apr 2020 19:46:19 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id 198so9845340lfo.7;
+        Mon, 20 Apr 2020 19:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GkO5OPMfjblm2nsbFSt6vLqg6Y5q/RvWe2WQ/AkzzSw=;
-        b=RLT9hDOhYDaVrOb3NQXEzKxLHu29Fry2nuuaORCMrniqJ6qFBrzkqExYtQsHcw+PV3
-         7O6N4Js3skiA85xYqwa4OXyxNXaoSVywnwsyGIBQPrrbuM+9qedw62FvSYonGlzH53Vp
-         1ZRz9H3HA+v1LH386c5pUp+6yQc6fYgdisIlUJGHsnvepCqAHnzS4jBNtwViMFUv8EW4
-         j5IxVqiUy04j74GBYjPPr3O8I8HZonBfK2NKdS4ew22JAAKHNLOE0aAsC1XkNJ1z2jbh
-         cgvOnISKLT1x4FXcUcTTYnqEbZpOq81T25jZLx2CWYni87ck/VIgHgmrqSacW5pVV4Oh
-         aJLQ==
+        bh=o5OcbUGHwiU1CmRyAs5hmz04gA+MaTAsH/b/sIzr7cU=;
+        b=KN56EWmXtN8o0IvMzCvJH3XSM9pOdbqZ5nAD9AoPLE+MXetTf0Rykt8SGBHkjtiMS9
+         lx6EJ2iYn+Pb7oDrdVUyQf7mjWvfGr6bjVmSI2zJUN4SnupxsawEOPpdj7GfJcQ+wLPk
+         rX95L534Ob9XyS3Wm8xeShzZ9JidZZjbOjujWoyKdJ2xgW1/EmsUsC0L1kS9IZNVOI3r
+         9wvLdfnenrs9mKqyvz1DX8++9R1cGxFuWwrrnCWOZ/6X9tCTnzD7c4Zpkh0ozM3vrIsD
+         niO5m1SZibfXVqrMMxg1a9P3xw00ZBqaXUquszXVRjEM29HVQudqy7jl+E2zhaPVv0W9
+         xvCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GkO5OPMfjblm2nsbFSt6vLqg6Y5q/RvWe2WQ/AkzzSw=;
-        b=LascA46FmOv1jLxz5IEFw2bYDlrnHPA8lV31kMJ8mWPsMZ4KkvKMKkys6L5zsNohQV
-         2DHDxTQhGzgb0F29Jean67AmfzrlFOlEXAnF1zSl8O4pzlsIRbuM35dSPtJMhjNXQ8tO
-         iqjVOdTZEdO1Pg3f6ltOK/51z/2ahysowKuLmgOeA56kzr2pyiCfOKTkRwZbQAbX03X8
-         rbwJqSjdoHD2XcVt5Yf88CbaUgJsFrl/bg9vl37C9EUCkOCbD1xrbF4I3cYKLnSBDi4H
-         7KTP4NUQ2VGzi6vj7s46ztTNYagGTjN9Dr74OHr5bd1U2havfg8B3CJz94xleUF20tT1
-         gLhg==
-X-Gm-Message-State: AGi0PualjawDQfgKm+SZK3oRn0uFD9kns4+jDEZT3uEPZrFQlKJSi20V
-        CZy69vd9UjE+p7MnNdAgLMeYIMhQExNxO1unvJWj/w==
-X-Google-Smtp-Source: APiQypJGQucPtvq3CfgTMf+OFHwpcjA3gKWb5P46VJ8NpuN6PgcSGXR/Vs8ghz34ahJqfBcHm2ZuGC6xF+srQY+GuVo=
-X-Received: by 2002:a63:cf10:: with SMTP id j16mr18229361pgg.201.1587420232829;
- Mon, 20 Apr 2020 15:03:52 -0700 (PDT)
+        bh=o5OcbUGHwiU1CmRyAs5hmz04gA+MaTAsH/b/sIzr7cU=;
+        b=YWtBOgANUjI/n8MbEFksXwCf7ffDM30zSotpjtgZee0VTj1htfiC/u6vk1GOmaWOU7
+         j0qITZf7J6/V/N0CRezWMbg3k2vEi8tsYT40KsnaWWAleOCcxxmjkKM7LHoRlt2p5FHd
+         1mq9Y7N0ilIRo3ey9AAlqiUALL+kXJnqmuaeOHHsZwdiAMFl8wbcb+dVAZz+9xH7oHU1
+         IH0PBdUWRVD/B+nxqyjPClyZTzhYWEMtCWT9hiSGPH5tCPXvXyj1MkvUBijNdVTVX0cF
+         E5dt2jeH+aVdzjv5zLNApnMdZx9RWFIpg5t16IiSOsDDS9LI3BtBRAsLdEQ7B/LjRHoc
+         8coA==
+X-Gm-Message-State: AGi0PuaJWoDkf5QU0IscHS7RF+2320m4NvJpvSCAzoASuSRBFUK+B8UE
+        IY7gbWnKcbJLSO/IHRSzXsJ/fW8ws7F0it/lo7U=
+X-Google-Smtp-Source: APiQypIqJWu9QiVesaaTnVGOdtYMSxVQY4sEJwiueOtyt8iKdNYmFMDvnjRUOFgNvj+br6RKUBHnoBWXACbWLX9LPe0=
+X-Received: by 2002:ac2:569b:: with SMTP id 27mr12499931lfr.134.1587437177744;
+ Mon, 20 Apr 2020 19:46:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200414204240.186377-1-brendanhiggins@google.com>
- <20200415061154.GA2496263@kroah.com> <20200415084653.GM2828150@kuha.fi.intel.com>
- <CAJZ5v0hNemTDVa_S-FfVMbrKjM-RWYoHh88asnUvTNxZinY2cw@mail.gmail.com>
- <20200415131018.GO2828150@kuha.fi.intel.com> <20200415133122.GB3461248@kroah.com>
- <20200417113956.GA3728594@kuha.fi.intel.com> <e946febc-a1d6-6392-bb00-bc6a65d93c5a@infradead.org>
-In-Reply-To: <e946febc-a1d6-6392-bb00-bc6a65d93c5a@infradead.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 20 Apr 2020 15:03:41 -0700
-Message-ID: <CAFd5g46AVqzQN+7eFQZV64vcZtJOS1V9QUX2zh74e=RtEmOLZg@mail.gmail.com>
-Subject: Re: [PATCH v1] kobject: make sure parent is not released before children
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+References: <20200418232655.23870-1-luke.r.nels@gmail.com>
+In-Reply-To: <20200418232655.23870-1-luke.r.nels@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 20 Apr 2020 19:46:05 -0700
+Message-ID: <CAADnVQL+--GLyaPdj2cRncQ9X-EAravt1_2fjfPhORWA-VUWuQ@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf, x86: Fix encoding for lower 8-bit registers
+ in BPF_STX BPF_B
+To:     Luke Nelson <lukenels@cs.washington.edu>
+Cc:     bpf <bpf@vger.kernel.org>, Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, X86 ML <x86@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        lkft-triage@lists.linaro.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 17, 2020 at 9:08 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Sat, Apr 18, 2020 at 4:27 PM Luke Nelson <lukenels@cs.washington.edu> wrote:
 >
-> On 4/17/20 4:39 AM, Heikki Krogerus wrote:
-> > Hi,
-> >
-> >>>> An alternative might be to define something like __kobject_del() doing
-> >>>> everything that kobject_del() does *without* the
-> >>>> kobject_put(kobj->parent).
-> >>>>
-> >>>> Then, kobject_del() could be defined as something like (pseudocode):
-> >>>>
-> >>>> kobject_del(kobj)
-> >>>> {
-> >>>>     kobject *perent = kobj->parent;
-> >>>>
-> >>>>     __kobject_del(kobj);
-> >>>>     kobject_put(parent);
-> >>>> }
-> >>>>
-> >>>> and kobject_cleanup() could call __kobject_del() instead of
-> >>>> kobject_del() and then do the last kobject_put(parent) when it is done
-> >>>> with the child.
-> >>>>
-> >>>> Would that work?
-> >>>
-> >>> I think so. Greg, what do you think?
-> >>
-> >> Hm, maybe.  Can someone test it out with the reproducer?
-> >
-> > Brendan, or Randy! Can you guys test Rafael's proposal? I think it
-> > would look like this:
+> This patch fixes an encoding bug in emit_stx for BPF_B when the source
+> register is BPF_REG_FP.
 >
-> patch is whitespace-damaged. did you copy-paste it from a screen?
+> The current implementation for BPF_STX BPF_B in emit_stx saves one REX
+> byte when the operands can be encoded using Mod-R/M alone. The lower 8
+> bits of registers %rax, %rbx, %rcx, and %rdx can be accessed without using
+> a REX prefix via %al, %bl, %cl, and %dl, respectively. Other registers,
+> (e.g., %rsi, %rdi, %rbp, %rsp) require a REX prefix to use their 8-bit
+> equivalents (%sil, %dil, %bpl, %spl).
 >
+> The current code checks if the source for BPF_STX BPF_B is BPF_REG_1
+> or BPF_REG_2 (which map to %rdi and %rsi), in which case it emits the
+> required REX prefix. However, it misses the case when the source is
+> BPF_REG_FP (mapped to %rbp).
 >
-> Anyway, it works for me. I loaded & unloaded test_printf.ko 5 times
-> without a problem.
+> The result is that BPF_STX BPF_B with BPF_REG_FP as the source operand
+> will read from register %ch instead of the correct %bpl. This patch fixes
+> the problem by fixing and refactoring the check on which registers need
+> the extra REX byte. Since no BPF registers map to %rsp, there is no need
+> to handle %spl.
+>
+> Fixes: 622582786c9e0 ("net: filter: x86: internal BPF JIT")
+> Signed-off-by: Xi Wang <xi.wang@gmail.com>
+> Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
 
-I just tried it as well. I also noticed some whitespace corruption,
-but it otherwise worked against the KUnit reproducer I wrote:
-
-https://lore.kernel.org/patchwork/patch/1224002/
-
-Thanks!
-
-> Thanks.
->
-> > diff --git a/lib/kobject.c b/lib/kobject.c
-> > index 83198cb37d8d..2bd631460e18 100644
-> > --- a/lib/kobject.c
-> > +++ b/lib/kobject.c
-> > @@ -599,14 +599,7 @@ int kobject_move(struct kobject *kobj, struct kobject *new_parent)
-> >  }
-> >  EXPORT_SYMBOL_GPL(kobject_move);
-> >
-> > -/**
-> > - * kobject_del() - Unlink kobject from hierarchy.
-> > - * @kobj: object.
-> > - *
-> > - * This is the function that should be called to delete an object
-> > - * successfully added via kobject_add().
-> > - */
-> > -void kobject_del(struct kobject *kobj)
-> > +static void __kobject_del(struct kobject *kobj)
-> >  {
-> >         struct kernfs_node *sd;
-> >         const struct kobj_type *ktype;
-> > @@ -625,9 +618,23 @@ void kobject_del(struct kobject *kobj)
-> >
-> >         kobj->state_in_sysfs = 0;
-> >         kobj_kset_leave(kobj);
-> > -       kobject_put(kobj->parent);
-> >         kobj->parent = NULL;
-> >  }
-> > +
-> > +/**
-> > + * kobject_del() - Unlink kobject from hierarchy.
-> > + * @kobj: object.
-> > + *
-> > + * This is the function that should be called to delete an object
-> > + * successfully added via kobject_add().
-> > + */
-> > +void kobject_del(struct kobject *kobj)
-> > +{
-> > +       struct kobject *parent = kobj->parent;
-> > +
-> > +       __kobject_del(kobj);
-> > +       kobject_put(parent);
-> > +}
-> >  EXPORT_SYMBOL(kobject_del);
-> >
-> >  /**
-> > @@ -663,6 +670,7 @@ EXPORT_SYMBOL(kobject_get_unless_zero);
-> >   */
-> >  static void kobject_cleanup(struct kobject *kobj)
-> >  {
-> > +       struct kobject *parent = kobj->parent;
-> >         struct kobj_type *t = get_ktype(kobj);
-> >         const char *name = kobj->name;
-> >
-> > @@ -684,7 +692,7 @@ static void kobject_cleanup(struct kobject *kobj)
-> >         if (kobj->state_in_sysfs) {
-> >                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
-> >                          kobject_name(kobj), kobj);
-> > -               kobject_del(kobj);
-> > +               __kobject_del(kobj);
-> >         }
-> >
-> >         if (t && t->release) {
-> > @@ -698,6 +706,8 @@ static void kobject_cleanup(struct kobject *kobj)
-> >                 pr_debug("kobject: '%s': free name\n", name);
-> >                 kfree_const(name);
-> >         }
-> > +
-> > +       kobject_put(parent);
-> >  }
-> >
-> >  #ifdef CONFIG_DEBUG_KOBJECT_RELEASE
-> >
-> >
-> > thanks,
-> >
->
->
-> --
-> ~Randy
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Applied. Thanks for the fix.
+It's questionable whether the verifier should have allowed such insn
+in the first place, but JIT fix is good regardless.
