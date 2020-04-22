@@ -2,73 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A57A1B463C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Apr 2020 15:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353901B4842
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Apr 2020 17:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbgDVN3T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Apr 2020 09:29:19 -0400
-Received: from mout-p-102.mailbox.org ([80.241.56.152]:60828 "EHLO
-        mout-p-102.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbgDVN3S (ORCPT
+        id S1726475AbgDVPJj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Apr 2020 11:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726472AbgDVPJj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Apr 2020 09:29:18 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 496h9S70qgzKmbT;
-        Wed, 22 Apr 2020 15:29:16 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
-        with ESMTP id dV--dvDXFOxA; Wed, 22 Apr 2020 15:29:13 +0200 (CEST)
-Date:   Wed, 22 Apr 2020 23:29:06 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Liu Yiding <yidingx.liu@intel.com>
-Cc:     linux-kselftest@vger.kernel.org
-Subject: Re: selftests/openat2: subtests "openat2 with valid how.mode and
- O_TMPFILE" failed
-Message-ID: <20200422132906.hbb7v57vxry46x6n@yavin.dot.cyphar.com>
-References: <8c04b687-db6c-3cb0-a559-1b44883eecaa@intel.com>
+        Wed, 22 Apr 2020 11:09:39 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E79C03C1AC
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2020 08:09:39 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id f19so2722557iog.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2020 08:09:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4Jm5qkR43ecrqz4QuVW5kTz/d/H3ltLjKcWsZzS+/Mg=;
+        b=G60f+9urzqV2BeZgiTHp04ELe2IgFlmAe3N2lpYtRytqBjeAXNr76vEESMrRKEvlMB
+         NuhzDzCPwYzndPwz3LScOtUxS403Yu2cjsJWfl7xht7icnUyEwv/RDYXFUbLag48Grlb
+         9nuKSeFGYt6FMtkFwWB3s7utCmQcYWvNRm/I4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4Jm5qkR43ecrqz4QuVW5kTz/d/H3ltLjKcWsZzS+/Mg=;
+        b=I4SJklyM8Fc4CseOYn+nLEmHK1eqjc34W981k+r4REtYs7wA5JvZ/A62iWHekYcUP+
+         9+jm4u4rgenPMvEv5GzmDWiZDa1O8HO0Oi2OBr46gG9c4GU+x+ZhckmDqsrLxGd6HvNh
+         dafYotd8WXfGffKtQlmvx5WjNktTrL4FG4bsPVigE0w4nQxgjxSDrgEx1hRNcyTL2s4o
+         FujxkYe+Y1Izo0haVVTYDIBqEhZWEbsmGQ9xC5nh19SkNEgaqYeoODTfbMaBLtLv+GyQ
+         uzcMTtoIr9dZoPYuORCspU0Xd933XoykZY6qrEVhWtK10Tr4byEgEtYbkn7bb6WAuXFq
+         vBuA==
+X-Gm-Message-State: AGi0PubReSTPsxWWHrPOxvn2EdhSSuOjMHWeeQUEyk/9+g4/l1gsNoYb
+        wJZSXudwLBtByAdE5VdugIJE+A==
+X-Google-Smtp-Source: APiQypJaoc4lP9v92w9nAC8tQaT+r7VsVpkADPHchkzskz2PFxvkM5sQgbwb8qYWtSHzTZgS5gLgZQ==
+X-Received: by 2002:a02:b055:: with SMTP id q21mr26504210jah.7.1587568178617;
+        Wed, 22 Apr 2020 08:09:38 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e11sm1834430ios.55.2020.04.22.08.09.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Apr 2020 08:09:37 -0700 (PDT)
+Subject: Re: [PATCH] selftests/ftrace: Check required filter files before
+ running test
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>
+Cc:     shuah@kernel.org, ice_yangxiao@163.com,
+        linux-kselftest@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        skhan@linuxfoundation.org
+References: <20200422095807.548519-1-yangx.jy@cn.fujitsu.com>
+ <20200422092110.6a4f0cfb@gandalf.local.home>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <583feda3-5605-f242-b3b0-37c15fa38a58@linuxfoundation.org>
+Date:   Wed, 22 Apr 2020 09:09:37 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7rofl3x6m6jn6ulf"
-Content-Disposition: inline
-In-Reply-To: <8c04b687-db6c-3cb0-a559-1b44883eecaa@intel.com>
-X-Rspamd-Queue-Id: A9BE617EF
-X-Rspamd-Score: -7.26 / 15.00 / 15.00
+In-Reply-To: <20200422092110.6a4f0cfb@gandalf.local.home>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 4/22/20 7:21 AM, Steven Rostedt wrote:
+> On Wed, 22 Apr 2020 17:58:07 +0800
+> Xiao Yang <yangx.jy@cn.fujitsu.com> wrote:
+> 
+>> Without CONFIG_DYNAMIC_FTRACE, some tests get failure because required
+>> filter files(set_ftrace_filter/available_filter_functions/stack_trace_filter)
+>> are missing.  So implement check_filter_file() and make all related tests
+>> check required filter files by it.
+>>
+>> BTW: set_ftrace_filter and available_filter_functions are introduced together
+>> so just check either of them.
+> 
+> I'm fine with that.
+> 
+> I'd like an Acked-by from Masami, and then Shauh, can you take this?
+> 
 
---7rofl3x6m6jn6ulf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes. I can pick this up after Masami gives his Ack.
 
-On 2020-04-22, Liu Yiding <yidingx.liu@intel.com> wrote:
-> # openat2 unexpectedly returned # -95 (Operation not supported)
-> not ok 106 openat2 with valid how.mode and O_TMPFILE succeeds
-
-I believe some filesystems don't support O_TMPFILE, hence -EOPNOTSUPP.
-Try using a different filesystem.
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---7rofl3x6m6jn6ulf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXqBGnwAKCRCdlLljIbnQ
-EuHwAQDr5lbpTsHvsxxTtlq15R8ykjhXK5MNg0zXD0oMi1AYRAEA2f8QN5y541/z
-PO8A0JooLkWQwhxInn43c0orVbGSlwA=
-=1yOC
------END PGP SIGNATURE-----
-
---7rofl3x6m6jn6ulf--
+thanks,
+-- Shuah
