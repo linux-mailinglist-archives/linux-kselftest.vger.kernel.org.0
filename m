@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D79E1B5895
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Apr 2020 11:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E721B58A3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Apr 2020 11:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726346AbgDWJyA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Apr 2020 05:54:00 -0400
-Received: from mga09.intel.com ([134.134.136.24]:26734 "EHLO mga09.intel.com"
+        id S1726945AbgDWJ4Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Apr 2020 05:56:16 -0400
+Received: from mga01.intel.com ([192.55.52.88]:34630 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725863AbgDWJyA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Apr 2020 05:54:00 -0400
-IronPort-SDR: epyTZi/lpNnFehCsAmyltQlvOnO6XFH5VZDHnV9GE0ue8z7A6HSMRLRCRD00YAcDSOgzcpE4YE
- hv1C1/hUug6w==
+        id S1726364AbgDWJ4P (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 Apr 2020 05:56:15 -0400
+IronPort-SDR: DC5ewb+U62H5GQ5x2zvCDFbvasRMIOCHADx8YNVb/DgOJ9hxMEF4KaMqf/lAifVio0B/HhXEFy
+ 8vObRqQsxVyQ==
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 02:44:36 -0700
-IronPort-SDR: efr7SzquGyTmUUcmBO9oKNL1uFoXNelZAniIt82dQglvXDaBofQnjNVKeHV2q/+12XeRUyb74X
- RzLZJ8f2mSyw==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 02:56:02 -0700
+IronPort-SDR: WZxfT6LAN2MqQjlLBIAwTuytWkFOvf0jCisnFmRKlkQddYEvXS3jPquUTl6CTahhvFgRv9J5UK
+ x7o9JlbYjQeA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,306,1583222400"; 
-   d="gz'50?scan'50,208,50";a="301175819"
+   d="gz'50?scan'50,208,50";a="301178023"
 Received: from lijiaxix-mobl.ccr.corp.intel.com (HELO [10.255.29.195]) ([10.255.29.195])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Apr 2020 02:44:33 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Apr 2020 02:56:00 -0700
 From:   Ma Xinjian <max.xinjian@intel.com>
 To:     Andrii Nakryiko <andriin@fb.com>
 Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         Philip Li <philip.li@intel.com>
-Subject: bpf: test_btf run failed on debian9
-Message-ID: <a24d4326-cf80-bb40-e888-eca7d783d9e5@intel.com>
-Date:   Thu, 23 Apr 2020 17:44:07 +0800
+Subject: bpf: test_progs run failed on debian 9
+Message-ID: <3c4a96ea-89b1-49be-ae88-360e5fa57627@intel.com>
+Date:   Thu, 23 Apr 2020 17:55:34 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.3.0
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="------------673A84117611FA0D1F3EB62E"
+ boundary="------------DDE9F0BC15B47FAB338354BD"
 Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -46,87 +46,74 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------673A84117611FA0D1F3EB62E
+--------------DDE9F0BC15B47FAB338354BD
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 Hi Andrii.
 
-I noticed you add tools/testing/selftests/bpf/progs/test_btf_*, so drop 
-this problem to you.
+sorry to bother you again.
 
+I run bpf: test_progs on debian 9, and failed with"Segmentation fault".
 
-I failed to run bpf: test_btf on debian9(stretch), hope you can give me 
-some suggestion.
-
+CONFIG_DEBUG_INFO_BTF was enabled in kconfig.
 
 
 Testing env: "Debian GNU/Linux 9 (stretch)"
 
-kernel: 5.7.0-rc2 5.6 both failed
+kernel: v5.7-rc2  v5.6 both failed
 
 
-Description: run bpf: test_btf failed with ""Arg#0 type PTR in 
-test_long_fname_2() is not supported yet.""
-
-Whole run log  and kconfig please see the attatchment.
+Whole run log and kconfig please see the attatchment.
 
 
 Error info
 
 ```
-
-  root@vm-snb-42 
+root@vm-snb-42 
 /usr/src/perf_selftests-x86_64-rhel-7.6-kselftests-ae83d0b416db002fe95601e7f97f64b59514d936/tools/testing/selftests/bpf# 
-./test_btf
-BTF raw test[1] (struct test #1): OK
-BTF raw test[2] (struct test #2): OK
-BTF raw test[3] (struct test #3 Invalid member offset): OK
-
-
+./test_progs
+#1 attach_probe:OK
+#2 bpf_obj_id:OK
+#3/1 dctcp:OK
 [snip]
 
-BTF libbpf test[1] (test_btf_haskv.o): libbpf: load bpf program failed: 
-Invalid argument
-libbpf: -- BEGIN DUMP LOG ---
-libbpf:
-Validating test_long_fname_2() func#1...
-Arg#0 type PTR in test_long_fname_2() is not supported yet.
-processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0 
-peak_states 0 mark_read 0
-
-libbpf: -- END LOG --
-libbpf: failed to load program 'dummy_tracepoint'
-libbpf: failed to load object 'test_btf_haskv.o'
-do_test_file:4201:FAIL bpf_object__load: -4007
-BTF libbpf test[2] (test_btf_newkv.o): libbpf: load bpf program failed: 
-Invalid argument
-libbpf: -- BEGIN DUMP LOG ---
-libbpf:
-Validating test_long_fname_2() func#1...
-Arg#0 type PTR in test_long_fname_2() is not supported yet.
-processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0 
-peak_states 0 mark_read 0
-
-libbpf: -- END LOG --
-libbpf: failed to load program 'dummy_tracepoint'
-libbpf: failed to load object 'test_btf_newkv.o'
-do_test_file:4201:FAIL bpf_object__load: -4007
-BTF libbpf test[3] (test_btf_nokv.o): libbpf: load bpf program failed: 
-Invalid argument
-libbpf: -- BEGIN DUMP LOG ---
-libbpf:
-Validating test_long_fname_2() func#1...
-Arg#0 type PTR in test_long_fname_2() is not supported yet.
-processed 0 insns (limit 1000000) max_states_per_insn 0 total_states 0 
-peak_states 0 mark_read 0
-
-libbpf: -- END LOG --
-libbpf: failed to load program 'dummy_tracepoint'
-libbpf: failed to load object 'test_btf_nokv.o'
-do_test_file:4201:FAIL bpf_object__load: -4007
-
-[snip]
+libbpf: bpf_fentry_test1 is not found in vmlinux BTF
+libbpf: failed to load object 'fentry_test'
+libbpf: failed to load BPF skeleton 'fentry_test': -2
+test_fentry_fexit:FAIL:fentry_skel_load fentry skeleton failed
+#13 fentry_fexit:FAIL
+libbpf: bpf_fentry_test1 is not found in vmlinux BTF
+libbpf: failed to load object 'fentry_test'
+libbpf: failed to load BPF skeleton 'fentry_test': -2
+test_fentry_test:FAIL:fentry_skel_load fentry skeleton failed
+#14 fentry_test:FAIL
+#15 fexit_bpf2bpf:OK
+libbpf: bpf_fentry_test1 is not found in vmlinux BTF
+test_fexit_stress:FAIL:find_vmlinux_btf_id failed: -2
+#16 fexit_stress:FAIL
+libbpf: bpf_fentry_test1 is not found in vmlinux BTF
+libbpf: failed to load object 'fexit_test'
+libbpf: failed to load BPF skeleton 'fexit_test': -2
+test_fexit_test:FAIL:fexit_skel_load fexit skeleton failed
+#17 fexit_test:FAIL
+#18 flow_dissector:OK
+#19 flow_dissector_load_bytes:OK
+#20 flow_dissector_reattach:OK
+#21 get_stack_raw_tp:OK
+#22 global_data:OK
+#23 global_data_init:OK
+test_kfree_skb:PASS:prog_load sched cls 0 nsec
+libbpf: eth_type_trans is not found in vmlinux BTF
+libbpf: failed to load object './kfree_skb.o'
+test_kfree_skb:FAIL:prog_load raw tp err -22 errno 1
+#24 kfree_skb:FAIL
+#25 l4lb_all:OK
+#26/1 pin_raw_tp:OK
+#26/2 pin_tp_btf:OK
+#26 link_pinning:OK
+#27 map_lock:OK
+Segmentation fault
 
 ```
 
@@ -136,65 +123,46 @@ Ma Xinjian
 
 
 
-
-
---------------673A84117611FA0D1F3EB62E
+--------------DDE9F0BC15B47FAB338354BD
 Content-Type: application/gzip;
- name="bpf_test_btf_log.gz"
+ name="bpf_test_progs_log.gz"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
- filename="bpf_test_btf_log.gz"
+ filename="bpf_test_progs_log.gz"
 
-H4sICOxeoV4AA2JwZl90ZXN0X2J0Zl9sb2cA7VrbcttGEn3nV0ziB0uJSOFGgGCFrLVj2aWK
-V1JFylbtbqVQIDGgsMKFAUBKytdv94DEjT0gRL/kIX6QSfCcMz3TjZnuBtIkyf+xjYZZvBga
-GrvcZOllli4v1zz1nYyHfs6zPBu+TEzHNIbpIw+H1sgcPlU/uXyie8rCUE1voSiaz+2xqajc
-8m3LN43F2B6rhmfr5mWeJGF2iaQgXl2WApeLtf+OjcQPziL3Bx8fPrPUfWZ44b/q7+wsy9PN
-Mhff2Tv1fMpuf2mCtDZII0B6G6Sz63jrhoHHIh4teMoS3894TlANoK7CZOGGzHNzt8OSMYmk
-zDFJpE4gLRJpXLBNnG3W6yTNucfCIH5yV5ygT0j6+IIFu9lv3ZTlr2uKa5Nc85DLzvxnr1Ah
-ZFSF1LHerKOSOpOmThb8Sc1F1Uiy3Y+s0yGg9GNLAki9YNEmzIN1yFnGl3mQxLtYzCgVOrhU
-rbJBGsEqHW6q3odLB6Bq9OHS0adC+MVJLtbsKYg9iknHntoKvpT7POXxErYUXEJqc6CDT7Xk
-QvCdEqKjT22FX5gka4pNh59qv9kMOhS1Wiiu815CdFRqEJVoSRAvw40HW0sQs2LfpDQkGx7E
-pJum7itEhmx0jEi8X9jykS+funZ3i0JSe6o2oZDUnqrZFNKgjg2FQo4pJMbHNoH1l89F15oY
-8qDSmxjKft1oYkjL0TcYjV32mE0MaY/VxJD2TJoY0h67iaHW0FCaGJPCqE2MRWG0JmZCYXYZ
-wW7rELuvl/BM7Ew89thzkD+yeBOGFBkdwKN1/sqaEhR2XGLFGdeBRHdADuQ8cteDjAQvjtjX
-JF7Bl0cvdUJO0iyK9sVdswXPnzmPkcvc2JOd88bkmIAwHBVgtpSATQncbnka9hcZK+Ts3RRn
-j0jJ8TpWKd595IbhESJGSbFPFRw4iviLg2Ze8pBH4hP7Pojz7ym23ou9TGKIQJmGIdWoMae6
-SpLHLTI1qoxrdgyMGwtJso5aK6VOjtkqZdp9mOwHimsqvQyWkNUWOR/OxUHw3YwpJAHDCZa8
-HKs4jeGKg2cjxdAFo8DBL871zedbCodhIjLjvSFiClJDMDAQ4XG/0o/diF+Ivw7kawy4VI5t
-mnJuOSOPx3ngBzwlFTBKMAUpEnrJ8D/NJeNPxMkWunkAWfFpEhgxhXdP4lsYNSnHfX15qoT6
-e1XKvNUFltZB7ucDq7Y3nWS/UauWhcBRo8dtxkl2m5XKrio/PrJ1yDlpbIw8Hm+ivjO2m/hT
-xpwoew3a8mM2TNRufk8rynMwgtN6z4ETlT3xV/iFLYKcATn0SLbeyYZNStdQISPJhowMnzaw
-qnmSsAyPcpI97sFeBCuSi6Hmb+IlW6dJnhQ799kP5/i/6K0Eq1hUP/k5SbdadChzIFMhoRMS
-ussvwU8kyW6RkOH6OfhYPpKttEg/397cP8zmD/++u/p09Xk2v3v4dTb//NvNz87dr7cPt6SG
-2tIoyUd4WouHGRnsokm45WfCXoqkt0g3kHuDsxnO9tHNpMtjGy3iR9cTpP0dQ5LGHSSS0I6R
-fccw5fkmjaWNKrsdHMLV4oJ0qHaQ1NITmbfLEClKQfwoothtxi9bkGuvKmW0wLJ3W6cqZVSU
-a3CEUIbD2X0S8cqhSQdHrxkUsz95mrAtljwA9hIHQQ6gp7qlGNPPH66/Mv6yhmIKpsnT1IEz
-YIpwkRcNIncVLKdMeeEL2x9AJZJBzTVl6sAP3VWGPyiDXUk1ZZoxQF9i4MAvxWfxg6UNQLa4
-vvssrqvKAOM7T3I3dDArxEvmAPvV1zcPcLfGUOCJumNmiM3PKXpkM4XFqYMXZrAr8niZeFA8
-zu6vv9xcfRpgJ/sU+hnA+fkAe9zVTbpXKWIVmOCCbHamYnjAhgxwo4AXnhRzDrxZ1RYXl3eN
-5UHbVUbNVXnRbRJlMIRu9z6hKuNa0ovhiR1AB71Cos0aGrPKbrRVQxf5Tzd+UsOLc7Qbjnfc
-bnEgP+vEiqb3XnqfUHcz1BqjTIG7KVqNUuwY3fh6wVGmuN0Uo0YRHu+Gj1twp9jPuklmua5F
-IndR4S8w/kXyIe4zkQlRElaXBIZZkSG15b6T6U1KvU0MO8e3ytld5tUyuL6Coq0ts+8UPbXL
-wH38vlFT67DxRMl6AB+NlVXKXcyY8kd338SWPx4y+imzhZvxooWAYRCL3W+1Cckut6qNj6i+
-Say+Fx6u6DfM3eq2Uh7v4KYL9pwmsPMvXnM45kNIOyIoNshhJt3DdITt28bBmw1GG2LdEtCY
-oq+/s6GG3Y1PUtQGRWlRSotJrlbj1qbcc2Rdxn6bEVVVP5zDWVq0keAmHM7FWTmco5BYb5G4
-byRtalUfS4XEA83hG+VqPafLUoBFwYuc/eXqQXTLdhIgMJuhJL5CIELmR1UG1g7BQ3yooU9G
-o5Fuwx9DgT8kFx0hOtJssfYFPYj9RDYSrjdevf5UIcJgAdTKbJHViu61mz1tR6hVQOD/BOoT
-BMMRukrdiPkuZATetMzQwJAN3gSDPWM4ZB+vvlzfsE+//fOOfb39AleG+18H/0KSm4s0DUcN
-4XZyfFExaWfn4rR+p8LMBx/S1TulaGtAxYhPACl8UDwqqV5CeOX5aAC2LnmWwVcFiFmcsbMw
-iCBIod7Af+cscl8gV4fNKXPWPHUQBNhdKi2uw9c1d5+qb5GbPkExCcuhDOqTvbr5tJtlebVY
-I8xDxfLtl+69t4miVydP3SVfJxCY72WMZPE/qCnY+7Zj3g/2NYgP+KmhKWpRhGAkFCTHQQWw
-zFAU68DbWt3bMX/+29t/RW/vHPPN3tYb3k7+dvZf0tnJyb7G0Rlu/rWDbFcTFwndWeTC6oqK
-6UcG9Tms5qJWEBN8rcm/hvI+TdFgcRGxsFBLcWB1C+nHhZbY1+zSMGQauCilzghd3Oq3EWLi
-VYQg5oIj2k2wGIjrppky2ojtx2XzmWAO57tGkVzNaqr9B9tLeAuKKF0m3pFFnciNEZ2qHGIN
-778S06lmy9XiJJYIdiqKhkNNstcKi57DIQkitnTxEQGNFBhB9pZlaL2a5WUnibMegvoRQS32
-3iZoSAQ3cZJ6PBVNUoiA3Uts3VqtQPZw34KtLD3GMwkej70jLItgYaCCe97uqAlleq8YsQlm
-6GZ5P7qmyAcG8/suoab2lGHPlyxKtkfuZk2jPVJb2lItTjDWGgvscW+zrnZ98XUKEbXB07F4
-IyhjcJpABQ4fz6eHNK2i7fHiaxgs3aLUOeToDQ5W9PzFjfD1UXy76xBvHOB/Gs5F67IqqXCC
-kOE+QmCFYZBJRh5XSuJZA/9jE2yLV+IouFnB8WnOOoFbd7FrZkLWAAu6nynHx4KHAlYlAGCs
-I2sEAj+p8KKL0JwjxbArBr6dkfGleDVp66YZW7tZNswf02SzehTcuw/391PVUtj9L9d3U4Vh
-djA1BoP/A/M8lqQ/LwAA
---------------673A84117611FA0D1F3EB62E
+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
+jp/ppYN9ShQziz626uFvYWRCqMQUAAA=
+--------------DDE9F0BC15B47FAB338354BD
 Content-Type: application/gzip;
  name="kconfig.gz"
 Content-Transfer-Encoding: base64
@@ -1110,4 +1078,4 @@ hPn1ChB1zslyQivX0nsDqO7m7aIADKsk4QUpUWDMFD9W+iX58ajNzX0JWoiiRJ8/CoQ2ws/A
 swMRVkTcswG5EFapxYfuBsGEkolPUc0srhUOH9EVeImOABi/X2MnubkCO0f1RCpiLsp0E+jR
 RuRoy9wX9gi5m5g5RSgGGvlMm8Wt0jxyCsOAJmAtcQaLEhzruKALaftLsu1E5rnA7wr3EgDO
 u2SW17AI1p2sYzeb0Z3FCQsjXUb+AxKorfBsHQMA
---------------673A84117611FA0D1F3EB62E--
+--------------DDE9F0BC15B47FAB338354BD--
