@@ -2,416 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6CA1B7DBC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 20:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3321B7DDE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 20:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727123AbgDXSTQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Apr 2020 14:19:16 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:51053 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727988AbgDXSTO (ORCPT
+        id S1728692AbgDXS3N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Apr 2020 14:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727033AbgDXS3M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Apr 2020 14:19:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587752351;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zBlEEl/4DE3AueNz8EcPFW+nerY+eN9VDgbsYvuIwAk=;
-        b=W4NpuWC/qtPem98Y7DBRzVPQChRSnsLSimaPALbvOZlhmnq6USddT5MEAI6rnFxxSw5KIy
-        y2FB9EheNGdtzPQ1PokMeC1QJTiqNndIPJ0d1oHB8yVQVE2Oz02ooEob2snGrKaQzk+YqA
-        ZgFvBAC9cV2iyp51fLm+l66Ye5XFSUo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-358-wM_L9XSxPy-Wam3e3x_hbA-1; Fri, 24 Apr 2020 14:18:57 -0400
-X-MC-Unique: wM_L9XSxPy-Wam3e3x_hbA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 676B48015D1;
-        Fri, 24 Apr 2020 18:18:50 +0000 (UTC)
-Received: from w520.home (ovpn-112-162.phx2.redhat.com [10.3.112.162])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 73F46619DC;
-        Fri, 24 Apr 2020 18:18:47 +0000 (UTC)
-Date:   Fri, 24 Apr 2020 12:18:46 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [regression] Re: [PATCH v6 06/12] mm/gup: track FOLL_PIN pages
-Message-ID: <20200424121846.5ee2685f@w520.home>
-In-Reply-To: <20200211001536.1027652-7-jhubbard@nvidia.com>
-References: <20200211001536.1027652-1-jhubbard@nvidia.com>
-        <20200211001536.1027652-7-jhubbard@nvidia.com>
+        Fri, 24 Apr 2020 14:29:12 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E05EC09B049
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2020 11:29:12 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id r2so10191455ilo.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2020 11:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=o3ECeOnWmOOIX7JhONBpTDrU6V2RncHpVLywz33DaM0=;
+        b=B1/5SqL0yLaKdQZ0nVzCSET6KOFzOezDBatJbZRoANF6iAyGl68o1Z4bZsudRV09sh
+         PnubkcySFifqXIcbIugrfnLPzy1jXIU1LJb6B1TxJAJ454iWUvnlc8zRMNJc0wZm8QNO
+         luAsBYEmRZSzphToZbUw8440p0nnXREQkeZuc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=o3ECeOnWmOOIX7JhONBpTDrU6V2RncHpVLywz33DaM0=;
+        b=Y/NcuqlpZUfw4xMMksNd4NMByZOg4YEsKyRbVXDs8WCkasyxpzmsfMzxI3lfUb8eLa
+         ZBNy6ybSjnh+xfZBq7zSK3NDXCGh8jT8AIQdkd3hwweXlssz7p/23bRw69QEt4c3Wv8a
+         D6e3Kh0QDIaAb0WXW0xEM3cv0u8x6mhAXFqrcwegFl7/NNgJS6kGFhBft4CzmJ/Vo5/y
+         CTpT1SWyNTYmVdY9yFCW72hNkMpNVhuWWhBKKLz63fZ0jeT4tTYWzksHWSO4aEdFytw2
+         yCbDvwtJkuQHOmKLVQGQpSaVlAfEDKwcHF3k5qw8HIhao+/1e1NN42kfzO37kkitqENo
+         Wj+w==
+X-Gm-Message-State: AGi0PuaMb553n6XXdTLWiM8RfPj5QDtHa/tfXa267YRzTlTKheFWAEWT
+        4rzswe9dEjvoZbP3ze7ZvlzpWQ==
+X-Google-Smtp-Source: APiQypL779N+IIt95hyM/PzjM4PPg8knZ/jgyJ3ubr7vLM8Nr7bmHptbylBBO3nXHUcwZ+5v2tR6tA==
+X-Received: by 2002:a92:d846:: with SMTP id h6mr8165453ilq.248.1587752951431;
+        Fri, 24 Apr 2020 11:29:11 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id l14sm2047083ioj.12.2020.04.24.11.29.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Apr 2020 11:29:10 -0700 (PDT)
+Subject: Re: [PATCH] selftests: add build/cross-build dependency check script
+To:     "Bird, Tim" <Tim.Bird@sony.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "bamv2005@gmail.com" <bamv2005@gmail.com>,
+        "khilman@baylibre.com" <khilman@baylibre.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200414212208.21667-1-skhan@linuxfoundation.org>
+ <374866ac-4519-f367-bdc6-ec8d0c1b6347@infradead.org>
+ <CY4PR13MB1527A6A6F9BCEADAF14A3C6BFDD00@CY4PR13MB1527.namprd13.prod.outlook.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <177a6b62-630d-7b30-dbb6-7e6ca7054790@linuxfoundation.org>
+Date:   Fri, 24 Apr 2020 12:29:09 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/aRIlGjxB14=fzhStE9AJEEB"
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <CY4PR13MB1527A6A6F9BCEADAF14A3C6BFDD00@CY4PR13MB1527.namprd13.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---MP_/aRIlGjxB14=fzhStE9AJEEB
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
-
-On Mon, 10 Feb 2020 16:15:30 -0800
-John Hubbard <jhubbard@nvidia.com> wrote:
-
-> Add tracking of pages that were pinned via FOLL_PIN. This tracking is
-> implemented via overloading of page->_refcount: pins are added by
-> adding GUP_PIN_COUNTING_BIAS (1024) to the refcount. This provides a
-> fuzzy indication of pinning, and it can have false positives (and that's
-> OK). Please see the pre-existing
-> Documentation/core-api/pin_user_pages.rst for details.
->=20
-> As mentioned in pin_user_pages.rst, callers who effectively set FOLL_PIN
-> (typically via pin_user_pages*()) are required to ultimately free such
-> pages via unpin_user_page().
->=20
-> Please also note the limitation, discussed in pin_user_pages.rst under
-> the "TODO: for 1GB and larger huge pages" section. (That limitation will
-> be removed in a following patch.)
->=20
-> The effect of a FOLL_PIN flag is similar to that of FOLL_GET, and may be
-> thought of as "FOLL_GET for DIO and/or RDMA use".
->=20
-> Pages that have been pinned via FOLL_PIN are identifiable via a
-> new function call:
->=20
->    bool page_maybe_dma_pinned(struct page *page);
->=20
-> What to do in response to encountering such a page, is left to later
-> patchsets. There is discussion about this in [1], [2], [3], and [4].
->=20
-> This also changes a BUG_ON(), to a WARN_ON(), in follow_page_mask().
->=20
-> [1] Some slow progress on get_user_pages() (Apr 2, 2019):
->     https://lwn.net/Articles/784574/
-> [2] DMA and get_user_pages() (LPC: Dec 12, 2018):
->     https://lwn.net/Articles/774411/
-> [3] The trouble with get_user_pages() (Apr 30, 2018):
->     https://lwn.net/Articles/753027/
-> [4] LWN kernel index: get_user_pages():
->     https://lwn.net/Kernel/Index/#Memory_management-get_user_pages
->=20
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On 4/24/20 11:28 AM, Bird, Tim wrote:
+>> -----Original Message-----
+>> From: linux-kselftest-owner@vger.kernel.org <linux-kselftest-owner@vger.kernel.org> On Behalf Of Randy Dunlap
+>>
+>> On 4/14/20 2:22 PM, Shuah Khan wrote:
+>>> -CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ $(MOUNT_CFLAGS)
+>>> -LDLIBS += $(MOUNT_LDLIBS)
+>>> +CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ $(VAR_CFLAGS)
+>>> +LDLIBS += $(VAR_LDLIBS)
+>>
+>>
+>> (1) Can that series of ../../../.. be replaced by $(objtree)?
+>> If so, that would be much cleaner IMO.
+> 
+> kselftests doesn't set $(objtree) when it is run directly
+> (ie make -C tools/testing/selftests)
+> 
+> I had my own solution which was to use KBUILD_OUTPUT, like so:
+> This was a patch in my queue, that I didn't send in because I wasn't
+> very happy with it.  I was still considering alternatives.
+> 
+> ---------------- (patch)
+> Subject: [PATCH] selftests/vm: use includes from KBUILD_OUTPUT directory
+> 
+> The Makefile for the vm tests was specifying a relative path
+> (in the source directory) for accessing include files.  This
+> doesn't work when the headers files are placed in another
+> directory (with O= or KBUILD_OUTPUT).  It may appear to work,
+> but ends up using includes from the host machine, which may
+> not match the kernel source being compiled against.
+> 
+> Without this change, when the program userfaultfd.c was
+> compiled, it generated errors like the following:
+> 
+>      userfaultfd.c:267:21: error: 'UFFD_API_RANGE_IOCTLS_BASIC' undeclared
+>      here (not in a function)
+>        .expected_ioctls = UFFD_API_RANGE_IOCTLS_BASIC,
+>                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>      userfaultfd.c: In function 'uffd_poll_thread':
+>      userfaultfd.c:529:8: error: 'UFFD_EVENT_FORK' undeclared (first use in
+>      this function)
+>         case UFFD_EVENT_FORK:
+>              ^~~~~~~~~~~~~~~
+>      userfaultfd.c:529:8: note: each undeclared identifier is reported only
+>      once for each function it appears in
+>      userfaultfd.c:531:18: error: 'union <anonymous>' has no member named
+>      'fork'
+>          uffd = msg.arg.fork.ufd;
+>                        ^
+> 
+> Change the CFLAGS definition in the Makefile to reference
+> KBUILD_OUTPUT.
+> 
+> Signed-off-by: Tim Bird <tim.bird@sony.com>
 > ---
->  Documentation/core-api/pin_user_pages.rst |   6 +-
->  include/linux/mm.h                        |  82 +++++--
->  mm/gup.c                                  | 254 +++++++++++++++++-----
->  mm/huge_memory.c                          |  29 ++-
->  mm/hugetlb.c                              |  54 +++--
->  5 files changed, 334 insertions(+), 91 deletions(-)
+>   tools/testing/selftests/vm/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 7f9a8a8..0208659 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -3,7 +3,7 @@
+>   uname_M := $(shell uname -m 2>/dev/null || echo not)
+>   ARCH ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
+>   
+> -CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
+> +CFLAGS = -Wall -I $(KBUILD_OUTPUT)/usr/include $(EXTRA_CFLAGS)
+>   LDLIBS = -lrt
+>   TEST_GEN_FILES = compaction_test
+>   TEST_GEN_FILES += gup_benchmark
+> 
 
-Hi John,
+This should be $(OUTPUT) instead of $(KBUILD_OUTPUT). OUTPUT is
+set by selftests Makefile and lib.mk which is common for all
+tests even when make -C is used for compile.
 
-I'm seeing a regression bisected back to this commit (3faa52c03f44
-mm/gup: track FOLL_PIN pages).  I've attached some vfio-pci test code
-that reproduces this by mmap'ing a page of MMIO space of a device and
-then tries to map that through the IOMMU, so this should be attempting
-a gup/pin of a PFNMAP page.  Previously this failed gracefully (-EFAULT),
-but now results in:
+Using KBUILD_OUTPUT will break other use-cases.
 
-BUG: unable to handle page fault for address: ffffae5cbfe5e938
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 0 P4D 0=20
-Oops: 0000 [#1] SMP NOPTI
-CPU: 18 PID: 3365 Comm: vfio-pci-dma-ma Tainted: G           OE     5.6.0+ =
-#6
-Hardware name: AMD Corporation Diesel/Diesel, BIOS TDL100CB 03/17/2020
-RIP: 0010:get_pfnblock_flags_mask+0x22/0x70
-Code: c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 05 bc e1 d9 01 48 89 f7 =
-49 89 c8 48 c1 ef 0f 48 85 c0 74 48 48 89 f1 48 c1 e9 17 <48> 8b 04 c8 48 8=
-5 c0 74 0b 40 0f b6 ff 48 c1 e7 04 48 01 f8 48 c1
-RSP: 0018:ffffb55289b3fcc8 EFLAGS: 00010216
-RAX: ffff9e5cbff50000 RBX: 0000000000000001 RCX: 000001fffffe1d27
-RDX: 0000000000000002 RSI: ffffff0e93acd633 RDI: 0001fffffe1d2759
-RBP: ffffb55289b3fd88 R08: 0000000000000007 R09: ffff9e48a52476a8
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000001 R15: ffff9e48ab358cc0
-FS:  00007f4ef7269740(0000) GS:ffff9e48afa80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffae5cbfe5e938 CR3: 0000000c61eda000 CR4: 00000000003406e0
-Call Trace:
- __gup_longterm_locked+0x274/0x620
- vaddr_get_pfn+0x74/0x110 [vfio_iommu_type1]
- vfio_pin_pages_remote+0x6e/0x370 [vfio_iommu_type1]
- vfio_iommu_type1_ioctl+0x8e5/0xaac [vfio_iommu_type1]
- ksys_ioctl+0x86/0xc0
- __x64_sys_ioctl+0x16/0x20
- do_syscall_64+0x5b/0x1f0
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7f4ef6d7d307
-Code: 44 00 00 48 8b 05 69 1b 2d 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff =
-ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff f=
-f 73 01 c3 48 8b 0d 39 1b 2d 00 f7 d8 64 89 01 48
-RSP: 002b:00007fff76ada738 EFLAGS: 00000213 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4ef6d7d307
-RDX: 00007fff76ada760 RSI: 0000000000003b71 RDI: 0000000000000003
-RBP: 00007fff76ada930 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000213 R12: 0000000000400950
-R13: 00007fff76adaa10 R14: 0000000000000000 R15: 0000000000000000
-Modules linked in: vfio_pci(OE) vfio_virqfd(OE) vfio_iommu_type1(OE) vfio(O=
-E) amd64_edac_mod edac_mce_amd kvm_amd kvm rfkill sunrpc ipmi_ssif vfat irq=
-bypass fat ipmi_si crct10dif_pclmul crc32_pclmul sp5100_tco ghash_clmulni_i=
-ntel ipmi_devintf pcspkr joydev ccp i2c_piix4 k10temp ipmi_msghandler pinct=
-rl_amd acpi_cpufreq ip_tables nouveau ast video mxm_wmi drm_vram_helper wmi=
- drm_ttm_helper i2c_algo_bit drm_kms_helper cec ttm drm i40e e1000e crc32c_=
-intel
-CR2: ffffae5cbfe5e938
----[ end trace a384ab7cc8e37d46 ]---
-RIP: 0010:get_pfnblock_flags_mask+0x22/0x70
-Code: c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 05 bc e1 d9 01 48 89 f7 =
-49 89 c8 48 c1 ef 0f 48 85 c0 74 48 48 89 f1 48 c1 e9 17 <48> 8b 04 c8 48 8=
-5 c0 74 0b 40 0f b6 ff 48 c1 e7 04 48 01 f8 48 c1
-RSP: 0018:ffffb55289b3fcc8 EFLAGS: 00010216
-RAX: ffff9e5cbff50000 RBX: 0000000000000001 RCX: 000001fffffe1d27
-RDX: 0000000000000002 RSI: ffffff0e93acd633 RDI: 0001fffffe1d2759
-RBP: ffffb55289b3fd88 R08: 0000000000000007 R09: ffff9e48a52476a8
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000001 R15: ffff9e48ab358cc0
-FS:  00007f4ef7269740(0000) GS:ffff9e48afa80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffae5cbfe5e938 CR3: 0000000c61eda000 CR4: 00000000003406e0
+Send me the patch when you are ready.
 
-Thanks,
-Alex
+kselftest Makefile invokes headers_install from the main Makefile.
 
---MP_/aRIlGjxB14=fzhStE9AJEEB
-Content-Type: text/x-c++src
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename=vfio-pci-dma-map-mmio.c
+This sequence doesn't install headers again when kselftest make
+is done:
 
-#include <errno.h>
-#include <libgen.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/eventfd.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/types.h>
+Main directory:
+# make headers_install
+[headers_install runs]
 
-#include <linux/ioctl.h>
-#include <linux/vfio.h>
-#include <linux/pci_regs.h>
+# make headers_install
+INSTALL ./usr/include
+[does nothing - headers are there]
 
-void usage(char *name)
-{
-	fprintf(stderr, "usage: %s <ssss:bb:dd.f>\n", name);
-	fprintf(stderr, "\tssss: PCI segment, ex. 0000\n");
-	fprintf(stderr, "\tbb:   PCI bus, ex. 01\n");
-	fprintf(stderr, "\tdd:   PCI device, ex. 06\n");
-	fprintf(stderr, "\tf:    PCI function, ex. 0\n");
-}
+make kselftest-all
+make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
+make[2]: Entering directory '/home/shuah/lkml/linux_5.7'
+   INSTALL ./usr/include
 
-int main(int argc, char **argv)
-{
-	int seg, bus, slot, func;
-	int ret, container, group, device, groupid;
-	char path[50], iommu_group_path[50], *group_name;
-	struct stat st;
-	ssize_t len;
-	void *map = MAP_FAILED;
-	int i;
-	unsigned int bar;
-	struct vfio_group_status group_status = {
-		.argsz = sizeof(group_status)
-	};
-	struct vfio_region_info region_info = {
-		.argsz = sizeof(region_info)
-	};
-	struct vfio_region_info config_info = {
-		.argsz = sizeof(config_info)
-	};
-	struct vfio_iommu_type1_dma_map dma_map = {
-		.argsz = sizeof(dma_map),
-		.flags = VFIO_DMA_MAP_FLAG_READ | VFIO_DMA_MAP_FLAG_WRITE,
-	};
+[Same here - headers aren't installed]
 
-	if (argc != 2) {
-		usage(argv[0]);
-		return -1;
-	}
+I didn't check O= and KBUILD_OUTPUT cases though.
 
-	ret = sscanf(argv[1], "%04x:%02x:%02x.%d", &seg, &bus, &slot, &func);
-	if (ret != 4) {
-		fprintf(stderr, "Invalid device\n");
-		usage(argv[0]);
-		return -1;
-	}
-
-	/* Boilerplate vfio setup */
-	container = open("/dev/vfio/vfio", O_RDWR);
-	if (container < 0) {
-		fprintf(stderr, "Failed to open /dev/vfio/vfio, %d (%s)\n",
-		       container, strerror(errno));
-		return container;
-	}
-
-	snprintf(path, sizeof(path),
-		 "/sys/bus/pci/devices/%04x:%02x:%02x.%01x/",
-		 seg, bus, slot, func);
-
-	ret = stat(path, &st);
-	if (ret < 0) {
-		fprintf(stderr, "No such device\n");
-		return ret;
-	}
-
-	strncat(path, "iommu_group", sizeof(path) - strlen(path) - 1);
-
-	len = readlink(path, iommu_group_path, sizeof(iommu_group_path));
-	if (len <= 0) {
-		fprintf(stderr, "No iommu_group for device\n");
-		return -1;
-	}
-
-	iommu_group_path[len] = 0;
-	group_name = basename(iommu_group_path);
-
-	if (sscanf(group_name, "%d", &groupid) != 1) {
-		fprintf(stderr, "Unknown group\n");
-		return -1;
-	}
-
-	snprintf(path, sizeof(path), "/dev/vfio/%d", groupid);
-	group = open(path, O_RDWR);
-	if (group < 0) {
-		fprintf(stderr, "Failed to open %s, %d (%s)\n",
-		       path, group, strerror(errno));
-		return group;
-	}
-
-	ret = ioctl(group, VFIO_GROUP_GET_STATUS, &group_status);
-	if (ret) {
-		fprintf(stderr, "ioctl(VFIO_GROUP_GET_STATUS) failed\n");
-		return ret;
-	}
-
-	if (!(group_status.flags & VFIO_GROUP_FLAGS_VIABLE)) {
-		fprintf(stderr,
-			"Group not viable, all devices attached to vfio?\n");
-		return -1;
-	}
-
-	ret = ioctl(group, VFIO_GROUP_SET_CONTAINER, &container);
-	if (ret) {
-		fprintf(stderr, "Failed to set group container\n");
-		return ret;
-	}
-
-	ret = ioctl(container, VFIO_SET_IOMMU, VFIO_TYPE1_IOMMU);
-	if (ret) {
-		fprintf(stderr, "Failed to set IOMMU\n");
-		return ret;
-	}
-
-	snprintf(path, sizeof(path), "%04x:%02x:%02x.%d", seg, bus, slot, func);
-
-	device = ioctl(group, VFIO_GROUP_GET_DEVICE_FD, path);
-	if (device < 0) {
-		fprintf(stderr, "Failed to get device\n");
-		return -ENODEV;
-	}
-
-	config_info.index = VFIO_PCI_CONFIG_REGION_INDEX;
-	ret = ioctl(device, VFIO_DEVICE_GET_REGION_INFO, &config_info);
-	if (ret) {
-		fprintf(stderr, "Failed to get config space region info\n");
-		return ret;
-	}
-
-	for (i = 0; i < 6; i++) {
-		if (pread(device, &bar, sizeof(bar),
-		          config_info.offset + PCI_BASE_ADDRESS_0 + (4 * i)) !=
-		    sizeof(bar)) {
-			fprintf(stderr, "Error reading BAR%d\n", i);
-			return -errno;
-		}
-
-		if (!(bar & PCI_BASE_ADDRESS_SPACE)) {
-			break;
-
-tryagain:
-			if (bar & PCI_BASE_ADDRESS_MEM_TYPE_64)
-				i++;
-		}
-	}
-
-	if (i >= 6) {
-		fprintf(stderr, "No memory BARs found\n");
-		return -ENODEV;
-	}
-
-	region_info.index = VFIO_PCI_BAR0_REGION_INDEX + i;
-	ret = ioctl(device, VFIO_DEVICE_GET_REGION_INFO, &region_info);
-	if (ret) {
-		fprintf(stderr, "Failed to get BAR%d region info\n", i);
-		return ret;
-	}
-  
-	if (!(region_info.flags & VFIO_REGION_INFO_FLAG_MMAP)) {
-		printf("No mmap support, try next\n");
-		goto tryagain;
-	}
-
-	if (region_info.size < getpagesize()) {
-		printf("Too small for mmap, try next\n");
-		goto tryagain;
-	}
-
-	map = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE,
-		   MAP_SHARED, device, region_info.offset);
-	if (map == MAP_FAILED) {
-		fprintf(stderr, "Error mmap'ing BAR: %m\n");
-		goto tryagain;
-	}
-
-	dma_map.size = getpagesize();
-	dma_map.vaddr = (__u64)map;
-	dma_map.iova = 1024 * 1024 * 1024; /* 1GB IOVA, arbitrary */
-
-	ret = ioctl(container, VFIO_IOMMU_MAP_DMA, &dma_map);
-	if (ret) {
-		fprintf(stderr, "Failed to DMA map: %m\n");
-		return ret;
-	}
-		
-	printf("Passed\n");
-	return 0;
-}
-
---MP_/aRIlGjxB14=fzhStE9AJEEB--
-
+thanks,
+-- Shuah
