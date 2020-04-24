@@ -2,102 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8111B6DE5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 08:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72BC1B6E3D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 08:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbgDXGOK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Apr 2020 02:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
+        id S1726520AbgDXGhC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Apr 2020 02:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726585AbgDXGOJ (ORCPT
+        by vger.kernel.org with ESMTP id S1725868AbgDXGhC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Apr 2020 02:14:09 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32FDC09B046
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2020 23:14:07 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id v71so6959604pjb.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2020 23:14:07 -0700 (PDT)
+        Fri, 24 Apr 2020 02:37:02 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEADC09B045
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2020 23:37:01 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id v8so9185239wma.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2020 23:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ktlf9QISDdPRX1uK01ka9sL/IDfKnusqL4DRjBWXu7E=;
-        b=ChzEHTsGqPRuCDwBSqzePHzbU3gd0vJ/obMVlNCqmZP6Bx9+LTIISm27bGINFK3ST6
-         U6egrTXZiDrcvjehCTkYlvCU6d9nsry4pNfwODvaALAVcnhYTx5axmEwIuK/GPq9Cfz8
-         UGfCyjVxVimTBu17eikwQb58W7KS5lsJoXPexDu9e8s4Peg0P3t/ZQHkcwab7oi7yoTM
-         GLC50li+VxxNldpiZ2gmUfvc0iPOMQFq5Mp4IFhOcF+8qx+5jUNTDO2ek2PqzLQnG6bg
-         7HreaMnVbHJmtsy4iqk8Nnut8zz6Smp6nnpdPPhjNz3hvUT561nE2fr4u5OMGoXJ/3kc
-         XalA==
+        bh=5Nl042EYhQkNdGgGpL0PjYS28b3/nSBEMCyC0XuhXcY=;
+        b=T3WvB9ZktxtKUFHZ4fn4bJrekvXMv5L0WjMsvkfzHvN3QFdGzUWUsLB/s/gpxzo8B8
+         c6u7vRd1abf2esEI0zaqL64FZhh/yBpz6GIb/TYnXFMj70BIzGV+U9GDhGksQs1x3Xp8
+         GHTDOI3SBEGflHKHNpuj8K/MipYao2Zz0mvyJnmtIMX2Dk270CoKX0Ug+oWGISPKXp6V
+         Hwu0YN1lmyWKmDFhs7mUa3sflRRX/6b03twFl6DB6VIgjo8t2R32x/QQxDO+d2MnFT+Q
+         2gzzqg0AZPgYowryahbt0CwianpNJaM2HiUbvb7ug3ukvlwpdIRmNvUHw0T/fQYAJU3X
+         sjjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Ktlf9QISDdPRX1uK01ka9sL/IDfKnusqL4DRjBWXu7E=;
-        b=DXFKfhhsp/0YnnVbgfgxBHx9my7twMnw0XtnJPC7Ui2w7hNuppZV3S+McC46ri8yah
-         7UldNhO59wn9V2EUWIhTyiydWSRF31cKiZ8b4W2qqhf7VwjkESpccttesKSO4MNnYdYS
-         oZoxkTjZNW/gk/aOffMMqhGzurl3cLmHVvW3CLTK3QqQesjNCGPA4ju80RC3mLhG5/fC
-         GJ1WG1Zar2jO+P35LOT+yKnqnOLBFsjGvJ/mdcumkgSAmo7OrN1HLYevjTub2mYfIxs4
-         7RhIrmgQnx+/pJJHXcp945ZKJyYM6St5Gin9fqs33ZwJmnefpIoemVC7Pf10G0MbccwD
-         tFvw==
-X-Gm-Message-State: AGi0PuZB+FGeU9YuL5zMJoQHlYNgR8+QKJqsMhDwTUx7AgSqXB3d19jC
-        NJnXZJn+W9P8nbsfRurgaIcmac9BvBpXBA==
-X-Google-Smtp-Source: APiQypKOtuNJXwpmMrdTnwPQuAL+4H1Nq1T3AV8w+3m+0jNCAItOLBXkSV8iB3V7g9qIPYAGCP41cMK+FN/X1w==
-X-Received: by 2002:a17:90a:ba88:: with SMTP id t8mr4757997pjr.182.1587708847422;
- Thu, 23 Apr 2020 23:14:07 -0700 (PDT)
-Date:   Thu, 23 Apr 2020 23:13:42 -0700
-In-Reply-To: <20200424061342.212535-1-davidgow@google.com>
-Message-Id: <20200424061342.212535-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20200424061342.212535-1-davidgow@google.com>
-X-Mailer: git-send-email 2.26.2.303.gf8c07b1a785-goog
-Subject: [PATCH v7 5/5] mm: kasan: Do not panic if both panic_on_warn and
- kasan_multishot set
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5Nl042EYhQkNdGgGpL0PjYS28b3/nSBEMCyC0XuhXcY=;
+        b=Qs8ZnYscD9Er9oXNJH79P5XP9hlgrnu1SQ8YPdqAF/tcSYpwTTYxMs1Vh+oNxy5hk/
+         9f0MbS+I2h03kRn52qS++aFmTAF359y9TbwwxZIjAElinujj/vKm21V4zcAqEDbdpONE
+         HVWwtKl7lORKXV5fbkNJaEqiK6Dp6qmqgce/GolT1EWv7MdBaX/aFdVL28MSDt7w9R4I
+         8FSXPkAL7/j0jxdgK7qd4GMQ4hEXfcy1+TFSsIiDjASxVsDighOGepTcot2Bg5DiZ8Sz
+         dNb/+b86dms90d8zvdtX9dlbVXVaeL4LaM0HFNmhyvslA5iI8O3ho2UvLS7n5HxZcupt
+         axDw==
+X-Gm-Message-State: AGi0PuZRbXK4Kg96gtHWdAruFEECvB+MDznNrhGHdVi6HCOV1oCtINoC
+        nB6zJQ5+JfOYqsDAsAeqmLPpmAI0kaZNQWV2ZrE7ng==
+X-Google-Smtp-Source: APiQypKMkY07NawNGwqDN/zJwXiWw1DxsM8Vl7RhgQHchO6nUWhs8EYKruSMVBR4h3l/hhGbDF2hnMbzJTvnl82TqiE=
+X-Received: by 2002:a1c:a512:: with SMTP id o18mr7973525wme.138.1587710219940;
+ Thu, 23 Apr 2020 23:36:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200418031833.234942-1-davidgow@google.com> <alpine.LRH.2.21.2004181619110.12187@localhost>
+In-Reply-To: <alpine.LRH.2.21.2004181619110.12187@localhost>
 From:   David Gow <davidgow@google.com>
-To:     trishalfonso@google.com, brendanhiggins@google.com,
-        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org
-Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 24 Apr 2020 14:36:48 +0800
+Message-ID: <CABVgOS=k2eCMwt-Tz46=mCXg1Kxjb54sD1kW-R=mchFQiCgYTQ@mail.gmail.com>
+Subject: Re: [PATCH v6 0/5] KUnit-KASAN Integration
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Patricia Alfonso <trishalfonso@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KASAN errors will currently trigger a panic when panic_on_warn is set.
-This renders kasan_multishot useless, as further KASAN errors won't be
-reported if the kernel has already paniced. By making kasan_multishot
-disable this behaviour for KASAN errors, we can still have the benefits
-of panic_on_warn for non-KASAN warnings, yet be able to use
-kasan_multishot.
+On Sat, Apr 18, 2020 at 11:28 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+>
+> On Fri, 17 Apr 2020, David Gow wrote:
+>
+> > This patchset contains everything needed to integrate KASAN and KUnit.
+> >
+> > KUnit will be able to:
+> > (1) Fail tests when an unexpected KASAN error occurs
+> > (2) Pass tests when an expected KASAN error occurs
+> >
+> > Convert KASAN tests to KUnit with the exception of copy_user_test
+> > because KUnit is unable to test those.
+> >
+>
+> I tried building and running and things look good but I am
+> still seeing the three failures I reported before, even with
+> CONFIG_AMD_MEM_ENCRYPT not set.  My config is attached if you
+> want to try and reproduce at your end.  Oddly this config was
+> working before IIRC (once CONFIG_AMD_MEM_ENCRYPT was not set).
+>
+> Here's the failures:
+>
+>    # kasan_memchr: EXPECTATION FAILED at lib/test_kasan.c:545
+>     Expected fail_data.report_expected == fail_data.report_found, but
+>         fail_data.report_expected == 1
+>         fail_data.report_found == 0
+>     not ok 31 - kasan_memchr
+>     # kasan_memcmp: EXPECTATION FAILED at lib/test_kasan.c:566
+>     Expected fail_data.report_expected == fail_data.report_found, but
+>         fail_data.report_expected == 1
+>         fail_data.report_found == 0
+>     not ok 32 - kasan_memcmp
 
-This is particularly important when running KASAN tests, which need to
-trigger multiple KASAN errors: previously these would panic the system
-if panic_on_warn was set, now they can run (and will panic the system
-should non-KASAN warnings show up).
+I was able to reproduce these (along with a kasan_strings) failure,
+and the cause seems to be some combination of __builtin functions
+being inlined by the compiler and potentially dead code elimination,
+as fixed by Daniel Axtens here:
+https://lkml.org/lkml/2020/4/23/708
 
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
----
- mm/kasan/report.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've sent out v7 of the patchset[1], which I've rebased on top of
+Daniel's patches, and can no longer reproduce those test failures with
+your .config.
 
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 45f3c23f54cb..dc9fc5c09ea3 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -94,7 +94,7 @@ static void end_report(unsigned long *flags)
- 	pr_err("==================================================================\n");
- 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
- 	spin_unlock_irqrestore(&report_lock, *flags);
--	if (panic_on_warn) {
-+	if (panic_on_warn && !test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags)) {
- 		/*
- 		 * This thread may hit another WARN() in the panic path.
- 		 * Resetting this prevents additional WARN() from panicking the
--- 
-2.26.2.303.gf8c07b1a785-goog
+Cheers,
+-- David
 
+[1]: https://lkml.org/lkml/2020/4/24/80
