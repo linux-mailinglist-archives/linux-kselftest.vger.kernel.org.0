@@ -2,115 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A371B8056
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 22:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542D71B81F7
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Apr 2020 00:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729595AbgDXUQC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Apr 2020 16:16:02 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:34649 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729597AbgDXUQC (ORCPT
+        id S1726162AbgDXWTx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Apr 2020 18:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726022AbgDXWTx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Apr 2020 16:16:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587759361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mijZ0deIMv+7N52HZ2/oeSJuKxO51O9zwfYwlf/bvUU=;
-        b=C9EhOtkKREEANxg/I6/rDMkFVNyFTBOwMguXh8xELPmqp2IYZmKwfgjC3qKD5rOf1GzDRD
-        5oe8YGsGIL8Ny3b5yEIsD+QFyXkdJ12nLytC/oO0CkQNdrqiLRu6GfrEb3ylwvwOL2HO9O
-        XkairqiZupaYBPN+4ixb1euUX/4RJRs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-342-D4Qq4ngMOX6rlbMg-FH6uw-1; Fri, 24 Apr 2020 16:15:56 -0400
-X-MC-Unique: D4Qq4ngMOX6rlbMg-FH6uw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A496D107BEFE;
-        Fri, 24 Apr 2020 20:15:53 +0000 (UTC)
-Received: from w520.home (ovpn-112-162.phx2.redhat.com [10.3.112.162])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C2F531002380;
-        Fri, 24 Apr 2020 20:15:51 +0000 (UTC)
-Date:   Fri, 24 Apr 2020 14:15:48 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Dan Williams" <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Ira Weiny" <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [regression] Re: [PATCH v6 06/12] mm/gup: track FOLL_PIN pages
-Message-ID: <20200424141548.5afdd2bb@w520.home>
-In-Reply-To: <5b901542-d949-8d7e-89c7-f8d5ee20f6e9@nvidia.com>
-References: <20200211001536.1027652-1-jhubbard@nvidia.com>
-        <20200211001536.1027652-7-jhubbard@nvidia.com>
-        <20200424121846.5ee2685f@w520.home>
-        <5b901542-d949-8d7e-89c7-f8d5ee20f6e9@nvidia.com>
+        Fri, 24 Apr 2020 18:19:53 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B53BC09B049
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2020 15:19:53 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id 20so11871721qkl.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2020 15:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WGOMinoRPcnlI70rPdJ5CxQD7Vp6ODKBRmVseNmsuZY=;
+        b=tG5V04JQRs9MpyavBTUEu6SJzTMe9vU3VMJ88lR+6ZUrYoEqlmpp12m/Ya+4OpN8u2
+         uB3gz7ZlNbKXsn3/cfP5EslZpanIoo8KSPBfDGhlwhGt5rH7VyNrdLHUCb7jkpNofmwf
+         zfCQu6BdxVM/q/sdAu7qFrec/Roka2/QYGGfU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WGOMinoRPcnlI70rPdJ5CxQD7Vp6ODKBRmVseNmsuZY=;
+        b=JvHncHmOdjiim1OG4o/jwpAsrXnGNCpfInM0s7jYPca9kSM3T4uid2YBYR7sZBa+4k
+         CASET245n4f7F6zWTiucAf6yO831mLsJjYc+BlBjiEPfPofsmk3pFOsB1BwRwJn6g7y9
+         ExM+V9hARdFOsaxCEp1ACdm6tlQfByOieljgwCUVQQpqbg1Gmj+seUcIkzJ7xbQwbHzV
+         P7g/VUnIG+wwqOfLwfGfIBnKBHPRwhzgnK6XMEaBzwljb5n98ZhKjmc+SdVxo7fljl0W
+         j0j5UX+PkQ0iACpuzrKEDnbEeT/zIl2ZQ3gtJNw5AFPk6VE2qcTfzkUEA9AHgGVgtTc4
+         gsVg==
+X-Gm-Message-State: AGi0PuZ0qt0Rd7ZXToTKcIjh9UdGznVFMrHcGRstVUfBBuMWN6JLQeA5
+        lR4SHtaBgBCNWh/4/UFraHlXBg==
+X-Google-Smtp-Source: APiQypLrsrtO4O72DH1Yx6UZ82q7oUEWtaHTFWLkrOx2rtCxCGH5VGuzmIkMVfpYIUxUGnDOzMH8VQ==
+X-Received: by 2002:ae9:f507:: with SMTP id o7mr10862620qkg.262.1587766791699;
+        Fri, 24 Apr 2020 15:19:51 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id j8sm4977784qtk.85.2020.04.24.15.19.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2020 15:19:51 -0700 (PDT)
+Date:   Fri, 24 Apr 2020 18:19:50 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        linux-kselftest@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Xiao Yang <ice_yangxiao@163.com>
+Subject: Re: preemptirq_delay_test module can trigger crash on arm64 vm
+Message-ID: <20200424221950.GA162750@google.com>
+References: <5EA2B0C8.2080706@cn.fujitsu.com>
+ <20200424100146.786bcd7f@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200424100146.786bcd7f@gandalf.local.home>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 24 Apr 2020 12:20:03 -0700
-John Hubbard <jhubbard@nvidia.com> wrote:
-
-> On 2020-04-24 11:18, Alex Williamson wrote:
-> ...
-> > Hi John,
+On Fri, Apr 24, 2020 at 10:01:46AM -0400, Steven Rostedt wrote:
+> On Fri, 24 Apr 2020 17:26:32 +0800
+> Xiao Yang <yangx.jy@cn.fujitsu.com> wrote:
+> 
+> > Hi Steve, Joel
 > > 
-> > I'm seeing a regression bisected back to this commit (3faa52c03f44
-> > mm/gup: track FOLL_PIN pages).  I've attached some vfio-pci test code
-> > that reproduces this by mmap'ing a page of MMIO space of a device and
-> > then tries to map that through the IOMMU, so this should be attempting
-> > a gup/pin of a PFNMAP page.  Previously this failed gracefully (-EFAULT),
-> > but now results in:  
+> > Sorry to bother you.
+> > 
+> > On my slow arm64 vm, inserting and removing preemptirq_delay_test module
+> > in loops triggers kernel panic sometimes.
+> > 
+> > Reproduce steps:
+> > Do the following steps in loops(more than 10 times):
+> > [root@CentOS81-aarch64 ]# modprobe preemptirq_delay_test
+> > test_mode=preempt delay=500000; rmmod preemptirq_delay_test
+> > 
+> >
 > 
+> Joel,
 > 
-> Hi Alex,
+> I never did really look at that module, but doing a quick scan, I see you
+> never clean up the task you start.
 > 
-> Thanks for this report, and especially for source code to test it, 
-> seeing as how I can't immediately spot the problem just from the crash
-> data so far.  I'll get set up and attempt a repro.
+> Which means, you can remove the module and the task still exists, and when
+> it runs, it will execute code that has been freed.
 > 
-> Actually this looks like it should be relatively easier than the usual 
-> sort of "oops, we leaked a pin_user_pages() or unpin_user_pages() call,
-> good luck finding which one" report that I fear the most. :) This one 
-> looks more like a crash that happens directly, when calling into the 
-> pin_user_pages_remote() code. Which should be a lot easier to solve...
-> 
-> btw, if you are set up for it, it would be nice to know what source file 
-> and line number corresponds to the RIP (get_pfnblock_flags_mask+0x22) 
-> below. But if not, no problem, because I've likely got to do the repro 
-> in any case.
+> The module exit should still do a kthread_stop() on it. If anything, it
+> will prevent the task existing after the module is removed.
 
-Hey John,
+Thanks Steve for taking a look, I will submit a fix for it ASAP and send it to you
+for -rc cycle. Thanks Xiao for the report.
 
-TBH I'm feeling a lot less confident about this bisect.  This was
-readily reproducible to me on a clean tree a bit ago, but now it
-eludes me.  Let me go back and figure out what's going on before you
-spend any more time on it.  Thanks,
-
-Alex
+ - Joel
 
