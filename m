@@ -2,120 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72BC1B6E3D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 08:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817401B70C8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 11:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbgDXGhC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Apr 2020 02:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725868AbgDXGhC (ORCPT
+        id S1726298AbgDXJ0i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Apr 2020 05:26:38 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:13424 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726582AbgDXJ0h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Apr 2020 02:37:02 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEADC09B045
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2020 23:37:01 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id v8so9185239wma.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2020 23:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5Nl042EYhQkNdGgGpL0PjYS28b3/nSBEMCyC0XuhXcY=;
-        b=T3WvB9ZktxtKUFHZ4fn4bJrekvXMv5L0WjMsvkfzHvN3QFdGzUWUsLB/s/gpxzo8B8
-         c6u7vRd1abf2esEI0zaqL64FZhh/yBpz6GIb/TYnXFMj70BIzGV+U9GDhGksQs1x3Xp8
-         GHTDOI3SBEGflHKHNpuj8K/MipYao2Zz0mvyJnmtIMX2Dk270CoKX0Ug+oWGISPKXp6V
-         Hwu0YN1lmyWKmDFhs7mUa3sflRRX/6b03twFl6DB6VIgjo8t2R32x/QQxDO+d2MnFT+Q
-         2gzzqg0AZPgYowryahbt0CwianpNJaM2HiUbvb7ug3ukvlwpdIRmNvUHw0T/fQYAJU3X
-         sjjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5Nl042EYhQkNdGgGpL0PjYS28b3/nSBEMCyC0XuhXcY=;
-        b=Qs8ZnYscD9Er9oXNJH79P5XP9hlgrnu1SQ8YPdqAF/tcSYpwTTYxMs1Vh+oNxy5hk/
-         9f0MbS+I2h03kRn52qS++aFmTAF359y9TbwwxZIjAElinujj/vKm21V4zcAqEDbdpONE
-         HVWwtKl7lORKXV5fbkNJaEqiK6Dp6qmqgce/GolT1EWv7MdBaX/aFdVL28MSDt7w9R4I
-         8FSXPkAL7/j0jxdgK7qd4GMQ4hEXfcy1+TFSsIiDjASxVsDighOGepTcot2Bg5DiZ8Sz
-         dNb/+b86dms90d8zvdtX9dlbVXVaeL4LaM0HFNmhyvslA5iI8O3ho2UvLS7n5HxZcupt
-         axDw==
-X-Gm-Message-State: AGi0PuZRbXK4Kg96gtHWdAruFEECvB+MDznNrhGHdVi6HCOV1oCtINoC
-        nB6zJQ5+JfOYqsDAsAeqmLPpmAI0kaZNQWV2ZrE7ng==
-X-Google-Smtp-Source: APiQypKMkY07NawNGwqDN/zJwXiWw1DxsM8Vl7RhgQHchO6nUWhs8EYKruSMVBR4h3l/hhGbDF2hnMbzJTvnl82TqiE=
-X-Received: by 2002:a1c:a512:: with SMTP id o18mr7973525wme.138.1587710219940;
- Thu, 23 Apr 2020 23:36:59 -0700 (PDT)
+        Fri, 24 Apr 2020 05:26:37 -0400
+X-IronPort-AV: E=Sophos;i="5.73,311,1583164800"; 
+   d="scan'208";a="90107731"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 24 Apr 2020 17:26:34 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id 3577E4BCC89E;
+        Fri, 24 Apr 2020 17:15:57 +0800 (CST)
+Received: from [10.167.220.69] (10.167.220.69) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Fri, 24 Apr 2020 17:26:33 +0800
+Message-ID: <5EA2B0C8.2080706@cn.fujitsu.com>
+Date:   Fri, 24 Apr 2020 17:26:32 +0800
+From:   Xiao Yang <yangx.jy@cn.fujitsu.com>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.2; zh-CN; rv:1.9.2.18) Gecko/20110616 Thunderbird/3.1.11
 MIME-Version: 1.0
-References: <20200418031833.234942-1-davidgow@google.com> <alpine.LRH.2.21.2004181619110.12187@localhost>
-In-Reply-To: <alpine.LRH.2.21.2004181619110.12187@localhost>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 24 Apr 2020 14:36:48 +0800
-Message-ID: <CABVgOS=k2eCMwt-Tz46=mCXg1Kxjb54sD1kW-R=mchFQiCgYTQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/5] KUnit-KASAN Integration
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Patricia Alfonso <trishalfonso@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Steven Rostedt <rostedt@goodmis.org>, <joel@joelfernandes.org>
+CC:     <linux-kselftest@vger.kernel.org>,
+        <linux-trace-devel@vger.kernel.org>,
+        Xiao Yang <ice_yangxiao@163.com>
+Subject: preemptirq_delay_test module can trigger crash on arm64 vm
+Content-Type: text/plain; charset="GB2312"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.167.220.69]
+X-ClientProxiedBy: G08CNEXCHPEKD05.g08.fujitsu.local (10.167.33.203) To
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206)
+X-yoursite-MailScanner-ID: 3577E4BCC89E.AD8D7
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: yangx.jy@cn.fujitsu.com
+X-Spam-Status: No
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 11:28 PM Alan Maguire <alan.maguire@oracle.com> wrote:
->
->
-> On Fri, 17 Apr 2020, David Gow wrote:
->
-> > This patchset contains everything needed to integrate KASAN and KUnit.
-> >
-> > KUnit will be able to:
-> > (1) Fail tests when an unexpected KASAN error occurs
-> > (2) Pass tests when an expected KASAN error occurs
-> >
-> > Convert KASAN tests to KUnit with the exception of copy_user_test
-> > because KUnit is unable to test those.
-> >
->
-> I tried building and running and things look good but I am
-> still seeing the three failures I reported before, even with
-> CONFIG_AMD_MEM_ENCRYPT not set.  My config is attached if you
-> want to try and reproduce at your end.  Oddly this config was
-> working before IIRC (once CONFIG_AMD_MEM_ENCRYPT was not set).
->
-> Here's the failures:
->
->    # kasan_memchr: EXPECTATION FAILED at lib/test_kasan.c:545
->     Expected fail_data.report_expected == fail_data.report_found, but
->         fail_data.report_expected == 1
->         fail_data.report_found == 0
->     not ok 31 - kasan_memchr
->     # kasan_memcmp: EXPECTATION FAILED at lib/test_kasan.c:566
->     Expected fail_data.report_expected == fail_data.report_found, but
->         fail_data.report_expected == 1
->         fail_data.report_found == 0
->     not ok 32 - kasan_memcmp
+Hi Steve, Joel
 
-I was able to reproduce these (along with a kasan_strings) failure,
-and the cause seems to be some combination of __builtin functions
-being inlined by the compiler and potentially dead code elimination,
-as fixed by Daniel Axtens here:
-https://lkml.org/lkml/2020/4/23/708
+Sorry to bother you.
 
-I've sent out v7 of the patchset[1], which I've rebased on top of
-Daniel's patches, and can no longer reproduce those test failures with
-your .config.
+On my slow arm64 vm, inserting and removing preemptirq_delay_test module
+in loops triggers kernel panic sometimes.
 
-Cheers,
--- David
+Reproduce steps:
+Do the following steps in loops(more than 10 times):
+[root@CentOS81-aarch64 ]# modprobe preemptirq_delay_test
+test_mode=preempt delay=500000; rmmod preemptirq_delay_test
 
-[1]: https://lkml.org/lkml/2020/4/24/80
+Call Trace:
+-------------------------------------------------------------------
+[172413.750294] Unable to handle kernel paging request at virtual
+address fffffe0009010280
+[172413.790511] Mem abort info:
+[172413.791129]   ESR = 0x86000007
+[172413.791656]   EC = 0x21: IABT (current EL), IL = 32 bits
+[172413.792322]   SET = 0, FnV = 0
+[172413.792793]   EA = 0, S1PTW = 0
+[172413.794082] swapper pgtable: 64k pages, 42-bit VAs,
+pgdp=0000000040ef0000
+[172413.794556] [fffffe0009010280] pgd=00000000bfff0003,
+pud=00000000bfff0003, pmd=00000000bfff0003, pte=0000000000000000
+[172413.795690] Internal error: Oops: 86000007 [#1] PREEMPT SMP
+[172413.796285] Modules linked in: sunrpc vfat fat ext4 mbcache jbd2
+crct10dif_ce ghash_ce sha2_ce sha256_arm64 sha1_ce ip_tables xfs
+libcrc32c virtio_net net_failover failover virtio_blk virtio_mmio [last
+unloaded: preemptirq_delay_test]
+[172413.797797] CPU: 1 PID: 15750 Comm: preempt_test Not tainted
+5.6.0-rc7 #17
+[172413.798275] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0
+02/06/2015
+[172413.799049] pstate: 40000005 (nZcv daif -PAN -UAO)
+[172413.799934] pc : 0xfffffe0009010280
+[172413.800230] lr : 0xfffffe0009010280
+[172413.800497] sp : fffffe001390fe00
+[172413.800799] x29: fffffe001390fe00 x28: 0000000000000000
+[172413.801263] x27: 0000000000000000 x26: fffffe0009010000
+[172413.801726] x25: 0000000000000000 x24: fffffe00114a3670
+[172413.802164] x23: fffffe0010d1d150 x22: fffffe0016b2f9e8
+[172413.802635] x21: 0000000000000000 x20: fffffe0009030008
+[172413.803191] x19: fffffe0009030000 x18: 0000000000000000
+[172413.803672] x17: 0000000000000000 x16: 0000000000000000
+[172413.804118] x15: 0000000000000000 x14: 0000000000000000
+[172413.804558] x13: 0000000000000000 x12: 0000000000000000
+[172413.805013] x11: 0000000000000000 x10: 0000000000000d50
+[172413.805441] x9 : fffffe001390fd10 x8 : fffffc00762930b0
+[172413.805944] x7 : 00000000fa83b2da x6 : 0000000000000000
+[172413.806455] x5 : fffffe001127c000 x4 : fffffe006ed00000
+[172413.806874] x3 : fffffe001127cf50 x2 : 0000000000000002
+[172413.807312] x1 : 0000000000000000 x0 : 0000000000000228
+[172413.807869] Call trace:
+[172413.808146]  0xfffffe0009010280
+[172413.808436]  0xfffffe0009010294
+[172413.808723]  0xfffffe0009010050
+[172413.809519]  kthread+0x110/0x118
+[172413.809734]  ret_from_fork+0x10/0x18
+[172413.810338] Code: bad PC value
+[172413.811203] ---[ end trace 69c688402fdc8bb1 ]---
+[172413.811670] Kernel panic - not syncing: Fatal exception
+[172413.812108] SMP: stopping secondary CPUs
+[172413.812733] Kernel Offset: disabled
+[172413.813043] CPU features: 0x10002,20006082
+[172413.813387] Memory Limit: none
+[172413.813849] ---[ end Kernel panic - not syncing: Fatal exception]---
+-------------------------------------------------------------------
+
+Do you have any suggestion about the issue.
+
+Thanks,
+Xiao Yang
+
+
