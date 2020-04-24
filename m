@@ -2,122 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 817401B70C8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 11:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4E41B73C6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 14:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbgDXJ0i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Apr 2020 05:26:38 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:13424 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726582AbgDXJ0h (ORCPT
+        id S1726667AbgDXMWY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Apr 2020 08:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726289AbgDXMWY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Apr 2020 05:26:37 -0400
-X-IronPort-AV: E=Sophos;i="5.73,311,1583164800"; 
-   d="scan'208";a="90107731"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 24 Apr 2020 17:26:34 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id 3577E4BCC89E;
-        Fri, 24 Apr 2020 17:15:57 +0800 (CST)
-Received: from [10.167.220.69] (10.167.220.69) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Fri, 24 Apr 2020 17:26:33 +0800
-Message-ID: <5EA2B0C8.2080706@cn.fujitsu.com>
-Date:   Fri, 24 Apr 2020 17:26:32 +0800
-From:   Xiao Yang <yangx.jy@cn.fujitsu.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.2; zh-CN; rv:1.9.2.18) Gecko/20110616 Thunderbird/3.1.11
+        Fri, 24 Apr 2020 08:22:24 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED242C09B045
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2020 05:22:23 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id e8so9044826ilm.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2020 05:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ElW66CEulda9Y4ovzb0ekLp4iIKON7cFIdh0cvua9lc=;
+        b=apfqnI9q0cQrKnsazbrdD2i4pBRgeRUHMYYONh/Za8UUB69RCJIXNqvxgwmGRBBvhB
+         AETFgn/QO0HZ897rDqZN8Ffp7aXw/PoFtTsbkOZxIvWdf1xqnpqF+xEJrSRGNcCMzoe2
+         aex3dEDORmZg+cXfUy+Tk7AU6I35J+ppyB060=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ElW66CEulda9Y4ovzb0ekLp4iIKON7cFIdh0cvua9lc=;
+        b=Qrzse9T0RgnFj/6eMlfs/kPgYOZqA6a3FAd8zdhi9IqPJ8Y22jV7KI9IE4ejVC8p/m
+         HjAjDPnD3iW+SBmXMuISiXhQ/vpdrnUuo3vZfGQ7WEP9E/p4ALWGtnS8ewomPPnCr+Wq
+         aNFAWJ7RdHU4EvSMu5NksRzeK+h0e3tdfjYPB2nxmqLBVrI7T0WBldpXKdlppGbazIaw
+         8t7dTZE2P49abrJ9NBpNm9EvkHYaL9lPZAGjCyQjk1qG6ih5l1IvPxDDtCz7usAmURNY
+         QKWk3eJUrPF61WNf+NlmYvWDP83nLQ57lEPYC1Xm+dyOObZyiP0IxB496qdMbjV2SMYd
+         Y7vQ==
+X-Gm-Message-State: AGi0PuZbP2adVERPQoV/1vOcZIiAiY0XUpPSxJogErST5vPy4ACiDtgB
+        1WQvQdln6ofhPJ9VHAIx1L0tdA==
+X-Google-Smtp-Source: APiQypJ66JgX2d7t70NA97tiLDfTCIkwj4PIIj6dHFTmq/QguJp+9UtomBJDuKDeoym1KJFq6AFSrQ==
+X-Received: by 2002:a92:2910:: with SMTP id l16mr8609485ilg.256.1587730943299;
+        Fri, 24 Apr 2020 05:22:23 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id m14sm2021928ilq.68.2020.04.24.05.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Apr 2020 05:22:22 -0700 (PDT)
+Subject: Re: [PATCH] selftests/ftrace: Check the first record for
+ kprobe_args_type.tc
+To:     Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     shuah@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        mingo@redhat.com, ice_yangxiao@163.com,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200407063419.292821-1-yangx.jy@cn.fujitsu.com>
+ <20200407095400.2a13b821@gandalf.local.home>
+ <20200408003026.24627a881c8f1eacb01cea48@kernel.org>
+ <5E96611B.10100@cn.fujitsu.com> <5EA23D0F.5020304@cn.fujitsu.com>
+ <20200423211809.7cdb1f90@oasis.local.home> <5EA242A9.9060104@cn.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <5d693b71-1afe-9147-52dd-53824255a49b@linuxfoundation.org>
+Date:   Fri, 24 Apr 2020 06:22:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-To:     Steven Rostedt <rostedt@goodmis.org>, <joel@joelfernandes.org>
-CC:     <linux-kselftest@vger.kernel.org>,
-        <linux-trace-devel@vger.kernel.org>,
-        Xiao Yang <ice_yangxiao@163.com>
-Subject: preemptirq_delay_test module can trigger crash on arm64 vm
-Content-Type: text/plain; charset="GB2312"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.167.220.69]
-X-ClientProxiedBy: G08CNEXCHPEKD05.g08.fujitsu.local (10.167.33.203) To
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206)
-X-yoursite-MailScanner-ID: 3577E4BCC89E.AD8D7
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: yangx.jy@cn.fujitsu.com
-X-Spam-Status: No
+In-Reply-To: <5EA242A9.9060104@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Steve, Joel
+On 4/23/20 7:36 PM, Xiao Yang wrote:
+> On 2020/4/24 9:18, Steven Rostedt wrote:
+>> On Fri, 24 Apr 2020 09:12:47 +0800
+>> Xiao Yang<yangx.jy@cn.fujitsu.com>  wrote:
+>>
+>>> Hi Shuah,
+>>>
+>>> Ping.
+>>
+>> Shuah usually responds to her linuxfoundation.org email a bit better [ 
+>> added ].
+> Hi Steve,
+> 
+> Thanks for your reminder.
+> Sorry for the wrong email(shuah@kernel.org).
+> 
 
-Sorry to bother you.
+Thanks for the ping. Will be applied shortly.
 
-On my slow arm64 vm, inserting and removing preemptirq_delay_test module
-in loops triggers kernel panic sometimes.
-
-Reproduce steps:
-Do the following steps in loops(more than 10 times):
-[root@CentOS81-aarch64 ]# modprobe preemptirq_delay_test
-test_mode=preempt delay=500000; rmmod preemptirq_delay_test
-
-Call Trace:
--------------------------------------------------------------------
-[172413.750294] Unable to handle kernel paging request at virtual
-address fffffe0009010280
-[172413.790511] Mem abort info:
-[172413.791129]   ESR = 0x86000007
-[172413.791656]   EC = 0x21: IABT (current EL), IL = 32 bits
-[172413.792322]   SET = 0, FnV = 0
-[172413.792793]   EA = 0, S1PTW = 0
-[172413.794082] swapper pgtable: 64k pages, 42-bit VAs,
-pgdp=0000000040ef0000
-[172413.794556] [fffffe0009010280] pgd=00000000bfff0003,
-pud=00000000bfff0003, pmd=00000000bfff0003, pte=0000000000000000
-[172413.795690] Internal error: Oops: 86000007 [#1] PREEMPT SMP
-[172413.796285] Modules linked in: sunrpc vfat fat ext4 mbcache jbd2
-crct10dif_ce ghash_ce sha2_ce sha256_arm64 sha1_ce ip_tables xfs
-libcrc32c virtio_net net_failover failover virtio_blk virtio_mmio [last
-unloaded: preemptirq_delay_test]
-[172413.797797] CPU: 1 PID: 15750 Comm: preempt_test Not tainted
-5.6.0-rc7 #17
-[172413.798275] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0
-02/06/2015
-[172413.799049] pstate: 40000005 (nZcv daif -PAN -UAO)
-[172413.799934] pc : 0xfffffe0009010280
-[172413.800230] lr : 0xfffffe0009010280
-[172413.800497] sp : fffffe001390fe00
-[172413.800799] x29: fffffe001390fe00 x28: 0000000000000000
-[172413.801263] x27: 0000000000000000 x26: fffffe0009010000
-[172413.801726] x25: 0000000000000000 x24: fffffe00114a3670
-[172413.802164] x23: fffffe0010d1d150 x22: fffffe0016b2f9e8
-[172413.802635] x21: 0000000000000000 x20: fffffe0009030008
-[172413.803191] x19: fffffe0009030000 x18: 0000000000000000
-[172413.803672] x17: 0000000000000000 x16: 0000000000000000
-[172413.804118] x15: 0000000000000000 x14: 0000000000000000
-[172413.804558] x13: 0000000000000000 x12: 0000000000000000
-[172413.805013] x11: 0000000000000000 x10: 0000000000000d50
-[172413.805441] x9 : fffffe001390fd10 x8 : fffffc00762930b0
-[172413.805944] x7 : 00000000fa83b2da x6 : 0000000000000000
-[172413.806455] x5 : fffffe001127c000 x4 : fffffe006ed00000
-[172413.806874] x3 : fffffe001127cf50 x2 : 0000000000000002
-[172413.807312] x1 : 0000000000000000 x0 : 0000000000000228
-[172413.807869] Call trace:
-[172413.808146]  0xfffffe0009010280
-[172413.808436]  0xfffffe0009010294
-[172413.808723]  0xfffffe0009010050
-[172413.809519]  kthread+0x110/0x118
-[172413.809734]  ret_from_fork+0x10/0x18
-[172413.810338] Code: bad PC value
-[172413.811203] ---[ end trace 69c688402fdc8bb1 ]---
-[172413.811670] Kernel panic - not syncing: Fatal exception
-[172413.812108] SMP: stopping secondary CPUs
-[172413.812733] Kernel Offset: disabled
-[172413.813043] CPU features: 0x10002,20006082
-[172413.813387] Memory Limit: none
-[172413.813849] ---[ end Kernel panic - not syncing: Fatal exception]---
--------------------------------------------------------------------
-
-Do you have any suggestion about the issue.
-
-Thanks,
-Xiao Yang
-
-
+thanks,
+-- Shuah
