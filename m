@@ -2,167 +2,416 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE90E1B7CBF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 19:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6CA1B7DBC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Apr 2020 20:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728737AbgDXR3D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Apr 2020 13:29:03 -0400
-Received: from mail-dm6nam10on2118.outbound.protection.outlook.com ([40.107.93.118]:59617
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728508AbgDXR3C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Apr 2020 13:29:02 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S0WHyVebHZb5gbh+uUlzxlNEWtzK8cGAmuPth3QLJP3YxGVZIwgnXLbrQnR3gjKyKnaxVVFoTeYi6yrqMe1SCTMFQaNXDC7LFRkuMDrugeje7MQoeShiehKNE/rd5pnJKAQSBrbl24YRTbtwcZzGxcCZPh5FJkOmaSoDmgEZPWS+arGCKFrMfTtyqrx0EnpaBNrGyOwAuzTEKOD7PI2sGz+TJUizbuSVm1J63b5R/5KJPuiwtOy2N6Fp6+bD0UwV5Edw2EMoaKwe8GCxZkh1Q6EUvTJZzNfH08pEAF4dff3P24RV4JLQtdnEMKtC1bvq+bCm3kYVF6IZ/Xpoqz5WIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZeWAWRmzQaEZBsv0+FqXMqMMLVgRnev9rD44bFmXtOM=;
- b=oPrgVqxKoC1yoUKwAd/oK5qIFpPVkoF7iG3ZlvrxORA1v4Z+j54OElNa1ELrrO8nAkjl9+ubtPBpu7dtJU2syzDo2UouOOkNSsLy3V/Frt6BUxfuhZQB+sumAxr1zBXRBomqQ984iBD/Bux+Iv2ayddVzMrWnAR6NAlibY4ZIDmqxmgQ5LVY3xkCmuB+Px9Z3qbgwyZzij61ZAaThBkPSXHj1XHUvmXtImxxusaun93Xp5KYf5ZXfB+YeZVFNvqzQ5mbVgLTlg29qm4qh2XKaOllFf/7NnikvpUbuLw3NFxHmQmd1TWSVR2riPcfZUOBUQuTkWnvDuPYZjJ7hYBPMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZeWAWRmzQaEZBsv0+FqXMqMMLVgRnev9rD44bFmXtOM=;
- b=ZdVYdbnETXWqAUsIusKEaMQq/8IG+bi9OfS9eao8CBboibgv8bNjzqc/QY1B8XdUir0UNAujrEjt7nGRzIx5bg0kdwc/SAptKSYDSAmRHJkvZw30rm8YUYYLMe3bqwFRjyFuysvER/BqXZd1x+xxi9CYqL+cqZRoreTwlch86zY=
-Received: from CY4PR13MB1527.namprd13.prod.outlook.com (2603:10b6:903:12f::23)
- by CY4PR13MB1400.namprd13.prod.outlook.com (2603:10b6:903:13c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.6; Fri, 24 Apr
- 2020 17:28:58 +0000
-Received: from CY4PR13MB1527.namprd13.prod.outlook.com
- ([fe80::d0e0:9b39:db76:e937]) by CY4PR13MB1527.namprd13.prod.outlook.com
- ([fe80::d0e0:9b39:db76:e937%11]) with mapi id 15.20.2937.020; Fri, 24 Apr
- 2020 17:28:58 +0000
-From:   "Bird, Tim" <Tim.Bird@sony.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bamv2005@gmail.com" <bamv2005@gmail.com>,
-        "khilman@baylibre.com" <khilman@baylibre.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH] selftests: add build/cross-build dependency check script
-Thread-Topic: [PATCH] selftests: add build/cross-build dependency check script
-Thread-Index: AQHWEqMAvlNnDYZ/6UC2UwGnLr03bqiHqroAgADnlKA=
-Date:   Fri, 24 Apr 2020 17:28:57 +0000
-Message-ID: <CY4PR13MB1527A6A6F9BCEADAF14A3C6BFDD00@CY4PR13MB1527.namprd13.prod.outlook.com>
-References: <20200414212208.21667-1-skhan@linuxfoundation.org>
- <374866ac-4519-f367-bdc6-ec8d0c1b6347@infradead.org>
-In-Reply-To: <374866ac-4519-f367-bdc6-ec8d0c1b6347@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Tim.Bird@sony.com; 
-x-originating-ip: [160.33.66.122]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 4f0ecb8b-f953-4e19-52fc-08d7e874f89e
-x-ms-traffictypediagnostic: CY4PR13MB1400:
-x-microsoft-antispam-prvs: <CY4PR13MB14001A1889CFD5B5A45717BCFDD00@CY4PR13MB1400.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 03838E948C
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR13MB1527.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(396003)(376002)(39860400002)(136003)(66446008)(6506007)(8936002)(26005)(2906002)(54906003)(81156014)(8676002)(53546011)(9686003)(52536014)(110136005)(316002)(5660300002)(478600001)(7696005)(86362001)(66556008)(66476007)(4326008)(186003)(64756008)(66946007)(55016002)(71200400001)(33656002)(76116006);DIR:OUT;SFP:1102;
-received-spf: None (protection.outlook.com: sony.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0SiRgy/YBOz8sQg2reV/yDUzzPF4cpUjSSOgcFgDdGf0U2gGlTvRbNbX7lbU5vMNxPoDr6IAABqMD2THQ1LZdtFLhhliPE3D5kxPgyVks5iVu7UgH9qxST1+9yJJ+Adq7H3vIaJi+2NUGarV8frE4Isw8Gknny7Cky4A42ok/qtEQ9MDECvtCNLHq89oRSFeVr3pMvjAeM6sfCSXBTbTjn7NMqtLgGFSfzSo6/un0eQm2Y6u3OtYxkbST1B2FGhuUB8fXFleZKf8AAJE3reqwBgMxKcYRUr/e/bHgjQB92Zb8cDmUHwfi61gXSXhYP+fuztJihdBuKwnwyaf0QPQipUI/Ha2MHachVu3zX2RaMqyelBWLHflQQ0KT+RoKBQRYdueuhsH0+EKWu6ZaQeMZ8tZ/0/xejdhi/jGNzFUm9Ao1p8yPhXkzBC9+IbaPsk6
-x-ms-exchange-antispam-messagedata: D66accd7WPTq04ulU8OiIacAIBd2S0yoyCXHG31PBwccohZkivy9wOxYCzvqvLq+4WQ+dU0yWslxw+aWB5YpayXisLgjezr4e5U99124rzBe14HqsCTLs/7b5hojbxlKFXAqY5ggYRkD+X0+hG8rTA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727123AbgDXSTQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Apr 2020 14:19:16 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:51053 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727988AbgDXSTO (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 24 Apr 2020 14:19:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587752351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zBlEEl/4DE3AueNz8EcPFW+nerY+eN9VDgbsYvuIwAk=;
+        b=W4NpuWC/qtPem98Y7DBRzVPQChRSnsLSimaPALbvOZlhmnq6USddT5MEAI6rnFxxSw5KIy
+        y2FB9EheNGdtzPQ1PokMeC1QJTiqNndIPJ0d1oHB8yVQVE2Oz02ooEob2snGrKaQzk+YqA
+        ZgFvBAC9cV2iyp51fLm+l66Ye5XFSUo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-358-wM_L9XSxPy-Wam3e3x_hbA-1; Fri, 24 Apr 2020 14:18:57 -0400
+X-MC-Unique: wM_L9XSxPy-Wam3e3x_hbA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 676B48015D1;
+        Fri, 24 Apr 2020 18:18:50 +0000 (UTC)
+Received: from w520.home (ovpn-112-162.phx2.redhat.com [10.3.112.162])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73F46619DC;
+        Fri, 24 Apr 2020 18:18:47 +0000 (UTC)
+Date:   Fri, 24 Apr 2020 12:18:46 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [regression] Re: [PATCH v6 06/12] mm/gup: track FOLL_PIN pages
+Message-ID: <20200424121846.5ee2685f@w520.home>
+In-Reply-To: <20200211001536.1027652-7-jhubbard@nvidia.com>
+References: <20200211001536.1027652-1-jhubbard@nvidia.com>
+        <20200211001536.1027652-7-jhubbard@nvidia.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f0ecb8b-f953-4e19-52fc-08d7e874f89e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2020 17:28:57.8421
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZKsHtMA6LaLPrsPGOSGVpnlN1SU578fKyHT6TZHOLtuo02DIkL4jh7POKRwnMIs7yXn2wAlqOshMN4wteqDO8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR13MB1400
+Content-Type: multipart/mixed; boundary="MP_/aRIlGjxB14=fzhStE9AJEEB"
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBsaW51eC1rc2VsZnRlc3Qtb3du
-ZXJAdmdlci5rZXJuZWwub3JnIDxsaW51eC1rc2VsZnRlc3Qtb3duZXJAdmdlci5rZXJuZWwub3Jn
-PiBPbiBCZWhhbGYgT2YgUmFuZHkgRHVubGFwDQo+IA0KPiBPbiA0LzE0LzIwIDI6MjIgUE0sIFNo
-dWFoIEtoYW4gd3JvdGU6DQo+ID4gLUNGTEFHUyArPSAtTzIgLWcgLXN0ZD1nbnU5OSAtV2FsbCAt
-SS4uLy4uLy4uLy4uL3Vzci9pbmNsdWRlLyAkKE1PVU5UX0NGTEFHUykNCj4gPiAtTERMSUJTICs9
-ICQoTU9VTlRfTERMSUJTKQ0KPiA+ICtDRkxBR1MgKz0gLU8yIC1nIC1zdGQ9Z251OTkgLVdhbGwg
-LUkuLi8uLi8uLi8uLi91c3IvaW5jbHVkZS8gJChWQVJfQ0ZMQUdTKQ0KPiA+ICtMRExJQlMgKz0g
-JChWQVJfTERMSUJTKQ0KPiANCj4gDQo+ICgxKSBDYW4gdGhhdCBzZXJpZXMgb2YgLi4vLi4vLi4v
-Li4gYmUgcmVwbGFjZWQgYnkgJChvYmp0cmVlKT8NCj4gSWYgc28sIHRoYXQgd291bGQgYmUgbXVj
-aCBjbGVhbmVyIElNTy4NCg0Ka3NlbGZ0ZXN0cyBkb2Vzbid0IHNldCAkKG9ianRyZWUpIHdoZW4g
-aXQgaXMgcnVuIGRpcmVjdGx5DQooaWUgbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cykN
-Cg0KSSBoYWQgbXkgb3duIHNvbHV0aW9uIHdoaWNoIHdhcyB0byB1c2UgS0JVSUxEX09VVFBVVCwg
-bGlrZSBzbzoNClRoaXMgd2FzIGEgcGF0Y2ggaW4gbXkgcXVldWUsIHRoYXQgSSBkaWRuJ3Qgc2Vu
-ZCBpbiBiZWNhdXNlIEkgd2Fzbid0DQp2ZXJ5IGhhcHB5IHdpdGggaXQuICBJIHdhcyBzdGlsbCBj
-b25zaWRlcmluZyBhbHRlcm5hdGl2ZXMuDQoNCi0tLS0tLS0tLS0tLS0tLS0gKHBhdGNoKQ0KU3Vi
-amVjdDogW1BBVENIXSBzZWxmdGVzdHMvdm06IHVzZSBpbmNsdWRlcyBmcm9tIEtCVUlMRF9PVVRQ
-VVQgZGlyZWN0b3J5DQoNClRoZSBNYWtlZmlsZSBmb3IgdGhlIHZtIHRlc3RzIHdhcyBzcGVjaWZ5
-aW5nIGEgcmVsYXRpdmUgcGF0aA0KKGluIHRoZSBzb3VyY2UgZGlyZWN0b3J5KSBmb3IgYWNjZXNz
-aW5nIGluY2x1ZGUgZmlsZXMuICBUaGlzDQpkb2Vzbid0IHdvcmsgd2hlbiB0aGUgaGVhZGVycyBm
-aWxlcyBhcmUgcGxhY2VkIGluIGFub3RoZXINCmRpcmVjdG9yeSAod2l0aCBPPSBvciBLQlVJTERf
-T1VUUFVUKS4gIEl0IG1heSBhcHBlYXIgdG8gd29yaywNCmJ1dCBlbmRzIHVwIHVzaW5nIGluY2x1
-ZGVzIGZyb20gdGhlIGhvc3QgbWFjaGluZSwgd2hpY2ggbWF5DQpub3QgbWF0Y2ggdGhlIGtlcm5l
-bCBzb3VyY2UgYmVpbmcgY29tcGlsZWQgYWdhaW5zdC4NCg0KV2l0aG91dCB0aGlzIGNoYW5nZSwg
-d2hlbiB0aGUgcHJvZ3JhbSB1c2VyZmF1bHRmZC5jIHdhcw0KY29tcGlsZWQsIGl0IGdlbmVyYXRl
-ZCBlcnJvcnMgbGlrZSB0aGUgZm9sbG93aW5nOg0KDQogICAgdXNlcmZhdWx0ZmQuYzoyNjc6MjE6
-IGVycm9yOiAnVUZGRF9BUElfUkFOR0VfSU9DVExTX0JBU0lDJyB1bmRlY2xhcmVkDQogICAgaGVy
-ZSAobm90IGluIGEgZnVuY3Rpb24pDQogICAgICAuZXhwZWN0ZWRfaW9jdGxzID0gVUZGRF9BUElf
-UkFOR0VfSU9DVExTX0JBU0lDLA0KICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fg0KICAgIHVzZXJmYXVsdGZkLmM6IEluIGZ1bmN0aW9uICd1ZmZkX3Bv
-bGxfdGhyZWFkJzoNCiAgICB1c2VyZmF1bHRmZC5jOjUyOTo4OiBlcnJvcjogJ1VGRkRfRVZFTlRf
-Rk9SSycgdW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluDQogICAgdGhpcyBmdW5jdGlvbikNCiAgICAg
-ICBjYXNlIFVGRkRfRVZFTlRfRk9SSzoNCiAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fg0KICAg
-IHVzZXJmYXVsdGZkLmM6NTI5Ojg6IG5vdGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlz
-IHJlcG9ydGVkIG9ubHkNCiAgICBvbmNlIGZvciBlYWNoIGZ1bmN0aW9uIGl0IGFwcGVhcnMgaW4N
-CiAgICB1c2VyZmF1bHRmZC5jOjUzMToxODogZXJyb3I6ICd1bmlvbiA8YW5vbnltb3VzPicgaGFz
-IG5vIG1lbWJlciBuYW1lZA0KICAgICdmb3JrJw0KICAgICAgICB1ZmZkID0gbXNnLmFyZy5mb3Jr
-LnVmZDsNCiAgICAgICAgICAgICAgICAgICAgICBeDQoNCkNoYW5nZSB0aGUgQ0ZMQUdTIGRlZmlu
-aXRpb24gaW4gdGhlIE1ha2VmaWxlIHRvIHJlZmVyZW5jZQ0KS0JVSUxEX09VVFBVVC4NCg0KU2ln
-bmVkLW9mZi1ieTogVGltIEJpcmQgPHRpbS5iaXJkQHNvbnkuY29tPg0KLS0tDQogdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvdm0vTWFrZWZpbGUgfCAyICstDQogMSBmaWxlIGNoYW5nZWQsIDEgaW5z
-ZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy92bS9NYWtlZmlsZSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZtL01ha2VmaWxl
-DQppbmRleCA3ZjlhOGE4Li4wMjA4NjU5IDEwMDY0NA0KLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMvdm0vTWFrZWZpbGUNCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZtL01ha2Vm
-aWxlDQpAQCAtMyw3ICszLDcgQEANCiB1bmFtZV9NIDo9ICQoc2hlbGwgdW5hbWUgLW0gMj4vZGV2
-L251bGwgfHwgZWNobyBub3QpDQogQVJDSCA/PSAkKHNoZWxsIGVjaG8gJCh1bmFtZV9NKSB8IHNl
-ZCAtZSAncy9hYXJjaDY0LiovYXJtNjQvJykNCiANCi1DRkxBR1MgPSAtV2FsbCAtSSAuLi8uLi8u
-Li8uLi91c3IvaW5jbHVkZSAkKEVYVFJBX0NGTEFHUykNCitDRkxBR1MgPSAtV2FsbCAtSSAkKEtC
-VUlMRF9PVVRQVVQpL3Vzci9pbmNsdWRlICQoRVhUUkFfQ0ZMQUdTKQ0KIExETElCUyA9IC1scnQN
-CiBURVNUX0dFTl9GSUxFUyA9IGNvbXBhY3Rpb25fdGVzdA0KIFRFU1RfR0VOX0ZJTEVTICs9IGd1
-cF9iZW5jaG1hcmsNCi0tIA0KMi4xLjQNCi0tLS0tLS0tIChlbmQgcGF0Y2gpDQoNClRoZSByZWFz
-b24gSSB3YXNuJ3QgaGFwcHkgaXMgdGhhdCB0aGlzIHJlcXVpcmVkIGFub3RoZXIgcGF0Y2ggdG8N
-CnRvb2xzL3Rlc3RpbmcvTWFrZWZpbGUgdG8gbWFrZSBzdXJlIEtCVUlMRF9PVVRQVVQgd2FzIGFs
-d2F5cw0Kc2V0LiAgSSBnb3Qgc2lkZXRyYWNrZWQgb24gdGhlIG1ha2UgaGVhZGVyc19pbnN0YWxs
-IGlzc3VlLCBhbmQgZGlkbid0DQpmaW5pc2ggdGhpcyB1cC4gIFNvcnJ5IGFib3V0IHRoYXQuIChT
-ZWUgYmVsb3cgZm9yIHRoZSBoZWFkZXJzX2luc3RhbGwgaXNzdWUpLg0KDQo+IA0KPiAoMikgSSBj
-YW4ndCBmaW5kIGFueXRoaW5nIHRoYXQgY2hlY2tzIHRoYXQgLi4vLi4vLi4vLi4vdXNyL2luY2x1
-ZGUgZXhpc3RzDQo+IChvciBoYXMgYmVlbiBpbnN0YWxsZWQgdmlhICdtYWtlIGhlYWRlcnNfaW5z
-dGFsbCcpLiAgT3IgYW55dGhpbmcgdGhhdA0KPiByZXF1aXJlcyB0aGF0IENPTkZJR19IRUFERVJT
-X0lOU1RBTEwgYmUgc2V0L2VuYWJsZWQuICBXZWxsLCBvdGhlciB0aGFuDQo+IGEgTWFrZWZpbGUg
-ZXJyb3IsIGJ1dCB0aGF0J3Mgbm90IGEgbmljZSB3YXkgdG8gZmluZCBvdXQuDQoNClRoZSBrc2Vs
-ZnRlc3QgaGFuZGxpbmcgb2YgaGVhZGVyc19pbnN0YWxsIGlzIHF1aXRlIGNvbmZ1c2luZy4gIFRo
-ZXJlIGlzIGENCmRlcGVuZGVuY3kgaW4gdGhlIHRvcC1sZXZlbCBNYWtlZmlsZSB0aGF0IGVuZHMg
-dXAgY2F1c2luZyBhIHZtbGludXggYnVpbGQsDQpldmVuIGlmIHlvdSBqdXN0IGZpbmlzaGVkIGRv
-aW5nIGEgaGVhZGVyc19pbnN0YWxsIHJlY2VudGx5IChhdCBsZWFzdCB0aGUgd2F5DQp0aGF0IGl0
-IGlzIGNhbGxlZCBieSBrc2VsZnRlc3QsIGFuZCBpbiBjZXJ0YWluIGJ1aWxkIGNvbmZpZ3VyYXRp
-b25zIHRoYXQgSSBhbSBzZWVpbmcNCndpdGggbXkgdGVzdGluZy4pDQoNCkkgc3VzcGVjdCB0aGF0
-IHdlIGRvbid0IGhhdmUgY2xlYW4gc2VwYXJhdGlvbiBvZiBrZXJuZWwgaGVhZGVycyBmb3IgdGhl
-DQprZXJuZWwgdW5kZXIgdGVzdCwgZnJvbSB0aGUgaG9zdCBtYWNoaW5lJ3Mga2VybmVsIGhlYWRl
-ciBmaWxlcywgZm9yIGJ1aWxkcw0Kb2Yga3NlbGZ0ZXN0IHByb2dyYW1zLiAgQnV0IEkgcmFuIG91
-dCBvZiB0aW1lIHRvIHRlYXNlIHRoaXMgb3V0Lg0KICAtLSBUaW0NCg0KPiANCj4gUHJlZmVyYWJs
-eSB3ZSB3b3VsZCBoYXZlIHNvbWUgS2NvbmZpZyBjaGVjay9lbmZvcmNlbWVudCBvciBhdCBsZWFz
-dCBzb21lDQo+IGRvY3VtZW50YXRpb24uDQo+IA0KPiBUaG91Z2h0cz8NCj4gDQo+IHRoYW5rcy4N
-Cj4gLS0NCj4gflJhbmR5DQoNCg==
+--MP_/aRIlGjxB14=fzhStE9AJEEB
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+On Mon, 10 Feb 2020 16:15:30 -0800
+John Hubbard <jhubbard@nvidia.com> wrote:
+
+> Add tracking of pages that were pinned via FOLL_PIN. This tracking is
+> implemented via overloading of page->_refcount: pins are added by
+> adding GUP_PIN_COUNTING_BIAS (1024) to the refcount. This provides a
+> fuzzy indication of pinning, and it can have false positives (and that's
+> OK). Please see the pre-existing
+> Documentation/core-api/pin_user_pages.rst for details.
+>=20
+> As mentioned in pin_user_pages.rst, callers who effectively set FOLL_PIN
+> (typically via pin_user_pages*()) are required to ultimately free such
+> pages via unpin_user_page().
+>=20
+> Please also note the limitation, discussed in pin_user_pages.rst under
+> the "TODO: for 1GB and larger huge pages" section. (That limitation will
+> be removed in a following patch.)
+>=20
+> The effect of a FOLL_PIN flag is similar to that of FOLL_GET, and may be
+> thought of as "FOLL_GET for DIO and/or RDMA use".
+>=20
+> Pages that have been pinned via FOLL_PIN are identifiable via a
+> new function call:
+>=20
+>    bool page_maybe_dma_pinned(struct page *page);
+>=20
+> What to do in response to encountering such a page, is left to later
+> patchsets. There is discussion about this in [1], [2], [3], and [4].
+>=20
+> This also changes a BUG_ON(), to a WARN_ON(), in follow_page_mask().
+>=20
+> [1] Some slow progress on get_user_pages() (Apr 2, 2019):
+>     https://lwn.net/Articles/784574/
+> [2] DMA and get_user_pages() (LPC: Dec 12, 2018):
+>     https://lwn.net/Articles/774411/
+> [3] The trouble with get_user_pages() (Apr 30, 2018):
+>     https://lwn.net/Articles/753027/
+> [4] LWN kernel index: get_user_pages():
+>     https://lwn.net/Kernel/Index/#Memory_management-get_user_pages
+>=20
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  Documentation/core-api/pin_user_pages.rst |   6 +-
+>  include/linux/mm.h                        |  82 +++++--
+>  mm/gup.c                                  | 254 +++++++++++++++++-----
+>  mm/huge_memory.c                          |  29 ++-
+>  mm/hugetlb.c                              |  54 +++--
+>  5 files changed, 334 insertions(+), 91 deletions(-)
+
+Hi John,
+
+I'm seeing a regression bisected back to this commit (3faa52c03f44
+mm/gup: track FOLL_PIN pages).  I've attached some vfio-pci test code
+that reproduces this by mmap'ing a page of MMIO space of a device and
+then tries to map that through the IOMMU, so this should be attempting
+a gup/pin of a PFNMAP page.  Previously this failed gracefully (-EFAULT),
+but now results in:
+
+BUG: unable to handle page fault for address: ffffae5cbfe5e938
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 0 P4D 0=20
+Oops: 0000 [#1] SMP NOPTI
+CPU: 18 PID: 3365 Comm: vfio-pci-dma-ma Tainted: G           OE     5.6.0+ =
+#6
+Hardware name: AMD Corporation Diesel/Diesel, BIOS TDL100CB 03/17/2020
+RIP: 0010:get_pfnblock_flags_mask+0x22/0x70
+Code: c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 05 bc e1 d9 01 48 89 f7 =
+49 89 c8 48 c1 ef 0f 48 85 c0 74 48 48 89 f1 48 c1 e9 17 <48> 8b 04 c8 48 8=
+5 c0 74 0b 40 0f b6 ff 48 c1 e7 04 48 01 f8 48 c1
+RSP: 0018:ffffb55289b3fcc8 EFLAGS: 00010216
+RAX: ffff9e5cbff50000 RBX: 0000000000000001 RCX: 000001fffffe1d27
+RDX: 0000000000000002 RSI: ffffff0e93acd633 RDI: 0001fffffe1d2759
+RBP: ffffb55289b3fd88 R08: 0000000000000007 R09: ffff9e48a52476a8
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000001 R15: ffff9e48ab358cc0
+FS:  00007f4ef7269740(0000) GS:ffff9e48afa80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffae5cbfe5e938 CR3: 0000000c61eda000 CR4: 00000000003406e0
+Call Trace:
+ __gup_longterm_locked+0x274/0x620
+ vaddr_get_pfn+0x74/0x110 [vfio_iommu_type1]
+ vfio_pin_pages_remote+0x6e/0x370 [vfio_iommu_type1]
+ vfio_iommu_type1_ioctl+0x8e5/0xaac [vfio_iommu_type1]
+ ksys_ioctl+0x86/0xc0
+ __x64_sys_ioctl+0x16/0x20
+ do_syscall_64+0x5b/0x1f0
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f4ef6d7d307
+Code: 44 00 00 48 8b 05 69 1b 2d 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff =
+ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff f=
+f 73 01 c3 48 8b 0d 39 1b 2d 00 f7 d8 64 89 01 48
+RSP: 002b:00007fff76ada738 EFLAGS: 00000213 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4ef6d7d307
+RDX: 00007fff76ada760 RSI: 0000000000003b71 RDI: 0000000000000003
+RBP: 00007fff76ada930 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000213 R12: 0000000000400950
+R13: 00007fff76adaa10 R14: 0000000000000000 R15: 0000000000000000
+Modules linked in: vfio_pci(OE) vfio_virqfd(OE) vfio_iommu_type1(OE) vfio(O=
+E) amd64_edac_mod edac_mce_amd kvm_amd kvm rfkill sunrpc ipmi_ssif vfat irq=
+bypass fat ipmi_si crct10dif_pclmul crc32_pclmul sp5100_tco ghash_clmulni_i=
+ntel ipmi_devintf pcspkr joydev ccp i2c_piix4 k10temp ipmi_msghandler pinct=
+rl_amd acpi_cpufreq ip_tables nouveau ast video mxm_wmi drm_vram_helper wmi=
+ drm_ttm_helper i2c_algo_bit drm_kms_helper cec ttm drm i40e e1000e crc32c_=
+intel
+CR2: ffffae5cbfe5e938
+---[ end trace a384ab7cc8e37d46 ]---
+RIP: 0010:get_pfnblock_flags_mask+0x22/0x70
+Code: c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 05 bc e1 d9 01 48 89 f7 =
+49 89 c8 48 c1 ef 0f 48 85 c0 74 48 48 89 f1 48 c1 e9 17 <48> 8b 04 c8 48 8=
+5 c0 74 0b 40 0f b6 ff 48 c1 e7 04 48 01 f8 48 c1
+RSP: 0018:ffffb55289b3fcc8 EFLAGS: 00010216
+RAX: ffff9e5cbff50000 RBX: 0000000000000001 RCX: 000001fffffe1d27
+RDX: 0000000000000002 RSI: ffffff0e93acd633 RDI: 0001fffffe1d2759
+RBP: ffffb55289b3fd88 R08: 0000000000000007 R09: ffff9e48a52476a8
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000001 R15: ffff9e48ab358cc0
+FS:  00007f4ef7269740(0000) GS:ffff9e48afa80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffae5cbfe5e938 CR3: 0000000c61eda000 CR4: 00000000003406e0
+
+Thanks,
+Alex
+
+--MP_/aRIlGjxB14=fzhStE9AJEEB
+Content-Type: text/x-c++src
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=vfio-pci-dma-map-mmio.c
+
+#include <errno.h>
+#include <libgen.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/eventfd.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+
+#include <linux/ioctl.h>
+#include <linux/vfio.h>
+#include <linux/pci_regs.h>
+
+void usage(char *name)
+{
+	fprintf(stderr, "usage: %s <ssss:bb:dd.f>\n", name);
+	fprintf(stderr, "\tssss: PCI segment, ex. 0000\n");
+	fprintf(stderr, "\tbb:   PCI bus, ex. 01\n");
+	fprintf(stderr, "\tdd:   PCI device, ex. 06\n");
+	fprintf(stderr, "\tf:    PCI function, ex. 0\n");
+}
+
+int main(int argc, char **argv)
+{
+	int seg, bus, slot, func;
+	int ret, container, group, device, groupid;
+	char path[50], iommu_group_path[50], *group_name;
+	struct stat st;
+	ssize_t len;
+	void *map = MAP_FAILED;
+	int i;
+	unsigned int bar;
+	struct vfio_group_status group_status = {
+		.argsz = sizeof(group_status)
+	};
+	struct vfio_region_info region_info = {
+		.argsz = sizeof(region_info)
+	};
+	struct vfio_region_info config_info = {
+		.argsz = sizeof(config_info)
+	};
+	struct vfio_iommu_type1_dma_map dma_map = {
+		.argsz = sizeof(dma_map),
+		.flags = VFIO_DMA_MAP_FLAG_READ | VFIO_DMA_MAP_FLAG_WRITE,
+	};
+
+	if (argc != 2) {
+		usage(argv[0]);
+		return -1;
+	}
+
+	ret = sscanf(argv[1], "%04x:%02x:%02x.%d", &seg, &bus, &slot, &func);
+	if (ret != 4) {
+		fprintf(stderr, "Invalid device\n");
+		usage(argv[0]);
+		return -1;
+	}
+
+	/* Boilerplate vfio setup */
+	container = open("/dev/vfio/vfio", O_RDWR);
+	if (container < 0) {
+		fprintf(stderr, "Failed to open /dev/vfio/vfio, %d (%s)\n",
+		       container, strerror(errno));
+		return container;
+	}
+
+	snprintf(path, sizeof(path),
+		 "/sys/bus/pci/devices/%04x:%02x:%02x.%01x/",
+		 seg, bus, slot, func);
+
+	ret = stat(path, &st);
+	if (ret < 0) {
+		fprintf(stderr, "No such device\n");
+		return ret;
+	}
+
+	strncat(path, "iommu_group", sizeof(path) - strlen(path) - 1);
+
+	len = readlink(path, iommu_group_path, sizeof(iommu_group_path));
+	if (len <= 0) {
+		fprintf(stderr, "No iommu_group for device\n");
+		return -1;
+	}
+
+	iommu_group_path[len] = 0;
+	group_name = basename(iommu_group_path);
+
+	if (sscanf(group_name, "%d", &groupid) != 1) {
+		fprintf(stderr, "Unknown group\n");
+		return -1;
+	}
+
+	snprintf(path, sizeof(path), "/dev/vfio/%d", groupid);
+	group = open(path, O_RDWR);
+	if (group < 0) {
+		fprintf(stderr, "Failed to open %s, %d (%s)\n",
+		       path, group, strerror(errno));
+		return group;
+	}
+
+	ret = ioctl(group, VFIO_GROUP_GET_STATUS, &group_status);
+	if (ret) {
+		fprintf(stderr, "ioctl(VFIO_GROUP_GET_STATUS) failed\n");
+		return ret;
+	}
+
+	if (!(group_status.flags & VFIO_GROUP_FLAGS_VIABLE)) {
+		fprintf(stderr,
+			"Group not viable, all devices attached to vfio?\n");
+		return -1;
+	}
+
+	ret = ioctl(group, VFIO_GROUP_SET_CONTAINER, &container);
+	if (ret) {
+		fprintf(stderr, "Failed to set group container\n");
+		return ret;
+	}
+
+	ret = ioctl(container, VFIO_SET_IOMMU, VFIO_TYPE1_IOMMU);
+	if (ret) {
+		fprintf(stderr, "Failed to set IOMMU\n");
+		return ret;
+	}
+
+	snprintf(path, sizeof(path), "%04x:%02x:%02x.%d", seg, bus, slot, func);
+
+	device = ioctl(group, VFIO_GROUP_GET_DEVICE_FD, path);
+	if (device < 0) {
+		fprintf(stderr, "Failed to get device\n");
+		return -ENODEV;
+	}
+
+	config_info.index = VFIO_PCI_CONFIG_REGION_INDEX;
+	ret = ioctl(device, VFIO_DEVICE_GET_REGION_INFO, &config_info);
+	if (ret) {
+		fprintf(stderr, "Failed to get config space region info\n");
+		return ret;
+	}
+
+	for (i = 0; i < 6; i++) {
+		if (pread(device, &bar, sizeof(bar),
+		          config_info.offset + PCI_BASE_ADDRESS_0 + (4 * i)) !=
+		    sizeof(bar)) {
+			fprintf(stderr, "Error reading BAR%d\n", i);
+			return -errno;
+		}
+
+		if (!(bar & PCI_BASE_ADDRESS_SPACE)) {
+			break;
+
+tryagain:
+			if (bar & PCI_BASE_ADDRESS_MEM_TYPE_64)
+				i++;
+		}
+	}
+
+	if (i >= 6) {
+		fprintf(stderr, "No memory BARs found\n");
+		return -ENODEV;
+	}
+
+	region_info.index = VFIO_PCI_BAR0_REGION_INDEX + i;
+	ret = ioctl(device, VFIO_DEVICE_GET_REGION_INFO, &region_info);
+	if (ret) {
+		fprintf(stderr, "Failed to get BAR%d region info\n", i);
+		return ret;
+	}
+  
+	if (!(region_info.flags & VFIO_REGION_INFO_FLAG_MMAP)) {
+		printf("No mmap support, try next\n");
+		goto tryagain;
+	}
+
+	if (region_info.size < getpagesize()) {
+		printf("Too small for mmap, try next\n");
+		goto tryagain;
+	}
+
+	map = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE,
+		   MAP_SHARED, device, region_info.offset);
+	if (map == MAP_FAILED) {
+		fprintf(stderr, "Error mmap'ing BAR: %m\n");
+		goto tryagain;
+	}
+
+	dma_map.size = getpagesize();
+	dma_map.vaddr = (__u64)map;
+	dma_map.iova = 1024 * 1024 * 1024; /* 1GB IOVA, arbitrary */
+
+	ret = ioctl(container, VFIO_IOMMU_MAP_DMA, &dma_map);
+	if (ret) {
+		fprintf(stderr, "Failed to DMA map: %m\n");
+		return ret;
+	}
+		
+	printf("Passed\n");
+	return 0;
+}
+
+--MP_/aRIlGjxB14=fzhStE9AJEEB--
+
