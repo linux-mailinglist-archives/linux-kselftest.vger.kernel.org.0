@@ -2,46 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC32B1B9401
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Apr 2020 22:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755CD1B9459
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Apr 2020 23:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbgDZUqW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Apr 2020 16:46:22 -0400
-Received: from mail.zx2c4.com ([192.95.5.64]:33857 "EHLO mail.zx2c4.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726176AbgDZUqV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Apr 2020 16:46:21 -0400
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 39088fed;
-        Sun, 26 Apr 2020 20:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
-        :references:in-reply-to:from:date:message-id:subject:to:cc
-        :content-type; s=mail; bh=Ugp9J23dMwybD+BDDgKHZnVK/uQ=; b=M93KN1
-        ims8o7fabG8/3QNssmzDkhKoonmWf+LPFGKE32qJUrW8Z9fiuA4J1XsJpPmcsRAe
-        0d3EuIEyyX5VXdKVQku9Y0zOjGz/R3v80OKwPryYM3+igeWXQZzg0B7JSDJ12R8v
-        hQzwhSATbPnA+oERLyN7UFXlq5lG0tBKLt2pv/DHDzcWGFVfAZY/1OZs7aGYS42O
-        yR2RuBpCvQGOVUOZsSBTqNIQnrjVeKIudHLjWUq1cq7sBJqej2bZOGLsseywhglc
-        nGlKv8ckvQeOI3PFGBtshQF1H7jhSjxGKxXrwIMWYMfPDbafq89M8d5lEqqvhN4v
-        2CV87IyEaw1TS8UQ==
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7397de7a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 26 Apr 2020 20:34:52 +0000 (UTC)
-Received: by mail-io1-f41.google.com with SMTP id o127so16713472iof.0;
-        Sun, 26 Apr 2020 13:46:17 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZOiASB2NqESmK4+wEVWpZD+T8wGgWAgS5nK1EMZTJRuHRJPWtr
-        tDs6wHVTdsaDhIuRrnH1jQqewATj21n9uocCyjE=
-X-Google-Smtp-Source: APiQypIOFLRFU/qIcLAa17exOMXrSKTlgt3AbZGePL0ys5e9a3KrxK4I6jN7+7FaQuIL/ajx3eFVKkj9+14titKCq0U=
-X-Received: by 2002:a02:b88e:: with SMTP id p14mr16955187jam.36.1587933976357;
- Sun, 26 Apr 2020 13:46:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000005fd19505a4355311@google.com> <e40c443e-74aa-bad4-7be8-4cdddfdf3eaf@gmail.com>
- <CAHmME9ov2ae08UTzwKL7enquChzDNxpg4c=ppnJqS2QF6ZAn_Q@mail.gmail.com>
- <f2eb18ea-b32a-4b64-0417-9b5b2df98e33@gmail.com> <29bd64f4-5fe0-605e-59cc-1afa199b1141@gmail.com>
-In-Reply-To: <29bd64f4-5fe0-605e-59cc-1afa199b1141@gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sun, 26 Apr 2020 14:46:05 -0600
-X-Gmail-Original-Message-ID: <CAHmME9rR-_KvENZyBrRhYNWD+hVD-FraxPJiofsmuXBh651QXw@mail.gmail.com>
-Message-ID: <CAHmME9rR-_KvENZyBrRhYNWD+hVD-FraxPJiofsmuXBh651QXw@mail.gmail.com>
+        id S1726215AbgDZVxq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 Apr 2020 17:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726184AbgDZVxq (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 26 Apr 2020 17:53:46 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402E5C061A0F;
+        Sun, 26 Apr 2020 14:53:46 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id s10so6214716plr.1;
+        Sun, 26 Apr 2020 14:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=H5D1PG6e/lMszq0Rf949EFEkle4oIskhG7vE9vM9dC4=;
+        b=gz4u1B/Skr8dsJGByTK2XWhiRHHeIiJZhyUTcQxEMw5oTN+clJwfvrhHWwRaMgDPks
+         SMs+QJlwZcv4XoMltJQ/o7qXuTkMuSfpQdq4HxDJBXB1/Brawn81miRiltA44CJozitD
+         4/CP/nB3W0TUJfCo2rr6dGLiBAvgxJgcgpsFtrfASPAlOec4eLvqfib9DRtnJAFMUmDU
+         JIsUDSHkLXGpVaSiKplTehHcZ+1gNn/HtN1XqWTqzQ53K/4TPUCPgx3OR0moFSueWT16
+         epWZKE9C2Q3NooFtA+t+7twpfMYGy3NXlHU/op6j2ucEvcAcjn00qPEOyYTlMZ0JwEwZ
+         +oEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=H5D1PG6e/lMszq0Rf949EFEkle4oIskhG7vE9vM9dC4=;
+        b=I3lNpitHO6vpe0BYxvrQqKNvXjQQbDEkNtFH8sNLq1mxcJ+AIUDJkBI4KFkQxLWIAo
+         iklrekpb6q26WBlkiGh3T+HFfepa85nv7SOgjeW6qQuALVC75CKEr6vi4GJcrD7vgvg3
+         K2oTsWCiHAfO+pRBqKseRgy286SVeJWGwIs7pGKp5wWkLfu8hwjGamk8v8u6Ir3O9B7e
+         zGcMMggptAC7Y+46YVKqQvAvQNIVx98trWae9pyN/nhK1kvkA5RMgI5BvR7zdQHiC05Y
+         6PYbHyp4p6s/psvXaL5ljRWpyuFeks5gzWoqXewIFXdmtmVCcXMQg3u3JhaBHUdwDovd
+         63RA==
+X-Gm-Message-State: AGi0PuakV54nrAg1mNaUHuo3MsQKu5kHRhT0o6j9tDgTZja0geni1mnY
+        iJsXq7CxrgFQaLkoDbD3RA4=
+X-Google-Smtp-Source: APiQypLlLPgA6Ou9oUq3eMaI0CVQsG9UrGKGpXBdsliinmBgCNXAyiE4zSfQmRisUhR9LgkPSFMytg==
+X-Received: by 2002:a17:90a:6d03:: with SMTP id z3mr20045920pjj.32.1587938024753;
+        Sun, 26 Apr 2020 14:53:44 -0700 (PDT)
+Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
+        by smtp.gmail.com with ESMTPSA id 67sm954454pfx.108.2020.04.26.14.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Apr 2020 14:53:44 -0700 (PDT)
 Subject: Re: INFO: rcu detected stall in wg_packet_tx_worker
-To:     Eric Dumazet <eric.dumazet@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>
 Cc:     syzbot <syzbot+0251e883fe39e7a0cb0a@syzkaller.appspotmail.com>,
         David Miller <davem@davemloft.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -55,93 +65,46 @@ Cc:     syzbot <syzbot+0251e883fe39e7a0cb0a@syzkaller.appspotmail.com>,
         Shuah Khan <shuah@kernel.org>, syzkaller-bugs@googlegroups.com,
         Thomas Gleixner <tglx@linutronix.de>, vivien.didelot@gmail.com,
         Cong Wang <xiyou.wangcong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <0000000000005fd19505a4355311@google.com>
+ <e40c443e-74aa-bad4-7be8-4cdddfdf3eaf@gmail.com>
+ <CAHmME9ov2ae08UTzwKL7enquChzDNxpg4c=ppnJqS2QF6ZAn_Q@mail.gmail.com>
+ <f2eb18ea-b32a-4b64-0417-9b5b2df98e33@gmail.com>
+ <29bd64f4-5fe0-605e-59cc-1afa199b1141@gmail.com>
+ <CAHmME9rR-_KvENZyBrRhYNWD+hVD-FraxPJiofsmuXBh651QXw@mail.gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <85e76f66-f807-ad12-df9d-0805b68133fa@gmail.com>
+Date:   Sun, 26 Apr 2020 14:53:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAHmME9rR-_KvENZyBrRhYNWD+hVD-FraxPJiofsmuXBh651QXw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 2:38 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->
->
->
-> On 4/26/20 1:26 PM, Eric Dumazet wrote:
-> >
-> >
-> > On 4/26/20 12:42 PM, Jason A. Donenfeld wrote:
-> >> On Sun, Apr 26, 2020 at 1:40 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 4/26/20 10:57 AM, syzbot wrote:
-> >>>> syzbot has bisected this bug to:
-> >>>>
-> >>>> commit e7096c131e5161fa3b8e52a650d7719d2857adfd
-> >>>> Author: Jason A. Donenfeld <Jason@zx2c4.com>
-> >>>> Date:   Sun Dec 8 23:27:34 2019 +0000
-> >>>>
-> >>>>     net: WireGuard secure network tunnel
-> >>>>
-> >>>> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15258fcfe00000
-> >>>> start commit:   b2768df2 Merge branch 'for-linus' of git://git.kernel.org/..
-> >>>> git tree:       upstream
-> >>>> final crash:    https://syzkaller.appspot.com/x/report.txt?x=17258fcfe00000
-> >>>> console output: https://syzkaller.appspot.com/x/log.txt?x=13258fcfe00000
-> >>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=b7a70e992f2f9b68
-> >>>> dashboard link: https://syzkaller.appspot.com/bug?extid=0251e883fe39e7a0cb0a
-> >>>> userspace arch: i386
-> >>>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f5f47fe00000
-> >>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11e8efb4100000
-> >>>>
-> >>>> Reported-by: syzbot+0251e883fe39e7a0cb0a@syzkaller.appspotmail.com
-> >>>> Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-> >>>>
-> >>>> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> >>>>
-> >>>
-> >>> I have not looked at the repro closely, but WireGuard has some workers
-> >>> that might loop forever, cond_resched() might help a bit.
-> >>
-> >> I'm working on this right now. Having a bit difficult of a time
-> >> getting it to reproduce locally...
-> >>
-> >> The reports show the stall happening always at:
-> >>
-> >> static struct sk_buff *
-> >> sfq_dequeue(struct Qdisc *sch)
-> >> {
-> >>        struct sfq_sched_data *q = qdisc_priv(sch);
-> >>        struct sk_buff *skb;
-> >>        sfq_index a, next_a;
-> >>        struct sfq_slot *slot;
-> >>
-> >>        /* No active slots */
-> >>        if (q->tail == NULL)
-> >>                return NULL;
-> >>
-> >> next_slot:
-> >>        a = q->tail->next;
-> >>        slot = &q->slots[a];
-> >>
-> >> Which is kind of interesting, because it's not like that should block
-> >> or anything, unless there's some kasan faulting happening.
-> >>
-> >
-> > I am not really sure WireGuard is involved, the repro does not rely on it anyway.
-> >
->
-> Yes, do not spend too much time on this.
->
-> syzbot found its way into crazy qdisc settings these last days.
->
-> ( I sent a patch yesterday for choke qdisc, it seems similar checks are needed in sfq )
 
-Ah, whew, okay. I had just begun instrumenting sfq (the highly
-technical term for "adding printks everywhere") to figure out what's
-going on. Looks like you've got a handle on it, so I'll let you have
-at it.
 
-On the brighter side, it seems like Dmitry's and my effort to get full
-coverage of WireGuard has paid off in the sense that tons of packets
-wind up being shoveled through it in one way or another, which is
-good.
+On 4/26/20 1:46 PM, Jason A. Donenfeld wrote:
+
+> 
+> Ah, whew, okay. I had just begun instrumenting sfq (the highly
+> technical term for "adding printks everywhere") to figure out what's
+> going on. Looks like you've got a handle on it, so I'll let you have
+> at it.
+
+Yes, syzbot manages to put a zero in q->scaled_quantum
+
+I will send a fix.
+
+> 
+> On the brighter side, it seems like Dmitry's and my effort to get full
+> coverage of WireGuard has paid off in the sense that tons of packets
+> wind up being shoveled through it in one way or another, which is
+> good.
+> 
+
+Sure !
