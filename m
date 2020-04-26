@@ -2,42 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9501B93B4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Apr 2020 21:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396CA1B93C9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Apr 2020 21:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726176AbgDZTnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Apr 2020 15:43:20 -0400
-Received: from mail.zx2c4.com ([192.95.5.64]:55279 "EHLO mail.zx2c4.com"
+        id S1726177AbgDZTw7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 Apr 2020 15:52:59 -0400
+Received: from mail.zx2c4.com ([192.95.5.64]:42241 "EHLO mail.zx2c4.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726171AbgDZTnU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Apr 2020 15:43:20 -0400
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id e76007a9;
-        Sun, 26 Apr 2020 19:31:47 +0000 (UTC)
+        id S1726171AbgDZTw7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 26 Apr 2020 15:52:59 -0400
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 4234d2d7;
+        Sun, 26 Apr 2020 19:41:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
         :references:in-reply-to:from:date:message-id:subject:to:cc
-        :content-type; s=mail; bh=Q95WupxJotcACUWONTVu7EW65Ro=; b=bYO8K8
-        UeSNbeGbha+u6Z+X4OWjAckkt578muPBYfljxTemQveUyZ4Y4KqM3k5XP3wLRZN3
-        3mYbpBfLS7i0PpncwzhsYoncBN8ReR5a/OkMjlGMooXNhMaeWFyl3aNqIi+dVcW5
-        XrVcNxNrpXIIa/A+YYSAurfsFS7n25G0dWk+n5zm0J3HEeTWS6Hdyhd4Zjk3oKgS
-        qha1334mjnFs+Z7o8hcpMwI+D1TUO1jYj++hJNUACygOipLiP2fRE42PDXMcXzTA
-        Y+QNHPHPi3Uxr0XHqfQ2KNxqhX4lR1zeaTfSN33UxQOu1cyFzO8lQwRfVgdy23uG
-        5kPRxtnoVNbQkuyA==
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a45018e5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 26 Apr 2020 19:31:46 +0000 (UTC)
-Received: by mail-il1-f172.google.com with SMTP id u189so14740028ilc.4;
-        Sun, 26 Apr 2020 12:43:11 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZQXvRTigFAKCzD2TWIRZvSoUg3vp2NAHEMQqTqxxE5VOtNh79Z
-        +ttimxxB8QjU2QwSPSjkWAgyaP/sAGKcWREV1t4=
-X-Google-Smtp-Source: APiQypJhdrWBdGhX+odG4xvM1xd9YLFfY6dps9KqG4u5HpuETWThfLmwYZGpIfmkBCsKnMx1fb9tGxaDOvBguexuC5A=
-X-Received: by 2002:a92:5c82:: with SMTP id d2mr18807878ilg.231.1587930190268;
- Sun, 26 Apr 2020 12:43:10 -0700 (PDT)
+        :content-type; s=mail; bh=hFPaJylJBtGuVDFNSlAKx8BfCy4=; b=zfvrZ2
+        zRKJWRr5WKRl/cFmJwkXS3woumJPnHJYRXPgRAD8/lE96qS8V14Y6VM/iw43ltIt
+        QH7Ujn+2bcOA5+X66WrVicoVT5Q3c9cABDAJmRPwBfy+QKdKFHZAXgbnKX5kIwg0
+        RUTCjCPnIEBUKKRwTN26mNcB1xyAU8DN5X1x7pcPT8vtwxnQ0S8Q8CgG/jIFrVv7
+        G/t228erdsQkiXFFHa+9C5MYzEBckXDhgdqiflE6s7YIB9gJotas9UhJwYIUFtbY
+        I1KYpsBMxRV/exQoPR8kpdC9HjjtqjmLUVezIQ0bx548bis7E8y9KKrdl1Dv4Yub
+        yAkIzWObrl9cNNvA==
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f4718d32 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 26 Apr 2020 19:41:32 +0000 (UTC)
+Received: by mail-il1-f171.google.com with SMTP id s10so14712799iln.11;
+        Sun, 26 Apr 2020 12:52:57 -0700 (PDT)
+X-Gm-Message-State: AGi0PubZw6uEXqPB8HscbDaXAC059QUg03shMeNHKwogIvu8q4e0l65J
+        KyAIopJ3wl/k2iCzIPI9dmZk2xM0uouZq0fUwro=
+X-Google-Smtp-Source: APiQypKWR1kPZMsj7G23BDHeamJD24j7N4WJFHC0YyaebHjrfsFGWkBXzNp/eJtifanT7be3tT0fDVxn98lqpOK/+i0=
+X-Received: by 2002:a92:5f46:: with SMTP id t67mr17415358ilb.64.1587930776486;
+ Sun, 26 Apr 2020 12:52:56 -0700 (PDT)
 MIME-Version: 1.0
 References: <0000000000005fd19505a4355311@google.com> <e40c443e-74aa-bad4-7be8-4cdddfdf3eaf@gmail.com>
-In-Reply-To: <e40c443e-74aa-bad4-7be8-4cdddfdf3eaf@gmail.com>
+ <CAHmME9ov2ae08UTzwKL7enquChzDNxpg4c=ppnJqS2QF6ZAn_Q@mail.gmail.com>
+In-Reply-To: <CAHmME9ov2ae08UTzwKL7enquChzDNxpg4c=ppnJqS2QF6ZAn_Q@mail.gmail.com>
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sun, 26 Apr 2020 13:42:58 -0600
-X-Gmail-Original-Message-ID: <CAHmME9ov2ae08UTzwKL7enquChzDNxpg4c=ppnJqS2QF6ZAn_Q@mail.gmail.com>
-Message-ID: <CAHmME9ov2ae08UTzwKL7enquChzDNxpg4c=ppnJqS2QF6ZAn_Q@mail.gmail.com>
+Date:   Sun, 26 Apr 2020 13:52:45 -0600
+X-Gmail-Original-Message-ID: <CAHmME9rxYkDhH3Fj-U24Ho7oGcdABK9hXsACPDQ1rz9WUcEuSQ@mail.gmail.com>
+Message-ID: <CAHmME9rxYkDhH3Fj-U24Ho7oGcdABK9hXsACPDQ1rz9WUcEuSQ@mail.gmail.com>
 Subject: Re: INFO: rcu detected stall in wg_packet_tx_worker
 To:     Eric Dumazet <eric.dumazet@gmail.com>
 Cc:     syzbot <syzbot+0251e883fe39e7a0cb0a@syzkaller.appspotmail.com>,
@@ -59,59 +60,9 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 1:40 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->
->
->
-> On 4/26/20 10:57 AM, syzbot wrote:
-> > syzbot has bisected this bug to:
-> >
-> > commit e7096c131e5161fa3b8e52a650d7719d2857adfd
-> > Author: Jason A. Donenfeld <Jason@zx2c4.com>
-> > Date:   Sun Dec 8 23:27:34 2019 +0000
-> >
-> >     net: WireGuard secure network tunnel
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15258fcfe00000
-> > start commit:   b2768df2 Merge branch 'for-linus' of git://git.kernel.org/..
-> > git tree:       upstream
-> > final crash:    https://syzkaller.appspot.com/x/report.txt?x=17258fcfe00000
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=13258fcfe00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b7a70e992f2f9b68
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=0251e883fe39e7a0cb0a
-> > userspace arch: i386
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f5f47fe00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11e8efb4100000
-> >
-> > Reported-by: syzbot+0251e883fe39e7a0cb0a@syzkaller.appspotmail.com
-> > Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> >
->
-> I have not looked at the repro closely, but WireGuard has some workers
-> that might loop forever, cond_resched() might help a bit.
-
-I'm working on this right now. Having a bit difficult of a time
-getting it to reproduce locally...
-
-The reports show the stall happening always at:
-
-static struct sk_buff *
-sfq_dequeue(struct Qdisc *sch)
-{
-       struct sfq_sched_data *q = qdisc_priv(sch);
-       struct sk_buff *skb;
-       sfq_index a, next_a;
-       struct sfq_slot *slot;
-
-       /* No active slots */
-       if (q->tail == NULL)
-               return NULL;
-
-next_slot:
-       a = q->tail->next;
-       slot = &q->slots[a];
-
-Which is kind of interesting, because it's not like that should block
-or anything, unless there's some kasan faulting happening.
+It looks like part of the issue might be that I call
+udp_tunnel6_xmit_skb while holding rcu_read_lock_bh, in
+drivers/net/wireguard/socket.c. But I think there's good reason to do
+so, and udp_tunnel6_xmit_skb should be rcu safe. In fact,
+every.single.other user of udp_tunnel6_xmit_skb in the kernel uses it
+with rcu locked. So, hm...
