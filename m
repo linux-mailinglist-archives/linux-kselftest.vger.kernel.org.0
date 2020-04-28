@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DA81BBDB9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Apr 2020 14:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B2E1BBDB8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Apr 2020 14:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726645AbgD1Mix (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S1726620AbgD1Mix (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Tue, 28 Apr 2020 08:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726361AbgD1Mix (ORCPT
+        by vger.kernel.org with ESMTP id S1726361AbgD1Miw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Apr 2020 08:38:53 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B01C03C1A9
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2020 05:38:53 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id u127so2688447wmg.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2020 05:38:52 -0700 (PDT)
+        Tue, 28 Apr 2020 08:38:52 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D15C03C1A9
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2020 05:38:51 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id 188so2577124wmc.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2020 05:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=pOMqC+ChmjG1hOQvFzfugQDf6EqBDj2J7aBYHiMkkmo=;
-        b=kJIUJa6pbhwzCB+6c2VikaUgtRuuCk4570aKggWOQUDSAbdKYcYMVnVxngNDzAaugC
-         YTMDAMQUAI1tCGrADk1EqIULr826+DT8M3zf5X2gWuToTNjBz/Cb2eeizx8833yHutPa
-         6Bouvuh7cSqmuDwDSrfp4t5boNm8A1KnhOco0WbP9MUFgoojtcosot4DNqoVX2vClAO6
-         Srv0qDl0mFpOU8+ShIQ6qjQUGKzvkc2/d161BQGX50rYLTePm2SsbkEIc+ceXFJfyPuu
-         JYRk+14Mv5DDTbgfvGoN5DsiR4Q0d32YrndjM5DrIYDHp8JUDJvNHxt5C9tdgUwZS3B6
-         WRCQ==
+        b=HDCLLdPR0t1hqa8N4GTYksD1oiI/2VjJ0Ti87hZP0Yfc+pbh6IWmioqu+jQgkBV8gj
+         mvzDrybUImmmZpXZjOYeAHj3GYh7IVoJ4xeOAca0IXSi0TYxv+uPhE04jqRPbhGLiNA6
+         2jBiSfgssvBJQmJwN/ffBL1o4Z28y2bIT9WrFmCwsigfKEulsn03ZUJvleUyouJFhBla
+         uRLtwiIRKxlif9EeFExO7Du3ykyrywFX12E5JGPlZsEmIBkhcCRQthxyB6Hdqbj6nZSP
+         Y0R59sQDC508HdTeHRk+z/b5Jj0QhDfGA7CpJ4ZZ4ByW6K8OG8wBbCGWmXVOqEb1n8K5
+         aNKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=pOMqC+ChmjG1hOQvFzfugQDf6EqBDj2J7aBYHiMkkmo=;
-        b=nD9kaYtUe6wb8H4ydNnadBf/uH8X8gWx+/kwz2oMjkKsPrsGeIOMNozqW+4Kr9pgzP
-         GPzRao7ox9Y/g7DHBAuPOXgCMQJ30a1AwWtG1+A0U2GVtGwDfW6a2/DY9HyXN2GUuyoM
-         xMuTGNtYQ+MH8VRX9ui0OlQnel3wtEbfNyiTr+W4hUUznjK4Pr/YGMqJtx1Dee7Ux05w
-         FfP1xrvIBP2D0n2X1A/zEOIRGypNdaTQtS/EqTKSxNz+OxvDTP5Y4cVoYwsBBbyt5Lvj
-         dDTO4+ELcVXpwtYC4HhYRGz1Lr6TUi0v6Q+CC8nE219pnioYTYdTCAKpusep5CAKhrez
-         cH2g==
-X-Gm-Message-State: AGi0Pubnkw3Ic5MAAehnTYacbj06fGJTf1Kj2T+ie3z06uFFWuHKVpiO
-        xtUDKvIYKxla1xdvbU6e/JI=
-X-Google-Smtp-Source: APiQypLqTkk9WhiHQ6mGCdNs7A9Pc7BdvO6VSqEUFRvsaObPUO39cUJdPFkGoUfeOBALKI9E1cyNCg==
-X-Received: by 2002:a7b:c10d:: with SMTP id w13mr4291690wmi.78.1588077531732;
-        Tue, 28 Apr 2020 05:38:51 -0700 (PDT)
+        b=eytBsQd8rl4iY8OTefEu+DUo4UoUVRr6LcQyHz97xS7wn+LT15bFPcFaL1CVy0lffg
+         BvO6bv6lSB7qVIKhPNYASdlzTNpE9JkzHP2Ti5lCN08xVOBA8B31RKWKFJG4+oeXYHpD
+         avt8Et0ZIkrBWIEB/N8A2MX0NTWsKX/MuM2PjPnX0wLZb7lrqG9K0fjWiadeGJrJpGrl
+         C+vQWBb+J1uL7zR2OaDmNYlosBVHxtMJLCeGtPbxWlEaNgAWJM7XWyRa5TFtYsTFyOnh
+         QaJe7lDBRph5pBvQKv76+0oCQ1/M/KtbELM/faP9AH6h49qIg+1cC3fJd7jXAJV+gISA
+         iPjA==
+X-Gm-Message-State: AGi0PualKezJwT1oDg1W/dm+nYOgKgJR8pUhvb/SpYG4ZBIj+Ae+/POB
+        tUn5bWncrVBHgSKhSUEzG1I=
+X-Google-Smtp-Source: APiQypK8vuaxdForD/GcrcImU+cZn2hQZNlN7gxYz/2CsGa0JJ8vMn8hwK3jWIvT/Przg6xH/Dj3Dg==
+X-Received: by 2002:a05:600c:295a:: with SMTP id n26mr4912466wmd.16.1588077529931;
+        Tue, 28 Apr 2020 05:38:49 -0700 (PDT)
 Received: from steamlocomotive (176-74-128-122.netdatacomm.cz. [176.74.128.122])
-        by smtp.gmail.com with ESMTPSA id k3sm28091677wru.90.2020.04.28.05.38.51
+        by smtp.gmail.com with ESMTPSA id m1sm24641444wro.64.2020.04.28.05.38.49
         (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Tue, 28 Apr 2020 05:38:51 -0700 (PDT)
+        Tue, 28 Apr 2020 05:38:49 -0700 (PDT)
 From:   Veronika Kabatova <veronicca114@gmail.com>
 X-Google-Original-From: Veronika Kabatova <vkabatov@redhat.com>
 To:     shuah@kernel.org
 Cc:     sbrivio@redhat.com, linux-kselftest@vger.kernel.org,
         Veronika Kabatova <vkabatov@redhat.com>
 Subject: [PATCH] selftests: introduce gen_tar Makefile target
-Date:   Tue, 28 Apr 2020 14:34:48 +0200
-Message-Id: <20200428123448.2950976-1-vkabatov@redhat.com>
+Date:   Tue, 28 Apr 2020 14:38:41 +0200
+Message-Id: <20200428123841.2953099-1-vkabatov@redhat.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
