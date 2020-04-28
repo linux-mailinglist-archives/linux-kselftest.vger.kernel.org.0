@@ -2,77 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 024D01BB29E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Apr 2020 02:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86BC1BB335
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Apr 2020 03:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgD1ARn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Apr 2020 20:17:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55360 "EHLO mail.kernel.org"
+        id S1726398AbgD1BD6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Apr 2020 21:03:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726204AbgD1ARn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Apr 2020 20:17:43 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726379AbgD1BD6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Apr 2020 21:03:58 -0400
+Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A20DB2072A;
-        Tue, 28 Apr 2020 00:17:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 35E50206D6;
+        Tue, 28 Apr 2020 01:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588033062;
-        bh=RvIxbz6xV8TKE7G+MxbFyTQV5ilrjLjm+DZT86ra/fs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=otOtwt713Z4AldxEewg5HRKiJKciN128nsMQ+bq0PGpC5D7ZU1ZqpF+3YO+/efMIb
-         4JSS6JEk3VORZoRjGMcoCcSQa20amQXXy9q1o5E4kMz/Hi+SkSFK247KCsmnKx3iMH
-         zASZDdB6wlpUYYkigoji7kgG+ImikasglcTVgkFI=
-Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
-To:     Stefano Brivio <sbrivio@redhat.com>,
-        Veronika Kabatova <vkabatov@redhat.com>
-Cc:     linux-kselftest@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20200427192141.2926018-1-vkabatov@redhat.com>
- <20200427212405.2747394d@redhat.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <bd179be3-2515-1efb-ba95-3c223d573753@kernel.org>
-Date:   Mon, 27 Apr 2020 18:17:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        s=default; t=1588035837;
+        bh=MGJvylZiGkTZwwzCHb5ZFTaQJFtBOk//T/dAGP9LFuk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=B4HM7VVc2Ui10qnNjm+8cBH8Ycc+25mPPyK4A0JOCN9vXVxeH/2yQO8iuSHHKxu7a
+         K10b9rA/jDKae6xISuL+IN5+3tNKNWuy8l5GgTm/TArZxHNm4ZPNoMqtSggtZPCYuj
+         LmfEvfSWVH+qp6jnrPyIfwxvMubg+ngkjP751/BI=
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     keescook@chromium.org, shuah@kernel.org, netdev@vger.kernel.org,
+        luto@amacapital.net, wad@chromium.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Tim.Bird@sony.com,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next v6 0/5] kselftest: add fixture parameters
+Date:   Mon, 27 Apr 2020 18:03:46 -0700
+Message-Id: <20200428010351.331260-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-In-Reply-To: <20200427212405.2747394d@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Veronika,
+Hi!
 
-On 4/27/20 1:24 PM, Stefano Brivio wrote:
-> On Mon, 27 Apr 2020 21:21:41 +0200
-> Veronika Kabatova <vkabatov@redhat.com> wrote:
-> 
->> The gen_kselftest_tar.sh always packages *all* selftests and doesn't
->> pass along any variables to `make install` to influence what should be
->> built. This can result in an early error on the command line ("Unknown
->> tarball format TARGETS=XXX"), or unexpected test failures as the
->> tarball contains tests people wanted to skip on purpose.
->>
->> Since the makefile already contains all the logic, we can add a target
->> for packaging. Keep the default .gz target the script uses, and actually
->> extend the supported formats by using tar's autodetection.
->>
->> To not break current workflows, keep the gen_kselftest_tar.sh script as
->> it is, with an added suggestion to use the makefile target instead.
->>
->> Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
-> 
-> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-> 
+This set is an attempt to make running tests for different
+sets of data easier. The direct motivation is the tls
+test which we'd like to run for TLS 1.2 and TLS 1.3,
+but currently there is no easy way to invoke the same
+tests with different parameters.
 
-I don't see this in my Inbox. Please include everybody get_maintainers
-script tells you to do.
+Tested all users of kselftest_harness.h.
 
-You can add the Reviewed-by: Stefano Brivio <sbrivio@redhat.com> to the
-patch when you resend it.
+Dave, would it be possible to take these via net-next?
+It seems we're failing to get Shuah's attention.
 
-thanks,
--- Shuah
+v2:
+ - don't run tests by fixture
+ - don't pass params as an explicit argument
+
+v3:
+ - go back to the orginal implementation with an extra
+   parameter, and running by fixture (Kees);
+ - add LIST_APPEND helper (Kees);
+ - add a dot between fixture and param name (Kees);
+ - rename the params to variants (Tim);
+
+v4:
+ - whitespace fixes.
+
+v5 (Kees):
+ - move a comment;
+ - remove a temporary variable;
+ - reword the commit message on patch 4.
+
+v6:
+ - resend for net-next.
+
+v1: https://lore.kernel.org/netdev/20200313031752.2332565-1-kuba@kernel.org/
+v2: https://lore.kernel.org/netdev/20200314005501.2446494-1-kuba@kernel.org/
+v3: https://lore.kernel.org/netdev/20200316225647.3129354-1-kuba@kernel.org/
+v4: https://lore.kernel.org/netdev/20200317010419.3268916-1-kuba@kernel.org/
+v5: https://lore.kernel.org/netdev/20200318010153.40797-1-kuba@kernel.org/
+
+Jakub Kicinski (5):
+  kselftest: factor out list manipulation to a helper
+  kselftest: create fixture objects
+  kselftest: run tests by fixture
+  kselftest: add fixture variants
+  selftests: tls: run all tests for TLS 1.2 and TLS 1.3
+
+ Documentation/dev-tools/kselftest.rst       |   3 +-
+ tools/testing/selftests/kselftest_harness.h | 234 +++++++++++++++-----
+ tools/testing/selftests/net/tls.c           |  93 ++------
+ 3 files changed, 202 insertions(+), 128 deletions(-)
+
+-- 
+2.25.4
+
