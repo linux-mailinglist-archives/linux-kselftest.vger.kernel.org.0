@@ -2,140 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E65F1BE3D7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Apr 2020 18:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42F41BE4D1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Apr 2020 19:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgD2Q27 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Apr 2020 12:28:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43274 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726423AbgD2Q27 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Apr 2020 12:28:59 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1718620787;
-        Wed, 29 Apr 2020 16:28:57 +0000 (UTC)
-Date:   Wed, 29 Apr 2020 12:28:55 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kselftest@vger.kernel.org, mingo@redhat.com,
-        shuah@kernel.org, colin.king@canonical.com, mhiramat@kernel.org,
-        yangx.jy@cn.fujitsu.com, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/ftrace: treat module requirement unmet
- situation as unsupported
-Message-ID: <20200429122855.02594f33@gandalf.local.home>
-In-Reply-To: <20200429095044.24625-1-po-hsu.lin@canonical.com>
-References: <20200429095044.24625-1-po-hsu.lin@canonical.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726949AbgD2RJc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Apr 2020 13:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726635AbgD2RJb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Apr 2020 13:09:31 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922EAC03C1AE
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2020 10:09:31 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id d17so1320354pgo.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2020 10:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=XRf8GObyFyiu0kikag+9wy7ttN3b1p/9KRQUdGvi0B8=;
+        b=dFhGW0VUHxp3OA589kT5FEsTI0gcW9DZ9PSljRlxhccRour0WECCxKllvJJbOjgqls
+         QGiR2/d3lgSmvsGENz1m/eNxyxrzop0FmghlK1zgmY+ibt3KYeSqqjL1ByoEaqRYUWMX
+         PMN7i6IYACVz2agI2sR0lM/b6AImqlOllicSw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XRf8GObyFyiu0kikag+9wy7ttN3b1p/9KRQUdGvi0B8=;
+        b=a2WqFr7dH5CrKtfQC5UShaHNRV70XrSbFiIUxczK2trXxtYH9/TfqSJJ0uCCHzbPaH
+         6fHh9ElJ9CbSoQ9/6PVmgjmDim49rY+jejgKefc9E0+O/j4i91iu/CiHaAZPCWYlVjHE
+         MBZLl809lY1ij0LQ9Nb97hV5uLPbQAnFsKNruURfTzwNbJu2GP1HnBz3Q6jeRuHASJbH
+         XcDQ9IbVtcwOiK78/RyL32hxwQKsHNnUm1H+HOFASdcA/pXu+F1fIsuURq7FbK+qD+cs
+         l7xl8pkjSDHpftkImyJz1vsSXOWS5RxdU4GIYcsqCV/0AeB7sLt6YryRkhHpR+uV3kMJ
+         Ft+A==
+X-Gm-Message-State: AGi0PuYRaVcI9pTTKSdgj8WBfJ9SH9fuGbO37cDFwGyJ5Sy5Jv3ttFl0
+        nopKhnYF1I6F37u1Puu9cdHLbA==
+X-Google-Smtp-Source: APiQypKbkmBWioZSe35zwE5e39r7ePGHkonrurn32H0uEpW6G6k6V8t8gVW+oaC2HGwZk/j58okUZg==
+X-Received: by 2002:aa7:943c:: with SMTP id y28mr36128122pfo.171.1588180170916;
+        Wed, 29 Apr 2020 10:09:30 -0700 (PDT)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id y63sm1574456pfg.138.2020.04.29.10.09.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2020 10:09:29 -0700 (PDT)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH v4 0/7] firmware: add partial read support in request_firmware_into_buf
+Date:   Wed, 29 Apr 2020 10:09:07 -0700
+Message-Id: <20200429170914.30976-1-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 29 Apr 2020 17:50:44 +0800
-Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
+This patch series adds partial read support in request_firmware_into_buf.
+In order to accept the enhanced API it has been requested that kernel
+selftests and upstreamed driver utilize the API enhancement and so
+are included in this patch series.
 
-> When the required module for the test does not exist, use
-> exit_unsupported instead of exit_unresolved to indicate this test is
-> not supported.
-> 
-> By doing this we can make test behaviour in sync with the
-> irqsoff_tracer.tc test in preemptirq, which is also treating module
-> existence in this way. Moreover, the test won't exit with a non-zero
-> return value if the module does not exist.
-> 
-> Fixes: 646f01ccdd59 ("ftrace/selftest: Add tests to test register_ftrace_direct()")
-> Fixes: 4d23e9b4fd2e ("selftests/ftrace: Add trace_printk sample module test")
-> Fixes: 7bc026d6c032 ("selftests/ftrace: Add function filter on module testcase")
-> Fixes: af2a0750f374 ("selftests/ftrace: Improve kprobe on module testcase to load/unload module")
+Also in this patch series is the addition of a new Broadcom VK driver
+utilizing the new request_firmware_into_buf enhanced API.
 
-I don't think this deserves the Fixes tags.
+Changes from v3:
+ - fix sparse warnings
+ - fix printf format specifiers for size_t
+ - fix 32-bit cross-compiling reports 32-bit shifts
+ - use readl/writel,_relaxed to access pci ioremap memory,
+  removed memory barriers and volatile keyword with such change
+ - driver optimizations for interrupt/poll functionalities
+Changes from v2:
+ - remove unnecessary code and mutex locks in lib/test_firmware.c
+ - remove VK_IOCTL_ACCESS_BAR support from driver and use pci sysfs instead
+ - remove bitfields
+ - remove Kconfig default m
+ - adjust formatting and some naming based on feedback
+ - fix error handling conditions
+ - use appropriate return codes
+ - use memcpy_toio instead of direct access to PCIE bar
 
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> ---
->  tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc  | 2 +-
->  tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc  | 2 +-
->  tools/testing/selftests/ftrace/test.d/event/trace_printk.tc    | 2 +-
->  tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc | 2 +-
->  tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc  | 2 +-
+Scott Branden (7):
+  fs: introduce kernel_pread_file* support
+  firmware: add offset to request_firmware_into_buf
+  test_firmware: add partial read support for request_firmware_into_buf
+  firmware: test partial file reads of request_firmware_into_buf
+  bcm-vk: add bcm_vk UAPI
+  misc: bcm-vk: add Broadcom VK driver
+  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
 
-I'm fine with these changes if Masami is. But it is Masami's call as his
-infrastructure is more sensitive to the return calls than mine. I just run
-the test and see what passes. I don't actually look at the return codes.
+ MAINTAINERS                                   |    7 +
+ drivers/base/firmware_loader/firmware.h       |    5 +
+ drivers/base/firmware_loader/main.c           |   52 +-
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/bcm-vk/Kconfig                   |   29 +
+ drivers/misc/bcm-vk/Makefile                  |   12 +
+ drivers/misc/bcm-vk/bcm_vk.h                  |  412 +++++
+ drivers/misc/bcm-vk/bcm_vk_dev.c              | 1211 ++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_legacy.c           |   89 ++
+ drivers/misc/bcm-vk/bcm_vk_msg.c              | 1414 +++++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.h              |  195 +++
+ drivers/misc/bcm-vk/bcm_vk_sg.c               |  271 ++++
+ drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
+ drivers/misc/bcm-vk/bcm_vk_tty.c              |  352 ++++
+ drivers/soc/qcom/mdt_loader.c                 |    7 +-
+ fs/exec.c                                     |   96 +-
+ include/linux/firmware.h                      |    8 +-
+ include/linux/fs.h                            |   20 +
+ include/uapi/linux/misc/bcm_vk.h              |   99 ++
+ lib/test_firmware.c                           |  144 +-
+ .../selftests/firmware/fw_filesystem.sh       |   80 +
+ 22 files changed, 4516 insertions(+), 49 deletions(-)
+ create mode 100644 drivers/misc/bcm-vk/Kconfig
+ create mode 100644 drivers/misc/bcm-vk/Makefile
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_legacy.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
+ create mode 100644 include/uapi/linux/misc/bcm_vk.h
 
--- Steve
-
-
->  5 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
-> index d75a869..3d6189e 100644
-> --- a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
-> @@ -5,7 +5,7 @@
->  rmmod ftrace-direct ||:
->  if ! modprobe ftrace-direct ; then
->    echo "No ftrace-direct sample module - please make CONFIG_SAMPLE_FTRACE_DIRECT=m"
-> -  exit_unresolved;
-> +  exit_unsupported;
->  fi
->  
->  echo "Let the module run a little"
-> diff --git a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-> index 801ecb6..3d0e3ca 100644
-> --- a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-> @@ -5,7 +5,7 @@
->  rmmod ftrace-direct ||:
->  if ! modprobe ftrace-direct ; then
->    echo "No ftrace-direct sample module - please build with CONFIG_SAMPLE_FTRACE_DIRECT=m"
-> -  exit_unresolved;
-> +  exit_unsupported;
->  fi
->  
->  if [ ! -f kprobe_events ]; then
-> diff --git a/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
-> index b02550b..dd8b10d 100644
-> --- a/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
-> @@ -5,7 +5,7 @@
->  rmmod trace-printk ||:
->  if ! modprobe trace-printk ; then
->    echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=m"
-> -  exit_unresolved;
-> +  exit_unsupported;
->  fi
->  
->  echo "Waiting for irq work"
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
-> index 1a4b4a4..26dc06a 100644
-> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
-> @@ -13,7 +13,7 @@ echo '*:mod:trace_printk' > set_ftrace_filter
->  if ! modprobe trace-printk ; then
->    echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
->  m"
-> -  exit_unresolved;
-> +  exit_unsupported;
->  fi
->  
->  : "Wildcard should be resolved after loading module"
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
-> index d861bd7..4e07c69 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
-> @@ -8,7 +8,7 @@ rmmod trace-printk ||:
->  if ! modprobe trace-printk ; then
->    echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
->  m"
-> -  exit_unresolved;
-> +  exit_unsupported;
->  fi
->  
->  MOD=trace_printk
+-- 
+2.17.1
 
