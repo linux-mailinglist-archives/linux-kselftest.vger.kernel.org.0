@@ -2,171 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDBE1C1B51
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 May 2020 19:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652441C1E7B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 May 2020 22:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729007AbgEARLm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 May 2020 13:11:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52376 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728970AbgEARLm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 May 2020 13:11:42 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4D0520857;
-        Fri,  1 May 2020 17:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588353101;
-        bh=WacCN/Oz3FfWXAtl9ZPGc7vScq7nB5CuG218xrDN1ec=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=wUGrqrGuByK8Iq+aQhf5BTao7flxposRXqEmjYSGNiTh9u4Ku8B4qzg2sxzELZd94
-         jX0Mt2N18gmRpeTr6N+UQxCGVGyQu2aULcnknFKEEs2fu6atnjc9w8WYurDab0dDa1
-         O9JWXPdm3WpXF1+nkDjuRTl6+6hq0Mdv3hK64/w4=
-Subject: Re: [RFC v3 0/3] Fix errors when try to build kvm selftests on
- specified output
-To:     Xiaoyao Li <xiaoyao.li@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20200326030750.173972-1-xiaoyao.li@intel.com>
- <41d5d89e-79c2-6f7d-de3e-ca3255e910e8@kernel.org>
- <cb445047-ab84-0c49-cfba-ec6933971dc7@intel.com>
- <71a5abdf-07b5-d927-1a08-de8019b3f39f@kernel.org>
- <77ad35cf-6332-9381-200e-40b6a3d18070@intel.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <920ea28b-5c36-75dc-ec51-d501a0322f50@kernel.org>
-Date:   Fri, 1 May 2020 11:11:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726783AbgEAUb1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 May 2020 16:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726788AbgEAUbY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 1 May 2020 16:31:24 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185F6C08E934
+        for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2020 13:31:24 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d24so4013513pll.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2020 13:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DVZsHO3B+82ZVvSvwD+6L84uL6YCwy6wqP9DD2caeKY=;
+        b=Zc3KuQRuQy2OoPJPM+d+PnQiWTvDwpVtt8Zs/O3P2xKcWz2OpXBRQHO7c7IRb3Svou
+         7tdEiY8sRnRcjQKcq5Zj+0PlJ3VLXU+3aiTRKJ5MlWhFdkPfkoa8RKmQKcnL+YtrFDPP
+         AoyAhLCPYp/Bscc03FLzyMRL/p9YsUHnOlTHVDrPdG/xFXwkBqT1eusZGZHPZcMORFnJ
+         XUnONPMgBLe3uBUsDaF4ihYyjghwSsIq+4toZYrsvYog8R/WKxPl/CIP6xrmB3iChGu+
+         IP/ZvPS61IFkPnLMCnS1V56OJBpUCNYtLWaCzdi/NkjLIM7PXCLaVmPYfH/gNTtPYD9V
+         IZCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DVZsHO3B+82ZVvSvwD+6L84uL6YCwy6wqP9DD2caeKY=;
+        b=V2bixNHAn3VWcCNfdss9S21K1irbfMJmkrYGeBasPE/Dznn7LznheNr0gQ0DNoMj9n
+         e0eVPluLEuyrMjSZdmVwGvMPc6gOUW0XUW/Ce3Sf97CjPgwPM+sktpdNkWzgUyCUK4np
+         9b/AXvno57o+IO16tsmNYFkmqxFDtd7jiHcoOj0AOdqOSpH7XDpWoJzwCniHWx7u5WX5
+         9yjFzI/ssFLuwnKDwpr04GWxDgRJshSjxk0Zuci+Ld2+i/IIDgOT2tfU4/5ypHLXZq6K
+         60eYFu+GGpfME6KrERtJeocUyqt9vRKydm4vhHou2gkfzD/Bf5Iq8VG/ZSwFXTVvW+Kw
+         jBZQ==
+X-Gm-Message-State: AGi0PuaPsRK7M9y6qTbZjREXBCfQZEBddZRr28XLiw/w9cxL2h85EnWR
+        kSA63QHhI7Y7dVLaf/S1B1APDeXJxQq6fAHq9koShQ==
+X-Google-Smtp-Source: APiQypJ9b4QRn/GrVn+RH4LsZdGv7V2jtr2OO/8zkSxd5QcIuJPpD3L0aOdJL8jy19OYg1HSleGSA99rMnX4I9DcZ7s=
+X-Received: by 2002:a17:902:a40e:: with SMTP id p14mr5817749plq.297.1588365082975;
+ Fri, 01 May 2020 13:31:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <77ad35cf-6332-9381-200e-40b6a3d18070@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200501083510.1413-1-anders.roxell@linaro.org>
+In-Reply-To: <20200501083510.1413-1-anders.roxell@linaro.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 1 May 2020 13:31:11 -0700
+Message-ID: <CAFd5g45C98_70Utp=QBWg_tKxaUMJ-ArQvjWbG9q6=dixfHBxw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Kconfig: enable a KUNIT_RUN_ALL fragment
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, adilger.kernel@dilger.ca,
+        Marco Elver <elver@google.com>,
+        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-security-module@vger.kernel.org,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/28/20 2:51 AM, Xiaoyao Li wrote:
-> On 3/28/2020 12:03 AM, shuah wrote:
->> On 3/27/20 7:31 AM, Xiaoyao Li wrote:
->>> On 3/27/2020 4:57 AM, shuah wrote:
->>>> On 3/25/20 9:07 PM, Xiaoyao Li wrote:
->> The patches you sent are based on running the command with OUTPUT
->> set. 
-> 
-> The issues are also there when I use
-> 
->    make O=/somewher TARGETS=kvm
-> 
-> from tools/testing/selftests/ directory,
-> 
-> Is it the right usecase?
-> 
->> That is why I am asking you start with the right use-cases,
->> and gave you pointers on tests to refer to that have sub-dirs
->> and handle relocatable builds:
->>
->> futex
->> arm64
->> android
-> 
-> I have read the Makefile in futex, arm64, android to learn how they
-> deal with subdir, they have Makefile in subdir but kvm doesn't.
-> 
-> I just want to create the subdir as easy as possible, so I follow the 
-> method how to create subdir for LIBKVM_OBJ in kvm.
-> 
-> If you dislike it way you can reply it Patch 1 to disclaim clear what 
-> you want to fix the subdir.
-> 
->>>> Also, just build isn't sufficient for you to be able to run the
->>>> tests.
->>>>
->>>> make kselftest-install O=/path/to/mydir TARGETS=kvm will generate
->>>> run script.
->>>
->>> This command also has the x86_64 directory not created issue.
->>> Since it generates header files in kernel_src/usr/include, it doesn't 
->>> have headers path issue. But as result, the kernel_src directory is 
->>> not clean, this requires me to run "make mrproper", I *really* don't 
->>> like it.
->>>
->>>
->>
->> If the test leverages lib.mk headers install logic correctly, you
->> shouldn't see this problem.
->>
->> Yes. It does make the source directory dirty. That is the problem we
->> have to fix. I am seeing issues the issue of x86_64 not being created
->> in the case of relocatable builds.
->>
->> Thanks for working on this by the way. It is one of the tests that
->> identified as the one doesn't support relocatable builds.
->>
->> You will see fixes to others I already fixed in
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next 
->>
->>
->> Start withe the following use0-cases to fix and then test your fixes
->> for these use-cases. The goal is to be able to run kvm from target
->> directory and source directory staying clean.
->>
->> You will have to build the kernel first in all of these cases.
->> Let's use kselftest-install which is what you would need if you
->> want build and then run tests later. Also assuming you are doing
->> native build on x86_64.
->>
->>  From main kernel Makefile: (from kernel source root dir)
->>
->> Builds in the same source directory:
->> make kselftest-install TARGETS=kvm
->>
->> Relocatable build: (from kernel source root dir)
->>
->> make O=/path/objdir  - build kernel
->> make kselftest-install O=/path/objdir TARGETS=kvm
-> 
-> I don't want to build kernel at all.
-> 
->>  From tools/testing/selftests/kvm directory:
->> make O=/path/objdir install
-> 
-> Oh no. This needs to define INSTALL_PATH, and I don't want to install.
-> I just want to build the testcase of kvm to anywhere else to make srcdir 
-> clean.
-> 
-> Besides this command make both kernel src and selftest/kvm dirty.
-> 
->> Install step is important especially for relocatable builds,
->> as it makes sure all run-time dependencies are copied to the
->> target directory.
->>
-> 
-> OK.
-> 
-> So, again.
-> 
-> is
-> 
->    make O=/tmp/kvm-selftest -C tools/testing/selftests \
->         TARGETS=kvm install INSTALL_PATH=/home/lxy/kvm-selftest
-> 
-> the right command for me to start on?
-> 
+On Fri, May 1, 2020 at 1:35 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> Make it easier to enable all KUnit fragments.  This is needed for kernel
+> test-systems, so its easy to get all KUnit tests enabled and if new gets
+> added they will be enabled as well.  Fragments that has to be builtin
+> will be missed if CONFIG_KUNIT_RUN_ALL is set as a module.
+>
+> Adding 'if !KUNIT_RUN_ALL' so individual test can be turned of if
+> someone wants that even though KUNIT_RUN_ALL is enabled.
 
-Sorry for the delay. Yes the above command will work. Please check
+I would LOVE IT, if you could make this work! I have been trying to
+figure out the best way to run all KUnit tests for a long time now.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git 
-next branch
+That being said, I am a bit skeptical that this approach will be much
+more successful than just using allyesconfig. Either way, there are
+tests coming down the pipeline that are incompatible with each other
+(the KASAN test and the KCSAN test will be incompatible). Even so,
+tests like the apparmor test require a lot of non-default
+configuration to compile. In the end, I am not sure how many tests we
+will really be able to turn on this way.
 
-I fixed kvm build/cross-build problems and applied it to next for
-testing.
-
-https://patchwork.kernel.org/patch/11513471/
-
-thanks,
--- Shuah
+Thoughts?
