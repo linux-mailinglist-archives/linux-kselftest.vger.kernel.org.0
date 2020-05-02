@@ -2,117 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E5E1C223B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 May 2020 04:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 978931C226B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 May 2020 05:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbgEBCL3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 May 2020 22:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726473AbgEBCL2 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 May 2020 22:11:28 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E240C08E859
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2020 19:11:28 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id u127so2153399wmg.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2020 19:11:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DxgeZ4dWQbsgxzC3vr4Uf0z6ga9GPtUvmnQ6rfH9mnw=;
-        b=GoAOXqYvnqNaHnqw0sl6wxaUTEEROMaaJ5wtFkTK5JBEL5n2G2yvGvhs3s05djne9u
-         Z0Nm572hdR8ZAqHgELOeTbhCxmoiHUC726/03InwwU0piYRV48UG/j+BM16uSqBf7VFT
-         3/4Bks7Dn7b3YYiGicAkJq043PppsvbGx0CWk1jV7TbiQ2eZ698CTHttNGU9GMA+gSlD
-         yy5AuwsFaLV1/DF+ulL0gMVwg0fBWYh58QliUQqii9fRHedY1IHl5AtDR8kM7dLRpvvV
-         Geu2ui5FWXP3BSoTCYRcP8EFX/JKjNL7AXTEBtblQXJ+7oX2W9r8tZjBd+6ylNmZDSNY
-         yEWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DxgeZ4dWQbsgxzC3vr4Uf0z6ga9GPtUvmnQ6rfH9mnw=;
-        b=Zx/wcxJ3iM+XMmKZLcPYTzxuNHtMzvAAom0Fg5fACaw7cstq1KlvubfW/06pafF2Uw
-         ypJTefxvkNiTmP8n5uy0u/r1fSFJpJL1B5JxbtYi/+cp271RcZjYvWXIAC2m+6KWAidE
-         Pf7qceafNQvQMYj1Hida3JQg2I8RbOL6OUqnMYOJxvgX5IAHNfsp+MAlhz+P72V46ykg
-         MU6FJUmern4ahQRYNkbHN3XoMQ3nlISmYMCL7I1M+Cjf4/P3z36eLlek1ZAIlWu8VMCG
-         vWEkSGPP/LPC3MdUjmLJjoVWNRXldY52dhBStM6RVlTXitsV0PT/ZNG03bv5I+fvtkqm
-         wjDQ==
-X-Gm-Message-State: AGi0PuYjkzJCuGj85ENMgADeg1KwJrpMHh1nH+b9STBYncLsb/JTFJH1
-        qWzdk4wF7BHuZKmrp6iL/ACxjsvQlvlTXaVEvkexAg==
-X-Google-Smtp-Source: APiQypLDIvRbUKevZsGcEO30n6w7WQseNzEj38FrNcXYHjaeCNVPqKzvEB/q8lL2AFg/XGQTwq2/IwPCqTdYBakWPhw=
-X-Received: by 2002:a1c:dd8a:: with SMTP id u132mr2195716wmg.87.1588385486740;
- Fri, 01 May 2020 19:11:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200501083510.1413-1-anders.roxell@linaro.org> <CAFd5g45C98_70Utp=QBWg_tKxaUMJ-ArQvjWbG9q6=dixfHBxw@mail.gmail.com>
-In-Reply-To: <CAFd5g45C98_70Utp=QBWg_tKxaUMJ-ArQvjWbG9q6=dixfHBxw@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 2 May 2020 10:11:15 +0800
-Message-ID: <CABVgOSkAAb7tyjhdqFZmyKyknaxz_sM_o3=bK6cL6Ld4wFxkRQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Kconfig: enable a KUNIT_RUN_ALL fragment
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, adilger.kernel@dilger.ca,
-        Marco Elver <elver@google.com>,
-        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
-        serge@hallyn.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, kasan-dev <kasan-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726473AbgEBDFn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 May 2020 23:05:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60560 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726463AbgEBDFn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 1 May 2020 23:05:43 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7A8720857;
+        Sat,  2 May 2020 03:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588388742;
+        bh=whnRbEL8VMPFploT9OMFbLOr5/cBg0hfDQ+sF+5UN/k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tu+idBLfSXLHIdDePFtX9lmD55VCxnpVkMnzmWd5K5D+NHWFseCDotsWOyw+ieSOI
+         sa9Yu3ipnEbPQgyA4qsUMXNa1M7v0v7Ft+xx7Wcuk8nG1A4ndb8MA+2n8o1ziElyMH
+         IreWuCtd6Q76feVs/WmHHIn/jKYD6cGBPUZU5sFc=
+Date:   Sat, 2 May 2020 12:05:37 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     shuah <shuah@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Li Philip <philip.li@intel.com>,
+        Liu Yiding <yidingx.liu@intel.com>, skhan@linuxfoundation.org
+Subject: Re: [PATCH 2/3] selftests/ftrace: Pick only the first kprobe event
+ to test
+Message-Id: <20200502120537.cfa3cdc1d898a12dc0c15471@kernel.org>
+In-Reply-To: <7751734b-83f1-bf14-9d8e-9092b0b7be3e@kernel.org>
+References: <158834025077.28357.15141584656220094821.stgit@devnote2>
+        <158834027133.28357.11196486193798517250.stgit@devnote2>
+        <20200501101718.5a15e557@gandalf.local.home>
+        <7751734b-83f1-bf14-9d8e-9092b0b7be3e@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 2, 2020 at 4:31 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Fri, May 1, 2020 at 1:35 AM Anders Roxell <anders.roxell@linaro.org> wrote:
-> >
-> > Make it easier to enable all KUnit fragments.  This is needed for kernel
-> > test-systems, so its easy to get all KUnit tests enabled and if new gets
-> > added they will be enabled as well.  Fragments that has to be builtin
-> > will be missed if CONFIG_KUNIT_RUN_ALL is set as a module.
-> >
-> > Adding 'if !KUNIT_RUN_ALL' so individual test can be turned of if
-> > someone wants that even though KUNIT_RUN_ALL is enabled.
->
-> I would LOVE IT, if you could make this work! I have been trying to
-> figure out the best way to run all KUnit tests for a long time now.
->
-> That being said, I am a bit skeptical that this approach will be much
-> more successful than just using allyesconfig. Either way, there are
-> tests coming down the pipeline that are incompatible with each other
-> (the KASAN test and the KCSAN test will be incompatible). Even so,
-> tests like the apparmor test require a lot of non-default
-> configuration to compile. In the end, I am not sure how many tests we
-> will really be able to turn on this way.
->
-> Thoughts?
+On Fri, 1 May 2020 09:38:59 -0600
+shuah <shuah@kernel.org> wrote:
 
-I think there's still some value in this which the allyesconfig option
-doesn't provide. As you point out, it's not possible to have a generic
-"run all tests" option due to potential conflicting dependencies, but
-this does provide a way to run all tests for things enabled in the
-current config. This could be really useful for downstream developers
-who want a way of running all tests relevant to their config without
-the overhead of running irrelevant tests (e.g., for drivers they don't
-build). Using allyesconfig doesn't make that distinction.
+> On 5/1/20 8:17 AM, Steven Rostedt wrote:
+> > On Fri,  1 May 2020 22:37:51 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > 
+> >> Since the kprobe/kprobe_args_type.tc reads out all event logs
+> >> from the trace buffer, the test can fail if there is another
+> >> fork event happens.
+> >> Use head command to pick only the first kprobe event from
+> >> the trace buffer to test the argument types.
+> >>
+> >> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> >> ---
+> >>   .../ftrace/test.d/kprobe/kprobe_args_type.tc       |    2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> >> index 1bcb67dcae26..81490ecaaa92 100644
+> >> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> >> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> >> @@ -38,7 +38,7 @@ for width in 64 32 16 8; do
+> >>     echo 0 > events/kprobes/testprobe/enable
+> >>   
+> >>     : "Confirm the arguments is recorded in given types correctly"
+> >> -  ARGS=`grep "testprobe" trace | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+> >> +  ARGS=`grep "testprobe" trace | head -n 1 | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+> >>     check_types $ARGS $width
+> >>   
+> >>     : "Clear event for next loop"
+> > 
+> > I think I've manually added this exact change to my tests to keep it from
+> > failing.
+> > 
+> > Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > 
+> 
+> Does this conflict with:
+> 
+> Author: Xiao Yang <yangx.jy@cn.fujitsu.com>
+> Date:   Tue Apr 7 14:34:19 2020 +0800
+> 
+>      selftests/ftrace: Check the first record for kprobe_args_type.tc
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=f0c0d0cf590f71b2213b29a7ded2cde3d0a1a0ba
+> 
+> I went into mainline yesterday in my rc4 pull request.
+> 
+> Exact change it appears.
+> 
+> diff --git 
+> a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc 
+> b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> index 1bcb67dcae26..81490ecaaa92 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> @@ -38,7 +38,7 @@ for width in 64 32 16 8; do
+>     echo 0 > events/kprobes/testprobe/enable
+> 
+>     : "Confirm the arguments is recorded in given types correctly"
+> -  ARGS=`grep "testprobe" trace | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) 
+> arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+> +  ARGS=`grep "testprobe" trace | head -n 1 | sed -e 's/.* arg1=\(.*\) 
+> arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+>     check_types $ARGS $width
+> 
+>     : "Clear event for next loop"
 
-Ultimately, we'll probably still want something which enables a
-broader set of tests for upstream development: whether that's based on
-this, allyesconfig, or something else entirely remains to be seen, I
-think. I suspect we're going to end up with something
-subsystem-specific (having a kunitconfig per subsystem, or a testing
-line in MAINTAINERS or similar are ideas which have been brought up in
-the past).
+Oops, yes, please drop this patch.
 
-This is a great looking tool to have in the toolbox, though.
+Thank you,
 
--- David
+> 
+> thanks,
+> -- Shuah
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
