@@ -2,108 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101651C3D43
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 May 2020 16:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03661C4A8F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 May 2020 01:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728762AbgEDOjA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 May 2020 10:39:00 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:23056 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728486AbgEDOjA (ORCPT
+        id S1728351AbgEDXsc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 May 2020 19:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726911AbgEDXsb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 May 2020 10:39:00 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 044EXBuV136193;
-        Mon, 4 May 2020 10:38:52 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30s45sqhkt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 May 2020 10:38:51 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 044EZof4019833;
-        Mon, 4 May 2020 14:38:48 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 30s0g5myqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 May 2020 14:38:48 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 044EckA060424284
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 May 2020 14:38:46 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88E6711C054;
-        Mon,  4 May 2020 14:38:46 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14B6F11C04A;
-        Mon,  4 May 2020 14:38:44 +0000 (GMT)
-Received: from [9.199.43.226] (unknown [9.199.43.226])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  4 May 2020 14:38:43 +0000 (GMT)
-Subject: Re: [PATCH] selftests/vm/keys: fix a broken reference at
- protection_keys.c
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ram Pai <linuxram@us.ibm.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org
-References: <d478a2fc5d204691d0cac6e2b416f0e07a26d3d9.1588585390.git.mchehab+huawei@kernel.org>
- <bd55a74d-1305-9e23-94cd-37e59c11dfcd@intel.com>
-From:   Sandipan Das <sandipan@linux.ibm.com>
-Message-ID: <43841ceb-f682-26ff-8b57-fed545759193@linux.ibm.com>
-Date:   Mon, 4 May 2020 20:08:42 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 4 May 2020 19:48:31 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06C1C061A0E;
+        Mon,  4 May 2020 16:48:31 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id w3so55782plz.5;
+        Mon, 04 May 2020 16:48:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cfGiwA9LJRPCF3MX+zGph8ephlPPnJi7faJRy6NmTEM=;
+        b=Hq/36UR+001Cwdpa+mLC4Zh1Dcu1HO4VDCScIWOw8YBsam7r8K5FJE6vJ9SIQbW63u
+         aZVS9VhnNj2uoCryrXVaqOT/FdQNN+lyHz3/l0DJCuAsnNHIwbmDwUw+U6SmwsZnWNx6
+         ZESTIljqgaWBKyjgbYVs4Q7S4yyzcoCVOcbCeVdtVH8JbYn1ZwOJGF14QDPRHGjAPf/2
+         b/PfjO40F+JR2HcxpZKjhuQ3x9bojDpkdIOs06HpzMlHhNdD2ZAomcxiP7QdR/UUAMBo
+         abHjooMu6Xsxd82zotN0x0zki5QsSWlcIoO6C7PTq4vLwRvIvndkrVUCO74g2ZM3M/v3
+         qx7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cfGiwA9LJRPCF3MX+zGph8ephlPPnJi7faJRy6NmTEM=;
+        b=jrwU4HdkadwUW8Zma68ru6okUFdEzH8VCz9BEQeLK8kyfYEuAdkvyLjGRimEQE1OZG
+         vETZVs7WF4tkIxHq68QBKq/6RWxXPM+76GwyMrnhV2Jk5U0GOVzufS10fI2OvZYAGyjV
+         pnoDhNRZbWl+5pKbCY+Paj/+dB8+RlhTQdHTddgbXoHKHYPCfq4CUJW7SeilrtWqdMM9
+         Cc1nZSp52UWXKtBXF3r1phu3DXXJoNFm1xnp4S8Z/4M/3xpVMbAx7pvrgNb2PV5RPwhb
+         +aitMlOVgvsphvdM4FgkAFg+lf7FaYE4ghB4cRlJoRpANAtqmoQM3GMH92ZdW262AgNH
+         U+cg==
+X-Gm-Message-State: AGi0PuaPnZXCDFD4eYr+Qz0nIbBZftFBcWxFRq5JNk9ZnMs+sgRefZ66
+        QAs1a+NE/4tlMSggVLM/QOg=
+X-Google-Smtp-Source: APiQypJojuvPLz4twGJW8t6CwdqX8pTJnOfRf5lowAkSZK9DI6d6rObg5OP7V/JcqnXhLMsmIvR3kw==
+X-Received: by 2002:a17:902:fe09:: with SMTP id g9mr416924plj.65.1588636111122;
+        Mon, 04 May 2020 16:48:31 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:1bad])
+        by smtp.gmail.com with ESMTPSA id b140sm191542pfb.119.2020.05.04.16.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2020 16:48:30 -0700 (PDT)
+Date:   Mon, 4 May 2020 16:48:27 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Lorenz Bauer <lmb@cloudflare.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Theo Julienne <theojulienne@github.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH 1/1] selftests/bpf: add cls_redirect classifier
+Message-ID: <20200504234827.6mrogryxk73jc6x2@ast-mbp.dhcp.thefacebook.com>
+References: <20200424185556.7358-1-lmb@cloudflare.com>
+ <20200424185556.7358-2-lmb@cloudflare.com>
+ <20200426173324.5zg7isugereb5ert@ast-mbp.dhcp.thefacebook.com>
+ <CACAyw98nK_Vkstp-vEqNwKXtoCRnTOPr7Eh+ziH56tJGbnPsig@mail.gmail.com>
+ <185417b8-0d50-f8a3-7a09-949066579732@iogearbox.net>
 MIME-Version: 1.0
-In-Reply-To: <bd55a74d-1305-9e23-94cd-37e59c11dfcd@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-05-04_08:2020-05-04,2020-05-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- phishscore=0 clxscore=1011 suspectscore=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005040121
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <185417b8-0d50-f8a3-7a09-949066579732@iogearbox.net>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 04/05/20 7:40 pm, Dave Hansen wrote:
-> On 5/4/20 2:44 AM, Mauro Carvalho Chehab wrote:
->> Changeset 1eecbcdca2bd ("docs: move protection-keys.rst to the core-api book")
->> from Jun 7, 2019 converted protection-keys.txt file to ReST.
->>
->> A recent change at protection_keys.c partially reverted such
->> changeset, causing it to point to a non-existing file:
->>
->> 	- * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
->> 	+ * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
->>
->> It sounds to me that the changeset that introduced such change
->> 4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
->> could also have other side effects, as it sounds that it was not
->> generated against uptream code, but, instead, against a version
->> older than Jun 7, 2019.
->>
->> Fixes: 4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
->> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+On Sat, May 02, 2020 at 01:48:51AM +0200, Daniel Borkmann wrote:
+> On 4/27/20 11:45 AM, Lorenz Bauer wrote:
+> > On Sun, 26 Apr 2020 at 18:33, Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> [...]
+> > > > +/* Linux packet pointers are either aligned to NET_IP_ALIGN (aka 2 bytes),
+> > > > + * or not aligned if the arch supports efficient unaligned access.
+> > > > + *
+> > > > + * Since the verifier ensures that eBPF packet accesses follow these rules,
+> > > > + * we can tell LLVM to emit code as if we always had a larger alignment.
+> > > > + * It will yell at us if we end up on a platform where this is not valid.
+> > > > + */
+> > > > +typedef uint8_t *net_ptr __attribute__((align_value(8)));
+> > > 
+> > > Wow. I didn't know about this attribute.
+> > > I wonder whether it can help Daniel's memcpy hack.
+> > 
+> > Yes, I think so.
 > 
-> Thanks for finding this!  The patch set which moved protection-keys.txt
-> out of x86 code probably just missed this when it got rebased.  It
-> originated well before June 2019, iirc.
+> Just for some more context [0]. I think the problem is a bit more complex in
+> general. Generally, _any_ kind of pointer to some data (except for the stack)
+> is currently treated as byte-by-byte copy from __builtin_memcpy() and other
+> similarly available __builtin_*() helpers on BPF backend since the backend
+> cannot make any assumptions about the data's alignment and whether unaligned
+> access from the underlying arch is ok & efficient (the latter the verifier
+> does judge for us however). So it's definitely not just limited to xdp->data.
+> There is also the issue that while access to any non-stack data can be
+> unaligned, access to the stack however cannot. I've discussed a while back
+> with Yonghong about potential solutions. One would be to add a small patch
+> to the BPF backend to enable __builtin_*() helpers to allow for unaligned
+> access which could then be opt-ed in e.g. via -mattr from llc for the case
+> when we know that the compiled program only runs on archs with efficient
+> unaligned access anyway. However, this still potentially breaks with the BPF
+> stack for the case when objects are, for example, larger than size 8 but with
+> a natural alignment smaller than 8 where __builtin_memcpy() would then decide
+> to emit dw-typed load/stores. But for these cases could then be annotated via
+> __aligned(8) on stack. So this is basically what we do right now as a generic
+> workaround in Cilium [0], meaning, our own memcpy/memset with optimal number
+> of instructions and __aligned(8) where needed; most of the time this __aligned(8)
+> is not needed, so it's really just a few places, and we also have a cocci
+> scripts to catch these during development if needed. Anyway, real thing would
+> be to allow the BPF stack for unaligned access as well and then BPF backend
+> could nicely solve this in a native way w/o any workarounds, but that is tbd.
 > 
+> Thanks,
+> Daniel
+> 
+>   [0] https://github.com/cilium/cilium/blob/master/bpf/include/bpf/builtins.h
 
-That's right. Sorry about that. Must have missed it when rebasing the
-older pkey selftest patches. Thanks for fixing this Mauro.
-
-Acked-by: Sandipan Das <sandipan@linux.ibm.com>
+Daniel,
+do you mind adding such memcpy to libbpf ?
