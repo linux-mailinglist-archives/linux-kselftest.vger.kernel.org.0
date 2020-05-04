@@ -2,86 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C32F1C35F7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 May 2020 11:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAE41C37FC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 May 2020 13:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgEDJo5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 May 2020 05:44:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52056 "EHLO mail.kernel.org"
+        id S1726756AbgEDLXb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 May 2020 07:23:31 -0400
+Received: from mail.zx2c4.com ([192.95.5.64]:40343 "EHLO mail.zx2c4.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727781AbgEDJo5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 May 2020 05:44:57 -0400
-Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9240320658;
-        Mon,  4 May 2020 09:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588585496;
-        bh=p1TvFFk+CFSzztc7y+DlnQLt3T/P7TNPd3wObNHjD2I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=wAAqCQLQ7jsLtYVmcioCSNyttgEwRpVhEVx+KRwb/Of4w07z89tMVv8gUGsUxTs6t
-         V7kM4av7AFlKZ035ogI9rBMNBXIkjfYeH/r/98K4otzBCSExVqUmhnNZ4yedd+jdGw
-         K3pvK2XFfce3x0eazUgS6+CoVZjdf8/+Is7h5Hxk=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jVXeg-000KKo-9E; Mon, 04 May 2020 11:44:54 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Ram Pai <linuxram@us.ibm.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/vm/keys: fix a broken reference at protection_keys.c
-Date:   Mon,  4 May 2020 11:44:50 +0200
-Message-Id: <d478a2fc5d204691d0cac6e2b416f0e07a26d3d9.1588585390.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.25.4
+        id S1726445AbgEDLXb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 4 May 2020 07:23:31 -0400
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 49e0af25;
+        Mon, 4 May 2020 11:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
+        :references:in-reply-to:from:date:message-id:subject:to:cc
+        :content-type; s=mail; bh=MshPdTivdQoEaiICWNo3xWGuO00=; b=IpF0KA
+        T3Flp86mw4XwuAySVKKGzTvzRvxgd+j/1OZCgygCNJwSvUzC0qvPrGi6FzHBlKjP
+        /uZZwjfgGZ9b9joUdSY6SmPbW8L6OCpaGwUS6iCvGOFEdJ9aAEEvDDqrVChDkFjc
+        cg0ssL+i9ZZKKKmjgwwi15OvOq9Z6MyEIcLT34fmi15OJpmk/vrzmXdSYYcW9g1U
+        TW/vLuvXbatTOna8Dja3WBuynAdtA6nn7nsCnG0C6hpxejT5d6LjLixcZmDZSuIG
+        H+KqlweT4z0GjEkZuIRhqyGJVU5A82pmDFfLg8VxlVC+LOR9uVVXnLCaHPy3ejxF
+        ywUgzniriikoQC4g==
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b89c4137 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 4 May 2020 11:11:05 +0000 (UTC)
+Received: by mail-il1-f176.google.com with SMTP id w6so10874770ilg.1;
+        Mon, 04 May 2020 04:23:28 -0700 (PDT)
+X-Gm-Message-State: AGi0PubGAMAGEIpIOAfqwZdpRlTiYqHAsCoJ9ZauaBxFWIRowFJzrCD8
+        O192DZVqMcY0F0dqhSBooDBaxkCEhK/l3BqFeCg=
+X-Google-Smtp-Source: APiQypKKfDzUtssMsRFuPB9MBgpCxpRDJrla4OQThGgQpXh+dzwUnDUeYrjOVDcBl/9bz1EkcmaNqR/+tP+3OIoMfzU=
+X-Received: by 2002:a92:5c82:: with SMTP id d2mr16079991ilg.231.1588591408099;
+ Mon, 04 May 2020 04:23:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <0000000000005fd19505a4355311@google.com> <e40c443e-74aa-bad4-7be8-4cdddfdf3eaf@gmail.com>
+ <CAHmME9ov2ae08UTzwKL7enquChzDNxpg4c=ppnJqS2QF6ZAn_Q@mail.gmail.com>
+ <f2eb18ea-b32a-4b64-0417-9b5b2df98e33@gmail.com> <29bd64f4-5fe0-605e-59cc-1afa199b1141@gmail.com>
+ <CAHmME9rR-_KvENZyBrRhYNWD+hVD-FraxPJiofsmuXBh651QXw@mail.gmail.com> <85e76f66-f807-ad12-df9d-0805b68133fa@gmail.com>
+In-Reply-To: <85e76f66-f807-ad12-df9d-0805b68133fa@gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 4 May 2020 05:23:17 -0600
+X-Gmail-Original-Message-ID: <CAHmME9ocB-LUYwJTxsqui1Bh+cbKixEP-sayVNa9puY25hEASA@mail.gmail.com>
+Message-ID: <CAHmME9ocB-LUYwJTxsqui1Bh+cbKixEP-sayVNa9puY25hEASA@mail.gmail.com>
+Subject: Re: INFO: rcu detected stall in wg_packet_tx_worker
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     syzbot <syzbot+0251e883fe39e7a0cb0a@syzkaller.appspotmail.com>,
+        David Miller <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        =?UTF-8?B?SmnFmcOtIFDDrXJrbw==?= <jiri@resnulli.us>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, kvalo@codeaurora.org,
+        leon@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>, syzkaller-bugs@googlegroups.com,
+        Thomas Gleixner <tglx@linutronix.de>, vivien.didelot@gmail.com,
+        Cong Wang <xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Changeset 1eecbcdca2bd ("docs: move protection-keys.rst to the core-api book")
-from Jun 7, 2019 converted protection-keys.txt file to ReST.
+So in spite of this Syzkaller bug being unrelated in the end, I've
+continued to think about the stacktrace a bit, and combined with some
+other [potentially false alarm] bug reports I'm trying to wrap my head
+around, I'm a bit a curious about ideal usage for the udp_tunnel API.
 
-A recent change at protection_keys.c partially reverted such
-changeset, causing it to point to a non-existing file:
+All the uses I've seen in the kernel (including wireguard) follow this pattern:
 
-	- * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-	+ * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
+rcu_read_lock_bh();
+sock = rcu_dereference(obj->sock);
+...
+udp_tunnel_xmit_skb(..., sock, ...);
+rcu_read_unlock_bh();
 
-It sounds to me that the changeset that introduced such change
-4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
-could also have other side effects, as it sounds that it was not
-generated against uptream code, but, instead, against a version
-older than Jun 7, 2019.
+udp_tunnel_xmit_skb calls iptunnel_xmit, which winds up in the usual
+ip_local_out path, which eventually winds up calling some other
+devices' ndo_xmit, or gets queued up in a qdisc. Calls to
+udp_tunnel_xmit_skb aren't exactly cheap. So I wonder: is holding the
+rcu lock for all that time really a good thing?
 
-Fixes: 4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- tools/testing/selftests/vm/protection_keys.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+A different pattern that avoids holding the rcu lock would be:
 
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index fc19addcb5c8..fdbb602ecf32 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
-+ * Tests Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-  *
-  * There are examples in here of:
-  *  * how to set protection keys on memory
--- 
-2.25.4
+rcu_read_lock_bh();
+sock = rcu_dereference(obj->sock);
+sock_hold(sock);
+rcu_read_unlock_bh();
+...
+udp_tunnel_xmit_skb(..., sock, ...);
+sock_put(sock);
 
+This seems better, but I wonder if it has some drawbacks too. For
+example, sock_put has some comment that warns against incrementing it
+in response to forwarded packets. And if this isn't necessary to do,
+it's marginally more costly than the first pattern.
+
+Any opinions about this?
+
+Jason
