@@ -2,162 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73EDF1C3896
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 May 2020 13:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055881C3C70
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 May 2020 16:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728608AbgEDLuF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 May 2020 07:50:05 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:55966 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726756AbgEDLuF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 May 2020 07:50:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588593003;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7hyf/LHgghd5mqY1mbkWHgQZ+YGXmwDLr14zfzKYF4E=;
-        b=Vu4nE9hmi+05M642uX1XzgGM0Phbk8STlvUXYi4bsUB/v9vHXw0eUf1NMJBfyLCsG0CjF7
-        bezVV1+Cbilg55H9rSzo17eycJR5QYL5V/Wje0TBeedZpGtkc+mEE0f7/y07v5etGcEd+5
-        jiit67aa26BuhVjzwh+/7/jllJX+VQA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-188-pSOLKiorODKyUFALXXeVRg-1; Mon, 04 May 2020 07:50:01 -0400
-X-MC-Unique: pSOLKiorODKyUFALXXeVRg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B583C107ACF5;
-        Mon,  4 May 2020 11:50:00 +0000 (UTC)
-Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AC72360BEC;
-        Mon,  4 May 2020 11:50:00 +0000 (UTC)
-Received: from zmail19.collab.prod.int.phx2.redhat.com (zmail19.collab.prod.int.phx2.redhat.com [10.5.83.22])
-        by colo-mx.corp.redhat.com (Postfix) with ESMTP id A25234CA94;
-        Mon,  4 May 2020 11:50:00 +0000 (UTC)
-Date:   Mon, 4 May 2020 07:50:00 -0400 (EDT)
-From:   Veronika Kabatova <vkabatov@redhat.com>
-To:     shuah <shuah@kernel.org>
-Cc:     Veronika Kabatova <veronicca114@gmail.com>, sbrivio@redhat.com,
+        id S1728187AbgEDOKy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 May 2020 10:10:54 -0400
+Received: from mga07.intel.com ([134.134.136.100]:52024 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726404AbgEDOKx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 4 May 2020 10:10:53 -0400
+IronPort-SDR: FnjQlJtew1ULL8NanbcLVmCWaMBgkT4jMOQ5z+dtgb0LPSLDW/yZin95YWL9xgHA9g06MEJBz5
+ uP3YYX++dK1Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 07:10:53 -0700
+IronPort-SDR: M1u1YSU8rla24ATntvB5kKSFZaHH+mPOXbGrfF2vYxiupehh1k8L9qq0dl3lyCYri4N+dbpFkd
+ gz06U246+3Pw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,352,1583222400"; 
+   d="scan'208";a="262831961"
+Received: from fmerchan-mobl.amr.corp.intel.com (HELO [10.255.229.65]) ([10.255.229.65])
+  by orsmga006.jf.intel.com with ESMTP; 04 May 2020 07:10:53 -0700
+Subject: Re: [PATCH] selftests/vm/keys: fix a broken reference at
+ protection_keys.c
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
         linux-kselftest@vger.kernel.org
-Message-ID: <687583033.21650764.1588593000351.JavaMail.zimbra@redhat.com>
-In-Reply-To: <529c2308-0840-a794-fc09-d44272066b08@kernel.org>
-References: <20200428123841.2953099-1-vkabatov@redhat.com> <529c2308-0840-a794-fc09-d44272066b08@kernel.org>
-Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
+References: <d478a2fc5d204691d0cac6e2b416f0e07a26d3d9.1588585390.git.mchehab+huawei@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <bd55a74d-1305-9e23-94cd-37e59c11dfcd@intel.com>
+Date:   Mon, 4 May 2020 07:10:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <d478a2fc5d204691d0cac6e2b416f0e07a26d3d9.1588585390.git.mchehab+huawei@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.40.195.208, 10.4.195.8]
-Thread-Topic: selftests: introduce gen_tar Makefile target
-Thread-Index: bPQtyLMcESjoyXQpKolgQIdGz4fLuQ==
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 5/4/20 2:44 AM, Mauro Carvalho Chehab wrote:
+> Changeset 1eecbcdca2bd ("docs: move protection-keys.rst to the core-api book")
+> from Jun 7, 2019 converted protection-keys.txt file to ReST.
+> 
+> A recent change at protection_keys.c partially reverted such
+> changeset, causing it to point to a non-existing file:
+> 
+> 	- * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
+> 	+ * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
+> 
+> It sounds to me that the changeset that introduced such change
+> 4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
+> could also have other side effects, as it sounds that it was not
+> generated against uptream code, but, instead, against a version
+> older than Jun 7, 2019.
+> 
+> Fixes: 4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
+Thanks for finding this!  The patch set which moved protection-keys.txt
+out of x86 code probably just missed this when it got rebased.  It
+originated well before June 2019, iirc.
 
------ Original Message -----
-> From: "shuah" <shuah@kernel.org>
-> To: "Veronika Kabatova" <veronicca114@gmail.com>
-> Cc: sbrivio@redhat.com, linux-kselftest@vger.kernel.org, "Veronika Kabatova" <vkabatov@redhat.com>, "shuah"
-> <shuah@kernel.org>
-> Sent: Friday, May 1, 2020 4:49:34 PM
-> Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
-> 
-> Hi Veronica,
-> 
-
-Hi,
-
-> On 4/28/20 6:38 AM, Veronika Kabatova wrote:
-> > The gen_kselftest_tar.sh always packages *all* selftests and doesn't
-> > pass along any variables to `make install` to influence what should be
-> > built. This can result in an early error on the command line ("Unknown
-> > tarball format TARGETS=XXX"), or unexpected test failures as the
-> > tarball contains tests people wanted to skip on purpose.
-> > 
-> > Since the makefile already contains all the logic, we can add a target
-> > for packaging. Keep the default .gz target the script uses, and actually
-> > extend the supported formats by using tar's autodetection.
-> > 
-> 
-> Thanks for working on this. gen_kselftest_tar.sh  a while back before a
-> lot of the install features went in and Makefile supports it fully. It
-> makes perfect sense to use Makefile drive this.
-> 
-> > To not break current workflows, keep the gen_kselftest_tar.sh script as
-> > it is, with an added suggestion to use the makefile target instead.
-> > 
-> 
-> Not sure how many people use this. It is a good idea keeping it around
-> for now.
-> 
-> > Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
-> > Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-> > ---
-> >   Documentation/dev-tools/kselftest.rst        | 23 ++++++++++++++++++++
-> >   tools/testing/selftests/Makefile             |  9 +++++++-
-> >   tools/testing/selftests/gen_kselftest_tar.sh |  5 +++++
-> >   3 files changed, 36 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/dev-tools/kselftest.rst
-> > b/Documentation/dev-tools/kselftest.rst
-> > index 61ae13c44f91..3fc559bcb597 100644
-> > --- a/Documentation/dev-tools/kselftest.rst
-> > +++ b/Documentation/dev-tools/kselftest.rst
-> > @@ -151,6 +151,29 @@ note some tests will require root privileges::
-> >      $ cd kselftest
-> >      $ ./run_kselftest.sh
-> >   
-> > +Packaging selftests
-> > +===================
-> > +
-> > +In some cases packaging is desired, such as when tests need to run on a
-> > +different system. To package selftests, run::
-> > +
-> > +   $ make -C tools/testing/selftests gen_tar
-> > +
-> 
-> Does this work in the case of relocatable build.cross-build cases?
-> 
-> > +This generates a tarball in the `INSTALL_PATH/kselftest-packages`
-> > directory. By
-> > +default, `.gz` format is used. The tar format can be overriden by
-> > specifying
-> > +a `FORMAT` make variable. Any value recognized by `tar's auto-compress`_
-> > option
-> > +is supported, such as::
-> > +
-> > +    $ make -C tools/testing/selftests gen_tar FORMAT=.xz
-> > +
-> > +`make gen_tar` invokes `make install` so you can use it to package a
-> > subset of
-> > +tests by using variables specified in `Running a subset of selftests`_
-> > +section::
-> > +
-> > +    $ make -C tools/testing/selftests gen_tar TARGETS="bpf" FORMAT=.xz
-> 
-> Does this work in the case of relocatable build.cross-build cases?
-> 
-
-The command only adds a "tar" call on top of "make install" and doesn't
-reach outside of INSTALL_PATH. If the cases you mention are supported by
-the regular "make install" then they should work with "gen_tar" as well.
-
-
-
-Veronika
-
-> Please try these cases as well and let me know.
-> 
-> I would like to get this in for 5.8-rc1.
-> 
-> thanks,
-> -- Shuah
-> 
-> 
-
+Acked-by: Dave Hansen <dave.hansen@intel.com>
