@@ -2,143 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D9D1C5F4B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 May 2020 19:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD71E1C5FE2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 May 2020 20:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730660AbgEERva (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 May 2020 13:51:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48892 "EHLO mail.kernel.org"
+        id S1730768AbgEESRa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 May 2020 14:17:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730685AbgEERv2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 May 2020 13:51:28 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730258AbgEESR3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 5 May 2020 14:17:29 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9EEE1206B9;
-        Tue,  5 May 2020 17:51:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 82C2220663;
+        Tue,  5 May 2020 18:17:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588701087;
-        bh=r1NrOndU3YS+eWt28dmHa/oAPjSkGoQJ/pvTSw5jq/A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t75d5toBn8C/owlGNazWmDP3BOtSidvPKmezqRfAnkoUhyPEKiECNOJcaD1L92pfh
-         DBiQkwplUzakgMjJ5CEZYZah0kCNyLGFumEqJfbrWFbpPe8YMImoQ988s5GGXyaA9i
-         EKijL/urhdBf9031GrTJDZoeIOAHVryPi6aP4bZo=
-From:   Mark Brown <broonie@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
+        s=default; t=1588702649;
+        bh=oZIhy4uAhQMfRftPSAxXEs0/SUwk5XbjQFCfi1/11+o=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=fYBbpjo91qL2bwN6FFFUcLIk0cn3McB4ntM5Qt+Rrvckuh/34djzMcYKkrf5Umuym
+         G0X2rpkq9+fFecmn/LBEwtxYj2swjIIAPRxsGVdZ0sKb8t7MDrhLmSLSz3PzMON8oM
+         9rHKTFfE0VbReNi0WnRWnKbEJI23LGHeGbxhUnCQ=
+Subject: Re: [PATCH 0/3] selftests: vdso: Add a selftest for vDSO getcpu()
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 3/3] selftests: vdso: Add a selftest for vDSO getcpu()
-Date:   Tue,  5 May 2020 18:47:28 +0100
-Message-Id: <20200505174728.46594-4-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200505174728.46594-1-broonie@kernel.org>
+        shuah <shuah@kernel.org>
 References: <20200505174728.46594-1-broonie@kernel.org>
+From:   shuah <shuah@kernel.org>
+Message-ID: <fa32cdad-b7f0-caea-3ebb-811f26be85e2@kernel.org>
+Date:   Tue, 5 May 2020 12:17:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200505174728.46594-1-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Provide a very basic selftest for getcpu() which similarly to our existing
-test for gettimeofday() looks up the function in the vDSO and prints the
-results it gets if the function exists and succeeds.
+On 5/5/20 11:47 AM, Mark Brown wrote:
+> This series does a bit of a cleanup of the existing tests for the vDSO
+> in kselftest and then adds a new test for getcpu().
+> 
+> Mark Brown (3):
+>    selftests: vdso: Rename vdso_test to vdso_test_gettimeofday
+>    selftests: vdso: Use a header file to prototype parse_vdso API
+>    selftests: vdso: Add a selftest for vDSO getcpu()
+> 
+>   tools/testing/selftests/vDSO/.gitignore       |  2 +
+>   tools/testing/selftests/vDSO/Makefile         |  5 +-
+>   tools/testing/selftests/vDSO/parse_vdso.c     | 24 +--------
+>   tools/testing/selftests/vDSO/parse_vdso.h     | 31 ++++++++++++
+>   .../selftests/vDSO/vdso_standalone_test_x86.c |  4 +-
+>   .../testing/selftests/vDSO/vdso_test_getcpu.c | 50 +++++++++++++++++++
+>   .../{vdso_test.c => vdso_test_gettimeofday.c} | 10 ++--
+>   7 files changed, 92 insertions(+), 34 deletions(-)
+>   create mode 100644 tools/testing/selftests/vDSO/parse_vdso.h
+>   create mode 100644 tools/testing/selftests/vDSO/vdso_test_getcpu.c
+>   rename tools/testing/selftests/vDSO/{vdso_test.c => vdso_test_gettimeofday.c} (84%)
+> 
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/vDSO/.gitignore       |  1 +
- tools/testing/selftests/vDSO/Makefile         |  3 +-
- .../testing/selftests/vDSO/vdso_test_getcpu.c | 50 +++++++++++++++++++
- 3 files changed, 53 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/vDSO/vdso_test_getcpu.c
+Thanks Mark. These look good to me. I will apply them for
+Linux 5.8-rc1.
 
-diff --git a/tools/testing/selftests/vDSO/.gitignore b/tools/testing/selftests/vDSO/.gitignore
-index 74f49bd5f6dd..5eb64d41e541 100644
---- a/tools/testing/selftests/vDSO/.gitignore
-+++ b/tools/testing/selftests/vDSO/.gitignore
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- vdso_test
- vdso_test_gettimeofday
-+vdso_test_getcpu
- vdso_standalone_test_x86
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index ae15d700b62e..0069f2f83f86 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -4,7 +4,7 @@ include ../lib.mk
- uname_M := $(shell uname -m 2>/dev/null || echo not)
- ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
--TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday
-+TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday $(OUTPUT)/vdso_test_getcpu
- ifeq ($(ARCH),x86)
- TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
- endif
-@@ -18,6 +18,7 @@ endif
- 
- all: $(TEST_GEN_PROGS)
- $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
-+$(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
- $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
- 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
- 		vdso_standalone_test_x86.c parse_vdso.c \
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-new file mode 100644
-index 000000000000..a9dd3db145f3
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * vdso_test_getcpu.c: Sample code to test parse_vdso.c and vDSO getcpu()
-+ *
-+ * Copyright (c) 2020 Arm Ltd
-+ */
-+
-+#include <stdint.h>
-+#include <elf.h>
-+#include <stdio.h>
-+#include <sys/auxv.h>
-+#include <sys/time.h>
-+
-+#include "../kselftest.h"
-+#include "parse_vdso.h"
-+
-+const char *version = "LINUX_2.6";
-+const char *name = "__vdso_getcpu";
-+
-+struct getcpu_cache;
-+typedef long (*getcpu_t)(unsigned int *, unsigned int *,
-+			 struct getcpu_cache *);
-+
-+int main(int argc, char **argv)
-+{
-+	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
-+	if (!sysinfo_ehdr) {
-+		printf("AT_SYSINFO_EHDR is not present!\n");
-+		return KSFT_SKIP;
-+	}
-+
-+	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
-+
-+	getcpu_t get_cpu = (getcpu_t)vdso_sym(version, name);
-+	if (!get_cpu) {
-+		printf("Could not find %s\n", name);
-+		return KSFT_SKIP;
-+	}
-+
-+	unsigned int cpu, node;
-+	long ret = get_cpu(&cpu, &node, 0);
-+	if (ret == 0) {
-+		printf("Running on CPU %u node %u\n", cpu, node);
-+	} else {
-+		printf("%s failed\n", name);
-+		return KSFT_FAIL;
-+	}
-+
-+	return 0;
-+}
--- 
-2.20.1
-
+thanks,
+-- Shuah
