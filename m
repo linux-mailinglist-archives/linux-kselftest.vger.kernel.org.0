@@ -2,125 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D03661C4A8F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 May 2020 01:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CBD1C4FF7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 May 2020 10:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbgEDXsc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 May 2020 19:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726911AbgEDXsb (ORCPT
+        id S1726568AbgEEINQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 May 2020 04:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725320AbgEEINP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 May 2020 19:48:31 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06C1C061A0E;
-        Mon,  4 May 2020 16:48:31 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id w3so55782plz.5;
-        Mon, 04 May 2020 16:48:31 -0700 (PDT)
+        Tue, 5 May 2020 04:13:15 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41410C061A0F
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2020 01:13:15 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id e25so661753ljg.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2020 01:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cfGiwA9LJRPCF3MX+zGph8ephlPPnJi7faJRy6NmTEM=;
-        b=Hq/36UR+001Cwdpa+mLC4Zh1Dcu1HO4VDCScIWOw8YBsam7r8K5FJE6vJ9SIQbW63u
-         aZVS9VhnNj2uoCryrXVaqOT/FdQNN+lyHz3/l0DJCuAsnNHIwbmDwUw+U6SmwsZnWNx6
-         ZESTIljqgaWBKyjgbYVs4Q7S4yyzcoCVOcbCeVdtVH8JbYn1ZwOJGF14QDPRHGjAPf/2
-         b/PfjO40F+JR2HcxpZKjhuQ3x9bojDpkdIOs06HpzMlHhNdD2ZAomcxiP7QdR/UUAMBo
-         abHjooMu6Xsxd82zotN0x0zki5QsSWlcIoO6C7PTq4vLwRvIvndkrVUCO74g2ZM3M/v3
-         qx7g==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cCtbnn/mPSYMTovrACT2kKrxnwGdokswItkXqrNBN20=;
+        b=Ds/TGo88InOgXEcC2Gt5/VgiFUU8yBoN4mf50voWf0ReQi8v5PKgYBXhp/82AjMhqB
+         rTJsuC5+jFz4XMfzl/6020xwtmeCq6QkJs2++a/n+/kMYDSpiRAHYh1yF8UfJO5L7UwR
+         2DAf67oLsyBJ5mLJtL91w5TAlbn6wdGv9X5gfILWFZD9RbWmIJkxZ8WXX6BiBOpJ4ZZs
+         H0UY8zhoYXsuMzNUNAukprACSGCpQMCw7tvWQYxBu6+4K9+5sgqLkPHgIEuklCZyYvqd
+         iSoCM2UNPS79xcfwFMFQgG3A2znyPS1q8ogklxD926Qj892yKoqT7ioU+9X6DS6s78N4
+         KFkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cfGiwA9LJRPCF3MX+zGph8ephlPPnJi7faJRy6NmTEM=;
-        b=jrwU4HdkadwUW8Zma68ru6okUFdEzH8VCz9BEQeLK8kyfYEuAdkvyLjGRimEQE1OZG
-         vETZVs7WF4tkIxHq68QBKq/6RWxXPM+76GwyMrnhV2Jk5U0GOVzufS10fI2OvZYAGyjV
-         pnoDhNRZbWl+5pKbCY+Paj/+dB8+RlhTQdHTddgbXoHKHYPCfq4CUJW7SeilrtWqdMM9
-         Cc1nZSp52UWXKtBXF3r1phu3DXXJoNFm1xnp4S8Z/4M/3xpVMbAx7pvrgNb2PV5RPwhb
-         +aitMlOVgvsphvdM4FgkAFg+lf7FaYE4ghB4cRlJoRpANAtqmoQM3GMH92ZdW262AgNH
-         U+cg==
-X-Gm-Message-State: AGi0PuaPnZXCDFD4eYr+Qz0nIbBZftFBcWxFRq5JNk9ZnMs+sgRefZ66
-        QAs1a+NE/4tlMSggVLM/QOg=
-X-Google-Smtp-Source: APiQypJojuvPLz4twGJW8t6CwdqX8pTJnOfRf5lowAkSZK9DI6d6rObg5OP7V/JcqnXhLMsmIvR3kw==
-X-Received: by 2002:a17:902:fe09:: with SMTP id g9mr416924plj.65.1588636111122;
-        Mon, 04 May 2020 16:48:31 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:1bad])
-        by smtp.gmail.com with ESMTPSA id b140sm191542pfb.119.2020.05.04.16.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2020 16:48:30 -0700 (PDT)
-Date:   Mon, 4 May 2020 16:48:27 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Theo Julienne <theojulienne@github.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH 1/1] selftests/bpf: add cls_redirect classifier
-Message-ID: <20200504234827.6mrogryxk73jc6x2@ast-mbp.dhcp.thefacebook.com>
-References: <20200424185556.7358-1-lmb@cloudflare.com>
- <20200424185556.7358-2-lmb@cloudflare.com>
- <20200426173324.5zg7isugereb5ert@ast-mbp.dhcp.thefacebook.com>
- <CACAyw98nK_Vkstp-vEqNwKXtoCRnTOPr7Eh+ziH56tJGbnPsig@mail.gmail.com>
- <185417b8-0d50-f8a3-7a09-949066579732@iogearbox.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cCtbnn/mPSYMTovrACT2kKrxnwGdokswItkXqrNBN20=;
+        b=hMMTt74ncqy2JG8pAgIzK/YYjU6LtI4EPUIB3GYEs6pnlOzXNn1cKKNvVOrodn7TsC
+         Hq/IZsRmVatKGrT4B5sBk2wmJPweQn+sSKfHldogzlc6YRcLpixE8ur1I93VIc2PLJk6
+         xisDbDvWvmgKAmiapmExund0rL1HH5mWYUepvxebMZI4qcEFRf/J2AuWMhcsM0okFyt6
+         mNwjCiLKVvxd+yJd/iBdMFUD8QuMWIW+wTA793brnE6MnYZSJh5cHQpSYt8Z/415f5/H
+         v+hJtjar5daHE1tm8PkD4yF7VTgQs9DJ2sSWML2rUzaQbQI6LgMUKxQdDBhqnwhdvM7Z
+         flcw==
+X-Gm-Message-State: AGi0PuaGpSlPU3f7uEqcOczkHNNCstHtJgYsTd136h+cM4H3IJBAAABg
+        bVPY68QmElBJUBAgDu6VPyI+htaF1OsIBiSQorvFZg==
+X-Google-Smtp-Source: APiQypJUpeM7dR82Dn4AY7wcHcK7ejTccxr/K+9YNhjOMoBLs1Z8eehQdWNAzTelKtxHX1iwrzM/YGhrn32nrSdwdS8=
+X-Received: by 2002:a2e:6a08:: with SMTP id f8mr1135471ljc.8.1588666393650;
+ Tue, 05 May 2020 01:13:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <185417b8-0d50-f8a3-7a09-949066579732@iogearbox.net>
+References: <20200501083510.1413-1-anders.roxell@linaro.org>
+ <CAFd5g45C98_70Utp=QBWg_tKxaUMJ-ArQvjWbG9q6=dixfHBxw@mail.gmail.com> <CABVgOSkAAb7tyjhdqFZmyKyknaxz_sM_o3=bK6cL6Ld4wFxkRQ@mail.gmail.com>
+In-Reply-To: <CABVgOSkAAb7tyjhdqFZmyKyknaxz_sM_o3=bK6cL6Ld4wFxkRQ@mail.gmail.com>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Tue, 5 May 2020 10:13:02 +0200
+Message-ID: <CADYN=9+AvFYgXKCrT_xwR50b0cPihgCiBvzOypOGNkho2GsvBA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Kconfig: enable a KUNIT_RUN_ALL fragment
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, adilger.kernel@dilger.ca,
+        Marco Elver <elver@google.com>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 02, 2020 at 01:48:51AM +0200, Daniel Borkmann wrote:
-> On 4/27/20 11:45 AM, Lorenz Bauer wrote:
-> > On Sun, 26 Apr 2020 at 18:33, Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> [...]
-> > > > +/* Linux packet pointers are either aligned to NET_IP_ALIGN (aka 2 bytes),
-> > > > + * or not aligned if the arch supports efficient unaligned access.
-> > > > + *
-> > > > + * Since the verifier ensures that eBPF packet accesses follow these rules,
-> > > > + * we can tell LLVM to emit code as if we always had a larger alignment.
-> > > > + * It will yell at us if we end up on a platform where this is not valid.
-> > > > + */
-> > > > +typedef uint8_t *net_ptr __attribute__((align_value(8)));
-> > > 
-> > > Wow. I didn't know about this attribute.
-> > > I wonder whether it can help Daniel's memcpy hack.
-> > 
-> > Yes, I think so.
-> 
-> Just for some more context [0]. I think the problem is a bit more complex in
-> general. Generally, _any_ kind of pointer to some data (except for the stack)
-> is currently treated as byte-by-byte copy from __builtin_memcpy() and other
-> similarly available __builtin_*() helpers on BPF backend since the backend
-> cannot make any assumptions about the data's alignment and whether unaligned
-> access from the underlying arch is ok & efficient (the latter the verifier
-> does judge for us however). So it's definitely not just limited to xdp->data.
-> There is also the issue that while access to any non-stack data can be
-> unaligned, access to the stack however cannot. I've discussed a while back
-> with Yonghong about potential solutions. One would be to add a small patch
-> to the BPF backend to enable __builtin_*() helpers to allow for unaligned
-> access which could then be opt-ed in e.g. via -mattr from llc for the case
-> when we know that the compiled program only runs on archs with efficient
-> unaligned access anyway. However, this still potentially breaks with the BPF
-> stack for the case when objects are, for example, larger than size 8 but with
-> a natural alignment smaller than 8 where __builtin_memcpy() would then decide
-> to emit dw-typed load/stores. But for these cases could then be annotated via
-> __aligned(8) on stack. So this is basically what we do right now as a generic
-> workaround in Cilium [0], meaning, our own memcpy/memset with optimal number
-> of instructions and __aligned(8) where needed; most of the time this __aligned(8)
-> is not needed, so it's really just a few places, and we also have a cocci
-> scripts to catch these during development if needed. Anyway, real thing would
-> be to allow the BPF stack for unaligned access as well and then BPF backend
-> could nicely solve this in a native way w/o any workarounds, but that is tbd.
-> 
-> Thanks,
-> Daniel
-> 
->   [0] https://github.com/cilium/cilium/blob/master/bpf/include/bpf/builtins.h
+On Sat, 2 May 2020 at 04:11, David Gow <davidgow@google.com> wrote:
+>
+> On Sat, May 2, 2020 at 4:31 AM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > On Fri, May 1, 2020 at 1:35 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+> > >
+> > > Make it easier to enable all KUnit fragments.  This is needed for kernel
+> > > test-systems, so its easy to get all KUnit tests enabled and if new gets
+> > > added they will be enabled as well.  Fragments that has to be builtin
+> > > will be missed if CONFIG_KUNIT_RUN_ALL is set as a module.
+> > >
+> > > Adding 'if !KUNIT_RUN_ALL' so individual test can be turned of if
+> > > someone wants that even though KUNIT_RUN_ALL is enabled.
+> >
+> > I would LOVE IT, if you could make this work! I have been trying to
+> > figure out the best way to run all KUnit tests for a long time now.
+> >
+> > That being said, I am a bit skeptical that this approach will be much
+> > more successful than just using allyesconfig. Either way, there are
+> > tests coming down the pipeline that are incompatible with each other
+> > (the KASAN test and the KCSAN test will be incompatible). Even so,
+> > tests like the apparmor test require a lot of non-default
+> > configuration to compile. In the end, I am not sure how many tests we
+> > will really be able to turn on this way.
+> >
+> > Thoughts?
+>
+> I think there's still some value in this which the allyesconfig option
+> doesn't provide. As you point out, it's not possible to have a generic
+> "run all tests" option due to potential conflicting dependencies, but
+> this does provide a way to run all tests for things enabled in the
+> current config. This could be really useful for downstream developers
+> who want a way of running all tests relevant to their config without
+> the overhead of running irrelevant tests (e.g., for drivers they don't
+> build).
 
-Daniel,
-do you mind adding such memcpy to libbpf ?
+It will solve that as well as for a tester doesn't have to go through all KUnit
+tests fragments to turn them on.
+
+> Using allyesconfig doesn't make that distinction.
+
+We could also create a config fragment file in kernel/configs/kunit.config
+where we set
+------start
+CONFIG_KUNIT=y
+CONFIG_KUNIT_RUN_ALL=y
+CONFIG_SECURITY_APPARMOR=y
+------end
+
+
+So, these two can only be enabled if KUNIT=y
+CONFIG_KUNIT_DRIVER_PE_TEST=y
+CONFIG_PM_QOS_KUNIT_TEST=y
+
+and for this one we have a pre-request of SECURITY_APPARMOR=y
+CONFIG_SECURITY_APPARMOR_KUNIT_TEST=y
+
+Other tests solves the dependencies with 'select' like
+CONFIG_EXT4_KUNIT_TESTS, that adds this row in
+fs/ext4/Kconfig, 'select EXT4_FS'
+
+But I think we should try to minimize the number of 'select' statements,
+in order to avoid circular dependencies and unexpected behaviours.
+Maybe we should add the CONFIG_EXT4_FS=y into the kunit.config
+file instead ?
+
+
+>
+> Ultimately, we'll probably still want something which enables a
+> broader set of tests for upstream development: whether that's based on
+> this, allyesconfig, or something else entirely remains to be seen, I
+> think. I suspect we're going to end up with something
+> subsystem-specific (having a kunitconfig per subsystem, or a testing
+> line in MAINTAINERS or similar are ideas which have been brought up in
+> the past).
+>
+> This is a great looking tool to have in the toolbox, though.
+
+I agree!
+
+I'll prepare a patchset with individual patches as was suggested by Marco
+shortly.
+
+Cheers,
+Anders
