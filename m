@@ -2,118 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0E71C65A7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 May 2020 03:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3C81C6737
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 May 2020 07:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729858AbgEFBqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 May 2020 21:46:36 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:46321 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728069AbgEFBqg (ORCPT
+        id S1726734AbgEFFIo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 May 2020 01:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726660AbgEFFIo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 May 2020 21:46:36 -0400
-Received: from mail-lf1-f69.google.com ([209.85.167.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1jW98r-00051M-Dr
-        for linux-kselftest@vger.kernel.org; Wed, 06 May 2020 01:46:33 +0000
-Received: by mail-lf1-f69.google.com with SMTP id q11so216907lfe.21
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2020 18:46:33 -0700 (PDT)
+        Wed, 6 May 2020 01:08:44 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DEFC0610D5
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2020 22:08:43 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id v8so4016119wma.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2020 22:08:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SceWBPekDdFRfF48uePY+T85beg2UFKBaFBprKKK2Fs=;
+        b=wJPP8upA208Ny+tQsnui6Sto754+QGj6pbO1HMOcOxY9IevB+Y2kWGwCmsphMLAwBQ
+         JZYn79elyP3RMcZR5FJtGBFDeTd+33jhRiMJg68J5ODXT/KOt8dZ+3CJAZP9ruC0pZGc
+         q+dArPJ1yQdOD1LeSmVKKXcOGGLlUyRkrHKxnOabhaqR+arMfWH60wttfWHMMevee4FX
+         JFM+vzw+Vsxotnguy7oXnD56vKGxKLP3veW+dB/zcULcp6nRJUn8S3CUhVE9tTGKK/uW
+         ZFM/NA0CswW9mz4xTIS1SHDSxz8KFTlajxCkx4yqkkK31rDm5asI7c13XBmZXOtqxJAJ
+         QWlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0B7yS8vfVpzW+bK3bCu1s781EudQm0LhQfkvys8g52o=;
-        b=nMMarBpKjeUudh0r/molV29ZaNOdPyQaIjiSqhSK92Y+bKsyl5VAkxt+NgVE0z1LzK
-         hv4YVl3hJ58lJ2wFjMszG7ecRNyTI54W4QOmaQF3apALXSRhlxDckBSC3CjaxuUFTF4W
-         jqO/8sU/tVJWYePzP0U172xHjc9ag2QhTGKlF4pVcCJmmA7SdPGW6AVTX5DaWFyo8t6Z
-         1wMyKKrI4ntd7DYJSrL4jWda3Nh4RKJ35IgoDjm6FCjJTFRD0scvpJMT7KMKK+HoA0+9
-         E5Nugt7a7HNo2MkV3KAvcFCLyofDAITrf7SC8HL3vuiITYGgU8T6W+dBRrxXg8UfPES5
-         ZhoA==
-X-Gm-Message-State: AGi0PubpIPg8xhg/vSwpdXHNvl0XzuX/0Po6U6FrD/6WQBdaBz24WHao
-        m02a1RqtuBwj/R0/XJIhvg2pPLmpnDb84xB0YeZZSCrHJaZNR9iSD2gKpLl1Cnbcx1FpEx2T5w6
-        O45MrzIP2/GM+48ri8jeNlnaNTfJwcLly6t8Ad2u//eIsl2UewIh0OuXM18QX
-X-Received: by 2002:a2e:910e:: with SMTP id m14mr3149527ljg.141.1588729592880;
-        Tue, 05 May 2020 18:46:32 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKuOYHIUMYt6ojTcSw/TDbURUf5WO6gJf1Kd8Jas019NkaxPEO+rYB8lhaFaJsGc6VfsnRf75BAETP9FLg5EUA=
-X-Received: by 2002:a2e:910e:: with SMTP id m14mr3149521ljg.141.1588729592605;
- Tue, 05 May 2020 18:46:32 -0700 (PDT)
+        bh=SceWBPekDdFRfF48uePY+T85beg2UFKBaFBprKKK2Fs=;
+        b=m06hpgThHBrHxlQaZgEnayfz9Mw5njnEesNsfgOHUKij25cfnbSF9rIMNrq8E4Xb3V
+         LMhWpExcS+COqjdY4rSN65NRWEGvwkl481+oUR7Zf7CfHpFRr4zEacX0keTVtBvYaH6B
+         DpsNSkbjUlD3sENWWNJiR4ypTEJAVxzyrllBipbDncQ/tbWVUo6OPtYzOZg50LlEnw2B
+         E/QiSrDN0f04WDX9MgGrynhAJerYw7gVIU44yXlrEY3el5pp6fLC9ObC6gDnnVCLnniu
+         /pwBHEQSILugYRQ2femUyuDdmNfaD6mCmP5zHRU+z6w22J5yl8JJ0rXmiIH1xqnm0XpM
+         Bhfg==
+X-Gm-Message-State: AGi0PuZGiWUNTQLY4Ccqr+r5mNTb89lJ8zQzzWeTsmM9tykilmNYr25s
+        JbHMBD5Rk5mLjrWCPqWQ/HlJ9vc/3Yq5TY4c5se9xQ==
+X-Google-Smtp-Source: APiQypJNX4BgVrJFR/RUHwSg0Jle8zGp48NuEq3xnGQEUwVPLzkBzxFXRfnSysvWwLqFKiOdR8JsNgakOQ3SbPsyRaE=
+X-Received: by 2002:a1c:a512:: with SMTP id o18mr2258788wme.138.1588741722115;
+ Tue, 05 May 2020 22:08:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200505101445.27063-1-po-hsu.lin@canonical.com> <20200505090912.7114f420@gandalf.local.home>
-In-Reply-To: <20200505090912.7114f420@gandalf.local.home>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Wed, 6 May 2020 09:46:21 +0800
-Message-ID: <CAMy_GT8r8H21Ly3N5VFkiPi0qUCkPCvy8SU3Ns2vesaS8xvffQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/ftrace: mark irqsoff_tracer.tc test as
- unresolved if the test module does not exist
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>, mingo@redhat.com,
-        Masami Hiramatsu <mhiramat@kernel.org>, joel@joelfernandes.org,
-        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200505102700.7912-1-anders.roxell@linaro.org>
+In-Reply-To: <20200505102700.7912-1-anders.roxell@linaro.org>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 6 May 2020 13:08:30 +0800
+Message-ID: <CABVgOS=awiwi7APWr5HgU6Eht-VAygWPeQyNsCnAF09OLpR46A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] kunit: Kconfig: enable a KUNIT_RUN_ALL fragment
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com, "Theodore Ts'o" <tytso@mit.edu>,
+        adilger.kernel@dilger.ca,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Marco Elver <elver@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 5, 2020 at 9:09 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, May 5, 2020 at 6:27 PM Anders Roxell <anders.roxell@linaro.org> wrote:
 >
+> Make it easier to enable all KUnit fragments.  This is needed for kernel
+> test-systems, so its easy to get all KUnit tests enabled and if new gets
+> added they will be enabled as well.  Fragments that has to be builtin
+> will be missed if CONFIG_KUNIT_RUN_ALL is set as a module.
 >
-> You keep forgetting to Cc Shuah's other email.
-Thanks!
-I got the recipients list from the get_mainter.pl.
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
+>  lib/kunit/Kconfig | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+> index 95d12e3d6d95..537f37bc8400 100644
+> --- a/lib/kunit/Kconfig
+> +++ b/lib/kunit/Kconfig
+> @@ -41,4 +41,10 @@ config KUNIT_EXAMPLE_TEST
+>           is intended for curious hackers who would like to understand how to
+>           use KUnit for kernel development.
+>
+> +config KUNIT_RUN_ALL
+> +       tristate "KUnit run all test"
 
+I'm not 100% sure about this name and description. It only actually
+"runs" the tests if they're builtin (as modules, they'll only run when
+loaded).
+
+Would KUNIT_BUILD_ALL or KUNIT_ALL_TESTS or similar be better?
+
+It also, as mentioned, only really runs all available (i.e., with
+dependencies met in the current .config) tests (as distinct from the
+--alltests flag to kunit.py, which builds UML with allyesconfig), it
+might be good to add this to the description or help.
+
+Something like "Enable all KUnit tests" or "Enable all available KUnit
+tests" (or even something about "all KUnit tests with satisfied
+dependencies") might be clearer.
+
+> +       help
+> +         Enables all KUnit tests, if they can be enabled.
+> +         That depends on if KUnit is enabled as a module or builtin.
+> +
+I like the first line here, but the second one could use a bit more
+explanation. Maybe copy some of the boilerplate text from other tests,
+e.g.:
+
+          KUnit tests run during boot and output the results to the debug log
+         in TAP format (http://testanything.org/). Only useful for kernel devs
+         running the KUnit test harness, and not intended for inclusion into a
+         production build.
+
+         For more information on KUnit and unit tests in general please refer
+         to the KUnit documentation in Documentation/dev-tools/kunit/.
+
+         If unsure, say N.
+
+>  endif # KUNIT
+> --
+> 2.20.1
 >
-> On Tue,  5 May 2020 18:14:45 +0800
-> Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
->
-> > The UNRESOLVED state is much more apporiate than the UNSUPPORTED state
-> > for the absence of the test module, as it matches "test was set up
-> > incorrectly" situation in the README file.
-> >
-> > A possible scenario is that the function was enabled (supported by the
-> > kernel) but the module was not installed properly, in this case we
-> > cannot call this as UNSUPPORTED.
-> >
-> > This change also make it consistent with other module-related tests
-> > in ftrace.
->
-> Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
->
-> Shuah,
->
-> Can you take this after Masami gives his ack (if he does that is).
->
-> Thanks,
->
-> -- Steve
->
-> >
-> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> > ---
-> >  .../testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> > index cbd1743..2b82c80e 100644
-> > --- a/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> > +++ b/tools/testing/selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc
-> > @@ -17,7 +17,14 @@ unsup() { #msg
-> >      exit_unsupported
-> >  }
-> >
-> > -modprobe $MOD || unsup "$MOD module not available"
-> > +unres() { #msg
-> > +    reset_tracer
-> > +    rmmod $MOD || true
-> > +    echo $1
-> > +    exit_unresolved
-> > +}
-> > +
-> > +modprobe $MOD || unres "$MOD module not available"
-> >  rmmod $MOD
-> >
-> >  grep -q "preemptoff" available_tracers || unsup "preemptoff tracer not enabled"
->
+
+Otherwise, this is looking good. I've done some quick testing, and it
+all seems to work for me. As long as it's clear what the difference
+between this and other ways of running "all tests" (like the
+--alltests kunit.py option), I'm all for including this in.
+
+Cheers,
+-- David
