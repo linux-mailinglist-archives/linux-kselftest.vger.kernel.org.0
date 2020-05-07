@@ -2,70 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FE71C8596
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 May 2020 11:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF821C88F2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 May 2020 13:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725966AbgEGJWc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 May 2020 05:22:32 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:46213 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725834AbgEGJWc (ORCPT
+        id S1726074AbgEGLxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 May 2020 07:53:06 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:39596 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbgEGLxG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 May 2020 05:22:32 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 49Hnzp4V3Rz1s15H;
-        Thu,  7 May 2020 11:22:29 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 49Hnzn4yNjz1qspk;
-        Thu,  7 May 2020 11:22:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id HuTpiRr17Yjp; Thu,  7 May 2020 11:22:28 +0200 (CEST)
-X-Auth-Info: My1rqRLQeRYwXTe8bTgqsiQduii7/8yaKxe1UwEuWa/9BFJuuxyboUhmQ8FG6wd2
-Received: from igel.home (ppp-46-244-177-18.dynamic.mnet-online.de [46.244.177.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu,  7 May 2020 11:22:28 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id 18A2D2C0D9B; Thu,  7 May 2020 11:22:28 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Li Philip <philip.li@intel.com>,
-        Liu Yiding <yidingx.liu@intel.com>
-Subject: Re: [PATCH 3/3] selftests/ftrace: Use /bin/echo instead of built-in
- echo
-References: <158834025077.28357.15141584656220094821.stgit@devnote2>
-        <158834028054.28357.398159034694277189.stgit@devnote2>
-X-Yow:  Where's my SOCIAL WORKER?
-Date:   Thu, 07 May 2020 11:22:28 +0200
-In-Reply-To: <158834028054.28357.398159034694277189.stgit@devnote2> (Masami
-        Hiramatsu's message of "Fri, 1 May 2020 22:38:00 +0900")
-Message-ID: <87eerwkskr.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.0.91 (gnu/linux)
+        Thu, 7 May 2020 07:53:06 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 047BlnMb092151;
+        Thu, 7 May 2020 11:53:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=vXRVTWSFpyYPvEhFDwtMilj27ozZ+Flx09viTRMduV0=;
+ b=pFYpME+BZVHN4oyCe9NvtBXcTt6QUtXw1/+NzTmJE8E5lSU6xhNqGbdI+Trb3kkksgfu
+ sSRf6nojpnUoWH4HpEI7GuA3mvuG8kmcdg2c7rpqepA6eHb9qaZTA4oYDHjCGMrp+2wO
+ 5mfjYFHf8XMKn3jMzRnMZHe8WwQkmYzNPDe/PG8zxUlQFw76jUOixZ5hgxR4YLhK9Fat
+ KLgXHROagaPBnr13yg6+yxDlp29lZuk+huwOgGNivltpQ8tCrJSTDUmS5+9kdgR4TaFX
+ HZdQOpO9xYsP5wm5yE03A78oisMu3e55t6+t3FlqtpcmzZvYawmTawYpANlpNBPzwFvx UQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 30s09rfntm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 May 2020 11:53:04 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 047BlWfa130527;
+        Thu, 7 May 2020 11:51:04 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 30sjnp1yrc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 May 2020 11:51:03 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 047Bp2bE025735;
+        Thu, 7 May 2020 11:51:02 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 07 May 2020 04:51:02 -0700
+Date:   Thu, 7 May 2020 14:50:56 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     sai.praneeth.prakhya@intel.com
+Cc:     linux-kselftest@vger.kernel.org
+Subject: [bug report] selftests/resctrl: Add callback to start a benchmark
+Message-ID: <20200507115056.GA252660@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9613 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 phishscore=0
+ mlxlogscore=998 bulkscore=0 malwarescore=0 spamscore=0 suspectscore=3
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005070096
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9613 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1011 suspectscore=3
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005070096
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mai 01 2020, Masami Hiramatsu wrote:
+Hello Sai Praneeth Prakhya,
 
-> Since the built-in echo has different behavior in POSIX shell
-> (dash) and bash, we forcibly use /bin/echo -E (not interpret
-> backslash escapes) by default.
+The patch 7f4d257e3a2a: "selftests/resctrl: Add callback to start a
+benchmark" from Jan 16, 2020, leads to the following static checker
+warning:
 
-How about using printf instead (at least where it matters)?
+	tools/testing/selftests/resctrl/resctrl_val.c:545 measure_vals()
+	warn: 'bw_imc' unsigned <= 0
 
-Andreas.
+	tools/testing/selftests/resctrl/resctrl_val.c:549 measure_vals()
+	warn: 'bw_resc_end' unsigned <= 0
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+tools/testing/selftests/resctrl/resctrl_val.c
+   531  static int
+   532  measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
+   533  {
+   534          unsigned long bw_imc, bw_resc, bw_resc_end;
+   535          int ret;
+   536  
+   537          /*
+   538           * Measure memory bandwidth from resctrl and from
+   539           * another source which is perf imc value or could
+   540           * be something else if perf imc event is not available.
+   541           * Compare the two values to validate resctrl value.
+   542           * It takes 1sec to measure the data.
+   543           */
+   544          bw_imc = get_mem_bw_imc(param->cpu_no, param->bw_report);
+   545          if (bw_imc <= 0)
+                    ^^^^^^^^^^^
+Unsigned.  Also the comments for get_mem_bw_imc() says that zero is
+success.
+
+   546                  return bw_imc;
+   547  
+   548          bw_resc_end = get_mem_bw_resctrl();
+   549          if (bw_resc_end <= 0)
+                    ^^^^^^^^^^^^^^^^
+Unsigned
+
+   550                  return bw_resc_end;
+   551  
+   552          bw_resc = (bw_resc_end - *bw_resc_start) / MB;
+   553          ret = print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
+   554          if (ret)
+   555                  return ret;
+   556  
+   557          *bw_resc_start = bw_resc_end;
+   558  
+   559          return 0;
+   560  }
+
+regards,
+dan carpenter
