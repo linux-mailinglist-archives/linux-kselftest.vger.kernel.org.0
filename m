@@ -2,70 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BD91C8BCF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 May 2020 15:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53031C901D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 May 2020 16:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725857AbgEGNMJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 May 2020 09:12:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46746 "EHLO mail.kernel.org"
+        id S1728098AbgEGOhn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 May 2020 10:37:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgEGNMJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 May 2020 09:12:09 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727827AbgEGO1y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 May 2020 10:27:54 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78C8C20735;
-        Thu,  7 May 2020 13:12:08 +0000 (UTC)
-Date:   Thu, 7 May 2020 09:12:07 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Li Philip <philip.li@intel.com>,
-        Liu Yiding <yidingx.liu@intel.com>
-Subject: Re: [PATCH 3/3] selftests/ftrace: Use /bin/echo instead of built-in
- echo
-Message-ID: <20200507091207.5c3b1a92@gandalf.local.home>
-In-Reply-To: <20200502120842.9d93352083fb854295150235@kernel.org>
-References: <158834025077.28357.15141584656220094821.stgit@devnote2>
-        <158834028054.28357.398159034694277189.stgit@devnote2>
-        <20200501101942.5c0da986@gandalf.local.home>
-        <20200502120842.9d93352083fb854295150235@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F4C62145D;
+        Thu,  7 May 2020 14:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588861673;
+        bh=iI6/4pieNmhea6dG1LXDMXm/LdTJkwUeGnsdS5TIGu4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gKVkNj9v1J3UhmTVnvMrE7zBsxSefiWMsNaWn8du3C288RelNEN4QhRvAbtGM8hPH
+         2PXOG5gSrtSWIs7Zvon9hAPP0bbAqSWjPRPAOJD009fubXPU+XTlUfNmw8Dgrq9gRl
+         kS3H4E7c44Mh13VFt27WQ/O0Hhs8XUTn6eQ08Xuk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 22/50] selftests/ftrace: Check the first record for kprobe_args_type.tc
+Date:   Thu,  7 May 2020 10:26:58 -0400
+Message-Id: <20200507142726.25751-22-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200507142726.25751-1-sashal@kernel.org>
+References: <20200507142726.25751-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 2 May 2020 12:08:42 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+From: Xiao Yang <yangx.jy@cn.fujitsu.com>
 
-> > > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc
-> > > index ab6bedb25736..b3f70f53ee69 100644
-> > > --- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc
-> > > +++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc
-> > > @@ -30,7 +30,7 @@ fi
-> > >  
-> > >  echo "Test histogram trace_marker tigger"
-> > >  
-> > > -echo 'hist:keys=common_pid' > events/ftrace/print/trigger
-> > > +echo 'hist:keys=ip' > events/ftrace/print/trigger  
-> > 
-> > This is doing more than just changing the echo being used. It's changing
-> > the test being done.  
-> 
-> Yes, I need Tom's review for this change. As far as I can test, this
-> fixes the test failure. If this isn't acceptable, we can use "alias echo=echo"
-> for this test case.
-> 
+[ Upstream commit f0c0d0cf590f71b2213b29a7ded2cde3d0a1a0ba ]
 
-I still don't see how changing "keys=common_pid" to "keys=ip" has anything
-to do with the echo patch. If that is a problem, it should be a different
-patch with explanation to why "keys=common_pid" is broken.
+It is possible to get multiple records from trace during test and then more
+than 4 arguments are assigned to ARGS.  This situation results in the failure
+of kprobe_args_type.tc.  For example:
+-----------------------------------------------------------
+grep testprobe trace
+   ftracetest-5902  [001] d... 111195.682227: testprobe: (_do_fork+0x0/0x460) arg1=334823024 arg2=334823024 arg3=0x13f4fe70 arg4=7
+     pmlogger-5949  [000] d... 111195.709898: testprobe: (_do_fork+0x0/0x460) arg1=345308784 arg2=345308784 arg3=0x1494fe70 arg4=7
+ grep testprobe trace
+ sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'
+ARGS='334823024 334823024 0x13f4fe70 7
+345308784 345308784 0x1494fe70 7'
+-----------------------------------------------------------
 
--- Steve
+We don't care which process calls do_fork so just check the first record to
+fix the issue.
+
+Signed-off-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+index 1bcb67dcae267..81490ecaaa927 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+@@ -38,7 +38,7 @@ for width in 64 32 16 8; do
+   echo 0 > events/kprobes/testprobe/enable
+ 
+   : "Confirm the arguments is recorded in given types correctly"
+-  ARGS=`grep "testprobe" trace | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
++  ARGS=`grep "testprobe" trace | head -n 1 | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+   check_types $ARGS $width
+ 
+   : "Clear event for next loop"
+-- 
+2.20.1
 
