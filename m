@@ -2,69 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7991CB8B5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 21:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872701CB8C1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 22:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbgEHT7M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 May 2020 15:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726825AbgEHT7L (ORCPT
+        id S1726908AbgEHUDr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 May 2020 16:03:47 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:60826 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726767AbgEHUDr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 May 2020 15:59:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD7DC061A0C;
-        Fri,  8 May 2020 12:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gAppywnHh153AQRT3TEcx+if6lH9LfxxNVXC5Eam2gE=; b=LO1NDtV4fUL1HsosKlFp07Jetj
-        ZmER83mcVniQHSmsmQkEliW+bBwKDjDgvgHLyNfoZZQSQ2d8d6uJ/E93YkCE/Pv2h22093IcHQJF/
-        CQ6TzUSGi2xhmQNj1rMfTNImRqt5Y+XlZHAUWdcvwdS3kCoksTLwVBiGa5dzHrkLrC81Z5Bsx81w+
-        vyMbYl3ABhhKu06mw/+kcUdRP4+2TYYCG7oCVYeSGa4gaBSaZTNDx7mUpGnSFcUEZZ5HfgBBuomDu
-        MAZ3piEgZS2Htb32yXrt2sUDxPwPRqVjJHOn0ESp05K4R/E6t0rB+N92zScazXyjIB7muAAe5G5O9
-        K8Pn+buQ==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jX99K-0004bs-6g; Fri, 08 May 2020 19:59:10 +0000
-Date:   Fri, 8 May 2020 12:59:10 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     nouveau@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@linuxfoundation.org>
-Subject: Re: [PATCH 0/6] nouveau/hmm: add support for mapping large pages
-Message-ID: <20200508195910.GR16070@bombadil.infradead.org>
-References: <20200508192009.15302-1-rcampbell@nvidia.com>
+        Fri, 8 May 2020 16:03:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588968226;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X5kwfCZ8GEMui0d70gWIkFX2ZjpyuOsqtOJu+2yxxqE=;
+        b=gx05R/wTArLhPODMu+I1V3hlIDLkvx7VC6Ia9OR+C3DoI25ulGp9lkLGU/olt0s+Qzg0qG
+        BPydLpizWqI/XkDP2Se7sgK8bMdQmpdBQjWNmkuYf6HcK7DjOCfjQglNXkQpjfhznzWV1p
+        S8cwPGailOadxhCOWWix6s/iI+CrdfQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-308-enATtp9oPj2wo-KN0UthHg-1; Fri, 08 May 2020 16:03:26 -0400
+X-MC-Unique: enATtp9oPj2wo-KN0UthHg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5F6401005510;
+        Fri,  8 May 2020 20:03:25 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-113-187.ams2.redhat.com [10.36.113.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 607B8702EC;
+        Fri,  8 May 2020 20:03:22 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Sandipan Das <sandipan@linux.ibm.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linuxram@us.ibm.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, mpe@ellerman.id.au
+Subject: Re: [PATCH 2/2] selftests: vm: pkeys: Fix powerpc access right updates
+References: <cover.1588959697.git.sandipan@linux.ibm.com>
+        <cover.1588959697.git.sandipan@linux.ibm.com>
+        <5f65cf37be993760de8112a88da194e3ccbb2bf8.1588959697.git.sandipan@linux.ibm.com>
+        <87blmymhkx.fsf@oldenburg2.str.redhat.com>
+        <a40c364d-e204-1d63-c211-7cdfdccb32e0@linux.ibm.com>
+Date:   Fri, 08 May 2020 22:03:20 +0200
+In-Reply-To: <a40c364d-e204-1d63-c211-7cdfdccb32e0@linux.ibm.com> (Sandipan
+        Das's message of "Sat, 9 May 2020 01:24:26 +0530")
+Message-ID: <87mu6ii48n.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200508192009.15302-1-rcampbell@nvidia.com>
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 08, 2020 at 12:20:03PM -0700, Ralph Campbell wrote:
-> hmm_range_fault() returns an array of page frame numbers and flags for
-> how the pages are mapped in the requested process' page tables. The PFN
-> can be used to get the struct page with hmm_pfn_to_page() and the page size
-> order can be determined with compound_order(page) but if the page is larger
-> than order 0 (PAGE_SIZE), there is no indication that the page is mapped
-> using a larger page size. To be fully general, hmm_range_fault() would need
-> to return the mapping size to handle cases like a 1GB compound page being
-> mapped with 2MB PMD entries. However, the most common case is the mapping
-> size the same as the underlying compound page size.
-> This series adds a new output flag to indicate this so that callers know it
-> is safe to use a large device page table mapping if one is available.
-> Nouveau and the HMM tests are updated to use the new flag.
+* Sandipan Das:
 
-This explanation doesn't make any sense.  It doesn't matter how somebody
-else has it mapped; if it's a PMD-sized page, you can map it with a
-2MB mapping.
+> Hi Florian,
+>
+> On 08/05/20 11:31 pm, Florian Weimer wrote:
+>> * Sandipan Das:
+>> 
+>>> The Power ISA mandates that all writes to the Authority
+>>> Mask Register (AMR) must always be preceded as well as
+>>> succeeded by a context-synchronizing instruction. This
+>>> applies to both the privileged and unprivileged variants
+>>> of the Move To AMR instruction.
+>> 
+>> Ugh.  Do you have a reference for that?
+>> 
+>> We need to fix this in glibc.
+>> 
+>
+> This is from Table 6 of Chapter 11 in page 1134 of Power
+> ISA 3.0B. The document can be found here:
+> https://ibm.ent.box.com/s/1hzcwkwf8rbju5h9iyf44wm94amnlcrv
+
+Thanks a lot!  I filed:
+
+  <https://sourceware.org/bugzilla/show_bug.cgi?id=25954>
+
+Florian
+
