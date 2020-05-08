@@ -2,72 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EABEA1CB678
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 20:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C981CB80E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 21:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbgEHSBp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 May 2020 14:01:45 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:33610 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726746AbgEHSBp (ORCPT
+        id S1726817AbgEHTUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 May 2020 15:20:22 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17039 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbgEHTUW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 May 2020 14:01:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588960904;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4KnJZqptJ7bWIQFTnBFMgLlZZljmdsRpqDipOGzc+e4=;
-        b=Lx+XrSiPMRWJEUN19vKXI+s1QBugwVCNYubkP/sF5e77zvLMQD3Q6VvN0oHOJ7uA9pdNbE
-        1ek9loLwZPv4go7iBnje93Ydv/XmTPJGdnbMVGoVl7rYWQqKuKWLRU0tGhVDB2pvfrjV8t
-        o6kKkxjVt12y6t1TBoGV44TdTlL26zA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-419-TtcT3JbAOVKRvwqRdpnw9w-1; Fri, 08 May 2020 14:01:40 -0400
-X-MC-Unique: TtcT3JbAOVKRvwqRdpnw9w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 09FAE1895A28;
-        Fri,  8 May 2020 18:01:38 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-113-187.ams2.redhat.com [10.36.113.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E9C465C297;
-        Fri,  8 May 2020 18:01:35 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Sandipan Das <sandipan@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linuxram@us.ibm.com, aneesh.kumar@linux.ibm.com,
-        bauerman@linux.ibm.com, mpe@ellerman.id.au
-Subject: Re: [PATCH 2/2] selftests: vm: pkeys: Fix powerpc access right updates
-References: <cover.1588959697.git.sandipan@linux.ibm.com>
-        <cover.1588959697.git.sandipan@linux.ibm.com>
-        <5f65cf37be993760de8112a88da194e3ccbb2bf8.1588959697.git.sandipan@linux.ibm.com>
-Date:   Fri, 08 May 2020 20:01:34 +0200
-In-Reply-To: <5f65cf37be993760de8112a88da194e3ccbb2bf8.1588959697.git.sandipan@linux.ibm.com>
-        (Sandipan Das's message of "Fri, 8 May 2020 23:19:15 +0530")
-Message-ID: <87blmymhkx.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Fri, 8 May 2020 15:20:22 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eb5b0e90000>; Fri, 08 May 2020 12:20:09 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 08 May 2020 12:20:22 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 08 May 2020 12:20:22 -0700
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 8 May
+ 2020 19:20:20 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 8 May 2020 19:20:20 +0000
+Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5eb5b0f3000a>; Fri, 08 May 2020 12:20:20 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Ben Skeggs" <bskeggs@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@linuxfoundation.org>,
+        Ralph Campbell <rcampbell@nvidia.com>
+Subject: [PATCH 0/6] nouveau/hmm: add support for mapping large pages
+Date:   Fri, 8 May 2020 12:20:03 -0700
+Message-ID: <20200508192009.15302-1-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1588965609; bh=jFq2mixtkzI32ozqz5hLHkzp0Ygs10xUW1B28WBNaLs=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Type:
+         Content-Transfer-Encoding;
+        b=f1uSc3ROHwcanB7L/tnLl4h20hmLEQD3keM9GdJxSJn+hErrBRjoEQ9pNFoFKAS3y
+         KXQ272lLCVcvsmn3Xh+CZ8PGvmLztkdvTO9AW7DTZ8K26htGWFfd4Z3lL/AsL0Gqmk
+         a2fyv9afMBkOOvcCPRVcP6FGdddhhrTMTn57sAbBgvBbXHlMkrCpzSzLoZNADRGtOO
+         T2pwhT2QsojXnT8v9nFgKvI91dK5M0SVdfBW0Oflirjs3is2qdNCUgrI1BH++cbcyW
+         YRWzjzSYUGCu/H/jdIfvhJ/DeCELi/J6Udl7WwSWZelaLryvmfp4l417C4xxGZ98PL
+         aKtDXj0RDipAw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* Sandipan Das:
+hmm_range_fault() returns an array of page frame numbers and flags for
+how the pages are mapped in the requested process' page tables. The PFN
+can be used to get the struct page with hmm_pfn_to_page() and the page size
+order can be determined with compound_order(page) but if the page is larger
+than order 0 (PAGE_SIZE), there is no indication that the page is mapped
+using a larger page size. To be fully general, hmm_range_fault() would need
+to return the mapping size to handle cases like a 1GB compound page being
+mapped with 2MB PMD entries. However, the most common case is the mapping
+size the same as the underlying compound page size.
+This series adds a new output flag to indicate this so that callers know it
+is safe to use a large device page table mapping if one is available.
+Nouveau and the HMM tests are updated to use the new flag.
 
-> The Power ISA mandates that all writes to the Authority
-> Mask Register (AMR) must always be preceded as well as
-> succeeded by a context-synchronizing instruction. This
-> applies to both the privileged and unprivileged variants
-> of the Move To AMR instruction.
+Note that this series depends on a patch queued in Ben Skeggs' nouveau
+tree ("nouveau/hmm: map pages after migration") and the patches queued
+in Jason's HMM tree.
+There is also a patch outstanding ("nouveau/hmm: fix nouveau_dmem_chunk
+allocations") that is independent of the above and could be applied
+before or after.
 
-Ugh.  Do you have a reference for that?
 
-We need to fix this in glibc.
+Ralph Campbell (6):
+  nouveau/hmm: map pages after migration
+  nouveau: make nvkm_vmm_ctor() and nvkm_mmu_ptp_get() static
+  nouveau/hmm: fault one page at a time
+  mm/hmm: add output flag for compound page mapping
+  nouveau/hmm: support mapping large sysmem pages
+  hmm: add tests for HMM_PFN_COMPOUND flag
 
-Thanks,
-Florian
+ drivers/gpu/drm/nouveau/nouveau_dmem.c        |  46 ++-
+ drivers/gpu/drm/nouveau/nouveau_dmem.h        |   2 +
+ drivers/gpu/drm/nouveau/nouveau_svm.c         | 288 +++++++++---------
+ drivers/gpu/drm/nouveau/nouveau_svm.h         |   5 +
+ .../gpu/drm/nouveau/nvkm/subdev/mmu/base.c    |   6 +-
+ .../gpu/drm/nouveau/nvkm/subdev/mmu/priv.h    |   2 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |  12 +-
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h |   3 -
+ .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    |  29 +-
+ include/linux/hmm.h                           |   4 +-
+ lib/test_hmm.c                                |   2 +
+ lib/test_hmm_uapi.h                           |   2 +
+ mm/hmm.c                                      |  10 +-
+ tools/testing/selftests/vm/hmm-tests.c        |  76 +++++
+ 14 files changed, 311 insertions(+), 176 deletions(-)
+
+--=20
+2.20.1
 
