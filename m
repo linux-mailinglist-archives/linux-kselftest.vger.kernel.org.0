@@ -2,104 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 831001C9FA5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 02:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB851CA273
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 06:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgEHA2Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 May 2020 20:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726770AbgEHA2Q (ORCPT
+        id S1725780AbgEHE4Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 May 2020 00:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725550AbgEHE4Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 May 2020 20:28:16 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942DBC05BD0F
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2020 17:28:15 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id q24so3417435pjd.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2020 17:28:15 -0700 (PDT)
+        Fri, 8 May 2020 00:56:16 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5121CC05BD43
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2020 21:56:16 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id 207so315610pgc.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2020 21:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=d89QrDod8n3DS0mHAWOT8Nhxmdw/BYJeM/jPsxOJaUA=;
-        b=BVCEG8eDlA86Kc3DaKoVApgyVNNVTpgY8y4vx9gcEnguJ1dEe7z5lgDTbTzC/qjCq2
-         x+gJ7f7GxT27U+R8QKnfUV/JlbVxgcsBnP+mH8K3KG6LYrmVtMpih45iOxwrNuMXbsND
-         i9pBLGXqA5iNRT7gde+iRZ/9z6Um+IIGKGmZk=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=4CNZy247ICcFx3HCeAu3lFAco0E9gMG+0QdnsbzPiRo=;
+        b=YongsVUNpHD9pyODgLUWb/61UgHn39x8OVioXsqsF8t1wwG89KBDqSL6gSxorgd9k/
+         g5T8jWEiH3DSGv7acmuQXIGGzN7sTXF3NStQ2YTee6G0PEbK67HSSVAtPAHU9XybTN1M
+         aQ49zkZht+DgamSC1QAGbZEfnNrfzBGWhEB/FJGNrkzwzZtGdLWQFuz02wCT9TT6IvwC
+         JdFrTlS8NmCdS1cvcoyFmjapEa4vx4HKpdpKrw8Z0ql2EQG1ZMEzABuFIgLN6U99b9Ta
+         gUYdOvR0cOs+31NukcL5XHWI8vGgztzelE+KIPZ0szEB++UYVvFk1gbHMIiKxJMQQh+u
+         GA2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=d89QrDod8n3DS0mHAWOT8Nhxmdw/BYJeM/jPsxOJaUA=;
-        b=AfyeQSuTKngDAU66TPxHQDbL+5whWFI8p5Xg5ktnF0b1Ufo7slMwyLHujPzJ/6pUK+
-         tZKdyQkwOG/t5zwr/nGaWdUlMKWrmdk1XyUKsVlXwTZ0+mLXiXaxDzsvN5IJQa2Mex3T
-         9xy3Pc4EbMYmpfp44ME8IgNBLZoFYMavar2Q6B/EgNoHaF9zrPBTQCLDurzMjo+sAigJ
-         hgTqaatc6yUjiLsGpFtDtkLNiP401GYaTIx4liPAgd6D2iJ8hqqfXRnE/HAkN3CAsPCV
-         QXoNKDAAKt0Kyf0KJZ+nX6KRz+pySJk4K3RC6iiv5+RShlqQTfLcCZ2nvGiMK/0Vr67+
-         S1fw==
-X-Gm-Message-State: AGi0Puaeua0SwPScYghsgwqvOame4N7ZI4Va5nmiBQ3f+fCTzCTmIjZk
-        G79ufVDVf0oAtUellfWQ8nelsw==
-X-Google-Smtp-Source: APiQypL9yg+UTfakfAY/PGrCH8wWW3n8ccPxXXOpi3O6KW2uN1JVvwO4pJpQK+Wqdfoa82/pMFJAYQ==
-X-Received: by 2002:a17:902:361:: with SMTP id 88mr15726849pld.279.1588897694996;
-        Thu, 07 May 2020 17:28:14 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id gz14sm882677pjb.42.2020.05.07.17.28.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=4CNZy247ICcFx3HCeAu3lFAco0E9gMG+0QdnsbzPiRo=;
+        b=i0VU7NZwox7G/DiDdGeje6marBmRkFdyZRSB+aVraC7nCkQtpMum2HwMvJYFEs+wNv
+         IRhgDtPHf3KrNoShnxyRAujE5ja49kNoH9dCMvOuAG82YiasrCs1ik9YhjF+6017EHq/
+         q22SzKDSQBrqcrnjq6AkO2L+CZzsio+9ip+45R91mzwBwSVaAgpz5uCZidRr++FGIDXX
+         qj7v3u7If6H7oakkxZGZKrioqc8Lopbtj5TZXgKrbvdP+aInIDrh07F3D2uGDmVKPs5n
+         UwbAs+Y+GhdRLb6YjoN8x/OKbrKtDsAvX7OV+bHULvnsIh9FWZqhPZ2R5tToCVHahCm8
+         iXqA==
+X-Gm-Message-State: AGi0PubDgCM1Hlc/cGxY2ka/WgqwMKvl9oEtCFgW5Ze1+xQyVLtvgB37
+        m5kS9/Z0YTUwM9XncuA+YOH+Ug==
+X-Google-Smtp-Source: APiQypKH7PmGUi/XHWEExL2pZ4ExfPw8tZVjceK5ZGdxg/94ViJwHsuu88DxdsCvzqKaPIiI68ArGA==
+X-Received: by 2002:a63:5824:: with SMTP id m36mr588890pgb.439.1588913775577;
+        Thu, 07 May 2020 21:56:15 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id d124sm426812pfa.98.2020.05.07.21.56.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 17:28:14 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v5 7/7] MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
-Date:   Thu,  7 May 2020 17:27:39 -0700
-Message-Id: <20200508002739.19360-8-scott.branden@broadcom.com>
+        Thu, 07 May 2020 21:56:14 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Laura Abbott <labbott@redhat.com>,
+        "Andrew F. Davis" <afd@ti.com>, linux-kselftest@vger.kernel.org
+Subject: [PATCH] kselftests: dmabuf-heaps: Fix confused return value on expected error testing
+Date:   Fri,  8 May 2020 04:56:10 +0000
+Message-Id: <20200508045610.80522-1-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200508002739.19360-1-scott.branden@broadcom.com>
-References: <20200508002739.19360-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add maintainer entry for new Broadcom VK Driver
+When I added the expected error testing, I forgot I need to set
+the return to zero when we successfully see an error.
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+Without this change we only end up testing a single heap
+before the test quits.
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Cc: Brian Starkey <brian.starkey@arm.com>
+Cc: Laura Abbott <labbott@redhat.com>
+Cc: "Andrew F. Davis" <afd@ti.com>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 88bf36ab2b22..63eec54250f0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3612,6 +3612,13 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/ethernet/broadcom/tg3.*
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index cd5e1f602ac9..909da9cdda97 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -351,6 +351,7 @@ static int test_alloc_errors(char *heap_name)
+ 	}
  
-+BROADCOM VK DRIVER
-+M:	Scott Branden <scott.branden@broadcom.com>
-+L:	bcm-kernel-feedback-list@broadcom.com
-+S:	Supported
-+F:	drivers/misc/bcm-vk/
-+F:	include/uapi/linux/misc/bcm_vk.h
-+
- BROCADE BFA FC SCSI DRIVER
- M:	Anil Gurumurthy <anil.gurumurthy@qlogic.com>
- M:	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
+ 	printf("Expected error checking passed\n");
++	ret = 0;
+ out:
+ 	if (dmabuf_fd >= 0)
+ 		close(dmabuf_fd);
 -- 
 2.17.1
 
