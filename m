@@ -2,87 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 872701CB8C1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 22:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4991CB8C8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 May 2020 22:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgEHUDr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 May 2020 16:03:47 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:60826 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726767AbgEHUDr (ORCPT
+        id S1726811AbgEHUG4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 May 2020 16:06:56 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:8438 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbgEHUG4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 May 2020 16:03:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588968226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X5kwfCZ8GEMui0d70gWIkFX2ZjpyuOsqtOJu+2yxxqE=;
-        b=gx05R/wTArLhPODMu+I1V3hlIDLkvx7VC6Ia9OR+C3DoI25ulGp9lkLGU/olt0s+Qzg0qG
-        BPydLpizWqI/XkDP2Se7sgK8bMdQmpdBQjWNmkuYf6HcK7DjOCfjQglNXkQpjfhznzWV1p
-        S8cwPGailOadxhCOWWix6s/iI+CrdfQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-308-enATtp9oPj2wo-KN0UthHg-1; Fri, 08 May 2020 16:03:26 -0400
-X-MC-Unique: enATtp9oPj2wo-KN0UthHg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5F6401005510;
-        Fri,  8 May 2020 20:03:25 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-113-187.ams2.redhat.com [10.36.113.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 607B8702EC;
-        Fri,  8 May 2020 20:03:22 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Sandipan Das <sandipan@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linuxram@us.ibm.com, aneesh.kumar@linux.ibm.com,
-        bauerman@linux.ibm.com, mpe@ellerman.id.au
-Subject: Re: [PATCH 2/2] selftests: vm: pkeys: Fix powerpc access right updates
-References: <cover.1588959697.git.sandipan@linux.ibm.com>
-        <cover.1588959697.git.sandipan@linux.ibm.com>
-        <5f65cf37be993760de8112a88da194e3ccbb2bf8.1588959697.git.sandipan@linux.ibm.com>
-        <87blmymhkx.fsf@oldenburg2.str.redhat.com>
-        <a40c364d-e204-1d63-c211-7cdfdccb32e0@linux.ibm.com>
-Date:   Fri, 08 May 2020 22:03:20 +0200
-In-Reply-To: <a40c364d-e204-1d63-c211-7cdfdccb32e0@linux.ibm.com> (Sandipan
-        Das's message of "Sat, 9 May 2020 01:24:26 +0530")
-Message-ID: <87mu6ii48n.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Fri, 8 May 2020 16:06:56 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eb5bbd30000>; Fri, 08 May 2020 13:06:43 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 08 May 2020 13:06:56 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 08 May 2020 13:06:56 -0700
+Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 8 May
+ 2020 20:06:55 +0000
+Subject: Re: [PATCH 4/6] mm/hmm: add output flag for compound page mapping
+To:     Christoph Hellwig <hch@lst.de>
+CC:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jerome Glisse <jglisse@redhat.com>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Ben Skeggs" <bskeggs@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Shuah Khan" <shuah@kernel.org>, <willy@infradead.org>
+References: <20200508192009.15302-1-rcampbell@nvidia.com>
+ <20200508192009.15302-5-rcampbell@nvidia.com> <20200508195129.GA19740@lst.de>
+X-Nvconfidentiality: public
+From:   Ralph Campbell <rcampbell@nvidia.com>
+Message-ID: <1ec0511f-e6eb-3e11-ad6d-ad4e5b107464@nvidia.com>
+Date:   Fri, 8 May 2020 13:06:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <20200508195129.GA19740@lst.de>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1588968404; bh=1PhR0ynTTHTZ2jjSta5jo4Wils7Nsyx2BUSfOurLe2M=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Ycs8GXkCLsC3dOjGwwVRiDFIa15xrlFp5dmFGRza+tkcfuZFMsD5xYyCaJ3SGXe5L
+         MbsyET5GQuGbmktRrCTBcURNRpVyByNfAP6d32d3PQqHhfvXHl7hV3Vz6+jpL9f7XP
+         CXbZOo+mS0n/H/P9XYRbSRpH1g1yZoCcRMaMatvBiqhLkjOZkUb5AO5td5VmqXKkE/
+         sM80B5uZfLs+ocEiGdK/OF8louCokHaVcQ5PGDdXwn/0dQA98q3hte0xdQaR0KSK8o
+         h1YgoYDiUJdbmaXyPqLW6c0Avqm1BAzTgQczQUQuWMpS3cwZcoVq5P9xL82BMqcFaC
+         raNhF8Jy7jtaw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* Sandipan Das:
 
-> Hi Florian,
->
-> On 08/05/20 11:31 pm, Florian Weimer wrote:
->> * Sandipan Das:
->> 
->>> The Power ISA mandates that all writes to the Authority
->>> Mask Register (AMR) must always be preceded as well as
->>> succeeded by a context-synchronizing instruction. This
->>> applies to both the privileged and unprivileged variants
->>> of the Move To AMR instruction.
->> 
->> Ugh.  Do you have a reference for that?
->> 
->> We need to fix this in glibc.
->> 
->
-> This is from Table 6 of Chapter 11 in page 1134 of Power
-> ISA 3.0B. The document can be found here:
-> https://ibm.ent.box.com/s/1hzcwkwf8rbju5h9iyf44wm94amnlcrv
+On 5/8/20 12:51 PM, Christoph Hellwig wrote:
+> On Fri, May 08, 2020 at 12:20:07PM -0700, Ralph Campbell wrote:
+>> hmm_range_fault() returns an array of page frame numbers and flags for
+>> how the pages are mapped in the requested process' page tables. The PFN
+>> can be used to get the struct page with hmm_pfn_to_page() and the page size
+>> order can be determined with compound_order(page) but if the page is larger
+>> than order 0 (PAGE_SIZE), there is no indication that the page is mapped
+>> using a larger page size. To be fully general, hmm_range_fault() would need
+>> to return the mapping size to handle cases like a 1GB compound page being
+>> mapped with 2MB PMD entries. However, the most common case is the mapping
+>> size the same as the underlying compound page size.
+>> Add a new output flag to indicate this so that callers know it is safe to
+>> use a large device page table mapping if one is available.
+> 
+> Why do you need the flag?  The caller should be able to just use
+> page_size() (or willys new thp_size helper).
+> 
 
-Thanks a lot!  I filed:
-
-  <https://sourceware.org/bugzilla/show_bug.cgi?id=25954>
-
-Florian
-
+The question is whether or not a large page can be mapped with smaller
+page table entries with different permissions. If one process has a 2MB
+page mapped with 4K PTEs with different read/write permissions, I don't think
+it would be OK for a device to map the whole 2MB with write access enabled.
+The flag is supposed to indicate that the whole page can be mapped by the
+device with the indicated read/write permissions.
