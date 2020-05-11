@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAAB1CDAF3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 15:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9645B1CDAF6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 15:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730168AbgEKNOg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 May 2020 09:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
+        id S1730166AbgEKNOl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 May 2020 09:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729279AbgEKNOf (ORCPT
+        by vger.kernel.org with ESMTP id S1729163AbgEKNOj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 May 2020 09:14:35 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567CEC05BD09
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:35 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id z22so7485782lfd.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:35 -0700 (PDT)
+        Mon, 11 May 2020 09:14:39 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A70BC05BD09
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:39 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id g1so3530075ljk.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=b7bMy350M8ax4YqO1k0ragPxZVB4Sq8gKTVAQseth78=;
-        b=tyeSTc03oTY6K3LroNm5HKqoawup1Mj0X6sMI2LGMzkNnWIn2McTNMZ0+NG4IDrCTF
-         mYmq171N/IAt1AL4hcG2usJLLR+FKwBKAdDk+D2CGXghJG5li2ANUCY+waO44fWVsuhu
-         GAGLLMK0E8G1g8jd42IDjIQanmldx0bv5iU9sCfC8p4701nKozgpMyCEHS9Yg0H7sADO
-         lTXVv2UrUhGLg/O3+/eInaBkR73wfVPL7uDqSrRJdA3p7So65TgSSNC8zzLhfv/gNvuA
-         UfYYrl5w8+EtkrBDJVKle8IvHG5dYC3DnFqsyti3J8mLK33RY56Eg8+XDiQmW58DkjUI
-         LCNQ==
+        bh=uOQlRoobz/JSTnw7jwwegH0gSDxJKtqarUsKs1ALhNM=;
+        b=O7IbKpf3NxRDO3Qz4E22XOJiODI89ShsyRIBjfFqiBxYbmyzjqlqyDUUuluKWLondb
+         zvLmdYtEfINYouhmprMb9bnYeW2ULG+ffMYDS3Hyz1jLdR29D6t24/4zBAL1Xh3W4jti
+         57sw25xbYMqSo0NWD6CftkCY5w24yKxWy6bIE4qRU3l4Y9UiMKz1Oz0GVyviY4znjJzR
+         dvF1SHdR6PDuhh59w/+680xYeLXE4uIspt4BilLfsI9Hg3T886eg9gExkPngkIkQNVzP
+         WOROjQRPgANTvGvNhKsku53v7mZiLgZ2QOJ0u2I+DZa+VkNc5AwzgG0w1M6UW63HzuDm
+         E85A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=b7bMy350M8ax4YqO1k0ragPxZVB4Sq8gKTVAQseth78=;
-        b=KcReb2yPw7yuhEOCG49qL7ElfOTKkKYXomN4X+dVSZEgb1GktlcNbeVsPJ6HSECRtS
-         rctlKTmcNpjiN9jrsSTy2z6kXCndUkuFmz5vWNq+xpeD9wzKHoBvtc+12lU7GpR9WUqm
-         64M87LtCHhHJZC7Pu5Hpv9o0CIg3ZDCDMA0Uh9FrumD2UZCaVFewxmhtQ5mN5EXqtWb4
-         tEr6dHQqcnv8U1ymipdXDI2dvPhyDfQCs2S91bhkR6+T+IkmI/RcNCBvSs29jzBeepob
-         djhyds3SI/0cH/LyheBkoJfUVd5OyIUBWjv8nDiOsjcBsxkwvHqxHvWrm5cCRnG7ivLv
-         Vo2A==
-X-Gm-Message-State: AOAM532eRWSd34HHr4qx9BLCTuQFVc3fSEmMN39CWNt1PBACHG/vavIY
-        8aCzInkTYz7IgELgKJudQMOFK/8AlCraoA==
-X-Google-Smtp-Source: ABdhPJyYMsO9TgP6DGnwyc67H9w/1hGv3XoXQ3P1ggxxHr47+Uuk3J2Lv1s11k+ixLL2310k5dEpCQ==
-X-Received: by 2002:a19:4816:: with SMTP id v22mr910163lfa.30.1589202873699;
-        Mon, 11 May 2020 06:14:33 -0700 (PDT)
+        bh=uOQlRoobz/JSTnw7jwwegH0gSDxJKtqarUsKs1ALhNM=;
+        b=Rzw4wuby1b/B+tkh5e/9q3FZdD6RfOcvycRYaykzrMQFI8U61TVUk+YdbCPF9oAzNM
+         5mrk/CiRYIBf1GlsZ4zsn0eikCVaPbiLlZ0POdBB3BWrY0jN56hx4x0Cz7SnsAxMHPpT
+         OHZzqA3S7ab6xY/pMOt4iYZd2i5WoK2ipCf/XRqbEUtMj9cxgGPyqSFqzxR86BwH0Dvp
+         lklELxvUQ2ybg6/l22hU4VJUzr5dKqW2WevSf1JgRnNct8FG0CRwaEiC8ZWRq8UW8DIt
+         /gqL+HdYt4V6Mv8500v3hEtAj3D7NCEMPtOCDNsVq2Nv/64XJBNcb35I8eFTZGysQc1T
+         R/7Q==
+X-Gm-Message-State: AOAM5337HuF4nrYKcyPlLyzQB9nvcSgl0kZ129YCqFqPYNFoBmCiM0jK
+        qQESnar30MSCY782lz2lmyxxRg==
+X-Google-Smtp-Source: ABdhPJzPQ63qDskczu5x6qrSWwXrg8R2UiUYIP4y4l+9X8DXtfBS8B2MRyrIgyTM1DH5gchXnwWtIw==
+X-Received: by 2002:a2e:9942:: with SMTP id r2mr466938ljj.283.1589202877635;
+        Mon, 11 May 2020 06:14:37 -0700 (PDT)
 Received: from localhost (c-8c28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.140])
-        by smtp.gmail.com with ESMTPSA id o22sm9844221ljj.100.2020.05.11.06.14.33
+        by smtp.gmail.com with ESMTPSA id i1sm36800lja.3.2020.05.11.06.14.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 06:14:33 -0700 (PDT)
+        Mon, 11 May 2020 06:14:37 -0700 (PDT)
 From:   Anders Roxell <anders.roxell@linaro.org>
-To:     akpm@linux-foundation.org
+To:     gregkh@linuxfoundation.org
 Cc:     john.johansen@canonical.com, jmorris@namei.org, serge@hallyn.com,
-        tytso@mit.edu, adilger.kernel@dilger.ca,
-        gregkh@linuxfoundation.org, brendanhiggins@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-security-module@vger.kernel.org, elver@google.com,
-        davidgow@google.com, Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v3 3/6] lib: Kconfig.debug: default KUNIT_* fragments to KUNIT_ALL_TESTS
-Date:   Mon, 11 May 2020 15:14:29 +0200
-Message-Id: <20200511131429.29856-1-anders.roxell@linaro.org>
+        tytso@mit.edu, adilger.kernel@dilger.ca, akpm@linux-foundation.org,
+        brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-security-module@vger.kernel.org,
+        elver@google.com, davidgow@google.com,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH v3 4/6] drivers: base: default KUNIT_* fragments to KUNIT_ALL_TESTS
+Date:   Mon, 11 May 2020 15:14:33 +0200
+Message-Id: <20200511131433.29905-1-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,35 +77,37 @@ menuconfig.
 Reviewed-by: David Gow <davidgow@google.com>
 Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- lib/Kconfig.debug | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/base/Kconfig      | 3 ++-
+ drivers/base/test/Kconfig | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 21d9c5f6e7ec..1f4ab7a2bdee 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2064,8 +2064,9 @@ config TEST_SYSCTL
- 	  If unsure, say N.
+diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+index 5f0bc74d2409..8d7001712062 100644
+--- a/drivers/base/Kconfig
++++ b/drivers/base/Kconfig
+@@ -149,8 +149,9 @@ config DEBUG_TEST_DRIVER_REMOVE
+ 	  test this functionality.
  
- config SYSCTL_KUNIT_TEST
--	tristate "KUnit test for sysctl"
-+	tristate "KUnit test for sysctl" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
+ config PM_QOS_KUNIT_TEST
+-	bool "KUnit Test for PM QoS features"
++	bool "KUnit Test for PM QoS features" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=y
 +	default KUNIT_ALL_TESTS
- 	help
- 	  This builds the proc sysctl unit test, which runs on boot.
- 	  Tests the API contract and implementation correctness of sysctl.
-@@ -2075,8 +2076,9 @@ config SYSCTL_KUNIT_TEST
- 	  If unsure, say N.
  
- config LIST_KUNIT_TEST
--	tristate "KUnit Test for Kernel Linked-list structures"
-+	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
+ config HMEM_REPORTING
+ 	bool
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 305c7751184a..ba225eb1b761 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -9,5 +9,6 @@ config TEST_ASYNC_DRIVER_PROBE
+ 
+ 	  If unsure say N.
+ config KUNIT_DRIVER_PE_TEST
+-	bool "KUnit Tests for property entry API"
++	bool "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=y
 +	default KUNIT_ALL_TESTS
- 	help
- 	  This builds the linked list KUnit test suite.
- 	  It tests that the API and basic functionality of the list_head type
 -- 
 2.20.1
 
