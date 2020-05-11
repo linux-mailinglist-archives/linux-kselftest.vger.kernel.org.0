@@ -2,99 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE5A1CDB00
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 15:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC8B1CDB52
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 15:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730090AbgEKNOx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 May 2020 09:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730198AbgEKNOs (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 May 2020 09:14:48 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9377EC061A0C
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:47 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id w20so9432995ljj.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hd5CEiw3xAmj+Qu84GZ/dMO9hkSOA6ixaeeAM/KiNHU=;
-        b=t/q/Xu2Wsk1cQP379bqb7AKPnMVYlzvnTZ2iToF9D09oipRJWynKJ+gRR+xoVRGhom
-         6pD/9G8cClGfg/m8k9yWgDTlOIQbm9Ixb6cWlOWc6rC7qy407QUS0Rka78Hf+0F+RzNM
-         Ujd1KPanQ5orj9cBzjrZfDRy5lLAxw1jJCOqjN4grijylK/LSWTGqs2BjeJWF8qPKUAy
-         SqwMRZfnwvux94TcbbUvcFI2qJKwwB2+W0O7QQA+5+IjPMogtRBJae4RHVct7pW7Obgz
-         z3gIn0kYZs/dFBbBaETQJRSXt/eQ7otP//1WDRZgjNOexrXZffr+COFscNImDd2SZgMA
-         uJ3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hd5CEiw3xAmj+Qu84GZ/dMO9hkSOA6ixaeeAM/KiNHU=;
-        b=drUWdTOgWNgr96gYjhx3Axj38hwZuKWtGsQuHkAPFZ3/des9bMYHnIY+TQ6e45BG14
-         LRkujLGWNQaqEVM80xkbOtYI0eA7mzEAVVujJRKo3c1lSYkLu5X2wgrT/c3T2AgEz8fu
-         o4kiTomk8W3d8CHl9HOx1esCNezEkVXQUvJYES8gGz7EBvcbs1v9kWiCdWG+kHKYDceF
-         HVScsn8lJWzyvMA3sgm2yJU4ugVPvywautFVdeEfr9/6Brj50VDyU16L8ojtcZhkbBl3
-         p1KFF9B5Xsqg+F5OPHUHr1MIVi98UlmXrxrVijWvQCCjmm6cdWhNUrIn2DfmV9qIQamx
-         D6iA==
-X-Gm-Message-State: AOAM530cvis9gyaxMHHOoZRAoLBd5PwFCiTMD975+QGqXmEAbYTAtIY1
-        fJhjzcz1qIr/k4DKufwrBRGbug==
-X-Google-Smtp-Source: ABdhPJyoLfetCr2ckH+XHqfj73a09MRKqeRqRgsIHcO5n6iFQ2egpeSzjj4Oiamdu1pt1MeA5mVJZg==
-X-Received: by 2002:a2e:920e:: with SMTP id k14mr10674436ljg.288.1589202886078;
-        Mon, 11 May 2020 06:14:46 -0700 (PDT)
-Received: from localhost (c-8c28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.140])
-        by smtp.gmail.com with ESMTPSA id h11sm10223074lfp.22.2020.05.11.06.14.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 06:14:45 -0700 (PDT)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     john.johansen@canonical.com, jmorris@namei.org, serge@hallyn.com
-Cc:     gregkh@linuxfoundation.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, akpm@linux-foundation.org,
-        brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-security-module@vger.kernel.org,
-        elver@google.com, davidgow@google.com,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v3 6/6] security: apparmor: default KUNIT_* fragments to KUNIT_ALL_TESTS
-Date:   Mon, 11 May 2020 15:14:42 +0200
-Message-Id: <20200511131442.30002-1-anders.roxell@linaro.org>
+        id S1728683AbgEKNge (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 May 2020 09:36:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43354 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729546AbgEKNge (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 May 2020 09:36:34 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 50C88206F9;
+        Mon, 11 May 2020 13:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589204193;
+        bh=8DynboS6OUq8obog0yLupsM4d16CMsXlKuWciX/Red8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aCmXliY0Luuna4EBlNA170YSeDStzaq/FBchKGaD1YBe5XzWo0xCbYQvOuuL4lFef
+         AFHvZOHpDFaVsi3i2X182LMexoAFz7oX3lPFIVKK6SKrvCi0ye34B65xH2kW0J8PY6
+         EcbzeOkJrfdpIeNZE9sTe62aRqptPpDoJ92nR7y4=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Li Philip <philip.li@intel.com>,
+        Liu Yiding <yidingx.liu@intel.com>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        David Laight <David.Laight@ACULAB.COM>
+Subject: [PATCH v2] selftests/ftrace: Use printf for backslash included command
+Date:   Mon, 11 May 2020 22:36:27 +0900
+Message-Id: <158920418730.16156.8299185499520876735.stgit@devnote2>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <87imh21x6f.fsf@igel.home>
+References: <87imh21x6f.fsf@igel.home>
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes it easier to enable all KUnit fragments.
+Since the built-in echo has different behavior in POSIX shell
+(dash) and bash, kprobe_syntax_errors.tc can fail on dash which
+interpret backslash escape automatically.
 
-Adding 'if !KUNIT_ALL_TESTS' so individual tests can not be turned off.
-Therefore if KUNIT_ALL_TESTS is enabled that will hide the prompt in
-menuconfig.
+To fix this issue, we explicitly use printf "%s" (not interpret
+backslash escapes) if the command string can include backslash.
 
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reported-by: Liu Yiding <yidingx.liu@intel.com>
+Suggested-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- security/apparmor/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/ftrace/test.d/functions    |    8 +++++---
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    4 +++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-index 0fe336860773..03fae1bd48a6 100644
---- a/security/apparmor/Kconfig
-+++ b/security/apparmor/Kconfig
-@@ -70,8 +70,9 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
- 	  the kernel message buffer.
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 61a3c7e2634d..697c77ef2e2b 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -119,12 +119,14 @@ yield() {
+     ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
+ }
  
- config SECURITY_APPARMOR_KUNIT_TEST
--	bool "Build KUnit tests for policy_unpack.c"
-+	bool "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
- 	depends on KUNIT=y && SECURITY_APPARMOR
-+	default KUNIT_ALL_TESTS
- 	help
- 	  This builds the AppArmor KUnit tests.
- 
--- 
-2.20.1
++# Since probe event command may include backslash, explicitly use printf "%s"
++# to NOT interpret it.
+ ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
+-    pos=$(echo -n "${2%^*}" | wc -c) # error position
+-    command=$(echo "$2" | tr -d ^)
++    pos=$(printf "%s" "${2%^*}" | wc -c) # error position
++    command=$(printf "%s" "$2" | tr -d ^)
+     echo "Test command: $command"
+     echo > error_log
+-    (! echo "$command" >> "$3" ) 2> /dev/null
++    (! printf "%s" "$command" >> "$3" ) 2> /dev/null
+     grep "$1: error:" -A 3 error_log
+     N=$(tail -n 1 error_log | wc -c)
+     # "  Command: " and "^\n" => 13
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+index ef1e9bafb098..eb0f4ab4e070 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+@@ -91,7 +91,9 @@ esac
+ if grep -q "Create/append/" README && grep -q "imm-value" README; then
+ echo 'p:kprobes/testevent _do_fork' > kprobe_events
+ check_error '^r:kprobes/testevent do_exit'	# DIFF_PROBE_TYPE
+-echo 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
++
++# Explicitly use printf "%s" to not interpret \1
++printf "%s" 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
+ check_error 'p:kprobes/testevent _do_fork ^bcd=\1'	# DIFF_ARG_TYPE
+ check_error 'p:kprobes/testevent _do_fork ^abcd=\1:u8'	# DIFF_ARG_TYPE
+ check_error 'p:kprobes/testevent _do_fork ^abcd=\"foo"'	# DIFF_ARG_TYPE
 
