@@ -2,67 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80B61CE57C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 22:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2CC1CE7C5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 23:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731669AbgEKU2p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 May 2020 16:28:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727873AbgEKU2p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 May 2020 16:28:45 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CEFC220661;
-        Mon, 11 May 2020 20:28:43 +0000 (UTC)
-Date:   Mon, 11 May 2020 16:28:42 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Masami Hiramatsu' <mhiramat@kernel.org>,
+        id S1727955AbgEKVy3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 May 2020 17:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727930AbgEKVy2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 May 2020 17:54:28 -0400
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE74C05BD09;
+        Mon, 11 May 2020 14:54:28 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49LZTY342WzlhGkQ;
+        Mon, 11 May 2020 23:54:25 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49LZTW6g0pzlhpJn;
+        Mon, 11 May 2020 23:54:23 +0200 (CEST)
+Subject: Re: [PATCH v17 00/10] Landlock LSM
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
         Shuah Khan <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Li Philip <philip.li@intel.com>,
-        Liu Yiding <yidingx.liu@intel.com>,
-        Xiao Yang <yangx.jy@cn.fujitsu.com>,
-        Andreas Schwab <schwab@linux-m68k.org>
-Subject: Re: [PATCH v2] selftests/ftrace: Use printf for backslash included
- command
-Message-ID: <20200511162842.7c198741@gandalf.local.home>
-In-Reply-To: <f61eda03333941958d62f9df93ba534b@AcuMS.aculab.com>
-References: <87imh21x6f.fsf@igel.home>
-        <158920418730.16156.8299185499520876735.stgit@devnote2>
-        <20200511223804.9483cab03c9221818ff4fc5b@kernel.org>
-        <f61eda03333941958d62f9df93ba534b@AcuMS.aculab.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200511192156.1618284-1-mic@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <91cab792-5a13-c71f-a8cb-782be21d86f5@digikod.net>
+Date:   Mon, 11 May 2020 23:54:23 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200511192156.1618284-1-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 11 May 2020 14:59:20 +0000
-David Laight <David.Laight@ACULAB.COM> wrote:
 
-> > >      echo "Test command: $command"
-> > >      echo > error_log
-> > > -    (! echo "$command" >> "$3" ) 2> /dev/null
-> > > +    (! printf "%s" "$command" >> "$3" ) 2> /dev/null  
+On 11/05/2020 21:21, Mickaël Salaün wrote:
+> Hi,
 > 
-> WTF is the (! for ??
-> The (...) is a subshell.
-> And ! inverts the exit status.
-> Neither is needed at all.
+> This new patch series brings some improvements and add new tests:
+> 
+> Use smaller userspace structures (attributes) to save space, and check
+> at built time that every attribute don't contain hole and are 8-bits
+> aligned.
 
-This is done because the scripts are run with '-e' and will exit the script
-on any error.
-
-This particular test is examining errors in the error log. The command
-being written into $3 is going to fail, and return an exit code. The
-"(! ..)" is needed, otherwise that failure will exit out the script.
-
--- Steve
+8-bytes aligned, of course.
