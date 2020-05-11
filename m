@@ -2,85 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABE41CDDF5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 16:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47141CDF38
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 17:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729711AbgEKO7Z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 May 2020 10:59:25 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:52467 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729120AbgEKO7Z (ORCPT
+        id S1730250AbgEKPjw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 May 2020 11:39:52 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:50835 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730084AbgEKPjv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 May 2020 10:59:25 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-157-TNtXyxpxO8qGl8Sa13yMrg-1; Mon, 11 May 2020 15:59:21 +0100
-X-MC-Unique: TNtXyxpxO8qGl8Sa13yMrg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Mon, 11 May 2020 15:59:20 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Mon, 11 May 2020 15:59:20 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Masami Hiramatsu' <mhiramat@kernel.org>
-CC:     Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Li Philip <philip.li@intel.com>,
-        Liu Yiding <yidingx.liu@intel.com>,
-        Xiao Yang <yangx.jy@cn.fujitsu.com>,
-        Andreas Schwab <schwab@linux-m68k.org>
-Subject: RE: [PATCH v2] selftests/ftrace: Use printf for backslash included
- command
-Thread-Topic: [PATCH v2] selftests/ftrace: Use printf for backslash included
- command
-Thread-Index: AQHWJ5lrSXqvrVhCTk6tpfgbVx7YuKii+RAg
-Date:   Mon, 11 May 2020 14:59:20 +0000
-Message-ID: <f61eda03333941958d62f9df93ba534b@AcuMS.aculab.com>
-References: <87imh21x6f.fsf@igel.home>
-        <158920418730.16156.8299185499520876735.stgit@devnote2>
- <20200511223804.9483cab03c9221818ff4fc5b@kernel.org>
-In-Reply-To: <20200511223804.9483cab03c9221818ff4fc5b@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 11 May 2020 11:39:51 -0400
+Received: from callcc.thunk.org (pool-100-0-195-244.bstnma.fios.verizon.net [100.0.195.244])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 04BFdPVD011857
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 May 2020 11:39:26 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 9DD554202E4; Mon, 11 May 2020 11:39:25 -0400 (EDT)
+Date:   Mon, 11 May 2020 11:39:25 -0400
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     adilger.kernel@dilger.ca, john.johansen@canonical.com,
+        jmorris@namei.org, serge@hallyn.com, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, brendanhiggins@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-security-module@vger.kernel.org, elver@google.com,
+        davidgow@google.com
+Subject: Re: [PATCH v3 5/6] fs: ext4: default KUNIT_* fragments to
+ KUNIT_ALL_TESTS
+Message-ID: <20200511153925.GA1331920@mit.edu>
+References: <20200511131438.29953-1-anders.roxell@linaro.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200511131438.29953-1-anders.roxell@linaro.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> > +    pos=$(printf "%s" "${2%^*}" | wc -c) # error position
-> > +    command=$(printf "%s" "$2" | tr -d ^)
+On Mon, May 11, 2020 at 03:14:38PM +0200, Anders Roxell wrote:
+> This makes it easier to enable all KUnit fragments.
+> 
+> Adding 'if !KUNIT_ALL_TESTS' so individual tests can not be turned off.
+> Therefore if KUNIT_ALL_TESTS is enabled that will hide the prompt in
+> menuconfig.
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-You may want to put all the $(...) inside "" to avoid field splitting
-(not relevant to a shell assignment with modern shells) and
-filename globbing.
-
-> >      echo "Test command: $command"
-> >      echo > error_log
-> > -    (! echo "$command" >> "$3" ) 2> /dev/null
-> > +    (! printf "%s" "$command" >> "$3" ) 2> /dev/null
-
-WTF is the (! for ??
-The (...) is a subshell.
-And ! inverts the exit status.
-Neither is needed at all.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Acked-off-by: Theodore Ts'o <tytso@mit.edu>
