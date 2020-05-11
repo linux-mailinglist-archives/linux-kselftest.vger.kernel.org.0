@@ -2,100 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 643871CD936
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 14:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2E51CD980
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 May 2020 14:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729490AbgEKMBJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 May 2020 08:01:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45270 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729453AbgEKMBJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 May 2020 08:01:09 -0400
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726934AbgEKMT1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 May 2020 08:19:27 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:47408 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbgEKMT1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 May 2020 08:19:27 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 49LKk22n2Tz1qs4F;
+        Mon, 11 May 2020 14:19:22 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 49LKk203qYz1qspZ;
+        Mon, 11 May 2020 14:19:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id 8cShAs1Muh7y; Mon, 11 May 2020 14:19:21 +0200 (CEST)
+X-Auth-Info: dhtQoNAEhEUEkKcjAaW5OFOS1FDoApCzJeoQrMso3MQAbl1rgVTOfvsvU8Y9GhxT
+Received: from igel.home (ppp-46-244-172-93.dynamic.mnet-online.de [46.244.172.93])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 678C320722;
-        Mon, 11 May 2020 12:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589198468;
-        bh=BB6veEoV8nefsa+08kyEFgzfgF9CioJSfxrRXxxpGDc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BrKY4dvm1TbXW8OXgqloAaQhVnhtdE1TgqLTPSgR0C8liM10np9COgFzeUnhsKoXV
-         T/l8vatda0KgEebBEakMtBLrNohd5EWAnnWjH5oVvSDrB/k9VO8hFHzX+M+8/L8VSb
-         iHsWX5W/gYrUW4gwYScxJ1anvV1swkck1wIYWOEQ=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Mon, 11 May 2020 14:19:21 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 7A72E2C0C52; Mon, 11 May 2020 14:19:20 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
         Li Philip <philip.li@intel.com>,
         Liu Yiding <yidingx.liu@intel.com>,
         Xiao Yang <yangx.jy@cn.fujitsu.com>
-Subject: [PATCH] selftests/ftrace: Use /bin/echo for backslash included command
-Date:   Mon, 11 May 2020 21:01:02 +0900
-Message-Id: <158919846272.12476.10277703957544382089.stgit@devnote2>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200511182752.c83f3454bcb3e205cf2bda4a@kernel.org>
+Subject: Re: [PATCH] selftests/ftrace: Use /bin/echo for backslash included
+ command
 References: <20200511182752.c83f3454bcb3e205cf2bda4a@kernel.org>
-User-Agent: StGit/0.17.1-dirty
+        <158919846272.12476.10277703957544382089.stgit@devnote2>
+X-Yow:  I will establish the first SHOPPING MALL in NUTLEY, New Jersey...
+Date:   Mon, 11 May 2020 14:19:20 +0200
+In-Reply-To: <158919846272.12476.10277703957544382089.stgit@devnote2> (Masami
+        Hiramatsu's message of "Mon, 11 May 2020 21:01:02 +0900")
+Message-ID: <87imh21x6f.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.0.91 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since the built-in echo has different behavior in POSIX shell
-(dash) and bash, kprobe_syntax_errors.tc can fail on dash which
-interpret backslash escape automatically.
+On Mai 11 2020, Masami Hiramatsu wrote:
 
-To fix this issue, we explicitly use /bin/echo -E (not interpret
-backslash escapes) if the command string can include backslash.
+> To fix this issue, we explicitly use /bin/echo -E (not interpret
+> backslash escapes) if the command string can include backslash.
 
-Reported-by: Liu Yiding <yidingx.liu@intel.com>
-Suggested-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- tools/testing/selftests/ftrace/test.d/functions    |    8 +++++---
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    4 +++-
- 2 files changed, 8 insertions(+), 4 deletions(-)
+Please use printf instead.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-index 61a3c7e2634d..69708830026f 100644
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -119,12 +119,14 @@ yield() {
-     ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
- }
- 
-+# Since probe event command may include backslash, explicitly use /bin/echo -E
-+# to NOT interpret it.
- ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
--    pos=$(echo -n "${2%^*}" | wc -c) # error position
--    command=$(echo "$2" | tr -d ^)
-+    pos=$(/bin/echo -En "${2%^*}" | wc -c) # error position
-+    command=$(/bin/echo -E "$2" | tr -d ^)
-     echo "Test command: $command"
-     echo > error_log
--    (! echo "$command" >> "$3" ) 2> /dev/null
-+    (! /bin/echo -E "$command" >> "$3" ) 2> /dev/null
-     grep "$1: error:" -A 3 error_log
-     N=$(tail -n 1 error_log | wc -c)
-     # "  Command: " and "^\n" => 13
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index ef1e9bafb098..4cfcf9440a1a 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -91,7 +91,9 @@ esac
- if grep -q "Create/append/" README && grep -q "imm-value" README; then
- echo 'p:kprobes/testevent _do_fork' > kprobe_events
- check_error '^r:kprobes/testevent do_exit'	# DIFF_PROBE_TYPE
--echo 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
-+
-+# Explicitly use /bin/echo -E to not interpret \1
-+/bin/echo -E 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
- check_error 'p:kprobes/testevent _do_fork ^bcd=\1'	# DIFF_ARG_TYPE
- check_error 'p:kprobes/testevent _do_fork ^abcd=\1:u8'	# DIFF_ARG_TYPE
- check_error 'p:kprobes/testevent _do_fork ^abcd=\"foo"'	# DIFF_ARG_TYPE
+Andreas.
 
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
