@@ -2,51 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9E51D12B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 May 2020 14:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8558A1D1AF4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 May 2020 18:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730208AbgEMMah (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 May 2020 08:30:37 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39872 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729975AbgEMMag (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 May 2020 08:30:36 -0400
-Received: by mail-pf1-f196.google.com with SMTP id b190so2184148pfg.6;
-        Wed, 13 May 2020 05:30:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=s6UKwXNDP9/u6KtJrcoesDc1tFaVGyXaG/2QuDgOJR0=;
-        b=co8jHKFL+Mb5LtsFAWfz0YLxscLUWImEz3JVJoLLy+1eHoHJIi4hF4uTrWG9HJgDTn
-         ZToyMAiUq6QvCHrPeAWZ96cCXKk1eFQ/02XJMBb7qo7wKKIgXWQo2zBe963txR4Yxatw
-         fM86kAWoRt5Ax8A9Dc/mB9pWO/Qe3NT1tPnlX35HxDVRTrHx5lExXQDfoccQ5ZxkuoZY
-         L0qzOJl8vPHZbVbzNRstQuNAVB0hGC95jvV3g8vhhEjLTra9wm35eq6z/GnTFZvkgrf8
-         f1G3PmOqwXgW8xnMq6/+jhQpCy2zei1NulWChf0s0X/mTzSyPXjRWqB5rUS/Apjv3VRo
-         5mCg==
-X-Gm-Message-State: AGi0Pub+uZ7owmH5WLkKMnUpFV8w076KIJ0R0rdMsPp6eDZs7JyarhB+
-        PQuDbcVwAUaOq9i1PRja/FE=
-X-Google-Smtp-Source: APiQypJgfhEo9WP6IGCoJH2PF3oIVLchRnTrr8jLp5QQMzfIh8kliCILIbT2GCnajLPHNpJWyqBd/w==
-X-Received: by 2002:a63:f809:: with SMTP id n9mr24815453pgh.355.1589373036088;
-        Wed, 13 May 2020 05:30:36 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id x23sm12936041pgf.32.2020.05.13.05.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 05:30:34 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id A33864063E; Wed, 13 May 2020 12:30:33 +0000 (UTC)
-Date:   Wed, 13 May 2020 12:30:33 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Scott Branden <scott.branden@broadcom.com>,
+        id S2389525AbgEMQYD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 May 2020 12:24:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41734 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732380AbgEMQYD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 May 2020 12:24:03 -0400
+Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 00E8D20659;
+        Wed, 13 May 2020 16:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589387042;
+        bh=GMIEwlaUuMOKi5AkDYUqDh+tZ9JXGeSF/BENEVLdelE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=O2CCNQtPLWuis6Iyzz3t9LE9/0N1orztrF73b2GHGrbexfrSZMT8U1JojVtMomoti
+         4IWbO2zbjaT+y5cJm/QTf5h8Q0wwikUv/jNNnCpLz84UNFT4gDGcQZaIiYJsKfrFCx
+         p/BF5chqdi5380TQ6UASs7NhMo537xeK2eTcgF54=
+Message-ID: <1589387039.5098.147.camel@kernel.org>
+Subject: Re: [PATCH v5 0/7] firmware: add partial read support in
+ request_firmware_into_buf
+From:   Mimi Zohar <zohar@kernel.org>
+To:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
@@ -56,76 +45,37 @@ Cc:     Scott Branden <scott.branden@broadcom.com>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-Subject: Re: [PATCH v5 6/7] misc: bcm-vk: add Broadcom VK driver
-Message-ID: <20200513123033.GL11244@42.do-not-panic.com>
+        Andy Gross <agross@kernel.org>
+Date:   Wed, 13 May 2020 12:23:59 -0400
+In-Reply-To: <20200508002739.19360-1-scott.branden@broadcom.com>
 References: <20200508002739.19360-1-scott.branden@broadcom.com>
- <20200508002739.19360-7-scott.branden@broadcom.com>
- <20200513003830.GJ11244@42.do-not-panic.com>
- <60372b2f-c03d-6384-43a7-8b97413b6672@broadcom.com>
- <20200513065046.GA764247@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200513065046.GA764247@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 13, 2020 at 08:50:46AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, May 12, 2020 at 11:31:28PM -0700, Scott Branden wrote:
-> > Hi Luis,
-> > 
-> > On 2020-05-12 5:38 p.m., Luis Chamberlain wrote:
-> > > On Thu, May 07, 2020 at 05:27:38PM -0700, Scott Branden wrote:
-> > > > +#if defined(CONFIG_REQ_FW_INTO_BUF_PRIV)
-> > > > +
-> > > > +#define KERNEL_PREAD_FLAG_PART	0x0001 /* Allow reading part of file */
-> > > > +#define REQUEST_FIRMWARE_INTO_BUF request_firmware_into_buf_priv
-> > > > +int request_firmware_into_buf_priv(const struct firmware **firmware_p,
-> > > > +				   const char *name, struct device *device,
-> > > > +				   void *buf, size_t size,
-> > > > +				   size_t offset, unsigned int pread_flags);
-> > > > +
-> > > > +#else
-> > > > +
-> > > > +#define REQUEST_FIRMWARE_INTO_BUF request_firmware_into_buf
-> > > > +
-> > > > +#endif
-> > > > +
-> > > > +#endif
-> > > Please clean this up, the code must reflect only the code upstream. No
-> > > config stuff like this should be used on the driver. I had to stop my
-> > > review here.
-> > The CONFIG_ prefix shouldn't have been there as there is no Kconfig option
-> > to select this.
-> > Would like to just change it to a normal define without CONFIG_ prefix
-> > instead?
-> > This code is here to allow a limited version of the driver to run on older
-> > kernels which do not have the necessary partial file read support.
-> > By having it in the upstream codebase we don't need to maintain an internal
-> > version of the driver.  User can take the upstream kernel module and compile
-> > it against an old version of the kernel by via the define.
+Hi Scott,
+
+On Thu, 2020-05-07 at 17:27 -0700, Scott Branden wrote:
+> Please consider this version series ready for upstream acceptance.
 > 
-> That's not how kernel drivers in the tree work, sorry.  They do not
-> contain "older kernel support" in them, they work as a whole with the
-> rest of the kernel they ship with only.
+> This patch series adds partial read support in request_firmware_into_buf.
+> In order to accept the enhanced API it has been requested that kernel
+> selftests and upstreamed driver utilize the API enhancement and so
+> are included in this patch series.
 > 
-> Otherwise all drivers would be a total mess over time, can you imagine
-> doing this for the next 20+ years?  Not maintainable.
+> Also in this patch series is the addition of a new Broadcom VK driver
+> utilizing the new request_firmware_into_buf enhanced API.
 
-Scott, now imagine the amount of cleanup you'd need to do to your driver
-to get it to a state where it doesn't depend on any old kernel. That's
-the exact shape of the driver we want.
+Up to now, the firmware blob was read into memory allowing IMA to
+verify the file signature. Â With this change, ima_post_read_file()
+will not be able to verify the file signature.
 
-To backport, you can look into the backports project which strives to
-backport drivers automatically [0] to older kernels.
+(I don't think any of the other LSMs are on this hook, but you might
+want to Cc the LSM or integrity mailing list.)
 
-[0] https://backports.wiki.kernel.org/index.php/Main_Page
-
-  Luis
+Mimi
