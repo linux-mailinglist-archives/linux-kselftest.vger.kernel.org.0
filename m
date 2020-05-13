@@ -2,105 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A591D2151
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 May 2020 23:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7D01D21C1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 May 2020 00:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729461AbgEMVpf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 May 2020 17:45:35 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:16462 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729196AbgEMVpf (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 May 2020 17:45:35 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ebc6a720000>; Wed, 13 May 2020 14:45:22 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 13 May 2020 14:45:34 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 13 May 2020 14:45:34 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 May
- 2020 21:45:32 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 13 May 2020 21:45:32 +0000
-Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ebc6a7c0001>; Wed, 13 May 2020 14:45:32 -0700
-From:   Ralph Campbell <rcampbell@nvidia.com>
-To:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Ralph Campbell" <rcampbell@nvidia.com>
-Subject: [PATCH] mm/hmm/test: destroy xa_array instead of looping
-Date:   Wed, 13 May 2020 14:45:07 -0700
-Message-ID: <20200513214507.30592-1-rcampbell@nvidia.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589406322; bh=mUTdF1AVMZd0iSCg3E8fEbaYihKH2WAzpFyYOhyV/OU=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=PFMTomRMAVJQ+UmxKAlAwof1dFot0qpMAJ1vATc+rjN6uEFZzlhYJjSuMLTODsPgc
-         K1PGvX4Bl+rKy4f/9/TuNUPRXrd8vGl4tU9aHkqJKDonNKUipJOOOgodwCMSd9YrMw
-         0krWiaadjXUzTUkp7oLKOHZCjMyG14aKfhQeB8UVeMwu87bAoRYJuiF7RseMI3/pjg
-         b9UQxFVFq45A+LHLKLIOTboyOgW1OKpwRmzNoQx6GCVok9yNkgqS9kavltRa4ARTUv
-         cqFpoLFZXI0zCycLGP/OhkT0QgR3adaoJhqku3WXCke7DZF2GZD3THkRh8Gtdqf+Cn
-         tifp6KhgVPa1g==
+        id S1730730AbgEMWMI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 May 2020 18:12:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41886 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730064AbgEMWMI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 May 2020 18:12:08 -0400
+Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8BC2205ED;
+        Wed, 13 May 2020 22:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589407927;
+        bh=GV/563MM7mfJ5kgZQMtPYK3qifQTKvZPMYMdtCfkpg4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=QnPxg2o6WRGBCwquEmJwsTp9lab8RyunbaH6LJWNZVMAa+vsaO6yi1Gh/WhPrcSaB
+         hPLr7mpacQrrP+TT/6Fz0YhgShEVqUV9yZY1x46w+KlFOdGienxqLp8Trk96SbD4Ep
+         u6J8Ozjqn/PIgG9D3/Bf5UaKrfeaywoNQfJJhUEo=
+Message-ID: <1589407924.5098.208.camel@kernel.org>
+Subject: Re: [PATCH v5 1/7] fs: introduce kernel_pread_file* support
+From:   Mimi Zohar <zohar@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Date:   Wed, 13 May 2020 18:12:04 -0400
+In-Reply-To: <20200513212847.GT11244@42.do-not-panic.com>
+References: <20200508002739.19360-1-scott.branden@broadcom.com>
+         <20200508002739.19360-2-scott.branden@broadcom.com>
+         <1589395153.5098.158.camel@kernel.org>
+         <0e6b5f65-8c61-b02e-7d35-b4ae52aebcf3@broadcom.com>
+         <1589396593.5098.166.camel@kernel.org>
+         <e1b92047-7003-0615-3d58-1388ec27c78a@broadcom.com>
+         <1589398747.5098.178.camel@kernel.org>
+         <a228ae0f-d551-e0e8-446e-5ae63462c520@broadcom.com>
+         <1589404814.5098.185.camel@kernel.org>
+         <20200513212847.GT11244@42.do-not-panic.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test driver uses an xa_array to store virtual to physical address
-translations for a simulated hardware device. The MMU notifier
-invalidation callback is used to keep the table consistent with the CPU
-page table and is frequently called only for a page or two. However, if
-the test process exits unexpectedly or is killed, the range can be
-[0..ULONG_MAX] in which case calling xa_erase() for every possible PFN
-results in CPU timeouts. Munmap() can result in a large range being
-invalidated but in that case, the xa_array is likely to contain entries
-that need to be invalidated.
-Check for [0..ULONG_MAX] explicitly and just destroy the whole table.
+On Wed, 2020-05-13 at 21:28 +0000, Luis Chamberlain wrote:
+> On Wed, May 13, 2020 at 05:20:14PM -0400, Mimi Zohar wrote:
+> > On Wed, 2020-05-13 at 12:41 -0700, Scott Branden wrote:
+> > > 
+> > > On 2020-05-13 12:39 p.m., Mimi Zohar wrote:
+> > > > On Wed, 2020-05-13 at 12:18 -0700, Scott Branden wrote:
+> > > >> On 2020-05-13 12:03 p.m., Mimi Zohar wrote:
+> > > >>> On Wed, 2020-05-13 at 11:53 -0700, Scott Branden wrote:
+> > > >> Even if the kernel successfully verified the firmware file signature it
+> > > >> would just be wasting its time.  The kernel in these use cases is not always
+> > > >> trusted.  The device needs to authenticate the firmware image itself.
+> > > > There are also environments where the kernel is trusted and limits the
+> > > > firmware being provided to the device to one which they signed.
+> > > >
+> > > >>> The device firmware is being downloaded piecemeal from somewhere and
+> > > >>> won't be measured?
+> > > >> It doesn't need to be measured for current driver needs.
+> > > > Sure the device doesn't need the kernel measuring the firmware, but
+> > > > hardened environments do measure firmware.
+> > > >
+> > > >> If someone has such need the infrastructure could be added to the kernel
+> > > >> at a later date.  Existing functionality is not broken in any way by
+> > > >> this patch series.
+> > > > Wow!  You're saying that your patch set takes precedence over the
+> > > > existing expectations and can break them.
+> > > Huh? I said existing functionality is NOT broken by this patch series.
+> > 
+> > Assuming a system is configured to measure and appraise firmware
+> > (rules below), with this change the firmware file will not be properly
+> > measured and will fail signature verification.
+> > 
+> > Sample IMA policy rules:
+> > measure func=FIRMWARE_CHECK
+> > appraise func=FIRMWARE_CHECK appraise_type=imasig
+> 
+> Would a pre and post lsm hook for pread do it?
 
-Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
----
+IMA currently measures and verifies the firmware file signature on the
+post hook.  The file is read once into a buffer.  With this change,
+IMA would need to be on the pre hook, to read the entire file,
+calculating the file hash and verifying the file signature.  Basically
+the firmware would be read once for IMA and again for the device.
 
-This patch is based on Jason Gunthorpe's hmm tree and should be folded
-into the ("mm/hmm/test: add selftest driver for HMM") patch once this
-patch is reviewed, etc.
-
- lib/test_hmm.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index 8b36c26b717b..b89852ec3c29 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -201,7 +201,13 @@ static void dmirror_do_update(struct dmirror *dmirror,=
- unsigned long start,
- 	 * The XArray doesn't hold references to pages since it relies on
- 	 * the mmu notifier to clear page pointers when they become stale.
- 	 * Therefore, it is OK to just clear the entry.
-+	 * However, if the entire address space is being invalidated, it
-+	 * takes too long to clear them one at a time so destroy the array.
- 	 */
-+	if (start =3D=3D 0 && end =3D=3D ULONG_MAX) {
-+		xa_destroy(&dmirror->pt);
-+		return;
-+	}
- 	for (pfn =3D start >> PAGE_SHIFT; pfn < (end >> PAGE_SHIFT); pfn++)
- 		xa_erase(&dmirror->pt, pfn);
- }
---=20
-2.20.1
-
+Mimi
