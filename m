@@ -2,45 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EF61D1FC2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 May 2020 21:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78F51D20D2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 May 2020 23:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390613AbgEMT5M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 May 2020 15:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390158AbgEMT5K (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 May 2020 15:57:10 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A782DC061A0C
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2020 12:57:10 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id EAE45127F6DC8;
-        Wed, 13 May 2020 12:57:09 -0700 (PDT)
-Date:   Wed, 13 May 2020 12:57:09 -0700 (PDT)
-Message-Id: <20200513.125709.1574810036252704473.davem@davemloft.net>
-To:     vladbu@mellanox.com
-Cc:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        xiyou.wangcong@gmail.com, jhs@mojatatu.com, dcaratti@redhat.com,
-        marcelo.leitner@gmail.com
-Subject: Re: [PATCH net-next] selftests: fix flower parent qdisc
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200513175746.7294-1-vladbu@mellanox.com>
-References: <20200513175746.7294-1-vladbu@mellanox.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
+        id S1728607AbgEMVUS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 May 2020 17:20:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38506 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726550AbgEMVUS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 May 2020 17:20:18 -0400
+Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 38336205ED;
+        Wed, 13 May 2020 21:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589404817;
+        bh=xWHjq8JYrcnKLKaLhAt/3Qu+CGeCVNq+g1GySEuPYRc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=PwJfPtEX6tp0QTHNEjB9QjrHmEOqN4ySwN4pxgVhjjg3ETeUb0TY4DXaxevUnby8+
+         EokyG0p+/y45QWzXzEKs2sgYFqd+tkFTTlPWzX0xov+GrSpiQ9A29xKfyJOHTMmiL3
+         i/n7KTWK2eIQJQSIq4Y9w8AfkxzotlkTFt2FmPX8=
+Message-ID: <1589404814.5098.185.camel@kernel.org>
+Subject: Re: [PATCH v5 1/7] fs: introduce kernel_pread_file* support
+From:   Mimi Zohar <zohar@kernel.org>
+To:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Date:   Wed, 13 May 2020 17:20:14 -0400
+In-Reply-To: <a228ae0f-d551-e0e8-446e-5ae63462c520@broadcom.com>
+References: <20200508002739.19360-1-scott.branden@broadcom.com>
+         <20200508002739.19360-2-scott.branden@broadcom.com>
+         <1589395153.5098.158.camel@kernel.org>
+         <0e6b5f65-8c61-b02e-7d35-b4ae52aebcf3@broadcom.com>
+         <1589396593.5098.166.camel@kernel.org>
+         <e1b92047-7003-0615-3d58-1388ec27c78a@broadcom.com>
+         <1589398747.5098.178.camel@kernel.org>
+         <a228ae0f-d551-e0e8-446e-5ae63462c520@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
 Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 13 May 2020 12:57:10 -0700 (PDT)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, 2020-05-13 at 12:41 -0700, Scott Branden wrote:
+> 
+> On 2020-05-13 12:39 p.m., Mimi Zohar wrote:
+> > On Wed, 2020-05-13 at 12:18 -0700, Scott Branden wrote:
+> >> On 2020-05-13 12:03 p.m., Mimi Zohar wrote:
+> >>> On Wed, 2020-05-13 at 11:53 -0700, Scott Branden wrote:
+> >> Even if the kernel successfully verified the firmware file signature it
+> >> would just be wasting its time.  The kernel in these use cases is not always
+> >> trusted.  The device needs to authenticate the firmware image itself.
+> > There are also environments where the kernel is trusted and limits the
+> > firmware being provided to the device to one which they signed.
+> >
+> >>> The device firmware is being downloaded piecemeal from somewhere and
+> >>> won't be measured?
+> >> It doesn't need to be measured for current driver needs.
+> > Sure the device doesn't need the kernel measuring the firmware, but
+> > hardened environments do measure firmware.
+> >
+> >> If someone has such need the infrastructure could be added to the kernel
+> >> at a later date.  Existing functionality is not broken in any way by
+> >> this patch series.
+> > Wow!  You're saying that your patch set takes precedence over the
+> > existing expectations and can break them.
+> Huh? I said existing functionality is NOT broken by this patch series.
 
-You put "net-next" in your subject line but failed to include
-netdev in the CC: list.
+Assuming a system is configured to measure and appraise firmware
+(rules below), with this change the firmware file will not be properly
+measured and will fail signature verification.
+
+Sample IMA policy rules:
+measure func=FIRMWARE_CHECK
+appraise func=FIRMWARE_CHECK appraise_type=imasig
+
+Mimi
