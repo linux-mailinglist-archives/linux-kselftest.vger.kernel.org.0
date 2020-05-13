@@ -2,59 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B5D1D1DA4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 May 2020 20:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298AE1D1E0E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 May 2020 20:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390195AbgEMSjj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 May 2020 14:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
+        id S2390337AbgEMSxd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 May 2020 14:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389392AbgEMSjj (ORCPT
+        by vger.kernel.org with ESMTP id S2390295AbgEMSxc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 May 2020 14:39:39 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC784C061A0C
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2020 11:39:38 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id l11so752965wru.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2020 11:39:38 -0700 (PDT)
+        Wed, 13 May 2020 14:53:32 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A4AC05BD0A
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2020 11:53:32 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id l18so761746wrn.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2020 11:53:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=QevyPaB54vabz1NgQweuhMZ/4PP5dMX078Hx9aqjxfc=;
-        b=ewIInpz3Jv/IrkCkWkGiBC6UAat93L2zYEJfVB/67p9YtVYuw3NEVn0LJQPhSBnoBR
-         pZUumCJ55i5Nmpq7zEeDDK+k0WKMCo5B9vDp02gV9BZTg4fT1dN/flqFNi79peEEs67R
-         mFiPZ7/V5n0/0I8UIXjKTwwVnG1krpdxHa9WI=
+        bh=pXu37DD6iE65dDGCF4WvK7cyvgiimEWOvvgpryvd52U=;
+        b=IbEVDf1PZkcsC9qKSfRpq/TZXfimI98pReSCcaQgTPNl9HmndoODpa4MDeOulOvRz4
+         yCi4Y0M//sK1fidl4u5Podrn0hGfzM9JzccG27h3Bum61GNrk5w9Z1sOClL7Gns6+5GF
+         NnqDrlIux2oiU+oQESCrAfiMljk+vnBzT/ypM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=QevyPaB54vabz1NgQweuhMZ/4PP5dMX078Hx9aqjxfc=;
-        b=jBm6r1ytR/jH8UwYyZRj4YwMZZwxnle6nOfCCsox3Fxw8jYhIZbtoeOn+K8Uwd4WYf
-         8eYplh2j9YggxCWX+YncHjnIdJrrQw0+tXVeRelVxWByf0OODxQVYigsbJOigmEXki+D
-         lq3r8ipRiPdjWBz13prHe+eyS5xxxTNoGMYz1mqh6W8/0iLmAZQNaypt7R1OQIvqzZne
-         LLQYHZbh0VQg1/Gt1p/8uKHQzBTAz98Q3LE+LRqQ0tCxyi/9F0etDJrMxLE6gBt4HuxY
-         hK3taZ3fNqFbwzCVbTBhofOkKWbnpzA2QEtJCNcygC0p6peVxTT/KM+HcCEmHQgHzjqB
-         2MQQ==
-X-Gm-Message-State: AOAM530lcFVJBtI5u8KvZBK5JWH5OtIck4OP2pH+0ebQwv6FfQTxJ3qE
-        vGwn1IgH/NOCS6LXcrV43+Qt2g==
-X-Google-Smtp-Source: ABdhPJzhf+mYsAycvYoLOXU1WHfMH8XPnenYApwbY7dPsUsGlZ8N8UGzdao3+8+YZVroo8SME6sfvg==
-X-Received: by 2002:adf:e38b:: with SMTP id e11mr706640wrm.343.1589395177524;
-        Wed, 13 May 2020 11:39:37 -0700 (PDT)
+        bh=pXu37DD6iE65dDGCF4WvK7cyvgiimEWOvvgpryvd52U=;
+        b=rAsakO08rpVLIem8cQTVQl+nuCbzCuDNcT9Csec9YwD57nSLapA2c+cMd3OLUTL/55
+         9+Rj95UcPBpSGkhS65Ifc6wIYpZI1+soHhvgNmYfKD0ufUHR8IvNr2MmgUdS63O6ZDOV
+         i2g2aLVvi1hSEcnyedKjJFrEFd4v8qTZI6XF4ny7/fAUjlPtenJJomP9OSw9mLhtJTP4
+         yXLa9tmdEsI5WFYVAC1IA6n2JS/7U/YPoVWsoJDtHTaH3IH7lFa5GzXYZK2H0lPRRlAT
+         DSvIIdMJBv9Bn8eOIexRnSlAIHnGXK1L/bh6DEAcWze0+TYEw3P7ZDXIcl8uCIlqsSNP
+         VCZg==
+X-Gm-Message-State: AOAM531Y5fhKswnkdOXYYuj0XQ6PS2dB7eBV7sbzkE1FW3J9gTSnc9hG
+        W50etdA8+Z9hn6Gzk+5DGczivg==
+X-Google-Smtp-Source: ABdhPJyQTNm1BSKNK4nPH8PwhT168mr3Et0SlCcd67hBnuW+VdEO/ieVYFVuvkPPR1fp/Uk3isIZEg==
+X-Received: by 2002:adf:a151:: with SMTP id r17mr761655wrr.161.1589396010916;
+        Wed, 13 May 2020 11:53:30 -0700 (PDT)
 Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id x24sm501774wrd.51.2020.05.13.11.39.32
+        by smtp.gmail.com with ESMTPSA id i17sm37309331wml.23.2020.05.13.11.53.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 11:39:36 -0700 (PDT)
-Subject: Re: [PATCH v5 6/7] misc: bcm-vk: add Broadcom VK driver
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     David Brown <david.brown@linaro.org>,
+        Wed, 13 May 2020 11:53:30 -0700 (PDT)
+Subject: Re: [PATCH v5 1/7] fs: introduce kernel_pread_file* support
+To:     Mimi Zohar <zohar@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
@@ -65,21 +66,18 @@ Cc:     David Brown <david.brown@linaro.org>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>
 References: <20200508002739.19360-1-scott.branden@broadcom.com>
- <20200508002739.19360-7-scott.branden@broadcom.com>
- <20200513003830.GJ11244@42.do-not-panic.com>
- <60372b2f-c03d-6384-43a7-8b97413b6672@broadcom.com>
- <20200513065046.GA764247@kroah.com>
- <20200513123033.GL11244@42.do-not-panic.com>
+ <20200508002739.19360-2-scott.branden@broadcom.com>
+ <1589395153.5098.158.camel@kernel.org>
 From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <2eaa3047-4833-8d1c-d8c7-fc602468eae3@broadcom.com>
-Date:   Wed, 13 May 2020 11:39:30 -0700
+Message-ID: <0e6b5f65-8c61-b02e-7d35-b4ae52aebcf3@broadcom.com>
+Date:   Wed, 13 May 2020 11:53:23 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200513123033.GL11244@42.do-not-panic.com>
+In-Reply-To: <1589395153.5098.158.camel@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -88,29 +86,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks for link.
+Hi Mimi,
 
-On 2020-05-13 5:30 a.m., Luis Chamberlain wrote:
-> On Wed, May 13, 2020 at 08:50:46AM +0200, Greg Kroah-Hartman wrote:
->> On Tue, May 12, 2020 at 11:31:28PM -0700, Scott Branden wrote:
+On 2020-05-13 11:39 a.m., Mimi Zohar wrote:
+> [Cc'ing linux-security-module, linux-integrity]
+>
+> On Thu, 2020-05-07 at 17:27 -0700, Scott Branden wrote:
+>> Add kernel_pread_file* support to kernel to allow for partial read
+>> of files with an offset into the file.  Existing kernel_read_file
+>> functions call new kernel_pread_file functions with offset=0 and
+>> flags=KERNEL_PREAD_FLAG_WHOLE.
 >>
->> That's not how kernel drivers in the tree work, sorry.  They do not
->> contain "older kernel support" in them, they work as a whole with the
->> rest of the kernel they ship with only.
->>
->> Otherwise all drivers would be a total mess over time, can you imagine
->> doing this for the next 20+ years?  Not maintainable.
-> Scott, now imagine the amount of cleanup you'd need to do to your driver
-> to get it to a state where it doesn't depend on any old kernel. That's
-> the exact shape of the driver we want.
+>> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+>> ---
+> <snip>
 >
-> To backport, you can look into the backports project which strives to
-> backport drivers automatically [0] to older kernels.
->
-> [0] https://backports.wiki.kernel.org/index.php/Main_Page
->
->    Luis
-Will drop legacy support from patch and look closer at this.
+>> @@ -941,14 +955,16 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+The checkpatch shows this as kernel_read_file when it is actually the 
+new function kernel_pread_file.
+Please see the call to kernel_pread_file from kernel_read_file in the 
+complete patch rather this snippet.
+>>   
+>>   		if (bytes == 0)
+>>   			break;
+>> +
+>> +		buf_pos += bytes;
+>>   	}
+>>   
+>> -	if (pos != i_size) {
+>> +	if (pos != read_end) {
+>>   		ret = -EIO;
+>>   		goto out_free;
+>>   	}
+>>   
+>> -	ret = security_kernel_post_read_file(file, *buf, i_size, id);
+>> +	ret = security_kernel_post_read_file(file, *buf, alloc_size, id);
+>>   	if (!ret)
+>>   		*size = pos;
+> Prior to the patch set that introduced this security hook, firmware
+> would be read twice, once for measuring/appraising the firmware and
+> again reading the file contents into memory.  Partial reads will break
+> both IMA's measuring the file and appraising the file signatures.
+The partial file read support is needed for request_firmware_into_buf 
+from drivers.  The EXPORT_SYMBOL_GPL is being removed so that
+there can be no abuse of the partial file read support.  Such file 
+integrity checks are not needed for this use case.  The partial file 
+(firmware image) is actually downloaded in portions and verified on the 
+device it is loaded to.
 
-Thanks,
+Regards,
   Scott
