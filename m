@@ -2,84 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1312E1D395B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 May 2020 20:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBD11D3C43
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 May 2020 21:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgENStf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 May 2020 14:49:35 -0400
-Received: from smtp-42a9.mail.infomaniak.ch ([84.16.66.169]:57071 "EHLO
-        smtp-42a9.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726890AbgENStf (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 May 2020 14:49:35 -0400
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49NLDr72ydzlh8ns;
-        Thu, 14 May 2020 20:49:32 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49NLDq6DNjzljZmr;
-        Thu, 14 May 2020 20:49:31 +0200 (CEST)
-Subject: Re: [PATCH v17 05/10] fs,landlock: Support filesystem access-control
-To:     James Morris <jmorris@namei.org>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20200511192156.1618284-1-mic@digikod.net>
- <20200511192156.1618284-6-mic@digikod.net>
- <alpine.LRH.2.21.2005141335280.30052@namei.org>
- <c159d845-6108-4b67-6527-405589fa5382@digikod.net>
- <alpine.LRH.2.21.2005150329580.26489@namei.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <2561827e-020c-9a76-98ae-9514904c69f9@digikod.net>
-Date:   Thu, 14 May 2020 20:49:31 +0200
-User-Agent: 
+        id S1728292AbgENSwW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 May 2020 14:52:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50476 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728271AbgENSwV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 May 2020 14:52:21 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 72D5E206A5;
+        Thu, 14 May 2020 18:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589482341;
+        bh=e923IeQUkDFGtCFMSIPljVav9gG9Zf2cBBiEpAXaqGA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oG2R26SaAJoOazKuPjlEiwZblhjEDzSX4BnYOpExYH3n+VeWsTi3lrM9moxjabCMk
+         BVHv8E6jcn1B751CUYFBtKaWiip5yzEi7yydCWt9K5TI1iQWGvklY3uQ0y/gDuYwrf
+         uyaoAxTZro3SeXGFInpD+bi+SsSBeL7dmaIcO8W8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 25/62] ftrace/selftests: workaround cgroup RT scheduling issues
+Date:   Thu, 14 May 2020 14:51:10 -0400
+Message-Id: <20200514185147.19716-25-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200514185147.19716-1-sashal@kernel.org>
+References: <20200514185147.19716-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.21.2005150329580.26489@namei.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Alan Maguire <alan.maguire@oracle.com>
 
-On 14/05/2020 19:31, James Morris wrote:
-> On Thu, 14 May 2020, Mickaël Salaün wrote:
-> 
->>> This needs to be converted to the LSM API via superblock blob stacking.
->>>
->>> See Casey's old patch: 
->>> https://lore.kernel.org/linux-security-module/20190829232935.7099-2-casey@schaufler-ca.com/
->>
->> s_landlock_inode_refs is quite similar to s_fsnotify_inode_refs, but I
->> can do it once the superblock security blob patch is upstream. Is it a
->> blocker for now? What is the current status of lbs_superblock?
-> 
-> Yes it is a blocker. Landlock should not be adding its own functions in 
-> core code, it should be using the LSM API (and extending that as needed).
+[ Upstream commit 57c4cfd4a2eef8f94052bd7c0fce0981f74fb213 ]
 
-OK, I'll use that in the next series.
+wakeup_rt.tc and wakeup.tc tests in tracers/ subdirectory
+fail due to the chrt command returning:
 
-> 
->> Anyway, we also need to have a call to landlock_release_inodes() in
->> generic_shutdown_super(), which does not fit the LSM framework, and I
->> think it is not an issue. Landlock handling of inodes is quite similar
->> to fsnotify.
-> 
-> fsnotify is not an LSM.
+ chrt: failed to set pid 0's policy: Operation not permitted.
 
-Yes, so I'll need to add a new LSM hook for this (release) call, right?
+To work around this, temporarily disable grout RT scheduling
+during ftracetest execution.  Restore original value on
+test run completion.  With these changes in place, both
+tests consistently pass.
+
+Fixes: c575dea2c1a5 ("selftests/ftrace: Add wakeup_rt tracer testcase")
+Fixes: c1edd060b413 ("selftests/ftrace: Add wakeup tracer testcase")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/ftrace/ftracetest | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 063ecb290a5a3..144308a757b70 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -29,8 +29,25 @@ err_ret=1
+ # kselftest skip code is 4
+ err_skip=4
+ 
++# cgroup RT scheduling prevents chrt commands from succeeding, which
++# induces failures in test wakeup tests.  Disable for the duration of
++# the tests.
++
++readonly sched_rt_runtime=/proc/sys/kernel/sched_rt_runtime_us
++
++sched_rt_runtime_orig=$(cat $sched_rt_runtime)
++
++setup() {
++  echo -1 > $sched_rt_runtime
++}
++
++cleanup() {
++  echo $sched_rt_runtime_orig > $sched_rt_runtime
++}
++
+ errexit() { # message
+   echo "Error: $1" 1>&2
++  cleanup
+   exit $err_ret
+ }
+ 
+@@ -39,6 +56,8 @@ if [ `id -u` -ne 0 ]; then
+   errexit "this must be run by root user"
+ fi
+ 
++setup
++
+ # Utilities
+ absdir() { # file_path
+   (cd `dirname $1`; pwd)
+@@ -235,6 +254,7 @@ TOTAL_RESULT=0
+ 
+ INSTANCE=
+ CASENO=0
++
+ testcase() { # testfile
+   CASENO=$((CASENO+1))
+   desc=`grep "^#[ \t]*description:" $1 | cut -f2 -d:`
+@@ -406,5 +426,7 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+ prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+ prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+ 
++cleanup
++
+ # if no error, return 0
+ exit $TOTAL_RESULT
+-- 
+2.20.1
+
