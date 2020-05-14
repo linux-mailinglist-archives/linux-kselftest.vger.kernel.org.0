@@ -2,67 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5251D3DAD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 May 2020 21:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FC71D3DED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 May 2020 21:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728280AbgENThj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 May 2020 15:37:39 -0400
-Received: from namei.org ([65.99.196.166]:59072 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726667AbgENThj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 May 2020 15:37:39 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 04EJb3d8007993;
-        Thu, 14 May 2020 19:37:03 GMT
-Date:   Fri, 15 May 2020 05:37:03 +1000 (AEST)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v17 05/10] fs,landlock: Support filesystem
- access-control
-In-Reply-To: <2561827e-020c-9a76-98ae-9514904c69f9@digikod.net>
-Message-ID: <alpine.LRH.2.21.2005150536440.7929@namei.org>
-References: <20200511192156.1618284-1-mic@digikod.net> <20200511192156.1618284-6-mic@digikod.net> <alpine.LRH.2.21.2005141335280.30052@namei.org> <c159d845-6108-4b67-6527-405589fa5382@digikod.net> <alpine.LRH.2.21.2005150329580.26489@namei.org>
- <2561827e-020c-9a76-98ae-9514904c69f9@digikod.net>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-72433049-1589485024=:7929"
+        id S1727882AbgENTt4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 May 2020 15:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727833AbgENTtz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 May 2020 15:49:55 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354B2C061A0C;
+        Thu, 14 May 2020 12:49:55 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id B7E8E128CF135;
+        Thu, 14 May 2020 12:49:54 -0700 (PDT)
+Date:   Thu, 14 May 2020 12:49:54 -0700 (PDT)
+Message-Id: <20200514.124954.1909205796405577142.davem@davemloft.net>
+To:     vladbu@mellanox.com
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        shuah@kernel.org, xiyou.wangcong@gmail.com, jhs@mojatatu.com,
+        dcaratti@redhat.com, marcelo.leitner@gmail.com
+Subject: Re: [PATCH RESEND net-next] selftests: fix flower parent qdisc
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200514063552.26678-1-vladbu@mellanox.com>
+References: <20200514063552.26678-1-vladbu@mellanox.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 14 May 2020 12:49:55 -0700 (PDT)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Vlad Buslov <vladbu@mellanox.com>
+Date: Thu, 14 May 2020 09:35:52 +0300
 
---1665246916-72433049-1589485024=:7929
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 14 May 2020, Mickaël Salaün wrote:
-
-> > fsnotify is not an LSM.
+> Flower tests used to create ingress filter with specified parent qdisc
+> "parent ffff:" but dump them on "ingress". With recent commit that fixed
+> tcm_parent handling in dump those are not considered same parent anymore,
+> which causes iproute2 tc to emit additional "parent ffff:" in first line of
+> filter dump output. The change in output causes filter match in tests to
+> fail.
 > 
-> Yes, so I'll need to add a new LSM hook for this (release) call, right?
+> Prevent parent qdisc output when dumping filters in flower tests by always
+> correctly specifying "ingress" parent both when creating and dumping
+> filters.
+> 
+> Fixes: a7df4870d79b ("net_sched: fix tcm_parent in tc filter dump")
+> Signed-off-by: Vlad Buslov <vladbu@mellanox.com>
 
-Unless an existing one will work.
-
--- 
-James Morris
-<jmorris@namei.org>
-
---1665246916-72433049-1589485024=:7929--
+Applied, thanks.
