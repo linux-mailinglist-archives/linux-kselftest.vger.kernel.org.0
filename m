@@ -2,35 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4751D3C44
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 May 2020 21:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB411D3CB6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 May 2020 21:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbgENSwZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 May 2020 14:52:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50540 "EHLO mail.kernel.org"
+        id S1730058AbgENTJa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 May 2020 15:09:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728298AbgENSwY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 May 2020 14:52:24 -0400
+        id S1728398AbgENSwt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 May 2020 14:52:49 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D37552065F;
-        Thu, 14 May 2020 18:52:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CFC18206DC;
+        Thu, 14 May 2020 18:52:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589482343;
-        bh=vSq6GEaaTggr4ryfJsodFdPoAGAAd+nM4yc6WZxN46A=;
+        s=default; t=1589482368;
+        bh=uHhK8nlqpp5T5x85pXHiy4QJRKiZuAiavSq3I3XXXcU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tDpPycG5aRTbIeplqsPUO7VgsWh16QhIFh+BjevLy7rxdIiBow8zGt5rlaY12oZCl
-         fzcjI7ENlrWdI9L6XTS8eTgRhRt47a1k+bcL/iosJwqa7JWs+p8FKJj2DwTv+HGXDe
-         P9XMHKwW1EsgoDj9N8a0+4CBPPAWoF9Q9oFpOcNM=
+        b=KR6tyy6q/zuCVcbVfkAU+LKD06QoXXQ0mx2VQtpXwjDvbJldAmpXfNiao3upi4TAg
+         XCfrDB76mmVJ3tFlNemy14AJJtz5QaPkLABTi3XE6QBRz08l/4QYIxVxZwyudKXAk5
+         CMyroVWVm5oLVUOD7w1F41risTcmHuKIMtkG2DCY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+Cc:     Peter Xu <peterx@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 27/62] selftests: fix kvm relocatable native/cross builds and installs
-Date:   Thu, 14 May 2020 14:51:12 -0400
-Message-Id: <20200514185147.19716-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 47/62] KVM: selftests: Fix build for evmcs.h
+Date:   Thu, 14 May 2020 14:51:32 -0400
+Message-Id: <20200514185147.19716-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200514185147.19716-1-sashal@kernel.org>
 References: <20200514185147.19716-1-sashal@kernel.org>
@@ -43,127 +45,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Peter Xu <peterx@redhat.com>
 
-[ Upstream commit 66d69e081b526b6a6031f0d3ca8ddff71e5707a5 ]
+[ Upstream commit 8ffdaf9155ebe517cdec5edbcca19ba6e7ee9c3c ]
 
-kvm test Makefile doesn't fully support cross-builds and installs.
-UNAME_M = $(shell uname -m) variable is used to define the target
-programs and libraries to be built from arch specific sources in
-sub-directories.
+I got this error when building kvm selftests:
 
-For cross-builds to work, UNAME_M has to map to ARCH and arch specific
-directories and targets in this Makefile.
+/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: multiple definition of `current_evmcs'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: first defined here
+/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: multiple definition of `current_vp_assist'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: first defined here
 
-UNAME_M variable to used to run the compiles pointing to the right arch
-directories and build the right targets for these supported architectures.
+I think it's because evmcs.h is included both in a test file and a lib file so
+the structs have multiple declarations when linking.  After all it's not a good
+habit to declare structs in the header files.
 
-TEST_GEN_PROGS and LIBKVM are set using UNAME_M variable.
-LINUX_TOOL_ARCH_INCLUDE is set using ARCH variable.
-
-x86_64 targets are named to include x86_64 as a suffix and directories
-for includes are in x86_64 sub-directory. s390x and aarch64 follow the
-same convention. "uname -m" doesn't result in the correct mapping for
-s390x and aarch64. Fix it to set UNAME_M correctly for s390x and aarch64
-cross-builds.
-
-In addition, Makefile doesn't create arch sub-directories in the case of
-relocatable builds and test programs under s390x and x86_64 directories
-fail to build. This is a problem for native and cross-builds. Fix it to
-create all necessary directories keying off of TEST_GEN_PROGS.
-
-The following use-cases work with this change:
-
-Native x86_64:
-make O=/tmp/kselftest -C tools/testing/selftests TARGETS=kvm install \
- INSTALL_PATH=$HOME/x86_64
-
-arm64 cross-build:
-make O=$HOME/arm64_build/ ARCH=arm64 HOSTCC=gcc \
-	CROSS_COMPILE=aarch64-linux-gnu- defconfig
-
-make O=$HOME/arm64_build/ ARCH=arm64 HOSTCC=gcc \
-	CROSS_COMPILE=aarch64-linux-gnu- all
-
-make kselftest-install TARGETS=kvm O=$HOME/arm64_build ARCH=arm64 \
-	HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu-
-
-s390x cross-build:
-make O=$HOME/s390x_build/ ARCH=s390 HOSTCC=gcc \
-	CROSS_COMPILE=s390x-linux-gnu- defconfig
-
-make O=$HOME/s390x_build/ ARCH=s390 HOSTCC=gcc \
-	CROSS_COMPILE=s390x-linux-gnu- all
-
-make kselftest-install TARGETS=kvm O=$HOME/s390x_build/ ARCH=s390 \
-	HOSTCC=gcc CROSS_COMPILE=s390x-linux-gnu- all
-
-No regressions in the following use-cases:
-make -C tools/testing/selftests TARGETS=kvm
-make kselftest-all TARGETS=kvm
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+Message-Id: <20200504220607.99627-1-peterx@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/Makefile | 29 +++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/include/evmcs.h  | 4 ++--
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index d91c53b726e60..75dec268787f3 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -5,8 +5,34 @@ all:
+diff --git a/tools/testing/selftests/kvm/include/evmcs.h b/tools/testing/selftests/kvm/include/evmcs.h
+index 4912d23844bc6..e31ac9c5ead0c 100644
+--- a/tools/testing/selftests/kvm/include/evmcs.h
++++ b/tools/testing/selftests/kvm/include/evmcs.h
+@@ -217,8 +217,8 @@ struct hv_enlightened_vmcs {
+ #define HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_MASK	\
+ 		(~((1ull << HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT) - 1))
  
- top_srcdir = ../../../..
- KSFT_KHDR_INSTALL := 1
+-struct hv_enlightened_vmcs *current_evmcs;
+-struct hv_vp_assist_page *current_vp_assist;
++extern struct hv_enlightened_vmcs *current_evmcs;
++extern struct hv_vp_assist_page *current_vp_assist;
+ 
+ int vcpu_enable_evmcs(struct kvm_vm *vm, int vcpu_id);
+ 
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+index 7aaa99ca4dbc3..ce528f3cf093c 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+@@ -17,6 +17,9 @@
+ 
+ bool enable_evmcs;
+ 
++struct hv_enlightened_vmcs *current_evmcs;
++struct hv_vp_assist_page *current_vp_assist;
 +
-+# For cross-builds to work, UNAME_M has to map to ARCH and arch specific
-+# directories and targets in this Makefile. "uname -m" doesn't map to
-+# arch specific sub-directory names.
-+#
-+# UNAME_M variable to used to run the compiles pointing to the right arch
-+# directories and build the right targets for these supported architectures.
-+#
-+# TEST_GEN_PROGS and LIBKVM are set using UNAME_M variable.
-+# LINUX_TOOL_ARCH_INCLUDE is set using ARCH variable.
-+#
-+# x86_64 targets are named to include x86_64 as a suffix and directories
-+# for includes are in x86_64 sub-directory. s390x and aarch64 follow the
-+# same convention. "uname -m" doesn't result in the correct mapping for
-+# s390x and aarch64.
-+#
-+# No change necessary for x86_64
- UNAME_M := $(shell uname -m)
- 
-+# Set UNAME_M for arm64 compile/install to work
-+ifeq ($(ARCH),arm64)
-+	UNAME_M := aarch64
-+endif
-+# Set UNAME_M s390x compile/install to work
-+ifeq ($(ARCH),s390)
-+	UNAME_M := s390x
-+endif
-+
- LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c
- LIBKVM_x86_64 = lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c
- LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c
-@@ -47,7 +73,7 @@ LIBKVM += $(LIBKVM_$(UNAME_M))
- INSTALL_HDR_PATH = $(top_srcdir)/usr
- LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
- LINUX_TOOL_INCLUDE = $(top_srcdir)/tools/include
--LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/x86/include
-+LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
- CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
- 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
-@@ -78,6 +104,7 @@ $(LIBKVM_OBJ): $(OUTPUT)/%.o: %.c
- $(OUTPUT)/libkvm.a: $(LIBKVM_OBJ)
- 	$(AR) crs $@ $^
- 
-+x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
- all: $(STATIC_LIBS)
- $(TEST_GEN_PROGS): $(STATIC_LIBS)
- 
+ struct eptPageTableEntry {
+ 	uint64_t readable:1;
+ 	uint64_t writable:1;
 -- 
 2.20.1
 
