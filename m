@@ -2,134 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFBA1D5CAF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 May 2020 01:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3251D5CBD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 May 2020 01:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726374AbgEOXPs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 May 2020 19:15:48 -0400
-Received: from mail-eopbgr140053.outbound.protection.outlook.com ([40.107.14.53]:19244
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726183AbgEOXPr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 May 2020 19:15:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SK9akejPruwS71Xm4vL+UT2ifJbP5Os6AJZP9LMw//D2rQMR8nPuNx7KiZQSMKgk6KLK3l3tR+cz+ucJiYh+57h56tDCTzNN9CpynV4N8nLHBNKsXUujHc2bE5XIvhJ3JNISJh4KNuJZBQqfEYi+YDsennuOHv5inVupkEjviT6yYhWKE4o8jLTyfbEjTdGuvuiKuyZCGSeuzhn0zd3FRjY+YDem7AYK50LwM2XElCZYvrRSl4zM07Ih37+jKLr7/mWgP+b834p8harcgkpsBGCXz1xPiY9kvb3nAEFxyEC7HLmxNQx48UZ4CteoxGxkvIN1T0I9wRtzNQScAwT0RQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rR+gLqBvIT3+9zxGdtXTiqYrmB+NehR+aYGhMkHESOk=;
- b=fpBPf3BsbZ1uBIq9B+y7v6R5GCtz6MuVogwXW/EzcY1mweCtIQlJ/2yGGCU0BeiML7ZMwFnwOZooEoX0Yvgze64C845EnIkdJA+7I2fWdBDVBHj1UgQIm9rYI2S6PDSv/6mhJOFQ0bVGLxXmIDAtz0vF3jWBvtJsPnvb43VJLAswqQzsmm54hECGgZX1A+CCb/hAcd40XegLGryKRE81rtuvdk1IwzhGqCgx5Sdijlv3NSnXwTBtX8mS5I3Hx2Z+bD/lSBwlD71wvryOuP0CQVtX+NCYQ2WHv8T9NA8btj/4PURO3DxTwSkNcoG4sgDwSGzGKUvnEDcBfDZN7OtePg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rR+gLqBvIT3+9zxGdtXTiqYrmB+NehR+aYGhMkHESOk=;
- b=QH28/sC8RC1bAVLHEyR33xmeutRBselzHqrEZzYc5wFSCbtpIUn6sAdpNLDnsOtFVDMnrMPKVQIRkRXRBGuqlWQR3c2YQ2btfqLDeDW7aidwtTb/J6pGLm3MQOEVkFHQoLBrSCSpQlJ4xbnaOo9H9QSOR5fi6IvSwFG+PqsZ37s=
-Authentication-Results: nvidia.com; dkim=none (message not signed)
- header.d=none;nvidia.com; dmarc=none action=none header.from=mellanox.com;
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (2603:10a6:803:44::15)
- by VI1PR05MB5982.eurprd05.prod.outlook.com (2603:10a6:803:e4::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.27; Fri, 15 May
- 2020 23:15:43 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::848b:fcd0:efe3:189e]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::848b:fcd0:efe3:189e%7]) with mapi id 15.20.3000.022; Fri, 15 May 2020
- 23:15:42 +0000
-Date:   Fri, 15 May 2020 20:15:38 -0300
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     linux-rdma@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
+        id S1726261AbgEOX2O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 May 2020 19:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726204AbgEOX2N (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 15 May 2020 19:28:13 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4CCC05BD09
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2020 16:28:13 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id f6so1728209pgm.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2020 16:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=E8j1zsP3t9Db9IDf/V9aE8nyZ2/Ryf+TXAxn3gqfEkQ=;
+        b=UnQQdzA2k7WTu3soGTuHp6WGTD+qiK8qSJb8mk1Pn9H2eum+E9Ts+BBJn73fEbeHhn
+         RCvwsXpvTKZDN9nf0ieSFsKQIBNAAhSy3JGMSLqfTBgCWzn69SZ6AjRrdwRptGXc6OxA
+         GMwQn9MzvTX7QqrnZx+alQ0//TqjxC7Ikw4bc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=E8j1zsP3t9Db9IDf/V9aE8nyZ2/Ryf+TXAxn3gqfEkQ=;
+        b=roC8CDMLGqcUHitohdvV87btms7YWLhv0g2qEgP98akiVJwUvU3dirOmF8W4OoSz11
+         kyCxtgH+sUNu4qwjenZQ6AcPbMEv3wcpr+YTHqcBqe3FxXG04Ew/n3yO0orU04h87f2/
+         9i6UYvlO44u8OViL2qF68XMrc4K7wb2eSf2W+6ZK1sLe8dxVFwScEmhrtrD91986WZ3F
+         jUvpTmUWsLpsGyR2u/TFu4Km62AopOF8ASQHxnpjKJJP+wKVmyygRI1WVzptpyY3th3N
+         I5p5j93K8nsyGYOnPYUYkmDV1sf9zVtvcU9ZahBdjGmWbw3aIjtMQUa+oNrZZMzCaTx7
+         3sdQ==
+X-Gm-Message-State: AOAM532xD0dGrIjvKM/cdiTd4u8s/XbJR6lnuvgJ4c2q1o9vS2ln5s72
+        i+uauHQrE9ehh//6Isq8I8eIZQ==
+X-Google-Smtp-Source: ABdhPJzDjdFyP0pP2LVm3Q8vARDClgR1ApLEZE6gM2tCxeAVs7H8OmgkHRMJ22dzucxwh+mZ6qJIdA==
+X-Received: by 2002:aa7:9302:: with SMTP id 2mr6259587pfj.256.1589585292833;
+        Fri, 15 May 2020 16:28:12 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id b13sm2543954pgi.58.2020.05.15.16.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 May 2020 16:28:11 -0700 (PDT)
+Subject: Re: [PATCH v5 0/7] firmware: add partial read support in
+ request_firmware_into_buf
+To:     Luis Chamberlain <mcgrof@kernel.org>, Mimi Zohar <zohar@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] mm/hmm/test: destroy xa_array instead of looping
-Message-ID: <20200515231538.GD24561@mellanox.com>
-References: <20200513214507.30592-1-rcampbell@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200513214507.30592-1-rcampbell@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MN2PR07CA0021.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::31) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:44::15)
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+References: <20200508002739.19360-1-scott.branden@broadcom.com>
+ <1589387039.5098.147.camel@kernel.org>
+ <20200515204700.GC11244@42.do-not-panic.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <1e75c270-eae5-8f1d-ecc6-1fd2fb248f29@broadcom.com>
+Date:   Fri, 15 May 2020 16:28:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (156.34.48.30) by MN2PR07CA0021.namprd07.prod.outlook.com (2603:10b6:208:1a0::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.26 via Frontend Transport; Fri, 15 May 2020 23:15:42 +0000
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)     (envelope-from <jgg@mellanox.com>)      id 1jZjYI-0001vI-OI; Fri, 15 May 2020 20:15:38 -0300
-X-Originating-IP: [156.34.48.30]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 011a953f-e07f-4830-c823-08d7f925e378
-X-MS-TrafficTypeDiagnostic: VI1PR05MB5982:
-X-Microsoft-Antispam-PRVS: <VI1PR05MB5982984A463DB7CBA89E644ACFBD0@VI1PR05MB5982.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 04041A2886
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /qooYkgnUqVRlS5VB9K7jNRyNqkJQ0bPX4BJgt/NB79FD4YSSnDjbIF5YxDSoi0hPptyAlMrudU5xC/ZjVIslzov5SBlVJaerYtRIwRuQ0yMpXlPcGlcC4OCR0uiijvl3cRo5wY53f4J4CgGuKgytVKfI9OCMqR6caQcEYLnbCIr6aSzTfBqYF1wqxpHv5X/t5fvrGOFxtvO9Oc+rECoGZFHrjEkdFIluD+7qKRjjSUyNn0Tm5CIESaIJYtSlmnRqjGddLmZZ4IwWfrTvAcYT99ow7VfB66gZG+MxrwWvswg12VgCl0YF5JGH3c1BNe2PRj1S/0Dmf4XQa7FlfYJROLNrTVxdcxVwetk+j7JNUCDsDANGrNiagoD58B5qOPthvZeoEf9k0BGK3nIRznU62TLk7gXNa4BMhcb4weW/N/MZYG0yD2rdaYYcMbqGGApOAH3iv7mO6EGr+fJGhtyZheSU24mUifJKUfhOAgWjA0UkAAU4fVrGG91iN1wCjlN
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR05MB4141.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(5660300002)(7416002)(478600001)(36756003)(33656002)(4326008)(2616005)(316002)(9746002)(9786002)(8676002)(54906003)(52116002)(86362001)(8936002)(66476007)(66946007)(66556008)(6916009)(186003)(26005)(2906002)(1076003)(24400500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: LovFComTvo+EQ0YIeu1gYzMhBPNU+w4Y417w4fXl/bvEPfeGp5mcZqXa1E7ypuXyPHrw29XbuzvuXwSwCiBYWxXCr8dR1XDhWooDB5O0GDCjmobNA8JAmSqETI/+hZb5LwzVJjq3zIlX3cJtYqlZjNzR4jHVFnUrjOYpQh8c7tJXOkNE4CPwx8gM6bFdEZHW9JvuP7aSZj/aVOGD2U3Fh28SNBigGYi5ycwJfhg0jnoBf1XRbYRyDzzT0fo2xAHUXRNTAfg5URgXTieSv30wQgmmFn/Ffn97Mu7v5mNg4pfsTo6hdQj+bMEawpFku+9i9nmQpmi1Qp8w+q6nYp5+WbObksxBg7CVaErgJftiPcyo8HHwosH0qcZrd7kUI/JlJSiUfrDj5lmPv7EDYDeXArTTFZGGgY/vSu1HADq/+TlNdiRuc2trGYQUo1jCWo9f7N7CsZKAo5VZOVol3eXefisBnrXXsunSEC+e0GemmNY=
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 011a953f-e07f-4830-c823-08d7f925e378
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2020 23:15:42.7540
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HQLQ9f5msyGRwirlCO2ep2bRj0FXGcJX2tF5gGgGDSHZ2S3EtvbV8D3zP4D6D4I4FYJ91RNRO8nuh12tu+11vQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB5982
+In-Reply-To: <20200515204700.GC11244@42.do-not-panic.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 13, 2020 at 02:45:07PM -0700, Ralph Campbell wrote:
-> The test driver uses an xa_array to store virtual to physical address
-> translations for a simulated hardware device. The MMU notifier
-> invalidation callback is used to keep the table consistent with the CPU
-> page table and is frequently called only for a page or two. However, if
-> the test process exits unexpectedly or is killed, the range can be
-> [0..ULONG_MAX] in which case calling xa_erase() for every possible PFN
-> results in CPU timeouts. Munmap() can result in a large range being
-> invalidated but in that case, the xa_array is likely to contain entries
-> that need to be invalidated.
-> Check for [0..ULONG_MAX] explicitly and just destroy the whole table.
-> 
-> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-> 
-> This patch is based on Jason Gunthorpe's hmm tree and should be folded
-> into the ("mm/hmm/test: add selftest driver for HMM") patch once this
-> patch is reviewed, etc.
-> 
->  lib/test_hmm.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-> index 8b36c26b717b..b89852ec3c29 100644
-> +++ b/lib/test_hmm.c
-> @@ -201,7 +201,13 @@ static void dmirror_do_update(struct dmirror *dmirror, unsigned long start,
->  	 * The XArray doesn't hold references to pages since it relies on
->  	 * the mmu notifier to clear page pointers when they become stale.
->  	 * Therefore, it is OK to just clear the entry.
-> +	 * However, if the entire address space is being invalidated, it
-> +	 * takes too long to clear them one at a time so destroy the array.
->  	 */
-> +	if (start == 0 && end == ULONG_MAX) {
-> +		xa_destroy(&dmirror->pt);
-> +		return;
-> +	}
->  	for (pfn = start >> PAGE_SHIFT; pfn < (end >> PAGE_SHIFT); pfn++)
->  		xa_erase(&dmirror->pt, pfn);
->  }
+Hi Luis,
 
-Just use xa_for_each_range() instead of the naive loop, it already
-optimizes against membership and avoids the need for the xa_destroy
-hack
+On 2020-05-15 1:47 p.m., Luis Chamberlain wrote:
+> On Wed, May 13, 2020 at 12:23:59PM -0400, Mimi Zohar wrote:
+>> Hi Scott,
+>>
+>> On Thu, 2020-05-07 at 17:27 -0700, Scott Branden wrote:
+>>> Please consider this version series ready for upstream acceptance.
+>>>
+>>> This patch series adds partial read support in request_firmware_into_buf.
+>>> In order to accept the enhanced API it has been requested that kernel
+>>> selftests and upstreamed driver utilize the API enhancement and so
+>>> are included in this patch series.
+>>>
+>>> Also in this patch series is the addition of a new Broadcom VK driver
+>>> utilizing the new request_firmware_into_buf enhanced API.
+>> Up to now, the firmware blob was read into memory allowing IMA to
+>> verify the file signature.  With this change, ima_post_read_file()
+>> will not be able to verify the file signature.
+>>
+>> (I don't think any of the other LSMs are on this hook, but you might
+>> want to Cc the LSM or integrity mailing list.)
+> Scott, so it sounds we need a resolution for pread for IMA for file
+> signature verification. It seems that can be addressed though. Feel
+> free to submit the u32 flag changes which you picked up on though in
+> the meantime.
+Sure, I can submit a new patch to change the existing enum to
+a u32.  For the new pread flags I am adding I could also leave as
+a u32 or change from a u32 to an enum since there is currently only
+one flag in use.  Then, in the future if another flag was added we would 
+need
+to change it back to a u32.
 
-Jason
+Please let me know what you prefer for the pread_flags.
+>
+>    Luis
+Thanks,
+  Scott
