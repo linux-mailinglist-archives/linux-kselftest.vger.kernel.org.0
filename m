@@ -2,56 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A741D5A97
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 May 2020 22:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A241D5AD7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 May 2020 22:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgEOUPE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 May 2020 16:15:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57660 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726168AbgEOUPE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 May 2020 16:15:04 -0400
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.7-rc6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589573703;
-        bh=4gnhVAShCJYYFd9LGgl0TpihpjTE3xLvNuOuo6w89Zc=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=YJp2cwYxo5T+ED9qfAprMQ8NZMHSjcAVYJcEAECDvccyruSR//AEca7z9gKY8cXRh
-         3XzDvL0ILrok9p5IY8QsNl9jzVwSRy1eTcaSjoYJLKx3t4aT3b+aeJSuKW068s1LZH
-         +dRifEaiLqTHqr8DWhMy5i+giNoewsZFMSXSLi8A=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <0cb258e7-e5ef-b42d-ef9b-2ee979a91aa0@linuxfoundation.org>
-References: <0cb258e7-e5ef-b42d-ef9b-2ee979a91aa0@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <0cb258e7-e5ef-b42d-ef9b-2ee979a91aa0@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
- tags/linux-kselftest-5.7-rc6
-X-PR-Tracked-Commit-Id: 851c4df54dc1bcae41d07e46e3d89e035b0a7140
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ce24729667cf8aaebf290613a6026a50a22c3eee
-Message-Id: <158957370371.26450.14505996827121272311.pr-tracker-bot@kernel.org>
-Date:   Fri, 15 May 2020 20:15:03 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     torvalds@linux-foundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>, mpe@ellerman.id.au,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, Kees Cook <keescook@chromium.org>,
-        shuah <shuah@kernel.org>
+        id S1726238AbgEOUoX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 May 2020 16:44:23 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34302 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbgEOUoX (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 15 May 2020 16:44:23 -0400
+Received: by mail-pg1-f195.google.com with SMTP id f6so1556771pgm.1;
+        Fri, 15 May 2020 13:44:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=31jlI11UdSuUne5CytA8aXHN1DKoQTYg2m0ehqqjq1w=;
+        b=Nr+wW/S0YqcnjY3rjCXDlQrzv69mSln+17NZYJDLMkCwVVBL60VVJL9eMr6Fjr6FRe
+         y1vMkFjtrFGZvpZYEa4V3B+VFXvBeYsjOW2yFXWIfCdbaw8qGUfXgEfA8JnEd77NpHkM
+         K1exf67FVJxF5dISa4eBFkR92IPx3QOCu6wdB7WU5RtOb9BL2gYFfQ/2I/ChL48SUQ3u
+         G2LvSldXyL79rsseNGTBQ7rylGTgVizsuMJ2MFwUO3d691/WAldvB4HSwfzwa9T3iPO2
+         zG6gdZZVIqOLNwHh3qh2ljcXbfk/ikpthkFBFGZEobrRlhhfFTdOM5Qc2nNrK74Ow5no
+         boWw==
+X-Gm-Message-State: AOAM531L1yg6BCFa3ACHakiMnjYtZArjgDej+/Xw3filWH3cQxXlEKmD
+        DlxfYWMHZ6LKoL7ZCdGelQBK/j14GqeJ1A==
+X-Google-Smtp-Source: ABdhPJw7XG8gdnNFvqQp/E+s55309E2Xi/QpwKoZegblz+akssDO8WQKCDIfy7AdJqwWny83PlCUZA==
+X-Received: by 2002:a62:e70b:: with SMTP id s11mr5672379pfh.32.1589575462477;
+        Fri, 15 May 2020 13:44:22 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id f6sm2707575pfd.175.2020.05.15.13.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2020 13:44:21 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id B5A6B40246; Fri, 15 May 2020 20:44:20 +0000 (UTC)
+Date:   Fri, 15 May 2020 20:44:20 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v5 2/7] firmware: add offset to request_firmware_into_buf
+Message-ID: <20200515204420.GB11244@42.do-not-panic.com>
+References: <20200508002739.19360-1-scott.branden@broadcom.com>
+ <20200508002739.19360-3-scott.branden@broadcom.com>
+ <20200513003301.GH11244@42.do-not-panic.com>
+ <3919bb12-522d-11fd-302b-91dc0fcff363@broadcom.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3919bb12-522d-11fd-302b-91dc0fcff363@broadcom.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 15 May 2020 11:42:30 -0600:
+On Wed, May 13, 2020 at 11:35:06AM -0700, Scott Branden wrote:
+> On 2020-05-12 5:33 p.m., Luis Chamberlain wrote:
+> > On Thu, May 07, 2020 at 05:27:34PM -0700, Scott Branden wrote:
+> > flags? But its a single variable enum!
+> fw_opt is an existing enum which doesn't really act like an enum.
+> It is a series of BIT defines in an enum that are then OR'd together in the
+> (existing) code?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.7-rc6
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ce24729667cf8aaebf290613a6026a50a22c3eee
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Indeed, in retrospect that is odd, it should be a u32 then. Please feel
+free to fix.
+ 
+  Luis
