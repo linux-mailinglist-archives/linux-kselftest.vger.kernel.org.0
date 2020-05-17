@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E92421D64DB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 May 2020 02:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AD31D64D7
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 May 2020 02:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726919AbgEQAMw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 May 2020 20:12:52 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14723 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbgEQAMv (ORCPT
+        id S1726719AbgEQAMu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 May 2020 20:12:50 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:15924 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726670AbgEQAMu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 May 2020 20:12:51 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ec080f50000>; Sat, 16 May 2020 17:10:31 -0700
+        Sat, 16 May 2020 20:12:50 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ec081750000>; Sat, 16 May 2020 17:12:37 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sat, 16 May 2020 17:12:50 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sat, 16 May 2020 17:12:49 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sat, 16 May 2020 17:12:50 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 17 May
+        by hqpgpgate102.nvidia.com on Sat, 16 May 2020 17:12:49 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 17 May
  2020 00:12:49 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
  Transport; Sun, 17 May 2020 00:12:49 +0000
 Received: from sandstorm.nvidia.com (Not Verified[10.2.48.175]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ec081810000>; Sat, 16 May 2020 17:12:49 -0700
+        id <B5ec081810001>; Sat, 16 May 2020 17:12:49 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Brian Geffon <bgeffon@google.com>,
@@ -36,57 +36,56 @@ CC:     Brian Geffon <bgeffon@google.com>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-kselftest@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 0/2] selftests/vm: minor fixes for 5.7-rc5
-Date:   Sat, 16 May 2020 17:12:43 -0700
-Message-ID: <20200517001245.361762-1-jhubbard@nvidia.com>
+Subject: [PATCH 1/2] selftests/vm/write_to_hugetlbfs.c: fix unused variable warning
+Date:   Sat, 16 May 2020 17:12:44 -0700
+Message-ID: <20200517001245.361762-2-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200517001245.361762-1-jhubbard@nvidia.com>
+References: <20200517001245.361762-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589674231; bh=wjLchc1ui/FmZZGmSH4qpXauQ1u6/oTfmbDWbGbON98=;
+        t=1589674357; bh=uXlixiau1j95RmP9NA0wbCzX6HbvCN4ClDBoBcdanXk=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=OeSj0X5leaSJg3f79iy0ZeLoGjRgdDteo6AyD3A8EHQls2wigV+WF74VdY+ZRYfDP
-         iWynlilWUwj4dYSSxrDCfw4AuqyqH6KKEOnODl96NQzfNNxpjKdbKu5d+vYSX65MJi
-         SuorSMJ4eu+2Gn3uBTwPitYwkGeB1VhuPqeJuX911gmcuTZi3qPQapjRfgwTvTGDRI
-         U4H7MjhF8qgsNxZIXxFh8PW0d7E4mlsRLuCmfTse1tgSU7GfxDQQ6QgyZ/lrwUck3w
-         AavC4b5b/aV/Od1MouLHI3sl2lch21w7qDEP3mNuNAb9zV5rH0W/ubGmvf0a0egNi0
-         mvCjTkVEOUySA==
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=XQMXj0qV/AX9NTtDgbIPGM40WnkSIrkE2RybnGe2neRMyAulj5Z4pu365jtx1rvkQ
+         rNL8RTKovH405wwCgP7joRSwu+dX5VG4LWoE2V8QU0h1ueNMSCluL8VU9MbLcHvBWp
+         +/0NMhjX8XBTgWgslN7enIlTy5/RVuO62sznjEew3sIif6hlTwzLPta7JuMQkQKi31
+         meVJAzwMzBRKkt29s2F/w0zqcq6cn7cDZBn6XI3oMxKWLNE5RdShk0YvFD58nK5kwS
+         95BR6IlaM3S4hMsA5t+ebSLDRLR8l//Di2ZWeeWU1xUfvriSrQQTAiIijSGSMRkg55
+         hdODhy2/5arjQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Here's a couple of tiny fixes, just so we can cleanly build
-selftests/vm. These apply to today's linux.git. Some merge notes:
+Remove unused variable "i", which was triggering a compiler warning.
 
-* The .gitignore fix is appropriate for linux.git, but it is a subset of
-  what's required for linux-next and mmotm. In order to fix things now
-  in linux.git, and keep it fixed in mmotm and linux-next, but without
-  manual intervention required in git merges, I'm adding the missing
-  item ("mremap_dontunmap") to the *top* of .gitignore for this patch.
-  And then I'll send a separate patch to be applied to mmotm and
-  linux-next, that will also add a different item ("khugepaged") to the
-  *bottom* of .gitignore.
-
-* The write_to_hugetlbfs.c fix is already applied to linux-next, but
-  doesn't seem to be getting picked up for linux.git. Maybe it's in
-  the merge pipeline, but if not, let's fix it here, before the -rc
-  cycle is over.
-
-John Hubbard (2):
-  selftests/vm/write_to_hugetlbfs.c: fix unused variable warning
-  selftests/vm/.gitignore: add mremap_dontunmap
-
- tools/testing/selftests/vm/.gitignore           | 1 +
+Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests"=
+)
+Cc: Mina Almasry <almasrymina@google.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
  tools/testing/selftests/vm/write_to_hugetlbfs.c | 2 --
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ 1 file changed, 2 deletions(-)
 
-
-base-commit: 3d1c1e5931ce45b3a3f309385bbc00c78e9951c6
+diff --git a/tools/testing/selftests/vm/write_to_hugetlbfs.c b/tools/testin=
+g/selftests/vm/write_to_hugetlbfs.c
+index 110bc4e4015d..6a2caba19ee1 100644
+--- a/tools/testing/selftests/vm/write_to_hugetlbfs.c
++++ b/tools/testing/selftests/vm/write_to_hugetlbfs.c
+@@ -74,8 +74,6 @@ int main(int argc, char **argv)
+ 	int write =3D 0;
+ 	int reserve =3D 1;
+=20
+-	unsigned long i;
+-
+ 	if (signal(SIGINT, sig_handler) =3D=3D SIG_ERR)
+ 		err(1, "\ncan't catch SIGINT\n");
+=20
 --=20
 2.26.2
 
