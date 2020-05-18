@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B9F1D8A80
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 00:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1A21D8A81
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 00:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727819AbgERWOC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 May 2020 18:14:02 -0400
+        id S1727827AbgERWOD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 May 2020 18:14:03 -0400
 Received: from mga01.intel.com ([192.55.52.88]:46558 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726502AbgERWOC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 May 2020 18:14:02 -0400
-IronPort-SDR: rQ8VZy1/OtQCLjMrUE+pU7lgYImIbDwgsAhAHeLiA3KyyCfTLFTr7ZQAISRilaywQTyy5u3OMG
- TuFMt1p2ENEg==
+        id S1726502AbgERWOD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 May 2020 18:14:03 -0400
+IronPort-SDR: H/9UqkEJ5H4zJARwHTFqP3JNMOnlpzjiZM0XHquipkKfjlRgHDe4wKrOgLYynmRPFQMpkbWx7E
+ lknYIKzd53kw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 15:14:02 -0700
-IronPort-SDR: tkP4nnxwCuLHusJT7MyrbdQod75s63mtfAJYKB3cRRdo5F3eeGXJGJCAHF87LVFTncmxzh6m+7
- O8iLPInAgd2Q==
+IronPort-SDR: SWqeXuK/PeRlwSQ43+LrOWEvAGBpp/PO56Wdw7S2jk8xRfXISjz0zqaR25WbowL7OdcBqaZykz
+ Gl0jHv36rbYg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
-   d="scan'208";a="411420420"
+   d="scan'208";a="411420433"
 Received: from sai-dev-mach.sc.intel.com ([143.183.140.153])
-  by orsmga004.jf.intel.com with ESMTP; 18 May 2020 15:14:01 -0700
+  by orsmga004.jf.intel.com with ESMTP; 18 May 2020 15:14:02 -0700
 From:   Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
 To:     shuah@kernel.org, skhan@linuxfoundation.org,
         linux-kselftest@vger.kernel.org
@@ -33,9 +33,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         fenghua.yu@intel.com, x86@kernel.org, linux-kernel@vger.kernel,
         dan.carpenter@oracle.com, dcb314@hotmail.com,
         Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
-Subject: [PATCH V2 15/19] selftests/resctrl: Change return type of umount_resctrlfs() to void
-Date:   Mon, 18 May 2020 15:08:35 -0700
-Message-Id: <3c00e744acbfa67a1988638f1718cd67382a6f59.1589835155.git.sai.praneeth.prakhya@intel.com>
+Subject: [PATCH V2 16/19] selftests/resctrl: Umount resctrl FS only if mounted
+Date:   Mon, 18 May 2020 15:08:36 -0700
+Message-Id: <f65df6aa5dc5b66ac804389e7859a08101107285.1589835155.git.sai.praneeth.prakhya@intel.com>
 X-Mailer: git-send-email 2.19.1
 In-Reply-To: <cover.1589835155.git.sai.praneeth.prakhya@intel.com>
 References: <cover.1589835155.git.sai.praneeth.prakhya@intel.com>
@@ -46,49 +46,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-umount_resctrlfs() is used only during tear down path and there is nothing
-much to do if unmount of resctrl file system fails, so, all the callers of
-this function are not checking for the return value. Hence, change the
-return type of this function from int to void.
+Currently, umount_resctrlfs() directly attempts to unmount resctrl FS
+without checking if resctrl FS is already mounted or not. But, there
+could be situations where-in the caller might not know if resctrl FS is
+already mounted or not. The caller might want to unmount resctrl FS _only_
+if it's already mounted.
+
+Hence, change umount_resctrlfs() such that it now first checks if resctrl
+FS is mounted or not and unmounts resctrl FS only if it's already mounted
+and does nothing if it's not mounted.
 
 Signed-off-by: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl.h   | 2 +-
- tools/testing/selftests/resctrl/resctrlfs.c | 9 ++-------
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/resctrlfs.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 65ca24bf3eac..23b691001f0b 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -76,7 +76,7 @@ bool check_resctrlfs_support(void);
- int filter_dmesg(void);
- int remount_resctrlfs(bool mum_resctrlfs);
- int get_resource_id(int cpu_no, int *resource_id);
--int umount_resctrlfs(void);
-+void umount_resctrlfs(void);
- int validate_bw_report_request(char *bw_report);
- bool validate_resctrl_feature_request(const char *resctrl_val);
- char *fgrep(FILE *inf, const char *str);
 diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 05956319d9ce..83cd3b026c52 100644
+index 83cd3b026c52..ebc8e3b4f7ff 100644
 --- a/tools/testing/selftests/resctrl/resctrlfs.c
 +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -90,15 +90,10 @@ int remount_resctrlfs(bool mum_resctrlfs)
- 	return ret;
- }
+@@ -92,8 +92,10 @@ int remount_resctrlfs(bool mum_resctrlfs)
  
--int umount_resctrlfs(void)
-+void umount_resctrlfs(void)
+ void umount_resctrlfs(void)
  {
--	if (umount(RESCTRL_PATH)) {
-+	if (umount(RESCTRL_PATH))
- 		perror("# Unable to umount resctrl");
--
--		return errno;
--	}
--
--	return 0;
+-	if (umount(RESCTRL_PATH))
+-		perror("# Unable to umount resctrl");
++	if (!find_resctrl_mount(NULL)) {
++		if (umount(RESCTRL_PATH))
++			perror("# Unable to umount resctrl");
++	}
  }
  
  /*
