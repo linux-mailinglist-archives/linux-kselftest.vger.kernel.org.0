@@ -2,89 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E33391D9E1A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 19:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466D61D9FA5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 20:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729001AbgESRoz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 May 2020 13:44:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46026 "EHLO mail.kernel.org"
+        id S1726502AbgESSjZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 May 2020 14:39:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726059AbgESRoz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 May 2020 13:44:55 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726447AbgESSjZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 May 2020 14:39:25 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D95E20708;
-        Tue, 19 May 2020 17:44:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88897207D3;
+        Tue, 19 May 2020 18:39:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589910295;
-        bh=LH/18jKdD4+8dj8U6OaV6ZmON9IfifCHP6whVy4u2dg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UfsCw1/B8B8h3JBZYFQESYsQ8akmx/QQ2q3CHrM7/b4e01E5TLYBNt1Dq2e4NL3OI
-         cEnKRiv+vCb4M5sfSx4u4Ys08MJvjKEqI/0W/SvST2RRykoWTkhMwifOi87Zlgvpzu
-         SegQgDxxHDi1PVNyiyrVwFheVr95oQ+VylbvIGnE=
-Date:   Tue, 19 May 2020 18:44:52 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     shuah <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/3] selftests: vdso: Add a selftest for vDSO getcpu()
-Message-ID: <20200519174452.GR4611@sirena.org.uk>
-References: <20200505174728.46594-1-broonie@kernel.org>
- <20200505174728.46594-4-broonie@kernel.org>
- <dff4dfbd-f3f1-d683-5dac-4404e9023b2e@kernel.org>
+        s=default; t=1589913564;
+        bh=KStAFTlR47KmXl1GzAy98aMWrh+mGBMToQO5AHu1/Hg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=PhMx8KKcC13IvukzSxjvdw9D4V5NjWsEx8IS3yTWsEyTx19C9QceFLZx6Gs8wdq9f
+         9Gn1Ixl73nqTg6KaIVPlTtBzW0ZNjqi4YJTK2fPBWDZh+OxurW1aULf1SK+hN7Py4D
+         m2fkcoapz+TKuNdeiVt+HWq3+caJt+/l7yXtNifs=
+Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
+To:     Veronika Kabatova <vkabatov@redhat.com>
+Cc:     Veronika Kabatova <veronicca114@gmail.com>, sbrivio@redhat.com,
+        linux-kselftest@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20200428123841.2953099-1-vkabatov@redhat.com>
+ <529c2308-0840-a794-fc09-d44272066b08@kernel.org>
+ <687583033.21650764.1588593000351.JavaMail.zimbra@redhat.com>
+ <492228e8-9762-dfe9-8cb6-534c8e6171b9@kernel.org>
+From:   shuah <shuah@kernel.org>
+Message-ID: <cb18f49a-02aa-4a85-a80d-e991254cd6b9@kernel.org>
+Date:   Tue, 19 May 2020 12:39:23 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zj18g9eElA7rRQh+"
-Content-Disposition: inline
-In-Reply-To: <dff4dfbd-f3f1-d683-5dac-4404e9023b2e@kernel.org>
-X-Cookie: Do not write below this line.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <492228e8-9762-dfe9-8cb6-534c8e6171b9@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Veronika,
 
---zj18g9eElA7rRQh+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/6/20 8:56 AM, shuah wrote:
+> On 5/4/20 5:50 AM, Veronika Kabatova wrote:
+>>
+>>
+>> ----- Original Message -----
+>>> From: "shuah" <shuah@kernel.org>
+>>> To: "Veronika Kabatova" <veronicca114@gmail.com>
+>>> Cc: sbrivio@redhat.com, linux-kselftest@vger.kernel.org, "Veronika 
+>>> Kabatova" <vkabatov@redhat.com>, "shuah"
+>>> <shuah@kernel.org>
+>>> Sent: Friday, May 1, 2020 4:49:34 PM
+>>> Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
+>>>
+>>> Hi Veronica,
+>>>
+>>
+>> Hi,
+>>
+>>> On 4/28/20 6:38 AM, Veronika Kabatova wrote:
+>>>> The gen_kselftest_tar.sh always packages *all* selftests and doesn't
+>>>> pass along any variables to `make install` to influence what should be
+>>>> built. This can result in an early error on the command line ("Unknown
+>>>> tarball format TARGETS=XXX"), or unexpected test failures as the
+>>>> tarball contains tests people wanted to skip on purpose.
+>>>>
+>>>> Since the makefile already contains all the logic, we can add a target
+>>>> for packaging. Keep the default .gz target the script uses, and 
+>>>> actually
+>>>> extend the supported formats by using tar's autodetection.
+>>>>
+>>>
+>>> Thanks for working on this. gen_kselftest_tar.sh  a while back before a
+>>> lot of the install features went in and Makefile supports it fully. It
+>>> makes perfect sense to use Makefile drive this.
+>>>
+>>>> To not break current workflows, keep the gen_kselftest_tar.sh script as
+>>>> it is, with an added suggestion to use the makefile target instead.
+>>>>
+>>>
+>>> Not sure how many people use this. It is a good idea keeping it around
+>>> for now.
+>>>
+>>>> Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
 
-On Tue, May 19, 2020 at 11:11:28AM -0600, shuah wrote:
-> On 5/5/20 11:47 AM, Mark Brown wrote:
+There is a mispatch between your from email address and signed-off line.
+Please make sure they match.
 
-> > +int main(int argc, char **argv)
-> > +{
-> > +	unsigned long sysinfo_ehdr =3D getauxval(AT_SYSINFO_EHDR);
->=20
-> WARNING: Missing a blank line after declarations
-> WARNING: Missing a blank line after declarations
-> #135: FILE: tools/testing/selftests/vDSO/vdso_test_getcpu.c:27:
-> +	unsigned long sysinfo_ehdr =3D getauxval(AT_SYSINFO_EHDR);
-> +	if (!sysinfo_ehdr) {
+Also there is a spelling error in the document.
 
-This is the idiom in use by the existing gettimeofday test:
 
-WARNING: Missing a blank line after declarations
-#38: FILE: tools/testing/selftests/vDSO/vdso_test_gettimeofday.c:38:
-+	unsigned long sysinfo_ehdr =3D getauxval(AT_SYSINFO_EHDR);
-+	if (!sysinfo_ehdr) {
+WARNING: 'overriden' may be misspelled - perhaps 'overridden'?
+#125: FILE: Documentation/dev-tools/kselftest.rst:163:
++default, `.gz` format is used. The tar format can be overriden by 
+specifying
 
-so I don't know how you want the code to look here?
+WARNING: Missing Signed-off-by: line by nominal patch author 'Veronika 
+Kabatova <veronicca114@gmail.com>'
 
---zj18g9eElA7rRQh+
-Content-Type: application/pgp-signature; name="signature.asc"
+Please fix them and sen me v2.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7EGxMACgkQJNaLcl1U
-h9Dtrgf9EvPl6k4mQxLhof/GI9tdCjeQvG/Mnv+3PVimZt6YlWwQj/GFbMTzhRKS
-TnWRtySrFArKtJJZT+cmsWR97PIH84sdlc6CJrxnsWUltZhuqxqocTMrDAQB9blU
-0qjMzXi6cfIIDeF8NC9LSvQoZOM7PznXZ28meiv0cqqX1hPegI7ihg1woGRlRkPn
-FXw6awO+1qKNTjPJsSwTjrqUTX5r4Jsf1r9ccrAVJuh/D+T5+Szjyqy/OLCuHJEp
-soHSdEfFRrfh6NE0pl57MiYpB0mXRnQcKnBQNsgnirF4QXr7dMFQEvEiLIdvkTnD
-llBPb6z1WnlinXHtHkNE/qBaDNMFOw==
-=OVk4
------END PGP SIGNATURE-----
-
---zj18g9eElA7rRQh+--
+thanks,
+-- Shuah
