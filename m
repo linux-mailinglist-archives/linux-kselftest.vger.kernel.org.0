@@ -2,98 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BC31D95E7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 14:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF2C1D960A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 14:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728686AbgESMIZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 May 2020 08:08:25 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:54250 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726196AbgESMIY (ORCPT
+        id S1728830AbgESMQK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 May 2020 08:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728612AbgESMQK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 May 2020 08:08:24 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 923684050C;
-        Tue, 19 May 2020 12:08:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1589890104; bh=5U+7CPG84Fx9MSC1QbUrTwvZo58qbTd3QcFm6yKsI9w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F98P3paCBmltrL9S1Ef3yazrOSEjbRdI26DYsfv2I2yxHmGNMcUsqop8Y7FREVDc3
-         Wg/vfiP+OdUO7px0l6hJYguCZuz7vHcWf7j8UzRXi3kBpefueDrNVeOnc3tTIsagbh
-         BgZxwOcFZp5+Ydrk7B/h7yPkZzHf4zRWCm44ILp+MLX1u8oJ+rsIzXiVdj7Jm6jOzH
-         M0atw6L9jbRYj1i1S/lBuKHrASrNSuNKhe8y3G1RAs5Nwc2fqQwg+Sv+Aw18Rf7DmI
-         IUqX7hymMrvVkOXUIZLcGKMRHhpHvdgqiTRADRjVlCv4U6MePR5lfEzTUi5q7soC+6
-         Cfzrei8hUv9bQ==
-Received: from ru20arcgnu1.internal.synopsys.com (ru20arcgnu1.internal.synopsys.com [10.121.9.48])
-        by mailhost.synopsys.com (Postfix) with ESMTP id 716F7A005C;
-        Tue, 19 May 2020 12:08:20 +0000 (UTC)
-From:   Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Tue, 19 May 2020 08:16:10 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A9FC08C5C0;
+        Tue, 19 May 2020 05:16:09 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id m185so3275669wme.3;
+        Tue, 19 May 2020 05:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CI8m9crALg/Xn9OTn2CBKMgQVjthPtgSj7GKK6/xrJY=;
+        b=vBqmOvTO2RpDH6eAR9P3QBjukIRoBhlYcOfYsZS2KPUH2g7YNw3monWGp1OTTphsZr
+         2BOEwUj0BfqLk13bC05HQvnpLhd+RXE8NX6/wusaJZ4jg+TZHXKBYhcx0jt8Eo3cJ7Hz
+         Y0wBW/ahm1c5pY7qSy5U8LUOfF5KnDEj905txbJ9j9VYGvbD8skZl5FDp/1x7S8TOzra
+         FiIuG06zXO5qpN6aI6/2AhgeUJMB/8Wy/Yado2WGM34H+G7tmZ5z5pCX5iuLeGc3H72O
+         W9lMeK/jqmk5fHNDYm4WN4Vhe67nU0qs0ujenvJa3chTKbNCLe9tESJ41lkBoKAm41gX
+         EBPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=CI8m9crALg/Xn9OTn2CBKMgQVjthPtgSj7GKK6/xrJY=;
+        b=GAsh3hpj/s384s3kkIAB11AdE3AKCUwL7vfsKmb0fXFtxqo8ml+8lQKLDsyJbzXuxJ
+         V/OxsbPZpFmam5r+9cPKM0N8XkJkcYWMxzY4E9M/RdjxGMvkoLHpSHyBprlYMjZ0ZUq8
+         OoMcKU2ESx7oW9emE6lL3+t32hyRvswBspP5ahWcO5Lpi/tleSYyjZGn9W28Kvhdavgb
+         qAt89ugCgJ8gBQMV0/cKSbQiOhd3Uh6v41YOYIMiZ4o24Ug/0SeMVddOgNOy5xVftyRi
+         427BzgWWa4TIeK6543p7Mv8AgwpFwbBzCfALYaqq+t2SKdUOqr215WCiSBagCU4vJCYO
+         pMPg==
+X-Gm-Message-State: AOAM533FQ6XVU08epT44lGiadpnEFOUBVUy0JMDRjFPOheSpZ1dbOQ9k
+        q86vpWp6czd/yEGbh2gsiks=
+X-Google-Smtp-Source: ABdhPJxHMUI94FzaEe4xQzVqMjormWR9atpJ2uAM5QMcxIJw4AE3uiC6h2FBqph/XlkkdbNUkyB9Sg==
+X-Received: by 2002:a05:600c:2c4e:: with SMTP id r14mr5467146wmg.118.1589890568466;
+        Tue, 19 May 2020 05:16:08 -0700 (PDT)
+Received: from dell5510 ([62.201.25.198])
+        by smtp.gmail.com with ESMTPSA id t129sm4356833wmg.27.2020.05.19.05.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 05:16:07 -0700 (PDT)
+Date:   Tue, 19 May 2020 14:16:05 +0200
+From:   Petr Vorel <petr.vorel@gmail.com>
+To:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Tadeusz Struk <tadeusz.struk@intel.com>,
         Joey Pabalinas <joeypabalinas@gmail.com>,
-        Petr Vorel <petr.vorel@gmail.com>,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Peter Huewe <peterhuewe@gmx.de>,
         Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
         Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         linux-snps-arc@lists.infradead.org,
-        Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Subject: [PATCH v2] Kernel selftests: Add check if tpm devices are supported
-Date:   Tue, 19 May 2020 15:07:43 +0300
-Message-Id: <20200519120743.41358-1-Nikita.Sobolev@synopsys.com>
-X-Mailer: git-send-email 2.16.2
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2] Kernel selftests: Add check if tpm devices are
+ supported
+Message-ID: <20200519121605.GA26265@dell5510>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+References: <20200519120743.41358-1-Nikita.Sobolev@synopsys.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200519120743.41358-1-Nikita.Sobolev@synopsys.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-tpm2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
-are available. In case, when these devices are not available test
-fails, but expected behaviour is skipped test.
+Hi Nikita,
 
-Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
----
-Changes for v2:
-    - Coding Style cleanup
+> tpm2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
+> are available. In case, when these devices are not available test
+> fails, but expected behaviour is skipped test.
 
- tools/testing/selftests/tpm2/test_smoke.sh | 5 +++++
- tools/testing/selftests/tpm2/test_space.sh | 5 +++++
- 2 files changed, 10 insertions(+)
+> Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 8155c2ea7ccb..663062701d5a 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -1,6 +1,11 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -f /dev/tpm0 ] || exit $ksft_skip
-+
- python -m unittest -v tpm2_tests.SmokeTest
- python -m unittest -v tpm2_tests.AsyncTest
- 
-diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-index a6f5e346635e..36c9d030a1c6 100755
---- a/tools/testing/selftests/tpm2/test_space.sh
-+++ b/tools/testing/selftests/tpm2/test_space.sh
-@@ -1,4 +1,9 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -f /dev/tpmrm0 ] || exit $ksft_skip
-+
- python -m unittest -v tpm2_tests.SpaceTest
--- 
-2.16.2
+Thanks for v2, but I see v1 already merged in next tree since February.
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20200518&id=b32694cd0724d4ceca2c62cc7c3d3a8d1ffa11fc
 
+Kind regards,
+Petr
