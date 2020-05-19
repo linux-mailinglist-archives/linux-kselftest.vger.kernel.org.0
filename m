@@ -2,102 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2183B1DA151
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 21:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223E01DA152
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 21:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbgESTup (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 May 2020 15:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726703AbgESTuo (ORCPT
+        id S1726703AbgESTvB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 May 2020 15:51:01 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:34141 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726643AbgESTvB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 May 2020 15:50:44 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FD1C08C5C2
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2020 12:50:42 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id m64so676245qtd.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2020 12:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=l1V3Tgw02jIXDbVJ9iD00NVCbfLIhXJCqqu7R58D3Ic=;
-        b=hyGaM1XtP9QcE4gMqttRjlKiSby43ALZhvaUIG1a8HKnQF+bmay6tolp4kdZvK+56D
-         p1u1oAFduyBAF9zrTldnPdlWlY6zBI9z1PVy+50BBc1hWiSoXee3ylMEmngDCmARnEdK
-         bMqVMPDifjogTsiAWgLrrma6FxDziVpivAhTydfNxU+jYDsskTwEkurXe7cti8cjv0NB
-         CwtJuNl0fg+MHRx+zkm67jQvVatY6N87BEj60z2f6rzSJpC3Ay+t9RSLqnYNPER9fqP8
-         qBfkgE4g4zZs6eUpreiQEwNlBErJnP+3ipDt70Mwk3WihQ4ovLCECy53ex0aWXEZalOc
-         nd+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=l1V3Tgw02jIXDbVJ9iD00NVCbfLIhXJCqqu7R58D3Ic=;
-        b=mJJZo6pIeD9ZucGeGIFYeV5ARRCysiMnPD9Eke8csZEEQoym4GlbrMMO63bnyhLHxm
-         e5lcJXQm86TNUobo0gdv9aVB1QaXIoqpI/lZq8F8rz7vUcbVmy4EmRLMHIRDfQV2kb7m
-         xE3aO8spqzzyxDA5CDzIn+dCnH0i4sPfBX2y6ks7HT8VZX4QdouLRfSRIM4MKA6pLOJg
-         uk6BEqC5mOPAnZ5ecmak/gzJ9S8dKMK3hKzfPyYjATUsjRrqQYs4myu6XgP6Tujt02Uo
-         xGc5zcOk2bGbaruko8/bEUIZnmwegwXZVrbzfvJxgHv2vQO3NcjKcV0Z3YoS4br6iACn
-         5svw==
-X-Gm-Message-State: AOAM532Ohc/2Ds9NW6uyVm0VZ61Qpj+UGW2F+JDP8V7Hwx5Jk+oUUoZs
-        uj+8pD4YP1FLZJUi0mlceff7wA==
-X-Google-Smtp-Source: ABdhPJy6JaIffKHbVZ/MvpPZNVvqEHP/VC9PD5c8cyUebyj+n7SZYQ9s4TSklbNNVWZyIyp3I3uKAg==
-X-Received: by 2002:ac8:2979:: with SMTP id z54mr1666184qtz.14.1589917841631;
-        Tue, 19 May 2020 12:50:41 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id q17sm414087qkq.111.2020.05.19.12.50.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 May 2020 12:50:41 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1jb8G8-0007fQ-Lk; Tue, 19 May 2020 16:50:40 -0300
-Date:   Tue, 19 May 2020 16:50:40 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     linux-rdma@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2] mm/hmm/test: use xa_for_each_range instead of looping
-Message-ID: <20200519195040.GA29444@ziepe.ca>
-References: <20200516010424.2013-1-rcampbell@nvidia.com>
+        Tue, 19 May 2020 15:51:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589917859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ATCqYOSghN4+w4h5JMu3321ql/sjpzsjQo34h345RKE=;
+        b=AIxDk6Jk88ycYmYWPApZiemmFy3lgHod30hzuGpjvCg5S2YK60wJKlZbXEUgjVmQGoR1MR
+        3r8QabqX4SE0PNdq8UntsVkyDySM0l/6grv0qLX7ymptkOYUQNur1MYSPbQs90MVToIVsc
+        F7TBhUK+kyoOmqxmnvUikZ5hfOZbnIg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-174-AxYRYGU8OW2Y4pm6jMTSAQ-1; Tue, 19 May 2020 15:50:55 -0400
+X-MC-Unique: AxYRYGU8OW2Y4pm6jMTSAQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1F7E107B266;
+        Tue, 19 May 2020 19:50:54 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA2B31001B2C;
+        Tue, 19 May 2020 19:50:54 +0000 (UTC)
+Received: from zmail19.collab.prod.int.phx2.redhat.com (zmail19.collab.prod.int.phx2.redhat.com [10.5.83.22])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id C236C4ED87;
+        Tue, 19 May 2020 19:50:54 +0000 (UTC)
+Date:   Tue, 19 May 2020 15:50:54 -0400 (EDT)
+From:   Veronika Kabatova <vkabatov@redhat.com>
+To:     shuah <shuah@kernel.org>
+Cc:     sbrivio@redhat.com, linux-kselftest@vger.kernel.org
+Message-ID: <45315971.23643916.1589917854550.JavaMail.zimbra@redhat.com>
+In-Reply-To: <cb18f49a-02aa-4a85-a80d-e991254cd6b9@kernel.org>
+References: <20200428123841.2953099-1-vkabatov@redhat.com> <529c2308-0840-a794-fc09-d44272066b08@kernel.org> <687583033.21650764.1588593000351.JavaMail.zimbra@redhat.com> <492228e8-9762-dfe9-8cb6-534c8e6171b9@kernel.org> <cb18f49a-02aa-4a85-a80d-e991254cd6b9@kernel.org>
+Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200516010424.2013-1-rcampbell@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.40.196.38, 10.4.195.20]
+Thread-Topic: selftests: introduce gen_tar Makefile target
+Thread-Index: ioEK4iVIpzlGRIowjyRjeP5QMCAMwQ==
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 15, 2020 at 06:04:24PM -0700, Ralph Campbell wrote:
-> The test driver uses an xa_array to store virtual to physical address
-> translations for a simulated hardware device. The MMU notifier
-> invalidation callback is used to keep the table consistent with the CPU
-> page table and is frequently called only for a page or two. However, if
-> the test process exits unexpectedly or is killed, the range can be
-> [0..ULONG_MAX] in which case calling xa_erase() for every possible PFN
-> results in CPU timeouts.
-> Use xa_for_each_range() to efficiently erase entries in the range.
-> 
-> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-> ---
-> 
-> This patch is based on Jason Gunthorpe's hmm tree and should be folded
-> into the ("mm/hmm/test: add selftest driver for HMM") patch once this
-> patch is reviewed, etc.
-> 
-> v1 -> v2:
-> Use xa_for_each_range() instead of special casing [0..ULONG_MAX].
-> 
->  lib/test_hmm.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 
-I squashed this in
 
-Thanks,
-Jason
+----- Original Message -----
+> From: "shuah" <shuah@kernel.org>
+> To: "Veronika Kabatova" <vkabatov@redhat.com>
+> Cc: "Veronika Kabatova" <veronicca114@gmail.com>, sbrivio@redhat.com, lin=
+ux-kselftest@vger.kernel.org, "shuah"
+> <shuah@kernel.org>
+> Sent: Tuesday, May 19, 2020 8:39:23 PM
+> Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
+>=20
+> Hi Veronika,
+>=20
+> On 5/6/20 8:56 AM, shuah wrote:
+> > On 5/4/20 5:50 AM, Veronika Kabatova wrote:
+> >>
+> >>
+> >> ----- Original Message -----
+> >>> From: "shuah" <shuah@kernel.org>
+> >>> To: "Veronika Kabatova" <veronicca114@gmail.com>
+> >>> Cc: sbrivio@redhat.com, linux-kselftest@vger.kernel.org, "Veronika
+> >>> Kabatova" <vkabatov@redhat.com>, "shuah"
+> >>> <shuah@kernel.org>
+> >>> Sent: Friday, May 1, 2020 4:49:34 PM
+> >>> Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
+> >>>
+> >>> Hi Veronica,
+> >>>
+> >>
+> >> Hi,
+> >>
+> >>> On 4/28/20 6:38 AM, Veronika Kabatova wrote:
+> >>>> The gen_kselftest_tar.sh always packages *all* selftests and doesn't
+> >>>> pass along any variables to `make install` to influence what should =
+be
+> >>>> built. This can result in an early error on the command line ("Unkno=
+wn
+> >>>> tarball format TARGETS=3DXXX"), or unexpected test failures as the
+> >>>> tarball contains tests people wanted to skip on purpose.
+> >>>>
+> >>>> Since the makefile already contains all the logic, we can add a targ=
+et
+> >>>> for packaging. Keep the default .gz target the script uses, and
+> >>>> actually
+> >>>> extend the supported formats by using tar's autodetection.
+> >>>>
+> >>>
+> >>> Thanks for working on this. gen_kselftest_tar.sh=C2=A0 a while back b=
+efore a
+> >>> lot of the install features went in and Makefile supports it fully. I=
+t
+> >>> makes perfect sense to use Makefile drive this.
+> >>>
+> >>>> To not break current workflows, keep the gen_kselftest_tar.sh script=
+ as
+> >>>> it is, with an added suggestion to use the makefile target instead.
+> >>>>
+> >>>
+> >>> Not sure how many people use this. It is a good idea keeping it aroun=
+d
+> >>> for now.
+> >>>
+> >>>> Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
+>=20
+> There is a mispatch between your from email address and signed-off line.
+> Please make sure they match.
+>=20
+> Also there is a spelling error in the document.
+>=20
+>=20
+> WARNING: 'overriden' may be misspelled - perhaps 'overridden'?
+> #125: FILE: Documentation/dev-tools/kselftest.rst:163:
+> +default, `.gz` format is used. The tar format can be overriden by
+> specifying
+>=20
+
+Thanks for pointing it out.
+
+> WARNING: Missing Signed-off-by: line by nominal patch author 'Veronika
+> Kabatova <veronicca114@gmail.com>'
+>=20
+
+Yes, that's because the work email decided to drop some public addresses
+and the original patch didn't make it to you or the list. We got it fixed
+so I'll send a v2 from there in a minute, sorry for the trouble.
+
+
+Veronika
+
+> Please fix them and sen me v2.
+>=20
+> thanks,
+> -- Shuah
+>=20
+>=20
+
