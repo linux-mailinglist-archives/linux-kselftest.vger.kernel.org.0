@@ -2,142 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 940C81D9BAB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 17:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EBA1D9D95
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 19:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729204AbgESPu2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 May 2020 11:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728534AbgESPu2 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 May 2020 11:50:28 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FACC08C5C0;
-        Tue, 19 May 2020 08:50:27 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ci21so1554973pjb.3;
-        Tue, 19 May 2020 08:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AHB18FnKAoqJzm0hykNiv4yZDqIuhCRDkCqTAP0Fza4=;
-        b=QnNPvhaHvPjBVI/mG9O+hAmqbMjquL9s/zmkb+9meC8rSuBDLe7FQ8nMwG+U8ZxSEi
-         F6PjYH8sX+az7OnVlmnLh9hn1LLMNXj9d2qenWkcW+/W0YDcYh+rIXZM4W913siZRXuW
-         KQKN897o5aLdFm/g8wz6Z/xwA92k2ifVjZOJn9V+2D9H/7LIyw3eX28YsA39YDdQGHJ8
-         +ww4Ae9hT+klcE06nFRFvdahB4hoi5l4j8ZcV/g/Zi0zT6OGwvqMIrOo+Ya0/DU5BdQo
-         DYH0rMRpgsLYv0T262RO87DhjL7iJRhbYvBHYuND/jI8xPNJNBt/maG7/bmhQGQrbtxa
-         I9CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AHB18FnKAoqJzm0hykNiv4yZDqIuhCRDkCqTAP0Fza4=;
-        b=YpVXSdKVt4Sa0z6xeodaRR4y2gGy7DaD38egNGo5Z/oIfUpla+XX/XH+N2wTrWoGy4
-         zf1Abub+X4Ai4kZOldGl6SA62mNgBG410djRkxS0vpMZh/5ToFl1NZIgVaBq8bdzZHsS
-         F4Ul+2HORkhYpRntnHT20K1czaVuv3YRrayBNpX7dBKvfUCT+12/aFdNA7vcjv1SPLgA
-         BjtcgW5htjVJdQUIeAiAMCqlqpiJLoRz5spvH0cKJtGUULH9sCX5ceVuVvUsSKLAeysv
-         CQj80ko7E1Fjye7qWZPu0P3XvbYpoQND/oPrKtzyqUXcn5mPThh6/ICBqvj1RM3htMq7
-         2xiA==
-X-Gm-Message-State: AOAM5318LEkkmq+rzUfi6G92K5S+gh4ZhAm8izjGhlu6TV34CNk1BQNZ
-        tW48zWGcxAys8Eze5valYdA=
-X-Google-Smtp-Source: ABdhPJxcFDvvZRcc6B2dds0KSXBbh7Kpiwc0U5r6qb5JbXZg+WDQ8gRZfYUL49kKtBH7JSaQAfrzuA==
-X-Received: by 2002:a17:902:599b:: with SMTP id p27mr129948pli.75.1589903426596;
-        Tue, 19 May 2020 08:50:26 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:7206])
-        by smtp.gmail.com with ESMTPSA id s13sm7769280pfh.118.2020.05.19.08.50.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 08:50:24 -0700 (PDT)
-Date:   Tue, 19 May 2020 08:50:21 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andriin@fb.com, bpf@vger.kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: add general instructions for
- test execution
-Message-ID: <20200519155021.6tag46i57z2hsivj@ast-mbp.dhcp.thefacebook.com>
-References: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
+        id S1729164AbgESRLa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 May 2020 13:11:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41086 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729001AbgESRLa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 May 2020 13:11:30 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6286920709;
+        Tue, 19 May 2020 17:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589908289;
+        bh=AhoIJIhI20EELQu2FCFvcJtbYqUj+WKPqBjlG6rzH7g=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Kl2YChZrd4IHZJAYhBvYynKdRg25g1P+rI7Sh3kRvohAKji2xq+9bGiAanen+lDCt
+         dcrRMw8SdCLmiVWhGCDCZ67nAtZSe7mP+4rZXdFacBeMoZR5cooYe4rMAqtQ7Ywm3V
+         Rfach0W5hfPC4Pnuy+Ion7DOZ2vubJbupTji6a1k=
+Subject: Re: [PATCH 3/3] selftests: vdso: Add a selftest for vDSO getcpu()
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20200505174728.46594-1-broonie@kernel.org>
+ <20200505174728.46594-4-broonie@kernel.org>
+From:   shuah <shuah@kernel.org>
+Message-ID: <dff4dfbd-f3f1-d683-5dac-4404e9023b2e@kernel.org>
+Date:   Tue, 19 May 2020 11:11:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <20200505174728.46594-4-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 18, 2020 at 12:23:10PM +0100, Alan Maguire wrote:
-> Getting a clean BPF selftests run involves ensuring latest trunk LLVM/clang
-> are used, pahole is recent (>=1.16) and config matches the specified
-> config file as closely as possible.  Document all of this in the general
-> README.rst file.  Also note how to work around timeout failures.
+Hi Mark,
+
+On 5/5/20 11:47 AM, Mark Brown wrote:
+> Provide a very basic selftest for getcpu() which similarly to our existing
+> test for gettimeofday() looks up the function in the vDSO and prints the
+> results it gets if the function exists and succeeds.
 > 
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  tools/testing/selftests/bpf/README.rst | 46 ++++++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
+>   tools/testing/selftests/vDSO/.gitignore       |  1 +
+>   tools/testing/selftests/vDSO/Makefile         |  3 +-
+>   .../testing/selftests/vDSO/vdso_test_getcpu.c | 50 +++++++++++++++++++
+>   3 files changed, 53 insertions(+), 1 deletion(-)
+>   create mode 100644 tools/testing/selftests/vDSO/vdso_test_getcpu.c
 > 
-> diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-> index 0f67f1b..b00eebb 100644
-> --- a/tools/testing/selftests/bpf/README.rst
-> +++ b/tools/testing/selftests/bpf/README.rst
-> @@ -1,6 +1,52 @@
->  ==================
->  BPF Selftest Notes
->  ==================
-> +First verify the built kernel config options match the config options
-> +specified in the config file in this directory.  Test failures for
-> +unknown helpers, inability to find BTF etc will be observed otherwise.
+> diff --git a/tools/testing/selftests/vDSO/.gitignore b/tools/testing/selftests/vDSO/.gitignore
+> index 74f49bd5f6dd..5eb64d41e541 100644
+> --- a/tools/testing/selftests/vDSO/.gitignore
+> +++ b/tools/testing/selftests/vDSO/.gitignore
+> @@ -1,4 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   vdso_test
+>   vdso_test_gettimeofday
+> +vdso_test_getcpu
+>   vdso_standalone_test_x86
+> diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+> index ae15d700b62e..0069f2f83f86 100644
+> --- a/tools/testing/selftests/vDSO/Makefile
+> +++ b/tools/testing/selftests/vDSO/Makefile
+> @@ -4,7 +4,7 @@ include ../lib.mk
+>   uname_M := $(shell uname -m 2>/dev/null || echo not)
+>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>   
+> -TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday
+> +TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday $(OUTPUT)/vdso_test_getcpu
+>   ifeq ($(ARCH),x86)
+>   TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
+>   endif
+> @@ -18,6 +18,7 @@ endif
+>   
+>   all: $(TEST_GEN_PROGS)
+>   $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
+> +$(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
+>   $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+>   	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+>   		vdso_standalone_test_x86.c parse_vdso.c \
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
+> new file mode 100644
+> index 000000000000..a9dd3db145f3
+> --- /dev/null
+> +++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
+> @@ -0,0 +1,50 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * vdso_test_getcpu.c: Sample code to test parse_vdso.c and vDSO getcpu()
+> + *
+> + * Copyright (c) 2020 Arm Ltd
+> + */
 > +
-> +To ensure the maximum number of tests pass, it is best to use the latest
-> +trunk LLVM/clang, i.e.
+> +#include <stdint.h>
+> +#include <elf.h>
+> +#include <stdio.h>
+> +#include <sys/auxv.h>
+> +#include <sys/time.h>
 > +
-> +git clone https://github.com/llvm/llvm-project
+> +#include "../kselftest.h"
+> +#include "parse_vdso.h"
 > +
-> +Build/install trunk LLVM:
+> +const char *version = "LINUX_2.6";
+> +const char *name = "__vdso_getcpu";
 > +
-> +.. code-block:: bash
-> +  git clone https://github.com/llvm/llvm-project
-> +  cd llvm-project
-> +  mkdir build/llvm
-> +  cd build/llvm
-> +  cmake ../../llvm/
-> +  make
-> +  sudo make install
-> +  cd ../../
+> +struct getcpu_cache;
+> +typedef long (*getcpu_t)(unsigned int *, unsigned int *,
+> +			 struct getcpu_cache *);
 > +
-> +Build/install trunk clang:
-> +
-> +.. code-block:: bash
-> +  mkdir -p build/clang
-> +  cd build/clang
-> +  cmake ../../clang
-> +  make
-> +  sudo make install
-> +
+> +int main(int argc, char **argv)
+> +{
+> +	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
 
-these instructions are obsolete and partially incorrect.
-May be refer to Documentation/bpf/bpf_devel_QA.rst instead?
+WARNING: Missing a blank line after declarations
+WARNING: Missing a blank line after declarations
+#135: FILE: tools/testing/selftests/vDSO/vdso_test_getcpu.c:27:
++	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
++	if (!sysinfo_ehdr) {
 
-> +When building the kernel with CONFIG_DEBUG_INFO_BTF, pahole
-> +version 16 or later is also required for BTF function
-> +support. pahole can be built from the source at
-> +
-> +https://github.com/acmel/dwarves
-> +
-> +It is often available in "dwarves/libdwarves" packages also,
-> +but be aware that versions prior to 1.16 will fail with
-> +errors that functions cannot be found in BTF.
-> +
-> +When running selftests, the default timeout of 45 seconds
-> +can be exceeded by some tests.  We can override the default
-> +timeout via a "settings" file; for example:
-> +
-> +.. code-block:: bash
-> +  echo "timeout=120" > tools/testing/selftests/bpf/settings
+WARNING: Missing a blank line after declarations
+#143: FILE: tools/testing/selftests/vDSO/vdso_test_getcpu.c:35:
++	getcpu_t get_cpu = (getcpu_t)vdso_sym(version, name);
++	if (!get_cpu) {
 
-Is it really the case?
-I've never seen anything like this.
+WARNING: Missing a blank line after declarations
+#150: FILE: tools/testing/selftests/vDSO/vdso_test_getcpu.c:42:
++	long ret = get_cpu(&cpu, &node, 0);
++	if (ret == 0) {
+
+Please send v2 for this one.
+
+thanks,
+-- Shuah
+
