@@ -2,125 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5251D9882
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 15:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940C81D9BAB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 May 2020 17:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728647AbgESNsp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 May 2020 09:48:45 -0400
-Received: from mga01.intel.com ([192.55.52.88]:11239 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727904AbgESNsp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 May 2020 09:48:45 -0400
-IronPort-SDR: DH9iWt0FTcQdz2aCiRimaTvtF4CiSXK9q5NYvxvYbIgtIchL1qzlCSC6KXZhQk+D+2fXRFVxPu
- FhfSkWvsjn3Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 06:48:44 -0700
-IronPort-SDR: H/JFjAHMwzZmTTusqpdysvxKXqFJF23mHNOpHPdTHd356dHLXcuk5QvGRbP68bBgYzBfk6LPVq
- nS0/01vIj02w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,410,1583222400"; 
-   d="scan'208";a="343140365"
-Received: from joelin3-mobl.gar.corp.intel.com (HELO localhost) ([10.249.42.57])
-  by orsmga001.jf.intel.com with ESMTP; 19 May 2020 06:48:39 -0700
-Date:   Tue, 19 May 2020 16:48:38 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        linux-snps-arc@lists.infradead.org
-Subject: Re: [PATCH] Kernel selftests: Add check if tpm devices are supported
-Message-ID: <20200519134838.GA17129@linux.intel.com>
-References: <20200518213934.23156-1-Nikita.Sobolev@synopsys.com>
+        id S1729204AbgESPu2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 May 2020 11:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728534AbgESPu2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 May 2020 11:50:28 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FACC08C5C0;
+        Tue, 19 May 2020 08:50:27 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ci21so1554973pjb.3;
+        Tue, 19 May 2020 08:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AHB18FnKAoqJzm0hykNiv4yZDqIuhCRDkCqTAP0Fza4=;
+        b=QnNPvhaHvPjBVI/mG9O+hAmqbMjquL9s/zmkb+9meC8rSuBDLe7FQ8nMwG+U8ZxSEi
+         F6PjYH8sX+az7OnVlmnLh9hn1LLMNXj9d2qenWkcW+/W0YDcYh+rIXZM4W913siZRXuW
+         KQKN897o5aLdFm/g8wz6Z/xwA92k2ifVjZOJn9V+2D9H/7LIyw3eX28YsA39YDdQGHJ8
+         +ww4Ae9hT+klcE06nFRFvdahB4hoi5l4j8ZcV/g/Zi0zT6OGwvqMIrOo+Ya0/DU5BdQo
+         DYH0rMRpgsLYv0T262RO87DhjL7iJRhbYvBHYuND/jI8xPNJNBt/maG7/bmhQGQrbtxa
+         I9CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AHB18FnKAoqJzm0hykNiv4yZDqIuhCRDkCqTAP0Fza4=;
+        b=YpVXSdKVt4Sa0z6xeodaRR4y2gGy7DaD38egNGo5Z/oIfUpla+XX/XH+N2wTrWoGy4
+         zf1Abub+X4Ai4kZOldGl6SA62mNgBG410djRkxS0vpMZh/5ToFl1NZIgVaBq8bdzZHsS
+         F4Ul+2HORkhYpRntnHT20K1czaVuv3YRrayBNpX7dBKvfUCT+12/aFdNA7vcjv1SPLgA
+         BjtcgW5htjVJdQUIeAiAMCqlqpiJLoRz5spvH0cKJtGUULH9sCX5ceVuVvUsSKLAeysv
+         CQj80ko7E1Fjye7qWZPu0P3XvbYpoQND/oPrKtzyqUXcn5mPThh6/ICBqvj1RM3htMq7
+         2xiA==
+X-Gm-Message-State: AOAM5318LEkkmq+rzUfi6G92K5S+gh4ZhAm8izjGhlu6TV34CNk1BQNZ
+        tW48zWGcxAys8Eze5valYdA=
+X-Google-Smtp-Source: ABdhPJxcFDvvZRcc6B2dds0KSXBbh7Kpiwc0U5r6qb5JbXZg+WDQ8gRZfYUL49kKtBH7JSaQAfrzuA==
+X-Received: by 2002:a17:902:599b:: with SMTP id p27mr129948pli.75.1589903426596;
+        Tue, 19 May 2020 08:50:26 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:7206])
+        by smtp.gmail.com with ESMTPSA id s13sm7769280pfh.118.2020.05.19.08.50.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 08:50:24 -0700 (PDT)
+Date:   Tue, 19 May 2020 08:50:21 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andriin@fb.com, bpf@vger.kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: add general instructions for
+ test execution
+Message-ID: <20200519155021.6tag46i57z2hsivj@ast-mbp.dhcp.thefacebook.com>
+References: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200518213934.23156-1-Nikita.Sobolev@synopsys.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 19, 2020 at 12:39:34AM +0300, Nikita Sobolev wrote:
-> tpm2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
-> are available. In case, when these devices are not available test
-> fails, but expected behaviour is test to be skipped.
+On Mon, May 18, 2020 at 12:23:10PM +0100, Alan Maguire wrote:
+> Getting a clean BPF selftests run involves ensuring latest trunk LLVM/clang
+> are used, pahole is recent (>=1.16) and config matches the specified
+> config file as closely as possible.  Document all of this in the general
+> README.rst file.  Also note how to work around timeout failures.
 > 
-> Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-
-tpm2 tests set -> TPM2 test suite
-
-Fixes tag is also required.
-
-There is nothing cool writing acronyms in lower case, so lets
-just always write them correctly.
-
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
->  tools/testing/selftests/tpm2/test_smoke.sh | 11 +++++++++--
->  tools/testing/selftests/tpm2/test_space.sh |  9 ++++++++-
->  2 files changed, 17 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/bpf/README.rst | 46 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-> index 8155c2ea7ccb..e55d3e400666 100755
-> --- a/tools/testing/selftests/tpm2/test_smoke.sh
-> +++ b/tools/testing/selftests/tpm2/test_smoke.sh
-> @@ -1,8 +1,15 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
->  
-> -python -m unittest -v tpm2_tests.SmokeTest
-> -python -m unittest -v tpm2_tests.AsyncTest
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
+> diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+> index 0f67f1b..b00eebb 100644
+> --- a/tools/testing/selftests/bpf/README.rst
+> +++ b/tools/testing/selftests/bpf/README.rst
+> @@ -1,6 +1,52 @@
+>  ==================
+>  BPF Selftest Notes
+>  ==================
+> +First verify the built kernel config options match the config options
+> +specified in the config file in this directory.  Test failures for
+> +unknown helpers, inability to find BTF etc will be observed otherwise.
 > +
-> +if [ -f /dev/tpm0 ] ; then
-> +	python -m unittest -v tpm2_tests.SmokeTest
-> +	python -m unittest -v tpm2_tests.AsyncTest
-> +else
-> +	exit $ksft_skip
-> +fi
->  
->  CLEAR_CMD=$(which tpm2_clear)
->  if [ -n $CLEAR_CMD ]; then
-> diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-> index a6f5e346635e..180b469c53b4 100755
-> --- a/tools/testing/selftests/tpm2/test_space.sh
-> +++ b/tools/testing/selftests/tpm2/test_space.sh
-> @@ -1,4 +1,11 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
->  
-> -python -m unittest -v tpm2_tests.SpaceTest
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
+> +To ensure the maximum number of tests pass, it is best to use the latest
+> +trunk LLVM/clang, i.e.
 > +
-> +if [ -f /dev/tpmrm0 ] ; then
-> +	python -m unittest -v tpm2_tests.SpaceTest
-> +else
-> +	exit $ksft_skip
-> +fi
-> -- 
-> 2.16.2
-> 
+> +git clone https://github.com/llvm/llvm-project
+> +
+> +Build/install trunk LLVM:
+> +
+> +.. code-block:: bash
+> +  git clone https://github.com/llvm/llvm-project
+> +  cd llvm-project
+> +  mkdir build/llvm
+> +  cd build/llvm
+> +  cmake ../../llvm/
+> +  make
+> +  sudo make install
+> +  cd ../../
+> +
+> +Build/install trunk clang:
+> +
+> +.. code-block:: bash
+> +  mkdir -p build/clang
+> +  cd build/clang
+> +  cmake ../../clang
+> +  make
+> +  sudo make install
+> +
 
-This would make the change more compact:
+these instructions are obsolete and partially incorrect.
+May be refer to Documentation/bpf/bpf_devel_QA.rst instead?
 
-# Kselftest framework requirement - SKIP code is 4.
-if [ ! -f /dev/tpmrm0 ] ; then
-	exit 4
-fi
+> +When building the kernel with CONFIG_DEBUG_INFO_BTF, pahole
+> +version 16 or later is also required for BTF function
+> +support. pahole can be built from the source at
+> +
+> +https://github.com/acmel/dwarves
+> +
+> +It is often available in "dwarves/libdwarves" packages also,
+> +but be aware that versions prior to 1.16 will fail with
+> +errors that functions cannot be found in BTF.
+> +
+> +When running selftests, the default timeout of 45 seconds
+> +can be exceeded by some tests.  We can override the default
+> +timeout via a "settings" file; for example:
+> +
+> +.. code-block:: bash
+> +  echo "timeout=120" > tools/testing/selftests/bpf/settings
 
-python -m unittest -v tpm2_tests.SpaceTest
-
-(also for /dev/tpm0)
-
-/Jarkko
+Is it really the case?
+I've never seen anything like this.
