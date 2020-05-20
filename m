@@ -2,185 +2,273 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C251DA9DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 May 2020 07:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9CF1DAE57
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 May 2020 11:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbgETF0J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 May 2020 01:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
+        id S1726486AbgETJGA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 May 2020 05:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726857AbgETF0I (ORCPT
+        with ESMTP id S1726452AbgETJF7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 May 2020 01:26:08 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95871C061A0E;
-        Tue, 19 May 2020 22:26:08 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id ci23so727091pjb.5;
-        Tue, 19 May 2020 22:26:08 -0700 (PDT)
+        Wed, 20 May 2020 05:05:59 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38BAC061A0F
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2020 02:05:59 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id s20so1059379plp.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2020 02:05:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eRmslym24V6G/rjPE8TehOfLWQ3zK6gG071z6c2z4UU=;
-        b=erUqusEcKRlIP3KYp3chtbL3NTp8aMyzzUU5VsGfE7lUwSaCnAkHLHve1yL3c+2ysw
-         tzV8VcKNivFaTnUwNf6c39c50waU31eQaRd7qXjqQRQ/eDh9+Cv3jBWmurl059hFt+q1
-         V5oSvIaX712w7elQvFTxwaO8IOmcDNBc+4Mgq89Trfv9U2wbq4LjA2t0TKtoCyVxubwp
-         xsvsI/OtlgMIXE7HF5s6y4LKwB34+LPafXCgjk6X9kShKU3OOFvPXQfKn6yIs7beMVT9
-         lIQaPdfIrSu7Rs8KDS7h3xIeNjla/7dr9VFcN+2SayNyRWJAUgAIlDyKIiveEVj+BoQf
-         Ni4Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=f0a69KoHD271I3l1GldQGAeZxMsJyy1bxo8ro0OOOBc=;
+        b=I0oks8CnC3Swt6NOYWkSoYwAlTa1Z18E+vy0NEVZUTl9z/ravaz96K/tIcUbsu1Y6W
+         Hxp7noqE3XCRjRxE0x6TEN2WBUg9KaEOdBoCSm/qJ4djaXmD8m/HEZb/oL7iXCiG0mzf
+         /JjxXftN/N2U7elLIJ+kX26ycp5kSgQ1WWtmo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eRmslym24V6G/rjPE8TehOfLWQ3zK6gG071z6c2z4UU=;
-        b=M6QpjsC/fYt5FyVAhLJVkmhxCzynzSJSeAiTIY0k+GimCqmgyz99zZ1y2MjWwv8QrC
-         lCk/H9/ub9YcZUlbAihHOkMS77hoa9WGetnPFdSWVYbhqGtIpCtmv6L4rYaEcihlrZQb
-         /TwRnvBRenECrsj8FWip2SU8GY1DbkstwoTXu8xIy+Fuh9oF17TVPuo9F7ta1GIuIiMU
-         riCEtwKm+WwaNJ6R0WiY6RCOIdw/794aqsqrJsOU8iPYmsKW3uYCk49IjZZjMjVFuJZt
-         KOwLx6/enEuJlfek4N40DRl9OdKQ+2TAQbEGz3vv268V2AubB9E4nGoTrXx/DDazfx6T
-         nehw==
-X-Gm-Message-State: AOAM5315d9/nYhn5b/GxMPDTY8i/bxB4k5QCSo9gGQHNF+rnIultZL7c
-        0e43TjFxCkwnV4tcvQH2ia0=
-X-Google-Smtp-Source: ABdhPJxgU6JMsC870qBMQn3lqTKFkDnKKBt3MvzEuqd85kwCYzn4m4YWzUn1hbHotWgCzS7GTpNWQg==
-X-Received: by 2002:a17:90a:8c85:: with SMTP id b5mr3143434pjo.187.1589952368001;
-        Tue, 19 May 2020 22:26:08 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:8135])
-        by smtp.gmail.com with ESMTPSA id 131sm882738pgf.49.2020.05.19.22.26.05
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=f0a69KoHD271I3l1GldQGAeZxMsJyy1bxo8ro0OOOBc=;
+        b=fUiKHfBEQoX7FKiU/tOuzwX4Gl2SVPCte82LbhvrYqTVkTofimgSyJOwiCBOOjpC2T
+         vsJ2BpY79yESSEO549f4Ie3Vt7nOvKuAioEFef6R0g2PlYLShHSDCZsQR3ri/cDBWCcn
+         JmgmiE/mf7SEDVPOGEVmjMvDTyTcbTpPgc88dYmshzy6jFRWkfReuoM5KBHTRqHhU3Js
+         RQEKxJD2RfPRalfL99xwX0+qu6GLJ3kYrI/LgEsWMlULtSYlARKdi8gd57/jhLlKmjC5
+         uDl+Ga3lCBuj7eFu6JmDviV4cDENbuQjOwXB0i3qm9GyhJa1luGpxGNWwBdrvGN5gm6T
+         +rhQ==
+X-Gm-Message-State: AOAM533BPz18W3UKC+P735c9qV3NUvTp3aLrTPmQHUPioE+XAjx1FB28
+        SaqIBip+5StT2A/07Jtesqzsug==
+X-Google-Smtp-Source: ABdhPJx9xcLw9LPIYUhEzAw0K95oX+/gO7XOj/7Uvb9MrC6NYusB6jmqCxfjtPfSpomQsd5Zkm1hHA==
+X-Received: by 2002:a17:902:b186:: with SMTP id s6mr3591908plr.111.1589965559001;
+        Wed, 20 May 2020 02:05:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m4sm1662711pje.47.2020.05.20.02.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 22:26:06 -0700 (PDT)
-Date:   Tue, 19 May 2020 22:26:04 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andriin@fb.com, bpf@vger.kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: add general instructions for
- test execution
-Message-ID: <20200520052604.o53ca2kyzd7sd3g3@ast-mbp.dhcp.thefacebook.com>
-References: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
- <20200519155021.6tag46i57z2hsivj@ast-mbp.dhcp.thefacebook.com>
- <alpine.LRH.2.21.2005192224560.31696@localhost>
+        Wed, 20 May 2020 02:05:58 -0700 (PDT)
+Date:   Wed, 20 May 2020 02:05:56 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/exec: Add binfmt_script regression test
+Message-ID: <202005200204.D07DF079@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.21.2005192224560.31696@localhost>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 19, 2020 at 10:34:25PM +0100, Alan Maguire wrote:
-> On Tue, 19 May 2020, Alexei Starovoitov wrote:
-> 
-> > On Mon, May 18, 2020 at 12:23:10PM +0100, Alan Maguire wrote:
-> > > Getting a clean BPF selftests run involves ensuring latest trunk LLVM/clang
-> > > are used, pahole is recent (>=1.16) and config matches the specified
-> > > config file as closely as possible.  Document all of this in the general
-> > > README.rst file.  Also note how to work around timeout failures.
-> > > 
-> > > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> > > ---
-> > >  tools/testing/selftests/bpf/README.rst | 46 ++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 46 insertions(+)
-> > > 
-> > > diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-> > > index 0f67f1b..b00eebb 100644
-> > > --- a/tools/testing/selftests/bpf/README.rst
-> > > +++ b/tools/testing/selftests/bpf/README.rst
-> > > @@ -1,6 +1,52 @@
-> > >  ==================
-> > >  BPF Selftest Notes
-> > >  ==================
-> > > +First verify the built kernel config options match the config options
-> > > +specified in the config file in this directory.  Test failures for
-> > > +unknown helpers, inability to find BTF etc will be observed otherwise.
-> > > +
-> > > +To ensure the maximum number of tests pass, it is best to use the latest
-> > > +trunk LLVM/clang, i.e.
-> > > +
-> > > +git clone https://github.com/llvm/llvm-project
-> > > +
-> > > +Build/install trunk LLVM:
-> > > +
-> > > +.. code-block:: bash
-> > > +  git clone https://github.com/llvm/llvm-project
-> > > +  cd llvm-project
-> > > +  mkdir build/llvm
-> > > +  cd build/llvm
-> > > +  cmake ../../llvm/
-> > > +  make
-> > > +  sudo make install
-> > > +  cd ../../
-> > > +
-> > > +Build/install trunk clang:
-> > > +
-> > > +.. code-block:: bash
-> > > +  mkdir -p build/clang
-> > > +  cd build/clang
-> > > +  cmake ../../clang
-> > > +  make
-> > > +  sudo make install
-> > > +
-> > 
-> > these instructions are obsolete and partially incorrect.
-> > May be refer to Documentation/bpf/bpf_devel_QA.rst instead?
-> >
-> 
-> Sure; looks like there are up-to-date sections there on
-> running BPF selftests and building LLVM manually.  Perhaps
-> I should add the notes about pahole etc there too?
+While working on commit b5372fe5dc84 ("exec: load_script: Do not exec
+truncated interpreter path"), I wrote a series of test scripts to verify
+corner cases. However, soon after, commit 6eb3c3d0a52d ("exec: increase
+BINPRM_BUF_SIZE to 256") landed, resulting in the tests needing to be
+refactored for the larger BINPRM_BUF_SIZE, which got lost on my TODO
+list. During the recent exec refactoring work[1], the need for these tests
+resurfaced, so I've finished them up for addition to the kernel selftests.
 
-yes. please.
-Could you mention distros that have fresh pahole?
-Otherwise users will have an impression that pahole needs
-to be build from scratch as well. Which is not the case.
+[1] https://lore.kernel.org/lkml/202005191144.E3112135@keescook/
 
-> I should also have noted that without an up-to-date iproute2
-> failures will be observed also.
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/exec/Makefile      |   1 +
+ tools/testing/selftests/exec/binfmt_script | 171 +++++++++++++++++++++
+ 2 files changed, 172 insertions(+)
+ create mode 100755 tools/testing/selftests/exec/binfmt_script
 
-Would be good to highlight which tests will fail with old iproute2.
-I'm not sure which version is necessary.
-What is 'up-to-date' ?
-The tests I run before applying work for me and I rebuild iproute2
-every year or so :)
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index 33339e31e365..7f4527f897c4 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -3,6 +3,7 @@ CFLAGS = -Wall
+ CFLAGS += -Wno-nonnull
+ CFLAGS += -D_GNU_SOURCE
+ 
++TEST_PROGS := binfmt_script
+ TEST_GEN_PROGS := execveat
+ TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+diff --git a/tools/testing/selftests/exec/binfmt_script b/tools/testing/selftests/exec/binfmt_script
+new file mode 100755
+index 000000000000..05f94a741c7a
+--- /dev/null
++++ b/tools/testing/selftests/exec/binfmt_script
+@@ -0,0 +1,171 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test that truncation of bprm->buf doesn't cause unexpected execs paths, along
++# with various other pathological cases.
++import os, subprocess
++
++# Relevant commits
++#
++# b5372fe5dc84 ("exec: load_script: Do not exec truncated interpreter path")
++# 6eb3c3d0a52d ("exec: increase BINPRM_BUF_SIZE to 256")
++
++# BINPRM_BUF_SIZE
++SIZE=256
++
++NAME_MAX=int(subprocess.check_output(["getconf", "NAME_MAX", "."]))
++
++test_num=0
++
++code='''#!/usr/bin/perl
++print "Executed interpreter! Args:\n";
++print "0 : '$0'\n";
++$counter = 1;
++foreach my $a (@ARGV) {
++    print "$counter : '$a'\n";
++    $counter++;
++}
++'''
++
++##
++# test - produce a binfmt_script hashbang line for testing
++#
++# @size:     bytes for bprm->buf line, including hashbang but not newline
++# @good:     whether this script is expected to execute correctly
++# @hashbang: the special 2 bytes for running binfmt_script
++# @leading:  any leading whitespace before the executable path
++# @root:     start of executable pathname
++# @target:   end of executable pathname
++# @arg:      bytes following the executable pathname
++# @fill:     character to fill between @root and @target to reach @size bytes
++# @newline:  character to use as newline, not counted towards @size
++# ...
++def test(name, size, good=True, leading="", root="./", target="/perl",
++                     fill="A", arg="", newline="\n", hashbang="#!"):
++    global test_num, tests, NAME_MAX
++    test_num += 1
++    if test_num > tests:
++        raise ValueError("more binfmt_script tests than expected! (want %d, expected %d)"
++                         % (test_num, tests))
++
++    middle = ""
++    remaining = size - len(hashbang) - len(leading) - len(root) - len(target) - len(arg)
++    # The middle of the pathname must not exceed NAME_MAX
++    while remaining >= NAME_MAX:
++        middle += fill * (NAME_MAX - 1)
++        middle += '/'
++        remaining -= NAME_MAX
++    middle += fill * remaining
++
++    dirpath = root + middle
++    binary = dirpath + target
++    if len(target):
++        os.makedirs(dirpath, mode=0o755, exist_ok=True)
++        open(binary, "w").write(code)
++        os.chmod(binary, 0o755)
++
++    buf=hashbang + leading + root + middle + target + arg + newline
++    if len(newline) > 0:
++        buf += 'echo this is not really perl\n'
++
++    script = "binfmt_script-%s" % (name)
++    open(script, "w").write(buf)
++    os.chmod(script, 0o755)
++
++    proc = subprocess.Popen(["./%s" % (script)], shell=True,
++                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
++    stdout = proc.communicate()[0]
++
++    if proc.returncode == 0 and b'Executed interpreter' in stdout:
++        if good:
++            print("ok %d - binfmt_script %s (successful good exec)"
++                  % (test_num, name))
++        else:
++            print("not ok %d - binfmt_script %s succeeded when it should have failed"
++                  % (test_num, name))
++    else:
++        if good:
++            print("not ok %d - binfmt_script %s failed when it should have succeeded (rc:%d)"
++                  % (test_num, name, proc.returncode))
++        else:
++            print("ok %d - binfmt_script %s (correctly failed bad exec)"
++                  % (test_num, name))
++
++    # Clean up crazy binaries
++    os.unlink(script)
++    if len(target):
++        elements = binary.split('/')
++        os.unlink(binary)
++        elements.pop()
++        while len(elements) > 1:
++            os.rmdir("/".join(elements))
++            elements.pop()
++
++tests=27
++print("TAP version 1.3")
++print("1..%d" % (tests))
++
++### FAIL (8 tests)
++
++# Entire path is well past the BINFMT_BUF_SIZE.
++test(name="too-big",        size=SIZE+80, good=False)
++# Path is right at max size, making it impossible to tell if it was truncated.
++test(name="exact",          size=SIZE,    good=False)
++# Same as above, but with leading whitespace.
++test(name="exact-space",    size=SIZE,    good=False, leading=" ")
++# Huge buffer of only whitespace.
++test(name="whitespace-too-big", size=SIZE+71, good=False, root="",
++                                              fill=" ", target="")
++# A good path, but it gets truncated due to leading whitespace.
++test(name="truncated",      size=SIZE+17, good=False, leading=" " * 19)
++# Entirely empty except for #!
++test(name="empty",          size=2,       good=False, root="",
++                                          fill="", target="", newline="")
++# Within size, but entirely spaces
++test(name="spaces",         size=SIZE-1,  good=False, root="", fill=" ",
++                                          target="", newline="")
++# Newline before binary.
++test(name="newline-prefix", size=SIZE-1,  good=False, leading="\n",
++                                          root="", fill=" ", target="")
++
++### ok (19 tests)
++
++# The original test case that was broken by commit:
++# 8099b047ecc4 ("exec: load_script: don't blindly truncate shebang string")
++test(name="test.pl",        size=439, leading=" ",
++     root="./nix/store/bwav8kz8b3y471wjsybgzw84mrh4js9-perl-5.28.1/bin",
++     arg=" -I/nix/store/x6yyav38jgr924nkna62q3pkp0dgmzlx-perl5.28.1-File-Slurp-9999.25/lib/perl5/site_perl -I/nix/store/ha8v67sl8dac92r9z07vzr4gv1y9nwqz-perl5.28.1-Net-DBus-1.1.0/lib/perl5/site_perl -I/nix/store/dcrkvnjmwh69ljsvpbdjjdnqgwx90a9d-perl5.28.1-XML-Parser-2.44/lib/perl5/site_perl -I/nix/store/rmji88k2zz7h4zg97385bygcydrf2q8h-perl5.28.1-XML-Twig-3.52/lib/perl5/site_perl")
++# One byte under size, leaving newline visible.
++test(name="one-under",           size=SIZE-1)
++# Two bytes under size, leaving newline visible.
++test(name="two-under",           size=SIZE-2)
++# Exact size, but trailing whitespace visible instead of newline
++test(name="exact-trunc-whitespace", size=SIZE, arg=" ")
++# Exact size, but trailing space and first arg char visible instead of newline.
++test(name="exact-trunc-arg",     size=SIZE, arg=" f")
++# One bute under, with confirmed non-truncated arg since newline now visible.
++test(name="one-under-full-arg",  size=SIZE-1, arg=" f")
++# Short read buffer by one byte.
++test(name="one-under-no-nl",     size=SIZE-1, newline="")
++# Short read buffer by half buffer size.
++test(name="half-under-no-nl",    size=int(SIZE/2), newline="")
++# One byte under with whitespace arg. leaving wenline visible.
++test(name="one-under-trunc-arg", size=SIZE-1, arg=" ")
++# One byte under with whitespace leading. leaving wenline visible.
++test(name="one-under-leading",   size=SIZE-1, leading=" ")
++# One byte under with whitespace leading and as arg. leaving newline visible.
++test(name="one-under-leading-trunc-arg",  size=SIZE-1, leading=" ", arg=" ")
++# Same as above, but with 2 bytes under
++test(name="two-under-no-nl",     size=SIZE-2, newline="")
++test(name="two-under-trunc-arg", size=SIZE-2, arg=" ")
++test(name="two-under-leading",   size=SIZE-2, leading=" ")
++test(name="two-under-leading-trunc-arg",   size=SIZE-2, leading=" ", arg=" ")
++# Same as above, but with buffer half filled
++test(name="two-under-no-nl",     size=int(SIZE/2), newline="")
++test(name="two-under-trunc-arg", size=int(SIZE/2), arg=" ")
++test(name="two-under-leading",   size=int(SIZE/2), leading=" ")
++test(name="two-under-lead-trunc-arg", size=int(SIZE/2), leading=" ", arg=" ")
++
++if test_num != tests:
++    raise ValueError("fewer binfmt_script tests than expected! (ran %d, expected %d"
++                     % (test_num, tests))
+-- 
+2.20.1
 
-> > > +When building the kernel with CONFIG_DEBUG_INFO_BTF, pahole
-> > > +version 16 or later is also required for BTF function
-> > > +support. pahole can be built from the source at
-> > > +
-> > > +https://github.com/acmel/dwarves
-> > > +
-> > > +It is often available in "dwarves/libdwarves" packages also,
-> > > +but be aware that versions prior to 1.16 will fail with
-> > > +errors that functions cannot be found in BTF.
-> > > +
-> > > +When running selftests, the default timeout of 45 seconds
-> > > +can be exceeded by some tests.  We can override the default
-> > > +timeout via a "settings" file; for example:
-> > > +
-> > > +.. code-block:: bash
-> > > +  echo "timeout=120" > tools/testing/selftests/bpf/settings
-> > 
-> > Is it really the case?
-> > I've never seen anything like this.
-> > 
-> 
-> When running via "make run_tests" on baremetal systems I
-> see test timeouts pretty consistently; e.g. from a bpf tree test
-> run yesterday:
-> 
-> not ok 6 selftests: bpf: test_progs # TIMEOUT
-> not ok 31 selftests: bpf: test_tunnel.sh # TIMEOUT
-> not ok 38 selftests: bpf: test_lwt_ip_encap.sh # TIMEOUT
-> not ok 40 selftests: bpf: test_tc_tunnel.sh # TIMEOUT
-> not ok 42 selftests: bpf: test_xdping.sh # TIMEOUT
-> not ok 43 selftests: bpf: test_bpftool_build.sh # TIMEOUT
-> 
-> These will only occur if running via "make run_tests",
-> so running tests individually would not trigger these
-> failures.
 
-If timeout is necessary it's better to fix it in the git
-instead of requiring users to tweak their environment.
+-- 
+Kees Cook
