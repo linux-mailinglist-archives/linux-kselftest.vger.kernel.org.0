@@ -2,273 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9CF1DAE57
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 May 2020 11:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542811DB261
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 May 2020 13:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgETJGA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 May 2020 05:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbgETJF7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 May 2020 05:05:59 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38BAC061A0F
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2020 02:05:59 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id s20so1059379plp.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2020 02:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=f0a69KoHD271I3l1GldQGAeZxMsJyy1bxo8ro0OOOBc=;
-        b=I0oks8CnC3Swt6NOYWkSoYwAlTa1Z18E+vy0NEVZUTl9z/ravaz96K/tIcUbsu1Y6W
-         Hxp7noqE3XCRjRxE0x6TEN2WBUg9KaEOdBoCSm/qJ4djaXmD8m/HEZb/oL7iXCiG0mzf
-         /JjxXftN/N2U7elLIJ+kX26ycp5kSgQ1WWtmo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=f0a69KoHD271I3l1GldQGAeZxMsJyy1bxo8ro0OOOBc=;
-        b=fUiKHfBEQoX7FKiU/tOuzwX4Gl2SVPCte82LbhvrYqTVkTofimgSyJOwiCBOOjpC2T
-         vsJ2BpY79yESSEO549f4Ie3Vt7nOvKuAioEFef6R0g2PlYLShHSDCZsQR3ri/cDBWCcn
-         JmgmiE/mf7SEDVPOGEVmjMvDTyTcbTpPgc88dYmshzy6jFRWkfReuoM5KBHTRqHhU3Js
-         RQEKxJD2RfPRalfL99xwX0+qu6GLJ3kYrI/LgEsWMlULtSYlARKdi8gd57/jhLlKmjC5
-         uDl+Ga3lCBuj7eFu6JmDviV4cDENbuQjOwXB0i3qm9GyhJa1luGpxGNWwBdrvGN5gm6T
-         +rhQ==
-X-Gm-Message-State: AOAM533BPz18W3UKC+P735c9qV3NUvTp3aLrTPmQHUPioE+XAjx1FB28
-        SaqIBip+5StT2A/07Jtesqzsug==
-X-Google-Smtp-Source: ABdhPJx9xcLw9LPIYUhEzAw0K95oX+/gO7XOj/7Uvb9MrC6NYusB6jmqCxfjtPfSpomQsd5Zkm1hHA==
-X-Received: by 2002:a17:902:b186:: with SMTP id s6mr3591908plr.111.1589965559001;
-        Wed, 20 May 2020 02:05:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m4sm1662711pje.47.2020.05.20.02.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2020 02:05:58 -0700 (PDT)
-Date:   Wed, 20 May 2020 02:05:56 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/exec: Add binfmt_script regression test
-Message-ID: <202005200204.D07DF079@keescook>
+        id S1726576AbgETLy3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 May 2020 07:54:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:54358 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726560AbgETLy3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 May 2020 07:54:29 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E65230E;
+        Wed, 20 May 2020 04:54:28 -0700 (PDT)
+Received: from [10.37.8.50] (unknown [10.37.8.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E4853F52E;
+        Wed, 20 May 2020 04:54:27 -0700 (PDT)
+Subject: Re: [PATCH] selftests/timens: handle a case when alarm clocks are not
+ supported
+To:     Andrei Vagin <avagin@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20200415061802.722485-1-avagin@gmail.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <5c9d2f75-d20a-d74a-f72a-94f3fa69bc16@arm.com>
+Date:   Wed, 20 May 2020 12:55:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20200415061802.722485-1-avagin@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While working on commit b5372fe5dc84 ("exec: load_script: Do not exec
-truncated interpreter path"), I wrote a series of test scripts to verify
-corner cases. However, soon after, commit 6eb3c3d0a52d ("exec: increase
-BINPRM_BUF_SIZE to 256") landed, resulting in the tests needing to be
-refactored for the larger BINPRM_BUF_SIZE, which got lost on my TODO
-list. During the recent exec refactoring work[1], the need for these tests
-resurfaced, so I've finished them up for addition to the kernel selftests.
+Hi Andrei,
 
-[1] https://lore.kernel.org/lkml/202005191144.E3112135@keescook/
+thanks for this.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/exec/Makefile      |   1 +
- tools/testing/selftests/exec/binfmt_script | 171 +++++++++++++++++++++
- 2 files changed, 172 insertions(+)
- create mode 100755 tools/testing/selftests/exec/binfmt_script
+On 4/15/20 7:18 AM, Andrei Vagin wrote:
+> This can happen if a testing node doesn't have RTC (real time clock)
+> hardware or it doesn't support alarms.
+> 
 
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index 33339e31e365..7f4527f897c4 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -3,6 +3,7 @@ CFLAGS = -Wall
- CFLAGS += -Wno-nonnull
- CFLAGS += -D_GNU_SOURCE
- 
-+TEST_PROGS := binfmt_script
- TEST_GEN_PROGS := execveat
- TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
- # Makefile is a run-time dependency, since it's accessed by the execveat test
-diff --git a/tools/testing/selftests/exec/binfmt_script b/tools/testing/selftests/exec/binfmt_script
-new file mode 100755
-index 000000000000..05f94a741c7a
---- /dev/null
-+++ b/tools/testing/selftests/exec/binfmt_script
-@@ -0,0 +1,171 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test that truncation of bprm->buf doesn't cause unexpected execs paths, along
-+# with various other pathological cases.
-+import os, subprocess
-+
-+# Relevant commits
-+#
-+# b5372fe5dc84 ("exec: load_script: Do not exec truncated interpreter path")
-+# 6eb3c3d0a52d ("exec: increase BINPRM_BUF_SIZE to 256")
-+
-+# BINPRM_BUF_SIZE
-+SIZE=256
-+
-+NAME_MAX=int(subprocess.check_output(["getconf", "NAME_MAX", "."]))
-+
-+test_num=0
-+
-+code='''#!/usr/bin/perl
-+print "Executed interpreter! Args:\n";
-+print "0 : '$0'\n";
-+$counter = 1;
-+foreach my $a (@ARGV) {
-+    print "$counter : '$a'\n";
-+    $counter++;
-+}
-+'''
-+
-+##
-+# test - produce a binfmt_script hashbang line for testing
-+#
-+# @size:     bytes for bprm->buf line, including hashbang but not newline
-+# @good:     whether this script is expected to execute correctly
-+# @hashbang: the special 2 bytes for running binfmt_script
-+# @leading:  any leading whitespace before the executable path
-+# @root:     start of executable pathname
-+# @target:   end of executable pathname
-+# @arg:      bytes following the executable pathname
-+# @fill:     character to fill between @root and @target to reach @size bytes
-+# @newline:  character to use as newline, not counted towards @size
-+# ...
-+def test(name, size, good=True, leading="", root="./", target="/perl",
-+                     fill="A", arg="", newline="\n", hashbang="#!"):
-+    global test_num, tests, NAME_MAX
-+    test_num += 1
-+    if test_num > tests:
-+        raise ValueError("more binfmt_script tests than expected! (want %d, expected %d)"
-+                         % (test_num, tests))
-+
-+    middle = ""
-+    remaining = size - len(hashbang) - len(leading) - len(root) - len(target) - len(arg)
-+    # The middle of the pathname must not exceed NAME_MAX
-+    while remaining >= NAME_MAX:
-+        middle += fill * (NAME_MAX - 1)
-+        middle += '/'
-+        remaining -= NAME_MAX
-+    middle += fill * remaining
-+
-+    dirpath = root + middle
-+    binary = dirpath + target
-+    if len(target):
-+        os.makedirs(dirpath, mode=0o755, exist_ok=True)
-+        open(binary, "w").write(code)
-+        os.chmod(binary, 0o755)
-+
-+    buf=hashbang + leading + root + middle + target + arg + newline
-+    if len(newline) > 0:
-+        buf += 'echo this is not really perl\n'
-+
-+    script = "binfmt_script-%s" % (name)
-+    open(script, "w").write(buf)
-+    os.chmod(script, 0o755)
-+
-+    proc = subprocess.Popen(["./%s" % (script)], shell=True,
-+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-+    stdout = proc.communicate()[0]
-+
-+    if proc.returncode == 0 and b'Executed interpreter' in stdout:
-+        if good:
-+            print("ok %d - binfmt_script %s (successful good exec)"
-+                  % (test_num, name))
-+        else:
-+            print("not ok %d - binfmt_script %s succeeded when it should have failed"
-+                  % (test_num, name))
-+    else:
-+        if good:
-+            print("not ok %d - binfmt_script %s failed when it should have succeeded (rc:%d)"
-+                  % (test_num, name, proc.returncode))
-+        else:
-+            print("ok %d - binfmt_script %s (correctly failed bad exec)"
-+                  % (test_num, name))
-+
-+    # Clean up crazy binaries
-+    os.unlink(script)
-+    if len(target):
-+        elements = binary.split('/')
-+        os.unlink(binary)
-+        elements.pop()
-+        while len(elements) > 1:
-+            os.rmdir("/".join(elements))
-+            elements.pop()
-+
-+tests=27
-+print("TAP version 1.3")
-+print("1..%d" % (tests))
-+
-+### FAIL (8 tests)
-+
-+# Entire path is well past the BINFMT_BUF_SIZE.
-+test(name="too-big",        size=SIZE+80, good=False)
-+# Path is right at max size, making it impossible to tell if it was truncated.
-+test(name="exact",          size=SIZE,    good=False)
-+# Same as above, but with leading whitespace.
-+test(name="exact-space",    size=SIZE,    good=False, leading=" ")
-+# Huge buffer of only whitespace.
-+test(name="whitespace-too-big", size=SIZE+71, good=False, root="",
-+                                              fill=" ", target="")
-+# A good path, but it gets truncated due to leading whitespace.
-+test(name="truncated",      size=SIZE+17, good=False, leading=" " * 19)
-+# Entirely empty except for #!
-+test(name="empty",          size=2,       good=False, root="",
-+                                          fill="", target="", newline="")
-+# Within size, but entirely spaces
-+test(name="spaces",         size=SIZE-1,  good=False, root="", fill=" ",
-+                                          target="", newline="")
-+# Newline before binary.
-+test(name="newline-prefix", size=SIZE-1,  good=False, leading="\n",
-+                                          root="", fill=" ", target="")
-+
-+### ok (19 tests)
-+
-+# The original test case that was broken by commit:
-+# 8099b047ecc4 ("exec: load_script: don't blindly truncate shebang string")
-+test(name="test.pl",        size=439, leading=" ",
-+     root="./nix/store/bwav8kz8b3y471wjsybgzw84mrh4js9-perl-5.28.1/bin",
-+     arg=" -I/nix/store/x6yyav38jgr924nkna62q3pkp0dgmzlx-perl5.28.1-File-Slurp-9999.25/lib/perl5/site_perl -I/nix/store/ha8v67sl8dac92r9z07vzr4gv1y9nwqz-perl5.28.1-Net-DBus-1.1.0/lib/perl5/site_perl -I/nix/store/dcrkvnjmwh69ljsvpbdjjdnqgwx90a9d-perl5.28.1-XML-Parser-2.44/lib/perl5/site_perl -I/nix/store/rmji88k2zz7h4zg97385bygcydrf2q8h-perl5.28.1-XML-Twig-3.52/lib/perl5/site_perl")
-+# One byte under size, leaving newline visible.
-+test(name="one-under",           size=SIZE-1)
-+# Two bytes under size, leaving newline visible.
-+test(name="two-under",           size=SIZE-2)
-+# Exact size, but trailing whitespace visible instead of newline
-+test(name="exact-trunc-whitespace", size=SIZE, arg=" ")
-+# Exact size, but trailing space and first arg char visible instead of newline.
-+test(name="exact-trunc-arg",     size=SIZE, arg=" f")
-+# One bute under, with confirmed non-truncated arg since newline now visible.
-+test(name="one-under-full-arg",  size=SIZE-1, arg=" f")
-+# Short read buffer by one byte.
-+test(name="one-under-no-nl",     size=SIZE-1, newline="")
-+# Short read buffer by half buffer size.
-+test(name="half-under-no-nl",    size=int(SIZE/2), newline="")
-+# One byte under with whitespace arg. leaving wenline visible.
-+test(name="one-under-trunc-arg", size=SIZE-1, arg=" ")
-+# One byte under with whitespace leading. leaving wenline visible.
-+test(name="one-under-leading",   size=SIZE-1, leading=" ")
-+# One byte under with whitespace leading and as arg. leaving newline visible.
-+test(name="one-under-leading-trunc-arg",  size=SIZE-1, leading=" ", arg=" ")
-+# Same as above, but with 2 bytes under
-+test(name="two-under-no-nl",     size=SIZE-2, newline="")
-+test(name="two-under-trunc-arg", size=SIZE-2, arg=" ")
-+test(name="two-under-leading",   size=SIZE-2, leading=" ")
-+test(name="two-under-leading-trunc-arg",   size=SIZE-2, leading=" ", arg=" ")
-+# Same as above, but with buffer half filled
-+test(name="two-under-no-nl",     size=int(SIZE/2), newline="")
-+test(name="two-under-trunc-arg", size=int(SIZE/2), arg=" ")
-+test(name="two-under-leading",   size=int(SIZE/2), leading=" ")
-+test(name="two-under-lead-trunc-arg", size=int(SIZE/2), leading=" ", arg=" ")
-+
-+if test_num != tests:
-+    raise ValueError("fewer binfmt_script tests than expected! (ran %d, expected %d"
-+                     % (test_num, tests))
--- 
-2.20.1
+Could you please add the "Reported-by:" tag and the "Fixes:" one?
 
+With this:
+
+Acked-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Signed-off-by: Andrei Vagin <avagin@gmail.com>
+> ---
+>  tools/testing/selftests/timens/clock_nanosleep.c |  2 +-
+>  tools/testing/selftests/timens/timens.c          |  2 +-
+>  tools/testing/selftests/timens/timens.h          | 13 ++++++++++++-
+>  3 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
+> index 8e7b7c72ef65..72d41b955fb2 100644
+> --- a/tools/testing/selftests/timens/clock_nanosleep.c
+> +++ b/tools/testing/selftests/timens/clock_nanosleep.c
+> @@ -119,7 +119,7 @@ int main(int argc, char *argv[])
+>  
+>  	ksft_set_plan(4);
+>  
+> -	check_config_posix_timers();
+> +	check_supported_timers();
+>  
+>  	if (unshare_timens())
+>  		return 1;
+> diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
+> index 559d26e21ba0..07feebe8e53e 100644
+> --- a/tools/testing/selftests/timens/timens.c
+> +++ b/tools/testing/selftests/timens/timens.c
+> @@ -156,7 +156,7 @@ int main(int argc, char *argv[])
+>  
+>  	nscheck();
+>  
+> -	check_config_posix_timers();
+> +	check_supported_timers();
+>  
+>  	ksft_set_plan(ARRAY_SIZE(clocks) * 2);
+>  
+> diff --git a/tools/testing/selftests/timens/timens.h b/tools/testing/selftests/timens/timens.h
+> index e09e7e39bc52..d4fc52d47146 100644
+> --- a/tools/testing/selftests/timens/timens.h
+> +++ b/tools/testing/selftests/timens/timens.h
+> @@ -14,15 +14,26 @@
+>  #endif
+>  
+>  static int config_posix_timers = true;
+> +static int config_alarm_timers = true;
+>  
+> -static inline void check_config_posix_timers(void)
+> +static inline void check_supported_timers(void)
+>  {
+> +	struct timespec ts;
+> +
+>  	if (timer_create(-1, 0, 0) == -1 && errno == ENOSYS)
+>  		config_posix_timers = false;
+> +
+> +	if (clock_gettime(CLOCK_BOOTTIME_ALARM, &ts) == -1 && errno == EINVAL)
+> +		config_alarm_timers = false;
+>  }
+>  
+>  static inline bool check_skip(int clockid)
+>  {
+> +	if (!config_alarm_timers && clockid == CLOCK_BOOTTIME_ALARM) {
+> +		ksft_test_result_skip("CLOCK_BOOTTIME_ALARM isn't supported\n");
+> +		return true;
+> +	}
+> +
+>  	if (config_posix_timers)
+>  		return false;
+>  
+> 
 
 -- 
-Kees Cook
+Regards,
+Vincenzo
