@@ -2,101 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEAD1DD067
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 May 2020 16:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BA51DD2DD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 May 2020 18:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729711AbgEUOn5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 May 2020 10:43:57 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:42918 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728229AbgEUOn4 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 May 2020 10:43:56 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B87DF40933;
-        Thu, 21 May 2020 14:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1590072236; bh=rgL44EnEgrpVVzhE3b5dAwCouZZTfZFny+fv4sxR10g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MbNJli3rsFLOYILTocxmw4hGxLMGpRQ/dx3kRpIi6AUiLGkOYxMrGRFVubygMVnNs
-         2KAdczyTpCjeni42oDinNO8FvMeD/Zt+cWMRnrN4oy2zOS4E+ZVfaB6y7W4AjvpoYy
-         uAnbXV4zQviuTIINuXBBEeKCmdQmIV2nn03gG115YXQjXEctreEbGbp5Rdsrh+dC59
-         +bPGQYtdTFF+I1iuJv7p95NTHExCLuduYi4c4ZZNQhQ6gpz056DQlTNr7XZQxGz3oC
-         mAOycLf+70XNk7YlnT1vUAfC+xstdfiPBm8rYEI7T+m4DlAo2WX9Ah17v/zZWPDcFQ
-         RFLNSgfoznnmw==
-Received: from ru20arcgnu1.internal.synopsys.com (ru20arcgnu1.internal.synopsys.com [10.121.9.48])
-        by mailhost.synopsys.com (Postfix) with ESMTP id CB578A005B;
-        Thu, 21 May 2020 14:43:46 +0000 (UTC)
-From:   Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        linux-snps-arc@lists.infradead.org,
-        Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Subject: [PATCH v3] Kernel selftests: Add check if TPM devices are supported
-Date:   Thu, 21 May 2020 17:43:44 +0300
-Message-Id: <20200521144344.1886-1-Nikita.Sobolev@synopsys.com>
-X-Mailer: git-send-email 2.16.2
+        id S1728679AbgEUQM2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 May 2020 12:12:28 -0400
+Received: from mga14.intel.com ([192.55.52.115]:17713 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726808AbgEUQM2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 May 2020 12:12:28 -0400
+IronPort-SDR: biol4xyfpVuLWxfGGjbELmFVUWEy9eJ0tgG6cUuODxVe+dP5vtofhK9ZIDpWAbfrLuz6AqO1I7
+ E4EogdAjb94A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 09:12:28 -0700
+IronPort-SDR: LWLf3MShLYs2YLg0NTxtzEz/O6GeAzCRLR2giotr4PTlz89esfcg+EQJQzlIvm3RU04NWbj+In
+ /G1zrBPCMcNw==
+X-IronPort-AV: E=Sophos;i="5.73,418,1583222400"; 
+   d="scan'208";a="289789281"
+Received: from rchatre-mobl.amr.corp.intel.com (HELO [10.254.101.239]) ([10.254.101.239])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 09:12:27 -0700
+Subject: Re: [PATCH V2 00/19] Miscellaneous fixes for resctrl selftests
+To:     Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        shuah@kernel.org, skhan@linuxfoundation.org,
+        linux-kselftest@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        tony.luck@intel.com, babu.moger@amd.com, james.morse@arm.com,
+        ravi.v.shankar@intel.com, fenghua.yu@intel.com, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, dan.carpenter@oracle.com,
+        dcb314@hotmail.com
+References: <cover.1589835155.git.sai.praneeth.prakhya@intel.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+Message-ID: <3669988f-2a76-c698-dd95-7972056353cb@intel.com>
+Date:   Thu, 21 May 2020 09:12:25 -0700
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <cover.1589835155.git.sai.praneeth.prakhya@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-TPM2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
-are available. In case, when these devices are not available test
-fails, but expected behaviour is skipped test.
+Hi Sai,
 
-Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
----
-Changes for v2:
-    - Coding Style cleanup
+On 5/18/2020 3:08 PM, Sai Praneeth Prakhya wrote:
+> Fenghua Yu (1):
+>   selftests/resctrl: Fix missing options "-n" and "-p"
+> 
+> Reinette Chatre (3):
+>   selftests/resctrl: Fix typo
+>   selftests/resctrl: Fix typo in help text
+>   selftests/resctrl: Ensure sibling CPU is not same as original CPU
+> 
+> Sai Praneeth Prakhya (15):
+>   selftests/resctrl: Rename CQM test as CMT test
+>   selftests/resctrl: Declare global variables as extern
+>   selftests/resctrl: Return if resctrl file system is not supported
+>   selftests/resctrl: Check for resctrl mount point only if resctrl FS is
+>     supported
+>   selftests/resctrl: Use resctrl/info for feature detection
+>   selftests/resctrl: Fix MBA/MBM results reporting format
+>   selftests/resctrl: Abort running tests if not root user
+>   selftests/resctrl: Enable gcc checks to detect buffer overflows
+>   selftests/resctrl: Dynamically select buffer size for CAT test
+>   selftests/resctrl: Skip the test if requested resctrl feature is not
+>     supported
+>   selftests/resctrl: Change return type of umount_resctrlfs() to void
+>   selftests/resctrl: Umount resctrl FS only if mounted
+>   selftests/resctrl: Unmount resctrl FS after running all tests
+>   selftests/resctrl: Fix incorrect parsing of iMC counters
+>   selftests/resctrl: Fix checking for < 0 for unsigned values
+> 
+>  tools/testing/selftests/resctrl/Makefile      |  2 +-
+>  tools/testing/selftests/resctrl/README        |  4 +-
+>  tools/testing/selftests/resctrl/cache.c       |  4 +-
+>  tools/testing/selftests/resctrl/cat_test.c    |  8 +-
+>  .../resctrl/{cqm_test.c => cmt_test.c}        | 23 +++---
+>  tools/testing/selftests/resctrl/mba_test.c    | 23 +++---
+>  tools/testing/selftests/resctrl/mbm_test.c    | 16 ++--
+>  tools/testing/selftests/resctrl/resctrl.h     | 20 +++--
+>  .../testing/selftests/resctrl/resctrl_tests.c | 69 ++++++++++++-----
+>  tools/testing/selftests/resctrl/resctrl_val.c | 67 ++++++++++------
+>  tools/testing/selftests/resctrl/resctrlfs.c   | 77 +++++++++++++------
+>  11 files changed, 195 insertions(+), 118 deletions(-)
+>  rename tools/testing/selftests/resctrl/{cqm_test.c => cmt_test.c} (88%)
+> 
 
-Changes for v3:
-    - Commit text message cleanup
+Thank you very much for creating these fixes. There are a few to which I
+responded directly, the rest look good to me.
 
- tools/testing/selftests/tpm2/test_smoke.sh | 5 +++++
- tools/testing/selftests/tpm2/test_space.sh | 5 +++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 8155c2ea7ccb..663062701d5a 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -1,6 +1,11 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -f /dev/tpm0 ] || exit $ksft_skip
-+
- python -m unittest -v tpm2_tests.SmokeTest
- python -m unittest -v tpm2_tests.AsyncTest
- 
-diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-index a6f5e346635e..36c9d030a1c6 100755
---- a/tools/testing/selftests/tpm2/test_space.sh
-+++ b/tools/testing/selftests/tpm2/test_space.sh
-@@ -1,4 +1,9 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -f /dev/tpmrm0 ] || exit $ksft_skip
-+
- python -m unittest -v tpm2_tests.SpaceTest
--- 
-2.16.2
-
+Reinette
