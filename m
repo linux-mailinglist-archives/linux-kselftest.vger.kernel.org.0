@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C051DD402
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 May 2020 19:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A661DD423
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 May 2020 19:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729920AbgEURMW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 May 2020 13:12:22 -0400
-Received: from mga14.intel.com ([192.55.52.115]:24313 "EHLO mga14.intel.com"
+        id S1728786AbgEURTf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 May 2020 13:19:35 -0400
+Received: from mga01.intel.com ([192.55.52.88]:13738 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728581AbgEURMV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 May 2020 13:12:21 -0400
-IronPort-SDR: H4C2W5iRonoXUZdY36cWvSOh0EG/1Mbxs3McVsvAPX6mrt7boeESldDZyoipmcEHwYlm+FUk+S
- tW+eX7H4qREQ==
+        id S1728771AbgEURTf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 May 2020 13:19:35 -0400
+IronPort-SDR: Mj/9EtonnRHwH0oMnPwookBNjMrVlUzwtV6ac5Di1blVQ7vzgx27cyT7q2xSuoDdrz0ibUVUe8
+ CgtA9uv1cXZw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 10:12:19 -0700
-IronPort-SDR: 945jnUa3R3Gx4lCH/pZ/V/Atl5F9IPZJyYeSoG08mACM1qQe1db683r7X9ujE/EgcztNiRdv/m
- g6V1doB5anJA==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 10:19:35 -0700
+IronPort-SDR: U9E/r+k/w0vkMUvf/3OWb0jl6X3Rsjpyho09Wd1JJMK1QHtng2j7fDqrbSKh5CSb9CVZ0rD6xu
+ L4IwrWOL6vnw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,418,1583222400"; 
-   d="scan'208";a="268709267"
-Received: from orsmsx101.amr.corp.intel.com ([10.22.225.128])
-  by orsmga006.jf.intel.com with ESMTP; 21 May 2020 10:12:20 -0700
-Received: from orsmsx116.amr.corp.intel.com (10.22.240.14) by
- ORSMSX101.amr.corp.intel.com (10.22.225.128) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Thu, 21 May 2020 10:12:20 -0700
+   d="scan'208";a="265124329"
+Received: from orsmsx106.amr.corp.intel.com ([10.22.225.133])
+  by orsmga003.jf.intel.com with ESMTP; 21 May 2020 10:19:34 -0700
+Received: from orsmsx153.amr.corp.intel.com (10.22.226.247) by
+ ORSMSX106.amr.corp.intel.com (10.22.225.133) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Thu, 21 May 2020 10:19:34 -0700
 Received: from orsmsx114.amr.corp.intel.com ([169.254.8.205]) by
- ORSMSX116.amr.corp.intel.com ([169.254.7.25]) with mapi id 14.03.0439.000;
- Thu, 21 May 2020 10:12:20 -0700
+ ORSMSX153.amr.corp.intel.com ([169.254.12.214]) with mapi id 14.03.0439.000;
+ Thu, 21 May 2020 10:19:33 -0700
 From:   "Prakhya, Sai Praneeth" <sai.praneeth.prakhya@intel.com>
 To:     "Chatre, Reinette" <reinette.chatre@intel.com>,
         "shuah@kernel.org" <shuah@kernel.org>,
@@ -46,17 +46,17 @@ CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
         "linux-kernel@vger.kernel" <linux-kernel@vger.kernel>,
         "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
         "dcb314@hotmail.com" <dcb314@hotmail.com>
-Subject: RE: [PATCH V2 14/19] selftests/resctrl: Skip the test if requested
- resctrl feature is not supported
-Thread-Topic: [PATCH V2 14/19] selftests/resctrl: Skip the test if requested
- resctrl feature is not supported
-Thread-Index: AQHWLWGl+DZVZL5DgkKjKCK6NMr6/6iyHFgAgACuOdA=
-Date:   Thu, 21 May 2020 17:12:19 +0000
-Message-ID: <FFF73D592F13FD46B8700F0A279B802F573B6697@ORSMSX114.amr.corp.intel.com>
+Subject: RE: [PATCH V2 15/19] selftests/resctrl: Change return type of
+ umount_resctrlfs() to void
+Thread-Topic: [PATCH V2 15/19] selftests/resctrl: Change return type of
+ umount_resctrlfs() to void
+Thread-Index: AQHWLWGmDu9yXudY90uSf8mjAaN10KiyHf0AgACtPWA=
+Date:   Thu, 21 May 2020 17:19:33 +0000
+Message-ID: <FFF73D592F13FD46B8700F0A279B802F573B66AE@ORSMSX114.amr.corp.intel.com>
 References: <cover.1589835155.git.sai.praneeth.prakhya@intel.com>
- <485f834d4f1188056b306263d800bffbc0c43430.1589835155.git.sai.praneeth.prakhya@intel.com>
- <6e12840d-d8fc-c8ef-cfad-eb8b514d3030@intel.com>
-In-Reply-To: <6e12840d-d8fc-c8ef-cfad-eb8b514d3030@intel.com>
+ <3c00e744acbfa67a1988638f1718cd67382a6f59.1589835155.git.sai.praneeth.prakhya@intel.com>
+ <5703181d-832b-27c1-4b32-241f5cc868fd@intel.com>
+In-Reply-To: <5703181d-832b-27c1-4b32-241f5cc868fd@intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -75,7 +75,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 SGkgUmVpbmV0dGUsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUmVp
 bmV0dGUgQ2hhdHJlIDxyZWluZXR0ZS5jaGF0cmVAaW50ZWwuY29tPg0KPiBTZW50OiBXZWRuZXNk
-YXksIE1heSAyMCwgMjAyMCA0OjQ2IFBNDQo+IFRvOiBQcmFraHlhLCBTYWkgUHJhbmVldGggPHNh
+YXksIE1heSAyMCwgMjAyMCA0OjUyIFBNDQo+IFRvOiBQcmFraHlhLCBTYWkgUHJhbmVldGggPHNh
 aS5wcmFuZWV0aC5wcmFraHlhQGludGVsLmNvbT47DQo+IHNodWFoQGtlcm5lbC5vcmc7IHNraGFu
 QGxpbnV4Zm91bmRhdGlvbi5vcmc7IGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmcNCj4g
 Q2M6IHRnbHhAbGludXRyb25peC5kZTsgbWluZ29AcmVkaGF0LmNvbTsgYnBAYWxpZW44LmRlOyBM
@@ -83,30 +83,27 @@ dWNrLCBUb255DQo+IDx0b255Lmx1Y2tAaW50ZWwuY29tPjsgYmFidS5tb2dlckBhbWQuY29tOyBq
 YW1lcy5tb3JzZUBhcm0uY29tOw0KPiBTaGFua2FyLCBSYXZpIFYgPHJhdmkudi5zaGFua2FyQGlu
 dGVsLmNvbT47IFl1LCBGZW5naHVhDQo+IDxmZW5naHVhLnl1QGludGVsLmNvbT47IHg4NkBrZXJu
 ZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWw7DQo+IGRhbi5jYXJwZW50ZXJAb3JhY2xl
-LmNvbTsgZGNiMzE0QGhvdG1haWwuY29tDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggVjIgMTQvMTld
-IHNlbGZ0ZXN0cy9yZXNjdHJsOiBTa2lwIHRoZSB0ZXN0IGlmIHJlcXVlc3RlZCByZXNjdHJsDQo+
-IGZlYXR1cmUgaXMgbm90IHN1cHBvcnRlZA0KPiANCj4gSGkgU2FpLA0KDQpbU05JUF0NCg0KPiA+
-IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL3Jlc2N0cmxfdGVz
-dHMuYw0KPiA+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9yZXNjdHJsX3Rlc3Rz
-LmMNCj4gPiBpbmRleCBmYjc3MDM0MTNiZTcuLmQ0NWFlMDA0ZWQ3NyAxMDA2NDQNCj4gPiAtLS0g
-YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL3Jlc2N0cmxfdGVzdHMuYw0KPiA+ICsr
-KyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvcmVzY3RybF90ZXN0cy5jDQo+ID4g
-QEAgLTE3MCw2ICsxNzAsMTAgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KPiA+
-DQo+ID4gIAlpZiAoIWlzX2FtZCAmJiBtYm1fdGVzdCkgew0KPiA+ICAJCXByaW50ZigiIyBTdGFy
-dGluZyBNQk0gQlcgY2hhbmdlIC4uLlxuIik7DQo+ID4gKwkJaWYgKCF2YWxpZGF0ZV9yZXNjdHJs
-X2ZlYXR1cmVfcmVxdWVzdCgibWJtIikpIHsNCj4gPiArCQkJcHJpbnRmKCJvayBNQk0gIyBTS0lQ
-IEhhcmR3YXJlIGRvZXMgbm90IHN1cHBvcnQNCj4gTUJNIG9yIE1CTSBpcyBkaXNhYmxlZFxuIik7
-DQo+ID4gKwkJCWdvdG8gdGVzdF9tYmE7DQo+ID4gKwkJfQ0KPiA+ICAJCWlmICghaGFzX2JlbikN
-Cj4gPiAgCQkJc3ByaW50ZihiZW5jaG1hcmtfY21kWzVdLCAiJXMiLCAibWJhIik7DQo+ID4gIAkJ
-cmVzID0gbWJtX2J3X2NoYW5nZShzcGFuLCBjcHVfbm8sIGJ3X3JlcG9ydCwNCj4gYmVuY2htYXJr
-X2NtZCk7IEBADQo+ID4gLTE3OCw4ICsxODIsMTMgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIg
-Kiphcmd2KQ0KPiA+ICAJCXRlc3RzX3J1bisrOw0KPiA+ICAJfQ0KPiA+DQo+ID4gK3Rlc3RfbWJh
-Og0KPiANCj4gSSB0aGluayB0aGlzIHBhcnRpY3VsYXIgdXNhZ2Ugb2YgZ290byBjb3VsZCBtYWtl
-IHRoZSBmbG93IG9mIHRoZSBjb2RlIGhhcmRlciB0bw0KPiB0cmFjZS4gQ291bGQgdGhlIHRlc3Rz
-IHBlcmhhcHMgYmUgbW92ZWQgdG8gZnVuY3Rpb25zIHRvIGF2b2lkIG5lZWRpbmcgdG8ganVtcA0K
-PiBsaWtlIHRoaXM/IFBlcmhhcHMgdGhlcmUgY291bGQgYmUgYSBuZXcgZnVuY3Rpb24gcGVyIHRl
-c3QsIGxpa2UgcnVuX21ibV90ZXN0KCksDQo+IHJ1bl9tYmFfdGVzdCgpLCBldGMuIHdpdGggZWFj
-aCB0ZXN0IGNhbGxlZCB3aGVuIHJlcXVlc3RlZCBieSB1c2VyIGFuZCB3aXRoIHRoZQ0KPiB0ZXN0
-IGV4aXRpbmcgY2xlYW5seSBpZiBmZWF0dXJlIGlzIG5vdCBzdXBwb3J0ZWQgYnkgdGhlIGhhcmR3
-YXJlLg0KDQpNYWtlcyBzZW5zZS4gSSB3aWxsIGNoYW5nZSBpdCBhcyBzdWdnZXN0ZWQuDQoNClJl
-Z2FyZHMsDQpTYWkNCg==
+LmNvbTsgZGNiMzE0QGhvdG1haWwuY29tDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggVjIgMTUvMTld
+IHNlbGZ0ZXN0cy9yZXNjdHJsOiBDaGFuZ2UgcmV0dXJuIHR5cGUgb2YNCj4gdW1vdW50X3Jlc2N0
+cmxmcygpIHRvIHZvaWQNCj4gDQo+IEhpIFNhaSwNCj4gDQo+IE9uIDUvMTgvMjAyMCAzOjA4IFBN
+LCBTYWkgUHJhbmVldGggUHJha2h5YSB3cm90ZToNCj4gPiB1bW91bnRfcmVzY3RybGZzKCkgaXMg
+dXNlZCBvbmx5IGR1cmluZyB0ZWFyIGRvd24gcGF0aCBhbmQgdGhlcmUgaXMNCj4gPiBub3RoaW5n
+IG11Y2ggdG8gZG8gaWYgdW5tb3VudCBvZiByZXNjdHJsIGZpbGUgc3lzdGVtIGZhaWxzLCBzbywg
+YWxsDQo+ID4gdGhlIGNhbGxlcnMgb2YgdGhpcyBmdW5jdGlvbiBhcmUgbm90IGNoZWNraW5nIGZv
+ciB0aGUgcmV0dXJuIHZhbHVlLg0KPiA+IEhlbmNlLCBjaGFuZ2UgdGhlIHJldHVybiB0eXBlIG9m
+IHRoaXMgZnVuY3Rpb24gZnJvbSBpbnQgdG8gdm9pZC4NCj4gDQo+IFNob3VsZCB0aGUgY2FsbGVy
+cyBiZSBpZ25vcmluZyB0aGUgcmV0dXJuIHZhbHVlPyBGcm9tIHdoYXQgSSBjYW4gdGVsbCB0aGUN
+Cj4gZmlsZXN5c3RlbSBpcyB1bm1vdW50ZWQgYmV0d2VlbiB0ZXN0IHJ1bnMgc28gSSB3b25kZXIg
+aWYgaXQgbWF5IGhlbHAgaWYgdGhlDQo+IHJldHVybiBjb2RlIGlzIHVzZWQgYW5kIHRoZSB0ZXN0
+IGV4aXRzIHdpdGggYW4gYXBwcm9wcmlhdGUgZXJyb3IgdG8gdXNlciBzcGFjZSBmb3INCj4gcG9z
+c2libGUgaW52ZXN0aWdhdGlvbiBpbnN0ZWFkIG9mIGF0dGVtcHRpbmcgdG8gcnVuIGEgbmV3IHRl
+c3Qgb24gdG9wIG9mIHRoZQ0KPiByZXNjdHJsIGZpbGVzeXN0ZW0gdGhhdCBjb3VsZCBwb3RlbnRp
+YWxseSBiZSBoYXZpbmcgaXNzdWVzIGF0IHRoZSB0aW1lLg0KDQpNYWtlcyBzZW5zZSB0byBtZSB0
+byBjaGVjayBmb3IgdGhlIHJldHVybiB2YWx1ZSBvZiB1bW91bnQoKSBhbmQgdGFrZSBhcHByb3By
+aWF0ZQ0KYWN0aW9uIHJhdGhlciB0aGFuIGlnbm9yaW5nIGl0LiBCdXQsIHNpbmNlIHRoaXMgbWln
+aHQgaGFwcGVuIHZlcnkgcmFyZWx5IChJIGhhdmVuJ3QNCm5vdGljZWQgdW1vdW50KCkgZmFpbGlu
+ZyB0aWxsIG5vdyksIEkgYW0gdGhpbmtpbmcgdG8gcXVldWUgdGhpcyB1cCBmb3IgY2xlYW51cCBz
+ZXJpZXMuDQpXaGF0IGRvIHlvdSB0aGluaz8NCg0KVGhpcyBidWcgZml4ZXMgc2VyaWVzIHdpbGwg
+dGhlbiBoYXZlIHBhdGNoZXMgMTYgYW5kIDE3IGJlY2F1c2UgdGhleSBhcmUgZml4aW5nIGEgYnVn
+DQp0aGF0IGNvdWxkIGJlIGVhc2lseSBub3RpY2VkLiBQbGVhc2UgbGV0IG1lIGtub3cgaWYgeW91
+IHRoaW5rIG90aGVyd2lzZS4NCg0KUmVnYXJkcywNClNhaQ0K
