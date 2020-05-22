@@ -2,81 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7CC1DF048
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 22:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4771DF16D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 23:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730931AbgEVUAk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 May 2020 16:00:40 -0400
-Received: from mga12.intel.com ([192.55.52.136]:57415 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730893AbgEVUAk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 May 2020 16:00:40 -0400
-IronPort-SDR: XtHVxYyAf5vEH49cUWyYQ0PD1nBHlna6PIBolyMBl7EkaS22LNt9ZXGsmjWwldcBaK/HC1JOT/
- 3JcgFNZpndZw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 13:00:31 -0700
-IronPort-SDR: Bn+s5kEeq3xJ/DxUaKFS56sEC5ThKILViF5ryIBv8HF8o4U+Pd6FqEFkCsxFQFXiXuboE64Tfx
- YkRHJDkDDurQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,422,1583222400"; 
-   d="scan'208";a="300771018"
-Received: from rpurrx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.58.10])
-  by fmsmga002.fm.intel.com with ESMTP; 22 May 2020 13:00:28 -0700
-Date:   Fri, 22 May 2020 23:00:29 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     shuah <shuah@kernel.org>
-Cc:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
-        linux-kselftest@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        linux-snps-arc@lists.infradead.org
-Subject: Re: [PATCH v3] Kernel selftests: Add check if TPM devices are
- supported
-Message-ID: <20200522200029.GA150221@linux.intel.com>
-References: <20200521144344.1886-1-Nikita.Sobolev@synopsys.com>
- <20200522163714.GA10319@linux.intel.com>
- <20200522163745.GB10319@linux.intel.com>
- <b433d7c7-38a2-098a-55c9-6f8cc13f7230@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b433d7c7-38a2-098a-55c9-6f8cc13f7230@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1731103AbgEVVrU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 May 2020 17:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731066AbgEVVrU (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 22 May 2020 17:47:20 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F467C08C5C0
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2020 14:47:20 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id w20so597208pga.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2020 14:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=80cOC3Q1C1nh3jgT7bLdfn6QXwRHWrLiSMAc5u1N5Mg=;
+        b=MBVTOqMsRRDOXwqDeh3TlHhCVuQINpecjzEWi2sbZjFC2s+fi8libuvJoKMdyiA93j
+         HjxXahYGwB2EeBTPt5THAGJtXNUS1blvwgSzxXsV7iD7yKk/idl5N09duhj4GIrn1ZiN
+         dFdhnMRbAksUe0m8/f+9BUDtxd165NCjk74ME=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=80cOC3Q1C1nh3jgT7bLdfn6QXwRHWrLiSMAc5u1N5Mg=;
+        b=MdtMEBo8lhZnujBIAgFZ/UH+N196ziU8bgFq8A5mPXPz2qPla7BLZU3QfLK5WXJQIX
+         UDPRSnLpEOTQPe0lN5B9c5b4hZENQggSw1EXSTiRmEmgkHdKb7XtkmLbXU057y4CxKDR
+         wdNGR9Jgg7+jhivu6gOc44K6hJL8YV4broLRzJeH8p8jF1FKiU0zlM5Tvx8kLItcq/b+
+         SB57BkLTBdcmL8hh84su/w01Ln0Q32F4pT1nW081onHN4E8CqgYAkj+BvSKJjAsasw+r
+         PzTCplZpBK+qIDfDM/9Oy94opN0EdvzB2/7XA9O/16KIJRlMNxFLy3AD+fAzWI20wD4V
+         IY1Q==
+X-Gm-Message-State: AOAM533PLtcvvftnCHDSDBt6oJCOsNXxSKrNraPQvKwG2dkajGdD0rwP
+        n5760R19bwhrpOsiBRf0BLfRZg==
+X-Google-Smtp-Source: ABdhPJwCvSRp3cNpgT+cHxazKcMuvzWV+0gormNW+/FlbLyRW0Hkd2BGV2aYYNTI+c6UjR+ZCLaIdA==
+X-Received: by 2002:a63:5864:: with SMTP id i36mr15433327pgm.231.1590184039358;
+        Fri, 22 May 2020 14:47:19 -0700 (PDT)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id w1sm6889502pgh.53.2020.05.22.14.47.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2020 14:47:18 -0700 (PDT)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH] firmware_loader: change enum fw_opt to u32
+Date:   Fri, 22 May 2020 14:46:58 -0700
+Message-Id: <20200522214658.12722-1-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 22, 2020 at 01:23:26PM -0600, shuah wrote:
-> On 5/22/20 10:37 AM, Jarkko Sakkinen wrote:
-> > On Fri, May 22, 2020 at 07:37:17PM +0300, Jarkko Sakkinen wrote:
-> > > On Thu, May 21, 2020 at 05:43:44PM +0300, Nikita Sobolev wrote:
-> > > > TPM2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
-> > > > are available. In case, when these devices are not available test
-> > > > fails, but expected behaviour is skipped test.
-> > > > 
-> > > > Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-> > > 
-> > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > 
-> > Shuah, can you pick this up?
-> > 
-> > /Jarkko
-> > 
-> 
-> Done. Applied to linux-kselftest next for Linux 5.8-rc1.
-> 
-> thanks,
-> -- Shuah
+"enum fw_opt" is not used as an enum.
+Change fw_opt to a u32 and the FW_OPT_* values inside the enum to defines.
 
-Thank you.
+Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+---
+ drivers/base/firmware_loader/fallback.c       | 12 +++++------
+ drivers/base/firmware_loader/fallback.h       |  8 +++----
+ .../base/firmware_loader/fallback_platform.c  |  2 +-
+ drivers/base/firmware_loader/firmware.h       | 21 ++++++++-----------
+ drivers/base/firmware_loader/main.c           | 11 +++++-----
+ 5 files changed, 25 insertions(+), 29 deletions(-)
 
-/Jarkko
+diff --git a/drivers/base/firmware_loader/fallback.c b/drivers/base/firmware_loader/fallback.c
+index 1e9c96e3ed63..af1aa3d69920 100644
+--- a/drivers/base/firmware_loader/fallback.c
++++ b/drivers/base/firmware_loader/fallback.c
+@@ -460,7 +460,7 @@ static const struct attribute_group *fw_dev_attr_groups[] = {
+ 
+ static struct fw_sysfs *
+ fw_create_instance(struct firmware *firmware, const char *fw_name,
+-		   struct device *device, enum fw_opt opt_flags)
++		   struct device *device, u32 opt_flags)
+ {
+ 	struct fw_sysfs *fw_sysfs;
+ 	struct device *f_dev;
+@@ -493,7 +493,7 @@ fw_create_instance(struct firmware *firmware, const char *fw_name,
+  * In charge of constructing a sysfs fallback interface for firmware loading.
+  **/
+ static int fw_load_sysfs_fallback(struct fw_sysfs *fw_sysfs,
+-				  enum fw_opt opt_flags, long timeout)
++				  u32 opt_flags, long timeout)
+ {
+ 	int retval = 0;
+ 	struct device *f_dev = &fw_sysfs->dev;
+@@ -547,7 +547,7 @@ static int fw_load_sysfs_fallback(struct fw_sysfs *fw_sysfs,
+ 
+ static int fw_load_from_user_helper(struct firmware *firmware,
+ 				    const char *name, struct device *device,
+-				    enum fw_opt opt_flags)
++				    u32 opt_flags)
+ {
+ 	struct fw_sysfs *fw_sysfs;
+ 	long timeout;
+@@ -588,7 +588,7 @@ static int fw_load_from_user_helper(struct firmware *firmware,
+ 	return ret;
+ }
+ 
+-static bool fw_force_sysfs_fallback(enum fw_opt opt_flags)
++static bool fw_force_sysfs_fallback(u32 opt_flags)
+ {
+ 	if (fw_fallback_config.force_sysfs_fallback)
+ 		return true;
+@@ -597,7 +597,7 @@ static bool fw_force_sysfs_fallback(enum fw_opt opt_flags)
+ 	return true;
+ }
+ 
+-static bool fw_run_sysfs_fallback(enum fw_opt opt_flags)
++static bool fw_run_sysfs_fallback(u32 opt_flags)
+ {
+ 	int ret;
+ 
+@@ -640,7 +640,7 @@ static bool fw_run_sysfs_fallback(enum fw_opt opt_flags)
+  **/
+ int firmware_fallback_sysfs(struct firmware *fw, const char *name,
+ 			    struct device *device,
+-			    enum fw_opt opt_flags,
++			    u32 opt_flags,
+ 			    int ret)
+ {
+ 	if (!fw_run_sysfs_fallback(opt_flags))
+diff --git a/drivers/base/firmware_loader/fallback.h b/drivers/base/firmware_loader/fallback.h
+index 06f4577733a8..2afdb6adb23f 100644
+--- a/drivers/base/firmware_loader/fallback.h
++++ b/drivers/base/firmware_loader/fallback.h
+@@ -33,7 +33,7 @@ struct firmware_fallback_config {
+ #ifdef CONFIG_FW_LOADER_USER_HELPER
+ int firmware_fallback_sysfs(struct firmware *fw, const char *name,
+ 			    struct device *device,
+-			    enum fw_opt opt_flags,
++			    u32 opt_flags,
+ 			    int ret);
+ void kill_pending_fw_fallback_reqs(bool only_kill_custom);
+ 
+@@ -45,7 +45,7 @@ void unregister_sysfs_loader(void);
+ #else /* CONFIG_FW_LOADER_USER_HELPER */
+ static inline int firmware_fallback_sysfs(struct firmware *fw, const char *name,
+ 					  struct device *device,
+-					  enum fw_opt opt_flags,
++					  u32 opt_flags,
+ 					  int ret)
+ {
+ 	/* Keep carrying over the same error */
+@@ -67,10 +67,10 @@ static inline void unregister_sysfs_loader(void)
+ #endif /* CONFIG_FW_LOADER_USER_HELPER */
+ 
+ #ifdef CONFIG_EFI_EMBEDDED_FIRMWARE
+-int firmware_fallback_platform(struct fw_priv *fw_priv, enum fw_opt opt_flags);
++int firmware_fallback_platform(struct fw_priv *fw_priv, u32 opt_flags);
+ #else
+ static inline int firmware_fallback_platform(struct fw_priv *fw_priv,
+-					     enum fw_opt opt_flags)
++					     u32 opt_flags)
+ {
+ 	return -ENOENT;
+ }
+diff --git a/drivers/base/firmware_loader/fallback_platform.c b/drivers/base/firmware_loader/fallback_platform.c
+index c88c745590fe..cdd2c9a9f38a 100644
+--- a/drivers/base/firmware_loader/fallback_platform.c
++++ b/drivers/base/firmware_loader/fallback_platform.c
+@@ -8,7 +8,7 @@
+ #include "fallback.h"
+ #include "firmware.h"
+ 
+-int firmware_fallback_platform(struct fw_priv *fw_priv, enum fw_opt opt_flags)
++int firmware_fallback_platform(struct fw_priv *fw_priv, u32 opt_flags)
+ {
+ 	const u8 *data;
+ 	size_t size;
+diff --git a/drivers/base/firmware_loader/firmware.h b/drivers/base/firmware_loader/firmware.h
+index 25836a6afc9f..cf6dc96a84a2 100644
+--- a/drivers/base/firmware_loader/firmware.h
++++ b/drivers/base/firmware_loader/firmware.h
+@@ -12,7 +12,7 @@
+ #include <generated/utsrelease.h>
+ 
+ /**
+- * enum fw_opt - options to control firmware loading behaviour
++ * fw_opt - options to control firmware loading behaviour
+  *
+  * @FW_OPT_UEVENT: Enables the fallback mechanism to send a kobject uevent
+  *	when the firmware is not found. Userspace is in charge to load the
+@@ -33,15 +33,13 @@
+  *	the platform's main firmware. If both this fallback and the sysfs
+  *      fallback are enabled, then this fallback will be tried first.
+  */
+-enum fw_opt {
+-	FW_OPT_UEVENT			= BIT(0),
+-	FW_OPT_NOWAIT			= BIT(1),
+-	FW_OPT_USERHELPER		= BIT(2),
+-	FW_OPT_NO_WARN			= BIT(3),
+-	FW_OPT_NOCACHE			= BIT(4),
+-	FW_OPT_NOFALLBACK_SYSFS		= BIT(5),
+-	FW_OPT_FALLBACK_PLATFORM	= BIT(6),
+-};
++#define FW_OPT_UEVENT			BIT(0)
++#define FW_OPT_NOWAIT			BIT(1)
++#define FW_OPT_USERHELPER		BIT(2)
++#define FW_OPT_NO_WARN			BIT(3)
++#define FW_OPT_NOCACHE			BIT(4)
++#define FW_OPT_NOFALLBACK_SYSFS		BIT(5)
++#define FW_OPT_FALLBACK_PLATFORM	BIT(6)
+ 
+ enum fw_status {
+ 	FW_STATUS_UNKNOWN,
+@@ -136,8 +134,7 @@ static inline void fw_state_done(struct fw_priv *fw_priv)
+ 	__fw_state_set(fw_priv, FW_STATUS_DONE);
+ }
+ 
+-int assign_fw(struct firmware *fw, struct device *device,
+-	      enum fw_opt opt_flags);
++int assign_fw(struct firmware *fw, struct device *device, u32 opt_flags);
+ 
+ #ifdef CONFIG_FW_LOADER_PAGED_BUF
+ void fw_free_paged_buf(struct fw_priv *fw_priv);
+diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+index 76f79913916d..2ca6b4735979 100644
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -210,7 +210,7 @@ static struct fw_priv *__lookup_fw_priv(const char *fw_name)
+ static int alloc_lookup_fw_priv(const char *fw_name,
+ 				struct firmware_cache *fwc,
+ 				struct fw_priv **fw_priv, void *dbuf,
+-				size_t size, enum fw_opt opt_flags)
++				size_t size, u32 opt_flags)
+ {
+ 	struct fw_priv *tmp;
+ 
+@@ -635,8 +635,7 @@ static int fw_add_devm_name(struct device *dev, const char *name)
+ }
+ #endif
+ 
+-int assign_fw(struct firmware *fw, struct device *device,
+-	      enum fw_opt opt_flags)
++int assign_fw(struct firmware *fw, struct device *device, u32 opt_flags)
+ {
+ 	struct fw_priv *fw_priv = fw->priv;
+ 	int ret;
+@@ -687,7 +686,7 @@ int assign_fw(struct firmware *fw, struct device *device,
+ static int
+ _request_firmware_prepare(struct firmware **firmware_p, const char *name,
+ 			  struct device *device, void *dbuf, size_t size,
+-			  enum fw_opt opt_flags)
++			  u32 opt_flags)
+ {
+ 	struct firmware *firmware;
+ 	struct fw_priv *fw_priv;
+@@ -753,7 +752,7 @@ static void fw_abort_batch_reqs(struct firmware *fw)
+ static int
+ _request_firmware(const struct firmware **firmware_p, const char *name,
+ 		  struct device *device, void *buf, size_t size,
+-		  enum fw_opt opt_flags)
++		  u32 opt_flags)
+ {
+ 	struct firmware *fw = NULL;
+ 	int ret;
+@@ -990,7 +989,7 @@ struct firmware_work {
+ 	struct device *device;
+ 	void *context;
+ 	void (*cont)(const struct firmware *fw, void *context);
+-	enum fw_opt opt_flags;
++	u32 opt_flags;
+ };
+ 
+ static void request_firmware_work_func(struct work_struct *work)
+-- 
+2.17.1
+
