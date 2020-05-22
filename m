@@ -2,122 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D611DE54E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 13:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2EF1DE5A4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 13:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729405AbgEVLZO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 May 2020 07:25:14 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:48006 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728281AbgEVLZN (ORCPT
+        id S1729942AbgEVLhJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 May 2020 07:37:09 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:54896 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728601AbgEVLhI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 May 2020 07:25:13 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MBI0U7108599;
-        Fri, 22 May 2020 11:24:55 GMT
+        Fri, 22 May 2020 07:37:08 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MBVvPk102651;
+        Fri, 22 May 2020 11:36:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id; s=corp-2020-01-29;
- bh=Dp/WCIWRjQgCLBrcUEQBV8a2eOIJeoHqdBAAyFlUI0k=;
- b=NkCtSpuIbkE4MJlDL6xPc5RWPFDIjUIBxszsArdjhVsGff1t0Og2BkC30W46/zR7uEha
- U1zbX5dEyPEGyYiL6AUNH6XKSZ+aRuUgg5Q85OACbSbpik317baGcECCCEyQX0y1yQWG
- 0WV1xqHCikAEWlthG/+0/sQuC4LuCY4ryXIWqcYhu0UiVbRtWHCKFDVgwBkBR+UgG+Sy
- +zAiTmu/dQZxSu1LeUN2ErYABcZWSa9UqHpk7R/46wm606hrb2fUvTpztZKBL4hHPiUG
- hxkc3n4oh3GnKWCkn+p7MNgIe5/LujhVa1UqHi2ZRgrMECHWGqFoFsIyoTm8zfbvXAbM IA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 31284md81f-1
+ bh=DmsvtQ/8SYimqUVvb41eUrdJHrvcJxY6DxjzzS+9LdY=;
+ b=e+QcgFjwnov2e/6vj1x0TQ942WM3QLPxSKNt8Qh2VdbnLwHTjSBOmDKjjfT8teItv7ZN
+ +oVxUJ6+JfGo9p/SwjHxMITIkfZagzwJo4tLiuGIO/3cbhGul93HrhC6awTec762PidS
+ j6Fjc1V7oE9PPU0qH6C5HVD4Ut1aVgjx2DasHe0vV+tWcRhSRebo5TxVNEJjNpkwBDpU
+ d8Akk0aj2KrnGZN3EcR1p/V3ZO0+tRZNCo+C3MU97B4tdyrd5lqXlRnVyjn+3R1XQ7mg
+ YEz922wdALFpzD0KN0B2cowyAnjIfDpqbksUZHJ0Y0ZlS2jPqkbkez42cT82ceO9IKX9 3Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 31501rkt6x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 May 2020 11:24:55 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MBNHTT127015;
-        Fri, 22 May 2020 11:24:55 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 312t3e9563-1
+        Fri, 22 May 2020 11:36:41 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MBWkU9186456;
+        Fri, 22 May 2020 11:36:40 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 313gj7b9vy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 May 2020 11:24:55 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04MBOpRB020735;
-        Fri, 22 May 2020 11:24:52 GMT
+        Fri, 22 May 2020 11:36:40 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04MBab27012862;
+        Fri, 22 May 2020 11:36:37 GMT
 Received: from localhost.uk.oracle.com (/10.175.194.37)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 22 May 2020 04:24:51 -0700
+        with ESMTP ; Fri, 22 May 2020 04:36:37 -0700
 From:   Alan Maguire <alan.maguire@oracle.com>
-To:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andriin@fb.com
+To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com
 Cc:     kafai@fb.com, john.fastabend@gmail.com, kpsingh@chromium.org,
-        shuah@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, sean@mess.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH] selftests/bpf: add general instructions for test execution
-Date:   Fri, 22 May 2020 12:24:34 +0100
-Message-Id: <1590146674-25485-1-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH bpf 0/2] selftests/bpf: add missing CONFIG values to test config
+Date:   Fri, 22 May 2020 12:36:27 +0100
+Message-Id: <1590147389-26482-1-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0 mlxlogscore=970
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005220094
+ definitions=main-2005220095
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0
- cotscore=-2147483648 impostorscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 spamscore=0 bulkscore=0 adultscore=0
- priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005220093
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 clxscore=1011 priorityscore=1501 cotscore=-2147483648
+ impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005220095
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Getting a clean BPF selftests run involves ensuring latest trunk LLVM/clang
-are used, pahole is recent (>=1.16) and config matches the specified
-config file as closely as possible.  Add to bpf_devel_QA.rst and point
-tools/testing/selftests/bpf/README.rst to it.
+Selftests "config" file is intended to represent the config required
+to run the tests; a few values are missing for the BPF selftests
+and these can result in test failures due to missing helpers etc.
+Add the missing values as they will help document the config needed
+for a clean BPF selftests run.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
----
- Documentation/bpf/bpf_devel_QA.rst     | 15 +++++++++++++++
- tools/testing/selftests/bpf/README.rst |  2 ++
- 2 files changed, 17 insertions(+)
+Alan Maguire (2):
+  selftests/bpf: CONFIG_IPV6_SEG6_BPF required for test_seg6_loop.o
+  selftests/bpf: CONFIG_LIRC required for test_lirc_mode2.sh
 
-diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
-index 38c15c6..0b3db91 100644
---- a/Documentation/bpf/bpf_devel_QA.rst
-+++ b/Documentation/bpf/bpf_devel_QA.rst
-@@ -437,6 +437,21 @@ needed::
- See the kernels selftest `Documentation/dev-tools/kselftest.rst`_
- document for further documentation.
- 
-+To maximize the number of tests passing, the .config of the kernel
-+under test should match the config file fragment in
-+tools/testing/selftests/bpf as closely as possible.
-+
-+Finally to ensure support for latest BPF Type Format features -
-+discussed in `Documentation/bpf/btf.rst`_ - pahole version 1.16
-+is required for kernels built with CONFIG_DEBUG_INFO_BTF=y.
-+pahole is delivered in the dwarves package or can be built
-+from source at
-+
-+https://github.com/acmel/dwarves
-+
-+Some distros have pahole version 1.16 packaged already, e.g.
-+Fedora, Gentoo.
-+
- Q: Which BPF kernel selftests version should I run my kernel against?
- ---------------------------------------------------------------------
- A: If you run a kernel ``xyz``, then always run the BPF kernel selftests
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-index 0f67f1b..e885d35 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -1,6 +1,8 @@
- ==================
- BPF Selftest Notes
- ==================
-+General instructions on running selftests can be found in
-+`Documentation/bpf/bpf_devel_QA.rst`_.
- 
- Additional information about selftest failures are
- documented here.
+ tools/testing/selftests/bpf/config | 2 ++
+ 1 file changed, 2 insertions(+)
+
 -- 
 1.8.3.1
 
