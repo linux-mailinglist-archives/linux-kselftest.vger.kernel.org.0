@@ -2,81 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F841DED04
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 18:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5A11DED1C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 18:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730325AbgEVQPM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 May 2020 12:15:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45160 "EHLO mail.kernel.org"
+        id S1730326AbgEVQVn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 May 2020 12:21:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47786 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729903AbgEVQPL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 May 2020 12:15:11 -0400
+        id S1729040AbgEVQVn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 22 May 2020 12:21:43 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E9E072072C;
-        Fri, 22 May 2020 16:15:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95CBB2070A;
+        Fri, 22 May 2020 16:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590164111;
-        bh=/XVrxxfTMAjEHk3OwtWDf86tYdi151zMugC2bDYrq34=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lkIA+w0oI1q4FR1927ERKE+b1Nb0vxkkmihIWMmKWt4vVbpB7wAj3L3/eZqhqgPd+
-         v/ocob+yX5/yB9dqw/4MMv62gfNen09QASDdXP+OUIS1T3SNBnwR3HB7FbekWqTJJl
-         71wsXKXrdnCohWnAipdGip6n3QBFz9Dz9HK4xFvI=
-Date:   Fri, 22 May 2020 17:15:08 +0100
+        s=default; t=1590164503;
+        bh=5niBKoyyo+z1xiBLh9FBJrqEJeoXUYx7FC4/gtluDAU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e8qVOcKaf3OP98hNrtrm97GX9k6tI1PIJbbn/BeAPine0/bGEgmSKBRHFEtGZkWro
+         Uc2xjMSYe0C6yXFCtKKr5YDMx0o0zPFsZBsDQ4kaw7vbh0FiqlZc/oEZiQjnCeqRns
+         goHQ+s7HdblZdIwvaiehjMSruCq5UXBeaz17KCrQ=
 From:   Mark Brown <broonie@kernel.org>
-To:     shuah <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/3] selftests: vdso: Add a selftest for vDSO getcpu()
-Message-ID: <20200522161508.GN5801@sirena.org.uk>
-References: <20200505174728.46594-1-broonie@kernel.org>
- <20200505174728.46594-4-broonie@kernel.org>
- <dff4dfbd-f3f1-d683-5dac-4404e9023b2e@kernel.org>
- <20200519174452.GR4611@sirena.org.uk>
- <0f1a7c29-340d-f61b-b102-d300932dc92c@kernel.org>
- <20200522151222.GJ5801@sirena.org.uk>
- <278c9a47-4d68-0e0d-415d-53360337aa6c@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 0/3] selftests: vdso: Add a selftest for vDSO getcpu()
+Date:   Fri, 22 May 2020 17:21:36 +0100
+Message-Id: <20200522162139.44380-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9DptZICXTlJ7FQ09"
-Content-Disposition: inline
-In-Reply-To: <278c9a47-4d68-0e0d-415d-53360337aa6c@kernel.org>
-X-Cookie: C for yourself.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This series does a bit of a cleanup of the existing tests for the vDSO
+in kselftest and then adds a new test for getcpu().
 
---9DptZICXTlJ7FQ09
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+v3: Remove some extern keywords.
+v2: Silence checkpatch
 
-On Fri, May 22, 2020 at 09:15:07AM -0600, shuah wrote:
-> On 5/22/20 9:12 AM, Mark Brown wrote:
+Mark Brown (3):
+  selftests: vdso: Rename vdso_test to vdso_test_gettimeofday
+  selftests: vdso: Use a header file to prototype parse_vdso API
+  selftests: vdso: Add a selftest for vDSO getcpu()
 
-> > That doesn't match the idiom used by any of the surrounding code :(
+ tools/testing/selftests/vDSO/.gitignore       |  2 +
+ tools/testing/selftests/vDSO/Makefile         |  5 +-
+ tools/testing/selftests/vDSO/parse_vdso.c     | 24 +--------
+ tools/testing/selftests/vDSO/parse_vdso.h     | 31 +++++++++++
+ .../selftests/vDSO/vdso_standalone_test_x86.c |  4 +-
+ .../testing/selftests/vDSO/vdso_test_getcpu.c | 54 +++++++++++++++++++
+ .../{vdso_test.c => vdso_test_gettimeofday.c} | 10 ++--
+ 7 files changed, 96 insertions(+), 34 deletions(-)
+ create mode 100644 tools/testing/selftests/vDSO/parse_vdso.h
+ create mode 100644 tools/testing/selftests/vDSO/vdso_test_getcpu.c
+ rename tools/testing/selftests/vDSO/{vdso_test.c => vdso_test_gettimeofday.c} (84%)
 
-> I can't parse the idiom statement? Can you clarify it please.
+-- 
+2.20.1
 
-The other code in the vDSO selftests does this (the quoted line was a
-cut'n'paste from the gettimeofday() test and most of the functions in
-parse_vdso.c are similar).
-
---9DptZICXTlJ7FQ09
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7H+osACgkQJNaLcl1U
-h9Druwf/acwMTA58Xw115dS1RbaOYK2H8ATPiTnX/k1VLv9UYljnE6sxyG2Fsu1E
-SEgvx13PY3S2kOL9kgydGu47hvPtVN22n02rAmedqj9mS3IwJ/oi5YyYhc2fTDja
-HjVuFYDxdSg/xwwhUb8HCaQx9rwCT+mgYMCFWoAaJLaTYxjPbZSP/J7ZZy+kG1j4
-eTG7QHgo4hHTujRhYeayDesuF1s6aQR1cJf37ExVNC02vN7rzawZqeB3SRYbUGXq
-tWX3PtrzYCWBAegxx06YBs39SeNq4zMAX7bKqj7vjc6EOZIUDBhwdejzCnQ7nj4r
-tvrzcmTKkzoZqJeBt7fN/pj4AIDyjQ==
-=5VAp
------END PGP SIGNATURE-----
-
---9DptZICXTlJ7FQ09--
