@@ -2,66 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C8E1DED65
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 18:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF4F1DEEFB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 20:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730291AbgEVQhs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 May 2020 12:37:48 -0400
-Received: from mga09.intel.com ([134.134.136.24]:60820 "EHLO mga09.intel.com"
+        id S1730764AbgEVSN1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 May 2020 14:13:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38156 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730260AbgEVQhs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 May 2020 12:37:48 -0400
-IronPort-SDR: A6xOwgnm8fsVRqJeTKB4oTGBEA1J+1oaUgBFoGan33pidojR9cC3D2zflf2z9MDHTxHsQsmByh
- l7aCa0oMgruw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2020 09:37:48 -0700
-IronPort-SDR: v05CruEDS/sQbJcCpXJ4yZigvNIF5MkdrMEIhvH0Vnxdhv3UvesWPTo5bJH61nOfyMZ3RcOolH
- wA9fTpvH3d3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,422,1583222400"; 
-   d="scan'208";a="254318997"
-Received: from omillerx-mobl.ger.corp.intel.com (HELO localhost) ([10.249.43.59])
-  by fmsmga007.fm.intel.com with ESMTP; 22 May 2020 09:37:45 -0700
-Date:   Fri, 22 May 2020 19:37:45 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        linux-snps-arc@lists.infradead.org
-Subject: Re: [PATCH v3] Kernel selftests: Add check if TPM devices are
- supported
-Message-ID: <20200522163745.GB10319@linux.intel.com>
-References: <20200521144344.1886-1-Nikita.Sobolev@synopsys.com>
- <20200522163714.GA10319@linux.intel.com>
+        id S1726373AbgEVSN0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 22 May 2020 14:13:26 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5FCCC206F6;
+        Fri, 22 May 2020 18:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590171206;
+        bh=990VpNbmnJRTKTRrlUlARO0pDj6MiynA5eE1JHvdWfo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=xqeqkVfANeqiwiXzYLYE2CoP+19RFUGgr549v01CAaPqlYAs2GY6NpM5wf0LEcsXN
+         A+MbqJrgKpsrhwaHpaaWFE96ijxeUhICm62vM2/Y0rrflsDVA60nLj0AThqMU033yo
+         JjdEtKinwXv9tt4W0spOirczax9mLclGaSUVNVfg=
+Subject: Re: [PATCH v3 0/3] selftests: vdso: Add a selftest for vDSO getcpu()
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20200522162139.44380-1-broonie@kernel.org>
+From:   shuah <shuah@kernel.org>
+Message-ID: <24b15074-7135-38d7-d491-76087d949498@kernel.org>
+Date:   Fri, 22 May 2020 12:13:25 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200522163714.GA10319@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200522162139.44380-1-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 22, 2020 at 07:37:17PM +0300, Jarkko Sakkinen wrote:
-> On Thu, May 21, 2020 at 05:43:44PM +0300, Nikita Sobolev wrote:
-> > TPM2 tests set uses /dev/tpm0 and /dev/tpmrm0 without check if they
-> > are available. In case, when these devices are not available test
-> > fails, but expected behaviour is skipped test.
-> > 
-> > Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+On 5/22/20 10:21 AM, Mark Brown wrote:
+> This series does a bit of a cleanup of the existing tests for the vDSO
+> in kselftest and then adds a new test for getcpu().
 > 
-> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> v3: Remove some extern keywords.
+> v2: Silence checkpatch
+> 
+> Mark Brown (3):
+>    selftests: vdso: Rename vdso_test to vdso_test_gettimeofday
+>    selftests: vdso: Use a header file to prototype parse_vdso API
+>    selftests: vdso: Add a selftest for vDSO getcpu()
+> 
+>   tools/testing/selftests/vDSO/.gitignore       |  2 +
+>   tools/testing/selftests/vDSO/Makefile         |  5 +-
+>   tools/testing/selftests/vDSO/parse_vdso.c     | 24 +--------
+>   tools/testing/selftests/vDSO/parse_vdso.h     | 31 +++++++++++
+>   .../selftests/vDSO/vdso_standalone_test_x86.c |  4 +-
+>   .../testing/selftests/vDSO/vdso_test_getcpu.c | 54 +++++++++++++++++++
+>   .../{vdso_test.c => vdso_test_gettimeofday.c} | 10 ++--
+>   7 files changed, 96 insertions(+), 34 deletions(-)
+>   create mode 100644 tools/testing/selftests/vDSO/parse_vdso.h
+>   create mode 100644 tools/testing/selftests/vDSO/vdso_test_getcpu.c
+>   rename tools/testing/selftests/vDSO/{vdso_test.c => vdso_test_gettimeofday.c} (84%)
+> 
 
-Shuah, can you pick this up?
+Thanks for the cleaning this up and the rework.
 
-/Jarkko
+Applied to linux-kselftest next for Linux 5.8-rc1
+
+thanks,
+-- Shuah
