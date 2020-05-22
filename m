@@ -2,79 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE801DEAB9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 16:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4511DEB58
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 May 2020 17:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730819AbgEVO4D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 May 2020 10:56:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58664 "EHLO mail.kernel.org"
+        id S1730315AbgEVPAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 May 2020 11:00:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35244 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730481AbgEVO4C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 May 2020 10:56:02 -0400
+        id S1730261AbgEVPAt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 22 May 2020 11:00:49 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5ADAA205CB;
-        Fri, 22 May 2020 14:56:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 68B0D2054F;
+        Fri, 22 May 2020 15:00:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590159361;
-        bh=0cKEoWpTu+DWnt1dxTx3zYaBzjzi9zNBJ/UJhCY6MEw=;
+        s=default; t=1590159648;
+        bh=lgj9gREzZACWIMWDadE30OkMatrU+Z1FCFBhhJ5hTcU=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=S2tGsp0elzP5bZPCTi84SjVeZaLlaznv1T5xlzOMg4Y0dF+KyjMmUuge2RGTdWSu2
-         NdXIrSGe2fRhRE0TIIF18GNfbWdGRo2kIaIcwAVDOxMZD1ntv6qO3M0DnHJ3iOth6T
-         0EJiDT9nxF+rFogASJMrv2NEMfke4sBLhm/iKjOQ=
-Subject: Re: [PATCH 3/3] selftests: vdso: Add a selftest for vDSO getcpu()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        b=lHtIED2X/j0HFUkgtIPVIU84CBQIHUHerSgUA91Kh+NCA0BralnQ3g2M9r4yoi5G/
+         xgXAD5maXyotPYvv0vFH2Z1vb4ml3I0gs8Qh4fX39mFL7LsdHePjgoYqGvSCaeNXQk
+         uCqU3FxMK69J4HfFHtxvshovdG7JdDvO9F7BJjOs=
+Subject: Re: [PATCH] selftests:mptcp: fix empty optstring
+To:     Li Zhijian <lizhijian@cn.fujitsu.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Li Zhijian <zhijianx.li@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        matthieu.baerts@tessares.net, netdev@vger.kernel.org,
         shuah <shuah@kernel.org>
-References: <20200505174728.46594-1-broonie@kernel.org>
- <20200505174728.46594-4-broonie@kernel.org>
- <dff4dfbd-f3f1-d683-5dac-4404e9023b2e@kernel.org>
- <20200519174452.GR4611@sirena.org.uk>
+References: <20200402065216.23301-1-zhijianx.li@intel.com>
+ <4bdd5672-eb24-2e49-e286-702510be0882@cn.fujitsu.com>
 From:   shuah <shuah@kernel.org>
-Message-ID: <0f1a7c29-340d-f61b-b102-d300932dc92c@kernel.org>
-Date:   Fri, 22 May 2020 08:55:50 -0600
+Message-ID: <3bd2171a-24e8-6e5a-5d16-10db2bcb27fe@kernel.org>
+Date:   Fri, 22 May 2020 09:00:47 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200519174452.GR4611@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <4bdd5672-eb24-2e49-e286-702510be0882@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/19/20 11:44 AM, Mark Brown wrote:
-> On Tue, May 19, 2020 at 11:11:28AM -0600, shuah wrote:
->> On 5/5/20 11:47 AM, Mark Brown wrote:
+On 5/10/20 10:47 PM, Li Zhijian wrote:
+> ping
 > 
->>> +int main(int argc, char **argv)
->>> +{
->>> +	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
+> 
+> On 4/2/20 2:52 PM, Li Zhijian wrote:
+>> From: Li Zhijian <lizhijian@cn.fujitsu.com>
 >>
->> WARNING: Missing a blank line after declarations
->> WARNING: Missing a blank line after declarations
->> #135: FILE: tools/testing/selftests/vDSO/vdso_test_getcpu.c:27:
->> +	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
+>> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+>> ---
+>>   tools/testing/selftests/net/mptcp/pm_netlink.sh | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/net/mptcp/pm_netlink.sh 
+>> b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+>> index 9172746b6cf0..8c7998c64d9e 100755
+>> --- a/tools/testing/selftests/net/mptcp/pm_netlink.sh
+>> +++ b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+>> @@ -8,8 +8,7 @@ usage() {
+>>       echo "Usage: $0 [ -h ]"
+>>   }
+>> -
+>> -while getopts "$optstring" option;do
+>> +while getopts "h" option;do
+>>       case "$option" in
+>>       "h")
+>>           usage $0
+> 
+> 
+> 
+> 
 
-A blank line after declarations here just like what checkpatch
-suggests. It makes it readable.
+Li Zhijian,
 
->> +	if (!sysinfo_ehdr) {
-> 
-> This is the idiom in use by the existing gettimeofday test:
-> 
-> WARNING: Missing a blank line after declarations
-> #38: FILE: tools/testing/selftests/vDSO/vdso_test_gettimeofday.c:38:
-> +	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
-> +	if (!sysinfo_ehdr) {
-> 
-> so I don't know how you want the code to look here?
-> 
+You are missing netdev and net maintainer.
+Adding netdev and Dave M.
 
-See above.
+net tests go through net tree and need review/Ack from Dave M.
+
+Dave! Please review and let me know if you want me to take this through
+kselftest tree.
 
 thanks,
 -- Shuah
