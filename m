@@ -2,107 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D351E28E0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 May 2020 19:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E7A1E2A22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 May 2020 20:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729650AbgEZRct (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 May 2020 13:32:49 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:1308 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726930AbgEZRct (ORCPT
+        id S1728890AbgEZSen (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 May 2020 14:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728576AbgEZSen (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 May 2020 13:32:49 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ecd52680001>; Tue, 26 May 2020 10:31:20 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 26 May 2020 10:32:49 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 26 May 2020 10:32:49 -0700
-Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 26 May
- 2020 17:32:48 +0000
-Subject: Re: [PATCH 0/6] nouveau/hmm: add support for mapping large pages
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Jerome Glisse <jglisse@redhat.com>,
-        "John Hubbard" <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@linuxfoundation.org>
-References: <20200508192009.15302-1-rcampbell@nvidia.com>
- <20200525134118.GA2536@ziepe.ca>
-X-Nvconfidentiality: public
-From:   Ralph Campbell <rcampbell@nvidia.com>
-Message-ID: <4743ec6e-a5a0-16ac-a1b8-992f851515f0@nvidia.com>
-Date:   Tue, 26 May 2020 10:32:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tue, 26 May 2020 14:34:43 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EAAC03E96E
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2020 11:34:41 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id c12so2787041qkk.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2020 11:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X6aXjORE3d23i1StkTonhzGHIalGKnrHwR2gVaYOR1Q=;
+        b=KGN04Gs7yNeKZzj8Lcyig10HxzNnFYhK42ZHpbQ7VNBeH5oOdHxr0avRB6BsoYRpdg
+         HHf0NqmqHMxFxlPGrp/dyvpQBszyjEKVlw2KCc1XphtusuGVsAUn7O1bVuxVSvUHzDAO
+         qDMbPlvkjYEKPQMSqNb3avW9ZnJ1JV677JoYBfxCY8u2Sr2CGJV7eb2fYyH7YyCp1xfS
+         BvD8LhMMJltV/8TSjKAidYgKWQplesk60AeoWpiEIsKiT1shwbBy0mYHMo8JS2ky0+sA
+         cMfCEn2PRi6ogyHzvbfD+0swY8H9NjiTzeEUn4ariY/8fTEGzx/HoNwF6w30WHKRhxEb
+         fquw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X6aXjORE3d23i1StkTonhzGHIalGKnrHwR2gVaYOR1Q=;
+        b=gHgEtwIqazC11pJtu4YRqK2YvXZ5W1XQbR/64nQaifFxRdYCLbrsc79cadVradZclw
+         v2dHe/fe3GRcpt/Y/zgkVhArcsrv8vQ3ZSJPryfXzD1V+xOhbWvbeg2pB/+Bccvyi2hI
+         DEFGzRbMdOLuj7SyJrujd7JF5oSxoG6RVFxwb2NzX/GvieHErO4mN99PxdeFc3kA8oc7
+         TpepS19VMihqFm9o3xCnHEwH0yumMRiwo2G8dWqvcNcwqiHrIndnMRlb/6jIl+5S2DWv
+         6IfemtjutBinOglaB4nCMvlLiwrDH8ENwM9yUqGEHpnDkPcWp/l3pf7zi4g3f8i9rrgp
+         8TLg==
+X-Gm-Message-State: AOAM5334gaG/d6C49NIyp8yjuMXLY/QR4fWfc579o5VS4W9nNRKMecbX
+        AoiX0d9BwoVTQvKld8DWk22nvA==
+X-Google-Smtp-Source: ABdhPJx197AECqahGr2mrLzhHicRNVl3wRfVxYHrdKQzzsTRV2BokxzXwXPWx0y9cHLpDk04xJuo0A==
+X-Received: by 2002:a37:484e:: with SMTP id v75mr142237qka.79.1590518080875;
+        Tue, 26 May 2020 11:34:40 -0700 (PDT)
+Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
+        by smtp.gmail.com with ESMTPSA id l22sm342526qki.45.2020.05.26.11.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 11:34:40 -0700 (PDT)
+From:   Vitor Massaru Iha <vitor@massaru.org>
+To:     kunit-dev@googlegroups.com, skhan@linuxfoundation.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brendanhiggins@google.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [fixup] kunit: use --build_dir=.kunit as default
+Date:   Tue, 26 May 2020 15:34:36 -0300
+Message-Id: <20200526183436.47026-1-vitor@massaru.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20200525134118.GA2536@ziepe.ca>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1590514280; bh=gY1xHSzU0BixoChtgpMiGs26xB1k45JS1OITIdF0cPM=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=YT6X8ZnMP3j2H98e/7bMTxvdcizzJii7qVVjHUfEFojmdIyhUbS3YLngjP0oO5mnQ
-         vMVFflzmbMRnAtJAvCGfn27zgKrru6NNKyc6215BVmJQv5P2SlhTOzfdIOtvkLILKd
-         eK8IB+aZBBKf+9QcOz3hHhbFq48EGMdTwSkqFXiaK8tMiGfqpR2y6WIl0vArwJinF8
-         /M/m6VN4l777oH6kgroSbuBL3/KyGVYBbYUEe3EsIObrnVtyX6ZE2IQ8g16O645XNw
-         OzjiUse4raMuhGPim7qMXfvYnXckCIUkzcKfIwBj1rHL5NI2x3jIWhjAqGjyqJWX9L
-         bsa3lTJ9hIpqw==
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+To make KUnit easier to use, and to avoid overwriting object and
+.config files, the default KUnit build directory is set to .kunit
 
-On 5/25/20 6:41 AM, Jason Gunthorpe wrote:
-> On Fri, May 08, 2020 at 12:20:03PM -0700, Ralph Campbell wrote:
->> hmm_range_fault() returns an array of page frame numbers and flags for
->> how the pages are mapped in the requested process' page tables. The PFN
->> can be used to get the struct page with hmm_pfn_to_page() and the page size
->> order can be determined with compound_order(page) but if the page is larger
->> than order 0 (PAGE_SIZE), there is no indication that the page is mapped
->> using a larger page size. To be fully general, hmm_range_fault() would need
->> to return the mapping size to handle cases like a 1GB compound page being
->> mapped with 2MB PMD entries. However, the most common case is the mapping
->> size the same as the underlying compound page size.
->> This series adds a new output flag to indicate this so that callers know it
->> is safe to use a large device page table mapping if one is available.
->> Nouveau and the HMM tests are updated to use the new flag.
->>
->> Note that this series depends on a patch queued in Ben Skeggs' nouveau
->> tree ("nouveau/hmm: map pages after migration") and the patches queued
->> in Jason's HMM tree.
->> There is also a patch outstanding ("nouveau/hmm: fix nouveau_dmem_chunk
->> allocations") that is independent of the above and could be applied
->> before or after.
-> 
-> Did Christoph and Matt's remarks get addressed here?
+ * Related bug: https://bugzilla.kernel.org/show_bug.cgi?id=205221
 
-Both questioned the need to add the HMM_PFN_COMPOUND flag to the
-hmm_range_fault() output array saying that the PFN can be used to get the
-struct page pointer and the page can be examined to determine the page size.
-My response is that while is true, it is also important that the device only
-access the same parts of a large page that the process/cpu has access to.
-There are places where a large page is mapped with smaller page table entries
-when a page is shared by multiple processes.
-After I explained this, I haven't seen any further comments from Christoph
-and Matt. I'm still looking for reviews, acks, or suggested changes.
+Fixed up minor merge conflicts - Shuah Khan <skhan@linuxfoundation.org>
 
+Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+version after merge on kunit brach:
+ * fix identation (tabs instead of spaces)
+---
+ tools/testing/kunit/kunit.py | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-> I think ODP could use something like this, currently it checks every
-> page to get back to the huge page size and this flag would optimze
-> that
-> 
-> Jason
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index b01838b6f5f9..b3490271a103 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -169,7 +169,7 @@ def add_common_opts(parser):
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+ 			    'directory.',
+-			    type=str, default='', metavar='build_dir')
++                            type=str, default='.kunit', metavar='build_dir')
+ 	parser.add_argument('--make_options',
+ 			    help='X=Y make option, can be repeated.',
+ 			    action='append')
+@@ -245,12 +245,11 @@ def main(argv, linux=None):
+ 	cli_args = parser.parse_args(argv)
+ 
+ 	if cli_args.subcommand == 'run':
+-		if cli_args.build_dir:
+-			if not os.path.exists(cli_args.build_dir):
+-				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
+-				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
++		if not os.path.exists(cli_args.build_dir):
++			os.mkdir(cli_args.build_dir)
++		kunit_kernel.kunitconfig_path = os.path.join(
++			cli_args.build_dir,
++			kunit_kernel.kunitconfig_path)
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+-- 
+2.26.2
+
