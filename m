@@ -2,95 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6192D1E33CD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 May 2020 01:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8ED71E33FA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 May 2020 02:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgEZXl6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 May 2020 19:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726350AbgEZXl5 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 May 2020 19:41:57 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B382FC03E96D
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2020 16:41:57 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id c185so8538496qke.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2020 16:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=hXQqv/v9vEVYiQfhG65G3PbZzCVHsVLEfF5BwtCgffQ=;
-        b=CCE+sc2PHzbrIdaja5D95876TdFmtlvMwrZdxapWFx+gcP/UjUcuZDtdW6X4Awh3gM
-         iDH0DKaGQmql1ZEmlKdncgkvW68rzQ1bPsMyzzYKfBbgD2zPwIQWVtCvqAXtDs+FJPdA
-         r23b/rRw7qmQYzX/W2pp1jT6jlCz+DkheqodVzvs9yq4YBSeULxIaqAH29A5PDJ4xkVZ
-         teWED5H5O9Tvd8vecCa1b+szTWTEh4M8rktKSOgtu3BBMsvpexasFyyOkCrs/idNOsa2
-         q1Z/MiBe7s4wdzL/XOmY8r6qC23mZzD1FtqZgxFcATDrNDni5s2h85YRRP5drFYU+FQf
-         SRdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=hXQqv/v9vEVYiQfhG65G3PbZzCVHsVLEfF5BwtCgffQ=;
-        b=RQ4i1V2QfhoYuDqxUnhL8frtNka6yRlhnZh8qoOAipLWn0LDxrryxnZcwzVQTV7zBI
-         yr2LmrDM1glaljjbX7k4A5HEkY5KyC9PTLs/49A7Cq9eFIxY3RYF0xyirb+cyI6j7we1
-         hvfuOpTbItf3IU2VdF6cRKPrS5WLEu1cpIb0KOuFFkGDutgva78ldy5cXrCnS+CiTJGy
-         tWg0UOflTa3C1NlJVg03wwkyjRi2qkpK61VV3ORHs4M8KF7e7LkXHIVhQeMawiyXoFeZ
-         KOixRbPgvpWgmB6SUn4E2p9jUJAx1ABmuNDACfNiSq9GsEfvMiRX+SKDeFgyLRKd6tii
-         bW3Q==
-X-Gm-Message-State: AOAM533Qlt7oLT0dP20kt25n42RE0LuFaZ82jvKUOr0zBsk1l8W1ecew
-        UyFbEPGJcP+WOjiZlVnFoQrxLw==
-X-Google-Smtp-Source: ABdhPJyE14ZUR04SAQDVd8MHMq53V+KJw3CgOd4MvBhRY9xxbeFMhUtX1Xb318fAiIuunVXvHq0vMQ==
-X-Received: by 2002:a37:8302:: with SMTP id f2mr1397002qkd.220.1590536516733;
-        Tue, 26 May 2020 16:41:56 -0700 (PDT)
-Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id k43sm1150727qtk.67.2020.05.26.16.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 16:41:56 -0700 (PDT)
-Message-ID: <adc28ceff89a7fffb8b6af4badc850b29b9e6207.camel@massaru.org>
-Subject: Re: [fixup] kunit: use --build_dir=.kunit as default
-From:   Vitor Massaru Iha <vitor@massaru.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brendanhiggins@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Date:   Tue, 26 May 2020 20:41:53 -0300
-In-Reply-To: <ace26347-a78e-1bd1-86f5-f8e644aa93ec@linuxfoundation.org>
-References: <20200526183436.47026-1-vitor@massaru.org>
-         <ace26347-a78e-1bd1-86f5-f8e644aa93ec@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.2 (3.36.2-1.fc32) 
+        id S1726846AbgE0ARC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 May 2020 20:17:02 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45471 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725801AbgE0ARC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 May 2020 20:17:02 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Wrx71vKpz9sSF;
+        Wed, 27 May 2020 10:16:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1590538620;
+        bh=4XXmvXXfgbRN/jQoHPVi4ASoxTVhtQ8D1zRlN09CNaY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Hsk6C4529uGHiB6Qxtg7/t3N2n3844F+cEuC8SeuUCCZKR7ee0Sar9o4zhzuh7JYj
+         NKqNMr0uteOA0OqstxVzUr0bzzstJGvfe6jATVRozDO/Utf/mGj4yBmjvd1vql6G68
+         v8yTuY6c0dOV6PSfbarX8eUGFhcE4L/CHpVuCJLaM7qmr/EtiMBUmfWzftNw/DQTlt
+         k9qfU1sNhvDq9q2MVI3qXDTnbOiI9KJNkE7Wgi9AEKU71Enz1Zf6O6e3lMcPB6hUzy
+         4dVFoN1L+SX5BKrAwP7SyR6EMPRB/HKCd7P8rvC/qBv7AhK6fJbGL/7w/gor91XbWz
+         brZ2CiCNtw6/w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Sandipan Das <sandipan@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, linuxram@us.ibm.com,
+        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
+        fweimer@redhat.com, ruscur@russell.cc
+Subject: Re: [PATCH] selftests: powerpc: Add test for execute-disabled pkeys
+In-Reply-To: <6b73bf3f-0d10-6e8c-acd9-27de53573dec@linux.ibm.com>
+References: <20200508162332.65316-1-sandipan@linux.ibm.com> <87367mg9h4.fsf@mpe.ellerman.id.au> <6b73bf3f-0d10-6e8c-acd9-27de53573dec@linux.ibm.com>
+Date:   Wed, 27 May 2020 10:17:22 +1000
+Message-ID: <87tv02dyel.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2020-05-26 at 16:29 -0600, Shuah Khan wrote:
-> On 5/26/20 12:34 PM, Vitor Massaru Iha wrote:
-> > To make KUnit easier to use, and to avoid overwriting object and
-> > .config files, the default KUnit build directory is set to .kunit
-> > 
-> >   * Related bug: https://bugzilla.kernel.org/show_bug.cgi?id=205221
-> > 
-> > Fixed up minor merge conflicts - Shuah Khan <
-> > skhan@linuxfoundation.org>
-> > 
-> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> > Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> > ---
-> > version after merge on kunit brach:
-> >   * fix identation (tabs instead of spaces)
-> 
-> You mentioned spaces breaking python. Please include the python
-> errors and make it clear in the change log what is fixes.
+Sandipan Das <sandipan@linux.ibm.com> writes:
+> Hi Michael,
+>
+> On 26/05/20 6:05 pm, Michael Ellerman wrote:
+>> [...]
+>>> +
+>>> +/* Override definitions as they might be inconsistent */
+>>> +#undef PKEY_DISABLE_ACCESS
+>>> +#define PKEY_DISABLE_ACCESS	0x3
+>> 
+>> Why would they be inconsistent?
+>> 
+>
+> The definition in sys/mman.h still uses the value specific to
+> Intel's implementation i.e. 1, when this should have been 3
+> for powerpc. I have seen this on Ubuntu 18.04 and 20.04.
 
-Of course, I will add this.
-> 
-> thanks,
-> -- Shuah
-> 
+Hmm OK, that's a bug but oh well nothing we can do about it.
+ 
+>> I think a reasonable solution is to use the absence of SEGV_PKUERR to
+>> basically turn the whole test into a nop at build time, eg:
+...
+>
+> Or can I use this from the pkey tests under selftests/vm?
+>
+> static inline u32 *siginfo_get_pkey_ptr(siginfo_t *si)
+> {
+> #ifdef si_pkey
+> 	return &si->si_pkey;
+> #else
+> 	return (u32 *)(((u8 *)si) + si_pkey_offset);
+> #endif
+> }
+>
+> Where si_pkey_offset is 0x20 for powerpc.
 
+Yeah that's fine if it works. Please send a v2 with that change.
+
+cheers
