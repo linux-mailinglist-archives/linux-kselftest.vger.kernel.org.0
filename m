@@ -2,85 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ED71E33FA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 May 2020 02:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AB11E3415
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 May 2020 02:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgE0ARC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 May 2020 20:17:02 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45471 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725801AbgE0ARC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 May 2020 20:17:02 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Wrx71vKpz9sSF;
-        Wed, 27 May 2020 10:16:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1590538620;
-        bh=4XXmvXXfgbRN/jQoHPVi4ASoxTVhtQ8D1zRlN09CNaY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Hsk6C4529uGHiB6Qxtg7/t3N2n3844F+cEuC8SeuUCCZKR7ee0Sar9o4zhzuh7JYj
-         NKqNMr0uteOA0OqstxVzUr0bzzstJGvfe6jATVRozDO/Utf/mGj4yBmjvd1vql6G68
-         v8yTuY6c0dOV6PSfbarX8eUGFhcE4L/CHpVuCJLaM7qmr/EtiMBUmfWzftNw/DQTlt
-         k9qfU1sNhvDq9q2MVI3qXDTnbOiI9KJNkE7Wgi9AEKU71Enz1Zf6O6e3lMcPB6hUzy
-         4dVFoN1L+SX5BKrAwP7SyR6EMPRB/HKCd7P8rvC/qBv7AhK6fJbGL/7w/gor91XbWz
-         brZ2CiCNtw6/w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sandipan Das <sandipan@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, linuxram@us.ibm.com,
-        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
-        fweimer@redhat.com, ruscur@russell.cc
-Subject: Re: [PATCH] selftests: powerpc: Add test for execute-disabled pkeys
-In-Reply-To: <6b73bf3f-0d10-6e8c-acd9-27de53573dec@linux.ibm.com>
-References: <20200508162332.65316-1-sandipan@linux.ibm.com> <87367mg9h4.fsf@mpe.ellerman.id.au> <6b73bf3f-0d10-6e8c-acd9-27de53573dec@linux.ibm.com>
-Date:   Wed, 27 May 2020 10:17:22 +1000
-Message-ID: <87tv02dyel.fsf@mpe.ellerman.id.au>
+        id S1726901AbgE0Ae1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 May 2020 20:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726835AbgE0Ae0 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 May 2020 20:34:26 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E602C061A0F
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2020 17:34:25 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id x12so17833869qts.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2020 17:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mq62GKb+a6uI+kRh3uk1w4mJxevGSsQXqoT6TNUJtKU=;
+        b=Fsp134TQ7ts6VmjtGPWLw/8pcYBl5mf3YGy3/ugLjZWeWLH9WV5b+ca9T9kOjAMf7a
+         sw5TPCeQE7mLzQU5m+epgt79iYBYCkzA6CDn2lD2ZKpD/CNQUiRC4/IK2cLOulw4IclN
+         ZB+GpDT/Qs9+fANsZGrmxiyChMn7WelXygAYfgtnEk6yVF14bOgtvMSUrWm9Z20zX9H0
+         MQb9zfjtYEUTRJV61OCuW1gZUCwGOWPv8B5whJDWlljeGzUbZ6UFjABYB9vk2izKWBly
+         QvmiWi+g3H2NEHGFKSxX8G6y656HaQCbz3VnQ3NyKPs4AxTf/+JCQ7CMH5kxGen1i6Zw
+         UhmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mq62GKb+a6uI+kRh3uk1w4mJxevGSsQXqoT6TNUJtKU=;
+        b=iq1ge4L0+lwaKbPLgpSHqrTG+xxQ6PoblRN0ygRD1vgDz+R3i9oYlVfw4oNUweRfzE
+         zLeijDPjUk2gLuy5nvK4HJhqP1SJJCRRGZ4cn1d5pivC2hxCtqNINgf3lcp/MniPVjsz
+         re/D59YTQAxjdrLu6ie/z31JXstPeJ2+jes0UlfE7/I8Uu9NXm4gG02PBRC+4aqM8He6
+         9SugjdKSFAJ0Q90fnKV5YrbyBWswpU4sOz0gxCVGGbPuLPqkzOlb6oGNyiOnVdaqQMh0
+         TtGYpyjdJNl1UlEt+LS8X6slG/ljMAhR50Xw9ZVhVnB0Wkvg5tE4AvAjPDnXSxVbUGa0
+         LKDg==
+X-Gm-Message-State: AOAM5310NMzM+TZG+DN7Z4QfY08htQpJAZXe7xW2rb50WwCMGyMBqcSF
+        fPzAv7m9WNwV0vHyZC19WBmNPQ==
+X-Google-Smtp-Source: ABdhPJwJlQUfbYhgP9H9HncZXgvR0jCIXllQbBglRLefb6mmcd3qtbB+BjdM5ZoIFi76MyRNuAH6oQ==
+X-Received: by 2002:ac8:5045:: with SMTP id h5mr1641523qtm.259.1590539664497;
+        Tue, 26 May 2020 17:34:24 -0700 (PDT)
+Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
+        by smtp.gmail.com with ESMTPSA id y185sm647153qkd.83.2020.05.26.17.34.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 17:34:23 -0700 (PDT)
+From:   Vitor Massaru Iha <vitor@massaru.org>
+To:     kunit-dev@googlegroups.com, skhan@linuxfoundation.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brendanhiggins@google.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [fixup v2] kunit: use --build_dir=.kunit as default
+Date:   Tue, 26 May 2020 21:34:20 -0300
+Message-Id: <20200527003420.34790-1-vitor@massaru.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sandipan Das <sandipan@linux.ibm.com> writes:
-> Hi Michael,
->
-> On 26/05/20 6:05 pm, Michael Ellerman wrote:
->> [...]
->>> +
->>> +/* Override definitions as they might be inconsistent */
->>> +#undef PKEY_DISABLE_ACCESS
->>> +#define PKEY_DISABLE_ACCESS	0x3
->> 
->> Why would they be inconsistent?
->> 
->
-> The definition in sys/mman.h still uses the value specific to
-> Intel's implementation i.e. 1, when this should have been 3
-> for powerpc. I have seen this on Ubuntu 18.04 and 20.04.
+To make KUnit easier to use, and to avoid overwriting object and
+.config files, the default KUnit build directory is set to .kunit
 
-Hmm OK, that's a bug but oh well nothing we can do about it.
+Fixed up minor merge conflicts - Shuah Khan <skhan@linuxfoundation.org>
+
+Fixed this identation error exchanging spaces for tabs between lines
+248 and 252:
+
+tools/testing/kunit/kunit.py run --defconfig
+
+  File "tools/testing/kunit/kunit.py", line 254
+    if not linux:
+                ^
+TabError: inconsistent use of tabs and spaces in indentation
+
+Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=205221
+---
+version after merge on kunit brach:
+v1:
+ * fix identation (tabs instead of spaces)
+
+v2:
+ * fix v1 changelog description: fix identation
+   (spaces instead of tabs, lines 248-252);
+ * add python error message on commit message;
+ * fix Link tag on commit message.
+---
+ tools/testing/kunit/kunit.py | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index b01838b6f5f9..b3490271a103 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -169,7 +169,7 @@ def add_common_opts(parser):
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+ 			    'directory.',
+-			    type=str, default='', metavar='build_dir')
++                            type=str, default='.kunit', metavar='build_dir')
+ 	parser.add_argument('--make_options',
+ 			    help='X=Y make option, can be repeated.',
+ 			    action='append')
+@@ -245,12 +245,11 @@ def main(argv, linux=None):
+ 	cli_args = parser.parse_args(argv)
  
->> I think a reasonable solution is to use the absence of SEGV_PKUERR to
->> basically turn the whole test into a nop at build time, eg:
-...
->
-> Or can I use this from the pkey tests under selftests/vm?
->
-> static inline u32 *siginfo_get_pkey_ptr(siginfo_t *si)
-> {
-> #ifdef si_pkey
-> 	return &si->si_pkey;
-> #else
-> 	return (u32 *)(((u8 *)si) + si_pkey_offset);
-> #endif
-> }
->
-> Where si_pkey_offset is 0x20 for powerpc.
+ 	if cli_args.subcommand == 'run':
+-		if cli_args.build_dir:
+-			if not os.path.exists(cli_args.build_dir):
+-				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
+-				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
++		if not os.path.exists(cli_args.build_dir):
++			os.mkdir(cli_args.build_dir)
++		kunit_kernel.kunitconfig_path = os.path.join(
++			cli_args.build_dir,
++			kunit_kernel.kunitconfig_path)
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+-- 
+2.26.2
 
-Yeah that's fine if it works. Please send a v2 with that change.
-
-cheers
