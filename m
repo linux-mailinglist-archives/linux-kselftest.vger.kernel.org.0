@@ -2,108 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B5A1E3E99
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 May 2020 12:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAE31E4069
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 May 2020 13:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729357AbgE0KIB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 May 2020 06:08:01 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:55268 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727888AbgE0KIB (ORCPT
+        id S1728205AbgE0Ltd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 May 2020 07:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728139AbgE0Lta (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 May 2020 06:08:01 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04RA7bN9029643;
-        Wed, 27 May 2020 10:07:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2020-01-29;
- bh=Jgk+aa3gaSbaEJGRzqmUB4J/D3RcAW2mzmSgXwtDYpI=;
- b=I++iBdw/d6EbbsVc0QonMYtP9GdH7G9gqk7JTiB94+7WbFWe/ILrE7Z3/1Xou2AA/fj0
- XfiW1ia3B13QNes64K8EvFxGTdek2n1b1W/CZkKh0BNspXqu5WHk3CdXeMTM9mLZJxGW
- HOtff/B6xDcXoVujMkSWvLLR+R8xcPpBHqJLZ0kEdQhnfyRw8J6J6VCNosFSIaEu0thm
- Xz1cn4ch5LgZ1tUZIBA3t8NTvbbgSWEt29tV/Ak2G+yNA1HvzCz/bBs7k698p7fC90vO
- 0n/SEPzLJEx2JmH8cX0h5LZ95k2fkDoJBgdt9g4Ud68tggcn37DEw46UAI4yWToBi71J Lg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 316u8qxjjc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 May 2020 10:07:37 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04R9vY3D160684;
-        Wed, 27 May 2020 10:05:35 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 317j5rcya4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 May 2020 10:05:35 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04RA5XM3005085;
-        Wed, 27 May 2020 10:05:33 GMT
-Received: from dhcp-10-175-217-36.vpn.oracle.com (/10.175.217.36)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 27 May 2020 03:05:33 -0700
-Date:   Wed, 27 May 2020 11:05:23 +0100 (BST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@localhost
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
-cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
-        brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v3 3/7] kunit: tests for stats_fs API
-In-Reply-To: <20200526110318.69006-4-eesposit@redhat.com>
-Message-ID: <alpine.LRH.2.21.2005271054360.24819@localhost>
-References: <20200526110318.69006-1-eesposit@redhat.com> <20200526110318.69006-4-eesposit@redhat.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Wed, 27 May 2020 07:49:30 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE57C03E97B
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2020 04:49:29 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id c12so14270133lfc.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2020 04:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1eb8hhRgWhldc6gNCY/BHu4k6Mc3ON849X4b3k08UMU=;
+        b=dZ2EO3LdRXmW0rb/PbGBy5/ATbLPpBSpne2iHWL8g4cHa5pFCH5GCbOAD7jC3Kzi3S
+         MISYPGpgS2exm9jQV0gLr3s2v7seE3tyMVMGbhwvcq5KWBC2lbp4WRogLsHJmD56dSoF
+         SaGqBkdQFcT/Q8+h09FriRhyy32nZ8Qbam2ia6qehADmirwsw9FzofuUIssUXiEf/O1M
+         PNKyMGSEEuXIahADQmZbrbIFZkk9iuRkEcQbQIaG2M4cssRD0uw+ZxOkNkqohemuxYe7
+         g5KMFqDZR/29AuHUIPPzijSDWnAEbdNVWRVRrdnecAjUZPqBYLoGLUucygRKxHZITQJs
+         lRlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1eb8hhRgWhldc6gNCY/BHu4k6Mc3ON849X4b3k08UMU=;
+        b=DTB+3oKwZjiVgW69HqaRXcUNKX2Go6R+nLs7tdoNqL1+jTrBGDMnAYzxlED7L5XpQM
+         klYIRkitTX06mdUzakn2CWEHeSQik7/bEXBuouizzIA2OwH6+HWr+uAlyjeiG8KGny0c
+         JGVwlU53E6u8IjTES3NKABd24pzvfn1SvjzlGHFDujqWaXNGVCmkE++GP3xHC79URn5o
+         DkfWSC/wQtyThgDYE65aZ9CW2KIQ009lgjmFZpYRAmzbHNFtLYn9NyQG4J5wOTJq7H9X
+         Gzj3cELc7mVBY0YhtzqnVVt/wIZqt56nIMTT5b9Tp4+52UYTo2kbMzHKtBzGAcIoIKz0
+         zD+g==
+X-Gm-Message-State: AOAM533k+3egmbf6Lr9wnvzPRaKs0sDgUuhVL6F0eYHV1WWSZ6D0KzXH
+        qiis3qIh2D1S0bzUpFOzRFWEUnAjY6TXlVIVuaDiew==
+X-Google-Smtp-Source: ABdhPJxtfHGgD1x+0sGWQDtxJJeB9uCl6Feg/5utDqmnhP3TYYxI7kATndRbmt63ldid6mOZbKhfx/ZSXQlPvqovUXQ=
+X-Received: by 2002:a05:6512:1051:: with SMTP id c17mr2908078lfb.206.1590580167403;
+ Wed, 27 May 2020 04:49:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 suspectscore=4
- mlxlogscore=999 mlxscore=0 adultscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005270072
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- priorityscore=1501 spamscore=0 cotscore=-2147483648 suspectscore=4
- phishscore=0 clxscore=1011 mlxlogscore=999 bulkscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005270073
+References: <20200511131350.29638-1-anders.roxell@linaro.org>
+In-Reply-To: <20200511131350.29638-1-anders.roxell@linaro.org>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Wed, 27 May 2020 13:49:16 +0200
+Message-ID: <CADYN=9LkA2h6dANREfPQq4iDvVEJX1wAdxjv31mpVBkaM_g0ZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Enable as many KUnit tests as possible
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Marco Elver <elver@google.com>, David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 26 May 2020, Emanuele Giuseppe Esposito wrote:
+Hi all,
 
-> Add kunit tests to extensively test the stats_fs API functionality.
+Friendly ping: who can take this?
+
+Cheers,
+Anders
+
+On Mon, 11 May 2020 at 15:14, Anders Roxell <anders.roxell@linaro.org> wrote:
 >
-
-I've added in the kunit-related folks.
- 
-> In order to run them, the kernel .config must set CONFIG_KUNIT=y
-> and a new .kunitconfig file must be created with CONFIG_STATS_FS=y
-> and CONFIG_STATS_FS_TEST=y
+> Hi,
 >
-
-It looks like CONFIG_STATS_FS is built-in, but it exports
-much of the functionality you are testing.  However could the
-tests also be built as a module (i.e. make CONFIG_STATS_FS_TEST
-a tristate variable)? To test this you'd need to specify
-CONFIG_KUNIT=m and CONFIG_STATS_FS_TEST=m, and testing would
-simply be a case of "modprobe"ing the stats fs module and collecting
-results in /sys/kernel/debug/kunit/<module_name> (rather 
-than running kunit.py). Are you relying on unexported internals in
-the the tests that would prevent building them as a module?
-
-Thanks!
-
-Alan
+> This patchset will try to enable as many KUnit test fragments as
+> possible for the current .config file.
+> This will make it easier for both developers that tests their specific
+> feature and also for test-systems that would like to get as much as
+> possible for their current .config file.
+>
+> I will send a separate KCSAN KUnit patch after this patchset since that
+> isn't in mainline yet.
+>
+> Since v2:
+> Fixed David's comments. KUNIT_RUN_ALL -> KUNIT_ALL_TESTS, and he
+> suggested a great help text.
+>
+> Since v1:
+> Marco commented to split up the patches, and change a "." to a ",".
+>
+>
+> Cheers,
+> Anders
+>
+> Anders Roxell (6):
+>   kunit: Kconfig: enable a KUNIT_ALL_TESTS fragment
+>   kunit: default KUNIT_* fragments to KUNIT_ALL_TESTS
+>   lib: Kconfig.debug: default KUNIT_* fragments to KUNIT_ALL_TESTS
+>   drivers: base: default KUNIT_* fragments to KUNIT_ALL_TESTS
+>   fs: ext4: default KUNIT_* fragments to KUNIT_ALL_TESTS
+>   security: apparmor: default KUNIT_* fragments to KUNIT_ALL_TESTS
+>
+>  drivers/base/Kconfig      |  3 ++-
+>  drivers/base/test/Kconfig |  3 ++-
+>  fs/ext4/Kconfig           |  3 ++-
+>  lib/Kconfig.debug         |  6 ++++--
+>  lib/kunit/Kconfig         | 23 ++++++++++++++++++++---
+>  security/apparmor/Kconfig |  3 ++-
+>  6 files changed, 32 insertions(+), 9 deletions(-)
+>
+> --
+> 2.20.1
+>
