@@ -2,86 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 176361E6B9D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 21:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D22B1E6BB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 21:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406759AbgE1TsS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 May 2020 15:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S2406855AbgE1TvW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 May 2020 15:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406730AbgE1Try (ORCPT
+        with ESMTP id S2406721AbgE1TvT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 May 2020 15:47:54 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA7CC08C5C6
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:47:54 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id g5so2586989pfm.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:47:54 -0700 (PDT)
+        Thu, 28 May 2020 15:51:19 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99775C08C5C8
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:51:18 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id l15so34606052lje.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=D/FdgxgI19k7/RKqJ/1UKTtp/t1yUz4BSjmKYARom7w=;
-        b=NhnoiyLyrHenDPN/ByLZft3pE/05o6EphRSK5zVl2eNUOny+2wX24yFoolbzQitLUx
-         r1GJXMjbbm/uPWj11cJZ0AuerxLLigaZsPLeD6BjBI4nIQcZfUzdv3Ma2fJ9el4c2Mdf
-         I2tbk9B6lqi1qJY5nBKMXroSqoQj+E4tNPXHZJyzOGOa40wcvmhJaOsVX2Dkjn6as5+N
-         H9n79lJcVEPFG7rwcG4FcNl+zCwgaSH+NoOjN+mYTzMdNLwTXyLsQVmm1TUL2+SWydmQ
-         a9S58luzSRtufXod/x4psb8i0Kyky1Fo7GHjE9FpMNuVMaz8XmjXJPtw2XlDn86Atmfn
-         2yPw==
+        bh=wUWteLk1qo/EQ4bMelbArMawbtwfGJA1RUwrky8bVBE=;
+        b=jvtLldIrYKX300AzToiku7J6CFXrR/LCiCWvns51CFZMNLl68OXNG2qe0R3J/bhCu2
+         D6X4iy42RnXaeC/qOT91y6FXIKJNiYQj3jfYvV99vn20N9jkrk7tgFon8cDayxprvBVR
+         IKQwzc55OgVYyi2SG10dNMHO8M3PTr02Exeg78gVLvnipth6k2bMo0NqC+e7ytkZ8s2X
+         eQZjJjf9p6fG63rA3UtRCNanFbAhH8u11835MH2OnOjzCbtLFd/rRtUEilWca9Wt9CbK
+         3zmDRyO8UyB1028lutz2PFy31zktI2fJUznxLcNtQj2qo32+/RSVvOY6zvPiXAglo2pw
+         f+vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=D/FdgxgI19k7/RKqJ/1UKTtp/t1yUz4BSjmKYARom7w=;
-        b=qm9eSUrhXXko2G1SKE5O2VVcSmzxHY+XjSpS/G5TvmOC8EoVI87M4C0nzCxjci/gtr
-         TJAO2aQGIPz7DijdsfJtVd11VzfIf6stvaTrOw8L3t8LcoekzpRIwJsgdhjq2WfYzxhy
-         vV9s589LKMgn6/piwSCIHum+rSMcM5QVMnWn9q/kg96rhQdTm+iJogp+6fKJPQCwdZWO
-         KR5vrkle8b8vdYsX0fQRet966n5mmCAZj1uvUuvCRlyaSgTGlJy8ndRLVEgqHc8tofbh
-         WsYBtX6tkkFeP4D13GygjpNgVG0jzz+DN+iH0dTOcz0pB7J4D0fpjYqn688BGgtkAwEE
-         +PFg==
-X-Gm-Message-State: AOAM531xf5WNuLu8UUyExu/8FuN7wxhat0O4bB2+bzj/GKbB1E3lZfKu
-        AQmWaeLlsCwyyExDTNbxMbs6AjJsnIqbG6ae3ClWAQ==
-X-Google-Smtp-Source: ABdhPJwgEtpb6jI3FOheNRBghe6AUmRsRvAFRwYEW6C/h7VOF9DNYfEAHMINt1bf+zlknXXh4+o9UNQsHuK9Q3SImW8=
-X-Received: by 2002:a62:8c42:: with SMTP id m63mr4739825pfd.106.1590695274111;
- Thu, 28 May 2020 12:47:54 -0700 (PDT)
+        bh=wUWteLk1qo/EQ4bMelbArMawbtwfGJA1RUwrky8bVBE=;
+        b=Lofb6JGSoMF7Cp6doOG16IgXhMBCKPks/Dcb7ZayjLrqE7sv/autAwd109trhxQGR4
+         JV9esLD0DR00vljG2Xk3P8qbs+UpheADi3jbuCTa2qw8qqbTlRTvf9o8NI9TmASUH7to
+         NaHdlJSongHhG/dHY9nG1IeyTJgFvvhmN+N2ELiw61K0Wm1pGn1fGlBAAXFAC1HCr/ji
+         5LThMjYSrRveo9sQ198oGKjEdJr4s1YbEOiQtZzYAvhWaigjbfaILmsu583OVwiUeFU8
+         a9xnTeUxPDMGwytJaBUgXFoDrIMpMgpc0nY3pl/UWr5mFBIQhdhFcCwsaG80bMglCrqd
+         5PZg==
+X-Gm-Message-State: AOAM532aaymT5jrzZg0XcWS0Z390df8+z6vEGpzlrbfFFeGpsDz+I7Td
+        VB5qmR0RRpCDwnNm9ewhvc5QJwrB3m4w1nmWT4uqyw==
+X-Google-Smtp-Source: ABdhPJwVlSEUIqKm3ytEt4ZeDf8mVNXY7GJDgsEX4PDMBqYyKpwp6lFyxNZmXX+LL999hVVGiHTHCyQzK22+WhbuLHQ=
+X-Received: by 2002:a2e:9684:: with SMTP id q4mr2373751lji.431.1590695476954;
+ Thu, 28 May 2020 12:51:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <1585313122-26441-1-git-send-email-alan.maguire@oracle.com> <1585313122-26441-3-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1585313122-26441-3-git-send-email-alan.maguire@oracle.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 28 May 2020 12:47:43 -0700
-Message-ID: <CAFd5g46uNRwDnKHjukU2gBu6wM0kzBragaWBJigbfJkFuQvsFw@mail.gmail.com>
-Subject: Re: [PATCH v3 kunit-next 2/2] kunit: add support for named resources
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     shuah <shuah@kernel.org>,
-        Patricia Alfonso <trishalfonso@google.com>,
+References: <CA+G9fYvnJNre4G=ZsPAon_Zt+kT_QLQB_VZVhdWKYbn29xtsRA@mail.gmail.com>
+ <20200528193840.GD30353@linux.intel.com>
+In-Reply-To: <20200528193840.GD30353@linux.intel.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 29 May 2020 01:21:05 +0530
+Message-ID: <CA+G9fYsC91dc5qp3Fb4nnZ=GzWu_9TG-_RVD2ie6xLmYD77n8w@mail.gmail.com>
+Subject: Re: BUG: arch/x86/kvm/mmu/mmu.c:3722: kvm_mmu_load+0x407/0x420
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        kvm list <kvm@vger.kernel.org>, eesposit@redhat.com,
+        lkft-triage@lists.linaro.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Anders Roxell <anders.roxell@linaro.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vivek Goyal <vgoyal@redhat.com>, Gavin Shan <gshan@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 5:46 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Fri, 29 May 2020 at 01:08, Sean Christopherson
+<sean.j.christopherson@intel.com> wrote:
 >
-> The kunit resources API allows for custom initialization and
-> cleanup code (init/fini); here a new resource add function sets
-> the "struct kunit_resource" "name" field, and calls the standard
-> add function.  Having a simple way to name resources is
-> useful in cases such as multithreaded tests where a set of
-> resources are shared among threads; a pointer to the
-> "struct kunit *" test state then is all that is needed to
-> retrieve and use named resources.  Support is provided to add,
-> find and destroy named resources; the latter two are simply
-> wrappers that use a "match-by-name" callback.
+> On Fri, May 29, 2020 at 12:59:40AM +0530, Naresh Kamboju wrote:
+> > While running selftest kvm set_memory_region_test on x86_64 linux-next kernel
+> > 5.7.0-rc6-next-20200518 the kernel BUG noticed.
+> >
+> > steps to reproduce: (always reproducible )
+> > -------------------------
+> > cd /opt/kselftests/default-in-kernel/kvm
+> > ./set_memory_region_test
+> >
+> > BAD: next-20200518 (still reproducible on next-20200526)
+> > GOOD: next-20200515
+> > git tree: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > kernel config:
+> > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/777/config
+> >
+> > kernel crash log,
+> > -----------------------
+> > [   33.074161] ------------[ cut here ]------------
+> > [   33.079845] kernel BUG at /usr/src/kernel/arch/x86/kvm/mmu/mmu.c:3722!
 >
-> If an attempt to add a resource with a name that already exists
-> is made kunit_add_named_resource() will return -EEXIST.
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> I'm 99% certain this is already fixed[*], I'll double check to confirm.
 
-FYI, I already gave a reviewed-by for this commit back in v1, so:
+Thanks for looking into this problem.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> [*] https://lkml.kernel.org/r/20200527085400.23759-1-sean.j.christopherson@intel.com
+
+I see you made a recent fix (on Wed, 27 May 2020).
+Let this patch get into the linux-next tree master and our build system
+will pull it and test it. I will report back once it is fixed.
+
+- Naresh
