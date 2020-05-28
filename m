@@ -2,79 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F741E69FE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 21:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96C41E6A04
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 21:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406104AbgE1TFO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 May 2020 15:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S2406125AbgE1TF1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 May 2020 15:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406096AbgE1TFJ (ORCPT
+        with ESMTP id S2406123AbgE1TF0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 May 2020 15:05:09 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DA0C08C5C7
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:05:08 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id a13so12011765pls.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:05:08 -0700 (PDT)
+        Thu, 28 May 2020 15:05:26 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B647C08C5C7
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:05:26 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id b3so130137oib.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 12:05:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0J8Ym+kzod0znonchBb67O6GEq+arSkfzWAx+2kx7IA=;
-        b=a8nA3Uvc1XNWqllXPWq50YCm6GC9JIOys9XsXoIOt75s4dnRClATn64VHORczX9nz6
-         36TiE/XIWNy4AlmxWJnXDOjgvsdfvmvpVnaO2spx11lRLFhR2wUwUrM6twTgijFZSMqE
-         wlhBeYKIjt+aSvFkHgat+EnhmlS08Lj8cQdcmDa8DdOVCnGQfzYhxtphaTNntW39TuoY
-         NXWldrR4iHGI2FL0D3sITI0vFDewIHKpEGHL2qvhCcHfj0ZL8ZpDSHixbKyv8jWakGKz
-         hMtXp+VhiNXwFMwKe+la2CyE3Cj0X/v83o5EewZSH0f1rn80z/ge1nhoKL5BqoZMw6XH
-         lzTA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zayuezgcz+k4PkQr7+Zp+Yj5Uyvc00S4ilElKD5RoqQ=;
+        b=BOKyHigFkIszdY6Dz9TkcwV9lzSFcg4/7r5Zyjm5vRi8nf/M195V+ibUPh/M4WQqXQ
+         S1kqP/cVuxZAt1eLk1SBr8dNB4vr+7e+iu4vBqU+yIYGegKyOdCGTORELlPfCiPyIcrZ
+         uRcZddaYHNJpWIjwyPeu4DfP3J9Zjo84/bhxE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0J8Ym+kzod0znonchBb67O6GEq+arSkfzWAx+2kx7IA=;
-        b=Jy3LEkmncZ0D8LC9pbSGN2JJGzkjRTRBN2FBFXLalKC57eXwNboGGxqaBKVLNHhkbz
-         Jd3Mvg3RzS7Ydg8EMn3y+nwRLURWvb1LZGwLxziHglNtK8zdNLRFZz8T/QYUsYJNGATj
-         9aWUYvnD5VHiEaY6VRrUUGHqM/YlzxZGxflpNQnCND1oDg8c5hCDuKRSQp687kB977Py
-         jwjw9IIvpHHdGNkhke2TrVknRdgGCqq8NvhDAjCasQKuDjR9R1/5t/pX3qZsXfQnq4HG
-         x3hg/KO+c4HnxgfreMGn6LH1+2qW5pWMeakACWIWGRv36Uqs1Vw0FI/tDN+K/uCD2WW1
-         C5fg==
-X-Gm-Message-State: AOAM532sfZ2EbPoCx/px4ZbcJhjmkk6h0IJovUTs3Q2pS3vzMpuyHHpY
-        6/ygh34iR6cz5tCPzodNFm5Q2vD79zKPJiGUDB83WA==
-X-Google-Smtp-Source: ABdhPJyGks+NLInlB7CGn8AvdNxpH+2UCTLT9jhDTHdhJNdwc1bWKpa0P/I3v5HG+9H3eFYcbh9Z67/5AufG661dnwA=
-X-Received: by 2002:a17:90a:17ed:: with SMTP id q100mr4941782pja.80.1590692707555;
- Thu, 28 May 2020 12:05:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200511131420.29758-1-anders.roxell@linaro.org>
-In-Reply-To: <20200511131420.29758-1-anders.roxell@linaro.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 28 May 2020 12:04:57 -0700
-Message-ID: <CAFd5g458j=VXttzbJUtD-HQR4k5T7us44oQOB6EPL09rgVr4LA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] kunit: Kconfig: enable a KUNIT_ALL_TESTS fragment
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
-        serge@hallyn.com, "Theodore Ts'o" <tytso@mit.edu>,
-        adilger.kernel@dilger.ca, Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zayuezgcz+k4PkQr7+Zp+Yj5Uyvc00S4ilElKD5RoqQ=;
+        b=UO9PRT3KIbfNGeVTlPhrueh8s01pkI4BmyWyRK31U4lQaU8N6JvQ2mZFtQYSYN5yk2
+         OLii9nCOuY7wXIzULIjywgphEsphsMvDyetmy46gMXaHuv8w/VM0NebTN2gciwadYGpb
+         ck+mbKp3BH8yicvV40FV6dCtzxtQbwh2rT8XctLybT8ViutXaH5RlWCml72AAfGZA2T6
+         E09qGAbEAOip8w1smXMB6vkSpR7qyc530TWgXojAfNU+TXn2MBnfkpgIrv10loMSKv+u
+         sEoX1d2SISGTQz7gd/PpT760U/ocaMck9vsZYDew2n1RCU4luFWSFfFoKfWRrLW/Kwxa
+         NPFw==
+X-Gm-Message-State: AOAM5321XcCsUrXWNloLZjcDmfkf2J/Ys8Z7T/0i75Tc6j1bxqyBG+5B
+        CaJPLUvRa6z7oR8Cc0hbHa2kHw==
+X-Google-Smtp-Source: ABdhPJyyDPGR2hKdt3sx1/IY2x8I5w5rSB6ARZafgWF+9Wu868mYI574XuWofdN3OeeNkeC77pErBg==
+X-Received: by 2002:aca:4a8b:: with SMTP id x133mr3109620oia.41.1590692726025;
+        Thu, 28 May 2020 12:05:26 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id h64sm2066424oia.28.2020.05.28.12.05.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 May 2020 12:05:25 -0700 (PDT)
+Subject: Re: [PATCH] selftests/bpf: split -extras target to -static and -gen
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, Jiri Benc <jbenc@redhat.com>,
+        shuah <shuah@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Marco Elver <elver@google.com>, David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <xuny367lq1z1.fsf@redhat.com>
+ <CAADnVQ+1o1JAm7w1twW0KgKMHbp-JvVjzET2N+VS1z=LajybzA@mail.gmail.com>
+ <xunyh7w1nwem.fsf@redhat.com>
+ <CAADnVQKbKA_Yuj7v3c6fNi7gZ8z_q_hzX2ry9optEHE3B_iWcg@mail.gmail.com>
+ <ec5f6bd9-83e9-fc55-1885-18eee404d988@kernel.org>
+ <CAADnVQJhb0+KWY0=4WVKc8NQswDJ5pU7LW1dQE2TQuya0Pn0oA@mail.gmail.com>
+ <20200528100557.20489f04@redhat.com> <20200528105631.GE3115014@kroah.com>
+ <20200528161437.x3e2ddxmj6nlhvv7@ast-mbp.dhcp.thefacebook.com>
+ <be0a24f4-8602-ba1b-6ca4-7308b01d7a48@linuxfoundation.org>
+ <20200528181546.eqzcc5kq5y6hnbcu@ast-mbp.dhcp.thefacebook.com>
+ <CANoWsw=NOvkFAv_roNSJhCqK6Z=xAv79CERzDNKz0qSqzZPstQ@mail.gmail.com>
+ <CAADnVQL0doJyDFGFZEPgM4_crvDskxRhXQGevzX9KRg8PaFvSQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <9068d622-2326-23e8-ad42-a4cbfb817f85@linuxfoundation.org>
+Date:   Thu, 28 May 2020 13:05:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <CAADnVQL0doJyDFGFZEPgM4_crvDskxRhXQGevzX9KRg8PaFvSQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 11, 2020 at 6:14 AM Anders Roxell <anders.roxell@linaro.org> wrote:
->
-> Make it easier to enable all KUnit fragments.  This is useful for kernel
-> devs or testers, so its easy to get all KUnit tests enabled and if new
-> gets added they will be enabled as well.  Fragments that has to be
-> builtin will be missed if CONFIG_KUNIT_ALL_TESTS is set as a module.
->
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+On 5/28/20 12:34 PM, Alexei Starovoitov wrote:
+> On Thu, May 28, 2020 at 11:29 AM Yauheni Kaliuta
+> <yauheni.kaliuta@redhat.com> wrote:
+>>
+>> Hi!
+>>
+>> On Thu, May 28, 2020 at 9:16 PM Alexei Starovoitov
+>> <alexei.starovoitov@gmail.com> wrote:
+>>>
+>>> On Thu, May 28, 2020 at 11:07:09AM -0600, Shuah Khan wrote:
+>>
+>> [...]
+>>>>
+>>>> Here is what CI users are requesting:
+>>>>
+>>>> - ability to install bpf test with other selftests using kselftest
+>>>>    install. The common framework is in place and with minor changes
+>>>>    to bpf test Makefile, we can make this happen. Others and myself
+>>>>    are willing to work on this, so we can get bpf test coverage in
+>>>>    test rings.
+>>>
+>>> so you're saying that bpf maintainers and all bpf developers now
+>>> would need to incorporate new 'make install' step to their workflow
+>>> because some unknown CI system that is not even functional decided
+>>> to do 'make install' ?
+>>> That's exactly my point about selfish CI developers who put their
+>>> needs in front of bpf community of developers.
+>>
+>> May be, it can work both ways to make everybody happy :) (I haven't
+>> seen yet fundamental problems why not).
+> 
+> then stop pretending and do 'cp -r' for your CI as you were suggested
+> several times already.
+> It works just fine for libbpf CI. Feel free to copy those scripts.
+> 
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Yauheni,
+
+Let's drop discussing this patch set. I don't have all the patches
+and changes in this to weigh in. There is no need to add cp -r at all.
+
+I want to take the discussion one level up to the use-cases.
+
+thanks,
+-- Shuah
