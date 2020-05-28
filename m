@@ -2,73 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8ED1E6759
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 18:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A99C1E67A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 18:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404906AbgE1QYX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 May 2020 12:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S2405158AbgE1Qp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 May 2020 12:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404875AbgE1QYW (ORCPT
+        with ESMTP id S2405081AbgE1Qp6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 May 2020 12:24:22 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3845C08C5C6
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 09:24:21 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id j145so536405oib.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 09:24:21 -0700 (PDT)
+        Thu, 28 May 2020 12:45:58 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D146C08C5C6
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 09:45:58 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id o13so2871883otl.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 09:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lNE5zhFi30q9WwsA8BI91uOqjeUOdLA24NbPUP4RY6U=;
-        b=f8zB+CQ9fKWIaBHJ3pRbSgQc/OvlY8b4ouWU1n9vC4OCtflD7zxXTJDkmVBl+33vDn
-         iWeZHsQkp5lcYaKK6OERajrqZ3NfdOZpj5uNzjN1ur9TcdcH2MoplDaNGt7zN9W4dCos
-         N+RFMJn2m8sXhZ0jlBMrWIYOV87q9p6Qq4LWw=
+        bh=tqJPlIw10s9Ij/zrETOCDphuCrsusdSvfBPan3DJSeI=;
+        b=ba0UjTXhf1uH8fl/cUodMv7++faO5D0gtXNXssPhpJqkjn2JLzJTRBq7AE79JvIzhT
+         qpHKNdxWaYvgFKswEhjsbL5KHh5JpO8dC7r8tGO4iiV6Xr4KuzdQgkSmzkDKNTUX8Vhu
+         YE/kneNase+CEm39JNI37HEDNo5NqK/Pei0rE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=lNE5zhFi30q9WwsA8BI91uOqjeUOdLA24NbPUP4RY6U=;
-        b=Nh6KypwsXUF89rxTVRyPTyj/doDZu6cy8uWDOIbH6ai1BQoHF68ZkHMXLz+hMRx2NO
-         PKA5MpFijiYWPQziqEIxawlYIpHBO2RPrvW2MGyKQSuXgpUdK0hV6w0TG1Rh1/mWutrF
-         Z8hM3ZYA+AE4Jn+dlJg96/sZV+LcNnaPwgy28iO6RED/IM9eQCDSXKJi1+TnZPs23tpI
-         V6b/CBVYPYXtKpC/28B9KC62714t0wWZvOx8lVVAbqi0ii8P7Zjp7VpTaKAtx9rvHit8
-         D75JC2Qokqxk+1Mw6ly0xbOYJtp669QBrS0vZW/Vk+gfoM86OnsFQTQ6KbWF425UdQbZ
-         8J0w==
-X-Gm-Message-State: AOAM531/UJ6l5jVUJqZEyB+PyDfjKeDQKIHTjC1PbrIerZlOVtnJAkM2
-        rEmjK/smMuuj1gd8EQ9SZ9vdBg==
-X-Google-Smtp-Source: ABdhPJwtSYjyMNr1fHEm0+dCoWqlHRseFAIIRs8jo5Jrenwz+++/FVXju5yw2uBEMWhXby7HhbCNyw==
-X-Received: by 2002:aca:af55:: with SMTP id y82mr2624443oie.178.1590683060534;
-        Thu, 28 May 2020 09:24:20 -0700 (PDT)
+        bh=tqJPlIw10s9Ij/zrETOCDphuCrsusdSvfBPan3DJSeI=;
+        b=VX1+kfuBaYPOB+HviufTJ6aQQSdbdmdeg2PBEgUKHH1J2oIEqohcpOmouZ+MjMmW3a
+         g0hJLbUmu0HaL33fSW4xCoiyHxUdTzL3BFRXBOizBUJ6wLNjn9V69Rv1EBAtvCl1ovFh
+         y6k6rIV48mxMxjqP8F9g4IcZCeiDijR4br400Q4aGj8F0Xl8o7TBBapHgp+S8wuG1UVJ
+         L6QZvGCqciwxMpQjmXwTs2tbVKQs5M8/5O4iqrkgC69SMJzU2WhAUlB+W6TLt4vRMXKY
+         X+xG0B82Iavrj8ZqkLunwlf5rJ7RpLzuK/pEf8SMhQVYMNDqWDHbdoG/1esAKFT1Ft+3
+         xAig==
+X-Gm-Message-State: AOAM530bOrFd3PMZvJ4o3YjnplII9fgCZY9BFwHskBBGrjAB9AfqLbl/
+        SQfLFEFzAyaMp2gbHNuzxwG0vw==
+X-Google-Smtp-Source: ABdhPJx2phhHCCTSMcd8x9B0836mZiGJ+WjKKrBJbJbydW5C7TtGeSceoh3cnrWSDcF7DjPlCyWvCQ==
+X-Received: by 2002:a05:6830:1601:: with SMTP id g1mr2753646otr.228.1590684357287;
+        Thu, 28 May 2020 09:45:57 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x3sm1839339ooc.22.2020.05.28.09.24.19
+        by smtp.gmail.com with ESMTPSA id t6sm1748396otb.27.2020.05.28.09.45.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 May 2020 09:24:19 -0700 (PDT)
-Subject: Re: [PATCH v2] selftests/ftrace: Use printf for backslash included
- command
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 28 May 2020 09:45:56 -0700 (PDT)
+Subject: Re: [PATCH] selftests/ftrace: Return unsupported if no error_log file
+To:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
         Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Li Philip <philip.li@intel.com>,
-        Liu Yiding <yidingx.liu@intel.com>,
-        Xiao Yang <yangx.jy@cn.fujitsu.com>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        skhan@linuxfoundation.org
-References: <87imh21x6f.fsf@igel.home>
- <158920418730.16156.8299185499520876735.stgit@devnote2>
- <20200525185905.5fecd8073e686001712dfdf9@kernel.org>
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <159040205682.10129.10826221002090446642.stgit@devnote2>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <02fbbc09-a52a-5e54-43a5-3de93c698072@linuxfoundation.org>
-Date:   Thu, 28 May 2020 10:24:18 -0600
+Message-ID: <bfaf034d-4bbb-1ca2-1cd7-309d4df79403@linuxfoundation.org>
+Date:   Thu, 28 May 2020 10:45:55 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200525185905.5fecd8073e686001712dfdf9@kernel.org>
+In-Reply-To: <159040205682.10129.10826221002090446642.stgit@devnote2>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -77,70 +69,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/25/20 3:59 AM, Masami Hiramatsu wrote:
-> Hi Shuah,
+On 5/25/20 4:20 AM, Masami Hiramatsu wrote:
+> Check whether error_log file exists in tracing/error_log testcase
+> and return UNSUPPORTED if no error_log file.
 > 
-> Could you pick this to kselftest-next?
+> This can happen if we run the ftracetest on the older stable
+> kernel.
 > 
-> Thank you,
+> Fixes: 4eab1cc461a6 ("selftests/ftrace: Add tracing/error_log testcase")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>   .../ftrace/test.d/ftrace/tracing-error-log.tc      |    2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> On Mon, 11 May 2020 22:36:27 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
->> Since the built-in echo has different behavior in POSIX shell
->> (dash) and bash, kprobe_syntax_errors.tc can fail on dash which
->> interpret backslash escape automatically.
->>
->> To fix this issue, we explicitly use printf "%s" (not interpret
->> backslash escapes) if the command string can include backslash.
->>
->> Reported-by: Liu Yiding <yidingx.liu@intel.com>
->> Suggested-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
->> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
->> ---
->>   tools/testing/selftests/ftrace/test.d/functions    |    8 +++++---
->>   .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    4 +++-
->>   2 files changed, 8 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
->> index 61a3c7e2634d..697c77ef2e2b 100644
->> --- a/tools/testing/selftests/ftrace/test.d/functions
->> +++ b/tools/testing/selftests/ftrace/test.d/functions
->> @@ -119,12 +119,14 @@ yield() {
->>       ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
->>   }
->>   
->> +# Since probe event command may include backslash, explicitly use printf "%s"
->> +# to NOT interpret it.
->>   ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
->> -    pos=$(echo -n "${2%^*}" | wc -c) # error position
->> -    command=$(echo "$2" | tr -d ^)
->> +    pos=$(printf "%s" "${2%^*}" | wc -c) # error position
->> +    command=$(printf "%s" "$2" | tr -d ^)
->>       echo "Test command: $command"
->>       echo > error_log
->> -    (! echo "$command" >> "$3" ) 2> /dev/null
->> +    (! printf "%s" "$command" >> "$3" ) 2> /dev/null
->>       grep "$1: error:" -A 3 error_log
->>       N=$(tail -n 1 error_log | wc -c)
->>       # "  Command: " and "^\n" => 13
->> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
->> index ef1e9bafb098..eb0f4ab4e070 100644
->> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
->> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
->> @@ -91,7 +91,9 @@ esac
->>   if grep -q "Create/append/" README && grep -q "imm-value" README; then
->>   echo 'p:kprobes/testevent _do_fork' > kprobe_events
->>   check_error '^r:kprobes/testevent do_exit'	# DIFF_PROBE_TYPE
->> -echo 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
->> +
->> +# Explicitly use printf "%s" to not interpret \1
->> +printf "%s" 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
->>   check_error 'p:kprobes/testevent _do_fork ^bcd=\1'	# DIFF_ARG_TYPE
->>   check_error 'p:kprobes/testevent _do_fork ^abcd=\1:u8'	# DIFF_ARG_TYPE
->>   check_error 'p:kprobes/testevent _do_fork ^abcd=\"foo"'	# DIFF_ARG_TYPE
->>
-> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc b/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
+> index 021c03fd885d..23465823532b 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
+> @@ -14,6 +14,8 @@ if [ ! -f set_event ]; then
+>       exit_unsupported
+>   fi
+>   
+> +[ -f error_log ] || exit_unsupported
+> +
+>   ftrace_errlog_check 'event filter parse error' '((sig >= 10 && sig < 15) || dsig ^== 17) && comm != bash' 'events/signal/signal_generate/filter'
+>   
+>   exit 0
 > 
 
 Applied to
