@@ -2,120 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450F31E672F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 18:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8ED1E6759
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 18:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404919AbgE1QOs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 May 2020 12:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S2404906AbgE1QYX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 May 2020 12:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404899AbgE1QOq (ORCPT
+        with ESMTP id S2404875AbgE1QYW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 May 2020 12:14:46 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5088C08C5C6;
-        Thu, 28 May 2020 09:14:45 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ci21so3379052pjb.3;
-        Thu, 28 May 2020 09:14:45 -0700 (PDT)
+        Thu, 28 May 2020 12:24:22 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3845C08C5C6
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 09:24:21 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id j145so536405oib.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2020 09:24:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cTa8jPiAl8cxlUiiMwc6w2KUDCB8Y2+LiAcBzLiLDjY=;
-        b=F4c2HQlovV9Ue0VXuH4VKTzsDOI4XolpY0j+ZcnjzV04PCVEVg8zjAj/fQfr1B90IC
-         EeAKNKwbskUkZkV3VOwG+5ZrQAXAZ7lR3e9gE7BKZSDeQrCRk4UabKJC/clVPRchBGBf
-         9D9hI/0gahlyR7xT8NP/A+esZOu+B5vX95/rycYxSYN7AkdNn0psWqT+qzHe0XV3GEjE
-         GqZU+dOokYayQBHFRyxNwbdy+Ng3VUorHDsma1XpA0mtz2ET+lR6NrO21s9MrwSRfEkN
-         uayYeMc2WNz8+eMCg2BaLuBh1bl41uyh3LhCwIs643kfrJjxJz9fRK3FkPFQd7vPrqdy
-         wRPQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lNE5zhFi30q9WwsA8BI91uOqjeUOdLA24NbPUP4RY6U=;
+        b=f8zB+CQ9fKWIaBHJ3pRbSgQc/OvlY8b4ouWU1n9vC4OCtflD7zxXTJDkmVBl+33vDn
+         iWeZHsQkp5lcYaKK6OERajrqZ3NfdOZpj5uNzjN1ur9TcdcH2MoplDaNGt7zN9W4dCos
+         N+RFMJn2m8sXhZ0jlBMrWIYOV87q9p6Qq4LWw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cTa8jPiAl8cxlUiiMwc6w2KUDCB8Y2+LiAcBzLiLDjY=;
-        b=nSmwGQcodVcLvjQACFejs5iG1BmuZTeePiUyZMhrtbayR8ZcBiTl+dNLWFaxryPj7R
-         jKeNq5zla3WyxbxZetXrlTOWTZsPM4CCC3R+mYGOYZiRBtpmd39p7eCselTfwkdVwwk0
-         SJ9ALYKRJMqtq3IDTpvFctPcvvbnhlrWBAHxs9OxTv375fgsUqtcr/5ucwweji638NxP
-         LfWmPIgccuHh+Wh/qorVhU/iPBMF+OoE5j+0kAwp1hgfp1OsALSZKSykqitZMSexQ7v7
-         ABc0a2EmR6nkafwZZ0otYT0C+4JCxgr/GWumfoDPG98/zEcyaVdOcr2QgW5KN4l7MNGB
-         cDaA==
-X-Gm-Message-State: AOAM531P3Ob+kDK8XBVfUAh+dxBhQdX+bPSrPcQ2Hh2+H+9YZ6aS266F
-        NqgNrNLEefiZaPTySCrtNIFGjGkV
-X-Google-Smtp-Source: ABdhPJw9pNbthryY5PJYcdzzvHVNTK4gq8CTpHrX2eGCaV/y1MaxW+3gxrRyvE3fqgD9tFNusbapXw==
-X-Received: by 2002:a17:902:a515:: with SMTP id s21mr4285248plq.334.1590682485385;
-        Thu, 28 May 2020 09:14:45 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:4a1c])
-        by smtp.gmail.com with ESMTPSA id q193sm5193057pfq.158.2020.05.28.09.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 09:14:44 -0700 (PDT)
-Date:   Thu, 28 May 2020 09:14:37 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Benc <jbenc@redhat.com>, shuah <shuah@kernel.org>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: split -extras target to -static and -gen
-Message-ID: <20200528161437.x3e2ddxmj6nlhvv7@ast-mbp.dhcp.thefacebook.com>
-References: <xunya71uosvv.fsf@redhat.com>
- <CAADnVQJUL9=T576jo29F_zcEd=C6_OiExaGbEup6F-mA01EKZQ@mail.gmail.com>
- <xuny367lq1z1.fsf@redhat.com>
- <CAADnVQ+1o1JAm7w1twW0KgKMHbp-JvVjzET2N+VS1z=LajybzA@mail.gmail.com>
- <xunyh7w1nwem.fsf@redhat.com>
- <CAADnVQKbKA_Yuj7v3c6fNi7gZ8z_q_hzX2ry9optEHE3B_iWcg@mail.gmail.com>
- <ec5f6bd9-83e9-fc55-1885-18eee404d988@kernel.org>
- <CAADnVQJhb0+KWY0=4WVKc8NQswDJ5pU7LW1dQE2TQuya0Pn0oA@mail.gmail.com>
- <20200528100557.20489f04@redhat.com>
- <20200528105631.GE3115014@kroah.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lNE5zhFi30q9WwsA8BI91uOqjeUOdLA24NbPUP4RY6U=;
+        b=Nh6KypwsXUF89rxTVRyPTyj/doDZu6cy8uWDOIbH6ai1BQoHF68ZkHMXLz+hMRx2NO
+         PKA5MpFijiYWPQziqEIxawlYIpHBO2RPrvW2MGyKQSuXgpUdK0hV6w0TG1Rh1/mWutrF
+         Z8hM3ZYA+AE4Jn+dlJg96/sZV+LcNnaPwgy28iO6RED/IM9eQCDSXKJi1+TnZPs23tpI
+         V6b/CBVYPYXtKpC/28B9KC62714t0wWZvOx8lVVAbqi0ii8P7Zjp7VpTaKAtx9rvHit8
+         D75JC2Qokqxk+1Mw6ly0xbOYJtp669QBrS0vZW/Vk+gfoM86OnsFQTQ6KbWF425UdQbZ
+         8J0w==
+X-Gm-Message-State: AOAM531/UJ6l5jVUJqZEyB+PyDfjKeDQKIHTjC1PbrIerZlOVtnJAkM2
+        rEmjK/smMuuj1gd8EQ9SZ9vdBg==
+X-Google-Smtp-Source: ABdhPJwtSYjyMNr1fHEm0+dCoWqlHRseFAIIRs8jo5Jrenwz+++/FVXju5yw2uBEMWhXby7HhbCNyw==
+X-Received: by 2002:aca:af55:: with SMTP id y82mr2624443oie.178.1590683060534;
+        Thu, 28 May 2020 09:24:20 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id x3sm1839339ooc.22.2020.05.28.09.24.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 May 2020 09:24:19 -0700 (PDT)
+Subject: Re: [PATCH v2] selftests/ftrace: Use printf for backslash included
+ command
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Li Philip <philip.li@intel.com>,
+        Liu Yiding <yidingx.liu@intel.com>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        skhan@linuxfoundation.org
+References: <87imh21x6f.fsf@igel.home>
+ <158920418730.16156.8299185499520876735.stgit@devnote2>
+ <20200525185905.5fecd8073e686001712dfdf9@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <02fbbc09-a52a-5e54-43a5-3de93c698072@linuxfoundation.org>
+Date:   Thu, 28 May 2020 10:24:18 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200528105631.GE3115014@kroah.com>
+In-Reply-To: <20200525185905.5fecd8073e686001712dfdf9@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 28, 2020 at 12:56:31PM +0200, Greg KH wrote:
-> On Thu, May 28, 2020 at 10:05:57AM +0200, Jiri Benc wrote:
-> > On Wed, 27 May 2020 15:23:13 -0700, Alexei Starovoitov wrote:
-> > > I prefer to keep selftests/bpf install broken.
-> > > This forced marriage between kselftests and selftests/bpf
-> > > never worked well. I think it's a time to free them up from each other.
-> > 
-> > Alexei, it would be great if you could cooperate with other people
-> > instead of pushing your own way. The selftests infrastructure was put
-> > to the kernel to have one place for testing. Inventing yet another way
-> > to add tests does not help anyone. You don't own the kernel. We're
-> > community, we should cooperate.
+On 5/25/20 3:59 AM, Masami Hiramatsu wrote:
+> Hi Shuah,
 > 
-> I agree, we rely on the infrastructure of the kselftests framework so
-> that testing systems do not have to create "custom" frameworks to handle
-> all of the individual variants that could easily crop up here.
+> Could you pick this to kselftest-next?
 > 
-> Let's keep it easy for people to run and use these tests, to not do so
-> is to ensure that they are not used, which is the exact opposite goal of
-> creating tests.
+> Thank you,
+> 
+> On Mon, 11 May 2020 22:36:27 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+>> Since the built-in echo has different behavior in POSIX shell
+>> (dash) and bash, kprobe_syntax_errors.tc can fail on dash which
+>> interpret backslash escape automatically.
+>>
+>> To fix this issue, we explicitly use printf "%s" (not interpret
+>> backslash escapes) if the command string can include backslash.
+>>
+>> Reported-by: Liu Yiding <yidingx.liu@intel.com>
+>> Suggested-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
+>> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+>> ---
+>>   tools/testing/selftests/ftrace/test.d/functions    |    8 +++++---
+>>   .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    4 +++-
+>>   2 files changed, 8 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+>> index 61a3c7e2634d..697c77ef2e2b 100644
+>> --- a/tools/testing/selftests/ftrace/test.d/functions
+>> +++ b/tools/testing/selftests/ftrace/test.d/functions
+>> @@ -119,12 +119,14 @@ yield() {
+>>       ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
+>>   }
+>>   
+>> +# Since probe event command may include backslash, explicitly use printf "%s"
+>> +# to NOT interpret it.
+>>   ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
+>> -    pos=$(echo -n "${2%^*}" | wc -c) # error position
+>> -    command=$(echo "$2" | tr -d ^)
+>> +    pos=$(printf "%s" "${2%^*}" | wc -c) # error position
+>> +    command=$(printf "%s" "$2" | tr -d ^)
+>>       echo "Test command: $command"
+>>       echo > error_log
+>> -    (! echo "$command" >> "$3" ) 2> /dev/null
+>> +    (! printf "%s" "$command" >> "$3" ) 2> /dev/null
+>>       grep "$1: error:" -A 3 error_log
+>>       N=$(tail -n 1 error_log | wc -c)
+>>       # "  Command: " and "^\n" => 13
+>> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+>> index ef1e9bafb098..eb0f4ab4e070 100644
+>> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+>> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+>> @@ -91,7 +91,9 @@ esac
+>>   if grep -q "Create/append/" README && grep -q "imm-value" README; then
+>>   echo 'p:kprobes/testevent _do_fork' > kprobe_events
+>>   check_error '^r:kprobes/testevent do_exit'	# DIFF_PROBE_TYPE
+>> -echo 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
+>> +
+>> +# Explicitly use printf "%s" to not interpret \1
+>> +printf "%s" 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
+>>   check_error 'p:kprobes/testevent _do_fork ^bcd=\1'	# DIFF_ARG_TYPE
+>>   check_error 'p:kprobes/testevent _do_fork ^abcd=\1:u8'	# DIFF_ARG_TYPE
+>>   check_error 'p:kprobes/testevent _do_fork ^abcd=\"foo"'	# DIFF_ARG_TYPE
+>>
+> 
+> 
 
-Greg,
+Applied to
 
-It is easy for people (bpf developers) to run and use the tests.
-Every developer runs them before submitting patches.
-New tests is a hard requirement for any new features.
-Maintainers run them for every push.
+git.kernel.org/pub/scm/linux/kernel/git/shuah/linux kselftest.git/ next
+branch for Linux 5.8-rc1
 
-What I was and will push back hard is when other people (not bpf developers)
-come back with an excuse that some CI system has a hard time running these
-tests. It's the problem of weak CI. That CI needs to be fixed. Not the tests.
-The example of this is that we already have github/libbpf CI that runs
-selftests/bpf just fine. Anyone who wants to do another CI are welcome to copy
-paste what already works instead of burdening people (bpf developers) who run
-and use existing tests. I frankly have no sympathy to folks who put their own
-interest of their CI development in front of bpf community of developers.
-The main job of CI is to help developers and maintainers.
-Where helping means to not impose new dumb rules on developers because CI
-framework is dumb. Fix CI instead.
+thanks,
+-- Shuah
