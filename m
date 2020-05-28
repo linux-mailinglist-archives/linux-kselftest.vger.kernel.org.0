@@ -2,68 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE061E6426
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 16:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B641E649A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 May 2020 16:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391194AbgE1Ojd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 May 2020 10:39:33 -0400
-Received: from www62.your-server.de ([213.133.104.62]:35266 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391177AbgE1Ojb (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 May 2020 10:39:31 -0400
-Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1jeJgv-0008Kh-Gq; Thu, 28 May 2020 16:39:29 +0200
-Date:   Thu, 28 May 2020 16:39:28 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     Anton Protopopov <a.s.protopopov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 0/5] bpf: fix map permissions check and cleanup code
- around
-Message-ID: <20200528143928.GA27756@pc-9.home>
-References: <20200527185700.14658-1-a.s.protopopov@gmail.com>
+        id S2391298AbgE1OwC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 May 2020 10:52:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40310 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391291AbgE1OwB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 May 2020 10:52:01 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 399552075F;
+        Thu, 28 May 2020 14:51:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590677520;
+        bh=MBo4bydaito7Zjn+vXtlyMHlcEan2eQv5rPVnMPb2hU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=badEl0doIkZEELJSx0nuJDS02rcm35o0j/kBDK5cCxECBCskSnj298BmpBWgrq1lT
+         KmVbmkl2a4cp9tZ3/17ImRTUDpwEhj6yBlnd8XrCrLehx57WsVcCeLdOMjJPDv2TKD
+         +4bNLdxZ+75uCfjUPxdR9+3fL5KuRocd06DH2ANc=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Luis R . Rodriguez" <mcgrof@kernel.org>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masami Hiramatsu <masami.hiramatsu@linaro.org>
+Subject: [PATCH 0/4] selftests, sysctl, lib: Fix prime_numbers and sysctl test to run
+Date:   Thu, 28 May 2020 23:51:54 +0900
+Message-Id: <159067751438.229397.6746886115540895104.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200527185700.14658-1-a.s.protopopov@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25826/Thu May 28 14:33:30 2020)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 27, 2020 at 06:56:55PM +0000, Anton Protopopov wrote:
-> This series fixes a bug in the map_lookup_and_delete_elem() function which
-> should check for the FMODE_CAN_READ bit, because it returns data to user space.
-> The rest of commits fix some typos and comment in selftests and extend the
-> test_map_wronly test to cover the new check for the BPF_MAP_TYPE_STACK and
-> BPF_MAP_TYPE_QUEUE map types.
-> 
-> Anton Protopopov (5):
->   selftests/bpf: fix a typo in test_maps
->   selftests/bpf: cleanup some file descriptors in test_maps
->   selftests/bpf: cleanup comments in test_maps
->   bpf: fix map permissions check
->   selftests/bpf: add tests for write-only stacks/queues
-> 
->  kernel/bpf/syscall.c                    |  3 +-
->  tools/testing/selftests/bpf/test_maps.c | 52 ++++++++++++++++++++++---
->  2 files changed, 49 insertions(+), 6 deletions(-)
+Hi,
 
-Looks good to me and is also consistent with what we do for the lookup +
-delete batch interface, applied thanks!
+Recently, I found some tests were always skipped.
+Here is a series of patches to fix those issues.
 
-Fyi, I've taken it to bpf-next given 5.7 is right around the corner. We
-can take the permissions fix to stable once in Linus' tree.
+The prime_numbers test is skipped in some cases because
+prime_numbers.ko is not always compiled.
+Since the CONFIG_PRIME_NUMBERS is not independently
+configurable item (it has no title and help), it is enabled
+only if other configs (DRM_DEBUG_SELFTEST etc.) select it.
+
+To fix this issue, I added a title and help for
+CONFIG_PRIME_NUMBERS.
+
+The sysctl test is skipped because
+ - selftests/sysctl/config requires CONFIG_TEST_SYSCTL=y. But
+   since lib/test_sysctl.c doesn't use module_init(), the
+   test_syscall is not listed under /sys/module/ and the 
+   test script gives up.
+ - Even if we make CONFIG_TEST_SYSCTL=m, the test script checks
+   /sys/modules/test_sysctl before loading module and gives up.
+ - Ayway, since the test module introduces useless sysctl
+   interface to the kernel, it would better be a module.
+
+This series includes fixes for above 3 points.
+ - Fix lib/test_sysctl.c to use module_init()
+ - Fix tools/testing/selftests/sysctl/sysctl.sh to try to load
+   test module if it is not loaded (nor embedded).
+ - Fix tools/testing/selftests/sysctl/config to require
+   CONFIG_TEST_SYSCTL=m, not y.
+
+Thank you,
+
+---
+
+Masami Hiramatsu (4):
+      lib: Make prime number generator independently selectable
+      lib: Make test_sysctl initialized as module
+      selftests/sysctl: Fix to load test_sysctl module
+      selftests/sysctl: Make sysctl test driver as a module
+
+
+ lib/math/Kconfig                         |    7 ++++++-
+ lib/test_sysctl.c                        |    2 +-
+ tools/testing/selftests/sysctl/config    |    2 +-
+ tools/testing/selftests/sysctl/sysctl.sh |   13 ++-----------
+ 4 files changed, 10 insertions(+), 14 deletions(-)
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
