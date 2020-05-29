@@ -2,101 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD971E89FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 May 2020 23:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8401E8A56
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 May 2020 23:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728267AbgE2V0J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 May 2020 17:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728040AbgE2V0I (ORCPT
+        id S1728294AbgE2Vqk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 May 2020 17:46:40 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:57498 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727947AbgE2Vqk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 May 2020 17:26:08 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F15C03E969
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2020 14:26:08 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id g5so2571443otg.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2020 14:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=p8dAPHZz+ht/nN+XghF1uMTld/TMP+BOizxf53N3zQw=;
-        b=EBp/atAcNaFN+6puN/Jwb4WUQOnZtbjjBHlfOyk5q7ALw8VT2t5On9HYf8HxTqJNVO
-         TqhBj4hRJC/0T8uzNoKe+c2rPuMyrCaCgsZPDHg4BT3UJ6/b8iUE8SQ15qBpk19qHVVG
-         0o8CsdaoQRbPfklS3B0KS0zjqfQ1pVpf+sNZg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=p8dAPHZz+ht/nN+XghF1uMTld/TMP+BOizxf53N3zQw=;
-        b=JVS+CQT12iZoSb3D7zlYsqGiN367G8yahJlzdVIo4M1+PsV6uKcyIguKG2/a7a50lI
-         U5+es+yVVYHK40qj59dvy5AreoR9IVTZiFAnTmiOaAYWezzE1+rEQld+m0THXBiZuv2j
-         szWYDBaKjuNSryFGJKR71tDrtvdMhsN7d+EOavF5QHJhU6CaZUxoyx4dR/tIAc38jz11
-         oKF9gC4Gkg8pefMoFdfW4jrZ/aX0m4zZSZp1FJY/GiHu9HzZlm2hHTl3+8Hw5U+53ohT
-         lAKrfWlG9ePZpI8OBuDguYJ27t6tLSz3wHXuWDKuQqp7CTTfKTqLpFMLf18U9FMsGSXf
-         nrVA==
-X-Gm-Message-State: AOAM533UxNE9MdmORlASU3X/rcm+1N+KQ+6NdOPo+SAxWEfklQM34iph
-        U3Z1ip1chwWhbVcWEBmc30H+3w==
-X-Google-Smtp-Source: ABdhPJxEZN3jHXCnJyt5F95GaRnw9TqHldrmjpzX0qnxxu2yYQJLNj90XywZQvbi5zTEizxNkgqYhQ==
-X-Received: by 2002:a05:6830:120f:: with SMTP id r15mr4105004otp.348.1590787568026;
-        Fri, 29 May 2020 14:26:08 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f15sm2782569otf.81.2020.05.29.14.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 14:26:07 -0700 (PDT)
-Subject: Re: [PATCH v2] selftests/ftrace: Use printf instead of echo in kprobe
- syntax error tests
-To:     Seth Forshee <seth.forshee@canonical.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200304222009.34663-1-seth.forshee@canonical.com>
- <20200529203704.GA57013@ubuntu-x1>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <de431b0e-6337-b95a-15c5-1c0c6abe697e@linuxfoundation.org>
-Date:   Fri, 29 May 2020 15:26:06 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200529203704.GA57013@ubuntu-x1>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Fri, 29 May 2020 17:46:40 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04TLbtK5004146;
+        Fri, 29 May 2020 21:46:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=u5x9D0t4tZz+1cMYmC9qV2MbmC6jm9OFvlDRzwpEAJ0=;
+ b=Yvq9yZByXssUUAK9+XEwjin2JPS+2qwRuy2omBhf0BErZH2leyfvVg6v8lcYSlEXIqgX
+ 3+M2HBQoCErUH4JO/QdHPYir8stCUVPJYd4rJYcrSJKrg4kvKhHJWYkde4r5Q3j+FQij
+ zlJo9ELK7KFWBSStZ3vMaCav/HZg/e1Fhizw68GdKiWQhNvwYXKSN5TrxbVeyaEA8jx6
+ NQQbZypOyrNrgzXHYwoSDSGkroU7wwj8njDgEF5hw7llEaYWm4XySaM050NfYVxOnGJm
+ O3fz2XGMmLOTjTlATGU7K6taLvHdEqnKV5SWOXqD12NVKc/6l2Jmte8QINUmhAZKUgKP Og== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 316u8rcmbv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 29 May 2020 21:46:35 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04TLXA9p091790;
+        Fri, 29 May 2020 21:46:35 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 317ddv06nv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 May 2020 21:46:34 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04TLkXui020880;
+        Fri, 29 May 2020 21:46:33 GMT
+Received: from localhost.uk.oracle.com (/10.175.189.67)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 29 May 2020 14:46:32 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, skhan@linuxfoundation.org
+Cc:     davidgow@google.com, trishalfonso@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v4 kunit-next 0/2] kunit: extend kunit resources API
+Date:   Fri, 29 May 2020 22:46:19 +0100
+Message-Id: <1590788781-1895-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9636 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ phishscore=0 adultscore=0 suspectscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005290155
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9636 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 spamscore=0 cotscore=-2147483648 suspectscore=0
+ phishscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005290155
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/29/20 2:37 PM, Seth Forshee wrote:
-> On Wed, Mar 04, 2020 at 04:20:09PM -0600, Seth Forshee wrote:
->> Test cases which use echo to write strings containing backslashes
->> fail with some shells, as echo's treatment of backslashes in
->> strings varies between shell implementations. Use printf instead,
->> as it should behave consistently across different shells. This
->> requires adjustments to the strings to escape \ and % characters.
->> ftrace_errlog_check() must also re-escape these characters after
->> processing them to remove ^ characters.
->>
->> Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
-> 
-> Ping. Someone just asked me about this patch, and I noticed that it
-> hasn't been applied or received any feedback.
-> 
+A recent RFC patch set [1] suggests some additional functionality
+may be needed around kunit resources.  It seems to require
 
-I pulled in this patch from Masami:
+1. support for resources without allocation
+2. support for lookup of such resources
+3. support for access to resources across multiple kernel threads
 
-selftests/ftrace: Use printf for backslash included command
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=8e923a2168afd221ea26e3d9716f21e9578b5c4d
+The proposed changes here are designed to address these needs.
+The idea is we first generalize the API to support adding
+resources with static data; then from there we support named
+resources.  The latter support is needed because if we are
+in a different thread context and only have the "struct kunit *"
+to work with, we need a way to identify a resource in lookup.
 
-Looks like a duplicate.
+[1] https://lkml.org/lkml/2020/2/26/1286
 
-Seth,
-Is your patch still needed?
+Changes since v3:
+- removed unused "init" field from "struct kunit_resources" (Brendan)
 
-+ Steve and Masami
+Changes since v2:
+ - moved a few functions relating to resource retrieval in patches
+   1 and 2 into include/kunit/test.h and defined as "static inline";
+   this allows built-in consumers to use these functions when KUnit
+   is built as a module
 
-thanks,
--- Shuah
+Changes since v1:
+ - reformatted longer parameter lists to have one parameter per-line
+   (Brendan, patch 1)
+ - fixed phrasing in various comments to clarify allocation of memory
+   and added comment to kunit resource tests to clarify why
+   kunit_put_resource() is used there (Brendan, patch 1)
+ - changed #define to static inline function (Brendan, patch 2)
+ - simplified kunit_add_named_resource() to use more of existing
+   code for non-named resource (Brendan, patch 2)
+
+Alan Maguire (2):
+  kunit: generalize kunit_resource API beyond allocated resources
+  kunit: add support for named resources
+
+Alan Maguire (2):
+  kunit: generalize kunit_resource API beyond allocated resources
+  kunit: add support for named resources
+
+ include/kunit/test.h      | 210 +++++++++++++++++++++++++++++++++++++++-------
+ lib/kunit/kunit-test.c    | 111 +++++++++++++++++++-----
+ lib/kunit/string-stream.c |  14 ++--
+ lib/kunit/test.c          | 171 ++++++++++++++++++++++---------------
+ 4 files changed, 380 insertions(+), 126 deletions(-)
+
+-- 
+1.8.3.1
+
