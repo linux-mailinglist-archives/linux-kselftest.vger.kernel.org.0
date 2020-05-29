@@ -2,113 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD151E8072
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 May 2020 16:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42281E815F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 May 2020 17:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbgE2Ojr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 May 2020 10:39:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57330 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726928AbgE2Ojr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 May 2020 10:39:47 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727093AbgE2PMY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 May 2020 11:12:24 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:58010 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726849AbgE2PMY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 29 May 2020 11:12:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590765143;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NyeQg8ZregT21iKXzyH6UaHW5smbt/BetQWzJvj6THg=;
+        b=aR7hzEvB/ZIRWuS+SH/PY5P64zPz+d8A8CA7Whu86KgZlNn8M9nX0r7khrLeuhyNmAguse
+        2TwcsfLlOPPRb5hDzmHCXC9mHy1777QuSHl2VJnADpJQsgbCuQyNGHpA18jJnbM0g9SX06
+        3O4KsHqc+EIud1/1Jcboytab2lgMSuQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-41-3mr9cXEzNi-tw5PBq78Uwg-1; Fri, 29 May 2020 11:12:21 -0400
+X-MC-Unique: 3mr9cXEzNi-tw5PBq78Uwg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6A2F92072D;
-        Fri, 29 May 2020 14:39:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590763186;
-        bh=exjd1DeyzZL/6POk5choc9MsqHwYdc70Ebbvb45qc0o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=E2oTwMO6rScF7H52nQIEMI42Wx7JqOuvRaw1hCjZLtmSTJNLQ/kZrTixH/k7lRXc6
-         nDu8l4Y3sgH2uVkqyRASqN4yVOVHHeo4eljLRaTMOoNnZEYn2FXcXPTJSj/gvj2ExB
-         /YIFJpB4Onh46sTilEGRHZxYp00zat2C7mk9bWwg=
-Date:   Fri, 29 May 2020 23:39:42 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "Luis R . Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Subject: Re: [PATCH 0/4] selftests, sysctl, lib: Fix prime_numbers and
- sysctl test to run
-Message-Id: <20200529233942.a47bbd8e918175e9af3fefab@kernel.org>
-In-Reply-To: <218210da-7d06-5b6e-13af-13a07e8e7064@linuxfoundation.org>
-References: <159067751438.229397.6746886115540895104.stgit@devnote2>
-        <218210da-7d06-5b6e-13af-13a07e8e7064@linuxfoundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21B32107ACCD;
+        Fri, 29 May 2020 15:12:20 +0000 (UTC)
+Received: from [10.3.112.17] (ovpn-112-17.phx2.redhat.com [10.3.112.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9B4607A8C9;
+        Fri, 29 May 2020 15:12:19 +0000 (UTC)
+Subject: Re: [PATCH 0/4] selftests/livepatch: rework of
+ test-klp-{callbacks,shadow_vars}
+To:     Yannick Cote <ycote@redhat.com>, live-patching@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org
+References: <20200528134849.7890-1-ycote@redhat.com>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Message-ID: <4d69a69d-480c-5abc-1d26-e107012041dd@redhat.com>
+Date:   Fri, 29 May 2020 11:12:18 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200528134849.7890-1-ycote@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 29 May 2020 08:14:39 -0600
-Shuah Khan <skhan@linuxfoundation.org> wrote:
-
-> On 5/28/20 8:51 AM, Masami Hiramatsu wrote:
-> > Hi,
-> > 
-> > Recently, I found some tests were always skipped.
-> > Here is a series of patches to fix those issues.
-> > 
-> > The prime_numbers test is skipped in some cases because
-> > prime_numbers.ko is not always compiled.
-> > Since the CONFIG_PRIME_NUMBERS is not independently
-> > configurable item (it has no title and help), it is enabled
-> > only if other configs (DRM_DEBUG_SELFTEST etc.) select it.
-> > 
-> > To fix this issue, I added a title and help for
-> > CONFIG_PRIME_NUMBERS.
-> > 
-> > The sysctl test is skipped because
-> >   - selftests/sysctl/config requires CONFIG_TEST_SYSCTL=y. But
-> >     since lib/test_sysctl.c doesn't use module_init(), the
-> >     test_syscall is not listed under /sys/module/ and the
-> >     test script gives up.
-> >   - Even if we make CONFIG_TEST_SYSCTL=m, the test script checks
-> >     /sys/modules/test_sysctl before loading module and gives up.
-> >   - Ayway, since the test module introduces useless sysctl
-> >     interface to the kernel, it would better be a module.
-> > 
-> > This series includes fixes for above 3 points.
-> >   - Fix lib/test_sysctl.c to use module_init()
-> >   - Fix tools/testing/selftests/sysctl/sysctl.sh to try to load
-> >     test module if it is not loaded (nor embedded).
-> >   - Fix tools/testing/selftests/sysctl/config to require
-> >     CONFIG_TEST_SYSCTL=m, not y.
-> > 
-> > Thank you,
-> > 
-> > ---
-> > 
-> > Masami Hiramatsu (4):
-> >        lib: Make prime number generator independently selectable
-> >        lib: Make test_sysctl initialized as module
-> >        selftests/sysctl: Fix to load test_sysctl module
-> >        selftests/sysctl: Make sysctl test driver as a module
-> > 
-> > 
-> >   lib/math/Kconfig                         |    7 ++++++-
-> >   lib/test_sysctl.c                        |    2 +-
-> >   tools/testing/selftests/sysctl/config    |    2 +-
-> >   tools/testing/selftests/sysctl/sysctl.sh |   13 ++-----------
-> >   4 files changed, 10 insertions(+), 14 deletions(-)
-> > 
-> > --
-> > Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
-> > 
+On 5/28/20 9:48 AM, Yannick Cote wrote:
+> The test-klp-callbacks change implement a synchronization replacement of
+> initial code to use completion variables instead of delays. The
+> completion variable interlocks the busy module with the concurrent
+> loading of the target livepatch patches which works with the execution
+> flow instead of estimated time delays.
 > 
-> Thanks Masami. I see Kees reviewing patches. I will wait for Luis to
-> weigh in on patch 2 before pulling this series in.
 
-OK, Thanks Shuah! 
+For more context: we had been seeing occasional glitches with this test 
+in our continuous kernel integration suite.  In every case, it seemed 
+that the worker thread wasn't running when expected, so I assumed that 
+system load had something to do with it.  We shuffled the ordering of 
+tests, but still encountered issues and I decided life was too sort to 
+continue remotely debugging sleep-"synchronized" code.
 
+> The test-klp-shadow-vars changes first refactors the code to be more of
+> a readable example as well as continuing to verify the component code.
+> The patch is broken in two to display the renaming and restructuring in
+> part 1 and the addition and change of logic in part 2. The last change
+> frees memory before bailing in case of errors.
+> 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Yannick's patches look fine to me, so for those:
+
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+
+(I can ack individually if required, let me know.)
+
+-- Joe
+
