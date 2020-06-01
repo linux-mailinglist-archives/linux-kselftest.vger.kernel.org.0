@@ -2,71 +2,189 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 141AF1EA4BE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jun 2020 15:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7622F1EA60B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jun 2020 16:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbgFANPy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Jun 2020 09:15:54 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41371 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbgFANPx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Jun 2020 09:15:53 -0400
-Received: by mail-pg1-f194.google.com with SMTP id r10so3478311pgv.8;
-        Mon, 01 Jun 2020 06:15:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YEjnyiAkBtLgDdKTQ3Q+SeGMmmbQpJXu+XKOdvg7XWQ=;
-        b=FYLfpDuMxg065Ks2MBCJbDh/9EUVecsmtgWC7LzPSRB/9tsrmMTK8AFw/2QVTSWGUN
-         kfyX/nASBxMxw7cHYcW8Lq9537frjYtXYAK5FtfFdXFoJbISZsO1s9Q/T8OZqVAY7i9E
-         oDZl9GfXAdG+G6w6QepK6CYynb07C2fpwcFowiF/zjRENzdzJ6b/Fv/YXUNq7g3g+cKX
-         1Do6i9G5wmxR7LxfYUoKXk4afIwDF7KyPe/ThXePnA6fYVWkdGXxmqdKcy5vAxOrjrTm
-         8sKc4mZ+SdCbyaTv+Ty7m3Q/pOvT+RLUVBjogHGbw9gWjP/b13ToBwnOUyeHOvpAZkhS
-         SWsQ==
-X-Gm-Message-State: AOAM531TGgZd6ujSQjeD1glIz64GqSftapIn8gznjvUFZ2OwJholtXXT
-        VF2p9IUox0HxEBw7cxW+ycM=
-X-Google-Smtp-Source: ABdhPJyGI1Jw//yDHaFra8X80vvfAUvVZa/DPz62//t/kk3t7fRH28Bc4Y9LUOxyGucYf1mdGccIog==
-X-Received: by 2002:a62:2bc7:: with SMTP id r190mr19965601pfr.55.1591017351876;
-        Mon, 01 Jun 2020 06:15:51 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id r18sm7347730pjz.43.2020.06.01.06.15.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2020 06:15:50 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id D43AB40251; Mon,  1 Jun 2020 13:15:49 +0000 (UTC)
-Date:   Mon, 1 Jun 2020 13:15:49 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S1726322AbgFAOmI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Jun 2020 10:42:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49944 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726128AbgFAOmI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 1 Jun 2020 10:42:08 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55D8C2074B;
+        Mon,  1 Jun 2020 14:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591022527;
+        bh=eXPsdcnSl73PMCf3QisYoyGBU760b23STG/LdqaCq9g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ir1M/+i7SumWRGGFIsV4N2hYNw7SzBWOPwbgSa6Qd9oTlJMupZqND/hnXlE39obUe
+         7kABnLX9Wx/QgBco06Gq2I94uJaEfbs2g/UYD4z6AhJLa+bptutPY6TmBeWe2zMr2b
+         3QzK3KCy0UW+/yFmhvD8MSmYD2r2wTPYhmhVKfGo=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Subject: Re: [PATCH 4/4] selftests/sysctl: Make sysctl test driver as a module
-Message-ID: <20200601131549.GJ11244@42.do-not-panic.com>
-References: <159067751438.229397.6746886115540895104.stgit@devnote2>
- <159067755690.229397.12060049846042042480.stgit@devnote2>
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 0/7] selftsts/ftrace: Add requires list for each test case
+Date:   Mon,  1 Jun 2020 23:42:03 +0900
+Message-Id: <159102252279.31199.12855129586058455119.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <159067755690.229397.12060049846042042480.stgit@devnote2>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 28, 2020 at 11:52:37PM +0900, Masami Hiramatsu wrote:
-> Fix config file to require CONFIG_TEST_SYSCTL=m instead of y
-> because this driver introduces a test sysctl interfaces which
-> are normally not used, and only used for the selftest.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Hi,
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Here is a series for adding "requires:" list for simplifying and
+unifying requirement checks for each test case.
+This series also includes the description line fix and
+unresolved -> unsupported change ([1/7] and [2/7]).
 
-  Luis
+Currently, we have many similar requirement checker to find
+unconfigured or unsupported (in older kernels) feature in
+each test case. I think it is a good time to unify those similar
+checks.
+
+As same as "description:" or "flags:" line, this series introduces
+new "requires:" line, and convert current checking code intor the
+"requires:" line.
+This requires line gives some good effects, not only simplyfies
+the code, but also unifies the reason message, and because it checks
+the requirements before running the testc ase, it skips unneeded
+ftrace initialization.
+
+The requires line supports following checks
+ - tracefs interface check: Check whether the given file or directory
+   in the tracefs. (No suffix) [3/7],[4/7],[5/7]
+ - available tracer check: Check whether the given tracer is available
+   (":tracer" suffix) [6/7]
+ - README feature check: Check whether the given string is in the
+   README (":README" suffix) [7/7]
+
+Note that since the requires line returns UNSUPPORTED error,
+the requirements must be one of ftrace feature, but not the
+user-space environmental requirement. If there is some issue
+in user-space (e.g. lack of the command, modules, etc) it must
+report UNRESOLVED error.
+
+Since this series depends on following 2 commits,
+
+commit 619ee76f5c9f ("selftests/ftrace: Return unsupported if no
+ error_log file") on Shuah's Kselftest tree
+commit bea24f766efc ("selftests/ftrace: Distinguish between hist
+ and synthetic event checks") on Steven's Tracing tree
+
+This can be applied on the tree which merged both of them.
+Also, you can get the series from the following.
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git ftracetest-requires-v1
+
+
+Thank you,
+
+---
+
+Masami Hiramatsu (7):
+      selftests/ftrace: Allow ":" in description
+      selftests/ftrace: Return unsupported for the unconfigured features
+      selftests/ftrace: Add "requires:" list support
+      selftests/ftrace: Convert required interface checks into requires list
+      selftests/ftrace: Convert check_filter_file() with requires list
+      selftests/ftrace: Support ":tracer" suffix for requires
+      selftests/ftrace: Support ":README" suffix for requires
+
+
+ tools/testing/selftests/ftrace/ftracetest          |   11 ++++++-
+ .../selftests/ftrace/test.d/00basic/snapshot.tc    |    3 +-
+ .../selftests/ftrace/test.d/00basic/trace_pipe.tc  |    3 +-
+ .../ftrace/test.d/direct/kprobe-direct.tc          |    6 +---
+ .../ftrace/test.d/dynevent/add_remove_kprobe.tc    |    6 +---
+ .../ftrace/test.d/dynevent/add_remove_synth.tc     |    5 +--
+ .../ftrace/test.d/dynevent/clear_select_events.tc  |   11 +------
+ .../ftrace/test.d/dynevent/generic_clear_event.tc  |    8 +----
+ .../selftests/ftrace/test.d/event/event-enable.tc  |    6 +---
+ .../selftests/ftrace/test.d/event/event-no-pid.tc  |   11 +------
+ .../selftests/ftrace/test.d/event/event-pid.tc     |   11 +------
+ .../ftrace/test.d/event/subsystem-enable.tc        |    6 +---
+ .../ftrace/test.d/event/toplevel-enable.tc         |    6 +---
+ .../ftrace/test.d/ftrace/fgraph-filter-stack.tc    |   14 +--------
+ .../ftrace/test.d/ftrace/fgraph-filter.tc          |    8 +----
+ .../ftrace/test.d/ftrace/func-filter-glob.tc       |    8 +----
+ .../test.d/ftrace/func-filter-notrace-pid.tc       |   13 +-------
+ .../ftrace/test.d/ftrace/func-filter-pid.tc        |   13 +-------
+ .../ftrace/test.d/ftrace/func-filter-stacktrace.tc |    3 +-
+ .../selftests/ftrace/test.d/ftrace/func_cpumask.tc |    6 +---
+ .../ftrace/test.d/ftrace/func_event_triggers.tc    |    7 ++---
+ .../ftrace/test.d/ftrace/func_mod_trace.tc         |    3 +-
+ .../ftrace/test.d/ftrace/func_profile_stat.tc      |    3 +-
+ .../ftrace/test.d/ftrace/func_profiler.tc          |   12 +-------
+ .../ftrace/test.d/ftrace/func_set_ftrace_file.tc   |    6 ++--
+ .../ftrace/test.d/ftrace/func_stack_tracer.tc      |    8 +----
+ .../test.d/ftrace/func_traceonoff_triggers.tc      |    6 ++--
+ .../ftrace/test.d/ftrace/tracing-error-log.tc      |   12 ++------
+ tools/testing/selftests/ftrace/test.d/functions    |   28 ++++++++++++++----
+ .../ftrace/test.d/instances/instance-event.tc      |    6 +---
+ .../selftests/ftrace/test.d/instances/instance.tc  |    6 +---
+ .../ftrace/test.d/kprobe/add_and_remove.tc         |    3 +-
+ .../selftests/ftrace/test.d/kprobe/busy_check.tc   |    3 +-
+ .../selftests/ftrace/test.d/kprobe/kprobe_args.tc  |    3 +-
+ .../ftrace/test.d/kprobe/kprobe_args_comm.tc       |    3 +-
+ .../ftrace/test.d/kprobe/kprobe_args_string.tc     |    3 +-
+ .../ftrace/test.d/kprobe/kprobe_args_symbol.tc     |    3 +-
+ .../ftrace/test.d/kprobe/kprobe_args_syntax.tc     |    5 +--
+ .../ftrace/test.d/kprobe/kprobe_args_type.tc       |    5 +--
+ .../ftrace/test.d/kprobe/kprobe_args_user.tc       |    5 +--
+ .../ftrace/test.d/kprobe/kprobe_eventname.tc       |    3 +-
+ .../ftrace/test.d/kprobe/kprobe_ftrace.tc          |    6 +---
+ .../ftrace/test.d/kprobe/kprobe_module.tc          |    3 +-
+ .../ftrace/test.d/kprobe/kprobe_multiprobe.tc      |    5 +--
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    5 +--
+ .../ftrace/test.d/kprobe/kretprobe_args.tc         |    3 +-
+ .../ftrace/test.d/kprobe/kretprobe_maxactive.tc    |    4 +--
+ .../ftrace/test.d/kprobe/multiple_kprobes.tc       |    3 +-
+ .../selftests/ftrace/test.d/kprobe/probepoint.tc   |    3 +-
+ .../selftests/ftrace/test.d/kprobe/profile.tc      |    3 +-
+ .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 +--
+ .../ftrace/test.d/preemptirq/irqsoff_tracer.tc     |    4 +--
+ tools/testing/selftests/ftrace/test.d/template     |    4 +++
+ .../selftests/ftrace/test.d/tracer/wakeup.tc       |    6 +---
+ .../selftests/ftrace/test.d/tracer/wakeup_rt.tc    |    6 +---
+ .../inter-event/trigger-action-hist-xfail.tc       |   13 +-------
+ .../inter-event/trigger-field-variable-support.tc  |   16 +---------
+ .../trigger-inter-event-combined-hist.tc           |   16 +---------
+ .../inter-event/trigger-multi-actions-accept.tc    |   16 +---------
+ .../inter-event/trigger-onchange-action-hist.tc    |    8 +----
+ .../inter-event/trigger-onmatch-action-hist.tc     |   16 +---------
+ .../trigger-onmatch-onmax-action-hist.tc           |   16 +---------
+ .../inter-event/trigger-onmax-action-hist.tc       |   16 +---------
+ .../inter-event/trigger-snapshot-action-hist.tc    |   20 +------------
+ .../trigger-synthetic-event-createremove.tc        |   11 +------
+ .../inter-event/trigger-synthetic-event-syntax.tc  |   11 +------
+ .../inter-event/trigger-trace-action-hist.tc       |   18 +-----------
+ .../ftrace/test.d/trigger/trigger-eventonoff.tc    |   11 +------
+ .../ftrace/test.d/trigger/trigger-filter.tc        |   11 +------
+ .../ftrace/test.d/trigger/trigger-hist-mod.tc      |   16 +---------
+ .../test.d/trigger/trigger-hist-syntax-errors.tc   |   18 +-----------
+ .../ftrace/test.d/trigger/trigger-hist.tc          |   16 +---------
+ .../ftrace/test.d/trigger/trigger-multihist.tc     |   16 +---------
+ .../ftrace/test.d/trigger/trigger-snapshot.tc      |   16 +---------
+ .../ftrace/test.d/trigger/trigger-stacktrace.tc    |   11 +------
+ .../test.d/trigger/trigger-trace-marker-hist.tc    |   21 +-------------
+ .../trigger/trigger-trace-marker-snapshot.tc       |   21 +-------------
+ .../trigger-trace-marker-synthetic-kernel.tc       |   31 +-------------------
+ .../trigger/trigger-trace-marker-synthetic.tc      |   26 +----------------
+ .../ftrace/test.d/trigger/trigger-traceonoff.tc    |   11 +------
+ 80 files changed, 120 insertions(+), 633 deletions(-)
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
