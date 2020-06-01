@@ -2,175 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 089F71EAFCC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jun 2020 21:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EAF1EAFCD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jun 2020 21:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbgFATtB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Jun 2020 15:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
+        id S1727932AbgFATto (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Jun 2020 15:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727096AbgFATtB (ORCPT
+        with ESMTP id S1726176AbgFATto (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Jun 2020 15:49:01 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF472C03E96F
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2020 12:49:00 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id v2so3943880pfv.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2020 12:49:00 -0700 (PDT)
+        Mon, 1 Jun 2020 15:49:44 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495EAC061A0E
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2020 12:49:44 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id d6so302070pjs.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2020 12:49:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=6PL3OvGHOMkzabQ8qT3x0ZtC2fHA0sA9zFM3NMGSpSw=;
-        b=jkdmq2ECZn8XeEaaj/N/CW3LrA+0U98ltS2tZpuvuB9OA3dvhAYnHS/oT5nXz0hI3R
-         jOjEO/KCn3QMj+yUcocRbEP1aFIXZJxeowvwnd0GF1Gt1pZCQlhxbg7DKqM5+6NPxmkb
-         Y6PA529f29GtXHZfiFf9HmrBH3sa1nKj23hoc=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CV7mubTvEBdNlKnhsE7VGPqdTkRnwn99m97ta59lmfk=;
+        b=g6HEz2aBlNKZcFsotKI4pWut9t2Aah2dMfCm6GzqIN9apkiVUT5tnI7f3sDv6swxov
+         mQyEuHW8GPOln+tF0OFqF3HLcdlMNPN+1dPq0bv+ETJqM5wQzZDI3SYpkc6/Ul+Rg1TA
+         X74mV36Y8g3wrwU5DMJnT/Ql93eBuSKvycaiM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=6PL3OvGHOMkzabQ8qT3x0ZtC2fHA0sA9zFM3NMGSpSw=;
-        b=bbvS4Kv3aKphY7tZJSiVSO0djtmy8hEf8d9FKnOSBBQAKQaSrUSHxMjc6o+NbOF+xw
-         OH4bdJjAzYDaneaOhNXlyxxFXgJLrhevQb4+cRvaHy1zKNVnrON6EFVGZbXcQiP+DqUI
-         EyriI1AvcpYWFeM9fzS28HrsI+ue1AzjEJIesvfZHQmgzAEWgurJXugZOuRdpKEBaxu+
-         pk1VZxWquYX5UNcr9NaEhI3J33xuECqXedrlhxjlimPYh/m+xtfzCB1RwPUh6KIA6Bb6
-         FaHnVJFZAXRRf1ZAvC7OZp/kmHWlY0Miv9vPspcp9cEhWgBrS0O6BvObiQ67wSNRpqPS
-         4pHw==
-X-Gm-Message-State: AOAM532snJbLOTogsdzp4QuhtzQbUmX1QyeL0r1egcf1x5LNvAW12DqI
-        6DZwfzxTu3HE9WqqqUBXQBMM4A==
-X-Google-Smtp-Source: ABdhPJwC5ehzi7feo6zyI23fvGhYfOJewqw9hvI4V9sUl1lxAaFA4zFza+9VkY9DUEp0AJw649eLlw==
-X-Received: by 2002:aa7:9093:: with SMTP id i19mr21284432pfa.152.1591040940326;
-        Mon, 01 Jun 2020 12:49:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CV7mubTvEBdNlKnhsE7VGPqdTkRnwn99m97ta59lmfk=;
+        b=JTvenKNaFnGEZEqdxe7m9M1ALKgAGSINeakEsnWaZdT8xTqKwBRqKWkASZ429XY22N
+         WpUv2tMoUHHpBbXVBXBpbLdiWw6WlhhRzWhDdY21ssjXZ0YlPiTJQzAVpeq3hDI3c4NH
+         YRc1WFnRsShnc5b+eSNQ9+iq6AsnpsBD6AawKBl3zDJOPgpcNtFwvoXVI0CLfr4G8p6F
+         AvLwAB6Pr2BRGnIMiucOU7IU1iOSBwBXx5mqNtEwvrdYukNuSI3oYLtahoO5h4zTzSme
+         xKj3zDHuLiCFMXw0lAB0Gz50CcZKfnMwsbSoFMKgCC4SmXb4vRHo7BZvoe26w1+XfDVi
+         3dmg==
+X-Gm-Message-State: AOAM531Jsak9htpcsUlfC+YOujv/Hdaui+cPWJpo6cuqnLDF8g9qcfAG
+        Cxzpk6MBMvFdji+JlZNTuPPxbQ==
+X-Google-Smtp-Source: ABdhPJysKrG9WjCl3R8UKGAvcZbIaRgJHSv+b58jR0g7DDChW61bHTe3IuA4U+poaf1+x+tpj41lsw==
+X-Received: by 2002:a17:90a:9e8:: with SMTP id 95mr1095838pjo.189.1591040983872;
+        Mon, 01 Jun 2020 12:49:43 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a20sm187978pff.147.2020.06.01.12.48.59
+        by smtp.gmail.com with ESMTPSA id b11sm240437pjz.54.2020.06.01.12.49.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2020 12:48:59 -0700 (PDT)
-Date:   Mon, 1 Jun 2020 12:48:58 -0700
+        Mon, 01 Jun 2020 12:49:43 -0700 (PDT)
+Date:   Mon, 1 Jun 2020 12:49:42 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/seccomp: Expand benchmark to per-filter
- measurements
-Message-ID: <202006011245.236AAF3D@keescook>
+To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>
+Subject: Re: [PATCH] selftests/seccomp: use 90s as timeout
+Message-ID: <202006011249.3E72ABDDE3@keescook>
+References: <20200601123202.1183526-1-cascardo@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20200601123202.1183526-1-cascardo@canonical.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's useful to see how much (at a minimum) each filter adds to the
-syscall overhead. Add additional calculations.
+On Mon, Jun 01, 2020 at 09:32:02AM -0300, Thadeu Lima de Souza Cascardo wrote:
+> As seccomp_benchmark tries to calibrate how many samples will take more
+> than 5 seconds to execute, it may end up picking up a number of samples
+> that take 10 (but up to 12) seconds. As the calibration will take double
+> that time, it takes around 20 seconds. Then, it executes the whole thing
+> again, and then once more, with some added overhead. So, the thing might
+> take more than 40 seconds, which is too close to the 45s timeout.
+> 
+> That is very dependent on the system where it's executed, so may not be
+> observed always, but it has been observed on x86 VMs. Using a 90s timeout
+> seems safe enough.
+> 
+> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-As part of the performance discussions, this is what I'm adding to the
-seccomp selftest in for-next/seccomp to get more details.
-https://lore.kernel.org/linux-security-module/202006011116.3F7109A@keescook/T/#md8a6fd608cfd1f3c70aaf9ccc4f09fcc33b5fc1b
-This does not include the BPF-bypass mode, which I don't see a way to
-do without creating major problems with seccomp. ;)
----
- .../selftests/seccomp/seccomp_benchmark.c     | 36 +++++++++++++++----
- tools/testing/selftests/seccomp/seccomp_bpf.c |  2 --
- 2 files changed, 29 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/seccomp/seccomp_benchmark.c b/tools/testing/selftests/seccomp/seccomp_benchmark.c
-index 5838c8697ec3..eca13fe1fba9 100644
---- a/tools/testing/selftests/seccomp/seccomp_benchmark.c
-+++ b/tools/testing/selftests/seccomp/seccomp_benchmark.c
-@@ -68,32 +68,54 @@ int main(int argc, char *argv[])
- 	};
- 	long ret;
- 	unsigned long long samples;
--	unsigned long long native, filtered;
-+	unsigned long long native, filter1, filter2;
- 
- 	if (argc > 1)
- 		samples = strtoull(argv[1], NULL, 0);
- 	else
- 		samples = calibrate();
- 
-+	printf("Current BPF sysctl settings:\n");
-+	system("sysctl net.core.bpf_jit_enable");
-+	system("sysctl net.core.bpf_jit_harden");
- 	printf("Benchmarking %llu samples...\n", samples);
- 
-+	/* Native call */
- 	native = timing(CLOCK_PROCESS_CPUTIME_ID, samples) / samples;
- 	printf("getpid native: %llu ns\n", native);
- 
- 	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
- 	assert(ret == 0);
- 
-+	/* One filter */
- 	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog);
- 	assert(ret == 0);
- 
--	filtered = timing(CLOCK_PROCESS_CPUTIME_ID, samples) / samples;
--	printf("getpid RET_ALLOW: %llu ns\n", filtered);
-+	filter1 = timing(CLOCK_PROCESS_CPUTIME_ID, samples) / samples;
-+	printf("getpid RET_ALLOW 1 filter: %llu ns\n", filter1);
- 
--	printf("Estimated seccomp overhead per syscall: %llu ns\n",
--		filtered - native);
-+	if (filter1 == native)
-+		printf("No overhead measured!? Try running again with more samples.\n");
- 
--	if (filtered == native)
--		printf("Trying running again with more samples.\n");
-+	/* Two filters */
-+	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog);
-+	assert(ret == 0);
-+
-+	filter2 = timing(CLOCK_PROCESS_CPUTIME_ID, samples) / samples;
-+	printf("getpid RET_ALLOW 2 filters: %llu ns\n", filter2);
-+
-+	/* Calculations */
-+	printf("Estimated total seccomp overhead for 1 filter: %llu ns\n",
-+		filter1 - native);
-+
-+	printf("Estimated total seccomp overhead for 2 filters: %llu ns\n",
-+		filter2 - native);
-+
-+	printf("Estimated seccomp per-filter overhead: %llu ns\n",
-+		filter2 - filter1);
-+
-+	printf("Estimated seccomp entry overhead: %llu ns\n",
-+		filter1 - native - (filter2 - filter1));
- 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 4dae278cf77e..402ccb3a4e52 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -3824,7 +3824,6 @@ TEST(user_notification_filter_empty_threaded)
- 
- /*
-  * TODO:
-- * - add microbenchmarks
-  * - expand NNP testing
-  * - better arch-specific TRACE and TRAP handlers.
-  * - endianness checking when appropriate
-@@ -3832,7 +3831,6 @@ TEST(user_notification_filter_empty_threaded)
-  * - arch value testing (x86 modes especially)
-  * - verify that FILTER_FLAG_LOG filters generate log messages
-  * - verify that RET_LOG generates log messages
-- * - ...
-  */
- 
- TEST_HARNESS_MAIN
--- 
-2.25.1
-
+Excellent point! Thanks, I've applied this (well, actually, your v2)
+to for-next/seccomp.
 
 -- 
 Kees Cook
