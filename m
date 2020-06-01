@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9311EA610
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jun 2020 16:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471261EA612
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Jun 2020 16:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726110AbgFAOm2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Jun 2020 10:42:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50294 "EHLO mail.kernel.org"
+        id S1727807AbgFAOmh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Jun 2020 10:42:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726017AbgFAOm1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Jun 2020 10:42:27 -0400
+        id S1726017AbgFAOmh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 1 Jun 2020 10:42:37 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5874C207D5;
-        Mon,  1 Jun 2020 14:42:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6BA62074B;
+        Mon,  1 Jun 2020 14:42:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591022547;
-        bh=1YExi40xGXdY3c2aLLYLqs5VAs1fWH47llqS3lm3EKA=;
+        s=default; t=1591022556;
+        bh=/qUCcHzpW3wKJxQdeY8BbIistWbJNBBTmLGi4DKJQi0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rhfhP22tp7x2yH48ei9oMHyuAwgFVudHJDYz8zVGDZ1aks4R1YMvWhWjI4dOqLYFi
-         3l+AtMqJP/VYZQfC65HSnMKsTxCSe2dausPrI13Lo3zF51iUHYqU+4nRg7XAr1/BZz
-         3ll09tb/CopT+8+hJDai5OOv1BM7ulCacA7Cu9To=
+        b=N7/G5E3S5Dl6ByXpQBxlljvOZHmtq2PiCDFpmZ3x36v3K+bjypuYb8aJnPA3EKvor
+         QLLZHMf/MeT5YIn98u+VcTPQYBUkfRNwjwQnT7n8UFjctQce1iI0Vn9IPK6M9XUiFb
+         O9LPz/scTo64B2pHhqDO207e9HFvGzef8pJlH9o8=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         Steven Rostedt <rostedt@goodmis.org>
@@ -30,9 +30,9 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
         Tom Zanussi <tom.zanussi@linux.intel.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 2/7] selftests/ftrace: Return unsupported for the unconfigured features
-Date:   Mon,  1 Jun 2020 23:42:23 +0900
-Message-Id: <159102254289.31199.15357461818950717703.stgit@devnote2>
+Subject: [PATCH 3/7] selftests/ftrace: Add "requires:" list support
+Date:   Mon,  1 Jun 2020 23:42:32 +0900
+Message-Id: <159102255252.31199.7974644473989099256.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <159102252279.31199.12855129586058455119.stgit@devnote2>
 References: <159102252279.31199.12855129586058455119.stgit@devnote2>
@@ -45,43 +45,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As same as other test cases, return unsupported if kprobe_events
-or argument access feature are not found.
+Introduce "requires:" list to check required ftrace interface
+for each test. This will simplify the interface checking code
+and unify the error message. Another good point is, it can
+skip the ftrace initializing.
 
-There can be a new arch which does not port those features yet,
-and an older kernel which doesn't support it.
-Those can not enable the features.
+Note that this requires list must be written as a shell
+comment.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- .../ftrace/test.d/direct/kprobe-direct.tc          |    2 +-
- .../ftrace/test.d/kprobe/kprobe_args_user.tc       |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/ftrace/ftracetest       |    8 +++++++-
+ tools/testing/selftests/ftrace/test.d/functions |    9 +++++++++
+ tools/testing/selftests/ftrace/test.d/template  |    1 +
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-index 801ecb63e84c..e95b744b23e4 100644
---- a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-+++ b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
-@@ -10,7 +10,7 @@ fi
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index d3f6652311ef..cdf7940b6610 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -267,6 +267,11 @@ testcase() { # testfile
+   prlog -n "[$CASENO]$INSTANCE$desc"
+ }
  
- if [ ! -f kprobe_events ]; then
- 	echo "No kprobe_events file -please build CONFIG_KPROBE_EVENTS"
--	exit_unresolved;
-+	exit_unsupported;
- fi
++checkreq() { # testfile
++  requires=`grep "^#[ \t]*requires:" $1 | cut -f2- -d:`
++  check_requires $requires
++}
++
+ test_on_instance() { # testfile
+   grep -q "^#[ \t]*flags:.*instance" $1
+ }
+@@ -356,7 +361,8 @@ trap 'SIG_RESULT=$XFAIL' $SIG_XFAIL
  
- echo "Let the module run a little"
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
-index 0f60087583d8..b41471f301ab 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
-@@ -4,7 +4,7 @@
+ __run_test() { # testfile
+   # setup PID and PPID, $$ is not updated.
+-  (cd $TRACING_DIR; read PID _ < /proc/self/stat; set -e; set -x; initialize_ftrace; . $1)
++  (cd $TRACING_DIR; read PID _ < /proc/self/stat; set -e; set -x;
++   checkreq $1; initialize_ftrace; . $1)
+   [ $? -ne 0 ] && kill -s $SIG_FAIL $SIG_PID
+ }
  
- [ -f kprobe_events ] || exit_unsupported # this is configurable
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 697c77ef2e2b..5100eb1ada0f 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -113,6 +113,15 @@ initialize_ftrace() { # Reset ftrace to initial-state
+     enable_tracing
+ }
  
--grep -q '\$arg<N>' README || exit_unresolved # depends on arch
-+grep -q '\$arg<N>' README || exit_unsupported # depends on arch
- grep -A10 "fetcharg:" README | grep -q 'ustring' || exit_unsupported
- grep -A10 "fetcharg:" README | grep -q '\[u\]<offset>' || exit_unsupported
++check_requires() { # Check required files
++    for i in $* ; do
++        if [ ! -e $i ]; then
++            echo "Required feature interface $i doesn't exist."
++            exit_unsupported
++        fi
++    done
++}
++
+ LOCALHOST=127.0.0.1
+ 
+ yield() {
+diff --git a/tools/testing/selftests/ftrace/test.d/template b/tools/testing/selftests/ftrace/test.d/template
+index e1a5d14c4eaf..d679e5c9e1ee 100644
+--- a/tools/testing/selftests/ftrace/test.d/template
++++ b/tools/testing/selftests/ftrace/test.d/template
+@@ -1,6 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ # description: %HERE DESCRIBE WHAT THIS DOES%
++# requires: %HERE LIST UP REQUIRED FILES%
+ # you have to add ".tc" extention for your testcase file
+ # Note that all tests are run with "errexit" option.
  
 
