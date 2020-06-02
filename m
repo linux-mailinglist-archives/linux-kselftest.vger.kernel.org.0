@@ -2,114 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D17A1EB4D5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 07:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7331EB567
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 07:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbgFBFCE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Jun 2020 01:02:04 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2814 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725787AbgFBFCC (ORCPT
+        id S1725787AbgFBFm3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jun 2020 01:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725298AbgFBFm2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jun 2020 01:02:02 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0524XkCG114231;
-        Tue, 2 Jun 2020 01:02:02 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31bm07mjrn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Jun 2020 01:02:01 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0524u4xN006388;
-        Tue, 2 Jun 2020 01:02:01 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31bm07mjqt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Jun 2020 01:02:01 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0524xnkB030256;
-        Tue, 2 Jun 2020 05:01:58 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 31bf47w9wv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Jun 2020 05:01:58 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05251uck8716598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 Jun 2020 05:01:56 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADFB84C044;
-        Tue,  2 Jun 2020 05:01:56 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A72BE4C05A;
-        Tue,  2 Jun 2020 05:01:55 +0000 (GMT)
-Received: from JAVRIS.in.ibm.com (unknown [9.199.37.29])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  2 Jun 2020 05:01:55 +0000 (GMT)
-Subject: Re: [PATCH 0/4] selftests/livepatch: rework of
- test-klp-{callbacks,shadow_vars}
-To:     Yannick Cote <ycote@redhat.com>, live-patching@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com
-References: <20200528134849.7890-1-ycote@redhat.com>
-From:   Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-Message-ID: <5ca6dcae-c686-6f62-2927-afeba97fbe2a@linux.vnet.ibm.com>
-Date:   Tue, 2 Jun 2020 10:31:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200528134849.7890-1-ycote@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-02_04:2020-06-01,2020-06-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
- cotscore=-2147483648 priorityscore=1501 clxscore=1011 mlxscore=0
- suspectscore=0 spamscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006020025
+        Tue, 2 Jun 2020 01:42:28 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6FFC061A0E
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2020 22:42:28 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id s90so9609058ybi.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2020 22:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=bk5osaVJiGNv6HMFDDoa1BeWBizOC8AFnfdcBnX83HE=;
+        b=MNwj43DNaxUfUwQ0rovjHIMZ1fTtleyHscFem2vWH5sI07j7Uv41fBVGKRbTXU0oWw
+         j1F4Pwb5+/QYPcVef9jk/i96jtWKgFNe7jRGGUQ6bUOFkLugEihxCBRPmTWNOUioFbFe
+         Bd8sM/zraHTpC736DqEwu7g+TQJW61V4ToQakrrYqLPOzbH64L+bUmz6QAUwBq47rLUd
+         NhUQR19oBeZ+ny6qikeZL/jYnxwgLcDqHoIzqqLGOKfCg8+73A3BvSjxs7k/ppWJ8w/U
+         U5xSqOSp4Tef13PWaNBeZ0un/Tk32Tc5lZ3FaTkFDgU2HKq6pLF+29weT6bmc/e6XCYt
+         pofg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=bk5osaVJiGNv6HMFDDoa1BeWBizOC8AFnfdcBnX83HE=;
+        b=dETe20MA1FOJy4NYsceBX8e3zsYYlyvZFK8vfmccnnthVrFlChwEv9RR5u3yfmf+by
+         oRsZkTgloQjkiH12InZk8ypUJn+EdZNWB8DDpe9O9d9zVl/LkticA0+J/7BPCKpBuQaD
+         hTvtxlq8Wrg5YiamFKV0qNbHD9y+6dc0Nhh4MX7TPelrcEjVnhRBiMV/YTtoFLoeW3jC
+         FCpngNxLhl7ToDFvtS2gIn4S4A3wLL4/eD1iRbN4JfvqSeDWJoF2+Aszz4EbMjYCXmvH
+         3QtHil6lyfx7JDPeBGXcjp+qkar7nM5NI8W2SHa5LGrvs5YyT9SAcBMt7J9BuDZ2O2n4
+         rwSQ==
+X-Gm-Message-State: AOAM532KeHmTr8DiVp2LpghZazjI5+D+PMKiAn1Uh9j+5gNFX4gFPKkl
+        Sf4/JErXtIceT38AaMjGZuSJYl3lPbXMOw==
+X-Google-Smtp-Source: ABdhPJx9vDHTXUY+CzoW3/vdoqwLoI1FfZ6/ud5mLimm+OjfZFVFhjoAVLYr/Go8lxvT6G+52qhwMG5A9nIiHQ==
+X-Received: by 2002:a25:d295:: with SMTP id j143mr6686782ybg.65.1591076547649;
+ Mon, 01 Jun 2020 22:42:27 -0700 (PDT)
+Date:   Mon,  1 Jun 2020 22:42:16 -0700
+Message-Id: <20200602054216.93122-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.rc2.251.g90737beb825-goog
+Subject: [PATCH] Documentation: kunit: Add some troubleshooting tips to the FAQ
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        alan.maguire@oracle.com, Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/28/20 7:18 PM, Yannick Cote wrote:
-> The test-klp-callbacks change implement a synchronization replacement of
-> initial code to use completion variables instead of delays. The
-> completion variable interlocks the busy module with the concurrent
-> loading of the target livepatch patches which works with the execution
-> flow instead of estimated time delays.
-> 
-> The test-klp-shadow-vars changes first refactors the code to be more of
-> a readable example as well as continuing to verify the component code.
-> The patch is broken in two to display the renaming and restructuring in
-> part 1 and the addition and change of logic in part 2. The last change
-> frees memory before bailing in case of errors.
-> 
-> Patchset to be merged via the livepatching tree is against: livepatching/for-next
-> 
-> Joe Lawrence (1):
->   selftests/livepatch: rework test-klp-callbacks to use completion
->     variables
-> 
-> Yannick Cote (3):
->   selftests/livepatch: rework test-klp-shadow-vars
->   selftests/livepatch: more verification in test-klp-shadow-vars
->   selftests/livepatch: fix mem leaks in test-klp-shadow-vars
-> 
->  lib/livepatch/test_klp_callbacks_busy.c       |  42 +++-
->  lib/livepatch/test_klp_shadow_vars.c          | 222 +++++++++---------
->  .../selftests/livepatch/test-callbacks.sh     |  29 ++-
->  .../selftests/livepatch/test-shadow-vars.sh   |  85 ++++---
->  4 files changed, 214 insertions(+), 164 deletions(-)
-> 
+Add an FAQ entry to the KUnit documentation with some tips for
+troubleshooting KUnit and kunit_tool.
 
-Series looks good to me, with one minor typo in patch 3 (s/kpatch-patch//),
-which Miroslav as already mentioned.
+These suggestions largely came from an email thread:
+https://lore.kernel.org/linux-kselftest/41db8bbd-3ba0-8bde-7352-083bf4b947ff@intel.com/T/#m23213d4e156db6d59b0b460a9014950f5ff6eb03
 
-Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ Documentation/dev-tools/kunit/faq.rst | 32 +++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
+diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
+index ea55b2467653..40109d425988 100644
+--- a/Documentation/dev-tools/kunit/faq.rst
++++ b/Documentation/dev-tools/kunit/faq.rst
+@@ -61,3 +61,35 @@ test, or an end-to-end test.
+   kernel by installing a production configuration of the kernel on production
+   hardware with a production userspace and then trying to exercise some behavior
+   that depends on interactions between the hardware, the kernel, and userspace.
++
++KUnit isn't working, what should I do?
++======================================
++
++Unfortunately, there are a number of things which can break, but here are some
++things to try.
++
++1. Try running ``./tools/testing/kunit/kunit.py run`` with the ``--raw_output``
++   parameter. This might show details or error messages hidden by the kunit_tool
++   parser.
++2. Instead of running ``kunit.py run``, try running ``kunit.py config``,
++   ``kunit.py build``, and ``kunit.py exec`` independently. This can help track
++   down where an issue is occurring. (If you think the parser is at fault, you
++   can run it manually against stdin or a file with ``kunit.py parse``.)
++3. Running the UML kernel directly can often reveal issues or error messages
++   kunit_tool ignores. This should be as simple as running ``./vmlinux`` after
++   building the UML kernel (e.g., by using ``kunit.py build``). Note that UML
++   has some unusual requirements (such as the host having a tmpfs filesystem
++   mounted), and has had issues in the past when built statically and the host
++   has KASLR enabled. (On older host kernels, you may need to run ``setarch
++   `uname -m` -R ./vmlinux`` to disable KASLR.)
++4. Make sure the kernel .config has ``CONFIG_KUNIT=y`` and at least one test
++   (e.g. ``CONFIG_KUNIT_EXAMPLE_TEST=y``). kunit_tool will keep its .config
++   around, so you can see what config was used after running ``kunit.py run``.
++   It also preserves any config changes you might make, so you can
++   enable/disable things with ``make ARCH=um menuconfig`` or similar, and then
++   re-run kunit_tool.
++5. Finally, running ``make ARCH=um defconfig`` before running ``kunit.py run``
++   may help clean up any residual config items which could be causing problems.
++
++If none of the above tricks help, you are always welcome to email any issues to
++kunit-dev@googlegroups.com.
 -- 
-Kamalesh
+2.27.0.rc2.251.g90737beb825-goog
+
