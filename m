@@ -2,114 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7331EB567
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 07:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB431EB72E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 10:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725787AbgFBFm3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Jun 2020 01:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbgFBFm2 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jun 2020 01:42:28 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6FFC061A0E
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Jun 2020 22:42:28 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id s90so9609058ybi.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jun 2020 22:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=bk5osaVJiGNv6HMFDDoa1BeWBizOC8AFnfdcBnX83HE=;
-        b=MNwj43DNaxUfUwQ0rovjHIMZ1fTtleyHscFem2vWH5sI07j7Uv41fBVGKRbTXU0oWw
-         j1F4Pwb5+/QYPcVef9jk/i96jtWKgFNe7jRGGUQ6bUOFkLugEihxCBRPmTWNOUioFbFe
-         Bd8sM/zraHTpC736DqEwu7g+TQJW61V4ToQakrrYqLPOzbH64L+bUmz6QAUwBq47rLUd
-         NhUQR19oBeZ+ny6qikeZL/jYnxwgLcDqHoIzqqLGOKfCg8+73A3BvSjxs7k/ppWJ8w/U
-         U5xSqOSp4Tef13PWaNBeZ0un/Tk32Tc5lZ3FaTkFDgU2HKq6pLF+29weT6bmc/e6XCYt
-         pofg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=bk5osaVJiGNv6HMFDDoa1BeWBizOC8AFnfdcBnX83HE=;
-        b=dETe20MA1FOJy4NYsceBX8e3zsYYlyvZFK8vfmccnnthVrFlChwEv9RR5u3yfmf+by
-         oRsZkTgloQjkiH12InZk8ypUJn+EdZNWB8DDpe9O9d9zVl/LkticA0+J/7BPCKpBuQaD
-         hTvtxlq8Wrg5YiamFKV0qNbHD9y+6dc0Nhh4MX7TPelrcEjVnhRBiMV/YTtoFLoeW3jC
-         FCpngNxLhl7ToDFvtS2gIn4S4A3wLL4/eD1iRbN4JfvqSeDWJoF2+Aszz4EbMjYCXmvH
-         3QtHil6lyfx7JDPeBGXcjp+qkar7nM5NI8W2SHa5LGrvs5YyT9SAcBMt7J9BuDZ2O2n4
-         rwSQ==
-X-Gm-Message-State: AOAM532KeHmTr8DiVp2LpghZazjI5+D+PMKiAn1Uh9j+5gNFX4gFPKkl
-        Sf4/JErXtIceT38AaMjGZuSJYl3lPbXMOw==
-X-Google-Smtp-Source: ABdhPJx9vDHTXUY+CzoW3/vdoqwLoI1FfZ6/ud5mLimm+OjfZFVFhjoAVLYr/Go8lxvT6G+52qhwMG5A9nIiHQ==
-X-Received: by 2002:a25:d295:: with SMTP id j143mr6686782ybg.65.1591076547649;
- Mon, 01 Jun 2020 22:42:27 -0700 (PDT)
-Date:   Mon,  1 Jun 2020 22:42:16 -0700
-Message-Id: <20200602054216.93122-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.rc2.251.g90737beb825-goog
-Subject: [PATCH] Documentation: kunit: Add some troubleshooting tips to the FAQ
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        alan.maguire@oracle.com, Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726260AbgFBIQ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jun 2020 04:16:58 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38818 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725900AbgFBIQ6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jun 2020 04:16:58 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id F24DDAC64;
+        Tue,  2 Jun 2020 08:16:57 +0000 (UTC)
+Date:   Tue, 2 Jun 2020 10:16:55 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Yannick Cote <ycote@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        joe.lawrence@redhat.com
+Subject: Re: [PATCH 1/4] selftests/livepatch: rework test-klp-callbacks to
+ use completion variables
+Message-ID: <20200602081654.GI27273@linux-b0ei>
+References: <20200528134849.7890-1-ycote@redhat.com>
+ <20200528134849.7890-2-ycote@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200528134849.7890-2-ycote@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add an FAQ entry to the KUnit documentation with some tips for
-troubleshooting KUnit and kunit_tool.
+On Thu 2020-05-28 09:48:46, Yannick Cote wrote:
+> From: Joe Lawrence <joe.lawrence@redhat.com>
+> 
+> The test-klp-callbacks script includes a few tests which rely on kernel
+> task timings that may not always execute as expected under system load.
+> These will generate out of sequence kernel log messages that result in
+> test failure.
+> 
+> Instead of using sleep timing windows to orchestrate the test, rework
+> the test_klp_callbacks_busy module to use completion variables.
+> 
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> Signed-off-by: Yannick Cote <ycote@redhat.com>
+> ---
+>  lib/livepatch/test_klp_callbacks_busy.c       | 42 +++++++++++++++----
+>  .../selftests/livepatch/test-callbacks.sh     | 29 +++++++------
+>  2 files changed, 47 insertions(+), 24 deletions(-)
+> 
+> diff --git a/lib/livepatch/test_klp_callbacks_busy.c b/lib/livepatch/test_klp_callbacks_busy.c
+> index 40beddf8a0e2..c3df12f47e5e 100644
+> --- a/lib/livepatch/test_klp_callbacks_busy.c
+> +++ b/lib/livepatch/test_klp_callbacks_busy.c
+> @@ -5,34 +5,58 @@
+>  
+>  #include <linux/module.h>
+>  #include <linux/kernel.h>
+> +#include <linux/sched.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/delay.h>
+>  
+> -static int sleep_secs;
+> -module_param(sleep_secs, int, 0644);
+> -MODULE_PARM_DESC(sleep_secs, "sleep_secs (default=0)");
+> +/* load/run-time control from sysfs writer  */
+> +static bool block_transition;
+> +module_param(block_transition, bool, 0644);
+> +MODULE_PARM_DESC(block_transition, "block_transition (default=false)");
+>  
+>  static void busymod_work_func(struct work_struct *work);
+> -static DECLARE_DELAYED_WORK(work, busymod_work_func);
+> +static DECLARE_WORK(work, busymod_work_func);
+> +static DECLARE_COMPLETION(busymod_work_complete);
+>  
+>  static void busymod_work_func(struct work_struct *work)
+>  {
+> -	pr_info("%s, sleeping %d seconds ...\n", __func__, sleep_secs);
+> -	msleep(sleep_secs * 1000);
+> +	bool early_complete = block_transition;
+> +
+> +	pr_info("%s enter\n", __func__);
+> +
+> +	/*
+> +	 * When blocking the livepatch transition, set completion flag
+> +	 * early so subsequent test commands see the transition.
+> +	 */
+> +	if (early_complete)
+> +		complete(&busymod_work_complete);
 
-These suggestions largely came from an email thread:
-https://lore.kernel.org/linux-kselftest/41db8bbd-3ba0-8bde-7352-083bf4b947ff@intel.com/T/#m23213d4e156db6d59b0b460a9014950f5ff6eb03
+I have to say that the code is really confusing. A completion called
+"work_complete" is completed when the work gets actually. It is
+completed later when the work is done immediately.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- Documentation/dev-tools/kunit/faq.rst | 32 +++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Do we need the completion at all? See below.
 
-diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
-index ea55b2467653..40109d425988 100644
---- a/Documentation/dev-tools/kunit/faq.rst
-+++ b/Documentation/dev-tools/kunit/faq.rst
-@@ -61,3 +61,35 @@ test, or an end-to-end test.
-   kernel by installing a production configuration of the kernel on production
-   hardware with a production userspace and then trying to exercise some behavior
-   that depends on interactions between the hardware, the kernel, and userspace.
-+
-+KUnit isn't working, what should I do?
-+======================================
-+
-+Unfortunately, there are a number of things which can break, but here are some
-+things to try.
-+
-+1. Try running ``./tools/testing/kunit/kunit.py run`` with the ``--raw_output``
-+   parameter. This might show details or error messages hidden by the kunit_tool
-+   parser.
-+2. Instead of running ``kunit.py run``, try running ``kunit.py config``,
-+   ``kunit.py build``, and ``kunit.py exec`` independently. This can help track
-+   down where an issue is occurring. (If you think the parser is at fault, you
-+   can run it manually against stdin or a file with ``kunit.py parse``.)
-+3. Running the UML kernel directly can often reveal issues or error messages
-+   kunit_tool ignores. This should be as simple as running ``./vmlinux`` after
-+   building the UML kernel (e.g., by using ``kunit.py build``). Note that UML
-+   has some unusual requirements (such as the host having a tmpfs filesystem
-+   mounted), and has had issues in the past when built statically and the host
-+   has KASLR enabled. (On older host kernels, you may need to run ``setarch
-+   `uname -m` -R ./vmlinux`` to disable KASLR.)
-+4. Make sure the kernel .config has ``CONFIG_KUNIT=y`` and at least one test
-+   (e.g. ``CONFIG_KUNIT_EXAMPLE_TEST=y``). kunit_tool will keep its .config
-+   around, so you can see what config was used after running ``kunit.py run``.
-+   It also preserves any config changes you might make, so you can
-+   enable/disable things with ``make ARCH=um menuconfig`` or similar, and then
-+   re-run kunit_tool.
-+5. Finally, running ``make ARCH=um defconfig`` before running ``kunit.py run``
-+   may help clean up any residual config items which could be causing problems.
-+
-+If none of the above tricks help, you are always welcome to email any issues to
-+kunit-dev@googlegroups.com.
--- 
-2.27.0.rc2.251.g90737beb825-goog
+> +
+> +	while (block_transition)
 
+The compiler might optimize the code and avoid the re-reads. Please, use:
+
+	/* Re-read variable in each cycle */
+	while (READ_ONCE(block_transition))
+
+
+> +		msleep(1000);
+
+Nit: This is still a busy wait even though there is a big
+delay between waits. The right solution would be using wait_event().
+But feel free to keep msleep(). It is good enough for selftests.
+
+> +
+>  	pr_info("%s exit\n", __func__);
+> +
+> +	/*
+> +	 * In non-blocking case, wait until we're done to complete to
+> +	 * ensure kernel log ordering
+> +	 */
+> +	if (!early_complete)
+> +		complete(&busymod_work_complete);
+>  }
+>  
+>  static int test_klp_callbacks_busy_init(void)
+>  {
+>  	pr_info("%s\n", __func__);
+> -	schedule_delayed_work(&work,
+> -		msecs_to_jiffies(1000 * 0));
+> +	schedule_work(&work);
+> +	wait_for_completion(&busymod_work_complete);
+
+IMHO, the completion is not needed when using:
+
+	schedule_work(&work);
+	/*
+	 * Print all messages from the work before returning from init().
+	 * It helps to serialize messages from the loaded modules.
+	 */
+	if (!block_transition)
+		flush_work(&work);
+
+> +
+>  	return 0;
+>  }
+>  
+>  static void test_klp_callbacks_busy_exit(void)
+>  {
+> -	cancel_delayed_work_sync(&work);
+> +	block_transition = false;
+
+The compiler could move this assignment after the following
+call. Please, use:
+
+	/* Make sure that the variable is set before flushing work. */
+	WRITE_ONCE(block_transition, false);
+
+
+> +	cancel_work_sync(&work);
+
+The work is not longer canceled. flush_work() better fits here.
+Also I would do this only when the transition is blocked:
+
+	if (block_transition) {
+		/* Make sure that the variable is set before flushing work. */
+		WRITE_ONCE(block_transition, false);
+		flush_work(&work);
+	}
+
+
+Otherwise this is a nice improvement.
+
+Best Regards,
+Petr
