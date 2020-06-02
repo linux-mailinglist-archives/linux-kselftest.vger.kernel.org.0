@@ -2,84 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343201EB277
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 02:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D17A1EB4D5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 07:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726007AbgFBACE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Jun 2020 20:02:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44058 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgFBACE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Jun 2020 20:02:04 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14B022072E;
-        Tue,  2 Jun 2020 00:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591056123;
-        bh=m/A9exI6hCT7HrMZiS79aYvM5xMnJxLqw67x4zmRnak=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QlUK8Fpd9R3dGozfIUXBzSEEM3d2dUORNDsOcLFfBUf+gGIZu8OZrxER7Vs+9EGdB
-         G6seZZahYdzO4NZK00Vf/UdSt+X2g+U6zoPfgJ2dfDo97WAlSm5jbctGSSVPrPyfns
-         pDHC0kJtbuKW40KdKbaJkoNzLjpWhxivIr8ss1/k=
-Date:   Tue, 2 Jun 2020 09:01:57 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     "Zanussi, Tom" <tom.zanussi@linux.intel.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 4/7] selftests/ftrace: Convert required interface checks
- into requires list
-Message-Id: <20200602090157.45cf58947267cec561da67ea@kernel.org>
-In-Reply-To: <e23a0d5c-5e7e-13db-e9c1-2a093d3327be@linux.intel.com>
-References: <159102252279.31199.12855129586058455119.stgit@devnote2>
-        <159102256204.31199.842249429317038334.stgit@devnote2>
-        <e23a0d5c-5e7e-13db-e9c1-2a093d3327be@linux.intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726480AbgFBFCE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jun 2020 01:02:04 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2814 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725787AbgFBFCC (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jun 2020 01:02:02 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0524XkCG114231;
+        Tue, 2 Jun 2020 01:02:02 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31bm07mjrn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Jun 2020 01:02:01 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0524u4xN006388;
+        Tue, 2 Jun 2020 01:02:01 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31bm07mjqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Jun 2020 01:02:01 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0524xnkB030256;
+        Tue, 2 Jun 2020 05:01:58 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 31bf47w9wv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Jun 2020 05:01:58 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05251uck8716598
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 Jun 2020 05:01:56 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ADFB84C044;
+        Tue,  2 Jun 2020 05:01:56 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A72BE4C05A;
+        Tue,  2 Jun 2020 05:01:55 +0000 (GMT)
+Received: from JAVRIS.in.ibm.com (unknown [9.199.37.29])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue,  2 Jun 2020 05:01:55 +0000 (GMT)
+Subject: Re: [PATCH 0/4] selftests/livepatch: rework of
+ test-klp-{callbacks,shadow_vars}
+To:     Yannick Cote <ycote@redhat.com>, live-patching@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com
+References: <20200528134849.7890-1-ycote@redhat.com>
+From:   Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Message-ID: <5ca6dcae-c686-6f62-2927-afeba97fbe2a@linux.vnet.ibm.com>
+Date:   Tue, 2 Jun 2020 10:31:54 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200528134849.7890-1-ycote@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-02_04:2020-06-01,2020-06-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ cotscore=-2147483648 priorityscore=1501 clxscore=1011 mlxscore=0
+ suspectscore=0 spamscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006020025
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 1 Jun 2020 14:54:12 -0500
-"Zanussi, Tom" <tom.zanussi@linux.intel.com> wrote:
-
-> Hi Masami,
+On 5/28/20 7:18 PM, Yannick Cote wrote:
+> The test-klp-callbacks change implement a synchronization replacement of
+> initial code to use completion variables instead of delays. The
+> completion variable interlocks the busy module with the concurrent
+> loading of the target livepatch patches which works with the execution
+> flow instead of estimated time delays.
 > 
-> On 6/1/2020 9:42 AM, Masami Hiramatsu wrote:
-> > Convert the required tracefs interface checking code with
-> > requires: list.
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org
-> [ SNIP ]
+> The test-klp-shadow-vars changes first refactors the code to be more of
+> a readable example as well as continuing to verify the component code.
+> The patch is broken in two to display the renaming and restructuring in
+> part 1 and the addition and change of logic in part 2. The last change
+> frees memory before bailing in case of errors.
 > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-> > index c80007aa9f86..59f876c80d45 100644
-> > --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-> > +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-> > @@ -1,17 +1,13 @@
-> >   #!/bin/sh
-> >   # SPDX-License-Identifier: GPL-2.0
-> >   # description: event trigger - test inter-event histogram trigger onchange action
-> > +# requires: synthetic_events
+> Patchset to be merged via the livepatching tree is against: livepatching/for-next
 > 
-> I think this should be 'set_event'
+> Joe Lawrence (1):
+>   selftests/livepatch: rework test-klp-callbacks to use completion
+>     variables
+> 
+> Yannick Cote (3):
+>   selftests/livepatch: rework test-klp-shadow-vars
+>   selftests/livepatch: more verification in test-klp-shadow-vars
+>   selftests/livepatch: fix mem leaks in test-klp-shadow-vars
+> 
+>  lib/livepatch/test_klp_callbacks_busy.c       |  42 +++-
+>  lib/livepatch/test_klp_shadow_vars.c          | 222 +++++++++---------
+>  .../selftests/livepatch/test-callbacks.sh     |  29 ++-
+>  .../selftests/livepatch/test-shadow-vars.sh   |  85 ++++---
+>  4 files changed, 214 insertions(+), 164 deletions(-)
 > 
 
-Thank you for point it out. I found another missed requirement.
-I'll fix it.
+Series looks good to me, with one minor typo in patch 3 (s/kpatch-patch//),
+which Miroslav as already mentioned.
 
-Thank you,
-
-> Thanks,
-> 
-> Tom
-
+Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Kamalesh
