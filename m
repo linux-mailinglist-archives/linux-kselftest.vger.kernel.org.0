@@ -2,144 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17CE1EC008
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 18:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EF21EC07C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jun 2020 18:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbgFBQce (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Jun 2020 12:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726140AbgFBQcd (ORCPT
+        id S1726037AbgFBQzh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jun 2020 12:55:37 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:52830 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725969AbgFBQzh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jun 2020 12:32:33 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F119C08C5C0
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Jun 2020 09:32:33 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id x202so12090968oix.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jun 2020 09:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OIPqrxkSqnuynSyRY7vRQBZYHR+WMgRkEpmVgbjrHTc=;
-        b=HG6Wxw5rrMdJqd7hGhdtskkbbmAPB2XQ3eAV+2Qcl4rpBYsCOjygxljQAyM2Jy1kkk
-         XFsQwe32kPYBzlFBb+/7mRLKidJ8bE8akWMH+cBzQ8TYU6c/cKGrZwdDuhsQkBuWfPbB
-         rvCONwG6lFEiU8Bpx5royuU3hazmbnnAxlavo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OIPqrxkSqnuynSyRY7vRQBZYHR+WMgRkEpmVgbjrHTc=;
-        b=fyp7h6Ltfi5Of/YoqaL0vlixpELS1Qb/7MXX7/aesHwcEuFQ+9+HKgwGxl2Rdhae6x
-         3KunnS+8l9dZ51rdnKPaobfKHVVW1i0tjxwtlhCynsi3kyIUYVX0eEchdSs92ERfVJ1U
-         koAwKBKMCKL87vtrMVS0F5JuMfHTfODBozh+/QabJ3N2p/l8A5TDn1Wq/1gIx5cXVNpC
-         ERqmRQ1tpBaibFKPtAcZs3KMZVXdRd+OlM7YUhqPTcy1yPLxMAQdEQR4NB2BJnXC+VCL
-         hRN/MuDskmE+UIK5LpUQEJ2rBtyKEh0uj8q8PcpnsphVpSuNv6ZWVw9YVzHtMe3NFoiD
-         R3ZA==
-X-Gm-Message-State: AOAM5310VxEKm2TEvZV2SkC4JMtwO/HgQplsK1n3UaB/LULs/riLmN6E
-        /kfO/DYrvG1XU5tYN9KxZuGHYQ==
-X-Google-Smtp-Source: ABdhPJyuZvnoCIiugarIgnNCPIIZA/ndxaeoH02CojLkcB8mkMHhNJzZuOixiJQetxBh///FWvlBuA==
-X-Received: by 2002:aca:4c15:: with SMTP id z21mr3660499oia.85.1591115552974;
-        Tue, 02 Jun 2020 09:32:32 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 33sm751060ott.0.2020.06.02.09.32.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2020 09:32:32 -0700 (PDT)
-Subject: Re: [PATCH 0/4] selftests, sysctl, lib: Fix prime_numbers and sysctl
- test to run
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     "Luis R . Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <159067751438.229397.6746886115540895104.stgit@devnote2>
- <218210da-7d06-5b6e-13af-13a07e8e7064@linuxfoundation.org>
- <20200529233942.a47bbd8e918175e9af3fefab@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <834784a5-835f-d42d-9cdb-2dbf3139f0b5@linuxfoundation.org>
-Date:   Tue, 2 Jun 2020 10:32:31 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 2 Jun 2020 12:55:37 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052Gq51C058718;
+        Tue, 2 Jun 2020 16:55:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=TgMIK/Li4+PJax3En9DWpNj9nLL9DF0CA9glXTSvvvI=;
+ b=AZIrf0AQfHEfr1bKCmy8cfEsfA0Gq/tqVTMmNPNsASwlg1ITxEcBrf5+WX8ebSeyB+Vk
+ LVkLwRMsB5EhXZwND6Wbrgt2STEor2DAohMnbp2W/AdeuD93wUozZF8JuSAdhx1pXqTN
+ fgBKzD5smbLf5BKJdWfDXoiPtxm0L0Vm2sVKgxPSEnre2L/IJyVeW4Tcmo6QnwX71f1z
+ ELEWygDQB78eiX6DGLBSA2zypg/cijlWz4RgDklwxxVV02fmaeVtAvxqj+iBzZIrhwpN
+ WMZ/dUqwdiTFGtAccByXHHR49v8xhFtABWCdCPMKxP3bBB0kfgxDGc+EHGgejHMlFJ1z 8A== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 31dkruj55h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 02 Jun 2020 16:55:32 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052GrFZc129851;
+        Tue, 2 Jun 2020 16:53:32 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 31c1dxk3qs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 Jun 2020 16:53:32 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 052GrVDF004497;
+        Tue, 2 Jun 2020 16:53:31 GMT
+Received: from dhcp-10-175-162-197.vpn.oracle.com (/10.175.162.197)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 02 Jun 2020 09:53:30 -0700
+Date:   Tue, 2 Jun 2020 17:53:27 +0100 (BST)
+From:   Alan Maguire <alan.maguire@oracle.com>
+X-X-Sender: alan@localhost
+To:     David Gow <davidgow@google.com>
+cc:     Brendan Higgins <brendanhiggins@google.com>,
+        alan.maguire@oracle.com, Jonathan Corbet <corbet@lwn.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: kunit: Add some troubleshooting tips to
+ the FAQ
+In-Reply-To: <20200602054216.93122-1-davidgow@google.com>
+Message-ID: <alpine.LRH.2.21.2006021743430.17227@localhost>
+References: <20200602054216.93122-1-davidgow@google.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20200529233942.a47bbd8e918175e9af3fefab@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
+ spamscore=0 bulkscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006020121
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 priorityscore=1501
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ adultscore=0 mlxlogscore=999 cotscore=-2147483648 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006020121
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/29/20 8:39 AM, Masami Hiramatsu wrote:
-> On Fri, 29 May 2020 08:14:39 -0600
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
-> 
->> On 5/28/20 8:51 AM, Masami Hiramatsu wrote:
->>> Hi,
->>>
->>> Recently, I found some tests were always skipped.
->>> Here is a series of patches to fix those issues.
->>>
->>> The prime_numbers test is skipped in some cases because
->>> prime_numbers.ko is not always compiled.
->>> Since the CONFIG_PRIME_NUMBERS is not independently
->>> configurable item (it has no title and help), it is enabled
->>> only if other configs (DRM_DEBUG_SELFTEST etc.) select it.
->>>
->>> To fix this issue, I added a title and help for
->>> CONFIG_PRIME_NUMBERS.
->>>
->>> The sysctl test is skipped because
->>>    - selftests/sysctl/config requires CONFIG_TEST_SYSCTL=y. But
->>>      since lib/test_sysctl.c doesn't use module_init(), the
->>>      test_syscall is not listed under /sys/module/ and the
->>>      test script gives up.
->>>    - Even if we make CONFIG_TEST_SYSCTL=m, the test script checks
->>>      /sys/modules/test_sysctl before loading module and gives up.
->>>    - Ayway, since the test module introduces useless sysctl
->>>      interface to the kernel, it would better be a module.
->>>
->>> This series includes fixes for above 3 points.
->>>    - Fix lib/test_sysctl.c to use module_init()
->>>    - Fix tools/testing/selftests/sysctl/sysctl.sh to try to load
->>>      test module if it is not loaded (nor embedded).
->>>    - Fix tools/testing/selftests/sysctl/config to require
->>>      CONFIG_TEST_SYSCTL=m, not y.
->>>
->>> Thank you,
->>>
->>> ---
->>>
->>> Masami Hiramatsu (4):
->>>         lib: Make prime number generator independently selectable
->>>         lib: Make test_sysctl initialized as module
->>>         selftests/sysctl: Fix to load test_sysctl module
->>>         selftests/sysctl: Make sysctl test driver as a module
->>>
->>>
->>>    lib/math/Kconfig                         |    7 ++++++-
->>>    lib/test_sysctl.c                        |    2 +-
->>>    tools/testing/selftests/sysctl/config    |    2 +-
->>>    tools/testing/selftests/sysctl/sysctl.sh |   13 ++-----------
->>>    4 files changed, 10 insertions(+), 14 deletions(-)
->>>
->>> --
->>> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
->>>
->>
->> Thanks Masami. I see Kees reviewing patches. I will wait for Luis to
->> weigh in on patch 2 before pulling this series in.
-> 
-> OK, Thanks Shuah!
-> 
-> 
+On Mon, 1 Jun 2020, David Gow wrote:
 
-Applied to linux-kselftest next for Linux 5.8-rc1.
+> Add an FAQ entry to the KUnit documentation with some tips for
+> troubleshooting KUnit and kunit_tool.
+> 
+> These suggestions largely came from an email thread:
+> https://lore.kernel.org/linux-kselftest/41db8bbd-3ba0-8bde-7352-083bf4b947ff@intel.com/T/#m23213d4e156db6d59b0b460a9014950f5ff6eb03
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>  Documentation/dev-tools/kunit/faq.rst | 32 +++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+> 
+> diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
+> index ea55b2467653..40109d425988 100644
+> --- a/Documentation/dev-tools/kunit/faq.rst
+> +++ b/Documentation/dev-tools/kunit/faq.rst
+> @@ -61,3 +61,35 @@ test, or an end-to-end test.
+>    kernel by installing a production configuration of the kernel on production
+>    hardware with a production userspace and then trying to exercise some behavior
+>    that depends on interactions between the hardware, the kernel, and userspace.
+> +
+> +KUnit isn't working, what should I do?
+> +======================================
+> +
+> +Unfortunately, there are a number of things which can break, but here are some
+> +things to try.
+> +
+> +1. Try running ``./tools/testing/kunit/kunit.py run`` with the ``--raw_output``
+> +   parameter. This might show details or error messages hidden by the kunit_tool
+> +   parser.
+> +2. Instead of running ``kunit.py run``, try running ``kunit.py config``,
+> +   ``kunit.py build``, and ``kunit.py exec`` independently. This can help track
+> +   down where an issue is occurring. (If you think the parser is at fault, you
+> +   can run it manually against stdin or a file with ``kunit.py parse``.)
+> +3. Running the UML kernel directly can often reveal issues or error messages
+> +   kunit_tool ignores. This should be as simple as running ``./vmlinux`` after
+> +   building the UML kernel (e.g., by using ``kunit.py build``). Note that UML
+> +   has some unusual requirements (such as the host having a tmpfs filesystem
+> +   mounted), and has had issues in the past when built statically and the host
+> +   has KASLR enabled. (On older host kernels, you may need to run ``setarch
+> +   `uname -m` -R ./vmlinux`` to disable KASLR.)
+> +4. Make sure the kernel .config has ``CONFIG_KUNIT=y`` and at least one test
+> +   (e.g. ``CONFIG_KUNIT_EXAMPLE_TEST=y``). kunit_tool will keep its .config
+> +   around, so you can see what config was used after running ``kunit.py run``.
+> +   It also preserves any config changes you might make, so you can
+> +   enable/disable things with ``make ARCH=um menuconfig`` or similar, and then
+> +   re-run kunit_tool.
+> +5. Finally, running ``make ARCH=um defconfig`` before running ``kunit.py run``
+> +   may help clean up any residual config items which could be causing problems.
+> +
 
-thanks,
--- Shuah
+Looks great! Could we add something like:
+
+6. Try running kunit standalone (without UML).  KUnit and associated 
+tests can be built into a standard kernel or built as a module; doing
+so allows us to verify test behaviour independent of UML so can be
+useful to do if running under UML is failing.  When tests are built-in
+they will execute on boot, and modules will automatically execute
+associated tests when loaded.  Test results can be collected from
+/sys/kernel/debug/kunit/<test-suite>/results. For more details see
+"KUnit on non-UML architectures" in :doc:`usage`. 
+
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
