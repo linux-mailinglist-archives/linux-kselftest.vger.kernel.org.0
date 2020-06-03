@@ -2,14 +2,14 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3561ED60D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jun 2020 20:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7427E1ED60E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jun 2020 20:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbgFCSVm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Jun 2020 14:21:42 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:28364 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726087AbgFCSVm (ORCPT
+        id S1726170AbgFCSV5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Jun 2020 14:21:57 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:29847 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726096AbgFCSVm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 3 Jun 2020 14:21:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
@@ -18,30 +18,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bAac06P3giR5I4Nc3J9vi1Ip90+x7WJLQsxk772I3oE=;
-        b=eSj3sSutCTgPIZrPN+bvJkTApoqEaTuNKjMBPwh3eXuc8hx84qJ7OetzMWfcIpZvnlduST
-        1CsXjblQrnCoHWsMqDu1GVey+9lqmvij5pr5WXpxOMbhNrEgXenu+Nvfjx5YiOBecT5HOU
-        EWNx3Z+6Dy2oPcT+J30mEb3DWsVtraw=
+        bh=rAog9oXLl/KPRUT67WnomCQCFdAZfZBa0BLOwUhaVok=;
+        b=L2U1Piwy/mz0uEunuiY49FmOFJ7bn7IczmcK62Zm2FQFxqS3EXAEoMsSzciBMq5dV6JN84
+        atVEw8iyc6vgpl358xC7K8ywAHSkqjLU0ED42iwifKmEuuNSugFVu+D4nE/p2Vg95rEACi
+        tgw2z4lYQR1tlXkQyJ0+h8Z/h/lmX+w=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-67-0WpOuRSGP_6tlyvkYlfIIg-1; Wed, 03 Jun 2020 14:21:35 -0400
-X-MC-Unique: 0WpOuRSGP_6tlyvkYlfIIg-1
+ us-mta-379-vX4zcfqUObyawnGnGgs7yg-1; Wed, 03 Jun 2020 14:21:37 -0400
+X-MC-Unique: vX4zcfqUObyawnGnGgs7yg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D1A71800D42;
-        Wed,  3 Jun 2020 18:21:34 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D92961005510;
+        Wed,  3 Jun 2020 18:21:35 +0000 (UTC)
 Received: from dm.redhat.com (unknown [10.10.67.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 938FD5D9CD;
-        Wed,  3 Jun 2020 18:21:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D10E95D9CD;
+        Wed,  3 Jun 2020 18:21:34 +0000 (UTC)
 From:   Yannick Cote <ycote@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
         linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
         kamalesh@linux.vnet.ibm.com
-Subject: [PATCH v2 1/4] selftests/livepatch: simplify test-klp-callbacks busy target tests
-Date:   Wed,  3 Jun 2020 14:20:55 -0400
-Message-Id: <20200603182058.109470-2-ycote@redhat.com>
+Subject: [PATCH v2 2/4] selftests/livepatch: rework test-klp-shadow-vars
+Date:   Wed,  3 Jun 2020 14:20:56 -0400
+Message-Id: <20200603182058.109470-3-ycote@redhat.com>
 In-Reply-To: <20200603182058.109470-1-ycote@redhat.com>
 References: <20200603182058.109470-1-ycote@redhat.com>
 MIME-Version: 1.0
@@ -52,171 +52,231 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Joe Lawrence <joe.lawrence@redhat.com>
+The initial idea was to make a change to please cppcheck and remove void
+pointer arithmetics found a few times:
 
-The test-klp-callbacks script includes a few tests which rely on kernel
-task timings that may not always execute as expected under system load.
-These may generate out of sequence kernel log messages that result in
-test failure.
+	portability: 'obj' is of type 'void *'. When using void pointers
+	             in calculations, the behaviour is undefined.
+		     [arithOperationsOnVoidPointer]
 
-Instead of using sleep timing windows to orchestrate these tests, add a
-block_transition module parameter to communicate the test purpose and
-utilize flush_queue() to serialize the test module's task output.
+The rest of the changes are to help make the test read as an example
+while continuing to verify the shadow variable code. The logic of the
+test is unchanged but restructured to use descriptive names.
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Yannick Cote <ycote@redhat.com>
 ---
- lib/livepatch/test_klp_callbacks_busy.c       | 37 ++++++++++++++-----
- .../selftests/livepatch/test-callbacks.sh     | 29 +++++++--------
- 2 files changed, 42 insertions(+), 24 deletions(-)
+ lib/livepatch/test_klp_shadow_vars.c | 101 +++++++++++++++------------
+ 1 file changed, 57 insertions(+), 44 deletions(-)
 
-diff --git a/lib/livepatch/test_klp_callbacks_busy.c b/lib/livepatch/test_klp_callbacks_busy.c
-index 40beddf8a0e2..7ac845f65be5 100644
---- a/lib/livepatch/test_klp_callbacks_busy.c
-+++ b/lib/livepatch/test_klp_callbacks_busy.c
-@@ -5,34 +5,53 @@
- 
- #include <linux/module.h>
- #include <linux/kernel.h>
-+#include <linux/sched.h>
- #include <linux/workqueue.h>
- #include <linux/delay.h>
- 
--static int sleep_secs;
--module_param(sleep_secs, int, 0644);
--MODULE_PARM_DESC(sleep_secs, "sleep_secs (default=0)");
-+/* load/run-time control from sysfs writer  */
-+static bool block_transition;
-+module_param(block_transition, bool, 0644);
-+MODULE_PARM_DESC(block_transition, "block_transition (default=false)");
- 
- static void busymod_work_func(struct work_struct *work);
--static DECLARE_DELAYED_WORK(work, busymod_work_func);
-+static DECLARE_WORK(work, busymod_work_func);
- 
- static void busymod_work_func(struct work_struct *work)
+diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
+index f0b5a1d24e55..ec2635cff974 100644
+--- a/lib/livepatch/test_klp_shadow_vars.c
++++ b/lib/livepatch/test_klp_shadow_vars.c
+@@ -109,8 +109,7 @@ static void shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
+ static void shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
  {
--	pr_info("%s, sleeping %d seconds ...\n", __func__, sleep_secs);
--	msleep(sleep_secs * 1000);
-+	pr_info("%s enter\n", __func__);
-+
-+	while (READ_ONCE(block_transition)) {
-+		/*
-+		 * Busy-wait until the sysfs writer has acknowledged a
-+		 * blocked transition and clears the flag.
-+		 */
-+		msleep(20);
-+	}
-+
- 	pr_info("%s exit\n", __func__);
+ 	klp_shadow_free_all(id, dtor);
+-	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n",
+-		__func__, id, ptr_id(dtor));
++	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n", __func__, id, ptr_id(dtor));
  }
  
- static int test_klp_callbacks_busy_init(void)
- {
- 	pr_info("%s\n", __func__);
--	schedule_delayed_work(&work,
--		msecs_to_jiffies(1000 * 0));
-+	schedule_work(&work);
-+
-+	if (!block_transition) {
-+		/*
-+		 * Serialize output: print all messages from the work
-+		 * function before returning from init().
-+		 */
-+		flush_work(&work);
-+	}
-+
+ 
+@@ -124,8 +123,7 @@ static int shadow_ctor(void *obj, void *shadow_data, void *ctor_data)
+ 		return -EINVAL;
+ 
+ 	*sv = *var;
+-	pr_info("%s: PTR%d -> PTR%d\n",
+-		__func__, ptr_id(sv), ptr_id(*var));
++	pr_info("%s: PTR%d -> PTR%d\n", __func__, ptr_id(sv), ptr_id(*var));
+ 
  	return 0;
  }
- 
- static void test_klp_callbacks_busy_exit(void)
- {
--	cancel_delayed_work_sync(&work);
-+	WRITE_ONCE(block_transition, false);
-+	flush_work(&work);
- 	pr_info("%s\n", __func__);
+@@ -138,49 +136,63 @@ static void shadow_dtor(void *obj, void *shadow_data)
+ 		__func__, ptr_id(obj), ptr_id(sv));
  }
  
-diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-index a35289b13c9c..32b57ba07f4f 100755
---- a/tools/testing/selftests/livepatch/test-callbacks.sh
-+++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-@@ -356,9 +356,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- echo -n "TEST: multiple target modules ... "
- dmesg -C
+-static int test_klp_shadow_vars_init(void)
+-{
+-	void *obj			= THIS_MODULE;
+-	int id			= 0x1234;
+-	gfp_t gfp_flags		= GFP_KERNEL;
++/* dynamically created obj fields have the following shadow var id values */
++#define SV_ID1 0x1234
++#define SV_ID2 0x1235
  
--load_mod $MOD_TARGET_BUSY sleep_secs=0
--# give $MOD_TARGET_BUSY::busymod_work_func() a chance to run
--sleep 5
-+load_mod $MOD_TARGET_BUSY block_transition=N
- load_lp $MOD_LIVEPATCH
- load_mod $MOD_TARGET
- unload_mod $MOD_TARGET
-@@ -366,9 +364,9 @@ disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
- unload_mod $MOD_TARGET_BUSY
+-	int var1, var2, var3, var4;
+-	int *pv1, *pv2, *pv3, *pv4;
+-	int **sv1, **sv2, **sv3, **sv4;
++/*
++ * The main test case adds/removes new fields (shadow var) to each of these
++ * test structure instances. The last group of fields in the struct represent
++ * the idea that shadow variables may be added and removed to and from the
++ * struct during execution.
++ */
++struct test_object {
++	 /* add anything here below and avoid to define an empty struct */
++	struct shadow_ptr sp;
  
--check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=0
-+check_result "% modprobe $MOD_TARGET_BUSY block_transition=N
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
--$MOD_TARGET_BUSY: busymod_work_func, sleeping 0 seconds ...
-+$MOD_TARGET_BUSY: busymod_work_func enter
- $MOD_TARGET_BUSY: busymod_work_func exit
- % modprobe $MOD_LIVEPATCH
- livepatch: enabling patch '$MOD_LIVEPATCH'
-@@ -404,11 +402,10 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
+-	int **sv;
++	/* these represent shadow vars added and removed with SV_ID{1,2} */
++	/* char nfield1; */
++	/* int  nfield2; */
++};
  
- 
--
- # TEST: busy target module
- #
- # A similar test as the previous one, but force the "busy" kernel module
--# to do longer work.
-+# to block the livepatch transition.
- #
- # The livepatching core will refuse to patch a task that is currently
- # executing a to-be-patched function -- the consistency model stalls the
-@@ -417,8 +414,7 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- # function for a long time.  Meanwhile, load and unload other target
- # kernel modules while the livepatch transition is in progress.
- #
--# - Load the "busy" kernel module, this time make it do 10 seconds worth
--#   of work.
-+# - Load the "busy" kernel module, this time make its work function loop
- #
- # - Meanwhile, the livepatch is loaded.  Notice that the patch
- #   transition does not complete as the targeted "busy" module is
-@@ -438,20 +434,23 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- echo -n "TEST: busy target module ... "
- dmesg -C
- 
--load_mod $MOD_TARGET_BUSY sleep_secs=10
-+load_mod $MOD_TARGET_BUSY block_transition=Y
- load_lp_nowait $MOD_LIVEPATCH
--# Don't wait for transition, load $MOD_TARGET while the transition
--# is still stalled in $MOD_TARGET_BUSY::busymod_work_func()
--sleep 5
+-	pv1 = &var1;
+-	pv2 = &var2;
+-	pv3 = &var3;
+-	pv4 = &var4;
++static int test_klp_shadow_vars_init(void)
++{
++	struct test_object obj1, obj2, obj3;
++	char nfield1, nfield2, *pnfield1, *pnfield2, **sv1, **sv2;
++	int  nfield3, nfield4, *pnfield3, *pnfield4, **sv3, **sv4;
++	void **sv;
 +
-+# Wait until the livepatch reports in-transition state, i.e. that it's
-+# stalled on $MOD_TARGET_BUSY::busymod_work_func()
-+loop_until 'grep -q '^1$' /sys/kernel/livepatch/$MOD_LIVEPATCH/transition' ||
-+	die "failed to stall transition"
-+
- load_mod $MOD_TARGET
- unload_mod $MOD_TARGET
- disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
- unload_mod $MOD_TARGET_BUSY
++	pnfield1 = &nfield1;
++	pnfield2 = &nfield2;
++	pnfield3 = &nfield3;
++	pnfield4 = &nfield4;
  
--check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=10
-+check_result "% modprobe $MOD_TARGET_BUSY block_transition=Y
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
--$MOD_TARGET_BUSY: busymod_work_func, sleeping 10 seconds ...
-+$MOD_TARGET_BUSY: busymod_work_func enter
- % modprobe $MOD_LIVEPATCH
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ 	ptr_id(NULL);
+-	ptr_id(pv1);
+-	ptr_id(pv2);
+-	ptr_id(pv3);
+-	ptr_id(pv4);
++	ptr_id(pnfield1);
++	ptr_id(pnfield2);
++	ptr_id(pnfield3);
++	ptr_id(pnfield4);
+ 
+ 	/*
+ 	 * With an empty shadow variable hash table, expect not to find
+ 	 * any matches.
+ 	 */
+-	sv = shadow_get(obj, id);
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+ 	/*
+ 	 * Allocate a few shadow variables with different <obj> and <id>.
+ 	 */
+-	sv1 = shadow_alloc(obj, id, sizeof(pv1), gfp_flags, shadow_ctor, &pv1);
++	sv1 = shadow_alloc(&obj1, SV_ID1, sizeof(pnfield1), GFP_KERNEL, shadow_ctor, &pnfield1);
+ 	if (!sv1)
+ 		return -ENOMEM;
+ 
+-	sv2 = shadow_alloc(obj + 1, id, sizeof(pv2), gfp_flags, shadow_ctor, &pv2);
++	sv2 = shadow_alloc(&obj2, SV_ID1, sizeof(pnfield2), GFP_KERNEL, shadow_ctor, &pnfield2);
+ 	if (!sv2)
+ 		return -ENOMEM;
+ 
+-	sv3 = shadow_alloc(obj, id + 1, sizeof(pv3), gfp_flags, shadow_ctor, &pv3);
++	sv3 = shadow_alloc(&obj1, SV_ID2, sizeof(pnfield3), GFP_KERNEL, shadow_ctor, &pnfield3);
+ 	if (!sv3)
+ 		return -ENOMEM;
+ 
+@@ -188,23 +200,24 @@ static int test_klp_shadow_vars_init(void)
+ 	 * Verify we can find our new shadow variables and that they point
+ 	 * to expected data.
+ 	 */
+-	sv = shadow_get(obj, id);
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv1 && *sv1 == pv1)
++	if ((char **)sv == sv1 && *sv1 == pnfield1)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv1), ptr_id(*sv1));
+ 
+-	sv = shadow_get(obj + 1, id);
++	sv = shadow_get(&obj2, SV_ID1);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv2 && *sv2 == pv2)
++	if ((char **)sv == sv2 && *sv2 == pnfield2)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv2), ptr_id(*sv2));
+-	sv = shadow_get(obj, id + 1);
++
++	sv = shadow_get(&obj1, SV_ID2);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv3 && *sv3 == pv3)
++	if ((int **)sv == sv3 && *sv3 == pnfield3)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv3), ptr_id(*sv3));
+ 
+@@ -212,14 +225,14 @@ static int test_klp_shadow_vars_init(void)
+ 	 * Allocate or get a few more, this time with the same <obj>, <id>.
+ 	 * The second invocation should return the same shadow var.
+ 	 */
+-	sv4 = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
++	sv4 = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
+ 	if (!sv4)
+ 		return -ENOMEM;
+ 
+-	sv = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
++	sv = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv4 && *sv4 == pv4)
++	if ((int **)sv == sv4 && *sv4 == pnfield4)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv4), ptr_id(*sv4));
+ 
+@@ -227,36 +240,36 @@ static int test_klp_shadow_vars_init(void)
+ 	 * Free the <obj=*, id> shadow variables and check that we can no
+ 	 * longer find them.
+ 	 */
+-	shadow_free(obj, id, shadow_dtor);			/* sv1 */
+-	sv = shadow_get(obj, id);
++	shadow_free(&obj1, SV_ID1, shadow_dtor);		/* sv1 */
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+-	shadow_free(obj + 1, id, shadow_dtor);			/* sv2 */
+-	sv = shadow_get(obj + 1, id);
++	shadow_free(&obj2, SV_ID1, shadow_dtor);		/* sv2 */
++	sv = shadow_get(&obj2, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+-	shadow_free(obj + 2, id, shadow_dtor);			/* sv4 */
+-	sv = shadow_get(obj + 2, id);
++	shadow_free(&obj3, SV_ID1, shadow_dtor);		/* sv4 */
++	sv = shadow_get(&obj3, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+ 	/*
+ 	 * We should still find an <id+1> variable.
+ 	 */
+-	sv = shadow_get(obj, id + 1);
++	sv = shadow_get(&obj1, SV_ID2);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv3 && *sv3 == pv3)
++	if ((int **)sv == sv3 && *sv3 == pnfield3)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv3), ptr_id(*sv3));
+ 
+ 	/*
+ 	 * Free all the <id+1> variables, too.
+ 	 */
+-	shadow_free_all(id + 1, shadow_dtor);			/* sv3 */
+-	sv = shadow_get(obj, id);
++	shadow_free_all(SV_ID2, shadow_dtor);			/* sv3 */
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  shadow_get() got expected NULL result\n");
+ 
 -- 
 2.25.4
 
