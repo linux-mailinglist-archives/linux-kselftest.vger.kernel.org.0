@@ -2,75 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCA11ED220
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jun 2020 16:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4741ED602
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jun 2020 20:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725937AbgFCOdq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Jun 2020 10:33:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725920AbgFCOdq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jun 2020 10:33:46 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725905AbgFCSVh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Jun 2020 14:21:37 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:52720 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725884AbgFCSVh (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Jun 2020 14:21:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591208496;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+c1cgHsK07BrW3OA4NvtHTy/+/91BrD1QDQgKn/57QU=;
+        b=VPkJ50TaienKvfD5j4p6lqvgK9XflWoc8UfNyBqufr/2vRtq8jStDh8l6zX9wZNIwuJaZR
+        Tfrvnlasp+HE9K4CAo6mX4bvfpoaAqqe7nySr0bv0p3+bZ2D/1ERGxKtlltt2DzU1LJJca
+        uFabiJZfID/4zMNrXrXTif+mjnwnrCg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-214-z6ZVHDynO0SDP4ytoFxXvQ-1; Wed, 03 Jun 2020 14:21:34 -0400
+X-MC-Unique: z6ZVHDynO0SDP4ytoFxXvQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 183F320679;
-        Wed,  3 Jun 2020 14:33:44 +0000 (UTC)
-Date:   Wed, 3 Jun 2020 10:33:43 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>
-Subject: Re: [PATCH v2 3/7] selftests/ftrace: Add "requires:" list support
-Message-ID: <20200603103343.2db5b5c6@gandalf.local.home>
-In-Reply-To: <20200603085113.67d6cdd16acdece4f167cab4@kernel.org>
-References: <159108888259.42416.547252366885528860.stgit@devnote2>
-        <159108891139.42416.16735397217311780715.stgit@devnote2>
-        <20200602092145.06afaf72@gandalf.local.home>
-        <20200603085113.67d6cdd16acdece4f167cab4@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 608F2107ACF2;
+        Wed,  3 Jun 2020 18:21:33 +0000 (UTC)
+Received: from dm.redhat.com (unknown [10.10.67.78])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 982BD5D9CD;
+        Wed,  3 Jun 2020 18:21:29 +0000 (UTC)
+From:   Yannick Cote <ycote@redhat.com>
+To:     live-patching@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
+        kamalesh@linux.vnet.ibm.com
+Subject: [PATCH v2 0/4] selftests/livepatch: rework of test-klp-{callbacks,shadow_vars}
+Date:   Wed,  3 Jun 2020 14:20:54 -0400
+Message-Id: <20200603182058.109470-1-ycote@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 3 Jun 2020 08:51:13 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+v2:
+ - drop completion variables and flush workqueue [pmladek]
+ - comment typo/pr_info cleanup [kbabulal/mbenes]
+ - cleanup goto ret assignations [pmladek]
+ - allocate pndup[]'s, leave some svar allocations to
+   shadow_get_or_alloc() [pmladek]
+ - change allocation order for cleaner test dmesg output [pmladek]
 
-> On Tue, 2 Jun 2020 09:21:45 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > On Tue,  2 Jun 2020 18:08:31 +0900
-> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >   
-> > > +++ b/tools/testing/selftests/ftrace/test.d/template
-> > > @@ -1,6 +1,7 @@
-> > >  #!/bin/sh
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > >  # description: %HERE DESCRIBE WHAT THIS DOES%
-> > > +# requires: %HERE LIST UP REQUIRED FILES%  
-> > 
-> > Not sure what you mean by "LIST UP". Perhaps you mean "LIST OF"?  
-> 
-> Ah, perhups we don't need UP. "list the required files" will be OK?
-> 
->
+The test-klp-callbacks change implements a synchronization replacement of
+initial code which relied on solely on sleep delays. Remove the sleeps
+and pass a block_transition flag from test script to module. Use
+flush_workqueue() to serialize module output for test result
+consideration.
 
-Yes, that sounds much better.
+The test-klp-shadow-vars changes first refactors the code to be more of
+a readable example as well as continuing to verify the component code.
+The patch is broken in two to display the renaming and restructuring in
+part 1 and the addition and change of logic in part 2. The last change
+frees memory before bailing in case of errors.
 
-I tested out the patches with a few different configurations, and they all
-look good.
+Patchset to be merged via the livepatching tree is against: livepatching/for-next
 
-Although I found that the irqsoff_tracer.tc (test for the preemptirqsoff
-tracer) changed from UNRESOLVED to UNSUPPORTED.
+Joe Lawrence (1):
+  selftests/livepatch: simplify test-klp-callbacks busy target tests
 
-I'll run a few more different configs and see what happens, but you can add:
+Yannick Cote (3):
+  selftests/livepatch: rework test-klp-shadow-vars
+  selftests/livepatch: more verification in test-klp-shadow-vars
+  selftests/livepatch: fix mem leaks in test-klp-shadow-vars
 
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+ lib/livepatch/test_klp_callbacks_busy.c       |  37 ++-
+ lib/livepatch/test_klp_shadow_vars.c          | 240 ++++++++++--------
+ .../selftests/livepatch/test-callbacks.sh     |  29 +--
+ .../selftests/livepatch/test-shadow-vars.sh   |  81 +++---
+ 4 files changed, 225 insertions(+), 162 deletions(-)
 
--- Steve
+-- 
+2.25.4
+
