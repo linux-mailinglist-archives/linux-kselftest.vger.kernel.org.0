@@ -2,84 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADE21ED865
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jun 2020 00:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112BD1EE4D8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jun 2020 14:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgFCWGf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Jun 2020 18:06:35 -0400
-Received: from mga06.intel.com ([134.134.136.31]:12488 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726614AbgFCWGf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jun 2020 18:06:35 -0400
-IronPort-SDR: W3QnxCBGQoxmAkSbifnW+HiPjZawpZKIBAyW8gEay5Ztc7lXDgqte0kiX5Z7g5/BF8d1vodLil
- NfxBm8YOFqaA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2020 15:06:34 -0700
-IronPort-SDR: sMphcVLs37uOLYmlTfp+8NPSIpJYLQu68VOHDtkqz+XcScbYO/tn6kCUhKuQLNyyIXwMhHqTK6
- AcT8FVIxruAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,470,1583222400"; 
-   d="scan'208";a="258147584"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
-  by orsmga007.jf.intel.com with ESMTP; 03 Jun 2020 15:06:34 -0700
-Date:   Wed, 3 Jun 2020 15:06:34 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
-        asapek@google.com, bp@alien8.de, cedric.xing@intel.com,
-        chenalexchen@google.com, conradparker@google.com,
-        cyhanish@google.com, dave.hansen@intel.com, haitao.huang@intel.com,
-        josh@joshtriplett.org, kai.huang@intel.com, kai.svahn@intel.com,
-        kmoy@google.com, ludloff@google.com, luto@kernel.org,
-        nhorman@redhat.com, npmccallum@redhat.com, puiterwijk@redhat.com,
-        rientjes@google.com, tglx@linutronix.de, yaozhangx@google.com
-Subject: Re: [PATCH v32 19/21] selftests/x86: Add a selftest for SGX
-Message-ID: <20200603220634.GB25606@linux.intel.com>
-References: <20200601075218.65618-1-jarkko.sakkinen@linux.intel.com>
- <20200601075218.65618-20-jarkko.sakkinen@linux.intel.com>
+        id S1728130AbgFDM42 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Jun 2020 08:56:28 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58000 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726003AbgFDM42 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 4 Jun 2020 08:56:28 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 054CWjoJ010764;
+        Thu, 4 Jun 2020 08:56:18 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31efd5q15q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jun 2020 08:56:18 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 054CinA2054649;
+        Thu, 4 Jun 2020 08:56:18 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31efd5q14u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jun 2020 08:56:17 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 054CamOs027515;
+        Thu, 4 Jun 2020 12:56:15 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 31bf47v430-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Jun 2020 12:56:15 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 054CuCPM24510574
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 4 Jun 2020 12:56:12 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71C10AE055;
+        Thu,  4 Jun 2020 12:56:12 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF056AE056;
+        Thu,  4 Jun 2020 12:56:10 +0000 (GMT)
+Received: from fir03.in.ibm.com (unknown [9.121.59.65])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  4 Jun 2020 12:56:10 +0000 (GMT)
+From:   Sandipan Das <sandipan@linux.ibm.com>
+To:     mpe@ellerman.id.au
+Cc:     linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, linuxram@us.ibm.com,
+        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
+        fweimer@redhat.com, ruscur@russell.cc
+Subject: [PATCH v3 0/3] selftests: powerpc: Fixes and execute-disable test for pkeys
+Date:   Thu,  4 Jun 2020 18:26:07 +0530
+Message-Id: <20200604125610.649668-1-sandipan@linux.ibm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200601075218.65618-20-jarkko.sakkinen@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-04_10:2020-06-02,2020-06-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 cotscore=-2147483648 malwarescore=0
+ adultscore=0 spamscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006040087
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 01, 2020 at 10:52:16AM +0300, Jarkko Sakkinen wrote:
-> Add a selftest for SGX. It is a trivial test where a simple enclave
-> copies one 64-bit word of memory between two memory locations.
+This fixes the way the Authority Mask Register (AMR) is updated
+by the existing pkey tests and adds a new test to verify the
+functionality of execute-disabled pkeys.
 
-...
+Previous versions can be found at:
+v2: https://lore.kernel.org/linuxppc-dev/20200527030342.13712-1-sandipan@linux.ibm.com/
+v1: https://lore.kernel.org/linuxppc-dev/20200508162332.65316-1-sandipan@linux.ibm.com/
 
-> --- /dev/null
-> +++ b/tools/testing/selftests/sgx/Makefile
-> @@ -0,0 +1,53 @@
-> +top_srcdir = ../../../..
-> +
-> +include ../lib.mk
-> +
-> +.PHONY: all clean
-> +
-> +CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh $(CC) \
-> +			    ../x86/trivial_64bit_program.c)
-> +
-> +ifndef OBJCOPY
-> +OBJCOPY := $(CROSS_COMPILE)objcopy
-> +endif
-> +
-> +INCLUDES := -I$(top_srcdir)/tools/include
-> +HOST_CFLAGS := -Wall -Werror -g $(INCLUDES) -fPIC -z noexecstack
+Changes in v3:
+- Fixed AMR writes for existing pkey tests (new patch).
+- Moved Hash MMU check under utilities (new patch) and removed duplicate
+  code.
+- Fixed comments on why the pkey permission bits were redefined.
+- Switched to existing mfspr() macro for reading AMR.
+- Switched to sig_atomic_t as data type for variables updated in the
+  signal handlers.
+- Switched to exit()-ing if the signal handlers come across an unexpected
+  condition instead of trying to reset page and pkey permissions.
+- Switched to write() from printf() for printing error messages from
+  the signal handlers.
+- Switched to getpagesize().
+- Renamed fault counter to denote remaining faults.
+- Dropped unnecessary randomization for choosing an address to fault at.
+- Added additional information on change in permissions due to AMR and
+  IAMR bits in comments.
+- Switched the first instruction word of the executable region to a trap
+  to test if it is actually overwritten by a no-op later.
+- Added an new test scenario where the pkey imposes no restrictions and
+  an attempt is made to jump to the executable region again.
 
-There's a pending pull request for 5.8[1] that includes a patch that turns
-off automatic READ_IMPLIES_EXEC for x86_64[2].  Assuming that gets pulled
-for 5.8, we should drop noexecstack to verify/ensure that the workaround is
-no longer needed to avoid conflicts with the EPCM permissions.
+Changes in v2:
+- Added .gitignore entry for test binary.
+- Fixed builds for older distros where siginfo_t might not have si_pkey as
+  a formal member based on discussion with Michael.
 
-[1] https://lkml.kernel.org/r/20200603213452.GG19667@zn.tnic
-[2] https://lkml.kernel.org/r/20200327064820.12602-4-keescook@chromium.org
+Sandipan Das (3):
+  selftests: powerpc: Fix pkey access right updates
+  selftests: powerpc: Move Hash MMU check to utilities
+  selftests: powerpc: Add test for execute-disabled pkeys
+
+ tools/testing/selftests/powerpc/include/reg.h |   6 +
+ .../testing/selftests/powerpc/include/utils.h |   1 +
+ tools/testing/selftests/powerpc/mm/.gitignore |   1 +
+ tools/testing/selftests/powerpc/mm/Makefile   |   5 +-
+ .../selftests/powerpc/mm/bad_accesses.c       |  28 --
+ .../selftests/powerpc/mm/pkey_exec_prot.c     | 388 ++++++++++++++++++
+ .../selftests/powerpc/ptrace/core-pkey.c      |   2 +-
+ .../selftests/powerpc/ptrace/ptrace-pkey.c    |   2 +-
+ tools/testing/selftests/powerpc/utils.c       |  28 ++
+ 9 files changed, 429 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/powerpc/mm/pkey_exec_prot.c
+
+-- 
+2.25.1
+
