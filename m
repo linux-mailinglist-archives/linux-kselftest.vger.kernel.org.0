@@ -2,99 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3821EF626
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jun 2020 13:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D6D1EF651
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jun 2020 13:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726941AbgFELID (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Jun 2020 07:08:03 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:48084 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726771AbgFELID (ORCPT
+        id S1726499AbgFELRH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Jun 2020 07:17:07 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:23886 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726351AbgFELRG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Jun 2020 07:08:03 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 055B6fAo030623;
-        Fri, 5 Jun 2020 11:07:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=DWdZJiAoSkzSBRrQkC9u7xM53dpdlyqE37xadceBSB8=;
- b=vY84+X7SG4MDS7SB3lpoL5edWX3UJ6FobfudSxVmXSNhUhl35DawPKbmekbYf9oio6T0
- 1M2BCaqeUv3VTtlG0iEDMHYvptyS1TDU/WQED8rg9e9oINI87sLTmGfDIaM0VZ4EWoNN
- v3ltvvonKFsXkNaTgfPBQO2YKnkC1/GxjyiEoW933O1DzQyeGduUp63NtzvdHaubin4h
- bctLU/DFHEwiIXO5EdhDRbsj++TZfZ9IQBKvV5PD9Z4SNXcN+isQ3tFuIvgXln3ZyOeL
- VEqLCVZHLqhqS0vXHvh4acHEXuWMjweddQkzsQMuQmO0APiLPIcPNLxTJtLcZxNkemBB lQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 31f91dtbdr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 05 Jun 2020 11:07:48 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 055B7R40039911;
-        Fri, 5 Jun 2020 11:07:47 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 31f92sm38y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 05 Jun 2020 11:07:47 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 055B7iE6030772;
-        Fri, 5 Jun 2020 11:07:45 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 05 Jun 2020 04:07:44 -0700
-Date:   Fri, 5 Jun 2020 14:07:36 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Zi Yan <ziy@nvidia.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] khugepaged: selftests: fix timeout condition in
- wait_for_scan()
-Message-ID: <20200605110736.GH978434@mwanda>
+        Fri, 5 Jun 2020 07:17:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591355825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RzGbqSL35ilUIrPGSPIeyg9y7kmtyuP/TetCRHblnU4=;
+        b=P4TfUdTrPc9BV9LOz20kRYmXWc4Ai80Y4fTFcbidFdZoyv+uygKAVWqrWTOLNZfXdLd1/+
+        jkE1ZCCcHR2TAE1odNGm5QsdgkHQZtrNr7DT797qqaH0sk1F3HZXDpMa1wSaCWEHiqLksy
+        9eoUP7biqwNhnAGE6ESDscSSvCUe8L8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-142-Yg77fjzGMga2IGhkiB2fpg-1; Fri, 05 Jun 2020 07:17:03 -0400
+X-MC-Unique: Yg77fjzGMga2IGhkiB2fpg-1
+Received: by mail-wm1-f69.google.com with SMTP id l26so2899278wmh.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2020 04:17:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RzGbqSL35ilUIrPGSPIeyg9y7kmtyuP/TetCRHblnU4=;
+        b=K+KyXGMtkMFmIrexQ9AXt9bEYC2rdswCevCXVAWCM1bBGyXewNvZW7cAzrbz4ht2Ot
+         imGZRMK9p8Fx4++21Ufky6kO9gBWMz3xVxQelp3vY7/i1FllFalmsXyia1B2vOjSt3UT
+         ddYDtVh5PSH6Cv1XucPwLLWAlK+Kj/q1sEeJQZSxCmxVjZfy8RqPwNdZNw2/LrYzMWRy
+         Y++TX+8eIZaucpU7jVEpex3dxyFRHXOqCo2yFmONsLrSvX5DWWzpnyMymGO+lu0l9fmr
+         i3GXd3TH6s/HIyerJqRym5gg1e+QbMQusXEbJ0OTl1Uo2JMaF5sddQ+9R460ZnX6diuk
+         6hYA==
+X-Gm-Message-State: AOAM531cjHn83yRNUDbEQ3dvP5GJGOZI5umCQfjfyzdAgHkO7UFVB/Fk
+        BPXDBDcSwjg3j/l8whFNUIGYyAuXGHzuhP5ofW4A2lPdIkeJz69Tu0iiGke/sDjMJn63MidlD5P
+        6Nlvml7ClrfRkoHQsUFqpyc8evM+t
+X-Received: by 2002:a5d:684a:: with SMTP id o10mr8428656wrw.4.1591355822348;
+        Fri, 05 Jun 2020 04:17:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwoWCY4kIj3NwURBaGZZ95zPlotZFEwtkK4J/GiE+YPjhOoebb8RUzODqnboUSiNMmXSnQIpA==
+X-Received: by 2002:a5d:684a:: with SMTP id o10mr8428638wrw.4.1591355822101;
+        Fri, 05 Jun 2020 04:17:02 -0700 (PDT)
+Received: from [192.168.178.58] ([151.20.243.176])
+        by smtp.gmail.com with ESMTPSA id 30sm11840903wrd.47.2020.06.05.04.17.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jun 2020 04:17:01 -0700 (PDT)
+Subject: Re: [PATCH] KVM: selftests: delete some dead code
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Ben Gardon <bgardon@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <20200605110048.GB978434@mwanda>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <9f20e25d-599d-c203-e3d4-905b122ef5a3@redhat.com>
+Date:   Fri, 5 Jun 2020 13:16:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9642 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 mlxscore=0
- malwarescore=0 spamscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006050086
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9642 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 bulkscore=0
- clxscore=1011 cotscore=-2147483648 malwarescore=0 adultscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 spamscore=0 mlxscore=0
- impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006050086
+In-Reply-To: <20200605110048.GB978434@mwanda>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The loop exits with "timeout" set to -1 and not to 0 so the test needs
-to be fixed.
+On 05/06/20 13:00, Dan Carpenter wrote:
+> The "uffd_delay" variable is unsigned so it's always going to be >= 0.
+> 
+> Fixes: 0119cb365c93 ("KVM: selftests: Add configurable demand paging delay")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  tools/testing/selftests/kvm/demand_paging_test.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> index 360cd3ea4cd67..4eb79621434e6 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -615,8 +615,6 @@ int main(int argc, char *argv[])
+>  			break;
+>  		case 'd':
+>  			uffd_delay = strtoul(optarg, NULL, 0);
+> -			TEST_ASSERT(uffd_delay >= 0,
+> -				    "A negative UFFD delay is not supported.");
+>  			break;
+>  		case 'b':
+>  			vcpu_memory_bytes = parse_size(optarg);
+> 
 
-Fixes: e7b592f6caca ("khugepaged: add self test")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- tools/testing/selftests/vm/khugepaged.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The bug is that strtoul is "impossible" to use correctly.  The right fix
+would be to have a replacement for strtoul.
 
-diff --git a/tools/testing/selftests/vm/khugepaged.c b/tools/testing/selftests/vm/khugepaged.c
-index 51b89cedd09d1..8b75821302a79 100644
---- a/tools/testing/selftests/vm/khugepaged.c
-+++ b/tools/testing/selftests/vm/khugepaged.c
-@@ -502,7 +502,7 @@ static bool wait_for_scan(const char *msg, char *p)
- 
- 	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
- 
--	return !timeout;
-+	return timeout == -1;
- }
- 
- static void alloc_at_fault(void)
--- 
-2.26.2
+Paolo
 
