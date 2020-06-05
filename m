@@ -2,58 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F73A1F0345
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jun 2020 01:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099ED1F0374
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jun 2020 01:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728611AbgFEXAl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Jun 2020 19:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728615AbgFEXAi (ORCPT
+        id S1728444AbgFEXTw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Jun 2020 19:19:52 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:23836 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728290AbgFEXTv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Jun 2020 19:00:38 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B3C08C5C7
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2020 16:00:38 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id a45so3659493pje.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2020 16:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=6IOQhnINeRXTMEp588L7TpuSlWAtthgo8pJPrT+dHag=;
-        b=Dmrrbc+recgD8e5AMN/BCTLy5ccUlTK2MC7rwQlOlF86Koa9ZP0RCaEl8gKBI8HCyJ
-         BqY0N+IPu2tx5GuZIXcP5iK50+rIfHhm8cbNSD39W9y1j6PkGWIV6L83L5pkIkZC3tb7
-         RL8cv3Tavf00q4remPzb72/VeCD1MyOHlmXgE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=6IOQhnINeRXTMEp588L7TpuSlWAtthgo8pJPrT+dHag=;
-        b=NTpm2FSOCE0o/N+FHVefgOl18EwS5VV5YAqnGBSRa39uZlr6DJLK70QXQjF8zC3vp5
-         Nwzid20yzXjgVw+uvg0WfN+76Qbnx9aYRUjXdbidSNCbniponE2jU1+d0iCIRsdrrjwq
-         6s/Ju/uJOvAG7rod1o+6xj2ITgVdRh+CNG+DmzeJisrsm4NbOCn0kbV6ROijAy78PL9i
-         01xONthNMDS4R+xcifqJkb4OnoGleXg/MoXCPOxh+0MsnKu5CJP9OJyKri0xwco1mVFF
-         CYfTxFaFn0T4KquAISMxrX2kvM5fc0O38u9bt8/bkcGmEwl9bCr50/GQKx12BGW1bre3
-         111w==
-X-Gm-Message-State: AOAM5316HH5XgLZpG+eeYlJX8ctYfkeyOTYQSdyF59mEhfEs9sdd/cWn
-        hgnTWbdBzZA13jfXNCkyGI0wwA==
-X-Google-Smtp-Source: ABdhPJygqG+jk7Ot91mrwH3N/Bq6YN5N7hRpLKAhEc5LQzFkljxQcq6rvccd49GdwHGxUxMHVl3f9A==
-X-Received: by 2002:a17:90a:8c12:: with SMTP id a18mr3957336pjo.198.1591398036980;
-        Fri, 05 Jun 2020 16:00:36 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id b140sm568974pfb.119.2020.06.05.16.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2020 16:00:36 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Fri, 5 Jun 2020 19:19:51 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 055N3J5A157074;
+        Fri, 5 Jun 2020 19:19:35 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 31fgkmkmgs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Jun 2020 19:19:34 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 055NBBuw014932;
+        Fri, 5 Jun 2020 23:19:32 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 31bf4852fc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Jun 2020 23:19:32 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 055NJUeN51970228
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 5 Jun 2020 23:19:30 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E6E44C046;
+        Fri,  5 Jun 2020 23:19:30 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52A8A4C050;
+        Fri,  5 Jun 2020 23:19:27 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.80.234.64])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  5 Jun 2020 23:19:27 +0000 (GMT)
+Message-ID: <1591399166.4615.37.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 8/8] ima: add FIRMWARE_PARTIAL_READ support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
@@ -65,136 +62,52 @@ Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v6 8/8] ima: add FIRMWARE_PARTIAL_READ support
-Date:   Fri,  5 Jun 2020 15:59:59 -0700
-Message-Id: <20200605225959.12424-9-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200605225959.12424-1-scott.branden@broadcom.com>
+        linux-security-module@vger.kernel.org
+Date:   Fri, 05 Jun 2020 19:19:26 -0400
+In-Reply-To: <20200605225959.12424-9-scott.branden@broadcom.com>
 References: <20200605225959.12424-1-scott.branden@broadcom.com>
+         <20200605225959.12424-9-scott.branden@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-05_07:2020-06-04,2020-06-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 cotscore=-2147483648
+ malwarescore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006050170
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add FIRMWARE_PARTIAL_READ support for integrity
-measurement on partial reads of firmware files.
+Hi Scott,
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
----
- drivers/base/firmware_loader/main.c |  6 +++++-
- fs/exec.c                           |  6 ++++--
- include/linux/fs.h                  |  1 +
- security/integrity/ima/ima_main.c   | 24 +++++++++++++++++++++++-
- 4 files changed, 33 insertions(+), 4 deletions(-)
+On Fri, 2020-06-05 at 15:59 -0700, Scott Branden wrote:
+> 
+> @@ -648,6 +667,9 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
+>  	enum ima_hooks func;
+>  	u32 secid;
+>  
+> +	if (!file && read_id == READING_FIRMWARE_PARTIAL_READ)
+> +		return 0;
 
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 93e7fee42cd4..d0c42194af17 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -483,7 +483,11 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 	/* Already populated data member means we're loading into a buffer */
- 	if (!decompress && fw_priv->data) {
- 		buffer = fw_priv->data;
--		id = READING_FIRMWARE_PREALLOC_BUFFER;
-+		if (fw_priv->opt == KERNEL_PREAD_PART)
-+			id = READING_FIRMWARE_PARTIAL_READ;
-+		else
-+			id = READING_FIRMWARE_PREALLOC_BUFFER;
-+
- 		msize = fw_priv->allocated_size;
- 	}
- 
-diff --git a/fs/exec.c b/fs/exec.c
-index e5c241c07b75..3fbc2fee909f 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -968,7 +968,8 @@ int kernel_pread_file(struct file *file, void **buf, loff_t *size,
- 		goto out;
- 	}
- 
--	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
-+	if ((id != READING_FIRMWARE_PARTIAL_READ) &&
-+	    (id != READING_FIRMWARE_PREALLOC_BUFFER))
- 		*buf = vmalloc(alloc_size);
- 	if (!*buf) {
- 		ret = -ENOMEM;
-@@ -1000,7 +1001,8 @@ int kernel_pread_file(struct file *file, void **buf, loff_t *size,
- 
- out_free:
- 	if (ret < 0) {
--		if (id != READING_FIRMWARE_PREALLOC_BUFFER) {
-+		if ((id != READING_FIRMWARE_PARTIAL_READ) &&
-+		    (id != READING_FIRMWARE_PREALLOC_BUFFER)) {
- 			vfree(*buf);
- 			*buf = NULL;
- 		}
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 76d463e4a628..3affcaa7c7b2 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3020,6 +3020,7 @@ extern int do_pipe_flags(int *, int);
- #define __kernel_read_file_id(id) \
- 	id(UNKNOWN, unknown)		\
- 	id(FIRMWARE, firmware)		\
-+	id(FIRMWARE_PARTIAL_READ, firmware)	\
- 	id(FIRMWARE_PREALLOC_BUFFER, firmware)	\
- 	id(FIRMWARE_EFI_EMBEDDED, firmware)	\
- 	id(MODULE, kernel-module)		\
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 800fb3bba418..982debd59cc4 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -609,6 +609,9 @@ void ima_post_path_mknod(struct dentry *dentry)
-  */
- int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- {
-+	enum ima_hooks func;
-+	u32 secid;
-+
- 	/*
- 	 * READING_FIRMWARE_PREALLOC_BUFFER
- 	 *
-@@ -617,11 +620,27 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
- 	 * of IMA's signature verification any more than when using two
- 	 * buffers?
- 	 */
--	return 0;
-+	if (read_id != READING_FIRMWARE_PARTIAL_READ)
-+		return 0;
-+
-+	if (!file) {
-+		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
-+		    (ima_appraise & IMA_APPRAISE_ENFORCE)) {
-+			pr_err("Prevent firmware loading_store.\n");
-+			return -EACCES;	/* INTEGRITY_UNKNOWN */
-+		}
-+		return 0;
-+	}
-+
-+	func = read_idmap[read_id] ?: FILE_CHECK;
-+	security_task_getsecid(current, &secid);
-+	return process_measurement(file, current_cred(), secid, NULL,
-+				   0, MAY_READ, func);
- }
- 
- const int read_idmap[READING_MAX_ID] = {
- 	[READING_FIRMWARE] = FIRMWARE_CHECK,
-+	[READING_FIRMWARE_PARTIAL_READ] = FIRMWARE_CHECK,
- 	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
- 	[READING_MODULE] = MODULE_CHECK,
- 	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
-@@ -648,6 +667,9 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 	enum ima_hooks func;
- 	u32 secid;
- 
-+	if (!file && read_id == READING_FIRMWARE_PARTIAL_READ)
-+		return 0;
-+
- 	if (!file && read_id == READING_FIRMWARE) {
- 		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
- 		    (ima_appraise & IMA_APPRAISE_ENFORCE)) {
--- 
-2.17.1
+The file should be measured on the pre security hook, not here on the
+post security hook.  Here, whether "file" is defined or not, is
+irrelevant.  The test should just check "read_id".
+
+Have you tested measuring the firmware by booting a system with
+"ima_policy=tcb" specified on the boot command line and compared the
+measurement entry in the IMA measurement list with the file hash (eg.
+sha1sum, sha256sum)?
+
+Mimi
+
+> +
+>  	if (!file && read_id == READING_FIRMWARE) {
+>  		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
+>  		    (ima_appraise & IMA_APPRAISE_ENFORCE)) {
 
