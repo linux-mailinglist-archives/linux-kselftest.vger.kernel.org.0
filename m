@@ -2,101 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 888651F0497
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jun 2020 06:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B358D1F04FF
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jun 2020 06:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727074AbgFFEEI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 6 Jun 2020 00:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S1726344AbgFFE5P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 6 Jun 2020 00:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726949AbgFFEEG (ORCPT
+        with ESMTP id S1726153AbgFFE5O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 6 Jun 2020 00:04:06 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4080C08C5C2
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2020 21:04:04 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id f16so14381046ybp.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2020 21:04:04 -0700 (PDT)
+        Sat, 6 Jun 2020 00:57:14 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BCCC08C5C2
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2020 21:57:14 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id s23so4602601pfh.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2020 21:57:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Bno6lpmXJK51n5a5Nx8tNY64fz3MIJ1lkOtErirSr6A=;
-        b=YHJ+OxXkKPDeM+7ELMewnwd+Ffd3T7tSXxbbkvE9Wj7weFnG3Q8LKA8LUT6tXC6f/p
-         sIbOnONsYBskP1Y3SPq2vQzpvPJEUP7+B1ZmGjvQSssiGqqjj5HDdRcFvZ2ybIK9yWf/
-         j6j+GMKsYKIw3LH4dk2PCMfZxUdt8GXgai1P/MTj0v2UoF/gav8ycpZBleH2wMzxIfyc
-         Y0V54/Ag7MMP61uxDwq4z3o6dkh9u5457FPbAcgHRve6KHb0x3bDwJjxvxYNIyQxV+wK
-         fCUxURx9kmWQWcwPOAjcLTShq1EL1uQoIYCXlGem4xyMNw85p0u6XL/OzfNBBbBQsg0c
-         I2dw==
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=AEeRqD/NorCUJBTa2b+IUYMUvQuNtNDzhJImkhNUMwE=;
+        b=SvoXuSTIYbKCNLm3Rf+7U72DNelud+4d639oZBnjG8U23K7zlLH+w3p8CEs0PTD2dU
+         Ja/nHOz6XUh0DjZ6xs6ZDwhhVtT0L8oSWdBRiKcSbDENa6K2+KVDoCZHJi5Hkz1nc1ai
+         gDR8glzNryBj5xK1fylPWU9yiBhf+Lc+RZRZY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Bno6lpmXJK51n5a5Nx8tNY64fz3MIJ1lkOtErirSr6A=;
-        b=g8EYJCXXpPC1mOBfvaxgzADjbHsaM61UeMRNH3fmUxv+GgCZSV3G9vy0LEwa/cO8Az
-         YaiedMBONVKO+RepcKcuUi1G5kMpKVrrY1L5aODzYQiqyQ1beG9hJ6/dbiGD9pTJcoWH
-         MLjrM4HYPnaUIVIDZg81iC+uTW+Q2wBuOCnlPWWMliTzC97KpRd52ZGs5PEKDB01YCLK
-         SG6vUiMqFwC7iSnmopNwTioJJH/9qMoWSVCDeNdHdEz3CCnQW09L+DyRI/B5F2IxubX+
-         s17EPJ/10WVjymXUjev7FQk4gCrNcZtQ3a+Jd8fuZBmuEBQmCSTJmYd99CU8MUgRK2Os
-         z0/g==
-X-Gm-Message-State: AOAM533VM0DFnjgyIIXVAwObX/nITb7i4spJaEbKB6l9aikEffjzlgIf
-        9bO8ybgd2xqA4ZbK3uDx7HWnCXhXid85OA==
-X-Google-Smtp-Source: ABdhPJxlU491uKsxwRao6XvYxlOdKzykd3Y4Y+nbo1iQnitptU5xhr1Ml21x6KURK0uGhshDvIETBl7GDDZr/A==
-X-Received: by 2002:a5b:785:: with SMTP id b5mr20722587ybq.96.1591416244078;
- Fri, 05 Jun 2020 21:04:04 -0700 (PDT)
-Date:   Fri,  5 Jun 2020 21:03:49 -0700
-In-Reply-To: <20200606040349.246780-1-davidgow@google.com>
-Message-Id: <20200606040349.246780-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20200606040349.246780-1-davidgow@google.com>
-X-Mailer: git-send-email 2.27.0.278.ge193c7cf3a9-goog
-Subject: [PATCH v8 5/5] mm: kasan: Do not panic if both panic_on_warn and
- kasan_multishot set
-From:   David Gow <davidgow@google.com>
-To:     trishalfonso@google.com, brendanhiggins@google.com,
-        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, andreyknvl@google.com, shuah@kernel.org
-Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=AEeRqD/NorCUJBTa2b+IUYMUvQuNtNDzhJImkhNUMwE=;
+        b=Awuou70wXJnX5Fpl45vYcSLSrbZOX5+Ta3AyvLlQMDA5VpWjckjieZq5E51ccSJD7C
+         cGpe5KsEF0YHYDEaBAuHaW9I/Bo5QRP5QbI1H/PJCs4uMM14cEI6F5taVIwWKZ6Zi4Rb
+         ZawPbP/32izXn9/qzVKXqd6QtUsQ8/oQSv85cMZAVPNKyN3WzfNSc6c3AV7d2TjC1bTV
+         AQKm/w1uWc7WVnvXXgkqtaBof7mdAKix30dkcm4j0SU+mglDQN/yJZ0vcwgbQ9Q8WxpV
+         QkvThuObgPYm84lxflBqzh5oKYxm7PBvQpB8pWs23a3nUoQ4cfk38SQNGGf8EPj6EvVf
+         Pczw==
+X-Gm-Message-State: AOAM531DI38vC+rBBYJ/7ExKatfCPkRQAov2pClefkbkUOC2bNAgwPtC
+        9wYUzWe2ryVcgu2XstS5RfRKBA==
+X-Google-Smtp-Source: ABdhPJy1OnrZSXjJCECuXBSjTznNT2AEnf7+8B0WVOWyttYt253hWfCVsp/i4j2CztKv6MOa13rY4Q==
+X-Received: by 2002:a63:ce0d:: with SMTP id y13mr12145554pgf.90.1591419433926;
+        Fri, 05 Jun 2020 21:57:13 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id k126sm1088049pfd.129.2020.06.05.21.57.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Jun 2020 21:57:12 -0700 (PDT)
+Subject: Re: [PATCH v6 1/8] fs: introduce kernel_pread_file* support
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20200605225959.12424-1-scott.branden@broadcom.com>
+ <20200605225959.12424-2-scott.branden@broadcom.com>
+ <20200606032011.GM19604@bombadil.infradead.org>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <4ca91507-90a5-1a99-ab19-c6782423e870@broadcom.com>
+Date:   Fri, 5 Jun 2020 21:56:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200606032011.GM19604@bombadil.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KASAN errors will currently trigger a panic when panic_on_warn is set.
-This renders kasan_multishot useless, as further KASAN errors won't be
-reported if the kernel has already paniced. By making kasan_multishot
-disable this behaviour for KASAN errors, we can still have the benefits
-of panic_on_warn for non-KASAN warnings, yet be able to use
-kasan_multishot.
+Hi Matthew,
 
-This is particularly important when running KASAN tests, which need to
-trigger multiple KASAN errors: previously these would panic the system
-if panic_on_warn was set, now they can run (and will panic the system
-should non-KASAN warnings show up).
-
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
----
- mm/kasan/report.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 45f3c23f54cb..dc9fc5c09ea3 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -94,7 +94,7 @@ static void end_report(unsigned long *flags)
- 	pr_err("==================================================================\n");
- 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
- 	spin_unlock_irqrestore(&report_lock, *flags);
--	if (panic_on_warn) {
-+	if (panic_on_warn && !test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags)) {
- 		/*
- 		 * This thread may hit another WARN() in the panic path.
- 		 * Resetting this prevents additional WARN() from panicking the
--- 
-2.27.0.278.ge193c7cf3a9-goog
+On 2020-06-05 8:20 p.m., Matthew Wilcox wrote:
+> On Fri, Jun 05, 2020 at 03:59:52PM -0700, Scott Branden wrote:
+>> -int kernel_read_file(struct file *file, void **buf, loff_t *size,
+>> -		     loff_t max_size, enum kernel_read_file_id id)
+>> -{
+>> -	loff_t i_size, pos;
+>> +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
+>> +		      loff_t pos, loff_t max_size,
+>> +		      enum kernel_pread_opt opt,
+>> +		      enum kernel_read_file_id id)
+> What is this 'kernel_pread_opt' foolishness?  Why not just pass in
+> ~0UL as max_size if you want the entire file?
+That is not how existing kernel_read_file api works - max_size is specified.
+I guess not everyone has unlimited memory to read a file on any size.
+>
+>> -int kernel_read_file_from_path_initns(const char *path, void **buf,
+>> -				      loff_t *size, loff_t max_size,
+>> -				      enum kernel_read_file_id id)
+>> +extern int kernel_pread_file_from_path_initns(const char *path, void **buf,
+> extern?  really?  i'm shocked gcc doesn't vomit on that.
+A typo.  thanks.  You'll have to ask the compiler gods about your shock.
 
