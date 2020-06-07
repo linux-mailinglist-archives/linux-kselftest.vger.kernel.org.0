@@ -2,91 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C45B01F0F2C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jun 2020 21:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04C71F1015
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jun 2020 23:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727080AbgFGTPD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 7 Jun 2020 15:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S1726914AbgFGV5Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 7 Jun 2020 17:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726985AbgFGTPC (ORCPT
+        with ESMTP id S1726833AbgFGV5Y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 7 Jun 2020 15:15:02 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47562C061A0E;
-        Sun,  7 Jun 2020 12:15:03 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id m2so5064820pjv.2;
-        Sun, 07 Jun 2020 12:15:03 -0700 (PDT)
+        Sun, 7 Jun 2020 17:57:24 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DD5C08C5C3;
+        Sun,  7 Jun 2020 14:57:23 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id j18so5006539lji.2;
+        Sun, 07 Jun 2020 14:57:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=U/uYcs3RzDzbfKbBDqV6cGLecIjVAkg4EoqiC2LpUQY=;
-        b=dlosL3GYKfzXdiEAHLXVSiXmzmtCNINoCgxhO2YF7Sdzmr8K43R39YfHx8n2EXmVVI
-         8M4+UO74rvAA9OnUcfJL87HKs4MxZHhJKEHJr61f4YjCC2XGrqo5B30URJMniRaDdDrk
-         ZcpCk5rH9BVJnTzWCVPMUJE3loN3NHFYAF801unR+zM6RKKs52/8UEFs3lhUWvSpHFSv
-         cml5iVkeWf9vNJBBOvkWL3mdJgqxPbDXTb9gInTwvoXcK33a8KgDXDn/hmQApDzo263U
-         wgGOeEP6/LQlL7wukTYvrkyYiDy1KTykGEHzVzpNgD1umbKAy9w3T3h9nmeW5VErcHO5
-         fneg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tqzE13DBGUWBWdCJ5g5XYcpEIrvBncjQd6Y+cm1LVm0=;
+        b=A1kcJcX9iH7BYSCidWQt8QJqrhpVkHmiMEn2kXteAL6QaN5K00uDeWRQas5Gw/ftHH
+         WH2IU1ymgjSDYDOdC9iLXN8Hs+7lXvDbE7M8+REwhu6Mo9GDNCkGTU908xQa61FjlPMN
+         iL0NNQALqkuSzQI3TzrdfMyuD9ccumhZXWsqM/VYB1czUV/FFPNq5t9jZlwXy5dQqrxr
+         IOFxdcIhLTxCmeMk+hSmdjE5TuHLlfyhLTj19MpCZ1IuALCjIL3qEMZdDWTg+jbS8ka/
+         c7fPjoxSDBlfZQsciVe9fGZrVqG7Juoz1jGsCEbAI/fjNlZzEM/bFZfEzq3/lDjgBAgt
+         pcmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=U/uYcs3RzDzbfKbBDqV6cGLecIjVAkg4EoqiC2LpUQY=;
-        b=bGIkUqp0ZgZQkEPSg0MBai2h0P09DWg9C1P0eEnB1kB1gp0xbMZw8NVMXXBDerf+L2
-         cPEX5Nhhz1QZxufJ3tuXh/tJzQn2YDtBlEUTO7MzmI2f0PA80CwhXUl4W9qrq7+sO7Fh
-         SXz8K2RgcehxwHhC4/6lIidTaJ26N1O/Vr/xZuUXOUjp9g6bdGbPGVPUow9es9rsPMAq
-         GXqVDK6K8iSVaXPZ3uQcZthsOs1wgV+vW1WJYZTTOa2CKBoWsdf/38f8Ya76Etq11dIR
-         dY+bBUkQiAqZkHk+rSY8tMWTmLJPTdDz5ha8BeeQef794Q7YOtoN8xh+pTiLMVmVGf6k
-         KDRQ==
-X-Gm-Message-State: AOAM53177+DfXHrauzwSfMJrOIupY6MJfd2OgsAUIQBGvH2yERbY7xh6
-        VWj31/LraZx9MlE0VfT2+BsgsMeu
-X-Google-Smtp-Source: ABdhPJzlTQJiWTfjhtcmYBLYPskCX8Pyhe9THE/ZuZym0N1jzGHGx47xzMTvypHqGbOs/I30sp4PXw==
-X-Received: by 2002:a17:90a:1485:: with SMTP id k5mr13469532pja.108.1591557302441;
-        Sun, 07 Jun 2020 12:15:02 -0700 (PDT)
-Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id f6sm5032253pfe.174.2020.06.07.12.14.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Jun 2020 12:15:01 -0700 (PDT)
-Subject: Re: [RFC PATCH net-next 03/10] mlxsw: spectrum_ethtool: Move
- mlxsw_sp_port_type_speed_ops structs
-To:     Amit Cohen <amitc@mellanox.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, corbet@lwn.net,
-        jiri@mellanox.com, idosch@mellanox.com, shuah@kernel.org,
-        mkubecek@suse.cz, gustavo@embeddedor.com,
-        cforno12@linux.vnet.ibm.com, andrew@lunn.ch,
-        linux@rempel-privat.de, alexandru.ardelean@analog.com,
-        ayal@mellanox.com, petrm@mellanox.com, mlxsw@mellanox.com,
-        liuhangbin@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20200607145945.30559-1-amitc@mellanox.com>
- <20200607145945.30559-4-amitc@mellanox.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <6f581284-16cd-803b-ead0-d012d973fc4d@gmail.com>
-Date:   Sun, 7 Jun 2020 12:14:58 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.9.0
+        bh=tqzE13DBGUWBWdCJ5g5XYcpEIrvBncjQd6Y+cm1LVm0=;
+        b=oLEQjr/CTc2L8WA6NLGXestHqqGnrHN3PEXLYNSgKyfZXryJA9jKNs7pQFyIdbFEIM
+         CVxEUnG7sWQ9F+Uicwtyl8sCyZrPV+Rmpqw/JXgWQEV22qi0g6eeIqP0jS6s2M/60FCI
+         OR6T+MzOqAXdEk0xaoAQpnWLHP1UAB4bEkizwFAMn5lgEk6DzpVNg8HQYW5GqJA7tODJ
+         pMEFR6rPZgJFMUoI9Y1i1q2Dr+TOiyzIRhKpTcqes/CEkaI6DnKC0A8iJ/6ag+g2wvbv
+         Wpm8fpITHwce6+QOECreBxqYvvuKkpEdYGqpnWClE7dUjU7GRLgVvjiWUq778DkVoOz3
+         Lksw==
+X-Gm-Message-State: AOAM531lzXNK86UD2PQYApxT/LiARNcGsznMlTqNNWChWMJO6yw42Ndh
+        +nEfj9+GS2N6cU0IXNPM72PNO7USWYc=
+X-Google-Smtp-Source: ABdhPJxYKPYJvSofcSn1dR4YwY1CnR0Kj2Oc001gie3aIIbT9BPfFiWFdMW9F/uoy8U0qTn/wGtb7g==
+X-Received: by 2002:a2e:b5bc:: with SMTP id f28mr8785854ljn.451.1591567041703;
+        Sun, 07 Jun 2020 14:57:21 -0700 (PDT)
+Received: from localhost.localdomain (h-82-196-111-136.NA.cust.bahnhof.se. [82.196.111.136])
+        by smtp.gmail.com with ESMTPSA id l14sm3897804lfk.30.2020.06.07.14.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jun 2020 14:57:21 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     brendanhiggins@google.com, masahiroy@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] kunit: kunit_config: Fix parsing of CONFIG options with space
+Date:   Sun,  7 Jun 2020 23:57:15 +0200
+Message-Id: <20200607215715.90981-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20200607145945.30559-4-amitc@mellanox.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Commit 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is
+updated") introduced a new CONFIG option CONFIG_CC_VERSION_TEXT. On my
+system, this is set to "gcc (GCC) 10.1.0" which breaks KUnit config
+parsing which did not like the spaces in the string.
 
+Fix this by updating the regex to allow strings containing spaces.
 
-On 6/7/2020 7:59 AM, Amit Cohen wrote:
-> Move mlxsw_sp1_port_type_speed_ops and mlxsw_sp2_port_type_speed_ops
-> with the relevant code from spectrum.c to spectrum_ethtool.c.
-> 
-> Signed-off-by: Amit Cohen <amitc@mellanox.com>
-> Reviewed-by: Petr Machata <petrm@mellanox.com>
-> Reviewed-by: Jiri Pirko <jiri@mellanox.com>
+Fixes: 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is updated")
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+Maybe it would have been sufficient to just use
+CONFIG_PATTERN = r'^CONFIG_(\w+)=(.*)$' instead?
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+ tools/testing/kunit/kunit_config.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+index e75063d603b5..02ffc3a3e5dc 100644
+--- a/tools/testing/kunit/kunit_config.py
++++ b/tools/testing/kunit/kunit_config.py
+@@ -10,7 +10,7 @@ import collections
+ import re
+ 
+ CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+-CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+)$'
++CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
+ 
+ KconfigEntryBase = collections.namedtuple('KconfigEntry', ['name', 'value'])
+ 
 -- 
-Florian
+2.27.0
+
