@@ -2,36 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A65691F29D9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D20B1F29B4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731173AbgFHXVd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 19:21:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45590 "EHLO mail.kernel.org"
+        id S1731355AbgFIADW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 20:03:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731157AbgFHXVc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:21:32 -0400
+        id S1731225AbgFHXVv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:21:51 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A272208B8;
-        Mon,  8 Jun 2020 23:21:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E34A20842;
+        Mon,  8 Jun 2020 23:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658491;
-        bh=17kbZ1WrKBdQWj2NDXfl3kg9/sIviW/uMiZRiZRnHHk=;
+        s=default; t=1591658510;
+        bh=za9EyI3o5uaFj1FcFu/tNsgXVP1mJnijVnQloGQKC8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QggN4+cXg9hQ0HqFj0JlZxUOYZ/QwZ+06mEgMGaJTpwGjrVfpNGgUWrSJHxL91nnj
-         QjwZcNqcwMAi1ZIVFmjYf6w1MTwfSHwDLRoPaxlFgr85e7sLnw3rZixM2i9dfLgEWv
-         uauh4i2m/HwDXInlTPjR96N9zzjANgWMR7opEz8I=
+        b=0QWkDq//IfWdyHXzYu7A2xomoT1iponN6USptM6G49qEdIGy59BwDrpSqcDvHqWj7
+         Q2+BO6dp6oo+NurjVyFOEzsyNcmwmS1n2x+yI8Pr0d9g2eCV3PJJD000QHfw51FKzV
+         bN1omiVfWHEQfcni5tCQN5aC/UtnZ/2T6+ggaPh4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vlad Buslov <vladbu@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 125/175] selftests: fix flower parent qdisc
-Date:   Mon,  8 Jun 2020 19:17:58 -0400
-Message-Id: <20200608231848.3366970-125-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 140/175] selftests/bpf: CONFIG_IPV6_SEG6_BPF required for test_seg6_loop.o
+Date:   Mon,  8 Jun 2020 19:18:13 -0400
+Message-Id: <20200608231848.3366970-140-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
 References: <20200608231848.3366970-1-sashal@kernel.org>
@@ -44,84 +45,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Vlad Buslov <vladbu@mellanox.com>
+From: Alan Maguire <alan.maguire@oracle.com>
 
-[ Upstream commit 0531b0357ba37464e5c0033e1b7c69bbf5ecd8fb ]
+[ Upstream commit 3c8e8cf4b18b3a7034fab4c4504fc4b54e4b6195 ]
 
-Flower tests used to create ingress filter with specified parent qdisc
-"parent ffff:" but dump them on "ingress". With recent commit that fixed
-tcm_parent handling in dump those are not considered same parent anymore,
-which causes iproute2 tc to emit additional "parent ffff:" in first line of
-filter dump output. The change in output causes filter match in tests to
-fail.
+test_seg6_loop.o uses the helper bpf_lwt_seg6_adjust_srh();
+it will not be present if CONFIG_IPV6_SEG6_BPF is not specified.
 
-Prevent parent qdisc output when dumping filters in flower tests by always
-correctly specifying "ingress" parent both when creating and dumping
-filters.
-
-Fixes: a7df4870d79b ("net_sched: fix tcm_parent in tc filter dump")
-Signed-off-by: Vlad Buslov <vladbu@mellanox.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: b061017f8b4d ("selftests/bpf: add realistic loop tests")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/1590147389-26482-2-git-send-email-alan.maguire@oracle.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/tc-testing/tc-tests/filters/tests.json        | 6 +++---
- tools/testing/selftests/tc-testing/tdc_batch.py             | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-index 0f89cd50a94b..152ffa45e857 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-@@ -54,7 +54,7 @@
-         "setup": [
-             "$TC qdisc add dev $DEV2 ingress"
-         ],
--        "cmdUnderTest": "$TC filter add dev $DEV2 protocol ip pref 1 parent ffff: handle 0xffffffff flower action ok",
-+        "cmdUnderTest": "$TC filter add dev $DEV2 protocol ip pref 1 ingress handle 0xffffffff flower action ok",
-         "expExitCode": "0",
-         "verifyCmd": "$TC filter show dev $DEV2 ingress",
-         "matchPattern": "filter protocol ip pref 1 flower.*handle 0xffffffff",
-@@ -99,9 +99,9 @@
-         },
-         "setup": [
-             "$TC qdisc add dev $DEV2 ingress",
--            "$TC filter add dev $DEV2 protocol ip prio 1 parent ffff: flower dst_mac e4:11:22:11:4a:51 src_mac e4:11:22:11:4a:50 ip_proto tcp src_ip 1.1.1.1 dst_ip 2.2.2.2 action drop"
-+            "$TC filter add dev $DEV2 protocol ip prio 1 ingress flower dst_mac e4:11:22:11:4a:51 src_mac e4:11:22:11:4a:50 ip_proto tcp src_ip 1.1.1.1 dst_ip 2.2.2.2 action drop"
-         ],
--        "cmdUnderTest": "$TC filter add dev $DEV2 protocol ip prio 1 parent ffff: flower dst_mac e4:11:22:11:4a:51 src_mac e4:11:22:11:4a:50 ip_proto tcp src_ip 1.1.1.1 dst_ip 2.2.2.2 action drop",
-+        "cmdUnderTest": "$TC filter add dev $DEV2 protocol ip prio 1 ingress flower dst_mac e4:11:22:11:4a:51 src_mac e4:11:22:11:4a:50 ip_proto tcp src_ip 1.1.1.1 dst_ip 2.2.2.2 action drop",
-         "expExitCode": "2",
-         "verifyCmd": "$TC -s filter show dev $DEV2 ingress",
-         "matchPattern": "filter protocol ip pref 1 flower chain 0 handle",
-diff --git a/tools/testing/selftests/tc-testing/tdc_batch.py b/tools/testing/selftests/tc-testing/tdc_batch.py
-index 6a2bd2cf528e..995f66ce43eb 100755
---- a/tools/testing/selftests/tc-testing/tdc_batch.py
-+++ b/tools/testing/selftests/tc-testing/tdc_batch.py
-@@ -72,21 +72,21 @@ mac_prefix = args.mac_prefix
- 
- def format_add_filter(device, prio, handle, skip, src_mac, dst_mac,
-                       share_action):
--    return ("filter add dev {} {} protocol ip parent ffff: handle {} "
-+    return ("filter add dev {} {} protocol ip ingress handle {} "
-             " flower {} src_mac {} dst_mac {} action drop {}".format(
-                 device, prio, handle, skip, src_mac, dst_mac, share_action))
- 
- 
- def format_rep_filter(device, prio, handle, skip, src_mac, dst_mac,
-                       share_action):
--    return ("filter replace dev {} {} protocol ip parent ffff: handle {} "
-+    return ("filter replace dev {} {} protocol ip ingress handle {} "
-             " flower {} src_mac {} dst_mac {} action drop {}".format(
-                 device, prio, handle, skip, src_mac, dst_mac, share_action))
- 
- 
- def format_del_filter(device, prio, handle, skip, src_mac, dst_mac,
-                       share_action):
--    return ("filter del dev {} {} protocol ip parent ffff: handle {} "
-+    return ("filter del dev {} {} protocol ip ingress handle {} "
-             "flower".format(device, prio, handle))
- 
- 
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 5dc109f4c097..b9601f13cf03 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -25,6 +25,7 @@ CONFIG_XDP_SOCKETS=y
+ CONFIG_FTRACE_SYSCALLS=y
+ CONFIG_IPV6_TUNNEL=y
+ CONFIG_IPV6_GRE=y
++CONFIG_IPV6_SEG6_BPF=y
+ CONFIG_NET_FOU=m
+ CONFIG_NET_FOU_IP_TUNNELS=y
+ CONFIG_IPV6_FOU=m
 -- 
 2.25.1
 
