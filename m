@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A821F24CB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 01:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FDC1F28DD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 01:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731336AbgFHXWg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 19:22:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47198 "EHLO mail.kernel.org"
+        id S1731918AbgFHX4s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 19:56:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731329AbgFHXWd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:22:33 -0400
+        id S1731162AbgFHXXj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:23:39 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E6BCD20842;
-        Mon,  8 Jun 2020 23:22:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 671F720872;
+        Mon,  8 Jun 2020 23:23:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658552;
-        bh=iGDstssJZNRPmYGflzsJwE0HzniypEW0XvpWSC3yA2I=;
+        s=default; t=1591658619;
+        bh=uZ84vTGYlo4IboKjY879TBGBz6Hhr7Vq0yu0/6vxmZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=quIj+6HEDqQdkv08blxJ0QTVvaUzbIxT94q6Ia+/fyiqOgrCN7DdeTg+J6p4WVl05
-         r48Gz4iSGqsGf9Qxe7sddLsWkBbcBcQ8V6SBUHQzKzgZ+/cwfbFC8d1+nnTb9FWI9F
-         cnsGO8FD5LDhrcti8dZz1xmnRMODBl2FtJW99wGw=
+        b=a7YPaHmpKvtJX4DuhJ/p1eoxlA2l9V3G7Kdl2I6sJGwDNLg1ShRMcPty662Gin8A8
+         AVnCOEBgQ8XCOfMgxxJH4vessh0wlOhLQY6TYziY9Q3n6P70J78l9PjpQmaW2inq2Q
+         gl/Pd9ygyHoT/Ke6njhNFcNI+P8jK3EI5ApSqxwQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
+Cc:     Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 172/175] selftests/bpf, flow_dissector: Close TAP device FD after the test
-Date:   Mon,  8 Jun 2020 19:18:45 -0400
-Message-Id: <20200608231848.3366970-172-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 044/106] selftests/bpf: Fix memory leak in extract_build_id()
+Date:   Mon,  8 Jun 2020 19:21:36 -0400
+Message-Id: <20200608232238.3368589-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
-References: <20200608231848.3366970-1-sashal@kernel.org>
+In-Reply-To: <20200608232238.3368589-1-sashal@kernel.org>
+References: <20200608232238.3368589-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,35 +46,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit b8215dce7dfd817ca38807f55165bf502146cd68 ]
+[ Upstream commit 9f56bb531a809ecaa7f0ddca61d2cf3adc1cb81a ]
 
-test_flow_dissector leaves a TAP device after it's finished, potentially
-interfering with other tests that will run after it. Fix it by closing the
-TAP descriptor on cleanup.
+getline() allocates string, which has to be freed.
 
-Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Fixes: 81f77fd0deeb ("bpf: add selftest for stackmap with BPF_F_STACK_BUILD_ID")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200531082846.2117903-11-jakub@cloudflare.com
+Cc: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20200429012111.277390-7-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+ tools/testing/selftests/bpf/test_progs.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index 92563898867c..9f3634c9971d 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -523,6 +523,7 @@ void test_flow_dissector(void)
- 		CHECK_ATTR(err, tests[i].name, "bpf_map_delete_elem %d\n", err);
- 	}
- 
-+	close(tap_fd);
- 	bpf_prog_detach(prog_fd, BPF_FLOW_DISSECTOR);
- 	bpf_object__close(obj);
- }
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 89f8b0dae7ef..bad3505d66e0 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1118,6 +1118,7 @@ static int extract_build_id(char *build_id, size_t size)
+ 		len = size;
+ 	memcpy(build_id, line, len);
+ 	build_id[len] = '\0';
++	free(line);
+ 	return 0;
+ err:
+ 	fclose(fp);
 -- 
 2.25.1
 
