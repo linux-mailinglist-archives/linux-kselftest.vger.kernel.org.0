@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF951F300C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2DE1F3016
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728344AbgFHXJJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 19:09:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54746 "EHLO mail.kernel.org"
+        id S1728193AbgFIA4G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 20:56:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54774 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728338AbgFHXJH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:09:07 -0400
+        id S1728342AbgFHXJI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:09:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BAC5120897;
-        Mon,  8 Jun 2020 23:09:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D81F208C9;
+        Mon,  8 Jun 2020 23:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657746;
-        bh=gxk9MSh3P8MPirDz3R+VvLbXVPW8bi0sEi+cQ9ZIbSQ=;
+        s=default; t=1591657748;
+        bh=7qRrtypSSmzWLdDkp9783c/owwEwmGd/9SP07NiOk2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lTxNbrXd+EOIMJt2pS99zyO2GfR0vIAOu4a+fGMlJwKVArStOjHwFJNWkQPh7/9bc
-         P8DDXjDBa1lrJAe6NRyVD4rNwoczRNN6Xwvg2lJ2Ria87y/i6a5lzSTZJVNc90SVGk
-         DE+a9f39QHE+UAU7aQ/ab9wHqtbOlUqYtJRzOkvA=
+        b=RPOGdBSXEHTJ9BjQyX7JAFlmdStNtE5CcFM/TDR0O77+gY9WGx6XW2W5FUIZMc+1Q
+         H8SG7qjhA0L8Wnp3gQMk5YPjGbJfC9XX7VsBqKo7/2x7FWwPY3/G8Md/g8Ygi5hT8F
+         o8IloG+sZrYZ1sXXNAt1yf8YYXeaL7kzynH/QAHU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Carlos Neira <cneirabustos@gmail.com>,
+        Veronika Kabatova <vkabatov@redhat.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 134/274] selftests/bpf: Fix bpf_link leak in ns_current_pid_tgid selftest
-Date:   Mon,  8 Jun 2020 19:03:47 -0400
-Message-Id: <20200608230607.3361041-134-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 135/274] selftests/bpf: Add runqslower binary to .gitignore
+Date:   Mon,  8 Jun 2020 19:03:48 -0400
+Message-Id: <20200608230607.3361041-135-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -48,35 +48,31 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 8d30e80a049ad699264e4a12911e349f93c7279a ]
+[ Upstream commit e4e8f4d047fdcf7ac7d944e266e85d8041f16cd6 ]
 
-If condition is inverted, but it's also just not necessary.
+With recent changes, runqslower is being copied into selftests/bpf root
+directory. So add it into .gitignore.
 
-Fixes: 1c1052e0140a ("tools/testing/selftests/bpf: Add self-tests for new helper bpf_get_ns_current_pid_tgid.")
+Fixes: b26d1e2b6028 ("selftests/bpf: Copy runqslower to OUTPUT directory")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Cc: Carlos Neira <cneirabustos@gmail.com>
-Link: https://lore.kernel.org/bpf/20200429012111.277390-11-andriin@fb.com
+Cc: Veronika Kabatova <vkabatov@redhat.com>
+Link: https://lore.kernel.org/bpf/20200429012111.277390-12-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ tools/testing/selftests/bpf/.gitignore | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-index 542240e16564..e74dc501b27f 100644
---- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-@@ -80,9 +80,6 @@ void test_ns_current_pid_tgid(void)
- 		  "User pid/tgid %llu BPF pid/tgid %llu\n", id, bss.pid_tgid))
- 		goto cleanup;
- cleanup:
--	if (!link) {
--		bpf_link__destroy(link);
--		link = NULL;
--	}
-+	bpf_link__destroy(link);
- 	bpf_object__close(obj);
- }
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index c30079c86998..35a577ca0226 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -39,4 +39,4 @@ test_cpp
+ /no_alu32
+ /bpf_gcc
+ /tools
+-
++/runqslower
 -- 
 2.25.1
 
