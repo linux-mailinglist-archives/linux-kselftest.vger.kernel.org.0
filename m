@@ -2,40 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D20B1F29B4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EB41F2E8D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731355AbgFIADW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 20:03:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46132 "EHLO mail.kernel.org"
+        id S1729075AbgFHXMX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 19:12:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731225AbgFHXVv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:21:51 -0400
+        id S1728384AbgFHXMU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:12:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E34A20842;
-        Mon,  8 Jun 2020 23:21:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C7C1212CC;
+        Mon,  8 Jun 2020 23:12:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658510;
-        bh=za9EyI3o5uaFj1FcFu/tNsgXVP1mJnijVnQloGQKC8c=;
+        s=default; t=1591657940;
+        bh=52liZxWS/YVroA/0/89/gMuhBgSh5CrWsVrWvpMtxo8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0QWkDq//IfWdyHXzYu7A2xomoT1iponN6USptM6G49qEdIGy59BwDrpSqcDvHqWj7
-         Q2+BO6dp6oo+NurjVyFOEzsyNcmwmS1n2x+yI8Pr0d9g2eCV3PJJD000QHfw51FKzV
-         bN1omiVfWHEQfcni5tCQN5aC/UtnZ/2T6+ggaPh4=
+        b=HDwlKid4kRMpQBoMqO5E0dhfpM2WucrsJdCMZSl2gmfXwr4Qck+ua9JJor+CEFOWG
+         kX/FZp20iu9P2XerocXebmYl3jWbHVWPGLvxZ3GW+K+2gf1EhkxP/CWbDNsI7S/Gyd
+         FbXoh99o0Mjt2LgjSMFSOXdI7HKu1neJNUvOLtXQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 140/175] selftests/bpf: CONFIG_IPV6_SEG6_BPF required for test_seg6_loop.o
-Date:   Mon,  8 Jun 2020 19:18:13 -0400
-Message-Id: <20200608231848.3366970-140-sashal@kernel.org>
+Cc:     Sasha Levin <sashal@kernel.org>, Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 006/606] bpf: Fix bug in mmap() implementation for BPF array map
+Date:   Mon,  8 Jun 2020 19:02:11 -0400
+Message-Id: <20200608231211.3363633-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
-References: <20200608231848.3366970-1-sashal@kernel.org>
+In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
+References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,34 +44,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+[ Upstream commit 333291ce5055f2039afc907badaf5b66bc1adfdc ]
 
-[ Upstream commit 3c8e8cf4b18b3a7034fab4c4504fc4b54e4b6195 ]
+mmap() subsystem allows user-space application to memory-map region with
+initial page offset. This wasn't taken into account in initial implementation
+of BPF array memory-mapping. This would result in wrong pages, not taking into
+account requested page shift, being memory-mmaped into user-space. This patch
+fixes this gap and adds a test for such scenario.
 
-test_seg6_loop.o uses the helper bpf_lwt_seg6_adjust_srh();
-it will not be present if CONFIG_IPV6_SEG6_BPF is not specified.
-
-Fixes: b061017f8b4d ("selftests/bpf: add realistic loop tests")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/1590147389-26482-2-git-send-email-alan.maguire@oracle.com
+Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20200512235925.3817805-1-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/bpf/arraymap.c                         | 7 ++++++-
+ tools/testing/selftests/bpf/prog_tests/mmap.c | 9 +++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 5dc109f4c097..b9601f13cf03 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -25,6 +25,7 @@ CONFIG_XDP_SOCKETS=y
- CONFIG_FTRACE_SYSCALLS=y
- CONFIG_IPV6_TUNNEL=y
- CONFIG_IPV6_GRE=y
-+CONFIG_IPV6_SEG6_BPF=y
- CONFIG_NET_FOU=m
- CONFIG_NET_FOU_IP_TUNNELS=y
- CONFIG_IPV6_FOU=m
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 95d77770353c..1d6120fd5ba6 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -486,7 +486,12 @@ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+ 	if (!(map->map_flags & BPF_F_MMAPABLE))
+ 		return -EINVAL;
+ 
+-	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array), pgoff);
++	if (vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start) >
++	    PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
++		return -EINVAL;
++
++	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
++				   vma->vm_pgoff + pgoff);
+ }
+ 
+ const struct bpf_map_ops array_map_ops = {
+diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
+index 16a814eb4d64..b0e789678aa4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
+@@ -197,6 +197,15 @@ void test_mmap(void)
+ 	CHECK_FAIL(map_data->val[far] != 3 * 321);
+ 
+ 	munmap(tmp2, 4 * page_size);
++
++	/* map all 4 pages, but with pg_off=1 page, should fail */
++	tmp1 = mmap(NULL, 4 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
++		    data_map_fd, page_size /* initial page shift */);
++	if (CHECK(tmp1 != MAP_FAILED, "adv_mmap7", "unexpected success")) {
++		munmap(tmp1, 4 * page_size);
++		goto cleanup;
++	}
++
+ cleanup:
+ 	if (bss_mmaped)
+ 		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
 -- 
 2.25.1
 
