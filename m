@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB201F2D7E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87971F2F6C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730425AbgFIAds (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 20:33:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35316 "EHLO mail.kernel.org"
+        id S1728664AbgFHXK2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 19:10:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729906AbgFHXOs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:14:48 -0400
+        id S1726973AbgFHXK0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:10:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 598ED20C09;
-        Mon,  8 Jun 2020 23:14:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C9D43208A9;
+        Mon,  8 Jun 2020 23:10:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658088;
-        bh=vXYk7JUvoeakSGmPKmqeDoVsAFE/QUqU1NhtnvOHL0I=;
+        s=default; t=1591657825;
+        bh=GgNbKupob62BqUCj27AYN8DGZuT/nucfLviwTiGLsBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ObgWlcolMem3z4ya4QgbYf9Qx81nUplV6n4vlh+yGDLQna7yO0r9AkK0GJIB4sIYm
-         KADzNxwf+24NasCvo+qvT8XmV9nWQ9T+cqGV9MBut09UZnlvpeKBL6WkCMKnNTvdu5
-         SxzOOnGXDkY5lPIwNoGVrvglxBSgXhy13kVMQGnw=
+        b=wbHDfA+96pe6Nco1zWoUDuGBpT0FGmgNziFO/3nJOJL+YKSOUB0MmuKB0fb+hxdyx
+         9Uqn5zU5rFItUqIKJOibbXC14MlgbT22a5TGhwpDOKj7rulvRNRPHOiP5LXztaCk/5
+         jv27mj6wLrwaoFTp4i5JxCVmltA/RLpIzqHMUCg4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peter Xu <peterx@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 131/606] KVM: selftests: Fix build for evmcs.h
-Date:   Mon,  8 Jun 2020 19:04:16 -0400
-Message-Id: <20200608231211.3363633-131-sashal@kernel.org>
+Cc:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 197/274] selftests/bpf: Install generated test progs
+Date:   Mon,  8 Jun 2020 19:04:50 -0400
+Message-Id: <20200608230607.3361041-197-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
+In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
+References: <20200608230607.3361041-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,58 +46,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peter Xu <peterx@redhat.com>
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 
-[ Upstream commit 8ffdaf9155ebe517cdec5edbcca19ba6e7ee9c3c ]
+[ Upstream commit 309b81f0fdc4209d998bc63f0da52c2e96340d4e ]
 
-I got this error when building kvm selftests:
+Before commit 74b5a5968fe8 ("selftests/bpf: Replace test_progs and
+test_maps w/ general rule") selftests/bpf used generic install
+target from selftests/lib.mk to install generated bpf test progs
+by mentioning them in TEST_GEN_FILES variable.
 
-/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: multiple definition of `current_evmcs'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: first defined here
-/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: multiple definition of `current_vp_assist'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: first defined here
+Take that functionality back.
 
-I think it's because evmcs.h is included both in a test file and a lib file so
-the structs have multiple declarations when linking.  After all it's not a good
-habit to declare structs in the header files.
-
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
-Message-Id: <20200504220607.99627-1-peterx@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: 74b5a5968fe8 ("selftests/bpf: Replace test_progs and test_maps w/ general rule")
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20200513021722.7787-1-yauheni.kaliuta@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/include/evmcs.h  | 4 ++--
- tools/testing/selftests/kvm/lib/x86_64/vmx.c | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/kvm/include/evmcs.h b/tools/testing/selftests/kvm/include/evmcs.h
-index 4912d23844bc..e31ac9c5ead0 100644
---- a/tools/testing/selftests/kvm/include/evmcs.h
-+++ b/tools/testing/selftests/kvm/include/evmcs.h
-@@ -217,8 +217,8 @@ struct hv_enlightened_vmcs {
- #define HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_MASK	\
- 		(~((1ull << HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT) - 1))
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 01c95f8278c7..af139d0e2e0c 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -264,6 +264,7 @@ TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o, $$(TRUNNER_BPF_SRCS)
+ TRUNNER_BPF_SKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.skel.h,	\
+ 				 $$(filter-out $(SKEL_BLACKLIST),	\
+ 					       $$(TRUNNER_BPF_SRCS)))
++TEST_GEN_FILES += $$(TRUNNER_BPF_OBJS)
  
--struct hv_enlightened_vmcs *current_evmcs;
--struct hv_vp_assist_page *current_vp_assist;
-+extern struct hv_enlightened_vmcs *current_evmcs;
-+extern struct hv_vp_assist_page *current_vp_assist;
- 
- int vcpu_enable_evmcs(struct kvm_vm *vm, int vcpu_id);
- 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-index 7aaa99ca4dbc..ce528f3cf093 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-@@ -17,6 +17,9 @@
- 
- bool enable_evmcs;
- 
-+struct hv_enlightened_vmcs *current_evmcs;
-+struct hv_vp_assist_page *current_vp_assist;
-+
- struct eptPageTableEntry {
- 	uint64_t readable:1;
- 	uint64_t writable:1;
+ # Evaluate rules now with extra TRUNNER_XXX variables above already defined
+ $$(eval $$(call DEFINE_TEST_RUNNER_RULES,$1,$2))
 -- 
 2.25.1
 
