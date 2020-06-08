@@ -2,63 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF6B1F21A1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jun 2020 23:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFC61F21CC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 00:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgFHVxU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 17:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S1726782AbgFHWXz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 18:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726723AbgFHVxQ (ORCPT
+        with ESMTP id S1726765AbgFHWXy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 17:53:16 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC9CC08C5C2
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2020 14:53:15 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id v13so14973050otp.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2020 14:53:15 -0700 (PDT)
+        Mon, 8 Jun 2020 18:23:54 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826F3C08C5C3
+        for <linux-kselftest@vger.kernel.org>; Mon,  8 Jun 2020 15:23:54 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id 69so15028017otv.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jun 2020 15:23:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=to:cc:from:subject:message-id:date:user-agent:mime-version
          :content-language;
-        bh=P0e4Qtfee5PLNZW89c3vmeVGsvQYeJAMKOzqAOnsokQ=;
-        b=XYtkjH2yhUhKLDMfvKbtdMOowMjh+taXYRaoyO1RMTxa/tLM/oYuLHIcEVOQ9PChPo
-         o+e4aJJv7KTwRFd0gVLhyyBrsbJZ34SQc/ziNG4VbdFRN/+STeDAcOGvYqPVBaA12cT6
-         3dILKgIQeEb1D2I360Fq3eB92+2wKgFYkov/4=
+        bh=6LuEExTNhqxw8wg5CEugQdz+Z5sLjz6eamDC5Zo8FUU=;
+        b=IKXJD0NdTGoCyp6iPtI+/xkYlFLJEspjlcjSgiBcIY/NXtEWTnW0Ti+fh3CFfHaAfA
+         BzncEF4pPSxAPfBHJzhZat2I7An86pPhVWdO64oMrwEGU2Ahv/K/lhJL2CQ7N2TgtJuw
+         9s7tiKz0LXc5Y+0Ql2kO32/ZYEI5AkZoee0AM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
          :mime-version:content-language;
-        bh=P0e4Qtfee5PLNZW89c3vmeVGsvQYeJAMKOzqAOnsokQ=;
-        b=gnGujWPlKiTUFPyr780b183FGmqDZ0silEJgfF1Zk6j9YcTcQ9acn09pE8UX60x9wM
-         /RVWYnJD/GFglGcX98jDUxClgX3cRmONiGN1JOnhfNan0r0aKllkcDJjvIJocP1UHCL2
-         SdWqM+sOlARRnyxasW8OW4ZSxKsLsWQP+MmiDfA6bXlBTd6ZLdrc2U8rx1jB66xpnwfk
-         hyrtYUlbUAbwswrYzV78sSG/qIGk6OzMiUhk93EvAl9wPrbUbILl3ulF9hgBrbhTLW1k
-         KoY+82mAPXM5AuIcZfy9mDGcm8lRV96Xi28LdiVGtFioYtHQjDA8/+Re3W5iLYbuUO4z
-         d9bg==
-X-Gm-Message-State: AOAM532sC+/gWbjvH7u1KqGB3ZHu26S+1AFoUSR1dv4AUPKV0DAvE3DR
-        B3kD5gFyOd3z9lPAVHFRvS+INZDZROw=
-X-Google-Smtp-Source: ABdhPJyLMGoyef2Lcde0Gqxop50kwKDaThjWAsdVkDYM1i+Q/ZMzELr/YbawXnalovQAOHesU2WgoA==
-X-Received: by 2002:a05:6830:19d3:: with SMTP id p19mr12449127otp.176.1591653194819;
-        Mon, 08 Jun 2020 14:53:14 -0700 (PDT)
+        bh=6LuEExTNhqxw8wg5CEugQdz+Z5sLjz6eamDC5Zo8FUU=;
+        b=Q4x1IVIu9H3gqaqYB4V+d5WFaJwbw7pJM5/Yme7DvkeQJdRgImPC1sbmdSfyviuoIk
+         tyq3AQRozimmmU80nx9qNcqxxH4dDkl873cNl+IS+ftVo0tn36J4cc4qfGVFCu/qKvlb
+         bzOSXwsALplc6UGLbeVOt2XnOWJNT0/skU6XIN+2+tadThnTeT8Os9QuyGMM6fuQfHq6
+         Rz3TFAGUD/qqgSSYgfB6Tgh3EKDxPDrZT27N5ds1qaVMRfuRg5CbIaQrNzNViZUceqcZ
+         mIcb8gxMAx9xzk88Yng7u/IZJZOwNXdGDrCbDBM8OgESthNutfCJjCdd1+V7PY4kzncU
+         bSdw==
+X-Gm-Message-State: AOAM531cxaHCbGRXQmyblAxy/ykHQacwQIaCKeiJUqycVNWCDhW0Lb/g
+        uFxGa2yUFOj6VJeLEtBdEdJ/wQ==
+X-Google-Smtp-Source: ABdhPJwnTTTANxH1/tKeNhQvHYbEgkefuB71aKQcEYA+W1CqAGFyr4uvOJBrk0AyfBfmhj5zi6psuw==
+X-Received: by 2002:a9d:7458:: with SMTP id p24mr17339798otk.330.1591655033885;
+        Mon, 08 Jun 2020 15:23:53 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 33sm1794864ott.0.2020.06.08.14.53.13
+        by smtp.gmail.com with ESMTPSA id i2sm1792302ota.66.2020.06.08.15.23.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jun 2020 14:53:14 -0700 (PDT)
-To:     torvalds@linux-foundation.org
-Cc:     sfr@canb.auug.org.au, akpm@linux-foundation.org,
-        skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>, vbabka@suse.cz
+        Mon, 08 Jun 2020 15:23:53 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest update for Linux 5.8-rc1
-Message-ID: <9e5f53d8-ecc7-5d78-e232-3f525541bf88@linuxfoundation.org>
-Date:   Mon, 8 Jun 2020 15:53:12 -0600
+Subject: [GIT PULL] Kunit update for Linux 5.8-rc1
+Message-ID: <a975bc3c-a101-fe24-a2e3-1ae70ad7b181@linuxfoundation.org>
+Date:   Mon, 8 Jun 2020 16:23:52 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="------------9530114B82D05A0A3E51D6BA"
+ boundary="------------11E968490F92724A739CD02E"
 Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -66,42 +65,28 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------9530114B82D05A0A3E51D6BA
+--------------11E968490F92724A739CD02E
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hi Linus,
 
-Please pull the following Kselftest update for Linux 5.8-rc1.
+Please pull the Kunit update for Linux 5.8-rc1.
 
-This Kselftest update for Linux 5.8-rc1 consists of:
+This Kunit update for Linux 5.8-rc1 consists of:
 
-- Several fixes from Masami Hiramatsu to improve coverage for
-   lib and sysctl tests.
-- Clean up to vdso test and a new test for getcpu() from Mark Brown.
-- Add new gen_tar selftests Makefile target generate selftest package
-   running "make gen_tar" in selftests directory from Veronika Kabatova.
-- Other miscellaneous fixes to timens, exec, tpm2 tests.
+- Several config fragment fixes from Anders Roxell to improve
+   test coverage.
+- Improvements to kunit run script to use defconfig as default and
+   restructure the code for config/build/exec/parse from Vitor Massaru Iha
+   and David Gow.
+- Miscellaneous documentation warn fix.
 
 diff is attached.
 
-Please note that there is a conflict in
-tools/testing/selftests/sysctl/sysctl.sh
-
-between commit:
-
-   eee470e0739a ("selftests/sysctl: Fix to load test_sysctl module")
-
-from the kselftest tree and patch:
-
-   "tools/testing/selftests/sysctl/sysctl.sh: support CONFIG_TEST_SYSCTL=y"
-
-Stephen fixed this up in linux-next. Masami double checked the fix.
-Please let me know if you see any problems and would like me to
-address them.
-
 thanks,
 -- Shuah
+
 
 ----------------------------------------------------------------
 The following changes since commit 2ef96a5bb12be62ef75b5828c0aab838ebb29cb8:
@@ -111,699 +96,783 @@ The following changes since commit 2ef96a5bb12be62ef75b5828c0aab838ebb29cb8:
 are available in the Git repository at:
 
    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-5.8-rc1
+tags/linux-kselftest-kunit-5.8-rc1
 
-for you to fetch changes up to 382561a0f11c4995d48ab82670412f8d6c418430:
+for you to fetch changes up to 6d6861d45e38d42a7df9db244c871ee3856acf57:
 
-   selftests/sysctl: Make sysctl test driver as a module (2020-06-02 
-10:27:02 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-5.8-rc1
-
-This Kselftest update for Linux 5.8-rc1 consists of:
-
-- Several fixes from Masami Hiramatsu to improve coverage for
-   lib and sysctl tests.
-- Clean up to vdso test and a new test for getcpu() from Mark Brown.
-- Add new gen_tar selftests Makefile target generate selftest package
-   running "make gen_tar" in selftests directory from Veronika Kabatova.
-- Other miscellaneous fixes to timens, exec, tpm2 tests.
+   security: apparmor: default KUNIT_* fragments to KUNIT_ALL_TESTS 
+(2020-06-01 14:25:15 -0600)
 
 ----------------------------------------------------------------
-Andrei Vagin (1):
-       selftests/timens: handle a case when alarm clocks are not supported
+linux-kselftest-kunit-5.8-rc1
 
-Kees Cook (1):
-       selftests/exec: Verify execve of non-regular files fail
+This Kunit update for Linux 5.8-rc1 consists of:
 
-Mark Brown (3):
-       selftests: vdso: Rename vdso_test to vdso_test_gettimeofday
-       selftests: vdso: Use a header file to prototype parse_vdso API
-       selftests: vdso: Add a selftest for vDSO getcpu()
+- Several config fragment fixes from Anders Roxell to improve
+   test coverage.
+- Improvements to kunit run script to use defconfig as default and
+   restructure the code for config/build/exec/parse from Vitor Massaru Iha
+   and David Gow.
+- Miscellaneous documentation warn fix.
 
-Masami Hiramatsu (6):
-       selftests/ftrace: Use printf for backslash included command
-       selftests/ftrace: Return unsupported if no error_log file
-       lib: Make prime number generator independently selectable
-       lib: Make test_sysctl initialized as module
-       selftests/sysctl: Fix to load test_sysctl module
-       selftests/sysctl: Make sysctl test driver as a module
+----------------------------------------------------------------
+Anders Roxell (6):
+       kunit: Kconfig: enable a KUNIT_ALL_TESTS fragment
+       kunit: default KUNIT_* fragments to KUNIT_ALL_TESTS
+       lib: Kconfig.debug: default KUNIT_* fragments to KUNIT_ALL_TESTS
+       drivers: base: default KUNIT_* fragments to KUNIT_ALL_TESTS
+       fs: ext4: default KUNIT_* fragments to KUNIT_ALL_TESTS
+       security: apparmor: default KUNIT_* fragments to KUNIT_ALL_TESTS
 
-Nikita Sobolev (1):
-       Kernel selftests: Add check if TPM devices are supported
+David Gow (1):
+       kunit: kunit_tool: Separate out config/build/exec/parse
 
-Veronika Kabatova (1):
-       selftests: introduce gen_tar Makefile target
+Lothar Rubusch (1):
+       Documentation: test.h - fix warnings
 
-  Documentation/dev-tools/kselftest.rst              | 23 +++++++++
-  lib/math/Kconfig                                   |  7 ++-
-  lib/test_sysctl.c                                  |  2 +-
-  tools/testing/selftests/Makefile                   |  9 +++-
-  tools/testing/selftests/exec/.gitignore            |  1 +
-  tools/testing/selftests/exec/Makefile              |  2 +-
-  tools/testing/selftests/exec/execveat.c            |  8 ++++
-  .../ftrace/test.d/ftrace/tracing-error-log.tc      |  2 +
-tools/testing/selftests/ftrace/test.d/functions    |  8 ++--
-  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |  4 +-
-  tools/testing/selftests/gen_kselftest_tar.sh       |  5 ++
-  tools/testing/selftests/sysctl/config              |  2 +-
-  tools/testing/selftests/sysctl/sysctl.sh           | 13 +-----
-  tools/testing/selftests/timens/clock_nanosleep.c   |  2 +-
-  tools/testing/selftests/timens/timens.c            |  2 +-
-  tools/testing/selftests/timens/timens.h            | 13 +++++-
-  tools/testing/selftests/timens/timer.c             |  5 ++
-  tools/testing/selftests/timens/timerfd.c           |  5 ++
-  tools/testing/selftests/tpm2/test_smoke.sh         |  5 ++
-  tools/testing/selftests/tpm2/test_space.sh         |  5 ++
-  tools/testing/selftests/vDSO/.gitignore            |  2 +
-  tools/testing/selftests/vDSO/Makefile              |  5 +-
-  tools/testing/selftests/vDSO/parse_vdso.c          | 24 +---------
-  tools/testing/selftests/vDSO/parse_vdso.h          | 31 +++++++++++++
-  .../selftests/vDSO/vdso_standalone_test_x86.c      |  4 +-
-  tools/testing/selftests/vDSO/vdso_test_getcpu.c    | 54 
-++++++++++++++++++++++
-  .../vDSO/{vdso_test.c => vdso_test_gettimeofday.c} | 10 ++--
-  27 files changed, 196 insertions(+), 57 deletions(-)
-  create mode 100644 tools/testing/selftests/vDSO/parse_vdso.h
-  create mode 100644 tools/testing/selftests/vDSO/vdso_test_getcpu.c
-  rename tools/testing/selftests/vDSO/{vdso_test.c => 
-vdso_test_gettimeofday.c} (84%)
+Vitor Massaru Iha (3):
+       kunit: use --build_dir=.kunit as default
+       kunit: use KUnit defconfig by default
+       kunit: Fix TabError, remove defconfig code and handle when there 
+is no kunitconfig
+
+  Documentation/dev-tools/kunit/start.rst |  13 +-
+  Documentation/dev-tools/kunit/usage.rst |   4 +-
+  drivers/base/Kconfig                    |   3 +-
+  drivers/base/test/Kconfig               |   3 +-
+  fs/ext4/Kconfig                         |   3 +-
+  include/kunit/test.h                    |  12 +-
+  lib/Kconfig.debug                       |   6 +-
+  lib/kunit/Kconfig                       |  23 ++-
+  security/apparmor/Kconfig               |   3 +-
+  tools/testing/kunit/kunit.py            | 307 
++++++++++++++++++++++++++-------
+  tools/testing/kunit/kunit_tool_test.py  |  63 ++++++-
+  11 files changed, 351 insertions(+), 89 deletions(-)
 
 ----------------------------------------------------------------
 
---------------9530114B82D05A0A3E51D6BA
+--------------11E968490F92724A739CD02E
 Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-5.8-rc1.diff"
+ name="linux-kselftest-kunit-5.8-rc1.diff"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment;
- filename="linux-kselftest-5.8-rc1.diff"
+ filename="linux-kselftest-kunit-5.8-rc1.diff"
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index 61ae13c44f91..d4f6341cf4d9 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -151,6 +151,29 @@ note some tests will require root privileges::
-    $ cd kselftest
-    $ ./run_kselftest.sh
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index e1c5ce80ce12..bb112cf70624 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -32,15 +32,17 @@ test targets as well. The ``.kunitconfig`` should also contain any other config
+ options required by the tests.
  
-+Packaging selftests
-+===================
+ A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
 +
-+In some cases packaging is desired, such as when tests need to run on a
-+different system. To package selftests, run::
-+
-+   $ make -C tools/testing/selftests gen_tar
-+
-+This generates a tarball in the `INSTALL_PATH/kselftest-packages` directory. By
-+default, `.gz` format is used. The tar format can be overridden by specifying
-+a `FORMAT` make variable. Any value recognized by `tar's auto-compress`_ option
-+is supported, such as::
-+
-+    $ make -C tools/testing/selftests gen_tar FORMAT=.xz
-+
-+`make gen_tar` invokes `make install` so you can use it to package a subset of
-+tests by using variables specified in `Running a subset of selftests`_
-+section::
-+
-+    $ make -C tools/testing/selftests gen_tar TARGETS="bpf" FORMAT=.xz
-+
-+.. _tar's auto-compress: https://www.gnu.org/software/tar/manual/html_node/gzip.html#auto_002dcompress
-+
- Contributing new tests
- ======================
+ .. code-block:: bash
  
-diff --git a/lib/math/Kconfig b/lib/math/Kconfig
-index 15bd50d92308..f19bc9734fa7 100644
---- a/lib/math/Kconfig
-+++ b/lib/math/Kconfig
-@@ -6,7 +6,12 @@ config CORDIC
- 	  calculations are in fixed point. Module will be called cordic.
+ 	cd $PATH_TO_LINUX_REPO
+ 	cp arch/um/configs/kunit_defconfig .kunitconfig
  
- config PRIME_NUMBERS
--	tristate
-+	tristate "Simple prime number generator for testing"
+ You can then add any other Kconfig options you wish, e.g.:
++
+ .. code-block:: none
+ 
+-        CONFIG_LIST_KUNIT_TEST=y
++	CONFIG_LIST_KUNIT_TEST=y
+ 
+ :doc:`kunit_tool <kunit-tool>` will ensure that all config options set in
+ ``.kunitconfig`` are set in the kernel ``.config`` before running the tests.
+@@ -54,8 +56,8 @@ using.
+    other tools (such as make menuconfig) to adjust other config options.
+ 
+ 
+-Running the tests
+------------------
++Running the tests (KUnit Wrapper)
++---------------------------------
+ 
+ To make sure that everything is set up correctly, simply invoke the Python
+ wrapper from your kernel repo:
+@@ -105,8 +107,9 @@ have config options ending in ``_KUNIT_TEST``.
+ KUnit and KUnit tests can be compiled as modules: in this case the tests in a
+ module will be run when the module is loaded.
+ 
+-Running the tests
+------------------
++
++Running the tests (w/o KUnit Wrapper)
++-------------------------------------
+ 
+ Build and run your kernel as usual. Test output will be written to the kernel
+ log in `TAP <https://testanything.org/>`_ format.
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 473a2361ec37..3c3fe8b5fecc 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -595,7 +595,7 @@ able to run one test case per invocation.
+ KUnit debugfs representation
+ ============================
+ When kunit test suites are initialized, they create an associated directory
+-in /sys/kernel/debug/kunit/<test-suite>.  The directory contains one file
++in ``/sys/kernel/debug/kunit/<test-suite>``.  The directory contains one file
+ 
+ - results: "cat results" displays results of each test case and the results
+   of the entire suite for the last test run.
+@@ -604,4 +604,4 @@ The debugfs representation is primarily of use when kunit test suites are
+ run in a native environment, either as modules or builtin.  Having a way
+ to display results like this is valuable as otherwise results can be
+ intermixed with other events in dmesg output.  The maximum size of each
+-results file is KUNIT_LOG_SIZE bytes (defined in include/kunit/test.h).
++results file is KUNIT_LOG_SIZE bytes (defined in ``include/kunit/test.h``).
+diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+index 5f0bc74d2409..8d7001712062 100644
+--- a/drivers/base/Kconfig
++++ b/drivers/base/Kconfig
+@@ -149,8 +149,9 @@ config DEBUG_TEST_DRIVER_REMOVE
+ 	  test this functionality.
+ 
+ config PM_QOS_KUNIT_TEST
+-	bool "KUnit Test for PM QoS features"
++	bool "KUnit Test for PM QoS features" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=y
++	default KUNIT_ALL_TESTS
+ 
+ config HMEM_REPORTING
+ 	bool
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 305c7751184a..ba225eb1b761 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -9,5 +9,6 @@ config TEST_ASYNC_DRIVER_PROBE
+ 
+ 	  If unsure say N.
+ config KUNIT_DRIVER_PE_TEST
+-	bool "KUnit Tests for property entry API"
++	bool "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=y
++	default KUNIT_ALL_TESTS
+diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
+index 2a592e38cdfe..bc7815158503 100644
+--- a/fs/ext4/Kconfig
++++ b/fs/ext4/Kconfig
+@@ -103,9 +103,10 @@ config EXT4_DEBUG
+ 		echo 1 > /sys/module/ext4/parameters/mballoc_debug
+ 
+ config EXT4_KUNIT_TESTS
+-	tristate "KUnit tests for ext4"
++	tristate "KUnit tests for ext4" if !KUNIT_ALL_TESTS
+ 	select EXT4_FS
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds the ext4 KUnit tests.
+ 
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 9b0c46a6ca1f..47e61e1d5337 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -175,7 +175,7 @@ struct kunit_suite {
+ 	void (*exit)(struct kunit *test);
+ 	struct kunit_case *test_cases;
+ 
+-	/* private - internal use only */
++	/* private: internal use only */
+ 	struct dentry *debugfs;
+ 	char *log;
+ };
+@@ -232,12 +232,12 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+  * kunit_test_suites() - used to register one or more &struct kunit_suite
+  *			 with KUnit.
+  *
+- * @suites: a statically allocated list of &struct kunit_suite.
++ * @suites_list...: a statically allocated list of &struct kunit_suite.
+  *
+- * Registers @suites with the test framework. See &struct kunit_suite for
++ * Registers @suites_list with the test framework. See &struct kunit_suite for
+  * more information.
+  *
+- * When builtin,  KUnit tests are all run as late_initcalls; this means
++ * When builtin, KUnit tests are all run as late_initcalls; this means
+  * that they cannot test anything where tests must run at a different init
+  * phase. One significant restriction resulting from this is that KUnit
+  * cannot reliably test anything that is initialize in the late_init phase;
+@@ -253,8 +253,8 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+  * tests from the same place, and at the very least to do so after
+  * everything else is definitely initialized.
+  */
+-#define kunit_test_suites(...)						\
+-	static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};	\
++#define kunit_test_suites(suites_list...)				\
++	static struct kunit_suite *suites[] = {suites_list, NULL};	\
+ 	static int kunit_test_suites_init(void)				\
+ 	{								\
+ 		return __kunit_test_suites_init(suites);		\
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 21d9c5f6e7ec..1f4ab7a2bdee 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2064,8 +2064,9 @@ config TEST_SYSCTL
+ 	  If unsure, say N.
+ 
+ config SYSCTL_KUNIT_TEST
+-	tristate "KUnit test for sysctl"
++	tristate "KUnit test for sysctl" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds the proc sysctl unit test, which runs on boot.
+ 	  Tests the API contract and implementation correctness of sysctl.
+@@ -2075,8 +2076,9 @@ config SYSCTL_KUNIT_TEST
+ 	  If unsure, say N.
+ 
+ config LIST_KUNIT_TEST
+-	tristate "KUnit Test for Kernel Linked-list structures"
++	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds the linked list KUnit test suite.
+ 	  It tests that the API and basic functionality of the list_head type
+diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+index 95d12e3d6d95..00909e6a2443 100644
+--- a/lib/kunit/Kconfig
++++ b/lib/kunit/Kconfig
+@@ -15,7 +15,8 @@ menuconfig KUNIT
+ if KUNIT
+ 
+ config KUNIT_DEBUGFS
+-	bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation"
++	bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation" if !KUNIT_ALL_TESTS
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enable debugfs representation for kunit.  Currently this consists
+ 	  of /sys/kernel/debug/kunit/<test_suite>/results files for each
+@@ -23,7 +24,8 @@ config KUNIT_DEBUGFS
+ 	  run that occurred.
+ 
+ config KUNIT_TEST
+-	tristate "KUnit test for KUnit"
++	tristate "KUnit test for KUnit" if !KUNIT_ALL_TESTS
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enables the unit tests for the KUnit test framework. These tests test
+ 	  the KUnit test framework itself; the tests are both written using
+@@ -32,7 +34,8 @@ config KUNIT_TEST
+ 	  expected.
+ 
+ config KUNIT_EXAMPLE_TEST
+-	tristate "Example test for KUnit"
++	tristate "Example test for KUnit" if !KUNIT_ALL_TESTS
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enables an example unit test that illustrates some of the basic
+ 	  features of KUnit. This test only exists to help new users understand
+@@ -41,4 +44,18 @@ config KUNIT_EXAMPLE_TEST
+ 	  is intended for curious hackers who would like to understand how to
+ 	  use KUnit for kernel development.
+ 
++config KUNIT_ALL_TESTS
++	tristate "All KUnit tests with satisfied dependencies"
 +	help
-+	  This option provides a simple prime number generator for test
-+	  modules.
++	  Enables all KUnit tests, if they can be enabled.
++	  KUnit tests run during boot and output the results to the debug log
++	  in TAP format (http://testanything.org/). Only useful for kernel devs
++	  running the KUnit test harness, and not intended for inclusion into a
++	  production build.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
 +
 +	  If unsure, say N.
- 
- config RATIONAL
- 	bool
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 566dad3f4196..ec4d0f03475d 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -149,7 +149,7 @@ static int __init test_sysctl_init(void)
- 	}
- 	return 0;
- }
--late_initcall(test_sysctl_init);
-+module_init(test_sysctl_init);
- 
- static void __exit test_sysctl_exit(void)
- {
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 2ff68702fd41..1195bd85af38 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -249,10 +249,17 @@ else
- 	$(error Error: set INSTALL_PATH to use install)
- endif
- 
-+FORMAT ?= .gz
-+TAR_PATH = $(abspath ${INSTALL_PATH}/kselftest-packages/kselftest.tar${FORMAT})
-+gen_tar: install
-+	@mkdir -p ${INSTALL_PATH}/kselftest-packages/
-+	@tar caf ${TAR_PATH} --exclude=kselftest-packages -C ${INSTALL_PATH} .
-+	@echo "Created ${TAR_PATH}"
 +
- clean:
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
- 	done;
+ endif # KUNIT
+diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
+index 0fe336860773..03fae1bd48a6 100644
+--- a/security/apparmor/Kconfig
++++ b/security/apparmor/Kconfig
+@@ -70,8 +70,9 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
+ 	  the kernel message buffer.
  
--.PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
-+.PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean gen_tar
-diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
-index c078ece12ff0..94b02a18f230 100644
---- a/tools/testing/selftests/exec/.gitignore
-+++ b/tools/testing/selftests/exec/.gitignore
-@@ -9,3 +9,4 @@ execveat.ephemeral
- execveat.denatured
- /recursion-depth
- xxxxxxxx*
-+pipe
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index 33339e31e365..cfafa1f8a2fa 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -4,7 +4,7 @@ CFLAGS += -Wno-nonnull
- CFLAGS += -D_GNU_SOURCE
+ config SECURITY_APPARMOR_KUNIT_TEST
+-	bool "Build KUnit tests for policy_unpack.c"
++	bool "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=y && SECURITY_APPARMOR
++	default KUNIT_ALL_TESTS
+ 	help
+ 	  This builds the AppArmor KUnit tests.
  
- TEST_GEN_PROGS := execveat
--TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
-+TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir pipe
- # Makefile is a run-time dependency, since it's accessed by the execveat test
- TEST_FILES := Makefile
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 7dca74774dd2..787b6d4ad716 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -20,11 +20,20 @@ import kunit_config
+ import kunit_kernel
+ import kunit_parser
  
-diff --git a/tools/testing/selftests/exec/execveat.c b/tools/testing/selftests/exec/execveat.c
-index cbb6efbdb786..67bf7254a48f 100644
---- a/tools/testing/selftests/exec/execveat.c
-+++ b/tools/testing/selftests/exec/execveat.c
-@@ -5,7 +5,9 @@
-  * Selftests for execveat(2).
-  */
+-KunitResult = namedtuple('KunitResult', ['status','result'])
++KunitResult = namedtuple('KunitResult', ['status','result','elapsed_time'])
  
-+#ifndef _GNU_SOURCE
- #define _GNU_SOURCE  /* to get O_PATH, AT_EMPTY_PATH */
-+#endif
- #include <sys/sendfile.h>
- #include <sys/stat.h>
- #include <sys/syscall.h>
-@@ -311,6 +313,10 @@ static int run_tests(void)
- 	fail += check_execveat_fail(AT_FDCWD, fullname_symlink,
- 				    AT_SYMLINK_NOFOLLOW, ELOOP);
++KunitConfigRequest = namedtuple('KunitConfigRequest',
++				['build_dir', 'make_options'])
++KunitBuildRequest = namedtuple('KunitBuildRequest',
++			       ['jobs', 'build_dir', 'alltests',
++				'make_options'])
++KunitExecRequest = namedtuple('KunitExecRequest',
++			      ['timeout', 'build_dir', 'alltests'])
++KunitParseRequest = namedtuple('KunitParseRequest',
++			       ['raw_output', 'input_data'])
+ KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
+-					   'build_dir', 'defconfig',
+-					   'alltests', 'make_options'])
++					   'build_dir', 'alltests',
++					   'make_options'])
  
-+	/*  Non-regular file failure */
-+	fail += check_execveat_fail(dot_dfd, "pipe", 0, EACCES);
-+	unlink("pipe");
+ KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
+ 
+@@ -46,14 +55,24 @@ def get_kernel_root_path():
+ 		sys.exit(1)
+ 	return parts[0]
+ 
+-def run_tests(linux: kunit_kernel.LinuxSourceTree,
+-	      request: KunitRequest) -> KunitResult:
++def config_tests(linux: kunit_kernel.LinuxSourceTree,
++		 request: KunitConfigRequest) -> KunitResult:
++	kunit_parser.print_with_timestamp('Configuring KUnit Kernel ...')
 +
- 	/* Shell script wrapping executable file: */
- 	/*   dfd + path */
- 	fail += check_execveat(subdir_dfd, "../script", 0);
-@@ -384,6 +390,8 @@ static void prerequisites(void)
- 	fd = open("subdir.ephemeral/script", O_RDWR|O_CREAT|O_TRUNC, 0755);
- 	write(fd, script, strlen(script));
- 	close(fd);
+ 	config_start = time.time()
++	create_default_kunitconfig()
+ 	success = linux.build_reconfig(request.build_dir, request.make_options)
+ 	config_end = time.time()
+ 	if not success:
+-		return KunitResult(KunitStatus.CONFIG_FAILURE, 'could not configure kernel')
++		return KunitResult(KunitStatus.CONFIG_FAILURE,
++				   'could not configure kernel',
++				   config_end - config_start)
++	return KunitResult(KunitStatus.SUCCESS,
++			   'configured kernel successfully',
++			   config_end - config_start)
+ 
++def build_tests(linux: kunit_kernel.LinuxSourceTree,
++		request: KunitBuildRequest) -> KunitResult:
+ 	kunit_parser.print_with_timestamp('Building KUnit Kernel ...')
+ 
+ 	build_start = time.time()
+@@ -64,86 +83,166 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	build_end = time.time()
+ 	if not success:
+ 		return KunitResult(KunitStatus.BUILD_FAILURE, 'could not build kernel')
++	if not success:
++		return KunitResult(KunitStatus.BUILD_FAILURE,
++				   'could not build kernel',
++				   build_end - build_start)
++	return KunitResult(KunitStatus.SUCCESS,
++			   'built kernel successfully',
++			   build_end - build_start)
+ 
++def exec_tests(linux: kunit_kernel.LinuxSourceTree,
++	       request: KunitExecRequest) -> KunitResult:
+ 	kunit_parser.print_with_timestamp('Starting KUnit Kernel ...')
+ 	test_start = time.time()
+-	kunit_output = linux.run_kernel(
++	result = linux.run_kernel(
+ 		timeout=None if request.alltests else request.timeout,
+ 		build_dir=request.build_dir)
 +
-+	mkfifo("pipe", 0755);
- }
- 
- int main(int argc, char **argv)
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc b/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
-index 021c03fd885d..23465823532b 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/tracing-error-log.tc
-@@ -14,6 +14,8 @@ if [ ! -f set_event ]; then
-     exit_unsupported
- fi
- 
-+[ -f error_log ] || exit_unsupported
++	test_end = time.time()
 +
- ftrace_errlog_check 'event filter parse error' '((sig >= 10 && sig < 15) || dsig ^== 17) && comm != bash' 'events/signal/signal_generate/filter'
- 
- exit 0
-diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-index 61a3c7e2634d..697c77ef2e2b 100644
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -119,12 +119,14 @@ yield() {
-     ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
- }
- 
-+# Since probe event command may include backslash, explicitly use printf "%s"
-+# to NOT interpret it.
- ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
--    pos=$(echo -n "${2%^*}" | wc -c) # error position
--    command=$(echo "$2" | tr -d ^)
-+    pos=$(printf "%s" "${2%^*}" | wc -c) # error position
-+    command=$(printf "%s" "$2" | tr -d ^)
-     echo "Test command: $command"
-     echo > error_log
--    (! echo "$command" >> "$3" ) 2> /dev/null
-+    (! printf "%s" "$command" >> "$3" ) 2> /dev/null
-     grep "$1: error:" -A 3 error_log
-     N=$(tail -n 1 error_log | wc -c)
-     # "  Command: " and "^\n" => 13
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index ef1e9bafb098..eb0f4ab4e070 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -91,7 +91,9 @@ esac
- if grep -q "Create/append/" README && grep -q "imm-value" README; then
- echo 'p:kprobes/testevent _do_fork' > kprobe_events
- check_error '^r:kprobes/testevent do_exit'	# DIFF_PROBE_TYPE
--echo 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
++	return KunitResult(KunitStatus.SUCCESS,
++			   result,
++			   test_end - test_start)
 +
-+# Explicitly use printf "%s" to not interpret \1
-+printf "%s" 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
- check_error 'p:kprobes/testevent _do_fork ^bcd=\1'	# DIFF_ARG_TYPE
- check_error 'p:kprobes/testevent _do_fork ^abcd=\1:u8'	# DIFF_ARG_TYPE
- check_error 'p:kprobes/testevent _do_fork ^abcd=\"foo"'	# DIFF_ARG_TYPE
-diff --git a/tools/testing/selftests/gen_kselftest_tar.sh b/tools/testing/selftests/gen_kselftest_tar.sh
-index 8b2b6088540d..4a974bc03385 100755
---- a/tools/testing/selftests/gen_kselftest_tar.sh
-+++ b/tools/testing/selftests/gen_kselftest_tar.sh
-@@ -49,6 +49,11 @@ main()
- 	# directory
- 	./kselftest_install.sh "$install_dir"
- 	(cd "$install_work"; tar $copts "$dest"/kselftest${ext} $install_name)
++def parse_tests(request: KunitParseRequest) -> KunitResult:
++	parse_start = time.time()
 +
-+	# Don't put the message at the actual end as people may be parsing the
-+	# "archive created" line in their scripts.
-+	echo -e "\nConsider using 'make gen_tar' instead of this script\n"
++	test_result = kunit_parser.TestResult(kunit_parser.TestStatus.SUCCESS,
++					      [],
++					      'Tests not Parsed.')
+ 	if request.raw_output:
+-		raw_output = kunit_parser.raw_output(kunit_output)
+-		isolated = list(kunit_parser.isolate_kunit_output(raw_output))
+-		test_result = kunit_parser.parse_test_result(isolated)
++		kunit_parser.raw_output(request.input_data)
+ 	else:
+-		test_result = kunit_parser.parse_run_tests(kunit_output)
+-	test_end = time.time()
++		test_result = kunit_parser.parse_run_tests(request.input_data)
++	parse_end = time.time()
 +
- 	echo "Kselftest archive kselftest${ext} created!"
++	if test_result.status != kunit_parser.TestStatus.SUCCESS:
++		return KunitResult(KunitStatus.TEST_FAILURE, test_result,
++				   parse_end - parse_start)
++
++	return KunitResult(KunitStatus.SUCCESS, test_result,
++				parse_end - parse_start)
++
++
++def run_tests(linux: kunit_kernel.LinuxSourceTree,
++	      request: KunitRequest) -> KunitResult:
++	run_start = time.time()
++
++	config_request = KunitConfigRequest(request.build_dir,
++					    request.make_options)
++	config_result = config_tests(linux, config_request)
++	if config_result.status != KunitStatus.SUCCESS:
++		return config_result
++
++	build_request = KunitBuildRequest(request.jobs, request.build_dir,
++					  request.alltests,
++					  request.make_options)
++	build_result = build_tests(linux, build_request)
++	if build_result.status != KunitStatus.SUCCESS:
++		return build_result
++
++	exec_request = KunitExecRequest(request.timeout, request.build_dir,
++					request.alltests)
++	exec_result = exec_tests(linux, exec_request)
++	if exec_result.status != KunitStatus.SUCCESS:
++		return exec_result
++
++	parse_request = KunitParseRequest(request.raw_output,
++					  exec_result.result)
++	parse_result = parse_tests(parse_request)
++
++	run_end = time.time()
  
- 	# clean up top-level install work directory
-diff --git a/tools/testing/selftests/sysctl/config b/tools/testing/selftests/sysctl/config
-index 6ca14800d755..fc263efd1fad 100644
---- a/tools/testing/selftests/sysctl/config
-+++ b/tools/testing/selftests/sysctl/config
-@@ -1 +1 @@
--CONFIG_TEST_SYSCTL=y
-+CONFIG_TEST_SYSCTL=m
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index 6a970b127c9b..c3459f9f2429 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -40,16 +40,6 @@ ALL_TESTS="$ALL_TESTS 0004:1:1:uint_0001"
- ALL_TESTS="$ALL_TESTS 0005:3:1:int_0003"
- ALL_TESTS="$ALL_TESTS 0006:50:1:bitmap_0001"
+ 	kunit_parser.print_with_timestamp((
+ 		'Elapsed time: %.3fs total, %.3fs configuring, %.3fs ' +
+ 		'building, %.3fs running\n') % (
+-				test_end - config_start,
+-				config_end - config_start,
+-				build_end - build_start,
+-				test_end - test_start))
++				run_end - run_start,
++				config_result.elapsed_time,
++				build_result.elapsed_time,
++				exec_result.elapsed_time))
++	return parse_result
++
++def add_common_opts(parser):
++	parser.add_argument('--build_dir',
++			    help='As in the make command, it specifies the build '
++			    'directory.',
++                            type=str, default='.kunit', metavar='build_dir')
++	parser.add_argument('--make_options',
++			    help='X=Y make option, can be repeated.',
++			    action='append')
++	parser.add_argument('--alltests',
++			    help='Run all KUnit tests through allyesconfig',
++			    action='store_true')
++
++def add_build_opts(parser):
++	parser.add_argument('--jobs',
++			    help='As in the make command, "Specifies  the number of '
++			    'jobs (commands) to run simultaneously."',
++			    type=int, default=8, metavar='jobs')
++
++def add_exec_opts(parser):
++	parser.add_argument('--timeout',
++			    help='maximum number of seconds to allow for all tests '
++			    'to run. This does not include time taken to build the '
++			    'tests.',
++			    type=int,
++			    default=300,
++			    metavar='timeout')
++
++def add_parse_opts(parser):
++	parser.add_argument('--raw_output', help='don\'t format output from kernel',
++			    action='store_true')
  
--test_modprobe()
--{
--       if [ ! -d $DIR ]; then
--               echo "$0: $DIR not present" >&2
--               echo "You must have the following enabled in your kernel:" >&2
--               cat $TEST_DIR/config >&2
--               exit $ksft_skip
--       fi
--}
+-	if test_result.status != kunit_parser.TestStatus.SUCCESS:
+-		return KunitResult(KunitStatus.TEST_FAILURE, test_result)
+-	else:
+-		return KunitResult(KunitStatus.SUCCESS, test_result)
+ 
+ def main(argv, linux=None):
+ 	parser = argparse.ArgumentParser(
+ 			description='Helps writing and running KUnit tests.')
+ 	subparser = parser.add_subparsers(dest='subcommand')
+ 
++	# The 'run' command will config, build, exec, and parse in one go.
+ 	run_parser = subparser.add_parser('run', help='Runs KUnit tests.')
+-	run_parser.add_argument('--raw_output', help='don\'t format output from kernel',
+-				action='store_true')
 -
- function allow_user_defaults()
- {
- 	if [ -z $DIR ]; then
-@@ -125,10 +115,12 @@ function load_req_mod()
- 	if [ ! -d $DIR ]; then
- 		if ! modprobe -q -n $TEST_DRIVER; then
- 			echo "$0: module $TEST_DRIVER not found [SKIP]"
-+			echo "You must set CONFIG_TEST_SYSCTL=m in your kernel" >&2
- 			exit $ksft_skip
- 		fi
- 		modprobe $TEST_DRIVER
- 		if [ $? -ne 0 ]; then
-+			echo "$0: modprobe $TEST_DRIVER failed."
- 			exit
- 		fi
- 	fi
-@@ -929,7 +921,6 @@ test_reqs
- allow_user_defaults
- check_production_sysctl_writes_strict
- load_req_mod
--test_modprobe
- 
- trap "test_finish" EXIT
- 
-diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
-index 8e7b7c72ef65..72d41b955fb2 100644
---- a/tools/testing/selftests/timens/clock_nanosleep.c
-+++ b/tools/testing/selftests/timens/clock_nanosleep.c
-@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
- 
- 	ksft_set_plan(4);
- 
--	check_config_posix_timers();
-+	check_supported_timers();
- 
- 	if (unshare_timens())
- 		return 1;
-diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
-index 098be7c83be3..52b6a1185f52 100644
---- a/tools/testing/selftests/timens/timens.c
-+++ b/tools/testing/selftests/timens/timens.c
-@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
- 
- 	nscheck();
- 
--	check_config_posix_timers();
-+	check_supported_timers();
- 
- 	ksft_set_plan(ARRAY_SIZE(clocks) * 2);
- 
-diff --git a/tools/testing/selftests/timens/timens.h b/tools/testing/selftests/timens/timens.h
-index e09e7e39bc52..d4fc52d47146 100644
---- a/tools/testing/selftests/timens/timens.h
-+++ b/tools/testing/selftests/timens/timens.h
-@@ -14,15 +14,26 @@
- #endif
- 
- static int config_posix_timers = true;
-+static int config_alarm_timers = true;
- 
--static inline void check_config_posix_timers(void)
-+static inline void check_supported_timers(void)
- {
-+	struct timespec ts;
-+
- 	if (timer_create(-1, 0, 0) == -1 && errno == ENOSYS)
- 		config_posix_timers = false;
-+
-+	if (clock_gettime(CLOCK_BOOTTIME_ALARM, &ts) == -1 && errno == EINVAL)
-+		config_alarm_timers = false;
- }
- 
- static inline bool check_skip(int clockid)
- {
-+	if (!config_alarm_timers && clockid == CLOCK_BOOTTIME_ALARM) {
-+		ksft_test_result_skip("CLOCK_BOOTTIME_ALARM isn't supported\n");
-+		return true;
-+	}
-+
- 	if (config_posix_timers)
- 		return false;
- 
-diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
-index 96dba11ebe44..5e7f0051bd7b 100644
---- a/tools/testing/selftests/timens/timer.c
-+++ b/tools/testing/selftests/timens/timer.c
-@@ -22,6 +22,9 @@ int run_test(int clockid, struct timespec now)
- 	timer_t fd;
- 	int i;
- 
-+	if (check_skip(clockid))
-+		return 0;
-+
- 	for (i = 0; i < 2; i++) {
- 		struct sigevent sevp = {.sigev_notify = SIGEV_NONE};
- 		int flags = 0;
-@@ -74,6 +77,8 @@ int main(int argc, char *argv[])
- 
- 	nscheck();
- 
-+	check_supported_timers();
-+
- 	ksft_set_plan(3);
- 
- 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
-diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
-index eff1ec5ff215..9edd43d6b2c1 100644
---- a/tools/testing/selftests/timens/timerfd.c
-+++ b/tools/testing/selftests/timens/timerfd.c
-@@ -28,6 +28,9 @@ int run_test(int clockid, struct timespec now)
- 	long long elapsed;
- 	int fd, i;
- 
-+	if (check_skip(clockid))
-+		return 0;
-+
- 	if (tclock_gettime(clockid, &now))
- 		return pr_perror("clock_gettime(%d)", clockid);
- 
-@@ -81,6 +84,8 @@ int main(int argc, char *argv[])
- 
- 	nscheck();
- 
-+	check_supported_timers();
-+
- 	ksft_set_plan(3);
- 
- 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 8155c2ea7ccb..663062701d5a 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -1,6 +1,11 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -f /dev/tpm0 ] || exit $ksft_skip
-+
- python -m unittest -v tpm2_tests.SmokeTest
- python -m unittest -v tpm2_tests.AsyncTest
- 
-diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-index a6f5e346635e..36c9d030a1c6 100755
---- a/tools/testing/selftests/tpm2/test_space.sh
-+++ b/tools/testing/selftests/tpm2/test_space.sh
-@@ -1,4 +1,9 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+[ -f /dev/tpmrm0 ] || exit $ksft_skip
-+
- python -m unittest -v tpm2_tests.SpaceTest
-diff --git a/tools/testing/selftests/vDSO/.gitignore b/tools/testing/selftests/vDSO/.gitignore
-index 382cfb39a1a3..5eb64d41e541 100644
---- a/tools/testing/selftests/vDSO/.gitignore
-+++ b/tools/testing/selftests/vDSO/.gitignore
-@@ -1,3 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- vdso_test
-+vdso_test_gettimeofday
-+vdso_test_getcpu
- vdso_standalone_test_x86
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index 9e03d61f52fd..0069f2f83f86 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -4,7 +4,7 @@ include ../lib.mk
- uname_M := $(shell uname -m 2>/dev/null || echo not)
- ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
--TEST_GEN_PROGS := $(OUTPUT)/vdso_test
-+TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday $(OUTPUT)/vdso_test_getcpu
- ifeq ($(ARCH),x86)
- TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
- endif
-@@ -17,7 +17,8 @@ LDLIBS += -lgcc_s
- endif
- 
- all: $(TEST_GEN_PROGS)
--$(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
-+$(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
-+$(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
- $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
- 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
- 		vdso_standalone_test_x86.c parse_vdso.c \
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 1dbb4b87268f..413f75620a35 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -21,29 +21,7 @@
- #include <limits.h>
- #include <elf.h>
- 
--/*
-- * To use this vDSO parser, first call one of the vdso_init_* functions.
-- * If you've already parsed auxv, then pass the value of AT_SYSINFO_EHDR
-- * to vdso_init_from_sysinfo_ehdr.  Otherwise pass auxv to vdso_init_from_auxv.
-- * Then call vdso_sym for each symbol you want.  For example, to look up
-- * gettimeofday on x86_64, use:
-- *
-- *     <some pointer> = vdso_sym("LINUX_2.6", "gettimeofday");
-- * or
-- *     <some pointer> = vdso_sym("LINUX_2.6", "__vdso_gettimeofday");
-- *
-- * vdso_sym will return 0 if the symbol doesn't exist or if the init function
-- * failed or was not called.  vdso_sym is a little slow, so its return value
-- * should be cached.
-- *
-- * vdso_sym is threadsafe; the init functions are not.
-- *
-- * These are the prototypes:
-- */
--extern void vdso_init_from_auxv(void *auxv);
--extern void vdso_init_from_sysinfo_ehdr(uintptr_t base);
--extern void *vdso_sym(const char *version, const char *name);
+-	run_parser.add_argument('--timeout',
+-				help='maximum number of seconds to allow for all tests '
+-				'to run. This does not include time taken to build the '
+-				'tests.',
+-				type=int,
+-				default=300,
+-				metavar='timeout')
 -
-+#include "parse_vdso.h"
- 
- /* And here's the code. */
- #ifndef ELF_BITS
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.h b/tools/testing/selftests/vDSO/parse_vdso.h
-new file mode 100644
-index 000000000000..de0453067d7c
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/parse_vdso.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef PARSE_VDSO_H
-+#define PARSE_VDSO_H
-+
-+#include <stdint.h>
-+
-+/*
-+ * To use this vDSO parser, first call one of the vdso_init_* functions.
-+ * If you've already parsed auxv, then pass the value of AT_SYSINFO_EHDR
-+ * to vdso_init_from_sysinfo_ehdr.  Otherwise pass auxv to vdso_init_from_auxv.
-+ * Then call vdso_sym for each symbol you want.  For example, to look up
-+ * gettimeofday on x86_64, use:
-+ *
-+ *     <some pointer> = vdso_sym("LINUX_2.6", "gettimeofday");
-+ * or
-+ *     <some pointer> = vdso_sym("LINUX_2.6", "__vdso_gettimeofday");
-+ *
-+ * vdso_sym will return 0 if the symbol doesn't exist or if the init function
-+ * failed or was not called.  vdso_sym is a little slow, so its return value
-+ * should be cached.
-+ *
-+ * vdso_sym is threadsafe; the init functions are not.
-+ *
-+ * These are the prototypes:
-+ */
-+void *vdso_sym(const char *version, const char *name);
-+void vdso_init_from_sysinfo_ehdr(uintptr_t base);
-+void vdso_init_from_auxv(void *auxv);
-+
-+#endif
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-index 5ac4b00acfbc..8a44ff973ee1 100644
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -16,9 +16,7 @@
- #include <unistd.h>
- #include <stdint.h>
- 
--extern void *vdso_sym(const char *version, const char *name);
--extern void vdso_init_from_sysinfo_ehdr(uintptr_t base);
--extern void vdso_init_from_auxv(void *auxv);
-+#include "parse_vdso.h"
- 
- /* We need a libc functions... */
- int strcmp(const char *a, const char *b)
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-new file mode 100644
-index 000000000000..fc25ede131b8
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * vdso_test_getcpu.c: Sample code to test parse_vdso.c and vDSO getcpu()
-+ *
-+ * Copyright (c) 2020 Arm Ltd
-+ */
-+
-+#include <stdint.h>
-+#include <elf.h>
-+#include <stdio.h>
-+#include <sys/auxv.h>
-+#include <sys/time.h>
-+
-+#include "../kselftest.h"
-+#include "parse_vdso.h"
-+
-+const char *version = "LINUX_2.6";
-+const char *name = "__vdso_getcpu";
-+
-+struct getcpu_cache;
-+typedef long (*getcpu_t)(unsigned int *, unsigned int *,
-+			 struct getcpu_cache *);
-+
-+int main(int argc, char **argv)
-+{
-+	unsigned long sysinfo_ehdr;
-+	unsigned int cpu, node;
-+	getcpu_t get_cpu;
-+	long ret;
-+
-+	sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
-+	if (!sysinfo_ehdr) {
-+		printf("AT_SYSINFO_EHDR is not present!\n");
-+		return KSFT_SKIP;
-+	}
-+
-+	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
-+
-+	get_cpu = (getcpu_t)vdso_sym(version, name);
-+	if (!get_cpu) {
-+		printf("Could not find %s\n", name);
-+		return KSFT_SKIP;
-+	}
-+
-+	ret = get_cpu(&cpu, &node, 0);
-+	if (ret == 0) {
-+		printf("Running on CPU %u node %u\n", cpu, node);
-+	} else {
-+		printf("%s failed\n", name);
-+		return KSFT_FAIL;
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/vDSO/vdso_test.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-similarity index 84%
-rename from tools/testing/selftests/vDSO/vdso_test.c
-rename to tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-index 719d5a6bd664..8ccc73ed8240 100644
---- a/tools/testing/selftests/vDSO/vdso_test.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-@@ -1,10 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * vdso_test.c: Sample code to test parse_vdso.c
-+ * vdso_test_gettimeofday.c: Sample code to test parse_vdso.c and
-+ *                           vDSO gettimeofday()
-  * Copyright (c) 2014 Andy Lutomirski
-  *
-  * Compile with:
-- * gcc -std=gnu99 vdso_test.c parse_vdso.c
-+ * gcc -std=gnu99 vdso_test_gettimeofday.c parse_vdso_gettimeofday.c
-  *
-  * Tested on x86, 32-bit and 64-bit.  It may work on other architectures, too.
-  */
-@@ -16,10 +17,7 @@
- #include <sys/time.h>
- 
- #include "../kselftest.h"
+-	run_parser.add_argument('--jobs',
+-				help='As in the make command, "Specifies  the number of '
+-				'jobs (commands) to run simultaneously."',
+-				type=int, default=8, metavar='jobs')
 -
--extern void *vdso_sym(const char *version, const char *name);
--extern void vdso_init_from_sysinfo_ehdr(uintptr_t base);
--extern void vdso_init_from_auxv(void *auxv);
-+#include "parse_vdso.h"
+-	run_parser.add_argument('--build_dir',
+-				help='As in the make command, it specifies the build '
+-				'directory.',
+-				type=str, default='', metavar='build_dir')
+-
+-	run_parser.add_argument('--defconfig',
+-				help='Uses a default .kunitconfig.',
+-				action='store_true')
+-
+-	run_parser.add_argument('--alltests',
+-				help='Run all KUnit tests through allyesconfig',
+-				action='store_true')
+-
+-	run_parser.add_argument('--make_options',
+-				help='X=Y make option, can be repeated.',
+-				action='append')
++	add_common_opts(run_parser)
++	add_build_opts(run_parser)
++	add_exec_opts(run_parser)
++	add_parse_opts(run_parser)
++
++	config_parser = subparser.add_parser('config',
++						help='Ensures that .config contains all of '
++						'the options in .kunitconfig')
++	add_common_opts(config_parser)
++
++	build_parser = subparser.add_parser('build', help='Builds a kernel with KUnit tests')
++	add_common_opts(build_parser)
++	add_build_opts(build_parser)
++
++	exec_parser = subparser.add_parser('exec', help='Run a kernel with KUnit tests')
++	add_common_opts(exec_parser)
++	add_exec_opts(exec_parser)
++	add_parse_opts(exec_parser)
++
++	# The 'parse' option is special, as it doesn't need the kernel source
++	# (therefore there is no need for a build_dir, hence no add_common_opts)
++	# and the '--file' argument is not relevant to 'run', so isn't in
++	# add_parse_opts()
++	parse_parser = subparser.add_parser('parse',
++					    help='Parses KUnit results from a file, '
++					    'and parses formatted results.')
++	add_parse_opts(parse_parser)
++	parse_parser.add_argument('file',
++				  help='Specifies the file to read results from.',
++				  type=str, nargs='?', metavar='input_file')
  
- /*
-  * ARM64's vDSO exports its gettimeofday() implementation with a different
+ 	cli_args = parser.parse_args(argv)
+ 
+ 	if cli_args.subcommand == 'run':
+-		if get_kernel_root_path():
+-			os.chdir(get_kernel_root_path())
++		if not os.path.exists(cli_args.build_dir):
++			os.mkdir(cli_args.build_dir)
++		kunit_kernel.kunitconfig_path = os.path.join(
++			cli_args.build_dir,
++			kunit_kernel.kunitconfig_path)
+ 
+-		if cli_args.build_dir:
+-			if not os.path.exists(cli_args.build_dir):
+-				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
+-				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
+-
+-		if cli_args.defconfig:
++		if not os.path.exists(kunit_kernel.kunitconfig_path):
+ 			create_default_kunitconfig()
+ 
+ 		if not linux:
+@@ -153,12 +252,94 @@ def main(argv, linux=None):
+ 				       cli_args.timeout,
+ 				       cli_args.jobs,
+ 				       cli_args.build_dir,
+-				       cli_args.defconfig,
+ 				       cli_args.alltests,
+ 				       cli_args.make_options)
+ 		result = run_tests(linux, request)
+ 		if result.status != KunitStatus.SUCCESS:
+ 			sys.exit(1)
++	elif cli_args.subcommand == 'config':
++		if cli_args.build_dir:
++			if not os.path.exists(cli_args.build_dir):
++				os.mkdir(cli_args.build_dir)
++			kunit_kernel.kunitconfig_path = os.path.join(
++				cli_args.build_dir,
++				kunit_kernel.kunitconfig_path)
++
++		if not os.path.exists(kunit_kernel.kunitconfig_path):
++			create_default_kunitconfig()
++
++		if not linux:
++			linux = kunit_kernel.LinuxSourceTree()
++
++		request = KunitConfigRequest(cli_args.build_dir,
++					     cli_args.make_options)
++		result = config_tests(linux, request)
++		kunit_parser.print_with_timestamp((
++			'Elapsed time: %.3fs\n') % (
++				result.elapsed_time))
++		if result.status != KunitStatus.SUCCESS:
++			sys.exit(1)
++	elif cli_args.subcommand == 'build':
++		if cli_args.build_dir:
++			if not os.path.exists(cli_args.build_dir):
++				os.mkdir(cli_args.build_dir)
++			kunit_kernel.kunitconfig_path = os.path.join(
++				cli_args.build_dir,
++				kunit_kernel.kunitconfig_path)
++
++		if not os.path.exists(kunit_kernel.kunitconfig_path):
++			create_default_kunitconfig()
++
++		if not linux:
++			linux = kunit_kernel.LinuxSourceTree()
++
++		request = KunitBuildRequest(cli_args.jobs,
++					    cli_args.build_dir,
++					    cli_args.alltests,
++					    cli_args.make_options)
++		result = build_tests(linux, request)
++		kunit_parser.print_with_timestamp((
++			'Elapsed time: %.3fs\n') % (
++				result.elapsed_time))
++		if result.status != KunitStatus.SUCCESS:
++			sys.exit(1)
++	elif cli_args.subcommand == 'exec':
++		if cli_args.build_dir:
++			if not os.path.exists(cli_args.build_dir):
++				os.mkdir(cli_args.build_dir)
++			kunit_kernel.kunitconfig_path = os.path.join(
++				cli_args.build_dir,
++				kunit_kernel.kunitconfig_path)
++
++		if not os.path.exists(kunit_kernel.kunitconfig_path):
++			create_default_kunitconfig()
++
++		if not linux:
++			linux = kunit_kernel.LinuxSourceTree()
++
++		exec_request = KunitExecRequest(cli_args.timeout,
++						cli_args.build_dir,
++						cli_args.alltests)
++		exec_result = exec_tests(linux, exec_request)
++		parse_request = KunitParseRequest(cli_args.raw_output,
++						  exec_result.result)
++		result = parse_tests(parse_request)
++		kunit_parser.print_with_timestamp((
++			'Elapsed time: %.3fs\n') % (
++				exec_result.elapsed_time))
++		if result.status != KunitStatus.SUCCESS:
++			sys.exit(1)
++	elif cli_args.subcommand == 'parse':
++		if cli_args.file == None:
++			kunit_output = sys.stdin
++		else:
++			with open(cli_args.file, 'r') as f:
++				kunit_output = f.read().splitlines()
++		request = KunitParseRequest(cli_args.raw_output,
++					    kunit_output)
++		result = parse_tests(request)
++		if result.status != KunitStatus.SUCCESS:
++			sys.exit(1)
+ 	else:
+ 		parser.print_help()
+ 
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 984588d6ba95..5bb7b118ebd9 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -239,6 +239,24 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.print_patch.stop()
+ 		pass
+ 
++	def test_config_passes_args_pass(self):
++		kunit.main(['config'], self.linux_source_mock)
++		assert self.linux_source_mock.build_reconfig.call_count == 1
++		assert self.linux_source_mock.run_kernel.call_count == 0
++
++	def test_build_passes_args_pass(self):
++		kunit.main(['build'], self.linux_source_mock)
++		assert self.linux_source_mock.build_reconfig.call_count == 0
++		self.linux_source_mock.build_um_kernel.assert_called_once_with(False, 8, '', None)
++		assert self.linux_source_mock.run_kernel.call_count == 0
++
++	def test_exec_passes_args_pass(self):
++		kunit.main(['exec'], self.linux_source_mock)
++		assert self.linux_source_mock.build_reconfig.call_count == 0
++		assert self.linux_source_mock.run_kernel.call_count == 1
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
++		self.print_mock.assert_any_call(StrContains('Testing complete.'))
++
+ 	def test_run_passes_args_pass(self):
+ 		kunit.main(['run'], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+@@ -247,6 +265,13 @@ class KUnitMainTest(unittest.TestCase):
+ 			build_dir='', timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
++	def test_exec_passes_args_fail(self):
++		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
++		with self.assertRaises(SystemExit) as e:
++			kunit.main(['exec'], self.linux_source_mock)
++		assert type(e.exception) == SystemExit
++		assert e.exception.code == 1
++
+ 	def test_run_passes_args_fail(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+ 		with self.assertRaises(SystemExit) as e:
+@@ -257,14 +282,28 @@ class KUnitMainTest(unittest.TestCase):
+ 		assert self.linux_source_mock.run_kernel.call_count == 1
+ 		self.print_mock.assert_any_call(StrContains(' 0 tests run'))
+ 
++	def test_exec_raw_output(self):
++		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
++		kunit.main(['exec', '--raw_output'], self.linux_source_mock)
++		assert self.linux_source_mock.run_kernel.call_count == 1
++		for kall in self.print_mock.call_args_list:
++			assert kall != mock.call(StrContains('Testing complete.'))
++			assert kall != mock.call(StrContains(' 0 tests run'))
++
+ 	def test_run_raw_output(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
+-		with self.assertRaises(SystemExit) as e:
+-			kunit.main(['run', '--raw_output'], self.linux_source_mock)
+-		assert type(e.exception) == SystemExit
+-		assert e.exception.code == 1
++		kunit.main(['run', '--raw_output'], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+ 		assert self.linux_source_mock.run_kernel.call_count == 1
++		for kall in self.print_mock.call_args_list:
++			assert kall != mock.call(StrContains('Testing complete.'))
++			assert kall != mock.call(StrContains(' 0 tests run'))
++
++	def test_exec_timeout(self):
++		timeout = 3453
++		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
++		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+ 	def test_run_timeout(self):
+ 		timeout = 3453
+@@ -282,5 +321,21 @@ class KUnitMainTest(unittest.TestCase):
+ 			build_dir=build_dir, timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
++	def test_config_builddir(self):
++		build_dir = '.kunit'
++		kunit.main(['config', '--build_dir', build_dir], self.linux_source_mock)
++		assert self.linux_source_mock.build_reconfig.call_count == 1
++
++	def test_build_builddir(self):
++		build_dir = '.kunit'
++		kunit.main(['build', '--build_dir', build_dir], self.linux_source_mock)
++		self.linux_source_mock.build_um_kernel.assert_called_once_with(False, 8, build_dir, None)
++
++	def test_exec_builddir(self):
++		build_dir = '.kunit'
++		kunit.main(['exec', '--build_dir', build_dir], self.linux_source_mock)
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
++		self.print_mock.assert_any_call(StrContains('Testing complete.'))
++
+ if __name__ == '__main__':
+ 	unittest.main()
 
---------------9530114B82D05A0A3E51D6BA--
+--------------11E968490F92724A739CD02E--
