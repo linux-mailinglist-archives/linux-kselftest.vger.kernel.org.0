@@ -2,37 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC421F301D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF951F300C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728433AbgFIA42 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 20:56:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54664 "EHLO mail.kernel.org"
+        id S1728344AbgFHXJJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 19:09:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728315AbgFHXJE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:09:04 -0400
+        id S1728338AbgFHXJH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:09:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48858208C9;
-        Mon,  8 Jun 2020 23:09:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAC5120897;
+        Mon,  8 Jun 2020 23:09:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657744;
-        bh=TZrUG0c+bqLjBayBmaG07PdziZ3fDMuG7ttxZs3ZcfA=;
+        s=default; t=1591657746;
+        bh=gxk9MSh3P8MPirDz3R+VvLbXVPW8bi0sEi+cQ9ZIbSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WiO8QZiOI3Ynh2+DZ4bUY5Ztma6D67bJ8l6uGYfHfxU0x4762+TSZ6giP2AYjbOOr
-         IM9bhDI6rWoRBpVdxapEJgmFj9jdG6d+aMJtetVvp/jhcxqA+CWjma/YHjB/k65S0i
-         lY4rOEYn6EhaVNhVxSWQ7so43sIQpQHAaq0d6yfo=
+        b=lTxNbrXd+EOIMJt2pS99zyO2GfR0vIAOu4a+fGMlJwKVArStOjHwFJNWkQPh7/9bc
+         P8DDXjDBa1lrJAe6NRyVD4rNwoczRNN6Xwvg2lJ2Ria87y/i6a5lzSTZJVNc90SVGk
+         DE+a9f39QHE+UAU7aQ/ab9wHqtbOlUqYtJRzOkvA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Carlos Neira <cneirabustos@gmail.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 132/274] selftests/bpf: Fix invalid memory reads in core_relo selftest
-Date:   Mon,  8 Jun 2020 19:03:45 -0400
-Message-Id: <20200608230607.3361041-132-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 134/274] selftests/bpf: Fix bpf_link leak in ns_current_pid_tgid selftest
+Date:   Mon,  8 Jun 2020 19:03:47 -0400
+Message-Id: <20200608230607.3361041-134-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -47,33 +48,35 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 13c908495e5d51718a6da84ae925fa2aac056380 ]
+[ Upstream commit 8d30e80a049ad699264e4a12911e349f93c7279a ]
 
-Another one found by AddressSanitizer. input_len is bigger than actually
-initialized data size.
+If condition is inverted, but it's also just not necessary.
 
-Fixes: c7566a69695c ("selftests/bpf: Add field existence CO-RE relocs tests")
+Fixes: 1c1052e0140a ("tools/testing/selftests/bpf: Add self-tests for new helper bpf_get_ns_current_pid_tgid.")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200429012111.277390-8-andriin@fb.com
+Cc: Carlos Neira <cneirabustos@gmail.com>
+Link: https://lore.kernel.org/bpf/20200429012111.277390-11-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/core_reloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index 31e177adbdf1..084ed26a7d78 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -392,7 +392,7 @@ static struct core_reloc_test_case test_cases[] = {
- 		.input = STRUCT_TO_CHAR_PTR(core_reloc_existence___minimal) {
- 			.a = 42,
- 		},
--		.input_len = sizeof(struct core_reloc_existence),
-+		.input_len = sizeof(struct core_reloc_existence___minimal),
- 		.output = STRUCT_TO_CHAR_PTR(core_reloc_existence_output) {
- 			.a_exists = 1,
- 			.b_exists = 0,
+diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+index 542240e16564..e74dc501b27f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
++++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+@@ -80,9 +80,6 @@ void test_ns_current_pid_tgid(void)
+ 		  "User pid/tgid %llu BPF pid/tgid %llu\n", id, bss.pid_tgid))
+ 		goto cleanup;
+ cleanup:
+-	if (!link) {
+-		bpf_link__destroy(link);
+-		link = NULL;
+-	}
++	bpf_link__destroy(link);
+ 	bpf_object__close(obj);
+ }
 -- 
 2.25.1
 
