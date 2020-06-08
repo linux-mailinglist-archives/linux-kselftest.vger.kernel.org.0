@@ -2,36 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EAC1F2CE4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8401F2BCE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 02:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731546AbgFIA2n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jun 2020 20:28:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37598 "EHLO mail.kernel.org"
+        id S1730482AbgFHXRe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jun 2020 19:17:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39232 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727961AbgFHXQR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:16:17 -0400
+        id S1730476AbgFHXRd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:17:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF3D220870;
-        Mon,  8 Jun 2020 23:16:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A130214F1;
+        Mon,  8 Jun 2020 23:17:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658176;
-        bh=SCfhZTIaHqAp/kDN9R0eV/qpGB7J/zlJUu4kD5LbpR4=;
+        s=default; t=1591658253;
+        bh=oqZ+NsD3VxSpXbZh521LmVgD1/qZripK/UNHLLtpTDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NlDhpgY3zdcxammlDi8Szyi/2zvJ7gXCxtW6Sj36eBLjcVLWP8V0YZzSg+3m1gA9m
-         CSVMqQGDB3WdER5VEAm3VKPmQ6SogVBPMEi5POAlcXYptnXQ1GPLA8WJLD3LHNm6Oa
-         BMON3MP4ROd0jd18g6uM9jR/fV13LPqWfQ5QsVZg=
+        b=SS1DYvK7I5MAgJ/mX3WuRQERJ3AjhAvSGoTFrvw0zxudmzJZ27T6mGlXppD03Ntt/
+         ukX6KrL3n4NtOlDk5nrcQVGlfL8fwkqcNf6yCWEZlqno5rnpwe+IgJHHBioPAJRgtb
+         LmiQ0aXDktdQ7IyTgzui/GY7CeAR7iqWngQQhSzA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>, Jann Horn <jannh@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 202/606] bpf: Prevent mmap()'ing read-only maps as writable
-Date:   Mon,  8 Jun 2020 19:05:27 -0400
-Message-Id: <20200608231211.3363633-202-sashal@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Laura Abbott <labbott@redhat.com>,
+        "Andrew F. Davis" <afd@ti.com>, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 262/606] kselftests: dmabuf-heaps: Fix confused return value on expected error testing
+Date:   Mon,  8 Jun 2020 19:06:27 -0400
+Message-Id: <20200608231211.3363633-262-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -44,110 +49,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+From: John Stultz <john.stultz@linaro.org>
 
-[ Upstream commit dfeb376dd4cb2c5004aeb625e2475f58a5ff2ea7 ]
+[ Upstream commit 4bb9d46d47b105a774f9dca642f5271375bca4b2 ]
 
-As discussed in [0], it's dangerous to allow mapping BPF map, that's meant to
-be frozen and is read-only on BPF program side, because that allows user-space
-to actually store a writable view to the page even after it is frozen. This is
-exacerbated by BPF verifier making a strong assumption that contents of such
-frozen map will remain unchanged. To prevent this, disallow mapping
-BPF_F_RDONLY_PROG mmap()'able BPF maps as writable, ever.
+When I added the expected error testing, I forgot I need to set
+the return to zero when we successfully see an error.
 
-  [0] https://lore.kernel.org/bpf/CAEf4BzYGWYhXdp6BJ7_=9OQPJxQpgug080MMjdSB72i9R+5c6g@mail.gmail.com/
+Without this change we only end up testing a single heap
+before the test quits.
 
-Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
-Suggested-by: Jann Horn <jannh@google.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Jann Horn <jannh@google.com>
-Link: https://lore.kernel.org/bpf/20200519053824.1089415-1-andriin@fb.com
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Cc: Brian Starkey <brian.starkey@arm.com>
+Cc: Laura Abbott <labbott@redhat.com>
+Cc: "Andrew F. Davis" <afd@ti.com>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c                          | 17 ++++++++++++++---
- tools/testing/selftests/bpf/prog_tests/mmap.c | 13 ++++++++++++-
- tools/testing/selftests/bpf/progs/test_mmap.c |  8 ++++++++
- 3 files changed, 34 insertions(+), 4 deletions(-)
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e04ea4c8f935..c0ab9bfdf28a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -629,9 +629,20 @@ static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
- 
- 	mutex_lock(&map->freeze_mutex);
- 
--	if ((vma->vm_flags & VM_WRITE) && map->frozen) {
--		err = -EPERM;
--		goto out;
-+	if (vma->vm_flags & VM_WRITE) {
-+		if (map->frozen) {
-+			err = -EPERM;
-+			goto out;
-+		}
-+		/* map is meant to be read-only, so do not allow mapping as
-+		 * writable, because it's possible to leak a writable page
-+		 * reference and allows user-space to still modify it after
-+		 * freezing, while verifier will assume contents do not change
-+		 */
-+		if (map->map_flags & BPF_F_RDONLY_PROG) {
-+			err = -EACCES;
-+			goto out;
-+		}
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index cd5e1f602ac9..909da9cdda97 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -351,6 +351,7 @@ static int test_alloc_errors(char *heap_name)
  	}
  
- 	/* set default open/close callbacks */
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-index b0e789678aa4..5495b669fccc 100644
---- a/tools/testing/selftests/bpf/prog_tests/mmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -19,7 +19,7 @@ void test_mmap(void)
- 	const size_t map_sz = roundup_page(sizeof(struct map_data));
- 	const int zero = 0, one = 1, two = 2, far = 1500;
- 	const long page_size = sysconf(_SC_PAGE_SIZE);
--	int err, duration = 0, i, data_map_fd;
-+	int err, duration = 0, i, data_map_fd, rdmap_fd;
- 	struct bpf_map *data_map, *bss_map;
- 	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
- 	struct test_mmap__bss *bss_data;
-@@ -36,6 +36,17 @@ void test_mmap(void)
- 	data_map = skel->maps.data_map;
- 	data_map_fd = bpf_map__fd(data_map);
- 
-+	rdmap_fd = bpf_map__fd(skel->maps.rdonly_map);
-+	tmp1 = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, rdmap_fd, 0);
-+	if (CHECK(tmp1 != MAP_FAILED, "rdonly_write_mmap", "unexpected success\n")) {
-+		munmap(tmp1, 4096);
-+		goto cleanup;
-+	}
-+	/* now double-check if it's mmap()'able at all */
-+	tmp1 = mmap(NULL, 4096, PROT_READ, MAP_SHARED, rdmap_fd, 0);
-+	if (CHECK(tmp1 == MAP_FAILED, "rdonly_read_mmap", "failed: %d\n", errno))
-+		goto cleanup;
-+
- 	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
- 			  bpf_map__fd(bss_map), 0);
- 	if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
-diff --git a/tools/testing/selftests/bpf/progs/test_mmap.c b/tools/testing/selftests/bpf/progs/test_mmap.c
-index 6239596cd14e..4eb42cff5fe9 100644
---- a/tools/testing/selftests/bpf/progs/test_mmap.c
-+++ b/tools/testing/selftests/bpf/progs/test_mmap.c
-@@ -7,6 +7,14 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 4096);
-+	__uint(map_flags, BPF_F_MMAPABLE | BPF_F_RDONLY_PROG);
-+	__type(key, __u32);
-+	__type(value, char);
-+} rdonly_map SEC(".maps");
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
- 	__uint(max_entries, 512 * 4); /* at least 4 pages of data */
+ 	printf("Expected error checking passed\n");
++	ret = 0;
+ out:
+ 	if (dmabuf_fd >= 0)
+ 		close(dmabuf_fd);
 -- 
 2.25.1
 
