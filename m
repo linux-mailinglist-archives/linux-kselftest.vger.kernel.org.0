@@ -2,92 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C451F471F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 21:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16181F476B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 21:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727773AbgFITcd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Jun 2020 15:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S1731103AbgFITrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Jun 2020 15:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726941AbgFITcc (ORCPT
+        with ESMTP id S1730688AbgFITrL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Jun 2020 15:32:32 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE3DC05BD1E
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2020 12:32:32 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id i4so1847084pjd.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2020 12:32:32 -0700 (PDT)
+        Tue, 9 Jun 2020 15:47:11 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA20C03E97C
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2020 12:47:10 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id j189so19885355oih.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2020 12:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3rS0PjS0rxiYFFA6NkJOsLiVgpILALWXqX0+c6m8rUY=;
-        b=OJfv/PGGjziwHlWGLl+f5814ZzqprpOKgo0vPYSNCO/nX2sijtaq5FNv2gvbWNkhmp
-         ukFbQ40AvJEaCjIAoONUN7rBXUFQtFBC59T6RYgZf6/g+ZOE30WUE3PG/CzZUVuCMG2F
-         xYPtOViIgO4UXi78VEBAlZF2PZmzgpXAibdXz32MwoE5ZnUNKhuYdjOdPa3tRcIPJuPD
-         NI8Zjw7xlv97Ssky633X8+kf83KMTUNzd2Lvt3fH2AJwCNE2X+GxhWoqijUCJyQYRMZy
-         PvSNcDANXeakfxifbFaKVQtiKdwY6rLQetiJl79W0EhnNinpGxBPO9DxW5/K8v3jyoxD
-         VEbg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vJHHkDUbokY+54DQEArYhqlw2m9nYTGAzxOkgAkUWeY=;
+        b=WXtsedVfP3o1vfsUqp9SFhXoVaZT2RWMlQqJ1vHWpk3WyTLEZUd3NiMq6zfRqO5UbF
+         BfIpm5z/znMwSry3ZVHTa6S4xXg78v+/9tgPGruWE0yDGTEZc2pbDGqgE6Osf3gwkU3N
+         Vq7g07ijZN4PQD4Vr+wOiewFQEz1wW2dZAYhU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3rS0PjS0rxiYFFA6NkJOsLiVgpILALWXqX0+c6m8rUY=;
-        b=pkMgoR2nKovAwVbs6LtII3TGfUg7sv7pB1jsustagyxnIo/V+rCOpd83VfNl0/dvyM
-         lbDx77gHXvAffOwNUWAm1s+72SV15zFdUrGfpieWpPUqGKSuAyn+ZhvZMgFmQBmu251T
-         kUdFnVcvSc5IAtURsY4abJZc+A4XgF6YOZ+nI1wTzTZe3EbV3Pg+kkKlGUnvh8VM9Nqx
-         K6thojn1FIGiz/b7jiX7B2pMLDMtu5342HrFbKRA9jcDaOvTA6DXF6urQdUJgDN9+ZJp
-         B6kedK7Y5cGRft1b3B2IAQ6y9hkWpzqY5bBHGLRNothOQrdGy+2ryhne0cp4yTbOMwfB
-         /Oog==
-X-Gm-Message-State: AOAM532prLfPKa5uXNa5X8X492QI11t8lbQbrriY43tAohNd+FbIgHKq
-        6014PoCeA9G6kjSr6wGekxOym86RSJWCVjxGtJEn9Q==
-X-Google-Smtp-Source: ABdhPJzT/ray+2iwWCZt/bmbUFyJRHb3+cB2WcthZLy3Trleot/HATDwSXKrTU7Vy+g0WzyotOm2sfBvvFzmrrJfW+E=
-X-Received: by 2002:a17:90a:df82:: with SMTP id p2mr6575703pjv.217.1591731151274;
- Tue, 09 Jun 2020 12:32:31 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vJHHkDUbokY+54DQEArYhqlw2m9nYTGAzxOkgAkUWeY=;
+        b=QsT+JVW1O/Aeu9FCxke+w7GPk935neIZ1UvYxx/C0U37ML4FuNpL+13hc/AAtu1ICN
+         zVbXOiUjqDx/bJP0XpAuoJxtL5pjc9wRpbAlS+GTY41HfIUyaiFo2MPZ74j5irvzDQ3t
+         zjZ2ExWYGP8UNoYZPxd3Z67nrUfl6KMVLT4Kssw46ZsX0OVnpjSieHVC95h7ph1+ayrl
+         1BgxsdSGryh8/MGMKTqW3p4NiWatuuqcRhwXLfZg0jecZ4EnENfOaQTDK4Dvx9+O61zm
+         f8KkhuyJHKKdNStbv/JR1b1onbfDwVPlBN5kjj1dsI2AICr1FuCV9Nz9ycKOEosqoIXQ
+         fZQg==
+X-Gm-Message-State: AOAM530UQbZ5BrGdg3NsxdUdt4wCZlFAyXtXevyqUi9apKrluKXOvDWH
+        3F0mX2BilIySaO4Ymzyf0cOBYg==
+X-Google-Smtp-Source: ABdhPJyrjWmHTMRP25i31oeVNd2eDv9bTCijGBLQDfU/kgKT+C11897+WkO+8gV7JrS+tHAmTk4Yrg==
+X-Received: by 2002:aca:b4c4:: with SMTP id d187mr4937372oif.42.1591732030191;
+        Tue, 09 Jun 2020 12:47:10 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id j46sm2369331ota.69.2020.06.09.12.47.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2020 12:47:09 -0700 (PDT)
+Subject: Re: [PATCH 1/1] tools: testing: ftrace: trigger: fix spelling mistake
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Flavio Suligoi <f.suligoi@asem.it>
+Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200609163853.1602-1-f.suligoi@asem.it>
+ <20200609135235.608cdbf6@oasis.local.home>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6334f193-675d-80a1-ccb3-d007c8179bcb@linuxfoundation.org>
+Date:   Tue, 9 Jun 2020 13:47:08 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <20200606040349.246780-1-davidgow@google.com> <20200606040349.246780-6-davidgow@google.com>
-In-Reply-To: <20200606040349.246780-6-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 9 Jun 2020 12:32:20 -0700
-Message-ID: <CAFd5g44KHLV3EV+At3tsnbcagbW5Yc-fRXoTBae8no=peCJsmQ@mail.gmail.com>
-Subject: Re: [PATCH v8 5/5] mm: kasan: Do not panic if both panic_on_warn and
- kasan_multishot set
-To:     David Gow <davidgow@google.com>
-Cc:     Patricia Alfonso <trishalfonso@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        andreyknvl@google.com, shuah <shuah@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200609135235.608cdbf6@oasis.local.home>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 5, 2020 at 9:04 PM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> KASAN errors will currently trigger a panic when panic_on_warn is set.
-> This renders kasan_multishot useless, as further KASAN errors won't be
-> reported if the kernel has already paniced. By making kasan_multishot
-> disable this behaviour for KASAN errors, we can still have the benefits
-> of panic_on_warn for non-KASAN warnings, yet be able to use
-> kasan_multishot.
->
-> This is particularly important when running KASAN tests, which need to
-> trigger multiple KASAN errors: previously these would panic the system
-> if panic_on_warn was set, now they can run (and will panic the system
-> should non-KASAN warnings show up).
->
-> Signed-off-by: David Gow <davidgow@google.com>
-> Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
+On 6/9/20 11:52 AM, Steven Rostedt wrote:
+> On Tue, 9 Jun 2020 18:38:53 +0200
+> Flavio Suligoi <f.suligoi@asem.it> wrote:
+> 
+>> Fix typo: "tigger" --> "trigger"
+> 
+> Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> 
+> Shuah, want to take this patch?
+> 
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Yes. I will get this one in.
+
+thanks,
+-- Shuah
