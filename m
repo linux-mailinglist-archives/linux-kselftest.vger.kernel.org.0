@@ -2,63 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA13E1F464B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 20:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3B51F46FB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jun 2020 21:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388913AbgFIS03 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Jun 2020 14:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S1727945AbgFITVl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Jun 2020 15:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731916AbgFIS0W (ORCPT
+        with ESMTP id S1727937AbgFITVk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Jun 2020 14:26:22 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E94C05BD1E;
-        Tue,  9 Jun 2020 11:26:22 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id 9so26330721ljc.8;
-        Tue, 09 Jun 2020 11:26:22 -0700 (PDT)
+        Tue, 9 Jun 2020 15:21:40 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B18DC05BD1E
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Jun 2020 12:21:40 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id m2so1832233pjv.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2020 12:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/MS9Y1NckTNUGInM9fo7+yYKL81LHnuUrE4ZS9tUH7g=;
-        b=DPikTQ6FcOWi2xrpQfnqWVvm6/TQuJuZJFq1dFpl6Dsv7SXbIyqsRgvVUAJHN8NA5/
-         4ZyotKF7uRw/fJVAdAnhcCbJA25jOOBTWjeYI573uPiJI6ttNZl7ut6DC1w1p9TEqMQq
-         bOGXtZi/nQZSFyigS4lXIBPyKoLA6OjZeRc28ZHnmWF22CygGrscBrirRXRuuDTjTF/E
-         V5KdvyWhvA5i2CNmuPHF+3ftELR0FjhMqHjlAuCUCUEslu19dV5BAqDY7EhMBoQHwzo8
-         7mJf9AbGhHY4SKc//y9ymx5vDx0Lc7hke0nkuCD4C2QSOm/vaoXVNFxpa6otHPhncXfj
-         LkeQ==
+        bh=v8Y+QEIY0T38+LyOkVjhLl2iDQvo9/HQ1D/xWJhCBjs=;
+        b=qkWSINAK4P2QFNy9LAGLjB9Ll1Jo9GgOJWulm5yJ5Bt7FfYC52YqZzgz8cMpEeVrvu
+         q4c30GIyUx1FZfEKY5MORDgggYbsPxJ1NOQRhTQ7X6ytJV5fZSPDDqoHA97lZgSaUjwt
+         FwiA0NE4Mi9sksbTyqJr89JWaQuh4FuVapyZr2ZvhbW36zc4b0Nw1h9S8yRw1K6Opgez
+         UP+XzX2HzoHjrDc+ZlJwvG+RvXXHsAZkiCKut3vQH1aKO33Aj1B13oBbbxpTn/KuiU/G
+         jx8ElnUpitRz5wfwU4rLfSxysDnncPOz/gIpQs34QFrEWUW52km4fVNmMcA/MczAHMc7
+         /v/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/MS9Y1NckTNUGInM9fo7+yYKL81LHnuUrE4ZS9tUH7g=;
-        b=CmDNspyxBDNGGedu4rcFcoJUE7VxYeG6VWenQwPSnk6AiCThSrR2MUZzQ49/+hLOht
-         GPyh05tJhBvmHK3iRl/lADL/Ses+lB9EnTKhb/ooXmzdVegMsjzAfkDQCThihUGG1k5l
-         EIvPyGnXqnsrDbY4flTxuMlwkVztEKeknNrxdkwm+7tuUXifFPivgm8VybbD2+Xfn0ny
-         tLI5Lui2a9lKwYdbnoYv2x6NqTPCRiCk2vvACA6MxboWaAyUtbquCDLCyMy+g2TDJpxV
-         IoPfRbC1u4PC0HLmfpnfdrErTw3oy8qjj08IwWNIHvUYB4wtPSB8bWByWPu6UmJQeJfB
-         S+Kg==
-X-Gm-Message-State: AOAM530nHCIOsTqkv7h+xy0MBTEWLkXuTqgH/u3HfDi3MfZifq28nfix
-        VfMehDf8iqcAtMFia4lMJWTIw1Yq/mptQr46JIM=
-X-Google-Smtp-Source: ABdhPJyuNw+27EwMjp90S0ui4JzjSD6X/su1nk+7nNol/uL1gqWAurpftXOz5HydFAsnP6W9lTuL+gJyLO/bzpSu7Qw=
-X-Received: by 2002:a05:651c:1193:: with SMTP id w19mr14859026ljo.121.1591727181004;
- Tue, 09 Jun 2020 11:26:21 -0700 (PDT)
+        bh=v8Y+QEIY0T38+LyOkVjhLl2iDQvo9/HQ1D/xWJhCBjs=;
+        b=hvVmawOg3nj9C1gvCEvYcjZZvK6/yWrD8MCtUNvGwuiYDrhHsNcSqF+f83Dh5egyyf
+         01ynojF37v/1lF3TubkTq9/Wu9mpcQAbfQb/GPUlmq3nPSx7L6KFTUYAK0GQ4A/JZrWX
+         fUjkG4RUa/PnxQI1K1LFbx5aHmwyELItXhx/Tbn/IFnKLZ6vRGFn9Np23uoKawIHlG22
+         AaKOkC5z5OaUrVVDUOGVLv2CMB63FIQDU7JVBHJi+Tc0ciFjjz8E4zQqUKoyG+dI7lex
+         TbNRsOhiygARaOKgxfGEILotf1joL2vVOMkq1WuB6z7rI0MYbiUVKNBk28G6G4633sy6
+         gtHA==
+X-Gm-Message-State: AOAM532o6MORpY9Dv2qQBojJpvePWJ1zGBEB4Qz/ZMe6tAdt3i6+qT6Q
+        E0Ck0iB/bARzmYFHkrnfA3XyiD8kF3Eft6ertBfW7g==
+X-Google-Smtp-Source: ABdhPJxUq+MFXXxcdrcaS2Wo86HKkBEg4ZrncFyYrIhWKvnT0OWYNZ5A9Z8OUiJz1u5cnaeV/fcAeKaKenaqklmHvjY=
+X-Received: by 2002:a17:90a:df82:: with SMTP id p2mr6537329pjv.217.1591730499841;
+ Tue, 09 Jun 2020 12:21:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200608162202.94002-1-lmb@cloudflare.com>
-In-Reply-To: <20200608162202.94002-1-lmb@cloudflare.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 9 Jun 2020 11:26:09 -0700
-Message-ID: <CAADnVQ+YNPG_AZueO+J8N=1u-fmsfSBCcyh693vYmaERdpGm7w@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: cgroup: allow multi-attach program to replace itself
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Roman Gushchin <guro@fb.com>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+References: <20200606040349.246780-1-davidgow@google.com> <20200606040349.246780-3-davidgow@google.com>
+In-Reply-To: <20200606040349.246780-3-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 9 Jun 2020 12:21:28 -0700
+Message-ID: <CAFd5g45zNikNb6wEa1UWDS_ZtxOVrUt006s_cMqM7ZCTMjfSYA@mail.gmail.com>
+Subject: Re: [PATCH v8 2/5] KUnit: KASAN Integration
+To:     David Gow <davidgow@google.com>
+Cc:     Patricia Alfonso <trishalfonso@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        andreyknvl@google.com, shuah <shuah@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -67,27 +71,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 8, 2020 at 9:22 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+On Fri, Jun 5, 2020 at 9:03 PM David Gow <davidgow@google.com> wrote:
 >
-> When using BPF_PROG_ATTACH to attach a program to a cgroup in
-> BPF_F_ALLOW_MULTI mode, it is not possible to replace a program
-> with itself. This is because the check for duplicate programs
-> doesn't take the replacement program into account.
+> From: Patricia Alfonso <trishalfonso@google.com>
 >
-> Replacing a program with itself might seem weird, but it has
-> some uses: first, it allows resetting the associated cgroup storage.
-> Second, it makes the API consistent with the non-ALLOW_MULTI usage,
-> where it is possible to replace a program with itself. Third, it
-> aligns BPF_PROG_ATTACH with bpf_link, where replacing itself is
-> also supported.
+> Integrate KASAN into KUnit testing framework.
+>         - Fail tests when KASAN reports an error that is not expected
+>         - Use KUNIT_EXPECT_KASAN_FAIL to expect a KASAN error in KASAN
+>         tests
+>         - Expected KASAN reports pass tests and are still printed when run
+>         without kunit_tool (kunit_tool still bypasses the report due to the
+>         test passing)
+>         - KUnit struct in current task used to keep track of the current
+>         test from KASAN code
 >
-> Sice this code has been refactored a few times this change will
-> only apply to v5.7 and later. Adjustments could be made to
-> commit 1020c1f24a94 ("bpf: Simplify __cgroup_bpf_attach") and
-> commit d7bf2c10af05 ("bpf: allocate cgroup storage entries on attaching bpf programs")
-> as well as commit 324bda9e6c5a ("bpf: multi program support for cgroup+bpf")
+> This patch makes use of "kunit: generalize kunit_resource API beyond
+> allocated resources" and "kunit: add support for named resources" from
+> Alan Maguire [1]
+>         - A named resource is added to a test when a KASAN report is
+>         expected
+>         - This resource contains a struct for kasan_data containing
+>         booleans representing if a KASAN report is expected and if a KASAN
+>         report is found
 >
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
+> [1] https://lore.kernel.org/linux-kselftest/CAFd5g46Uu_5TG89uOm0Dj5CMq+11cwjBnsd-k_CVy6bQUeU4Jw@mail.gmail.com/T/#t
+>
+> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+> Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
 
-Applied. Thanks
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
