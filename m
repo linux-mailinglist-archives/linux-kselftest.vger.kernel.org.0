@@ -2,83 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 305CA1F4B79
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jun 2020 04:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB88C1F4D5A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jun 2020 07:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbgFJCdv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Jun 2020 22:33:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57806 "EHLO mail.kernel.org"
+        id S1726278AbgFJFzl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Jun 2020 01:55:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35190 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbgFJCdu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Jun 2020 22:33:50 -0400
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726273AbgFJFzl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Jun 2020 01:55:41 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C90E20774;
-        Wed, 10 Jun 2020 02:33:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A04F20801;
+        Wed, 10 Jun 2020 05:55:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591756430;
-        bh=nTjH+tdbs+yAKbTwA1OOrmTxHfSLcvvhAAg+lSjYA/I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vPC03ns92LIQ+rLBTLuZAiZrArPks5URUOgmitlx9TLwhwbfNqSfqwdl0rpAEYP6S
-         sV05gJqHwrG/8RdrRdvjVqc6uCGGEI0gytiieSgBNRq0qEazRLpwm7XMGDtAQIpB9u
-         /S6OGKQ5tJDZ2JOoa0zKoDxV/Mhv73Vvswsfevms=
-Received: by mail-ua1-f45.google.com with SMTP id v25so338706uau.4;
-        Tue, 09 Jun 2020 19:33:50 -0700 (PDT)
-X-Gm-Message-State: AOAM530ghc4Xi+9/CD1cDHrLPMHwmhsFbb4jeFjUZJDJDmpoAL2rU2cg
-        aRanay6k8vEKeEyAssdUWC/qxtVkC+iIzjK+8T8=
-X-Google-Smtp-Source: ABdhPJzrdQrTOlvQWKAfqf6y57d0RDb8cSLbmuHAMZqD9eEGwgxWOWugMp4a4gueTOO0ONCtgFvGNt3Ru0wnEG51bPw=
-X-Received: by 2002:a9f:326a:: with SMTP id y39mr906811uad.93.1591756429682;
- Tue, 09 Jun 2020 19:33:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <1587452704-1299-1-git-send-email-yangtiezhu@loongson.cn>
- <9b50d2b1-2fb4-10a1-5966-5458507a9b05@loongson.cn> <20200511182814.GS11244@42.do-not-panic.com>
-In-Reply-To: <20200511182814.GS11244@42.do-not-panic.com>
-From:   Luis Chamberlain <mcgrof@kernel.org>
-Date:   Tue, 9 Jun 2020 20:33:37 -0600
-X-Gmail-Original-Message-ID: <CAB=NE6VZyG1Q9kFYKXKg=EePUY7tY99LLEq95vuMPLZxufAdUg@mail.gmail.com>
-Message-ID: <CAB=NE6VZyG1Q9kFYKXKg=EePUY7tY99LLEq95vuMPLZxufAdUg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Fix some issues about kmod
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+        s=default; t=1591768540;
+        bh=KFffeQlQ3ejoQDHl0mCIa2lYqP0RiWorWvUaxswIW9g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rUGUJLhyoLvwurOS7cz8gdKKAp8OaIfDHLD3MKIDds/02BpPCD4j+EIy28CwetAyO
+         AlZQVFhbWpIGJuEhX966JZM1t6jbGEjG3sHIE5zl6v48c3zQA8wvNZ/dcONAnmeumI
+         FGetIYKDbX9/uyic8tbYAVM1tdjKVWVsYELd4MjY=
+Date:   Wed, 10 Jun 2020 14:55:35 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>
+Subject: Re: [PATCH v3 4/7] selftests/ftrace: Convert required interface
+ checks into requires list
+Message-Id: <20200610145535.747d2765d60e6e3923441768@kernel.org>
+In-Reply-To: <1cf646af-ef25-a7df-9df3-1e6aa8e6a9c8@linuxfoundation.org>
+References: <159115200085.70027.6141550347953439240.stgit@devnote2>
+        <159115203782.70027.2241223276591824366.stgit@devnote2>
+        <1cf646af-ef25-a7df-9df3-1e6aa8e6a9c8@linuxfoundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 11, 2020 at 12:28 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Mon, May 11, 2020 at 08:59:37PM +0800, Tiezhu Yang wrote:
-> > Hi,
-> >
-> > Could you please apply the following three patches?
-> >
-> > [v4,1/4] selftests: kmod: Use variable NAME in kmod_test_0001()
-> > https://lore.kernel.org/patchwork/patch/1227980/
-> >
-> > [v4,2/4] kmod: Remove redundant "be an" in the comment
-> > https://lore.kernel.org/patchwork/patch/1227982/
-> >
-> > [v4,4/4] test_kmod: Avoid potential double free in trigger_config_run_type()
-> > https://lore.kernel.org/patchwork/patch/1227978/
->
-> Andrew,
->
-> These 3 patches should be fine.
->
-> I am re-working a replacement proper fix for patch #3, that requires a
-> change to the umh. I'll try to iron this out today.
+Hi Shuah,
 
-I'll pick these up, and run tests now that I have a finalized solution
-in place for the patch replacement I mentioned which was needed. Sorry
-this took so long, but I am glad I took my time. I'll post soon after
-I test the new fix.
+On Tue, 9 Jun 2020 14:41:27 -0600
+Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-  Luis
+> On 6/2/20 8:40 PM, Masami Hiramatsu wrote:
+> > Convert the required tracefs interface checking code with
+> > requires: list.
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+> > ---
+> >    Changes in v2: Fix trigger-onchange-action-hist.tc requires list.
+> 
+> Masami,
+> 
+> This patch doesn't apply to linux-kselftest next
+> 
+> Patches 1-3 applied fine and this one failed. For now I will
+> hold off on applying this series.
+
+Yes, there is another patch posted by Tom with his ftrace enhancement
+in tracing-next. Thus I commented on 0/7 as below.
+
+----
+Since this series depends on following 2 commits,
+
+commit 619ee76f5c9f ("selftests/ftrace: Return unsupported if no
+ error_log file") on Shuah's Kselftest tree
+commit bea24f766efc ("selftests/ftrace: Distinguish between hist
+ and synthetic event checks") on Steven's Tracing tree
+
+This can be applied on the tree which merged both of them.
+----
+
+I'm not sure how do I handle it. It is OK just modifying this
+for linux-kselftest, but in that case we will need another
+patch after merged both.
+
+IMHO, since the kselftest must run correctly on older kernel,
+(and ftracetest does) Tom's kselftest patch should be merged
+into linux-kselftest instead of tracing tree.
+
+Steve, what would you think?
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
