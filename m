@@ -2,79 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6A71F6A23
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jun 2020 16:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425E71F6E0D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jun 2020 21:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbgFKOgW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Jun 2020 10:36:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728243AbgFKOgW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jun 2020 10:36:22 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5E77206C3;
-        Thu, 11 Jun 2020 14:36:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591886181;
-        bh=3odZMer00sE/n4jCKTZHS4GFSMcNc1Rw3n8kkCHJfEQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aFgE3zp3Wr0SKQ/LfsNkmxoBBhaGtaXYxpzQcgggDRA+d8qLmt8LEEQdKdGgkNP8d
-         i37NA0C3UdreAWUYguOQ4Rgn2WHWlotx8N9Wy8qC2JAlS8fr8BECuinP2D6/yXboeI
-         HYhsk+KMIIsh+fheB99/2qCIah17m1lZ8HusoMLQ=
-Date:   Thu, 11 Jun 2020 23:36:17 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>
-Subject: Re: [PATCH v3 4/7] selftests/ftrace: Convert required interface
- checks into requires list
-Message-Id: <20200611233617.2dc66dec28e6aef848352700@kernel.org>
-In-Reply-To: <f8cc0d67-3f35-134a-a6c4-ad4a98a215a3@linuxfoundation.org>
-References: <159115200085.70027.6141550347953439240.stgit@devnote2>
-        <159115203782.70027.2241223276591824366.stgit@devnote2>
-        <1cf646af-ef25-a7df-9df3-1e6aa8e6a9c8@linuxfoundation.org>
-        <20200610145535.747d2765d60e6e3923441768@kernel.org>
-        <5a658ffa-348a-436d-fb74-e01f56541d6b@linuxfoundation.org>
-        <20200610093206.5b9fb1b7@oasis.local.home>
-        <f8cc0d67-3f35-134a-a6c4-ad4a98a215a3@linuxfoundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726456AbgFKTjL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Jun 2020 15:39:11 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:38098 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726134AbgFKTjL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 11 Jun 2020 15:39:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591904350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=u8/OdraxV9Bf+mXB4Fs4dcRV8raf0sIOF0iql8UflHo=;
+        b=BeAqUNIEZBaRHj8/b9uIS1f+wHRzjiuosnZY0+I5E3GB9GpXfJ7RN5pcaoFYbO6s1ycpa7
+        3c6Qj3+fXuuX/tMxTmatj8sYhIUVCHvfHDgchjtlupdaInFUizg5wFQIR/Ze+O8LmWvh5H
+        jDYRpVd1ewvs23PrmwftNS6j+qal+Mk=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-331-vlezEvJgM_6V9R-mFP0KAQ-1; Thu, 11 Jun 2020 15:38:35 -0400
+X-MC-Unique: vlezEvJgM_6V9R-mFP0KAQ-1
+Received: by mail-qv1-f71.google.com with SMTP id z7so5183714qve.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 12:38:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=u8/OdraxV9Bf+mXB4Fs4dcRV8raf0sIOF0iql8UflHo=;
+        b=VUXs+jqx9lpCW579ReHaLfzZS3/2MpvaJqJ2k6LGTEjH53w6NdTNh15GCBL/v5fgB/
+         sWluudqBtCcUHqdqiqCg7LD0jliggwduNbit70kI6hCJaQWYYt7zAqpS7ThWSJ89D69T
+         ga159dsrv4hCSRblZJY4spL007ID9OpxNK2zDbggrbmBV6cP8zgzDuDR3A2gPbQbh0d8
+         rAMA3EjEhAE7Svg0WK44XRwMtibSdNRUQqWMNpSpmqMwaPMOj1Y3SEaJIYe/h2dSWaCp
+         +6faba36KJbLIzlcpw1t4mrY45AKqPmprVf46G8BCrC+N7zAfCh5io0pzt23PnIRMVuR
+         yTIA==
+X-Gm-Message-State: AOAM530ZSzH/pl5/76DgTJ9A6/86SY3gm2+ze9kKPIWSUQjwGWM+Fbkp
+        ArMl+WHWEMBaXP9jB0q7QVJXywcLmF8649VmLCnft/P/0uEUQlr0lhmhEiGwOGfDPuehClaEepB
+        yeU5M8OhRlZm9KcP80mkAS28mQLSc
+X-Received: by 2002:a37:9a4c:: with SMTP id c73mr10196335qke.450.1591904314732;
+        Thu, 11 Jun 2020 12:38:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQtwswsTGgRQ9rrZiZRxCAHbWdA8cWacLl6m7dxpVA5zy7jW4IXrGz/yV8yRp3gYQa1DE2tg==
+X-Received: by 2002:a37:9a4c:: with SMTP id c73mr10196317qke.450.1591904314480;
+        Thu, 11 Jun 2020 12:38:34 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id j22sm3020783qke.117.2020.06.11.12.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2020 12:38:33 -0700 (PDT)
+From:   trix@redhat.com
+To:     shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH v2 0/1]  selftests: fpga: dfl: A test for afu interrupt support
+Date:   Thu, 11 Jun 2020 12:38:26 -0700
+Message-Id: <20200611193827.8302-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 11 Jun 2020 06:03:50 -0600
-Shuah Khan <skhan@linuxfoundation.org> wrote:
+From: Tom Rix <trix@redhat.com>
 
-> On 6/10/20 7:32 AM, Steven Rostedt wrote:
-> > On Wed, 10 Jun 2020 06:04:33 -0600
-> > Shuah Khan <skhan@linuxfoundation.org> wrote:
-> > 
-> >>> Steve, what would you think?
-> >>>    
-> >>
-> >> No worries. As far as kselftest tree is concrned, I can apply these
-> >> after rc1 comes out with Tom's patch.
-> >>
-> >> Or I can give Ack and Steve can take these through tracing tree.
-> > 
-> > All my patches have already made it to Linus's tree. Perhaps
-> > cherry-pick the commit needed from Linus's tree (it shouldn't break
-> > anything when Linus pulls it). Just let Linus know what you did, and
-> > everything should be fine.
-> > 
-> 
-> Good to know. I will get these in.
+repo: linux-next
+tag: next-20200611
 
-Thanks Shuah and Steve!
+Start applying selftests to drivers/fpga.
+
+While testing out this upcoming change on linux-fpga
+'Add interrupt support to FPGA DFL drivers'
+
+I did not see any existing fpga tests.
+So I added one.
+
+Change from v1
+Use ksft_* functions for reporting
+
+Tom Rix (1):
+  selftests: fpga: dfl: A test for afu interrupt support
+
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/drivers/fpga/Makefile |  9 +++++
+ .../testing/selftests/drivers/fpga/afu_intr.c | 33 +++++++++++++++++++
+ tools/testing/selftests/drivers/fpga/config   |  1 +
+ 4 files changed, 44 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
+ create mode 100644 tools/testing/selftests/drivers/fpga/afu_intr.c
+ create mode 100644 tools/testing/selftests/drivers/fpga/config
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.18.1
+
