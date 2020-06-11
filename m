@@ -2,99 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EE81F6768
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jun 2020 14:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896AD1F687E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jun 2020 15:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727839AbgFKMDz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Jun 2020 08:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbgFKMDy (ORCPT
+        id S1727025AbgFKNCE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Jun 2020 09:02:04 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:20112 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726435AbgFKNCD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jun 2020 08:03:54 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91E2C08C5C2
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 05:03:54 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id t9so5945529ioj.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 05:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HQgdpKM4dEN15pdyKHWiwAPArlDUxZ7X6xmIoMk4KoI=;
-        b=RLdsocZGxNbIqrwbRaCW9nAGeQdfkcRfB5yY9O+DueBvepvOjkQV8IqxnoEtk2MJXv
-         xAse8W7GzRGAtvWUkdhPyzXkKFWPqU1IklWYBJ9daHebL0Jt9EzhNHv98oxbWb3R3Ue1
-         aJ0Bj4REGLnCZ5Lc02q3FkpxKZkYAwG5WZuhk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HQgdpKM4dEN15pdyKHWiwAPArlDUxZ7X6xmIoMk4KoI=;
-        b=YSjQcaeyQbyA3eUhvNdYefccH+hTKJ9jCQYG1rIG0tJq8PNbarMcSjcWEVLCixhckB
-         EzvFs9UO2Y2pF5XVqi5ZnNfonEwDxn2xwGbDoDySV8xXTVrppzkZ8S2W75Rzw99ZYMf4
-         iiWTA5ApSfxxZTyHeCcErEdSkfsBJ1tXF1Xt4SvMt2zYMBheQERUqoFyxW0t/dXA11RX
-         u6wQ9wdhwA0UIshtjJs/0hUNFqDPFbCYLMka4ZBi0f4feawzZveUpKTRCsWxgQqwWScE
-         dT9g6xABtRXZ/eCJN++8ePUXtJoFUJDkdag2gsLqjKew1+ds8aS+b/MSfzsdvyDVolzA
-         74Sg==
-X-Gm-Message-State: AOAM531Ji8VuWRfTFA7hn7iIOeW5SQca2aeCFNpG2LVUFQb/kW9SI6UQ
-        iKyW0YQfKJDAeJszXpr63yw95FcHSDQ=
-X-Google-Smtp-Source: ABdhPJyWfGJ1+9lxeSa3Th0z/gkQYgnCXCMBoWdd2c0vXWG7F6qlix9bM8Er5mV/swuR/vh9eQiy5Q==
-X-Received: by 2002:a02:298b:: with SMTP id p133mr2918838jap.73.1591877032369;
-        Thu, 11 Jun 2020 05:03:52 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f5sm1367881iog.49.2020.06.11.05.03.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2020 05:03:51 -0700 (PDT)
-Subject: Re: [PATCH v3 4/7] selftests/ftrace: Convert required interface
- checks into requires list
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <159115200085.70027.6141550347953439240.stgit@devnote2>
- <159115203782.70027.2241223276591824366.stgit@devnote2>
- <1cf646af-ef25-a7df-9df3-1e6aa8e6a9c8@linuxfoundation.org>
- <20200610145535.747d2765d60e6e3923441768@kernel.org>
- <5a658ffa-348a-436d-fb74-e01f56541d6b@linuxfoundation.org>
- <20200610093206.5b9fb1b7@oasis.local.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f8cc0d67-3f35-134a-a6c4-ad4a98a215a3@linuxfoundation.org>
-Date:   Thu, 11 Jun 2020 06:03:50 -0600
+        Thu, 11 Jun 2020 09:02:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591880521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/cRAprkT7S89tlGY48hka4FQEbiwNER+FmCFXXMuntE=;
+        b=N59RA121/ZTX6Jgp/zVUewIzhp32pjdk6YMzWOhPst455KgGTszN/N36ga2/nlj4e67/ru
+        DhTgVnbIq4lT5fPdO3Q2Kaf2uI9Ofa9Ngt1bvRrPc8EYNWChyQoMOPlnkTNmcluf8LqZjl
+        z2KGqn3HYGgfx/AsJ2bmvLbDPM5tdtM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-182-EEow7cx4PVapwtrteqGONw-1; Thu, 11 Jun 2020 09:01:50 -0400
+X-MC-Unique: EEow7cx4PVapwtrteqGONw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0A8D7EC1AF;
+        Thu, 11 Jun 2020 13:01:49 +0000 (UTC)
+Received: from [10.10.117.142] (ovpn-117-142.rdu2.redhat.com [10.10.117.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 77F2C5C3F8;
+        Thu, 11 Jun 2020 13:01:48 +0000 (UTC)
+Subject: Re: [PATCH 1/3] selftests/livepatch: Don't clear dmesg when running
+ tests
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20200610172101.21910-1-joe.lawrence@redhat.com>
+ <20200610172101.21910-2-joe.lawrence@redhat.com>
+ <alpine.LSU.2.21.2006110930590.32091@pobox.suse.cz>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Message-ID: <f08eb372-0282-7d07-180f-ff0d7220708b@redhat.com>
+Date:   Thu, 11 Jun 2020 09:01:47 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200610093206.5b9fb1b7@oasis.local.home>
+In-Reply-To: <alpine.LSU.2.21.2006110930590.32091@pobox.suse.cz>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/10/20 7:32 AM, Steven Rostedt wrote:
-> On Wed, 10 Jun 2020 06:04:33 -0600
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
+On 6/11/20 3:38 AM, Miroslav Benes wrote:
+> Hi,
 > 
->>> Steve, what would you think?
->>>    
->>
->> No worries. As far as kselftest tree is concrned, I can apply these
->> after rc1 comes out with Tom's patch.
->>
->> Or I can give Ack and Steve can take these through tracing tree.
+> On Wed, 10 Jun 2020, Joe Lawrence wrote:
 > 
-> All my patches have already made it to Linus's tree. Perhaps
-> cherry-pick the commit needed from Linus's tree (it shouldn't break
-> anything when Linus pulls it). Just let Linus know what you did, and
-> everything should be fine.
+>> diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+>> index 32b57ba07f4f..c3d949da5bb7 100755
+>> --- a/tools/testing/selftests/livepatch/test-callbacks.sh
+>> +++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+>> @@ -12,7 +12,7 @@ MOD_TARGET_BUSY=test_klp_callbacks_busy
+>>   setup_config
+>>   
+>>   
+>> -# TEST: target module before livepatch
+>> +start_test "target module before livepatch"
+>>   #
+>>   # Test a combination of loading a kernel module and a livepatch that
+>>   # patches a function in the first module.  Load the target module
+>> @@ -28,9 +28,6 @@ setup_config
+>>   #   unpatching transition starts.  klp_objects are reverted, post-patch
+>>   #   callbacks execute and the transition completes.
+>>   
+>> -echo -n "TEST: target module before livepatch ... "
+>> -dmesg -C
+>> -
+> 
+> A nit, but I think it would be better to place start_test here below the
+> comment. The same for other occurrences in test-callbacks.sh.
 > 
 
-Good to know. I will get these in.
+The idea was to remove the duplicate # TEST: comment and then the same 
+echo -n "TEST: ..." entries.
 
-thanks,
--- Shuah
+Would it still look okay if we move start_test to below the comment and 
+omit that # TEST ... part?  (This might be what you're suggesting, but I 
+wanted to make sure.)
+
+> [...]
+> 
+>> diff --git a/tools/testing/selftests/livepatch/test-state.sh b/tools/testing/selftests/livepatch/test-state.sh
+>> index a08212708115..bf8db1613961 100755
+>> --- a/tools/testing/selftests/livepatch/test-state.sh
+>> +++ b/tools/testing/selftests/livepatch/test-state.sh
+>> @@ -10,10 +10,7 @@ MOD_LIVEPATCH3=test_klp_state3
+>>   
+>>   setup_config
+>>   
+>> -# TEST: Loading and removing a module that modifies the system state
+>> -
+>> -echo -n "TEST: system state modification ... "
+>> -dmesg -C
+>> +start_test "Loading and removing a module that modifies the system state"
+> 
+> start_test should get the message from the original echo command and not
+> the comment above, I think...
+> 
+
+Yup, good eye.
+
+>>   load_lp $MOD_LIVEPATCH
+>>   disable_lp $MOD_LIVEPATCH
+>> @@ -41,10 +38,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
+>>   % rmmod $MOD_LIVEPATCH"
+>>   
+>>   
+>> -# TEST: Take over system state change by a cumulative patch
+>> -
+>> -echo -n "TEST: taking over system state modification ... "
+>> -dmesg -C
+>> +start_test "Take over system state change by a cumulative patch"
+>>   
+>>   load_lp $MOD_LIVEPATCH
+>>   load_lp $MOD_LIVEPATCH2
+>> @@ -85,10 +79,7 @@ livepatch: '$MOD_LIVEPATCH2': unpatching complete
+>>   % rmmod $MOD_LIVEPATCH2"
+>>   
+>>   
+>> -# TEST: Take over system state change by a cumulative patch
+>> -
+>> -echo -n "TEST: compatible cumulative livepatches ... "
+>> -dmesg -C
+>> +start_test "Take over system state change by a cumulative patch"
+> 
+> ...because now we have two "Take over system state change by a cumulative
+> patch" tests in the log.
+> 
+
+Right, the start_test messages should be unique.  I'll fix those up for v2.
+
+-- Joe
 
