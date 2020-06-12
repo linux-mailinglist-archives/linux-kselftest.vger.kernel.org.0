@@ -2,133 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74F31F782D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 14:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA8D1F7BF7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 19:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgFLM6G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Jun 2020 08:58:06 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34022 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726053AbgFLM6G (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Jun 2020 08:58:06 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05CCjGxM184252;
-        Fri, 12 Jun 2020 08:58:00 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31ma068aap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Jun 2020 08:58:00 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 05CCjQ4Q184965;
-        Fri, 12 Jun 2020 08:57:59 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31ma068aa2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Jun 2020 08:57:59 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05CCvwWC030153;
-        Fri, 12 Jun 2020 12:57:58 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 31g2s83bfa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Jun 2020 12:57:58 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05CCvtmb62390598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Jun 2020 12:57:56 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D375542041;
-        Fri, 12 Jun 2020 12:57:55 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B242F4204D;
-        Fri, 12 Jun 2020 12:57:54 +0000 (GMT)
-Received: from JAVRIS.in.ibm.com (unknown [9.85.84.126])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 12 Jun 2020 12:57:54 +0000 (GMT)
-Subject: Re: [PATCH 3/3] selftests/livepatch: filter 'taints' from dmesg
- comparison
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20200610172101.21910-1-joe.lawrence@redhat.com>
- <20200610172101.21910-4-joe.lawrence@redhat.com>
- <alpine.LSU.2.21.2006110938090.32091@pobox.suse.cz>
- <047eba61-b0b9-4e91-395f-13bafbf43af6@redhat.com>
- <20200612114706.GH4311@linux-b0ei>
-From:   Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-Message-ID: <ba0202cf-beea-ddde-4941-053718c77257@linux.vnet.ibm.com>
-Date:   Fri, 12 Jun 2020 18:27:52 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726290AbgFLRDR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Jun 2020 13:03:17 -0400
+Received: from smtp.uniroma2.it ([160.80.6.16]:43544 "EHLO smtp.uniroma2.it"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726390AbgFLRDO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Jun 2020 13:03:14 -0400
+X-Greylist: delayed 670 seconds by postgrey-1.27 at vger.kernel.org; Fri, 12 Jun 2020 13:02:58 EDT
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05CGpXZp019363
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 12 Jun 2020 18:51:33 +0200
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Donald Sharp <sharpd@cumulusnetworks.com>,
+        Roopa Prabhu <roopa@cumulusnetworks.com>,
+        Dinesh Dutt <didutt@gmail.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [RFC,net-next, 0/5] Strict mode for VRF 
+Date:   Fri, 12 Jun 2020 18:49:32 +0200
+Message-Id: <20200612164937.5468-1-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20200612114706.GH4311@linux-b0ei>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-12_09:2020-06-12,2020-06-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 phishscore=0 cotscore=-2147483648
- suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0 spamscore=0
- mlxscore=0 mlxlogscore=999 priorityscore=1501 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006120092
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/12/20 5:17 PM, Petr Mladek wrote:
-> On Thu 2020-06-11 09:10:38, Joe Lawrence wrote:
->> On 6/11/20 3:39 AM, Miroslav Benes wrote:
->>> On Wed, 10 Jun 2020, Joe Lawrence wrote:
->>>
->>>> The livepatch selftests currently filter out "tainting kernel with
->>>> TAINT_LIVEPATCH" messages which may be logged when loading livepatch
->>>> modules.
->>>>
->>>> Further filter the log to drop "loading out-of-tree module taints
->>>> kernel" in the rare case the klp_test modules have been built
->>>> out-of-tree.
->>>>
->>>> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
->>>> ---
->>>>   tools/testing/selftests/livepatch/functions.sh | 3 ++-
->>>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
->>>> index 83560c3df2ee..f5d4ef12f1cb 100644
->>>> --- a/tools/testing/selftests/livepatch/functions.sh
->>>> +++ b/tools/testing/selftests/livepatch/functions.sh
->>>> @@ -260,7 +260,8 @@ function check_result {
->>>>   	local result
->>>>   	result=$(dmesg --notime | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
->>>> -		 grep -v 'tainting' | grep -e '^livepatch:' -e 'test_klp')
->>>> +		 grep -e '^livepatch:' -e 'test_klp' | \
->>>> +		 grep -ve '\<taints\>' -ve '\<tainting\>')
->>>
->>> or make it just 'grep -v 'taint' ? It does not matter much though.
->>>
->>
->> I don't know of any larger words* that may hit a partial match on "taint",
->> but I figured the two word bounded regexes would be more specific.
-> 
-> I do not have strong opinion. I am fine with both current and Mirek's proposal.
-> 
-> I am just curious where \< and \> regexp substitutions are documented.
-> I see the following at the very end of "man re_syntax":
-> 
->    \< and \> are synonyms for  “[[:<:]]” and “[[:>:]]” respectively
-> 
-> But I am not able to find documentation for “[[:<:]]” and “[[:>:]].
-> Even google looks helpless ;-)
-> 
+This patch set adds the new "strict mode" functionality to the Virtual
+Routing and Forwarding infrastructure (VRF). Hereafter we discuss the
+requirements and the main features of the "strict mode" for VRF.
 
-AFAIK, using \< and \> matches exact word.  Whereas when used individually,
-\< matches beginning and \> matches end of the word.
+On VRF creation, it is necessary to specify the associated routing table used
+during the lookup operations. Currently, there is no mechanism that avoids
+creating multiple VRFs sharing the same routing table. In other words, it is not
+possible to force a one-to-one relationship between a specific VRF and the table
+associated with it.
+
+
+The "strict mode" imposes that each VRF can be associated to a routing table
+only if such routing table is not already in use by any other VRF.
+In particular, the strict mode ensures that:
+ 
+ 1) given a specific routing table, the VRF (if exists) is uniquely identified;
+ 2) given a specific VRF, the related table is not shared with any other VRF.
+
+Constraints (1) and (2) force a one-to-one relationship between each VRF and the
+corresponding routing table.
+
+
+The strict mode feature is designed to be network-namespace aware and it can be
+directly enabled/disabled acting on the "strict_mode" parameter.
+Read and write operations are carried out through the classic sysctl command on
+net.vrf.strict_mode path, i.e: sysctl -w net.vrf.strict_mode=1.
+
+Only two distinct values {0,1} are accepted by the strict_mode parameter:
+
+ - with strict_mode=0, multiple VRFs can be associated with the same table.
+   This is the (legacy) default kernel behavior, the same that we experience
+   when the strict mode patch set is not applied;
+
+ - with strict_mode=1, the one-to-one relationship between the VRFs and the
+   associated tables is guaranteed. In this configuration, the creation of a VRF
+   which refers to a routing table already associated with another VRF fails and
+   the error is returned to the user.
+
+
+The kernel keeps track of the associations between a VRF and the routing table
+during the VRF setup, in the "management" plane. Therefore, the strict mode does
+not impact the performance or intrinsic functionality of the data plane in any
+way.
+
+When the strict mode is active it is always possible to disable the strict mode,
+while the reverse operation is not always allowed.
+Setting the strict_mode parameter to 0 is equivalent to removing the one-to-one
+constraint between any single VRF and its associated routing table.
+
+Conversely, if the strict mode is disabled and there are multiple VRFs that
+refer to the same routing table, then it is prohibited to set the strict_mode
+parameter to 1. In this configuration, any attempt to perform the operation will
+lead to an error and it will be reported to the user.
+To enable strict mode once again (by setting the strict_mode parameter to 1),
+you must first remove all the VRFs that share common tables.
+
+There are several use cases which can take advantage from the introduction of
+the strict mode feature. In particular, the strict mode allows us to:
+
+  i) guarantee the proper functioning of some applications which deal with
+     routing protocols;
+
+ ii) perform some tunneling decap operations which require to use specific
+     routing tables for segregating and forwarding the traffic.
+
+
+Considering (i), the creation of different VRFs that point to the same table
+leads to the situation where two different routing entities believe they have
+exclusive access to the same table. This leads to the situation where different
+routing daemons can conflict for gaining routes control due to overlapping
+tables. By enabling strict mode it is possible to prevent this situation which
+often occurs due to incorrect configurations done by the users. 
+The ability to enable/disable the strict mode functionality does not depend on
+the tool used for configuring the networking. In essence, the strict mode patch
+solves, at the kernel level, what some other patches [1] had tried to solve at
+the userspace level (using only iproute2) with all the related problems.
+
+Considering (ii), the introduction of the strict mode functionality allows us
+implementing the SRv6 End.DT4 behavior. Such behavior terminates a SR tunnel and
+it forwards the IPv4 traffic according to the routes present in the routing
+table supplied during the configuration. The SRv6 End.DT4 can be realized
+exploiting the routing capabilities made available by the VRF infrastructure.
+This behavior could leverage a specific VRF for forcing the traffic to be
+forwarded in accordance with the routes available in the VRF table.
+Anyway, in order to make the End.DT4 properly work, it must be guaranteed that
+the table used for the route lookup operations is bound to one and only one VRF.
+In this way, it is possible to use the table for uniquely retrieving the
+associated VRF and for routing packets.
+
+I would like to thank David Ahern for his constant and valuable support during
+the design and development phases of this patch set.
+
+Comments, suggestions and improvements are very welcome!
+
+Thanks,
+Andrea Mayer
+
+
+[1] https://lore.kernel.org/netdev/20200307205916.15646-1-sharpd@cumulusnetworks.com/
+
+Andrea Mayer (5):
+  l3mdev: add infrastructure for table to VRF mapping
+  vrf: track associations between VRF devices and tables
+  vrf: add sysctl parameter for strict mode
+  vrf: add l3mdev registration for table to VRF device lookup
+  selftests: add selftest for the VRF strict mode
+
+ drivers/net/vrf.c                             | 450 +++++++++++++++++-
+ include/net/l3mdev.h                          |  37 ++
+ net/l3mdev/l3mdev.c                           |  95 ++++
+ .../selftests/net/vrf_strict_mode_test.sh     | 390 +++++++++++++++
+ 4 files changed, 963 insertions(+), 9 deletions(-)
+ create mode 100755 tools/testing/selftests/net/vrf_strict_mode_test.sh
 
 -- 
-Kamalesh
+2.20.1
+
