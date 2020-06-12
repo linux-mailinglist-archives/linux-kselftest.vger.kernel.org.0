@@ -2,144 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15011F7070
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 00:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6092B1F7632
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 11:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbgFKWks (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Jun 2020 18:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726403AbgFKWkh (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jun 2020 18:40:37 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12DFC08C5C5
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 15:40:37 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id u5so3169195pgn.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 15:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lwTXYmugGfPyRmPXLVDMLZeDAwOpJTMJJZD/3cGJRTs=;
-        b=lPJU1Y2R2NywIskyfYs77rROpVYDKiNxiU+FtrWqYim2ntaPqIl0oZxPeEtP9GTf1C
-         2E8AfFC1z3sz+x3Seh/d0VaZQy6MBLjU+Rwj3Yq5ukGEGN4u8ljUuv7c1Ey1d6Isqj2t
-         iGqCwXCUaftykqwKRps/aQXbzP0Hkgml3wSoM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lwTXYmugGfPyRmPXLVDMLZeDAwOpJTMJJZD/3cGJRTs=;
-        b=j8hpbCXLNjLyZMu6D/HZ0OGjXwdeLIZ7Oo5YFdQFUQTOBCyxJ0KskBC9uxWeqsZuJF
-         rz7TjrLDxSqbO9WYSOcTyprTNOSCGkiiBFGpY14GclZpIkyEvMMSjITZfx/NB068y54W
-         JOxpBwTFzqQlPP/cKcjU0rj19hOb2Ex4qBYqzEaCsfOt4f8g9eBTJoDedXUSkqqlcq9x
-         kZQ0u8VPluAd3Dv1u4JhygwND3O9eWIBnYHGhf5o+eFSb7FlEKjOFuvk5LUsZtreQ55Y
-         FDO9y+sEdL+T5RBbTW/K4D5RZaFinEZxYw0IAtqOUacA3d9QHrqWhylrOX2NMKYfaNdE
-         155g==
-X-Gm-Message-State: AOAM533yYRRdssbwIM3FfZAq4gfJJrEXXaeAX/Il7cl7UgWiyEgLpvmd
-        OyFfOdvB6r0zgPS4zjJsmw0dJg==
-X-Google-Smtp-Source: ABdhPJxaLlAeRBLlbl1E4AmmW/uBOo/KQCB0mkrVPg0oSPK1ysCZFN+nVdaUrf0lamB1krUMqXB6Gw==
-X-Received: by 2002:a63:c04b:: with SMTP id z11mr8608634pgi.215.1591915237243;
-        Thu, 11 Jun 2020 15:40:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 9sm4186457pfu.181.2020.06.11.15.40.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2020 15:40:35 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] selftests/harness: Display signed values correctly
-Date:   Thu, 11 Jun 2020 15:40:28 -0700
-Message-Id: <20200611224028.3275174-8-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200611224028.3275174-1-keescook@chromium.org>
-References: <20200611224028.3275174-1-keescook@chromium.org>
+        id S1726024AbgFLJtI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Jun 2020 05:49:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41880 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725868AbgFLJtG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Jun 2020 05:49:06 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id EF01BADC5;
+        Fri, 12 Jun 2020 09:49:07 +0000 (UTC)
+Date:   Fri, 12 Jun 2020 11:49:03 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/3] selftests/livepatch: Don't clear dmesg when running
+ tests
+Message-ID: <20200612094903.GE4311@linux-b0ei>
+References: <20200610172101.21910-1-joe.lawrence@redhat.com>
+ <20200610172101.21910-2-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200610172101.21910-2-joe.lawrence@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since forever the harness output for signed value tests have reported
-unsigned values to avoid casting. Instead, actually test the variable
-types and perform the correct casts and choose the correct format
-specifiers.
+On Wed 2020-06-10 13:20:59, Joe Lawrence wrote:
+> Inspired by commit f131d9edc29d ("selftests/lkdtm: Don't clear dmesg
+> when running tests"), keep a reference dmesg copy when beginning each
+> test.  This way check_result() can compare against the initial copy
+> rather than relying upon an empty log.
+> 
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> ---
+>  tools/testing/selftests/livepatch/README      | 16 +++---
+>  .../testing/selftests/livepatch/functions.sh  | 16 +++++-
+>  .../selftests/livepatch/test-callbacks.sh     | 55 ++++---------------
+>  .../selftests/livepatch/test-ftrace.sh        |  5 +-
+>  .../selftests/livepatch/test-livepatch.sh     | 15 +----
+>  .../selftests/livepatch/test-shadow-vars.sh   |  5 +-
+>  .../testing/selftests/livepatch/test-state.sh | 20 ++-----
+>  7 files changed, 43 insertions(+), 89 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
+> index 621d325425c2..0942dd5826f8 100644
+> --- a/tools/testing/selftests/livepatch/README
+> +++ b/tools/testing/selftests/livepatch/README
+> @@ -6,8 +6,8 @@ This is a small set of sanity tests for the kernel livepatching.
+>  
+>  The test suite loads and unloads several test kernel modules to verify
+>  livepatch behavior.  Debug information is logged to the kernel's message
+> -buffer and parsed for expected messages.  (Note: the tests will clear
+> -the message buffer between individual tests.)
+> +buffer and parsed for expected messages.  (Note: the tests will compare
+> +the message buffer for only the duration of each individual test.)
+>  
+>  
+>  Config
+> @@ -35,9 +35,9 @@ Adding tests
+>  ------------
+>  
+>  See the common functions.sh file for the existing collection of utility
+> -functions, most importantly setup_config() and check_result().  The
+> -latter function greps the kernel's ring buffer for "livepatch:" and
+> -"test_klp" strings, so tests be sure to include one of those strings for
+> -result comparison.  Other utility functions include general module
+> -loading and livepatch loading helpers (waiting for patch transitions,
+> -sysfs entries, etc.)
+> +functions, most importantly setup_config(), start_test() and
+> +check_result().  The latter function greps the kernel's ring buffer for
+> +"livepatch:" and "test_klp" strings, so tests be sure to include one of
+> +those strings for result comparison.  Other utility functions include
+> +general module loading and livepatch loading helpers (waiting for patch
+> +transitions, sysfs entries, etc.)
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 2aab9791791d..e84375a33852 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -243,13 +243,25 @@ function set_pre_patch_ret {
+>  		die "failed to set pre_patch_ret parameter for $mod module"
+>  }
+>  
+> +function start_test {
+> +	local test="$1"
+> +
+> +	# Save existing dmesg so we can detect new content below
+> +	SAVED_DMESG=$(mktemp --tmpdir -t klp-dmesg-XXXXXX)
 
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/kselftest_harness.h | 42 ++++++++++++++++++---
- 1 file changed, 37 insertions(+), 5 deletions(-)
+There is a nice trick how to remove the temporary files even
+when the script fails from other reasons. The following should
+do the job:
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 6b06930468e5..8802f20d1915 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -679,17 +679,49 @@
- 	if (_metadata->passed && _metadata->step < 255) \
- 		_metadata->step++;
- 
-+#define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
-+
- #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
- 	/* Avoid multiple evaluation of the cases */ \
- 	__typeof__(_expected) __exp = (_expected); \
- 	__typeof__(_seen) __seen = (_seen); \
- 	if (_assert) __INC_STEP(_metadata); \
- 	if (!(__exp _t __seen)) { \
--		unsigned long long __exp_print = (uintptr_t)__exp; \
--		unsigned long long __seen_print = (uintptr_t)__seen; \
--		__TH_LOG("Expected %s (%llu) %s %s (%llu)", \
--			 _expected_str, __exp_print, #_t, \
--			 _seen_str, __seen_print); \
-+		/* Report with actual signedness to avoid weird output. */ \
-+		switch (is_signed_type(__exp) * 2 + is_signed_type(__seen)) { \
-+		case 0: { \
-+			unsigned long long __exp_print = (uintptr_t)__exp; \
-+			unsigned long long __seen_print = (uintptr_t)__seen; \
-+			__TH_LOG("Expected %s (%llu) %s %s (%llu)", \
-+				 _expected_str, __exp_print, #_t, \
-+				 _seen_str, __seen_print); \
-+			break; \
-+			} \
-+		case 1: { \
-+			unsigned long long __exp_print = (uintptr_t)__exp; \
-+			long long __seen_print = (intptr_t)__seen; \
-+			__TH_LOG("Expected %s (%llu) %s %s (%lld)", \
-+				 _expected_str, __exp_print, #_t, \
-+				 _seen_str, __seen_print); \
-+			break; \
-+			} \
-+		case 2: { \
-+			long long __exp_print = (intptr_t)__exp; \
-+			unsigned long long __seen_print = (uintptr_t)__seen; \
-+			__TH_LOG("Expected %s (%lld) %s %s (%llu)", \
-+				 _expected_str, __exp_print, #_t, \
-+				 _seen_str, __seen_print); \
-+			break; \
-+			} \
-+		case 3: { \
-+			long long __exp_print = (intptr_t)__exp; \
-+			long long __seen_print = (intptr_t)__seen; \
-+			__TH_LOG("Expected %s (%lld) %s %s (%lld)", \
-+				 _expected_str, __exp_print, #_t, \
-+				 _seen_str, __seen_print); \
-+			break; \
-+			} \
-+		} \
- 		_metadata->passed = 0; \
- 		/* Ensure the optional handler is triggered */ \
- 		_metadata->trigger = 1; \
--- 
-2.25.1
+function cleanup {
+	rm -f "$SAVED_DMESG"
+}
 
+trap cleanup EXIT
+
+> +	dmesg > "$SAVED_DMESG"
+> +
+> +	echo -n "TEST: $test ... "
+> +}
+> +
+>  # check_result() - verify dmesg output
+>  #	TODO - better filter, out of order msgs, etc?
+>  function check_result {
+>  	local expect="$*"
+>  	local result
+>  
+> -	result=$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
+> +	result=$(dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
+> +		 grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | \
+> +		 sed 's/^\[[ 0-9.]*\] //')
+>  
+>  	if [[ "$expect" == "$result" ]] ; then
+>  		echo "ok"
+> @@ -257,4 +269,6 @@ function check_result {
+>  		echo -e "not ok\n\n$(diff -upr --label expected --label result <(echo "$expect") <(echo "$result"))\n"
+>  		die "livepatch kselftest(s) failed"
+>  	fi
+> +
+> +	rm -f "$SAVED_DMESG"
+
+This change will not be necessary with the above trap handler.
+
+Otherwise, I really like the change. I was always a bit worried that these
+tests were clearing all other messages.
+
+Best Regards,
+Petr
