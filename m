@@ -2,110 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288C41F7CCA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 20:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660741F7D06
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 20:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgFLSVK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Jun 2020 14:21:10 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:45380 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgFLSVK (ORCPT
+        id S1726317AbgFLSlx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Jun 2020 14:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726304AbgFLSlx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Jun 2020 14:21:10 -0400
-Received: from ip5f5af183.dynamic.kabel-deutschland.de ([95.90.241.131] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jjoIc-0005i8-Gf; Fri, 12 Jun 2020 18:21:06 +0000
-Date:   Fri, 12 Jun 2020 20:21:05 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Kees Cook <keescook@chromium.org>
+        Fri, 12 Jun 2020 14:41:53 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A410C08C5C1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 11:41:53 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id jz3so3997978pjb.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 11:41:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qkjrCiKtn27Q86bEY5Zk8H6jpaZDgzX0V2ezg2m+c28=;
+        b=HMApzVGKyREgvBZcJ3L+ZHYzdU8A7u2LcP73qWYOlMUrqKOtbTinPJcTIWLT1XmDgj
+         dzNKNYDYm9DR+3r5Ls0MmPvx/weBNrWJ/pyA7WhHjfrPz4TKhqRDabII+ejN6s54hsGV
+         oNy43643FzpCg0BlZMemItXDkJqE9w3K3wM/Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qkjrCiKtn27Q86bEY5Zk8H6jpaZDgzX0V2ezg2m+c28=;
+        b=jwYEGWeMuKjE+AX3RhPEPXE/n/JB/VaAh5tNfuSeds4lnNVkyOvctcsn8O8Sd/4o7w
+         NzzDi3pwGKtKCgWVbxvTojgKzUzix8PSloIUnK/mmaCW+TKHl7dUvJBeDeLGvpNDOW1F
+         S9U7HL3T1mzQ5UbAz2flS21rFfAtP/89ViP4ncPV0sLIx1AHd9IpnhlepMhJUUQzxHAc
+         tpNAB+wcqI8ldUiwZHR0aVDCr2KJjp66sw8RYrMEDHyhXbxGpO9Z1yLOZN/jChvDjq3t
+         XEXcfVW0wlDQBO1O6Ut280SdlSb0PfAjEztP4Dxs54pmD4igrE28/LAXAVWikLdCgVxy
+         ynRg==
+X-Gm-Message-State: AOAM530JVRkjjcAYSu4hCpbRMU8UKOuU44YQTGT/z9Gfb4L9Lbph4vnP
+        DdGLdvG27w4k+lPUdeTiW/awnQ==
+X-Google-Smtp-Source: ABdhPJw7+X28Su6pr5AQrgMOS6ASerURV1Q7yRXEHjjBew+WOoj/phuKUp8p7+5Gb/6yrzHFLe0jTg==
+X-Received: by 2002:a17:90a:2ec6:: with SMTP id h6mr292496pjs.82.1591987312542;
+        Fri, 12 Jun 2020 11:41:52 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b6sm6733713pfp.24.2020.06.12.11.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2020 11:41:51 -0700 (PDT)
+Date:   Fri, 12 Jun 2020 11:41:50 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
 Cc:     Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        linux-kselftest@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] selftests: Remove unneeded selftest API headers
-Message-ID: <20200612182105.w22td5jb5g6iltd7@wittgenstein>
+        linux-kselftest@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/7] selftests/binderfs: Fix harness API usage
+Message-ID: <202006121141.1A0623336C@keescook>
 References: <20200611224028.3275174-1-keescook@chromium.org>
- <20200611224028.3275174-3-keescook@chromium.org>
+ <20200611224028.3275174-4-keescook@chromium.org>
+ <20200612181900.6kyhxevm6ebhu43d@wittgenstein>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200611224028.3275174-3-keescook@chromium.org>
+In-Reply-To: <20200612181900.6kyhxevm6ebhu43d@wittgenstein>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 11, 2020 at 03:40:23PM -0700, Kees Cook wrote:
-> Remove unused includes of the kselftest.h header.
+On Fri, Jun 12, 2020 at 08:19:00PM +0200, Christian Brauner wrote:
+> On Thu, Jun 11, 2020 at 03:40:24PM -0700, Kees Cook wrote:
+> > The binderfs test mixed the full harness API and the selftest API.
+> > Adjust to use only the harness API so that the harness API can switch
+> > to using the selftest API internally in future patches.
+> > 
+> > Cc: Shuah Khan <shuah@kernel.org>
+> > Cc: Christian Brauner <christian.brauner@ubuntu.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-kselftest@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
 > 
-> Cc: Christian Brauner <christian@brauner.io>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+> I had this on my TODO but never actually got around to it, so thanks!
+> 
+> In all honesty, I've done a "Does this overall look sane?" review.
+> Simply because I lack the time to do this in more detail right now but
+> I'm happy this work is done and so overall:
+> 
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-Thanks!
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+I did actually do runtime tests of this (and found a couple bugs in my
+port that I fixed before sending the final version). So, fwiw, it passes
+for me.
 
->  tools/testing/selftests/pid_namespace/regression_enomem.c | 1 -
->  tools/testing/selftests/pidfd/pidfd_getfd_test.c          | 1 -
->  tools/testing/selftests/pidfd/pidfd_setns_test.c          | 1 -
->  tools/testing/selftests/uevent/uevent_filtering.c         | 1 -
->  4 files changed, 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/pid_namespace/regression_enomem.c b/tools/testing/selftests/pid_namespace/regression_enomem.c
-> index 73d532556d17..7d84097ad45c 100644
-> --- a/tools/testing/selftests/pid_namespace/regression_enomem.c
-> +++ b/tools/testing/selftests/pid_namespace/regression_enomem.c
-> @@ -11,7 +11,6 @@
->  #include <syscall.h>
->  #include <sys/wait.h>
->  
-> -#include "../kselftest.h"
->  #include "../kselftest_harness.h"
->  #include "../pidfd/pidfd.h"
->  
-> diff --git a/tools/testing/selftests/pidfd/pidfd_getfd_test.c b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-> index 401a7c1d0312..eecbf18510fd 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-> @@ -18,7 +18,6 @@
->  #include <linux/kcmp.h>
->  
->  #include "pidfd.h"
-> -#include "../kselftest.h"
->  #include "../kselftest_harness.h"
->  
->  /*
-> diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> index 133ec5b6cda8..f66861cf9c4d 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-> @@ -20,7 +20,6 @@
->  
->  #include "pidfd.h"
->  #include "../clone3/clone3_selftests.h"
-> -#include "../kselftest.h"
->  #include "../kselftest_harness.h"
->  
->  enum {
-> diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
-> index f83391aa42cf..5cebfb356345 100644
-> --- a/tools/testing/selftests/uevent/uevent_filtering.c
-> +++ b/tools/testing/selftests/uevent/uevent_filtering.c
-> @@ -19,7 +19,6 @@
->  #include <sys/wait.h>
->  #include <unistd.h>
->  
-> -#include "../kselftest.h"
->  #include "../kselftest_harness.h"
->  
->  #define __DEV_FULL "/sys/devices/virtual/mem/full/uevent"
-> -- 
-> 2.25.1
-> 
+Thanks for the review!
+
+-Kees
+
+-- 
+Kees Cook
