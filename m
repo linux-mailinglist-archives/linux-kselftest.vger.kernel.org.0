@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6092B1F7632
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 11:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD14E1F7682
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jun 2020 12:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbgFLJtI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Jun 2020 05:49:08 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41880 "EHLO mx2.suse.de"
+        id S1726134AbgFLKL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Jun 2020 06:11:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53020 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725868AbgFLJtG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Jun 2020 05:49:06 -0400
+        id S1725872AbgFLKL0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Jun 2020 06:11:26 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id EF01BADC5;
-        Fri, 12 Jun 2020 09:49:07 +0000 (UTC)
-Date:   Fri, 12 Jun 2020 11:49:03 +0200
+        by mx2.suse.de (Postfix) with ESMTP id 91EF9AAC7;
+        Fri, 12 Jun 2020 10:11:27 +0000 (UTC)
+Date:   Fri, 12 Jun 2020 12:11:22 +0200
 From:   Petr Mladek <pmladek@suse.com>
 To:     Joe Lawrence <joe.lawrence@redhat.com>
 Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH 1/3] selftests/livepatch: Don't clear dmesg when running
  tests
-Message-ID: <20200612094903.GE4311@linux-b0ei>
+Message-ID: <20200612101122.GF4311@linux-b0ei>
 References: <20200610172101.21910-1-joe.lawrence@redhat.com>
  <20200610172101.21910-2-joe.lawrence@redhat.com>
 MIME-Version: 1.0
@@ -95,46 +95,20 @@ On Wed 2020-06-10 13:20:59, Joe Lawrence wrote:
 > +
 > +	# Save existing dmesg so we can detect new content below
 > +	SAVED_DMESG=$(mktemp --tmpdir -t klp-dmesg-XXXXXX)
-
-There is a nice trick how to remove the temporary files even
-when the script fails from other reasons. The following should
-do the job:
-
-function cleanup {
-	rm -f "$SAVED_DMESG"
-}
-
-trap cleanup EXIT
-
 > +	dmesg > "$SAVED_DMESG"
 > +
+
+One more thing. Could we print a delimiter into dmesg log so that it
+is easier to distinguish different tests.
+
+The following looks fine to me but I do not resist on exactly
+this format:
+
+	log "===== TEST: $test ====="
+
 > +	echo -n "TEST: $test ... "
 > +}
 > +
->  # check_result() - verify dmesg output
->  #	TODO - better filter, out of order msgs, etc?
->  function check_result {
->  	local expect="$*"
->  	local result
->  
-> -	result=$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
-> +	result=$(dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
-> +		 grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | \
-> +		 sed 's/^\[[ 0-9.]*\] //')
->  
->  	if [[ "$expect" == "$result" ]] ; then
->  		echo "ok"
-> @@ -257,4 +269,6 @@ function check_result {
->  		echo -e "not ok\n\n$(diff -upr --label expected --label result <(echo "$expect") <(echo "$result"))\n"
->  		die "livepatch kselftest(s) failed"
->  	fi
-> +
-> +	rm -f "$SAVED_DMESG"
-
-This change will not be necessary with the above trap handler.
-
-Otherwise, I really like the change. I was always a bit worried that these
-tests were clearing all other messages.
 
 Best Regards,
 Petr
