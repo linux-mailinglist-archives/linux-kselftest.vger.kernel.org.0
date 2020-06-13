@@ -2,100 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E28A1F816F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jun 2020 08:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B351F84EE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jun 2020 21:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbgFMG45 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 13 Jun 2020 02:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S1726304AbgFMT3S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 13 Jun 2020 15:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726398AbgFMG45 (ORCPT
+        with ESMTP id S1726533AbgFMT3K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 13 Jun 2020 02:56:57 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DD2C08C5C1
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 23:56:56 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id c71so9782243wmd.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 23:56:56 -0700 (PDT)
+        Sat, 13 Jun 2020 15:29:10 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B444C08C5C3
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2020 12:29:09 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id u5so5742613pgn.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Jun 2020 12:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OFFZRUuwZyciolFutHUZy+k3hDO5IWFL+Mp7cEZTf1o=;
-        b=TtPuXKAeBC4b7WRt8j5QlCvQ7mq3sQssnKqhuC8v1kjpfVTco+fsFkYswB9EdOATuX
-         CAQ5eTEC7dTFj4dGzRkx4QX92FcQ0ZmMwQ220MlEnm5nXRwUf+c81iouibty9uX7iwSb
-         AbCQ2Helzyo7TWlXliHGkSoX7ihF28qag1IFHomseE8hakNgDCZ9J5UC7O/UDdbN7WoL
-         F/iLQGDVivhvyJx1U2pC9TkEvQbdby8dDNiuw6jiuPX7eaoDMfVR2PAE6hkkaVOBHVT9
-         2NlNf2m5ByPos85L+6pKsBDYOdx/6fo+sDHHeeq5V9EGuw1pwoWtLAdt13n1wTRsWccC
-         Fnvg==
+        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xo8ytRHA8kMhSzgaf+vcCOJn1UirQ92SScXvh+BCUB4=;
+        b=L/1yEubsRWCHrnfgf6xtbij3KIJa1Fnvz53JJOSpVq9YiCmGymxgD3wLQCsX6X63ao
+         B0xS48rjEajSoNmCF7d/rhclbk0EPqpV3/tvUf87IC2FAwJp1lsO+GgAUQBbxLbdeZLl
+         SbeFjUa3cap1Ju+49TeV9PH48lqJhL6M9fmw9DwdOsJDIBc95U7/Ss2gcHLUUKDJyWGy
+         skT6e6GskED9pC/lurdufttvDWSCDJvjoKPuYzCKl8roKwX3jKWDuuoxDfcCezmwJ8gi
+         BQu9lTrTlli7icemq5yXKUVEQ4bo9D4QSmUwY+8TnzQy6TewvmTPMDELsCiMQv+ylAEc
+         kaOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OFFZRUuwZyciolFutHUZy+k3hDO5IWFL+Mp7cEZTf1o=;
-        b=JNB+tmi5P6gmIkKz0Imhv0zvBCdsGptQbGrm001kwb9s0vZ26Ylvi5JKR8fHKD0JdB
-         dbQJqFTsXPmm8RAJT/0TYoajKv0uyMUdNnyRA58Tgjkd3TOc5q95OL24esnrlhwjJC2X
-         59xdPDO0tUs5UYhcxycW/iS//i+p3BrcD+zFv2su5wQLn5jvzJlTUfN7lkHalwHIG2oS
-         jx1+OOeRUJwi1JyxENiqtcCl5kC/ll/c91K0DuqLLwOwDyvEaI7h8jrPM4HFi1cT3pck
-         lKdhc7nCNkgsV9h+dw65WyJRAc+iwopNxtWE75nT3qcg7dbmjt2+aQ/05DUCfsNVPUWK
-         9zxg==
-X-Gm-Message-State: AOAM5316j/G7aw6n8gxQt3kmkEIW4NhelvRYA/N3nLgI+HOs1w554koJ
-        jIPK6kpAEm0pBoZGkulQuWFYkw8TV/5VMZZRLloQKxNzs6XPXA==
-X-Google-Smtp-Source: ABdhPJyXtTYSMyQ6wXdEQDy9VIp/SQ0LjE3BFblFW22MQ9kE0ZSsESdPTCKrAA1RGJrKDw9Ctu3dijpN+V/HBa0mMrE=
-X-Received: by 2002:a1c:a444:: with SMTP id n65mr2429963wme.99.1592031415287;
- Fri, 12 Jun 2020 23:56:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xo8ytRHA8kMhSzgaf+vcCOJn1UirQ92SScXvh+BCUB4=;
+        b=RQdX1DGa60UYXwBUD3vFpE9cqy1oxTwBV8Sx6+Te4l7V8sj9r8RnnTHp+cudGcKUMy
+         sDWMQyESGOQ4URQUg/H/Wk/t7m+ybHqFU8LUf/fpCDSX4+WosEoCvz2VAr4C985QA3bx
+         yYUTVjFzOAog4uN7JldU7fjtqExZobIupfGANHmxm/lt4AwXpz2onXxIslidIeQP5j4k
+         UilIueUOknByOgwV4eDHdt86dQ95GpolcDZiTeoFsW9EH8MKE8nkYOVO/zvhc0IlDmzn
+         XPcm4THDRwXLn4HhjS9QH58yZvHl5CKVTvl4pcKU1pizjyWXP7QuBnC4hzx1hmsf+7k/
+         wCUA==
+X-Gm-Message-State: AOAM533KBjNIwrvyCbmG4IAlvo0Dctwa/32idf/tGisiE7cRy0ymep1a
+        sI2SpGOtbRFyW1cJ57nkzl6+xg==
+X-Google-Smtp-Source: ABdhPJzK5lBTS6eJJybZBFDFzV+Je4R27TUx1fw5wg2waDHRc1M28kVvD4DdIG4PzGMG6/kz0yy3DQ==
+X-Received: by 2002:a62:7f58:: with SMTP id a85mr1385838pfd.89.1592076548331;
+        Sat, 13 Jun 2020 12:29:08 -0700 (PDT)
+Received: from hermes.lan (204-195-22-127.wavecable.com. [204.195.22.127])
+        by smtp.gmail.com with ESMTPSA id a10sm8313289pgv.72.2020.06.13.12.29.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Jun 2020 12:29:07 -0700 (PDT)
+Date:   Sat, 13 Jun 2020 12:28:59 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc:     David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Donald Sharp <sharpd@cumulusnetworks.com>,
+        Roopa Prabhu <roopa@cumulusnetworks.com>,
+        Dinesh Dutt <didutt@gmail.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels@gmail.com>
+Subject: Re: [RFC,net-next, 2/5] vrf: track associations between VRF devices
+ and tables
+Message-ID: <20200613122859.4f5e2761@hermes.lan>
+In-Reply-To: <20200612164937.5468-3-andrea.mayer@uniroma2.it>
+References: <20200612164937.5468-1-andrea.mayer@uniroma2.it>
+        <20200612164937.5468-3-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
-References: <20200611215501.213058-1-vitor@massaru.org>
-In-Reply-To: <20200611215501.213058-1-vitor@massaru.org>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 13 Jun 2020 14:56:43 +0800
-Message-ID: <CABVgOSkMv22GDGin8GCqq4Vd=Bff7-VzEycmzKhUeKj9tErD7Q@mail.gmail.com>
-Subject: Re: [PATCH] lib: kunit_test_overflow: add KUnit test of
- check_*_overflow functions
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Kees Cook <keescook@chromium.org>, linux@rasmusvillemoes.dk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 12, 2020 at 5:55 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
->
-> This adds the convertion of the runtime tests of check_*_overflow fuctions,
-> from `lib/test_overflow.c`to KUnit tests.
+On Fri, 12 Jun 2020 18:49:34 +0200
+Andrea Mayer <andrea.mayer@uniroma2.it> wrote:
 
-Nit: couple of minor typos here: convertion -> conversion, and
-functions -> functions
+> +	/* shared_tables:
+> +	 * count how many distinct tables does not comply with the
+> +	 * strict mode requirement.
+> +	 * shared_table value must be 0 in order to switch to strict mode.
+> +	 *
+> +	 * example of evolution of shared_table:
+> +	 *                                                        | time
+> +	 * add  vrf0 --> table 100        shared_tables = 0       | t0
+> +	 * add  vrf1 --> table 101        shared_tables = 0       | t1
+> +	 * add  vrf2 --> table 100        shared_tables = 1       | t2
+> +	 * add  vrf3 --> table 100        shared_tables = 1       | t3
+> +	 * add  vrf4 --> table 101        shared_tables = 2       v t4
+> +	 *
+> +	 * shared_tables is a "step function" (or "staircase function")
+> +	 * and is increased by one when the second vrf is associated to a table
+> +	 *
+> +	 * at t2, vrf0 and vrf2 are bound to table 100: shared_table = 1.
+> +	 *
+> +	 * at t3, another dev (vrf3) is bound to the same table 100 but the
+> +	 * shared_table counters is still 1.
+> +	 * This means that no matter how many new vrfs will register on the
+> +	 * table 100, the shared_table will not increase (considering only
+> +	 * table 100).
+> +	 *
+> +	 * at t4, vrf4 is bound to table 101, and shared_table = 2.
+> +	 *
+> +	 * Looking at the value of shared_tables we can immediately know if
+> +	 * the strict_mode can or cannot be enforced. Indeed, strict_mode
+> +	 * can be enforced iff shared_table = 0.
+> +	 *
+> +	 * Conversely, shared_table is decreased when a vrf is de-associated
+> +	 * from a table with exactly two associated vrfs.
+> +	 */
+> +	int shared_tables;
 
-> The log similar to the one seen in dmesg running test_overflow can be
-> seen in `test.log`.
->
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-
-I've tested that this builds and runs on my system, and it all seems
-to be working fine!
-
-Tested-by: David Gow <davidgow@google.com>
-
-> ---
->  lib/Kconfig.debug         |  17 ++
->  lib/Makefile              |   1 +
->  lib/kunit_overflow_test.c | 590 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 608 insertions(+)
->  create mode 100644 lib/kunit_overflow_test.c
-
-Echoing what Brendan and Kees mentioned, it'd be nicer to have this
-replace the existing test, both because there's no need for redundant
-tests (one will get out-of-date), and so that we can have a nice diff
-showing the changes made as part of the conversion.
-
-Cheers,
--- David
+Should this be unsigned?
+Should it be a fixed size?
