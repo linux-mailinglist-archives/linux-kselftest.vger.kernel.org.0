@@ -2,47 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5FA1F85B1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 00:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AB61F85C1
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 00:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726774AbgFMWgR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 13 Jun 2020 18:36:17 -0400
-Received: from smtp.uniroma2.it ([160.80.6.16]:41795 "EHLO smtp.uniroma2.it"
+        id S1726791AbgFMWkh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 13 Jun 2020 18:40:37 -0400
+Received: from smtp.uniroma2.it ([160.80.6.16]:42150 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726272AbgFMWgQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 13 Jun 2020 18:36:16 -0400
+        id S1726728AbgFMWkh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 13 Jun 2020 18:40:37 -0400
 Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05DMZxuG019259;
-        Sun, 14 Jun 2020 00:36:04 +0200
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05DMeKVd019295;
+        Sun, 14 Jun 2020 00:40:25 +0200
 Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 7B69212093E;
-        Sun, 14 Jun 2020 00:35:54 +0200 (CEST)
+        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 641D9120069;
+        Sun, 14 Jun 2020 00:40:15 +0200 (CEST)
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1592087755; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=ed201904; t=1592088015; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MsxSNSWu5WD8jMh67/fRBqZEczfqOOR6ef+YVsRr9WY=;
-        b=VPAcboqRmMNleJACcpdM1QYqhnF4kvR/lSDmChodPo4fFw3MR0kWNgM7z1Bu/rOPJG8y7c
-        dUwiVb7ALY7aE+DQ==
+        bh=1YTwWfivUt1tSuIOMHks9jBd3XnLGThjeWZ7z8Bddco=;
+        b=8MRwRyzYlfnAFx9HqyjoOyTvtnIkg2PUo6gQ2SgqHvU+AGRoSdriRW0pD6Yx0CpcNQb0aE
+        ATNWS+xtCxu1I1Ag==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1592087755; h=from:from:sender:reply-to:subject:subject:date:date:
+        t=1592088015; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MsxSNSWu5WD8jMh67/fRBqZEczfqOOR6ef+YVsRr9WY=;
-        b=ean5dyqRTvryl0C/DnYRYjcPoqJodQHoy2hlrjz7bwF/ymZa3W9SVBQPG5LRTOQMNuInPe
-        lzD6eqH+JSh9rObufD3lr0mEwivDUupUzkKEkRBWkE+kuOB0uY6xSVM7ntgXAs6Ng4yQmi
-        QltbM95WeAnT2AHhK/yi3w1TtPSXY2I7HpkL1IVnWIjgBV12I9CUbfKDuJKf/RpqWLRa8o
-        7xl7MOxwyMxOFzUNKibFffD16Fa435/RgVT8x3aESR/k6EApD1k/2F19Z8Yf9EsylleYwB
-        bQXElNccPltGiCPtLVhOu91asE8hRSgPBi402xKqtIJhGc+t/vFjB+84Bp5B6w==
-Date:   Sun, 14 Jun 2020 00:35:54 +0200
+        bh=1YTwWfivUt1tSuIOMHks9jBd3XnLGThjeWZ7z8Bddco=;
+        b=A13y3PH2HLQNtp/dPt47GBNTTsXv6LqEG77h1Rsm4evjDwpO5fjwG6UXmGyIMh8q84f3i+
+        0nUMZ8JiSDSw3JOXNvpF867Ir3prnYX99b1lCdMIqeDnWWHX+zsy2Y3552SyuVhxGtzTcR
+        OE0uvu5HruAiGnO2TOd87k1vMyJUhgPDt1fa86572K72PMonc1uRqsi4TRJlk3VpI2yHHW
+        8hdEuoOkOueXUN8KgWoPHCjR1V1LI2Ovi1T/9zXEMQccMx6az4wNS2LF/GmAlvkCEBzdC0
+        cmeyUX4+MWVHYyIA0zQ9q4nVffCLCzv8ltdZ20b+v0cqM6/goNfn3jf/UpFEZw==
+Date:   Sun, 14 Jun 2020 00:40:14 +0200
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        David Ahern <dsahern@kernel.org>,
+Cc:     David Ahern <dsahern@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Shrijeet Mukherjee <shrijeet@gmail.com>,
         Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
@@ -52,14 +51,14 @@ Cc:     Andrea Mayer <andrea.mayer@uniroma2.it>,
         Dinesh Dutt <didutt@gmail.com>,
         Stefano Salsano <stefano.salsano@uniroma2.it>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels@gmail.com>
-Subject: Re: [RFC,net-next, 1/5] l3mdev: add infrastructure for table to VRF
- mapping
-Message-Id: <20200614003554.4bfed8a61a5741bfd2660d30@uniroma2.it>
-In-Reply-To: <20200612105148.1b977dc3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Ahmed Abdelsalam <ahabdels@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [RFC,net-next, 3/5] vrf: add sysctl parameter for strict mode
+Message-Id: <20200614004014.582e20b9f2c2c786deca9779@uniroma2.it>
+In-Reply-To: <20200612105227.2f85e3d7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 References: <20200612164937.5468-1-andrea.mayer@uniroma2.it>
-        <20200612164937.5468-2-andrea.mayer@uniroma2.it>
-        <20200612105148.1b977dc3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20200612164937.5468-4-andrea.mayer@uniroma2.it>
+        <20200612105227.2f85e3d7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -71,18 +70,18 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 12 Jun 2020 10:51:48 -0700
+On Fri, 12 Jun 2020 10:52:27 -0700
 Jakub Kicinski <kuba@kernel.org> wrote:
 
-> net/l3mdev/l3mdev.c:12:1: warning: symbol 'l3mdev_lock' was not declared. Should it be static?
-> 
-> Please make sure it doesn't add errors with W=1 C=1 :)
+> drivers/net/vrf.c:1771:49: warning: incorrect type in argument 3 (different address spaces)
+> drivers/net/vrf.c:1771:49:    expected void *
+> drivers/net/vrf.c:1771:49:    got void [noderef] <asn:1> *buffer
+> drivers/net/vrf.c:1785:35: warning: incorrect type in initializer (incompatible argument 3 (different address spaces))
+> drivers/net/vrf.c:1785:35:    expected int ( [usertype] *proc_handler )( ... )
+> drivers/net/vrf.c:1785:35:    got int ( * )( ... )
 
 Hi Jakub,
-thanks for your feedback.
+the fix will be in the next version of this patch set.
 
-sorry, I did not want to add more warnings! I will declare the l3mdev_lock
-static! I will be more careful while checking with W=1 and C=1 next time.
-
-Thanks,
+Thank you,
 Andrea
