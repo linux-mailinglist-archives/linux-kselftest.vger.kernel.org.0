@@ -2,511 +2,418 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D601F7EFB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jun 2020 00:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3A21F810D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jun 2020 07:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbgFLWgs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Jun 2020 18:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S1726048AbgFMFH3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 13 Jun 2020 01:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726363AbgFLWgr (ORCPT
+        with ESMTP id S1725287AbgFMFH2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Jun 2020 18:36:47 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825E0C03E96F
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 15:36:46 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id bh7so4310998plb.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 15:36:46 -0700 (PDT)
+        Sat, 13 Jun 2020 01:07:28 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5575C08C5C1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 22:07:26 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id r15so9797383wmh.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jun 2020 22:07:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lO8mi2zhhtsGQXztgPFepnvQEc1Z1nZkKCQAprRqTJ4=;
-        b=XsmsOLCFQ93CbLn9XQetz0h9AFJYU3ErW5h+8j+CVclkQsYBeNjGXvwmosvZkRiHCj
-         xycBVj8L/V6qzkc39xxVw3XI6A9itH8pQiXCHcN+kZ/PkXsLDOqTaA8OEHVKdlVmI6D/
-         VYg1SNz562LcmJvbRlZRyCd5daQtFxeb8sbPI=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lZedxNbSR5Y6VCQFoU4t/WUj3cun+Lor1CUMdsSMaZs=;
+        b=Chn2MsdPxPFoQe+xVK24PTksspNNpO8iIfWYSZ3H6hBeOAFBoT96xkxhH2ML+UQQAk
+         R0cTK+X+mKd7TKDdi5wYmzqDyMK4zgUJvqs3ZNdJBbiZVcqUl7XXj2xxPjKzckxPmSAu
+         7OTTpTiatHoW7HSZy/APK9frF9qIziqL57lVhkoEbVWEj+LWGn2HMlv8+WSLhxjNj3XC
+         9NnPRgjM0Z5I4Uf8m0JkFw149NAveMUNQGopbNHu9haI+oBeSr3pW/ElsQvFt0JnKHbq
+         pzXK1IOmOB7MS/HE2N/R87vXAi8O3I4LWGJNE1ndyTx7t4rKcqx3q8SuYZunIofS0yCJ
+         MuMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lO8mi2zhhtsGQXztgPFepnvQEc1Z1nZkKCQAprRqTJ4=;
-        b=Uzqbph1Psw42oWgIiQ4PuNOq5JqcQNlsx8NrLMeIxjbMh92Ty4N30R4ku0HuRcC1zy
-         h8wa1I8Hn1AB8tPq22PDs8i3I+kIaFU91ulCzek/aWIkDUp+QtQj7koA77i/umxMYA/k
-         F/tyCijfkXsrXgW8C7Hj2K+t2RH/M6P1iWeviaSj5W8gqFdIIv9D2yla9dbx+RdQEACf
-         BRkJGlRDKHWkeuf+mI3EQ2TjWbSrqTqSajRpdyZjeXT9AVQp8/HKX5EeAoiPj2EYaocb
-         rxZr1On4Td50f8fFj8zoUqy4gyi+E0wJpCGDqnPEZHfsTquJa54nq8jXRDB2zesoaBWJ
-         0DCg==
-X-Gm-Message-State: AOAM532my1uPU2NnJ81ONeyKkJ/K8UwaSMYzMuyVVUzWxHtpnHCxpBT4
-        8dpIXL6BfINZu/25bIFVFIrUGg==
-X-Google-Smtp-Source: ABdhPJyrBo5EKiDLRgRPY9opnNYen61fBUs9EhgZy/OdHh3845pdzrbzn9u/rdo0zXk8zuFL7tbD7A==
-X-Received: by 2002:a17:90a:aa88:: with SMTP id l8mr1041887pjq.145.1592001405265;
-        Fri, 12 Jun 2020 15:36:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j13sm6481571pje.25.2020.06.12.15.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2020 15:36:44 -0700 (PDT)
-Date:   Fri, 12 Jun 2020 15:36:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     kunit-dev@googlegroups.com, skhan@linuxfoundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brendanhiggins@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux@rasmusvillemoes.dk
-Subject: Re: [PATCH] lib: kunit_test_overflow: add KUnit test of
- check_*_overflow functions
-Message-ID: <202006121403.CF8D57C@keescook>
-References: <20200611215501.213058-1-vitor@massaru.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lZedxNbSR5Y6VCQFoU4t/WUj3cun+Lor1CUMdsSMaZs=;
+        b=Y83v0qXqgWuEjXVdtWpcTMMYE0Uh19HmH3U8q3/lDG77J7vaO1cnkB4leCmUBI4tFS
+         TjGxOkJWmU3L2cCW0hAyDITGQWmvVJqp6yXerOycgqTsar5YOReqacqwfyiIT2XeRvk6
+         K8vLMnvxGRaX5RCTpjn/tKeZRRbtiircm60RwPdo+n988lv9ScGotHEaok8EObGnWEaF
+         UP022IGz1uxUZz4PNSZHFfEyJ8BfQoEyB0qIA1ets9yJPaCNjouUUBqE4zwHOrIhx8U6
+         RIRVT6YHEDKhctjV2b4uHRZwpI+vTDXlZpinYO3PYx/MHZZxCFYUq1QzGGas4JeM6m7j
+         Ipog==
+X-Gm-Message-State: AOAM530UhRrwG2vkJkzrLTZBRNiHM4eq8RTAl9wh0PydYiLd18+hofi5
+        pDkf1BwfiCcK9NsPXzkUPHVOJW4jeGO5e0XE9TWfgDz3jcYW/A==
+X-Google-Smtp-Source: ABdhPJyHy226Pv9kgYPx9qtbckz6fLn1TG6uAzEeWT+pMDYxzH6S/6xCEGmX6/UUBoYt8p1UNeQyXhNvKN4/ZjAq9lQ=
+X-Received: by 2002:a1c:a444:: with SMTP id n65mr2086921wme.99.1592024843427;
+ Fri, 12 Jun 2020 22:07:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200611215501.213058-1-vitor@massaru.org>
+References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
+In-Reply-To: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 13 Jun 2020 13:07:11 +0800
+Message-ID: <CABVgOSkrKHs_uWLZ++_fBC_mfe3RgDxmCvnkcyn1P_wjXTV9Og@mail.gmail.com>
+Subject: Re: RFC - kernel selftest result documentation (KTAP)
+To:     "Bird, Tim" <Tim.Bird@sony.com>
+Cc:     "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 11, 2020 at 06:55:01PM -0300, Vitor Massaru Iha wrote:
-> This adds the convertion of the runtime tests of check_*_overflow fuctions,
-> from `lib/test_overflow.c`to KUnit tests.
+On Thu, Jun 11, 2020 at 2:11 AM Bird, Tim <Tim.Bird@sony.com> wrote:
 >
-> The log similar to the one seen in dmesg running test_overflow can be
-> seen in `test.log`.
+> Some months ago I started work on a document to formalize how
+> kselftest implements the TAP specification.  However, I didn't finish
+> that work.  Maybe it's time to do so now.
 >
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-> ---
->  lib/Kconfig.debug         |  17 ++
->  lib/Makefile              |   1 +
->  lib/kunit_overflow_test.c | 590 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 608 insertions(+)
->  create mode 100644 lib/kunit_overflow_test.c
+> kselftest has developed a few differences from the original
+> TAP specification, and  some extensions that I believe are worth
+> documenting.
+>
+> Essentially, we have created our own KTAP (kernel TAP)
+> format.  I think it is worth documenting our conventions, in order to
+> keep everyone on the same page.
+>
+> Below is a partially completed document on my understanding
+> of KTAP, based on examination of some of the kselftest test
+> output.  I have not reconciled this with the kunit output format,
+> which I believe has some differences (which maybe we should
+> resolve before we get too far into this).
 
-What tree is this based on? I can't apply it to v5.7, linux-next, nor
-Linus's latest. I've fixed it up to apply to linux-next for now. :)
+Thanks for doing this! This is something we've wanted to have for a while!
 
-Looking at linux-next, though, I am reminded of my agony over naming:
+On the KUnit side of things, we've not (intentionally) deviated too
+much from TAP/kselftest
+It's certainly our intention to hew as close as possible to what
+kselftest is doing: I don't think there are any real conflicts
+conceptually (at least at the moment), but we're almost certainly
+handling a few details differently.
 
-obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += kunit_overflow_test.o
+One other thing worth noting is that KUnit has a parser for our TAP
+results: './tools/testing/kunit/kunit.py parse' will do some basic
+parsing and print out results, a summary, etc.
 
-*-test
-test_*
-*_test
+A few other comments below:
 
-This has to get fixed now, and the naming convention needs to be
-documented. For old tests, the preferred naming was test_*. For kunit, I
-think it should be kunit_* (and no trailing _test; that's redundant).
+> I submit the document now, before it is finished, because a patch
+> was recently introduced to alter one of the result conventions
+> (from SKIP='not ok' to SKIP='ok').
+>
+> See the document include inline below
+>
+> ====== start of ktap-doc-rfc.txt ======
+> Selftest preferred output format
+> --------------------------------
+>
+> The linux kernel selftest system uses TAP (Test Anything Protocol)
+> output to make testing results consumable by automated systems.  A
+> number of Continuous Integration (CI) systems test the kernel every
+> day.  It is useful for these systems that output from selftest
+> programs be consistent and machine-parsable.
+>
+> At the same time, it is useful for test results to be human-readable
+> as well.
+>
+> The kernel test result format is based on a variation TAP
+> TAP is a simple text-based format that is
+> documented on the TAP home page (http://testanything.org/).  There
+> is an official TAP13 specification here:
+> http://testanything.org/tap-version-13-specification.html
+>
+> The kernel test result format consists of 5 major elements,
+> 4 of which are line-based:
+>  * the output version line
+>  * the plan line
+>  * one or more test result lines (also called test result lines)
+>  * a possible "Bail out!" line
+>
+> optional elements:
+>  * diagnostic data
+>
+> The 5th element is diagnostic information, which is used to describe
+> items running in the test, and possibly to explain test results.
+> A sample test result is show below:
+>
+> Some other lines may be placed the test harness, and are not emitted
+> by individual test programs:
+>  * one or more test identification lines
+>  * a possible results summary line
+>
+> Here is an example:
+>
+>         TAP version 13
+>         1..1
+>         # selftests: cpufreq: main.sh
+>         # pid 8101's current affinity mask: fff
+>         # pid 8101's new affinity mask: 1
+>         ok 1 selftests: cpufreq: main.sh
+>
+> The output version line is: "TAP version 13"
+>
+> The test plan is "1..1".
+>
+> Element details
+> ===============
+>
+> Output version line
+> -------------------
+> The output version line is always "TAP version 13".
+>
+> Although the kernel test result format has some additions
+> to the TAP13 format, the version line reported by kselftest tests
+> is (currently) always the exact string "TAP version 13"
+>
+> This is always the first line of test output.
 
-For for this bikeshed, I think it should be kunit_overflow.c
+KUnit is currently outputting "TAP version 14", as we were hoping some
+of our changes would get into the TAP14 spec. (Any comments, Brendan?)
+Maybe this should end up saying "KTAP version 1" or something?
 
-For the CONFIG name, it seems to be suggested in docs to be
-*_KUNIT_TEST:
+> Test plan line
+> --------------
+> The test plan indicates the number of individual test cases intended to
+> be executed by the test. It always starts with "1.." and is followed
+> by the number of tests cases.  In the example above, 1..1", indicates
+> that this test reports only 1 test case.
+>
+> The test plan line can be placed in two locations:
+>  * the second line of test output, when the number of test cases is known
+>    in advance
+>  * as the last line of test output, when the number of test cases is not
+>    known in advance.
+>
+> Most often, the number of test cases is known in advance, and the test plan
+> line appears as the second line of test output, immediately following
+> the output version line.  The number of test cases might not be known
+> in advance if the number of tests is calculated from runtime data.
+> In this case, the test plan line is emitted as the last line of test
+> output.
 
-...
-menuconfig). From there, you can enable any KUnit tests you want: they usually
-have config options ending in ``_KUNIT_TEST``.
-...
+KUnit is currently including the test plan line only for subtests, as
+the current version doesn't actually know how many test suites will
+run in advance.
+This is something there's work underway to fix, though.
 
-I think much stronger language needs to be added to "Writing your first
-test" (which actually recommends the wrong thing: "config
-MISC_EXAMPLE_TEST"). And then doesn't specify a module file name, though
-it hints at one:
+> Test result lines
+> -----------------
+> The test output consists of one or more test result lines that indicate
+> the actual results for the test.  These have the format:
+>
+>   <result> <number> <description> [<directive>] [<diagnostic data>]
+>
+> The ''result'' must appear at the start of a line (except for when a
+> test is nested, see below), and must consist of one of the following
+> two phrases:
+>   * ok
+>   * not ok
+>
+> If the test passed, then the result is reported as "ok".  If the test
+> failed, then the result is reported as "not ok".  These must be in
+> lower case, exactly as shown.
+>
+> The ''number'' in the test result line represents the number of the
+> test case being performed by the test program.  This is often used by
+> test harnesses as a unique identifier for each test case.  The test
+> number is a base-10 number, starting with 1.  It should increase by
+> one for each new test result line emitted.  If possible the number
+> for a test case should be kept the same over the lifetime of the test.
+>
+> The ''description'' is a short description of the test case.
+> This can be any string of words, but should avoid using colons (':')
+> except as part of a fully qualifed test case name (see below).
+>
+> Finally, it is possible to use a test directive to indicate another
+> possible outcome for a test: that it was skipped.  To report that
+> a test case was skipped, the result line should start with the
+> result "not ok", and the directive "# SKIP" should be placed after
+> the test description. (Note that this deviates from the TAP13
+> specification).
+>
+> A test may be skipped for a variety of reasons, ranging for
+> insufficient privileges to missing features or resources required
+> to execute that test case.
+>
+> It is usually helpful if a diagnostic message is emitted to explain
+> the reasons for the skip.  If the message is a single line and is
+> short, the diagnostic message may be placed after the '# SKIP'
+> directive on the same line as the test result.  However, if it is
+> not on the test result line, it should precede the test line (see
+> diagnostic data, next).
 
-...
-        obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
-...
+We're in the process of supporting test skipping in KUnit at the
+moment[1], and haven't totally formalised what the syntax here should
+be. The only output issues thus far have been on the "ok"/"not ok"
+point (my in-progress patch is using 'ok', the previous RFC could
+output either). At the moment, the reason a test is skipped has to be
+on the same line as the result for the tools to pick it up (and the
+KUnit API always requests such a 'status comment', even if it ends up
+as the empty string).
 
-So, please, let's get this documented: we really really need a single
-naming convention for these.
+We'll probably follow whatever kselftest does here, though, but will
+be able to do more with skip reasons on the reult line.
 
-For Kconfig in the tree, I see:
+> Diagnostic data
+> ---------------
+> Diagnostic data is text that reports on test conditions or test
+> operations, or that explains test results.  In the kernel test
+> result format, diagnostic data is placed on lines that start with a
+> hash sign, followed by a space ('# ').
+>
+> One special format of diagnostic data is a test identification line,
+> that has the fully qualified name of a test case.  Such a test
+> identification line marks the start of test output for a test case.
+>
+> In the example above, there are three lines that start with '#'
+> which precede the test result line:
+>         # selftests: cpufreq: main.sh
+>         # pid 8101's current affinity mask: fff
+>         # pid 8101's new affinity mask: 1
+> These are used to indicate diagnostic data for the test case
+> 'selftests: cpufreq: main.sh'
+>
+> Material in comments between the identification line and the test
+> result line are diagnostic data that can help to interpret the
+> results of the test.
+>
+> The TAP specification indicates that automated test harnesses may
+> ignore any line that is not one of the mandatory prescribed lines
+> (that is, the output format version line, the plan line, a test
+> result line, or a "Bail out!" line.)
+>
+> Bail out!
+> ---------
+> If a line in the test output starts with 'Bail out!', it indicates
+> that the test was aborted for some reason.  It indicates that
+> the test is unable to proceed, and no additional tests will be
+> performed.
+>
+> This can be used at the very beginning of a test, or anywhere in the
+> middle of the test, to indicate that the test can not continue.
+>
+> --- from here on is not-yet-organized material
+>
+> Tip:
+>  - don't change the test plan based on skipped tests.
+>    - it is better to report that a test case was skipped, than to
+>      not report it
+>    - that is, don't adjust the number of test cases based on skipped
+>      tests
+>
+> Other things to mention:
+> TAP13 elements not used:
+>  - yaml for diagnostic messages
+>    - reason: try to keep things line-based, since output from other things
+>    may be interspersed with messages from the test itself
+We're not using this in KUnit, either.
+>  - TODO directive
+Ditto: the upcoming SKIP support leaves room for this to easily be
+added, though.
+>
+> KTAP Extensions beyond TAP13:
+>  - nesting
+>    - via indentation
+>      - indentation makes it easier for humans to read
+We're using this a lot in KUnit, as all tests are split into suites.
+The syntax is basically a full nested TAP document, indented with four
+spaces. (There are a couple of tests which output some non-indented
+lines to our log, though.)
 
-drivers/base/Kconfig:config PM_QOS_KUNIT_TEST
-drivers/base/test/Kconfig:config KUNIT_DRIVER_PE_TEST
-fs/ext4/Kconfig:config EXT4_KUNIT_TESTS
-lib/Kconfig.debug:config SYSCTL_KUNIT_TEST
-lib/Kconfig.debug:config OVERFLOW_KUNIT_TEST
-lib/Kconfig.debug:config LIST_KUNIT_TEST
-lib/Kconfig.debug:config LINEAR_RANGES_TEST
-lib/kunit/Kconfig:menuconfig KUNIT
-lib/kunit/Kconfig:config KUNIT_DEBUGFS
-lib/kunit/Kconfig:config KUNIT_TEST
-lib/kunit/Kconfig:config KUNIT_EXAMPLE_TEST
-lib/kunit/Kconfig:config KUNIT_ALL_TESTS
+I've included some example output at the end of this email of what
+we're doing currently.
 
-Which is:
+>  - test identifier
+>     - multiple parts, separated by ':'
 
-*_KUNIT_TEST
-KUNIT_*_TEST
-KUNIT_*_TESTS
-*_TEST
+>  - summary lines
+>    - can be skipped by CI systems that do their own calculations
 
-Nooooo. ;)
+We're not outputting any summary lines for the tests as a whole, but
+the success of a test suite is determined from the success of nested
+tests.
 
-If it should all be *_KUNIT_TEST, let's do that. I think just *_KUNIT
-would be sufficient (again, adding the word "test" to "kunit" is
-redundant). And it absolutely should not be a prefix, otherwise it'll
-get sorted away from the thing it's named after. So my preference is
-here would be CONFIG_OVERFLOW_KUNIT. (Yes the old convention was
-CONFIG_TEST_*, but those things tended to be regression tests, not unit
-tests.)
+> Other notes:
+>  - automatic assignment of result status based on exit code
+>
+> Tips:
+>  - do NOT describe the result in the test line
+>    - the test case description should be the same whether the test
+>      succeeds or fails
+>    - use diagnostic lines to describe or explain results, if this is
+>      desirable
+>  - test numbers are considered harmful
+>    - test harnesses should use the test description as the identifier
+>    - test numbers change when testcases are added or removed
+>      - which means that results can't be compared between different
+>        versions of the test
+>  - recommendations for diagnostic messages:
+>    - reason for failure
+>    - reason for skip
+>    - diagnostic data should always preceding the result line
+>      - problem: harness may emit result before test can do assessment
+>        to determine reason for result
+>      - this is what the kernel uses
+>
+> Differences between kernel test result format and TAP13:
+>  - in KTAP the "# SKIP" directive is placed after the description on
+>    the test result line
 
-Please please, can we fix this before we add anything more?
+That's what we're planning to do with KUnit as well: clearly I didn't
+read the TAP13 spec as thoroughly as I'd intended, as I'd naively
+assumed that this was TAP13 spec compliant. Oops.
+I'm very much in favour of this change.
 
 >
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 1f4ab7a2bdee..72fcfe1f24a4 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2075,6 +2075,23 @@ config SYSCTL_KUNIT_TEST
+> ====== start of ktap-doc-rfc.txt ======
+> OK - that's the end of the RFC doc.
 >
->  	  If unsure, say N.
+> Here are a few questions:
+>  - is this document desired or not?
+
+This is definitely a good thing for us: thanks a lot!
+
+>     - is it too long or too short?
+>  - if the document is desired, where should it be placed?
+>    I assume somewhere under Documentation, and put into
+>    .rst format. Suggestions for a name and location are welcome.
+>  - is this document accurate?
+>    I think KUNIT does a few things differently than this description.
+>    - is the intent to have kunit and kselftest have the same output format?
+>       if so, then these should be rationalized.
+
+As above, we'd love to at least try to have kunit and kselftest using
+the same format.
+
+
+> Finally,
+>   - Should a SKIP result be 'ok' (TAP13 spec) or 'not ok' (current kselftest practice)?
+> See https://testanything.org/tap-version-13-specification.html
+
+I have a very mild preference for 'ok': but it doesn't really matter
+much one way or the other. Our tooling throws the result away if it
+sees a SKIP.
+
+> Regards,
+>  -- Tim
 >
-> +config OVERFLOW_KUNIT_TEST
-> +	tristate "KUnit test for overflow" if !KUNIT_ALL_TESTS
-> +	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  This builds the overflow KUnit tests.
-> +
-> +	  KUnit tests run during boot and output the results to the debug log
-> +	  in TAP format (http://testanything.org/). Only useful for kernel devs
-> +	  running KUnit test harness and are not for inclusion into a production
-> +	  build.
-> +
-> +	  For more information on KUnit and unit tests in general please refer
-> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +	  If unsure, say N.
-> +
->  config LIST_KUNIT_TEST
->  	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
-
-Regarding output:
-
-[   36.611358] TAP version 14
-[   36.611953]     # Subtest: overflow
-[   36.611954]     1..3
-...
-[   36.622914]     # overflow_calculation_test: s64: 21 arithmetic tests
-[   36.624020]     ok 1 - overflow_calculation_test
-...
-[   36.731096]     # overflow_shift_test: ok: (s64)(0 << 63) == 0
-[   36.731840]     ok 2 - overflow_shift_test
-...
-[   36.750294] kunit_try_catch: vmalloc: allocation failure: 18446744073709551615 bytes, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
-...
-[   36.805350]     # overflow_allocation_test: devm_kzalloc detected saturation
-[   36.807763]     ok 3 - overflow_allocation_test
-[   36.807765] ok 1 - overflow
-
-A few things here....
-
-- On the outer test report, there is no "plan" line (I was expecting
-  "1..1"). Technically it's optional, but it seems like the information
-  is available. :)
-
-- The subtest should have its own "TAP version 14" line, and it should
-  be using the diagnostic line prefix for the top-level test (this is
-  what kselftest is doing).
-
-- There is no way to distinguish top-level TAP output from kernel log
-  lines. I think we should stick with the existing marker, which is
-  "# ", so that kernel output has no way to be interpreted as TAP
-  details -- unless it intentionally starts adding "#"s. ;)
-
-- There is no summary line (to help humans). For example, the kselftest
-  API produces a final pass/fail report.
-
-Taken together, I was expecting the output to be:
-
-[   36.611358] # TAP version 14
-[   36.611953] # 1..1
-[   36.611958] # # TAP version 14
-[   36.611954] # # 1..3
-...
-[   36.622914] # # # overflow_calculation_test: s64: 21 arithmetic tests
-[   36.624020] # # ok 1 - overflow_calculation_test
-...
-[   36.731096] # # # overflow_shift_test: ok: (s64)(0 << 63) == 0
-[   36.731840] # # ok 2 - overflow_shift_test
-...
-[   36.750294] kunit_try_catch: vmalloc: allocation failure: 18446744073709551615 bytes, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
-...
-[   36.805350] # # # overflow_allocation_test: devm_kzalloc detected saturation
-[   36.807763] # # ok 3 - overflow_allocation_test
-[   36.807763] # # # overflow: PASS
-[   36.807765] # ok 1 - overflow
-[   36.807767] # # kunit: PASS
-
-But I assume there are threads on this that I've not read... :)
-
-
-Now, speaking to actual behavior, I love it. :) All the tests are there
-(and then some -- noted below).
-
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 685aee60de1d..a3290adc0019 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -309,3 +309,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
 >
->  # KUnit tests
->  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-> +obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += kunit_overflow_test.o
-> diff --git a/lib/kunit_overflow_test.c b/lib/kunit_overflow_test.c
-> new file mode 100644
-> index 000000000000..c3eb8f0d3d50
-> --- /dev/null
-> +++ b/lib/kunit_overflow_test.c
 
-A lot of this file is unchanged, so I would suggest doing this as a
-"git mv lib/test_overflow.c lib/kunit_overflow.c" and then put the
-changes into the file. Then it should be easier to track git history, etc.
+Example KUnit output (including the in-progress "skip test" support):
+TAP version 14
+   # Subtest: kunit-try-catch-test
+   1..2
+   ok 1 - kunit_test_try_catch_successful_try_no_catch
+   ok 2 - kunit_test_try_catch_unsuccessful_try_does_catch
+ok 1 - kunit-try-catch-test
+    # Subtest: example
+   1..2
+   # example_simple_test: initializing
+   ok 1 - example_simple_test
+   # example_skip_test: initializing
+   ok 2 - example_skip_test # SKIP this test should be skipped
+ok 2 - example
 
-Without this, it's a lot harder to review this patch since I'm just
-looking at a 590 new lines. ;) Really, it's a diff (which I'll paste
-here for the code review...)
 
-> --- a/lib/test_overflow.c	2020-06-12 14:07:11.161999209 -0700
-> +++ b/lib/kunit_overflow_test.c	2020-06-12 14:07:27.950183116 -0700
-> @@ -1,17 +1,18 @@
-> -// SPDX-License-Identifier: GPL-2.0 OR MIT
-> +// SPDX-License-Identifier: GPL-2.0
 
-Please don't change the license.
-
-> +/*
-> + *  This code is the conversion of the overflow test in runtime to KUnit tests.
-> + */
-> +
-
-This can be left off.
-
->  /*
->   * Test cases for arithmetic overflow checks.
->   */
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->  
-> +#include <kunit/test.h>
->  #include <linux/device.h>
->  #include <linux/init.h>
-> -#include <linux/kernel.h>
->  #include <linux/mm.h>
-> -#include <linux/module.h>
->  #include <linux/overflow.h>
-> -#include <linux/slab.h>
-> -#include <linux/types.h>
->  #include <linux/vmalloc.h>
->  
->  #define DEFINE_TEST_ARRAY(t)			\
-> @@ -19,7 +20,7 @@
->  		t a, b;				\
->  		t sum, diff, prod;		\
->  		bool s_of, d_of, p_of;		\
-> -	} t ## _tests[] __initconst
-> +	} t ## _tests[]
-
-Why drop the __initconst?
-
->  DEFINE_TEST_ARRAY(u8) = {
->  	{0, 0, 0, 0, 0, false, false, false},
-> @@ -44,6 +45,7 @@
->  	{128, 128, 0, 0, 0, true, false, true},
->  	{123, 234, 101, 145, 110, true, true, true},
->  };
-> +
-
-Style nit: I'd like to avoid the blank lines here.
-
->  DEFINE_TEST_ARRAY(u16) = {
->  	{0, 0, 0, 0, 0, false, false, false},
->  	{1, 1, 2, 0, 1, false, false, false},
-> @@ -66,6 +68,7 @@
->  	{123, 234, 357, 65425, 28782, false, true, false},
->  	{1234, 2345, 3579, 64425, 10146, false, true, true},
->  };
-> +
->  DEFINE_TEST_ARRAY(u32) = {
->  	{0, 0, 0, 0, 0, false, false, false},
->  	{1, 1, 2, 0, 1, false, false, false},
-> @@ -163,6 +166,7 @@
->  	{S16_MIN, S16_MIN, 0, 0, 0, true, false, true},
->  	{S16_MAX, S16_MAX, -2, 0, 1, true, false, true},
->  };
-> +
->  DEFINE_TEST_ARRAY(s32) = {
->  	{0, 0, 0, 0, 0, false, false, false},
->  
-> @@ -186,6 +190,7 @@
->  	{S32_MIN, S32_MIN, 0, 0, 0, true, false, true},
->  	{S32_MAX, S32_MAX, -2, 0, 1, true, false, true},
->  };
-> +
->  DEFINE_TEST_ARRAY(s64) = {
->  	{0, 0, 0, 0, 0, false, false, false},
->  
-> @@ -215,254 +220,243 @@
->  	{0, -S64_MAX, -S64_MAX, S64_MAX, 0, false, false, false},
->  };
->  
-> -#define check_one_op(t, fmt, op, sym, a, b, r, of) do {		\
-> -	t _r;							\
-> -	bool _of;						\
-> -								\
-> -	_of = check_ ## op ## _overflow(a, b, &_r);		\
-> -	if (_of != of) {					\
-> -		pr_warn("expected "fmt" "sym" "fmt		\
-> -			" to%s overflow (type %s)\n",		\
-> -			a, b, of ? "" : " not", #t);		\
-> -		err = 1;					\
-> -	}							\
-> -	if (_r != r) {						\
-> -		pr_warn("expected "fmt" "sym" "fmt" == "	\
-> -			fmt", got "fmt" (type %s)\n",		\
-> -			a, b, r, _r, #t);			\
-> -		err = 1;					\
-> -	}							\
-> +#define check_one_op(test, t, fmt, op, sym, a, b, r, of) do {		\
-> +	t _r;								\
-> +	bool _of;							\
-> +									\
-> +	_of = check_ ## op ## _overflow(a, b, &_r);			\
-> +	if (_of != of) {						\
-> +		KUNIT_FAIL(test, "Expected "fmt" "sym" "fmt		\
-> +			" to%s overflow (type %s)\n",			\
-> +			a, b, of ? "" : " not", #t);			\
-> +	}								\
-> +	if (_r != r) {							\
-> +		KUNIT_FAIL(test, "Expected "fmt" "sym" "fmt" == "	\
-> +			fmt", got "fmt" (type %s)\n",			\
-> +			a, b, r, _r, #t);				\
-> +	}								\
->  } while (0)
-
-The trailing \ makes this more awkward to diff, but one thing I'm not
-quite seeing is why "test" needs to be added. It's not a variable in
-these macros. i.e. it is used literally:
-
-#define DEFINE_TEST_FUNC(test, t, fmt)						\
-static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p)	\
-{										\
-        check_one_op(test, t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);	\
-...
-
-Only callers of the do_test_*() would need to be changed. I think all of
-these macros just need the pr_warn/KUNIT_FAIL changes, and the function
-prototypes updated to include struct kunit *test.
-
->  
-> -#define DEFINE_TEST_FUNC(t, fmt)					\
-> -static int __init do_test_ ## t(const struct test_ ## t *p)		\
-> -{							   		\
-> -	int err = 0;							\
-> -									\
-> -	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);	\
-> -	check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);	\
-> -	check_one_op(t, fmt, sub, "-", p->a, p->b, p->diff, p->d_of);	\
-> -	check_one_op(t, fmt, mul, "*", p->a, p->b, p->prod, p->p_of);	\
-> -	check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);	\
-> -									\
-> -	return err;							\
-> -}									\
-> -									\
-> -static int __init test_ ## t ## _overflow(void) {			\
-> -	int err = 0;							\
-> -	unsigned i;							\
-> -									\
-> -	pr_info("%-3s: %zu arithmetic tests\n", #t,			\
-> -		ARRAY_SIZE(t ## _tests));				\
-> -	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
-> -		err |= do_test_ ## t(&t ## _tests[i]);			\
-> -	return err;							\
-> +#define DEFINE_TEST_FUNC(test, t, fmt)						\
-> +static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p)	\
-> +{										\
-> +	check_one_op(test, t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);	\
-> +	check_one_op(test, t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);	\
-> +	check_one_op(test, t, fmt, sub, "-", p->a, p->b, p->diff, p->d_of);	\
-> +	check_one_op(test, t, fmt, mul, "*", p->a, p->b, p->prod, p->p_of);	\
-> +	check_one_op(test, t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);	\
-> +}										\
-
-Then these all only need the prototype on the actual function changed.
-
-> +										\
-> +static void  test_ ## t ## _overflow(struct kunit *test)			\
-> +{										\
-> +	unsigned i;								\
-> +										\
-> +	kunit_warn(test, "%-3s: %zu arithmetic tests\n", #t,			\
-> +		ARRAY_SIZE(t ## _tests));					\
-> +	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)				\
-> +		do_test_ ## t(test, &t ## _tests[i]);				\
->  }
->  
-> -DEFINE_TEST_FUNC(u8, "%d");
-> -DEFINE_TEST_FUNC(s8, "%d");
-> -DEFINE_TEST_FUNC(u16, "%d");
-> -DEFINE_TEST_FUNC(s16, "%d");
-> -DEFINE_TEST_FUNC(u32, "%u");
-> -DEFINE_TEST_FUNC(s32, "%d");
-> +DEFINE_TEST_FUNC(test, u8, "%d");
-> +DEFINE_TEST_FUNC(test, s8, "%d");
-> +DEFINE_TEST_FUNC(test, u16, "%d");
-> +DEFINE_TEST_FUNC(test, s16, "%d");
-> +DEFINE_TEST_FUNC(test, u32, "%u");
-> +DEFINE_TEST_FUNC(test, s32, "%d");
->  #if BITS_PER_LONG == 64
-> -DEFINE_TEST_FUNC(u64, "%llu");
-> -DEFINE_TEST_FUNC(s64, "%lld");
-> +DEFINE_TEST_FUNC(test, u64, "%llu");
-> +DEFINE_TEST_FUNC(test, s64, "%lld");
->  #endif
-
-And all the actual uses of the macros can be left unchanged.
-
->  
-> -static int __init test_overflow_calculation(void)
-> +static void  overflow_calculation_test(struct kunit *test)
->  {
-> -	int err = 0;
->  
-> -	err |= test_u8_overflow();
-> -	err |= test_s8_overflow();
-> -	err |= test_u16_overflow();
-> -	err |= test_s16_overflow();
-> -	err |= test_u32_overflow();
-> -	err |= test_s32_overflow();
-> +	test_u8_overflow(test);
-> +	test_s8_overflow(test);
-> +	test_s8_overflow(test);
-
-The s8 test got added twice here accidentally.
-
-> +	test_u16_overflow(test);
-> +	test_s16_overflow(test);
-> +	test_u32_overflow(test);
-> +	test_s32_overflow(test);
->  #if BITS_PER_LONG == 64
-> -	err |= test_u64_overflow();
-> -	err |= test_s64_overflow();
-> +	test_u64_overflow(test);
-> +	test_s64_overflow(test);
->  #endif
-> -
-> -	return err;
->  }
-
-I think it might be nice to keep the "err" vars around for a final report
-line (maybe per test)? (It would keep the diff churn way lower, too...)
-
-So, yes! I like it. :) Most of my comments here have nothing to do with
-specifically this patch (sorry)! But I'd love to see a v2.
-
-Thanks for doing this! I'm glad to see more TAP output. :)
-
--- 
-Kees Cook
+[1]: https://lore.kernel.org/linux-kselftest/20200513042956.109987-1-davidgow@google.com/T/#u
