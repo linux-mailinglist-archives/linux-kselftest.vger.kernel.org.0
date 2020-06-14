@@ -2,63 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 590141F8A02
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 20:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0B51F8A26
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 20:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726857AbgFNSRx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Jun 2020 14:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
+        id S1727082AbgFNSjs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Jun 2020 14:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726686AbgFNSRw (ORCPT
+        with ESMTP id S1726648AbgFNSjr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Jun 2020 14:17:52 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A612C03E969
-        for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2020 11:17:52 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id b201so6827320pfb.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2020 11:17:52 -0700 (PDT)
+        Sun, 14 Jun 2020 14:39:47 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DAEC08C5C2
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2020 11:39:46 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id h185so6827663pfg.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Jun 2020 11:39:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :in-reply-to;
-        bh=cb72U6z8Cr3P1sDvU4qKoKm5R8JCyir5KudWL5PBfe4=;
-        b=imO/Ri9IjD4cKro9T+4QV21TjLNGHMG84h8k8JDVGRPG/lHK243ckZNCe+G3H+somu
-         OL/M8bk8nLvnmkjCfLFwJZiSPs5XKzfU+4zW6+kqGhPBJJ8/qUvOa0ltRzQlWUf1kUh+
-         64Kjo3XlIX2tF4GTCv0UO0eZxM2cMtYeM7dBc=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=19HC7VZegAFMIrVuT1WO9vNsblblWVfvq+qakcPsIak=;
+        b=F6H+BuG9wTvKTPAy8s8vLiyk2/w6yHtrCtpQTfexslP/WUr6JNSD1LCpm3rLd1kHrQ
+         ScPgWtHpj/PzaEFTzFoxPOibgmJFJTGOeeGFbm58OGXX4cZm2kJuQi6bURpfOnuqN8iR
+         5C9Arjkf7i8fORZjmmJguRBB4x+mMlQk64fqU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=cb72U6z8Cr3P1sDvU4qKoKm5R8JCyir5KudWL5PBfe4=;
-        b=nIQD7MH+0H5UcbkKKrs/7kPRyt0B4j6s0SQKb7v7U69X40RvRsVq1c16mEWN7SfyWb
-         apaKHASfaIVj/Y0D6jAdw4NI1AN7B/FDBCVZYfxeeaBNKqVIJ7cXVM0DY+x+UjRIIuy2
-         71Xa3A8c1Q38uqL4sKSgKTcYe3Htwbsp12/CsOYLoFoehFS9ukRNPot4+j+1kBua3qYI
-         JGmodO6li9JIpzWClsL3/I0GezBsHiw4ozkgCzoIhEyZWOQgFSqypUztx0n+qpRqWTT8
-         KYIpjaBiU/xiPQ4von6qfGJ7RfKSPSR/yymZ+A7myHqE/ZjEu2EcPQozpq7i96cFqkNv
-         Wisw==
-X-Gm-Message-State: AOAM530bE6idJuyrvIsD3SkoqO3jYVymJ+CIuHIUxzHVZTquvaGeZLwF
-        pTFKL6BcDv5N6TwDNmDxapb/bw==
-X-Google-Smtp-Source: ABdhPJwu5IBcA4n/0wLJc3MDmle+pQFHlC4oN8rj1R1/IVTU3LUF6VllWPCiJNuJcKG+Kg8WLb0yAQ==
-X-Received: by 2002:a65:52c3:: with SMTP id z3mr18513447pgp.146.1592158671493;
-        Sun, 14 Jun 2020 11:17:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=19HC7VZegAFMIrVuT1WO9vNsblblWVfvq+qakcPsIak=;
+        b=DzDLdqFlpdw0MU2aCC1h5LZbj8zVEHA6FQ8sZkuR/8XzTJ/15YykJlY+StugXk9TbU
+         xLPGVxiurp+/w5ABn2oC0qvTgt80PKQtaIi06qtI32D69pYhAddXUIts9doEgSY7I0n8
+         2JF+SAvsQb5QfGLeHlvwRB1OLmBt42Ld7Wrd8NkgeNc8cEfxX98a0HKxHAeFRyfCm56M
+         2c/uR4OUt2AMWb1V1hmdcSWveSI9WtZ0HKGFZneJPIAqsDdRz76Gv3+nBxZXID3oB+T1
+         e4j5iYweYcwHIk1OfIh+HM1LhJ3v45fbP11C0rZw42B41KddxveZw2NStfGDd+MkS7yn
+         lpeQ==
+X-Gm-Message-State: AOAM530P3RnkCKccQ1h1KoCA4XVQg7tbkjovHIVTN/ZHbS8APpPXkyIg
+        qP5IMJ0Hn97wUm7SjgPhdjHM7KJ00EqIRQ==
+X-Google-Smtp-Source: ABdhPJxd3o+Zafq2+WNV78yg/XVCUpMrONSHsagkLDCLQQB6DK5Rs02u8CD1pIWebDWpd/Wlm4HIkQ==
+X-Received: by 2002:a63:3384:: with SMTP id z126mr18464190pgz.7.1592159985837;
+        Sun, 14 Jun 2020 11:39:45 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 4sm1469791pgk.68.2020.06.14.11.17.50
+        by smtp.gmail.com with ESMTPSA id hi19sm10281005pjb.49.2020.06.14.11.39.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2020 11:17:50 -0700 (PDT)
-Date:   Sun, 14 Jun 2020 11:17:49 -0700
+        Sun, 14 Jun 2020 11:39:44 -0700 (PDT)
+Date:   Sun, 14 Jun 2020 11:39:43 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Vitor Massaru Iha <vitor@massaru.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Bird, Tim" <Tim.Bird@sony.com>
+Cc:     "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux@rasmusvillemoes.dk
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: RFC - kernel selftest result documentation (KTAP)
-Message-ID: <202006141050.5512F17@keescook>
+Message-ID: <202006141120.96FF8C5@keescook>
+References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,192 +64,322 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 13, 2020 at 02:51:17PM +0800, David Gow wrote:
-> On Sat, Jun 13, 2020 at 6:36 AM Kees Cook <keescook@chromium.org> wrote:
-> > Regarding output:
-> >
-> > [   36.611358] TAP version 14
-> > [   36.611953]     # Subtest: overflow
-> > [   36.611954]     1..3
-> > ...
-> > [   36.622914]     # overflow_calculation_test: s64: 21 arithmetic tests
-> > [   36.624020]     ok 1 - overflow_calculation_test
-> > ...
-> > [   36.731096]     # overflow_shift_test: ok: (s64)(0 << 63) == 0
-> > [   36.731840]     ok 2 - overflow_shift_test
-> > ...
-> > [   36.750294] kunit_try_catch: vmalloc: allocation failure: 18446744073709551615 bytes, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
-> > ...
-> > [   36.805350]     # overflow_allocation_test: devm_kzalloc detected saturation
-> > [   36.807763]     ok 3 - overflow_allocation_test
-> > [   36.807765] ok 1 - overflow
-> >
-> > A few things here....
->
-> Tim Bird has just sent out an RFC for a "KTAP" specification, which
-> we'll hope to support in KUnit:
+On Wed, Jun 10, 2020 at 06:11:06PM +0000, Bird, Tim wrote:
+> The kernel test result format consists of 5 major elements,
+> 4 of which are line-based:
+>  * the output version line
+>  * the plan line
 
-Ah-ha! Thanks for the heads-up. :)
+Note: making the plan line required differs from TAP13 and TAP14. I
+think it's the right choice, but we should be clear.
 
-> https://lore.kernel.org/linux-kselftest/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com/T/#u
+>  * one or more test result lines (also called test result lines)
+>  * a possible "Bail out!" line
 
-*thread split/merge*
+"Bail out!" to be moved to "optional" elements, since it may not appear.
+And we should clarify TAP13 and TAP14's language to say it should only
+appear when the test is aborting without running later tests -- for this
+reason, I think the optional "description" following "Bail out!" should
+be made required. I.e. it must be: "Bail out! $reason"
 
-This is coming from:
-https://lore.kernel.org/linux-kselftest/CABVgOSnofuJQ_fiCL-8KdKezg3Hnqk3A+X509c4YP_toKeBVBg@mail.gmail.com/
-But I'm attempting a thread jump... ;)
+> optional elements:
+>  * diagnostic data
 
-> That's probably where we'll end up trying to hash out exactly what
-> this format should be. Fortunately, I don't think any of these will
-> require any per-test work, just changes to the KUnit implementation.
+nit: diagnostic lines (not data)
 
-Yup, good.
+> The 5th element is diagnostic information, which is used to describe
+> items running in the test, and possibly to explain test results.
+> A sample test result is show below:
+> 
+> Some other lines may be placed the test harness, and are not emitted
+> by individual test programs:
+>  * one or more test identification lines
+>  * a possible results summary line
+> 
+> Here is an example:
+> 
+> 	TAP version 13
+> 	1..1
+> 	# selftests: cpufreq: main.sh
+> 	# pid 8101's current affinity mask: fff
+> 	# pid 8101's new affinity mask: 1
+> 	ok 1 selftests: cpufreq: main.sh
 
-> > - On the outer test report, there is no "plan" line (I was expecting
-> >   "1..1"). Technically it's optional, but it seems like the information
-> >   is available. :)
->
-> There's work underway to support this, but it's hit a few minor snags:
-> https://lkml.org/lkml/2020/2/27/2155
+Nit: for examples, I this should should show more than one test.
+(Preferably, it should show all the possible cases, ok, not ok, SKIP,
+etc.)
 
-Okay, cool. It's not critical, I don't think.
+> The output version line is: "TAP version 13"
+> 
+> The test plan is "1..1".
+> 
+> Element details
+> ===============
+> 
+> Output version line
+> -------------------
+> The output version line is always "TAP version 13".
+> 
+> Although the kernel test result format has some additions
+> to the TAP13 format, the version line reported by kselftest tests
+> is (currently) always the exact string "TAP version 13"
+> 
+> This is always the first line of test output.
+> 
+> Test plan line
+> --------------
+> The test plan indicates the number of individual test cases intended to
+> be executed by the test. It always starts with "1.." and is followed
+> by the number of tests cases.  In the example above, 1..1", indicates
+> that this test reports only 1 test case.
+> 
+> The test plan line can be placed in two locations:
+>  * the second line of test output, when the number of test cases is known
+>    in advance
+>  * as the last line of test output, when the number of test cases is not
+>    known in advance.
+> 
+> Most often, the number of test cases is known in advance, and the test plan
+> line appears as the second line of test output, immediately following
+> the output version line.  The number of test cases might not be known
+> in advance if the number of tests is calculated from runtime data.
+> In this case, the test plan line is emitted as the last line of test
+> output.
 
-> > - The subtest should have its own "TAP version 14" line, and it should
-> >   be using the diagnostic line prefix for the top-level test (this is
-> >   what kselftest is doing).
->
-> Alas, TAP itself hasn't standardised subtests. Personally, I think it
-> doesn't fundamentally matter which way we do this (I actually prefer
-> the way we're doing it currently slightly), but converging with what
-> kselftest does would be ideal.
+"... must be ..." ?
 
-I see the KTAP RFC doesn't discuss subtests at all, but kselftest actually
-already handles subtests. I strongly feel that line-start formatting is
-the correct way to deal with this, with each subtest having it's own
-self-contained KTAP. This allows for several important features:
+> 
+> Test result lines
+> -----------------
+> The test output consists of one or more test result lines that indicate
+> the actual results for the test.  These have the format:
+> 
+>   <result> <number> <description> [<directive>] [<diagnostic data>]
 
-- the subtest, run on its own, needs no knowledge about its execution
-  environment: it simply emits its standard KTAP output.
+This should be:
 
-- subtest output can be externally parsed separably, without any
-  knowledge or parsing of the enclosing test.
+<result> <number> <description> [# [<directive> ][<diagnostic data>]]
 
-For example, with my recent series[1], "make -C seccomp run_tests"
-produces:
+> 
+> The ''result'' must appear at the start of a line (except for when a
+> test is nested, see below), and must consist of one of the following
+> two phrases:
+>   * ok
+>   * not ok
+> 
+> If the test passed, then the result is reported as "ok".  If the test
+> failed, then the result is reported as "not ok".  These must be in
+> lower case, exactly as shown.
+> 
+> The ''number'' in the test result line represents the number of the
+> test case being performed by the test program.  This is often used by
+> test harnesses as a unique identifier for each test case.  The test
+> number is a base-10 number, starting with 1.  It should increase by
+> one for each new test result line emitted.  If possible the number
+> for a test case should be kept the same over the lifetime of the test.
+> 
+> The ''description'' is a short description of the test case.
+> This can be any string of words, but should avoid using colons (':')
 
-TAP version 13
-1..2
-# selftests: seccomp: seccomp_bpf
-# TAP version 13
-# 1..77
-# # Starting 77 tests from 6 test cases.
-# #  RUN           global.mode_strict_support ...
-# #            OK  global.mode_strict_support
-# ok 1 global.mode_strict_support
-...
-# ok 77 TSYNC.two_siblings_not_under_filter
-# # FAILED: 73 / 77 tests passed.
-# # Totals: pass:72 fail:4 xfail:1 xpass:0 skip:0 error:0
-not ok 1 selftests: seccomp: seccomp_bpf # exit=1
-# selftests: seccomp: seccomp_benchmark
-#
-not ok 2 selftests: seccomp: seccomp_benchmark # TIMEOUT
+Must also avoid "#".
 
-> > - There is no way to distinguish top-level TAP output from kernel log
-> >   lines. I think we should stick with the existing marker, which is
-> >   "# ", so that kernel output has no way to be interpreted as TAP
-> >   details -- unless it intentionally starts adding "#"s. ;)
->
-> At the moment, we're doing this in KUnit tool by stripping anything
-> before "TAP version 14" (e.g., the timestamp), and then only incuding
-> lines which parse correctly (are a test plan, result, or a diagnostic
-> line beginning with '#').
-> This has worked pretty well thus far, and we do have the ability to
-> get results from debugfs instead of the kernel log, which won't have
-> the same problems.
->
-> It's worth considering, though, particularly since our parser should
-> handle this anyway without any changes.
+> except as part of a fully qualifed test case name (see below).
 
-For the KTAP parsing, actually think it's very important to include
-kernel log lines in the test output (as diagnostic lines), since they
-are "unexpected" (they fail to have the correct indentation) and may
-provide additional context for test failures when reading log files.
-(As in the "vmalloc: allocation failure" line in the quoted section
-above, to be included as a diagnostic line for test #3.)
+TAP13/14 makes description optional, are we making it required (I think
+we should). There seems to be a TAP13/14 "convention" of starting
+<description> with "- ", which I'm on the fence about it. It does make
+parsing maybe a little easier.
 
-> > - There is no summary line (to help humans). For example, the kselftest
-> >   API produces a final pass/fail report.
->
-> Currently, we're relying on the kunit.py script to produce this, but
-> it shouldn't be impossible to add to the kernel, particularly once the
-> "KUnit Executor" changes mentioned above land.
+> Finally, it is possible to use a test directive to indicate another
+> possible outcome for a test: that it was skipped.  To report that
+> a test case was skipped, the result line should start with the
+> result "not ok", and the directive "# SKIP" should be placed after
+> the test description. (Note that this deviates from the TAP13
+> specification).
 
-Cool. Yeah, it's not required, but I think there are two use cases:
-humans running a single test (where is a summary is valuable, especially
-for long tests that scroll off the screen), and automation (where it can
-ignore the summary, as it will produce its own in a regularized fashion).
+This is what TAP14 changed, I think (i.e. directive follows description
+now).
 
-> > Taken together, I was expecting the output to be:
-> >
-> > [   36.611358] # TAP version 14
-> > [   36.611953] # 1..1
-> > [   36.611958] # # TAP version 14
-> > [   36.611954] # # 1..3
-> > ...
-> > [   36.622914] # # # overflow_calculation_test: s64: 21 arithmetic tests
-> > [   36.624020] # # ok 1 - overflow_calculation_test
-> > ...
-> > [   36.731096] # # # overflow_shift_test: ok: (s64)(0 << 63) == 0
-> > [   36.731840] # # ok 2 - overflow_shift_test
-> > ...
-> > [   36.750294] kunit_try_catch: vmalloc: allocation failure: 18446744073709551615 bytes, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
-> > ...
-> > [   36.805350] # # # overflow_allocation_test: devm_kzalloc detected saturation
-> > [   36.807763] # # ok 3 - overflow_allocation_test
-> > [   36.807763] # # # overflow: PASS
-> > [   36.807765] # ok 1 - overflow
-> > [   36.807767] # # kunit: PASS
-> >
-> > But I assume there are threads on this that I've not read... :)
->
-> These discussions all seem to be coming to a head now, so this is
-> probably just the kick we need to prioritise this a bit more. The KTAP
-> thread hasn't covered all of these (particularly the subtest stuff)
-> yet, so I confess I hadn't realised the extent of the divergence
-> between KUnit and kselftest here.
+> 
+> A test may be skipped for a variety of reasons, ranging for
+> insufficient privileges to missing features or resources required
+> to execute that test case.
+> 
+> It is usually helpful if a diagnostic message is emitted to explain
+> the reasons for the skip.  If the message is a single line and is
+> short, the diagnostic message may be placed after the '# SKIP'
+> directive on the same line as the test result.  However, if it is
+> not on the test result line, it should precede the test line (see
+> diagnostic data, next).
+> 
+> Diagnostic data
+> ---------------
+> Diagnostic data is text that reports on test conditions or test
+> operations, or that explains test results.  In the kernel test
+> result format, diagnostic data is placed on lines that start with a
+> hash sign, followed by a space ('# ').
+> 
+> One special format of diagnostic data is a test identification line,
+> that has the fully qualified name of a test case.  Such a test
+> identification line marks the start of test output for a test case.
+> 
+> In the example above, there are three lines that start with '#'
+> which precede the test result line:
+> 	# selftests: cpufreq: main.sh
+> 	# pid 8101's current affinity mask: fff
+> 	# pid 8101's new affinity mask: 1
+> These are used to indicate diagnostic data for the test case
+> 'selftests: cpufreq: main.sh'
+> 
+> Material in comments between the identification line and the test
+> result line are diagnostic data that can help to interpret the
+> results of the test.
+> 
+> The TAP specification indicates that automated test harnesses may
+> ignore any line that is not one of the mandatory prescribed lines
+> (that is, the output format version line, the plan line, a test
+> result line, or a "Bail out!" line.) 
+> 
+> Bail out!
+> ---------
+> If a line in the test output starts with 'Bail out!', it indicates
+> that the test was aborted for some reason.  It indicates that 
+> the test is unable to proceed, and no additional tests will be
+> performed.
+> 
+> This can be used at the very beginning of a test, or anywhere in the
+> middle of the test, to indicate that the test can not continue.
 
-Cool. Yeah, I'd like to keep things as close as possible. In looking at
-this again, I wonder if perhaps it would be better to change the
-"indent" from "# " to "  ", which might make things more readable for
-both dmesg and terminal output:
+I think the required syntax should be:
 
-[   36.611358]   TAP version 14
-[   36.611953]   1..1
-[   36.611958]     TAP version 14
-[   36.611954]     1..3
-...
-[   36.622914]     # overflow_calculation_test: s64: 21 arithmetic tests
-[   36.624020]     ok 1 - overflow_calculation_test
-...
-[   36.731096]     # overflow_shift_test: ok: (s64)(0 << 63) == 0
-[   36.731840]     ok 2 - overflow_shift_test
-...
-[   36.750294] kunit_try_catch: vmalloc: allocation failure: 18446744073709551615 bytes, mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
-...
-[   36.805350]     # overflow_allocation_test: devm_kzalloc detected saturation
-[   36.807763]     ok 3 - overflow_allocation_test
-[   36.807763]     # overflow: PASS
-[   36.807765]   ok 1 - overflow
-[   36.807767]   # kunit: PASS
+Bail out! <reason>
 
-As it happens, subtests are a bit rare in kselftests right now, but
-for kunit, the "common" output (IIUC) will fundamentally be a top-level
-test running all the subtests, so we should get it right. :)
+And to make it clear that this is optionally used to indicate an early
+abort. (Though with a leading plan line, a parser should be able to
+determine this on its own.)
 
--Kees
+> --- from here on is not-yet-organized material
+> 
+> Tip:
+>  - don't change the test plan based on skipped tests.
+>    - it is better to report that a test case was skipped, than to
+>      not report it
+>    - that is, don't adjust the number of test cases based on skipped
+>      tests
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=selftests/harness/tap
+Yes, totally.
 
---
+> Other things to mention:
+> TAP13 elements not used:
+>  - yaml for diagnostic messages
+>    - reason: try to keep things line-based, since output from other things
+>    may be interspersed with messages from the test itself
+
+Agreed: the yaml extension is not sensible for our use.
+
+>  - TODO directive
+
+Agreed: SKIP should cover everything TODO does.
+
+> KTAP Extensions beyond TAP13:
+>  - nesting
+
+(I would call this 'subtests')
+
+>    - via indentation
+>      - indentation makes it easier for humans to read
+
+And allows for separable parsing of subtests.
+
+>  - test identifier
+>     - multiple parts, separated by ':'
+
+This is interesting... is the goal to be able to report test status over
+time by name?
+
+>  - summary lines
+>    - can be skipped by CI systems that do their own calculations
+
+Right -- I think per-test summary line should be included for the humans
+reading a single test (which may scroll off the screen).
+
+> Other notes:
+>  - automatic assignment of result status based on exit code
+
+This is, I think, a matter for the kselftest running infrastructure, not
+the KTAP output?
+
+> Tips:
+>  - do NOT describe the result in the test line
+>    - the test case description should be the same whether the test
+>      succeeds or fails
+>    - use diagnostic lines to describe or explain results, if this is
+>      desirable
+
+Right.
+
+>  - test numbers are considered harmful
+>    - test harnesses should use the test description as the identifier
+>    - test numbers change when testcases are added or removed
+>      - which means that results can't be compared between different
+>        versions of the test
+
+Right.
+
+>  - recommendations for diagnostic messages:
+>    - reason for failure
+>    - reason for skip
+>    - diagnostic data should always preceding the result line
+>      - problem: harness may emit result before test can do assessment
+>        to determine reason for result
+>      - this is what the kernel uses
+
+Right.
+
+> Differences between kernel test result format and TAP13:
+>  - in KTAP the "# SKIP" directive is placed after the description on
+>    the test result line
+
+Right, this is the same as TAP14, IIRC. KTAP's big deltas are the "#"
+diagnostic lines and the subtest handling.
+
+> ====== start of ktap-doc-rfc.txt ======
+> OK - that's the end of the RFC doc.
+> 
+> Here are a few questions:
+>  - is this document desired or not?
+
+Yes.
+
+>     - is it too long or too short?
+
+Should be slightly longer: more examples.
+
+>  - if the document is desired, where should it be placed?
+>    I assume somewhere under Documentation, and put into
+>    .rst format. Suggestions for a name and location are welcome.
+
+Yes Documentation/*.rst Not sure on name yet, but where do kselftest
+docs live? :)
+
+>  - is this document accurate?
+>    I think KUNIT does a few things differently than this description.
+
+Let's fix it. :)
+
+>    - is the intent to have kunit and kselftest have the same output format?
+>       if so, then these should be rationalized.
+
+Yes please.
+
+> Finally,
+>   - Should a SKIP result be 'ok' (TAP13 spec) or 'not ok' (current kselftest practice)?
+> See https://testanything.org/tap-version-13-specification.html
+
+Oh! I totally missed this. Uhm. I think "not ok" makes sense to me "it
+did not run successfully". ... but ... Uhhh ... how do XFAIL and SKIP
+relate? Neither SKIP nor XFAIL count toward failure, though, so both
+should be "ok"? I guess we should change it to "ok".
+
+-- 
 Kees Cook
