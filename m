@@ -2,45 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A261F85C8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 00:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F551F8603
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 02:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgFMWyS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 13 Jun 2020 18:54:18 -0400
-Received: from smtp.uniroma2.it ([160.80.6.16]:42851 "EHLO smtp.uniroma2.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726272AbgFMWyR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 13 Jun 2020 18:54:17 -0400
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05DMrxR4019350;
-        Sun, 14 Jun 2020 00:54:04 +0200
-Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 56E29120069;
-        Sun, 14 Jun 2020 00:53:54 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1592088834; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/zs0CUi+Oz0j3LEZd44hCt+whNDO8jzzRMXHT/xwzzo=;
-        b=+2tRaCtZyfIdpFZnhIrndpLvrS9HwWUL+4SKJaDpnV88xBZ1ekyo3yRw6iGPQ4TE94BWGa
-        whgux0Qtuoe7yACg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1592088834; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/zs0CUi+Oz0j3LEZd44hCt+whNDO8jzzRMXHT/xwzzo=;
-        b=ie30d2N771yY6UC4FH/KLpB+OZIKYdffd3BV3Bcv0bP+eLQTWYDcZwmUdkTF1aOhbtQqOH
-        leoG4MKAfNO8EfWW5OlguXjY7cfm6bmm092PAeLrVzMXooGboKiIVZ5cA8C43MclHPGGqv
-        aMuo/TZFSsX6vDT3gUpe1BR3dFVFqRS/Kexwbbhf+HBhCmNhLx6ycz7yTs6QQ7z9Ig4I5W
-        7SDS/jMh5fziZzfwrj3zIoJDhD1URwY6GLH5W8+L6eTldmoDhvSRSRWx5XRQ+Vw9/fKQno
-        4vlbAsYGoQEMYvSe92W1OlBZMd4SYhlpuf7m0rVR6XpPO7QFiSIvrxRjr05Szw==
-Date:   Sun, 14 Jun 2020 00:53:53 +0200
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     Stephen Hemminger <stephen@networkplumber.org>
+        id S1726803AbgFNAdN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 13 Jun 2020 20:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbgFNAdN (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 13 Jun 2020 20:33:13 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1534FC03E96F;
+        Sat, 13 Jun 2020 17:33:13 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id v79so12534537qkb.10;
+        Sat, 13 Jun 2020 17:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=C/gN5QvuZVItaz+X97RNteBVgSNHJhCVxtlFAT4qa5c=;
+        b=CbX/GLJ7z6qr63wjT6VYP4YyuT3Kls2y8xO6EiGWtDKETU5lYMcCm9w9aY+bLfCdK5
+         dbVewLJr415Kjzr71SrBhtVb4ZiRAMJnRH4sSo+G5LrRtVaf0aXcCL3OhWuHjPuJ0q6q
+         MD/jq7kwE8SHqKAJsn/R+x3C76/lYxWpMkIT+FVat/YWowmxYTl/qj/bMm3TkpJostHK
+         WUUkzeyfI105AL1bTmDr64F+pEzbo9iacO2ek4d7xPiEYbw7Y+bVmFO1ml/73uimDViS
+         Y6jsORc6JRVfidsa+5QC1WAFKR+Ln51vIsRtfYaJFfKUJBn7jPbza1rSLLEX301Q82Y/
+         YLyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=C/gN5QvuZVItaz+X97RNteBVgSNHJhCVxtlFAT4qa5c=;
+        b=QA9S/Fly07x0RNKw1rkUH+y0TpgdiiFbAe4XNbJgM2BHLZwAB4UzvMeBAg3sXQ1BS5
+         FwAo/PwstpgXNXLPn2lpyzjFaRmHQhG5ocuFwxIUvhC3pstNCBVSmlmHqkTgtV2PxSiy
+         Lp2I3tUStvIKwMrXCOP2leVCm9Ugp3wgJ/mYtUseGXkOBnl2f6KmjSBmG3SMCBgRbz/9
+         MABw/CfX0+OwWMh0gPOoJo/HQCSSkzHvnlwY3GtnZYHalHzFn6QqYbBljeG6tcu0fE51
+         z18dWW1ZYH8bKHuhspVjZ8keDKl6vusjmVFWI7LfL8OKDxjVWSrAxdXMIzYlIRnZckbb
+         fbwQ==
+X-Gm-Message-State: AOAM531BKYkWUyk5WrXDVb55kYicaopylyYcvtEG0ZVS8G/Tw/HPQ37u
+        u6vpY1ePx66nUit75ouz2b8nNpkF
+X-Google-Smtp-Source: ABdhPJwFybvKGT3uSa5VzZxPuDOcoZa7kgVrXzgsap1sI7boInmcBGHtZF0T2/TvZHeySs5NMvbVZg==
+X-Received: by 2002:a37:7ac4:: with SMTP id v187mr9875564qkc.65.1592094791538;
+        Sat, 13 Jun 2020 17:33:11 -0700 (PDT)
+Received: from ?IPv6:2601:284:8202:10b0:c0a6:d168:a4bb:a408? ([2601:284:8202:10b0:c0a6:d168:a4bb:a408])
+        by smtp.googlemail.com with ESMTPSA id 124sm7884475qkm.115.2020.06.13.17.33.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Jun 2020 17:33:11 -0700 (PDT)
+Subject: Re: [RFC,net-next, 0/5] Strict mode for VRF
+To:     Dinesh Dutt <didutt@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
 Cc:     David Ahern <dsahern@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Shrijeet Mukherjee <shrijeet@gmail.com>,
@@ -49,45 +60,31 @@ Cc:     David Ahern <dsahern@kernel.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Donald Sharp <sharpd@cumulusnetworks.com>,
         Roopa Prabhu <roopa@cumulusnetworks.com>,
-        Dinesh Dutt <didutt@gmail.com>,
         Stefano Salsano <stefano.salsano@uniroma2.it>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [RFC,net-next, 2/5] vrf: track associations between VRF devices
- and tables
-Message-Id: <20200614005353.fb4083bed70780feee2fd19a@uniroma2.it>
-In-Reply-To: <20200613122859.4f5e2761@hermes.lan>
+        Ahmed Abdelsalam <ahabdels@gmail.com>
 References: <20200612164937.5468-1-andrea.mayer@uniroma2.it>
-        <20200612164937.5468-3-andrea.mayer@uniroma2.it>
-        <20200613122859.4f5e2761@hermes.lan>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <34a020ef-6024-5253-3e14-be865a7f6de1@gmail.com>
+ <20200614002935.3a371a8be63f9424ffdb745c@uniroma2.it>
+ <3099cf72-d54c-494c-b11a-0131138f6d41@Spark>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <920434b5-f557-2ee3-d64a-6aa08d861297@gmail.com>
+Date:   Sat, 13 Jun 2020 18:33:09 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <3099cf72-d54c-494c-b11a-0131138f6d41@Spark>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Stephen,
-thanks for your questions.
-
-On Sat, 13 Jun 2020 12:28:59 -0700
-Stephen Hemminger <stephen@networkplumber.org> wrote:
-
-> > +
-> > +	 * Conversely, shared_table is decreased when a vrf is de-associated
-> > +	 * from a table with exactly two associated vrfs.
-> > +	 */
-> > +	int shared_tables;
+On 6/13/20 4:39 PM, Dinesh Dutt wrote:
+> Understand Andrea. I guess I didn't say it well. What I meant to say was
+> that the strict mode is the default expected behavior in a classical router.
 > 
-> Should this be unsigned?
-> Should it be a fixed size?
 
-Yes. I think an u32 would be reasonable for the shared_table.
-What do you think?
-
-Andrea
+it has to be off by default for backwards compatibility.
