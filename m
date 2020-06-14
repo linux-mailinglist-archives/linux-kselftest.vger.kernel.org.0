@@ -2,47 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9161F8ADF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 23:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C056E1F8B03
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jun 2020 23:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726648AbgFNVXx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Jun 2020 17:23:53 -0400
-Received: from smtp.uniroma2.it ([160.80.6.16]:43946 "EHLO smtp.uniroma2.it"
+        id S1727923AbgFNV4i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Jun 2020 17:56:38 -0400
+Received: from smtp.uniroma2.it ([160.80.6.16]:46730 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727837AbgFNVXw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Jun 2020 17:23:52 -0400
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05ELNUUM015920;
-        Sun, 14 Jun 2020 23:23:36 +0200
+        id S1727918AbgFNV4i (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 14 Jun 2020 17:56:38 -0400
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05ELuIDW016346;
+        Sun, 14 Jun 2020 23:56:23 +0200
 Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id C578E120925;
-        Sun, 14 Jun 2020 23:23:25 +0200 (CEST)
+        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id EE0A8120925;
+        Sun, 14 Jun 2020 23:56:13 +0200 (CEST)
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1592169806; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=ed201904; t=1592171774; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kx73yPN0vHM7ch4flQNK0LbOwii+DIdepw9ya6KsG+4=;
-        b=hr6ecuOmuCy65Cu//Kz5PKqgoWwK18CtiSwbd3ekSmtPTBr0ayjSvsPwYRDWj4thSht3kS
-        aM4h2kwUg0A0+eAg==
+        bh=1JFmA7zQmwjamZvBBzBcAWOqtcPJgeXHYUvuSuVxnic=;
+        b=T/g7DF0hX49XAr/jZkQc4sR1ST6F6ytA011Dlcs4i+2Nj/z5Kj3w66bLVVfqGKX59SF1ap
+        hjTQUWEXGC07lDAQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1592169806; h=from:from:sender:reply-to:subject:subject:date:date:
+        t=1592171774; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kx73yPN0vHM7ch4flQNK0LbOwii+DIdepw9ya6KsG+4=;
-        b=fWHiesOOVizZ9H6kBsUBuxcVJ2X5IdMsXdzmyNaa9T6SeSKjwdKldtJdXKUhqoLNUNleJr
-        2tRXIcPr/1DywcBe4UW2gFdjXqO2qS3XSQtSUD/oRz7jrnHyLXTt1WsSBzPGbYyaw/a0wd
-        QOg+INcESm9G0grvRj+iR9KArQQeZIOHuSTw2cOlqLBQ0MUGwUzfg2TNvNJNqBfKb3MWCT
-        BvQg7aS6rjPTPyzwgB3LJhOTbynxHLw5w+phsogazf+4ptYusW+T75Jn+An5Dspd7TsnKo
-        gma3ea1o0O70GPnt3vcIvLpnb5cq/kby0Ou6H/wwpK/IIIvwZ7vZtZ8JRq+r5A==
-Date:   Sun, 14 Jun 2020 23:23:25 +0200
+        bh=1JFmA7zQmwjamZvBBzBcAWOqtcPJgeXHYUvuSuVxnic=;
+        b=tnha29J3cd5QfC0yMck+H910Xz4i3OVWnzUBgMDCnLmn/q2eo2B1EevHVnmUoK4S+nBijZ
+        40fvMolW3egtHBcKZXInfcV+zAduwF6a0IW4IDuk4tS8gHIUS1VNctbjYOSCp6+wFRx6g1
+        uvghRvCLGWVymAxDw9OK75NCkxx0+IkNKHABKCxnhV6Thcm206BYr0qDALwtWEYhD75HIJ
+        +kSg7xcHFzAqgr5dyQ4ukE6FSww32Pp74BfTGMIraq5nCqPctIDV9ZlhdEK7OWxmCBZU0e
+        AOuLT9w2oMn3adAHWhQSrC3r9znEwxHZZEXuCXcv6PwwRYN4L8ydgFFP5lt7Xw==
+Date:   Sun, 14 Jun 2020 23:56:13 +0200
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     David Ahern <dsahern@gmail.com>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        David Ahern <dsahern@kernel.org>,
+Cc:     David Ahern <dsahern@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Shrijeet Mukherjee <shrijeet@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -55,15 +54,13 @@ Cc:     Stephen Hemminger <stephen@networkplumber.org>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [RFC,net-next, 2/5] vrf: track associations between VRF devices
- and tables
-Message-Id: <20200614232325.c710c9c2e71f66202b51ee46@uniroma2.it>
-In-Reply-To: <df8e9f2a-6c39-a398-5a44-5c18346f7bdc@gmail.com>
+Subject: Re: [RFC,net-next, 1/5] l3mdev: add infrastructure for table to VRF
+ mapping
+Message-Id: <20200614235613.b16ef9bad3e93b8727a80abe@uniroma2.it>
+In-Reply-To: <983c5d6b-5366-dfd3-eab2-2727e056d5c5@gmail.com>
 References: <20200612164937.5468-1-andrea.mayer@uniroma2.it>
-        <20200612164937.5468-3-andrea.mayer@uniroma2.it>
-        <20200613122859.4f5e2761@hermes.lan>
-        <20200614005353.fb4083bed70780feee2fd19a@uniroma2.it>
-        <df8e9f2a-6c39-a398-5a44-5c18346f7bdc@gmail.com>
+        <20200612164937.5468-2-andrea.mayer@uniroma2.it>
+        <983c5d6b-5366-dfd3-eab2-2727e056d5c5@gmail.com>
 X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -75,33 +72,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 13 Jun 2020 18:34:25 -0600
+On Sat, 13 Jun 2020 18:37:09 -0600
 David Ahern <dsahern@gmail.com> wrote:
 
-> On 6/13/20 4:53 PM, Andrea Mayer wrote:
-> > Hi Stephen,
-> > thanks for your questions.
-> > 
-> > On Sat, 13 Jun 2020 12:28:59 -0700
-> > Stephen Hemminger <stephen@networkplumber.org> wrote:
-> > 
-> >>> +
-> >>> +	 * Conversely, shared_table is decreased when a vrf is de-associated
-> >>> +	 * from a table with exactly two associated vrfs.
-> >>> +	 */
-> >>> +	int shared_tables;
-> >>
-> >> Should this be unsigned?
-> >> Should it be a fixed size?
-> > 
-> > Yes. I think an u32 would be reasonable for the shared_table.
-> > What do you think?
-> > 
+> On 6/12/20 10:49 AM, Andrea Mayer wrote:
+> > @@ -37,6 +45,15 @@ struct l3mdev_ops {
+> >  
+> >  #ifdef CONFIG_NET_L3_MASTER_DEV
+> >  
+> > +int l3mdev_table_lookup_register(enum l3mdev_type l3type,
+> > +				 int (*fn)(struct net *net, u32 table_id));
+> > +
+> > +void l3mdev_table_lookup_unregister(enum l3mdev_type l3type,
+> > +				    int (*fn)(struct net *net, u32 table_id));
+> > +
+> > +int l3mdev_ifindex_lookup_by_table_id(enum l3mdev_type l3type, struct net *net,
+> > +				      u32 table_id);
+> > +
+> >  int l3mdev_fib_rule_match(struct net *net, struct flowi *fl,
+> >  			  struct fib_lookup_arg *arg);
+> >  
+> > @@ -280,6 +297,26 @@ struct sk_buff *l3mdev_ip6_out(struct sock *sk, struct sk_buff *skb)
+> >  	return skb;
+> >  }
+> >  
+> > +static inline
+> > +int l3mdev_table_lookup_register(enum l3mdev_type l3type,
+> > +				 int (*fn)(struct net *net, u32 table_id))
+> > +{
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +
+> > +static inline
+> > +void l3mdev_table_lookup_unregister(enum l3mdev_type l3type,
+> > +				    int (*fn)(struct net *net, u32 table_id))
+> > +{
+> > +}
+> > +
+> > +static inline
+> > +int l3mdev_ifindex_lookup_by_table_id(enum l3mdev_type l3type, struct net *net,
+> > +				      u32 table_id)
+> > +{
+> > +	return -ENODEV;
+> > +}
+> > +
+> >  static inline
+> >  int l3mdev_fib_rule_match(struct net *net, struct flowi *fl,
+> >  			  struct fib_lookup_arg *arg)
+> > diff --git a/net/l3mdev/l3mdev.c b/net/l3mdev/l3mdev.c
+> > index f35899d45a9a..6cc1fe7eb039 100644
+> > --- a/net/l3mdev/l3mdev.c
+> > +++ b/net/l3mdev/l3mdev.c
+> > @@ -9,6 +9,101 @@
+> >  #include <net/fib_rules.h>
+> >  #include <net/l3mdev.h>
+> >  
+> > +DEFINE_SPINLOCK(l3mdev_lock);
+> > +
+> > +typedef int (*lookup_by_table_id_t)(struct net *net, u32 table_d);
+> > +
 > 
-> u32 or unsigned int is fine.
+> I should have caught this earlier. Move lookup_by_table_id_t to l3mdev.h
+> and use above for 'fn' in l3mdev_table_lookup_{un,}register
+> 
 
 Hi David,
-I will use the u32.
+Ok, I will do it!
 
-thanks,
+Thank you,
 Andrea
