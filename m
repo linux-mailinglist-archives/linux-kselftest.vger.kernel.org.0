@@ -2,105 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5797D1F9F6E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jun 2020 20:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FCB1F9F98
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jun 2020 20:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729844AbgFOShv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Jun 2020 14:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S1729844AbgFOSoJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Jun 2020 14:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729842AbgFOShv (ORCPT
+        with ESMTP id S1729124AbgFOSoI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jun 2020 14:37:51 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C15C05BD43
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 11:37:50 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y18so7150342plr.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 11:37:50 -0700 (PDT)
+        Mon, 15 Jun 2020 14:44:08 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F87C061A0E
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 11:44:08 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id z63so7266977pfb.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 11:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=BXOExHlseDR5lyHBcXzOZz/wvry3WqelFft9LO6SFUk=;
-        b=dpaWrqr3z78F+xpH0gnmbE6vvjL2dNQiiHQAgD5yKHAMh27qX8+aCvXaXKOUToLdIQ
-         sh6A1RfFFvXRlslq5iAHx0a6Zv8quHnCskDIV9U6gjU/arpkc0c7br21WbGk78B6ho1g
-         7YcMndA5241LA3xc2qlIfpxX1dol0YzIPnDHw=
+        bh=/L9vpEy4YW+wvyzUDXXcVOqQeUfP4Lan/mDToAVsZn8=;
+        b=Qq3fN4y2CCfEPhibQkPDaZ75Ak5kNzodLN5Z3DKP2Bq96Tm1pExOLtH5IRqg3V67wN
+         7KpKNhSUNdpTUyhFuzRc5jhgaJ8fabzwM7yYceZFF/SrROtrUgG07+eLCcFy32D6+U/3
+         NmQEkdKxfiGBRWeC0hEo70hvO4o/6uQ/AETGk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=BXOExHlseDR5lyHBcXzOZz/wvry3WqelFft9LO6SFUk=;
-        b=nnfGDvi+C/HJwWI4BbPsPlpUdg1mun4nfsWCjhr697PnvobYTx4qrTBh7q9Ct3CA2c
-         Go3agS/XCPmESYEcsT0y8S0cTVK6lt44Yrk7NiyutOymW5YCsVzpX7Xx6azpYCmppysw
-         kZb2ZrOOJC5D/zky+AW0GAdeuqXYT7zej5Q9h89MqmHQ2+bqbSwaBveY1FtaW9Q7/Pn/
-         YDRoyugHb/CWVwx5a51Q6q4Z1+xIVP4+yu6yfjEsgGNe+x1hlmA6ykms3aS9P/NbAK23
-         HYNK+sat6zB0k/iH9ycQFzD6bl8Vg267hNlH35iOewkYlo7iVHnvsu75VyGrVREzigEN
-         /ZEQ==
-X-Gm-Message-State: AOAM532MiAkuyLqyyZov836wxc+YyKwQYPC+uEmQPSotR56aFyHGKA+Q
-        29YnaVMqzigd5dZo62zWTE9Jew==
-X-Google-Smtp-Source: ABdhPJzOmBD8Hz6oTM7AnVhELxZHQ6n3SqTyEwjfJ4bmPUbdCEr5ZOSF2osjWYz/O569gQqlA9YE7A==
-X-Received: by 2002:a17:902:710e:: with SMTP id a14mr23411950pll.199.1592246270133;
-        Mon, 15 Jun 2020 11:37:50 -0700 (PDT)
+        bh=/L9vpEy4YW+wvyzUDXXcVOqQeUfP4Lan/mDToAVsZn8=;
+        b=X1akeUivQP/hukJ7Il0DyEWRV2++3M2d00oi7FE5hpBj3mIP58fzlg3/EHGYBwVrlQ
+         SJXgWWygWX4eO6MOPtoLaVk0Yjkw8C/AOfzhsUeal2lFE8ibDHZRkNPcI+4ovAstgoCq
+         nW41UJnP0PPEK55YG0xloZpnnhN8ideRTk6QK7QmfupVJ5qRdMNGIpCJoDmnHMVmskzv
+         0JZ9C3JDGbAMUaDZ9adcxidJyE06Ml489sYSFM5nG6eRdWUJeryRvUJUjsGLiA2WDkWM
+         YXoasvf+efdSqRQZweXGVy4y0szq9fM/aJR/n4ibsK657tiWcRzqVlelcag9msVJ+yMx
+         ggLg==
+X-Gm-Message-State: AOAM531y6dA3lusIS8VvJ2O+jZ48Ce2elsseSRbsPmPoqbN+Ek0oJb4S
+        Zz07qIQBfS04Pz9zqvBumzFe4A==
+X-Google-Smtp-Source: ABdhPJz0GnEMgd+NOJZ4YyIuSQqz2DIY7a1WO/6cybe4V5xreJTkji7NSBD9m9gfN0gcNG2/5EgGBg==
+X-Received: by 2002:a63:2a8a:: with SMTP id q132mr21651876pgq.279.1592246647773;
+        Mon, 15 Jun 2020 11:44:07 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i22sm14427227pfo.92.2020.06.15.11.37.49
+        by smtp.gmail.com with ESMTPSA id l4sm12552670pgo.92.2020.06.15.11.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 11:37:49 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 11:37:48 -0700
+        Mon, 15 Jun 2020 11:44:06 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 11:44:06 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     kunit-dev@googlegroups.com, skhan@linuxfoundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brendanhiggins@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux@rasmusvillemoes.dk
-Subject: Re: [PATCH] lib: kunit_test_overflow: add KUnit test of
- check_*_overflow functions
-Message-ID: <202006151134.36BAA57@keescook>
-References: <20200611215501.213058-1-vitor@massaru.org>
- <202006121403.CF8D57C@keescook>
- <0c9d09065dca0b71466600e68b64142402a98d24.camel@massaru.org>
+To:     "Bird, Tim" <Tim.Bird@sony.com>
+Cc:     David Gow <davidgow@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel-mentees@lists.linuxfoundation.org" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>
+Subject: Re: RFC - kernel selftest result documentation (KTAP)
+Message-ID: <202006151142.8B78AAE7D2@keescook>
+References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <202006141050.5512F17@keescook>
+ <CY4PR13MB11752A5C1586F3D597C52679FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0c9d09065dca0b71466600e68b64142402a98d24.camel@massaru.org>
+In-Reply-To: <CY4PR13MB11752A5C1586F3D597C52679FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 01:30:42PM -0300, Vitor Massaru Iha wrote:
-> On Fri, 2020-06-12 at 15:36 -0700, Kees Cook wrote:
-> > Why drop the __initconst?
-> 
-> I removed __initconst because of these warnings below, as it is used
-> for the kernel during the module initialization, and I do not use the
-> module initialization in this tests. Does this have any side effects in
-> these tests?
-> 
-> WARNING: modpost: vmlinux.o(.text.unlikely+0x131b7): Section mismatch
-> in reference from the function test_s8_overflow() to the variable
-> .init.rodata:s8_tests
-> The function test_s8_overflow() references
-> the variable __initconst s8_tests.
-> This is often because test_s8_overflow lacks a __initconst 
-> annotation or the annotation of s8_tests is wrong.
+On Mon, Jun 15, 2020 at 05:45:28PM +0000, Bird, Tim wrote:
+> Personally, as a human I find the space prefix a bit easier to read.
+> However, I think that in "normal" kernel log output it is unusual for
+> a line to be prefixed with a hash (#), so this might be easier to
+> both visually distinguish and for automated parsing.
+> So I'm torn.  I don't have a strong opinion on space vs. hash prefix
+> for indicating sub-test.  I think the KUnit convention of matching
+> whatever was the prefix of the "TAP version 14" line is clever, but
+> it would be nice to just pick a prefix and be done with it.
 
-Ah, right. I assume there are build modes where the tests don't only
-live in the __init section any more due to how Kunit does its runtime?
-(Before all the tests ran from __init via module_init(), IIRC.)
+Are there plans in kernelci for doing any parsing of subtests? (As in,
+what do we break if we move from "# " to "  "?)
 
-> > So, yes! I like it. :) Most of my comments here have nothing to do with
-> > specifically this patch (sorry)! But I'd love to see a v2.
-> > 
-> > Thanks for doing this! I'm glad to see more TAP output. :)
-> 
-> Thanks Kees, I'm learning a lot from you, and as I said privately with
-> Brendan, I've never seen so much macro in a code. I learned a lot from
-> it.
-
-Heh, yes, for that I must beg forgiveness. ;) The macros are rather
-wild, but it seemed the best way to avoid a ton of cut/paste code
-duplication.
+I'm really thinking "  " makes sense now. :)
 
 -- 
 Kees Cook
