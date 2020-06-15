@@ -2,87 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 565CA1F8E64
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jun 2020 08:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70F91F90BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jun 2020 09:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728750AbgFOGtJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Jun 2020 02:49:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59954 "EHLO mail.kernel.org"
+        id S1726318AbgFOHza (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Jun 2020 03:55:30 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44810 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728454AbgFOGrN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jun 2020 02:47:13 -0400
-Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0BF52208B3;
-        Mon, 15 Jun 2020 06:47:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592203632;
-        bh=sTFjDVFNxvaxYL1XIBkVBYNkDxJgnmCW7W2tRtvvhLM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ICoImG8MfZOxFPF4J9t5PiRfFS02yMYiYen8UYtYGTH/6L+bBsLSvJ57bf3MBjHVp
-         Sqw/BUN+7pWxD2uMhLQg+R5NO9c/+0XeHuc0baGjOvfeaofkbPrlNjvLyIhxC7eOBT
-         f993jZxvSg8IZTHnBu0AQJOhbhZBhrRpWf3wfRjM=
-Received: from mchehab by mail.kernel.org with local (Exim 4.93)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jkith-009nn5-To; Mon, 15 Jun 2020 08:47:09 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
+        id S1728260AbgFOHz3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Jun 2020 03:55:29 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 2FE43AB76;
+        Mon, 15 Jun 2020 07:55:32 +0000 (UTC)
+Date:   Mon, 15 Jun 2020 09:55:27 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+cc:     Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        Petr Mladek <pmladek@suse.com>, live-patching@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 16/29] selftests/vm/keys: fix a broken reference at protection_keys.c
-Date:   Mon, 15 Jun 2020 08:46:55 +0200
-Message-Id: <8f0e19f790d5ac3beeea2b77f14f3afe538f7708.1592203542.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1592203542.git.mchehab+huawei@kernel.org>
-References: <cover.1592203542.git.mchehab+huawei@kernel.org>
+Subject: Re: [PATCH 3/3] selftests/livepatch: filter 'taints' from dmesg
+ comparison
+In-Reply-To: <b1db9ae1-781c-6ea5-c748-0928bed145f1@redhat.com>
+Message-ID: <alpine.LSU.2.21.2006150953520.5945@pobox.suse.cz>
+References: <20200610172101.21910-1-joe.lawrence@redhat.com> <20200610172101.21910-4-joe.lawrence@redhat.com> <alpine.LSU.2.21.2006110938090.32091@pobox.suse.cz> <047eba61-b0b9-4e91-395f-13bafbf43af6@redhat.com> <20200612114706.GH4311@linux-b0ei>
+ <ba0202cf-beea-ddde-4941-053718c77257@linux.vnet.ibm.com> <b1db9ae1-781c-6ea5-c748-0928bed145f1@redhat.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="1678380546-1327128221-1592207728=:5945"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Changeset 1eecbcdca2bd ("docs: move protection-keys.rst to the core-api book")
-from Jun 7, 2019 converted protection-keys.txt file to ReST.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-A recent change at protection_keys.c partially reverted such
-changeset, causing it to point to a non-existing file:
+--1678380546-1327128221-1592207728=:5945
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-	- * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-	+ * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
+> From
+> https://www.gnu.org/software/grep/manual/grep.html#The-Backslash-Character-and-Special-Expressions
+> :
+> 
+> The ‘\’ character, when followed by certain ordinary characters, takes a
+> special meaning:
+> 
+> ...
+> 
+> ‘\<’
+> 
+>     Match the empty string at the beginning of word.
+> ‘\>’
+> 
+>     Match the empty string at the end of word.
+> 
+> 
+> I'd be happy to use any other (more readable!) whole-word matching grep trick,
+> this \<one\> just happens to be committed to my cmdline muscle memory.
 
-It sounds to me that the changeset that introduced such change
-4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
-could also have other side effects, as it sounds that it was not
-generated against uptream code, but, instead, against a version
-older than Jun 7, 2019.
+There is 'grep -w' which I use for this.
 
-Fixes: 4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- tools/testing/selftests/vm/protection_keys.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index fc19addcb5c8..fdbb602ecf32 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
-+ * Tests Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-  *
-  * There are examples in here of:
-  *  * how to set protection keys on memory
--- 
-2.26.2
-
+Miroslav
+--1678380546-1327128221-1592207728=:5945--
