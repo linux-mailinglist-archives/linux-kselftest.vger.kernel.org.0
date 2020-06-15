@@ -2,47 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9858C1FA075
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jun 2020 21:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854FA1FA0AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jun 2020 21:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729900AbgFOTmD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Jun 2020 15:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S1730712AbgFOTnM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Jun 2020 15:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729821AbgFOTmC (ORCPT
+        with ESMTP id S1729983AbgFOTmF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jun 2020 15:42:02 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF475C05BD43
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 12:42:01 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id n9so7235531plk.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 12:42:01 -0700 (PDT)
+        Mon, 15 Jun 2020 15:42:05 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C375EC08C5C4
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 12:42:04 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id v14so3029601pgl.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 12:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=HYEguIgCbs72qU3RQvrxRYIXfQehsVQ9xr9hBAlsIv0=;
-        b=dkbPpsjDjU6G8ru0ttn46RPKVPgFK19yRuH9PgkL25/VkhONVT6d1SRaSawFEkIh3P
-         q2G9dK2MaZXWR8pk5Y2Y1Mt/EV6grY8Q7bXEvq8BPnQgIoE3kerT+l+D6ATbDm2I1+nO
-         Ua7wjPbwO7pX5wW8J0wsCoA2UyrRPH+drXvz8=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=X7oayQXpFfH0qIjE8VVUrPkwWu99Q4aIM1+mSE7oCdc=;
+        b=GvKdKsG5vYoiC0bs5kCKstHpSmpj5wIhuX/OrXD0Ui/Zyge4QxOk2QGL+cy9dVZgmw
+         8B1dQ0YxSxCR7clLs8wRRBQWLL/FBni5rHsz7mnDa3Ev/+eszYj46f4aoPQiMUv+ztlg
+         iybuggTVnBUQ0xbX3O3kvrRtJma9bnUvdZKqE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HYEguIgCbs72qU3RQvrxRYIXfQehsVQ9xr9hBAlsIv0=;
-        b=gnAT3rlfs6uJf56zWdYMogTnM95Ejb2UW7v3zniFU+HVY7uAGmCw2c0e8vrUP5u/2Y
-         70n7zTcijxXJpE7993Iiv7vAly2rYDI8v1Y08BZPD3G2HasePXxsdcHQQu9dkgL6/AHZ
-         vykYKX4lcXU8O0d6PN/Zv1c3AZdCZfjTKr/YolwPKVIgEL7bnLY9OqyYlZar8+zcbQx4
-         TJKtguCzzfuv+5o+XwElCQocrghD7J4XnTXYJgj5uANNkraEUf4BubLhYjJIsLBnVFMS
-         /IhaTLLwIyuPs2OCT4W40mJbS4RJT7cho+1ZMbZ74hHiFHqKbYas9kM7nd1f4i4WPCja
-         yjsQ==
-X-Gm-Message-State: AOAM530vVO8gQhHXfHVvHGB20sDe6GiPsfMZoGKjZKayRkN7uX2i7nuc
-        QMS5bOe3yYxgdWqx9uZL9rP1/w==
-X-Google-Smtp-Source: ABdhPJxlw3cBZEDOlyThQIHDpnQsA/kqwh3v+wvEHfOnz+hY04zT6ELbTDVN9pSlaag4HAinH9avGg==
-X-Received: by 2002:a17:902:b411:: with SMTP id x17mr22579249plr.272.1592250120762;
-        Mon, 15 Jun 2020 12:42:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=X7oayQXpFfH0qIjE8VVUrPkwWu99Q4aIM1+mSE7oCdc=;
+        b=pH5bl0QpUXRpp68kPJro03BfBiKbvES9TJudQ1sq64NsVx0moON2+Ny6wW0A22fqid
+         5Sf7X7qh96jd4sMpLyVx0pQ9X5q9H2qlsjP9j5P8MaGK68uJv3lE5GsxwxEKeJdF0owb
+         L1GD7q88BDgdEw5BXDVVzxFhQZP06+658gTFz/QlpTBFXIW5TRziJxBsF15jGXxWR6bY
+         VR0MDN7JkEdX2aOf2p/aBLH6xVbAhjjg1jQkGmuDeog7XaMqWdd66FJK8VllG0M7PCod
+         c34PmfL+2yb13A0KDJUL7kC1EO1xeuxBmYVJ5u/Amk6Vg0J9RGG1boHR3zCcsSeBMTtR
+         IE6w==
+X-Gm-Message-State: AOAM531UTzW2/jHlhYQHudo38ig8NjzBxxxv7scjhhB50KntZwlRrbAY
+        w50dGyKKQNOBwqUOT8JQT3l4hg==
+X-Google-Smtp-Source: ABdhPJyaRouhqc/ghZX+9irNnLivPsZzJLNg8UnQV3mWCvhlvAflqL4KDExRQJW17pTQhC4wP1W6Cw==
+X-Received: by 2002:a63:ef11:: with SMTP id u17mr21921402pgh.249.1592250124122;
+        Mon, 15 Jun 2020 12:42:04 -0700 (PDT)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id gq8sm293663pjb.14.2020.06.15.12.41.57
+        by smtp.gmail.com with ESMTPSA id gq8sm293663pjb.14.2020.06.15.12.42.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 12:42:00 -0700 (PDT)
+        Mon, 15 Jun 2020 12:42:03 -0700 (PDT)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Wolfram Sang <wsa@kernel.org>,
@@ -67,109 +68,247 @@ Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v9 0/8] firmware: add request_partial_firmware_into_buf
-Date:   Mon, 15 Jun 2020 12:41:43 -0700
-Message-Id: <20200615194151.7011-1-scott.branden@broadcom.com>
+Subject: [PATCH v9 1/8] fs: introduce kernel_pread_file* support
+Date:   Mon, 15 Jun 2020 12:41:44 -0700
+Message-Id: <20200615194151.7011-2-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200615194151.7011-1-scott.branden@broadcom.com>
+References: <20200615194151.7011-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series adds partial read support via a new call
-request_partial_firmware_into_buf.
-Such support is needed when the whole file is not needed and/or
-only a smaller portion of the file will fit into allocated memory
-at any one time.
-In order to accept the enhanced API it has been requested that kernel
-selftests and upstreamed driver utilize the API enhancement and so
-are included in this patch series.
+Add kernel_pread_file* support to kernel to allow for partial read
+of files with an offset into the file.
 
-Also in this patch series is the addition of a new Broadcom VK driver
-utilizing the new request_firmware_into_buf enhanced API.
+Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+---
+ fs/exec.c          | 93 ++++++++++++++++++++++++++++++++++------------
+ include/linux/fs.h | 15 ++++++++
+ 2 files changed, 85 insertions(+), 23 deletions(-)
 
-Further comment followed to add IMA support of the partial reads
-originating from request_firmware_into_buf calls.
-
-Changes from v8:
- - correct compilation error when CONFIG_FW_LOADER not defined
-Changes from v7:
- - removed swiss army knife kernel_pread_* style approach
-   and simply add offset parameter in addition to those needed
-   in kernel_read_* functions thus removing need for kernel_pread enum
-Changes from v6:
- - update ima_post_read_file check on IMA_FIRMWARE_PARTIAL_READ
- - adjust new driver i2c-slave-eeprom.c use of request_firmware_into_buf
- - remove an extern
-Changes from v5:
- - add IMA FIRMWARE_PARTIAL_READ support
- - change kernel pread flags to enum
- - removed legacy support from driver
- - driver fixes
-Changes from v4:
- - handle reset issues if card crashes
- - allow driver to have min required msix
- - add card utilization information
-Changes from v3:
- - fix sparse warnings
- - fix printf format specifiers for size_t
- - fix 32-bit cross-compiling reports 32-bit shifts
- - use readl/writel,_relaxed to access pci ioremap memory,
-  removed memory barriers and volatile keyword with such change
- - driver optimizations for interrupt/poll functionalities
-Changes from v2:
- - remove unnecessary code and mutex locks in lib/test_firmware.c
- - remove VK_IOCTL_ACCESS_BAR support from driver and use pci sysfs instead
- - remove bitfields
- - remove Kconfig default m
- - adjust formatting and some naming based on feedback
- - fix error handling conditions
- - use appropriate return codes
- - use memcpy_toio instead of direct access to PCIE bar
-
-Scott Branden (8):
-  fs: introduce kernel_pread_file* support
-  firmware: add request_partial_firmware_into_buf
-  test_firmware: add partial read support for request_firmware_into_buf
-  firmware: test partial file reads of request_partial_firmware_into_buf
-  bcm-vk: add bcm_vk UAPI
-  misc: bcm-vk: add Broadcom VK driver
-  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
-  ima: add FIRMWARE_PARTIAL_READ support
-
- MAINTAINERS                                   |    7 +
- drivers/base/firmware_loader/firmware.h       |    5 +
- drivers/base/firmware_loader/main.c           |   79 +-
- drivers/misc/Kconfig                          |    1 +
- drivers/misc/Makefile                         |    1 +
- drivers/misc/bcm-vk/Kconfig                   |   29 +
- drivers/misc/bcm-vk/Makefile                  |   11 +
- drivers/misc/bcm-vk/bcm_vk.h                  |  407 +++++
- drivers/misc/bcm-vk/bcm_vk_dev.c              | 1310 +++++++++++++++
- drivers/misc/bcm-vk/bcm_vk_msg.c              | 1440 +++++++++++++++++
- drivers/misc/bcm-vk/bcm_vk_msg.h              |  202 +++
- drivers/misc/bcm-vk/bcm_vk_sg.c               |  271 ++++
- drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
- drivers/misc/bcm-vk/bcm_vk_tty.c              |  352 ++++
- fs/exec.c                                     |   93 +-
- include/linux/firmware.h                      |   12 +
- include/linux/fs.h                            |   15 +
- include/uapi/linux/misc/bcm_vk.h              |   99 ++
- lib/test_firmware.c                           |  154 +-
- security/integrity/ima/ima_main.c             |   24 +-
- .../selftests/firmware/fw_filesystem.sh       |   80 +
- 21 files changed, 4599 insertions(+), 53 deletions(-)
- create mode 100644 drivers/misc/bcm-vk/Kconfig
- create mode 100644 drivers/misc/bcm-vk/Makefile
- create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
- create mode 100644 include/uapi/linux/misc/bcm_vk.h
-
+diff --git a/fs/exec.c b/fs/exec.c
+index 7b7cbb180785..c557b4b31d0f 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -927,10 +927,14 @@ struct file *open_exec(const char *name)
+ }
+ EXPORT_SYMBOL(open_exec);
+ 
+-int kernel_read_file(struct file *file, void **buf, loff_t *size,
+-		     loff_t max_size, enum kernel_read_file_id id)
+-{
+-	loff_t i_size, pos;
++int kernel_pread_file(struct file *file, void **buf, loff_t *size,
++		      loff_t max_size, loff_t pos,
++		      enum kernel_read_file_id id)
++{
++	loff_t alloc_size;
++	loff_t buf_pos;
++	loff_t read_end;
++	loff_t i_size;
+ 	ssize_t bytes = 0;
+ 	int ret;
+ 
+@@ -950,21 +954,32 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+-	if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
++
++	/* Default read to end of file */
++	read_end = i_size;
++
++	/* Allow reading partial portion of file */
++	if ((id == READING_FIRMWARE_PARTIAL_READ) &&
++	    (i_size > (pos + max_size)))
++		read_end = pos + max_size;
++
++	alloc_size = read_end - pos;
++	if (i_size > SIZE_MAX || (max_size > 0 && alloc_size > max_size)) {
+ 		ret = -EFBIG;
+ 		goto out;
+ 	}
+ 
+-	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
+-		*buf = vmalloc(i_size);
++	if ((id != READING_FIRMWARE_PARTIAL_READ) &&
++	    (id != READING_FIRMWARE_PREALLOC_BUFFER))
++		*buf = vmalloc(alloc_size);
+ 	if (!*buf) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	pos = 0;
+-	while (pos < i_size) {
+-		bytes = kernel_read(file, *buf + pos, i_size - pos, &pos);
++	buf_pos = 0;
++	while (pos < read_end) {
++		bytes = kernel_read(file, *buf + buf_pos, read_end - pos, &pos);
+ 		if (bytes < 0) {
+ 			ret = bytes;
+ 			goto out_free;
+@@ -972,20 +987,23 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 
+ 		if (bytes == 0)
+ 			break;
++
++		buf_pos += bytes;
+ 	}
+ 
+-	if (pos != i_size) {
++	if (pos != read_end) {
+ 		ret = -EIO;
+ 		goto out_free;
+ 	}
+ 
+-	ret = security_kernel_post_read_file(file, *buf, i_size, id);
++	ret = security_kernel_post_read_file(file, *buf, alloc_size, id);
+ 	if (!ret)
+ 		*size = pos;
+ 
+ out_free:
+ 	if (ret < 0) {
+-		if (id != READING_FIRMWARE_PREALLOC_BUFFER) {
++		if ((id != READING_FIRMWARE_PARTIAL_READ) &&
++		    (id != READING_FIRMWARE_PREALLOC_BUFFER)) {
+ 			vfree(*buf);
+ 			*buf = NULL;
+ 		}
+@@ -995,10 +1013,18 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 	allow_write_access(file);
+ 	return ret;
+ }
++
++int kernel_read_file(struct file *file, void **buf, loff_t *size,
++		     loff_t max_size, enum kernel_read_file_id id)
++{
++	return kernel_pread_file(file, buf, size, max_size, 0, id);
++}
+ EXPORT_SYMBOL_GPL(kernel_read_file);
+ 
+-int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
+-			       loff_t max_size, enum kernel_read_file_id id)
++int kernel_pread_file_from_path(const char *path, void **buf,
++				loff_t *size,
++				loff_t max_size, loff_t pos,
++				enum kernel_read_file_id id)
+ {
+ 	struct file *file;
+ 	int ret;
+@@ -1010,15 +1036,22 @@ int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
+ 	if (IS_ERR(file))
+ 		return PTR_ERR(file);
+ 
+-	ret = kernel_read_file(file, buf, size, max_size, id);
++	ret = kernel_pread_file(file, buf, size, max_size, pos, id);
+ 	fput(file);
+ 	return ret;
+ }
++
++int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
++			       loff_t max_size, enum kernel_read_file_id id)
++{
++	return kernel_pread_file_from_path(path, buf, size, max_size, 0, id);
++}
+ EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
+ 
+-int kernel_read_file_from_path_initns(const char *path, void **buf,
+-				      loff_t *size, loff_t max_size,
+-				      enum kernel_read_file_id id)
++int kernel_pread_file_from_path_initns(const char *path, void **buf,
++				       loff_t *size,
++				       loff_t max_size, loff_t pos,
++				       enum kernel_read_file_id id)
+ {
+ 	struct file *file;
+ 	struct path root;
+@@ -1036,14 +1069,22 @@ int kernel_read_file_from_path_initns(const char *path, void **buf,
+ 	if (IS_ERR(file))
+ 		return PTR_ERR(file);
+ 
+-	ret = kernel_read_file(file, buf, size, max_size, id);
++	ret = kernel_pread_file(file, buf, size, max_size, pos, id);
+ 	fput(file);
+ 	return ret;
+ }
++
++int kernel_read_file_from_path_initns(const char *path, void **buf,
++				      loff_t *size, loff_t max_size,
++				      enum kernel_read_file_id id)
++{
++	return kernel_pread_file_from_path_initns(path, buf, size, max_size, 0, id);
++}
+ EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
+ 
+-int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
+-			     enum kernel_read_file_id id)
++int kernel_pread_file_from_fd(int fd, void **buf, loff_t *size,
++			      loff_t max_size, loff_t pos,
++			      enum kernel_read_file_id id)
+ {
+ 	struct fd f = fdget(fd);
+ 	int ret = -EBADF;
+@@ -1051,11 +1092,17 @@ int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
+ 	if (!f.file)
+ 		goto out;
+ 
+-	ret = kernel_read_file(f.file, buf, size, max_size, id);
++	ret = kernel_pread_file(f.file, buf, size, max_size, pos, id);
+ out:
+ 	fdput(f);
+ 	return ret;
+ }
++
++int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
++			     enum kernel_read_file_id id)
++{
++	return kernel_pread_file_from_fd(fd, buf, size, max_size, 0, id);
++}
+ EXPORT_SYMBOL_GPL(kernel_read_file_from_fd);
+ 
+ #if defined(CONFIG_HAVE_AOUT) || defined(CONFIG_BINFMT_FLAT) || \
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 6931c469040b..3ac1d213577a 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -3012,6 +3012,7 @@ extern int do_pipe_flags(int *, int);
+ #define __kernel_read_file_id(id) \
+ 	id(UNKNOWN, unknown)		\
+ 	id(FIRMWARE, firmware)		\
++	id(FIRMWARE_PARTIAL_READ, firmware)	\
+ 	id(FIRMWARE_PREALLOC_BUFFER, firmware)	\
+ 	id(FIRMWARE_EFI_EMBEDDED, firmware)	\
+ 	id(MODULE, kernel-module)		\
+@@ -3040,12 +3041,26 @@ static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
+ 	return kernel_read_file_str[id];
+ }
+ 
++int kernel_pread_file(struct file *file, void **buf, loff_t *size,
++		      loff_t pos, loff_t max_size,
++		      enum kernel_read_file_id id);
+ extern int kernel_read_file(struct file *, void **, loff_t *, loff_t,
+ 			    enum kernel_read_file_id);
++int kernel_pread_file_from_path(const char *path, void **buf,
++				loff_t *size, loff_t pos,
++				loff_t max_size,
++				enum kernel_read_file_id id);
+ extern int kernel_read_file_from_path(const char *, void **, loff_t *, loff_t,
+ 				      enum kernel_read_file_id);
++int kernel_pread_file_from_path_initns(const char *path, void **buf,
++				       loff_t *size, loff_t pos,
++				       loff_t max_size,
++				       enum kernel_read_file_id id);
+ extern int kernel_read_file_from_path_initns(const char *, void **, loff_t *, loff_t,
+ 					     enum kernel_read_file_id);
++int kernel_pread_file_from_fd(int fd, void **buf, loff_t *size,
++			      loff_t pos, loff_t max_size,
++			      enum kernel_read_file_id id);
+ extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
+ 				    enum kernel_read_file_id);
+ extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
 -- 
 2.17.1
 
