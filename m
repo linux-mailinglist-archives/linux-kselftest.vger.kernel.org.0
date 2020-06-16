@@ -2,64 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5C21FB0CE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jun 2020 14:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28AD1FB4C0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jun 2020 16:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbgFPMem (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Jun 2020 08:34:42 -0400
-Received: from u164.east.ru ([195.170.63.164]:64002 "EHLO u164.east.ru"
+        id S1728515AbgFPOnZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Jun 2020 10:43:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36014 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725843AbgFPMel (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jun 2020 08:34:41 -0400
-X-Greylist: delayed 500 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Jun 2020 08:34:41 EDT
-Received: by u164.east.ru (Postfix, from userid 1001)
-        id D6B43512807; Tue, 16 Jun 2020 15:26:18 +0300 (MSK)
-Date:   Tue, 16 Jun 2020 15:26:18 +0300
-From:   Anatoly Pugachev <matorola@gmail.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     Jiri Kosina <trivial@kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] selftests: vm: add fragment CONFIG_GUP_BENCHMARK
-Message-ID: <20200616122618.GA24819@yogzotot>
+        id S1728183AbgFPOnZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 16 Jun 2020 10:43:25 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 6A01EACAE;
+        Tue, 16 Jun 2020 14:43:27 +0000 (UTC)
+Date:   Tue, 16 Jun 2020 16:43:22 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH v2 0/4] selftests/livepatch: small script cleanups
+Message-ID: <20200616144322.GP31238@alley>
+References: <20200615172756.12912-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20200615172756.12912-1-joe.lawrence@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When running gup_benchmark test the following output states that
-the config options is missing.
+On Mon 2020-06-15 13:27:52, Joe Lawrence wrote:
+> This is a small collection of tweaks for the shellscript side of the
+> livepatch tests.  If anyone else has a small cleanup (or even just a
+> suggestion for a low-hanging change) and would like to tack it onto the
+> set, let me know.
+> 
+> based-on: livepatching.git, for-5.9/selftests-cleanup
+> merge-thru: livepatching.git
+> 
+> Joe Lawrence (4):
+>   selftests/livepatch: Don't clear dmesg when running tests
+>   selftests/livepatch: use $(dmesg --notime) instead of manually
+>     filtering
+>   selftests/livepatch: refine dmesg 'taints' in dmesg comparison
+>   selftests/livepatch: add test delimiter to dmesg
 
-$ sudo ./gup_benchmark
-open: No such file or directory
+For the series:
 
-$ sudo strace -e trace=file ./gup_benchmark 2>&1 | tail -3
-openat(AT_FDCWD, "/sys/kernel/debug/gup_benchmark", O_RDWR) = -1 ENOENT
-(No such file or directory)
-open: No such file or directory
-+++ exited with 1 +++
+Revieved-by: Petr Mladek <pmladek@suse.com>
 
-Fix it by adding config option fragment.
-
-Fixes: 64c349f4ae78 ("mm: add infrastructure for get_user_pages_fast() benchmarking")
-Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
-CC: Jiri Kosina <trivial@kernel.org>
-CC: Shuah Khan <shuah@kernel.org>
----
- tools/testing/selftests/vm/config | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/vm/config b/tools/testing/selftests/vm/config
-index 3ba674b64fa9..69dd0d1aa30b 100644
---- a/tools/testing/selftests/vm/config
-+++ b/tools/testing/selftests/vm/config
-@@ -3,3 +3,4 @@ CONFIG_USERFAULTFD=y
- CONFIG_TEST_VMALLOC=m
- CONFIG_DEVICE_PRIVATE=y
- CONFIG_TEST_HMM=m
-+CONFIG_GUP_BENCHMARK=y
--- 
-2.27.0
-
+Best Regards,
+Petr
