@@ -2,105 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D480E1FA85E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jun 2020 07:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F131F1FA88C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jun 2020 08:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgFPFsb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Jun 2020 01:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725710AbgFPFsa (ORCPT
+        id S1726579AbgFPGM7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Jun 2020 02:12:59 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44004 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726052AbgFPGM6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jun 2020 01:48:30 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CCBC03E96A
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 22:48:30 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id x11so2492165plo.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 22:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jVMXkZReclJfWUwDhO52OxqMkCMrLsR1BufGDz+LRJA=;
-        b=Y/jZuYROCnWNy8yDQHa+xLPbEzmyWOXuXUaMIuKQWlxvItI97MmpLAsjOOy1PPsiNo
-         UoQgUVJa0T9FqYKoIq8imZeyd9/P/AV+w9Bu0no0JPgG3uHnW3lsDYs4HkS6FcpyekXs
-         MYT2cRX/qQMeXm+aj7sGNPaDaiCg0FqY7U+CU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jVMXkZReclJfWUwDhO52OxqMkCMrLsR1BufGDz+LRJA=;
-        b=YJ/EanHDUfhWfQ+tqb7HLcW4VQBUrMYyGiLErE7j74GkWaosntTRqps0FoLrtLYVrK
-         YP73cBLd5qxfIeUI3EnrGv41YaD4o9VkrOzdxYqzvQgAYi4O6kafzliqBEBdE3QjULbo
-         1nA2i3EYrlA9x7yB6FQCqUPN5yoPQfiYNYU5t17SidUBUjExuBaW0CBXOKocPshqV+s4
-         iFPTxC7cT4cX1iQCF1PMRVm8vJ4RUAnhFbKvVQuhfq6hjCfHIjWYZ8h5Iho7kGIKepyn
-         EBIGHW2r7IoaDkw6U8bsaGPZFrHNRMv9Ow6V1juLuV+vXjeu4+Tngrvwy9eVsYitT/e/
-         jVTA==
-X-Gm-Message-State: AOAM531aZdPlxG1R/3D2AQvhd1guAJhqzK7NSV/b/yt2gLnwiKJ6grNh
-        bYpnryZT9V8UwQ3aTwk/t7nIMA==
-X-Google-Smtp-Source: ABdhPJwvdozFAN2lhTlC6N/9QoMVTVKeh5sLC4qkatRF9AL2i35/dwbVQtpPyfyBZoDbRV++yi3yIA==
-X-Received: by 2002:a17:902:7611:: with SMTP id k17mr690817pll.255.1592286510152;
-        Mon, 15 Jun 2020 22:48:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m9sm15615291pfo.200.2020.06.15.22.48.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 22:48:29 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 22:48:28 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sargun Dhillon <sargun@sargun.me>
-Cc:     linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        "David S. Miller" <davem@davemloft.net>,
-        Christoph Hellwig <hch@lst.de>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Matt Denton <mpdenton@google.com>,
-        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
-        Robert Sesek <rsesek@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, containers@lists.linux-foundation.org,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 02/11] fs: Move __scm_install_fd() to
- __fd_install_received()
-Message-ID: <202006152247.17A6A1EAF7@keescook>
-References: <20200616032524.460144-1-keescook@chromium.org>
- <20200616032524.460144-3-keescook@chromium.org>
- <20200616052941.GB16032@ircssh-2.c.rugged-nimbus-611.internal>
+        Tue, 16 Jun 2020 02:12:58 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05G62X1n043574;
+        Tue, 16 Jun 2020 02:12:57 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31msf0amqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Jun 2020 02:12:57 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05G6BP4d010721;
+        Tue, 16 Jun 2020 06:12:55 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 31mpe81x1c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Jun 2020 06:12:54 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05G6Cq0E60686604
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Jun 2020 06:12:52 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06DB5A4062;
+        Tue, 16 Jun 2020 06:12:52 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2ACEA4060;
+        Tue, 16 Jun 2020 06:12:50 +0000 (GMT)
+Received: from localhost.localdomain.com (unknown [9.85.88.230])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 16 Jun 2020 06:12:50 +0000 (GMT)
+From:   Harish <harish@linux.ibm.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Harish <harish@linux.ibm.com>, aneesh.kumar@linux.ibm.com,
+        skhan@linuxfoundation.org
+Subject: [PATCH] selftests/vm: Run va_128TBswitch test with hugepages
+Date:   Tue, 16 Jun 2020 11:42:45 +0530
+Message-Id: <20200616061246.51754-1-harish@linux.ibm.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616052941.GB16032@ircssh-2.c.rugged-nimbus-611.internal>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-15_11:2020-06-15,2020-06-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ suspectscore=1 malwarescore=0 mlxscore=0 clxscore=1011
+ cotscore=-2147483648 phishscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006160040
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 05:29:41AM +0000, Sargun Dhillon wrote:
-> On Mon, Jun 15, 2020 at 08:25:15PM -0700, Kees Cook wrote:
-> > +/**
-> > + * __fd_install_received() - Install received file into file descriptor table
-> > + *
-> > + * @fd: fd to install into (if negative, a new fd will be allocated)
-> > + * @file: struct file that was received from another process
-> > + * @ufd_required: true to use @ufd for writing fd number to userspace
-> > + * @ufd: __user pointer to write new fd number to
-> > + * @o_flags: the O_* flags to apply to the new fd entry
-> Probably doesn't matter, but this function doesn't take the fd, or ufd_required
-> argument in this patch. 
-> 
-> > + *
-> > + * Installs a received file into the file descriptor table, with appropriate
-> > + * checks and count updates. Optionally writes the fd number to userspace.
-> ufd does not apppear options here.
+Use the --run-hugetlb option to run va_128TBswitch with hugepages
+configured
 
-Argh, yes, thanks. I think this was a fixup targeting the wrong commit.
-I will adjust.
+Signed-off-by: Harish <harish@linux.ibm.com>
+---
+ tools/testing/selftests/vm/run_vmtests | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
+index a3f4f30f0a2e..ca0be11250bf 100755
+--- a/tools/testing/selftests/vm/run_vmtests
++++ b/tools/testing/selftests/vm/run_vmtests
+@@ -267,13 +267,16 @@ fi
+ echo "-----------------------------"
+ echo "running virtual address 128TB switch test"
+ echo "-----------------------------"
+-./va_128TBswitch
++# Configure minimum hugepages to run test with hugepages
++echo $(( $lackpgs + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
++./va_128TBswitch --run-hugetlb
+ if [ $? -ne 0 ]; then
+     echo "[FAIL]"
+     exitcode=1
+ else
+     echo "[PASS]"
+ fi
++echo $nr_hugepgs > /proc/sys/vm/nr_hugepages
+ fi # VADDR64
+ 
+ echo "------------------------------------"
 -- 
-Kees Cook
+2.24.1
+
