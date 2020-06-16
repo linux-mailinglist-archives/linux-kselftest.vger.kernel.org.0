@@ -2,97 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F131F1FA88C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jun 2020 08:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FBC1FA90C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jun 2020 08:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgFPGM7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Jun 2020 02:12:59 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44004 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726052AbgFPGM6 (ORCPT
+        id S1726052AbgFPGrr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Jun 2020 02:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbgFPGrq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jun 2020 02:12:58 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05G62X1n043574;
-        Tue, 16 Jun 2020 02:12:57 -0400
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 31msf0amqv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Jun 2020 02:12:57 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05G6BP4d010721;
-        Tue, 16 Jun 2020 06:12:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 31mpe81x1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Jun 2020 06:12:54 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05G6Cq0E60686604
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 06:12:52 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 06DB5A4062;
-        Tue, 16 Jun 2020 06:12:52 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D2ACEA4060;
-        Tue, 16 Jun 2020 06:12:50 +0000 (GMT)
-Received: from localhost.localdomain.com (unknown [9.85.88.230])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 16 Jun 2020 06:12:50 +0000 (GMT)
-From:   Harish <harish@linux.ibm.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     Harish <harish@linux.ibm.com>, aneesh.kumar@linux.ibm.com,
-        skhan@linuxfoundation.org
-Subject: [PATCH] selftests/vm: Run va_128TBswitch test with hugepages
-Date:   Tue, 16 Jun 2020 11:42:45 +0530
-Message-Id: <20200616061246.51754-1-harish@linux.ibm.com>
-X-Mailer: git-send-email 2.24.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-15_11:2020-06-15,2020-06-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- suspectscore=1 malwarescore=0 mlxscore=0 clxscore=1011
- cotscore=-2147483648 phishscore=0 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006160040
+        Tue, 16 Jun 2020 02:47:46 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19E1C05BD43
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 23:47:44 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y3so24083220ybf.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 23:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=rY8mLmisHjWy1FJ/edCX4pC2W+lemlUit54tKdWmG4c=;
+        b=eP6QBUGwa7iE9veBVB488E9XSbW6RgnTJdBxJO+wT6o54RHljVgl+A3CITwHr8gLON
+         PfnPz11VeEuGVvisiOQsjLo80bewfSJcEPQAwsHVdXAhPm1/Htb/FYU+vYRW/G/IUVWX
+         4SUAcx0wuITm7pk1cCPLMI0iAQmh2Eol4ciJzAgcKPSXWYsp4qLlDrzg2VSUTVjGvDrE
+         QLe9mPbjYCgVV8KrUWfqpTEbzRS4facU+WEapKgq5cvNSYZYdamicQVfOGbGm6AV2iSf
+         jef5HN7zgUQAjZ4Jq4Gr1gMV9ZJk+Hx1zL87tEETTy5GfPGK5f/43daVz1f7PGjalTAQ
+         Rhlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=rY8mLmisHjWy1FJ/edCX4pC2W+lemlUit54tKdWmG4c=;
+        b=YgLfI1gDijfb9XTUcdPeiT+Oq7cfvtq7uT5vulBHTwpzTo2aTe6ktZPrStY2+BF24N
+         Z6XRbLXG9jhPfDqUQaxYrEt7YzN8SPjPQruXrH4eXd9O3EsFGm1118J8HuJz2OFCKfb7
+         OOkIdSnyO08T6gvtc70haiT/1+h2vbMsz+fltNx+qfKqsTbtkIlDlMlnCERm1jKMte4X
+         OVRQfv/cx1PqOYCNdNmDrk+bEXPxXQlcF1rA63BQmldQoF9bgmb91qGFymNgI3SUAnmp
+         6MRcFfFdQG4fqQgj9g5ybAOE0FheYb9wgbPBvGskVUpH3Y54R3rAXk1YQFR4Dm1vFub3
+         hhYg==
+X-Gm-Message-State: AOAM530W09T6HUM6UdHnSj9gJiv48XMgx/+/IN+Ntgf/QEgEzcEGXMcu
+        dp6wzVzLdbR43+PSE0yVmeI5T/h1B4WnTw==
+X-Google-Smtp-Source: ABdhPJyNOyWelBu1uraSPS7WDyezI/GDjB2D9r6wLSLmxn41Z6buzjfQlhIA8UL0JpC9xH6dNY9wtycb2OVPig==
+X-Received: by 2002:a25:c507:: with SMTP id v7mr1841055ybe.306.1592290064202;
+ Mon, 15 Jun 2020 23:47:44 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 23:47:30 -0700
+Message-Id: <20200616064730.123871-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.290.gba653c62da-goog
+Subject: [PATCH] kunit: kunit_tool: Fix invalid result when build fails
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use the --run-hugetlb option to run va_128TBswitch with hugepages
-configured
+When separating out different phases of running tests[1]
+(build/exec/parse/etc), the format of the KunitResult tuple changed
+(adding an elapsed_time variable). This is not populated during a build
+failure, causing kunit.py to crash.
 
-Signed-off-by: Harish <harish@linux.ibm.com>
+This fixes [1] to probably populate the result variable, causing a
+failing build to be reported properly.
+
+[1]:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=45ba7a893ad89114e773b3dc32f6431354c465d6
+
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- tools/testing/selftests/vm/run_vmtests | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/kunit/kunit.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index a3f4f30f0a2e..ca0be11250bf 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -267,13 +267,16 @@ fi
- echo "-----------------------------"
- echo "running virtual address 128TB switch test"
- echo "-----------------------------"
--./va_128TBswitch
-+# Configure minimum hugepages to run test with hugepages
-+echo $(( $lackpgs + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
-+./va_128TBswitch --run-hugetlb
- if [ $? -ne 0 ]; then
-     echo "[FAIL]"
-     exitcode=1
- else
-     echo "[PASS]"
- fi
-+echo $nr_hugepgs > /proc/sys/vm/nr_hugepages
- fi # VADDR64
- 
- echo "------------------------------------"
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 787b6d4ad716..f9b769f3437d 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -82,7 +82,9 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+ 					request.make_options)
+ 	build_end = time.time()
+ 	if not success:
+-		return KunitResult(KunitStatus.BUILD_FAILURE, 'could not build kernel')
++		return KunitResult(KunitStatus.BUILD_FAILURE,
++				   'could not build kernel',
++				   build_end - build_start)
+ 	if not success:
+ 		return KunitResult(KunitStatus.BUILD_FAILURE,
+ 				   'could not build kernel',
 -- 
-2.24.1
+2.27.0.290.gba653c62da-goog
 
