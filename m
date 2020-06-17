@@ -2,135 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754C81FC4F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jun 2020 06:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6F31FC504
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jun 2020 06:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725808AbgFQEGO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jun 2020 00:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S1725814AbgFQEVC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jun 2020 00:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbgFQEGO (ORCPT
+        with ESMTP id S1725776AbgFQEVC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 00:06:14 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71353C06174E
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2020 21:06:12 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id t18so753347wru.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2020 21:06:12 -0700 (PDT)
+        Wed, 17 Jun 2020 00:21:02 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D312AC061573
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2020 21:21:01 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id l10so754701wrr.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jun 2020 21:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5PuPiLXB+Zn09O0tzAIe764d7r3OYmp8OwnNdcrO+bA=;
-        b=I7Uq/MjZ+H2xYtZZ4lA3ybOmOnECnv1eu4jmKgICIFg1a36hkRrBKNn6pAPwS4YOOj
-         pTi8/SQv0GJSutNn6gIjqRYG0ulgepo/AWTgsqY7UggatblWIsgzcI9iKBJPxzJj9LCI
-         KpdUWKIow4A/LejdoB21mNpx7LguFSeW0ht7ShdHmcu64lscjRejQgcGXcCQAJXbzfHV
-         rnCSvWG1f89gwvLN2HoMic9sPr7nqASI77NOfJ9HFCpx8DDcnWAlOdOVBbF99OrEEU27
-         /f1XXJdZ2LIUu+hGG5ktnbDJl7awX5pxuprv+heMCzxv5vqgMo+4zfYDhNK2GiTGS7JR
-         Jy3w==
+        bh=HTfy5ZLyuJT0yC8McsN2BR/ssAXBpdtQpUx9FOK3zbk=;
+        b=trYmk0NGqDbCC4+0yisOAMU2pUJhbmgPqz+08MzhL27FdwrZo5x8CC4LEpCfuYb/Zr
+         s1QKUQ36/lFT54YeSj4wMO2z03xG7ZHUyULrLv/itHLmSJrxFSEhFzNxmLIDV3tA1gnK
+         YAPUnmYpzNlEn1MNyIFPBRyY/DJQ8pPbeVuwcVP/tmWe4gav31Bs+27G+UlUAw8/YJ/5
+         yTKh7XhbkytVPeIHwAX3HLHug9KZVFvVYeTpepaKrD1CyXC5RiXl6v+c5PUH6BO9zDaP
+         GYJcs6px4Qrqv0P91Xbb+OkXoYyebl7f4EBsdAVNN8Tn4TXMxoaN1C0iiWjPseR0JNzw
+         /irw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5PuPiLXB+Zn09O0tzAIe764d7r3OYmp8OwnNdcrO+bA=;
-        b=XsiqGsQ7tL7YVTewcttIt530Y3bYYOgEa+UA14BF1N6qCbepREf9RDvskdwpxyj7ys
-         sFYzFJIupOS/o1GS9y2ASPSv9owAyNWqUPgN+C5WZSlev2aGlmxsmXnFl+ZwKQqKv1Yt
-         8nTo4WqYnsnfTD8LEzgpI7G/jDELvtdr4P+Go/WK7QdjzcEOP+7UdrMXpDfjAByDVq/p
-         AJGin0ayTXFJFi7wG79yDGzaNvdbV1iUJ55DfVIb/NbF3lKkUuRwMI6N0VOj3+DShH4T
-         7l+CemwRVNpgjuBd16XgZxC5tF8TNrIU+AGwe+G0PqV54hqaK1MhyteR4tUkwPfTUyBZ
-         Gg9A==
-X-Gm-Message-State: AOAM530kuQfV04iFwJx6fkz/DwrDCVdULctrKDhgNibKCPTWrqvXfmyx
-        BsDaQK9SWls8ZduxkT6o07yJ9CcW03/hcIoMDthUiA==
-X-Google-Smtp-Source: ABdhPJxo7S4BNCm1hKAaH+x6SbN8seI34s31YejfTVkfl5aLhC7YykVSJY6L56UwCmIH6aI86ha+buwLc2koBjYu4k0=
-X-Received: by 2002:adf:b60b:: with SMTP id f11mr6193172wre.7.1592366770496;
- Tue, 16 Jun 2020 21:06:10 -0700 (PDT)
+        bh=HTfy5ZLyuJT0yC8McsN2BR/ssAXBpdtQpUx9FOK3zbk=;
+        b=aClbbRIoAcprnidBlY/RN0s/tGMA0u0/PrlEzfHoO0CM9kqGSsxWXunLW8qLT1WCgk
+         gTX1OGJms0wBv0dqAAchn91QHp/iXCqpBGowPoLdq3tu//9oadB47IgzkzhX0fjUuImL
+         VemxNXMQ4vV+BsXRr/xa/zf9FBq5OLOgvDaMTS8iBGftLAbVurSyAPR0R9lGMg1jhwT0
+         WmMrBG0odXJJvr5ZXrAhM0EZ3NUjYbU9uenGUqA9AtQ72NsXI6LzF2ZOTxBaoPD6RDMW
+         fgm9gVFQLF5GT722lJqxfoLak4SyjZpLEQOF3rqDWy1fdIjmLsaRkhWtMtdjvrXPV2h4
+         rCZw==
+X-Gm-Message-State: AOAM5336D0cQXUz4/X65y0eBe6y/4Errp0oGUEn1eZCOY+i80XL9CvjY
+        OHNkaHX1QD9UEPdg1PHYzvPf4KqzAbgx8/keQ/kcjg==
+X-Google-Smtp-Source: ABdhPJxJ1NKDw0A/Mr5gdEzqzF5vb61QgpH/v8tCiZA1rOlUaXZVgnusiMMA71lTFJNM8LFxei18qdWr+22zs53LCG8=
+X-Received: by 2002:a5d:69ca:: with SMTP id s10mr6465150wrw.203.1592367660051;
+ Tue, 16 Jun 2020 21:21:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
- <20200616204817.GA212825@google.com> <CY4PR13MB1175A71AE3937C0786721ABFFD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
- <202006161703.B2E51605@keescook> <CY4PR13MB1175DCC4066FC0839A6B2E84FD9A0@CY4PR13MB1175.namprd13.prod.outlook.com>
- <202006162032.9BF6F8F4E@keescook>
-In-Reply-To: <202006162032.9BF6F8F4E@keescook>
+References: <20200611215501.213058-1-vitor@massaru.org> <202006121403.CF8D57C@keescook>
+ <CABVgOSnofuJQ_fiCL-8KdKezg3Hnqk3A+X509c4YP_toKeBVBg@mail.gmail.com>
+ <202006141005.BA19A9D3@keescook> <CABVgOSkPYBL8Qy9Fsr0owNhh2=tXZmdwCsWhnq+PshJLr06YKA@mail.gmail.com>
+ <alpine.LRH.2.21.2006160956170.16027@localhost>
+In-Reply-To: <alpine.LRH.2.21.2006160956170.16027@localhost>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 17 Jun 2020 12:05:59 +0800
-Message-ID: <CABVgOSn48gw3pMSCccmF8FK=3UPF+Spe47AiDQcMiXkk3k4yqQ@mail.gmail.com>
-Subject: Re: RFC - kernel selftest result documentation (KTAP)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
+Date:   Wed, 17 Jun 2020 12:20:48 +0800
+Message-ID: <CABVgOS=-AHNABkAVV7p=pq67hwoVcXXJSEPvxNbp90Eh_RaxBg@mail.gmail.com>
+Subject: Re: common KUnit Kconfig and file naming (was: Re: [PATCH] lib:
+ kunit_test_overflow: add KUnit test of check_*_overflow functions)
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 11:36 AM Kees Cook <keescook@chromium.org> wrote:
+On Tue, Jun 16, 2020 at 5:40 PM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> On Wed, Jun 17, 2020 at 02:30:45AM +0000, Bird, Tim wrote:
-> > Agreed.  You only need machine-parsable data if you expect the CI
-> > system to do something more with the data than just present it.
-> > What that would be, that would be common for all tests (or at least
-> > many test), is unclear.  Maybe there are patterns in the diagnostic
-> > data that could lead to higher-level analysis, or even automated
-> > fixes, that don't become apparent if the data is unstructured.  But
-> > it's hard to know until you have lots of data.  I think just getting
-> > the other things consistent is a good priority right now.
+> On Tue, 16 Jun 2020, David Gow wrote:
 >
-> Yeah. I think the main place for this is performance analysis, but I
-> think that's a separate system entirely. TAP is really strictly yes/no,
-> where as performance analysis a whole other thing. The only other thing
-> I can think of is some kind of feature analysis, but that would be built
-> out of the standard yes/no output. i.e. if I create a test that checks
-> for specific security mitigation features (*cough*LKDTM*cough*), having
-> a dashboard that shows features down one axis and architectures and/or
-> kernel versions on other axes, then I get a pretty picture. But it's
-> still being built out of the yes/no info.
+> > CONFIG_PM_QOS_KUNIT_TESTOn Mon, Jun 15, 2020 at 1:48 AM Kees Cook
+> > <keescook@chromium.org> wrote:
+> > >
+> > > On Sat, Jun 13, 2020 at 02:51:17PM +0800, David Gow wrote:
+> > > > Yeah, _KUNIT_TEST was what we've sort-of implicitly decided on for
+> > > > config names, but the documentation does need to happen.
+> > >
+> > > That works for me. It still feels redundant, but all I really want is a
+> > > standard name. :)
+> > >
+> > > > We haven't put as much thought into standardising the filenames much, though.
+> > >
+> > > I actually find this to be much more important because it is more
+> > > end-user-facing (i.e. in module naming, in build logs, in scripts, on
+> > > filesystem, etc -- CONFIG is basically only present during kernel build).
+> > > Trying to do any sorting or greping really needs a way to find all the
+> > > kunit pieces.
+> > >
+> >
+> > Certainly this is more of an issue now we support building KUnit tests
+> > as modules, rather than having them always be built-in.
+> >
+> > Having some halfway consistent config-name <-> filename <-> test suite
+> > name could be useful down the line, too. Unfortunately, not
+> > necessarily a 1:1 mapping, e.g.:
+> > - CONFIG_KUNIT_TEST compiles both kunit-test.c and string-stream-test.c
+> > - kunit-test.c has several test suites within it:
+> > kunit-try-catch-test, kunit-resource-test & kunit-log-test.
+> > - CONFIG_EXT4_KUNIT_TESTS currently only builds ext4-inode-test.c, but
+> > as the plural name suggests, might build others later.
+> > - CONFIG_SECURITY_APPARMOR_KUNIT_TEST doesn't actually have its own
+> > source file: the test is built into policy_unpack.c
+> > - &cetera
+> >
+> > Indeed, this made me quickly look up the names of suites, and there
+> > are a few inconsistencies there:
+> > - most have "-test" as a suffix
+> > - some have "_test" as a suffix
+> > - some have no suffix
+> >
+> > (I'm inclined to say that these don't need a suffix at all.)
+> >
 >
-> *shrug*
+> A good convention for module names - which I _think_ is along the lines
+> of what Kees is suggesting - might be something like
 >
-> I think diagnostic should be expressly non-machine-oriented.
+> <subsystem>[_<optional_test-area>]_kunit.ko
+>
+> So for example
+>
+> kunit_test -> test_kunit.ko
+> string_stream_test.ko -> test_string_stream_kunit.ko
+> kunit_example_test -> example_kunit.ko
+> ext4_inode_test.ko -> ext4_inode_kunit.ko
+>
+> For the kunit selftests, "selftest_" might be a better name
+> than "test_", as the latter might encourage people to reintroduce
+> a redundant "test" into their module name.
+>
 
-So from the KUnit side, we sort-of have three kinds of diagnostic lines:
-- Lines printed directly from tests (typically using kunit_info() or
-similar functions): as I understand it, these are basically the
-equivalent of what kselftest typically uses diagnostics for --
-test-specific, human-readable messages. I don't think we need/want to
-parse these much.
-- Kernel messages during test execution. If we get the results from
-scraping the kernel log (which is still the default for KUnit, though
-there is also a debugfs info), other kernel logs can be interleaved
-with the results. Sometimes these are irrelevant things happening on
-another thread, sometimes they're something directly related to the
-test which we'd like to capture (KASAN errors, for instance). I don't
-think we want these to be machine oriented, but we may want to be able
-to filter them out.
-- Expectation failures: as Brendan mentioned, KUnit will print some
-diagnostic messages for individual assertion/expectation failures,
-including the expected and actual values. We'd ideally like to be able
-to identify and parse these, but keeping them human-readable is
-definitely also a goal.
+I quite like the idea of having the deeper "subsystem:suite:test"
+hierarchy here. "selftest" possibly would be a bit confusing against
+kselftest for the KUnit tests -- personally I'd probably go with
+"kunit", even if that introduces a redundant-looking kunit into the
+module name.
 
-Now, to be honest, I doubt that the distinction here would be of much
-use to kselftest, but it could be nice to not go out of our way to
-make parsing some diagnostic lines possible. That being said,
-personally I'm all for avoiding the yaml for diagnostic messages stuff
-and sticking to something simple and line-based, possibly
-standardising a the format of a few common diagnostic measurements
-(e.g., assertions/expected values/etc) in a way that's both
-human-readable and parsable if possible.
+So, this could look something like:
+- Kconfig name: CONFIG_<subsystem>_<suite>_KUNIT_TEST, or very
+possibly CONFIG_<subsystem>_KUNIT_TEST(S?) -- we already have
+something like that for the ext4 tests.
+- Source filename: <suite>_kunit.c within a subsystem directory. (We
+probably don't need to enforce suites being in separate files, but
+whatever file does contain the tests should at least end "kunit.c")
+- Module filename: <subsystem>_<suite>_kunit.ko, or
+<subsystem>_kunit.ko if all suites are built into the same module (or
+there's just one suite for the whole subsystem)
+- Suite name: Either <subsystem>_<suite> or have a separate subsystem
+field in kunit_suite. If there's only one suite for the subsystem, set
+suite==subsystem
+- Test names: Personally, I'd kind-of like to not prefix these at all,
+as they're already part of the suite. If we do want to, though, prefix
+them with <subsystem> and <suite>.
 
-I agree that there's a lot of analysis that is possible with just the
-yes/no data. There's probably some fancy correlation one could do even
-with unstructured diagnostic logs, so I don't think overstructuring
-things is a necessity by any means. Where we have different tests
-doing similar sorts of things, though, consistency in message
-formatting could help even if things are not explicitly parsed.
-Ensuring that helper functions that log and the like are spitting
-things out in the same format is probably a good starting step down
-that path.
+> > Within test suites, we're also largely prefixing all of the tests with
+> > a suite name (even if it's not actually the specified suite name). For
+> > example, CONFIG_PM_QOS_KUNIT_TEST builds
+> > drivers/base/power/qos-test.c which contains a suite called
+> > "qos-kunit-test", with tests prefixed "freq_qos_test_". Some of this
+> > clearly comes down to wanting to namespace things a bit more
+> > ("qos-test" as a name could refer to a few things, I imagine), but
+> > specifying how to do so consistently could help.
+> >
+>
+> Could we add some definitions to help standardize this?
+> For example, adding a "subsystem" field to "struct kunit_suite"?
+>
+> So for the ext4 tests the "subsystem" would be "ext4" and the
+> name "inode" would specify the test area within that subsystem.
+> For the KUnit selftests, the subsystem would be "test"/"selftest".
+> Logging could utilize the subsystem definition to allow test
+> writers to use less redundant test names too.  For example
+> the suite name logged could be constructed from the
+> subsystem + area values associated with the kunit_suite,
+> and individual test names could be shown as the
+> suite area + test_name.
+
+As above, I quite like this. If we were really brave, we could
+actually nest the results into subsystem:area/suite:test using the TAP
+subtests stuff. Generating the longer suite name may be easier on
+people manually reading large test logs, though, as they wouldn't have
+to scroll quite as far to determine what subsystem they're in. (Again,
+something that could be solved with tooling, and probably less of a
+problem for people accessing results through debugfs.)
 
 Cheers,
 -- David
