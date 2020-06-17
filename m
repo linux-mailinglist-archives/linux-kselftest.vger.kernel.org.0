@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D581FD514
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jun 2020 21:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9651FD51B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jun 2020 21:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726999AbgFQTFM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jun 2020 15:05:12 -0400
-Received: from mga04.intel.com ([192.55.52.120]:48978 "EHLO mga04.intel.com"
+        id S1726953AbgFQTF2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jun 2020 15:05:28 -0400
+Received: from mga04.intel.com ([192.55.52.120]:48989 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbgFQTFL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 15:05:11 -0400
-IronPort-SDR: MK/k9T2jFuVGb8gOOuAaAbdDc/VOCgrgjQmyZuycVOMFQTq6NbwC4CdSj0Y5ys1359UX2JtShy
- KTnPw1U4GEcQ==
+        id S1726511AbgFQTF0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 15:05:26 -0400
+IronPort-SDR: rWOlf+KEPivNXjSJoSjQgPetUTvQJArbAH+Cu1LtRTozHUGKO2agV5xct5ZTp+Svr/ty8LwIgN
+ AK602w/AeZtA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 12:05:09 -0700
-IronPort-SDR: jsScCobBAxNj1+5VqD2s0okJHLATdhpgHIK+77640LR3Z49+tPFiJIh8n9cZE5wcdhDqg4mYTy
- E/N03xO2s5tQ==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 12:05:10 -0700
+IronPort-SDR: vJEpKL+AIa7KhEzPupD3WbOKuBWu+CYvk8p+IiV4ZdOZMRARIttvSmd3m0FmydNAtiba+osmr/
+ hjQT5dpQEtyg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,523,1583222400"; 
-   d="scan'208";a="273609635"
+   d="scan'208";a="273609661"
 Received: from gza.jf.intel.com ([10.54.75.28])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2020 12:05:09 -0700
+  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2020 12:05:10 -0700
 From:   John Andersen <john.s.andersen@intel.com>
 To:     corbet@lwn.net, pbonzini@redhat.com, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
@@ -46,9 +46,9 @@ Cc:     vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         kernel-hardening@lists.openwall.com
-Subject: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
-Date:   Wed, 17 Jun 2020 12:07:55 -0700
-Message-Id: <20200617190757.27081-3-john.s.andersen@intel.com>
+Subject: [PATCH 3/4] selftests: kvm: add test for CR pinning with SMM
+Date:   Wed, 17 Jun 2020 12:07:56 -0700
+Message-Id: <20200617190757.27081-4-john.s.andersen@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200617190757.27081-1-john.s.andersen@intel.com>
 References: <20200617190757.27081-1-john.s.andersen@intel.com>
@@ -59,448 +59,284 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a CR pin feature bit to the KVM cpuid. Add read only MSRs to KVM
-which guests use to identify which bits they may request be pinned. Add
-CR pinned MSRs to KVM. Allow guests to request that KVM pin certain
-bits within control register 0 or 4 via the CR pinned MSRs. Writes to
-the MSRs fail if they include bits which aren't allowed. Host userspace
-may clear or modify pinned bits at any time. Once pinned bits are set,
-the guest may pin additional allowed bits, but not clear any. Clear
-pinning on vCPU reset.
-
-In the event that the guest vCPU attempts to disable any of the pinned
-bits, send that vCPU a general protection fault, and leave the register
-unchanged. Clear pinning on vCPU reset to avoid faulting non-boot
-CPUs when they are disabled and then re-enabled, which is done when
-hibernating.
-
-Pinning is not active when running in SMM. Entering SMM disables pinned
-bits. Writes to control registers within SMM would therefore trigger
-general protection faults if pinning was enforced. Upon exit from SMM,
-SMRAM is modified to ensure the values of CR0/4 that will be restored
-contain the correct values for pinned bits. CR0/4 values are then
-restored from SMRAM as usual.
-
-When running with nested virtualization, should pinned bits be cleared
-from host VMCS / VMCB, on VM-Exit, they will be silently restored.
-
-Should userspace expose the CR pinning CPUID feature bit, it must zero
-CR pinned MSRs on reboot. If it does not, it runs the risk of having the
-guest enable pinning and subsequently cause general protection faults on
-next boot due to early boot code setting control registers to values
-which do not contain the pinned bits. Userspace is responsible for
-migrating the contents of the CR* pinned MSRs. If userspace fails to
-migrate the MSRs the protection will no longer be active.
-
-Pinning of sensitive CR bits has already been implemented to protect
-against exploits directly calling native_write_cr*(). The current
-protection cannot stop ROP attacks which jump directly to a MOV CR
-instruction.
-
-https://web.archive.org/web/20171029060939/http://www.blackbunny.io/linux-kernel-x86-64-bypass-smep-kaslr-kptr_restric/
-
-Guests running with paravirtualized CR pinning can now be protected
-against the use of ROP to disable CR bits. The same bits that are being
-pinned natively may be pinned via the CR pinned MSRs. These bits are WP
-in CR0, and SMEP, SMAP, and UMIP in CR4.
-
-Other hypervisors such as HyperV have implemented similar protections
-for Control Registers and MSRs; which security researchers have found
-effective.
-
-https://www.abatchy.com/2018/01/kernel-exploitation-4
-
-Future work could implement similar MSRs to protect bits elsewhere, such
-as MSRs. The NXE bit of the EFER MSR is a prime candidate.
-
-Changes for QEMU are required to expose the CR pin cpuid feature bit. As
-well as clear the MSRs on reboot and enable migration.
-
-https://github.com/qemu/qemu/commit/1b26f03653669c97dd8729f9f59be561d68e2b2d
-https://github.com/qemu/qemu/commit/3af36d57457892c3088ee88de759d4f258c159a7
+Check that paravirtualized control register pinning blocks modifications
+of pinned CR values stored in SMRAM on exit from SMM.
 
 Signed-off-by: John Andersen <john.s.andersen@intel.com>
 ---
- Documentation/virt/kvm/msr.rst       |  53 ++++++++++++++
- arch/x86/include/asm/kvm_host.h      |   7 ++
- arch/x86/include/uapi/asm/kvm_para.h |   7 ++
- arch/x86/kvm/cpuid.c                 |   3 +-
- arch/x86/kvm/emulate.c               |   3 +-
- arch/x86/kvm/kvm_emulate.h           |   2 +-
- arch/x86/kvm/svm/nested.c            |  11 ++-
- arch/x86/kvm/vmx/nested.c            |  10 ++-
- arch/x86/kvm/x86.c                   | 106 ++++++++++++++++++++++++++-
- 9 files changed, 193 insertions(+), 9 deletions(-)
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/processor.h  |  13 ++
+ .../selftests/kvm/x86_64/smm_cr_pin_test.c    | 207 ++++++++++++++++++
+ 4 files changed, 222 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c
 
-diff --git a/Documentation/virt/kvm/msr.rst b/Documentation/virt/kvm/msr.rst
-index e37a14c323d2..9fa43c4a5895 100644
---- a/Documentation/virt/kvm/msr.rst
-+++ b/Documentation/virt/kvm/msr.rst
-@@ -376,3 +376,56 @@ data:
- 	write '1' to bit 0 of the MSR, this causes the host to re-scan its queue
- 	and check if there are more notifications pending. The MSR is available
- 	if KVM_FEATURE_ASYNC_PF_INT is present in CPUID.
-+
-+MSR_KVM_CR0_PIN_ALLOWED:
-+	0x4b564d08
-+MSR_KVM_CR4_PIN_ALLOWED:
-+	0x4b564d09
-+
-+	Read only registers informing the guest which bits may be pinned for
-+	each control register respectively via the CR pinned MSRs.
-+
-+data:
-+	Bits which may be pinned.
-+
-+	Attempting to pin bits other than these will result in a failure when
-+	writing to the respective CR pinned MSR.
-+
-+	Bits which are allowed to be pinned are WP for CR0 and SMEP, SMAP, and
-+	UMIP for CR4.
-+
-+MSR_KVM_CR0_PINNED_LOW:
-+	0x4b564d0a
-+MSR_KVM_CR0_PINNED_HIGH:
-+	0x4b564d0b
-+MSR_KVM_CR4_PINNED_LOW:
-+	0x4b564d0c
-+MSR_KVM_CR4_PINNED_HIGH:
-+	0x4b564d0d
-+
-+	Used to configure pinned bits in control registers
-+
-+data:
-+	Bits to be pinned.
-+
-+	Fails if data contains bits which are not allowed to be pinned. Or if
-+	attempting to pin bits high that are already pinned low, or vice versa.
-+	Bits which are allowed to be pinned can be found by reading the CR pin
-+	allowed MSRs.
-+
-+	The MSRs are read/write for host userspace, and write-only for the
-+	guest.
-+
-+	Once set to a non-zero value, the guest cannot clear any of the bits
-+	that have been pinned. The guest can pin more bits, so long as those
-+	bits appear in the allowed MSR, and are not already pinned to the
-+	opposite value.
-+
-+	Host userspace may clear or change pinned bits at any point. Host
-+	userspace must clear pinned bits on reboot.
-+
-+	The MSR enables bit pinning for control registers. Pinning is active
-+	when the guest is not in SMM. If an exit from SMM results in pinned
-+	bits becoming unpinned. The guest will exit. If the guest attempts to
-+	write values to cr* where bits differ from pinned bits, the write will
-+	fail and the guest will be sent a general protection fault.
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index f8998e97457f..962cb48535d4 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -565,6 +565,11 @@ struct kvm_vcpu_hv {
- 	cpumask_t tlb_flush;
- };
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 452787152748..c0666c3efcbb 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -10,6 +10,7 @@
+ /x86_64/platform_info_test
+ /x86_64/set_sregs_test
+ /x86_64/smm_test
++/x86_64/smm_cr_pin_test
+ /x86_64/state_test
+ /x86_64/vmx_preemption_timer_test
+ /x86_64/svm_vmcall_test
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 4a166588d99f..c5c205637f38 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -45,6 +45,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
+ TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
+ TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
+ TEST_GEN_PROGS_x86_64 += x86_64/smm_test
++TEST_GEN_PROGS_x86_64 += x86_64/smm_cr_pin_test
+ TEST_GEN_PROGS_x86_64 += x86_64/state_test
+ TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 82b7fe16a824..8a2da0449772 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -200,6 +200,11 @@ static inline uint64_t get_cr0(void)
+ 	return cr0;
+ }
  
-+struct kvm_vcpu_cr_pinning {
-+	unsigned long high;
-+	unsigned long low;
-+};
++static inline void set_cr0(uint64_t val)
++{
++	__asm__ __volatile__("mov %0, %%cr0" : : "r" (val) : "memory");
++}
 +
- struct kvm_vcpu_arch {
- 	/*
- 	 * rip and regs accesses must go through
-@@ -576,10 +581,12 @@ struct kvm_vcpu_arch {
+ static inline uint64_t get_cr3(void)
+ {
+ 	uint64_t cr3;
+@@ -383,4 +388,12 @@ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits);
+ /* VMX_EPT_VPID_CAP bits */
+ #define VMX_EPT_VPID_CAP_AD_BITS       (1ULL << 21)
  
- 	unsigned long cr0;
- 	unsigned long cr0_guest_owned_bits;
-+	struct kvm_vcpu_cr_pinning cr0_pinned;
- 	unsigned long cr2;
- 	unsigned long cr3;
- 	unsigned long cr4;
- 	unsigned long cr4_guest_owned_bits;
-+	struct kvm_vcpu_cr_pinning cr4_pinned;
- 	unsigned long cr8;
- 	u32 host_pkru;
- 	u32 pkru;
-diff --git a/arch/x86/include/uapi/asm/kvm_para.h b/arch/x86/include/uapi/asm/kvm_para.h
-index 812e9b4c1114..91241e0d9691 100644
---- a/arch/x86/include/uapi/asm/kvm_para.h
-+++ b/arch/x86/include/uapi/asm/kvm_para.h
-@@ -32,6 +32,7 @@
- #define KVM_FEATURE_POLL_CONTROL	12
- #define KVM_FEATURE_PV_SCHED_YIELD	13
- #define KVM_FEATURE_ASYNC_PF_INT	14
-+#define KVM_FEATURE_CR_PIN		15
- 
- #define KVM_HINTS_REALTIME      0
- 
-@@ -53,6 +54,12 @@
- #define MSR_KVM_POLL_CONTROL	0x4b564d05
- #define MSR_KVM_ASYNC_PF_INT	0x4b564d06
- #define MSR_KVM_ASYNC_PF_ACK	0x4b564d07
++/* KVM MSRs */
 +#define MSR_KVM_CR0_PIN_ALLOWED	0x4b564d08
 +#define MSR_KVM_CR4_PIN_ALLOWED	0x4b564d09
 +#define MSR_KVM_CR0_PINNED_LOW	0x4b564d0a
 +#define MSR_KVM_CR0_PINNED_HIGH	0x4b564d0b
 +#define MSR_KVM_CR4_PINNED_LOW	0x4b564d0c
 +#define MSR_KVM_CR4_PINNED_HIGH	0x4b564d0d
- 
- struct kvm_steal_time {
- 	__u64 steal;
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 8a294f9747aa..bb0ed645324d 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -716,7 +716,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			     (1 << KVM_FEATURE_PV_SEND_IPI) |
- 			     (1 << KVM_FEATURE_POLL_CONTROL) |
- 			     (1 << KVM_FEATURE_PV_SCHED_YIELD) |
--			     (1 << KVM_FEATURE_ASYNC_PF_INT);
-+			     (1 << KVM_FEATURE_ASYNC_PF_INT) |
-+			     (1 << KVM_FEATURE_CR_PIN);
- 
- 		if (sched_info_on())
- 			entry->eax |= (1 << KVM_FEATURE_STEAL_TIME);
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index d0e2825ae617..95780422765b 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -2685,7 +2685,8 @@ static int em_rsm(struct x86_emulate_ctxt *ctxt)
- 		return X86EMUL_UNHANDLEABLE;
- 	}
- 
--	ctxt->ops->post_leave_smm(ctxt);
-+	if (ctxt->ops->post_leave_smm(ctxt))
-+		return X86EMUL_UNHANDLEABLE;
- 
- 	return X86EMUL_CONTINUE;
- }
-diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-index 43c93ffa76ed..e92dd7605e48 100644
---- a/arch/x86/kvm/kvm_emulate.h
-+++ b/arch/x86/kvm/kvm_emulate.h
-@@ -232,7 +232,7 @@ struct x86_emulate_ops {
- 	void (*set_hflags)(struct x86_emulate_ctxt *ctxt, unsigned hflags);
- 	int (*pre_leave_smm)(struct x86_emulate_ctxt *ctxt,
- 			     const char *smstate);
--	void (*post_leave_smm)(struct x86_emulate_ctxt *ctxt);
-+	int (*post_leave_smm)(struct x86_emulate_ctxt *ctxt);
- 	int (*set_xcr)(struct x86_emulate_ctxt *ctxt, u32 index, u64 xcr);
- };
- 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 6bceafb19108..245bdff4b052 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -583,8 +583,15 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
- 	svm->vmcb->save.idtr = hsave->save.idtr;
- 	kvm_set_rflags(&svm->vcpu, hsave->save.rflags);
- 	svm_set_efer(&svm->vcpu, hsave->save.efer);
--	svm_set_cr0(&svm->vcpu, hsave->save.cr0 | X86_CR0_PE);
--	svm_set_cr4(&svm->vcpu, hsave->save.cr4);
-+	svm_set_cr0(&svm->vcpu,
-+		    (hsave->save.cr0 |
-+		    X86_CR0_PE |
-+		    svm->vcpu.arch.cr0_pinned.high) &
-+		    ~svm->vcpu.arch.cr0_pinned.low);
-+	svm_set_cr4(&svm->vcpu,
-+		    (hsave->save.cr4 |
-+		    svm->vcpu.arch.cr4_pinned.high) &
-+		    ~svm->vcpu.arch.cr4_pinned.low);
- 	if (npt_enabled) {
- 		svm->vmcb->save.cr3 = hsave->save.cr3;
- 		svm->vcpu.arch.cr3 = hsave->save.cr3;
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index adb11b504d5c..a12bac57b374 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4110,11 +4110,17 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
- 	 * (KVM doesn't change it);
- 	 */
- 	vcpu->arch.cr0_guest_owned_bits = X86_CR0_TS;
--	vmx_set_cr0(vcpu, vmcs12->host_cr0);
-+	vmx_set_cr0(vcpu,
-+		    (vmcs12->host_cr0 |
-+		     vcpu->arch.cr0_pinned.high) &
-+		    ~vcpu->arch.cr0_pinned.low);
- 
- 	/* Same as above - no reason to call set_cr4_guest_host_mask().  */
- 	vcpu->arch.cr4_guest_owned_bits = ~vmcs_readl(CR4_GUEST_HOST_MASK);
--	vmx_set_cr4(vcpu, vmcs12->host_cr4);
-+	vmx_set_cr4(vcpu,
-+		   (vmcs12->host_cr4 |
-+		    vcpu->arch.cr4_pinned.high) &
-+		    ~vcpu->arch.cr4_pinned.low);
- 
- 	nested_ept_uninit_mmu_context(vcpu);
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 00c88c2f34e4..940de9a968bd 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -772,6 +772,9 @@ bool pdptrs_changed(struct kvm_vcpu *vcpu)
- }
- EXPORT_SYMBOL_GPL(pdptrs_changed);
- 
-+#define KVM_CR0_PIN_ALLOWED	(X86_CR0_WP)
-+#define KVM_CR4_PIN_ALLOWED	(X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP)
 +
- int kvm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
- {
- 	unsigned long old_cr0 = kvm_read_cr0(vcpu);
-@@ -792,6 +795,11 @@ int kvm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
- 	if ((cr0 & X86_CR0_PG) && !(cr0 & X86_CR0_PE))
- 		return 1;
- 
-+	if (!is_smm(vcpu) && !is_guest_mode(vcpu) &&
-+	    (((cr0 ^ vcpu->arch.cr0_pinned.high) & vcpu->arch.cr0_pinned.high) ||
-+	    ((~cr0 ^ vcpu->arch.cr0_pinned.low) & vcpu->arch.cr0_pinned.low)))
-+		return 1;
+ #endif /* SELFTEST_KVM_PROCESSOR_H */
+diff --git a/tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c b/tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c
+new file mode 100644
+index 000000000000..a32f577ca1e5
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c
+@@ -0,0 +1,207 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Tests for control register pinning not being affected by SMRAM writes.
++ */
++#define _GNU_SOURCE /* for program_invocation_short_name */
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <string.h>
++#include <sys/ioctl.h>
++#include <linux/stringify.h>
 +
- 	if (!is_paging(vcpu) && (cr0 & X86_CR0_PG)) {
- #ifdef CONFIG_X86_64
- 		if ((vcpu->arch.efer & EFER_LME)) {
-@@ -972,6 +980,11 @@ int kvm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
- 	if (kvm_valid_cr4(vcpu, cr4))
- 		return 1;
- 
-+	if (!is_smm(vcpu) && !is_guest_mode(vcpu) &&
-+	    (((cr4 ^ vcpu->arch.cr4_pinned.high) & vcpu->arch.cr4_pinned.high) ||
-+	    ((~cr4 ^ vcpu->arch.cr4_pinned.low) & vcpu->arch.cr4_pinned.low)))
-+		return 1;
++#include "test_util.h"
 +
- 	if (is_long_mode(vcpu)) {
- 		if (!(cr4 & X86_CR4_PAE))
- 			return 1;
-@@ -1291,6 +1304,12 @@ static const u32 emulated_msrs_all[] = {
- 
- 	MSR_K7_HWCR,
- 	MSR_KVM_POLL_CONTROL,
-+	MSR_KVM_CR0_PIN_ALLOWED,
-+	MSR_KVM_CR4_PIN_ALLOWED,
-+	MSR_KVM_CR0_PINNED_LOW,
-+	MSR_KVM_CR0_PINNED_HIGH,
-+	MSR_KVM_CR4_PINNED_LOW,
-+	MSR_KVM_CR4_PINNED_HIGH,
- };
- 
- static u32 emulated_msrs[ARRAY_SIZE(emulated_msrs_all)];
-@@ -2986,6 +3005,54 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		vcpu->arch.msr_kvm_poll_control = data;
- 		break;
- 
-+	case MSR_KVM_CR0_PIN_ALLOWED:
-+		return (data != KVM_CR0_PIN_ALLOWED);
-+	case MSR_KVM_CR4_PIN_ALLOWED:
-+		return (data != KVM_CR4_PIN_ALLOWED);
-+	case MSR_KVM_CR0_PINNED_LOW:
-+		if ((data & ~KVM_CR0_PIN_ALLOWED) ||
-+		    (data & vcpu->arch.cr0_pinned.high))
-+			return 1;
++#include "kvm_util.h"
 +
-+		if (!msr_info->host_initiated &&
-+		    (~data & vcpu->arch.cr0_pinned.low))
-+			return 1;
++#include "processor.h"
 +
-+		vcpu->arch.cr0_pinned.low = data;
-+		break;
-+	case MSR_KVM_CR0_PINNED_HIGH:
-+		if ((data & ~KVM_CR0_PIN_ALLOWED) ||
-+		    (data & vcpu->arch.cr0_pinned.low))
-+			return 1;
++#define VCPU_ID	      1
 +
-+		if (!msr_info->host_initiated &&
-+		    (~data & vcpu->arch.cr0_pinned.high))
-+			return 1;
++#define PAGE_SIZE  4096
 +
-+		vcpu->arch.cr0_pinned.high = data;
-+		break;
-+	case MSR_KVM_CR4_PINNED_LOW:
-+		if ((data & ~KVM_CR4_PIN_ALLOWED) ||
-+		    (data & vcpu->arch.cr4_pinned.high))
-+			return 1;
++#define SMRAM_SIZE 65536
++#define SMRAM_MEMSLOT ((1 << 16) | 1)
++#define SMRAM_PAGES (SMRAM_SIZE / PAGE_SIZE)
++#define SMRAM_GPA 0x1000000
++#define SMRAM_STAGE_SUCCESS 0xfe
++#define SMRAM_STAGE_FAILURE 0xfd
 +
-+		if (!msr_info->host_initiated &&
-+		    (~data & vcpu->arch.cr4_pinned.low))
-+			return 1;
++#define XSTR(s) __stringify(s)
 +
-+		vcpu->arch.cr4_pinned.low = data;
-+		break;
-+	case MSR_KVM_CR4_PINNED_HIGH:
-+		if ((data & ~KVM_CR4_PIN_ALLOWED) ||
-+		    (data & vcpu->arch.cr4_pinned.low))
-+			return 1;
++#define SYNC_PORT 0xe
++#define DONE 0xff
 +
-+		if (!msr_info->host_initiated &&
-+		    (~data & vcpu->arch.cr4_pinned.high))
-+			return 1;
++#define CR0_PINNED X86_CR0_WP
++#define CR4_PINNED (X86_CR4_SMAP | X86_CR4_UMIP)
++#define CR4_ALL (CR4_PINNED | X86_CR4_SMEP)
 +
-+		vcpu->arch.cr4_pinned.high = data;
-+		break;
- 	case MSR_IA32_MCG_CTL:
- 	case MSR_IA32_MCG_STATUS:
- 	case MSR_IA32_MC0_CTL ... MSR_IA32_MCx_CTL(KVM_MAX_MCE_BANKS) - 1:
-@@ -3250,6 +3317,24 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	case MSR_KVM_POLL_CONTROL:
- 		msr_info->data = vcpu->arch.msr_kvm_poll_control;
- 		break;
-+	case MSR_KVM_CR0_PIN_ALLOWED:
-+		msr_info->data = KVM_CR0_PIN_ALLOWED;
-+		break;
-+	case MSR_KVM_CR4_PIN_ALLOWED:
-+		msr_info->data = KVM_CR4_PIN_ALLOWED;
-+		break;
-+	case MSR_KVM_CR0_PINNED_LOW:
-+		msr_info->data = vcpu->arch.cr0_pinned.low;
-+		break;
-+	case MSR_KVM_CR0_PINNED_HIGH:
-+		msr_info->data = vcpu->arch.cr0_pinned.high;
-+		break;
-+	case MSR_KVM_CR4_PINNED_LOW:
-+		msr_info->data = vcpu->arch.cr4_pinned.low;
-+		break;
-+	case MSR_KVM_CR4_PINNED_HIGH:
-+		msr_info->data = vcpu->arch.cr4_pinned.high;
-+		break;
- 	case MSR_IA32_P5_MC_ADDR:
- 	case MSR_IA32_P5_MC_TYPE:
- 	case MSR_IA32_MCG_CAP:
-@@ -6414,9 +6499,23 @@ static int emulator_pre_leave_smm(struct x86_emulate_ctxt *ctxt,
- 	return kvm_x86_ops.pre_leave_smm(emul_to_vcpu(ctxt), smstate);
- }
- 
--static void emulator_post_leave_smm(struct x86_emulate_ctxt *ctxt)
-+static int emulator_post_leave_smm(struct x86_emulate_ctxt *ctxt)
- {
--	kvm_smm_changed(emul_to_vcpu(ctxt));
-+	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
-+	unsigned long cr0 = kvm_read_cr0(vcpu);
-+	unsigned long cr4 = kvm_read_cr4(vcpu);
++/*
++ * This is compiled as normal 64-bit code, however, SMI handler is executed
++ * in real-address mode. To stay simple we're limiting ourselves to a mode
++ * independent subset of asm here.
++ * SMI handler always report back fixed stage SMRAM_STAGE_SUCCESS.
++ */
++uint8_t smi_handler_success[] = {
++	0xb0, SMRAM_STAGE_SUCCESS,    /* mov $SMRAM_STAGE_SUCCESS, %al */
++	0xe4, SYNC_PORT,              /* in $SYNC_PORT, %al */
++	0x0f, 0xaa,                   /* rsm */
++};
++uint8_t smi_handler_fault[] = {
++	0xb0, SMRAM_STAGE_FAILURE,    /* mov $SMRAM_STAGE_FAILURE, %al */
++	0xe4, SYNC_PORT,              /* in $SYNC_PORT, %al */
++	0x0f, 0xaa,                   /* rsm */
++};
 +
-+	if (((cr0 ^ vcpu->arch.cr0_pinned.high) & vcpu->arch.cr0_pinned.high) ||
-+	    ((~cr0 ^ vcpu->arch.cr0_pinned.low) & vcpu->arch.cr0_pinned.low))
-+		return 1;
++/* We opt not to use GUEST_SYNC() here because we also have to make a sync call
++ * from SMM. As such, the address of the ucall struct we'd need to pass isn't
++ * something we can put into the above machine code in a maintainable way
++ */
++static inline void sync_with_host(uint64_t phase)
++{
++	asm volatile("in $" XSTR(SYNC_PORT)", %%al\n"
++		     : "+a" (phase));
++}
 +
-+	if (((cr4 ^ vcpu->arch.cr4_pinned.high) & vcpu->arch.cr4_pinned.high) ||
-+	    ((~cr4 ^ vcpu->arch.cr4_pinned.low) & vcpu->arch.cr4_pinned.low))
-+		return 1;
++void self_smi(void)
++{
++	wrmsr(APIC_BASE_MSR + (APIC_ICR >> 4),
++	      APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_SMI);
++}
 +
-+	kvm_smm_changed(vcpu);
++void guest_code(void)
++{
++	uint64_t apicbase = rdmsr(MSR_IA32_APICBASE);
 +
-+	return 0;
- }
- 
- static int emulator_set_xcr(struct x86_emulate_ctxt *ctxt, u32 index, u64 xcr)
-@@ -9640,6 +9739,9 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
- 
- 	vcpu->arch.ia32_xss = 0;
- 
-+	memset(&vcpu->arch.cr0_pinned, 0, sizeof(vcpu->arch.cr0_pinned));
-+	memset(&vcpu->arch.cr4_pinned, 0, sizeof(vcpu->arch.cr4_pinned));
++	sync_with_host(1);
 +
- 	kvm_x86_ops.vcpu_reset(vcpu, init_event);
- }
- 
++	wrmsr(MSR_IA32_APICBASE, apicbase | X2APIC_ENABLE);
++
++	sync_with_host(2);
++
++	set_cr0(get_cr0() | CR0_PINNED);
++
++	wrmsr(MSR_KVM_CR0_PINNED_HIGH, CR0_PINNED);
++
++	sync_with_host(3);
++
++	set_cr4(get_cr4() | CR4_PINNED);
++
++	sync_with_host(4);
++
++	/* Pin SMEP low */
++	wrmsr(MSR_KVM_CR4_PINNED_HIGH, CR4_PINNED);
++
++	sync_with_host(5);
++
++	self_smi();
++
++	sync_with_host(DONE);
++}
++
++int main(int argc, char *argv[])
++{
++	struct kvm_regs regs;
++	struct kvm_sregs sregs;
++	struct kvm_vm *vm;
++	struct kvm_run *run;
++	struct kvm_x86_state *state;
++	int failure, stage, stage_reported;
++	u64 *cr;
++
++	for (failure = 0; failure <= 1; failure++) {
++		stage_reported = 0;
++
++		/* Create VM */
++		vm = vm_create_default(VCPU_ID, 0, guest_code);
++
++		vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
++
++		run = vcpu_state(vm, VCPU_ID);
++
++		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, SMRAM_GPA,
++					    SMRAM_MEMSLOT, SMRAM_PAGES, 0);
++		TEST_ASSERT(vm_phy_pages_alloc(vm, SMRAM_PAGES, SMRAM_GPA, SMRAM_MEMSLOT)
++			    == SMRAM_GPA, "could not allocate guest physical addresses?");
++
++		memset(addr_gpa2hva(vm, SMRAM_GPA), 0x0, SMRAM_SIZE);
++		if (failure) {
++			memcpy(addr_gpa2hva(vm, SMRAM_GPA) + 0x8000, smi_handler_fault,
++			       sizeof(smi_handler_fault));
++		} else {
++			memcpy(addr_gpa2hva(vm, SMRAM_GPA) + 0x8000, smi_handler_success,
++			       sizeof(smi_handler_success));
++		}
++		vcpu_set_msr(vm, VCPU_ID, MSR_IA32_SMBASE, SMRAM_GPA);
++
++		for (stage = 1;; stage++) {
++			_vcpu_run(vm, VCPU_ID);
++
++			memset(&regs, 0, sizeof(regs));
++			vcpu_regs_get(vm, VCPU_ID, &regs);
++
++			memset(&sregs, 0, sizeof(sregs));
++			vcpu_sregs_get(vm, VCPU_ID, &sregs);
++
++			/* stage_reported is currrently the last stage reported */
++			if (failure && stage_reported == SMRAM_STAGE_FAILURE) {
++				/* Ensure that we exit on smram modification of CR4 */
++				TEST_ASSERT(run->exit_reason == KVM_EXIT_INTERNAL_ERROR &&
++					    run->internal.suberror == KVM_INTERNAL_ERROR_EMULATION,
++					    "Stage %d: unexpected exit reason: %u, suberror: %u (%s),\n",
++					    stage, run->exit_reason, run->internal.suberror,
++					    exit_reason_str(run->exit_reason));
++				if (run->exit_reason == KVM_EXIT_INTERNAL_ERROR)
++					goto done;
++			} else {
++				TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
++					    "Stage %d: unexpected exit reason: %u (%s),\n",
++					    stage, run->exit_reason,
++					    exit_reason_str(run->exit_reason));
++			}
++
++			stage_reported = regs.rax & 0xff;
++
++			if (stage_reported == DONE) {
++				TEST_ASSERT((sregs.cr0 & CR0_PINNED) == CR0_PINNED,
++					    "Unexpected cr0. Bits missing: %llx",
++					    sregs.cr0 ^ (CR0_PINNED | sregs.cr0));
++				TEST_ASSERT((sregs.cr4 & CR4_ALL) == CR4_PINNED,
++					    "Unexpected cr4. Bits missing: %llx, cr4: %llx",
++					    sregs.cr4 ^ (CR4_ALL | sregs.cr4),
++					    sregs.cr4);
++				goto done;
++			}
++
++			TEST_ASSERT(stage_reported == stage ||
++				    stage_reported == SMRAM_STAGE_SUCCESS ||
++				    stage_reported == SMRAM_STAGE_FAILURE,
++				    "Unexpected stage: #%x, got %x",
++				    stage, stage_reported);
++
++			/* Within SMM modify CR0/4 to not contain pinned bits. */
++			if (stage_reported == SMRAM_STAGE_FAILURE) {
++				cr = (u64 *)(addr_gpa2hva(vm, SMRAM_GPA + 0x8000 + 0x7f58));
++				*cr &= ~CR0_PINNED;
++
++				cr = (u64 *)(addr_gpa2hva(vm, SMRAM_GPA + 0x8000 + 0x7f48));
++				/* Unset pinned, set one that was pinned low */
++				*cr &= ~CR4_PINNED;
++				*cr |= X86_CR4_SMEP;
++			}
++
++			state = vcpu_save_state(vm, VCPU_ID);
++			kvm_vm_release(vm);
++			kvm_vm_restart(vm, O_RDWR);
++			vm_vcpu_add(vm, VCPU_ID);
++			vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
++			vcpu_load_state(vm, VCPU_ID, state);
++			run = vcpu_state(vm, VCPU_ID);
++			free(state);
++		}
++
++done:
++		kvm_vm_free(vm);
++	}
++}
 -- 
 2.21.0
 
