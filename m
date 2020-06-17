@@ -2,336 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6341FD512
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jun 2020 21:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8281FD5A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jun 2020 21:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727806AbgFQTFP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jun 2020 15:05:15 -0400
-Received: from mga04.intel.com ([192.55.52.120]:48978 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726991AbgFQTFM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 15:05:12 -0400
-IronPort-SDR: NooAGNyQf0ZPhrz42xP9jstf9Gded30rYMc3C7Pr7lebLop2SdcCjeEBA8MAl2wsQFi0pagCu2
- tJjbBA3sdeEA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 12:05:11 -0700
-IronPort-SDR: 16liMDp6fjMJskgBNoaSNQ/ghF+MJxz6rqa/Oic4ytifJV5tNpXBCV6ChubOykl3ZRrsk1hjFv
- 8O6IvGieAe+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,523,1583222400"; 
-   d="scan'208";a="273609675"
-Received: from gza.jf.intel.com ([10.54.75.28])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2020 12:05:11 -0700
-From:   John Andersen <john.s.andersen@intel.com>
-To:     corbet@lwn.net, pbonzini@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        shuah@kernel.org, sean.j.christopherson@intel.com,
-        liran.alon@oracle.com, drjones@redhat.com,
-        rick.p.edgecombe@intel.com, kristen@linux.intel.com
-Cc:     vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, mchehab+huawei@kernel.org,
-        gregkh@linuxfoundation.org, paulmck@kernel.org,
-        pawan.kumar.gupta@linux.intel.com, jgross@suse.com,
-        mike.kravetz@oracle.com, oneukum@suse.com, luto@kernel.org,
-        peterz@infradead.org, fenghua.yu@intel.com,
-        reinette.chatre@intel.com, vineela.tummalapalli@intel.com,
-        dave.hansen@linux.intel.com, john.s.andersen@intel.com,
-        arjan@linux.intel.com, caoj.fnst@cn.fujitsu.com, bhe@redhat.com,
-        nivedita@alum.mit.edu, keescook@chromium.org,
-        dan.j.williams@intel.com, eric.auger@redhat.com,
-        aaronlewis@google.com, peterx@redhat.com,
-        makarandsonare@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: [PATCH 4/4] X86: Use KVM CR pin MSRs
-Date:   Wed, 17 Jun 2020 12:07:57 -0700
-Message-Id: <20200617190757.27081-5-john.s.andersen@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200617190757.27081-1-john.s.andersen@intel.com>
-References: <20200617190757.27081-1-john.s.andersen@intel.com>
+        id S1726868AbgFQT6E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jun 2020 15:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgFQT6D (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 15:58:03 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BE7C061755
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2020 12:58:03 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ga6so1495409pjb.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2020 12:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mtm26zMhVvziSNAo5SmfL3grFhcLxm63K6Ll3k7pVLA=;
+        b=OGVeyzLchDvvpgrQEJsCwDmB0g5mSK2iyCbWztP7Kq7e12lAsbrbJJ/O765BM1d9FQ
+         vMMvIE3saYLDImlEZ8eBNU3vlyvAG5MdNrvhwK/eP1+c7i+djFuR5nroesN2ZDFLFVQh
+         AMcDeULYTTf+crJp+k+EIY9BLyYqFncTk8mtc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mtm26zMhVvziSNAo5SmfL3grFhcLxm63K6Ll3k7pVLA=;
+        b=ffDl/mswuW69Raj5SjpZxIWyR2ukhsILHK/zDSzOFa1+7ATAV807nd9RXGFrtwWg7s
+         R/PiI8iBG6B74VwhM43v/OfBvsvR0e+6vPm9ajh2Z1IdfSAzyYsvjG6qpj3zpHjuSxG4
+         e2o7QKGUz0g4FFWkaEtxP6QqXxU7X3AfteK7Eb5oBWYbi4phi+19x6KwtwOLqbIPim/L
+         +NoQfYA03T+o7/LKAXNVjI2PdQ24XQBHxrUviye740z/S21VMlvb9/1GdEtAg8Oc5Pza
+         lJhKBJf0tZYDipHWIwm6NZ0DKU2HggGFTPTBKrAf83ZeVuQ/gfDl8zmc0TtPO4eXOXxA
+         DCpw==
+X-Gm-Message-State: AOAM530JDjR5OcMvm84m0wInCCnU8h+SfPadatseuDZ5F2I9lpOWfkLr
+        mUK0kNSLyNdCjbeurVdbFCvfJQ==
+X-Google-Smtp-Source: ABdhPJx1Vhks5l1dJnwJicud25Ov+I84VyGCU0nF8o3XyWLhCCiEEzvHbnFtOemqhaMfq16ly8QKug==
+X-Received: by 2002:a17:90a:7a8f:: with SMTP id q15mr598912pjf.116.1592423882783;
+        Wed, 17 Jun 2020 12:58:02 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w22sm628496pfq.193.2020.06.17.12.58.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 12:58:01 -0700 (PDT)
+Date:   Wed, 17 Jun 2020 12:58:00 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
+        "David S. Miller" <davem@davemloft.net>,
+        Christoph Hellwig <hch@lst.de>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Matt Denton <mpdenton@google.com>,
+        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
+        Robert Sesek <rsesek@google.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "containers@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v4 03/11] fs: Add fd_install_received() wrapper for
+ __fd_install_received()
+Message-ID: <202006171141.4DA1174979@keescook>
+References: <20200616032524.460144-1-keescook@chromium.org>
+ <20200616032524.460144-4-keescook@chromium.org>
+ <6de12195ec3244b99e6026b4b46e5be2@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6de12195ec3244b99e6026b4b46e5be2@AcuMS.aculab.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Strengthen existing control register pinning when running
-paravirtualized under KVM. Check which bits KVM supports pinning for
-each control register and only pin supported bits which are already
-pinned via the existing native protection. Write to KVM CR0/4 pinned
-MSRs to enable pinning.
+On Wed, Jun 17, 2020 at 03:35:20PM +0000, David Laight wrote:
+> From: Kees Cook
+> > Sent: 16 June 2020 04:25
+> > 
+> > For both pidfd and seccomp, the __user pointer is not used. Update
+> > __fd_install_received() to make writing to ufd optional. (ufd
+> > itself cannot checked for NULL because this changes the SCM_RIGHTS
+> > interface behavior.) In these cases, the new fd needs to be returned
+> > on success.  Update the existing callers to handle it. Add new wrapper
+> > fd_install_received() for pidfd and seccomp that does not use the ufd
+> > argument.
+> ...> 
+> >  static inline int fd_install_received_user(struct file *file, int __user *ufd,
+> >  					   unsigned int o_flags)
+> >  {
+> > -	return __fd_install_received(file, ufd, o_flags);
+> > +	return __fd_install_received(file, true, ufd, o_flags);
+> > +}
+> 
+> Can you get rid of the 'return user' parameter by adding
+> 	if (!ufd) return -EFAULT;
+> to the above wrapper, then checking for NULL in the function?
+> 
+> Or does that do the wrong horrid things in the fail path?
 
-Initiate KVM assisted pinning directly following the setup of native
-pinning on boot CPU. For non-boot CPUs initiate paravirtualized pinning
-on CPU identification.
+Oh, hm. No, that shouldn't break the failure path, since everything gets
+unwound in __fd_install_received if the ufd write fails.
 
-Identification of non-boot CPUs takes place after the boot CPU has setup
-native CR pinning. Therefore, non-boot CPUs access pinned bits setup by
-the boot CPU and request that those be pinned. All CPUs request
-paravirtualized pinning of the same bits which are already pinned
-natively.
+Effectively this (I'll chop it up into the correct patches):
 
-Guests using the kexec system call currently do not support
-paravirtualized control register pinning. This is due to early boot
-code writing known good values to control registers, these values do
-not contain the protected bits. This is due to CPU feature
-identification being done at a later time, when the kernel properly
-checks if it can enable protections. As such, the pv_cr_pin command line
-option has been added which instructs the kernel to disable kexec in
-favor of enabling paravirtualized control register pinning. crashkernel
-is also disabled when the pv_cr_pin parameter is specified due to its
-reliance on kexec.
-
-When we fix kexec, we will still need a way for a kernel with support to
-know if the kernel it is attempting to load has support. If a kernel
-with this enabled attempts to kexec a kernel where this is not
-supported, it would trigger a fault almost immediately.
-
-Liran suggested adding a section to the built image acting as a flag to
-signify support for being kexec'd by a kernel with pinning enabled.
-Should that approach be implemented, it is likely that the command line
-flag (pv_cr_pin) would still be desired for some deprecation period. We
-wouldn't want the default behavior to change from being able to kexec
-older kernels to not being able to, as this might break some users
-workflows.
-
-Signed-off-by: John Andersen <john.s.andersen@intel.com>
----
- .../admin-guide/kernel-parameters.txt         | 11 ++++++
- arch/x86/Kconfig                              | 10 +++++
- arch/x86/include/asm/kvm_para.h               | 28 +++++++++++++
- arch/x86/kernel/cpu/common.c                  |  5 +++
- arch/x86/kernel/kvm.c                         | 39 +++++++++++++++++++
- arch/x86/kernel/setup.c                       |  8 ++++
- 6 files changed, 101 insertions(+)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 89386f6f3ab6..54fb2b5ab8fc 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3926,6 +3926,17 @@
- 			[KNL] Number of legacy pty's. Overwrites compiled-in
- 			default number.
- 
-+	pv_cr_pin	[SECURITY,X86]
-+			Enable paravirtualized control register pinning. When
-+			running paravirutalized under KVM, request that KVM not
-+			allow the guest to disable kernel protection features
-+			set in CPU control registers. Specifying this option
-+			will disable kexec (and crashkernel). If kexec support
-+			has not been compiled into the kernel and host KVM
-+			supports paravirtualized control register pinning, it
-+			will be active by default without the need to specify
-+			this parameter.
-+
- 	quiet		[KNL] Disable most log messages
- 
- 	r128=		[HW,DRM]
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 67f6a40b5e93..bc0b27483001 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -800,6 +800,7 @@ config KVM_GUEST
- 	bool "KVM Guest support (including kvmclock)"
- 	depends on PARAVIRT
- 	select PARAVIRT_CLOCK
-+	select PARAVIRT_CR_PIN
- 	select ARCH_CPUIDLE_HALTPOLL
- 	default y
- 	---help---
-@@ -835,6 +836,15 @@ config PARAVIRT_TIME_ACCOUNTING
- config PARAVIRT_CLOCK
- 	bool
- 
-+config PARAVIRT_CR_PIN
-+       bool "Paravirtual bit pinning for CR0 and CR4"
-+       depends on KVM_GUEST
-+       help
-+         Select this option to have the virtualised guest request that the
-+         hypervisor disallow it from disabling protections set in control
-+         registers. The hypervisor will prevent exploits from disabling
-+         features such as SMEP, SMAP, UMIP, and WP.
-+
- config JAILHOUSE_GUEST
- 	bool "Jailhouse non-root cell support"
- 	depends on X86_64 && PCI
-diff --git a/arch/x86/include/asm/kvm_para.h b/arch/x86/include/asm/kvm_para.h
-index 57fd1966c4ea..f021531e98dc 100644
---- a/arch/x86/include/asm/kvm_para.h
-+++ b/arch/x86/include/asm/kvm_para.h
-@@ -112,6 +112,23 @@ static inline void kvm_spinlock_init(void)
- }
- #endif /* CONFIG_PARAVIRT_SPINLOCKS */
- 
-+#ifdef CONFIG_PARAVIRT_CR_PIN
-+void __init kvm_paravirt_cr_pinning_init(void);
-+void kvm_setup_paravirt_cr_pinning(unsigned long cr0_pinned_bits,
-+				   unsigned long cr4_pinned_bits);
-+#else
-+static inline void kvm_paravirt_cr_pinning_init(void)
-+{
-+	return;
-+}
-+
-+static inline void kvm_setup_paravirt_cr_pinning(unsigned long cr0_pinned_bits,
-+						 unsigned long cr4_pinned_bits)
-+{
-+	return;
-+}
-+#endif /* CONFIG_PARAVIRT_CR_PIN */
-+
- #else /* CONFIG_KVM_GUEST */
- #define kvm_async_pf_task_wait_schedule(T) do {} while(0)
- #define kvm_async_pf_task_wake(T) do {} while(0)
-@@ -145,6 +162,17 @@ static inline bool kvm_handle_async_pf(struct pt_regs *regs, u32 token)
+diff --git a/fs/file.c b/fs/file.c
+index b583e7c60571..3b80324a31cc 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -939,18 +939,16 @@ int replace_fd(unsigned fd, struct file *file, unsigned flags)
+  *
+  * @fd: fd to install into (if negative, a new fd will be allocated)
+  * @file: struct file that was received from another process
+- * @ufd_required: true to use @ufd for writing fd number to userspace
+  * @ufd: __user pointer to write new fd number to
+  * @o_flags: the O_* flags to apply to the new fd entry
+  *
+  * Installs a received file into the file descriptor table, with appropriate
+  * checks and count updates. Optionally writes the fd number to userspace, if
+- * @ufd_required is true (@ufd cannot just be tested for NULL because NULL may
+- * actually get passed into SCM_RIGHTS).
++ * @ufd is non-NULL.
+  *
+  * Returns newly install fd or -ve on error.
+  */
+-int __fd_install_received(int fd, struct file *file, bool ufd_required,
++int __fd_install_received(int fd, struct file *file,
+ 			  int __user *ufd, unsigned int o_flags)
  {
- 	return false;
- }
-+
-+static inline void kvm_paravirt_cr_pinning_init(void)
-+{
-+	return;
-+}
-+
-+static inline void kvm_setup_paravirt_cr_pinning(unsigned long cr0_pinned_bits,
-+						 unsigned long cr4_pinned_bits)
-+{
-+	return;
-+}
- #endif
- 
- #endif /* _ASM_X86_KVM_PARA_H */
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 921e67086a00..ee17223b1fa8 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -21,6 +21,7 @@
- #include <linux/smp.h>
- #include <linux/io.h>
- #include <linux/syscore_ops.h>
-+#include <linux/kvm_para.h>
- 
- #include <asm/stackprotector.h>
- #include <asm/perf_event.h>
-@@ -416,6 +417,8 @@ static void __init setup_cr_pinning(void)
- 	mask = (X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP);
- 	cr4_pinned_bits = this_cpu_read(cpu_tlbstate.cr4) & mask;
- 	static_key_enable(&cr_pinning.key);
-+
-+	kvm_setup_paravirt_cr_pinning(X86_CR0_WP, cr4_pinned_bits);
- }
- 
- /*
-@@ -1551,6 +1554,8 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
- 	mtrr_ap_init();
- 	validate_apic_and_package_id(c);
- 	x86_spec_ctrl_setup_ap();
-+
-+	kvm_setup_paravirt_cr_pinning(X86_CR0_WP, cr4_pinned_bits);
- }
- 
- static __init int setup_noclflush(char *arg)
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index 7e6403a8d861..def913b86a99 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -23,6 +23,8 @@
- #include <linux/kprobes.h>
- #include <linux/nmi.h>
- #include <linux/swait.h>
-+#include <linux/init.h>
-+#include <linux/kexec.h>
- #include <asm/timer.h>
- #include <asm/cpu.h>
- #include <asm/traps.h>
-@@ -33,6 +35,7 @@
- #include <asm/hypervisor.h>
- #include <asm/tlb.h>
- #include <asm/cpuidle_haltpoll.h>
-+#include <asm/cmdline.h>
- 
- DEFINE_STATIC_KEY_FALSE(kvm_async_pf_enabled);
- 
-@@ -723,6 +726,7 @@ static void __init kvm_apic_init(void)
- static void __init kvm_init_platform(void)
- {
- 	kvmclock_init();
-+	kvm_paravirt_cr_pinning_init();
- 	x86_platform.apic_post_init = kvm_apic_init;
- }
- 
-@@ -877,6 +881,41 @@ void __init kvm_spinlock_init(void)
- 
- #endif	/* CONFIG_PARAVIRT_SPINLOCKS */
- 
-+#ifdef CONFIG_PARAVIRT_CR_PIN
-+static int kvm_paravirt_cr_pinning_enabled __ro_after_init;
-+
-+void __init kvm_paravirt_cr_pinning_init(void)
-+{
-+#ifdef CONFIG_KEXEC_CORE
-+	if (!cmdline_find_option_bool(boot_command_line, "pv_cr_pin"))
-+		return;
-+
-+	/* Paravirtualized CR pinning is currently incompatible with kexec */
-+	kexec_load_disabled = 1;
-+#endif
-+
-+	kvm_paravirt_cr_pinning_enabled = 1;
-+}
-+
-+void kvm_setup_paravirt_cr_pinning(unsigned long cr0_pinned_bits,
-+				   unsigned long cr4_pinned_bits)
-+{
-+	u64 mask;
-+
-+	if (!kvm_paravirt_cr_pinning_enabled)
-+		return;
-+
-+	if (!kvm_para_has_feature(KVM_FEATURE_CR_PIN))
-+		return;
-+
-+	rdmsrl(MSR_KVM_CR0_PIN_ALLOWED, mask);
-+	wrmsrl(MSR_KVM_CR0_PINNED_HIGH, cr0_pinned_bits & mask);
-+
-+	rdmsrl(MSR_KVM_CR4_PIN_ALLOWED, mask);
-+	wrmsrl(MSR_KVM_CR4_PINNED_HIGH, cr4_pinned_bits & mask);
-+}
-+#endif
-+
- #ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
- 
- static void kvm_disable_host_haltpoll(void *i)
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index d9c678b37a9b..ed3bcc85d40d 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -27,6 +27,9 @@
- #include <asm/apic.h>
- #include <asm/bios_ebda.h>
- #include <asm/bugs.h>
-+#include <asm/kasan.h>
-+#include <asm/cmdline.h>
-+
- #include <asm/cpu.h>
- #include <asm/efi.h>
- #include <asm/gart.h>
-@@ -502,6 +505,11 @@ static void __init reserve_crashkernel(void)
- 		return;
+ 	struct socket *sock;
+@@ -967,7 +965,7 @@ int __fd_install_received(int fd, struct file *file, bool ufd_required,
+ 			return new_fd;
  	}
  
-+	if (cmdline_find_option_bool(boot_command_line, "pv_cr_pin")) {
-+		pr_info("Ignoring crashkernel since pv_cr_pin present in cmdline\n");
-+		return;
-+	}
-+
- 	/* 0 means: find the address automatically */
- 	if (!crash_base) {
- 		/*
--- 
-2.21.0
+-	if (ufd_required) {
++	if (ufd) {
+ 		error = put_user(new_fd, ufd);
+ 		if (error) {
+ 			put_unused_fd(new_fd);
+diff --git a/include/linux/file.h b/include/linux/file.h
+index f1d16e24a12e..2ade0d90bc5e 100644
+--- a/include/linux/file.h
++++ b/include/linux/file.h
+@@ -91,20 +91,22 @@ extern void put_unused_fd(unsigned int fd);
+ 
+ extern void fd_install(unsigned int fd, struct file *file);
+ 
+-extern int __fd_install_received(int fd, struct file *file, bool ufd_required,
++extern int __fd_install_received(int fd, struct file *file,
+ 				 int __user *ufd, unsigned int o_flags);
+ static inline int fd_install_received_user(struct file *file, int __user *ufd,
+ 					   unsigned int o_flags)
+ {
+-	return __fd_install_received(-1, file, true, ufd, o_flags);
++	if (ufd == NULL)
++		return -EFAULT;
++	return __fd_install_received(-1, file, ufd, o_flags);
+ }
+ static inline int fd_install_received(struct file *file, unsigned int o_flags)
+ {
+-	return __fd_install_received(-1, file, false, NULL, o_flags);
++	return __fd_install_received(-1, file, NULL, o_flags);
+ }
+ static inline int fd_replace_received(int fd, struct file *file, unsigned int o_flags)
+ {
+-	return __fd_install_received(fd, file, false, NULL, o_flags);
++	return __fd_install_received(fd, file, NULL, o_flags);
+ }
+ 
+ extern void flush_delayed_fput(void);
 
+-- 
+Kees Cook
