@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5A41FFC7F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 22:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626451FFC8A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 22:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729300AbgFRU36 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jun 2020 16:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        id S1729866AbgFRUbh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jun 2020 16:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726193AbgFRU35 (ORCPT
+        with ESMTP id S1727793AbgFRUbf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jun 2020 16:29:57 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A118AC06174E
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 13:29:57 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id h22so3236387pjf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 13:29:57 -0700 (PDT)
+        Thu, 18 Jun 2020 16:31:35 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D66EC0613EE
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 13:31:35 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 10so3328008pfx.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 13:31:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5/hCpa4EUzmgzyQWCDiDnoXra6cXP6DdcXvsMo077Gs=;
-        b=RDbK89/DJFlPYBLi55AUzHik7hIPiAtrhNB3Qa2pdC8sq3oAKuRj+VhPo1gjJBe1GN
-         pIusZmQqosz28RAPNaShZUmvRSvTZ4EzkJRinInfNnyR2OhGWhAIW7UagQLSbf8lTAKN
-         KmPwknx0k7749KSqeRDXxoQZoh9ar4v/7B03lx02PuZFdeTdROniKhr+wLSEjik/enwI
-         ihdjQVuWtYdfF+yQTXSerlGuocHTzvCp4gXjS8YmZne6mTxZIOWtwUp4HhH76bM5g8pQ
-         /zR0EgeK5AgsprFpSFT4Wne7/sUVbgYXMvlO//r2X8YcgZr2pMj/0qoxF7dgOlNjLPZm
-         b+xg==
+        bh=2vYguTxknGE8Dx16795P40n1hyMI+4rqo7SoKdZ0n4M=;
+        b=jUQk5nqzrPWoyZry6OFj3XXe2iWiykd0oEPPhNsYguTw0jHnq0ttSeXC05Jbcj+aKH
+         i2w49bRIQ5UXe4x22BDcgWgjawQPc1s94rGXML4EP3kzY94O7KzGbJmSf8A849v/UXa2
+         oRf+0BFrbHWIBtEoBJdAikbWPgiYzu90FKcXuNY+ZRcgFcx+Wm8Nv9EGxMtm1b0LKXn3
+         G5kB8nhaWvIOWj9+7918MeRleRN0sfuG6FyMC3ZIONGqNxWyBXVUr67HqJ+qoafWkLB7
+         hCFfMmFjlUt/CmROnI8YhwVwYsILkkIJmZo5/IDHjO4Rsp9jrOOJozHQ13XkS+gRKeeM
+         4BAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5/hCpa4EUzmgzyQWCDiDnoXra6cXP6DdcXvsMo077Gs=;
-        b=nIORjlotmwuiv2+eED1BYJlPGBwYviWOz4Q8Fm9w3K6x0FxJq0Gc60fC5iUwDRAmWg
-         yw/9GntFnKEsrTOUhivhEcy3XNuTjRGsu9XhdS1LTwcCH1OetM1dTZ6fJIIxC0s3HRJv
-         U//G/FwZwgBXR8WeILCax3OVYhEFbwp+kGSxt91vHu6nmiiAQQ2lPAsUu6xilCfBTV7d
-         yIC6Z0DQpUMCNcIcOGO6J/vphMkpzR37LT7pUaI7AYKMAqqsPDwJgIub6049qmgE8xTm
-         R1Qmm33XNgcP63EAT7fjRnWzMGJyg1rJOdntkX1Kg7VIPsiH1ThZ9s2zMW/4KwGQaqG9
-         as5g==
-X-Gm-Message-State: AOAM5322sSzJJMsfALmbobjD9iaeMn/V2rciBMxOIAox+phh82XVJchl
-        mug8k89WsI4mWk7IpxYkVL+Fdhyt/O6nV5wDQXtj0g==
-X-Google-Smtp-Source: ABdhPJzxU3pY06CWSm4LO7FME2n4fLBB6pVcJXHzNqN2LnUXllGbawGj0C6+Ydhb05A/tvBLq04fczMZ38da+qd63co=
-X-Received: by 2002:a17:90a:df82:: with SMTP id p2mr74335pjv.217.1592512197024;
- Thu, 18 Jun 2020 13:29:57 -0700 (PDT)
+        bh=2vYguTxknGE8Dx16795P40n1hyMI+4rqo7SoKdZ0n4M=;
+        b=ACnyowP+d7inuBDbxssuWvRHtzuIovPTdouoTIX6eh6WdssTKnsUbRM77PIaohGFCk
+         98EP0/8RNfLLWzrdWOykYWuUs2uAoi97tOo+5aY3ajO3IHaqQAvyz260fyRLvBZfQWsG
+         n4zUtrr3+8z2OTVOCRCB6iHFLQJe2cXpKQlWzDrx6W1Y968A/GLzjsy21Z1tRss7FkLA
+         O1Nu//Q+G4D0K0ONF+bCdC+szv3iggoOD6ayciNoi3/eUy1TapmMF+B5yd5SvWaMLKi8
+         HTLJtDOkAvEraGL1eyzKl+Z4xhQzAkcRl/xA7QscSsVcsmgiGtkOT2YOhV7F2G0u8vnh
+         lK4w==
+X-Gm-Message-State: AOAM533SRAJh0m3ITZCxC0fswvneIE3QqWmJATOzQG0Sbhq+XM2DgvWB
+        o99xMOK/Jktz8sRAGYFIwXCvY7OxzT5dyjY9Re4t+g==
+X-Google-Smtp-Source: ABdhPJyg7+/EsMv/uILhnCx33cvfvyj/A5rdmlcYEhM69bT4X7pfCnqfldKiOJpntTlq+2IKO59hml9kLz5hSl5KpGY=
+X-Received: by 2002:aa7:868f:: with SMTP id d15mr5402182pfo.166.1592512294729;
+ Thu, 18 Jun 2020 13:31:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200618035736.245566-1-vitor@massaru.org>
-In-Reply-To: <20200618035736.245566-1-vitor@massaru.org>
+References: <20200618123912.64762-1-vitor@massaru.org>
+In-Reply-To: <20200618123912.64762-1-vitor@massaru.org>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 18 Jun 2020 13:29:46 -0700
-Message-ID: <CAFd5g45AB8K-p78GRmauRPbkXLU572D2tuMTc0pumL+EgDA52Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix KconfigParseError by ignoring CC_VERSION_TEXT
+Date:   Thu, 18 Jun 2020 13:31:23 -0700
+Message-ID: <CAFd5g47tWA=yqa2zN8f6d=dKDhutU_Dr3JLjAdu8+wRFq9iOyg@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: fix KconfigParseError handling CC_VERSION_TEXT
 To:     Vitor Massaru Iha <vitor@massaru.org>
 Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -64,12 +64,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 8:57 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
+On Thu, Jun 18, 2020 at 5:39 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
 >
 > Commit 8b59cd81dc5 ("kbuild: ensure full rebuild when the compiler
 > is updated") added the environment variable CC_VERSION_TEXT,
-> parse_from_string() doesn't expect a string and this causes the
-> failure below:
+> parse_from_string() doesn't expect a string in value field and this
+> causes the failure below:
 >
 > [iha@bbking linux]$ tools/testing/kunit/kunit.py run --timeout=60
 > [00:20:12] Configuring KUnit Kernel ...
