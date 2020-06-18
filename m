@@ -2,388 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 889881FE90E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 04:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2238A1FE9B1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 05:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387933AbgFRCw6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jun 2020 22:52:58 -0400
-Received: from mga11.intel.com ([192.55.52.93]:58718 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728161AbgFRCwz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 22:52:55 -0400
-IronPort-SDR: 2fSgot4c2J4cs+COgOphYUbw/PMNZGY1MW36xZRjCOBCGWM7rK4r6oColzDKcQDlJmmrK8iqPI
- obEQ0v2Bw3qg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 19:52:53 -0700
-IronPort-SDR: Gu66Sly+A4MSw6hpLfxeVq3rRbb7Pj7R6eY7wGmpGAaztCYgSI8+bXAZ/9FZCNasmJ3xVt0O0E
- 1Pj9KSGbellQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,524,1583222400"; 
-   d="scan'208";a="262777561"
-Received: from xpf-desktop.sh.intel.com ([10.239.13.107])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jun 2020 19:52:51 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai Svahn <kai.svahn@intel.com>
-Subject: [Linux] [PATCH] Kernel selftests: tpm2: upgrade tpm2 tests from python2 to python3
-Date:   Thu, 18 Jun 2020 11:02:45 +0800
-Message-Id: <20200618030245.7153-1-pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726948AbgFRD5m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jun 2020 23:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726918AbgFRD5l (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 23:57:41 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5A7C06174E
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2020 20:57:41 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id 205so4358684qkg.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2020 20:57:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kxq9wRrE0VcoWqdZaicI3/uHvnI8AYX6HIWvnm/8zQU=;
+        b=Z0X0AmgFWFKBZX0ES2R4eb0Zccw1evdsbhMfTQR8REFSgqGBre9aVWppzpZHKBD1T2
+         p2vk59LxddnUhMiGRtjZSxJwll0NNPe283ZTTiZ1HjLE0v2EsPbiDHrGWEFSNfFDJ96t
+         zG34duQCPI6NFTakIDfkNqOa2QNGLK0X8vQsPM8kuiDKllhrvTAg2SVTXN2KRnCL97op
+         citaOJ/yBH3DLNHEX3GdXrivfTYhkDqky8KacUjgsFIcnYZpN9F/4tlrHDcx96M38x/4
+         nihDusTfHIueFxSn7yrqTqe0sg3gFV8YWOtHdjVpA+iA0v9xFWXdi6O2GXGkFW5gc1YR
+         C0eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kxq9wRrE0VcoWqdZaicI3/uHvnI8AYX6HIWvnm/8zQU=;
+        b=UdMh6a3NbFAJUG2kwrVotD0hnXwoCHQTN6ljSOivBkvaQeiEznC8ufmxNoaDc3SPCo
+         kVCSIYLbaHzCh68LTGmvrSN6jp5eSlCvs7V0FCo1t1rc4okuIPkW4wIY7pKNsbIDNoWi
+         RQvYjuFrLOp5GwH2mKCfxeCB3s3siswkPZLKMDvQnbQvWz1I574D9qiyAhpvHJ9R/ppU
+         YqaJgjOW1042MFBHXuS5IProXzsoU1465ozQw6o55Qy8kPGl2wOLjGYD2hF/R778x07l
+         u0GGJRJxoPaOdLzfGq+PK/E/6qvSMtfpPGa0jQQUQ6MAs2fg8nAPuAkrPOLAyU2Dhdy7
+         ondA==
+X-Gm-Message-State: AOAM531NzpK0QuozUBxzmfZXDoX1BMrXiYAGyH+ebRwqzFfkqoQhUMP6
+        dNk8IMfz3JIFZdSWB6pLxDkSRw==
+X-Google-Smtp-Source: ABdhPJx7UOP/sLgtGoIwIcclUrfK9C91LRQm5rNLMKQL+9lN8jMkDMH6MlF3cRaZ2mvb6P4/pXHg4A==
+X-Received: by 2002:a37:a386:: with SMTP id m128mr2023002qke.224.1592452660335;
+        Wed, 17 Jun 2020 20:57:40 -0700 (PDT)
+Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
+        by smtp.gmail.com with ESMTPSA id a1sm1846168qkn.87.2020.06.17.20.57.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 20:57:39 -0700 (PDT)
+From:   Vitor Massaru Iha <vitor@massaru.org>
+To:     kunit-dev@googlegroups.com
+Cc:     skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, brendanhiggins@google.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] kunit: fix KconfigParseError by ignoring CC_VERSION_TEXT
+Date:   Thu, 18 Jun 2020 00:57:36 -0300
+Message-Id: <20200618035736.245566-1-vitor@massaru.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some Linux OS will never support python2 anymore, so upgrade tpm2 selftests
-to python3.
+Commit 8b59cd81dc5 ("kbuild: ensure full rebuild when the compiler
+is updated") added the environment variable CC_VERSION_TEXT,
+parse_from_string() doesn't expect a string and this causes the
+failure below:
 
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+[iha@bbking linux]$ tools/testing/kunit/kunit.py run --timeout=60
+[00:20:12] Configuring KUnit Kernel ...
+Generating .config ...
+Traceback (most recent call last):
+  File "tools/testing/kunit/kunit.py", line 347, in <module>
+    main(sys.argv[1:])
+  File "tools/testing/kunit/kunit.py", line 257, in main
+    result = run_tests(linux, request)
+  File "tools/testing/kunit/kunit.py", line 134, in run_tests
+    config_result = config_tests(linux, config_request)
+  File "tools/testing/kunit/kunit.py", line 64, in config_tests
+    success = linux.build_reconfig(request.build_dir, request.make_options)
+  File "/home/iha/lkmp/linux/tools/testing/kunit/kunit_kernel.py", line 161, in build_reconfig
+    return self.build_config(build_dir, make_options)
+  File "/home/iha/lkmp/linux/tools/testing/kunit/kunit_kernel.py", line 145, in build_config
+    return self.validate_config(build_dir)
+  File "/home/iha/lkmp/linux/tools/testing/kunit/kunit_kernel.py", line 124, in validate_config
+    validated_kconfig.read_from_file(kconfig_path)
+  File "/home/iha/lkmp/linux/tools/testing/kunit/kunit_config.py", line 89, in read_from_file
+    self.parse_from_string(f.read())
+  File "/home/iha/lkmp/linux/tools/testing/kunit/kunit_config.py", line 85, in parse_from_string
+    raise KconfigParseError('Failed to parse: ' + line)
+kunit_config.KconfigParseError: Failed to parse: CONFIG_CC_VERSION_TEXT="gcc (GCC) 10.1.1 20200507 (Red Hat 10.1.1-1)"
+
+Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
 ---
- tools/testing/selftests/tpm2/test_smoke.sh |  4 +-
- tools/testing/selftests/tpm2/test_space.sh |  2 +-
- tools/testing/selftests/tpm2/tpm2.py       | 68 ++++++++++++++--------
- tools/testing/selftests/tpm2/tpm2_tests.py | 24 +++++---
- 4 files changed, 61 insertions(+), 37 deletions(-)
+ tools/testing/kunit/kunit_config.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 663062701d5a..d05467f6d258 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -6,8 +6,8 @@ ksft_skip=4
+diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+index e75063d603b5..3033520597b6 100644
+--- a/tools/testing/kunit/kunit_config.py
++++ b/tools/testing/kunit/kunit_config.py
+@@ -9,6 +9,7 @@
+ import collections
+ import re
  
- [ -f /dev/tpm0 ] || exit $ksft_skip
++CONFIG_IGNORE_CC_VERSION_TEXT = 'CONFIG_CC_VERSION_TEXT'
+ CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+ CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+)$'
  
--python -m unittest -v tpm2_tests.SmokeTest
--python -m unittest -v tpm2_tests.AsyncTest
-+python3 -m unittest -v tpm2_tests.SmokeTest
-+python3 -m unittest -v tpm2_tests.AsyncTest
+@@ -79,7 +80,7 @@ class Kconfig(object):
+ 				self.add_entry(entry)
+ 				continue
  
- CLEAR_CMD=$(which tpm2_clear)
- if [ -n $CLEAR_CMD ]; then
-diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-index 36c9d030a1c6..151c64e8ee9f 100755
---- a/tools/testing/selftests/tpm2/test_space.sh
-+++ b/tools/testing/selftests/tpm2/test_space.sh
-@@ -6,4 +6,4 @@ ksft_skip=4
- 
- [ -f /dev/tpmrm0 ] || exit $ksft_skip
- 
--python -m unittest -v tpm2_tests.SpaceTest
-+python3 -m unittest -v tpm2_tests.SpaceTest
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index d0fcb66a88a6..b0ccc1499c53 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -247,14 +247,18 @@ class ProtocolError(Exception):
- class AuthCommand(object):
-     """TPMS_AUTH_COMMAND"""
- 
--    def __init__(self, session_handle=TPM2_RS_PW, nonce='', session_attributes=0,
--                 hmac=''):
-+    def __init__(self, session_handle=TPM2_RS_PW, nonce=''.encode(),
-+                 session_attributes=0, hmac=''.encode()):
-+        if not isinstance(nonce, bytes):
-+            nonce = nonce.encode()
-+        if not isinstance(hmac, bytes):
-+            hmac = hmac.encode()
-         self.session_handle = session_handle
-         self.nonce = nonce
-         self.session_attributes = session_attributes
-         self.hmac = hmac
- 
--    def __str__(self):
-+    def __bytes__(self):
-         fmt = '>I H%us B H%us' % (len(self.nonce), len(self.hmac))
-         return struct.pack(fmt, self.session_handle, len(self.nonce),
-                            self.nonce, self.session_attributes, len(self.hmac),
-@@ -268,11 +272,15 @@ class AuthCommand(object):
- class SensitiveCreate(object):
-     """TPMS_SENSITIVE_CREATE"""
- 
--    def __init__(self, user_auth='', data=''):
-+    def __init__(self, user_auth=''.encode(), data=''.encode()):
-+        if not isinstance(user_auth, bytes):
-+            user_auth = user_auth.encode()
-+        if not isinstance(data, bytes):
-+            data = data.encode()
-         self.user_auth = user_auth
-         self.data = data
- 
--    def __str__(self):
-+    def __bytes__(self):
-         fmt = '>H%us H%us' % (len(self.user_auth), len(self.data))
-         return struct.pack(fmt, len(self.user_auth), self.user_auth,
-                            len(self.data), self.data)
-@@ -296,8 +304,15 @@ class Public(object):
-         return '>HHIH%us%usH%us' % \
-             (len(self.auth_policy), len(self.parameters), len(self.unique))
- 
--    def __init__(self, object_type, name_alg, object_attributes, auth_policy='',
--                 parameters='', unique=''):
-+    def __init__(self, object_type, name_alg, object_attributes,
-+                 auth_policy=''.encode(), parameters=''.encode(),
-+                 unique=''.encode()):
-+        if not isinstance(auth_policy, bytes):
-+            auth_policy = auth_policy.encode()
-+        if not isinstance(parameters, bytes):
-+            parameters = parameters.encode()
-+        if not isinstance(unique, bytes):
-+            unique = unique.encode()
-         self.object_type = object_type
-         self.name_alg = name_alg
-         self.object_attributes = object_attributes
-@@ -305,7 +320,7 @@ class Public(object):
-         self.parameters = parameters
-         self.unique = unique
- 
--    def __str__(self):
-+    def __bytes__(self):
-         return struct.pack(self.__fmt(),
-                            self.object_type,
-                            self.name_alg,
-@@ -343,7 +358,7 @@ def get_algorithm(name):
- 
- def hex_dump(d):
-     d = [format(ord(x), '02x') for x in d]
--    d = [d[i: i + 16] for i in xrange(0, len(d), 16)]
-+    d = [d[i: i + 16] for i in range(0, len(d), 16)]
-     d = [' '.join(x) for x in d]
-     d = os.linesep.join(d)
- 
-@@ -401,7 +416,7 @@ class Client:
-         pcrsel_len = max((i >> 3) + 1, 3)
-         pcrsel = [0] * pcrsel_len
-         pcrsel[i >> 3] = 1 << (i & 7)
--        pcrsel = ''.join(map(chr, pcrsel))
-+        pcrsel = ''.join(map(chr, pcrsel)).encode()
- 
-         fmt = '>HII IHB%us' % (pcrsel_len)
-         cmd = struct.pack(fmt,
-@@ -430,6 +445,8 @@ class Client:
-         return rsp
- 
-     def extend_pcr(self, i, dig, bank_alg = TPM2_ALG_SHA1):
-+        if not isinstance(dig, bytes):
-+            dig = dig.encode()
-         ds = get_digest_size(bank_alg)
-         assert(ds == len(dig))
- 
-@@ -443,7 +460,7 @@ class Client:
-             TPM2_CC_PCR_EXTEND,
-             i,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             1, bank_alg, dig)
- 
-         self.send_cmd(cmd)
-@@ -457,7 +474,7 @@ class Client:
-                           TPM2_RH_NULL,
-                           TPM2_RH_NULL,
-                           16,
--                          '\0' * 16,
-+                          ('\0' * 16).encode(),
-                           0,
-                           session_type,
-                           TPM2_ALG_NULL,
-@@ -472,7 +489,7 @@ class Client:
- 
-         for i in pcrs:
-             pcr = self.read_pcr(i, bank_alg)
--            if pcr == None:
-+            if pcr is None:
-                 return None
-             x += pcr
- 
-@@ -489,7 +506,7 @@ class Client:
-         pcrsel = [0] * pcrsel_len
-         for i in pcrs:
-             pcrsel[i >> 3] |= 1 << (i & 7)
--        pcrsel = ''.join(map(chr, pcrsel))
-+        pcrsel = ''.join(map(chr, pcrsel)).encode()
- 
-         fmt = '>HII IH%usIHB3s' % ds
-         cmd = struct.pack(fmt,
-@@ -497,7 +514,8 @@ class Client:
-                           struct.calcsize(fmt),
-                           TPM2_CC_POLICY_PCR,
-                           handle,
--                          len(dig), str(dig),
-+                          len(dig),
-+                          bytes(dig),
-                           1,
-                           bank_alg,
-                           pcrsel_len, pcrsel)
-@@ -570,11 +588,11 @@ class Client:
-             TPM2_CC_CREATE_PRIMARY,
-             TPM2_RH_OWNER,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             len(sensitive),
--            str(sensitive),
-+            bytes(sensitive),
-             len(public),
--            str(public),
-+            bytes(public),
-             0, 0)
- 
-         return struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
-@@ -608,11 +626,11 @@ class Client:
-             TPM2_CC_CREATE,
-             parent_key,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             len(sensitive),
--            str(sensitive),
-+            bytes(sensitive),
-             len(public),
--            str(public),
-+            bytes(public),
-             0, 0)
- 
-         rsp = self.send_cmd(cmd)
-@@ -635,7 +653,7 @@ class Client:
-             TPM2_CC_LOAD,
-             parent_key,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             blob)
- 
-         data_handle = struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
-@@ -653,7 +671,7 @@ class Client:
-             TPM2_CC_UNSEAL,
-             data_handle,
-             len(auth_cmd),
--            str(auth_cmd))
-+            bytes(auth_cmd))
- 
-         try:
-             rsp = self.send_cmd(cmd)
-@@ -675,7 +693,7 @@ class Client:
-             TPM2_CC_DICTIONARY_ATTACK_LOCK_RESET,
-             TPM2_RH_LOCKOUT,
-             len(auth_cmd),
--            str(auth_cmd))
-+            bytes(auth_cmd))
- 
-         self.send_cmd(cmd)
- 
-@@ -693,7 +711,7 @@ class Client:
-         more_data, cap, cnt = struct.unpack('>BII', rsp[:9])
-         rsp = rsp[9:]
- 
--        for i in xrange(0, cnt):
-+        for i in range(0, cnt):
-             handle = struct.unpack('>I', rsp[:4])[0]
-             handles.append(handle)
-             rsp = rsp[4:]
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index 728be7c69b76..e134033e6f67 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -25,7 +25,9 @@ class SmokeTest(unittest.TestCase):
- 
-         blob = self.client.seal(self.root_key, data, auth, None)
-         result = self.client.unseal(self.root_key, blob, auth, None)
--        self.assertEqual(data, result)
-+        if not isinstance(result, bytes):
-+            result = result.encode()
-+        self.assertEqual(data.encode(), result)
- 
-     def test_seal_with_policy(self):
-         handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
-@@ -51,11 +53,13 @@ class SmokeTest(unittest.TestCase):
-             self.client.policy_password(handle)
- 
-             result = self.client.unseal(self.root_key, blob, auth, handle)
-+            if not isinstance(result, bytes):
-+                result = result.encode()
-         except:
-             self.client.flush_context(handle)
-             raise
- 
--        self.assertEqual(data, result)
-+        self.assertEqual(data.encode(), result)
- 
-     def test_unseal_with_wrong_auth(self):
-         data = 'X' * 64
-@@ -65,7 +69,7 @@ class SmokeTest(unittest.TestCase):
-         blob = self.client.seal(self.root_key, data, auth, None)
-         try:
-             result = self.client.unseal(self.root_key, blob, auth[:-1] + 'B', None)
--        except ProtocolError, e:
-+        except ProtocolError as e:
-             rc = e.rc
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_AUTH_FAIL)
-@@ -100,11 +104,13 @@ class SmokeTest(unittest.TestCase):
-             self.client.policy_password(handle)
- 
-             result = self.client.unseal(self.root_key, blob, auth, handle)
-+            if not isinstance(result, bytes):
-+                result = result.encode()
-         except:
-             self.client.flush_context(handle)
-             raise
- 
--        self.assertEqual(data, result)
-+        self.assertEqual(data.encode(), result)
- 
-         # Then, extend a PCR that is part of the policy and try to unseal.
-         # This should fail.
-@@ -119,7 +125,7 @@ class SmokeTest(unittest.TestCase):
-             self.client.policy_password(handle)
- 
-             result = self.client.unseal(self.root_key, blob, auth, handle)
--        except ProtocolError, e:
-+        except ProtocolError as e:
-             rc = e.rc
-             self.client.flush_context(handle)
-         except:
-@@ -136,7 +142,7 @@ class SmokeTest(unittest.TestCase):
-         rc = 0
-         try:
-             blob = self.client.seal(self.root_key, data, auth, None)
--        except ProtocolError, e:
-+        except ProtocolError as e:
-             rc = e.rc
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_SIZE)
-@@ -152,7 +158,7 @@ class SmokeTest(unittest.TestCase):
-                               0xDEADBEEF)
- 
-             self.client.send_cmd(cmd)
--        except IOError, e:
-+        except IOError as e:
-             rejected = True
-         except:
-             pass
-@@ -212,7 +218,7 @@ class SmokeTest(unittest.TestCase):
-             self.client.tpm.write(cmd)
-             rsp = self.client.tpm.read()
- 
--        except IOError, e:
-+        except IOError as e:
-             # read the response
-             rsp = self.client.tpm.read()
-             rejected = True
-@@ -283,7 +289,7 @@ class SpaceTest(unittest.TestCase):
-         rc = 0
-         try:
-             space1.send_cmd(cmd)
--        except ProtocolError, e:
-+        except ProtocolError as e:
-             rc = e.rc
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_COMMAND_CODE |
+-			if line[0] == '#':
++			if line[0] == '#' or CONFIG_IGNORE_CC_VERSION_TEXT in line:
+ 				continue
+ 			else:
+ 				raise KconfigParseError('Failed to parse: ' + line)
+
+base-commit: 7bf200b3a4ac10b1b0376c70b8c66ed39eae7cdd
 -- 
-2.17.1
+2.26.2
 
