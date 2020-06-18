@@ -2,106 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EEE1FF829
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 17:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8395C1FFACF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 20:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728512AbgFRPw6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jun 2020 11:52:58 -0400
-Received: from mga14.intel.com ([192.55.52.115]:58067 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727911AbgFRPw6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jun 2020 11:52:58 -0400
-IronPort-SDR: zz43w2BAAasn4uYs6kw3LtkM3X323TZTDNMMY35jUR2bO0DDhj5n4j/NuluZmxsdce64e6hqCN
- ReScRyT47BAg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="141701484"
-X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
-   d="scan'208";a="141701484"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 08:52:56 -0700
-IronPort-SDR: Rz7wj+h3c6y5PnE7mt0HLs+WCimZP8shyO9jjYR92TH5XPP+l4Rs1D7su9MB1R/gF705XCWoaj
- /weqIcFrTVQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,251,1589266800"; 
-   d="scan'208";a="277665815"
-Received: from otcsectest.jf.intel.com (HELO 258ff54ff3c0) ([10.54.30.81])
-  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2020 08:52:56 -0700
-Date:   Thu, 18 Jun 2020 15:49:32 +0000
-From:   "Andersen, John" <john.s.andersen@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     corbet@lwn.net, pbonzini@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        shuah@kernel.org, sean.j.christopherson@intel.com,
-        liran.alon@oracle.com, drjones@redhat.com,
-        rick.p.edgecombe@intel.com, kristen@linux.intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, mchehab+huawei@kernel.org,
-        gregkh@linuxfoundation.org, paulmck@kernel.org,
-        pawan.kumar.gupta@linux.intel.com, jgross@suse.com,
-        mike.kravetz@oracle.com, oneukum@suse.com, luto@kernel.org,
-        peterz@infradead.org, fenghua.yu@intel.com,
-        reinette.chatre@intel.com, vineela.tummalapalli@intel.com,
-        dave.hansen@linux.intel.com, arjan@linux.intel.com,
-        caoj.fnst@cn.fujitsu.com, bhe@redhat.com, nivedita@alum.mit.edu,
-        keescook@chromium.org, dan.j.williams@intel.com,
-        eric.auger@redhat.com, aaronlewis@google.com, peterx@redhat.com,
-        makarandsonare@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH 4/4] X86: Use KVM CR pin MSRs
-Message-ID: <20200618154931.GD23@258ff54ff3c0>
-References: <20200617190757.27081-1-john.s.andersen@intel.com>
- <20200617190757.27081-5-john.s.andersen@intel.com>
- <b5d791f9-1708-9715-e03d-4618d1b27d05@intel.com>
- <20200618152649.GC23@258ff54ff3c0>
- <5706af0c-e426-91bc-4c38-d1203cf1b3b7@intel.com>
+        id S1729110AbgFRSK5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jun 2020 14:10:57 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45640 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726882AbgFRSK4 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 18 Jun 2020 14:10:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592503854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LHGyp6CYIKGOqwxes/zzCO/ZvJIZQruxra7ZLeYTBQU=;
+        b=KAAOQfDVQYMSGLM+3xbF7wPiEY0xX+gCRY6tci3hy3FQtl1L4FhzSVgx03/t+W4gF/IlQ9
+        aIfJYfgq/XzdAsCYGmortwCIxnVTTM7Klv31zSFUNRPwf4OY6lCWOGvCzfuh5g7HkgGNY2
+        i6bPrdY3VU5H+TWQ+Igv2kGLmAKX/aY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-274-u01PmpGkOlmYIPKnLHNA5A-1; Thu, 18 Jun 2020 14:10:53 -0400
+X-MC-Unique: u01PmpGkOlmYIPKnLHNA5A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 04348107BEF5;
+        Thu, 18 Jun 2020 18:10:52 +0000 (UTC)
+Received: from jlaw-desktop.redhat.com (ovpn-112-56.rdu2.redhat.com [10.10.112.56])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BE701E2261;
+        Thu, 18 Jun 2020 18:10:51 +0000 (UTC)
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, Yannick Cote <ycote@redhat.com>
+Subject: [PATCH v3 0/3] selftests/livepatch: small script cleanups
+Date:   Thu, 18 Jun 2020 14:10:37 -0400
+Message-Id: <20200618181040.21132-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5706af0c-e426-91bc-4c38-d1203cf1b3b7@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 08:38:06AM -0700, Dave Hansen wrote:
-> On 6/18/20 8:26 AM, Andersen, John wrote:
-> > On Thu, Jun 18, 2020 at 07:41:04AM -0700, Dave Hansen wrote:
-> >>> +config PARAVIRT_CR_PIN
-> >>> +       bool "Paravirtual bit pinning for CR0 and CR4"
-> >>> +       depends on KVM_GUEST
-> >>> +       help
-> >>> +         Select this option to have the virtualised guest request that the
-> >>> +         hypervisor disallow it from disabling protections set in control
-> >>> +         registers. The hypervisor will prevent exploits from disabling
-> >>> +         features such as SMEP, SMAP, UMIP, and WP.
-> >>
-> >> I'm confused.  Does this add support for ""Paravirtual bit pinning", or
-> >> actually tell the guest to request pinning by default?
-> >>
-> >> It says "Select this option to have the virtualised guest request...",
-> >> which makes it sound like it affects the default rather than the
-> >> availability of the option.
-> > 
-> > How about this
-> > 
-> > Select this option to request protection of SMEP, SMAP, UMIP, and WP
-> > control register bits when running paravirtualized under KVM. Protection will
-> > be active provided the feature is available host side and kexec is disabled via
-> > kconfig or the command line for the guest requesting protection.
-> 
-> It still isn't very clear to me.
-> 
-> Let's pull the config option out of this patch.  Enable the feature by
-> default and do the command-line processing in this patch.
-> 
-> If you still think a Kconfig option is helpful, add it in a separate
-> patch calling out the deficiencies with the boot-time options.
+Hi Petr,
 
-That's right we're going to pull it out anyway and just disable if the
-disable_pv_cr_pin command line option is set. Oops. That solves that.
+Given the realization about kernel log timestamps and partial log
+comparison with v2, I respun a final version dropping the dmesg --notime
+patch, fixed any rebase conflicts, and added a comment per your
+suggestion.
 
-Thank you very much for your review Dave
+I copied all the ack and review tags from v2 since the patchset is
+unchanged otherwise.  Hopefully this v3 minimizes any maintainer
+fiddling on your end.
+
+I did iterate through the patches and verified that I could run each
+multiple times without the dmesg comparison getting confused.
+
+Thanks,
+
+-- Joe
+
+
+v3:
+
+- when modifying the dmesg comparision to select only new messages in
+  patch 1, add a comment explaining the importance of timestamps to
+  accurately pick from where the log left off at start_test [pmladek]
+
+- since Petr determined that the timestamps were in fact very important
+  to maintain for the dmesg / diff comparision, drop the patch which
+  added --notime to dmesg invocations [pmladek]
+
+- update the comparision regex filter for 'livepatch:' now that it's
+  going to be prefixed by '[timestamp] ' and no longer at the start of
+  the buffer line.  This part of the log comparison should now be
+  unmodified by the patchset.
+
+Joe Lawrence (3):
+  selftests/livepatch: Don't clear dmesg when running tests
+  selftests/livepatch: refine dmesg 'taints' in dmesg comparison
+  selftests/livepatch: add test delimiter to dmesg
+
+ tools/testing/selftests/livepatch/README      | 16 +++---
+ .../testing/selftests/livepatch/functions.sh  | 37 ++++++++++++-
+ .../selftests/livepatch/test-callbacks.sh     | 55 ++++---------------
+ .../selftests/livepatch/test-ftrace.sh        |  4 +-
+ .../selftests/livepatch/test-livepatch.sh     | 12 +---
+ .../selftests/livepatch/test-shadow-vars.sh   |  4 +-
+ .../testing/selftests/livepatch/test-state.sh | 21 +++----
+ 7 files changed, 68 insertions(+), 81 deletions(-)
+
+-- 
+2.21.3
+
