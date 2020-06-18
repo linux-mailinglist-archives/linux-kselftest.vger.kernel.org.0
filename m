@@ -2,271 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C20D1FF435
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 16:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916151FF43D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 16:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730532AbgFROIc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jun 2020 10:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730509AbgFROIX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jun 2020 10:08:23 -0400
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F04C06174E
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 07:08:19 -0700 (PDT)
-Received: by mail-qv1-xf44.google.com with SMTP id e2so2794821qvw.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 07:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JXLha1RTWIXF0lXAQyqwuY9PTZXuY44UcKST+Lha3uU=;
-        b=jZD6g78RTmAlMpmUep1/NUJSNYHP2pvki450PEIkzl1gcw8BRYivlYnueRKbdtrbkf
-         YCGy/hMZLtFiYCu3SE2ZNh4JgQ6c4IWZvLkni3dnYJ8FNXTdwIpojX3UMN5Cymmw83Rr
-         zGe1b4uEwgUOp5OT3dcDCnZnDIwZNEckpzsIG07LYQQj85V6bInFHWYa2/rTR0YTqy5m
-         4lNj0B98GglCyptnw7I8/VmqgNIqAkW6+XoyRgK3tS1qJ69sniBD+EvdUPtWbWDBzqKw
-         bNJqup1MXc7weoLPQ5Fe6OSeGGzctvCFXmA0CNwNejYwJ3CiwYLHsGRw96bJ2aZlIyUh
-         kC7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JXLha1RTWIXF0lXAQyqwuY9PTZXuY44UcKST+Lha3uU=;
-        b=CKBsMcv2XoyLx5Fpbm7h3EeJp4gPZbiAZA8C46gVCy8CTXWp0VzkKIUIKOngG3y4Rg
-         /6Khy7cL0X+bx+YB/tljGdFPHPEzv7kzJofh1AEnXXKc0wEkSSIjkmoHD9vq8SzbvDYy
-         q4XVixyiW9JY3KkhEeh7o6pfpLHZ+63tE6JJDTNztmhSoaJSe46TkcP8GbU/RlgOus3I
-         jPfpQmuUPOyiseWxqB7XKovSu20nw97AXzhIrHh/7VekvXrHVaLKFsgzCh65qHYDPoVB
-         YGSyG7ZG/EdH+ERBZLWppeESqaml5RSZj9UrwhyBKHnItZK6o1R5AltDYZVtob8SmRrW
-         DRBQ==
-X-Gm-Message-State: AOAM533itvIRhFR3l6w5UHM8szsI7c34UN2jQgesUpAEG+XiyoRDOaca
-        CM4qFlVkjzo5eWIzHTU+IS+YcQ==
-X-Google-Smtp-Source: ABdhPJwFjA1N4L0WlyH0BXXtioLH2Ruv/9nDhNrLkpccWCX1TF4LkSOvfdixWAAKSKLWoYtUHZba5g==
-X-Received: by 2002:a05:6214:11f0:: with SMTP id e16mr3780913qvu.37.1592489298846;
-        Thu, 18 Jun 2020 07:08:18 -0700 (PDT)
-Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id a1sm2929823qkn.87.2020.06.18.07.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 07:08:18 -0700 (PDT)
-From:   Vitor Massaru Iha <vitor@massaru.org>
-To:     kunit-dev@googlegroups.com
-Cc:     skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, brendanhiggins@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        keescook@chromium.org, linux@rasmusvillemoes.dk,
-        davidgow@google.com
-Subject: [RESEND, PATCH v2] lib: overflow-test: add KUnit test of check_*_overflow functions
-Date:   Thu, 18 Jun 2020 11:08:14 -0300
-Message-Id: <20200618140814.135948-1-vitor@massaru.org>
-X-Mailer: git-send-email 2.26.2
+        id S1730512AbgFROJ0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jun 2020 10:09:26 -0400
+Received: from mga09.intel.com ([134.134.136.24]:40597 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728707AbgFROJX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 18 Jun 2020 10:09:23 -0400
+IronPort-SDR: i6cPF39gFNA01SAd73wbk9u0aOC++47FXGLygCdaxfVYR8GJJqskWT5OTseoRYYxoohEYO3OJw
+ bEN5fpvo+cqg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9655"; a="144096349"
+X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
+   d="scan'208";a="144096349"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 07:09:22 -0700
+IronPort-SDR: xOK2I18398q2bmHJzuXqSreeiFdtuKhbyKrvQdbyZ1Vtbwufhq4RsqmJvxkzrdXG+X+63VfnyO
+ DYa2L07P7BKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
+   d="scan'208";a="277635259"
+Received: from ryanr2x-mobl1.amr.corp.intel.com (HELO [10.255.0.133]) ([10.255.0.133])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2020 07:09:15 -0700
+Subject: Re: [PATCH 1/4] X86: Update mmu_cr4_features during feature
+ identification
+To:     John Andersen <john.s.andersen@intel.com>, corbet@lwn.net,
+        pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com, shuah@kernel.org,
+        sean.j.christopherson@intel.com, liran.alon@oracle.com,
+        drjones@redhat.com, rick.p.edgecombe@intel.com,
+        kristen@linux.intel.com
+Cc:     vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, mchehab+huawei@kernel.org,
+        gregkh@linuxfoundation.org, paulmck@kernel.org,
+        pawan.kumar.gupta@linux.intel.com, jgross@suse.com,
+        mike.kravetz@oracle.com, oneukum@suse.com, luto@kernel.org,
+        peterz@infradead.org, fenghua.yu@intel.com,
+        reinette.chatre@intel.com, vineela.tummalapalli@intel.com,
+        dave.hansen@linux.intel.com, arjan@linux.intel.com,
+        caoj.fnst@cn.fujitsu.com, bhe@redhat.com, nivedita@alum.mit.edu,
+        keescook@chromium.org, dan.j.williams@intel.com,
+        eric.auger@redhat.com, aaronlewis@google.com, peterx@redhat.com,
+        makarandsonare@google.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+References: <20200617190757.27081-1-john.s.andersen@intel.com>
+ <20200617190757.27081-2-john.s.andersen@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <539ad252-599f-1be5-3bde-196829929af2@intel.com>
+Date:   Thu, 18 Jun 2020 07:09:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <20200617190757.27081-2-john.s.andersen@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds the conversion of the runtime tests of check_*_overflow functions,
-from `lib/test_overflow.c`to KUnit tests.
+Overall this looks pretty good.  For all the maintainers on cc, we try
+to do internal reviews of these before they're submitted.  This one got
+missed, sorry about that.
 
-The log similar to the one seen in dmesg running test_overflow.c can be
-seen in `test.log`.
+On 6/17/20 12:07 PM, John Andersen wrote:
+> In identify_cpu when setting up SMEP/SMAP/UMIP call
+> cr4_set_bits_and_update_boot instead of cr4_set_bits. This ensures that
+> mmu_cr4_features contains those bits, and does not disable those
+> protections when in hibernation asm.
 
-Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-Tested-by: David Gow <davidgow@google.com>
----
-v2:
-  * moved lib/test_overflow.c to lib/overflow-test.c; 
-    * back to original license;
-    * fixed style code;
-    * keeps __initconst and added _refdata on overflow_test_cases variable;
-    * keeps macros intact making asserts with the variable err;
-    * removed duplicate test_s8_overflow();
-  * fixed typos on commit message;
----
- lib/Kconfig.debug                        | 20 +++++++--
- lib/Makefile                             |  2 +-
- lib/{test_overflow.c => overflow-test.c} | 54 +++++++++---------------
- 3 files changed, 38 insertions(+), 38 deletions(-)
- rename lib/{test_overflow.c => overflow-test.c} (96%)
+When I'm writing comments, I try to use parenthesis for functions(),
+which leaves variable_names plain.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d74ac0fd6b2d..fb8a3955e969 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2000,9 +2000,6 @@ config TEST_UUID
- config TEST_XARRAY
- 	tristate "Test the XArray code at runtime"
- 
--config TEST_OVERFLOW
--	tristate "Test check_*_overflow() functions at runtime"
--
- config TEST_RHASHTABLE
- 	tristate "Perform selftest on resizable hash table"
- 	help
-@@ -2155,6 +2152,23 @@ config SYSCTL_KUNIT_TEST
- 
- 	  If unsure, say N.
- 
-+config OVERFLOW_KUNIT_TEST
-+	tristate "KUnit test for overflow" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the overflow KUnit tests.
-+
-+	  KUnit tests run during boot and output the results to the debug log
-+	  in TAP format (http://testanything.org/). Only useful for kernel devs
-+	  running KUnit test harness and are not for inclusion into a production
-+	  build.
-+
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config LIST_KUNIT_TEST
- 	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index b1c42c10073b..3b725c9f92d4 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -75,7 +75,6 @@ obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
- obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
- obj-$(CONFIG_TEST_LKM) += test_module.o
- obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
--obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
- obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
- obj-$(CONFIG_TEST_SORT) += test_sort.o
- obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
-@@ -318,3 +317,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- # KUnit tests
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-+obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow-test.o
-diff --git a/lib/test_overflow.c b/lib/overflow-test.c
-similarity index 96%
-rename from lib/test_overflow.c
-rename to lib/overflow-test.c
-index 7a4b6f6c5473..d40ef06b1ade 100644
---- a/lib/test_overflow.c
-+++ b/lib/overflow-test.c
-@@ -4,14 +4,11 @@
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <kunit/test.h>
- #include <linux/device.h>
- #include <linux/init.h>
--#include <linux/kernel.h>
- #include <linux/mm.h>
--#include <linux/module.h>
- #include <linux/overflow.h>
--#include <linux/slab.h>
--#include <linux/types.h>
- #include <linux/vmalloc.h>
- 
- #define DEFINE_TEST_ARRAY(t)			\
-@@ -270,7 +267,7 @@ DEFINE_TEST_FUNC(u64, "%llu");
- DEFINE_TEST_FUNC(s64, "%lld");
- #endif
- 
--static int __init test_overflow_calculation(void)
-+static void __init overflow_calculation_test(struct kunit *test)
- {
- 	int err = 0;
- 
-@@ -285,10 +282,10 @@ static int __init test_overflow_calculation(void)
- 	err |= test_s64_overflow();
- #endif
- 
--	return err;
-+	KUNIT_EXPECT_FALSE(test, err);
- }
- 
--static int __init test_overflow_shift(void)
-+static void __init overflow_shift_test(struct kunit *test)
- {
- 	int err = 0;
- 
-@@ -479,7 +476,7 @@ static int __init test_overflow_shift(void)
- 	err |= TEST_ONE_SHIFT(0, 31, s32, 0, false);
- 	err |= TEST_ONE_SHIFT(0, 63, s64, 0, false);
- 
--	return err;
-+	KUNIT_EXPECT_FALSE(test, err);
- }
- 
- /*
-@@ -555,7 +552,7 @@ DEFINE_TEST_ALLOC(kvzalloc_node, kvfree,     0, 1, 1);
- DEFINE_TEST_ALLOC(devm_kmalloc,  devm_kfree, 1, 1, 0);
- DEFINE_TEST_ALLOC(devm_kzalloc,  devm_kfree, 1, 1, 0);
- 
--static int __init test_overflow_allocation(void)
-+static void __init overflow_allocation_test(struct kunit *test)
- {
- 	const char device_name[] = "overflow-test";
- 	struct device *dev;
-@@ -563,10 +560,8 @@ static int __init test_overflow_allocation(void)
- 
- 	/* Create dummy device for devm_kmalloc()-family tests. */
- 	dev = root_device_register(device_name);
--	if (IS_ERR(dev)) {
--		pr_warn("Cannot register test device\n");
--		return 1;
--	}
-+	if (IS_ERR(dev))
-+		kunit_warn(test, "Cannot register test device\n");
- 
- 	err |= test_kmalloc(NULL);
- 	err |= test_kmalloc_node(NULL);
-@@ -585,30 +580,21 @@ static int __init test_overflow_allocation(void)
- 
- 	device_unregister(dev);
- 
--	return err;
-+	KUNIT_EXPECT_FALSE(test, err);
- }
- 
--static int __init test_module_init(void)
--{
--	int err = 0;
--
--	err |= test_overflow_calculation();
--	err |= test_overflow_shift();
--	err |= test_overflow_allocation();
--
--	if (err) {
--		pr_warn("FAIL!\n");
--		err = -EINVAL;
--	} else {
--		pr_info("all tests passed\n");
--	}
-+static struct kunit_case __refdata overflow_test_cases[] = {
-+	KUNIT_CASE(overflow_calculation_test),
-+	KUNIT_CASE(overflow_shift_test),
-+	KUNIT_CASE(overflow_allocation_test),
-+	{}
-+};
- 
--	return err;
--}
-+static struct kunit_suite overflow_test_suite = {
-+	.name = "overflow",
-+	.test_cases = overflow_test_cases,
-+};
- 
--static void __exit test_module_exit(void)
--{ }
-+kunit_test_suites(&overflow_test_suite);
- 
--module_init(test_module_init);
--module_exit(test_module_exit);
- MODULE_LICENSE("Dual MIT/GPL");
+I also try not to dive directly into the function names.  This
+description assumes that the reader knows the subtle difference between
+cr4_set_bits_and_update_boot() and of cr4_set_bits().  A sentence or two
+of background here can save a reviewer a dive into the source code.
 
-base-commit: 7bf200b3a4ac10b1b0376c70b8c66ed39eae7cdd
-prerequisite-patch-id: e827b6b22f950b9f69620805a04e4a264cf4cc6a
--- 
-2.26.2
+> setup_arch updates mmu_cr4_features to save what identified features are
+> supported for later use in hibernation asm when cr4 needs to be modified
+> to toggle PGE. cr4 writes happen in restore_image and restore_registers.
+> setup_arch occurs before identify_cpu, this leads to mmu_cr4_features
+> not containing some of the cr4 features which were enabled via
+> identify_cpu when hibernation asm is executed.
 
+This fails to address the bigger picture.  I assume you end up wanting
+this because without it hibernation is not compatible with CR pinning.
+Shouldn't that be mentioned?
+
+I also wonder why we even need two classes of cr4_set_bits().  Are there
+features we *want* to disable before entering the hibernation assembly?
+
+For instance, why not leave MCE enabled in there?  What about PCIDs or
+OSPKE?  Does it hurt?
+
+> On CPU bringup when cr4_set_bits_and_update_boot is called 
+> mmu_cr4_features will now be written to. For the boot CPU, the
+> __ro_after_init on mmu_cr4_features does not cause a fault. However, 
+> __ro_after_init was removed due to it triggering faults on non-boot 
+> CPUs
+Before this patch, cr4_set_bits_and_update_boot() was only ever called
+during init.  But, after this patch, it gets called later in boot and
+causes problems.  We're surely not making _real_ updates to it, right?
+In that case the writes are superfluous and we would be better off just
+not writing to it (and retaining __ro_after_init) rather than allowing
+superfluous writes.
