@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F1E1FDBE2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 03:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7741FDD60
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 03:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728991AbgFRBP3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jun 2020 21:15:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45534 "EHLO mail.kernel.org"
+        id S1730602AbgFRBZs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jun 2020 21:25:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32876 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729474AbgFRBP2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:15:28 -0400
+        id S1731497AbgFRBZq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:25:46 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 79B192193E;
-        Thu, 18 Jun 2020 01:15:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DF8C2075E;
+        Thu, 18 Jun 2020 01:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442928;
-        bh=Z0RcWYenrpj8+WEO56fwKNjTcwN2Tnh89HFmd30u+7s=;
+        s=default; t=1592443546;
+        bh=WJhUlbUTIN1K73n4tY0V57/KVBPeXnvmTmlAw1UHdiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ehoTLYQtnp4AKHJwIefrdbJzkk2JiZ5I4Ck2iL0SPCJkSMC9Gl40+AWCZKkKjyNjq
-         FqoukQB20oB+dDCnHtXDGKJ8aNjIjs4xcxmYBnJUirol6uGSQaXJjREA4r3h2O7Kd/
-         RzJ/8TqDfrIvr8GunPBi/2LeZUXfqjUNb8v15b6E=
+        b=unVnacMYIz2Ds4VS9qeA7UNzayuBPR4EqRa808R3915kCAxkzbCiBgEF9whRz9W9c
+         MeK1bYjJkL4jR8WcR1E2UZKbClnP7USx1SE8yv3C33Wrfg5eHB4rMBRZRVQfNZw+Hu
+         cooPIHIxyypRk4ExECQ9xdl3MeK9ayOFwogUEI7U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Marcelo Bandeira Condotta <mcondotta@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
+Cc:     tannerlove <tannerlove@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 342/388] KVM: selftests: Fix build with "make ARCH=x86_64"
-Date:   Wed, 17 Jun 2020 21:07:19 -0400
-Message-Id: <20200618010805.600873-342-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 162/172] selftests/net: in timestamping, strncpy needs to preserve null byte
+Date:   Wed, 17 Jun 2020 21:22:08 -0400
+Message-Id: <20200618012218.607130-162-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
+In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
+References: <20200618012218.607130-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -45,57 +46,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: tannerlove <tannerlove@google.com>
 
-[ Upstream commit b80db73dc8be7022adae1b4414a1bebce50fe915 ]
+[ Upstream commit 8027bc0307ce59759b90679fa5d8b22949586d20 ]
 
-Marcelo reports that kvm selftests fail to build with
-"make ARCH=x86_64":
+If user passed an interface option longer than 15 characters, then
+device.ifr_name and hwtstamp.ifr_name became non-null-terminated
+strings. The compiler warned about this:
 
-gcc -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99
- -fno-stack-protector -fno-PIE -I../../../../tools/include
- -I../../../../tools/arch/x86_64/include  -I../../../../usr/include/
- -Iinclude -Ilib -Iinclude/x86_64 -I.. -c lib/kvm_util.c
- -o /var/tmp/20200604202744-bin/lib/kvm_util.o
+timestamping.c:353:2: warning: ‘strncpy’ specified bound 16 equals \
+destination size [-Wstringop-truncation]
+  353 |  strncpy(device.ifr_name, interface, sizeof(device.ifr_name));
 
-In file included from lib/kvm_util.c:11:
-include/x86_64/processor.h:14:10: fatal error: asm/msr-index.h: No such
- file or directory
-
- #include <asm/msr-index.h>
-          ^~~~~~~~~~~~~~~~~
-compilation terminated.
-
-"make ARCH=x86", however, works. The problem is that arch specific headers
-for x86_64 live in 'tools/arch/x86/include', not in
-'tools/arch/x86_64/include'.
-
-Fixes: 66d69e081b52 ("selftests: fix kvm relocatable native/cross builds and installs")
-Reported-by: Marcelo Bandeira Condotta <mcondotta@redhat.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20200605142028.550068-1-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: cb9eff097831 ("net: new user space API for time stamping of incoming and outgoing packets")
+Signed-off-by: Tanner Love <tannerlove@google.com>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../selftests/networking/timestamping/timestamping.c   | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 42f4f49f2a48..2c85b9dd86f5 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -80,7 +80,11 @@ LIBKVM += $(LIBKVM_$(UNAME_M))
- INSTALL_HDR_PATH = $(top_srcdir)/usr
- LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
- LINUX_TOOL_INCLUDE = $(top_srcdir)/tools/include
-+ifeq ($(ARCH),x86_64)
-+LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/x86/include
-+else
- LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
-+endif
- CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
- 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
+index 5cdfd743447b..900ed4b47899 100644
+--- a/tools/testing/selftests/networking/timestamping/timestamping.c
++++ b/tools/testing/selftests/networking/timestamping/timestamping.c
+@@ -332,10 +332,16 @@ int main(int argc, char **argv)
+ 	int val;
+ 	socklen_t len;
+ 	struct timeval next;
++	size_t if_len;
+ 
+ 	if (argc < 2)
+ 		usage(0);
+ 	interface = argv[1];
++	if_len = strlen(interface);
++	if (if_len >= IFNAMSIZ) {
++		printf("interface name exceeds IFNAMSIZ\n");
++		exit(1);
++	}
+ 
+ 	for (i = 2; i < argc; i++) {
+ 		if (!strcasecmp(argv[i], "SO_TIMESTAMP"))
+@@ -369,12 +375,12 @@ int main(int argc, char **argv)
+ 		bail("socket");
+ 
+ 	memset(&device, 0, sizeof(device));
+-	strncpy(device.ifr_name, interface, sizeof(device.ifr_name));
++	memcpy(device.ifr_name, interface, if_len + 1);
+ 	if (ioctl(sock, SIOCGIFADDR, &device) < 0)
+ 		bail("getting interface IP address");
+ 
+ 	memset(&hwtstamp, 0, sizeof(hwtstamp));
+-	strncpy(hwtstamp.ifr_name, interface, sizeof(hwtstamp.ifr_name));
++	memcpy(hwtstamp.ifr_name, interface, if_len + 1);
+ 	hwtstamp.ifr_data = (void *)&hwconfig;
+ 	memset(&hwconfig, 0, sizeof(hwconfig));
+ 	hwconfig.tx_type =
 -- 
 2.25.1
 
