@@ -2,37 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8511FE6D0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 04:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AE91FE63C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 04:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729201AbgFRBNs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jun 2020 21:13:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43156 "EHLO mail.kernel.org"
+        id S1729770AbgFRCb4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jun 2020 22:31:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728176AbgFRBNr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:13:47 -0400
+        id S1727980AbgFRBPX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:15:23 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E223820EDD;
-        Thu, 18 Jun 2020 01:13:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D15F521D7A;
+        Thu, 18 Jun 2020 01:15:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442826;
-        bh=1L1IL2y01Qzhmft+H/AeRDpC/FR4sANsggs28guR4Ug=;
+        s=default; t=1592442923;
+        bh=p3Hnb+vOJEjS2tVwNF7F5TKw8Ai9OL9Llz0cByj2LTM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d4Rzd+wBXlq2u+gD9Fl96r0RpiMMX4XYtwRmM13AVZN6XfnwIw9VVsf32+mxMgyzo
-         /WWHwyJ3iSI6Fi4kvYkEmXpL9vuxNRFhbnOcGlLnATByI8XCvBCa/fyKGhT5wOYSFz
-         5tRyUAVJioBU7Fd3gK1dIaPKa5T6oeV9ZWJsnkbU=
+        b=l8+hNw4RIO8S+73IOnP/ItskGdAykhtgvud34iGNPxyV3PziIUHztJlYxQ5v/1UzW
+         G6c+rAB0pQHNuq7+dBmhl7hkFSTj3qwkYcEQOcetaA7ck1OlfWNeZL2DYLKLibqIia
+         wRfIWfd1IDzawyZ/Lu6dGllimRPDV8a3EiCy6gkQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+Cc:     Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@kernel.org>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 262/388] selftests/timens: handle a case when alarm clocks are not supported
-Date:   Wed, 17 Jun 2020 21:05:59 -0400
-Message-Id: <20200618010805.600873-262-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 338/388] selftests/vm/pkeys: fix alloc_random_pkey() to make it really random
+Date:   Wed, 17 Jun 2020 21:07:15 -0400
+Message-Id: <20200618010805.600873-338-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -45,131 +56,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrei Vagin <avagin@gmail.com>
+From: Ram Pai <linuxram@us.ibm.com>
 
-[ Upstream commit 558ae0355a91c7d28fdf4c0011bee6ebb5118632 ]
+[ Upstream commit 6e373263ce07eeaa6410843179535fbdf561fc31 ]
 
-This can happen if a testing node doesn't have RTC (real time clock)
-hardware or it doesn't support alarms.
+alloc_random_pkey() was allocating the same pkey every time.  Not all
+pkeys were geting tested.  This fixes it.
 
-Fixes: 61c57676035d ("selftests/timens: Add Time Namespace test for supported clocks")
-Acked-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Reported-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Ram Pai <linuxram@us.ibm.com>
+Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Acked-by: Dave Hansen <dave.hansen@intel.com>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Michal Suchanek <msuchanek@suse.de>
+Cc: Shuah Khan <shuah@kernel.org>
+Link: http://lkml.kernel.org/r/0162f55816d4e783a0d6e49e554d0ab9a3c9a23b.1585646528.git.sandipan@linux.ibm.com
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/timens/clock_nanosleep.c |  2 +-
- tools/testing/selftests/timens/timens.c          |  2 +-
- tools/testing/selftests/timens/timens.h          | 13 ++++++++++++-
- tools/testing/selftests/timens/timer.c           |  5 +++++
- tools/testing/selftests/timens/timerfd.c         |  5 +++++
- 5 files changed, 24 insertions(+), 3 deletions(-)
+ tools/testing/selftests/x86/protection_keys.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
-index 8e7b7c72ef65..72d41b955fb2 100644
---- a/tools/testing/selftests/timens/clock_nanosleep.c
-+++ b/tools/testing/selftests/timens/clock_nanosleep.c
-@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/x86/protection_keys.c
+index 480995bceefa..47191af46617 100644
+--- a/tools/testing/selftests/x86/protection_keys.c
++++ b/tools/testing/selftests/x86/protection_keys.c
+@@ -24,6 +24,7 @@
+ #define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/futex.h>
++#include <time.h>
+ #include <sys/time.h>
+ #include <sys/syscall.h>
+ #include <string.h>
+@@ -612,10 +613,10 @@ int alloc_random_pkey(void)
+ 	int nr_alloced = 0;
+ 	int random_index;
+ 	memset(alloced_pkeys, 0, sizeof(alloced_pkeys));
++	srand((unsigned int)time(NULL));
  
- 	ksft_set_plan(4);
- 
--	check_config_posix_timers();
-+	check_supported_timers();
- 
- 	if (unshare_timens())
- 		return 1;
-diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
-index 098be7c83be3..52b6a1185f52 100644
---- a/tools/testing/selftests/timens/timens.c
-+++ b/tools/testing/selftests/timens/timens.c
-@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
- 
- 	nscheck();
- 
--	check_config_posix_timers();
-+	check_supported_timers();
- 
- 	ksft_set_plan(ARRAY_SIZE(clocks) * 2);
- 
-diff --git a/tools/testing/selftests/timens/timens.h b/tools/testing/selftests/timens/timens.h
-index e09e7e39bc52..d4fc52d47146 100644
---- a/tools/testing/selftests/timens/timens.h
-+++ b/tools/testing/selftests/timens/timens.h
-@@ -14,15 +14,26 @@
- #endif
- 
- static int config_posix_timers = true;
-+static int config_alarm_timers = true;
- 
--static inline void check_config_posix_timers(void)
-+static inline void check_supported_timers(void)
- {
-+	struct timespec ts;
-+
- 	if (timer_create(-1, 0, 0) == -1 && errno == ENOSYS)
- 		config_posix_timers = false;
-+
-+	if (clock_gettime(CLOCK_BOOTTIME_ALARM, &ts) == -1 && errno == EINVAL)
-+		config_alarm_timers = false;
- }
- 
- static inline bool check_skip(int clockid)
- {
-+	if (!config_alarm_timers && clockid == CLOCK_BOOTTIME_ALARM) {
-+		ksft_test_result_skip("CLOCK_BOOTTIME_ALARM isn't supported\n");
-+		return true;
-+	}
-+
- 	if (config_posix_timers)
- 		return false;
- 
-diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
-index 96dba11ebe44..5e7f0051bd7b 100644
---- a/tools/testing/selftests/timens/timer.c
-+++ b/tools/testing/selftests/timens/timer.c
-@@ -22,6 +22,9 @@ int run_test(int clockid, struct timespec now)
- 	timer_t fd;
- 	int i;
- 
-+	if (check_skip(clockid))
-+		return 0;
-+
- 	for (i = 0; i < 2; i++) {
- 		struct sigevent sevp = {.sigev_notify = SIGEV_NONE};
- 		int flags = 0;
-@@ -74,6 +77,8 @@ int main(int argc, char *argv[])
- 
- 	nscheck();
- 
-+	check_supported_timers();
-+
- 	ksft_set_plan(3);
- 
- 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
-diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
-index eff1ec5ff215..9edd43d6b2c1 100644
---- a/tools/testing/selftests/timens/timerfd.c
-+++ b/tools/testing/selftests/timens/timerfd.c
-@@ -28,6 +28,9 @@ int run_test(int clockid, struct timespec now)
- 	long long elapsed;
- 	int fd, i;
- 
-+	if (check_skip(clockid))
-+		return 0;
-+
- 	if (tclock_gettime(clockid, &now))
- 		return pr_perror("clock_gettime(%d)", clockid);
- 
-@@ -81,6 +84,8 @@ int main(int argc, char *argv[])
- 
- 	nscheck();
- 
-+	check_supported_timers();
-+
- 	ksft_set_plan(3);
- 
- 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
+ 	/* allocate every possible key and make a note of which ones we got */
+ 	max_nr_pkey_allocs = NR_PKEYS;
+-	max_nr_pkey_allocs = 1;
+ 	for (i = 0; i < max_nr_pkey_allocs; i++) {
+ 		int new_pkey = alloc_pkey();
+ 		if (new_pkey < 0)
 -- 
 2.25.1
 
