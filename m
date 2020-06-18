@@ -2,35 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4341FED74
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 10:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0C61FEE2A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 10:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbgFRIUN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jun 2020 04:20:13 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:25515 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728421AbgFRIUF (ORCPT
+        id S1728955AbgFRI4x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jun 2020 04:56:53 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:45062 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728945AbgFRI4l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jun 2020 04:20:05 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-60-xqW0qJM9OuOmp_SMWmfb5w-1; Thu, 18 Jun 2020 09:20:00 +0100
-X-MC-Unique: xqW0qJM9OuOmp_SMWmfb5w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 18 Jun 2020 09:19:59 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 18 Jun 2020 09:19:59 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kees Cook' <keescook@chromium.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sargun Dhillon" <sargun@sargun.me>,
+        Thu, 18 Jun 2020 04:56:41 -0400
+Received: from ip-109-41-0-102.web.vodafone.de ([109.41.0.102] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jlqLL-0003gc-FO; Thu, 18 Jun 2020 08:56:20 +0000
+Date:   Thu, 18 Jun 2020 10:56:14 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
         Christian Brauner <christian@brauner.io>,
         "David S. Miller" <davem@davemloft.net>,
         Christoph Hellwig <hch@lst.de>,
-        "Tycho Andersen" <tycho@tycho.ws>,
+        Tycho Andersen <tycho@tycho.ws>,
         Jakub Kicinski <kuba@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Aleksa Sarai <cyphar@cyphar.com>,
@@ -39,94 +33,223 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Robert Sesek <rsesek@google.com>,
         Giuseppe Scrivano <gscrivan@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Andy Lutomirski" <luto@amacapital.net>,
+        Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH v4 03/11] fs: Add fd_install_received() wrapper for
+        netdev@vger.kernel.org, containers@lists.linux-foundation.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 02/11] fs: Move __scm_install_fd() to
  __fd_install_received()
-Thread-Topic: [PATCH v4 03/11] fs: Add fd_install_received() wrapper for
- __fd_install_received()
-Thread-Index: AQHWQ44F2CX108LjrkCobo2loVeUYajc8NxQgAA6eACAANyJYA==
-Date:   Thu, 18 Jun 2020 08:19:59 +0000
-Message-ID: <bed4dbb349cf4dbda78652f9c2bf1090@AcuMS.aculab.com>
+Message-ID: <20200618085614.fw3ynalpcipbplf3@wittgenstein>
 References: <20200616032524.460144-1-keescook@chromium.org>
- <20200616032524.460144-4-keescook@chromium.org>
- <6de12195ec3244b99e6026b4b46e5be2@AcuMS.aculab.com>
- <202006171141.4DA1174979@keescook>
-In-Reply-To: <202006171141.4DA1174979@keescook>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <20200616032524.460144-3-keescook@chromium.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200616032524.460144-3-keescook@chromium.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Kees Cook
-> Sent: 17 June 2020 20:58
-> On Wed, Jun 17, 2020 at 03:35:20PM +0000, David Laight wrote:
-> > From: Kees Cook
-> > > Sent: 16 June 2020 04:25
-> > >
-> > > For both pidfd and seccomp, the __user pointer is not used. Update
-> > > __fd_install_received() to make writing to ufd optional. (ufd
-> > > itself cannot checked for NULL because this changes the SCM_RIGHTS
-> > > interface behavior.) In these cases, the new fd needs to be returned
-> > > on success.  Update the existing callers to handle it. Add new wrapper
-> > > fd_install_received() for pidfd and seccomp that does not use the ufd
-> > > argument.
-> > ...>
-> > >  static inline int fd_install_received_user(struct file *file, int __user *ufd,
-> > >  					   unsigned int o_flags)
-> > >  {
-> > > -	return __fd_install_received(file, ufd, o_flags);
-> > > +	return __fd_install_received(file, true, ufd, o_flags);
-> > > +}
-> >
-> > Can you get rid of the 'return user' parameter by adding
-> > 	if (!ufd) return -EFAULT;
-> > to the above wrapper, then checking for NULL in the function?
-> >
-> > Or does that do the wrong horrid things in the fail path?
+On Mon, Jun 15, 2020 at 08:25:15PM -0700, Kees Cook wrote:
+> In preparation for users of the "install a received file" logic outside
+> of net/ (pidfd and seccomp), relocate and rename __scm_install_fd() from
+> net/core/scm.c to __fd_install_received() in fs/file.c, and provide a
+> wrapper named fd_install_received_user(), as future patches will change
+> the interface to __fd_install_received().
 > 
-> Oh, hm. No, that shouldn't break the failure path, since everything gets
-> unwound in __fd_install_received if the ufd write fails.
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  fs/file.c            | 47 ++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/file.h |  8 ++++++++
+>  include/net/scm.h    |  1 -
+>  net/compat.c         |  2 +-
+>  net/core/scm.c       | 32 +-----------------------------
+>  5 files changed, 57 insertions(+), 33 deletions(-)
 > 
-> Effectively this (I'll chop it up into the correct patches):
+> diff --git a/fs/file.c b/fs/file.c
+> index abb8b7081d7a..fcfddae0d252 100644
+> --- a/fs/file.c
+> +++ b/fs/file.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/export.h>
+>  #include <linux/fs.h>
+>  #include <linux/mm.h>
+> +#include <linux/net.h>
+>  #include <linux/sched/signal.h>
+>  #include <linux/slab.h>
+>  #include <linux/file.h>
+> @@ -18,6 +19,8 @@
+>  #include <linux/bitops.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/rcupdate.h>
+> +#include <net/cls_cgroup.h>
+> +#include <net/netprio_cgroup.h>
+>  
+>  unsigned int sysctl_nr_open __read_mostly = 1024*1024;
+>  unsigned int sysctl_nr_open_min = BITS_PER_LONG;
+> @@ -931,6 +934,50 @@ int replace_fd(unsigned fd, struct file *file, unsigned flags)
+>  	return err;
+>  }
+>  
+> +/**
+> + * __fd_install_received() - Install received file into file descriptor table
+> + *
+> + * @fd: fd to install into (if negative, a new fd will be allocated)
+> + * @file: struct file that was received from another process
+> + * @ufd_required: true to use @ufd for writing fd number to userspace
+> + * @ufd: __user pointer to write new fd number to
+> + * @o_flags: the O_* flags to apply to the new fd entry
+> + *
+> + * Installs a received file into the file descriptor table, with appropriate
+> + * checks and count updates. Optionally writes the fd number to userspace.
+> + *
+> + * Returns -ve on error.
+> + */
+> +int __fd_install_received(struct file *file, int __user *ufd, unsigned int o_flags)
+> +{
+> +	struct socket *sock;
+> +	int new_fd;
+> +	int error;
+> +
+> +	error = security_file_receive(file);
+> +	if (error)
+> +		return error;
+> +
+> +	new_fd = get_unused_fd_flags(o_flags);
+> +	if (new_fd < 0)
+> +		return new_fd;
+> +
+> +	error = put_user(new_fd, ufd);
+> +	if (error) {
+> +		put_unused_fd(new_fd);
+> +		return error;
+> +	}
+> +
+> +	/* Bump the usage count and install the file. */
+> +	sock = sock_from_file(file, &error);
+> +	if (sock) {
+> +		sock_update_netprioidx(&sock->sk->sk_cgrp_data);
+> +		sock_update_classid(&sock->sk->sk_cgrp_data);
+> +	}
+> +	fd_install(new_fd, get_file(file));
+> +	return 0;
+> +}
+> +
+>  static int ksys_dup3(unsigned int oldfd, unsigned int newfd, int flags)
+>  {
+>  	int err = -EBADF;
+> diff --git a/include/linux/file.h b/include/linux/file.h
+> index 122f80084a3e..fe18a1a0d555 100644
+> --- a/include/linux/file.h
+> +++ b/include/linux/file.h
+> @@ -91,6 +91,14 @@ extern void put_unused_fd(unsigned int fd);
+>  
+>  extern void fd_install(unsigned int fd, struct file *file);
+>  
+> +extern int __fd_install_received(struct file *file, int __user *ufd,
+> +				 unsigned int o_flags);
+> +static inline int fd_install_received_user(struct file *file, int __user *ufd,
+> +					   unsigned int o_flags)
+> +{
+> +	return __fd_install_received(file, ufd, o_flags);
+> +}
 
-Yep, that's what i was thinking...
+Shouldn't this be the other way around such that
+fd_install_received_user() is the workhorse that has a "ufd" argument
+and fd_install_received() is the static inline function that doesn't?
 
-Personally I'm not sure that it matters whether the file is left
-attached to a process fd when the copy_to_user() fails.
-The kernel data structures are consistent either way.
-So sane code relies on catching SIGSEGV, fixing thigs up,
-and carrying on.
-(IIRC the original /bin/sh code called sbrk() in its SIGSEGV
-handler instead of doing the limit check in malloc()!)
+extern int fd_install_received_user(struct file *file, int __user *ufd, unsigned int o_flags)
+static inline int fd_install_received(struct file *file, unsigned int o_flags)
+{
+	return fd_install_received_user(file, NULL, o_flags);
+}
 
-The important error path is 'failing to get an fd number'.
-In that case the caller needs to keep the 'file *' or close it.
+(So I'm on vacation this week some my reviews are selective and spotty
+but I promise to be back next week. :))
 
-I've not looked at the code, but I wonder if you need to pass
-the 'file *' by reference so that you can consume it (write NULL)
-and return an error.
+Christian
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> +
+>  extern void flush_delayed_fput(void);
+>  extern void __fput_sync(struct file *);
+>  
+> diff --git a/include/net/scm.h b/include/net/scm.h
+> index 581a94d6c613..1ce365f4c256 100644
+> --- a/include/net/scm.h
+> +++ b/include/net/scm.h
+> @@ -37,7 +37,6 @@ struct scm_cookie {
+>  #endif
+>  };
+>  
+> -int __scm_install_fd(struct file *file, int __user *ufd, unsigned int o_flags);
+>  void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm);
+>  void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm);
+>  int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *scm);
+> diff --git a/net/compat.c b/net/compat.c
+> index 27d477fdcaa0..94f288e8dac5 100644
+> --- a/net/compat.c
+> +++ b/net/compat.c
+> @@ -298,7 +298,7 @@ void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
+>  	int err = 0, i;
+>  
+>  	for (i = 0; i < fdmax; i++) {
+> -		err = __scm_install_fd(scm->fp->fp[i], cmsg_data + i, o_flags);
+> +		err = fd_install_received_user(scm->fp->fp[i], cmsg_data + i, o_flags);
+>  		if (err)
+>  			break;
+>  	}
+> diff --git a/net/core/scm.c b/net/core/scm.c
+> index 6151678c73ed..df190f1fdd28 100644
+> --- a/net/core/scm.c
+> +++ b/net/core/scm.c
+> @@ -280,36 +280,6 @@ void put_cmsg_scm_timestamping(struct msghdr *msg, struct scm_timestamping_inter
+>  }
+>  EXPORT_SYMBOL(put_cmsg_scm_timestamping);
+>  
+> -int __scm_install_fd(struct file *file, int __user *ufd, unsigned int o_flags)
+> -{
+> -	struct socket *sock;
+> -	int new_fd;
+> -	int error;
+> -
+> -	error = security_file_receive(file);
+> -	if (error)
+> -		return error;
+> -
+> -	new_fd = get_unused_fd_flags(o_flags);
+> -	if (new_fd < 0)
+> -		return new_fd;
+> -
+> -	error = put_user(new_fd, ufd);
+> -	if (error) {
+> -		put_unused_fd(new_fd);
+> -		return error;
+> -	}
+> -
+> -	/* Bump the usage count and install the file. */
+> -	sock = sock_from_file(file, &error);
+> -	if (sock) {
+> -		sock_update_netprioidx(&sock->sk->sk_cgrp_data);
+> -		sock_update_classid(&sock->sk->sk_cgrp_data);
+> -	}
+> -	fd_install(new_fd, get_file(file));
+> -	return 0;
+> -}
+> -
+>  static int scm_max_fds(struct msghdr *msg)
+>  {
+>  	if (msg->msg_controllen <= sizeof(struct cmsghdr))
+> @@ -336,7 +306,7 @@ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
+>  	}
+>  
+>  	for (i = 0; i < fdmax; i++) {
+> -		err = __scm_install_fd(scm->fp->fp[i], cmsg_data + i, o_flags);
+> +		err = fd_install_received_user(scm->fp->fp[i], cmsg_data + i, o_flags);
+>  		if (err)
+>  			break;
+>  	}
+> -- 
+> 2.25.1
+> 
