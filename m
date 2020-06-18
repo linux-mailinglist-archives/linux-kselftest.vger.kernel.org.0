@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FBB1FDF72
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 03:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5658C1FDE99
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 03:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732451AbgFRBaF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jun 2020 21:30:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39874 "EHLO mail.kernel.org"
+        id S1730248AbgFRBfk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jun 2020 21:35:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732440AbgFRBaD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:30:03 -0400
+        id S1732757AbgFRBbW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:31:22 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A4B5C22251;
-        Thu, 18 Jun 2020 01:30:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8F3422257;
+        Thu, 18 Jun 2020 01:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443802;
+        s=default; t=1592443881;
         bh=WJhUlbUTIN1K73n4tY0V57/KVBPeXnvmTmlAw1UHdiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rjRrNfS/vVsz/oFYnw077MuI2eVdNHPnUp/P8dTRbUfJcgOjAOgl6YnYQU73ZRjwR
-         1Bf4LdgnLXTx14H66cDwD5A40Hjpd0qcVZhlkf1NEcnEJ+f6RY98+FICTZZEQzvVmC
-         uSEaEdhvejBKjZ9/XtGSmcgVrh8BqK4JiYc/wrw0=
+        b=SGMYzoi0/Nr8Jt8bBK8Hh5RQKv9/57ipsZStfOT4ksagWUa6myup/VHUJlEeKxAnD
+         PSxsJ9H7E4EUxBd7kCgtKJdMt1lpRjWgosWH/5wMANQXwez79SgDWynnAaNe02ShI2
+         CZ58cXn56OA1AxDv0yueEMQRVhIMpObh4NLkcT9k=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     tannerlove <tannerlove@google.com>,
@@ -30,12 +30,12 @@ Cc:     tannerlove <tannerlove@google.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 79/80] selftests/net: in timestamping, strncpy needs to preserve null byte
-Date:   Wed, 17 Jun 2020 21:28:18 -0400
-Message-Id: <20200618012819.609778-79-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 59/60] selftests/net: in timestamping, strncpy needs to preserve null byte
+Date:   Wed, 17 Jun 2020 21:30:03 -0400
+Message-Id: <20200618013004.610532-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012819.609778-1-sashal@kernel.org>
-References: <20200618012819.609778-1-sashal@kernel.org>
+In-Reply-To: <20200618013004.610532-1-sashal@kernel.org>
+References: <20200618013004.610532-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
