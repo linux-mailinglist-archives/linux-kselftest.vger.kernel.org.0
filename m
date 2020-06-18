@@ -2,85 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7C81FFC1C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 21:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD9D1FFC3D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 22:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730355AbgFRT7y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jun 2020 15:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S1730938AbgFRUFT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jun 2020 16:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730216AbgFRT7w (ORCPT
+        with ESMTP id S1730919AbgFRUFQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jun 2020 15:59:52 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA0BC0613ED
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 12:59:51 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id i12so3025261pju.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 12:59:51 -0700 (PDT)
+        Thu, 18 Jun 2020 16:05:16 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA120C06174E
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 13:05:16 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id s23so3297037pfh.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 13:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U3QGsT97pDvvMvvKXcBgwyDJ7+zbhoAH55hk1yJyQBg=;
-        b=kDfdoao3jkV76yu/0HQcS3EdiHt3zKaFYqcTf17EemKjFtUc8coz/vWxbiHhGjx7UE
-         4qr1wV3n/HPnsU6f94HAma3Bav2YpG8RYXjlFrN4Cy6aAXixK/rHNLa8qacKRWJgVYvv
-         9B5xci1yRjZO38wdAorzOdAl92gM+bj9VtlO9KPmnq2L1UzWVlJae4ntR8G0lL4nX5Cj
-         FQouYMXp9h/bHz02yvkFfqyURyShCumixKXeqHUKEZrGZ5V8wH+JOMWyySrTbp6O9azN
-         4FUofGkpJg+/jin7yR9UTjFF4F0YZJKQrxqesr1LVb6DKtYu4CLewdIyQpTSNTi4ongi
-         u/Nw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hH5UdqkrUsHHkWkTkrsTpUaZ/SG0CR6QLInGjMheMsQ=;
+        b=etadw103cqJRZdZ59vL7+FSIVCyWqJxsPUoshMP46pJkWYpyPh1Z8z2rOaozPM6T9H
+         5c7AmqMnocB+A8JJb/7BGlmzUHsa8VUg/Sy09a1I4Lr+wMi+eXoSUP1amVW/VFTdTB0Y
+         Az+830Tp9h9FTrH3X1IX6E56xQAUj6mYytnd0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U3QGsT97pDvvMvvKXcBgwyDJ7+zbhoAH55hk1yJyQBg=;
-        b=HvaTsw2dojm5aTiNO4+62M4gqLpFrRNdmgZ6RiB20B5T2Ew1QceGWEr/hcbO8CJBP2
-         HdQHtHv5texzd+K46ZaO+vBedNRrZ1mazL/gy88OJKk1+GX/FwFzptzm0t1ra5ntu2vP
-         U5GI0UppF+oYSnF9ljgUwwYr87Dc9bpePBINUrYnTVDVQUosY9XlyLXTN8L/aOHfg509
-         mkkhGsTIHO189A24X+j5LhU3zGzA2jLQ4skNKvUCvTJJR3QY3NQt9eQfhMg0pdw4em5O
-         ABBCusWdZ4hv9s8P323wjyekAgCmXj2xftXT+h2RG85JNm5s/PoDfKsXc5Yb2a5rm/p8
-         WxsQ==
-X-Gm-Message-State: AOAM530KwwgP+dG0fOOooDG3be6NEfLqJxd0N+1C4HshQlAV9QGfCi6r
-        CTxu/OgD/B0SFPL/Q3k7KbELPPJxeSNAFTr1I0ptY9p3Q1s=
-X-Google-Smtp-Source: ABdhPJyVCjvMmGy+J9LEg5lcRDKDvsw8LvlLWpJqVH2+6OGAJF76y8MYaaNzBmYqJ0LtUvWFUmZP28zjVCgPZgcgvYc=
-X-Received: by 2002:a17:90a:3321:: with SMTP id m30mr29183pjb.20.1592510390785;
- Thu, 18 Jun 2020 12:59:50 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hH5UdqkrUsHHkWkTkrsTpUaZ/SG0CR6QLInGjMheMsQ=;
+        b=K709vBuQnnoeIRWW4fK8BhTa+fyHQwTs+A17CkozVZ7Ocn6WJuFCzRYbyr5HdDYZwx
+         u4tpq8/CYhFbmRP2/lZxhd20KnEiLJQlgx4jm5RZZirUaAFkTbfrHzcEAWYrcLnSAfVj
+         qhasFcfTXEL1gONY3X2HGEk2oGVECVLfKZZFcCn5g5CrENPyC5AQ5tSY6LgmWI8Oos84
+         ZQcZVJa9txdb1mDh5w7n7jUutlFQK+CR8HVZLLmgQIuvlpIxza4AxRiC7WtzylLraA59
+         gqF0oa6vJU3p6EmtMPqoU1+baZQvany8977tSSGRscJYpFzFUriIaY6Omwk7OOgoZLFs
+         5cgA==
+X-Gm-Message-State: AOAM5321Y2lnEfz1V6skUw6AKxfuqDjduuzADX1XAMeNGnMe9862drYd
+        LM7brHVZNHNuPeYnA9jr80UcEQ==
+X-Google-Smtp-Source: ABdhPJyvN1SyXkPFRjQ3ru6p0iO6TqH4uR0HKiNTz7KbggpLMsPBApIzCK92OExHh+Nr7VZgXchX+A==
+X-Received: by 2002:a62:1c5:: with SMTP id 188mr4954296pfb.213.1592510716220;
+        Thu, 18 Jun 2020 13:05:16 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p14sm3201600pju.7.2020.06.18.13.05.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2020 13:05:15 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 13:05:14 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-kernel@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
+        "David S. Miller" <davem@davemloft.net>,
+        Christoph Hellwig <hch@lst.de>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Matt Denton <mpdenton@google.com>,
+        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
+        Robert Sesek <rsesek@google.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, containers@lists.linux-foundation.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 02/11] fs: Move __scm_install_fd() to
+ __fd_install_received()
+Message-ID: <202006181302.84BFFF52CA@keescook>
+References: <20200616032524.460144-1-keescook@chromium.org>
+ <20200616032524.460144-3-keescook@chromium.org>
+ <20200618085614.fw3ynalpcipbplf3@wittgenstein>
 MIME-Version: 1.0
-References: <20200616064730.123871-1-davidgow@google.com>
-In-Reply-To: <20200616064730.123871-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 18 Jun 2020 12:59:39 -0700
-Message-ID: <CAFd5g45M-Kzexz9_BRguh7AMP+pP1gijvdjYvTyS=cTk8ZpCdg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: kunit_tool: Fix invalid result when build fails
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200618085614.fw3ynalpcipbplf3@wittgenstein>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 11:47 PM David Gow <davidgow@google.com> wrote:
->
-> When separating out different phases of running tests[1]
-> (build/exec/parse/etc), the format of the KunitResult tuple changed
-> (adding an elapsed_time variable). This is not populated during a build
-> failure, causing kunit.py to crash.
->
-> This fixes [1] to probably populate the result variable, causing a
-> failing build to be reported properly.
->
-> [1]:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=45ba7a893ad89114e773b3dc32f6431354c465d6
->
-> Signed-off-by: David Gow <davidgow@google.com>
+On Thu, Jun 18, 2020 at 10:56:14AM +0200, Christian Brauner wrote:
+> On Mon, Jun 15, 2020 at 08:25:15PM -0700, Kees Cook wrote:
+> > In preparation for users of the "install a received file" logic outside
+> > of net/ (pidfd and seccomp), relocate and rename __scm_install_fd() from
+> > net/core/scm.c to __fd_install_received() in fs/file.c, and provide a
+> > wrapper named fd_install_received_user(), as future patches will change
+> > the interface to __fd_install_received().
+> > 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  fs/file.c            | 47 ++++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/file.h |  8 ++++++++
+> >  include/net/scm.h    |  1 -
+> >  net/compat.c         |  2 +-
+> >  net/core/scm.c       | 32 +-----------------------------
+> >  5 files changed, 57 insertions(+), 33 deletions(-)
+> > 
+> > diff --git a/fs/file.c b/fs/file.c
+> > index abb8b7081d7a..fcfddae0d252 100644
+> > --- a/fs/file.c
+> > +++ b/fs/file.c
+> > @@ -11,6 +11,7 @@
+> >  #include <linux/export.h>
+> >  #include <linux/fs.h>
+> >  #include <linux/mm.h>
+> > +#include <linux/net.h>
+> >  #include <linux/sched/signal.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/file.h>
+> > @@ -18,6 +19,8 @@
+> >  #include <linux/bitops.h>
+> >  #include <linux/spinlock.h>
+> >  #include <linux/rcupdate.h>
+> > +#include <net/cls_cgroup.h>
+> > +#include <net/netprio_cgroup.h>
+> >  
+> >  unsigned int sysctl_nr_open __read_mostly = 1024*1024;
+> >  unsigned int sysctl_nr_open_min = BITS_PER_LONG;
+> > @@ -931,6 +934,50 @@ int replace_fd(unsigned fd, struct file *file, unsigned flags)
+> >  	return err;
+> >  }
+> >  
+> > +/**
+> > + * __fd_install_received() - Install received file into file descriptor table
+> > + *
+> > + * @fd: fd to install into (if negative, a new fd will be allocated)
+> > + * @file: struct file that was received from another process
+> > + * @ufd_required: true to use @ufd for writing fd number to userspace
+> > + * @ufd: __user pointer to write new fd number to
+> > + * @o_flags: the O_* flags to apply to the new fd entry
+> > + *
+> > + * Installs a received file into the file descriptor table, with appropriate
+> > + * checks and count updates. Optionally writes the fd number to userspace.
+> > + *
+> > + * Returns -ve on error.
+> > + */
+> > +int __fd_install_received(struct file *file, int __user *ufd, unsigned int o_flags)
+> > +{
+> > +	struct socket *sock;
+> > +	int new_fd;
+> > +	int error;
+> > +
+> > +	error = security_file_receive(file);
+> > +	if (error)
+> > +		return error;
+> > +
+> > +	new_fd = get_unused_fd_flags(o_flags);
+> > +	if (new_fd < 0)
+> > +		return new_fd;
+> > +
+> > +	error = put_user(new_fd, ufd);
+> > +	if (error) {
+> > +		put_unused_fd(new_fd);
+> > +		return error;
+> > +	}
+> > +
+> > +	/* Bump the usage count and install the file. */
+> > +	sock = sock_from_file(file, &error);
+> > +	if (sock) {
+> > +		sock_update_netprioidx(&sock->sk->sk_cgrp_data);
+> > +		sock_update_classid(&sock->sk->sk_cgrp_data);
+> > +	}
+> > +	fd_install(new_fd, get_file(file));
+> > +	return 0;
+> > +}
+> > +
+> >  static int ksys_dup3(unsigned int oldfd, unsigned int newfd, int flags)
+> >  {
+> >  	int err = -EBADF;
+> > diff --git a/include/linux/file.h b/include/linux/file.h
+> > index 122f80084a3e..fe18a1a0d555 100644
+> > --- a/include/linux/file.h
+> > +++ b/include/linux/file.h
+> > @@ -91,6 +91,14 @@ extern void put_unused_fd(unsigned int fd);
+> >  
+> >  extern void fd_install(unsigned int fd, struct file *file);
+> >  
+> > +extern int __fd_install_received(struct file *file, int __user *ufd,
+> > +				 unsigned int o_flags);
+> > +static inline int fd_install_received_user(struct file *file, int __user *ufd,
+> > +					   unsigned int o_flags)
+> > +{
+> > +	return __fd_install_received(file, ufd, o_flags);
+> > +}
+> 
+> Shouldn't this be the other way around such that
+> fd_install_received_user() is the workhorse that has a "ufd" argument
+> and fd_install_received() is the static inline function that doesn't?
+> 
+> extern int fd_install_received_user(struct file *file, int __user *ufd, unsigned int o_flags)
+> static inline int fd_install_received(struct file *file, unsigned int o_flags)
+> {
+> 	return fd_install_received_user(file, NULL, o_flags);
+> }
 
-Oh wow! This is an old issue.
+So, I think it's all worked out in v5[1], so the helper argument handling
+is better for the ufd case, as David pointed out earlier. (As in,
+I think you're reacting to the same general problem here.)
 
-Nice work!
+> (So I'm on vacation this week some my reviews are selective and spotty
+> but I promise to be back next week. :))
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
+No worries!
+
+-Kees
+
+[1] https://lore.kernel.org/lkml/20200617220327.3731559-1-keescook@chromium.org/
+
+-- 
+Kees Cook
