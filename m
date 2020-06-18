@@ -2,82 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2572A1FFAD0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 20:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7C81FFC1C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 21:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730023AbgFRSLB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jun 2020 14:11:01 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:35671 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729997AbgFRSLA (ORCPT
+        id S1730355AbgFRT7y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jun 2020 15:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730216AbgFRT7w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jun 2020 14:11:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592503857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZZWlQ5y7Pb1QamFT51VCVsggHmDjllVGDgfPdvXE2UE=;
-        b=UB/8n19gjsMzIb74KfjZs2ICURRE0mweP9nkXc9PXgIwbItxmYBWB6o4+B+ZsL1NUW6rto
-        SC3V6/TDtZou9Zhs7j4XgLGo/x+349l2R1IYZdswWQWaxIVi/rIJpGh9E9GSLwkqVJO8h3
-        7x7ui1RzJozPOmxnaELB0gf3yY31PHM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-265-GJu4NKrCMYixIcj9daZjdQ-1; Thu, 18 Jun 2020 14:10:55 -0400
-X-MC-Unique: GJu4NKrCMYixIcj9daZjdQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7E104835B5D;
-        Thu, 18 Jun 2020 18:10:54 +0000 (UTC)
-Received: from jlaw-desktop.redhat.com (ovpn-112-56.rdu2.redhat.com [10.10.112.56])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D0E1E1E2261;
-        Thu, 18 Jun 2020 18:10:53 +0000 (UTC)
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>, Yannick Cote <ycote@redhat.com>
-Subject: [PATCH v3 3/3] selftests/livepatch: add test delimiter to dmesg
-Date:   Thu, 18 Jun 2020 14:10:40 -0400
-Message-Id: <20200618181040.21132-4-joe.lawrence@redhat.com>
-In-Reply-To: <20200618181040.21132-1-joe.lawrence@redhat.com>
-References: <20200618181040.21132-1-joe.lawrence@redhat.com>
+        Thu, 18 Jun 2020 15:59:52 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA0BC0613ED
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 12:59:51 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id i12so3025261pju.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jun 2020 12:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U3QGsT97pDvvMvvKXcBgwyDJ7+zbhoAH55hk1yJyQBg=;
+        b=kDfdoao3jkV76yu/0HQcS3EdiHt3zKaFYqcTf17EemKjFtUc8coz/vWxbiHhGjx7UE
+         4qr1wV3n/HPnsU6f94HAma3Bav2YpG8RYXjlFrN4Cy6aAXixK/rHNLa8qacKRWJgVYvv
+         9B5xci1yRjZO38wdAorzOdAl92gM+bj9VtlO9KPmnq2L1UzWVlJae4ntR8G0lL4nX5Cj
+         FQouYMXp9h/bHz02yvkFfqyURyShCumixKXeqHUKEZrGZ5V8wH+JOMWyySrTbp6O9azN
+         4FUofGkpJg+/jin7yR9UTjFF4F0YZJKQrxqesr1LVb6DKtYu4CLewdIyQpTSNTi4ongi
+         u/Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U3QGsT97pDvvMvvKXcBgwyDJ7+zbhoAH55hk1yJyQBg=;
+        b=HvaTsw2dojm5aTiNO4+62M4gqLpFrRNdmgZ6RiB20B5T2Ew1QceGWEr/hcbO8CJBP2
+         HdQHtHv5texzd+K46ZaO+vBedNRrZ1mazL/gy88OJKk1+GX/FwFzptzm0t1ra5ntu2vP
+         U5GI0UppF+oYSnF9ljgUwwYr87Dc9bpePBINUrYnTVDVQUosY9XlyLXTN8L/aOHfg509
+         mkkhGsTIHO189A24X+j5LhU3zGzA2jLQ4skNKvUCvTJJR3QY3NQt9eQfhMg0pdw4em5O
+         ABBCusWdZ4hv9s8P323wjyekAgCmXj2xftXT+h2RG85JNm5s/PoDfKsXc5Yb2a5rm/p8
+         WxsQ==
+X-Gm-Message-State: AOAM530KwwgP+dG0fOOooDG3be6NEfLqJxd0N+1C4HshQlAV9QGfCi6r
+        CTxu/OgD/B0SFPL/Q3k7KbELPPJxeSNAFTr1I0ptY9p3Q1s=
+X-Google-Smtp-Source: ABdhPJyVCjvMmGy+J9LEg5lcRDKDvsw8LvlLWpJqVH2+6OGAJF76y8MYaaNzBmYqJ0LtUvWFUmZP28zjVCgPZgcgvYc=
+X-Received: by 2002:a17:90a:3321:: with SMTP id m30mr29183pjb.20.1592510390785;
+ Thu, 18 Jun 2020 12:59:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20200616064730.123871-1-davidgow@google.com>
+In-Reply-To: <20200616064730.123871-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 18 Jun 2020 12:59:39 -0700
+Message-ID: <CAFd5g45M-Kzexz9_BRguh7AMP+pP1gijvdjYvTyS=cTk8ZpCdg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: kunit_tool: Fix invalid result when build fails
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Make it bit easier to parse the kernel logs during the selftests by
-adding a "===== TEST: $test =====" delimiter when each individual test
-begins.
+On Mon, Jun 15, 2020 at 11:47 PM David Gow <davidgow@google.com> wrote:
+>
+> When separating out different phases of running tests[1]
+> (build/exec/parse/etc), the format of the KunitResult tuple changed
+> (adding an elapsed_time variable). This is not populated during a build
+> failure, causing kunit.py to crash.
+>
+> This fixes [1] to probably populate the result variable, causing a
+> failing build to be reported properly.
+>
+> [1]:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=45ba7a893ad89114e773b3dc32f6431354c465d6
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
-Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-Revieved-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Yannick Cote <ycote@redhat.com>
----
- tools/testing/selftests/livepatch/functions.sh | 1 +
- 1 file changed, 1 insertion(+)
+Oh wow! This is an old issue.
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 5e5a79179fc1..36648ca367c2 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -264,6 +264,7 @@ function start_test {
- 
- 	save_dmesg
- 	echo -n "TEST: $test ... "
-+	log "===== TEST: $test ====="
- }
- 
- # check_result() - verify dmesg output
--- 
-2.21.3
+Nice work!
 
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
