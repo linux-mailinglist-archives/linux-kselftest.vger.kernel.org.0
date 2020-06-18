@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D911FF48A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 16:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9972D1FF4F0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jun 2020 16:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729844AbgFROSV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jun 2020 10:18:21 -0400
-Received: from mga03.intel.com ([134.134.136.65]:3868 "EHLO mga03.intel.com"
+        id S1727933AbgFROlR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jun 2020 10:41:17 -0400
+Received: from mga02.intel.com ([134.134.136.20]:24819 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728340AbgFROST (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jun 2020 10:18:19 -0400
-IronPort-SDR: 1PoJ4qzKIM8deSZtzmTrO0NTUE7emF8vNCevOnRf4qn7R+IOOOpojqrMMOSWNmw81JtPypTKWu
- HvCrsL363k6Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9655"; a="142528941"
-X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
-   d="scan'208";a="142528941"
+        id S1726981AbgFROlP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 18 Jun 2020 10:41:15 -0400
+IronPort-SDR: 5qHgtSZnSnamiQvDEAeTF11jtv9HUs+28PzhQbZjAYfmNf+b0b8u9n7CieSMe9lqeVtBgATLhO
+ sYh0+GTnCyZw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9655"; a="130991885"
+X-IronPort-AV: E=Sophos;i="5.75,526,1589266800"; 
+   d="scan'208";a="130991885"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 07:18:18 -0700
-IronPort-SDR: Z3EwOfLlV2OW9hD3bZAORhaaaJXjZT3oK6CMXq2HjaoC/5xRKHBH8qvIpgsk9o744/qlyJ7jWT
- RvboVXVkhOdw==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 07:41:11 -0700
+IronPort-SDR: jqIabIwAQ3v6Gt37K8Vc1ybzA+mx9gmrW8OLBOMAVcVmb1iaSBAIanmkVCJc3Eds4bvpjLGV/2
+ zf9hq49K6rpA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,526,1583222400"; 
-   d="scan'208";a="277637357"
-Received: from ryanr2x-mobl1.amr.corp.intel.com (HELO [10.255.0.133]) ([10.255.0.133])
-  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2020 07:18:10 -0700
-Subject: Re: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
+   d="scan'208";a="277643425"
+Received: from mcrum-mobl1.amr.corp.intel.com (HELO [10.255.0.127]) ([10.255.0.127])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jun 2020 07:41:06 -0700
+Subject: Re: [PATCH 4/4] X86: Use KVM CR pin MSRs
 To:     John Andersen <john.s.andersen@intel.com>, corbet@lwn.net,
         pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, x86@kernel.org, hpa@zytor.com, shuah@kernel.org,
@@ -50,7 +50,7 @@ Cc:     vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
         linux-kselftest@vger.kernel.org,
         kernel-hardening@lists.openwall.com
 References: <20200617190757.27081-1-john.s.andersen@intel.com>
- <20200617190757.27081-3-john.s.andersen@intel.com>
+ <20200617190757.27081-5-john.s.andersen@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -95,12 +95,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <0fa9682e-59d4-75f7-366f-103d6b8e71b8@intel.com>
-Date:   Thu, 18 Jun 2020 07:18:09 -0700
+Message-ID: <b5d791f9-1708-9715-e03d-4618d1b27d05@intel.com>
+Date:   Thu, 18 Jun 2020 07:41:04 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200617190757.27081-3-john.s.andersen@intel.com>
+In-Reply-To: <20200617190757.27081-5-john.s.andersen@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -110,16 +110,214 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 6/17/20 12:07 PM, John Andersen wrote:
-> +#define KVM_CR0_PIN_ALLOWED	(X86_CR0_WP)
-> +#define KVM_CR4_PIN_ALLOWED	(X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP)
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 89386f6f3ab6..54fb2b5ab8fc 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3926,6 +3926,17 @@
+>  			[KNL] Number of legacy pty's. Overwrites compiled-in
+>  			default number.
+>  
+> +	pv_cr_pin	[SECURITY,X86]
+> +			Enable paravirtualized control register pinning. When
+> +			running paravirutalized under KVM, request that KVM not
+> +			allow the guest to disable kernel protection features
+> +			set in CPU control registers. Specifying this option
+> +			will disable kexec (and crashkernel). If kexec support
+> +			has not been compiled into the kernel and host KVM
+> +			supports paravirtualized control register pinning, it
+> +			will be active by default without the need to specify
+> +			this parameter.
 
-Why *is* there an allowed set?  Why don't we just allow everything?
+I'm writing this last in my review.  I guess I should have read this
+first.  You'll see later in my review how this confused me.  This
+behavior needs to be documented elsewhere.  Code comments would be best.
 
-Shouldn't we also pin any unknown bits?  The CR4.FSGSBASE bit is an
-example of something that showed up CPUs without Linux knowing about it.
- If set, it causes problems.  This set couldn't have helped FSGSBASE
-because it is not in the allowed set.
+Let's say kexec is config'd off.  This feature is enabled by default and
+crashes the kernel in early boot.  I have no way to disable this fancy
+new feature.  Is that what we want?
 
-Let's say Intel loses its marbles and adds a CR4 bit that lets userspace
-write to kernel memory.  Linux won't set it, but an attacker would go
-after it, first thing.
+I also think that instead of having to *enable* this explicitly when
+kexec is present, maybe we should have a "disable_kexec" parameter.  If
+kexec is configured out or disabled on the command-line, then you can
+turn CR pinning on.
+
+If someone fails to kexec() because of this feature, there's no way in
+hell they'll ever track down "pv_cr_pin" on the command-line as the
+cause.  The might have a chance of finding disable_kexec, though.
+
+Wouldn't it also be nice to add a single printk() the first time a kexec
+fails because of this feature being present?
+
+>  	quiet		[KNL] Disable most log messages
+>  
+>  	r128=		[HW,DRM]
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 67f6a40b5e93..bc0b27483001 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -800,6 +800,7 @@ config KVM_GUEST
+>  	bool "KVM Guest support (including kvmclock)"
+>  	depends on PARAVIRT
+>  	select PARAVIRT_CLOCK
+> +	select PARAVIRT_CR_PIN
+>  	select ARCH_CPUIDLE_HALTPOLL
+>  	default y
+>  	---help---
+> @@ -835,6 +836,15 @@ config PARAVIRT_TIME_ACCOUNTING
+>  config PARAVIRT_CLOCK
+>  	bool
+>  
+> +config PARAVIRT_CR_PIN
+> +       bool "Paravirtual bit pinning for CR0 and CR4"
+> +       depends on KVM_GUEST
+> +       help
+> +         Select this option to have the virtualised guest request that the
+> +         hypervisor disallow it from disabling protections set in control
+> +         registers. The hypervisor will prevent exploits from disabling
+> +         features such as SMEP, SMAP, UMIP, and WP.
+
+I'm confused.  Does this add support for ""Paravirtual bit pinning", or
+actually tell the guest to request pinning by default?
+
+It says "Select this option to have the virtualised guest request...",
+which makes it sound like it affects the default rather than the
+availability of the option.
+
+
+> +#ifdef CONFIG_PARAVIRT_CR_PIN
+> +void __init kvm_paravirt_cr_pinning_init(void);
+> +void kvm_setup_paravirt_cr_pinning(unsigned long cr0_pinned_bits,
+> +				   unsigned long cr4_pinned_bits);
+> +#else
+> +static inline void kvm_paravirt_cr_pinning_init(void)
+> +{
+> +	return;
+> +}
+> +
+> +static inline void kvm_setup_paravirt_cr_pinning(unsigned long cr0_pinned_bits,
+> +						 unsigned long cr4_pinned_bits)
+> +{
+> +	return;
+> +}
+> +#endif /* CONFIG_PARAVIRT_CR_PIN */
+
+For stuff like this that isn't the least bit performance sensitive, I
+usually don't bother with header stubs.  Just do the function
+declaration and then check the config option in the .c code.  It saves
+#ifdef noise in the header.
+
+>  #endif /* _ASM_X86_KVM_PARA_H */
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 921e67086a00..ee17223b1fa8 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/smp.h>
+>  #include <linux/io.h>
+>  #include <linux/syscore_ops.h>
+> +#include <linux/kvm_para.h>
+>  
+>  #include <asm/stackprotector.h>
+>  #include <asm/perf_event.h>
+> @@ -416,6 +417,8 @@ static void __init setup_cr_pinning(void)
+>  	mask = (X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP);
+>  	cr4_pinned_bits = this_cpu_read(cpu_tlbstate.cr4) & mask;
+>  	static_key_enable(&cr_pinning.key);
+> +
+> +	kvm_setup_paravirt_cr_pinning(X86_CR0_WP, cr4_pinned_bits);
+>  }
+>  
+>  /*
+> @@ -1551,6 +1554,8 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
+>  	mtrr_ap_init();
+>  	validate_apic_and_package_id(c);
+>  	x86_spec_ctrl_setup_ap();
+> +
+> +	kvm_setup_paravirt_cr_pinning(X86_CR0_WP, cr4_pinned_bits);
+>  }
+
+WP looks like it get special handling here.  But, why it is special goes
+unmentioned in the changelog or comments.
+
+Why is it special?
+
+> +#ifdef CONFIG_PARAVIRT_CR_PIN
+> +static int kvm_paravirt_cr_pinning_enabled __ro_after_init;
+> +
+> +void __init kvm_paravirt_cr_pinning_init(void)
+> +{
+> +#ifdef CONFIG_KEXEC_CORE
+> +	if (!cmdline_find_option_bool(boot_command_line, "pv_cr_pin"))
+> +		return;
+> +
+> +	/* Paravirtualized CR pinning is currently incompatible with kexec */
+> +	kexec_load_disabled = 1;
+> +#endif
+> +
+> +	kvm_paravirt_cr_pinning_enabled = 1;
+> +}
+
+This is why we don't like #ifdefs in .c files.  The CONFIG_KEXEC_CORE
+one really makes this unreadable.
+
+This is really confusing because it says, if "CONFIG_KEXEC_CORE" is off,
+don't bother with looking for "pv_cr_pin" on the command-line before
+setting kvm_paravirt_cr_pinning_enabled=1.  That doesn't make any sense
+to me.
+
+> +void kvm_setup_paravirt_cr_pinning(unsigned long cr0_pinned_bits,
+> +				   unsigned long cr4_pinned_bits)
+> +{
+> +	u64 mask;
+> +
+> +	if (!kvm_paravirt_cr_pinning_enabled)
+> +		return;
+> +
+> +	if (!kvm_para_has_feature(KVM_FEATURE_CR_PIN))
+> +		return;
+
+So, if we compiled this whole mess in and got the new command-line
+parameter and we got all the way here and the host doesn't support it,
+we silently return?
+
+Seems like it would at least deserve a pr_info().
+
+> +	rdmsrl(MSR_KVM_CR0_PIN_ALLOWED, mask);
+> +	wrmsrl(MSR_KVM_CR0_PINNED_HIGH, cr0_pinned_bits & mask);
+> +
+> +	rdmsrl(MSR_KVM_CR4_PIN_ALLOWED, mask);
+> +	wrmsrl(MSR_KVM_CR4_PINNED_HIGH, cr4_pinned_bits & mask);
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
+>  
+>  static void kvm_disable_host_haltpoll(void *i)
+> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+> index d9c678b37a9b..ed3bcc85d40d 100644
+> --- a/arch/x86/kernel/setup.c
+> +++ b/arch/x86/kernel/setup.c
+> @@ -27,6 +27,9 @@
+>  #include <asm/apic.h>
+>  #include <asm/bios_ebda.h>
+>  #include <asm/bugs.h>
+> +#include <asm/kasan.h>
+> +#include <asm/cmdline.h>
+> +
+>  #include <asm/cpu.h>
+>  #include <asm/efi.h>
+>  #include <asm/gart.h>
+> @@ -502,6 +505,11 @@ static void __init reserve_crashkernel(void)
+>  		return;
+>  	}
+>  
+> +	if (cmdline_find_option_bool(boot_command_line, "pv_cr_pin")) {
+> +		pr_info("Ignoring crashkernel since pv_cr_pin present in cmdline\n");
+> +		return;
+> +	}
+
+Isn't it a bit mean to ignore crashkernel if the kernel has
+CONFIG_PARAVIRT_CR_PIN=n?
+
+
