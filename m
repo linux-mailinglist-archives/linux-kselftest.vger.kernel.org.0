@@ -2,135 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71624201BA3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 21:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CCF201C0F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 22:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390642AbgFSTuz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Jun 2020 15:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S2390113AbgFSUM2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Jun 2020 16:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390220AbgFSTuy (ORCPT
+        with ESMTP id S2390044AbgFSUM1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 15:50:54 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133BFC06174E
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:50:54 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id j1so4868602pfe.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:50:54 -0700 (PDT)
+        Fri, 19 Jun 2020 16:12:27 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57765C0613EE
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 13:12:27 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ne5so4491817pjb.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 13:12:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aNT64JH4pEFGIW/zOKuYzIi+PxEqhWFih4V3DtMG5uw=;
-        b=KG3HLTZqAizhXno+SvHB3QU8UgG5DSs2DDiK4JSvYwT0dXUgdjLm+SzEy0nDs63BIa
-         6nJQ42blal7wAjbcLi+3pwKuL2BNdtMif3R9vV0ibh49nqpYHmUuEaFY453sFeTi8TMB
-         qv69DHklzRs7nQLdJNwaPCpK60msvzUoo/gUUk9uKpfDs5IlJjVPciyOzPbqezC/pT83
-         n/GIY/O0eEoMNHtLityMrxCgGATz4U4a7V854f79pKWRIwbEQwZ5h054cJKi4gFHrnVf
-         BeGgliaDqVJlPkhqH6xDv3w7Q99uO8xiJToRdQmKvd1hjx0e/Cc37+pezgu9mrB+xhSp
-         HlRA==
+        bh=CtL6MXEKzIeEStdpWr+Z+AY2ozIEH/pJKXnlCHuuM48=;
+        b=JhzmdnUXuMgHKNez3rF4CNCqDonN/tgdYvlkkcY/gmPsUHMicehnsmLblPolT0WwCP
+         jBS2JJcHqQG1V0nwykQ0NmhmhWrSfYF01b7DLyrDEHJFDrPzR1QitEqoxZXQYFz3FqJR
+         YrKNN9+B5Pb8rAcdwHREZXyWpmcRScK+4i+0ol8nC/KODfzFmCrOrpZ7LA7DzlOFCBLP
+         qjT6ZfI4bFvx0peh229/xx3Bx3hEpB2yDOZURUzmy3toPz6A2Jfkelvpiw7pkmY7K0q8
+         CAPWGRC9EplTK1ob060zhSYPcTqcJQ9rC4nHw4wzmtkOnA/QUBrGlbR3sMJxiI8zzqvp
+         6/Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aNT64JH4pEFGIW/zOKuYzIi+PxEqhWFih4V3DtMG5uw=;
-        b=nQayx+2InhQr15UEaUr909Zs0/hKd9RrBPX8CSXmyfRE9uryT3DnU0KPnn68vsryzA
-         tVhxSaI7n81LnBtsk/YiJcTmlU/0pMdxEl95m09G0EGjfxPIKuhg7fBDFclgxt0EhZkY
-         csVchOw6ViwJvh/HGDnd/pSJpfiY0d3if8jXxqWT0AZ73cw207dAPfJEWXSHg1dbtXUd
-         Q0Zty8zPNQMgs8T2RPvZc84DtoKTP3xJx9PbrUjXGia+oiSAAevUuA79kBnEsh/Y6OpB
-         IClZeLfVXZ9VdG0p5uT7jUHZOQDcuYi0oq63R9WNoLF2YlL61WtgrwCKY6R2qwqG2VS7
-         gHUg==
-X-Gm-Message-State: AOAM533wTlmGsZKk9bXqRb3qpZ8Cs21TYKkJurFAeKZceNm4Ayfgmb4d
-        /mTHrCrHukaC+NequgKRwVUlIgsXDb2UPgmIO6MgCQ==
-X-Google-Smtp-Source: ABdhPJzCbeGw8aqUSCSne4JgLyCwGUWXAGu/3y8GGUrbwN50PA0lsKp01F63TLMxspcEfPHDiA2gG1W3jqhNDrBn270=
-X-Received: by 2002:a63:4c08:: with SMTP id z8mr4188941pga.201.1592596253398;
- Fri, 19 Jun 2020 12:50:53 -0700 (PDT)
+        bh=CtL6MXEKzIeEStdpWr+Z+AY2ozIEH/pJKXnlCHuuM48=;
+        b=nMO9/bD58ZNCg9NLkJ5zePzSzVOIg5v/WyjFi0KmOh2GEr8QJmmalcNFIULYnbzlMV
+         POAHpnP1lGUWEgxlaZVOS/cxHN743OuheHKWPedShj2SsfZ82vW7Q2SU2w4WuAIf7fcE
+         PsbNkVVbqpLXnSPsIV8377v1CZ9csA8s7qfSVREP+3LnxESRYE6lhUsyKLTM6LyeV3PZ
+         BWaLjoekZA3/pKb1Fiin7mRoYYewzWYe9Pr78bqRJo+psAYcc8VZeh+LZyHY2VJEQYL/
+         nW1VryPeHLbO3UFVtOKO/tdFWRLGOhHyyhLYvXXmgyAhoWqgkfUX3hgdkv8I55ctu5KV
+         LIRw==
+X-Gm-Message-State: AOAM530RBVVwirl04JAmCd9nKeI3G5gA8AZYEFmljkLFN3PMlQiK4INl
+        H/EXZnC0xAXVjGubK1ipY0M/ysY7h/E3LPRcv3Wztg==
+X-Google-Smtp-Source: ABdhPJypxSlZuKQ8KcK9qjRv+cbeQn6Qu6jLWRyO3vg5JSCH4ChHL8jP7spzL1WH9TUNcBt0eMgqMcv9S+u+44HLvxE=
+X-Received: by 2002:a17:90a:df82:: with SMTP id p2mr5255928pjv.217.1592597546456;
+ Fri, 19 Jun 2020 13:12:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
- <202006141120.96FF8C5@keescook> <CY4PR13MB11757D57CD441C5CAEC3F257FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
- <202006161642.A5F50ED07@keescook>
-In-Reply-To: <202006161642.A5F50ED07@keescook>
+References: <20200611215501.213058-1-vitor@massaru.org> <202006121403.CF8D57C@keescook>
+ <CABVgOSnofuJQ_fiCL-8KdKezg3Hnqk3A+X509c4YP_toKeBVBg@mail.gmail.com>
+ <202006141005.BA19A9D3@keescook> <CABVgOSkPYBL8Qy9Fsr0owNhh2=tXZmdwCsWhnq+PshJLr06YKA@mail.gmail.com>
+ <alpine.LRH.2.21.2006160956170.16027@localhost> <CABVgOS=-AHNABkAVV7p=pq67hwoVcXXJSEPvxNbp90Eh_RaxBg@mail.gmail.com>
+ <CAFd5g44kZe7h+qKHmx029Qj15FdqxsFRFD3TEx_iEhPEt0jJmA@mail.gmail.com> <CABVgOSnjrzfFOMF0VE1-5Ks-e40fc0XZsNZ92jE60ZOhYmZWog@mail.gmail.com>
+In-Reply-To: <CABVgOSnjrzfFOMF0VE1-5Ks-e40fc0XZsNZ92jE60ZOhYmZWog@mail.gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 19 Jun 2020 12:50:42 -0700
-Message-ID: <CAFd5g46VkEbYemSv2PC28GyGTSipoFG+e6yqO--H9e2Sa+UdbQ@mail.gmail.com>
-Subject: Re: RFC - kernel selftest result documentation (KTAP)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Gow <davidgow@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
+Date:   Fri, 19 Jun 2020 13:12:15 -0700
+Message-ID: <CAFd5g45jHMZV3yHnxO-U3uCvhpPeOesHbuAgnzXOqtP-z7+Gmw@mail.gmail.com>
+Subject: Re: common KUnit Kconfig and file naming (was: Re: [PATCH] lib:
+ kunit_test_overflow: add KUnit test of check_*_overflow functions)
+To:     David Gow <davidgow@google.com>
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Kees Cook <keescook@chromium.org>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 4:52 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Jun 15, 2020 at 07:07:34PM +0000, Bird, Tim wrote:
-> > From: Kees Cook <keescook@chromium.org>
-> > > Note: making the plan line required differs from TAP13 and TAP14. I
-> > > think it's the right choice, but we should be clear.
+On Thu, Jun 18, 2020 at 11:39 PM David Gow <davidgow@google.com> wrote:
+[...]
+> On Fri, Jun 19, 2020 at 4:28 AM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
 > >
-> > [...]
-> > With regards to making it optional or not, I don't have a strong
-> > preference.  The extra info seems helpful in some circumstances.
-> > I don't know if it's too onerous to make it a requirement or not.
-> > I'd prefer if it was always there (either at the beginning or the end),
-> > but if there is some situation where it's quite difficult to calculate,
-> > then it would be best not to mandate it. I can't think of any impossible
-> > situations at the moment.
->
-> I think we should require one of:
->
-> - starting plan line
-> - ending plan line
-> - ending with something that indicates "I'm done, but I have no idea how
->   many tests actually ran" (Maybe "1..?")
->
-> To me, the point of the plan line is to be able to say "this test did,
-> in fact, finish". So even if some test can't even count how many tests
-> it _ran_, it can at least say "I am now finished".
+> > On Tue, Jun 16, 2020 at 9:21 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > On Tue, Jun 16, 2020 at 5:40 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+> > > >
+> > > > On Tue, 16 Jun 2020, David Gow wrote:
+[...]
+> > > > > <keescook@chromium.org> wrote:
+> > > > > >
+> > > > > > On Sat, Jun 13, 2020 at 02:51:17PM +0800, David Gow wrote:
 
-So the counting is actually not the hard part for us, it's figuring
-out when we have finished. Again, the change that I am working on (I
-REALLY need to get that out) should fix that, but until we get that
-upstream, KUnit doesn't actually know when it is done running tests.
+[...]
 
-> > > TAP13/14 makes description optional, are we making it required (I think
-> > > we should). There seems to be a TAP13/14 "convention" of starting
-> > > <description> with "- ", which I'm on the fence about it. It does make
-> > > parsing maybe a little easier.
+> > > - Test names: Personally, I'd kind-of like to not prefix these at all,
+> > > as they're already part of the suite. If we do want to, though, prefix
+> > > them with <subsystem> and <suite>.
 > >
-> > I would like the description to be required.
-> > I don't have a strong opinion on the dash.  I'm OK with either one (dash
-> > or no dash), but we should make kselftest and KUnit consistent.
->
-> I find the dash to be distracting -- it doesn't help me scan it, and it
-> doesn't help a parser (which only needs to find "#").
-
-Yeah, I also prefer spaces and/or "#". I am okay if spaces are
-optional only to aid human readability. And honestly I don't care
-about this point too much. Just offering my 2 cents.
-
-> > > > Differences between kernel test result format and TAP13:
-> > > >  - in KTAP the "# SKIP" directive is placed after the description on
-> > > >    the test result line
->
-> I sent a bunch of clean-ups for kselftest.h recently[1], but it looks
-> like we'll need more for adding "description" to skip (right now it only
-> prints the SKIP reason).
->
-> [1] https://lore.kernel.org/lkml/20200611224028.3275174-1-keescook@chromium.org/
->
-> > > Yes Documentation/*.rst Not sure on name yet, but where do kselftest
-> > > docs live? :)
-> > Documentation/dev-tools/kselftest.rst
+> > Eh, I did that to remain consistent with the kernel naming
+> > conventions, but I think those have diverged too. If maintainers are
+> > cool with it, I agree that the prefixes are redundant on tests and
+> > generally way too long.
 > >
-> > I'll put this at: Documentation/dev-tools/test-results-format.rst
 >
-> Sounds good!
->
-> --
-> Kees Cook
+> Do you have a link to the conventions you're talking about?
+
+A link no. This is only of those undocumented rules that most people follow.
+
+The rule is something like this:
+
+Global identifiers should be named:
+<subsystem_name_n>_<subsystem_name_n-1>_..._<subsystem_name_1>_<subsystem_name_0>_foo.
+
+For example, let's say I am working on Synopsis' DesignWare I2C master
+driver. The outermost namespace is i2c, and because DesignWare is
+long, we might prefix each function with i2c_dw_*.
+
+It is a practice that is not universally maintained around the kernel,
+but it seems to be the most common method of namespacing aside from
+just randomly throwing characters together in a prefix that hasn't
+been used before.
+
+Anyway, standardized or not, that is the convention I was trying to follow.
