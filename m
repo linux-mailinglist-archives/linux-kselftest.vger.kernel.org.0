@@ -2,178 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97478201C44
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 22:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24C5201D95
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 23:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389312AbgFSUTt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Jun 2020 16:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726667AbgFSUTt (ORCPT
+        id S1728551AbgFSV6F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Jun 2020 17:58:05 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:4459 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728287AbgFSV5K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 16:19:49 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1D0C06174E;
-        Fri, 19 Jun 2020 13:19:49 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id j68so6839733qkb.10;
-        Fri, 19 Jun 2020 13:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=en0bd9Z1UOgbNwil/O5E9MONyVUtQwSCd/V2jBgui+8=;
-        b=f0p4HJd2r/N4xv4vE4skYM7sxiImjJrj0X+JzFnB7xYR8O56fjwU8+wWmpiZ5XUwn8
-         tp3FRIW4rULkMVsECLzDSBZ2xlVfvhj4sYnjXkwUK7XXj1qKdC46/63riCHjM98GUE9t
-         6Os1mRIeA2ZW8wEeZ7z7vaU90BY5gERuWllNyVR8jkSskyvg4McG001VCfdRTSIIgoHZ
-         eL8BPcp4vTqmyZB30TrZcGBGYf6IyzKxiiL1COUOOtLX7bVluhGWEWoviXnhZW8PHEF4
-         Mp+fNdyByS9CE8vGU/yQtc5hnTObyOuI73958nnv/lr+UmOEFtdF0yXzxzaqgwGaOMuq
-         HZIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=en0bd9Z1UOgbNwil/O5E9MONyVUtQwSCd/V2jBgui+8=;
-        b=kgaxcCTee7MtzlsRtXQqyuW7TMiXqFMUuhpzL2sqXMoj7NRcBgdeVUk9rtcvpqCygO
-         p6L8+l0rMbPdbxNGRYwxrFM1K+GX+zTEuRBpMf+QcV3JCDz+DfCQS0ax0/5/PTiz0xXR
-         VZ1pqsK6hHF7b07wff2hHI2vkiFsiJUmU3Q7+00XBCp44YJrM826uWFsoIZDjyglFFEv
-         EzkCA6UJWpUpvNjwwqpWHdfC+N0dhLpjRq8WtztxNDiY0sqwIoGo/VuCrFfuZxZafPFk
-         lXtGNhZnVbwIbA6916+faOZ99JO7JGOOdT7RgZn5Seq1vX3dbRrFm1G9XYVxBtmhAl5a
-         7zfA==
-X-Gm-Message-State: AOAM531pTG9HRO6W979hBYpsw7jwoawtxyc8DvC7Xvp2tr6OKLvQjf3G
-        xJuVURuPpZsKM6gwBT7S6F8=
-X-Google-Smtp-Source: ABdhPJxuAUJkRoWiExKH7+YTulQfaa4Qn4Q+3e9EQwZC/3GG5D7JG1eAPc7JRaE/NVzyNGDKVa2Bow==
-X-Received: by 2002:a37:a08:: with SMTP id 8mr5481210qkk.388.1592597988125;
-        Fri, 19 Jun 2020 13:19:48 -0700 (PDT)
-Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id l2sm7265729qth.47.2020.06.19.13.19.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2020 13:19:47 -0700 (PDT)
-Subject: Re: RFC - kernel selftest result documentation (KTAP)
-To:     David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>
-Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
- <20200616204817.GA212825@google.com>
- <CY4PR13MB1175A71AE3937C0786721ABFFD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
- <202006161703.B2E51605@keescook>
- <CY4PR13MB1175DCC4066FC0839A6B2E84FD9A0@CY4PR13MB1175.namprd13.prod.outlook.com>
- <202006162032.9BF6F8F4E@keescook>
- <CABVgOSn48gw3pMSCccmF8FK=3UPF+Spe47AiDQcMiXkk3k4yqQ@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <0408a492-7d95-d34c-443c-11a2d05abd37@gmail.com>
-Date:   Fri, 19 Jun 2020 15:19:46 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Fri, 19 Jun 2020 17:57:10 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eed34800007>; Fri, 19 Jun 2020 14:56:16 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 19 Jun 2020 14:57:07 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 19 Jun 2020 14:57:07 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Jun
+ 2020 21:56:59 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 19 Jun 2020 21:56:59 +0000
+Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5eed34aa0003>; Fri, 19 Jun 2020 14:56:58 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Ben Skeggs" <bskeggs@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Ralph Campbell <rcampbell@nvidia.com>
+Subject: [PATCH 00/16] mm/hmm/nouveau: THP mapping and migration
+Date:   Fri, 19 Jun 2020 14:56:33 -0700
+Message-ID: <20200619215649.32297-1-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CABVgOSn48gw3pMSCccmF8FK=3UPF+Spe47AiDQcMiXkk3k4yqQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1592603776; bh=cY2z0OG1pUaoe5jBUN9mz4n6ug8KS7Y4KUbr8HDt6lM=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=h9Ue237VUS0DYlx4+ZPf7DBfdsfGNigyNS8eyYLe4mqxhix4iw4hCoiwj2ACeJcIP
+         cOTmq6M+LU527F7YEWJ/54n1+Y5dEeKouADPnbmr/KPkjT3o7tPCziz0MoMr3pTyp8
+         A1HW3B5f4n7FfjOHYCOtmc7IWlH5MRslPGnMBkrylKMFrXZnTHcKMnGmyTWhiSDiR3
+         HOTG6yr7LJLQEWip29sWfhQOotCaV5PlNKnifKnVuKEFYI9228oqDmbwJnbmLHiKu7
+         8L0xm1X2SJ5LKTbMoZamhFqZdsFKD5qaniMTzm5doSBLxYF69Hm2lMaHC1hEA3Rdja
+         a/eQhOsyz/uLA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-06-16 23:05, David Gow wrote:
-> On Wed, Jun 17, 2020 at 11:36 AM Kees Cook <keescook@chromium.org> wrote:
->>
->> On Wed, Jun 17, 2020 at 02:30:45AM +0000, Bird, Tim wrote:
->>> Agreed.  You only need machine-parsable data if you expect the CI
->>> system to do something more with the data than just present it.
->>> What that would be, that would be common for all tests (or at least
->>> many test), is unclear.  Maybe there are patterns in the diagnostic
->>> data that could lead to higher-level analysis, or even automated
->>> fixes, that don't become apparent if the data is unstructured.  But
->>> it's hard to know until you have lots of data.  I think just getting
->>> the other things consistent is a good priority right now.
->>
->> Yeah. I think the main place for this is performance analysis, but I
->> think that's a separate system entirely. TAP is really strictly yes/no,
->> where as performance analysis a whole other thing. The only other thing
->> I can think of is some kind of feature analysis, but that would be built
->> out of the standard yes/no output. i.e. if I create a test that checks
->> for specific security mitigation features (*cough*LKDTM*cough*), having
->> a dashboard that shows features down one axis and architectures and/or
->> kernel versions on other axes, then I get a pretty picture. But it's
->> still being built out of the yes/no info.
->>
->> *shrug*
->>
->> I think diagnostic should be expressly non-machine-oriented.
-> 
-> So from the KUnit side, we sort-of have three kinds of diagnostic lines:
-> - Lines printed directly from tests (typically using kunit_info() or
-> similar functions): as I understand it, these are basically the
-> equivalent of what kselftest typically uses diagnostics for --
-> test-specific, human-readable messages. I don't think we need/want to
-> parse these much.
+These patches apply to linux-5.8.0-rc1. Patches 1-3 should probably go
+into 5.8, the others can be queued for 5.9. Patches 4-6 improve the HMM
+self tests. Patch 7-8 prepare nouveau for the meat of this series which
+adds support and testing for compound page mapping of system memory
+(patches 9-11) and compound page migration to device private memory
+(patches 12-16). Since these changes are split across mm core, nouveau,
+and testing, I'm guessing Jason Gunthorpe's HMM tree would be appropriate.
 
+Ralph Campbell (16):
+  mm: fix migrate_vma_setup() src_owner and normal pages
+  nouveau: fix migrate page regression
+  nouveau: fix mixed normal and device private page migration
+  mm/hmm: fix test timeout on slower machines
+  mm/hmm/test: remove redundant page table invalidate
+  mm/hmm: test mixed normal and device private migrations
+  nouveau: make nvkm_vmm_ctor() and nvkm_mmu_ptp_get() static
+  nouveau/hmm: fault one page at a time
+  mm/hmm: add output flag for compound page mapping
+  nouveau/hmm: support mapping large sysmem pages
+  hmm: add tests for HMM_PFN_COMPOUND flag
+  mm/hmm: optimize migrate_vma_setup() for holes
+  mm: support THP migration to device private memory
+  mm/thp: add THP allocation helper
+  mm/hmm/test: add self tests for THP migration
+  nouveau: support THP migration to private memory
 
-> - Kernel messages during test execution. If we get the results from
-> scraping the kernel log (which is still the default for KUnit, though
-> there is also a debugfs info), other kernel logs can be interleaved
-> with the results. Sometimes these are irrelevant things happening on
-> another thread, sometimes they're something directly related to the
-> test which we'd like to capture (KASAN errors, for instance). I don't
-> think we want these to be machine oriented, but we may want to be able
-> to filter them out.
+ drivers/gpu/drm/nouveau/nouveau_dmem.c        | 177 +++++---
+ drivers/gpu/drm/nouveau/nouveau_svm.c         | 241 +++++------
+ drivers/gpu/drm/nouveau/nouveau_svm.h         |   3 +-
+ .../gpu/drm/nouveau/nvkm/subdev/mmu/base.c    |   6 +-
+ .../gpu/drm/nouveau/nvkm/subdev/mmu/priv.h    |   2 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |  10 +-
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h |   3 -
+ .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    |  29 +-
+ include/linux/gfp.h                           |  10 +
+ include/linux/hmm.h                           |   4 +-
+ include/linux/migrate.h                       |   1 +
+ include/linux/mm.h                            |   1 +
+ lib/test_hmm.c                                | 359 ++++++++++++----
+ lib/test_hmm_uapi.h                           |   2 +
+ mm/hmm.c                                      |  10 +-
+ mm/huge_memory.c                              |  46 ++-
+ mm/internal.h                                 |   1 -
+ mm/memory.c                                   |  10 +-
+ mm/memremap.c                                 |   9 +-
+ mm/migrate.c                                  | 236 +++++++++--
+ mm/page_alloc.c                               |   1 +
+ tools/testing/selftests/vm/hmm-tests.c        | 388 +++++++++++++++++-
+ 22 files changed, 1203 insertions(+), 346 deletions(-)
 
-This is an important conceptual difference between testing a user
-space program (which is the environment that TAP initially was
-created for) and testing kernel code.  This difference should be
-addressed in the KTAP standard.  As noted above, a kernel test
-case may call into other kernel code, where the other kernel code
-generates messages that get into the test output.
-
-One issue with the kernel issues is that they may be warnings or
-errors, and to anyone other than the test creator it is probably
-hard to determine whether the warnings and errors are reporting
-bugs or whether they are expected results triggered by the test.
-
-I created a solution to report what error(s) were expected for a
-test, and a tool to validate whether the error(s) occurred or not.
-This is currently in the devicetree unittests, but the exact
-implementation should be discussed in the KUnit context, and it
-should be included in the KTAP spec.
-
-I can describe the current implementation and start a discussion
-of any issues in this thread or I can start a new thread.  Whichever
-seems appropriate to everyone.
-
--Frank
-
-
-> - Expectation failures: as Brendan mentioned, KUnit will print some
-> diagnostic messages for individual assertion/expectation failures,
-> including the expected and actual values. We'd ideally like to be able
-> to identify and parse these, but keeping them human-readable is
-> definitely also a goal.
-> 
-> Now, to be honest, I doubt that the distinction here would be of much
-> use to kselftest, but it could be nice to not go out of our way to
-> make parsing some diagnostic lines possible. That being said,
-> personally I'm all for avoiding the yaml for diagnostic messages stuff
-> and sticking to something simple and line-based, possibly
-> standardising a the format of a few common diagnostic measurements
-> (e.g., assertions/expected values/etc) in a way that's both
-> human-readable and parsable if possible.
-> 
-> I agree that there's a lot of analysis that is possible with just the
-> yes/no data. There's probably some fancy correlation one could do even
-> with unstructured diagnostic logs, so I don't think overstructuring
-> things is a necessity by any means. Where we have different tests
-> doing similar sorts of things, though, consistency in message
-> formatting could help even if things are not explicitly parsed.
-> Ensuring that helper functions that log and the like are spitting
-> things out in the same format is probably a good starting step down
-> that path.
-> 
-> Cheers,
-> -- David
-> 
+--=20
+2.20.1
 
