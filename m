@@ -2,349 +2,988 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F42F20191E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 19:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA3820197B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 19:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388102AbgFSRNj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Jun 2020 13:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        id S2389507AbgFSR2l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Jun 2020 13:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387563AbgFSRNi (ORCPT
+        with ESMTP id S1728624AbgFSR2k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 13:13:38 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E0BC06174E;
-        Fri, 19 Jun 2020 10:13:37 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id l6so5992580qkc.6;
-        Fri, 19 Jun 2020 10:13:37 -0700 (PDT)
+        Fri, 19 Jun 2020 13:28:40 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71D5C06174E
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 10:28:40 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id p70so9081343oic.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 10:28:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FHPVmXCjCJN0gFzLxo3jjpnT8jSEJ0FELbiMyFnOPt8=;
-        b=mWPTg6OGYcntFaD0LELzXVfAouf6vzXr96UIaBbWK0kxwXG3F7B9JPiz4KwSjfqH+g
-         y9tMuQ1TZL+aNQgTfwOb8yTg5OPRmJQ4OngkjQLJ7OMx2DQV3g6s7dP4bHwZez39AjOQ
-         MdeyOTRfr0/8/ViFl+nv60kGSji+USxs1hMe8IAa5t6dFAwyAeThpW/aQya98mz+MgNN
-         YCqj6ThW7j8bqae40w0YE0A/6+qvwFKGVRv6UuUIWNelyhPmRqYD9Z01134iV77dnPPo
-         +P3iVDUth48JLvn+XfaBgqPegqHydZyi/R0bsy2g/7GYTxMuVHYnCibbKVbN5Fw/SOjH
-         mcIg==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=F1rKKAvA2IGNgvyfp1GIdROaF8UtMGLKWPeo1bZgxbQ=;
+        b=TzYuRsCXL9RVmQPFZ08BYboYSYVZ1i5hngm3dvG3iZJIF7OFqhMBbOG9l08z/SSsD5
+         /LiBHJuFhovx6iZVR7BViXf3JuauvZ9nGipA9XUwXet5eRxaBA1faFbkKqTrIRYoGXFz
+         BQSVqd536ItZ8CZp90spSkh/PJjiIT9mPmfxE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FHPVmXCjCJN0gFzLxo3jjpnT8jSEJ0FELbiMyFnOPt8=;
-        b=nG5kX73u9SILyRVnbO6NGew7rnGO6YKfy3+sXxltckr4jmaQQM4dHB7m7PnQImCdC7
-         KJnc8ou0LFTjPiQsZW6SX7Dh8DNpD4hCXE2ULrI44XL7gCY7o+pTBHs4EdPN/6sUuDUa
-         1BslpssgqBy+eAEKxwTiPWBn/BAzcoO94flp7eQXBWVB1akwRLXaYPHlRWdNRSQfnpx2
-         UqXzPyRx6nRVjjj7mva6HWNPxtmPpBzFXuC9VDRVMvJWDUzYihWK6LKfOISU7zEMexHJ
-         gvlYE8ccb76ZDrU+NGiiDXHdks0GaQ1Y4W1Dis8VMozrf6zQqaEKyNrRjd1lKRc1tzrM
-         kUCg==
-X-Gm-Message-State: AOAM533wxcOSjp0IB72BzqH/brXnZZ9zUC1Xbdqu0He/r1/eWHlvKhAO
-        VTdFJD5wSXDC7aa4pLuSN/8=
-X-Google-Smtp-Source: ABdhPJwE+pXkNWGe6K1Bk6aptseRi1pnMLj63Zl3YwYOapKgfLHuTaOSqDarEpUMjfbb5ky9t3s+EQ==
-X-Received: by 2002:a37:6cd:: with SMTP id 196mr4410806qkg.393.1592586815984;
-        Fri, 19 Jun 2020 10:13:35 -0700 (PDT)
-Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id 10sm6956933qkv.136.2020.06.19.10.13.34
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=F1rKKAvA2IGNgvyfp1GIdROaF8UtMGLKWPeo1bZgxbQ=;
+        b=JC8EBU52ay4WRkL1+8pTotsyk6IsIeudPd6oGki0d3q8bOd1B0RHdu1/QsJWTmt072
+         imjA5b3k7j3UFBge5hysYPB/n9neXD0NqcpYQwuAhrqNfiU3/ZMJtBF17vYUcR+2YeyT
+         XRQs1OI9uEqJ5/XtySazM77AKu15PMfPpSAGBrvl2Pq4OfogwRNNd1oZX74eE38pXXn+
+         gEH6Y4TD+Q4llzXD910/P82sHehGOX8cPw5zJ6d2G5FsyPN+GclwyomXw/OxI8Jbz7Vb
+         MKfHs2TzD176CqrKa1tZogt3LnxxMeJKzhP7GgSaryOSQqhJV3rqCEGAIitGcJewIcec
+         MvWg==
+X-Gm-Message-State: AOAM530noNIjfsc0upGhHnILuD2/XwM6OYvlcGWyXtsvyt816MDgQHtJ
+        7amjHp4QMx1TXebFlk1Gzs2H8Q==
+X-Google-Smtp-Source: ABdhPJxaa2p913oUa39pN8qy9rW+8VnzJd709BewLyZojOhVBv692I5vsKKQFkmB0Ry6Gj8otSEVCQ==
+X-Received: by 2002:a05:6808:4c1:: with SMTP id a1mr3901015oie.100.1592587720056;
+        Fri, 19 Jun 2020 10:28:40 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 6sm1584270ooy.18.2020.06.19.10.28.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2020 10:13:35 -0700 (PDT)
-Subject: Re: RFC - kernel selftest result documentation (KTAP)
-To:     "Bird, Tim" <Tim.Bird@sony.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <edcd53f0-d931-17b9-9d29-e1797e50a646@gmail.com>
-Date:   Fri, 19 Jun 2020 12:13:34 -0500
+        Fri, 19 Jun 2020 10:28:39 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kunit update for Linux 5.8-rc2
+Message-ID: <90024a5c-ea67-2529-e330-3a4f0bef6596@linuxfoundation.org>
+Date:   Fri, 19 Jun 2020 11:28:38 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/mixed;
+ boundary="------------F323B03CA4D0B5E3B3156FEF"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-06-10 13:11, Bird, Tim wrote:
-> Some months ago I started work on a document to formalize how
-> kselftest implements the TAP specification.  However, I didn't finish
-> that work.  Maybe it's time to do so now.
-> 
-> kselftest has developed a few differences from the original
-> TAP specification, and  some extensions that I believe are worth
-> documenting.
-> 
-> Essentially, we have created our own KTAP (kernel TAP)
-> format.  I think it is worth documenting our conventions, in order to
-> keep everyone on the same page.
-> 
-> Below is a partially completed document on my understanding
-> of KTAP, based on examination of some of the kselftest test
-> output.  I have not reconciled this with the kunit output format,
-> which I believe has some differences (which maybe we should
-> resolve before we get too far into this).
-> 
-> I submit the document now, before it is finished, because a patch
-> was recently introduced to alter one of the result conventions
-> (from SKIP='not ok' to SKIP='ok').
-> 
-> See the document include inline below
-> 
-> ====== start of ktap-doc-rfc.txt ======
-> Selftest preferred output format
-> --------------------------------
-> 
-> The linux kernel selftest system uses TAP (Test Anything Protocol)
-> output to make testing results consumable by automated systems.  A
-> number of Continuous Integration (CI) systems test the kernel every
-> day.  It is useful for these systems that output from selftest
-> programs be consistent and machine-parsable.
-> 
-> At the same time, it is useful for test results to be human-readable
-> as well.
-> 
-> The kernel test result format is based on a variation TAP
-> TAP is a simple text-based format that is
-> documented on the TAP home page (http://testanything.org/).  There
-> is an official TAP13 specification here:
-> http://testanything.org/tap-version-13-specification.html
-> 
-> The kernel test result format consists of 5 major elements,
-> 4 of which are line-based:
+This is a multi-part message in MIME format.
+--------------F323B03CA4D0B5E3B3156FEF
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This document should use the terminology used by the TAP spec,
-if at all reasonable and possible.  It is very hard to go between
-this document and the TAP specs (v13 and v14) when they use
-different names for the same thing.  For example, the TAP spec
-calls this "tests lines" instead of "test result".
+Hi Linus,
 
--Frank
+Please pull the Kunit update for Linux 5.8-rc12.
 
->  * the output version line
->  * the plan line
->  * one or more test result lines (also called test result lines)
->  * a possible "Bail out!" line
-> 
-> optional elements:
->  * diagnostic data
-> 
-> The 5th element is diagnostic information, which is used to describe
-> items running in the test, and possibly to explain test results.
-> A sample test result is show below:
-> 
-> Some other lines may be placed the test harness, and are not emitted
-> by individual test programs:
->  * one or more test identification lines
->  * a possible results summary line
-> 
-> Here is an example:
-> 
-> 	TAP version 13
-> 	1..1
-> 	# selftests: cpufreq: main.sh
-> 	# pid 8101's current affinity mask: fff
-> 	# pid 8101's new affinity mask: 1
-> 	ok 1 selftests: cpufreq: main.sh
-> 
-> The output version line is: "TAP version 13"
-> 
-> The test plan is "1..1".
-> 
-> Element details
-> ===============
-> 
-> Output version line
-> -------------------
-> The output version line is always "TAP version 13".
-> 
-> Although the kernel test result format has some additions
-> to the TAP13 format, the version line reported by kselftest tests
-> is (currently) always the exact string "TAP version 13"
-> 
-> This is always the first line of test output.
-> 
-> Test plan line
-> --------------
-> The test plan indicates the number of individual test cases intended to
-> be executed by the test. It always starts with "1.." and is followed
-> by the number of tests cases.  In the example above, 1..1", indicates
-> that this test reports only 1 test case.
-> 
-> The test plan line can be placed in two locations:
->  * the second line of test output, when the number of test cases is known
->    in advance
->  * as the last line of test output, when the number of test cases is not
->    known in advance.
-> 
-> Most often, the number of test cases is known in advance, and the test plan
-> line appears as the second line of test output, immediately following
-> the output version line.  The number of test cases might not be known
-> in advance if the number of tests is calculated from runtime data.
-> In this case, the test plan line is emitted as the last line of test
-> output.
-> 
-> Test result lines
-> -----------------
-> The test output consists of one or more test result lines that indicate
-> the actual results for the test.  These have the format:
-> 
->   <result> <number> <description> [<directive>] [<diagnostic data>]
-> 
-> The ''result'' must appear at the start of a line (except for when a
-> test is nested, see below), and must consist of one of the following
-> two phrases:
->   * ok
->   * not ok
-> 
-> If the test passed, then the result is reported as "ok".  If the test
-> failed, then the result is reported as "not ok".  These must be in
-> lower case, exactly as shown.
-> 
-> The ''number'' in the test result line represents the number of the
-> test case being performed by the test program.  This is often used by
-> test harnesses as a unique identifier for each test case.  The test
-> number is a base-10 number, starting with 1.  It should increase by
-> one for each new test result line emitted.  If possible the number
-> for a test case should be kept the same over the lifetime of the test.
-> 
-> The ''description'' is a short description of the test case.
-> This can be any string of words, but should avoid using colons (':')
-> except as part of a fully qualifed test case name (see below).
-> 
-> Finally, it is possible to use a test directive to indicate another
-> possible outcome for a test: that it was skipped.  To report that
-> a test case was skipped, the result line should start with the
-> result "not ok", and the directive "# SKIP" should be placed after
-> the test description. (Note that this deviates from the TAP13
-> specification).
-> 
-> A test may be skipped for a variety of reasons, ranging for
-> insufficient privileges to missing features or resources required
-> to execute that test case.
-> 
-> It is usually helpful if a diagnostic message is emitted to explain
-> the reasons for the skip.  If the message is a single line and is
-> short, the diagnostic message may be placed after the '# SKIP'
-> directive on the same line as the test result.  However, if it is
-> not on the test result line, it should precede the test line (see
-> diagnostic data, next).
-> 
-> Diagnostic data
-> ---------------
-> Diagnostic data is text that reports on test conditions or test
-> operations, or that explains test results.  In the kernel test
-> result format, diagnostic data is placed on lines that start with a
-> hash sign, followed by a space ('# ').
-> 
-> One special format of diagnostic data is a test identification line,
-> that has the fully qualified name of a test case.  Such a test
-> identification line marks the start of test output for a test case.
-> 
-> In the example above, there are three lines that start with '#'
-> which precede the test result line:
-> 	# selftests: cpufreq: main.sh
-> 	# pid 8101's current affinity mask: fff
-> 	# pid 8101's new affinity mask: 1
-> These are used to indicate diagnostic data for the test case
-> 'selftests: cpufreq: main.sh'
-> 
-> Material in comments between the identification line and the test
-> result line are diagnostic data that can help to interpret the
-> results of the test.
-> 
-> The TAP specification indicates that automated test harnesses may
-> ignore any line that is not one of the mandatory prescribed lines
-> (that is, the output format version line, the plan line, a test
-> result line, or a "Bail out!" line.) 
-> 
-> Bail out!
-> ---------
-> If a line in the test output starts with 'Bail out!', it indicates
-> that the test was aborted for some reason.  It indicates that 
-> the test is unable to proceed, and no additional tests will be
-> performed.
-> 
-> This can be used at the very beginning of a test, or anywhere in the
-> middle of the test, to indicate that the test can not continue.
-> 
-> --- from here on is not-yet-organized material
-> 
-> Tip:
->  - don't change the test plan based on skipped tests.
->    - it is better to report that a test case was skipped, than to
->      not report it
->    - that is, don't adjust the number of test cases based on skipped
->      tests
-> 
-> Other things to mention:
-> TAP13 elements not used:
->  - yaml for diagnostic messages
->    - reason: try to keep things line-based, since output from other things
->    may be interspersed with messages from the test itself
->  - TODO directive
-> 
-> KTAP Extensions beyond TAP13:
->  - nesting
->    - via indentation
->      - indentation makes it easier for humans to read
->  - test identifier
->     - multiple parts, separated by ':'
->  - summary lines
->    - can be skipped by CI systems that do their own calculations
-> 
-> Other notes:
->  - automatic assignment of result status based on exit code
-> 
-> Tips:
->  - do NOT describe the result in the test line
->    - the test case description should be the same whether the test
->      succeeds or fails
->    - use diagnostic lines to describe or explain results, if this is
->      desirable
->  - test numbers are considered harmful
->    - test harnesses should use the test description as the identifier
->    - test numbers change when testcases are added or removed
->      - which means that results can't be compared between different
->        versions of the test
->  - recommendations for diagnostic messages:
->    - reason for failure
->    - reason for skip
->    - diagnostic data should always preceding the result line
->      - problem: harness may emit result before test can do assessment
->        to determine reason for result
->      - this is what the kernel uses
-> 
-> Differences between kernel test result format and TAP13:
->  - in KTAP the "# SKIP" directive is placed after the description on
->    the test result line
-> 
-> ====== start of ktap-doc-rfc.txt ======
-> OK - that's the end of the RFC doc.
-> 
-> Here are a few questions:
->  - is this document desired or not?
->     - is it too long or too short?
->  - if the document is desired, where should it be placed?
->    I assume somewhere under Documentation, and put into
->    .rst format. Suggestions for a name and location are welcome.
->  - is this document accurate?
->    I think KUNIT does a few things differently than this description.
->    - is the intent to have kunit and kselftest have the same output format?
->       if so, then these should be rationalized.
-> 
-> Finally,
->   - Should a SKIP result be 'ok' (TAP13 spec) or 'not ok' (current kselftest practice)?
-> See https://testanything.org/tap-version-13-specification.html
-> 
-> Regards,
->  -- Tim
-> 
->    
-> 
+This Kunit update for Linux 5.8-rc2 consists of:
 
+- Adds a generic kunit_resource API extending it to support
+   resources that are passed in to kunit in addition kunit
+   allocated resources. In addition, KUnit resources are now
+   refcounted to avoid passed in resources being released while
+   in use by kunit.
+
+- Add support for named resources.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+
+   Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-kunit-5.8-rc2
+
+for you to fetch changes up to 7bf200b3a4ac10b1b0376c70b8c66ed39eae7cdd:
+
+   kunit: add support for named resources (2020-06-15 09:31:23 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-kunit-5.8-rc2
+
+This Kunit update for Linux 5.8-rc2 consists of:
+
+- Adds a generic kunit_resource API extending it to support
+   resources that are passed in to kunit in addition kunit
+   allocated resources. In addition, KUnit resources are now
+   refcounted to avoid passed in resources being released while
+   in use by kunit.
+
+- Add support for named resources.
+
+----------------------------------------------------------------
+Alan Maguire (2):
+       kunit: generalize kunit_resource API beyond allocated resources
+       kunit: add support for named resources
+
+  include/kunit/test.h      | 210 
++++++++++++++++++++++++++++++++++++++++-------
+  lib/kunit/kunit-test.c    | 111 +++++++++++++++++++-----
+  lib/kunit/string-stream.c |  14 ++--
+  lib/kunit/test.c          | 171 ++++++++++++++++++++++---------------
+  4 files changed, 380 insertions(+), 126 deletions(-)
+
+----------------------------------------------------------------
+
+--------------F323B03CA4D0B5E3B3156FEF
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-5.8-rc2.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-5.8-rc2.diff"
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 47e61e1d5337..59f3144f009a 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
++#include <linux/kref.h>
+ 
+ struct kunit_resource;
+ 
+@@ -23,13 +24,19 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+ 
+ /**
+  * struct kunit_resource - represents a *test managed resource*
+- * @allocation: for the user to store arbitrary data.
++ * @data: for the user to store arbitrary data.
+  * @free: a user supplied function to free the resource. Populated by
+- * kunit_alloc_resource().
++ * kunit_resource_alloc().
+  *
+  * Represents a *test managed resource*, a resource which will automatically be
+  * cleaned up at the end of a test case.
+  *
++ * Resources are reference counted so if a resource is retrieved via
++ * kunit_alloc_and_get_resource() or kunit_find_resource(), we need
++ * to call kunit_put_resource() to reduce the resource reference count
++ * when finished with it.  Note that kunit_alloc_resource() does not require a
++ * kunit_resource_put() because it does not retrieve the resource itself.
++ *
+  * Example:
+  *
+  * .. code-block:: c
+@@ -42,9 +49,9 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+  *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
+  *	{
+  *		struct kunit_kmalloc_params *params = context;
+- *		res->allocation = kmalloc(params->size, params->gfp);
++ *		res->data = kmalloc(params->size, params->gfp);
+  *
+- *		if (!res->allocation)
++ *		if (!res->data)
+  *			return -ENOMEM;
+  *
+  *		return 0;
+@@ -52,30 +59,32 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+  *
+  *	static void kunit_kmalloc_free(struct kunit_resource *res)
+  *	{
+- *		kfree(res->allocation);
++ *		kfree(res->data);
+  *	}
+  *
+  *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
+  *	{
+  *		struct kunit_kmalloc_params params;
+- *		struct kunit_resource *res;
+  *
+  *		params.size = size;
+  *		params.gfp = gfp;
+  *
+- *		res = kunit_alloc_resource(test, kunit_kmalloc_init,
++ *		return kunit_alloc_resource(test, kunit_kmalloc_init,
+  *			kunit_kmalloc_free, &params);
+- *		if (res)
+- *			return res->allocation;
+- *
+- *		return NULL;
+  *	}
++ *
++ * Resources can also be named, with lookup/removal done on a name
++ * basis also.  kunit_add_named_resource(), kunit_find_named_resource()
++ * and kunit_destroy_named_resource().  Resource names must be
++ * unique within the test instance.
+  */
+ struct kunit_resource {
+-	void *allocation;
+-	kunit_resource_free_t free;
++	void *data;
++	const char *name;		/* optional name */
+ 
+ 	/* private: internal use only. */
++	kunit_resource_free_t free;
++	struct kref refcount;
+ 	struct list_head node;
+ };
+ 
+@@ -283,6 +292,79 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+ 						    gfp_t internal_gfp,
+ 						    void *context);
+ 
++/**
++ * kunit_get_resource() - Hold resource for use.  Should not need to be used
++ *			  by most users as we automatically get resources
++ *			  retrieved by kunit_find_resource*().
++ * @res: resource
++ */
++static inline void kunit_get_resource(struct kunit_resource *res)
++{
++	kref_get(&res->refcount);
++}
++
++/*
++ * Called when refcount reaches zero via kunit_put_resources();
++ * should not be called directly.
++ */
++static inline void kunit_release_resource(struct kref *kref)
++{
++	struct kunit_resource *res = container_of(kref, struct kunit_resource,
++						  refcount);
++
++	/* If free function is defined, resource was dynamically allocated. */
++	if (res->free) {
++		res->free(res);
++		kfree(res);
++	}
++}
++
++/**
++ * kunit_put_resource() - When caller is done with retrieved resource,
++ *			  kunit_put_resource() should be called to drop
++ *			  reference count.  The resource list maintains
++ *			  a reference count on resources, so if no users
++ *			  are utilizing a resource and it is removed from
++ *			  the resource list, it will be freed via the
++ *			  associated free function (if any).  Only
++ *			  needs to be used if we alloc_and_get() or
++ *			  find() resource.
++ * @res: resource
++ */
++static inline void kunit_put_resource(struct kunit_resource *res)
++{
++	kref_put(&res->refcount, kunit_release_resource);
++}
++
++/**
++ * kunit_add_resource() - Add a *test managed resource*.
++ * @test: The test context object.
++ * @init: a user-supplied function to initialize the result (if needed).  If
++ *        none is supplied, the resource data value is simply set to @data.
++ *	  If an init function is supplied, @data is passed to it instead.
++ * @free: a user-supplied function to free the resource (if needed).
++ * @data: value to pass to init function or set in resource data field.
++ */
++int kunit_add_resource(struct kunit *test,
++		       kunit_resource_init_t init,
++		       kunit_resource_free_t free,
++		       struct kunit_resource *res,
++		       void *data);
++
++/**
++ * kunit_add_named_resource() - Add a named *test managed resource*.
++ * @test: The test context object.
++ * @init: a user-supplied function to initialize the resource data, if needed.
++ * @free: a user-supplied function to free the resource data, if needed.
++ * @name_data: name and data to be set for resource.
++ */
++int kunit_add_named_resource(struct kunit *test,
++			     kunit_resource_init_t init,
++			     kunit_resource_free_t free,
++			     struct kunit_resource *res,
++			     const char *name,
++			     void *data);
++
+ /**
+  * kunit_alloc_resource() - Allocates a *test managed resource*.
+  * @test: The test context object.
+@@ -295,7 +377,7 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+  * cleaned up at the end of a test case. See &struct kunit_resource for an
+  * example.
+  *
+- * NOTE: KUnit needs to allocate memory for each kunit_resource object. You must
++ * Note: KUnit needs to allocate memory for a kunit_resource object. You must
+  * specify an @internal_gfp that is compatible with the use context of your
+  * resource.
+  */
+@@ -307,54 +389,122 @@ static inline void *kunit_alloc_resource(struct kunit *test,
+ {
+ 	struct kunit_resource *res;
+ 
+-	res = kunit_alloc_and_get_resource(test, init, free, internal_gfp,
+-					   context);
++	res = kzalloc(sizeof(*res), internal_gfp);
++	if (!res)
++		return NULL;
+ 
+-	if (res)
+-		return res->allocation;
++	if (!kunit_add_resource(test, init, free, res, context))
++		return res->data;
+ 
+ 	return NULL;
+ }
+ 
+ typedef bool (*kunit_resource_match_t)(struct kunit *test,
+-				       const void *res,
++				       struct kunit_resource *res,
+ 				       void *match_data);
+ 
+ /**
+  * kunit_resource_instance_match() - Match a resource with the same instance.
+  * @test: Test case to which the resource belongs.
+- * @res: The data stored in kunit_resource->allocation.
++ * @res: The resource.
+  * @match_data: The resource pointer to match against.
+  *
+  * An instance of kunit_resource_match_t that matches a resource whose
+  * allocation matches @match_data.
+  */
+ static inline bool kunit_resource_instance_match(struct kunit *test,
+-						 const void *res,
++						 struct kunit_resource *res,
+ 						 void *match_data)
+ {
+-	return res == match_data;
++	return res->data == match_data;
+ }
+ 
+ /**
+- * kunit_resource_destroy() - Find a kunit_resource and destroy it.
++ * kunit_resource_name_match() - Match a resource with the same name.
++ * @test: Test case to which the resource belongs.
++ * @res: The resource.
++ * @match_name: The name to match against.
++ */
++static inline bool kunit_resource_name_match(struct kunit *test,
++					     struct kunit_resource *res,
++					     void *match_name)
++{
++	return res->name && strcmp(res->name, match_name) == 0;
++}
++
++/**
++ * kunit_find_resource() - Find a resource using match function/data.
++ * @test: Test case to which the resource belongs.
++ * @match: match function to be applied to resources/match data.
++ * @match_data: data to be used in matching.
++ */
++static inline struct kunit_resource *
++kunit_find_resource(struct kunit *test,
++		    kunit_resource_match_t match,
++		    void *match_data)
++{
++	struct kunit_resource *res, *found = NULL;
++
++	spin_lock(&test->lock);
++
++	list_for_each_entry_reverse(res, &test->resources, node) {
++		if (match(test, res, (void *)match_data)) {
++			found = res;
++			kunit_get_resource(found);
++			break;
++		}
++	}
++
++	spin_unlock(&test->lock);
++
++	return found;
++}
++
++/**
++ * kunit_find_named_resource() - Find a resource using match name.
++ * @test: Test case to which the resource belongs.
++ * @name: match name.
++ */
++static inline struct kunit_resource *
++kunit_find_named_resource(struct kunit *test,
++			  const char *name)
++{
++	return kunit_find_resource(test, kunit_resource_name_match,
++				   (void *)name);
++}
++
++/**
++ * kunit_destroy_resource() - Find a kunit_resource and destroy it.
+  * @test: Test case to which the resource belongs.
+  * @match: Match function. Returns whether a given resource matches @match_data.
+- * @free: Must match free on the kunit_resource to free.
+  * @match_data: Data passed into @match.
+  *
+- * Free the latest kunit_resource of @test for which @free matches the
+- * kunit_resource_free_t associated with the resource and for which @match
+- * returns true.
+- *
+  * RETURNS:
+  * 0 if kunit_resource is found and freed, -ENOENT if not found.
+  */
+-int kunit_resource_destroy(struct kunit *test,
++int kunit_destroy_resource(struct kunit *test,
+ 			   kunit_resource_match_t match,
+-			   kunit_resource_free_t free,
+ 			   void *match_data);
+ 
++static inline int kunit_destroy_named_resource(struct kunit *test,
++					       const char *name)
++{
++	return kunit_destroy_resource(test, kunit_resource_name_match,
++				      (void *)name);
++}
++
++/**
++ * kunit_remove_resource: remove resource from resource list associated with
++ *			  test.
++ * @test: The test context object.
++ * @res: The resource to be removed.
++ *
++ * Note that the resource will not be immediately freed since it is likely
++ * the caller has a reference to it via alloc_and_get() or find();
++ * in this case a final call to kunit_put_resource() is required.
++ */
++void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
++
+ /**
+  * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
+  * @test: The test context object.
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 4f3d36a72f8f..69f902440a0e 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -118,14 +118,14 @@ static int fake_resource_init(struct kunit_resource *res, void *context)
+ {
+ 	struct kunit_test_resource_context *ctx = context;
+ 
+-	res->allocation = &ctx->is_resource_initialized;
++	res->data = &ctx->is_resource_initialized;
+ 	ctx->is_resource_initialized = true;
+ 	return 0;
+ }
+ 
+ static void fake_resource_free(struct kunit_resource *res)
+ {
+-	bool *is_resource_initialized = res->allocation;
++	bool *is_resource_initialized = res->data;
+ 
+ 	*is_resource_initialized = false;
+ }
+@@ -154,11 +154,21 @@ static void kunit_resource_test_alloc_resource(struct kunit *test)
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
+ 	KUNIT_EXPECT_PTR_EQ(test,
+ 			    &ctx->is_resource_initialized,
+-			    (bool *) res->allocation);
++			    (bool *)res->data);
+ 	KUNIT_EXPECT_TRUE(test, list_is_last(&res->node, &ctx->test.resources));
+ 	KUNIT_EXPECT_PTR_EQ(test, free, res->free);
++
++	kunit_put_resource(res);
+ }
+ 
++/*
++ * Note: tests below use kunit_alloc_and_get_resource(), so as a consequence
++ * they have a reference to the associated resource that they must release
++ * via kunit_put_resource().  In normal operation, users will only
++ * have to do this for cases where they use kunit_find_resource(), and the
++ * kunit_alloc_resource() function will be used (which does not take a
++ * resource reference).
++ */
+ static void kunit_resource_test_destroy_resource(struct kunit *test)
+ {
+ 	struct kunit_test_resource_context *ctx = test->priv;
+@@ -169,11 +179,12 @@ static void kunit_resource_test_destroy_resource(struct kunit *test)
+ 			GFP_KERNEL,
+ 			ctx);
+ 
++	kunit_put_resource(res);
++
+ 	KUNIT_ASSERT_FALSE(test,
+-			   kunit_resource_destroy(&ctx->test,
++			   kunit_destroy_resource(&ctx->test,
+ 						  kunit_resource_instance_match,
+-						  res->free,
+-						  res->allocation));
++						  res->data));
+ 
+ 	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
+ 	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
+@@ -191,6 +202,7 @@ static void kunit_resource_test_cleanup_resources(struct kunit *test)
+ 							    fake_resource_free,
+ 							    GFP_KERNEL,
+ 							    ctx);
++		kunit_put_resource(resources[i]);
+ 	}
+ 
+ 	kunit_cleanup(&ctx->test);
+@@ -221,14 +233,14 @@ static int fake_resource_2_init(struct kunit_resource *res, void *context)
+ 
+ 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 2);
+ 
+-	res->allocation = ctx;
++	res->data = ctx;
+ 
+ 	return 0;
+ }
+ 
+ static void fake_resource_2_free(struct kunit_resource *res)
+ {
+-	struct kunit_test_resource_context *ctx = res->allocation;
++	struct kunit_test_resource_context *ctx = res->data;
+ 
+ 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 2);
+ }
+@@ -236,23 +248,26 @@ static void fake_resource_2_free(struct kunit_resource *res)
+ static int fake_resource_1_init(struct kunit_resource *res, void *context)
+ {
+ 	struct kunit_test_resource_context *ctx = context;
++	struct kunit_resource *res2;
+ 
+-	kunit_alloc_and_get_resource(&ctx->test,
+-				     fake_resource_2_init,
+-				     fake_resource_2_free,
+-				     GFP_KERNEL,
+-				     ctx);
++	res2 = kunit_alloc_and_get_resource(&ctx->test,
++					    fake_resource_2_init,
++					    fake_resource_2_free,
++					    GFP_KERNEL,
++					    ctx);
+ 
+ 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 1);
+ 
+-	res->allocation = ctx;
++	res->data = ctx;
++
++	kunit_put_resource(res2);
+ 
+ 	return 0;
+ }
+ 
+ static void fake_resource_1_free(struct kunit_resource *res)
+ {
+-	struct kunit_test_resource_context *ctx = res->allocation;
++	struct kunit_test_resource_context *ctx = res->data;
+ 
+ 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 1);
+ }
+@@ -265,13 +280,14 @@ static void fake_resource_1_free(struct kunit_resource *res)
+ static void kunit_resource_test_proper_free_ordering(struct kunit *test)
+ {
+ 	struct kunit_test_resource_context *ctx = test->priv;
++	struct kunit_resource *res;
+ 
+ 	/* fake_resource_1 allocates a fake_resource_2 in its init. */
+-	kunit_alloc_and_get_resource(&ctx->test,
+-				     fake_resource_1_init,
+-				     fake_resource_1_free,
+-				     GFP_KERNEL,
+-				     ctx);
++	res = kunit_alloc_and_get_resource(&ctx->test,
++					   fake_resource_1_init,
++					   fake_resource_1_free,
++					   GFP_KERNEL,
++					   ctx);
+ 
+ 	/*
+ 	 * Since fake_resource_2_init calls KUNIT_RESOURCE_TEST_MARK_ORDER
+@@ -281,6 +297,8 @@ static void kunit_resource_test_proper_free_ordering(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, ctx->allocate_order[0], 2);
+ 	KUNIT_EXPECT_EQ(test, ctx->allocate_order[1], 1);
+ 
++	kunit_put_resource(res);
++
+ 	kunit_cleanup(&ctx->test);
+ 
+ 	/*
+@@ -292,6 +310,57 @@ static void kunit_resource_test_proper_free_ordering(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, ctx->free_order[1], 2);
+ }
+ 
++static void kunit_resource_test_static(struct kunit *test)
++{
++	struct kunit_test_resource_context ctx;
++	struct kunit_resource res;
++
++	KUNIT_EXPECT_EQ(test, kunit_add_resource(test, NULL, NULL, &res, &ctx),
++			0);
++
++	KUNIT_EXPECT_PTR_EQ(test, res.data, (void *)&ctx);
++
++	kunit_cleanup(test);
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&test->resources));
++}
++
++static void kunit_resource_test_named(struct kunit *test)
++{
++	struct kunit_resource res1, res2, *found = NULL;
++	struct kunit_test_resource_context ctx;
++
++	KUNIT_EXPECT_EQ(test,
++			kunit_add_named_resource(test, NULL, NULL, &res1,
++						 "resource_1", &ctx),
++			0);
++	KUNIT_EXPECT_PTR_EQ(test, res1.data, (void *)&ctx);
++
++	KUNIT_EXPECT_EQ(test,
++			kunit_add_named_resource(test, NULL, NULL, &res1,
++						 "resource_1", &ctx),
++			-EEXIST);
++
++	KUNIT_EXPECT_EQ(test,
++			kunit_add_named_resource(test, NULL, NULL, &res2,
++						 "resource_2", &ctx),
++			0);
++
++	found = kunit_find_named_resource(test, "resource_1");
++
++	KUNIT_EXPECT_PTR_EQ(test, found, &res1);
++
++	if (found)
++		kunit_put_resource(&res1);
++
++	KUNIT_EXPECT_EQ(test, kunit_destroy_named_resource(test, "resource_2"),
++			0);
++
++	kunit_cleanup(test);
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&test->resources));
++}
++
+ static int kunit_resource_test_init(struct kunit *test)
+ {
+ 	struct kunit_test_resource_context *ctx =
+@@ -320,6 +389,8 @@ static struct kunit_case kunit_resource_test_cases[] = {
+ 	KUNIT_CASE(kunit_resource_test_destroy_resource),
+ 	KUNIT_CASE(kunit_resource_test_cleanup_resources),
+ 	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
++	KUNIT_CASE(kunit_resource_test_static),
++	KUNIT_CASE(kunit_resource_test_named),
+ 	{}
+ };
+ 
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index 350392013c14..141789ca8949 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -33,14 +33,14 @@ static int string_stream_fragment_init(struct kunit_resource *res,
+ 	if (!frag->fragment)
+ 		return -ENOMEM;
+ 
+-	res->allocation = frag;
++	res->data = frag;
+ 
+ 	return 0;
+ }
+ 
+ static void string_stream_fragment_free(struct kunit_resource *res)
+ {
+-	struct string_stream_fragment *frag = res->allocation;
++	struct string_stream_fragment *frag = res->data;
+ 
+ 	list_del(&frag->node);
+ 	kunit_kfree(frag->test, frag->fragment);
+@@ -65,9 +65,8 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
+ 
+ static int string_stream_fragment_destroy(struct string_stream_fragment *frag)
+ {
+-	return kunit_resource_destroy(frag->test,
++	return kunit_destroy_resource(frag->test,
+ 				      kunit_resource_instance_match,
+-				      string_stream_fragment_free,
+ 				      frag);
+ }
+ 
+@@ -179,7 +178,7 @@ static int string_stream_init(struct kunit_resource *res, void *context)
+ 	if (!stream)
+ 		return -ENOMEM;
+ 
+-	res->allocation = stream;
++	res->data = stream;
+ 	stream->gfp = ctx->gfp;
+ 	stream->test = ctx->test;
+ 	INIT_LIST_HEAD(&stream->fragments);
+@@ -190,7 +189,7 @@ static int string_stream_init(struct kunit_resource *res, void *context)
+ 
+ static void string_stream_free(struct kunit_resource *res)
+ {
+-	struct string_stream *stream = res->allocation;
++	struct string_stream *stream = res->data;
+ 
+ 	string_stream_clear(stream);
+ }
+@@ -211,8 +210,7 @@ struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
+ 
+ int string_stream_destroy(struct string_stream *stream)
+ {
+-	return kunit_resource_destroy(stream->test,
++	return kunit_destroy_resource(stream->test,
+ 				      kunit_resource_instance_match,
+-				      string_stream_free,
+ 				      stream);
+ }
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index ccb2ffad8dcf..c36037200310 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -8,6 +8,7 @@
+ 
+ #include <kunit/test.h>
+ #include <linux/kernel.h>
++#include <linux/kref.h>
+ #include <linux/sched/debug.h>
+ 
+ #include "debugfs.h"
+@@ -406,90 +407,116 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
+ 
+-struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+-						    kunit_resource_init_t init,
+-						    kunit_resource_free_t free,
+-						    gfp_t internal_gfp,
+-						    void *context)
++/*
++ * Used for static resources and when a kunit_resource * has been created by
++ * kunit_alloc_resource().  When an init function is supplied, @data is passed
++ * into the init function; otherwise, we simply set the resource data field to
++ * the data value passed in.
++ */
++int kunit_add_resource(struct kunit *test,
++		       kunit_resource_init_t init,
++		       kunit_resource_free_t free,
++		       struct kunit_resource *res,
++		       void *data)
+ {
+-	struct kunit_resource *res;
+-	int ret;
++	int ret = 0;
+ 
+-	res = kzalloc(sizeof(*res), internal_gfp);
+-	if (!res)
+-		return NULL;
++	res->free = free;
++	kref_init(&res->refcount);
+ 
+-	ret = init(res, context);
+-	if (ret)
+-		return NULL;
++	if (init) {
++		ret = init(res, data);
++		if (ret)
++			return ret;
++	} else {
++		res->data = data;
++	}
+ 
+-	res->free = free;
+ 	spin_lock(&test->lock);
+ 	list_add_tail(&res->node, &test->resources);
++	/* refcount for list is established by kref_init() */
+ 	spin_unlock(&test->lock);
+ 
+-	return res;
++	return ret;
+ }
+-EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
++EXPORT_SYMBOL_GPL(kunit_add_resource);
+ 
+-static void kunit_resource_free(struct kunit *test, struct kunit_resource *res)
++int kunit_add_named_resource(struct kunit *test,
++			     kunit_resource_init_t init,
++			     kunit_resource_free_t free,
++			     struct kunit_resource *res,
++			     const char *name,
++			     void *data)
+ {
+-	res->free(res);
+-	kfree(res);
++	struct kunit_resource *existing;
++
++	if (!name)
++		return -EINVAL;
++
++	existing = kunit_find_named_resource(test, name);
++	if (existing) {
++		kunit_put_resource(existing);
++		return -EEXIST;
++	}
++
++	res->name = name;
++
++	return kunit_add_resource(test, init, free, res, data);
+ }
++EXPORT_SYMBOL_GPL(kunit_add_named_resource);
+ 
+-static struct kunit_resource *kunit_resource_find(struct kunit *test,
+-						  kunit_resource_match_t match,
+-						  kunit_resource_free_t free,
+-						  void *match_data)
++struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
++						    kunit_resource_init_t init,
++						    kunit_resource_free_t free,
++						    gfp_t internal_gfp,
++						    void *data)
+ {
+-	struct kunit_resource *resource;
++	struct kunit_resource *res;
++	int ret;
+ 
+-	lockdep_assert_held(&test->lock);
++	res = kzalloc(sizeof(*res), internal_gfp);
++	if (!res)
++		return NULL;
+ 
+-	list_for_each_entry_reverse(resource, &test->resources, node) {
+-		if (resource->free != free)
+-			continue;
+-		if (match(test, resource->allocation, match_data))
+-			return resource;
++	ret = kunit_add_resource(test, init, free, res, data);
++	if (!ret) {
++		/*
++		 * bump refcount for get; kunit_resource_put() should be called
++		 * when done.
++		 */
++		kunit_get_resource(res);
++		return res;
+ 	}
+-
+ 	return NULL;
+ }
++EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
+ 
+-static struct kunit_resource *kunit_resource_remove(
+-		struct kunit *test,
+-		kunit_resource_match_t match,
+-		kunit_resource_free_t free,
+-		void *match_data)
++void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
+ {
+-	struct kunit_resource *resource;
+-
+ 	spin_lock(&test->lock);
+-	resource = kunit_resource_find(test, match, free, match_data);
+-	if (resource)
+-		list_del(&resource->node);
++	list_del(&res->node);
+ 	spin_unlock(&test->lock);
+-
+-	return resource;
++	kunit_put_resource(res);
+ }
++EXPORT_SYMBOL_GPL(kunit_remove_resource);
+ 
+-int kunit_resource_destroy(struct kunit *test,
+-			   kunit_resource_match_t match,
+-			   kunit_resource_free_t free,
++int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
+ 			   void *match_data)
+ {
+-	struct kunit_resource *resource;
+-
+-	resource = kunit_resource_remove(test, match, free, match_data);
++	struct kunit_resource *res = kunit_find_resource(test, match,
++							 match_data);
+ 
+-	if (!resource)
++	if (!res)
+ 		return -ENOENT;
+ 
+-	kunit_resource_free(test, resource);
++	kunit_remove_resource(test, res);
++
++	/* We have a reference also via _find(); drop it. */
++	kunit_put_resource(res);
++
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(kunit_resource_destroy);
++EXPORT_SYMBOL_GPL(kunit_destroy_resource);
+ 
+ struct kunit_kmalloc_params {
+ 	size_t size;
+@@ -500,8 +527,8 @@ static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
+ {
+ 	struct kunit_kmalloc_params *params = context;
+ 
+-	res->allocation = kmalloc(params->size, params->gfp);
+-	if (!res->allocation)
++	res->data = kmalloc(params->size, params->gfp);
++	if (!res->data)
+ 		return -ENOMEM;
+ 
+ 	return 0;
+@@ -509,7 +536,7 @@ static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
+ 
+ static void kunit_kmalloc_free(struct kunit_resource *res)
+ {
+-	kfree(res->allocation);
++	kfree(res->data);
+ }
+ 
+ void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
+@@ -529,20 +556,25 @@ EXPORT_SYMBOL_GPL(kunit_kmalloc);
+ 
+ void kunit_kfree(struct kunit *test, const void *ptr)
+ {
+-	int rc;
++	struct kunit_resource *res;
+ 
+-	rc = kunit_resource_destroy(test,
+-				    kunit_resource_instance_match,
+-				    kunit_kmalloc_free,
+-				    (void *)ptr);
++	res = kunit_find_resource(test, kunit_resource_instance_match,
++				  (void *)ptr);
++
++	/*
++	 * Removing the resource from the list of resources drops the
++	 * reference count to 1; the final put will trigger the free.
++	 */
++	kunit_remove_resource(test, res);
++
++	kunit_put_resource(res);
+ 
+-	WARN_ON(rc);
+ }
+ EXPORT_SYMBOL_GPL(kunit_kfree);
+ 
+ void kunit_cleanup(struct kunit *test)
+ {
+-	struct kunit_resource *resource;
++	struct kunit_resource *res;
+ 
+ 	/*
+ 	 * test->resources is a stack - each allocation must be freed in the
+@@ -559,13 +591,16 @@ void kunit_cleanup(struct kunit *test)
+ 			spin_unlock(&test->lock);
+ 			break;
+ 		}
+-		resource = list_last_entry(&test->resources,
+-					   struct kunit_resource,
+-					   node);
+-		list_del(&resource->node);
++		res = list_last_entry(&test->resources,
++				      struct kunit_resource,
++				      node);
++		/*
++		 * Need to unlock here as a resource may remove another
++		 * resource, and this can't happen if the test->lock
++		 * is held.
++		 */
+ 		spin_unlock(&test->lock);
+-
+-		kunit_resource_free(test, resource);
++		kunit_remove_resource(test, res);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(kunit_cleanup);
+
+--------------F323B03CA4D0B5E3B3156FEF--
