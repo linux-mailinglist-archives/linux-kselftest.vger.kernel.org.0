@@ -2,470 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEC6201B9D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 21:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71624201BA3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 21:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390541AbgFSTtI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Jun 2020 15:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S2390642AbgFSTuz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Jun 2020 15:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390270AbgFSTtI (ORCPT
+        with ESMTP id S2390220AbgFSTuy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 15:49:08 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC2C06174E;
-        Fri, 19 Jun 2020 12:49:07 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id q198so2281155qka.2;
-        Fri, 19 Jun 2020 12:49:07 -0700 (PDT)
+        Fri, 19 Jun 2020 15:50:54 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133BFC06174E
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:50:54 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id j1so4868602pfe.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:50:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6UU3semgSfmE4cT8/An3pAGMSXCzQAx1R9TLWqf3Z/U=;
-        b=fW9yDAv8iK+gHJd3qRnrysXyhHN5IFYe+2rHqBkxufdkPKyTWQzNaonEgO51K4vQJZ
-         2LzMapB2faj7jJcaM98wuSan0n49TAL3sDjvy0NdXhCoZ+UcHPfdFJ/LgANbxN05Mba5
-         hzg/flOCTJy0xx5GnZZhS6QEL38fw5TUnKXZCLICUMuZv8SjVyA3xj9StfbI/EF9yA7/
-         LIOOy1mNsUK5yzeLJsDqx3NUzgLkTG+E+23EZ0ASiDZtIgz2FvjpFl5w0tVLFXaT7Cll
-         pShHpBjFkN5uuXtxqhM6fN0JfJ6sD64A4w1E/qFH6c0GT9ncxZmGiYQbCskqjY9bX4Z4
-         h/NQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aNT64JH4pEFGIW/zOKuYzIi+PxEqhWFih4V3DtMG5uw=;
+        b=KG3HLTZqAizhXno+SvHB3QU8UgG5DSs2DDiK4JSvYwT0dXUgdjLm+SzEy0nDs63BIa
+         6nJQ42blal7wAjbcLi+3pwKuL2BNdtMif3R9vV0ibh49nqpYHmUuEaFY453sFeTi8TMB
+         qv69DHklzRs7nQLdJNwaPCpK60msvzUoo/gUUk9uKpfDs5IlJjVPciyOzPbqezC/pT83
+         n/GIY/O0eEoMNHtLityMrxCgGATz4U4a7V854f79pKWRIwbEQwZ5h054cJKi4gFHrnVf
+         BeGgliaDqVJlPkhqH6xDv3w7Q99uO8xiJToRdQmKvd1hjx0e/Cc37+pezgu9mrB+xhSp
+         HlRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6UU3semgSfmE4cT8/An3pAGMSXCzQAx1R9TLWqf3Z/U=;
-        b=nX2DyXCPhvY07pOcq9Bah5LhNzPegJHqy12DEOxBct8TNGD+Y8xxOHTPJNnCs0XmfT
-         DDJNsOq6VAF6okPWqSaXF45ahIOuDsqkjsAmDXn3lbq9Yw2assJ91U8YwPV0+UceRKEB
-         RxUXQidmXNX8+drOphs7Ic/XqB4vxfF/PxVub3LTXudO9NPJdjJ2yTmM//TuhvRIsMUt
-         4uNo0SuEZNIk9vuVPVgfv7V2CGfeEGAIJ35PflO+f6YM+Ap5FFKTisAoffzcJUHiFBKB
-         CEOGDJk13cDIjfThNXEejWGBeyhsvsb3GtqMcuDHlw5bf6gDn629xIIaB3WTQtuYc7eG
-         lS/g==
-X-Gm-Message-State: AOAM531X0e3BwQ9rK/Gz9+ljve+c3QFdw1UPFkaQm+PyM2+Bic+Bsblu
-        5cgy2kR0YBboZvaiHptzmXU=
-X-Google-Smtp-Source: ABdhPJz/czwlZ8ht+b83Ri+dcsp2qwPJlaDD+vC8cYdIocRmkLaci47EHHB4TM7sM7H1dSMwMudoNA==
-X-Received: by 2002:a37:a589:: with SMTP id o131mr5308807qke.102.1592596146186;
-        Fri, 19 Jun 2020 12:49:06 -0700 (PDT)
-Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id t65sm7214284qke.83.2020.06.19.12.49.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2020 12:49:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aNT64JH4pEFGIW/zOKuYzIi+PxEqhWFih4V3DtMG5uw=;
+        b=nQayx+2InhQr15UEaUr909Zs0/hKd9RrBPX8CSXmyfRE9uryT3DnU0KPnn68vsryzA
+         tVhxSaI7n81LnBtsk/YiJcTmlU/0pMdxEl95m09G0EGjfxPIKuhg7fBDFclgxt0EhZkY
+         csVchOw6ViwJvh/HGDnd/pSJpfiY0d3if8jXxqWT0AZ73cw207dAPfJEWXSHg1dbtXUd
+         Q0Zty8zPNQMgs8T2RPvZc84DtoKTP3xJx9PbrUjXGia+oiSAAevUuA79kBnEsh/Y6OpB
+         IClZeLfVXZ9VdG0p5uT7jUHZOQDcuYi0oq63R9WNoLF2YlL61WtgrwCKY6R2qwqG2VS7
+         gHUg==
+X-Gm-Message-State: AOAM533wTlmGsZKk9bXqRb3qpZ8Cs21TYKkJurFAeKZceNm4Ayfgmb4d
+        /mTHrCrHukaC+NequgKRwVUlIgsXDb2UPgmIO6MgCQ==
+X-Google-Smtp-Source: ABdhPJzCbeGw8aqUSCSne4JgLyCwGUWXAGu/3y8GGUrbwN50PA0lsKp01F63TLMxspcEfPHDiA2gG1W3jqhNDrBn270=
+X-Received: by 2002:a63:4c08:: with SMTP id z8mr4188941pga.201.1592596253398;
+ Fri, 19 Jun 2020 12:50:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <202006141120.96FF8C5@keescook> <CY4PR13MB11757D57CD441C5CAEC3F257FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <202006161642.A5F50ED07@keescook>
+In-Reply-To: <202006161642.A5F50ED07@keescook>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 19 Jun 2020 12:50:42 -0700
+Message-ID: <CAFd5g46VkEbYemSv2PC28GyGTSipoFG+e6yqO--H9e2Sa+UdbQ@mail.gmail.com>
 Subject: Re: RFC - kernel selftest result documentation (KTAP)
-To:     "Bird, Tim" <Tim.Bird@sony.com>, Kees Cook <keescook@chromium.org>
-Cc:     "shuah@kernel.org" <shuah@kernel.org>,
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         David Gow <davidgow@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>
-References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
- <202006141120.96FF8C5@keescook>
- <CY4PR13MB11757D57CD441C5CAEC3F257FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <f27565bd-fd3d-def5-15ac-ec46950f2d9c@gmail.com>
-Date:   Fri, 19 Jun 2020 14:49:04 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <CY4PR13MB11757D57CD441C5CAEC3F257FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-06-15 14:07, Bird, Tim wrote:
-> Kees,
-> 
-> Thanks for the great feedback.  See comments inline below.
-> 
->> -----Original Message-----
->> From: Kees Cook <keescook@chromium.org>
->>
->> On Wed, Jun 10, 2020 at 06:11:06PM +0000, Bird, Tim wrote:
->>> The kernel test result format consists of 5 major elements,
->>> 4 of which are line-based:
->>>  * the output version line
->>>  * the plan line
->>
->> Note: making the plan line required differs from TAP13 and TAP14. I
->> think it's the right choice, but we should be clear.
-> 
-> Noted.  In re-reading my doc, I've conflated my sections.  The first
-> section is "single-line", and the next section is "optional".  ???
-> I'll fix that.
-> 
-> With regards to making it optional or not, I don't have a strong
-> preference.  The extra info seems helpful in some circumstances.
-> I don't know if it's too onerous to make it a requirement or not.
-> I'd prefer if it was always there (either at the beginning or the end),
-> but if there is some situation where it's quite difficult to calculate,
-> then it would be best not to mandate it. I can't think of any impossible
-> situations at the moment.
-> 
->>
->>>  * one or more test result lines (also called test result lines)
->>>  * a possible "Bail out!" line
->>
->> "Bail out!" to be moved to "optional" elements, since it may not appear.
->> And we should clarify TAP13 and TAP14's language to say it should only
->> appear when the test is aborting without running later tests -- for this
->> reason, I think the optional "description" following "Bail out!" should
->> be made required. I.e. it must be: "Bail out! $reason"
-> 
-> I'll make sure this is listed as optional.
-> I like adding a mandatory reason.
->>
->>> optional elements:
->>>  * diagnostic data
->>
->> nit: diagnostic lines (not data)
-> OK.
-> 
->>
->>> The 5th element is diagnostic information, which is used to describe
->>> items running in the test, and possibly to explain test results.
->>> A sample test result is show below:
->>>
->>> Some other lines may be placed the test harness, and are not emitted
->>> by individual test programs:
->>>  * one or more test identification lines
->>>  * a possible results summary line
->>>
->>> Here is an example:
->>>
->>> 	TAP version 13
->>> 	1..1
->>> 	# selftests: cpufreq: main.sh
->>> 	# pid 8101's current affinity mask: fff
->>> 	# pid 8101's new affinity mask: 1
->>> 	ok 1 selftests: cpufreq: main.sh
->>
->> Nit: for examples, I this should should show more than one test.
->> (Preferably, it should show all the possible cases, ok, not ok, SKIP,
->> etc.)
-> Agree.  I will expand this.
-> 
->>
->>> The output version line is: "TAP version 13"
->>>
->>> The test plan is "1..1".
->>>
->>> Element details
->>> ===============
->>>
->>> Output version line
->>> -------------------
->>> The output version line is always "TAP version 13".
->>>
->>> Although the kernel test result format has some additions
->>> to the TAP13 format, the version line reported by kselftest tests
->>> is (currently) always the exact string "TAP version 13"
->>>
->>> This is always the first line of test output.
->>>
->>> Test plan line
->>> --------------
->>> The test plan indicates the number of individual test cases intended to
->>> be executed by the test. It always starts with "1.." and is followed
->>> by the number of tests cases.  In the example above, 1..1", indicates
->>> that this test reports only 1 test case.
->>>
->>> The test plan line can be placed in two locations:
->>>  * the second line of test output, when the number of test cases is known
->>>    in advance
->>>  * as the last line of test output, when the number of test cases is not
->>>    known in advance.
->>>
->>> Most often, the number of test cases is known in advance, and the test plan
->>> line appears as the second line of test output, immediately following
->>> the output version line.  The number of test cases might not be known
->>> in advance if the number of tests is calculated from runtime data.
->>> In this case, the test plan line is emitted as the last line of test
->>> output.
->>
->> "... must be ..." ?
->>
->>>
->>> Test result lines
->>> -----------------
->>> The test output consists of one or more test result lines that indicate
->>> the actual results for the test.  These have the format:
->>>
->>>   <result> <number> <description> [<directive>] [<diagnostic data>]
->>
->> This should be:
->>
->> <result> <number> <description> [# [<directive> ][<diagnostic data>]]
->>
->>>
->>> The ''result'' must appear at the start of a line (except for when a
->>> test is nested, see below), and must consist of one of the following
->>> two phrases:
->>>   * ok
->>>   * not ok
->>>
->>> If the test passed, then the result is reported as "ok".  If the test
->>> failed, then the result is reported as "not ok".  These must be in
->>> lower case, exactly as shown.
->>>
->>> The ''number'' in the test result line represents the number of the
->>> test case being performed by the test program.  This is often used by
->>> test harnesses as a unique identifier for each test case.  The test
->>> number is a base-10 number, starting with 1.  It should increase by
->>> one for each new test result line emitted.  If possible the number
->>> for a test case should be kept the same over the lifetime of the test.
->>>
->>> The ''description'' is a short description of the test case.
->>> This can be any string of words, but should avoid using colons (':')
->>
->> Must also avoid "#".
-> ok.
->>
->>> except as part of a fully qualifed test case name (see below).
->>
->> TAP13/14 makes description optional, are we making it required (I think
->> we should). There seems to be a TAP13/14 "convention" of starting
->> <description> with "- ", which I'm on the fence about it. It does make
->> parsing maybe a little easier.
-> 
-> I would like the description to be required.
+On Tue, Jun 16, 2020 at 4:52 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Jun 15, 2020 at 07:07:34PM +0000, Bird, Tim wrote:
+> > From: Kees Cook <keescook@chromium.org>
+> > > Note: making the plan line required differs from TAP13 and TAP14. I
+> > > think it's the right choice, but we should be clear.
+> >
+> > [...]
+> > With regards to making it optional or not, I don't have a strong
+> > preference.  The extra info seems helpful in some circumstances.
+> > I don't know if it's too onerous to make it a requirement or not.
+> > I'd prefer if it was always there (either at the beginning or the end),
+> > but if there is some situation where it's quite difficult to calculate,
+> > then it would be best not to mandate it. I can't think of any impossible
+> > situations at the moment.
+>
+> I think we should require one of:
+>
+> - starting plan line
+> - ending plan line
+> - ending with something that indicates "I'm done, but I have no idea how
+>   many tests actually ran" (Maybe "1..?")
+>
+> To me, the point of the plan line is to be able to say "this test did,
+> in fact, finish". So even if some test can't even count how many tests
+> it _ran_, it can at least say "I am now finished".
 
-Agree, description should be required.
+So the counting is actually not the hard part for us, it's figuring
+out when we have finished. Again, the change that I am working on (I
+REALLY need to get that out) should fix that, but until we get that
+upstream, KUnit doesn't actually know when it is done running tests.
 
--Frank
+> > > TAP13/14 makes description optional, are we making it required (I think
+> > > we should). There seems to be a TAP13/14 "convention" of starting
+> > > <description> with "- ", which I'm on the fence about it. It does make
+> > > parsing maybe a little easier.
+> >
+> > I would like the description to be required.
+> > I don't have a strong opinion on the dash.  I'm OK with either one (dash
+> > or no dash), but we should make kselftest and KUnit consistent.
+>
+> I find the dash to be distracting -- it doesn't help me scan it, and it
+> doesn't help a parser (which only needs to find "#").
 
-> I don't have a strong opinion on the dash.  I'm OK with either one (dash
-> or no dash), but we should make kselftest and KUnit consistent.
-> 
->>
->>> Finally, it is possible to use a test directive to indicate another
->>> possible outcome for a test: that it was skipped.  To report that
->>> a test case was skipped, the result line should start with the
->>> result "not ok", and the directive "# SKIP" should be placed after
->>> the test description. (Note that this deviates from the TAP13
->>> specification).
->>
->> This is what TAP14 changed, I think (i.e. directive follows description
->> now).
->>
->>>
->>> A test may be skipped for a variety of reasons, ranging for
->>> insufficient privileges to missing features or resources required
->>> to execute that test case.
->>>
->>> It is usually helpful if a diagnostic message is emitted to explain
->>> the reasons for the skip.  If the message is a single line and is
->>> short, the diagnostic message may be placed after the '# SKIP'
->>> directive on the same line as the test result.  However, if it is
->>> not on the test result line, it should precede the test line (see
->>> diagnostic data, next).
->>>
->>> Diagnostic data
->>> ---------------
->>> Diagnostic data is text that reports on test conditions or test
->>> operations, or that explains test results.  In the kernel test
->>> result format, diagnostic data is placed on lines that start with a
->>> hash sign, followed by a space ('# ').
->>>
->>> One special format of diagnostic data is a test identification line,
->>> that has the fully qualified name of a test case.  Such a test
->>> identification line marks the start of test output for a test case.
->>>
->>> In the example above, there are three lines that start with '#'
->>> which precede the test result line:
->>> 	# selftests: cpufreq: main.sh
->>> 	# pid 8101's current affinity mask: fff
->>> 	# pid 8101's new affinity mask: 1
->>> These are used to indicate diagnostic data for the test case
->>> 'selftests: cpufreq: main.sh'
->>>
->>> Material in comments between the identification line and the test
->>> result line are diagnostic data that can help to interpret the
->>> results of the test.
->>>
->>> The TAP specification indicates that automated test harnesses may
->>> ignore any line that is not one of the mandatory prescribed lines
->>> (that is, the output format version line, the plan line, a test
->>> result line, or a "Bail out!" line.)
->>>
->>> Bail out!
->>> ---------
->>> If a line in the test output starts with 'Bail out!', it indicates
->>> that the test was aborted for some reason.  It indicates that
->>> the test is unable to proceed, and no additional tests will be
->>> performed.
->>>
->>> This can be used at the very beginning of a test, or anywhere in the
->>> middle of the test, to indicate that the test can not continue.
->>
->> I think the required syntax should be:
->>
->> Bail out! <reason>
->>
->> And to make it clear that this is optionally used to indicate an early
->> abort. (Though with a leading plan line, a parser should be able to
->> determine this on its own.)
->>
->>> --- from here on is not-yet-organized material
->>>
->>> Tip:
->>>  - don't change the test plan based on skipped tests.
->>>    - it is better to report that a test case was skipped, than to
->>>      not report it
->>>    - that is, don't adjust the number of test cases based on skipped
->>>      tests
->>
->> Yes, totally.
->>
->>> Other things to mention:
->>> TAP13 elements not used:
->>>  - yaml for diagnostic messages
->>>    - reason: try to keep things line-based, since output from other things
->>>    may be interspersed with messages from the test itself
->>
->> Agreed: the yaml extension is not sensible for our use.
->>
->>>  - TODO directive
->>
->> Agreed: SKIP should cover everything TODO does.
->>
->>> KTAP Extensions beyond TAP13:
->>>  - nesting
->>
->> (I would call this 'subtests')
-> Sounds good.  Will do.
-> 
->>
->>>    - via indentation
->>>      - indentation makes it easier for humans to read
->>
->> And allows for separable parsing of subtests.
-> Agree.  I'll try to work that into the doc.
-> 
->>
->>>  - test identifier
->>>     - multiple parts, separated by ':'
->>
->> This is interesting... is the goal to be able to report test status over
->> time by name?
-> Yes.  KernelCI and Fuego have the notions of a testcase namespace
-> hierarchy.  As the number of tests expands it is helpful to have
-> the name-space for a sub-test be limited, just like a filesystem hierarchy
-> provides scope for the names of objects (directories and files) that
-> it contains.
-> 
->>
->>>  - summary lines
->>>    - can be skipped by CI systems that do their own calculations
->>
->> Right -- I think per-test summary line should be included for the humans
->> reading a single test (which may scroll off the screen).
->>
->>> Other notes:
->>>  - automatic assignment of result status based on exit code
->>
->> This is, I think, a matter for the kselftest running infrastructure, not
->> the KTAP output?
-> Agreed.  This doesn't have anything to do with the API between
-> the tests and the results processor.  I'll take it out.
->>
->>> Tips:
->>>  - do NOT describe the result in the test line
->>>    - the test case description should be the same whether the test
->>>      succeeds or fails
->>>    - use diagnostic lines to describe or explain results, if this is
->>>      desirable
->>
->> Right.
->>
->>>  - test numbers are considered harmful
->>>    - test harnesses should use the test description as the identifier
->>>    - test numbers change when testcases are added or removed
->>>      - which means that results can't be compared between different
->>>        versions of the test
->>
->> Right.
->>
->>>  - recommendations for diagnostic messages:
->>>    - reason for failure
->>>    - reason for skip
->>>    - diagnostic data should always preceding the result line
->>>      - problem: harness may emit result before test can do assessment
->>>        to determine reason for result
->>>      - this is what the kernel uses
->>
->> Right.
->>
->>> Differences between kernel test result format and TAP13:
->>>  - in KTAP the "# SKIP" directive is placed after the description on
->>>    the test result line
->>
->> Right, this is the same as TAP14, IIRC. KTAP's big deltas are the "#"
->> diagnostic lines and the subtest handling.
->>
->>> ====== start of ktap-doc-rfc.txt ======
->>> OK - that's the end of the RFC doc.
->>>
->>> Here are a few questions:
->>>  - is this document desired or not?
->>
->> Yes.
-> Great.  I'll make this a priority to work on.
-> 
->>
->>>     - is it too long or too short?
->>
->> Should be slightly longer: more examples.
->>
->>>  - if the document is desired, where should it be placed?
->>>    I assume somewhere under Documentation, and put into
->>>    .rst format. Suggestions for a name and location are welcome.
->>
->> Yes Documentation/*.rst Not sure on name yet, but where do kselftest
->> docs live? :)
-> Documentation/dev-tools/kselftest.rst
-> 
-> I'll put this at: Documentation/dev-tools/test-results-format.rst
-> 
->>
->>>  - is this document accurate?
->>>    I think KUNIT does a few things differently than this description.
->>
->> Let's fix it. :)
->>
->>>    - is the intent to have kunit and kselftest have the same output format?
->>>       if so, then these should be rationalized.
->>
->> Yes please.
->>
->>> Finally,
->>>   - Should a SKIP result be 'ok' (TAP13 spec) or 'not ok' (current kselftest practice)?
->>> See https://testanything.org/tap-version-13-specification.html
->>
->> Oh! I totally missed this. Uhm. I think "not ok" makes sense to me "it
->> did not run successfully". ... but ... Uhhh ... how do XFAIL and SKIP
->> relate? Neither SKIP nor XFAIL count toward failure, though, so both
->> should be "ok"? I guess we should change it to "ok".
-> 
-> I have the same initial impression.  In my mind, a skip is "not ok", since
-> the test didn't run. However, a SKIP and should be treated differently
-> from either "ok" or "not ok" by the results interpreter, so I don't think it
-> matters.  Originally I was averse to changing the SKIP result to "ok"
-> (as suggested by Paulo Bonzini [1]), but I checked and it's pretty trivial to
-> change the parser in Fuego, and it would make the kernel results format
-> match the TAP13 spec.  I don't see a strong reason for us to be different
-> from TAP13 here.
-> 
-> I raised this issue on our automated testing conference call last week
-> (which includes people from the CKI, Fuego, KernelCI and LKFT projects), and
-> so people should be chiming in if their parser will have a problem with this change.)
-> 
-> [1]  https://lkml.kernel.org/lkml/20200610154447.15826-1-pbonzini@redhat.com/T/
-> 
-> Thanks very much for the feedback.
->  -- Tim
-> 
+Yeah, I also prefer spaces and/or "#". I am okay if spaces are
+optional only to aid human readability. And honestly I don't care
+about this point too much. Just offering my 2 cents.
 
+> > > > Differences between kernel test result format and TAP13:
+> > > >  - in KTAP the "# SKIP" directive is placed after the description on
+> > > >    the test result line
+>
+> I sent a bunch of clean-ups for kselftest.h recently[1], but it looks
+> like we'll need more for adding "description" to skip (right now it only
+> prints the SKIP reason).
+>
+> [1] https://lore.kernel.org/lkml/20200611224028.3275174-1-keescook@chromium.org/
+>
+> > > Yes Documentation/*.rst Not sure on name yet, but where do kselftest
+> > > docs live? :)
+> > Documentation/dev-tools/kselftest.rst
+> >
+> > I'll put this at: Documentation/dev-tools/test-results-format.rst
+>
+> Sounds good!
+>
+> --
+> Kees Cook
