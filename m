@@ -2,172 +2,255 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6071C201B4C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 21:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4EA201B71
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 21:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388919AbgFSTcP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Jun 2020 15:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S2389745AbgFSTkI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Jun 2020 15:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388640AbgFSTcP (ORCPT
+        with ESMTP id S2389005AbgFSTkI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 15:32:15 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D569C0613EE
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:32:14 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d10so2403981pls.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:32:14 -0700 (PDT)
+        Fri, 19 Jun 2020 15:40:08 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44F1C0613EE
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:40:06 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id l24so4921237pgb.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 12:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=X6pNECJHvGGo04RDB6FGiFe7cqfTlSabjrTVzSNhffo=;
-        b=lm4u8G+6xBJp/u/tfZ6W4QB3eDaPcNn8Gr+lIzoILXOx2Kj/Hqaul6eLUdBPxHefvA
-         pQM9K8l0AkbePEk6ovHqqZz3Vj/VJfyaow8VlqOh4t/LGyM9M0/hEUTJ8u4IvTRB+PG/
-         MqfJ01qXdUshNEzBMOmwSzfxJRUkxv2yZGURqKLq0ve4wlcgMvIh38xTNPspYLc7j46x
-         fqFufjmzMG9s1TJilozY9RswkoLJdhVOIHcE/FbcdzvWHXxjAXUBNVNlfS447YpHtVo2
-         sAeRjZe709JcYMSCSdRhvQy6jKEISzJJGsSqy/qt9Z9URlksjllfeJkHfoQebEHBKftn
-         sEhQ==
+        bh=sX1c9FKybz5ArwGZsmczF2qzdLUq4rRk/oQnybs6nAA=;
+        b=Zyhih7gCW1Rw5b2dY839uPGQNBaD8BZ/7M30FwYAbVf7zxQ38XLRJrw7wQzQ6q627B
+         HHlYY4cKIoMgxOsRISu101Gba9Djfr5m7SDoxHltoCPw99Knu6jmrki8FaKuRxfcjDhK
+         yCTNxuh1Swd4l9bV0IClEPRNt4WQA2kz1NMvJO/L8RfIOHtX+oJtp/BAoj3twu58LdMN
+         +3hN5mPICWMPRzmgHNUFA9pA4/f7V+U7IyVPHMD3p2kvCTZXh+JEk+KHkT8OHE3veNbY
+         fADC6kNRhruXT3z3xT64FthvqeoqMcyBoSn69aFBypDP2Etsorlfpi6C5uVOcVIQfXFa
+         St0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=X6pNECJHvGGo04RDB6FGiFe7cqfTlSabjrTVzSNhffo=;
-        b=MnCxBoPyuIGwS/R4pte2wnGFNU5wXHLbETqbNRe2vPpsViYCd2QWVjSKKul2XaiGAC
-         1G8r+lb46cME8MdbnHSMlVQqePU+s45hnXi6xpkF7jBQZ1ZNJmE0FozlHQZMEZZRgVBS
-         G2rXUsSZCihDHAB7gGPmO8UvsH3jS2QzVqIGwGup4IcABAJAKXTWDtdUuQCWyE0IbdGE
-         D1dxoSmA0QxFql29iY6gkOBG8jMTy4S88367qUc1WG9kyG6fhMz+Rvxr31hk6XYQNK3U
-         DBQ3CCnpIsjIF9Dikdg/keW1Gx8WLtqXgy+lq926ULOl02Py+C+UOHb53FlfgbyNaAh0
-         iHsQ==
-X-Gm-Message-State: AOAM532jhSIjt5vkrFoqVOam/E3NiAwnzR4r5XHTVZk51juglyIZLIqx
-        msjHrZoSXsSjeR2YXYnQ6pLFrLQkbviOmfQjbYKgdQ==
-X-Google-Smtp-Source: ABdhPJwBNNjvabPIUwUBBIl/SSANdgLOh4rsYgRth4Nx2nalMDaHLdz+BV03D2WjF3viQLc98eo52D747Rq5Y6hgkjk=
-X-Received: by 2002:a17:902:ea91:: with SMTP id x17mr9554513plb.325.1592595133363;
- Fri, 19 Jun 2020 12:32:13 -0700 (PDT)
+        bh=sX1c9FKybz5ArwGZsmczF2qzdLUq4rRk/oQnybs6nAA=;
+        b=CynplzvKPyag0ZwW/O7m5w6cW8OwPgCQIChOdTRv2BtfqeVVU4ltcJ28h0LOAmSlnv
+         zp4i02s/IzuIxPN6IkxD5zrYp3s3a9N5yIpzXqbIFQUi4SnPeUAg6IabOaUfkMgByOzF
+         Jyg1nYG4M8iB2yMXPXJXGLohU0dYirkHNhYE69tcRxcMUArGoTx9c6QGGbktC8VJo7h4
+         b2/qRj+OCrTF604OyPVpITdhmKNzuNo+v1dFlhjOb6Hhr9HP4p7Gbx64vkj3sr2jpQ3M
+         aCr2TDFILkKKHJTVG4ayEm/dczkpwsspG9rp41lV6FELLHdApzjCUwGxt0WDn4GLEPki
+         yVlA==
+X-Gm-Message-State: AOAM532n5snsw2N8M72+okBOZQYD0eKX+xWR78qDGhFI1enKmhIsvYCL
+        ahENUPu/kQdyjq9VMwiQUFdilj4CgTS9PtkWJA/fcQ==
+X-Google-Smtp-Source: ABdhPJyJnniJbG3habLLAfMpUidGHy8a1ZGt/i1Hk+hJyhz9BpuOxYBBz/0l4p7chYrmHj00hvuw3ZrKBUsIqj4seoo=
+X-Received: by 2002:a62:216:: with SMTP id 22mr9339339pfc.106.1592595604611;
+ Fri, 19 Jun 2020 12:40:04 -0700 (PDT)
 MIME-Version: 1.0
 References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
- <CABVgOSkrKHs_uWLZ++_fBC_mfe3RgDxmCvnkcyn1P_wjXTV9Og@mail.gmail.com>
- <CY4PR13MB11756803217A9D20456E826FFD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
- <CAFd5g458XTDftQAOm-K4Squ5-ZuZnZcFdVUG0JtUWF56cODOVg@mail.gmail.com> <CY4PR13MB1175CB6221D5859AAC9920C6FD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
-In-Reply-To: <CY4PR13MB1175CB6221D5859AAC9920C6FD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <20200616204817.GA212825@google.com> <CY4PR13MB1175A71AE3937C0786721ABFFD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
+In-Reply-To: <CY4PR13MB1175A71AE3937C0786721ABFFD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 19 Jun 2020 12:32:01 -0700
-Message-ID: <CAFd5g44qO4+jE9ZXMM6KFwAFW-56ndV93E-TQbGNeemgkfLg9w@mail.gmail.com>
+Date:   Fri, 19 Jun 2020 12:39:53 -0700
+Message-ID: <CAFd5g44fueJUMYxWoEa6YEW_9+LjZ7XWQQB17e1cQtZ911KBWg@mail.gmail.com>
 Subject: Re: RFC - kernel selftest result documentation (KTAP)
-To:     "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     David Gow <davidgow@google.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
+To:     "Bird, Tim" <Tim.Bird@sony.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Cc:     "shuah@kernel.org" <shuah@kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 1:37 PM Bird, Tim <Tim.Bird@sony.com> wrote:
+On Tue, Jun 16, 2020 at 2:16 PM Bird, Tim <Tim.Bird@sony.com> wrote:
+>
+>
 >
 > > -----Original Message-----
-> > From: Brendan Higgins <brendanhiggins@google.com>
+> > From: Brendan Higgins
 > >
-> > On Mon, Jun 15, 2020 at 10:34 AM Bird, Tim <Tim.Bird@sony.com> wrote:
+> > On Wed, Jun 10, 2020 at 06:11:06PM +0000, Bird, Tim wrote:
+> > > Some months ago I started work on a document to formalize how
+> > > kselftest implements the TAP specification.  However, I didn't finish
+> > > that work.  Maybe it's time to do so now.
 > > >
-> > > > -----Original Message-----
-> > > > From: David Gow <davidgow@google.com>
-> > > >
-> > > > On Thu, Jun 11, 2020 at 2:11 AM Bird, Tim <Tim.Bird@sony.com> wrote:
+> > > kselftest has developed a few differences from the original
+> > > TAP specification, and  some extensions that I believe are worth
+> > > documenting.
+> > >
+> > > Essentially, we have created our own KTAP (kernel TAP)
+> > > format.  I think it is worth documenting our conventions, in order to
+> > > keep everyone on the same page.
+> > >
+> > > Below is a partially completed document on my understanding
+> > > of KTAP, based on examination of some of the kselftest test
+> > > output.  I have not reconciled this with the kunit output format,
+> > > which I believe has some differences (which maybe we should
+> > > resolve before we get too far into this).
+> > >
+> > > I submit the document now, before it is finished, because a patch
+> > > was recently introduced to alter one of the result conventions
+> > > (from SKIP='not ok' to SKIP='ok').
+> > >
+> > > See the document include inline below
+> > >
+> > > ====== start of ktap-doc-rfc.txt ======
+> >
 > > [...]
-> > > > KUnit is currently outputting "TAP version 14", as we were hoping some
-> > > > of our changes would get into the TAP14 spec. (Any comments, Brendan?)
-> > > > Maybe this should end up saying "KTAP version 1" or something?
+> >
+> > > --- from here on is not-yet-organized material
 > > >
-> > > I don't know if this will break any existing results parsers or not.
-> > > I hesitate to use "TAP version 14", as TAP appears to be a dormant
-> > > initiative at the moment, and there's no guarantee that the kernel's
-> > > changes will get adopted into an official spec.
+> > > Tip:
+> > >  - don't change the test plan based on skipped tests.
+> > >    - it is better to report that a test case was skipped, than to
+> > >      not report it
+> > >    - that is, don't adjust the number of test cases based on skipped
+> > >      tests
+> > >
+> > > Other things to mention:
+> > > TAP13 elements not used:
+> > >  - yaml for diagnostic messages
 > >
-> > We were using "TAP version 14" since the "extensions" we are using
-> > were all proposed among the TAP people to go into the next version of
-> > TAP. Based on discussions among them they seem to like the subtest
-> > stuff:
+> > We talked about this before, but I would like some way to get failed
+> > expectation/assertion information in the test in a consistent machine
+> > parsible way. Currently we do the following:
 > >
-> > https://github.com/TestAnything/testanything.github.io/pull/36
+> >     # Subtest: example
+> >     1..1
+> >     # example_simple_test: initializing
+> >     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+> >     Expected 1 + 1 == 3, but
+> >         1 + 1 == 2
+> >         3 == 3
+> >     not ok 1 - example_simple_test
+> > not ok 5 - example
 > >
-> > Anyway, I can still appreciate that they might change their minds.
-> I don't know if there's anyone left around to change their mind.
+> > Technically not TAP compliant, but no one seems to mind. I am okay with
+> > keeping it the way it is, but if we don't want it in the KTAP spec, we
+> > will need some kind of recourse.
 >
-> I have to agree with isaacs (who proposed TAP14 5 years ago),
-> that the TAP specification is in a weird state.
->
-> https://github.com/TestAnything/testanything.github.io/pull/36#issuecomment-566321633
->
-> There have been commits to the github respository by a few different
-> people recently (3 commits in the last 9 months).  But there's no body to approve or
-> disapprove of a new spec.
->
+> So far, most of the CI systems don't parse out diagnostic data, so it doesn't
+> really matter what the format is.  If it's useful for humans, it's valuable as is.
+> However, it would be nice if that could change.  But without some formalization
+> of the format of the diagnostic data, it's an intractable problem for CI systems
+> to parse it.  So it's really a chicken and egg problem.  To solve it, we would have
+> to determine what exactly needs to be provided on a consistent basis for diagnostic
+> data across many tests.  I think that it's too big a problem to handle right now.
+> I'm not opposed to migrating to some structure with yaml in the future, but free
+> form text output seems OK for now.
+
+Well as long as everyone is cool with it for now we can put the
+problem for later.
+
+> > >    - reason: try to keep things line-based, since output from other things
+> > >    may be interspersed with messages from the test itself
+> > >  - TODO directive
 > >
-> > > If we are a strict super-set of TAP, then I suppose we could just
-> > > start using TAP version 14, and unilaterally declare that our changes
-> > > make a new spec.  But since we don't control the web site this feels
-> > > like a hostile takeover.
+> > Is this more of stating a fact or desire? We don't use TODO either, but
+> > it looks like it could be useful.
+> Just stating a fact.  I didn't find TODO in either KUnit or selftest in
+> November when I initially wrote this up.  If TODO serves as a kind
+> of XFAIL, it could be useful.  I have nothing against it.
+
+Fair enough.
+
+> > > KTAP Extensions beyond TAP13:
+> > >  - nesting
+> > >    - via indentation
+> > >      - indentation makes it easier for humans to read
+> > >  - test identifier
+> > >     - multiple parts, separated by ':'
 > >
-> > I just thought it was okay because it was already in their proposed
-> > TAP14 spec, but yeah, if we just decide amongst ourselves to use it,
-> > we should probably do something else.
+> > Can you elabroate on this more? I am not sure what you mean.
+> An individual test case can have a name that is scoped by a containing
+> test or test suite.  For example: selftests: cpufreq: main.sh
+> This test identifier consists of the test system (selftests), the test
+> area (cpufreq), and the test case name (main.sh).  This one's a bit
+> weird because the test case name is just the name of the program
+> in that test area.  The program itself doesn't output data in TAP format,
+> and the harness uses it's exit code to detect PASS/FAIL.  if main.sh had
+> multiple test cases, it might produce test identifiers like this:
+> selftests: cpufreq: main: check_change_afinity_mask
+> selftests: cpufreq: main: check_permissions_for_mask_operation
+> (Or it might just produce the last part of these strings, the
+> testcase names, and the testcase id might be something generated
+> by the harness or CI system.)
+
++Alan Maguire
+
+Aha, that is something we (Alan, David, Kees, and myself) were talking
+about on another thread:
+
+https://lore.kernel.org/linux-kselftest/CABVgOSnjrzfFOMF0VE1-5Ks-e40fc0XZsNZ92jE60ZOhYmZWog@mail.gmail.com/T/#m682be9f9103f7b363b702e49c137d83a4833fcae
+
+I think that makes a lot of sense if it isn't too hard in practice.
+
+> The value of having a single string to identify the testcase (like a
+> uniform resource locator), is that it's easier to use the string to
+> correlate results produced from different CI system that are executing
+> the same test.
+
+Makes sense.
+
+> > >  - summary lines
+> > >    - can be skipped by CI systems that do their own calculations
+> > >
+> > > Other notes:
+> > >  - automatic assignment of result status based on exit code
+> > >
+> > > Tips:
+> > >  - do NOT describe the result in the test line
+> > >    - the test case description should be the same whether the test
+> > >      succeeds or fails
+> > >    - use diagnostic lines to describe or explain results, if this is
+> > >      desirable
+> > >  - test numbers are considered harmful
+> > >    - test harnesses should use the test description as the identifier
+> > >    - test numbers change when testcases are added or removed
+> > >      - which means that results can't be compared between different
+> > >        versions of the test
+> > >  - recommendations for diagnostic messages:
+> > >    - reason for failure
+> > >    - reason for skip
+> > >    - diagnostic data should always preceding the result line
+> > >      - problem: harness may emit result before test can do assessment
+> > >        to determine reason for result
+> > >      - this is what the kernel uses
+> > >
+> > > Differences between kernel test result format and TAP13:
+> > >  - in KTAP the "# SKIP" directive is placed after the description on
+> > >    the test result line
+> > >
+> > > ====== start of ktap-doc-rfc.txt ======
+> > > OK - that's the end of the RFC doc.
+> > >
+> > > Here are a few questions:
+> > >  - is this document desired or not?
+> > >     - is it too long or too short?
+> > >  - if the document is desired, where should it be placed?
 > >
-> > > I'm most comfortable with calling our thing KTAP, and just
-> > > referencing TAP as inspiration.  I don't have a strong opinion on
+> > I like it. I don't think we can rely on the TAP people updating their
+> > stuff based on my interactions with them. So having a spec which is
+> > actually maintained would be nice.
 > >
-> > I am cool with that.
-> I hate forks, but if we do go with declaring our own fork as KTAP,
-> then we should probably pull in the TAP14 spec as a starting point.
-> Since it has no home other than in a pull request, it seems a bit tentative.
-> We may need to put the spec in the kernel source or something.
+> > Maybe in Documentation/dev-tools/ ?
+> I'm leaning towards Documentation/dev-tools/test-results_format.rst
 
-Yeah, I didn't really want to fork either, but I don't see any other
-way around it given the current state of TAP. Seems like if we want an
-updated maintained spec that doesn't live in a pull request, then it
-is up to us to give it a new home.
+SGTM.
 
-> I think we're definitely not doing anything with the yaml blocks at
-> the moment (or maybe ever), so there's one big point of departure.
-
-Yeah, seeing that everyone seems amenable to the expectation blocks
-that KUnit uses in our version of the spec, I don't see any other
-reason to keep YAML, and I agree it is probably the least desirable
-thing that they have in the spec. So yeah, I am on board with omitting
-YAML from KTAP.
-
-> > > KTAP vs TAP, but I do feel strongly that kselftest and kunit should use the
-> > > same version line (if we can get them to use the same conventions).
+> > >    I assume somewhere under Documentation, and put into
+> > >    .rst format. Suggestions for a name and location are welcome.
+> > >  - is this document accurate?
+> > >    I think KUNIT does a few things differently than this description.
+> > >    - is the intent to have kunit and kselftest have the same output format?
+> > >       if so, then these should be rationalized.
 > >
-> > Yeah, I agree: it would be better if there was just one version of
-> > (K)TAP in the kernel.
->
-> One thing that needs to be rationalized between KUnit and selftest
-> is the syntax for subtests.  KUnit follows the TAP14 spec, and starts
-> subtests with indented "# Subtest: name of the child test"
-> and selftests just indents the output from the child test, so it
-> starts with indented "TAP version 13".  One issue I have with the
-> TAP14/KUnit approach is that the output from the child is different
-> depending on whether the test is called in the context of another
-> test or not.
-
-I can see (in later emails), why you would say that. On the flip side,
-I think that indenting and starting off with "# Subtest: name of the
-child test" makes it a lot more readable for a human.
-
-> In KUnit, is it the parent test or the child test that prints out the
-> "# Subtest: ..." line?
-
-Short answer: The child test.
-
-Long answer: The answer is complicated. From KUnit's perspective the
-"parent test" is always just the collection of all test suites. Right
-now there is no loop that runs each test suite; each one is a
-late_initcall. However, that is something that we are working on
-fixing (I really need to get the next version of that patchset out).
+> > Yeah, I think it would be nice if all test frameworks/libraries for the
+> > kernel output tests in the same language.
+> Agreed.
 
 Cheers
