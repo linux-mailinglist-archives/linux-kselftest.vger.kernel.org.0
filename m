@@ -2,192 +2,295 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A171E201A27
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 20:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03C8201A6A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Jun 2020 20:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394200AbgFSSRi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Jun 2020 14:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S2387746AbgFSSdV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Jun 2020 14:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389232AbgFSSRf (ORCPT
+        with ESMTP id S1728430AbgFSSdV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 14:17:35 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB8BC06174E;
-        Fri, 19 Jun 2020 11:17:35 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id p15so4891810qvr.9;
-        Fri, 19 Jun 2020 11:17:35 -0700 (PDT)
+        Fri, 19 Jun 2020 14:33:21 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9509C06174E;
+        Fri, 19 Jun 2020 11:33:20 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id g28so9920218qkl.0;
+        Fri, 19 Jun 2020 11:33:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3uZCoM2AWA6/XtPvpJamTOlHYSrROKfn1hw8fNerrOg=;
-        b=f1MTzq5px1ZySmzMqwu8CBDsMcxnBOYGuyxhP7gnhUomFLUDKg0ESORk9IVOIyvxMV
-         6CAuFtQa/yKhdEZwRrwn9VgZfDyHPq01i8x+574sPCEbXnyKbH/SJ5NF5E36EvtnfMKz
-         eNGL8G7uZ/nCucgPYOpmJpeejDtvzyiyaRD+MmIb6LWZAavDBnE/J16UjPL5TB/rxVUQ
-         DVIbMgEubdkd1b4/km22idxq9bWhB+uwCEuVBoNlirINAfXmsn3rPUZsHMS7IIgt7FCx
-         eDe9r+JB9c5Q8N2Fxzeenlyl8PIfTZGy9UrluWwVlm/MoJHZHtqjLBvfNSOaoCQCPE8H
-         vRTw==
+        bh=xampKwCeqjXqsH4E2n+nvafbeZ3t6N+1Pr1eeefvz9U=;
+        b=E50Ajly+heyCQ1MqEf1w1U30NTYLAUCcL4nl9Nm61/59NU8MEdS9YUoB+BmuEQnzRr
+         5DYnCvCkAfTGwTQ7wX0NxjpmqPvTlaXyrX3xdkpwXyoAo1+obXsFNBVMEFlUaZmp5RkW
+         hZGmFlgMZ+ExZ34iSGdCwKud52mfZXBcIrGq9djf8zpn/pVVyIe/ITVHhaz+V5PH5Sx5
+         3GGffdcXLyMyWMEiNU0Xn0ZuKatgDeQNaU/u5JWFFNuavm9Sexp1i03o8P1y0UjT3wMG
+         ZYw+omDAr9pgpnKf0idp8IvPAyTybpYfetnEaWlyDHJ1Yys16u1GAMSQrxlodUwnyZcr
+         TlJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3uZCoM2AWA6/XtPvpJamTOlHYSrROKfn1hw8fNerrOg=;
-        b=KT3nLm1YKD3SrikmRyzkyZja7A6cPvfN48c+bRMl40CYLxBsxhrdANodntC1Jre1Ol
-         6wIMUZNKa5zVl2c7vgxlZ7Dd8rLGXSoO3UTwKmtCl8pt/7SMssvGNcIrX+GB3xYK53Qb
-         JeoWbzSKqTUixr351qKyLtxxCXgZ6GUvi21Ti6wej9+kQTJEHbnfcy3zgjAFP3/DO0ox
-         +naX7hvB9VUGPRj3uVRSdeOat8WZ2hY7e2bu16wtTZZBVGboYNaxusoDdGCwxOqpr4Xk
-         t/KXX4flexWRnDpLVyUXVksHyX6/BdTlL7AO/V49ncN0dW4B35/q68+qOFjys+OrySfi
-         /6lg==
-X-Gm-Message-State: AOAM533HY3wbAzt0zLAGS10E7tiBgnjOcLbGdIOABrOx9pXiu0ND+TBI
-        PvFb+jZctg1s3P0aMMuJXftN0xQcQAo=
-X-Google-Smtp-Source: ABdhPJypDjUGC4ELUXzah3KfvqRPnDFmNebIAcKuobBGd0JRNhy9gTlVawM4bflVC2fHItXQAqIoaw==
-X-Received: by 2002:ad4:4d04:: with SMTP id l4mr10316591qvl.88.1592590654677;
-        Fri, 19 Jun 2020 11:17:34 -0700 (PDT)
+        bh=xampKwCeqjXqsH4E2n+nvafbeZ3t6N+1Pr1eeefvz9U=;
+        b=KtoXiYNGtPIeoKO67xpoEhjBokUkGJuNQwunLkcytx9nrQ6RKCqXtpZCviOsmYwxJZ
+         uCo/T2V6Be2eR3FK/jVL4wzq5kXL/kumrsRmz1/44tKJVIlaxE+b55LksJDqvzXCmnEc
+         WQ25W5e8U1Ir+2ImkQqd5j1UHonxT33ZHOnOTgzxSEEm4zdeiXAP+IuZURhZfrpFptRQ
+         NChEZUJLh7HS0Lm2EUJieQT33wObCwE6h8K7slNS9VtU4BpkvLkzUlmLBCLpqJ5Z4Blj
+         vv52+aUPL/MFHzkxefr5BQVHcoY5r2t6WYp4588yuZlXqoyHGfqdFRzQOMON5ov4P9nZ
+         0Mdg==
+X-Gm-Message-State: AOAM531VHNmr0WGQWvMwldp3ZsH23XsZJIeFidDxLe2vzvsZwKYKtG4c
+        B/VNBIFYiKqH2XWlsyY6bHg=
+X-Google-Smtp-Source: ABdhPJzv/dhosAjOqR7rwoECQIQMAGqbyiwJ36XGH4ugaKIlLnC/JUEwQQLb6YLgosALy1VrELJWKQ==
+X-Received: by 2002:a05:620a:2494:: with SMTP id i20mr1372011qkn.123.1592591599425;
+        Fri, 19 Jun 2020 11:33:19 -0700 (PDT)
 Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id u14sm6467749qkj.18.2020.06.19.11.17.33
+        by smtp.gmail.com with ESMTPSA id c6sm6829919qkg.93.2020.06.19.11.33.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2020 11:17:34 -0700 (PDT)
+        Fri, 19 Jun 2020 11:33:17 -0700 (PDT)
 Subject: Re: RFC - kernel selftest result documentation (KTAP)
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     David Gow <davidgow@google.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+To:     "Bird, Tim" <Tim.Bird@sony.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Kees Cook <keescook@chromium.org>
+Cc:     "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Gow <davidgow@google.com>
 References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
- <CABVgOSkrKHs_uWLZ++_fBC_mfe3RgDxmCvnkcyn1P_wjXTV9Og@mail.gmail.com>
- <CY4PR13MB11756803217A9D20456E826FFD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
- <CAFd5g458XTDftQAOm-K4Squ5-ZuZnZcFdVUG0JtUWF56cODOVg@mail.gmail.com>
+ <202006141120.96FF8C5@keescook>
+ <CY4PR13MB11757D57CD441C5CAEC3F257FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <7161fadb-45ba-c4c0-8bbb-cb47d2dd0265@redhat.com>
+ <CY4PR13MB11755F5A6879CA3FFD005426FD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
 From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <f5554a01-0862-f7c3-5c6d-f77c9ee8c8f9@gmail.com>
-Date:   Fri, 19 Jun 2020 13:17:32 -0500
+Message-ID: <ac33fef5-7a1d-ee18-3eeb-c4437901cda5@gmail.com>
+Date:   Fri, 19 Jun 2020 13:33:16 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <CAFd5g458XTDftQAOm-K4Squ5-ZuZnZcFdVUG0JtUWF56cODOVg@mail.gmail.com>
+In-Reply-To: <CY4PR13MB11755F5A6879CA3FFD005426FD9D0@CY4PR13MB1175.namprd13.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-06-16 15:03, Brendan Higgins wrote:
-> On Mon, Jun 15, 2020 at 10:34 AM Bird, Tim <Tim.Bird@sony.com> wrote:
+On 2020-06-16 11:42, Bird, Tim wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Paolo Bonzini <pbonzini@redhat.com>
 >>
->>> -----Original Message-----
->>> From: David Gow <davidgow@google.com>
+>> On 15/06/20 21:07, Bird, Tim wrote:
+>>>> Note: making the plan line required differs from TAP13 and TAP14. I
+>>>> think it's the right choice, but we should be clear.
+>>
+>> As an aside, where is TAP14?
+> By TAP14, I was referring to the current, undocumented, KUnit
+> conventions.
+
+When "TAP14" is used in this discussion, let's please use the current
+proposed TAP14 spec which Brendan has provided a link to.  If you
+want to describe current KUnit conventions, please say current
+KUnit conventions.
+
+> 
+>>
+>>> With regards to making it optional or not, I don't have a strong
+>>> preference.  The extra info seems helpful in some circumstances.
+>>> I don't know if it's too onerous to make it a requirement or not.
+>>> I'd prefer if it was always there (either at the beginning or the end),
+>>> but if there is some situation where it's quite difficult to calculate,
+>>> then it would be best not to mandate it. I can't think of any impossible
+>>> situations at the moment.
+>>
+>> I think making the plan mandatory is a good idea.  "Late plans" work
+>> very well for cases where you cannot know in advance the number of tests
+>> (for example in filters that produce TAP from other output), and provide
+>> an additional safety net.
+>>
+>>>> "Bail out!" to be moved to "optional" elements, since it may not appear.
+>>>> And we should clarify TAP13 and TAP14's language to say it should only
+>>>> appear when the test is aborting without running later tests -- for this
+>>>> reason, I think the optional "description" following "Bail out!" should
+>>>> be made required. I.e. it must be: "Bail out! $reason"
 >>>
->>> On Thu, Jun 11, 2020 at 2:11 AM Bird, Tim <Tim.Bird@sony.com> wrote:
-> [...]
->>> KUnit is currently outputting "TAP version 14", as we were hoping some
->>> of our changes would get into the TAP14 spec. (Any comments, Brendan?)
->>> Maybe this should end up saying "KTAP version 1" or something?
+>>> I'll make sure this is listed as optional.
+>>> I like adding a mandatory reason.
 >>
->> I don't know if this will break any existing results parsers or not.
->> I hesitate to use "TAP version 14", as TAP appears to be a dormant
->> initiative at the moment, and there's no guarantee that the kernel's
->> changes will get adopted into an official spec.
+>> +1.
+>>
+>>>> TAP13/14 makes description optional, are we making it required (I think
+>>>> we should). There seems to be a TAP13/14 "convention" of starting
+>>>> <description> with "- ", which I'm on the fence about it. It does make
+>>>> parsing maybe a little easier.
+>>>
+>>> I would like the description to be required.
+>>> I don't have a strong opinion on the dash.  I'm OK with either one (dash
+>>> or no dash), but we should make kselftest and KUnit consistent.
+>>
+>> I think no mandatory dash is better (or even mandatory no-dash!).  We
+>> can suggest removing it when formatting TAP output.
 > 
-> We were using "TAP version 14" since the "extensions" we are using
-> were all proposed among the TAP people to go into the next version of
-> TAP. Based on discussions among them they seem to like the subtest
-> stuff:
+> My personal preference is to have the dash.  I think it's more human readable.
+> I note that the TAP spec has examples of result lines both with and without
+> the dash, so even the spec is ambiguous on this.   I think not mandating it
+> either way is probably best.  For regex parsers, it's easy to ignore with '[-]?'
+> outside the pattern groups that grab the number and description.
 > 
-> https://github.com/TestAnything/testanything.github.io/pull/36
-> 
-> Anyway, I can still appreciate that they might change their minds.
-> 
->> If we are a strict super-set of TAP, then I suppose we could just
->> start using TAP version 14, and unilaterally declare that our changes
->> make a new spec.  But since we don't control the web site this feels
->> like a hostile takeover.
-> 
-> I just thought it was okay because it was already in their proposed
-> TAP14 spec, but yeah, if we just decide amongst ourselves to use it,
-> we should probably do something else.
-> 
->> I'm most comfortable with calling our thing KTAP, and just
->> referencing TAP as inspiration.  I don't have a strong opinion on
-> 
-> I am cool with that.
+>>
+>>>>> Finally, it is possible to use a test directive to indicate another
+>>>>> possible outcome for a test: that it was skipped.  To report that
+>>>>> a test case was skipped, the result line should start with the
+>>>>> result "not ok", and the directive "# SKIP" should be placed after
+>>>>> the test description. (Note that this deviates from the TAP13
+>>>>> specification).
+>>
+>> How so?  The description comes first, but there can be a description of
+>> the directive.
+> None of the examples of skips in the TAP13 spec have a test descriptions before
+> the '# SKIP' directive.  But maybe I read too much into the examples. There is a
+> format example, and a list of items in a result line that both have the test description
+> before the directive.  So maybe I read this wrong.
 
-I like a KTAP specification, based on the proposed TAP 14, but with a
-good edit, and with the extensions and changes that are coming out
-of this conversation.
+Yes, I think you read too much into the examples.  I think the TAP spec
+is very hard to read in the current form (v13 and proposed v14).  If
+we create a KTAP spec, I can do editing to clean up some of the issues
+or give review comments on what issues about clarity that I see and how
+to fix them.
 
-It would be great if we could just have a finished TAP 14, but my
-understanding is that efforts to move that forward are not making
-any progress.  And if we fork to make KTAP, maybe that will be
-the incentive for TAP to move forward, and maybe KTAP could be
-merged back into TAP.
+I read the spec as saying that the description is optional, but if the
+description exists in a test line that contains "# TODO explanation"
+then the description will precede the "#".
+
+(Yes, you are seeing "I volunteer" because the current spec is so
+frustrating to me.)
+
+> 
+>>
+>>      not ok 4 - Summarized correctly # TODO Not written yet
+>>
+>>>>> It is usually helpful if a diagnostic message is emitted to explain
+>>>>> the reasons for the skip.  If the message is a single line and is
+>>>>> short, the diagnostic message may be placed after the '# SKIP'
+>>>>> directive on the same line as the test result.  However, if it is
+>>>>> not on the test result line, it should precede the test line (see
+>>>>> diagnostic data, next).
+>>>>>
+>>>>> Bail out!
+>>>>> ---------
+>>>>> If a line in the test output starts with 'Bail out!', it indicates
+>>>>> that the test was aborted for some reason.  It indicates that
+>>>>> the test is unable to proceed, and no additional tests will be
+>>>>> performed.
+>>>>>
+>>>>> This can be used at the very beginning of a test, or anywhere in the
+>>>>> middle of the test, to indicate that the test can not continue.
+>>>>
+>>>> I think the required syntax should be:
+>>>>
+>>>> Bail out! <reason>
+>>>>
+>>>> And to make it clear that this is optionally used to indicate an early
+>>>> abort. (Though with a leading plan line, a parser should be able to
+>>>> determine this on its own.)
+>>
+>> True.  However, "Bail out!" allow to distinguish issues with the harness
+>> (such as ENOSPC) from test aborts.
+>>
+>>>>>  - TODO directive
+>>>>
+>>>> Agreed: SKIP should cover everything TODO does.
+>>
+>> XFAIL/XPASS are different from SKIP.  I personally don't have a need for
+>> them, but kselftests includes XFAIL/XPASS exit codes and they aren't
+>> reflected into selftests/kselftest/runner.sh.
+>>
+>> Likewise, kselftest.h has ksft_inc_xfail_cnt but not
+>> ksft_test_result_xfail/ksft_test_result_xpass.
+>>
+>> It's important to notice in the spec that the TODO directive inverts the
+>> direction of ok/not-ok (i.e. XFAIL, the "good" result, is represented by
+>> "not ok # TODO").
+> 
+> The TAP13 spec is not explicit about the result for TODO (and only provides
+> one example), but the text *does* say a TODO can represent a bug to be fixed.
+> This makes it the equivalent of XFAIL.  I hadn't noticed this before.  Thanks.
+
+TAP 13 spec:
+
+  "Note that if the TODO has an explanation it must be separated from TODO by a
+  space. These tests represent a feature to be implemented or a bug to be fixed
+  and act as something of an executable “things to do” list. They are not expected
+  to succeed. Should a todo test point begin succeeding, the harness should report
+  it as a bonus. This indicates that whatever you were supposed to do has been done 
+  and you should promote this to a normal test point."
+
+That seems very clear and explicit to me about what the intent and usage of TODO is.
+
+
+> 
+>>
+>>>>>  - test identifier
+>>>>>     - multiple parts, separated by ':'
+
+I don't find "identifier" when I grep for it in KUnit related places.  And
+it has been a while since I've read through the KUnit code.  So I am a
+little lost about what a "test identifier" is.  Is this part of the test
+line "Description"?  Any pointers to what this is?
 
 -Frank
 
-> 
->> KTAP vs TAP, but I do feel strongly that kselftest and kunit should use the
->> same version line (if we can get them to use the same conventions).
-> 
-> Yeah, I agree: it would be better if there was just one version of
-> (K)TAP in the kernel.
-> 
->>>> Test plan line
->>>> --------------
->>>> The test plan indicates the number of individual test cases intended to
->>>> be executed by the test. It always starts with "1.." and is followed
->>>> by the number of tests cases.  In the example above, 1..1", indicates
->>>> that this test reports only 1 test case.
+
 >>>>
->>>> The test plan line can be placed in two locations:
->>>>  * the second line of test output, when the number of test cases is known
->>>>    in advance
->>>>  * as the last line of test output, when the number of test cases is not
->>>>    known in advance.
+>>>> This is interesting... is the goal to be able to report test status over
+>>>> time by name?
+>>
+>> What about "/" instead?
+> In my experience, / is used in a lot of test descriptions (when quoting
+> file paths) (not in kselftest, but in lots of other tests).  Both Fuego
+> and KernelCI use colons, and that's what kselftest already uses,
+> so it seems like a good choice.
+> 
+>>
+>>>>> Finally,
+>>>>>   - Should a SKIP result be 'ok' (TAP13 spec) or 'not ok' (current kselftest practice)?
+>>>>> See https://testanything.org/tap-version-13-specification.html
 >>>>
->>>> Most often, the number of test cases is known in advance, and the test plan
->>>> line appears as the second line of test output, immediately following
->>>> the output version line.  The number of test cases might not be known
->>>> in advance if the number of tests is calculated from runtime data.
->>>> In this case, the test plan line is emitted as the last line of test
->>>> output.
+>>>> Oh! I totally missed this. Uhm. I think "not ok" makes sense to me "it
+>>>> did not run successfully". ... but ... Uhhh ... how do XFAIL and SKIP
+>>>> relate? Neither SKIP nor XFAIL count toward failure, though, so both
+>>>> should be "ok"? I guess we should change it to "ok".
+>>
+>> See above for XFAIL.
+>>
+>> I initially raised the issue with "SKIP" because I have a lot of tests
+>> that depend on hardware availability---for example, a test that does not
+>> run on some processor kinds (e.g. on AMD, or old Intel)---and for those
+>> SKIP should be considered a success.
+>>
+>> Paolo
+>>
+>>> I have the same initial impression.  In my mind, a skip is "not ok", since
+>>> the test didn't run. However, a SKIP and should be treated differently
+>>> from either "ok" or "not ok" by the results interpreter, so I don't think it
+>>> matters.  Originally I was averse to changing the SKIP result to "ok"
+>>> (as suggested by Paulo Bonzini [1]), but I checked and it's pretty trivial to
+>>> change the parser in Fuego, and it would make the kernel results format
+>>> match the TAP13 spec.  I don't see a strong reason for us to be different
+>>> from TAP13 here.
 >>>
->>> KUnit is currently including the test plan line only for subtests, as
->>> the current version doesn't actually know how many test suites will
->>> run in advance.
->>> This is something there's work underway to fix, though.
->> Sounds good.  You can just put the line at the bottom if it's
->> obnoxious to calculate ahead of time.
-> 
-> I thought that is not in the TAP spec?
-> 
-> I kind of like printing out ahead of time how many tests we expect to
-> run, so if we crash we know how many tests weren't run.
-> 
-> In any case, until we get the change in that David is referencing, we
-> cannot print out the test plan for the "super test" before or after
-> because KUnit doesn't know when it is "done". So moving it to the
-> bottom doesn't really help us.
-> 
->> Does this mean that KUnit treats each sub-test as an individual test case
->> of the "super-test"?
-> 
-> Yes.
-> 
-> At the top level, we have all test suites. Each subtest in TAP is a
-> test suite in KUnit. Each case in each subtest in TAP is a test case
-> in KUnit.
-> 
->> In results summaries for a super-test, are all sub-test cases counted,
->> or just the list of sub-tests?
-> 
-> Just the sub-tests. Each subtest is responsible for counting it's own cases:
-> 
-> https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#subtests
-> 
-> Cheers
+>>> I raised this issue on our automated testing conference call last week
+>>> (which includes people from the CKI, Fuego, KernelCI and LKFT projects), and
+>>> so people should be chiming in if their parser will have a problem with this change.)
+>>>
+>>> [1]  https://lkml.kernel.org/lkml/20200610154447.15826-1-pbonzini@redhat.com/T/
+>>>
+>>> Thanks very much for the feedback.
+>>>  -- Tim
+>>>
 > 
 
