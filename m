@@ -2,307 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEDA2021C0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jun 2020 07:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F592021FB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jun 2020 08:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725994AbgFTFuQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 20 Jun 2020 01:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S1726019AbgFTGpL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 20 Jun 2020 02:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbgFTFuP (ORCPT
+        with ESMTP id S1725989AbgFTGpL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 20 Jun 2020 01:50:15 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC9CC06174E
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 22:50:13 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id c17so12516233ybf.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 22:50:13 -0700 (PDT)
+        Sat, 20 Jun 2020 02:45:11 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C89EC06174E
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 23:45:09 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id f185so10945686wmf.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Jun 2020 23:45:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=w+bw/iadzMNcs/GQEQe/9mn2EUSTk7D5RqaFJzB0X78=;
-        b=RPeBtp0uZB7ijB2DxjeIl8lCsyAwavxKk6RzC1k30vLro9n3mEQGKqK3w/BGZ4a91E
-         WSBOCAWJ42OVrWsARdMMEcDpWfmCeqNhxyrAUg3S6xzS8BiudGS/EjfiRiYOwanFNJpl
-         zKKjJl3jf1SmqZtl1VpB78j1+rgJy2hThWLHubq+zYgy7IPIhU8MmNEn4OrMMn2yZgHs
-         pZBxsiPfwoC80GPRRazLLFQvryZsr65aBGY4FTKnWw8z1J3XxK0lW21hplx+WM3SyhMz
-         zep5NAsBAxTymIcO4UgR2L+wWeaig3yzlj2qFRG2xVUtrDtEfQQ4Fz4/bUp7bmI5tIOw
-         4HGw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nuqIBJcEfQ5YejHXKkH59txUGkRqecLMXyxE/1IPdkk=;
+        b=t+nkAWVDInMtkOcuQjp92ZOQUc1IuMFxgyEboiybhrYvZWoh7q8LUr77tTUAeuXJMe
+         Z0c2rRVzRqxJsr27Q1uuzAbLvXBm89jXnexCcqb3+uui3x2XZgl9s/suCXtMX8kIMORP
+         /HaDwMnLpd3LIvu//Ci+o1/LKX+QbutwsQnO8okTCN5S+UEkUoWtApZ44xBeVawrCr0U
+         jBjoYlEaJuw8beWnZgo605MuWPFluoHXQ7r7qjlo1v1J2d7RZGAkZ1AsJBwOuqx02p3k
+         7gddTIo0Kvi5en3QzTINvAc5Mf8CD0ezYQUl9tdYA0RztGMaxLB+elN4/3MeQT+neeCd
+         V2aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=w+bw/iadzMNcs/GQEQe/9mn2EUSTk7D5RqaFJzB0X78=;
-        b=hDulwpoc72D2FnCna6p9aQ+o8MmeJ05K9u/lW3vgpr9tZGwwoHRTk8QtFW02VlrY4z
-         VIkDcv7Nr40QmmyrqfVw1lJYwMw+Yt7HfIzf3DajD11CwcjnYL7bXU2OtfLrJ2w0lP9V
-         FojDSWEdTaqVkgYSGrsxTCVyCvU7ebKCl0ZmHUYxNX3ghcNNz/Mm31GTE1o9hm3oIUly
-         EMTVtBS9fJPmRtjAZVeEu500psoRoOT78nk3xxQncjZhmFwkhKjlierdhYuu9H97VszF
-         W2C7yJGxrviArKn1RQuukMGieSfhGGbOrWeYo8k6g1M5hU0tDYai8YJBhY4gUy9DcyF5
-         SuWQ==
-X-Gm-Message-State: AOAM532Ox3w/zf5Xyy6/2RH8vV8VJbwbheHY3YE1R44bSXPIHJATIdiB
-        89KR07X1TUtu0JaeU+3RNJgq1AqbNuNEcw==
-X-Google-Smtp-Source: ABdhPJyFj79DgaInQbFMsGvJXfS/+duq+1CJaf/Mdz5KDbTwQgIQpMQPen2lREAJDEwidLg6lwxeocLGbVd/8w==
-X-Received: by 2002:a25:7903:: with SMTP id u3mr11230122ybc.416.1592632212416;
- Fri, 19 Jun 2020 22:50:12 -0700 (PDT)
-Date:   Fri, 19 Jun 2020 22:49:44 -0700
-Message-Id: <20200620054944.167330-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.111.gc72c7da667-goog
-Subject: [PATCH] Documentation: kunit: Add naming guidelines
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nuqIBJcEfQ5YejHXKkH59txUGkRqecLMXyxE/1IPdkk=;
+        b=fG1neCCjlVKQRPAYJxoqXFsQWT5rTdRWRIH13wT85XuSzh2oGtJieiMp4upOTt7A+5
+         CE3fVYhc76bJKaSkOXyqZD5iRKJAMT25XuwKoz5phiurZ7d2rfGnSFoz8L+DnvsGx3tm
+         CGZarmZ7UzgY8ctWQUcsgeoXEjAChSUt0Fohpj348gYJsQokT5io1TXE/e9RDQ3WIrVi
+         jamuZgyuuXNNfyiF+Y7/pzL2mnxSSRWP7UGUXAGJbCUXzPZxHWNcNzZhWYbFezSfbugw
+         T6YLzpVNIZx5oRj3K1e5sq4N+ZEVfeJDwYFwmpqmTeQLwbOKk7upMMsQ94TqYRjwCqDZ
+         NUXQ==
+X-Gm-Message-State: AOAM53303UGlig7Wspey5CvjEsa+w62XbOJj45mrgikcb6OdWXyeKZAJ
+        tLigarFC26IeiyQTUTDzo9/XcHpJw54bvvVLSRyLoA==
+X-Google-Smtp-Source: ABdhPJx7mIrBxGEmOgQAPKNX/fbXVDZ9o5UkxJWjrhZtIbfVJfeiUzymJy9QxNd1F8rgmFm/6coNOM/Cqq9zfVvRrUo=
+X-Received: by 2002:a1c:a444:: with SMTP id n65mr6939881wme.99.1592635507940;
+ Fri, 19 Jun 2020 23:45:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <202006141120.96FF8C5@keescook> <CY4PR13MB11757D57CD441C5CAEC3F257FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <7161fadb-45ba-c4c0-8bbb-cb47d2dd0265@redhat.com> <dc853d83-649e-b652-819f-4766ea294d78@gmail.com>
+In-Reply-To: <dc853d83-649e-b652-819f-4766ea294d78@gmail.com>
 From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
+Date:   Sat, 20 Jun 2020 14:44:56 +0800
+Message-ID: <CABVgOS=qSMY9xP7db4-hkSt71YKyPpJuQv=fqcfzV-kCC1k9qQ@mail.gmail.com>
+Subject: Re: RFC - kernel selftest result documentation (KTAP)
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>, Kees Cook <keescook@chromium.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As discussed in [1], KUnit tests have hitherto not had a particularly
-consistent naming scheme. This adds documentation outlining how tests
-and test suites should be named, including how those names should be
-used in Kconfig entries and filenames.
+On Sat, Jun 20, 2020 at 1:58 AM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 2020-06-16 07:08, Paolo Bonzini wrote:
+> > On 15/06/20 21:07, Bird, Tim wrote:
 
-[1]:
-https://lore.kernel.org/linux-kselftest/202006141005.BA19A9D3@keescook/t/#u
+> >>>> Finally,
+> >>>>   - Should a SKIP result be 'ok' (TAP13 spec) or 'not ok' (current kselftest practice)?
+> >>>> See https://testanything.org/tap-version-13-specification.html
+> >>>
+> >>> Oh! I totally missed this. Uhm. I think "not ok" makes sense to me "it
+> >>> did not run successfully". ... but ... Uhhh ... how do XFAIL and SKIP
+> >>> relate? Neither SKIP nor XFAIL count toward failure, though, so both
+> >>> should be "ok"? I guess we should change it to "ok".
+> >
+> > See above for XFAIL.
+> >
+> > I initially raised the issue with "SKIP" because I have a lot of tests
+> > that depend on hardware availability---for example, a test that does not
+> > run on some processor kinds (e.g. on AMD, or old Intel)---and for those
+> > SKIP should be considered a success.
+>
+> No, SKIP should not be considered a success.  It should also not be considered
+> a failure.  Please do not blur the lines between success, failure, and
+> skipped.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
-This is a first draft of some naming guidelines for KUnit tests. Note
-that I haven't edited it for spelling/grammar/style yet: I wanted to get
-some feedback on the actual naming conventions first.
+I agree that skipped tests should be their own thing, separate from
+success and failure, but the way they tend to behave tends to be
+closer to a success than a failure.
 
-The issues which came most to the forefront while writing it were:
-- Do we want to make subsystems a more explicit thing (make the KUnit
-  framework recognise them, make suites KTAP subtests of them, etc)
-  - I'm leaning towards no, mainly because it doesn't seem necessary,
-    and it makes the subsystem-with-only-one-suite case ugly.
+I guess the important note here is that a suite of tests, some of
+which are SKIPped, can be listed as having passed, so long as none of
+them failed. So, the rule for "bubbling up" test results is that any
+failures cause the parent to fail, the parent is marked as skipped if
+_all_ subtests are skipped, and otherwise is marked as having
+succeeded. (Reversing the last part: having a suite be marked as
+skipped if _any_ of the subtests are skipped also makes sense, and has
+its advantages, but anecdotally seems less common in other systems.)
 
-- Do we want to support (or encourage) Kconfig options and/or modules at
-  the subsystem level rather than the suite level?
-  - This could be nice: it'd avoid the proliferation of a large number
-    of tiny config options and modules, and would encourage the test for
-    <module> to be <module>_kunit, without other stuff in-between.
+The other really brave thing one could do to break from the TAP
+specification would be to add a "skipped" value alongside "ok" and
+"not ok", and get rid of the whole "SKIP" directive/comment stuff.
+Possibly not worth the departure from the spec, but it would sidestep
+part of the problem.
 
-- As test names are also function names, it may actually make sense to
-  decorate them with "test" or "kunit" or the like.
-  - If we're testing a function "foo", "test_foo" seems like as good a
-    name for the function as any. Sure, many cases may could have better
-    names like "foo_invalid_context" or something, but that won't make
-    sense for everything.
-  - Alternatively, do we split up the test name and the name of the
-    function implementing the test?
 
-Thoughts?
-
- Documentation/dev-tools/kunit/index.rst |   1 +
- Documentation/dev-tools/kunit/style.rst | 139 ++++++++++++++++++++++++
- 2 files changed, 140 insertions(+)
- create mode 100644 Documentation/dev-tools/kunit/style.rst
-
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-to=
-ols/kunit/index.rst
-index e93606ecfb01..117c88856fb3 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -11,6 +11,7 @@ KUnit - Unit Testing for the Linux Kernel
- 	usage
- 	kunit-tool
- 	api/index
-+        style
- 	faq
-=20
- What is KUnit?
-diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/dev-to=
-ols/kunit/style.rst
-new file mode 100644
-index 000000000000..9363b5607262
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/style.rst
-@@ -0,0 +1,139 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-+Test Style and Nomenclature
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-+
-+Subsystems, Suites, and Tests
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-+
-+In order to make tests as easy to find as possible, they're grouped into s=
-uites
-+and subsystems. A test suite is a group of tests which test a related area=
- of
-+the kernel, and a subsystem is a set of test suites which test different p=
-arts
-+of the same kernel subsystem or driver.
-+
-+Subsystems
-+----------
-+
-+Every test suite must belong to a subsystem. A subsystem is a collection o=
-f one
-+or more KUnit test suites which test the same driver or part of the kernel=
-. A
-+rule of thumb is that a test subsystem should match a single kernel module=
-. If
-+the code being tested can't be compiled as a module, in many cases the sub=
-system
-+should correspond to a directory in the source tree or an entry in the
-+MAINTAINERS file. If unsure, follow the conventions set by tests in simila=
-r
-+areas.
-+
-+Test subsystems should be named after the code being tested, either after =
-the
-+module (wherever possible), or after the directory or files being tested. =
-Test
-+subsystems should be named to avoid ambiguity where necessary.
-+
-+If a test subsystem name has multiple components, they should be separated=
- by
-+underscores. Do not include "test" or "kunit" directly in the subsystem na=
-me
-+unless you are actually testing other tests or the kunit framework itself.
-+
-+Example subsystems could be:
-+
-+* ``ext4``
-+* ``apparmor``
-+* ``kasan``
-+
-+.. note::
-+        The KUnit API and tools do not explicitly know about subsystems. T=
-hey're
-+        simply a way of categorising test suites and naming modules which
-+        provides a simple, consistent way for humans to find and run tests=
-. This
-+        may change in the future, though.
-+
-+Suites
-+------
-+
-+KUnit tests are grouped into test suites, which cover a specific area of
-+functionality being tested. Test suites can have shared initialisation and
-+shutdown code which is run for all tests in the suite.
-+Not all subsystems will need to be split into multiple test suites (e.g. s=
-imple drivers).
-+
-+Test suites are named after the subsystem they are part of. If a subsystem
-+contains several suites, the specific area under test should be appended t=
-o the
-+subsystem name, separated by an underscore.
-+
-+The full test suite name (including the subsystem name) should be specifie=
-d as
-+the ``.name`` member of the ``kunit_suite`` struct, and forms the base for=
- the
-+module name (see below).
-+
-+Example test suites could include:
-+
-+* ``ext4_inode``
-+* ``kunit_try_catch``
-+* ``apparmor_property_entry``
-+* ``kasan``
-+
-+Tests
-+-----
-+
-+Individual tests consist of a single function which tests a constrained
-+codepath, property, or function. In the test output, individual tests' res=
-ults
-+will show up as subtests of the suite's results.
-+
-+Tests should be named after what they're testing. This is often the name o=
-f the
-+function being tested, with a description of the input or codepath being t=
-ested.
-+As tests are C functions, they should be named and written in accordance w=
-ith
-+the kernel coding style.
-+
-+.. note::
-+        As tests are themselves functions, their names cannot conflict wit=
-h
-+        other C identifiers in the kernel. This may require some creative
-+        naming. It's a good idea to make your test functions `static` to a=
-void
-+        polluting the global namespace.
-+
-+Should it be necessary to refer to a test outside the context of its test =
-suite,
-+the *fully-qualified* name of a test should be the suite name followed by =
-the
-+test name, separated by a colon (i.e. ``suite:test``).
-+
-+Test Kconfig Entries
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Every test suite should be tied to a Kconfig entry.
-+
-+This Kconfig entry must:
-+
-+* be named ``CONFIG_<name>_KUNIT_TEST``: where <name> is the name of the t=
-est
-+  suite.
-+* be listed either alongside the config entries for the driver/subsystem b=
-eing
-+  tested, or be under [Kernel Hacking]=E2=86=92[Kernel Testing and Coverag=
-e]
-+* depend on ``CONFIG_KUNIT``
-+* be visible only if ``CONFIG_KUNIT_ALL_TESTS`` is not enabled.
-+* have a default value of ``CONFIG_KUNIT_ALL_TESTS``.
-+* have a brief description of KUnit in the help text
-+* include "If unsure, say N" in the help text
-+
-+Unless there's a specific reason not to (e.g. the test is unable to be bui=
-lt as
-+a module), Kconfig entries for tests should be tristate.
-+
-+An example Kconfig entry:
-+
-+.. code-block:: none
-+
-+        config FOO_KUNIT_TEST
-+                tristate "KUnit test for foo" if !KUNIT_ALL_TESTS
-+                depends on KUNIT
-+                default KUNIT_ALL_TESTS
-+                help
-+                    This builds unit tests for foo.
-+
-+                    For more information on KUnit and unit tests in genera=
-l, please refer
-+                    to the KUnit documentation in Documentation/dev-tools/=
-kunit
-+
-+                    If unsure, say N
-+
-+
-+Test Filenames
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Where possible, test suites should be placed in a separate source file in =
-the
-+same directory as the code being tested.
-+
-+This file should be named ``<suite>_kunit.c``. It may make sense to strip
-+excessive namespacing from the source filename (e.g., ``firmware_kunit.c``=
- instead of
-+``<drivername>_firmware.c``), but please ensure the module name does conta=
-in the
-+full suite name.
-+
-+
---=20
-2.27.0.111.gc72c7da667-goog
-
+Cheers,
+-- David
