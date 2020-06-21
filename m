@@ -2,60 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CBA20278D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Jun 2020 02:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46D2202D79
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 00:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728614AbgFUAXC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 20 Jun 2020 20:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S1726380AbgFUWpr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Jun 2020 18:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728520AbgFUAXC (ORCPT
+        with ESMTP id S1726101AbgFUWpr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 20 Jun 2020 20:23:02 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7F9C061794;
-        Sat, 20 Jun 2020 17:23:02 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id AF250120ED4AD;
-        Sat, 20 Jun 2020 17:22:58 -0700 (PDT)
-Date:   Sat, 20 Jun 2020 17:22:55 -0700 (PDT)
-Message-Id: <20200620.172255.1570205815461958163.davem@davemloft.net>
-To:     dsahern@gmail.com
-Cc:     andrea.mayer@uniroma2.it, dsahern@kernel.org, shrijeet@gmail.com,
-        kuba@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        sharpd@cumulusnetworks.com, roopa@cumulusnetworks.com,
-        didutt@gmail.com, stephen@networkplumber.org,
-        stefano.salsano@uniroma2.it, paolo.lungaroni@cnit.it,
-        ahabdels@gmail.com
-Subject: Re: [net-next,v1,0/5] Strict mode for VRF
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <f13c47d2-6b08-8f73-05d2-755a40fba6a8@gmail.com>
-References: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
-        <f13c47d2-6b08-8f73-05d2-755a40fba6a8@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        Sun, 21 Jun 2020 18:45:47 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBA2C061794;
+        Sun, 21 Jun 2020 15:45:46 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id l17so13957187qki.9;
+        Sun, 21 Jun 2020 15:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=3I6qYF+rnBnkOJGlzBHotShl0MA4LrBISg2tIo433jE=;
+        b=UOoL/FdHx/7J1P9Sje5Dnv3JyYolJfSQwmd2rWTUg/XWghJBG++sukBfLoxuxVp0JD
+         ygRVSNU3bcWbKvYlWc7XgL+m6swLHmSlrWCbSjs1rPlg/DjfHkmRsQy0jMSvs/iOyyDo
+         48SXzIUhGToxftcnXgwbI4SQz53zm1kCtUtP551ZLuMqbUDx6IOaL11k1P6BayclJEuZ
+         WGn/Kcaa2FOxoqxjYfkFk7KZ3RjIL6IZSx8yjHT8lKeYiUCU3r/BxxM/E8F8lLqO8u3k
+         /yhQnreZ2B4ggXUF49OcRNZXggBRURLdjtfFo/wHUEAHWNUov7PlamBkr6t7yI2q7cbA
+         e5Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=3I6qYF+rnBnkOJGlzBHotShl0MA4LrBISg2tIo433jE=;
+        b=Gmi0FQf4aVuMZeL8ACnjWXbgRbGKa8ocClAoZH6+j2OA7VswwY74HLd76IUgDlsCR/
+         cQSEK7pcbgdOELomgksATLSnRYTFK+8XCrqLNwT9SDJ+dBFWADfc+XXui0tBMDEk2qaO
+         Cxyw8/j0+nF2Mh5gdTwY+Zsv8tr9B/3Q+M80foSBD5ZBd98lLr0y1YEUXEr3oVLF67ji
+         oaTpyT9+F7vwEZnQd2aLJJtH1WULgiTvMK5OpeRW0nEunFTi9xxTcGdybZE5vAKukVNd
+         Ms0OY6c3uuzYr82lI75oXlT+NswOe37o8HCzycGHAzLM6jXn9xLPROLMcnPD1+NBA8Ug
+         RJ1w==
+X-Gm-Message-State: AOAM532osxzo8InPoa3vwYGC2HaUd9gqiEJyyAL0YYAKK7ERmbM+am4r
+        ijnloiBZGKp6+1XpiFKSLKk=
+X-Google-Smtp-Source: ABdhPJwzzcHolrY41026rPOZrohLb1e3e+kkD3FkVxgMEe05Aiiare9fT2AvsCC0DQXbqdDkp85DxQ==
+X-Received: by 2002:a37:6503:: with SMTP id z3mr12650524qkb.439.1592779546162;
+        Sun, 21 Jun 2020 15:45:46 -0700 (PDT)
+Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
+        by smtp.gmail.com with ESMTPSA id w45sm6252365qtj.51.2020.06.21.15.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Jun 2020 15:45:45 -0700 (PDT)
+To:     "Bird, Tim" <Tim.Bird@sony.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Frank Rowand <frowand.list@gmail.com>
+Subject: RFC: KTAP documentation - expected messages
+Message-ID: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
+Date:   Sun, 21 Jun 2020 17:45:44 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 20 Jun 2020 17:22:59 -0700 (PDT)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: David Ahern <dsahern@gmail.com>
-Date: Sat, 20 Jun 2020 16:32:53 -0700
+Tim Bird started a thread [1] proposing that he document the selftest result
+format used by Linux kernel tests.  
 
-> On 6/19/20 3:54 PM, Andrea Mayer wrote:
->> This patch set adds the new "strict mode" functionality to the Virtual
->> Routing and Forwarding infrastructure (VRF). Hereafter we discuss the
->> requirements and the main features of the "strict mode" for VRF.
->> 
-> 
-> For the set:
-> Acked-by: David Ahern <dsahern@gmail.com>
+[1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
 
-Series applied to net-next, thanks.
+The issue of messages generated by the kernel being tested (that are not
+messages directly created by the tests, but are instead triggered as a
+side effect of the test) came up.  In this thread, I will call these
+messages "expected messages".  Instead of sidetracking that thread with
+a proposal to handle expected messages, I am starting this new thread.
+
+I implemented an API for expected messages that are triggered by tests
+in the Devicetree unittest code, with the expectation that the specific
+details may change when the Devicetree unittest code adapts the KUnit
+API.  It seems appropriate to incorporate the concept of expected
+messages in Tim's documentation instead of waiting to address the
+subject when the Devicetree unittest code adapts the KUnit API, since
+Tim's document may become the kernel selftest standard.
+
+Instead of creating a very long email containing multiple objects,
+I will reply to this email with a separate reply for each of:
+
+  The "expected messages" API implemention and use can be from
+  drivers/of/unittest.c in the mainline kernel.
+
+  of_unittest_expect - A proof of concept perl program to filter console
+                       output containing expected messages output
+
+                       of_unittest_expect is also available by cloning
+                       https://github.com/frowand/dt_tools.git
+
+  An example raw console output with timestamps and expect messages.
+
+  An example of console output processed by filter program
+  of_unittest_expect to be more human readable.  The expected
+  messages are not removed, but are flagged.
+
+  An example of console output processed by filter program
+  of_unittest_expect to be more human readable.  The expected
+  messages are removed instead of being flagged.
