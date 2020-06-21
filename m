@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9C3202D84
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 00:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54345202D86
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 00:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbgFUWvp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Jun 2020 18:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
+        id S1726488AbgFUWwh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Jun 2020 18:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726432AbgFUWvo (ORCPT
+        with ESMTP id S1726432AbgFUWwh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Jun 2020 18:51:44 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC57C061794;
-        Sun, 21 Jun 2020 15:51:44 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id u8so63254qvj.12;
-        Sun, 21 Jun 2020 15:51:44 -0700 (PDT)
+        Sun, 21 Jun 2020 18:52:37 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196DDC061794;
+        Sun, 21 Jun 2020 15:52:37 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id l188so954244qkf.10;
+        Sun, 21 Jun 2020 15:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+qFGsX7QohomofTLyFnYuOHNyeXT7lJsvHGvvGa/xlU=;
-        b=HAr2t+Jwm7mLt2LhTL5rTK5Kt4c4miFCCDIr++Dpqwvk05IczDFC4rRMAUQza1L9qW
-         pniyuoBFY9W9J+hNHhIWsOWEhE+tBOjBKZdkBNoVpg4iITTTcSptyb3xC50JklVNDiks
-         FNfPSdj9E6Y42urqa62RDwIrwv2NUXVa1LYwqw02dFvs5GzW7S4Zbw9PClypLsbi+Czp
-         GuIzeF8O0sxhahOpDVGzD5KBSnS0BGwdLdo14bWIMypTe41VlNbgdia4DcKpjjkgrwqw
-         9a3tH8IypYs68+lXcZtRDDHP9OVLM011r5K6n5tT9obVpfFBc5ja7/GYGid3uoEWB/18
-         Cwbw==
+        bh=zTVIHWDDmj7Tn2Zh1WfJEgDZE8El5j9C1V5flsPUvRU=;
+        b=U98BGKB8WE6raxyIpeNGmN18FU/WhUoqPNBqyYc7Mv4r8I0WcfjVl0sRJb4LznpQSQ
+         s4VRjd+DeUAybdbXSyBm30de/J0rhfjFlgFsOR5Nv5YN2eTWFqfHpwpJc4NMT5Cm5hNk
+         tyH530t9hYCNyVRM6e2BnVBLwtR2Jo5KgsC0XByXlZJgghhDceTQTAt+O6oahYvA3BsQ
+         0+nE7x2Iczo279XgLX3JlxnH7A0hEq6zARdYLTA0ehylqpxlpTAZ2ZI5M0O36TssX8dI
+         cehpZkG679sgEllUoUb8LL6bz++98rgjjr1xL8/WdmhVlS2WQe3Vgvf4SmtkkyCaBexY
+         OMOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+qFGsX7QohomofTLyFnYuOHNyeXT7lJsvHGvvGa/xlU=;
-        b=fPSNgJ7WO3PhMa6HPuSNGNGPP+fOYCjC+fLOsC1Xlu7N7LPpl3ZYaDw2cqHMKHlo1v
-         2oYQ8qr2A5hGvIOsWI9tu4Sjb/4PCpQ5hsE1w8nmQg1iJKnYIBTPEsDBFfNhhCZB0cCf
-         3d9x41HrVK5+Nkj+sRQn5cFha193/Ie4OQgGbE+Rl+pB6R4ROjoySw//kAyyJFiOg6nV
-         VXyTwjsBKVHFzZG2WvAyhkgNg3c419/X658q+umiID3dyK70mrvINP3GGqxiblBy+0Xr
-         LDodL8VS5v9jJPwerKdOXOqbD9jnZFLig08EojwBYiU/IKwgn8HLLA+dsOA0hhueDYIZ
-         pa1w==
-X-Gm-Message-State: AOAM530eZglSIx5yXFcG+V3PSUHfYF0YrFPvfopAm4j56aNFtcDe6giu
-        cPnGx6E2b9GfavxLr2XAws6gOdP6Vx0=
-X-Google-Smtp-Source: ABdhPJy2rWcB+SnobHAMpTIpCHjwne6xx2vqK5QYNxi4523hU25uk0pX5+fQGi6zZpMoN63NcaULwg==
-X-Received: by 2002:a0c:f9c3:: with SMTP id j3mr19372430qvo.125.1592779903689;
-        Sun, 21 Jun 2020 15:51:43 -0700 (PDT)
+        bh=zTVIHWDDmj7Tn2Zh1WfJEgDZE8El5j9C1V5flsPUvRU=;
+        b=SAEBYILbBU7Pt1z4F8cTDs/iH66cN+4iOCRVC4dspDzH2/+LNro1aA9iheFHonQjXe
+         a2jDYnr8NDJ+jqFiiTDUfmew2X8jOiT58YO7kIuk7mQIRB4MPMRFRJNJgjVr4+uyINHf
+         NPJ9T40Hyc/jgpG8ry05KcIsWSHOrtT50EvAKAIwrbbSAKVehktM1K4YXs5oQsVUTElk
+         oYu1F+qCNaN7NDn+2aFVLObYs7jrYqNssWQGCdYup6hFOi0jB2spdy3C0/FmzJhAE6xf
+         OJqh4eKe+3zMtheriZoWIsxMtXT4ykIrc2XoyeVjSXKVaqpLZ4sz08nQ/Ik/WpHGMtwM
+         dhWw==
+X-Gm-Message-State: AOAM530/o4JoeZBnrRfMokwGN4pNKBtOfdjxZ99iagO2mK8eEBm94swF
+        KHtSLv0X4+6qmEYYKMjb824=
+X-Google-Smtp-Source: ABdhPJwjs/124zVcImjhcG2ljTMKtaT5dcxySM1zy+oaeg6UkikrqcQdz31KU8KAWSDjLfh6b/5/IA==
+X-Received: by 2002:a05:620a:15da:: with SMTP id o26mr11998600qkm.304.1592779956102;
+        Sun, 21 Jun 2020 15:52:36 -0700 (PDT)
 Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id j198sm3809754qke.71.2020.06.21.15.51.42
+        by smtp.gmail.com with ESMTPSA id r2sm6743965qtn.27.2020.06.21.15.52.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jun 2020 15:51:43 -0700 (PDT)
+        Sun, 21 Jun 2020 15:52:35 -0700 (PDT)
 Subject: Re: RFC: KTAP documentation - expected messages
 From:   Frank Rowand <frowand.list@gmail.com>
 To:     "Bird, Tim" <Tim.Bird@sony.com>,
@@ -60,8 +60,8 @@ To:     "Bird, Tim" <Tim.Bird@sony.com>,
         Paolo Bonzini <pbonzini@redhat.com>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
-Message-ID: <64c4deb8-73ea-a18e-3950-0eb333e056fb@gmail.com>
-Date:   Sun, 21 Jun 2020 17:51:41 -0500
+Message-ID: <8434df9b-d7c7-a873-41a2-b4b9e8c46d6d@gmail.com>
+Date:   Sun, 21 Jun 2020 17:52:34 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
@@ -117,20 +117,23 @@ On 2020-06-21 17:45, Frank Rowand wrote:
 >   messages are removed instead of being flagged.
 > 
 
-reply 4/5
+reply 5/5
 
 This is the previous raw console output for the Devicetree unittest,
-filtered by of_unittest_expect.  The expected messages are not
-eliminated, but are flagged with "ok" in the leading columns.
+filtered by of_unittest_expect.  The expected messages are eliminated
+instead of being flagged.
 
 Lines 1 - 205 deleted again.
+
+The output is still somewhat noisy because the Devicetree unittest
+is running in parallel with some unrelated driver initialization.
 
 This test run shows one of the unittests failing (search for
 the string "FAIL") and an associated expected console error
 message is missing.
 
   EXPECT begin and EXPECT end lines are suppressed.
-  Lines that match an EXPECT line are flagged with a leading 'ok'.
+  Lines that match an EXPECT line are suppressed.
   Lines reporting a of_unittest_expect warning or error are flagged
      with a leading '**'.
   Lines reporting start or end of the unittests are flagged
@@ -139,98 +142,70 @@ message is missing.
      with a leading '>>'.
 
 
+   s4: supplied by regulator-dummy
    s4: Bringing 0uV into 500000-500000uV
    s5: supplied by regulator-dummy
    sdhci_msm f98a4900.sdhci: Got CD GPIO
    rtc-pm8xxx fc4cf000.spmi:pm8941@0:rtc@6000: setting system clock to 1970-02-07T19:24:17 UTC (3266657)
 -> ### dt-test ### start of unittest - you will see error messages
    s6: supplied by regulator-dummy
-ok Duplicate name in testcase-data, renamed to "duplicate-name#1"
    s7: supplied by regulator-dummy
    s8: supplied by regulator-dummy
-ok OF: /testcase-data/phandle-tests/consumer-a: could not get #phandle-cells-missing for /testcase-data/phandle-tests/provider1
    s1: supplied by regulator-dummy
-ok OF: /testcase-data/phandle-tests/consumer-a: could not get #phandle-cells-missing for /testcase-data/phandle-tests/provider1
    s1: Bringing 0uV into 1300000-1300000uV
    s2: supplied by regulator-dummy
-ok OF: /testcase-data/phandle-tests/consumer-a: could not find phandle
    sdhci_msm f98a4900.sdhci: Got CD GPIO
-ok OF: /testcase-data/phandle-tests/consumer-a: could not find phandle
    s2: Bringing 0uV into 2150000-2150000uV
    s3: supplied by regulator-dummy
-ok OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found -1
    s3: Bringing 0uV into 1800000-1800000uV
-ok OF: /testcase-data/phandle-tests/consumer-a: #phandle-cells = 3 found -1
    l1: supplied by s1
-ok OF: /testcase-data/phandle-tests/consumer-b: could not get #phandle-missing-cells for /testcase-data/phandle-tests/provider1
    l1: Bringing 0uV into 1225000-1225000uV
-ok OF: /testcase-data/phandle-tests/consumer-b: could not find phandle
    l2: supplied by s3
    l2: Bringing 0uV into 1200000-1200000uV
-ok OF: /testcase-data/phandle-tests/consumer-b: #phandle-cells = 2 found -1
    l3: supplied by s1
    l3: Bringing 0uV into 1225000-1225000uV
-ok platform testcase-data:testcase-device2: IRQ index 0 not found
    l4: supplied by s1
    l4: Bringing 0uV into 1225000-1225000uV
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest0/status
    l5: supplied by s2
    l5: Bringing 0uV into 1800000-1800000uV
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest1/status
    l6: supplied by s2
    l6: Bringing 0uV into 1800000-1800000uV
    sdhci_msm f98a4900.sdhci: Got CD GPIO
    l7: supplied by s2
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest2/status
    l7: Bringing 0uV into 1800000-1800000uV
    l8: supplied by regulator-dummy
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest3/status
    l8: Bringing 0uV into 1800000-1800000uV
    l9: supplied by regulator-dummy
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest5/status
    l9: Bringing 0uV into 1800000-1800000uV
    l10: supplied by regulator-dummy
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest6/status
    l10: Bringing 0uV into 1800000-1800000uV
    l11: supplied by s1
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest7/status
    l11: Bringing 0uV into 1300000-1300000uV
    sdhci_msm f98a4900.sdhci: Got CD GPIO
    l12: supplied by s2
    l12: Bringing 0uV into 1800000-1800000uV
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest8/status
    l13: supplied by regulator-dummy
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest8/property-foo
    sdhci_msm f98a4900.sdhci: Got CD GPIO
    l13: Bringing 0uV into 1800000-1800000uV
-ok OF: overlay: node_overlaps_later_cs: #6 overlaps with #7 @/testcase-data/overlay-node/test-bus/test-unittest8
-ok OF: overlay: overlay #6 is not topmost
    l14: supplied by s2
    l14: Bringing 0uV into 1800000-1800000uV
    l15: supplied by s2
-ok i2c i2c-1: Added multiplexed i2c bus 2
    l15: Bringing 0uV into 2050000-2050000uV
    l16: supplied by regulator-dummy
    sdhci_msm f98a4900.sdhci: Got CD GPIO
    l16: Bringing 0uV into 2700000-2700000uV
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/i2c-test-bus/test-unittest12/status
    l17: supplied by regulator-dummy
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/i2c-test-bus/test-unittest13/status
    l17: Bringing 0uV into 2700000-2700000uV
    l18: supplied by regulator-dummy
-ok i2c i2c-1: Added multiplexed i2c bus 3
    l18: Bringing 0uV into 2850000-2850000uV
    sdhci_msm f98a4900.sdhci: Got CD GPIO
    l19: supplied by regulator-dummy
    l19: Bringing 0uV into 3300000-3300000uV
    l20: supplied by regulator-dummy
-ok GPIO line 315 (line-B-input) hogged as input
    l20: Bringing 0uV into 2950000-2950000uV
-ok GPIO line 309 (line-A-input) hogged as input
    l21: supplied by regulator-dummy
    l21: Bringing 0uV into 2950000-2950000uV
    l22: supplied by regulator-dummy
-ok GPIO line 307 (line-D-input) hogged as input
    l22: Bringing 0uV into 3000000-3000000uV
    l23: supplied by regulator-dummy
    l23: Bringing 0uV into 3000000-3000000uV
@@ -245,26 +220,10 @@ ok GPIO line 307 (line-D-input) hogged as input
    lvs3: supplied by s3
    5vs1: supplied by s4
    5vs2: supplied by s4
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/substation@100/status
    mmc1: SDHCI controller on f98a4900.sdhci [f98a4900.sdhci] using ADMA
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/fairway-1/status
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/fairway-1/ride@100/track@30/incline-up
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/fairway-1/ride@100/track@40/incline-up
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/lights@40000/status
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/lights@40000/color
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/lights@40000/rate
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /__symbols__/hvac_2
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /__symbols__/ride_200
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /__symbols__/ride_200_left
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /__symbols__/ride_200_right
    msm_hsusb f9a55000.usb: failed to create device link to ci_hdrc.0.ulpi
-ok OF: overlay: ERROR: multiple fragments add and/or delete node /testcase-data-2/substation@100/motor-1/controller
-ok OF: overlay: ERROR: multiple fragments add, update, and/or delete property /testcase-data-2/substation@100/motor-1/controller/name
    mmc1: new ultra high speed DDR50 SDHC card at address aaaa
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/substation@100/motor-1/rpm_avail
    mmcblk1: mmc1:aaaa SU16G 14.8 GiB 
-ok OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data-2/substation@100/motor-1/rpm_avail
-ok OF: overlay: ERROR: multiple fragments add, update, and/or delete property /testcase-data-2/substation@100/motor-1/rpm_avail
     mmcblk1: p1
 -> ### dt-test ### end of unittest - 258 passed, 1 failed
    ALSA device list:
