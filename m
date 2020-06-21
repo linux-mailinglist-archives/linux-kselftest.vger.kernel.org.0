@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDD4202D7E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 00:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6947D202D80
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 00:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgFUWtP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Jun 2020 18:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
+        id S1730765AbgFUWuG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Jun 2020 18:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgFUWtO (ORCPT
+        with ESMTP id S1726064AbgFUWuG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Jun 2020 18:49:14 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C44C061794;
-        Sun, 21 Jun 2020 15:49:14 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id l6so10339766qkc.6;
-        Sun, 21 Jun 2020 15:49:14 -0700 (PDT)
+        Sun, 21 Jun 2020 18:50:06 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E10C061794;
+        Sun, 21 Jun 2020 15:50:06 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id d27so11373259qtg.4;
+        Sun, 21 Jun 2020 15:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LCeD6pPgVH9FP8OnJumzQJNZgxWhcXTVHXpm3TnvleM=;
-        b=oPN4Z6Jf/qWLFnlDmw9GmiJN+mqGYRIX5a5qlLhF3rWiGE2/2YrcLe6X3fP+Id9+/D
-         FVi/oIsvh+YJxPMJDhL30R3Wv+ovhKfC3OTurLbGKU++5SrUzQm8dDvJIZePKiA5L/sX
-         g//E6o0cBx7u2lpo+ccn8pMKYzLH0NevrZGkiKF3aTX2p9KEgLjiyQZlYwTvPtSDKDZJ
-         /bmlmEXznHadwQhG2LwqKkfZPX+HD6SYmqjpu3WKyIkmenk65cKsnPkmBmevrsoMoYdH
-         g6wzp8ScUuugAVu6wI87y5Ck2xz9Xqmztcgr+yykiYuL1f+efyFXUH4mwi6KP3Af5rMj
-         G6EQ==
+        bh=heSq8XvVezF5nncAUlIXXdN5McVzbacnXT3xS+iRY2M=;
+        b=W4DDeGRW6GKzpd/Ekw7+4xbCWkXaJtl5iD/eOuwW50w6VQ6W8o/rqViBVe/lMQF/3a
+         AdqJd/LWC3woVHh66GeXuX8q23Jzarfbot9Ty/TM8vI3nma/2sm7l9z/lefrkD11KPFr
+         qgw+EnzrS7BCZCpPtNwMpOuUBRrdcDEJbLjGKiYrS1z/JFX6PASIRF7T9vYlXP/w5Mtb
+         7ZSy+bzOiDSrrDj8xLN3bcUF/B0Noy1WwTJEjYhqv+KHsOOKKYfIptrlSQf1YvP1ZxsM
+         re4bWmYtdyyyV27De+k82jd5A0J07bH8c+ZGS+cdAowryGPM8bwdAJJWh0qxs/5giCxf
+         Tnvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=LCeD6pPgVH9FP8OnJumzQJNZgxWhcXTVHXpm3TnvleM=;
-        b=szI+OMJTR8Te7rZJcPAnz8FlTT14yaaubvBkW2qkY7X51YIERU3tw7az1b2/+ubXxh
-         iHMDisVH/FLfr6SwuM7t4Rl9Lubld+4hIq1O0A3lz5yhPbPGMtME1PSRi7qDV4R4NCGL
-         VxDQqUBDx6BbSNH2nwEX8gZWH/iq3jGjtUEcemWY/U51HQU7unKQn48nO2qPB33v6YB6
-         5yMtZ+n54ZG+GHqqj8vLUU3f550RMtqjW0SAq3FWw2v0iBYK8a4ZJapkeDEnh4Bwjw8r
-         2EXWdlNuhCF0jEJVNKfsBA0zUHFRvmbfmvWiJrO9zRY8JWFiqbAXGKcfA05GYtIuacwe
-         xsCg==
-X-Gm-Message-State: AOAM5331SmG1DA2poonAcSLvUuIQCjmwVrGfPP/4XR0n+2sGF8ZfvQMH
-        dMY+XPTNIe6OuFG7JK2N0rM=
-X-Google-Smtp-Source: ABdhPJwmjqu1wM+qwIb0PM1SSR9HEfSXEqzMaYPpTgjwuUTLHhQXB6DjjQ4Br8rytnd9tJLS7/Ejiw==
-X-Received: by 2002:a37:9684:: with SMTP id y126mr13385790qkd.348.1592779753578;
-        Sun, 21 Jun 2020 15:49:13 -0700 (PDT)
+        bh=heSq8XvVezF5nncAUlIXXdN5McVzbacnXT3xS+iRY2M=;
+        b=hYCYwrC66ezcbTRc8Ie0SdcWDJLAhxDyz0k08UPwuIrx0FipUTH1h4rDRU3axZ8DeS
+         U0kZO/Btzr7jzWQtPmR4p8OmIZoBLumfEXGVHuGQ7Rfia4a/qFI3vYmXo2PzCxVyZdY1
+         E3eS1rMVjQb26PF3JUUtjRXzg1XYaJtTTQSf1uNeIuIKTGYJnqKZzOdEoARMcVjK6Vc7
+         TPOk7mrPoFgsg1Nl9DAk+QlI8u+MZ5APZUSKEjzz7R2pbOo4hSraV3NXKbQN4Q5dh+OA
+         vvaGJd5EDUlurXtZY26VzfOSR/5FwJrd7lYERHjH6120YhdCcYrQnn4gf7zYzTKc7Cm6
+         rpfA==
+X-Gm-Message-State: AOAM532ERywSL1q2PJwncd/8MWvTnMdYVuRSAJQClIqrFn4bd0MtXNYJ
+        qPzcndmg+wZbIeoNMgT9oYM=
+X-Google-Smtp-Source: ABdhPJy+aKtalybE4R14DCY29ctkc62hYEz912FeZvx0YNPqq5/DHPzOTpyVTfwNXUc/UOMZlRdN9A==
+X-Received: by 2002:ac8:4c89:: with SMTP id j9mr13904476qtv.326.1592779805150;
+        Sun, 21 Jun 2020 15:50:05 -0700 (PDT)
 Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id w13sm12228726qkb.91.2020.06.21.15.49.12
+        by smtp.gmail.com with ESMTPSA id s2sm4924132qks.70.2020.06.21.15.50.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jun 2020 15:49:13 -0700 (PDT)
+        Sun, 21 Jun 2020 15:50:04 -0700 (PDT)
 Subject: Re: RFC: KTAP documentation - expected messages
 From:   Frank Rowand <frowand.list@gmail.com>
 To:     "Bird, Tim" <Tim.Bird@sony.com>,
@@ -60,8 +60,8 @@ To:     "Bird, Tim" <Tim.Bird@sony.com>,
         Paolo Bonzini <pbonzini@redhat.com>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
-Message-ID: <5c0c1ad7-c3c6-39b9-0907-330241d40464@gmail.com>
-Date:   Sun, 21 Jun 2020 17:49:12 -0500
+Message-ID: <19d771b3-54e5-11fb-86d9-2b56ab8190eb@gmail.com>
+Date:   Sun, 21 Jun 2020 17:50:04 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
@@ -117,171 +117,371 @@ On 2020-06-21 17:45, Frank Rowand wrote:
 >   messages are removed instead of being flagged.
 > 
 
-reply 1/5
 
-expected messages API:
+# reply 2/5
 
-  - execute EXPECT_BEGIN(), reporting the expected message, before the
-    point when the message will occur
+#!/usr/bin/perl
+# SPDX-License-Identifier: GPL-2.0
+#
+# Copyright 2020 Sony Corporation
+#
+# Author: Frank Rowand
 
-  - execute EXPECT_END(), reporting the same expected message, after the
-    point when the message will occur
+# This program is meant to be an aid to reading the output of the Linux
+# kernel devicetree unittest (drivers/of/unitest.c).  A design goal of
+# unittest is that the output is directly usable without a helper program
+# such as this one.
 
-  - EXPECT_BEGIN() may occur multiple times, before the corresponding
-    EXPECT_END()s, when a single test action may result in multiple
-    expected messages
-
-  - When multiple EXPECT_BEGIN()s are nested, the corresponding (matching)
-    EXPECT_END()s occur in the inverse order of the EXPECT_BEGIN()s.
-
-  - When the expected message contain a non-constant value, a place holder
-    can be placed in the message.  Current place holders are:
-
-     - <<int>>  an integer
-     - <<hex>>  a hexadecimal number
-
-     Suggested additional place holder(s) are:
-
-       - <<alpha>>  contiguous non white space characters 
-
-       I have avoided allowing regular expessions, because test frameworks
-       may implement their own filtering instead of relying on a generic
-       console output filter program.  There are multiple definitions for
-       regular expressions in different languages, thus it could be
-       difficult to set rules for a subset of regular expression usable
-       by all languages.
-
-A preliminary version of an expected messages framework has been
-implemented in the mainline drivers/of/unittest.c.  The implementation
-is trivial, as seen below.
-
-Note that the define of "pr_fmt()" pre-dates the implementation
-of the EXPECT_BEGIN() and EXPECT_END() macros.
----------------------------------------------------------------
-
-#define pr_fmt(fmt) "### dt-test ### " fmt
+$VUFX = "200115a";
 
 
-/*
- * Expected message may have a message level other than KERN_INFO.
- * Print the expected message only if the current loglevel will allow
- * the actual message to print.
- *
- * Do not use EXPECT_BEGIN() or EXPECT_END() for messages generated by
- * pr_debug().
- */
-#define EXPECT_BEGIN(level, fmt, ...) \
-        printk(level pr_fmt("EXPECT \\ : ") fmt, ##__VA_ARGS__)
+use strict 'refs';
+use strict subs;
 
-#define EXPECT_END(level, fmt, ...) \
-        printk(level pr_fmt("EXPECT / : ") fmt, ##__VA_ARGS__)
+use Getopt::Long;
+use Text::Wrap;
 
 
-
-Example 1 of the API use, single message:
------------------------------------------
-
-        EXPECT_BEGIN(KERN_INFO,
-                     "OF: /testcase-data/phandle-tests/consumer-a: could not find phandle");
-
-        rc = of_parse_phandle_with_args(np, "phandle-list-bad-phandle",
-                                        "#phandle-cells", 0, &args);
-
-        EXPECT_END(KERN_INFO,
-                   "OF: /testcase-data/phandle-tests/consumer-a: could not find phandle");
+# strip off everything before final "/"
+(undef, $script_name) = split(/^.*\//, $0);
 
 
-Example 2 of the API use, two messages,
-"<<int>>" placeholder matches any integer:
-------------------------------------------
+#______________________________________________________________________________
+sub compare {
+	my ($expect, $got) = @_;
+	my $expect_next;
+	my $expect_next_lit;
+	my $got_next;
+	my $type;
 
-        /*
-         * messages are the result of the probes, after the
-         * driver is registered
-         */
+	while ($expect) {
 
-        EXPECT_BEGIN(KERN_INFO,
-                     "GPIO line <<int>> (line-B-input) hogged as input\n");
+		($expect_next, $type) = split(/<</, $expect);
+		($type) = split(/>>/, $type);
+		$expect =~ s/^.*?>>//;	# '?' is non-greedy, minimal match
 
-        EXPECT_BEGIN(KERN_INFO,
-                     "GPIO line <<int>> (line-A-input) hogged as input\n");
+		# literal, ignore all metacharacters when used in a regex
+		$expect_next_lit = quotemeta($expect_next);
 
-        ret = platform_driver_register(&unittest_gpio_driver);
-        if (unittest(ret == 0, "could not register unittest gpio driver\n"))
-                return;
+		$got_next = $got;
+		$got_next =~ s/^($expect_next_lit).*/\1/;
+		$got       =~ s/^$expect_next_lit//;
 
-        EXPECT_END(KERN_INFO,
-                   "GPIO line <<int>> (line-A-input) hogged as input\n");
-        EXPECT_END(KERN_INFO,
-                   "GPIO line <<int>> (line-B-input) hogged as input\n");
+		if ($expect_next ne $got_next) {
+			return 0;
+		}
 
-Subtle flow of control issue: the two EXPECT_END() are not executed if
-platform_driver_register() fails.  The two expected messages will not
-be printed, but the filter tool (of_unittest_expect) will not report this
-as an error because of_unittest_expect does not search for the messages
-until the EXPEND_END() output is encountered.
+		if ($type eq "int") {
+			if ($got =~ /^[+-]*[0-9]+/) {
+				$got =~ s/^[+-]*[0-9]+//;
+			} else {
+				return 0;
+			}
+		} elsif ($type eq "hex") {
+			if ($got =~ /^(0x)*[0-9a-f]+/) {
+				$got =~ s/^(0x)*[0-9a-f]+//;
+			} else {
+				return 0;
+			}
+		} elsif ($type eq "") {
+			if ($expect_next ne $got_next) {
+				return 0;
+			} else {
+				return 1;
+			}
+		} else {
+			print "ERROR: type not recognized: $type\n";
+			return 0;
+		}
 
-One could argue that this is correct behavior because unittest() will print
-the error that platform_driver_register() failed.  The "expected" messages
-are not expected if the register fails.
+	}
 
-One could equally well argue that the two EXPECT_END() should execute
-before unittest() checks the value of ret, so the missing messages will
-be reported as an error by of_unittest_expect.
+	# should not get here
+	print "ERROR: $script_name internal error, at end of compare()\n";
 
-But that is a discussion that should occur in the context of whether
-drivers/of/unittest.c has a coding error, not in the context of how
-to implement the expected messages framework.
-
-
-goals:
-
-  - The console output should be human readable and easy to parse.
-    Have "\" in the expect begin and a matching "/" in the expect end
-    is intended to make it easier to visualize pairs.
-
-  - The console output should be machine parsable.
-
-
-Design alternate choices:
-
-  - Expect message nesting:
-     1) Nested expect messages place the "\" in the same column.
-     2) For each nested expect message, indent the "\" by one more column
-        for each level of nesting.
-
-    Chose 1.  This keeps the EXPECT_BEGIN() and EXPECT_END() macros very
-    simple, at the expense of the output being less human readable in the
-    raw log.
-
-    The raw log is already not very readable, and I would expect the normal
-    use case would be using a filter program, such as of_unittest_expect,
-    to handle the readability issue.
+	return 0;
+}
 
 
-Issues:
+#______________________________________________________________________________
+sub usage {
 
-  - The EXPECT_BEGIN() and EXPECT_END() macros use printk() for output.
-    printk() prefixes the output with the value of the pr_fmt() macro.
-    This means the filter program must be able to deal with different
-    pr_fmt() strings being incorporated in the expect messages that
-    are in different source files.  The unittest.c pr_fmt() value is
-    currently hard coded in the of_unittest_expect filter program.
+# ***** when editing, be careful to not put tabs in the string printed:
 
-  - The output of the of_unittest_expect filter program prepends several
-    columns of data at the beginning of the resulting filtered data.  The
-    TAP format does not expect these extra columns.
+	print STDERR
+"
 
-    The prepended data is very important for making the report easily
-    read by humans.
+usage:
 
-    1) It will be trivial to add an of_unittest_expect "--tap-out" option
-       to not add the prepended data, so that normal TAP programs can use
-       the output from of_unittest_expect.
+  $script_name CONSOLE_LOG
 
-    2) The "--tap-out" option could also create a TAP "test line" reporting
-       an "ok" for expected message detected and "not ok" if an expected
-       message is not detected.
+     -h                print program usage
+    --help             print program usage
+    --hide-expect      suppress output of EXPECTed lines
+    --line-num         report line number of CONSOLE_LOG
+    --no-strip-ts      do not strip leading timestamp
+    --version          print program version and exit
 
-       This would also require modifying the "test plan" line to change
-       the number of tests.
+
+  Process a console log for EXPECTed test related messages to either
+  highlight expected devicetree unittest related messages or suppress
+  the messages.
+
+  Various unittests may trigger kernel messages from outside the
+  unittest code.  The unittest annotates any such message with
+  an EXPECT begin before triggering the message, and an EXPECT
+  end after triggering the message.
+
+  If an expected message does not occur, that will be reported.
+
+  If EXPECT begin and EXPECT end lines do not match, that will
+  be reported.  If nested, EXPECT end lines must be in the reverse
+  order of the corresponding EXPECT begin lines.
+
+  EXPECT begin and EXPECT end lines can contain special patterns:
+
+     <<int>> matches: [+-]*[0-9]+
+     <<hex>> matches: (0x)*[0-9a-f]+
+
+  Default:
+    - strip timestamps
+
+  EXPECT begin and EXPECT end lines are suppressed.
+  Lines that match an EXPECT line are flagged with a leading 'ok'.
+  Lines reporting a $script_name warning or error are flagged
+     with a leading '**'.
+  Lines reporting start or end of the unittests are flagged
+     with a leading '->'.
+  Lines reporting a unittest test FAIL are flagged
+     with a leading '>>'.
+
+";
+
+	return {};
+}
+
+#______________________________________________________________________________
+#______________________________________________________________________________
+
+# save for usage()
+
+if (!GetOptions(
+	"h"               => \$help,
+	"help"            => \$help,
+	"hide-expect"     => \$hide_expect,
+	"line-num"        => \$print_line_num,
+	"no-strip-ts"     => \$no_strip_ts,
+	"verbose"         => \$verbose,
+	"version"         => \$version,
+	)) {
+	print STDERR "\n";
+	print STDERR "ERROR processing command line options\n";
+	print STDERR "\n";
+	print STDERR "For help, type '$script_name --help'\n";
+	print STDERR "\n";
+
+	exit 1;
+}
+
+
+if ($no_strip_ts) {
+	$strip_ts = 1;
+	$no_strip_ts = 0;
+} else {
+	$strip_ts = 0;
+	$no_strip_ts = 1;
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+if ($help){
+
+	&usage;
+
+	exit 1;
+}
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+if ($version) {
+	print STDERR "\n$script_name  $VUFX\n\n";
+	print STDERR "\n";
+
+	exit 0;
+}
+
+
+#______________________________________________________________________________
+
+
+# $debug = 1;
+
+# zzz:
+#if ($#ARGV != 1) {
+#	print STDERR "\n";
+#	print STDERR "Required arguments: two file names\n";
+#	print STDERR "\n";
+#
+#	exit 0;
+#}
+
+
+# $exp_* are used as regex match patterns,
+# so '\\\\' in $exp_begin matches a single '\'
+# quotemeta() does not do the right thing in this case
+
+$pr_fmt = "### dt-test ### ";
+$exp_begin = "${pr_fmt}EXPECT \\\\ : ";
+$exp_end   = "${pr_fmt}EXPECT / : ";
+
+
+$line_num = "";
+$timestamp = "";
+
+LINE:
+while ($line = <ARGV>) {
+
+	chomp $line;
+
+	$prefix = "  ";  ## 2 characters
+
+
+	if ($strip_ts) {
+
+		$timestamp = $line;
+
+		if ($timestamp =~ /^\[\s*[0-9]+\.[0-9]*\] /) {
+			($timestamp, $null) = split(/]/, $line);
+			$timestamp = $timestamp . "] ";
+
+		} else {
+			$timestamp = "";
+		}
+	}
+
+	$line =~ s/^\[\s*[0-9]+\.[0-9]*\] //;
+
+
+	# -----  find EXPECT begin
+
+	if ($line =~ /^\s*$exp_begin/) {
+		$data = $line;
+		$data =~ s/^\s*$exp_begin//;
+		push @begin, $data;
+
+		if ($verbose) {
+			if ($print_line_num) {
+				$line_num = sprintf("%4s ", $.);
+			}
+			printf "%s %s%s%s\n", $prefix, $line_num,  $timestamp, $line;
+		}
+
+		next LINE;
+	}
+
+
+	# -----  find EXPECT end
+
+	if ($line =~ /^\s*$exp_end/) {
+		$data = $line;
+		$data =~ s/^\s*$exp_end//;
+
+		if ($verbose) {
+			if ($print_line_num) {
+				$line_num = sprintf("%4s ", $.);
+			}
+			printf "%s %s%s%s\n", $prefix, $line_num,  $timestamp, $line;
+		}
+
+		$found = 0;
+		$no_begin = 0;
+		if (@found_or_begin > 0) {
+			$begin = pop @found_or_begin;
+			if (compare($data, $begin)) {
+				$found = 1;
+			}
+		} elsif (@begin > 0) {
+			$begin = pop @begin;
+		} else {
+			$no_begin = 1;
+		}
+
+		if ($no_begin) {
+
+			print "** ERROR: EXPECT end without any EXPECT begin:\n";
+			print "       end ---> $line\n";
+
+		} elsif (! $found) {
+			if ($print_line_num) {
+				$line_num = sprintf("%4s ", $.);
+			}
+
+			printf "** %s%s$script_name WARNING - not found ---> %s\n", $line_num,  $timestamp, $data;
+
+		} elsif (! compare($data, $begin)) {
+			print "** ERROR: EXPECT end does not match EXPECT begin:\n";
+			print "       begin -> $begin\n";
+			print "       end ---> $line\n";
+		}
+
+		next LINE;
+	}
+
+
+	# -----  not an EXPECT line
+
+	if (($line =~ /^${pr_fmt}start of unittest - you will see error messages$/) ||
+	    ($line =~ /^${pr_fmt}end of unittest - [0-9]+ passed, [0-9]+ failed$/ )   ) {
+		$prefix = "->"; # 2 characters
+	} elsif ($line =~ /^${pr_fmt}FAIL /) {
+		$prefix = ">>"; # 2 characters
+	}
+
+	$found = 0;
+	foreach $begin (@begin) {
+		if (compare($begin, $line)) {
+			$found = 1;
+			last;
+		}
+	}
+
+	if ($found) {
+		$begin = shift @begin;
+		while (! compare($begin, $line)) {
+			push @found_or_begin, $begin;
+			$begin = shift @begin;
+		}
+		push @found_or_begin, $line;
+
+		if ($hide_expect) {
+			$suppress_line = 1;
+			next LINE;
+		}
+		$prefix = "ok"; # 2 characters
+	}
+
+
+	if ($print_line_num) {
+		$line_num = sprintf("%4s ", $.);
+	}
+
+	printf "%s %s%s%s\n", $prefix, $line_num,  $timestamp, $line;
+}
+
+if (@begin) {
+	print "** ERROR: EXPECT begin without any EXPECT end:\n";
+	print "          This list may be misleading.\n";
+	foreach $begin (@begin) {
+		print "       begin ---> $begin\n";
+	}
+}
+
+
+#______________________________________________________________________________
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#_______________________________________________________________________________
+# vi config follows:
+
+# ~/.exrc must contain "set modelines" for tabs to be set automatically
+# ex:set tabstop=3 shiftwidth=3 sts=0:
