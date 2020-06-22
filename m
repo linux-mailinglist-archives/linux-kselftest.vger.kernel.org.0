@@ -2,119 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84762204467
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 01:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5013B2044CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 01:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730436AbgFVX0w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 19:26:52 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:16982 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727061AbgFVX0v (ORCPT
+        id S1730845AbgFVXzP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 19:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730227AbgFVXzO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 19:26:51 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ef13e0e0000>; Mon, 22 Jun 2020 16:26:06 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 22 Jun 2020 16:26:51 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 22 Jun 2020 16:26:51 -0700
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 22 Jun
- 2020 23:26:41 +0000
-Subject: Re: [PATCH 09/16] mm/hmm: add output flag for compound page mapping
-To:     Jason Gunthorpe <jgg@mellanox.com>
-CC:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Jerome Glisse <jglisse@redhat.com>,
-        "John Hubbard" <jhubbard@nvidia.com>,
+        Mon, 22 Jun 2020 19:55:14 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED98BC061573;
+        Mon, 22 Jun 2020 16:55:13 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id p20so19700983ejd.13;
+        Mon, 22 Jun 2020 16:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=NjMcZXprv/nOI4forFhKBTk/9F1/kItqecbA0f3zzT8=;
+        b=MK3YZsIqGYoDjbxLtQy2a2wo4ruMmS1w9QUl9/b2H1N34YqISWMm4seVahEk6vXpOI
+         SgBWMKclzauV/+pl9tGCeOaTNW0t2+0vC53zrCUIN6UO6sMVq+xOis8Nnm32NMx8suxR
+         UhCmTiQTZQhtWbpw2vcER4mouZPvsT8VZEXNEeATbbrxzozgbjOPBthCdAw+infZucxe
+         zkUG4Enjj+ZXGXRDXzuhcOIhk127PUmHwYCqIOvVFSxdxnzVTp8DEZ/aH2mR5XH5+Ans
+         xmUT27IlXZQdKBsq/7FrGNFly2GxAGf/6aYN5rJVJtKl2tow0KSBSoBWJGhErIvYIYDX
+         NbSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NjMcZXprv/nOI4forFhKBTk/9F1/kItqecbA0f3zzT8=;
+        b=iz8GU/l3NxK4TsbnTMNwgaDarjy1L9LOGjCR1pcHIW/nTG4WNpeeE7TAhYUbu6wuCm
+         j+cbnoAsfvgJzEeTObyt4Q2DpldZl23ZdnDwMO3kYK7W6BxSGnzTA6x1TLX915SDrhYg
+         wLpoxne/F6L6EHOME3y+DuGZlJ8lnHZXpsDgmG9DAD5FUggUq0B6OeaSZJs0PhR6vClK
+         QycyLbO+3gtBloZl3ItHDLLrqlBE9WMoj9qtvvm2eVqBbre9ytmQuMXPRYRuUhuuRih6
+         bCNDbByNXWAJmDgDhIyYA45mlHwdJ4c8oRMvj36BIWUzBjJs/NA8IwHO0fz/V6NR4NFB
+         A/uw==
+X-Gm-Message-State: AOAM530HVXwuEnhUsIEiN6Mn6VPfp0ajpHrXzUrEeEBvx1WidJPfkSt9
+        OLgH+2G1IBsF8ewUrsocW+J1umsjnbzATn8s0xY=
+X-Google-Smtp-Source: ABdhPJwQzUdtQVA8N+epe6jO74BqD4xLZlDw/rWnWRA1sAy4igezZryH7Kv9srM9ru85/edGlgH35lOeiLAECSYhKcc=
+X-Received: by 2002:a17:906:2b81:: with SMTP id m1mr17303645ejg.488.1592870112660;
+ Mon, 22 Jun 2020 16:55:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200619215649.32297-1-rcampbell@nvidia.com> <20200619215649.32297-14-rcampbell@nvidia.com>
+ <F1872509-3B1F-4A8A-BFF5-E4D44E451920@nvidia.com> <b6eed976-c515-72d6-a7be-2296cab8f0d4@nvidia.com>
+ <C7BEB563-3698-442C-A188-1B66CBE4CF63@nvidia.com> <a5f502f8-70cd-014b-8066-bbaeb8024a29@nvidia.com>
+ <4C364E23-0716-4D59-85A1-0C293B86BC2C@nvidia.com> <CAHbLzkqe50+KUsRH92O4Be2PjuwAYGw9nK+d-73syxi2Xnf9-Q@mail.gmail.com>
+ <CAHbLzko=BqtPhxgf7f1bKKqoQxK9XCCPdp4YdL80K_uXFfcETQ@mail.gmail.com> <fa056e5e-ca87-aef1-e66e-58e8ebe5403e@nvidia.com>
+In-Reply-To: <fa056e5e-ca87-aef1-e66e-58e8ebe5403e@nvidia.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 22 Jun 2020 16:54:45 -0700
+Message-ID: <CAHbLzkrR4-s+ye1F3XDV_0q+iyZOcyMQNHTggDY3Mn_e2yOZ7g@mail.gmail.com>
+Subject: Re: [PATCH 13/16] mm: support THP migration to device private memory
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Zi Yan <ziy@nvidia.com>, Ralph Campbell <rcampbell@nvidia.com>,
+        nouveau@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jerome Glisse <jglisse@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
         Ben Skeggs <bskeggs@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20200619215649.32297-1-rcampbell@nvidia.com>
- <20200619215649.32297-10-rcampbell@nvidia.com>
- <20200622172520.GB2874652@mellanox.com>
- <15ba19a9-5f71-546b-bdea-31e65fc39693@nvidia.com>
- <20200622231835.GD2874652@mellanox.com>
-X-Nvconfidentiality: public
-From:   Ralph Campbell <rcampbell@nvidia.com>
-Message-ID: <f5ae2cdd-5774-8d1e-5a30-657b611568b8@nvidia.com>
-Date:   Mon, 22 Jun 2020 16:26:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <20200622231835.GD2874652@mellanox.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1592868366; bh=+OkYuEGtBWmCdamoI5RkV/30Ug8LA8Bd48QQ050WpCg=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=Z0yrcSnqqy39UtthHbXgST4onrT+geCMj9CZGPtxxEjYRjvnZ/kvuaig9BtbS5ewN
-         4PIcptsE5rT/Cya1Dawz6nY7KqIoA4ZCnrFgV8aylqKRcIyulrCQdQucOix/auD69Y
-         o+5+eqPgRY6cWpvS5AVPdQy8HhlNirNtE6d1O6Ay43A0Ufmn/YhE81mHzy6s8SVxj6
-         l2dqTvOK7OV8EoRMMdgr944mPz2zbtHk7IGwF+944sFLpQW5BPEzArNOBM6eKvlkia
-         GV7w1FT1kKnHhScFUsDCR2TRDrVQdKPPziglWU4Q7P8t1qWhtZohHk+jb9zgeiNkMI
-         oeV7F+nI1CdpQ==
+        Shuah Khan <shuah@kernel.org>,
+        "Huang, Ying" <ying.huang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Jun 22, 2020 at 4:02 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> On 2020-06-22 15:33, Yang Shi wrote:
+> > On Mon, Jun 22, 2020 at 3:30 PM Yang Shi <shy828301@gmail.com> wrote:
+> >> On Mon, Jun 22, 2020 at 2:53 PM Zi Yan <ziy@nvidia.com> wrote:
+> >>> On 22 Jun 2020, at 17:31, Ralph Campbell wrote:
+> >>>> On 6/22/20 1:10 PM, Zi Yan wrote:
+> >>>>> On 22 Jun 2020, at 15:36, Ralph Campbell wrote:
+> >>>>>> On 6/21/20 4:20 PM, Zi Yan wrote:
+> >>>>>>> On 19 Jun 2020, at 17:56, Ralph Campbell wrote:
+> ...
+> >>> Ying(cc=E2=80=99d) developed the code to swapout and swapin THP in on=
+e piece: https://lore.kernel.org/linux-mm/20181207054122.27822-1-ying.huang=
+@intel.com/.
+> >>> I am not sure whether the patchset makes into mainstream or not. It c=
+ould be a good technical reference
+> >>> for swapping in device private pages, although swapping in pages from=
+ disk and from device private
+> >>> memory are two different scenarios.
+> >>>
+> >>> Since the device private memory swapin impacts core mm performance, w=
+e might want to discuss your patches
+> >>> with more people, like the ones from Ying=E2=80=99s patchset, in the =
+next version.
+> >>
+> >> I believe Ying will give you more insights about how THP swap works.
+> >>
+> >> But, IMHO device memory migration (migrate to system memory) seems
+> >> like THP CoW more than swap.
+>
+>
+> A fine point: overall, the desired behavior is "migrate", not CoW.
+> That's important. Migrate means that you don't leave a page behind, even
+> a read-only one. And that's exactly how device private migration is
+> specified.
+>
+> We should try to avoid any erosion of clarity here. Even if somehow
+> (really?) the underlying implementation calls this THP CoW, the actual
+> goal is to migrate pages over to the device (and back).
+>
+>
+> >>
+> >> When migrating in:
+> >
+> > Sorry for my fat finger, hit sent button inadvertently, let me finish h=
+ere.
+> >
+> > When migrating in:
+> >
+> >          - if THP is enabled: allocate THP, but need handle allocation
+> > failure by falling back to base page
+> >          - if THP is disabled: fallback to base page
+> >
+>
+> OK, but *all* page entries (base and huge/large pages) need to be cleared=
+,
+> when migrating to device memory, unless I'm really confused here.
+> So: not CoW.
 
-On 6/22/20 4:18 PM, Jason Gunthorpe wrote:
-> On Mon, Jun 22, 2020 at 11:10:05AM -0700, Ralph Campbell wrote:
->>
->> On 6/22/20 10:25 AM, Jason Gunthorpe wrote:
->>> On Fri, Jun 19, 2020 at 02:56:42PM -0700, Ralph Campbell wrote:
->>>> hmm_range_fault() returns an array of page frame numbers and flags for
->>>> how the pages are mapped in the requested process' page tables. The PFN
->>>> can be used to get the struct page with hmm_pfn_to_page() and the page size
->>>> order can be determined with compound_order(page) but if the page is larger
->>>> than order 0 (PAGE_SIZE), there is no indication that the page is mapped
->>>> using a larger page size. To be fully general, hmm_range_fault() would need
->>>> to return the mapping size to handle cases like a 1GB compound page being
->>>> mapped with 2MB PMD entries. However, the most common case is the mapping
->>>> size is the same as the underlying compound page size.
->>>> Add a new output flag to indicate this so that callers know it is safe to
->>>> use a large device page table mapping if one is available.
->>>
->>> But what size should the caller use?
->>>
->>> You already explained that the caller cannot use compound_ordet() to
->>> get the size, so what should it be?
->>>
->>> Probably this needs to be two flags, PUD and PMD, and the caller should
->>> use the PUD and PMD sizes to figure out how big it is?
->>>
->>> Jason
->>>
->>
->> I guess I didn't explain it as clearly as I thought. :-)
->>
->> The page size *can* be determined with compound_order(page) but without the
->> flag, the caller doesn't know how much of that page is being mapped by the
->> CPU. The flag says the CPU is mapping the whole compound page (based on compound_order)
->> and that the caller can use device mappings up to the size of compound_order(page).
-> 
-> No, I got it, I just don't like the assumption that just because a PMD
-> or PUD points to a page that the only possible value for
-> compound_page() is PMD or PUD respectively. Partial mapping should be
-> possible in both cases, if not today, then maybe down the road with
-> some of the large page work that has been floating about
-> 
-> It seems much safer to just directly encode the PUD/PMD size in the
-> flags
-> 
-> Jason
+I realized the comment caused more confusion. I apologize for the
+confusion. Yes, the trigger condition for swap/migration and CoW are
+definitely different. Here I mean the fault handling part of migrating
+into system memory.
 
-That is fine with me. I'll make that change for v2.
-I was just trying to minimize the number of flags being added.
+Swap-in just needs to handle the base page case since THP swapin is
+not supported in upstream yet and the PMD is split in swap-out phase
+(see shrink_page_list).
 
+The patch adds THP migration support to device memory, but you need to
+handle migrate in (back to system memory) case correctly. The fault
+handling should look like THP CoW fault handling behavior (before
+5.8):
+    - if THP is enabled: allocate THP, fallback if allocation is failed
+    - if THP is disabled: fallback to base page
+
+Swap fault handling doesn't look like the above. So, I said it seems
+like more THP CoW (fault handling part only before 5.8). I hope I
+articulate my mind.
+
+However, I didn't see such fallback is handled. It looks if THP
+allocation is failed, it just returns SIGBUS; and no check about THP
+status if I read the patches correctly. The THP might be disabled for
+the specific vma or system wide before migrating from device memory
+back to system memory.
+
+>
+> thanks,
+> --
+> John Hubbard
+> NVIDIA
