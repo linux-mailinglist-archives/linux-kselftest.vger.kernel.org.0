@@ -2,307 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E70B82038A0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 16:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3A5203B05
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 17:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729112AbgFVOCs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 10:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S1729396AbgFVPhV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 11:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728070AbgFVOCr (ORCPT
+        with ESMTP id S1729150AbgFVPhU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 10:02:47 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9830BC061573;
-        Mon, 22 Jun 2020 07:02:47 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id dp10so7929100qvb.10;
-        Mon, 22 Jun 2020 07:02:47 -0700 (PDT)
+        Mon, 22 Jun 2020 11:37:20 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D98C061573;
+        Mon, 22 Jun 2020 08:37:20 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id q17so1375734pfu.8;
+        Mon, 22 Jun 2020 08:37:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
+        h=subject:to:references:from:organization:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2n9reDCiwzp5p2T3bmWzun36Iijn1O0DAytSxN/0x1A=;
-        b=JEZDn71Xinf71REbjW+mjEFYFsPh2fNibaEuiLqW9s72hmeSvulB84TizS66PfETcg
-         g+HuwcwULqAQnQ3KeKru6Tjf+CexYvUJMkifaBYcMNSxk6WZR7SKUX1Q6lqwfVEwk90f
-         yV10JUefD7/34w0XWqq4Z8AT8Pw2EMmehIgw+nOwp4uqDCroD7RdEbGfGfzJkFs/unt1
-         Mcq15V9piOvDBsisurvw3LIc3weGs+STbHbsngrbY+FxDdZ4Wr5hgh6V2TihpWpBzjiw
-         Y/fFRhLLXnArra7INBs+cxA7KtVMltaBkEzs2lfLRHQ+j5IFNoi6br1vjbHKvsUUDIEn
-         FSQg==
+        bh=7I4FBHkC3xoY8dcYSORZ0nTLqrZS6hPMwq+XQvczidk=;
+        b=O4wc8PnnSmhd0MtkI7mV9+Rlp5x+aav1eXppMIpW6e6vfWSVuBtqcKJrI+Dl6tSEjP
+         bvirBl9ybJmqgaCDLsrfCPIXGkRWxij5h4/BfSq6kShUKoEhNP58McT+yPuUZxTpaVwB
+         TB298vkuKHBamQZVx+oK8NINwJONAH5UZTiLezsdHCBeeqMK1zGWv4Bg8cSARNICaheU
+         dXGCj/bN6VHS7IuItxM10WBT8+kpc1LmVhXTfBBXyQvCZTTaWEdnWbhHYiqque2UYmUJ
+         BZ52vOqxIW6WYDuyGWcMt48OTGhyoXUCXb1z769cjgEgPuDYP+JXO65x1k2uisBtOVFd
+         1tbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2n9reDCiwzp5p2T3bmWzun36Iijn1O0DAytSxN/0x1A=;
-        b=nAUUcICIB4jD0WXeh3sPh1TI36K+cisBDBa9Eg7rLvLYvJ5qPpS2yRpeHqiiKkDMyw
-         rbpTs9nHuZ1KbvVwyuogzg9UuIuXO663iXgPg/0mcSiQKr3NZnkJzanMKMEYdBUingm5
-         wW2F3S+ldvi6TLjhXuIr0hJ4jZpRYA6T0Vd5niGY0v+l/6PmwR8Hfw161dsWJ3qJlgIE
-         F6lYJYskN6/zT9dXSD9dbGhSaFPskJC2tLMTYgRQ2Yr8IRHlkVpgeeDb+lHoCue/emfZ
-         RxiQ4BaiXe+h22VXDVC6qkEbA7Vu0h3f67H7Rh7ngyQIIK9FSnkIYlJnhkcTWDVpasR6
-         v5uw==
-X-Gm-Message-State: AOAM533xTSmOjDbzfTfBTPWQGSID9SRVcGmV7SkL60x49lYO1ZSnAPLS
-        NaUI5SoVJcZrDXkhGh4lG8Y=
-X-Google-Smtp-Source: ABdhPJxRyoXygJc5bB2cmdhhMuSn2psgdfwedsE6Pgja+4dCJKxY6WCNKlGKWi5el/CYG8tO1bn0fw==
-X-Received: by 2002:a0c:fba2:: with SMTP id m2mr20867510qvp.5.1592834566597;
-        Mon, 22 Jun 2020 07:02:46 -0700 (PDT)
-Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id f203sm8109472qke.135.2020.06.22.07.02.44
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=7I4FBHkC3xoY8dcYSORZ0nTLqrZS6hPMwq+XQvczidk=;
+        b=kT836hbHtzhmT3dpGL71djXTKME9NaFI4RFXGO0w5vF3W2M78hUXolmufpgaMZ0R38
+         BcEP26XGr3M1dq2/18jWToICab2g3y2gQkFcdLKDGpCE1Mjmxvvrf/pDt5h93PmePCig
+         fSUQdwV8JH+iQ3OnCRJpcHrVwTqhnq6mVja7Qmcrf3fppmW2uOslugH1Nkc7g1cUIdUo
+         62fFD13fSx74vGfTFFCUgMenxJq6I160m+zYLNhavhNnBtjl5xQS/a9PhWazj/tai18d
+         W9sH/A1T62t+/2srn/L2ka35aDY5wcgCfPHMVfyyUjpJ3Bj5rH/uKuMUG2cw0og8ALcA
+         DmAw==
+X-Gm-Message-State: AOAM531TZbPOKM83Ts0B+P/BnKmTcmf2nJObUkYnNIWVzZ+c1MA/M+Eb
+        JG3LhreifoZZXZzJJTq61EOkQiY0
+X-Google-Smtp-Source: ABdhPJzqNQNJOpVYmj9g0sA4GCXf+imfhXoZXk2cFTB51ukto7iCCL0jPlM4jDE1SVmc+idfGcCl9g==
+X-Received: by 2002:a63:ca0c:: with SMTP id n12mr2298819pgi.216.1592840239667;
+        Mon, 22 Jun 2020 08:37:19 -0700 (PDT)
+Received: from ?IPv6:2601:1c0:6280:3f0::19c2? ([2601:1c0:6280:3f0::19c2])
+        by smtp.gmail.com with ESMTPSA id y10sm11749397pgi.54.2020.06.22.08.37.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jun 2020 07:02:46 -0700 (PDT)
-Subject: Re: RFC: KTAP documentation - expected messages
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     "Bird, Tim" <Tim.Bird@sony.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
+        Mon, 22 Jun 2020 08:37:18 -0700 (PDT)
+Subject: Re: mmotm 2020-06-20-21-36 uploaded (lkdtm/bugs.c)
+To:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
         Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
- <5c0c1ad7-c3c6-39b9-0907-330241d40464@gmail.com>
-Message-ID: <d105f53a-5de6-6d14-f345-ceddc0191f8e@gmail.com>
-Date:   Mon, 22 Jun 2020 09:02:43 -0500
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20200621043737.pb6JV%akpm@linux-foundation.org>
+From:   Randy Dunlap <rd.dunlab@gmail.com>
+Organization: nil
+Message-ID: <20a39fd4-622d-693c-c8d6-1fbab12af62a@gmail.com>
+Date:   Mon, 22 Jun 2020 08:37:17 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <5c0c1ad7-c3c6-39b9-0907-330241d40464@gmail.com>
+In-Reply-To: <20200621043737.pb6JV%akpm@linux-foundation.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-06-21 17:49, Frank Rowand wrote:
-> On 2020-06-21 17:45, Frank Rowand wrote:
->> Tim Bird started a thread [1] proposing that he document the selftest result
->> format used by Linux kernel tests.  
->>
->> [1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
->>
->> The issue of messages generated by the kernel being tested (that are not
->> messages directly created by the tests, but are instead triggered as a
->> side effect of the test) came up.  In this thread, I will call these
->> messages "expected messages".  Instead of sidetracking that thread with
->> a proposal to handle expected messages, I am starting this new thread.
->>
->> I implemented an API for expected messages that are triggered by tests
->> in the Devicetree unittest code, with the expectation that the specific
->> details may change when the Devicetree unittest code adapts the KUnit
->> API.  It seems appropriate to incorporate the concept of expected
->> messages in Tim's documentation instead of waiting to address the
->> subject when the Devicetree unittest code adapts the KUnit API, since
->> Tim's document may become the kernel selftest standard.
->>
->> Instead of creating a very long email containing multiple objects,
->> I will reply to this email with a separate reply for each of:
->>
->>   The "expected messages" API implemention and use can be from
->>   drivers/of/unittest.c in the mainline kernel.
->>
->>   of_unittest_expect - A proof of concept perl program to filter console
->>                        output containing expected messages output
->>
->>                        of_unittest_expect is also available by cloning
->>                        https://github.com/frowand/dt_tools.git
->>
->>   An example raw console output with timestamps and expect messages.
->>
->>   An example of console output processed by filter program
->>   of_unittest_expect to be more human readable.  The expected
->>   messages are not removed, but are flagged.
->>
->>   An example of console output processed by filter program
->>   of_unittest_expect to be more human readable.  The expected
->>   messages are removed instead of being flagged.
->>
+On 6/20/20 9:37 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2020-06-20-21-36 has been uploaded to
 > 
-> reply 1/5
+>    http://www.ozlabs.org/~akpm/mmotm/
 > 
-> expected messages API:
+> mmotm-readme.txt says
 > 
->   - execute EXPECT_BEGIN(), reporting the expected message, before the
->     point when the message will occur
+> README for mm-of-the-moment:
 > 
->   - execute EXPECT_END(), reporting the same expected message, after the
->     point when the message will occur
+> http://www.ozlabs.org/~akpm/mmotm/
 > 
->   - EXPECT_BEGIN() may occur multiple times, before the corresponding
->     EXPECT_END()s, when a single test action may result in multiple
->     expected messages
-> 
->   - When multiple EXPECT_BEGIN()s are nested, the corresponding (matching)
->     EXPECT_END()s occur in the inverse order of the EXPECT_BEGIN()s.
-> 
->   - When the expected message contain a non-constant value, a place holder
->     can be placed in the message.  Current place holders are:
-> 
->      - <<int>>  an integer
->      - <<hex>>  a hexadecimal number
-> 
->      Suggested additional place holder(s) are:
-> 
->        - <<alpha>>  contiguous non white space characters 
-> 
->        I have avoided allowing regular expessions, because test frameworks
->        may implement their own filtering instead of relying on a generic
->        console output filter program.  There are multiple definitions for
->        regular expressions in different languages, thus it could be
->        difficult to set rules for a subset of regular expression usable
->        by all languages.
-> 
-> A preliminary version of an expected messages framework has been
-> implemented in the mainline drivers/of/unittest.c.  The implementation
-> is trivial, as seen below.
-> 
-> Note that the define of "pr_fmt()" pre-dates the implementation
-> of the EXPECT_BEGIN() and EXPECT_END() macros.
-> ---------------------------------------------------------------
-> 
-> #define pr_fmt(fmt) "### dt-test ### " fmt
-> 
-> 
-> /*
->  * Expected message may have a message level other than KERN_INFO.
->  * Print the expected message only if the current loglevel will allow
->  * the actual message to print.
->  *
->  * Do not use EXPECT_BEGIN() or EXPECT_END() for messages generated by
->  * pr_debug().
->  */
-> #define EXPECT_BEGIN(level, fmt, ...) \
->         printk(level pr_fmt("EXPECT \\ : ") fmt, ##__VA_ARGS__)
-> 
-> #define EXPECT_END(level, fmt, ...) \
->         printk(level pr_fmt("EXPECT / : ") fmt, ##__VA_ARGS__)
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
 
-I included the pr_fmt() in EXPECT_BEGIN() and EXPECT_END(), because I
-defined the two macros within the unittest.c file.
+drivers/misc/lkdtm/bugs.c has build errors when building UML for i386
+(allmodconfig or allyesconfig):
 
-For a KTAP compliant generic implementation, I would change these
-to be diagnostic messages, so:
 
-  #define EXPECT_BEGIN(level, fmt, ...) \
-          printk(level "# EXPECT \\ : " fmt, ##__VA_ARGS__)
-  
-  #define EXPECT_END(level, fmt, ...) \
-          printk(level "# EXPECT / : " fmt, ##__VA_ARGS__)
+In file included from ../drivers/misc/lkdtm/bugs.c:17:0:
+../arch/x86/um/asm/desc.h:7:0: warning: "LDT_empty" redefined
+ #define LDT_empty(info) (\
+ 
+In file included from ../arch/um/include/asm/mmu.h:10:0,
+                 from ../include/linux/mm_types.h:18,
+                 from ../include/linux/sched/signal.h:13,
+                 from ../drivers/misc/lkdtm/bugs.c:11:
+../arch/x86/um/asm/mm_context.h:65:0: note: this is the location of the previous definition
+ #define LDT_empty(info) (_LDT_empty(info))
+ 
+../drivers/misc/lkdtm/bugs.c: In function ‘lkdtm_DOUBLE_FAULT’:
+../drivers/misc/lkdtm/bugs.c:428:9: error: variable ‘d’ has initializer but incomplete type
+  struct desc_struct d = {
+         ^~~~~~~~~~~
+../drivers/misc/lkdtm/bugs.c:429:4: error: ‘struct desc_struct’ has no member named ‘type’
+   .type = 3, /* expand-up, writable, accessed data */
+    ^~~~
+../drivers/misc/lkdtm/bugs.c:429:11: warning: excess elements in struct initializer
+   .type = 3, /* expand-up, writable, accessed data */
+           ^
+../drivers/misc/lkdtm/bugs.c:429:11: note: (near initialization for ‘d’)
+../drivers/misc/lkdtm/bugs.c:430:4: error: ‘struct desc_struct’ has no member named ‘p’
+   .p = 1,  /* present */
+    ^
+../drivers/misc/lkdtm/bugs.c:430:8: warning: excess elements in struct initializer
+   .p = 1,  /* present */
+        ^
+../drivers/misc/lkdtm/bugs.c:430:8: note: (near initialization for ‘d’)
+../drivers/misc/lkdtm/bugs.c:431:4: error: ‘struct desc_struct’ has no member named ‘d’
+   .d = 1,  /* 32-bit */
+    ^
+../drivers/misc/lkdtm/bugs.c:431:8: warning: excess elements in struct initializer
+   .d = 1,  /* 32-bit */
+        ^
+../drivers/misc/lkdtm/bugs.c:431:8: note: (near initialization for ‘d’)
+../drivers/misc/lkdtm/bugs.c:432:4: error: ‘struct desc_struct’ has no member named ‘g’
+   .g = 0,  /* limit in bytes */
+    ^
+../drivers/misc/lkdtm/bugs.c:432:8: warning: excess elements in struct initializer
+   .g = 0,  /* limit in bytes */
+        ^
+../drivers/misc/lkdtm/bugs.c:432:8: note: (near initialization for ‘d’)
+../drivers/misc/lkdtm/bugs.c:433:4: error: ‘struct desc_struct’ has no member named ‘s’
+   .s = 1,  /* not system */
+    ^
+../drivers/misc/lkdtm/bugs.c:433:8: warning: excess elements in struct initializer
+   .s = 1,  /* not system */
+        ^
+../drivers/misc/lkdtm/bugs.c:433:8: note: (near initialization for ‘d’)
+../drivers/misc/lkdtm/bugs.c:428:21: error: storage size of ‘d’ isn’t known
+  struct desc_struct d = {
+                     ^
+../drivers/misc/lkdtm/bugs.c:437:2: error: implicit declaration of function ‘write_gdt_entry’; did you mean ‘init_wait_entry’? [-Werror=implicit-function-declaration]
+  write_gdt_entry(get_cpu_gdt_rw(smp_processor_id()),
+  ^~~~~~~~~~~~~~~
+  init_wait_entry
+../drivers/misc/lkdtm/bugs.c:437:18: error: implicit declaration of function ‘get_cpu_gdt_rw’; did you mean ‘get_cpu_ptr’? [-Werror=implicit-function-declaration]
+  write_gdt_entry(get_cpu_gdt_rw(smp_processor_id()),
+                  ^~~~~~~~~~~~~~
+                  get_cpu_ptr
+../drivers/misc/lkdtm/bugs.c:438:27: error: ‘DESCTYPE_S’ undeclared (first use in this function)
+    GDT_ENTRY_TLS_MIN, &d, DESCTYPE_S);
+                           ^~~~~~~~~~
+../drivers/misc/lkdtm/bugs.c:438:27: note: each undeclared identifier is reported only once for each function it appears in
+../drivers/misc/lkdtm/bugs.c:428:21: warning: unused variable ‘d’ [-Wunused-variable]
+  struct desc_struct d = {
+                     ^
+cc1: some warnings being treated as errors
 
-This also fixes the first issue in the "Issues" list below.
 
--Frank
-
-> 
-> 
-> 
-> Example 1 of the API use, single message:
-> -----------------------------------------
-> 
->         EXPECT_BEGIN(KERN_INFO,
->                      "OF: /testcase-data/phandle-tests/consumer-a: could not find phandle");
-> 
->         rc = of_parse_phandle_with_args(np, "phandle-list-bad-phandle",
->                                         "#phandle-cells", 0, &args);
-> 
->         EXPECT_END(KERN_INFO,
->                    "OF: /testcase-data/phandle-tests/consumer-a: could not find phandle");
-> 
-> 
-> Example 2 of the API use, two messages,
-> "<<int>>" placeholder matches any integer:
-> ------------------------------------------
-> 
->         /*
->          * messages are the result of the probes, after the
->          * driver is registered
->          */
-> 
->         EXPECT_BEGIN(KERN_INFO,
->                      "GPIO line <<int>> (line-B-input) hogged as input\n");
-> 
->         EXPECT_BEGIN(KERN_INFO,
->                      "GPIO line <<int>> (line-A-input) hogged as input\n");
-> 
->         ret = platform_driver_register(&unittest_gpio_driver);
->         if (unittest(ret == 0, "could not register unittest gpio driver\n"))
->                 return;
-> 
->         EXPECT_END(KERN_INFO,
->                    "GPIO line <<int>> (line-A-input) hogged as input\n");
->         EXPECT_END(KERN_INFO,
->                    "GPIO line <<int>> (line-B-input) hogged as input\n");
-> 
-> Subtle flow of control issue: the two EXPECT_END() are not executed if
-> platform_driver_register() fails.  The two expected messages will not
-> be printed, but the filter tool (of_unittest_expect) will not report this
-> as an error because of_unittest_expect does not search for the messages
-> until the EXPEND_END() output is encountered.
-> 
-> One could argue that this is correct behavior because unittest() will print
-> the error that platform_driver_register() failed.  The "expected" messages
-> are not expected if the register fails.
-> 
-> One could equally well argue that the two EXPECT_END() should execute
-> before unittest() checks the value of ret, so the missing messages will
-> be reported as an error by of_unittest_expect.
-> 
-> But that is a discussion that should occur in the context of whether
-> drivers/of/unittest.c has a coding error, not in the context of how
-> to implement the expected messages framework.
-> 
-> 
-> goals:
-> 
->   - The console output should be human readable and easy to parse.
->     Have "\" in the expect begin and a matching "/" in the expect end
->     is intended to make it easier to visualize pairs.
-> 
->   - The console output should be machine parsable.
-> 
-> 
-> Design alternate choices:
-> 
->   - Expect message nesting:
->      1) Nested expect messages place the "\" in the same column.
->      2) For each nested expect message, indent the "\" by one more column
->         for each level of nesting.
-> 
->     Chose 1.  This keeps the EXPECT_BEGIN() and EXPECT_END() macros very
->     simple, at the expense of the output being less human readable in the
->     raw log.
-> 
->     The raw log is already not very readable, and I would expect the normal
->     use case would be using a filter program, such as of_unittest_expect,
->     to handle the readability issue.
-> 
-> 
-> Issues:
-> 
->   - The EXPECT_BEGIN() and EXPECT_END() macros use printk() for output.
->     printk() prefixes the output with the value of the pr_fmt() macro.
->     This means the filter program must be able to deal with different
->     pr_fmt() strings being incorporated in the expect messages that
->     are in different source files.  The unittest.c pr_fmt() value is
->     currently hard coded in the of_unittest_expect filter program.
-> 
->   - The output of the of_unittest_expect filter program prepends several
->     columns of data at the beginning of the resulting filtered data.  The
->     TAP format does not expect these extra columns.
-> 
->     The prepended data is very important for making the report easily
->     read by humans.
-> 
->     1) It will be trivial to add an of_unittest_expect "--tap-out" option
->        to not add the prepended data, so that normal TAP programs can use
->        the output from of_unittest_expect.
-> 
->     2) The "--tap-out" option could also create a TAP "test line" reporting
->        an "ok" for expected message detected and "not ok" if an expected
->        message is not detected.
-> 
->        This would also require modifying the "test plan" line to change
->        the number of tests.
-> 
-
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
