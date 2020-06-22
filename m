@@ -2,139 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0DA20328E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 10:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FD82036F7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 14:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725952AbgFVIv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 04:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgFVIvy (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 04:51:54 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF65C061794
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 01:51:52 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id 9so18351941ljc.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 01:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5iSOzHwBaotY/UIRNioAEBuXDPVG7zu4qxXMNrK9fyc=;
-        b=g1brCWmwJtbkSmFV9tqet1ryr9ApeCcCobA98O+cU+FVDj94qF4u9u0ipyjv7QP2qo
-         21prTrr4rLVKagZO1Ra+ay+gNxNr917nLzNVLjeCbu4H8rSqpfyjR3kLirlWPjVNhK+T
-         6QeOABhjPryupAkfoIxNCmCs1oKwrRJYxQQUcWvqw0So+1UGczY8TbVrX0AdRZxSHDUO
-         UIR2+jQozywcAJJqc3Mlk6cLafjWJ1imBHjeftPy7Mr7Ml7HMaV+jqn/W2D4waHIkcom
-         J1L6fq9amVsuNkhjxaOkV2BUbByvpCXBuzl8LU/7fNF4G3bmFcAly/3OtqShrxr7ehiG
-         TyBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5iSOzHwBaotY/UIRNioAEBuXDPVG7zu4qxXMNrK9fyc=;
-        b=mP9srPPTOlrt4rqpJ+sh8Blkg3tO8Iwm8Am16FMIJZtnkejSn6kjvpKsjMHx4BkB0C
-         FsBAgOrV2sZ+NeNK+QiytbaboqAAsddCB+sJZD3xqlcgTnq7FE/FtDFT6un8loCIcqH1
-         GGJVq/cOZz7rOO165zbhlYNwBrfZ4u9OlnHTJx+2nQVbwSpRxmNXHeUZ4e0NyMN6yuqg
-         /WoB2QjddWk60GyV0/q47QDcKQikoMgBgn4c9k/cY/lI+Td8WxVykzwhzAZ1Dk3FN2eP
-         4VacGLexltbO6/7scM7/6NAZEGNLmS1i1wfDWisgKwqLigf6CC/vkfQ01GaFFUqLzK6K
-         SKow==
-X-Gm-Message-State: AOAM530DsD728PZZKbrI7oZTq5fdNmEqpzZffZwQCOHcMVyzWDkU0hT6
-        ha3e3Divp5m65oXSR1bK1uHgbdv8xdqWaGTEAsF+Rw==
-X-Google-Smtp-Source: ABdhPJzPcxI7lreAQVQmWGeoQhl8ktN6/1zLDkgbhAhAe090FX+hV8+nsH6dFhqYb8sndBXmAohGrA73QF7C0Ox0Zno=
-X-Received: by 2002:a05:651c:318:: with SMTP id a24mr7713808ljp.55.1592815910815;
- Mon, 22 Jun 2020 01:51:50 -0700 (PDT)
+        id S1728121AbgFVMjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 08:39:55 -0400
+Received: from mail-eopbgr60066.outbound.protection.outlook.com ([40.107.6.66]:35809
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726889AbgFVMjy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Jun 2020 08:39:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AP0fIm8eIL6gBjbXpBT2M1dc0zOUDdqi8tBmcGBJTKOM4RJxGyEPdmBL+X8ODzJdV3IShu1wH2GgrOM7zPAtUkL/yfDw7DowuheyVpF6ZeHt1C0IU/ryN4xtOK3zVZFCUnKuG0tRBPhl3ni7DyWBD956kVif0EjzOt2pd8z+PlbzKjhwbVdvAF3SKqaWBk7TRQpUlIO+paxcErBmxQEVkLKZbIFMEnXiriihLcpIO1cTOIZZo1wkDXmMvG4OW0xNlwxvfvtL+QijZZT7OS+ZImMURBM1d72iDH6r8+Dyl9rsvuMcn0LsZC29KtmyH8T4ypBqsTDrbfMBw4JnSOb9JA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p1K3W9D2CAIdaMZ2eJJRaCFYV5/wZE+UtaAcLp9SRgs=;
+ b=T9EEnKTezHSS1HLgHSzQnTrwJhI/gEafwyffNFvEAgSn9xwFfnZotJ4xXxmnlVs52qH/eqlIsBUA4H1b2zuaoeTP0CPayKTRQPNnayHPbY0ZfwIM2JufHbIm9cEfp49wM+6vvFDXO6SZIhMrjPrp+Kidfdx/TAKJGzVCtEx6NHgq+UwCOJExkxsuBB/D7scTcz5WQpEB2+i8wS0Jfi7UZyFr94z5eU3Wnh4mEVNZLeS6cl565jUpI1gBbthcyfZSKMV2a/qWzkA8gWq2CXjhmWPmfn4NyLJEyJDRFBW29hKH3cP33NSXc8sziB0pQFnS3UyJ3KevnZgmLvZDRwQjAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p1K3W9D2CAIdaMZ2eJJRaCFYV5/wZE+UtaAcLp9SRgs=;
+ b=pOaARyiZTEmm72NN0IdoN3cfSQp5FIJ1SGJv/d1SRevkRsh8Ni070O+5nwkdvkwM3QaQQvL1lBP5bV5fdjyIpyBKTp7FmyRAMWVoO1PJCT3vtwDIeVFglUivOZfKxmV/QoJa0ziSvdRBFQOGEH1bJKVoLtJmJ4Kiztp99sUMldM=
+Authentication-Results: nvidia.com; dkim=none (message not signed)
+ header.d=none;nvidia.com; dmarc=none action=none header.from=mellanox.com;
+Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (2603:10a6:803:44::15)
+ by VI1PR05MB4702.eurprd05.prod.outlook.com (2603:10a6:802:5b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.25; Mon, 22 Jun
+ 2020 12:39:50 +0000
+Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
+ ([fe80::848b:fcd0:efe3:189e]) by VI1PR05MB4141.eurprd05.prod.outlook.com
+ ([fe80::848b:fcd0:efe3:189e%7]) with mapi id 15.20.3109.027; Mon, 22 Jun 2020
+ 12:39:50 +0000
+Date:   Mon, 22 Jun 2020 09:39:47 -0300
+From:   Jason Gunthorpe <jgg@mellanox.com>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     nouveau@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 00/16] mm/hmm/nouveau: THP mapping and migration
+Message-ID: <20200622123947.GC2590509@mellanox.com>
+References: <20200619215649.32297-1-rcampbell@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200619215649.32297-1-rcampbell@nvidia.com>
+X-ClientProxiedBy: BL0PR01CA0031.prod.exchangelabs.com (2603:10b6:208:71::44)
+ To VI1PR05MB4141.eurprd05.prod.outlook.com (2603:10a6:803:44::15)
 MIME-Version: 1.0
-References: <20200508065356.2493343-1-mpe@ellerman.id.au>
-In-Reply-To: <20200508065356.2493343-1-mpe@ellerman.id.au>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 22 Jun 2020 14:21:38 +0530
-Message-ID: <CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests/lkdtm: Don't clear dmesg when running tests
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        lkft-triage@lists.linaro.org, Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mlx.ziepe.ca (156.34.48.30) by BL0PR01CA0031.prod.exchangelabs.com (2603:10b6:208:71::44) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend Transport; Mon, 22 Jun 2020 12:39:50 +0000
+Received: from jgg by mlx with local (Exim 4.93)        (envelope-from <jgg@mellanox.com>)      id 1jnLjn-00Bt6R-52; Mon, 22 Jun 2020 09:39:47 -0300
+X-Originating-IP: [156.34.48.30]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 751cebd9-7b35-46be-0431-08d816a95b0a
+X-MS-TrafficTypeDiagnostic: VI1PR05MB4702:
+X-Microsoft-Antispam-PRVS: <VI1PR05MB470271E4FEB6E385D7F352E4CF970@VI1PR05MB4702.eurprd05.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 0442E569BC
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pMHw3hZKMymfaINzJj5CBQbB3lHLKD46VbCUtqy53Q69xeSoFrISsbudZYm57hKL9HTQ2aqcIF/xfOa/FUUzMRf1xqfNVpWhzzFzCC8Y3H8SKYuYThujhsTqUEbMAsyApFS0NAqn27AEC9b/g1IxXXtQ8MsiWJ8BrhtJhZ/WFz3vmNXBPmvidh4CmFzVmjzXhuighDOD15Fj6fiPd9zWPx3ekdsBnzLBPW7p/aZiCYNJWwMnXFrRMkShLdH5alaODiJ9a3i6xajnJzKgxdzxP1hqDSYpCpnXRRDjTHMexH5qIlPaTJdu8JFhRosCuiIOysewn81ExFVDOQA9JUhkJw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR05MB4141.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(8936002)(6916009)(186003)(26005)(1076003)(316002)(426003)(4326008)(8676002)(54906003)(83380400001)(2906002)(33656002)(5660300002)(9746002)(9786002)(36756003)(86362001)(2616005)(66476007)(66946007)(66556008)(478600001)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: tLNNxONQZO6jW+hpHfyZgIH4ekJEEY76iBbMYz/8FNO3wxQPzfWFq3Odq7G4TWT6ABx+FHBvHZwmz8kx3UjhKDksB7vj94wbWU+LQDYv0V5WvLaMkJQsXGFSj3jgmu7hDEXxHrbgpdUW5i93VB3NguMA1Oa4MKTWBVD8jNQNkdG3X/X8EP3XTWb4LgFI58kENa4x4U6n/zUmPWQvERH971WippoG425mD9tdpWq4Qo5C3n5urcpRbQurRf2Sj1MURdQfEwb10irvDYfWPCdshUbE3q6gLfPsJrOHez+yAa4MJ2J3wTZBNXjbbdvV/0zycr4BL5Drtu25Dx62pSSuqMnOC39+AVXTYMPIlqTdkuT+pmNmjbuAPnAiPG6ouIWKI/Ngt/m+ZDclKT1Zw5GJ0DOW66kV5Uiu8BuQzWygmNy016o7AQ8Gjy9qcA6Ud3PA39PjkQc+DEXPdvBkHvPXO5OWwC/i8tM0ja7JpaZPGP8=
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 751cebd9-7b35-46be-0431-08d816a95b0a
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2020 12:39:50.8090
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NLiVITWOJzttNzWnX+aFlNoYNmvhsxk0rQ5aLv4lUo/rd3WlD+tL/RYu4y/qiU7gmFVLwyBOB+qC4ZS5L4BP1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB4702
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 8 May 2020 at 12:23, Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> It is Very Rude to clear dmesg in test scripts. That's because the
-> script may be part of a larger test run, and clearing dmesg
-> potentially destroys the output of other tests.
->
-> We can avoid using dmesg -c by saving the content of dmesg before the
-> test, and then using diff to compare that to the dmesg afterward,
-> producing a log with just the added lines.
->
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> ---
->  tools/testing/selftests/lkdtm/run.sh | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
-> index dadf819148a4..0b409e187c7b 100755
-> --- a/tools/testing/selftests/lkdtm/run.sh
-> +++ b/tools/testing/selftests/lkdtm/run.sh
-> @@ -59,23 +59,25 @@ if [ -z "$expect" ]; then
->         expect="call trace:"
->  fi
->
-> -# Clear out dmesg for output reporting
-> -dmesg -c >/dev/null
-> -
->  # Prepare log for report checking
-> -LOG=$(mktemp --tmpdir -t lkdtm-XXXXXX)
-> +LOG=$(mktemp --tmpdir -t lkdtm-log-XXXXXX)
-> +DMESG=$(mktemp --tmpdir -t lkdtm-dmesg-XXXXXX)
->  cleanup() {
-> -       rm -f "$LOG"
-> +       rm -f "$LOG" "$DMESG"
->  }
->  trap cleanup EXIT
->
-> +# Save existing dmesg so we can detect new content below
-> +dmesg > "$DMESG"
-> +
->  # Most shells yell about signals and we're expecting the "cat" process
->  # to usually be killed by the kernel. So we have to run it in a sub-shell
->  # and silence errors.
->  ($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
->
->  # Record and dump the results
-> -dmesg -c >"$LOG"
-> +dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
+On Fri, Jun 19, 2020 at 02:56:33PM -0700, Ralph Campbell wrote:
+> These patches apply to linux-5.8.0-rc1. Patches 1-3 should probably go
+> into 5.8, the others can be queued for 5.9. Patches 4-6 improve the HMM
+> self tests. Patch 7-8 prepare nouveau for the meat of this series which
+> adds support and testing for compound page mapping of system memory
+> (patches 9-11) and compound page migration to device private memory
+> (patches 12-16). Since these changes are split across mm core, nouveau,
+> and testing, I'm guessing Jason Gunthorpe's HMM tree would be appropriate.
 
-We are facing problems with the diff `=%>` part of the option.
-This report is from the OpenEmbedded environment.
-We have the same problem from livepatch_testcases.
+You need to break this up into parts that go where they need to
+go. Nouveau rc changes should go to DRM or some series needs to
+explain the linkage
 
-# selftests lkdtm BUG.sh
-lkdtm: BUG.sh_ #
-# diff unrecognized option '--changed-group-format=%>'
-unrecognized: option_'--changed-group-format=%>' #
-# BusyBox v1.27.2 (2020-03-30 164108 UTC) multi-call binary.
-v1.27.2: (2020-03-30_164108 #
-#
-: _ #
-# Usage diff [-abBdiNqrTstw] [-L LABEL] [-S FILE] [-U LINES] FILE1 FILE2
-diff: [-abBdiNqrTstw]_[-L #
-# BUG missing 'kernel BUG at' [FAIL]
+> Ralph Campbell (16):
+>   mm: fix migrate_vma_setup() src_owner and normal pages
+>   nouveau: fix migrate page regression
+>   nouveau: fix mixed normal and device private page migration
+>   mm/hmm: fix test timeout on slower machines
+>   mm/hmm/test: remove redundant page table invalidate
+>   mm/hmm: test mixed normal and device private migrations
+>   nouveau: make nvkm_vmm_ctor() and nvkm_mmu_ptp_get() static
+>   nouveau/hmm: fault one page at a time
+>   mm/hmm: add output flag for compound page mapping
+>   nouveau/hmm: support mapping large sysmem pages
+>   hmm: add tests for HMM_PFN_COMPOUND flag
+>   mm/hmm: optimize migrate_vma_setup() for holes
 
-Full test output log,
-https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200621/testrun/2850083/suite/kselftest/test/lkdtm_BUG.sh/log
+Order things so it is hmm, test, noeveau
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+>   mm: support THP migration to device private memory
+>   mm/thp: add THP allocation helper
+>   mm/hmm/test: add self tests for THP migration
+>   nouveau: support THP migration to private memory
+
+This is another series, you should split it even if it has to go
+through the hmm tree
+
+Jason
