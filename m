@@ -2,127 +2,307 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FD82036F7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 14:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70B82038A0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 16:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728121AbgFVMjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 08:39:55 -0400
-Received: from mail-eopbgr60066.outbound.protection.outlook.com ([40.107.6.66]:35809
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726889AbgFVMjy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 08:39:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AP0fIm8eIL6gBjbXpBT2M1dc0zOUDdqi8tBmcGBJTKOM4RJxGyEPdmBL+X8ODzJdV3IShu1wH2GgrOM7zPAtUkL/yfDw7DowuheyVpF6ZeHt1C0IU/ryN4xtOK3zVZFCUnKuG0tRBPhl3ni7DyWBD956kVif0EjzOt2pd8z+PlbzKjhwbVdvAF3SKqaWBk7TRQpUlIO+paxcErBmxQEVkLKZbIFMEnXiriihLcpIO1cTOIZZo1wkDXmMvG4OW0xNlwxvfvtL+QijZZT7OS+ZImMURBM1d72iDH6r8+Dyl9rsvuMcn0LsZC29KtmyH8T4ypBqsTDrbfMBw4JnSOb9JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p1K3W9D2CAIdaMZ2eJJRaCFYV5/wZE+UtaAcLp9SRgs=;
- b=T9EEnKTezHSS1HLgHSzQnTrwJhI/gEafwyffNFvEAgSn9xwFfnZotJ4xXxmnlVs52qH/eqlIsBUA4H1b2zuaoeTP0CPayKTRQPNnayHPbY0ZfwIM2JufHbIm9cEfp49wM+6vvFDXO6SZIhMrjPrp+Kidfdx/TAKJGzVCtEx6NHgq+UwCOJExkxsuBB/D7scTcz5WQpEB2+i8wS0Jfi7UZyFr94z5eU3Wnh4mEVNZLeS6cl565jUpI1gBbthcyfZSKMV2a/qWzkA8gWq2CXjhmWPmfn4NyLJEyJDRFBW29hKH3cP33NSXc8sziB0pQFnS3UyJ3KevnZgmLvZDRwQjAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p1K3W9D2CAIdaMZ2eJJRaCFYV5/wZE+UtaAcLp9SRgs=;
- b=pOaARyiZTEmm72NN0IdoN3cfSQp5FIJ1SGJv/d1SRevkRsh8Ni070O+5nwkdvkwM3QaQQvL1lBP5bV5fdjyIpyBKTp7FmyRAMWVoO1PJCT3vtwDIeVFglUivOZfKxmV/QoJa0ziSvdRBFQOGEH1bJKVoLtJmJ4Kiztp99sUMldM=
-Authentication-Results: nvidia.com; dkim=none (message not signed)
- header.d=none;nvidia.com; dmarc=none action=none header.from=mellanox.com;
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (2603:10a6:803:44::15)
- by VI1PR05MB4702.eurprd05.prod.outlook.com (2603:10a6:802:5b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.25; Mon, 22 Jun
- 2020 12:39:50 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::848b:fcd0:efe3:189e]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::848b:fcd0:efe3:189e%7]) with mapi id 15.20.3109.027; Mon, 22 Jun 2020
- 12:39:50 +0000
-Date:   Mon, 22 Jun 2020 09:39:47 -0300
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     nouveau@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 00/16] mm/hmm/nouveau: THP mapping and migration
-Message-ID: <20200622123947.GC2590509@mellanox.com>
-References: <20200619215649.32297-1-rcampbell@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200619215649.32297-1-rcampbell@nvidia.com>
-X-ClientProxiedBy: BL0PR01CA0031.prod.exchangelabs.com (2603:10b6:208:71::44)
- To VI1PR05MB4141.eurprd05.prod.outlook.com (2603:10a6:803:44::15)
+        id S1729112AbgFVOCs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 10:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728070AbgFVOCr (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Jun 2020 10:02:47 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9830BC061573;
+        Mon, 22 Jun 2020 07:02:47 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id dp10so7929100qvb.10;
+        Mon, 22 Jun 2020 07:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2n9reDCiwzp5p2T3bmWzun36Iijn1O0DAytSxN/0x1A=;
+        b=JEZDn71Xinf71REbjW+mjEFYFsPh2fNibaEuiLqW9s72hmeSvulB84TizS66PfETcg
+         g+HuwcwULqAQnQ3KeKru6Tjf+CexYvUJMkifaBYcMNSxk6WZR7SKUX1Q6lqwfVEwk90f
+         yV10JUefD7/34w0XWqq4Z8AT8Pw2EMmehIgw+nOwp4uqDCroD7RdEbGfGfzJkFs/unt1
+         Mcq15V9piOvDBsisurvw3LIc3weGs+STbHbsngrbY+FxDdZ4Wr5hgh6V2TihpWpBzjiw
+         Y/fFRhLLXnArra7INBs+cxA7KtVMltaBkEzs2lfLRHQ+j5IFNoi6br1vjbHKvsUUDIEn
+         FSQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2n9reDCiwzp5p2T3bmWzun36Iijn1O0DAytSxN/0x1A=;
+        b=nAUUcICIB4jD0WXeh3sPh1TI36K+cisBDBa9Eg7rLvLYvJ5qPpS2yRpeHqiiKkDMyw
+         rbpTs9nHuZ1KbvVwyuogzg9UuIuXO663iXgPg/0mcSiQKr3NZnkJzanMKMEYdBUingm5
+         wW2F3S+ldvi6TLjhXuIr0hJ4jZpRYA6T0Vd5niGY0v+l/6PmwR8Hfw161dsWJ3qJlgIE
+         F6lYJYskN6/zT9dXSD9dbGhSaFPskJC2tLMTYgRQ2Yr8IRHlkVpgeeDb+lHoCue/emfZ
+         RxiQ4BaiXe+h22VXDVC6qkEbA7Vu0h3f67H7Rh7ngyQIIK9FSnkIYlJnhkcTWDVpasR6
+         v5uw==
+X-Gm-Message-State: AOAM533xTSmOjDbzfTfBTPWQGSID9SRVcGmV7SkL60x49lYO1ZSnAPLS
+        NaUI5SoVJcZrDXkhGh4lG8Y=
+X-Google-Smtp-Source: ABdhPJxRyoXygJc5bB2cmdhhMuSn2psgdfwedsE6Pgja+4dCJKxY6WCNKlGKWi5el/CYG8tO1bn0fw==
+X-Received: by 2002:a0c:fba2:: with SMTP id m2mr20867510qvp.5.1592834566597;
+        Mon, 22 Jun 2020 07:02:46 -0700 (PDT)
+Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
+        by smtp.gmail.com with ESMTPSA id f203sm8109472qke.135.2020.06.22.07.02.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jun 2020 07:02:46 -0700 (PDT)
+Subject: Re: RFC: KTAP documentation - expected messages
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     "Bird, Tim" <Tim.Bird@sony.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
+ <5c0c1ad7-c3c6-39b9-0907-330241d40464@gmail.com>
+Message-ID: <d105f53a-5de6-6d14-f345-ceddc0191f8e@gmail.com>
+Date:   Mon, 22 Jun 2020 09:02:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (156.34.48.30) by BL0PR01CA0031.prod.exchangelabs.com (2603:10b6:208:71::44) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend Transport; Mon, 22 Jun 2020 12:39:50 +0000
-Received: from jgg by mlx with local (Exim 4.93)        (envelope-from <jgg@mellanox.com>)      id 1jnLjn-00Bt6R-52; Mon, 22 Jun 2020 09:39:47 -0300
-X-Originating-IP: [156.34.48.30]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 751cebd9-7b35-46be-0431-08d816a95b0a
-X-MS-TrafficTypeDiagnostic: VI1PR05MB4702:
-X-Microsoft-Antispam-PRVS: <VI1PR05MB470271E4FEB6E385D7F352E4CF970@VI1PR05MB4702.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-Forefront-PRVS: 0442E569BC
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pMHw3hZKMymfaINzJj5CBQbB3lHLKD46VbCUtqy53Q69xeSoFrISsbudZYm57hKL9HTQ2aqcIF/xfOa/FUUzMRf1xqfNVpWhzzFzCC8Y3H8SKYuYThujhsTqUEbMAsyApFS0NAqn27AEC9b/g1IxXXtQ8MsiWJ8BrhtJhZ/WFz3vmNXBPmvidh4CmFzVmjzXhuighDOD15Fj6fiPd9zWPx3ekdsBnzLBPW7p/aZiCYNJWwMnXFrRMkShLdH5alaODiJ9a3i6xajnJzKgxdzxP1hqDSYpCpnXRRDjTHMexH5qIlPaTJdu8JFhRosCuiIOysewn81ExFVDOQA9JUhkJw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR05MB4141.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(8936002)(6916009)(186003)(26005)(1076003)(316002)(426003)(4326008)(8676002)(54906003)(83380400001)(2906002)(33656002)(5660300002)(9746002)(9786002)(36756003)(86362001)(2616005)(66476007)(66946007)(66556008)(478600001)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: tLNNxONQZO6jW+hpHfyZgIH4ekJEEY76iBbMYz/8FNO3wxQPzfWFq3Odq7G4TWT6ABx+FHBvHZwmz8kx3UjhKDksB7vj94wbWU+LQDYv0V5WvLaMkJQsXGFSj3jgmu7hDEXxHrbgpdUW5i93VB3NguMA1Oa4MKTWBVD8jNQNkdG3X/X8EP3XTWb4LgFI58kENa4x4U6n/zUmPWQvERH971WippoG425mD9tdpWq4Qo5C3n5urcpRbQurRf2Sj1MURdQfEwb10irvDYfWPCdshUbE3q6gLfPsJrOHez+yAa4MJ2J3wTZBNXjbbdvV/0zycr4BL5Drtu25Dx62pSSuqMnOC39+AVXTYMPIlqTdkuT+pmNmjbuAPnAiPG6ouIWKI/Ngt/m+ZDclKT1Zw5GJ0DOW66kV5Uiu8BuQzWygmNy016o7AQ8Gjy9qcA6Ud3PA39PjkQc+DEXPdvBkHvPXO5OWwC/i8tM0ja7JpaZPGP8=
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 751cebd9-7b35-46be-0431-08d816a95b0a
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2020 12:39:50.8090
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NLiVITWOJzttNzWnX+aFlNoYNmvhsxk0rQ5aLv4lUo/rd3WlD+tL/RYu4y/qiU7gmFVLwyBOB+qC4ZS5L4BP1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB4702
+In-Reply-To: <5c0c1ad7-c3c6-39b9-0907-330241d40464@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 02:56:33PM -0700, Ralph Campbell wrote:
-> These patches apply to linux-5.8.0-rc1. Patches 1-3 should probably go
-> into 5.8, the others can be queued for 5.9. Patches 4-6 improve the HMM
-> self tests. Patch 7-8 prepare nouveau for the meat of this series which
-> adds support and testing for compound page mapping of system memory
-> (patches 9-11) and compound page migration to device private memory
-> (patches 12-16). Since these changes are split across mm core, nouveau,
-> and testing, I'm guessing Jason Gunthorpe's HMM tree would be appropriate.
+On 2020-06-21 17:49, Frank Rowand wrote:
+> On 2020-06-21 17:45, Frank Rowand wrote:
+>> Tim Bird started a thread [1] proposing that he document the selftest result
+>> format used by Linux kernel tests.  
+>>
+>> [1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
+>>
+>> The issue of messages generated by the kernel being tested (that are not
+>> messages directly created by the tests, but are instead triggered as a
+>> side effect of the test) came up.  In this thread, I will call these
+>> messages "expected messages".  Instead of sidetracking that thread with
+>> a proposal to handle expected messages, I am starting this new thread.
+>>
+>> I implemented an API for expected messages that are triggered by tests
+>> in the Devicetree unittest code, with the expectation that the specific
+>> details may change when the Devicetree unittest code adapts the KUnit
+>> API.  It seems appropriate to incorporate the concept of expected
+>> messages in Tim's documentation instead of waiting to address the
+>> subject when the Devicetree unittest code adapts the KUnit API, since
+>> Tim's document may become the kernel selftest standard.
+>>
+>> Instead of creating a very long email containing multiple objects,
+>> I will reply to this email with a separate reply for each of:
+>>
+>>   The "expected messages" API implemention and use can be from
+>>   drivers/of/unittest.c in the mainline kernel.
+>>
+>>   of_unittest_expect - A proof of concept perl program to filter console
+>>                        output containing expected messages output
+>>
+>>                        of_unittest_expect is also available by cloning
+>>                        https://github.com/frowand/dt_tools.git
+>>
+>>   An example raw console output with timestamps and expect messages.
+>>
+>>   An example of console output processed by filter program
+>>   of_unittest_expect to be more human readable.  The expected
+>>   messages are not removed, but are flagged.
+>>
+>>   An example of console output processed by filter program
+>>   of_unittest_expect to be more human readable.  The expected
+>>   messages are removed instead of being flagged.
+>>
+> 
+> reply 1/5
+> 
+> expected messages API:
+> 
+>   - execute EXPECT_BEGIN(), reporting the expected message, before the
+>     point when the message will occur
+> 
+>   - execute EXPECT_END(), reporting the same expected message, after the
+>     point when the message will occur
+> 
+>   - EXPECT_BEGIN() may occur multiple times, before the corresponding
+>     EXPECT_END()s, when a single test action may result in multiple
+>     expected messages
+> 
+>   - When multiple EXPECT_BEGIN()s are nested, the corresponding (matching)
+>     EXPECT_END()s occur in the inverse order of the EXPECT_BEGIN()s.
+> 
+>   - When the expected message contain a non-constant value, a place holder
+>     can be placed in the message.  Current place holders are:
+> 
+>      - <<int>>  an integer
+>      - <<hex>>  a hexadecimal number
+> 
+>      Suggested additional place holder(s) are:
+> 
+>        - <<alpha>>  contiguous non white space characters 
+> 
+>        I have avoided allowing regular expessions, because test frameworks
+>        may implement their own filtering instead of relying on a generic
+>        console output filter program.  There are multiple definitions for
+>        regular expressions in different languages, thus it could be
+>        difficult to set rules for a subset of regular expression usable
+>        by all languages.
+> 
+> A preliminary version of an expected messages framework has been
+> implemented in the mainline drivers/of/unittest.c.  The implementation
+> is trivial, as seen below.
+> 
+> Note that the define of "pr_fmt()" pre-dates the implementation
+> of the EXPECT_BEGIN() and EXPECT_END() macros.
+> ---------------------------------------------------------------
+> 
+> #define pr_fmt(fmt) "### dt-test ### " fmt
+> 
+> 
+> /*
+>  * Expected message may have a message level other than KERN_INFO.
+>  * Print the expected message only if the current loglevel will allow
+>  * the actual message to print.
+>  *
+>  * Do not use EXPECT_BEGIN() or EXPECT_END() for messages generated by
+>  * pr_debug().
+>  */
+> #define EXPECT_BEGIN(level, fmt, ...) \
+>         printk(level pr_fmt("EXPECT \\ : ") fmt, ##__VA_ARGS__)
+> 
+> #define EXPECT_END(level, fmt, ...) \
+>         printk(level pr_fmt("EXPECT / : ") fmt, ##__VA_ARGS__)
 
-You need to break this up into parts that go where they need to
-go. Nouveau rc changes should go to DRM or some series needs to
-explain the linkage
+I included the pr_fmt() in EXPECT_BEGIN() and EXPECT_END(), because I
+defined the two macros within the unittest.c file.
 
-> Ralph Campbell (16):
->   mm: fix migrate_vma_setup() src_owner and normal pages
->   nouveau: fix migrate page regression
->   nouveau: fix mixed normal and device private page migration
->   mm/hmm: fix test timeout on slower machines
->   mm/hmm/test: remove redundant page table invalidate
->   mm/hmm: test mixed normal and device private migrations
->   nouveau: make nvkm_vmm_ctor() and nvkm_mmu_ptp_get() static
->   nouveau/hmm: fault one page at a time
->   mm/hmm: add output flag for compound page mapping
->   nouveau/hmm: support mapping large sysmem pages
->   hmm: add tests for HMM_PFN_COMPOUND flag
->   mm/hmm: optimize migrate_vma_setup() for holes
+For a KTAP compliant generic implementation, I would change these
+to be diagnostic messages, so:
 
-Order things so it is hmm, test, noeveau
+  #define EXPECT_BEGIN(level, fmt, ...) \
+          printk(level "# EXPECT \\ : " fmt, ##__VA_ARGS__)
+  
+  #define EXPECT_END(level, fmt, ...) \
+          printk(level "# EXPECT / : " fmt, ##__VA_ARGS__)
 
->   mm: support THP migration to device private memory
->   mm/thp: add THP allocation helper
->   mm/hmm/test: add self tests for THP migration
->   nouveau: support THP migration to private memory
+This also fixes the first issue in the "Issues" list below.
 
-This is another series, you should split it even if it has to go
-through the hmm tree
+-Frank
 
-Jason
+> 
+> 
+> 
+> Example 1 of the API use, single message:
+> -----------------------------------------
+> 
+>         EXPECT_BEGIN(KERN_INFO,
+>                      "OF: /testcase-data/phandle-tests/consumer-a: could not find phandle");
+> 
+>         rc = of_parse_phandle_with_args(np, "phandle-list-bad-phandle",
+>                                         "#phandle-cells", 0, &args);
+> 
+>         EXPECT_END(KERN_INFO,
+>                    "OF: /testcase-data/phandle-tests/consumer-a: could not find phandle");
+> 
+> 
+> Example 2 of the API use, two messages,
+> "<<int>>" placeholder matches any integer:
+> ------------------------------------------
+> 
+>         /*
+>          * messages are the result of the probes, after the
+>          * driver is registered
+>          */
+> 
+>         EXPECT_BEGIN(KERN_INFO,
+>                      "GPIO line <<int>> (line-B-input) hogged as input\n");
+> 
+>         EXPECT_BEGIN(KERN_INFO,
+>                      "GPIO line <<int>> (line-A-input) hogged as input\n");
+> 
+>         ret = platform_driver_register(&unittest_gpio_driver);
+>         if (unittest(ret == 0, "could not register unittest gpio driver\n"))
+>                 return;
+> 
+>         EXPECT_END(KERN_INFO,
+>                    "GPIO line <<int>> (line-A-input) hogged as input\n");
+>         EXPECT_END(KERN_INFO,
+>                    "GPIO line <<int>> (line-B-input) hogged as input\n");
+> 
+> Subtle flow of control issue: the two EXPECT_END() are not executed if
+> platform_driver_register() fails.  The two expected messages will not
+> be printed, but the filter tool (of_unittest_expect) will not report this
+> as an error because of_unittest_expect does not search for the messages
+> until the EXPEND_END() output is encountered.
+> 
+> One could argue that this is correct behavior because unittest() will print
+> the error that platform_driver_register() failed.  The "expected" messages
+> are not expected if the register fails.
+> 
+> One could equally well argue that the two EXPECT_END() should execute
+> before unittest() checks the value of ret, so the missing messages will
+> be reported as an error by of_unittest_expect.
+> 
+> But that is a discussion that should occur in the context of whether
+> drivers/of/unittest.c has a coding error, not in the context of how
+> to implement the expected messages framework.
+> 
+> 
+> goals:
+> 
+>   - The console output should be human readable and easy to parse.
+>     Have "\" in the expect begin and a matching "/" in the expect end
+>     is intended to make it easier to visualize pairs.
+> 
+>   - The console output should be machine parsable.
+> 
+> 
+> Design alternate choices:
+> 
+>   - Expect message nesting:
+>      1) Nested expect messages place the "\" in the same column.
+>      2) For each nested expect message, indent the "\" by one more column
+>         for each level of nesting.
+> 
+>     Chose 1.  This keeps the EXPECT_BEGIN() and EXPECT_END() macros very
+>     simple, at the expense of the output being less human readable in the
+>     raw log.
+> 
+>     The raw log is already not very readable, and I would expect the normal
+>     use case would be using a filter program, such as of_unittest_expect,
+>     to handle the readability issue.
+> 
+> 
+> Issues:
+> 
+>   - The EXPECT_BEGIN() and EXPECT_END() macros use printk() for output.
+>     printk() prefixes the output with the value of the pr_fmt() macro.
+>     This means the filter program must be able to deal with different
+>     pr_fmt() strings being incorporated in the expect messages that
+>     are in different source files.  The unittest.c pr_fmt() value is
+>     currently hard coded in the of_unittest_expect filter program.
+> 
+>   - The output of the of_unittest_expect filter program prepends several
+>     columns of data at the beginning of the resulting filtered data.  The
+>     TAP format does not expect these extra columns.
+> 
+>     The prepended data is very important for making the report easily
+>     read by humans.
+> 
+>     1) It will be trivial to add an of_unittest_expect "--tap-out" option
+>        to not add the prepended data, so that normal TAP programs can use
+>        the output from of_unittest_expect.
+> 
+>     2) The "--tap-out" option could also create a TAP "test line" reporting
+>        an "ok" for expected message detected and "not ok" if an expected
+>        message is not detected.
+> 
+>        This would also require modifying the "test plan" line to change
+>        the number of tests.
+> 
+
