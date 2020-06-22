@@ -2,102 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36091202EF1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 05:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0DA20328E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 10:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgFVDzv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Jun 2020 23:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S1725952AbgFVIv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 04:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726753AbgFVDzu (ORCPT
+        with ESMTP id S1727005AbgFVIvy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Jun 2020 23:55:50 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90EAC061794;
-        Sun, 21 Jun 2020 20:55:50 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 64so7804905pfv.11;
-        Sun, 21 Jun 2020 20:55:50 -0700 (PDT)
+        Mon, 22 Jun 2020 04:51:54 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF65C061794
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 01:51:52 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id 9so18351941ljc.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 01:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WezStc/D1EkmnZa5KTdzKFk1A1s8o2Eo2djnKEDQ8c0=;
-        b=DDuwCt8NaRU8AEME2lf6Xc/MxvCRFUlvC7hL5pw/OXnA9wDQyF8UUwvnU9fpkxofAG
-         dEwBh8VoveUofsI2MpvknhfML6tLZiIW0Ah290WlGaSSheaS66PbO/aD6qkz1SkbnYzD
-         1rAzWX9OaZGXEvlHdistSoUR3uZM5J8y2fqynD5SIJG4qCnme/bVRjVxs/IBX4qc5OyY
-         KkqwFVtMpqM/PRZx0qR+WaNgWZrqJiuFRyQpEN+UsGQt/Aelyqqi1VnX7cuGOZ56EYKW
-         snF2HbGDOGxqYtPaF49qt0qfXTP6Y0ImyZ0VhngeeZQqQj4cPV3WIMitA4u/QON3K/Tc
-         xtkQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5iSOzHwBaotY/UIRNioAEBuXDPVG7zu4qxXMNrK9fyc=;
+        b=g1brCWmwJtbkSmFV9tqet1ryr9ApeCcCobA98O+cU+FVDj94qF4u9u0ipyjv7QP2qo
+         21prTrr4rLVKagZO1Ra+ay+gNxNr917nLzNVLjeCbu4H8rSqpfyjR3kLirlWPjVNhK+T
+         6QeOABhjPryupAkfoIxNCmCs1oKwrRJYxQQUcWvqw0So+1UGczY8TbVrX0AdRZxSHDUO
+         UIR2+jQozywcAJJqc3Mlk6cLafjWJ1imBHjeftPy7Mr7Ml7HMaV+jqn/W2D4waHIkcom
+         J1L6fq9amVsuNkhjxaOkV2BUbByvpCXBuzl8LU/7fNF4G3bmFcAly/3OtqShrxr7ehiG
+         TyBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=WezStc/D1EkmnZa5KTdzKFk1A1s8o2Eo2djnKEDQ8c0=;
-        b=a0wiZMzrUQsp1+Pt7yAA40KLGBnYaSeVQVT8NL2m3wwz7kWtKBHaHzB66ceC732rRm
-         UUDZ3G+JS2zuy6K+UjdN3wx7TcIik5wu30CfsIVmlhWYF7SbLUVzgY8I5fqZ2jgD4Rj9
-         cPmLtqc/K/qSjlYOKKO4Y/PcMd4Ujyhcn4em68FmAQa3OH6SXXjs6Q2R9i3oCYmF779H
-         5+0JPZ/HvQeoNRMH6ib/x9jmC1mkGLPa5VOwflPWyg0EZZtMg5Tugm7r4Guw6lHymo4N
-         a/2zbf8+ZZnzCDqFSBWughUKDlVM1ZMrVawHnvmW5q1V21n+B/nSoRIabLsVmgFptYiV
-         PKdw==
-X-Gm-Message-State: AOAM532/9TN/p/FDhfOh8SNU45vNrClpOfycOhEMJAVMW532C/xWd6fE
-        5OBWlJjpCTj2m5GnOp8+lHxqJ0Eo
-X-Google-Smtp-Source: ABdhPJyPV7626Cj2vZU/cpWBhGomZEB5wxpncS/E2vsopQ7iNkcMfS6SY127a30X2xcNxNiviMMbrA==
-X-Received: by 2002:a63:6643:: with SMTP id a64mr8466553pgc.246.1592798149925;
-        Sun, 21 Jun 2020 20:55:49 -0700 (PDT)
-Received: from ?IPv6:2601:1c0:6280:3f0::19c2? ([2601:1c0:6280:3f0::19c2])
-        by smtp.gmail.com with ESMTPSA id d25sm9519660pgn.2.2020.06.21.20.55.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jun 2020 20:55:49 -0700 (PDT)
-From:   Randy Dunlap <rd.dunlab@gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: Add naming guidelines
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200620054944.167330-1-davidgow@google.com>
-Organization: nil
-Message-ID: <067f9f56-8990-0d60-815f-10d6c296dbef@gmail.com>
-Date:   Sun, 21 Jun 2020 20:55:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5iSOzHwBaotY/UIRNioAEBuXDPVG7zu4qxXMNrK9fyc=;
+        b=mP9srPPTOlrt4rqpJ+sh8Blkg3tO8Iwm8Am16FMIJZtnkejSn6kjvpKsjMHx4BkB0C
+         FsBAgOrV2sZ+NeNK+QiytbaboqAAsddCB+sJZD3xqlcgTnq7FE/FtDFT6un8loCIcqH1
+         GGJVq/cOZz7rOO165zbhlYNwBrfZ4u9OlnHTJx+2nQVbwSpRxmNXHeUZ4e0NyMN6yuqg
+         /WoB2QjddWk60GyV0/q47QDcKQikoMgBgn4c9k/cY/lI+Td8WxVykzwhzAZ1Dk3FN2eP
+         4VacGLexltbO6/7scM7/6NAZEGNLmS1i1wfDWisgKwqLigf6CC/vkfQ01GaFFUqLzK6K
+         SKow==
+X-Gm-Message-State: AOAM530DsD728PZZKbrI7oZTq5fdNmEqpzZffZwQCOHcMVyzWDkU0hT6
+        ha3e3Divp5m65oXSR1bK1uHgbdv8xdqWaGTEAsF+Rw==
+X-Google-Smtp-Source: ABdhPJzPcxI7lreAQVQmWGeoQhl8ktN6/1zLDkgbhAhAe090FX+hV8+nsH6dFhqYb8sndBXmAohGrA73QF7C0Ox0Zno=
+X-Received: by 2002:a05:651c:318:: with SMTP id a24mr7713808ljp.55.1592815910815;
+ Mon, 22 Jun 2020 01:51:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200620054944.167330-1-davidgow@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200508065356.2493343-1-mpe@ellerman.id.au>
+In-Reply-To: <20200508065356.2493343-1-mpe@ellerman.id.au>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 22 Jun 2020 14:21:38 +0530
+Message-ID: <CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests/lkdtm: Don't clear dmesg when running tests
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        lkft-triage@lists.linaro.org, Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi--
+On Fri, 8 May 2020 at 12:23, Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> It is Very Rude to clear dmesg in test scripts. That's because the
+> script may be part of a larger test run, and clearing dmesg
+> potentially destroys the output of other tests.
+>
+> We can avoid using dmesg -c by saving the content of dmesg before the
+> test, and then using diff to compare that to the dmesg afterward,
+> producing a log with just the added lines.
+>
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> ---
+>  tools/testing/selftests/lkdtm/run.sh | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
+> index dadf819148a4..0b409e187c7b 100755
+> --- a/tools/testing/selftests/lkdtm/run.sh
+> +++ b/tools/testing/selftests/lkdtm/run.sh
+> @@ -59,23 +59,25 @@ if [ -z "$expect" ]; then
+>         expect="call trace:"
+>  fi
+>
+> -# Clear out dmesg for output reporting
+> -dmesg -c >/dev/null
+> -
+>  # Prepare log for report checking
+> -LOG=$(mktemp --tmpdir -t lkdtm-XXXXXX)
+> +LOG=$(mktemp --tmpdir -t lkdtm-log-XXXXXX)
+> +DMESG=$(mktemp --tmpdir -t lkdtm-dmesg-XXXXXX)
+>  cleanup() {
+> -       rm -f "$LOG"
+> +       rm -f "$LOG" "$DMESG"
+>  }
+>  trap cleanup EXIT
+>
+> +# Save existing dmesg so we can detect new content below
+> +dmesg > "$DMESG"
+> +
+>  # Most shells yell about signals and we're expecting the "cat" process
+>  # to usually be killed by the kernel. So we have to run it in a sub-shell
+>  # and silence errors.
+>  ($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
+>
+>  # Record and dump the results
+> -dmesg -c >"$LOG"
+> +dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
 
-On 6/19/20 10:49 PM, David Gow wrote:
->  Documentation/dev-tools/kunit/index.rst |   1 +
->  Documentation/dev-tools/kunit/style.rst | 139 ++++++++++++++++++++++++
->  2 files changed, 140 insertions(+)
->  create mode 100644 Documentation/dev-tools/kunit/style.rst
-> 
-> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-> index e93606ecfb01..117c88856fb3 100644
-> --- a/Documentation/dev-tools/kunit/index.rst
-> +++ b/Documentation/dev-tools/kunit/index.rst
-> @@ -11,6 +11,7 @@ KUnit - Unit Testing for the Linux Kernel
->  	usage
->  	kunit-tool
->  	api/index
-> +        style
+We are facing problems with the diff `=%>` part of the option.
+This report is from the OpenEmbedded environment.
+We have the same problem from livepatch_testcases.
 
-Use tab for indentation, not spaces.
+# selftests lkdtm BUG.sh
+lkdtm: BUG.sh_ #
+# diff unrecognized option '--changed-group-format=%>'
+unrecognized: option_'--changed-group-format=%>' #
+# BusyBox v1.27.2 (2020-03-30 164108 UTC) multi-call binary.
+v1.27.2: (2020-03-30_164108 #
+#
+: _ #
+# Usage diff [-abBdiNqrTstw] [-L LABEL] [-S FILE] [-U LINES] FILE1 FILE2
+diff: [-abBdiNqrTstw]_[-L #
+# BUG missing 'kernel BUG at' [FAIL]
 
->  	faq
+Full test output log,
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200621/testrun/2850083/suite/kselftest/test/lkdtm_BUG.sh/log
 
-
-thanks.
 -- 
-~Randy
+Linaro LKFT
+https://lkft.linaro.org
