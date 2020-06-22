@@ -2,52 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 449CA203EFB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 20:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B143203EEC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jun 2020 20:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730303AbgFVSQ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 14:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S1730319AbgFVSQ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 14:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730157AbgFVSQ5 (ORCPT
+        with ESMTP id S1730299AbgFVSQ6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 14:16:57 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D89C061573
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:56 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d8so7899574plo.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:56 -0700 (PDT)
+        Mon, 22 Jun 2020 14:16:58 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796B0C061795
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:58 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id d6so223752pjs.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cs1TzbVWJcRX8QIkepO+whzfzA7CjoIqZIBpgLWkg48=;
-        b=mNyAXwzXxYYhNCAHgqFwOMl8/f3f+cfn9sRi1jO3ptYqEqq24+KHoJqcbDFhKS6Yl6
-         Y5vq/Ru0pZsrqwsvcYpi9Sj4/h1lSCo6+QSOjSuZdtgsOk7zIw652Hw6W4gLHEEpugGG
-         cKHE+ab+jFSL2sZBEELNtSMkajV+8MeXa2wRY=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gmWEkUNicDeCM4kFpW02gLeTggGe1CX/sAbQL0lp4ok=;
+        b=gCn6sUrcglxjrNfNk1b4t8uFQEW2ivCw6IGFERgd2ucag2WSZ8dDQVZj+vjoeZkv4W
+         5XzU1emOkx+4It3oK9atoQRugJQPMIyYZeW5I20TMGNQLCuuFGM2zrbLRHheiDGuUbET
+         wCPTcPVHrrk2VgUkAhMgytOiH4Im0X2QdI3oA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cs1TzbVWJcRX8QIkepO+whzfzA7CjoIqZIBpgLWkg48=;
-        b=awRiTzsNz6V4crLNucpIlwQK0HyvSplMduHGhicUv8giaqEWuB6NMhrPC6PU4BAFrw
-         EV00P7bz1Ef8a2rsU4/RuRu3fYNj7aeS+5joBe8MLV7jRWK5I7zgDxdKWfv9K7eqKPIw
-         8YnXijLVqOlGsZ3vmb67AlPph9HQ9tlf3JhQjBwVYPJbjHLToMpTTWiXm5YBw8VkakXz
-         UqB3rAeCRMFLcldr210yCgU84bnmDsvhg5u+r4/MADPswavNlYO809DDKLkAu/ItX8bg
-         maqHji9izFUOlBp0yb5Eq3Qv7XqFB3dpcTGvtgywMyhmHR0La0P2TXBmLjXd91IVcgKW
-         Vs1g==
-X-Gm-Message-State: AOAM530arsn3HcrHb7zzL32VTR8WXMfxPR6ZhzCmrGqS2CpFjltyxjSo
-        OSCH/m4mDfaNacNP8ru3mHPQoQ==
-X-Google-Smtp-Source: ABdhPJx4Xvw8G70Ihu9eJfSDjh/kyqUe3WotbHQ6CsslNUCxNiCGGS9DgOCH6cVeGQ6wSyyWHbjT0Q==
-X-Received: by 2002:a17:902:b706:: with SMTP id d6mr21132209pls.304.1592849815700;
-        Mon, 22 Jun 2020 11:16:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gmWEkUNicDeCM4kFpW02gLeTggGe1CX/sAbQL0lp4ok=;
+        b=sBWUVK8XzKrJey0x8bkLFnV/u62Zg+Mf6GA6zAGKacpkqn8m1+1xi9k9nzfq90D672
+         Ow5FkifmLDTj1PfrPpIArK3HaoCYRlI7fRtiMWMqt4ae3eDnASWVeQ2xG4Gd1HwzS1mN
+         8JOOGMqVvxvBeo73ylqp5BD5hJNkYmIkXeIlihxhRgr8yiYyMxhybq1QlLBBC33O/hp0
+         439kIad2VWc1J+dS0YFWPizNX/ABV1/sz+NwludPp/x79iRJX0IjhUO6g/5g+FMkUxeo
+         segFf+CGhnbGRAmsNV8Md+MFatzosEDbTilpRl3KIuesTi9PPtXovFp4ugCfZs8CQKMn
+         Q94g==
+X-Gm-Message-State: AOAM533XEU1Ym0/yjM5VS4FTyMbkMBm+HrzPbag6Cf3RJtntXNZfpZex
+        PNYO6YeCKeE4IUyjO/Fwyx8aXw==
+X-Google-Smtp-Source: ABdhPJyjnPW8KKOQGeoi/F2bXOPpiEJeT6vo2t99kS7iITrMKDcamCLyXSzQuGqFiPic8NSEaNumwg==
+X-Received: by 2002:a17:90a:30e1:: with SMTP id h88mr18277609pjb.43.1592849818071;
+        Mon, 22 Jun 2020 11:16:58 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k26sm11732375pgt.90.2020.06.22.11.16.54
+        by smtp.gmail.com with ESMTPSA id h17sm14314190pfo.168.2020.06.22.11.16.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 11:16:54 -0700 (PDT)
+        Mon, 22 Jun 2020 11:16:55 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
         Christian Brauner <christian@brauner.io>,
         David Gow <davidgow@google.com>,
         Frank Rowand <frowand.list@gmail.com>,
@@ -58,10 +59,12 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/8] selftests/harness: Switch to TAP output
-Date:   Mon, 22 Jun 2020 11:16:43 -0700
-Message-Id: <20200622181651.2795217-1-keescook@chromium.org>
+Subject: [PATCH v2 1/8] selftests/clone3: Reorder reporting output
+Date:   Mon, 22 Jun 2020 11:16:44 -0700
+Message-Id: <20200622181651.2795217-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200622181651.2795217-1-keescook@chromium.org>
+References: <20200622181651.2795217-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -69,47 +72,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Selftest output reporting was happening before the TAP headers and plan
+had been emitted. Move the first test reports later.
 
-v2:
-- switch harness from XFAIL to SKIP
-- pass skip reason from test into TAP output
-- add acks/reviews
-v1: https://lore.kernel.org/lkml/20200611224028.3275174-1-keescook@chromium.org/
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/clone3/clone3.c               | 2 +-
+ tools/testing/selftests/clone3/clone3_clear_sighand.c | 3 +--
+ tools/testing/selftests/clone3/clone3_set_tid.c       | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-
-I finally got around to converting the kselftest_harness.h API to actually
-use the kselftest.h API so all the tools using it can actually report
-TAP correctly. As part of this, there are a bunch of related cleanups,
-API updates, and additions.
-
-Thanks!
-
--Kees
-
-Kees Cook (8):
-  selftests/clone3: Reorder reporting output
-  selftests: Remove unneeded selftest API headers
-  selftests/binderfs: Fix harness API usage
-  selftests: Add header documentation and helpers
-  selftests/harness: Switch to TAP output
-  selftests/harness: Refactor XFAIL into SKIP
-  selftests/harness: Display signed values correctly
-  selftests/harness: Report skip reason
-
- tools/testing/selftests/clone3/clone3.c       |   2 +-
- .../selftests/clone3/clone3_clear_sighand.c   |   3 +-
- .../testing/selftests/clone3/clone3_set_tid.c |   2 +-
- .../filesystems/binderfs/binderfs_test.c      | 284 +++++++++---------
- tools/testing/selftests/kselftest.h           |  78 ++++-
- tools/testing/selftests/kselftest_harness.h   | 169 ++++++++---
- .../pid_namespace/regression_enomem.c         |   1 -
- .../selftests/pidfd/pidfd_getfd_test.c        |   1 -
- .../selftests/pidfd/pidfd_setns_test.c        |   1 -
- tools/testing/selftests/seccomp/seccomp_bpf.c |   8 +-
- .../selftests/uevent/uevent_filtering.c       |   1 -
- 11 files changed, 356 insertions(+), 194 deletions(-)
-
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index f14c269a5a18..b7e6dec36173 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -131,9 +131,9 @@ int main(int argc, char *argv[])
+ 
+ 	uid_t uid = getuid();
+ 
+-	test_clone3_supported();
+ 	ksft_print_header();
+ 	ksft_set_plan(17);
++	test_clone3_supported();
+ 
+ 	/* Just a simple clone3() should return 0.*/
+ 	test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
+diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
+index 9e1af8aa7698..db5fc9c5edcf 100644
+--- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
++++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
+@@ -119,9 +119,8 @@ static void test_clone3_clear_sighand(void)
+ int main(int argc, char **argv)
+ {
+ 	ksft_print_header();
+-	test_clone3_supported();
+-
+ 	ksft_set_plan(1);
++	test_clone3_supported();
+ 
+ 	test_clone3_clear_sighand();
+ 
+diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
+index 25beb22f35b5..5831c1082d6d 100644
+--- a/tools/testing/selftests/clone3/clone3_set_tid.c
++++ b/tools/testing/selftests/clone3/clone3_set_tid.c
+@@ -157,8 +157,8 @@ int main(int argc, char *argv[])
+ 	pid_t set_tid[MAX_PID_NS_LEVEL * 2];
+ 
+ 	ksft_print_header();
+-	test_clone3_supported();
+ 	ksft_set_plan(29);
++	test_clone3_supported();
+ 
+ 	if (pipe(pipe_1) < 0 || pipe(pipe_2) < 0)
+ 		ksft_exit_fail_msg("pipe() failed\n");
 -- 
 2.25.1
 
