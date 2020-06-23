@@ -2,163 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8532060A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 22:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E3E20663C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 23:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392056AbgFWUos (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Jun 2020 16:44:48 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34879 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390082AbgFWUon (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:44:43 -0400
-Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jnpmb-0002XV-Ib; Tue, 23 Jun 2020 20:44:41 +0000
-Date:   Tue, 23 Jun 2020 22:44:41 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, keescook@chromium.org
-Subject: Re: [PATCH v2 4/6] selftests: pidfd: do not use ksft_exit_skip after
- ksft_set_plan
-Message-ID: <20200623204441.phngiwlj2idonpe6@wittgenstein>
-References: <20200623001547.22255-1-pbonzini@redhat.com>
- <20200623001547.22255-5-pbonzini@redhat.com>
+        id S2393855AbgFWVj0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Jun 2020 17:39:26 -0400
+Received: from mga07.intel.com ([134.134.136.100]:53885 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387773AbgFWUHF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Jun 2020 16:07:05 -0400
+IronPort-SDR: +Aas+ROpdhZR/x82s1jEC4syCnTI4vlepPjlBKogu9ymwwSZbTVkF5Y5M0YGawDVlE2RvFihKL
+ x4L/sXVRfLtA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="209400455"
+X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
+   d="scan'208";a="209400455"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 13:07:03 -0700
+IronPort-SDR: BUquHP6/egIubskUC+wd1qMKZIo8Ikj9vc9R1L2KgEVN7Re1Fh7E6yhj8tO0FBTJxozd8Oe4ES
+ HDhJEnS/VEsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
+   d="scan'208";a="301379329"
+Received: from otcsectest.jf.intel.com (HELO 6540770db1d7) ([10.54.30.81])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jun 2020 13:07:02 -0700
+Date:   Tue, 23 Jun 2020 20:03:35 +0000
+From:   "Andersen, John" <john.s.andersen@intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "Christopherson, Sean J" <sean.j.christopherson@intel.com>,
+        Liran Alon <liran.alon@oracle.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, mchehab+huawei@kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        pawan.kumar.gupta@linux.intel.com, Juergen Gross <jgross@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
+        vineela.tummalapalli@intel.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        caoj.fnst@cn.fujitsu.com, Baoquan He <bhe@redhat.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>, eric.auger@redhat.com,
+        aaronlewis@google.com, Peter Xu <peterx@redhat.com>,
+        makarandsonare@google.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: [PATCH 4/4] X86: Use KVM CR pin MSRs
+Message-ID: <20200623200334.GA23@6540770db1d7>
+References: <20200617190757.27081-1-john.s.andersen@intel.com>
+ <20200617190757.27081-5-john.s.andersen@intel.com>
+ <CALCETrXwzQDDd1rfBW+ptmijEjc2cMqfWGvJu-qqrqia5Ls=Uw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200623001547.22255-5-pbonzini@redhat.com>
+In-Reply-To: <CALCETrXwzQDDd1rfBW+ptmijEjc2cMqfWGvJu-qqrqia5Ls=Uw@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 08:15:45PM -0400, Paolo Bonzini wrote:
-> Calling ksft_exit_skip after ksft_set_plan results in executing fewer tests
-> than planned.  Use ksft_test_result_skip instead.
+On Fri, Jun 19, 2020 at 10:13:25PM -0700, Andy Lutomirski wrote:
+> On Wed, Jun 17, 2020 at 12:05 PM John Andersen
+> <john.s.andersen@intel.com> wrote:
+> > Guests using the kexec system call currently do not support
+> > paravirtualized control register pinning. This is due to early boot
+> > code writing known good values to control registers, these values do
+> > not contain the protected bits. This is due to CPU feature
+> > identification being done at a later time, when the kernel properly
+> > checks if it can enable protections. As such, the pv_cr_pin command line
+> > option has been added which instructs the kernel to disable kexec in
+> > favor of enabling paravirtualized control register pinning. crashkernel
+> > is also disabled when the pv_cr_pin parameter is specified due to its
+> > reliance on kexec.
 > 
-> The plan passed to ksft_set_plan was wrong, too, so fix it while at it.
+> Is there a plan for fixing this for real?  I'm wondering if there is a
+> sane weakening of this feature that still allows things like kexec.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
 
-Thanks for the patch!
-Hm, this series misses a bunch of Cces for the maintainers of these files...
-(Also note that Kees has a/some series with most of us Cced that might
-conflict with some of these changes. But not sure rn.)
+I'm pretty sure kexec can be fixed. I had it working at one point, I'm
+currently in the process of revalidating this. The issue was though that
+kexec only worked within the guest, not on the physical host, which I suspect
+is related to the need for supervisor pages to be mapped, which seems to be
+required before enabling SMAP (based on what I'd seen with the selftests and
+unittests). I was also just blindly turning on the bits without checking for
+support when I'd tried this, so that could have been the issue too.
 
-A comment below.
+I think most of the changes for just blindly enabling the bits were in
+relocate_kernel, secondary_startup_64, and startup_32.
 
->  tools/testing/selftests/pidfd/pidfd_test.c | 39 ++++++++++++++++++----
->  1 file changed, 33 insertions(+), 6 deletions(-)
+> What happens if a guest tries to reset?  For that matter, what happens
+> when a guest vCPU sends SIPI to another guest vCPU?  The target CPU
+> starts up in real mode, right?
+>
+
+In this case we hit kvm_vcpu_reset, where we clear pinning. Yes I believe it
+starts up in real mode.
+
+> There's no SMEP or SMAP in real mode, and real mode has basically no security
+> mitigations at all.
 > 
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index 7aff2d3b42c0..380c6314e6a2 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -8,6 +8,7 @@
->  #include <sched.h>
->  #include <signal.h>
->  #include <stdio.h>
-> +#include <stdbool.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <syscall.h>
-> @@ -27,6 +28,8 @@
->  
->  #define MAX_EVENTS 5
->  
-> +static bool have_pidfd_send_signal = false;
-> +
->  static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
->  {
->  	size_t stack_size = 1024;
-> @@ -56,6 +59,13 @@ static int test_pidfd_send_signal_simple_success(void)
->  	int pidfd, ret;
->  	const char *test_name = "pidfd_send_signal send SIGUSR1";
->  
-> +	if (!have_pidfd_send_signal) {
-> +		ksft_test_result_skip(
-> +			"%s test: pidfd_send_signal() syscall not supported\n",
-> +			test_name);
-> +		return 0;
-> +	}
-> +
->  	pidfd = open("/proc/self", O_DIRECTORY | O_CLOEXEC);
->  	if (pidfd < 0)
->  		ksft_exit_fail_msg(
-> @@ -86,6 +96,13 @@ static int test_pidfd_send_signal_exited_fail(void)
->  	pid_t pid;
->  	const char *test_name = "pidfd_send_signal signal exited process";
->  
-> +	if (!have_pidfd_send_signal) {
-> +		ksft_test_result_skip(
-> +			"%s test: pidfd_send_signal() syscall not supported\n",
-> +			test_name);
-> +		return 0;
-> +	}
-> +
->  	pid = fork();
->  	if (pid < 0)
->  		ksft_exit_fail_msg("%s test: Failed to create new process\n",
-> @@ -137,6 +154,13 @@ static int test_pidfd_send_signal_recycled_pid_fail(void)
->  	pid_t pid1;
->  	const char *test_name = "pidfd_send_signal signal recycled pid";
->  
-> +	if (!have_pidfd_send_signal) {
-> +		ksft_test_result_skip(
-> +			"%s test: pidfd_send_signal() syscall not supported\n",
-> +			test_name);
-> +		return 0;
-> +	}
-> +
->  	ret = unshare(CLONE_NEWPID);
->  	if (ret < 0)
->  		ksft_exit_fail_msg("%s test: Failed to unshare pid namespace\n",
-> @@ -325,13 +349,16 @@ static int test_pidfd_send_signal_syscall_support(void)
->  
->  	ret = sys_pidfd_send_signal(pidfd, 0, NULL, 0);
->  	if (ret < 0) {
-> -		if (errno == ENOSYS)
-> -			ksft_exit_skip(
-> +		if (errno == ENOSYS) {
-> +			ksft_test_result_skip(
->  				"%s test: pidfd_send_signal() syscall not supported\n",
->  				test_name);
 
-If pidfd_send_signal() is not supported, you're falling through and then
-you're reporting:
+We'd thought about the switch to real mode being a case where we'd want to drop
+pinning. However, we weren't sure how much weaker, if at all, it makes this
+protection.
 
-ok 5 # SKIP pidfd_send_signal check for support test: pidfd_send_signal() syscall not supported
-ok 6 pidfd_send_signal check for support test: pidfd_send_signal() syscall is supported. Tests can be executed
+Unless someone knows, I'll probably need to do some digging into what an
+exploit might look like that tries switching to real mode and switching back as
+a way around this protection.
 
-which seems wrong.
+If we can use the switch to real mode as a drop pinning trigger then I think
+that might just solve the kexec problem.
 
-> -
-> -		ksft_exit_fail_msg("%s test: Failed to send signal\n",
-> -				   test_name);
-> +		} else {
-> +			ksft_exit_fail_msg("%s test: Failed to send signal\n",
-> +					   test_name);
-> +		}
-> +	} else {
-> +		have_pidfd_send_signal = true;
->  	}
->  
->  	close(pidfd);
-> @@ -521,7 +548,7 @@ static void test_pidfd_poll_leader_exit(int use_waitpid)
->  int main(int argc, char **argv)
->  {
->  	ksft_print_header();
-> -	ksft_set_plan(4);
-> +	ksft_set_plan(8);
->  
->  	test_pidfd_poll_exec(0);
->  	test_pidfd_poll_exec(1);
-> -- 
-> 2.26.2
-> 
-> 
+> PCID is an odd case.  I see no good reason to pin it, and pinning PCID
+> on prevents use of 32-bit mode.
+
+Maybe it makes sense to default to the values we have, but allow host userspace
+to overwrite the allowed values, in case some other guest OS wants to do
+something that Linux doesn't with PCID or other bits.
