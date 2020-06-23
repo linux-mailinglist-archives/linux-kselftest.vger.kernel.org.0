@@ -2,141 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E3E20663C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 23:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AEB206446
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 23:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393855AbgFWVj0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Jun 2020 17:39:26 -0400
-Received: from mga07.intel.com ([134.134.136.100]:53885 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387773AbgFWUHF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:07:05 -0400
-IronPort-SDR: +Aas+ROpdhZR/x82s1jEC4syCnTI4vlepPjlBKogu9ymwwSZbTVkF5Y5M0YGawDVlE2RvFihKL
- x4L/sXVRfLtA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="209400455"
-X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
-   d="scan'208";a="209400455"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 13:07:03 -0700
-IronPort-SDR: BUquHP6/egIubskUC+wd1qMKZIo8Ikj9vc9R1L2KgEVN7Re1Fh7E6yhj8tO0FBTJxozd8Oe4ES
- HDhJEnS/VEsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,272,1589266800"; 
-   d="scan'208";a="301379329"
-Received: from otcsectest.jf.intel.com (HELO 6540770db1d7) ([10.54.30.81])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Jun 2020 13:07:02 -0700
-Date:   Tue, 23 Jun 2020 20:03:35 +0000
-From:   "Andersen, John" <john.s.andersen@intel.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "Christopherson, Sean J" <sean.j.christopherson@intel.com>,
-        Liran Alon <liran.alon@oracle.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, mchehab+huawei@kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        pawan.kumar.gupta@linux.intel.com, Juergen Gross <jgross@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
-        vineela.tummalapalli@intel.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        caoj.fnst@cn.fujitsu.com, Baoquan He <bhe@redhat.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>, eric.auger@redhat.com,
-        aaronlewis@google.com, Peter Xu <peterx@redhat.com>,
-        makarandsonare@google.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>
-Subject: Re: [PATCH 4/4] X86: Use KVM CR pin MSRs
-Message-ID: <20200623200334.GA23@6540770db1d7>
-References: <20200617190757.27081-1-john.s.andersen@intel.com>
- <20200617190757.27081-5-john.s.andersen@intel.com>
- <CALCETrXwzQDDd1rfBW+ptmijEjc2cMqfWGvJu-qqrqia5Ls=Uw@mail.gmail.com>
+        id S2391636AbgFWVS6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Jun 2020 17:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391638AbgFWVSt (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Jun 2020 17:18:49 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0BC061573
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 14:18:49 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id bh7so9661897plb.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 14:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mJWzvNZU1DMsijzcM8pSgSd+l6gBq4CZTTDgQGADwPk=;
+        b=d3UM5mS3Lwn1zCoUYBgL4MOdtaGDbpZ45FPQQmIiPWsUMcrblQ5pb3qHERiGLD+POo
+         npuxt5fXnoKsGH+DKJAJ+ul8Y6EIbNJlyhdRsgqhAJJVelU3+pcBdfBAZbEE0IALc384
+         HvWlGLE8Lxqn759AEnWNmPzbSamSO0pLN7FZSwLXeXqyRZnZlzI1T+dLxqjN669bHpfc
+         4PUyBqpVX/KHW0QckUDmH8mwi2foQLWmoCOCWIHp9tf3Vad3W1LL3blo7BhXrgl1U32a
+         ZjXCghkz45tieXrFU8exdMXC0j/7LeiqFZ1w/Xc8XlOUWq/TprLg9rEQAMqc44FXv3Xc
+         rFQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mJWzvNZU1DMsijzcM8pSgSd+l6gBq4CZTTDgQGADwPk=;
+        b=SGkI/U3y6TGQVUZyVvZPQF8gXAdHSzk7Au/9kCF+A65G4zqjwnx0Wsir8ibJ+U+RkS
+         3GS2Srj7jlD0xM5g8uaLwZILAs157SDUC+udoAQLEtH+KGVZr2a8Irqa4N6QKE9RaP50
+         +38PCUhI0BQjNFlw63AZ3LVw/0EGs8r7VA3Gw0LegRdf0Y83l8lRhsHmieD8sWuJ7LTm
+         vsrmULiORPcEjkQhiiYQU+k1uEdRae6vb1Ltou9IIN641CReZaMsEURTw7mLW8Fa1PHX
+         69bLVe4kMDU8SyP0Set/TWR0pSQ/LGRCX1liB6CEvaQpi1ZXDhOngQKrw8w48om7C/L4
+         kKcQ==
+X-Gm-Message-State: AOAM533vNyh1b3WADxFf0GHwcRKWx5THZJHXDgIKF/3OT3XCbm7hS/5v
+        TwkcrJWK9CrFMOYmgUdIRKOHjhkoTOkFj1bBdbYHrQ==
+X-Google-Smtp-Source: ABdhPJxLAk9Ot+Z5BtINKEITMd+CQ0dUpAGNCdMnfGs22621xhkUMbtlO0eW9G4/rU2unSlLcfsNUito8iq6hb4/NFI=
+X-Received: by 2002:a17:902:32d:: with SMTP id 42mr15721221pld.297.1592947128738;
+ Tue, 23 Jun 2020 14:18:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALCETrXwzQDDd1rfBW+ptmijEjc2cMqfWGvJu-qqrqia5Ls=Uw@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com> <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
+In-Reply-To: <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 23 Jun 2020 14:18:37 -0700
+Message-ID: <CAFd5g44+cUBhbHCx7dGk_dyn0Ph7U8dpaBzESWRi6L6qQizbFQ@mail.gmail.com>
+Subject: Re: RFC: KTAP documentation - expected messages
+To:     David Gow <davidgow@google.com>, Dmitry Vyukov <dvyukov@google.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 10:13:25PM -0700, Andy Lutomirski wrote:
-> On Wed, Jun 17, 2020 at 12:05 PM John Andersen
-> <john.s.andersen@intel.com> wrote:
-> > Guests using the kexec system call currently do not support
-> > paravirtualized control register pinning. This is due to early boot
-> > code writing known good values to control registers, these values do
-> > not contain the protected bits. This is due to CPU feature
-> > identification being done at a later time, when the kernel properly
-> > checks if it can enable protections. As such, the pv_cr_pin command line
-> > option has been added which instructs the kernel to disable kexec in
-> > favor of enabling paravirtualized control register pinning. crashkernel
-> > is also disabled when the pv_cr_pin parameter is specified due to its
-> > reliance on kexec.
-> 
-> Is there a plan for fixing this for real?  I'm wondering if there is a
-> sane weakening of this feature that still allows things like kexec.
-> 
-
-I'm pretty sure kexec can be fixed. I had it working at one point, I'm
-currently in the process of revalidating this. The issue was though that
-kexec only worked within the guest, not on the physical host, which I suspect
-is related to the need for supervisor pages to be mapped, which seems to be
-required before enabling SMAP (based on what I'd seen with the selftests and
-unittests). I was also just blindly turning on the bits without checking for
-support when I'd tried this, so that could have been the issue too.
-
-I think most of the changes for just blindly enabling the bits were in
-relocate_kernel, secondary_startup_64, and startup_32.
-
-> What happens if a guest tries to reset?  For that matter, what happens
-> when a guest vCPU sends SIPI to another guest vCPU?  The target CPU
-> starts up in real mode, right?
+On Mon, Jun 22, 2020 at 7:47 PM David Gow <davidgow@google.com> wrote:
 >
+> On Mon, Jun 22, 2020 at 6:45 AM Frank Rowand <frowand.list@gmail.com> wrote:
+> >
+> > Tim Bird started a thread [1] proposing that he document the selftest result
+> > format used by Linux kernel tests.
+> >
+> > [1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
+> >
+> > The issue of messages generated by the kernel being tested (that are not
+> > messages directly created by the tests, but are instead triggered as a
+> > side effect of the test) came up.  In this thread, I will call these
+> > messages "expected messages".  Instead of sidetracking that thread with
+> > a proposal to handle expected messages, I am starting this new thread.
+>
+> Thanks for doing this: I think there are quite a few tests which could
+> benefit from something like this.
+>
+> I think there were actually two separate questions: what do we do with
+> unexpected messages (most of which I expect are useless, but some of
+> which may end up being related to an unexpected test failure), and how
+> to have tests "expect" a particular message to appear. I'll stick to
+> talking about the latter for this thread, but even there there's two
+> possible interpretations of "expected messages" we probably want to
+> explicitly distinguish between: a message which must be present for
+> the test to pass (which I think best fits the "expected message"
+> name), and a message which the test is likely to produce, but which
+> shouldn't alter the result (an "ignored message"). I don't see much
+> use for the latter at present, but if we wanted to do more things with
+> messages and had some otherwise very verbose tests, it could
+> potentially be useful.
 
-In this case we hit kvm_vcpu_reset, where we clear pinning. Yes I believe it
-starts up in real mode.
++Dmitry Vyukov, I think you were interested in this for KASAN before
+we went with the signalling approach. Any thoughts?
 
-> There's no SMEP or SMAP in real mode, and real mode has basically no security
-> mitigations at all.
-> 
-
-We'd thought about the switch to real mode being a case where we'd want to drop
-pinning. However, we weren't sure how much weaker, if at all, it makes this
-protection.
-
-Unless someone knows, I'll probably need to do some digging into what an
-exploit might look like that tries switching to real mode and switching back as
-a way around this protection.
-
-If we can use the switch to real mode as a drop pinning trigger then I think
-that might just solve the kexec problem.
-
-> PCID is an odd case.  I see no good reason to pin it, and pinning PCID
-> on prevents use of 32-bit mode.
-
-Maybe it makes sense to default to the values we have, but allow host userspace
-to overwrite the allowed values, in case some other guest OS wants to do
-something that Linux doesn't with PCID or other bits.
+> The other thing I'd note here is that this proposal seems to be doing
+> all of the actual message filtering in userspace, which makes a lot of
+> sense for kselftest tests, but does mean that the kernel can't know if
+> the test has passed or failed. There's definitely a tradeoff between
+> trying to put too much needless string parsing in the kernel and
+> having to have a userland tool determine the test results. The
+> proposed KCSAN test suite[1] is using tracepoints to do this in the
+> kernel. It's not the cleanest thing, but there's no reason KUnit or
+> similar couldn't implement a nicer API around it.
+>
+> [1]: https://lkml.org/lkml/2020/6/22/1506
+>
+> > I implemented an API for expected messages that are triggered by tests
+> > in the Devicetree unittest code, with the expectation that the specific
+> > details may change when the Devicetree unittest code adapts the KUnit
+> > API.  It seems appropriate to incorporate the concept of expected
+> > messages in Tim's documentation instead of waiting to address the
+> > subject when the Devicetree unittest code adapts the KUnit API, since
+> > Tim's document may become the kernel selftest standard.
+>
+> Is having a nice way to handle expected messages the only thing
+> holding up porting this to KUnit?
+>
+> > Instead of creating a very long email containing multiple objects,
+> > I will reply to this email with a separate reply for each of:
+> >
+> >   The "expected messages" API implemention and use can be from
+> >   drivers/of/unittest.c in the mainline kernel.
+> >
+> >   of_unittest_expect - A proof of concept perl program to filter console
+> >                        output containing expected messages output
+> >
+> >                        of_unittest_expect is also available by cloning
+> >                        https://github.com/frowand/dt_tools.git
+> >
+> >   An example raw console output with timestamps and expect messages.
+> >
+> >   An example of console output processed by filter program
+> >   of_unittest_expect to be more human readable.  The expected
+> >   messages are not removed, but are flagged.
+> >
+> >   An example of console output processed by filter program
+> >   of_unittest_expect to be more human readable.  The expected
+> >   messages are removed instead of being flagged.
+>
+> Cheers,
+> -- David
