@@ -2,66 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E302051AB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 14:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BFF205409
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 16:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732448AbgFWMCO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Jun 2020 08:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S1729504AbgFWOAI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Jun 2020 10:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732396AbgFWMCN (ORCPT
+        with ESMTP id S1732687AbgFWOAH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jun 2020 08:02:13 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C82C061795
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 05:02:13 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id o38so6435358qtf.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 05:02:13 -0700 (PDT)
+        Tue, 23 Jun 2020 10:00:07 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921F8C061573
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 07:00:06 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id t25so18890263oij.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 07:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=UJLFqH+nz6JL18vmMp9AOPI2FroC31pq+teAwHPNar1eiBQ9Yy+80ms5K4v1/p3T2J
-         L2/VBlv2V7VfKE4rYCdbWJvLLZVc6lYLnv+fXOe3DKiEunpb4W19D97rUv9DtkFDrPR6
-         bxx9SCKFFR7oxS5wyOawR10NgiPx7iNPtQtk1jgGWBrP8t2WHU3s2Svu9XywyJgiovqp
-         l3N+/UeaWFg1/B0rDgEZev7snS4P5yMRqccSmgr8wtgvtp7SCEkaeMIuLfVC1abYn28a
-         0lOm8r0Y3ORb/ecNi+nwJO1PSdlC3wO2gaNbjCYRAGTYyl1dNKtQmi5TFLPwZkpxG3z2
-         jLVg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OWJaEeNqVLaBxo7u+h6+Cgpk3QyvR08wDj4Gz9NXugQ=;
+        b=NA0QTCIU1je5pywavX2LTXsKBrnauupeONhOczDdedEK/5BNUj5Erf/sbtjCE2F9eA
+         s9SlCsF5hKO5opzOeRrGAegvwpkfADx3SLQRLqf7mRnjrOj1A3rkM+1uHmcJqPku/6GK
+         dSfJyzOo7GzkahV15M9LZbzRk8L3zPyj9qbtc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=X/SitHJV8HEHuytkT65Hzio0kcIWmFUi5XNdrwzVT05rVVIjzjc6ME9l0t3w9kIEfw
-         FJhVvWHCG6vk2XKU6fV03flQG3BwHfdw61IeaMACBMn57sijOGQj+4pXEuEUW+mCtDAG
-         r2rckmgmpVQdnd3yEHpWDPtZoo0tuvBq2zIdpWYpXPkrMEpgQq08t/NFgwrevWYnQ7mx
-         08UiJp7MkM98NI9CGvABOzs6Mp53RMwaMfTkasqpaQEZ7F9wi4lhBddb31dZNO1rybCy
-         Q+2X4mSE9BytqSwMW+fg4w836QPMeRXkblWhenK1hFyU/jTTwWOkCvniePSOVl+yLGj9
-         8QFQ==
-X-Gm-Message-State: AOAM533GuVykbQ7/bSDJlG5Xb/IR9jhRgkw5XOn0H2tubCAVrP/ktbUZ
-        J8Y0uzYfISDJoDuLmMcUCWCn1ryF2eKSaSFVq0A=
-X-Google-Smtp-Source: ABdhPJy9hL0j/lhNbfcB00DeOK7b0U4zsoic5mnnMbHNRRfvtq2YEG4GVY9xM4euUA/qj/6OFeVzDzuTpkOX9D54k0k=
-X-Received: by 2002:ac8:2fb0:: with SMTP id l45mr20693117qta.260.1592913733005;
- Tue, 23 Jun 2020 05:02:13 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OWJaEeNqVLaBxo7u+h6+Cgpk3QyvR08wDj4Gz9NXugQ=;
+        b=gkm6m7k7q95TBe4rFlzeBOMaBumI8pa1RbjXFoTthmytJTmUMGiuG/TYgehTnJ8Vg4
+         McyTYuxshHaFww/hPqJXKFyC0YDg8GE9fkAsUQs/lII7Y7WeyjyAqXClmlAB/kRgR7vx
+         BQEB98vyNC9IRPGse2qZg3arZqnCBe7W2yRuD8OH7caF+bcHwjpJ7mOBB+PT2taUUdJM
+         TGt8Rsg1NeLG1U5NFn2oflpHhHf4KIDwn9geJBsptFw1luXO0ObH1LZc6bc5mOltF/+F
+         EgdOxNVFU1VWgDZfUalVIIW7Ms11A/EI0GY+TaZLGyRIb2AN2vHy0sSBWwSG2Frad/q4
+         vh9g==
+X-Gm-Message-State: AOAM530zNfr+eEv4tw1UAWHXdOrpsDqUgnYt0tK9pH7vqKCkJ4XyBDXN
+        c+7WdnJ++d8J+7jTO++v4KjUxEN/0K4=
+X-Google-Smtp-Source: ABdhPJyaiWH0vRxuZi7aWRwJC6faR9Wg+uqF32tTZr6jxgQa1tELNtstBcDFkGjaORmr9UxzEApbtw==
+X-Received: by 2002:a05:6808:60d:: with SMTP id y13mr857118oih.121.1592920805917;
+        Tue, 23 Jun 2020 07:00:05 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id k7sm4159264oon.29.2020.06.23.07.00.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jun 2020 07:00:05 -0700 (PDT)
+Subject: Re: [RESEND PATCH 0/3] selftests: lib.mk improvements
+To:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Jiri Benc <jbenc@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200527071629.63364-1-yauheni.kaliuta@redhat.com>
+ <CANoWswkwYPmfMbh3U3NRc26JRMe3bkWHcfiMJ6fi-3fXT1OQLA@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a63239ee-d198-9305-4690-167d83a05203@linuxfoundation.org>
+Date:   Tue, 23 Jun 2020 08:00:04 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Received: by 2002:ac8:47c2:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 05:02:12
- -0700 (PDT)
-Reply-To: bektery@outlook.com
-From:   YAVUZ BEKTER <bakert.jg@gmail.com>
-Date:   Tue, 23 Jun 2020 05:02:12 -0700
-Message-ID: <CAAUSuTW=r1zPYsLsMYZRnSyv_sPyVA3dnZKNBmSk5AVRmY-kDQ@mail.gmail.com>
-Subject: Hello.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CANoWswkwYPmfMbh3U3NRc26JRMe3bkWHcfiMJ6fi-3fXT1OQLA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I am the foreign operations director of Bank of Turkey.
-My name is Mr, Yavuz. I have a sensitive investment project to discuss
-with you, please reply now.
-________________________
-Ik ben de directeur buitenlandse activiteiten van de Bank of Turkey.
-Mijn naam is meneer Yavuz. Ik moet een gevoelig investeringsproject bespreken
-met u, antwoord dan nu.
+Hi Yauheni,
+
+On 6/19/20 10:46 PM, Yauheni Kaliuta wrote:
+> Hi!
+> 
+> Shuah, what about the patchset?
+> 
+> On Wed, May 27, 2020 at 10:16 AM Yauheni Kaliuta
+> <yauheni.kaliuta@redhat.com> wrote:
+>>
+>> Fix
+>> make[1]: execvp: /bin/sh: Argument list too long
+>>
+>> encountered with some shells and a couple of more potential problems
+>> in that part of code.
+>>
+>> Yauheni Kaliuta (3):
+>>    selftests: do not use .ONESHELL
+>>    selftests: fix condition in run_tests
+>>    selftests: simplify run_tests
+>>
+>>   tools/testing/selftests/lib.mk | 19 ++++++-------------
+>>   1 file changed, 6 insertions(+), 13 deletions(-)
+>>
+>> --
+>> 2.26.2
+>>
+> 
+> 
+
+I am planning to send them in for 5.9-rc1. They should appear
+in linux-kselftest next this week.
+
+thanks,
+-- Shuah
