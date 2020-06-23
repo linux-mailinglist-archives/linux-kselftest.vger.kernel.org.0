@@ -2,161 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D8E2047AB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 04:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81B42047BD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 04:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731788AbgFWCv3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 22:51:29 -0400
-Received: from mga03.intel.com ([134.134.136.65]:8474 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731434AbgFWCv3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 22:51:29 -0400
-IronPort-SDR: 4fbRkBhI0456nAQ2Bh7NG9bIu3yjvSMzVHIXGINkMdblffyF5QwuUh4Xsfw0xXUIFpbwy05fjw
- +XLsug8z7FCA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="143920307"
-X-IronPort-AV: E=Sophos;i="5.75,269,1589266800"; 
-   d="scan'208";a="143920307"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 19:51:27 -0700
-IronPort-SDR: stMi4x4u0lGE9oF6INyqSIVVZASuHoTY6RLBNhZfKd1cGfjSj+eDTH/4My3zENuLBHRiWuxxoE
- C4MywkOnf8rQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,269,1589266800"; 
-   d="scan'208";a="275201085"
-Received: from yhuang-dev.sh.intel.com (HELO yhuang-dev) ([10.239.159.23])
-  by orsmga003.jf.intel.com with ESMTP; 22 Jun 2020 19:51:24 -0700
-From:   "Huang\, Ying" <ying.huang@intel.com>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     Yang Shi <shy828301@gmail.com>, John Hubbard <jhubbard@nvidia.com>,
-        Zi Yan <ziy@nvidia.com>, <nouveau@lists.freedesktop.org>,
-        <linux-rdma@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 13/16] mm: support THP migration to device private memory
-References: <20200619215649.32297-1-rcampbell@nvidia.com>
-        <20200619215649.32297-14-rcampbell@nvidia.com>
-        <F1872509-3B1F-4A8A-BFF5-E4D44E451920@nvidia.com>
-        <b6eed976-c515-72d6-a7be-2296cab8f0d4@nvidia.com>
-        <C7BEB563-3698-442C-A188-1B66CBE4CF63@nvidia.com>
-        <a5f502f8-70cd-014b-8066-bbaeb8024a29@nvidia.com>
-        <4C364E23-0716-4D59-85A1-0C293B86BC2C@nvidia.com>
-        <CAHbLzkqe50+KUsRH92O4Be2PjuwAYGw9nK+d-73syxi2Xnf9-Q@mail.gmail.com>
-        <CAHbLzko=BqtPhxgf7f1bKKqoQxK9XCCPdp4YdL80K_uXFfcETQ@mail.gmail.com>
-        <fa056e5e-ca87-aef1-e66e-58e8ebe5403e@nvidia.com>
-        <CAHbLzkrR4-s+ye1F3XDV_0q+iyZOcyMQNHTggDY3Mn_e2yOZ7g@mail.gmail.com>
-        <a778dcec-045b-85c0-2dd3-ac700e4208c5@nvidia.com>
-Date:   Tue, 23 Jun 2020 10:51:23 +0800
-In-Reply-To: <a778dcec-045b-85c0-2dd3-ac700e4208c5@nvidia.com> (Ralph
-        Campbell's message of "Mon, 22 Jun 2020 17:05:37 -0700")
-Message-ID: <87zh8uze8k.fsf@yhuang-dev.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1731820AbgFWC6s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 22:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731690AbgFWC6r (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Jun 2020 22:58:47 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75528C061573
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 19:58:46 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id r12so1565266wrj.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 19:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AXi+ZPhOfi04UEldTn/C6lZw7iAKx1vkRfbVboyu5Z0=;
+        b=Y3HOJcUYWQT1B2yupxS5EPA1NVpsex3gMAWe6SIbFh7bAvgDF0uBzQN6I/bkTGE/OB
+         Gu8DKIv7rOKRPkkKD9Iba6bbTMsFaGiB1ebC7uZfytnVLiGAj3AyixHelJfe4ChL/y3s
+         jCy0cr3BlqjdTezrgeEzGm1E+bvPhB78v+J8fFfQ/Cc14IDVVjWo1e1xCP/UHI6BKORS
+         duqXl3Nc/ydmQws6UK1NZ8spaSbr8jiVeqV+YxO8BzCY0ACDgX5q+T44qgxEocQCYbfk
+         c6GfLkrtiEshevPCtEWNWQiDGpGOt1DpuHu7k2HAHwdpJ1/QwrJZfHLqAmpnLGw0ZG9s
+         7qwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AXi+ZPhOfi04UEldTn/C6lZw7iAKx1vkRfbVboyu5Z0=;
+        b=KDfLyG9PXvtOHE2Ci7YYhd0oJQCMD0Ab2WJk/1ZrotUVulw+TlY9VBwsfb21HZJw7H
+         xE5QkEkMO6IVPvG590+Zywm91Xienzoep/SIdiHn194N3AaWqUqbfXSKJtetaiDrZzKJ
+         SuUBWx4V9u7iVO0zlgZRGTYP6WGo53RfHrPJrVvtrBuPuu9fhxewGGuDasL0RG/jqFHi
+         hix7wDqalcjpoKH+EdIBz+r0VX4ATD8z6K810+QPeGtLFCqONLR5TD5pabZoCFE+m0qd
+         y7KlzJ5935nqCj81FwuFhA9QTFmrJC20aLBCTjyvpXIl/bB8njJUtyZm7oatAC8+vvzc
+         BJ0w==
+X-Gm-Message-State: AOAM531AYoYSObmWOlvN6XgyKSWTpQI08/tW4josG5hNL9q6wAdiPx3b
+        g9sQUBJUNNsIhy1+WqFiCmAQUgvPNToQsS8Me7cfUw==
+X-Google-Smtp-Source: ABdhPJzzX/FACj8yCdz+hoPmTXjLPzc/aJfnbVwkEq7r5hSinTj1eUQC2ZstlXF36DK/MV9XiqivfcNA49+Ievk6AQ0=
+X-Received: by 2002:a5d:5642:: with SMTP id j2mr15456656wrw.19.1592881124921;
+ Mon, 22 Jun 2020 19:58:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+References: <CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <202006141120.96FF8C5@keescook> <CY4PR13MB11757D57CD441C5CAEC3F257FD9C0@CY4PR13MB1175.namprd13.prod.outlook.com>
+ <7161fadb-45ba-c4c0-8bbb-cb47d2dd0265@redhat.com> <dc853d83-649e-b652-819f-4766ea294d78@gmail.com>
+ <CABVgOS=qSMY9xP7db4-hkSt71YKyPpJuQv=fqcfzV-kCC1k9qQ@mail.gmail.com> <5b4c248a-f8c9-0913-5280-8e436cdc5838@gmail.com>
+In-Reply-To: <5b4c248a-f8c9-0913-5280-8e436cdc5838@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 23 Jun 2020 10:58:33 +0800
+Message-ID: <CABVgOSm3E7hou1oA+Ua1N=NY=ZRRqm3+bKUuvcCqyVZ5-gWU=w@mail.gmail.com>
+Subject: Re: RFC - kernel selftest result documentation (KTAP)
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>, Kees Cook <keescook@chromium.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ralph Campbell <rcampbell@nvidia.com> writes:
-
-> On 6/22/20 4:54 PM, Yang Shi wrote:
->> On Mon, Jun 22, 2020 at 4:02 PM John Hubbard <jhubbard@nvidia.com> wrote:
->>>
->>> On 2020-06-22 15:33, Yang Shi wrote:
->>>> On Mon, Jun 22, 2020 at 3:30 PM Yang Shi <shy828301@gmail.com> wrote:
->>>>> On Mon, Jun 22, 2020 at 2:53 PM Zi Yan <ziy@nvidia.com> wrote:
->>>>>> On 22 Jun 2020, at 17:31, Ralph Campbell wrote:
->>>>>>> On 6/22/20 1:10 PM, Zi Yan wrote:
->>>>>>>> On 22 Jun 2020, at 15:36, Ralph Campbell wrote:
->>>>>>>>> On 6/21/20 4:20 PM, Zi Yan wrote:
->>>>>>>>>> On 19 Jun 2020, at 17:56, Ralph Campbell wrote:
->>> ...
->>>>>> Ying(cc’d) developed the code to swapout and swapin THP in one piece: https://lore.kernel.org/linux-mm/20181207054122.27822-1-ying.huang@intel.com/.
->>>>>> I am not sure whether the patchset makes into mainstream or not. It could be a good technical reference
->>>>>> for swapping in device private pages, although swapping in pages from disk and from device private
->>>>>> memory are two different scenarios.
->>>>>>
->>>>>> Since the device private memory swapin impacts core mm performance, we might want to discuss your patches
->>>>>> with more people, like the ones from Ying’s patchset, in the next version.
->>>>>
->>>>> I believe Ying will give you more insights about how THP swap works.
->>>>>
->>>>> But, IMHO device memory migration (migrate to system memory) seems
->>>>> like THP CoW more than swap.
->>>
->>>
->>> A fine point: overall, the desired behavior is "migrate", not CoW.
->>> That's important. Migrate means that you don't leave a page behind, even
->>> a read-only one. And that's exactly how device private migration is
->>> specified.
->>>
->>> We should try to avoid any erosion of clarity here. Even if somehow
->>> (really?) the underlying implementation calls this THP CoW, the actual
->>> goal is to migrate pages over to the device (and back).
->>>
->>>
->>>>>
->>>>> When migrating in:
->>>>
->>>> Sorry for my fat finger, hit sent button inadvertently, let me finish here.
->>>>
->>>> When migrating in:
->>>>
->>>>           - if THP is enabled: allocate THP, but need handle allocation
->>>> failure by falling back to base page
->>>>           - if THP is disabled: fallback to base page
->>>>
->>>
->>> OK, but *all* page entries (base and huge/large pages) need to be cleared,
->>> when migrating to device memory, unless I'm really confused here.
->>> So: not CoW.
->>
->> I realized the comment caused more confusion. I apologize for the
->> confusion. Yes, the trigger condition for swap/migration and CoW are
->> definitely different. Here I mean the fault handling part of migrating
->> into system memory.
->>
->> Swap-in just needs to handle the base page case since THP swapin is
->> not supported in upstream yet and the PMD is split in swap-out phase
->> (see shrink_page_list).
->>
->> The patch adds THP migration support to device memory, but you need to
->> handle migrate in (back to system memory) case correctly. The fault
->> handling should look like THP CoW fault handling behavior (before
->> 5.8):
->>      - if THP is enabled: allocate THP, fallback if allocation is failed
->>      - if THP is disabled: fallback to base page
->>
->> Swap fault handling doesn't look like the above. So, I said it seems
->> like more THP CoW (fault handling part only before 5.8). I hope I
->> articulate my mind.
->>
->> However, I didn't see such fallback is handled. It looks if THP
->> allocation is failed, it just returns SIGBUS; and no check about THP
->> status if I read the patches correctly. The THP might be disabled for
->> the specific vma or system wide before migrating from device memory
->> back to system memory.
+On Sat, Jun 20, 2020 at 11:03 PM Frank Rowand <frowand.list@gmail.com> wrote:
 >
-> You are correct, the patch wasn't handling the fallback case.
-> I'll add that in the next version.
+> On 2020-06-20 01:44, David Gow wrote:
+> > On Sat, Jun 20, 2020 at 1:58 AM Frank Rowand <frowand.list@gmail.com> wrote:
+> >>
+> >> On 2020-06-16 07:08, Paolo Bonzini wrote:
+> >>> On 15/06/20 21:07, Bird, Tim wrote:
+> >
+> >>>>>> Finally,
+> >>>>>>   - Should a SKIP result be 'ok' (TAP13 spec) or 'not ok' (current kselftest practice)?
+> >>>>>> See https://testanything.org/tap-version-13-specification.html
+> >>>>>
+> >>>>> Oh! I totally missed this. Uhm. I think "not ok" makes sense to me "it
+> >>>>> did not run successfully". ... but ... Uhhh ... how do XFAIL and SKIP
+> >>>>> relate? Neither SKIP nor XFAIL count toward failure, though, so both
+> >>>>> should be "ok"? I guess we should change it to "ok".
+> >>>
+> >>> See above for XFAIL.
+> >>>
+> >>> I initially raised the issue with "SKIP" because I have a lot of tests
+> >>> that depend on hardware availability---for example, a test that does not
+> >>> run on some processor kinds (e.g. on AMD, or old Intel)---and for those
+> >>> SKIP should be considered a success.
+> >>
+> >> No, SKIP should not be considered a success.  It should also not be considered
+> >> a failure.  Please do not blur the lines between success, failure, and
+> >> skipped.
+> >
+>
+>
+> > I agree that skipped tests should be their own thing, separate from
+> > success and failure, but the way they tend to behave tends to be
+> > closer to a success than a failure.
+> >
+> > I guess the important note here is that a suite of tests, some of
+> > which are SKIPped, can be listed as having passed, so long as none of
+> > them failed. So, the rule for "bubbling up" test results is that any
+> > failures cause the parent to fail, the parent is marked as skipped if
+> > _all_ subtests are skipped, and otherwise is marked as having
+> > succeeded. (Reversing the last part: having a suite be marked as
+> > skipped if _any_ of the subtests are skipped also makes sense, and has
+> > its advantages, but anecdotally seems less common in other systems.)
+>
+> That really caught my attention as something to be captured in the spec.
+>
+> My initial response was that bubbling up results is the domain of the
+> test analysis tools, not the test code.
 
-For fallback, you need to split the THP in device firstly.  Because you
-will migrate a base page instead a whole THP now.
+KUnit is actually sitting in the middle. Results are bubbled up from
+individual tests to the test suites in-kernel (by the common KUnit
+code), as the suites are TAP tests (individual test cases being
+subtests), and so need to provide results. The kunit.py script then
+bubbles those results up (using the same rules) to print a summary.
 
-Best Regards,
-Huang, Ying
+> If I were writing a test analysis tool, I would want the user to have
+> the ability to configure the bubble up rules.  Different use cases
+> would desire different rules.
 
->>>
->>> thanks,
->>> --
->>> John Hubbard
->>> NVIDIA
+I tend to agree: it'd be nice if test analysis tools could implement
+different rules here. If we're using TAP subtests, though, the parent
+tests do need to return a result in the test code, so either that
+needs to be test-specific (if the parent test is not just a simple
+union of its subtests), or it could be ignored by an analysis tool
+which would follow its own rules. (In either case, it may make sense
+to be able to configure a test analysis tool to always fail or mark
+tests with failed or skipped subtests, even if its result is "ok", but
+not vice-versa -- a test which failed would stay failed, even if all
+its subtests passed.)
+
+> My second response was to start thinking about whether the tests
+> themselves should have any sort of bubble up implemented.  I think
+> it is a very interesting question.  My current mindset is that
+> each test is independent, and their is not a concept of an umbrella
+> test that is the union of a set of subtests.  But maybe there is
+> value to umbrella tests.  If there is a concept of umbrella tests
+> then I think the spec should define how skip bubbles up.
+>
+
+KUnit suites are definitely that kind of "umbrella test" at the moment.
+
+> >
+> > The other really brave thing one could do to break from the TAP
+> > specification would be to add a "skipped" value alongside "ok" and
+> > "not ok", and get rid of the whole "SKIP" directive/comment stuff.
+> > Possibly not worth the departure from the spec, but it would sidestep
+> > part of the problem.
+>
+> I like being brave in this case.  Elevating SKIP to be a peer of
+> "ok" and "not ok" provides a more clear model that SKIP is a first
+> class citizen.  It also removes the muddled thinking that the
+> current model promotes.
+>
+> >
+> >
+> > Cheers,
+> > -- David
+> >
+>
