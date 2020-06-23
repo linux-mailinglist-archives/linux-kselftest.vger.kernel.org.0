@@ -2,105 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F68205030
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 13:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071E72050C4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 13:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732361AbgFWLNe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Jun 2020 07:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732327AbgFWLNd (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jun 2020 07:13:33 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8882C061797
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 04:13:31 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id z2so18877788ilq.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 04:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=JmFWxL8jcgFtJ4lXeAh1tsN1JKedqnhe1aARR5DLLNfnmxbRVdigZWObFQCKHma7V/
-         nXcD5YIWEVXNXCqrytPGgDqMF7LG3AjbXiqLTgzqk1NJVD0/SRZf4OoSI6wnKQxYV3Ks
-         amS6a4QzU5emTI071jmI7+yuVO8cf4VT9H8sEhnpri7+7G+PTXCBUyZqsrxfqxuiwOG4
-         xEIjMamwRMoIta8KsYy3dHkpvW0oyFzbTuaV2CPgDnFo04GeMPe10QjUEXx8wj4RHH8B
-         DHZEqlRnedz4pCoeB0pVzmh4bko7PaIqIxbPCx2izv0Xwb2Gc8VLztOXP6mjnrkcvxdC
-         tn1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=gGG2klLbzrlWdBOykQduG4II4snolJIrRYzRGnHyIzp22oSHNFHCe0LGQyzAxZS6Hc
-         dqncUIlwduNoxXSr2ELhua63AMAQY6C1wN1EMa636OlKeD4bPEtO61zVCeouL3Vz1v7J
-         uHKwCRy4yRL28Yh/8Nv0eek+7ZK4xOILmwt0Gztg76W8WpLpJrF9MIGbSTMkhc/2cdZr
-         khlg8OuCm7TQ5vVxGeYm5Mf92bZMefwPnp7RGKqEVttHiQnBbSw97GZDVFtn+PT+LvU8
-         OrbgkeCjcybE+W+56glCCCd2JwGYBv3DojyDd8T+too58Nq5wZI6WGmDf4xrfwvhvkf3
-         xeIw==
-X-Gm-Message-State: AOAM533DkpS9b+ETtjLrVi1p7t7mriKffDTpbph6+xDvXJ/zECOIxaLs
-        P+AYYCwdi3jxK5DJs6k7KFWxJRCesh0uYscgIB0=
-X-Google-Smtp-Source: ABdhPJwK923lg5M3WnkXSapWWzottNhCJnxFSYd3ngrqt2SS9qPX4AJ/vikM4fv3WoLbmggVNNCfvDQtP1sd5XzwhK0=
-X-Received: by 2002:a92:c643:: with SMTP id 3mr23427492ill.229.1592910811076;
- Tue, 23 Jun 2020 04:13:31 -0700 (PDT)
+        id S1732409AbgFWLcO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Jun 2020 07:32:14 -0400
+Received: from mga01.intel.com ([192.55.52.88]:13397 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732450AbgFWLcH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Jun 2020 07:32:07 -0400
+IronPort-SDR: pMpnCYkGbQbgOtkmZxsuOb8kyRtrhcIjn2UmW+3nO2zehu17+aRiUcCtP7+PKAdbbU89Ua/qRu
+ pPzdNd9tIKKQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="162125691"
+X-IronPort-AV: E=Sophos;i="5.75,271,1589266800"; 
+   d="scan'208";a="162125691"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 04:32:04 -0700
+IronPort-SDR: 5tkfT0mZr3W/taJOkL52IkrQPichvXxonir3i8I80hB2DPMHRI27NufAZe238Pjv7lkhilhA4x
+ ntx8O0syHBkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,271,1589266800"; 
+   d="scan'208";a="353775553"
+Received: from xpf-desktop.sh.intel.com ([10.239.13.107])
+  by orsmga001.jf.intel.com with ESMTP; 23 Jun 2020 04:32:01 -0700
+Date:   Tue, 23 Jun 2020 19:41:55 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Heng Su <heng.su@intel.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kai Svahn <kai.svahn@intel.com>
+Subject: Re: [PATCH v2] Kernel selftests: TPM2: upgrade TPM2 tests from
+ Python 2 to Python 3
+Message-ID: <20200623114155.GA15561@xpf-desktop.sh.intel.com>
+References: <20200618081502.15302-1-pengfei.xu@intel.com>
+ <20200622214613.GA22727@linux.intel.com>
+ <20200622214739.GB22727@linux.intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6638:14d3:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:13:30
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <elnana194@gmail.com>
-Date:   Tue, 23 Jun 2020 12:13:30 +0100
-Message-ID: <CA+NUCuTpRBCNhzPsUx6VPrOLF5ST46h_JaJQFi9zwqK2yEciSw@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200622214739.GB22727@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+Hi Jarkk,
+  Thanks for your comments!
+  My feedback is as below.
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+  BR.
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
+On 2020-06-23 at 00:47:39 +0300, Jarkko Sakkinen wrote:
+> On Tue, Jun 23, 2020 at 12:46:18AM +0300, Jarkko Sakkinen wrote:
+> > On Thu, Jun 18, 2020 at 04:15:02PM +0800, Pengfei Xu wrote:
+> > > Python 2 is no longer supported by the Python upstream project, so
+> > > upgrade TPM2 tests to Python 3.
+> > > 
+> > > Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+> > 
+> > Use "selftests: tpm: <short summary>".
+> > 
 
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
+   Will do.
 
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
+> > > ---
+> > >  tools/testing/selftests/tpm2/test_smoke.sh |  4 +-
+> > >  tools/testing/selftests/tpm2/test_space.sh |  2 +-
+> > >  tools/testing/selftests/tpm2/tpm2.py       | 68 ++++++++++++++--------
+> > >  tools/testing/selftests/tpm2/tpm2_tests.py | 24 +++++---
+> > >  4 files changed, 61 insertions(+), 37 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+> > > index 663062701d5a..d05467f6d258 100755
+> > > --- a/tools/testing/selftests/tpm2/test_smoke.sh
+> > > +++ b/tools/testing/selftests/tpm2/test_smoke.sh
+> > > @@ -6,8 +6,8 @@ ksft_skip=4
+> > >  
+> > >  [ -f /dev/tpm0 ] || exit $ksft_skip
+> > >  
+> > > -python -m unittest -v tpm2_tests.SmokeTest
+> > > -python -m unittest -v tpm2_tests.AsyncTest
+> > > +python3 -m unittest -v tpm2_tests.SmokeTest
+> > > +python3 -m unittest -v tpm2_tests.AsyncTest
+> > >  
+> > >  CLEAR_CMD=$(which tpm2_clear)
+> > >  if [ -n $CLEAR_CMD ]; then
+> > > diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
+> > > index 36c9d030a1c6..151c64e8ee9f 100755
+> > > --- a/tools/testing/selftests/tpm2/test_space.sh
+> > > +++ b/tools/testing/selftests/tpm2/test_space.sh
+> > > @@ -6,4 +6,4 @@ ksft_skip=4
+> > >  
+> > >  [ -f /dev/tpmrm0 ] || exit $ksft_skip
+> > >  
+> > > -python -m unittest -v tpm2_tests.SpaceTest
+> > > +python3 -m unittest -v tpm2_tests.SpaceTest
+> > > diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+> > > index d0fcb66a88a6..b0ccc1499c53 100644
+> > > --- a/tools/testing/selftests/tpm2/tpm2.py
+> > > +++ b/tools/testing/selftests/tpm2/tpm2.py
+> > > @@ -247,14 +247,18 @@ class ProtocolError(Exception):
+> > >  class AuthCommand(object):
+> > >      """TPMS_AUTH_COMMAND"""
+> > >  
+> > > -    def __init__(self, session_handle=TPM2_RS_PW, nonce='', session_attributes=0,
+> > > -                 hmac=''):
+> > > +    def __init__(self, session_handle=TPM2_RS_PW, nonce=''.encode(),
+> > > +                 session_attributes=0, hmac=''.encode()):
+> > > +        if not isinstance(nonce, bytes):
+> > > +            nonce = nonce.encode()
+> > > +        if not isinstance(hmac, bytes):
+> > > +            hmac = hmac.encode()
+> > 
+> > This looks messy. Please, instead
+> > 
+> >     def __init__(self, session_handle=TPM2_RS_PW, nonce=bytes(),
+> >                  session_attributes=0, hmac=bytes()):
+> >          self.session_handle = session_handle
+> >          self.nonce = nonce
+> >          self.session_attributes = session_attributes
+> > 
+> > Applies also to other places.
+> 
+> I.e. use '.encode()' in the call site.
+> 
 
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
+  I tried to use bytes(parm, encoding='UTF-8') way, it met the situation
+  that sometimes parm is string, sometimes parm is bytes.
+  And it's better we could convert all types value to bytes in
+  __init__ function.
 
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
+  Could we modify it as below:
+def ConvertToBytes(parm):
+    if not isinstance(parm, bytes):
+        parm = parm.encode()
+    return parm
 
-I will wait to hear from you so as to give you details.With love from
+class AuthCommand(object):
+    """TPMS_AUTH_COMMAND"""
 
- i need you to contact me here sarahkoffi389@yahoo.co.jp
+    def __init__(self, session_handle=TPM2_RS_PW, nonce='',
+                 session_attributes=0, hmac=''):
+        self.session_handle = session_handle
+        self.nonce = ConvertToBytes(nonce)
+        self.session_attributes = session_attributes
+        self.hmac = ConvertToBytes(hmac)
 
-Mrs. Sarah Koffi
+Thanks!
+
+> /Jarkko
