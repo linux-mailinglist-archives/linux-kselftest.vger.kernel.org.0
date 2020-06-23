@@ -2,77 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD8F20451E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 02:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6B320476B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 04:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731480AbgFWAQL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 20:16:11 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:56109 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731539AbgFWAPz (ORCPT
+        id S1731434AbgFWCrJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 22:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730456AbgFWCrI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 20:15:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592871354;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KTIfD+5tCBwAWNOi72btfXnK7DLTQdOMYtdNacQ/2Bg=;
-        b=V6cHwJdOYD/NmgG1Z37yJLa5+3vlci2V1Grc85MLf2/IYVJ0jl5rNttdWeWa/Rbz0O36A2
-        lJwDapM5BmJ4cJlTCFUYaI3sNimD4pLZhDbLCGo9CKN/sTFEdCFfNXigBvlqVoqcFJF6ns
-        jY0dX2I3GBBeIfjjlFk5TvpEr0RpBtQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-102-t4J6rWs7PQmwDy_Rf_LD3Q-1; Mon, 22 Jun 2020 20:15:53 -0400
-X-MC-Unique: t4J6rWs7PQmwDy_Rf_LD3Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 325041005513;
-        Tue, 23 Jun 2020 00:15:52 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B8E8D60BEC;
-        Tue, 23 Jun 2020 00:15:51 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 6/6] selftests: sync_test: do not use ksft_exit_skip after ksft_set_plan
-Date:   Mon, 22 Jun 2020 20:15:47 -0400
-Message-Id: <20200623001547.22255-7-pbonzini@redhat.com>
-In-Reply-To: <20200623001547.22255-1-pbonzini@redhat.com>
-References: <20200623001547.22255-1-pbonzini@redhat.com>
+        Mon, 22 Jun 2020 22:47:08 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47442C061573
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 19:47:08 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id f18so1607440wml.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 19:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nO5X8az1iZdZpQgcucoRmbtaCiu8/dHvR/vuZisbGbg=;
+        b=ZWus7F/wJ5uGQya+5s5/T0SJ/pHOu6ysTi808P3JHesr4MkDHHBWSCTZWZHhFAWQ0i
+         kiHYEDyZOdgN48Iu28wFy9/I8HN9OM6RVX8iQqkDdzJtBB3iFmeipxarIHkTfvpaY3UM
+         C6NViwBAby8Ca5tt4udkIHQOtMSDHmwOzLD/Fqt123GRK+QyK5cmcbZ6zV8n/+jiTJDv
+         13D0YgnXySUirtY5wstCyg58sFZRXMVEhP+zam4kEMdP7N0gS35N3Ogg/VkF+lXGwX8N
+         zAD5YuVZSsrKDoZHsEX6Ai2+60GP6zXJl+tT5Obi3yeL9N4d7jTcg3QILNc4Z7ZAJcDf
+         OHgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nO5X8az1iZdZpQgcucoRmbtaCiu8/dHvR/vuZisbGbg=;
+        b=FThUsC2/2PNffXzRyK14TZSa7aLQCoX1WYF2tikV+SGnZK8rn7J0ndbjl6KJc7chzG
+         2QC9E00H9axD7ebt1zKP/q7zcmlK8VE9ChmC77KcIAc8dUrzxYNFfo1NSeGpPFQ5XIWg
+         JWfOQxEYl18mWN4QCMn9NnhtgvOaOJ/fynu7iVAKjacHteskpSzlrXcbmenyeYXBOoWw
+         MI5pWWoR8iLnHyUvbsfGRk63dkxA1H/QxdrRvEz/zqk84IUhpMr4QofiOdTunjqQDxER
+         oaB5ts2ljXQYDhGlYaRREEIRwFMATEFip81xQigGHPsAqGrYmrcsBhEK845+Bw5n7x72
+         6Whg==
+X-Gm-Message-State: AOAM532LDgwTnCrcfbs/tQfsIcfkx51XT6E8XHxa6zB8zzeUve7Kylvs
+        DDPE/RlDDZTgRKMV8+3qXWYJv5vEoMc9ndDgMTfCMA==
+X-Google-Smtp-Source: ABdhPJwVhwBuznzaEXZC0Z8D79xNdvpGAAjV8U45ICfWzRKRdyWpqj9d6UN8PJvPV5l6xbkf9WzwPIIGOte4iLoo5wQ=
+X-Received: by 2002:a1c:750e:: with SMTP id o14mr21195505wmc.86.1592880426707;
+ Mon, 22 Jun 2020 19:47:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
+In-Reply-To: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 23 Jun 2020 10:46:54 +0800
+Message-ID: <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
+Subject: Re: RFC: KTAP documentation - expected messages
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Calling ksft_exit_skip after ksft_set_plan results in executing fewer tests
-than planned.  Move it before.
+On Mon, Jun 22, 2020 at 6:45 AM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> Tim Bird started a thread [1] proposing that he document the selftest result
+> format used by Linux kernel tests.
+>
+> [1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
+>
+> The issue of messages generated by the kernel being tested (that are not
+> messages directly created by the tests, but are instead triggered as a
+> side effect of the test) came up.  In this thread, I will call these
+> messages "expected messages".  Instead of sidetracking that thread with
+> a proposal to handle expected messages, I am starting this new thread.
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- tools/testing/selftests/sync/sync_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for doing this: I think there are quite a few tests which could
+benefit from something like this.
 
-diff --git a/tools/testing/selftests/sync/sync_test.c b/tools/testing/selftests/sync/sync_test.c
-index 3824b66f41a0..414a617db993 100644
---- a/tools/testing/selftests/sync/sync_test.c
-+++ b/tools/testing/selftests/sync/sync_test.c
-@@ -86,9 +86,9 @@ int main(void)
- 	int err;
- 
- 	ksft_print_header();
--	ksft_set_plan(3 + 7);
- 
- 	sync_api_supported();
-+	ksft_set_plan(3 + 7);
- 
- 	ksft_print_msg("[RUN]\tTesting sync framework\n");
- 
--- 
-2.26.2
+I think there were actually two separate questions: what do we do with
+unexpected messages (most of which I expect are useless, but some of
+which may end up being related to an unexpected test failure), and how
+to have tests "expect" a particular message to appear. I'll stick to
+talking about the latter for this thread, but even there there's two
+possible interpretations of "expected messages" we probably want to
+explicitly distinguish between: a message which must be present for
+the test to pass (which I think best fits the "expected message"
+name), and a message which the test is likely to produce, but which
+shouldn't alter the result (an "ignored message"). I don't see much
+use for the latter at present, but if we wanted to do more things with
+messages and had some otherwise very verbose tests, it could
+potentially be useful.
 
+The other thing I'd note here is that this proposal seems to be doing
+all of the actual message filtering in userspace, which makes a lot of
+sense for kselftest tests, but does mean that the kernel can't know if
+the test has passed or failed. There's definitely a tradeoff between
+trying to put too much needless string parsing in the kernel and
+having to have a userland tool determine the test results. The
+proposed KCSAN test suite[1] is using tracepoints to do this in the
+kernel. It's not the cleanest thing, but there's no reason KUnit or
+similar couldn't implement a nicer API around it.
+
+[1]: https://lkml.org/lkml/2020/6/22/1506
+
+> I implemented an API for expected messages that are triggered by tests
+> in the Devicetree unittest code, with the expectation that the specific
+> details may change when the Devicetree unittest code adapts the KUnit
+> API.  It seems appropriate to incorporate the concept of expected
+> messages in Tim's documentation instead of waiting to address the
+> subject when the Devicetree unittest code adapts the KUnit API, since
+> Tim's document may become the kernel selftest standard.
+
+Is having a nice way to handle expected messages the only thing
+holding up porting this to KUnit?
+
+> Instead of creating a very long email containing multiple objects,
+> I will reply to this email with a separate reply for each of:
+>
+>   The "expected messages" API implemention and use can be from
+>   drivers/of/unittest.c in the mainline kernel.
+>
+>   of_unittest_expect - A proof of concept perl program to filter console
+>                        output containing expected messages output
+>
+>                        of_unittest_expect is also available by cloning
+>                        https://github.com/frowand/dt_tools.git
+>
+>   An example raw console output with timestamps and expect messages.
+>
+>   An example of console output processed by filter program
+>   of_unittest_expect to be more human readable.  The expected
+>   messages are not removed, but are flagged.
+>
+>   An example of console output processed by filter program
+>   of_unittest_expect to be more human readable.  The expected
+>   messages are removed instead of being flagged.
+
+Cheers,
+-- David
