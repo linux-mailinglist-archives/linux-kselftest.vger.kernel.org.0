@@ -2,148 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AEB206446
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 23:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD6D206811
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jun 2020 01:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391636AbgFWVS6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Jun 2020 17:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        id S2387829AbgFWXKa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Jun 2020 19:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391638AbgFWVSt (ORCPT
+        with ESMTP id S2387848AbgFWXK1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jun 2020 17:18:49 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0BC061573
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 14:18:49 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id bh7so9661897plb.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 14:18:49 -0700 (PDT)
+        Tue, 23 Jun 2020 19:10:27 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133BEC061573
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 16:10:26 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id i12so159679pju.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 16:10:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mJWzvNZU1DMsijzcM8pSgSd+l6gBq4CZTTDgQGADwPk=;
-        b=d3UM5mS3Lwn1zCoUYBgL4MOdtaGDbpZ45FPQQmIiPWsUMcrblQ5pb3qHERiGLD+POo
-         npuxt5fXnoKsGH+DKJAJ+ul8Y6EIbNJlyhdRsgqhAJJVelU3+pcBdfBAZbEE0IALc384
-         HvWlGLE8Lxqn759AEnWNmPzbSamSO0pLN7FZSwLXeXqyRZnZlzI1T+dLxqjN669bHpfc
-         4PUyBqpVX/KHW0QckUDmH8mwi2foQLWmoCOCWIHp9tf3Vad3W1LL3blo7BhXrgl1U32a
-         ZjXCghkz45tieXrFU8exdMXC0j/7LeiqFZ1w/Xc8XlOUWq/TprLg9rEQAMqc44FXv3Xc
-         rFQQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7CGyJvgDfqa7MpUh5embDkSIvDYKMmy2PpptbOHIrEM=;
+        b=KbxBnfchg2RNBRCTFJcBQBqbQAmyNQh/HXi+viuVz7TZ4U9dkUGXHvTy44WpHvxokb
+         87n0dBDZDidnAzVyqWRq33wij2V0sVhaVFfIaucT3qotWt3zH2jjPWJkJS2kQILaoMQL
+         yRN9ZLg8FrVnGR1hLX+DaepKcjahJ0EpkhK5o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mJWzvNZU1DMsijzcM8pSgSd+l6gBq4CZTTDgQGADwPk=;
-        b=SGkI/U3y6TGQVUZyVvZPQF8gXAdHSzk7Au/9kCF+A65G4zqjwnx0Wsir8ibJ+U+RkS
-         3GS2Srj7jlD0xM5g8uaLwZILAs157SDUC+udoAQLEtH+KGVZr2a8Irqa4N6QKE9RaP50
-         +38PCUhI0BQjNFlw63AZ3LVw/0EGs8r7VA3Gw0LegRdf0Y83l8lRhsHmieD8sWuJ7LTm
-         vsrmULiORPcEjkQhiiYQU+k1uEdRae6vb1Ltou9IIN641CReZaMsEURTw7mLW8Fa1PHX
-         69bLVe4kMDU8SyP0Set/TWR0pSQ/LGRCX1liB6CEvaQpi1ZXDhOngQKrw8w48om7C/L4
-         kKcQ==
-X-Gm-Message-State: AOAM533vNyh1b3WADxFf0GHwcRKWx5THZJHXDgIKF/3OT3XCbm7hS/5v
-        TwkcrJWK9CrFMOYmgUdIRKOHjhkoTOkFj1bBdbYHrQ==
-X-Google-Smtp-Source: ABdhPJxLAk9Ot+Z5BtINKEITMd+CQ0dUpAGNCdMnfGs22621xhkUMbtlO0eW9G4/rU2unSlLcfsNUito8iq6hb4/NFI=
-X-Received: by 2002:a17:902:32d:: with SMTP id 42mr15721221pld.297.1592947128738;
- Tue, 23 Jun 2020 14:18:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7CGyJvgDfqa7MpUh5embDkSIvDYKMmy2PpptbOHIrEM=;
+        b=CBB4OEZITbZGJ1Hqdm1JH3YByJOG2UrdY2VEEo/qlOwEuI9kUXAxIHwtwq12gxpOXX
+         A/lDNe0rEQzNvjRB2B0H9eFyUgAFqAchNY+kFjcOj6rvAf1XMWttxpe5LvIevEIqZ28P
+         COBigke3zs/miR5+H6xUAN/6t7euSwla+C0oz2gFAmsELMBsXp0rmIhMGFmpVrE9U4Aj
+         FAjpoKjpfN46tCqB4PivsZoTO81XMiOHoy5xinLVYShGzXz+cwCQ7IIXrVVMoO0BA1tR
+         6IsreC0+/DFuFiJK7Aa+z3fAUjxcPERW91XjVqI/bNGs8uXrJpF8+BlINDuxWCfy7JJ9
+         xTIQ==
+X-Gm-Message-State: AOAM5323NC9eISw4iSL6wdOlKPJ70RJMeewSOgQanTPW8h0c/4EfVL/L
+        GRcSG3InmVYckl0ZPY6vbkGqZg==
+X-Google-Smtp-Source: ABdhPJxWiopvITqQoUsjOrkPVJLPViTKTyfPSXoXAyVLmwAy3lfwE9jEZ/6WkBPSzCGcW/dk/mk+LA==
+X-Received: by 2002:a17:90a:d186:: with SMTP id fu6mr3871728pjb.185.1592953825608;
+        Tue, 23 Jun 2020 16:10:25 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r7sm13275139pfc.183.2020.06.23.16.10.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 16:10:24 -0700 (PDT)
+Date:   Tue, 23 Jun 2020 16:10:23 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Prasad Sodagudi <psodagud@codeaurora.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH drivers/misc 0/4] lkdtm: Various clean ups
+Message-ID: <202006231610.4993DC5@keescook>
+References: <20200529200347.2464284-1-keescook@chromium.org>
 MIME-Version: 1.0
-References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com> <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
-In-Reply-To: <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 23 Jun 2020 14:18:37 -0700
-Message-ID: <CAFd5g44+cUBhbHCx7dGk_dyn0Ph7U8dpaBzESWRi6L6qQizbFQ@mail.gmail.com>
-Subject: Re: RFC: KTAP documentation - expected messages
-To:     David Gow <davidgow@google.com>, Dmitry Vyukov <dvyukov@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529200347.2464284-1-keescook@chromium.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 7:47 PM David Gow <davidgow@google.com> wrote:
->
-> On Mon, Jun 22, 2020 at 6:45 AM Frank Rowand <frowand.list@gmail.com> wrote:
-> >
-> > Tim Bird started a thread [1] proposing that he document the selftest result
-> > format used by Linux kernel tests.
-> >
-> > [1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
-> >
-> > The issue of messages generated by the kernel being tested (that are not
-> > messages directly created by the tests, but are instead triggered as a
-> > side effect of the test) came up.  In this thread, I will call these
-> > messages "expected messages".  Instead of sidetracking that thread with
-> > a proposal to handle expected messages, I am starting this new thread.
->
-> Thanks for doing this: I think there are quite a few tests which could
-> benefit from something like this.
->
-> I think there were actually two separate questions: what do we do with
-> unexpected messages (most of which I expect are useless, but some of
-> which may end up being related to an unexpected test failure), and how
-> to have tests "expect" a particular message to appear. I'll stick to
-> talking about the latter for this thread, but even there there's two
-> possible interpretations of "expected messages" we probably want to
-> explicitly distinguish between: a message which must be present for
-> the test to pass (which I think best fits the "expected message"
-> name), and a message which the test is likely to produce, but which
-> shouldn't alter the result (an "ignored message"). I don't see much
-> use for the latter at present, but if we wanted to do more things with
-> messages and had some otherwise very verbose tests, it could
-> potentially be useful.
+On Fri, May 29, 2020 at 01:03:43PM -0700, Kees Cook wrote:
+> Hi Greg,
+> 
+> Can you please apply these patches to your drivers/misc tree for LKDTM?
+> It's mostly a collection of fixes and improvements and tweaks to the
+> selftest integration.
 
-+Dmitry Vyukov, I think you were interested in this for KASAN before
-we went with the signalling approach. Any thoughts?
+Friendly ping -- we're past -rc2 now. :)
 
-> The other thing I'd note here is that this proposal seems to be doing
-> all of the actual message filtering in userspace, which makes a lot of
-> sense for kselftest tests, but does mean that the kernel can't know if
-> the test has passed or failed. There's definitely a tradeoff between
-> trying to put too much needless string parsing in the kernel and
-> having to have a userland tool determine the test results. The
-> proposed KCSAN test suite[1] is using tracepoints to do this in the
-> kernel. It's not the cleanest thing, but there's no reason KUnit or
-> similar couldn't implement a nicer API around it.
->
-> [1]: https://lkml.org/lkml/2020/6/22/1506
->
-> > I implemented an API for expected messages that are triggered by tests
-> > in the Devicetree unittest code, with the expectation that the specific
-> > details may change when the Devicetree unittest code adapts the KUnit
-> > API.  It seems appropriate to incorporate the concept of expected
-> > messages in Tim's documentation instead of waiting to address the
-> > subject when the Devicetree unittest code adapts the KUnit API, since
-> > Tim's document may become the kernel selftest standard.
->
-> Is having a nice way to handle expected messages the only thing
-> holding up porting this to KUnit?
->
-> > Instead of creating a very long email containing multiple objects,
-> > I will reply to this email with a separate reply for each of:
-> >
-> >   The "expected messages" API implemention and use can be from
-> >   drivers/of/unittest.c in the mainline kernel.
-> >
-> >   of_unittest_expect - A proof of concept perl program to filter console
-> >                        output containing expected messages output
-> >
-> >                        of_unittest_expect is also available by cloning
-> >                        https://github.com/frowand/dt_tools.git
-> >
-> >   An example raw console output with timestamps and expect messages.
-> >
-> >   An example of console output processed by filter program
-> >   of_unittest_expect to be more human readable.  The expected
-> >   messages are not removed, but are flagged.
-> >
-> >   An example of console output processed by filter program
-> >   of_unittest_expect to be more human readable.  The expected
-> >   messages are removed instead of being flagged.
->
-> Cheers,
-> -- David
+Thanks!
+
+-Kees
+
+> 
+> Thanks!
+> 
+> -Kees
+> 
+> Kees Cook (4):
+>   lkdtm: Avoid more compiler optimizations for bad writes
+>   lkdtm/heap: Avoid edge and middle of slabs
+>   selftests/lkdtm: Reset WARN_ONCE to avoid false negatives
+>   lkdtm: Make arch-specific tests always available
+> 
+>  drivers/misc/lkdtm/bugs.c               | 45 +++++++++++++------------
+>  drivers/misc/lkdtm/heap.c               |  9 ++---
+>  drivers/misc/lkdtm/lkdtm.h              |  2 --
+>  drivers/misc/lkdtm/perms.c              | 22 ++++++++----
+>  drivers/misc/lkdtm/usercopy.c           |  7 ++--
+>  tools/testing/selftests/lkdtm/run.sh    |  6 ++++
+>  tools/testing/selftests/lkdtm/tests.txt |  1 +
+>  7 files changed, 56 insertions(+), 36 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+
+-- 
+Kees Cook
