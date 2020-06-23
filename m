@@ -2,143 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6B320476B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 04:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D8E2047AB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jun 2020 04:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731434AbgFWCrJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jun 2020 22:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730456AbgFWCrI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 22:47:08 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47442C061573
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 19:47:08 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id f18so1607440wml.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 19:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nO5X8az1iZdZpQgcucoRmbtaCiu8/dHvR/vuZisbGbg=;
-        b=ZWus7F/wJ5uGQya+5s5/T0SJ/pHOu6ysTi808P3JHesr4MkDHHBWSCTZWZHhFAWQ0i
-         kiHYEDyZOdgN48Iu28wFy9/I8HN9OM6RVX8iQqkDdzJtBB3iFmeipxarIHkTfvpaY3UM
-         C6NViwBAby8Ca5tt4udkIHQOtMSDHmwOzLD/Fqt123GRK+QyK5cmcbZ6zV8n/+jiTJDv
-         13D0YgnXySUirtY5wstCyg58sFZRXMVEhP+zam4kEMdP7N0gS35N3Ogg/VkF+lXGwX8N
-         zAD5YuVZSsrKDoZHsEX6Ai2+60GP6zXJl+tT5Obi3yeL9N4d7jTcg3QILNc4Z7ZAJcDf
-         OHgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nO5X8az1iZdZpQgcucoRmbtaCiu8/dHvR/vuZisbGbg=;
-        b=FThUsC2/2PNffXzRyK14TZSa7aLQCoX1WYF2tikV+SGnZK8rn7J0ndbjl6KJc7chzG
-         2QC9E00H9axD7ebt1zKP/q7zcmlK8VE9ChmC77KcIAc8dUrzxYNFfo1NSeGpPFQ5XIWg
-         JWfOQxEYl18mWN4QCMn9NnhtgvOaOJ/fynu7iVAKjacHteskpSzlrXcbmenyeYXBOoWw
-         MI5pWWoR8iLnHyUvbsfGRk63dkxA1H/QxdrRvEz/zqk84IUhpMr4QofiOdTunjqQDxER
-         oaB5ts2ljXQYDhGlYaRREEIRwFMATEFip81xQigGHPsAqGrYmrcsBhEK845+Bw5n7x72
-         6Whg==
-X-Gm-Message-State: AOAM532LDgwTnCrcfbs/tQfsIcfkx51XT6E8XHxa6zB8zzeUve7Kylvs
-        DDPE/RlDDZTgRKMV8+3qXWYJv5vEoMc9ndDgMTfCMA==
-X-Google-Smtp-Source: ABdhPJwVhwBuznzaEXZC0Z8D79xNdvpGAAjV8U45ICfWzRKRdyWpqj9d6UN8PJvPV5l6xbkf9WzwPIIGOte4iLoo5wQ=
-X-Received: by 2002:a1c:750e:: with SMTP id o14mr21195505wmc.86.1592880426707;
- Mon, 22 Jun 2020 19:47:06 -0700 (PDT)
+        id S1731788AbgFWCv3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jun 2020 22:51:29 -0400
+Received: from mga03.intel.com ([134.134.136.65]:8474 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731434AbgFWCv3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Jun 2020 22:51:29 -0400
+IronPort-SDR: 4fbRkBhI0456nAQ2Bh7NG9bIu3yjvSMzVHIXGINkMdblffyF5QwuUh4Xsfw0xXUIFpbwy05fjw
+ +XLsug8z7FCA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="143920307"
+X-IronPort-AV: E=Sophos;i="5.75,269,1589266800"; 
+   d="scan'208";a="143920307"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 19:51:27 -0700
+IronPort-SDR: stMi4x4u0lGE9oF6INyqSIVVZASuHoTY6RLBNhZfKd1cGfjSj+eDTH/4My3zENuLBHRiWuxxoE
+ C4MywkOnf8rQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,269,1589266800"; 
+   d="scan'208";a="275201085"
+Received: from yhuang-dev.sh.intel.com (HELO yhuang-dev) ([10.239.159.23])
+  by orsmga003.jf.intel.com with ESMTP; 22 Jun 2020 19:51:24 -0700
+From:   "Huang\, Ying" <ying.huang@intel.com>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     Yang Shi <shy828301@gmail.com>, John Hubbard <jhubbard@nvidia.com>,
+        Zi Yan <ziy@nvidia.com>, <nouveau@lists.freedesktop.org>,
+        <linux-rdma@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 13/16] mm: support THP migration to device private memory
+References: <20200619215649.32297-1-rcampbell@nvidia.com>
+        <20200619215649.32297-14-rcampbell@nvidia.com>
+        <F1872509-3B1F-4A8A-BFF5-E4D44E451920@nvidia.com>
+        <b6eed976-c515-72d6-a7be-2296cab8f0d4@nvidia.com>
+        <C7BEB563-3698-442C-A188-1B66CBE4CF63@nvidia.com>
+        <a5f502f8-70cd-014b-8066-bbaeb8024a29@nvidia.com>
+        <4C364E23-0716-4D59-85A1-0C293B86BC2C@nvidia.com>
+        <CAHbLzkqe50+KUsRH92O4Be2PjuwAYGw9nK+d-73syxi2Xnf9-Q@mail.gmail.com>
+        <CAHbLzko=BqtPhxgf7f1bKKqoQxK9XCCPdp4YdL80K_uXFfcETQ@mail.gmail.com>
+        <fa056e5e-ca87-aef1-e66e-58e8ebe5403e@nvidia.com>
+        <CAHbLzkrR4-s+ye1F3XDV_0q+iyZOcyMQNHTggDY3Mn_e2yOZ7g@mail.gmail.com>
+        <a778dcec-045b-85c0-2dd3-ac700e4208c5@nvidia.com>
+Date:   Tue, 23 Jun 2020 10:51:23 +0800
+In-Reply-To: <a778dcec-045b-85c0-2dd3-ac700e4208c5@nvidia.com> (Ralph
+        Campbell's message of "Mon, 22 Jun 2020 17:05:37 -0700")
+Message-ID: <87zh8uze8k.fsf@yhuang-dev.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
-In-Reply-To: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 23 Jun 2020 10:46:54 +0800
-Message-ID: <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
-Subject: Re: RFC: KTAP documentation - expected messages
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 6:45 AM Frank Rowand <frowand.list@gmail.com> wrote:
->
-> Tim Bird started a thread [1] proposing that he document the selftest result
-> format used by Linux kernel tests.
->
-> [1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
->
-> The issue of messages generated by the kernel being tested (that are not
-> messages directly created by the tests, but are instead triggered as a
-> side effect of the test) came up.  In this thread, I will call these
-> messages "expected messages".  Instead of sidetracking that thread with
-> a proposal to handle expected messages, I am starting this new thread.
+Ralph Campbell <rcampbell@nvidia.com> writes:
 
-Thanks for doing this: I think there are quite a few tests which could
-benefit from something like this.
-
-I think there were actually two separate questions: what do we do with
-unexpected messages (most of which I expect are useless, but some of
-which may end up being related to an unexpected test failure), and how
-to have tests "expect" a particular message to appear. I'll stick to
-talking about the latter for this thread, but even there there's two
-possible interpretations of "expected messages" we probably want to
-explicitly distinguish between: a message which must be present for
-the test to pass (which I think best fits the "expected message"
-name), and a message which the test is likely to produce, but which
-shouldn't alter the result (an "ignored message"). I don't see much
-use for the latter at present, but if we wanted to do more things with
-messages and had some otherwise very verbose tests, it could
-potentially be useful.
-
-The other thing I'd note here is that this proposal seems to be doing
-all of the actual message filtering in userspace, which makes a lot of
-sense for kselftest tests, but does mean that the kernel can't know if
-the test has passed or failed. There's definitely a tradeoff between
-trying to put too much needless string parsing in the kernel and
-having to have a userland tool determine the test results. The
-proposed KCSAN test suite[1] is using tracepoints to do this in the
-kernel. It's not the cleanest thing, but there's no reason KUnit or
-similar couldn't implement a nicer API around it.
-
-[1]: https://lkml.org/lkml/2020/6/22/1506
-
-> I implemented an API for expected messages that are triggered by tests
-> in the Devicetree unittest code, with the expectation that the specific
-> details may change when the Devicetree unittest code adapts the KUnit
-> API.  It seems appropriate to incorporate the concept of expected
-> messages in Tim's documentation instead of waiting to address the
-> subject when the Devicetree unittest code adapts the KUnit API, since
-> Tim's document may become the kernel selftest standard.
-
-Is having a nice way to handle expected messages the only thing
-holding up porting this to KUnit?
-
-> Instead of creating a very long email containing multiple objects,
-> I will reply to this email with a separate reply for each of:
+> On 6/22/20 4:54 PM, Yang Shi wrote:
+>> On Mon, Jun 22, 2020 at 4:02 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>>>
+>>> On 2020-06-22 15:33, Yang Shi wrote:
+>>>> On Mon, Jun 22, 2020 at 3:30 PM Yang Shi <shy828301@gmail.com> wrote:
+>>>>> On Mon, Jun 22, 2020 at 2:53 PM Zi Yan <ziy@nvidia.com> wrote:
+>>>>>> On 22 Jun 2020, at 17:31, Ralph Campbell wrote:
+>>>>>>> On 6/22/20 1:10 PM, Zi Yan wrote:
+>>>>>>>> On 22 Jun 2020, at 15:36, Ralph Campbell wrote:
+>>>>>>>>> On 6/21/20 4:20 PM, Zi Yan wrote:
+>>>>>>>>>> On 19 Jun 2020, at 17:56, Ralph Campbell wrote:
+>>> ...
+>>>>>> Ying(cc’d) developed the code to swapout and swapin THP in one piece: https://lore.kernel.org/linux-mm/20181207054122.27822-1-ying.huang@intel.com/.
+>>>>>> I am not sure whether the patchset makes into mainstream or not. It could be a good technical reference
+>>>>>> for swapping in device private pages, although swapping in pages from disk and from device private
+>>>>>> memory are two different scenarios.
+>>>>>>
+>>>>>> Since the device private memory swapin impacts core mm performance, we might want to discuss your patches
+>>>>>> with more people, like the ones from Ying’s patchset, in the next version.
+>>>>>
+>>>>> I believe Ying will give you more insights about how THP swap works.
+>>>>>
+>>>>> But, IMHO device memory migration (migrate to system memory) seems
+>>>>> like THP CoW more than swap.
+>>>
+>>>
+>>> A fine point: overall, the desired behavior is "migrate", not CoW.
+>>> That's important. Migrate means that you don't leave a page behind, even
+>>> a read-only one. And that's exactly how device private migration is
+>>> specified.
+>>>
+>>> We should try to avoid any erosion of clarity here. Even if somehow
+>>> (really?) the underlying implementation calls this THP CoW, the actual
+>>> goal is to migrate pages over to the device (and back).
+>>>
+>>>
+>>>>>
+>>>>> When migrating in:
+>>>>
+>>>> Sorry for my fat finger, hit sent button inadvertently, let me finish here.
+>>>>
+>>>> When migrating in:
+>>>>
+>>>>           - if THP is enabled: allocate THP, but need handle allocation
+>>>> failure by falling back to base page
+>>>>           - if THP is disabled: fallback to base page
+>>>>
+>>>
+>>> OK, but *all* page entries (base and huge/large pages) need to be cleared,
+>>> when migrating to device memory, unless I'm really confused here.
+>>> So: not CoW.
+>>
+>> I realized the comment caused more confusion. I apologize for the
+>> confusion. Yes, the trigger condition for swap/migration and CoW are
+>> definitely different. Here I mean the fault handling part of migrating
+>> into system memory.
+>>
+>> Swap-in just needs to handle the base page case since THP swapin is
+>> not supported in upstream yet and the PMD is split in swap-out phase
+>> (see shrink_page_list).
+>>
+>> The patch adds THP migration support to device memory, but you need to
+>> handle migrate in (back to system memory) case correctly. The fault
+>> handling should look like THP CoW fault handling behavior (before
+>> 5.8):
+>>      - if THP is enabled: allocate THP, fallback if allocation is failed
+>>      - if THP is disabled: fallback to base page
+>>
+>> Swap fault handling doesn't look like the above. So, I said it seems
+>> like more THP CoW (fault handling part only before 5.8). I hope I
+>> articulate my mind.
+>>
+>> However, I didn't see such fallback is handled. It looks if THP
+>> allocation is failed, it just returns SIGBUS; and no check about THP
+>> status if I read the patches correctly. The THP might be disabled for
+>> the specific vma or system wide before migrating from device memory
+>> back to system memory.
 >
->   The "expected messages" API implemention and use can be from
->   drivers/of/unittest.c in the mainline kernel.
->
->   of_unittest_expect - A proof of concept perl program to filter console
->                        output containing expected messages output
->
->                        of_unittest_expect is also available by cloning
->                        https://github.com/frowand/dt_tools.git
->
->   An example raw console output with timestamps and expect messages.
->
->   An example of console output processed by filter program
->   of_unittest_expect to be more human readable.  The expected
->   messages are not removed, but are flagged.
->
->   An example of console output processed by filter program
->   of_unittest_expect to be more human readable.  The expected
->   messages are removed instead of being flagged.
+> You are correct, the patch wasn't handling the fallback case.
+> I'll add that in the next version.
 
-Cheers,
--- David
+For fallback, you need to split the THP in device firstly.  Because you
+will migrate a base page instead a whole THP now.
+
+Best Regards,
+Huang, Ying
+
+>>>
+>>> thanks,
+>>> --
+>>> John Hubbard
+>>> NVIDIA
