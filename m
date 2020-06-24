@@ -2,244 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF6E207CBA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jun 2020 22:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D86207CC2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jun 2020 22:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406492AbgFXUNO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Jun 2020 16:13:14 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:22370 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2406391AbgFXUNN (ORCPT
+        id S2406399AbgFXUP2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Jun 2020 16:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406385AbgFXUP1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jun 2020 16:13:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593029590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4MbGz15Us31m2v0G89U7HCcGguCWLGU9ZCf1KLcZZdY=;
-        b=dlEs2UehL1c1HUpSd2+pwnLisHLgdZ7gmuqcb5SGjz2Ws1nc+iUBJoR3C8t/7yZQGnARhK
-        mcCch3yx0eOGJQd/K3PNJdDlev/7jCcQSHQwcCU+srQgmcgpMlZUFO31vdJ8Bhqhn1G/10
-        6CZyIYv4FomRMEY8N1Ql7lD3A8BHmc4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-305-tzqgQsbyNMWHVOpkxOH0Rw-1; Wed, 24 Jun 2020 16:12:53 -0400
-X-MC-Unique: tzqgQsbyNMWHVOpkxOH0Rw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C6276805EE1;
-        Wed, 24 Jun 2020 20:12:50 +0000 (UTC)
-Received: from redhat.com (ovpn-112-56.rdu2.redhat.com [10.10.112.56])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2E23519D7D;
-        Wed, 24 Jun 2020 20:12:49 +0000 (UTC)
-Date:   Wed, 24 Jun 2020 16:12:47 -0400
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Wed, 24 Jun 2020 16:15:27 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7348C061796
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:15:26 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id n2so1532260pld.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IdPEcGBnqX+qJ5FRufYsC8Fmx34kZgyoik6khE35S6c=;
+        b=LAgCJBjwd1W/QzoEvVFv6uT/xdusvMrDmvZmLReTUlSLsK29qb2r44fWyhO1UhPjLz
+         uCqW0klYugm6yeBpcqwbanjBuPn8Y4d1Tu+ugG6egYFyGEsuoDAliH69triCGqr36dmi
+         BMDc2ZPjjlfibF6w3Ngt7Ai+eI0QCED0XjXlZ9iFn4S8F1kjfO+ZbKzEVcatJwMuVMIJ
+         QzCxLBIbzHXagWgFw39ff0eRVBOF+fHHz/VqrbQU+1mjgX/mE+n7M899/K/IafH7EGgM
+         IhB3AOn5dcpYIYEwgO3/nAL0oNHI/8GAMY6MwEGOhWPMzMzE8W8bLyDD9+yilUzPos45
+         Mszw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IdPEcGBnqX+qJ5FRufYsC8Fmx34kZgyoik6khE35S6c=;
+        b=QUarOJWnDjZn+D6oXCa3PMlaXO5wLE6NghhVChiw+iThbdl4Fh4MXBgHmRhwEep1qJ
+         UViD9oTUZezokMf8h3vGEj9ajAHByQsPNNfgSHW3HmTTizjoVXBDz3KMdv6qDsikMCxF
+         kz9QoS+UoVNDh+oYkN0VokbH7De5Ju7DR8D6OrZeX+vZwlY1K+r3A6S1fCjIg6O1D8Jj
+         zyg6eY5JxofrMoeuPI8zSuwyl+OAXkEjXpagMT6UG6EdakAfrFb3pmNv+FGNTHqrBgch
+         d6QkD9Oa+6uEij1Bu5ySSAnVNp1tR2rsn80bFg0Qr5IBB41y4/Fqc5Cd1BhMuEfanJNW
+         YEmQ==
+X-Gm-Message-State: AOAM530qya5LnKln2GzIHv21esapGYdNE9N4Wtzn48o8vRzEoFbAPKtI
+        1C6MkfcpO2e4O0EY0/Axhs3kG+qqVwN/xvGRAp49dw==
+X-Google-Smtp-Source: ABdhPJwWls4hrMzUFcn8SBHGpHRCDnSeZUXTbN8ExG/y1RAi8xwaghxvTb/oqHElrII6pYkocNgNnEUPoflPuaWhmtc=
+X-Received: by 2002:a17:90a:3321:: with SMTP id m30mr30079924pjb.20.1593029725879;
+ Wed, 24 Jun 2020 13:15:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200228012036.15682-1-brendanhiggins@google.com>
+ <20200228012036.15682-5-brendanhiggins@google.com> <e5de96ed-fb76-d322-fa40-c6e870e76c36@gmail.com>
+In-Reply-To: <e5de96ed-fb76-d322-fa40-c6e870e76c36@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 24 Jun 2020 13:15:14 -0700
+Message-ID: <CAFd5g45Fi8n9YsMqV0FNrz3+wtoVtvg_Hvo7yg-MdJwwqxXqTQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] init: main: add KUnit to kernel init
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        lkft-triage@lists.linaro.org, Miroslav Benes <mbenes@suse.cz>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 1/2] selftests/lkdtm: Don't clear dmesg when running tests
-Message-ID: <20200624201247.GA25319@redhat.com>
-References: <20200508065356.2493343-1-mpe@ellerman.id.au>
- <CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com>
- <c5b77970-ecaf-24ad-c34d-134acc1a6063@redhat.com>
- <20200624083955.GF8444@alley>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200624083955.GF8444@alley>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 10:39:55AM +0200, Petr Mladek wrote:
-> On Tue 2020-06-23 23:48:36, Joe Lawrence wrote:
-> > On 6/22/20 4:51 AM, Naresh Kamboju wrote:
-> > > On Fri, 8 May 2020 at 12:23, Michael Ellerman <mpe@ellerman.id.au> wrote:
-> > > > 
-> > > > It is Very Rude to clear dmesg in test scripts. That's because the
-> > > > script may be part of a larger test run, and clearing dmesg
-> > > > potentially destroys the output of other tests.
-> > > > 
-> > > > We can avoid using dmesg -c by saving the content of dmesg before the
-> > > > test, and then using diff to compare that to the dmesg afterward,
-> > > > producing a log with just the added lines.
-> > > >
-> > > > > > > diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
-> > > > index dadf819148a4..0b409e187c7b 100755
-> > > > --- a/tools/testing/selftests/lkdtm/run.sh
-> > > > +++ b/tools/testing/selftests/lkdtm/run.sh
-> > > >   # Record and dump the results
-> > > > -dmesg -c >"$LOG"
-> > > > +dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
-> > > 
-> > > We are facing problems with the diff `=%>` part of the option.
-> > > This report is from the OpenEmbedded environment.
-> > > We have the same problem from livepatch_testcases.
-> > > 
-> > > # selftests lkdtm BUG.sh
-> > > lkdtm: BUG.sh_ #
-> > > # diff unrecognized option '--changed-group-format=%>'
-> > > unrecognized: option_'--changed-group-format=%>' #
-> > > # BusyBox v1.27.2 (2020-03-30 164108 UTC) multi-call binary.
-> > > v1.27.2: (2020-03-30_164108 #
-> > > #
-> > > : _ #
-> > > # Usage diff [-abBdiNqrTstw] [-L LABEL] [-S FILE] [-U LINES] FILE1 FILE2
-> > > diff: [-abBdiNqrTstw]_[-L #
-> > > # BUG missing 'kernel BUG at' [FAIL]
-> > > 
-> > > Full test output log,
-> > > https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200621/testrun/2850083/suite/kselftest/test/lkdtm_BUG.sh/log
-> > > 
-> > 
-> > D'oh!  Using diff's changed/unchanged group format was a nice trick to
-> > easily fetch the new kernel log messages.
-> > 
-> > I can't think of any simple alternative off the top of my head, so here's a
-> > kludgy tested-once awk script:
-> > 
-> >  SAVED_DMESG="$(dmesg | tail -n1)"
-> >  ... tests ...
-> >  NEW_DMESG=$(dmesg | awk -v last="$SAVED_DMESG" 'p; $0 == last{p=1}')
-> > 
-> > I think timestamps should make each log line unique, but this probably won't
-> > handle kernel log buffer overflow.
-> 
-> The test would fail anyway if there was log buffer overflow.
-> 
-> We could check if the last line was still there and
-> suggest to increase the log buffer size in the error message.
-> 
+On Mon, Mar 2, 2020 at 11:13 AM Frank Rowand <frowand.list@gmail.com> wrote:
 
-Hi Petr,
+Sorry it took so long to respond. I am reviving this patchset now,
+about to send out a new revision and I just saw this comment.
 
-This is a good suggestion and I've worked it into the awk script I
-wrote last night, check it out at the bottom ...
+> On 2/27/20 7:20 PM, Brendan Higgins wrote:
+> > Remove KUnit from init calls entirely, instead call directly from
+> > kernel_init().
+> >
+> > Co-developed-by: Alan Maguire <alan.maguire@oracle.com>
+> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> > ---
+> >  include/kunit/test.h | 9 +++++++++
+> >  init/main.c          | 4 ++++
+> >  lib/kunit/executor.c | 4 +---
+> >  3 files changed, 14 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 8a02f93a6b505..8689dd1459844 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -197,6 +197,15 @@ void kunit_init_test(struct kunit *test, const char *name);
+> >
+> >  int kunit_run_tests(struct kunit_suite *suite);
+> >
+> > +#if IS_BUILTIN(CONFIG_KUNIT)
+>
+> I suspected this would not work if a unittest was builtin but CONFIG_KUNIT
+> was set to module.
+>
+> So I decided to experiment a bit to verify my assumptions (before applying
+> this patch series).  I tried to set CONFIG_KUNIT to module, then set
+> CONFIG_KUNIT_EXAMPLE_TEST to built in.  Kconfig does not let me do this
+> because KUNIT_EXAMPLE_TEST is inside a 'if KUNIT' in lib/kunit/Kconfig,
+> but instead switches KUNIT_EXAMPLE_TEST to a module, and warns that it
+> has done so.  This was a bit of a surprise, but seems reasonable.
+>
+> So my next assumption is that the architecture of KUnit expects
+> each individual unit test config option to depend upon CONFIG_KUNIT.
+> If this is the case, please clearly document that requirement in
+> the KUnit documentation.
 
-> > Maybe it would be easier to log a known unique test delimiter msg and then
-> > fetch all new messages after that?
-> 
-> The timestamp should be enough to distinguish any message.
-> 
-> But some visual separator between each test is useful anyway. And
-> it might include some random string...
-> 
+Your assumption is correct. I will fix this in the Kconfig
+documentation in a separate patch.
 
-Ah yeah, you're right about those timestamps again. :)
-
-As for separators, we've already added the "===== TEST: foo =====" for
-the livepatch ones... so I think with the timestamp prefix, we're good
-enough, no?
-
-
-I did a bit more hacking to work that awk script into the livepatching
-tests.  The changes aren't too bad and coding it ourselves lets us drop
-the temporary dmesg file business.  If this looks good, I can send out
-as a real patch, but then that raises a few questions:
-
-  1 - f131d9edc29d ("selftests/lkdtm: Don't clear dmesg when running
-      tests") has already merged, updating that file doesn't look too
-      difficult, but will need a Fixes tag and should probably go
-      through Shuah's tree.
-
-  2 - We haven't actually merged the livepatch copy yet.  I can roll
-      another version of that patchset, substituting a fix for the
-      problematic patch, or we could just tack this one on at the end.
-      In fine with either approach.
-
--- Joe
-
--->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8--
-
-
-From 892a651839ac6cdd398d6d9998c0d2e4214b72f7 Mon Sep 17 00:00:00 2001
-From: Joe Lawrence <joe.lawrence@redhat.com>
-Date: Wed, 24 Jun 2020 15:34:04 -0400
-Subject: [PATCH] selftests/livepatch: support BusyBox diff
-
-BusyBox diff doesn't support the GNU diff '--LTYPE-line-format' options
-that were used in the selftests to filter older kernel log messages from
-dmesg output.
-
-Bite the bullet and code this into the selftest:
-
-  - test start: remember the last dmesg entry (has unique [timestamp]
-    prefix) in $SAVED_DMESG
-  - test end: awk-filter dmesg output up to and including $SAVED_DMESG
-
-Account for kernel log overflow in case awk doesn't find $SAVED_DMESG,
-exit and fail the test with a recommendation that the user expand the
-kernel log buffer.
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- tools/testing/selftests/livepatch/functions.sh | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 36648ca367c2..365ce4110265 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -41,15 +41,16 @@ function die() {
- 	exit 1
- }
- 
--# save existing dmesg so we can detect new content
-+# save last dmesg entry so we can detect new content
- function save_dmesg() {
--	SAVED_DMESG=$(mktemp --tmpdir -t klp-dmesg-XXXXXX)
--	dmesg > "$SAVED_DMESG"
-+	SAVED_DMESG="$(dmesg | tail -n1)"
- }
- 
--# cleanup temporary dmesg file from save_dmesg()
--function cleanup_dmesg_file() {
--	rm -f "$SAVED_DMESG"
-+# filter all dmesg content before and including $SAVED_DMESG
-+function new_dmesg() {
-+	if ! dmesg | awk -v last="$SAVED_DMESG" 'p; $0 == last{p=1} END {exit !p}'; then
-+		die "dmesg overflow, try increasing kernel log buffer size"
-+	fi
- }
- 
- function push_config() {
-@@ -81,7 +82,6 @@ function set_ftrace_enabled() {
- 
- function cleanup() {
- 	pop_config
--	cleanup_dmesg_file
- }
- 
- # setup_config - save the current config and set a script exit trap that
-@@ -277,7 +277,7 @@ function check_result {
- 	# help differentiate repeated testing runs.  Remove them with a
- 	# post-comparison sed filter.
- 
--	result=$(dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
-+	result=$(new_dmesg | \
- 		 grep -e 'livepatch:' -e 'test_klp' | \
- 		 grep -v '\(tainting\|taints\) kernel' | \
- 		 sed 's/^\[[ 0-9.]*\] //')
-@@ -288,6 +288,4 @@ function check_result {
- 		echo -e "not ok\n\n$(diff -upr --label expected --label result <(echo "$expect") <(echo "$result"))\n"
- 		die "livepatch kselftest(s) failed"
- 	fi
--
--	cleanup_dmesg_file
- }
--- 
-2.21.3
-
+> > +int kunit_run_all_tests(void);
+> > +#else
+> > +static inline int kunit_run_all_tests(void)
+> > +{
+> > +     return 0;
+> > +}
+> > +#endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> > +
+> >  /*
+> >   * If a test suite is built-in, module_init() gets translated into
+> >   * an initcall which we don't want as the idea is that for builtins
+> > diff --git a/init/main.c b/init/main.c
+> > index ee4947af823f3..7875a5c486dc4 100644
+> > --- a/init/main.c
+> > +++ b/init/main.c
+> > @@ -104,6 +104,8 @@
+> >  #define CREATE_TRACE_POINTS
+> >  #include <trace/events/initcall.h>
+> >
+> > +#include <kunit/test.h>
+> > +
+> >  static int kernel_init(void *);
+> >
+> >  extern void init_IRQ(void);
+> > @@ -1444,6 +1446,8 @@ static noinline void __init kernel_init_freeable(void)
+> >
+> >       do_basic_setup();
+> >
+> > +     kunit_run_all_tests();
+> > +
+> >       console_on_rootfs();
+> >
+> >       /*
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index 6429927d598a5..b75a46c560847 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -11,7 +11,7 @@ extern struct kunit_suite * const * const __kunit_suites_end[];
+> >
+> >  #if IS_BUILTIN(CONFIG_KUNIT)
+> >
+> > -static int kunit_run_all_tests(void)
+> > +int kunit_run_all_tests(void)
+> >  {
+> >       struct kunit_suite * const * const *suites, * const *subsuite;
+> >       bool has_test_failed = false;
+> > @@ -31,6 +31,4 @@ static int kunit_run_all_tests(void)
+> >       return 0;
+> >  }
+> >
+> > -late_initcall(kunit_run_all_tests);
+> > -
+> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> >
+>
