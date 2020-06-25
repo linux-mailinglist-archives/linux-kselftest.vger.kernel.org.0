@@ -2,212 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E060E20984C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jun 2020 03:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0623F2099B3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jun 2020 08:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388930AbgFYBrO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Jun 2020 21:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S2389878AbgFYGGW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Jun 2020 02:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388977AbgFYBrO (ORCPT
+        with ESMTP id S2389239AbgFYGGV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jun 2020 21:47:14 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E61C0613ED
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 18:47:13 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id 17so4312741wmo.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 18:47:13 -0700 (PDT)
+        Thu, 25 Jun 2020 02:06:21 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF4CC0613ED
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 23:06:21 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id b7so3155071pju.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 23:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8GiKIX/vStI7SGvasVqVJsOyHpxs3Ttg4NMGSmUAEW0=;
-        b=MAvymusAsOY95wvaDryEZpMdHEe5FdDHdKHQ5raIzb2e6+9FbnKYcuCCjrf7BvNJ2n
-         5AOvVH0ZOPGhy6H0yawAJVwZasPeYzdEFcTpbTEnoDsHD32DilL1c5O4Cb3sndxeHkFt
-         voPoH9kY09KsNjxAflA41VjCtIEU6zSBS3lwRzk9ktVl43LC8fTV9Tkl0KkheIcKEBbT
-         1pT5thNszSg7g1M9X/u6RSPaFEmmr4G5C6sejp1pf3Cbv+gt66qshb13i6eYr/BBBKSa
-         PzvB3l6ZYjRf6NP4gYAJvyLvc5FCOn+GKFXEu2WTvwq2kL0lMvXqLdKv+TribW4YaeHj
-         XT1Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bmHKXnQ4Boi1eFNXwwpe1A6f+AH0+2ONWt2wcc9MKB4=;
+        b=eaXqrVjGvqMbRGvwa0gOwAwGm+xvdYLnWL086+E3GRyZYwYMETONorNvcngNumR8Zh
+         E9NqO2qEQHI4dLFhIlZzgazQMSiFJEftyIoyWUuvn+Pkl8/hU/+0PEZTV7GxVo1HxPeP
+         eQOMGmpgP1euTXqO4xce92nCWtXYOI3uPeYr8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8GiKIX/vStI7SGvasVqVJsOyHpxs3Ttg4NMGSmUAEW0=;
-        b=hXN/Y08DgwkGMH3d6twlQ8FIt6pNYPForqxInW0tckNUJr3TdzXtZUJ7p0Anw34WIy
-         RW1R/0GzlnDEXIeUCHlmLOoSuGsymAldd5qWQWL8VtLN2fqvRy+pHB1bEWcLTZvr7+e1
-         7fpGTQSTHhyw2QVYwLIbYIAXJSPKB/7Hd5nxqc1T4b6A8eOobU/LVVeTFQjNn6UxRVwy
-         nWCWx7DDCsMuHmAAE0fiW+2ZUpMFPN1KPWEh93E5ZuWeakPPdc7HZcMucg3ktWNwrhqq
-         JIbLksnlDaHqcE4N7YMoRt0sgVBL74UGtwnlyEiIn8tKp4VveA8iNXg2ayTkaF5x0lkp
-         CZyg==
-X-Gm-Message-State: AOAM531qRAT1ZF33DFBApAzx4C5HCP+rmJD/WqLokj93L0lhfc8OjAZZ
-        0CBJrdYB8k9RlS4f+PZ5IOW/O77sXADF4mbmH1EkMw==
-X-Google-Smtp-Source: ABdhPJw2DZIdWwUIMDdao2bLZhuUP65zl22/umR4onGlZwaR9GVdVFEuput6SazbqmKipdF5zt6jw51yyuhYLPbCGbo=
-X-Received: by 2002:a1c:750e:: with SMTP id o14mr646775wmc.86.1593049632255;
- Wed, 24 Jun 2020 18:47:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624205550.215599-1-brendanhiggins@google.com>
-In-Reply-To: <20200624205550.215599-1-brendanhiggins@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 25 Jun 2020 09:47:00 +0800
-Message-ID: <CABVgOSnkYfXZ1YELsXAjA0GzCQT9YWO8x+Tssw_+avkDdBB4aw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] kunit: create a centralized executor to dispatch
- all KUnit tests
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Frank Rowand <frowand.list@gmail.com>, catalin.marinas@arm.com,
-        will@kernel.org, monstr@monstr.eu, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, chris@zankel.net,
-        jcmvbkbc@gmail.com,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bmHKXnQ4Boi1eFNXwwpe1A6f+AH0+2ONWt2wcc9MKB4=;
+        b=Zln1fhTUQgIMcXzUlE5auPiJgknyKYouQ3V3au/YBZAFcokZbx/PsA10hbSJF8gRQE
+         BF7U+0X0BrUUnA2k8mkutoG8Lz8odoMAbhMPI0gMaQhX9ZG1Ap7TZGgqo/B6IJa6Nghx
+         KyC7h7/0x+EOVLUq9Gw6xzyfBJYrBhw8nThchmuL3hu3itevnR6aHzIGeKMzXERH7+vT
+         3YvjB6L3jMtgeLM1DnnQvTxnsb8+mbOhoKUtGxF4HDIDqdmUKKVpKhAAsg398jEltk+o
+         BK1Dm1rziNiHJhRp0SbezDE4GBNEUEzYnQkmQmyrmivQsVJIE2TBmAh1eXd3Kct2hZZ5
+         Legw==
+X-Gm-Message-State: AOAM5320Vx78yY2uJ30Ysi9kcmlcM4H8KighKcGoqMXe+Y0gDylWdVVj
+        V55JjvX2eQznFSLYmJPGJa9I5w==
+X-Google-Smtp-Source: ABdhPJxgLn1OrSz77PkNWmC2KIlmqjt/PSB0iT+FDiN9y5fw1zLTEuhwg7bZeyQizf/TOK7pdWhF8w==
+X-Received: by 2002:a17:90b:190b:: with SMTP id mp11mr1647255pjb.82.1593065180560;
+        Wed, 24 Jun 2020 23:06:20 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u4sm21959927pfl.102.2020.06.24.23.06.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 23:06:19 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 23:06:18 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Richard Weinberger <richard.weinberger@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
+        Prasad Sodagudi <psodagud@codeaurora.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
+        clang-built-linux@googlegroups.com,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH drivers/misc 0/4] lkdtm: Various clean ups
+Message-ID: <202006242300.145D555@keescook>
+References: <20200529200347.2464284-1-keescook@chromium.org>
+ <202006231610.4993DC5@keescook>
+ <2356a78c-750b-538f-3d64-b9c78aff89cb@infradead.org>
+ <903628180.54697.1592983405305.JavaMail.zimbra@nod.at>
+ <202006241335.2C0FB5DF90@keescook>
+ <b97853f0-c4be-7039-1d4c-96b3ab802472@infradead.org>
+ <CAFLxGvxiyyX9s=y4phGxvWh-vonS1WPOUbRZr9mgq-B+wY+2nQ@mail.gmail.com>
+ <10f7c20a-0a32-f5cf-7fdf-761db22afcd9@infradead.org>
+ <03486f13-b138-2fc6-4d90-2737d86add2f@infradead.org>
+ <80f501f4-d4fb-1f22-5603-57b5490a695d@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80f501f4-d4fb-1f22-5603-57b5490a695d@infradead.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Glad this is back out there: a couple of minor nitpicks below:
+On Wed, Jun 24, 2020 at 06:45:47PM -0700, Randy Dunlap wrote:
+> Looks like lkdtm/bugs.c needs to get/use arch/x86/include/asm/processor.h
+> but it actually uses arch/x86/um/asm/processor*.h, which does not have the
+> needed structs etc.
 
-On Thu, Jun 25, 2020 at 4:58 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> ## TL;DR
->
-> This patchset adds a centralized executor to dispatch tests rather than
-> relying on late_initcall to schedule each test suite separately along
-> with a couple of new features that depend on it.
->
-> Also, sorry for the extreme delay in getting this out. Part of the delay
-> came from finding that there were actually several architectures that
-> the previous revision of this patchset didn't work on, so I went through
-> and attempted to test this patchset on every architecture - more on that
-> later.
->
-> ## What am I trying to do?
->
-> Conceptually, I am trying to provide a mechanism by which test suites
-> can be grouped together so that they can be reasoned about collectively.
-> The last two of three patches in this series add features which depend
-> on this:
->
-> PATCH 8/11 Prints out a test plan[1] right before KUnit tests are run;
->            this is valuable because it makes it possible for a test
->            harness to detect whether the number of tests run matches the
->            number of tests expected to be run, ensuring that no tests
->            silently failed. The test plan includes a count of tests that
->            will run. With the centralized executor, the tests are
->            located in a single data structure and thus can be counted.
->
+Should I just test for !UML in bugs.c? (This is all for the
+lkdtm_DOUBLE_FAULT() test.) I already do those kinds of checks for the
+lkdtm_UNSET_SMEP() test. e.g.:
 
-This appears to actually be patch 9/11.
 
-> PATCH 9/11 Add a new kernel command-line option which allows the user to
->            specify that the kernel poweroff, halt, or reboot after
->            completing all KUnit tests; this is very handy for running
->            KUnit tests on UML or a VM so that the UML/VM process exits
->            cleanly immediately after running all tests without needing a
->            special initramfs. The centralized executor provides a
->            definitive point when all tests have completed and the
->            poweroff, halt, or reboot could occur.
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index 736675f0a246..f3e7040a7739 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -13,7 +13,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/slab.h>
+ 
+-#ifdef CONFIG_X86_32
++#if IS_ENABLED(CONFIG_X86_32) && !IS_ENABLED(CONFIG_UML)
+ #include <asm/desc.h>
+ #endif
+ 
+@@ -419,7 +419,7 @@ void lkdtm_UNSET_SMEP(void)
+ 
+ void lkdtm_DOUBLE_FAULT(void)
+ {
+-#ifdef CONFIG_X86_32
++#if IS_ENABLED(CONFIG_X86_32) && !IS_ENABLED(CONFIG_UML)
+ 	/*
+ 	 * Trigger #DF by setting the stack limit to zero.  This clobbers
+ 	 * a GDT TLS slot, which is okay because the current task will die
 
-This seems to have been merged into the above patch (9/11).
-
-> In addition, by dispatching tests from a single location, we can
-> guarantee that all KUnit tests run after late_init is complete, which
-> was a concern during the initial KUnit patchset review (this has not
-> been a problem in practice, but resolving with certainty is nevertheless
-> desirable).
->
-> Other use cases for this exist, but the above features should provide an
-> idea of the value that this could provide.
->
-> ## Changes since last revision:
->  - On the last revision I got some messages from 0day that showed that
->    this patchset didn't work on several architectures, one issue that
->    this patchset addresses is that we were aligning both memory segments
->    as well as structures in the segments to specific byte boundaries
->    which was incorrect.
->  - The issue mentioned above also caused me to test on additional
->    architectures which revealed that some architectures other than UML
->    do not use the default init linker section macro that most
->    architectures use. There are now several new patches (2, 3, 4, and
->    6).
->  - Fixed a formatting consistency issue in the kernel params
->    documentation patch (9/9).
->  - Add a brief blurb on how and when the kunit_test_suite macro works.
->
-> ## Remaining work to be done:
->
-> The only architecture for which I was able to get a compiler, but was
-> apparently unable to get KUnit into a section that the executor to see
-> was m68k - not sure why.
->
-> Alan Maguire (1):
->   kunit: test: create a single centralized executor for all tests
->
-> Brendan Higgins (10):
->   vmlinux.lds.h: add linker section for KUnit test suites
->   arch: arm64: add linker section for KUnit test suites
->   arch: microblaze: add linker section for KUnit test suites
->   arch: powerpc: add linker section for KUnit test suites
->   arch: um: add linker section for KUnit test suites
->   arch: xtensa: add linker section for KUnit test suites
->   init: main: add KUnit to kernel init
->   kunit: test: add test plan to KUnit TAP format
->   Documentation: Add kunit_shutdown to kernel-parameters.txt
->   Documentation: kunit: add a brief blurb about kunit_test_suite
->
->  .../admin-guide/kernel-parameters.txt         |   8 ++
->  Documentation/dev-tools/kunit/usage.rst       |   5 ++
->  arch/arm64/kernel/vmlinux.lds.S               |   3 +
->  arch/microblaze/kernel/vmlinux.lds.S          |   4 +
->  arch/powerpc/kernel/vmlinux.lds.S             |   4 +
->  arch/um/include/asm/common.lds.S              |   4 +
->  arch/xtensa/kernel/vmlinux.lds.S              |   4 +
->  include/asm-generic/vmlinux.lds.h             |   8 ++
->  include/kunit/test.h                          |  73 ++++++++++++-----
->  init/main.c                                   |   4 +
->  lib/kunit/Makefile                            |   3 +-
->  lib/kunit/executor.c                          |  63 +++++++++++++++
->  lib/kunit/test.c                              |  13 +--
->  tools/testing/kunit/kunit_kernel.py           |   2 +-
->  tools/testing/kunit/kunit_parser.py           |  74 +++++++++++++++---
->  .../test_is_test_passed-all_passed.log        | Bin 1562 -> 1567 bytes
->  .../test_data/test_is_test_passed-crash.log   | Bin 3016 -> 3021 bytes
->  .../test_data/test_is_test_passed-failure.log | Bin 1700 -> 1705 bytes
->  18 files changed, 226 insertions(+), 46 deletions(-)
->  create mode 100644 lib/kunit/executor.c
->
->
-> base-commit: 4333a9b0b67bb4e8bcd91bdd80da80b0ec151162
-> prerequisite-patch-id: 2d4b5aa9fa8ada9ae04c8584b47c299a822b9455
-> prerequisite-patch-id: 582b6d9d28ce4b71628890ec832df6522ca68de0
->
-> These patches are available for download with dependencies here:
->
-> https://kunit-review.googlesource.com/c/linux/+/3829
->
-> [1] https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#the-plan
-> [2] https://patchwork.kernel.org/patch/11383635/
->
-> --
-> 2.27.0.212.ge8ba1cc988-goog
->
+-- 
+Kees Cook
