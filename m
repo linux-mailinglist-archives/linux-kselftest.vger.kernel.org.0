@@ -2,416 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFA520AABA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 05:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D201520ADC6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 10:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726207AbgFZDbH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Jun 2020 23:31:07 -0400
-Received: from mga18.intel.com ([134.134.136.126]:56347 "EHLO mga18.intel.com"
+        id S1729053AbgFZICz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Jun 2020 04:02:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37434 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725830AbgFZDbH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Jun 2020 23:31:07 -0400
-IronPort-SDR: DIFlViyYiy7IcNMEo17B/Xg/H3vDBi65dFQH0M7wUAouEGCyoTXWmSzuRyucUvn6qb2A8XufhL
- Rd1UHb5cTILg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="132611294"
-X-IronPort-AV: E=Sophos;i="5.75,282,1589266800"; 
-   d="scan'208";a="132611294"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 20:31:03 -0700
-IronPort-SDR: VtiHWR6/4Xlz5y81GYgbSB+iC758C78hYl2ObYzZPmK9LudckrpNA8X6Ufk/7h3uw4E0i7MAvt
- 6Gi53ej+IIOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,282,1589266800"; 
-   d="scan'208";a="453230699"
-Received: from xpf-desktop.sh.intel.com ([10.239.13.107])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jun 2020 20:31:00 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Heng Su <heng.su@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai Svahn <kai.svahn@intel.com>
-Subject: [PATCH v4] selftests: tpm: upgrade TPM2 tests from Python 2 to Python 3
-Date:   Fri, 26 Jun 2020 11:40:52 +0800
-Message-Id: <20200626034052.25263-1-pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728988AbgFZICy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 26 Jun 2020 04:02:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 530B5ABE2;
+        Fri, 26 Jun 2020 08:02:52 +0000 (UTC)
+Date:   Fri, 26 Jun 2020 10:02:52 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        lkft-triage@lists.linaro.org, Miroslav Benes <mbenes@suse.cz>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 1/2] selftests/lkdtm: Don't clear dmesg when running tests
+Message-ID: <20200626080252.GL8444@alley>
+References: <20200508065356.2493343-1-mpe@ellerman.id.au>
+ <CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com>
+ <c5b77970-ecaf-24ad-c34d-134acc1a6063@redhat.com>
+ <20200624083955.GF8444@alley>
+ <20200624201247.GA25319@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200624201247.GA25319@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Python 2 is no longer supported by the Python upstream project, so
-upgrade TPM2 tests to Python 3.
+On Wed 2020-06-24 16:12:47, Joe Lawrence wrote:
+> On Wed, Jun 24, 2020 at 10:39:55AM +0200, Petr Mladek wrote:
+> > On Tue 2020-06-23 23:48:36, Joe Lawrence wrote:
+> > > On 6/22/20 4:51 AM, Naresh Kamboju wrote:
+> > > > On Fri, 8 May 2020 at 12:23, Michael Ellerman <mpe@ellerman.id.au> wrote:
+> > > > > 
+> > > > > It is Very Rude to clear dmesg in test scripts. That's because the
+> > > > > script may be part of a larger test run, and clearing dmesg
+> > > > > potentially destroys the output of other tests.
+> > > > > 
+> > > > > We can avoid using dmesg -c by saving the content of dmesg before the
+> > > > > test, and then using diff to compare that to the dmesg afterward,
+> > > > > producing a log with just the added lines.
+> > > > >
+> > > > > > > > diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
+> > > > > index dadf819148a4..0b409e187c7b 100755
+> > > > > --- a/tools/testing/selftests/lkdtm/run.sh
+> > > > > +++ b/tools/testing/selftests/lkdtm/run.sh
+> > > > >   # Record and dump the results
+> > > > > -dmesg -c >"$LOG"
+> > > > > +dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
+> > > > 
+> > > > We are facing problems with the diff `=%>` part of the option.
+> > > > This report is from the OpenEmbedded environment.
+> > > > We have the same problem from livepatch_testcases.
+> > > > 
+> > > > # selftests lkdtm BUG.sh
+> > > > lkdtm: BUG.sh_ #
+> > > > # diff unrecognized option '--changed-group-format=%>'
+> > > > unrecognized: option_'--changed-group-format=%>' #
+> > > > # BusyBox v1.27.2 (2020-03-30 164108 UTC) multi-call binary.
+> > > > v1.27.2: (2020-03-30_164108 #
 
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
----
- tools/testing/selftests/tpm2/test_smoke.sh |  4 +-
- tools/testing/selftests/tpm2/test_space.sh |  2 +-
- tools/testing/selftests/tpm2/tpm2.py       | 56 +++++++++++-----------
- tools/testing/selftests/tpm2/tpm2_tests.py | 39 +++++++--------
- 4 files changed, 52 insertions(+), 49 deletions(-)
+> I did a bit more hacking to work that awk script into the livepatching
+> tests.  The changes aren't too bad and coding it ourselves lets us drop
+> the temporary dmesg file business.  If this looks good, I can send out
+> as a real patch, but then that raises a few questions:
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 663062701d5a..d05467f6d258 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -6,8 +6,8 @@ ksft_skip=4
- 
- [ -f /dev/tpm0 ] || exit $ksft_skip
- 
--python -m unittest -v tpm2_tests.SmokeTest
--python -m unittest -v tpm2_tests.AsyncTest
-+python3 -m unittest -v tpm2_tests.SmokeTest
-+python3 -m unittest -v tpm2_tests.AsyncTest
- 
- CLEAR_CMD=$(which tpm2_clear)
- if [ -n $CLEAR_CMD ]; then
-diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-index 36c9d030a1c6..151c64e8ee9f 100755
---- a/tools/testing/selftests/tpm2/test_space.sh
-+++ b/tools/testing/selftests/tpm2/test_space.sh
-@@ -6,4 +6,4 @@ ksft_skip=4
- 
- [ -f /dev/tpmrm0 ] || exit $ksft_skip
- 
--python -m unittest -v tpm2_tests.SpaceTest
-+python3 -m unittest -v tpm2_tests.SpaceTest
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index d0fcb66a88a6..f34486cd7342 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -247,14 +247,14 @@ class ProtocolError(Exception):
- class AuthCommand(object):
-     """TPMS_AUTH_COMMAND"""
- 
--    def __init__(self, session_handle=TPM2_RS_PW, nonce='', session_attributes=0,
--                 hmac=''):
-+    def __init__(self, session_handle=TPM2_RS_PW, nonce=bytes(),
-+                 session_attributes=0, hmac=bytes()):
-         self.session_handle = session_handle
-         self.nonce = nonce
-         self.session_attributes = session_attributes
-         self.hmac = hmac
- 
--    def __str__(self):
-+    def __bytes__(self):
-         fmt = '>I H%us B H%us' % (len(self.nonce), len(self.hmac))
-         return struct.pack(fmt, self.session_handle, len(self.nonce),
-                            self.nonce, self.session_attributes, len(self.hmac),
-@@ -268,11 +268,11 @@ class AuthCommand(object):
- class SensitiveCreate(object):
-     """TPMS_SENSITIVE_CREATE"""
- 
--    def __init__(self, user_auth='', data=''):
-+    def __init__(self, user_auth=bytes(), data=bytes()):
-         self.user_auth = user_auth
-         self.data = data
- 
--    def __str__(self):
-+    def __bytes__(self):
-         fmt = '>H%us H%us' % (len(self.user_auth), len(self.data))
-         return struct.pack(fmt, len(self.user_auth), self.user_auth,
-                            len(self.data), self.data)
-@@ -296,8 +296,9 @@ class Public(object):
-         return '>HHIH%us%usH%us' % \
-             (len(self.auth_policy), len(self.parameters), len(self.unique))
- 
--    def __init__(self, object_type, name_alg, object_attributes, auth_policy='',
--                 parameters='', unique=''):
-+    def __init__(self, object_type, name_alg, object_attributes,
-+                 auth_policy=bytes(), parameters=bytes(),
-+                 unique=bytes()):
-         self.object_type = object_type
-         self.name_alg = name_alg
-         self.object_attributes = object_attributes
-@@ -305,7 +306,7 @@ class Public(object):
-         self.parameters = parameters
-         self.unique = unique
- 
--    def __str__(self):
-+    def __bytes__(self):
-         return struct.pack(self.__fmt(),
-                            self.object_type,
-                            self.name_alg,
-@@ -343,7 +344,7 @@ def get_algorithm(name):
- 
- def hex_dump(d):
-     d = [format(ord(x), '02x') for x in d]
--    d = [d[i: i + 16] for i in xrange(0, len(d), 16)]
-+    d = [d[i: i + 16] for i in range(0, len(d), 16)]
-     d = [' '.join(x) for x in d]
-     d = os.linesep.join(d)
- 
-@@ -401,7 +402,7 @@ class Client:
-         pcrsel_len = max((i >> 3) + 1, 3)
-         pcrsel = [0] * pcrsel_len
-         pcrsel[i >> 3] = 1 << (i & 7)
--        pcrsel = ''.join(map(chr, pcrsel))
-+        pcrsel = ''.join(map(chr, pcrsel)).encode()
- 
-         fmt = '>HII IHB%us' % (pcrsel_len)
-         cmd = struct.pack(fmt,
-@@ -443,7 +444,7 @@ class Client:
-             TPM2_CC_PCR_EXTEND,
-             i,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             1, bank_alg, dig)
- 
-         self.send_cmd(cmd)
-@@ -457,7 +458,7 @@ class Client:
-                           TPM2_RH_NULL,
-                           TPM2_RH_NULL,
-                           16,
--                          '\0' * 16,
-+                          ('\0' * 16).encode(),
-                           0,
-                           session_type,
-                           TPM2_ALG_NULL,
-@@ -472,7 +473,7 @@ class Client:
- 
-         for i in pcrs:
-             pcr = self.read_pcr(i, bank_alg)
--            if pcr == None:
-+            if pcr is None:
-                 return None
-             x += pcr
- 
-@@ -489,7 +490,7 @@ class Client:
-         pcrsel = [0] * pcrsel_len
-         for i in pcrs:
-             pcrsel[i >> 3] |= 1 << (i & 7)
--        pcrsel = ''.join(map(chr, pcrsel))
-+        pcrsel = ''.join(map(chr, pcrsel)).encode()
- 
-         fmt = '>HII IH%usIHB3s' % ds
-         cmd = struct.pack(fmt,
-@@ -497,7 +498,8 @@ class Client:
-                           struct.calcsize(fmt),
-                           TPM2_CC_POLICY_PCR,
-                           handle,
--                          len(dig), str(dig),
-+                          len(dig),
-+                          bytes(dig),
-                           1,
-                           bank_alg,
-                           pcrsel_len, pcrsel)
-@@ -534,7 +536,7 @@ class Client:
- 
-         self.send_cmd(cmd)
- 
--    def create_root_key(self, auth_value = ''):
-+    def create_root_key(self, auth_value = bytes()):
-         attributes = \
-             Public.FIXED_TPM | \
-             Public.FIXED_PARENT | \
-@@ -570,11 +572,11 @@ class Client:
-             TPM2_CC_CREATE_PRIMARY,
-             TPM2_RH_OWNER,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             len(sensitive),
--            str(sensitive),
-+            bytes(sensitive),
-             len(public),
--            str(public),
-+            bytes(public),
-             0, 0)
- 
-         return struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
-@@ -587,7 +589,7 @@ class Client:
-         attributes = 0
-         if not policy_dig:
-             attributes |= Public.USER_WITH_AUTH
--            policy_dig = ''
-+            policy_dig = bytes()
- 
-         auth_cmd =  AuthCommand()
-         sensitive = SensitiveCreate(user_auth=auth_value, data=data)
-@@ -608,11 +610,11 @@ class Client:
-             TPM2_CC_CREATE,
-             parent_key,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             len(sensitive),
--            str(sensitive),
-+            bytes(sensitive),
-             len(public),
--            str(public),
-+            bytes(public),
-             0, 0)
- 
-         rsp = self.send_cmd(cmd)
-@@ -635,7 +637,7 @@ class Client:
-             TPM2_CC_LOAD,
-             parent_key,
-             len(auth_cmd),
--            str(auth_cmd),
-+            bytes(auth_cmd),
-             blob)
- 
-         data_handle = struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
-@@ -653,7 +655,7 @@ class Client:
-             TPM2_CC_UNSEAL,
-             data_handle,
-             len(auth_cmd),
--            str(auth_cmd))
-+            bytes(auth_cmd))
- 
-         try:
-             rsp = self.send_cmd(cmd)
-@@ -675,7 +677,7 @@ class Client:
-             TPM2_CC_DICTIONARY_ATTACK_LOCK_RESET,
-             TPM2_RH_LOCKOUT,
-             len(auth_cmd),
--            str(auth_cmd))
-+            bytes(auth_cmd))
- 
-         self.send_cmd(cmd)
- 
-@@ -693,7 +695,7 @@ class Client:
-         more_data, cap, cnt = struct.unpack('>BII', rsp[:9])
-         rsp = rsp[9:]
- 
--        for i in xrange(0, cnt):
-+        for i in range(0, cnt):
-             handle = struct.unpack('>I', rsp[:4])[0]
-             handles.append(handle)
-             rsp = rsp[4:]
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index 728be7c69b76..9d764306887b 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -20,8 +20,8 @@ class SmokeTest(unittest.TestCase):
-         self.client.close()
- 
-     def test_seal_with_auth(self):
--        data = 'X' * 64
--        auth = 'A' * 15
-+        data = ('X' * 64).encode()
-+        auth = ('A' * 15).encode()
- 
-         blob = self.client.seal(self.root_key, data, auth, None)
-         result = self.client.unseal(self.root_key, blob, auth, None)
-@@ -30,8 +30,8 @@ class SmokeTest(unittest.TestCase):
-     def test_seal_with_policy(self):
-         handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
- 
--        data = 'X' * 64
--        auth = 'A' * 15
-+        data = ('X' * 64).encode()
-+        auth = ('A' * 15).encode()
-         pcrs = [16]
- 
-         try:
-@@ -58,14 +58,15 @@ class SmokeTest(unittest.TestCase):
-         self.assertEqual(data, result)
- 
-     def test_unseal_with_wrong_auth(self):
--        data = 'X' * 64
--        auth = 'A' * 20
-+        data = ('X' * 64).encode()
-+        auth = ('A' * 20).encode()
-         rc = 0
- 
-         blob = self.client.seal(self.root_key, data, auth, None)
-         try:
--            result = self.client.unseal(self.root_key, blob, auth[:-1] + 'B', None)
--        except ProtocolError, e:
-+            result = self.client.unseal(self.root_key, blob,
-+                        auth[:-1] + 'B'.encode(), None)
-+        except ProtocolError as e:
-             rc = e.rc
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_AUTH_FAIL)
-@@ -73,8 +74,8 @@ class SmokeTest(unittest.TestCase):
-     def test_unseal_with_wrong_policy(self):
-         handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
- 
--        data = 'X' * 64
--        auth = 'A' * 17
-+        data = ('X' * 64).encode()
-+        auth = ('A' * 17).encode()
-         pcrs = [16]
- 
-         try:
-@@ -91,7 +92,7 @@ class SmokeTest(unittest.TestCase):
-         # This should succeed.
- 
-         ds = tpm2.get_digest_size(tpm2.TPM2_ALG_SHA1)
--        self.client.extend_pcr(1, 'X' * ds)
-+        self.client.extend_pcr(1, ('X' * ds).encode())
- 
-         handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
- 
-@@ -108,7 +109,7 @@ class SmokeTest(unittest.TestCase):
- 
-         # Then, extend a PCR that is part of the policy and try to unseal.
-         # This should fail.
--        self.client.extend_pcr(16, 'X' * ds)
-+        self.client.extend_pcr(16, ('X' * ds).encode())
- 
-         handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
- 
-@@ -119,7 +120,7 @@ class SmokeTest(unittest.TestCase):
-             self.client.policy_password(handle)
- 
-             result = self.client.unseal(self.root_key, blob, auth, handle)
--        except ProtocolError, e:
-+        except ProtocolError as e:
-             rc = e.rc
-             self.client.flush_context(handle)
-         except:
-@@ -130,13 +131,13 @@ class SmokeTest(unittest.TestCase):
- 
-     def test_seal_with_too_long_auth(self):
-         ds = tpm2.get_digest_size(tpm2.TPM2_ALG_SHA1)
--        data = 'X' * 64
--        auth = 'A' * (ds + 1)
-+        data = ('X' * 64).encode()
-+        auth = ('A' * (ds + 1)).encode()
- 
-         rc = 0
-         try:
-             blob = self.client.seal(self.root_key, data, auth, None)
--        except ProtocolError, e:
-+        except ProtocolError as e:
-             rc = e.rc
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_SIZE)
-@@ -152,7 +153,7 @@ class SmokeTest(unittest.TestCase):
-                               0xDEADBEEF)
- 
-             self.client.send_cmd(cmd)
--        except IOError, e:
-+        except IOError as e:
-             rejected = True
-         except:
-             pass
-@@ -212,7 +213,7 @@ class SmokeTest(unittest.TestCase):
-             self.client.tpm.write(cmd)
-             rsp = self.client.tpm.read()
- 
--        except IOError, e:
-+        except IOError as e:
-             # read the response
-             rsp = self.client.tpm.read()
-             rejected = True
-@@ -283,7 +284,7 @@ class SpaceTest(unittest.TestCase):
-         rc = 0
-         try:
-             space1.send_cmd(cmd)
--        except ProtocolError, e:
-+        except ProtocolError as e:
-             rc = e.rc
- 
-         self.assertEqual(rc, tpm2.TPM2_RC_COMMAND_CODE |
--- 
-2.17.1
+The patch worked and I agree that it is not that bad.
 
+Well, what about using "comm" as proposed by Michael in the other
+mail? It seems to be part of coreutils and should be everywhere.
+
+I guess that many people, including me, are not fluent in awk.
+So, I am slightly in favor of the "comm" approach ;-)
+
+
+>   1 - f131d9edc29d ("selftests/lkdtm: Don't clear dmesg when running
+>       tests") has already merged, updating that file doesn't look too
+>       difficult, but will need a Fixes tag and should probably go
+>       through Shuah's tree.
+
+Yup.
+
+>   2 - We haven't actually merged the livepatch copy yet.  I can roll
+>       another version of that patchset, substituting a fix for the
+>       problematic patch, or we could just tack this one on at the end.
+>       In fine with either approach.
+
+I prefer the followup patch to avoid rebase.
+
+Best Regards,
+Petr
