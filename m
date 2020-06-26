@@ -2,88 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A29C20B542
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 17:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E995520B548
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 17:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727835AbgFZPug (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Jun 2020 11:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        id S1729998AbgFZPv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Jun 2020 11:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727116AbgFZPug (ORCPT
+        with ESMTP id S1730005AbgFZPvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Jun 2020 11:50:36 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11775C03E97A
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 08:50:36 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id x18so10875938lji.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 08:50:35 -0700 (PDT)
+        Fri, 26 Jun 2020 11:51:55 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6B9C03E97A
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 08:51:55 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id i3so10869709ljg.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 08:51:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gk7pt4o52R1i8UxPya9K/JTWryM486pinPKkTZZgiYo=;
-        b=AIYwRD6MrE8AA7Ha12CddBuKx+00cURYa3xqNdHtCTmTW6RwVBMoR2saeKN//BMwdd
-         1xn80jwdYnoAmfgvlsGrSChT0+xcx79vwYvma+GGVruZ/zYG9sb7D+R1o3oieOJoxHdG
-         +kG1ZfV+LyJF56gGqqXi19Y57JW1r1QXW+VynSq89mzSz/YtugCUI3qUnEDKUaH3RAcl
-         m6dNKfNHus0xeiqMTgRMganFy1wOYQJzHS/qCZ6nkY/pLph6RXjPCxWfFuAARtLTCZen
-         JxsBSnD7V3y43vppubOalQ1RJoFHfRqSHxI7WiVGbSFYt4GHYllGuk01AnBqWKNuh0wE
-         YWkA==
+        bh=+yupIHVEaUHp73cP5u6LnV/onGU7SFzXKN5zVmkGo+I=;
+        b=zxJAPt+Bo7TqbvoBsBFLqKt4FY+2bwmP64zownTOMXf2auVPTSSkEBJY+4CQjQQXRb
+         4HfDTEymX2IFUu+djhQVPJnRDcrshLS1fwcN4uf227PbkFmsrQMfxQdRAIGEbY/LH5Rf
+         eJWPDh+7PyXvPyCaHfTotY+q26ZlrIlvKy2ZmqQyRNyBsFjfjHA59TL7E8WUNgJCAbGs
+         ZBW3QanS7AONurGOwIeJu/owe9ftPyqY0a+X04KfI9gHvrKgTT8nKRvX+29VTthCDBXd
+         cR5pCbhuaCX7NkJKNA+HP9/ZSkIICrjNrh5nxZPr4WRkBprfHMEpsVmwlJszwZhOgFbv
+         Pw3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gk7pt4o52R1i8UxPya9K/JTWryM486pinPKkTZZgiYo=;
-        b=dLIuo5ZHC8F/a8/cKVOkVBGInOkBTrVg4TZuba7SK3V2jJfa0EoaLIncNiRFHzCdz7
-         h30Jle4cABsTOyPaIMQU0t27tBnslhj9jC3cLO7HNcl2gFzX03gqo+gofUMTlYJQGbwD
-         x8ITGhRs+t3Wrrhw/O84vrp6HXaCkrDAbI6VN3E/jNeANwUnwe9tSbvUJelHXK12REXu
-         xzwcgSV/pvHuZGFVpWJYfPDBfIfYKjs2VF36rnVo6qq8XxIb+4DsRX5TQ2svuS5goMk2
-         rYgwbaWaWXtVv2SpF1AQljsPrvpk1T7Uus6Daoi0/EJLtLPAwbJvvE5R4VSLHFaCKgjX
-         y9tA==
-X-Gm-Message-State: AOAM532f++bDWq32/6qUlIoAiu8A6YKeAsa7PCUpJV1yNXgaampEBiRX
-        iXU4f+2ALXgOb22tewRQltnYuNgZ0kMsuYOiPghMAw==
-X-Google-Smtp-Source: ABdhPJy007mkSDmCwqlRe0fuiCkW8krkuhDJ/3AKsVcjZLlDeZrfFysXPMdILGkTR9Zmd6tfShRU1ijZRDNdeUmnAwo=
-X-Received: by 2002:a2e:9116:: with SMTP id m22mr1780104ljg.431.1593186634379;
- Fri, 26 Jun 2020 08:50:34 -0700 (PDT)
+        bh=+yupIHVEaUHp73cP5u6LnV/onGU7SFzXKN5zVmkGo+I=;
+        b=YE47ZFf2hEe0Qsh5chnSKyiiPEi/1RwO7bAkUif9S4aHanwsH48pOHhMrYSXDvRVzM
+         PKaoBIQ8gFSjlVQfk8T15/hnlwxO/jsm03qX8azwLLK0gxfO7kE/QZj65CzZgnT3OpTj
+         kUSBK6X7p7vX0TjuWC9fi/eP9e4VhD87Nj8yjdCbRTpNzbxdnR4dMGoASaO3ivlBTU7k
+         u/Q0qnKZoGP+j3uAndu5AffbnG0G4fVpvb+WfOKccAJhLVbcBwOTyp+T0zMKm4Q0ziyQ
+         8ytKvlh4tgkSXRmdwSlxFxxk9C/Dl4/YeFWI5BFANBhGupZhpBF+tZRD5HFXbjOtPGVR
+         hfTQ==
+X-Gm-Message-State: AOAM531c8kh806Qtu+Sl/7na8NVXatQ4sx5ROTUe9O4WGcq1NufKpfR8
+        xUq59+2S7nkgIAm94NL+GSR7J00naXNM9nZS/LWFGw==
+X-Google-Smtp-Source: ABdhPJxmkkp3usLIm5u4dle+yZV5eFkwmahS1cqkdQ0mKaBAD+cHmI1d8UneTI4Bokhft+LY8vPWRH/p+HH4IB2yzYM=
+X-Received: by 2002:a2e:9ed0:: with SMTP id h16mr1901309ljk.366.1593186714266;
+ Fri, 26 Jun 2020 08:51:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200508065356.2493343-1-mpe@ellerman.id.au> <CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com>
- <202006242312.8888AAFE@keescook>
-In-Reply-To: <202006242312.8888AAFE@keescook>
+ <c5b77970-ecaf-24ad-c34d-134acc1a6063@redhat.com> <20200624083955.GF8444@alley>
+ <20200624201247.GA25319@redhat.com> <20200626080252.GL8444@alley> <762d9ca5-82f3-588c-b147-b0954a764ea7@redhat.com>
+In-Reply-To: <762d9ca5-82f3-588c-b147-b0954a764ea7@redhat.com>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 26 Jun 2020 21:20:22 +0530
-Message-ID: <CA+G9fYtdF__9bGneXkuv3E7djg1rbhrQ=DCf6d7_t9hyBZRL2g@mail.gmail.com>
+Date:   Fri, 26 Jun 2020 21:21:42 +0530
+Message-ID: <CA+G9fYt8XEWDTrUJX6hpEGiTwHuYFv3UmMw-ND8KRCxu18fznA@mail.gmail.com>
 Subject: Re: [PATCH 1/2] selftests/lkdtm: Don't clear dmesg when running tests
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Anders Roxell <anders.roxell@linaro.org>,
         =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
         Justin Cook <justin.cook@linaro.org>,
         lkft-triage@lists.linaro.org, Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>
+        Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 25 Jun 2020 at 11:46, Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Jun 22, 2020 at 02:21:38PM +0530, Naresh Kamboju wrote:
-> > On Fri, 8 May 2020 at 12:23, Michael Ellerman <mpe@ellerman.id.au> wrote:
-> > >  # Record and dump the results
-> > > -dmesg -c >"$LOG"
-> > > +dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
+> > Well, what about using "comm" as proposed by Michael in the other
+> > mail? It seems to be part of coreutils and should be everywhere.
 > >
-> > We are facing problems with the diff `=%>` part of the option.
-> > This report is from the OpenEmbedded environment.
-> > We have the same problem from livepatch_testcases.
+> > I guess that many people, including me, are not fluent in awk.
+> > So, I am slightly in favor of the "comm" approach ;-)
+> >
 >
-> Does "comm" exists in those environments?
->
-> dmesg | comm -13 "$DMESG" - > "$LOG" || true
+> comm is definitely simpler and for some reason I forgot about the
+> leading timestamps (again!) dismissing it thinking that the inputs
+> weren't sorted.  But luckily they are and if Naresh or anyone can
+> confirm that comm is well supported in the BusyBox testing environment,
+> then using that is fine w/me.
 
 "comm" works in our environment.
 
