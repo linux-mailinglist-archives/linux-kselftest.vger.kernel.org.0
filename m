@@ -2,125 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B6720B2A0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 15:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A29C20B542
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 17:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbgFZNiz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Jun 2020 09:38:55 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:22818 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726770AbgFZNiz (ORCPT
+        id S1727835AbgFZPug (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Jun 2020 11:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727116AbgFZPug (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Jun 2020 09:38:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593178734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HsFehEv1OUOatwx+S43XjusrlgWYrjMc9ZPpHVwNiv0=;
-        b=bzge9EZL37NO18Z8IRja0Hozczcd6t0RkCrdo8oLeN1cUIwcmD3V0A8z1PIekLh0DAjKYs
-        B1EcHZimWv0qQkQIsfPvodMRC/n9eFh2vzxhQvfOma1t9tIYq61ek6xO2j0ikW24IdTDmR
-        mB9dv63f8RLrZaZChgWaGvNVfWbfNKs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-288-RTrJ4L5INJWpa7hRomPr0g-1; Fri, 26 Jun 2020 09:38:47 -0400
-X-MC-Unique: RTrJ4L5INJWpa7hRomPr0g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA4B7107ACCA;
-        Fri, 26 Jun 2020 13:38:45 +0000 (UTC)
-Received: from [10.10.112.56] (ovpn-112-56.rdu2.redhat.com [10.10.112.56])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 79BC470915;
-        Fri, 26 Jun 2020 13:38:44 +0000 (UTC)
+        Fri, 26 Jun 2020 11:50:36 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11775C03E97A
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 08:50:36 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id x18so10875938lji.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 08:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gk7pt4o52R1i8UxPya9K/JTWryM486pinPKkTZZgiYo=;
+        b=AIYwRD6MrE8AA7Ha12CddBuKx+00cURYa3xqNdHtCTmTW6RwVBMoR2saeKN//BMwdd
+         1xn80jwdYnoAmfgvlsGrSChT0+xcx79vwYvma+GGVruZ/zYG9sb7D+R1o3oieOJoxHdG
+         +kG1ZfV+LyJF56gGqqXi19Y57JW1r1QXW+VynSq89mzSz/YtugCUI3qUnEDKUaH3RAcl
+         m6dNKfNHus0xeiqMTgRMganFy1wOYQJzHS/qCZ6nkY/pLph6RXjPCxWfFuAARtLTCZen
+         JxsBSnD7V3y43vppubOalQ1RJoFHfRqSHxI7WiVGbSFYt4GHYllGuk01AnBqWKNuh0wE
+         YWkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gk7pt4o52R1i8UxPya9K/JTWryM486pinPKkTZZgiYo=;
+        b=dLIuo5ZHC8F/a8/cKVOkVBGInOkBTrVg4TZuba7SK3V2jJfa0EoaLIncNiRFHzCdz7
+         h30Jle4cABsTOyPaIMQU0t27tBnslhj9jC3cLO7HNcl2gFzX03gqo+gofUMTlYJQGbwD
+         x8ITGhRs+t3Wrrhw/O84vrp6HXaCkrDAbI6VN3E/jNeANwUnwe9tSbvUJelHXK12REXu
+         xzwcgSV/pvHuZGFVpWJYfPDBfIfYKjs2VF36rnVo6qq8XxIb+4DsRX5TQ2svuS5goMk2
+         rYgwbaWaWXtVv2SpF1AQljsPrvpk1T7Uus6Daoi0/EJLtLPAwbJvvE5R4VSLHFaCKgjX
+         y9tA==
+X-Gm-Message-State: AOAM532f++bDWq32/6qUlIoAiu8A6YKeAsa7PCUpJV1yNXgaampEBiRX
+        iXU4f+2ALXgOb22tewRQltnYuNgZ0kMsuYOiPghMAw==
+X-Google-Smtp-Source: ABdhPJy007mkSDmCwqlRe0fuiCkW8krkuhDJ/3AKsVcjZLlDeZrfFysXPMdILGkTR9Zmd6tfShRU1ijZRDNdeUmnAwo=
+X-Received: by 2002:a2e:9116:: with SMTP id m22mr1780104ljg.431.1593186634379;
+ Fri, 26 Jun 2020 08:50:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200508065356.2493343-1-mpe@ellerman.id.au> <CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com>
+ <202006242312.8888AAFE@keescook>
+In-Reply-To: <202006242312.8888AAFE@keescook>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 26 Jun 2020 21:20:22 +0530
+Message-ID: <CA+G9fYtdF__9bGneXkuv3E7djg1rbhrQ=DCf6d7_t9hyBZRL2g@mail.gmail.com>
 Subject: Re: [PATCH 1/2] selftests/lkdtm: Don't clear dmesg when running tests
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
         Anders Roxell <anders.roxell@linaro.org>,
-        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
         Justin Cook <justin.cook@linaro.org>,
         lkft-triage@lists.linaro.org, Miroslav Benes <mbenes@suse.cz>,
-        Shuah Khan <shuah@kernel.org>
-References: <20200508065356.2493343-1-mpe@ellerman.id.au>
- <CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com>
- <c5b77970-ecaf-24ad-c34d-134acc1a6063@redhat.com>
- <20200624083955.GF8444@alley> <20200624201247.GA25319@redhat.com>
- <20200626080252.GL8444@alley>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Message-ID: <762d9ca5-82f3-588c-b147-b0954a764ea7@redhat.com>
-Date:   Fri, 26 Jun 2020 09:38:43 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-MIME-Version: 1.0
-In-Reply-To: <20200626080252.GL8444@alley>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/26/20 4:02 AM, Petr Mladek wrote:
-> On Wed 2020-06-24 16:12:47, Joe Lawrence wrote:
->> On Wed, Jun 24, 2020 at 10:39:55AM +0200, Petr Mladek wrote:
->>> On Tue 2020-06-23 23:48:36, Joe Lawrence wrote:
->>>> On 6/22/20 4:51 AM, Naresh Kamboju wrote:
->>>>> On Fri, 8 May 2020 at 12:23, Michael Ellerman <mpe@ellerman.id.au> wrote:
->>>>>>
->>>>>> It is Very Rude to clear dmesg in test scripts. That's because the
->>>>>> script may be part of a larger test run, and clearing dmesg
->>>>>> potentially destroys the output of other tests.
->>>>>>
->>>>>> We can avoid using dmesg -c by saving the content of dmesg before the
->>>>>> test, and then using diff to compare that to the dmesg afterward,
->>>>>> producing a log with just the added lines.
->>>>>>
->>>>>>>>> diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
->>>>>> index dadf819148a4..0b409e187c7b 100755
->>>>>> --- a/tools/testing/selftests/lkdtm/run.sh
->>>>>> +++ b/tools/testing/selftests/lkdtm/run.sh
->>>>>>    # Record and dump the results
->>>>>> -dmesg -c >"$LOG"
->>>>>> +dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
->>>>>
->>>>> We are facing problems with the diff `=%>` part of the option.
->>>>> This report is from the OpenEmbedded environment.
->>>>> We have the same problem from livepatch_testcases.
->>>>>
->>>>> # selftests lkdtm BUG.sh
->>>>> lkdtm: BUG.sh_ #
->>>>> # diff unrecognized option '--changed-group-format=%>'
->>>>> unrecognized: option_'--changed-group-format=%>' #
->>>>> # BusyBox v1.27.2 (2020-03-30 164108 UTC) multi-call binary.
->>>>> v1.27.2: (2020-03-30_164108 #
-> 
->> I did a bit more hacking to work that awk script into the livepatching
->> tests.  The changes aren't too bad and coding it ourselves lets us drop
->> the temporary dmesg file business.  If this looks good, I can send out
->> as a real patch, but then that raises a few questions:
-> 
-> The patch worked and I agree that it is not that bad.
-> 
-> Well, what about using "comm" as proposed by Michael in the other
-> mail? It seems to be part of coreutils and should be everywhere.
-> 
-> I guess that many people, including me, are not fluent in awk.
-> So, I am slightly in favor of the "comm" approach ;-)
-> 
+On Thu, 25 Jun 2020 at 11:46, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Jun 22, 2020 at 02:21:38PM +0530, Naresh Kamboju wrote:
+> > On Fri, 8 May 2020 at 12:23, Michael Ellerman <mpe@ellerman.id.au> wrote:
+> > >  # Record and dump the results
+> > > -dmesg -c >"$LOG"
+> > > +dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
+> >
+> > We are facing problems with the diff `=%>` part of the option.
+> > This report is from the OpenEmbedded environment.
+> > We have the same problem from livepatch_testcases.
+>
+> Does "comm" exists in those environments?
+>
+> dmesg | comm -13 "$DMESG" - > "$LOG" || true
 
-comm is definitely simpler and for some reason I forgot about the 
-leading timestamps (again!) dismissing it thinking that the inputs 
-weren't sorted.  But luckily they are and if Naresh or anyone can 
-confirm that comm is well supported in the BusyBox testing environment, 
-then using that is fine w/me.
+"comm" works in our environment.
 
--- Joe
-
+- Naresh
