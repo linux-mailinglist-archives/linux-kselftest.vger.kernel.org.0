@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 615C920BB23
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 23:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1904420BB1E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jun 2020 23:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbgFZVKV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Jun 2020 17:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S1726399AbgFZVKN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Jun 2020 17:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbgFZVJa (ORCPT
+        with ESMTP id S1726364AbgFZVJf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Jun 2020 17:09:30 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD93C03E97E
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 14:09:30 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id a9so6636900plp.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 14:09:30 -0700 (PDT)
+        Fri, 26 Jun 2020 17:09:35 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46552C08C5DE
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 14:09:32 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id s7so11100716ybg.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 14:09:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=hiFp+uoptqOZ2rqi90LxI+MqGbDbXrg3yHQVzKDmQQ4=;
-        b=jebeIARZ4MbpC/qohszlae0SxIiUjfS+aHdsgRsyl+nDoZ13dCApmFMyUJeVDOsHAY
-         KIcGcHJ+1BS4bpjJljRbXhZa/cLiJQCxIz3INsZbN4Us+V8lP8TK5psKf814t/EGk6wE
-         pXdYgr4IlD1bc5vMRTxWpR8bW/X9rqzObf6oG1rnxRKPcgwcVlXdkP64PXWb7NSXT5a6
-         NEtpZlVx+hSr8lknL1TKy8c7BgSEPoFVGkkI3sTvx7LhXrKgu9GToCMGaLH+nZo8xo8H
-         YHmDwLXC56KXjbSBDnypaQ9i4502TKmtFeLoqT6X6hTKa14dhV4gfc4ThT1/79Jdq8SS
-         8zLQ==
+        bh=0vYZtvNiMw5LFIFKa+iHi1yqO9mFLTJ7LRF4fjft6YQ=;
+        b=u6J8VuAHahXAYfZui4sfoaT0dsrVB0g/njRZ5MIakf/7bSZWFoZur8+vHZjZIgvkyd
+         rsiis3HuL4AzSgVfpTFGOsNv9/7tHGdL61VbY11KBuBRNquuaThfognGBSG6XDHhjVrh
+         liuTo+mvfU3D58KkhDomQtYXookl7U6ajEKfETHE1nWaRN0/gzOUI4z4bMwjPWQ6R2G4
+         zVR7MS6jsimbRTLQK965Ww+Cp//ng+4aqqoiGzs9geOb61x+qHK6AUxwcP2HuU1S8dLP
+         OEv3lAQzqQIPWit38K3OJmKJ+ONf/s2+d2jSKX83GtbI8ZYL+/awT6qOEcyz2uNC8LpH
+         kbaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=hiFp+uoptqOZ2rqi90LxI+MqGbDbXrg3yHQVzKDmQQ4=;
-        b=tBGrNpCyYwp2xgtA9ja9u85nRv0v63Ltjeiqcl6cBZO5LbVw8RdoDZYH5QbgxXfBzf
-         OXNJK0SInq46dScLX//tAJnTKA2FQbU086NW44f1CdE3c5Rm8W0lfQ0y2/XEv255l+NB
-         tu5tPY9kJa/BgJbQflGeKC90br23kucw984BNautS7xO/NbQkt0Ww1jSCQ5RKCjcsWw4
-         ncnbJZolR86C02T7szAKRKuh8JzshxdzDtqmYIiuhCVi9zmO+xw8Z80hmOAzda4arBcc
-         DH08oqRHJNvTvF1tYyj6gzBLyWrVdkgADYcsRdF1cGPDURMyLWtKAnFCGBA6wiG6bA7p
-         9mUA==
-X-Gm-Message-State: AOAM533WK5oYZvHMo/DUWfc4vuvr9VFtb6szj9g2IC8syDw+46TuTgpg
-        PX9oSRwhDzg8lbbm+nAqddvgpVZOju6SMgefIDquAg==
-X-Google-Smtp-Source: ABdhPJxSwQ68iEnNXkgolra98q2cg2bDfdpdwE62xg8GhSSGsb9iaN0w7iVXuEbw7sVWlA1D/tARVHhauyHs3D3fWH+8JQ==
-X-Received: by 2002:a17:90a:f206:: with SMTP id bs6mr5554851pjb.48.1593205769580;
- Fri, 26 Jun 2020 14:09:29 -0700 (PDT)
-Date:   Fri, 26 Jun 2020 14:09:08 -0700
+        bh=0vYZtvNiMw5LFIFKa+iHi1yqO9mFLTJ7LRF4fjft6YQ=;
+        b=DE/miHTLXCcZt/ipt4VK2xMfO7hnesDWGXMk1FgVuVCuXQxnHJIWooFIjQdPsrjmtm
+         Efz8fOC+bJapPK+55cmVnSazV+IFaKF4C/OpgDC6JldOD1IbiuX6M2E2HQO47+aW+Toq
+         r+8NHsoSgB3SKnqKecFEOmdLZkid5RcKJ6XtSAiKcoA5doHQ3HvnRFTLkJP4PeY0kZFv
+         /5Qp/ybbh6YP3G5bJYuId3gJcz/3NG53guqLq8Ipnl+WsgB3uMSR7V3mjRWk7F3nfTA3
+         +3ZbETGqukHZER5fSB1qqnjkWYC4nigaIavDIh+O+1ysbBOjE/bAhCfGlncK+5jhO+uu
+         hUQQ==
+X-Gm-Message-State: AOAM533317MueA3a0GZ43IT1C3r4+drYHN+1O3M+cHOy/6+jON9NNCBt
+        q43bI+DJE1r2nfD27ADVSnJoVHmyhe/tWER3gy2YfQ==
+X-Google-Smtp-Source: ABdhPJx4P+f9DA00o4x+xqsn5YNYZSrsnifEZc+MXGWM1Q+GQ6+KAVyhHfpoUwDaYub8VfOW5n9UfKxOSH6ZQNhne0KQ9w==
+X-Received: by 2002:a25:99c8:: with SMTP id q8mr7798153ybo.3.1593205771432;
+ Fri, 26 Jun 2020 14:09:31 -0700 (PDT)
+Date:   Fri, 26 Jun 2020 14:09:09 -0700
 In-Reply-To: <20200626210917.358969-1-brendanhiggins@google.com>
-Message-Id: <20200626210917.358969-4-brendanhiggins@google.com>
+Message-Id: <20200626210917.358969-5-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20200626210917.358969-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH v5 03/12] arch: microblaze: add linker section for KUnit test suites
+Subject: [PATCH v5 04/12] arch: powerpc: add linker section for KUnit test suites
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
         arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
@@ -72,31 +72,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a linker section to microblaze where KUnit can put references to its
-test suites. This patch is an early step in transitioning to dispatching
-all KUnit tests from a centralized executor rather than having each as
-its own separate late_initcall.
+Add a linker section to powerpc where KUnit can put references to its test
+suites. This patch is an early step in transitioning to dispatching all
+KUnit tests from a centralized executor rather than having each as its
+own separate late_initcall.
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- arch/microblaze/kernel/vmlinux.lds.S | 4 ++++
+ arch/powerpc/kernel/vmlinux.lds.S | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/microblaze/kernel/vmlinux.lds.S b/arch/microblaze/kernel/vmlinux.lds.S
-index df07b3d06cd6b..4fc32f8979a60 100644
---- a/arch/microblaze/kernel/vmlinux.lds.S
-+++ b/arch/microblaze/kernel/vmlinux.lds.S
-@@ -128,6 +128,10 @@ SECTIONS {
- 
- 	__init_end = .;
+diff --git a/arch/powerpc/kernel/vmlinux.lds.S b/arch/powerpc/kernel/vmlinux.lds.S
+index 326e113d2e456..0cc97dbfde0ad 100644
+--- a/arch/powerpc/kernel/vmlinux.lds.S
++++ b/arch/powerpc/kernel/vmlinux.lds.S
+@@ -202,6 +202,10 @@ SECTIONS
+ 		CON_INITCALL
+ 	}
  
 +	.kunit_test_suites : {
 +		KUNIT_TEST_SUITES
 +	}
 +
- 	.bss ALIGN (PAGE_SIZE) : AT(ADDR(.bss) - LOAD_OFFSET) {
- 		/* page aligned when MMU used */
- 		__bss_start = . ;
+ 	. = ALIGN(8);
+ 	__ftr_fixup : AT(ADDR(__ftr_fixup) - LOAD_OFFSET) {
+ 		__start___ftr_fixup = .;
 -- 
 2.27.0.212.ge8ba1cc988-goog
 
