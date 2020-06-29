@@ -2,68 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 646C120E078
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jun 2020 23:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603F220DE05
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jun 2020 23:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731629AbgF2Uqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Jun 2020 16:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S2387552AbgF2UVw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Jun 2020 16:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731552AbgF2TNx (ORCPT
+        with ESMTP id S1732590AbgF2UVu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:53 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B8DC08EA4B;
-        Sun, 28 Jun 2020 22:48:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wGjw1lCLz9sRk;
-        Mon, 29 Jun 2020 15:48:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1593409684;
-        bh=/YQUWPTNF1yfjssmjTfskL+aXMkfJR2ADKApusEzfaA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZiiGvlHCBnvAF3APkTommNfdvQmDkuYoZMa+llNNHmj31m9lhBnJPy19xfNxjMJiI
-         LOEHaJ8xq26BiOKskUPmfOW4WUU+T79cfWSyDx7RdzCKZJzLLkNz4Oq9G8fr8h9PHV
-         PpMSd3Xc/PQdrP1409zgma9HkuMVo4knpGsQy4+X88UPXbLERDNgC1cb6A2fF7WI5P
-         WiWe7WtJ2hrelBssuoZAIEukoh8LAXk/XNOtW0D20iY0LEcnXYlflR65DabbSdQuIL
-         Gj9HDWDpu1Zwa3R6DkW58ykovlV/uoJL3w1+hw4OyzGz778jSZTfL6rFVsmmhSmNAX
-         mvOcCg0ljaiLQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
-In-Reply-To: <202006270849.7190A26@keescook>
-References: <202006261358.3E8AA623A9@keescook> <87k0zsbubg.fsf@mpe.ellerman.id.au> <202006270849.7190A26@keescook>
-Date:   Mon, 29 Jun 2020 15:50:18 +1000
-Message-ID: <87lfk68lph.fsf@mpe.ellerman.id.au>
+        Mon, 29 Jun 2020 16:21:50 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6D6C061755
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2020 13:21:49 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id q8so18597573iow.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2020 13:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xe0Kngev5V0/2bx10GzAMBFnMV/HG+Kp7x1mqRPLtn8=;
+        b=Qe0B4hN6JKmXDAhczq2oH+LohHCdr7IKU3Oc+5OvaVsLeMY/Gfq8E693dAwZeXvtYB
+         9UxlCIgHPxx8vAzPeOflNYyNQnfyo3uUyg2WSWgfB+HBYIdbc6DtlTd1wL737VZ5e3BK
+         IrlSrC/99WWot+aPQgwRMpRDEuf+8IY0FSfYM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xe0Kngev5V0/2bx10GzAMBFnMV/HG+Kp7x1mqRPLtn8=;
+        b=SskRUrPYd77IoFgvmxXnPChw6eo4FTBwvEIApshkk/jJQWWzjomuAqWQZAbKliR1/0
+         e8pf6Zwq8ZgAKzrb28MyKBlaYBrw5YO5l3Q9cxA5IBNcFfwRXCX+iQEPgxu8ZWgN0nNJ
+         DK+kBmdnkLERL1FnuQ7+z/hFyOT0OehuNJrEWdJqUq/WQ9L9uzESG1CyhDY2tmjlNY9B
+         IEBnQTBcX9/lH1nVNdNfDZkDQuspGkcGPB77PvDxON+UXMoL/3mSJ4Wk8uf9Q17v/1C1
+         EhnXRL1+UmjfRN/VD9JTNHFVMl7iNZ5R8UvbCkxhobjJjvAj4xFyJsfYkVbfgB7kcu8P
+         EI2Q==
+X-Gm-Message-State: AOAM5331OLdU1HjmSvBxpc48NHyNmjNAdn7H5FQTxDz6qshR3NLAP+wN
+        15TCVw0zVdBIUBG5yCBl32/BnQ==
+X-Google-Smtp-Source: ABdhPJx8iE1nRfHXfDv7Z/LjcCPE31AEKBsPiln2NpPL29NMT2q2L7llun+8++o8/dahYOJ1YsK5Mg==
+X-Received: by 2002:a02:1a06:: with SMTP id 6mr20182590jai.8.1593462109366;
+        Mon, 29 Jun 2020 13:21:49 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id c9sm471009ilm.57.2020.06.29.13.21.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2020 13:21:48 -0700 (PDT)
+Subject: Re: [PATCH 0/3] selftests: tpm: fixes
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     pengfei.xu@intel.com, Joey Pabalinas <joeypabalinas@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
+        Petr Vorel <petr.vorel@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200622212034.20624-1-jarkko.sakkinen@linux.intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ddf50129-5fe0-ab84-1bae-90a06ba017a3@linuxfoundation.org>
+Date:   Mon, 29 Jun 2020 14:21:47 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20200622212034.20624-1-jarkko.sakkinen@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-> On Sat, Jun 27, 2020 at 09:51:31PM +1000, Michael Ellerman wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> > Instead of full GNU diff (which smaller boot environments may not have),
->> > use "comm" which is more available.
->> 
->> Although using "comm" requires CONFIG_PRINTK_TIME=y doesn't it?
->
-> No, it doesn't seem to. "comm" doesn't carry about the line prefixes.
-> AIUI, the only reason for a mention of "sort" is because of how "comm"
-> does its line pairing. i.e. as soon as it goes out of sync, it starts
-> accounting for the disjunction between files. But that's exactly what we
-> want it doing, and the prefix doesn't matter.
+On 6/22/20 3:20 PM, Jarkko Sakkinen wrote:
+> A few fixes for tools/testing/selftests/tpm.
+> 
+> Jarkko Sakkinen (3):
+>    Revert "tpm: selftest: cleanup after unseal with wrong auth/policy
+>      test"
+>    selftests: tpm: Use 'test -e' instead of 'test -f'
+>    selftests: tpm: Use /bin/sh instead of /bin/bash
+> 
+>   tools/testing/selftests/tpm2/test_smoke.sh | 9 ++-------
+>   tools/testing/selftests/tpm2/test_space.sh | 4 ++--
+>   2 files changed, 4 insertions(+), 9 deletions(-)
+> 
 
-OK, if it works.
+Applied to linux-kselftest fixes for Linux 5.8-rc4
 
-cheers
+thanks,
+-- Shuah
