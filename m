@@ -2,73 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A5F20D579
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jun 2020 21:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646C120E078
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jun 2020 23:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbgF2TQi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Jun 2020 15:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S1731629AbgF2Uqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Jun 2020 16:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731895AbgF2TQD (ORCPT
+        with ESMTP id S1731552AbgF2TNx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:16:03 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7EAC03E979
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2020 12:16:02 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id c16so18379603ioi.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jun 2020 12:16:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
-         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
-         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
-         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
-         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
-         3NGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=K5q90xMD1royXTCGThxZQR6I/P4qwrB0VcDDgNlGqi/GXhEWJLkavECW8zRsinRQTB
-         feZ3OSTH86RAA0PoaC+yXDft03uZ9d/9hlNveak3A3HAnxHBHW8qBjUlaiWRwLkUCmkk
-         PXdIN0QwD08qhFNrhcbJ5a1heo6sELrcVL5dbJYEEMaWF3Ehy0r3axqudW1IZsILeNXq
-         lVRpbqwF8CygfTXdojUg31d2azw3LjVXnHAvbneY1EsKFRenZT8KXiGFpOOkpbiwjyDb
-         pctAfNrlt/I9vQAECzUPI73pwW6yM1AOx5HcJfgENEBCREHyTj/LiW6EmJW5AIiqA9Ev
-         +FjQ==
-X-Gm-Message-State: AOAM531yxrsrV8YKqeWpUwSJqpI2g/lskhKOSKj+gWjWg2ZnqUiXX2TJ
-        YE7KlQaRL2u8Wf8H/tmiKybgT2v/byihMJTjJcs=
-X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
-X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
- Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
+        Mon, 29 Jun 2020 15:13:53 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B8DC08EA4B;
+        Sun, 28 Jun 2020 22:48:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wGjw1lCLz9sRk;
+        Mon, 29 Jun 2020 15:48:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1593409684;
+        bh=/YQUWPTNF1yfjssmjTfskL+aXMkfJR2ADKApusEzfaA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ZiiGvlHCBnvAF3APkTommNfdvQmDkuYoZMa+llNNHmj31m9lhBnJPy19xfNxjMJiI
+         LOEHaJ8xq26BiOKskUPmfOW4WUU+T79cfWSyDx7RdzCKZJzLLkNz4Oq9G8fr8h9PHV
+         PpMSd3Xc/PQdrP1409zgma9HkuMVo4knpGsQy4+X88UPXbLERDNgC1cb6A2fF7WI5P
+         WiWe7WtJ2hrelBssuoZAIEukoh8LAXk/XNOtW0D20iY0LEcnXYlflR65DabbSdQuIL
+         Gj9HDWDpu1Zwa3R6DkW58ykovlV/uoJL3w1+hw4OyzGz778jSZTfL6rFVsmmhSmNAX
+         mvOcCg0ljaiLQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
+In-Reply-To: <202006270849.7190A26@keescook>
+References: <202006261358.3E8AA623A9@keescook> <87k0zsbubg.fsf@mpe.ellerman.id.au> <202006270849.7190A26@keescook>
+Date:   Mon, 29 Jun 2020 15:50:18 +1000
+Message-ID: <87lfk68lph.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
- -0700 (PDT)
-Reply-To: mrs.victoria.alexander2@gmail.com
-From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
-Date:   Mon, 29 Jun 2020 12:15:58 -0700
-Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dear friend,
+Kees Cook <keescook@chromium.org> writes:
+> On Sat, Jun 27, 2020 at 09:51:31PM +1000, Michael Ellerman wrote:
+>> Kees Cook <keescook@chromium.org> writes:
+>> > Instead of full GNU diff (which smaller boot environments may not have),
+>> > use "comm" which is more available.
+>> 
+>> Although using "comm" requires CONFIG_PRINTK_TIME=y doesn't it?
+>
+> No, it doesn't seem to. "comm" doesn't carry about the line prefixes.
+> AIUI, the only reason for a mention of "sort" is because of how "comm"
+> does its line pairing. i.e. as soon as it goes out of sync, it starts
+> accounting for the disjunction between files. But that's exactly what we
+> want it doing, and the prefix doesn't matter.
 
+OK, if it works.
 
-I have a business container transaction what that some of( $13million dollars)
-
- I would like to discuss with you. If you are interested, please
-contact my email
-
-address (mrs.victoria.alexander2@gmail.com)
-
-My WhatsApp number but only message (+19293737780)
-
-Please do not reply if you are not ready
-Thanks
+cheers
