@@ -2,95 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2823820EF1A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jun 2020 09:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E79F20F9C1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jun 2020 18:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730670AbgF3HPl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Jun 2020 03:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730538AbgF3HPl (ORCPT
+        id S1729500AbgF3QsS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Jun 2020 12:48:18 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:52875 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728022AbgF3QsR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Jun 2020 03:15:41 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0111C061755
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2020 00:15:40 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id f139so18497934wmf.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2020 00:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qomXq2ActQZN/6bFPVvt+u08Ypzth62dhj61jRlqIqg=;
-        b=mHPPQN9W6sb5xzGjh62onzl2oulcD9KtmeoN3pj89jyErg91srjiDxZWGa0QP4AU81
-         hNytKu4gO1Hf57LjmGAHupV3KhZ6p7CP5e2bf1da5aZ/2Z8cECbVqs1BBE0k2MvEYqYS
-         AN13UDyfULgP0X2RttKExd9B7DOT7Y79cE+/fIOh/sYi11Hkq0VwmsCYk2uA/11QhZQf
-         capG494GGtRpc/Iecx47e5KMHddbnKyn/QXCZkCqBhw2n1GIR7jnkgI4Gtr8lyi2rsBX
-         5S8tnxAbcNGgp/h3MCUI/FhDtuUhaGODB7BFHDnSfKDU+7ImIZu6J1q0Ec9+OQ4JXn42
-         Kbgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qomXq2ActQZN/6bFPVvt+u08Ypzth62dhj61jRlqIqg=;
-        b=UrMimxwIZrMz2WOejtxJNaXvWV2VfYAdgPlQwfm77S1uIiZzsiVwS25Xck81SZ6YsB
-         jXyzBtTjKTxWHw2mGHPymjJcXjYGBOchRHgSJjUZtd3UK/8m6R61j2fISJlNMDIFf5S+
-         jbDP/Cm9e3eQmH60S8ck5tn2ZNNPv2ZBGhxz4m6nTIGyCmRkpMH2RwlWSI86EElHQzIJ
-         tOCJTo7EMhaXqKrlfwj1uiRWwU84RQ+kchoygPV5tCO38CFLECXpKS/d2lKK/UtFgyf+
-         7Pr2CYpvJMC41twUnMXFPsb9Iq+ZjWCch8+m37A4BFA4gjOBltPR3N6yrzRkNGWf/vps
-         3vKw==
-X-Gm-Message-State: AOAM5315EipP/eOIVGTJYf7JZ1fwQoQyxuwTxy3ALh+E3abquDW5CpsE
-        mrJAr8WuOXqz2eFMrxcnQtq7SiG30dMyqWMC0KtT0Q==
-X-Google-Smtp-Source: ABdhPJyKohk0LvsHxuOJ7RF09tiNLq0s5bjM/CBQtjGt7EOC+N3RWtGru1+JzCh2phyG6SALIaXkSdAO0MtBxqVEh7s=
-X-Received: by 2002:a1c:5a41:: with SMTP id o62mr5429652wmb.16.1593501339411;
- Tue, 30 Jun 2020 00:15:39 -0700 (PDT)
+        Tue, 30 Jun 2020 12:48:17 -0400
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1jqJQc-0001jJ-S7; Tue, 30 Jun 2020 16:48:15 +0000
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kees Cook <keescook@google.com>
+Subject: [PATCH] selftests/seccomp: fix ptrace tests on powerpc
+Date:   Tue, 30 Jun 2020 13:47:39 -0300
+Message-Id: <20200630164739.1268222-1-cascardo@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20200607215715.90981-1-rikard.falkeborn@gmail.com>
-In-Reply-To: <20200607215715.90981-1-rikard.falkeborn@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 30 Jun 2020 15:15:28 +0800
-Message-ID: <CABVgOSnqyqg8xPT2wM=taN2=pPTAm_ySD-WscHuBW175QipuEw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: kunit_config: Fix parsing of CONFIG options with space
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        masahiroy@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 8, 2020 at 5:57 AM Rikard Falkeborn
-<rikard.falkeborn@gmail.com> wrote:
->
-> Commit 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is
-> updated") introduced a new CONFIG option CONFIG_CC_VERSION_TEXT. On my
-> system, this is set to "gcc (GCC) 10.1.0" which breaks KUnit config
-> parsing which did not like the spaces in the string.
->
-> Fix this by updating the regex to allow strings containing spaces.
->
-> Fixes: 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is updated")
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+As pointed out by Michael Ellerman, the ptrace ABI on powerpc does not
+allow or require the return code to be set on syscall entry when
+skipping the syscall. It will always return ENOSYS and the return code
+must be set on syscall exit.
 
-Tested-by: David Gow <davidgow@google.com>
+This code does that, behaving more similarly to strace. It still sets
+the return code on entry, which is overridden on powerpc, and it will
+always repeat the same on exit. Also, on powerpc, the errno is not
+inverted, and depends on ccr.so being set.
 
-I've been using this patch quite a bit, and haven't hit any problems.
+This has been tested on powerpc and amd64.
 
-+Shuah: Any chance we get this into the kunit branch sooner rather
-than later? The KUnit tooling is quite broken without it.
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Kees Cook <keescook@google.com>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 24 +++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-> ---
-> Maybe it would have been sufficient to just use
-> CONFIG_PATTERN = r'^CONFIG_(\w+)=(.*)$' instead?
->
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 252140a52553..b90a9190ba88 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1738,6 +1738,14 @@ void change_syscall(struct __test_metadata *_metadata,
+ 		TH_LOG("Can't modify syscall return on this architecture");
+ #else
+ 		regs.SYSCALL_RET = result;
++# if defined(__powerpc__)
++		if (result < 0) {
++			regs.SYSCALL_RET = -result;
++			regs.ccr |= 0x10000000;
++		} else {
++			regs.ccr &= ~0x10000000;
++		}
++# endif
+ #endif
+ 
+ #ifdef HAVE_GETREGS
+@@ -1796,6 +1804,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+ 	int ret, nr;
+ 	unsigned long msg;
+ 	static bool entry;
++	int *syscall_nr = args;
+ 
+ 	/*
+ 	 * The traditional way to tell PTRACE_SYSCALL entry/exit
+@@ -1809,10 +1818,15 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+ 	EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+ 			: PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
+ 
+-	if (!entry)
++	if (!entry && !syscall_nr)
+ 		return;
+ 
+-	nr = get_syscall(_metadata, tracee);
++	if (entry)
++		nr = get_syscall(_metadata, tracee);
++	else
++		nr = *syscall_nr;
++	if (syscall_nr)
++		*syscall_nr = nr;
+ 
+ 	if (nr == __NR_getpid)
+ 		change_syscall(_metadata, tracee, __NR_getppid, 0);
+@@ -1889,9 +1903,10 @@ TEST_F(TRACE_syscall, ptrace_syscall_redirected)
+ 
+ TEST_F(TRACE_syscall, ptrace_syscall_errno)
+ {
++	int syscall_nr = -1;
+ 	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
+ 	teardown_trace_fixture(_metadata, self->tracer);
+-	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
++	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, &syscall_nr,
+ 					   true);
+ 
+ 	/* Tracer should skip the open syscall, resulting in ESRCH. */
+@@ -1900,9 +1915,10 @@ TEST_F(TRACE_syscall, ptrace_syscall_errno)
+ 
+ TEST_F(TRACE_syscall, ptrace_syscall_faked)
+ {
++	int syscall_nr = -1;
+ 	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
+ 	teardown_trace_fixture(_metadata, self->tracer);
+-	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
++	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, &syscall_nr,
+ 					   true);
+ 
+ 	/* Tracer should skip the gettid syscall, resulting fake pid. */
+-- 
+2.25.1
 
-FWIW, I tried this myself, and it seemed to work, but I think I like
-requiring the quotes more.
-
-Cheers,
--- David
