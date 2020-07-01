@@ -2,102 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7903721117E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jul 2020 19:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 885AF211238
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jul 2020 19:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732635AbgGARDC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Jul 2020 13:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S1730180AbgGARxU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Jul 2020 13:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732624AbgGARDB (ORCPT
+        with ESMTP id S1726364AbgGARxT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jul 2020 13:03:01 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CB9C08C5DC
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2020 10:03:01 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id d16so14032508edz.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2020 10:03:00 -0700 (PDT)
+        Wed, 1 Jul 2020 13:53:19 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546D9C08C5DB
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2020 10:53:19 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id c26so17328238qtq.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2020 10:53:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sXLocZuYa5LyRW+7c8dY9wi1ppvduxYFU7Sa4aAHUQ0=;
-        b=FNRiKjGOLujr2GHcouB/onGnSBkqERG4/SfGtF+Ui+ASREDVq0YOFGgipw9Hvu1XeC
-         q8heD9a6c0iKic1AFiHslIDWRsk3kJuygMm66NNQI3CKH+rjWm7qheoPxrMSMqJirLId
-         u0O6QB0nEFLdDv+1vKCf2hb9UR/WD5bow+KZtf+Yai71jqQEIysBGBLVTL5bXK91wveb
-         aW19JVd27lMuXuDtDqanawo4WQLJ1PS+jkTc68VMGHm6mJimVzgSBzRTHIDNYK5Wuy8e
-         MdEyachNYELHOsU4Av3kBkd99S9yklbFxhFQ6+0bJLfrFOw8CzsQH0eP8+R4xf2mYRJs
-         VJTw==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=VB/KSdoSleNPyuddI4RHZwpZo8dMr4vfXtKSdI4JDW8=;
+        b=UfhtwlfrE3cJUVoe4WVJG0157tIrGS4kww4M+vCDEfR+MCtIiF4OHtsu8K6QHxFgSL
+         H0UHxeRL8rCoT0xjdG6BeSd9Vzya6G5s6MvHiwqdFlGdqTCJaXXJeUrqNTHrlVNwFpaR
+         A/ANM+yVtI8e/dEMoZKYYul4ntUXW8V2/F3LhRlIYDNn0RqTajLdXN0eMWaTagt9HVCl
+         hPG3cFJQIU2bTRi3IzGl4NTUH9f4NgKrXrfdnIIG/RuFR9rCo/VuMGRcXIqsQ6GT+ndI
+         hQVRM0DybGmWejTnFp3mJO8RGffIZPtnhuFSu3QvgYT4djdjGnsgFSyEwHF1fOuWUomu
+         wvqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sXLocZuYa5LyRW+7c8dY9wi1ppvduxYFU7Sa4aAHUQ0=;
-        b=Y1qQR/hGhrAiL7GsoIPp8b5sdty/ZGB+p4fsURPjULTxMUaITLsvD3kxXgiOHjMBEG
-         0zTehyUh5pv1i+RQyDFYwZQnxhwNAFmAIHnzV6hGF9lCOOkaq1bglqebqszOzB+8Xjwh
-         Up21xqMbFuM30Th0E2weGQaDTq3aKJMWu6HTO3DGH8KVC3uxGh+MKfy264VjIY7lA+3y
-         EOjAYwY1X4VmYYoDIXFMWQwSFN+X2t5suoUMpeRMeprYuBRdevvW7L/8WnlNQNTz2YOa
-         /jUCu4Sy6C5qVLCDrdK0+ZY75jwEOt6RxZwSoU8v31eD0uiaNm4bH9HhhTnLcI1dPt1P
-         YiKg==
-X-Gm-Message-State: AOAM531SYm/zdYWA9Th35AmdAPOSmjXTm/BVob+4WdoDNH6AUOrqE5pC
-        Reth+S6l1GLom+014171xqjSXrOV1yfnGb3yQ5BSAA==
-X-Google-Smtp-Source: ABdhPJx8LUrrdnwmBIDiSNRuGB4f6C/45FYDSPt9e8ZYnDUngrST9sVe5bZuefihx+MmlBauk2XZmDEsc574ZFY6EU0=
-X-Received: by 2002:a50:c355:: with SMTP id q21mr27751649edb.121.1593622979559;
- Wed, 01 Jul 2020 10:02:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200630184922.455439-1-haoluo@google.com> <49df8306-ecc7-b979-d887-b023275e4842@fb.com>
- <CA+khW7iJu2tzcz36XzL6gBq4poq+5Qt0vbrmPRdYuvC-c5U4_A@mail.gmail.com>
- <CA+khW7jNqVMqq2dzf6Dy0pWCZYjHrG7Vm_sUEKKLS-L-ptzEtQ@mail.gmail.com> <46fc8e13-fb3e-6464-b794-60cf90d16543@fb.com>
-In-Reply-To: <46fc8e13-fb3e-6464-b794-60cf90d16543@fb.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=VB/KSdoSleNPyuddI4RHZwpZo8dMr4vfXtKSdI4JDW8=;
+        b=qoEjpDXEf16wSMkVb2hDout241s4zdxkF4Pt3M959ApcUPW/yeAqKJ3yZXuiZmaNUw
+         0yFITa6lPrG/G3w0OWPjYqBI0tDLCGKTMe5ApjdWNYETOze4Vysk117tgjdppdtAVY8d
+         yt6wvXdRc693gpFxbSPvlchh1+TJpcLjtLNyYPyPdDPVWHhq3oebKvMFLIL3GcdR6TD9
+         RRIbV3hVNHA+mhg+5uFQ31ytPHcnLlD+NFuVFEQOsyM5jPx/jnHazhGW22K0VXDEF2Pp
+         QovGHZFsfp8qaM4ON1RgJ3uV0zjKlnIH0j1fnfFVHSH7BxoKNENepAzRkfNTXfqcoOU8
+         JcyQ==
+X-Gm-Message-State: AOAM533ASSl9qLDHxpxX/mVJl1mIhveGupKbKwpae/H0qrrYijx4Xh52
+        0CLFLyicmA5jwiCt2i8nbZycsUbu8XQ=
+X-Google-Smtp-Source: ABdhPJxm18w/p7T2L9JtqSka8bQFpLWO3xGu8H/hkbHEGAGRPd+DV26F5Q8a2oWlPOlxvzXa0T/+KtOVVFo=
+X-Received: by 2002:a0c:8b4a:: with SMTP id d10mr26091444qvc.31.1593625998237;
+ Wed, 01 Jul 2020 10:53:18 -0700 (PDT)
+Date:   Wed,  1 Jul 2020 10:53:15 -0700
+Message-Id: <20200701175315.1161242-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+Subject: [PATCH bpf-next v2] selftests/bpf: Switch test_vmlinux to use hrtimer_range_start_ns.
 From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 1 Jul 2020 10:02:48 -0700
-Message-ID: <CA+khW7hLL+=sZwCT_6gHHjHTZnmbNk5Pju9vsLOJF4VjyHY-iA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Switch test_vmlinux to use hrtimer_range_start_ns.
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Cc:     sdf@google.com, Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Bill Wendling <morbo@google.com>
+        KP Singh <kpsingh@chromium.org>, Hao Luo <haoluo@google.com>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 7:26 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 6/30/20 5:10 PM, Hao Luo wrote:
-> > Ok, with the help of my colleague Ian Rogers, I think we solved the
-> > mystery. Clang actually inlined hrtimer_nanosleep() inside
-> > SyS_nanosleep(), so there is no call to that function throughout the
-> > path of the nanosleep syscall. I've been looking at the function body
-> > of hrtimer_nanosleep for quite some time, but clearly overlooked the
-> > caller of hrtimer_nanosleep. hrtimer_nanosleep is pretty short and
-> > there are many constants, inlining would not be too surprising.
->
-> Oh thanks for explanation. inlining makes sense. We have many other
-> instances like this in the past where kprobe won't work properly.
->
-> Could you reword your commit message then?
->
->  > causing fentry and kprobe to not hook on this function properly on a
->  > Clang build kernel.
->
-> The above is a little vague on what happens. What really happens is
-> fentry/kprobe does hook on this function but has no effect since
-> its caller has inlined the function.
+The test_vmlinux test uses hrtimer_nanosleep as hook to test tracing
+programs. But in a kernel built by clang, which performs more aggresive
+inlining, that function gets inlined into its caller SyS_nanosleep.
+Therefore, even though fentry and kprobe do hook on the function,
+they aren't triggered by the call to nanosleep in the test.
 
-Sure, sending a v2 with a more accurate description of the issue.
+A possible fix is switching to use a function that is less likely to
+be inlined, such as hrtimer_range_start_ns. The EXPORT_SYMBOL functions
+shouldn't be inlined based on the description of [1], therefore safe
+to use for this test. Also the arguments of this function include the
+duration of sleep, therefore suitable for test verification.
 
-Hao
+[1] af3b56289be1 time: don't inline EXPORT_SYMBOL functions
+
+Tested:
+ In a clang build kernel, before this change, the test fails:
+
+ test_vmlinux:PASS:skel_open 0 nsec
+ test_vmlinux:PASS:skel_attach 0 nsec
+ test_vmlinux:PASS:tp 0 nsec
+ test_vmlinux:PASS:raw_tp 0 nsec
+ test_vmlinux:PASS:tp_btf 0 nsec
+ test_vmlinux:FAIL:kprobe not called
+ test_vmlinux:FAIL:fentry not called
+
+ After switching to hrtimer_range_start_ns, the test passes:
+
+ test_vmlinux:PASS:skel_open 0 nsec
+ test_vmlinux:PASS:skel_attach 0 nsec
+ test_vmlinux:PASS:tp 0 nsec
+ test_vmlinux:PASS:raw_tp 0 nsec
+ test_vmlinux:PASS:tp_btf 0 nsec
+ test_vmlinux:PASS:kprobe 0 nsec
+ test_vmlinux:PASS:fentry 0 nsec
+
+Signed-off-by: Hao Luo <haoluo@google.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+---
+ Changelog since v1:
+ - More accurate commit messages
+
+ tools/testing/selftests/bpf/progs/test_vmlinux.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_vmlinux.c b/tools/testing/selftests/bpf/progs/test_vmlinux.c
+index 5611b564d3b1..29fa09d6a6c6 100644
+--- a/tools/testing/selftests/bpf/progs/test_vmlinux.c
++++ b/tools/testing/selftests/bpf/progs/test_vmlinux.c
+@@ -63,20 +63,20 @@ int BPF_PROG(handle__tp_btf, struct pt_regs *regs, long id)
+ 	return 0;
+ }
+ 
+-SEC("kprobe/hrtimer_nanosleep")
+-int BPF_KPROBE(handle__kprobe,
+-	       ktime_t rqtp, enum hrtimer_mode mode, clockid_t clockid)
++SEC("kprobe/hrtimer_start_range_ns")
++int BPF_KPROBE(handle__kprobe, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
++	       const enum hrtimer_mode mode)
+ {
+-	if (rqtp == MY_TV_NSEC)
++	if (tim == MY_TV_NSEC)
+ 		kprobe_called = true;
+ 	return 0;
+ }
+ 
+-SEC("fentry/hrtimer_nanosleep")
+-int BPF_PROG(handle__fentry,
+-	     ktime_t rqtp, enum hrtimer_mode mode, clockid_t clockid)
++SEC("fentry/hrtimer_start_range_ns")
++int BPF_PROG(handle__fentry, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
++	     const enum hrtimer_mode mode)
+ {
+-	if (rqtp == MY_TV_NSEC)
++	if (tim == MY_TV_NSEC)
+ 		fentry_called = true;
+ 	return 0;
+ }
+-- 
+2.27.0.212.ge8ba1cc988-goog
+
