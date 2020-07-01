@@ -2,104 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB8221134D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jul 2020 21:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52312115BD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jul 2020 00:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgGATKh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Jul 2020 15:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        id S1726687AbgGAWRX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Jul 2020 18:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbgGATKg (ORCPT
+        with ESMTP id S1725771AbgGAWRV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jul 2020 15:10:36 -0400
-Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A25C08C5C1
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jul 2020 12:10:36 -0700 (PDT)
-Received: by mail-oo1-xc43.google.com with SMTP id z23so1287605ood.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jul 2020 12:10:36 -0700 (PDT)
+        Wed, 1 Jul 2020 18:17:21 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5076BC08C5C1;
+        Wed,  1 Jul 2020 15:17:21 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id z24so4210425ljn.8;
+        Wed, 01 Jul 2020 15:17:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZQpzdbIjf113I5LT5xAH3Pi/R/4lrflrWxNFquDKW28=;
-        b=FdoyLiw1YEaBJRmbvHwoiLGnoqBFL3sVYQzGpdYTkcc04w7rUWrpiD2CRsjH6qrCqD
-         N0OmiCsWjkFTIO1gSatiKqwyKJkvNM7S2l0mAtNk9bA3iQf2fkMCQ3Wu0ZNyFKL8896X
-         eVTqaFq/UaoMB5yU04svOiDK4sbp5tLO2/Lkg=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0hjOP2xWJYBFB1lJ44pZ1iwrgg794l/jK5E/p4AXI4Y=;
+        b=Xgu2wjxM8gR3RdyappZ8oWPk1hZNwzaHxbRsdwv1ih9IYYRvRIqKdKk+NPPFJMIgGf
+         tuGmbf6th2afvmfrQgZ17KsSvoXzw3M/DdERL+haWnWYQ/yivIh04Il/0SVpOwIJChfl
+         nXaI+90956OkrqnzY6idFn3fR1CkNiI5oxM4OI6aNVN+5CqeuerOXeXz9wcOK4mEwFS2
+         U56SI4t7ivgqYcuMz2DZjhfloweXi09Cjg5M/y/YDMDXPgOxjXBlw2JdLi09TJrwyhFJ
+         day/jgYuHZH1a/2z0VXf3QdBEoV+fYkMqyeFxhJwrcFsfZvEJ/UtDGJgzS0li4MLQMx+
+         A5Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZQpzdbIjf113I5LT5xAH3Pi/R/4lrflrWxNFquDKW28=;
-        b=Nqo50/7HNjsg+5+HAINneNrBz21Jp+tPzTr9QIHnG7DnVHa8t4oX+Ig+UcY1PIYNeh
-         I0rxIZlB1Y8mUj96yc7YzN77oN9mYCkaKs6QIYOh8ocJOzC8G/iQP1YdIrGim/veStit
-         jb3YQaQdw1WFESBZmbIlwCeBpCLeR1jPOEt5mG2KG9b0I++v33TrtqO9bFX1yeRh7ySM
-         U8KeROxxykgnW7BbYJJNHI8r9e5BxoE8uKu7KWTTiVIAjs2H99w7QbT39NtFv0W7Xhc2
-         r2LXU/bOYjcsl4X8I7XAwqI2BWLxrYRkcVY6Chq0iOJ+6Gh9cneIrGTYT+SodFwJKR01
-         Vk5Q==
-X-Gm-Message-State: AOAM530N60mGuMQTWe+pPQSk/kqv8LjMXs8JKUKvup2MvbqRHQdo+DuI
-        ezj/8hnu9+dohdxZMaD+ops/6g==
-X-Google-Smtp-Source: ABdhPJzx9z5yTTETBz/pqFVx0iHUBPxUsqSF0+zDs9TcGwYfRAte2MthXkwd/jt9wLGnktCfYhVTFA==
-X-Received: by 2002:a05:6820:50a:: with SMTP id m10mr24591794ooj.54.1593630635940;
-        Wed, 01 Jul 2020 12:10:35 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id a204sm1627823oii.34.2020.07.01.12.10.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2020 12:10:35 -0700 (PDT)
-Subject: Re: [PATCH] kunit: kunit_config: Fix parsing of CONFIG options with
- space
-To:     David Gow <davidgow@google.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        masahiroy@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        skhan@linuxfoundation.org
-References: <20200607215715.90981-1-rikard.falkeborn@gmail.com>
- <CABVgOSnqyqg8xPT2wM=taN2=pPTAm_ySD-WscHuBW175QipuEw@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <da025a82-17ee-e8bb-61dd-e655f0087d8f@linuxfoundation.org>
-Date:   Wed, 1 Jul 2020 13:10:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0hjOP2xWJYBFB1lJ44pZ1iwrgg794l/jK5E/p4AXI4Y=;
+        b=tEggY2p9BWi6NCXwIeCK+9b1GLianUnoRbEoDcSz6TiF5G4PFWKBogJSjTHCFzUZdz
+         jA0x0HknrpKx5kOH9UJ8bERPQ7cor4LnZXZKFfEWRRWp+x4xnS80aIUKRqKJdNMt0Q4d
+         klGwKrqNFq/2RYk8pDKtqZW5Hxh/jUqBY13nJfZHXUnel06iGS8Kl3j9u+0S0ZUOvfGW
+         1/L9vq66m0ZY6BVj5n+SiUXrK9T5oekQLkD2gtF6Aaf6LiBryn2VgOb1x/QkvQe1aG2v
+         WPs8/LEEL9JLPXySfxgVi4GC79K8x/BcMwhqryQW4xNqQRF0pfmCWVVCjSlpNGpP8EsU
+         Ou9g==
+X-Gm-Message-State: AOAM533A/LUpocLk4YMG6jg1Ofl17r70xz+ituTUXxEWG19TwBz8owyw
+        8bjVbOpX6utFYI24JR0SEKLYw+PU4D8FdcWEDqg=
+X-Google-Smtp-Source: ABdhPJy5vPSx7u8xpYmsgb/HuUaDybMaWgfQGMlx4w2etWh/E2gQtbxZbUoCO0Vwt7DaK6VEGMyi7t2ve6zYyr4FuE8=
+X-Received: by 2002:a2e:9bc3:: with SMTP id w3mr6345365ljj.121.1593641839001;
+ Wed, 01 Jul 2020 15:17:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CABVgOSnqyqg8xPT2wM=taN2=pPTAm_ySD-WscHuBW175QipuEw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200701175315.1161242-1-haoluo@google.com> <aab03e4b-2779-3b71-44ea-735a7b92a70f@fb.com>
+In-Reply-To: <aab03e4b-2779-3b71-44ea-735a7b92a70f@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 1 Jul 2020 15:17:07 -0700
+Message-ID: <CAADnVQK5o1uhJOXLKAbf9Hp_Y0fVsowD3DwRWwBd_++KTTOJHw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Switch test_vmlinux to use hrtimer_range_start_ns.
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Hao Luo <haoluo@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/30/20 1:15 AM, David Gow wrote:
-> On Mon, Jun 8, 2020 at 5:57 AM Rikard Falkeborn
-> <rikard.falkeborn@gmail.com> wrote:
->>
->> Commit 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is
->> updated") introduced a new CONFIG option CONFIG_CC_VERSION_TEXT. On my
->> system, this is set to "gcc (GCC) 10.1.0" which breaks KUnit config
->> parsing which did not like the spaces in the string.
->>
->> Fix this by updating the regex to allow strings containing spaces.
->>
->> Fixes: 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is updated")
->> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
-> 
-> Tested-by: David Gow <davidgow@google.com>
-> 
-> I've been using this patch quite a bit, and haven't hit any problems.
-> 
-> +Shuah: Any chance we get this into the kunit branch sooner rather
-> than later? The KUnit tooling is quite broken without it.
-> 
+On Wed, Jul 1, 2020 at 11:04 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 7/1/20 10:53 AM, Hao Luo wrote:
+> > The test_vmlinux test uses hrtimer_nanosleep as hook to test tracing
+> > programs. But in a kernel built by clang, which performs more aggresive
+> > inlining, that function gets inlined into its caller SyS_nanosleep.
+> > Therefore, even though fentry and kprobe do hook on the function,
+> > they aren't triggered by the call to nanosleep in the test.
+> >
+> > A possible fix is switching to use a function that is less likely to
+> > be inlined, such as hrtimer_range_start_ns. The EXPORT_SYMBOL functions
+> > shouldn't be inlined based on the description of [1], therefore safe
+> > to use for this test. Also the arguments of this function include the
+> > duration of sleep, therefore suitable for test verification.
+> >
+> > [1] af3b56289be1 time: don't inline EXPORT_SYMBOL functions
+> >
+> > Tested:
+> >   In a clang build kernel, before this change, the test fails:
+> >
+> >   test_vmlinux:PASS:skel_open 0 nsec
+> >   test_vmlinux:PASS:skel_attach 0 nsec
+> >   test_vmlinux:PASS:tp 0 nsec
+> >   test_vmlinux:PASS:raw_tp 0 nsec
+> >   test_vmlinux:PASS:tp_btf 0 nsec
+> >   test_vmlinux:FAIL:kprobe not called
+> >   test_vmlinux:FAIL:fentry not called
+> >
+> >   After switching to hrtimer_range_start_ns, the test passes:
+> >
+> >   test_vmlinux:PASS:skel_open 0 nsec
+> >   test_vmlinux:PASS:skel_attach 0 nsec
+> >   test_vmlinux:PASS:tp 0 nsec
+> >   test_vmlinux:PASS:raw_tp 0 nsec
+> >   test_vmlinux:PASS:tp_btf 0 nsec
+> >   test_vmlinux:PASS:kprobe 0 nsec
+> >   test_vmlinux:PASS:fentry 0 nsec
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > Acked-by: Andrii Nakryiko <andriin@fb.com>
+>
+> Thanks!
+> Acked-by: Yonghong Song <yhs@fb.com>
 
-
-Applied to linux-kselftest kunit
-
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
-
-thanks,
--- Shuah
+Applied. Thanks
