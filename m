@@ -2,350 +2,271 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374D8211C77
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jul 2020 09:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B712127BF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jul 2020 17:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727006AbgGBHOZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Jul 2020 03:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S1730011AbgGBPYA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Jul 2020 11:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726963AbgGBHOY (ORCPT
+        with ESMTP id S1730301AbgGBPX7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Jul 2020 03:14:24 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AAFC08C5DC
-        for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2020 00:14:24 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id u64so14414740ybf.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2020 00:14:24 -0700 (PDT)
+        Thu, 2 Jul 2020 11:23:59 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74161C08C5DD
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2020 08:23:59 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id l63so22542753oih.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2020 08:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=0MPFvMqMThNlqIXSGXzk3uL7fUIp1+1hZOAZp0aIFwA=;
-        b=bdlc7ZwZTDFsLsoFXz42E7eAeV+b9lPIs0tdRLSBoLa1uHbCsGZPxJ3hVSMJZLlNmz
-         4nsaqDJ8Ls7FfE8uwy67W4Ybtv9I46noCqW8y4WdZhfXo9+VmSNjfip0MOvZYU4zDdtf
-         lppv9sqgyLILvAKTXAkMrXIPSTx6JBnnzu1UA330MvTrma0ry+v5nRce2KG9D58btsog
-         M7saHzBbJd6f8moXykXOSVlKNf43cP4Moov4ivaB56FmYRc3MGOCe63Dcffi5xk5s5Kb
-         AJK5X4T6XGWa7ISrOI7immZ9UVsBrhxJqbcV/FalorvbVDtGP2cCNxU4y2bCxpBO2gia
-         FBSg==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=B4Ar3fpA3HhwCaigMczgSpA2w+YvUJd42HYXvnQydWY=;
+        b=ZPv6cx92wk+wl3iQVPR7rcCaSByWPwAMHkBZDRRnVtsZzEOjtZh7EJ9SQDOgW2zvnE
+         chfGNQt5cJ+DehMkKw+8jqH19FrshSLmVgDFguKrDQhrfXekgvm3gpeDZAGhv5Z2D2yN
+         ti1cqJ8/XrhSH8YbZNaH2jTnvDsoEpJTkdl08=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=0MPFvMqMThNlqIXSGXzk3uL7fUIp1+1hZOAZp0aIFwA=;
-        b=uaAQALw0ghUWPFx/nj7ZE+90PYDE6JryBUHGAXk9VoJ/lqGLDrVaxLDT+TBgmdmqlE
-         HB0x8mP4CcMoT0myRqf5eXJ7X+EseIMFWJrG3KDhCVCJjL0hGjkqSup4u6wIr816ESkD
-         tUS9DL3E7Snz6AP/gnqp9954Mrb/An2z5bzArjjzyTWDrN5lf9kUSao5Cf2u18tJlQOX
-         iAmEnnniioG3ssub3iS8t6pq4G+oiuqiT9rtbplL6iVI3296CadqpzTnSY9pIIFfnrDu
-         cqSG/p0w1zzGYNVrPrcD6WpnXnOnM41vEDTZ03Mtuu/v6+9wUwya6M2IRL5aH9ZXZ78b
-         nACw==
-X-Gm-Message-State: AOAM532SpgAvlpR5Z4NQTaO8ee+FiFZAZBbkdPGKwp4HRZDFSUGiWFYJ
-        z49YyF7T591UflFr7uJ4wl1A5Yl67YuWGg==
-X-Google-Smtp-Source: ABdhPJwiHir8TS/erd15crPhqF0xsId3SapDysSYHvv7OHwGS8fbayeX14AfWbGTj/L1XQvwl+B3SqkmGiotKg==
-X-Received: by 2002:a25:d80b:: with SMTP id p11mr1614734ybg.506.1593674063431;
- Thu, 02 Jul 2020 00:14:23 -0700 (PDT)
-Date:   Thu,  2 Jul 2020 00:14:16 -0700
-Message-Id: <20200702071416.1780522-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH] Documentation: kunit: Add naming guidelines
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Randy Dunlap <rd.dunlab@gmail.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Tim Bird <Tim.Bird@sony.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=B4Ar3fpA3HhwCaigMczgSpA2w+YvUJd42HYXvnQydWY=;
+        b=pyC0qX7sYv2sZ+5+AHvmqAxFbLzDqVlzvmGlhiw6/RR3o4UxG4XegmFk8aEVFtdCBL
+         FZrWhgkkap5E1St9Y0oGFWWrbtsIyFHrFDZZo3ny/9eulpBtLaqyu4laA+fe2xG1YIjr
+         +0hBUkJ/ZC//A6La+CivuDIDR+dEjJJovQSYpwEtA3eoTXJIi2+At3hDmfHukntZeqO6
+         Nj7rXTkQc96PwORQdX14AwOI4Hc0i/oiLAB2JCvwE5EqJ9zxX52ye4b6ZiK4bSPH/i6o
+         +fduA1zyrmO4wfYO9xF00O1/8NgbfuvOz9crnZTSOfB4bXB5Zu2fUkgFChtKEWHxoPER
+         yxrg==
+X-Gm-Message-State: AOAM531GliXFF6G+KkyTbBbqGnTT3J7/P5MTJS3z4beSJAaYuZEpbnqM
+        0fiiYABAN2T8Jsrx54Nlf0Ibl+tyCQ8=
+X-Google-Smtp-Source: ABdhPJzRLtOaeIiDSxEPiK5IDPEWLft3Ryb8hfoSeSB1WD89Aes2qQa6F5iXonXK0zaQT4eZihuUKw==
+X-Received: by 2002:aca:230f:: with SMTP id e15mr23489002oie.164.1593703437711;
+        Thu, 02 Jul 2020 08:23:57 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g8sm2279335otb.39.2020.07.02.08.23.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jul 2020 08:23:56 -0700 (PDT)
+To:     torvalds@linux-foundation.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, skhan@linuxfoundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kunit fixes update for Linux 5.8-rc4
+Message-ID: <39219b27-98db-609c-d77b-3db2eb64345a@linuxfoundation.org>
+Date:   Thu, 2 Jul 2020 09:23:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------4311EBEE68346305983AB55B"
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As discussed in [1], KUnit tests have hitherto not had a particularly
-consistent naming scheme. This adds documentation outlining how tests
-and test suites should be named, including how those names should be
-used in Kconfig entries and filenames.
+This is a multi-part message in MIME format.
+--------------4311EBEE68346305983AB55B
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-[1]:
-https://lore.kernel.org/linux-kselftest/202006141005.BA19A9D3@keescook/t/#u
+Hi Linus,
 
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
-This is a follow-up v1 to the RFC patch here:
-https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@go=
-ogle.com/T/#u
+Please pull the following Kunit fixes update for Linux 5.8-rc4.
 
-There weren't any fundamental objections to the naming guidelines
-themselves, so nothing's changed on that front.
+This kunit fixes update for Linux 5.8-rc4 consists of fixes to build
+and run-times failures. Also includes troubleshooting tips updates
+to kunit user documentation.
 
-Otherwise, changes since the RFC:
-- Fixed a bit of space/tab confusion in the index (Thanks, Randy)
-- Added some more examples (and some test case examples).
-- Added some examples of what not to call subsystems and suites.
-- No longer explicitly require "If unsure, put N" in Kconfig entries.
-- Minor formatting changes.
+These tips in the doc patch helped me with my test runs.
 
-Cheers,
--- David
+diff is included.
 
- Documentation/dev-tools/kunit/index.rst |   1 +
- Documentation/dev-tools/kunit/style.rst | 181 ++++++++++++++++++++++++
- 2 files changed, 182 insertions(+)
- create mode 100644 Documentation/dev-tools/kunit/style.rst
+thanks,
+-- Shuah
 
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-to=
-ols/kunit/index.rst
-index e93606ecfb01..c234a3ab3c34 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -11,6 +11,7 @@ KUnit - Unit Testing for the Linux Kernel
- 	usage
- 	kunit-tool
- 	api/index
-+	style
- 	faq
-=20
- What is KUnit?
-diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/dev-to=
-ols/kunit/style.rst
+
+----------------------------------------------------------------
+
+The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
+
+   Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-kunit-fixes-5.8-rc4
+
+for you to fetch changes up to c63d2dd7e134ebddce4745c51f9572b3f0d92b26:
+
+   Documentation: kunit: Add some troubleshooting tips to the FAQ 
+(2020-06-26 14:29:55 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-kunit-fixes-5.8-rc4
+
+This kunit fixes update for Linux 5.8-rc4 consists of fixes to build
+and run-times failures. Also includes troubleshooting tips updates
+to kunit user documentation.
+
+----------------------------------------------------------------
+David Gow (2):
+       kunit: kunit_tool: Fix invalid result when build fails
+       Documentation: kunit: Add some troubleshooting tips to the FAQ
+
+Rikard Falkeborn (1):
+       kunit: kunit_config: Fix parsing of CONFIG options with space
+
+Uriel Guajardo (1):
+       kunit: show error if kunit results are not present
+
+  Documentation/dev-tools/kunit/faq.rst              |  40 
++++++++++++++++++++++
+  tools/testing/kunit/kunit.py                       |   4 ++-
+  tools/testing/kunit/kunit_config.py                |   2 +-
+  tools/testing/kunit/kunit_parser.py                |   8 ++---
+  tools/testing/kunit/kunit_tool_test.py             |  11 ++++++
+  .../kunit/test_data/test_insufficient_memory.log   | Bin
+  6 files changed, 59 insertions(+), 6 deletions(-)
+  create mode 100644 
+tools/testing/kunit/test_data/test_insufficient_memory.log
+----------------------------------------------------------------
+
+
+--------------4311EBEE68346305983AB55B
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-fixes-5.8-rc4.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-fixes-5.8-rc4.diff"
+
+diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
+index ea55b2467653..1628862e7024 100644
+--- a/Documentation/dev-tools/kunit/faq.rst
++++ b/Documentation/dev-tools/kunit/faq.rst
+@@ -61,3 +61,43 @@ test, or an end-to-end test.
+   kernel by installing a production configuration of the kernel on production
+   hardware with a production userspace and then trying to exercise some behavior
+   that depends on interactions between the hardware, the kernel, and userspace.
++
++KUnit isn't working, what should I do?
++======================================
++
++Unfortunately, there are a number of things which can break, but here are some
++things to try.
++
++1. Try running ``./tools/testing/kunit/kunit.py run`` with the ``--raw_output``
++   parameter. This might show details or error messages hidden by the kunit_tool
++   parser.
++2. Instead of running ``kunit.py run``, try running ``kunit.py config``,
++   ``kunit.py build``, and ``kunit.py exec`` independently. This can help track
++   down where an issue is occurring. (If you think the parser is at fault, you
++   can run it manually against stdin or a file with ``kunit.py parse``.)
++3. Running the UML kernel directly can often reveal issues or error messages
++   kunit_tool ignores. This should be as simple as running ``./vmlinux`` after
++   building the UML kernel (e.g., by using ``kunit.py build``). Note that UML
++   has some unusual requirements (such as the host having a tmpfs filesystem
++   mounted), and has had issues in the past when built statically and the host
++   has KASLR enabled. (On older host kernels, you may need to run ``setarch
++   `uname -m` -R ./vmlinux`` to disable KASLR.)
++4. Make sure the kernel .config has ``CONFIG_KUNIT=y`` and at least one test
++   (e.g. ``CONFIG_KUNIT_EXAMPLE_TEST=y``). kunit_tool will keep its .config
++   around, so you can see what config was used after running ``kunit.py run``.
++   It also preserves any config changes you might make, so you can
++   enable/disable things with ``make ARCH=um menuconfig`` or similar, and then
++   re-run kunit_tool.
++5. Try to run ``make ARCH=um defconfig`` before running ``kunit.py run``. This
++   may help clean up any residual config items which could be causing problems.
++6. Finally, try running KUnit outside UML. KUnit and KUnit tests can run be
++   built into any kernel, or can be built as a module and loaded at runtime.
++   Doing so should allow you to determine if UML is causing the issue you're
++   seeing. When tests are built-in, they will execute when the kernel boots, and
++   modules will automatically execute associated tests when loaded. Test results
++   can be collected from ``/sys/kernel/debug/kunit/<test suite>/results``, and
++   can be parsed with ``kunit.py parse``. For more details, see "KUnit on
++   non-UML architectures" in :doc:`usage`.
++
++If none of the above tricks help, you are always welcome to email any issues to
++kunit-dev@googlegroups.com.
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 787b6d4ad716..f9b769f3437d 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -82,7 +82,9 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+ 					request.make_options)
+ 	build_end = time.time()
+ 	if not success:
+-		return KunitResult(KunitStatus.BUILD_FAILURE, 'could not build kernel')
++		return KunitResult(KunitStatus.BUILD_FAILURE,
++				   'could not build kernel',
++				   build_end - build_start)
+ 	if not success:
+ 		return KunitResult(KunitStatus.BUILD_FAILURE,
+ 				   'could not build kernel',
+diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+index e75063d603b5..02ffc3a3e5dc 100644
+--- a/tools/testing/kunit/kunit_config.py
++++ b/tools/testing/kunit/kunit_config.py
+@@ -10,7 +10,7 @@ import collections
+ import re
+ 
+ CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+-CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+)$'
++CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
+ 
+ KconfigEntryBase = collections.namedtuple('KconfigEntry', ['name', 'value'])
+ 
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 64aac9dcd431..f13e0c0d6663 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -265,11 +265,9 @@ def bubble_up_suite_errors(test_suite_list: List[TestSuite]) -> TestStatus:
+ 	return bubble_up_errors(lambda x: x.status, test_suite_list)
+ 
+ def parse_test_result(lines: List[str]) -> TestResult:
+-	if not lines:
+-		return TestResult(TestStatus.NO_TESTS, [], lines)
+ 	consume_non_diagnositic(lines)
+-	if not parse_tap_header(lines):
+-		return None
++	if not lines or not parse_tap_header(lines):
++		return TestResult(TestStatus.NO_TESTS, [], lines)
+ 	test_suites = []
+ 	test_suite = parse_test_suite(lines)
+ 	while test_suite:
+@@ -282,6 +280,8 @@ def parse_run_tests(kernel_output) -> TestResult:
+ 	failed_tests = 0
+ 	crashed_tests = 0
+ 	test_result = parse_test_result(list(isolate_kunit_output(kernel_output)))
++	if test_result.status == TestStatus.NO_TESTS:
++		print_with_timestamp(red('[ERROR] ') + 'no kunit output detected')
+ 	for test_suite in test_result.suites:
+ 		if test_suite.status == TestStatus.SUCCESS:
+ 			print_suite_divider(green('[PASSED] ') + test_suite.name)
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 5bb7b118ebd9..f9eeaea94cad 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -170,6 +170,17 @@ class KUnitParserTest(unittest.TestCase):
+ 			result.status)
+ 		file.close()
+ 
++	def test_no_kunit_output(self):
++		crash_log = get_absolute_path(
++			'test_data/test_insufficient_memory.log')
++		file = open(crash_log)
++		print_mock = mock.patch('builtins.print').start()
++		result = kunit_parser.parse_run_tests(
++			kunit_parser.isolate_kunit_output(file.readlines()))
++		print_mock.assert_any_call(StrContains("no kunit output detected"))
++		print_mock.stop()
++		file.close()
++
+ 	def test_crashed_test(self):
+ 		crashed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-crash.log')
+diff --git a/tools/testing/kunit/test_data/test_insufficient_memory.log b/tools/testing/kunit/test_data/test_insufficient_memory.log
 new file mode 100644
-index 000000000000..8cad2627924c
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/style.rst
-@@ -0,0 +1,181 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-+Test Style and Nomenclature
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-+
-+Subsystems, Suites, and Tests
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-+
-+In order to make tests as easy to find as possible, they're grouped into s=
-uites
-+and subsystems. A test suite is a group of tests which test a related area=
- of
-+the kernel, and a subsystem is a set of test suites which test different p=
-arts
-+of the same kernel subsystem or driver.
-+
-+Subsystems
-+----------
-+
-+Every test suite must belong to a subsystem. A subsystem is a collection o=
-f one
-+or more KUnit test suites which test the same driver or part of the kernel=
-. A
-+rule of thumb is that a test subsystem should match a single kernel module=
-. If
-+the code being tested can't be compiled as a module, in many cases the sub=
-system
-+should correspond to a directory in the source tree or an entry in the
-+MAINTAINERS file. If unsure, follow the conventions set by tests in simila=
-r
-+areas.
-+
-+Test subsystems should be named after the code being tested, either after =
-the
-+module (wherever possible), or after the directory or files being tested. =
-Test
-+subsystems should be named to avoid ambiguity where necessary.
-+
-+If a test subsystem name has multiple components, they should be separated=
- by
-+underscores. *Do not* include "test" or "kunit" directly in the subsystem =
-name
-+unless you are actually testing other tests or the kunit framework itself.
-+
-+Example subsystems could be:
-+
-+``ext4``
-+  Matches the module and filesystem name.
-+``apparmor``
-+  Matches the module name and LSM name.
-+``kasan``
-+  Common name for the tool, prominent part of the path ``mm/kasan``
-+``snd_hda_codec_hdmi``
-+  Has several components (``snd``, ``hda``, ``codec``, ``hdmi``) separated=
- by
-+  underscores. Matches the module name.
-+
-+Avoid names like these:
-+
-+``linear-ranges``
-+  Names should use underscores, not dashes, to separate words. Prefer
-+  ``linear_ranges``.
-+``qos-kunit-test``
-+  As well as using underscores, this name should not have "kunit-test" as =
-a
-+  suffix, and ``qos`` is ambiguous as a subsystem name. ``power_qos`` woul=
-d be a
-+  better name.
-+``pc_parallel_port``
-+  The corresponding module name is ``parport_pc``, so this subsystem shoul=
-d also
-+  be named ``parport_pc``.
-+
-+.. note::
-+        The KUnit API and tools do not explicitly know about subsystems. T=
-hey're
-+        simply a way of categorising test suites and naming modules which
-+        provides a simple, consistent way for humans to find and run tests=
-. This
-+        may change in the future, though.
-+
-+Suites
-+------
-+
-+KUnit tests are grouped into test suites, which cover a specific area of
-+functionality being tested. Test suites can have shared initialisation and
-+shutdown code which is run for all tests in the suite.
-+Not all subsystems will need to be split into multiple test suites (e.g. s=
-imple drivers).
-+
-+Test suites are named after the subsystem they are part of. If a subsystem
-+contains several suites, the specific area under test should be appended t=
-o the
-+subsystem name, separated by an underscore.
-+
-+The full test suite name (including the subsystem name) should be specifie=
-d as
-+the ``.name`` member of the ``kunit_suite`` struct, and forms the base for=
- the
-+module name (see below).
-+
-+Example test suites could include:
-+
-+``ext4_inode``
-+  Part of the ``ext4`` subsystem, testing the ``inode`` area.
-+``kunit_try_catch``
-+  Part of the ``kunit`` implementation itself, testing the ``try_catch`` a=
-rea.
-+``apparmor_property_entry``
-+  Part of the ``apparmor`` subsystem, testing the ``property_entry`` area.
-+``kasan``
-+  The ``kasan`` subsystem has only one suite, so the suite name is the sam=
-e as
-+  the subsystem name.
-+
-+Avoid names like:
-+
-+``ext4_ext4_inode``
-+  There's no reason to state the subsystem twice.
-+``property_entry``
-+  The suite name is ambiguous without the subsystem name.
-+``kasan_unit_test``
-+  Because there is only one suite in the ``kasan`` subsystem, the suite sh=
-ould
-+  just be called ``kasan``. There's no need to redundantly add ``unit_test=
-``.
-+
-+Test Cases
-+----------
-+
-+Individual tests consist of a single function which tests a constrained
-+codepath, property, or function. In the test output, individual tests' res=
-ults
-+will show up as subtests of the suite's results.
-+
-+Tests should be named after what they're testing. This is often the name o=
-f the
-+function being tested, with a description of the input or codepath being t=
-ested.
-+As tests are C functions, they should be named and written in accordance w=
-ith
-+the kernel coding style.
-+
-+.. note::
-+        As tests are themselves functions, their names cannot conflict wit=
-h
-+        other C identifiers in the kernel. This may require some creative
-+        naming. It's a good idea to make your test functions `static` to a=
-void
-+        polluting the global namespace.
-+
-+Example test names include:
-+
-+``unpack_u32_with_null_name``
-+  Tests the ``unpack_u32`` function when a NULL name is passed in.
-+``test_list_splice``
-+  Tests the ``list_splice`` macro. It has the prefix ``test_`` to avoid a
-+  name conflict with the macro itself.
-+
-+
-+Should it be necessary to refer to a test outside the context of its test =
-suite,
-+the *fully-qualified* name of a test should be the suite name followed by =
-the
-+test name, separated by a colon (i.e. ``suite:test``).
-+
-+Test Kconfig Entries
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Every test suite should be tied to a Kconfig entry.
-+
-+This Kconfig entry must:
-+
-+* be named ``CONFIG_<name>_KUNIT_TEST``: where <name> is the name of the t=
-est
-+  suite.
-+* be listed either alongside the config entries for the driver/subsystem b=
-eing
-+  tested, or be under [Kernel Hacking]=E2=86=92[Kernel Testing and Coverag=
-e]
-+* depend on ``CONFIG_KUNIT``
-+* be visible only if ``CONFIG_KUNIT_ALL_TESTS`` is not enabled.
-+* have a default value of ``CONFIG_KUNIT_ALL_TESTS``.
-+* have a brief description of KUnit in the help text
-+
-+Unless there's a specific reason not to (e.g. the test is unable to be bui=
-lt as
-+a module), Kconfig entries for tests should be tristate.
-+
-+An example Kconfig entry:
-+
-+.. code-block:: none
-+
-+        config FOO_KUNIT_TEST
-+                tristate "KUnit test for foo" if !KUNIT_ALL_TESTS
-+                depends on KUNIT
-+                default KUNIT_ALL_TESTS
-+                help
-+                    This builds unit tests for foo.
-+
-+                    For more information on KUnit and unit tests in genera=
-l, please refer
-+                    to the KUnit documentation in Documentation/dev-tools/=
-kunit
-+
-+                    If unsure, say N
-+
-+
-+Test Filenames
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Where possible, test suites should be placed in a separate source file in =
-the
-+same directory as the code being tested.
-+
-+This file should be named ``<suite>_kunit.c``. It may make sense to strip
-+excessive namespacing from the source filename (e.g., ``firmware_kunit.c``=
- instead of
-+``<drivername>_firmware.c``), but please ensure the module name does conta=
-in the
-+full suite name.
-+
-+
---=20
-2.27.0.212.ge8ba1cc988-goog
+index 000000000000..e69de29bb2d1
 
+--------------4311EBEE68346305983AB55B--
