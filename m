@@ -2,87 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AD22130D6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jul 2020 03:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8762133A4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jul 2020 07:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgGCBKS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Jul 2020 21:10:18 -0400
-Received: from mga18.intel.com ([134.134.136.126]:33118 "EHLO mga18.intel.com"
+        id S1726237AbgGCFkM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Jul 2020 01:40:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48378 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725937AbgGCBKS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Jul 2020 21:10:18 -0400
-IronPort-SDR: ZcNxe+KN403AQeSQTJXcLlyHYxK++nSgMNegoxzU22R/WfL3+n6Cp5rrbfpu22BfftMnem+f7t
- ylFjeywgE8/w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="134523863"
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="134523863"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 18:10:17 -0700
-IronPort-SDR: hhzfnRppsSt1HZlwFkl+A9lSroPpFTv/+m1cEBZgvi+zT05eg3cgffRKVE4QVyqI/qYcDGTZQX
- tb4Z/KJkQrzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="265844749"
-Received: from xpf-desktop.sh.intel.com ([10.239.13.107])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jul 2020 18:10:15 -0700
-Date:   Fri, 3 Jul 2020 09:20:06 +0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
+        id S1726110AbgGCFkI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Jul 2020 01:40:08 -0400
+Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.8-rc4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593754808;
+        bh=1PQoSFGeykjYBraSRM8kS0DiUCQhGPxof6Uw1hWDvQc=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=AwMbDadJMS8hNPexaeV4AFen14i+AZsKTII1MUWNkKB65+KOagJhMPvrbQYbW3lae
+         wlAnhESpgFnefBcIggyNjcBZ/OC5XeB2WYjWGiyo/WT9u+hak9q0Wvi8YDhwt2kd8F
+         U8hrPJPTYD6NizNYO612OOcz9T89VT/6k/9Fm93s=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <c97a669c-02d8-24c6-3bbf-295124d8261a@linuxfoundation.org>
+References: <c97a669c-02d8-24c6-3bbf-295124d8261a@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <c97a669c-02d8-24c6-3bbf-295124d8261a@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+ tags/linux-kselftest-fixes-5.8-rc4
+X-PR-Tracked-Commit-Id: 377ff83083c953dd58c5a030b3c9b5b85d8cc727
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0dce88451f9c1cc5f1b73818e0608d5f84499e9a
+Message-Id: <159375480825.400.6437519329876320973.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Jul 2020 05:40:08 +0000
 To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Heng Su <heng.su@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai Svahn <kai.svahn@intel.com>
-Subject: Re: [PATCH v4] selftests: tpm: upgrade TPM2 tests from Python 2 to
- Python 3
-Message-ID: <20200703012005.GA23276@xpf-desktop.sh.intel.com>
-References: <20200626034052.25263-1-pengfei.xu@intel.com>
- <20200702194435.GA28988@linux.intel.com>
- <52f0d32d-d63a-ae1e-cdd9-1ed7bd4edbc0@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <52f0d32d-d63a-ae1e-cdd9-1ed7bd4edbc0@linuxfoundation.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks a lot Jarkko and Shuah!
+The pull request you sent on Thu, 2 Jul 2020 10:26:58 -0600:
 
-BR.
-Thanks!
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.8-rc4
 
-On 2020-07-02 at 15:32:49 -0600, Shuah Khan wrote:
-> On 7/2/20 1:44 PM, Jarkko Sakkinen wrote:
-> > On Fri, Jun 26, 2020 at 11:40:52AM +0800, Pengfei Xu wrote:
-> > > Python 2 is no longer supported by the Python upstream project, so
-> > > upgrade TPM2 tests to Python 3.
-> > > 
-> > > Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
-> > 
-> > I think that it's perfect now. Thank you.
-> > 
-> > Also
-> > 
-> > 1. I checked that scripts/checkpatch.pl did not report any errors.
-> > 2. sudo python3 -m unittest -v tpm2_tests.SmokeTest
-> > 3. sudo python3 -m unittest -v tpm2_tests.SpaceTest
-> > 
-> > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > 
-> > Shuah, I could pick this up after your PR (with my earlier fixes) lands
-> > to mainline, and sort out possible merge conflicts if they uprise. Is
-> > this fine by you?
-> > 
-> 
-> Yes. I will apply them as soon as PR clears and hopefully they can go
-> into rc5.
-> 
-> thanks,
-> -- Shuah
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0dce88451f9c1cc5f1b73818e0608d5f84499e9a
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
