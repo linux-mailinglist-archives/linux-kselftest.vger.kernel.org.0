@@ -2,56 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7512C2133A2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jul 2020 07:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F161213453
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jul 2020 08:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726169AbgGCFkI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Jul 2020 01:40:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48360 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725779AbgGCFkI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Jul 2020 01:40:08 -0400
-Subject: Re: [GIT PULL] Kunit fixes update for Linux 5.8-rc4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593754808;
-        bh=ocskdSa0KVruh+R4uOpgC7Tiw8alBDbBAnXQd6V/rgo=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=aLlOd09mgW6cNmxHE46hmJFdD1v51zC0bh8qFch1cg48R2Ablw0OJ/EAB1YaVuIG+
-         62Egl+ck/HGUpYhbKbjCrmUbth84VjD6qxuK4xarH7I3yj8Ls6luivFQt86M0LDAGM
-         Pop6aXruZ5uLlppr5b+56k2cv6pchjRHm34ryx4E=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <39219b27-98db-609c-d77b-3db2eb64345a@linuxfoundation.org>
-References: <39219b27-98db-609c-d77b-3db2eb64345a@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <39219b27-98db-609c-d77b-3db2eb64345a@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
- tags/linux-kselftest-kunit-fixes-5.8-rc4
-X-PR-Tracked-Commit-Id: c63d2dd7e134ebddce4745c51f9572b3f0d92b26
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 55844741a1e74bd41b4cea57502c2efedc99bf47
-Message-Id: <159375480808.400.11761356366202390858.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 Jul 2020 05:40:08 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     torvalds@linux-foundation.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>, skhan@linuxfoundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
+        id S1726406AbgGCGjI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Jul 2020 02:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbgGCGjH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Jul 2020 02:39:07 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BE0C08C5C1;
+        Thu,  2 Jul 2020 23:39:07 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id CEA5DBC146;
+        Fri,  3 Jul 2020 06:38:53 +0000 (UTC)
+Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: BPF (Safe dynamic
+ programs and tools)
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andrey Ignatov <rdna@fb.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
+References: <20200702200516.13324-1-grandmaster@al2klimov.de>
+ <CAADnVQKaL7cX2oCFLU7MW+CMf4ySbJf3tC3YqajDxgbuPCY-Cg@mail.gmail.com>
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Message-ID: <b06e1efb-b2e6-b06b-bf24-1369c42e8ace@al2klimov.de>
+Date:   Fri, 3 Jul 2020 08:38:52 +0200
+MIME-Version: 1.0
+In-Reply-To: <CAADnVQKaL7cX2oCFLU7MW+CMf4ySbJf3tC3YqajDxgbuPCY-Cg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: +
+X-Spam-Level: *
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Thu, 2 Jul 2020 09:23:55 -0600:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.8-rc4
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/55844741a1e74bd41b4cea57502c2efedc99bf47
+Am 03.07.20 um 00:08 schrieb Alexei Starovoitov:
+> On Thu, Jul 2, 2020 at 1:05 PM Alexander A. Klimov
+> <grandmaster@al2klimov.de> wrote:
+>>
+>> Rationale:
+>> Reduces attack surface on kernel devs opening the links for MITM
+>> as HTTPS traffic is much harder to manipulate.
+>>
+>> Deterministic algorithm:
+>> For each file:
+>>    If not .svg:
+>>      For each line:
+>>        If doesn't contain `\bxmlns\b`:
+>>          For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+>>            If both the HTTP and HTTPS versions
+>>            return 200 OK and serve the same content:
+>>              Replace HTTP with HTTPS.
+>>
+>> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+>> ---
+>>   Continuing my work started at 93431e0607e5.
+>>
+>>   If there are any URLs to be removed completely or at least not HTTPSified:
+>>   Just clearly say so and I'll *undo my change*.
+>>   See also https://lkml.org/lkml/2020/6/27/64
+>>
+>>   If there are any valid, but yet not changed URLs:
+>>   See https://lkml.org/lkml/2020/6/26/837
+>>
+>>   Documentation/bpf/bpf_devel_QA.rst          | 4 ++--
+>>   Documentation/bpf/index.rst                 | 2 +-
+>>   Documentation/networking/af_xdp.rst         | 2 +-
+>>   Documentation/networking/filter.rst         | 2 +-
+>>   arch/x86/net/bpf_jit_comp.c                 | 2 +-
+>>   include/linux/bpf.h                         | 2 +-
+>>   include/linux/bpf_verifier.h                | 2 +-
+>>   include/uapi/linux/bpf.h                    | 2 +-
+>>   kernel/bpf/arraymap.c                       | 2 +-
+>>   kernel/bpf/core.c                           | 2 +-
+>>   kernel/bpf/disasm.c                         | 2 +-
+>>   kernel/bpf/disasm.h                         | 2 +-
+>>   kernel/bpf/hashtab.c                        | 2 +-
+>>   kernel/bpf/helpers.c                        | 2 +-
+>>   kernel/bpf/syscall.c                        | 2 +-
+>>   kernel/bpf/verifier.c                       | 2 +-
+>>   kernel/trace/bpf_trace.c                    | 2 +-
+>>   lib/test_bpf.c                              | 2 +-
+>>   net/core/filter.c                           | 2 +-
+>>   samples/bpf/lathist_kern.c                  | 2 +-
+>>   samples/bpf/lathist_user.c                  | 2 +-
+>>   samples/bpf/sockex3_kern.c                  | 2 +-
+>>   samples/bpf/tracex1_kern.c                  | 2 +-
+>>   samples/bpf/tracex2_kern.c                  | 2 +-
+>>   samples/bpf/tracex3_kern.c                  | 2 +-
+>>   samples/bpf/tracex3_user.c                  | 2 +-
+>>   samples/bpf/tracex4_kern.c                  | 2 +-
+>>   samples/bpf/tracex4_user.c                  | 2 +-
+>>   samples/bpf/tracex5_kern.c                  | 2 +-
+>>   tools/include/uapi/linux/bpf.h              | 2 +-
+>>   tools/lib/bpf/bpf.c                         | 2 +-
+>>   tools/lib/bpf/bpf.h                         | 2 +-
+>>   tools/testing/selftests/bpf/test_maps.c     | 2 +-
+>>   tools/testing/selftests/bpf/test_verifier.c | 2 +-
+>>   34 files changed, 35 insertions(+), 35 deletions(-)
+> 
+> Nacked-by: Alexei Starovoitov <ast@kernel.org>
+> 
+> Pls don't touch anything bpf related with such changes.
+https://lore.kernel.org/linux-doc/20200526060544.25127-1-grandmaster@al2klimov.de/
+– merged.
 
-Thank you!
+https://lore.kernel.org/linux-doc/20200608181649.74883-1-grandmaster@al2klimov.de/
+– applied.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+https://lore.kernel.org/linux-doc/20200620075402.22347-1-grandmaster@al2klimov.de/
+– applied.
+
+https://lore.kernel.org/linux-doc/20200621133512.46311-1-grandmaster@al2klimov.de/
+– applied.
+
+https://lore.kernel.org/linux-doc/20200621133552.46371-1-grandmaster@al2klimov.de/
+– applied.
+
+https://lore.kernel.org/linux-doc/20200621133630.46435-1-grandmaster@al2klimov.de/
+– applied.
+
+https://lore.kernel.org/linux-doc/20200627103050.71712-1-grandmaster@al2klimov.de/
+– applied.
+
+https://lore.kernel.org/linux-doc/20200627103125.71828-1-grandmaster@al2klimov.de/
+– reviewed.
+
+https://lore.kernel.org/linux-doc/20200627103151.71942-1-grandmaster@al2klimov.de/
+– reviewed.
+
+This one – no, pls not.
+
+Why exactly not? Are these URLs not being opened at all (What they're 
+doing there then?) or have all who open them the HTTPS everywhere 
+browser addon installed?
+
+> 
