@@ -2,172 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F161213453
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jul 2020 08:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9561F213F53
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jul 2020 20:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbgGCGjI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Jul 2020 02:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S1726382AbgGCSnb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Jul 2020 14:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbgGCGjH (ORCPT
+        with ESMTP id S1726148AbgGCSnb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Jul 2020 02:39:07 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BE0C08C5C1;
-        Thu,  2 Jul 2020 23:39:07 -0700 (PDT)
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id CEA5DBC146;
-        Fri,  3 Jul 2020 06:38:53 +0000 (UTC)
-Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: BPF (Safe dynamic
- programs and tools)
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andrey Ignatov <rdna@fb.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
-References: <20200702200516.13324-1-grandmaster@al2klimov.de>
- <CAADnVQKaL7cX2oCFLU7MW+CMf4ySbJf3tC3YqajDxgbuPCY-Cg@mail.gmail.com>
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Message-ID: <b06e1efb-b2e6-b06b-bf24-1369c42e8ace@al2klimov.de>
-Date:   Fri, 3 Jul 2020 08:38:52 +0200
+        Fri, 3 Jul 2020 14:43:31 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4E1C061794
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2020 11:43:31 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id bf7so3601606plb.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2020 11:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=mPYr8lr3dKUW6vXJxZwhdaycJnvZSFeoH2v61Uj7UJE=;
+        b=mof6JfwP8HZHKdXOSnM0KGvAbs+aaGUl0ZRYqOy7DKbsrF/bsIBrdbBzKrZbUpKiMm
+         JDbUMsX26Or6vL/H/UMsIDo0B7NsONf7q+ErPdZeT38sPBCXXOu/rBZ3n5HxrlqbvG1X
+         I+U1/5ChNQAZvIVSMsUoSwM4Z1Cqd1NqwgqV4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=mPYr8lr3dKUW6vXJxZwhdaycJnvZSFeoH2v61Uj7UJE=;
+        b=F4f8G+xzATjPnEYtbnAiKXyFQWSL+nxJotE2HwDUzVqAqE8OuW21t9olbGnv/wjdfl
+         0YVSKcQBMGsHyo3Kp5ZV45MAGFoFXw3U4MoHaqv/uAkoRQmBBt1+8hLMK7FRw10qrwt4
+         jAWjKEQ3NzxPqCRmlGgKPPksz79rlZJDlE9UqeI3ws3DgpUJjzySu+s/jJneZnX58s0L
+         zAI85AS+7HjzVKHxRXbU/Xm6T3flWzepIcv1d3neYm/uUfI1Z0ruWGUpQKMVz1kct14s
+         Ya9q0RUPRteJMGA/su3LIPdKWIpxecSmyduKgquQ1vChMO9JWmRUe4YOMgwcTsGfzqpI
+         VUvQ==
+X-Gm-Message-State: AOAM532At5PppZT1qjO/sRwxTwNCK/6e3khiBYvFzTJ9V207Xx8p+vK7
+        BhBHczxpweEMa4pQy4kNnKW+Fg==
+X-Google-Smtp-Source: ABdhPJyq6m8Qlb4zZJvG3Y12jlIiEeZ9iY6G937YP3me7No2ZXYqR9ki1WHJLdnN9BcRmfa7w8PCbw==
+X-Received: by 2002:a17:90a:764c:: with SMTP id s12mr25055306pjl.201.1593801810720;
+        Fri, 03 Jul 2020 11:43:30 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j36sm12672948pgj.39.2020.07.03.11.43.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2020 11:43:29 -0700 (PDT)
+Date:   Fri, 3 Jul 2020 11:43:28 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dominik Czarnota <dominik.czarnota@trailofbits.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: kmod: Add module address visibility test
+Message-ID: <202007031141.6AC2173@keescook>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQKaL7cX2oCFLU7MW+CMf4ySbJf3tC3YqajDxgbuPCY-Cg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +
-X-Spam-Level: *
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Make sure we don't regress the CAP_SYSLOG behavior of the module address
+visibility via /proc/modules nor /sys/module/*/sections/*.
+
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+I forgot to include this patch in my kallsyms_show_value() f_cred series:
+https://lore.kernel.org/lkml/20200702232638.2946421-1-keescook@chromium.org/
+Since this depends on the changes, I'd like to include this in the
+series with acks/review, etc. :)
+---
+ tools/testing/selftests/kmod/kmod.sh | 36 ++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index 3702dbcc90a7..c82aa77958e5 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -63,6 +63,8 @@ ALL_TESTS="$ALL_TESTS 0008:150:1"
+ ALL_TESTS="$ALL_TESTS 0009:150:1"
+ ALL_TESTS="$ALL_TESTS 0010:1:1"
+ ALL_TESTS="$ALL_TESTS 0011:1:1"
++ALL_TESTS="$ALL_TESTS 0012:1:1"
++ALL_TESTS="$ALL_TESTS 0013:1:1"
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+@@ -470,6 +472,38 @@ kmod_test_0011()
+ 	echo "$MODPROBE" > /proc/sys/kernel/modprobe
+ }
+ 
++kmod_check_visibility()
++{
++	local name="$1"
++	local cmd="$2"
++
++	modprobe $DEFAULT_KMOD_DRIVER
++
++	local priv=$(eval $cmd)
++	local unpriv=$(capsh --drop=CAP_SYSLOG -- -c "$cmd")
++
++	if [ "$priv" = "$unpriv" ] || \
++	   [ "${priv:0:3}" = "0x0" ] || \
++	   [ "${unpriv:0:3}" != "0x0" ] ; then
++		echo "${FUNCNAME[0]}: FAIL, $name visible to unpriv: '$priv' vs '$unpriv'" >&2
++		exit 1
++	else
++		echo "${FUNCNAME[0]}: OK!"
++	fi
++}
++
++kmod_test_0012()
++{
++	kmod_check_visibility /proc/modules \
++		"grep '^${DEFAULT_KMOD_DRIVER}\b' /proc/modules | awk '{print \$NF}'"
++}
++
++kmod_test_0013()
++{
++	kmod_check_visibility '/sys/module/*/sections/*' \
++		"cat /sys/module/${DEFAULT_KMOD_DRIVER}/sections/.*text | head -n1"
++}
++
+ list_tests()
+ {
+ 	echo "Test ID list:"
+@@ -489,6 +523,8 @@ list_tests()
+ 	echo "0009 x $(get_test_count 0009) - multithreaded - push kmod_concurrent over max_modprobes for get_fs_type()"
+ 	echo "0010 x $(get_test_count 0010) - test nonexistent modprobe path"
+ 	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
++	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
++	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
+ }
+ 
+ usage()
+-- 
+2.25.1
 
 
-Am 03.07.20 um 00:08 schrieb Alexei Starovoitov:
-> On Thu, Jul 2, 2020 at 1:05 PM Alexander A. Klimov
-> <grandmaster@al2klimov.de> wrote:
->>
->> Rationale:
->> Reduces attack surface on kernel devs opening the links for MITM
->> as HTTPS traffic is much harder to manipulate.
->>
->> Deterministic algorithm:
->> For each file:
->>    If not .svg:
->>      For each line:
->>        If doesn't contain `\bxmlns\b`:
->>          For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
->>            If both the HTTP and HTTPS versions
->>            return 200 OK and serve the same content:
->>              Replace HTTP with HTTPS.
->>
->> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
->> ---
->>   Continuing my work started at 93431e0607e5.
->>
->>   If there are any URLs to be removed completely or at least not HTTPSified:
->>   Just clearly say so and I'll *undo my change*.
->>   See also https://lkml.org/lkml/2020/6/27/64
->>
->>   If there are any valid, but yet not changed URLs:
->>   See https://lkml.org/lkml/2020/6/26/837
->>
->>   Documentation/bpf/bpf_devel_QA.rst          | 4 ++--
->>   Documentation/bpf/index.rst                 | 2 +-
->>   Documentation/networking/af_xdp.rst         | 2 +-
->>   Documentation/networking/filter.rst         | 2 +-
->>   arch/x86/net/bpf_jit_comp.c                 | 2 +-
->>   include/linux/bpf.h                         | 2 +-
->>   include/linux/bpf_verifier.h                | 2 +-
->>   include/uapi/linux/bpf.h                    | 2 +-
->>   kernel/bpf/arraymap.c                       | 2 +-
->>   kernel/bpf/core.c                           | 2 +-
->>   kernel/bpf/disasm.c                         | 2 +-
->>   kernel/bpf/disasm.h                         | 2 +-
->>   kernel/bpf/hashtab.c                        | 2 +-
->>   kernel/bpf/helpers.c                        | 2 +-
->>   kernel/bpf/syscall.c                        | 2 +-
->>   kernel/bpf/verifier.c                       | 2 +-
->>   kernel/trace/bpf_trace.c                    | 2 +-
->>   lib/test_bpf.c                              | 2 +-
->>   net/core/filter.c                           | 2 +-
->>   samples/bpf/lathist_kern.c                  | 2 +-
->>   samples/bpf/lathist_user.c                  | 2 +-
->>   samples/bpf/sockex3_kern.c                  | 2 +-
->>   samples/bpf/tracex1_kern.c                  | 2 +-
->>   samples/bpf/tracex2_kern.c                  | 2 +-
->>   samples/bpf/tracex3_kern.c                  | 2 +-
->>   samples/bpf/tracex3_user.c                  | 2 +-
->>   samples/bpf/tracex4_kern.c                  | 2 +-
->>   samples/bpf/tracex4_user.c                  | 2 +-
->>   samples/bpf/tracex5_kern.c                  | 2 +-
->>   tools/include/uapi/linux/bpf.h              | 2 +-
->>   tools/lib/bpf/bpf.c                         | 2 +-
->>   tools/lib/bpf/bpf.h                         | 2 +-
->>   tools/testing/selftests/bpf/test_maps.c     | 2 +-
->>   tools/testing/selftests/bpf/test_verifier.c | 2 +-
->>   34 files changed, 35 insertions(+), 35 deletions(-)
-> 
-> Nacked-by: Alexei Starovoitov <ast@kernel.org>
-> 
-> Pls don't touch anything bpf related with such changes.
-https://lore.kernel.org/linux-doc/20200526060544.25127-1-grandmaster@al2klimov.de/
-– merged.
-
-https://lore.kernel.org/linux-doc/20200608181649.74883-1-grandmaster@al2klimov.de/
-– applied.
-
-https://lore.kernel.org/linux-doc/20200620075402.22347-1-grandmaster@al2klimov.de/
-– applied.
-
-https://lore.kernel.org/linux-doc/20200621133512.46311-1-grandmaster@al2klimov.de/
-– applied.
-
-https://lore.kernel.org/linux-doc/20200621133552.46371-1-grandmaster@al2klimov.de/
-– applied.
-
-https://lore.kernel.org/linux-doc/20200621133630.46435-1-grandmaster@al2klimov.de/
-– applied.
-
-https://lore.kernel.org/linux-doc/20200627103050.71712-1-grandmaster@al2klimov.de/
-– applied.
-
-https://lore.kernel.org/linux-doc/20200627103125.71828-1-grandmaster@al2klimov.de/
-– reviewed.
-
-https://lore.kernel.org/linux-doc/20200627103151.71942-1-grandmaster@al2klimov.de/
-– reviewed.
-
-This one – no, pls not.
-
-Why exactly not? Are these URLs not being opened at all (What they're 
-doing there then?) or have all who open them the HTTPS everywhere 
-browser addon installed?
-
-> 
+-- 
+Kees Cook
