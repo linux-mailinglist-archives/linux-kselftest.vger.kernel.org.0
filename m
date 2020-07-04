@@ -2,224 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4FF214651
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jul 2020 16:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC322146D1
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jul 2020 17:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbgGDODR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 4 Jul 2020 10:03:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726948AbgGDODN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 Jul 2020 10:03:13 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD589218AC;
-        Sat,  4 Jul 2020 14:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593871392;
-        bh=Yj+14217YtAOnGW+R47dIfZ8DJrAtcfTkhE3moybXhw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bo1VVkDd19yyAM+xVbtMirVeDtHC8y8RVtHm53sL556lDzTRt7fNbrNRVslVhYZQh
-         jB4FnUhzApA+tdrCHP5OK5i0o7VSGvrVwKwgJAUXYBs2Tlqpg3HLvxn5WJhZkYfTZw
-         DyEvXIMAXEm++4fTgZWv/HtWpliLrfrV11Oh3GoU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     viro@zeniv.linux.org.uk, mtk.manpages@gmail.com, shuah@kernel.org,
-        linux-api@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-man@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] readfile.2: new page describing readfile(2)
-Date:   Sat,  4 Jul 2020 16:02:50 +0200
-Message-Id: <20200704140250.423345-5-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200704140250.423345-1-gregkh@linuxfoundation.org>
-References: <20200704140250.423345-1-gregkh@linuxfoundation.org>
+        id S1726909AbgGDPL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 4 Jul 2020 11:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbgGDPLZ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 4 Jul 2020 11:11:25 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1D4C061794;
+        Sat,  4 Jul 2020 08:11:25 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id b25so4469804qto.2;
+        Sat, 04 Jul 2020 08:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OOkooQcgZT8G2WjNcK+Cq5ASRRPbRLgNwU0mUCZTWZI=;
+        b=SSCGTrxShtNJIdkHMwubUtEAPLob65gZ9Nz5GIsi4JTIzZCXrLS/99iaMWNLeILZZh
+         dUCTc3VZFmhBFFLd6jSGUcZoz4xga8nOBy81G/6qLO+eDQFVHxsn45Hc+A2nfJbxQLQ3
+         F/yWQeimUTBDQsKwVTH3jhKYtwL7xOf7lN40MjPuRNoNjMdHcoy12/g+hDD3lKHj4+yW
+         4w2ihNFDM1x8cwKAZcSDup2S5B+BdcBesMzzm3szOfZD3uGB51X/o6qFL+ZwB749hzBe
+         DWEjqvR/fDIzJeaw5zs0M8WY8K+4iXiLIzARk5Sn76TMP5jOkhrKt6AE/QYT8GXmRlM/
+         0w3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=OOkooQcgZT8G2WjNcK+Cq5ASRRPbRLgNwU0mUCZTWZI=;
+        b=DU1IyXEHq0szioK2dOKcmbWf9AF5ZtFC3bhzKAX86tsYbgYYV1t8/cHEwWR7k7bKM/
+         izEMEhIL8cz8ZtYJ587zrB60/4GP8381hCNeaH/5Z9/RicPH5yLCt4qhZGhHn/q+SAPQ
+         vviKlsF89ahLwPNfnsh87KItPl2ETyOHQhKZ/BF0h9Ephw+UwvTUcPQxV6+hrO7gNqg3
+         DgkDjqb0hhzsI04nhzdMN5NhhcY92aXkGhMT3Xe64pYUeOm+jhjKXqf2kk5OGyz00uxi
+         t7F+PT04KkAbZ5QOPl8KYuMLm13JXFDBYfST7s5YC0A3/0DB5/ufJPoRpJOW9EZmASNU
+         EPfg==
+X-Gm-Message-State: AOAM531DqdCNzkRkpwUCOaM5WVElITjacx9x7ADqNKgj6gh4bRdCQKjW
+        xaNoe20oHlDywdqQmuZGAqc=
+X-Google-Smtp-Source: ABdhPJyYWEY9xvrLxysif9VMRbbPNXdpPaaf7cVFq/ebirldMeLAaEYpHqI6t21b12ayi2VmWj4t2Q==
+X-Received: by 2002:aed:2492:: with SMTP id t18mr42182035qtc.353.1593875484322;
+        Sat, 04 Jul 2020 08:11:24 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id z68sm13598056qke.113.2020.07.04.08.11.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jul 2020 08:11:23 -0700 (PDT)
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Sat, 4 Jul 2020 11:11:21 -0400
+To:     "Andersen, John" <john.s.andersen@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "Christopherson, Sean J" <sean.j.christopherson@intel.com>,
+        Liran Alon <liran.alon@oracle.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, mchehab+huawei@kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        pawan.kumar.gupta@linux.intel.com, Juergen Gross <jgross@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
+        vineela.tummalapalli@intel.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        caoj.fnst@cn.fujitsu.com, Baoquan He <bhe@redhat.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Geremy Condra <geremy.condra@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>, eric.auger@redhat.com,
+        aaronlewis@google.com, Peter Xu <peterx@redhat.com>,
+        makarandsonare@google.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: [PATCH 4/4] X86: Use KVM CR pin MSRs
+Message-ID: <20200704151121.GA1611291@rani.riverdale.lan>
+References: <20200617190757.27081-1-john.s.andersen@intel.com>
+ <20200617190757.27081-5-john.s.andersen@intel.com>
+ <CALCETrXwzQDDd1rfBW+ptmijEjc2cMqfWGvJu-qqrqia5Ls=Uw@mail.gmail.com>
+ <20200623200334.GA23@6540770db1d7>
+ <20200703214814.GA25@0e1a9e0069b7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200703214814.GA25@0e1a9e0069b7>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-readfile(2) is a new syscall to remove the need to do the
-open/read/close dance for small virtual files in places like procfs or
-sysfs.
+On Fri, Jul 03, 2020 at 09:48:14PM +0000, Andersen, John wrote:
+> > > Is there a plan for fixing this for real?  I'm wondering if there is a
+> > > sane weakening of this feature that still allows things like kexec.
+> > > 
+> > 
+> > I'm pretty sure kexec can be fixed. I had it working at one point, I'm
+> > currently in the process of revalidating this. The issue was though that
+> > kexec only worked within the guest, not on the physical host, which I suspect
+> > is related to the need for supervisor pages to be mapped, which seems to be
+> > required before enabling SMAP (based on what I'd seen with the selftests and
+> > unittests). I was also just blindly turning on the bits without checking for
+> > support when I'd tried this, so that could have been the issue too.
+> > 
+> > I think most of the changes for just blindly enabling the bits were in
+> > relocate_kernel, secondary_startup_64, and startup_32.
+> > 
+> 
+> So I have a naive fix for kexec which has only been tested to work under KVM.
+> When tested on a physical host, it did not boot when SMAP or UMIP were set.
+> Undoubtedly it's not the correct way to do this, as it skips CPU feature
+> identification, opting instead for blindly setting the bits. The physical host
+> I tested this on does not have UMIP so that's likely why it failed to boot when
+> UMIP gets set blindly. Within kvm-unit-tests, the test for SMAP maps memory as
+> supervisor pages before enabling SMAP. I suspect this is why setting SMAP
+> blindly causes the physical host not to boot.
+> 
+> Within trampoline_32bit_src() if I add more instructions I get an error
+> about "attempt to move .org backwards", which as I understand it means
+> there are only so many instructions allowed in each of those functions.
+> 
+> My suspicion is that someone with more knowledge of this area has a good
+> idea on how best to handle this. Feedback would be much appreciated.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-
-This patch is for the man-pages project, not the kernel source tree
-
- man2/readfile.2 | 159 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 159 insertions(+)
- create mode 100644 man2/readfile.2
-
-diff --git a/man2/readfile.2 b/man2/readfile.2
-new file mode 100644
-index 000000000000..449e722c3442
---- /dev/null
-+++ b/man2/readfile.2
-@@ -0,0 +1,159 @@
-+.\" This manpage is Copyright (C) 2020 Greg Kroah-Hartman;
-+.\"  and Copyright (C) 2020 The Linux Foundation
-+.\"
-+.\" %%%LICENSE_START(VERBATIM)
-+.\" Permission is granted to make and distribute verbatim copies of this
-+.\" manual provided the copyright notice and this permission notice are
-+.\" preserved on all copies.
-+.\"
-+.\" Permission is granted to copy and distribute modified versions of this
-+.\" manual under the conditions for verbatim copying, provided that the
-+.\" entire resulting derived work is distributed under the terms of a
-+.\" permission notice identical to this one.
-+.\"
-+.\" Since the Linux kernel and libraries are constantly changing, this
-+.\" manual page may be incorrect or out-of-date.  The author(s) assume no
-+.\" responsibility for errors or omissions, or for damages resulting from
-+.\" the use of the information contained herein.  The author(s) may not
-+.\" have taken the same level of care in the production of this manual,
-+.\" which is licensed free of charge, as they might when working
-+.\" professionally.
-+.\"
-+.\" Formatted or processed versions of this manual, if unaccompanied by
-+.\" the source, must acknowledge the copyright and authors of this work.
-+.\" %%%LICENSE_END
-+.\"
-+.TH READFILE 2 2020-07-04 "Linux" "Linux Programmer's Manual"
-+.SH NAME
-+readfile \- read a file into a buffer
-+.SH SYNOPSIS
-+.nf
-+.B #include <unistd.h>
-+.PP
-+.BI "ssize_t readfile(int " dirfd ", const char *" pathname ", void *" buf \
-+", size_t " count ", int " flags );
-+.fi
-+.SH DESCRIPTION
-+.BR readfile ()
-+attempts to open the file specified by
-+.IR pathname
-+and to read up to
-+.I count
-+bytes from the file into the buffer starting at
-+.IR buf .
-+It is to be a shortcut of doing the sequence of
-+.BR open ()
-+and then
-+.BR read ()
-+and then
-+.BR close ()
-+for small files that are read frequently, such as those in
-+.B procfs
-+or
-+.BR sysfs .
-+.PP
-+If the size of file is smaller than the value provided in
-+.I count
-+then the whole file will be copied into
-+.IR buf .
-+.PP
-+If the file is larger than the value provided in
-+.I count
-+then only
-+.I count
-+number of bytes will be copied into
-+.IR buf .
-+.PP
-+The argument
-+.I flags
-+may contain one of the following
-+.IR "access modes" :
-+.BR O_NOFOLLOW ", or " O_NOATIME .
-+.PP
-+If the pathname given in
-+.I pathname
-+is relative, then it is interpreted relative to the directory
-+referred to by the file descriptor
-+.IR dirfd .
-+.PP
-+If
-+.I pathname
-+is relative and
-+.I dirfd
-+is the special value
-+.BR AT_FDCWD ,
-+then
-+.I pathname
-+is interpreted relative to the current working
-+directory of the calling process (like
-+.BR openat ()).
-+.PP
-+If
-+.I pathname
-+is absolute, then
-+.I dirfd
-+is ignored.
-+.SH RETURN VALUE
-+On success, the number of bytes read is returned.
-+It is not an error if this number is smaller than the number of bytes
-+requested; this can happen if the file is smaller than the number of
-+bytes requested.
-+.PP
-+On error, \-1 is returned, and
-+.I errno
-+is set appropriately.
-+.SH ERRORS
-+.TP
-+.B EFAULT
-+.I buf
-+is outside your accessible address space.
-+.TP
-+.B EINTR
-+The call was interrupted by a signal before any data was read; see
-+.BR signal (7).
-+.TP
-+.B EINVAL
-+.I flags
-+was set to a value that is not allowed.
-+.TP
-+.B EIO
-+I/O error.
-+This will happen for example when the process is in a
-+background process group, tries to read from its controlling terminal,
-+and either it is ignoring or blocking
-+.B SIGTTIN
-+or its process group
-+is orphaned.
-+It may also occur when there is a low-level I/O error
-+while reading from a disk or tape.
-+A further possible cause of
-+.B EIO
-+on networked filesystems is when an advisory lock had been taken
-+out on the file descriptor and this lock has been lost.
-+See the
-+.I "Lost locks"
-+section of
-+.BR fcntl (2)
-+for further details.
-+.SH CONFORMING TO
-+None, this is a Linux-specific system call at this point in time.
-+.SH NOTES
-+The type
-+.I size_t
-+is an unsigned integer data type specified by POSIX.1.
-+.PP
-+On Linux,
-+.BR read ()
-+(and similar system calls) will transfer at most
-+0x7ffff000 (2,147,479,552) bytes,
-+returning the number of bytes actually transferred.
-+.\" commit e28cc71572da38a5a12c1cfe4d7032017adccf69
-+(This is true on both 32-bit and 64-bit systems.)
-+.SH BUGS
-+None yet!
-+.SH SEE ALSO
-+.BR close (2),
-+.BR open (2),
-+.BR openat (2),
-+.BR read (2),
-+.BR fread (3)
--- 
-2.27.0
-
+You can simply increase the value of TRAMPOLINE_32BIT_CODE_SIZE in
+pgtable.h, assuming you don't need a very large increase. There's one
+page available for code + stack at present.
