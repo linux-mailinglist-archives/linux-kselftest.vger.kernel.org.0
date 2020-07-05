@@ -2,119 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC41214A8D
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 08:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFF5214A9A
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 08:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgGEGMl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 5 Jul 2020 02:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S1725873AbgGEGcm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 5 Jul 2020 02:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726538AbgGEGMk (ORCPT
+        with ESMTP id S1725901AbgGEGcm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Jul 2020 02:12:40 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356EBC08C5DF
-        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 23:12:40 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id o22so10579247pjw.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 23:12:40 -0700 (PDT)
+        Sun, 5 Jul 2020 02:32:42 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD6BC08C5DF
+        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 23:32:42 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id x11so14107963plo.7
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 23:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fPweZ6DZU1ENxuozio/NA02HLt4qwCgCF26PVdwgmUw=;
-        b=eHez7mRezl3LRANbjE9V3fYHuiKTipMbrZxyLSQ8DYa+CsUnkd7R93uYjLh8qhclBF
-         astTE3wzBXb6w0ko4CNb3iCWSSyKMABzRVflBHuKZATMtETPiDqIYxCGlugWhQxJnQAe
-         tcWFVOjHZeqkFFnKprhnoBDKbp1h+KP0S01jU=
+        d=dilger-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:message-id:mime-version:subject:date:in-reply-to:cc:to
+         :references;
+        bh=WCQEsdCuQ9yFesPb0P6L21dKrxXpFZDsrMqQwx+GSTE=;
+        b=ZkJkXi+4dQk/smjOS+gAMftw8iLt0lIoYUPMioM6cB75Cd2e+suQg7Z3PgVEn2jMKu
+         L7W5ZbRNMy0LAiu+GVWQ3ABkYJlrIJGAmCwQcTInqg6Itj7nc0cDPLKv7bEto5F43R2O
+         yx5Qa7aukHcTcJq/HgOpgyc+PbNivsP5yFJ685k4H7v4rrf31YrfC0zVKncgXt+kx2wk
+         hE+UVW7xpWxJDAsXBA3nkO7Zq4oqz27mC3wb21zvqsAhWEQIrnQo7YATnlPPxwf8UG2F
+         cfAeArQQBXead75eYpr3duXEKYFASiHwCdZQ3pVCEDjFj3o5VSg1HepNpoU7FXTtSXMX
+         9+JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fPweZ6DZU1ENxuozio/NA02HLt4qwCgCF26PVdwgmUw=;
-        b=uS+k4jHU3wBsOJaU4m+K/i0QzT1OpyWK+sTgOPn+HBrDaSBW3MtY1Rb7ioeYuUTZJj
-         UudOA4czzdXoIINIs/Ayb0+9OB4hqntTv2zPMf9AIcPLUP2tM5GJ/e/57Mci1y1kttET
-         vK64XOUzDq0zPb1R85piQzt2qP59kwoi+spEnoq7HC7kfjcxhasYSmHPYtUkpaPRj8eA
-         W0MbgAHyQjpM7EBkHC/QVyjv5xztM2hXvymexxxbBPDoKdAoE0axI2PIVTGF8ZZAWqi8
-         hE4+MhLD2Q+tp871J7v+QNfOOxzJ1Qb5uWEcFhI/qMRi2hb88wGxeN7OEAd3u8o/h+Si
-         yoEA==
-X-Gm-Message-State: AOAM5309a8zgaNCCHUfIlBdx6L4st67tlYUOJAJnxliXBPc/KJy0xfQg
-        /S12TV6XJMdoovWnDzCbADqUCg==
-X-Google-Smtp-Source: ABdhPJz3fz9uNnH3pm1N5xpLDXk919zAKiGqawBuegK156HeIrG5riLllTgK7fEcIVuXZxaN1UTCSw==
-X-Received: by 2002:a17:90a:c5:: with SMTP id v5mr46527588pjd.192.1593929559801;
-        Sat, 04 Jul 2020 23:12:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n62sm5275663pjb.28.2020.07.04.23.12.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2020 23:12:37 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] selftests/seccomp: Check ENOSYS under tracing
-Date:   Sat,  4 Jul 2020 23:12:32 -0700
-Message-Id: <20200705061232.4151319-4-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200705061232.4151319-1-keescook@chromium.org>
-References: <20200705061232.4151319-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:message-id:mime-version:subject:date
+         :in-reply-to:cc:to:references;
+        bh=WCQEsdCuQ9yFesPb0P6L21dKrxXpFZDsrMqQwx+GSTE=;
+        b=VY2oV9e7bwyJ9Amk2C5fb/jRiJX3vTC2X31Jyt5iGXKXY6cFWatAbcamRCFNlyQn1+
+         wogesXXgoTKZNIldvldyaljMjiK0k4n2Ob5nzLeLjEcphvdoiVsBO0YUOY2YtyqTI0Uq
+         QYY8n8pFK6x48ucUONjj25OeFP1+Bep+LO4uHK3xt0sqII7IbuV76bhTCLEZIgeFVPHw
+         tPSYLEuUUGnsfkpuFo+4EUM8qFEGHYv9YwhaEZqEqQto7oX20wvlBBrn+eGZr0sIV/Po
+         5FvJVqZkJMIB45YXdmPICDBQJfGsXa23FN+Ni09QixJErgFLAKk1UOQgcfYUksYcKuAM
+         gHXA==
+X-Gm-Message-State: AOAM532ycdFE6G/Roq0/SKw+b4WUQue7HL3rokX+mURcfZDlBpgC/WQD
+        VRO3pKVG8xBu9qfl/wkRX7Lq+A==
+X-Google-Smtp-Source: ABdhPJwJkMLBJdpDYqM5AYWawg6/cZLfnUq+DQZ33ACOlcuCfixDJ35bJodagdEXHonrGw1k3Vhylw==
+X-Received: by 2002:a17:90a:32cb:: with SMTP id l69mr41609009pjb.205.1593930761767;
+        Sat, 04 Jul 2020 23:32:41 -0700 (PDT)
+Received: from cabot.hitronhub.home (S0106bc4dfb596de3.ek.shawcable.net. [174.0.67.248])
+        by smtp.gmail.com with ESMTPSA id br9sm14470529pjb.56.2020.07.04.23.32.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 04 Jul 2020 23:32:41 -0700 (PDT)
+From:   Andreas Dilger <adilger@dilger.ca>
+Message-Id: <37170CC1-C132-40BE-8ABA-B14E3419975C@dilger.ca>
+Content-Type: multipart/signed;
+ boundary="Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH 0/3] readfile(2): a new syscall to make open/read/close
+ faster
+Date:   Sun, 5 Jul 2020 00:32:38 -0600
+In-Reply-To: <CAODFU0qwtPTaBRbA3_ufA6N7fajhi61Sp5iE75Shdk25NSOTLA@mail.gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, gregkh@linuxfoundation.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-man@vger.kernel.org, mtk.manpages@gmail.com,
+        shuah@kernel.org, viro@zeniv.linux.org.uk
+To:     Jan Ziak <0xe2.0x9a.0x9b@gmail.com>
+References: <CAODFU0q6CrUB_LkSdrbp5TQ4Jm6Sw=ZepZwD-B7-aFudsOvsig@mail.gmail.com>
+ <20200705021631.GR25523@casper.infradead.org>
+ <CAODFU0qwtPTaBRbA3_ufA6N7fajhi61Sp5iE75Shdk25NSOTLA@mail.gmail.com>
+X-Mailer: Apple Mail (2.3273)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There should be no difference between -1 and other negative syscalls
-while tracing.
 
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Keno Fischer <keno@juliacomputing.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+--Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset=us-ascii
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 966dec340ea8..bf6aa06c435c 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -1973,6 +1973,32 @@ FIXTURE_TEARDOWN(TRACE_syscall)
- 	teardown_trace_fixture(_metadata, self->tracer);
- }
- 
-+TEST(negative_ENOSYS)
-+{
-+	/* Untraced negative syscalls should return ENOSYS. */
-+	errno = 0;
-+	EXPECT_EQ(-1, syscall(-1));
-+	EXPECT_EQ(errno, ENOSYS);
-+	errno = 0;
-+	EXPECT_EQ(-1, syscall(-101));
-+	EXPECT_EQ(errno, ENOSYS);
-+}
-+
-+TEST_F(TRACE_syscall, negative_ENOSYS)
-+{
-+	/*
-+	 * There should be no difference between an "internal" skip
-+	 * and userspace asking for syscall "-1".
-+	 */
-+	errno = 0;
-+	EXPECT_EQ(-1, syscall(-1));
-+	EXPECT_EQ(errno, ENOSYS);
-+	/* And no difference for "still not valid but not -1". */
-+	errno = 0;
-+	EXPECT_EQ(-1, syscall(-101));
-+	EXPECT_EQ(errno, ENOSYS);
-+}
-+
- TEST_F(TRACE_syscall, syscall_allowed)
- {
- 	/* getppid works as expected (no changes). */
--- 
-2.25.1
+On Jul 4, 2020, at 8:46 PM, Jan Ziak <0xe2.0x9a.0x9b@gmail.com> wrote:
+> 
+> On Sun, Jul 5, 2020 at 4:16 AM Matthew Wilcox <willy@infradead.org> wrote:
+>> 
+>> On Sun, Jul 05, 2020 at 04:06:22AM +0200, Jan Ziak wrote:
+>>> Hello
+>>> 
+>>> At first, I thought that the proposed system call is capable of
+>>> reading *multiple* small files using a single system call - which
+>>> would help increase HDD/SSD queue utilization and increase IOPS (I/O
+>>> operations per second) - but that isn't the case and the proposed
+>>> system call can read just a single file.
+>>> 
+>>> Without the ability to read multiple small files using a single system
+>>> call, it is impossible to increase IOPS (unless an application is
+>>> using multiple reader threads or somehow instructs the kernel to
+>>> prefetch multiple files into memory).
+>> 
+>> What API would you use for this?
+>> 
+>> ssize_t readfiles(int dfd, char **files, void **bufs, size_t *lens);
+>> 
+>> I pretty much hate this interface, so I hope you have something better
+>> in mind.
+> 
+> I am proposing the following:
+> 
+> struct readfile_t {
+>  int dirfd;
+>  const char *pathname;
+>  void *buf;
+>  size_t count;
+>  int flags;
+>  ssize_t retval; // set by kernel
+>  int reserved; // not used by kernel
+> };
 
+If you are going to pass a struct from userspace to the kernel, it
+should not mix int and pointer types (which may be 64-bit values,
+so that there are not structure packing issues, like:
+
+struct readfile {
+	int	dirfd;
+	int	flags;
+	const char *pathname;
+	void	*buf;
+	size_t	count;
+	ssize_t retval;
+};
+
+It would be better if "retval" was returned in "count", so that
+the structure fits nicely into 32 bytes on a 64-bit system, instead
+of being 40 bytes per entry, which adds up over many entries, like.
+
+struct readfile {
+	int	dirfd;
+	int	flags;
+	const char *pathname;
+	void	*buf;
+	ssize_t count;	/* input: bytes requested, output: bytes read or -errno */
+};
+
+
+However, there is still an issue with passing pointers from userspace,
+since they may be 32-bit userspace pointers on a 64-bit kernel.
+
+> int readfiles(struct readfile_t *requests, size_t count);
+
+It's not clear why count is a "size_t" since it is not a size.
+An unsigned int is fine here, since it should never be negative.
+
+> Returns zero if all requests succeeded, otherwise the returned value
+> is non-zero (glibc wrapper: -1) and user-space is expected to check
+> which requests have succeeded and which have failed. retval in
+> readfile_t is set to what the single-file readfile syscall would
+> return if it was called with the contents of the corresponding
+> readfile_t struct.
+> 
+> The glibc library wrapper of this system call is expected to store the
+> errno in the "reserved" field. Thus, a programmer using glibc sees:
+> 
+> struct readfile_t {
+>  int dirfd;
+>  const char *pathname;
+>  void *buf;
+>  size_t count;
+>  int flags;
+>  ssize_t retval; // set by glibc (-1 on error)
+>  int errno; // set by glibc if retval is -1
+> };
+
+Why not just return the errno directly in "retval", or in "count" as
+proposed?  That avoids further bloating the structure by another field.
+
+> retval and errno in glibc's readfile_t are set to what the single-file
+> glibc readfile would return (retval) and set (errno) if it was called
+> with the contents of the corresponding readfile_t struct. In case of
+> an error, glibc will pick one readfile_t which failed (such as: the
+> 1st failed one) and use it to set glibc's errno.
+
+
+Cheers, Andreas
+
+
+
+
+
+
+--Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
+
+iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAl8BdAYACgkQcqXauRfM
+H+Ct9hAAvj7/hD4n/PIbh60MFpaeOapkuMHxCnYr65O3YXwd4uVcU++4K1ZgTZ2o
+I3Q5YBjjX3qNSUbCR98tJV22Fe0wCTaicCLT9u1g205mAiswMOt+dTIRysmJ2gLr
+L3SUz3NLzJKYSSuLE9ItKwTD6gp/7jAukDc+0dbMd8YPIfG79woUVapwV4me3Lxh
+swvwCRkS18c/TC5/w8jAAiiCBoMc6Q0HcDUUKeG/FfrAI8pQVk46pZ9EEGVaDRsp
+cnoudMACfe/hgEzhRT+tSlNF6dq9myIStYkKG/B4X2cP1JPpw2IN05oZfM8TDH4Y
+vpoaj1iw/gOC8KT/fHWmH8ESBDFolihLUY0H1ka6/YW16cb4SzwKUuhzWJMi/mZ8
+UyYQeXUGwOgYDWGkPNf9gTmNKVH1243NRxiciunN4C19n53TiowvsUyixMlFBgwc
+qvjRvZc9PYZSSGKWgEQR7fAihtNcPzbRfnLmRJZSI61CrWsV6AmUchr4hgm6da0H
+pAO1dpPIZAKwVph9N/Cf7JXdErHGHO4BTP8r+BGYmxE1IWtdMjhq4eqVQJ2b5DZd
+hDPk4hnA7peOXC3NJ52+quST3kvnkJ4CFKfi3iPQYmj9Cq+0XVAr7aXedlG68qdP
+oI8Wp7rbxzqAt5JQWy5t6sPFjMs4Y0Okp5AMpn2/yrdPKtTcBZc=
+=v31i
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D--
