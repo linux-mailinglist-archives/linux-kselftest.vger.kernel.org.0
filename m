@@ -2,133 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D79214AC9
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 09:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A89E214AE4
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 09:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgGEHBM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 5 Jul 2020 03:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
+        id S1725901AbgGEH0R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 5 Jul 2020 03:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725967AbgGEHBM (ORCPT
+        with ESMTP id S1725894AbgGEH0Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Jul 2020 03:01:12 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CB6C061794
-        for <linux-kselftest@vger.kernel.org>; Sun,  5 Jul 2020 00:01:12 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id d194so13589124pga.13
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Jul 2020 00:01:12 -0700 (PDT)
+        Sun, 5 Jul 2020 03:26:16 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7B3C061794;
+        Sun,  5 Jul 2020 00:26:16 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id w17so29026401oie.6;
+        Sun, 05 Jul 2020 00:26:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nTHtSjVLQHeLSy0uqm8S4L9uEdI8s7cHTYuNr/RgjU4=;
-        b=ZYUgITlCyYLwvoccNm5Op0BVJOu48KNGbkGelaKJSplcATNZjAyMv4yUD22K4JLAvF
-         o2jccECA9kTPkAwq7NQRm0+nLKYroBEYw0LeqKIm8/nf8ZQv4OUdVSrg/qhCpyP71Qtt
-         xuHPXc519c8Svisi7KdcUBxlw0dchUydJkCgo=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dKw4EpxGN0YdG0VPpIynr/J1EkJpB2HGlu3HY3J+Zvk=;
+        b=LtFTmZribUAaCdwyIEUFNXYwJHgjPTnGLn20NUfrHIqEC1c8KqMwnEBhRMxf/n6MJz
+         xwg82lZsH2MTD+zSzhgXYQNMX174cC3ouCR19rBLQYwC5ht8pBaZzserIIqxOKRLuWZe
+         qq8zvDda+9Y3Crrf43PPHsyDNiKOWmf5TOu4ML2Ce3tW/pn0ryEJ2bVi1MonyfKm9o5m
+         KbCeuM4cRQQz5MTwJfbj/Ao5c2mCBM1FYLjno8VxA9q/1JxWN+cbizX4AM+XxhvSsE2v
+         bK0s2bN2UGZtmBG9mckhr8PpsWBwhvpwGe8/rSvhXSEMCyhli8KZ1C9Xbo5soGR+4+Aw
+         vaBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nTHtSjVLQHeLSy0uqm8S4L9uEdI8s7cHTYuNr/RgjU4=;
-        b=p6vntKNziLG1aHI3ypPtL7WCrqmmEq1/BXnqwrF0buumevGKMoVz2LA4BqL9Mn1uwj
-         98gy/UbVjMHGhqKgc2PWeeBUZip4fMY3f/k8DVA6AGAJ2Jxh9oYnEy6PPBreYuV+MhAe
-         NiE0I9osQR4q2kMtgXbVm6lGOJFHi2VaYIUghfJgcxhVUP4l2Q4nUk8B/wDlGrLtu1Vy
-         9uCXqJdy03p8xuuMZFkxz2r8vC97HJFI498UbL012VEuPjK9FMk8f5Ujz4JArnNjqMNG
-         Z6XO/hQlaFKP0pZK9/4ggXP88oCcYMTrzr4rKRUN0viphVD0jsQjtZyI9z2nKsmMOQPB
-         LPjQ==
-X-Gm-Message-State: AOAM532/wsQXx7oc/hqcmMZLK8gcrrxfRxHoakiBfywVx/s/L61DJzVo
-        IUvLDA0RKKaj2L2ZByYG/7YtYA==
-X-Google-Smtp-Source: ABdhPJyEd3dqAnjdX5X0B1CLAKee5RybaEyD8kgsnX6V5YlPld+U/ysl/B0SAcaccskQ2/uMT+wjbg==
-X-Received: by 2002:a62:7650:: with SMTP id r77mr28964787pfc.235.1593932471622;
-        Sun, 05 Jul 2020 00:01:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j16sm15909514pfr.100.2020.07.05.00.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2020 00:01:10 -0700 (PDT)
-Date:   Sun, 5 Jul 2020 00:01:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] selftests/seccomp: Check ENOSYS under tracing
-Message-ID: <202007050000.40DCED12@keescook>
-References: <20200705061232.4151319-1-keescook@chromium.org>
- <20200705061232.4151319-4-keescook@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dKw4EpxGN0YdG0VPpIynr/J1EkJpB2HGlu3HY3J+Zvk=;
+        b=po5skEOSXOlhqO6g0kGu8XUi81B3gGkre4y2bi0IsHiIPI1vuNnBo+aq4b2+JryqUk
+         vXrBEtfAB8GCKaowWvH/mWsoZnOVT131gHZyu4fJO+BkYqFrlz/Z49zEhSrniu0bZGKn
+         UTESYumeOvTF5/CzV+JqIjwlurwH8mHiqPezVbNZZ/WOYjPpR0Jk2qG55euE3U//pWIR
+         KtCEsFgfMutdM8Ws/GHPweSsNe1XwqAtBFE0qaxQepAm0iAYQ2pV4MI8Ey+vV3vyZAgi
+         c5v0ujLGO8lf/FsHab6xAIunPFzdOfUST7baDXXApKWP6g7JVThFZjGgYn6O2Utx+jY7
+         QFbw==
+X-Gm-Message-State: AOAM532Uhb8/wu7ZQDDxMuxAkcYEJGpQIwZQ7PonvPxpGfFGZpHhWrzY
+        Qq+CuTVU02F7tA1OB3ggxSm26whXgJun7ghHdOezgnp5ArE=
+X-Google-Smtp-Source: ABdhPJw9w+l+t+8XHnfWcnulUprNuPdfKXpniuXmwOiRq9JDCafp1hy2ZINwxadA8jTnzoD4Vz9cmvpWiYaua4eS3uI=
+X-Received: by 2002:aca:fc97:: with SMTP id a145mr22033692oii.149.1593933975349;
+ Sun, 05 Jul 2020 00:26:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200705061232.4151319-4-keescook@chromium.org>
+References: <CAODFU0q6CrUB_LkSdrbp5TQ4Jm6Sw=ZepZwD-B7-aFudsOvsig@mail.gmail.com>
+ <20200705021631.GR25523@casper.infradead.org> <CAODFU0qwtPTaBRbA3_ufA6N7fajhi61Sp5iE75Shdk25NSOTLA@mail.gmail.com>
+ <37170CC1-C132-40BE-8ABA-B14E3419975C@dilger.ca>
+In-Reply-To: <37170CC1-C132-40BE-8ABA-B14E3419975C@dilger.ca>
+From:   Jan Ziak <0xe2.0x9a.0x9b@gmail.com>
+Date:   Sun, 5 Jul 2020 09:25:39 +0200
+Message-ID: <CAODFU0qT07ERWVH7F3rO1CK6CckmoF4p8ArHk09S9DCojD8M4w@mail.gmail.com>
+Subject: Re: [PATCH 0/3] readfile(2): a new syscall to make open/read/close faster
+To:     Andreas Dilger <adilger@dilger.ca>
+Cc:     Matthew Wilcox <willy@infradead.org>, gregkh@linuxfoundation.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-man@vger.kernel.org, mtk.manpages@gmail.com,
+        shuah@kernel.org, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 04, 2020 at 11:12:32PM -0700, Kees Cook wrote:
-> There should be no difference between -1 and other negative syscalls
-> while tracing.
-> 
-> Cc: Andy Lutomirski <luto@amacapital.net>
-> Cc: Will Drewry <wad@chromium.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Keno Fischer <keno@juliacomputing.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 966dec340ea8..bf6aa06c435c 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -1973,6 +1973,32 @@ FIXTURE_TEARDOWN(TRACE_syscall)
->  	teardown_trace_fixture(_metadata, self->tracer);
->  }
->  
-> +TEST(negative_ENOSYS)
-> +{
-> +	/* Untraced negative syscalls should return ENOSYS. */
-> +	errno = 0;
-> +	EXPECT_EQ(-1, syscall(-1));
-> +	EXPECT_EQ(errno, ENOSYS);
-> +	errno = 0;
-> +	EXPECT_EQ(-1, syscall(-101));
-> +	EXPECT_EQ(errno, ENOSYS);
-> +}
-> +
-> +TEST_F(TRACE_syscall, negative_ENOSYS)
-> +{
-> +	/*
-> +	 * There should be no difference between an "internal" skip
-> +	 * and userspace asking for syscall "-1".
-> +	 */
-> +	errno = 0;
-> +	EXPECT_EQ(-1, syscall(-1));
-> +	EXPECT_EQ(errno, ENOSYS);
-> +	/* And no difference for "still not valid but not -1". */
-> +	errno = 0;
-> +	EXPECT_EQ(-1, syscall(-101));
-> +	EXPECT_EQ(errno, ENOSYS);
-> +}
-> +
+On Sun, Jul 5, 2020 at 8:32 AM Andreas Dilger <adilger@dilger.ca> wrote:
+>
+> On Jul 4, 2020, at 8:46 PM, Jan Ziak <0xe2.0x9a.0x9b@gmail.com> wrote:
+> >
+> > On Sun, Jul 5, 2020 at 4:16 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >>
+> >> On Sun, Jul 05, 2020 at 04:06:22AM +0200, Jan Ziak wrote:
+> >>> Hello
+> >>>
+> >>> At first, I thought that the proposed system call is capable of
+> >>> reading *multiple* small files using a single system call - which
+> >>> would help increase HDD/SSD queue utilization and increase IOPS (I/O
+> >>> operations per second) - but that isn't the case and the proposed
+> >>> system call can read just a single file.
+> >>>
+> >>> Without the ability to read multiple small files using a single system
+> >>> call, it is impossible to increase IOPS (unless an application is
+> >>> using multiple reader threads or somehow instructs the kernel to
+> >>> prefetch multiple files into memory).
+> >>
+> >> What API would you use for this?
+> >>
+> >> ssize_t readfiles(int dfd, char **files, void **bufs, size_t *lens);
+> >>
+> >> I pretty much hate this interface, so I hope you have something better
+> >> in mind.
+> >
+> > I am proposing the following:
+> >
+> > struct readfile_t {
+> >  int dirfd;
+> >  const char *pathname;
+> >  void *buf;
+> >  size_t count;
+> >  int flags;
+> >  ssize_t retval; // set by kernel
+> >  int reserved; // not used by kernel
+> > };
+>
+> If you are going to pass a struct from userspace to the kernel, it
+> should not mix int and pointer types (which may be 64-bit values,
+> so that there are not structure packing issues, like:
+>
+> struct readfile {
+>         int     dirfd;
+>         int     flags;
+>         const char *pathname;
+>         void    *buf;
+>         size_t  count;
+>         ssize_t retval;
+> };
+>
+> It would be better if "retval" was returned in "count", so that
+> the structure fits nicely into 32 bytes on a 64-bit system, instead
+> of being 40 bytes per entry, which adds up over many entries, like.
 
-I realized after sending this that the second function could just be:
+I know what you mean and it is a valid point, but in my opinion it
+shouldn't (in most cases) be left to the programmer to decide what the
+binary layout of a data structure is - instead it should be left to an
+optimizing compiler to decide it. Just like code optimization,
+determining the physical layout of data structures can be subject to
+automatic optimizations as well. It is kind of unfortunate that in
+C/C++, and in many other statically compiled languages (even recent
+ones), the physical layout of all data structures is determined by the
+programmer rather than the compiler. Also, tagging fields as "input",
+"output", or both (the default) would be helpful in obtaining smaller
+sizes:
 
-+TEST_F(TRACE_syscall, negative_ENOSYS)
-+{
-+	negative_ENOSYS(_metadata);
-+}
+struct readfile_t {
+  input int dirfd;
+  input const char *pathname;
+  input void *buf;
+  input size_t count;
+  input int flags;
+  output ssize_t retval; // set by kernel
+  output int reserved; // not used by kernel
+};
 
-:)
+int readfiles(struct readfile_t *requests, size_t count);
 
->  TEST_F(TRACE_syscall, syscall_allowed)
->  {
->  	/* getppid works as expected (no changes). */
-> -- 
-> 2.25.1
-> 
+struct readfile_t r[10];
+// Write r[i] inputs
+int status = readfiles(r, nelem(r));
+// Read r[i] outputs
 
--- 
-Kees Cook
+A data-layout optimizing compiler should be able to determine that the
+optimal layout of readfile_t is UNION(INPUT: 2*int+2*pointer+1*size_t,
+OUTPUT: 1*ssize_t+1*int).
+
+In the unfortunate case of the non-optimizing C language and if it is
+just a micro-optimization (optimizing readfile_t is a
+micro-optimization), it is better to leave the data structure in a
+form that is appropriate for being efficiently readable by programmers
+rather than to micro-optimize it and make it confusing to programmers.
+
+> struct readfile {
+>         int     dirfd;
+>         int     flags;
+>         const char *pathname;
+>         void    *buf;
+>         ssize_t count;  /* input: bytes requested, output: bytes read or -errno */
+> };
+>
+>
+> However, there is still an issue with passing pointers from userspace,
+> since they may be 32-bit userspace pointers on a 64-bit kernel.
+>
+> > int readfiles(struct readfile_t *requests, size_t count);
+>
+> It's not clear why count is a "size_t" since it is not a size.
+> An unsigned int is fine here, since it should never be negative.
+
+Generally speaking, size_t reflects the size of the address space
+while unsigned int doesn't and therefore it is easier for unsigned int
+to overflow on very large data sets.
+
+> > Returns zero if all requests succeeded, otherwise the returned value
+> > is non-zero (glibc wrapper: -1) and user-space is expected to check
+> > which requests have succeeded and which have failed. retval in
+> > readfile_t is set to what the single-file readfile syscall would
+> > return if it was called with the contents of the corresponding
+> > readfile_t struct.
+> >
+> > The glibc library wrapper of this system call is expected to store the
+> > errno in the "reserved" field. Thus, a programmer using glibc sees:
+> >
+> > struct readfile_t {
+> >  int dirfd;
+> >  const char *pathname;
+> >  void *buf;
+> >  size_t count;
+> >  int flags;
+> >  ssize_t retval; // set by glibc (-1 on error)
+> >  int errno; // set by glibc if retval is -1
+> > };
+>
+> Why not just return the errno directly in "retval", or in "count" as
+> proposed?  That avoids further bloating the structure by another field.
+>
+> > retval and errno in glibc's readfile_t are set to what the single-file
+> > glibc readfile would return (retval) and set (errno) if it was called
+> > with the contents of the corresponding readfile_t struct. In case of
+> > an error, glibc will pick one readfile_t which failed (such as: the
+> > 1st failed one) and use it to set glibc's errno.
+>
+>
+> Cheers, Andreas
