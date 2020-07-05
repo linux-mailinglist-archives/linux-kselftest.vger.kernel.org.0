@@ -2,127 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D96FD214A75
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 07:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43C5214A89
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 08:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725967AbgGEFq2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 5 Jul 2020 01:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S1726303AbgGEGMj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 5 Jul 2020 02:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725873AbgGEFq2 (ORCPT
+        with ESMTP id S1726270AbgGEGMi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Jul 2020 01:46:28 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018DBC061794
-        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 22:46:28 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id x3so10093283pfo.9
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 22:46:27 -0700 (PDT)
+        Sun, 5 Jul 2020 02:12:38 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A5FC08C5DE
+        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 23:12:38 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id x9so441846plr.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 23:12:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=I2a5PLdldX+tMxKx3O4LIv9xtAhMAmYRl6zJFR/hXiA=;
-        b=RfXmPGTto0Gz+MbvGo1QMO6md2BCUQfRW1QqjLWmCbGgpWhv+ZjlhVMZhByyZ81nCy
-         yJEuOCfrQd1bVCiwemfHjqROV85NLuWzERnY/7MDfjpl9aHezsWWv0QcqSlKhSSlBftW
-         6ywG3JjDEuoLx9YNUQFFYdIEENn7bAlblo42A=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7QQXwEm4dnmq+jlTbXbOEq302bTMUVfN5lq4IjhYc8=;
+        b=XyO2RmkEGRaFfFZkIuTkygla4ZXv0c89QtCF7yaqlKX3Gr5EOroGlW72oG3IyXMG92
+         BEK5FUNsUTcLlnU41uBg2FuxDaX5Bq0y0zjTFTZnAAqHSX2RpiF8SjE1qjAu2zG+G2rH
+         a8rEmOxPZky9FBjyj5nqDoD79Riqo9Nvbu6ks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I2a5PLdldX+tMxKx3O4LIv9xtAhMAmYRl6zJFR/hXiA=;
-        b=g0UHBUd0UOtGxhqK+RIZxVLhyQODs3ed3bC5MYZnsjfwcsObAvpYjuNAfXZkecUneA
-         PYw11yphumquNPCCRyJvAWgQIQlztHpDhr/JoXOglsqdmbZ37HXRC9hGmZtsIE8jSYtE
-         6BunwovepLTCJv3NDO8YIGh5rJ4T2LeMJ5qisN8uJ73qCZlcjWzOzJ3KTIedb8Ekxypb
-         xMXWDWZSOvdqk2yStild/wksatoXzb3ouwwc1b9jLRwnE/kkHpyetouVj7sYWcUx+PWc
-         zYxE8XoY85xDq+wXJSWFUBJednQUr5clptCENR+kc2eOaLCLz9ck8i0gLYhAeCqzJYLj
-         Y2rA==
-X-Gm-Message-State: AOAM530zN9kEZCKuOPuSNwi9v01im/1Os1XaDJgG9QLctYTuYXHoAWy4
-        x+Pb33lyDdL9+EbXUNxcfv0cvw==
-X-Google-Smtp-Source: ABdhPJxLxBTBtwYIHio0yADOjvtvwnRBa62ORSVaTpJlmeQsJN600nicdVw6a1IlkKRlRiQpgmTtGA==
-X-Received: by 2002:aa7:9d9a:: with SMTP id f26mr7487491pfq.26.1593927987520;
-        Sat, 04 Jul 2020 22:46:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7QQXwEm4dnmq+jlTbXbOEq302bTMUVfN5lq4IjhYc8=;
+        b=UAYtQ37JQpdB81M5r8i2JELuLZ0Zjlnu/aEZ2gELv1LVPTiL9cePEn0Os1DJAjBid3
+         hWSn6M6HEGyqcYrm5gxQ3XxF0o/0SbztT1zsRrh+MJYBGeZsmXb/4oiCKY1ezNjQGPiP
+         VXNp7slt1pdvjcgA/ZMsgkp/64SOVB2zyh1uAB20eQsTRo7XmnGktZBM0BgZrIDAGL3v
+         o7BY+H5Vc9dXIbEgCmMtdvBJmYs0tc3PFcCbO1NctSPKBvTGxAa0rsVHDExP6zMR4eaL
+         WV621dtDVr3+qcPS7HPpKK5OidtJNxnn2uYcRCxXRZUSKBvnpmRTe1S3bIgkSwUnScn+
+         /wZA==
+X-Gm-Message-State: AOAM531OVRP4387GSE7LoHq4RoLNZn9mCl5jm9IKN7YjZ62y2Ovqi2ca
+        ycC/pPWf6K8XXGEUPviYgYB6Aw==
+X-Google-Smtp-Source: ABdhPJygzPaieVb3XQ6+2JIScvsgING0EAgONcSvvoMj/Xyn1uQ6SLPo+DogPpeL8b3+2sdKe8YpEA==
+X-Received: by 2002:a17:90b:3842:: with SMTP id nl2mr44572479pjb.111.1593929558010;
+        Sat, 04 Jul 2020 23:12:38 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j3sm4663264pfe.102.2020.07.04.22.46.25
+        by smtp.gmail.com with ESMTPSA id a9sm15525789pfr.103.2020.07.04.23.12.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2020 22:46:26 -0700 (PDT)
-Date:   Sat, 4 Jul 2020 22:46:25 -0700
+        Sat, 04 Jul 2020 23:12:37 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Christian Brauner <christian@brauner.io>,
-        David Gow <davidgow@google.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Will Deacon <will@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Keno Fischer <keno@juliacomputing.com>,
         Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] selftests/harness: Switch to TAP output
-Message-ID: <202007042245.BCC693126@keescook>
-References: <20200622181651.2795217-1-keescook@chromium.org>
+Subject: [PATCH for-next/seccomp 0/3] Check ENOSYS under tracing
+Date:   Sat,  4 Jul 2020 23:12:29 -0700
+Message-Id: <20200705061232.4151319-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200622181651.2795217-1-keescook@chromium.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 11:16:43AM -0700, Kees Cook wrote:
-> Hi,
-> 
-> v2:
-> - switch harness from XFAIL to SKIP
-> - pass skip reason from test into TAP output
-> - add acks/reviews
-> v1: https://lore.kernel.org/lkml/20200611224028.3275174-1-keescook@chromium.org/
-> 
-> 
-> I finally got around to converting the kselftest_harness.h API to actually
-> use the kselftest.h API so all the tools using it can actually report
-> TAP correctly. As part of this, there are a bunch of related cleanups,
-> API updates, and additions.
+Hi,
 
-Friendly ping -- I'd love to get this landed for -next, it makes doing
-seccomp testing much nicer. :)
+This expands the seccomp selftest to poke a architectural behavior corner
+that Keno Fischer noticed[1]. In the process, I took the opportunity
+to do the kselftest harness variant refactoring I'd been meaning to do,
+which made adding this test much nicer.
 
-Thanks!
+I'd prefer this went via the seccomp tree, as it builds on top of the
+other recent seccomp feature addition tests. Testing and reviews are
+welcome! :)
+
+Thanks,
 
 -Kees
 
-> 
-> Thanks!
-> 
-> -Kees
-> 
-> Kees Cook (8):
->   selftests/clone3: Reorder reporting output
->   selftests: Remove unneeded selftest API headers
->   selftests/binderfs: Fix harness API usage
->   selftests: Add header documentation and helpers
->   selftests/harness: Switch to TAP output
->   selftests/harness: Refactor XFAIL into SKIP
->   selftests/harness: Display signed values correctly
->   selftests/harness: Report skip reason
-> 
->  tools/testing/selftests/clone3/clone3.c       |   2 +-
->  .../selftests/clone3/clone3_clear_sighand.c   |   3 +-
->  .../testing/selftests/clone3/clone3_set_tid.c |   2 +-
->  .../filesystems/binderfs/binderfs_test.c      | 284 +++++++++---------
->  tools/testing/selftests/kselftest.h           |  78 ++++-
->  tools/testing/selftests/kselftest_harness.h   | 169 ++++++++---
->  .../pid_namespace/regression_enomem.c         |   1 -
->  .../selftests/pidfd/pidfd_getfd_test.c        |   1 -
->  .../selftests/pidfd/pidfd_setns_test.c        |   1 -
->  tools/testing/selftests/seccomp/seccomp_bpf.c |   8 +-
->  .../selftests/uevent/uevent_filtering.c       |   1 -
->  11 files changed, 356 insertions(+), 194 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+[1] https://lore.kernel.org/lkml/CABV8kRxA9mXPZwtYrjbAfOfFewhABHddipccgk-LQJO+ZYu4Xg@mail.gmail.com
+
+Kees Cook (3):
+  selftests/harness: Clean up kern-doc for fixtures
+  selftests/seccomp: Refactor to use fixture variants
+  selftests/seccomp: Check ENOSYS under tracing
+
+ tools/testing/selftests/kselftest_harness.h   |  15 +-
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 217 ++++++------------
+ 2 files changed, 72 insertions(+), 160 deletions(-)
 
 -- 
-Kees Cook
+2.25.1
+
