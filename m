@@ -2,97 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 147522149EB
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 06:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96FD214A75
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jul 2020 07:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725846AbgGEEJk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 5 Jul 2020 00:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50974 "EHLO
+        id S1725967AbgGEFq2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 5 Jul 2020 01:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgGEEJj (ORCPT
+        with ESMTP id S1725873AbgGEFq2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Jul 2020 00:09:39 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8ECC061794;
-        Sat,  4 Jul 2020 21:09:39 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id d4so29328937otk.2;
-        Sat, 04 Jul 2020 21:09:39 -0700 (PDT)
+        Sun, 5 Jul 2020 01:46:28 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018DBC061794
+        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 22:46:28 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id x3so10093283pfo.9
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 22:46:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PishxRT+7tY2csv4uXKXLuwh6FfnrTZUj/NxIbo0apM=;
-        b=hz2iUEPTzGHGBeHhCYB7h0tGja5uhbiMrESl4CAVOld+fdLsEo29MkzGg5cFb4lGBT
-         yLfKvrNUGxkJp7asGi2zFLznqJRRvut8KVccZ81pGI5YvbLLTHqT8kHuVKdMmxniBr/g
-         gDsmDvnqhdeGjdZSjakEW2l16A0r7kTi0UfmvZBfw2VCWzsoGGd14qRtQCKaLyZXUFON
-         jbytcK1r0IwAcKFplGzCjeVRebLADKlA68XRNk1QPXHzkVQciXGOyEnY/+v4/TPAj/MJ
-         BzhVvDaXBC+rlL+zw68h267PdbDbnPosXZWWgrUeNNc5tPKvko9sV5jkjMmPwFOaNsck
-         T5GA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=I2a5PLdldX+tMxKx3O4LIv9xtAhMAmYRl6zJFR/hXiA=;
+        b=RfXmPGTto0Gz+MbvGo1QMO6md2BCUQfRW1QqjLWmCbGgpWhv+ZjlhVMZhByyZ81nCy
+         yJEuOCfrQd1bVCiwemfHjqROV85NLuWzERnY/7MDfjpl9aHezsWWv0QcqSlKhSSlBftW
+         6ywG3JjDEuoLx9YNUQFFYdIEENn7bAlblo42A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PishxRT+7tY2csv4uXKXLuwh6FfnrTZUj/NxIbo0apM=;
-        b=WzlWaZzmDY/Pd3VpHTN/Tcp++eg0D/TDOZWEtCrZAt/V65mbKph+Hl6YhOWTiVgqG1
-         vMdAsE0mspQVN98Kg/GelvGQQVYSCFHCfGoZheq3hsFotHplNfbwxnkhSkNj2g8NuWDw
-         6elysgA9XkDufpo/jguO/mQGrWlsAg8uD8n/Xyz4rj3rLiTSiZBD7QOK6X320Avf/JMf
-         11Nzl6TqV3BDyzeY45aFbo0mVingNgJ+uXVgbmdX127WH0rAPjbFee1rUA8vPFDbR9gY
-         1QIphxZVpe7BWATwy765efELc1VWIx98xQbQUbSdVpxyuCrB/5pr+/f4Qo/dWYnVIZh4
-         akbQ==
-X-Gm-Message-State: AOAM532BcMJGT03VAzWpY9m5gfPVqN8W2rk/oEoAVHsZG7uQhttrlUZM
-        39XHpIBsjQvBsIEs3eMbNXKKkR4j0ldPEgUuEbE=
-X-Google-Smtp-Source: ABdhPJzzEMj0BZ11L8P9HCnxRbPvaK4IDQ6LttX0KznjOVmxkXf+JX+NyjJ/jpfX6fVCTTqmpXDJkYm5/uVuYcVsJuU=
-X-Received: by 2002:a9d:66ca:: with SMTP id t10mr20300471otm.358.1593922179004;
- Sat, 04 Jul 2020 21:09:39 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I2a5PLdldX+tMxKx3O4LIv9xtAhMAmYRl6zJFR/hXiA=;
+        b=g0UHBUd0UOtGxhqK+RIZxVLhyQODs3ed3bC5MYZnsjfwcsObAvpYjuNAfXZkecUneA
+         PYw11yphumquNPCCRyJvAWgQIQlztHpDhr/JoXOglsqdmbZ37HXRC9hGmZtsIE8jSYtE
+         6BunwovepLTCJv3NDO8YIGh5rJ4T2LeMJ5qisN8uJ73qCZlcjWzOzJ3KTIedb8Ekxypb
+         xMXWDWZSOvdqk2yStild/wksatoXzb3ouwwc1b9jLRwnE/kkHpyetouVj7sYWcUx+PWc
+         zYxE8XoY85xDq+wXJSWFUBJednQUr5clptCENR+kc2eOaLCLz9ck8i0gLYhAeCqzJYLj
+         Y2rA==
+X-Gm-Message-State: AOAM530zN9kEZCKuOPuSNwi9v01im/1Os1XaDJgG9QLctYTuYXHoAWy4
+        x+Pb33lyDdL9+EbXUNxcfv0cvw==
+X-Google-Smtp-Source: ABdhPJxLxBTBtwYIHio0yADOjvtvwnRBa62ORSVaTpJlmeQsJN600nicdVw6a1IlkKRlRiQpgmTtGA==
+X-Received: by 2002:aa7:9d9a:: with SMTP id f26mr7487491pfq.26.1593927987520;
+        Sat, 04 Jul 2020 22:46:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j3sm4663264pfe.102.2020.07.04.22.46.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jul 2020 22:46:26 -0700 (PDT)
+Date:   Sat, 4 Jul 2020 22:46:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Christian Brauner <christian@brauner.io>,
+        David Gow <davidgow@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/8] selftests/harness: Switch to TAP output
+Message-ID: <202007042245.BCC693126@keescook>
+References: <20200622181651.2795217-1-keescook@chromium.org>
 MIME-Version: 1.0
-References: <CAODFU0q6CrUB_LkSdrbp5TQ4Jm6Sw=ZepZwD-B7-aFudsOvsig@mail.gmail.com>
- <20200705021631.GR25523@casper.infradead.org> <CAODFU0qwtPTaBRbA3_ufA6N7fajhi61Sp5iE75Shdk25NSOTLA@mail.gmail.com>
- <20200705031208.GS25523@casper.infradead.org> <CAODFU0q=nDdx7D1NUxTQshBjqgTCYPpKzog78XZLjoPqnZqXvw@mail.gmail.com>
- <20200705032732.GT25523@casper.infradead.org>
-In-Reply-To: <20200705032732.GT25523@casper.infradead.org>
-From:   Jan Ziak <0xe2.0x9a.0x9b@gmail.com>
-Date:   Sun, 5 Jul 2020 06:09:03 +0200
-Message-ID: <CAODFU0rSqQsO9rSiA8Ke=+mk_NgEdFDHPMfmXGSmzmkqQh1KYw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] readfile(2): a new syscall to make open/read/close faster
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     gregkh@linuxfoundation.org, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-man@vger.kernel.org,
-        mtk.manpages@gmail.com, shuah@kernel.org, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200622181651.2795217-1-keescook@chromium.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 5, 2020 at 5:27 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Sun, Jul 05, 2020 at 05:18:58AM +0200, Jan Ziak wrote:
-> > On Sun, Jul 5, 2020 at 5:12 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > >
-> > > You should probably take a look at io_uring.  That has the level of
-> > > complexity of this proposal and supports open/read/close along with many
-> > > other opcodes.
-> >
-> > Then glibc can implement readfile using io_uring and there is no need
-> > for a new single-file readfile syscall.
->
-> It could, sure.  But there's also a value in having a simple interface
-> to accomplish a simple task.  Your proposed API added a very complex
-> interface to satisfy needs that clearly aren't part of the problem space
-> that Greg is looking to address.
+On Mon, Jun 22, 2020 at 11:16:43AM -0700, Kees Cook wrote:
+> Hi,
+> 
+> v2:
+> - switch harness from XFAIL to SKIP
+> - pass skip reason from test into TAP output
+> - add acks/reviews
+> v1: https://lore.kernel.org/lkml/20200611224028.3275174-1-keescook@chromium.org/
+> 
+> 
+> I finally got around to converting the kselftest_harness.h API to actually
+> use the kselftest.h API so all the tools using it can actually report
+> TAP correctly. As part of this, there are a bunch of related cleanups,
+> API updates, and additions.
 
-I believe that we should look at the single-file readfile syscall from
-a performance viewpoint. If an application is expecting to read a
-couple of small/medium-size files per second, then neither readfile
-nor readfiles makes sense in terms of improving performance. The
-benefits start to show up only in case an application is expecting to
-read at least a hundred of files per second. The "per second" part is
-important, it cannot be left out. Because readfile only improves
-performance for many-file reads, the syscall that applications
-performing many-file reads actually want is the multi-file version,
-not the single-file version.
+Friendly ping -- I'd love to get this landed for -next, it makes doing
+seccomp testing much nicer. :)
 
-I am not sure I understand why you think that a pointer to an array of
-readfile_t structures is very complex. If it was very complex then it
-would be a deep tree or a large graph.
+Thanks!
+
+-Kees
+
+> 
+> Thanks!
+> 
+> -Kees
+> 
+> Kees Cook (8):
+>   selftests/clone3: Reorder reporting output
+>   selftests: Remove unneeded selftest API headers
+>   selftests/binderfs: Fix harness API usage
+>   selftests: Add header documentation and helpers
+>   selftests/harness: Switch to TAP output
+>   selftests/harness: Refactor XFAIL into SKIP
+>   selftests/harness: Display signed values correctly
+>   selftests/harness: Report skip reason
+> 
+>  tools/testing/selftests/clone3/clone3.c       |   2 +-
+>  .../selftests/clone3/clone3_clear_sighand.c   |   3 +-
+>  .../testing/selftests/clone3/clone3_set_tid.c |   2 +-
+>  .../filesystems/binderfs/binderfs_test.c      | 284 +++++++++---------
+>  tools/testing/selftests/kselftest.h           |  78 ++++-
+>  tools/testing/selftests/kselftest_harness.h   | 169 ++++++++---
+>  .../pid_namespace/regression_enomem.c         |   1 -
+>  .../selftests/pidfd/pidfd_getfd_test.c        |   1 -
+>  .../selftests/pidfd/pidfd_setns_test.c        |   1 -
+>  tools/testing/selftests/seccomp/seccomp_bpf.c |   8 +-
+>  .../selftests/uevent/uevent_filtering.c       |   1 -
+>  11 files changed, 356 insertions(+), 194 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+
+-- 
+Kees Cook
