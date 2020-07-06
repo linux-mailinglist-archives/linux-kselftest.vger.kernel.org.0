@@ -2,99 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A062160B5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 22:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085822160C1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 23:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbgGFUzT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jul 2020 16:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S1725941AbgGFVDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jul 2020 17:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726494AbgGFUzT (ORCPT
+        with ESMTP id S1725860AbgGFVDy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 16:55:19 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16700C061794
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 13:55:19 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id j11so30462080oiw.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 13:55:19 -0700 (PDT)
+        Mon, 6 Jul 2020 17:03:54 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B91CC061755;
+        Mon,  6 Jul 2020 14:03:54 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id x9so34191380ila.3;
+        Mon, 06 Jul 2020 14:03:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cynLjJyLUOsY4VOEmxldJUEFC/8ScvtiG3yRvbagFFo=;
-        b=aw0L6ppw4UM72rsA+cDjHWgBPv5FMcleKEs8uLYdX4bLw8r5dNasFvLILv/6NLBZav
-         Y0FYgqIQSOaiZiDHc7k9RLj+VuUJM/zKdL8XKkrW0oyGiwI4tHI4E4giXH1C+U99IDm5
-         Kgq2WP3PqBKeRqAo7z9Jm0lDU7dbyShp0Glgc=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dJcRuZiW502lyt79q4NbNcGnwyJ5bsa33N05bbGF6KY=;
+        b=fb4LEAwelQZhBQartXxX+K/z44dEfBN+CPqGvIDl+w7J1eLsZPkVXNhLzEtikXgReS
+         +kiRBi08ZCwZ+PPJFB9D3EOpNO5HLXS+ycWHz9V7rZAObNI6UqEHcC4Gl3UV8b8CLakz
+         wfzLUGnyJUkT35yrmYXTdJ7cVGBlmCn9848F/S7cHvS2/zfkQn5fliOy4t/r2JfSjwt1
+         TdsZI88OPbRTCk3fPc7i5LAlYv1gZmazaTydrZ6KmACsGRshcKdC4/ndKYzyqWfXdMAn
+         IC+J/QsJ+7w+UVUWJEfKRf92Zrktl87lyYtzQf7mhdB6h32coDdSTwt9/m3Be41th6Hy
+         fQCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=cynLjJyLUOsY4VOEmxldJUEFC/8ScvtiG3yRvbagFFo=;
-        b=LcFZIX/GSvq9hZu1Fz08by4SbEcBJh7UHz+PcjZGkRCryOdMWBnL3ceHscnEhiKEMi
-         MFVSzcAp2ZA3huYUS+xJ5XhIvhH0cybBbqgfKMkmBh9SE9WBNvWt9JJhx1M2dgiBM6XU
-         cJegllJ9ghQG+yM8R7Cynv1SK6X7f2o56BIk2I9lW4AUhhQUaa3ISUmIekygD3kDjQHY
-         LpzvSxg+V0QRu+3mCUUkbnmqGEaF5ki918iGlzNLi1N1AGUuwKmh2wHD85X3BRWYS11A
-         5V+ePNJbTEHqLeq/neSX+un50tcari/5khHH7+Fqy3D2g6/v5a7MeMKdJShNlwMm9MMz
-         fbVw==
-X-Gm-Message-State: AOAM533dLtINy1OUxY8VVqyc8jJNBYt1gQZ2GZgyYpUk5jlph2IJC/Cv
-        ol04ZxDIwYWBOfR8vjSi+zv1hA==
-X-Google-Smtp-Source: ABdhPJzBgD2nIR407/PVN5Z/ENeWzlxgZrtqJqxnPCgMekbWkw4ce92Eg72NSk4VDT2msPBmZ/Kfpg==
-X-Received: by 2002:aca:ea88:: with SMTP id i130mr896936oih.156.1594068918445;
-        Mon, 06 Jul 2020 13:55:18 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id n141sm4551294oig.24.2020.07.06.13.55.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2020 13:55:17 -0700 (PDT)
-Subject: Re: [PATCH v2 4/6] selftests: pidfd: do not use ksft_exit_skip after
- ksft_set_plan
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, keescook@chromium.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200623001547.22255-1-pbonzini@redhat.com>
- <20200623001547.22255-5-pbonzini@redhat.com>
- <20200623204441.phngiwlj2idonpe6@wittgenstein>
- <9ddfac6e-473d-1856-3ab7-ff61ccf11ac6@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f0b60da1-ce3f-da53-9ffc-94fea233181a@linuxfoundation.org>
-Date:   Mon, 6 Jul 2020 14:55:16 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        bh=dJcRuZiW502lyt79q4NbNcGnwyJ5bsa33N05bbGF6KY=;
+        b=qqJiBseUfiXQi2vuFimn84xYlJhR/uFlFc+dLNdRX9TGb6gr7MuKn8SBcfGys/JttZ
+         /OStZot+gwATU9Wlaz0ncPKtRqU0OKpnd+XopsM8VBwC6xiSb8ZqxQz1+eddeKRVHxTp
+         AGxnT8HmI4cRfukbpOvNb+LVEHexbQYFMy/F7EuDK6KeCQ0atsYWXV/iDAGW87Tw6AEB
+         E1rZhYALKDwyVWNz4eSAREUtMAV2xSRJMtE4fr6m+qz6QpVl4YcNL5ulL9p9/uQVg3Bd
+         wAAubKSOX98r0kxzEgQOmVbFXKpYZUTgnIBwsNwUEdYe/FGRolJCJWU4F0GH+1OFzLDV
+         ND3Q==
+X-Gm-Message-State: AOAM530wwXkO8VD/gGcnlQMBcXDb+ljlZBhCkxL0s0B5u5CHj50HrLrZ
+        T9P99OVKi3/QFMyS+e1wzLQ=
+X-Google-Smtp-Source: ABdhPJzHQY4gcWWjayoSceEU/AntNo9Wx92xwOBX0gPaOOwxbeSczT6JhlIJ0FRm2x/EtGbmnO6XSg==
+X-Received: by 2002:a92:d24a:: with SMTP id v10mr33073352ilg.224.1594069433312;
+        Mon, 06 Jul 2020 14:03:53 -0700 (PDT)
+Received: from urieldev.c.googlers.com.com (243.199.238.35.bc.googleusercontent.com. [35.238.199.243])
+        by smtp.gmail.com with ESMTPSA id v10sm11522730ilj.40.2020.07.06.14.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2020 14:03:52 -0700 (PDT)
+From:   Uriel Guajardo <urielguajardojr@gmail.com>
+To:     brendanhiggins@google.com, catalin.marinas@arm.com,
+        akpm@linux-foundtation.org
+Cc:     changbin.du@intel.com, rdunlap@infradead.org, masahiroy@kernel.org,
+        0x7f454c46@gmail.com, urielguajardo@google.com, krzk@kernel.org,
+        kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-mm@kvack.org
+Subject: [PATCH 0/2] KUnit-Kmemleak Integration
+Date:   Mon,  6 Jul 2020 21:03:25 +0000
+Message-Id: <20200706210327.3313498-1-urielguajardojr@gmail.com>
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
 MIME-Version: 1.0
-In-Reply-To: <9ddfac6e-473d-1856-3ab7-ff61ccf11ac6@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/24/20 12:21 AM, Paolo Bonzini wrote:
-> On 23/06/20 22:44, Christian Brauner wrote:
->>>   	ret = sys_pidfd_send_signal(pidfd, 0, NULL, 0);
->>>   	if (ret < 0) {
->>> -		if (errno == ENOSYS)
->>> -			ksft_exit_skip(
->>> +		if (errno == ENOSYS) {
->>> +			ksft_test_result_skip(
->>>   				"%s test: pidfd_send_signal() syscall not supported\n",
->>>   				test_name);
->> If pidfd_send_signal() is not supported, you're falling through and then
->> you're reporting:
->>
->> ok 5 # SKIP pidfd_send_signal check for support test: pidfd_send_signal() syscall not supported
->> ok 6 pidfd_send_signal check for support test: pidfd_send_signal() syscall is supported. Tests can be executed
-> 
-> You're right, this needs a "return".
-> 
+From: Uriel Guajardo <urielguajardo@google.com>
 
-Hi Paulo,
+With these patches, KUnit can access and manually run kmemleak in every test
+case. Any errors caught by kmemleak will cause the KUnit test to fail.
 
-I am applying the rest of the patches in this series except this one.
-Please send v3 for this.
+This patchset relies on "kunit: KASAN integration", which places the
+currently running kunit test in task_struct. [1]
 
-thanks,
--- Shuah
+[1] https://lore.kernel.org/linux-kselftest/20200606040349.246780-2-davidgow@google.com
+
+Uriel Guajardo (2):
+  kunit: support kunit failures from debugging tools
+  kunit: kmemleak integration
+
+ include/kunit/test-bug.h | 15 +++++++++++++
+ include/kunit/test.h     |  1 +
+ include/linux/kmemleak.h | 11 ++++++++++
+ lib/Kconfig.debug        | 26 +++++++++++++++++++++++
+ lib/kunit/test.c         | 46 +++++++++++++++++++++++++++++++++++-----
+ mm/kmemleak.c            | 27 +++++++++++++++++------
+ 6 files changed, 115 insertions(+), 11 deletions(-)
+ create mode 100644 include/kunit/test-bug.h
+
+-- 
+2.27.0.212.ge8ba1cc988-goog
+
