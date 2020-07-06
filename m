@@ -2,123 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6323A215633
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 13:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89FD215786
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 14:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgGFLSx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jul 2020 07:18:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60660 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728578AbgGFLSw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 07:18:52 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9C7E020724;
-        Mon,  6 Jul 2020 11:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594034332;
-        bh=zmLR8ixp5sAk1S+ev5fAN5kR8hjaY/WGUGOCG/81gPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=swRHZ9dvM6Cdv2zekhNMV5k8dNEu5dGipKH3rVjPbGLGCwuhLwkDdl1GwEcPdDnbu
-         rcN1I4YSJ4naOdnXogcVK4SJxbTijKBeQUXqVVcIGAqeTJwAcOVJxLCp9Nj4Uhnw4W
-         Ol1iWX3rSZsd442n+Ko+ekIdbXr6fZBXRtoJI5vI=
-Date:   Mon, 6 Jul 2020 13:18:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jan Ziak <0xe2.0x9a.0x9b@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-man@vger.kernel.org,
-        mtk.manpages@gmail.com, shuah@kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH 0/3] readfile(2): a new syscall to make open/read/close
- faster
-Message-ID: <20200706111849.GA84659@kroah.com>
-References: <CAODFU0q6CrUB_LkSdrbp5TQ4Jm6Sw=ZepZwD-B7-aFudsOvsig@mail.gmail.com>
- <20200705021631.GR25523@casper.infradead.org>
- <CAODFU0qwtPTaBRbA3_ufA6N7fajhi61Sp5iE75Shdk25NSOTLA@mail.gmail.com>
- <20200705031208.GS25523@casper.infradead.org>
- <CAODFU0q=nDdx7D1NUxTQshBjqgTCYPpKzog78XZLjoPqnZqXvw@mail.gmail.com>
- <20200705032732.GT25523@casper.infradead.org>
- <CAODFU0rSqQsO9rSiA8Ke=+mk_NgEdFDHPMfmXGSmzmkqQh1KYw@mail.gmail.com>
- <20200705115851.GB1227929@kroah.com>
- <CAODFU0ovM-i=4fNKSzp9SgO_FjPcAOZ0R8S4iRXyGm+QL53C1A@mail.gmail.com>
+        id S1729130AbgGFMod (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jul 2020 08:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729095AbgGFMoc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 Jul 2020 08:44:32 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177F1C061794
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 05:44:32 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a1so42254348ejg.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 05:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4NNoOxff0nhiCp6Y07KXiET4P9UsRV6yVCqRMrClQ08=;
+        b=LWykRokaTmYGCqNEmY1w2CbyYxpuoZ4IFwUyN2UXP98ea8Z0BRaVWGpaWgNFEvh13H
+         JRxrnjn1lc0s0e4nmGqgRrN2qGll3nIiPYCtvLO6kSS32ghi2ONDDC027n/De5hiibRX
+         ZMEaZJKbuaJpkDRH3CXSbR1n5tfQgsRf74sEneUBzB+DcXRj/ER/CfAIAKVm3BaMBzIa
+         QhB2tjR/pjRKHHx62mY+/Op1CRNEgrVfWsKjL4JoE8JMiMUl37CWYfdc9FJy8LIEfVMF
+         5miZwnJ7wb3MAbLG7WFMRaGSGzCaQ5s0whwDppGx8QqNyNuW1bWE/2JIc7svNnVYhsL/
+         YAng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4NNoOxff0nhiCp6Y07KXiET4P9UsRV6yVCqRMrClQ08=;
+        b=LP6RcLAlD6l3Kw2L53Xoinp238Qxr8LAZc32ujR4RdSpM6RSFENGOKzOXeOt8e7A8v
+         A3/Rmf2qFeD5+ZXmtInjboTkwCll1eDnN6zb1nj+Ik3spUQqnSyFC9LVLjbF+yysWCmw
+         pxgWNy6inWTQxGxE7D9p/IfQCYD8HauMHLzssn4TCG6utCx9GRwvQAdmK0kF6Ed3O7u9
+         YJyBSdgYNqN9iU0X3/nWCtqCUVUt4iA7n51owm+Qn3BeQGFcdF7ElfoPlQ0Wv4E6uBqc
+         CvO4U2q7tEp0vVV1VEYEMOgjkg1AXEAmKadICPSO0swlgGwZgqWXI5GpQTVDJxH3k5x0
+         K4Jg==
+X-Gm-Message-State: AOAM532NkjT2gERGl2a/YKE/DGPGCaGJUBaboPyp8uIYRcttjiF59N9F
+        L13Dr6bEwQc1OsUc5etglpD6Pg==
+X-Google-Smtp-Source: ABdhPJyzJ09NPfBJvmOzre17fK9bY9OTFzZGQ+6qD49u1WlGJgzfsoCqeWeLkqKQP0AgVKpIANFFdg==
+X-Received: by 2002:a17:906:4356:: with SMTP id z22mr26801923ejm.414.1594039470723;
+        Mon, 06 Jul 2020 05:44:30 -0700 (PDT)
+Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
+        by smtp.gmail.com with ESMTPSA id o6sm20737298edr.94.2020.07.06.05.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2020 05:44:29 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     netdev@vger.kernel.org
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, mptcp@lists.01.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] selftests: mptcp: capture pcap on both sides
+Date:   Mon,  6 Jul 2020 14:44:08 +0200
+Message-Id: <20200706124408.3118005-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAODFU0ovM-i=4fNKSzp9SgO_FjPcAOZ0R8S4iRXyGm+QL53C1A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 08:07:46AM +0200, Jan Ziak wrote:
-> On Sun, Jul 5, 2020 at 1:58 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Sun, Jul 05, 2020 at 06:09:03AM +0200, Jan Ziak wrote:
-> > > On Sun, Jul 5, 2020 at 5:27 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Sun, Jul 05, 2020 at 05:18:58AM +0200, Jan Ziak wrote:
-> > > > > On Sun, Jul 5, 2020 at 5:12 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > >
-> > > > > > You should probably take a look at io_uring.  That has the level of
-> > > > > > complexity of this proposal and supports open/read/close along with many
-> > > > > > other opcodes.
-> > > > >
-> > > > > Then glibc can implement readfile using io_uring and there is no need
-> > > > > for a new single-file readfile syscall.
-> > > >
-> > > > It could, sure.  But there's also a value in having a simple interface
-> > > > to accomplish a simple task.  Your proposed API added a very complex
-> > > > interface to satisfy needs that clearly aren't part of the problem space
-> > > > that Greg is looking to address.
-> > >
-> > > I believe that we should look at the single-file readfile syscall from
-> > > a performance viewpoint. If an application is expecting to read a
-> > > couple of small/medium-size files per second, then neither readfile
-> > > nor readfiles makes sense in terms of improving performance. The
-> > > benefits start to show up only in case an application is expecting to
-> > > read at least a hundred of files per second. The "per second" part is
-> > > important, it cannot be left out. Because readfile only improves
-> > > performance for many-file reads, the syscall that applications
-> > > performing many-file reads actually want is the multi-file version,
-> > > not the single-file version.
-> >
-> > It also is a measurable increase over reading just a single file.
-> > Here's my really really fast AMD system doing just one call to readfile
-> > vs. one call sequence to open/read/close:
-> >
-> >         $ ./readfile_speed -l 1
-> >         Running readfile test on file /sys/devices/system/cpu/vulnerabilities/meltdown for 1 loops...
-> >         Took 3410 ns
-> >         Running open/read/close test on file /sys/devices/system/cpu/vulnerabilities/meltdown for 1 loops...
-> >         Took 3780 ns
-> >
-> > 370ns isn't all that much, yes, but it is 370ns that could have been
-> > used for something else :)
-> 
-> I am curious as to how you amortized or accounted for the fact that
-> readfile() first needs to open the dirfd and then close it later.
+When investigating performance issues that involve latency / loss /
+reordering it is useful to have the pcap from the sender-side as it
+allows to easier infer the state of the sender's congestion-control,
+loss-recovery, etc.
 
-I do not open a dirfd, look at the benchmark code in the patch, it's all
-right there.
+Allow the selftests to capture a pcap on both sender and receiver so
+that this information is not lost when reproducing.
 
-I can make it simpler, will do that for the next round as I want to make
-it really obvious for people to test on their hardware.
+This patch also improves the file names. Instead of:
 
-> >From performance viewpoint, only codes where readfile() is called
-> multiple times from within a loop make sense:
-> 
-> dirfd = open();
-> for(...) {
->   readfile(dirfd, ...);
-> }
-> close(dirfd);
+  ns4-5ee79a56-X4O6gS-ns3-5ee79a56-X4O6gS-MPTCP-MPTCP-10.0.3.1.pcap
 
-No need to open dirfd at all, my benchmarks did not do that, just pass
-in an absolute path if you don't want to.  But if you want to, because
-you want to read a bunch of files, you can, faster than you could if you
-wanted to read a number of individual files without it :)
+We now have something like for the same test:
 
-thanks,
+  5ee79a56-X4O6gS-ns3-ns4-MPTCP-MPTCP-10.0.3.1-10030-connector.pcap
+  5ee79a56-X4O6gS-ns3-ns4-MPTCP-MPTCP-10.0.3.1-10030-listener.pcap
 
-greg k-h
+It was a connection from ns3 to ns4, better to start with ns3 then. The
+port is also added, easier to find the trace we want.
+
+Co-developed-by: Christoph Paasch <cpaasch@apple.com>
+Signed-off-by: Christoph Paasch <cpaasch@apple.com>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+index 8f7145c413b9..c0589e071f20 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+@@ -395,10 +395,14 @@ do_transfer()
+ 			capuser="-Z $SUDO_USER"
+ 		fi
+ 
+-		local capfile="${listener_ns}-${connector_ns}-${cl_proto}-${srv_proto}-${connect_addr}.pcap"
++		local capfile="${rndh}-${connector_ns:0:3}-${listener_ns:0:3}-${cl_proto}-${srv_proto}-${connect_addr}-${port}"
++		local capopt="-i any -s 65535 -B 32768 ${capuser}"
+ 
+-		ip netns exec ${listener_ns} tcpdump -i any -s 65535 -B 32768 $capuser -w $capfile > "$capout" 2>&1 &
+-		local cappid=$!
++		ip netns exec ${listener_ns}  tcpdump ${capopt} -w "${capfile}-listener.pcap"  >> "${capout}" 2>&1 &
++		local cappid_listener=$!
++
++		ip netns exec ${connector_ns} tcpdump ${capopt} -w "${capfile}-connector.pcap" >> "${capout}" 2>&1 &
++		local cappid_connector=$!
+ 
+ 		sleep 1
+ 	fi
+@@ -423,7 +427,8 @@ do_transfer()
+ 
+ 	if $capture; then
+ 		sleep 1
+-		kill $cappid
++		kill ${cappid_listener}
++		kill ${cappid_connector}
+ 	fi
+ 
+ 	local duration
+-- 
+2.27.0
+
