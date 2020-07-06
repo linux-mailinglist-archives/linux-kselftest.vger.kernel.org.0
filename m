@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7611B2160C2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 23:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178902160C4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 23:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725860AbgGFVDz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S1725987AbgGFVDz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Mon, 6 Jul 2020 17:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbgGFVDy (ORCPT
+        with ESMTP id S1725942AbgGFVDz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 17:03:54 -0400
+        Mon, 6 Jul 2020 17:03:55 -0400
 Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C213C08C5DF;
-        Mon,  6 Jul 2020 14:03:54 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id t18so14224517ilh.2;
-        Mon, 06 Jul 2020 14:03:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5582BC08C5DF;
+        Mon,  6 Jul 2020 14:03:55 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id i18so34165494ilk.10;
+        Mon, 06 Jul 2020 14:03:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+16+7KnkX/9gcZH8MHFXYJspRfXIBLdOpWbNNV0TOlU=;
-        b=uoHhmTNROZj8CmYMxmegK1DaKiSDsdZHNxaiyrGKuknTWf7XfxcYlL2/B1HC5Vnefx
-         QbZs+8PCPr6ovkyUJUcj6AVRQxF7qCHorxJUOekBJ93gCdF6RLNFi1vQauAG6klyObQt
-         HWpgFrEbygmL0bue+hCOAHc5CR/UkL1EKuYy9fPktSYt98AX5AYSCHaFMz7wvCiUdhFu
-         sEnkYZW9onZboUyQx3itTIFECyro/r6Ur5KJtGtAnV0k2CeZW1FEwgS7x9tvLCBdf7R+
-         dKwkpj7AXrfD4+8KX195ILZWkuZJktd7pAbOL7vnTkv/Ke90qnrOAIiD0H15/k5A4KFM
-         3c9Q==
+        bh=CLjoKMeutODoP4Bv1WKkZd+zgs0/3Kf9t9fuv18bUww=;
+        b=LhJEhnTjf6hDbBuja09VkdxcTYpBgjXGLxzLnuvuDlwjZrtqXF7ZRdRyCB3ktbulHe
+         9z0899k58/X3PajM9VnXgYl9nRTtqzP7aSqLr8Wzz6oO8mS8a3ePrDks/Cg7QEF2wWQN
+         i9o2n/YShxB9ukTfVAR77tX/L2iMG/6W4mg8xsVwK2D/4XXlpQdaTcRz0SjLrk/99WRW
+         a21LeJ0Zl0FEG0QLLF1ez2aTOQ2hupHdk0YymK4aoMloBw+N1r2wz2BTJZyRuVZ4m54g
+         VkTPXOpX0wPsNnUs6XDDFruruF+qkmMO62botSPH8fDPILQUZR1XKsa5Rqh0gkeucU5G
+         +GIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+16+7KnkX/9gcZH8MHFXYJspRfXIBLdOpWbNNV0TOlU=;
-        b=eFwmtpgMSM0Thw4RWxfeNbOSo/2G+2LFqUnTbS2jAMwiXd5jwj1snlI99comoT6tsX
-         wJaCWeP6unE6C2OIvppr/f7ktzRnvQ5kLIckJ3MYO4X7069u+Z5eXttt0dQYxlDtGH0H
-         cKAgX558AHO09y08NyjfHyK7wfNOTzcNxGl+gs4LdobSnv2hPJAaZyMZaOdXNmGHHWWD
-         GJmRImZ+49pmb3iBAejE03cdxkRKUV7P9/XwhKRU4slFXrhOQECo0Y3L3u6qIxDVjdyv
-         Q6p9cZk5UJR9ZfWaYkpAfmYEh8D5LwzhweN4Nz2xVnApRKCELuRSgrwe/qDsJ+u0EwWs
-         XpuQ==
-X-Gm-Message-State: AOAM533s+3YGfdnq5FAMY9I5dFBObKWqwSXnIHMJfveQQrLoUXMXQWFg
-        5AEjPbOcoX03MkXE7fIRc0U=
-X-Google-Smtp-Source: ABdhPJyfWwbEsh9gv+AvxPR/xbUztYmTYm1aQ9jTqeSoVV0XtSLhv5JpxCx3BxKDwUK9nd4PpxUufA==
-X-Received: by 2002:a05:6e02:13a9:: with SMTP id h9mr32832029ilo.232.1594069433952;
-        Mon, 06 Jul 2020 14:03:53 -0700 (PDT)
+        bh=CLjoKMeutODoP4Bv1WKkZd+zgs0/3Kf9t9fuv18bUww=;
+        b=DVq2SNTwLOgTE6dpk+sMEcNTjR9r3rMO4gSPML/Ap/hv7NHXVIboaaVU1eh/SgVTkK
+         B5QFwfMqKO2IH/uRSuOCdGiYidkqiwf4RpC54HxPELZsgccfPjxnKNZZzMYCnba7z4h9
+         FzCFw38lBrx5aeHzL/9AB/IZx4hfLirAEQVQu12UAA59rGCn8B4uQmMiv0zr3VhyObFB
+         15zjWZrmjjioKIHEfoTIh+seRLA1VJtjhb5leyfra9xE0OLLIGmfk5Ah8tVAI4NPbBDF
+         w6mSnfJOgY/sipFPnAf6X9KTi5Q4w9QzWZRqYHpZRyK1rszHVxQKXag0jToYS7AZZ2uB
+         4vcw==
+X-Gm-Message-State: AOAM5312/dx/F7uWk0tyKLh2zAZW8O6W1kDXSre4lkai2/e4X4OaRHNu
+        rUMtexg2c7dLp9vtxWiTJso=
+X-Google-Smtp-Source: ABdhPJw6farWJvYW/vDWzIPneFofVdUqDu8YNO98+T6gnDBiHZTaleksl2IoopM9jtZOK0q3c22nCQ==
+X-Received: by 2002:a92:840b:: with SMTP id l11mr28243406ild.129.1594069434644;
+        Mon, 06 Jul 2020 14:03:54 -0700 (PDT)
 Received: from urieldev.c.googlers.com.com (243.199.238.35.bc.googleusercontent.com. [35.238.199.243])
         by smtp.gmail.com with ESMTPSA id v10sm11522730ilj.40.2020.07.06.14.03.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 14:03:53 -0700 (PDT)
+        Mon, 06 Jul 2020 14:03:54 -0700 (PDT)
 From:   Uriel Guajardo <urielguajardojr@gmail.com>
 To:     brendanhiggins@google.com, catalin.marinas@arm.com,
         akpm@linux-foundtation.org
@@ -55,9 +55,9 @@ Cc:     changbin.du@intel.com, rdunlap@infradead.org, masahiroy@kernel.org,
         0x7f454c46@gmail.com, urielguajardo@google.com, krzk@kernel.org,
         kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-mm@kvack.org
-Subject: [PATCH 1/2] kunit: support kunit failures from debugging tools
-Date:   Mon,  6 Jul 2020 21:03:26 +0000
-Message-Id: <20200706210327.3313498-2-urielguajardojr@gmail.com>
+Subject: [PATCH 2/2] kunit: kmemleak integration
+Date:   Mon,  6 Jul 2020 21:03:27 +0000
+Message-Id: <20200706210327.3313498-3-urielguajardojr@gmail.com>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
 In-Reply-To: <20200706210327.3313498-1-urielguajardojr@gmail.com>
 References: <20200706210327.3313498-1-urielguajardojr@gmail.com>
@@ -70,95 +70,233 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Uriel Guajardo <urielguajardo@google.com>
 
-Dynamic analyis tools can now fail the currently running kunit
-test case by calling kunit_fail_current_test().
+Integrate kmemleak into the KUnit testing framework.
 
-A new header file is created so that no circular dependencies are
-created with external tools.
+Kmemleak will now fail the currently running KUnit test case if it finds
+any memory leaks.
 
-This patch requires "kunit: KASAN integration", which places the
-currently running kunit test in task_struct. [1]
-
-[1] https://lore.kernel.org/linux-kselftest/20200606040349.246780-2-davidgow@google.com
+The minimum object age for reporting is set to 0 msecs so that leaks are
+not ignored if the test case finishes too quickly.
 
 Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
 ---
- include/kunit/test-bug.h | 15 +++++++++++++++
- include/kunit/test.h     |  1 +
- lib/kunit/test.c         | 10 ++++++----
- 3 files changed, 22 insertions(+), 4 deletions(-)
- create mode 100644 include/kunit/test-bug.h
+ include/linux/kmemleak.h | 11 +++++++++++
+ lib/Kconfig.debug        | 26 ++++++++++++++++++++++++++
+ lib/kunit/test.c         | 36 +++++++++++++++++++++++++++++++++++-
+ mm/kmemleak.c            | 27 +++++++++++++++++++++------
+ 4 files changed, 93 insertions(+), 7 deletions(-)
 
-diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-new file mode 100644
-index 000000000000..69ec3dd91c52
---- /dev/null
-+++ b/include/kunit/test-bug.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Base unit test (KUnit) API.
-+ *
-+ * Copyright (C) 2020, Google LLC.
-+ * Author: Uriel Guajardo <urielguajardo@google.com>
-+ */
-+
-+#if IS_ENABLED(CONFIG_KUNIT)
-+extern void kunit_fail_current_test(void);
-+#else
-+static inline void kunit_fail_current_test(void)
-+{
-+}
-+#endif
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 1dc3d118f64b..c46715c739b5 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -11,6 +11,7 @@
+diff --git a/include/linux/kmemleak.h b/include/linux/kmemleak.h
+index 34684b2026ab..0da427934462 100644
+--- a/include/linux/kmemleak.h
++++ b/include/linux/kmemleak.h
+@@ -35,6 +35,10 @@ extern void kmemleak_free_part_phys(phys_addr_t phys, size_t size) __ref;
+ extern void kmemleak_not_leak_phys(phys_addr_t phys) __ref;
+ extern void kmemleak_ignore_phys(phys_addr_t phys) __ref;
  
- #include <kunit/assert.h>
- #include <kunit/try-catch.h>
-+#include <kunit/test-bug.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/slab.h>
++extern ssize_t kmemleak_write(struct file *file,
++			      const char __user *user_buf,
++			      size_t size, loff_t *ppos);
++
+ static inline void kmemleak_alloc_recursive(const void *ptr, size_t size,
+ 					    int min_count, slab_flags_t flags,
+ 					    gfp_t gfp)
+@@ -120,6 +124,13 @@ static inline void kmemleak_ignore_phys(phys_addr_t phys)
+ {
+ }
+ 
++static inline ssize_t kmemleak_write(struct file *file,
++				     const char __user *user_buf,
++				     size_t size, loff_t *ppos)
++{
++	return -1;
++}
++
+ #endif	/* CONFIG_DEBUG_KMEMLEAK */
+ 
+ #endif	/* __KMEMLEAK_H */
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 21d9c5f6e7ec..e9c492cb3f4d 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -602,6 +602,32 @@ config DEBUG_KMEMLEAK_MEM_POOL_SIZE
+ 	  fully initialised, this memory pool acts as an emergency one
+ 	  if slab allocations fail.
+ 
++config DEBUG_KMEMLEAK_MAX_TRACE
++	int "Kmemleak stack trace length"
++	depends on DEBUG_KMEMLEAK
++	default 16
++
++config DEBUG_KMEMLEAK_MSECS_MIN_AGE
++	int "Minimum object age before reporting in msecs"
++	depends on DEBUG_KMEMLEAK
++	default 0 if KUNIT
++	default 5000
++
++config DEBUG_KMEMLEAK_SECS_FIRST_SCAN
++	int "Delay before first scan in secs"
++	depends on DEBUG_KMEMLEAK
++	default 60
++
++config DEBUG_KMEMLEAK_SECS_SCAN_WAIT
++	int "Delay before subsequent auto scans in secs"
++	depends on DEBUG_KMEMLEAK
++	default 600
++
++config DEBUG_KMEMLEAK_MAX_SCAN_SIZE
++	int "Maximum size of scanned block"
++	depends on DEBUG_KMEMLEAK
++	default 4096
++
+ config DEBUG_KMEMLEAK_TEST
+ 	tristate "Simple test for the kernel memory leak detector"
+ 	depends on DEBUG_KMEMLEAK && m
 diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index ef3bfb9fae48..8580ed831a8f 100644
+index 8580ed831a8f..8d113a6a214b 100644
 --- a/lib/kunit/test.c
 +++ b/lib/kunit/test.c
-@@ -16,6 +16,12 @@
- #include "string-stream.h"
- #include "try-catch-impl.h"
+@@ -11,6 +11,7 @@
+ #include <linux/kref.h>
+ #include <linux/sched/debug.h>
+ #include <linux/sched.h>
++#include <linux/kmemleak.h>
  
-+void kunit_fail_current_test(void)
+ #include "debugfs.h"
+ #include "string-stream.h"
+@@ -277,6 +278,27 @@ static void kunit_run_case_cleanup(struct kunit *test,
+ 	kunit_case_internal_cleanup(test);
+ }
+ 
++/*
++ * Manually scans for memory leaks using the kmemleak tool.
++ *
++ * Any leaks that occurred since the previous scan will be
++ * reported and will cause the currently running test to fail.
++ */
++static inline void kmemleak_scan(void)
 +{
-+	if (current->kunit_test)
-+		kunit_set_failure(current->kunit_test);
++	loff_t pos;
++	kmemleak_write(NULL, "scan", 5, &pos);
 +}
 +
- static void kunit_print_tap_version(void)
- {
- 	static bool kunit_has_printed_tap_version;
-@@ -284,9 +290,7 @@ static void kunit_try_run_case(void *data)
++/*
++ * Turn off the background automatic scan that kmemleak performs upon starting
++ */
++static inline void kmemleak_automatic_scan_off(void)
++{
++	loff_t pos;
++	kmemleak_write(NULL, "scan=off", 9, &pos);
++}
++
+ struct kunit_try_catch_context {
+ 	struct kunit *test;
+ 	struct kunit_suite *suite;
+@@ -290,6 +312,12 @@ static void kunit_try_run_case(void *data)
  	struct kunit_suite *suite = ctx->suite;
  	struct kunit_case *test_case = ctx->test_case;
  
--#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
++	/*
++	 * Clear any reported memory leaks since last scan, so that only the
++	 * leaks pertaining to the test case remain afterwards.
++	 */
++	kmemleak_scan();
++
  	current->kunit_test = test;
--#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT) */
  
  	/*
- 	 * kunit_run_case_internal may encounter a fatal error; if it does,
-@@ -603,9 +607,7 @@ void kunit_cleanup(struct kunit *test)
- 		spin_unlock(&test->lock);
- 		kunit_remove_resource(test, res);
- 	}
--#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
- 	current->kunit_test = NULL;
--#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT)*/
+@@ -298,7 +326,12 @@ static void kunit_try_run_case(void *data)
+ 	 * thread will resume control and handle any necessary clean up.
+ 	 */
+ 	kunit_run_case_internal(test, suite, test_case);
+-	/* This line may never be reached. */
++
++	/* These lines may never be reached. */
++
++	/* Report any detected memory leaks that occurred in the test case */
++	kmemleak_scan();
++
+ 	kunit_run_case_cleanup(test, suite);
  }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
  
+@@ -388,6 +421,7 @@ static void kunit_init_suite(struct kunit_suite *suite)
+ int __kunit_test_suites_init(struct kunit_suite **suites)
+ {
+ 	unsigned int i;
++	kmemleak_automatic_scan_off();
+ 
+ 	for (i = 0; suites[i] != NULL; i++) {
+ 		kunit_init_suite(suites[i]);
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index e362dc3d2028..ad046c77e00c 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -99,15 +99,26 @@
+ #include <linux/kasan.h>
+ #include <linux/kmemleak.h>
+ #include <linux/memory_hotplug.h>
++#include <kunit/test.h>
+ 
+ /*
+  * Kmemleak configuration and common defines.
+  */
+-#define MAX_TRACE		16	/* stack trace length */
+-#define MSECS_MIN_AGE		5000	/* minimum object age for reporting */
+-#define SECS_FIRST_SCAN		60	/* delay before the first scan */
+-#define SECS_SCAN_WAIT		600	/* subsequent auto scanning delay */
+-#define MAX_SCAN_SIZE		4096	/* maximum size of a scanned block */
++
++/* stack trace length */
++#define MAX_TRACE		CONFIG_DEBUG_KMEMLEAK_MAX_TRACE
++
++/* minimum object age for reporting */
++#define MSECS_MIN_AGE		CONFIG_DEBUG_KMEMLEAK_MSECS_MIN_AGE
++
++/* delay before the first scan */
++#define SECS_FIRST_SCAN		CONFIG_DEBUG_KMEMLEAK_SECS_FIRST_SCAN
++
++/* subsequent auto scanning delay */
++#define SECS_SCAN_WAIT		CONFIG_DEBUG_KMEMLEAK_SECS_SCAN_WAIT
++
++/* maximum size of a scanned lock */
++#define MAX_SCAN_SIZE		CONFIG_DEBUG_KMEMLEAK_MAX_SCAN_SIZE
+ 
+ #define BYTES_PER_POINTER	sizeof(void *)
+ 
+@@ -1490,6 +1501,7 @@ static void kmemleak_scan(void)
+ 	 * Check for new or unreferenced objects modified since the previous
+ 	 * scan and color them gray until the next scan.
+ 	 */
++#if (!IS_ENABLED(CONFIG_KUNIT))
+ 	rcu_read_lock();
+ 	list_for_each_entry_rcu(object, &object_list, object_list) {
+ 		raw_spin_lock_irqsave(&object->lock, flags);
+@@ -1502,6 +1514,7 @@ static void kmemleak_scan(void)
+ 		raw_spin_unlock_irqrestore(&object->lock, flags);
+ 	}
+ 	rcu_read_unlock();
++#endif
+ 
+ 	/*
+ 	 * Re-scan the gray list for modified unreferenced objects.
+@@ -1534,6 +1547,8 @@ static void kmemleak_scan(void)
+ 	rcu_read_unlock();
+ 
+ 	if (new_leaks) {
++		kunit_fail_current_test();
++
+ 		kmemleak_found_leaks = true;
+ 
+ 		pr_info("%d new suspected memory leaks (see /sys/kernel/debug/kmemleak)\n",
+@@ -1764,7 +1779,7 @@ static void __kmemleak_do_cleanup(void);
+  *		  if kmemleak has been disabled.
+  *   dump=...	- dump information about the object found at the given address
+  */
+-static ssize_t kmemleak_write(struct file *file, const char __user *user_buf,
++ssize_t kmemleak_write(struct file *file, const char __user *user_buf,
+ 			      size_t size, loff_t *ppos)
+ {
+ 	char buf[64];
 -- 
 2.27.0.212.ge8ba1cc988-goog
 
