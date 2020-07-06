@@ -2,75 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D747215D09
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 19:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BFA215F59
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 21:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729670AbgGFRZp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jul 2020 13:25:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:58314 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729666AbgGFRZp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 13:25:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3030D6E;
-        Mon,  6 Jul 2020 10:25:44 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF14C3F68F;
-        Mon,  6 Jul 2020 10:25:43 -0700 (PDT)
-Date:   Mon, 6 Jul 2020 18:25:41 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     viro@zeniv.linux.org.uk, mtk.manpages@gmail.com, shuah@kernel.org,
+        id S1726582AbgGFTah (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jul 2020 15:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725982AbgGFTag (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 Jul 2020 15:30:36 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BCDC061794
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 12:30:36 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id z5so18842633pgb.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 12:30:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jA71++q3kdwcFkfUU/1at8AL+IZxf2Nnq6lJ3LbUnXg=;
+        b=Q+7dfF3lcRisIsTqM7EGD0tYjWye1O/Gfz50qcw4naOrpboCi2ZmrR6d1RzMnOs7mR
+         Fh1/KCwCGizIS3GVQrZmc4YKPc7/8e4SSalTwfSqP37iQkamNsBrIJtKubGbQxGTlF4L
+         Gxge8avBKJljPA0a7NtRL4/iHOuA13h42MPe0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jA71++q3kdwcFkfUU/1at8AL+IZxf2Nnq6lJ3LbUnXg=;
+        b=G5wtMoK+87GaIOxRiA8iI0IlzUyFGpXJnTcR4HdpZx0H8IkCLGofHdYOEMsGdE3kk9
+         WZO3B173UOKHdpTOP4rj+8vJIdCNOuSGZ4rn7nIXsxlXhBfKycGuYLMviKWSsuEHemfq
+         1ihBOiO1q4vr7qYj/cwAyKyDL8+A1fTlqg5kHzjawYazDvj8W/0ELVcW7l1lx1GHOKG/
+         WxIwvAg2LdKDizAW72i5nfP+ssM2G6JPRYS6omq7JQcCdiO9uCWZd17dCEZ+tGTFw017
+         Uk6CNKImjEv1pveLkb6baQFDQpLVO8rztQ+K8y/NYKS7JkghN8+fiw/n09RAA4VphEYh
+         2G3w==
+X-Gm-Message-State: AOAM530GFzeEAsrXLOlhDWkMi9uOLEKh1oSoPgFJTljyjqqqCnv1Agh+
+        XRKxTlWALQaC78P4dT+v7qB0AA==
+X-Google-Smtp-Source: ABdhPJz7tXd/nnBDS0YQJcB7rwYbSOG0wy8tzeWXjOdUxA5eSWOjt+6q3dGWi3mLABNZOwnfZ4Olmg==
+X-Received: by 2002:a62:fc15:: with SMTP id e21mr46353476pfh.167.1594063835932;
+        Mon, 06 Jul 2020 12:30:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y8sm225835pju.49.2020.07.06.12.30.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2020 12:30:35 -0700 (PDT)
+Date:   Mon, 6 Jul 2020 12:30:33 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-kernel@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Matt Denton <mpdenton@google.com>,
+        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
+        Robert Sesek <rsesek@google.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, containers@lists.linux-foundation.org,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/3] readfile(2): a new syscall to make open/read/close
- faster
-Message-ID: <20200706172541.GG10992@arm.com>
-References: <20200704140250.423345-1-gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v5 4/7] pidfd: Replace open-coded partial
+ fd_install_received()
+Message-ID: <202007061225.5CBC3CF@keescook>
+References: <20200617220327.3731559-1-keescook@chromium.org>
+ <20200617220327.3731559-5-keescook@chromium.org>
+ <20200706130713.n6r3vhn4hn2lodex@wittgenstein>
+ <202007060830.0FE753B@keescook>
+ <20200706161245.hjat2rsikt3linbm@wittgenstein>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200704140250.423345-1-gregkh@linuxfoundation.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200706161245.hjat2rsikt3linbm@wittgenstein>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 04, 2020 at 04:02:46PM +0200, Greg Kroah-Hartman wrote:
-> Here is a tiny new syscall, readfile, that makes it simpler to read
-> small/medium sized files all in one shot, no need to do open/read/close.
-> This is especially helpful for tools that poke around in procfs or
-> sysfs, making a little bit of a less system load than before, especially
-> as syscall overheads go up over time due to various CPU bugs being
-> addressed.
+On Mon, Jul 06, 2020 at 06:12:45PM +0200, Christian Brauner wrote:
+> On Mon, Jul 06, 2020 at 08:34:06AM -0700, Kees Cook wrote:
+> > Yup, this was a mistake in my refactoring of the pidfs changes.
 > 
-> There are 4 patches in this series, the first 3 are against the kernel
-> tree, adding the syscall logic, wiring up the syscall, and adding some
-> tests for it.
+> I already did.
+
+Er, what? (I had a typo in my quote: s/pidfs/pidfd/.) I was trying to
+say that this was just a mistake in my refactoring of the pidfd usage of
+the new helper.
+
+> > I still don't agree: it radically complicates the SCM_RIGHTS and seccomp
 > 
-> The last patch is agains the man-pages project, adding a tiny man page
-> to try to describe the new syscall.
+> I'm sorry, I don't buy it yet, though I might've missed something in the
+> discussions: :)
+> After applying the patches in your series this literally is just (which
+> is hardly radical ;):
 
-General question, using this series as an illustration only:
+Agreed, "radical" was too strong.
 
+> diff --git a/fs/file.c b/fs/file.c
+> index 9568bcfd1f44..26930b2ea39d 100644
+> --- a/fs/file.c
+> +++ b/fs/file.c
+> @@ -974,7 +974,7 @@ int __fd_install_received(int fd, struct file *file, int __user *ufd,
+>         }
+> 
+>         if (fd < 0)
+> -               fd_install(new_fd, get_file(file));
+> +               fd_install(new_fd, file);
+>         else {
+>                 new_fd = fd;
+>                 error = replace_fd(new_fd, file, o_flags);
+> diff --git a/net/compat.c b/net/compat.c
+> index 71494337cca7..605a5a67200c 100644
+> --- a/net/compat.c
+> +++ b/net/compat.c
+> @@ -298,9 +298,11 @@ void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
+>         int err = 0, i;
+> 
+>         for (i = 0; i < fdmax; i++) {
+> -               err = fd_install_received_user(scm->fp->fp[i], cmsg_data + i, o_flags);
+> -               if (err < 0)
+> +               err = fd_install_received_user(get_file(scm->fp->fp[i]), cmsg_data + i, o_flags);
+> +               if (err < 0) {
+> +                       fput(scm->fp->fp[i]);
+>                         break;
+> +               }
+>         }
+> 
+>         if (i > 0) {
+> diff --git a/net/core/scm.c b/net/core/scm.c
+> index b9a0442ebd26..0d06446ae598 100644
+> --- a/net/core/scm.c
+> +++ b/net/core/scm.c
+> @@ -306,9 +306,11 @@ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
+>         }
+> 
+>         for (i = 0; i < fdmax; i++) {
+> -               err = fd_install_received_user(scm->fp->fp[i], cmsg_data + i, o_flags);
+> -               if (err < 0)
+> +               err = fd_install_received_user(get_file(scm->fp->fp[i]), cmsg_data + i, o_flags);
+> +               if (err < 0) {
+> +                       fput(scm->fp->fp[i]);
+>                         break;
+> +               }
+>         }
+> 
+>         if (i > 0) {
 
-At the risk of starting a flamewar, why is this needed?  Is there a
-realistic usecase that would get significant benefit from this?
+But my point stands: I really dislike this; suddenly the caller needs to
+manage this when it should be an entirely internal detail to the
+function. It was only pidfd doing it wrong, and that was entirely my
+fault in the conversion.
 
-A lot of syscalls seem to get added that combine or refactor the
-functionality of existing syscalls without justifying why this is
-needed (or even wise).  This case feels like a solution, not a
-primitive, so I wonder if the long-term ABI fragmentation is worth the
-benefit.
+> The problem here is that the current patch invites bugs and has already
+> produced one because fd_install() and fd_install_*() have the same
+> naming scheme but different behavior when dealing with references.
+> That's just not a good idea.
 
-I ask because I'd like to get an idea of the policy on what is and is
-not considered a frivolous ABI extension.
+I will rename the helper and add explicit documentation, but I really
+don't think callers should have to deal with managing the helper's split
+ref lifetime.
 
-(I'm sure a usecase must be in mind, but it isn't mentioned here.
-Certainly the time it takes top to dump the contents of /proc leaves
-something to be desired.)
-
-Cheers
----Dave
+-- 
+Kees Cook
