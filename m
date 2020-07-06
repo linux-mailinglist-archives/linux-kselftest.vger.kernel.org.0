@@ -2,123 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E8A216086
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 22:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A062160B5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 22:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727091AbgGFUtq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jul 2020 16:49:46 -0400
-Received: from mail.efficios.com ([167.114.26.124]:57052 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726939AbgGFUtp (ORCPT
+        id S1726540AbgGFUzT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jul 2020 16:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726494AbgGFUzT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 16:49:45 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B6C5C2DCBC2;
-        Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ZWQUH0zUNbht; Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 35EAC2DCCBF;
-        Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 35EAC2DCCBF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1594068584;
-        bh=mnMMKvJaOAN7AlfDW7S7IlXwHCI9soK/a0/c/Zir58M=;
-        h=From:To:Date:Message-Id;
-        b=efnws94pwSMtS/IAS5Ys121F4Iq0KkCiCQgYcjiDsebUjlu6LXkPm9zpyge1fMqPv
-         9nQd/m9xFhZdjfHt09PE4YdZFXpRUysulFSKGtxJiFGQt0WJvoAAyA5kpzyrcTXF49
-         7sBqxwZT49TCWK+pYyRF3XbxL9x1ATX+FoViBCvI0MRSyrTai+lJf7HOyB8+FCASkF
-         T+MPqNjCmWJNJ+hprRVDdzAWKUc3EVs1h65dEysJLOiFRsOXnK4xgxnGLg+xT52nJz
-         XEWqPNi6KMWbw7cM2ah1xYQJcMM0Pbqx1leWRmlLRMEQoI1tF5hCte7ygzCBjCdbFs
-         SdYo2KTPeLw4w==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wTGn1GJVJk5q; Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
-Received: from localhost.localdomain (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
-        by mail.efficios.com (Postfix) with ESMTPSA id BD4512DCDA9;
-        Mon,  6 Jul 2020 16:49:42 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@linux.ibm.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Florian Weimer <fw@deneb.enyo.de>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Neel Natu <neelnatu@google.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH for 5.8 4/4] rseq: selftests: Expect reliable cpu_id field
-Date:   Mon,  6 Jul 2020 16:49:13 -0400
-Message-Id: <20200706204913.20347-5-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200706204913.20347-1-mathieu.desnoyers@efficios.com>
-References: <20200706204913.20347-1-mathieu.desnoyers@efficios.com>
+        Mon, 6 Jul 2020 16:55:19 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16700C061794
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 13:55:19 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id j11so30462080oiw.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 13:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cynLjJyLUOsY4VOEmxldJUEFC/8ScvtiG3yRvbagFFo=;
+        b=aw0L6ppw4UM72rsA+cDjHWgBPv5FMcleKEs8uLYdX4bLw8r5dNasFvLILv/6NLBZav
+         Y0FYgqIQSOaiZiDHc7k9RLj+VuUJM/zKdL8XKkrW0oyGiwI4tHI4E4giXH1C+U99IDm5
+         Kgq2WP3PqBKeRqAo7z9Jm0lDU7dbyShp0Glgc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cynLjJyLUOsY4VOEmxldJUEFC/8ScvtiG3yRvbagFFo=;
+        b=LcFZIX/GSvq9hZu1Fz08by4SbEcBJh7UHz+PcjZGkRCryOdMWBnL3ceHscnEhiKEMi
+         MFVSzcAp2ZA3huYUS+xJ5XhIvhH0cybBbqgfKMkmBh9SE9WBNvWt9JJhx1M2dgiBM6XU
+         cJegllJ9ghQG+yM8R7Cynv1SK6X7f2o56BIk2I9lW4AUhhQUaa3ISUmIekygD3kDjQHY
+         LpzvSxg+V0QRu+3mCUUkbnmqGEaF5ki918iGlzNLi1N1AGUuwKmh2wHD85X3BRWYS11A
+         5V+ePNJbTEHqLeq/neSX+un50tcari/5khHH7+Fqy3D2g6/v5a7MeMKdJShNlwMm9MMz
+         fbVw==
+X-Gm-Message-State: AOAM533dLtINy1OUxY8VVqyc8jJNBYt1gQZ2GZgyYpUk5jlph2IJC/Cv
+        ol04ZxDIwYWBOfR8vjSi+zv1hA==
+X-Google-Smtp-Source: ABdhPJzBgD2nIR407/PVN5Z/ENeWzlxgZrtqJqxnPCgMekbWkw4ce92Eg72NSk4VDT2msPBmZ/Kfpg==
+X-Received: by 2002:aca:ea88:: with SMTP id i130mr896936oih.156.1594068918445;
+        Mon, 06 Jul 2020 13:55:18 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id n141sm4551294oig.24.2020.07.06.13.55.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jul 2020 13:55:17 -0700 (PDT)
+Subject: Re: [PATCH v2 4/6] selftests: pidfd: do not use ksft_exit_skip after
+ ksft_set_plan
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, keescook@chromium.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200623001547.22255-1-pbonzini@redhat.com>
+ <20200623001547.22255-5-pbonzini@redhat.com>
+ <20200623204441.phngiwlj2idonpe6@wittgenstein>
+ <9ddfac6e-473d-1856-3ab7-ff61ccf11ac6@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f0b60da1-ce3f-da53-9ffc-94fea233181a@linuxfoundation.org>
+Date:   Mon, 6 Jul 2020 14:55:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <9ddfac6e-473d-1856-3ab7-ff61ccf11ac6@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The rseq selftests should discover whether the kernel implements the
-RSEQ_FLAG_RELIABLE_CPU_ID flag, which indicates that the
-__rseq_abi.cpu_id field is reliable.
+On 6/24/20 12:21 AM, Paolo Bonzini wrote:
+> On 23/06/20 22:44, Christian Brauner wrote:
+>>>   	ret = sys_pidfd_send_signal(pidfd, 0, NULL, 0);
+>>>   	if (ret < 0) {
+>>> -		if (errno == ENOSYS)
+>>> -			ksft_exit_skip(
+>>> +		if (errno == ENOSYS) {
+>>> +			ksft_test_result_skip(
+>>>   				"%s test: pidfd_send_signal() syscall not supported\n",
+>>>   				test_name);
+>> If pidfd_send_signal() is not supported, you're falling through and then
+>> you're reporting:
+>>
+>> ok 5 # SKIP pidfd_send_signal check for support test: pidfd_send_signal() syscall not supported
+>> ok 6 pidfd_send_signal check for support test: pidfd_send_signal() syscall is supported. Tests can be executed
+> 
+> You're right, this needs a "return".
+> 
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Florian Weimer <fw@deneb.enyo.de>
-Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: "H . Peter Anvin" <hpa@zytor.com>
-Cc: Paul Turner <pjt@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Neel Natu <neelnatu@google.com>
-Cc: linux-api@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/rseq/rseq.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Hi Paulo,
 
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index 7159eb777fd3..55f1edb0649c 100644
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -73,6 +73,11 @@ static int sys_rseq(volatile struct rseq *rseq_abi, uint32_t rseq_len,
- 	return syscall(__NR_rseq, rseq_abi, rseq_len, flags, sig);
- }
- 
-+static bool rseq_reliable_cpu_id(void)
-+{
-+	return sys_rseq(NULL, 0, RSEQ_FLAG_RELIABLE_CPU_ID, 0) == 0;
-+}
-+
- int rseq_register_current_thread(void)
- {
- 	int rc, ret = 0;
-@@ -87,7 +92,8 @@ int rseq_register_current_thread(void)
- 	}
- 	if (__rseq_refcount++)
- 		goto end;
--	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq), 0, RSEQ_SIG);
-+	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq),
-+		      RSEQ_FLAG_REGISTER | RSEQ_FLAG_RELIABLE_CPU_ID, RSEQ_SIG);
- 	if (!rc) {
- 		assert(rseq_current_cpu_raw() >= 0);
- 		goto end;
-@@ -96,6 +102,8 @@ int rseq_register_current_thread(void)
- 		__rseq_abi.cpu_id = RSEQ_CPU_ID_REGISTRATION_FAILED;
- 	ret = -1;
- 	__rseq_refcount--;
-+	if (errno == EINVAL && !rseq_reliable_cpu_id())
-+		fprintf(stderr, "Error: rseq does not provide a reliable cpu_id field.\n");
- end:
- 	signal_restore(oldset);
- 	return ret;
--- 
-2.17.1
+I am applying the rest of the patches in this series except this one.
+Please send v3 for this.
 
+thanks,
+-- Shuah
