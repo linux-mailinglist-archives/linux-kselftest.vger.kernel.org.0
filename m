@@ -2,170 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BFA215F59
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 21:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432D4215F9D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 21:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbgGFTah (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jul 2020 15:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S1725860AbgGFTrs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jul 2020 15:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725982AbgGFTag (ORCPT
+        with ESMTP id S1726211AbgGFTrs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 15:30:36 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BCDC061794
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 12:30:36 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id z5so18842633pgb.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 12:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jA71++q3kdwcFkfUU/1at8AL+IZxf2Nnq6lJ3LbUnXg=;
-        b=Q+7dfF3lcRisIsTqM7EGD0tYjWye1O/Gfz50qcw4naOrpboCi2ZmrR6d1RzMnOs7mR
-         Fh1/KCwCGizIS3GVQrZmc4YKPc7/8e4SSalTwfSqP37iQkamNsBrIJtKubGbQxGTlF4L
-         Gxge8avBKJljPA0a7NtRL4/iHOuA13h42MPe0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jA71++q3kdwcFkfUU/1at8AL+IZxf2Nnq6lJ3LbUnXg=;
-        b=G5wtMoK+87GaIOxRiA8iI0IlzUyFGpXJnTcR4HdpZx0H8IkCLGofHdYOEMsGdE3kk9
-         WZO3B173UOKHdpTOP4rj+8vJIdCNOuSGZ4rn7nIXsxlXhBfKycGuYLMviKWSsuEHemfq
-         1ihBOiO1q4vr7qYj/cwAyKyDL8+A1fTlqg5kHzjawYazDvj8W/0ELVcW7l1lx1GHOKG/
-         WxIwvAg2LdKDizAW72i5nfP+ssM2G6JPRYS6omq7JQcCdiO9uCWZd17dCEZ+tGTFw017
-         Uk6CNKImjEv1pveLkb6baQFDQpLVO8rztQ+K8y/NYKS7JkghN8+fiw/n09RAA4VphEYh
-         2G3w==
-X-Gm-Message-State: AOAM530GFzeEAsrXLOlhDWkMi9uOLEKh1oSoPgFJTljyjqqqCnv1Agh+
-        XRKxTlWALQaC78P4dT+v7qB0AA==
-X-Google-Smtp-Source: ABdhPJz7tXd/nnBDS0YQJcB7rwYbSOG0wy8tzeWXjOdUxA5eSWOjt+6q3dGWi3mLABNZOwnfZ4Olmg==
-X-Received: by 2002:a62:fc15:: with SMTP id e21mr46353476pfh.167.1594063835932;
-        Mon, 06 Jul 2020 12:30:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y8sm225835pju.49.2020.07.06.12.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 12:30:35 -0700 (PDT)
-Date:   Mon, 6 Jul 2020 12:30:33 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-kernel@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Matt Denton <mpdenton@google.com>,
-        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
-        Robert Sesek <rsesek@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, containers@lists.linux-foundation.org,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 4/7] pidfd: Replace open-coded partial
- fd_install_received()
-Message-ID: <202007061225.5CBC3CF@keescook>
-References: <20200617220327.3731559-1-keescook@chromium.org>
- <20200617220327.3731559-5-keescook@chromium.org>
- <20200706130713.n6r3vhn4hn2lodex@wittgenstein>
- <202007060830.0FE753B@keescook>
- <20200706161245.hjat2rsikt3linbm@wittgenstein>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200706161245.hjat2rsikt3linbm@wittgenstein>
+        Mon, 6 Jul 2020 15:47:48 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17798C061755;
+        Mon,  6 Jul 2020 12:47:48 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 073CE127EF29F;
+        Mon,  6 Jul 2020 12:47:46 -0700 (PDT)
+Date:   Mon, 06 Jul 2020 12:47:46 -0700 (PDT)
+Message-Id: <20200706.124746.191843852351699222.davem@davemloft.net>
+To:     matthieu.baerts@tessares.net
+Cc:     netdev@vger.kernel.org, cpaasch@apple.com,
+        mathew.j.martineau@linux.intel.com, kuba@kernel.org,
+        shuah@kernel.org, mptcp@lists.01.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: mptcp: capture pcap on both sides
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200706124408.3118005-1-matthieu.baerts@tessares.net>
+References: <20200706124408.3118005-1-matthieu.baerts@tessares.net>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 06 Jul 2020 12:47:47 -0700 (PDT)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 06:12:45PM +0200, Christian Brauner wrote:
-> On Mon, Jul 06, 2020 at 08:34:06AM -0700, Kees Cook wrote:
-> > Yup, this was a mistake in my refactoring of the pidfs changes.
+From: Matthieu Baerts <matthieu.baerts@tessares.net>
+Date: Mon,  6 Jul 2020 14:44:08 +0200
+
+> When investigating performance issues that involve latency / loss /
+> reordering it is useful to have the pcap from the sender-side as it
+> allows to easier infer the state of the sender's congestion-control,
+> loss-recovery, etc.
 > 
-> I already did.
-
-Er, what? (I had a typo in my quote: s/pidfs/pidfd/.) I was trying to
-say that this was just a mistake in my refactoring of the pidfd usage of
-the new helper.
-
-> > I still don't agree: it radically complicates the SCM_RIGHTS and seccomp
+> Allow the selftests to capture a pcap on both sender and receiver so
+> that this information is not lost when reproducing.
 > 
-> I'm sorry, I don't buy it yet, though I might've missed something in the
-> discussions: :)
-> After applying the patches in your series this literally is just (which
-> is hardly radical ;):
-
-Agreed, "radical" was too strong.
-
-> diff --git a/fs/file.c b/fs/file.c
-> index 9568bcfd1f44..26930b2ea39d 100644
-> --- a/fs/file.c
-> +++ b/fs/file.c
-> @@ -974,7 +974,7 @@ int __fd_install_received(int fd, struct file *file, int __user *ufd,
->         }
+> This patch also improves the file names. Instead of:
 > 
->         if (fd < 0)
-> -               fd_install(new_fd, get_file(file));
-> +               fd_install(new_fd, file);
->         else {
->                 new_fd = fd;
->                 error = replace_fd(new_fd, file, o_flags);
-> diff --git a/net/compat.c b/net/compat.c
-> index 71494337cca7..605a5a67200c 100644
-> --- a/net/compat.c
-> +++ b/net/compat.c
-> @@ -298,9 +298,11 @@ void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
->         int err = 0, i;
+>   ns4-5ee79a56-X4O6gS-ns3-5ee79a56-X4O6gS-MPTCP-MPTCP-10.0.3.1.pcap
 > 
->         for (i = 0; i < fdmax; i++) {
-> -               err = fd_install_received_user(scm->fp->fp[i], cmsg_data + i, o_flags);
-> -               if (err < 0)
-> +               err = fd_install_received_user(get_file(scm->fp->fp[i]), cmsg_data + i, o_flags);
-> +               if (err < 0) {
-> +                       fput(scm->fp->fp[i]);
->                         break;
-> +               }
->         }
+> We now have something like for the same test:
 > 
->         if (i > 0) {
-> diff --git a/net/core/scm.c b/net/core/scm.c
-> index b9a0442ebd26..0d06446ae598 100644
-> --- a/net/core/scm.c
-> +++ b/net/core/scm.c
-> @@ -306,9 +306,11 @@ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
->         }
+>   5ee79a56-X4O6gS-ns3-ns4-MPTCP-MPTCP-10.0.3.1-10030-connector.pcap
+>   5ee79a56-X4O6gS-ns3-ns4-MPTCP-MPTCP-10.0.3.1-10030-listener.pcap
 > 
->         for (i = 0; i < fdmax; i++) {
-> -               err = fd_install_received_user(scm->fp->fp[i], cmsg_data + i, o_flags);
-> -               if (err < 0)
-> +               err = fd_install_received_user(get_file(scm->fp->fp[i]), cmsg_data + i, o_flags);
-> +               if (err < 0) {
-> +                       fput(scm->fp->fp[i]);
->                         break;
-> +               }
->         }
+> It was a connection from ns3 to ns4, better to start with ns3 then. The
+> port is also added, easier to find the trace we want.
 > 
->         if (i > 0) {
+> Co-developed-by: Christoph Paasch <cpaasch@apple.com>
+> Signed-off-by: Christoph Paasch <cpaasch@apple.com>
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 
-But my point stands: I really dislike this; suddenly the caller needs to
-manage this when it should be an entirely internal detail to the
-function. It was only pidfd doing it wrong, and that was entirely my
-fault in the conversion.
-
-> The problem here is that the current patch invites bugs and has already
-> produced one because fd_install() and fd_install_*() have the same
-> naming scheme but different behavior when dealing with references.
-> That's just not a good idea.
-
-I will rename the helper and add explicit documentation, but I really
-don't think callers should have to deal with managing the helper's split
-ref lifetime.
-
--- 
-Kees Cook
+Applied, thank you.
