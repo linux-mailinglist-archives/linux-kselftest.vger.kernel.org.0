@@ -2,119 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E66821605A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 22:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E8A216086
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jul 2020 22:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726936AbgGFUcP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jul 2020 16:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726600AbgGFUcP (ORCPT
+        id S1727091AbgGFUtq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jul 2020 16:49:46 -0400
+Received: from mail.efficios.com ([167.114.26.124]:57052 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbgGFUtp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 16:32:15 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BBC061755
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 13:32:15 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 95so22032390otw.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 13:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fYQOdCfTTkXILORVtgEAOSWFzdmimDz+yZgYtM4yZbE=;
-        b=VQIIiHM2Ao/EeMWSJrjPlMGvUtC+rgPUY2bgc58R3cMyriGsceTf+Kx01YXOOZqIXw
-         upAgmJV15tUFe0W76Yexn9k/dG/4xYzDYNQY1/AWWB0IKUmhfuOPDqcqX27aBowFgjbF
-         1dY9tzGMkt2CdilQlzd3ue5U6A5kt1im4geNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fYQOdCfTTkXILORVtgEAOSWFzdmimDz+yZgYtM4yZbE=;
-        b=HwfYOCpwaYGThiylkCzS73GPAvT4C01sc/4ZwbVxNgP7LAdNdusaY38Kkfr48FxEzh
-         NjQpZqjjA7pbSg0qpKIvTbH9GATUMlXAH6j5jq6boSvrKy9wPm+4k24Xwf56lqe4xUiX
-         fFywN75H0MFqpwlWkXual1fbcqwf0LU3lZE6PiTMnD0eCXRQuyhYjlMhb8QYQdWD6aKP
-         QbfTBnYdJnaBP2Xkx8mrX3Nl+xMlpNzb1irhCwTvk2QmKtObv3dGBjYmOTadcs+QS7Rh
-         PveS5DV3tjPZML7DNLeU1BAalWXuwh0kXsN9VpBHlnB+8HaC7LjnJqeEXxGbu1sToXke
-         c0TQ==
-X-Gm-Message-State: AOAM531VIngP0txCOfcgVCnHFS8mbIJ3D7+sf62EJTuaNwhA7flUiCij
-        y8iC6+34M1Kj4bTm7u8YYJpn0zO7Cbg=
-X-Google-Smtp-Source: ABdhPJw6ob5Foy2BcLVulUulHHyB2XDn2hXJ0IJM3C9aaf5FcZHvP152UHhejq0INirO6Q1UySgibg==
-X-Received: by 2002:a9d:24e6:: with SMTP id z93mr42571857ota.360.1594067534692;
-        Mon, 06 Jul 2020 13:32:14 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id t187sm5273105oib.45.2020.07.06.13.32.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2020 13:32:13 -0700 (PDT)
-Subject: Re: [PATCH v4] selftests: tpm: upgrade TPM2 tests from Python 2 to
- Python 3
-To:     Pengfei Xu <pengfei.xu@intel.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Heng Su <heng.su@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai Svahn <kai.svahn@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200626034052.25263-1-pengfei.xu@intel.com>
- <20200702194435.GA28988@linux.intel.com>
- <52f0d32d-d63a-ae1e-cdd9-1ed7bd4edbc0@linuxfoundation.org>
- <20200703012005.GA23276@xpf-desktop.sh.intel.com>
- <02c7dda4-3a05-b118-1edf-ec020eb08193@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <444c90ba-3ad3-6ce1-d83e-bb918856079f@linuxfoundation.org>
-Date:   Mon, 6 Jul 2020 14:32:13 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <02c7dda4-3a05-b118-1edf-ec020eb08193@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Mon, 6 Jul 2020 16:49:45 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id B6C5C2DCBC2;
+        Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ZWQUH0zUNbht; Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 35EAC2DCCBF;
+        Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 35EAC2DCCBF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1594068584;
+        bh=mnMMKvJaOAN7AlfDW7S7IlXwHCI9soK/a0/c/Zir58M=;
+        h=From:To:Date:Message-Id;
+        b=efnws94pwSMtS/IAS5Ys121F4Iq0KkCiCQgYcjiDsebUjlu6LXkPm9zpyge1fMqPv
+         9nQd/m9xFhZdjfHt09PE4YdZFXpRUysulFSKGtxJiFGQt0WJvoAAyA5kpzyrcTXF49
+         7sBqxwZT49TCWK+pYyRF3XbxL9x1ATX+FoViBCvI0MRSyrTai+lJf7HOyB8+FCASkF
+         T+MPqNjCmWJNJ+hprRVDdzAWKUc3EVs1h65dEysJLOiFRsOXnK4xgxnGLg+xT52nJz
+         XEWqPNi6KMWbw7cM2ah1xYQJcMM0Pbqx1leWRmlLRMEQoI1tF5hCte7ygzCBjCdbFs
+         SdYo2KTPeLw4w==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wTGn1GJVJk5q; Mon,  6 Jul 2020 16:49:44 -0400 (EDT)
+Received: from localhost.localdomain (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
+        by mail.efficios.com (Postfix) with ESMTPSA id BD4512DCDA9;
+        Mon,  6 Jul 2020 16:49:42 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Florian Weimer <fw@deneb.enyo.de>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Neel Natu <neelnatu@google.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH for 5.8 4/4] rseq: selftests: Expect reliable cpu_id field
+Date:   Mon,  6 Jul 2020 16:49:13 -0400
+Message-Id: <20200706204913.20347-5-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200706204913.20347-1-mathieu.desnoyers@efficios.com>
+References: <20200706204913.20347-1-mathieu.desnoyers@efficios.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/6/20 2:12 PM, Shuah Khan wrote:
-> On 7/2/20 7:20 PM, Pengfei Xu wrote:
->> Thanks a lot Jarkko and Shuah!
->>
->> BR.
->> Thanks!
->>
->> On 2020-07-02 at 15:32:49 -0600, Shuah Khan wrote:
->>> On 7/2/20 1:44 PM, Jarkko Sakkinen wrote:
->>>> On Fri, Jun 26, 2020 at 11:40:52AM +0800, Pengfei Xu wrote:
->>>>> Python 2 is no longer supported by the Python upstream project, so
->>>>> upgrade TPM2 tests to Python 3.
->>>>>
->>>>> Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
->>>>
->>>> I think that it's perfect now. Thank you.
->>>>
->>>> Also
->>>>
->>>> 1. I checked that scripts/checkpatch.pl did not report any errors.
->>>> 2. sudo python3 -m unittest -v tpm2_tests.SmokeTest
->>>> 3. sudo python3 -m unittest -v tpm2_tests.SpaceTest
->>>>
->>>> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->>>> Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
->>>>
->>>> Shuah, I could pick this up after your PR (with my earlier fixes) lands
->>>> to mainline, and sort out possible merge conflicts if they uprise. Is
->>>> this fine by you?
->>>>
->>>
-> 
-> I started applying this and then passed.
-> 
-> Doesn't this test fail if python3 isn't installed? Do you have to
-> support both versions?
-> 
+The rseq selftests should discover whether the kernel implements the
+RSEQ_FLAG_RELIABLE_CPU_ID flag, which indicates that the
+__rseq_abi.cpu_id field is reliable.
 
-Never mind. Tested it on with python2. All is well. Applied to
-linux-kselftest fixes for Linux 5.8-rc5
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Florian Weimer <fw@deneb.enyo.de>
+Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: "H . Peter Anvin" <hpa@zytor.com>
+Cc: Paul Turner <pjt@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Neel Natu <neelnatu@google.com>
+Cc: linux-api@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/rseq/rseq.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index 7159eb777fd3..55f1edb0649c 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -73,6 +73,11 @@ static int sys_rseq(volatile struct rseq *rseq_abi, uint32_t rseq_len,
+ 	return syscall(__NR_rseq, rseq_abi, rseq_len, flags, sig);
+ }
+ 
++static bool rseq_reliable_cpu_id(void)
++{
++	return sys_rseq(NULL, 0, RSEQ_FLAG_RELIABLE_CPU_ID, 0) == 0;
++}
++
+ int rseq_register_current_thread(void)
+ {
+ 	int rc, ret = 0;
+@@ -87,7 +92,8 @@ int rseq_register_current_thread(void)
+ 	}
+ 	if (__rseq_refcount++)
+ 		goto end;
+-	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq), 0, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq),
++		      RSEQ_FLAG_REGISTER | RSEQ_FLAG_RELIABLE_CPU_ID, RSEQ_SIG);
+ 	if (!rc) {
+ 		assert(rseq_current_cpu_raw() >= 0);
+ 		goto end;
+@@ -96,6 +102,8 @@ int rseq_register_current_thread(void)
+ 		__rseq_abi.cpu_id = RSEQ_CPU_ID_REGISTRATION_FAILED;
+ 	ret = -1;
+ 	__rseq_refcount--;
++	if (errno == EINVAL && !rseq_reliable_cpu_id())
++		fprintf(stderr, "Error: rseq does not provide a reliable cpu_id field.\n");
+ end:
+ 	signal_restore(oldset);
+ 	return ret;
+-- 
+2.17.1
+
