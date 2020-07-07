@@ -2,75 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF79821733A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 18:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AE62174D9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 19:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728265AbgGGQCS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jul 2020 12:02:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60852 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727793AbgGGQCQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jul 2020 12:02:16 -0400
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 447E920674;
-        Tue,  7 Jul 2020 16:02:14 +0000 (UTC)
-Date:   Tue, 7 Jul 2020 12:02:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Haren Myneni <haren@us.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of
- lib/
-Message-ID: <20200707120212.7010fa4f@oasis.local.home>
-In-Reply-To: <20200707092117.963394-2-masahiroy@kernel.org>
-References: <20200707092117.963394-1-masahiroy@kernel.org>
-        <20200707092117.963394-2-masahiroy@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728370AbgGGROA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jul 2020 13:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728350AbgGGRN7 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Jul 2020 13:13:59 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869A0C08C5E1
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 10:13:59 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id o13so17335271pgf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 10:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=HtwXtpph2OoeeE3uD1Wi+DXJnoAVgPcW38Mw9B+yPaE=;
+        b=dzipK/c+2ZtFsuqwsrTcL/d1Yv8zQfVpnmVDF5jdaKLo4l/L0jd2RP/hL4s3Yr7L39
+         jwBA+QtRbToqLcum6mDVLTCl2kTLhyzMXa5bQLsbtwSfa8Ypv7iELew2HUxgzxRYGmGZ
+         naco+TSnJERTyBinS1dUilsIYM1AfRFHFx/sk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=HtwXtpph2OoeeE3uD1Wi+DXJnoAVgPcW38Mw9B+yPaE=;
+        b=BPDwyVIoUmmIHFmI78CeaQfiSdWfg7iupl8iOfgqP2BYwvpa6E5bfeTrk1NdA4MQio
+         Hil0GU5/kS6MnbwX07cUg9EnhpGrjwOpkC9mUKJanOo0UYeqpCcTS0vC0sSYXDfBou6u
+         rZ04fbO40vYsLXbgdjSAWHagAw67w0vI3Soy1iwA4Cahd+QirK0wE0ALQNpEtBH/CWZK
+         +TQ4Dk887dCP18JxAUUx7CxOSwQlwnRjPKAkPlxRL5R1u6cSGblWyLJBFkeMtYnILPrA
+         1pQrgBj4oTxwdcszda9omIpJ9bFMD3ZP3qphiaxtRzYxERAMuObcdN7hht7F2oa0Gqfc
+         VXzA==
+X-Gm-Message-State: AOAM532pzAsrqVca0J5m6UYhNNNs/uBWByR2/P/10IxZCIhW1/NSBmRM
+        z72kQA7Mr2bJjL8QATsrmMZDqw==
+X-Google-Smtp-Source: ABdhPJyeSq0J8hJSh8EyLFyNDGaXMs3fPXkpyq9VbmAPXqtEFkmdoQuH8aOIqAG0WttuGA3gnpzq7w==
+X-Received: by 2002:a62:8782:: with SMTP id i124mr49547162pfe.267.1594142038788;
+        Tue, 07 Jul 2020 10:13:58 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id j70sm23482082pfd.208.2020.07.07.10.13.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2020 10:13:58 -0700 (PDT)
+Subject: Re: [PATCH v10 9/9] ima: add FIRMWARE_PARTIAL_READ support
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20200706232309.12010-1-scott.branden@broadcom.com>
+ <20200706232309.12010-10-scott.branden@broadcom.com>
+ <202007061950.F6B3D9E6A@keescook>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <df45cc5b-62d7-21c7-a852-1433a45b68ef@broadcom.com>
+Date:   Tue, 7 Jul 2020 10:13:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <202007061950.F6B3D9E6A@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue,  7 Jul 2020 18:21:17 +0900
-Masahiro Yamada <masahiroy@kernel.org> wrote:
+Hi Kees,
 
->   ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
-> 
-> exists here in sub-directories of lib/ to keep the behavior of
-> commit 2464a609ded0 ("ftrace: do not trace library functions").
-> 
-> Since that commit, not only the objects in lib/ but also the ones in
-> the sub-directories are excluded from ftrace (although the commit
-> description did not explicitly mention this).
-> 
-> However, most of library functions in sub-directories are not so hot.
-> Re-add them to ftrace.
+You and others are certainly more experts in the filesystem and security
+infrastructure of the kernel.
+What I am trying to accomplish is a simple operation:
+request part of a file into a buffer rather than the whole file.
+If someone could add such support I would be more than happy to use it.
 
-I'm OK with this change, but note, it wasn't just the hot path that I
-disabled ftrace on lib for, but some of these calls are done very early
-at boot up. It may have been PowerPC that I was stumbling over. The
-issue is that they would call mcount before the kernel was mapped
-properly, and the system would crash.
+This has now bubbled into many other designs issues in the existing 
+codebase.
+I will need more details on your comments - see below.
 
-My PowerPC box no longer boots so I can't test this anymore. But a lot
-has changed since 2008, and all this may very well be OK.
 
--- Steve
+On 2020-07-06 8:08 p.m., Kees Cook wrote:
+> On Mon, Jul 06, 2020 at 04:23:09PM -0700, Scott Branden wrote:
+>> Add FIRMWARE_PARTIAL_READ support for integrity
+>> measurement on partial reads of firmware files.
+> Hi,
+>
+> Several versions ago I'd suggested that the LSM infrastructure handle
+> the "full read" semantics so that individual LSMs don't need to each
+> duplicate the same efforts. As it happens, only IMA is impacted (SELinux
+> ignores everything except modules, and LoadPin only cares about origin
+> not contents).
+Does your patch series "Fix misused kernel_read_file() enums" handle this
+because this suggestion is outside the scope of my change?
+>
+> Next is the problem that enum kernel_read_file_id is an object
+> TYPE enum, not a HOW enum. (And it seems I missed the addition of
+> READING_FIRMWARE_PREALLOC_BUFFER, which may share a similar problem.)
+> That it's a partial read doesn't change _what_ you're reading: that's an
+> internal API detail. What happens when I attempt to do a partial read of
+> a kexec image?
+It does not appear there is any user of partial reads of kexec images?
+I have been informed by Greg K-H to not add apis that are not used so 
+such support
+doesn't make sense to add at this time.
+>   I'll use kernel_pread_file() and pass READING_KEXEC_IMAGE,
+> but the LSMs will have no idea it's a partial read.
+The addition I am adding is for request_partial_firmware_into_buf.
+In order to do so it adds internal support for partial reads of firmware 
+files,
+not kexec image.
+
+The above seems outside the scope of my patch?
+>
+> Finally, what keeps the contents of the file from changing between the
+> first call (which IMA will read the entire file for) and the next reads
+> which will bypass IMA?
+The request is for a partial read.  IMA ensures the whole file integrity 
+even though I only do a partial read.
+The next partial read will re-read and check integrity of file.
+>   I'd suggested that the open file must have writes
+> disabled on it (as execve() does).
+The file will be reopened and integrity checked on the next partial read 
+(if there is one).
+So I don't think there is any change to be made here.
+If writes aren't already disabled for a whole file read then that is 
+something that needs to be fixed in the existing code.
+>
+> So, please redesign this:
+> - do not add an enum
+I used existing infrastructure provided by Mimi but now looks like it 
+will have to fit with your patches from yesterday.
+> - make the file unwritable for the life of having the handle open
+It's no different than a full file read so no change to be made here.
+> - make the "full read" happen as part of the first partial read so the
+>    LSMs don't have to reimplement everything
+Each partial read is an individual operation so I think a "full read" is 
+performed every time
+if your security IMA is enabled.  If someone wants to add a file lock 
+and then partial reads in the kernel
+then that would be different than what is needed by the kernel driver.
+>
+> -Kees
+>
+Regards,
+Scott
