@@ -2,482 +2,211 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C23821765B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 20:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1042177FC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 21:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728765AbgGGSRq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jul 2020 14:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S1726900AbgGGTel (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jul 2020 15:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728653AbgGGSRJ (ORCPT
+        with ESMTP id S1726763AbgGGTel (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jul 2020 14:17:09 -0400
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48334C061755;
-        Tue,  7 Jul 2020 11:17:06 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B1Vph62clzlhZK5;
-        Tue,  7 Jul 2020 20:10:20 +0200 (CEST)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4B1Vph2qRMzlh8TB;
-        Tue,  7 Jul 2020 20:10:20 +0200 (CEST)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        Richard Weinberger <richard@nod.at>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v19 12/12] landlock: Add user and kernel documentation
-Date:   Tue,  7 Jul 2020 20:09:55 +0200
-Message-Id: <20200707180955.53024-13-mic@digikod.net>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200707180955.53024-1-mic@digikod.net>
-References: <20200707180955.53024-1-mic@digikod.net>
+        Tue, 7 Jul 2020 15:34:41 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39501C061755
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 12:34:41 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id c139so39236703qkg.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 12:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xVt2YK5fz9oFkXUBAkGsBYne4Pd79jtYdQyRepPOP4E=;
+        b=XyYCfoXM1r+N8DwUWlmvDPLAfgaaXeOLfy8C4mRQZYkYvPG6MAbu06xw7R2KfFrbf2
+         QpPdS9/4cRY8r7GCHNdjwKLcFvlmDAW1zk8eI2EGfl27V61Wp2IgJZDOkB2Wtg9Yi+Lw
+         tpavHoYcteHAqlcmnGtrYxOIuFGQPDUReDUUC/KYUdABDh0KTVeT0xmR1nUk/BBdTQUK
+         Ahpn+v3vPLCsce+dJFsewCeqrtt5r2pSMiewHfeJ9MyW5qS7hstGyz9m9o9vk9JRx/EY
+         AKGQ1B/NO92bS7DUmzTH47kc23GpDWSIbymOwI5Y/VaqT2bd5zL199G52/+/3yv36PPF
+         ARHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xVt2YK5fz9oFkXUBAkGsBYne4Pd79jtYdQyRepPOP4E=;
+        b=RJOroGa7BcDvZR7cIx08QhHYaUBtDXttgdaffNUSOfxTbIaTEYao0PAwEajHzXVt0a
+         yVHLtWaJwYBssmX/da/SpIP7148Hu2GSg173Uw+W3A/LL7dfxk3wdM5vBuXMPEErTzQS
+         aRbj4rqJxCvXqmvJEg9GtiQlnRFS5PBQzAx3J+JbmFtT8+tGq/zVHoFDUj/A+XbuZ6US
+         OAMtTFEehE1bYoolsA6sQN8cH4UArHaGSD0hav2BdLAi90F4PrdymEP/DXAcVZJKiHU+
+         VfY6o3j1uNv2YE0ILPiYJBI+NMjlLLM6aXgHLg0UjtURajbt+csnsqsHEg281X7N3kWL
+         Fzwg==
+X-Gm-Message-State: AOAM531F06h8qHm+/MU2EXMW/iT2QPZ0NdpCUPcM0sBXDHwXyp2UeJ3w
+        W1/bhgXAZdxQ4Pmoh99IYQA/9A==
+X-Google-Smtp-Source: ABdhPJxWnRfHlcB33n2WqGOiUJ8zUyEBAGcI/XOi8NRXNTu75pauGmptq+erFObPZ0B0CEYsYn8y+w==
+X-Received: by 2002:ae9:e809:: with SMTP id a9mr52315940qkg.315.1594150480267;
+        Tue, 07 Jul 2020 12:34:40 -0700 (PDT)
+Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id l31sm22808139qtc.33.2020.07.07.12.34.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 12:34:39 -0700 (PDT)
+Date:   Tue, 7 Jul 2020 15:34:37 -0400
+From:   Qian Cai <cai@lca.pw>
+To:     Uriel Guajardo <urielguajardo@google.com>
+Cc:     Uriel Guajardo <urielguajardojr@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        catalin.marinas@arm.com, akpm@linux-foundation.org,
+        rdunlap@infradead.org, masahiroy@kernel.org, 0x7f454c46@gmail.com,
+        krzk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 2/2] kunit: kmemleak integration
+Message-ID: <20200707193437.GB992@lca.pw>
+References: <20200706211309.3314644-1-urielguajardojr@gmail.com>
+ <20200706211309.3314644-3-urielguajardojr@gmail.com>
+ <20200706213905.GA1916@lca.pw>
+ <CAG30EeeV0c8vQCdtqPBUNMiN--0K+j5xE+PMwW-godhX1qqwQg@mail.gmail.com>
+ <20200706231730.GA2613@lca.pw>
+ <CAG30EeeJL_LUpZdBYpi4TRhw8pzBxhSrVF-4j1g3z22-ZXTGrw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG30EeeJL_LUpZdBYpi4TRhw8pzBxhSrVF-4j1g3z22-ZXTGrw@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This documentation can be built with the Sphinx framework.
+On Tue, Jul 07, 2020 at 12:26:52PM -0500, Uriel Guajardo wrote:
+> On Mon, Jul 6, 2020 at 6:17 PM Qian Cai <cai@lca.pw> wrote:
+> >
+> > On Mon, Jul 06, 2020 at 05:48:21PM -0500, Uriel Guajardo wrote:
+> > > On Mon, Jul 6, 2020 at 4:39 PM Qian Cai <cai@lca.pw> wrote:
+> > > >
+> > > > On Mon, Jul 06, 2020 at 09:13:09PM +0000, Uriel Guajardo wrote:
+> > > > > From: Uriel Guajardo <urielguajardo@google.com>
+> > > > >
+> > > > > Integrate kmemleak into the KUnit testing framework.
+> > > > >
+> > > > > Kmemleak will now fail the currently running KUnit test case if it finds
+> > > > > any memory leaks.
+> > > > >
+> > > > > The minimum object age for reporting is set to 0 msecs so that leaks are
+> > > > > not ignored if the test case finishes too quickly.
+> > > > >
+> > > > > Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+> > > > > ---
+> > > > >  include/linux/kmemleak.h | 11 +++++++++++
+> > > > >  lib/Kconfig.debug        | 26 ++++++++++++++++++++++++++
+> > > > >  lib/kunit/test.c         | 36 +++++++++++++++++++++++++++++++++++-
+> > > > >  mm/kmemleak.c            | 27 +++++++++++++++++++++------
+> > > > >  4 files changed, 93 insertions(+), 7 deletions(-)
+> > > > >
+> > > > > diff --git a/include/linux/kmemleak.h b/include/linux/kmemleak.h
+> > > > > index 34684b2026ab..0da427934462 100644
+> > > > > --- a/include/linux/kmemleak.h
+> > > > > +++ b/include/linux/kmemleak.h
+> > > > > @@ -35,6 +35,10 @@ extern void kmemleak_free_part_phys(phys_addr_t phys, size_t size) __ref;
+> > > > >  extern void kmemleak_not_leak_phys(phys_addr_t phys) __ref;
+> > > > >  extern void kmemleak_ignore_phys(phys_addr_t phys) __ref;
+> > > > >
+> > > > > +extern ssize_t kmemleak_write(struct file *file,
+> > > > > +                           const char __user *user_buf,
+> > > > > +                           size_t size, loff_t *ppos);
+> > > > > +
+> > > > >  static inline void kmemleak_alloc_recursive(const void *ptr, size_t size,
+> > > > >                                           int min_count, slab_flags_t flags,
+> > > > >                                           gfp_t gfp)
+> > > > > @@ -120,6 +124,13 @@ static inline void kmemleak_ignore_phys(phys_addr_t phys)
+> > > > >  {
+> > > > >  }
+> > > > >
+> > > > > +static inline ssize_t kmemleak_write(struct file *file,
+> > > > > +                                  const char __user *user_buf,
+> > > > > +                                  size_t size, loff_t *ppos)
+> > > > > +{
+> > > > > +     return -1;
+> > > > > +}
+> > > > > +
+> > > > >  #endif       /* CONFIG_DEBUG_KMEMLEAK */
+> > > > >
+> > > > >  #endif       /* __KMEMLEAK_H */
+> > > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > > > > index 21d9c5f6e7ec..e9c492cb3f4d 100644
+> > > > > --- a/lib/Kconfig.debug
+> > > > > +++ b/lib/Kconfig.debug
+> > > > > @@ -602,6 +602,32 @@ config DEBUG_KMEMLEAK_MEM_POOL_SIZE
+> > > > >         fully initialised, this memory pool acts as an emergency one
+> > > > >         if slab allocations fail.
+> > > > >
+> > > > > +config DEBUG_KMEMLEAK_MAX_TRACE
+> > > > > +     int "Kmemleak stack trace length"
+> > > > > +     depends on DEBUG_KMEMLEAK
+> > > > > +     default 16
+> > > > > +
+> > > > > +config DEBUG_KMEMLEAK_MSECS_MIN_AGE
+> > > > > +     int "Minimum object age before reporting in msecs"
+> > > > > +     depends on DEBUG_KMEMLEAK
+> > > > > +     default 0 if KUNIT
+> > > > > +     default 5000
+> > > > > +
+> > > > > +config DEBUG_KMEMLEAK_SECS_FIRST_SCAN
+> > > > > +     int "Delay before first scan in secs"
+> > > > > +     depends on DEBUG_KMEMLEAK
+> > > > > +     default 60
+> > > > > +
+> > > > > +config DEBUG_KMEMLEAK_SECS_SCAN_WAIT
+> > > > > +     int "Delay before subsequent auto scans in secs"
+> > > > > +     depends on DEBUG_KMEMLEAK
+> > > > > +     default 600
+> > > > > +
+> > > > > +config DEBUG_KMEMLEAK_MAX_SCAN_SIZE
+> > > > > +     int "Maximum size of scanned block"
+> > > > > +     depends on DEBUG_KMEMLEAK
+> > > > > +     default 4096
+> > > > > +
+> > > >
+> > > > Why do you make those configurable? I don't see anywhere you make use of
+> > > > them except DEBUG_KMEMLEAK_MSECS_MIN_AGE?
+> > > >
+> > >
+> > > That's correct. Strictly speaking, only DEBUG_KMEMLEAK_MSECS_MIN_AGE
+> > > is used to set a default when KUnit is configured.
+> > >
+> > > There is no concrete reason why these other variables need to be
+> > > configurable. At the time of writing this, it seemed to make the most
+> > > sense to configure the other configuration options, given that I was
+> > > already going to make MSECS_MIN_AGE configurable. It can definitely be
+> > > taken out.
+> > >
+> > > > Even then, how setting DEBUG_KMEMLEAK_MSECS_MIN_AGE=0 not giving too
+> > > > many false positives? Kmemleak simply does not work that instantly.
+> > > >
+> > >
+> > > I did not experience this issue, but I see your point.
+> > >
+> > > An alternative that I was thinking about -- and one that is not in
+> > > this patch -- is to wait DEBUG_KMEMLEAK_MSECS_MIN_AGE after each test
+> > > case in a test suite, while leaving kmemleak's default value as is. I
+> > > was hesitant to do this initially because many KUnit test cases run
+> > > quick, so this may result in a lot of time just waiting. But if we
+> > > leave it configurable, the user can change this as needed and deal
+> > > with the possible false positives.
+> >
+> > I doubt that is good idea. We don't really want people to start
+> > reporting those false positives to the MLs just because some kunit tests
+> > starts to flag them. It is wasting everyone's time. Reports from
+> > DEBUG_KMEMLEAK_MSECS_MIN_AGE=0 are simply trustful. I don't think there
+> > is a way around. Kmemleak was designed to have a lot of
+> > waitings/re-scans to be useful not even mentioning kfree_rcu() etc until
+> > it is redesigned...
+> 
+> I agree with your statement about false positives.
+> Is your suggestion to not make MSECS_MIN_AGE configurable and have
+> KUnit wait after each test case? Or are you saying that this will not
+> work entirely?
+> It seems like kmemleak should be able to work in some fashion under
+> KUnit, since it has specific documentation over testing parts of code
+> (https://www.kernel.org/doc/html/latest/dev-tools/kmemleak.html#testing-specific-sections-with-kmemleak).
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
-Cc: James Morris <jmorris@namei.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
----
-
-Changes since v15:
-* Add current limitations.
-
-Changes since v14:
-* Fix spelling (contributed by Randy Dunlap).
-* Extend documentation about inheritance and explain layer levels.
-* Remove the use of now-removed access rights.
-* Use GitHub links.
-* Improve kernel documentation.
-* Add section for tests.
-* Update example.
-
-Changes since v13:
-* Rewrote the documentation according to the major revamp.
-
-Previous changes:
-https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
----
- Documentation/security/index.rst           |   1 +
- Documentation/security/landlock/index.rst  |  18 ++
- Documentation/security/landlock/kernel.rst |  69 ++++++
- Documentation/security/landlock/user.rst   | 268 +++++++++++++++++++++
- 4 files changed, 356 insertions(+)
- create mode 100644 Documentation/security/landlock/index.rst
- create mode 100644 Documentation/security/landlock/kernel.rst
- create mode 100644 Documentation/security/landlock/user.rst
-
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 8129405eb2cc..e3f2bf4fef77 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -16,3 +16,4 @@ Security Documentation
-    siphash
-    tpm/index
-    digsig
-+   landlock/index
-diff --git a/Documentation/security/landlock/index.rst b/Documentation/security/landlock/index.rst
-new file mode 100644
-index 000000000000..2520f8f33f5e
---- /dev/null
-+++ b/Documentation/security/landlock/index.rst
-@@ -0,0 +1,18 @@
-+=========================================
-+Landlock LSM: unprivileged access control
-+=========================================
-+
-+:Author: Mickaël Salaün
-+
-+The goal of Landlock is to enable to restrict ambient rights (e.g.  global
-+filesystem access) for a set of processes.  Because Landlock is a stackable
-+LSM, it makes possible to create safe security sandboxes as new security layers
-+in addition to the existing system-wide access-controls. This kind of sandbox
-+is expected to help mitigate the security impact of bugs or
-+unexpected/malicious behaviors in user-space applications. Landlock empowers
-+any process, including unprivileged ones, to securely restrict themselves.
-+
-+.. toctree::
-+
-+    user
-+    kernel
-diff --git a/Documentation/security/landlock/kernel.rst b/Documentation/security/landlock/kernel.rst
-new file mode 100644
-index 000000000000..f8e2b8f5c824
---- /dev/null
-+++ b/Documentation/security/landlock/kernel.rst
-@@ -0,0 +1,69 @@
-+==============================
-+Landlock: kernel documentation
-+==============================
-+
-+Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
-+harden a whole system, this feature should be available to any process,
-+including unprivileged ones.  Because such process may be compromised or
-+backdoored (i.e. untrusted), Landlock's features must be safe to use from the
-+kernel and other processes point of view.  Landlock's interface must therefore
-+expose a minimal attack surface.
-+
-+Landlock is designed to be usable by unprivileged processes while following the
-+system security policy enforced by other access control mechanisms (e.g. DAC,
-+LSM).  Indeed, a Landlock rule shall not interfere with other access-controls
-+enforced on the system, only add more restrictions.
-+
-+Any user can enforce Landlock rulesets on their processes.  They are merged and
-+evaluated according to the inherited ones in a way that ensures that only more
-+constraints can be added.
-+
-+Guiding principles for safe access controls
-+===========================================
-+
-+* A Landlock rule shall be focused on access control on kernel objects instead
-+  of syscall filtering (i.e. syscall arguments), which is the purpose of
-+  seccomp-bpf.
-+* To avoid multiple kinds of side-channel attacks (e.g. leak of security
-+  policies, CPU-based attacks), Landlock rules shall not be able to
-+  programmatically communicate with user space.
-+* Kernel access check shall not slow down access request from unsandboxed
-+  processes.
-+* Computation related to Landlock operations (e.g. enforce a ruleset) shall
-+  only impact the processes requesting them.
-+
-+Tests
-+=====
-+
-+Userspace tests for backward compatibility, ptrace restrictions and filesystem
-+support can be found here: `tools/testing/selftests/landlock/`_.
-+
-+Kernel structures
-+=================
-+
-+Object
-+------
-+
-+.. kernel-doc:: security/landlock/object.h
-+    :identifiers:
-+
-+Ruleset and domain
-+------------------
-+
-+A domain is a read-only ruleset tied to a set of subjects (i.e. tasks'
-+credentials).  Each time a ruleset is enforced on a task, the current domain is
-+duplicated and the ruleset is imported as a new layer of rules in the new
-+domain.  Indeed, once in a domain, each rule is tied to a layer level.  To
-+grant access to an object, at least one rule of each layer must allow the
-+requested action on the object.  A task can then only transit to a new domain
-+which is the intersection of the constraints from the current domain and those
-+of a ruleset provided by the task.
-+
-+The definition of a subject is implicit for a task sandboxing itself, which
-+makes the reasoning much easier and helps avoid pitfalls.
-+
-+.. kernel-doc:: security/landlock/ruleset.h
-+    :identifiers:
-+
-+.. Links
-+.. _tools/testing/selftests/landlock/: https://github.com/landlock-lsm/linux/tree/landlock-v19/tools/testing/selftests/landlock/
-diff --git a/Documentation/security/landlock/user.rst b/Documentation/security/landlock/user.rst
-new file mode 100644
-index 000000000000..5420f74d9158
---- /dev/null
-+++ b/Documentation/security/landlock/user.rst
-@@ -0,0 +1,268 @@
-+=================================
-+Landlock: userspace documentation
-+=================================
-+
-+Landlock rules
-+==============
-+
-+A Landlock rule enables to describe an action on an object.  An object is
-+currently a file hierarchy, and the related filesystem actions are defined in
-+`Access rights`_.  A set of rules is aggregated in a ruleset, which can then
-+restrict the thread enforcing it, and its future children.
-+
-+Defining and enforcing a security policy
-+----------------------------------------
-+
-+Before defining a security policy, an application should first probe for the
-+features supported by the running kernel, which is important to be compatible
-+with older kernels.  This can be done thanks to the `landlock` syscall (cf.
-+:ref:`syscall`).
-+
-+.. code-block:: c
-+
-+    struct landlock_attr_features attr_features;
-+
-+    if (landlock(LANDLOCK_CMD_GET_FEATURES, LANDLOCK_OPT_GET_FEATURES,
-+            sizeof(attr_features), &attr_features)) {
-+        perror("Failed to probe the Landlock supported features");
-+        return 1;
-+    }
-+
-+Then, we need to create the ruleset that will contain our rules.  For this
-+example, the ruleset will contain rules which only allow read actions, but
-+write actions will be denied.  The ruleset then needs to handle both of these
-+kind of actions.  To have a backward compatibility, these actions should be
-+ANDed with the supported ones.
-+
-+.. code-block:: c
-+
-+    int ruleset_fd;
-+    struct landlock_attr_ruleset ruleset = {
-+        .handled_access_fs =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_WRITE_FILE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_DIR |
-+            LANDLOCK_ACCESS_FS_REMOVE_FILE |
-+            LANDLOCK_ACCESS_FS_MAKE_CHAR |
-+            LANDLOCK_ACCESS_FS_MAKE_DIR |
-+            LANDLOCK_ACCESS_FS_MAKE_REG |
-+            LANDLOCK_ACCESS_FS_MAKE_SOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_FIFO |
-+            LANDLOCK_ACCESS_FS_MAKE_BLOCK |
-+            LANDLOCK_ACCESS_FS_MAKE_SYM,
-+    };
-+
-+    ruleset.handled_access_fs &= attr_features.access_fs;
-+    ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
-+                    LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
-+    if (ruleset_fd < 0) {
-+        perror("Failed to create a ruleset");
-+        return 1;
-+    }
-+
-+We can now add a new rule to this ruleset thanks to the returned file
-+descriptor referring to this ruleset.  The rule will only enable to read the
-+file hierarchy ``/usr``.  Without another rule, write actions would then be
-+denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with the
-+``O_PATH`` flag and fill the &struct landlock_attr_path_beneath with this file
-+descriptor.
-+
-+.. code-block:: c
-+
-+    int err;
-+    struct landlock_attr_path_beneath path_beneath = {
-+        .ruleset_fd = ruleset_fd,
-+        .allowed_access =
-+            LANDLOCK_ACCESS_FS_EXECUTE |
-+            LANDLOCK_ACCESS_FS_READ_FILE |
-+            LANDLOCK_ACCESS_FS_READ_DIR,
-+    };
-+
-+    path_beneath.allowed_access &= attr_features.access_fs;
-+    path_beneath.parent_fd = open("/usr", O_PATH | O_CLOEXEC);
-+    if (path_beneath.parent_fd < 0) {
-+        perror("Failed to open file");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    err = landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
-+            sizeof(path_beneath), &path_beneath);
-+    close(path_beneath.parent_fd);
-+    if (err) {
-+        perror("Failed to update ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+We now have a ruleset with one rule allowing read access to ``/usr`` while
-+denying all accesses featured in ``attr_features.access_fs`` to everything else
-+on the filesystem.  The next step is to restrict the current thread from
-+gaining more privileges (e.g. thanks to a SUID binary).
-+
-+.. code-block:: c
-+
-+    if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+        perror("Failed to restrict privileges");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+
-+The current thread is now ready to sandbox itself with the ruleset.
-+
-+.. code-block:: c
-+
-+    struct landlock_attr_enforce attr_enforce = {
-+        .ruleset_fd = ruleset_fd,
-+    };
-+
-+    if (landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
-+            sizeof(attr_enforce), &attr_enforce)) {
-+        perror("Failed to enforce ruleset");
-+        close(ruleset_fd);
-+        return 1;
-+    }
-+    close(ruleset_fd);
-+
-+If the last `landlock` system call succeeds, the current thread is now
-+restricted and this policy will be enforced on all its subsequently created
-+children as well.  Once a thread is landlocked, there is no way to remove its
-+security policy; only adding more restrictions is allowed.  These threads are
-+now in a new Landlock domain, merge of their parent one (if any) with the new
-+ruleset.
-+
-+Full working code can be found in `samples/landlock/sandboxer.c`_.
-+
-+Inheritance
-+-----------
-+
-+Every new thread resulting from a :manpage:`clone(2)` inherits Landlock domain
-+restrictions from its parent.  This is similar to the seccomp inheritance (cf.
-+:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task's
-+:manpage:`credentials(7)`.  For instance, one process's thread may apply
-+Landlock rules to itself, but they will not be automatically applied to other
-+sibling threads (unlike POSIX thread credential changes, cf.
-+:manpage:`nptl(7)`).
-+
-+When a thread sandbox itself, we have the grantee that the related security
-+policy will stay enforced on all this thread's descendants.  This enables to
-+create standalone and modular security policies per application, which will
-+automatically be composed between themselves according to their runtime parent
-+policies.
-+
-+Ptrace restrictions
-+-------------------
-+
-+A sandboxed process has less privileges than a non-sandboxed process and must
-+then be subject to additional restrictions when manipulating another process.
-+To be allowed to use :manpage:`ptrace(2)` and related syscalls on a target
-+process, a sandboxed process should have a subset of the target process rules,
-+which means the tracee must be in a sub-domain of the tracer.
-+
-+.. _syscall:
-+
-+The `landlock` syscall and its arguments
-+========================================
-+
-+.. kernel-doc:: security/landlock/syscall.c
-+    :identifiers: sys_landlock
-+
-+Commands
-+--------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_cmd
-+
-+Options
-+-------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: options_intro
-+                  options_get_features options_create_ruleset
-+                  options_add_rule options_enforce_ruleset
-+
-+Attributes
-+----------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: landlock_attr_features landlock_attr_ruleset
-+                  landlock_attr_path_beneath landlock_attr_enforce
-+
-+Access rights
-+-------------
-+
-+.. kernel-doc:: include/uapi/linux/landlock.h
-+    :identifiers: fs_access
-+
-+Current limitations
-+===================
-+
-+File renaming and linking
-+-------------------------
-+
-+Because Landlock targets unprivileged access controls, it is needed to properly
-+handle composition of rules.  Such property also implies rules nesting.
-+Properly handling multiple layers of ruleset, each one of them able to restrict
-+access to files, also imply to inherit the ruleset restrictions from a parent
-+to its hierarchy.  Because files are identified and restricted by their
-+hierarchy, moving or linking a file from one directory to another imply to
-+propagate the hierarchy constraints.  To protect against privilege escalations
-+through renaming or linking, and for the sack of simplicity, Landlock currently
-+limits linking and renaming to the same directory.  Future Landlock evolutions
-+will enable more flexibility for renaming and linking, with dedicated ruleset
-+options.
-+
-+OverlayFS
-+---------
-+
-+An OverlayFS mount point consists of upper and lower layers.  It is currently
-+not possible to reliably infer which underlying file hierarchy matches an
-+OverlayFS path composed of such layers.  It is then not currently possible to
-+track the source of an indirect access-request, and then not possible to
-+properly identify and allow an unified OverlayFS hierarchy.  Restricting files
-+in an OverlayFS mount point works, but files allowed in one layer may not be
-+allowed in a related OverlayFS mount point.  A future Landlock evolution will
-+make possible to properly work with OverlayFS, according to a dedicated ruleset
-+option.
-+
-+
-+Special filesystems
-+-------------------
-+
-+Access to regular files and directories can be restricted by Landlock,
-+according to the handled accesses of a ruleset.  However, files which do not
-+come from a user-visible filesystem (e.g. pipe, socket), but can still be
-+accessed through /proc/self/fd/, cannot currently be restricted.  Likewise,
-+some special kernel filesystems such as nsfs which can be accessed through
-+/proc/self/ns/, cannot currently be restricted.  For now, these kind of special
-+paths are then always allowed.  Future Landlock evolutions will enable to
-+restrict such paths, with dedicated ruleset options.
-+
-+Questions and answers
-+=====================
-+
-+What about user space sandbox managers?
-+---------------------------------------
-+
-+Using user space process to enforce restrictions on kernel resources can lead
-+to race conditions or inconsistent evaluations (i.e. `Incorrect mirroring of
-+the OS code and state
-+<https://www.ndss-symposium.org/ndss2003/traps-and-pitfalls-practical-problems-system-call-interposition-based-security-tools/>`_).
-+
-+What about namespaces and containers?
-+-------------------------------------
-+
-+Namespaces can help create sandboxes but they are not designed for
-+access-control and then miss useful features for such use case (e.g. no
-+fine-grained restrictions).  Moreover, their complexity can lead to security
-+issues, especially when untrusted processes can manipulate them (cf.
-+`Controlling access to user namespaces <https://lwn.net/Articles/673597/>`_).
-+
-+Additional documentation
-+========================
-+
-+See https://landlock.io
-+
-+.. Links
-+.. _samples/landlock/sandboxer.c: https://github.com/landlock-lsm/linux/tree/landlock-v19/samples/landlock/sandboxer.c
--- 
-2.27.0
-
+It is going to be tough. It is normal that sometimes when there is a
+leak. It needs to rescan a few times to make sure it is stable.
+Sometimes, even the real leaks will take quite a while to show up.
