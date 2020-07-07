@@ -2,211 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1042177FC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 21:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C5121786D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 21:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbgGGTel (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jul 2020 15:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S1727826AbgGGT6O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jul 2020 15:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726763AbgGGTel (ORCPT
+        with ESMTP id S1728489AbgGGT6N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jul 2020 15:34:41 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39501C061755
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 12:34:41 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id c139so39236703qkg.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 12:34:41 -0700 (PDT)
+        Tue, 7 Jul 2020 15:58:13 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2407CC08C5E2
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 12:58:13 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id k5so1310779plk.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 12:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xVt2YK5fz9oFkXUBAkGsBYne4Pd79jtYdQyRepPOP4E=;
-        b=XyYCfoXM1r+N8DwUWlmvDPLAfgaaXeOLfy8C4mRQZYkYvPG6MAbu06xw7R2KfFrbf2
-         QpPdS9/4cRY8r7GCHNdjwKLcFvlmDAW1zk8eI2EGfl27V61Wp2IgJZDOkB2Wtg9Yi+Lw
-         tpavHoYcteHAqlcmnGtrYxOIuFGQPDUReDUUC/KYUdABDh0KTVeT0xmR1nUk/BBdTQUK
-         Ahpn+v3vPLCsce+dJFsewCeqrtt5r2pSMiewHfeJ9MyW5qS7hstGyz9m9o9vk9JRx/EY
-         AKGQ1B/NO92bS7DUmzTH47kc23GpDWSIbymOwI5Y/VaqT2bd5zL199G52/+/3yv36PPF
-         ARHw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VzRu+6RTYvmFttwhsiQLXCF6YnU1lg38nqV7v8N7whw=;
+        b=POB0tDdCbNVqmVQZ6yua+ndmhJsgXFLarIJRrzZHpuDGP0B1FODyoxi9lUTM/pG0IL
+         mE1dMIr/gsK64CjizChpcXywJYXY4Vfi25COfLptk3V+mFNHqoasjVtfubvV2ebCtl7a
+         czRuA5AP473VLGgnEz34EgdAlV0QOt3H67RniAnOVC2+In0mdoC9rSRvmlMzUXfZVzt4
+         xGEFUHBxADeMLVRzRAoW7/H0iSwTAcsqnlAtpK24wb/U0fEHrp7KMPF2hLocEXQ4+asp
+         047TKx7zculMEGUVbpwgiExvH3ficDy6d/Wj01wsX8chenP63N6BpBBILOJ6KcW2NDnx
+         OPSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xVt2YK5fz9oFkXUBAkGsBYne4Pd79jtYdQyRepPOP4E=;
-        b=RJOroGa7BcDvZR7cIx08QhHYaUBtDXttgdaffNUSOfxTbIaTEYao0PAwEajHzXVt0a
-         yVHLtWaJwYBssmX/da/SpIP7148Hu2GSg173Uw+W3A/LL7dfxk3wdM5vBuXMPEErTzQS
-         aRbj4rqJxCvXqmvJEg9GtiQlnRFS5PBQzAx3J+JbmFtT8+tGq/zVHoFDUj/A+XbuZ6US
-         OAMtTFEehE1bYoolsA6sQN8cH4UArHaGSD0hav2BdLAi90F4PrdymEP/DXAcVZJKiHU+
-         VfY6o3j1uNv2YE0ILPiYJBI+NMjlLLM6aXgHLg0UjtURajbt+csnsqsHEg281X7N3kWL
-         Fzwg==
-X-Gm-Message-State: AOAM531F06h8qHm+/MU2EXMW/iT2QPZ0NdpCUPcM0sBXDHwXyp2UeJ3w
-        W1/bhgXAZdxQ4Pmoh99IYQA/9A==
-X-Google-Smtp-Source: ABdhPJxWnRfHlcB33n2WqGOiUJ8zUyEBAGcI/XOi8NRXNTu75pauGmptq+erFObPZ0B0CEYsYn8y+w==
-X-Received: by 2002:ae9:e809:: with SMTP id a9mr52315940qkg.315.1594150480267;
-        Tue, 07 Jul 2020 12:34:40 -0700 (PDT)
-Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id l31sm22808139qtc.33.2020.07.07.12.34.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 12:34:39 -0700 (PDT)
-Date:   Tue, 7 Jul 2020 15:34:37 -0400
-From:   Qian Cai <cai@lca.pw>
-To:     Uriel Guajardo <urielguajardo@google.com>
-Cc:     Uriel Guajardo <urielguajardojr@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        catalin.marinas@arm.com, akpm@linux-foundation.org,
-        rdunlap@infradead.org, masahiroy@kernel.org, 0x7f454c46@gmail.com,
-        krzk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 2/2] kunit: kmemleak integration
-Message-ID: <20200707193437.GB992@lca.pw>
-References: <20200706211309.3314644-1-urielguajardojr@gmail.com>
- <20200706211309.3314644-3-urielguajardojr@gmail.com>
- <20200706213905.GA1916@lca.pw>
- <CAG30EeeV0c8vQCdtqPBUNMiN--0K+j5xE+PMwW-godhX1qqwQg@mail.gmail.com>
- <20200706231730.GA2613@lca.pw>
- <CAG30EeeJL_LUpZdBYpi4TRhw8pzBxhSrVF-4j1g3z22-ZXTGrw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VzRu+6RTYvmFttwhsiQLXCF6YnU1lg38nqV7v8N7whw=;
+        b=kuE8OS8FxobiT3Vyj+7wbmYsSNzviP4V8yk59Zv8VOlAT8Pq8xxFoKNUnSdF50qXx0
+         LVwJvh/zdGzzX4t8rwvDg8O/PizR/GNvpyO+6WsWqWJAPuzZKthS8DnjMPIduiv5Q4QW
+         izYwjn7g0orruz0L5bYuRG9wqpXSU+WkoUkSZcmAa79Bu1F6eNp9V5i0A1Cthxg5j7fa
+         CVjS9VGoOSgzhRXEFNNN7GluuuWS1mdU6Kzq+WU8kb3CReErS/jL+87h/XTQJR1H+OIq
+         etOQNzY3OD9kkuO3AQnhXlYO9dk5puSMYzn51kpTu/OF8bx2dmMvyhMTXTGlpXR6vruM
+         kK0A==
+X-Gm-Message-State: AOAM532NgIkSmJWFy0O7w1EHdP/O86llJG79rTnokM2u0ecJW9gjY21+
+        VX3KWSDGTiL/e9ZPKIh9jZsB3Qx1YVaycGIaqanC/g==
+X-Google-Smtp-Source: ABdhPJwAgKOW6WJkomMyOukfnt4wP2/V35sf6mYJAhQLNyaosM4LY2uIUq7rKvvPZg70NVApdINfIkTmb6+bTRJLXD0=
+X-Received: by 2002:a17:90b:1296:: with SMTP id fw22mr6086502pjb.20.1594151892296;
+ Tue, 07 Jul 2020 12:58:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG30EeeJL_LUpZdBYpi4TRhw8pzBxhSrVF-4j1g3z22-ZXTGrw@mail.gmail.com>
+References: <20200707092117.963394-1-masahiroy@kernel.org>
+In-Reply-To: <20200707092117.963394-1-masahiroy@kernel.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 7 Jul 2020 12:58:01 -0700
+Message-ID: <CAFd5g46eCjZA-e4akYc1K8u29tp94gpmrAOxZ_joZ=9kJtZeuA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] kbuild: introduce ccflags-remove-y and asflags-remove-y
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Haren Myneni <haren@us.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Paul Mackerras <paulus@samba.org>,
+        Petr Mladek <pmladek@suse.com>, Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Tal Gilboa <talgi@mellanox.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-crypto@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-sh@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, live-patching@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 07, 2020 at 12:26:52PM -0500, Uriel Guajardo wrote:
-> On Mon, Jul 6, 2020 at 6:17 PM Qian Cai <cai@lca.pw> wrote:
-> >
-> > On Mon, Jul 06, 2020 at 05:48:21PM -0500, Uriel Guajardo wrote:
-> > > On Mon, Jul 6, 2020 at 4:39 PM Qian Cai <cai@lca.pw> wrote:
-> > > >
-> > > > On Mon, Jul 06, 2020 at 09:13:09PM +0000, Uriel Guajardo wrote:
-> > > > > From: Uriel Guajardo <urielguajardo@google.com>
-> > > > >
-> > > > > Integrate kmemleak into the KUnit testing framework.
-> > > > >
-> > > > > Kmemleak will now fail the currently running KUnit test case if it finds
-> > > > > any memory leaks.
-> > > > >
-> > > > > The minimum object age for reporting is set to 0 msecs so that leaks are
-> > > > > not ignored if the test case finishes too quickly.
-> > > > >
-> > > > > Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-> > > > > ---
-> > > > >  include/linux/kmemleak.h | 11 +++++++++++
-> > > > >  lib/Kconfig.debug        | 26 ++++++++++++++++++++++++++
-> > > > >  lib/kunit/test.c         | 36 +++++++++++++++++++++++++++++++++++-
-> > > > >  mm/kmemleak.c            | 27 +++++++++++++++++++++------
-> > > > >  4 files changed, 93 insertions(+), 7 deletions(-)
-> > > > >
-> > > > > diff --git a/include/linux/kmemleak.h b/include/linux/kmemleak.h
-> > > > > index 34684b2026ab..0da427934462 100644
-> > > > > --- a/include/linux/kmemleak.h
-> > > > > +++ b/include/linux/kmemleak.h
-> > > > > @@ -35,6 +35,10 @@ extern void kmemleak_free_part_phys(phys_addr_t phys, size_t size) __ref;
-> > > > >  extern void kmemleak_not_leak_phys(phys_addr_t phys) __ref;
-> > > > >  extern void kmemleak_ignore_phys(phys_addr_t phys) __ref;
-> > > > >
-> > > > > +extern ssize_t kmemleak_write(struct file *file,
-> > > > > +                           const char __user *user_buf,
-> > > > > +                           size_t size, loff_t *ppos);
-> > > > > +
-> > > > >  static inline void kmemleak_alloc_recursive(const void *ptr, size_t size,
-> > > > >                                           int min_count, slab_flags_t flags,
-> > > > >                                           gfp_t gfp)
-> > > > > @@ -120,6 +124,13 @@ static inline void kmemleak_ignore_phys(phys_addr_t phys)
-> > > > >  {
-> > > > >  }
-> > > > >
-> > > > > +static inline ssize_t kmemleak_write(struct file *file,
-> > > > > +                                  const char __user *user_buf,
-> > > > > +                                  size_t size, loff_t *ppos)
-> > > > > +{
-> > > > > +     return -1;
-> > > > > +}
-> > > > > +
-> > > > >  #endif       /* CONFIG_DEBUG_KMEMLEAK */
-> > > > >
-> > > > >  #endif       /* __KMEMLEAK_H */
-> > > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > > > index 21d9c5f6e7ec..e9c492cb3f4d 100644
-> > > > > --- a/lib/Kconfig.debug
-> > > > > +++ b/lib/Kconfig.debug
-> > > > > @@ -602,6 +602,32 @@ config DEBUG_KMEMLEAK_MEM_POOL_SIZE
-> > > > >         fully initialised, this memory pool acts as an emergency one
-> > > > >         if slab allocations fail.
-> > > > >
-> > > > > +config DEBUG_KMEMLEAK_MAX_TRACE
-> > > > > +     int "Kmemleak stack trace length"
-> > > > > +     depends on DEBUG_KMEMLEAK
-> > > > > +     default 16
-> > > > > +
-> > > > > +config DEBUG_KMEMLEAK_MSECS_MIN_AGE
-> > > > > +     int "Minimum object age before reporting in msecs"
-> > > > > +     depends on DEBUG_KMEMLEAK
-> > > > > +     default 0 if KUNIT
-> > > > > +     default 5000
-> > > > > +
-> > > > > +config DEBUG_KMEMLEAK_SECS_FIRST_SCAN
-> > > > > +     int "Delay before first scan in secs"
-> > > > > +     depends on DEBUG_KMEMLEAK
-> > > > > +     default 60
-> > > > > +
-> > > > > +config DEBUG_KMEMLEAK_SECS_SCAN_WAIT
-> > > > > +     int "Delay before subsequent auto scans in secs"
-> > > > > +     depends on DEBUG_KMEMLEAK
-> > > > > +     default 600
-> > > > > +
-> > > > > +config DEBUG_KMEMLEAK_MAX_SCAN_SIZE
-> > > > > +     int "Maximum size of scanned block"
-> > > > > +     depends on DEBUG_KMEMLEAK
-> > > > > +     default 4096
-> > > > > +
-> > > >
-> > > > Why do you make those configurable? I don't see anywhere you make use of
-> > > > them except DEBUG_KMEMLEAK_MSECS_MIN_AGE?
-> > > >
-> > >
-> > > That's correct. Strictly speaking, only DEBUG_KMEMLEAK_MSECS_MIN_AGE
-> > > is used to set a default when KUnit is configured.
-> > >
-> > > There is no concrete reason why these other variables need to be
-> > > configurable. At the time of writing this, it seemed to make the most
-> > > sense to configure the other configuration options, given that I was
-> > > already going to make MSECS_MIN_AGE configurable. It can definitely be
-> > > taken out.
-> > >
-> > > > Even then, how setting DEBUG_KMEMLEAK_MSECS_MIN_AGE=0 not giving too
-> > > > many false positives? Kmemleak simply does not work that instantly.
-> > > >
-> > >
-> > > I did not experience this issue, but I see your point.
-> > >
-> > > An alternative that I was thinking about -- and one that is not in
-> > > this patch -- is to wait DEBUG_KMEMLEAK_MSECS_MIN_AGE after each test
-> > > case in a test suite, while leaving kmemleak's default value as is. I
-> > > was hesitant to do this initially because many KUnit test cases run
-> > > quick, so this may result in a lot of time just waiting. But if we
-> > > leave it configurable, the user can change this as needed and deal
-> > > with the possible false positives.
-> >
-> > I doubt that is good idea. We don't really want people to start
-> > reporting those false positives to the MLs just because some kunit tests
-> > starts to flag them. It is wasting everyone's time. Reports from
-> > DEBUG_KMEMLEAK_MSECS_MIN_AGE=0 are simply trustful. I don't think there
-> > is a way around. Kmemleak was designed to have a lot of
-> > waitings/re-scans to be useful not even mentioning kfree_rcu() etc until
-> > it is redesigned...
-> 
-> I agree with your statement about false positives.
-> Is your suggestion to not make MSECS_MIN_AGE configurable and have
-> KUnit wait after each test case? Or are you saying that this will not
-> work entirely?
-> It seems like kmemleak should be able to work in some fashion under
-> KUnit, since it has specific documentation over testing parts of code
-> (https://www.kernel.org/doc/html/latest/dev-tools/kmemleak.html#testing-specific-sections-with-kmemleak).
+On Tue, Jul 7, 2020 at 2:22 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> CFLAGS_REMOVE_<file>.o filters out flags when compiling a particular
+> object, but there is no convenient way to do that for every object in
+> a directory.
+>
+> Add ccflags-remove-y and asflags-remove-y to make it easily.
+>
+> Use ccflags-remove-y to clean up some Makefiles.
+>
+> The add/remove order works as follows:
+>
+>  [1] KBUILD_CFLAGS specifies compiler flags used globally
+>
+>  [2] ccflags-y adds compiler flags for all objects in the
+>      current Makefile
+>
+>  [3] ccflags-remove-y removes compiler flags for all objects in the
+>      current Makefile (New feature)
+>
+>  [4] CFLAGS_<file> adds compiler flags per file.
+>
+>  [5] CFLAGS_REMOVE_<file> removes compiler flags per file.
+>
+> Having [3] before [4] allows us to remove flags from most (but not all)
+> objects in the current Makefile.
+>
+> For example, kernel/trace/Makefile removes $(CC_FLAGS_FTRACE)
+> from all objects in the directory, then adds it back to
+> trace_selftest_dynamic.o and CFLAGS_trace_kprobe_selftest.o
+>
+> Please note ccflags-remove-y has no effect to the sub-directories.
+> In contrast, the previous notation got rid of compiler flags also from
+> all the sub-directories.
+>
+>   arch/arm/boot/compressed/
+>   arch/powerpc/xmon/
+>   arch/sh/
+>   kernel/trace/
+>
+> ... have no sub-directories.
+>
+>   lib/
+>
+> ... has several sub-directories.
+>
+> To keep the behavior, I added ccflags-remove-y to all Makefiles
+> in subdirectories of lib/, except:
+>
+>   lib/vdso/Makefile        - Kbuild does not descend into this Makefile
+>   lib/raid/test/Makefile   - This is not used for the kernel build
+>
+> I think commit 2464a609ded0 ("ftrace: do not trace library functions")
+> excluded too much. In later commit, I will try to remove ccflags-remove-y
+> from sub-directory Makefiles.
+>
+> Suggested-by: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-It is going to be tough. It is normal that sometimes when there is a
-leak. It needs to rescan a few times to make sure it is stable.
-Sometimes, even the real leaks will take quite a while to show up.
+Acked-by: Brendan Higgins <brendanhiggins@google.com> (KUnit)
