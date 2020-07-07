@@ -2,198 +2,229 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23354217518
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 19:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6B5217627
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jul 2020 20:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbgGGR1M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jul 2020 13:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728316AbgGGR1L (ORCPT
+        id S1728246AbgGGSPz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jul 2020 14:15:55 -0400
+Received: from smtp-bc0a.mail.infomaniak.ch ([45.157.188.10]:42095 "EHLO
+        smtp-bc0a.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728029AbgGGSPx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jul 2020 13:27:11 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A8AC061755
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 10:27:11 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id a21so11613491otq.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 10:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rMuppVQPw1RXuBiFiMtip818dqgzLT1r4LNtpXbqYiA=;
-        b=Da7lTAGxPQmYXMvQQ4cWrsEYHZWwOInlr895o9PE9VLeruKvguPNzyTvemAQ/LrYS3
-         DCf/hccEnf3/CIb91aCbopgUylSF/m/e5azHPG9mr0w6qgj+DvDQwlRXm+/GwyAIqIoo
-         hTzEnElApg23ktZgKJoXMax6ANqQnXW9HMqtjEG0enAglxuDNKSKtapq12Vk44EnL84p
-         5Stao3rqWDccSRI6DH1dhJZoeS+r6JYbKjPBpSwa9Y4PcrjR41m2L3njV4bWAtkF8Tcr
-         JoS865rPiiDrtT5lDm6X4CmVHV1P5AvXOrebwF91HtRH8nfrBLwObxrCQp3eaijWbpGP
-         Tn8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rMuppVQPw1RXuBiFiMtip818dqgzLT1r4LNtpXbqYiA=;
-        b=GYwgeTQnikGoaaMY2nWHBaHn/lMSEeOH6ok1uHpYNVOeWdsQndLL6FVPPzM3st4dC2
-         om/8njR/4cRa7RMDawM2empgxtw31W7QQDKrb4JRYg7kPTTlFmW0YZxMMqk2BJ0ZiaTv
-         SQNtRcp5iq1qT7T5zeTil64wxjZFbAWJEUGMoYuAio4fUZQoLznli9DHZbKsoV9SJvsi
-         nkOiOyWkpn7J9+LQIsBQjL9QCjJEqXzOGohtqZWFvjDzz9zhknocKBsS658Pt16LEI5r
-         nEjXQh4jgOBUp8gu6pIyTtby4UNztvWTOxB12n/WumybRYddH75D7vh1i0lkkVq6/OOQ
-         U/7g==
-X-Gm-Message-State: AOAM533/SuDuHMFay/4hRlzTY+qzOMpc5CWw9/959lQIkFciWFT7ng42
-        vHClsiPhYzmmmbhy3MKky3VmE2BblMqc9XbhsL1z1w==
-X-Google-Smtp-Source: ABdhPJzF8Ar2RTTATP+hMbbUYSw+rN5v6I36KsgvZGdJ7W8qxDfi5DUq8PDe5clf7m+OO0iWEvBEeJcUqeLFcuSqUa0=
-X-Received: by 2002:a9d:688:: with SMTP id 8mr46326077otx.108.1594142824174;
- Tue, 07 Jul 2020 10:27:04 -0700 (PDT)
+        Tue, 7 Jul 2020 14:15:53 -0400
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B1VpL6QMVzlhcWl;
+        Tue,  7 Jul 2020 20:10:02 +0200 (CEST)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4B1VpG0jcQzlh8TC;
+        Tue,  7 Jul 2020 20:09:58 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v19 00/12] Landlock LSM
+Date:   Tue,  7 Jul 2020 20:09:43 +0200
+Message-Id: <20200707180955.53024-1-mic@digikod.net>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20200706211309.3314644-1-urielguajardojr@gmail.com>
- <20200706211309.3314644-3-urielguajardojr@gmail.com> <20200706213905.GA1916@lca.pw>
- <CAG30EeeV0c8vQCdtqPBUNMiN--0K+j5xE+PMwW-godhX1qqwQg@mail.gmail.com> <20200706231730.GA2613@lca.pw>
-In-Reply-To: <20200706231730.GA2613@lca.pw>
-From:   Uriel Guajardo <urielguajardo@google.com>
-Date:   Tue, 7 Jul 2020 12:26:52 -0500
-Message-ID: <CAG30EeeJL_LUpZdBYpi4TRhw8pzBxhSrVF-4j1g3z22-ZXTGrw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: kmemleak integration
-To:     Qian Cai <cai@lca.pw>
-Cc:     Uriel Guajardo <urielguajardojr@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        catalin.marinas@arm.com, akpm@linux-foundation.org,
-        rdunlap@infradead.org, masahiroy@kernel.org, 0x7f454c46@gmail.com,
-        krzk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 6, 2020 at 6:17 PM Qian Cai <cai@lca.pw> wrote:
->
-> On Mon, Jul 06, 2020 at 05:48:21PM -0500, Uriel Guajardo wrote:
-> > On Mon, Jul 6, 2020 at 4:39 PM Qian Cai <cai@lca.pw> wrote:
-> > >
-> > > On Mon, Jul 06, 2020 at 09:13:09PM +0000, Uriel Guajardo wrote:
-> > > > From: Uriel Guajardo <urielguajardo@google.com>
-> > > >
-> > > > Integrate kmemleak into the KUnit testing framework.
-> > > >
-> > > > Kmemleak will now fail the currently running KUnit test case if it finds
-> > > > any memory leaks.
-> > > >
-> > > > The minimum object age for reporting is set to 0 msecs so that leaks are
-> > > > not ignored if the test case finishes too quickly.
-> > > >
-> > > > Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-> > > > ---
-> > > >  include/linux/kmemleak.h | 11 +++++++++++
-> > > >  lib/Kconfig.debug        | 26 ++++++++++++++++++++++++++
-> > > >  lib/kunit/test.c         | 36 +++++++++++++++++++++++++++++++++++-
-> > > >  mm/kmemleak.c            | 27 +++++++++++++++++++++------
-> > > >  4 files changed, 93 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/kmemleak.h b/include/linux/kmemleak.h
-> > > > index 34684b2026ab..0da427934462 100644
-> > > > --- a/include/linux/kmemleak.h
-> > > > +++ b/include/linux/kmemleak.h
-> > > > @@ -35,6 +35,10 @@ extern void kmemleak_free_part_phys(phys_addr_t phys, size_t size) __ref;
-> > > >  extern void kmemleak_not_leak_phys(phys_addr_t phys) __ref;
-> > > >  extern void kmemleak_ignore_phys(phys_addr_t phys) __ref;
-> > > >
-> > > > +extern ssize_t kmemleak_write(struct file *file,
-> > > > +                           const char __user *user_buf,
-> > > > +                           size_t size, loff_t *ppos);
-> > > > +
-> > > >  static inline void kmemleak_alloc_recursive(const void *ptr, size_t size,
-> > > >                                           int min_count, slab_flags_t flags,
-> > > >                                           gfp_t gfp)
-> > > > @@ -120,6 +124,13 @@ static inline void kmemleak_ignore_phys(phys_addr_t phys)
-> > > >  {
-> > > >  }
-> > > >
-> > > > +static inline ssize_t kmemleak_write(struct file *file,
-> > > > +                                  const char __user *user_buf,
-> > > > +                                  size_t size, loff_t *ppos)
-> > > > +{
-> > > > +     return -1;
-> > > > +}
-> > > > +
-> > > >  #endif       /* CONFIG_DEBUG_KMEMLEAK */
-> > > >
-> > > >  #endif       /* __KMEMLEAK_H */
-> > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > > index 21d9c5f6e7ec..e9c492cb3f4d 100644
-> > > > --- a/lib/Kconfig.debug
-> > > > +++ b/lib/Kconfig.debug
-> > > > @@ -602,6 +602,32 @@ config DEBUG_KMEMLEAK_MEM_POOL_SIZE
-> > > >         fully initialised, this memory pool acts as an emergency one
-> > > >         if slab allocations fail.
-> > > >
-> > > > +config DEBUG_KMEMLEAK_MAX_TRACE
-> > > > +     int "Kmemleak stack trace length"
-> > > > +     depends on DEBUG_KMEMLEAK
-> > > > +     default 16
-> > > > +
-> > > > +config DEBUG_KMEMLEAK_MSECS_MIN_AGE
-> > > > +     int "Minimum object age before reporting in msecs"
-> > > > +     depends on DEBUG_KMEMLEAK
-> > > > +     default 0 if KUNIT
-> > > > +     default 5000
-> > > > +
-> > > > +config DEBUG_KMEMLEAK_SECS_FIRST_SCAN
-> > > > +     int "Delay before first scan in secs"
-> > > > +     depends on DEBUG_KMEMLEAK
-> > > > +     default 60
-> > > > +
-> > > > +config DEBUG_KMEMLEAK_SECS_SCAN_WAIT
-> > > > +     int "Delay before subsequent auto scans in secs"
-> > > > +     depends on DEBUG_KMEMLEAK
-> > > > +     default 600
-> > > > +
-> > > > +config DEBUG_KMEMLEAK_MAX_SCAN_SIZE
-> > > > +     int "Maximum size of scanned block"
-> > > > +     depends on DEBUG_KMEMLEAK
-> > > > +     default 4096
-> > > > +
-> > >
-> > > Why do you make those configurable? I don't see anywhere you make use of
-> > > them except DEBUG_KMEMLEAK_MSECS_MIN_AGE?
-> > >
-> >
-> > That's correct. Strictly speaking, only DEBUG_KMEMLEAK_MSECS_MIN_AGE
-> > is used to set a default when KUnit is configured.
-> >
-> > There is no concrete reason why these other variables need to be
-> > configurable. At the time of writing this, it seemed to make the most
-> > sense to configure the other configuration options, given that I was
-> > already going to make MSECS_MIN_AGE configurable. It can definitely be
-> > taken out.
-> >
-> > > Even then, how setting DEBUG_KMEMLEAK_MSECS_MIN_AGE=0 not giving too
-> > > many false positives? Kmemleak simply does not work that instantly.
-> > >
-> >
-> > I did not experience this issue, but I see your point.
-> >
-> > An alternative that I was thinking about -- and one that is not in
-> > this patch -- is to wait DEBUG_KMEMLEAK_MSECS_MIN_AGE after each test
-> > case in a test suite, while leaving kmemleak's default value as is. I
-> > was hesitant to do this initially because many KUnit test cases run
-> > quick, so this may result in a lot of time just waiting. But if we
-> > leave it configurable, the user can change this as needed and deal
-> > with the possible false positives.
->
-> I doubt that is good idea. We don't really want people to start
-> reporting those false positives to the MLs just because some kunit tests
-> starts to flag them. It is wasting everyone's time. Reports from
-> DEBUG_KMEMLEAK_MSECS_MIN_AGE=0 are simply trustful. I don't think there
-> is a way around. Kmemleak was designed to have a lot of
-> waitings/re-scans to be useful not even mentioning kfree_rcu() etc until
-> it is redesigned...
+Hi,
 
-I agree with your statement about false positives.
-Is your suggestion to not make MSECS_MIN_AGE configurable and have
-KUnit wait after each test case? Or are you saying that this will not
-work entirely?
-It seems like kmemleak should be able to work in some fashion under
-KUnit, since it has specific documentation over testing parts of code
-(https://www.kernel.org/doc/html/latest/dev-tools/kmemleak.html#testing-specific-sections-with-kmemleak).
+This new patch series is a light update of the previous one, with some
+minor fixes and cosmetic changes.  All reviews have been taken into
+account.
+
+The SLOC count is 1299 for security/landlock/ and 1752 for
+tools/testing/selftest/landlock/ .  Test coverage for security/landlock/
+is 93.6% of lines.  The code not covered only deals with internal kernel
+errors (e.g. memory allocation) and race conditions.
+
+The compiled documentation is available here:
+https://landlock.io/linux-doc/landlock-v19/security/landlock/index.html
+
+This series can be applied on top of v5.8-rc4 .  This can be tested with
+CONFIG_SECURITY_LANDLOCK and CONFIG_SAMPLE_LANDLOCK.  This patch series
+can be found in a Git repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v19
+I would really appreciate constructive comments on this patch series.
+
+
+# Landlock LSM
+
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [1], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empowers any process, including unprivileged
+ones, to securely restrict themselves.
+
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
+
+In this current form, Landlock misses some access-control features.
+This enables to minimize this patch series and ease review.  This series
+still addresses multiple use cases, especially with the combined use of
+seccomp-bpf: applications with built-in sandboxing, init systems,
+security sandbox tools and security-oriented APIs [2].
+
+Previous version:
+https://lore.kernel.org/lkml/20200526205322.23465-1-mic@digikod.net/
+
+[1] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+[2] https://lore.kernel.org/lkml/f646e1c7-33cf-333f-070c-0a40ad0468cd@digikod.net/
+
+
+Casey Schaufler (1):
+  LSM: Infrastructure management of the superblock
+
+Mickaël Salaün (11):
+  landlock: Add object management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,security: Add sb_delete hook
+  landlock: Support filesystem access-control
+  landlock: Add syscall implementation
+  arch: Wire up landlock() syscall
+  selftests/landlock: Add initial tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
+
+ Documentation/security/index.rst              |    1 +
+ Documentation/security/landlock/index.rst     |   18 +
+ Documentation/security/landlock/kernel.rst    |   69 +
+ Documentation/security/landlock/user.rst      |  268 +++
+ MAINTAINERS                                   |   11 +
+ arch/Kconfig                                  |    7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    1 +
+ arch/arm/tools/syscall.tbl                    |    1 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    1 +
+ arch/um/Kconfig                               |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    1 +
+ fs/super.c                                    |    1 +
+ include/linux/lsm_hook_defs.h                 |    1 +
+ include/linux/lsm_hooks.h                     |    3 +
+ include/linux/security.h                      |    4 +
+ include/linux/syscalls.h                      |    3 +
+ include/uapi/asm-generic/unistd.h             |    4 +-
+ include/uapi/linux/landlock.h                 |  302 +++
+ kernel/sys_ni.c                               |    3 +
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 +
+ samples/landlock/.gitignore                   |    1 +
+ samples/landlock/Makefile                     |   15 +
+ samples/landlock/sandboxer.c                  |  228 +++
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    2 +
+ security/landlock/Kconfig                     |   18 +
+ security/landlock/Makefile                    |    4 +
+ security/landlock/common.h                    |   20 +
+ security/landlock/cred.c                      |   46 +
+ security/landlock/cred.h                      |   58 +
+ security/landlock/fs.c                        |  609 ++++++
+ security/landlock/fs.h                        |   60 +
+ security/landlock/object.c                    |   66 +
+ security/landlock/object.h                    |   91 +
+ security/landlock/ptrace.c                    |  120 ++
+ security/landlock/ptrace.h                    |   14 +
+ security/landlock/ruleset.c                   |  342 ++++
+ security/landlock/ruleset.h                   |  157 ++
+ security/landlock/setup.c                     |   40 +
+ security/landlock/setup.h                     |   18 +
+ security/landlock/syscall.c                   |  526 +++++
+ security/security.c                           |   51 +-
+ security/selinux/hooks.c                      |   58 +-
+ security/selinux/include/objsec.h             |    6 +
+ security/selinux/ss/services.c                |    3 +-
+ security/smack/smack.h                        |    6 +
+ security/smack/smack_lsm.c                    |   35 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/landlock/.gitignore   |    2 +
+ tools/testing/selftests/landlock/Makefile     |   29 +
+ tools/testing/selftests/landlock/base_test.c  |  163 ++
+ tools/testing/selftests/landlock/common.h     |   93 +
+ tools/testing/selftests/landlock/config       |    5 +
+ tools/testing/selftests/landlock/fs_test.c    | 1740 +++++++++++++++++
+ .../testing/selftests/landlock/ptrace_test.c  |  321 +++
+ tools/testing/selftests/landlock/true.c       |    5 +
+ 71 files changed, 5611 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/security/landlock/index.rst
+ create mode 100644 Documentation/security/landlock/kernel.rst
+ create mode 100644 Documentation/security/landlock/user.rst
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/common.h
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscall.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/base_test.c
+ create mode 100644 tools/testing/selftests/landlock/common.h
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/fs_test.c
+ create mode 100644 tools/testing/selftests/landlock/ptrace_test.c
+ create mode 100644 tools/testing/selftests/landlock/true.c
+
+-- 
+2.27.0
+
