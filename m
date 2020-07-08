@@ -2,52 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE46217C0C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 02:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5E0217C2D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 02:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728612AbgGHADy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jul 2020 20:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728909AbgGHADy (ORCPT
+        id S1728513AbgGHAYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jul 2020 20:24:55 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32518 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728208AbgGHAYz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jul 2020 20:03:54 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F318CC08C5E1
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 17:03:53 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id k27so4689990pgm.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 17:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XdUaPDr56t2dB8W61mELkwj0Skn6S5S4z+Vsl/tJuD4=;
-        b=VTUdIfdQiK5zHvzFtK8tbyfXjd+nD6axR+vPnmGSSkNh1E+1ZiM7M9DC1CsxyMf2wt
-         b2v8jrBY52b2jGsd26dV33M2EUP/T2e2Dgnx6h0zwboF2A1izvEz03TmfgImJCv+hVe9
-         ZK3sk7xEQSZ9B1SsC6/oLqAPlJT5zW/upU9BA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XdUaPDr56t2dB8W61mELkwj0Skn6S5S4z+Vsl/tJuD4=;
-        b=VFFPQe01haarJt0o7J9h/QD5iHqvLmObOpXv4aXqdm1YuRPomHTq0S7WlIryRxoc1m
-         ScJfiaBs6s4Ed9mv9MtIQEXvxn4pSurD7CCAQuA1fr6sAUpQM0vaHS9DRg3oQM3TjFV6
-         AB2Z+XrAE+CF7Zi5wqCgPNnQdpLhP1NB8UvJMVgJLAVaKU9x7GoV/1nJHlwEDBVM8yRc
-         OIO1OeVaUWiexaD7lgtttxdPZ52Dvx7KTv3aMt2HlG8/w22WdfEaEDA/vNv3OxwmpV1Z
-         QND6ZiGI+kTBRddtMKAcHUxw9bec701BW5I0zw/OPe0AazisuVbq5L//VavLhe46+g/b
-         cwmA==
-X-Gm-Message-State: AOAM5328KRBFdXNV57tw77ZznD2tP8Gc/S5LedtIBCTe+q65E4+JPT/B
-        sbsJoOp4ODlW+gJamTrxy191+Q==
-X-Google-Smtp-Source: ABdhPJzlB+wnA820KsXyKDpkiqDz27omyRVHEG+75x1JqbwOpWvyP8oemaSGQaQclki+9QkvXKv2uA==
-X-Received: by 2002:a62:f202:: with SMTP id m2mr39784579pfh.157.1594166631916;
-        Tue, 07 Jul 2020 17:03:51 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 27sm3417389pjg.19.2020.07.07.17.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 17:03:51 -0700 (PDT)
-Date:   Tue, 7 Jul 2020 17:03:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Scott Branden <scott.branden@broadcom.com>
+        Tue, 7 Jul 2020 20:24:55 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06803DgJ167205;
+        Tue, 7 Jul 2020 20:24:39 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3250bcmryj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jul 2020 20:24:39 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0680DDAO010229;
+        Wed, 8 Jul 2020 00:24:37 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 322h1g9xm1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Jul 2020 00:24:36 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0680NDRm62980576
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Jul 2020 00:23:13 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55FBE52051;
+        Wed,  8 Jul 2020 00:24:34 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.200.130])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id CA4565204E;
+        Wed,  8 Jul 2020 00:24:31 +0000 (GMT)
+Message-ID: <1594167871.23056.132.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 2/9] fs: introduce kernel_pread_file* support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Wolfram Sang <wsa@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -56,7 +49,6 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
@@ -68,65 +60,58 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-Subject: Re: [PATCH v10 7/9] misc: bcm-vk: add Broadcom VK driver
-Message-ID: <202007071700.C567BA7B@keescook>
+        linux-security-module@vger.kernel.org
+Date:   Tue, 07 Jul 2020 20:24:31 -0400
+In-Reply-To: <202007071642.AA705B2A@keescook>
 References: <20200706232309.12010-1-scott.branden@broadcom.com>
- <20200706232309.12010-8-scott.branden@broadcom.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200706232309.12010-8-scott.branden@broadcom.com>
+         <20200706232309.12010-3-scott.branden@broadcom.com>
+         <202007071642.AA705B2A@keescook>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-07_14:2020-07-07,2020-07-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 cotscore=-2147483648 priorityscore=1501 phishscore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
+ impostorscore=0 malwarescore=0 clxscore=1011 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007070158
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 04:23:07PM -0700, Scott Branden wrote:
-> Add Broadcom VK driver offload engine.
-> This driver interfaces to the VK PCIe offload engine to perform
-> should offload functions as video transcoding on multiple streams
-> in parallel.  VK device is booted from files loaded using
-> request_firmware_into_buf mechanism.  After booted card status is updated
-> and messages can then be sent to the card.
-> Such messages contain scatter gather list of addresses
-> to pull data from the host to perform operations on.
+On Tue, 2020-07-07 at 16:56 -0700, Kees Cook wrote:
+> > @@ -951,21 +955,32 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+> >               ret = -EINVAL;
+> >               goto out;
+> >       }
+> > -     if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
+> > +
+> > +     /* Default read to end of file */
+> > +     read_end = i_size;
+> > +
+> > +     /* Allow reading partial portion of file */
+> > +     if ((id == READING_FIRMWARE_PARTIAL_READ) &&
+> > +         (i_size > (pos + max_size)))
+> > +             read_end = pos + max_size;
 > 
-> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-> Signed-off-by: Desmond Yan <desmond.yan@broadcom.com>
+> There's no need to involve "id" here. There are other signals about
+> what's happening (i.e. pos != 0, max_size != i_size, etc).
 
-nit: your S-o-b chain doesn't make sense (I would expect you at the end
-since you're sending it and showing as the Author). Is it Co-developed-by?
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+Both the pre and post security kernel_read_file hooks are called here,
+but there isn't enough information being passed to the LSM/IMA to be
+able to different which hook is applicable.  One method of providing
+that additional information is by enumeration.  The other option would
+be to pass some additional information.
 
-> [...]
-> +
-> +		max_buf = SZ_4M;
-> +		bufp = dma_alloc_coherent(dev,
-> +					  max_buf,
-> +					  &boot_dma_addr, GFP_KERNEL);
-> +		if (!bufp) {
-> +			dev_err(dev, "Error allocating 0x%zx\n", max_buf);
-> +			ret = -ENOMEM;
-> +			goto err_buf_out;
-> +		}
-> +
-> +		bcm_vk_buf_notify(vk, bufp, boot_dma_addr, max_buf);
-> +	} else {
-> +		dev_err(dev, "Error invalid image type 0x%x\n", load_type);
-> +		ret = -EINVAL;
-> +		goto err_buf_out;
-> +	}
-> +
-> +	ret = request_partial_firmware_into_buf(&fw, filename, dev,
-> +						bufp, max_buf, 0);
+For example, on the post kernel_read_file hook, the file is read once
+into memory.  IMA calculates the firmware file hash based on the
+buffer contents.  On the pre kernel_read_file hook, IMA would need to
+read the entire file, calculating the file hash.  Both methods of
+calculating the file hash work, but the post hook is more efficient.
 
-Unless I don't understand what's happening here, this needs to be
-reordered if you're going to keep Mimi happy and disallow the device
-being able to see the firmware before it has been verified. (i.e. please
-load the firmware before mapping DMA across the buffer.)
-
--- 
-Kees Cook
+Mimi
