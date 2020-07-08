@@ -2,116 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5E0217C2D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 02:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F63217D7D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 05:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728513AbgGHAYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jul 2020 20:24:55 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32518 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728208AbgGHAYz (ORCPT
+        id S1729091AbgGHDUF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jul 2020 23:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728369AbgGHDUF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jul 2020 20:24:55 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06803DgJ167205;
-        Tue, 7 Jul 2020 20:24:39 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3250bcmryj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 20:24:39 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0680DDAO010229;
-        Wed, 8 Jul 2020 00:24:37 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 322h1g9xm1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jul 2020 00:24:36 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0680NDRm62980576
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Jul 2020 00:23:13 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55FBE52051;
-        Wed,  8 Jul 2020 00:24:34 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.200.130])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id CA4565204E;
-        Wed,  8 Jul 2020 00:24:31 +0000 (GMT)
-Message-ID: <1594167871.23056.132.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 2/9] fs: introduce kernel_pread_file* support
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Scott Branden <scott.branden@broadcom.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
+        Tue, 7 Jul 2020 23:20:05 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D282C061755;
+        Tue,  7 Jul 2020 20:20:05 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id y13so21577839ybj.10;
+        Tue, 07 Jul 2020 20:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y395uq9ReqH2QX93opdrgHuWiwbpwhJOGLNOpbOYln4=;
+        b=Wa8yVrPinL0aOLQ7Hfplhtj7J5g22NlsP9MXp9Ms1yv22XoeLGiaVaVtB7/gkAG+L4
+         UaXBz9HCVN+/t+fFjg6mi8JG0/BQdFZjNE863x13dQns4fkFPVoCu42dG3DO3qoIT/6u
+         Cpy36Kyz0MA4rfwt25sjvA6WzYaC8byEvYRNxhDKXuNtKauPWy0pJH2oIYh87jeE8rqI
+         sTc7OvVyRJBa0mWBkrmQIbW+Tsn2cSJil+Fxu5m8vZEXDASfOo5NYCKWpuATdLbxv0Iv
+         h5TzHkfcpbW7Vv0fyH+dQFQm3/1LracmJdRBWRrklkQs3rbDadtCep+hheCFXlroyhP4
+         Khfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y395uq9ReqH2QX93opdrgHuWiwbpwhJOGLNOpbOYln4=;
+        b=Zu+/TTPicRBxgh+anTiQavyRkQqGUjOc/Qx4WegqGUNKeiR1CY/JFsOF/XIxMOyrT+
+         Fnc5XRYvlXnlI+2gzbbcgsSPSb/iTIY3OxpDrWuYeDoUqPj/am+WeeEwNpADipoli5uW
+         CtPcINCNntIcgQvbyz5HZEHH0pFdqNF54I0RSn8kv7hK8Ex4NcV/fFeqxznoeVWy+MKg
+         /gNO4+pT0xr9IPfKE5HVAbl3wl+tV0jez9MnWwgFR6qc03xvYGeuQm9RTWbrgfNJhuX7
+         hTxyrj6LrSpgzPRIAi8uPuXVREa8D76adj8tQx9QBdM/5r0jtdIKsiN/I84REq4MbV6f
+         ZuHA==
+X-Gm-Message-State: AOAM532sCP+9XKp8eGr0yghShSbn591BlWU2cE9Ba5BPqOuJjGupBkhs
+        HVrE7UMCox1CD3zUxX55K6jfCPXi06vXZ/llvC68GIw7
+X-Google-Smtp-Source: ABdhPJyJ0RqaPrAnLPhG8IAkVYaMuSdrLUc0ZhLlso+NQ+N29OO5Ct2wudI/5Wei+530PO0W2GZbgRwzD0UxnqNEto0=
+X-Received: by 2002:a25:b28d:: with SMTP id k13mr2515633ybj.162.1594178404356;
+ Tue, 07 Jul 2020 20:20:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200701225352.9649-1-rcampbell@nvidia.com> <20200701225352.9649-4-rcampbell@nvidia.com>
+In-Reply-To: <20200701225352.9649-4-rcampbell@nvidia.com>
+From:   Ben Skeggs <skeggsb@gmail.com>
+Date:   Wed, 8 Jul 2020 13:19:53 +1000
+Message-ID: <CACAvsv4fbO8JtAjRYKnUBTccsZO7xeR4T6bYirY3QDDr1F2jsA@mail.gmail.com>
+Subject: Re: [Nouveau] [PATCH v3 3/5] nouveau: fix mapping 2MB sysmem pages
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     linux-rdma@vger.kernel.org, linux-mm@kvack.org,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Tue, 07 Jul 2020 20:24:31 -0400
-In-Reply-To: <202007071642.AA705B2A@keescook>
-References: <20200706232309.12010-1-scott.branden@broadcom.com>
-         <20200706232309.12010-3-scott.branden@broadcom.com>
-         <202007071642.AA705B2A@keescook>
+        Shuah Khan <shuah@kernel.org>, Christoph Hellwig <hch@lst.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-07_14:2020-07-07,2020-07-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 cotscore=-2147483648 priorityscore=1501 phishscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
- impostorscore=0 malwarescore=0 clxscore=1011 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007070158
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2020-07-07 at 16:56 -0700, Kees Cook wrote:
-> > @@ -951,21 +955,32 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
-> >               ret = -EINVAL;
-> >               goto out;
-> >       }
-> > -     if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
-> > +
-> > +     /* Default read to end of file */
-> > +     read_end = i_size;
-> > +
-> > +     /* Allow reading partial portion of file */
-> > +     if ((id == READING_FIRMWARE_PARTIAL_READ) &&
-> > +         (i_size > (pos + max_size)))
-> > +             read_end = pos + max_size;
-> 
-> There's no need to involve "id" here. There are other signals about
-> what's happening (i.e. pos != 0, max_size != i_size, etc).
+On Thu, 2 Jul 2020 at 08:54, Ralph Campbell <rcampbell@nvidia.com> wrote:
+>
+> The nvif_object_ioctl() method NVIF_VMM_V0_PFNMAP wasn't correctly
+> setting the hardware specific GPU page table entries for 2MB sized
+> pages. Fix this by adding functions to set and clear PD0 GPU page
+> table entries.
+I can take this one in my tree now, it's fairly independent of the rest.
 
-Both the pre and post security kernel_read_file hooks are called here,
-but there isn't enough information being passed to the LSM/IMA to be
-able to different which hook is applicable.  One method of providing
-that additional information is by enumeration.  The other option would
-be to pass some additional information.
+Ben.
 
-For example, on the post kernel_read_file hook, the file is read once
-into memory.  IMA calculates the firmware file hash based on the
-buffer contents.  On the pre kernel_read_file hook, IMA would need to
-read the entire file, calculating the file hash.  Both methods of
-calculating the file hash work, but the post hook is more efficient.
-
-Mimi
+>
+> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |  5 +-
+>  .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    | 82 +++++++++++++++++++
+>  2 files changed, 84 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> index 199f94e15c5f..19a6804e3989 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> @@ -1204,7 +1204,6 @@ nvkm_vmm_pfn_unmap(struct nvkm_vmm *vmm, u64 addr, u64 size)
+>  /*TODO:
+>   * - Avoid PT readback (for dma_unmap etc), this might end up being dealt
+>   *   with inside HMM, which would be a lot nicer for us to deal with.
+> - * - Multiple page sizes (particularly for huge page support).
+>   * - Support for systems without a 4KiB page size.
+>   */
+>  int
+> @@ -1220,8 +1219,8 @@ nvkm_vmm_pfn_map(struct nvkm_vmm *vmm, u8 shift, u64 addr, u64 size, u64 *pfn)
+>         /* Only support mapping where the page size of the incoming page
+>          * array matches a page size available for direct mapping.
+>          */
+> -       while (page->shift && page->shift != shift &&
+> -              page->desc->func->pfn == NULL)
+> +       while (page->shift && (page->shift != shift ||
+> +              page->desc->func->pfn == NULL))
+>                 page++;
+>
+>         if (!page->shift || !IS_ALIGNED(addr, 1ULL << shift) ||
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c
+> index d86287565542..ed37fddd063f 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c
+> @@ -258,12 +258,94 @@ gp100_vmm_pd0_unmap(struct nvkm_vmm *vmm,
+>         VMM_FO128(pt, vmm, pdei * 0x10, 0ULL, 0ULL, pdes);
+>  }
+>
+> +static void
+> +gp100_vmm_pd0_pfn_unmap(struct nvkm_vmm *vmm,
+> +                       struct nvkm_mmu_pt *pt, u32 ptei, u32 ptes)
+> +{
+> +       struct device *dev = vmm->mmu->subdev.device->dev;
+> +       dma_addr_t addr;
+> +
+> +       nvkm_kmap(pt->memory);
+> +       while (ptes--) {
+> +               u32 datalo = nvkm_ro32(pt->memory, pt->base + ptei * 16 + 0);
+> +               u32 datahi = nvkm_ro32(pt->memory, pt->base + ptei * 16 + 4);
+> +               u64 data   = (u64)datahi << 32 | datalo;
+> +
+> +               if ((data & (3ULL << 1)) != 0) {
+> +                       addr = (data >> 8) << 12;
+> +                       dma_unmap_page(dev, addr, 1UL << 21, DMA_BIDIRECTIONAL);
+> +               }
+> +               ptei++;
+> +       }
+> +       nvkm_done(pt->memory);
+> +}
+> +
+> +static bool
+> +gp100_vmm_pd0_pfn_clear(struct nvkm_vmm *vmm,
+> +                       struct nvkm_mmu_pt *pt, u32 ptei, u32 ptes)
+> +{
+> +       bool dma = false;
+> +
+> +       nvkm_kmap(pt->memory);
+> +       while (ptes--) {
+> +               u32 datalo = nvkm_ro32(pt->memory, pt->base + ptei * 16 + 0);
+> +               u32 datahi = nvkm_ro32(pt->memory, pt->base + ptei * 16 + 4);
+> +               u64 data   = (u64)datahi << 32 | datalo;
+> +
+> +               if ((data & BIT_ULL(0)) && (data & (3ULL << 1)) != 0) {
+> +                       VMM_WO064(pt, vmm, ptei * 16, data & ~BIT_ULL(0));
+> +                       dma = true;
+> +               }
+> +               ptei++;
+> +       }
+> +       nvkm_done(pt->memory);
+> +       return dma;
+> +}
+> +
+> +static void
+> +gp100_vmm_pd0_pfn(struct nvkm_vmm *vmm, struct nvkm_mmu_pt *pt,
+> +                 u32 ptei, u32 ptes, struct nvkm_vmm_map *map)
+> +{
+> +       struct device *dev = vmm->mmu->subdev.device->dev;
+> +       dma_addr_t addr;
+> +
+> +       nvkm_kmap(pt->memory);
+> +       while (ptes--) {
+> +               u64 data = 0;
+> +
+> +               if (!(*map->pfn & NVKM_VMM_PFN_W))
+> +                       data |= BIT_ULL(6); /* RO. */
+> +
+> +               if (!(*map->pfn & NVKM_VMM_PFN_VRAM)) {
+> +                       addr = *map->pfn >> NVKM_VMM_PFN_ADDR_SHIFT;
+> +                       addr = dma_map_page(dev, pfn_to_page(addr), 0,
+> +                                           1UL << 21, DMA_BIDIRECTIONAL);
+> +                       if (!WARN_ON(dma_mapping_error(dev, addr))) {
+> +                               data |= addr >> 4;
+> +                               data |= 2ULL << 1; /* SYSTEM_COHERENT_MEMORY. */
+> +                               data |= BIT_ULL(3); /* VOL. */
+> +                               data |= BIT_ULL(0); /* VALID. */
+> +                       }
+> +               } else {
+> +                       data |= (*map->pfn & NVKM_VMM_PFN_ADDR) >> 4;
+> +                       data |= BIT_ULL(0); /* VALID. */
+> +               }
+> +
+> +               VMM_WO064(pt, vmm, ptei++ * 16, data);
+> +               map->pfn++;
+> +       }
+> +       nvkm_done(pt->memory);
+> +}
+> +
+>  static const struct nvkm_vmm_desc_func
+>  gp100_vmm_desc_pd0 = {
+>         .unmap = gp100_vmm_pd0_unmap,
+>         .sparse = gp100_vmm_pd0_sparse,
+>         .pde = gp100_vmm_pd0_pde,
+>         .mem = gp100_vmm_pd0_mem,
+> +       .pfn = gp100_vmm_pd0_pfn,
+> +       .pfn_clear = gp100_vmm_pd0_pfn_clear,
+> +       .pfn_unmap = gp100_vmm_pd0_pfn_unmap,
+>  };
+>
+>  static void
+> --
+> 2.20.1
+>
+> _______________________________________________
+> Nouveau mailing list
+> Nouveau@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/nouveau
