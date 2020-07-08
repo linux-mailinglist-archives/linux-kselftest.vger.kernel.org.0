@@ -2,91 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD6F217FF7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 08:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D251321802A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 09:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730020AbgGHGw1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jul 2020 02:52:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37322 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729960AbgGHGw1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jul 2020 02:52:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6B597AC1D;
-        Wed,  8 Jul 2020 06:52:25 +0000 (UTC)
-Date:   Wed, 8 Jul 2020 08:52:23 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Haren Myneni <haren@us.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of lib/
-Message-ID: <20200708065223.GA11164@alley>
-References: <20200707092117.963394-1-masahiroy@kernel.org>
- <20200707092117.963394-2-masahiroy@kernel.org>
+        id S1729222AbgGHHD5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jul 2020 03:03:57 -0400
+Received: from smtp-42af.mail.infomaniak.ch ([84.16.66.175]:58623 "EHLO
+        smtp-42af.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729856AbgGHHD5 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Jul 2020 03:03:57 -0400
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B1qzH2Lhxzlhcqk;
+        Wed,  8 Jul 2020 09:03:55 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4B1qz772rqzlh8TH;
+        Wed,  8 Jul 2020 09:03:47 +0200 (CEST)
+Subject: Re: [PATCH v19 07/12] landlock: Support filesystem access-control
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200707180955.53024-1-mic@digikod.net>
+ <20200707180955.53024-8-mic@digikod.net>
+ <6a80b712-a7b9-7b47-083a-08b7769016f8@infradead.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <b5d5326f-cf37-36f0-7bce-8494c5a65cb5@digikod.net>
+Date:   Wed, 8 Jul 2020 09:03:46 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200707092117.963394-2-masahiroy@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <6a80b712-a7b9-7b47-083a-08b7769016f8@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 2020-07-07 18:21:17, Masahiro Yamada wrote:
->   ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+
+On 07/07/2020 22:11, Randy Dunlap wrote:
+> Hi--
 > 
-> exists here in sub-directories of lib/ to keep the behavior of
-> commit 2464a609ded0 ("ftrace: do not trace library functions").
+> On 7/7/20 11:09 AM, Mickaël Salaün wrote:
+>> ---
+>>  arch/Kconfig                  |   7 +
+>>  arch/um/Kconfig               |   1 +
+>>  include/uapi/linux/landlock.h |  78 +++++
+>>  security/landlock/Kconfig     |   2 +-
+>>  security/landlock/Makefile    |   2 +-
+>>  security/landlock/fs.c        | 609 ++++++++++++++++++++++++++++++++++
+>>  security/landlock/fs.h        |  60 ++++
+>>  security/landlock/setup.c     |   7 +
+>>  security/landlock/setup.h     |   2 +
+>>  9 files changed, 766 insertions(+), 2 deletions(-)
+>>  create mode 100644 include/uapi/linux/landlock.h
+>>  create mode 100644 security/landlock/fs.c
+>>  create mode 100644 security/landlock/fs.h
+>>
+>> diff --git a/arch/Kconfig b/arch/Kconfig
+>> index 8cc35dc556c7..483b7476ac69 100644
+>> --- a/arch/Kconfig
+>> +++ b/arch/Kconfig
+>> @@ -845,6 +845,13 @@ config COMPAT_32BIT_TIME
+>>  config ARCH_NO_PREEMPT
+>>  	bool
+>>  
+>> +config ARCH_EPHEMERAL_STATES
+>> +	def_bool n
+>> +	help
+>> +	  An arch should select this symbol if it do not keep an internal kernel
 > 
-> Since that commit, not only the objects in lib/ but also the ones in
-> the sub-directories are excluded from ftrace (although the commit
-> description did not explicitly mention this).
+> 	                                       it does not
 > 
-> However, most of library functions in sub-directories are not so hot.
-> Re-add them to ftrace.
+>> +	  state for kernel objects such as inodes, but instead rely on something
 > 
-> Going forward, only the objects right under lib/ will be excluded.
- 
-> diff --git a/lib/livepatch/Makefile b/lib/livepatch/Makefile
-> index 9abdf615b088..295b94bff370 100644
-> --- a/lib/livepatch/Makefile
-> +++ b/lib/livepatch/Makefile
-> @@ -2,8 +2,6 @@
->  #
->  # Makefile for livepatch test code.
->  
-> -ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
-> -
->  obj-$(CONFIG_TEST_LIVEPATCH) += test_klp_atomic_replace.o \
->  				test_klp_callbacks_demo.o \
->  				test_klp_callbacks_demo2.o \
+> 	                                               instead relies on
+> 
+>> +	  else (e.g. the host kernel for an UML kernel).
+>> +
+>>  config ARCH_SUPPORTS_RT
+>>  	bool
+>>  
+> 
+> thanks.
+> 
 
-With this change it might be possible to remove also the last few
-lines that explicitly added $(CC_FLAGS_FTRACE) for two test modules.
-
-The two modules really needed these flags. But they are fine also
-for the other modules.
-
-We could do this later as a followup patch but it would be nice
-to do so here.
-
-Best Regards,
-Petr
-
-PS: BTW: The livepatch selftests fail in Linus's master now. But it
-seems to be for another reason. I am going to dig into it.
+Thanks Randy!
