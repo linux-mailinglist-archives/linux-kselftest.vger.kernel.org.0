@@ -2,68 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DF6217FC1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 08:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD6F217FF7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 08:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729748AbgGHGog (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jul 2020 02:44:36 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:35693 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726174AbgGHGog (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jul 2020 02:44:36 -0400
-Received: by mail-pj1-f67.google.com with SMTP id f16so763686pjt.0;
-        Tue, 07 Jul 2020 23:44:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xugiqIhWgDyPUIRQocIBP2J7Hrt09NF5Sv5m+G5LnOk=;
-        b=cD5B2mJuc+CNz6aUXmJeYz5HG0Qh7TbrvoHQMDKNiB5UxyHKuiw0xdKmLUbps96G2N
-         duFg4Z4KlJ4l3lhitgbAd328WYjR7OnmAhLnvWSqwMDMAnvQv4dt2hlIhduo5xyvc10Q
-         NFhwwEn0W53wyxBE6hPIfGeaxm8dY+tzwZbjiXodaUeIEcwWhhTN+kTJmlTOpVNq8J5s
-         tB1gcdogxTdW3v2Q0PhPY1D9VlRILLOB0kJqk0MjozyfWrIHPgALz5jAXweXrnB58APY
-         Mve8M66PW/Ky+454zA8oKwlVuY7rbUP9lWcZzGVYkJLFj3/USnCcVunO5/CzYXuswl/N
-         KHkw==
-X-Gm-Message-State: AOAM532Fvb4OB+KlV+V+V3DBnGCg35gZJ6KANk0YT2NG+MUSKeHXu3ik
-        vyFDbBFJdRi65RXi6aYsh6w=
-X-Google-Smtp-Source: ABdhPJwyhCGrZ1fEfmUBZILkNsv3VUQI7+NNzFiLMr2Fo6CDQGxckRs9AxmZZEbjbbKVbEinrPwqkA==
-X-Received: by 2002:a17:90a:3fc7:: with SMTP id u7mr8155757pjm.231.1594190675605;
-        Tue, 07 Jul 2020 23:44:35 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id r2sm15455857pfh.106.2020.07.07.23.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 23:44:34 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id EC8C8400DB; Wed,  8 Jul 2020 06:44:33 +0000 (UTC)
-Date:   Wed, 8 Jul 2020 06:44:33 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Dominik Czarnota <dominik.czarnota@trailofbits.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: kmod: Add module address visibility test
-Message-ID: <20200708064433.GD4332@42.do-not-panic.com>
-References: <202007031141.6AC2173@keescook>
+        id S1730020AbgGHGw1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jul 2020 02:52:27 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37322 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729960AbgGHGw1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Jul 2020 02:52:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6B597AC1D;
+        Wed,  8 Jul 2020 06:52:25 +0000 (UTC)
+Date:   Wed, 8 Jul 2020 08:52:23 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Haren Myneni <haren@us.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of lib/
+Message-ID: <20200708065223.GA11164@alley>
+References: <20200707092117.963394-1-masahiroy@kernel.org>
+ <20200707092117.963394-2-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202007031141.6AC2173@keescook>
+In-Reply-To: <20200707092117.963394-2-masahiroy@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 03, 2020 at 11:43:28AM -0700, Kees Cook wrote:
-> Make sure we don't regress the CAP_SYSLOG behavior of the module address
-> visibility via /proc/modules nor /sys/module/*/sections/*.
+On Tue 2020-07-07 18:21:17, Masahiro Yamada wrote:
+>   ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
 > 
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> exists here in sub-directories of lib/ to keep the behavior of
+> commit 2464a609ded0 ("ftrace: do not trace library functions").
+> 
+> Since that commit, not only the objects in lib/ but also the ones in
+> the sub-directories are excluded from ftrace (although the commit
+> description did not explicitly mention this).
+> 
+> However, most of library functions in sub-directories are not so hot.
+> Re-add them to ftrace.
+> 
+> Going forward, only the objects right under lib/ will be excluded.
+ 
+> diff --git a/lib/livepatch/Makefile b/lib/livepatch/Makefile
+> index 9abdf615b088..295b94bff370 100644
+> --- a/lib/livepatch/Makefile
+> +++ b/lib/livepatch/Makefile
+> @@ -2,8 +2,6 @@
+>  #
+>  # Makefile for livepatch test code.
+>  
+> -ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+> -
+>  obj-$(CONFIG_TEST_LIVEPATCH) += test_klp_atomic_replace.o \
+>  				test_klp_callbacks_demo.o \
+>  				test_klp_callbacks_demo2.o \
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+With this change it might be possible to remove also the last few
+lines that explicitly added $(CC_FLAGS_FTRACE) for two test modules.
 
-  Luis
+The two modules really needed these flags. But they are fine also
+for the other modules.
+
+We could do this later as a followup patch but it would be nice
+to do so here.
+
+Best Regards,
+Petr
+
+PS: BTW: The livepatch selftests fail in Linus's master now. But it
+seems to be for another reason. I am going to dig into it.
