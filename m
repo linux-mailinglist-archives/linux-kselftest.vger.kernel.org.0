@@ -2,108 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D251321802A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 09:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D528D218087
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 09:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729222AbgGHHD5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jul 2020 03:03:57 -0400
-Received: from smtp-42af.mail.infomaniak.ch ([84.16.66.175]:58623 "EHLO
-        smtp-42af.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729856AbgGHHD5 (ORCPT
+        id S1730058AbgGHHNr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jul 2020 03:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730055AbgGHHNr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jul 2020 03:03:57 -0400
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4B1qzH2Lhxzlhcqk;
-        Wed,  8 Jul 2020 09:03:55 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4B1qz772rqzlh8TH;
-        Wed,  8 Jul 2020 09:03:47 +0200 (CEST)
-Subject: Re: [PATCH v19 07/12] landlock: Support filesystem access-control
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
-        Richard Weinberger <richard@nod.at>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-References: <20200707180955.53024-1-mic@digikod.net>
- <20200707180955.53024-8-mic@digikod.net>
- <6a80b712-a7b9-7b47-083a-08b7769016f8@infradead.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <b5d5326f-cf37-36f0-7bce-8494c5a65cb5@digikod.net>
-Date:   Wed, 8 Jul 2020 09:03:46 +0200
-User-Agent: 
+        Wed, 8 Jul 2020 03:13:47 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABE6C061755;
+        Wed,  8 Jul 2020 00:13:46 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 8480CBC0D4;
+        Wed,  8 Jul 2020 07:13:44 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     mcgrof@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] Replace HTTP links with HTTPS ones: KMOD KERNEL MODULE LOADER - USERMODE HELPER
+Date:   Wed,  8 Jul 2020 09:13:37 +0200
+Message-Id: <20200708071337.13108-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-In-Reply-To: <6a80b712-a7b9-7b47-083a-08b7769016f8@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: fr
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+X-Spamd-Bar: +++++
+X-Spam-Level: *****
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-On 07/07/2020 22:11, Randy Dunlap wrote:
-> Hi--
-> 
-> On 7/7/20 11:09 AM, Mickaël Salaün wrote:
->> ---
->>  arch/Kconfig                  |   7 +
->>  arch/um/Kconfig               |   1 +
->>  include/uapi/linux/landlock.h |  78 +++++
->>  security/landlock/Kconfig     |   2 +-
->>  security/landlock/Makefile    |   2 +-
->>  security/landlock/fs.c        | 609 ++++++++++++++++++++++++++++++++++
->>  security/landlock/fs.h        |  60 ++++
->>  security/landlock/setup.c     |   7 +
->>  security/landlock/setup.h     |   2 +
->>  9 files changed, 766 insertions(+), 2 deletions(-)
->>  create mode 100644 include/uapi/linux/landlock.h
->>  create mode 100644 security/landlock/fs.c
->>  create mode 100644 security/landlock/fs.h
->>
->> diff --git a/arch/Kconfig b/arch/Kconfig
->> index 8cc35dc556c7..483b7476ac69 100644
->> --- a/arch/Kconfig
->> +++ b/arch/Kconfig
->> @@ -845,6 +845,13 @@ config COMPAT_32BIT_TIME
->>  config ARCH_NO_PREEMPT
->>  	bool
->>  
->> +config ARCH_EPHEMERAL_STATES
->> +	def_bool n
->> +	help
->> +	  An arch should select this symbol if it do not keep an internal kernel
-> 
-> 	                                       it does not
-> 
->> +	  state for kernel objects such as inodes, but instead rely on something
-> 
-> 	                                               instead relies on
-> 
->> +	  else (e.g. the host kernel for an UML kernel).
->> +
->>  config ARCH_SUPPORTS_RT
->>  	bool
->>  
-> 
-> thanks.
-> 
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
 
-Thanks Randy!
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+---
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
+
+ If there are any URLs to be removed completely or at least not HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+
+ tools/testing/selftests/kmod/kmod.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
+index 3702dbcc90a7..84409020a40f 100755
+--- a/tools/testing/selftests/kmod/kmod.sh
++++ b/tools/testing/selftests/kmod/kmod.sh
+@@ -128,7 +128,7 @@ test_reqs()
+ 	if [[ $KMOD_VERSION  -le 19 ]]; then
+ 		echo "$0: You need at least kmod 20" >&2
+ 		echo "kmod <= 19 is buggy, for details see:" >&2
+-		echo "http://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/libkmod/libkmod-module.c?id=fd44a98ae2eb5eb32161088954ab21e58e19dfc4" >&2
++		echo "https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/libkmod/libkmod-module.c?id=fd44a98ae2eb5eb32161088954ab21e58e19dfc4" >&2
+ 		exit $ksft_skip
+ 	fi
+ 
+-- 
+2.27.0
+
