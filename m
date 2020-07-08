@@ -2,110 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E9621929B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 23:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1E6219489
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 01:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726215AbgGHVhc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jul 2020 17:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S1725903AbgGHXqP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jul 2020 19:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725787AbgGHVhb (ORCPT
+        with ESMTP id S1726081AbgGHXqI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jul 2020 17:37:31 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77409C061A0B
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2020 14:37:31 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id y3so327551ybf.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2020 14:37:31 -0700 (PDT)
+        Wed, 8 Jul 2020 19:46:08 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF62CC08C5DC
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2020 16:46:06 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 207so182880pfu.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2020 16:46:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=PXdA0rNG8aGRV2ZzjVBiGuKlp3LZqY6KQhSWMv0h4t4=;
-        b=jlfj14tJJso5xJQh2ZFFUs+makolFUrtgyAdJTx9tMshD9dQ4nIfqgVBWvXrCFtUjW
-         tPjDOLfUBINVIxsCnn8HVfGIfL8tNijy3YNFr/s/B5grX6afT81g0nBf1biHctoipWCg
-         Mnk6HeZMMiUtYz0ZWIJZxSyOxK78K5wCTlYcvd7ItygslKBi9ig+BZvRjgJk2AUCDzVf
-         lVzsc9WErPnKTAEPfoVRpGsbI+2B/psJffTfyQAl9Z9Q8+H1qIi84CcGyndNSp+/7ICp
-         JfxQ4iZExzvGzvmwyHTcbqYqRU+UwwyM/6Uf+EKK/gZKa6VJb1hYZJW7mwXePCx9V6Im
-         KQwA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wjXXLmNasbmFovZrtae0ec77dHFuvWrKDR6UgZkQq1o=;
+        b=X1FU4G1VLFZex+8YiDlXau6+MCCQm8OG7mebpY9uGQDklifI/m4+5Xql3pSiPyk7wI
+         RYBJQUA75gBRMOCLqN/1/4LZs5wbPVYGqQNFaKqo3lGTVQWMw64uQh+BWsjO/eUaFuAL
+         5uUSeZQG+L+RIsEOS6bJ66gWqPlq1K4GAiO4s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=PXdA0rNG8aGRV2ZzjVBiGuKlp3LZqY6KQhSWMv0h4t4=;
-        b=WEoOk21nnQWGsDF18EwdhXvsBslgegI1OaPc5RJa5kw9mhH87bfL+4Uqkqxjes2Rle
-         s0BxfQ5rgTxX0syl9DjdtOiLnzQgIfbs0O0yd8rDTZi2XnpQIHSyDmmy3O6CeEti3+YL
-         sFBwVCFWmu3hFsihb7kzjwEjE6k/oBpQClhdaelIu3f2ygFYGZ79wJVUl1/+vFNYle1g
-         2Uz2IQHxju79t4exXqvpTEqftq7PVj9xs7edIxyv3cY7gtPL/cqzNwdOw6+asw+cpd+t
-         rYNiGi8kDzVH/WazlcPuUGsmk9YI7oPOqpiyYX4JqcndG7Ir46JNyry5rejgjhtwnBot
-         rArw==
-X-Gm-Message-State: AOAM53013GU/o7SYYuStUOsM305821Erce5cbxFUUXVJBGeo4G2+DJEe
-        sP+tO1/tJOrREWwfnhMk8djrw5xemys=
-X-Google-Smtp-Source: ABdhPJzIAK/YhDl8oNzm9DEGNOQQXAqOey/d2Kazv/0TNh0ZqLlJor388FJ1PxZwqByTgY20/BZETshRzyE=
-X-Received: by 2002:a25:ad03:: with SMTP id y3mr13948847ybi.411.1594244250479;
- Wed, 08 Jul 2020 14:37:30 -0700 (PDT)
-Date:   Wed,  8 Jul 2020 14:35:43 -0700
-Message-Id: <20200708213543.1365306-1-chenwi@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
-Subject: [PATCH] kunit: capture stderr on all make subprocess calls
-From:   Will Chen <chenwi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     Will Chen <chenwi@google.com>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wjXXLmNasbmFovZrtae0ec77dHFuvWrKDR6UgZkQq1o=;
+        b=bCY/3rjrgWgnHNUmoTobgUJGQvZhwSNlVUgqtgBfGMmT704WjX0s//tOcMpSruNe82
+         HOABlo/BsuyArgCBhl7IjUOuSJHnM4HktoWC20mJlfLhMO9B4jAaspbM4GWSuYWiMg4J
+         jbiLFiS8Ck/X360Nz9/Cob6FHKoV8K0KWvKMNCqU7jfDxXsqmBl+X+fH5ba8Gq7eg0j6
+         SeoDMRMBVLpSd8gzcBuKArVF11lJYbVZI9WhEf1JilUps4EWpVbJsC7j9GVXBpIteD/c
+         AUBcLGoeihWe5SCSaraEP6iFpli0/dNQ7PNG13ShzRjeYKE3p2TI14LJyXhsEst1bDIP
+         14/A==
+X-Gm-Message-State: AOAM533HTsSQNkXTczZfOqkKmL0rIe8yXuHh/wxsQsjc/KFk1ivS+8Nj
+        xy51j3jk6YUpT/7Y3wAFc5IrPA==
+X-Google-Smtp-Source: ABdhPJzcShw6xLbb9Fq4V0uhaRKl2b8m8iqOu3ZQoUcx4EgzAu79u0+9nu96sxU6kKMTElpnEagW1g==
+X-Received: by 2002:aa7:8e90:: with SMTP id a16mr53417728pfr.84.1594251966115;
+        Wed, 08 Jul 2020 16:46:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v11sm807844pfc.108.2020.07.08.16.46.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jul 2020 16:46:05 -0700 (PDT)
+Date:   Wed, 8 Jul 2020 16:46:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-kernel@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Matt Denton <mpdenton@google.com>,
+        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
+        Robert Sesek <rsesek@google.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, containers@lists.linux-foundation.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 1/7] net/scm: Regularize compat handling of
+ scm_detach_fds()
+Message-ID: <202007081636.5458B0B@keescook>
+References: <20200706201720.3482959-1-keescook@chromium.org>
+ <20200706201720.3482959-2-keescook@chromium.org>
+ <20200707114103.lkfbt3kdtturp42z@wittgenstein>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200707114103.lkfbt3kdtturp42z@wittgenstein>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Direct stderr to subprocess.STDOUT so error messages get included in the
-subprocess.CalledProcessError exceptions output field. This results in
-more meaningful error messages for the user.
+On Tue, Jul 07, 2020 at 01:41:03PM +0200, Christian Brauner wrote:
+> On Mon, Jul 06, 2020 at 01:17:14PM -0700, Kees Cook wrote:
+> > Duplicate the cleanups from commit 2618d530dd8b ("net/scm: cleanup
+> > scm_detach_fds") into the compat code.
+> > 
+> > Move the check added in commit 1f466e1f15cf ("net: cleanly handle kernel
+> > vs user buffers for ->msg_control") to before the compat call, even
+> > though it should be impossible for an in-kernel call to also be compat.
+> > 
+> > Correct the int "flags" argument to unsigned int to match fd_install()
+> > and similar APIs.
+> > 
+> > Regularize any remaining differences, including a whitespace issue,
+> > a checkpatch warning, and add the check from commit 6900317f5eff ("net,
+> > scm: fix PaX detected msg_controllen overflow in scm_detach_fds") which
+> > fixed an overflow unique to 64-bit. To avoid confusion when comparing
+> > the compat handler to the native handler, just include the same check
+> > in the compat handler.
+> > 
+> > Fixes: 48a87cc26c13 ("net: netprio: fd passed in SCM_RIGHTS datagram not set correctly")
+> > Fixes: d84295067fc7 ("net: net_cls: fd passed in SCM_RIGHTS datagram not set correctly")
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> 
+> Thanks. Just a comment below.
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-This is already being done in the make_allyesconfig method. Do the same
-for make_mrproper, make_olddefconfig, and make methods.
+Thanks!
 
-With this, failures on unclean trees [1] will give users an error
-message that includes:
-"The source tree is not clean, please run 'make ARCH=um mrproper'"
+> >  include/net/scm.h |  1 +
+> >  net/compat.c      | 55 +++++++++++++++++++++--------------------------
+> >  net/core/scm.c    | 18 ++++++++--------
+> >  3 files changed, 35 insertions(+), 39 deletions(-)
+> > 
+> > diff --git a/include/net/scm.h b/include/net/scm.h
+> > index 1ce365f4c256..581a94d6c613 100644
+> > --- a/include/net/scm.h
+> > +++ b/include/net/scm.h
+> > @@ -37,6 +37,7 @@ struct scm_cookie {
+> >  #endif
+> >  };
+> >  
+> > +int __scm_install_fd(struct file *file, int __user *ufd, unsigned int o_flags);
+> >  void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm);
+> >  void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm);
+> >  int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *scm);
+> > diff --git a/net/compat.c b/net/compat.c
+> > index 5e3041a2c37d..27d477fdcaa0 100644
+> > --- a/net/compat.c
+> > +++ b/net/compat.c
+> > @@ -281,39 +281,31 @@ int put_cmsg_compat(struct msghdr *kmsg, int level, int type, int len, void *dat
+> >  	return 0;
+> >  }
+> >  
+> > -void scm_detach_fds_compat(struct msghdr *kmsg, struct scm_cookie *scm)
+> > +static int scm_max_fds_compat(struct msghdr *msg)
+> >  {
+> > -	struct compat_cmsghdr __user *cm = (struct compat_cmsghdr __user *) kmsg->msg_control;
+> > -	int fdmax = (kmsg->msg_controllen - sizeof(struct compat_cmsghdr)) / sizeof(int);
+> > -	int fdnum = scm->fp->count;
+> > -	struct file **fp = scm->fp->fp;
+> > -	int __user *cmfptr;
+> > -	int err = 0, i;
+> > +	if (msg->msg_controllen <= sizeof(struct compat_cmsghdr))
+> > +		return 0;
+> > +	return (msg->msg_controllen - sizeof(struct compat_cmsghdr)) / sizeof(int);
+> > +}
+> >  
+> > -	if (fdnum < fdmax)
+> > -		fdmax = fdnum;
+> > +void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
+> > +{
+> > +	struct compat_cmsghdr __user *cm =
+> > +		(struct compat_cmsghdr __user *)msg->msg_control;
+> > +	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
+> > +	int fdmax = min_t(int, scm_max_fds_compat(msg), scm->fp->count);
+> 
+> Just a note that SCM_RIGHTS fd-sending is limited to 253 (SCM_MAX_FD)
+> fds so min_t should never ouput > SCM_MAX_FD here afaict.
+> 
+> > +	int __user *cmsg_data = CMSG_USER_DATA(cm);
+> > +	int err = 0, i;
+> >  
+> > -	for (i = 0, cmfptr = (int __user *) CMSG_COMPAT_DATA(cm); i < fdmax; i++, cmfptr++) {
+> > -		int new_fd;
+> > -		err = security_file_receive(fp[i]);
+> > +	for (i = 0; i < fdmax; i++) {
+> > +		err = __scm_install_fd(scm->fp->fp[i], cmsg_data + i, o_flags);
+> >  		if (err)
+> >  			break;
+> > -		err = get_unused_fd_flags(MSG_CMSG_CLOEXEC & kmsg->msg_flags
+> > -					  ? O_CLOEXEC : 0);
+> > -		if (err < 0)
+> > -			break;
+> > -		new_fd = err;
+> > -		err = put_user(new_fd, cmfptr);
+> > -		if (err) {
+> > -			put_unused_fd(new_fd);
+> > -			break;
+> > -		}
+> > -		/* Bump the usage count and install the file. */
+> > -		fd_install(new_fd, get_file(fp[i]));
+> >  	}
+> >  
+> >  	if (i > 0) {
+> >  		int cmlen = CMSG_COMPAT_LEN(i * sizeof(int));
+> > +
+> >  		err = put_user(SOL_SOCKET, &cm->cmsg_level);
+> >  		if (!err)
+> >  			err = put_user(SCM_RIGHTS, &cm->cmsg_type);
+> > @@ -321,16 +313,19 @@ void scm_detach_fds_compat(struct msghdr *kmsg, struct scm_cookie *scm)
+> >  			err = put_user(cmlen, &cm->cmsg_len);
+> >  		if (!err) {
+> >  			cmlen = CMSG_COMPAT_SPACE(i * sizeof(int));
+> > -			kmsg->msg_control += cmlen;
+> > -			kmsg->msg_controllen -= cmlen;
+> > +			if (msg->msg_controllen < cmlen)
+> > +				cmlen = msg->msg_controllen;
+> > +			msg->msg_control += cmlen;
+> > +			msg->msg_controllen -= cmlen;
+> >  		}
+> >  	}
+> > -	if (i < fdnum)
+> > -		kmsg->msg_flags |= MSG_CTRUNC;
+> > +
+> > +	if (i < scm->fp->count || (scm->fp->count && fdmax <= 0))
+> 
+> I think fdmax can't be < 0 after your changes? scm_max_fds() guarantees
+> that fdmax is always >= 0 and min_t() guarantees that fdmax <= scm->fp->count.
+> So the check should technically be :)
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=205219
+You left our your suggestion! :) But, I think you mean "== 0" ?
 
-Signed-off-by: Will Chen <chenwi@google.com>
----
- tools/testing/kunit/kunit_kernel.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The check actually comes from the refactoring from commit 2618d530dd8b
+("net/scm: cleanup scm_detach_fds") which I mostly copy/pasted into
+compat. However, fdmax is an int, and scm->fp->count is signed so it's
+possible fdmax is < 0 (but I don't think count can actually ever be <
+0), but I don't want to refactor all the types just to fix this boundary
+condition. :)
 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 63dbda2d029f..e20e2056cb38 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -34,7 +34,7 @@ class LinuxSourceTreeOperations(object):
- 
- 	def make_mrproper(self):
- 		try:
--			subprocess.check_output(['make', 'mrproper'])
-+			subprocess.check_output(['make', 'mrproper'], stderr=subprocess.STDOUT)
- 		except OSError as e:
- 			raise ConfigError('Could not call make command: ' + e)
- 		except subprocess.CalledProcessError as e:
-@@ -47,7 +47,7 @@ class LinuxSourceTreeOperations(object):
- 		if build_dir:
- 			command += ['O=' + build_dir]
- 		try:
--			subprocess.check_output(command, stderr=subprocess.PIPE)
-+			subprocess.check_output(command, stderr=subprocess.STDOUT)
- 		except OSError as e:
- 			raise ConfigError('Could not call make command: ' + e)
- 		except subprocess.CalledProcessError as e:
-@@ -77,7 +77,7 @@ class LinuxSourceTreeOperations(object):
- 		if build_dir:
- 			command += ['O=' + build_dir]
- 		try:
--			subprocess.check_output(command)
-+			subprocess.check_output(command, stderr=subprocess.STDOUT)
- 		except OSError as e:
- 			raise BuildError('Could not call execute make: ' + e)
- 		except subprocess.CalledProcessError as e:
 -- 
-2.27.0.383.g050319c2ae-goog
-
+Kees Cook
