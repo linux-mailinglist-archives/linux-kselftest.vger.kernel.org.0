@@ -2,149 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE06E217E5F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 06:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62F5217E63
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jul 2020 06:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbgGHEaj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jul 2020 00:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbgGHEaj (ORCPT
+        id S1728441AbgGHEbb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jul 2020 00:31:31 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41078 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbgGHEbb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jul 2020 00:30:39 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3F9C08C5E1
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 21:30:38 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id l17so1492166wmj.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 21:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=9z8AqNAtfLqJboxfTSuy4+9Gg/kN9QYsVqfQLWbeo4w=;
-        b=gwkq4+Hlakm3izkfm3Vx8ZZCM5LOzO3cymjOSh4+vM8T7cBwdjsaTUVd9kq/x6E+Nh
-         LNC4usHx3RpnjI9YfPVuOYlIHMxSq1nB5UkuqJzdB3PaMh+PFXIlNStED6a1DCPIfivL
-         ZGphzvNanNKVijraSFJb+UugoBCX9/HxIAv7Y=
+        Wed, 8 Jul 2020 00:31:31 -0400
+Received: by mail-pg1-f196.google.com with SMTP id g67so20156512pgc.8;
+        Tue, 07 Jul 2020 21:31:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=9z8AqNAtfLqJboxfTSuy4+9Gg/kN9QYsVqfQLWbeo4w=;
-        b=Eql+U8jvJCMy4D0+mK86uEvpJ9cqE9Al8bYGZk02OUyhzDEZs/DC3ShRpJYs3ZQjiv
-         Sx2xEZMdF1ljCL31bmg1D3376D0m+yjiMf5rNtdu8ev7azZCM+941dPMkxGWrMkFXcjl
-         dhXFYLm3XaiOvgMFGCM6AGFBGkWlGZeEZW+/PCXGJWyWu8cm2/cQMYxVbbnl6Mai7DXl
-         ZedhK82vG3ahF5OhM214IubaBfz+BUn/NEQFn1JMz3TRiVGflo+OKwBKNDDltRo+I7MP
-         8BFpbYd7TyyoNrqR+ILtuZCAgiWanJuBPL3ZYTw7Oof1xsj20kPpdmXb6yT6909SUu13
-         Ob4A==
-X-Gm-Message-State: AOAM531Fjt+46tO/aDbrsbupFVAyXjR9/blgDKnpd9LE2m72VdZQw2+d
-        lf+f57LCvRwMKur/zchpPu+0pg==
-X-Google-Smtp-Source: ABdhPJxz1HCKFHKGJAHeBxv2ayO0myaozG6pLXUA04b6prEWm0Cz5Rezi42VTrPu7hajJjMaPp0QIA==
-X-Received: by 2002:a7b:cd09:: with SMTP id f9mr7627559wmj.160.1594182637061;
-        Tue, 07 Jul 2020 21:30:37 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id q1sm3577207wro.82.2020.07.07.21.30.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 21:30:36 -0700 (PDT)
-Subject: Re: [PATCH v10 7/9] misc: bcm-vk: add Broadcom VK driver
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w74eNERLG2pgyjUdSRcYW9SUoyc7gG8Z+LPaMqm+zH4=;
+        b=bGr877LUdCQ0kuSTd6Jzf41uJHQKYxSNHoRUTRR4j8FtJtlOyW0FoOwCvJ0t/mozML
+         9fOZVHGHIAIbjMyLZ5VM5fRv3stTWKk7HF0lUxN31Qo/mFTe5Ut9rSku6IXj4n2wJM6K
+         jRqY4pu+DIOuIYgJGMOqyQROrz4ULc6SXGN0zIvDNqz/VX4OSlAk9OI13oUJdMhZUjTr
+         qZgqSTZw5FOEBGtJoz/pGXZj0m6zw5LLFpapPHSoVx6UcuJ7qzaaFud0REjTTWVhI14S
+         rCO2SGeobH8T5XoDsIg9G7ylBOjEFE1WfZP3pDWJ4TPg+VZ9fVXHT0Vf3ax++zbqU7ve
+         sHdA==
+X-Gm-Message-State: AOAM530ICR02122zUYQomrMS4iQ1qTHs/XZYJDQeu7GC25eX8vFqkuWi
+        ghI+l8FtpVk6T3WVUxjSv2U=
+X-Google-Smtp-Source: ABdhPJxHZU8n57bHyUA87/h7IOAVFo14RjremkjbHa0piNVeEl4DjqKtxGu5JTtc4Tf00fVU/dHDDQ==
+X-Received: by 2002:a05:6a00:2c1:: with SMTP id b1mr40074651pft.159.1594182690346;
+        Tue, 07 Jul 2020 21:31:30 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id w9sm3745302pja.39.2020.07.07.21.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 21:31:29 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id A30C1400DB; Wed,  8 Jul 2020 04:31:28 +0000 (UTC)
+Date:   Wed, 8 Jul 2020 04:31:28 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-References: <20200706232309.12010-1-scott.branden@broadcom.com>
- <20200706232309.12010-8-scott.branden@broadcom.com>
- <202007071700.C567BA7B@keescook>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <400ebe0d-6b04-a211-7d80-cc8b0bf4d7df@broadcom.com>
-Date:   Tue, 7 Jul 2020 21:30:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Frank Rowand <frowand.list@gmail.com>, catalin.marinas@arm.com,
+        will@kernel.org, monstr@monstr.eu,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        paulus@samba.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v5 01/12] vmlinux.lds.h: add linker section for KUnit
+ test suites
+Message-ID: <20200708043128.GY4332@42.do-not-panic.com>
+References: <20200626210917.358969-1-brendanhiggins@google.com>
+ <20200626210917.358969-2-brendanhiggins@google.com>
+ <202006261416.F4EAAE47E3@keescook>
+ <CAFd5g47vu5vmrXnS0sLu+hdC2HmYz7GY82sE8rhcHfNkuC1NRw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <202007071700.C567BA7B@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFd5g47vu5vmrXnS0sLu+hdC2HmYz7GY82sE8rhcHfNkuC1NRw@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri, Jun 26, 2020 at 02:22:11PM -0700, Brendan Higgins wrote:
+> On Fri, Jun 26, 2020 at 2:20 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Fri, Jun 26, 2020 at 02:09:06PM -0700, Brendan Higgins wrote:
+> > > Add a linker section where KUnit can put references to its test suites.
+> > > This patch is the first step in transitioning to dispatching all KUnit
+> > > tests from a centralized executor rather than having each as its own
+> > > separate late_initcall.
+> > >
+> > > Co-developed-by: Iurii Zaikin <yzaikin@google.com>
+> > > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> > > ---
+> > >  include/asm-generic/vmlinux.lds.h | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> > > index db600ef218d7d..4f9b036fc9616 100644
+> > > --- a/include/asm-generic/vmlinux.lds.h
+> > > +++ b/include/asm-generic/vmlinux.lds.h
+> > > @@ -881,6 +881,13 @@
+> > >               KEEP(*(.con_initcall.init))                             \
+> > >               __con_initcall_end = .;
+> > >
+> > > +/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+> >
+> > Nit on naming:
+> >
+> > > +#define KUNIT_TEST_SUITES                                            \
+> >
+> > I would call this KUNIT_TABLE to maintain the same names as other things
+> > of this nature.
+> >
+> > > +             . = ALIGN(8);                                           \
+> > > +             __kunit_suites_start = .;                               \
+> > > +             KEEP(*(.kunit_test_suites))                             \
+> > > +             __kunit_suites_end = .;
+> > > +
+> > >  #ifdef CONFIG_BLK_DEV_INITRD
+> > >  #define INIT_RAM_FS                                                  \
+> > >       . = ALIGN(4);                                                   \
+> > > @@ -1056,6 +1063,7 @@
+> > >               INIT_CALLS                                              \
+> > >               CON_INITCALL                                            \
+> > >               INIT_RAM_FS                                             \
+> > > +             KUNIT_TEST_SUITES                                       \
+> > >       }
+> >
+> > Nack: this must be in INIT_DATA, not in INIT_DATA_SECTION. Not all
+> > architectures use the INIT_DATA_SECTION macro (e.g. arm64), but everything
+> > uses INIT_DATA.
+> 
+> Oh, maybe that would eliminate the need for the other linkerscript
+> patches? That would be nice.
 
+Curious, did changing it as Kees suggest fix it for m68k?
 
-On 2020-07-07 5:03 p.m., Kees Cook wrote:
-> On Mon, Jul 06, 2020 at 04:23:07PM -0700, Scott Branden wrote:
->> Add Broadcom VK driver offload engine.
->> This driver interfaces to the VK PCIe offload engine to perform
->> should offload functions as video transcoding on multiple streams
->> in parallel.  VK device is booted from files loaded using
->> request_firmware_into_buf mechanism.  After booted card status is updated
->> and messages can then be sent to the card.
->> Such messages contain scatter gather list of addresses
->> to pull data from the host to perform operations on.
->>
->> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
->> Signed-off-by: Desmond Yan <desmond.yan@broadcom.com>
-> nit: your S-o-b chain doesn't make sense (I would expect you at the end
-> since you're sending it and showing as the Author). Is it Co-developed-by?
-> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
-Yes, Co-developed-by.  Will adjust.
->
->> [...]
->> +
->> +		max_buf = SZ_4M;
->> +		bufp = dma_alloc_coherent(dev,
->> +					  max_buf,
->> +					  &boot_dma_addr, GFP_KERNEL);
->> +		if (!bufp) {
->> +			dev_err(dev, "Error allocating 0x%zx\n", max_buf);
->> +			ret = -ENOMEM;
->> +			goto err_buf_out;
->> +		}
->> +
->> +		bcm_vk_buf_notify(vk, bufp, boot_dma_addr, max_buf);
->> +	} else {
->> +		dev_err(dev, "Error invalid image type 0x%x\n", load_type);
->> +		ret = -EINVAL;
->> +		goto err_buf_out;
->> +	}
->> +
->> +	ret = request_partial_firmware_into_buf(&fw, filename, dev,
->> +						bufp, max_buf, 0);
-> Unless I don't understand what's happening here, this needs to be
-> reordered if you're going to keep Mimi happy and disallow the device
-> being able to see the firmware before it has been verified. (i.e. please
-> load the firmware before mapping DMA across the buffer.)
-I don't understand your concern here.  We request partial firmware into 
-a buffer that we allocated.
-After loading it we signal the card the firmware has been loaded into 
-that memory region.
-The card then pulls the data into its internal memory.  And, 
-authenticates it.
-
-Even if the card randomly read and writes to that buffer it shouldn't 
-matter to the linux kernel security subsystem.
-It passed the security check already when placed in the buffer.
-If there is a concern could we add an "nosecurity" 
-request_partial_firmware_into_buf instead as there is no need for any 
-security on this particular request?
-
+  Luis
