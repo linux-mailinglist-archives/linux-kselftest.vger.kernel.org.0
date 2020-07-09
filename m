@@ -2,159 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D8E21A07D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 15:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D30F21A3FC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 17:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgGINIR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Jul 2020 09:08:17 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35601 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726785AbgGINIR (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Jul 2020 09:08:17 -0400
-Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jtWHd-0001Iq-Q4; Thu, 09 Jul 2020 13:08:13 +0000
-Date:   Thu, 9 Jul 2020 15:08:11 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
-        Matt Denton <mpdenton@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
-        Chris Palmer <palmer@google.com>,
-        Robert Sesek <rsesek@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, containers@lists.linux-foundation.org,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 6/7] seccomp: Introduce addfd ioctl to seccomp user
- notifier
-Message-ID: <20200709130811.zjyn6ptsd3rss3j4@wittgenstein>
-References: <20200706201720.3482959-1-keescook@chromium.org>
- <20200706201720.3482959-7-keescook@chromium.org>
- <20200707133049.nfxc6vz6vcs26m3b@wittgenstein>
- <202007082307.EB5BAD3A0@keescook>
+        id S1727944AbgGIPrt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Jul 2020 11:47:49 -0400
+Received: from mga07.intel.com ([134.134.136.100]:65354 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726519AbgGIPrt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Jul 2020 11:47:49 -0400
+IronPort-SDR: zWcAl1CBz8ho4wdzuI0K6pR9lYnbxKDPvdNE0k6B8RqIeHIsgDdrlRdwRftVfw8gnYRXjShmqN
+ Gun1BpHFSIIw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="212931531"
+X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
+   d="scan'208";a="212931531"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 08:47:48 -0700
+IronPort-SDR: cE9JhtxvrZXc4jXdrrCsehjy1soh2GYV/VEffc4pqCe90cpz7eO/WgThxiLkUkSOt1RsCnX3pA
+ iA1cbdX19Rog==
+X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
+   d="scan'208";a="324261360"
+Received: from otcsectest.jf.intel.com (HELO 64c96d3be97b) ([10.54.30.81])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 08:47:48 -0700
+Date:   Thu, 9 Jul 2020 15:44:12 +0000
+From:   "Andersen, John" <john.s.andersen@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        corbet@lwn.net, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        x86@kernel.org, hpa@zytor.com, shuah@kernel.org,
+        liran.alon@oracle.com, drjones@redhat.com,
+        rick.p.edgecombe@intel.com, kristen@linux.intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, mchehab+huawei@kernel.org,
+        gregkh@linuxfoundation.org, paulmck@kernel.org,
+        pawan.kumar.gupta@linux.intel.com, jgross@suse.com,
+        mike.kravetz@oracle.com, oneukum@suse.com, luto@kernel.org,
+        peterz@infradead.org, fenghua.yu@intel.com,
+        reinette.chatre@intel.com, vineela.tummalapalli@intel.com,
+        dave.hansen@linux.intel.com, arjan@linux.intel.com,
+        caoj.fnst@cn.fujitsu.com, bhe@redhat.com, nivedita@alum.mit.edu,
+        keescook@chromium.org, dan.j.williams@intel.com,
+        eric.auger@redhat.com, aaronlewis@google.com, peterx@redhat.com,
+        makarandsonare@google.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: Re: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
+Message-ID: <20200709154412.GA25@64c96d3be97b>
+References: <20200617190757.27081-1-john.s.andersen@intel.com>
+ <20200617190757.27081-3-john.s.andersen@intel.com>
+ <0fa9682e-59d4-75f7-366f-103d6b8e71b8@intel.com>
+ <20200618144314.GB23@258ff54ff3c0>
+ <124a59a3-a603-701b-e3bb-61e83d70b20d@intel.com>
+ <20200707211244.GN20096@linux.intel.com>
+ <19b97891-bbb0-1061-5971-549a386f7cfb@intel.com>
+ <31eb5b00-9e2a-aa10-0f20-4abc3cd35112@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202007082307.EB5BAD3A0@keescook>
+In-Reply-To: <31eb5b00-9e2a-aa10-0f20-4abc3cd35112@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 11:12:02PM -0700, Kees Cook wrote:
-> On Tue, Jul 07, 2020 at 03:30:49PM +0200, Christian Brauner wrote:
-> > Hm, maybe change that description to sm like:
+On Tue, Jul 07, 2020 at 11:51:54PM +0200, Paolo Bonzini wrote:
+> On 07/07/20 23:48, Dave Hansen wrote:
+> > On 7/7/20 2:12 PM, Sean Christopherson wrote:
+> >>>>> Let's say Intel loses its marbles and adds a CR4 bit that lets userspace
+> >>>>> write to kernel memory.  Linux won't set it, but an attacker would go
+> >>>>> after it, first thing.
+> >> That's an orthogonal to pinning.  KVM never lets the guest set CR4 bits that
+> >> are unknown to KVM.  Supporting CR4.NO_MARBLES would require an explicit KVM
+> >> change to allow it to be set by the guest, and would also require a userspace
+> >> VMM to expose NO_MARBLES to the guest.
+> >>
+> >> That being said, this series should supporting pinning as much as possible,
+> >> i.e. if the bit can be exposed to the guest and doesn't require special
+> >> handling in KVM, allow it to be pinned.  E.g. TS is a special case because
+> >> pinning would require additional emulator support and IMO isn't interesting
+> >> enough to justify the extra complexity.  At a glance, I don't see anything
+> >> that would prevent pinning FSGSBASE.
 > > 
-> > [...]
-> 
-> Cool, yeah. Thanks! I've tweaked it a little more
-> 
-> > > +	/* 24 is original sizeof(struct seccomp_notif_addfd) */
-> > > +	if (size < 24 || size >= PAGE_SIZE)
-> > > +		return -EINVAL;
+> > Thanks for filling in the KVM picture.
 > > 
-> > Hm, so maybe add the following:
+> > If we're supporting as much pinning as possible, can we also add
+> > something to make it inconvenient for someone to both make a CR4 bit
+> > known to KVM *and* ignore the pinning aspects?
 > > 
-> > #define SECCOMP_NOTIFY_ADDFD_VER0 24
-> > #define SECCOMP_NOTIFY_ADDFD_LATEST SECCOMP_NOTIFY_ADDFD_VER0
+> > We should really make folks think about it.  Something like:
 > > 
-> > and then place:
+> > #define KVM_CR4_KNOWN 0xff
+> > #define KVM_CR4_PIN_ALLOWED 0xf0
+> > #define KVM_CR4_PIN_NOT_ALLOWED 0x0f
 > > 
-> > BUILD_BUG_ON(sizeof(struct seccomp_notify_addfd) < SECCOMP_NOTIFY_ADDFD_VER0);
-> > BUILD_BUG_ON(sizeof(struct open_how) != SECCOMP_NOTIFY_ADDFD_LATEST);
-> 
-> Yes, good idea (BTW, did the EA syscall docs land?)
-
-I'll be giving a kernel summit talk about extensible syscalls to come to
-some agreement on a few things. After this we'll update the doc patch
-we have now and merge it. :)
-
-> 
-> I've made these SECCOMP_NOTIFY_ADDFD_SIZE_* to match your examples below
-> (i.e.  I added "SIZE" to what you suggested above).
-
-Yup, sounds good!
-
-> 
-> > somewhere which is what we do for clone3(), openat2() and others to
-> > catch build-time nonsense.
+> > BUILD_BUG_ON(KVM_CR4_KNOWN !=
+> >              (KVM_CR4_PIN_ALLOWED|KVM_CR4_PIN_NOT_ALLOWED));
 > > 
-> > include/uapi/linux/perf_event.h:#define PERF_ATTR_SIZE_VER0     64      /* sizeof first published struct */
-> > include/uapi/linux/sched.h:#define CLONE_ARGS_SIZE_VER0 64 /* sizeof first published struct */
-> > include/uapi/linux/sched/types.h:#define SCHED_ATTR_SIZE_VER0   48      /* sizeof first published struct */
-> > include/linux/fcntl.h:#define OPEN_HOW_SIZE_VER0        24 /* sizeof first published struct */
-> > include/linux/fcntl.h:#define OPEN_HOW_SIZE_LATEST      OPEN_HOW_SIZE_VER0
+> > So someone *MUST* make an active declaration about new bits being pinned
+> > or not?
 > 
-> The ..._SIZE_VER0 and ...LATEST stuff doesn't seem useful to export via
-> UAPI. Above, 2 of the 3 export to uapi. Is there a specific rationale
-> for which should and which shouldn't?
+> I would just make all unknown bits pinnable (or perhaps all CR4 bits in
+> general).
+> 
 
-I think openat2() just didn't think it was useful. I find them helpful
-because I often update codebase to the newest struct I know about:
+Sounds good. I'll make it this way in the next revision. I'll do the same for
+CR0 (unless I hear otherwise). I've added the last paragraph here under the
+ALLOWED MSRs data section.
 
-struct clone_args {
-	__aligned_u64 flags;
-	__aligned_u64 pidfd;
-	__aligned_u64 child_tid;
-	__aligned_u64 parent_tid;
-	__aligned_u64 exit_signal;
-	__aligned_u64 stack;
-	__aligned_u64 stack_size;
-	__aligned_u64 tls;
-/* CLONE_ARGS_SIZE_VER0 64 */
-	__aligned_u64 set_tid;
-	__aligned_u64 set_tid_size;
-/* CLONE_ARGS_SIZE_VER1 80 */
-	__aligned_u64 cgroup;
-/* CLONE_ARGS_SIZE_VER2 88 */
-};
+data:
+        Bits which may be pinned.
 
-But bumping it means I can't use:
+        Attempting to pin bits other than these will result in a failure when
+        writing to the respective CR pinned MSR.
 
-clone3(&clone_args, sizeof(clone));
+        Bits which are allowed to be pinned default to WP for CR0 and SMEP,
+        SMAP, and UMIP for CR4.
 
-everywhere in the codebase because I'm fscking over everyone on older
-kernels now. :)
-
-Soin various parts of the codebase I will just use:
-
-clone3(&clone_args, CLONE_ARGS_SIZE_VER0);
-
-because I don't care about any of the additional features and I don't
-need the kernel to copy any of the other stuff. Then in other parts of
-the codebase I want to set_tid so I use:
-
-clone3(&clone_args, CLONE_ARGS_SIZE_VER1);
-
-This way I can also set "templates", i.e.
-
-struct clone_args clone_template1 = {
-	.flags		|= CLONE_CLEAR_SIGHAND,
-	.exit_signal	= SIGCHLD,
-	.set_tid	= 1000,
-	.set_tid_size	= 1,
-};
-
-and then use the same struct for:
-
-clone3(&clone_template1, CLONE_ARGS_SIZE_VER0);
-clone3(&clone_template1, CLONE_ARGS_SIZE_VER1);
-
-Whereas sizeof(clone_template1) would always give me
-CLONE_ARGS_SIZE_VER2.
-
-Christian
+        The host VMM may modify the set of allowed bits. However, only the above
+        have been tested to work. Allowing the guest to pin other bits may or
+        may not be compatible with KVM.
