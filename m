@@ -2,53 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DA921A41E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 17:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DD221A4A8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 18:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgGIP4r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Jul 2020 11:56:47 -0400
-Received: from mga09.intel.com ([134.134.136.24]:23655 "EHLO mga09.intel.com"
+        id S1726729AbgGIQWT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Jul 2020 12:22:19 -0400
+Received: from mga05.intel.com ([192.55.52.43]:42992 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726497AbgGIP4q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Jul 2020 11:56:46 -0400
-IronPort-SDR: KJ5JUa9LgJItBeKe4rz4UdWgIFA7ASNj0VMyyNiUfpy9bFo72UXCey1lqpNVQm6+rJTF31O1Zb
- O003PTgXeGjw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="149508395"
+        id S1726339AbgGIQWS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Jul 2020 12:22:18 -0400
+IronPort-SDR: gPtoevKR9wYmpYoNRTCRVO+Kw7aZBsY4vHio6teZa2rPan9OPFSgYosRpf5dB/LicvOEHyf4lX
+ xd7+SbhUfJOw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="232906681"
 X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
-   d="scan'208";a="149508395"
+   d="scan'208";a="232906681"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 08:56:45 -0700
-IronPort-SDR: myidNpIhd1R1WE/IoJ0NU3MH9h/JFnLjAMF9TUaQ9XtENmEVFAn/2BKF5Y0USxBlSvjYwlbBtD
- /q5r4e4h2r8g==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 09:22:16 -0700
+IronPort-SDR: D7zqjH9MDNrm28vsej5a56Wko94Qh8fUs/JXfMna+Ma3qiiPw8cFANb6nuGnbvp5X31yPzg8CJ
+ 342O5ykwnIYQ==
 X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
-   d="scan'208";a="457952181"
+   d="scan'208";a="457962922"
 Received: from srinatha-mobl1.amr.corp.intel.com (HELO [10.255.5.187]) ([10.255.5.187])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 08:56:40 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 09:22:10 -0700
 Subject: Re: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
-To:     "Andersen, John" <john.s.andersen@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        corbet@lwn.net, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        x86@kernel.org, hpa@zytor.com, shuah@kernel.org,
-        liran.alon@oracle.com, drjones@redhat.com,
-        rick.p.edgecombe@intel.com, kristen@linux.intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, mchehab+huawei@kernel.org,
-        gregkh@linuxfoundation.org, paulmck@kernel.org,
-        pawan.kumar.gupta@linux.intel.com, jgross@suse.com,
-        mike.kravetz@oracle.com, oneukum@suse.com, luto@kernel.org,
-        peterz@infradead.org, fenghua.yu@intel.com,
-        reinette.chatre@intel.com, vineela.tummalapalli@intel.com,
-        dave.hansen@linux.intel.com, arjan@linux.intel.com,
-        caoj.fnst@cn.fujitsu.com, bhe@redhat.com, nivedita@alum.mit.edu,
-        keescook@chromium.org, dan.j.williams@intel.com,
-        eric.auger@redhat.com, aaronlewis@google.com, peterx@redhat.com,
-        makarandsonare@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     "Andersen, John" <john.s.andersen@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Liran Alon <liran.alon@oracle.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
+        vineela.tummalapalli@intel.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        caoj.fnst@cn.fujitsu.com, Baoquan He <bhe@redhat.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>, eric.auger@redhat.com,
+        aaronlewis@google.com, Peter Xu <peterx@redhat.com>,
+        makarandsonare@google.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
 References: <20200617190757.27081-1-john.s.andersen@intel.com>
  <20200617190757.27081-3-john.s.andersen@intel.com>
  <0fa9682e-59d4-75f7-366f-103d6b8e71b8@intel.com>
@@ -58,6 +77,8 @@ References: <20200617190757.27081-1-john.s.andersen@intel.com>
  <19b97891-bbb0-1061-5971-549a386f7cfb@intel.com>
  <31eb5b00-9e2a-aa10-0f20-4abc3cd35112@redhat.com>
  <20200709154412.GA25@64c96d3be97b>
+ <af6ac772-318d-aab0-ce5f-55cf92f6e96d@intel.com>
+ <CALCETrWxt0CHUoonWX1fgbM46ydJPQZhj8Q=G+45EG4wW3wZqQ@mail.gmail.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
  xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
@@ -102,12 +123,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
  ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
  z5cecg==
-Message-ID: <af6ac772-318d-aab0-ce5f-55cf92f6e96d@intel.com>
-Date:   Thu, 9 Jul 2020 08:56:39 -0700
+Message-ID: <6040c3b3-cac9-cc0e-f0de-baaa274920a2@intel.com>
+Date:   Thu, 9 Jul 2020 09:22:09 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200709154412.GA25@64c96d3be97b>
+In-Reply-To: <CALCETrWxt0CHUoonWX1fgbM46ydJPQZhj8Q=G+45EG4wW3wZqQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -116,12 +137,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/9/20 8:44 AM, Andersen, John wrote:
-> 
->         Bits which are allowed to be pinned default to WP for CR0 and SMEP,
->         SMAP, and UMIP for CR4.
+On 7/9/20 9:07 AM, Andy Lutomirski wrote:
+> On Thu, Jul 9, 2020 at 8:56 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>> On 7/9/20 8:44 AM, Andersen, John wrote:
+>>>         Bits which are allowed to be pinned default to WP for CR0 and SMEP,
+>>>         SMAP, and UMIP for CR4.
+>> I think it also makes sense to have FSGSBASE in this set.
+>>
+>> I know it hasn't been tested, but I think we should do the legwork to
+>> test it.  If not in this set, can we agree that it's a logical next step?
+> I have no objection to pinning FSGSBASE, but is there a clear
+> description of the threat model that this whole series is meant to
+> address?  The idea is to provide a degree of protection against an
+> attacker who is able to convince a guest kernel to write something
+> inappropriate to CR4, right?  How realistic is this?
 
-I think it also makes sense to have FSGSBASE in this set.
+If a quick search can find this:
 
-I know it hasn't been tested, but I think we should do the legwork to
-test it.  If not in this set, can we agree that it's a logical next step?
+> https://googleprojectzero.blogspot.com/2017/05/exploiting-linux-kernel-via-packet.html
+
+I'd pretty confident that the guys doing actual bad things have it in
+their toolbox too.
+
