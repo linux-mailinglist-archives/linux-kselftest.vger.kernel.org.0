@@ -2,256 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D7D21A644
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 19:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3675221A6C2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 20:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728827AbgGIRrl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Jul 2020 13:47:41 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:44592 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728817AbgGIRrc (ORCPT
+        id S1726228AbgGISV2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Jul 2020 14:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbgGISV1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Jul 2020 13:47:32 -0400
-Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jtado-0003TO-Mp; Thu, 09 Jul 2020 17:47:24 +0000
-Date:   Thu, 9 Jul 2020 19:47:23 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        Richard Weinberger <richard@nod.at>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v19 08/12] landlock: Add syscall implementation
-Message-ID: <20200709174723.3m7iuma4re2v3xod@wittgenstein>
-References: <20200707180955.53024-1-mic@digikod.net>
- <20200707180955.53024-9-mic@digikod.net>
- <CAK8P3a0FkoxFtcQJ2jSqyLbDCOp3R8-1JoY8CWAgbSZ9hH9wdQ@mail.gmail.com>
- <7f407b67-d470-25fd-1287-f4f55f18e74a@digikod.net>
- <CAK8P3a1ehWZErD2a0iBqn37s-LTAtW0AbV_gt32iX3cQkXbpOQ@mail.gmail.com>
- <ec79f6ad-1c11-d69f-724b-622baa28f19f@digikod.net>
- <CAK8P3a34X1qfDhn8u3nR+aQA_g+V2i35L0oTnvhNAs83YJPB_w@mail.gmail.com>
+        Thu, 9 Jul 2020 14:21:27 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87335C08C5DD
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2020 11:21:27 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id b25so3497761ljp.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2020 11:21:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=11gPwvbTzhcBYbo+vwPUgMj7SJcAk2yAyF7jDQyYrDQ=;
+        b=L2ZWb2PTR19zzCqVEjb9Xmg361g/AUvEoxd18yaexoIIIvj4/Uzz4hmrNv96qSuZN/
+         sjxlAngpsGDhag86wEs9xg1hvFA7pr+jyFrHN0+OqdUCJ3IqRn5mCpLu8FW2nx6TNYVu
+         GeNVqzhJX+JufNDuVCUt81ZikTeRMxc/LFTIE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=11gPwvbTzhcBYbo+vwPUgMj7SJcAk2yAyF7jDQyYrDQ=;
+        b=ZBN52LSCwVuZslo1bVY9Lt1trmP/Bg3J3mJFsGb8l858RVW0dWlv1dGGhFcQp2khW6
+         Yjhlc7FM4ltuMbmfGFKFt2gAIYfUVKHyvjOII6eZPr3XjIjdSJj9Z4ww3GYBDTzOHkqL
+         BzSYE1HpQQxHHX9f5lF2vCyFN9PtDxN3I+J94GYTSH5n9B3wmkTdo5v7R1Coi7IVmL4t
+         bF2GfmNI3+QItBRbScoSwAJEyqnMKn6UmMRivEpwLPGd6FQ2hrUzo4PavoUWJ6AOdOCe
+         KQ63RH2NANcFumWF6p9rqwoy8P3ZHPQWRIkWb1vdO0o2Oh0dZhhdOw4hiBFHitfOK1lK
+         X1vw==
+X-Gm-Message-State: AOAM531icLwgJz7xrLqssQlCmNzsadnoh3LvaOV5kIdhbHqinygNuD8i
+        xG0Xa25CHhTxcxENQl7XHCWlR75k6AkpfA==
+X-Google-Smtp-Source: ABdhPJyIvtZvgCwJDBk4N9jrMxUsGzwvy61eu1Iyl0GjXzmKDzz2OB1s/2QZ0X3uo4XDOaYUuQ5PGA==
+X-Received: by 2002:a2e:9b41:: with SMTP id o1mr25390840ljj.360.1594318885862;
+        Thu, 09 Jul 2020 11:21:25 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id m9sm1212543lfb.5.2020.07.09.11.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2020 11:21:25 -0700 (PDT)
+References: <20200709115151.75829-1-lmb@cloudflare.com>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team@cloudflare.com, Martin KaFai Lau <kafai@fb.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf] selftests: bpf: fix detach from sockmap tests
+In-reply-to: <20200709115151.75829-1-lmb@cloudflare.com>
+Date:   Thu, 09 Jul 2020 20:21:24 +0200
+Message-ID: <87eepka6sb.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a34X1qfDhn8u3nR+aQA_g+V2i35L0oTnvhNAs83YJPB_w@mail.gmail.com>
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 07:26:18PM +0200, Arnd Bergmann wrote:
-> On Wed, Jul 8, 2020 at 7:50 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > On 08/07/2020 15:49, Arnd Bergmann wrote:
-> > > On Wed, Jul 8, 2020 at 3:04 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > >> On 08/07/2020 10:57, Arnd Bergmann wrote:
-> > >>> On Tue, Jul 7, 2020 at 8:10 PM Mickaël Salaün <mic@digikod.net> wrote:
-> > >>>
-> > >>> It looks like all you need here today is a single argument bit, plus
-> > >>> possibly some room for extensibility. I would suggest removing all
-> > >>> the extra bits and using a syscall like
-> > >>>
-> > >>> SYSCALL_DEFINE1(landlock_create_ruleset, u32, flags);
-> > >>>
-> > >>> I don't really see how this needs any variable-length arguments,
-> > >>> it really doesn't do much.
-> > >>
-> > >> We need the attr_ptr/attr_size pattern because the number of ruleset
-> > >> properties will increase (e.g. network access mask).
-> > >
-> > > But how many bits do you think you will *actually* need in total that
-> > > this needs to be a two-dimensional set of flags? At the moment you
-> > > only have a single bit that you interpret.
-> >
-> > I think there is a misunderstanding. For this syscall I wasn't talking
-> > about the "options" field but about the "handled_access_fs" field which
-> > has 14 bits dedicated to control access to the file system:
-> > https://landlock.io/linux-doc/landlock-v19/security/landlock/user.html#filesystem-flags
-> 
-> Ok, got it. I didn't read far enough there.
-> 
-> > The idea is to add other handled_access_* fields for other kernel object
-> > types (e.g. network, process, etc.).
-> >
-> > The "options" field is fine as a raw __u32 syscall argument.
-> 
-> I'd still like to avoid having it variable-length and structured though.
-> How about having a __u32 "options" flag, plus an indirect argument
-> with 32 fixed-length (all 32 bit or all 64 bit) flag words, each of which
-> corresponds to one of the option bits?
-> 
-> It's still fairly complex that way, but not as much as the version
-> you have right now that can be extended in multiple dimensions.
-> 
-> This could possibly also help avoid the need for the get_features
+On Thu, Jul 09, 2020 at 01:51 PM CEST, Lorenz Bauer wrote:
+> Fix sockmap tests which rely on old bpf_prog_dispatch behaviour.
+> In the first case, the tests check that detaching without giving
+> a program succeeds. Since these are not the desired semantics,
+> invert the condition. In the second case, the clean up code doesn't
+> supply the necessary program fds.
+>
+> Reported-by: Martin KaFai Lau <kafai@fb.com>
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> Fixes: bb0de3131f4c ("bpf: sockmap: Require attach_bpf_fd when detaching a program")
+> ---
+>  tools/testing/selftests/bpf/test_maps.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+> index 6a12a0e01e07..754cf611723e 100644
+> --- a/tools/testing/selftests/bpf/test_maps.c
+> +++ b/tools/testing/selftests/bpf/test_maps.c
+> @@ -789,19 +789,19 @@ static void test_sockmap(unsigned int tasks, void *data)
+>  	}
+>  
+>  	err = bpf_prog_detach(fd, BPF_SK_SKB_STREAM_PARSER);
+> -	if (err) {
+> +	if (!err) {
+>  		printf("Failed empty parser prog detach\n");
+>  		goto out_sockmap;
+>  	}
+>  
+>  	err = bpf_prog_detach(fd, BPF_SK_SKB_STREAM_VERDICT);
+> -	if (err) {
+> +	if (!err) {
+>  		printf("Failed empty verdict prog detach\n");
+>  		goto out_sockmap;
+>  	}
+>  
+>  	err = bpf_prog_detach(fd, BPF_SK_MSG_VERDICT);
+> -	if (err) {
+> +	if (!err) {
+>  		printf("Failed empty msg verdict prog detach\n");
+>  		goto out_sockmap;
+>  	}
+> @@ -1090,19 +1090,19 @@ static void test_sockmap(unsigned int tasks, void *data)
+>  		assert(status == 0);
+>  	}
+>  
+> -	err = bpf_prog_detach(map_fd_rx, __MAX_BPF_ATTACH_TYPE);
+> +	err = bpf_prog_detach2(parse_prog, map_fd_rx, __MAX_BPF_ATTACH_TYPE);
+>  	if (!err) {
+>  		printf("Detached an invalid prog type.\n");
+>  		goto out_sockmap;
+>  	}
+>  
+> -	err = bpf_prog_detach(map_fd_rx, BPF_SK_SKB_STREAM_PARSER);
+> +	err = bpf_prog_detach2(parse_prog, map_fd_rx, BPF_SK_SKB_STREAM_PARSER);
+>  	if (err) {
+>  		printf("Failed parser prog detach\n");
+>  		goto out_sockmap;
+>  	}
+>  
+> -	err = bpf_prog_detach(map_fd_rx, BPF_SK_SKB_STREAM_VERDICT);
+> +	err = bpf_prog_detach2(verdict_prog, map_fd_rx, BPF_SK_SKB_STREAM_VERDICT);
+>  	if (err) {
+>  		printf("Failed parser prog detach\n");
+>  		goto out_sockmap;
 
-What is this fresh hell again, please?
-
-> syscall: If user space just passes the bitmap of all the access flags
-> it wants to use in a fixed-size structure, the kernel can update the
-> bits to mask out the ones it does not understand and write back
-> that bitmap as the result of create_ruleset().
-> 
-> > >>> To be on the safe side, you might split up the flags into either the
-> > >>> upper/lower 16 bits or two u32 arguments, to allow both compatible
-> > >>> (ignored by older kernels if flag is set) and incompatible (return error
-> > >>> when an unknown flag is set) bits.
-> > >>
-> > >> This may be a good idea in general, but in the case of Landlock, because
-> > >> this kind of (discretionary) sandboxing should be a best-effort security
-> > >> feature, we should avoid incompatible behavior. In practice, every
-> > >> unknown bit returns an error because userland can probe for available
-> > >> bits thanks to the get_features command. This kind of (in)compatibility
-> > >> can then be handled by userland.
-> > >
-> > > If there are not going to be incompatible extensions, then just ignore
-> > > all unknown bits and never return an error but get rid of the user
-> > > space probing that just complicates the interface.
-> >
-> > There was multiple discussions about ABI compatibility, especially
-> > inspired by open(2) vs. openat2(2), and ignoring flags seems to be a bad
-> > idea. In the "sandboxer" example, we first probe the supported features
-> > and then mask unknown bits (i.e. access rights) at run time in userland.
-> > This strategy is quite straightforward, backward compatible and
-> > future-proof.
-> 
-> For behavior changing flags, I agree they should be seen as
-> incompatible flags (i.e. return an error if an unknown bit is set).
-> 
-> However, for the flags you pass in in an allowlist, treating them
-> as compatible (i.e. ignore any unknown flags, allowing everything
-> you are not forbidding already) seems completely reasonable
-> to me. Do you foresee user space doing anything other than masking
-> out the bits that the kernel doesn't know about? If not, then doing
-> it in the  kernel should always be simpler.
-> 
-> > >> I suggest this syscall signature:
-> > >> SYSCALL_DEFINE3(landlock_create_ruleset, __u32, options, const struct
-> > >> landlock_attr_ruleset __user *, ruleset_ptr, size_t, ruleset_size);
-> > >
-> > > The other problem here is that indirect variable-size structured arguments
-> > > are a pain to instrument with things like strace or seccomp, so you
-> > > should first try to use a fixed argument list, and fall back to a fixed
-> > > structure if that fails.
-> >
-> > I agree that it is not perfect with the current tools but this kind of
-> > extensible structs are becoming common and well defined (e.g. openat2).
-> > Moreover there is some work going on for seccomp to support "extensible
-> > argument" syscalls: https://lwn.net/Articles/822256/
-> 
-> openat2() is already more complex than we'd ideally want, I think we
-> should try hard to make new syscalls simpler than that, following the
-> rule that any interface should be as simple as possible, but no simpler.
-
-Extensible structs are targeted at system calls that are either known to
-grow a lot of features or we already have prior versions that have
-accumulated quite a lot of features or that by their nature need to be
-more complex.
-openat2() is not really complex per se (At least not yet. It will likely
-grow quite a bit in the future...). The kernel now has infrastructure
-since clone3() and later generalized with openat2() and is well-equipped
-with a consistent api to deal with such syscalls so I don't see how this
-is really an issue in the first place. Yes, syscalls should be kept
-as simple as possible but we don't need to lock us into a "structs as
-arguments" are inherently bad mindset. That will also cause us to end up
-with crappy syscalls that are awkward to use for userspace.
-(Second-level pointers is a whole different issue of course.)
-
-(Arnd, you should also note that we're giving a talk at kernel summit
-about new syscall conventions and I'm syncing with Florian who'll be
-talking about the userspace side and requirements of this.)
-
-Christian
-
-> 
-> > >>>> +static int syscall_add_rule_path_beneath(const void __user *const attr_ptr,
-> > >>>> +               const size_t attr_size)
-> > >>>> +{
-> > >>>> +       struct landlock_attr_path_beneath attr_path_beneath;
-> > >>>> +       struct path path;
-> > >>>> +       struct landlock_ruleset *ruleset;
-> > >>>> +       int err;
-> > >>>
-> > >>> Similarly, it looks like this wants to be
-> > >>>
-> > >>> SYSCALL_DEFINE3(landlock_add_rule_path_beneath, int, ruleset, int,
-> > >>> path, __u32, flags)
-> > >>>
-> > >>> I don't see any need to extend this in a way that wouldn't already
-> > >>> be served better by adding another system call. You might argue
-> > >>> that 'flags' and 'allowed_access' could be separate, with the latter
-> > >>> being an indirect in/out argument here, like
-> > >>>
-> > >>> SYSCALL_DEFINE4(landlock_add_rule_path_beneath, int, ruleset, int, path,
-> > >>>                            __u64 *, allowed_acces, __u32, flags)
-> > >>
-> > >> To avoid adding a new syscall for each new rule type (e.g. path_beneath,
-> > >> path_range, net_ipv4_range, etc.), I think it would be better to keep
-> > >> the attr_ptr/attr_size pattern and to explicitely set a dedicated option
-> > >> flag to specify the attr type.
-> > >>
-> > >> This would look like this:
-> > >> SYSCALL_DEFINE4(landlock_add_rule, __u32, options, int, ruleset, const
-> > >> void __user *, rule_ptr, size_t, rule_size);
-> > >>
-> > >> The rule_ptr could then point to multiple types like struct
-> > >> landlock_attr_path_beneath (without the current ruleset_fd field).
-> > >
-> > > This again introduces variable-sized structured data. How many different
-> > > kinds of rule types do you think there will be (most likely, and maybe an
-> > > upper bound)?
-> >
-> > I don't know how many rule types will come, but right now I think it may
-> > be less than 10.
-> 
-> Ok,
-> 
-> > > Could (some of) these be generalized to use the same data structure?
-> >
-> > I don't think so, file path and network addresses are an example of very
-> > different types.
-> 
-> Clearly the target object is something different, but maybe there is
-> enough commonality to still make them fit into a more regular form.
-> 
-> For the file system case, you have an identify for an object
-> (the file descriptor) and the  '__u64 allowed_access'. I would
-> expect that the 'allowed_access' concept is generic enough that
-> you can make it a direct argument (32 bit register arg, or pointer
-> to a __u64). Do you expect others to need something besides
-> an object identifier and a permission bitmask? Maybe it could
-> be something like
-> 
->  SYSCALL_DEFINE4(landlock_add_rule, int, ruleset, __u32, options,
->                        const void __user *, object, const __u64 __user
-> *, allowed_access,
->                        __u32, flags);
-> 
-> with a fixed-length 'object' identifier type (file descriptor,
-> sockaddr_storage, ...) for each option.
-> 
->     Arnd
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
