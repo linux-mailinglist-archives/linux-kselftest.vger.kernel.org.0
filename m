@@ -2,83 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AFD21A9BA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 23:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68C121A9DA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jul 2020 23:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgGIV10 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Jul 2020 17:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgGIV1Z (ORCPT
+        id S1726324AbgGIVnh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Jul 2020 17:43:37 -0400
+Received: from www62.your-server.de ([213.133.104.62]:33874 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726269AbgGIVnh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Jul 2020 17:27:25 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5871C08C5CE
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2020 14:27:25 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id m22so1523699pgv.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2020 14:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P6+NCDCknn8HOgMcidJ1cpk0+00o/dYEdlgP9Ug2JXQ=;
-        b=U0K8hs7/zYjp7v6F9ZR0fL5JhJLp3BIds9vhqJf2265qv/ZHjllCR5v3zSFeia4CsR
-         +EOcB437kV+ilxEY9/9dAmY0RNN9e4akCQ+yXnZZFh47RUQ2m07YrVaSJ4saerDfOXxz
-         UbCF/9Uvk4aNIDng14O2SKqn/pJ87PuNKcNyIc+x2rKAUMFEObjYSSakH6bIrobp4Ntw
-         qqi//hfYgvXoG+ru3XaE4AgodDXYWgilv3R0mumWm8lVsRpqLftnfh0DYv2gisIY2C/h
-         38cIIqfAJfwIYqPViwrKxeazgqb58FCQW3W+yr1DKKIFOcn5WJIG/GR4qlUnw1g74olg
-         ytbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P6+NCDCknn8HOgMcidJ1cpk0+00o/dYEdlgP9Ug2JXQ=;
-        b=TWeatfByBokz6YnBgt7sEZJ4Hcasf7ATcDkZKSVh4d/czMmmii2GWQZCoANN4NfWid
-         e0izGRByu5Xf8XZCOzXZ4NdzYri8amUOxLLFGwZSlKR7rWy7k6nZ/9n7yHdFDsaH7UXi
-         Dpl55UPMJbpc2yiIXNkeSb+a46tO0tadCy8q7rlVe35KTa011HjR4yCjfcJpILUqvver
-         IaELxWe9wYrlr5dyFLX6asxr0v436KEE9KisjWnHS5r77T+232KOnkDNki1TpAEIbMen
-         UCNhhc7ng4NCgRV4PZHPsfB+oQnMdDKpdBBvYyxQbio75npfwZJVeI9be2RrBGSft4YQ
-         yFAA==
-X-Gm-Message-State: AOAM533WTETvcbBFC8DwkHVFkksAiwLO04CLLzltKYMozM0FvqnzYU43
-        1jxKLRPhshwqBje2w/gnjWOAOD9crQ3Kr/leaVg9Dg==
-X-Google-Smtp-Source: ABdhPJx8egPGks6+3+oORiSQ45+RR3TBGylO9r7zpEbA49xi5mzsqd1sWKcvr8LLoluatQ8o7TnwdJ7iJmqu24JCpYo=
-X-Received: by 2002:a63:4c08:: with SMTP id z8mr53932099pga.201.1594330045176;
- Thu, 09 Jul 2020 14:27:25 -0700 (PDT)
+        Thu, 9 Jul 2020 17:43:37 -0400
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jteKL-00029M-Gu; Thu, 09 Jul 2020 23:43:33 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jteKL-00085h-9X; Thu, 09 Jul 2020 23:43:33 +0200
+Subject: Re: [PATCH bpf] selftests: bpf: fix detach from sockmap tests
+To:     Lorenz Bauer <lmb@cloudflare.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     kernel-team@cloudflare.com, Martin KaFai Lau <kafai@fb.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200709115151.75829-1-lmb@cloudflare.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <98ec53fe-7766-2b0a-42f4-89ce9aad04dd@iogearbox.net>
+Date:   Thu, 9 Jul 2020 23:43:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20200708213543.1365306-1-chenwi@google.com>
-In-Reply-To: <20200708213543.1365306-1-chenwi@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 9 Jul 2020 14:27:14 -0700
-Message-ID: <CAFd5g45C8Pn8-QaQxvQaAQcKHEtonw8CFaKEzqUd-ttG0ypWZA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: capture stderr on all make subprocess calls
-To:     Will Chen <chenwi@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200709115151.75829-1-lmb@cloudflare.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25868/Thu Jul  9 15:58:00 2020)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 8, 2020 at 2:37 PM Will Chen <chenwi@google.com> wrote:
->
-> Direct stderr to subprocess.STDOUT so error messages get included in the
-> subprocess.CalledProcessError exceptions output field. This results in
-> more meaningful error messages for the user.
->
-> This is already being done in the make_allyesconfig method. Do the same
-> for make_mrproper, make_olddefconfig, and make methods.
->
-> With this, failures on unclean trees [1] will give users an error
-> message that includes:
-> "The source tree is not clean, please run 'make ARCH=um mrproper'"
->
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=205219
->
-> Signed-off-by: Will Chen <chenwi@google.com>
+On 7/9/20 1:51 PM, Lorenz Bauer wrote:
+> Fix sockmap tests which rely on old bpf_prog_dispatch behaviour.
+> In the first case, the tests check that detaching without giving
+> a program succeeds. Since these are not the desired semantics,
+> invert the condition. In the second case, the clean up code doesn't
+> supply the necessary program fds.
+> 
+> Reported-by: Martin KaFai Lau <kafai@fb.com>
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> Fixes: bb0de3131f4c ("bpf: sockmap: Require attach_bpf_fd when detaching a program")
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
+Applied, thanks!
