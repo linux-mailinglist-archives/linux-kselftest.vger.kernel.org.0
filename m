@@ -2,139 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7663D21ABB8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jul 2020 01:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3CA21AE5E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jul 2020 07:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgGIXhk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Jul 2020 19:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726581AbgGIXhk (ORCPT
+        id S1726757AbgGJFLl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Jul 2020 01:11:41 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52960 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726840AbgGJFLk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Jul 2020 19:37:40 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A051C08C5DD
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2020 16:37:40 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id z3so1670834pfn.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2020 16:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=49nvohObD7NIzUF0BfwI36tqxmTFWboJS8SYsz0QQGI=;
-        b=d1fhruaq3iAgLLhUtayeHvRegHINeqtG7TBQnzxSkGDJxNJfqFuwBJvMmZzBA8RONW
-         3EWhHxsZlCQudvK8/fMc0kPEU+vuxkCxX/cWcbSfPQuI2x2MFgBmsRwJSfUOp2JxxBB7
-         5QyFewNxU0UWUNDkYBxZQ7ozqL4/qf61sjw2M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=49nvohObD7NIzUF0BfwI36tqxmTFWboJS8SYsz0QQGI=;
-        b=kLNzTc0fpfWEDtezoO8BfOitrwBufWfyfAz2+obx0UhbvtaYekDQdXgV/DBvSwLl6/
-         xWdfhlf8+oypyK7lsitEayrqfABCUPH1Yfh2c0GkkGWe9XcdpotXFEKKG+KIlIDTn+ZJ
-         eM3Sytidcv4XKxbI0Bb6h3LOeUfMfrMcmemSt5sNoJFvF78kONvXmMblBQmvQtmrUlsI
-         u2iZ5ZoIl2mWh4Np1d2q+W2NAeHIoTZ8MOrzt6B2KXZQB+T9R/YLMpJuZkpeoNQJc466
-         6HUw2LoZlIXr5Rtv2mBn7brAVNZepORKH6N8UbXZJ4tjsfFMVS9GvVYelJATQtp+fehB
-         35Kg==
-X-Gm-Message-State: AOAM531gscUjz9jJJ0vzUHfj0vBrrYpkvjBOl38GPaItOrhSCoA0MwR6
-        zIx3tFNd7tO+E8/g27FIXuvaow==
-X-Google-Smtp-Source: ABdhPJyMVLjQTkrAT893hzGYB34NF584FlAsBE8NVHx+rx9CzStVPpQjoezHz1rmqBiAMWCaH7OGyQ==
-X-Received: by 2002:a63:3c09:: with SMTP id j9mr54205575pga.206.1594337859635;
-        Thu, 09 Jul 2020 16:37:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q20sm3987518pfn.111.2020.07.09.16.37.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 16:37:38 -0700 (PDT)
-Date:   Thu, 9 Jul 2020 16:37:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        "Andersen, John" <john.s.andersen@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Liran Alon <liran.alon@oracle.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
-        vineela.tummalapalli@intel.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        caoj.fnst@cn.fujitsu.com, Baoquan He <bhe@redhat.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Dan Williams <dan.j.williams@intel.com>, eric.auger@redhat.com,
-        aaronlewis@google.com, Peter Xu <peterx@redhat.com>,
-        makarandsonare@google.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>
-Subject: Re: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
-Message-ID: <202007091634.528B6641@keescook>
-References: <0fa9682e-59d4-75f7-366f-103d6b8e71b8@intel.com>
- <20200618144314.GB23@258ff54ff3c0>
- <124a59a3-a603-701b-e3bb-61e83d70b20d@intel.com>
- <20200707211244.GN20096@linux.intel.com>
- <19b97891-bbb0-1061-5971-549a386f7cfb@intel.com>
- <31eb5b00-9e2a-aa10-0f20-4abc3cd35112@redhat.com>
- <20200709154412.GA25@64c96d3be97b>
- <af6ac772-318d-aab0-ce5f-55cf92f6e96d@intel.com>
- <CALCETrWxt0CHUoonWX1fgbM46ydJPQZhj8Q=G+45EG4wW3wZqQ@mail.gmail.com>
- <6040c3b3-cac9-cc0e-f0de-baaa274920a2@intel.com>
+        Fri, 10 Jul 2020 01:11:40 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06A51nP2107497;
+        Fri, 10 Jul 2020 01:11:00 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 326bpqqpfj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Jul 2020 01:10:59 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06A52F7F108851;
+        Fri, 10 Jul 2020 01:10:59 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 326bpqqpeh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Jul 2020 01:10:59 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06A55FfG018835;
+        Fri, 10 Jul 2020 05:10:56 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 326bch84q0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Jul 2020 05:10:56 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06A5Ari353018686
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Jul 2020 05:10:54 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DBB9B52057;
+        Fri, 10 Jul 2020 05:10:53 +0000 (GMT)
+Received: from JAVRIS.in.ibm.com.com (unknown [9.199.48.201])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id C4E205205A;
+        Fri, 10 Jul 2020 05:10:51 +0000 (GMT)
+From:   Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/livepatch: adopt to newer sysctl error format
+Date:   Fri, 10 Jul 2020 10:40:43 +0530
+Message-Id: <20200710051043.899291-1-kamalesh@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6040c3b3-cac9-cc0e-f0de-baaa274920a2@intel.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-10_01:2020-07-09,2020-07-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 clxscore=1011 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2007100029
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 09:22:09AM -0700, Dave Hansen wrote:
-> On 7/9/20 9:07 AM, Andy Lutomirski wrote:
-> > On Thu, Jul 9, 2020 at 8:56 AM Dave Hansen <dave.hansen@intel.com> wrote:
-> >> On 7/9/20 8:44 AM, Andersen, John wrote:
-> >>>         Bits which are allowed to be pinned default to WP for CR0 and SMEP,
-> >>>         SMAP, and UMIP for CR4.
-> >> I think it also makes sense to have FSGSBASE in this set.
-> >>
-> >> I know it hasn't been tested, but I think we should do the legwork to
-> >> test it.  If not in this set, can we agree that it's a logical next step?
-> > I have no objection to pinning FSGSBASE, but is there a clear
-> > description of the threat model that this whole series is meant to
-> > address?  The idea is to provide a degree of protection against an
-> > attacker who is able to convince a guest kernel to write something
-> > inappropriate to CR4, right?  How realistic is this?
-> 
-> If a quick search can find this:
-> 
-> > https://googleprojectzero.blogspot.com/2017/05/exploiting-linux-kernel-via-packet.html
-> 
-> I'd pretty confident that the guys doing actual bad things have it in
-> their toolbox too.
+With procfs v3.3.16, the sysctl command doesn't prints the set key and
+value on error.  This change breaks livepatch selftest test-ftrace.sh,
+that tests the interaction of sysctl ftrace_enabled:
 
-Right, it's common (see my commit log in 873d50d58f67), and having this
-enforced by the hypervisor is WAY better since it'll block gadgets or
-ROP.
+ # selftests: livepatch: test-ftrace.sh
+ # TEST: livepatch interaction with ftrace_enabled sysctl ... not ok
+ #
+ # --- expected
+ # +++ result
+ # @@ -16,7 +16,7 @@ livepatch: 'test_klp_livepatch': initial
+ #  livepatch: 'test_klp_livepatch': starting patching transition
+ #  livepatch: 'test_klp_livepatch': completing patching transition
+ #  livepatch: 'test_klp_livepatch': patching complete
+ # -livepatch: sysctl: setting key "kernel.ftrace_enabled": Device or
+    resource busy kernel.ftrace_enabled = 0
+ # +livepatch: sysctl: setting key "kernel.ftrace_enabled": Device or
+    resource busy
+ #  % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
+ #  livepatch: 'test_klp_livepatch': initializing unpatching transition
+ #  livepatch: 'test_klp_livepatch': starting unpatching transition
+ #
+ # ERROR: livepatch kselftest(s) failed
 
+on setting sysctl kernel.ftrace_enabled={0,1} value successfully, the
+set key and value is displayed.
+
+This patch fixes it by limiting the output from both the cases to eight
+words, that includes the error message or set key and value on failure
+and success. The upper bound of eight words is enough to display the
+only tracked error message. Also, adjust the check_result string in
+test-ftrace.sh to match the expected output.
+
+With the patch, the test-ftrace.sh passes on v3.3.15, v3.3.16 versions
+of sysctl:
+ ...
+ # selftests: livepatch: test-ftrace.sh
+ # TEST: livepatch interaction with ftrace_enabled sysctl ... ok
+ ok 5 selftests: livepatch: test-ftrace.sh
+
+Signed-off-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+---
+Based on livepatching/for-5.9/selftests-cleanup, to be merged
+through livepatching.git
+
+ tools/testing/selftests/livepatch/functions.sh   | 3 ++-
+ tools/testing/selftests/livepatch/test-ftrace.sh | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 36648ca367c2..e3c0490d5a45 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -75,7 +75,8 @@ function set_dynamic_debug() {
+ }
+ 
+ function set_ftrace_enabled() {
+-	result=$(sysctl kernel.ftrace_enabled="$1" 2>&1 | paste --serial --delimiters=' ')
++	result=$(sysctl kernel.ftrace_enabled="$1" 2>&1 | paste --serial --delimiters=' ' | \
++		 cut -d" " -f1-8)
+ 	echo "livepatch: $result" > /dev/kmsg
+ }
+ 
+diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+index 9160c9ec3b6f..552e165512f4 100755
+--- a/tools/testing/selftests/livepatch/test-ftrace.sh
++++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+@@ -51,7 +51,7 @@ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ livepatch: '$MOD_LIVEPATCH': patching complete
+-livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy kernel.ftrace_enabled = 0
++livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+ livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+ livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+
+base-commit: 3fd9bd8b7e41a1908bf8bc0cd06606f2b787cd39
 -- 
-Kees Cook
+2.26.2
+
