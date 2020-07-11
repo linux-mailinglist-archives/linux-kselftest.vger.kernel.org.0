@@ -2,61 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0C121C0CA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jul 2020 01:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738C321C4F9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jul 2020 18:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726624AbgGJXea (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Jul 2020 19:34:30 -0400
-Received: from www62.your-server.de ([213.133.104.62]:50860 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726328AbgGJXea (ORCPT
+        id S1728449AbgGKQB1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 11 Jul 2020 12:01:27 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54020 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728412AbgGKQB1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Jul 2020 19:34:30 -0400
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ju2XE-0007vI-Cj; Sat, 11 Jul 2020 01:34:28 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ju2XE-000XkG-2T; Sat, 11 Jul 2020 01:34:28 +0200
-Subject: Re: [PATCH bpf] selftests/bpf: Fix cgroup sockopt verifier test
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, ast@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com
-References: <20200710150439.126627-1-jean-philippe@linaro.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <85d9b268-2960-79a2-102e-2fcc6e7d2462@iogearbox.net>
-Date:   Sat, 11 Jul 2020 01:34:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Sat, 11 Jul 2020 12:01:27 -0400
+Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1juHwK-00005T-1N; Sat, 11 Jul 2020 16:01:24 +0000
+Date:   Sat, 11 Jul 2020 18:01:23 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Will Deacon <will@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-next/seccomp v2 1/2] selftests/seccomp: Add SKIPs for
+ failed unshare()
+Message-ID: <20200711160123.eqqrkiz6olc4ofly@wittgenstein>
+References: <20200710230107.2528890-1-keescook@chromium.org>
+ <20200710230107.2528890-2-keescook@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20200710150439.126627-1-jean-philippe@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.3/25869/Fri Jul 10 16:01:45 2020)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200710230107.2528890-2-keescook@chromium.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/10/20 5:04 PM, Jean-Philippe Brucker wrote:
-> Since the BPF_PROG_TYPE_CGROUP_SOCKOPT verifier test does not set an
-> attach type, bpf_prog_load_check_attach() disallows loading the program
-> and the test is always skipped:
+On Fri, Jul 10, 2020 at 04:01:06PM -0700, Kees Cook wrote:
+> Running the seccomp tests as a regular user shouldn't just fail tests
+> that require CAP_SYS_ADMIN (for getting a PID namespace). Instead,
+> detect those cases and SKIP them. Additionally, gracefully SKIP missing
+> CONFIG_USER_NS (and add to "config" since we'd prefer to actually test
+> this case).
 > 
->   #434/p perfevent for cgroup sockopt SKIP (unsupported program type 25)
-> 
-> Fix the issue by setting a valid attach type.
-> 
-> Fixes: 0456ea170cd6 ("bpf: Enable more helpers for BPF_PROG_TYPE_CGROUP_{DEVICE,SYSCTL,SOCKOPT}")
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
-Applied, thanks!
+Just a comment, otherwise:
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+
+>  tools/testing/selftests/seccomp/config        |  1 +
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 10 ++++++++--
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/config b/tools/testing/selftests/seccomp/config
+> index db1e11b08c8a..64c19d8eba79 100644
+> --- a/tools/testing/selftests/seccomp/config
+> +++ b/tools/testing/selftests/seccomp/config
+> @@ -1,2 +1,3 @@
+>  CONFIG_SECCOMP=y
+>  CONFIG_SECCOMP_FILTER=y
+> +CONFIG_USER_NS=y
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index c0aa46ce14f6..14b038361549 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -3439,7 +3439,10 @@ TEST(user_notification_child_pid_ns)
+>  	struct seccomp_notif req = {};
+>  	struct seccomp_notif_resp resp = {};
+>  
+> -	ASSERT_EQ(unshare(CLONE_NEWUSER | CLONE_NEWPID), 0);
+> +	ASSERT_EQ(unshare(CLONE_NEWUSER | CLONE_NEWPID), 0) {
+> +		if (errno == EINVAL)
+> +			SKIP(return, "kernel missing CLONE_NEWUSER support");
+
+That would be either CLONE_NEWUSER or CLONE_NEWPID, right? :)
+Maybe just do:
+"kernel misses necessary namespace support"
+
+
+> +	};
+>  
+>  	listener = user_trap_syscall(__NR_getppid,
+>  				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
+> @@ -3504,7 +3507,10 @@ TEST(user_notification_sibling_pid_ns)
+>  	}
+>  
+>  	/* Create the sibling ns, and sibling in it. */
+> -	ASSERT_EQ(unshare(CLONE_NEWPID), 0);
+> +	ASSERT_EQ(unshare(CLONE_NEWPID), 0) {
+> +		if (errno == EPERM)
+> +			SKIP(return, "CLONE_NEWPID requires CAP_SYS_ADMIN");
+> +	}
+>  	ASSERT_EQ(errno, 0);
+>  
+>  	pid2 = fork();
+> -- 
+> 2.25.1
+> 
