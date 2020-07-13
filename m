@@ -2,101 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0CA21D650
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jul 2020 14:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163CE21DE8B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jul 2020 19:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729543AbgGMMva (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Jul 2020 08:51:30 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21116 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729494AbgGMMva (ORCPT
+        id S1730496AbgGMRWi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Jul 2020 13:22:38 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17652 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730412AbgGMRWH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jul 2020 08:51:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594644688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YjOX0+qMsr0MZ2n7yEIvNR1la6gfCqgxiam2qlcsRPU=;
-        b=H9pbEBLVe/orSI4qPJD4iDl0fMb0FMKGswKkFgoBVgSnQLPNDGlU8mSEHyu3lO4OyUCxh3
-        BpqFjuZ8BcD97fkpdTv5WSZdp3yrIhT9hFQVh4DLtfWW/fIKAape9rXlUSnbytUNXraHLq
-        TCuxCaXG4Jyrvl8LaBfwxMMykuWgzNk=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-381-_uypYKDCNNmHosexGv-YjA-1; Mon, 13 Jul 2020 08:51:27 -0400
-X-MC-Unique: _uypYKDCNNmHosexGv-YjA-1
-Received: by mail-qv1-f69.google.com with SMTP id v20so7338594qvt.15
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2020 05:51:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YjOX0+qMsr0MZ2n7yEIvNR1la6gfCqgxiam2qlcsRPU=;
-        b=rrwKvN1+RmIOxBUJQCQThrbF61XriBSL3umfEHOxSq5YOCvGQndsZtSkkvjmB5BPkV
-         Y0TuVDaRzF84AwWMXE/z/jbP5wNviQE1ZAZ6Ksp85WXmstE7ogvzDOMwQNnKm/lynBTF
-         u0tQWMTvsbC3edlZcWuqKU5jX/hhwnfAi6wPtMuiBFOXelbP6UpkqFHK3/7M75zHfmYh
-         DRQt+EGE9JbCn7MWjDpFy3EQKVs33dfJliUUJaoz0Z5EDdQXph0qUSTgcZBnIyenD0dw
-         ectEvuTT21VZdwms46ahlHbN4c3Ezee7xMMR/pP8qdLYyd9nwVzS1a2IIRWUVVuPF1Fh
-         MyEQ==
-X-Gm-Message-State: AOAM533vsMpfkKFwfyaYBBli1Jyx6Lfyn5t9SX+XBamOQtvDH6m0SemJ
-        6ai05tfv6vdyG7sm16D4hMXNTJAjZuAo9i8Nhng7eY1lSGLzniI+FyxtCapGIPi1mA1A2wGBrNs
-        1nSsNg/hLtc+Rw/z3H1S0wXEydYLr7G9tS3tBjLQnW5X8
-X-Received: by 2002:a37:5b81:: with SMTP id p123mr79713626qkb.150.1594644686658;
-        Mon, 13 Jul 2020 05:51:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxekftooSxa1u1VC3aPSrNHxSTGnX+9e052hcG04Me+8Z6Np01h076NBmbFLdN/2WyjobuC1GlPp9SslA84gNU=
-X-Received: by 2002:a37:5b81:: with SMTP id p123mr79713605qkb.150.1594644686341;
- Mon, 13 Jul 2020 05:51:26 -0700 (PDT)
+        Mon, 13 Jul 2020 13:22:07 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f0c98050002>; Mon, 13 Jul 2020 10:21:09 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 13 Jul 2020 10:22:07 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 13 Jul 2020 10:22:07 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jul
+ 2020 17:21:59 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 13 Jul 2020 17:21:58 +0000
+Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f0c98360001>; Mon, 13 Jul 2020 10:21:58 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        <nouveau@lists.freedesktop.org>, <kvm-ppc@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Ben Skeggs" <bskeggs@redhat.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        "Ralph Campbell" <rcampbell@nvidia.com>
+Subject: [PATCH v2 0/5] mm/migrate: avoid device private invalidations
+Date:   Mon, 13 Jul 2020 10:21:44 -0700
+Message-ID: <20200713172149.2310-1-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20200710183745.19730-1-joe.lawrence@redhat.com>
-In-Reply-To: <20200710183745.19730-1-joe.lawrence@redhat.com>
-From:   Yannick Cote <ycote@redhat.com>
-Date:   Mon, 13 Jul 2020 08:51:15 -0400
-Message-ID: <CAKMMXfb0kuynAjA76fnB+BWX+wRVY2NQ+hPs4nSJi3YgbEnsew@mail.gmail.com>
-Subject: Re: [PATCH] selftests/livepatch: Use "comm" instead of "diff" for dmesg
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Petr Mladek <pmladek@suse.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594660869; bh=5i6MV2A7BbbUmWCEieFN/sAj7Mt92VZyVtIABtiqqhI=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=S9Srg5FV2+5NPoiew/+hOS5KMNb8dFviiWPao2+p2Ju/zDqV/LiBwF7jMuhMCy+Uc
+         vyAUDnXqWRiOCZ+CbT276SESkRonomfHiLgBbPR9IqtD3J/qYs0hiaSBfMvPGCSDFs
+         iOoQ8SN1Ojl+DPkcBsHzXLtWPvP04BDrHw1AeFXip8lsjV6s5NRlkaSRPBOB0U+sZD
+         M5Xahv4Y9eXcv+UfN2KgairH7lKJH0NaD+nhB3E2OKM2SrQLW0SItS1nfh2pi5++3b
+         Sdqq7YNWAZjd+lI+yWDcrPVKy5xpAxf7Ft8BbpAeArRd4Cu4W4lNlsEEd0y+ePj3Bt
+         RuxeEs7N6FHFw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 2:39 PM Joe Lawrence <joe.lawrence@redhat.com> wrote:
->
-> BusyBox diff doesn't support the GNU diff '--LTYPE-line-format' options
-> that were used in the selftests to filter older kernel log messages from
-> dmesg output.
->
-> Use "comm" which is more available in smaller boot environments.
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> ---
->
-> based-on: livepatching.git/for-5.9/selftests-cleanup
-> merge-thru: livepatching.git
->
->  tools/testing/selftests/livepatch/functions.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 36648ca367c2..408529d94ddb 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -277,7 +277,7 @@ function check_result {
->         # help differentiate repeated testing runs.  Remove them with a
->         # post-comparison sed filter.
->
-> -       result=$(dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
-> +       result=$(dmesg | comm -13 "$SAVED_DMESG" - | \
->                  grep -e 'livepatch:' -e 'test_klp' | \
->                  grep -v '\(tainting\|taints\) kernel' | \
->                  sed 's/^\[[ 0-9.]*\] //')
-> --
-> 2.21.3
->
+The goal for this series is to avoid device private memory TLB
+invalidations when migrating a range of addresses from system
+memory to device private memory and some of those pages have already
+been migrated. The approach taken is to introduce a new mmu notifier
+invalidation event type and use that in the device driver to skip
+invalidation callbacks from migrate_vma_setup(). The device driver is
+also then expected to handle device MMU invalidations as part of the
+migrate_vma_setup(), migrate_vma_pages(), migrate_vma_finalize() process.
+Note that this is opt-in. A device driver can simply invalidate its MMU
+in the mmu notifier callback and not handle MMU invalidations in the
+migration sequence.
 
-Reviewed-by: Yannick Cote <ycote@redhat.com>
+This series is based on Jason Gunthorpe's HMM tree (linux-5.8.0-rc4).
+
+Also, this replaces the need for the following two patches I sent:
+("mm: fix migrate_vma_setup() src_owner and normal pages")
+https://lore.kernel.org/linux-mm/20200622222008.9971-1-rcampbell@nvidia.com
+("nouveau: fix mixed normal and device private page migration")
+https://lore.kernel.org/lkml/20200622233854.10889-3-rcampbell@nvidia.com
+
+Changes in v2:
+Rebase to Jason Gunthorpe's HMM tree.
+Added reviewed-by from Bharata B Rao.
+Rename the mmu_notifier_range::data field to migrate_pgmap_owner as
+  suggested by Jason Gunthorpe.
+
+Ralph Campbell (5):
+  nouveau: fix storing invalid ptes
+  mm/migrate: add a direction parameter to migrate_vma
+  mm/notifier: add migration invalidation type
+  nouveau/svm: use the new migration invalidation
+  mm/hmm/test: use the new migration invalidation
+
+ arch/powerpc/kvm/book3s_hv_uvmem.c            |  2 ++
+ drivers/gpu/drm/nouveau/nouveau_dmem.c        | 13 ++++++--
+ drivers/gpu/drm/nouveau/nouveau_svm.c         | 10 +++++-
+ drivers/gpu/drm/nouveau/nouveau_svm.h         |  1 +
+ .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    | 13 +++++---
+ include/linux/migrate.h                       | 12 +++++--
+ include/linux/mmu_notifier.h                  |  7 ++++
+ lib/test_hmm.c                                | 33 +++++++++++--------
+ mm/migrate.c                                  | 13 ++++++--
+ 9 files changed, 77 insertions(+), 27 deletions(-)
+
+--=20
+2.20.1
 
