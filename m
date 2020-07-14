@@ -2,109 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185EA21EFD7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 13:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6817A21F173
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 14:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbgGNL4E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jul 2020 07:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbgGNL4D (ORCPT
+        id S1726889AbgGNMgp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jul 2020 08:36:45 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:45833 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726823AbgGNMgj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 07:56:03 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E50C08C5C1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 04:56:03 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id h28so16794300edz.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 04:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+sjMIjM2/JFepdRAXpOHb7ghC5LhQeVZQ0Kayo5azeY=;
-        b=BWruN3AFlA46ZLoJRaXr2SIqdS24ok0rzjPKi9syKMhMKh0JxzioNs8EdhKj+fmaW8
-         LtFlAX3lpklg05W9WQ2EZYCE821vzWc7x2++w2jVILwn2boWbSBMsrC6/5ApTmFgISg3
-         lazdTrnPmPdLzow7yla7Nzl2D4pVlMvE8cJJk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+sjMIjM2/JFepdRAXpOHb7ghC5LhQeVZQ0Kayo5azeY=;
-        b=C7oyY4HFe0jCaALzN0qhX2lZuMDLjC3rwUnJGlC/lHVuJWTnIicgXzkgblv0FUg0Ma
-         d5sjJcRAoqUjUAm1PWMNS6tbBQHJ6IReFyohoN/mgSkTU01N1ES94Whup3AoQW1dUrc5
-         HVrD5VMsGP9RTXPljciyaHcJpk69pJDrZZ7PB2JhyzBLNm/5vk5j1u4gBGjrQ8uLT58S
-         ckS2HebXleqRiw32T9mWH6EJGxWpmLT7aM4GxA9JWH9RWe1Hc+pCPZj/8JDeVOYI1WBZ
-         QpgfDkeWVB+1iqC+i3AnUFbU5SEgPMPuhfMwZuWAzmH5md/kgfUDcPsHVr9QAQzdSHeN
-         2Cjg==
-X-Gm-Message-State: AOAM531dxGYuRlIgRuJo6vfmQuUihnbHiw/xtzI6D79p6pQEhANsa29d
-        LAxXNBupmlPiYgzuPPiIukOdqqgsngUUtdMQKRWGag==
-X-Google-Smtp-Source: ABdhPJx7T4CbUMQ5B2n8Maq8US8S/XJNlgydPVNLLLOLr6IH9mheDQ+RV1Tk59Uievz5SqNyI1kTrxdL9hey9Cb11rE=
-X-Received: by 2002:a05:6402:1d0b:: with SMTP id dg11mr3988736edb.212.1594727761659;
- Tue, 14 Jul 2020 04:56:01 -0700 (PDT)
+        Tue, 14 Jul 2020 08:36:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594730197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uN+URw2m81+BGl4jOJuzvBqo88yHsU8OolOc4NwmsLI=;
+        b=O5WUPXHD/oJfYjcMvNsVe0RWicWxsF8ZhP2TTzjLgGClMntoyxeFRiRtRJEHsZRYtDxAme
+        WTxMlqd+cxkY7C/FY9j46huc9JpgoJzFJlouuX0hwSJ0BIO0+VKSDV6A9HmLAzLYlb8SZa
+        7YSTmpl3De+iSMyRXxrHRZjKR1L5N5c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-195-94l5EXXuMgaqUySrQrUW0g-1; Tue, 14 Jul 2020 08:36:34 -0400
+X-MC-Unique: 94l5EXXuMgaqUySrQrUW0g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 97BF91085;
+        Tue, 14 Jul 2020 12:36:32 +0000 (UTC)
+Received: from [10.10.112.73] (ovpn-112-73.rdu2.redhat.com [10.10.112.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C6F17B42D;
+        Tue, 14 Jul 2020 12:36:31 +0000 (UTC)
+Subject: Re: [PATCH v2] selftests/livepatch: adopt to newer sysctl error
+ format
+To:     Petr Mladek <pmladek@suse.com>,
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>
+Cc:     Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200714091030.1611-1-pmladek@suse.com>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Message-ID: <480e4da4-36b6-c112-255c-8cdab57e24ff@redhat.com>
+Date:   Tue, 14 Jul 2020 08:36:30 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <CAODFU0q6CrUB_LkSdrbp5TQ4Jm6Sw=ZepZwD-B7-aFudsOvsig@mail.gmail.com>
- <20200705115021.GA1227929@kroah.com> <20200714065110.GA8047@amd>
- <CAJfpegu8AXZWQh3W39PriqxVna+t3D2pz23t_4xEVxGcNf1AUA@mail.gmail.com> <4e92b851-ce9a-e2f6-3f9a-a4d47219d320@gmail.com>
-In-Reply-To: <4e92b851-ce9a-e2f6-3f9a-a4d47219d320@gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 14 Jul 2020 13:55:50 +0200
-Message-ID: <CAJfpegvroouw5ndHv+395w5PP1c+pUyp=-T8qhhvSnFbhbRehg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] readfile(2): a new syscall to make open/read/close faster
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Pavel Machek <pavel@denx.de>, Greg KH <gregkh@linuxfoundation.org>,
-        Jan Ziak <0xe2.0x9a.0x9b@gmail.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-man <linux-man@vger.kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>, shuah@kernel.org,
-        Al Viro <viro@zeniv.linux.org.uk>, io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200714091030.1611-1-pmladek@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 1:36 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
->
-> On 14/07/2020 11:07, Miklos Szeredi wrote:
-> > On Tue, Jul 14, 2020 at 8:51 AM Pavel Machek <pavel@denx.de> wrote:
-> >>
-> >> Hi!
-> >>
-> >>>> At first, I thought that the proposed system call is capable of
-> >>>> reading *multiple* small files using a single system call - which
-> >>>> would help increase HDD/SSD queue utilization and increase IOPS (I/O
-> >>>> operations per second) - but that isn't the case and the proposed
-> >>>> system call can read just a single file.
-> >>>
-> >>> If you want to do this for multple files, use io_ring, that's what it
-> >>> was designed for.  I think Jens was going to be adding support for the
-> >>> open/read/close pattern to it as well, after some other more pressing
-> >>> features/fixes were finished.
-> >>
-> >> What about... just using io_uring for single file, too? I'm pretty
-> >> sure it can be wrapped in a library that is simple to use, avoiding
-> >> need for new syscall.
-> >
-> > Just wondering:  is there a plan to add strace support to io_uring?
-> > And I don't just mean the syscalls associated with io_uring, but
-> > tracing the ring itself.
->
-> What kind of support do you mean? io_uring is asynchronous in nature
-> with all intrinsic tracing/debugging/etc. problems of such APIs.
-> And there are a lot of handy trace points, are those not enough?
->
-> Though, this can be an interesting project to rethink how async
-> APIs are worked with.
+On 7/14/20 5:10 AM, Petr Mladek wrote:
+> With procfs v3.3.16, the sysctl command doesn't print the set key and
+> value on error.  This change breaks livepatch selftest test-ftrace.sh,
+> that tests the interaction of sysctl ftrace_enabled:
+> 
+> Make it work with all sysctl versions using '-q' option.
+> 
+> Explicitly print the final status on success so that it can be verified
+> in the log. The error message is enough on failure.
+> 
+> Reported-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+> Signed-off-by: Petr Mladek <pmladek@suse.com>
+> ---
+> The patch has been created against livepatch.git,
+> branch for-5.9/selftests-cleanup. But it applies also against
+> the current Linus' tree.
+> 
+> tools/testing/selftests/livepatch/functions.sh   | 3 ++-
+>   tools/testing/selftests/livepatch/test-ftrace.sh | 2 +-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 408529d94ddb..1aba83c87ad3 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -75,7 +75,8 @@ function set_dynamic_debug() {
+>   }
+>   
+>   function set_ftrace_enabled() {
+> -	result=$(sysctl kernel.ftrace_enabled="$1" 2>&1 | paste --serial --delimiters=' ')
+> +	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
+> +		 sysctl kernel.ftrace_enabled 2>&1)
+>   	echo "livepatch: $result" > /dev/kmsg
+>   }
+>   
+> diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+> index 9160c9ec3b6f..552e165512f4 100755
+> --- a/tools/testing/selftests/livepatch/test-ftrace.sh
+> +++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+> @@ -51,7 +51,7 @@ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+>   livepatch: '$MOD_LIVEPATCH': starting patching transition
+>   livepatch: '$MOD_LIVEPATCH': completing patching transition
+>   livepatch: '$MOD_LIVEPATCH': patching complete
+> -livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy kernel.ftrace_enabled = 0
+> +livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy
+>   % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+>   livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+>   livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+> 
 
-Yeah, it's an interesting problem.  The uring has the same events, as
-far as I understand, that are recorded in a multithreaded strace
-output (syscall entry, syscall exit); nothing more is needed.
+Looks good, thanks.
 
-I do think this needs to be integrated into strace(1), otherwise the
-usefulness of that tool (which I think is *very* high) would go down
-drastically as io_uring usage goes up.
+Reviewed-by: Joe Lawrence <joe.lawrence@redhat.com>
 
-Thanks,
-Miklos
+-- Joe
+
