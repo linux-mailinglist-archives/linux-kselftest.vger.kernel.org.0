@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3894621E79C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 07:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4EE21E7A7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 07:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725853AbgGNFkO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jul 2020 01:40:14 -0400
-Received: from mga07.intel.com ([134.134.136.100]:29411 "EHLO mga07.intel.com"
+        id S1726630AbgGNFnK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jul 2020 01:43:10 -0400
+Received: from mga05.intel.com ([192.55.52.43]:56275 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgGNFkO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 01:40:14 -0400
-IronPort-SDR: 9P7nAcsnhmnqLDaTYOnxbFNxZ7+0vQJLs/Dn7P9ryN6qCT64IwTWR+MtV/XbHw2O0RSvGtULCA
- BbJ3UbGSRuMA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="213622006"
+        id S1725306AbgGNFnJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jul 2020 01:43:09 -0400
+IronPort-SDR: uhQTP7KOU/pcJ6TYeJU6keO8b1WHUW8JP6FxH9RNRDrmUhssOiiNxi8J6Lr4lYKOSBtJYu7+sh
+ f3EuN3bqwPlQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="233665963"
 X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="213622006"
+   d="scan'208";a="233665963"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2020 22:40:13 -0700
-IronPort-SDR: 8O3V/it4p0N6j+N7QEPzWNuCQ5U/VyDf2kVsZZjpwRZculpB/yqsVZ6ChpHCkWM+k6CU/n5I6/
- JVf3sEmYaXEw==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2020 22:43:08 -0700
+IronPort-SDR: MizPN2CBTzimOsR+xSUT+e+4WVuCCDUceoaUG09wR/Om3zkkAzUomzdwbif514QuCYev3LbEyA
+ G70hNQxP+5QQ==
 X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="269919030"
+   d="scan'208";a="316281009"
 Received: from otcsectest.jf.intel.com (HELO 760745902f30) ([10.54.30.81])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2020 22:40:12 -0700
-Date:   Tue, 14 Jul 2020 05:36:33 +0000
-From:   "Andersen, John" <john.s.andersen@intel.com>,
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2020 22:43:08 -0700
+Date:   Tue, 14 Jul 2020 05:39:30 +0000
+From:   "Andersen, John" <john.s.andersen@intel.com>
+To:     Andy Lutomirski <luto@kernel.org>,
         Arvind Sankar <nivedita@alum.mit.edu>
-To:     Andy Lutomirski <luto@kernel.org>
 Cc:     Dave Hansen <dave.hansen@intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>,
@@ -70,7 +70,7 @@ Cc:     Dave Hansen <dave.hansen@intel.com>,
         <linux-kselftest@vger.kernel.org>,
         Kernel Hardening <kernel-hardening@lists.openwall.com>
 Subject: Re: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
-Message-ID: <20200714053633.GB25@760745902f30>
+Message-ID: <20200714053930.GC25@760745902f30>
 References: <20200618144314.GB23@258ff54ff3c0>
  <124a59a3-a603-701b-e3bb-61e83d70b20d@intel.com>
  <20200707211244.GN20096@linux.intel.com>
@@ -142,3 +142,7 @@ next version.
 With regards to FSGSBASE, are we open to validating and adding that to the
 DEFAULT set as a part of a separate patchset? This patchset is focused on
 replicating the functionality we already have natively.
+
+
+(If anyone got this email twice, sorry I messed up the From: field the first
+time around)
