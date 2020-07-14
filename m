@@ -2,419 +2,248 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F72321E470
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 02:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE94621E4CA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 02:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbgGNAWq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Jul 2020 20:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726830AbgGNAWp (ORCPT
+        id S1726345AbgGNAug (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Jul 2020 20:50:36 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8376 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbgGNAuf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jul 2020 20:22:45 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A98CC061794
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2020 17:22:45 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id md7so685203pjb.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2020 17:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f31PxKyy1+P4RLk/c/fs6WJ3JZAuSosfsqLmLnDvgYc=;
-        b=hAm2TyI92wIZU5/F1Y4YPs2YKhsON68XvqNjT6Pmhmw74jv7JlXhnCN0gg01iquXKw
-         hnOryIieMfykorbKwGHWSc7pbU+lFL5aw/ndIF5NqTC2DfsBTWsLbRhBAo0NcR0Ml9gg
-         eh7fwxYlXDgib+VAVJCFTkkOXALlwgKwl/nsE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f31PxKyy1+P4RLk/c/fs6WJ3JZAuSosfsqLmLnDvgYc=;
-        b=LSFvGzF7bqkMHPvsyaNgc7NhYPugfkVcZ10n5b7lGTI2R3+xIOYfuF8uCHIDZiVrdx
-         rFUaLJ++sHVqntIz8q6/4018XRTxNtp6J302jaIvWwpX+x22fY6K/5JrJgPiO/gksa9f
-         iZ6LJywMuyVTeKR8gBBl5RyWO0aDHrWgmIT23/DRwJNx6zqfo+qkN1fl43cnjAOLveDo
-         uJPJeEdcZo2rj34rFp4SKEMKY4nju+PLZ6cAahUGNqbZ1iowWGAMGmBOQtBavAfD6zkQ
-         c8rojBrzJ2Wuwy3beFBjO4UfhB2Mt53T5KBUE9GeW2/q1N66ukIK7l6qBx6XRtF+kkcJ
-         R+Ng==
-X-Gm-Message-State: AOAM533Xkmx7IzFkuWmMRjNIoNviabKs0jMUC1bsqnmd5O6nHnEy+aO/
-        kVjTn9B/kxJYl/P9g+svgrYHHQ==
-X-Google-Smtp-Source: ABdhPJyfCHiZLk4sXm+zuWFA5WhiLeOyc8dTrfJa+zRTsxo3cIkE+ek1j8Ao4GJDYAVxH8ZeV288MA==
-X-Received: by 2002:a17:902:ea8a:: with SMTP id x10mr1717906plb.95.1594686164646;
-        Mon, 13 Jul 2020 17:22:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y200sm15072202pfb.33.2020.07.13.17.22.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 17:22:43 -0700 (PDT)
-Date:   Mon, 13 Jul 2020 17:22:42 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, willy@infradead.org, luto@kernel.org,
-        gofmanp@gmail.com, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: Re: [PATCH v3 2/2] selftests: Add kselftest for syscall user dispatch
-Message-ID: <202007131716.303AF8371F@keescook>
-References: <20200712044516.2347844-1-krisman@collabora.com>
- <20200712044516.2347844-3-krisman@collabora.com>
+        Mon, 13 Jul 2020 20:50:35 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f0d01210000>; Mon, 13 Jul 2020 17:49:37 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 13 Jul 2020 17:50:35 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Mon, 13 Jul 2020 17:50:35 -0700
+Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 14 Jul
+ 2020 00:50:34 +0000
+Subject: Re: [PATCH v2 6/8] selftests/harness: Refactor XFAIL into SKIP
+To:     Kees Cook <keescook@chromium.org>
+CC:     Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        David Gow <davidgow@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200622181651.2795217-1-keescook@chromium.org>
+ <20200622181651.2795217-7-keescook@chromium.org>
+ <90fa90dc-7155-6096-678d-b6c103c1b0a6@nvidia.com>
+ <202007131705.D17464CA16@keescook>
+X-Nvconfidentiality: public
+From:   Ralph Campbell <rcampbell@nvidia.com>
+Message-ID: <9a3ff6a1-de73-08fc-49ad-b68f3b1776b8@nvidia.com>
+Date:   Mon, 13 Jul 2020 17:50:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200712044516.2347844-3-krisman@collabora.com>
+In-Reply-To: <202007131705.D17464CA16@keescook>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594687777; bh=lR6u9w+8DklpteIoSVyEE9JVQ86HW65/OnXVj0QouQw=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=hMwiQJZmZJDBHu4v2qpYgF5vOwY4dWwRm6sG5IYDnCmwXkVKGf/oxRZxU421ChMNU
+         zx/qlDsmwXc1mNgWMD6wDzDaoyfA4AZ5iqIW5RCKeF3EU9qvMIG4BUkFYaDZvT7f5a
+         ygD6aafRkAtyHX3R2fmdL5wBtq2HNingIjaSTpgiM5GilKRKR6PGtnP08ZwtV9rOqB
+         Zp3+pA8XidZoI8Gl/btFDUpfdKXi4kAluoBEPvkgTM6Do9Vp8LYGR9PthQCJ+Pk3kb
+         xmrJ8wCFY2OLKsdoPZQyFJ7PqRdYEfTvquQz6TGF8CPyZMBo5YBCrtA9XUNcubRpyl
+         L9A3ShvS13Z3Q==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 12, 2020 at 12:45:16AM -0400, Gabriel Krisman Bertazi wrote:
-> Implement functionality tests for syscall user dispatch.  In order to
-> make the test portable, refrain from open coding syscall dispatchers and
-> calculating glibc memory ranges.
+
+On 7/13/20 5:13 PM, Kees Cook wrote:
+> On Mon, Jul 13, 2020 at 12:08:08PM -0700, Ralph Campbell wrote:
+>>
+>> On 6/22/20 11:16 AM, Kees Cook wrote:
+>>> Plumb the old XFAIL result into a TAP SKIP.
+>>>
+>>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>>> ---
+>>>    tools/testing/selftests/kselftest_harness.h   | 64 ++++++++++++++-----
+>>>    tools/testing/selftests/seccomp/seccomp_bpf.c |  8 +--
+>>>    2 files changed, 52 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+>>> index f8f7e47c739a..b519765904a6 100644
+>>> --- a/tools/testing/selftests/kselftest_harness.h
+>>> +++ b/tools/testing/selftests/kselftest_harness.h
+>>> @@ -112,22 +112,22 @@
+>>>    			__FILE__, __LINE__, _metadata->name, ##__VA_ARGS__)
+>>>    /**
+>>> - * XFAIL(statement, fmt, ...)
+>>> + * SKIP(statement, fmt, ...)
+>>>     *
+>>> - * @statement: statement to run after reporting XFAIL
+>>> + * @statement: statement to run after reporting SKIP
+>>>     * @fmt: format string
+>>>     * @...: optional arguments
+>>>     *
+>>> - * This forces a "pass" after reporting a failure with an XFAIL prefix,
+>>> + * This forces a "pass" after reporting why something is being skipped
+>>>     * and runs "statement", which is usually "return" or "goto skip".
+>>>     */
+>>> -#define XFAIL(statement, fmt, ...) do { \
+>>> +#define SKIP(statement, fmt, ...) do { \
+>>>    	if (TH_LOG_ENABLED) { \
+>>> -		fprintf(TH_LOG_STREAM, "#      XFAIL     " fmt "\n", \
+>>> +		fprintf(TH_LOG_STREAM, "#      SKIP     " fmt "\n", \
+>>>    			##__VA_ARGS__); \
+>>>    	} \
+>>> -	/* TODO: find a way to pass xfail to test runner process. */ \
+>>>    	_metadata->passed = 1; \
+>>> +	_metadata->skip = 1; \
+>>>    	_metadata->trigger = 0; \
+>>>    	statement; \
+>>>    } while (0)
+>>> @@ -777,6 +777,7 @@ struct __test_metadata {
+>>>    	struct __fixture_metadata *fixture;
+>>>    	int termsig;
+>>>    	int passed;
+>>> +	int skip;	/* did SKIP get used? */
+>>>    	int trigger; /* extra handler after the evaluation */
+>>>    	int timeout;	/* seconds to wait for test timeout */
+>>>    	bool timed_out;	/* did this test timeout instead of exiting? */
+>>> @@ -866,17 +867,31 @@ void __wait_for_test(struct __test_metadata *t)
+>>>    		fprintf(TH_LOG_STREAM,
+>>>    			"# %s: Test terminated by timeout\n", t->name);
+>>>    	} else if (WIFEXITED(status)) {
+>>> -		t->passed = t->termsig == -1 ? !WEXITSTATUS(status) : 0;
+>>>    		if (t->termsig != -1) {
+>>> +			t->passed = 0;
+>>>    			fprintf(TH_LOG_STREAM,
+>>>    				"# %s: Test exited normally instead of by signal (code: %d)\n",
+>>>    				t->name,
+>>>    				WEXITSTATUS(status));
+>>> -		} else if (!t->passed) {
+>>> -			fprintf(TH_LOG_STREAM,
+>>> -				"# %s: Test failed at step #%d\n",
+>>> -				t->name,
+>>> -				WEXITSTATUS(status));
+>>> +		} else {
+>>> +			switch (WEXITSTATUS(status)) {
+>>> +			/* Success */
+>>> +			case 0:
+>>> +				t->passed = 1;
+>>> +				break;
+>>> +			/* SKIP */
+>>> +			case 255:
+>>> +				t->passed = 1;
+>>> +				t->skip = 1;
+>>> +				break;
+>>> +			/* Other failure, assume step report. */
+>>> +			default:
+>>> +				t->passed = 0;
+>>> +				fprintf(TH_LOG_STREAM,
+>>> +					"# %s: Test failed at step #%d\n",
+>>> +					t->name,
+>>> +					WEXITSTATUS(status));
+>>> +			}
+>>>    		}
+>>>    	} else if (WIFSIGNALED(status)) {
+>>>    		t->passed = 0;
+>>> @@ -906,6 +921,7 @@ void __run_test(struct __fixture_metadata *f,
+>>>    {
+>>>    	/* reset test struct */
+>>>    	t->passed = 1;
+>>> +	t->skip = 0;
+>>>    	t->trigger = 0;
+>>>    	t->step = 0;
+>>>    	t->no_print = 0;
+>>> @@ -918,15 +934,31 @@ void __run_test(struct __fixture_metadata *f,
+>>>    		t->passed = 0;
+>>>    	} else if (t->pid == 0) {
+>>>    		t->fn(t, variant);
+>>> -		/* return the step that failed or 0 */
+>>> -		_exit(t->passed ? 0 : t->step);
+>>> +		/* Make sure step doesn't get lost in reporting */
+>>> +		if (t->step >= 255) {
+>>> +			ksft_print_msg("Too many test steps (%u)!?\n", t->step);
+>>> +			t->step = 254;
+>>> +		}
+>>
+>> I noticed that this message is now appearing in the HMM self tests.
+>> I haven't quite tracked down why ->steps should be 255 after running
+>> the first test. I did notice that ASSERT*() calls __INC_STEP() but
+>> that doesn't explain it.
+>> Separately, maybe __INC_STEP() should check for < 254 instead of < 255?
+>>
+>>      Set CONFIG_HMM_TESTS=m, build and install kernel and modules.
+>>      cd tools/testing/selftests/vm
+>>      make
+>>      ./test_hmm.sh smoke
+>>      Running smoke test. Note, this test provides basic coverage.
+>>      [  106.803476] memmap_init_zone_device initialised 65536 pages in 7ms
+>>      [  106.810141] added new 256 MB chunk (total 1 chunks, 256 MB) PFNs [0x3ffff0000 0x400000000)
+>>      [  106.823703] memmap_init_zone_device initialised 65536 pages in 4ms
+>>      [  106.829968] added new 256 MB chunk (total 1 chunks, 256 MB) PFNs [0x3fffe0000 0x3ffff0000)
+>>      [  106.838655] HMM test module loaded. This is only for testing HMM.
+>>      TAP version 13
+>>      1..20
+>>      # Starting 20 tests from 3 test cases.
+>>      #  RUN           hmm.open_close ...
+>>      #            OK  hmm.open_close
+>>      ok 1 hmm.open_close
+>>      #  RUN           hmm.anon_read ...
+>>      # Too many test steps (255)!?
+>>      #            OK  hmm.anon_read
 > 
-> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-> ---
->  tools/testing/selftests/Makefile              |   1 +
->  .../syscall_user_dispatch/.gitignore          |   1 +
->  .../selftests/syscall_user_dispatch/Makefile  |   5 +
->  .../selftests/syscall_user_dispatch/config    |   1 +
->  .../syscall_user_dispatch.c                   | 259 ++++++++++++++++++
->  5 files changed, 267 insertions(+)
->  create mode 100644 tools/testing/selftests/syscall_user_dispatch/.gitignore
->  create mode 100644 tools/testing/selftests/syscall_user_dispatch/Makefile
->  create mode 100644 tools/testing/selftests/syscall_user_dispatch/config
->  create mode 100644 tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c
+> Oooh:
 > 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 1195bd85af38..31b07dd774a6 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -47,6 +47,7 @@ TARGETS += openat2
->  TARGETS += rseq
->  TARGETS += rtc
->  TARGETS += seccomp
-> +TARGETS += syscall_user_dispatch
->  TARGETS += sigaltstack
->  TARGETS += size
->  TARGETS += sparc64
+> #define NTIMES          256
+> 
+> Yes, that's a lot of steps. :)
+> 
+> I agree,__ INC_STEP() needs adjustment, though it should be 253. Does
+> this work for you?
+> 
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index 935029d4fb21..4f78e4805633 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -680,7 +680,8 @@
+>   			__bail(_assert, _metadata->no_print, _metadata->step))
+>   
+>   #define __INC_STEP(_metadata) \
+> -	if (_metadata->passed && _metadata->step < 255) \
+> +	/* Keep "step" below 255 (which is used for "SKIP" reporting). */	\
+> +	if (_metadata->passed && _metadata->step < 253) \
+>   		_metadata->step++;
+>   
+>   #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+> @@ -976,12 +977,6 @@ void __run_test(struct __fixture_metadata *f,
+>   		t->passed = 0;
+>   	} else if (t->pid == 0) {
+>   		t->fn(t, variant);
+> -		/* Make sure step doesn't get lost in reporting */
+> -		if (t->step >= 255) {
+> -			ksft_print_msg("Too many test steps (%u)!?\n", t->step);
+> -			t->step = 254;
+> -		}
+> -		/* Use 255 for SKIP */
+>   		if (t->skip)
+>   			_exit(255);
+>   		/* Pass is exit 0 */
+> 
 
-nit: moar alphabetical! :)
-
-> diff --git a/tools/testing/selftests/syscall_user_dispatch/.gitignore b/tools/testing/selftests/syscall_user_dispatch/.gitignore
-> new file mode 100644
-> index 000000000000..fadfb304c539
-> --- /dev/null
-> +++ b/tools/testing/selftests/syscall_user_dispatch/.gitignore
-> @@ -0,0 +1 @@
-> +syscall_user_dispatch
-
-nit: this needs as the first line:
-
-# SPDX-License-Identifier: GPL-2.0-only
-
-> diff --git a/tools/testing/selftests/syscall_user_dispatch/Makefile b/tools/testing/selftests/syscall_user_dispatch/Makefile
-> new file mode 100644
-> index 000000000000..4785c98d4714
-> --- /dev/null
-> +++ b/tools/testing/selftests/syscall_user_dispatch/Makefile
-> @@ -0,0 +1,5 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +CFLAGS += -Wall
-> +
-> +TEST_GEN_PROGS := syscall_user_dispatch
-> +include ../lib.mk
-> diff --git a/tools/testing/selftests/syscall_user_dispatch/config b/tools/testing/selftests/syscall_user_dispatch/config
-> new file mode 100644
-> index 000000000000..22c4dfe167ca
-> --- /dev/null
-> +++ b/tools/testing/selftests/syscall_user_dispatch/config
-> @@ -0,0 +1 @@
-> +CONFIG_SYSCALL_USER_DISPATCH=y
-> diff --git a/tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c b/tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c
-> new file mode 100644
-> index 000000000000..d713147863ef
-> --- /dev/null
-> +++ b/tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c
-> @@ -0,0 +1,259 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + *  Copyright (c) 2020 Collabora Ltd.
-> + *
-> + * Test code for syscall user dispatch
-> + */
-> +
-> +#define _GNU_SOURCE
-> +#include <sys/types.h>
-> +#include <sys/prctl.h>
-> +#include <sys/syscall.h>
-> +#include <sys/sysinfo.h>
-> +#include <signal.h>
-> +#include <errno.h>
-> +
-> +#include "../kselftest_harness.h"
-> +
-> +#ifndef PR_SET_SYSCALL_USER_DISPATCH
-
-style nit: I usually use the initial ifndef to wrap all those related to
-it. i.e.:
-
-#ifndef PR_SET_SYSCALL_USER_DISPATCH
-# define PR_SET_SYSCALL_USER_DISPATCH	59
-# define PR_SYS_DISPATCH_OFF	0
-# define PR_SYS_DISPATCH_ON	1
-...
-#endif
-
-But either way is fine.
-
-> +# define PR_SET_SYSCALL_USER_DISPATCH	59
-> +#endif
-> +
-> +#ifndef PR_SYS_DISPATCH_OFF
-> +# define PR_SYS_DISPATCH_OFF	0
-> +#endif
-> +
-> +#ifndef PR_SYS_DISPATCH_ON
-> +# define PR_SYS_DISPATCH_ON	1
-> +#endif
-> +
-> +#ifndef SYS_USER_DISPATCH
-> +# define SYS_USER_DISPATCH	2
-> +#endif
-> +
-> +#define SYSCALL_DISPATCH_ON(x) ((x) = 1)
-> +#define SYSCALL_DISPATCH_OFF(x) ((x) = 0)
-> +
-> +/* Test Summary:
-> + *
-> + * - dispatch_trigger_sigsys: Verify if PR_SET_SYSCALL_USER_DISPATCH is
-> + *   able to trigger SIGSYS on a syscall.
-> + *
-> + * - bad_selector: Test that a bad selector value triggers SIGSEGV.
-> + *
-> + * - bad_prctl_param: Test that the API correctly rejects invalid
-> + *   parameters on prctl
-> + *
-> + * - dispatch_and_return: Test that a syscall is selectively dispatched
-> + *   to userspace depending on the value of selector.
-> + *
-> + * - disable_dispatch: Test that the PR_SYS_DISPATCH_OFF correctly
-> + *   disables the dispatcher
-> + *
-> + * - direct_dispatch_range: Test that a syscall within the allowed range
-> + *   can bypass the dispatcher.
-> + */
-> +
-> +TEST_SIGNAL(dispatch_trigger_sigsys, SIGSYS)
-> +{
-> +	char sel = 0;
-> +	struct sysinfo info;
-> +	int ret;
-> +
-> +	ret = sysinfo(&info);
-> +	ASSERT_EQ(0, ret);
-> +
-> +	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &sel);
-> +	ASSERT_EQ(0, ret) {
-> +		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-> +	}
-> +
-> +	SYSCALL_DISPATCH_ON(sel);
-> +
-> +	sysinfo(&info);
-> +
-> +	EXPECT_FALSE(true) {
-> +		TH_LOG("Unreachable!");
-> +	}
-> +}
-> +
-> +TEST_SIGNAL(bad_selector, SIGSEGV)
-> +{
-> +	char sel = -1;
-> +	long ret;
-> +
-> +	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &sel);
-> +	ASSERT_EQ(0, ret) {
-> +		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-> +	}
-> +	EXPECT_FALSE(true) {
-> +		TH_LOG("Unreachable!");
-> +	}
-> +}
-> +
-> +TEST(bad_prctl_param)
-> +{
-> +	char sel = 0;
-> +	int op;
-> +
-> +	/* Invalid op */
-> +	op = -1;
-> +	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0, 0, &sel);
-> +	ASSERT_EQ(EINVAL, errno);
-> +
-> +	/* PR_SYS_DISPATCH_OFF */
-> +	op = PR_SYS_DISPATCH_OFF;
-> +
-> +	/* start_addr != 0 */
-> +	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x1, 0xff, 0);
-> +	EXPECT_EQ(EINVAL, errno);
-> +
-> +	/* end_addr != 0 */
-> +	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0xff, 0);
-> +	EXPECT_EQ(EINVAL, errno);
-> +
-> +	/* sel != NULL */
-> +	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0x0, &sel);
-> +	EXPECT_EQ(EINVAL, errno);
-
-I think here would be a good place to test PR_GET_... too?
-
-> +
-> +	/* Valid parameter */
-> +	errno = 0;
-> +	syscall(SYS_prctl, PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0x0, 0x0);
-> +	EXPECT_EQ(0, errno);
-> +
-> +	/* PR_SYS_DISPATCH_ON */
-> +	op = PR_SYS_DISPATCH_ON;
-> +
-> +	/* start_addr > end_addr */
-> +	syscall(SYS_prctl, PR_SET_SYSCALL_USER_DISPATCH, op, 0x1, 0x0, &sel);
-> +	EXPECT_EQ(EINVAL, errno);
-> +
-> +	/* Invalid selector */
-> +	syscall(SYS_prctl, PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0x1, (void *) -1);
-> +	ASSERT_EQ(EFAULT, errno);
-> +}
-> +
-> +#define MAGIC_SYSCALL_1 0xff00  /* Bad Linux syscall number */
-
-Some archs do weird things with syscalls. Maybe use __NR_syscalls + 1?
-For x86, this should be fine, though.
-
-> +
-> +/*
-> + * Use global selector for handle_sigsys tests, to avoid passing
-> + * selector to signal handler
-> + */
-> +char glob_sel;
-> +int nr_syscalls_emulated;
-> +int si_code;
-> +
-> +static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
-> +{
-> +	si_code = info->si_code;
-> +
-> +	if (info->si_syscall == MAGIC_SYSCALL_1)
-> +		nr_syscalls_emulated++;
-> +
-> +	/* In preparation for sigreturn. */
-> +	SYSCALL_DISPATCH_OFF(glob_sel);
-> +}
-> +
-> +TEST(dispatch_and_return)
-> +{
-> +	long ret;
-> +	struct sigaction act;
-> +	sigset_t mask;
-> +
-> +	glob_sel = 0;
-> +	nr_syscalls_emulated = 0;
-> +	si_code = 0;
-> +
-> +	memset(&act, 0, sizeof(act));
-> +	sigemptyset(&mask);
-> +
-> +	act.sa_sigaction = handle_sigsys;
-> +	act.sa_flags = SA_SIGINFO;
-> +	act.sa_mask = mask;
-> +
-> +	ret = sigaction(SIGSYS, &act, NULL);
-> +	ASSERT_EQ(0, ret);
-> +
-> +	/* Make sure selector is good prior to prctl. */
-> +	SYSCALL_DISPATCH_OFF(glob_sel);
-> +
-> +	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &glob_sel);
-> +	ASSERT_EQ(0, ret) {
-> +		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-> +	}
-> +
-> +	/* MAGIC_SYSCALL_1 doesn't exist. */
-> +	SYSCALL_DISPATCH_OFF(glob_sel);
-> +	ret = syscall(MAGIC_SYSCALL_1);
-> +	EXPECT_EQ(-1, ret) {
-> +		TH_LOG("Dispatch triggered unexpectedly");
-> +	}
-> +
-> +	/* MAGIC_SYSCALL_1 should be emulated. */
-> +	nr_syscalls_emulated = 0;
-> +	SYSCALL_DISPATCH_ON(glob_sel);
-> +
-> +	ret = syscall(MAGIC_SYSCALL_1);
-> +	EXPECT_EQ(MAGIC_SYSCALL_1, ret) {
-> +		TH_LOG("Failed to intercept syscall");
-> +	}
-> +	EXPECT_EQ(1, nr_syscalls_emulated) {
-> +		TH_LOG("Failed to emulate syscall");
-> +	}
-> +	ASSERT_EQ(SYS_USER_DISPATCH, si_code) {
-> +		TH_LOG("Bad si_code in SIGSYS");
-> +	}
-> +}
-> +
-> +TEST(disable_dispatch)
-> +{
-> +	int ret;
-> +	struct sysinfo info;
-> +	char sel = 0;
-> +
-> +	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &sel);
-> +	ASSERT_EQ(0, ret) {
-> +		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-> +	}
-> +
-> +	/* MAGIC_SYSCALL_1 doesn't exist. */
-> +	SYSCALL_DISPATCH_OFF(glob_sel);
-> +
-> +	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_OFF, 0, 0, 0);
-> +	EXPECT_EQ(0, ret) {
-> +		TH_LOG("Failed to unset syscall user dispatch");
-> +	}
-> +
-> +	/* Shouldn't have any effect... */
-> +	SYSCALL_DISPATCH_ON(glob_sel);
-> +
-> +	ret = syscall(SYS_sysinfo, &info);
-> +	EXPECT_EQ(0, ret) {
-> +		TH_LOG("Dispatch triggered unexpectedly");
-> +	}
-> +}
-> +
-> +TEST(direct_dispatch_range)
-> +{
-> +	int ret = 0;
-> +	struct sysinfo info;
-> +	char sel = 0;
-> +
-> +	/*
-> +	 * Instead of calculating libc addresses; allow the entire
-> +	 * memory map and lock the selector.
-> +	 */
-> +	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, -1L, &sel);
-> +	ASSERT_EQ(0, ret) {
-> +		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-> +	}
-> +
-> +	SYSCALL_DISPATCH_ON(sel);
-> +
-> +	ret = syscall(SYS_sysinfo, &info);
-> +	ASSERT_EQ(0, ret) {
-> +		TH_LOG("Dispatch triggered unexpectedly");
-> +	}
-> +}
-> +
-> +TEST_HARNESS_MAIN
-
-Yay tests! :) Thank you! :)
-
--- 
-Kees Cook
+Yes, this works for me.
+Thanks!
