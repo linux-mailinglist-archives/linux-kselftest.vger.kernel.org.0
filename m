@@ -2,132 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A293E21F922
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 20:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E4921F975
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 20:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729093AbgGNSUZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jul 2020 14:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
+        id S1729259AbgGNSa3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jul 2020 14:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729025AbgGNSUX (ORCPT
+        with ESMTP id S1726989AbgGNSa0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 14:20:23 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD33CC08C5DB
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 11:20:22 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id s10so23781720wrw.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 11:20:22 -0700 (PDT)
+        Tue, 14 Jul 2020 14:30:26 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB8C061794
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 11:30:26 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id b92so1915070pjc.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 11:30:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HPlGFdGBPdOOnjWNIrp7n7fX2f6c5N2cri07SgmWmTg=;
-        b=JB+J/nyt6TfGmfP1FNHzDlP0adDJxkUGVFw5/aitKXAyBNMl8DYy62MiTBc8Rk1QD+
-         rm4HViH+6fsIyde6WYByrD91wRfXvfHvxs/vnOJ8wI0lqj0DgxgzvyrBe4aTsR1yCrzx
-         47P82a7vcihTMuj/258naogm0mSiGnyx4C/10=
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=W+8q1daBddAXvOtBFXAsV/dQeLyDputz9vwjDvvFrCo=;
+        b=g6gZ1A4WuOIoYr8rxcyDj1SdE42QcHNevJm1VxLwaCiSS2uhXIbMQj4fbdrcNwyzHk
+         KnvFuRPRUDe5Yf+Rh2mFTJTuON6B+mzDyipBnRMnXk3yrjPC9OfA6/+sq/1SZ4MYJwSq
+         78eMkxt7DiIedoW1NofxUFgnmjqqoXHpk5SPw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HPlGFdGBPdOOnjWNIrp7n7fX2f6c5N2cri07SgmWmTg=;
-        b=OF9D8EMkOa1FsGO7I0WwSlUeqC1aTHUYvUe/eUBVrLkWZwMpdHOTZgD5P8U8B3pXOj
-         9xLK4VWxVBzLyJ+ePpYllVSK5O4/O/KI4zJRzxlTsDdqQ8tZTa7OxBttDT2ERuzGEls4
-         U1SAN6WPWymh0ANjuNgkIYYMXMeikpJ5/H27PYe5X4EHGvMZuf0SNGxDdKXnNsellj0Y
-         JcYkme9R/jjxP8YxYu022ny+hvcIhv6qffr2ukahezviMcM23TsiFtx7pqha4WG8KVsW
-         JgtAUzRsMakYp9tlbSymVNVZEHhup7Ynq4pDaGmss2EFL+xWizdrA34NN4am1MLeUC4J
-         MdRA==
-X-Gm-Message-State: AOAM5331qh218/L0SUjlX36hNnlV1YsbQKh2CwmiPPT0jIO2pYYSFaD9
-        es/8Nfx42KGs3sOhm46xtmwW/Ri/BSVOOktSxr3gng==
-X-Google-Smtp-Source: ABdhPJzTRetuwJgvNgpbAVJcEpxdMAupdArwCBSPE038dmzCtxo8SQiUfeNuFojjgzmNMeBkMFoGBcaYJM2tZf4UVL4=
-X-Received: by 2002:a5d:4a45:: with SMTP id v5mr7440248wrs.228.1594750821121;
- Tue, 14 Jul 2020 11:20:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200709182642.1773477-1-keescook@chromium.org> <20200709182642.1773477-9-keescook@chromium.org>
-In-Reply-To: <20200709182642.1773477-9-keescook@chromium.org>
-From:   Will Drewry <wad@chromium.org>
-Date:   Tue, 14 Jul 2020 13:20:08 -0500
-Message-ID: <CAAFS_9Gx1=ytAqTPE3ygh6euJqDObcdg70-gzUuq3eHeWHR2HQ@mail.gmail.com>
-Subject: Re: [PATCH v7 8/9] seccomp: Introduce addfd ioctl to seccomp user notifier
-To:     Kees Cook <keescook@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Matt Denton <mpdenton@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Laight <David.Laight@aculab.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
-        Chris Palmer <palmer@google.com>,
-        Robert Sesek <rsesek@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=W+8q1daBddAXvOtBFXAsV/dQeLyDputz9vwjDvvFrCo=;
+        b=ghvGggrb855yGPZ+6g2hWgP4jyHMs3uvfgy4+Z0lbYvJUc3iOtxVQt+ldkgOc9Pa63
+         KLNGDW2QR3/eUSYhsRnSIGHKen9UTHxnUogmPdfB4eIif3K0nKiTdQASw4oA5dnbu0KG
+         MeBzRftsHKT8lUGYJEAdlKIkBExC6eqgisF0Iz3NfFiJvK+YlyyN4q/d+iOYx7Znp/ge
+         XHouWXRXjg6/VnHNipVW50qsf5EXQAm3gZDkI2/hk5RnHu/hyFaW9XIjNlo6vHBr1mSh
+         I73LrUXL3B7ngOqwS/8il/S1Nes8JE5abap0ORWyBgMvvh2dcMSGNNykfbnvIbFy1kRx
+         emZQ==
+X-Gm-Message-State: AOAM530nOSFrDI4Ka5qyzBk6gfVVcYsKFGEMHdfqJYoNVOUEZh4EkkCa
+        Bsm8Z1EEIXOcW6lX93ORFi4s6A==
+X-Google-Smtp-Source: ABdhPJya+EiWFEJrlE0qPDf2Gq7NOZdjqmit6Y9e6eKWmO2lnvPlzplAV/n+sFRa/06ifs0zFz25Lg==
+X-Received: by 2002:a17:90a:ce0c:: with SMTP id f12mr6190895pju.19.1594751425748;
+        Tue, 14 Jul 2020 11:30:25 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e195sm17091209pfh.218.2020.07.14.11.30.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 11:30:24 -0700 (PDT)
+Date:   Tue, 14 Jul 2020 11:30:23 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Ralph Campbell <rcampbell@nvidia.com>,
         Andy Lutomirski <luto@amacapital.net>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        containers@lists.linux-foundation.org, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/harness: Limit step counter reporting
+Message-ID: <202007141129.54335CEAC6@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 9, 2020 at 1:26 PM Kees Cook <keescook@chromium.org> wrote:
->
-> From: Sargun Dhillon <sargun@sargun.me>
->
-> The current SECCOMP_RET_USER_NOTIF API allows for syscall supervision over
-> an fd. It is often used in settings where a supervising task emulates
-> syscalls on behalf of a supervised task in userspace, either to further
-> restrict the supervisee's syscall abilities or to circumvent kernel
-> enforced restrictions the supervisor deems safe to lift (e.g. actually
-> performing a mount(2) for an unprivileged container).
->
-> While SECCOMP_RET_USER_NOTIF allows for the interception of any syscall,
-> only a certain subset of syscalls could be correctly emulated. Over the
-> last few development cycles, the set of syscalls which can't be emulated
-> has been reduced due to the addition of pidfd_getfd(2). With this we are
-> now able to, for example, intercept syscalls that require the supervisor
-> to operate on file descriptors of the supervisee such as connect(2).
->
-> However, syscalls that cause new file descriptors to be installed can not
-> currently be correctly emulated since there is no way for the supervisor
-> to inject file descriptors into the supervisee. This patch adds a
-> new addfd ioctl to remove this restriction by allowing the supervisor to
-> install file descriptors into the intercepted task. By implementing this
-> feature via seccomp the supervisor effectively instructs the supervisee
-> to install a set of file descriptors into its own file descriptor table
-> during the intercepted syscall. This way it is possible to intercept
-> syscalls such as open() or accept(), and install (or replace, like
-> dup2(2)) the supervisor's resulting fd into the supervisee. One
-> replacement use-case would be to redirect the stdout and stderr of a
-> supervisee into log file descriptors opened by the supervisor.
->
-> The ioctl handling is based on the discussions[1] of how Extensible
-> Arguments should interact with ioctls. Instead of building size into
-> the addfd structure, make it a function of the ioctl command (which
-> is how sizes are normally passed to ioctls). To support forward and
-> backward compatibility, just mask out the direction and size, and match
-> everything. The size (and any future direction) checks are done along
-> with copy_struct_from_user() logic.
->
-> As a note, the seccomp_notif_addfd structure is laid out based on 8-byte
-> alignment without requiring packing as there have been packing issues
-> with uapi highlighted before[2][3]. Although we could overload the
-> newfd field and use -1 to indicate that it is not to be used, doing
-> so requires changing the size of the fd field, and introduces struct
-> packing complexity.
->
-> [1]: https://lore.kernel.org/lkml/87o8w9bcaf.fsf@mid.deneb.enyo.de/
-> [2]: https://lore.kernel.org/lkml/a328b91d-fd8f-4f27-b3c2-91a9c45f18c0@rasmusvillemoes.dk/
-> [3]: https://lore.kernel.org/lkml/20200612104629.GA15814@ircssh-2.c.rugged-nimbus-611.internal
->
-> Suggested-by: Matt Denton <mpdenton@google.com>
-> Link: https://lore.kernel.org/r/20200603011044.7972-4-sargun@sargun.me
-> Signed-off-by: Sargun Dhillon <sargun@sargun.me>
-> Co-developed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+When the selftest "step" counter grew beyond 255, non-fatal warnings
+were being emitted, which is noisy and pointless. There are selftests
+with more than 255 steps (especially those in loops, etc). Instead,
+just cap "steps" to 254 and do not report the saturation.
 
-Reviewed-by: Will Drewry <wad@chromium.org>
+Reported-by: Ralph Campbell <rcampbell@nvidia.com>
+Tested-by: Ralph Campbell <rcampbell@nvidia.com>
+Fixes: 9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 935029d4fb21..4f78e4805633 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -680,7 +680,8 @@
+ 			__bail(_assert, _metadata->no_print, _metadata->step))
+ 
+ #define __INC_STEP(_metadata) \
+-	if (_metadata->passed && _metadata->step < 255) \
++	/* Keep "step" below 255 (which is used for "SKIP" reporting). */	\
++	if (_metadata->passed && _metadata->step < 253) \
+ 		_metadata->step++;
+ 
+ #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+@@ -976,12 +977,6 @@ void __run_test(struct __fixture_metadata *f,
+ 		t->passed = 0;
+ 	} else if (t->pid == 0) {
+ 		t->fn(t, variant);
+-		/* Make sure step doesn't get lost in reporting */
+-		if (t->step >= 255) {
+-			ksft_print_msg("Too many test steps (%u)!?\n", t->step);
+-			t->step = 254;
+-		}
+-		/* Use 255 for SKIP */
+ 		if (t->skip)
+ 			_exit(255);
+ 		/* Pass is exit 0 */
+-- 
+2.25.1
+
+
+-- 
+Kees Cook
