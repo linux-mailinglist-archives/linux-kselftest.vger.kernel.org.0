@@ -2,108 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E4921F975
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 20:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA54121FAE2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jul 2020 20:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729259AbgGNSa3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jul 2020 14:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726989AbgGNSa0 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 14:30:26 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB8C061794
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 11:30:26 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id b92so1915070pjc.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 11:30:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=W+8q1daBddAXvOtBFXAsV/dQeLyDputz9vwjDvvFrCo=;
-        b=g6gZ1A4WuOIoYr8rxcyDj1SdE42QcHNevJm1VxLwaCiSS2uhXIbMQj4fbdrcNwyzHk
-         KnvFuRPRUDe5Yf+Rh2mFTJTuON6B+mzDyipBnRMnXk3yrjPC9OfA6/+sq/1SZ4MYJwSq
-         78eMkxt7DiIedoW1NofxUFgnmjqqoXHpk5SPw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=W+8q1daBddAXvOtBFXAsV/dQeLyDputz9vwjDvvFrCo=;
-        b=ghvGggrb855yGPZ+6g2hWgP4jyHMs3uvfgy4+Z0lbYvJUc3iOtxVQt+ldkgOc9Pa63
-         KLNGDW2QR3/eUSYhsRnSIGHKen9UTHxnUogmPdfB4eIif3K0nKiTdQASw4oA5dnbu0KG
-         MeBzRftsHKT8lUGYJEAdlKIkBExC6eqgisF0Iz3NfFiJvK+YlyyN4q/d+iOYx7Znp/ge
-         XHouWXRXjg6/VnHNipVW50qsf5EXQAm3gZDkI2/hk5RnHu/hyFaW9XIjNlo6vHBr1mSh
-         I73LrUXL3B7ngOqwS/8il/S1Nes8JE5abap0ORWyBgMvvh2dcMSGNNykfbnvIbFy1kRx
-         emZQ==
-X-Gm-Message-State: AOAM530nOSFrDI4Ka5qyzBk6gfVVcYsKFGEMHdfqJYoNVOUEZh4EkkCa
-        Bsm8Z1EEIXOcW6lX93ORFi4s6A==
-X-Google-Smtp-Source: ABdhPJya+EiWFEJrlE0qPDf2Gq7NOZdjqmit6Y9e6eKWmO2lnvPlzplAV/n+sFRa/06ifs0zFz25Lg==
-X-Received: by 2002:a17:90a:ce0c:: with SMTP id f12mr6190895pju.19.1594751425748;
-        Tue, 14 Jul 2020 11:30:25 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e195sm17091209pfh.218.2020.07.14.11.30.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 11:30:24 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 11:30:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Ralph Campbell <rcampbell@nvidia.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/harness: Limit step counter reporting
-Message-ID: <202007141129.54335CEAC6@keescook>
+        id S1731007AbgGNS4i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jul 2020 14:56:38 -0400
+Received: from mga01.intel.com ([192.55.52.88]:49953 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730999AbgGNS4f (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jul 2020 14:56:35 -0400
+IronPort-SDR: snGeDQgmVWJMp5Fd4iWp+X+iE7IP8ko+KX4rCf228/RKrBt3yAhE9iTiJvFI2kxQn36/2t6Gaz
+ lfu3lyONKQiA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="167126375"
+X-IronPort-AV: E=Sophos;i="5.75,352,1589266800"; 
+   d="scan'208";a="167126375"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 11:56:35 -0700
+IronPort-SDR: IBWiob855Z3wYeyY46vW1ObsQ+wys7Mln78uQlOhp2EiQ01Fsay7tpG8V8Gs0Tggk8AaRJWFha
+ eaz80B1wi4fw==
+X-IronPort-AV: E=Sophos;i="5.75,352,1589266800"; 
+   d="scan'208";a="459796243"
+Received: from calinapo-mobl.amr.corp.intel.com (HELO [10.255.6.204]) ([10.255.6.204])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 11:56:32 -0700
+Subject: Re: [RFC PATCH 04/15] x86/pks: Preserve the PKRS MSR on context
+ switch
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20200714070220.3500839-1-ira.weiny@intel.com>
+ <20200714070220.3500839-5-ira.weiny@intel.com>
+ <20200714082701.GO10769@hirez.programming.kicks-ass.net>
+ <20200714185322.GB3008823@iweiny-DESK2.sc.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzShEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gPGRhdmVAc3I3MS5uZXQ+wsF7BBMBAgAlAhsDBgsJCAcDAgYVCAIJ
+ CgsEFgIDAQIeAQIXgAUCTo3k0QIZAQAKCRBoNZUwcMmSsMO2D/421Xg8pimb9mPzM5N7khT0
+ 2MCnaGssU1T59YPE25kYdx2HntwdO0JA27Wn9xx5zYijOe6B21ufrvsyv42auCO85+oFJWfE
+ K2R/IpLle09GDx5tcEmMAHX6KSxpHmGuJmUPibHVbfep2aCh9lKaDqQR07gXXWK5/yU1Dx0r
+ VVFRaHTasp9fZ9AmY4K9/BSA3VkQ8v3OrxNty3OdsrmTTzO91YszpdbjjEFZK53zXy6tUD2d
+ e1i0kBBS6NLAAsqEtneplz88T/v7MpLmpY30N9gQU3QyRC50jJ7LU9RazMjUQY1WohVsR56d
+ ORqFxS8ChhyJs7BI34vQusYHDTp6PnZHUppb9WIzjeWlC7Jc8lSBDlEWodmqQQgp5+6AfhTD
+ kDv1a+W5+ncq+Uo63WHRiCPuyt4di4/0zo28RVcjtzlGBZtmz2EIC3vUfmoZbO/Gn6EKbYAn
+ rzz3iU/JWV8DwQ+sZSGu0HmvYMt6t5SmqWQo/hyHtA7uF5Wxtu1lCgolSQw4t49ZuOyOnQi5
+ f8R3nE7lpVCSF1TT+h8kMvFPv3VG7KunyjHr3sEptYxQs4VRxqeirSuyBv1TyxT+LdTm6j4a
+ mulOWf+YtFRAgIYyyN5YOepDEBv4LUM8Tz98lZiNMlFyRMNrsLV6Pv6SxhrMxbT6TNVS5D+6
+ UorTLotDZKp5+M7BTQRUY85qARAAsgMW71BIXRgxjYNCYQ3Xs8k3TfAvQRbHccky50h99TUY
+ sqdULbsb3KhmY29raw1bgmyM0a4DGS1YKN7qazCDsdQlxIJp9t2YYdBKXVRzPCCsfWe1dK/q
+ 66UVhRPP8EGZ4CmFYuPTxqGY+dGRInxCeap/xzbKdvmPm01Iw3YFjAE4PQ4hTMr/H76KoDbD
+ cq62U50oKC83ca/PRRh2QqEqACvIH4BR7jueAZSPEDnzwxvVgzyeuhwqHY05QRK/wsKuhq7s
+ UuYtmN92Fasbxbw2tbVLZfoidklikvZAmotg0dwcFTjSRGEg0Gr3p/xBzJWNavFZZ95Rj7Et
+ db0lCt0HDSY5q4GMR+SrFbH+jzUY/ZqfGdZCBqo0cdPPp58krVgtIGR+ja2Mkva6ah94/oQN
+ lnCOw3udS+Eb/aRcM6detZr7XOngvxsWolBrhwTQFT9D2NH6ryAuvKd6yyAFt3/e7r+HHtkU
+ kOy27D7IpjngqP+b4EumELI/NxPgIqT69PQmo9IZaI/oRaKorYnDaZrMXViqDrFdD37XELwQ
+ gmLoSm2VfbOYY7fap/AhPOgOYOSqg3/Nxcapv71yoBzRRxOc4FxmZ65mn+q3rEM27yRztBW9
+ AnCKIc66T2i92HqXCw6AgoBJRjBkI3QnEkPgohQkZdAb8o9WGVKpfmZKbYBo4pEAEQEAAcLB
+ XwQYAQIACQUCVGPOagIbDAAKCRBoNZUwcMmSsJeCEACCh7P/aaOLKWQxcnw47p4phIVR6pVL
+ e4IEdR7Jf7ZL00s3vKSNT+nRqdl1ugJx9Ymsp8kXKMk9GSfmZpuMQB9c6io1qZc6nW/3TtvK
+ pNGz7KPPtaDzvKA4S5tfrWPnDr7n15AU5vsIZvgMjU42gkbemkjJwP0B1RkifIK60yQqAAlT
+ YZ14P0dIPdIPIlfEPiAWcg5BtLQU4Wg3cNQdpWrCJ1E3m/RIlXy/2Y3YOVVohfSy+4kvvYU3
+ lXUdPb04UPw4VWwjcVZPg7cgR7Izion61bGHqVqURgSALt2yvHl7cr68NYoFkzbNsGsye9ft
+ M9ozM23JSgMkRylPSXTeh5JIK9pz2+etco3AfLCKtaRVysjvpysukmWMTrx8QnI5Nn5MOlJj
+ 1Ov4/50JY9pXzgIDVSrgy6LYSMc4vKZ3QfCY7ipLRORyalFDF3j5AGCMRENJjHPD6O7bl3Xo
+ 4DzMID+8eucbXxKiNEbs21IqBZbbKdY1GkcEGTE7AnkA3Y6YB7I/j9mQ3hCgm5muJuhM/2Fr
+ OPsw5tV/LmQ5GXH0JQ/TZXWygyRFyyI2FqNTx4WHqUn3yFj8rwTAU1tluRUYyeLy0ayUlKBH
+ ybj0N71vWO936MqP6haFERzuPAIpxj2ezwu0xb1GjTk4ynna6h5GjnKgdfOWoRtoWndMZxbA
+ z5cecg==
+Message-ID: <17c6ebbc-ffa4-7c60-f5e8-faca062c59d1@intel.com>
+Date:   Tue, 14 Jul 2020 11:56:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20200714185322.GB3008823@iweiny-DESK2.sc.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When the selftest "step" counter grew beyond 255, non-fatal warnings
-were being emitted, which is noisy and pointless. There are selftests
-with more than 255 steps (especially those in loops, etc). Instead,
-just cap "steps" to 254 and do not report the saturation.
+On 7/14/20 11:53 AM, Ira Weiny wrote:
+>>> The PKRS MSR is defined as a per-core register.
 
-Reported-by: Ralph Campbell <rcampbell@nvidia.com>
-Tested-by: Ralph Campbell <rcampbell@nvidia.com>
-Fixes: 9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/kselftest_harness.h | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 935029d4fb21..4f78e4805633 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -680,7 +680,8 @@
- 			__bail(_assert, _metadata->no_print, _metadata->step))
- 
- #define __INC_STEP(_metadata) \
--	if (_metadata->passed && _metadata->step < 255) \
-+	/* Keep "step" below 255 (which is used for "SKIP" reporting). */	\
-+	if (_metadata->passed && _metadata->step < 253) \
- 		_metadata->step++;
- 
- #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
-@@ -976,12 +977,6 @@ void __run_test(struct __fixture_metadata *f,
- 		t->passed = 0;
- 	} else if (t->pid == 0) {
- 		t->fn(t, variant);
--		/* Make sure step doesn't get lost in reporting */
--		if (t->step >= 255) {
--			ksft_print_msg("Too many test steps (%u)!?\n", t->step);
--			t->step = 254;
--		}
--		/* Use 255 for SKIP */
- 		if (t->skip)
- 			_exit(255);
- 		/* Pass is exit 0 */
--- 
-2.25.1
-
-
--- 
-Kees Cook
+Just to be clear, PKRS is a per-logical-processor register, just like
+PKRU.  The "per-core" thing here is a typo.
