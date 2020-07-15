@@ -2,129 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 312DD22030B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jul 2020 05:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C699F220414
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jul 2020 06:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728661AbgGODr0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jul 2020 23:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728199AbgGODr0 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 23:47:26 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEB8C061755
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 20:47:24 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id k6so905918wrn.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 20:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=80hgB3Fq3XFIKiId7PbT4ZtffySmJWFsmTxk7R8Jg78=;
-        b=b5kE0esfW+M+PVUtyf+1XnxZWg/JuNQGk9B30zFKSWwurrF2Da7rR/RbN+1Bsb5aak
-         6KCFwvBiX1KbZ/IogP3pgSu/O8PM6byEbFMOnbofAE3e1bqbESydmUgbJoT2RamHCP3e
-         7v/euNreVZcaLhwBYqZjk2NGFCoTAsl0SrlER1JeMtgBdpcy+r18pjhL7vJV/dsDXyoO
-         FUrWxn5TvZREZUQE4uNfw4jrxhuCA4zh+n6XztLstMWmDrC+KPeKPxvwWVCLv2faVPb+
-         /nh1TAQA68sOIRN8bgOsMTmahPxi+zieMcpGMPPMLaHf9LVlWYr2Tb582/rfA9b77/Yz
-         B/Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=80hgB3Fq3XFIKiId7PbT4ZtffySmJWFsmTxk7R8Jg78=;
-        b=SpTitwv2rC7e2/l+KRk+GKjGbx1IlzdtAvu03VH90KhUQU2taK+Jc4+4UnzXKRKgtb
-         /FC3c8uq3VUVAIvUlqgKg+v4fzlurODMYhqB5NfCZl69unFA1CNWznkyXlgWYTOT/xMn
-         TNdLyjqolxVECP2AZKZYTo9T34Cxg46Q8tg3uu3xjGzeyy0e+BZ+VWxvgeRjPpq8RTE4
-         +SozuUAwJwlBhqlOrwwk7+c6LaV/teees1C8wa3DGBfTJNvl9fMxicNi/EzYTksrgeNe
-         eOSYNIjYEqOljm/jM5aXvUKXFp9UQ4wVdjYTIa9ScSbGuR8oXoVu7WKUN2ofQB2k6UfK
-         6ATQ==
-X-Gm-Message-State: AOAM530WJIbsYA/tqhw/ihtbgRBeOLk7ICD7kd0gtWvMeMfowIWThgas
-        HUYJlZH5FRBV/PU9Uyu09B30yfHJTRxUqnbRkB0SgQ==
-X-Google-Smtp-Source: ABdhPJw9P2wWnLC30qk6qeKsB/4onQBt5QQ/Ff4rue+kzOL0Dw7pLXwt158nTqEpcLRe3Tk+o/VWZozgd5+OwoBRTJ8=
-X-Received: by 2002:a05:6000:cf:: with SMTP id q15mr9253893wrx.203.1594784843205;
- Tue, 14 Jul 2020 20:47:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200715031120.1002016-1-vitor@massaru.org>
-In-Reply-To: <20200715031120.1002016-1-vitor@massaru.org>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 15 Jul 2020 11:47:11 +0800
-Message-ID: <CABVgOSkBAiMSMzCx62_CRo_0e2SGdvRWZ0dSC4t628YJBw-3Aw@mail.gmail.com>
-Subject: Re: [RFC 0/3] kunit: add support to use modules
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        id S1726852AbgGOEla (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jul 2020 00:41:30 -0400
+Received: from mga02.intel.com ([134.134.136.20]:62528 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725770AbgGOEla (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jul 2020 00:41:30 -0400
+IronPort-SDR: 12fOklgYhmPLyeChR9kPLnlROqNds6tjyEVEu3JgxyKgt2a6P4TLBibmDNAuMwj1E4bHNA2dbS
+ TiZdQs3/MgKg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="137210660"
+X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
+   d="scan'208";a="137210660"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 21:41:30 -0700
+IronPort-SDR: tPAxt0Zb++8MhxgPdx85urOug4eGehmIUtSsXwHJnIU25SvJTEXBjkPDzwgnNFwqot1XcoyHDU
+ qgn6I8SLpFow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
+   d="scan'208";a="326050554"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
+  by orsmga007.jf.intel.com with ESMTP; 14 Jul 2020 21:41:29 -0700
+Date:   Tue, 14 Jul 2020 21:41:29 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     "Andersen, John" <john.s.andersen@intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Liran Alon <liran.alon@oracle.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
+        vineela.tummalapalli@intel.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        caoj.fnst@cn.fujitsu.com, Baoquan He <bhe@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>, eric.auger@redhat.com,
+        aaronlewis@google.com, Peter Xu <peterx@redhat.com>,
+        makarandsonare@google.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
+Message-ID: <20200715044129.GA11248@linux.intel.com>
+References: <124a59a3-a603-701b-e3bb-61e83d70b20d@intel.com>
+ <20200707211244.GN20096@linux.intel.com>
+ <19b97891-bbb0-1061-5971-549a386f7cfb@intel.com>
+ <31eb5b00-9e2a-aa10-0f20-4abc3cd35112@redhat.com>
+ <20200709154412.GA25@64c96d3be97b>
+ <af6ac772-318d-aab0-ce5f-55cf92f6e96d@intel.com>
+ <CALCETrWxt0CHUoonWX1fgbM46ydJPQZhj8Q=G+45EG4wW3wZqQ@mail.gmail.com>
+ <6040c3b3-cac9-cc0e-f0de-baaa274920a2@intel.com>
+ <CALCETrUHcpqjDfAM9SbrZUM7xcS2wkVm=r1Nb1JmxV7A-KAeUQ@mail.gmail.com>
+ <20200714053930.GC25@760745902f30>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200714053930.GC25@760745902f30>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 11:11 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
->
-> Currently, KUnit does not allow the use of tests as a module.
-> This prevents the implementation of tests that require userspace.
+On Tue, Jul 14, 2020 at 05:39:30AM +0000, Andersen, John wrote:
+> With regards to FSGSBASE, are we open to validating and adding that to the
+> DEFAULT set as a part of a separate patchset? This patchset is focused on
+> replicating the functionality we already have natively.
 
-If this is what I think it is, thanks! I'll hopefully get a chance to
-play with it over the next few days.
-
-Can we clarify what this means: the current description is a little
-misleading, as KUnit tests can already be built and run as modules,
-and "tests that require userspace" is a bit broad.
-
-As I understand it, this patchset does three things:
-- Let kunit_tool install modules to a root filesystem and boot UML
-with that filesystem.
-- Have tests inherit the mm of the process that started them, which
-(if the test is in a module), provides a user-space memory context so
-that copy_{from,to}_user() works.
-- Port the test_user_copy.c tests to KUnit, using this new feature.
-
-A few comments from my quick glance over it:
-- The rootfs support is useful: I'm curious how it'll interact with
-non-UML architectures in [1]. It'd be nice for this to be extensible
-and to not explicitly state UML where possible.
-- The inheriting of the mm stuff still means that
-copy_{from,to}_user() will only work if loaded as a module. This
-really needs to be documented. (Ideally, we'd find a way of having
-this work even for built-in tests, but I don't have any real ideas as
-to how that could be done).
-- It'd be nice to split the test_user_copy.c test port into a separate
-commit. In fact, it may make sense to also split the kunit_tool
-changes and the mm changes into separate series, as they're both quite
-useful independently.
-
-Cheers,
--- David
-
-> This patchset makes this possible by introducing the use of
-> the root filesystem in KUnit. And it allows the use of tests
-> that can be compiled as a module
->
-> Vitor Massaru Iha (3):
->   kunit: tool: Add support root filesystem in kunit-tool
->   lib: Allows to borrow mm in userspace on KUnit
->   lib: Convert test_user_copy to KUnit test
->
->  include/kunit/test.h                        |   1 +
->  lib/Kconfig.debug                           |  17 ++
->  lib/Makefile                                |   2 +-
->  lib/kunit/try-catch.c                       |  15 +-
->  lib/{test_user_copy.c => user_copy_kunit.c} | 196 +++++++++-----------
->  tools/testing/kunit/kunit.py                |  37 +++-
->  tools/testing/kunit/kunit_kernel.py         | 105 +++++++++--
->  7 files changed, 238 insertions(+), 135 deletions(-)
->  rename lib/{test_user_copy.c => user_copy_kunit.c} (55%)
->
->
-> base-commit: 725aca9585956676687c4cb803e88f770b0df2b2
-> prerequisite-patch-id: 582b6d9d28ce4b71628890ec832df6522ca68de0
-> --
-> 2.26.2
->
+Kees added FSGSBASE pinning in commit a13b9d0b97211 ("x86/cpu: Use pinning
+mask for CR4 bits needing to be 0"), so I believe it's a done deal already.
