@@ -2,102 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCDA2215AA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jul 2020 22:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EF7221733
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jul 2020 23:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgGOUC3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jul 2020 16:02:29 -0400
-Received: from mga05.intel.com ([192.55.52.43]:31992 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726491AbgGOUC2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jul 2020 16:02:28 -0400
-IronPort-SDR: 5xGg3eW7aW/Ri6YbLmzdSOi0SdaLL5M/8ExcyEjpA9JQcAZhGJugB7yRf3HrFdibf37bjCFZ1C
- znqobmCwII8A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9683"; a="234115543"
-X-IronPort-AV: E=Sophos;i="5.75,356,1589266800"; 
-   d="scan'208";a="234115543"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 13:02:28 -0700
-IronPort-SDR: MkLInbnvcc7MzlFRLFR80N9TF9i4byCNeQBBRI8k0z1B4lJxv76xTM1XavfvVhqrC+mI3YeVsJ
- gxdjPuQGecwA==
-X-IronPort-AV: E=Sophos;i="5.75,356,1589266800"; 
-   d="scan'208";a="324931027"
-Received: from otcsectest.jf.intel.com (HELO 760745902f30) ([10.54.30.81])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 13:02:27 -0700
-Date:   Wed, 15 Jul 2020 19:58:48 +0000
-From:   "Andersen, John" <john.s.andersen@intel.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Liran Alon <liran.alon@oracle.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
-        vineela.tummalapalli@intel.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        caoj.fnst@cn.fujitsu.com, Baoquan He <bhe@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>, eric.auger@redhat.com,
-        aaronlewis@google.com, Peter Xu <peterx@redhat.com>,
-        makarandsonare@google.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>
-Subject: Re: [PATCH 2/4] KVM: x86: Introduce paravirt feature CR0/CR4 pinning
-Message-ID: <20200715195848.GE25@760745902f30>
-References: <20200707211244.GN20096@linux.intel.com>
- <19b97891-bbb0-1061-5971-549a386f7cfb@intel.com>
- <31eb5b00-9e2a-aa10-0f20-4abc3cd35112@redhat.com>
- <20200709154412.GA25@64c96d3be97b>
- <af6ac772-318d-aab0-ce5f-55cf92f6e96d@intel.com>
- <CALCETrWxt0CHUoonWX1fgbM46ydJPQZhj8Q=G+45EG4wW3wZqQ@mail.gmail.com>
- <6040c3b3-cac9-cc0e-f0de-baaa274920a2@intel.com>
- <CALCETrUHcpqjDfAM9SbrZUM7xcS2wkVm=r1Nb1JmxV7A-KAeUQ@mail.gmail.com>
- <20200714053930.GC25@760745902f30>
- <20200715044129.GA11248@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200715044129.GA11248@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1726356AbgGOVnT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jul 2020 17:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727094AbgGOVnT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jul 2020 17:43:19 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C239AC08C5DB
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2020 14:43:18 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id x184so4601806ybx.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2020 14:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=WPW2jthcymgJJnDe4srAy8GflGzwLl52ZFtIA0Ixzqw=;
+        b=PvN9qtLWYSDsNHkgj/A27DsYxbLZ/Xnm+V0boSzvB8ey5BIexmosCy7fP6UkN8Zb4C
+         sjRU/+R5zu11ex3BuKYJXCu8Ou4nJO1JBvDeL/VWYvR9Ex4e5VutdUb9RQCUUB8sYUag
+         2w+3i8jQdmRvbG9KhMIy39jcQELLbsG//2Iy5fj3qTFiC12LFmrkC3diSfvc5Yuxy/9F
+         KtwNHAQwI/2lNQ+CS57Ti7gxaqePN96jkHJ039IoZCkJHRp1e/E5SdJmPZj6+/Kr/vMy
+         7T5pI1oyS6yTvXp3k+5+h5huvsrNOh7L4gpAnasiC27Ib9QLtf6R2tjZRCDElxuZLeOS
+         18uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=WPW2jthcymgJJnDe4srAy8GflGzwLl52ZFtIA0Ixzqw=;
+        b=A4vX+xtpfGz1FhsHhU3R+4h5AFg4HRH8+VsgSB0gu2YgOmC1D6C7WRTGhA8cqNuFKb
+         l+XA/2RZMFLeHgDl6Uz+ikNX/VB1cCuldinRzgPCzhFXG3s4OdVDQtfdG2rAkoodzb4H
+         FssRfQXApV2qN2mZ00M+tBAF7p7yLt2SQ/5Z/EtPUNjnpNTWLIclceCFw51GPofW/35Y
+         ZT6IcfzCQkcQM+HRh37350EvooaxdXD611JRd3sVFTdJOPbEVvjQCXht7+Dkxjv9thZL
+         JWTlpdGUZJFsYxvO+SepgBhcZk8CW3jMG0BH5cglz+HiT8TQpr7o5xboBuWOuqMaQq8U
+         qMBA==
+X-Gm-Message-State: AOAM531uJ6O4LZBKqjzBLmMaPEJue4TqPGY58Gkk5SmLSLZ/McdABl27
+        04QoXWWITySmtbbH+4pnSrSSa+ycuJo=
+X-Google-Smtp-Source: ABdhPJz/qTdRjOyD9NiyHcxQ5X4u25G5pK7DjjWbH8sfOQ6b1U0bIDyl+0KlG5qp/aUt1V0yHVOLYZN+VVE=
+X-Received: by 2002:a25:6c57:: with SMTP id h84mr1497780ybc.211.1594849397781;
+ Wed, 15 Jul 2020 14:43:17 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 14:43:10 -0700
+Message-Id: <20200715214312.2266839-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.389.gc38d7665816-goog
+Subject: [RFC PATCH bpf-next 0/2] BTF support for ksyms
+From:   Hao Luo <haoluo@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 09:41:29PM -0700, Sean Christopherson wrote:
-> On Tue, Jul 14, 2020 at 05:39:30AM +0000, Andersen, John wrote:
-> > With regards to FSGSBASE, are we open to validating and adding that to the
-> > DEFAULT set as a part of a separate patchset? This patchset is focused on
-> > replicating the functionality we already have natively.
-> 
-> Kees added FSGSBASE pinning in commit a13b9d0b97211 ("x86/cpu: Use pinning
-> mask for CR4 bits needing to be 0"), so I believe it's a done deal already.
+This patch series extends the previously add __ksym externs with btf
+info.
 
-Ah my bad. Thanks, I'll look into it.
+Right now the __ksym externs are treated as pure 64-bit scalar value.
+Libbpf replaces ld_imm64 insn of __ksym by its kernel address at load
+time. This patch series extend those extern with their btf info. Note
+that btf support for __ksym must come with the btf that has VARs encoded
+to work properly. Therefore, these patches are tested against a btf
+generated by a patched pahole, whose change will available in released
+pahole soon.
+
+There are a couple of design choices that I would like feedbacks from
+bpf/btf experts.
+
+ 1. Because the newly added pseudo_btf_id needs to carry both a kernel
+    address (64 bits) and a btf id (32 bits), I used the 'off' fields
+    of ld_imm insn to carry btf id. I wonder if this breaks anything or
+    if there is a better idea.
+ 2. Since only a subset of vars are going to be encoded into the new
+    btf, if a ksym that doesn't find its btf id, it doesn't get
+    converted into pseudo_btf_id. It is still treated as pure scalar
+    value. But we require kernel btf to be loaded in libbpf if there is
+    any ksym in the bpf prog.
+
+This is RFC as it requires pahole changes that encode kernel vars into
+btf.
+
+Hao Luo (2):
+  bpf: BTF support for __ksym externs
+  selftests/bpf: Test __ksym externs with BTF
+
+ include/uapi/linux/bpf.h                      | 37 ++++++++++----
+ kernel/bpf/verifier.c                         | 26 ++++++++--
+ tools/include/uapi/linux/bpf.h                | 37 ++++++++++----
+ tools/lib/bpf/libbpf.c                        | 50 ++++++++++++++++++-
+ .../testing/selftests/bpf/prog_tests/ksyms.c  |  2 +
+ .../testing/selftests/bpf/progs/test_ksyms.c  | 14 ++++++
+ 6 files changed, 143 insertions(+), 23 deletions(-)
+
+-- 
+2.27.0.389.gc38d7665816-goog
+
