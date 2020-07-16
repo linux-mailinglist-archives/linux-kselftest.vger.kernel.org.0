@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 540F9222854
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jul 2020 18:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC5F222856
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jul 2020 18:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729198AbgGPQfV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jul 2020 12:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S1729313AbgGPQgC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jul 2020 12:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728845AbgGPQfU (ORCPT
+        with ESMTP id S1728237AbgGPQgC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jul 2020 12:35:20 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B98BC061755
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 09:35:20 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id p7so2988271qvl.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 09:35:20 -0700 (PDT)
+        Thu, 16 Jul 2020 12:36:02 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B56C08C5C0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 09:36:01 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id p7so2989475qvl.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 09:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=massaru-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:subject:from:to:cc:date:in-reply-to:references
          :user-agent:mime-version:content-transfer-encoding;
-        bh=fNLVxbryOFz0P4iYYN4nq5tJAfgthGwNwlN4AMKfx5s=;
-        b=farj/N/v+ww/83TMrMdBjmvadr5J8dJu08GDa5Tve6Cw2sMPHNaIVTcHH0ZFEV5Kwi
-         NiY2D1Xt8uErC7YPv3kQC3PYDE+gwdKrJ3ApxcyQRSaOYXO/qJ+F/3mQXuS4533nh0cd
-         CqcEznH6H2jGjttpN0nwhYp/vK6gjEhSQ/a9Oa41IlFPOaVxX09ev84NgIYKEqGfBQjN
-         2sfhwOFwfdkryZ8q66d4MsB4adXy+0a+VLB51dDnO7M7+ZtBBOhD24vmB4rDE760G7SI
-         xqALJZLkbyjkz4BesCT5g/br60aItZRF4KnT16fHXN2oNCeMyy8e2n5U2tWOPWuiytxP
-         9dcw==
+        bh=TLyzrMoUQJBrFIS7h6/Ao3hqwvcAjDtd5BjTOluL9gg=;
+        b=GrgSKDhxqKx4Ttoo/eEntuPwJVU7FTTnuxxRBHCdAjExk8jst+SL8WG4eAnNH+xe55
+         zd+2bXboDcoeeDCO4XWH8BAjiML8Zjwt9mMp3k1x/2lkEmsAc1N9grJFKb/4MYa5GeCV
+         JG7Dn0t2rCXzeN4phClA3yDyZuUDDFxKEvSj9vVRHsXzGxKFU7Lp7YfxDcQQISgt1ImM
+         ee5DgE8JsaMj1Pd//bpOa2k4JCGW+03m2y3rvMs0Hv94t42sXb3NLlXtlZ8ywnQ24aBa
+         GilOZX8Ep5MV70Mm5D2bFUFfvzTAZ/pZQdp9+wcPz2nbMqdhephslTLUXthYNHdj1ZXt
+         ps6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=fNLVxbryOFz0P4iYYN4nq5tJAfgthGwNwlN4AMKfx5s=;
-        b=C/rfDbdUcMQ9MqEm3phlRN1PA1Z2Ozz9GZ2r3rrKcSR5JlmqX5nE+f7CmtyCeaKC/1
-         1PDuMCWMjwll47jZ+jcB5da4opWA4tAyopjKY4IniHd/RmDJId7yWiCjzkqncVpIxm0C
-         W6br3xhz0bajphAp8ab2TOlLGgmi791ZojAc2GxscH/I+A3WsB5ONNilk+3yVARJ79+3
-         KrU0x/bkkDfuq/Xahi66OUWq8bXZH4NozexiokjG3SSe1U/cWwR9kbyve3Yr8gcWHHZp
-         Ys74WFJCaJ03Das7WJZn4wYNOr9s8fWY/N/vrVeaAuBaRBC8cjhDFbyamALcBDb+3uxS
-         f4ow==
-X-Gm-Message-State: AOAM531BXupo/G1n7e122vOv6GOCUGwhcvJ1AsWo1RB7LxABhaWUeWVR
-        ZztwFdCii9S267RYD51l9NMSeg==
-X-Google-Smtp-Source: ABdhPJwLiVWEhyy9wE5hXwCJKWEklBwb1sYkeUh8lfEwZJQowdISUQsLFJ8anNvNV9YuVvNhuv80nA==
-X-Received: by 2002:a05:6214:851:: with SMTP id dg17mr5157555qvb.235.1594917319752;
-        Thu, 16 Jul 2020 09:35:19 -0700 (PDT)
+        bh=TLyzrMoUQJBrFIS7h6/Ao3hqwvcAjDtd5BjTOluL9gg=;
+        b=dAtriXwwpGTCdHqtVG+aZt8JK5x+e2auNwbjQKjgYd0Q/DrN1uyVrns5TjPdHgtL9U
+         9O680eEd531FvG860Yijnjt/+5KCW4TyoyKHyxxMYWkQEWka6gykDYHM78t2MIPV3C4n
+         OcGvhJYKWojplZAdHdIjo3hE6ixW9O21CQF1Lo52jhdr4OE9Id7UPrmiyqDG//mjSJ+q
+         SWLKokpH0iVuuiAa+LccYDMNPfE2FuwsxvmoS7TTU3SRS+OrQAQxOgCmx5VUZuwXWWOn
+         D+vXsGEV2AqpJoQVQVNn4EBb3ufcGLjwdAE7NTrxLb6TjqI+cPK/QUy7MJaitwnJ7AXU
+         nY7g==
+X-Gm-Message-State: AOAM530ascOnvQQgUfcNuJaby+pZq8mNND3K3Qohq5gI/UvjqRLhoQYD
+        rs8zvm5hMU9vjc5jkhT/VmXeEA==
+X-Google-Smtp-Source: ABdhPJzDAQdsuQfj+FrH2AKPIAzSqhhNwiffQw3ilVWX5dglvzazNFagj3w1wfSFixQ3ZB7ypXcGPw==
+X-Received: by 2002:a0c:f683:: with SMTP id p3mr5009130qvn.39.1594917361013;
+        Thu, 16 Jul 2020 09:36:01 -0700 (PDT)
 Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id l5sm8264754qtd.37.2020.07.16.09.35.16
+        by smtp.gmail.com with ESMTPSA id g1sm7742608qkl.86.2020.07.16.09.35.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 09:35:18 -0700 (PDT)
-Message-ID: <a1221f11e7ab6926dcca8b4cabfa4ef6dfecf654.camel@massaru.org>
+        Thu, 16 Jul 2020 09:36:00 -0700 (PDT)
+Message-ID: <ccf310f7b7f5368be09868f7f782096a45b779f1.camel@massaru.org>
 Subject: Re: [RFC 2/3] lib: Allows to borrow mm in userspace on KUnit
 From:   Vitor Massaru Iha <vitor@massaru.org>
 To:     Brendan Higgins <brendanhiggins@google.com>
@@ -60,7 +60,7 @@ Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         David Gow <davidgow@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         linux-kernel-mentees@lists.linuxfoundation.org
-Date:   Thu, 16 Jul 2020 13:35:14 -0300
+Date:   Thu, 16 Jul 2020 13:35:57 -0300
 In-Reply-To: <CAFd5g47HPGjX4AYuBCjH8DqSUMNO+yqjudWH+ZNovStM+aXExA@mail.gmail.com>
 References: <20200715031120.1002016-1-vitor@massaru.org>
          <20200715031120.1002016-3-vitor@massaru.org>
@@ -136,6 +136,8 @@ On Wed, 2020-07-15 at 17:37 -0700, Brendan Higgins wrote:
 > 
 > Here and below: You already have a pointer to test. You should use
 > it.
+
+Ops, thanks!
 > 
 > > +               if (test->mm != NULL)
 > > +                       kthread_unuse_mm(try_catch->test->mm);
