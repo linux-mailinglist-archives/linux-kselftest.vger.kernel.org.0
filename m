@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A293022376E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 10:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426B0223784
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 11:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgGQIzA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jul 2020 04:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S1726079AbgGQJAH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jul 2020 05:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgGQIy7 (ORCPT
+        with ESMTP id S1725950AbgGQJAG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jul 2020 04:54:59 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB95DC061755;
-        Fri, 17 Jul 2020 01:54:59 -0700 (PDT)
+        Fri, 17 Jul 2020 05:00:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889FBC08C5C0;
+        Fri, 17 Jul 2020 02:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aEr7cpiEkCxbEVwXSRfLp3Ytk5hTAgwAHhMYmtgWkp8=; b=XTp6bn8FEKwlnyQgkHyasqtfQs
-        fFYXMAUIiMSk8ZvOhG343GjKyPZe9SzrBqo4dgVstwgjT/qqnBnojwBCg02q+0+oaf4CtVI9jrQ03
-        ONB24bL/N5z3WjOc/fHRXLiv5pluGJgrS96d7OVkA8awqCpQdsFU7l6f1TDqUW+wjR9oMMFFmdtJn
-        VzUhKVeV4zqZEVhYbJxkhKgUC4lOzWSbPL46WpppaNrJaSpNv9qbChKd0nKPB+YDqPSa0c4DPcASR
-        deR1T0ijZzeJx31cEvj91bKq7KSnx5u0W411DK6OS3PyVW3svSma5utxYBHXipY7w2w6E5oKjTaT5
-        O7+5x+pg==;
+        bh=8xT/WVtQE2KY4X7YjP79ChPInUPynkTTYKC9pryceZE=; b=e8KQste/jtn3QrtBaetLpn+930
+        lo7u3UpKqeat3xIAKeiubE8XcxBOKlbeGR+zBvDcke8mVhn2ZhXIwz/zwSoruuzYOQQnpdCu9VnX7
+        kPEQ1GdsmNi7kWdwGOU62EL1GI1oq3MhbE3MF5Emma66Ddcf580sU3Uax4jBgNxK6tB5mi9o8UN5l
+        dEky9TUhy29LwKea+f2O3dJtrVwpY6RLv8drTRWYk4uE/aME4kvSRVvTQhQZi19Y+5rjSYthwxVtj
+        3m5koTs+xwLdLDFypF6fAfbSPUXt7HXH9dhFltXANJc09Slkg5B6GcdVs0+Zs1woD4Yqqt0nwQFQf
+        i6xNaS1w==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jwM8j-0002lD-9h; Fri, 17 Jul 2020 08:54:45 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jwMDk-0005yy-7T; Fri, 17 Jul 2020 08:59:56 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 79D35304D58;
-        Fri, 17 Jul 2020 10:54:42 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D695B304D58;
+        Fri, 17 Jul 2020 10:59:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5001929CF6F79; Fri, 17 Jul 2020 10:54:42 +0200 (CEST)
-Date:   Fri, 17 Jul 2020 10:54:42 +0200
+        id B702429CF6F79; Fri, 17 Jul 2020 10:59:54 +0200 (CEST)
+Date:   Fri, 17 Jul 2020 10:59:54 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     ira.weiny@intel.com
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -49,66 +49,42 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 02/17] x86/fpu: Refactor
- arch_set_user_pkey_access() for PKS support
-Message-ID: <20200717085442.GX10769@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH RFC V2 04/17] x86/pks: Preserve the PKRS MSR on context
+ switch
+Message-ID: <20200717085954.GY10769@hirez.programming.kicks-ass.net>
 References: <20200717072056.73134-1-ira.weiny@intel.com>
- <20200717072056.73134-3-ira.weiny@intel.com>
+ <20200717072056.73134-5-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200717072056.73134-3-ira.weiny@intel.com>
+In-Reply-To: <20200717072056.73134-5-ira.weiny@intel.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 12:20:41AM -0700, ira.weiny@intel.com wrote:
+On Fri, Jul 17, 2020 at 12:20:43AM -0700, ira.weiny@intel.com wrote:
 > +/*
-> + * Get a new pkey register value from the user values specified.
-> + *
-> + * Kernel users use the same flags as user space:
-> + *     PKEY_DISABLE_ACCESS
-> + *     PKEY_DISABLE_WRITE
+> + * Write the PKey Register Supervisor.  This must be run with preemption
+> + * disabled as it does not guarantee the atomicity of updating the pkrs_cache
+> + * and MSR on its own.
 > + */
-> +u32 get_new_pkr(u32 old_pkr, int pkey, unsigned long init_val)
+> +void write_pkrs(u32 pkrs_val)
 > +{
-> +	int pkey_shift = (pkey * PKR_BITS_PER_PKEY);
-> +	u32 new_pkr_bits = 0;
-> +
-> +	/* Set the bits we need in the register:  */
-> +	if (init_val & PKEY_DISABLE_ACCESS)
-> +		new_pkr_bits |= PKR_AD_BIT;
-> +	if (init_val & PKEY_DISABLE_WRITE)
-> +		new_pkr_bits |= PKR_WD_BIT;
-> +
-> +	/* Shift the bits in to the correct place: */
-> +	new_pkr_bits <<= pkey_shift;
-> +
-> +	/* Mask off any old bits in place: */
-> +	old_pkr &= ~((PKR_AD_BIT | PKR_WD_BIT) << pkey_shift);
-> +
-> +	/* Return the old part along with the new part: */
-> +	return old_pkr | new_pkr_bits;
+> +	this_cpu_write(pkrs_cache, pkrs_val);
+> +	wrmsrl(MSR_IA32_PKRS, pkrs_val);
 > +}
 
-This is unbelievable junk...
+Should we write that like:
 
-How about something like:
-
-u32 update_pkey_reg(u32 pk_reg, int pkey, unsigned int flags)
+void write_pkrs(u32 pkr)
 {
-	int pkey_shift = pkey * PKR_BITS_PER_PKEY;
-
-	pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
-
-	if (flags & PKEY_DISABLE_ACCESS)
-		pk_reg |= PKR_AD_BIT << pkey_shift;
-	if (flags & PKEY_DISABLE_WRITE)
-		pk_reg |= PKR_WD_BIT << pkey_shift;
-
-	return pk_reg;
+	u32 *pkrs = get_cpu_ptr(pkrs_cache);
+	if (*pkrs != pkr) {
+		*pkrs = pkr;
+		wrmsrl(MSR_IA32_PKRS, pkr);
+	}
+	put_cpu_ptrpkrs_cache);
 }
 
-Then we at least have a little clue wtf the thing does.. Yes I started
-with a rename and then got annoyed at the implementation too.
+given that we fundamentally need to serialize againt schedule() here.
