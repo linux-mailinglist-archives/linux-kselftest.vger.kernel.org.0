@@ -2,74 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C382223032
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 03:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85F2223113
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 04:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgGQBJo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jul 2020 21:09:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56044 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726401AbgGQBJo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jul 2020 21:09:44 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 76A68207BC;
-        Fri, 17 Jul 2020 01:09:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594948183;
-        bh=YgKWBSEhMz+NBsILDChvn58XB6zvrCT46NsLfN2Wlvs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=G1B1dSdQxJSbAwQbKGWfetCMby9xFfC7p/pGY5CWr4Okt2I0vXrAgr6WRzjFNORXB
-         AdjvdYH6Mh/eFqHoyigXwYxQzusAMPqLZff6rZXhrpCGImdP+F/cOm77Ia3K0zKOKw
-         LI2qL2r2VXGG7bboN3eJbgOSfNKleZ6O5z6D5FDQ=
-Date:   Thu, 16 Jul 2020 18:09:42 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Paolo Pisati <paolo.pisati@canonical.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: net: ip_defrag: modprobe missing
- nf_defrag_ipv6 support
-Message-ID: <20200716180942.2c52ecd1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20200716155114.72625-1-paolo.pisati@canonical.com>
-References: <20200716155114.72625-1-paolo.pisati@canonical.com>
+        id S1726229AbgGQCPl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jul 2020 22:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgGQCPl (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jul 2020 22:15:41 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B4C061755;
+        Thu, 16 Jul 2020 19:15:41 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id EA02B2A292F
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, kernel@collabora.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Paul Gofman <gofmanp@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v4 1/2] kernel: Implement selective syscall userspace redirection
+Organization: Collabora
+References: <20200716193141.4068476-1-krisman@collabora.com>
+        <20200716193141.4068476-2-krisman@collabora.com>
+        <CALCETrWdCN5KsRUkrb8VoYGRBhy71P-MAHGWhuJ5y4Z3vByyvg@mail.gmail.com>
+Date:   Thu, 16 Jul 2020 22:15:35 -0400
+In-Reply-To: <CALCETrWdCN5KsRUkrb8VoYGRBhy71P-MAHGWhuJ5y4Z3vByyvg@mail.gmail.com>
+        (Andy Lutomirski's message of "Thu, 16 Jul 2020 17:20:02 -0700")
+Message-ID: <87wo32j394.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 16 Jul 2020 17:51:14 +0200 Paolo Pisati wrote:
-> Fix ip_defrag.sh when CONFIG_NF_DEFRAG_IPV6=m:
-> 
-> $ sudo ./ip_defrag.sh
-> + set -e
-> + mktemp -u XXXXXX
-> + readonly NETNS=ns-rGlXcw
-> + trap cleanup EXIT
-> + setup
-> + ip netns add ns-rGlXcw
-> + ip -netns ns-rGlXcw link set lo up
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_high_thresh=9000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_low_thresh=7000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_time=1
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_high_thresh=9000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_low_thresh=7000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_time=1
-> + ip netns exec ns-rGlXcw sysctl -w net.netfilter.nf_conntrack_frag6_high_thresh=9000000
-> + cleanup
-> + ip netns del ns-rGlXcw
-> 
-> $ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
-> ls: cannot access '/proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh': No such file or directory
-> 
-> $ sudo modprobe nf_defrag_ipv6
-> $ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
-> -rw-r--r-- 1 root root 0 Jul 14 12:34 /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
-> 
-> Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
+Andy Lutomirski <luto@kernel.org> writes:
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+> On Thu, Jul 16, 2020 at 12:31 PM Gabriel Krisman Bertazi
+> <krisman@collabora.com> wrote:
+>>
+>
+> This is quite nice.  I have a few comments, though:
+>
+> You mentioned rt_sigreturn().  Should this automatically exempt the
+> kernel-provided signal restorer on architectures (e.g. x86_32) that
+> provide one?
+
+That seems reasonable.  Not sure how easy it is to do it, though.
+
+> The amount of syscall entry wiring that arches need to do is IMO
+> already a bit out of hand.  Should we instead rename TIF_SECCOMP to
+> TIF_SYSCALL_INTERCEPTION and have one generic callback that handles
+> seccomp and this new thing?
+
+Considering the previous suggestion from Kees to hide it inside the
+tracehook and Thomas rework of this path, I'm not sure what is the best
+solution here, but some rework of these flags is due.  Thomas suggested
+expanding these flags to 64 bits and having some arch specific and
+arch-agnostic flags.  With the storage expansion and arch-agnostic flags,
+would this still be desirable?
+
+>> +int do_syscall_user_dispatch(struct pt_regs *regs)
+>> +{
+>> +       struct syscall_user_dispatch *sd = &current->syscall_dispatch;
+>> +       unsigned long ip = instruction_pointer(regs);
+>> +       char state;
+>> +
+>> +       if (likely(ip >= sd->dispatcher_start && ip <= sd->dispatcher_end))
+>> +               return 0;
+>> +
+>> +       if (likely(sd->selector)) {
+>> +               if (unlikely(__get_user(state, sd->selector)))
+>> +                       do_exit(SIGSEGV);
+>> +
+>> +               if (likely(state == 0))
+>> +                       return 0;
+>> +
+>> +               if (state != 1)
+>> +                       do_exit(SIGSEGV);
+>
+> This seems a bit extreme and hard to debug if it ever happens.
+
+Makes sense, but I don't see a better way to return the error here.
+Maybe a SIGSYS with a different si_errno?  Alternatively, we could
+revert to the previous behavior of allowing syscalls on state != 0, that
+existed in v1.  What do you think?
+
+-- 
+Gabriel Krisman Bertazi
