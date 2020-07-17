@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4768224566
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 22:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC402245E8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 23:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbgGQUw4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jul 2020 16:52:56 -0400
-Received: from mga02.intel.com ([134.134.136.20]:46328 "EHLO mga02.intel.com"
+        id S1726960AbgGQVjd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jul 2020 17:39:33 -0400
+Received: from mga05.intel.com ([192.55.52.43]:24888 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbgGQUw4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jul 2020 16:52:56 -0400
-IronPort-SDR: ccA0VIC++hRfB2yVjVzT0UNATUk+loJD2acJHKdhTFZ4OKGwpEK+F83LJq+fQWDJm9Ked4c9Mb
- kMNsLfgJyHVg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9685"; a="137785235"
+        id S1726204AbgGQVjb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Jul 2020 17:39:31 -0400
+IronPort-SDR: aBZHDjghD0crMd+R/XDYtcqWhPJ5nLUfrgPhoHmUF6bdbc8D8ucG/UNxn1ggygKf0OWYn6BtiC
+ YUpWjjmzkOdQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9685"; a="234532583"
 X-IronPort-AV: E=Sophos;i="5.75,364,1589266800"; 
-   d="scan'208";a="137785235"
+   d="scan'208";a="234532583"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 13:52:55 -0700
-IronPort-SDR: 690U0n6opbZ/Ur7zkVu//anEQ7MRj2sHCRzWpKkvX0jU9VzxrjihvaQr+xK5iBUfhEQqvlrfq5
- HGUS8jcEky3Q==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 14:39:30 -0700
+IronPort-SDR: AU7pg9gP52qGosMkjj44f+xwiuRZBXuNXBPORBl/nIscyOnQkujZOX7iJDcTIOdgYz9TXvt9wD
+ p6bhZiX9j/bw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,364,1589266800"; 
-   d="scan'208";a="326947980"
+   d="scan'208";a="460984872"
 Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga007.jf.intel.com with ESMTP; 17 Jul 2020 13:52:55 -0700
-Date:   Fri, 17 Jul 2020 13:52:55 -0700
+  by orsmga005.jf.intel.com with ESMTP; 17 Jul 2020 14:39:30 -0700
+Date:   Fri, 17 Jul 2020 14:39:30 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -41,90 +41,96 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 02/17] x86/fpu: Refactor
- arch_set_user_pkey_access() for PKS support
-Message-ID: <20200717205254.GQ3008823@iweiny-DESK2.sc.intel.com>
+Subject: Re: [PATCH RFC V2 04/17] x86/pks: Preserve the PKRS MSR on context
+ switch
+Message-ID: <20200717213929.GR3008823@iweiny-DESK2.sc.intel.com>
 References: <20200717072056.73134-1-ira.weiny@intel.com>
- <20200717072056.73134-3-ira.weiny@intel.com>
- <20200717085442.GX10769@hirez.programming.kicks-ass.net>
+ <20200717072056.73134-5-ira.weiny@intel.com>
+ <20200717083140.GW10769@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200717085442.GX10769@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200717083140.GW10769@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 10:54:42AM +0200, Peter Zijlstra wrote:
-> On Fri, Jul 17, 2020 at 12:20:41AM -0700, ira.weiny@intel.com wrote:
+On Fri, Jul 17, 2020 at 10:31:40AM +0200, Peter Zijlstra wrote:
+> On Fri, Jul 17, 2020 at 12:20:43AM -0700, ira.weiny@intel.com wrote:
+> 
+> > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> > index f362ce0d5ac0..d69250a7c1bf 100644
+> > --- a/arch/x86/kernel/process.c
+> > +++ b/arch/x86/kernel/process.c
+> > @@ -42,6 +42,7 @@
+> >  #include <asm/spec-ctrl.h>
+> >  #include <asm/io_bitmap.h>
+> >  #include <asm/proto.h>
+> > +#include <asm/pkeys_internal.h>
+> >  
+> >  #include "process.h"
+> >  
+> > @@ -184,6 +185,36 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long sp,
+> >  	return ret;
+> >  }
+> >  
 > > +/*
-> > + * Get a new pkey register value from the user values specified.
-> > + *
-> > + * Kernel users use the same flags as user space:
-> > + *     PKEY_DISABLE_ACCESS
-> > + *     PKEY_DISABLE_WRITE
+> > + * NOTE: We wrap pks_init_task() and pks_sched_in() with
+> > + * CONFIG_ARCH_HAS_SUPERVISOR_PKEYS because using IS_ENABLED() fails
+> > + * due to the lack of task_struct->saved_pkrs in this configuration.
+> > + * Furthermore, we place them here because of the complexity introduced by
+> > + * header conflicts introduced to get the task_struct definition in the pkeys
+> > + * headers.
 > > + */
-> > +u32 get_new_pkr(u32 old_pkr, int pkey, unsigned long init_val)
+> 
+> I don't see anything much useful in that comment.
+
+I'm happy to delete.  Internal reviews questioned the motive here so I added
+the comment to inform why this style was chosen rather than the preferred
+IS_ENABLED().
+
+I've deleted it now.
+
+> 
+> > +#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
+> > +DECLARE_PER_CPU(u32, pkrs_cache);
+> > +static inline void pks_init_task(struct task_struct *tsk)
 > > +{
-> > +	int pkey_shift = (pkey * PKR_BITS_PER_PKEY);
-> > +	u32 new_pkr_bits = 0;
-> > +
-> > +	/* Set the bits we need in the register:  */
-> > +	if (init_val & PKEY_DISABLE_ACCESS)
-> > +		new_pkr_bits |= PKR_AD_BIT;
-> > +	if (init_val & PKEY_DISABLE_WRITE)
-> > +		new_pkr_bits |= PKR_WD_BIT;
-> > +
-> > +	/* Shift the bits in to the correct place: */
-> > +	new_pkr_bits <<= pkey_shift;
-> > +
-> > +	/* Mask off any old bits in place: */
-> > +	old_pkr &= ~((PKR_AD_BIT | PKR_WD_BIT) << pkey_shift);
-> > +
-> > +	/* Return the old part along with the new part: */
-> > +	return old_pkr | new_pkr_bits;
+> > +	/* New tasks get the most restrictive PKRS value */
+> > +	tsk->thread.saved_pkrs = INIT_PKRS_VALUE;
 > > +}
+> > +static inline void pks_sched_in(void)
+> > +{
+> > +	u64 current_pkrs = current->thread.saved_pkrs;
+> > +
+> > +	/* Only update the MSR when current's pkrs is different from the MSR. */
+> > +	if (this_cpu_read(pkrs_cache) == current_pkrs)
+> > +		return;
+> > +
+> > +	write_pkrs(current_pkrs);
 > 
-> This is unbelievable junk...
+> Should we write that like:
 > 
-> How about something like:
+> 	/*
+> 	 * PKRS is only temporarily changed during specific code paths.
+> 	 * Only a preemption during these windows away from the default
+> 	 * value would require updating the MSR.
+> 	 */
+> 	if (unlikely(this_cpu_read(pkrs_cache) != current_pkrs))
+> 		write_pkrs(current_pkrs);
 > 
-> u32 update_pkey_reg(u32 pk_reg, int pkey, unsigned int flags)
-> {
-> 	int pkey_shift = pkey * PKR_BITS_PER_PKEY;
-> 
-> 	pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
-> 
-> 	if (flags & PKEY_DISABLE_ACCESS)
-> 		pk_reg |= PKR_AD_BIT << pkey_shift;
-> 	if (flags & PKEY_DISABLE_WRITE)
-> 		pk_reg |= PKR_WD_BIT << pkey_shift;
-> 
-> 	return pk_reg;
-> }
-> 
-> Then we at least have a little clue wtf the thing does.. Yes I started
-> with a rename and then got annoyed at the implementation too.
+> ?
 
-On the code I think this is fair.  I've also updated the calling function to be
-a bit cleaner as well.
+Yes I think the unlikely is better.
 
-However, I think the name 'update' is a bit misleading.  Here is the new
-calling code:
-
-...
-        pkru = read_pkru();
-	pkru = update_pkey_reg(pkru, pkey, init_val);
-	write_pkru(pkru);
-...
-
-
-I think it is odd to have a function called update_pkey_reg() called right
-before a write_pkru().  Can we call this update_pkey_value?  or just 'val'?
-Because write_pkru() actually updates the register.
-
-Thanks for the review,
+Thanks,
 Ira
 
+> 
+> > +}
+> > +#else
+> > +static inline void pks_init_task(struct task_struct *tsk) { }
+> > +static inline void pks_sched_in(void) { }
+> > +#endif
