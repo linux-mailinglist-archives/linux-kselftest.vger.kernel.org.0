@@ -2,75 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E53224494
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 21:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4768224566
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jul 2020 22:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgGQTtp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jul 2020 15:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728022AbgGQTtp (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jul 2020 15:49:45 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD85C0619D2;
-        Fri, 17 Jul 2020 12:49:45 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 81B8A11E45928;
-        Fri, 17 Jul 2020 12:49:44 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 12:49:43 -0700 (PDT)
-Message-Id: <20200717.124943.1418473237939036327.davem@davemloft.net>
-To:     paolo.pisati@canonical.com
-Cc:     kuba@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: net: ip_defrag: modprobe missing
- nf_defrag_ipv6 support
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200716155114.72625-1-paolo.pisati@canonical.com>
-References: <20200716155114.72625-1-paolo.pisati@canonical.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 17 Jul 2020 12:49:44 -0700 (PDT)
+        id S1726492AbgGQUw4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jul 2020 16:52:56 -0400
+Received: from mga02.intel.com ([134.134.136.20]:46328 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726393AbgGQUw4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Jul 2020 16:52:56 -0400
+IronPort-SDR: ccA0VIC++hRfB2yVjVzT0UNATUk+loJD2acJHKdhTFZ4OKGwpEK+F83LJq+fQWDJm9Ked4c9Mb
+ kMNsLfgJyHVg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9685"; a="137785235"
+X-IronPort-AV: E=Sophos;i="5.75,364,1589266800"; 
+   d="scan'208";a="137785235"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 13:52:55 -0700
+IronPort-SDR: 690U0n6opbZ/Ur7zkVu//anEQ7MRj2sHCRzWpKkvX0jU9VzxrjihvaQr+xK5iBUfhEQqvlrfq5
+ HGUS8jcEky3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,364,1589266800"; 
+   d="scan'208";a="326947980"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jul 2020 13:52:55 -0700
+Date:   Fri, 17 Jul 2020 13:52:55 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V2 02/17] x86/fpu: Refactor
+ arch_set_user_pkey_access() for PKS support
+Message-ID: <20200717205254.GQ3008823@iweiny-DESK2.sc.intel.com>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-3-ira.weiny@intel.com>
+ <20200717085442.GX10769@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200717085442.GX10769@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Pisati <paolo.pisati@canonical.com>
-Date: Thu, 16 Jul 2020 17:51:14 +0200
+On Fri, Jul 17, 2020 at 10:54:42AM +0200, Peter Zijlstra wrote:
+> On Fri, Jul 17, 2020 at 12:20:41AM -0700, ira.weiny@intel.com wrote:
+> > +/*
+> > + * Get a new pkey register value from the user values specified.
+> > + *
+> > + * Kernel users use the same flags as user space:
+> > + *     PKEY_DISABLE_ACCESS
+> > + *     PKEY_DISABLE_WRITE
+> > + */
+> > +u32 get_new_pkr(u32 old_pkr, int pkey, unsigned long init_val)
+> > +{
+> > +	int pkey_shift = (pkey * PKR_BITS_PER_PKEY);
+> > +	u32 new_pkr_bits = 0;
+> > +
+> > +	/* Set the bits we need in the register:  */
+> > +	if (init_val & PKEY_DISABLE_ACCESS)
+> > +		new_pkr_bits |= PKR_AD_BIT;
+> > +	if (init_val & PKEY_DISABLE_WRITE)
+> > +		new_pkr_bits |= PKR_WD_BIT;
+> > +
+> > +	/* Shift the bits in to the correct place: */
+> > +	new_pkr_bits <<= pkey_shift;
+> > +
+> > +	/* Mask off any old bits in place: */
+> > +	old_pkr &= ~((PKR_AD_BIT | PKR_WD_BIT) << pkey_shift);
+> > +
+> > +	/* Return the old part along with the new part: */
+> > +	return old_pkr | new_pkr_bits;
+> > +}
+> 
+> This is unbelievable junk...
+> 
+> How about something like:
+> 
+> u32 update_pkey_reg(u32 pk_reg, int pkey, unsigned int flags)
+> {
+> 	int pkey_shift = pkey * PKR_BITS_PER_PKEY;
+> 
+> 	pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
+> 
+> 	if (flags & PKEY_DISABLE_ACCESS)
+> 		pk_reg |= PKR_AD_BIT << pkey_shift;
+> 	if (flags & PKEY_DISABLE_WRITE)
+> 		pk_reg |= PKR_WD_BIT << pkey_shift;
+> 
+> 	return pk_reg;
+> }
+> 
+> Then we at least have a little clue wtf the thing does.. Yes I started
+> with a rename and then got annoyed at the implementation too.
 
-> Fix ip_defrag.sh when CONFIG_NF_DEFRAG_IPV6=m:
-> 
-> $ sudo ./ip_defrag.sh
-> + set -e
-> + mktemp -u XXXXXX
-> + readonly NETNS=ns-rGlXcw
-> + trap cleanup EXIT
-> + setup
-> + ip netns add ns-rGlXcw
-> + ip -netns ns-rGlXcw link set lo up
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_high_thresh=9000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_low_thresh=7000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_time=1
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_high_thresh=9000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_low_thresh=7000000
-> + ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_time=1
-> + ip netns exec ns-rGlXcw sysctl -w net.netfilter.nf_conntrack_frag6_high_thresh=9000000
-> + cleanup
-> + ip netns del ns-rGlXcw
-> 
-> $ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
-> ls: cannot access '/proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh': No such file or directory
-> 
-> $ sudo modprobe nf_defrag_ipv6
-> $ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
-> -rw-r--r-- 1 root root 0 Jul 14 12:34 /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
-> 
-> Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
+On the code I think this is fair.  I've also updated the calling function to be
+a bit cleaner as well.
 
-Applied, thanks.
+However, I think the name 'update' is a bit misleading.  Here is the new
+calling code:
+
+...
+        pkru = read_pkru();
+	pkru = update_pkey_reg(pkru, pkey, init_val);
+	write_pkru(pkru);
+...
+
+
+I think it is odd to have a function called update_pkey_reg() called right
+before a write_pkru().  Can we call this update_pkey_value?  or just 'val'?
+Because write_pkru() actually updates the register.
+
+Thanks for the review,
+Ira
+
