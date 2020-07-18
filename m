@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 142712248E0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jul 2020 07:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAB3224916
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jul 2020 07:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbgGRFGw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Jul 2020 01:06:52 -0400
-Received: from mga18.intel.com ([134.134.136.126]:7941 "EHLO mga18.intel.com"
+        id S1726499AbgGRFvG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Jul 2020 01:51:06 -0400
+Received: from mga18.intel.com ([134.134.136.126]:11135 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725887AbgGRFGv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Jul 2020 01:06:51 -0400
-IronPort-SDR: 7YftjD1FvMeh2cfhLU+Hl2Z19UHAwH4voI2BitVIuI/J9Dh24sj6d2cuBq5Vr4Rv5+msav1Td9
- Dd7iw7W5Prww==
-X-IronPort-AV: E=McAfee;i="6000,8403,9685"; a="137184356"
+        id S1726249AbgGRFvF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 18 Jul 2020 01:51:05 -0400
+IronPort-SDR: AYj5vi9SRqf90NzlG1PtvIWR5kP8GG2xKuSQJMNrukWUMpeW1xa+p5v6uCymiFzQveeMn9wzGH
+ rTUZnN7GJfGw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9685"; a="137186390"
 X-IronPort-AV: E=Sophos;i="5.75,365,1589266800"; 
-   d="scan'208";a="137184356"
+   d="scan'208";a="137186390"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 22:06:50 -0700
-IronPort-SDR: PY3XuV+vuuAtpY8rxRvZ+3vMP/33Vq1wquR8p4Yg18XVLAL6vT+hjMFvaGQsieLHuShfCSaRfd
- pufbVEiCB0pQ==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 22:51:04 -0700
+IronPort-SDR: Bc8yS/Mga/P/JELyDS9maVNQZIck4wfEmlGO3VkOyOrNQb8SVgJAdVZL/lTq/KBuOwtXK2wrMt
+ piSYLWsQeJ9A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,365,1589266800"; 
-   d="scan'208";a="270979648"
+   d="scan'208";a="282993538"
 Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Jul 2020 22:06:50 -0700
-Date:   Fri, 17 Jul 2020 22:06:50 -0700
+  by orsmga003.jf.intel.com with ESMTP; 17 Jul 2020 22:51:04 -0700
+Date:   Fri, 17 Jul 2020 22:51:03 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -42,46 +42,86 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH RFC V2 12/17] memremap: Add zone device access protection
-Message-ID: <20200718050650.GT3008823@iweiny-DESK2.sc.intel.com>
+Message-ID: <20200718055103.GU3008823@iweiny-DESK2.sc.intel.com>
 References: <20200717072056.73134-1-ira.weiny@intel.com>
  <20200717072056.73134-13-ira.weiny@intel.com>
- <20200717091053.GZ10769@hirez.programming.kicks-ass.net>
+ <20200717091718.GA10769@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200717091053.GZ10769@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200717091718.GA10769@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 11:10:53AM +0200, Peter Zijlstra wrote:
+On Fri, Jul 17, 2020 at 11:17:18AM +0200, Peter Zijlstra wrote:
 > On Fri, Jul 17, 2020 at 12:20:51AM -0700, ira.weiny@intel.com wrote:
-> > +static pgprot_t dev_protection_enable_get(struct dev_pagemap *pgmap, pgprot_t prot)
+> > +void dev_access_disable(void)
 > > +{
-> > +	if (pgmap->flags & PGMAP_PROT_ENABLED && dev_page_pkey != PKEY_INVALID) {
-> > +		pgprotval_t val = pgprot_val(prot);
+> > +	unsigned long flags;
 > > +
-> > +		static_branch_inc(&dev_protection_static_key);
-> > +		prot = __pgprot(val | _PAGE_PKEY(dev_page_pkey));
-> > +	}
-> > +	return prot;
+> > +	if (!static_branch_unlikely(&dev_protection_static_key))
+> > +		return;
+> > +
+> > +	local_irq_save(flags);
+> > +	current->dev_page_access_ref--;
+> > +	if (current->dev_page_access_ref == 0)
+> 
+> 	if (!--current->dev_page_access_ref)
+
+It's not my style but I'm ok with it.
+
+> 
+> > +		pks_update_protection(dev_page_pkey, PKEY_DISABLE_ACCESS);
+> > +	local_irq_restore(flags);
 > > +}
+> > +EXPORT_SYMBOL_GPL(dev_access_disable);
+> > +
+> > +void dev_access_enable(void)
+> > +{
+> > +	unsigned long flags;
+> > +
+> > +	if (!static_branch_unlikely(&dev_protection_static_key))
+> > +		return;
+> > +
+> > +	local_irq_save(flags);
+> > +	/* 0 clears the PKEY_DISABLE_ACCESS bit, allowing access */
+> > +	if (current->dev_page_access_ref == 0)
+> > +		pks_update_protection(dev_page_pkey, 0);
+> > +	current->dev_page_access_ref++;
 > 
-> Every other pgprot modifying function is called pgprot_*(), although I
-> suppose we have the exceptions phys_mem_access_prot() and dma_pgprot().
+> 	if (!current->dev_page_access_ref++)
 
-Yea...  this function kind of morphed.  The issue is that this is also a 'get'
-with a corresponding 'put'.  So I'm at a loss for what makes sense between the
-2 functions.
+Sure.
 
 > 
-> How about we call this one devm_pgprot() ?
+> > +	local_irq_restore(flags);
+> > +}
+> > +EXPORT_SYMBOL_GPL(dev_access_enable);
+> 
+> 
+> Also, you probably want something like:
+> 
+> static __always_inline devm_access_disable(void)
 
-Dan Williams mentioned to me that the devm is not an appropriate prefix.  Thus
-the 'dev' prefix instead.
+Yes that is better.
 
-How about dev_pgprot_{get,put}()?
+However, again Dan and I agree devm is not the right prefix here.
 
+I've updated.
+
+Thanks!
 Ira
+
+> {
+> 	if (static_branch_unlikely(&dev_protection_static_key))
+> 		__devm_access_disable();
+> }
+> 
+> static __always_inline devm_access_enable(void)
+> {
+> 	if (static_branch_unlikely(&dev_protection_static_key))
+> 		__devm_access_enable();
+> }
