@@ -2,377 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50439227275
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 00:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C792272A9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 01:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727795AbgGTWo0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jul 2020 18:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726127AbgGTWoZ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jul 2020 18:44:25 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF88BC061794
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2020 15:44:24 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id e12so14713978qtr.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2020 15:44:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ag3CH9gIrCGq60wqLtIh8GQRzVO4EAvpufO2Zb/zlwc=;
-        b=MijXTMv2wmOpRT0tSxn67usaHrw7v5/wM9T09O2XbEPBquJps5+8tk8hPgi+9s8haX
-         DwenNjaAEUmqapQyTASXTIMFLrqfJ5maiAbJQLOCfogISvfTxHrXjb/P3vx8ORIPJZON
-         IKLq7gwEwA4XcBWmR2Z24Pi7TAlfL9mNK6ntT2H9RvN/4/UbbmwNRY/A9QLg8S1sVL4p
-         kQBzA5Al3O8Ct7hjyr+Q6j6YqSAcL+/GJIPjnN6I9OuxTl2lrbQPHmJy048u9YeXUZDo
-         /0Y5h6zcEukIuboddjdF2QFrEnX1ablLh0vlr2c8qn2PzSq2CTzpap7gEEC7oJdQxH6k
-         JlYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ag3CH9gIrCGq60wqLtIh8GQRzVO4EAvpufO2Zb/zlwc=;
-        b=FXpV4MEi3QXDnA/EcyNpCLYxV1H4PSyu5miN3L/3K/YQ1I5pGZJXDBaNURU2+n6xGv
-         J13NTHHD7Bcg3T1dVJLyIi804DzNlLxQxDxT5RhRJp+RXOo5fCX8CYE+ZVxS3CF6HJEp
-         ehUR1DWpBUU6YgjywQbbHhTxzivo9pNAAU0Elp+S9J7E8l7pvdPswc9ZObY4E5Bldmx1
-         o+9JBhpC07ePSYnsdTlTQ+RGjPzsriMysojbj+oAQ47kuBI8WdsUUBYxEY1UGofoVRMS
-         lnxRoiX+9QW8bLul7c4m7Q1mU4NluNy3KWl830Yp/vvwRFR7jP7pgsymIOJ6TZhMrYwU
-         TIzA==
-X-Gm-Message-State: AOAM533vAAgl7uN4r+BsrOIEvpz/0errblfO/CSN7++mKCIACAvlZ8Sy
-        WzgkSiDSrHUqKfVswz7k8p6jZ8e6Lgdh6A==
-X-Google-Smtp-Source: ABdhPJwpZN6+9Bs9wz4nAsemF8PM8GzrSfDmAGPEYHHS4VKn288EfCse8gYvM/GJ6JWxwBpXQ1D0RQ==
-X-Received: by 2002:ac8:3985:: with SMTP id v5mr25758367qte.337.1595285064006;
-        Mon, 20 Jul 2020 15:44:24 -0700 (PDT)
-Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id g136sm795513qke.82.2020.07.20.15.44.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 15:44:22 -0700 (PDT)
-From:   Vitor Massaru Iha <vitor@massaru.org>
-To:     kunit-dev@googlegroups.com
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brendanhiggins@google.com, keescook@chromium.org,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v3] lib: overflow_kunit: add KUnit test conversion of check_*_overflow
-Date:   Mon, 20 Jul 2020 19:44:18 -0300
-Message-Id: <20200720224418.200495-1-vitor@massaru.org>
-X-Mailer: git-send-email 2.26.2
+        id S1727912AbgGTXQn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jul 2020 19:16:43 -0400
+Received: from nat-hk.nvidia.com ([203.18.50.4]:29291 "EHLO nat-hk.nvidia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726546AbgGTXQm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 20 Jul 2020 19:16:42 -0400
+Received: from hkpgpgate102.nvidia.com (Not Verified[10.18.92.9]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f1625d60000>; Tue, 21 Jul 2020 07:16:38 +0800
+Received: from HKMAIL102.nvidia.com ([10.18.16.11])
+  by hkpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 20 Jul 2020 16:16:38 -0700
+X-PGP-Universal: processed;
+        by hkpgpgate102.nvidia.com on Mon, 20 Jul 2020 16:16:38 -0700
+Received: from HKMAIL101.nvidia.com (10.18.16.10) by HKMAIL102.nvidia.com
+ (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Jul
+ 2020 23:16:38 +0000
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by HKMAIL101.nvidia.com (10.18.16.10) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Mon, 20 Jul 2020 23:16:38 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DCoUoqegydEjQPyoEXbE2vGgNAd+b89o005xLH6jT+BeEYfXfLQ+fZ6sJ0tcSHxOCT/4WbP/jYRfaWDsRMDetDAK/w9JW8AzhVJuwtC3jSuH79dc1drxplHxephvhwmM8cjIpTys2EpQvO92ZZSp9IXVq17Pu3S4QCLyawJPV3oTeiQmWoH0VofHR2TF7eNkxVF7UlH52IICDZKJtcz5fG9aKEM5HYrmkuqeOcKXjlG3ev6QGgx9f2LhNu7j/RTbuFBMmEuJIcuZClxPxGvW8ZmnKjl0EismFUVMxByP1Ag4HbRtGJsvgkal+C88ms7lRPPrmp7p8Ha+ZVf4eLOitQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l9YsPERfWdF/nbq0WcQoLchDX/Y65JmOVza5hA+QpB0=;
+ b=iAHcDGb0ZxLR6BMwJXvF02fuWLXg+By7QU1LcdcSFMLYVdON4ZBu8sUMU+LPbAXxkyvfKoqzTg3+E0UyOdVeIgvPWxIYznn67MsYKX+x628XKMy2vPKsN4W8WD21TQFhZGvylgnK17y8hHlwIPJz8gDcfk7PuIj9NS4Coo1zd5LoGPElheyI+W2cYlr39YB9vWPXUKLDce3cqQI+b6BmVcI0k2OYpLaw8N1Tqxdoi39MKfg7c+QtbZcrAjKkBNLA35HaXAFHZ3i3brCeOpvsqBOG2OI2nEfsqbgUz+Jep5947rEDWs5DiOcoCyqjpKa7yQpm/nRKTUgZgIUlBRw8PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Authentication-Results: nvidia.com; dkim=none (message not signed)
+ header.d=none;nvidia.com; dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
+ by DM6PR12MB3116.namprd12.prod.outlook.com (2603:10b6:5:38::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17; Mon, 20 Jul
+ 2020 23:16:35 +0000
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::1d53:7cb4:c3d7:2b54]) by DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::1d53:7cb4:c3d7:2b54%6]) with mapi id 15.20.3195.025; Mon, 20 Jul 2020
+ 23:16:35 +0000
+Date:   Mon, 20 Jul 2020 20:16:33 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+CC:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        <nouveau@lists.freedesktop.org>, <kvm-ppc@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
+        Bharata B Rao <bharata@linux.ibm.com>
+Subject: Re: [PATCH v2 2/5] mm/migrate: add a direction parameter to
+ migrate_vma
+Message-ID: <20200720231633.GI2021234@nvidia.com>
+References: <20200713172149.2310-1-rcampbell@nvidia.com>
+ <20200713172149.2310-3-rcampbell@nvidia.com>
+ <20200720183643.GA3028737@nvidia.com>
+ <2e775a5d-9d62-de52-6799-3bbb09c88c5a@nvidia.com>
+ <20200720195943.GH2021234@nvidia.com>
+ <fdfde6a0-f2bf-c0b2-0283-c882aa755292@nvidia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <fdfde6a0-f2bf-c0b2-0283-c882aa755292@nvidia.com>
+X-ClientProxiedBy: MN2PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::17) To DM6PR12MB3834.namprd12.prod.outlook.com
+ (2603:10b6:5:14a::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mlx.ziepe.ca (156.34.48.30) by MN2PR03CA0012.namprd03.prod.outlook.com (2603:10b6:208:23a::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17 via Frontend Transport; Mon, 20 Jul 2020 23:16:34 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1jxf1N-00Cvqs-N4; Mon, 20 Jul 2020 20:16:33 -0300
+X-Originating-IP: [156.34.48.30]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4834a13b-0763-4ea0-e80e-08d82d02f235
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3116:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM6PR12MB311690C831D918EB185B363EC27B0@DM6PR12MB3116.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x1vdsr0Q8fmfyeG6Qr5xFJ847lTRIr1DpfMfQnCj+LmeniURZYRjJHNbLhc6dsuE5v8Ls7xMG/pAFrFAD52IZdIFH27Joivn5utBeXbiTWMfY0iNdrFxwEoSdlgMdVQoJGr0xzyf8e7/HpdCU9jq3B9+Zj/nf13jdtQK69s/IlIyib3pdeFm9oT+bFLqAN1fWkO8kIHyhF19mVo626dzr4WEl7YDampQPFnIMDZ5Youiy5KjXyP3rv4EPAwhVmPf/L4MlzeLh2hhlwNOqR9EaXoIAt7QrNRLQEJq8oLiOO3cH6Uev7HZ8ZriJv0rutVR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3834.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(6862004)(5660300002)(53546011)(66946007)(8936002)(66556008)(66476007)(426003)(8676002)(4326008)(36756003)(2906002)(83380400001)(2616005)(316002)(37006003)(6636002)(7416002)(54906003)(478600001)(186003)(1076003)(86362001)(9746002)(9786002)(26005)(33656002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: tVqQxieM0fDVK4DPnAxAHf1QcCA4z9m9W0Sppr0hGem5arVxrqiyUHp5jIyZesdKD8Vx5ZSHfehtpdATVZq0vLfFwBx2hplbdeYcoDiY1RBYvJiqcOjkvEabTlRmvZHECQKGix9SIisrFs+TmUOIV983pxs96tuoEBpAp7i1nmuPRnJtwgaWhw6NWLrXodnmu9jNq9YEypGmakzkCB3KB+/fFQzREYCeujN619xUMKfjZ3Xw3sKm+W4zzlxwA2wVOwTH2eDVu+fx5TADYoG2tTKLz4f1RZ1DW3UWyIG+kZetzzRehdXS5/MZKHYrPf7sZitqzHx8DD/x/lTmA2OQ0vHKWJ71tr5Fm5PKXUOoMVQMrsYsq5BCMAubzkmVwrKRTAhgExKIvxq7I+mqXZBM2nO3QlG3Np162ycAScNjHxPJgjS5ozQP57CMkmh+upgLTCgfTZ3prABi6wm/8IDo2elau7LzHbNvW0UnA8WhD0I=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4834a13b-0763-4ea0-e80e-08d82d02f235
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3834.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2020 23:16:35.3146
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RQzMkKTH5jCxNqKMbV4jagMqTkm27z0xpJ9dQDXEAoi3kI9J29ZNfiGthw1jDU3J
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3116
+X-OriginatorOrg: Nvidia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595286998; bh=l9YsPERfWdF/nbq0WcQoLchDX/Y65JmOVza5hA+QpB0=;
+        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
+         ARC-Authentication-Results:Authentication-Results:Date:From:To:CC:
+         Subject:Message-ID:References:Content-Type:Content-Disposition:
+         In-Reply-To:X-ClientProxiedBy:MIME-Version:
+         X-MS-Exchange-MessageSentRepresentingType:X-Originating-IP:
+         X-MS-PublicTrafficType:X-MS-Office365-Filtering-Correlation-Id:
+         X-MS-TrafficTypeDiagnostic:X-MS-Exchange-Transport-Forked:
+         X-Microsoft-Antispam-PRVS:X-MS-Oob-TLC-OOBClassifiers:
+         X-MS-Exchange-SenderADCheck:X-Microsoft-Antispam:
+         X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+         X-MS-Exchange-AntiSpam-MessageData:
+         X-MS-Exchange-CrossTenant-Network-Message-Id:
+         X-MS-Exchange-CrossTenant-AuthSource:
+         X-MS-Exchange-CrossTenant-AuthAs:
+         X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+         X-MS-Exchange-CrossTenant-FromEntityHeader:
+         X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+         X-MS-Exchange-CrossTenant-UserPrincipalName:
+         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+        b=NvGAOEXLF5Fo8nGP1vF5ypMJLmSXtXJxBtweEcANVnbCsNK91CDC3Ummnk6v/tzH9
+         aBoXuMl1T0ygtIH+NA8x+xsLJWtQqSwP04+m3g8I5YMClFnyzW1ch+lU7yd4YC8+jf
+         nP5S12gV7IQigjHMymTyuQ6kJoQMcMkBdE9MssRYEOCsgk5aXpgOGYAj+7SFWTtEmu
+         UJmm0UvqBx/4f6EgszAedF3GUdEKbOz8Pmxom8UQN4wlVRJocTYB7Q9+t/M8BU50E2
+         01S58TXDId7ZE0H3a2U7NfduR9KQl6n2bO6WPi6ImoYXBMA8EqfM9wLEoM6KM+86bj
+         tOoToq6jhTfrA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds the conversion of the runtime tests of check_*_overflow functions,
-from `lib/test_overflow.c`to KUnit tests.
+On Mon, Jul 20, 2020 at 01:49:09PM -0700, Ralph Campbell wrote:
+> 
+> On 7/20/20 12:59 PM, Jason Gunthorpe wrote:
+> > On Mon, Jul 20, 2020 at 12:54:53PM -0700, Ralph Campbell wrote:
+> > > > > diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+> > > > > index 3e546cbf03dd..620f2235d7d4 100644
+> > > > > +++ b/include/linux/migrate.h
+> > > > > @@ -180,6 +180,11 @@ static inline unsigned long migrate_pfn(unsigned long pfn)
+> > > > >    	return (pfn << MIGRATE_PFN_SHIFT) | MIGRATE_PFN_VALID;
+> > > > >    }
+> > > > > +enum migrate_vma_direction {
+> > > > > +	MIGRATE_VMA_FROM_SYSTEM,
+> > > > > +	MIGRATE_VMA_FROM_DEVICE_PRIVATE,
+> > > > > +};
+> > > > 
+> > > > I would have guessed this is more natural as _FROM_DEVICE_ and
+> > > > TO_DEVICE_ ?
+> > > 
+> > > The caller controls where the destination memory is allocated so it isn't
+> > > necessarily device private memory, it could be from system to system.
+> > > The use case for system to system memory migration is for hardware
+> > > like ARM SMMU or PCIe ATS where a single set of page tables is shared by
+> > > the device and a CPU process over a coherent system memory bus.
+> > > Also many integrated GPUs in SOCs fall into this category too.
+> > 
+> > Maybe just TO/FROM_DEIVCE then? Even though the memory is not
+> > DEVICE_PRIVATE it is still device owned pages right?
+> > 
+> > > So to me, it makes more sense to specify the direction based on the
+> > > source location.
+> > 
+> > It feels strange because the driver doesn't always know or control the
+> > source?
+> 
+> The driver can't really know where the source is currently located because the
+> API is designed to not initially hold the page locks, migrate_vma_setup() only knows
+> the source once it holds the page table locks and isolates/locks the pages being
+> migrated. The direction and pgmap_owner are supposed to filter which pages
+> the caller is interested in migrating.
+> Perhaps the direction should instead be a flags field with separate bits for
+> system memory and device private memory selecting source candidates for
+> migration. I can imagine use cases for all 4 combinations of
+> d->d, d->s, s->d, and s->s being valid.
+> 
+> I didn't really think a direction was needed, this was something that
+> Christoph Hellwig seemed to think made the API safer.
 
-The log similar to the one seen in dmesg running test_overflow.c can be
-seen in `test.log`.
+If it is a filter then just using those names would make sense
 
-Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-Tested-by: David Gow <davidgow@google.com>
----
-v2:
-  * moved lib/test_overflow.c to lib/overflow-test.c;
-    * back to original license;
-    * fixed style code;
-    * keeps __initconst and added _refdata on overflow_test_cases variable;
-    * keeps macros intact making asserts with the variable err;
-    * removed duplicate test_s8_overflow();
-  * fixed typos on commit message;
+MIGRATE_VMA_SELECT_SYSTEM
+MIGRATE_VMA_SELECT_DEVICE_PRIVATE
 
-v3:
-  * changed filename to overflow_kunit.c;
-  * replace _refdata by _inidata;
-  * added expects/asserts on individual tests;
----
- lib/Kconfig.debug                         |  20 +++-
- lib/Makefile                              |   2 +-
- lib/{test_overflow.c => overflow_kunit.c} | 122 +++++++++-------------
- 3 files changed, 70 insertions(+), 74 deletions(-)
- rename lib/{test_overflow.c => overflow_kunit.c} (91%)
+SYSTEM feels like the wrong name too, doesn't linux have a formal name
+for RAM struct pages?
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 9ad9210d70a1..230aaf418dc0 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1999,9 +1999,6 @@ config TEST_UUID
- config TEST_XARRAY
- 	tristate "Test the XArray code at runtime"
+In your future coherent design how would the migrate select 'device'
+pages that are fully coherent? Are they still zone something pages
+that are OK for CPU usage?
 
--config TEST_OVERFLOW
--	tristate "Test check_*_overflow() functions at runtime"
--
- config TEST_RHASHTABLE
- 	tristate "Perform selftest on resizable hash table"
- 	help
-@@ -2154,6 +2151,23 @@ config SYSCTL_KUNIT_TEST
-
- 	  If unsure, say N.
-
-+config OVERFLOW_KUNIT
-+	tristate "KUnit test for overflow" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the overflow KUnit tests.
-+
-+	  KUnit tests run during boot and output the results to the debug log
-+	  in TAP format (http://testanything.org/). Only useful for kernel devs
-+	  running KUnit test harness and are not for inclusion into a production
-+	  build.
-+
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config LIST_KUNIT_TEST
- 	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index b1c42c10073b..c3cf72ec6c52 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -75,7 +75,6 @@ obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
- obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
- obj-$(CONFIG_TEST_LKM) += test_module.o
- obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
--obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
- obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
- obj-$(CONFIG_TEST_SORT) += test_sort.o
- obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
-@@ -318,3 +317,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- # KUnit tests
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-+obj-$(CONFIG_OVERFLOW_KUNIT) += overflow_kunit.o
-diff --git a/lib/test_overflow.c b/lib/overflow_kunit.c
-similarity index 91%
-rename from lib/test_overflow.c
-rename to lib/overflow_kunit.c
-index 7a4b6f6c5473..475d0daeb801 100644
---- a/lib/test_overflow.c
-+++ b/lib/overflow_kunit.c
-@@ -4,14 +4,11 @@
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-
-+#include <kunit/test.h>
- #include <linux/device.h>
- #include <linux/init.h>
--#include <linux/kernel.h>
- #include <linux/mm.h>
--#include <linux/module.h>
- #include <linux/overflow.h>
--#include <linux/slab.h>
--#include <linux/types.h>
- #include <linux/vmalloc.h>
-
- #define DEFINE_TEST_ARRAY(t)			\
-@@ -248,7 +245,7 @@ static int __init do_test_ ## t(const struct test_ ## t *p)		\
- 	return err;							\
- }									\
- 									\
--static int __init test_ ## t ## _overflow(void) {			\
-+static int __init test_ ## t ## _overflow(struct kunit *test) {	\
- 	int err = 0;							\
- 	unsigned i;							\
- 									\
-@@ -256,6 +253,7 @@ static int __init test_ ## t ## _overflow(void) {			\
- 		ARRAY_SIZE(t ## _tests));				\
- 	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
- 		err |= do_test_ ## t(&t ## _tests[i]);			\
-+	KUNIT_EXPECT_FALSE(test, err);					\
- 	return err;							\
- }
-
-@@ -270,25 +268,25 @@ DEFINE_TEST_FUNC(u64, "%llu");
- DEFINE_TEST_FUNC(s64, "%lld");
- #endif
-
--static int __init test_overflow_calculation(void)
-+static void __init overflow_calculation_test(struct kunit *test)
- {
- 	int err = 0;
-
--	err |= test_u8_overflow();
--	err |= test_s8_overflow();
--	err |= test_u16_overflow();
--	err |= test_s16_overflow();
--	err |= test_u32_overflow();
--	err |= test_s32_overflow();
-+	err |= test_u8_overflow(test);
-+	err |= test_s8_overflow(test);
-+	err |= test_u16_overflow(test);
-+	err |= test_s16_overflow(test);
-+	err |= test_u32_overflow(test);
-+	err |= test_s32_overflow(test);
- #if BITS_PER_LONG == 64
--	err |= test_u64_overflow();
--	err |= test_s64_overflow();
-+	err |= test_u64_overflow(test);
-+	err |= test_s64_overflow(test);
- #endif
-
--	return err;
-+	KUNIT_EXPECT_FALSE(test, err);
- }
-
--static int __init test_overflow_shift(void)
-+static void __init overflow_shift_test(struct kunit *test)
- {
- 	int err = 0;
-
-@@ -313,9 +311,9 @@ static int __init test_overflow_shift(void)
- 			pr_warn("got %llu\n", (u64)__d);		\
- 		__failed = 1;						\
- 	}								\
--	if (!__failed)							\
--		pr_info("ok: (%s)(%s << %s) == %s\n", #t, #a, #s,	\
--			of ? "overflow" : #expect);			\
-+	KUNIT_EXPECT_FALSE_MSG(test, __failed,				\
-+			       "ok: (%s)(%s << %s) == %s\n", #t, #a, #s,\
-+			       of ? "overflow" : #expect);		\
- 	__failed;							\
- })
-
-@@ -479,7 +477,7 @@ static int __init test_overflow_shift(void)
- 	err |= TEST_ONE_SHIFT(0, 31, s32, 0, false);
- 	err |= TEST_ONE_SHIFT(0, 63, s64, 0, false);
-
--	return err;
-+	KUNIT_EXPECT_FALSE(test, err);
- }
-
- /*
-@@ -499,7 +497,7 @@ static int __init test_overflow_shift(void)
- #define TEST_SIZE		(5 * 4096)
-
- #define DEFINE_TEST_ALLOC(func, free_func, want_arg, want_gfp, want_node)\
--static int __init test_ ## func (void *arg)				\
-+static int __init test_ ## func (struct kunit *test, void *arg)		\
- {									\
- 	volatile size_t a = TEST_SIZE;					\
- 	volatile size_t b = (SIZE_MAX / TEST_SIZE) + 1;			\
-@@ -507,19 +505,15 @@ static int __init test_ ## func (void *arg)				\
- 									\
- 	/* Tiny allocation test. */					\
- 	ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg, 1);\
--	if (!ptr) {							\
--		pr_warn(#func " failed regular allocation?!\n");	\
--		return 1;						\
--	}								\
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ptr,			\
-+			#func " failed regular allocation?!\n");	\
- 	free ## want_arg (free_func, arg, ptr);				\
- 									\
- 	/* Wrapped allocation test. */					\
- 	ptr = alloc ## want_arg ## want_gfp ## want_node (func, arg,	\
- 							  a * b);	\
--	if (!ptr) {							\
--		pr_warn(#func " unexpectedly failed bad wrapping?!\n");	\
--		return 1;						\
--	}								\
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ptr,			\
-+			#func " unexpectedly failed bad wrapping?!\n"); \
- 	free ## want_arg (free_func, arg, ptr);				\
- 									\
- 	/* Saturated allocation test. */				\
-@@ -555,7 +549,7 @@ DEFINE_TEST_ALLOC(kvzalloc_node, kvfree,     0, 1, 1);
- DEFINE_TEST_ALLOC(devm_kmalloc,  devm_kfree, 1, 1, 0);
- DEFINE_TEST_ALLOC(devm_kzalloc,  devm_kfree, 1, 1, 0);
-
--static int __init test_overflow_allocation(void)
-+static void __init overflow_allocation_test(struct kunit *test)
- {
- 	const char device_name[] = "overflow-test";
- 	struct device *dev;
-@@ -563,52 +557,40 @@ static int __init test_overflow_allocation(void)
-
- 	/* Create dummy device for devm_kmalloc()-family tests. */
- 	dev = root_device_register(device_name);
--	if (IS_ERR(dev)) {
--		pr_warn("Cannot register test device\n");
--		return 1;
--	}
--
--	err |= test_kmalloc(NULL);
--	err |= test_kmalloc_node(NULL);
--	err |= test_kzalloc(NULL);
--	err |= test_kzalloc_node(NULL);
--	err |= test_kvmalloc(NULL);
--	err |= test_kvmalloc_node(NULL);
--	err |= test_kvzalloc(NULL);
--	err |= test_kvzalloc_node(NULL);
--	err |= test_vmalloc(NULL);
--	err |= test_vmalloc_node(NULL);
--	err |= test_vzalloc(NULL);
--	err |= test_vzalloc_node(NULL);
--	err |= test_devm_kmalloc(dev);
--	err |= test_devm_kzalloc(dev);
-+	KUNIT_ASSERT_FALSE_MSG(test, IS_ERR(dev), "Cannot register test device\n");
-+
-+	err |= test_kmalloc(test, NULL);
-+	err |= test_kmalloc_node(test, NULL);
-+	err |= test_kzalloc(test, NULL);
-+	err |= test_kzalloc_node(test, NULL);
-+	err |= test_kvmalloc(test, NULL);
-+	err |= test_kvmalloc_node(test, NULL);
-+	err |= test_kvzalloc(test, NULL);
-+	err |= test_kvzalloc_node(test, NULL);
-+	err |= test_vmalloc(test, NULL);
-+	err |= test_vmalloc_node(test, NULL);
-+	err |= test_vzalloc(test, NULL);
-+	err |= test_vzalloc_node(test, NULL);
-+	err |= test_devm_kmalloc(test, dev);
-+	err |= test_devm_kzalloc(test, dev);
-
- 	device_unregister(dev);
-
--	return err;
-+	KUNIT_EXPECT_FALSE(test, err);
- }
-
--static int __init test_module_init(void)
--{
--	int err = 0;
--
--	err |= test_overflow_calculation();
--	err |= test_overflow_shift();
--	err |= test_overflow_allocation();
--
--	if (err) {
--		pr_warn("FAIL!\n");
--		err = -EINVAL;
--	} else {
--		pr_info("all tests passed\n");
--	}
-+static struct kunit_case __initdata overflow_test_cases[] = {
-+	KUNIT_CASE(overflow_calculation_test),
-+	KUNIT_CASE(overflow_shift_test),
-+	KUNIT_CASE(overflow_allocation_test),
-+	{}
-+};
-
--	return err;
--}
-+static struct kunit_suite __initdata overflow_test_suite = {
-+	.name = "overflow",
-+	.test_cases = overflow_test_cases,
-+};
-
--static void __exit test_module_exit(void)
--{ }
-+kunit_test_suites(&overflow_test_suite);
-
--module_init(test_module_init);
--module_exit(test_module_exit);
- MODULE_LICENSE("Dual MIT/GPL");
-
-base-commit: c63d2dd7e134ebddce4745c51f9572b3f0d92b26
---
-2.26.2
-
+Jason
