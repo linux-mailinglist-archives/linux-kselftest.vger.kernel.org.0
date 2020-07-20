@@ -2,316 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B612256E6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jul 2020 07:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69504225702
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jul 2020 07:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725893AbgGTFBV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jul 2020 01:01:21 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12932 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725805AbgGTFBV (ORCPT
+        id S1725872AbgGTFWd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jul 2020 01:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725287AbgGTFWc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jul 2020 01:01:21 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06K4WqDN159661;
-        Mon, 20 Jul 2020 01:00:53 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32buddgyqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 01:00:53 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06K50HTU036012;
-        Mon, 20 Jul 2020 01:00:52 -0400
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32buddgyq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 01:00:52 -0400
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06K4oqWC009851;
-        Mon, 20 Jul 2020 05:00:51 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03wdc.us.ibm.com with ESMTP id 32brq8pbt8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 05:00:51 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06K50oPr31457780
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jul 2020 05:00:50 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 06D256A05A;
-        Mon, 20 Jul 2020 05:00:50 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D9876A063;
-        Mon, 20 Jul 2020 05:00:49 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.102.23.82])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Jul 2020 05:00:49 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id 9A6F42E3225; Mon, 20 Jul 2020 10:30:43 +0530 (IST)
-Date:   Mon, 20 Jul 2020 10:30:43 +0530
-From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, srivatsa@csail.mit.edu,
-        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
-        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] cpuidle: Trace IPI based and timer based wakeup
- latency from idle states
-Message-ID: <20200720050043.GA31497@in.ibm.com>
-Reply-To: ego@linux.vnet.ibm.com
-References: <20200717091801.29289-1-psampat@linux.ibm.com>
- <20200717091801.29289-2-psampat@linux.ibm.com>
+        Mon, 20 Jul 2020 01:22:32 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76506C0619D2;
+        Sun, 19 Jul 2020 22:22:32 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id b79so429417qkg.9;
+        Sun, 19 Jul 2020 22:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J9yakJIWVJcO3qOP1hLM5tTSUBs1Jt+mXyEidCcZxjA=;
+        b=L4R0GS9iJsO22staBD0RL/tWoOc+llS1WcszVoPCdFC287SWRXFVQqgLt43M2x/1hz
+         B3zV/JsRDJY0RmkMvxadDiB6oei8AG0lvk0rE4fQnemMtppN9MmJ+y0zKSS/DqWjbQeI
+         rTIPPLHyUgG9zAg1xGkpRw6mie2+fR0zgWUf7ZJOXaccJYoJ3YPFHO4luWFJ0PJIpwSR
+         NJzZbGzB2pe86I77cSzsMtU27vhWbnVv9LAOcOBncp89pMlLOQC9V+Dz35gvAHWVuYrk
+         qxL1kVAl6+6MMWU+oc2ez+N549j/jPNV1EHsbdywQd8KVWXa3PqaMNE9Cki/cuespRig
+         x5yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J9yakJIWVJcO3qOP1hLM5tTSUBs1Jt+mXyEidCcZxjA=;
+        b=opwbWUvgmKIK3FPU7+GmcYyV+D0+n41CMRzXs0MhiKkscMkKHVEBbVgzSUnmoM7Lgf
+         jLIFL5ZuOb6k8uDaAb5Q7ImQlrvAel2i9d5vewQBTYy9VVNxZtAqeBuNmhjMLeDqo02T
+         AYX+YgCyi7AbmLx5VcIYAXNyT0dZfU9ELoEq5fUXm6LsSnYlKHD7O9qj7a+zzv0XiGWQ
+         C+8D552y/IJ3U3+f0gzGWGGEZYiTFyyrTtysZvpavMUhVVzroERtmPg1EXGLbvQehmUy
+         zixCyJfz25eoqBPb8hbda/QLblAFcYVLh+thF8jSgE/vaA8fiSQfu21tWiuxRkpEWDrW
+         MtZg==
+X-Gm-Message-State: AOAM530zy0e2ZxBG7veoLSv2HGdVruUspk53QEbGElW8JF/nKy031ySh
+        IZRkC2VLiC9NgUCImVvEzCxlUsx6MuLnflSs0PE=
+X-Google-Smtp-Source: ABdhPJwLF9RC4pjguC8DeRtX9v4tK2sOM0n9fP/pk+TU3p8YY098D89niOWnI/+FVoz07U7mGLAdXNwr5g89KV1KBFs=
+X-Received: by 2002:ae9:f002:: with SMTP id l2mr20890927qkg.437.1595222550340;
+ Sun, 19 Jul 2020 22:22:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200717091801.29289-2-psampat@linux.ibm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-20_01:2020-07-17,2020-07-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- suspectscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 clxscore=1011 impostorscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007200029
+References: <20200715214312.2266839-1-haoluo@google.com> <20200715214312.2266839-2-haoluo@google.com>
+In-Reply-To: <20200715214312.2266839-2-haoluo@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sun, 19 Jul 2020 22:22:19 -0700
+Message-ID: <CAEf4BzZ5A+uMPFEmgom+0x+jju3JgTLXuuy=QB_dm2Skf--5Dg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/2] bpf: BTF support for __ksym externs
+To:     Hao Luo <haoluo@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 02:48:00PM +0530, Pratik Rajesh Sampat wrote:
-> Fire directed smp_call_function_single IPIs from a specified source
-> CPU to the specified target CPU to reduce the noise we have to wade
-> through in the trace log.
-> The module is based on the idea written by Srivatsa Bhat and maintained
-> by Vaidyanathan Srinivasan internally.
-> 
-> Queue HR timer and measure jitter. Wakeup latency measurement for idle
-> states using hrtimer.  Echo a value in ns to timer_test_function and
-> watch trace. A HRtimer will be queued and when it fires the expected
-> wakeup vs actual wakeup is computes and delay printed in ns.
-> 
-> Implemented as a module which utilizes debugfs so that it can be
-> integrated with selftests.
-> 
-> To include the module, check option and include as module
-> kernel hacking -> Cpuidle latency selftests
-> 
-> [srivatsa.bhat@linux.vnet.ibm.com: Initial implementation in
->  cpidle/sysfs]
-> 
-> [svaidy@linux.vnet.ibm.com: wakeup latency measurements using hrtimer
->  and fix some of the time calculation]
-> 
-> [ego@linux.vnet.ibm.com: Fix some whitespace and tab errors and
->  increase the resolution of IPI wakeup]
-> 
-> Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
+On Wed, Jul 15, 2020 at 2:45 PM Hao Luo <haoluo@google.com> wrote:
+>
+> Previous commits:
+>
+>  commit 1c0c7074fefd ("libbpf: Add support for extracting kernel symbol addresses")
+>  commit 2e33efe32e01 ("libbpf: Generalize libbpf externs support")
+>
+> have introduced a new type of extern variable ksyms to access kernel
+> global variables. This patch extends that work by adding btf info
+> for ksyms. In more details, in addition to the existing type btf_types,
+> pahole is going to encode a certain global variables in kernel btf
+> (percpu variables at this moment). With the extended kernel btf, we
+> can associate btf id to the ksyms to improve the performance of
+> accessing those vars by using direct load instructions.
+
+This is a step in the right direction, thanks for working on this. See
+below for a few problems, though.
+
+Also, in the next version, please split kernel part and libbpf part
+into separate patches.
+
+>
+> More specifically, libbpf can scan the kernel btf to find the btf id
+> of a ksym at extern resolution. During relocation, it will replace
+> "ld_imm64 rX, foo" with BPF_PSEUDO_BTF_ID. From the verifier point of
+> view "ld_imm64 rX, foo // pseudo_btf_id" will be similar to ld_imm64
+> with pseudo_map_fd and pseudo_map_value. The verifier will check btf_id
+> and replace that with actual kernel address at program load time. It
+> will also know that exact type of 'rX' from there on.
+>
+> Note that since only a subset of kernel symbols are encoded in btf right
+> now, finding btf_id for ksyms is only best effort. If a ksym does not
+> have a btf id, we do not rewrite its ld_imm64 to pseudo_btf_id. In that
+> case, it is treated as loading from a scalar value, which is the current
+> default behavior for ksyms.
+
+I don't think that's the right approach. It can't be the best effort.
+It's actually pretty clear when a user wants a BTF-based variable with
+ability to do direct memory access vs __ksym address that we have
+right now: variable type info. In your patch you are only looking up
+variable by name, but it needs to be more elaborate logic:
+
+1. if variable type is `extern void` -- do what we do today (no BTF required)
+2. if the variable type is anything but `extern void`, then find that
+variable in BTF. If no BTF or variable is not found -- hard error with
+detailed enough message about what we expected to find in kernel BTF.
+3. If such a variable is found in the kernel, then might be a good
+idea to additionally check type compatibility (e.g., struct/union
+should match struct/union, int should match int, typedefs should get
+resolved to underlying type, etc). I don't think deep comparison of
+structs is right, though, due to CO-RE, so just high-level
+compatibility checks to prevent the most obvious mistakes.
+
+>
+> Also note since we need to carry the ksym's address (64bits) as well as
+> its btf_id (32bits), pseudo_btf_id uses ld_imm64's both imm and off
+> fields.
+
+For BTF-enabled ksyms, libbpf doesn't need to provide symbol address,
+kernel will find it and substitute it, so BTF ID is the only
+parameter. Thus it can just go into the imm field (and simplify
+ldimm64 validation logic a bit).
 
 
-The debugfs module looks good to me.
-
-Reviewed-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
-
-
+>
+> Signed-off-by: Hao Luo <haoluo@google.com>
 > ---
->  drivers/cpuidle/Makefile               |   1 +
->  drivers/cpuidle/test-cpuidle_latency.c | 150 +++++++++++++++++++++++++
->  lib/Kconfig.debug                      |  10 ++
->  3 files changed, 161 insertions(+)
->  create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
-> 
-> diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-> index f07800cbb43f..2ae05968078c 100644
-> --- a/drivers/cpuidle/Makefile
-> +++ b/drivers/cpuidle/Makefile
-> @@ -8,6 +8,7 @@ obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
->  obj-$(CONFIG_DT_IDLE_STATES)		  += dt_idle_states.o
->  obj-$(CONFIG_ARCH_HAS_CPU_RELAX)	  += poll_state.o
->  obj-$(CONFIG_HALTPOLL_CPUIDLE)		  += cpuidle-haltpoll.o
-> +obj-$(CONFIG_IDLE_LATENCY_SELFTEST)	  += test-cpuidle_latency.o
-> 
->  ##################################################################################
->  # ARM SoC drivers
-> diff --git a/drivers/cpuidle/test-cpuidle_latency.c b/drivers/cpuidle/test-cpuidle_latency.c
-> new file mode 100644
-> index 000000000000..61574665e972
-> --- /dev/null
-> +++ b/drivers/cpuidle/test-cpuidle_latency.c
-> @@ -0,0 +1,150 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+>  include/uapi/linux/bpf.h       | 37 +++++++++++++++++++------
+>  kernel/bpf/verifier.c          | 26 +++++++++++++++---
+>  tools/include/uapi/linux/bpf.h | 37 +++++++++++++++++++------
+>  tools/lib/bpf/libbpf.c         | 50 +++++++++++++++++++++++++++++++++-
+>  4 files changed, 127 insertions(+), 23 deletions(-)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 5e386389913a..7490005acdba 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -334,18 +334,37 @@ enum bpf_link_type {
+>  #define BPF_F_TEST_STATE_FREQ  (1U << 3)
+>
+>  /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+> - * two extensions:
+> - *
+> - * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
+> - * insn[0].imm:      map fd              map fd
+> - * insn[1].imm:      0                   offset into value
+> - * insn[0].off:      0                   0
+> - * insn[1].off:      0                   0
+> - * ldimm64 rewrite:  address of map      address of map[0]+offset
+> - * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
+> + * three extensions:
+> + *
+> + * insn[0].src_reg:  BPF_PSEUDO_MAP_FD
+> + * insn[0].imm:      map fd
+> + * insn[1].imm:      0
+> + * insn[0].off:      0
+> + * insn[1].off:      0
+> + * ldimm64 rewrite:  address of map
+> + * verifier type:    CONST_PTR_TO_MAP
+>   */
+>  #define BPF_PSEUDO_MAP_FD      1
 > +/*
-> + * Module-based API test facility for cpuidle latency using IPIs and timers
+> + * insn[0].src_reg:  BPF_PSEUDO_MAP_VALUE
+> + * insn[0].imm:      map fd
+> + * insn[1].imm:      offset into value
+> + * insn[0].off:      0
+> + * insn[1].off:      0
+> + * ldimm64 rewrite:  address of map[0]+offset
+> + * verifier type:    PTR_TO_MAP_VALUE
 > + */
+>  #define BPF_PSEUDO_MAP_VALUE   2
+> +/*
+> + * insn[0].src_reg:  BPF_PSEUDO_BTF_ID
+> + * insn[0].imm:      lower 32 bits of address
+> + * insn[1].imm:      higher 32 bits of address
+> + * insn[0].off:      lower 16 bits of btf id
+> + * insn[1].off:      higher 16 bits of btf id
+> + * ldimm64 rewrite:  address of kernel symbol
+> + * verifier type:    PTR_TO_BTF_ID
+> + */
+> +#define BPF_PSEUDO_BTF_ID      3
+>
+>  /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
+>   * offset to another bpf function
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 3c1efc9d08fd..3c925957b9b6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7131,15 +7131,29 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>                 verbose(env, "invalid BPF_LD_IMM insn\n");
+>                 return -EINVAL;
+>         }
+> +       err = check_reg_arg(env, insn->dst_reg, DST_OP);
+> +       if (err)
+> +               return err;
 > +
-> +#include <linux/debugfs.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
+> +       /*
+> +        * BPF_PSEUDO_BTF_ID insn's off fields carry the ksym's btf_id, so its
+> +        * handling has to come before the reserved field check.
+> +        */
+> +       if (insn->src_reg == BPF_PSEUDO_BTF_ID) {
+> +               u32 id = ((u32)(insn + 1)->off << 16) | (u32)insn->off;
+> +               const struct btf_type *t = btf_type_by_id(btf_vmlinux, id);
 > +
-> +/* IPI based wakeup latencies */
-> +struct latency {
-> +	unsigned int src_cpu;
-> +	unsigned int dest_cpu;
-> +	ktime_t time_start;
-> +	ktime_t time_end;
-> +	u64 latency_ns;
-> +} ipi_wakeup;
+
+This is the kernel, we should be paranoid and assume the hackers want
+to do bad things. So check t for NULL. Check that it's actually a
+BTF_KIND_VAR. Check the name, find ksym addr, etc.
+
+
+> +               mark_reg_known_zero(env, regs, insn->dst_reg);
+> +               regs[insn->dst_reg].type = PTR_TO_BTF_ID;
+> +               regs[insn->dst_reg].btf_id = t->type;
+> +               return 0;
+> +       }
 > +
-> +static void measure_latency(void *info)
-> +{
-> +	struct latency *v;
-> +	ktime_t time_diff;
-> +
-> +	v = (struct latency *)info;
-> +	v->time_end = ktime_get();
-> +	time_diff = ktime_sub(v->time_end, v->time_start);
-> +	v->latency_ns = ktime_to_ns(time_diff);
-> +}
-> +
-> +void run_smp_call_function_test(unsigned int cpu)
-> +{
-> +	ipi_wakeup.src_cpu = smp_processor_id();
-> +	ipi_wakeup.dest_cpu = cpu;
-> +	ipi_wakeup.time_start = ktime_get();
-> +	smp_call_function_single(cpu, measure_latency, &ipi_wakeup, 1);
-> +}
-> +
-> +/* Timer based wakeup latencies */
-> +struct timer_data {
-> +	unsigned int src_cpu;
-> +	u64 timeout;
-> +	ktime_t time_start;
-> +	ktime_t time_end;
-> +	struct hrtimer timer;
-> +	u64 timeout_diff_ns;
-> +} timer_wakeup;
-> +
-> +static enum hrtimer_restart timer_called(struct hrtimer *hrtimer)
-> +{
-> +	struct timer_data *w;
-> +	ktime_t time_diff;
-> +
-> +	w = container_of(hrtimer, struct timer_data, timer);
-> +	w->time_end = ktime_get();
-> +
-> +	time_diff = ktime_sub(w->time_end, w->time_start);
-> +	time_diff = ktime_sub(time_diff, ns_to_ktime(w->timeout));
-> +	w->timeout_diff_ns = ktime_to_ns(time_diff);
-> +	return HRTIMER_NORESTART;
-> +}
-> +
-> +static void run_timer_test(unsigned int ns)
-> +{
-> +	hrtimer_init(&timer_wakeup.timer, CLOCK_MONOTONIC,
-> +		     HRTIMER_MODE_REL);
-> +	timer_wakeup.timer.function = timer_called;
-> +	timer_wakeup.time_start = ktime_get();
-> +	timer_wakeup.src_cpu = smp_processor_id();
-> +	timer_wakeup.timeout = ns;
-> +
-> +	hrtimer_start(&timer_wakeup.timer, ns_to_ktime(ns),
-> +		      HRTIMER_MODE_REL_PINNED);
-> +}
-> +
-> +static struct dentry *dir;
-> +
-> +static int cpu_read_op(void *data, u64 *value)
-> +{
-> +	*value = ipi_wakeup.dest_cpu;
-> +	return 0;
-> +}
-> +
-> +static int cpu_write_op(void *data, u64 value)
-> +{
-> +	run_smp_call_function_test(value);
-> +	return 0;
-> +}
-> +DEFINE_SIMPLE_ATTRIBUTE(ipi_ops, cpu_read_op, cpu_write_op, "%llu\n");
-> +
-> +static int timeout_read_op(void *data, u64 *value)
-> +{
-> +	*value = timer_wakeup.timeout;
-> +	return 0;
-> +}
-> +
-> +static int timeout_write_op(void *data, u64 value)
-> +{
-> +	run_timer_test(value);
-> +	return 0;
-> +}
-> +DEFINE_SIMPLE_ATTRIBUTE(timeout_ops, timeout_read_op, timeout_write_op, "%llu\n");
-> +
-> +static int __init latency_init(void)
-> +{
-> +	struct dentry *temp;
-> +
-> +	dir = debugfs_create_dir("latency_test", 0);
-> +	if (!dir) {
-> +		pr_alert("latency_test: failed to create /sys/kernel/debug/latency_test\n");
-> +		return -1;
-> +	}
-> +	temp = debugfs_create_file("ipi_cpu_dest",
-> +				   0666,
-> +				   dir,
-> +				   NULL,
-> +				   &ipi_ops);
-> +	if (!temp) {
-> +		pr_alert("latency_test: failed to create /sys/kernel/debug/ipi_cpu_dest\n");
-> +		return -1;
-> +	}
-> +	debugfs_create_u64("ipi_latency_ns", 0444, dir, &ipi_wakeup.latency_ns);
-> +	debugfs_create_u32("ipi_cpu_src", 0444, dir, &ipi_wakeup.src_cpu);
-> +
-> +	temp = debugfs_create_file("timeout_expected_ns",
-> +				   0666,
-> +				   dir,
-> +				   NULL,
-> +				   &timeout_ops);
-> +	if (!temp) {
-> +		pr_alert("latency_test: failed to create /sys/kernel/debug/timeout_expected_ns\n");
-> +		return -1;
-> +	}
-> +	debugfs_create_u64("timeout_diff_ns", 0444, dir, &timer_wakeup.timeout_diff_ns);
-> +	debugfs_create_u32("timeout_cpu_src", 0444, dir, &timer_wakeup.src_cpu);
-> +	pr_info("Latency Test module loaded\n");
-> +	return 0;
-> +}
-> +
-> +static void __exit latency_cleanup(void)
-> +{
-> +	pr_info("Cleaning up Latency Test module.\n");
-> +	debugfs_remove_recursive(dir);
-> +}
-> +
-> +module_init(latency_init);
-> +module_exit(latency_cleanup);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("IBM Corporation");
-> +MODULE_DESCRIPTION("Measuring idle latency for IPIs and Timers");
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index d74ac0fd6b2d..e2283790245a 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1375,6 +1375,16 @@ config DEBUG_KOBJECT
->  	  If you say Y here, some extra kobject debugging messages will be sent
->  	  to the syslog.
-> 
-> +config IDLE_LATENCY_SELFTEST
-> +	tristate "Cpuidle latency selftests"
-> +	depends on CPU_IDLE
-> +	help
-> +	  This option provides a kernel module that runs tests using the IPI and
-> +	  timers to measure latency.
-> +
-> +	  Say M if you want these self tests to build as a module.
-> +	  Say N if you are unsure.
-> +
->  config DEBUG_KOBJECT_RELEASE
->  	bool "kobject release debugging"
->  	depends on DEBUG_OBJECTS_TIMERS
-> -- 
-> 2.25.4
-> 
+>         if (insn->off != 0) {
+>                 verbose(env, "BPF_LD_IMM64 uses reserved fields\n");
+>                 return -EINVAL;
+>         }
+>
+> -       err = check_reg_arg(env, insn->dst_reg, DST_OP);
+> -       if (err)
+> -               return err;
+> -
+>         if (insn->src_reg == 0) {
+>                 u64 imm = ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
+>
+
+[...]
