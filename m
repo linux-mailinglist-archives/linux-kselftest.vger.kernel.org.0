@@ -2,110 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7E6226FB6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jul 2020 22:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D13226FF1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jul 2020 22:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728122AbgGTU2O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jul 2020 16:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727123AbgGTU2O (ORCPT
+        id S1726381AbgGTUtL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jul 2020 16:49:11 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2409 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726012AbgGTUtL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jul 2020 16:28:14 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34272C061794
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2020 13:28:14 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id s21so14464964ilk.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2020 13:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jnROxpLTebfdg0VQxLM+qOeJIWXx+3VtqAPYTCwBg5A=;
-        b=e+YdMIZbfHuIN71zlAV9pte6XTKkIrMTuKqwzmQZxOkC954LaZlH12s9VMPeezYI/f
-         Jzv9Vzo+NY9vuVMW7D959S2Cdvs9ichUR+pxGCUw8tgcn9EqQtUg+gaQcJ0/MHWorqZG
-         /UDNGpn0SIDSdKMAMJQOHR7Re670rfu9J3bP/upy5wVU8JbcSWFw7jSVkEhpbdUvmmwy
-         2XkrGG80hp9CMfvxOaOhxtD9ErS7CIYgMtAd9PUGPwpxpdRbgachvMNiitkCzU4SDh6e
-         WfI7egJn+xCqdGw1WJUiGfrYepxPaHbyfX45EeOp+TCrHvYYLqEQ82fwEjcD0Fx5Lj35
-         diTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jnROxpLTebfdg0VQxLM+qOeJIWXx+3VtqAPYTCwBg5A=;
-        b=hJD8wUmJ4WxGPxUvoWT3wWY6NpXF4yU/7gI+PY8VvoQOZWysJvN+su0+GlYa8rkdtP
-         b0isxocKOS8+R5ibD+qQaVKWnmHU5DI7k6Al7Latt9VuPD9d2uGj+Z+IkN8qFSIi/sWW
-         y2OPn3n862YaflcX9YiGF9zy0dWmklurudFECH/xkhDkQVkk1WF6Z45CLNhPl+B3LGXp
-         1N7zFVXtv/Y5GN+N049JLKLUN0wIvKulY1eldodVZIJ9EyRonXgpd91DwDU6EOEXmHXc
-         QskolB/3hGHoBj4LuN0ofDv6Xyp5PATJ+wmvwptpBGAevx4FBZl3X42CKmHXr/8Y+3lv
-         m7aA==
-X-Gm-Message-State: AOAM530ytAr0/ZsZ2XPykF8a7Br96Fbb+C9hWcNU+C5ZLzD1JkIc2PsT
-        vF+2ENwam7w/AIUrkmql+rFQaJytd7/Qerqhu2d4+w==
-X-Google-Smtp-Source: ABdhPJziZBrq7Pg+3/2EhDfmIw4gaLRIAxqYeGhCSSFHEMO8VPg5I18oqjIhNgbraAGINUvLf5g9njXh6av9exRpt4U=
-X-Received: by 2002:a92:bb57:: with SMTP id w84mr25017823ili.104.1595276893343;
- Mon, 20 Jul 2020 13:28:13 -0700 (PDT)
+        Mon, 20 Jul 2020 16:49:11 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f16033a0000>; Mon, 20 Jul 2020 13:48:58 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 20 Jul 2020 13:49:10 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 20 Jul 2020 13:49:10 -0700
+Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Jul
+ 2020 20:49:10 +0000
+Subject: Re: [PATCH v2 2/5] mm/migrate: add a direction parameter to
+ migrate_vma
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        <nouveau@lists.freedesktop.org>, <kvm-ppc@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Jerome Glisse" <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
+        Bharata B Rao <bharata@linux.ibm.com>
+References: <20200713172149.2310-1-rcampbell@nvidia.com>
+ <20200713172149.2310-3-rcampbell@nvidia.com>
+ <20200720183643.GA3028737@nvidia.com>
+ <2e775a5d-9d62-de52-6799-3bbb09c88c5a@nvidia.com>
+ <20200720195943.GH2021234@nvidia.com>
+From:   Ralph Campbell <rcampbell@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <fdfde6a0-f2bf-c0b2-0283-c882aa755292@nvidia.com>
+Date:   Mon, 20 Jul 2020 13:49:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-References: <20200715214312.2266839-1-haoluo@google.com> <20200715214312.2266839-3-haoluo@google.com>
- <CAEf4BzYxWk9OmN0QhDrvE943YsYd2Opdkbt7NQTO9-YM6c4aGw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYxWk9OmN0QhDrvE943YsYd2Opdkbt7NQTO9-YM6c4aGw@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 20 Jul 2020 13:28:02 -0700
-Message-ID: <CA+khW7i9wq0+2P_M46pEv-onGXL_=sW7xE=10CYeP_yjPh-Rpw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 2/2] selftests/bpf: Test __ksym externs with BTF
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200720195943.GH2021234@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595278138; bh=Ccj/+mKAxu8hTLWfU4Ue43iWGdFGZ2AWQABgAkqwS5c=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=VcLaCG1jeJ3grIAQ6dNREngT9LTn9RlNSSs2PV9xB2FKhVBQ9sSCMPElcq6X8bk+g
+         BffYfWyypukyPqCEivuSYDvDbuieMzbmOD4tLYnkHSGC+/8Eo7xnq/qABwzVunk2E6
+         uuRVRSaBj5I2QN265J3jgZcvbPEcUO9iGyrjO1Dmiosny1t4HQJP2yT8VtJhLO0nNd
+         d2SZ6bBN3ywT4vnkEiIQBekg3S0vniVavcHfZrE0YcmAZXB+VncPBE1u5hMqQT3tC2
+         V47tjJs5XwPa9/MN0I8bxqzoDxEte6LZmbM+QXwVdqRgI+PVl2LkjNrZZ7TGxvNp+b
+         GRhbS0bjKKnhw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->
-> This should ideally look like a real global variable extern:
->
-> extern const struct rq runqueues __ksym;
->
->
-> But that's the case for non-per-cpu variables. You didn't seem to
-> address per-CPU variables in this patch set. How did you intend to
-> handle that? We should look at a possible BPF helper to access such
-> variables as well and how the verifier will prevent direct memory
-> accesses for such variables.
->
-> We should have some BPF helper that accepts per-CPU PTR_TO_BTF_ID, and
-> returns PTR_TO_BTF_ID, but adjusted to desired CPU. And verifier
-> ideally would allow direct memory access on that resulting
-> PTR_TO_BTF_ID, but not on per-CPU one. Not sure yet how this should
-> look like, but the verifier probably needs to know that variable
-> itself is per-cpu, no?
->
 
-Yes, that's what I was unclear about, so I don't have that part in
-this patchset. But your explanation helped me organize my thoughts. :)
+On 7/20/20 12:59 PM, Jason Gunthorpe wrote:
+> On Mon, Jul 20, 2020 at 12:54:53PM -0700, Ralph Campbell wrote:
+>>>> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+>>>> index 3e546cbf03dd..620f2235d7d4 100644
+>>>> +++ b/include/linux/migrate.h
+>>>> @@ -180,6 +180,11 @@ static inline unsigned long migrate_pfn(unsigned long pfn)
+>>>>    	return (pfn << MIGRATE_PFN_SHIFT) | MIGRATE_PFN_VALID;
+>>>>    }
+>>>> +enum migrate_vma_direction {
+>>>> +	MIGRATE_VMA_FROM_SYSTEM,
+>>>> +	MIGRATE_VMA_FROM_DEVICE_PRIVATE,
+>>>> +};
+>>>
+>>> I would have guessed this is more natural as _FROM_DEVICE_ and
+>>> TO_DEVICE_ ?
+>>
+>> The caller controls where the destination memory is allocated so it isn't
+>> necessarily device private memory, it could be from system to system.
+>> The use case for system to system memory migration is for hardware
+>> like ARM SMMU or PCIe ATS where a single set of page tables is shared by
+>> the device and a CPU process over a coherent system memory bus.
+>> Also many integrated GPUs in SOCs fall into this category too.
+> 
+> Maybe just TO/FROM_DEIVCE then? Even though the memory is not
+> DEVICE_PRIVATE it is still device owned pages right?
+> 
+>> So to me, it makes more sense to specify the direction based on the
+>> source location.
+> 
+> It feels strange because the driver doesn't always know or control the
+> source?
+> 
+> Jason
+> 
 
-Actually, the verifier can tell whether a var is percpu from the
-DATASEC, since we have encoded "percpu" DATASEC in btf. I think the
-following should work:
+The driver can't really know where the source is currently located because the
+API is designed to not initially hold the page locks, migrate_vma_setup() only knows
+the source once it holds the page table locks and isolates/locks the pages being
+migrated. The direction and pgmap_owner are supposed to filter which pages
+the caller is interested in migrating.
+Perhaps the direction should instead be a flags field with separate bits for
+system memory and device private memory selecting source candidates for
+migration. I can imagine use cases for all 4 combinations of
+d->d, d->s, s->d, and s->s being valid.
 
-We may introduce a new PTR_TO_BTF_VAR_ID. In ld_imm, libbpf replaces
-ksyms with btf_id. The btf id points to a KIND_VAR. If the pointed VAR
-is found in the "percpu" DATASEC, dst_reg is set to PTR_TO_BTF_VAR_ID;
-otherwise, it will be a PTR_TO_BTF_ID. For PTR_TO_BTF_VAR_ID,
-reg->btf_id is the id of the VAR. For PTR_TO_BTF_ID, reg->btf_id is
-the id of the actual kernel type. The verifier would reject direct
-memory access on PTR_TO_BTF_VAR_ID, but the new BPF helper can convert
-a PTR_TO_BTF_VAR_ID to PTR_TO_BTF_ID.
-
-Hao
+I didn't really think a direction was needed, this was something that
+Christoph Hellwig seemed to think made the API safer.
