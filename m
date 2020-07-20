@@ -2,97 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 537AA225B2B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jul 2020 11:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEA5225B56
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jul 2020 11:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728017AbgGTJRx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jul 2020 05:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbgGTJRx (ORCPT
+        id S1728040AbgGTJXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jul 2020 05:23:16 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:56320 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728017AbgGTJXQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jul 2020 05:17:53 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D03C061794;
-        Mon, 20 Jul 2020 02:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9k1ombCB/XhICcqxKFVOjQ1AGpkCxpa4eC8EdBJWgkY=; b=BwLB0hGgSaqBkwLtMWDBnHXKfa
-        y7KAxz2bvDvF28yAcByni6ft1LZoY+n7qXz+5Poaoi7g+/6sfr6GteFHgRvelLQIKZNHsgFcjyqz1
-        /AqTtFK1HwwxUaSbQIh77cuNL+w4fZNtWq+ryKADWQMt+4pqOMsCSvXicIUyJItyjjRkCcN18/M4m
-        sIKPVkl/Toz0xyLQqTr4OjhenYlHlihU5FH2u4zr7B5dyinii+jIF/lP/ajnPkCRs9UrZkovvo0dH
-        cbu7HHK7n/aOJC7/YrfYdPuIfqJK6w6DvqqGIsmDvMd7NIWQv8IueXLrH7qkCHuXA1pIwiFCtIwDh
-        UYlS5ZNQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jxRvZ-00061o-To; Mon, 20 Jul 2020 09:17:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B6F05301AC6;
-        Mon, 20 Jul 2020 11:17:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A63AA205A7673; Mon, 20 Jul 2020 11:17:40 +0200 (CEST)
-Date:   Mon, 20 Jul 2020 11:17:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 13/17] kmap: Add stray write protection for device
- pages
-Message-ID: <20200720091740.GP10769@hirez.programming.kicks-ass.net>
-References: <20200717072056.73134-1-ira.weiny@intel.com>
- <20200717072056.73134-14-ira.weiny@intel.com>
- <20200717092139.GC10769@hirez.programming.kicks-ass.net>
- <20200719041319.GA478573@iweiny-DESK2.sc.intel.com>
+        Mon, 20 Jul 2020 05:23:16 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1595236993;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g9BNAc85U7zjpSEDSfX62xvbyUEcp+gIOP471mP4nTA=;
+        b=jm0wsL/NI+UtXEk9215WIQhOEpwW4iQZptuYBnRfUdN9VoE0HgdaQQciiNlYcYG6WkvR/F
+        NxMF7kCpLhkU2Nw8tqyG7jHj0dltSxf57M9+WzCOHOCwEZufuEbt7v1j7neTIMsLjirP0R
+        df1nWCPIY+LYytI1h5+2XP0nn0Y+6nRwtOHk7rPMFJZwhMyADGZ+M+IlyroTyryi7SzRZ/
+        7YnJcBpxisaMFjqLA4/N9AkE0H0OQcrh6K/zLhHox/5JHAY57WDLbKF9Z/JJ43+GhKk53b
+        VLIB++aFNksw2F9hRxu7IfjiCh8uzvulz2EZX+fB2YG06C1KpDZC0iHYsC3t7g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1595236993;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g9BNAc85U7zjpSEDSfX62xvbyUEcp+gIOP471mP4nTA=;
+        b=PhOAz/NPRfnvR/VW+21DZgtdobYVbCKiQuopwntd9GWEaikRV4Y6q7S5ncz/S60pmTn2dD
+        vvQMaYZ5uDN+f1Bg==
+To:     Andy Lutomirski <luto@kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kernel@collabora.com,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Lutomirski <luto@kernel.org>,
+        Paul Gofman <gofmanp@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v4 1/2] kernel: Implement selective syscall userspace redirection
+In-Reply-To: <CALCETrWdCN5KsRUkrb8VoYGRBhy71P-MAHGWhuJ5y4Z3vByyvg@mail.gmail.com>
+References: <20200716193141.4068476-1-krisman@collabora.com> <20200716193141.4068476-2-krisman@collabora.com> <CALCETrWdCN5KsRUkrb8VoYGRBhy71P-MAHGWhuJ5y4Z3vByyvg@mail.gmail.com>
+Date:   Mon, 20 Jul 2020 11:23:13 +0200
+Message-ID: <874kq2o7zy.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200719041319.GA478573@iweiny-DESK2.sc.intel.com>
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 18, 2020 at 09:13:19PM -0700, Ira Weiny wrote:
-> On Fri, Jul 17, 2020 at 11:21:39AM +0200, Peter Zijlstra wrote:
-> > On Fri, Jul 17, 2020 at 12:20:52AM -0700, ira.weiny@intel.com wrote:
-> > > @@ -31,6 +32,20 @@ static inline void invalidate_kernel_vmap_range(void *vaddr, int size)
-> > >  
-> > >  #include <asm/kmap_types.h>
-> > >  
-> > > +static inline void enable_access(struct page *page)
-> > > +{
-> > > +	if (!page_is_access_protected(page))
-> > > +		return;
-> > > +	dev_access_enable();
-> > > +}
-> > > +
-> > > +static inline void disable_access(struct page *page)
-> > > +{
-> > > +	if (!page_is_access_protected(page))
-> > > +		return;
-> > > +	dev_access_disable();
-> > > +}
-> > 
-> > These are some very generic names, do we want them to be a little more
-> > specific?
-> 
-> I had them named kmap_* but Dave (I think it was Dave) thought they did not
-> really apply strictly to kmap_*.
-> 
-> They are static to this file which I thought may be sufficient to 'uniqify'
-> them?
+Andy Lutomirski <luto@kernel.org> writes:
+> On Thu, Jul 16, 2020 at 12:31 PM Gabriel Krisman Bertazi
+> <krisman@collabora.com> wrote:
+> The amount of syscall entry wiring that arches need to do is IMO
+> already a bit out of hand.  Should we instead rename TIF_SECCOMP to
+> TIF_SYSCALL_INTERCEPTION and have one generic callback that handles
+> seccomp and this new thing?
 
-They're static to a .h, which means they're all over the place ;-)
+The right way to go is to consolidate all the stupidly different
+entry/exit work handling implementations and have exactly one in generic
+code, i.e. what I posted a few days ago.
+
+Then we can make new features only available in the generic version by
+hiding the new functionality in the core code and not exposing the
+functions to architecture implementations.
+
+Making it easy for architectures to keep their own variant forever just
+proliferates the mess we have right now.
+
+Thanks,
+
+        tglx
