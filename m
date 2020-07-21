@@ -2,94 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA59227F97
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 14:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA53822803C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 14:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728737AbgGUMGv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jul 2020 08:06:51 -0400
-Received: from foss.arm.com ([217.140.110.172]:38418 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726919AbgGUMGv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 08:06:51 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68636D6E;
-        Tue, 21 Jul 2020 05:06:50 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.3.181])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AF633F66E;
-        Tue, 21 Jul 2020 05:06:47 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 13:06:41 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, kernel@collabora.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Paul Gofman <gofmanp@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        will@kernel.org, catalin.marinas@arm.com
-Subject: Re: [PATCH v4 1/2] kernel: Implement selective syscall userspace
- redirection
-Message-ID: <20200721120516.GA84703@C02TD0UTHF1T.local>
-References: <20200716193141.4068476-1-krisman@collabora.com>
- <20200716193141.4068476-2-krisman@collabora.com>
- <CALCETrWdCN5KsRUkrb8VoYGRBhy71P-MAHGWhuJ5y4Z3vByyvg@mail.gmail.com>
- <87wo32j394.fsf@collabora.com>
- <CALCETrUOe=a35rb-o44vLOSHmQ45EuommwoL2quowzw3h+J2gg@mail.gmail.com>
+        id S1728835AbgGUMoo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jul 2020 08:44:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27488 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727983AbgGUMoo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 21 Jul 2020 08:44:44 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06LCXIU1141883;
+        Tue, 21 Jul 2020 08:44:25 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5h8r6eh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jul 2020 08:44:25 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06LCZPoX149175;
+        Tue, 21 Jul 2020 08:44:23 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d5h8r6dn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jul 2020 08:44:23 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06LCeSXc023133;
+        Tue, 21 Jul 2020 12:44:21 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 32brq7uywn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jul 2020 12:44:21 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06LCh3MT60752264
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Jul 2020 12:43:03 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8FE894204B;
+        Tue, 21 Jul 2020 12:43:03 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 105E642047;
+        Tue, 21 Jul 2020 12:43:01 +0000 (GMT)
+Received: from pratiks-thinkpad.ibmuc.com (unknown [9.79.210.59])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 21 Jul 2020 12:43:00 +0000 (GMT)
+From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
+        svaidy@linux.ibm.com, pratik.r.sampat@gmail.com,
+        psampat@linux.ibm.com, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/2] Selftest for cpuidle latency measurement
+Date:   Tue, 21 Jul 2020 18:12:58 +0530
+Message-Id: <20200721124300.65615-1-psampat@linux.ibm.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALCETrUOe=a35rb-o44vLOSHmQ45EuommwoL2quowzw3h+J2gg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-21_08:2020-07-21,2020-07-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxlogscore=724 spamscore=0 adultscore=0 clxscore=1015 mlxscore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007210089
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 09:48:50PM -0700, Andy Lutomirski wrote:
-> On Thu, Jul 16, 2020 at 7:15 PM Gabriel Krisman Bertazi
-> <krisman@collabora.com> wrote:
-> >
-> > Andy Lutomirski <luto@kernel.org> writes:
-> >
-> > > On Thu, Jul 16, 2020 at 12:31 PM Gabriel Krisman Bertazi
-> > > <krisman@collabora.com> wrote:
-> > >>
-> > >
-> > > This is quite nice.  I have a few comments, though:
-> > >
-> > > You mentioned rt_sigreturn().  Should this automatically exempt the
-> > > kernel-provided signal restorer on architectures (e.g. x86_32) that
-> > > provide one?
-> >
-> > That seems reasonable.  Not sure how easy it is to do it, though.
-> 
-> For better or for worse, it's currently straightforward because the code is:
-> 
-> __kernel_sigreturn:
-> .LSTART_sigreturn:
->         popl %eax               /* XXX does this mean it needs unwind info? */
->         movl $__NR_sigreturn, %eax
->         SYSCALL_ENTER_KERNEL
-> 
-> and SYSCALL_ENTER_KERNEL is hardwired as int $0x80.  (The latter is
-> probably my fault, for better or for worse.)  So this would change to:
-> 
-> __vdso32_sigreturn_syscall:
->   SYSCALL_ENTER_KERNEL
-> 
-> and vdso2c would wire up __vdso32_sigreturn_syscall.  Then there would
-> be something like:
-> 
-> bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs);
-> 
-> and that would be that.  Does anyone have an opinion as to whether
-> this is a good idea?  Modern glibc shouldn't be using this mechanism,
-> I think, but I won't swear to it.
+v2: https://lkml.org/lkml/2020/7/17/369
+Changelog v2-->v3
+Based on comments from Gautham R. Shenoy adding the following in the
+selftest,
+1. Grepping modules to determine if already loaded
+2. Wrapper to enable/disable states
+3. Preventing any operation/test on offlined CPUs 
+---
 
-On arm64 sigreturn is always through the vdso, so IIUC we'd certainly
-need something like this. Otherwise it'd be the user's responsibility to
-register the vdso sigtramp range when making the prctl, and flip the
-selector in each signal handler, which sounds both painful and fragile.
+The patch series introduces a mechanism to measure wakeup latency for
+IPI and timer based interrupts
+The motivation behind this series is to find significant deviations
+behind advertised latency and resisdency values
 
-Mark.
+To achieve this, we introduce a kernel module and expose its control
+knobs through the debugfs interface that the selftests can engage with.
+
+The kernel module provides the following interfaces within
+/sys/kernel/debug/latency_test/ for,
+1. IPI test:
+  ipi_cpu_dest   # Destination CPU for the IPI
+  ipi_cpu_src    # Origin of the IPI
+  ipi_latency_ns # Measured latency time in ns
+2. Timeout test:
+  timeout_cpu_src     # CPU on which the timer to be queued
+  timeout_expected_ns # Timer duration
+  timeout_diff_ns     # Difference of actual duration vs expected timer
+To include the module, check option and include as module
+kernel hacking -> Cpuidle latency selftests
+
+The selftest inserts the module, disables all the idle states and
+enables them one by one testing the following:
+1. Keeping source CPU constant, iterates through all the CPUS measuring
+   IPI latency for baseline (CPU is busy with
+   "cat /dev/random > /dev/null" workload) and the when the CPU is
+   allowed to be at rest
+2. Iterating through all the CPUs, sending expected timer durations to
+   be equivalent to the residency of the the deepest idle state
+   enabled and extracting the difference in time between the time of
+   wakeup and the expected timer duration
+
+Usage
+-----
+Can be used in conjuction to the rest of the selftests.
+Default Output location in: tools/testing/cpuidle/cpuidle.log
+
+To run this test specifically:
+$ make -C tools/testing/selftests TARGETS="cpuidle" run_tests
+
+There are a few optinal arguments too that the script can take
+	[-h <help>]
+	[-m <location of the module>]
+	[-o <location of the output>]
+
+Sample output snippet
+---------------------
+--IPI Latency Test---
+--Baseline IPI Latency measurement: CPU Busy--
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+...
+0            8         1996
+0            9         2125
+0           10         1264
+0           11         1788
+0           12         2045
+Baseline Average IPI latency(ns): 1843
+---Enabling state: 5---
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+0            8       621719
+0            9       624752
+0           10       622218
+0           11       623968
+0           12       621303
+Expected IPI latency(ns): 100000
+Observed Average IPI latency(ns): 622792
+
+--Timeout Latency Test--
+--Baseline Timeout Latency measurement: CPU Busy--
+Wakeup_src Baseline_delay(ns) 
+...
+8            2249
+9            2226
+10           2211
+11           2183
+12           2263
+Baseline Average timeout diff(ns): 2226
+---Enabling state: 5---
+8           10749                   
+9           10911                   
+10          10912                   
+11          12100                   
+12          73276                   
+Expected timeout(ns): 10000200
+Observed Average timeout diff(ns): 23589
+
+Pratik Rajesh Sampat (2):
+  cpuidle: Trace IPI based and timer based wakeup latency from idle
+    states
+  selftest/cpuidle: Add support for cpuidle latency measurement
+
+ drivers/cpuidle/Makefile                   |   1 +
+ drivers/cpuidle/test-cpuidle_latency.c     | 150 ++++++++++
+ lib/Kconfig.debug                          |  10 +
+ tools/testing/selftests/Makefile           |   1 +
+ tools/testing/selftests/cpuidle/Makefile   |   6 +
+ tools/testing/selftests/cpuidle/cpuidle.sh | 310 +++++++++++++++++++++
+ tools/testing/selftests/cpuidle/settings   |   1 +
+ 7 files changed, 479 insertions(+)
+ create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
+ create mode 100644 tools/testing/selftests/cpuidle/Makefile
+ create mode 100755 tools/testing/selftests/cpuidle/cpuidle.sh
+ create mode 100644 tools/testing/selftests/cpuidle/settings
+
+-- 
+2.25.4
+
