@@ -2,161 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A50227350
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 01:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46442275B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 04:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbgGTXxq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jul 2020 19:53:46 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:2712 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726907AbgGTXxp (ORCPT
+        id S1728423AbgGUCh7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jul 2020 22:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726264AbgGUCh6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jul 2020 19:53:45 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f162e110000>; Mon, 20 Jul 2020 16:51:45 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 20 Jul 2020 16:53:45 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 20 Jul 2020 16:53:45 -0700
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Jul
- 2020 23:53:44 +0000
-Subject: Re: [PATCH v2 2/5] mm/migrate: add a direction parameter to
- migrate_vma
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        <nouveau@lists.freedesktop.org>, <kvm-ppc@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Jerome Glisse" <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
-        Bharata B Rao <bharata@linux.ibm.com>
-References: <20200713172149.2310-1-rcampbell@nvidia.com>
- <20200713172149.2310-3-rcampbell@nvidia.com>
- <20200720183643.GA3028737@nvidia.com>
- <2e775a5d-9d62-de52-6799-3bbb09c88c5a@nvidia.com>
- <20200720195943.GH2021234@nvidia.com>
- <fdfde6a0-f2bf-c0b2-0283-c882aa755292@nvidia.com>
- <20200720231633.GI2021234@nvidia.com>
-From:   Ralph Campbell <rcampbell@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <d458ffef-d205-e71d-1b8b-60721c42ca7f@nvidia.com>
-Date:   Mon, 20 Jul 2020 16:53:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Mon, 20 Jul 2020 22:37:58 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D92C061794;
+        Mon, 20 Jul 2020 19:37:58 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id l6so17894188qkc.6;
+        Mon, 20 Jul 2020 19:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NWS6zbF9VWo5oMAvQTBUWggBuwxufh05HWBlDSCFVtY=;
+        b=lvbZO6T4S0JGTmIHngm7LcUDDSa7cYxUCD/N7eSe0bUJv9CdFNjPXhhBoqTZPHDm2G
+         Yod4c9r3tNdUZKWAR0wIjfUxWrKIS4FlBhq1adqROQ9WbF9gMJ3ZqBgFnuyZ6fSkCjG1
+         Uw99uZr155ulZEFn/20xJq4H2IVG5Ib4JPsgnakUPJiPqLvJNda9NHHAb2tNQBAlSe6l
+         p/pbm1/C5XMUmsaI8hqn69uppLen6jZrMKWQZbGqsLL6jfLH2RmnozMAC5fmiVO8uBjG
+         ukBg+OfAgtBvaQZ5IBveUACxNIVSMeDwFkl2z2ZgyQ2dpOpYHqdZb5qoVnRmaQ5acHmE
+         8E8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NWS6zbF9VWo5oMAvQTBUWggBuwxufh05HWBlDSCFVtY=;
+        b=YFLOM1o2K78pLptfRK/ahpRffofGP0UhlWp/BY1gtlhZsOpykc97743XVgu3Arpwih
+         3IL24LPddu3EDeHeW+UbkDsosaOi8LS937XQmbb1Vv6sqQvcM5BmL3jw/8yM7oTx05Ka
+         yfQkQmWXldfTKWyfnienTutv14fK0IOP3EPGeEAhIHBKeoGUWFdbOjD0+tU598mytN9f
+         z+pK+3XJFiiMaHAalxsAE4+oC5pQl00UDX+nMew0N7yamKMgogzzTF9zrz6hsL3c6Wq7
+         I9efb0tfxnphAsGO+MHmc3lQg7OEREYLHM8hPs7F8VF9dZoMZ9CuNxCQl3dMxBhQCc7K
+         CTSw==
+X-Gm-Message-State: AOAM531QiS0eSnLFMG/wnfF8k08dcaQy+yAh2LZZOiD+INkiqeOomtxF
+        8UtZTCfalHSoRwklj3+lgHTUx1i6aG2+BU7OWj0=
+X-Google-Smtp-Source: ABdhPJxKgcEN3NO4mCS8ShSobjtP7cd5qUzLj6nTuBVhG2NvdlUW5ewWYlMxI9s9TVnBnlaVeKdGCU5zYmXf3rChzPk=
+X-Received: by 2002:ae9:f002:: with SMTP id l2mr25752391qkg.437.1595299077929;
+ Mon, 20 Jul 2020 19:37:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200720231633.GI2021234@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1595289105; bh=ZQjRhhF+y7yVrWHN10F4rwb8PZd9lDc5hIDmGv41Pnw=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=Nwzysd2f4rPxKQVih681HcCnyXf4qE7QVnsfF9tUtJg8Dc9oBycsJXLGLV3kaUfXV
-         nmm4LncwyqzoOLgco1FCThZHDdqbmM3+CjrFswyr5WV7DTb3AMo9EKjCt5biRhuWMB
-         lSRgCG173E4ml5n8MeKW+VBZQVkO0yyD5hf+OodIOjSKRiTXJ/tKAEye51AIva2T1U
-         FODQh+Z15ZUAjjTsNpkmriBFpTDfXwqEn0A6fxS4VnMjggS0A7MGoqiWrIfS4pU0+f
-         NlFesJezdyDMTEH/Zg4AeOZpuwCO6L+bQkrLw/S41vxNr5I2vrNdySmYHnqVEy3tJf
-         nQod1z/sAA/4w==
+References: <20200715214312.2266839-1-haoluo@google.com> <20200715214312.2266839-3-haoluo@google.com>
+ <CAEf4BzYxWk9OmN0QhDrvE943YsYd2Opdkbt7NQTO9-YM6c4aGw@mail.gmail.com> <CA+khW7i9wq0+2P_M46pEv-onGXL_=sW7xE=10CYeP_yjPh-Rpw@mail.gmail.com>
+In-Reply-To: <CA+khW7i9wq0+2P_M46pEv-onGXL_=sW7xE=10CYeP_yjPh-Rpw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 20 Jul 2020 19:37:47 -0700
+Message-ID: <CAEf4BzY=6PH4YS8sX1SRFOj+6oQnfAk-f0P8+0XWMGMS+RJ0pw@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 2/2] selftests/bpf: Test __ksym externs with BTF
+To:     Hao Luo <haoluo@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Jul 20, 2020 at 1:28 PM Hao Luo <haoluo@google.com> wrote:
+>
+> >
+> > This should ideally look like a real global variable extern:
+> >
+> > extern const struct rq runqueues __ksym;
+> >
+> >
+> > But that's the case for non-per-cpu variables. You didn't seem to
+> > address per-CPU variables in this patch set. How did you intend to
+> > handle that? We should look at a possible BPF helper to access such
+> > variables as well and how the verifier will prevent direct memory
+> > accesses for such variables.
+> >
+> > We should have some BPF helper that accepts per-CPU PTR_TO_BTF_ID, and
+> > returns PTR_TO_BTF_ID, but adjusted to desired CPU. And verifier
+> > ideally would allow direct memory access on that resulting
+> > PTR_TO_BTF_ID, but not on per-CPU one. Not sure yet how this should
+> > look like, but the verifier probably needs to know that variable
+> > itself is per-cpu, no?
+> >
+>
+> Yes, that's what I was unclear about, so I don't have that part in
+> this patchset. But your explanation helped me organize my thoughts. :)
+>
+> Actually, the verifier can tell whether a var is percpu from the
+> DATASEC, since we have encoded "percpu" DATASEC in btf. I think the
+> following should work:
+>
+> We may introduce a new PTR_TO_BTF_VAR_ID. In ld_imm, libbpf replaces
+> ksyms with btf_id. The btf id points to a KIND_VAR. If the pointed VAR
+> is found in the "percpu" DATASEC, dst_reg is set to PTR_TO_BTF_VAR_ID;
+> otherwise, it will be a PTR_TO_BTF_ID. For PTR_TO_BTF_VAR_ID,
+> reg->btf_id is the id of the VAR. For PTR_TO_BTF_ID, reg->btf_id is
+> the id of the actual kernel type. The verifier would reject direct
+> memory access on PTR_TO_BTF_VAR_ID, but the new BPF helper can convert
+> a PTR_TO_BTF_VAR_ID to PTR_TO_BTF_ID.
 
-On 7/20/20 4:16 PM, Jason Gunthorpe wrote:
-> On Mon, Jul 20, 2020 at 01:49:09PM -0700, Ralph Campbell wrote:
->>
->> On 7/20/20 12:59 PM, Jason Gunthorpe wrote:
->>> On Mon, Jul 20, 2020 at 12:54:53PM -0700, Ralph Campbell wrote:
->>>>>> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
->>>>>> index 3e546cbf03dd..620f2235d7d4 100644
->>>>>> +++ b/include/linux/migrate.h
->>>>>> @@ -180,6 +180,11 @@ static inline unsigned long migrate_pfn(unsigned long pfn)
->>>>>>     	return (pfn << MIGRATE_PFN_SHIFT) | MIGRATE_PFN_VALID;
->>>>>>     }
->>>>>> +enum migrate_vma_direction {
->>>>>> +	MIGRATE_VMA_FROM_SYSTEM,
->>>>>> +	MIGRATE_VMA_FROM_DEVICE_PRIVATE,
->>>>>> +};
->>>>>
->>>>> I would have guessed this is more natural as _FROM_DEVICE_ and
->>>>> TO_DEVICE_ ?
->>>>
->>>> The caller controls where the destination memory is allocated so it isn't
->>>> necessarily device private memory, it could be from system to system.
->>>> The use case for system to system memory migration is for hardware
->>>> like ARM SMMU or PCIe ATS where a single set of page tables is shared by
->>>> the device and a CPU process over a coherent system memory bus.
->>>> Also many integrated GPUs in SOCs fall into this category too.
->>>
->>> Maybe just TO/FROM_DEIVCE then? Even though the memory is not
->>> DEVICE_PRIVATE it is still device owned pages right?
->>>
->>>> So to me, it makes more sense to specify the direction based on the
->>>> source location.
->>>
->>> It feels strange because the driver doesn't always know or control the
->>> source?
->>
->> The driver can't really know where the source is currently located because the
->> API is designed to not initially hold the page locks, migrate_vma_setup() only knows
->> the source once it holds the page table locks and isolates/locks the pages being
->> migrated. The direction and pgmap_owner are supposed to filter which pages
->> the caller is interested in migrating.
->> Perhaps the direction should instead be a flags field with separate bits for
->> system memory and device private memory selecting source candidates for
->> migration. I can imagine use cases for all 4 combinations of
->> d->d, d->s, s->d, and s->s being valid.
->>
->> I didn't really think a direction was needed, this was something that
->> Christoph Hellwig seemed to think made the API safer.
-> 
-> If it is a filter then just using those names would make sense
-> 
-> MIGRATE_VMA_SELECT_SYSTEM
-> MIGRATE_VMA_SELECT_DEVICE_PRIVATE
-> 
-> SYSTEM feels like the wrong name too, doesn't linux have a formal name
-> for RAM struct pages?
+Sounds good to me as a plan, except that PTR_TO_BTF_VAR_ID is a
+misleading name. It's always a variable. The per-CPU part is crucial,
+though, so maybe something like PTR_TO_PERCPU_BTF_ID?
 
-Highmem? Movable? Zone normal?
-There are quite a few :-)
-At the moment, only anonymous pages are being migrated but I expect
-file backed pages to be supported at some point (but not DAX).
-VM_PFNMAP and VM_MIXEDMAP might make sense some day with peer-to-peer
-copies.
-
-So MIGRATE_VMA_SELECT_SYSTEM seems OK to me.
-
-> In your future coherent design how would the migrate select 'device'
-> pages that are fully coherent? Are they still zone something pages
-> that are OK for CPU usage?
-> 
-> Jason
-> 
-
-For pages that are device private, the pgmap_owner selects them (plus the
-MIGRATE_VMA_SELECT_DEVICE_PRIVATE flag).
-For pages that are migrating from system memory to system memory, I expect
-the pages to be in different NUMA zones. Otherwise, there wouldn't be much
-point in migrating them. And yes, the CPU can access them.
-It might be useful to have a filter saying "migrate system memory not already
-in NUMA zone X" if the MIGRATE_VMA_SELECT_SYSTEM flag is set.
-
-Also, in support of the flags field, I'm looking at THP migration and I can
-picture defining some request flags like hmm_range_fault() to say "migrate
-THPs if they exist, otherwise split THPs".
-A default_flags MIGRATE_PFN_REQ_FAULT would be useful if the source page is
-swapped out. Currently, migrate_vma_setup() just skips these pages without
-any indication to the caller why the page isn't being migrated or if retrying
-is worth attempting.
+>
+> Hao
