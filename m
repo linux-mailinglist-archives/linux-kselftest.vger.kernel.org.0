@@ -2,296 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 511552288E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 21:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D662288EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 21:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730322AbgGUTJg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jul 2020 15:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
+        id S1726960AbgGUTLx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jul 2020 15:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728700AbgGUTJd (ORCPT
+        with ESMTP id S1726602AbgGUTLw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 15:09:33 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCE5C061794
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 12:09:33 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id k1so2010726pjt.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 12:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NAFt6C2lnvpS45jVhw23Ap3Sp8296UwbtX9tobHLa1g=;
-        b=icFK+j1QmdrfPm1agUfJealBTpwFHPXzo+8S/+STX6KNUWATkXlIlCEWGl2IAB0Kaw
-         81hUL9l2hd6YXn1feWWISzSrw+hQRCIGKNVJbWKr7A8mt5ntyHbZ7HqDqAM0G+A1AosL
-         C4oIXZNzgs1qwn+vlMLHBWHD7jiCUNtg/I8HA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NAFt6C2lnvpS45jVhw23Ap3Sp8296UwbtX9tobHLa1g=;
-        b=oNlj182xwFexxc/jK3Ce9mQd4wMxo2Ocn/AiqEtYKh2RvfzMIM23zPZ8ohT7gmV9wo
-         JJBVZxqgnA0O5HO+QX2ll/l8cTvWxgBJVU+fXXsjP2g9pj+tGA21oI2VpamoBTpkahRb
-         8NTIJH7QJPl4mxcvf4+yMIu5YMxsYVQEeKzUydDDC1/0ZVc0AMXA+KaIzw7a0Kk4XMfS
-         p6t5X5Z3I3KnuhvU6aSr8VeQbgoS74d2yFaY4hipDTqIntlAp7wTj1KUqSk/ng/KFVI8
-         hmrnQbC9EViNDvHdmbW8Cfy7zfCUzuh4Ok4VQXkzhGhGig0TPqW7rVHxW6rHCKnKGHc+
-         XXzw==
-X-Gm-Message-State: AOAM533RZjNOBDMwLoo9eLYifEy/bfX0hK42igCVEl49gxThKejh2bIE
-        uR1twC9D4OL9v+aCym2vIXTTvw==
-X-Google-Smtp-Source: ABdhPJzWAwKHQkMx9PJ9EAZVnXplkjPUmWmAhBJFL+0Oc7tM+S4Ojo/uUW20rsqp3QBbghADINzeSA==
-X-Received: by 2002:a17:902:7612:: with SMTP id k18mr22356298pll.187.1595358572696;
-        Tue, 21 Jul 2020 12:09:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c139sm20745411pfb.65.2020.07.21.12.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 12:09:31 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 12:09:30 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, brendanhiggins@google.com,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v3] lib: Convert test_user_copy to KUnit test
-Message-ID: <202007211207.5BAA9D8D@keescook>
-References: <20200721174654.72132-1-vitor@massaru.org>
+        Tue, 21 Jul 2020 15:11:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E744AC061794;
+        Tue, 21 Jul 2020 12:11:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R2zugMccFiI0jJgvQMs0TPnzzQfNHe0PTn5J5IwA7Vg=; b=R19nnLcc1ehZda6baIKpJBp4mk
+        QIU+wDYISg1oiFi1U088VyKvy4CooK8rP1aGzRtF9XgpDe7eTIFV5r5689wWdYUJ+kYWCyJFppnHe
+        nqnVDpB+MOc7wNPL3u1wcpwcRyUTibeYFoZ5XQDOq5H50e5y/OqubPR0zS217bggT7wpva3a9ANM7
+        finoA5pjqRnrzqe5tTkqDI+yyfEltcwPUMKHMM+FcE0XgdWmzuY4QGbHUG0CxVcaj2fo8FJfZoGej
+        y8rSdDOLXtpi9uJ1cu34SMbBgoHDTpVf2xUJM8yurQyaUxcOCForZjuAREOFTQHAPuEArGD2e6Sf2
+        YkXN9VdA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jxxfo-00084N-76; Tue, 21 Jul 2020 19:11:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D3C7E3011C6;
+        Tue, 21 Jul 2020 21:11:29 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BEE3D203C9761; Tue, 21 Jul 2020 21:11:29 +0200 (CEST)
+Date:   Tue, 21 Jul 2020 21:11:29 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
+ exceptions
+Message-ID: <20200721191129.GG10769@hirez.programming.kicks-ass.net>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-18-ira.weiny@intel.com>
+ <20200717093041.GF10769@hirez.programming.kicks-ass.net>
+ <20200721180134.GB643353@iweiny-DESK2.sc.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200721174654.72132-1-vitor@massaru.org>
+In-Reply-To: <20200721180134.GB643353@iweiny-DESK2.sc.intel.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 02:46:54PM -0300, Vitor Massaru Iha wrote:
-> This adds the conversion of the runtime tests of test_user_copy fuctions,
-> from `lib/test_user_copy.c`to KUnit tests.
+On Tue, Jul 21, 2020 at 11:01:34AM -0700, Ira Weiny wrote:
+> On Fri, Jul 17, 2020 at 11:30:41AM +0200, Peter Zijlstra wrote:
+> > On Fri, Jul 17, 2020 at 12:20:56AM -0700, ira.weiny@intel.com wrote:
+> > > +static void noinstr idt_save_pkrs(idtentry_state_t state)
+> > 
+> > noinstr goes in the same place you would normally put inline, that's
+> > before the return type, not after it.
+> >
 > 
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-> ---
-> v2:
->     * splitted patch in 3:
->         - Allows to install and load modules in root filesystem;
->         - Provides an userspace memory context when tests are compiled
->           as module;
->         - Convert test_user_copy to KUnit test;
->     * removed entry for CONFIG_TEST_USER_COPY;
->     * replaced pr_warn to KUNIT_EXPECT_FALSE_MSG in test macro to
->       decrease the diff;
-> v3:
->     * rebased with last kunit branch
->     * Please apply this commit from kunit-fixes:
->         3f37d14b8a3152441f36b6bc74000996679f0998
->       And these from patchwork:
->         https://patchwork.kernel.org/patch/11676331/
->         https://patchwork.kernel.org/patch/11676335/
-> ---
->  lib/Kconfig.debug                           | 28 ++++++++------
->  lib/Makefile                                |  2 +-
->  lib/{test_user_copy.c => user_copy_kunit.c} | 42 +++++++++------------
->  3 files changed, 35 insertions(+), 37 deletions(-)
->  rename lib/{test_user_copy.c => user_copy_kunit.c} (91%)
+> Sorry about that.  But that does not look to be consistent.
 > 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 9ad9210d70a1..f699a3624ae7 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2078,18 +2078,6 @@ config TEST_VMALLOC
+> 10:57:35 > git grep 'noinstr' arch/x86/entry/common.c
+> ...
+> arch/x86/entry/common.c:idtentry_state_t noinstr idtentry_enter(struct pt_regs *regs)
+> arch/x86/entry/common.c:void noinstr idtentry_exit(struct pt_regs *regs, idtentry_state_t state)
+> arch/x86/entry/common.c:void noinstr idtentry_enter_user(struct pt_regs *regs)
+> arch/x86/entry/common.c:void noinstr idtentry_exit_user(struct pt_regs *regs)
+> ...
 > 
->  	  If unsure, say N.
-> 
-> -config TEST_USER_COPY
-> -	tristate "Test user/kernel boundary protections"
-> -	depends on m
-> -	help
-> -	  This builds the "test_user_copy" module that runs sanity checks
-> -	  on the copy_to/from_user infrastructure, making sure basic
-> -	  user/kernel boundary testing is working. If it fails to load,
-> -	  a regression has been detected in the user/kernel memory boundary
-> -	  protections.
-> -
-> -	  If unsure, say N.
-> -
->  config TEST_BPF
->  	tristate "Test BPF filter functionality"
->  	depends on m && NET
-> @@ -2154,6 +2142,22 @@ config SYSCTL_KUNIT_TEST
-> 
->  	  If unsure, say N.
-> 
-> +config USER_COPY_KUNIT
-> +	tristate "KUnit Test for user/kernel boundary protections"
-> +	depends on KUNIT
-> +	depends on m
-> +	help
-> +	  This builds the "user_copy_kunit" module that runs sanity checks
-> +	  on the copy_to/from_user infrastructure, making sure basic
-> +	  user/kernel boundary testing is working. If it fails to load,
-> +	  a regression has been detected in the user/kernel memory boundary
-> +	  protections.
-> +
-> +	  For more information on KUnit and unit tests in general please refer
-> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +	  If unsure, say N.
-> +
->  config LIST_KUNIT_TEST
->  	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
->  	depends on KUNIT
-> diff --git a/lib/Makefile b/lib/Makefile
-> index b1c42c10073b..8c145f85accc 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -78,7 +78,6 @@ obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
->  obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
->  obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
->  obj-$(CONFIG_TEST_SORT) += test_sort.o
-> -obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
->  obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
->  obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
->  obj-$(CONFIG_TEST_PRINTF) += test_printf.o
-> @@ -318,3 +317,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
->  # KUnit tests
->  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
->  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-> +obj-$(CONFIG_USER_COPY_KUNIT) += user_copy_kunit.o
-> diff --git a/lib/test_user_copy.c b/lib/user_copy_kunit.c
-> similarity index 91%
-> rename from lib/test_user_copy.c
-> rename to lib/user_copy_kunit.c
-> index 5ff04d8fe971..a10ddd15b4cd 100644
-> --- a/lib/test_user_copy.c
-> +++ b/lib/user_copy_kunit.c
-> @@ -16,6 +16,7 @@
->  #include <linux/slab.h>
->  #include <linux/uaccess.h>
->  #include <linux/vmalloc.h>
-> +#include <kunit/test.h>
-> 
->  /*
->   * Several 32-bit architectures support 64-bit {get,put}_user() calls.
-> @@ -35,7 +36,7 @@
->  ({									\
->  	int cond = (condition);						\
->  	if (cond)							\
-> -		pr_warn("[%d] " msg "\n", __LINE__, ##__VA_ARGS__);	\
-> +		KUNIT_EXPECT_FALSE_MSG(test, cond, msg, ##__VA_ARGS__);	\
+> Are the above 'wrong'?  Is it worth me sending a patch?
 
-I'm surprised any of this compiles with both a macro and arg named
-"test". :) Can you change the arg to something with more clarity?
-"context" or "kunit" seems better.
-
->  	cond;								\
->  })
-> 
-> @@ -44,7 +45,7 @@ static bool is_zeroed(void *from, size_t size)
->  	return memchr_inv(from, 0x0, size) == NULL;
->  }
-> 
-> -static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
-> +static int test_check_nonzero_user(struct kunit *test, char *kmem, char __user *umem, size_t size)
->  {
->  	int ret = 0;
->  	size_t start, end, i, zero_start, zero_end;
-> @@ -102,7 +103,7 @@ static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
->  	return ret;
->  }
-> 
-> -static int test_copy_struct_from_user(char *kmem, char __user *umem,
-> +static int test_copy_struct_from_user(struct kunit *test, char *kmem, char __user *umem,
->  				      size_t size)
->  {
->  	int ret = 0;
-> @@ -177,7 +178,7 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
->  	return ret;
->  }
-> 
-> -static int __init test_user_copy_init(void)
-> +static void user_copy_test(struct kunit *test)
->  {
->  	int ret = 0;
->  	char *kmem;
-> @@ -192,16 +193,14 @@ static int __init test_user_copy_init(void)
->  #endif
-> 
->  	kmem = kmalloc(PAGE_SIZE * 2, GFP_KERNEL);
-> -	if (!kmem)
-> -		return -ENOMEM;
-> +	KUNIT_EXPECT_FALSE_MSG(test, kmem == NULL, "kmalloc failed");
-
-This would need to be an ASSERT, yes?
-
-> 
->  	user_addr = vm_mmap(NULL, 0, PAGE_SIZE * 2,
->  			    PROT_READ | PROT_WRITE | PROT_EXEC,
->  			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
->  	if (user_addr >= (unsigned long)(TASK_SIZE)) {
-> -		pr_warn("Failed to allocate user memory\n");
->  		kfree(kmem);
-> -		return -ENOMEM;
-> +		KUNIT_FAIL(test, "Failed to allocate user memory");
->  	}
-
-Why FAIL instead of ASSERT?
-
-> 
->  	usermem = (char __user *)user_addr;
-> @@ -245,9 +244,9 @@ static int __init test_user_copy_init(void)
->  #undef test_legit
-> 
->  	/* Test usage of check_nonzero_user(). */
-> -	ret |= test_check_nonzero_user(kmem, usermem, 2 * PAGE_SIZE);
-> +	ret |= test_check_nonzero_user(test, kmem, usermem, 2 * PAGE_SIZE);
->  	/* Test usage of copy_struct_from_user(). */
-> -	ret |= test_copy_struct_from_user(kmem, usermem, 2 * PAGE_SIZE);
-> +	ret |= test_copy_struct_from_user(test, kmem, usermem, 2 * PAGE_SIZE);
-> 
->  	/*
->  	 * Invalid usage: none of these copies should succeed.
-> @@ -309,23 +308,18 @@ static int __init test_user_copy_init(void)
-> 
->  	vm_munmap(user_addr, PAGE_SIZE * 2);
->  	kfree(kmem);
-> -
-> -	if (ret == 0) {
-> -		pr_info("tests passed.\n");
-> -		return 0;
-> -	}
-> -
-> -	return -EINVAL;
-
-Does KUnit provide a end-of-test summary now?
-
->  }
-> 
-> -module_init(test_user_copy_init);
-> -
-> -static void __exit test_user_copy_exit(void)
-> -{
-> -	pr_info("unloaded.\n");
-> -}
-> +static struct kunit_case user_copy_test_cases[] = {
-> +	KUNIT_CASE(user_copy_test),
-> +	{}
-> +};
-> 
-> -module_exit(test_user_copy_exit);
-> +static struct kunit_suite user_copy_test_suite = {
-> +	.name = "user_copy",
-> +	.test_cases = user_copy_test_cases,
-> +};
-> 
-> +kunit_test_suites(&user_copy_test_suite);
->  MODULE_AUTHOR("Kees Cook <keescook@chromium.org>");
->  MODULE_LICENSE("GPL");
-> 
-> base-commit: d43c7fb05765152d4d4a39a8ef957c4ea14d8847
-> --
-> 2.26.2
-> 
-
-Otherwise, yes, looking good.
-
--- 
-Kees Cook
+I think I already fixed all those, please check tip/master.
