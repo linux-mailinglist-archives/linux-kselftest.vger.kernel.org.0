@@ -2,91 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F36B228542
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 18:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018F72285B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jul 2020 18:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729890AbgGUQ0P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jul 2020 12:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728441AbgGUQ0P (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 12:26:15 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF99C0619DB
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 09:26:15 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id i3so16571061qtq.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 09:26:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UBP7qP0FYUChGaa0hrCulaczX/efODgBvnjZrXBVhPI=;
-        b=nUKUr55EXExbEWdGOSEgTubGim/24Vyuixpdf0xLuViukQ1HYqXJ7wLSsx+StUT43t
-         K7S55wPrevvD8wkT/jrhclLmMejSUMDLw/wfvqShS0D/yhLD7MZQeo5BKdYi4rR98vdh
-         A4Abp/qboL4FVZMjQwFlFG/Qg49E4D6cnF+/nV1uHLYdZC2dmvQK1VAuuU6ef+ygSSnQ
-         8nE6dM9lGyZyn4qkp8Fh/bl8PGghxxHCR1zTT9HnL1uv9lfgENAOh4F46b94eDP/ywhC
-         fHczpcKRfaXaS77iH+rIzwkD7Z+il6u/vAyKFt8XUshWYfbGW0VPWA07ft3AHzYXsQOH
-         rEqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UBP7qP0FYUChGaa0hrCulaczX/efODgBvnjZrXBVhPI=;
-        b=ptob/Jf8W4ga+mhs3iUPJ+j2khoQR/hTFGHPb8zgakz6bA8F4yVVeknOnVUWxx1Qdr
-         /SaXG8uBORT7atw6pZXrHuQ/smCP1PvF+JHz1MkPcL6SwVQiuV38yNZww/gGl64E4hRe
-         hivZYG1U6JAcKPDtggVsxvE5bMOeo4qTl1Ed2VCHfO50r3CdspAzDeSpLGpersWBcx7B
-         oTZZLR5C5cmx4y7bwjJI5Rn734M1GHLZrg2WNLZjRlXkW+pBLu97cnU/6jAlKGOqO9eV
-         1UUqf29JV/7JKmx/lFYGYUf1Z8Dc4bm6+8SVeT4iwYKAtglntIpQap4NfKROZTcO97qu
-         iIhQ==
-X-Gm-Message-State: AOAM533lpiM09tCDZY9ZQstVCt4MwmesI1q9rXMsGOPoxX6YFyO+Qf2M
-        EF7aqZcC0xRU1Vcuab5zxWgI6YFq
-X-Google-Smtp-Source: ABdhPJzc07NSdHq/S+xC5sPDate4lalPxJRPEL5XYfrKzsv95BGGSF1LT5y/1DQ4IZjXj/NrmuveuA==
-X-Received: by 2002:aed:2c87:: with SMTP id g7mr30876977qtd.346.1595348773661;
-        Tue, 21 Jul 2020 09:26:13 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id n63sm2556351qkf.21.2020.07.21.09.26.12
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2020 09:26:12 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 2so10247035ybr.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 09:26:12 -0700 (PDT)
-X-Received: by 2002:a25:6d87:: with SMTP id i129mr42670421ybc.315.1595348772036;
- Tue, 21 Jul 2020 09:26:12 -0700 (PDT)
+        id S1728268AbgGUQbx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jul 2020 12:31:53 -0400
+Received: from mga04.intel.com ([192.55.52.120]:46226 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727860AbgGUQbw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 21 Jul 2020 12:31:52 -0400
+IronPort-SDR: o0NiPHrTuxyP+q0NerB5nLFWmpMBzzujbGJ4Xpay4EJr9vBcrn0nyDvKIft1+P0zWUc9RAxnLz
+ YlsnXg+/tuqA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="147673884"
+X-IronPort-AV: E=Sophos;i="5.75,379,1589266800"; 
+   d="scan'208";a="147673884"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 09:31:52 -0700
+IronPort-SDR: QIqyg569mkeyzGevueJJ0WqfJG1wbbgWKT8l7gfSm5T3TqYGXngLSHY7sbeaPpwcZZol3ESKK7
+ P6/eMlyR/hZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,379,1589266800"; 
+   d="scan'208";a="270482086"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Jul 2020 09:31:52 -0700
+Date:   Tue, 21 Jul 2020 09:31:52 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V2 13/17] kmap: Add stray write protection for device
+ pages
+Message-ID: <20200721163151.GA643353@iweiny-DESK2.sc.intel.com>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-14-ira.weiny@intel.com>
+ <20200717092139.GC10769@hirez.programming.kicks-ass.net>
+ <20200719041319.GA478573@iweiny-DESK2.sc.intel.com>
+ <20200720091740.GP10769@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <CA+FuTSeN8SONXySGys8b2EtTqJmHDKw1XVoDte0vzUPg=yuH5g@mail.gmail.com>
- <20200721161710.80797-1-paolo.pisati@canonical.com>
-In-Reply-To: <20200721161710.80797-1-paolo.pisati@canonical.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 21 Jul 2020 12:25:36 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSe1-ZEC5xEXXbT=cbN6eAK1NXXKJ3f2Gz_v3gQyh2SkjA@mail.gmail.com>
-Message-ID: <CA+FuTSe1-ZEC5xEXXbT=cbN6eAK1NXXKJ3f2Gz_v3gQyh2SkjA@mail.gmail.com>
-Subject: Re: [PATCH v2] selftest: txtimestamp: fix net ns entry logic
-To:     Paolo Pisati <paolo.pisati@canonical.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Jian Yang <jianyang@google.com>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200720091740.GP10769@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 12:17 PM Paolo Pisati
-<paolo.pisati@canonical.com> wrote:
->
-> According to 'man 8 ip-netns', if `ip netns identify` returns an empty string,
-> there's no net namespace associated with current PID: fix the net ns entrance
-> logic.
->
-> Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
+On Mon, Jul 20, 2020 at 11:17:40AM +0200, Peter Zijlstra wrote:
+> On Sat, Jul 18, 2020 at 09:13:19PM -0700, Ira Weiny wrote:
+> > On Fri, Jul 17, 2020 at 11:21:39AM +0200, Peter Zijlstra wrote:
+> > > On Fri, Jul 17, 2020 at 12:20:52AM -0700, ira.weiny@intel.com wrote:
+> > > > @@ -31,6 +32,20 @@ static inline void invalidate_kernel_vmap_range(void *vaddr, int size)
+> > > >  
+> > > >  #include <asm/kmap_types.h>
+> > > >  
+> > > > +static inline void enable_access(struct page *page)
+> > > > +{
+> > > > +	if (!page_is_access_protected(page))
+> > > > +		return;
+> > > > +	dev_access_enable();
+> > > > +}
+> > > > +
+> > > > +static inline void disable_access(struct page *page)
+> > > > +{
+> > > > +	if (!page_is_access_protected(page))
+> > > > +		return;
+> > > > +	dev_access_disable();
+> > > > +}
+> > > 
+> > > These are some very generic names, do we want them to be a little more
+> > > specific?
+> > 
+> > I had them named kmap_* but Dave (I think it was Dave) thought they did not
+> > really apply strictly to kmap_*.
+> > 
+> > They are static to this file which I thought may be sufficient to 'uniqify'
+> > them?
+> 
+> They're static to a .h, which means they're all over the place ;-)
 
-Fixes: cda261f421ba ("selftests: add txtimestamp kselftest")
+I've thought about it a bit.  I think I agree with both you and Dave.
 
-Acked-by: Willem de Bruijn <willemb@google.com>
+How about:
 
-Thanks for the fix.
+dev_page_{en,dis}able_access()
+
+??
+
+I've made that change for now.
+
+Thanks,
+Ira
