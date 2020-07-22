@@ -2,86 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24298228CE3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 01:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37173228DEA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 04:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgGUXxE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jul 2020 19:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726148AbgGUXxD (ORCPT
+        id S1731630AbgGVCNK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jul 2020 22:13:10 -0400
+Received: from condef-07.nifty.com ([202.248.20.72]:30785 "EHLO
+        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731621AbgGVCNJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 19:53:03 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321C2C061794
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 16:53:03 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d7so57629plq.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 16:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9GAANOVEkg7Oss4DpDH0gr9ifNPUbhRTyDcGnsT2WTE=;
-        b=p1xsv+JsYJXhYalj5ZZCc9wnW1uf56mVn0Gc1i+QWyJBhVm2oAo15ONIoGH5a++qc3
-         nS8vtFYiWBbBZN/ZbGkIgOWNPX3q2HAp+ZRYAz0yz6yBgjgbaVNRv9jJYBy2nfqY++4s
-         49RCXlqcN1Khtcr2FHPAlM6wIONJZ/uQkd34FX01Bue6DVy0I1d2B1vmNGTCO94yzDW+
-         Fsd6zuBB7YB7X0nSbZNQjQSwkxI+h8rk5XJzp/8bgnBgal//1dKnFv7A0QGSbptnJ7tf
-         1JcrpYnLejhIZ2RRFRpcz+Ki1fmJRs7nlyLeVDnnreujKpiOcnohfnZRviTLvcVEKJgB
-         pezg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9GAANOVEkg7Oss4DpDH0gr9ifNPUbhRTyDcGnsT2WTE=;
-        b=U17CNPY2z5NM2ux40dVlF7kYDLa7vVstL9vE1NEM1LUGvFVR/wJuSl/0bkp7FR6z+F
-         Qw8Y3oAJ72kRh5CiqjpZcGdCs9gn+lTMIPloYLluZUHow3ZkVUjvTaDRRGilnHCKd+i8
-         /3MjAPah0oeDBRNufTzk5UCrE3Cfq7iLCuVXiuTAX6AxY+E7J46xLWTdqAsjDTj/Lga8
-         ++8bxW9GlBi9tzfF88AYrSghxGQWESMvLTqtNDbxepTthfoxL1nNiW0GnZGMR9KVIQ3L
-         fk9AFnBQM7sA0SSHDfVeX2Z7JLfjKFiJKKhoH1vdEFgRaryBZbCr1ebrzsL1TErKeLMW
-         pRlQ==
-X-Gm-Message-State: AOAM530K2zMLYLWg5rnLQt0Dljnl3LTvYM5hd6jTKy7RJEPcYh2/7agK
-        x/wKfBIVryLdw3GVh7dZUkOiRAvQyJmP9os9rLXYNg==
-X-Google-Smtp-Source: ABdhPJwlgYLxoZWZx8+svKNEBY0q6bxsav7DHLE6pxfIoOZcXdRkc72QEfSINPDlzRr5arUe6DKa0UAUjzPNjGbgJMA=
-X-Received: by 2002:a17:902:10e:: with SMTP id 14mr23017886plb.297.1595375582338;
- Tue, 21 Jul 2020 16:53:02 -0700 (PDT)
+        Tue, 21 Jul 2020 22:13:09 -0400
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-07.nifty.com with ESMTP id 06M29rjj003253;
+        Wed, 22 Jul 2020 11:09:53 +0900
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 06M29TuW014750;
+        Wed, 22 Jul 2020 11:09:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 06M29TuW014750
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1595383770;
+        bh=06gcJexBF/tpPqvX05Gt/CkE+hULn79ToD587rmdDQs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dSg4gOQ/jjsop05eIvXnSVytHbNKER9gJUCj/xFmRlxYS+uGMyhYC2Jk8d1UBmCVX
+         N1wjZTgmQYzpQCSGv2J5c4KvJ2kjyLKOzJFC5l8gYX1yjdoAtZ7mns1fCfS9MfKUGa
+         feiB1WnrJiEjtgGX1PThQkOVSt0m95ze/qj3NqeLBZOk3KVAJoyBMNQGHxUiE6bUgU
+         S7BpYr/Q3jpf2LPbiVV4KR9pdEwxudC0XZrB2hLCO21kIoIwLsPStojFwuyeXxnb3e
+         +DA66Lbh5i1vksPqHMaAxXTAXudMclMGABTxcYMX8driO5gHjm+9iL6JkpQWAP1/AR
+         VVd88rpFkynxw==
+X-Nifty-SrcIP: [209.85.217.44]
+Received: by mail-vs1-f44.google.com with SMTP id s20so330522vsq.5;
+        Tue, 21 Jul 2020 19:09:29 -0700 (PDT)
+X-Gm-Message-State: AOAM533nsgc4IMlpB454vyz6TB6mt+fAfr7w+7yvTX9jwoDxUQuIjOAS
+        1ZOQry2AGUE6VKL880TXZIx/CvCLACPhDxKUjJI=
+X-Google-Smtp-Source: ABdhPJzHR+EIktThMD2rIpFhI4uTJPOQdJWdMC4eTf5k71hKCt1edF/2edrSgjCexGMNslyvA9SMcKmKrD1IOmpXMxw=
+X-Received: by 2002:a67:de09:: with SMTP id q9mr21900661vsk.179.1595383768506;
+ Tue, 21 Jul 2020 19:09:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200721174036.71072-1-vitor@massaru.org>
-In-Reply-To: <20200721174036.71072-1-vitor@massaru.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 21 Jul 2020 16:52:51 -0700
-Message-ID: <CAFd5g45DrBCA2Oq0RCb5FDWybt9NnXj=tN7pZFqjMLhuWWQoew@mail.gmail.com>
-Subject: Re: [PATCH v3] lib: kunit: Provides a userspace memory context when
- tests are compiled as module
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
+References: <20200707092117.963394-1-masahiroy@kernel.org> <20200707092117.963394-2-masahiroy@kernel.org>
+ <20200707120212.7010fa4f@oasis.local.home>
+In-Reply-To: <20200707120212.7010fa4f@oasis.local.home>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 22 Jul 2020 11:08:51 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASdytWgqQWux1cyBrGJb_FvS7Ur5UqgHaA2Xf5cwfL85A@mail.gmail.com>
+Message-ID: <CAK7LNASdytWgqQWux1cyBrGJb_FvS7Ur5UqgHaA2Xf5cwfL85A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of lib/
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Haren Myneni <haren@us.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, live-patching@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 10:40 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
+On Wed, Jul 8, 2020 at 1:02 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> KUnit test cases run on kthreads, and kthreads don't have an
-> adddress space (current->mm is NULL), but processes have mm.
+> On Tue,  7 Jul 2020 18:21:17 +0900
+> Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> The purpose of this patch is to allow to borrow mm to KUnit kthread
-> after userspace is brought up, because we know that there are processes
-> running, at least the process that loaded the module to borrow mm.
+> >   ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+> >
+> > exists here in sub-directories of lib/ to keep the behavior of
+> > commit 2464a609ded0 ("ftrace: do not trace library functions").
+> >
+> > Since that commit, not only the objects in lib/ but also the ones in
+> > the sub-directories are excluded from ftrace (although the commit
+> > description did not explicitly mention this).
+> >
+> > However, most of library functions in sub-directories are not so hot.
+> > Re-add them to ftrace.
 >
-> This allows, for example, tests such as user_copy_kunit, which uses
-> vm_mmap, which needs current->mm.
+> I'm OK with this change, but note, it wasn't just the hot path that I
+> disabled ftrace on lib for, but some of these calls are done very early
+> at boot up. It may have been PowerPC that I was stumbling over. The
+> issue is that they would call mcount before the kernel was mapped
+> properly, and the system would crash.
 >
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> My PowerPC box no longer boots so I can't test this anymore. But a lot
+> has changed since 2008, and all this may very well be OK.
+>
+> -- Steve
 
-Isn't this a dependency for the test_user_copy? Also, don't we also
-need the change that makes kunit_tool build modules? It seems like you
-should put these together in a patchset like you did before. If not,
-you should at least reference the dependencies in each patch.
+
+That's why I split this into two commits
+so that we can do git-bisect and
+revert the second one in case of a regression.
+
+Anyway, we have some more time to test this in linux-next
+(and somebody reports an issue, if any).
+
+
+-- 
+Best Regards
+Masahiro Yamada
