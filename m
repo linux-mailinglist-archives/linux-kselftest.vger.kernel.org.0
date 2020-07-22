@@ -2,78 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4E2229D05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 18:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE4D229F43
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 20:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729700AbgGVQV5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jul 2020 12:21:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46322 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726784AbgGVQV5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jul 2020 12:21:57 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A92CA207CD
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2020 16:21:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595434916;
-        bh=NnybZoElq3+0KYwoEu4w7pBb4jnYvQOexyS5ysvraSE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vSXDj7y4cjPLVva9NAh9E8W8nLdAoG0KWjc1Xvn4ZFyDroZnWq5rSXVbBn7BifxOt
-         7bHtlPYpQv/zqYsru2Ia0FbssvT6tN9BCNbgBUDs2+Y147IplM47o7Q3IQjPz8jxPm
-         V8lO1ZksDemESa5uzI+dxZ69W6cujSFN7Y6FaZlA=
-Received: by mail-wr1-f41.google.com with SMTP id b6so2465987wrs.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2020 09:21:56 -0700 (PDT)
-X-Gm-Message-State: AOAM530MjzEQGEDLl3qJ0rY1HUuw10Egf+ocTIHCyhZvj81QcAw0f+Oe
-        ENelaYHMr0JoK8EEjGt7ZtDsZ1W0nBgoJlGMXp+KYQ==
-X-Google-Smtp-Source: ABdhPJyEetM5mfaR+krsbN1VbThAmtrGRoGcIADpoq0lN9rBpz6OtbXdH4MYYDkEz8tY7NVo/wEe+Jv+iOx79Efg25I=
-X-Received: by 2002:adf:e482:: with SMTP id i2mr296828wrm.75.1595434915303;
- Wed, 22 Jul 2020 09:21:55 -0700 (PDT)
+        id S1728821AbgGVSaE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jul 2020 14:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbgGVSaE (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Jul 2020 14:30:04 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7EAC0619DC
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2020 11:30:04 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id x9so1508641ybd.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2020 11:30:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4e/KF48f9JUg5sygJxwMfUiq+YIbJ7Nlc7LSKPnv3rI=;
+        b=elNYwD1e4l5A1KsSeru0ittmsBZcP9Qvxdm6i1W2vAadzRzceSIF8GOqVbab64YGjI
+         xla+wgOFhaQAak7QezviTywlZwEDOs3EXob3DAeRjPBLlU/sRfiK0NJkdC02HnGu3cmm
+         9Tza53NoK+Rx72dBOeEZt1gA3coJhMDCGjdVwsJMp35icIDjL/wLEA4XVM/l3n55IkYS
+         LYiOBfmW64KojOHqjG6zVHTj5OVcDb9Q0fpMkzzJQon9sjivSRMjJguIdTyhBEQqBFMl
+         I8ZkXOoRyc93D0lDVv7Jvo31XOVIfoCPP9bzu+FUgajm3oMoxsvj+snvVne/3F1M2nu0
+         gj6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4e/KF48f9JUg5sygJxwMfUiq+YIbJ7Nlc7LSKPnv3rI=;
+        b=GcU4IR9TUGfRqkC/5ruzc75DjI50hs3YJ3eigfzzogA/WYtXJuQq9FePBFh6GPBSnw
+         rRUk/K4vNfAn3DncNGTgXjfarg6M6gMqU9KalkaqWfz3Yf6ZzbHaF2xEJ8ns4pK0CkRM
+         4OUVLYQoIlKTtgLN7G7x4m2fM/LWSmb/W0jLzToVN0jgSCw+nhZt6G1CqG75dm4fGgUn
+         rilC+8L1L2wWCoujHy/nQAhxTuQ7oS6+LjA8EYsD9rKWcsh7Ubjms0E4YK43hEhzodAh
+         AcnZlRZfSf0ybc+2A0qJsYFmOgtytMFlncQQmQHSyF5xlTtUX4+dHGALjPgbE+hH6VVv
+         8unQ==
+X-Gm-Message-State: AOAM533Xoyg5b6TJlOyme3D2OFIRlWucF3k0v7azOrKKmAmCqlhrZg9s
+        pICA8wdHTetFGuN6iz0RuKj1+Cb4QO+u4CxFlNzPCA==
+X-Google-Smtp-Source: ABdhPJy+ZrG8SAw6xEmL/PrEzWg/CRqYaJT9N71mtGNjeBynwVo4OjeQbE9HHYEo9y47LHFPFKU+nTWaSv5a+5HPYl0=
+X-Received: by 2002:a25:4e45:: with SMTP id c66mr925374ybb.333.1595442603378;
+ Wed, 22 Jul 2020 11:30:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200717072056.73134-1-ira.weiny@intel.com> <20200717072056.73134-18-ira.weiny@intel.com>
-In-Reply-To: <20200717072056.73134-18-ira.weiny@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 22 Jul 2020 09:21:43 -0700
-X-Gmail-Original-Message-ID: <CALCETrVe1i5JdyzD_BcctxQJn+ZE3T38EFPgjxN1F577M36g+w@mail.gmail.com>
-Message-ID: <CALCETrVe1i5JdyzD_BcctxQJn+ZE3T38EFPgjxN1F577M36g+w@mail.gmail.com>
-Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across exceptions
-To:     Weiny Ira <ira.weiny@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
+References: <20200721174654.72132-1-vitor@massaru.org> <202007211207.5BAA9D8D@keescook>
+ <CADQ6JjU8rX2F_iBqth3u0EiA+CBgz4H+YL_-nbQ_cojYeLFXKQ@mail.gmail.com> <202007211911.666E080@keescook>
+In-Reply-To: <202007211911.666E080@keescook>
+From:   Vitor Massaru Iha <vitor@massaru.org>
+Date:   Wed, 22 Jul 2020 15:29:27 -0300
+Message-ID: <CADQ6JjUgVXBfHfb=V2ajwm=rHi12rxiqEtpivjY03xZbp6k7wg@mail.gmail.com>
+Subject: Re: [PATCH v3] lib: Convert test_user_copy to KUnit test
+To:     Kees Cook <keescook@chromium.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 12:21 AM <ira.weiny@intel.com> wrote:
+On Tue, Jul 21, 2020 at 11:12 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> From: Ira Weiny <ira.weiny@intel.com>
+> On Tue, Jul 21, 2020 at 07:19:12PM -0300, Vitor Massaru Iha wrote:
+> > When you talk about end-of-test summary, is it what is written in
+> > dmesg and not the kunit-tool?
 >
-> The PKRS MSR is not managed by XSAVE.  It is already preserved through a
-> context switch but this support leaves exception handling code open to
-> memory accesses which the interrupted process has allowed.
->
-> Close this hole by preserve the current task's PKRS MSR, reset the PKRS
-> MSR value on exception entry, and then restore the state on exception
-> exit.
+> Right, if I build this as a module and do "modprobe user_copy_kunit",
+> what will show up in dmesg?
 
-Should this live in pt_regs?
-
---Andy
+No, It doesn't. I'll put the messages again.
