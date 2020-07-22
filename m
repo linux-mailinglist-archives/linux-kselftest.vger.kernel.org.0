@@ -2,80 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB3C228DE6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 04:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60010228FAC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 07:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731815AbgGVCMm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jul 2020 22:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731633AbgGVCMl (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 22:12:41 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA76CC0619DB
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 19:12:41 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id j19so370558pgm.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 19:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9rx2ICY1n/mQSkvQxm3DqiqKMym6DrzmjM7s6SFLwEo=;
-        b=atGnOu7xHD1d7gov5LcXUyObLmqvtY+NKSNPa6d6jiajFGLijXYs76qCGG2MyxBXpt
-         B4bCLJke54FioXB7TsLyXbctIuODAyg16qUDhNP9VyX7cVOdVgazx2VRtEkJCvESrShA
-         D5FCyYUeM4oFS5jlVeUgWWTs6v7LIjj7XbbAw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9rx2ICY1n/mQSkvQxm3DqiqKMym6DrzmjM7s6SFLwEo=;
-        b=LcQmURw9JHseeAShPzhJ3XHJQd29zEFS6AGaEMnK6SJb3k2uuaC46RLWqZvBdkPrvn
-         l5cgKQWgkEj46g+/kb2fj6iCO50eyxZ0nOO9XkKgj74gQPiLRRFPPjWCKDVwAtDc5Jjp
-         +15Ut20QbCjKdfyD57TXw6H8xAxW3qV4ks5r4ElS6gNamZZa2x8pAaxKiTtzinAcimge
-         qTafwpau+zqbFiZtVTKWS4cdYxma7nVGTigi2+3ahCJ+P1vmyBgD+EcrDKiTPYrV7UaY
-         wGeVTjm0YhDInvpSaEnSYHxF6aF9nD2lx0XeSfIaUC6TAYLFYufEYhcPpzNAf5fUQXP/
-         hauQ==
-X-Gm-Message-State: AOAM5326sb3a4AZoDheYEIr4jgd/fXy3tkZd5enF3hNiKgs0ecRw88MD
-        ZzruUDN3P8hNZoKspb6uxJoDjw==
-X-Google-Smtp-Source: ABdhPJxqnoNNPu7Gh1zJCb1n8eFvBd5/4XYBGHD0TD6QA8KDFgS1fU3XMMQqJud4CqpFOVMOBEqe9Q==
-X-Received: by 2002:a62:cd89:: with SMTP id o131mr26386979pfg.195.1595383961041;
-        Tue, 21 Jul 2020 19:12:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i67sm22574975pfg.13.2020.07.21.19.12.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 19:12:40 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 19:12:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v3] lib: Convert test_user_copy to KUnit test
-Message-ID: <202007211911.666E080@keescook>
-References: <20200721174654.72132-1-vitor@massaru.org>
- <202007211207.5BAA9D8D@keescook>
- <CADQ6JjU8rX2F_iBqth3u0EiA+CBgz4H+YL_-nbQ_cojYeLFXKQ@mail.gmail.com>
+        id S1727794AbgGVF1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jul 2020 01:27:11 -0400
+Received: from mga06.intel.com ([134.134.136.31]:45932 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726147AbgGVF1L (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Jul 2020 01:27:11 -0400
+IronPort-SDR: weyePju+AsTR0Ef5QloQE9O2UvHGs10/tJroV6wLgWLHPS9De8wGeg1auGWizBniw5sGOS4jrq
+ 4bbBnlPmk5+g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="211816469"
+X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
+   d="scan'208";a="211816469"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 22:27:10 -0700
+IronPort-SDR: 99GhxGM5RE4/FWZPVc87eqBXDP7QFCYYA1UR13FqqLtQTjcvudNbcYc3VQFdlM1dFySzls+p48
+ DehFI7uYAdaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
+   d="scan'208";a="288166459"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2020 22:27:09 -0700
+Date:   Tue, 21 Jul 2020 22:27:09 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
+ exceptions
+Message-ID: <20200722052709.GB478587@iweiny-DESK2.sc.intel.com>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-18-ira.weiny@intel.com>
+ <20200717100610.GH10769@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADQ6JjU8rX2F_iBqth3u0EiA+CBgz4H+YL_-nbQ_cojYeLFXKQ@mail.gmail.com>
+In-Reply-To: <20200717100610.GH10769@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 07:19:12PM -0300, Vitor Massaru Iha wrote:
-> When you talk about end-of-test summary, is it what is written in
-> dmesg and not the kunit-tool?
+On Fri, Jul 17, 2020 at 12:06:10PM +0200, Peter Zijlstra wrote:
+> On Fri, Jul 17, 2020 at 12:20:56AM -0700, ira.weiny@intel.com wrote:
+> > First I'm not sure if adding this state to idtentry_state and having
+> > that state copied is the right way to go.  It seems like we should start
+> > passing this by reference instead of value.  But for now this works as
+> > an RFC.  Comments?
+> 
+> As long as you keep sizeof(struct idtentry_state_t) <= sizeof(u64) or
+> possibly 2*sizeof(unsigned long), code gen shouldn't be too horrid IIRC.
+> You'll have to look at what the compiler makes of it.
+> 
+> > Second, I'm not 100% happy with having to save the reference count in
+> > the exception handler.  It seems like a very ugly layering violation but
+> > I don't see a way around it at the moment.
+> 
+> So I've been struggling with that API, all the way from
+> pks_update_protection() to that dev_access_{en,dis}able(). I _really_
+> hate it, but I see how you ended up with it.
+> 
+> I wanted to propose something like:
+> 
+> u32 current_pkey_save(int pkey, unsigned flags)
+> {
+> 	u32 *lpkr = get_cpu_ptr(&local_pkr);
+> 	u32 pkr, saved = *lpkr;
+> 
+> 	pkr = update_pkey_reg(saved, pkey, flags);
+> 	if (pkr != saved)
+> 		wrpkr(pkr);
+> 
+> 	put_cpu_ptr(&local_pkr);
+> 	return saved;
+> }
+> 
+> void current_pkey_restore(u32 pkr)
+> {
+> 	u32 *lpkr = get_cpu_ptr(&local_pkr);
+> 	if (*lpkr != pkr)
+> 		wrpkr(pkr);
+> 	put_cpu_ptr(&local_pkr);
+> }
+> 
+> Together with:
+> 
+> void pkey_switch(struct task_struct *prev, struct task_struct *next)
+> {
+> 	prev->pkr = this_cpu_read(local_pkr);
+> 	if (prev->pkr != next->pkr)
+> 		wrpkr(next->pkr);
+> }
+> 
+> But that's actually hard to frob into the kmap() model :-( The upside is
+> that you only have 1 word of state, instead of the 2 you have now.
 
-Right, if I build this as a module and do "modprobe user_copy_kunit",
-what will show up in dmesg?
+I'm still mulling over if what you have really helps us.  It seems like we may
+be able to remove the percpu pkrs_cache variable...  But I'm hesitant to do so.
 
--- 
-Kees Cook
+Regardless that is not the big issue right now...
+
+> 
+> > Third, this patch has gone through a couple of revisions as I've had
+> > crashes which just don't make sense to me.  One particular issue I've
+> > had is taking a MCE during memcpy_mcsafe causing my WARN_ON() to fire.
+> > The code path was a pmem copy and the ref count should have been
+> > elevated due to dev_access_enable() but why was
+> > idtentry_enter()->idt_save_pkrs() not called I don't know.
+> 
+> Because MCEs are NMI-like and don't go through the normal interrupt
+> path. MCEs are an abomination, please wear all the protective devices
+> you can lay hands on when delving into that.
+
+I've been really digging into this today and I'm very concerned that I'm
+completely missing something WRT idtentry_enter() and idtentry_exit().
+
+I've instrumented idt_{save,restore}_pkrs(), and __dev_access_{en,dis}able()
+with trace_printk()'s.
+
+With this debug code, I have found an instance where it seems like
+idtentry_enter() is called without a corresponding idtentry_exit().  This has
+left the thread ref counter at 0 which results in very bad things happening
+when __dev_access_disable() is called and the ref count goes negative.
+
+Effectively this seems to be happening:
+
+...
+	// ref == 0
+	dev_access_enable()  // ref += 1 ==> disable protection
+		// exception  (which one I don't know)
+			idtentry_enter()
+				// ref = 0
+				_handler() // or whatever code...
+			// *_exit() not called [at least there is no trace_printk() output]...
+			// Regardless of trace output, the ref is left at 0
+	dev_access_disable() // ref -= 1 ==> -1 ==> does not enable protection
+	(Bad stuff is bound to happen now...)
+...
+
+The ref count ends up completely messed up after this sequence...  and the PKRS
+register gets out of sync as well.  This is starting to make some sense of how
+I was getting what seemed like random crashes before.
+
+Unfortunately I don't understand the idt entry/exit code well enough to see
+clearly what is going on.  Is there any reason idtentry_exit() is not called
+after idtentry_enter()?  Perhaps some NMI/MCE or 'not normal' exception code
+path I'm not seeing?  In my searches I see a corresponding exit for every
+enter.  But MCE is pretty hard to follow.
+
+Also is there any chance that the process could be getting scheduled and that
+is causing an issue?
+
+Thanks,
+Ira
