@@ -2,98 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 788A3228DE2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 04:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB3C228DE6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 04:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731782AbgGVCLU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jul 2020 22:11:20 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:32111 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731621AbgGVCLU (ORCPT
+        id S1731815AbgGVCMm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jul 2020 22:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731633AbgGVCMl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 22:11:20 -0400
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 06M2AmTB032054;
-        Wed, 22 Jul 2020 11:10:49 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 06M2AmTB032054
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1595383849;
-        bh=Aih6VBubiSXnprivmgnxaVTSC58fZZfIbh+5AaCTBIM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EK80SaE1oXZzPoKURYSTxTH+hxVXKvKr12Tsuy/FX5trsgAahkshxC3XvvjFV8sKp
-         kvotbDYshJF+qwdVkQQYifZ3+p5XbQPCpf7NpGo6h/4SAC4fDPF0PE7zVmWgGQMSC5
-         0m3wOAfD08HO837L/IdMOPyCR2dKjbl3qXPXwhL5F0NcX88G6GCXNdaRnxw3rmBmWQ
-         0lpwHzpXbHChzvgzNs9gUkl7CDhLTAd2xKp4S7Wkpizq8GR3wjLLfzLcwl7EVGVrXO
-         PQ9Ye5lj1XuTXoMaojlnlT72b0Qcj48tzNwqpLcZdjIYZEGDOIjehke/+UON54o26F
-         j1ed1QcFQuTWg==
-X-Nifty-SrcIP: [209.85.217.44]
-Received: by mail-vs1-f44.google.com with SMTP id m6so308180vsl.12;
-        Tue, 21 Jul 2020 19:10:49 -0700 (PDT)
-X-Gm-Message-State: AOAM532hd9TXd3U8NO2/v9pvDAN9mdt0OZd3LJx5Zq7WAOv5BRj84pde
-        7NZZ1/ng5/lcAMkqR1JZfeK2M8EM97RlQlziUfo=
-X-Google-Smtp-Source: ABdhPJxePnkwQjGrTtR0b/vKzaaoGDrx5Lo9YH6/7fWyDIDmz0k8/gl81kgwfi+UC9Pxo7G80Dx5Q555MuZEA4oNWjo=
-X-Received: by 2002:a67:2e4d:: with SMTP id u74mr21559012vsu.215.1595383847947;
- Tue, 21 Jul 2020 19:10:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200707092117.963394-1-masahiroy@kernel.org> <20200707092117.963394-2-masahiroy@kernel.org>
- <20200708065223.GA11164@alley> <20200708092324.GA4751@alley>
-In-Reply-To: <20200708092324.GA4751@alley>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 22 Jul 2020 11:10:10 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARFTzfx772bTUnLxbN9pwyX3=H284cg-YWKc3YUY9_8KA@mail.gmail.com>
-Message-ID: <CAK7LNARFTzfx772bTUnLxbN9pwyX3=H284cg-YWKc3YUY9_8KA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of lib/
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Haren Myneni <haren@us.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tue, 21 Jul 2020 22:12:41 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA76CC0619DB
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 19:12:41 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id j19so370558pgm.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 19:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9rx2ICY1n/mQSkvQxm3DqiqKMym6DrzmjM7s6SFLwEo=;
+        b=atGnOu7xHD1d7gov5LcXUyObLmqvtY+NKSNPa6d6jiajFGLijXYs76qCGG2MyxBXpt
+         B4bCLJke54FioXB7TsLyXbctIuODAyg16qUDhNP9VyX7cVOdVgazx2VRtEkJCvESrShA
+         D5FCyYUeM4oFS5jlVeUgWWTs6v7LIjj7XbbAw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9rx2ICY1n/mQSkvQxm3DqiqKMym6DrzmjM7s6SFLwEo=;
+        b=LcQmURw9JHseeAShPzhJ3XHJQd29zEFS6AGaEMnK6SJb3k2uuaC46RLWqZvBdkPrvn
+         l5cgKQWgkEj46g+/kb2fj6iCO50eyxZ0nOO9XkKgj74gQPiLRRFPPjWCKDVwAtDc5Jjp
+         +15Ut20QbCjKdfyD57TXw6H8xAxW3qV4ks5r4ElS6gNamZZa2x8pAaxKiTtzinAcimge
+         qTafwpau+zqbFiZtVTKWS4cdYxma7nVGTigi2+3ahCJ+P1vmyBgD+EcrDKiTPYrV7UaY
+         wGeVTjm0YhDInvpSaEnSYHxF6aF9nD2lx0XeSfIaUC6TAYLFYufEYhcPpzNAf5fUQXP/
+         hauQ==
+X-Gm-Message-State: AOAM5326sb3a4AZoDheYEIr4jgd/fXy3tkZd5enF3hNiKgs0ecRw88MD
+        ZzruUDN3P8hNZoKspb6uxJoDjw==
+X-Google-Smtp-Source: ABdhPJxqnoNNPu7Gh1zJCb1n8eFvBd5/4XYBGHD0TD6QA8KDFgS1fU3XMMQqJud4CqpFOVMOBEqe9Q==
+X-Received: by 2002:a62:cd89:: with SMTP id o131mr26386979pfg.195.1595383961041;
+        Tue, 21 Jul 2020 19:12:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i67sm22574975pfg.13.2020.07.21.19.12.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 19:12:40 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 19:12:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Vitor Massaru Iha <vitor@massaru.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v3] lib: Convert test_user_copy to KUnit test
+Message-ID: <202007211911.666E080@keescook>
+References: <20200721174654.72132-1-vitor@massaru.org>
+ <202007211207.5BAA9D8D@keescook>
+ <CADQ6JjU8rX2F_iBqth3u0EiA+CBgz4H+YL_-nbQ_cojYeLFXKQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADQ6JjU8rX2F_iBqth3u0EiA+CBgz4H+YL_-nbQ_cojYeLFXKQ@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 8, 2020 at 6:23 PM Petr Mladek <pmladek@suse.com> wrote:
->
-> On Wed 2020-07-08 08:52:23, Petr Mladek wrote:
-> >
-> > PS: BTW: The livepatch selftests fail in Linus's master now. But it
-> > seems to be for another reason. I am going to dig into it.
->
-> JFYI, the livepatch selftests are actually working. I have messed
-> the testing here. I am sorry for the noise.
->
-> Best Regards,
-> Petr
+On Tue, Jul 21, 2020 at 07:19:12PM -0300, Vitor Massaru Iha wrote:
+> When you talk about end-of-test summary, is it what is written in
+> dmesg and not the kunit-tool?
 
-No worry, thank you for testing this patch.
-
-
-I deleted the following two lines,
-otherwise $(CC_FLAGS_FTRACE) would be added twice.
-
-# Target modules to be livepatched require CC_FLAGS_FTRACE
-CFLAGS_test_klp_callbacks_busy.o       += $(CC_FLAGS_FTRACE)
-CFLAGS_test_klp_callbacks_mod.o                += $(CC_FLAGS_FTRACE)
-
-
-
+Right, if I build this as a module and do "modprobe user_copy_kunit",
+what will show up in dmesg?
 
 -- 
-Best Regards
-Masahiro Yamada
+Kees Cook
