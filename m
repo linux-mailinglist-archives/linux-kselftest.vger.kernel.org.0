@@ -2,97 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D51292293AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 10:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CA122956B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 11:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728503AbgGVIhT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jul 2020 04:37:19 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57479 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726555AbgGVIhS (ORCPT
+        id S1728856AbgGVJtS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jul 2020 05:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726147AbgGVJtR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jul 2020 04:37:18 -0400
-Received: from mail-ua1-f71.google.com ([209.85.222.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <paolo.pisati@canonical.com>)
-        id 1jyAFY-0005xW-P2
-        for linux-kselftest@vger.kernel.org; Wed, 22 Jul 2020 08:37:16 +0000
-Received: by mail-ua1-f71.google.com with SMTP id h10so356111uar.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2020 01:37:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R+bYSyuCUZFAkGtII1RmdIT7fMN+AO1fhPK7l1587qY=;
-        b=owjLbTKKWKDpeQztKfy+O63OLvWA4GpmQuwaWb1h6oHPT4zO7FGtGkLD1sadb/B7de
-         eKiSRPA6fAxaVECHN9gahIZZH1XHEe5MWOQUS1IHNG59o2wpRJ//x+PF0HcxUOTLjVBr
-         osPpzcbzD5Vxp0erUws/+SVM5cwiFDr4TGOjtiYWtd3DTx20sBOqe1lM3iOTsiB5Ojlz
-         FTCZTUYihlg9WLen9GRW98iU9IOXyKLQXHoVa/uzFNOa2G7PCjGAJIqzh2B97VQ3NoTD
-         OHMb58wg6TE5zpNJElJx/8+mzAulAeMlaAsDK8ekHFA8wil9FK6lVNSq1IuhqzEC1Cwm
-         iKIQ==
-X-Gm-Message-State: AOAM5331iTs5LGGgZgrIpJ6onFg0LtEOIDyC+f4ouWp0VymddGgiIaJC
-        IwYfJaGWEiQZ9cjBCT9kuvsEWFcC692g0bIms/20HvrMAUtopRYr1hlddr+ASMRAyQWM0rGkiyg
-        r9kmSWBxQN8xvnBghCem9hIjdNLo/OMSUGSyQ68vvcZ/9dAlIxObjBrUAsebMaw==
-X-Received: by 2002:a67:1105:: with SMTP id 5mr24340545vsr.174.1595407034591;
-        Wed, 22 Jul 2020 01:37:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyHhx8M1zvoxC/SgvLXUeJNSlv9KoZs9SK1CB828zfYcRVOHt6JU+7hR5X5KsNVtgCDY7YsQoWp9nuI8gUSZfk=
-X-Received: by 2002:a67:1105:: with SMTP id 5mr24340530vsr.174.1595407034362;
- Wed, 22 Jul 2020 01:37:14 -0700 (PDT)
+        Wed, 22 Jul 2020 05:49:17 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5CAC0619DC;
+        Wed, 22 Jul 2020 02:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CGWeeSRaUSkQ7fRpSaSxceYYgFD1vpes5EtqHWHdpSk=; b=OwoBHanUcjzURwMFxFtVsv9qfg
+        SeMEMy/1cgFq/6m+pzEEfSa6Xcdy/FeKvQkAYl0zjdjfLykOJ8qAC+63Dr3qdZ20GQbde7oDVD6Jq
+        uawCAOpyJ8G/qXsZEIrjKsaLLf88AFKEvhFUsMYXlAHU6X7PbtkQaQH4eOH9Rzuab+mB/XLsjUTUj
+        Kq3qmjssUzDiUOfEnSKuCfvCZsqxbJaT+qKDQHrOTeaZWbVIDB3rYawhHlO9mhq0FjoH+7nyqW6sR
+        xdC3UlwPbRuWnsgQBfnNEKRrKuyGQ8HVupyoL8IwxZ9p3A9+yamJ/NCAGw21N1yHcHM1pzHtYIn8N
+        VUj0Bt1w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jyBMw-0007bB-1x; Wed, 22 Jul 2020 09:48:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 93C513011C6;
+        Wed, 22 Jul 2020 11:48:53 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D378821A7D50E; Wed, 22 Jul 2020 11:48:53 +0200 (CEST)
+Date:   Wed, 22 Jul 2020 11:48:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
+ exceptions
+Message-ID: <20200722094853.GM10769@hirez.programming.kicks-ass.net>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-18-ira.weiny@intel.com>
+ <20200717100610.GH10769@hirez.programming.kicks-ass.net>
+ <20200722052709.GB478587@iweiny-DESK2.sc.intel.com>
 MIME-Version: 1.0
-References: <CA+FuTSeN8SONXySGys8b2EtTqJmHDKw1XVoDte0vzUPg=yuH5g@mail.gmail.com>
- <20200721161710.80797-1-paolo.pisati@canonical.com> <CA+FuTSe1-ZEC5xEXXbT=cbN6eAK1NXXKJ3f2Gz_v3gQyh2SkjA@mail.gmail.com>
-In-Reply-To: <CA+FuTSe1-ZEC5xEXXbT=cbN6eAK1NXXKJ3f2Gz_v3gQyh2SkjA@mail.gmail.com>
-From:   Paolo Pisati <paolo.pisati@canonical.com>
-Date:   Wed, 22 Jul 2020 10:37:03 +0200
-Message-ID: <CAMsH0TTQnPGrXci3WvjM+8sdJdxOjR9MnwFvv4DS6=crMCAt4A@mail.gmail.com>
-Subject: Re: [PATCH v2] selftest: txtimestamp: fix net ns entry logic
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Jian Yang <jianyang@google.com>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200722052709.GB478587@iweiny-DESK2.sc.intel.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 6:26 PM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> Fixes: cda261f421ba ("selftests: add txtimestamp kselftest")
->
-> Acked-by: Willem de Bruijn <willemb@google.com>
+On Tue, Jul 21, 2020 at 10:27:09PM -0700, Ira Weiny wrote:
 
-Besides, is it just me or this test fails frequently? I've been
-running it on 5.4.x, 5.7.x and 5.8-rcX and it often fails:
+> I've been really digging into this today and I'm very concerned that I'm
+> completely missing something WRT idtentry_enter() and idtentry_exit().
+> 
+> I've instrumented idt_{save,restore}_pkrs(), and __dev_access_{en,dis}able()
+> with trace_printk()'s.
+> 
+> With this debug code, I have found an instance where it seems like
+> idtentry_enter() is called without a corresponding idtentry_exit().  This has
+> left the thread ref counter at 0 which results in very bad things happening
+> when __dev_access_disable() is called and the ref count goes negative.
+> 
+> Effectively this seems to be happening:
+> 
+> ...
+> 	// ref == 0
+> 	dev_access_enable()  // ref += 1 ==> disable protection
+> 		// exception  (which one I don't know)
+> 			idtentry_enter()
+> 				// ref = 0
+> 				_handler() // or whatever code...
+> 			// *_exit() not called [at least there is no trace_printk() output]...
+> 			// Regardless of trace output, the ref is left at 0
+> 	dev_access_disable() // ref -= 1 ==> -1 ==> does not enable protection
+> 	(Bad stuff is bound to happen now...)
+> ...
+> 
+> The ref count ends up completely messed up after this sequence...  and the PKRS
+> register gets out of sync as well.  This is starting to make some sense of how
+> I was getting what seemed like random crashes before.
+> 
+> Unfortunately I don't understand the idt entry/exit code well enough to see
+> clearly what is going on.  Is there any reason idtentry_exit() is not called
+> after idtentry_enter()?  Perhaps some NMI/MCE or 'not normal' exception code
+> path I'm not seeing?  In my searches I see a corresponding exit for every
+> enter.  But MCE is pretty hard to follow.
+> 
+> Also is there any chance that the process could be getting scheduled and that
+> is causing an issue?
 
-...
-    USR: 1595405084 s 947366 us (seq=0, len=0)
-    SND: 1595405084 s 948686 us (seq=9, len=10)  (USR +1319 us)
-ERROR: 6542 us expected between 6000 and 6500
-    ACK: 1595405084 s 953908 us (seq=9, len=10)  (USR +6541 us)
-    USR: 1595405084 s 997979 us (seq=0, len=0)
-    SND: 1595405084 s 999101 us (seq=19, len=10)  (USR +1121 us)
-    ACK: 1595405085 s 4438 us (seq=19, len=10)  (USR +6458 us)
-    USR: 1595405085 s 49317 us (seq=0, len=0)
-    SND: 1595405085 s 50680 us (seq=29, len=10)  (USR +1363 us)
-ERROR: 6661 us expected between 6000 and 6500
-    ACK: 1595405085 s 55978 us (seq=29, len=10)  (USR +6661 us)
-    USR: 1595405085 s 101049 us (seq=0, len=0)
-    SND: 1595405085 s 102342 us (seq=39, len=10)  (USR +1293 us)
-ERROR: 6578 us expected between 6000 and 6500
-    ACK: 1595405085 s 107627 us (seq=39, len=10)  (USR +6577 us)
-    USR-SND: count=4, avg=1274 us, min=1121 us, max=1363 us
-    USR-ACK: count=4, avg=6559 us, min=6458 us, max=6661 us
+Ooh, I think I see the problem. We also use idtentry_enter() for #PF,
+and #PF can schedule, exactly as you observed. Argh!
 
+This then means you need to go frob something in
+arch/x86/include/asm/idtentry.h, which is somewhat unfortunate.
 
-In particular, "run_test_v4v6 ${args}       # tcp" is the most
-susceptible to failures (though i've seen the udp variant fail too).
--- 
-bye,
-p.
+Thomas, would it make sense to add a type parameter to
+idtentry_{enter,exit}() ?
