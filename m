@@ -2,115 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CA122956B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 11:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15172297B6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 13:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728856AbgGVJtS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jul 2020 05:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgGVJtR (ORCPT
+        id S1726503AbgGVLvb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jul 2020 07:51:31 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37034 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726334AbgGVLvb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jul 2020 05:49:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5CAC0619DC;
-        Wed, 22 Jul 2020 02:49:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CGWeeSRaUSkQ7fRpSaSxceYYgFD1vpes5EtqHWHdpSk=; b=OwoBHanUcjzURwMFxFtVsv9qfg
-        SeMEMy/1cgFq/6m+pzEEfSa6Xcdy/FeKvQkAYl0zjdjfLykOJ8qAC+63Dr3qdZ20GQbde7oDVD6Jq
-        uawCAOpyJ8G/qXsZEIrjKsaLLf88AFKEvhFUsMYXlAHU6X7PbtkQaQH4eOH9Rzuab+mB/XLsjUTUj
-        Kq3qmjssUzDiUOfEnSKuCfvCZsqxbJaT+qKDQHrOTeaZWbVIDB3rYawhHlO9mhq0FjoH+7nyqW6sR
-        xdC3UlwPbRuWnsgQBfnNEKRrKuyGQ8HVupyoL8IwxZ9p3A9+yamJ/NCAGw21N1yHcHM1pzHtYIn8N
-        VUj0Bt1w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jyBMw-0007bB-1x; Wed, 22 Jul 2020 09:48:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 93C513011C6;
-        Wed, 22 Jul 2020 11:48:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D378821A7D50E; Wed, 22 Jul 2020 11:48:53 +0200 (CEST)
-Date:   Wed, 22 Jul 2020 11:48:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
+        Wed, 22 Jul 2020 07:51:31 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06MBXRFd125842;
+        Wed, 22 Jul 2020 07:51:21 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32e1yayggw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jul 2020 07:51:21 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06MBYZiL129623;
+        Wed, 22 Jul 2020 07:51:21 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32e1yaygg0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jul 2020 07:51:20 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06MBfPXb012436;
+        Wed, 22 Jul 2020 11:51:18 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 32brq7mybr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Jul 2020 11:51:18 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06MBpG3w56295454
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Jul 2020 11:51:16 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 711BC5204F;
+        Wed, 22 Jul 2020 11:51:16 +0000 (GMT)
+Received: from in.ibm.com (unknown [9.102.3.172])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 2EFB35204E;
+        Wed, 22 Jul 2020 11:51:14 +0000 (GMT)
+Date:   Wed, 22 Jul 2020 17:21:11 +0530
+From:   Bharata B Rao <bharata@linux.ibm.com>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     linux-rdma@vger.kernel.org, linux-mm@kvack.org,
+        nouveau@lists.freedesktop.org, kvm-ppc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
- exceptions
-Message-ID: <20200722094853.GM10769@hirez.programming.kicks-ass.net>
-References: <20200717072056.73134-1-ira.weiny@intel.com>
- <20200717072056.73134-18-ira.weiny@intel.com>
- <20200717100610.GH10769@hirez.programming.kicks-ass.net>
- <20200722052709.GB478587@iweiny-DESK2.sc.intel.com>
+        Shuah Khan <shuah@kernel.org>, Ben Skeggs <bskeggs@redhat.com>
+Subject: Re: [PATCH v3 2/5] mm/migrate: add a flags parameter to migrate_vma
+Message-ID: <20200722115111.GR7902@in.ibm.com>
+Reply-To: bharata@linux.ibm.com
+References: <20200721213119.32344-1-rcampbell@nvidia.com>
+ <20200721213119.32344-3-rcampbell@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200722052709.GB478587@iweiny-DESK2.sc.intel.com>
+In-Reply-To: <20200721213119.32344-3-rcampbell@nvidia.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-22_05:2020-07-22,2020-07-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 suspectscore=1 bulkscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 mlxlogscore=989 phishscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007220089
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 10:27:09PM -0700, Ira Weiny wrote:
+On Tue, Jul 21, 2020 at 02:31:16PM -0700, Ralph Campbell wrote:
+> The src_owner field in struct migrate_vma is being used for two purposes,
+> it acts as a selection filter for which types of pages are to be migrated
+> and it identifies device private pages owned by the caller. Split this
+> into separate parameters so the src_owner field can be used just to
+> identify device private pages owned by the caller of migrate_vma_setup().
+> Rename the src_owner field to pgmap_owner to reflect it is now used only
+> to identify which device private pages to migrate.
+> 
+> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+> ---
+>  arch/powerpc/kvm/book3s_hv_uvmem.c     |  4 +++-
+>  drivers/gpu/drm/nouveau/nouveau_dmem.c |  4 +++-
+>  include/linux/migrate.h                | 13 +++++++++----
+>  lib/test_hmm.c                         |  6 ++++--
+>  mm/migrate.c                           |  6 ++++--
+>  5 files changed, 23 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/powerpc/kvm/book3s_hv_uvmem.c b/arch/powerpc/kvm/book3s_hv_uvmem.c
+> index 09d8119024db..6850bd04bcb9 100644
+> --- a/arch/powerpc/kvm/book3s_hv_uvmem.c
+> +++ b/arch/powerpc/kvm/book3s_hv_uvmem.c
+> @@ -400,6 +400,7 @@ kvmppc_svm_page_in(struct vm_area_struct *vma, unsigned long start,
+>  	mig.end = end;
+>  	mig.src = &src_pfn;
+>  	mig.dst = &dst_pfn;
+> +	mig.flags = MIGRATE_VMA_SELECT_SYSTEM;
+>  
+>  	/*
+>  	 * We come here with mmap_lock write lock held just for
+> @@ -577,7 +578,8 @@ kvmppc_svm_page_out(struct vm_area_struct *vma, unsigned long start,
+>  	mig.end = end;
+>  	mig.src = &src_pfn;
+>  	mig.dst = &dst_pfn;
+> -	mig.src_owner = &kvmppc_uvmem_pgmap;
+> +	mig.pgmap_owner = &kvmppc_uvmem_pgmap;
+> +	mig.flags = MIGRATE_VMA_SELECT_DEVICE_PRIVATE;
+>  
+>  	mutex_lock(&kvm->arch.uvmem_lock);
 
-> I've been really digging into this today and I'm very concerned that I'm
-> completely missing something WRT idtentry_enter() and idtentry_exit().
-> 
-> I've instrumented idt_{save,restore}_pkrs(), and __dev_access_{en,dis}able()
-> with trace_printk()'s.
-> 
-> With this debug code, I have found an instance where it seems like
-> idtentry_enter() is called without a corresponding idtentry_exit().  This has
-> left the thread ref counter at 0 which results in very bad things happening
-> when __dev_access_disable() is called and the ref count goes negative.
-> 
-> Effectively this seems to be happening:
-> 
-> ...
-> 	// ref == 0
-> 	dev_access_enable()  // ref += 1 ==> disable protection
-> 		// exception  (which one I don't know)
-> 			idtentry_enter()
-> 				// ref = 0
-> 				_handler() // or whatever code...
-> 			// *_exit() not called [at least there is no trace_printk() output]...
-> 			// Regardless of trace output, the ref is left at 0
-> 	dev_access_disable() // ref -= 1 ==> -1 ==> does not enable protection
-> 	(Bad stuff is bound to happen now...)
-> ...
-> 
-> The ref count ends up completely messed up after this sequence...  and the PKRS
-> register gets out of sync as well.  This is starting to make some sense of how
-> I was getting what seemed like random crashes before.
-> 
-> Unfortunately I don't understand the idt entry/exit code well enough to see
-> clearly what is going on.  Is there any reason idtentry_exit() is not called
-> after idtentry_enter()?  Perhaps some NMI/MCE or 'not normal' exception code
-> path I'm not seeing?  In my searches I see a corresponding exit for every
-> enter.  But MCE is pretty hard to follow.
-> 
-> Also is there any chance that the process could be getting scheduled and that
-> is causing an issue?
-
-Ooh, I think I see the problem. We also use idtentry_enter() for #PF,
-and #PF can schedule, exactly as you observed. Argh!
-
-This then means you need to go frob something in
-arch/x86/include/asm/idtentry.h, which is somewhat unfortunate.
-
-Thomas, would it make sense to add a type parameter to
-idtentry_{enter,exit}() ?
+For the kvmppc changes above,
+Reviewed-by: Bharata B Rao <bharata@linux.ibm.com>
