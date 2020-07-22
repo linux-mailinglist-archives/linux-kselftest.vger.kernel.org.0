@@ -2,170 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60010228FAC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 07:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51292293AF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jul 2020 10:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgGVF1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jul 2020 01:27:11 -0400
-Received: from mga06.intel.com ([134.134.136.31]:45932 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726147AbgGVF1L (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jul 2020 01:27:11 -0400
-IronPort-SDR: weyePju+AsTR0Ef5QloQE9O2UvHGs10/tJroV6wLgWLHPS9De8wGeg1auGWizBniw5sGOS4jrq
- 4bbBnlPmk5+g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="211816469"
-X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
-   d="scan'208";a="211816469"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 22:27:10 -0700
-IronPort-SDR: 99GhxGM5RE4/FWZPVc87eqBXDP7QFCYYA1UR13FqqLtQTjcvudNbcYc3VQFdlM1dFySzls+p48
- DehFI7uYAdaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
-   d="scan'208";a="288166459"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2020 22:27:09 -0700
-Date:   Tue, 21 Jul 2020 22:27:09 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
- exceptions
-Message-ID: <20200722052709.GB478587@iweiny-DESK2.sc.intel.com>
-References: <20200717072056.73134-1-ira.weiny@intel.com>
- <20200717072056.73134-18-ira.weiny@intel.com>
- <20200717100610.GH10769@hirez.programming.kicks-ass.net>
+        id S1728503AbgGVIhT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jul 2020 04:37:19 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57479 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbgGVIhS (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Jul 2020 04:37:18 -0400
+Received: from mail-ua1-f71.google.com ([209.85.222.71])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <paolo.pisati@canonical.com>)
+        id 1jyAFY-0005xW-P2
+        for linux-kselftest@vger.kernel.org; Wed, 22 Jul 2020 08:37:16 +0000
+Received: by mail-ua1-f71.google.com with SMTP id h10so356111uar.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2020 01:37:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R+bYSyuCUZFAkGtII1RmdIT7fMN+AO1fhPK7l1587qY=;
+        b=owjLbTKKWKDpeQztKfy+O63OLvWA4GpmQuwaWb1h6oHPT4zO7FGtGkLD1sadb/B7de
+         eKiSRPA6fAxaVECHN9gahIZZH1XHEe5MWOQUS1IHNG59o2wpRJ//x+PF0HcxUOTLjVBr
+         osPpzcbzD5Vxp0erUws/+SVM5cwiFDr4TGOjtiYWtd3DTx20sBOqe1lM3iOTsiB5Ojlz
+         FTCZTUYihlg9WLen9GRW98iU9IOXyKLQXHoVa/uzFNOa2G7PCjGAJIqzh2B97VQ3NoTD
+         OHMb58wg6TE5zpNJElJx/8+mzAulAeMlaAsDK8ekHFA8wil9FK6lVNSq1IuhqzEC1Cwm
+         iKIQ==
+X-Gm-Message-State: AOAM5331iTs5LGGgZgrIpJ6onFg0LtEOIDyC+f4ouWp0VymddGgiIaJC
+        IwYfJaGWEiQZ9cjBCT9kuvsEWFcC692g0bIms/20HvrMAUtopRYr1hlddr+ASMRAyQWM0rGkiyg
+        r9kmSWBxQN8xvnBghCem9hIjdNLo/OMSUGSyQ68vvcZ/9dAlIxObjBrUAsebMaw==
+X-Received: by 2002:a67:1105:: with SMTP id 5mr24340545vsr.174.1595407034591;
+        Wed, 22 Jul 2020 01:37:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyHhx8M1zvoxC/SgvLXUeJNSlv9KoZs9SK1CB828zfYcRVOHt6JU+7hR5X5KsNVtgCDY7YsQoWp9nuI8gUSZfk=
+X-Received: by 2002:a67:1105:: with SMTP id 5mr24340530vsr.174.1595407034362;
+ Wed, 22 Jul 2020 01:37:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200717100610.GH10769@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <CA+FuTSeN8SONXySGys8b2EtTqJmHDKw1XVoDte0vzUPg=yuH5g@mail.gmail.com>
+ <20200721161710.80797-1-paolo.pisati@canonical.com> <CA+FuTSe1-ZEC5xEXXbT=cbN6eAK1NXXKJ3f2Gz_v3gQyh2SkjA@mail.gmail.com>
+In-Reply-To: <CA+FuTSe1-ZEC5xEXXbT=cbN6eAK1NXXKJ3f2Gz_v3gQyh2SkjA@mail.gmail.com>
+From:   Paolo Pisati <paolo.pisati@canonical.com>
+Date:   Wed, 22 Jul 2020 10:37:03 +0200
+Message-ID: <CAMsH0TTQnPGrXci3WvjM+8sdJdxOjR9MnwFvv4DS6=crMCAt4A@mail.gmail.com>
+Subject: Re: [PATCH v2] selftest: txtimestamp: fix net ns entry logic
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Jian Yang <jianyang@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 12:06:10PM +0200, Peter Zijlstra wrote:
-> On Fri, Jul 17, 2020 at 12:20:56AM -0700, ira.weiny@intel.com wrote:
-> > First I'm not sure if adding this state to idtentry_state and having
-> > that state copied is the right way to go.  It seems like we should start
-> > passing this by reference instead of value.  But for now this works as
-> > an RFC.  Comments?
-> 
-> As long as you keep sizeof(struct idtentry_state_t) <= sizeof(u64) or
-> possibly 2*sizeof(unsigned long), code gen shouldn't be too horrid IIRC.
-> You'll have to look at what the compiler makes of it.
-> 
-> > Second, I'm not 100% happy with having to save the reference count in
-> > the exception handler.  It seems like a very ugly layering violation but
-> > I don't see a way around it at the moment.
-> 
-> So I've been struggling with that API, all the way from
-> pks_update_protection() to that dev_access_{en,dis}able(). I _really_
-> hate it, but I see how you ended up with it.
-> 
-> I wanted to propose something like:
-> 
-> u32 current_pkey_save(int pkey, unsigned flags)
-> {
-> 	u32 *lpkr = get_cpu_ptr(&local_pkr);
-> 	u32 pkr, saved = *lpkr;
-> 
-> 	pkr = update_pkey_reg(saved, pkey, flags);
-> 	if (pkr != saved)
-> 		wrpkr(pkr);
-> 
-> 	put_cpu_ptr(&local_pkr);
-> 	return saved;
-> }
-> 
-> void current_pkey_restore(u32 pkr)
-> {
-> 	u32 *lpkr = get_cpu_ptr(&local_pkr);
-> 	if (*lpkr != pkr)
-> 		wrpkr(pkr);
-> 	put_cpu_ptr(&local_pkr);
-> }
-> 
-> Together with:
-> 
-> void pkey_switch(struct task_struct *prev, struct task_struct *next)
-> {
-> 	prev->pkr = this_cpu_read(local_pkr);
-> 	if (prev->pkr != next->pkr)
-> 		wrpkr(next->pkr);
-> }
-> 
-> But that's actually hard to frob into the kmap() model :-( The upside is
-> that you only have 1 word of state, instead of the 2 you have now.
+On Tue, Jul 21, 2020 at 6:26 PM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
+>
+> Fixes: cda261f421ba ("selftests: add txtimestamp kselftest")
+>
+> Acked-by: Willem de Bruijn <willemb@google.com>
 
-I'm still mulling over if what you have really helps us.  It seems like we may
-be able to remove the percpu pkrs_cache variable...  But I'm hesitant to do so.
-
-Regardless that is not the big issue right now...
-
-> 
-> > Third, this patch has gone through a couple of revisions as I've had
-> > crashes which just don't make sense to me.  One particular issue I've
-> > had is taking a MCE during memcpy_mcsafe causing my WARN_ON() to fire.
-> > The code path was a pmem copy and the ref count should have been
-> > elevated due to dev_access_enable() but why was
-> > idtentry_enter()->idt_save_pkrs() not called I don't know.
-> 
-> Because MCEs are NMI-like and don't go through the normal interrupt
-> path. MCEs are an abomination, please wear all the protective devices
-> you can lay hands on when delving into that.
-
-I've been really digging into this today and I'm very concerned that I'm
-completely missing something WRT idtentry_enter() and idtentry_exit().
-
-I've instrumented idt_{save,restore}_pkrs(), and __dev_access_{en,dis}able()
-with trace_printk()'s.
-
-With this debug code, I have found an instance where it seems like
-idtentry_enter() is called without a corresponding idtentry_exit().  This has
-left the thread ref counter at 0 which results in very bad things happening
-when __dev_access_disable() is called and the ref count goes negative.
-
-Effectively this seems to be happening:
+Besides, is it just me or this test fails frequently? I've been
+running it on 5.4.x, 5.7.x and 5.8-rcX and it often fails:
 
 ...
-	// ref == 0
-	dev_access_enable()  // ref += 1 ==> disable protection
-		// exception  (which one I don't know)
-			idtentry_enter()
-				// ref = 0
-				_handler() // or whatever code...
-			// *_exit() not called [at least there is no trace_printk() output]...
-			// Regardless of trace output, the ref is left at 0
-	dev_access_disable() // ref -= 1 ==> -1 ==> does not enable protection
-	(Bad stuff is bound to happen now...)
-...
+    USR: 1595405084 s 947366 us (seq=0, len=0)
+    SND: 1595405084 s 948686 us (seq=9, len=10)  (USR +1319 us)
+ERROR: 6542 us expected between 6000 and 6500
+    ACK: 1595405084 s 953908 us (seq=9, len=10)  (USR +6541 us)
+    USR: 1595405084 s 997979 us (seq=0, len=0)
+    SND: 1595405084 s 999101 us (seq=19, len=10)  (USR +1121 us)
+    ACK: 1595405085 s 4438 us (seq=19, len=10)  (USR +6458 us)
+    USR: 1595405085 s 49317 us (seq=0, len=0)
+    SND: 1595405085 s 50680 us (seq=29, len=10)  (USR +1363 us)
+ERROR: 6661 us expected between 6000 and 6500
+    ACK: 1595405085 s 55978 us (seq=29, len=10)  (USR +6661 us)
+    USR: 1595405085 s 101049 us (seq=0, len=0)
+    SND: 1595405085 s 102342 us (seq=39, len=10)  (USR +1293 us)
+ERROR: 6578 us expected between 6000 and 6500
+    ACK: 1595405085 s 107627 us (seq=39, len=10)  (USR +6577 us)
+    USR-SND: count=4, avg=1274 us, min=1121 us, max=1363 us
+    USR-ACK: count=4, avg=6559 us, min=6458 us, max=6661 us
 
-The ref count ends up completely messed up after this sequence...  and the PKRS
-register gets out of sync as well.  This is starting to make some sense of how
-I was getting what seemed like random crashes before.
 
-Unfortunately I don't understand the idt entry/exit code well enough to see
-clearly what is going on.  Is there any reason idtentry_exit() is not called
-after idtentry_enter()?  Perhaps some NMI/MCE or 'not normal' exception code
-path I'm not seeing?  In my searches I see a corresponding exit for every
-enter.  But MCE is pretty hard to follow.
-
-Also is there any chance that the process could be getting scheduled and that
-is causing an issue?
-
-Thanks,
-Ira
+In particular, "run_test_v4v6 ${args}       # tcp" is the most
+susceptible to failures (though i've seen the udp variant fail too).
+-- 
+bye,
+p.
