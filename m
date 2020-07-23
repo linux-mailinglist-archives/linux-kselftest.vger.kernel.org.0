@@ -2,88 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F0D22AF69
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jul 2020 14:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A7022B34D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jul 2020 18:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728545AbgGWMdT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jul 2020 08:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728426AbgGWMdS (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jul 2020 08:33:18 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5744AC0619DC
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2020 05:33:18 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id q16so561802ybk.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2020 05:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oFgfTkrSPliJdcE2ZgsQWMPTGBVr0aakFg2hA0SWopU=;
-        b=UEBq0g6zVMlm+ZOvqr+tCAlWDUA/6n2VoQROx1IZzoTys38IcwrQeOz+GShfaQzW+J
-         To5Bmc/Zh7gMKe+cCUyDCqT0y3en2zd0IK7nUUAkONV9Mb0l0kObjCF9GUlkRAudUBhB
-         HY/ksvKxacwrGibAXXusQ9lTg2v0qGKwWQ0/C+FS/FqdBwHdECBWUf37nyCrVtjtyq6i
-         +vVvOqRZYus8UJRW+lDKpj8v7GVkGvAJoA9I1Lv/lXXf0CUAs1GOqfb6nvbye/plV4Bq
-         PtASg15+JaR18XbvVx+Q00QoPJZi2CBDabxZF+Xj6xVM+fDz0gYI3vfatj5joQYchIDI
-         2Lwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oFgfTkrSPliJdcE2ZgsQWMPTGBVr0aakFg2hA0SWopU=;
-        b=lM4jGH6xWbBNZo3gxBiBHzleTDb4jseXsFJotnK6E5cAjORrNUrzdPP6PwdsM9KBeW
-         gnaMgd+p6jVvzA7Zvy2mTUjh9xIiHkmOn43f0aqNYy+4KeoC4tCPHE/Bz03LLrz/BToW
-         sUuFhMRlQQaDwYGyWKGhTn1Z2/a0TsjvbBLazvof6T7yWsaLdhzyFwW/RI5PnFBr4MQs
-         5j4c1YZMk+YG51r8tF/ndilwVHcgSHFd7NGs/juB2Jcv/fMtZ3PpR1go6d6gtNaLEHse
-         NOz2EsJHwMPPFbHt1aUAKdsAwIz+Buc6QE0t39LCVtJR7N134GeYNM8HTSfVGnFltjio
-         pK+A==
-X-Gm-Message-State: AOAM532OsYBmE+/ZYzbvIxt5DsvkgncVz5LkzxSNg/VTzMjAnSEgbVsi
-        LT0P0j4a/x3O7oSIhsuAaDPaSYX4QHb+12IawSK7TOHATc6bVbBe
-X-Google-Smtp-Source: ABdhPJyhPrvkl3wnqOJZR+KE4dXDzdfdmBF8NSWdbQMOAwRHnH9rqpSXNAdzCEMhnvUlDuTGwR1GdEdZ4pIM0+kNO2A=
-X-Received: by 2002:a25:cfd2:: with SMTP id f201mr6479953ybg.286.1595507597470;
- Thu, 23 Jul 2020 05:33:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200723000807.171940-1-vitor@massaru.org> <20200723080444.GE3703480@smile.fi.intel.com>
-In-Reply-To: <20200723080444.GE3703480@smile.fi.intel.com>
-From:   Vitor Massaru Iha <vitor@massaru.org>
-Date:   Thu, 23 Jul 2020 09:32:41 -0300
-Message-ID: <CADQ6JjVujdtaG7HxOLxg=vuGjFt--sZ9+6QzY0ZXQuOVBDn+7Q@mail.gmail.com>
-Subject: Re: [PATCH] lib: kunit: Convert test_sort to KUnit test
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        id S1729590AbgGWQSU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jul 2020 12:18:20 -0400
+Received: from mga07.intel.com ([134.134.136.100]:46002 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727052AbgGWQSU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 Jul 2020 12:18:20 -0400
+IronPort-SDR: xww9ynMAf3BamWKdU3NyMnmvhx8fzAN9TxPj51rveMlJmASpjp2Ekd91+fT/OYJWKbFbAylzyq
+ 5KHCeG7QPEbQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="215169773"
+X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
+   d="scan'208";a="215169773"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 09:18:19 -0700
+IronPort-SDR: kf2KWN7WI2p4vd74GFsxQMiXONFSvdTEj6bfjU/HaqJRxh3PGZm95T03EkTMNRYV+oRWiqE8bl
+ Q0ShhWAOk+TQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
+   d="scan'208";a="311087983"
+Received: from romley-ivt3.sc.intel.com ([172.25.110.60])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jul 2020 09:18:18 -0700
+Date:   Thu, 23 Jul 2020 09:18:18 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Weiny Ira <ira.weiny@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        tglx@linutronix.de, fkostenzer@live.at, geert@linux-m68k.org,
-        paul.gortmaker@windriver.com, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
+ exceptions
+Message-ID: <20200723161818.GA77434@romley-ivt3.sc.intel.com>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-18-ira.weiny@intel.com>
+ <CALCETrVe1i5JdyzD_BcctxQJn+ZE3T38EFPgjxN1F577M36g+w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrVe1i5JdyzD_BcctxQJn+ZE3T38EFPgjxN1F577M36g+w@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 5:04 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Jul 22, 2020 at 09:08:07PM -0300, Vitor Massaru Iha wrote:
-> > This adds the conversion of the test_sort.c to KUnit test.
+On Wed, Jul 22, 2020 at 09:21:43AM -0700, Andy Lutomirski wrote:
+> On Fri, Jul 17, 2020 at 12:21 AM <ira.weiny@intel.com> wrote:
 > >
-> > Please apply this commit first (linux-kselftest/kunit-fixes):
-> > 3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
->
-> ...
->
-> >  lib/{test_sort.c => sort_kunit.c} | 31 +++++++++++++++----------------
->
-> Is it established practice to put kunit as a suffix?
+> > From: Ira Weiny <ira.weiny@intel.com>
+> >
+> > The PKRS MSR is not managed by XSAVE.  It is already preserved through a
+> > context switch but this support leaves exception handling code open to
+> > memory accesses which the interrupted process has allowed.
+> >
+> > Close this hole by preserve the current task's PKRS MSR, reset the PKRS
+> > MSR value on exception entry, and then restore the state on exception
+> > exit.
+> 
+> Should this live in pt_regs?
 
-Not yet. https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/T/#u
+The PKRS MSR has been preserved in thread_info during kernel entry. We
+don't need to preserve it in another place (i.e. idtentry_state).
 
-Thanks
+To avoid confusion, I think we need to change the above commit message to:
+
+"Exception handling code is open to memory accesses which the interrupted
+process has allowed.
+
+Close this hole by reset the PKRS MSR value on exception entry and restore
+the state on exception exit. The MSR was preserved in thread_info."
+
+The patch needs to be changed accordingly, I think:
+
+1. No need to define "pks" in struct idtentry_state because the MSR is
+   already preserved in thread_info.
+2. idt_save_pkrs() could be renamed as idt_reset_pkrs() to reset
+   the MSR (no need to save it). "state.pkrs" can be replaced by
+   "current->thread_info.pkrs" now.
+3. The "pkrs_ref" could be defined in thread_info as well. But I'm not
+   sure if it's better than defined in idtentry_state.
+
+Thanks.
+
+-Fenghua
