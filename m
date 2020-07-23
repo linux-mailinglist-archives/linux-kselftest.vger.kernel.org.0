@@ -2,263 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBDF22B920
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jul 2020 00:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9215122B93C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jul 2020 00:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgGWWEh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jul 2020 18:04:37 -0400
-Received: from mga05.intel.com ([192.55.52.43]:34544 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726173AbgGWWEh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jul 2020 18:04:37 -0400
-IronPort-SDR: SJLe018F9ZQvP29O4/2nxWzfslzXPX3O7wjABsKbCKrhZSAXZbhl2eoAkNnu85cHAzz4/Sv6p5
- fA2eN+Bd7KYg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="235506520"
-X-IronPort-AV: E=Sophos;i="5.75,388,1589266800"; 
-   d="scan'208";a="235506520"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 15:04:36 -0700
-IronPort-SDR: rQG8HKWjqzlmD9H779pxEFgskGYeCSeYgrZ/P8pr4uqKXrnKL8tXK26BHlVCIOsqZcNMAAg4qF
- oNVhQ6xlzj/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,388,1589266800"; 
-   d="scan'208";a="319127920"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga008.jf.intel.com with ESMTP; 23 Jul 2020 15:04:36 -0700
-Date:   Thu, 23 Jul 2020 15:04:36 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        id S1726436AbgGWWOb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jul 2020 18:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726417AbgGWWOb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 Jul 2020 18:14:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC07C0619D3;
+        Thu, 23 Jul 2020 15:14:31 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1595542468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JmyzjmH8/olb4mM6hh3RrBawdAZ1ohRuT2f6HKf6J84=;
+        b=V5Z5Rq1nk71rXzhuUOz5ybYySxFdqFcH8dpWSElBd5qV0W8MCoBko+38RNWOwqWv2ju5Ig
+        bQIZTjLoRGXb0gRm8ytYEZ+t/kr7TRL00g3qwWdo76SMcfJ4GqUmx1vL6JGaDTvO7FZH+R
+        ehWAUFsqGo/fbWIHtNHboBF7FH01EARrdMRiueauNFcaZcnEvopvmfNUwCfpZJv1T5dDwT
+        im0DmUgWCCRiLQJaa9slhiO8uBTVN7eOzTJKLsyQvSGFvkDS9iSTv6B55CVKQYzX50pMS/
+        92w4HmCS53+4wG2ZzwtaOhcrmTM/WnQ4LlDs75AQoLaiaAd4mZmRHbv65Gb2eA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1595542468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JmyzjmH8/olb4mM6hh3RrBawdAZ1ohRuT2f6HKf6J84=;
+        b=DpE/SglP+UbEOY+9bcINMPHA9y7J8tMcjgmZMJCa1/pPbw5ifZwHGpOKKPr+c+G54aYYVK
+        9inwqDxRJmQ+XGDQ==
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
         Andy Lutomirski <luto@kernel.org>,
+        Weiny Ira <ira.weiny@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Vishal Verma <vishal.l.verma@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
- exceptions
-Message-ID: <20200723220435.GI844235@iweiny-DESK2.sc.intel.com>
-References: <20200717072056.73134-1-ira.weiny@intel.com>
- <20200717072056.73134-18-ira.weiny@intel.com>
- <87r1t2vwi7.fsf@nanos.tec.linutronix.de>
+        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across exceptions
+In-Reply-To: <CALCETrUdxpVP3dZgsZBpCODxW8yaiHguxTu=aHg_AkRbs91dWg@mail.gmail.com>
+References: <20200723165204.GB77434@romley-ivt3.sc.intel.com> <C03DA782-BD1A-42E3-B118-ABB34BC5F2AF@amacapital.net> <87imeevv6b.fsf@nanos.tec.linutronix.de> <CALCETrUdxpVP3dZgsZBpCODxW8yaiHguxTu=aHg_AkRbs91dWg@mail.gmail.com>
+Date:   Fri, 24 Jul 2020 00:14:28 +0200
+Message-ID: <874kpxx4jf.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r1t2vwi7.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 09:53:20PM +0200, Thomas Gleixner wrote:
-> Ira,
-> 
-> ira.weiny@intel.com writes:
-> 
-> > ...
-> > 	// ref == 0
-> > 	dev_access_enable()  // ref += 1 ==> disable protection
-> > 		irq()
-> > 			// enable protection
-> > 			// ref = 0
-> > 			_handler()
-> > 				dev_access_enable()   // ref += 1 ==> disable protection
-> > 				dev_access_disable()  // ref -= 1 ==> enable protection
-> > 			// WARN_ON(ref != 0)
-> > 			// disable protection
-> > 	do_pmem_thing()  // all good here
-> > 	dev_access_disable() // ref -= 1 ==> 0 ==> enable protection
-> 
-> ...
-> 
-> > First I'm not sure if adding this state to idtentry_state and having
-> > that state copied is the right way to go.
-> 
-> Adding the state to idtentry_state is fine at least for most interrupts
-> and exceptions. Emphasis on most.
-> 
-> #PF does not work because #PF can schedule.
+Andy Lutomirski <luto@kernel.org> writes:
+>> On Jul 23, 2020, at 1:22 PM, Thomas Gleixner <tglx@linutronix.de> wrote:
+>> =EF=BB=BFAndy Lutomirski <luto@amacapital.net> writes:
+>>> My suggestion is to enlarge pt_regs.  The save and restore logic can
+>>> probably be in C, but pt_regs is the logical place to put a register
+>>> that is saved and restored across all entries.
+>>
+>> Kinda, but that still sucks because schedule from #PF will get it wrong
+>> unless you do extra nasties.
+>
+> This seems like we=E2=80=99re reinventing the wheel.  PKRS is not
+> fundamentally different from, say, RSP.  If we want to save it across
+> exceptions, we save it on entry and context-switch-out and restore it
+> on exit and context-switch-in.
 
+It's fundamentally different from RSP because it has state (refcount)
+attached, which RSP clearly has not. If you get rid of the state then
+yes.
 
-Merging with your other response:
+>>> Whoever does this work will have the delightful job of figuring out
+>>> whether BPF thinks that the layout of pt_regs is ABI and, if so,
+>>> fixing the resulting mess.
+>>>
+>>> The fact the new fields will go at the beginning of pt_regs will make
+>>> this an entertaining prospect.
+>>
+>> Good luck with all of that.
+>
+> We can always cheat like this:
+>
+> struct real_pt_regs {
+>   unsigned long pkrs;
+>   struct pt_regs regs;
+> };
+>
+> and pass a pointer to regs around.  What BPF doesn't know about can't hur=
+t it.
 
-<quote: https://lore.kernel.org/lkml/87o8o6vvt0.fsf@nanos.tec.linutronix.de/>
-Only from #PF, but after the fault has been resolved and the tasks is
-scheduled in again then the task returns through idtentry_exit() to the
-place where it took the fault. That's not guaranteed to be on the same
-CPU. If schedule is not aware of the fact that the exception turned off
-stuff then you surely get into trouble. So you really want to store it
-in the task itself then the context switch code can actually see the
-state and act accordingly.
-</quote>
+Yes, but that's the easy part of the problem :)
 
-I think, after fixing my code (see below), using idtentry_state could still
-work.  If the per-cpu cache and the MSR is updated in idtentry_exit() that
-should carry the state to the new cpu, correct?
+Thanks,
 
-The exception may have turned off stuff but it is a bug if it did not also turn
-it back on.
-
-Ie the irq should not be doing:
-
-	kmap_atomic()
-	return;
-
-... without a kunmap_atomic().
-
-That is why I put the WARN_ON_ONCE() to ensure the ref count has been properly
-returned to 0 by the exception handler.
-
-FWIW the fixed code is working for my tests...
-
-> 
-> > It seems like we should start passing this by reference instead of
-> > value.  But for now this works as an RFC.  Comments?
-> 
-> Works as in compiles, right?
-> 
-> static void noinstr idt_save_pkrs(idtentry_state_t state)
-> {
->         state.foo = 1;
-> }
-> 
-> How is that supposed to change the caller state? C programming basics.
-
-<sigh>  I am so stupid.  I was not looking at this particular case but you are
-100% correct...  I can't believe I did not see this.
-
-In the above statement I was only thinking about the extra overhead I was
-adding to idtentry_enter() and the callers of it.
-
-"C programming basics" indeed... Once again sorry...
-
-> 
-> > Second, I'm not 100% happy with having to save the reference count in
-> > the exception handler.  It seems like a very ugly layering violation but
-> > I don't see a way around it at the moment.
-> 
-> That state is strict per task, right? So why do you want to store it
-> anywhere else that in task/thread storage. That solves your problem of
-> #PF scheduling nicely.
-
-The problem is with the kmap code.  If an exception handler calls kmap_atomic()
-[more importantly if they nest kmap_atomic() calls] the kmap code will need to
-keep track of that re-entrant call.  With a separate reference counter, the
-kmap code would have to know it is in irq context or not.
-
-Here I'm attempting to make the task 'current->dev_page_access_ref' counter
-serve double duty so that the kmap code is agnostic to the context it is in.
-
-> 
-> > Third, this patch has gone through a couple of revisions as I've had
-> > crashes which just don't make sense to me.  One particular issue I've
-> > had is taking a MCE during memcpy_mcsafe causing my WARN_ON() to fire.
-> > The code path was a pmem copy and the ref count should have been
-> > elevated due to dev_access_enable() but why was
-> > idtentry_enter()->idt_save_pkrs() not called I don't know.
-> 
-> Because #MC does not go through idtentry_enter(). Neither do #NMI, #DB, #BP.
-
-And the above probably would work if I knew how to code in C...  :-/  I'm so
-embarrassed.
-
-> 
-> > Finally, it looks like the entry/exit code is being refactored into
-> > common code.  So likely this is best handled somewhat there.  Because
-> > this can be predicated on CONFIG_ARCH_HAS_SUPERVISOR_PKEYS and handled
-> > in a generic fashion.  But that is a ways off I think.
-> 
-> The invocation of save/restore might be placed in generic code at least
-> for the common exception and interrupt entries.
-
-I think you are correct.  I'm testing now...
-
-> 
-> > +static void noinstr idt_save_pkrs(idtentry_state_t state)
-> 
-> *state. See above.
-
-Yep...  :-/
-
-> 
-> > +#else
-> > +/* Define as macros to prevent conflict of inline and noinstr */
-> > +#define idt_save_pkrs(state)
-> > +#define idt_restore_pkrs(state)
-> 
-> Empty inlines do not need noinstr because they are optimized out. If you
-> want inlines in a noinstr section then use __always_inline
-
-Peter made the same comment so I've changed to __always_inline.
-
-> 
-> >  /**
-> >   * idtentry_enter - Handle state tracking on ordinary idtentries
-> >   * @regs:	Pointer to pt_regs of interrupted context
-> > @@ -604,6 +671,8 @@ idtentry_state_t noinstr idtentry_enter(struct pt_regs *regs)
-> >  		return ret;
-> >  	}
-> >  
-> > +	idt_save_pkrs(ret);
-> 
-> No. This really has no business to be called before the state is
-> established. It's not something horribly urgent and write_pkrs() is NOT
-> noinstr and invokes wrmsrl() which is subject to tracing.
-
-I don't understand.  I'm not calling it within intrumentation_{begin,end}() so
-does that mean I can remove the noinstr?  I think I can actually.
-
-Or do you mean call it at the end of idtentry_enter()?  Like this:
-
-@@ -672,8 +672,6 @@ idtentry_state_t noinstr idtentry_enter(struct pt_regs *regs)
-                return ret;
-        }
- 
--       idt_save_pkrs(ret);
--
-        /*
-         * If this entry hit the idle task invoke rcu_irq_enter() whether
-         * RCU is watching or not.
-@@ -710,7 +708,7 @@ idtentry_state_t noinstr idtentry_enter(struct pt_regs *regs)
-                instrumentation_end();
- 
-                ret.exit_rcu = true;
--               return ret;
-+               goto done;
-        }
- 
-        /*
-@@ -725,6 +723,8 @@ idtentry_state_t noinstr idtentry_enter(struct pt_regs *regs)
-        trace_hardirqs_off();
-        instrumentation_end();
- 
-+done:
-+       idt_save_pkrs(&ret);
-        return ret;
- }
-
-
-> 
-> > +
-> > +	idt_restore_pkrs(state);
-> 
-> This one is placed correctly.
-> 
-> Thanks,
-
-No thank you...  I'm really sorry for wasting every ones time on this one.
-
-I'm still processing all your responses so forgive me if I've missed something.
-And thank you so much for pointing out my mistake.  That seems to have fixed
-all the problems I have seen thus far.  But I want to think on if there may be
-more issues.
-
-Thank you,
-Ira
+        tglx
