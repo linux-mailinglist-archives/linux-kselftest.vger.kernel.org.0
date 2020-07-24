@@ -2,38 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB1022CECE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jul 2020 21:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FD322D07B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jul 2020 23:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbgGXTn5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jul 2020 15:43:57 -0400
-Received: from mga18.intel.com ([134.134.136.126]:28554 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726085AbgGXTn5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jul 2020 15:43:57 -0400
-IronPort-SDR: EfyhiW3llWlszXI3GBFqhly+qsP2rPDJX12B1ZCW1e0fDLHBKP+784TFknVpFI6TXo/vf9mqp7
- UoYWvt582+sA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9692"; a="138282996"
-X-IronPort-AV: E=Sophos;i="5.75,391,1589266800"; 
-   d="scan'208";a="138282996"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2020 12:43:56 -0700
-IronPort-SDR: xw35vgWVMvuh2FxBDPdLOZ98hPNSo7kyjZ00bcaGwKX/k2DG8gIcu2MZetY8wt/D3BJ5XnscaB
- FrmYkinokGDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,391,1589266800"; 
-   d="scan'208";a="272667289"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Jul 2020 12:43:56 -0700
-Date:   Fri, 24 Jul 2020 12:43:56 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        id S1726607AbgGXVZC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jul 2020 17:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726411AbgGXVZC (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 24 Jul 2020 17:25:02 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B58C0619D3;
+        Fri, 24 Jul 2020 14:25:02 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1595625899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GvMyNHsN0q61AeYEdZRSIrvuxMsl65bOxTzAFe7Crcg=;
+        b=mcpxjpBay3zaosMLUpZIESiZjX70tWRDRrx62Lm4RZUZc66n2tEF+jIigzon1ulXqPAERq
+        ZJBeRZcLuvLk3InOnvs226uLjvp9EwdGzfEf4sHXWe38EjioooEeyVEX2Kksr7QK6jVkr+
+        gApsCDCed1fI1bDW7RK9ps9yfftC50U2AXId0QshkdkkGOfTL5UPVuBaBWUBWhbMGefq0a
+        MAKXzZK9hoR8BnVhzGZPhLTTEPNpSkPkqD7AcTV1UJTp0GZt3J4BCnJi/biHikXZ5HE40c
+        xE35FKIFCpdNFLF7Crv+6ifPiyZlxBEA9V8tCb6fCPFnzN/br8LG0AYI/g9MTw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1595625899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GvMyNHsN0q61AeYEdZRSIrvuxMsl65bOxTzAFe7Crcg=;
+        b=BRWV0W9529yicWf3VvB2bX366+Nsr1sxb73tdd6g/5PhodE1uYx58ywUoVNKdnXJW4fZmr
+        4hAZGvRtWU1J8ICw==
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         Dan Williams <dan.j.williams@intel.com>,
         Vishal Verma <vishal.l.verma@intel.com>,
@@ -42,89 +47,82 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
- exceptions
-Message-ID: <20200724194355.GA844234@iweiny-DESK2.sc.intel.com>
-References: <20200724172344.GO844235@iweiny-DESK2.sc.intel.com>
- <D866BD75-42A2-43B2-B07A-55BCC3781FEC@amacapital.net>
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across exceptions
+In-Reply-To: <87mu3pvly7.fsf@nanos.tec.linutronix.de>
+References: <20200717072056.73134-1-ira.weiny@intel.com> <20200717072056.73134-18-ira.weiny@intel.com> <87r1t2vwi7.fsf@nanos.tec.linutronix.de> <20200723220435.GI844235@iweiny-DESK2.sc.intel.com> <87mu3pvly7.fsf@nanos.tec.linutronix.de>
+Date:   Fri, 24 Jul 2020 23:24:58 +0200
+Message-ID: <874kpwtxlh.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D866BD75-42A2-43B2-B07A-55BCC3781FEC@amacapital.net>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 10:29:23AM -0700, Andy Lutomirski wrote:
-> 
-> > On Jul 24, 2020, at 10:23 AM, Ira Weiny <ira.weiny@intel.com> wrote:
-> > 
-> > ﻿On Thu, Jul 23, 2020 at 10:15:17PM +0200, Thomas Gleixner wrote:
-> >> Thomas Gleixner <tglx@linutronix.de> writes:
-> >> 
-> >>> Ira Weiny <ira.weiny@intel.com> writes:
-> >>>> On Fri, Jul 17, 2020 at 12:06:10PM +0200, Peter Zijlstra wrote:
-> >>>>>> On Fri, Jul 17, 2020 at 12:20:56AM -0700, ira.weiny@intel.com wrote:
-> >>>>> I've been really digging into this today and I'm very concerned that I'm
-> >>>>> completely missing something WRT idtentry_enter() and idtentry_exit().
-> >>>>> 
-> >>>>> I've instrumented idt_{save,restore}_pkrs(), and __dev_access_{en,dis}able()
-> >>>>> with trace_printk()'s.
-> >>>>> 
-> >>>>> With this debug code, I have found an instance where it seems like
-> >>>>> idtentry_enter() is called without a corresponding idtentry_exit().  This has
-> >>>>> left the thread ref counter at 0 which results in very bad things happening
-> >>>>> when __dev_access_disable() is called and the ref count goes negative.
-> >>>>> 
-> >>>>> Effectively this seems to be happening:
-> >>>>> 
-> >>>>> ...
-> >>>>>    // ref == 0
-> >>>>>    dev_access_enable()  // ref += 1 ==> disable protection
-> >>>>>        // exception  (which one I don't know)
-> >>>>>            idtentry_enter()
-> >>>>>                // ref = 0
-> >>>>>                _handler() // or whatever code...
-> >>>>>            // *_exit() not called [at least there is no trace_printk() output]...
-> >>>>>            // Regardless of trace output, the ref is left at 0
-> >>>>>    dev_access_disable() // ref -= 1 ==> -1 ==> does not enable protection
-> >>>>>    (Bad stuff is bound to happen now...)
-> >>> 
-> >>> Well, if any exception which calls idtentry_enter() would return without
-> >>> going through idtentry_exit() then lots of bad stuff would happen even
-> >>> without your patches.
-> >>> 
-> >>>> Also is there any chance that the process could be getting scheduled and that
-> >>>> is causing an issue?
-> >>> 
-> >>> Only from #PF, but after the fault has been resolved and the tasks is
-> >>> scheduled in again then the task returns through idtentry_exit() to the
-> >>> place where it took the fault. That's not guaranteed to be on the same
-> >>> CPU. If schedule is not aware of the fact that the exception turned off
-> >>> stuff then you surely get into trouble. So you really want to store it
-> >>> in the task itself then the context switch code can actually see the
-> >>> state and act accordingly.
-> >> 
-> >> Actually thats nasty as well as you need a stack of PKRS values to
-> >> handle nested exceptions. But it might be still the most reasonable
-> >> thing to do. 7 PKRS values plus an index should be really sufficient,
-> >> that's 32bytes total, not that bad.
-> > 
-> > I've thought about this a bit more and unless I'm wrong I think the
-> > idtentry_state provides for that because each nested exception has it's own
-> > idtentry_state doesn't it?
-> 
-> Only the ones that use idtentry_enter() instead of, say, nmi_enter().
+Ira,
 
-Oh agreed...
+Thomas Gleixner <tglx@linutronix.de> writes:
+> Ira Weiny <ira.weiny@intel.com> writes:
+>> On Thu, Jul 23, 2020 at 09:53:20PM +0200, Thomas Gleixner wrote:
+>> I think, after fixing my code (see below), using idtentry_state could still
+>> work.  If the per-cpu cache and the MSR is updated in idtentry_exit() that
+>> should carry the state to the new cpu, correct?
+>
+> I'm way too tired to think about that now. Will have a look tomorrow
+> with brain awake.
 
-But with this patch we are still better off than just preserving during context
-switch.
+Not that I'm way more awake now, but at least I have the feeling that my
+brain is not completely useless.
 
-I need to update the commit message here to make this clear though.
+Let me summarize what I understood:
+
+  1) A per CPU cache which shadows the current state of the MSR, i.e. the
+     current valid key. You use that to avoid costly MSR writes if the
+     key does not change.
+
+  2) On idtentry you store the key on entry in idtentry_state, clear it
+     in the MSR and shadow state if necessary and restore it on exit.
+
+  3) On context switch out you save the per CPU cache value in the task
+     and on context switch in you restore it from there.
+
+Yes, that works (see below for #2) and sorry for my confusion yesterday
+about storing this in task state.
+
+#2 requires to handle the exceptions which do not go through
+idtentry_enter/exit() seperately, but that's a manageable amount. It's
+the ones which use IDTENTRY_RAW or a variant of it.
+
+#BP, #MC, #NMI, #DB, #DF need extra local storage as all the kernel
+entries for those use nmi_enter()/exit(). So you just can create
+wrappers around those. Somehting like this
+
+static __always_inline idtentry_state_t idtentry_nmi_enter(void)
+{
+     	idtentry_state_t state = {};
+
+        nmi_enter();
+        instrumentation_begin();
+        state.key = save_and_clear_key();
+        instrumentation_end();
+}
+
+static __always_inline void idtentry_nmi_exit(idtentry_state_t state)
+{
+        instrumentation_begin();
+        restore_key(state.key);
+        instrumentation_end();
+        nmi_exit();
+}
+
+#UD and #PF are using the raw entry variant as well but still invoke
+idtentry_enter()/exit(). #PF does not need any work. #UD handles
+WARN/BUG without going through idtentry_enter() first, but I don't think
+that's an issue unless a not 0 key would prevent writing to the console
+device. You surely can figure that out.
+
+Hope that helps.
 
 Thanks,
-Ira
+
+        tglx
