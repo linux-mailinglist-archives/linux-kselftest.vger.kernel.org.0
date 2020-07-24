@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9B422D155
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jul 2020 23:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D968E22D161
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jul 2020 23:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbgGXVnT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jul 2020 17:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S1726904AbgGXVn0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jul 2020 17:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726607AbgGXVnT (ORCPT
+        with ESMTP id S1726835AbgGXVnU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jul 2020 17:43:19 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC32C0619E6
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:43:19 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id gc15so6405837pjb.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:43:19 -0700 (PDT)
+        Fri, 24 Jul 2020 17:43:20 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F0CC08C5C1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:43:20 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id w2so6131408pgg.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:43:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qdkr5XNFZOA3/i0kYohPdpD2J2yA/jNhR7s1f88b5QU=;
-        b=WqzIXVwpDp4gnwWsWJwjXuHFnApTuwPEYjLbNDDrvrPjYqmmPbOpsEwzjuSmyIqWka
-         3+e0cn6lZeNZnaZ0gfzdPtlvo55VQtshoCy5D4P7jpcioOVxrcchkc28U74d7rclt6Lg
-         2BmBtMENHkcMRivO0CirReSV/O0lhwLg05bNk=
+        bh=xJo0nq/BwSGQyuu34Uu71pqCjmwIBDsltoAlvySz0DI=;
+        b=WF07yjKX5utbSDQ8syHyojARSjazCxSOao3aCWCeAHYHmbHDe0SdIUzBhZr/J7SaUL
+         FDdBvzEwSJ6Ht+m5+HgRYfKKX1Uah+k+8kCxuoZzCixukqCROuLhsEW4XwGQRD9E0z7f
+         pRwWnUP5zS1bogct7qR+dfGuTKkuBP94tqx5o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qdkr5XNFZOA3/i0kYohPdpD2J2yA/jNhR7s1f88b5QU=;
-        b=nLo6K34JU0tz3t56cec8oF9h/jErhlRAznroklPjNn9ikta5UYFO+a7Kv+dtxXEgfY
-         P7zYQo9kKLgxYH3Tsvh05GvpAQznHYesWkuSKjZCy3OOjCDMvzA8oIBN4zhgc0GQWf2Q
-         atslHzSc+hQNWs/rKPVz1u/uefZz4Bx/9BF7jydJgM6BP8DBg3sTD86nydXQw+jUT/rZ
-         QP9dvvAW6V+toWQMRM4mwnO/dFYGPqA4sms5sNkIVfKKWvrvVN+gdyoBkKzGQp0dogl+
-         KR9ddiOQR7DBGEK8Qz9hZMmmKFgf2TssuGcjuls/G9cu7Y3Kx/M+XKW8vucA5lulJz0s
-         hJbg==
-X-Gm-Message-State: AOAM532qM6S4WV7rXTK7IjmMt+qwI63bZIGnBTYRGmsLYnXLtLPhBdgv
-        hogoRKYqZr7PRgH1qp9hB94QKA==
-X-Google-Smtp-Source: ABdhPJyPePEiM6/iL1wJKSR2toN34rjXePWcBw0Be6BRk6BSE9kLnu60cS2aK4jEui1/EmF3PioVsg==
-X-Received: by 2002:a17:90a:1f08:: with SMTP id u8mr7567373pja.154.1595626998354;
-        Fri, 24 Jul 2020 14:43:18 -0700 (PDT)
+        bh=xJo0nq/BwSGQyuu34Uu71pqCjmwIBDsltoAlvySz0DI=;
+        b=OzVXMU0UDAy6GyHuZ1q2VxscUngolwp6M4OAKxBTqYwX9E4CmVWDJlTAU99jsmsPHN
+         11n8jS0JTBjFAiJ7B10tSn0RACbBSHWzc0gawxpbcF1BnkkLn/dVOkCpkGzArMS5trsu
+         n/BxJOra4vvHkozNgXId8GvM6QwB2atbxTvoSyC+ugM7lFGt1qTitKSWoG2yDmRG65Mu
+         Xe1VQ+l8u2K9THWaS6kJAJQFm8DYXLwhV7QJxeSJJrUHMYJnDLMweh2Z25EZjGCE0+OH
+         Y8WYIIsA8yc/lnY1owBXkH/eugUqwVJxHVdKGfGw3PX1ysl8VeSSEDX9h/evw6h7xkaI
+         XZzw==
+X-Gm-Message-State: AOAM530BPjKcgE/6mBSpU8ZmGkuryOB1inQ/7Xmhit1NmZZcRoi9xxS4
+        ancEtzs07YaS/UI3ZXw1Pfwg8w==
+X-Google-Smtp-Source: ABdhPJzTkTAjdLfYdBfGZbxKblfOfrNHl+LQkdB1MNQDqkCwaf17Zw+bn8RQ46naJoLAGnapVnhleA==
+X-Received: by 2002:a05:6a00:224c:: with SMTP id i12mr11032282pfu.18.1595626999914;
+        Fri, 24 Jul 2020 14:43:19 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o26sm7463742pfp.219.2020.07.24.14.43.17
+        by smtp.gmail.com with ESMTPSA id 17sm7488793pfv.16.2020.07.24.14.43.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 24 Jul 2020 14:43:17 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -56,9 +56,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 17/19] firmware: Store opt_flags in fw_priv
-Date:   Fri, 24 Jul 2020 14:36:38 -0700
-Message-Id: <20200724213640.389191-18-keescook@chromium.org>
+Subject: [PATCH v3 18/19] firmware: Add request_partial_firmware_into_buf()
+Date:   Fri, 24 Jul 2020 14:36:39 -0700
+Message-Id: <20200724213640.389191-19-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200724213640.389191-1-keescook@chromium.org>
 References: <20200724213640.389191-1-keescook@chromium.org>
@@ -69,220 +69,343 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Instead of passing opt_flags around so much, store it in the private
-structure so it can be examined by internals without needing to add more
-arguments to functions.
+From: Scott Branden <scott.branden@broadcom.com>
 
-Co-developed-by: Scott Branden <scott.branden@broadcom.com>
+Add request_partial_firmware_into_buf() to allow for portions of a
+firmware file to be read into a buffer. This is needed when large firmware
+must be loaded in portions from a file on memory constrained systems.
+
 Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+Co-developed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/base/firmware_loader/fallback.c       | 11 +++-----
- drivers/base/firmware_loader/fallback.h       |  5 ++--
- .../base/firmware_loader/fallback_platform.c  |  4 +--
- drivers/base/firmware_loader/firmware.h       |  3 ++-
- drivers/base/firmware_loader/main.c           | 25 +++++++++++--------
- 5 files changed, 25 insertions(+), 23 deletions(-)
+ drivers/base/firmware_loader/firmware.h |   4 +
+ drivers/base/firmware_loader/main.c     | 109 +++++++++++++++++++-----
+ include/linux/firmware.h                |  12 +++
+ 3 files changed, 105 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/base/firmware_loader/fallback.c b/drivers/base/firmware_loader/fallback.c
-index 7cfdfdcb819c..0a94c8739959 100644
---- a/drivers/base/firmware_loader/fallback.c
-+++ b/drivers/base/firmware_loader/fallback.c
-@@ -490,13 +490,11 @@ fw_create_instance(struct firmware *firmware, const char *fw_name,
- /**
-  * fw_load_sysfs_fallback() - load a firmware via the sysfs fallback mechanism
-  * @fw_sysfs: firmware sysfs information for the firmware to load
-- * @opt_flags: flags of options, FW_OPT_*
-  * @timeout: timeout to wait for the load
-  *
-  * In charge of constructing a sysfs fallback interface for firmware loading.
-  **/
--static int fw_load_sysfs_fallback(struct fw_sysfs *fw_sysfs,
--				  u32 opt_flags, long timeout)
-+static int fw_load_sysfs_fallback(struct fw_sysfs *fw_sysfs, long timeout)
- {
- 	int retval = 0;
- 	struct device *f_dev = &fw_sysfs->dev;
-@@ -518,7 +516,7 @@ static int fw_load_sysfs_fallback(struct fw_sysfs *fw_sysfs,
- 	list_add(&fw_priv->pending_list, &pending_fw_head);
- 	mutex_unlock(&fw_lock);
- 
--	if (opt_flags & FW_OPT_UEVENT) {
-+	if (fw_priv->opt_flags & FW_OPT_UEVENT) {
- 		fw_priv->need_uevent = true;
- 		dev_set_uevent_suppress(f_dev, false);
- 		dev_dbg(f_dev, "firmware: requesting %s\n", fw_priv->fw_name);
-@@ -580,10 +578,10 @@ static int fw_load_from_user_helper(struct firmware *firmware,
- 	}
- 
- 	fw_sysfs->fw_priv = firmware->priv;
--	ret = fw_load_sysfs_fallback(fw_sysfs, opt_flags, timeout);
-+	ret = fw_load_sysfs_fallback(fw_sysfs, timeout);
- 
- 	if (!ret)
--		ret = assign_fw(firmware, device, opt_flags);
-+		ret = assign_fw(firmware, device);
- 
- out_unlock:
- 	usermodehelper_read_unlock();
-@@ -625,7 +623,6 @@ static bool fw_run_sysfs_fallback(u32 opt_flags)
-  * @fw: pointer to firmware image
-  * @name: name of firmware file to look for
-  * @device: device for which firmware is being loaded
-- * @opt_flags: options to control firmware loading behaviour
-  * @ret: return value from direct lookup which triggered the fallback mechanism
-  *
-  * This function is called if direct lookup for the firmware failed, it enables
-diff --git a/drivers/base/firmware_loader/fallback.h b/drivers/base/firmware_loader/fallback.h
-index 2afdb6adb23f..3af7205b302f 100644
---- a/drivers/base/firmware_loader/fallback.h
-+++ b/drivers/base/firmware_loader/fallback.h
-@@ -67,10 +67,9 @@ static inline void unregister_sysfs_loader(void)
- #endif /* CONFIG_FW_LOADER_USER_HELPER */
- 
- #ifdef CONFIG_EFI_EMBEDDED_FIRMWARE
--int firmware_fallback_platform(struct fw_priv *fw_priv, u32 opt_flags);
-+int firmware_fallback_platform(struct fw_priv *fw_priv);
- #else
--static inline int firmware_fallback_platform(struct fw_priv *fw_priv,
--					     u32 opt_flags)
-+static inline int firmware_fallback_platform(struct fw_priv *fw_priv)
- {
- 	return -ENOENT;
- }
-diff --git a/drivers/base/firmware_loader/fallback_platform.c b/drivers/base/firmware_loader/fallback_platform.c
-index 4d1157af0e86..38de68d7e973 100644
---- a/drivers/base/firmware_loader/fallback_platform.c
-+++ b/drivers/base/firmware_loader/fallback_platform.c
-@@ -8,13 +8,13 @@
- #include "fallback.h"
- #include "firmware.h"
- 
--int firmware_fallback_platform(struct fw_priv *fw_priv, u32 opt_flags)
-+int firmware_fallback_platform(struct fw_priv *fw_priv)
- {
- 	const u8 *data;
- 	size_t size;
- 	int rc;
- 
--	if (!(opt_flags & FW_OPT_FALLBACK_PLATFORM))
-+	if (!(fw_priv->opt_flags & FW_OPT_FALLBACK_PLATFORM))
- 		return -ENOENT;
- 
- 	rc = security_kernel_load_data(LOADING_FIRMWARE, true);
 diff --git a/drivers/base/firmware_loader/firmware.h b/drivers/base/firmware_loader/firmware.h
-index 933e2192fbe8..7ad5fe52bc72 100644
+index 7ad5fe52bc72..3f6eda46b3a2 100644
 --- a/drivers/base/firmware_loader/firmware.h
 +++ b/drivers/base/firmware_loader/firmware.h
-@@ -68,6 +68,7 @@ struct fw_priv {
+@@ -32,6 +32,8 @@
+  * @FW_OPT_FALLBACK_PLATFORM: Enable fallback to device fw copy embedded in
+  *	the platform's main firmware. If both this fallback and the sysfs
+  *      fallback are enabled, then this fallback will be tried first.
++ * @FW_OPT_PARTIAL: Allow partial read of firmware instead of needing to read
++ *	entire file.
+  */
+ enum fw_opt {
+ 	FW_OPT_UEVENT			= BIT(0),
+@@ -41,6 +43,7 @@ enum fw_opt {
+ 	FW_OPT_NOCACHE			= BIT(4),
+ 	FW_OPT_NOFALLBACK_SYSFS		= BIT(5),
+ 	FW_OPT_FALLBACK_PLATFORM	= BIT(6),
++	FW_OPT_PARTIAL			= BIT(7),
+ };
+ 
+ enum fw_status {
+@@ -68,6 +71,7 @@ struct fw_priv {
  	void *data;
  	size_t size;
  	size_t allocated_size;
-+	u32 opt_flags;
++	size_t offset;
+ 	u32 opt_flags;
  #ifdef CONFIG_FW_LOADER_PAGED_BUF
  	bool is_paged_buf;
- 	struct page **pages;
-@@ -136,7 +137,7 @@ static inline void fw_state_done(struct fw_priv *fw_priv)
- 	__fw_state_set(fw_priv, FW_STATUS_DONE);
- }
- 
--int assign_fw(struct firmware *fw, struct device *device, u32 opt_flags);
-+int assign_fw(struct firmware *fw, struct device *device);
- 
- #ifdef CONFIG_FW_LOADER_PAGED_BUF
- void fw_free_paged_buf(struct fw_priv *fw_priv);
 diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index d95249b5284e..814a18cc51bd 100644
+index 814a18cc51bd..7aa22bdc2f60 100644
 --- a/drivers/base/firmware_loader/main.c
 +++ b/drivers/base/firmware_loader/main.c
-@@ -168,7 +168,9 @@ static int fw_cache_piggyback_on_request(const char *name);
- 
- static struct fw_priv *__allocate_fw_priv(const char *fw_name,
+@@ -170,10 +170,19 @@ static struct fw_priv *__allocate_fw_priv(const char *fw_name,
  					  struct firmware_cache *fwc,
--					  void *dbuf, size_t size)
-+					  void *dbuf,
-+					  size_t size,
-+					  u32 opt_flags)
+ 					  void *dbuf,
+ 					  size_t size,
++					  size_t offset,
+ 					  u32 opt_flags)
  {
  	struct fw_priv *fw_priv;
  
-@@ -186,6 +188,7 @@ static struct fw_priv *__allocate_fw_priv(const char *fw_name,
++	/* For a partial read, the buffer must be preallocated. */
++	if ((opt_flags & FW_OPT_PARTIAL) && !dbuf)
++		return NULL;
++
++	/* Only partial reads are allowed to use an offset. */
++	if (offset != 0 && !(opt_flags & FW_OPT_PARTIAL))
++		return NULL;
++
+ 	fw_priv = kzalloc(sizeof(*fw_priv), GFP_ATOMIC);
+ 	if (!fw_priv)
+ 		return NULL;
+@@ -188,6 +197,7 @@ static struct fw_priv *__allocate_fw_priv(const char *fw_name,
  	fw_priv->fwc = fwc;
  	fw_priv->data = dbuf;
  	fw_priv->allocated_size = size;
-+	fw_priv->opt_flags = opt_flags;
++	fw_priv->offset = offset;
+ 	fw_priv->opt_flags = opt_flags;
  	fw_state_init(fw_priv);
  #ifdef CONFIG_FW_LOADER_USER_HELPER
- 	INIT_LIST_HEAD(&fw_priv->pending_list);
-@@ -210,8 +213,10 @@ static struct fw_priv *__lookup_fw_priv(const char *fw_name)
- /* Returns 1 for batching firmware requests with the same name */
- static int alloc_lookup_fw_priv(const char *fw_name,
- 				struct firmware_cache *fwc,
--				struct fw_priv **fw_priv, void *dbuf,
--				size_t size, u32 opt_flags)
-+				struct fw_priv **fw_priv,
-+				void *dbuf,
-+				size_t size,
-+				u32 opt_flags)
+@@ -216,12 +226,17 @@ static int alloc_lookup_fw_priv(const char *fw_name,
+ 				struct fw_priv **fw_priv,
+ 				void *dbuf,
+ 				size_t size,
++				size_t offset,
+ 				u32 opt_flags)
  {
  	struct fw_priv *tmp;
  
-@@ -227,7 +232,7 @@ static int alloc_lookup_fw_priv(const char *fw_name,
+ 	spin_lock(&fwc->lock);
+-	if (!(opt_flags & FW_OPT_NOCACHE)) {
++	/*
++	 * Do not merge requests that are marked to be non-cached or
++	 * are performing partial reads.
++	 */
++	if (!(opt_flags & (FW_OPT_NOCACHE | FW_OPT_PARTIAL))) {
+ 		tmp = __lookup_fw_priv(fw_name);
+ 		if (tmp) {
+ 			kref_get(&tmp->ref);
+@@ -232,7 +247,7 @@ static int alloc_lookup_fw_priv(const char *fw_name,
  		}
  	}
  
--	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size);
-+	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size, opt_flags);
+-	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size, opt_flags);
++	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size, offset, opt_flags);
  	if (tmp) {
  		INIT_LIST_HEAD(&tmp->list);
  		if (!(opt_flags & FW_OPT_NOCACHE))
-@@ -635,7 +640,7 @@ static int fw_add_devm_name(struct device *dev, const char *name)
+@@ -439,6 +454,12 @@ static int fw_decompress_xz(struct device *dev, struct fw_priv *fw_priv,
+ 	else
+ 		return fw_decompress_xz_pages(dev, fw_priv, in_size, in_buffer);
  }
- #endif
++#else
++static inline int fw_decompress_xz(struct device *dev, struct fw_priv *fw_priv,
++				   size_t in_size, const void *in_buffer)
++{
++	return -ENOENT;
++}
+ #endif /* CONFIG_FW_LOADER_COMPRESS */
  
--int assign_fw(struct firmware *fw, struct device *device, u32 opt_flags)
-+int assign_fw(struct firmware *fw, struct device *device)
+ /* direct firmware loading support */
+@@ -485,6 +506,9 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+ 		return -ENOMEM;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(fw_path); i++) {
++		size_t file_size = 0;
++		size_t *file_size_ptr = NULL;
++
+ 		/* skip the unset customized path */
+ 		if (!fw_path[i][0])
+ 			continue;
+@@ -498,9 +522,18 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+ 
+ 		fw_priv->size = 0;
+ 
++		/*
++		 * The total file size is only examined when doing a partial
++		 * read; the "full read" case needs to fail if the whole
++		 * firmware was not completely loaded.
++		 */
++		if ((fw_priv->opt_flags & FW_OPT_PARTIAL) && buffer)
++			file_size_ptr = &file_size;
++
+ 		/* load firmware files from the mount namespace of init */
+-		rc = kernel_read_file_from_path_initns(path, 0, &buffer, msize,
+-						       NULL,
++		rc = kernel_read_file_from_path_initns(path, fw_priv->offset,
++						       &buffer, msize,
++						       file_size_ptr,
+ 						       READING_FIRMWARE);
+ 		if (rc < 0) {
+ 			if (rc != -ENOENT)
+@@ -691,7 +724,7 @@ int assign_fw(struct firmware *fw, struct device *device)
+ static int
+ _request_firmware_prepare(struct firmware **firmware_p, const char *name,
+ 			  struct device *device, void *dbuf, size_t size,
+-			  u32 opt_flags)
++			  size_t offset, u32 opt_flags)
  {
- 	struct fw_priv *fw_priv = fw->priv;
- 	int ret;
-@@ -654,8 +659,8 @@ int assign_fw(struct firmware *fw, struct device *device, u32 opt_flags)
- 	 * should be fixed in devres or driver core.
- 	 */
- 	/* don't cache firmware handled without uevent */
--	if (device && (opt_flags & FW_OPT_UEVENT) &&
--	    !(opt_flags & FW_OPT_NOCACHE)) {
-+	if (device && (fw_priv->opt_flags & FW_OPT_UEVENT) &&
-+	    !(fw_priv->opt_flags & FW_OPT_NOCACHE)) {
- 		ret = fw_add_devm_name(device, fw_priv->fw_name);
- 		if (ret) {
- 			mutex_unlock(&fw_lock);
-@@ -667,7 +672,7 @@ int assign_fw(struct firmware *fw, struct device *device, u32 opt_flags)
- 	 * After caching firmware image is started, let it piggyback
- 	 * on request firmware.
- 	 */
--	if (!(opt_flags & FW_OPT_NOCACHE) &&
-+	if (!(fw_priv->opt_flags & FW_OPT_NOCACHE) &&
- 	    fw_priv->fwc->state == FW_LOADER_START_CACHE) {
- 		if (fw_cache_piggyback_on_request(fw_priv->fw_name))
- 			kref_get(&fw_priv->ref);
-@@ -778,7 +783,7 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- #endif
+ 	struct firmware *firmware;
+ 	struct fw_priv *fw_priv;
+@@ -710,7 +743,7 @@ _request_firmware_prepare(struct firmware **firmware_p, const char *name,
+ 	}
  
- 	if (ret == -ENOENT)
--		ret = firmware_fallback_platform(fw->priv, opt_flags);
-+		ret = firmware_fallback_platform(fw->priv);
+ 	ret = alloc_lookup_fw_priv(name, &fw_cache, &fw_priv, dbuf, size,
+-				  opt_flags);
++				   offset, opt_flags);
+ 
+ 	/*
+ 	 * bind with 'priv' now to avoid warning in failure path
+@@ -757,9 +790,10 @@ static void fw_abort_batch_reqs(struct firmware *fw)
+ static int
+ _request_firmware(const struct firmware **firmware_p, const char *name,
+ 		  struct device *device, void *buf, size_t size,
+-		  u32 opt_flags)
++		  size_t offset, u32 opt_flags)
+ {
+ 	struct firmware *fw = NULL;
++	bool nondirect = false;
+ 	int ret;
+ 
+ 	if (!firmware_p)
+@@ -771,18 +805,20 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
+ 	}
+ 
+ 	ret = _request_firmware_prepare(&fw, name, device, buf, size,
+-					opt_flags);
++					offset, opt_flags);
+ 	if (ret <= 0) /* error or already assigned */
+ 		goto out;
+ 
+ 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
+-#ifdef CONFIG_FW_LOADER_COMPRESS
+-	if (ret == -ENOENT)
++
++	/* Only full reads can support decompression, platform, and sysfs. */
++	if (!(opt_flags & FW_OPT_PARTIAL))
++		nondirect = true;
++
++	if (ret == -ENOENT && nondirect)
+ 		ret = fw_get_filesystem_firmware(device, fw->priv, ".xz",
+ 						 fw_decompress_xz);
+-#endif
+-
+-	if (ret == -ENOENT)
++	if (ret == -ENOENT && nondirect)
+ 		ret = firmware_fallback_platform(fw->priv);
  
  	if (ret) {
- 		if (!(opt_flags & FW_OPT_NO_WARN))
-@@ -787,7 +792,7 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
+@@ -790,7 +826,9 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
+ 			dev_warn(device,
+ 				 "Direct firmware load for %s failed with error %d\n",
  				 name, ret);
- 		ret = firmware_fallback_sysfs(fw, name, device, opt_flags, ret);
+-		ret = firmware_fallback_sysfs(fw, name, device, opt_flags, ret);
++		if (nondirect)
++			ret = firmware_fallback_sysfs(fw, name, device,
++						      opt_flags, ret);
  	} else
--		ret = assign_fw(fw, device, opt_flags);
-+		ret = assign_fw(fw, device);
+ 		ret = assign_fw(fw, device);
  
-  out:
- 	if (ret < 0) {
+@@ -833,7 +871,7 @@ request_firmware(const struct firmware **firmware_p, const char *name,
+ 
+ 	/* Need to pin this module until return */
+ 	__module_get(THIS_MODULE);
+-	ret = _request_firmware(firmware_p, name, device, NULL, 0,
++	ret = _request_firmware(firmware_p, name, device, NULL, 0, 0,
+ 				FW_OPT_UEVENT);
+ 	module_put(THIS_MODULE);
+ 	return ret;
+@@ -860,7 +898,7 @@ int firmware_request_nowarn(const struct firmware **firmware, const char *name,
+ 
+ 	/* Need to pin this module until return */
+ 	__module_get(THIS_MODULE);
+-	ret = _request_firmware(firmware, name, device, NULL, 0,
++	ret = _request_firmware(firmware, name, device, NULL, 0, 0,
+ 				FW_OPT_UEVENT | FW_OPT_NO_WARN);
+ 	module_put(THIS_MODULE);
+ 	return ret;
+@@ -884,7 +922,7 @@ int request_firmware_direct(const struct firmware **firmware_p,
+ 	int ret;
+ 
+ 	__module_get(THIS_MODULE);
+-	ret = _request_firmware(firmware_p, name, device, NULL, 0,
++	ret = _request_firmware(firmware_p, name, device, NULL, 0, 0,
+ 				FW_OPT_UEVENT | FW_OPT_NO_WARN |
+ 				FW_OPT_NOFALLBACK_SYSFS);
+ 	module_put(THIS_MODULE);
+@@ -909,7 +947,7 @@ int firmware_request_platform(const struct firmware **firmware,
+ 
+ 	/* Need to pin this module until return */
+ 	__module_get(THIS_MODULE);
+-	ret = _request_firmware(firmware, name, device, NULL, 0,
++	ret = _request_firmware(firmware, name, device, NULL, 0, 0,
+ 				FW_OPT_UEVENT | FW_OPT_FALLBACK_PLATFORM);
+ 	module_put(THIS_MODULE);
+ 	return ret;
+@@ -965,13 +1003,44 @@ request_firmware_into_buf(const struct firmware **firmware_p, const char *name,
+ 		return -EOPNOTSUPP;
+ 
+ 	__module_get(THIS_MODULE);
+-	ret = _request_firmware(firmware_p, name, device, buf, size,
++	ret = _request_firmware(firmware_p, name, device, buf, size, 0,
+ 				FW_OPT_UEVENT | FW_OPT_NOCACHE);
+ 	module_put(THIS_MODULE);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(request_firmware_into_buf);
+ 
++/**
++ * request_partial_firmware_into_buf() - load partial firmware into a previously allocated buffer
++ * @firmware_p: pointer to firmware image
++ * @name: name of firmware file
++ * @device: device for which firmware is being loaded and DMA region allocated
++ * @buf: address of buffer to load firmware into
++ * @size: size of buffer
++ * @offset: offset into file to read
++ *
++ * This function works pretty much like request_firmware_into_buf except
++ * it allows a partial read of the file.
++ */
++int
++request_partial_firmware_into_buf(const struct firmware **firmware_p,
++				  const char *name, struct device *device,
++				  void *buf, size_t size, size_t offset)
++{
++	int ret;
++
++	if (fw_cache_is_setup(device, name))
++		return -EOPNOTSUPP;
++
++	__module_get(THIS_MODULE);
++	ret = _request_firmware(firmware_p, name, device, buf, size, offset,
++				FW_OPT_UEVENT | FW_OPT_NOCACHE |
++				FW_OPT_PARTIAL);
++	module_put(THIS_MODULE);
++	return ret;
++}
++EXPORT_SYMBOL(request_partial_firmware_into_buf);
++
+ /**
+  * release_firmware() - release the resource associated with a firmware image
+  * @fw: firmware resource to release
+@@ -1004,7 +1073,7 @@ static void request_firmware_work_func(struct work_struct *work)
+ 
+ 	fw_work = container_of(work, struct firmware_work, work);
+ 
+-	_request_firmware(&fw, fw_work->name, fw_work->device, NULL, 0,
++	_request_firmware(&fw, fw_work->name, fw_work->device, NULL, 0, 0,
+ 			  fw_work->opt_flags);
+ 	fw_work->cont(fw, fw_work->context);
+ 	put_device(fw_work->device); /* taken in request_firmware_nowait() */
+diff --git a/include/linux/firmware.h b/include/linux/firmware.h
+index cb3e2c06ed8a..c15acadc6cf4 100644
+--- a/include/linux/firmware.h
++++ b/include/linux/firmware.h
+@@ -53,6 +53,9 @@ int request_firmware_direct(const struct firmware **fw, const char *name,
+ 			    struct device *device);
+ int request_firmware_into_buf(const struct firmware **firmware_p,
+ 	const char *name, struct device *device, void *buf, size_t size);
++int request_partial_firmware_into_buf(const struct firmware **firmware_p,
++				      const char *name, struct device *device,
++				      void *buf, size_t size, size_t offset);
+ 
+ void release_firmware(const struct firmware *fw);
+ #else
+@@ -102,6 +105,15 @@ static inline int request_firmware_into_buf(const struct firmware **firmware_p,
+ 	return -EINVAL;
+ }
+ 
++static inline int request_partial_firmware_into_buf
++					(const struct firmware **firmware_p,
++					 const char *name,
++					 struct device *device,
++					 void *buf, size_t size, size_t offset)
++{
++	return -EINVAL;
++}
++
+ #endif
+ 
+ int firmware_request_cache(struct device *device, const char *name);
 -- 
 2.25.1
 
