@@ -2,82 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FE022E9AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jul 2020 12:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5949722EA5A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jul 2020 12:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727780AbgG0KBj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jul 2020 06:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgG0KBh (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jul 2020 06:01:37 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B28DC061794;
-        Mon, 27 Jul 2020 03:01:37 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id m200so4290928ybf.10;
-        Mon, 27 Jul 2020 03:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=0ovBpV1RCu/BA4nTaDoRsgP6/JwSLVZ6NKuTSDEoq2o=;
-        b=E1eEVpGEJkFOHv/jqkFzsLLBeZstzNWOnkRuOgqZq3k7vgl9/Ijqj/NHFA/SBQMZJO
-         Y5OwQaqHN56aElH0syOGrNz6hrxinVDdoiIx40CkrlNzdXZF+LOTL2Kw/XHgTflBaNs3
-         s+SDsKy1h6DhAsl7AVa9QBZryXqrY7kxTLH1jWsyUnRFbQQyFGtpXyU2kkn02DvoxTUr
-         EIRmh0xZkgIjxUFFLjuQpMcN/lNSu64f2XwZf0TqoQ+2+b0vfQxtGe+OR30rtc1OadC0
-         eb8Ox+INKvauRuG7kuqzAKaaZc177gbuissG5WyDzbxBY1aD4g0CEDZ1xv5EqIm7nKLz
-         xx3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=0ovBpV1RCu/BA4nTaDoRsgP6/JwSLVZ6NKuTSDEoq2o=;
-        b=roXU5ZXqKLuEryFQ/Il5pYIMEKnKIN/EOzquosRyHRRcp3ZXV9R9KcoolDmwRR3eOR
-         PskYogj4q1zg78Z4VANgyUlD52A1GFmwNvp9KLeQ4P9epxS55zZlbB6YE7SWcMfLU/cD
-         +jvCQ1kFOv8Ot53HCIcypE2ihIB9FgGUjDd+hf9kTTIZ2tIr7kCLEdVnjOKv8V5LEkfH
-         wi8AG/6JoZl22raNSKLPKImjInFD2xnUWNFx7IirKPhhTaA6hhyrhxCH/ojaNv69UsI5
-         ZMCwWXoYZ6IzRgq9p/zNzF050/3jQ2p7MB0p95BmuK2nj8BwPJKZy1UYcHm/hSLm9GMq
-         desw==
-X-Gm-Message-State: AOAM531nTkU22fYHH9B2PezcXShMfmf5vm4OFJa5oNn0QOjLnzVVOLRk
-        RFqiQf5E311JBqkxXSjtD0/aXlBYw4NYxMMxIW0=
-X-Google-Smtp-Source: ABdhPJz2Z1EfUwootw8qs317nd/jj2jzAlI9c6sRGBnky/I0AJpP1/G4Jft3ZDAapmF2Mq/YqGV64nNWGGukhI/jh4w=
-X-Received: by 2002:a25:bbd2:: with SMTP id c18mr31296332ybk.495.1595844096142;
- Mon, 27 Jul 2020 03:01:36 -0700 (PDT)
-MIME-Version: 1.0
-From:   Cixi Geng <gengcixi@gmail.com>
-Date:   Mon, 27 Jul 2020 18:00:59 +0800
-Message-ID: <CAF12kFsOrFOQBrZv6qBbcQ971acEM0XxLWKqBJvEspoQ3UOHUQ@mail.gmail.com>
-Subject: kunit compile failed on um
-To:     brendanhiggins@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>, zhang.lyra@gmail.com
+        id S1728067AbgG0KtO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jul 2020 06:49:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726298AbgG0KtO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jul 2020 06:49:14 -0400
+Received: from localhost.localdomain (pool-96-246-152-186.nycmny.fios.verizon.net [96.246.152.186])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7ED78206E7;
+        Mon, 27 Jul 2020 10:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595846953;
+        bh=zNfqzDInDnSp+fKCzpx3F6lQ3q4TBw0M7Av0QoXkGpo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lhClkxotlesTUV1UDov1RrY64xr/ppyKNwCO0sGj548usN3ExBpqNf1v73lO6qY2x
+         gXrALj4a7FB2QB75LMyX17RGfKrjHGwIko0vBdXAOFq7H637gLacrQYgI1EPBcNl4F
+         WQ3zl8FW26O60MLGh4f1gZbN6TKyE1zhYxL/dUMo=
+Message-ID: <1595846951.4841.61.camel@kernel.org>
+Subject: Re: [PATCH v3 11/19] LSM: Introduce kernel_post_load_data() hook
+From:   Mimi Zohar <zohar@kernel.org>
+To:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 27 Jul 2020 06:49:11 -0400
+In-Reply-To: <20200724213640.389191-12-keescook@chromium.org>
+References: <20200724213640.389191-1-keescook@chromium.org>
+         <20200724213640.389191-12-keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Brendan:
-When I run kunit test in um , it failed on kernel 5.8-rc* while
-succeeded  in v5.7 with same configuration. is this a bug?
+On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
+> There are a few places in the kernel where LSMs would like to have
+> visibility into the contents of a kernel buffer that has been loaded or
+> read. While security_kernel_post_read_file() (which includes the
+> buffer) exists as a pairing for security_kernel_read_file(), no such
+> hook exists to pair with security_kernel_load_data().
+> 
+> Earlier proposals for just using security_kernel_post_read_file() with a
+> NULL file argument were rejected (i.e. "file" should always be valid for
+> the security_..._file hooks, but it appears at least one case was
+> left in the kernel during earlier refactoring. (This will be fixed in
+> a subsequent patch.)
+> 
+> Since not all cases of security_kernel_load_data() can have a single
+> contiguous buffer made available to the LSM hook (e.g. kexec image
+> segments are separately loaded), there needs to be a way for the LSM to
+> reason about its expectations of the hook coverage. In order to handle
+> this, add a "contents" argument to the "kernel_load_data" hook that
+> indicates if the newly added "kernel_post_load_data" hook will be called
+> with the full contents once loaded. That way, LSMs requiring full contents
+> can choose to unilaterally reject "kernel_load_data" with contents=false
+> (which is effectively the existing hook coverage), but when contents=true
+> they can allow it and later evaluate the "kernel_post_load_data" hook
+> once the buffer is loaded.
+> 
+> With this change, LSMs can gain coverage over non-file-backed data loads
+> (e.g. init_module(2) and firmware userspace helper), which will happen
+> in subsequent patches.
+> 
+> Additionally prepare IMA to start processing these cases.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Here is my operation:
- gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)
+At least from an IMA perspective, the original
+security_kernel_load_data() hook was defined in order to prevent
+certain syscalls - init_module, kexec_load - and loading firmware via
+sysfs.  The resulting error messages were generic.
+  
+Unlike security_kernel_load_data(), security_kernel_post_load_data()
+is meant to be used, but without a file desciptor specific
+information, like the filename associated with the buffer, is missing.
+ Having the filename isn't actually necessary for verifying the
+appended signature, but it is needed for auditing signature
+verification failures and including in the IMA measurement list.
 
-the kunitconfig:
-Cixi.Geng:~/git-projects/torvals-linux$ cat .kunitconfig
-CONFIG_KUNIT=y
-CONFIG_KUNIT_TEST=y
-CONFIG_KUNIT_EXAMPLE_TEST=y
-
-command:
-Cixi.Geng:~/git-projects/torvals-linux$ ./tools/testing/kunit/kunit.py run
-
-the Error log:
-[17:51:14] Configuring KUnit Kernel ...
-[17:51:14] Building KUnit Kernel ...
-ERROR:root:b"make[1]:
-\xe8\xbf\x9b\xe5\x85\xa5\xe7\x9b\xae\xe5\xbd\x95\xe2\x80\x9c/home/cixi.geng1/git-projects/torvals-linux/.kunit\xe2\x80\x9d\n/home/cixi.geng1/git-projects/torvals-linux/Makefile:551:
-recipe for target 'outputmakefile' failed\nmake[1]:
-\xe7\xa6\xbb\xe5\xbc\x80\xe7\x9b\xae\xe5\xbd\x95\xe2\x80\x9c/home/cixi.geng1/git-projects/torvals-linux/.kunit\xe2\x80\x9d\nMakefile:185:
-recipe for target '__sub-make' failed\n"
+Mimi
