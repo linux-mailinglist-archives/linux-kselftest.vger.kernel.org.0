@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E42022FDA1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jul 2020 01:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD3622FD9B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jul 2020 01:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgG0X2w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jul 2020 19:28:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35380 "EHLO mail.kernel.org"
+        id S1728224AbgG0XY1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jul 2020 19:24:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35440 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728183AbgG0XYY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jul 2020 19:24:24 -0400
+        id S1728204AbgG0XY1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:24:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8A8620A8B;
-        Mon, 27 Jul 2020 23:24:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6174F20A8B;
+        Mon, 27 Jul 2020 23:24:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595892263;
-        bh=LkmYfpO8CCHqVPPYGJEJrOUiJmWXY43q7bamRMNf8qU=;
+        s=default; t=1595892266;
+        bh=I2dTzUq/9wZciNDjDhbRp5+H1zAaUup4cSjPwG9P8DI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=131NI9iBTrFuzZ2t85U1G4NdNGkfTMw2FouQOJxaqpDu41xmlO0CPF1fdnhPl4wIZ
-         AQQyPJtxrWra/s6R7NE7cgIP62Sezhn7BdwDYLhJk/eoM09/Acst4RVO7Ujc7du+lW
-         +xJBsvqVFrhS1IHKCsj6P2orQIbd5mCmTU+6YPwk=
+        b=m8rx3Dmp8hcXLHEAjkHDoOHl5ruDNKHoiR3DoHWMFX3qzx6lna+hIrBsmWnIipPjR
+         xIZyu0r4X3wsJ2xF87CYGF9rJ4Qvhq71CSwSJy9cXOoih5v5mQDGFlrKKOlBAuIENy
+         Z0cy7s/MsXNpZQftUO5GjXV/07kp/ytZw81ohdbc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paolo Pisati <paolo.pisati@canonical.com>,
-        David Ahern <dsahern@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 02/17] selftests: fib_nexthop_multiprefix: fix cleanup() netns deletion
-Date:   Mon, 27 Jul 2020 19:24:05 -0400
-Message-Id: <20200727232420.717684-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 04/17] selftests: net: ip_defrag: modprobe missing nf_defrag_ipv6 support
+Date:   Mon, 27 Jul 2020 19:24:07 -0400
+Message-Id: <20200727232420.717684-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200727232420.717684-1-sashal@kernel.org>
 References: <20200727232420.717684-1-sashal@kernel.org>
@@ -47,62 +47,56 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Paolo Pisati <paolo.pisati@canonical.com>
 
-[ Upstream commit 651149f60376758a4759f761767965040f9e4464 ]
+[ Upstream commit aba69d49fb49c9166596dd78926514173b7f9ab5 ]
 
-During setup():
-...
-        for ns in h0 r1 h1 h2 h3
-        do
-                create_ns ${ns}
-        done
-...
+Fix ip_defrag.sh when CONFIG_NF_DEFRAG_IPV6=m:
 
-while in cleanup():
-...
-        for n in h1 r1 h2 h3 h4
-        do
-                ip netns del ${n} 2>/dev/null
-        done
-...
+$ sudo ./ip_defrag.sh
++ set -e
++ mktemp -u XXXXXX
++ readonly NETNS=ns-rGlXcw
++ trap cleanup EXIT
++ setup
++ ip netns add ns-rGlXcw
++ ip -netns ns-rGlXcw link set lo up
++ ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_high_thresh=9000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_low_thresh=7000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_time=1
++ ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_high_thresh=9000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_low_thresh=7000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_time=1
++ ip netns exec ns-rGlXcw sysctl -w net.netfilter.nf_conntrack_frag6_high_thresh=9000000
++ cleanup
++ ip netns del ns-rGlXcw
 
-and after removing the stderr redirection in cleanup():
+$ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
+ls: cannot access '/proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh': No such file or directory
 
-$ sudo ./fib_nexthop_multiprefix.sh
-...
-TEST: IPv4: host 0 to host 3, mtu 1400                              [ OK ]
-TEST: IPv6: host 0 to host 3, mtu 1400                              [ OK ]
-Cannot remove namespace file "/run/netns/h4": No such file or directory
-$ echo $?
-1
-
-and a non-zero return code, make kselftests fail (even if the test
-itself is fine):
-
-...
-not ok 34 selftests: net: fib_nexthop_multiprefix.sh # exit=1
-...
+$ sudo modprobe nf_defrag_ipv6
+$ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
+-rw-r--r-- 1 root root 0 Jul 14 12:34 /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
 
 Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
-Reviewed-by: David Ahern <dsahern@gmail.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/fib_nexthop_multiprefix.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/ip_defrag.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/net/fib_nexthop_multiprefix.sh b/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
-index 9dc35a16e4159..51df5e305855a 100755
---- a/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
-+++ b/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
-@@ -144,7 +144,7 @@ setup()
+diff --git a/tools/testing/selftests/net/ip_defrag.sh b/tools/testing/selftests/net/ip_defrag.sh
+index 15d3489ecd9ce..ceb7ad4dbd945 100755
+--- a/tools/testing/selftests/net/ip_defrag.sh
++++ b/tools/testing/selftests/net/ip_defrag.sh
+@@ -6,6 +6,8 @@
+ set +x
+ set -e
  
- cleanup()
- {
--	for n in h1 r1 h2 h3 h4
-+	for n in h0 r1 h1 h2 h3
- 	do
- 		ip netns del ${n} 2>/dev/null
- 	done
++modprobe -q nf_defrag_ipv6
++
+ readonly NETNS="ns-$(mktemp -u XXXXXX)"
+ 
+ setup() {
 -- 
 2.25.1
 
