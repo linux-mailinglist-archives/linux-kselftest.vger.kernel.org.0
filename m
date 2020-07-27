@@ -2,169 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE6B22FA22
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jul 2020 22:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB3222FAD5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jul 2020 22:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729276AbgG0Ud3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jul 2020 16:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgG0Ud3 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jul 2020 16:33:29 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E8FC061794
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2020 13:33:28 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w35so22121770ybi.16
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2020 13:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=8+GWCqToRsYuSGreGCapWzOVpnWd7snaZLCa1XNJr0I=;
-        b=SGMEjLSsF+Ur+M/B7vxrNKGkbM9VGYJ4OL16bAu+jA4wlVRqUKmhkovlTjCvo5cwU9
-         /GR6A4itCCVvgEwtK6ZdxnsEsFauXhRtDAeadxCpTuMTAFSYGn3km+Wp/WDZ5pV/gE4h
-         5OPZoJf92JLkU7KvFmGXdg4/sOkHWtZBnadjwZtWWIw3EWWfeUUoEaQa7B/7pGV01SWb
-         m1h0X+ZNhWSnCC/KQ7tVoclpMbFgTjvcOXkHZJ5eTjyTTCkc12F3Xg9ylL2tYHwxh9iF
-         RMSKvHSOapmw+rwteyyXBBlypKDGCfdEQfDDkF+XzY69jwq96n38yxI8cUB000mfvGjj
-         CEMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=8+GWCqToRsYuSGreGCapWzOVpnWd7snaZLCa1XNJr0I=;
-        b=q0qwYg3gDzsqij/++6/TuYnQjLUIbE6OmeBRx5pN09861sIGGKT88Yzo17I4ZfwKL+
-         c7K2MbPbmTbunRe0PibgvIxMP/dSGFb1fbjqIYMqohJS1rI7Du8MXf3zw6NeoOqOeF2Y
-         3jKTrVAgBAAVACz504S6JY9OkilgNVPafWXkNqAxFKlh+uMopKST3X5l5r32q4iCz0PD
-         DeVDFLAnP0kVs7+Isp70LVkFix7IN6oQP7VuUidolUTUUsz8L1oZfIs8PKFJquTkyzpX
-         w2nzi4URWN0wUx6pOSV9ry3GQYogybM8XdkiZcX5Zd3raYqjON/JMqjHt4GBSYHP6diE
-         QTaw==
-X-Gm-Message-State: AOAM530vHhNUaOfqiXdRwjxkwwKSJtocI0HzEwdDwLbP636xJgCikMIh
-        Dmcu31HVFmzSKOq8McAvu1mBjyunWPn9
-X-Google-Smtp-Source: ABdhPJyJorpxq2jFPepAV9fDiih8wuRQXMoiV5SISAnOdfN1gBNWXGfdqI5rYs7ErSZFfzEXT7vNGuGHGtL8
-X-Received: by 2002:a25:31d4:: with SMTP id x203mr37893178ybx.396.1595882008151;
- Mon, 27 Jul 2020 13:33:28 -0700 (PDT)
-Date:   Mon, 27 Jul 2020 13:33:24 -0700
-Message-Id: <20200727203324.2614917-1-bgardon@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.rc0.142.g3c755180ce-goog
-Subject: [PATCH 1/1] kvm: mmu: zap pages when zapping only parent
-From:   Ben Gardon <bgardon@google.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        id S1726826AbgG0U7L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jul 2020 16:59:11 -0400
+Received: from mga09.intel.com ([134.134.136.24]:50925 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726196AbgG0U7L (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jul 2020 16:59:11 -0400
+IronPort-SDR: McrCKUqe+uaAfMZEA7ugCeCtRsJYkFtgka8tdgvu1ynZ1o5URYJ9qMHrNU2w488P8YStwujOuV
+ KcNuayNZvAmA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9695"; a="152368198"
+X-IronPort-AV: E=Sophos;i="5.75,403,1589266800"; 
+   d="scan'208";a="152368198"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2020 13:59:10 -0700
+IronPort-SDR: F6x4TaH2xUbkqcHOlkYVCRLa84X160LomB+gQPSLrqqclZ5rkG41zSJgbumVGi5uDGCsUe7wk1
+ 4OgHP9BbFWkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,403,1589266800"; 
+   d="scan'208";a="320157680"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga008.jf.intel.com with ESMTP; 27 Jul 2020 13:59:10 -0700
+Date:   Mon, 27 Jul 2020 13:59:09 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Peter Shier <pshier@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
+ exceptions
+Message-ID: <20200727205909.GP844235@iweiny-DESK2.sc.intel.com>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-18-ira.weiny@intel.com>
+ <87r1t2vwi7.fsf@nanos.tec.linutronix.de>
+ <20200723220435.GI844235@iweiny-DESK2.sc.intel.com>
+ <87mu3pvly7.fsf@nanos.tec.linutronix.de>
+ <874kpwtxlh.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874kpwtxlh.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When the KVM MMU zaps a page, it will recursively zap the unsynced child
-pages, but not the synced ones. This can create problems over time when
-running many nested guests because it leaves unlinked pages which will not
-be freed until the page quota is hit. With the default page quota of 20
-shadow pages per 1000 guest pages, this looks like a memory leak and can
-degrade MMU performance.
+On Fri, Jul 24, 2020 at 11:24:58PM +0200, Thomas Gleixner wrote:
+> Ira,
+> 
+> Thomas Gleixner <tglx@linutronix.de> writes:
+> > Ira Weiny <ira.weiny@intel.com> writes:
+> >> On Thu, Jul 23, 2020 at 09:53:20PM +0200, Thomas Gleixner wrote:
+> >> I think, after fixing my code (see below), using idtentry_state could still
+> >> work.  If the per-cpu cache and the MSR is updated in idtentry_exit() that
+> >> should carry the state to the new cpu, correct?
+> >
+> > I'm way too tired to think about that now. Will have a look tomorrow
+> > with brain awake.
+> 
+> Not that I'm way more awake now, but at least I have the feeling that my
+> brain is not completely useless.
+> 
+> Let me summarize what I understood:
+> 
+>   1) A per CPU cache which shadows the current state of the MSR, i.e. the
+>      current valid key. You use that to avoid costly MSR writes if the
+>      key does not change.
 
-In a recent benchmark, substantial performance degradation was observed:
-An L1 guest was booted with 64G memory.
-2G nested Windows guests were booted, 10 at a time for 20
-iterations. (200 total boots)
-Windows was used in this benchmark because they touch all of their
-memory on startup.
-By the end of the benchmark, the nested guests were taking ~10% longer
-to boot. With this patch there is no degradation in boot time.
-Without this patch the benchmark ends with hundreds of thousands of
-stale EPT02 pages cluttering up rmaps and the page hash map. As a
-result, VM shutdown is also much slower: deleting memslot 0 was
-observed to take over a minute. With this patch it takes just a
-few miliseconds.
+Yes
 
-If TDP is enabled, zap child shadow pages when zapping the only parent
-shadow page.
+> 
+>   2) On idtentry you store the key on entry in idtentry_state, clear it
+>      in the MSR and shadow state if necessary and restore it on exit.
 
-Tested by running the kvm-unit-tests suite on an Intel Haswell machine.
-No regressions versus
-commit c34b26b98cac ("KVM: MIPS: clean up redundant 'kvm_run' parameters"),
-or warnings.
+Yes, but I've subsequently found a bug here but yea that was the intention.
+:-D
 
-Reviewed-by: Peter Shier <pshier@google.com>
-Signed-off-by: Ben Gardon <bgardon@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 49 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 44 insertions(+), 5 deletions(-)
+I also maintain the ref count of the number of nested calls to kmap to ensure
+that kmap_atomic() is nestable during an exception independent of the number
+of nested calls of the interrupted thread.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index fa506aaaf0194..c550bc3831dcc 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2626,13 +2626,52 @@ static bool mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
- 	return false;
- }
- 
--static void kvm_mmu_page_unlink_children(struct kvm *kvm,
--					 struct kvm_mmu_page *sp)
-+static int kvm_mmu_page_unlink_children(struct kvm *kvm,
-+					struct kvm_mmu_page *sp,
-+					struct list_head *invalid_list)
- {
- 	unsigned i;
-+	int zapped = 0;
-+
-+	for (i = 0; i < PT64_ENT_PER_PAGE; ++i) {
-+		u64 *sptep = sp->spt + i;
-+		u64 spte = *sptep;
-+		struct kvm_mmu_page *child_sp;
-+
-+		/*
-+		 * Zap the page table entry, unlinking any potential child
-+		 * page
-+		 */
-+		mmu_page_zap_pte(kvm, sp, sptep);
-+
-+		/* If there is no child page for this spte, continue */
-+		if (!is_shadow_present_pte(spte) ||
-+		    is_last_spte(spte, sp->role.level))
-+			continue;
-+
-+		/*
-+		 * If TDP is enabled, then any shadow pages are part of either
-+		 * the EPT01 or an EPT02. In either case, do not expect the
-+		 * same pattern of page reuse seen in x86 PTs for
-+		 * copy-on-write  and similar techniques. In this case, it is
-+		 * unlikely that a parentless shadow PT will be used again in
-+		 * the near future. Zap it to keep the rmaps and page hash
-+		 * maps from filling up with stale EPT02 pages.
-+		 */
-+		if (!tdp_enabled)
-+			continue;
-+
-+		child_sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
-+		if (WARN_ON_ONCE(!child_sp))
-+			continue;
-+
-+		/* Zap the page if it has no remaining parent pages */
-+		if (!child_sp->parent_ptes.val)
-+			zapped += kvm_mmu_prepare_zap_page(kvm, child_sp,
-+							   invalid_list);
-+	}
- 
--	for (i = 0; i < PT64_ENT_PER_PAGE; ++i)
--		mmu_page_zap_pte(kvm, sp, sp->spt + i);
-+	return zapped;
- }
- 
- static void kvm_mmu_unlink_parents(struct kvm *kvm, struct kvm_mmu_page *sp)
-@@ -2678,7 +2717,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
- 	trace_kvm_mmu_prepare_zap_page(sp);
- 	++kvm->stat.mmu_shadow_zapped;
- 	*nr_zapped = mmu_zap_unsync_children(kvm, sp, invalid_list);
--	kvm_mmu_page_unlink_children(kvm, sp);
-+	*nr_zapped += kvm_mmu_page_unlink_children(kvm, sp, invalid_list);
- 	kvm_mmu_unlink_parents(kvm, sp);
- 
- 	/* Zapping children means active_mmu_pages has become unstable. */
--- 
-2.28.0.rc0.142.g3c755180ce-goog
+>   3) On context switch out you save the per CPU cache value in the task
+>      and on context switch in you restore it from there.
+
+yes
+
+> 
+> Yes, that works (see below for #2) and sorry for my confusion yesterday
+> about storing this in task state.
+
+No problem.
+
+> 
+> #2 requires to handle the exceptions which do not go through
+> idtentry_enter/exit() seperately, but that's a manageable amount. It's
+> the ones which use IDTENTRY_RAW or a variant of it.
+> 
+> #BP, #MC, #NMI, #DB, #DF need extra local storage as all the kernel
+> entries for those use nmi_enter()/exit(). So you just can create
+> wrappers around those. Somehting like this
+> 
+> static __always_inline idtentry_state_t idtentry_nmi_enter(void)
+> {
+>      	idtentry_state_t state = {};
+> 
+>         nmi_enter();
+>         instrumentation_begin();
+>         state.key = save_and_clear_key();
+>         instrumentation_end();
+> }
+> 
+> static __always_inline void idtentry_nmi_exit(idtentry_state_t state)
+> {
+>         instrumentation_begin();
+>         restore_key(state.key);
+>         instrumentation_end();
+>         nmi_exit();
+> }
+> 
+
+Thanks!
+
+> #UD and #PF are using the raw entry variant as well but still invoke
+> idtentry_enter()/exit(). #PF does not need any work. #UD handles
+> WARN/BUG without going through idtentry_enter() first, but I don't think
+> that's an issue unless a not 0 key would prevent writing to the console
+> device. You surely can figure that out.
+> 
+> Hope that helps.
+
+Yes it does thank you.  I'm also trying to simplify the API per Peters
+comments while refactoring this.
+
+Ira
 
