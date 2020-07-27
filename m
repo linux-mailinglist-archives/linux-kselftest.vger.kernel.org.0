@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A24A22FDBC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jul 2020 01:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E42022FDA1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jul 2020 01:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgG0X3Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jul 2020 19:29:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34970 "EHLO mail.kernel.org"
+        id S1727801AbgG0X2w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jul 2020 19:28:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35380 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726171AbgG0XYG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jul 2020 19:24:06 -0400
+        id S1728183AbgG0XYY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:24:24 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9DEE02173E;
-        Mon, 27 Jul 2020 23:24:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E8A8620A8B;
+        Mon, 27 Jul 2020 23:24:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595892245;
-        bh=h34qtxaIin9fvca5iz4rgj6oOZSApYPiXFr73+LDPjY=;
+        s=default; t=1595892263;
+        bh=LkmYfpO8CCHqVPPYGJEJrOUiJmWXY43q7bamRMNf8qU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z0TETOFPJ4YcNgEhVxA1UVuq5Pbif0kCWRscX9+EgSsPnkb/sG24s7DHBu5s1hjMd
-         sDPvSX2wx7XOeZ2Wzxa8UrNS5qQpp3tAq+vOB4hwGS/l29Y8EoH3VDC9uIg2Zkt2/p
-         gMfd/uHvSlI37AzeLMEHAf8usGo4g9yXnYWLQwfg=
+        b=131NI9iBTrFuzZ2t85U1G4NdNGkfTMw2FouQOJxaqpDu41xmlO0CPF1fdnhPl4wIZ
+         AQQyPJtxrWra/s6R7NE7cgIP62Sezhn7BdwDYLhJk/eoM09/Acst4RVO7Ujc7du+lW
+         +xJBsvqVFrhS1IHKCsj6P2orQIbd5mCmTU+6YPwk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paolo Pisati <paolo.pisati@canonical.com>,
-        Willem de Bruijn <willemb@google.com>,
+        David Ahern <dsahern@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 14/25] selftest: txtimestamp: fix net ns entry logic
-Date:   Mon, 27 Jul 2020 19:23:34 -0400
-Message-Id: <20200727232345.717432-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 02/17] selftests: fib_nexthop_multiprefix: fix cleanup() netns deletion
+Date:   Mon, 27 Jul 2020 19:24:05 -0400
+Message-Id: <20200727232420.717684-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200727232345.717432-1-sashal@kernel.org>
-References: <20200727232345.717432-1-sashal@kernel.org>
+In-Reply-To: <20200727232420.717684-1-sashal@kernel.org>
+References: <20200727232420.717684-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -47,33 +47,62 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Paolo Pisati <paolo.pisati@canonical.com>
 
-[ Upstream commit b346c0c85892cb8c53e8715734f71ba5bbec3387 ]
+[ Upstream commit 651149f60376758a4759f761767965040f9e4464 ]
 
-According to 'man 8 ip-netns', if `ip netns identify` returns an empty string,
-there's no net namespace associated with current PID: fix the net ns entrance
-logic.
+During setup():
+...
+        for ns in h0 r1 h1 h2 h3
+        do
+                create_ns ${ns}
+        done
+...
+
+while in cleanup():
+...
+        for n in h1 r1 h2 h3 h4
+        do
+                ip netns del ${n} 2>/dev/null
+        done
+...
+
+and after removing the stderr redirection in cleanup():
+
+$ sudo ./fib_nexthop_multiprefix.sh
+...
+TEST: IPv4: host 0 to host 3, mtu 1400                              [ OK ]
+TEST: IPv6: host 0 to host 3, mtu 1400                              [ OK ]
+Cannot remove namespace file "/run/netns/h4": No such file or directory
+$ echo $?
+1
+
+and a non-zero return code, make kselftests fail (even if the test
+itself is fine):
+
+...
+not ok 34 selftests: net: fib_nexthop_multiprefix.sh # exit=1
+...
 
 Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
-Acked-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: David Ahern <dsahern@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/txtimestamp.sh | 2 +-
+ tools/testing/selftests/net/fib_nexthop_multiprefix.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/txtimestamp.sh b/tools/testing/selftests/net/txtimestamp.sh
-index eea6f5193693f..31637769f59f6 100755
---- a/tools/testing/selftests/net/txtimestamp.sh
-+++ b/tools/testing/selftests/net/txtimestamp.sh
-@@ -75,7 +75,7 @@ main() {
- 	fi
- }
+diff --git a/tools/testing/selftests/net/fib_nexthop_multiprefix.sh b/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
+index 9dc35a16e4159..51df5e305855a 100755
+--- a/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
++++ b/tools/testing/selftests/net/fib_nexthop_multiprefix.sh
+@@ -144,7 +144,7 @@ setup()
  
--if [[ "$(ip netns identify)" == "root" ]]; then
-+if [[ -z "$(ip netns identify)" ]]; then
- 	./in_netns.sh $0 $@
- else
- 	main $@
+ cleanup()
+ {
+-	for n in h1 r1 h2 h3 h4
++	for n in h0 r1 h1 h2 h3
+ 	do
+ 		ip netns del ${n} 2>/dev/null
+ 	done
 -- 
 2.25.1
 
