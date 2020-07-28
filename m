@@ -2,107 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2314A2313A4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jul 2020 22:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03992231459
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jul 2020 22:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728475AbgG1UM3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Jul 2020 16:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728355AbgG1UM2 (ORCPT
+        id S1729332AbgG1U5d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Jul 2020 16:57:33 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:15954 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728993AbgG1U5c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jul 2020 16:12:28 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA490C0619D5
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2020 13:12:28 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id gc9so537723pjb.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2020 13:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lGODvQAyFgiIakAvcuOrB55CdYdcOaQbABBPHmSlK8A=;
-        b=KXX8Mkn7MNftP6mJ42ju7ovK7oMAAX0wGRB0ry7w+mD/hsCbKEyPUIfLQgdll+U1Hq
-         4xQS018nhgkGgLPtgROQlYsblo5NoExjDQhzJknpZmFPr1lJDow/rdW50/9T5e1TGb0u
-         4gJoD0vzQnv64fwnh0m/ejgnfnf0ndm6GA1nQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lGODvQAyFgiIakAvcuOrB55CdYdcOaQbABBPHmSlK8A=;
-        b=sZDki4/tQ+8tI4AYGuvfOP8t9Q2cbSLT2YQ6Y+DumU6ciQMTM2XMBe+Iqzk0EuciRO
-         qAfv+zWR2n/fimKxa2tOBnPc3jjRfVnhfDCidJcQe3ka03OHxkT963hkox3A66qd2W3T
-         iwAfHLXyaCwatyckoDgg+SybNROPkKLzrGPC886sv1Pda3+4Aa8e4eCpPvmC7j4MyJY0
-         9xgFsTd7A3SSmAIhFpJ2yp1J5+Ba0iZDFj08W6iUddukTsbpxjY39+jDZo0E1ajfTZS5
-         rlrL3tAYRy5vVWqBn7JeSxQ/uysNk00JQ6D6Xw7HfZozWZz2enpSEPMWgQRmGEvekFhy
-         seFQ==
-X-Gm-Message-State: AOAM532bwv5ja1MD6Dembn008lKJ2mtEWlv401tNJW7m4rbn2dOc7Rsx
-        dcvPSGlHBFlyPcFO2kHIJgbuPA==
-X-Google-Smtp-Source: ABdhPJyFIgRmVJfBhFlzPKJj5terbzmemlEZoh3fyIw7tCG0VwJkPldmQbeJoogxX3pMzlVW5vctfw==
-X-Received: by 2002:a17:90a:2207:: with SMTP id c7mr6611771pje.206.1595967148091;
-        Tue, 28 Jul 2020 13:12:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q17sm22220199pfk.0.2020.07.28.13.12.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2020 13:12:27 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 13:12:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mimi Zohar <zohar@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 15/19] IMA: Add support for file reads without contents
-Message-ID: <202007281311.F2F5A7ED5@keescook>
-References: <20200724213640.389191-1-keescook@chromium.org>
- <20200724213640.389191-16-keescook@chromium.org>
- <1595856214.4841.86.camel@kernel.org>
- <202007281244.2F2681AE9@keescook>
- <20200728195640.GA342741@kroah.com>
+        Tue, 28 Jul 2020 16:57:32 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f20910e0001>; Tue, 28 Jul 2020 13:56:46 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 28 Jul 2020 13:57:31 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 28 Jul 2020 13:57:31 -0700
+Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 28 Jul
+ 2020 20:57:31 +0000
+Subject: Re: [PATCH v4 3/6] mm/notifier: add migration invalidation type
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        <nouveau@lists.freedesktop.org>, <kvm-ppc@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Jerome Glisse" <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Christoph Hellwig" <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
+        Bharata B Rao <bharata@linux.ibm.com>
+References: <20200723223004.9586-1-rcampbell@nvidia.com>
+ <20200723223004.9586-4-rcampbell@nvidia.com>
+ <20200728191518.GA159104@nvidia.com>
+From:   Ralph Campbell <rcampbell@nvidia.com>
+Message-ID: <08eb43d9-9650-f050-9cfb-d8ba5df6c5dd@nvidia.com>
+Date:   Tue, 28 Jul 2020 13:57:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200728195640.GA342741@kroah.com>
+In-Reply-To: <20200728191518.GA159104@nvidia.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595969807; bh=9Nj75AE4ohwwG9J6YbO3veFOmQ4ey7Egk4PXruXSzmU=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=A2aVhD+B+AhG2E5d83qfwZzxxNrFv1TRhOrGwvam4fmgELGml0WuPUwQJgwjxZBg4
+         zmSjTa6i2efJWUcN/wUCWgfe8tmF6dTiAtH2AwAUsDkc9AJLoRuVMnCAEP4fGOIj1R
+         G7wqR8mmh+IJPYOolfdXKpBEWdSmQQ4jx4TzXk+AGmM9tzosm7cOWNeRzTOvSfySMg
+         Mc/W5xlkuMEAZfnKrSMtEyBpqbDuT94P/55M3a/7YTmrfnz+XuPxXm/lPQPjsSUFkK
+         zmSmW7uzwoHnXlFMJkolzml+ktsHPbaKP9GwaH6bC5V6O8zhD29UNEWmGCh7CwLjq9
+         sFBK7PeKxByow==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 09:56:40PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jul 28, 2020 at 12:44:50PM -0700, Kees Cook wrote:
-> > On Mon, Jul 27, 2020 at 09:23:34AM -0400, Mimi Zohar wrote:
-> > > On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
-> > > > From: Scott Branden <scott.branden@broadcom.com>
-> > > > 
-> > > > When the kernel_read_file LSM hook is called with contents=false, IMA
-> > > > can appraise the file directly, without requiring a filled buffer. When
-> > > > such a buffer is available, though, IMA can continue to use it instead
-> > > > of forcing a double read here.
-> > > > 
-> > > > Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-> > > > Link: https://lore.kernel.org/lkml/20200706232309.12010-10-scott.branden@broadcom.com/
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > 
-> > > After adjusting the comment below.
-> > > 
-> > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > 
-> > Sure!
-> > 
-> > Greg, shall I send a v4 with added Reviews and the comment change or is
-> > that minor enough that you're able to do it?
+
+On 7/28/20 12:15 PM, Jason Gunthorpe wrote:
+> On Thu, Jul 23, 2020 at 03:30:01PM -0700, Ralph Campbell wrote:
+>>   static inline int mm_has_notifiers(struct mm_struct *mm)
+>> @@ -513,6 +519,7 @@ static inline void mmu_notifier_range_init(struct mmu_notifier_range *range,
+>>   	range->start = start;
+>>   	range->end = end;
+>>   	range->flags = flags;
+>> +	range->migrate_pgmap_owner = NULL;
+>>   }
 > 
-> v4 is needed, as this series is a mess of reviewes and you will have to
-> redo at least one patch and drop some others, right?
+> Since this function is commonly called and nobody should read
+> migrate_pgmap_owner unless MMU_NOTIFY_MIGRATE is set as the event,
+> this assignment can be dropped.
+> 
+> Jason
 
-Well, I wasn't sure what your desire was, given the weirdness of taking
-some and reverting others. I will do a v4 based on driver-core-next.
-
-Thanks!
-
--- 
-Kees Cook
+I agree.
+Acked-by: Ralph Campbell <rcampbell@nvidia.com>
