@@ -2,67 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89012323FC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jul 2020 19:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696F02323DE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jul 2020 19:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727909AbgG2R7d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jul 2020 13:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S1726857AbgG2R66 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jul 2020 13:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727939AbgG2R7H (ORCPT
+        with ESMTP id S1727020AbgG2R64 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jul 2020 13:59:07 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDB2C08C5DB
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 10:59:07 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d188so7279251pfd.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 10:59:07 -0700 (PDT)
+        Wed, 29 Jul 2020 13:58:56 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F2EC0619DC
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 10:58:55 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id l6so23082112qkc.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 10:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+NaGsZ6LkqLP7N90n/8Avv/y2oDkj/LqGy0xmUe3sQI=;
-        b=hp7mbpgpzEbT4hmsg/0VefWpKjWuMD8517bITA0szXsxyzLErrtYxEne3GSIfYyf1a
-         TbEZZ3NQ3QLjzbI0vCoMwVy4hBW0R6Gd9ppCmdX5jDyH5QP8CHt+Ed6X8dJ6iSEQDMqP
-         qZ+HawSNZSCQwfzbfxd8luxWK5q5OVS5vXT1o=
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IR8kl6q02JQVV7/sYzqm1Sm6y7ctVZjq+Lwk1QFsbIY=;
+        b=CXPoDUsEGcDQYbZMW+Rn6nD+0PCCPwiwRLZExgj5iUx1tW06qD45DsVfCnJnkTXJeq
+         pnTo4s7uRNKDygqcufUAMIrMxLqiKqrqI0a6JW/IKEsTTCLVWji4LA3kwZMTDxoo87WO
+         c56vVUR2OKwY9BtXTqUAqdPYnfzp0vBso1Yp5f87ObH63BWUUDhoXA3VjCZlGm+G0Tez
+         ZxxRTyWNuUBYDqyUFHkIOv+vUH6Ko0pZH6ANv+x84zO85KRARuwNvLkSzMxU8GAInQz3
+         e34Wb2/H97fjDaWiJ9hDjt9zLuisSiK0hmvFMa8F9SpWbG75282gnMNA452o+iG+EC8U
+         TrTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+NaGsZ6LkqLP7N90n/8Avv/y2oDkj/LqGy0xmUe3sQI=;
-        b=FqLQykehnfFapVobe6y72u7bqGi6PuNF1A7M2XIch0dKL455myEQ9jQcN7xbwy2Mgu
-         OuBaRnsQbhyS2QneEo3DBGBDZM0J5LAmo72z1G1Yu/zDNk66o7IahI2AIgK5zGG+K/Zu
-         R0tJXsblnMDsR4hHuaHXZk6d+OsSY2Z348pmGjNvLhcrnmYZdK+zEzI0ReY3ULcMVTDa
-         dG19VQ/RkvxM3JjZokfjrhWi6eVnMNrhIZhTzWWE1A9Qd4Q4MhtG6gF5OLjomEubBuS3
-         gwHc0Z0IpccxWHkd4/5vH3XfWAX+QYzBW4ijmHvoXn+aLPc3qPw9L98LlhfqcalLeNvM
-         0IQg==
-X-Gm-Message-State: AOAM533O85AdMU9hX+px869SY7k7dcCDoDBwacDLLxmEDpQP+76as1Ny
-        gDbkVlo80wO2SZ6s43Mo741auA==
-X-Google-Smtp-Source: ABdhPJxyBV4lMmdEC9afNAeBvnS7qOJJXJuf2R/sr7FyvukYVdfczUkitscrueNwT/Og6LWrh8CU+g==
-X-Received: by 2002:a62:7705:: with SMTP id s5mr12985932pfc.52.1596045546921;
-        Wed, 29 Jul 2020 10:59:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s125sm1247882pfc.63.2020.07.29.10.59.00
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IR8kl6q02JQVV7/sYzqm1Sm6y7ctVZjq+Lwk1QFsbIY=;
+        b=T9WswjXJ/mayN8XGEOXXf2o3cZ2Y2l8T8zzMuC2D9OWuqpl4uM8O8EAZ0X/Czrsy5Q
+         yEuR19My5OV497gRUuW6yCkMC2QYLXDz2NKRJh3SpIhZ56xj0nponCBZbBoksMe29ZLR
+         ErDX/s+6wdVBHjeNOxpGMAxKPTMrHwk+I5PrW46Xw2tW7dvb9zelgT83iNRuMmiz1R4+
+         i+MP+iCNN1+HgG1OPe0+MBYG1zZh4tID4ljNSfzBeupOco8NuKs1XhWioSWA2prCw3rU
+         pLlL2EhSgrEa6ktOQDzRN8KByZIqBtD4L7o8txwTpbHvJuvz1R/xxf1zdD62vRTw2ePH
+         lkMA==
+X-Gm-Message-State: AOAM532PuTB8bEuSzVlVJQ9RSIWG3m5n8da61U7pV6uKBUEvGkdH/KRG
+        OO5D3lfyzHakAJYLp8DpXXPt4g==
+X-Google-Smtp-Source: ABdhPJzLCTFy8pCLR85PV/ZE79tLd8wUmFZrt7pruhZOb0N5M7MYNCV+YDocdMWsEc9EgXrgW9Dmmg==
+X-Received: by 2002:a37:4185:: with SMTP id o127mr34187889qka.478.1596045534623;
+        Wed, 29 Jul 2020 10:58:54 -0700 (PDT)
+Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
+        by smtp.gmail.com with ESMTPSA id s128sm2026340qkd.108.2020.07.29.10.58.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2020 10:59:04 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>, Jessica Yu <jeyu@kernel.org>,
-        SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 16/17] firmware: Add request_partial_firmware_into_buf()
-Date:   Wed, 29 Jul 2020 10:58:44 -0700
-Message-Id: <20200729175845.1745471-17-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200729175845.1745471-1-keescook@chromium.org>
-References: <20200729175845.1745471-1-keescook@chromium.org>
+        Wed, 29 Jul 2020 10:58:54 -0700 (PDT)
+From:   Vitor Massaru Iha <vitor@massaru.org>
+To:     kunit-dev@googlegroups.com
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brendanhiggins@google.com, skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        andy.shevchenko@gmail.com, johannes@sipsolutions.net,
+        kvalo@codeaurora.org
+Subject: [PATCH] lib: kunit: add bitfield test conversion to KUnit
+Date:   Wed, 29 Jul 2020 14:58:49 -0300
+Message-Id: <20200729175849.148332-1-vitor@massaru.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -70,330 +66,253 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Scott Branden <scott.branden@broadcom.com>
+This adds the conversion of the runtime tests of test_bitfield,
+from `lib/test_bitfield.c` to KUnit tests.
 
-Add request_partial_firmware_into_buf() to allow for portions of a
-firmware file to be read into a buffer. This is needed when large firmware
-must be loaded in portions from a file on memory constrained systems.
+Please apply this commit first (linux-kselftest/kunit-fixes):
+3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-Co-developed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Code Style Documentation: [0]
+
+Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+Link: [0] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/T/#u
 ---
- drivers/base/firmware_loader/firmware.h |   4 +
- drivers/base/firmware_loader/main.c     | 101 +++++++++++++++++++-----
- include/linux/firmware.h                |  12 +++
- 3 files changed, 99 insertions(+), 18 deletions(-)
+ lib/Kconfig.debug                         | 23 ++++--
+ lib/Makefile                              |  2 +-
+ lib/{test_bitfield.c => bitfield_kunit.c} | 92 ++++++++++-------------
+ 3 files changed, 57 insertions(+), 60 deletions(-)
+ rename lib/{test_bitfield.c => bitfield_kunit.c} (66%)
 
-diff --git a/drivers/base/firmware_loader/firmware.h b/drivers/base/firmware_loader/firmware.h
-index 7ad5fe52bc72..3f6eda46b3a2 100644
---- a/drivers/base/firmware_loader/firmware.h
-+++ b/drivers/base/firmware_loader/firmware.h
-@@ -32,6 +32,8 @@
-  * @FW_OPT_FALLBACK_PLATFORM: Enable fallback to device fw copy embedded in
-  *	the platform's main firmware. If both this fallback and the sysfs
-  *      fallback are enabled, then this fallback will be tried first.
-+ * @FW_OPT_PARTIAL: Allow partial read of firmware instead of needing to read
-+ *	entire file.
-  */
- enum fw_opt {
- 	FW_OPT_UEVENT			= BIT(0),
-@@ -41,6 +43,7 @@ enum fw_opt {
- 	FW_OPT_NOCACHE			= BIT(4),
- 	FW_OPT_NOFALLBACK_SYSFS		= BIT(5),
- 	FW_OPT_FALLBACK_PLATFORM	= BIT(6),
-+	FW_OPT_PARTIAL			= BIT(7),
- };
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 9ad9210d70a1..16c5574bf103 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1986,13 +1986,6 @@ config TEST_BITMAP
  
- enum fw_status {
-@@ -68,6 +71,7 @@ struct fw_priv {
- 	void *data;
- 	size_t size;
- 	size_t allocated_size;
-+	size_t offset;
- 	u32 opt_flags;
- #ifdef CONFIG_FW_LOADER_PAGED_BUF
- 	bool is_paged_buf;
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 67d8afa91ae0..54c5d57b6327 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -170,10 +170,19 @@ static struct fw_priv *__allocate_fw_priv(const char *fw_name,
- 					  struct firmware_cache *fwc,
- 					  void *dbuf,
- 					  size_t size,
-+					  size_t offset,
- 					  u32 opt_flags)
- {
- 	struct fw_priv *fw_priv;
+ 	  If unsure, say N.
  
-+	/* For a partial read, the buffer must be preallocated. */
-+	if ((opt_flags & FW_OPT_PARTIAL) && !dbuf)
-+		return NULL;
-+
-+	/* Only partial reads are allowed to use an offset. */
-+	if (offset != 0 && !(opt_flags & FW_OPT_PARTIAL))
-+		return NULL;
-+
- 	fw_priv = kzalloc(sizeof(*fw_priv), GFP_ATOMIC);
- 	if (!fw_priv)
- 		return NULL;
-@@ -188,6 +197,7 @@ static struct fw_priv *__allocate_fw_priv(const char *fw_name,
- 	fw_priv->fwc = fwc;
- 	fw_priv->data = dbuf;
- 	fw_priv->allocated_size = size;
-+	fw_priv->offset = offset;
- 	fw_priv->opt_flags = opt_flags;
- 	fw_state_init(fw_priv);
- #ifdef CONFIG_FW_LOADER_USER_HELPER
-@@ -216,12 +226,17 @@ static int alloc_lookup_fw_priv(const char *fw_name,
- 				struct fw_priv **fw_priv,
- 				void *dbuf,
- 				size_t size,
-+				size_t offset,
- 				u32 opt_flags)
- {
- 	struct fw_priv *tmp;
- 
- 	spin_lock(&fwc->lock);
--	if (!(opt_flags & FW_OPT_NOCACHE)) {
-+	/*
-+	 * Do not merge requests that are marked to be non-cached or
-+	 * are performing partial reads.
-+	 */
-+	if (!(opt_flags & (FW_OPT_NOCACHE | FW_OPT_PARTIAL))) {
- 		tmp = __lookup_fw_priv(fw_name);
- 		if (tmp) {
- 			kref_get(&tmp->ref);
-@@ -232,7 +247,7 @@ static int alloc_lookup_fw_priv(const char *fw_name,
- 		}
- 	}
- 
--	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size, opt_flags);
-+	tmp = __allocate_fw_priv(fw_name, fwc, dbuf, size, offset, opt_flags);
- 	if (tmp) {
- 		INIT_LIST_HEAD(&tmp->list);
- 		if (!(opt_flags & FW_OPT_NOCACHE))
-@@ -485,6 +500,9 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 		return -ENOMEM;
- 
- 	for (i = 0; i < ARRAY_SIZE(fw_path); i++) {
-+		size_t file_size = 0;
-+		size_t *file_size_ptr = NULL;
-+
- 		/* skip the unset customized path */
- 		if (!fw_path[i][0])
- 			continue;
-@@ -498,9 +516,18 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
- 
- 		fw_priv->size = 0;
- 
-+		/*
-+		 * The total file size is only examined when doing a partial
-+		 * read; the "full read" case needs to fail if the whole
-+		 * firmware was not completely loaded.
-+		 */
-+		if ((fw_priv->opt_flags & FW_OPT_PARTIAL) && buffer)
-+			file_size_ptr = &file_size;
-+
- 		/* load firmware files from the mount namespace of init */
--		rc = kernel_read_file_from_path_initns(path, 0, &buffer, msize,
--						       NULL,
-+		rc = kernel_read_file_from_path_initns(path, fw_priv->offset,
-+						       &buffer, msize,
-+						       file_size_ptr,
- 						       READING_FIRMWARE);
- 		if (rc < 0) {
- 			if (rc != -ENOENT)
-@@ -691,7 +718,7 @@ int assign_fw(struct firmware *fw, struct device *device)
- static int
- _request_firmware_prepare(struct firmware **firmware_p, const char *name,
- 			  struct device *device, void *dbuf, size_t size,
--			  u32 opt_flags)
-+			  size_t offset, u32 opt_flags)
- {
- 	struct firmware *firmware;
- 	struct fw_priv *fw_priv;
-@@ -710,7 +737,7 @@ _request_firmware_prepare(struct firmware **firmware_p, const char *name,
- 	}
- 
- 	ret = alloc_lookup_fw_priv(name, &fw_cache, &fw_priv, dbuf, size,
--				  opt_flags);
-+				   offset, opt_flags);
- 
- 	/*
- 	 * bind with 'priv' now to avoid warning in failure path
-@@ -757,9 +784,10 @@ static void fw_abort_batch_reqs(struct firmware *fw)
- static int
- _request_firmware(const struct firmware **firmware_p, const char *name,
- 		  struct device *device, void *buf, size_t size,
--		  u32 opt_flags)
-+		  size_t offset, u32 opt_flags)
- {
- 	struct firmware *fw = NULL;
-+	bool nondirect = false;
- 	int ret;
- 
- 	if (!firmware_p)
-@@ -771,18 +799,22 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 	}
- 
- 	ret = _request_firmware_prepare(&fw, name, device, buf, size,
--					opt_flags);
-+					offset, opt_flags);
- 	if (ret <= 0) /* error or already assigned */
- 		goto out;
- 
- 	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
-+
-+	/* Only full reads can support decompression, platform, and sysfs. */
-+	if (!(opt_flags & FW_OPT_PARTIAL))
-+		nondirect = true;
-+
- #ifdef CONFIG_FW_LOADER_COMPRESS
--	if (ret == -ENOENT)
-+	if (ret == -ENOENT && nondirect)
- 		ret = fw_get_filesystem_firmware(device, fw->priv, ".xz",
- 						 fw_decompress_xz);
- #endif
+-config TEST_BITFIELD
+-	tristate "Test bitfield functions at runtime"
+-	help
+-	  Enable this option to test the bitfield functions at boot.
 -
--	if (ret == -ENOENT)
-+	if (ret == -ENOENT && nondirect)
- 		ret = firmware_fallback_platform(fw->priv);
+-	  If unsure, say N.
+-
+ config TEST_UUID
+ 	tristate "Test functions located in the uuid module at runtime"
  
- 	if (ret) {
-@@ -790,7 +822,9 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 			dev_warn(device,
- 				 "Direct firmware load for %s failed with error %d\n",
- 				 name, ret);
--		ret = firmware_fallback_sysfs(fw, name, device, opt_flags, ret);
-+		if (nondirect)
-+			ret = firmware_fallback_sysfs(fw, name, device,
-+						      opt_flags, ret);
- 	} else
- 		ret = assign_fw(fw, device);
+@@ -2142,6 +2135,22 @@ config TEST_SYSCTL
  
-@@ -833,7 +867,7 @@ request_firmware(const struct firmware **firmware_p, const char *name,
+ 	  If unsure, say N.
  
- 	/* Need to pin this module until return */
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware_p, name, device, NULL, 0,
-+	ret = _request_firmware(firmware_p, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT);
- 	module_put(THIS_MODULE);
- 	return ret;
-@@ -860,7 +894,7 @@ int firmware_request_nowarn(const struct firmware **firmware, const char *name,
++config BITFIELD_KUNIT
++	tristate "KUnit test bitfield functions at runtime"
++	depends on KUNIT
++	help
++	  Enable this option to test the bitfield functions at boot.
++
++	  KUnit tests run during boot and output the results to the debug log
++	  in TAP format (http://testanything.org/). Only useful for kernel devs
++	  running the KUnit test harness, and not intended for inclusion into a
++	  production build.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config SYSCTL_KUNIT_TEST
+ 	tristate "KUnit test for sysctl" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+diff --git a/lib/Makefile b/lib/Makefile
+index b1c42c10073b..56019c34f5ed 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -84,7 +84,6 @@ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
+ obj-$(CONFIG_TEST_PRINTF) += test_printf.o
+ obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
+ obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
+-obj-$(CONFIG_TEST_BITFIELD) += test_bitfield.o
+ obj-$(CONFIG_TEST_UUID) += test_uuid.o
+ obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
+ obj-$(CONFIG_TEST_PARMAN) += test_parman.o
+@@ -316,5 +315,6 @@ obj-$(CONFIG_GENERIC_LIB_UCMPDI2) += ucmpdi2.o
+ obj-$(CONFIG_OBJAGG) += objagg.o
  
- 	/* Need to pin this module until return */
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware, name, device, NULL, 0,
-+	ret = _request_firmware(firmware, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT | FW_OPT_NO_WARN);
- 	module_put(THIS_MODULE);
- 	return ret;
-@@ -884,7 +918,7 @@ int request_firmware_direct(const struct firmware **firmware_p,
- 	int ret;
+ # KUnit tests
++obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+diff --git a/lib/test_bitfield.c b/lib/bitfield_kunit.c
+similarity index 66%
+rename from lib/test_bitfield.c
+rename to lib/bitfield_kunit.c
+index 5b8f4108662d..d63a2be5aff8 100644
+--- a/lib/test_bitfield.c
++++ b/lib/bitfield_kunit.c
+@@ -5,8 +5,7 @@
  
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware_p, name, device, NULL, 0,
-+	ret = _request_firmware(firmware_p, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT | FW_OPT_NO_WARN |
- 				FW_OPT_NOFALLBACK_SYSFS);
- 	module_put(THIS_MODULE);
-@@ -909,7 +943,7 @@ int firmware_request_platform(const struct firmware **firmware,
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- 	/* Need to pin this module until return */
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware, name, device, NULL, 0,
-+	ret = _request_firmware(firmware, name, device, NULL, 0, 0,
- 				FW_OPT_UEVENT | FW_OPT_FALLBACK_PLATFORM);
- 	module_put(THIS_MODULE);
- 	return ret;
-@@ -965,13 +999,44 @@ request_firmware_into_buf(const struct firmware **firmware_p, const char *name,
- 		return -EOPNOTSUPP;
+-#include <linux/kernel.h>
+-#include <linux/module.h>
++#include <kunit/test.h>
+ #include <linux/bitfield.h>
  
- 	__module_get(THIS_MODULE);
--	ret = _request_firmware(firmware_p, name, device, buf, size,
-+	ret = _request_firmware(firmware_p, name, device, buf, size, 0,
- 				FW_OPT_UEVENT | FW_OPT_NOCACHE);
- 	module_put(THIS_MODULE);
- 	return ret;
+ #define CHECK_ENC_GET_U(tp, v, field, res) do {				\
+@@ -14,13 +13,11 @@
+ 			u##tp _res;					\
+ 									\
+ 			_res = u##tp##_encode_bits(v, field);		\
+-			if (_res != res) {				\
+-				pr_warn("u" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != " #res "\n",\
+-					(u64)_res);			\
+-				return -EINVAL;				\
+-			}						\
+-			if (u##tp##_get_bits(_res, field) != v)		\
+-				return -EINVAL;				\
++			KUNIT_ASSERT_FALSE_MSG(context, _res != res,	\
++				       "u" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != " #res "\n",	\
++				       (u64)_res);			\
++			KUNIT_ASSERT_FALSE(context,			\
++				   u##tp##_get_bits(_res, field) != v);	\
+ 		}							\
+ 	} while (0)
+ 
+@@ -29,14 +26,13 @@
+ 			__le##tp _res;					\
+ 									\
+ 			_res = le##tp##_encode_bits(v, field);		\
+-			if (_res != cpu_to_le##tp(res)) {		\
+-				pr_warn("le" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx\n",\
+-					(u64)le##tp##_to_cpu(_res),	\
+-					(u64)(res));			\
+-				return -EINVAL;				\
+-			}						\
+-			if (le##tp##_get_bits(_res, field) != v)	\
+-				return -EINVAL;				\
++			KUNIT_ASSERT_FALSE_MSG(context,			\
++				       _res != cpu_to_le##tp(res),	\
++				       "le" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx",\
++				       (u64)le##tp##_to_cpu(_res),	\
++				       (u64)(res));			\
++			KUNIT_ASSERT_FALSE(context,			\
++				   le##tp##_get_bits(_res, field) != v);\
+ 		}							\
+ 	} while (0)
+ 
+@@ -45,14 +41,13 @@
+ 			__be##tp _res;					\
+ 									\
+ 			_res = be##tp##_encode_bits(v, field);		\
+-			if (_res != cpu_to_be##tp(res)) {		\
+-				pr_warn("be" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx\n",\
+-					(u64)be##tp##_to_cpu(_res),	\
+-					(u64)(res));			\
+-				return -EINVAL;				\
+-			}						\
+-			if (be##tp##_get_bits(_res, field) != v)	\
+-				return -EINVAL;				\
++			KUNIT_ASSERT_FALSE_MSG(context,			\
++				       _res != cpu_to_be##tp(res),	\
++				       "be" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx",	\
++				       (u64)be##tp##_to_cpu(_res),	\
++				       (u64)(res));			\
++			KUNIT_ASSERT_FALSE(context,			\
++				   be##tp##_get_bits(_res, field) != v);\
+ 		}							\
+ 	} while (0)
+ 
+@@ -62,7 +57,7 @@
+ 		CHECK_ENC_GET_BE(tp, v, field, res);			\
+ 	} while (0)
+ 
+-static int test_constants(void)
++static void __init test_bitfields_constants(struct kunit *context)
+ {
+ 	/*
+ 	 * NOTE
+@@ -95,19 +90,17 @@ static int test_constants(void)
+ 	CHECK_ENC_GET(64,  7, 0x00f0000000000000ull, 0x0070000000000000ull);
+ 	CHECK_ENC_GET(64, 14, 0x0f00000000000000ull, 0x0e00000000000000ull);
+ 	CHECK_ENC_GET(64, 15, 0xf000000000000000ull, 0xf000000000000000ull);
+-
+-	return 0;
  }
- EXPORT_SYMBOL(request_firmware_into_buf);
  
-+/**
-+ * request_partial_firmware_into_buf() - load partial firmware into a previously allocated buffer
-+ * @firmware_p: pointer to firmware image
-+ * @name: name of firmware file
-+ * @device: device for which firmware is being loaded and DMA region allocated
-+ * @buf: address of buffer to load firmware into
-+ * @size: size of buffer
-+ * @offset: offset into file to read
-+ *
-+ * This function works pretty much like request_firmware_into_buf except
-+ * it allows a partial read of the file.
-+ */
-+int
-+request_partial_firmware_into_buf(const struct firmware **firmware_p,
-+				  const char *name, struct device *device,
-+				  void *buf, size_t size, size_t offset)
-+{
-+	int ret;
-+
-+	if (fw_cache_is_setup(device, name))
-+		return -EOPNOTSUPP;
-+
-+	__module_get(THIS_MODULE);
-+	ret = _request_firmware(firmware_p, name, device, buf, size, offset,
-+				FW_OPT_UEVENT | FW_OPT_NOCACHE |
-+				FW_OPT_PARTIAL);
-+	module_put(THIS_MODULE);
-+	return ret;
-+}
-+EXPORT_SYMBOL(request_partial_firmware_into_buf);
-+
- /**
-  * release_firmware() - release the resource associated with a firmware image
-  * @fw: firmware resource to release
-@@ -1004,7 +1069,7 @@ static void request_firmware_work_func(struct work_struct *work)
+ #define CHECK(tp, mask) do {						\
+ 		u64 v;							\
+ 									\
+ 		for (v = 0; v < 1 << hweight32(mask); v++)		\
+-			if (tp##_encode_bits(v, mask) != v << __ffs64(mask)) \
+-				return -EINVAL;				\
++			KUNIT_ASSERT_FALSE(context,			\
++				tp##_encode_bits(v, mask) != v << __ffs64(mask));\
+ 	} while (0)
  
- 	fw_work = container_of(work, struct firmware_work, work);
- 
--	_request_firmware(&fw, fw_work->name, fw_work->device, NULL, 0,
-+	_request_firmware(&fw, fw_work->name, fw_work->device, NULL, 0, 0,
- 			  fw_work->opt_flags);
- 	fw_work->cont(fw, fw_work->context);
- 	put_device(fw_work->device); /* taken in request_firmware_nowait() */
-diff --git a/include/linux/firmware.h b/include/linux/firmware.h
-index cb3e2c06ed8a..c15acadc6cf4 100644
---- a/include/linux/firmware.h
-+++ b/include/linux/firmware.h
-@@ -53,6 +53,9 @@ int request_firmware_direct(const struct firmware **fw, const char *name,
- 			    struct device *device);
- int request_firmware_into_buf(const struct firmware **firmware_p,
- 	const char *name, struct device *device, void *buf, size_t size);
-+int request_partial_firmware_into_buf(const struct firmware **firmware_p,
-+				      const char *name, struct device *device,
-+				      void *buf, size_t size, size_t offset);
- 
- void release_firmware(const struct firmware *fw);
- #else
-@@ -102,6 +105,15 @@ static inline int request_firmware_into_buf(const struct firmware **firmware_p,
- 	return -EINVAL;
+-static int test_variables(void)
++static void __init test_bitfields_variables(struct kunit *context)
+ {
+ 	CHECK(u8, 0x0f);
+ 	CHECK(u8, 0xf0);
+@@ -130,39 +123,34 @@ static int test_variables(void)
+ 	CHECK(u64, 0x000000007f000000ull);
+ 	CHECK(u64, 0x0000000018000000ull);
+ 	CHECK(u64, 0x0000001f8000000ull);
+-
+-	return 0;
  }
  
-+static inline int request_partial_firmware_into_buf
-+					(const struct firmware **firmware_p,
-+					 const char *name,
-+					 struct device *device,
-+					 void *buf, size_t size, size_t offset)
+-static int __init test_bitfields(void)
+-{
+-	int ret = test_constants();
+-
+-	if (ret) {
+-		pr_warn("constant tests failed!\n");
+-		return ret;
+-	}
+-
+-	ret = test_variables();
+-	if (ret) {
+-		pr_warn("variable tests failed!\n");
+-		return ret;
+-	}
+ 
+-#ifdef TEST_BITFIELD_COMPILE
++static void __init test_bitfields_compile(struct kunit *context)
 +{
-+	return -EINVAL;
+ 	/* these should fail compilation */
+ 	CHECK_ENC_GET(16, 16, 0x0f00, 0x1000);
+ 	u32_encode_bits(7, 0x06000000);
+ 
+ 	/* this should at least give a warning */
+ 	u16_encode_bits(0, 0x60000);
 +}
 +
++static struct kunit_case __refdata bitfields_test_cases[] = {
++	KUNIT_CASE(test_bitfields_constants),
++	KUNIT_CASE(test_bitfields_variables),
++#ifdef TEST_BITFIELD_COMPILE
++	KUNIT_CASE(test_bitfields_compile),
  #endif
++	{}
++};
  
- int firmware_request_cache(struct device *device, const char *name);
+-	pr_info("tests passed\n");
++static struct kunit_suite bitfields_test_suite = {
++	.name = "bitfields",
++	.test_cases = bitfields_test_cases,
++};
+ 
+-	return 0;
+-}
+-module_init(test_bitfields)
++kunit_test_suites(&bitfields_test_suite);
+ 
+ MODULE_AUTHOR("Johannes Berg <johannes@sipsolutions.net>");
+ MODULE_LICENSE("GPL");
+
+base-commit: d43c7fb05765152d4d4a39a8ef957c4ea14d8847
 -- 
-2.25.1
+2.26.2
 
