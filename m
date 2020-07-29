@@ -2,144 +2,237 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1729F232470
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jul 2020 20:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8925F23251A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jul 2020 21:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbgG2SKf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jul 2020 14:10:35 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64962 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726606AbgG2SKf (ORCPT
+        id S1726644AbgG2TL6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jul 2020 15:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726606AbgG2TL6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jul 2020 14:10:35 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06TI2PS1002494;
-        Wed, 29 Jul 2020 14:10:30 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32jj2kje5a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jul 2020 14:10:30 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06TI6LbS027311;
-        Wed, 29 Jul 2020 18:10:28 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 32gcpx5c3u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jul 2020 18:10:27 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06TIAPKc21561680
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Jul 2020 18:10:25 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D241C4203F;
-        Wed, 29 Jul 2020 18:10:25 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 059A042049;
-        Wed, 29 Jul 2020 18:10:20 +0000 (GMT)
-Received: from sig-9-65-244-68.ibm.com (unknown [9.65.244.68])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 29 Jul 2020 18:10:19 +0000 (GMT)
-Message-ID: <e6f7ce4aa506ff016dde9a75c607849587c1ca2c.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 12/19] firmware_loader: Use security_post_load_data()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 29 Jul 2020 14:10:18 -0400
-In-Reply-To: <e5ed8876b9907315c2a906ab248639ea8c6d2cd5.camel@linux.ibm.com>
-References: <20200724213640.389191-1-keescook@chromium.org>
-         <20200724213640.389191-13-keescook@chromium.org>
-         <1595847465.4841.63.camel@kernel.org> <202007281242.B6016AE4B@keescook>
-         <e5ed8876b9907315c2a906ab248639ea8c6d2cd5.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-29_13:2020-07-29,2020-07-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- bulkscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 phishscore=0
- clxscore=1015 mlxlogscore=999 suspectscore=3 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007290120
+        Wed, 29 Jul 2020 15:11:58 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127B5C0619D2
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 12:11:58 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id j187so23285494qke.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 12:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JiXGvEaxlR+R/poUy+KkKDbPSSxw+vYE0tU7qSg7Gr0=;
+        b=QQyoFB/3QZEIbqjLrh11jmrIQZShit6LKFxmT1o2Ns8Njgxj/67t76WMxdNauZLpS4
+         xggeFCt7js2asoG0lTI31libhtwx/Lf2xwN4/IrW7bnpfpxZd5bhcYk4HzKyIOeIiorP
+         8/zPd7XdHYxn8xGkUSF4VZBxeKK8Sn5ZR2a9eS19DPoml2a8U4MV22tXnE6MWjKbyjBu
+         FlGRUBXIKokZJcw+PnvLDfFUTnNTffEzcRlyUu3NSnYDaNYHhZ91WTjvs0q0ZJwfWLFW
+         w9tgtFmu70K9611GmIQrGq2lAfz20yktcmYJEql5EpU25w+vk/V5UpzcRAuem45Do2qW
+         qXMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JiXGvEaxlR+R/poUy+KkKDbPSSxw+vYE0tU7qSg7Gr0=;
+        b=KUeJdBdg75pgqRcWeeCi2j47kl3S+C3wk1diKCIfgqVk2UQNnzC+abpXlnq9uoab/e
+         LDL44ST4xvWyRiMzf6SwLsAE+wwwNP8yijftV6sUjLe6vRsWH08y+UFC/Jvi2Km970k0
+         4jZ3yRKbLNuWBc2HcEsyWHMuPGb9nh6ZUoyFWobjTnj1MjAaqtH228TErUNN1HYTcSxm
+         /ey/O/Sc4vhFdrF+X4uOJd+EuELC4UUTKJWBLUiOVUCX8+f8fhRq11ShibqASAng5jc6
+         f0bw9QU8ypNGmWLCt1T49VUmFZ0Y/cJKZh5QO8XRNjJVKexRM5/Mb//DKGH9ha7CXTFw
+         PXLQ==
+X-Gm-Message-State: AOAM533nMGG9ovo2H0qqZmxQy6+9UaehabiDX0NFovALdrIX5nuUbnT6
+        k9XSAb2EtwXWkX0r5d7OnTJMsIZQvgkv8c4A
+X-Google-Smtp-Source: ABdhPJzdBKqmAa7A60uajE8zyLjbuhxiZgjk+/Vh30Ar+K7BeZ3r90QOcK/43nsamnzbaFjsmAZ5NA==
+X-Received: by 2002:a05:620a:4d9:: with SMTP id 25mr29737348qks.411.1596049917086;
+        Wed, 29 Jul 2020 12:11:57 -0700 (PDT)
+Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
+        by smtp.gmail.com with ESMTPSA id o187sm2270967qkd.112.2020.07.29.12.11.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2020 12:11:56 -0700 (PDT)
+From:   Vitor Massaru Iha <vitor@massaru.org>
+To:     kunit-dev@googlegroups.com
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brendanhiggins@google.com, skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        gregkh@linuxfoundation.org, tglx@linutronix.de, fkostenzer@live.at,
+        andriy.shevchenko@linux.intel.com, geert@linux-m68k.org,
+        paul.gortmaker@windriver.com, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org
+Subject: [PATCH v2] lib: kunit: Convert test_sort to KUnit test
+Date:   Wed, 29 Jul 2020 16:11:51 -0300
+Message-Id: <20200729191151.476368-1-vitor@massaru.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2020-07-29 at 12:29 -0400, Mimi Zohar wrote:
-> On Tue, 2020-07-28 at 12:43 -0700, Kees Cook wrote:
-> > On Mon, Jul 27, 2020 at 06:57:45AM -0400, Mimi Zohar wrote:
-> > > On Fri, 2020-07-24 at 14:36 -0700, Kees Cook wrote:
-> > > > Now that security_post_load_data() is wired up, use it instead
-> > > > of the NULL file argument style of security_post_read_file(),
-> > > > and update the security_kernel_load_data() call to indicate that a
-> > > > security_kernel_post_load_data() call is expected.
-> > > > 
-> > > > Wire up the IMA check to match earlier logic. Perhaps a generalized
-> > > > change to ima_post_load_data() might look something like this:
-> > > > 
-> > > >     return process_buffer_measurement(buf, size,
-> > > >                                       kernel_load_data_id_str(load_id),
-> > > >                                       read_idmap[load_id] ?: FILE_CHECK,
-> > > >                                       0, NULL);
-> > > > 
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > 
-> > > process_measurement() measures, verifies a file signature -  both
-> > > signatures stored as an xattr and as an appended buffer signature -
-> > > and augments audit records with the file hash. (Support for measuring,
-> > > augmenting audit records, and/or verifying fs-verity signatures has
-> > > yet to be added.)
-> > > 
-> > > As explained in my response to 11/19, the file descriptor provides the
-> > > file pathname associated with the buffer data.  In addition, IMA
-> > > policy rules may be defined in terms of other file descriptor info -
-> > > uid, euid, uuid, etc.
-> > > 
-> > > Recently support was added for measuring the kexec boot command line,
-> > > certificates being loaded onto a keyring, and blacklisted file hashes
-> > > (limited to appended signatures).  None of these buffers are signed.
-> > >  process_buffer_measurement() was added for this reason and as a
-> > > result is limited to just measuring the buffer data.
-> > > 
-> > > Whether process_measurement() or process_buffer_measurement() should
-> > > be modified, needs to be determined.  In either case to support the
-> > > init_module syscall, would at minimum require the associated file
-> > > pathname.
-> > 
-> > Right -- I don't intend to make changes to the init_module() syscall
-> > since it's deprecated, so this hook is more of a "fuller LSM coverage
-> > for old syscalls" addition.
-> > 
-> > IMA can happily continue to ignore it, which is what I have here, but I
-> > thought I'd at least show what it *might* look like. Perhaps BPF LSM is
-> > a better example.
-> > 
-> > Does anything need to change for this patch?
-> 
-> I wasn't aware that init_syscall was deprecated.  From your original comments,
-> it sounded like you wanted a new LSM for verifying kernel module signatures,
-> as
-> they're currently supported via init_module().
-> 
-> I was mistaken.  Without a file descriptor, security_post_load_data() will
-> measure the firmware, as Scott confirmed, but won't be able to verify the
-> signature, whether he signed it using evmctl or not,
+This adds the conversion of the test_sort.c to KUnit test.
 
-Actually, the partial firmware read should be calling
-security_kernel_read_file().  The sysfs firmware fallback is calling
-security_kernel_load_data().  Which firmware is calling
-security_kernel_post_load_data()?
+Please apply this commit first (linux-kselftest/kunit-fixes):
+3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
 
-thanks,
+Code Style Documentation: [0]
 
-Mimi
+Fix these warnings Reported-by lkp@intel.com
+
+WARNING: modpost: vmlinux.o(.data+0x4fc70): Section mismatch in reference from the variable sort_test_cases to the variable .init.text:sort_test
+   The variable sort_test_cases references
+   the variable __init sort_test
+   If the reference is valid then annotate the
+   variable with or __refdata (see linux/init.h) or name the variable
+
+WARNING: modpost: lib/sort_kunit.o(.data+0x11c): Section mismatch in reference from the variable sort_test_cases to the function .init.text:sort_test()
+   The variable sort_test_cases references
+   the function __init sort_test()
+
+Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: [0] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/T/#u
+---
+v2:
+    * Add Kunit Code Style reference in commit message;
+    * Fix lkp@intel.com warning report;
+---
+ lib/Kconfig.debug                 | 26 +++++++++++++++++---------
+ lib/Makefile                      |  2 +-
+ lib/{test_sort.c => sort_kunit.c} | 31 +++++++++++++++----------------
+ 3 files changed, 33 insertions(+), 26 deletions(-)
+ rename lib/{test_sort.c => sort_kunit.c} (55%)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 9ad9210d70a1..1fe19e78d7ca 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1874,15 +1874,6 @@ config TEST_MIN_HEAP
+
+ 	  If unsure, say N.
+
+-config TEST_SORT
+-	tristate "Array-based sort test"
+-	depends on DEBUG_KERNEL || m
+-	help
+-	  This option enables the self-test function of 'sort()' at boot,
+-	  or at module load time.
+-
+-	  If unsure, say N.
+-
+ config KPROBES_SANITY_TEST
+ 	bool "Kprobes sanity tests"
+ 	depends on DEBUG_KERNEL
+@@ -2185,6 +2176,23 @@ config LINEAR_RANGES_TEST
+
+ 	  If unsure, say N.
+
++config SORT_KUNIT
++	tristate "KUnit test for Array-based sort"
++	depends on DEBUG_KERNEL || m
++	help
++	  This option enables the KUnit function of 'sort()' at boot,
++	  or at module load time.
++
++	  KUnit tests run during boot and output the results to the debug log
++	  in TAP format (http://testanything.org/). Only useful for kernel devs
++	  running the KUnit test harness, and not intended for inclusion into a
++	  production build.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index b1c42c10073b..c22bb13b0a08 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -77,7 +77,6 @@ obj-$(CONFIG_TEST_LKM) += test_module.o
+ obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
+ obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
+ obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
+-obj-$(CONFIG_TEST_SORT) += test_sort.o
+ obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
+ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
+ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
+@@ -318,3 +317,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
+ # KUnit tests
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
++obj-$(CONFIG_SORT_KUNIT) += sort_kunit.o
+diff --git a/lib/test_sort.c b/lib/sort_kunit.c
+similarity index 55%
+rename from lib/test_sort.c
+rename to lib/sort_kunit.c
+index 52edbe10f2e5..602a234f1e7d 100644
+--- a/lib/test_sort.c
++++ b/lib/sort_kunit.c
+@@ -1,7 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include <linux/sort.h>
+-#include <linux/slab.h>
+-#include <linux/module.h>
++#include <kunit/test.h>
+
+ /* a simple boot-time regression test */
+
+@@ -12,13 +11,12 @@ static int __init cmpint(const void *a, const void *b)
+ 	return *(int *)a - *(int *)b;
+ }
+
+-static int __init test_sort_init(void)
++static void __init sort_test(struct kunit *test)
+ {
+-	int *a, i, r = 1, err = -ENOMEM;
++	int *a, i, r = 1;
+
+ 	a = kmalloc_array(TEST_LEN, sizeof(*a), GFP_KERNEL);
+-	if (!a)
+-		return err;
++	KUNIT_ASSERT_FALSE_MSG(test, a == NULL, "kmalloc_array failed");
+
+ 	for (i = 0; i < TEST_LEN; i++) {
+ 		r = (r * 725861) % 6599;
+@@ -27,24 +25,25 @@ static int __init test_sort_init(void)
+
+ 	sort(a, TEST_LEN, sizeof(*a), cmpint, NULL);
+
+-	err = -EINVAL;
+ 	for (i = 0; i < TEST_LEN-1; i++)
+ 		if (a[i] > a[i+1]) {
+-			pr_err("test has failed\n");
++			KUNIT_FAIL(test, "test has failed");
+ 			goto exit;
+ 		}
+-	err = 0;
+-	pr_info("test passed\n");
+ exit:
+ 	kfree(a);
+-	return err;
+ }
+
+-static void __exit test_sort_exit(void)
+-{
+-}
++static struct kunit_case __refdata sort_test_cases[] = {
++	KUNIT_CASE(sort_test),
++	{}
++};
++
++static struct kunit_suite sort_test_suite = {
++	.name = "sort",
++	.test_cases = sort_test_cases,
++};
+
+-module_init(test_sort_init);
+-module_exit(test_sort_exit);
++kunit_test_suites(&sort_test_suite);
+
+ MODULE_LICENSE("GPL");
+
+base-commit: d43c7fb05765152d4d4a39a8ef957c4ea14d8847
+--
+2.26.2
 
