@@ -2,63 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 696F02323DE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jul 2020 19:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E4E23243B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jul 2020 20:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726857AbgG2R66 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jul 2020 13:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S1727112AbgG2R6z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jul 2020 13:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727020AbgG2R64 (ORCPT
+        with ESMTP id S1726857AbgG2R6z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jul 2020 13:58:56 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F2EC0619DC
+        Wed, 29 Jul 2020 13:58:55 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1D2C0619D2
         for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 10:58:55 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id l6so23082112qkc.6
+Received: by mail-pg1-x541.google.com with SMTP id l12so3599998pgt.13
         for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 10:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IR8kl6q02JQVV7/sYzqm1Sm6y7ctVZjq+Lwk1QFsbIY=;
-        b=CXPoDUsEGcDQYbZMW+Rn6nD+0PCCPwiwRLZExgj5iUx1tW06qD45DsVfCnJnkTXJeq
-         pnTo4s7uRNKDygqcufUAMIrMxLqiKqrqI0a6JW/IKEsTTCLVWji4LA3kwZMTDxoo87WO
-         c56vVUR2OKwY9BtXTqUAqdPYnfzp0vBso1Yp5f87ObH63BWUUDhoXA3VjCZlGm+G0Tez
-         ZxxRTyWNuUBYDqyUFHkIOv+vUH6Ko0pZH6ANv+x84zO85KRARuwNvLkSzMxU8GAInQz3
-         e34Wb2/H97fjDaWiJ9hDjt9zLuisSiK0hmvFMa8F9SpWbG75282gnMNA452o+iG+EC8U
-         TrTQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DgMrXVVefzee5XLvUUvLofSlFR2vFY36qKFP1IS3s/M=;
+        b=ecnAksZk8u482WqjHzXgmErEsJOgZFCFls0F0FtO7QmdHTAAGDaWiu+nlxfcYYLD/d
+         vOqlPliWbWinlSxtuqmjAy7Ruxwd6be6qQHWGBiByabdvGPPs65frNOVSJCZRjLZGs7F
+         RFwB+vTeBV8v3277ad97fHgeSGQl8zzdLnaqs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IR8kl6q02JQVV7/sYzqm1Sm6y7ctVZjq+Lwk1QFsbIY=;
-        b=T9WswjXJ/mayN8XGEOXXf2o3cZ2Y2l8T8zzMuC2D9OWuqpl4uM8O8EAZ0X/Czrsy5Q
-         yEuR19My5OV497gRUuW6yCkMC2QYLXDz2NKRJh3SpIhZ56xj0nponCBZbBoksMe29ZLR
-         ErDX/s+6wdVBHjeNOxpGMAxKPTMrHwk+I5PrW46Xw2tW7dvb9zelgT83iNRuMmiz1R4+
-         i+MP+iCNN1+HgG1OPe0+MBYG1zZh4tID4ljNSfzBeupOco8NuKs1XhWioSWA2prCw3rU
-         pLlL2EhSgrEa6ktOQDzRN8KByZIqBtD4L7o8txwTpbHvJuvz1R/xxf1zdD62vRTw2ePH
-         lkMA==
-X-Gm-Message-State: AOAM532PuTB8bEuSzVlVJQ9RSIWG3m5n8da61U7pV6uKBUEvGkdH/KRG
-        OO5D3lfyzHakAJYLp8DpXXPt4g==
-X-Google-Smtp-Source: ABdhPJzLCTFy8pCLR85PV/ZE79tLd8wUmFZrt7pruhZOb0N5M7MYNCV+YDocdMWsEc9EgXrgW9Dmmg==
-X-Received: by 2002:a37:4185:: with SMTP id o127mr34187889qka.478.1596045534623;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DgMrXVVefzee5XLvUUvLofSlFR2vFY36qKFP1IS3s/M=;
+        b=qCkDaXVDtRRVHaeih/IjW5mhp8DJ2TSqRgL0iht8FFwFuRzr5d2L9KT7rL89GLVscS
+         Ftq2SjOi6osQAzSNzk70TigKe6E0EhB/Y8gKDMBPGGPXD9NDV4TzQV3p07iWVkpcY+Ax
+         /3f9TLxhpjwGlS4nnKX7x3f4J81DvhN47Qv17W8IPYiZzdyYZesZu5RqjW85N1IDUiTk
+         +tZuLtD3LwDyfFLjPttjmNJCIO7Q+qhjgxPzR5aYf14GyVgTz13OXR/I8ztjb9bckdon
+         YpYMEpN/FuSh4VTfekg72eeSYrHBMLAO2F5HRrBcvhJVnMjG7ZvRpo9Rn1LXn0WmBzgA
+         mTHA==
+X-Gm-Message-State: AOAM5328+gHQcYNYzNCQ6vFgxWMS1juskeimlftHc4pV3QIJFaum8gri
+        t18llN48BGnjNgc2t7R8Wcwl2Q==
+X-Google-Smtp-Source: ABdhPJxhdO2MgDtr62Uppf9UbFVzy8Bb9dXdsSesClNEHtIm2RElCtl0XV+rgMZUKEUflFVUEOGjEg==
+X-Received: by 2002:a63:5349:: with SMTP id t9mr2901760pgl.204.1596045534650;
         Wed, 29 Jul 2020 10:58:54 -0700 (PDT)
-Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id s128sm2026340qkd.108.2020.07.29.10.58.51
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b82sm3185975pfb.215.2020.07.29.10.58.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2020 10:58:54 -0700 (PDT)
-From:   Vitor Massaru Iha <vitor@massaru.org>
-To:     kunit-dev@googlegroups.com
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brendanhiggins@google.com, skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        andy.shevchenko@gmail.com, johannes@sipsolutions.net,
-        kvalo@codeaurora.org
-Subject: [PATCH] lib: kunit: add bitfield test conversion to KUnit
-Date:   Wed, 29 Jul 2020 14:58:49 -0300
-Message-Id: <20200729175849.148332-1-vitor@massaru.org>
-X-Mailer: git-send-email 2.26.2
+        Wed, 29 Jul 2020 10:58:53 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
+        Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>, Takashi Iwai <tiwai@suse.de>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 01/17] test_firmware: Test platform fw loading on non-EFI systems
+Date:   Wed, 29 Jul 2020 10:58:29 -0700
+Message-Id: <20200729175845.1745471-2-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200729175845.1745471-1-keescook@chromium.org>
+References: <20200729175845.1745471-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -66,253 +69,160 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds the conversion of the runtime tests of test_bitfield,
-from `lib/test_bitfield.c` to KUnit tests.
+On non-EFI systems, it wasn't possible to test the platform firmware
+loader because it will have never set "checked_fw" during __init.
+Instead, allow the test code to override this check. Additionally split
+the declarations into a private header file so it there is greater
+enforcement of the symbol visibility.
 
-Please apply this commit first (linux-kselftest/kunit-fixes):
-3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
-
-Code Style Documentation: [0]
-
-Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-Link: [0] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/T/#u
+Fixes: 548193cba2a7 ("test_firmware: add support for firmware_request_platform")
+Cc: stable@vger.kernel.org
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- lib/Kconfig.debug                         | 23 ++++--
- lib/Makefile                              |  2 +-
- lib/{test_bitfield.c => bitfield_kunit.c} | 92 ++++++++++-------------
- 3 files changed, 57 insertions(+), 60 deletions(-)
- rename lib/{test_bitfield.c => bitfield_kunit.c} (66%)
+ drivers/firmware/efi/embedded-firmware.c | 21 ++++++++++++++++-----
+ drivers/firmware/efi/embedded-firmware.h | 21 +++++++++++++++++++++
+ include/linux/efi_embedded_fw.h          | 13 -------------
+ lib/test_firmware.c                      |  5 +++++
+ 4 files changed, 42 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/firmware/efi/embedded-firmware.h
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 9ad9210d70a1..16c5574bf103 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1986,13 +1986,6 @@ config TEST_BITMAP
+diff --git a/drivers/firmware/efi/embedded-firmware.c b/drivers/firmware/efi/embedded-firmware.c
+index a1b199de9006..0fb03cd0a5a2 100644
+--- a/drivers/firmware/efi/embedded-firmware.c
++++ b/drivers/firmware/efi/embedded-firmware.c
+@@ -14,11 +14,22 @@
+ #include <linux/vmalloc.h>
+ #include <crypto/sha.h>
  
- 	  If unsure, say N.
- 
--config TEST_BITFIELD
--	tristate "Test bitfield functions at runtime"
--	help
--	  Enable this option to test the bitfield functions at boot.
++#include "embedded-firmware.h"
++
++#ifdef CONFIG_TEST_FIRMWARE
++# define EFI_EMBEDDED_FW_VISIBILITY
++#else
++# define EFI_EMBEDDED_FW_VISIBILITY static
++#endif
++
++EFI_EMBEDDED_FW_VISIBILITY LIST_HEAD(efi_embedded_fw_list);
++EFI_EMBEDDED_FW_VISIBILITY bool efi_embedded_fw_checked;
++
+ /* Exported for use by lib/test_firmware.c only */
+-LIST_HEAD(efi_embedded_fw_list);
++#ifdef CONFIG_TEST_FIRMWARE
+ EXPORT_SYMBOL_GPL(efi_embedded_fw_list);
 -
--	  If unsure, say N.
--
- config TEST_UUID
- 	tristate "Test functions located in the uuid module at runtime"
+-static bool checked_for_fw;
++EXPORT_SYMBOL_GPL(efi_embedded_fw_checked);
++#endif
  
-@@ -2142,6 +2135,22 @@ config TEST_SYSCTL
+ static const struct dmi_system_id * const embedded_fw_table[] = {
+ #ifdef CONFIG_TOUCHSCREEN_DMI
+@@ -119,14 +130,14 @@ void __init efi_check_for_embedded_firmwares(void)
+ 		}
+ 	}
  
- 	  If unsure, say N.
- 
-+config BITFIELD_KUNIT
-+	tristate "KUnit test bitfield functions at runtime"
-+	depends on KUNIT
-+	help
-+	  Enable this option to test the bitfield functions at boot.
-+
-+	  KUnit tests run during boot and output the results to the debug log
-+	  in TAP format (http://testanything.org/). Only useful for kernel devs
-+	  running the KUnit test harness, and not intended for inclusion into a
-+	  production build.
-+
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config SYSCTL_KUNIT_TEST
- 	tristate "KUnit test for sysctl" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index b1c42c10073b..56019c34f5ed 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -84,7 +84,6 @@ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
- obj-$(CONFIG_TEST_PRINTF) += test_printf.o
- obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
- obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
--obj-$(CONFIG_TEST_BITFIELD) += test_bitfield.o
- obj-$(CONFIG_TEST_UUID) += test_uuid.o
- obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
- obj-$(CONFIG_TEST_PARMAN) += test_parman.o
-@@ -316,5 +315,6 @@ obj-$(CONFIG_GENERIC_LIB_UCMPDI2) += ucmpdi2.o
- obj-$(CONFIG_OBJAGG) += objagg.o
- 
- # KUnit tests
-+obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-diff --git a/lib/test_bitfield.c b/lib/bitfield_kunit.c
-similarity index 66%
-rename from lib/test_bitfield.c
-rename to lib/bitfield_kunit.c
-index 5b8f4108662d..d63a2be5aff8 100644
---- a/lib/test_bitfield.c
-+++ b/lib/bitfield_kunit.c
-@@ -5,8 +5,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
--#include <linux/kernel.h>
--#include <linux/module.h>
-+#include <kunit/test.h>
- #include <linux/bitfield.h>
- 
- #define CHECK_ENC_GET_U(tp, v, field, res) do {				\
-@@ -14,13 +13,11 @@
- 			u##tp _res;					\
- 									\
- 			_res = u##tp##_encode_bits(v, field);		\
--			if (_res != res) {				\
--				pr_warn("u" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != " #res "\n",\
--					(u64)_res);			\
--				return -EINVAL;				\
--			}						\
--			if (u##tp##_get_bits(_res, field) != v)		\
--				return -EINVAL;				\
-+			KUNIT_ASSERT_FALSE_MSG(context, _res != res,	\
-+				       "u" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != " #res "\n",	\
-+				       (u64)_res);			\
-+			KUNIT_ASSERT_FALSE(context,			\
-+				   u##tp##_get_bits(_res, field) != v);	\
- 		}							\
- 	} while (0)
- 
-@@ -29,14 +26,13 @@
- 			__le##tp _res;					\
- 									\
- 			_res = le##tp##_encode_bits(v, field);		\
--			if (_res != cpu_to_le##tp(res)) {		\
--				pr_warn("le" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx\n",\
--					(u64)le##tp##_to_cpu(_res),	\
--					(u64)(res));			\
--				return -EINVAL;				\
--			}						\
--			if (le##tp##_get_bits(_res, field) != v)	\
--				return -EINVAL;				\
-+			KUNIT_ASSERT_FALSE_MSG(context,			\
-+				       _res != cpu_to_le##tp(res),	\
-+				       "le" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx",\
-+				       (u64)le##tp##_to_cpu(_res),	\
-+				       (u64)(res));			\
-+			KUNIT_ASSERT_FALSE(context,			\
-+				   le##tp##_get_bits(_res, field) != v);\
- 		}							\
- 	} while (0)
- 
-@@ -45,14 +41,13 @@
- 			__be##tp _res;					\
- 									\
- 			_res = be##tp##_encode_bits(v, field);		\
--			if (_res != cpu_to_be##tp(res)) {		\
--				pr_warn("be" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx\n",\
--					(u64)be##tp##_to_cpu(_res),	\
--					(u64)(res));			\
--				return -EINVAL;				\
--			}						\
--			if (be##tp##_get_bits(_res, field) != v)	\
--				return -EINVAL;				\
-+			KUNIT_ASSERT_FALSE_MSG(context,			\
-+				       _res != cpu_to_be##tp(res),	\
-+				       "be" #tp "_encode_bits(" #v ", " #field ") is 0x%llx != 0x%llx",	\
-+				       (u64)be##tp##_to_cpu(_res),	\
-+				       (u64)(res));			\
-+			KUNIT_ASSERT_FALSE(context,			\
-+				   be##tp##_get_bits(_res, field) != v);\
- 		}							\
- 	} while (0)
- 
-@@ -62,7 +57,7 @@
- 		CHECK_ENC_GET_BE(tp, v, field, res);			\
- 	} while (0)
- 
--static int test_constants(void)
-+static void __init test_bitfields_constants(struct kunit *context)
- {
- 	/*
- 	 * NOTE
-@@ -95,19 +90,17 @@ static int test_constants(void)
- 	CHECK_ENC_GET(64,  7, 0x00f0000000000000ull, 0x0070000000000000ull);
- 	CHECK_ENC_GET(64, 14, 0x0f00000000000000ull, 0x0e00000000000000ull);
- 	CHECK_ENC_GET(64, 15, 0xf000000000000000ull, 0xf000000000000000ull);
--
--	return 0;
+-	checked_for_fw = true;
++	efi_embedded_fw_checked = true;
  }
  
- #define CHECK(tp, mask) do {						\
- 		u64 v;							\
- 									\
- 		for (v = 0; v < 1 << hweight32(mask); v++)		\
--			if (tp##_encode_bits(v, mask) != v << __ffs64(mask)) \
--				return -EINVAL;				\
-+			KUNIT_ASSERT_FALSE(context,			\
-+				tp##_encode_bits(v, mask) != v << __ffs64(mask));\
- 	} while (0)
- 
--static int test_variables(void)
-+static void __init test_bitfields_variables(struct kunit *context)
+ int efi_get_embedded_fw(const char *name, const u8 **data, size_t *size)
  {
- 	CHECK(u8, 0x0f);
- 	CHECK(u8, 0xf0);
-@@ -130,39 +123,34 @@ static int test_variables(void)
- 	CHECK(u64, 0x000000007f000000ull);
- 	CHECK(u64, 0x0000000018000000ull);
- 	CHECK(u64, 0x0000001f8000000ull);
--
--	return 0;
- }
+ 	struct efi_embedded_fw *iter, *fw = NULL;
  
--static int __init test_bitfields(void)
--{
--	int ret = test_constants();
--
--	if (ret) {
--		pr_warn("constant tests failed!\n");
--		return ret;
--	}
--
--	ret = test_variables();
--	if (ret) {
--		pr_warn("variable tests failed!\n");
--		return ret;
--	}
- 
--#ifdef TEST_BITFIELD_COMPILE
-+static void __init test_bitfields_compile(struct kunit *context)
-+{
- 	/* these should fail compilation */
- 	CHECK_ENC_GET(16, 16, 0x0f00, 0x1000);
- 	u32_encode_bits(7, 0x06000000);
- 
- 	/* this should at least give a warning */
- 	u16_encode_bits(0, 0x60000);
-+}
+-	if (!checked_for_fw) {
++	if (!efi_embedded_fw_checked) {
+ 		pr_warn("Warning %s called while we did not check for embedded fw\n",
+ 			__func__);
+ 		return -ENOENT;
+diff --git a/drivers/firmware/efi/embedded-firmware.h b/drivers/firmware/efi/embedded-firmware.h
+new file mode 100644
+index 000000000000..bb894eae0906
+--- /dev/null
++++ b/drivers/firmware/efi/embedded-firmware.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _EFI_EMBEDDED_FW_INTERNAL_H_
++#define _EFI_EMBEDDED_FW_INTERNAL_H_
 +
-+static struct kunit_case __refdata bitfields_test_cases[] = {
-+	KUNIT_CASE(test_bitfields_constants),
-+	KUNIT_CASE(test_bitfields_variables),
-+#ifdef TEST_BITFIELD_COMPILE
-+	KUNIT_CASE(test_bitfields_compile),
- #endif
-+	{}
++/*
++ * This struct and efi_embedded_fw_list are private to the efi-embedded fw
++ * implementation they only in separate header for use by lib/test_firmware.c.
++ */
++struct efi_embedded_fw {
++	struct list_head list;
++	const char *name;
++	const u8 *data;
++	size_t length;
 +};
++
++#ifdef CONFIG_TEST_FIRMWARE
++extern struct list_head efi_embedded_fw_list;
++extern bool efi_embedded_fw_checked;
++#endif
++
++#endif /* _EFI_EMBEDDED_FW_INTERNAL_H_ */
+diff --git a/include/linux/efi_embedded_fw.h b/include/linux/efi_embedded_fw.h
+index 57eac5241303..4ad5db9f5312 100644
+--- a/include/linux/efi_embedded_fw.h
++++ b/include/linux/efi_embedded_fw.h
+@@ -7,19 +7,6 @@
  
--	pr_info("tests passed\n");
-+static struct kunit_suite bitfields_test_suite = {
-+	.name = "bitfields",
-+	.test_cases = bitfields_test_cases,
-+};
+ #define EFI_EMBEDDED_FW_PREFIX_LEN		8
  
--	return 0;
--}
--module_init(test_bitfields)
-+kunit_test_suites(&bitfields_test_suite);
+-/*
+- * This struct and efi_embedded_fw_list are private to the efi-embedded fw
+- * implementation they are in this header for use by lib/test_firmware.c only!
+- */
+-struct efi_embedded_fw {
+-	struct list_head list;
+-	const char *name;
+-	const u8 *data;
+-	size_t length;
+-};
+-
+-extern struct list_head efi_embedded_fw_list;
+-
+ /**
+  * struct efi_embedded_fw_desc - This struct is used by the EFI embedded-fw
+  *                               code to search for embedded firmwares.
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 9fee2b93a8d1..62af792e151c 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -489,6 +489,7 @@ static ssize_t trigger_request_store(struct device *dev,
+ static DEVICE_ATTR_WO(trigger_request);
  
- MODULE_AUTHOR("Johannes Berg <johannes@sipsolutions.net>");
- MODULE_LICENSE("GPL");
-
-base-commit: d43c7fb05765152d4d4a39a8ef957c4ea14d8847
+ #ifdef CONFIG_EFI_EMBEDDED_FIRMWARE
++#include "../drivers/firmware/efi/embedded-firmware.h"
+ static ssize_t trigger_request_platform_store(struct device *dev,
+ 					      struct device_attribute *attr,
+ 					      const char *buf, size_t count)
+@@ -501,6 +502,7 @@ static ssize_t trigger_request_platform_store(struct device *dev,
+ 	};
+ 	struct efi_embedded_fw efi_embedded_fw;
+ 	const struct firmware *firmware = NULL;
++	bool saved_efi_embedded_fw_checked;
+ 	char *name;
+ 	int rc;
+ 
+@@ -513,6 +515,8 @@ static ssize_t trigger_request_platform_store(struct device *dev,
+ 	efi_embedded_fw.data = (void *)test_data;
+ 	efi_embedded_fw.length = sizeof(test_data);
+ 	list_add(&efi_embedded_fw.list, &efi_embedded_fw_list);
++	saved_efi_embedded_fw_checked = efi_embedded_fw_checked;
++	efi_embedded_fw_checked = true;
+ 
+ 	pr_info("loading '%s'\n", name);
+ 	rc = firmware_request_platform(&firmware, name, dev);
+@@ -530,6 +534,7 @@ static ssize_t trigger_request_platform_store(struct device *dev,
+ 	rc = count;
+ 
+ out:
++	efi_embedded_fw_checked = saved_efi_embedded_fw_checked;
+ 	release_firmware(firmware);
+ 	list_del(&efi_embedded_fw.list);
+ 	kfree(name);
 -- 
-2.26.2
+2.25.1
 
