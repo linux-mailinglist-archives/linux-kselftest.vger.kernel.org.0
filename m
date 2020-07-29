@@ -2,170 +2,388 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 906CA232735
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jul 2020 23:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BC62327C0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jul 2020 00:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgG2V5z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jul 2020 17:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        id S1727082AbgG2W5K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jul 2020 18:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726560AbgG2V5y (ORCPT
+        with ESMTP id S1726876AbgG2W5J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jul 2020 17:57:54 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C24C0619D2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 14:57:54 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id a34so8325722ybj.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 14:57:54 -0700 (PDT)
+        Wed, 29 Jul 2020 18:57:09 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688BCC061794
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 15:57:09 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id r2so18021198wrs.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2020 15:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=d/ukW0X/5BiKbJEKr2oeHvITKKVidatQzqB3tkKKQNg=;
-        b=rJaH5wiXRvUWjGwEt7fJ1cni+QUEQC+KArZY6p9dqwr+4i9DiQKMSTcR2iiDPSaH8u
-         fs+PexYNdlCvXC5wsnATdxceiAcJXPGlFX2e9AmEodp+cXu385RH3dMPBV1cVaFZ8sWv
-         DQ823qFab2ZxTt4iFeEC9dVOjJgenL7Ch/RIR1u/PCbMpZXEOui01nlr3cARdxjtAy9L
-         CzpjWgxyXcgh931rMjLjrAVgbhTDVmK0kglNHoNPDvJhLXtUMjjdo47t8tApp/WMUli+
-         +Veo/yRPfOpoJnwAamAlxDyucbmT1wpFRznchCnqhxMgKido4q6VF/LK607lXukFaMP1
-         AX0w==
+        bh=K8b8qAqV8mqmEXP+yiynnGsxHiDwmHCU219yrWhjnYM=;
+        b=Iq6iNDbuIjRQv1qjfDLpHhq89DsYEogu+Z4T/Bbvg2J0VVqKPfANVmN7t/Hkb8n540
+         GpTOFbCxbGmeGm8r+745UnIZnGgerJKHBaCE+oKmCa/XGU34jeD/BaFrUKIRBqSc4+YY
+         SJ63cNQnOpSzD8d3cG4Dne180zpQwVzSCiHXWbvM2IXtBZ4rYY/04WQriyfbWQEPDDid
+         TDOjD3iQ8Tx9k3hOPcGtU1gnJtlnNdakWwOvH/yQV2NJHUSoujwGeV9StdmkVItWhCMP
+         OCu2L4JIND4//1d7zRDQ3P4V/okAZgp6ZyBvuYfB6jD4zjps9sReHXOGEsb2N/CNIlAv
+         m/Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=d/ukW0X/5BiKbJEKr2oeHvITKKVidatQzqB3tkKKQNg=;
-        b=DxLBuXt72SfLHr6Sg9kuRVW/DEBzKrxBUGFPDwPozdE3fgw1o/oPuNltED43WHLdSB
-         b8JGwNdBIuWH51bG0sf0VqzU9IIl7b9Ts+VjBhszBSXWxZ33nmI1orcYkmqopwRCptQX
-         msTeIDwD6Dwr+zle1A9ST1Qk/gRK80U9w4Uf3iRvgMShGc3x4KLSKMc0r0n8+rAKfkO/
-         28t9odZ3OwrFqPGAifaiVyfw1ibt1d1HL+Da4nFfFNbF2f5svqIRX28a3kQPZiEq0Dq+
-         b06nBFtLYm0iT6CeZlWzRfwbhIhg+SAq9Nx/N454TG8pagCN9pgkOhkNfpwRoxYJUZWL
-         Er9g==
-X-Gm-Message-State: AOAM5303Y3qWEUz6e4moHEXb/USFDDEYFCQ6lls7Kui3IwcdDQ/Uul6i
-        TwYIm3I0ou0hgPFdIo17IQXYvnQo8i5jyJRs1qqVXg==
-X-Google-Smtp-Source: ABdhPJz9dkLbOEKynG62lQISCs1yNneZEmgV3y/1OTZdR9Y2aBJ9odsOuCArdCa9NY4jjb6DO9llKm9ES6IszlsGFk4=
-X-Received: by 2002:a25:361b:: with SMTP id d27mr66842yba.348.1596059873438;
- Wed, 29 Jul 2020 14:57:53 -0700 (PDT)
+        bh=K8b8qAqV8mqmEXP+yiynnGsxHiDwmHCU219yrWhjnYM=;
+        b=J1vFBqKQ8VpB5t0PHa0xpCGcp97K1KBHyal3mWSpMSUHxODTa5HfOm2VNDH/iRwHWx
+         NaQjWoiDc51xtJqqFJCN65miGzZlnjNeW3Xwz+j+SdZUhA/bsiRCSnif8HG4YYFbx3ky
+         M1IOUOLBWwmpR1prHrumUs285BEVm4vgjhkePs4QYLqE/j+lhEWhdhP0Y1ZnZEyPw/Uw
+         gd7m86E/WcWnwIuviXHS5Z4wjGVR4/Rj2MztdZosSeKB7UQghn3eqAchz4q33WdK4nw2
+         ICNYHzgNwS2Ecs+JzDp0eh7M9WFUkXBKXzTQodqx4fFl3itJUrcs4Db2Dk2xmw9LPQ5x
+         KY6A==
+X-Gm-Message-State: AOAM532JRNFnYUHyxL5JJia41BxaXFvGgmXS95mspkvUxvoIuqRMnFtM
+        hsNUQ+J0bqHfeDftQF1LpVQx7VpHWMqe62PWTsaPDA==
+X-Google-Smtp-Source: ABdhPJzJt7Qzo3MeHpzcKyozU4OTEzCtsgjsvz++0P66kmni11XfkG34xRV1U5/8E1taaRrSlNx8fhodKsBRg81vkOY=
+X-Received: by 2002:adf:edd0:: with SMTP id v16mr34374615wro.271.1596063427581;
+ Wed, 29 Jul 2020 15:57:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200729201146.537433-1-vitor@massaru.org> <20200729203908.GD2655@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200729203908.GD2655@hirez.programming.kicks-ass.net>
-From:   Vitor Massaru Iha <vitor@massaru.org>
-Date:   Wed, 29 Jul 2020 18:57:17 -0300
-Message-ID: <CADQ6JjW-=SNjV-abGpGA9NfHD4yGG_bD5FmvW99W-Vo06twkbw@mail.gmail.com>
+References: <20200729201146.537433-1-vitor@massaru.org>
+In-Reply-To: <20200729201146.537433-1-vitor@massaru.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 29 Jul 2020 15:56:55 -0700
+Message-ID: <CAP-5=fWCMPyBYqn4p+_=Ra5_sXqUbr4h_OCuYS4iY-6fsnevvA@mail.gmail.com>
 Subject: Re: [PATCH] lib: kunit: add test_min_heap test conversion to KUnit
-To:     peterz@infradead.org
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
+To:     Vitor Massaru Iha <vitor@massaru.org>
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, brendanhiggins@google.com,
         Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org, irogers@google.com,
-        mingo@kernel.org
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Peter,
-
-On Wed, Jul 29, 2020 at 5:39 PM <peterz@infradead.org> wrote:
+On Wed, Jul 29, 2020 at 1:11 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
 >
-> On Wed, Jul 29, 2020 at 05:11:46PM -0300, Vitor Massaru Iha wrote:
-> > This adds the conversion of the runtime tests of test_min_heap,
-> > from `lib/test_min_heap.c` to KUnit tests.
-> >
-> > Please apply this commit first (linux-kselftest/kunit-fixes):
-> > 3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
-> >
-> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-> > ---
-> >  lib/Kconfig.debug                         |  29 ++++--
-> >  lib/Makefile                              |   2 +-
-> >  lib/{test_min_heap.c => min_heap_kunit.c} | 117 ++++++++++++----------
-> >  3 files changed, 83 insertions(+), 65 deletions(-)
-> >  rename lib/{test_min_heap.c => min_heap_kunit.c} (60%)
+> This adds the conversion of the runtime tests of test_min_heap,
+> from `lib/test_min_heap.c` to KUnit tests.
 >
-> So where's the win? What's KUnit, why should I care and more lines.
+> Please apply this commit first (linux-kselftest/kunit-fixes):
+> 3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
 
-KUnit is a unit testing and mocking framework for the Linux kernel. [0]
+Thanks for this, I'm a fan of testing frameworks :-)
 
-In Kconfig.debug you only have some more information about KUnit.
+> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> ---
+>  lib/Kconfig.debug                         |  29 ++++--
+>  lib/Makefile                              |   2 +-
+>  lib/{test_min_heap.c => min_heap_kunit.c} | 117 ++++++++++++----------
+>  3 files changed, 83 insertions(+), 65 deletions(-)
+>  rename lib/{test_min_heap.c => min_heap_kunit.c} (60%)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 9ad9210d70a1..46674fc4972c 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1864,16 +1864,6 @@ config TEST_LIST_SORT
+>
+>           If unsure, say N.
+>
+> -config TEST_MIN_HEAP
+> -       tristate "Min heap test"
+> -       depends on DEBUG_KERNEL || m
+> -       help
+> -         Enable this to turn on min heap function tests. This test is
+> -         executed only once during system boot (so affects only boot time),
+> -         or at module load time.
+> -
+> -         If unsure, say N.
+> -
+>  config TEST_SORT
+>         tristate "Array-based sort test"
+>         depends on DEBUG_KERNEL || m
+> @@ -2185,6 +2175,25 @@ config LINEAR_RANGES_TEST
+>
+>           If unsure, say N.
+>
+> +config MIN_HEAP_KUNIT
+> +        tristate "KUnit test for Min heap"
+> +        depends on KUNIT
+> +        depends on DEBUG_KERNEL || m
+> +        help
+> +          Enable this to turn on min heap function tests. This test is
+> +          executed only once during system boot (so affects only boot time),
+> +          or at module load time.
+> +
+> +          KUnit tests run during boot and output the results to the debug log
+> +          in TAP format (http://testanything.org/). Only useful for kernel devs
+> +          running the KUnit test harness, and not intended for inclusion into a
+> +          production build.
+> +
+> +          For more information on KUnit and unit tests in general please refer
+> +          to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +          If unsure, say N.
+> +
 
-If the number of lines is a parameter that should be considered, I can
-change sections like this
+It's a shame we need a config option for this. Could we have one
+option to cover all basic library tests?
 
--                       if (last > values[0]) {
--                               pr_err("error: expected %d <= %d\n", last,
--                                       values[0]);
--                               err++;
--                       }
-+                       KUNIT_EXPECT_FALSE_MSG(context,
-+                                              last > values[0],
-+                                              "expected %d <= %d\n",
-+                                              last, values[0]);
+>  config TEST_UDELAY
+>         tristate "udelay test driver"
+>         help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index b1c42c10073b..748f57063160 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -72,7 +72,6 @@ CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
+>  UBSAN_SANITIZE_test_ubsan.o := y
+>  obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
+>  obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
+> -obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
+>  obj-$(CONFIG_TEST_LKM) += test_module.o
+>  obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
+>  obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
+> @@ -318,3 +317,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
+>  # KUnit tests
+>  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+>  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+> +obj-$(CONFIG_MIN_HEAP_KUNIT) += min_heap_kunit.o
+> diff --git a/lib/test_min_heap.c b/lib/min_heap_kunit.c
+> similarity index 60%
+> rename from lib/test_min_heap.c
+> rename to lib/min_heap_kunit.c
+> index d19c8080fd4d..398db1c63146 100644
+> --- a/lib/test_min_heap.c
+> +++ b/lib/min_heap_kunit.c
+> @@ -7,9 +7,8 @@
+>
+>  #include <linux/log2.h>
+>  #include <linux/min_heap.h>
+> -#include <linux/module.h>
+> -#include <linux/printk.h>
+>  #include <linux/random.h>
+> +#include <kunit/test.h>
+>
+>  static __init bool less_than(const void *lhs, const void *rhs)
+>  {
+> @@ -29,37 +28,34 @@ static __init void swap_ints(void *lhs, void *rhs)
+>         *(int *)rhs = temp;
+>  }
+>
+> -static __init int pop_verify_heap(bool min_heap,
+> +static __init void pop_verify_heap(struct kunit *context,
+> +                               bool min_heap,
+>                                 struct min_heap *heap,
+>                                 const struct min_heap_callbacks *funcs)
+>  {
+>         int *values = heap->data;
+> -       int err = 0;
+>         int last;
+>
+>         last = values[0];
+>         min_heap_pop(heap, funcs);
+>         while (heap->nr > 0) {
+>                 if (min_heap) {
+> -                       if (last > values[0]) {
+> -                               pr_err("error: expected %d <= %d\n", last,
+> -                                       values[0]);
+> -                               err++;
+> -                       }
+> +                       KUNIT_EXPECT_FALSE_MSG(context,
+> +                                              last > values[0],
+> +                                              "expected %d <= %d\n",
+> +                                              last, values[0]);
 
-To this:
+I'm not familiar with kunit, is there a reason not to prefer:
+KUNIT_EXPECT_LT(context, last, values[0]);
 
--                       if (last > values[0]) {
--                               pr_err("error: expected %d <= %d\n", last,
--                                       values[0]);
--                               err++;
--                       }
-+                       KUNIT_EXPECT_FALSE_MSG(context, last >
-values[0],  "expected %d <= %d\n",  last, values[0]);
+>                 } else {
+> -                       if (last < values[0]) {
+> -                               pr_err("error: expected %d >= %d\n", last,
+> -                                       values[0]);
+> -                               err++;
+> -                       }
+> +                       KUNIT_EXPECT_FALSE_MSG(context,
+> +                                              last < values[0],
+> +                                              "expected %d >= %d\n",
+> +                                              last, values[0]);
 
-And from this:
+Similarly KUNIT_EXPECT_GT.
 
-+static struct kunit_case __refdata min_heap_test_cases[] = {
-+       KUNIT_CASE(test_heapify_all_true),
-+       KUNIT_CASE(test_heapify_all_false),
-+       KUNIT_CASE(test_heap_push_true),
-+       KUNIT_CASE(test_heap_push_false),
-+       KUNIT_CASE(test_heap_pop_push_true),
-+       KUNIT_CASE(test_heap_pop_push_false),
-+       {}
+Thanks,
+Ian
 
-To this:
-
-+static struct kunit_case __refdata min_heap_test_cases[] = {
-+       KUNIT_CASE(test_min_heap),
-+       {}
-
-I did the latter this way to be more informative, but if the goal is
-to reduce lines of code, this is possible.
-
-The results can be seen this way:
-
-This is an excerpt from the test.log with the result in TAP format:
-[snip]
-ok 5 - example
-    # Subtest: min-heap
-    1..6
-    ok 1 - test_heapify_all_true
-    ok 2 - test_heapify_all_false
-    ok 3 - test_heap_push_true
-    ok 4 - test_heap_push_false
-    ok 5 - test_heap_pop_push_true
-    ok 6 - test_heap_pop_push_false
-[snip]
-
-And this from kunit-tool:
-[snip]
-[18:43:32] ============================================================
-[18:43:32] ======== [PASSED] min-heap ========
-[18:43:32] [PASSED] test_heapify_all_true
-[18:43:32] [PASSED] test_heapify_all_false
-[18:43:32] [PASSED] test_heap_push_true
-[18:43:32] [PASSED] test_heap_push_false
-[18:43:32] [PASSED] test_heap_pop_push_true
-[18:43:32] [PASSED] test_heap_pop_push_false
-[18:43:32] ============================================================
-[18:43:32] Testing complete. 20 tests run. 0 failed. 0 crashed.
-[18:43:32] Elapsed time: 9.758s total, 0.001s configuring, 6.012s
-building, 0.000s running
-[snip]
-
-BR,
-Vitor
-
-[0] https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html#what-is-kunit
+>                 }
+>                 last = values[0];
+>                 min_heap_pop(heap, funcs);
+>         }
+> -       return err;
+>  }
+>
+> -static __init int test_heapify_all(bool min_heap)
+> +static __init void test_heapify_all(struct kunit *context, bool min_heap)
+>  {
+>         int values[] = { 3, 1, 2, 4, 0x8000000, 0x7FFFFFF, 0,
+>                          -3, -1, -2, -4, 0x8000000, 0x7FFFFFF };
+> @@ -73,12 +69,11 @@ static __init int test_heapify_all(bool min_heap)
+>                 .less = min_heap ? less_than : greater_than,
+>                 .swp = swap_ints,
+>         };
+> -       int i, err;
+> +       int i;
+>
+>         /* Test with known set of values. */
+>         min_heapify_all(&heap, &funcs);
+> -       err = pop_verify_heap(min_heap, &heap, &funcs);
+> -
+> +       pop_verify_heap(context, min_heap, &heap, &funcs);
+>
+>         /* Test with randomly generated values. */
+>         heap.nr = ARRAY_SIZE(values);
+> @@ -86,12 +81,10 @@ static __init int test_heapify_all(bool min_heap)
+>                 values[i] = get_random_int();
+>
+>         min_heapify_all(&heap, &funcs);
+> -       err += pop_verify_heap(min_heap, &heap, &funcs);
+> -
+> -       return err;
+> +       pop_verify_heap(context, min_heap, &heap, &funcs);
+>  }
+>
+> -static __init int test_heap_push(bool min_heap)
+> +static __init void test_heap_push(struct kunit *context, bool min_heap)
+>  {
+>         const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
+>                              -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
+> @@ -106,25 +99,22 @@ static __init int test_heap_push(bool min_heap)
+>                 .less = min_heap ? less_than : greater_than,
+>                 .swp = swap_ints,
+>         };
+> -       int i, temp, err;
+> +       int i, temp;
+>
+>         /* Test with known set of values copied from data. */
+>         for (i = 0; i < ARRAY_SIZE(data); i++)
+>                 min_heap_push(&heap, &data[i], &funcs);
+> -
+> -       err = pop_verify_heap(min_heap, &heap, &funcs);
+> +       pop_verify_heap(context, min_heap, &heap, &funcs);
+>
+>         /* Test with randomly generated values. */
+>         while (heap.nr < heap.size) {
+>                 temp = get_random_int();
+>                 min_heap_push(&heap, &temp, &funcs);
+>         }
+> -       err += pop_verify_heap(min_heap, &heap, &funcs);
+> -
+> -       return err;
+> +       pop_verify_heap(context, min_heap, &heap, &funcs);
+>  }
+>
+> -static __init int test_heap_pop_push(bool min_heap)
+> +static __init void test_heap_pop_push(struct kunit *context, bool min_heap)
+>  {
+>         const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
+>                              -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
+> @@ -139,7 +129,7 @@ static __init int test_heap_pop_push(bool min_heap)
+>                 .less = min_heap ? less_than : greater_than,
+>                 .swp = swap_ints,
+>         };
+> -       int i, temp, err;
+> +       int i, temp;
+>
+>         /* Fill values with data to pop and replace. */
+>         temp = min_heap ? 0x80000000 : 0x7FFFFFFF;
+> @@ -149,8 +139,7 @@ static __init int test_heap_pop_push(bool min_heap)
+>         /* Test with known set of values copied from data. */
+>         for (i = 0; i < ARRAY_SIZE(data); i++)
+>                 min_heap_pop_push(&heap, &data[i], &funcs);
+> -
+> -       err = pop_verify_heap(min_heap, &heap, &funcs);
+> +       pop_verify_heap(context, min_heap, &heap, &funcs);
+>
+>         heap.nr = 0;
+>         for (i = 0; i < ARRAY_SIZE(data); i++)
+> @@ -161,34 +150,54 @@ static __init int test_heap_pop_push(bool min_heap)
+>                 temp = get_random_int();
+>                 min_heap_pop_push(&heap, &temp, &funcs);
+>         }
+> -       err += pop_verify_heap(min_heap, &heap, &funcs);
+> +       pop_verify_heap(context, min_heap, &heap, &funcs);
+> +}
+>
+> -       return err;
+> +static void __init test_heapify_all_true(struct kunit *context)
+> +{
+> +       test_heapify_all(context, true);
+>  }
+>
+> -static int __init test_min_heap_init(void)
+> +static void __init test_heapify_all_false(struct kunit *context)
+>  {
+> -       int err = 0;
+> -
+> -       err += test_heapify_all(true);
+> -       err += test_heapify_all(false);
+> -       err += test_heap_push(true);
+> -       err += test_heap_push(false);
+> -       err += test_heap_pop_push(true);
+> -       err += test_heap_pop_push(false);
+> -       if (err) {
+> -               pr_err("test failed with %d errors\n", err);
+> -               return -EINVAL;
+> -       }
+> -       pr_info("test passed\n");
+> -       return 0;
+> +       test_heapify_all(context, true);
+> +}
+> +
+> +static void __init test_heap_push_true(struct kunit *context)
+> +{
+> +       test_heap_push(context, true);
+> +}
+> +
+> +static void __init test_heap_push_false(struct kunit *context)
+> +{
+> +       test_heap_push(context, false);
+>  }
+> -module_init(test_min_heap_init);
+>
+> -static void __exit test_min_heap_exit(void)
+> +static void __init test_heap_pop_push_true(struct kunit *context)
+>  {
+> -       /* do nothing */
+> +       test_heap_pop_push(context, true);
+>  }
+> -module_exit(test_min_heap_exit);
+> +
+> +static void __init test_heap_pop_push_false(struct kunit *context)
+> +{
+> +       test_heap_pop_push(context, false);
+> +}
+> +
+> +static struct kunit_case __refdata min_heap_test_cases[] = {
+> +       KUNIT_CASE(test_heapify_all_true),
+> +       KUNIT_CASE(test_heapify_all_false),
+> +       KUNIT_CASE(test_heap_push_true),
+> +       KUNIT_CASE(test_heap_push_false),
+> +       KUNIT_CASE(test_heap_pop_push_true),
+> +       KUNIT_CASE(test_heap_pop_push_false),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite min_heap_test_suite = {
+> +       .name = "min-heap",
+> +       .test_cases = min_heap_test_cases,
+> +};
+> +
+> +kunit_test_suites(&min_heap_test_suite);
+>
+>  MODULE_LICENSE("GPL");
+>
+> base-commit: d43c7fb05765152d4d4a39a8ef957c4ea14d8847
+> --
+> 2.26.2
+>
