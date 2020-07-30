@@ -2,36 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C890233874
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jul 2020 20:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36244233875
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jul 2020 20:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726544AbgG3ShD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jul 2020 14:37:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57048 "EHLO mail.kernel.org"
+        id S1730279AbgG3ShM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jul 2020 14:37:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57094 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730199AbgG3ShD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jul 2020 14:37:03 -0400
+        id S1730199AbgG3ShH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Jul 2020 14:37:07 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1AF3C2072A;
-        Thu, 30 Jul 2020 18:37:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E86ED2072A;
+        Thu, 30 Jul 2020 18:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596134223;
-        bh=9aa7GFDTeNUgLhP0YwH+lSjSF66FaNUkytsGodVj9jU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0u7Nl1GQzQR30vx5T8+l8YRnn9jXVe+AwGxuTdyut94CN336S26tiJSjC7Lce0dj9
-         hmLdkJHQ0KgKZ4mwzT4zr664kbY6VJW5LAfZ5jqkGJKma90wvkHb7IBLB9c/jW9tgV
-         lpDsHtMSmHKsexVC2Awg3z7QwPQUE2czNCvjKL3c=
+        s=default; t=1596134226;
+        bh=UT+Vo3HFrZsD3uYH4LrsM9/ehPOpm9/+3nfx46Us6CA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Tdb+LJUYepgJ398frVtT+uOikIQZwPxBbAoR57SyyPqdJKVaDhwDBGxO64JTpz9fl
+         44QWL/c6hFzEOC7l2KLdw4xNDlE7oC0jlO6LGDnl3B20S7VtXm8ww1BzsZQXB/cAqA
+         B5J1LQMCd8og7JeJnOI3cOllCQtipN1/TUavkre4=
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Dave Martin <Dave.Martin@arm.com>
 Cc:     linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/6] selftests: arm64: Add floating point selftests
-Date:   Thu, 30 Jul 2020 19:09:14 +0100
-Message-Id: <20200730180920.23527-1-broonie@kernel.org>
+Subject: [PATCH 1/6] selftests: arm64: Test case for enumeration of SVE vector lengths
+Date:   Thu, 30 Jul 2020 19:09:15 +0100
+Message-Id: <20200730180920.23527-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200730180920.23527-1-broonie@kernel.org>
+References: <20200730180920.23527-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -39,57 +41,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series imports a series of tests for FPSIMD and SVE originally
-written by Dave Martin to the tree. Since these extensions have some
-overlap in terms of register usage and must sometimes be tested together
-they're dropped into a single directory. I've adapted some of the tests
-to run within the kselftest framework but there are also some stress
-tests here that are intended to be run as soak tests so aren't suitable
-for running by default and are mostly just integrated with the build
-system. There doesn't seem to be a more suitable home for those stress
-tests and they are very useful for work on these areas of the code so it
-seems useful to have them somewhere in tree.
+Add a test case that verifies that we can enumerate the SVE vector lengths
+on systems where we detect SVE, and that those SVE vector lengths are
+valid. This program was written by Dave Martin and adapted to kselftest by
+me.
 
-Mark Brown (6):
-  selftests: arm64: Test case for enumeration of SVE vector lengths
-  selftests: arm64: Add test for the SVE ptrace interface
-  selftests: arm64: Add stress tests for FPSMID and SVE context
-    switching
-  selftests: arm64: Add utility to set SVE vector lengths
-  selftests: arm64: Add wrapper scripts for stress tests
-  selftests: arm64: Add build and documentation for FP tests
-
- tools/testing/selftests/arm64/Makefile        |   2 +-
- tools/testing/selftests/arm64/fp/.gitignore   |   5 +
- tools/testing/selftests/arm64/fp/Makefile     |  17 +
- tools/testing/selftests/arm64/fp/README       | 100 +++
- .../testing/selftests/arm64/fp/asm-offsets.h  |  11 +
- tools/testing/selftests/arm64/fp/assembler.h  |  57 ++
- .../testing/selftests/arm64/fp/fpsimd-stress  |  60 ++
- .../testing/selftests/arm64/fp/fpsimd-test.S  | 482 +++++++++++++
- .../selftests/arm64/fp/sve-probe-vls.c        |  58 ++
- .../selftests/arm64/fp/sve-ptrace-asm.S       |  33 +
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 336 +++++++++
- tools/testing/selftests/arm64/fp/sve-stress   |  59 ++
- tools/testing/selftests/arm64/fp/sve-test.S   | 672 ++++++++++++++++++
- tools/testing/selftests/arm64/fp/vlset.c      | 155 ++++
- 14 files changed, 2046 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/fp/.gitignore
- create mode 100644 tools/testing/selftests/arm64/fp/Makefile
- create mode 100644 tools/testing/selftests/arm64/fp/README
- create mode 100644 tools/testing/selftests/arm64/fp/asm-offsets.h
- create mode 100644 tools/testing/selftests/arm64/fp/assembler.h
- create mode 100755 tools/testing/selftests/arm64/fp/fpsimd-stress
- create mode 100644 tools/testing/selftests/arm64/fp/fpsimd-test.S
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ .../selftests/arm64/fp/sve-probe-vls.c        | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
  create mode 100644 tools/testing/selftests/arm64/fp/sve-probe-vls.c
- create mode 100644 tools/testing/selftests/arm64/fp/sve-ptrace-asm.S
- create mode 100644 tools/testing/selftests/arm64/fp/sve-ptrace.c
- create mode 100755 tools/testing/selftests/arm64/fp/sve-stress
- create mode 100644 tools/testing/selftests/arm64/fp/sve-test.S
- create mode 100644 tools/testing/selftests/arm64/fp/vlset.c
 
-
-base-commit: 9ebcfadb0610322ac537dd7aa5d9cbc2b2894c68
+diff --git a/tools/testing/selftests/arm64/fp/sve-probe-vls.c b/tools/testing/selftests/arm64/fp/sve-probe-vls.c
+new file mode 100644
+index 000000000000..b29cbc642c57
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/sve-probe-vls.c
+@@ -0,0 +1,58 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2015-2020 ARM Limited.
++ * Original author: Dave Martin <Dave.Martin@arm.com>
++ */
++#include <assert.h>
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <asm/sigcontext.h>
++
++#include "../../kselftest.h"
++
++int main(int argc, char **argv)
++{
++	unsigned int vq;
++	int vl;
++	static unsigned int vqs[SVE_VQ_MAX];
++	unsigned int nvqs = 0;
++
++	ksft_print_header();
++	ksft_set_plan(2);
++
++	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
++		ksft_exit_skip("SVE not available");
++
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
++					   strerror(errno), errno);
++
++		vl &= PR_SVE_VL_LEN_MASK;
++
++		if (!sve_vl_valid(vl))
++			ksft_exit_fail_msg("VL %d invalid\n", vl);
++		vq = sve_vq_from_vl(vl);
++
++		if (!(nvqs < SVE_VQ_MAX))
++			ksft_exit_fail_msg("Too many VLs %u >= SVE_VQ_MAX\n",
++					   nvqs);
++		vqs[nvqs++] = vq;
++	}
++	ksft_test_result_pass("Enumerated %d vector lengths\n", nvqs);
++	ksft_test_result_pass("All vector lengths valid\n");
++
++	/* Print out the vector lengths in ascending order: */
++	while (nvqs--)
++		ksft_print_msg("%u\n", 16 * vqs[nvqs]);
++
++	ksft_exit_pass();
++}
 -- 
 2.20.1
 
