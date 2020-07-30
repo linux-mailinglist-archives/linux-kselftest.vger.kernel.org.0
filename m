@@ -2,35 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FCE23387D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jul 2020 20:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D666E23387F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jul 2020 20:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730357AbgG3ShT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jul 2020 14:37:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57336 "EHLO mail.kernel.org"
+        id S1730374AbgG3ShY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jul 2020 14:37:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57424 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730244AbgG3ShT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jul 2020 14:37:19 -0400
+        id S1730275AbgG3ShW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Jul 2020 14:37:22 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A11A2072A;
-        Thu, 30 Jul 2020 18:37:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB60E2083B;
+        Thu, 30 Jul 2020 18:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596134238;
-        bh=0KUG667BqBQH7R9oDKcdtnatIv4iRLCgQg18W5V0byE=;
+        s=default; t=1596134241;
+        bh=F1AYrEcZ7mpD0EYEJHQ5gNlFCjBTpcbcw3WgaRKBGUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rCdp+A9ToDiysepw7RYIe8NE9bGECqyDN0X3FxbWZxNfiqO53aMiwDacFVaxM2RR4
-         snhVlyYobin6wynwriaabMiE+hgZoyslaC58y3e2e2OgM9SKYDqjBabSeUJ+XGnCNS
-         Usw2rlLeOa/TXRgJ/lA1frJV6Di0+hZTZiJ784Y8=
+        b=Ey4XAGD1gH8xyBmOIPLVPVwtgpdy8kCTkGlP9rlY0ak+66cD/EchmZOJuzD8J/nHs
+         MBMNzdyIm3+jEjSFqKYq8jfqnUNg9phyg11gUyvw9HGMhZYYIN7PECePhEqcrd2YOs
+         B3tvkH+A7Ze0XD3JSmVYdsBB2Fgf+rB4nO2fYgaY=
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Dave Martin <Dave.Martin@arm.com>
 Cc:     linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4/6] selftests: arm64: Add utility to set SVE vector lengths
-Date:   Thu, 30 Jul 2020 19:09:18 +0100
-Message-Id: <20200730180920.23527-5-broonie@kernel.org>
+Subject: [PATCH 5/6] selftests: arm64: Add wrapper scripts for stress tests
+Date:   Thu, 30 Jul 2020 19:09:19 +0100
+Message-Id: <20200730180920.23527-6-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200730180920.23527-1-broonie@kernel.org>
 References: <20200730180920.23527-1-broonie@kernel.org>
@@ -41,177 +41,149 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-vlset is a small utility for use in conjunction with tests like the sve-test
-stress test which allows another executable to be invoked with a configured
-SVE vector length.
+Add wrapper scripts which invoke fpsimd-test and sve-test with several
+copies per CPU such that the context switch code will be appropriately
+exercised.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/vlset.c | 155 +++++++++++++++++++++++
- 1 file changed, 155 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/vlset.c
+ .../testing/selftests/arm64/fp/fpsimd-stress  | 60 +++++++++++++++++++
+ tools/testing/selftests/arm64/fp/sve-stress   | 59 ++++++++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100755 tools/testing/selftests/arm64/fp/fpsimd-stress
+ create mode 100755 tools/testing/selftests/arm64/fp/sve-stress
 
-diff --git a/tools/testing/selftests/arm64/fp/vlset.c b/tools/testing/selftests/arm64/fp/vlset.c
-new file mode 100644
-index 000000000000..308d27a68226
+diff --git a/tools/testing/selftests/arm64/fp/fpsimd-stress b/tools/testing/selftests/arm64/fp/fpsimd-stress
+new file mode 100755
+index 000000000000..781b5b022eaf
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/vlset.c
-@@ -0,0 +1,155 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2015-2019 ARM Limited.
-+ * Original author: Dave Martin <Dave.Martin@arm.com>
-+ */
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <errno.h>
-+#include <limits.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <getopt.h>
-+#include <unistd.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <asm/hwcap.h>
-+#include <asm/sigcontext.h>
++++ b/tools/testing/selftests/arm64/fp/fpsimd-stress
+@@ -0,0 +1,60 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright (C) 2015-2019 ARM Limited.
++# Original author: Dave Martin <Dave.Martin@arm.com>
 +
-+static int inherit = 0;
-+static int no_inherit = 0;
-+static int force = 0;
-+static unsigned long vl;
++set -ue
 +
-+static const struct option options[] = {
-+	{ "force",	no_argument, NULL, 'f' },
-+	{ "inherit",	no_argument, NULL, 'i' },
-+	{ "max",	no_argument, NULL, 'M' },
-+	{ "no-inherit",	no_argument, &no_inherit, 1 },
-+	{ "help",	no_argument, NULL, '?' },
-+	{}
-+};
++NR_CPUS=`nproc`
 +
-+static char const *program_name;
++pids=
++logs=
 +
-+static int parse_options(int argc, char **argv)
-+{
-+	int c;
-+	char *rest;
++cleanup () {
++	trap - INT TERM CHLD
++	set +e
 +
-+	program_name = strrchr(argv[0], '/');
-+	if (program_name)
-+		++program_name;
-+	else
-+		program_name = argv[0];
++	if [ -n "$pids" ]; then
++		kill $pids
++		wait $pids
++		pids=
++	fi
 +
-+	while ((c = getopt_long(argc, argv, "Mfhi", options, NULL)) != -1)
-+		switch (c) {
-+		case 'M':	vl = SVE_VL_MAX; break;
-+		case 'f':	force = 1; break;
-+		case 'i':	inherit = 1; break;
-+		case 0:		break;
-+		default:	goto error;
-+		}
-+
-+	if (inherit && no_inherit)
-+		goto error;
-+
-+	if (!vl) {
-+		/* vector length */
-+		if (optind >= argc)
-+			goto error;
-+
-+		errno = 0;
-+		vl = strtoul(argv[optind], &rest, 0);
-+		if (*rest) {
-+			vl = ULONG_MAX;
-+			errno = EINVAL;
-+		}
-+		if (vl == ULONG_MAX && errno) {
-+			fprintf(stderr, "%s: %s: %s\n",
-+				program_name, argv[optind], strerror(errno));
-+			goto error;
-+		}
-+
-+		++optind;
-+	}
-+
-+	/* command */
-+	if (optind >= argc)
-+		goto error;
-+
-+	return 0;
-+
-+error:
-+	fprintf(stderr,
-+		"Usage: %s [-f | --force] "
-+		"[-i | --inherit | --no-inherit] "
-+		"{-M | --max | <vector length>} "
-+		"<command> [<arguments> ...]\n",
-+		program_name);
-+	return -1;
++	if [ -n "$logs" ]; then
++		cat $logs
++		rm $logs
++		logs=
++	fi
 +}
 +
-+int main(int argc, char **argv)
-+{
-+	int ret = 126;	/* same as sh(1) command-not-executable error */
-+	long flags;
-+	char *path;
-+	int t, e;
-+
-+	if (parse_options(argc, argv))
-+		return 2;	/* same as sh(1) builtin incorrect-usage */
-+
-+	if (vl & ~(vl & PR_SVE_VL_LEN_MASK)) {
-+		fprintf(stderr, "%s: Invalid vector length %lu\n",
-+			program_name, vl);
-+		return 2;	/* same as sh(1) builtin incorrect-usage */
-+	}
-+
-+	if (!(getauxval(AT_HWCAP) & HWCAP_SVE)) {
-+		fprintf(stderr, "%s: Scalable Vector Extension not present\n",
-+			program_name);
-+
-+		if (!force)
-+			goto error;
-+
-+		fputs("Going ahead anyway (--force):  "
-+		      "This is a debug option.  Don't rely on it.\n",
-+		      stderr);
-+	}
-+
-+	flags = PR_SVE_SET_VL_ONEXEC;
-+	if (inherit)
-+		flags |= PR_SVE_VL_INHERIT;
-+
-+	t = prctl(PR_SVE_SET_VL, vl | flags);
-+	if (t < 0) {
-+		fprintf(stderr, "%s: PR_SVE_SET_VL: %s\n",
-+			program_name, strerror(errno));
-+		goto error;
-+	}
-+
-+	t = prctl(PR_SVE_GET_VL);
-+	if (t == -1) {
-+		fprintf(stderr, "%s: PR_SVE_GET_VL: %s\n",
-+			program_name, strerror(errno));
-+		goto error;
-+	}
-+	flags = PR_SVE_VL_LEN_MASK;
-+	flags = t & ~flags;
-+
-+	assert(optind < argc);
-+	path = argv[optind];
-+
-+	execvp(path, &argv[optind]);
-+	e = errno;
-+	if (errno == ENOENT)
-+		ret = 127;	/* same as sh(1) not-found error */
-+	fprintf(stderr, "%s: %s: %s\n", program_name, path, strerror(e));
-+
-+error:
-+	return ret;		/* same as sh(1) not-executable error */
++interrupt () {
++	cleanup
++	exit 0
 +}
++
++child_died () {
++	cleanup
++	exit 1
++}
++
++trap interrupt INT TERM EXIT
++trap child_died CHLD
++
++for x in `seq 0 $((NR_CPUS * 4))`; do
++	log=`mktemp`
++	logs=$logs\ $log
++	./fpsimd-test >$log &
++	pids=$pids\ $!
++done
++
++# Wait for all child processes to be created:
++sleep 10
++
++while :; do
++	kill -USR1 $pids
++done &
++pids=$pids\ $!
++
++wait
++
++exit 1
+diff --git a/tools/testing/selftests/arm64/fp/sve-stress b/tools/testing/selftests/arm64/fp/sve-stress
+new file mode 100755
+index 000000000000..24dd0922cc02
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/sve-stress
+@@ -0,0 +1,59 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright (C) 2015-2019 ARM Limited.
++# Original author: Dave Martin <Dave.Martin@arm.com>
++
++set -ue
++
++NR_CPUS=`nproc`
++
++pids=
++logs=
++
++cleanup () {
++	trap - INT TERM CHLD
++	set +e
++
++	if [ -n "$pids" ]; then
++		kill $pids
++		wait $pids
++		pids=
++	fi
++
++	if [ -n "$logs" ]; then
++		cat $logs
++		rm $logs
++		logs=
++	fi
++}
++
++interrupt () {
++	cleanup
++	exit 0
++}
++
++child_died () {
++	cleanup
++	exit 1
++}
++
++trap interrupt INT TERM EXIT
++
++for x in `seq 0 $((NR_CPUS * 4))`; do
++	log=`mktemp`
++	logs=$logs\ $log
++	./sve-test >$log &
++	pids=$pids\ $!
++done
++
++# Wait for all child processes to be created:
++sleep 10
++
++while :; do
++	kill -USR1 $pids
++done &
++pids=$pids\ $!
++
++wait
++
++exit 1
 -- 
 2.20.1
 
