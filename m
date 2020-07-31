@@ -2,215 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D25132346CF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jul 2020 15:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40B223490A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jul 2020 18:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728252AbgGaNZl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Jul 2020 09:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S1728943AbgGaQPK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Jul 2020 12:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728047AbgGaNZl (ORCPT
+        with ESMTP id S1728779AbgGaQPJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jul 2020 09:25:41 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59406C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 06:25:41 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id kr4so5449324pjb.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 06:25:41 -0700 (PDT)
+        Fri, 31 Jul 2020 12:15:09 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9216EC061574
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 09:15:09 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id ed14so14370476qvb.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 09:15:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JEI7QlNd+n7mCSlqUP8tfyoHThcUKaKtV6i9WVkU4rE=;
-        b=EFgAoxc1lBpnfSfRcu0ipTMSOcGQ7QweQKKGPauCln797EF9dMpL2jrHlvP3viERy7
-         6qFdcVq+tn90iXkFML2huGj/kTaqeYwd/tS810ojOyiuFUrhQFrwyxc/BeYr/842OzXU
-         rynPBE1lj5slETpR/oow2+ToDsadtR/BoUqLKLoYKWnwR+HH/2DB10GikHFfbj3t1v+m
-         N2DahEtaTYkIgdoQgbYSWJrCzpoBgZOPeTCxZnDOL16sPbRrhknatvMqejsiLYOKvu4w
-         Y2LKrE/WO8yydETeJfQxH1xUVrEduccDSUWqhacBZZisj+q50doQ8BMdgdT9lokDc13Q
-         qZ0w==
+        bh=3d01Lmun8Mhs3FkTX0Od32vSs3Xvk7kXc2qFlp3wiUg=;
+        b=QAPjzBXkNWldUvi1YrspeozuNR/f3rc8UlT6mt4uMq0QEn01P+wmztAlxGa6yYQUQ5
+         nB/dqGphJjqy/jfbUpB/YwYurg7h7bGGW+4It1AmNy5pfCJgTkQLx369UiQbuXSiTAGE
+         1Rdn7nbhxpkzwJgGD5WkNOoC8WqjhJGwT/9y9LTa+5P+QO7tTwtQef4hKiDDmKzBxvWA
+         1dF/A1BrQtaHvOpM9GREJ0qZfdgDlqFQ64yGetdXGfgjhHQBCJCtznWM8rQ6C7iWWPBL
+         9fjiBXfygQ1/WdUL8jSEA0qSUtH9TQ1rKtENxbM5mFXugMSispxiTkU7jv3/sAB7RxwS
+         ABoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JEI7QlNd+n7mCSlqUP8tfyoHThcUKaKtV6i9WVkU4rE=;
-        b=IE+JNneCAbXjWFu7FgCINKv36/yCeSYGtfhfKoZpQHVeJyrzY7YblGkeDCbgBLQrkU
-         glH1k2Bua+LOKlJLQmqj4FsSfWrZUv2LydhdpQ8Pr9xQCm6/jTt3MvgByoAOM2m2nixt
-         DNcQ7qC0V/8PKEqXpU7V7m6tFFRzM797WsDa5z6uD3yhbEWuOh0ScXjNHQqpDcmZs/wT
-         ar/EumP5dUTQwyMABrWsCjM9KkvSvm4Higitj29V+KLm5NWbnTgOvZh1jyF/Trw+2Lt/
-         8BQFeDHyuNEUSvL7C5SuX7z+ZmIn6jB47z1VsYygqUeokVzEeOOg57VQA09i5u3SkCLy
-         m2Cw==
-X-Gm-Message-State: AOAM532589G6J9bW0WH2WVE5FusUyVFUrtsBg1pCi+/mzsS37nwHeG/s
-        5OrMuEbfnSU6rwp/QnSL3MP/HfK00NJCQD5nBIFAwA==
-X-Google-Smtp-Source: ABdhPJwOM1X62UcHRYe5CnKGFs2rbUxLwcrdYvfymYqKedcGjdjR5g/NUfO5j/eCNp+kDkNJ/+yyjpopjON6YKGdS6w=
-X-Received: by 2002:a17:90a:6a8d:: with SMTP id u13mr3852021pjj.166.1596201940297;
- Fri, 31 Jul 2020 06:25:40 -0700 (PDT)
+        bh=3d01Lmun8Mhs3FkTX0Od32vSs3Xvk7kXc2qFlp3wiUg=;
+        b=j/1R5mZeGIsk/H4msXq0mh+h1iL5uPaaEoViaEqP53ZdXWPCI3JcsC756oeCa3dOwZ
+         +lH/TgHZvfcIHSo96vie0Z/M4CdWb0G4u+uRc/io6nwvtqjRBIofGjDyuIl7GQOIWGX0
+         tU8dcyIp8907fI0Fb2EjRlqW1pyGu0cSV8xw/sy4VgisoaZis7yMZAMzLdFCkzy1hzet
+         PKopjCxYZ4Q8yuA2wdzdJQX5vwNVGELO4+Stdgj5Vp5ijfV/YlMWVx4ZCxqiIdyTgsql
+         y12k4saIk6MH510Y8JkS1pYGE4IVEc4MVtv3d0oa0wmKInbuUpN1Ys8ctlF2bOElSm71
+         tnMw==
+X-Gm-Message-State: AOAM531UvfCxQCjY05Kj0ChTajzZuSx3Hq2NENwBiGj6o8STz6zBmnAo
+        YC5q64aUoxQTBLcz2ndsWkSSaOOkzFq5dB7dUTrVnIvvVxnP/g==
+X-Google-Smtp-Source: ABdhPJx/Vs5MD1g4yuquxDXYaN0xWQoZ2JpAeK0MwDeFRjYiOEyOXF1wYuLTBmPzgMVk4/0HdAaBmB6/lp3WRgQFIic=
+X-Received: by 2002:a0c:9c03:: with SMTP id v3mr4920686qve.34.1596212108421;
+ Fri, 31 Jul 2020 09:15:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200731044242.1323143-1-davidgow@google.com>
-In-Reply-To: <20200731044242.1323143-1-davidgow@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 31 Jul 2020 15:25:29 +0200
-Message-ID: <CAAeHK+z0wJ-3+dXey9o3zysy9fPOqk-YdFFtVOB5==WcG3B8+Q@mail.gmail.com>
-Subject: Re: [PATCH v9 0/5] KASAN-KUnit Integration
-To:     David Gow <davidgow@google.com>
-Cc:     Patricia Alfonso <trishalfonso@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        kunit-dev@googlegroups.com,
+References: <7heep067yt.fsf@baylibre.com>
+In-Reply-To: <7heep067yt.fsf@baylibre.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 31 Jul 2020 18:14:56 +0200
+Message-ID: <CACT4Y+Z9wsS_m4humVcx-4CAbD2rvUxRHCVfgUYTWXVVzreXOA@mail.gmail.com>
+Subject: Re: CFP open for testing/fuzzing microconference at LPC
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     automated-testing@yoctoproject.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Sasha Levin <sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 6:43 AM David Gow <davidgow@google.com> wrote:
+On Fri, Jul 24, 2020 at 9:14 PM Kevin Hilman <khilman@baylibre.com> wrote:
 >
-> This patchset contains everything needed to integrate KASAN and KUnit.
+> Hello Linux testing enthusiasts,
 >
-> KUnit will be able to:
-> (1) Fail tests when an unexpected KASAN error occurs
-> (2) Pass tests when an expected KASAN error occurs
+> The CFP is open for the testing/fuzzing microconference[1] at Linux
+> plumbers conference.
 >
-> Convert KASAN tests to KUnit with the exception of copy_user_test
-> because KUnit is unable to test those.
+> Please submit your ideas for discussion topics usin the LPC CFP tool:
 >
-> Add documentation on how to run the KASAN tests with KUnit and what to
-> expect when running these tests.
+>    https://www.linuxplumbersconf.org/event/7/abstracts/
 >
-> This patchset depends on:
-> - "kunit: extend kunit resources API" [1]
->  - This is already present in the kselftest/kunit branch
+> Click "Submit new Proposal" at the bottom of the page.
 >
-> I'd _really_ like to get this into 5.9 if possible: we also have some
-> other changes which depend on some things here.
+> There are some suggested topics in the MC announcement[1], but feel
+> free to submit ideas that are not on that list.
+>
+> And yes, LPC will be virtual this year as announced on the LPC blog:
+> https://www.linuxplumbersconf.org/blog/2020/linux-plumbers-conference-2020-goes-virtual/
+>
+> The tools and logistics are being actively worked on, so stay tuned to
+> the LPC blog for all the details.
+>
+> Thanks,
+>
+> Kevin
+>
+> [1] From: https://www.linuxplumbersconf.org/event/7/page/80-accepted-microconferences#tf-cr
+>
+> The Testing and Fuzzing microconference focuses on advancing the current
+> state of testing and validation of the Linux Kernel, with a focus on
+> encouraging and facilitating collaboration between testing projects.
+>
+> Suggested Topics:
+>
+>     Next steps for KernelCI (data formats, dashboards, etc)
+>     Structured data feeds for cross-project collaboration
+>     Integration with kernel.org tools (e.g. b4)
+>     Continued defragmentation of testing infrastructure
+>     Better sanitizers: KASAN improvements, KCSAN fallout, future plans.
+>     Better hardware testing, hardware sanitizers: how the USB fallout was handled, are there efforts to poke at something besides USB?
+>     Improving real-time testing: is there any testing for real time at all?
+>
+> MC leads
+>
+>     Sasha Levin <sashal@kernel.org>
+>     Kevin Hilman <khilman@kernel.org>
 
-Hi David,
+Hi Kevin,
 
-You'll need to rebase this on top of the mm tree, which currently
-contains Walter's patch titled "kasan: fix KASAN unit tests for
-tag-based KASAN".
+What is the deadline? I almost prepared a proposal, just want to make
+sure I won't miss the deadline by a day :)
 
-There's also another patch that touches KASAN tests in the series I've
-just mailed titled "kasan: support stack instrumentation for tag-based
-mode".
+I see some other MCs have "CFP Ends:", but not Testing MC:
+https://www.linuxplumbersconf.org/event/7/page/80-accepted-microconferences#tf-cr
 
-Thanks!
-
-
->
-> Changes from v8:
->  - Rebased on top of kselftest/kunit
->  - (Which, with this patchset, should rebase cleanly on 5.8-rc7)
->  - Renamed the KUnit test suite, config name to patch the proposed
->    naming guidelines for KUnit tests[6]
->
-> Changes from v7:
->  - Rebased on top of kselftest/kunit
->  - Rebased on top of v4 of the kunit resources API[1]
->  - Rebased on top of v4 of the FORTIFY_SOURCE fix[2,3,4]
->  - Updated the Kconfig entry to support KUNIT_ALL_TESTS
->
-> Changes from v6:
->  - Rebased on top of kselftest/kunit
->  - Rebased on top of Daniel Axtens' fix for FORTIFY_SOURCE
->    incompatibilites [2]
->  - Removed a redundant report_enabled() check.
->  - Fixed some places with out of date Kconfig names in the
->    documentation.
->
-> Changes from v5:
->  - Split out the panic_on_warn changes to a separate patch.
->  - Fix documentation to fewer to the new Kconfig names.
->  - Fix some changes which were in the wrong patch.
->  - Rebase on top of kselftest/kunit (currently identical to 5.7-rc1)
->
-> Changes from v4:
->  - KASAN no longer will panic on errors if both panic_on_warn and
->    kasan_multishot are enabled.
->  - As a result, the KASAN tests will no-longer disable panic_on_warn.
->  - This also means panic_on_warn no-longer needs to be exported.
->  - The use of temporary "kasan_data" variables has been cleaned up
->    somewhat.
->  - A potential refcount/resource leak should multiple KASAN errors
->    appear during an assertion was fixed.
->  - Some wording changes to the KASAN test Kconfig entries.
->
-> Changes from v3:
->  - KUNIT_SET_KASAN_DATA and KUNIT_DO_EXPECT_KASAN_FAIL have been
->  combined and included in KUNIT_DO_EXPECT_KASAN_FAIL() instead.
->  - Reordered logic in kasan_update_kunit_status() in report.c to be
->  easier to read.
->  - Added comment to not use the name "kasan_data" for any kunit tests
->  outside of KUNIT_EXPECT_KASAN_FAIL().
->
-> Changes since v2:
->  - Due to Alan's changes in [1], KUnit can be built as a module.
->  - The name of the tests that could not be run with KUnit has been
->  changed to be more generic: test_kasan_module.
->  - Documentation on how to run the new KASAN tests and what to expect
->  when running them has been added.
->  - Some variables and functions are now static.
->  - Now save/restore panic_on_warn in a similar way to kasan_multi_shot
->  and renamed the init/exit functions to be more generic to accommodate.
->  - Due to [4] in kasan_strings, kasan_memchr, and
->  kasan_memcmp will fail if CONFIG_AMD_MEM_ENCRYPT is enabled so return
->  early and print message explaining this circumstance.
->  - Changed preprocessor checks to C checks where applicable.
->
-> Changes since v1:
->  - Make use of Alan Maguire's suggestion to use his patch that allows
->    static resources for integration instead of adding a new attribute to
->    the kunit struct
->  - All KUNIT_EXPECT_KASAN_FAIL statements are local to each test
->  - The definition of KUNIT_EXPECT_KASAN_FAIL is local to the
->    test_kasan.c file since it seems this is the only place this will
->    be used.
->  - Integration relies on KUnit being builtin
->  - copy_user_test has been separated into its own file since KUnit
->    is unable to test these. This can be run as a module just as before,
->    using CONFIG_TEST_KASAN_USER
->  - The addition to the current task has been separated into its own
->    patch as this is a significant enough change to be on its own.
->
->
-> [1] https://lore.kernel.org/linux-kselftest/CAFd5g46Uu_5TG89uOm0Dj5CMq+11cwjBnsd-k_CVy6bQUeU4Jw@mail.gmail.com/T/#t
-> [2] https://lore.kernel.org/linux-mm/20200424145521.8203-1-dja@axtens.net/
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adb72ae1915db28f934e9e02c18bfcea2f3ed3b7
-> [4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47227d27e2fcb01a9e8f5958d8997cf47a820afc
-> [5] https://bugzilla.kernel.org/show_bug.cgi?id=206337
-> [6] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/
->
->
-> David Gow (1):
->   mm: kasan: Do not panic if both panic_on_warn and kasan_multishot set
->
-> Patricia Alfonso (4):
->   Add KUnit Struct to Current Task
->   KUnit: KASAN Integration
->   KASAN: Port KASAN Tests to KUnit
->   KASAN: Testing Documentation
->
->  Documentation/dev-tools/kasan.rst |  70 +++
->  include/kunit/test.h              |   5 +
->  include/linux/kasan.h             |   6 +
->  include/linux/sched.h             |   4 +
->  lib/Kconfig.kasan                 |  22 +-
->  lib/Makefile                      |   7 +-
->  lib/kunit/test.c                  |  13 +-
->  lib/test_kasan.c                  | 858 ------------------------------
->  mm/kasan/report.c                 |  34 +-
->  9 files changed, 147 insertions(+), 872 deletions(-)
->  delete mode 100644 lib/test_kasan.c
->
-> --
-> 2.28.0.163.g6104cc2f0b6-goog
->
+Also what are the options for duration? Can I ask for a particular
+duration in the proposal comments?
