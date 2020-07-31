@@ -2,143 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE86D2349DC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jul 2020 19:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF41C234B80
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jul 2020 21:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732693AbgGaRGA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Jul 2020 13:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S1729910AbgGaTPq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Jul 2020 15:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729944AbgGaRF7 (ORCPT
+        with ESMTP id S1729519AbgGaTPq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jul 2020 13:05:59 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27E3C061574
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 10:05:59 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id j19so16341850pgm.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 10:05:59 -0700 (PDT)
+        Fri, 31 Jul 2020 15:15:46 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA80CC061757
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 12:15:45 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id w9so23774515qts.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2020 12:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=kO7tSmtMGzFWvAuVfMIeLezphj2gPAq2RvK7z1I/VfA=;
-        b=ibiqzg2ZwZTyZLqAQ8FffJTr1JkjcIyb3SPv+w+O64xTjp3WuD524BKAzNBdD/tHv5
-         U9jfVKIUL7YHeMAEmQucJ/PQJw9Xx54IpkzhuRsZOMLyqppunGjdQWPk3NcDB9km8Asa
-         0CSEyzBTLtEVZWKuSoxdVrDBn4ZbtwvvCarvFfSxLtJeRrmwf0dzeE3SlQGpkwd3iHGm
-         cvEnq/bEbDfgUA1giAwMzLtvdU+DWZW9RsoBqx5J49edJQWb7jpEQCg3WkW2Z02EJtoR
-         tNO4fZ2wr/FaX1TmqcXWsuAsiCvlz1mP3t/UomVoq5eLIKnAueu2BXNOpHiXeY+xVCYP
-         lzAg==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Fq0Y+W4Lgf9ZSs2fq5dZEqY/mzSGk+8POFJ4bFdvCDk=;
+        b=G/VpxuJUEys50kS6M4S8wb2H1SZFH9TAe6PT9j9DjWLTOfJB5PNMU67K3dsNbEqa/T
+         f/t/ak0QhLCebd7u7VQEHzvhQW9JdWn6Q0zDWLUeVDy3t8XfK0bgdcd4pK6d11b8hDOJ
+         awmYIM72dgL0i2V7jQWPII+xmQ6s7xdvCa7yHe3VPproYPZLgxU/trvWLMs7TJ1a17zM
+         hkxnvRS2KHmbgVl2ohPFNxuIcOG5Hy4m6X5ZU/L5bcHwUkvXjAenwqP7ddqeXsdvNx8d
+         7a/WH0YQE0MirCzNS6Fv+Fw+tL8mCVhiagDDtra7MILsPqqCdx7raAC9vGeT/LHU24gG
+         VvfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=kO7tSmtMGzFWvAuVfMIeLezphj2gPAq2RvK7z1I/VfA=;
-        b=JGLS328kUp3eqGv8cXFqlby3jMXHMyr6EyOVnfvZACg9db+NsAfY+B2DingoZWgr+R
-         z3NxuhnCfCgiUSkbTjloCieINFV7/+RbBpiBFTTdoqdo5WgvyNw1WQa1DdSHSbj+fCt+
-         u2618MAafcifsTc3DNkxj16CXuZXNGUOITK83NBOaFwqwP+OkUgftzuG48+2savDXkaJ
-         wlfp8+ypeapBJ3r5/L5mKnP8jy7GCRXu6JK2mow9RT1RylnwjL9fqIceTvrYaT1SukHo
-         pmen8KJXnVXbwgnGdvv0OSiy5EvX/rZATCoFPzRTGp11DsSpdF4ibqaZ8MVlue3/Cldn
-         9y0g==
-X-Gm-Message-State: AOAM532KU+PtD3s8ykfu2gIebRde94C8VcDtn8UelONShP25Zqq6VhGs
-        4Uud7u3mMCSsYVK7kxAf3s/5Qw==
-X-Google-Smtp-Source: ABdhPJw+SlAdNRgxZUlASP8WDeEbVi66Ms8SKMgQwqsCPN2Y9NOLpy2nNiHSHNbp8rl7Vkvc+pEG7g==
-X-Received: by 2002:a63:720b:: with SMTP id n11mr4487103pgc.137.1596215159205;
-        Fri, 31 Jul 2020 10:05:59 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id lk16sm9028739pjb.13.2020.07.31.10.05.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Fq0Y+W4Lgf9ZSs2fq5dZEqY/mzSGk+8POFJ4bFdvCDk=;
+        b=nl/IpyhGaQgOFcXjDukGF2U0pKyEgsWp8WiL8ASW+/PdhlYy4xVSV8hOELzy+r/5oi
+         vyJtyNNIQyTjanoEpe3llVZ0GvKfnosxfKQVF3m+vkjHSf5uDwUKJc9/gKyi/Ivsv9NT
+         DuleiGgvSmiYRtAduL2w9K9n2g9VzJ6rb7KUUPldYWKl1jZFnA8X/OcntsozBYzIGdbr
+         OKYrfsh5Mgk+HL1ntaghSrfzzUfLKWQG4u8BM88j9k2p1ZliMUlEB+n5mOMIrwE6DNTB
+         SsPKTtbXH7ZMmfpXvkyO+oqkzFEjDV1dt2UFmmGDqdkCv4n0wpyDkHcs3gagFblyv0nW
+         W02Q==
+X-Gm-Message-State: AOAM532XFm0D2zHKJJ663IgVcjHLplfgS6gFtIDGQAMroEBFMDllRF96
+        ACjmHnCLRCGmFMrVhYyn6TzjQw==
+X-Google-Smtp-Source: ABdhPJy80fPm/ep3Y4AxQL+NAp4HUm3l9/dB0ABYDlNS+XUMwzmiJ6PHh20/a5m/KIRuQsM16pnQBA==
+X-Received: by 2002:aed:3361:: with SMTP id u88mr5258595qtd.79.1596222944775;
+        Fri, 31 Jul 2020 12:15:44 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id q2sm10160900qtl.64.2020.07.31.12.15.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2020 10:05:58 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     automated-testing@yoctoproject.org,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: CFP open for testing/fuzzing microconference at LPC
-In-Reply-To: <CACT4Y+Z9wsS_m4humVcx-4CAbD2rvUxRHCVfgUYTWXVVzreXOA@mail.gmail.com>
-References: <7heep067yt.fsf@baylibre.com> <CACT4Y+Z9wsS_m4humVcx-4CAbD2rvUxRHCVfgUYTWXVVzreXOA@mail.gmail.com>
-Date:   Fri, 31 Jul 2020 10:05:57 -0700
-Message-ID: <7h7duj398q.fsf@baylibre.com>
+        Fri, 31 Jul 2020 12:15:44 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1k1aVL-002Bep-EX; Fri, 31 Jul 2020 16:15:43 -0300
+Date:   Fri, 31 Jul 2020 16:15:43 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     linux-rdma@vger.kernel.org, linux-mm@kvack.org,
+        nouveau@lists.freedesktop.org, kvm-ppc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Ben Skeggs <bskeggs@redhat.com>,
+        Bharata B Rao <bharata@linux.ibm.com>
+Subject: Re: [PATCH v4 6/6] mm/migrate: remove range invalidation in
+ migrate_vma_pages()
+Message-ID: <20200731191543.GJ24045@ziepe.ca>
+References: <20200723223004.9586-1-rcampbell@nvidia.com>
+ <20200723223004.9586-7-rcampbell@nvidia.com>
+ <20200728191940.GB159104@nvidia.com>
+ <7f947311-0034-9148-1dca-fb9b9a10abc4@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f947311-0034-9148-1dca-fb9b9a10abc4@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-"'Dmitry Vyukov' via syzkaller" <syzkaller@googlegroups.com> writes:
+On Tue, Jul 28, 2020 at 03:04:07PM -0700, Ralph Campbell wrote:
+> 
+> On 7/28/20 12:19 PM, Jason Gunthorpe wrote:
+> > On Thu, Jul 23, 2020 at 03:30:04PM -0700, Ralph Campbell wrote:
+> > > When migrating the special zero page, migrate_vma_pages() calls
+> > > mmu_notifier_invalidate_range_start() before replacing the zero page
+> > > PFN in the CPU page tables. This is unnecessary since the range was
+> > > invalidated in migrate_vma_setup() and the page table entry is checked
+> > > to be sure it hasn't changed between migrate_vma_setup() and
+> > > migrate_vma_pages(). Therefore, remove the redundant invalidation.
+> > 
+> > I don't follow this logic, the purpose of the invalidation is also to
+> > clear out anything that may be mirroring this VA, and "the page hasn't
+> > changed" doesn't seem to rule out that case?
+> > 
+> > I'm also not sure I follow where the zero page came from?
+> 
+> The zero page comes from an anonymous private VMA that is read-only
+> and the user level CPU process tries to read the page data (or any
+> other read page fault).
+> 
+> > Jason
+> > 
+> 
+> The overall migration process is:
+> 
+> mmap_read_lock()
+> 
+> migrate_vma_setup()
+>       // invalidates range, locks/isolates pages, puts migration entry in page table
+> 
+> <driver allocates destination pages and copies source to dest>
+> 
+> migrate_vma_pages()
+>       // moves source struct page info to destination struct page info.
+>       // clears migration flag for pages that can't be migrated.
+> 
+> <driver updates device page tables for pages still migrating, rollback pages not migrating>
+> 
+> migrate_vma_finalize()
+>       // replaces migration page table entry with destination page PFN.
+> 
+> mmap_read_unlock()
+> 
+> Since the address range is invalidated in the migrate_vma_setup() stage,
+> and the page is isolated from the LRU cache, locked, unmapped, and the page table
+> holds a migration entry (so the page can't be faulted and the CPU page table set
+> valid again), and there are no extra page references (pins), the page
+> "should not be modified".
 
-> On Fri, Jul 24, 2020 at 9:14 PM Kevin Hilman <khilman@baylibre.com> wrote:
->>
->> Hello Linux testing enthusiasts,
->>
->> The CFP is open for the testing/fuzzing microconference[1] at Linux
->> plumbers conference.
->>
->> Please submit your ideas for discussion topics usin the LPC CFP tool:
->>
->>    https://www.linuxplumbersconf.org/event/7/abstracts/
->>
->> Click "Submit new Proposal" at the bottom of the page.
->>
->> There are some suggested topics in the MC announcement[1], but feel
->> free to submit ideas that are not on that list.
->>
->> And yes, LPC will be virtual this year as announced on the LPC blog:
->> https://www.linuxplumbersconf.org/blog/2020/linux-plumbers-conference-2020-goes-virtual/
->>
->> The tools and logistics are being actively worked on, so stay tuned to
->> the LPC blog for all the details.
->>
->> Thanks,
->>
->> Kevin
->>
->> [1] From: https://www.linuxplumbersconf.org/event/7/page/80-accepted-microconferences#tf-cr
->>
->> The Testing and Fuzzing microconference focuses on advancing the current
->> state of testing and validation of the Linux Kernel, with a focus on
->> encouraging and facilitating collaboration between testing projects.
->>
->> Suggested Topics:
->>
->>     Next steps for KernelCI (data formats, dashboards, etc)
->>     Structured data feeds for cross-project collaboration
->>     Integration with kernel.org tools (e.g. b4)
->>     Continued defragmentation of testing infrastructure
->>     Better sanitizers: KASAN improvements, KCSAN fallout, future plans.
->>     Better hardware testing, hardware sanitizers: how the USB fallout was handled, are there efforts to poke at something besides USB?
->>     Improving real-time testing: is there any testing for real time at all?
->>
->> MC leads
->>
->>     Sasha Levin <sashal@kernel.org>
->>     Kevin Hilman <khilman@kernel.org>
->
-> Hi Kevin,
->
-> What is the deadline? I almost prepared a proposal, just want to make
-> sure I won't miss the deadline by a day :)
+That is the physical page though, it doesn't prove nobody else is
+reading the PTE.
+ 
+> For pte_none()/is_zero_pfn() entries, migrate_vma_setup() leaves the
+> pte_none()/is_zero_pfn() entry in place but does still call
+> mmu_notifier_invalidate_range_start() for the whole range being migrated.
 
-Aug 17th.
+Ok..
 
-> I see some other MCs have "CFP Ends:", but not Testing MC:
-> https://www.linuxplumbersconf.org/event/7/page/80-accepted-microconferences#tf-cr
+> In the migrate_vma_pages() step, the pte page table is locked and the
+> pte entry checked to be sure it is still pte_none/is_zero_pfn(). If not,
+> the new page isn't inserted. If it is still none/zero, the new device private
+> struct page is inserted into the page table, replacing the pte_none()/is_zero_pfn()
+> page table entry. The secondary MMUs were already invalidated in the migrate_vma_setup()
+> step and a pte_none() or zero page can't be modified so the only invalidation needed
+> is the CPU TLB(s) for clearing the special zero page PTE entry.
 
-Oops, I'll get that added to our entry.
+No, the secondary MMU was invalidated but the invalidation start/end
+range was exited. That means a secondary MMU is immeidately able to
+reload the zero page into its MMU cache.
 
-> Also what are the options for duration? Can I ask for a particular
-> duration in the proposal comments?
+When this code replaces the PTE that has a zero page it also has to
+invalidate again so that secondary MMU's are guaranteed to pick up the
+new PTE value.
 
-Yes, you can request a duration, but keep in mind the virtual nature of
-the event.  
+So, I still don't understand how this is safe?
 
-If you think it's useful, you can also propose follow-up/breakout with a
-smaller group of interested parties for more detailed technical
-discussion.  It's still a bit unclear how this is all going to work out
-with it being virtual, but we'll be able to do smaller, targetted
-sessions if needed as well.
-
-Kevin
-
+Jason
