@@ -2,79 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9827F23AF88
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Aug 2020 23:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4607423B08F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Aug 2020 00:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729189AbgHCVO4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Aug 2020 17:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S1728601AbgHCW7M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Aug 2020 18:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729186AbgHCVOy (ORCPT
+        with ESMTP id S1726770AbgHCW7L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Aug 2020 17:14:54 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E44C061756
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2020 14:14:54 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 189so3305758pfd.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2020 14:14:54 -0700 (PDT)
+        Mon, 3 Aug 2020 18:59:11 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774BAC06174A
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2020 15:59:11 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id r2so30558907wrs.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2020 15:59:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vFs5N7Aj94X2p4Itvu8tYvN2B3/GsCmBFKnespcHSO0=;
-        b=BIJROpGSryxlCfoh5rldvY+j0NKCC0TMSDj/SFN4RZMbQXx5jWPcy71uC+SEtNDxX7
-         BqHAgLfMCOWFh5CNKROZfxPZ7EGqxWAg93Z6IjH7NzGlBMXrZcz89dtyCQzcWdK51/rc
-         4fcRl1C9vlx4ysv8yE4M/BFzdQHtnm+whqM3MeFrq5DQOznOUiZWtnNMCG0/nmJ4d/7y
-         rB4POQCJpPpNHFNFza1crYxYA9RRemn99Fll6ery5GoKvTgmgHezyhpPaFZuHLcvyRsN
-         GEAKftb1k0JcKY4VpjWXVi9+noA+0KYRnOD0pfyJCTCONpF6xVqUst0vVvw9lVpCHj9e
-         mamA==
+        bh=ZVMTuQZIH47WM1WuikLBTLZ1LTQtr65n2lbis/GQnro=;
+        b=Q7y3ZvBVs+uNYo2Mb/GjVhFW370VN3GdBcKmK5mr/28yZ6LjoWyp7Mv8xLknRLnc2p
+         BNrv0CINGmdsSeO3zTZ7FuvLbsFzdcCbYN9AH81W0h8/Ob7GEjdafkSXLP6PcWEQiEeZ
+         gVF4CtKz6ADDdBTrluK5XeHu+zCJSsLHvwwgIV4WFipgSAJPdW+OcDGwEWJ9+Da4pWJo
+         PU7uzG5Hl6lgY+Hfhf2LZO5LusUkYOHCRzel2VYM0x17UQSy8lcpdB8pwytWV4f4AHXf
+         g3ASsKZsCq3cVMnawJRsyHM22bzRYMmwrqfN9UropwJg1eDQiIvAwDxzIQzMBPOr58Zx
+         oxaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vFs5N7Aj94X2p4Itvu8tYvN2B3/GsCmBFKnespcHSO0=;
-        b=dRdPTKGMx/PywKnD3hJVJQ9SDh1itpg/AqhHhuhP2HB2PYgmJ6rGwgvpvWrXRASZXX
-         Hb/u+qOwlKJzUYHaRr36Rjb5YPUA/P8zbYPGNZQP1B7JF9VhEG5r3UCk3GzqR7NdYV4a
-         yPmu6xnC0jSF/8Nk7P9ysflJo+R4jfDeDFaDs+Fdm4MxYx8bz/iGPDQ1sjYp2nqnIIX9
-         NYcLqhBhw3YtA9vYe2++2aX+xkjC+Pqielu6gfPJKkCT3foo5B0kPmGzy/C+XWjj09Hs
-         7ak7V5EA9mSMdPF4u6MrRSoZOwsS2Pdx7UMn7pqgb7J+dH2/F+JPC2bs3hb49O8eOv4K
-         VQ3w==
-X-Gm-Message-State: AOAM532JsQ5fwSfnNAWjPbMZaeXrXSmaDAJxigYHCyatKI+VwfAEviWH
-        8H33ApuGvC+iLhezSgt6qjoWEbmr4x4ygyuciqX3aQ==
-X-Google-Smtp-Source: ABdhPJxN74uGPSyFq/sMHzSrAyVNydvv3a1KRtp+ugVWRWUR4XzuGsQSZAk1SzJ3Mge5oZFXZ7/TRU4deckwnTL4Mdg=
-X-Received: by 2002:a62:7b89:: with SMTP id w131mr16526946pfc.284.1596489293882;
- Mon, 03 Aug 2020 14:14:53 -0700 (PDT)
+        bh=ZVMTuQZIH47WM1WuikLBTLZ1LTQtr65n2lbis/GQnro=;
+        b=tipyVJJa9eZ7Ncu70waPvjY67BWj7MPSaVNCo7eI0E/gVYR2opT7tz3/OeYKFT9qN7
+         SIxFyV+SQ8tjgbY43FPIQAI7JLSNwjlJo8BAkHQx0rUnI5WlQ/REckBpF1Xhj4hcUpRv
+         tVae2yNumYzlMW9ROM+72BWF54/qUalu6jPwNjhbde9A1es88OH9auG8loCpz2aa/cr+
+         JJITtuhDOkvg4xSUx2PQCtZp5H6PEuTKENrMn23vFxHmFkPW/xINZHyLkR2LkS9JX9Ol
+         ks6qBE0rIb88GBQuAshS2gudlxVJ9GNMJFom+1/pHigBldb8VN0QmZdlJa+rLpYD4mPZ
+         0NdA==
+X-Gm-Message-State: AOAM531nFzNPOmBYcXRA+uo4vVHhLQYGIzt6xHrHj/Yqa7HIB2+uCrml
+        /9tblRiLISmfn6jkSxS/eGcfVFy4Mkb+s2iOU0ih8Q==
+X-Google-Smtp-Source: ABdhPJwd+kAe35CZLHtw169OJYbx0Gkc+euSQp8Y4f8jmkoFFLXtjrglf4FogQewYcDbj62rm0/pOPYEOMajh2OZ5FQ=
+X-Received: by 2002:adf:f289:: with SMTP id k9mr17129637wro.203.1596495550006;
+ Mon, 03 Aug 2020 15:59:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200803025939.21106-1-98.arpi@gmail.com>
-In-Reply-To: <20200803025939.21106-1-98.arpi@gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 3 Aug 2020 14:14:42 -0700
-Message-ID: <CAFd5g47u5u=cVAM_5rBj0mA4YcKjanebb35Po1EN13mNrEH7KA@mail.gmail.com>
-Subject: Re: [PATCH v2] lib: Convert test_uuid.c to KUnit
-To:     Arpitha Raghunandan <98.arpi@gmail.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+References: <20200801070924.1786166-1-davidgow@google.com> <20200801070924.1786166-4-davidgow@google.com>
+In-Reply-To: <20200801070924.1786166-4-davidgow@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 4 Aug 2020 06:58:58 +0800
+Message-ID: <CABVgOSnpsnYw=0mAks4Xr2rGe07ER1041TKCCY1izeCfT8TcBQ@mail.gmail.com>
+Subject: Re: [PATCH v10 3/5] KASAN: Port KASAN Tests to KUnit
+To:     Patricia Alfonso <trishalfonso@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 2, 2020 at 8:00 PM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+On Sat, Aug 1, 2020 at 3:10 PM David Gow <davidgow@google.com> wrote:
 >
-> Converts test lib/test_uuid.c to KUnit.
-> More information about KUnit can be found at
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
-> This change is beneficial as KUnit provides a common framework for
-> unit tests in the kernel. KUnit is fast as well.
+> From: Patricia Alfonso <trishalfonso@google.com>
 >
-> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+> Transfer all previous tests for KASAN to KUnit so they can be run
+> more easily. Using kunit_tool, developers can run these tests with their
+> other KUnit tests and see "pass" or "fail" with the appropriate KASAN
+> report instead of needing to parse each KASAN report to test KASAN
+> functionalities. All KASAN reports are still printed to dmesg.
+>
+> Stack tests do not work properly when KASAN_STACK is enabled so
+> those tests use a check for "if IS_ENABLED(CONFIG_KASAN_STACK)" so they
+> only run if stack instrumentation is enabled. If KASAN_STACK is not
+> enabled, KUnit will print a statement to let the user know this test
+> was not run with KASAN_STACK enabled.
+>
+> copy_user_test and kasan_rcu_uaf cannot be run in KUnit so there is a
+> separate test file for those tests, which can be run as before as a
+> module.
+>
+> Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
+> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+> ---
+>  lib/Kconfig.kasan       |  22 +-
+>  lib/Makefile            |   7 +-
+>  lib/kasan_kunit.c       | 770 ++++++++++++++++++++++++++++++++
+>  lib/test_kasan.c        | 946 ----------------------------------------
+>  lib/test_kasan_module.c | 111 +++++
+>  5 files changed, 902 insertions(+), 954 deletions(-)
+>  create mode 100644 lib/kasan_kunit.c
+>  delete mode 100644 lib/test_kasan.c
+>  create mode 100644 lib/test_kasan_module.c
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Whoops -- this patch had a few nasty whitespace issues make it
+through. I'll send out a new version with those fixed.
 
-Thanks!
+I'm pondering splitting it up to do the file rename
+(test_kasan.c->kasan_kunit.c) separately as well, as git's rename
+detection is not particularly happy with it.
+
+Sorry,
+-- David
