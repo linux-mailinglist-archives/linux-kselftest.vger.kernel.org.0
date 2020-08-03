@@ -2,361 +2,264 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA9B239C91
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Aug 2020 00:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DB2239D94
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Aug 2020 05:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728285AbgHBWAQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 2 Aug 2020 18:00:16 -0400
-Received: from smtp-8fa8.mail.infomaniak.ch ([83.166.143.168]:58231 "EHLO
-        smtp-8fa8.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728051AbgHBV7k (ORCPT
+        id S1726862AbgHCDAf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 2 Aug 2020 23:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726845AbgHCDAe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 2 Aug 2020 17:59:40 -0400
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BKZgC1k2lzlhb5w;
-        Sun,  2 Aug 2020 23:59:35 +0200 (CEST)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BKZgB5sdmzlh8T4;
-        Sun,  2 Aug 2020 23:59:34 +0200 (CEST)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v20 09/12] arch: Wire up Landlock syscalls
-Date:   Sun,  2 Aug 2020 23:59:00 +0200
-Message-Id: <20200802215903.91936-10-mic@digikod.net>
-X-Mailer: git-send-email 2.28.0.rc2
-In-Reply-To: <20200802215903.91936-1-mic@digikod.net>
-References: <20200802215903.91936-1-mic@digikod.net>
+        Sun, 2 Aug 2020 23:00:34 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85716C06174A;
+        Sun,  2 Aug 2020 20:00:34 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id kr4so8248896pjb.2;
+        Sun, 02 Aug 2020 20:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SslfOAYowcSIRE7OJfXaZEhy+2zzQJIxjTX2JOfNhb0=;
+        b=ClJLtk7ld1m3Hbn7U3wLFVfTa9n9Sax2PhdyVglv8jYvKM1jE1XyUVKtIP5hZAiAJz
+         K/WRlfx6ylvKa9drNpdWB6gfkpcLcro9XFpZAVrBeC7JxLRVfEFk90mvXFQEpuBAn6vr
+         qyrFFAK3OPDJEs08ooJmUD8S7KnBgJtgf+slm10wKQBh0jXGtEv4c+Fv35Efh94ldzkC
+         XqC60Gu4mO4M8kx8XMKsdf3fuacFkrAL2CG0nnwQZUrJqmlJqa/FMFeGyj8Nk6uP9PC5
+         kVFov0WtpT6PGCn5Vy0s3oJ7W50SK4EDuToJrC41Hqa/qar9YLKecqt7zqZjLgyW5f7e
+         Svzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SslfOAYowcSIRE7OJfXaZEhy+2zzQJIxjTX2JOfNhb0=;
+        b=jjv9wuoPb0keysi8Aaw35YM3G4PoOnc4uSMR8paCqyXHTkgp7ZK7DuMAgjRpvBLfr0
+         JePEWsORyWJN6mXIlLKOFQFX262DsvL2edfOBhkz8InJDwRhcOwjhByl9SMFCF3tLaWg
+         hMRxuPi+FT+Qf0aFKwdxnYs2wOOomfnrt7svLVibpYOlF9ZqV99mZjNZmMnr2uGyIi85
+         +kIO2Lu1/uMuBbI1gPoR0hIHdP3SqNluIzCHW0cHPhIu8QuPlwugLh0rwODEZ8UsD8Zk
+         zSfmEHnS4E3s8X6zCxv0fV3+Bl9+l0z4N60hQl0s8e6O50HlSgwkapfIbBcia7NkUOox
+         0DGg==
+X-Gm-Message-State: AOAM530VdXDolVRTq2Ey1uTzb7C2iQlORFWp3i1E3b0+QBmnpVqMlX5K
+        AXviqYRndbldImtdMezVM54=
+X-Google-Smtp-Source: ABdhPJxDrt2rUig4JsB3VONcCUv3daYW3E9vL8dO56SldvOAR9QRN2kiyiXC5AXgs1t7O5oC7rUAXQ==
+X-Received: by 2002:a17:902:aa82:: with SMTP id d2mr12475796plr.336.1596423633945;
+        Sun, 02 Aug 2020 20:00:33 -0700 (PDT)
+Received: from arpitha-Inspiron-7570.lan ([49.206.12.123])
+        by smtp.gmail.com with ESMTPSA id g23sm18069768pfo.95.2020.08.02.20.00.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2020 20:00:33 -0700 (PDT)
+From:   Arpitha Raghunandan <98.arpi@gmail.com>
+To:     brendanhiggins@google.com, skhan@linuxfoundation.org,
+        andriy.shevchenko@linux.intel.com
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v2] lib: Convert test_uuid.c to KUnit
+Date:   Mon,  3 Aug 2020 08:29:39 +0530
+Message-Id: <20200803025939.21106-1-98.arpi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Wire up the following system calls for all architectures:
-* landlock_get_features(2)
-* landlock_create_ruleset(2)
-* landlock_add_rule(2)
-* landlock_enforce_ruleset(2)
+Converts test lib/test_uuid.c to KUnit.
+More information about KUnit can be found at
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
+This change is beneficial as KUnit provides a common framework for
+unit tests in the kernel. KUnit is fast as well.
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: James Morris <jmorris@namei.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
+Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
 ---
+Changes v1->v2:
+- Add a more detailed commit message
 
-Changes since v19:
-* Increase syscall numbers by 4 to leave space for new ones (in
-  linux-next): watch_mount(2), watch_sb(2), fsinfo(2) and
-  process_madvise(2) (requested by Arnd Bergmann).
-* Replace the previous multiplexor landlock(2) with 4 syscalls:
-  landlock_get_features(2), landlock_create_ruleset(2),
-  landlock_add_rule(2) and landlock_enforce_ruleset(2).
+ lib/Kconfig.debug                 |  7 +--
+ lib/Makefile                      |  2 +-
+ lib/{test_uuid.c => uuid_kunit.c} | 84 +++++++++----------------------
+ 3 files changed, 28 insertions(+), 65 deletions(-)
+ rename lib/{test_uuid.c => uuid_kunit.c} (48%)
 
-Changes since v18:
-* Increase the syscall number because of the new faccessat2(2).
-
-Changes since v14:
-* Add all architectures.
-
-Changes since v13:
-* New implementation.
----
- arch/alpha/kernel/syscalls/syscall.tbl      |  4 ++++
- arch/arm/tools/syscall.tbl                  |  4 ++++
- arch/arm64/include/asm/unistd.h             |  2 +-
- arch/arm64/include/asm/unistd32.h           |  8 ++++++++
- arch/ia64/kernel/syscalls/syscall.tbl       |  4 ++++
- arch/m68k/kernel/syscalls/syscall.tbl       |  4 ++++
- arch/microblaze/kernel/syscalls/syscall.tbl |  4 ++++
- arch/mips/kernel/syscalls/syscall_n32.tbl   |  4 ++++
- arch/mips/kernel/syscalls/syscall_n64.tbl   |  4 ++++
- arch/mips/kernel/syscalls/syscall_o32.tbl   |  4 ++++
- arch/parisc/kernel/syscalls/syscall.tbl     |  4 ++++
- arch/powerpc/kernel/syscalls/syscall.tbl    |  4 ++++
- arch/s390/kernel/syscalls/syscall.tbl       |  4 ++++
- arch/sh/kernel/syscalls/syscall.tbl         |  4 ++++
- arch/sparc/kernel/syscalls/syscall.tbl      |  4 ++++
- arch/x86/entry/syscalls/syscall_32.tbl      |  4 ++++
- arch/x86/entry/syscalls/syscall_64.tbl      |  4 ++++
- arch/xtensa/kernel/syscalls/syscall.tbl     |  4 ++++
- include/uapi/asm-generic/unistd.h           | 10 +++++++++-
- 19 files changed, 82 insertions(+), 2 deletions(-)
-
-diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-index 5ddd128d4b7a..d59664094690 100644
---- a/arch/alpha/kernel/syscalls/syscall.tbl
-+++ b/arch/alpha/kernel/syscalls/syscall.tbl
-@@ -478,3 +478,7 @@
- 547	common	openat2				sys_openat2
- 548	common	pidfd_getfd			sys_pidfd_getfd
- 549	common	faccessat2			sys_faccessat2
-+554	common	landlock_get_features		sys_landlock_get_features
-+555	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+556	common	landlock_add_rule			sys_landlock_add_rule
-+557	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-index d5cae5ffede0..9fe59a61fa75 100644
---- a/arch/arm/tools/syscall.tbl
-+++ b/arch/arm/tools/syscall.tbl
-@@ -452,3 +452,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index 3b859596840d..fb7a0be2f3d9 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -38,7 +38,7 @@
- #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
- #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index f174f8887ae7..330c0d1de50b 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2070,9 +2070,6 @@ config TEST_BITFIELD
  
--#define __NR_compat_syscalls		440
-+#define __NR_compat_syscalls		448
- #endif
+ 	  If unsure, say N.
  
- #define __ARCH_WANT_SYS_CLONE
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 6d95d0c8bf2f..d150396491e6 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -885,6 +885,14 @@ __SYSCALL(__NR_openat2, sys_openat2)
- __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
- #define __NR_faccessat2 439
- __SYSCALL(__NR_faccessat2, sys_faccessat2)
-+#define __NR_landlock_get_features 444
-+__SYSCALL(__NR_landlock_get_features, sys_landlock_get_features)
-+#define __NR_landlock_create_ruleset 445
-+__SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
-+#define __NR_landlock_add_rule 446
-+__SYSCALL(__NR_landlock_add_rule, sys_landlock_add_rule)
-+#define __NR_landlock_enforce_ruleset 447
-+__SYSCALL(__NR_landlock_enforce_ruleset, sys_landloc_enforce_rulesetk)
+-config TEST_UUID
+-	tristate "Test functions located in the uuid module at runtime"
+-
+ config TEST_XARRAY
+ 	tristate "Test the XArray code at runtime"
  
- /*
-  * Please add new compat syscalls above this comment and update
-diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-index 49e325b604b3..84872f8daa42 100644
---- a/arch/ia64/kernel/syscalls/syscall.tbl
-+++ b/arch/ia64/kernel/syscalls/syscall.tbl
-@@ -359,3 +359,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-index f71b1bbcc198..a362b4b16d7b 100644
---- a/arch/m68k/kernel/syscalls/syscall.tbl
-+++ b/arch/m68k/kernel/syscalls/syscall.tbl
-@@ -438,3 +438,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-index edacc4561f2b..acc931725b43 100644
---- a/arch/microblaze/kernel/syscalls/syscall.tbl
-+++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-@@ -444,3 +444,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index f777141f5256..5e1d5bfced9d 100644
---- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -377,3 +377,7 @@
- 437	n32	openat2				sys_openat2
- 438	n32	pidfd_getfd			sys_pidfd_getfd
- 439	n32	faccessat2			sys_faccessat2
-+444	n32	landlock_get_features		sys_landlock_get_features
-+445	n32	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	n32	landlock_add_rule			sys_landlock_add_rule
-+447	n32	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-index da8c76394e17..8d9b6175f4af 100644
---- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-@@ -353,3 +353,7 @@
- 437	n64	openat2				sys_openat2
- 438	n64	pidfd_getfd			sys_pidfd_getfd
- 439	n64	faccessat2			sys_faccessat2
-+444	n64	landlock_get_features		sys_landlock_get_features
-+445	n64	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	n64	landlock_add_rule			sys_landlock_add_rule
-+447	n64	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index 13280625d312..66e58338772a 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -426,3 +426,7 @@
- 437	o32	openat2				sys_openat2
- 438	o32	pidfd_getfd			sys_pidfd_getfd
- 439	o32	faccessat2			sys_faccessat2
-+444	o32	landlock_get_features		sys_landlock_get_features
-+445	o32	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	o32	landlock_add_rule			sys_landlock_add_rule
-+447	o32	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-index 5a758fa6ec52..70bdc7c43464 100644
---- a/arch/parisc/kernel/syscalls/syscall.tbl
-+++ b/arch/parisc/kernel/syscalls/syscall.tbl
-@@ -436,3 +436,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-index f833a3190822..3f1d2c12eb98 100644
---- a/arch/powerpc/kernel/syscalls/syscall.tbl
-+++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-@@ -528,3 +528,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-index bfdcb7633957..577d590450e9 100644
---- a/arch/s390/kernel/syscalls/syscall.tbl
-+++ b/arch/s390/kernel/syscalls/syscall.tbl
-@@ -441,3 +441,7 @@
- 437  common	openat2			sys_openat2			sys_openat2
- 438  common	pidfd_getfd		sys_pidfd_getfd			sys_pidfd_getfd
- 439  common	faccessat2		sys_faccessat2			sys_faccessat2
-+444  common	landlock_get_features		sys_landlock_get_features		sys_landlock_get_features
-+445  common	landlock_create_ruleset		sys_landlock_create_ruleset		sys_landlock_create_ruleset
-+446  common	landlock_add_rule			sys_landlock_add_rule			sys_landlock_add_rule
-+447  common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-index acc35daa1b79..9202338a9e70 100644
---- a/arch/sh/kernel/syscalls/syscall.tbl
-+++ b/arch/sh/kernel/syscalls/syscall.tbl
-@@ -441,3 +441,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-index 8004a276cb74..b4c47eefda57 100644
---- a/arch/sparc/kernel/syscalls/syscall.tbl
-+++ b/arch/sparc/kernel/syscalls/syscall.tbl
-@@ -484,3 +484,7 @@
- 437	common	openat2			sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index d8f8a1a69ed1..26735df8c19e 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -443,3 +443,7 @@
- 437	i386	openat2			sys_openat2
- 438	i386	pidfd_getfd		sys_pidfd_getfd
- 439	i386	faccessat2		sys_faccessat2
-+444	i386	landlock_get_features		sys_landlock_get_features
-+445	i386	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	i386	landlock_add_rule			sys_landlock_add_rule
-+447	i386	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 78847b32e137..7e9c927b51fb 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -360,6 +360,10 @@
- 437	common	openat2			sys_openat2
- 438	common	pidfd_getfd		sys_pidfd_getfd
- 439	common	faccessat2		sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
+@@ -2273,6 +2270,10 @@ config BITS_TEST
  
- #
- # x32-specific system call numbers start at 512 to avoid cache impact
-diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-index 69d0d73876b3..c8b1a6218ee6 100644
---- a/arch/xtensa/kernel/syscalls/syscall.tbl
-+++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-@@ -409,3 +409,7 @@
- 437	common	openat2				sys_openat2
- 438	common	pidfd_getfd			sys_pidfd_getfd
- 439	common	faccessat2			sys_faccessat2
-+444	common	landlock_get_features		sys_landlock_get_features
-+445	common	landlock_create_ruleset		sys_landlock_create_ruleset
-+446	common	landlock_add_rule			sys_landlock_add_rule
-+447	common	landlock_enforce_ruleset	sys_landlock_enforce_ruleset
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index f4a01305d9a6..ff3afbf02b51 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -857,9 +857,17 @@ __SYSCALL(__NR_openat2, sys_openat2)
- __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
- #define __NR_faccessat2 439
- __SYSCALL(__NR_faccessat2, sys_faccessat2)
-+#define __NR_landlock_get_features 444
-+__SYSCALL(__NR_landlock_get_features, sys_landlock_get_features)
-+#define __NR_landlock_create_ruleset 445
-+__SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
-+#define __NR_landlock_add_rule 446
-+__SYSCALL(__NR_landlock_add_rule, sys_landlock_add_rule)
-+#define __NR_landlock_enforce_ruleset 447
-+__SYSCALL(__NR_landlock_enforce_ruleset, sys_landloc_enforce_rulesetk)
+ 	  If unsure, say N.
  
- #undef __NR_syscalls
--#define __NR_syscalls 440
-+#define __NR_syscalls 448
++config UUID_KUNIT_TEST
++	tristate "KUnit test for functions located in the uuid module at runtime"
++	depends on KUNIT
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 032cc6c71a3a..62ef383c7563 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -81,7 +81,6 @@ obj-$(CONFIG_TEST_PRINTF) += test_printf.o
+ obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
+ obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
+ obj-$(CONFIG_TEST_BITFIELD) += test_bitfield.o
+-obj-$(CONFIG_TEST_UUID) += test_uuid.o
+ obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
+ obj-$(CONFIG_TEST_PARMAN) += test_parman.o
+ obj-$(CONFIG_TEST_KMOD) += test_kmod.o
+@@ -342,5 +341,6 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) += test_bits.o
++obj-$(CONFIG_UUID_KUNIT_TEST) += uuid_kunit.o
  
- /*
-  * 32 bit systems traditionally used different
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+diff --git a/lib/test_uuid.c b/lib/uuid_kunit.c
+similarity index 48%
+rename from lib/test_uuid.c
+rename to lib/uuid_kunit.c
+index cd819c397dc7..f7f219ddecc2 100644
+--- a/lib/test_uuid.c
++++ b/lib/uuid_kunit.c
+@@ -3,6 +3,7 @@
+  */
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <kunit/test.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+@@ -39,95 +40,56 @@ static const char * const test_uuid_wrong_data[] = {
+ 	"0cb4ddff-a545-4401-9d06-688af53e",	/* not enough data */
+ };
+ 
+-static unsigned total_tests __initdata;
+-static unsigned failed_tests __initdata;
+-
+-static void __init test_uuid_failed(const char *prefix, bool wrong, bool be,
+-				    const char *data, const char *actual)
+-{
+-	pr_err("%s test #%u %s %s data: '%s'\n",
+-	       prefix,
+-	       total_tests,
+-	       wrong ? "passed on wrong" : "failed on",
+-	       be ? "BE" : "LE",
+-	       data);
+-	if (actual && *actual)
+-		pr_err("%s test #%u actual data: '%s'\n",
+-		       prefix,
+-		       total_tests,
+-		       actual);
+-	failed_tests++;
+-}
+-
+-static void __init test_uuid_test(const struct test_uuid_data *data)
++static void test_uuid_test(struct kunit *test, const struct test_uuid_data *data)
+ {
+ 	guid_t le;
+ 	uuid_t be;
+ 	char buf[48];
+ 
+ 	/* LE */
+-	total_tests++;
+-	if (guid_parse(data->uuid, &le))
+-		test_uuid_failed("conversion", false, false, data->uuid, NULL);
+-
+-	total_tests++;
+-	if (!guid_equal(&data->le, &le)) {
+-		sprintf(buf, "%pUl", &le);
+-		test_uuid_failed("cmp", false, false, data->uuid, buf);
+-	}
++	KUNIT_EXPECT_EQ(test, 0, guid_parse(data->uuid, &le));
++	KUNIT_EXPECT_TRUE(test, guid_equal(&data->le, &le));
+ 
+ 	/* BE */
+-	total_tests++;
+-	if (uuid_parse(data->uuid, &be))
+-		test_uuid_failed("conversion", false, true, data->uuid, NULL);
+-
+-	total_tests++;
+-	if (!uuid_equal(&data->be, &be)) {
+-		sprintf(buf, "%pUb", &be);
+-		test_uuid_failed("cmp", false, true, data->uuid, buf);
+-	}
++	KUNIT_EXPECT_EQ(test, 0, uuid_parse(data->uuid, &be));
++	KUNIT_EXPECT_TRUE(test, uuid_equal(&data->be, &be));
+ }
+ 
+-static void __init test_uuid_wrong(const char *data)
++static void test_uuid_wrong(struct kunit *test, const char *data)
+ {
+ 	guid_t le;
+ 	uuid_t be;
+ 
+ 	/* LE */
+-	total_tests++;
+-	if (!guid_parse(data, &le))
+-		test_uuid_failed("negative", true, false, data, NULL);
++	KUNIT_EXPECT_NE(test, 0, guid_parse(data, &le));
+ 
+ 	/* BE */
+-	total_tests++;
+-	if (!uuid_parse(data, &be))
+-		test_uuid_failed("negative", true, true, data, NULL);
++	KUNIT_EXPECT_NE(test, 0, uuid_parse(data, &be));
+ }
+ 
+-static int __init test_uuid_init(void)
++static void test_uuid_init(struct kunit *test)
+ {
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(test_uuid_test_data); i++)
+-		test_uuid_test(&test_uuid_test_data[i]);
++		test_uuid_test(test, &test_uuid_test_data[i]);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(test_uuid_wrong_data); i++)
+-		test_uuid_wrong(test_uuid_wrong_data[i]);
++		test_uuid_wrong(test, test_uuid_wrong_data[i]);
++}
+ 
+-	if (failed_tests == 0)
+-		pr_info("all %u tests passed\n", total_tests);
+-	else
+-		pr_err("failed %u out of %u tests\n", failed_tests, total_tests);
++static struct kunit_case uuid_test_cases[] = {
++	KUNIT_CASE(test_uuid_init),
++	{}
++};
+ 
+-	return failed_tests ? -EINVAL : 0;
+-}
+-module_init(test_uuid_init);
++static struct kunit_suite uuid_test_suite = {
++	.name = "uuid-kunit-test",
++	.test_cases = uuid_test_cases,
++};
++
++kunit_test_suite(uuid_test_suite);
+ 
+-static void __exit test_uuid_exit(void)
+-{
+-	/* do nothing */
+-}
+-module_exit(test_uuid_exit);
+ 
+ MODULE_AUTHOR("Andy Shevchenko <andriy.shevchenko@linux.intel.com>");
+ MODULE_LICENSE("Dual BSD/GPL");
 -- 
-2.28.0.rc2
+2.25.1
 
