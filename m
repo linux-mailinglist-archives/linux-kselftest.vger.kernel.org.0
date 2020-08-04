@@ -2,97 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D3D23BBF4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Aug 2020 16:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455BD23BC14
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Aug 2020 16:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728945AbgHDOYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Aug 2020 10:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728903AbgHDOX6 (ORCPT
+        id S1729194AbgHDO1F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Aug 2020 10:27:05 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33090 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728909AbgHDO1B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Aug 2020 10:23:58 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80364C06174A;
-        Tue,  4 Aug 2020 07:23:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=k3hHT8hBP3vIg+5n2HC1ywURgKIRKUgYzqnMS2vhhdM=; b=YaID0GqXpy1LpLRHHrlA5ZgUdz
-        YRGNR6WocYcAEBMUYF6t2biBQQZsEFcHxoQjE9fZYjLOXGJvpnh17wTBwaWVviPibgVhjtzD1VpNl
-        CXYJfWd6M0ExGPid892N2ilOazv9V15LYR0KDCJcB58l52fAtPISo6oZohbygZn1JD6R8o3EvvKJ0
-        Mht2Ln7RQbdCwW6RIIT8QRChYwE6jcSTh01gvuhnDUVvaKgrbVrfETGDK9EsEGiZovSfSYX3GVzmO
-        shjByq9fco8EqvTIr1/L1omF4lOkIZVQX82BF7paNS2+MsJFJuBPh/3IvmeI8gWNmTqqKPz4bK0qP
-        LEmOq8jQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k2xr0-0004yR-9p; Tue, 04 Aug 2020 14:23:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 4 Aug 2020 10:27:01 -0400
+Received: from localhost (unknown [IPv6:2610:98:8005::7c0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F2F730477A;
-        Tue,  4 Aug 2020 16:23:44 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 281592B7C12A3; Tue,  4 Aug 2020 16:23:44 +0200 (CEST)
-Date:   Tue, 4 Aug 2020 16:23:44 +0200
-From:   peterz@infradead.org
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Ian Rogers <irogers@google.com>, mingo@kernel.org
-Subject: Re: [PATCH] lib: kunit: add test_min_heap test conversion to KUnit
-Message-ID: <20200804142344.GM2674@hirez.programming.kicks-ass.net>
-References: <20200729201146.537433-1-vitor@massaru.org>
- <20200729203908.GD2655@hirez.programming.kicks-ass.net>
- <CADQ6JjW-=SNjV-abGpGA9NfHD4yGG_bD5FmvW99W-Vo06twkbw@mail.gmail.com>
- <20200804132517.GK2657@hirez.programming.kicks-ass.net>
- <CADQ6JjWzze-VAmg_b9EkS4iVySt5pw8V4FSxYpDFAj8jvBxuGA@mail.gmail.com>
+        (No client certificate requested)
+        (Authenticated sender: krisman)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 90031298801;
+        Tue,  4 Aug 2020 15:26:59 +0100 (BST)
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, willy@infradead.org, luto@kernel.org,
+        gofmanp@gmail.com, keescook@chromium.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v4 0/2] Syscall User Redirection
+Organization: Collabora
+References: <20200716193141.4068476-1-krisman@collabora.com>
+        <20200802120115.GC1289@bug>
+Date:   Tue, 04 Aug 2020 10:26:56 -0400
+In-Reply-To: <20200802120115.GC1289@bug> (Pavel Machek's message of "Sun, 2
+        Aug 2020 14:01:15 +0200")
+Message-ID: <87h7tiebbj.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADQ6JjWzze-VAmg_b9EkS4iVySt5pw8V4FSxYpDFAj8jvBxuGA@mail.gmail.com>
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 04, 2020 at 10:46:21AM -0300, Vitor Massaru Iha wrote:
-> On Tue, Aug 4, 2020 at 10:25 AM <peterz@infradead.org> wrote:
-> > On Wed, Jul 29, 2020 at 06:57:17PM -0300, Vitor Massaru Iha wrote:
-> >
-> > > The results can be seen this way:
-> > >
-> > > This is an excerpt from the test.log with the result in TAP format:
-> > > [snip]
-> > > ok 5 - example
-> > >     # Subtest: min-heap
-> > >     1..6
-> > >     ok 1 - test_heapify_all_true
-> > >     ok 2 - test_heapify_all_false
-> > >     ok 3 - test_heap_push_true
-> > >     ok 4 - test_heap_push_false
-> > >     ok 5 - test_heap_pop_push_true
-> > >     ok 6 - test_heap_pop_push_false
-> > > [snip]
+Pavel Machek <pavel@ucw.cz> writes:
 
-So ^ is TAP format?
+> Hi!
+>
+>> This is v4 of Syscall User Redirection.  The implementation itself is
+>> not modified from v3, it only applies the latest round of reviews to the
+>> selftests.
+>> 
+>> __NR_syscalls is not really exported in header files other than
+>> asm-generic for every architecture, so it felt safer to optionally
+>> expose it with a fallback to a high value.
+>> 
+>> Also, I didn't expose tests for PR_GET as that is not currently
+>> implemented.  If possible, I'd have it supported by a future patchset,
+>> since it is not immediately necessary to support this feature.
+>> 
+>> Finally, one question: Which tree would this go through?
+>
+> Should it come with Documentation?
 
-> > I don't care or care to use either; what does dmesg do? It used to be
-> > that just building the self-tests was sufficient and any error would
-> > show in dmesg when you boot the machine.
-> >
-> > But if I now have to use some damn tool, this is a regression.
-> 
-> If you don't want to, you don't need to use the kunit-tool. If you
-> compile the tests as builtin and run the Kernel on your machine
-> the test result will be shown in dmesg in TAP format.
+Hi,
 
-That's seems a lot more verbose than it is now. I've recently even done
-a bunch of tests that don't print anything on success, dmesg is clutter
-enough already.
+Thanks for the review.
+
+I will prepare it for the next iteration.
+
+> How does it interact with ptrace, seccomp and similar?
+
+That is a very good question.
+
+Regarding seccomp, this must take precedence, since the use case is
+emulation (it can be invoked with a different ABI) such that seccomp
+filtering by syscall number doesn't make sense in the first place.  In
+addition, either the syscall is dispatched back to userspace, in which
+case there is no resource for seccomp to protect, or the syscall will be
+executed, and seccomp will execute next.
+
+Regarding ptrace, I experimented with before and after, and while the
+same ABI argument applies, I felt it was easier to debug if I let ptrace
+happen for syscalls that are dispatched back to userspace.  In addition,
+doing it after ptrace makes the code in syscall_exit_work slightly
+simpler, since it doesn't require special handling for this feature.
+
+For PTRACE_SYSEMU in particular, either placing this before or after is
+a bit odd.  I don't think there is a right answer for this one, but I
+don't see anyone wanting to use these features at the same time.  I
+think as long as it is documented behavior, it should be fine either
+way.
+
+-- 
+Gabriel Krisman Bertazi
