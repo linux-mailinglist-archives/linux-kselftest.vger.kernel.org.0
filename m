@@ -2,124 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D9223BE09
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Aug 2020 18:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4842F23C05B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Aug 2020 22:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729817AbgHDQW4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Aug 2020 12:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S1726750AbgHDUBo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Aug 2020 16:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729772AbgHDQWm (ORCPT
+        with ESMTP id S1726878AbgHDUBn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Aug 2020 12:22:42 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66829C06174A
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2020 09:22:40 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id a34so17204274ybj.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2020 09:22:40 -0700 (PDT)
+        Tue, 4 Aug 2020 16:01:43 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7B0C061757
+        for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2020 13:01:43 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 74so12975838pfx.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2020 13:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0pnsFML9kOr1mpGxswyZ75m8dhfY+/2C5+vBWHJn45U=;
-        b=vY8v/QkBFvvM97vcv7qQBuKoB9WH0zYIDrB/Jg+3hS/ZIlJMvkTJ2QqnjQVLwNr5GS
-         70mPlcS16tJ4QdDthmPcYfqyrGSCqfsewvOHtr+ULLBgLtz1eJcNeuRW+ayioA/2r4PG
-         2Llon0xGXHDlvSR1EAzAExe9pkZ2u/+oUt7B10Bk8LxduhynTXitcaRLhMsb7vKMu3g+
-         pHUXHfJprB9WtwemXG/s6roSqgHuanUmc790shYPUpZVULOrXJkloxZlDDHzntVqVSVt
-         IpuqKoD4FzPDWGELc4e/BRPfvSuLrne8m57IHgAFuteKzrA+4g/0fcDXqYlsoQHd5x1w
-         FBgA==
+        bh=NGNEd3Lp8fYqN2xdgBLfWZRJYT3O7WzzWQnO9+HSxQk=;
+        b=GflFL1WYfQVzQD4fL/T4jBZKh7JPXp0BjIk5sL7JE/3ZK5A3sV3xZbh/yfGVUE0qsP
+         E8yzX9X+hsi/jPgMOXv5KyzdGbchiQfB+e6evv0M2SBqQeIpPvQCBY7+peu0nO4BLYGa
+         rdDx5ycRqouMDJsTRzYND+Tolb/oVleKFhJtjOjIQORoJT/S/6+FUy7Kqq7ICEsZ9Bbl
+         0OVwDgiwpMSYG30M2rS3A8VLQOVW8i0aLpgdwxcBGN+zSp9A98eH6F083YoTKVXDwSul
+         ItGmc4NUog48QtQq1C+v7I7SDLF2999IlOerOmbpf1fsDJ45bAYCsHylk7gjqEPEQWPz
+         rsTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0pnsFML9kOr1mpGxswyZ75m8dhfY+/2C5+vBWHJn45U=;
-        b=qR/nkCewdnP1WQI5YXSk5iBMO7C67iMFRua/yYoaQcu3EBYk2O/IN/Wi484B14xo8c
-         DdgozAVDuQxydoE8e2mN+SdHO/ebp9nDvw7WeRMYMEYW6CLll5N735mY6wJf9sWiv4M/
-         Qrzii7GFhc5x6l8knqLZgGRs77+tabw16vSacHSauEdYIIvI8DZgr7fGRK1Yab2fCd0T
-         PHPp9PNEvReDoU6EbsdhgN7g4SGl/9sjh8coKRbl2sQuZnWpfsN5CgXJpCp3khxgL3t9
-         84YzSB2It/T5KgHpjsHPycbse4XPd8+IeNIJxEQ9CO+SFAEVm4QSa0TAxp6KgUYIg0vo
-         oQJQ==
-X-Gm-Message-State: AOAM531987bSiOVA3K+MEGdTZlG9QRDZeMV6JVjcNE1Z7ZJ3kfPklq+Y
-        YMOD683rDm2LwvYU6OxCOPxVZ9VhAIBIL3GAAeT1ww==
-X-Google-Smtp-Source: ABdhPJyEjvjw6hlErB+kg/BSJ7LyU/dZjQUAvBRLQQ4hkNFJbTQQe1Btf7L6kkpWTGStUhQ/HNdcwukrIX/Ik9iHIBk=
-X-Received: by 2002:a25:b88b:: with SMTP id w11mr23329907ybj.129.1596558159458;
- Tue, 04 Aug 2020 09:22:39 -0700 (PDT)
+        bh=NGNEd3Lp8fYqN2xdgBLfWZRJYT3O7WzzWQnO9+HSxQk=;
+        b=kSCKOMCK9tPLFrNSKCJky+AjCquvJ9K7EgUaUOURNxYaYRoC+o3X192j3EquCaQtzf
+         piedNvMbL3QE6HqoU/8/0mF1SjVWZp34DX7ORKilvVJhyLBCbgT5Acb5e8WgY+eZUL1x
+         9GP+2QF9x7H5qZrz192LH5pRv2EbDccwKfxp/k6mg4A3h1tLNujdKRrs8uFsoXkJtpv/
+         ygF8Yjur/fOr23hsvtTlSaYQW7LdsKbpBTXbcs/V3nAV2BBKVT7OzkS2MIvS9o2fLlAd
+         IU1SKd54HP3vkFPtk+73sVrKLZn7QHvAKYBWvUNFbtPrSd7SSGoUP9fePAbVrMsf6ZgT
+         UtUQ==
+X-Gm-Message-State: AOAM530Uu43SqysyES/l679ks/gNYwKCytLuCDy/EtUuTsVOLL492MmJ
+        fYhUbvBeDHW3BvKjwtQZBvNm6d8n7RTdd15OSRAmjA==
+X-Google-Smtp-Source: ABdhPJxibV8WdZD4fajbOd68sN3rQCbVSctPTRSdThTAPzTdQ5zE6A2a16V/r2RcvRmnAUUEZc+Zdf2C7tegXZnxAGI=
+X-Received: by 2002:a62:1d0e:: with SMTP id d14mr46991pfd.106.1596571302143;
+ Tue, 04 Aug 2020 13:01:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200729201146.537433-1-vitor@massaru.org> <20200729203908.GD2655@hirez.programming.kicks-ass.net>
- <CADQ6JjW-=SNjV-abGpGA9NfHD4yGG_bD5FmvW99W-Vo06twkbw@mail.gmail.com>
- <20200804132517.GK2657@hirez.programming.kicks-ass.net> <CADQ6JjWzze-VAmg_b9EkS4iVySt5pw8V4FSxYpDFAj8jvBxuGA@mail.gmail.com>
- <20200804142344.GM2674@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200804142344.GM2674@hirez.programming.kicks-ass.net>
-From:   Vitor Massaru Iha <vitor@massaru.org>
-Date:   Tue, 4 Aug 2020 13:22:03 -0300
-Message-ID: <CADQ6JjWbCsyWxZKQ5=kkxx8hkaW=mbCjDodPXDAv5vH-=tVvEQ@mail.gmail.com>
-Subject: Re: [PATCH] lib: kunit: add test_min_heap test conversion to KUnit
-To:     peterz@infradead.org
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+References: <20200626210917.358969-1-brendanhiggins@google.com> <202006261442.5C245709@keescook>
+In-Reply-To: <202006261442.5C245709@keescook>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 4 Aug 2020 13:01:30 -0700
+Message-ID: <CAFd5g46auR=OgQ4j=P=KH7GDerW-SkB8aFGehuYkmgJ2Z+jGCA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/12] kunit: create a centralized executor to dispatch
+ all KUnit tests
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Frank Rowand <frowand.list@gmail.com>, catalin.marinas@arm.com,
+        will@kernel.org, Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Chris Zankel <chris@zankel.net>, jcmvbkbc@gmail.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Ian Rogers <irogers@google.com>, mingo@kernel.org
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Peter,
-
-On Tue, Aug 4, 2020 at 11:23 AM <peterz@infradead.org> wrote:
+On Fri, Jun 26, 2020 at 2:52 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Tue, Aug 04, 2020 at 10:46:21AM -0300, Vitor Massaru Iha wrote:
-> > On Tue, Aug 4, 2020 at 10:25 AM <peterz@infradead.org> wrote:
-> > > On Wed, Jul 29, 2020 at 06:57:17PM -0300, Vitor Massaru Iha wrote:
-> > >
-> > > > The results can be seen this way:
-> > > >
-> > > > This is an excerpt from the test.log with the result in TAP format:
-> > > > [snip]
-> > > > ok 5 - example
-> > > >     # Subtest: min-heap
-> > > >     1..6
-> > > >     ok 1 - test_heapify_all_true
-> > > >     ok 2 - test_heapify_all_false
-> > > >     ok 3 - test_heap_push_true
-> > > >     ok 4 - test_heap_push_false
-> > > >     ok 5 - test_heap_pop_push_true
-> > > >     ok 6 - test_heap_pop_push_false
-> > > > [snip]
+> On Fri, Jun 26, 2020 at 02:09:05PM -0700, Brendan Higgins wrote:
+> > This patchset adds a centralized executor to dispatch tests rather than
+> > relying on late_initcall to schedule each test suite separately along
+> > with a couple of new features that depend on it.
+
+Sorry it took so long to reply. I got sucked into some other stuff again.
+
+> So, the new section looks fine to me (modulo the INIT_DATA change). The
+> plumbing to start the tests, though, I think is redundant. Why not just
+> add a sysctl that starts all known tests?
+
+We already have that; however, we use debugfs to start the tests -
+same difference. I just find it convenient to not have to build and
+then maintain a userland for each architecture. It's also really nice
+that KUnit "just works out of the box" - you don't have to download
+anything other than the kernel source, and you don't need to do any
+steps outside of just run "kuit.py run". That seems like a big
+advantage to me.
+
+> That way you don't need the plumbing into init/main.c, and you can have
+> a mode where builtin tests can be started on a fully booted system too.
 >
-> So ^ is TAP format?
-
-Yep, you can see the spec here: https://testanything.org/tap-specification.html
-
+> i.e. boot with "sysctl.kernel.kunit=start" or when fully booted with
+> "echo start > /proc/sys/kernel/kunit"
 >
-> > > I don't care or care to use either; what does dmesg do? It used to be
-> > > that just building the self-tests was sufficient and any error would
-> > > show in dmesg when you boot the machine.
-> > >
-> > > But if I now have to use some damn tool, this is a regression.
-> >
-> > If you don't want to, you don't need to use the kunit-tool. If you
-> > compile the tests as builtin and run the Kernel on your machine
-> > the test result will be shown in dmesg in TAP format.
+> And instead of the kunit-specific halt/reboot stuff, how about moving
+> /proc/sysrq-trigger into /proc/sys instead? Then you (or anything) could
+> do:
 >
-> That's seems a lot more verbose than it is now. I've recently even done
-> a bunch of tests that don't print anything on success, dmesg is clutter
-> enough already.
+> sysctl.kernel.kunit=start sysctl.kernel.sysrq-trigger=b
 
-What tests do you refer to?
-
-Running the test_min_heap.c, I got this from dmesg:
-
-min_heap_test: test passed
-
-And running min_heap_kunit.c:
-
-ok 1 - min-heap
-
-BR,
-Vitor
+I think it might be harder to make a case for the reboot stuff without
+the stuff I am working on outside of this patchset. I think I will
+probably drop that patch from this patchset and reintroduce it later.
