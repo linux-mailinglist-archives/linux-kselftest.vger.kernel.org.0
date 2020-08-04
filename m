@@ -2,1209 +2,446 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6EB23C123
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Aug 2020 22:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1693023C153
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Aug 2020 23:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728696AbgHDU7d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Aug 2020 16:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728498AbgHDU7c (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Aug 2020 16:59:32 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A6C061756
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2020 13:59:31 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id k4so37620934oik.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2020 13:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=VdcB2762rUe4DllcSB5S9YWcyftXQD4SSBeRpKrFXlQ=;
-        b=VvBPYmK9OCq/ufvL2GYImFODijTCwcB3aZLpsx40+qoWctOcTUh1fiG78t3cKhstPx
-         fy+bUMnlcybpBptihtZTbxSGdY/s3uW1+yrFZhZmxNmeeI7Dim/qxoR2lO3ygS6WvTMw
-         TatqLVt/WngPskBDSsvjuLN/whGQ/XZzlZya0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=VdcB2762rUe4DllcSB5S9YWcyftXQD4SSBeRpKrFXlQ=;
-        b=UmyHmqXg8vNTUoxqEGhzt81zRbFN2AhRBRvVwUCzcFeQoHF3uLx1kHyj9CQxqfNfaH
-         KnhYNE7uEFJdC/N41I/HLDjqpVneo5SWbS3Tn7dgVr67E9HJXOGNgQeXM6sfvL42xyMH
-         iIBJAW+MwQybypAr0/YD/DgRl5xt2R/fcgxS4PWI7T4UY3gFosl9CTTZAMs5w73cs1Z6
-         BxsYuF52QQ0RDod+9yJ0W6bLGVg/S829I1+rbMinMklt4xeSMJ8Lf70961Tw8LCCf0X1
-         sOKIGxmworxnYf4bIt8hOK9weuPvNZaKxnVd0zrwlbQts2b6YPgLlBrToujeim/sqr6R
-         /UOQ==
-X-Gm-Message-State: AOAM53182+OhGUjKywJ2YSTg7pCfYiC1xH61/TQw4abIUc4p4nXgxBF4
-        Ws7ZMKGX14FGkVtpe+LLwvX7xcMgmOg=
-X-Google-Smtp-Source: ABdhPJzc9Et6kFaqtWO+7dlyJBn6+C0kH9gccUFULzQqAr3GNieOC3+9hkSZ5nUVt8+qX8L5+WtlyA==
-X-Received: by 2002:aca:56c1:: with SMTP id k184mr219879oib.26.1596574770983;
-        Tue, 04 Aug 2020 13:59:30 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id d10sm3920441oia.18.2020.08.04.13.59.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Aug 2020 13:59:30 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     skhan@linuxfoundation.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kunit update for Linux 5.9-rc1
-Message-ID: <8d43e88e-1356-cd63-9152-209b81b16746@linuxfoundation.org>
-Date:   Tue, 4 Aug 2020 14:59:29 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726568AbgHDVSt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Aug 2020 17:18:49 -0400
+Received: from mga04.intel.com ([192.55.52.120]:25527 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725863AbgHDVSs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 4 Aug 2020 17:18:48 -0400
+IronPort-SDR: 9LcTF7ZWoSA2TKv/tATLztz7IFmBoiUhQ6RzPtIIiYKPmLia+DN1ZDJzCLOzl2KslALLhtLn4P
+ OArjT5pyYsJQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9703"; a="149856162"
+X-IronPort-AV: E=Sophos;i="5.75,435,1589266800"; 
+   d="scan'208,223";a="149856162"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2020 14:14:45 -0700
+IronPort-SDR: s9YjZZBWjG5e6aJdDfVyX+cDOqgk/z2EpZKkEc28Xp7/3N+P0EUJTNbDS/VLAhp0CNPfpySdWY
+ FvFoeZBQFuiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,435,1589266800"; 
+   d="scan'208,223";a="324799402"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.160])
+  by fmsmga002.fm.intel.com with ESMTP; 04 Aug 2020 14:14:45 -0700
+Date:   Tue, 4 Aug 2020 14:14:45 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>
+Subject: Re: [PATCH 1/1] kvm: mmu: zap pages when zapping only parent
+Message-ID: <20200804211444.GA31916@linux.intel.com>
+References: <20200727203324.2614917-1-bgardon@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------463F1E7D7F10366BAE40F450"
-Content-Language: en-US
+Content-Type: multipart/mixed; boundary="cNdxnHkX5QqsyA0e"
+Content-Disposition: inline
+In-Reply-To: <20200727203324.2614917-1-bgardon@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------463F1E7D7F10366BAE40F450
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+--cNdxnHkX5QqsyA0e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Please pull the Kunit update for Linux 5.9-rc1.
+On Mon, Jul 27, 2020 at 01:33:24PM -0700, Ben Gardon wrote:
+> When the KVM MMU zaps a page, it will recursively zap the unsynced child
+> pages, but not the synced ones. This can create problems over time when
+> running many nested guests because it leaves unlinked pages which will not
+> be freed until the page quota is hit. With the default page quota of 20
+> shadow pages per 1000 guest pages, this looks like a memory leak and can
+> degrade MMU performance.
+> 
+> In a recent benchmark, substantial performance degradation was observed:
+> An L1 guest was booted with 64G memory.
+> 2G nested Windows guests were booted, 10 at a time for 20
+> iterations. (200 total boots)
+> Windows was used in this benchmark because they touch all of their
+> memory on startup.
+> By the end of the benchmark, the nested guests were taking ~10% longer
+> to boot. With this patch there is no degradation in boot time.
+> Without this patch the benchmark ends with hundreds of thousands of
+> stale EPT02 pages cluttering up rmaps and the page hash map. As a
+> result, VM shutdown is also much slower: deleting memslot 0 was
+> observed to take over a minute. With this patch it takes just a
+> few miliseconds.
+> 
+> If TDP is enabled, zap child shadow pages when zapping the only parent
+> shadow page.
 
-This Kunit update for Linux 5.9-rc1 consists of:
+Comments on the mechanics below.  For the approach itself, I wonder if we
+could/should go even further, i.e. be even more aggressive in reaping nested
+TDP shadow pages.
 
-- Adds a generic kunit_resource API extending it to support
-   resources that are passed in to kunit in addition kunit
-   allocated resources. In addition, KUnit resources are now
-   refcounted to avoid passed in resources being released while
-   in use by kunit.
+For this to work, KVM is effectively relying on the write flooding detection
+in kvm_mmu_pte_write() to kick in, i.e. KVM needs the L1 VMM to overwrite
+the TDP tables that L1 was using for L2.  In particular, L1 needs to write
+the upper level TDP entries in order for L0 to effeciently reclaim memory.
 
-- Add support for named resources.
+For HyperV as L1, I believe that will happen sooner than later as HyperV
+maintains a pool of zeroed pages, i.e. L1 will quickly zero out the old TDP
+entries and trigger the zap.
 
-- Important bug fixes from Brendan Higgins and Will Chen
+For KVM as L1, that may not hold true for all scenarios due to lazy zeroing
+of memory.  If L1 is creating and destroying VMs (as in the benchmark), then
+it will work as expected.  But if L1 creates and destroys a large L2 without
+reallocating all memory used for L2's TDP tables, the write flooding will
+never happen and L0 will keep the stale SPs even though L2 is dead.
 
-diff is attached.
+The above scenario may or may not be problematic in practice.  I would
+assume any reasonably active L1 will quickly do something with the old TDP
+memory and trigger write flooding, but at the same time it's plausible that
+L1 could leave pages unused for a decent amount of time.
 
-thanks,
--- Shuah
+One thought would be to track nested TDP PGDs and periodically purge PGDs
+that haven't been used in some arbitrary amount of time and/or an arbitrary
+threshold for the number of nested TDP PGDs is reached.  That being said,
+either of those is probably overkill without more analysis on the below
+approach.
 
-----------------------------------------------------------------
-The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
+> Tested by running the kvm-unit-tests suite on an Intel Haswell machine.
+> No regressions versus
+> commit c34b26b98cac ("KVM: MIPS: clean up redundant 'kvm_run' parameters"),
+> or warnings.
+> 
+> Reviewed-by: Peter Shier <pshier@google.com>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 49 +++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 44 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index fa506aaaf0194..c550bc3831dcc 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2626,13 +2626,52 @@ static bool mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
+>  	return false;
+>  }
+>  
+> -static void kvm_mmu_page_unlink_children(struct kvm *kvm,
+> -					 struct kvm_mmu_page *sp)
+> +static int kvm_mmu_page_unlink_children(struct kvm *kvm,
+> +					struct kvm_mmu_page *sp,
+> +					struct list_head *invalid_list)
+>  {
+>  	unsigned i;
+> +	int zapped = 0;
+> +
+> +	for (i = 0; i < PT64_ENT_PER_PAGE; ++i) {
+> +		u64 *sptep = sp->spt + i;
+> +		u64 spte = *sptep;
+> +		struct kvm_mmu_page *child_sp;
+> +
+> +		/*
+> +		 * Zap the page table entry, unlinking any potential child
+> +		 * page
+> +		 */
+> +		mmu_page_zap_pte(kvm, sp, sptep);
+> +
+> +		/* If there is no child page for this spte, continue */
+> +		if (!is_shadow_present_pte(spte) ||
+> +		    is_last_spte(spte, sp->role.level))
+> +			continue;
+> +
+> +		/*
+> +		 * If TDP is enabled, then any shadow pages are part of either
+> +		 * the EPT01 or an EPT02. In either case, do not expect the
+> +		 * same pattern of page reuse seen in x86 PTs for
+> +		 * copy-on-write  and similar techniques. In this case, it is
+> +		 * unlikely that a parentless shadow PT will be used again in
+> +		 * the near future. Zap it to keep the rmaps and page hash
+> +		 * maps from filling up with stale EPT02 pages.
+> +		 */
+> +		if (!tdp_enabled)
+> +			continue;
 
-   Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
+I haven't tested, but I believe this will have the unwanted side effect of
+blasting large swaths of EPT01 if recycling is triggered.  Because the list
+of active SPs is FIFO (and never reordered), the first entries are almost
+always the root SP and then high level SPs.  If make_mmu_pages_available()
+triggers kvm_mmu_zap_oldest_mmu_pages(), this is take out the high level SP
+and all its children.
 
-are available in the Git repository at:
+That may or may not be a problem in practice, but it's outside the scope of
+what this patch is trying to accomplish.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-kunit-5.9-rc1
+TL;DR: what about further conditioning this on sp->role.guest_mode?
 
-for you to fetch changes up to d43c7fb05765152d4d4a39a8ef957c4ea14d8847:
+> +
+> +		child_sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
+> +		if (WARN_ON_ONCE(!child_sp))
 
-   kunit: tool: fix improper treatment of file location (2020-07-17 
-14:17:49 -0600)
+This WARN is pointless, mmu_page_zap_pte() above will already have dereferenced
+the child shadow page, i.e. any null pointer will have exploded.
 
-----------------------------------------------------------------
-linux-kselftest-kunit-5.9-rc1
+> +			continue;
+> +
+> +		/* Zap the page if it has no remaining parent pages */
+> +		if (!child_sp->parent_ptes.val)
 
-This Kunit update for Linux 5.9-rc1 consists of:
+IMO it's easier to read if these checks are collapsed, e.g.:
 
-- Adds a generic kunit_resource API extending it to support
-   resources that are passed in to kunit in addition kunit
-   allocated resources. In addition, KUnit resources are now
-   refcounted to avoid passed in resources being released while
-   in use by kunit.
+		if (!tdp_enabled || !child_sp->role.guest_mode ||
+		    child_sp->parent_ptes.val)
+			continue;
 
-- Add support for named resources.
+		zapped += kvm_mmu_prepare_zap_page(kvm, child_sp, invalid_list);
 
-- Important bug fixes from Brendan Higgins and Will Chen
 
-----------------------------------------------------------------
-Alan Maguire (2):
-       kunit: generalize kunit_resource API beyond allocated resources
-       kunit: add support for named resources
+Alternatively, what about moving this logic into mmu_page_zap_pte()?  That
+can be done with a little massaging of FNAME(invlpg) and would avoid what is
+effectively redundant checks on is_shadow_present_pte() and is_last_spte().
+Patches attached and somewhat tested.
 
-Brendan Higgins (2):
-       kunit: tool: fix broken default args in unit tests
-       kunit: tool: fix improper treatment of file location
+> +			zapped += kvm_mmu_prepare_zap_page(kvm, child_sp,
+> +							   invalid_list);
+> +	}
+>  
+> -	for (i = 0; i < PT64_ENT_PER_PAGE; ++i)
+> -		mmu_page_zap_pte(kvm, sp, sp->spt + i);
+> +	return zapped;
+>  }
+>  
+>  static void kvm_mmu_unlink_parents(struct kvm *kvm, struct kvm_mmu_page *sp)
+> @@ -2678,7 +2717,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+>  	trace_kvm_mmu_prepare_zap_page(sp);
+>  	++kvm->stat.mmu_shadow_zapped;
+>  	*nr_zapped = mmu_zap_unsync_children(kvm, sp, invalid_list);
+> -	kvm_mmu_page_unlink_children(kvm, sp);
+> +	*nr_zapped += kvm_mmu_page_unlink_children(kvm, sp, invalid_list);
+>  	kvm_mmu_unlink_parents(kvm, sp);
+>  
+>  	/* Zapping children means active_mmu_pages has become unstable. */
+> -- 
+> 2.28.0.rc0.142.g3c755180ce-goog
+> 
 
-David Gow (1):
-       Documentation: kunit: Remove references to --defconfig
+--cNdxnHkX5QqsyA0e
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment; filename="0001-KVM-x86-mmu-Move-flush-logic-from-mmu_page_zap_pte-t.patch"
 
-Will Chen (1):
-       kunit: capture stderr on all make subprocess calls
+From b1964178d9b6abadd33531a5dd7788368f89bc40 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <sean.j.christopherson@intel.com>
+Date: Tue, 4 Aug 2020 09:14:21 -0700
+Subject: [PATCH 1/2] KVM: x86/mmu: Move flush logic from mmu_page_zap_pte() to
+ FNAME(invlpg)
 
-  Documentation/dev-tools/kunit/kunit-tool.rst |  17 +--
-  Documentation/dev-tools/kunit/start.rst      |   2 +-
-  include/kunit/test.h                         | 210 
-+++++++++++++++++++++++----
-  lib/kunit/kunit-test.c                       | 111 +++++++++++---
-  lib/kunit/string-stream.c                    |  14 +-
-  lib/kunit/test.c                             | 171 +++++++++++++---------
-  tools/testing/kunit/kunit.py                 |  24 ---
-  tools/testing/kunit/kunit_kernel.py          |   6 +-
-  tools/testing/kunit/kunit_tool_test.py       |  14 +-
-  9 files changed, 396 insertions(+), 173 deletions(-)
+Move the logic that controls whether or not FNAME(invlpg) needs to flush
+fully into FNAME(invlpg) so that mmu_page_zap_pte() doesn't return a
+value.  This allows a future patch to redefine the return semantics for
+mmu_page_zap_pte() so that it can recursively zap orphaned child shadow
+pages for nested TDP MMUs.
 
-----------------------------------------------------------------
+No functional change intended.
 
---------------463F1E7D7F10366BAE40F450
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-5.9-rc1.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-5.9-rc1.diff"
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+---
+ arch/x86/kvm/mmu/mmu.c         | 10 +++-------
+ arch/x86/kvm/mmu/paging_tmpl.h |  7 +++++--
+ 2 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
-index 949af2da81e5..29ae2fee8123 100644
---- a/Documentation/dev-tools/kunit/kunit-tool.rst
-+++ b/Documentation/dev-tools/kunit/kunit-tool.rst
-@@ -19,13 +19,13 @@ compiles the kernel as a standalone Linux executable that can be run like any
- other program directly inside of a host operating system. To be clear, it does
- not require any virtualization support: it is just a regular program.
- 
--What is a kunitconfig?
--======================
-+What is a .kunitconfig?
-+=======================
- 
- It's just a defconfig that kunit_tool looks for in the base directory.
- kunit_tool uses it to generate a .config as you might expect. In addition, it
- verifies that the generated .config contains the CONFIG options in the
--kunitconfig; the reason it does this is so that it is easy to be sure that a
-+.kunitconfig; the reason it does this is so that it is easy to be sure that a
- CONFIG that enables a test actually ends up in the .config.
- 
- How do I use kunit_tool?
-@@ -46,16 +46,9 @@ However, you most likely want to use it with the following options:
- - ``--timeout`` sets a maximum amount of time to allow tests to run.
- - ``--jobs`` sets the number of threads to use to build the kernel.
- 
--If you just want to use the defconfig that ships with the kernel, you can
--append the ``--defconfig`` flag as well:
--
--.. code-block:: bash
--
--	./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all` --defconfig
--
- .. note::
--	This command is particularly helpful for getting started because it
--	just works. No kunitconfig needs to be present.
-+	This command will work even without a .kunitconfig file: if no
-+        .kunitconfig is present, a default one will be used instead.
- 
- For a list of all the flags supported by kunit_tool, you can run:
- 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index bb112cf70624..d23385e3e159 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -18,7 +18,7 @@ The wrapper can be run with:
- 
- .. code-block:: bash
- 
--	./tools/testing/kunit/kunit.py run --defconfig
-+	./tools/testing/kunit/kunit.py run
- 
- For more information on this wrapper (also called kunit_tool) check out the
- :doc:`kunit-tool` page.
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 47e61e1d5337..59f3144f009a 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-+#include <linux/kref.h>
- 
- struct kunit_resource;
- 
-@@ -23,13 +24,19 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
- 
- /**
-  * struct kunit_resource - represents a *test managed resource*
-- * @allocation: for the user to store arbitrary data.
-+ * @data: for the user to store arbitrary data.
-  * @free: a user supplied function to free the resource. Populated by
-- * kunit_alloc_resource().
-+ * kunit_resource_alloc().
-  *
-  * Represents a *test managed resource*, a resource which will automatically be
-  * cleaned up at the end of a test case.
-  *
-+ * Resources are reference counted so if a resource is retrieved via
-+ * kunit_alloc_and_get_resource() or kunit_find_resource(), we need
-+ * to call kunit_put_resource() to reduce the resource reference count
-+ * when finished with it.  Note that kunit_alloc_resource() does not require a
-+ * kunit_resource_put() because it does not retrieve the resource itself.
-+ *
-  * Example:
-  *
-  * .. code-block:: c
-@@ -42,9 +49,9 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-  *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
-  *	{
-  *		struct kunit_kmalloc_params *params = context;
-- *		res->allocation = kmalloc(params->size, params->gfp);
-+ *		res->data = kmalloc(params->size, params->gfp);
-  *
-- *		if (!res->allocation)
-+ *		if (!res->data)
-  *			return -ENOMEM;
-  *
-  *		return 0;
-@@ -52,30 +59,32 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-  *
-  *	static void kunit_kmalloc_free(struct kunit_resource *res)
-  *	{
-- *		kfree(res->allocation);
-+ *		kfree(res->data);
-  *	}
-  *
-  *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-  *	{
-  *		struct kunit_kmalloc_params params;
-- *		struct kunit_resource *res;
-  *
-  *		params.size = size;
-  *		params.gfp = gfp;
-  *
-- *		res = kunit_alloc_resource(test, kunit_kmalloc_init,
-+ *		return kunit_alloc_resource(test, kunit_kmalloc_init,
-  *			kunit_kmalloc_free, &params);
-- *		if (res)
-- *			return res->allocation;
-- *
-- *		return NULL;
-  *	}
-+ *
-+ * Resources can also be named, with lookup/removal done on a name
-+ * basis also.  kunit_add_named_resource(), kunit_find_named_resource()
-+ * and kunit_destroy_named_resource().  Resource names must be
-+ * unique within the test instance.
-  */
- struct kunit_resource {
--	void *allocation;
--	kunit_resource_free_t free;
-+	void *data;
-+	const char *name;		/* optional name */
- 
- 	/* private: internal use only. */
-+	kunit_resource_free_t free;
-+	struct kref refcount;
- 	struct list_head node;
- };
- 
-@@ -283,6 +292,79 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
- 						    gfp_t internal_gfp,
- 						    void *context);
- 
-+/**
-+ * kunit_get_resource() - Hold resource for use.  Should not need to be used
-+ *			  by most users as we automatically get resources
-+ *			  retrieved by kunit_find_resource*().
-+ * @res: resource
-+ */
-+static inline void kunit_get_resource(struct kunit_resource *res)
-+{
-+	kref_get(&res->refcount);
-+}
-+
-+/*
-+ * Called when refcount reaches zero via kunit_put_resources();
-+ * should not be called directly.
-+ */
-+static inline void kunit_release_resource(struct kref *kref)
-+{
-+	struct kunit_resource *res = container_of(kref, struct kunit_resource,
-+						  refcount);
-+
-+	/* If free function is defined, resource was dynamically allocated. */
-+	if (res->free) {
-+		res->free(res);
-+		kfree(res);
-+	}
-+}
-+
-+/**
-+ * kunit_put_resource() - When caller is done with retrieved resource,
-+ *			  kunit_put_resource() should be called to drop
-+ *			  reference count.  The resource list maintains
-+ *			  a reference count on resources, so if no users
-+ *			  are utilizing a resource and it is removed from
-+ *			  the resource list, it will be freed via the
-+ *			  associated free function (if any).  Only
-+ *			  needs to be used if we alloc_and_get() or
-+ *			  find() resource.
-+ * @res: resource
-+ */
-+static inline void kunit_put_resource(struct kunit_resource *res)
-+{
-+	kref_put(&res->refcount, kunit_release_resource);
-+}
-+
-+/**
-+ * kunit_add_resource() - Add a *test managed resource*.
-+ * @test: The test context object.
-+ * @init: a user-supplied function to initialize the result (if needed).  If
-+ *        none is supplied, the resource data value is simply set to @data.
-+ *	  If an init function is supplied, @data is passed to it instead.
-+ * @free: a user-supplied function to free the resource (if needed).
-+ * @data: value to pass to init function or set in resource data field.
-+ */
-+int kunit_add_resource(struct kunit *test,
-+		       kunit_resource_init_t init,
-+		       kunit_resource_free_t free,
-+		       struct kunit_resource *res,
-+		       void *data);
-+
-+/**
-+ * kunit_add_named_resource() - Add a named *test managed resource*.
-+ * @test: The test context object.
-+ * @init: a user-supplied function to initialize the resource data, if needed.
-+ * @free: a user-supplied function to free the resource data, if needed.
-+ * @name_data: name and data to be set for resource.
-+ */
-+int kunit_add_named_resource(struct kunit *test,
-+			     kunit_resource_init_t init,
-+			     kunit_resource_free_t free,
-+			     struct kunit_resource *res,
-+			     const char *name,
-+			     void *data);
-+
- /**
-  * kunit_alloc_resource() - Allocates a *test managed resource*.
-  * @test: The test context object.
-@@ -295,7 +377,7 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-  * cleaned up at the end of a test case. See &struct kunit_resource for an
-  * example.
-  *
-- * NOTE: KUnit needs to allocate memory for each kunit_resource object. You must
-+ * Note: KUnit needs to allocate memory for a kunit_resource object. You must
-  * specify an @internal_gfp that is compatible with the use context of your
-  * resource.
-  */
-@@ -307,54 +389,122 @@ static inline void *kunit_alloc_resource(struct kunit *test,
- {
- 	struct kunit_resource *res;
- 
--	res = kunit_alloc_and_get_resource(test, init, free, internal_gfp,
--					   context);
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
- 
--	if (res)
--		return res->allocation;
-+	if (!kunit_add_resource(test, init, free, res, context))
-+		return res->data;
- 
- 	return NULL;
- }
- 
- typedef bool (*kunit_resource_match_t)(struct kunit *test,
--				       const void *res,
-+				       struct kunit_resource *res,
- 				       void *match_data);
- 
- /**
-  * kunit_resource_instance_match() - Match a resource with the same instance.
-  * @test: Test case to which the resource belongs.
-- * @res: The data stored in kunit_resource->allocation.
-+ * @res: The resource.
-  * @match_data: The resource pointer to match against.
-  *
-  * An instance of kunit_resource_match_t that matches a resource whose
-  * allocation matches @match_data.
-  */
- static inline bool kunit_resource_instance_match(struct kunit *test,
--						 const void *res,
-+						 struct kunit_resource *res,
- 						 void *match_data)
- {
--	return res == match_data;
-+	return res->data == match_data;
- }
- 
- /**
-- * kunit_resource_destroy() - Find a kunit_resource and destroy it.
-+ * kunit_resource_name_match() - Match a resource with the same name.
-+ * @test: Test case to which the resource belongs.
-+ * @res: The resource.
-+ * @match_name: The name to match against.
-+ */
-+static inline bool kunit_resource_name_match(struct kunit *test,
-+					     struct kunit_resource *res,
-+					     void *match_name)
-+{
-+	return res->name && strcmp(res->name, match_name) == 0;
-+}
-+
-+/**
-+ * kunit_find_resource() - Find a resource using match function/data.
-+ * @test: Test case to which the resource belongs.
-+ * @match: match function to be applied to resources/match data.
-+ * @match_data: data to be used in matching.
-+ */
-+static inline struct kunit_resource *
-+kunit_find_resource(struct kunit *test,
-+		    kunit_resource_match_t match,
-+		    void *match_data)
-+{
-+	struct kunit_resource *res, *found = NULL;
-+
-+	spin_lock(&test->lock);
-+
-+	list_for_each_entry_reverse(res, &test->resources, node) {
-+		if (match(test, res, (void *)match_data)) {
-+			found = res;
-+			kunit_get_resource(found);
-+			break;
-+		}
-+	}
-+
-+	spin_unlock(&test->lock);
-+
-+	return found;
-+}
-+
-+/**
-+ * kunit_find_named_resource() - Find a resource using match name.
-+ * @test: Test case to which the resource belongs.
-+ * @name: match name.
-+ */
-+static inline struct kunit_resource *
-+kunit_find_named_resource(struct kunit *test,
-+			  const char *name)
-+{
-+	return kunit_find_resource(test, kunit_resource_name_match,
-+				   (void *)name);
-+}
-+
-+/**
-+ * kunit_destroy_resource() - Find a kunit_resource and destroy it.
-  * @test: Test case to which the resource belongs.
-  * @match: Match function. Returns whether a given resource matches @match_data.
-- * @free: Must match free on the kunit_resource to free.
-  * @match_data: Data passed into @match.
-  *
-- * Free the latest kunit_resource of @test for which @free matches the
-- * kunit_resource_free_t associated with the resource and for which @match
-- * returns true.
-- *
-  * RETURNS:
-  * 0 if kunit_resource is found and freed, -ENOENT if not found.
-  */
--int kunit_resource_destroy(struct kunit *test,
-+int kunit_destroy_resource(struct kunit *test,
- 			   kunit_resource_match_t match,
--			   kunit_resource_free_t free,
- 			   void *match_data);
- 
-+static inline int kunit_destroy_named_resource(struct kunit *test,
-+					       const char *name)
-+{
-+	return kunit_destroy_resource(test, kunit_resource_name_match,
-+				      (void *)name);
-+}
-+
-+/**
-+ * kunit_remove_resource: remove resource from resource list associated with
-+ *			  test.
-+ * @test: The test context object.
-+ * @res: The resource to be removed.
-+ *
-+ * Note that the resource will not be immediately freed since it is likely
-+ * the caller has a reference to it via alloc_and_get() or find();
-+ * in this case a final call to kunit_put_resource() is required.
-+ */
-+void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
-+
- /**
-  * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-  * @test: The test context object.
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 4f3d36a72f8f..69f902440a0e 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -118,14 +118,14 @@ static int fake_resource_init(struct kunit_resource *res, void *context)
- {
- 	struct kunit_test_resource_context *ctx = context;
- 
--	res->allocation = &ctx->is_resource_initialized;
-+	res->data = &ctx->is_resource_initialized;
- 	ctx->is_resource_initialized = true;
- 	return 0;
- }
- 
- static void fake_resource_free(struct kunit_resource *res)
- {
--	bool *is_resource_initialized = res->allocation;
-+	bool *is_resource_initialized = res->data;
- 
- 	*is_resource_initialized = false;
- }
-@@ -154,11 +154,21 @@ static void kunit_resource_test_alloc_resource(struct kunit *test)
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
- 	KUNIT_EXPECT_PTR_EQ(test,
- 			    &ctx->is_resource_initialized,
--			    (bool *) res->allocation);
-+			    (bool *)res->data);
- 	KUNIT_EXPECT_TRUE(test, list_is_last(&res->node, &ctx->test.resources));
- 	KUNIT_EXPECT_PTR_EQ(test, free, res->free);
-+
-+	kunit_put_resource(res);
- }
- 
-+/*
-+ * Note: tests below use kunit_alloc_and_get_resource(), so as a consequence
-+ * they have a reference to the associated resource that they must release
-+ * via kunit_put_resource().  In normal operation, users will only
-+ * have to do this for cases where they use kunit_find_resource(), and the
-+ * kunit_alloc_resource() function will be used (which does not take a
-+ * resource reference).
-+ */
- static void kunit_resource_test_destroy_resource(struct kunit *test)
- {
- 	struct kunit_test_resource_context *ctx = test->priv;
-@@ -169,11 +179,12 @@ static void kunit_resource_test_destroy_resource(struct kunit *test)
- 			GFP_KERNEL,
- 			ctx);
- 
-+	kunit_put_resource(res);
-+
- 	KUNIT_ASSERT_FALSE(test,
--			   kunit_resource_destroy(&ctx->test,
-+			   kunit_destroy_resource(&ctx->test,
- 						  kunit_resource_instance_match,
--						  res->free,
--						  res->allocation));
-+						  res->data));
- 
- 	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
- 	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-@@ -191,6 +202,7 @@ static void kunit_resource_test_cleanup_resources(struct kunit *test)
- 							    fake_resource_free,
- 							    GFP_KERNEL,
- 							    ctx);
-+		kunit_put_resource(resources[i]);
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 862bf418214e2..bdc10a53cd6ad 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2614,7 +2614,7 @@ static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
  	}
- 
- 	kunit_cleanup(&ctx->test);
-@@ -221,14 +233,14 @@ static int fake_resource_2_init(struct kunit_resource *res, void *context)
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 2);
- 
--	res->allocation = ctx;
-+	res->data = ctx;
- 
- 	return 0;
  }
  
- static void fake_resource_2_free(struct kunit_resource *res)
+-static bool mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
++static void mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
+ 			     u64 *spte)
  {
--	struct kunit_test_resource_context *ctx = res->allocation;
-+	struct kunit_test_resource_context *ctx = res->data;
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 2);
- }
-@@ -236,23 +248,26 @@ static void fake_resource_2_free(struct kunit_resource *res)
- static int fake_resource_1_init(struct kunit_resource *res, void *context)
- {
- 	struct kunit_test_resource_context *ctx = context;
-+	struct kunit_resource *res2;
- 
--	kunit_alloc_and_get_resource(&ctx->test,
--				     fake_resource_2_init,
--				     fake_resource_2_free,
--				     GFP_KERNEL,
--				     ctx);
-+	res2 = kunit_alloc_and_get_resource(&ctx->test,
-+					    fake_resource_2_init,
-+					    fake_resource_2_free,
-+					    GFP_KERNEL,
-+					    ctx);
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 1);
- 
--	res->allocation = ctx;
-+	res->data = ctx;
-+
-+	kunit_put_resource(res2);
- 
- 	return 0;
- }
- 
- static void fake_resource_1_free(struct kunit_resource *res)
- {
--	struct kunit_test_resource_context *ctx = res->allocation;
-+	struct kunit_test_resource_context *ctx = res->data;
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 1);
- }
-@@ -265,13 +280,14 @@ static void fake_resource_1_free(struct kunit_resource *res)
- static void kunit_resource_test_proper_free_ordering(struct kunit *test)
- {
- 	struct kunit_test_resource_context *ctx = test->priv;
-+	struct kunit_resource *res;
- 
- 	/* fake_resource_1 allocates a fake_resource_2 in its init. */
--	kunit_alloc_and_get_resource(&ctx->test,
--				     fake_resource_1_init,
--				     fake_resource_1_free,
--				     GFP_KERNEL,
--				     ctx);
-+	res = kunit_alloc_and_get_resource(&ctx->test,
-+					   fake_resource_1_init,
-+					   fake_resource_1_free,
-+					   GFP_KERNEL,
-+					   ctx);
- 
- 	/*
- 	 * Since fake_resource_2_init calls KUNIT_RESOURCE_TEST_MARK_ORDER
-@@ -281,6 +297,8 @@ static void kunit_resource_test_proper_free_ordering(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, ctx->allocate_order[0], 2);
- 	KUNIT_EXPECT_EQ(test, ctx->allocate_order[1], 1);
- 
-+	kunit_put_resource(res);
-+
- 	kunit_cleanup(&ctx->test);
- 
- 	/*
-@@ -292,6 +310,57 @@ static void kunit_resource_test_proper_free_ordering(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, ctx->free_order[1], 2);
- }
- 
-+static void kunit_resource_test_static(struct kunit *test)
-+{
-+	struct kunit_test_resource_context ctx;
-+	struct kunit_resource res;
-+
-+	KUNIT_EXPECT_EQ(test, kunit_add_resource(test, NULL, NULL, &res, &ctx),
-+			0);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, res.data, (void *)&ctx);
-+
-+	kunit_cleanup(test);
-+
-+	KUNIT_EXPECT_TRUE(test, list_empty(&test->resources));
-+}
-+
-+static void kunit_resource_test_named(struct kunit *test)
-+{
-+	struct kunit_resource res1, res2, *found = NULL;
-+	struct kunit_test_resource_context ctx;
-+
-+	KUNIT_EXPECT_EQ(test,
-+			kunit_add_named_resource(test, NULL, NULL, &res1,
-+						 "resource_1", &ctx),
-+			0);
-+	KUNIT_EXPECT_PTR_EQ(test, res1.data, (void *)&ctx);
-+
-+	KUNIT_EXPECT_EQ(test,
-+			kunit_add_named_resource(test, NULL, NULL, &res1,
-+						 "resource_1", &ctx),
-+			-EEXIST);
-+
-+	KUNIT_EXPECT_EQ(test,
-+			kunit_add_named_resource(test, NULL, NULL, &res2,
-+						 "resource_2", &ctx),
-+			0);
-+
-+	found = kunit_find_named_resource(test, "resource_1");
-+
-+	KUNIT_EXPECT_PTR_EQ(test, found, &res1);
-+
-+	if (found)
-+		kunit_put_resource(&res1);
-+
-+	KUNIT_EXPECT_EQ(test, kunit_destroy_named_resource(test, "resource_2"),
-+			0);
-+
-+	kunit_cleanup(test);
-+
-+	KUNIT_EXPECT_TRUE(test, list_empty(&test->resources));
-+}
-+
- static int kunit_resource_test_init(struct kunit *test)
- {
- 	struct kunit_test_resource_context *ctx =
-@@ -320,6 +389,8 @@ static struct kunit_case kunit_resource_test_cases[] = {
- 	KUNIT_CASE(kunit_resource_test_destroy_resource),
- 	KUNIT_CASE(kunit_resource_test_cleanup_resources),
- 	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
-+	KUNIT_CASE(kunit_resource_test_static),
-+	KUNIT_CASE(kunit_resource_test_named),
- 	{}
- };
- 
-diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-index 350392013c14..141789ca8949 100644
---- a/lib/kunit/string-stream.c
-+++ b/lib/kunit/string-stream.c
-@@ -33,14 +33,14 @@ static int string_stream_fragment_init(struct kunit_resource *res,
- 	if (!frag->fragment)
- 		return -ENOMEM;
- 
--	res->allocation = frag;
-+	res->data = frag;
- 
- 	return 0;
- }
- 
- static void string_stream_fragment_free(struct kunit_resource *res)
- {
--	struct string_stream_fragment *frag = res->allocation;
-+	struct string_stream_fragment *frag = res->data;
- 
- 	list_del(&frag->node);
- 	kunit_kfree(frag->test, frag->fragment);
-@@ -65,9 +65,8 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
- 
- static int string_stream_fragment_destroy(struct string_stream_fragment *frag)
- {
--	return kunit_resource_destroy(frag->test,
-+	return kunit_destroy_resource(frag->test,
- 				      kunit_resource_instance_match,
--				      string_stream_fragment_free,
- 				      frag);
- }
- 
-@@ -179,7 +178,7 @@ static int string_stream_init(struct kunit_resource *res, void *context)
- 	if (!stream)
- 		return -ENOMEM;
- 
--	res->allocation = stream;
-+	res->data = stream;
- 	stream->gfp = ctx->gfp;
- 	stream->test = ctx->test;
- 	INIT_LIST_HEAD(&stream->fragments);
-@@ -190,7 +189,7 @@ static int string_stream_init(struct kunit_resource *res, void *context)
- 
- static void string_stream_free(struct kunit_resource *res)
- {
--	struct string_stream *stream = res->allocation;
-+	struct string_stream *stream = res->data;
- 
- 	string_stream_clear(stream);
- }
-@@ -211,8 +210,7 @@ struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
- 
- int string_stream_destroy(struct string_stream *stream)
- {
--	return kunit_resource_destroy(stream->test,
-+	return kunit_destroy_resource(stream->test,
- 				      kunit_resource_instance_match,
--				      string_stream_free,
- 				      stream);
- }
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index ccb2ffad8dcf..c36037200310 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -8,6 +8,7 @@
- 
- #include <kunit/test.h>
- #include <linux/kernel.h>
-+#include <linux/kref.h>
- #include <linux/sched/debug.h>
- 
- #include "debugfs.h"
-@@ -406,90 +407,116 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
- }
- EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
- 
--struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
--						    kunit_resource_init_t init,
--						    kunit_resource_free_t free,
--						    gfp_t internal_gfp,
--						    void *context)
-+/*
-+ * Used for static resources and when a kunit_resource * has been created by
-+ * kunit_alloc_resource().  When an init function is supplied, @data is passed
-+ * into the init function; otherwise, we simply set the resource data field to
-+ * the data value passed in.
-+ */
-+int kunit_add_resource(struct kunit *test,
-+		       kunit_resource_init_t init,
-+		       kunit_resource_free_t free,
-+		       struct kunit_resource *res,
-+		       void *data)
- {
--	struct kunit_resource *res;
--	int ret;
-+	int ret = 0;
- 
--	res = kzalloc(sizeof(*res), internal_gfp);
--	if (!res)
--		return NULL;
-+	res->free = free;
-+	kref_init(&res->refcount);
- 
--	ret = init(res, context);
--	if (ret)
--		return NULL;
-+	if (init) {
-+		ret = init(res, data);
-+		if (ret)
-+			return ret;
-+	} else {
-+		res->data = data;
-+	}
- 
--	res->free = free;
- 	spin_lock(&test->lock);
- 	list_add_tail(&res->node, &test->resources);
-+	/* refcount for list is established by kref_init() */
- 	spin_unlock(&test->lock);
- 
--	return res;
-+	return ret;
- }
--EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
-+EXPORT_SYMBOL_GPL(kunit_add_resource);
- 
--static void kunit_resource_free(struct kunit *test, struct kunit_resource *res)
-+int kunit_add_named_resource(struct kunit *test,
-+			     kunit_resource_init_t init,
-+			     kunit_resource_free_t free,
-+			     struct kunit_resource *res,
-+			     const char *name,
-+			     void *data)
- {
--	res->free(res);
--	kfree(res);
-+	struct kunit_resource *existing;
-+
-+	if (!name)
-+		return -EINVAL;
-+
-+	existing = kunit_find_named_resource(test, name);
-+	if (existing) {
-+		kunit_put_resource(existing);
-+		return -EEXIST;
-+	}
-+
-+	res->name = name;
-+
-+	return kunit_add_resource(test, init, free, res, data);
- }
-+EXPORT_SYMBOL_GPL(kunit_add_named_resource);
- 
--static struct kunit_resource *kunit_resource_find(struct kunit *test,
--						  kunit_resource_match_t match,
--						  kunit_resource_free_t free,
--						  void *match_data)
-+struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-+						    kunit_resource_init_t init,
-+						    kunit_resource_free_t free,
-+						    gfp_t internal_gfp,
-+						    void *data)
- {
--	struct kunit_resource *resource;
-+	struct kunit_resource *res;
-+	int ret;
- 
--	lockdep_assert_held(&test->lock);
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
- 
--	list_for_each_entry_reverse(resource, &test->resources, node) {
--		if (resource->free != free)
--			continue;
--		if (match(test, resource->allocation, match_data))
--			return resource;
-+	ret = kunit_add_resource(test, init, free, res, data);
-+	if (!ret) {
-+		/*
-+		 * bump refcount for get; kunit_resource_put() should be called
-+		 * when done.
-+		 */
-+		kunit_get_resource(res);
-+		return res;
- 	}
--
- 	return NULL;
- }
-+EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
- 
--static struct kunit_resource *kunit_resource_remove(
--		struct kunit *test,
--		kunit_resource_match_t match,
--		kunit_resource_free_t free,
--		void *match_data)
-+void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
- {
--	struct kunit_resource *resource;
--
- 	spin_lock(&test->lock);
--	resource = kunit_resource_find(test, match, free, match_data);
--	if (resource)
--		list_del(&resource->node);
-+	list_del(&res->node);
- 	spin_unlock(&test->lock);
--
--	return resource;
-+	kunit_put_resource(res);
- }
-+EXPORT_SYMBOL_GPL(kunit_remove_resource);
- 
--int kunit_resource_destroy(struct kunit *test,
--			   kunit_resource_match_t match,
--			   kunit_resource_free_t free,
-+int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
- 			   void *match_data)
- {
--	struct kunit_resource *resource;
--
--	resource = kunit_resource_remove(test, match, free, match_data);
-+	struct kunit_resource *res = kunit_find_resource(test, match,
-+							 match_data);
- 
--	if (!resource)
-+	if (!res)
- 		return -ENOENT;
- 
--	kunit_resource_free(test, resource);
-+	kunit_remove_resource(test, res);
-+
-+	/* We have a reference also via _find(); drop it. */
-+	kunit_put_resource(res);
-+
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(kunit_resource_destroy);
-+EXPORT_SYMBOL_GPL(kunit_destroy_resource);
- 
- struct kunit_kmalloc_params {
- 	size_t size;
-@@ -500,8 +527,8 @@ static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
- {
- 	struct kunit_kmalloc_params *params = context;
- 
--	res->allocation = kmalloc(params->size, params->gfp);
--	if (!res->allocation)
-+	res->data = kmalloc(params->size, params->gfp);
-+	if (!res->data)
- 		return -ENOMEM;
- 
- 	return 0;
-@@ -509,7 +536,7 @@ static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
- 
- static void kunit_kmalloc_free(struct kunit_resource *res)
- {
--	kfree(res->allocation);
-+	kfree(res->data);
- }
- 
- void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-@@ -529,20 +556,25 @@ EXPORT_SYMBOL_GPL(kunit_kmalloc);
- 
- void kunit_kfree(struct kunit *test, const void *ptr)
- {
--	int rc;
-+	struct kunit_resource *res;
- 
--	rc = kunit_resource_destroy(test,
--				    kunit_resource_instance_match,
--				    kunit_kmalloc_free,
--				    (void *)ptr);
-+	res = kunit_find_resource(test, kunit_resource_instance_match,
-+				  (void *)ptr);
-+
-+	/*
-+	 * Removing the resource from the list of resources drops the
-+	 * reference count to 1; the final put will trigger the free.
-+	 */
-+	kunit_remove_resource(test, res);
-+
-+	kunit_put_resource(res);
- 
--	WARN_ON(rc);
- }
- EXPORT_SYMBOL_GPL(kunit_kfree);
- 
- void kunit_cleanup(struct kunit *test)
- {
--	struct kunit_resource *resource;
-+	struct kunit_resource *res;
- 
- 	/*
- 	 * test->resources is a stack - each allocation must be freed in the
-@@ -559,13 +591,16 @@ void kunit_cleanup(struct kunit *test)
- 			spin_unlock(&test->lock);
- 			break;
+ 	u64 pte;
+@@ -2630,13 +2630,9 @@ static bool mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
+ 			child = to_shadow_page(pte & PT64_BASE_ADDR_MASK);
+ 			drop_parent_pte(child, spte);
  		}
--		resource = list_last_entry(&test->resources,
--					   struct kunit_resource,
--					   node);
--		list_del(&resource->node);
-+		res = list_last_entry(&test->resources,
-+				      struct kunit_resource,
-+				      node);
-+		/*
-+		 * Need to unlock here as a resource may remove another
-+		 * resource, and this can't happen if the test->lock
-+		 * is held.
-+		 */
- 		spin_unlock(&test->lock);
+-		return true;
+-	}
 -
--		kunit_resource_free(test, resource);
-+		kunit_remove_resource(test, res);
+-	if (is_mmio_spte(pte))
++	} else if (is_mmio_spte(pte)) {
+ 		mmu_spte_clear_no_track(spte);
+-
+-	return false;
++	}
+ }
+ 
+ static void kvm_mmu_page_unlink_children(struct kvm *kvm,
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index 0172a949f6a75..1fe7edc5732da 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -895,6 +895,7 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
+ {
+ 	struct kvm_shadow_walk_iterator iterator;
+ 	struct kvm_mmu_page *sp;
++	u64 old_spte;
+ 	int level;
+ 	u64 *sptep;
+ 
+@@ -917,7 +918,8 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
+ 		sptep = iterator.sptep;
+ 
+ 		sp = sptep_to_sp(sptep);
+-		if (is_last_spte(*sptep, level)) {
++		old_spte = *sptep;
++		if (is_last_spte(old_spte, level)) {
+ 			pt_element_t gpte;
+ 			gpa_t pte_gpa;
+ 
+@@ -927,7 +929,8 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
+ 			pte_gpa = FNAME(get_level1_sp_gpa)(sp);
+ 			pte_gpa += (sptep - sp->spt) * sizeof(pt_element_t);
+ 
+-			if (mmu_page_zap_pte(vcpu->kvm, sp, sptep))
++			mmu_page_zap_pte(vcpu->kvm, sp, sptep);
++			if (is_shadow_present_pte(old_spte))
+ 				kvm_flush_remote_tlbs_with_address(vcpu->kvm,
+ 					sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
+ 
+-- 
+2.28.0
+
+
+--cNdxnHkX5QqsyA0e
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment; filename="0002-KVM-x86-MMU-Recursively-zap-nested-TDP-SPs-when-zapp.patch"
+
+From 848917abc9c928df254d77a6fa5a5d874461975e Mon Sep 17 00:00:00 2001
+From: Ben Gardon <bgardon@google.com>
+Date: Tue, 4 Aug 2020 10:02:17 -0700
+Subject: [PATCH 2/2] KVM: x86/MMU: Recursively zap nested TDP SPs when zapping
+ last/only parent
+
+Recursively zap all to-be-orphaned children, unsynced or otherwise, when
+zapping a shadow page for a nested TDP MMU.  KVM currently only zaps the
+unsynced child pages, but not the synced ones.  This can create problems
+over time when running many nested guests because it leaves unlinked
+pages which will not be freed until the page quota is hit. With the
+default page quota of 20 shadow pages per 1000 guest pages, this looks
+like a memory leak and can degrade MMU performance.
+
+In a recent benchmark, substantial performance degradation was observed:
+An L1 guest was booted with 64G memory.
+2G nested Windows guests were booted, 10 at a time for 20
+iterations. (200 total boots)
+Windows was used in this benchmark because they touch all of their
+memory on startup.
+By the end of the benchmark, the nested guests were taking ~10% longer
+to boot. With this patch there is no degradation in boot time.
+Without this patch the benchmark ends with hundreds of thousands of
+stale EPT02 pages cluttering up rmaps and the page hash map. As a
+result, VM shutdown is also much slower: deleting memslot 0 was
+observed to take over a minute. With this patch it takes just a
+few miliseconds.
+
+Cc: Peter Shier <pshier@google.com>
+Signed-off-by: Ben Gardon <bgardon@google.com>
+Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+---
+ arch/x86/kvm/mmu/mmu.c         | 30 +++++++++++++++++++++++-------
+ arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
+ 2 files changed, 24 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index bdc10a53cd6ad..11d3c6ec608ef 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2614,8 +2614,9 @@ static void validate_direct_spte(struct kvm_vcpu *vcpu, u64 *sptep,
  	}
  }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 787b6d4ad716..2ece17e9eab5 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -238,12 +238,6 @@ def main(argv, linux=None):
- 	if cli_args.subcommand == 'run':
- 		if not os.path.exists(cli_args.build_dir):
- 			os.mkdir(cli_args.build_dir)
--		kunit_kernel.kunitconfig_path = os.path.join(
--			cli_args.build_dir,
--			kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -261,12 +255,6 @@ def main(argv, linux=None):
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
--			kunit_kernel.kunitconfig_path = os.path.join(
--				cli_args.build_dir,
--				kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
+-static void mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
+-			     u64 *spte)
++/* Returns the number of zapped non-leaf child shadow pages. */
++static int mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
++			    u64 *spte, struct list_head *invalid_list)
+ {
+ 	u64 pte;
+ 	struct kvm_mmu_page *child;
+@@ -2629,19 +2630,34 @@ static void mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
+ 		} else {
+ 			child = to_shadow_page(pte & PT64_BASE_ADDR_MASK);
+ 			drop_parent_pte(child, spte);
++
++			/*
++			 * Recursively zap nested TDP SPs, parentless SPs are
++			 * unlikely to be used again in the near future.  This
++			 * avoids retaining a large number of stale nested SPs.
++			 */
++			if (tdp_enabled && invalid_list &&
++			    child->role.guest_mode && !child->parent_ptes.val)
++				return kvm_mmu_prepare_zap_page(kvm, child,
++								invalid_list);
+ 		}
+ 	} else if (is_mmio_spte(pte)) {
+ 		mmu_spte_clear_no_track(spte);
+ 	}
++	return 0;
+ }
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -283,12 +271,6 @@ def main(argv, linux=None):
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
--			kunit_kernel.kunitconfig_path = os.path.join(
--				cli_args.build_dir,
--				kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
+-static void kvm_mmu_page_unlink_children(struct kvm *kvm,
+-					 struct kvm_mmu_page *sp)
++static int kvm_mmu_page_unlink_children(struct kvm *kvm,
++					struct kvm_mmu_page *sp,
++					struct list_head *invalid_list)
+ {
++	int zapped = 0;
+ 	unsigned i;
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -307,12 +289,6 @@ def main(argv, linux=None):
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
--			kunit_kernel.kunitconfig_path = os.path.join(
--				cli_args.build_dir,
--				kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
+ 	for (i = 0; i < PT64_ENT_PER_PAGE; ++i)
+-		mmu_page_zap_pte(kvm, sp, sp->spt + i);
++		zapped += mmu_page_zap_pte(kvm, sp, sp->spt + i, invalid_list);
++
++	return zapped;
+ }
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 63dbda2d029f..e20e2056cb38 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -34,7 +34,7 @@ class LinuxSourceTreeOperations(object):
+ static void kvm_mmu_unlink_parents(struct kvm *kvm, struct kvm_mmu_page *sp)
+@@ -2687,7 +2703,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+ 	trace_kvm_mmu_prepare_zap_page(sp);
+ 	++kvm->stat.mmu_shadow_zapped;
+ 	*nr_zapped = mmu_zap_unsync_children(kvm, sp, invalid_list);
+-	kvm_mmu_page_unlink_children(kvm, sp);
++	*nr_zapped += kvm_mmu_page_unlink_children(kvm, sp, invalid_list);
+ 	kvm_mmu_unlink_parents(kvm, sp);
  
- 	def make_mrproper(self):
- 		try:
--			subprocess.check_output(['make', 'mrproper'])
-+			subprocess.check_output(['make', 'mrproper'], stderr=subprocess.STDOUT)
- 		except OSError as e:
- 			raise ConfigError('Could not call make command: ' + e)
- 		except subprocess.CalledProcessError as e:
-@@ -47,7 +47,7 @@ class LinuxSourceTreeOperations(object):
- 		if build_dir:
- 			command += ['O=' + build_dir]
- 		try:
--			subprocess.check_output(command, stderr=subprocess.PIPE)
-+			subprocess.check_output(command, stderr=subprocess.STDOUT)
- 		except OSError as e:
- 			raise ConfigError('Could not call make command: ' + e)
- 		except subprocess.CalledProcessError as e:
-@@ -77,7 +77,7 @@ class LinuxSourceTreeOperations(object):
- 		if build_dir:
- 			command += ['O=' + build_dir]
- 		try:
--			subprocess.check_output(command)
-+			subprocess.check_output(command, stderr=subprocess.STDOUT)
- 		except OSError as e:
- 			raise BuildError('Could not call execute make: ' + e)
- 		except subprocess.CalledProcessError as e:
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 5bb7b118ebd9..ebedfc57a39b 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -240,21 +240,21 @@ class KUnitMainTest(unittest.TestCase):
- 		pass
+ 	/* Zapping children means active_mmu_pages has become unstable. */
+@@ -5395,7 +5411,7 @@ static void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+ 			u32 base_role = vcpu->arch.mmu->mmu_role.base.word;
  
- 	def test_config_passes_args_pass(self):
--		kunit.main(['config'], self.linux_source_mock)
-+		kunit.main(['config', '--build_dir=.kunit'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 0
+ 			entry = *spte;
+-			mmu_page_zap_pte(vcpu->kvm, sp, spte);
++			mmu_page_zap_pte(vcpu->kvm, sp, spte, NULL);
+ 			if (gentry &&
+ 			    !((sp->role.word ^ base_role) & ~role_ign.word) &&
+ 			    rmap_can_add(vcpu))
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index 1fe7edc5732da..58ae852a9615b 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -929,7 +929,7 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
+ 			pte_gpa = FNAME(get_level1_sp_gpa)(sp);
+ 			pte_gpa += (sptep - sp->spt) * sizeof(pt_element_t);
  
- 	def test_build_passes_args_pass(self):
- 		kunit.main(['build'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 0
--		self.linux_source_mock.build_um_kernel.assert_called_once_with(False, 8, '', None)
-+		self.linux_source_mock.build_um_kernel.assert_called_once_with(False, 8, '.kunit', None)
- 		assert self.linux_source_mock.run_kernel.call_count == 0
- 
- 	def test_exec_passes_args_pass(self):
- 		kunit.main(['exec'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 0
- 		assert self.linux_source_mock.run_kernel.call_count == 1
--		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='.kunit', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_passes_args_pass(self):
-@@ -262,7 +262,7 @@ class KUnitMainTest(unittest.TestCase):
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 1
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
--			build_dir='', timeout=300)
-+			build_dir='.kunit', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_exec_passes_args_fail(self):
-@@ -302,7 +302,7 @@ class KUnitMainTest(unittest.TestCase):
- 	def test_exec_timeout(self):
- 		timeout = 3453
- 		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
--		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='.kunit', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_timeout(self):
-@@ -310,12 +310,12 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
--			build_dir='', timeout=timeout)
-+			build_dir='.kunit', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_builddir(self):
- 		build_dir = '.kunit'
--		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
-+		kunit.main(['run', '--build_dir=.kunit'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
- 			build_dir=build_dir, timeout=300)
+-			mmu_page_zap_pte(vcpu->kvm, sp, sptep);
++			mmu_page_zap_pte(vcpu->kvm, sp, sptep, NULL);
+ 			if (is_shadow_present_pte(old_spte))
+ 				kvm_flush_remote_tlbs_with_address(vcpu->kvm,
+ 					sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
+-- 
+2.28.0
 
---------------463F1E7D7F10366BAE40F450--
+
+--cNdxnHkX5QqsyA0e--
