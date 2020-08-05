@@ -2,134 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 808AE23C21A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Aug 2020 01:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FA923C2C4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Aug 2020 02:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbgHDXPR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Aug 2020 19:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S1726579AbgHEAyX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Aug 2020 20:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727889AbgHDXPR (ORCPT
+        with ESMTP id S1725864AbgHEAyW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Aug 2020 19:15:17 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C222BC061756
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2020 16:15:16 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id f12so3047828wru.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2020 16:15:16 -0700 (PDT)
+        Tue, 4 Aug 2020 20:54:22 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F23C06174A;
+        Tue,  4 Aug 2020 17:54:21 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id l60so3565533pjb.3;
+        Tue, 04 Aug 2020 17:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K9gpV2EukdQDh4ZPc/03X4i9rg/1FfiYZWy/TtTUyw8=;
-        b=vKJZJB4t0jSDcSkqtMkclvkoltustEMpfBLwXU8BrykAMNEVDNLtHeqArD1xoF+pmL
-         zaF0CRqkShgYuuro7xHtWxKH2yb5cBT6zxtSTqSiaIzbSJAVy+gE42naRGMSjbVcR9eB
-         ctXZcbHll/mIlqktiIqmKmTVCDCcvj4Iya97fiL0xBiS9FeQvCKqh919HAd4AdOgB8Y6
-         0CosIPoenyb16IUbqWHJaHj8SsxoTzqYMurGLB357gRe23Z2O5FBsA32+wjKfZvfmWRr
-         KcL6TGmgM3X3oAETPebL+wDfiWTMeh2FOFjfMtelbY4KbbG7oamjlwacW8vGs/3m/z0v
-         dDbQ==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BxG05DrFE72MOSGeh/nY3ptdaEd7/gUavlyqDnB6i8I=;
+        b=AowsasC1tnaoLsPE+JXPouJvv4SWJ8rby3ouB/3Lk3rA6Ad+K4X8QYIoew3qNP/CSH
+         c01KUTKd9ezV2iy1zV1NvrhEdyPZekjBx8GYYtTfk+302Q6BSur1QzeIu/6s/vzuUj2w
+         GyLbD/ZMYB+4YUy8w1l7ntsOL4B1s1am4vLLrJ3qBO/KKYS6e7GBJ1cGksgRp3ngMGiW
+         TP6XDk5wcK8Gu7WAaagVhn0mihANBOdE9ay1OWO+dS8k0RkSeBaYRBLug1+b0USPh2XN
+         WZaxI5XzWcODT3Sp8zBhnuigBT94g4om8oaax00jUWa/bFmW6y6GuOuKHl4q5iLOWD+E
+         wHGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K9gpV2EukdQDh4ZPc/03X4i9rg/1FfiYZWy/TtTUyw8=;
-        b=FM5TN/qzYmmQ3+yZ6Ekr3LykwGGrBVHm4oyWWpICmIU8dHtHvCNSct1X9Xo5EgjnHh
-         8vzKL96z9ViHQGDUQ3CsPrEmIvki0LzrjZ02cRGEEoIZH1/v+43kbAXhGZaN+IhxMbDG
-         GEO7MguktzVV8Xskg3R0VEIkR18AczFInK7wy1rlxecY/ZqwTxRrjoiQRqpCmjLIqvxq
-         uk4s3IFkLFQtvGgGIv2P3mAkmdfFmnyjEXOM92idKlsgHDjPl/IrVZx8Rsg/g+RJ+UHC
-         AOhpk7QHFHLwcymPRgBjPVoXR80rHoUKzoILRD5esW55d0saBSPYj5oUjSmxveQETCW+
-         4iDw==
-X-Gm-Message-State: AOAM533sm6kK6kMFlsNC0JSZAps3sbelE2IDNdZb8r1HxjPmG0kBTkKf
-        Ty+cCnQg3v0BsE5y0rrSnfkPt5VESyxHv3haKhhKeA==
-X-Google-Smtp-Source: ABdhPJy4RdIlWhdyRLD6kiD0K/NkH2q77aUp4lqTCqpftNSh7mSJgiGdKaBGJxxzuqDVOJbrUK3SlC2QFHtvY/yN8i0=
-X-Received: by 2002:a5d:4e8c:: with SMTP id e12mr191888wru.19.1596582914310;
- Tue, 04 Aug 2020 16:15:14 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BxG05DrFE72MOSGeh/nY3ptdaEd7/gUavlyqDnB6i8I=;
+        b=gOJtqrarJaJrvwkhPtIA+F0dmy1OFPs++jAkz38DlX2biULwRm4uc1i3yK4dy+qdT/
+         kd2SJ6jxwqSBFCOnPpnzGhhMvXkfn9bPjIBWpokVT98GcIp5/YrMFGkrkaiJ+5rruxdm
+         D7JrUqLo9UIBhan2ncdrPniXRzQOBOl31FPD3Z7IW9ar1bzOk3twMRWFtiKYWNnI4xLg
+         k4LqrZxuxq0uPgfHkvb69oHUej6c/eKBCm0Qx3q6HOwkIT1uwEd/PzJ4u1apPL7L1jHZ
+         77oqrWrY+B301WlbWzHq7z8jG4h/bzAxhBiVlbUvxJfAy8+DVOJcQvXcbcDkzmo5XfeI
+         5HRA==
+X-Gm-Message-State: AOAM530XqK8tUmG4e6CbWr1qMnyqtdFD82Md//NCbjAgrAMlZ80hDekX
+        1n9FJehjVvRebislRSM6KgujBWgi
+X-Google-Smtp-Source: ABdhPJxr0UjlZMG0OjFUlayZYLfycyN2ymZAc4EBOQ7kJ4SMuC8oXoDn0GJiozFWRN8ChOO0WI3cDg==
+X-Received: by 2002:a17:902:bd01:: with SMTP id p1mr843670pls.25.1596588861126;
+        Tue, 04 Aug 2020 17:54:21 -0700 (PDT)
+Received: from [10.1.10.11] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
+        by smtp.gmail.com with ESMTPSA id s61sm397343pjb.57.2020.08.04.17.54.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Aug 2020 17:54:20 -0700 (PDT)
+Subject: Re: [PATCH] selftests/net: skip msg_zerocopy test if we have less
+ than 4 CPUs
+To:     Colin King <colin.king@canonical.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200804123012.378750-1-colin.king@canonical.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <b99004ea-cd9d-bec3-5f9f-82dcb00a6284@gmail.com>
+Date:   Tue, 4 Aug 2020 17:54:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <20200801070924.1786166-1-davidgow@google.com> <20200801070924.1786166-4-davidgow@google.com>
- <CABVgOSnpsnYw=0mAks4Xr2rGe07ER1041TKCCY1izeCfT8TcBQ@mail.gmail.com> <CAAeHK+y5KBuAfpeO90X0rxyZmPj4OQGUF=L-q3GAgQUTFNxdsQ@mail.gmail.com>
-In-Reply-To: <CAAeHK+y5KBuAfpeO90X0rxyZmPj4OQGUF=L-q3GAgQUTFNxdsQ@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 5 Aug 2020 07:15:02 +0800
-Message-ID: <CABVgOS=fOj++o2sBbOAwnKJSC+2s4dE6pDuuZNHYq+u_ayPiAw@mail.gmail.com>
-Subject: Re: [PATCH v10 3/5] KASAN: Port KASAN Tests to KUnit
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Patricia Alfonso <trishalfonso@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200804123012.378750-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 4, 2020 at 6:15 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> On Tue, Aug 4, 2020 at 12:59 AM David Gow <davidgow@google.com> wrote:
-> >
-> > On Sat, Aug 1, 2020 at 3:10 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > From: Patricia Alfonso <trishalfonso@google.com>
-> > >
-> > > Transfer all previous tests for KASAN to KUnit so they can be run
-> > > more easily. Using kunit_tool, developers can run these tests with their
-> > > other KUnit tests and see "pass" or "fail" with the appropriate KASAN
-> > > report instead of needing to parse each KASAN report to test KASAN
-> > > functionalities. All KASAN reports are still printed to dmesg.
-> > >
-> > > Stack tests do not work properly when KASAN_STACK is enabled so
-> > > those tests use a check for "if IS_ENABLED(CONFIG_KASAN_STACK)" so they
-> > > only run if stack instrumentation is enabled. If KASAN_STACK is not
-> > > enabled, KUnit will print a statement to let the user know this test
-> > > was not run with KASAN_STACK enabled.
-> > >
-> > > copy_user_test and kasan_rcu_uaf cannot be run in KUnit so there is a
-> > > separate test file for those tests, which can be run as before as a
-> > > module.
-> > >
-> > > Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
-> > > Signed-off-by: David Gow <davidgow@google.com>
-> > > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> > > Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
-> > > Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
-> > > ---
-> > >  lib/Kconfig.kasan       |  22 +-
-> > >  lib/Makefile            |   7 +-
-> > >  lib/kasan_kunit.c       | 770 ++++++++++++++++++++++++++++++++
-> > >  lib/test_kasan.c        | 946 ----------------------------------------
-> > >  lib/test_kasan_module.c | 111 +++++
-> > >  5 files changed, 902 insertions(+), 954 deletions(-)
-> > >  create mode 100644 lib/kasan_kunit.c
-> > >  delete mode 100644 lib/test_kasan.c
-> > >  create mode 100644 lib/test_kasan_module.c
-> >
-> > Whoops -- this patch had a few nasty whitespace issues make it
-> > through. I'll send out a new version with those fixed.
-> >
-> > I'm pondering splitting it up to do the file rename
-> > (test_kasan.c->kasan_kunit.c) separately as well, as git's rename
-> > detection is not particularly happy with it.
->
-> Maybe also name it kunit_kasan.c? Probably in the future we'll have
-> kunit_kmsan.c, etc.
 
-The name here uses _kunit as a suffix as part of a plan to standardise
-that for all KUnit tests.
-There's some draft documentation for the proposed naming guidelines here:
-https://lore.kernel.org/linux-kselftest/20200702071416.1780522-1-davidgow@google.com/
 
-(The idea here was for kunit tests for modules to nicely sort next to
-the corresponding modules, which is why _kunit is a suffix, but that
-doesn't really apply for something built-in like KASAN.)
+On 8/4/20 5:30 AM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> The current test will exit with a failure if it cannot set affinity on
+> specific CPUs which is problematic when running this on single CPU
+> systems. Add a check for the number of CPUs and skip the test if
+> the CPU requirement is not met.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  tools/testing/selftests/net/msg_zerocopy.sh | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/msg_zerocopy.sh b/tools/testing/selftests/net/msg_zerocopy.sh
+> index 825ffec85cea..97bc527e1297 100755
+> --- a/tools/testing/selftests/net/msg_zerocopy.sh
+> +++ b/tools/testing/selftests/net/msg_zerocopy.sh
+> @@ -21,6 +21,11 @@ readonly DADDR6='fd::2'
+>  
+>  readonly path_sysctl_mem="net.core.optmem_max"
+>  
+> +if [[ $(nproc) -lt 4 ]]; then
+> +	echo "SKIP: test requires at least 4 CPUs"
+> +	exit 4
+> +fi
+> +
+>  # No arguments: automated test
+>  if [[ "$#" -eq "0" ]]; then
+>  	$0 4 tcp -t 1
+> 
 
--- David
+Test explicitly uses CPU 2 and 3, right ?
+
+nproc could be 500, yet cpu 2 or 3 could be offline
+
+# cat /sys/devices/system/cpu/cpu3/online
+0
+# echo $(nproc)
+71
