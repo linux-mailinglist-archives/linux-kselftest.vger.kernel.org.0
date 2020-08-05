@@ -2,158 +2,258 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAB223C813
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Aug 2020 10:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D9923CD01
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Aug 2020 19:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbgHEIsR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Aug 2020 04:48:17 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:51250 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726175AbgHEIsO (ORCPT
+        id S1728513AbgHERO4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Aug 2020 13:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728588AbgHERKz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Aug 2020 04:48:14 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1k3F5o-0001rR-5K; Wed, 05 Aug 2020 08:48:12 +0000
-Subject: Re: [PATCH] selftests/net: skip msg_zerocopy test if we have less
- than 4 CPUs
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernel-janitors@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20200804123012.378750-1-colin.king@canonical.com>
- <b99004ea-cd9d-bec3-5f9f-82dcb00a6284@gmail.com>
- <CA+FuTSd9K+s1rXUFpb_RWEC-uAgwU1Vz44zaUPaZK0cfsX4kwA@mail.gmail.com>
- <fc66cf3c-b4be-f098-3a2b-aef36b90835d@canonical.com>
- <CA+FuTSfVOPiiBi2AcyiyNHoOpbKg4dPWCNvjg=-UuP+GA2c5FA@mail.gmail.com>
-From:   Colin Ian King <colin.king@canonical.com>
-Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <914695bd-7896-777d-fa8e-182b247e3b77@canonical.com>
-Date:   Wed, 5 Aug 2020 09:48:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 5 Aug 2020 13:10:55 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96D0C06179F
+        for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2020 10:10:54 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id u126so9395262iod.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2020 10:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LKoP11nkvOdBjLbNMsJ6mS897rkmdxw+OMORh/Gp4dA=;
+        b=GpjIVCI6a03/UEs6DBRtDfOpuL79ZJtMen/Mx6fZk9kE0pYngE8oVpJLMswOW46JmA
+         MhDigq/7/enDILO0WaKYgKJkvhFgk8iJZ+1/kn0awByH6AewETF70nYT93b2wNenFSSf
+         O0nKjUlmlhkJ/G6AMGe7Cx5QGmXJMo3szYzc08E9epEo7OvxDGBxFU/6DUIFchoqvJrt
+         xd0T9/EgwuW07QgS0vyjPEUBxl7COwhsSiCzioyOmeRqCeSmJYJaG1rmVrQXYzarwdbT
+         5i9O10bY3rojgoz2kH6ePLtQh1bF4stYMgMls32QWdnovhan2/+4ppo8cBNhW8Gzb04k
+         0nFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LKoP11nkvOdBjLbNMsJ6mS897rkmdxw+OMORh/Gp4dA=;
+        b=QMDgEr62It0BgAkfKE3RBxb0b7ZOGT3gVbWrd7nuy2Vb3E28yNwEY7uEgRiwF+ZFYN
+         IKJ9fiPxCQFSvLeaVmBDIFpn+U2pB42wPoZZ7BM2obovP6n+gbsrD8WIvaoN0fnxfNXL
+         CIP0eI2YwT9bJRpigbLk6qrsdeHiQY9s4j/5ZJupwoSBdYcjiuLdT6YONtD8pH0uJXYE
+         XXBkIslU0s4Fm27/LrYCaTd/5pXRcMpsyzltKRZrxC7t5Gv24rlR5AOhpF2ClMHpV1BI
+         7qlgfs+dijq8DMVDwjh0P47Q0+A4kQS4bLdOB8mt21r5g3msidjuL2ZxrM63HXJ2y1fk
+         1/Cw==
+X-Gm-Message-State: AOAM533sSTk1EYT1xL/lx4tQfwBxq5Aqeu5/nUczHC0SKEHRpoACdGbA
+        Ja/L8Ea0ckQ7C/e6vfalwJbbaoVkCRrITnaat4WNkg==
+X-Google-Smtp-Source: ABdhPJwvU0rq9b8X9APyOBTEnYQ8zXpYCksXMZ/jVli4oSFBnrGrMT7ShfLdmvkIb4kHg6uOWdLqfxAZLVmF4H1neRc=
+X-Received: by 2002:a05:6602:1343:: with SMTP id i3mr4316598iov.134.1596647453522;
+ Wed, 05 Aug 2020 10:10:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CA+FuTSfVOPiiBi2AcyiyNHoOpbKg4dPWCNvjg=-UuP+GA2c5FA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200727203324.2614917-1-bgardon@google.com> <20200804211444.GA31916@linux.intel.com>
+In-Reply-To: <20200804211444.GA31916@linux.intel.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Wed, 5 Aug 2020 10:10:42 -0700
+Message-ID: <CANgfPd9kbnzW+eaBi+dwA1+E2VXEd6JfN4n2PstWrmh4VPRFjA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kvm: mmu: zap pages when zapping only parent
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 05/08/2020 09:44, Willem de Bruijn wrote:
-> On Wed, Aug 5, 2020 at 10:22 AM Colin Ian King <colin.king@canonical.com> wrote:
->>
->> On 05/08/2020 09:06, Willem de Bruijn wrote:
->>> On Wed, Aug 5, 2020 at 2:54 AM Eric Dumazet <eric.dumazet@gmail.com> wrote:
->>>>
->>>>
->>>>
->>>> On 8/4/20 5:30 AM, Colin King wrote:
->>>>> From: Colin Ian King <colin.king@canonical.com>
->>>>>
->>>>> The current test will exit with a failure if it cannot set affinity on
->>>>> specific CPUs which is problematic when running this on single CPU
->>>>> systems. Add a check for the number of CPUs and skip the test if
->>>>> the CPU requirement is not met.
->>>>>
->>>>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
->>>>> ---
->>>>>  tools/testing/selftests/net/msg_zerocopy.sh | 5 +++++
->>>>>  1 file changed, 5 insertions(+)
->>>>>
->>>>> diff --git a/tools/testing/selftests/net/msg_zerocopy.sh b/tools/testing/selftests/net/msg_zerocopy.sh
->>>>> index 825ffec85cea..97bc527e1297 100755
->>>>> --- a/tools/testing/selftests/net/msg_zerocopy.sh
->>>>> +++ b/tools/testing/selftests/net/msg_zerocopy.sh
->>>>> @@ -21,6 +21,11 @@ readonly DADDR6='fd::2'
->>>>>
->>>>>  readonly path_sysctl_mem="net.core.optmem_max"
->>>>>
->>>>> +if [[ $(nproc) -lt 4 ]]; then
->>>>> +     echo "SKIP: test requires at least 4 CPUs"
->>>>> +     exit 4
->>>>> +fi
->>>>> +
->>>>>  # No arguments: automated test
->>>>>  if [[ "$#" -eq "0" ]]; then
->>>>>       $0 4 tcp -t 1
->>>>>
->>>>
->>>> Test explicitly uses CPU 2 and 3, right ?
->>>>
->>>> nproc could be 500, yet cpu 2 or 3 could be offline
->>>>
->>>> # cat /sys/devices/system/cpu/cpu3/online
->>>> 0
->>>> # echo $(nproc)
->>>> 71
->>>
->>> The cpu affinity is only set to bring some stability across runs.
->>>
->>> The test does not actually verify that a run with zerocopy is some
->>> factor faster than without, as that factor is hard to choose across
->>> all platforms. As a result the automated run mainly gives code coverage.
->>>
->>> It's preferable to always run. And on sched_setaffinity failure log a
->>> message about possible jitter and continue. I can send that patch, if
->>> the approach sounds good.
->>>
->> That's sounds preferable to my bad fix for sure :-)
-> 
-> Certainly not a bad fix! Thanks for addressing the issue. Alternative
-> approach at
-> 
-> http://patchwork.ozlabs.org/project/netdev/patch/20200805084045.1549492-1-willemdebruijn.kernel@gmail.com/
-> 
-Thanks, you solution is good for my testing requirements
+On Tue, Aug 4, 2020 at 2:14 PM Sean Christopherson
+<sean.j.christopherson@intel.com> wrote:
+>
+> On Mon, Jul 27, 2020 at 01:33:24PM -0700, Ben Gardon wrote:
+> > When the KVM MMU zaps a page, it will recursively zap the unsynced child
+> > pages, but not the synced ones. This can create problems over time when
+> > running many nested guests because it leaves unlinked pages which will not
+> > be freed until the page quota is hit. With the default page quota of 20
+> > shadow pages per 1000 guest pages, this looks like a memory leak and can
+> > degrade MMU performance.
+> >
+> > In a recent benchmark, substantial performance degradation was observed:
+> > An L1 guest was booted with 64G memory.
+> > 2G nested Windows guests were booted, 10 at a time for 20
+> > iterations. (200 total boots)
+> > Windows was used in this benchmark because they touch all of their
+> > memory on startup.
+> > By the end of the benchmark, the nested guests were taking ~10% longer
+> > to boot. With this patch there is no degradation in boot time.
+> > Without this patch the benchmark ends with hundreds of thousands of
+> > stale EPT02 pages cluttering up rmaps and the page hash map. As a
+> > result, VM shutdown is also much slower: deleting memslot 0 was
+> > observed to take over a minute. With this patch it takes just a
+> > few miliseconds.
+> >
+> > If TDP is enabled, zap child shadow pages when zapping the only parent
+> > shadow page.
+>
+> Comments on the mechanics below.  For the approach itself, I wonder if we
+> could/should go even further, i.e. be even more aggressive in reaping nested
+> TDP shadow pages.
+>
+> For this to work, KVM is effectively relying on the write flooding detection
+> in kvm_mmu_pte_write() to kick in, i.e. KVM needs the L1 VMM to overwrite
+> the TDP tables that L1 was using for L2.  In particular, L1 needs to write
+> the upper level TDP entries in order for L0 to effeciently reclaim memory.
+>
+> For HyperV as L1, I believe that will happen sooner than later as HyperV
+> maintains a pool of zeroed pages, i.e. L1 will quickly zero out the old TDP
+> entries and trigger the zap.
+>
+> For KVM as L1, that may not hold true for all scenarios due to lazy zeroing
+> of memory.  If L1 is creating and destroying VMs (as in the benchmark), then
+> it will work as expected.  But if L1 creates and destroys a large L2 without
+> reallocating all memory used for L2's TDP tables, the write flooding will
+> never happen and L0 will keep the stale SPs even though L2 is dead.
+>
+> The above scenario may or may not be problematic in practice.  I would
+> assume any reasonably active L1 will quickly do something with the old TDP
+> memory and trigger write flooding, but at the same time it's plausible that
+> L1 could leave pages unused for a decent amount of time.
+>
+> One thought would be to track nested TDP PGDs and periodically purge PGDs
+> that haven't been used in some arbitrary amount of time and/or an arbitrary
+> threshold for the number of nested TDP PGDs is reached.  That being said,
+> either of those is probably overkill without more analysis on the below
+> approach.
 
-Acked-by: Colin Ian King <colin.king@canonical.com>
+We thought about this as well, but in the absence of a workload which
+doesn't get sufficient reclaim from write flooding, it didn't seem
+worth implementing.
+
+>
+> > Tested by running the kvm-unit-tests suite on an Intel Haswell machine.
+> > No regressions versus
+> > commit c34b26b98cac ("KVM: MIPS: clean up redundant 'kvm_run' parameters"),
+> > or warnings.
+> >
+> > Reviewed-by: Peter Shier <pshier@google.com>
+> > Signed-off-by: Ben Gardon <bgardon@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 49 +++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 44 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index fa506aaaf0194..c550bc3831dcc 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -2626,13 +2626,52 @@ static bool mmu_page_zap_pte(struct kvm *kvm, struct kvm_mmu_page *sp,
+> >       return false;
+> >  }
+> >
+> > -static void kvm_mmu_page_unlink_children(struct kvm *kvm,
+> > -                                      struct kvm_mmu_page *sp)
+> > +static int kvm_mmu_page_unlink_children(struct kvm *kvm,
+> > +                                     struct kvm_mmu_page *sp,
+> > +                                     struct list_head *invalid_list)
+> >  {
+> >       unsigned i;
+> > +     int zapped = 0;
+> > +
+> > +     for (i = 0; i < PT64_ENT_PER_PAGE; ++i) {
+> > +             u64 *sptep = sp->spt + i;
+> > +             u64 spte = *sptep;
+> > +             struct kvm_mmu_page *child_sp;
+> > +
+> > +             /*
+> > +              * Zap the page table entry, unlinking any potential child
+> > +              * page
+> > +              */
+> > +             mmu_page_zap_pte(kvm, sp, sptep);
+> > +
+> > +             /* If there is no child page for this spte, continue */
+> > +             if (!is_shadow_present_pte(spte) ||
+> > +                 is_last_spte(spte, sp->role.level))
+> > +                     continue;
+> > +
+> > +             /*
+> > +              * If TDP is enabled, then any shadow pages are part of either
+> > +              * the EPT01 or an EPT02. In either case, do not expect the
+> > +              * same pattern of page reuse seen in x86 PTs for
+> > +              * copy-on-write  and similar techniques. In this case, it is
+> > +              * unlikely that a parentless shadow PT will be used again in
+> > +              * the near future. Zap it to keep the rmaps and page hash
+> > +              * maps from filling up with stale EPT02 pages.
+> > +              */
+> > +             if (!tdp_enabled)
+> > +                     continue;
+>
+> I haven't tested, but I believe this will have the unwanted side effect of
+> blasting large swaths of EPT01 if recycling is triggered.  Because the list
+> of active SPs is FIFO (and never reordered), the first entries are almost
+> always the root SP and then high level SPs.  If make_mmu_pages_available()
+> triggers kvm_mmu_zap_oldest_mmu_pages(), this is take out the high level SP
+> and all its children.
+>
+> That may or may not be a problem in practice, but it's outside the scope of
+> what this patch is trying to accomplish.
+>
+> TL;DR: what about further conditioning this on sp->role.guest_mode?
+
+I agree this is a potential problem and conditioning on
+sp->role.guest_mode seems like an adequate solution for preventing
+this leaky behavior for nested. If there were a better way to get the
+recursive zapping for all TDP structures without the reclaim being
+overly aggressive, that feels more intuitive, but certainly more work
+to implement. I suppose a parameter could be added when zapping to
+prevent recursive zapping but I'm happy with the guest mode condition
+for now.
+
+>
+> > +
+> > +             child_sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
+> > +             if (WARN_ON_ONCE(!child_sp))
+>
+> This WARN is pointless, mmu_page_zap_pte() above will already have dereferenced
+> the child shadow page, i.e. any null pointer will have exploded.
+>
+> > +                     continue;
+> > +
+> > +             /* Zap the page if it has no remaining parent pages */
+> > +             if (!child_sp->parent_ptes.val)
+>
+> IMO it's easier to read if these checks are collapsed, e.g.:
+>
+>                 if (!tdp_enabled || !child_sp->role.guest_mode ||
+>                     child_sp->parent_ptes.val)
+>                         continue;
+>
+>                 zapped += kvm_mmu_prepare_zap_page(kvm, child_sp, invalid_list);
+>
+>
+> Alternatively, what about moving this logic into mmu_page_zap_pte()?  That
+> can be done with a little massaging of FNAME(invlpg) and would avoid what is
+> effectively redundant checks on is_shadow_present_pte() and is_last_spte().
+> Patches attached and somewhat tested.
+
+That seems like a good change to me and the patches you attached look
+good to me. I'm happy to review them more if you want to send them to
+the mailing list as their own series. Thanks for putting them
+together.
+
+>
+> > +                     zapped += kvm_mmu_prepare_zap_page(kvm, child_sp,
+> > +                                                        invalid_list);
+> > +     }
+> >
+> > -     for (i = 0; i < PT64_ENT_PER_PAGE; ++i)
+> > -             mmu_page_zap_pte(kvm, sp, sp->spt + i);
+> > +     return zapped;
+> >  }
+> >
+> >  static void kvm_mmu_unlink_parents(struct kvm *kvm, struct kvm_mmu_page *sp)
+> > @@ -2678,7 +2717,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+> >       trace_kvm_mmu_prepare_zap_page(sp);
+> >       ++kvm->stat.mmu_shadow_zapped;
+> >       *nr_zapped = mmu_zap_unsync_children(kvm, sp, invalid_list);
+> > -     kvm_mmu_page_unlink_children(kvm, sp);
+> > +     *nr_zapped += kvm_mmu_page_unlink_children(kvm, sp, invalid_list);
+> >       kvm_mmu_unlink_parents(kvm, sp);
+> >
+> >       /* Zapping children means active_mmu_pages has become unstable. */
+> > --
+> > 2.28.0.rc0.142.g3c755180ce-goog
+> >
