@@ -2,59 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DD123D220
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Aug 2020 22:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9607823D30D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Aug 2020 22:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729718AbgHEUJO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Aug 2020 16:09:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49480 "EHLO mail.kernel.org"
+        id S1725771AbgHEUdS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Aug 2020 16:33:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58158 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726881AbgHEQce (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Aug 2020 12:32:34 -0400
-Received: from linux-8ccs (p57a236d4.dip0.t-ipconnect.de [87.162.54.212])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 611972332B;
-        Wed,  5 Aug 2020 14:53:46 +0000 (UTC)
+        id S1726635AbgHEUdM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 5 Aug 2020 16:33:12 -0400
+Subject: Re: Re: [GIT PULL] Kselftest update for Linux 5.9-rc1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596639229;
-        bh=dbGVB80eYa/nySFVWDJFfLJakBsIbNOmiAZCGTFt7no=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aiidoivW6Ka39wLtz4Rev/xfeu3gn/KqTPMWcMp2RpfkimMpyH9umMo3mqAjVizCX
-         4Ba9g+JuEE+1F2LMpKt9MJ3zqjc4VcDw6pIvqAxnAD31JOGx1wKeMHMd1vmu70PBnT
-         21BTAUo97qU7VTMydLFvMz/JsKrurSCZF9fPrfuM=
-Date:   Wed, 5 Aug 2020 16:53:43 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 11/17] module: Call security_kernel_post_load_data()
-Message-ID: <20200805145342.GA22100@linux-8ccs>
-References: <20200729175845.1745471-1-keescook@chromium.org>
- <20200729175845.1745471-12-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200729175845.1745471-12-keescook@chromium.org>
-X-OS:   Linux linux-8ccs 5.8.0-rc6-lp150.12.61-default+ x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        s=default; t=1596659591;
+        bh=TXYQwMoPGaRbjNI+FnM5hefOLkB+Sak6ssnj/0O33dM=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=YVwwam73RCK6mJPHLIogcdtJo60I2RbxcwXDoNpD8r1nU6cthc7s6X8Gj2chqqZX0
+         qc1wLAC831Dwe1CrPirjeieWHMNxeNWICzXFU/TT5z7Ui1kiPT1b3v+NPIG1/jy5SH
+         1ZQmrI23qk6uyKlJnL2DlO8XNbx2LXQCH3tkV14g=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <8d894cb3-83ac-66bc-48ec-dc273d1afcbe@linuxfoundation.org>
+References: <0e3a9c1f-7ac6-33e2-ed11-5a56659fc5f7@linuxfoundation.org>
+ <CAHk-=wi4iDwuazgXQ-1yvM_JMTBepi9rc-zfSMeyjfDgSS2fgA@mail.gmail.com> <8d894cb3-83ac-66bc-48ec-dc273d1afcbe@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
+X-PR-Tracked-Message-Id: <8d894cb3-83ac-66bc-48ec-dc273d1afcbe@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.9-rc1
+X-PR-Tracked-Commit-Id: 850d0cc64c8e2e0895acf735ac0a53c78b80dbe5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4834ce9d8e074bb7ae197632e0708219b9f389b5
+Message-Id: <159665959176.13939.287196953712072463.pr-tracker-bot@kernel.org>
+Date:   Wed, 05 Aug 2020 20:33:11 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+++ Kees Cook [29/07/20 10:58 -0700]:
->Now that there is an API for checking loaded contents for modules
->loaded without a file, call into the LSM hooks.
->
->Cc: Jessica Yu <jeyu@kernel.org>
->Signed-off-by: Kees Cook <keescook@chromium.org>
+The pull request you sent on Wed, 5 Aug 2020 08:13:44 -0600:
 
-Acked-by: Jessica Yu <jeyu@kernel.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.9-rc1
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4834ce9d8e074bb7ae197632e0708219b9f389b5
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
