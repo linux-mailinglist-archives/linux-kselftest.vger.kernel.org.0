@@ -2,155 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AEB223E34F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Aug 2020 22:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3750923E397
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Aug 2020 23:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbgHFUny (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Aug 2020 16:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725272AbgHFUnx (ORCPT
+        id S1726131AbgHFVoZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Aug 2020 17:44:25 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:51594 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726050AbgHFVoX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Aug 2020 16:43:53 -0400
-Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82796C061574
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2020 13:43:53 -0700 (PDT)
-Received: by mail-oo1-xc43.google.com with SMTP id y30so2105764ooj.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2020 13:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T6Ysoq0U1zVmxOP6risM52XyEbhlxIpm08Hb7kCGz70=;
-        b=Auy2akYzBH3AZup7SZnPiLijTH+mPW/zHHW0rr1XxDtwoGUS4L4D4xMhT+VV/NP2kK
-         okYdK6X5WRe3jPL2HdYTKlMkVWwgbI7njMZTuAs/tkzEByjP0yHdXW2kNAutO4PY0cIK
-         qN+u8mRlPwOl/KwI7CSnjSkXHrWGDPGjNXe003V2G7Vgf+js9Lz5iqT70sFcbREyAOg9
-         MpiGZUwBzC9bXMbfgGpJ7giwkDrI2fpqzx6RMxVRTTE9DZ6aRQMBiAWjijqqaCOQLYwV
-         SNeKbHjpQjgF6v21u4yvAVsiIElYCgaV25xyuUjLK01QTy8aIaZTIFyMVy7YfpQhj9pO
-         L5Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T6Ysoq0U1zVmxOP6risM52XyEbhlxIpm08Hb7kCGz70=;
-        b=f51jX5l+BrIcSVyL9Uws1V+xJa9fs+IqGKVYf+gxc6goVsRZk7UK300LapyA6odJsD
-         I0FYj+2GfeotM+iV1h6WQ8vZ65366kxE45DpHE8oG2UNp4vmh2g8tdZRSUeyXj2ncPc5
-         1Vhjvib5N+EuCBbVfR1I1DeJloHrzZm7X/mY0wfmIPttxGJm6DDm4UR2p5fZSNKgvful
-         lshu6/xpI5LKJFbROxrzjavbXfvlwwTLD7lh4w4O+e2s/G5yvZmQEjqRmh5LTDn98FPA
-         K2MW7yS/NQ9ZWty4fgEqnLoeHMGbRRW+mmFLYpMFxhCYCl88L4qwm4vLo/liXJscPdPw
-         3iLg==
-X-Gm-Message-State: AOAM530R35tFkhbK/UqifC5LunL/mwL4BKwXb2cni8cEsJJRKvBFHwwb
-        2W6mYBERYk/S1QKtHoRCqS9s4BXSlWj0P6p3iiPFMQ==
-X-Google-Smtp-Source: ABdhPJye2wLcbFAcX97AxwywoWC014e53L4CA/hfLv/hQn7FiMsxUdVou4ZNW/bOCBr12ua4G88pdrxiroFaHmpmP6I=
-X-Received: by 2002:a4a:d04f:: with SMTP id x15mr9627153oor.87.1596746631868;
- Thu, 06 Aug 2020 13:43:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200806203737.3636830-1-urielguajardojr@gmail.com>
-In-Reply-To: <20200806203737.3636830-1-urielguajardojr@gmail.com>
-From:   Uriel Guajardo <urielguajardo@google.com>
-Date:   Thu, 6 Aug 2020 15:43:39 -0500
-Message-ID: <CAG30EedgwNJMCXX6Eo3b8heMa228N4=RLd=BgAQhS8AZ51bU0A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: added lockdep support
-To:     Uriel Guajardo <urielguajardojr@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 6 Aug 2020 17:44:23 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 076EgE5q153796;
+        Thu, 6 Aug 2020 14:45:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=obaVmbgBXXm2urNWlyNH2OLW5Z9/AQRdX/v3/ftgK3I=;
+ b=s1LhiUzq1dgyKH3qyoMLnYz3ie+BDgWEI4dISFmv/s8DaVMMcGuguvxcwBu7siJ+L6FX
+ zgSpw1/o5BGY1SW2MQOmRwMf7+iBZp2/LIP72VAY+adyjZaooootLFHUudgSbWlooXyo
+ hy7uvsRMJ4w1aTjyl/M48sHkjXxMDBJh+8/u00/1qMPlqYP7hDpN7c9lxYrpAhUW9Ro2
+ x/Y1KMqqYEIydrEN8fR983yRhCpKJ5SA33vbdc2M1sOwncxDq57xtxUNmfhtlLvbOzZK
+ CaV/2gNf1zktGy1jAaGaqJScVALXs0V2lwznAchVKkNhEm+1FZZ69j/HKMWJ0pHeOg34 hQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 32r6ep3dj0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 06 Aug 2020 14:45:05 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 076EbpDM077357;
+        Thu, 6 Aug 2020 14:43:04 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 32r6cvhq5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Aug 2020 14:43:04 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 076Eh3fK006113;
+        Thu, 6 Aug 2020 14:43:03 GMT
+Received: from localhost.uk.oracle.com (/10.175.182.235)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 06 Aug 2020 07:43:03 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
+Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [RFC PATCH bpf-next 4/4] selftests/bpf: add bpf_trace_btf helper tests
+Date:   Thu,  6 Aug 2020 15:42:25 +0100
+Message-Id: <1596724945-22859-5-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1596724945-22859-1-git-send-email-alan.maguire@oracle.com>
+References: <1596724945-22859-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9704 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 adultscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008060104
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9704 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 priorityscore=1501 adultscore=0
+ impostorscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008060105
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 6, 2020 at 3:37 PM Uriel Guajardo <urielguajardojr@gmail.com> wrote:
->
-> From: Uriel Guajardo <urielguajardo@google.com>
->
-> KUnit tests will now fail if lockdep detects an error during a test
-> case.
->
-> The idea comes from how lib/locking-selftest [1] checks for lock errors: we
-> first if lock debugging is turned on. If not, an error must have
-> occurred, so we fail the test and restart lockdep for the next test case.
->
-> Like the locking selftests, we also fix possible preemption count
-> corruption from lock bugs.
->
-> Depends on kunit: support failure from dynamic analysis tools [2]
->
-> [1] https://elixir.bootlin.com/linux/v5.7.12/source/lib/locking-selftest.c#L1137
->
-> [2] https://lore.kernel.org/linux-kselftest/20200806174326.3577537-1-urielguajardojr@gmail.com/
->
-> Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-> ---
->  lib/kunit/test.c | 26 +++++++++++++++++++++++++-
->  1 file changed, 25 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index d8189d827368..0838ececa005 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -11,6 +11,8 @@
->  #include <linux/kref.h>
->  #include <linux/sched/debug.h>
->  #include <linux/sched.h>
-> +#include <linux/lockdep.h>
-> +#include <linux/debug_locks.h>
->
->  #include "debugfs.h"
->  #include "string-stream.h"
-> @@ -22,6 +24,26 @@ void kunit_fail_current_test(void)
->                 kunit_set_failure(current->kunit_test);
->  }
->
-> +static inline void kunit_check_locking_bugs(struct kunit *test,
-> +                                           unsigned long saved_preempt_count)
-> +{
-> +       preempt_count_set(saved_preempt_count);
-> +#ifdef CONFIG_TRACE_IRQFLAGS
-> +       if (softirq_count())
-> +               current->softirqs_enabled = 0;
-> +       else
-> +               current->softirqs_enabled = 1;
-> +#endif
+Basic tests verifying various flag combinations for bpf_trace_btf()
+using a tp_btf program to trace skb data.
 
-I am not entirely sure why lib/locking-selftests enables/disables
-softirqs, but I suspect it has to do with the fact that preempt_count
-became corrupted, and somehow softirqs became incorrectly
-enabled/disabled as a result. The resetting of the preemption count
-will undo the enabling/disabling accordingly. Any insight on this
-would be appreciated!
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tools/testing/selftests/bpf/prog_tests/trace_btf.c | 45 ++++++++++++++++++++++
+ .../selftests/bpf/progs/netif_receive_skb.c        | 43 +++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_btf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/netif_receive_skb.c
 
-> +#if IS_ENABLED(CONFIG_LOCKDEP)
-> +       local_irq_disable();
-> +       if (!debug_locks) {
-> +               kunit_set_failure(test);
-> +               lockdep_reset();
-> +       }
-> +       local_irq_enable();
-> +#endif
-> +}
-> +
->  static void kunit_print_tap_version(void)
->  {
->         static bool kunit_has_printed_tap_version;
-> @@ -289,6 +311,7 @@ static void kunit_try_run_case(void *data)
->         struct kunit *test = ctx->test;
->         struct kunit_suite *suite = ctx->suite;
->         struct kunit_case *test_case = ctx->test_case;
-> +       unsigned long saved_preempt_count = preempt_count();
->
->         current->kunit_test = test;
->
-> @@ -298,7 +321,8 @@ static void kunit_try_run_case(void *data)
->          * thread will resume control and handle any necessary clean up.
->          */
->         kunit_run_case_internal(test, suite, test_case);
-> -       /* This line may never be reached. */
-> +       /* These lines may never be reached. */
-> +       kunit_check_locking_bugs(test, saved_preempt_count);
->         kunit_run_case_cleanup(test, suite);
->  }
->
-> --
-> 2.28.0.236.gb10cc79966-goog
->
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_btf.c b/tools/testing/selftests/bpf/prog_tests/trace_btf.c
+new file mode 100644
+index 0000000..e64b69d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/trace_btf.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++
++#include "netif_receive_skb.skel.h"
++
++void test_trace_btf(void)
++{
++	struct netif_receive_skb *skel;
++	struct netif_receive_skb__bss *bss;
++	int err, duration = 0;
++
++	skel = netif_receive_skb__open();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
++
++	err = netif_receive_skb__load(skel);
++	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
++		goto cleanup;
++
++	bss = skel->bss;
++
++	err = netif_receive_skb__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	/* generate receive event */
++	system("ping -c 10 127.0.0.1");
++
++	/*
++	 * Make sure netif_receive_skb program was triggered
++	 * and it set expected return values from bpf_trace_printk()s
++	 * and all tests ran.
++	 */
++	if (CHECK(bss->ret <= 0,
++		  "bpf_trace_btf: got return value",
++		  "ret <= 0 %ld test %d\n", bss->ret, bss->num_subtests))
++		goto cleanup;
++
++	CHECK(bss->num_subtests != bss->ran_subtests, "check all subtests ran",
++	      "only ran %d of %d tests\n", bss->num_subtests,
++	      bss->ran_subtests);
++
++cleanup:
++	netif_receive_skb__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+new file mode 100644
+index 0000000..cab764e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020, Oracle and/or its affiliates. */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++long ret = 0;
++int num_subtests = 0;
++int ran_subtests = 0;
++
++#define CHECK_TRACE(_p, flags)						 \
++	do {								 \
++		++num_subtests;						 \
++		if (ret >= 0) {						 \
++			++ran_subtests;					 \
++			ret = bpf_trace_btf(_p, sizeof(*(_p)), 0, flags);\
++		}							 \
++	} while (0)
++
++/* TRACE_EVENT(netif_receive_skb,
++ *	TP_PROTO(struct sk_buff *skb),
++ */
++SEC("tp_btf/netif_receive_skb")
++int BPF_PROG(trace_netif_receive_skb, struct sk_buff *skb)
++{
++	static const char skb_type[] = "struct sk_buff";
++	static struct btf_ptr p = { };
++
++	p.ptr = skb;
++	p.type = skb_type;
++
++	CHECK_TRACE(&p, 0);
++	CHECK_TRACE(&p, BTF_TRACE_F_COMPACT);
++	CHECK_TRACE(&p, BTF_TRACE_F_NONAME);
++	CHECK_TRACE(&p, BTF_TRACE_F_PTR_RAW);
++	CHECK_TRACE(&p, BTF_TRACE_F_ZERO);
++	CHECK_TRACE(&p, BTF_TRACE_F_COMPACT | BTF_TRACE_F_NONAME |
++		    BTF_TRACE_F_PTR_RAW | BTF_TRACE_F_ZERO);
++
++	return 0;
++}
+-- 
+1.8.3.1
+
