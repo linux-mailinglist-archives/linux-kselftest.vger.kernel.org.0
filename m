@@ -2,120 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1474C23F3C7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Aug 2020 22:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18A623F46B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Aug 2020 23:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbgHGU3h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Aug 2020 16:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
+        id S1726067AbgHGVdX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Aug 2020 17:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbgHGU3g (ORCPT
+        with ESMTP id S1725970AbgHGVdX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Aug 2020 16:29:36 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD37DC061756;
-        Fri,  7 Aug 2020 13:29:36 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id z17so2834611ill.6;
-        Fri, 07 Aug 2020 13:29:36 -0700 (PDT)
+        Fri, 7 Aug 2020 17:33:23 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A05C061757
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2020 14:33:22 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id 88so2889709wrh.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2020 14:33:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uq3Rm3BodEbHoD3xpm4HpbWX1fCXnHobKwQS9eSoca4=;
-        b=BM8RHOdk46N+DeGLK9WTKkMYUkIB4fexT7uOlF79JjFH11zN1g/IDmLcSQCtkuwngn
-         r46/DeVJjrv9lKfKrdHHQuVScjeQiOaKJSwY9wjuNTdWsvRjDUnl/HHzqs9EO/081Miq
-         wdI2AiaNkAx1NGAuG5qdMcXHvZpdqekA0Kev49MF9WOrn83XpMBgp7ehIKkOjE7e46lU
-         0z4BAQ/F1aXYZRnjf9q0LZ3RtANjeAyQlZf/9+8HxqhjShyGSfgA08uIf/J6h/3t12Z7
-         CFEZMpvZW0kN1Vv59hHqIaQOdsKTVw9clSzgmhVFD88DVHzDLqks3CY76+d/yK4x4VWx
-         It1Q==
+        bh=Kb51K/JMx93SnPedI+EIdFTSAF1IqBeo/q6vamdS4A8=;
+        b=j5fGpkuVmHIE5Ps7zFBfy2Pdo1F76BJ2oz5uWWb95k6tuAOeu9Lp4hnY+11pqXqX1f
+         eW1WZpc91IM6WYWcp4j7Pc0/kUgOqrwv13XpEAuwqgjmvnwoIIzpfOy3OE4k4/KCmI8w
+         ra9stYzuUfw82bKAJG8gGxGsX6WJE2a3T138c12Td/HoyQKB2GU84ST0lk/zf/LbdF/d
+         IBWP4IIg1oHczrZH/o2MdqLogojr6xaCupKt9SwIPIiPSkUipTJx5ONXLtq+8Og5YlNT
+         8S80SBjxPsK8ALFVuDrRJDapxKxuC1Z1yAZquhI6AWArhrAHO3gS9bAYqZpoMK3/hxu6
+         mVPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uq3Rm3BodEbHoD3xpm4HpbWX1fCXnHobKwQS9eSoca4=;
-        b=bMAg/EcUny46Z97LH0cHSqCgGJmNXfSrV2vcBSCRl+TMFvyfKxrKH4ifVabVszmNDu
-         HBoHINHjapbQ0hwukZwJ0AWAQoPmD+GDv1bMG0TPk2ciKJd/eLC/i6FRx5Li+X/Gtfcz
-         4nl6iqoAI/P0xRR1qmdQzzq36QyvT8lkKlkHJaKlEgG69SnzzEdPymfFICVFmxRZHi+f
-         KC55Hx9pt63Qh1sUNsIIYomMlITeiNEvLp8WM5G3WQBxfuaIlm06ky1YWpcWGnJD61UQ
-         LkUmLw4F2KUqNj9kIQBaGjToSt1DAis9P3FtAH1kM/x6NUE1gfsZ0zldGATrn5O6/heC
-         wnEg==
-X-Gm-Message-State: AOAM531qq0Qd2m/95YfFoor9JwYgELQZPX46AGeXviqu2IZDDBgwxXn6
-        ROPhsftgCf9R+0eBnjq+soJuReE0vm6/HwCfK10=
-X-Google-Smtp-Source: ABdhPJwC9P+sOC25h3PoOSP50YpPCTyAOEUT0secwM5VyYf3NZXaBzxAMi6eRm+95YX8Kh14rxVqTZmqDD/zYQktLX0=
-X-Received: by 2002:a92:5e9c:: with SMTP id f28mr6357090ilg.302.1596832176074;
- Fri, 07 Aug 2020 13:29:36 -0700 (PDT)
+        bh=Kb51K/JMx93SnPedI+EIdFTSAF1IqBeo/q6vamdS4A8=;
+        b=dLtWu9kdCUaSQJNScDNoXRfzzsq0IouZHJ9j1VrINPmd6j4l51+qoxP/6kmyiuSyz4
+         1iLJ15349vzC2d6wMxVyT00Qs6sK5ccLFbIcJUewJqnb8rrfXqnnXpFEFB/Ul20Bo3+A
+         kKip81WWozzjyQPGSlTDzyz67reRCY2t86nOaltVAbkmq8IGWjzd+DaMMSjIfs9Nfys5
+         Z7T185F0udgU1VRmZnEktTID6Rz3ibZbcz5TailgCHJp84U2QibdrehyOPbfOsexc6r7
+         fD3tLsfHN/c1iENHDbeMy9Fsjb8TVzgdMC0ZdmhhqgQVp6DXissddt0rciFaGt0N51xE
+         zhLw==
+X-Gm-Message-State: AOAM530Yf6+NpyZW6Xtj3rYG60zveckLKeQh5VAYHBDcWXGhSXWK3QAx
+        8CCJHgq+OGuTQa7XivUhdAv3Ts6a9rGmuSLzJpqzug==
+X-Google-Smtp-Source: ABdhPJxXQmEyH/oQ6CHELZFCo1U1iD2D6vbAatj8wgGfSPKfqffSXXd1hCvHhnXMVMh8U7IDXpV1HbyO9BWtNAzpZjA=
+X-Received: by 2002:adf:f511:: with SMTP id q17mr9909904wro.414.1596836001220;
+ Fri, 07 Aug 2020 14:33:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200709182642.1773477-1-keescook@chromium.org> <20200709182642.1773477-4-keescook@chromium.org>
-In-Reply-To: <20200709182642.1773477-4-keescook@chromium.org>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 7 Aug 2020 13:29:24 -0700
-Message-ID: <CANcMJZAcDAG7Dq7vo=M-SZwujj+BOKMh7wKvywHq+tEX3GDbBQ@mail.gmail.com>
-Subject: Re: [PATCH v7 3/9] net/scm: Regularize compat handling of scm_detach_fds()
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Laight <David.Laight@aculab.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Matt Denton <mpdenton@google.com>,
-        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
-        Robert Sesek <rsesek@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        containers@lists.linux-foundation.org, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20200806094440.14962-1-98.arpi@gmail.com> <CAHp75Vdpyr=LiOsjgoJ1YscrvFwivtfg58dePtF9aQDYp6V9-A@mail.gmail.com>
+In-Reply-To: <CAHp75Vdpyr=LiOsjgoJ1YscrvFwivtfg58dePtF9aQDYp6V9-A@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 8 Aug 2020 05:33:09 +0800
+Message-ID: <CABVgOSmXFZL+uxKY9yAn9JVzChZxQDsucSQGAGBxM6OpOkCwJg@mail.gmail.com>
+Subject: Re: [PATCH] lib: Convert test_hexdump.c to KUnit
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 9, 2020 at 11:28 AM Kees Cook <keescook@chromium.org> wrote:
+On Thu, Aug 6, 2020 at 5:53 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> Duplicate the cleanups from commit 2618d530dd8b ("net/scm: cleanup
-> scm_detach_fds") into the compat code.
+> On Thu, Aug 6, 2020 at 12:48 PM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+> >
+> > Converts test lib/test_hexdump.c to KUnit.
+> > More information about KUnit can be found at
+> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
+> > KUnit provides a common framework for unit tests in the kernel.
 >
-> Replace open-coded __receive_sock() with a call to the helper.
+> > -config TEST_HEXDUMP
+> > -       tristate "Test functions located in the hexdump module at runtime"
 >
-> Move the check added in commit 1f466e1f15cf ("net: cleanly handle kernel
-> vs user buffers for ->msg_control") to before the compat call, even
-> though it should be impossible for an in-kernel call to also be compat.
+> We have a nice collection of tests starting with TEST_ in the
+> configuration, now it's gone.
+> I'm strongly against this change.
+> Code itself okay, but without addressing above - NAK.
 >
-> Correct the int "flags" argument to unsigned int to match fd_install()
-> and similar APIs.
->
-> Regularize any remaining differences, including a whitespace issue,
-> a checkpatch warning, and add the check from commit 6900317f5eff ("net,
-> scm: fix PaX detected msg_controllen overflow in scm_detach_fds") which
-> fixed an overflow unique to 64-bit. To avoid confusion when comparing
-> the compat handler to the native handler, just include the same check
-> in the compat handler.
->
-> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
 
-Hey Kees,
-  So during the merge window (while chasing a few other regressions),
-I noticed occasionally my Dragonboard 845c running AOSP having trouble
-with the web browser crashing or other apps hanging, and I've bisected
-the issue down to this change.
+This change is to make the test naming compliant with the proposed
+KUnit test naming guidelines:
+- https://lore.kernel.org/linux-kselftest/20200702071416.1780522-1-davidgow@google.com/
 
-Unfortunately it doesn't revert cleanly so I can't validate reverting
-it sorts things against linus/HEAD.  Anyway, I wanted to check and see
-if you had any other reports of similar or any ideas what might be
-going wrong?
+The hope is that tests built on KUnit will all end up with the same
+[x]_KUNIT_TEST config options (which at least preserves the
+consistency of the test naming, even if they'll not all sort
+together), and should make it easier for people to know that the test
+results will be in a common format, and that the test can also be run
+using the KUnit tools.
 
-thanks
--john
+The naming guidelines haven't been upstreamed yet, though, so we'd
+definitely appreciate input on that thread if you've got comments more
+broadly than for this particular patch. Ultimately, I don't think it
+matters too much what we end up using, but having some consistency is
+the goal.
