@@ -2,83 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7880723E50E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Aug 2020 02:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C4523E51B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Aug 2020 02:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbgHGAWp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Aug 2020 20:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726011AbgHGAWn (ORCPT
+        id S1726382AbgHGAYN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Aug 2020 20:24:13 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10680 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725998AbgHGAYJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Aug 2020 20:22:43 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC67C061757
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2020 17:22:42 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id x5so242187wmi.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2020 17:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nrwX/wfFzmOB6yLRhb7qEWgDu6TEjOMw7c5SuWROcuA=;
-        b=JpfLO58DHRpIaearkFKOnrfvqBCUl0RamhydiUAyJKHTIjLYcYkw7jHOswLhEnvlz+
-         42rMjdrWtq1srri4CwkYJOOZqz9/+yBOurDBNaTXbUNL7sGwOZSau9gPNwqlyl1D/7TE
-         o5VG1NlGwBD81xYZqfeyR2hIsZ7Qv7Lk4Sk5w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nrwX/wfFzmOB6yLRhb7qEWgDu6TEjOMw7c5SuWROcuA=;
-        b=D+FA60NztsMh3dta4UT9REAmR4VYf2bOXfUyzvYQ/NRmLCngb+EZcdzlm/yu/UkqJ4
-         RcBA7dU42+EnMQ37I51UeZhhBvXZ+vKvcZvgLrNrexBEWzc4s+5qClSl/akkV4IAuVjm
-         TqfJUk5H8eUFfctY/3ayUbP8Mf4AM8YwHv9mJSraUcM2Jl+/Bw6WPzzzAieSLS51Dy6e
-         CCbPgiMf8yFI5GF5LMhG+Fl5S0eVH+J5YrhyAISTgDr1rNJKrw2g7hIW/tmSl6ivHlCg
-         OD7X+CWTw60s6kgYMotnL/+mEQWKFvQXmG6oqUoPpcXuWkiWgqGohD6f6tR4txHhCXKU
-         U9/A==
-X-Gm-Message-State: AOAM5320KoPYrDWLsR/Oj/8ljIH/HBFqt2Y9CiCAyS2ZYeV3MbWBQJKk
-        NRcLw8ooy0fpRie0NG0mAh18vtUWU1JKt4wcl1WPZw==
-X-Google-Smtp-Source: ABdhPJz2CSFYHBHps5lsYSSXi4LmfIaF9F6g3gv7J9WuzjjQKkuYj3RGkVMthT3YMgBgze8VgIBd8JCNOrPtY+ZUvC4=
-X-Received: by 2002:a05:600c:252:: with SMTP id 18mr10198939wmj.56.1596759760832;
- Thu, 06 Aug 2020 17:22:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200729175845.1745471-1-keescook@chromium.org>
- <20200729175845.1745471-12-keescook@chromium.org> <20200805145342.GA22100@linux-8ccs>
-In-Reply-To: <20200805145342.GA22100@linux-8ccs>
-From:   KP Singh <kpsingh@chromium.org>
-Date:   Fri, 7 Aug 2020 02:22:30 +0200
-Message-ID: <CACYkzJ6dbUPydbg+HVt3toAPhgZAFut5Wt5OVckWMrKuPZ0ibw@mail.gmail.com>
-Subject: Re: [PATCH v4 11/17] module: Call security_kernel_post_load_data()
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
+        Thu, 6 Aug 2020 20:24:09 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 077038jc175593;
+        Thu, 6 Aug 2020 20:24:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=VsXvvS8VKmxXDht3q36Bubq+Zar3OcXZnhZAUZMQcnY=;
+ b=osQlR8ck1rT5G162TuDnpSNrxODRJG3dxpkrNZqQCF2Cdp6JuubIveeoPTy+njFJIIe2
+ D3MnSivYKh0I7ddKP5/HThN1K6l1LBTV37g0Nd9xv34NNSj2oHOPAnv4k2FSMck0UGG7
+ Ro+ZwjFZYrRiTK0BDmljRTm1B3xzO00Ceu0PoXfamHku+958QyF+MTyLzsWUgvdJk7t3
+ FmajTb+ccilDljclikn5Bm8ybta2w/Zx7xXKYHR2bswT72i1k9FkUGXsFQolYrk2gAEW
+ ltYbBrvJSVQ0yEO8zoDDiYosFvmdbWSzy+F6beREbwYkci4JLqcbiz4vwt1OkMUT+Xm+ UQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32rgnfn7rt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Aug 2020 20:24:00 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0770Jqde005199;
+        Fri, 7 Aug 2020 00:23:58 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 32n0185yyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Aug 2020 00:23:58 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0770NuNi28246380
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Aug 2020 00:23:56 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F04DB4C04E;
+        Fri,  7 Aug 2020 00:23:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B2EB4C046;
+        Fri,  7 Aug 2020 00:23:53 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.117.136])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Aug 2020 00:23:52 +0000 (GMT)
+Message-ID: <1cdddf80e0b1ea46346edf8a1c0dc81aea095f15.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 12/17] LSM: Add "contents" flag to kernel_read_file
+ hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Takashi Iwai <tiwai@suse.de>, SeongJae Park <sjpark@amazon.de>,
-        linux-efi@vger.kernel.org,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
+        Takashi Iwai <tiwai@suse.de>, Jessica Yu <jeyu@kernel.org>,
+        SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 06 Aug 2020 20:23:51 -0400
+In-Reply-To: <20200729175845.1745471-13-keescook@chromium.org>
+References: <20200729175845.1745471-1-keescook@chromium.org>
+         <20200729175845.1745471-13-keescook@chromium.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-06_17:2020-08-06,2020-08-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 clxscore=1015 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008060156
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 4:53 PM Jessica Yu <jeyu@kernel.org> wrote:
->
-> +++ Kees Cook [29/07/20 10:58 -0700]:
-> >Now that there is an API for checking loaded contents for modules
-> >loaded without a file, call into the LSM hooks.
-> >
-> >Cc: Jessica Yu <jeyu@kernel.org>
-> >Signed-off-by: Kees Cook <keescook@chromium.org>
->
-> Acked-by: Jessica Yu <jeyu@kernel.org>
+On Wed, 2020-07-29 at 10:58 -0700, Kees Cook wrote:
+> As with the kernel_load_data LSM hook, add a "contents" flag to the
+> kernel_read_file LSM hook that indicates whether the LSM can expect
+> a matching call to the kernel_post_read_file LSM hook with the full
+> contents of the file. With the coming addition of partial file read
+> support for kernel_read_file*() API, the LSM will no longer be able
+> to always see the entire contents of a file during the read calls.
+> 
+> For cases where the LSM must read examine the complete file contents,
+> it will need to do so on its own every time the kernel_read_file
+> hook is called with contents=false (or reject such cases). Adjust all
+> existing LSMs to retain existing behavior.
+> 
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Thanks!
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Reviewed-by: KP Singh <kpsingh@google.com>
