@@ -2,153 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE5423F6FF
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Aug 2020 10:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B453D23FB54
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Aug 2020 01:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgHHIvG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Aug 2020 04:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726256AbgHHIvG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Aug 2020 04:51:06 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B13C061A27
-        for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2020 01:51:05 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id s15so2230463pgc.8
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2020 01:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iJ0NqtLhxMa8vy08p3okMi0ViGuJVupVz011S0TP8uw=;
-        b=cImpvsWPA0tuRi4FaCIuCkXN09crvNWiva4SxYghBRxe6QF2UvZhTPYZb15Kg/i6q4
-         U04UHFT/tSEwoIikSa9Sv9Ww6ahDFtp7AX/xoeCrjs09WdmOunuqUuQll8zvKiEI8xWl
-         B5SS6ez59kzeNCmSP6eRF54eKARyzxYPJoGuqXxvfJ70QYV54PMxDCXnbPFnZd2eECBk
-         bmMzFz8Q5U4eOEvqpx12T5+VfNpUNdTNemuIe3yul8DlBqCwiMSFO4FzonQLwBbiAD17
-         hyRba4cPe6q4owa2MM8Q//2W8lXY3zXmDtx5B9W/F+2EeHESKda7rDJvNkzrsIeEJGv+
-         a4EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iJ0NqtLhxMa8vy08p3okMi0ViGuJVupVz011S0TP8uw=;
-        b=qN+KpVdoM/IshyJGSrdnnwLEqTs0SWwSIuPHLoSsGP9MPM8so3zoLT0tFuaaEhBmxX
-         jIwe/RUczg2UGLV58wKRECja/icD0j461HgLX6XFdAGP4/H8VBKoZE4sbtH8W+jK9DQj
-         /KkMeDmmyq499magniGVXkCdeplECzE7s8qnOlepi649IdKE6NbouoV+AMYdESa1MdVH
-         QPuqWAlFY5zqCzPfiBETUlB7GdSxdzR+rMsTqSg1BjVNWkNDqcK4kjKAZdbghzixdmwz
-         U8FAi9zzKknwUv+5xzGo85sYjHJODm0pAjf7dFNWbYRHiq/NgcMq1dfrAr5PhHI/ohcT
-         DZ/w==
-X-Gm-Message-State: AOAM532pAdGi2h8Vp93FBP3qkzpDTQ0Mme/L/8e8Gj6jP5LNwP+W2g7Z
-        IKGMn9HoCA4SmyzNO4fJq93SHRSFxsrpw9JF9F0CZg==
-X-Google-Smtp-Source: ABdhPJxAo+2rzPqPflRATM8sZ8jKh8Eqk5Td2gDaK3rMsOsNEKuQG6IxCX+MvyVsMYXGQLQwroTsDDpIERUbjKXA8v0=
-X-Received: by 2002:a63:6e0e:: with SMTP id j14mr14337055pgc.384.1596876664643;
- Sat, 08 Aug 2020 01:51:04 -0700 (PDT)
+        id S1726382AbgHHXhF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Aug 2020 19:37:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49964 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725950AbgHHXhF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 8 Aug 2020 19:37:05 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A6367207FB;
+        Sat,  8 Aug 2020 23:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596929824;
+        bh=UCGiZ204cxB9dbRnXHlFZB9TQWCCrxb35jvAi/jUETw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=wbJe7HAXu6Bl3aPU/Pau1GNgGg0KgeuxrSoxjZTWMVZUyoTeZ5FTe21V0hMiUU2aI
+         y7QGf1wQCgnNxILxlLt2PyDB4O2kiISM9/jmTCjl6G7hTc0NFI7Zot8ho5gaQGKOgt
+         /5Tv/psAX9+RGa/+8pBetd2tjPMm82iLfz6Q6zic=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>, Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 57/72] seccomp: Fix ioctl number for SECCOMP_IOCTL_NOTIF_ID_VALID
+Date:   Sat,  8 Aug 2020 19:35:26 -0400
+Message-Id: <20200808233542.3617339-57-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200808233542.3617339-1-sashal@kernel.org>
+References: <20200808233542.3617339-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20200808011651.2113930-1-brendanhiggins@google.com> <CABVgOSkEiQkcOy+gF9irJo-R6xCeiCvDRZXa_ubzCfz+9Yx2ZA@mail.gmail.com>
-In-Reply-To: <CABVgOSkEiQkcOy+gF9irJo-R6xCeiCvDRZXa_ubzCfz+9Yx2ZA@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Sat, 8 Aug 2020 01:50:53 -0700
-Message-ID: <CAFd5g47itmDHzVRiihUe_P2yjqGuvGC8LPLpiDx1D8aQX1T1BA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: tool: fix running kunit_tool from outside
- kernel tree
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 7, 2020 at 10:45 PM David Gow <davidgow@google.com> wrote:
->
-> On Sat, Aug 8, 2020 at 9:17 AM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > Currently kunit_tool does not work correctly when executed from a path
-> > outside of the kernel tree, so make sure that the current working
-> > directory is correct and the kunit_dir is properly initialized before
-> > running.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > ---
-> >  tools/testing/kunit/kunit.py | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> > index 425ef40067e7..96344a11ff1f 100755
-> > --- a/tools/testing/kunit/kunit.py
-> > +++ b/tools/testing/kunit/kunit.py
-> > @@ -237,9 +237,14 @@ def main(argv, linux=None):
-> >
-> >         cli_args = parser.parse_args(argv)
-> >
-> > +       if get_kernel_root_path():
-> > +               print('cd ' + get_kernel_root_path())
-> Do we want to print this, or is it a leftover debug statement?
+From: Kees Cook <keescook@chromium.org>
 
-Whoops, I was supposed to delete that. That's embarrassing... ^_^;
+[ Upstream commit 47e33c05f9f07cac3de833e531bcac9ae052c7ca ]
 
-> > +               os.chdir(get_kernel_root_path())
-> > +
-> >         if cli_args.subcommand == 'run':
-> >                 if not os.path.exists(cli_args.build_dir):
-> >                         os.mkdir(cli_args.build_dir)
-> > +                       create_default_kunitconfig()
-> Why are we adding this everywhere when it's already in config_tests,
-> which should already be called in all of the places where a
-> kunitconfig is required?
+When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced it had the wrong
+direction flag set. While this isn't a big deal as nothing currently
+enforces these bits in the kernel, it should be defined correctly. Fix
+the define and provide support for the old command until it is no longer
+needed for backward compatibility.
 
-Ah yes, .kunitconfig needs to be created before config_tests() can be
-called because the LinuxSourceTree constructor needs .kunitconfig to
-exist.
+Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/uapi/linux/seccomp.h                  | 3 ++-
+ kernel/seccomp.c                              | 9 +++++++++
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-> Is the goal to always copy the default kunitconfig when creating a new
-> build_dir? While I can sort-of see why we might want to do that, if
-> the build dir doesn't exist, most of the subcommands will fail anyway
-> (maybe we should only create the build-dir for 'config' and 'run'?)
+diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
+index c1735455bc536..965290f7dcc28 100644
+--- a/include/uapi/linux/seccomp.h
++++ b/include/uapi/linux/seccomp.h
+@@ -123,5 +123,6 @@ struct seccomp_notif_resp {
+ #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
+ #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
+ 						struct seccomp_notif_resp)
+-#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
++#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
++
+ #endif /* _UAPI_LINUX_SECCOMP_H */
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index d653d8426de90..c461ba9925136 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -42,6 +42,14 @@
+ #include <linux/uaccess.h>
+ #include <linux/anon_inodes.h>
+ 
++/*
++ * When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced, it had the
++ * wrong direction flag in the ioctl number. This is the broken one,
++ * which the kernel needs to keep supporting until all userspaces stop
++ * using the wrong command number.
++ */
++#define SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR	SECCOMP_IOR(2, __u64)
++
+ enum notify_state {
+ 	SECCOMP_NOTIFY_INIT,
+ 	SECCOMP_NOTIFY_SENT,
+@@ -1186,6 +1194,7 @@ static long seccomp_notify_ioctl(struct file *file, unsigned int cmd,
+ 		return seccomp_notify_recv(filter, buf);
+ 	case SECCOMP_IOCTL_NOTIF_SEND:
+ 		return seccomp_notify_send(filter, buf);
++	case SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR:
+ 	case SECCOMP_IOCTL_NOTIF_ID_VALID:
+ 		return seccomp_notify_id_valid(filter, buf);
+ 	default:
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 252140a525531..ccf276e138829 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -180,7 +180,7 @@ struct seccomp_metadata {
+ #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
+ #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
+ 						struct seccomp_notif_resp)
+-#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
++#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
+ 
+ struct seccomp_notif {
+ 	__u64 id;
+-- 
+2.25.1
 
-I just did it because we were getting a failure in a constructor so we
-couldn't do much. Ideally we would check that the current state allows
-for the command that the user intended to run, but I think that's
-beyond the scope of this change.
-
-So I guess the real question is: Is it okay for it to crash in the
-constructor with a cryptic error message for now, or do we want to let
-it fail with a slightly less cryptic message later?
-
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree()
-> > @@ -257,6 +262,7 @@ def main(argv, linux=None):
-> >                 if cli_args.build_dir:
-> >                         if not os.path.exists(cli_args.build_dir):
-> >                                 os.mkdir(cli_args.build_dir)
-> > +                               create_default_kunitconfig()
-> >
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree()
-> > @@ -273,6 +279,7 @@ def main(argv, linux=None):
-> >                 if cli_args.build_dir:
-> >                         if not os.path.exists(cli_args.build_dir):
-> >                                 os.mkdir(cli_args.build_dir)
-> > +                               create_default_kunitconfig()
-> >
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree()
-> > @@ -291,6 +298,7 @@ def main(argv, linux=None):
-> >                 if cli_args.build_dir:
-> >                         if not os.path.exists(cli_args.build_dir):
-> >                                 os.mkdir(cli_args.build_dir)
-> > +                               create_default_kunitconfig()
-> >
-> >                 if not linux:
-> >                         linux = kunit_kernel.LinuxSourceTree()
-> >
-> > base-commit: 30185b69a2d533c4ba6ca926b8390ce7de495e29
-> > --
-> > 2.28.0.236.gb10cc79966-goog
-> >
