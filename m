@@ -2,138 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2077B23F69B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Aug 2020 07:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D169523F6C8
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Aug 2020 09:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726514AbgHHFpT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Aug 2020 01:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S1726250AbgHHHR7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Aug 2020 03:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726511AbgHHFpS (ORCPT
+        with ESMTP id S1726076AbgHHHR6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Aug 2020 01:45:18 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEE2C061A27
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2020 22:45:18 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id x5so3368590wmi.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2020 22:45:18 -0700 (PDT)
+        Sat, 8 Aug 2020 03:17:58 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189D4C061A29
+        for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2020 00:17:58 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id mw10so2147073pjb.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2020 00:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=441erG+nQmp/Gw1mKUcyWCbdvIu4tY4AskgERTUrfjg=;
-        b=gFgiaaUI3R97K8gVNTA0DZeC1udE44Xe94EfLuFG1QpmUFFLrLEysS/L41zYbhywlR
-         mPQkkd+eeFz/LTsg34gxiKRGptrqJhCYX9JpHb2zPZDfvKDf4EC824Em7a6WPF+Qx6ZG
-         IyHyoO7cF3GP1ylR3urde/Y1x+HM1HMXDCaEEVM4N9t9AX+Nvr8VlhnUnpo9OMzUsDnt
-         mYOmnT2IEGD86AG63um15D87y76SR2uMql/cULk2BXS9r+afuQlHDsuuw+vpjp0vdeya
-         4kBLhd/DC2NyDWZh4c7JaDvRiK6eGx6TtAeR/UQVZ1NFR/F6HprG8LVCJH1H0RttbBcE
-         0eTA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eCir4Ayk72PEJKd/j3pe7BJGzgEnAkyDXiuG2Izic9E=;
+        b=J7Jeyp1bV8d1URPGbqvopRR/3Xv35lGlgk3bx/aVLux30Z0Cmt4M/ru2/CBSKrc2Yn
+         LEJbOfinClv/JPRyH+MHFh9ugxQs5r4SbmaNlbh5n8VMkUwpagi9FtI+PHeqB3dPKLZF
+         bpEda01yNbqZ47Ba6PWHX3rxvgyf6J7BQX6EQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=441erG+nQmp/Gw1mKUcyWCbdvIu4tY4AskgERTUrfjg=;
-        b=Xkf7N8ko9efs3u0WpMSKvcCyOVTBi7BSb8EjrpBh7/1Jt8gaGx25REoLMID3/U7t4r
-         jsu5S7a011X1jUvw5hryr1QQ62XOSk+qjkQ6Vavjdg27otMyaxDbgkI6mU9z6Oc1Sav+
-         SWZuo8PKffKLXPifb/fyK3u2zSIdZBcJ3oIe6bOhWPg3gyVWON+JYPQbsmBHyWcBp4/R
-         G8qnJ83oGcTe7b7iJKlrvFrS9aS4aA4BRGduK/4D012whKkYQ5CSdAOE2In6aZSXFtGj
-         1Al5CKNZky6TKb5E0p2UxYuKQ2U/Nm8+w2K0PGItcNWgPbgarVaO4S329kq0M5g0YO0Q
-         x0Gw==
-X-Gm-Message-State: AOAM533UoxUUAuoQjNBee6/QCP1PyictPsfRJCM8Go39WKEpu3K2Ph4o
-        z+PQhGLdZkY0DP1bcXe7hFpFgkZHui0Q+g1ab3CNWg==
-X-Google-Smtp-Source: ABdhPJx0rFe0zGAHdrBJuE8AHpoJMag7cGGMlYcCrkYzgb+JqKHHTSUqvpypkcKFaRZqkqXKMiukGIhlzijpTrDC9gs=
-X-Received: by 2002:a7b:c2aa:: with SMTP id c10mr15492330wmk.86.1596865516755;
- Fri, 07 Aug 2020 22:45:16 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eCir4Ayk72PEJKd/j3pe7BJGzgEnAkyDXiuG2Izic9E=;
+        b=SGWrpjzoACuXssAXvv9rmqzARcdXX05FVuU4/CJJogHBxuLL2EgGq1n8zzyS0Eu9fM
+         PnE1rVfMoppfl7BGfwmR4RS7hVTMojg4pgXHImmQ18HV4ZULS5I/cusSuH/elWR9lrV9
+         EQjr/KEK967J1iXRIyKmIaDxmEheUjw6KuDaVaiqIxYX6K8KCWoyNKffdesNiwGMIMp8
+         AzS/PdoIkH7Jy7j19Fr/7MkzGDupQzXMa1HjNAkkMS1iInWAXqMZe/qiydkN2rmOzix4
+         8wHprUfDIUHC+WsWleljoFrQYB2peo5hXZmNRlrzfvsKR8BwXeQYC5yfGVMb3yK1JZyw
+         pkxw==
+X-Gm-Message-State: AOAM532cj41qbsKT+fZ7+5eMAihIEe0LEe2Yeej7OyjAYTJMO4SvHdXF
+        2XoTMyjnCkYM/iQeH+wvtq7uqw==
+X-Google-Smtp-Source: ABdhPJx+ciLdH6ySwDMsUNQtApGD+XkDqifS0PpDf22ilxzYv3YOdIibv7N9AvGktGE1tc4I58GOOA==
+X-Received: by 2002:a17:90a:bc41:: with SMTP id t1mr16615267pjv.181.1596871077273;
+        Sat, 08 Aug 2020 00:17:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j142sm16303934pfd.100.2020.08.08.00.17.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Aug 2020 00:17:56 -0700 (PDT)
+Date:   Sat, 8 Aug 2020 00:17:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Laight <David.Laight@aculab.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Matt Denton <mpdenton@google.com>,
+        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
+        Robert Sesek <rsesek@google.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        containers@lists.linux-foundation.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v7 3/9] net/scm: Regularize compat handling of
+ scm_detach_fds()
+Message-ID: <202008080017.1298B0C@keescook>
+References: <20200709182642.1773477-1-keescook@chromium.org>
+ <20200709182642.1773477-4-keescook@chromium.org>
+ <CANcMJZAcDAG7Dq7vo=M-SZwujj+BOKMh7wKvywHq+tEX3GDbBQ@mail.gmail.com>
+ <202008071516.83432C389@keescook>
+ <CALAqxLXqjEN0S+eGeFA_obaunBK_+xqKbQtdQj1w+wegz-6U5w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200808011651.2113930-1-brendanhiggins@google.com>
-In-Reply-To: <20200808011651.2113930-1-brendanhiggins@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 8 Aug 2020 13:45:05 +0800
-Message-ID: <CABVgOSkEiQkcOy+gF9irJo-R6xCeiCvDRZXa_ubzCfz+9Yx2ZA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: tool: fix running kunit_tool from outside
- kernel tree
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALAqxLXqjEN0S+eGeFA_obaunBK_+xqKbQtdQj1w+wegz-6U5w@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 8, 2020 at 9:17 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> Currently kunit_tool does not work correctly when executed from a path
-> outside of the kernel tree, so make sure that the current working
-> directory is correct and the kunit_dir is properly initialized before
-> running.
->
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
->  tools/testing/kunit/kunit.py | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 425ef40067e7..96344a11ff1f 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -237,9 +237,14 @@ def main(argv, linux=None):
->
->         cli_args = parser.parse_args(argv)
->
-> +       if get_kernel_root_path():
-> +               print('cd ' + get_kernel_root_path())
-Do we want to print this, or is it a leftover debug statement?
+On Fri, Aug 07, 2020 at 05:02:15PM -0700, John Stultz wrote:
+> On Fri, Aug 7, 2020 at 3:18 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Fri, Aug 07, 2020 at 01:29:24PM -0700, John Stultz wrote:
+> > > On Thu, Jul 9, 2020 at 11:28 AM Kees Cook <keescook@chromium.org> wrote:
+> > > >
+> > > > Duplicate the cleanups from commit 2618d530dd8b ("net/scm: cleanup
+> > > > scm_detach_fds") into the compat code.
+> > > >
+> > > > Replace open-coded __receive_sock() with a call to the helper.
+> > > >
+> > > > Move the check added in commit 1f466e1f15cf ("net: cleanly handle kernel
+> > > > vs user buffers for ->msg_control") to before the compat call, even
+> > > > though it should be impossible for an in-kernel call to also be compat.
+> > > >
+> > > > Correct the int "flags" argument to unsigned int to match fd_install()
+> > > > and similar APIs.
+> > > >
+> > > > Regularize any remaining differences, including a whitespace issue,
+> > > > a checkpatch warning, and add the check from commit 6900317f5eff ("net,
+> > > > scm: fix PaX detected msg_controllen overflow in scm_detach_fds") which
+> > > > fixed an overflow unique to 64-bit. To avoid confusion when comparing
+> > > > the compat handler to the native handler, just include the same check
+> > > > in the compat handler.
+> > > >
+> > > > Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > > ---
+> > >
+> > > Hey Kees,
+> > >   So during the merge window (while chasing a few other regressions),
+> > > I noticed occasionally my Dragonboard 845c running AOSP having trouble
+> > > with the web browser crashing or other apps hanging, and I've bisected
+> > > the issue down to this change.
+> > >
+> > > Unfortunately it doesn't revert cleanly so I can't validate reverting
+> > > it sorts things against linus/HEAD.  Anyway, I wanted to check and see
+> > > if you had any other reports of similar or any ideas what might be
+> > > going wrong?
+> >
+> > Hi; Yes, sorry for the trouble. I had a typo in a refactor of
+> > SCM_RIGHTS. I suspect it'll be fixed by this:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1fa2c0a0c814fbae0eb3e79a510765225570d043
+> >
+> > Can you verify Linus's latest tree works for you? If not, there might be
+> > something else hiding in the corners...
+> 
+> Thanks so much! Yes, I just updated to Linus' latest and the issue has
+> disappeared!
+> 
+> thanks again!
 
+Whew; sorry again and thanks for testing! :)
 
-> +               os.chdir(get_kernel_root_path())
-> +
->         if cli_args.subcommand == 'run':
->                 if not os.path.exists(cli_args.build_dir):
->                         os.mkdir(cli_args.build_dir)
-> +                       create_default_kunitconfig()
-Why are we adding this everywhere when it's already in config_tests,
-which should already be called in all of the places where a
-kunitconfig is required?
-Is the goal to always copy the default kunitconfig when creating a new
-build_dir? While I can sort-of see why we might want to do that, if
-the build dir doesn't exist, most of the subcommands will fail anyway
-(maybe we should only create the build-dir for 'config' and 'run'?)
-
-
->
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree()
-> @@ -257,6 +262,7 @@ def main(argv, linux=None):
->                 if cli_args.build_dir:
->                         if not os.path.exists(cli_args.build_dir):
->                                 os.mkdir(cli_args.build_dir)
-> +                               create_default_kunitconfig()
->
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree()
-> @@ -273,6 +279,7 @@ def main(argv, linux=None):
->                 if cli_args.build_dir:
->                         if not os.path.exists(cli_args.build_dir):
->                                 os.mkdir(cli_args.build_dir)
-> +                               create_default_kunitconfig()
->
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree()
-> @@ -291,6 +298,7 @@ def main(argv, linux=None):
->                 if cli_args.build_dir:
->                         if not os.path.exists(cli_args.build_dir):
->                                 os.mkdir(cli_args.build_dir)
-> +                               create_default_kunitconfig()
->
->                 if not linux:
->                         linux = kunit_kernel.LinuxSourceTree()
->
-> base-commit: 30185b69a2d533c4ba6ca926b8390ce7de495e29
-> --
-> 2.28.0.236.gb10cc79966-goog
->
+-- 
+Kees Cook
