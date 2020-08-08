@@ -2,310 +2,255 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9FA23F5C0
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Aug 2020 03:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B2323F627
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Aug 2020 05:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbgHHBRl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Aug 2020 21:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S1726338AbgHHD1N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Aug 2020 23:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726159AbgHHBRl (ORCPT
+        with ESMTP id S1726202AbgHHD1M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Aug 2020 21:17:41 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258F7C061756
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2020 18:17:41 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id h6so2767491qvz.14
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2020 18:17:41 -0700 (PDT)
+        Fri, 7 Aug 2020 23:27:12 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30B2C061756
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2020 20:27:11 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id p14so3247905wmg.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2020 20:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yd6TGRc1GXqN/EjtG+8Verq36FPJdYPHa8QPD7rKsBw=;
-        b=TuoU7TfCVBfpE2cCm9NmCqDraN4zNzlW7gPwmIpx6K/oM4Q/HzkbI3h82zn0k0TRbb
-         qkjfxDDVmZgwieq5MsHrot7tkDiIegJvaQ81Y8kNk2Nmo/gO3R+by89MaLPEEhLjC2hf
-         iUe0qc2wDryiDiX6lHZeRcMu2C14FwodJ0shPV18YQyjaXg6MPbsf2zCRbO7S8aJIW5U
-         uvlCoPUUOKjEA8Fmdgkwaku1Pbz23uA3WOUL8nRB2PIbWriUNaAcVl5rjPAAB9be/1Hb
-         +b9ixQDQvWydkEdUL+rtl5JHrqC3vBPmND3vMbAsRiD503ib7L5LJVm1OArdlAt8+5K6
-         1Yqw==
+        bh=I0+G3ptAFziJUCT/18IT+zTZUcvz/66QmwQnq2ejpjY=;
+        b=mYnRitoDRGnzQN5IFjn015NCM7g2pLzAdf/7p6ZdrQx/OZGSwtTuIcuSgnz7+nu9qV
+         001Ha2HBxKk0gYPBhkU4do6oqaBVe/QAUkugEKVFaXDXfgCwMPPNwxSyWTpF31XIGv6g
+         w9Sa4cCCVlwvWleQ2RvEPwef/DsQNAiP2l7ZlCuUSBVORaQbR1ftz5+Uam5eppvGlSIv
+         3MyOGkU/t+SVW8AnGBGLr3lyjyzpEoVU25kDagRiNUIox7awXGG4LRwAu9vLy7lpuWdU
+         DBKFgsu7poteX4PQ3XPBm0YaXf/ayyykY6ANb5KLmMTpgHQv1ITJZHhRa5ZxHV3RhM5f
+         ocLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=yd6TGRc1GXqN/EjtG+8Verq36FPJdYPHa8QPD7rKsBw=;
-        b=VwSSEMLlENaknX2f1cFe+35VhzkXnsy4IwXZrEpK8UWzb4eznxVcQFgafEjlJLDFJz
-         DSrdxb9yOv5X9+Q6jDYUGAxOXnhw6ad7AXFbP8+sSZSWygRja5owtEFhTt6uyKHx/Tfs
-         rIZOcAIQFRiE/wD08KhjLYwdWvd+Y5U/TW8VAv0ZpAfKzQ4qMZ/gy/8Zg2dNsth+I6GS
-         1uk712AqSigqBcLVmnUQW4zRg4P6PAFgZ3TkTf32pAz0/klSoZHAys9FzBMkufMmGBRs
-         CuJycIZpE8GreeJ5Ccmo41P+vZr72nYxGhD6g0qItzjqwwwzR71OsIYrMrP5yhZgSFC8
-         /LcQ==
-X-Gm-Message-State: AOAM530JEnWBqLpUDxjQ7Y5MKqWZhFDQtLUgbAPxJYIi0z4FuVruq8l8
-        kY1hUDSBiL8CVnWbdPDs237n6MnQJ3sGGkEk6yLq3w==
-X-Google-Smtp-Source: ABdhPJx+t440pJAV1URxY4FC4xXu7li3tPKgxdxjbCWQkD0lFIKWnmZ0ha7fd/s17cbCixhZFQD4B9W9K604rY3jrFVlRw==
-X-Received: by 2002:ad4:44e5:: with SMTP id p5mr17363190qvt.197.1596849460227;
- Fri, 07 Aug 2020 18:17:40 -0700 (PDT)
-Date:   Fri,  7 Aug 2020 18:16:51 -0700
-In-Reply-To: <20200808011651.2113930-1-brendanhiggins@google.com>
-Message-Id: <20200808011651.2113930-2-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200808011651.2113930-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-Subject: [PATCH v1 2/2] kunit: tool: allow generating test results in JSON
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Heidi Fahim <heidifahim@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I0+G3ptAFziJUCT/18IT+zTZUcvz/66QmwQnq2ejpjY=;
+        b=gLAiq+m0Cr5U3c/Qb0ox2KYkxRfRdM61t5jxkX1g18nksVNMVkT0/OwIm7R1QAA+Tt
+         WsVk/RH7AbexbMU/By2YrQ4ypz5ZLCyu5S8uVU+z8AwNo32CE2gf8S+UA0ehRkdB5wY5
+         dwqPHsUgYcVp7yw4NqkuXAfkoVVGabCbjQLEJKaLunI8cHrkSdmVLCOdGRAypJTaOWC8
+         4GisTHfwqBh/SYtFH5xlRTC6R7mJkoA9ZKlwjawzFqkt0mm1EgfB9tdQ0tFCvqO1sSXL
+         zct2BcMEkVV28qlKMRBzyfJG+KS0BkkkwXtTHKNYHRRFG/K5EjRlaGywMkzJFLSLArKy
+         2RAQ==
+X-Gm-Message-State: AOAM532Am+x7jshpyYvIY1jrwheEbBUj8zsaXtzcSBFsQZFZkay8r4wq
+        WcHvxEt5nBXx6AExV4Vy1Dhzr1nF7C9sR/qWDbCgaQ==
+X-Google-Smtp-Source: ABdhPJz8N3755lj1ooAtGAlEW8uOvjNdG465PnUVZXEXiUy+efXsmC2Szc6kDxhz8ShLf8f0C3GbzgPJOCRyJSIYN10=
+X-Received: by 2002:a1c:2485:: with SMTP id k127mr14768659wmk.138.1596857230126;
+ Fri, 07 Aug 2020 20:27:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200805042938.2961494-1-davidgow@google.com> <CAAeHK+wPt46879AnV3n3d7+JZqkv2Vo652OPBAjHcuyru56h9w@mail.gmail.com>
+In-Reply-To: <CAAeHK+wPt46879AnV3n3d7+JZqkv2Vo652OPBAjHcuyru56h9w@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 8 Aug 2020 11:26:58 +0800
+Message-ID: <CABVgOSmveFxFq-Kvtq9+EQa61ko-wQ4CTJ2WCfJWbjUWzBaQrg@mail.gmail.com>
+Subject: Re: [PATCH v11 0/6] KASAN-KUnit Integration
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Heidi Fahim <heidifahim@google.com>
+On Fri, Aug 7, 2020 at 9:15 PM 'Andrey Konovalov' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> On Wed, Aug 5, 2020 at 6:29 AM David Gow <davidgow@google.com> wrote:
+> >
+> > This patchset contains everything needed to integrate KASAN and KUnit.
+> >
+> > KUnit will be able to:
+> > (1) Fail tests when an unexpected KASAN error occurs
+> > (2) Pass tests when an expected KASAN error occurs
+> >
+> > Convert KASAN tests to KUnit with the exception of copy_user_test
+> > because KUnit is unable to test those.
+> >
+> > Add documentation on how to run the KASAN tests with KUnit and what to
+> > expect when running these tests.
+> >
+> > This patchset depends on:
+> > - "kunit: extend kunit resources API" [1]
+> >  - This is included in the KUnit 5.9-rci pull request[8]
+> >
+> > I'd _really_ like to get this into 5.9 if possible: we also have some
+> > other changes which depend on some things here.
+>
+> Found a small issue in patch #3, but otherwise:
+>
+> Tested-by: Andrey Konovalov <andreyknvl@google.com>
+>
+> for the series.
 
-Add a --json flag, which when specified when kunit_tool is run,
-generates JSON formatted test results conforming to the KernelCI API
-test_group spec[1]. The user can the new flag to specify a filename as
-the value to json in order to store the JSON results under linux/.
+Cheers! The issue in #3 looks to be a rebase issue: I'll send a fixed
+version out soon.
+>
+> The patches apply cleanly on top of the latest linux-next/akpm branch.
+>
+> There are some tests that fail for tag-based mode, but those are
+> unrelated to this series, and require KASAN improvements.
+>
+Do you think it's worth disabling these tests if tag-based mode is
+disabled? Personally, I'm leaning "no", but if the planned support for
+explicitly skipping tests existed, this could be a good case for it: a
+test which is expected to fail due to a feature not existing in the
+current config.
 
-Link[1]: https://api.kernelci.org/schema-test-group.html#post
-Signed-off-by: Heidi Fahim <heidifahim@google.com>
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- tools/testing/kunit/kunit.py           | 35 +++++++++++---
- tools/testing/kunit/kunit_json.py      | 63 ++++++++++++++++++++++++++
- tools/testing/kunit/kunit_tool_test.py | 33 ++++++++++++++
- 3 files changed, 125 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/kunit/kunit_json.py
+Thanks,
+-- David
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 96344a11ff1f..485b7c63b967 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -17,6 +17,7 @@ from collections import namedtuple
- from enum import Enum, auto
- 
- import kunit_config
-+import kunit_json
- import kunit_kernel
- import kunit_parser
- 
-@@ -30,9 +31,9 @@ KunitBuildRequest = namedtuple('KunitBuildRequest',
- KunitExecRequest = namedtuple('KunitExecRequest',
- 			      ['timeout', 'build_dir', 'alltests'])
- KunitParseRequest = namedtuple('KunitParseRequest',
--			       ['raw_output', 'input_data'])
-+			       ['raw_output', 'input_data', 'build_dir', 'json'])
- KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
--					   'build_dir', 'alltests',
-+					   'build_dir', 'alltests', 'json',
- 					   'make_options'])
- 
- KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
-@@ -113,12 +114,22 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
- 	test_result = kunit_parser.TestResult(kunit_parser.TestStatus.SUCCESS,
- 					      [],
- 					      'Tests not Parsed.')
-+
- 	if request.raw_output:
- 		kunit_parser.raw_output(request.input_data)
- 	else:
- 		test_result = kunit_parser.parse_run_tests(request.input_data)
- 	parse_end = time.time()
- 
-+	if request.json:
-+		json_obj = kunit_json.get_json_result(
-+					test_result=test_result,
-+					def_config='kunit_defconfig',
-+					build_dir=request.build_dir,
-+					json_path=request.json)
-+		if request.json == 'stdout':
-+			print(json_obj)
-+
- 	if test_result.status != kunit_parser.TestStatus.SUCCESS:
- 		return KunitResult(KunitStatus.TEST_FAILURE, test_result,
- 				   parse_end - parse_start)
-@@ -151,7 +162,9 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 		return exec_result
- 
- 	parse_request = KunitParseRequest(request.raw_output,
--					  exec_result.result)
-+					  exec_result.result,
-+					  request.build_dir,
-+					  request.json)
- 	parse_result = parse_tests(parse_request)
- 
- 	run_end = time.time()
-@@ -195,7 +208,12 @@ def add_exec_opts(parser):
- def add_parse_opts(parser):
- 	parser.add_argument('--raw_output', help='don\'t format output from kernel',
- 			    action='store_true')
--
-+	parser.add_argument('--json',
-+			    nargs='?',
-+			    help='Stores test results in a JSON, and either '
-+			    'prints to stdout or saves to file if a '
-+			    'filename is specified',
-+			    type=str, const='stdout', default=None)
- 
- def main(argv, linux=None):
- 	parser = argparse.ArgumentParser(
-@@ -254,6 +272,7 @@ def main(argv, linux=None):
- 				       cli_args.jobs,
- 				       cli_args.build_dir,
- 				       cli_args.alltests,
-+				       cli_args.json,
- 				       cli_args.make_options)
- 		result = run_tests(linux, request)
- 		if result.status != KunitStatus.SUCCESS:
-@@ -308,7 +327,9 @@ def main(argv, linux=None):
- 						cli_args.alltests)
- 		exec_result = exec_tests(linux, exec_request)
- 		parse_request = KunitParseRequest(cli_args.raw_output,
--						  exec_result.result)
-+						  exec_result.result,
-+						  cli_args.build_dir,
-+						  cli_args.json)
- 		result = parse_tests(parse_request)
- 		kunit_parser.print_with_timestamp((
- 			'Elapsed time: %.3fs\n') % (
-@@ -322,7 +343,9 @@ def main(argv, linux=None):
- 			with open(cli_args.file, 'r') as f:
- 				kunit_output = f.read().splitlines()
- 		request = KunitParseRequest(cli_args.raw_output,
--					    kunit_output)
-+					    kunit_output,
-+					    cli_args.build_dir,
-+					    cli_args.json)
- 		result = parse_tests(request)
- 		if result.status != KunitStatus.SUCCESS:
- 			sys.exit(1)
-diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
-new file mode 100644
-index 000000000000..624b31b2dbd6
---- /dev/null
-+++ b/tools/testing/kunit/kunit_json.py
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Generates JSON from KUnit results according to
-+# KernelCI spec: https://github.com/kernelci/kernelci-doc/wiki/Test-API
-+#
-+# Copyright (C) 2020, Google LLC.
-+# Author: Heidi Fahim <heidifahim@google.com>
-+
-+import json
-+import os
-+
-+import kunit_parser
-+
-+from kunit_parser import TestStatus
-+
-+def get_json_result(test_result, def_config, build_dir, json_path):
-+	sub_groups = []
-+
-+	# Each test suite is mapped to a KernelCI sub_group
-+	for test_suite in test_result.suites:
-+		sub_group = {
-+			"name": test_suite.name,
-+			"arch": "UM",
-+			"defconfig": def_config,
-+			"build_environment": build_dir,
-+			"test_cases": [],
-+			"lab_name": None,
-+			"kernel": None,
-+			"job": None,
-+			"git_branch": "kselftest",
-+		}
-+		test_cases = []
-+		# TODO: Add attachments attribute in test_case with detailed
-+		#  failure message, see https://api.kernelci.org/schema-test-case.html#get
-+		for case in test_suite.cases:
-+			test_case = {"name": case.name, "status": "FAIL"}
-+			if case.status == TestStatus.SUCCESS:
-+				test_case["status"] = "PASS"
-+			elif case.status == TestStatus.TEST_CRASHED:
-+				test_case["status"] = "ERROR"
-+			test_cases.append(test_case)
-+		sub_group["test_cases"] = test_cases
-+		sub_groups.append(sub_group)
-+	test_group = {
-+		"name": "KUnit Test Group",
-+		"arch": "UM",
-+		"defconfig": def_config,
-+		"build_environment": build_dir,
-+		"sub_groups": sub_groups,
-+		"lab_name": None,
-+		"kernel": None,
-+		"job": None,
-+		"git_branch": "kselftest",
-+	}
-+	json_obj = json.dumps(test_group, indent=4)
-+	if json_path != 'stdout':
-+		with open(json_path, 'w') as result_path:
-+			result_path.write(json_obj)
-+		root = __file__.split('tools/testing/kunit/')[0]
-+		kunit_parser.print_with_timestamp(
-+			"Test results stored in %s" %
-+			os.path.join(root, result_path.name))
-+	return json_obj
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 287c74d821c3..99c3c5671ea4 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -11,11 +11,13 @@ from unittest import mock
- 
- import tempfile, shutil # Handling test_tmpdir
- 
-+import json
- import os
- 
- import kunit_config
- import kunit_parser
- import kunit_kernel
-+import kunit_json
- import kunit
- 
- test_tmpdir = ''
-@@ -230,6 +232,37 @@ class KUnitParserTest(unittest.TestCase):
- 			result = kunit_parser.parse_run_tests(file.readlines())
- 		self.assertEqual('kunit-resource-test', result.suites[0].name)
- 
-+class KUnitJsonTest(unittest.TestCase):
-+
-+	def _json_for(self, log_file):
-+		with(open(get_absolute_path(log_file))) as file:
-+			test_result = kunit_parser.parse_run_tests(file)
-+			json_obj = kunit_json.get_json_result(
-+				test_result=test_result,
-+				def_config='kunit_defconfig',
-+				build_dir=None,
-+				json_path='stdout')
-+		return json.loads(json_obj)
-+
-+	def test_failed_test_json(self):
-+		result = self._json_for(
-+			'test_data/test_is_test_passed-failure.log')
-+		self.assertEqual(
-+			{'name': 'example_simple_test', 'status': 'FAIL'},
-+			result["sub_groups"][1]["test_cases"][0])
-+
-+	def test_crashed_test_json(self):
-+		result = self._json_for(
-+			'test_data/test_is_test_passed-crash.log')
-+		self.assertEqual(
-+			{'name': 'example_simple_test', 'status': 'ERROR'},
-+			result["sub_groups"][1]["test_cases"][0])
-+
-+	def test_no_tests_json(self):
-+		result = self._json_for(
-+			'test_data/test_is_test_passed-no_tests_run.log')
-+		self.assertEqual(0, len(result['sub_groups']))
-+
- class StrContains(str):
- 	def __eq__(self, other):
- 		return self in other
--- 
-2.28.0.236.gb10cc79966-goog
-
+> >
+> > Changes from v10:
+> >  - Fixed some whitespace issues in patch 2.
+> >  - Split out the renaming of the KUnit test suite into a separate patch.
+> >
+> > Changes from v9:
+> >  - Rebased on top of linux-next (20200731) + kselftest/kunit and [7]
+> >  - Note that the kasan_rcu_uaf test has not been ported to KUnit, and
+> >    remains in test_kasan_module. This is because:
+> >    (a) KUnit's expect failure will not check if the RCU stacktraces
+> >        show.
+> >    (b) KUnit is unable to link the failure to the test, as it occurs in
+> >        an RCU callback.
+> >
+> > Changes from v8:
+> >  - Rebased on top of kselftest/kunit
+> >  - (Which, with this patchset, should rebase cleanly on 5.8-rc7)
+> >  - Renamed the KUnit test suite, config name to patch the proposed
+> >    naming guidelines for KUnit tests[6]
+> >
+> > Changes from v7:
+> >  - Rebased on top of kselftest/kunit
+> >  - Rebased on top of v4 of the kunit resources API[1]
+> >  - Rebased on top of v4 of the FORTIFY_SOURCE fix[2,3,4]
+> >  - Updated the Kconfig entry to support KUNIT_ALL_TESTS
+> >
+> > Changes from v6:
+> >  - Rebased on top of kselftest/kunit
+> >  - Rebased on top of Daniel Axtens' fix for FORTIFY_SOURCE
+> >    incompatibilites [2]
+> >  - Removed a redundant report_enabled() check.
+> >  - Fixed some places with out of date Kconfig names in the
+> >    documentation.
+> >
+> > Changes from v5:
+> >  - Split out the panic_on_warn changes to a separate patch.
+> >  - Fix documentation to fewer to the new Kconfig names.
+> >  - Fix some changes which were in the wrong patch.
+> >  - Rebase on top of kselftest/kunit (currently identical to 5.7-rc1)
+> >
+> > Changes from v4:
+> >  - KASAN no longer will panic on errors if both panic_on_warn and
+> >    kasan_multishot are enabled.
+> >  - As a result, the KASAN tests will no-longer disable panic_on_warn.
+> >  - This also means panic_on_warn no-longer needs to be exported.
+> >  - The use of temporary "kasan_data" variables has been cleaned up
+> >    somewhat.
+> >  - A potential refcount/resource leak should multiple KASAN errors
+> >    appear during an assertion was fixed.
+> >  - Some wording changes to the KASAN test Kconfig entries.
+> >
+> > Changes from v3:
+> >  - KUNIT_SET_KASAN_DATA and KUNIT_DO_EXPECT_KASAN_FAIL have been
+> >  combined and included in KUNIT_DO_EXPECT_KASAN_FAIL() instead.
+> >  - Reordered logic in kasan_update_kunit_status() in report.c to be
+> >  easier to read.
+> >  - Added comment to not use the name "kasan_data" for any kunit tests
+> >  outside of KUNIT_EXPECT_KASAN_FAIL().
+> >
+> > Changes since v2:
+> >  - Due to Alan's changes in [1], KUnit can be built as a module.
+> >  - The name of the tests that could not be run with KUnit has been
+> >  changed to be more generic: test_kasan_module.
+> >  - Documentation on how to run the new KASAN tests and what to expect
+> >  when running them has been added.
+> >  - Some variables and functions are now static.
+> >  - Now save/restore panic_on_warn in a similar way to kasan_multi_shot
+> >  and renamed the init/exit functions to be more generic to accommodate.
+> >  - Due to [4] in kasan_strings, kasan_memchr, and
+> >  kasan_memcmp will fail if CONFIG_AMD_MEM_ENCRYPT is enabled so return
+> >  early and print message explaining this circumstance.
+> >  - Changed preprocessor checks to C checks where applicable.
+> >
+> > Changes since v1:
+> >  - Make use of Alan Maguire's suggestion to use his patch that allows
+> >    static resources for integration instead of adding a new attribute to
+> >    the kunit struct
+> >  - All KUNIT_EXPECT_KASAN_FAIL statements are local to each test
+> >  - The definition of KUNIT_EXPECT_KASAN_FAIL is local to the
+> >    test_kasan.c file since it seems this is the only place this will
+> >    be used.
+> >  - Integration relies on KUnit being builtin
+> >  - copy_user_test has been separated into its own file since KUnit
+> >    is unable to test these. This can be run as a module just as before,
+> >    using CONFIG_TEST_KASAN_USER
+> >  - The addition to the current task has been separated into its own
+> >    patch as this is a significant enough change to be on its own.
+> >
+> >
+> > [1] https://lore.kernel.org/linux-kselftest/CAFd5g46Uu_5TG89uOm0Dj5CMq+11cwjBnsd-k_CVy6bQUeU4Jw@mail.gmail.com/T/#t
+> > [2] https://lore.kernel.org/linux-mm/20200424145521.8203-1-dja@axtens.net/
+> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adb72ae1915db28f934e9e02c18bfcea2f3ed3b7
+> > [4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47227d27e2fcb01a9e8f5958d8997cf47a820afc
+> > [5] https://bugzilla.kernel.org/show_bug.cgi?id=206337
+> > [6] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/
+> > [7] https://lkml.org/lkml/2020/7/31/571
+> > [8] https://lore.kernel.org/linux-kselftest/8d43e88e-1356-cd63-9152-209b81b16746@linuxfoundation.org/T/#u
+> >
+> >
+> > David Gow (2):
+> >   kasan: test: Make KASAN KUnit test comply with naming guidelines
+> >   mm: kasan: Do not panic if both panic_on_warn and kasan_multishot set
+> >
+> > Patricia Alfonso (4):
+> >   Add KUnit Struct to Current Task
+> >   KUnit: KASAN Integration
+> >   KASAN: Port KASAN Tests to KUnit
+> >   KASAN: Testing Documentation
+> >
+> >  Documentation/dev-tools/kasan.rst |  70 +++
+> >  include/kunit/test.h              |   5 +
+> >  include/linux/kasan.h             |   6 +
+> >  include/linux/sched.h             |   4 +
+> >  lib/Kconfig.kasan                 |  22 +-
+> >  lib/Makefile                      |   7 +-
+> >  lib/kasan_kunit.c                 | 770 +++++++++++++++++++++++++
+> >  lib/kunit/test.c                  |  13 +-
+> >  lib/test_kasan.c                  | 903 ------------------------------
+> >  lib/test_kasan_module.c           | 111 ++++
+> >  mm/kasan/report.c                 |  34 +-
+> >  11 files changed, 1028 insertions(+), 917 deletions(-)
+> >  create mode 100644 lib/kasan_kunit.c
+> >  delete mode 100644 lib/test_kasan.c
+> >  create mode 100644 lib/test_kasan_module.c
+> >
+> > --
+> > 2.28.0.163.g6104cc2f0b6-goog
+> >
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/CAAeHK%2BwPt46879AnV3n3d7%2BJZqkv2Vo652OPBAjHcuyru56h9w%40mail.gmail.com.
