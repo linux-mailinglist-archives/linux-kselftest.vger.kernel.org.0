@@ -2,39 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFD323FB60
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Aug 2020 01:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB4E23FAED
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Aug 2020 01:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727890AbgHHXhO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Aug 2020 19:37:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50118 "EHLO mail.kernel.org"
+        id S1728204AbgHHXp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Aug 2020 19:45:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52538 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727879AbgHHXhO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:37:14 -0400
+        id S1726688AbgHHXic (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 8 Aug 2020 19:38:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 741002075D;
-        Sat,  8 Aug 2020 23:37:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6F6E7207BB;
+        Sat,  8 Aug 2020 23:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596929833;
-        bh=S52HMP+iGIQTiPXzc+/0cRLoLrDrJlI50TCAzbDwHIo=;
+        s=default; t=1596929912;
+        bh=/UEqwzic9EGyYzOQJVauOsfUX8Ho4axU58aHeAfs0dI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rIcsOjGIxKYTZ1V8CQfasOxObj1NYQvuZVMksI4MVw6pytudwEuLPBJH68PlhhA/a
-         sZQxjUW/mVpE9jok2hMFt9dZ+nFHWbzCs7gSmcG/vvY2Px3PG0Wbrfo3ocsP35cbZH
-         BvWFXpuPR4ULpZ/uP809bvKLCo4iFpArOTMFTKxM=
+        b=O7o68cShqio1gGgw4l4d5fCj6JQjYapgoJXO/Z+R7Jki8gamlXMAAriO88V8aHZqA
+         vNJEIlqOzayTMHUoyLtYIuqBN0cgkqJwBpb3D67HkDNGrLoQ8sKCPZ8gIpoIiLkh6M
+         4W6wdZ7DM2Eu8hsL+SAOENZmDpWF3hp0YZGcLd9g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 5.8 64/72] kunit: tool: fix improper treatment of file location
-Date:   Sat,  8 Aug 2020 19:35:33 -0400
-Message-Id: <20200808233542.3617339-64-sashal@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 49/58] seccomp: Fix ioctl number for SECCOMP_IOCTL_NOTIF_ID_VALID
+Date:   Sat,  8 Aug 2020 19:37:15 -0400
+Message-Id: <20200808233724.3618168-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200808233542.3617339-1-sashal@kernel.org>
-References: <20200808233542.3617339-1-sashal@kernel.org>
+In-Reply-To: <20200808233724.3618168-1-sashal@kernel.org>
+References: <20200808233724.3618168-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,111 +43,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Brendan Higgins <brendanhiggins@google.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit d43c7fb05765152d4d4a39a8ef957c4ea14d8847 ]
+[ Upstream commit 47e33c05f9f07cac3de833e531bcac9ae052c7ca ]
 
-Commit 01397e822af4 ("kunit: Fix TabError, remove defconfig code and
-handle when there is no kunitconfig") and commit 45ba7a893ad8 ("kunit:
-kunit_tool: Separate out config/build/exec/parse") introduced two
-closely related issues which built off of each other: they excessively
-created the build directory when not present and modified a constant
-(constants in Python only exist by convention).
+When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced it had the wrong
+direction flag set. While this isn't a big deal as nothing currently
+enforces these bits in the kernel, it should be defined correctly. Fix
+the define and provide support for the old command until it is no longer
+needed for backward compatibility.
 
-Together these issues broken a number of unit tests for KUnit tool, so
-fix them.
-
-Fixed up commit log to fic checkpatch commit description style error.
-Shuah Khan <skhan@linuxfoundation.org>
-
-Fixes: 01397e822af4 ("kunit: Fix TabError, remove defconfig code and handle when there is no kunitconfig")
-Fixes: 45ba7a893ad8 ("kunit: kunit_tool: Separate out config/build/exec/parse")
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/kunit/kunit.py           | 24 ------------------------
- tools/testing/kunit/kunit_tool_test.py |  4 ++--
- 2 files changed, 2 insertions(+), 26 deletions(-)
+ include/uapi/linux/seccomp.h                  | 3 ++-
+ kernel/seccomp.c                              | 9 +++++++++
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index f9b769f3437dd..425ef40067e7e 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -240,12 +240,6 @@ def main(argv, linux=None):
- 	if cli_args.subcommand == 'run':
- 		if not os.path.exists(cli_args.build_dir):
- 			os.mkdir(cli_args.build_dir)
--		kunit_kernel.kunitconfig_path = os.path.join(
--			cli_args.build_dir,
--			kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
+diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
+index c1735455bc536..965290f7dcc28 100644
+--- a/include/uapi/linux/seccomp.h
++++ b/include/uapi/linux/seccomp.h
+@@ -123,5 +123,6 @@ struct seccomp_notif_resp {
+ #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
+ #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
+ 						struct seccomp_notif_resp)
+-#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
++#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
++
+ #endif /* _UAPI_LINUX_SECCOMP_H */
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 55a6184f59903..63e283c4c58eb 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -42,6 +42,14 @@
+ #include <linux/uaccess.h>
+ #include <linux/anon_inodes.h>
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -263,12 +257,6 @@ def main(argv, linux=None):
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
--			kunit_kernel.kunitconfig_path = os.path.join(
--				cli_args.build_dir,
--				kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
++/*
++ * When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced, it had the
++ * wrong direction flag in the ioctl number. This is the broken one,
++ * which the kernel needs to keep supporting until all userspaces stop
++ * using the wrong command number.
++ */
++#define SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR	SECCOMP_IOR(2, __u64)
++
+ enum notify_state {
+ 	SECCOMP_NOTIFY_INIT,
+ 	SECCOMP_NOTIFY_SENT,
+@@ -1186,6 +1194,7 @@ static long seccomp_notify_ioctl(struct file *file, unsigned int cmd,
+ 		return seccomp_notify_recv(filter, buf);
+ 	case SECCOMP_IOCTL_NOTIF_SEND:
+ 		return seccomp_notify_send(filter, buf);
++	case SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR:
+ 	case SECCOMP_IOCTL_NOTIF_ID_VALID:
+ 		return seccomp_notify_id_valid(filter, buf);
+ 	default:
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index c0aa46ce14f6c..c84c7b50331c6 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -180,7 +180,7 @@ struct seccomp_metadata {
+ #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
+ #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
+ 						struct seccomp_notif_resp)
+-#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
++#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -285,12 +273,6 @@ def main(argv, linux=None):
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
--			kunit_kernel.kunitconfig_path = os.path.join(
--				cli_args.build_dir,
--				kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
- 
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -309,12 +291,6 @@ def main(argv, linux=None):
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
--			kunit_kernel.kunitconfig_path = os.path.join(
--				cli_args.build_dir,
--				kunit_kernel.kunitconfig_path)
--
--		if not os.path.exists(kunit_kernel.kunitconfig_path):
--			create_default_kunitconfig()
- 
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index ee942d80bdd02..287c74d821c33 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -251,7 +251,7 @@ class KUnitMainTest(unittest.TestCase):
- 		pass
- 
- 	def test_config_passes_args_pass(self):
--		kunit.main(['config'], self.linux_source_mock)
-+		kunit.main(['config', '--build_dir=.kunit'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 0
- 
-@@ -326,7 +326,7 @@ class KUnitMainTest(unittest.TestCase):
- 
- 	def test_run_builddir(self):
- 		build_dir = '.kunit'
--		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
-+		kunit.main(['run', '--build_dir=.kunit'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
- 			build_dir=build_dir, timeout=300)
+ struct seccomp_notif {
+ 	__u64 id;
 -- 
 2.25.1
 
