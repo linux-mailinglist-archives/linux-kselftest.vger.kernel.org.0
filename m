@@ -2,143 +2,183 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B33B2413D1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 01:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AE02415BC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 06:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728019AbgHJX1T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Aug 2020 19:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S1726493AbgHKEaO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Aug 2020 00:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728018AbgHJX1S (ORCPT
+        with ESMTP id S1725898AbgHKEaM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Aug 2020 19:27:18 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A92C06174A;
-        Mon, 10 Aug 2020 16:27:18 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 2E52A2948A6
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     luto@kernel.org, tglx@linutronix.de
-Cc:     keescook@chromium.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        willy@infradead.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, Gabriel Krisman Bertazi <krisman@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v5 9/9] doc: Document Syscall User Dispatch
-Date:   Mon, 10 Aug 2020 19:26:36 -0400
-Message-Id: <20200810232636.1415588-10-krisman@collabora.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200810232636.1415588-1-krisman@collabora.com>
-References: <20200810232636.1415588-1-krisman@collabora.com>
+        Tue, 11 Aug 2020 00:30:12 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F2AC06174A
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 21:30:12 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a14so10159852wra.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 21:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UTA/jlI4ZkjE+5vHGh7qBO6GyXxZqYMrHrBvLYqNA/8=;
+        b=ecIE6H8POPKe2GmWnNT6j85kVXuCut+VRP5UWYxjZhFuR0utGUaTCLiyLZFEFaDGXA
+         Nk/IlTphNYMbm49+EFFnIapGm8TEPL82eic3iPh2Rlf0lJA+8IhA3A3oHXIQu8w5MVug
+         OvVkhDq+VZYnuiK6dN1Bu0HPFneZmrTPkI3nfzbMatTEZlaex8bGobr6YOJ7YoXcI07z
+         DkFRr3Qa5XPbsrwvmjqdYC/0QkNHbwQzMak6Zf9z33kZSpuCDs0VGKCcRf8TGkbkT+vT
+         dqycUjwh94zMZvgPC4Dchf6trndi28QLRRNPB7oCxwuYZkAjf/7FraDP6yUyEczB2yKe
+         wI5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UTA/jlI4ZkjE+5vHGh7qBO6GyXxZqYMrHrBvLYqNA/8=;
+        b=uFK/UcfbL4ISyiV8Rzo1cHPmp2zqvbq52uphnrWPuhW2qO6n9YqQbjQD7+aCP9sfXD
+         VjZJiry5Mh9hBsGkMX8kGpPXH/rdS8IGOTlzUyWIyjoihb+S9DS4VgatpYkWLJi53Cs1
+         juttCNuAqOkBaEmdPEc7KyneT9fvGHkH61AuPr5LcD+jNe62eA5K29BLe1krQ/EjacSH
+         yjNACT+nq//u7+sRNhovp4TqeKtumLracVmufCxN9mUmSHh8aRq/WS+kwo6bLcytJYSE
+         cePQDmHpAzbLzGXIqSC36c7C0vP4wFIaANnfEQ1SlraKXK3iiNQTtuvfw5Taoa56e1yU
+         v5Zw==
+X-Gm-Message-State: AOAM531MOUm3JIaJSp5NGnjV8azuYYU84f4MDTYk9QwqAeJfRNi7AYzA
+        q8fw5xJMADyKQ3WfAxYjAvQiCTzAxz/+s4p1glnAuw==
+X-Google-Smtp-Source: ABdhPJycvgzrejAmWvErgPyXmMcxP7oFh0zNGsbjxXriifiC7oqFsCyotTtJ4bM768Iz1pVpC2Nv3L+9xIOQhTKoCgc=
+X-Received: by 2002:adf:f511:: with SMTP id q17mr4184981wro.414.1597120210798;
+ Mon, 10 Aug 2020 21:30:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200808011651.2113930-1-brendanhiggins@google.com>
+ <CABVgOSkEiQkcOy+gF9irJo-R6xCeiCvDRZXa_ubzCfz+9Yx2ZA@mail.gmail.com> <CAFd5g47itmDHzVRiihUe_P2yjqGuvGC8LPLpiDx1D8aQX1T1BA@mail.gmail.com>
+In-Reply-To: <CAFd5g47itmDHzVRiihUe_P2yjqGuvGC8LPLpiDx1D8aQX1T1BA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 11 Aug 2020 12:29:59 +0800
+Message-ID: <CABVgOSkpTuT6=V08xU0eun-7_OgMR2TdQe0f5rA=mvEPkVrrsw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] kunit: tool: fix running kunit_tool from outside
+ kernel tree
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Explain the interface, provide some background and security notes.
+On Sat, Aug 8, 2020 at 4:51 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Fri, Aug 7, 2020 at 10:45 PM David Gow <davidgow@google.com> wrote:
+> >
+> > On Sat, Aug 8, 2020 at 9:17 AM Brendan Higgins
+> > <brendanhiggins@google.com> wrote:
+> > >
+> > > Currently kunit_tool does not work correctly when executed from a path
+> > > outside of the kernel tree, so make sure that the current working
+> > > directory is correct and the kunit_dir is properly initialized before
+> > > running.
+> > >
+> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > > ---
+> > >  tools/testing/kunit/kunit.py | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> > > index 425ef40067e7..96344a11ff1f 100755
+> > > --- a/tools/testing/kunit/kunit.py
+> > > +++ b/tools/testing/kunit/kunit.py
+> > > @@ -237,9 +237,14 @@ def main(argv, linux=None):
+> > >
+> > >         cli_args = parser.parse_args(argv)
+> > >
+> > > +       if get_kernel_root_path():
+> > > +               print('cd ' + get_kernel_root_path())
+> > Do we want to print this, or is it a leftover debug statement?
+>
+> Whoops, I was supposed to delete that. That's embarrassing... ^_^;
+>
+> > > +               os.chdir(get_kernel_root_path())
+> > > +
+> > >         if cli_args.subcommand == 'run':
+> > >                 if not os.path.exists(cli_args.build_dir):
+> > >                         os.mkdir(cli_args.build_dir)
+> > > +                       create_default_kunitconfig()
+> > Why are we adding this everywhere when it's already in config_tests,
+> > which should already be called in all of the places where a
+> > kunitconfig is required?
+>
+> Ah yes, .kunitconfig needs to be created before config_tests() can be
+> called because the LinuxSourceTree constructor needs .kunitconfig to
+> exist.
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
----
- .../admin-guide/syscall-user-dispatch.rst     | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 Documentation/admin-guide/syscall-user-dispatch.rst
+I see. I guess the ultimate solution will be for LinuxSourceTree not
+require a .kunitconfig unless it's actually being used.
 
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-new file mode 100644
-index 000000000000..96616660fded
---- /dev/null
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -0,0 +1,87 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================
-+Syscall User Dispatch
-+=====================
-+
-+Background
-+----------
-+
-+Compatibility layers like Wine need a way to efficiently emulate system
-+calls of only a part of their process - the part that has the
-+incompatible code - while being able to execute native syscalls without
-+a high performance penalty on the native part of the process.  Seccomp
-+falls short on this task, since it has limited support to efficiently
-+filter syscalls based on memory regions, and it doesn't support removing
-+filters.  Therefore a new mechanism is necessary.
-+
-+Syscall User Dispatch brings the filtering of the syscall dispatcher
-+address back to userspace.  The application is in control of a flip
-+switch, indicating the current personality of the process.  A
-+multiple-personality application can then flip the switch without
-+invoking the kernel, when crossing the compatibility layer API
-+boundaries, to enable/disable the syscall redirection and execute
-+syscalls directly (disabled) or send them to be emulated in userspace
-+through a SIGSYS.
-+
-+The goal of this design is to provide very quick compatibility layer
-+boundary crosses, which is achieved by not executing a syscall to change
-+personality every time the compatibility layer executes.  Instead, a
-+userspace memory region exposed to the kernel indicates the current
-+personality, and the application simply modifies that variable to
-+configure the mechanism.
-+
-+There is a relatively high cost associated with handling signals on most
-+architectures, like x86, but at least for Wine, syscalls issued by
-+native Windows code are currently not known to be a performance problem,
-+since they are quite rare, at least for modern gaming applications.
-+
-+Since this mechanism is designed to capture syscalls issued by
-+non-native applications, it must function on syscalls whose invocation
-+ABI is completely unexpected to Linux.  Syscall User Dispatch, therefore
-+doesn't rely on any of the syscall ABI to make the filtering.  It uses
-+only the syscall dispatcher address and the userspace key.
-+
-+Interface
-+---------
-+
-+A process can setup this mechanism on supported kernels
-+CONFIG_SYSCALL_USER_DISPATCH) by executing the following prctl:
-+
-+   prctl(PR_SET_SYSCALL_USER_DISPATCH, <op>, <start_addr>, <end_addr>, [selector])
-+
-+<op> is either PR_SYS_DISPATCH_ON or PR_SYS_DISPATCH_OFF, to enable and
-+disable the mechanism globally for that thread.  When
-+PR_SYS_DISPATCH_OFF is used, the other fields must be zero.
-+
-+<start_addr> and <end_addr> delimit a closed memory region interval from
-+which syscalls are always executed directly, regardless of the userspace
-+selector.  This provides a fast path for the C library, which includes
-+the most common syscall dispatchers in the native code applications, and
-+also provides a way for the signal handler to return without triggering
-+a nested SIGSYS on (rt_)sigreturn.  Users of this interface should make
-+sure that at least the signal trampoline code is included in this
-+region. In addition, for syscalls that implement the trampoline code on
-+the vDSO, that trampoline is never intercepted.
-+
-+[selector] is a pointer to a char-sized region in the process memory
-+region, that provides a quick way to enable disable syscall redirection
-+thread-wide, without the need to invoke the kernel directly.  selector
-+can be set to PR_SYS_DISPATCH_ON or PR_SYS_DISPATCH_OFF.  Any other
-+value should terminate the program with a SIGSYS.
-+
-+Security Notes
-+--------------
-+
-+Syscall User Dispatch provides functionality for compatibility layers to
-+quickly capture system calls issued by a non-native part of the
-+application, while not impacting the Linux native regions of the
-+process.  It is not a mechanism for sandboxing system calls, and it
-+should not be seen as a security mechanism, since it is trivial for a
-+malicious application to subvert the mechanism by jumping to an allowed
-+dispatcher region prior to executing the syscall, or to discover the
-+address and modify the selector value.  If the use case requires any
-+kind of security sandboxing, Seccomp should be used instead.
-+
-+Any fork or exec of the existing process resets the mechanism to
-+PR_SYS_DISPATCH_OFF.
--- 
-2.28.0
+> > Is the goal to always copy the default kunitconfig when creating a new
+> > build_dir? While I can sort-of see why we might want to do that, if
+> > the build dir doesn't exist, most of the subcommands will fail anyway
+> > (maybe we should only create the build-dir for 'config' and 'run'?)
+>
+> I just did it because we were getting a failure in a constructor so we
+> couldn't do much. Ideally we would check that the current state allows
+> for the command that the user intended to run, but I think that's
+> beyond the scope of this change.
+>
+> So I guess the real question is: Is it okay for it to crash in the
+> constructor with a cryptic error message for now, or do we want to let
+> it fail with a slightly less cryptic message later?
+>
 
+I personally am leaning towards allowing it to crash in the build,
+exec, etc. subcommands for now, and tidying up the error messages
+later, rather than silently creating a blank build dir, only for it
+then to fail later.
+
+In the meantime, yeah, we can add this for the config and run tasks,
+and maybe remove the whole "if cli_args.build_dir" / mkdir branch from
+the other subcommands.
+
+If we weren't going to fix the LinuxSourceTree constructor, it'd make
+sense to get rid of the redundant code to create it in config_tests(),
+too, but I'm not sure it's worthwhile.
+
+In any case, now I know what's happening, I'm okay with anything
+moderately sensible which gets the 'config' and 'run' subcommands
+working on an empty build dir, and the code and error messages can be
+fixed when tidying up the LinuxSourceTree() constructor in a separate
+patch.
+
+Cheers,
+-- David
+
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > > @@ -257,6 +262,7 @@ def main(argv, linux=None):
+> > >                 if cli_args.build_dir:
+> > >                         if not os.path.exists(cli_args.build_dir):
+> > >                                 os.mkdir(cli_args.build_dir)
+> > > +                               create_default_kunitconfig()
+> > >
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > > @@ -273,6 +279,7 @@ def main(argv, linux=None):
+> > >                 if cli_args.build_dir:
+> > >                         if not os.path.exists(cli_args.build_dir):
+> > >                                 os.mkdir(cli_args.build_dir)
+> > > +                               create_default_kunitconfig()
+> > >
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > > @@ -291,6 +298,7 @@ def main(argv, linux=None):
+> > >                 if cli_args.build_dir:
+> > >                         if not os.path.exists(cli_args.build_dir):
+> > >                                 os.mkdir(cli_args.build_dir)
+> > > +                               create_default_kunitconfig()
+> > >
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > >
+> > > base-commit: 30185b69a2d533c4ba6ca926b8390ce7de495e29
+> > > --
+> > > 2.28.0.236.gb10cc79966-goog
+> > >
