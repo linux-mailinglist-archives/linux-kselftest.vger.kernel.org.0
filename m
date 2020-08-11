@@ -2,81 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E69A241E0F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 18:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE5F241E80
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 18:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729046AbgHKQUC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Aug 2020 12:20:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38382 "EHLO mail.kernel.org"
+        id S1729148AbgHKQme (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Aug 2020 12:42:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47126 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728797AbgHKQUC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Aug 2020 12:20:02 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1728970AbgHKQmd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Aug 2020 12:42:33 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E2787206B5;
-        Tue, 11 Aug 2020 16:20:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BFE12206DC;
+        Tue, 11 Aug 2020 16:42:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597162801;
-        bh=DBTLEgLoShBacLtvTrSjzwCoe7AuHPsP195roGj64sw=;
+        s=default; t=1597164153;
+        bh=wLDdwLUeUg+9AYUSveqoVqiy+usyp31jDtk1JImzqLs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rddeRjqVG7gIOrNaU8xh/5TSbZes30GoO60ZrGqoMvPx7dn3iF4csv2R+Snmba446
-         8mmOqnuxKDDNvgASr61Us0OzAGKlZXHLPOjVWqplpAeg0YySDYLnu6yg5gvHS5J+QM
-         hpkQXafs12kBaT8A/i1tR6qc+pNdI0x4hQ3rt3Zc=
-Date:   Tue, 11 Aug 2020 18:20:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        Ben Hutchings <ben.hutchings@codethink.co.uk>,
-        lkft-triage@lists.linaro.org,
-        linux- stable <stable@vger.kernel.org>,
+        b=YVAERsMSNloysD/HjddpKd84n+7f1cq9ngKijUztRHywo5twN2qKez8gkhyfms9SE
+         mrM49ZQr3I4WWAYuYqifd5DwYmTixrI7GMOJg00pbIlHv62ELga2rA6gvo1sj52pNT
+         XsXZUr+0VPAam+fjCDyVc1J59SV8EZkTMWADWr6k=
+Date:   Tue, 11 Aug 2020 12:42:31 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Sasha Levin <alexander.levin@microsoft.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 5.8 00/38] 5.8.1-rc1 review
-Message-ID: <20200811162010.GC440280@kroah.com>
-References: <20200810151803.920113428@linuxfoundation.org>
- <CA+G9fYtzP22nR4vd+GAn+tqy0S38XAa3E9=QfDiSPWHrHeqgsw@mail.gmail.com>
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: Please pick this kunit fix for stables (5.8 & 5.7)
+Message-ID: <20200811164231.GI2975990@sasha-vm>
+References: <59f75dc7-3fe4-d61f-4cf1-4b922f596818@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYtzP22nR4vd+GAn+tqy0S38XAa3E9=QfDiSPWHrHeqgsw@mail.gmail.com>
+In-Reply-To: <59f75dc7-3fe4-d61f-4cf1-4b922f596818@linuxfoundation.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 11:59:37AM +0530, Naresh Kamboju wrote:
-> On Mon, 10 Aug 2020 at 20:50, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.8.1 release.
-> > There are 38 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 12 Aug 2020 15:17:47 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.8.1-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.8.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> >
-> 
-> 
-> Results from Linaro’s test farm.
-> No regressions on arm64, arm, x86_64, and i386.
+On Mon, Aug 10, 2020 at 02:54:29PM -0600, Shuah Khan wrote:
+>Hi Sasha,
+>
+>Please pick the following commit for stables Linux 5.8 and 5.7
+>
+>kunit: capture stderr on all make subprocess calls
+>
+>https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5a9fcad71caa970f30aef99134a1cd19bc4b8eea
 
-Thanks for testing all of these and letting me know.
+Now queued up, thanks!
 
-greg k-h
+-- 
+Thanks,
+Sasha
