@@ -2,56 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 578C82421F2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 23:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188292421F4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 23:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbgHKV2H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Aug 2020 17:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
+        id S1726492AbgHKV2M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Aug 2020 17:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726114AbgHKV2H (ORCPT
+        with ESMTP id S1725987AbgHKV2J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Aug 2020 17:28:07 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27962C06174A
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2020 14:28:07 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id d30so9910qve.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2020 14:28:07 -0700 (PDT)
+        Tue, 11 Aug 2020 17:28:09 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAF3C061787
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2020 14:28:09 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id x3so1343pga.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2020 14:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=JEHvtyXY0PahDyTNTofnb+o70v/Ji63GK4tErbh+T7U=;
-        b=v0rqLtrGjr6RFTcXhotnND/SQoYUh8qkJiSo07+iNVvoBLd/0LvoE9uKnK7QGigI+H
-         lOsCUjwqLAQts0bZdwzMbO7m+/6LPejOxPT652Ef1zJyeKkPQSkF9eGFV3/wI4pSMeRp
-         isxJ3DUdz3d9fsGLF27K1CDAphFRsyMlDSub4YXU/wtyuwsVmg/UBRfA7fMUtuj8F+1A
-         pAnel/CZ/vbYM9gccjLQGsy3Ci7VH0lPDsxbjoTPiLf9Q6OUZzJxdx5r1EEyik+4xG++
-         kqzgGblHuxo9mG+yOb/h8tavfSWnv8dalfViOp9SEWna1ZXzs8aeC49uvvL+01l7LkdW
-         yAyA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=N13wpgYndNaXgSy4by0nKxgHXlrjLqcp9reNbhtILvg=;
+        b=dqTCW2YdplgHCyPLFdFZqxIu4yC4Dw6PjLNPMQutQkA/Hx2zIhZ9O1hYxQlK+njp6H
+         fVNorFghrQA/cN0HlOgyVvSrhkXlvYVXne9fHFvr/JCupk4Jv7TO/bz95ZEHqT1xyDhb
+         n2NXx8N0EVnL6+nNx+FRg5Qpr/aJj2LgH3V4PgHc3evhf1jShU02rR7tVucs80yX1wcA
+         Uld4UL8xVAVUUpZYPdiYT+3EMDjvhPLMAH9vSIrpf5ys3OjQmCkmGEctF5DBJ0oV+kgy
+         nFeFCLmRytsmBnIVIld5VTv8iwYIG6Xm5to98fGTT8uWjRh7SInID2SRe9TmIrgkqYtU
+         e8XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=JEHvtyXY0PahDyTNTofnb+o70v/Ji63GK4tErbh+T7U=;
-        b=WFP+oYMsvCsZPpgZvzlQh55bANHftlc7ITuVysQqR/PyhU5ZtLG025HZfpc0NJQ0BY
-         ourbXF7VPUJcav2ogj1Iz6ClFP7O6MKzKS4hqPpLoXBmUGsY3wAF9NKspaW2gv0XUGjx
-         O/5ZS0rFcHL//YnBKJCK0MPUC7BogqspwGl0xEP+JSyzobszKiny0Wt+3KkgPpsM0fny
-         cpeB2o5n4nV0rxHhtpL1Jc5mcyKH6ocLvp1kcZI5l1srCV1vhrShem5yJ+s4QKHETPXl
-         aKmVmZwmWdvjntBWdqmkJYPHL5EG9F60KCcaT8b5mKkl8pujASbemFi6TuPHm2Aex3Qw
-         voeQ==
-X-Gm-Message-State: AOAM5303SSZr6Yrx1OaG9kLVSV3uw8geZtCf+zTxcxVBKuCD8xcCwM/l
-        N/16KVnkpmMopS6mFJnDgkpGHSRnL8jWXMgAfBrseg==
-X-Google-Smtp-Source: ABdhPJwe/D1QnjaomloZ5+oBlMTzK1X7S7cIeykWGHTCWPLu4m/3lcVHUxJZ3HD2LIOfXvjGcgC+f/3kwSG0yIrGgAyxqA==
-X-Received: by 2002:a05:6214:1302:: with SMTP id a2mr3525273qvv.156.1597181286277;
- Tue, 11 Aug 2020 14:28:06 -0700 (PDT)
-Date:   Tue, 11 Aug 2020 14:27:55 -0700
-Message-Id: <20200811212756.3328740-1-brendanhiggins@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=N13wpgYndNaXgSy4by0nKxgHXlrjLqcp9reNbhtILvg=;
+        b=hCqqS/lkPH+ezR4+akpJjEqah7wk13X40lF6D0sO1y9NkRkFctseBnoWXMKZz4Qx0w
+         3SR13lDUu2STupbDhaxQkzwp+yCcCBrt4ypJowl9qS40vZZVFJuayExVvcwoxvun7cJa
+         h0oJQxYk7NOi2im4N0Aj/1AZehPVTl81IdOelCKWMr16KVlI7OK+jKZlyXUkty6rZQYH
+         E2GvupPCj0FXW7Uxsb+QDNb1Aq5NVB21NST7RstHihb32hHjkJ99ChIYnTt8Ol3iFDRT
+         upeKes10W0kkZr9zhcw15GVKXaIuoIu0yU6LU+m4RN4BNXG9LMXrVxClX1YvAntJPcTB
+         0skw==
+X-Gm-Message-State: AOAM532H3Kt7EiJPhea+XJD3WXky87i5RVVADe7ORA9bZyzF8MLeD52w
+        nLz4onwZHY0zHS3WbXnoHTUmib9CBddNHSOk3KWrGA==
+X-Google-Smtp-Source: ABdhPJxQOFWZaiQmvlVy+S/FZ0p2TWkzSSH3fPC7l/fcdmOFd1B8nudfxlecAoDP0AsDyHh5PJwTjin6wSPYNQc8VBOYXQ==
+X-Received: by 2002:a17:902:d345:: with SMTP id l5mr2400419plk.276.1597181288284;
+ Tue, 11 Aug 2020 14:28:08 -0700 (PDT)
+Date:   Tue, 11 Aug 2020 14:27:56 -0700
+In-Reply-To: <20200811212756.3328740-1-brendanhiggins@google.com>
+Message-Id: <20200811212756.3328740-2-brendanhiggins@google.com>
 Mime-Version: 1.0
+References: <20200811212756.3328740-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-Subject: [PATCH v2 1/2] kunit: tool: fix running kunit_tool from outside
- kernel tree
+Subject: [PATCH v2 2/2] kunit: tool: allow generating test results in JSON
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     shuah@kernel.org, davidgow@google.com
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, Tim.Bird@sony.com,
+        Heidi Fahim <heidifahim@google.com>,
         Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -59,66 +63,250 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently kunit_tool does not work correctly when executed from a path
-outside of the kernel tree, so make sure that the current working
-directory is correct and the kunit_dir is properly initialized before
-running.
+From: Heidi Fahim <heidifahim@google.com>
 
+Add a --json flag, which when specified generates JSON formatted test
+results conforming to the KernelCI API test_group spec[1]. The user can
+use the new flag to specify a filename to print the json formatted
+results to.
+
+Link[1]: https://api.kernelci.org/schema-test-group.html#post
+Signed-off-by: Heidi Fahim <heidifahim@google.com>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- tools/testing/kunit/kunit.py | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ tools/testing/kunit/kunit.py           | 35 +++++++++++---
+ tools/testing/kunit/kunit_json.py      | 63 ++++++++++++++++++++++++++
+ tools/testing/kunit/kunit_tool_test.py | 33 ++++++++++++++
+ 3 files changed, 125 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/kunit/kunit_json.py
 
 diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 425ef40067e7e..e2caf4e24ecb2 100755
+index e2caf4e24ecb2..3c95a0eb0d048 100755
 --- a/tools/testing/kunit/kunit.py
 +++ b/tools/testing/kunit/kunit.py
-@@ -237,9 +237,13 @@ def main(argv, linux=None):
+@@ -17,6 +17,7 @@ from collections import namedtuple
+ from enum import Enum, auto
  
- 	cli_args = parser.parse_args(argv)
+ import kunit_config
++import kunit_json
+ import kunit_kernel
+ import kunit_parser
  
-+	if get_kernel_root_path():
-+		os.chdir(get_kernel_root_path())
+@@ -30,9 +31,9 @@ KunitBuildRequest = namedtuple('KunitBuildRequest',
+ KunitExecRequest = namedtuple('KunitExecRequest',
+ 			      ['timeout', 'build_dir', 'alltests'])
+ KunitParseRequest = namedtuple('KunitParseRequest',
+-			       ['raw_output', 'input_data'])
++			       ['raw_output', 'input_data', 'build_dir', 'json'])
+ KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
+-					   'build_dir', 'alltests',
++					   'build_dir', 'alltests', 'json',
+ 					   'make_options'])
+ 
+ KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
+@@ -113,12 +114,22 @@ def parse_tests(request: KunitParseRequest) -> KunitResult:
+ 	test_result = kunit_parser.TestResult(kunit_parser.TestStatus.SUCCESS,
+ 					      [],
+ 					      'Tests not Parsed.')
 +
- 	if cli_args.subcommand == 'run':
- 		if not os.path.exists(cli_args.build_dir):
- 			os.mkdir(cli_args.build_dir)
-+			create_default_kunitconfig()
+ 	if request.raw_output:
+ 		kunit_parser.raw_output(request.input_data)
+ 	else:
+ 		test_result = kunit_parser.parse_run_tests(request.input_data)
+ 	parse_end = time.time()
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -257,6 +261,7 @@ def main(argv, linux=None):
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
-+				create_default_kunitconfig()
++	if request.json:
++		json_obj = kunit_json.get_json_result(
++					test_result=test_result,
++					def_config='kunit_defconfig',
++					build_dir=request.build_dir,
++					json_path=request.json)
++		if request.json == 'stdout':
++			print(json_obj)
++
+ 	if test_result.status != kunit_parser.TestStatus.SUCCESS:
+ 		return KunitResult(KunitStatus.TEST_FAILURE, test_result,
+ 				   parse_end - parse_start)
+@@ -151,7 +162,9 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 		return exec_result
  
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -270,10 +275,6 @@ def main(argv, linux=None):
+ 	parse_request = KunitParseRequest(request.raw_output,
+-					  exec_result.result)
++					  exec_result.result,
++					  request.build_dir,
++					  request.json)
+ 	parse_result = parse_tests(parse_request)
+ 
+ 	run_end = time.time()
+@@ -195,7 +208,12 @@ def add_exec_opts(parser):
+ def add_parse_opts(parser):
+ 	parser.add_argument('--raw_output', help='don\'t format output from kernel',
+ 			    action='store_true')
+-
++	parser.add_argument('--json',
++			    nargs='?',
++			    help='Stores test results in a JSON, and either '
++			    'prints to stdout or saves to file if a '
++			    'filename is specified',
++			    type=str, const='stdout', default=None)
+ 
+ def main(argv, linux=None):
+ 	parser = argparse.ArgumentParser(
+@@ -253,6 +271,7 @@ def main(argv, linux=None):
+ 				       cli_args.jobs,
+ 				       cli_args.build_dir,
+ 				       cli_args.alltests,
++				       cli_args.json,
+ 				       cli_args.make_options)
+ 		result = run_tests(linux, request)
+ 		if result.status != KunitStatus.SUCCESS:
+@@ -297,7 +316,9 @@ def main(argv, linux=None):
+ 						cli_args.alltests)
+ 		exec_result = exec_tests(linux, exec_request)
+ 		parse_request = KunitParseRequest(cli_args.raw_output,
+-						  exec_result.result)
++						  exec_result.result,
++						  cli_args.build_dir,
++						  cli_args.json)
+ 		result = parse_tests(parse_request)
+ 		kunit_parser.print_with_timestamp((
+ 			'Elapsed time: %.3fs\n') % (
+@@ -311,7 +332,9 @@ def main(argv, linux=None):
+ 			with open(cli_args.file, 'r') as f:
+ 				kunit_output = f.read().splitlines()
+ 		request = KunitParseRequest(cli_args.raw_output,
+-					    kunit_output)
++					    kunit_output,
++					    cli_args.build_dir,
++					    cli_args.json)
+ 		result = parse_tests(request)
  		if result.status != KunitStatus.SUCCESS:
  			sys.exit(1)
- 	elif cli_args.subcommand == 'build':
--		if cli_args.build_dir:
--			if not os.path.exists(cli_args.build_dir):
--				os.mkdir(cli_args.build_dir)
--
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
+diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+new file mode 100644
+index 0000000000000..624b31b2dbd62
+--- /dev/null
++++ b/tools/testing/kunit/kunit_json.py
+@@ -0,0 +1,63 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Generates JSON from KUnit results according to
++# KernelCI spec: https://github.com/kernelci/kernelci-doc/wiki/Test-API
++#
++# Copyright (C) 2020, Google LLC.
++# Author: Heidi Fahim <heidifahim@google.com>
++
++import json
++import os
++
++import kunit_parser
++
++from kunit_parser import TestStatus
++
++def get_json_result(test_result, def_config, build_dir, json_path):
++	sub_groups = []
++
++	# Each test suite is mapped to a KernelCI sub_group
++	for test_suite in test_result.suites:
++		sub_group = {
++			"name": test_suite.name,
++			"arch": "UM",
++			"defconfig": def_config,
++			"build_environment": build_dir,
++			"test_cases": [],
++			"lab_name": None,
++			"kernel": None,
++			"job": None,
++			"git_branch": "kselftest",
++		}
++		test_cases = []
++		# TODO: Add attachments attribute in test_case with detailed
++		#  failure message, see https://api.kernelci.org/schema-test-case.html#get
++		for case in test_suite.cases:
++			test_case = {"name": case.name, "status": "FAIL"}
++			if case.status == TestStatus.SUCCESS:
++				test_case["status"] = "PASS"
++			elif case.status == TestStatus.TEST_CRASHED:
++				test_case["status"] = "ERROR"
++			test_cases.append(test_case)
++		sub_group["test_cases"] = test_cases
++		sub_groups.append(sub_group)
++	test_group = {
++		"name": "KUnit Test Group",
++		"arch": "UM",
++		"defconfig": def_config,
++		"build_environment": build_dir,
++		"sub_groups": sub_groups,
++		"lab_name": None,
++		"kernel": None,
++		"job": None,
++		"git_branch": "kselftest",
++	}
++	json_obj = json.dumps(test_group, indent=4)
++	if json_path != 'stdout':
++		with open(json_path, 'w') as result_path:
++			result_path.write(json_obj)
++		root = __file__.split('tools/testing/kunit/')[0]
++		kunit_parser.print_with_timestamp(
++			"Test results stored in %s" %
++			os.path.join(root, result_path.name))
++	return json_obj
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 287c74d821c33..99c3c5671ea48 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -11,11 +11,13 @@ from unittest import mock
  
-@@ -288,10 +289,6 @@ def main(argv, linux=None):
- 		if result.status != KunitStatus.SUCCESS:
- 			sys.exit(1)
- 	elif cli_args.subcommand == 'exec':
--		if cli_args.build_dir:
--			if not os.path.exists(cli_args.build_dir):
--				os.mkdir(cli_args.build_dir)
--
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
+ import tempfile, shutil # Handling test_tmpdir
  
-
-base-commit: 30185b69a2d533c4ba6ca926b8390ce7de495e29
++import json
+ import os
+ 
+ import kunit_config
+ import kunit_parser
+ import kunit_kernel
++import kunit_json
+ import kunit
+ 
+ test_tmpdir = ''
+@@ -230,6 +232,37 @@ class KUnitParserTest(unittest.TestCase):
+ 			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.assertEqual('kunit-resource-test', result.suites[0].name)
+ 
++class KUnitJsonTest(unittest.TestCase):
++
++	def _json_for(self, log_file):
++		with(open(get_absolute_path(log_file))) as file:
++			test_result = kunit_parser.parse_run_tests(file)
++			json_obj = kunit_json.get_json_result(
++				test_result=test_result,
++				def_config='kunit_defconfig',
++				build_dir=None,
++				json_path='stdout')
++		return json.loads(json_obj)
++
++	def test_failed_test_json(self):
++		result = self._json_for(
++			'test_data/test_is_test_passed-failure.log')
++		self.assertEqual(
++			{'name': 'example_simple_test', 'status': 'FAIL'},
++			result["sub_groups"][1]["test_cases"][0])
++
++	def test_crashed_test_json(self):
++		result = self._json_for(
++			'test_data/test_is_test_passed-crash.log')
++		self.assertEqual(
++			{'name': 'example_simple_test', 'status': 'ERROR'},
++			result["sub_groups"][1]["test_cases"][0])
++
++	def test_no_tests_json(self):
++		result = self._json_for(
++			'test_data/test_is_test_passed-no_tests_run.log')
++		self.assertEqual(0, len(result['sub_groups']))
++
+ class StrContains(str):
+ 	def __eq__(self, other):
+ 		return self in other
 -- 
 2.28.0.236.gb10cc79966-goog
 
