@@ -2,183 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AE02415BC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 06:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B64241600
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 07:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726493AbgHKEaO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Aug 2020 00:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S1726411AbgHKFjf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Aug 2020 01:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725898AbgHKEaM (ORCPT
+        with ESMTP id S1726326AbgHKFjf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Aug 2020 00:30:12 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F2AC06174A
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 21:30:12 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id a14so10159852wra.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 21:30:12 -0700 (PDT)
+        Tue, 11 Aug 2020 01:39:35 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A99C061756
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 22:39:35 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id o8so15432812ybg.16
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 22:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UTA/jlI4ZkjE+5vHGh7qBO6GyXxZqYMrHrBvLYqNA/8=;
-        b=ecIE6H8POPKe2GmWnNT6j85kVXuCut+VRP5UWYxjZhFuR0utGUaTCLiyLZFEFaDGXA
-         Nk/IlTphNYMbm49+EFFnIapGm8TEPL82eic3iPh2Rlf0lJA+8IhA3A3oHXIQu8w5MVug
-         OvVkhDq+VZYnuiK6dN1Bu0HPFneZmrTPkI3nfzbMatTEZlaex8bGobr6YOJ7YoXcI07z
-         DkFRr3Qa5XPbsrwvmjqdYC/0QkNHbwQzMak6Zf9z33kZSpuCDs0VGKCcRf8TGkbkT+vT
-         dqycUjwh94zMZvgPC4Dchf6trndi28QLRRNPB7oCxwuYZkAjf/7FraDP6yUyEczB2yKe
-         wI5w==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=eI3dpvpZLLpmJ9nqCDi7T91G61DRoZz1t5zO7N7HKA8=;
+        b=BrmmSX27ZRi82o7xEzX2l5M/sJN6sMvF5eCXUYLzJ0vt6z/eZSp8FiktjvhFRHGg3a
+         xN1efG2MozbLRkMpoPfW0LtCCXCTgYehg18sKbiZIypQlBi06akHrSp8zuEwCAzDL0hM
+         wTfHxdWS/psRpaNOKLJiviTtXwBv9EIcQbChOz6Dai+cfTM9+AAdFQaikiAxIRuGBx2r
+         I+HqIeg9nX0eU0rDDlrmPZXIFdKnrg66YeGtl1MlnDaCwIArVV6+dTQyPEnDGOVUdlWC
+         r5Ogv5mGen0CEDU6/h46gy5hAAC3H+WLg/KVNNd3i3+J/7rc/K0Z4q5z590roifWPDOy
+         Vp8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UTA/jlI4ZkjE+5vHGh7qBO6GyXxZqYMrHrBvLYqNA/8=;
-        b=uFK/UcfbL4ISyiV8Rzo1cHPmp2zqvbq52uphnrWPuhW2qO6n9YqQbjQD7+aCP9sfXD
-         VjZJiry5Mh9hBsGkMX8kGpPXH/rdS8IGOTlzUyWIyjoihb+S9DS4VgatpYkWLJi53Cs1
-         juttCNuAqOkBaEmdPEc7KyneT9fvGHkH61AuPr5LcD+jNe62eA5K29BLe1krQ/EjacSH
-         yjNACT+nq//u7+sRNhovp4TqeKtumLracVmufCxN9mUmSHh8aRq/WS+kwo6bLcytJYSE
-         cePQDmHpAzbLzGXIqSC36c7C0vP4wFIaANnfEQ1SlraKXK3iiNQTtuvfw5Taoa56e1yU
-         v5Zw==
-X-Gm-Message-State: AOAM531MOUm3JIaJSp5NGnjV8azuYYU84f4MDTYk9QwqAeJfRNi7AYzA
-        q8fw5xJMADyKQ3WfAxYjAvQiCTzAxz/+s4p1glnAuw==
-X-Google-Smtp-Source: ABdhPJycvgzrejAmWvErgPyXmMcxP7oFh0zNGsbjxXriifiC7oqFsCyotTtJ4bM768Iz1pVpC2Nv3L+9xIOQhTKoCgc=
-X-Received: by 2002:adf:f511:: with SMTP id q17mr4184981wro.414.1597120210798;
- Mon, 10 Aug 2020 21:30:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200808011651.2113930-1-brendanhiggins@google.com>
- <CABVgOSkEiQkcOy+gF9irJo-R6xCeiCvDRZXa_ubzCfz+9Yx2ZA@mail.gmail.com> <CAFd5g47itmDHzVRiihUe_P2yjqGuvGC8LPLpiDx1D8aQX1T1BA@mail.gmail.com>
-In-Reply-To: <CAFd5g47itmDHzVRiihUe_P2yjqGuvGC8LPLpiDx1D8aQX1T1BA@mail.gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=eI3dpvpZLLpmJ9nqCDi7T91G61DRoZz1t5zO7N7HKA8=;
+        b=abqVRJgnUqCjKbNJquxbj0hCPBkbstx+/vtQ5KNIEcVfRWSBWhSsJ3N01Cd9vrl90/
+         9ytEFrJ6tFLZvcf2zQwk/EoYvx+w6DhHfRC9g1qFH3dvYkgc9mHkO9MW+YjILZmj2rZB
+         g7B0bYu1d1cQ0F3o2RqIZqQiv9R0+3JTtTSkme5udxwy4baw/8zxR9Lk4oYnnDpu7IUx
+         6PgDIyhs/pB/X85V8Z34UHZfOzMKAuqzmDdLnkE3fB+Jf0r1B95826YP9pgytNkbvqHP
+         CisD9s+jtAYd/+ITvdJPReJUT0xN8xdseDniFb9Vo9sGUl5edO+wm7iR+WlrYqvs2E1r
+         mz6Q==
+X-Gm-Message-State: AOAM533qnBwVrHDxdrvbg/2HA6n249hK93m0KZ3cfwtC3SYiQzF6RtEr
+        V9u8Bwx0m4JjHooVIyHq+EccDgAJrUSthQ==
+X-Google-Smtp-Source: ABdhPJxZFZ0NcbWXJxUbFG2ezYdT7p63Z4lATrGjue8Q0YNqAuGMcw2vz1LPFixU8ZifT2aWSpQa4CR39vDMXw==
+X-Received: by 2002:a25:de48:: with SMTP id v69mr15076735ybg.191.1597124374426;
+ Mon, 10 Aug 2020 22:39:34 -0700 (PDT)
+Date:   Mon, 10 Aug 2020 22:39:09 -0700
+Message-Id: <20200811053914.652710-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
+Subject: [PATCH v12 0/6] KASAN-KUnit Integration
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 11 Aug 2020 12:29:59 +0800
-Message-ID: <CABVgOSkpTuT6=V08xU0eun-7_OgMR2TdQe0f5rA=mvEPkVrrsw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: tool: fix running kunit_tool from outside
- kernel tree
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     trishalfonso@google.com, brendanhiggins@google.com,
+        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, andreyknvl@google.com,
+        shuah@kernel.org, akpm@linux-foundation.org
+Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 8, 2020 at 4:51 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Fri, Aug 7, 2020 at 10:45 PM David Gow <davidgow@google.com> wrote:
-> >
-> > On Sat, Aug 8, 2020 at 9:17 AM Brendan Higgins
-> > <brendanhiggins@google.com> wrote:
-> > >
-> > > Currently kunit_tool does not work correctly when executed from a path
-> > > outside of the kernel tree, so make sure that the current working
-> > > directory is correct and the kunit_dir is properly initialized before
-> > > running.
-> > >
-> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > > ---
-> > >  tools/testing/kunit/kunit.py | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> > > index 425ef40067e7..96344a11ff1f 100755
-> > > --- a/tools/testing/kunit/kunit.py
-> > > +++ b/tools/testing/kunit/kunit.py
-> > > @@ -237,9 +237,14 @@ def main(argv, linux=None):
-> > >
-> > >         cli_args = parser.parse_args(argv)
-> > >
-> > > +       if get_kernel_root_path():
-> > > +               print('cd ' + get_kernel_root_path())
-> > Do we want to print this, or is it a leftover debug statement?
->
-> Whoops, I was supposed to delete that. That's embarrassing... ^_^;
->
-> > > +               os.chdir(get_kernel_root_path())
-> > > +
-> > >         if cli_args.subcommand == 'run':
-> > >                 if not os.path.exists(cli_args.build_dir):
-> > >                         os.mkdir(cli_args.build_dir)
-> > > +                       create_default_kunitconfig()
-> > Why are we adding this everywhere when it's already in config_tests,
-> > which should already be called in all of the places where a
-> > kunitconfig is required?
->
-> Ah yes, .kunitconfig needs to be created before config_tests() can be
-> called because the LinuxSourceTree constructor needs .kunitconfig to
-> exist.
+This patchset contains everything needed to integrate KASAN and KUnit.
 
-I see. I guess the ultimate solution will be for LinuxSourceTree not
-require a .kunitconfig unless it's actually being used.
+KUnit will be able to:
+(1) Fail tests when an unexpected KASAN error occurs
+(2) Pass tests when an expected KASAN error occurs
 
-> > Is the goal to always copy the default kunitconfig when creating a new
-> > build_dir? While I can sort-of see why we might want to do that, if
-> > the build dir doesn't exist, most of the subcommands will fail anyway
-> > (maybe we should only create the build-dir for 'config' and 'run'?)
->
-> I just did it because we were getting a failure in a constructor so we
-> couldn't do much. Ideally we would check that the current state allows
-> for the command that the user intended to run, but I think that's
-> beyond the scope of this change.
->
-> So I guess the real question is: Is it okay for it to crash in the
-> constructor with a cryptic error message for now, or do we want to let
-> it fail with a slightly less cryptic message later?
->
+Convert KASAN tests to KUnit with the exception of copy_user_test
+because KUnit is unable to test those.
 
-I personally am leaning towards allowing it to crash in the build,
-exec, etc. subcommands for now, and tidying up the error messages
-later, rather than silently creating a blank build dir, only for it
-then to fail later.
+Add documentation on how to run the KASAN tests with KUnit and what to
+expect when running these tests.
 
-In the meantime, yeah, we can add this for the config and run tasks,
-and maybe remove the whole "if cli_args.build_dir" / mkdir branch from
-the other subcommands.
+This patchset depends on:
+- "kunit: extend kunit resources API" [1]
+ - This is included in the KUnit 5.9-rci pull request[8]
 
-If we weren't going to fix the LinuxSourceTree constructor, it'd make
-sense to get rid of the redundant code to create it in config_tests(),
-too, but I'm not sure it's worthwhile.
+Sorry for spamming you all with all these revisions.
+I'd _really_ like to get this into 5.9 if possible: we also have some
+other changes which depend on some things here.
 
-In any case, now I know what's happening, I'm okay with anything
-moderately sensible which gets the 'config' and 'run' subcommands
-working on an empty build dir, and the code and error messages can be
-fixed when tidying up the LinuxSourceTree() constructor in a separate
-patch.
+Changes from v11:
+ - Rebased on top of latest -next (20200810)
+ - Fixed a redundant memchr() call in kasan_memchr()
+ - Added Andrey's "Tested-by" to everything.
 
-Cheers,
--- David
+Changes from v10:
+ - Fixed some whitespace issues in patch 2.
+ - Split out the renaming of the KUnit test suite into a separate patch.
 
-> > >                 if not linux:
-> > >                         linux = kunit_kernel.LinuxSourceTree()
-> > > @@ -257,6 +262,7 @@ def main(argv, linux=None):
-> > >                 if cli_args.build_dir:
-> > >                         if not os.path.exists(cli_args.build_dir):
-> > >                                 os.mkdir(cli_args.build_dir)
-> > > +                               create_default_kunitconfig()
-> > >
-> > >                 if not linux:
-> > >                         linux = kunit_kernel.LinuxSourceTree()
-> > > @@ -273,6 +279,7 @@ def main(argv, linux=None):
-> > >                 if cli_args.build_dir:
-> > >                         if not os.path.exists(cli_args.build_dir):
-> > >                                 os.mkdir(cli_args.build_dir)
-> > > +                               create_default_kunitconfig()
-> > >
-> > >                 if not linux:
-> > >                         linux = kunit_kernel.LinuxSourceTree()
-> > > @@ -291,6 +298,7 @@ def main(argv, linux=None):
-> > >                 if cli_args.build_dir:
-> > >                         if not os.path.exists(cli_args.build_dir):
-> > >                                 os.mkdir(cli_args.build_dir)
-> > > +                               create_default_kunitconfig()
-> > >
-> > >                 if not linux:
-> > >                         linux = kunit_kernel.LinuxSourceTree()
-> > >
-> > > base-commit: 30185b69a2d533c4ba6ca926b8390ce7de495e29
-> > > --
-> > > 2.28.0.236.gb10cc79966-goog
-> > >
+Changes from v9:
+ - Rebased on top of linux-next (20200731) + kselftest/kunit and [7]
+ - Note that the kasan_rcu_uaf test has not been ported to KUnit, and
+   remains in test_kasan_module. This is because:
+   (a) KUnit's expect failure will not check if the RCU stacktraces
+       show.
+   (b) KUnit is unable to link the failure to the test, as it occurs in
+       an RCU callback.
+
+Changes from v8:
+ - Rebased on top of kselftest/kunit
+ - (Which, with this patchset, should rebase cleanly on 5.8-rc7)
+ - Renamed the KUnit test suite, config name to patch the proposed
+   naming guidelines for KUnit tests[6]
+
+Changes from v7:
+ - Rebased on top of kselftest/kunit
+ - Rebased on top of v4 of the kunit resources API[1]
+ - Rebased on top of v4 of the FORTIFY_SOURCE fix[2,3,4]
+ - Updated the Kconfig entry to support KUNIT_ALL_TESTS
+
+Changes from v6:
+ - Rebased on top of kselftest/kunit
+ - Rebased on top of Daniel Axtens' fix for FORTIFY_SOURCE
+   incompatibilites [2]
+ - Removed a redundant report_enabled() check.
+ - Fixed some places with out of date Kconfig names in the
+   documentation.
+
+Changes from v5:
+ - Split out the panic_on_warn changes to a separate patch.
+ - Fix documentation to fewer to the new Kconfig names.
+ - Fix some changes which were in the wrong patch.
+ - Rebase on top of kselftest/kunit (currently identical to 5.7-rc1)
+
+Changes from v4:
+ - KASAN no longer will panic on errors if both panic_on_warn and
+   kasan_multishot are enabled.
+ - As a result, the KASAN tests will no-longer disable panic_on_warn.
+ - This also means panic_on_warn no-longer needs to be exported.
+ - The use of temporary "kasan_data" variables has been cleaned up
+   somewhat.
+ - A potential refcount/resource leak should multiple KASAN errors
+   appear during an assertion was fixed.
+ - Some wording changes to the KASAN test Kconfig entries.
+
+Changes from v3:
+ - KUNIT_SET_KASAN_DATA and KUNIT_DO_EXPECT_KASAN_FAIL have been
+ combined and included in KUNIT_DO_EXPECT_KASAN_FAIL() instead.
+ - Reordered logic in kasan_update_kunit_status() in report.c to be
+ easier to read.
+ - Added comment to not use the name "kasan_data" for any kunit tests
+ outside of KUNIT_EXPECT_KASAN_FAIL().
+
+Changes since v2:
+ - Due to Alan's changes in [1], KUnit can be built as a module.
+ - The name of the tests that could not be run with KUnit has been
+ changed to be more generic: test_kasan_module.
+ - Documentation on how to run the new KASAN tests and what to expect
+ when running them has been added.
+ - Some variables and functions are now static.
+ - Now save/restore panic_on_warn in a similar way to kasan_multi_shot
+ and renamed the init/exit functions to be more generic to accommodate.
+ - Due to [4] in kasan_strings, kasan_memchr, and
+ kasan_memcmp will fail if CONFIG_AMD_MEM_ENCRYPT is enabled so return
+ early and print message explaining this circumstance.
+ - Changed preprocessor checks to C checks where applicable.
+
+Changes since v1:
+ - Make use of Alan Maguire's suggestion to use his patch that allows
+   static resources for integration instead of adding a new attribute to
+   the kunit struct
+ - All KUNIT_EXPECT_KASAN_FAIL statements are local to each test
+ - The definition of KUNIT_EXPECT_KASAN_FAIL is local to the
+   test_kasan.c file since it seems this is the only place this will
+   be used.
+ - Integration relies on KUnit being builtin
+ - copy_user_test has been separated into its own file since KUnit
+   is unable to test these. This can be run as a module just as before,
+   using CONFIG_TEST_KASAN_USER
+ - The addition to the current task has been separated into its own
+   patch as this is a significant enough change to be on its own.
+
+
+[1] https://lore.kernel.org/linux-kselftest/CAFd5g46Uu_5TG89uOm0Dj5CMq+11cwjBnsd-k_CVy6bQUeU4Jw@mail.gmail.com/T/#t
+[2] https://lore.kernel.org/linux-mm/20200424145521.8203-1-dja@axtens.net/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adb72ae1915db28f934e9e02c18bfcea2f3ed3b7
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47227d27e2fcb01a9e8f5958d8997cf47a820afc
+[5] https://bugzilla.kernel.org/show_bug.cgi?id=206337
+[6] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/
+[7] https://lkml.org/lkml/2020/7/31/571
+[8] https://lore.kernel.org/linux-kselftest/8d43e88e-1356-cd63-9152-209b81b16746@linuxfoundation.org/T/#u
+
+
+David Gow (2):
+  kasan: test: Make KASAN KUnit test comply with naming guidelines
+  mm: kasan: Do not panic if both panic_on_warn and kasan_multishot set
+
+Patricia Alfonso (4):
+  Add KUnit Struct to Current Task
+  KUnit: KASAN Integration
+  KASAN: Port KASAN Tests to KUnit
+  KASAN: Testing Documentation
+
+ Documentation/dev-tools/kasan.rst |  70 +++
+ include/kunit/test.h              |   5 +
+ include/linux/kasan.h             |   6 +
+ include/linux/sched.h             |   4 +
+ lib/Kconfig.kasan                 |  22 +-
+ lib/Makefile                      |   7 +-
+ lib/kasan_kunit.c                 | 769 +++++++++++++++++++++++++
+ lib/kunit/test.c                  |  13 +-
+ lib/test_kasan.c                  | 903 ------------------------------
+ lib/test_kasan_module.c           | 111 ++++
+ mm/kasan/report.c                 |  34 +-
+ 11 files changed, 1027 insertions(+), 917 deletions(-)
+ create mode 100644 lib/kasan_kunit.c
+ delete mode 100644 lib/test_kasan.c
+ create mode 100644 lib/test_kasan_module.c
+
+-- 
+2.28.0.236.gb10cc79966-goog
+
