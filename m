@@ -2,419 +2,695 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7426A241652
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 08:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1262417C4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Aug 2020 10:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728133AbgHKG3u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Aug 2020 02:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
+        id S1728306AbgHKIBB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Aug 2020 04:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726154AbgHKG3u (ORCPT
+        with ESMTP id S1726397AbgHKIBA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Aug 2020 02:29:50 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D648C06174A
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 23:29:50 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id z6so11510767iow.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 23:29:49 -0700 (PDT)
+        Tue, 11 Aug 2020 04:01:00 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79750C06174A;
+        Tue, 11 Aug 2020 01:01:00 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id c4so9392529otf.12;
+        Tue, 11 Aug 2020 01:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=aNnAeZQA4dDcU/wP3GlS98gDCwWR0FArn/KPOtHttxw=;
-        b=rMRR3B/IUXnChu4yxa02VcTqFo7vPHWHHyMIoUf3q2VRLbmSXlTiy9CzU74grMCJmn
-         MIOapE/wMdEUU7teHJXzPHEpVy0GrPVrND+qqz1LV82K/pUbrCVylNNC8Mw26Uw+P3ny
-         8zIlgemEqUNBt7PCZ6xAIsKeSk5wemIeH4ggqlNZMcLLhD/5ue6esPVNS0hSKTNrLaTC
-         4zkJW/bDn/C/6+kbe51qR8CN1XdGbzgIn44WfgZbsLL/7rCkMZRWKCWripO9pj4t+L1K
-         798hQmfHbJpxuZg3It1DLezH7JKhMufEs5Ji+Xo9NMWExlgoAhS8C8r0WpvcPvxduaQj
-         VA7Q==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=49W3z429YTWwYqoLUkRh2ENpilgF9rMqX+cAAlUfygw=;
+        b=ajFImN6v6tU5+2Ys28WJuK7fA2bH2660VnDHrs0VbtBAKiVEWY4C5dxumwoauF/WRn
+         rnXTxurRsVCwwNrP9Fzd1n84q5LrfF8ihy4h0gEQh1h4Fa9572168IaphIqoUHXWCYJl
+         fZjU+l6VhTfmgjiO8YrSoGftpRms4sjJOGliTBf4qpIZ3YEeQTC1hPL9rngCrBtnMhno
+         PY+AqReTZ6ciPZmIfRKohiyoF/NvwUvzNkDfjC4t1YFhut4LFGEoV6WRtfWF7qlHRov0
+         9Pw5m9Y1pDB76r5jVlXRlLk9hvXt8H0fyGWdGKezzlx+KxNJkizl+ts5UzQmUq0OWuuc
+         +cnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aNnAeZQA4dDcU/wP3GlS98gDCwWR0FArn/KPOtHttxw=;
-        b=JUg8IPapWmCOBDjSiUENy/g2CrzeLt5yk6DPrL2OCuax+vn+HJMTXKA/u/Wmh9DCmH
-         X7n2RWTty5ylr+HcBo6dv6FXemPm+IwduyL/Ikv/1q9LD3RjSK1GsHkGJK4e6Kpofe5X
-         5YOcdCZIoB+5bp6IbNxOW3q5/U7/zPOTTZHtNOkASH2qyobz93b95B7X+kZjmYtnMI2Z
-         3Nd4Bu0rcJmMB32erQRxflyxlijEabkQgTGwb1PJAt0uEuKE0x4mqD9VKE5/YED24X8E
-         VdqfPTf1E0LGmDfAbkSHiB1Tkj4kXZDFwrTG3bvhF3t23YCEAxQ27OFaJzmoAqh8kHxZ
-         PZdA==
-X-Gm-Message-State: AOAM5339P1xtOTE4IGPutVhn1/mYkSywoajeoqYvAnmrenxM1PMsHU/1
-        fvAr2+P/pgtMhTRhsKsFFO1v0yc3tEZ36hf53RN1IA==
-X-Google-Smtp-Source: ABdhPJx229ezwmO8zclGn4W04WWCsMNuhTrFQKqTtcJJMOqZSK5pKLWofS7fxWyBKBNUEMN8ltHSGUCC8CXnPWanEh4=
-X-Received: by 2002:a05:6602:2c08:: with SMTP id w8mr21797292iov.129.1597127388974;
- Mon, 10 Aug 2020 23:29:48 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=49W3z429YTWwYqoLUkRh2ENpilgF9rMqX+cAAlUfygw=;
+        b=XZ4Z2+e+sS9FdMV3Kd89FoKHwMGGEOmX+DbUExafLI5PP0m+mdH/lJ62oVgCFvPyPs
+         3E4ocFbauatvGXraSwuCxS0wlUIDlGT2/SOOSRvJrbth88slnBhJfUXNs8dntrmHBM8Q
+         aWAjRKczyjdcE3dKJf9arvMyvS/2g/WfbkGCUndPQYhdb4A/mQTNojlPddGA4wmiB2EC
+         fb1TQppQc5fXvpk65JRoZ6jKL4/QM6pCgerPJ0Zz6s3c0KlqorBV+gr/ZXv0YvGY6XPA
+         OozBhEZzNypjiQu1xzS/0cz5YT5yGWs/gEpYSlp8bLV6ChNfvBXusJ0T/3XXm7gA7oCG
+         aQcg==
+X-Gm-Message-State: AOAM531nQ/MiP1+L3c2feVT0loVthjE91mnVu4rNzcr6nMgpu8Afu7Jx
+        8jicopfL/lzME9+LEHZYcscpc5CcNY2eAHsLh8rWIkis
+X-Google-Smtp-Source: ABdhPJzMYnUh1+kbHSoPoB8v+G4LaNIvNtOJ55FLQw/SQbqsVkxP13qdelxHp/TCi7lhAu2hnB0ld+4kthp6dR4LIX8=
+X-Received: by 2002:a9d:4e6:: with SMTP id 93mr4104308otm.308.1597132859596;
+ Tue, 11 Aug 2020 01:00:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200810151803.920113428@linuxfoundation.org>
-In-Reply-To: <20200810151803.920113428@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 11 Aug 2020 11:59:37 +0530
-Message-ID: <CA+G9fYtzP22nR4vd+GAn+tqy0S38XAa3E9=QfDiSPWHrHeqgsw@mail.gmail.com>
-Subject: Re: [PATCH 5.8 00/38] 5.8.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        Ben Hutchings <ben.hutchings@codethink.co.uk>,
-        lkft-triage@lists.linaro.org,
-        linux- stable <stable@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+References: <202008101448.9BAFCF5@keescook>
+In-Reply-To: <202008101448.9BAFCF5@keescook>
+Reply-To: mtk.manpages@gmail.com
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Date:   Tue, 11 Aug 2020 10:00:47 +0200
+Message-ID: <CAKgNAkjDWxNPAOrLxw1NQu76aDrDz5R3Nh3=tLjq1C0KDPuWyQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/socket: Introduce simple SCM_RIGHTS tests
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Shuah Khan <shuah@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 10 Aug 2020 at 20:50, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Hi,
+
+On Mon, 10 Aug 2020 at 23:52, Kees Cook <keescook@chromium.org> wrote:
 >
-> This is the start of the stable review cycle for the 5.8.1 release.
-> There are 38 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> This makes sure that simple SCM_RIGHTS fd passing works as expected, to
+> avoid any future regressions. This is mostly code from Michael Kerrisk's
+> examples on how to set up and perform fd passing with SCM_RIGHTS. Add
+> a test script and wire it up to the selftests.
 >
-> Responses should be made by Wed, 12 Aug 2020 15:17:47 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Acked-by: Michael Kerrisk <mtk.manpages@gmail.com>
+
+(As per off-list discussion with Kees), I confirm that I'm okay with
+relicensing to GPL2+.
+
+Cheers,
+
+Michael
+
+> ---
+> FYI, this also relicenses Michael's code (with his permission) from
+> GPL3+ to GPL2+, who is on CC to publicly confirm. :) Thank you Michael!
+> ---
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/socket/.gitignore     |   4 +
+>  tools/testing/selftests/socket/Makefile       |  11 ++
+>  tools/testing/selftests/socket/hello.txt      |   1 +
+>  tools/testing/selftests/socket/scm_rights.h   |  40 +++++
+>  .../selftests/socket/scm_rights_recv.c        | 168 ++++++++++++++++++
+>  .../selftests/socket/scm_rights_send.c        | 144 +++++++++++++++
+>  .../selftests/socket/simple_scm_rights.sh     |  30 ++++
+>  tools/testing/selftests/socket/unix_sockets.c |  88 +++++++++
+>  tools/testing/selftests/socket/unix_sockets.h |  23 +++
+>  10 files changed, 510 insertions(+)
+>  create mode 100644 tools/testing/selftests/socket/.gitignore
+>  create mode 100644 tools/testing/selftests/socket/Makefile
+>  create mode 100644 tools/testing/selftests/socket/hello.txt
+>  create mode 100644 tools/testing/selftests/socket/scm_rights.h
+>  create mode 100644 tools/testing/selftests/socket/scm_rights_recv.c
+>  create mode 100644 tools/testing/selftests/socket/scm_rights_send.c
+>  create mode 100755 tools/testing/selftests/socket/simple_scm_rights.sh
+>  create mode 100644 tools/testing/selftests/socket/unix_sockets.c
+>  create mode 100644 tools/testing/selftests/socket/unix_sockets.h
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.8.1-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.8.y
-> and the diffstat can be found below.
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index e03bc15ce731..97e155596660 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -51,6 +51,7 @@ TARGETS += rtc
+>  TARGETS += seccomp
+>  TARGETS += sigaltstack
+>  TARGETS += size
+> +TARGETS += socket
+>  TARGETS += sparc64
+>  TARGETS += splice
+>  TARGETS += static_keys
+> diff --git a/tools/testing/selftests/socket/.gitignore b/tools/testing/selftests/socket/.gitignore
+> new file mode 100644
+> index 000000000000..bc9a892956b0
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/.gitignore
+> @@ -0,0 +1,4 @@
+> +unix_sockets.o
+> +scm_rights_send
+> +scm_rights_recv
+> +scm_rights
+> diff --git a/tools/testing/selftests/socket/Makefile b/tools/testing/selftests/socket/Makefile
+> new file mode 100644
+> index 000000000000..3eb7ef0db997
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/Makefile
+> @@ -0,0 +1,11 @@
+> +# SPDX-License-Identifier: GPL-2.0+
+> +TEST_PROGS := simple_scm_rights.sh
+> +TEST_GEN_PROGS_EXTENDED := scm_rights_send scm_rights_recv
+> +
+> +include ../lib.mk
+> +
+> +$(OUTPUT)/unix_sockets.o: unix_sockets.h
+> +$(OUTPUT)/scm_rights_recv: $(OUTPUT)/unix_sockets.o scm_rights.h
+> +$(OUTPUT)/scm_rights_send: $(OUTPUT)/unix_sockets.o scm_rights.h
+> +
+> +EXTRA_CLEAN += $(OUTPUT)/unix_sockets.o $(OUTPUT)/scm_rights
+> diff --git a/tools/testing/selftests/socket/hello.txt b/tools/testing/selftests/socket/hello.txt
+> new file mode 100644
+> index 000000000000..e965047ad7c5
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/hello.txt
+> @@ -0,0 +1 @@
+> +Hello
+> diff --git a/tools/testing/selftests/socket/scm_rights.h b/tools/testing/selftests/socket/scm_rights.h
+> new file mode 100644
+> index 000000000000..4501a46bf1be
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/scm_rights.h
+> @@ -0,0 +1,40 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * scm_rights.h
+> + *
+> + *  Copyright (C) Michael Kerrisk, 2020.
+> + *
+> + *  Header file used by scm_rights_send.c and scm_rights_recv.c.
+> + */
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <sys/socket.h>
+> +#include <sys/un.h>
+> +
+> +#include "unix_sockets.h"
+> +
+> +#define SOCK_PATH "scm_rights"
+> +
+> +#define errExit(fmt, ...) do {                                 \
+> +               fprintf(stderr, fmt, ## __VA_ARGS__);           \
+> +               fprintf(stderr, ": %s\n", strerror(errno));     \
+> +               exit(EXIT_FAILURE);                             \
+> +       } while (0)
+> +
+> +#define fatal(str) errExit("%s\n", str)
+> +
+> +#define usageErr(fmt, ...) do {                                        \
+> +               fprintf(stderr, "Usage: ");                     \
+> +               fprintf(stderr, fmt, ## __VA_ARGS__);           \
+> +               exit(EXIT_FAILURE);                             \
+> +       } while (0)
+> +
+> +static bool debugging;
+> +
+> +#define debug(fmt, ...) do {                                   \
+> +               if (debugging)                                  \
+> +                       fprintf(stderr, fmt, ## __VA_ARGS__);   \
+> +       } while (0)
+> diff --git a/tools/testing/selftests/socket/scm_rights_recv.c b/tools/testing/selftests/socket/scm_rights_recv.c
+> new file mode 100644
+> index 000000000000..4c916e43c319
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/scm_rights_recv.c
+> @@ -0,0 +1,168 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * scm_rights_recv.c
+> + *
+> + * Copyright (C) Michael Kerrisk, 2020.
+> + *
+> + * Used in conjunction with scm_rights_send.c to demonstrate passing of
+> + * file descriptors via a UNIX domain socket.
+> + *
+> + * This program receives a file descriptor sent to a UNIX domain socket.
+> + *
+> + * Usage is as shown in the usageErr() call below.
+> + *
+> + * File descriptors can be exchanged over stream or datagram sockets. This
+> + * program uses stream sockets by default; the "-d" command-line option
+> + * specifies that datagram sockets should be used instead.
+> + *
+> + * This program is Linux-specific.
+> + */
+> +#include "scm_rights.h"
+> +
+> +#define BUF_SIZE 100
+> +
+> +int
+> +main(int argc, char *argv[])
+> +{
+> +       int data, lfd, sfd, fd, opt;
+> +       ssize_t nr;
+> +       bool useDatagramSocket;
+> +       struct msghdr msgh;
+> +       struct iovec iov;
+> +
+> +       /* Allocate a char array of suitable size to hold the ancillary data.
+> +        * However, since this buffer is in reality a 'struct cmsghdr', use a
+> +        * union to ensure that it is aligned as required for that structure.
+> +        * Alternatively, we could allocate the buffer using malloc(), which
+> +        * returns a buffer that satisfies the strictest alignment
+> +        * requirements of any type
+> +        */
+> +
+> +       union {
+> +               char   buf[CMSG_SPACE(sizeof(int))];
+> +               /* Space large enough to hold an 'int' */
+> +               struct cmsghdr align;
+> +       } controlMsg;
+> +       struct cmsghdr *cmsgp;  /* Pointer used to iterate through
+> +                                * headers in ancillary data
+> +                                */
+> +
+> +       /* Parse command-line options */
+> +
+> +       useDatagramSocket = false;
+> +
+> +       while ((opt = getopt(argc, argv, "dD")) != -1) {
+> +               switch (opt) {
+> +               case 'd':
+> +                       useDatagramSocket = true;
+> +                       break;
+> +
+> +               default:
+> +                       usageErr("%s [-dD]\n"
+> +                                        "              -D      enable debugging\n"
+> +                                        "              -d      use datagram socket\n", argv[0]);
+> +               }
+> +       }
+> +
+> +       /* Create socket bound to a well-known address. In the case where
+> +        * we are using stream sockets, also make the socket a listening
+> +        * socket and accept a connection on the socket.
+> +        */
+> +
+> +       if (remove(SOCK_PATH) == -1 && errno != ENOENT)
+> +               errExit("remove-%s", SOCK_PATH);
+> +
+> +       if (useDatagramSocket) {
+> +               sfd = unixBind(SOCK_PATH, SOCK_DGRAM);
+> +               if (sfd == -1)
+> +                       errExit("unixBind");
+> +
+> +       } else {
+> +               lfd = unixBind(SOCK_PATH, SOCK_STREAM);
+> +               if (lfd == -1)
+> +                       errExit("unixBind");
+> +
+> +               if (listen(lfd, 5) == -1)
+> +                       errExit("listen");
+> +
+> +               sfd = accept(lfd, NULL, NULL);
+> +               if (sfd == -1)
+> +                       errExit("accept");
+> +       }
+> +
+> +       /* The 'msg_name' field can be set to point to a buffer where the
+> +        * kernel will place the address of the peer socket. However, we don't
+> +        * need the address of the peer, so we set this field to NULL.
+> +        */
+> +
+> +       msgh.msg_name = NULL;
+> +       msgh.msg_namelen = 0;
+> +
+> +       /* Set fields of 'msgh' to point to buffer used to receive the (real)
+> +        * data read by recvmsg()
+> +        */
+> +
+> +       msgh.msg_iov = &iov;
+> +       msgh.msg_iovlen = 1;
+> +       iov.iov_base = &data;
+> +       iov.iov_len = sizeof(int);
+> +
+> +       /* Set 'msgh' fields to describe the ancillary data buffer */
+> +
+> +       msgh.msg_control = controlMsg.buf;
+> +       msgh.msg_controllen = sizeof(controlMsg.buf);
+> +
+> +       /* Receive real plus ancillary data */
+> +
+> +       nr = recvmsg(sfd, &msgh, 0);
+> +       if (nr == -1)
+> +               errExit("recvmsg");
+> +       debug("recvmsg() returned %ld\n", (long) nr);
+> +
+> +       if (nr > 0)
+> +               debug("Received data = %d\n", data);
+> +
+> +       /* Get the address of the first 'cmsghdr' in the received
+> +        * ancillary data
+> +        */
+> +
+> +       cmsgp = CMSG_FIRSTHDR(&msgh);
+> +
+> +       /* Check the validity of the 'cmsghdr' */
+> +
+> +       if (cmsgp == NULL || cmsgp->cmsg_len != CMSG_LEN(sizeof(int)))
+> +               fatal("bad cmsg header / message length");
+> +       if (cmsgp->cmsg_level != SOL_SOCKET)
+> +               fatal("cmsg_level != SOL_SOCKET");
+> +       if (cmsgp->cmsg_type != SCM_RIGHTS)
+> +               fatal("cmsg_type != SCM_RIGHTS");
+> +
+> +       /* The data area of the 'cmsghdr' is an 'int' (a file descriptor);
+> +        * copy that integer to a local variable. (The received file descriptor
+> +        * is typically a different file descriptor number than was used in the
+> +        * sending process.)
+> +        */
+> +
+> +       memcpy(&fd, CMSG_DATA(cmsgp), sizeof(int));
+> +       debug("Received FD %d\n", fd);
+> +
+> +       /* Having obtained the file descriptor, read the file's contents and
+> +        * print them on standard output
+> +        */
+> +
+> +       for (;;) {
+> +               char buf[BUF_SIZE];
+> +               ssize_t numRead;
+> +
+> +               numRead = read(fd, buf, BUF_SIZE);
+> +               if (numRead == -1)
+> +                       errExit("read");
+> +
+> +               if (numRead == 0)
+> +                       break;
+> +
+> +               write(STDOUT_FILENO, buf, numRead);
+> +       }
+> +
+> +       exit(EXIT_SUCCESS);
+> +}
+> diff --git a/tools/testing/selftests/socket/scm_rights_send.c b/tools/testing/selftests/socket/scm_rights_send.c
+> new file mode 100644
+> index 000000000000..c5718d10a80d
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/scm_rights_send.c
+> @@ -0,0 +1,144 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * scm_rights_send.c
+> + *
+> + * Copyright (C) Michael Kerrisk, 2020.
+> + *
+> + * Used in conjunction with scm_rights_recv.c to demonstrate passing of
+> + * file descriptors via a UNIX domain socket.
+> + *
+> + * This program sends a file descriptor to a UNIX domain socket.
+> + *
+> + * Usage is as shown in the usageErr() call below.
+> + *
+> + * File descriptors can be exchanged over stream or datagram sockets. This
+> + * program uses stream sockets by default; the "-d" command-line option
+> + * specifies that datagram sockets should be used instead.
+> + *
+> + * This program is Linux-specific.
+> + */
+> +#include "scm_rights.h"
+> +
+> +int
+> +main(int argc, char *argv[])
+> +{
+> +       int data, sfd, opt, fd;
+> +       ssize_t ns;
+> +       bool useDatagramSocket;
+> +       struct msghdr msgh;
+> +       struct iovec iov;
+> +
+> +       /* Allocate a char array of suitable size to hold the ancillary data.
+> +        * However, since this buffer is in reality a 'struct cmsghdr', use a
+> +        * union to ensure that it is aligned as required for that structure.
+> +        * Alternatively, we could allocate the buffer using malloc(), which
+> +        * returns a buffer that satisfies the strictest alignment
+> +        * requirements of any type.
+> +        */
+> +
+> +       union {
+> +               char   buf[CMSG_SPACE(sizeof(int))];
+> +               /* Space large enough to hold an 'int' */
+> +               struct cmsghdr align;
+> +       } controlMsg;
+> +       struct cmsghdr *cmsgp;  /* Pointer used to iterate through
+> +                                * headers in ancillary data
+> +                                */
+> +
+> +       /* Parse command-line options */
+> +
+> +       useDatagramSocket = false;
+> +
+> +       while ((opt = getopt(argc, argv, "dD")) != -1) {
+> +               switch (opt) {
+> +               case 'd':
+> +                       useDatagramSocket = true;
+> +                       break;
+> +               case 'D':
+> +                       debugging = true;
+> +                       break;
+> +               default:
+> +                       usageErr("%s [-dD] file\n"
+> +                                        "              -D      enable debugging\n"
+> +                                        "              -d      use datagram socket\n", argv[0]);
+> +               }
+> +       }
+> +
+> +       if (argc != optind + 1)
+> +               usageErr("%s [-dD] file\n", argv[0]);
+> +
+> +       /* Open the file named on the command line */
+> +
+> +       fd = open(argv[optind], O_RDONLY);
+> +       if (fd == -1)
+> +               errExit("open");
+> +
+> +       /* The 'msg_name' field can be used to specify the address of the
+> +        * destination socket when sending a datagram. However, we do not
+> +        * need to use this field because we use connect() below, which sets
+> +        * a default outgoing address for datagrams.
+> +        */
+> +
+> +       msgh.msg_name = NULL;
+> +       msgh.msg_namelen = 0;
+> +
+> +       /* On Linux, we must transmit at least 1 byte of real data in
+> +        * order to send ancillary data
+> +        */
+> +
+> +       msgh.msg_iov = &iov;
+> +       msgh.msg_iovlen = 1;
+> +       iov.iov_base = &data;
+> +       iov.iov_len = sizeof(int);
+> +       data = 12345;
+> +       debug("Sending data = %d\n", data);
+> +
+> +       /* Set 'msgh' fields to describe the ancillary data buffer */
+> +
+> +       msgh.msg_control = controlMsg.buf;
+> +       msgh.msg_controllen = sizeof(controlMsg.buf);
+> +
+> +       /* The control message buffer must be zero-initialized in order
+> +        * for the CMSG_NXTHDR() macro to work correctly. Although we
+> +        * don't need to use CMSG_NXTHDR() in this example (because
+> +        * there is only one block of ancillary data), we show this
+> +        * step to demonstrate best practice
+> +        */
+> +
+> +       memset(controlMsg.buf, 0, sizeof(controlMsg.buf));
+> +
+> +       /* Set message header to describe the ancillary data that
+> +        * we want to send
+> +        */
+> +
+> +       cmsgp = CMSG_FIRSTHDR(&msgh);
+> +       cmsgp->cmsg_len = CMSG_LEN(sizeof(int));
+> +       cmsgp->cmsg_level = SOL_SOCKET;
+> +       cmsgp->cmsg_type = SCM_RIGHTS;
+> +       memcpy(CMSG_DATA(cmsgp), &fd, sizeof(int));
+> +
+> +       /* Connect to the peer socket */
+> +
+> +       sfd = unixConnect(SOCK_PATH, useDatagramSocket ? SOCK_DGRAM : SOCK_STREAM);
+> +       if (sfd == -1)
+> +               errExit("unixConnect");
+> +
+> +       debug("Sending FD %d\n", fd);
+> +
+> +       /* Send real plus ancillary data */
+> +
+> +       ns = sendmsg(sfd, &msgh, 0);
+> +       if (ns == -1)
+> +               errExit("sendmsg");
+> +
+> +       debug("sendmsg() returned %ld\n", (long) ns);
+> +
+> +       /* Once the file descriptor has been sent, it is no longer necessary
+> +        * to keep it open in the sending process
+> +        */
+> +
+> +       if (close(fd) == -1)
+> +               errExit("close");
+> +
+> +       exit(EXIT_SUCCESS);
+> +}
+> diff --git a/tools/testing/selftests/socket/simple_scm_rights.sh b/tools/testing/selftests/socket/simple_scm_rights.sh
+> new file mode 100755
+> index 000000000000..31ea0fc1bb6d
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/simple_scm_rights.sh
+> @@ -0,0 +1,30 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0+
+> +set -e
+> +
+> +ret=0
+> +hello=$(cat hello.txt)
+> +
+> +rm -f scm_rights
+> +(sleep 0.1; ./scm_rights_send hello.txt) &
+> +out=$(./scm_rights_recv)
+> +
+> +if [ "$hello" != "$out" ] ; then
+> +       echo "FAIL: SCM_RIGHTS fd contents mismatch"
+> +       ret=1
+> +else
+> +       echo "ok: SOCK_STREAM"
+> +fi
+> +
+> +rm -f scm_rights
+> +(sleep 0.1; ./scm_rights_send -d hello.txt) &
+> +out=$(./scm_rights_recv -d)
+> +
+> +if [ "$hello" != "$out" ] ; then
+> +       echo "FAIL: SCM_RIGHTS fd contents mismatch"
+> +       ret=1
+> +else
+> +       echo "ok: SOCK_DGRAM"
+> +fi
+> +
+> +exit $ret
+> diff --git a/tools/testing/selftests/socket/unix_sockets.c b/tools/testing/selftests/socket/unix_sockets.c
+> new file mode 100644
+> index 000000000000..a7678fad1a16
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/unix_sockets.c
+> @@ -0,0 +1,88 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * unix_sockets.c
+> + *
+> + * Copyright (C) Michael Kerrisk, 2020.
+> + *
+> + * A package of useful routines for UNIX domain sockets.
+> + */
+> +#include "unix_sockets.h"         /* Declares functions defined here */
+> +
+> +/* Build a UNIX domain socket address structure for 'path', returning
+> + * it in 'addr'. Returns -1 on success, or 0 on error.
+> + */
+> +
+> +int
+> +unixBuildAddress(const char *path, struct sockaddr_un *addr)
+> +{
+> +       if (addr == NULL || path == NULL) {
+> +               errno = EINVAL;
+> +               return -1;
+> +       }
+> +
+> +       memset(addr, 0, sizeof(struct sockaddr_un));
+> +       addr->sun_family = AF_UNIX;
+> +       if (strlen(path) < sizeof(addr->sun_path)) {
+> +               strncpy(addr->sun_path, path, sizeof(addr->sun_path) - 1);
+> +               return 0;
+> +       } else {
+> +               errno = ENAMETOOLONG;
+> +               return -1;
+> +       }
+> +}
+> +
+> +/* Create a UNIX domain socket of type 'type' and connect it
+> + * to the remote address specified by the 'path'.
+> + * Return the socket descriptor on success, or -1 on error
+> + */
+> +
+> +int
+> +unixConnect(const char *path, int type)
+> +{
+> +       int sd, savedErrno;
+> +       struct sockaddr_un addr;
+> +
+> +       if (unixBuildAddress(path, &addr) == -1)
+> +               return -1;
+> +
+> +       sd = socket(AF_UNIX, type, 0);
+> +       if (sd == -1)
+> +               return -1;
+> +
+> +       if (connect(sd, (struct sockaddr *) &addr,
+> +                               sizeof(struct sockaddr_un)) == -1) {
+> +               savedErrno = errno;
+> +               close(sd);                        /* Might change 'errno' */
+> +               errno = savedErrno;
+> +               return -1;
+> +       }
+> +
+> +       return sd;
+> +}
+> +
+> +/* Create a UNIX domain socket and bind it to 'path'.
+> + * Return the socket descriptor on success, or -1 on error.
+> + */
+> +
+> +int
+> +unixBind(const char *path, int type)
+> +{
+> +       int sd, savedErrno;
+> +       struct sockaddr_un addr;
+> +
+> +       if (unixBuildAddress(path, &addr) == -1)
+> +               return -1;
+> +
+> +       sd = socket(AF_UNIX, type, 0);
+> +       if (sd == -1)
+> +               return -1;
+> +
+> +       if (bind(sd, (struct sockaddr *) &addr, sizeof(struct sockaddr_un)) == -1) {
+> +               savedErrno = errno;
+> +               close(sd);                        /* Might change 'errno' */
+> +               errno = savedErrno;
+> +               return -1;
+> +       }
+> +
+> +       return sd;
+> +}
+> diff --git a/tools/testing/selftests/socket/unix_sockets.h b/tools/testing/selftests/socket/unix_sockets.h
+> new file mode 100644
+> index 000000000000..e03a5aecd10c
+> --- /dev/null
+> +++ b/tools/testing/selftests/socket/unix_sockets.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + *  unix_sockets.h
+> + *
+> + *  Copyright (C) Michael Kerrisk, 2020.
+> + *
+> + *  Header file for unix_sockets.c.
+> + */
+> +#ifndef UNIX_SOCKETS_H
+> +#define UNIX_SOCKETS_H      /* Prevent accidental double inclusion */
+> +
+> +#include <errno.h>
+> +#include <unistd.h>
+> +#include <sys/socket.h>
+> +#include <sys/un.h>
+> +
+> +int unixBuildAddress(const char *path, struct sockaddr_un *addr);
+> +
+> +int unixConnect(const char *path, int type);
+> +
+> +int unixBind(const char *path, int type);
+> +
+> +#endif
+> --
+> 2.25.1
 >
-> thanks,
 >
-> greg k-h
->
+> --
+> Kees Cook
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
 
-Few warnings noticed while running kselftests on arm64 juno-r2 device
-1 and 3 noticed on linux mainline tree
-2 and 4 seems to be specific to arm64 juno platform.
-
-1)
-[   85.834361] WARNING: CPU: 4 PID: 740 at
-/usr/src/kernel/kernel/bpf/verifier.c:8999 bpf_check+0x1d1c/0x2ac0
-2)
-[   97.854733] Unexpected kernel BRK exception at EL1
-[   97.861235] Internal error: ptrace BRK handler: f2000100 [#1] PREEMPT SM=
-P
-3)
-[  102.715399] BUG: sleeping function called from invalid context at
-/usr/src/kernel/include/linux/percpu-rwsem.h:49
-4)
-[  102.891463] WARNING: CPU: 2 PID: 0 at
-/usr/src/kernel/kernel/rcu/tree.c:618 rcu_eqs_enter.isra.67+0xd8/0xe0
-
-Summary
-------------------------------------------------------------------------
-
-kernel: 5.8.1-rc1
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le-rc.git
-git branch: linux-5.8.y
-git commit: b30c8c9d42601af8ebeb3ad42085ff4134a111a0
-git describe: v5.8-39-gb30c8c9d4260
-Test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-5.8-oe/bui=
-ld/v5.8-39-gb30c8c9d4260
-
-No regressions (compared to build v5.8)
-
-No fixes (compared to build v5.8)
-
-
-------------[ cut here ]------------
-[   85.826439] trace type BPF program uses run-time allocation
-[   85.834361] WARNING: CPU: 4 PID: 740 at
-/usr/src/kernel/kernel/bpf/verifier.c:8999 bpf_check+0x1d1c/0x2ac0
-[   85.846245] Modules linked in: rfkill tda998x cec drm_kms_helper
-drm crct10dif_ce fuse
-[   85.856955] CPU: 4 PID: 740 Comm: test_verifier Not tainted 5.8.1-rc1 #1
-[   85.866436] Hardware name: ARM Juno development board (r2) (DT)
-[   85.875143] pstate: 40000005 (nZcv daif -PAN -UAO BTYPE=3D--)
-[   85.883503] pc : bpf_check+0x1d1c/0x2ac0
-[   85.890202] lr : bpf_check+0x1d1c/0x2ac0
-[   85.896902] sp : ffff80001472bb00
-[   85.902997] x29: ffff80001472bb00 x28: 0000000000000025
-[   85.911091] x27: ffff800011382000 x26: 0000000000000000
-[   85.919186] x25: 0000000000000000 x24: ffff00096e9d8000
-[   85.927282] x23: ffff0009731d1400 x22: ffff8000135c3058
-[   85.935376] x21: 0000000000000004 x20: ffff00096e94b800
-[   85.943471] x19: ffff800012650000 x18: ffffffffffffffff
-[   85.951566] x17: 00000000bd597f08 x16: 000000004476e5aa
-[   85.959662] x15: ffff800012650a88 x14: ffff80009472b7e7
-[   85.967757] x13: ffff80001472b7f5 x12: ffff800012680000
-[   85.975851] x11: 0000000005f5e0ff x10: ffff00097efa5118
-[   85.983947] x9 : ffff800013134000 x8 : 00000000d7e0a7a6
-[   85.992042] x7 : ffff800012654000 x6 : ffff00097ef904a8
-[   86.000137] x5 : ffff00097ef904a8 x4 : ffff0009751597c0
-[   86.008233] x3 : ffff800012651000 x2 : 0000000000000000
-[   86.016327] x1 : ac9d7b2c4e06c300 x0 : 0000000000000000
-[   86.024423] Call trace:
-[   86.029653]  bpf_check+0x1d1c/0x2ac0
-[   86.036006]  bpf_prog_load+0x698/0x8b8
-[   86.042533]  __do_sys_bpf+0xf3c/0x1d18
-[   86.049062]  __arm64_sys_bpf+0x28/0x38
-[   86.055592]  el0_svc_common.constprop.3+0x7c/0x198
-[   86.063162]  do_el0_svc+0x34/0xa0
-[   86.069258]  el0_sync_handler+0x16c/0x210
-[   86.076045]  el0_sync+0x140/0x180
-[   86.082137] irq event stamp: 60966
-[   86.088326] hardirqs last  enabled at (60965): [<ffff800011332760>]
-_raw_spin_unlock_irq+0x48/0x90
-[   86.100075] hardirqs last disabled at (60966): [<ffff800010029a04>]
-debug_exception_enter+0xac/0xe8
-[   86.111909] softirqs last  enabled at (60960): [<ffff8000100019bc>]
-__do_softirq+0x59c/0x5dc
-[   86.123138] softirqs last disabled at (60925): [<ffff80001008fbf4>]
-irq_exit+0x144/0x150
-[   86.134011] ---[ end trace 14c3fdd625b93f50 ]---
-[   88.541693]
-[   90.633700] kauditd_printk_skb: 1766 callbacks suppressed
-[   90.633713] audit: type=3D1334 audit(1597081685.048:1803): prog-id=3D906=
- op=3DLOAD
-[   90.651538] audit: type=3D1334 audit(1597081686.220:1804):
-prog-id=3D906 op=3DUNLOAD
-[   90.661574] audit: type=3D1334 audit(1597081686.220:1805): prog-id=3D907=
- op=3DLOAD
-[   90.671455] audit: type=3D1334 audit(1597081686.228:1806):
-prog-id=3D907 op=3DUNLOAD
-[   95.725310] audit: type=3D1334 audit(1597081686.228:1807): prog-id=3D908=
- op=3DLOAD
-[   95.734199] audit: type=3D1334 audit(1597081691.312:1808):
-prog-id=3D908 op=3DUNLOAD
-[   95.760019] audit: type=3D1334 audit(1597081691.344:1809): prog-id=3D909=
- op=3DLOAD
-[   95.769379] audit: type=3D1334 audit(1597081691.348:1810):
-prog-id=3D909 op=3DUNLOAD
-[   95.779416] audit: type=3D1334 audit(1597081691.348:1811): prog-id=3D910=
- op=3DLOAD
-[   95.789197] audit: type=3D1334 audit(1597081691.356:1812):
-prog-id=3D910 op=3DUNLOAD
-[   95.799333] audit: type=3D1334 audit(1597081691.356:1813): prog-id=3D911=
- op=3DLOAD
-[   95.809110] audit: type=3D1334 audit(1597081691.368:1814):
-prog-id=3D911 op=3DUNLOAD
-[   95.818982] audit: type=3D1334 audit(1597081691.368:1815): prog-id=3D912=
- op=3DLOAD
-[   95.828982] audit: type=3D1334 audit(1597081691.376:1816):
-prog-id=3D912 op=3DUNLOAD
-[   97.854733] Unexpected kernel BRK exception at EL1
-[   97.861235] Internal error: ptrace BRK handler: f2000100 [#1] PREEMPT SM=
-P
-[   97.870587] Modules linked in: rfkill tda998x cec drm_kms_helper
-drm crct10dif_ce fuse
-[   97.881295] CPU: 2 PID: 740 Comm: test_verifier Tainted: G        W
-        5.8.1-rc1 #1
-[   97.892171] Hardware name: ARM Juno development board (r2) (DT)
-[   97.900877] pstate: 20000005 (nzCv daif -PAN -UAO BTYPE=3D--)
-[   97.909235] pc : 0xffff8000000129b8
-[   97.915501] lr : bpf_prog_d53bb52e3f4483f9_F+0x38/0x8d0
-[   97.923507] sp : ffff80001472bb00
-[   97.929601] x29: ffff80001472bb30 x28: ffff80001472bcd8
-[   97.937696] x27: 0000000000000001 x26: 0000000000000000
-[   97.945790] x25: ffff80001472bb00 x24: ffff8000135c3038
-[   97.953885] x23: ffff80001472bce0 x22: ffff80001472bc58
-[   97.961981] x21: ffff8000135c3038 x20: ffff80001472bce0
-[   97.970076] x19: ffff800000030730 x18: 0000000000000000
-[   97.978171] x17: 0000000000000000 x16: 0000000000000000
-[   97.986266] x15: 0000000000000000 x14: 0000000000000000
-[   97.994361] x13: 0000000000000000 x12: 0000000000000000
-[   98.002455] x11: 0000000000000001 x10: ffff800000032998
-[   98.010551] x9 : ffff800013134000 x8 : 00000000430ad605
-[   98.018646] x7 : ffff800012654000 x6 : 000000024ead2ef5
-[   98.026741] x5 : 00ffffffffffffff x4 : 001a3a31531529a9
-[   98.034836] x3 : 0000000000000000 x2 : ffff800000030730
-[   98.042931] x1 : 000000000000000a x0 : 0000000000000009
-[   98.051027] Call trace:
-[   98.056252]  0xffff8000000129b8
-[   98.062172]  bpf_prog_d53bb52e3f4483f9_F+0x38/0x8d0
-[   98.069837]  bpf_dispatcher_xdp_func+0x30/0x40
-[   98.077057]  bpf_test_run+0x180/0x570
-[  102.671323]  bpf_prog_test_run_xdp+0xf4/0x1b0
-[  102.675688]  __do_sys_bpf+0x708/0x1d18
-[  102.679442]  __arm64_sys_bpf+0x28/0x38
-[  102.683197]  el0_svc_common.constprop.3+0x7c/0x198
-[  102.687995]  do_el0_svc+0x34/0xa0
-[  102.691315]  el0_sync_handler+0x16c/0x210
-[  102.695329]  el0_sync+0x140/0x180
-[  102.698651] Code: d4202000 d4202000 d4202000 d4202000 (d4202000)
-[  102.704758] ---[ end trace 14c3fdd625b93f51 ]---
-[  102.709383] note: test_verifier[740] exited with preempt_count 2
-[  102.715399] BUG: sleeping function called from invalid context at
-/usr/src/kernel/include/linux/percpu-rwsem.h:49
-[  102.725680] in_atomic(): 0, irqs_disabled(): 128, non_block: 0,
-pid: 740, name: test_verifier
-[  102.734219] INFO: lockdep is turned off.
-[  102.738146] irq event stamp: 4369860
-[  102.741729] hardirqs last  enabled at (4369859):
-[<ffff80001015ab18>] ktime_get+0xc0/0x178
-[  102.750010] hardirqs last disabled at (4369860):
-[<ffff800010029a04>] debug_exception_enter+0xac/0xe8
-[  102.759249] softirqs last  enabled at (4369842):
-[<ffff8000102161d4>] bpf_ksym_add+0x12c/0x148
-[  102.767878] softirqs last disabled at (4369840):
-[<ffff8000102160d4>] bpf_ksym_add+0x2c/0x148
-[  102.776419] CPU: 2 PID: 740 Comm: test_verifier Tainted: G      D W
-        5.8.1-rc1 #1
-[  102.784523] Hardware name: ARM Juno development board (r2) (DT)
-[  102.790451] Call trace:
-[  102.792900]  dump_backtrace+0x0/0x1f8
-[  102.796567]  show_stack+0x2c/0x38
-[  102.799889]  dump_stack+0xf0/0x16c
-[  102.803296]  ___might_sleep+0x144/0x208
-[  102.807137]  __might_sleep+0x54/0x90
-[  102.810719]  exit_signals+0x54/0x3e8
-[  102.814301]  do_exit+0xc8/0xae0
-[  102.817446]  die+0x200/0x268
-[  102.820329]  arm64_notify_die+0xa0/0xc0
-[  102.824172]  do_debug_exception+0xf0/0x128
-[  102.828275]  el1_sync_handler+0x90/0xf0
-[  102.832116]  el1_sync+0x7c/0x100
-[  102.835347]  0xffff8000000129b8
-[  102.838493]  bpf_prog_d53bb52e3f4483f9_F+0x38/0x8d0
-[  102.843379]  bpf_dispatcher_xdp_func+0x30/0x40
-[  102.847830]  bpf_test_run+0x180/0x570
-[  102.851497]  bpf_prog_test_run_xdp+0xf4/0x1b0
-[  102.855861]  __do_sys_bpf+0x708/0x1d18
-[  102.859615]  __arm64_sys_bpf+0x28/0x38
-[  102.863369]  el0_svc_common.constprop.3+0x7c/0x198
-[  102.868167]  do_el0_svc+0x34/0xa0
-[  102.871486]  el0_sync_handler+0x16c/0x210
-[  102.875501]  el0_sync+0x140/0x180
-[  102.886823] ------------[ cut here ]------------
-[[  102.887376] kauditd_printk_skb: 125 callbacks suppressed
-[  102.887387] audit: type=3D1701 audit(1597081698.472:1942):
-auid=3D4294967295 uid=3D0 gid=3D0 ses=3D4294967295 pid=3D738 comm=3D\"timeo=
-ut\"
-exe=3D\"/usr/bin/timeout.coreutils\" sig=3D11 res=3D1
-[  102.891463] WARNING: CPU: 2 PID: 0 at
-/usr/src/kernel/kernel/rcu/tree.c:618 rcu_eqs_enter.isra.67+0xd8/0xe0
-[  102.891467] Modules linked in: rfkill tda998x cec drm_kms_helper
-drm crct10dif_ce fuse
-[  102.891486] CPU: 2 PID: 0 Comm: swapper/2 Tainted: G      D W
-  5.8.1-rc1 #1
-[  102.891490] Hardware name: ARM Juno development board (r2) (DT)
-[  102.891495] pstate: 200003c5 (nzCv DAIF -PAN -UAO BTYPE=3D--)
-[  102.891501] pc : rcu_eqs_enter.isra.67+0xd8/0xe0
-[  102.891511] lr : rcu_eqs_enter.isra.67+0x10/0xe0
-[  102.957881] sp : ffff800013683f20
-[  102.961198] x29: ffff800013683f20 x28: 0000000000000000
-[  102.966519] x27: 0000000000000000 x26: ffff000973033800
-[  102.971840] x25: ffff00097ef5fc80 x24: ffff800012651410
-[  102.977162] x23: ffff800011f00c78 x22: ffff800012650000
-[  102.982483] x21: ffff800012651000 x20: ffff800011f02000
-[  102.987803] x19: ffff00097ef61ec0 x18: ffffffffffffffff
-[  102.993124] x17: 0000000000000000 x16: 0000000000000000
-[  102.998444] x15: 000000000000006c x14: 000000000000002a
-[  103.003765] x13: 0000000000000002 x12: 0000000000000000
-[  103.009086] x11: 0000000000000000 x10: ffff80001264b1c8
-[  103.014406] x9 : 0000000000000000 x8 : ffff800012650a88
-[  103.019727] x7 : ffff80001016d09c x6 : 0000000000000000
-[  103.025048] x5 : 0000000000000000 x4 : 0000000000000000
-[  103.030368] x3 : ffff800012650a88 x2 : 00000017f0129f00
-[  103.035689] x1 : 4000000000000002 x0 : 4000000000000000
-[  103.041011] Call trace:
-[  103.043461]  rcu_eqs_enter.isra.67+0xd8/0xe0
-[  103.047739]  rcu_idle_enter+0x44/0x70
-[  103.051406]  do_idle+0x214/0x2c0
-[  103.054637]  cpu_startup_entry+0x2c/0x70
-[  103.058567]  secondary_start_kernel+0x1a8/0x200
-[  103.063103] irq event stamp: 449856
-[  103.066599] hardirqs last  enabled at (449855):
-[<ffff80001016d1ec>] tick_nohz_idle_exit+0x64/0xd0
-[  103.075574] hardirqs last disabled at (449856):
-[<ffff800011329c08>] __schedule+0xf0/0x8f0
-[  103.083853] softirqs last  enabled at (449814):
-[<ffff8000100019bc>] __do_softirq+0x59c/0x5dc
-[  103.092396] softirqs last disabled at (449803):
-[<ffff80001008fbf4>] irq_exit+0x144/0x150
-
-
-Full output log:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-5.8-oe/build/v5.8-39-gb3=
-0c8c9d4260/testrun/3049360/suite/linux-log-parser/test/check-kernel-excepti=
-on-1657446/log
-
-Ran 35329 total tests in the following environments and test suites.
-
-Environments
---------------
-- dragonboard-410c
-- hi6220-hikey
-- i386
-- juno-r2
-- juno-r2-compat
-- juno-r2-kasan
-- nxp-ls2088
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15
-- x86
-- x86-kasan
-
-Test Suites
------------
-* build
-* install-android-platform-tools-r2600
-* kselftest
-* kselftest/drivers
-* kselftest/filesystems
-* kselftest/net
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-math-tests
-* ltp-nptl-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* perf
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-mm-tests
-* network-basic-tests
-* v4l2-compliance
-* ltp-containers-tests
-* ltp-dio-tests
-* ltp-open-posix-tests
-* igt-gpu-tools
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-native/drivers
-* kselftest-vsyscall-mode-native/filesystems
-* kselftest-vsyscall-mode-native/net
-* kselftest-vsyscall-mode-none
-* kselftest-vsyscall-mode-none/drivers
-* kselftest-vsyscall-mode-none/filesystems
-* kselftest-vsyscall-mode-none/net
-* ssuite
-
-
---=20
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
