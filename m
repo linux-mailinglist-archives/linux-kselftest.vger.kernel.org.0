@@ -2,206 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4B6242ED8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Aug 2020 21:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D536F242F31
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Aug 2020 21:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgHLTBE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Aug 2020 15:01:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37118 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726515AbgHLTBD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Aug 2020 15:01:03 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B2D0120781;
-        Wed, 12 Aug 2020 19:01:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597258862;
-        bh=Lyp6UJJuG/8lZ1akf0m3/bkg8Lo0dmkVxOXoHpckVtk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=p2wByT2hjS3n5m9FNFn5UO79ntxtiIySENKTMv3UiLF42ono2E36CZCOST6ENiHHu
-         7u/FZdwqqOMr8pCTSAKzt+XvDq8qs7TNVS3LE5z+lj6gNUDdoMJN+fMfyCoraUw1Cl
-         +DqCyQEsyYjGwelaU24H+ajsnppS2Vy3Dvuzum24=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 936D43522615; Wed, 12 Aug 2020 12:01:02 -0700 (PDT)
-Date:   Wed, 12 Aug 2020 12:01:02 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, rcu@vger.kernel.org,
-        linux- stable <stable@vger.kernel.org>, srostedt@redhat.com,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        lkft-triage@lists.linaro.org, Basil Eljuse <Basil.Eljuse@arm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        john.fastabend@gmail.com, jakub@cloudflare.com,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: Re: WARNING: kernel/rcu/tree.c:618 rcu_eqs_enter.isra.67+0xd8
-Message-ID: <20200812190102.GI4295@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <CA+G9fYt9J3tzYjVMq2Z-i8+j3qHTNVX8zwVOJrzRbiJmei7OHw@mail.gmail.com>
+        id S1726593AbgHLT0o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Aug 2020 15:26:44 -0400
+Received: from UCOL19PA37.eemsg.mail.mil ([214.24.24.197]:47300 "EHLO
+        UCOL19PA37.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726512AbgHLT0m (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Aug 2020 15:26:42 -0400
+X-Greylist: delayed 434 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Aug 2020 15:26:41 EDT
+X-EEMSG-check-017: 140741912|UCOL19PA37_ESA_OUT04.csd.disa.mil
+X-IronPort-AV: E=Sophos;i="5.76,305,1592870400"; 
+   d="scan'208";a="140741912"
+Received: from emsm-gh1-uea10.ncsc.mil ([214.29.60.2])
+  by UCOL19PA37.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 12 Aug 2020 19:18:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
+  s=tycho.nsa.gov; t=1597259905; x=1628795905;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=CueohJZx1/qXKuWloOiESfHo96sdfx+fXREsHuVp6DU=;
+  b=Q8PEiWbTufiwiNjVk3ypPUOeKBSoChGPRPVtK9kXkdscE7d0F7LqRPeE
+   U6iGNlimTAv/T3BAAfoZlFGxNoqvyEGr0PATJllYANlATrPjxLHjXu21h
+   fPoAFhNxmUcaS8lKdXgx8K2AgV6JDm+oXifZJ+9UpQJdlZgXZJECeIw5c
+   R5BVFr29DtRmfx2Usc9iVesm9CZg4wOcFm3CybQ1VLmTO/R6SuZJI5kEy
+   kl14+y0jBm+yO1rfeFckZ2xicGDhKLJEuGUp7KdTnXE8vNuJmOpkYdfyH
+   W7PrV9zmXHy68nXzeBkY7S35GtK4LINM0hr15jjEL/bBrZ6tFr1PfI870
+   A==;
+X-IronPort-AV: E=Sophos;i="5.76,305,1592870400"; 
+   d="scan'208";a="39350079"
+IronPort-PHdr: =?us-ascii?q?9a23=3ARwX+ER+z4+2mmv9uRHKM819IXTAuvvDOBiVQ1K?=
+ =?us-ascii?q?B91+0fIJqq85mqBkHD//Il1AaPAdyFraMewLON7+jJYi8p2d65qncMcZhBBV?=
+ =?us-ascii?q?cuqP49uEgeOvODElDxN/XwbiY3T4xoXV5h+GynYwAOQJ6tL1LdrWev4jEMBx?=
+ =?us-ascii?q?7xKRR6JvjvGo7Vks+7y/2+94fcbglVhTexe7d/IAu5oQnMuMQbjpZpJ7osxB?=
+ =?us-ascii?q?fOvnZGYfldy3lyJVKUkRb858Ow84Bm/i9Npf8v9NNOXLvjcaggQrNWEDopM2?=
+ =?us-ascii?q?Yu5M32rhbDVheA5mEdUmoNjBVFBRXO4QzgUZfwtiv6sfd92DWfMMbrQ704RS?=
+ =?us-ascii?q?iu4qF2QxLzliwJKyA2/33WisxojaJUvhShpwBkw4XJZI2ZLedycr/Bcd8fQ2?=
+ =?us-ascii?q?dOUNxRVyhcCY2iaYUBAfcKMeJBo4XjqVYCqB2zDhSuCuzy0D9FnmL407M00+?=
+ =?us-ascii?q?ohEg/I0gIvEN0Mv3vIo9v4L7sSXOOvwaXU0TnOYfFb1DHg44bIaBAhpvSMUK?=
+ =?us-ascii?q?ptf8rN10YvDwPFgUuWqYf4Ij2V0/4Cs2yf7+V+VeOklmkqqxpsrTi03coslo?=
+ =?us-ascii?q?nIiZ4VylDD7yl5xp01KseiRE50Zt6kDoJduieHPIR5Xs0sWXtnuDomyrIYo5?=
+ =?us-ascii?q?67ejAHxYkoyhPcb/GJc4aG7xL/WeuMITl1gHNodbKhihi88UWs1u3xW8e23V?=
+ =?us-ascii?q?pUsydLncfAu24O2hHO9sWLV+dx81mh1DuJygvd5OZEIUUumqraLZ4s2r0wmY?=
+ =?us-ascii?q?QJsUTFACD2nF/6jKiMdkUr/OWj9ufpYq3+q5OBOIJ5hRvyP6QzlsClH+g1PR?=
+ =?us-ascii?q?YCU3KG9em6ybbt51f2QK9Qgf0ziqTZtZfaKtkFqaOhGA9V15oj6w64Dze7zN?=
+ =?us-ascii?q?QUhXkHI0xBeBKAl4XpJ0vBIOr5DfeimFSgiitrxvDaMb3hBZXBNH7Dn6v6fb?=
+ =?us-ascii?q?lh8UJczQszzdRH65JVDLEOPu7zV1fsuNHXARI1KQy5z/v9BNlj2Y4SR3iDDr?=
+ =?us-ascii?q?KBPKPXq1CI5+YvI+eWZI8SvTbwM+Ml6OP1jXIihV8cfbWm3ZsQaHyiGPRmOF?=
+ =?us-ascii?q?+WbWDjgtcGD2cGphA+Q/DyiF2eTT5TYG6/X6c95j4nE4+pEIbDRo+sgLyC2y?=
+ =?us-ascii?q?e0A4daZmZYBVCQCX3obZmLW+8QaCKOJc9sijgEVbmnS4882hCirQz6xKR9Lu?=
+ =?us-ascii?q?rS5CIYsYnu1MZ65+LNjxE+7z90ANqH02GLUW50mnkERzgs3KBwuUZ90EuM0b?=
+ =?us-ascii?q?Bkg/xEEtxe/+1JUgYgNZ7b1OF7Cs79WgTAfteXUlqmRtSmATcsTtM+2dMOZF?=
+ =?us-ascii?q?x9G9q4ghDe3CqgG6UVmKCTBJwo7qLc2GD8J8Jgy3ba06kslEMpQs5VOmK6nK?=
+ =?us-ascii?q?F/7wnTB5LTnEWdjaqqc7oT3DLV/meZ0WWOpF1YUBJ3UajdR38fYFfWrdP/5k?=
+ =?us-ascii?q?/YTr+uF64oMg1Gyc6cMaZFdsfmjVBdS/f5OdTRfm2xlHm/BRaS2LyNbJHqd3?=
+ =?us-ascii?q?8B0yXaDUgOixoT8mqeNQgiGiehpHrTAyZ0FVLpfkzh6vNxqGm9TkAp1A6GdV?=
+ =?us-ascii?q?Bu2KSt8B4PmfOcU+8T3q4DuCo5tzp7Bk290MzWCtebvApuYKVcbskg4FdJ0W?=
+ =?us-ascii?q?LWqRZ9MoW8IK94nFIRbwN3v0b23RVtFopAidQqrG8tzAdqK6KY1VRBdymC3Z?=
+ =?us-ascii?q?DxIb3aMW/y8wqqa6HI21HSytGW+r0A6P4gsVXsoBmpFlY+83Vgy9RV0WGT5p?=
+ =?us-ascii?q?PMDAoSSp/xXUE39x91p7HefCYx/Z/b1XppMaOsqD/Nx8opBPc5yhanZ9pfMr?=
+ =?us-ascii?q?6LFA7xE8IEHMWhMvEllEW1bhIDPeBS6LQ4MN+hd/uDwKSrJvpvnCq6jWRb54?=
+ =?us-ascii?q?Bwyl6D9y1mSuHTwZkF3+qV3g+JVjf6lluhtN74mZxcbzEIAmW/0TTkBJJWZq?=
+ =?us-ascii?q?BqfoYEF3mhI9arydV5gJ7tWGVV+0KjB1Mc38+pfBuSb0H43QFK0kQXu3Onkz?=
+ =?us-ascii?q?OizzNoizEpsraf3CvWzuTnaBoHOXRHRGx4glfqOYi7ld8aU1azbwUymxul4F?=
+ =?us-ascii?q?z1x6lfpKhlM2bTRkJIdTDsL25+SquwqqaCY8lX5ZMysCVYTOS8bkqASrHguB?=
+ =?us-ascii?q?Ya1STjEHZEyD8hazGgoo/5kABiiGKBMHZzq2LUedpuyhfF69zTW+Vc3jocSy?=
+ =?us-ascii?q?l8jTnWBl68M8O18tWTkpfJqvq+WH65Vp1PbSnrypuNtDC75W13GxK/n+u+mt?=
+ =?us-ascii?q?75Hggg1y/0yd1qWT/PrBbmbYnhz766Pv5/fkl0GF/87NJ3Gp9/kos2mJ4fx3?=
+ =?us-ascii?q?4ahomP8XUai2jzPtJb2aT4bHUTXzEL3sXY4BP+2E1iNH6JyIX5VmiDwsd7ad?=
+ =?us-ascii?q?m6eHsc2jgh4MBSFKeU8LtEkDN2olWmtwLRZ+ZynjMExfsu8nEamfwGtxQrzi?=
+ =?us-ascii?q?WcBLASElJVPSjtlxST89C+t79bZGG3cbeu0kp/k8quDLWGog1GRHn5fZIiFz?=
+ =?us-ascii?q?dq7spjKFLMzGHz6ob8ddnUbNITsACUkhjZg+dPMJIxl+EHhTRoOW3jp30p0e?=
+ =?us-ascii?q?07ggJ03ZG8ooeHL39h/KWjAh5XLjf1fd8c+inxjaZCmcabx4SvHpRnGjUWU5?=
+ =?us-ascii?q?rkVOinECgOuvTnLAuODjI8pWmBGbbFHg+Q9l1mr3TRHJCvLX2XI2MZzdp6Th?=
+ =?us-ascii?q?mHOENfmBwUXCk9npMhEgCqxcrhcFp25zwI+1H4rQdDx/l2NxnwTGjfvh2kaj?=
+ =?us-ascii?q?QqR5iFKhpZ8AVC613SMcyE4eJ5BztY8YG5rAyRNmybYBxFDWUIWkyCGlDiMa?=
+ =?us-ascii?q?Ci5dfb8+eFGOW+MeXBYbGVpOxAWPeH24iv3pFl/zmSLMWPOGdtD/kh1kpER3?=
+ =?us-ascii?q?B5FNzTmy8TRCwPiyLNc8mbqQ+4+i12qMC/7fvqVBvs5YuUFbRSNdtv+wyojq?=
+ =?us-ascii?q?eYK+6dnzh5KTlG2ZMW33PIy6YQ3EQUiy5wczmhC7MAtTTCTKjIgK9YEwYbaz?=
+ =?us-ascii?q?9vNMtP96882ghNOcjGitL6z7J4leA6BEtYVVz7m8GpecwLL3i4NFPAGUmLKb?=
+ =?us-ascii?q?CGKiPQzsHpbqOzV6dQgP9XtxKuozabFVHsPjCZmznuTRCvPvlGjDuHMxxGpI?=
+ =?us-ascii?q?G9bhFtBHDsTd/laxC2K9x3giMswb0ymHzKMXQQMT9mc0NCtreQ9z9Xgu1jG2?=
+ =?us-ascii?q?xd6XpoNeuEmyGZ7+neMJoWs/xrAiRumOJc+3Q11b1V4TpYS/NvnivSqdhuo1?=
+ =?us-ascii?q?C6neaVzjprSgZBqjFOhNHDgUI3HKTS9ZDDXUH/9RYEeWPYXxELrPNpC9LuuK?=
+ =?us-ascii?q?dcjN7CiPS3YDND9c/EuMgRHc7ZLOqZP3c7dxnkAjjZCE0CVzH4G3vYghlmjP?=
+ =?us-ascii?q?yK9nCT5qM/o5zolYtGHqRXT3QpB/gaDQJjB9VEL5BpCGB32YWHhdIFsCLt5C?=
+ =?us-ascii?q?LaQ99X69WeDKmf?=
+X-IPAS-Result: =?us-ascii?q?A2A4AADZPzRf/wHyM5BfGQEBAQEBAQEBAQEBAQEBAQEBA?=
+ =?us-ascii?q?RIBAQEBAQEBAQEBAQFAgUqBe4EeVAFehDaPYQaBN4oWkXsLAQEBAQEBAQEBK?=
+ =?us-ascii?q?wkBAgQBAYRMAoI2AiQ4EwIQAQEBBQEBAQEBBgMBAYZIDII3KQGDEAEBAQEDI?=
+ =?us-ascii?q?wQLAQVBEAsVAwICJgICVwYBDAYCAQGCYz8BglclD7FNdn8zhDsBgRaDP4E6B?=
+ =?us-ascii?q?oEOKgGNDxp5gQeBOA+CWj6BF4Y9gmAEkj4Bo2mCbIMLhViRKgUHAx6gFZIvi?=
+ =?us-ascii?q?j2XCYF6KwgCGAghD4MkEz0ZDZckhV4lAzACATQCBgEHAQEDCVkBAZAOAQE?=
+Received: from tarius.tycho.ncsc.mil ([144.51.242.1])
+  by EMSM-GH1-UEA10.NCSC.MIL with ESMTP; 12 Aug 2020 19:18:24 +0000
+Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto.infosec.tycho.ncsc.mil [192.168.25.131])
+        by tarius.tycho.ncsc.mil (8.14.7/8.14.4) with ESMTP id 07CJI3oV149999;
+        Wed, 12 Aug 2020 15:18:04 -0400
+Subject: Re: [PATCH v20 05/12] LSM: Infrastructure management of the
+ superblock
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        John Johansen <john.johansen@canonical.com>
+References: <20200802215903.91936-1-mic@digikod.net>
+ <20200802215903.91936-6-mic@digikod.net>
+From:   Stephen Smalley <sds@tycho.nsa.gov>
+Message-ID: <779c290b-45f5-b86c-c573-2edb4004105d@tycho.nsa.gov>
+Date:   Wed, 12 Aug 2020 15:16:42 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYt9J3tzYjVMq2Z-i8+j3qHTNVX8zwVOJrzRbiJmei7OHw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200802215903.91936-6-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 09:43:35PM +0530, Naresh Kamboju wrote:
-> While running kselftests bpf test_verifier on arm64 juno-r2 device
-> the kernel BUG and WARNING noticed.
+On 8/2/20 5:58 PM, Mickaël Salaün wrote:
+> From: Casey Schaufler <casey@schaufler-ca.com>
 > 
-> metadata:
->   git branch: linux-5.8.y
->   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
->   git commit: b30c8c9d42601af8ebeb3ad42085ff4134a111a0
-
-I don't see this commit in -stable.  Where should I be looking?
-
-git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-
->   git describe: v5.8-39-gb30c8c9d4260
->   make_kernelversion: 5.8.1-rc1
->   kernel-config:
-> http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/juno/lkft/linux-stable-rc-5.8/3/config
+> Move management of the superblock->sb_security blob out
+> of the individual security modules and into the security
+> infrastructure. Instead of allocating the blobs from within
+> the modules the modules tell the infrastructure how much
+> space is required, and the space is allocated there.
 > 
-> [  102.671323]  bpf_prog_test_run_xdp+0xf4/0x1b0
-> [  102.675688]  __do_sys_bpf+0x708/0x1d18
-> [  102.679442]  __arm64_sys_bpf+0x28/0x38
-> [  102.683197]  el0_svc_common.constprop.3+0x7c/0x198
-> [  102.687995]  do_el0_svc+0x34/0xa0
-> [  102.691315]  el0_sync_handler+0x16c/0x210
-> [  102.695329]  el0_sync+0x140/0x180
-> [  102.698651] Code: d4202000 d4202000 d4202000 d4202000 (d4202000)
-> [  102.704758] ---[ end trace 14c3fdd625b93f51 ]---
-
-Whatever error prompted this last stack trace needs attention.
-
-> [  102.709383] note: test_verifier[740] exited with preempt_count 2
-
-Looks like there is a preempt_disable() that is lacking the
-corresponding preempt_disable() on some code path.
-
-Could you please try to bisect this?
-
-> [  102.715399] BUG: sleeping function called from invalid context at
-> /usr/src/kernel/include/linux/percpu-rwsem.h:49
-> [  102.725680] in_atomic(): 0, irqs_disabled(): 128, non_block: 0,
-
-As the "BUG:" message says...
-
-> pid: 740, name: test_verifier
-> [  102.734219] INFO: lockdep is turned off.
-> [  102.738146] irq event stamp: 4369860
-> [  102.741729] hardirqs last  enabled at (4369859):
-> [<ffff80001015ab18>] ktime_get+0xc0/0x178
-> [  102.750010] hardirqs last disabled at (4369860):
-> [<ffff800010029a04>] debug_exception_enter+0xac/0xe8
-> [  102.759249] softirqs last  enabled at (4369842):
-> [<ffff8000102161d4>] bpf_ksym_add+0x12c/0x148
-> [  102.767878] softirqs last disabled at (4369840):
-> [<ffff8000102160d4>] bpf_ksym_add+0x2c/0x148
-> [  102.776419] CPU: 2 PID: 740 Comm: test_verifier Tainted: G      D W
->         5.8.1-rc1 #1
-> [  102.784523] Hardware name: ARM Juno development board (r2) (DT)
-> [  102.790451] Call trace:
-> [  102.792900]  dump_backtrace+0x0/0x1f8
-> [  102.796567]  show_stack+0x2c/0x38
-> [  102.799889]  dump_stack+0xf0/0x16c
-> [  102.803296]  ___might_sleep+0x144/0x208
-> [  102.807137]  __might_sleep+0x54/0x90
-> [  102.810719]  exit_signals+0x54/0x3e8
-> [  102.814301]  do_exit+0xc8/0xae0
-> [  102.817446]  die+0x200/0x268
-> [  102.820329]  arm64_notify_die+0xa0/0xc0
-> [  102.824172]  do_debug_exception+0xf0/0x128
-> [  102.828275]  el1_sync_handler+0x90/0xf0
-> [  102.832116]  el1_sync+0x7c/0x100
-> [  102.835347]  0xffff8000000129b8
-> [  102.838493]  bpf_prog_d53bb52e3f4483f9_F+0x38/0x8d0
-> [  102.843379]  bpf_dispatcher_xdp_func+0x30/0x40
-> [  102.847830]  bpf_test_run+0x180/0x570
-> [  102.851497]  bpf_prog_test_run_xdp+0xf4/0x1b0
-> [  102.855861]  __do_sys_bpf+0x708/0x1d18
-> [  102.859615]  __arm64_sys_bpf+0x28/0x38
-> [  102.863369]  el0_svc_common.constprop.3+0x7c/0x198
-> [  102.868167]  do_el0_svc+0x34/0xa0
-> [  102.871486]  el0_sync_handler+0x16c/0x210
-> [  102.875501]  el0_sync+0x140/0x180
-> [  102.886823] ------------[ cut here ]------------
-> [  102.887376] kauditd_printk_skb: 125 callbacks suppressed
-> [  102.887387] audit: type=1701 audit(1597081698.472:1942):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=738 comm=\"timeout\"
-> exe=\"/usr/bin/timeout.coreutils\" sig=11 res=1
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: John Johansen <john.johansen@canonical.com>
+> Reviewed-by: Stephen Smalley <sds@tycho.nsa.gov>
+> Reviewed-by: Mickaël Salaün <mic@digikod.net>
+> Link: https://lore.kernel.org/r/20190829232935.7099-2-casey@schaufler-ca.com
+> ---
 > 
-> [  102.891463] WARNING: CPU: 2 PID: 0 at
-> /usr/src/kernel/kernel/rcu/tree.c:618 rcu_eqs_enter.isra.67+0xd8/0xe0
+> Changes since v17:
+> * Rebase the original LSM stacking patch from v5.3 to v5.7: I fixed some
+>    diff conflicts caused by code moves and function renames in
+>    selinux/include/objsec.h and selinux/hooks.c .  I checked that it
+>    builds but I didn't test the changes for SELinux nor SMACK.
 
-If the line number matches -stable v5.8.1, this could be due
-to exception-handler entry/exit updates of RCU state not being
-set up properly.  For example, if some system-call-like entry from
-userspace failed to call rcu_user_exit() in a kernel built with context
-tracking, though there are many ways to make this sort of error appear.
-Historically, the most common cause has been a missing rcu_irq_enter()
-or rcu_irq_exit() call one one of the exception paths.
+You shouldn't retain Signed-off-by and Reviewed-by lines from an earlier 
+patch if you made non-trivial changes to it (even more so if you didn't 
+test them).
 
-It is of course quite possible that this error is a consequence of
-earlier errors, so I would suggest focusing first on fixing the
-earlier errors.
-
-						Thanx, Paul
-
-> [  102.891467] Modules linked in: rfkill tda998x cec drm_kms_helper
-> drm crct10dif_ce fuse
-> [  102.891486] CPU: 2 PID: 0 Comm: swapper/2 Tainted: G      D W
->   5.8.1-rc1 #1
-> [  102.891490] Hardware name: ARM Juno development board (r2) (DT)
-> [  102.891495] pstate: 200003c5 (nzCv DAIF -PAN -UAO BTYPE=--)
-> [  102.891501] pc : rcu_eqs_enter.isra.67+0xd8/0xe0
-> [  102.891511] lr : rcu_eqs_enter.isra.67+0x10/0xe0
-> [  102.957881] sp : ffff800013683f20
-> [  102.961198] x29: ffff800013683f20 x28: 0000000000000000
-> [  102.966519] x27: 0000000000000000 x26: ffff000973033800
-> [  102.971840] x25: ffff00097ef5fc80 x24: ffff800012651410
-> [  102.977162] x23: ffff800011f00c78 x22: ffff800012650000
-> [  102.982483] x21: ffff800012651000 x20: ffff800011f02000
-> [  102.987803] x19: ffff00097ef61ec0 x18: ffffffffffffffff
-> [  102.993124] x17: 0000000000000000 x16: 0000000000000000
-> [  102.998444] x15: 000000000000006c x14: 000000000000002a
-> [  103.003765] x13: 0000000000000002 x12: 0000000000000000
-> [  103.009086] x11: 0000000000000000 x10: ffff80001264b1c8
-> [  103.014406] x9 : 0000000000000000 x8 : ffff800012650a88
-> [  103.019727] x7 : ffff80001016d09c x6 : 0000000000000000
-> [  103.025048] x5 : 0000000000000000 x4 : 0000000000000000
-> [  103.030368] x3 : ffff800012650a88 x2 : 00000017f0129f00
-> [  103.035689] x1 : 4000000000000002 x0 : 4000000000000000
-> [  103.041011] Call trace:
-> [  103.043461]  rcu_eqs_enter.isra.67+0xd8/0xe0
-> [  103.047739]  rcu_idle_enter+0x44/0x70
-> [  103.051406]  do_idle+0x214/0x2c0
-> [  103.054637]  cpu_startup_entry+0x2c/0x70
-> [  103.058567]  secondary_start_kernel+0x1a8/0x200
-> [  103.063103] irq event stamp: 449856
-> [  103.066599] hardirqs last  enabled at (449855):
-> [<ffff80001016d1ec>] tick_nohz_idle_exit+0x64/0xd0
-> [  103.075574] hardirqs last disabled at (449856):
-> [<ffff800011329c08>] __schedule+0xf0/0x8f0
-> [  103.083853] softirqs last  enabled at (449814):
-> [<ffff8000100019bc>] __do_softirq+0x59c/0x5dc
-> [  103.092396] softirqs last disabled at (449803):
-> [<ffff80001008fbf4>] irq_exit+0x144/0x150
-> 
-> 
-> Full output log:
-> https://qa-reports.linaro.org/lkft/linux-stable-rc-5.8-oe/build/v5.8-39-gb30c8c9d4260/testrun/3049360/suite/linux-log-parser/test/check-kernel-exception-1657446/log
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
