@@ -2,120 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC48F243AAA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Aug 2020 15:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56916243B50
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Aug 2020 16:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgHMNPo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Aug 2020 09:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbgHMNPn (ORCPT
+        id S1726102AbgHMOPY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Aug 2020 10:15:24 -0400
+Received: from smtp-8faa.mail.infomaniak.ch ([83.166.143.170]:46881 "EHLO
+        smtp-8faa.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726082AbgHMOPX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Aug 2020 09:15:43 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD73C061757
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2020 06:15:39 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id j7so4956900oij.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2020 06:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=amVDbDf/cLsaykKYWF9FuSxMbm/nBOZt2H1uNX9eFZ8=;
-        b=dx3NyCqigtr2t3jtQ/IMwtuMBkhILVT1UmzPUtb4b2jCYAr+ZYn7BPmv3+YmijhshN
-         P4khHU8jeFGpytrXSxxCyJfspnPyk4/VdLTgIcIsger4AhcutPrQvLAM8wc9ap3KfvTq
-         IQ8RmnmQUQa+qA12npIau3fVNGq7AvSlTXJx/+Td8fIPUPs9ozva718Ag2JmCk/WuvHz
-         ji+vVofQrr44BpY19X/RvLQnuTMbhVKh0Dm92Ld47aX6xHuMfh3Sj5t6ePFGP/iDQ9O5
-         tRQjb11AI+GERSlmpHzmfTiYD6VUxTaB6cvV2gqu4Kw49IlrE39YWiDFUq8PGA8j/yBw
-         f+Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=amVDbDf/cLsaykKYWF9FuSxMbm/nBOZt2H1uNX9eFZ8=;
-        b=DLxMQ8HoSZk2rW+MDrM/EaA3oIRT2600JluX/QJq+56psx4yzgzpXS5KZC3a6i58nj
-         P47SQNzgMUP5lxhPuAd3pdi/4J4mhc+eLmFT/T8srvbkS0U3bs2Ayzc5PCft3mODSAj2
-         q3i6e8WXJQjH5SeTmrH/GQaM87dygNbVfOasKWzuadvMWi7Gkphfs3Ift5Fhs48ak6tU
-         +HppQeXepZ3nwJxzswM9xOECqcWQ5CGU5oyrYqc8DmtF8TvReqzkKlanqI4pBVfzBBX+
-         l+RXWaRkF4JEE2QkJ5VexjUezgXCas+WDpsnCq7vbN3kjaF5DKNooP99O+dQoW2u4iTj
-         rQfw==
-X-Gm-Message-State: AOAM5335O+TltSaJSaP7d7FkeezcBvLJwy0U1aMGk3UR5SiuTZvVMTi0
-        AITUAXRY2m52t/e+bQ8v7HzRuwFmMQhadz8fMuLJxTZm
-X-Google-Smtp-Source: ABdhPJzT91SoRH9TzoDHHDkZs8acikukFVst91Z+8KqgqXM6PYEOrqrEbVPQF8tqWyPsnWaufHxMCs0RUWuUOwzHLqk=
-X-Received: by 2002:a54:480c:: with SMTP id j12mr3393250oij.85.1597324538126;
- Thu, 13 Aug 2020 06:15:38 -0700 (PDT)
+        Thu, 13 Aug 2020 10:15:23 -0400
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BS7rT0dsFzlhcWv;
+        Thu, 13 Aug 2020 16:15:21 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BS7rN3mlnzlh8T7;
+        Thu, 13 Aug 2020 16:15:16 +0200 (CEST)
+Subject: Re: [PATCH v20 05/12] LSM: Infrastructure management of the
+ superblock
+To:     Stephen Smalley <sds@tycho.nsa.gov>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Kees Cook <keescook@chromium.org>,
+        John Johansen <john.johansen@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+References: <20200802215903.91936-1-mic@digikod.net>
+ <20200802215903.91936-6-mic@digikod.net>
+ <779c290b-45f5-b86c-c573-2edb4004105d@tycho.nsa.gov>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <03f522c0-414c-434b-a0d1-57c3b17fa67f@digikod.net>
+Date:   Thu, 13 Aug 2020 16:15:01 +0200
+User-Agent: 
 MIME-Version: 1.0
-References: <20200812193332.954395-1-urielguajardojr@gmail.com> <20200813103615.GT2674@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200813103615.GT2674@hirez.programming.kicks-ass.net>
-From:   Uriel Guajardo <urielguajardo@google.com>
-Date:   Thu, 13 Aug 2020 08:15:27 -0500
-Message-ID: <CAG30Eec2w1zG7CEd=TVGoNssCZu49TBF+1xXPKrKh+d7hJZfsg@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: added lockdep support
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Uriel Guajardo <urielguajardojr@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>, mingo@redhat.com,
-        will@kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <779c290b-45f5-b86c-c573-2edb4004105d@tycho.nsa.gov>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 5:36 AM <peterz@infradead.org> wrote:
->
-> On Wed, Aug 12, 2020 at 07:33:32PM +0000, Uriel Guajardo wrote:
-> > KUnit will fail tests upon observing a lockdep failure. Because lockdep
-> > turns itself off after its first failure, only fail the first test and
-> > warn users to not expect any future failures from lockdep.
-> >
-> > Similar to lib/locking-selftest [1], we check if the status of
-> > debug_locks has changed after the execution of a test case. However, we
-> > do not reset lockdep afterwards.
-> >
-> > Like the locking selftests, we also fix possible preemption count
-> > corruption from lock bugs.
->
-> > +static void kunit_check_locking_bugs(struct kunit *test,
-> > +                                  unsigned long saved_preempt_count,
-> > +                                  bool saved_debug_locks)
-> > +{
-> > +     preempt_count_set(saved_preempt_count);
-> > +#ifdef CONFIG_TRACE_IRQFLAGS
-> > +     if (softirq_count())
-> > +             current->softirqs_enabled = 0;
-> > +     else
-> > +             current->softirqs_enabled = 1;
-> > +#endif
->
-> Urgh, don't silently change these... if they're off that's a hard fail.
->
->         if (DEBUG_LOCKS_WARN_ON(preempt_count() != saved_preempt_count))
->                 preempt_count_set(saved_preempt_count);
->
-> And by using DEBUG_LOCKS_WARN_ON() it will kill IRQ tracing and trigger
-> the below fail.
 
-Hmm, I see. My original assumption was that lock related bugs that
-could corrupt preempt_count would always be intervened by lockdep
-(resulting in debug_locks already being off). Is this not always true?
-In any case, I think it's better to explicitly show the failure
-associated with preemption count as you have done, but I'm still
-curious.
+On 12/08/2020 21:16, Stephen Smalley wrote:
+> On 8/2/20 5:58 PM, Mickaël Salaün wrote:
+>> From: Casey Schaufler <casey@schaufler-ca.com>
+>>
+>> Move management of the superblock->sb_security blob out
+>> of the individual security modules and into the security
+>> infrastructure. Instead of allocating the blobs from within
+>> the modules the modules tell the infrastructure how much
+>> space is required, and the space is allocated there.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>> Reviewed-by: John Johansen <john.johansen@canonical.com>
+>> Reviewed-by: Stephen Smalley <sds@tycho.nsa.gov>
+>> Reviewed-by: Mickaël Salaün <mic@digikod.net>
+>> Link:
+>> https://lore.kernel.org/r/20190829232935.7099-2-casey@schaufler-ca.com
+>> ---
+>>
+>> Changes since v17:
+>> * Rebase the original LSM stacking patch from v5.3 to v5.7: I fixed some
+>>    diff conflicts caused by code moves and function renames in
+>>    selinux/include/objsec.h and selinux/hooks.c .  I checked that it
+>>    builds but I didn't test the changes for SELinux nor SMACK.
+> 
+> You shouldn't retain Signed-off-by and Reviewed-by lines from an earlier
+> patch if you made non-trivial changes to it (even more so if you didn't
+> test them).
 
-Also, for further clarification: the check you have made on
-preempt_count also covers softirq_count, right? My understanding is
-that softirqs are re-{enabled/disabled} due to the corruption of the
-preemption count, so no changes should occur if the preemption count
-remains the same. If it does change, we've already failed from
-DEBUG_LOCKS_WARN_ON.
-
->
-> > +     if (saved_debug_locks && !debug_locks) {
-> > +             kunit_set_failure(test);
-> > +             kunit_warn(test, "Dynamic analysis tool failure from LOCKDEP.");
-> > +             kunit_warn(test, "Further tests will have LOCKDEP disabled.");
-> > +     }
-> > +}
+I think I made trivial changes according to the original patch. But
+without reply from other people with Signed-off-by or Reviewed-by
+(Casey, Kees, John), I'll remove them. I guess you don't want your
+Reviewed-by to be kept, so I'll remove it, except if you want to review
+this patch (or the modified part).
