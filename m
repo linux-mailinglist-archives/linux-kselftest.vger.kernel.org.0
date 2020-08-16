@@ -2,199 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCDE2455A3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Aug 2020 06:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4460245800
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Aug 2020 16:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726560AbgHPEKd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 16 Aug 2020 00:10:33 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:9821 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726319AbgHPEKc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 16 Aug 2020 00:10:32 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 8D4D062CA52734828924;
-        Sat, 15 Aug 2020 20:23:41 +0800 (CST)
-Received: from SWX921481.china.huawei.com (10.126.202.229) by
- DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
- 14.3.487.0; Sat, 15 Aug 2020 20:23:34 +0800
-From:   Barry Song <song.bao.hua@hisilicon.com>
-To:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linuxarm@huawei.com>, Barry Song <song.bao.hua@hisilicon.com>,
-        "John Hubbard" <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Dave Chinner" <david@fromorbit.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "Jonathan Corbet" <corbet@lwn.net>, Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH] mm/gup_benchmark: use pin_user_pages for FOLL_LONGTERM flag
-Date:   Sun, 16 Aug 2020 00:20:56 +1200
-Message-ID: <20200815122056.29508-1-song.bao.hua@hisilicon.com>
-X-Mailer: git-send-email 2.21.0.windows.1
+        id S1729571AbgHPOa5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 16 Aug 2020 10:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729529AbgHPO3U (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 16 Aug 2020 10:29:20 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD60EC061363
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id k8so11872540wma.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
+         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
+         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
+         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
+         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
+         yMKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
+        b=Bnvtve8wiJzJSl4XKhQ5Icld+Hfd+N04OrYLUgiMnsMAhdJaAYJAIxlGMc3ppyWo9q
+         KbbERS765lxhziXH4+GzH9TduHGkbE52RHbjt2R+rngLaIdlD/yaK7iXOciblt4xanlH
+         sTW/bqaCMhPZ9ZQZNzHPyyrOzwDjSSQXPFpvytCy8BPbUKRd92sWpOzTEcmTM8pbEqbW
+         ZcMJiUGTh5OtbQ0wF/4vR/4R7zJ4Mqxzl1bJO97WWdhe+pSiIFd62UmkrmYgBzZlp1O3
+         3pZ3EZcberr5rfbBnEPhzcadP8ZsOjFkeVLmqdojTVHuq/1WPiwQnM+Ekds1afQ2iCEk
+         zuQg==
+X-Gm-Message-State: AOAM530/1gmMcpu6kblSbp8vMrBR3BpvNVeOu9CFJjGeOghcqCzKyBDI
+        saQOrPfno1irlePTVyeQzuD1vQU9mZpBDc4UwLA+lISbQgc=
+X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
+X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
+ Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
+ -0700 (PDT)
+Reply-To: sctnld11170@tlen.pl
+From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
+Date:   Sun, 16 Aug 2020 07:28:30 -0700
+Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
+Subject: Hello, Please
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.202.229]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-According to Documentation/core-api/pin_user_pages.rst, FOLL_PIN is a
-prerequisite to FOLL_LONGTERM. Another way of saying that is,
-FOLL_LONGTERM is a specific case, more restrictive case of FOLL_PIN.
+--=20
+Dear Friend,
 
-Almost all kernel modules are using pin_user_pages() with FOLL_LONGTERM,
-mm/gup_benchmark.c seems to the only exception in which FOLL_PIN is not
-a prerequisite to FOLL_LONGTERM.
+I'm Mr. Scott Donald a Successful businessMan dealing with
+Exportation, I got your mail contact through search to let you know my
+intension and my Ugly Situation Am a dying Man here in Los Angeles
+California Hospital Bed in (USA), I Lost my Wife and my only Daughter
+for Covid-19 and I also have a problem in my Health and I can die
+anytime I Know,
 
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Jérôme Glisse <jglisse@redhat.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Chinner <david@fromorbit.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
----
- mm/gup_benchmark.c                         | 23 +++++++++++-----------
- tools/testing/selftests/vm/gup_benchmark.c | 14 ++++++-------
- 2 files changed, 19 insertions(+), 18 deletions(-)
+I have a project that I am about to hand over to you. and I already
+instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
+of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
+able you
+to give 50% of this fund to Charitable Home in your State and take 50%
+don't think otherwise and why would anybody send someone you barely
+know to help you deliver a message, help me do this for the happiness
+of my soul and for God to mercy me and my Family and give Us a good
+place.
 
-diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
-index be690fa66a46..464cae1fa3ea 100644
---- a/mm/gup_benchmark.c
-+++ b/mm/gup_benchmark.c
-@@ -6,10 +6,10 @@
- #include <linux/debugfs.h>
- 
- #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_benchmark)
--#define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
--#define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
--#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
--#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
-+#define GUP_BENCHMARK		_IOWR('g', 2, struct gup_benchmark)
-+#define PIN_FAST_BENCHMARK	_IOWR('g', 3, struct gup_benchmark)
-+#define PIN_BENCHMARK		_IOWR('g', 4, struct gup_benchmark)
-+#define PIN_LONGTERM_BENCHMARK	_IOWR('g', 5, struct gup_benchmark)
- 
- struct gup_benchmark {
- 	__u64 get_delta_usec;
-@@ -28,7 +28,6 @@ static void put_back_pages(unsigned int cmd, struct page **pages,
- 
- 	switch (cmd) {
- 	case GUP_FAST_BENCHMARK:
--	case GUP_LONGTERM_BENCHMARK:
- 	case GUP_BENCHMARK:
- 		for (i = 0; i < nr_pages; i++)
- 			put_page(pages[i]);
-@@ -36,6 +35,7 @@ static void put_back_pages(unsigned int cmd, struct page **pages,
- 
- 	case PIN_FAST_BENCHMARK:
- 	case PIN_BENCHMARK:
-+	case PIN_LONGTERM_BENCHMARK:
- 		unpin_user_pages(pages, nr_pages);
- 		break;
- 	}
-@@ -50,6 +50,7 @@ static void verify_dma_pinned(unsigned int cmd, struct page **pages,
- 	switch (cmd) {
- 	case PIN_FAST_BENCHMARK:
- 	case PIN_BENCHMARK:
-+	case PIN_LONGTERM_BENCHMARK:
- 		for (i = 0; i < nr_pages; i++) {
- 			page = pages[i];
- 			if (WARN(!page_maybe_dma_pinned(page),
-@@ -101,11 +102,6 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
- 			nr = get_user_pages_fast(addr, nr, gup->flags,
- 						 pages + i);
- 			break;
--		case GUP_LONGTERM_BENCHMARK:
--			nr = get_user_pages(addr, nr,
--					    gup->flags | FOLL_LONGTERM,
--					    pages + i, NULL);
--			break;
- 		case GUP_BENCHMARK:
- 			nr = get_user_pages(addr, nr, gup->flags, pages + i,
- 					    NULL);
-@@ -118,6 +114,11 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
- 			nr = pin_user_pages(addr, nr, gup->flags, pages + i,
- 					    NULL);
- 			break;
-+		case PIN_LONGTERM_BENCHMARK:
-+			nr = pin_user_pages(addr, nr,
-+					    gup->flags | FOLL_LONGTERM,
-+					    pages + i, NULL);
-+			break;
- 		default:
- 			kvfree(pages);
- 			ret = -EINVAL;
-@@ -162,10 +163,10 @@ static long gup_benchmark_ioctl(struct file *filep, unsigned int cmd,
- 
- 	switch (cmd) {
- 	case GUP_FAST_BENCHMARK:
--	case GUP_LONGTERM_BENCHMARK:
- 	case GUP_BENCHMARK:
- 	case PIN_FAST_BENCHMARK:
- 	case PIN_BENCHMARK:
-+	case PIN_LONGTERM_BENCHMARK:
- 		break;
- 	default:
- 		return -EINVAL;
-diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/selftests/vm/gup_benchmark.c
-index 43b4dfe161a2..31f8bb086907 100644
---- a/tools/testing/selftests/vm/gup_benchmark.c
-+++ b/tools/testing/selftests/vm/gup_benchmark.c
-@@ -15,12 +15,12 @@
- #define PAGE_SIZE sysconf(_SC_PAGESIZE)
- 
- #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_benchmark)
--#define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
--#define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
-+#define GUP_BENCHMARK		_IOWR('g', 2, struct gup_benchmark)
- 
- /* Similar to above, but use FOLL_PIN instead of FOLL_GET. */
--#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
--#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
-+#define PIN_FAST_BENCHMARK	_IOWR('g', 3, struct gup_benchmark)
-+#define PIN_BENCHMARK		_IOWR('g', 4, struct gup_benchmark)
-+#define PIN_LONGTERM_BENCHMARK	_IOWR('g', 5, struct gup_benchmark)
- 
- /* Just the flags we need, copied from mm.h: */
- #define FOLL_WRITE	0x01	/* check pte is writable */
-@@ -52,6 +52,9 @@ int main(int argc, char **argv)
- 		case 'b':
- 			cmd = PIN_BENCHMARK;
- 			break;
-+		case 'L':
-+			cmd = PIN_LONGTERM_BENCHMARK;
-+			break;
- 		case 'm':
- 			size = atoi(optarg) * MB;
- 			break;
-@@ -67,9 +70,6 @@ int main(int argc, char **argv)
- 		case 'T':
- 			thp = 0;
- 			break;
--		case 'L':
--			cmd = GUP_LONGTERM_BENCHMARK;
--			break;
- 		case 'U':
- 			cmd = GUP_BENCHMARK;
- 			break;
--- 
-2.27.0
+please, do as I said there was someone from your State that I deeply
+love so very very much and I miss her so badly I have no means to
+reach any Charitable Home there. that is why I go for a personal
+search of the Country and State and I got your mail contact through
+search to let you know my Bitterness and please, help me is getting
+Dark I ask my Doctor to help me keep you notice failure for me to
+reach you in person Your urgent Response, here is my Doctor Whats-app
+Number for urgent notice +13019692737
 
+Hope To Hear From You. I'm sending this email to you for the second
+time yet no response from you.
 
+My Regards.
+
+Mr. Scott Donald
+CEO
