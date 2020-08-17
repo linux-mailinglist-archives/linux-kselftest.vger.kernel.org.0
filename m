@@ -2,111 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB640246D14
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Aug 2020 18:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C64246E51
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Aug 2020 19:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731212AbgHQQo2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Aug 2020 12:44:28 -0400
-Received: from mga09.intel.com ([134.134.136.24]:9535 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388942AbgHQQml (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Aug 2020 12:42:41 -0400
-IronPort-SDR: G/mvlPr0YEVJMQSW3lC7tu1tUoPN1z4awacrZokwdT+LhPPi0DYgTa4+1fZODSbg1nibE2rWBV
- m8YYYuZ4fcdg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="155837544"
-X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="155837544"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 09:42:39 -0700
-IronPort-SDR: ltuQkmVJs+n7F9YPld+E7pKAdJGKal06TEtUMPoSF5+9iDdqVHPFsO0n0Dt4w+BXDRZG+Z4GWP
- 707tjQZCV7gg==
-X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="440922800"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.160])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 09:42:39 -0700
-Date:   Mon, 17 Aug 2020 09:42:38 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
-        peterx@redhat.com, linux-kselftest@vger.kernel.org
+        id S2389462AbgHQR1g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Aug 2020 13:27:36 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48650 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730957AbgHQRTY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Aug 2020 13:19:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597684762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eFPMSvpIlcEi9vKnp4yTX8jZZSPCc4zsy0BQSz8767o=;
+        b=EAFr4JEWWQ1W9fFaNEYjFcMfuqqotR1MBG4PrKluQXH3oLA3b1XTfoV967oQVUO9uauML9
+        d6EPl6OZv4n4EofMd0YoDvGPPzs4zpmbO4GZamXXlUfEDJi8O6ena2ngev+WhACfsbosz6
+        Xt2Bc8qhQ1faPG/x+9GnyTQ2FtIcAP0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-270-99MXLCRsPo2Zg_nMFz8qOQ-1; Mon, 17 Aug 2020 13:19:20 -0400
+X-MC-Unique: 99MXLCRsPo2Zg_nMFz8qOQ-1
+Received: by mail-wr1-f70.google.com with SMTP id t12so7338657wrp.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2020 10:19:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eFPMSvpIlcEi9vKnp4yTX8jZZSPCc4zsy0BQSz8767o=;
+        b=suuDODgXmVob0SzlC9YL/mHzz1Qql00ZqcevAJK9t0k4zbhKBHphSyjKHznDYV09xa
+         Pc/N5Is+bpQ+r9ZxEzuP9MBzPaghorLii2g1RJyejKqs6o38LeTCT2GKnKZGPUBWMZ8a
+         haIDLU/0VBC6i1E3q9sVqmdubumTBOJ4Dngfylm0pWsJXOEL23MP0y48xAQKNL2EmYfi
+         /ohjyclVwJifaumTGcTsS5PMi/dmDKZmzRXrNXFLoR2cp81c8TasVsvVP24HBdJ6/NT/
+         cVEclsWKlo/Ut7o/24VEs/m6WRRxy+GKQURQ+pf26jaaBHgNpqOf0rz47sc9ZOQKIea4
+         9K7w==
+X-Gm-Message-State: AOAM533H714xeIoorOOH6Di/HtWIJC3ehaqLcQvLTJhLI4tkh8oAY5+e
+        xAc2uh5/zqBTf7tSxc9jzR1TcLQN8BhKOilgYbnqvyoId58RJnPhhkBzfnZZVY9OXUHdRNydsdh
+        Evxas2s3vuanDR8uLhMGeRzz22HRK
+X-Received: by 2002:adf:e486:: with SMTP id i6mr16096847wrm.258.1597684759141;
+        Mon, 17 Aug 2020 10:19:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzBsO9sI7JfPb/GTHTpiEfT134+1sQNfi3YoKjidFt0K8JQ4tn1XRcdb2IstK/hgHWmfZIjMg==
+X-Received: by 2002:adf:e486:: with SMTP id i6mr16096831wrm.258.1597684758913;
+        Mon, 17 Aug 2020 10:19:18 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:a0d1:fc42:c610:f977? ([2001:b07:6468:f312:a0d1:fc42:c610:f977])
+        by smtp.gmail.com with ESMTPSA id p8sm32192744wrq.9.2020.08.17.10.19.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Aug 2020 10:19:18 -0700 (PDT)
 Subject: Re: [PATCH] selftests: kvm: Fix an unexpected failure with newer gcc
  compiler
-Message-ID: <20200817164238.GD22407@linux.intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
+        Yang Weijiang <weijiang.yang@intel.com>
+Cc:     kvm@vger.kernel.org, shuah@kernel.org, peterx@redhat.com,
+        linux-kselftest@vger.kernel.org
 References: <20200814132105.5122-1-weijiang.yang@intel.com>
+ <20200817164238.GD22407@linux.intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <7ad0f9fa-bb57-4c19-475b-3439d7a61bcd@redhat.com>
+Date:   Mon, 17 Aug 2020 19:19:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200814132105.5122-1-weijiang.yang@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20200817164238.GD22407@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 14, 2020 at 09:21:05PM +0800, Yang Weijiang wrote:
-> If debug_regs.c is built with newer gcc, e.g., 8.3.1 on my side, then the generated
-> binary looks like over-optimized by gcc:
+On 17/08/20 18:42, Sean Christopherson wrote:
+> On Fri, Aug 14, 2020 at 09:21:05PM +0800, Yang Weijiang wrote:
+>> If debug_regs.c is built with newer gcc, e.g., 8.3.1 on my side, then the generated
+>> binary looks like over-optimized by gcc:
+>>
+>> asm volatile("ss_start: "
+>>              "xor %%rax,%%rax\n\t"
+>>              "cpuid\n\t"
+>>              "movl $0x1a0,%%ecx\n\t"
+>>              "rdmsr\n\t"
+>>              : : : "rax", "ecx");
+>>
+>> is translated to :
+>>
+>>   000000000040194e <ss_start>:
+>>   40194e:       31 c0                   xor    %eax,%eax     <----- rax->eax?
+>>   401950:       0f a2                   cpuid
+>>   401952:       b9 a0 01 00 00          mov    $0x1a0,%ecx
+>>   401957:       0f 32                   rdmsr
+>>
+>> As you can see rax is replaced with eax in taret binary code.
 > 
-> asm volatile("ss_start: "
->              "xor %%rax,%%rax\n\t"
->              "cpuid\n\t"
->              "movl $0x1a0,%%ecx\n\t"
->              "rdmsr\n\t"
->              : : : "rax", "ecx");
-> 
-> is translated to :
-> 
->   000000000040194e <ss_start>:
->   40194e:       31 c0                   xor    %eax,%eax     <----- rax->eax?
->   401950:       0f a2                   cpuid
->   401952:       b9 a0 01 00 00          mov    $0x1a0,%ecx
->   401957:       0f 32                   rdmsr
-> 
-> As you can see rax is replaced with eax in taret binary code.
+> It's an optimization.  `xor rax, rax` and `xor eax, eax` yield the exact
+> same result, as writing the lower 32 bits of a GPR in 64-bit mode clears
+> the upper 32 bits.  Using the eax variant avoids the REX prefix and saves
+> a byte of code.
 
-It's an optimization.  `xor rax, rax` and `xor eax, eax` yield the exact
-same result, as writing the lower 32 bits of a GPR in 64-bit mode clears
-the upper 32 bits.  Using the eax variant avoids the REX prefix and saves
-a byte of code.
+I would have expected that from binutils though, not GCC.
 
-> But if I replace %%rax with %%r8 or any GPR from r8~15, then I get below
-> expected binary:
-> 
-> 0000000000401950 <ss_start>:
->   401950:       45 31 ff                xor    %r15d,%r15d
+> Use `xor %%eax, %%eax`.  That should always generate a 2 byte instruction.
+> Encoding a 64-bit operation would technically be legal, but I doubt any
+> compiler would do that in practice.
 
-This is not replacing %rax with %r15, it's replacing it with %r15d, which
-is the equivalent of %eax.  But that's beside the point.  Encoding GPRs
-r8-r15 requires a REX prefix, so even though you avoid REX.W you still need
-REX.R, and thus end up with a 3 byte instruction.
+Indeed, and in addition the clobbers are incorrect since they miss rbx
+and rdx.  I've sent a patch.
 
->   401953:       0f a2                   cpuid
+Paolo
 
-Note, CPUID consumes EAX.  It doesn't look like the code actually consumes
-the CPUID output, but switching to r15 is at best bizarre.
-
->   401955:       b9 a0 01 00 00          mov    $0x1a0,%ecx
->   40195a:       0f 32                   rdmsr
-> 
-> The difference is the length of xor instruction(2 Byte vs 3 Byte),
-> so this makes below hard-coded instruction length cannot pass runtime check:
-> 
->         /* Instruction lengths starting at ss_start */
->         int ss_size[4] = {
->                 3,              /* xor */   <-------- 2 or 3?
->                 2,              /* cpuid */
->                 5,              /* mov */
->                 2,              /* rdmsr */
->         };
-> Note:
-> Use 8.2.1 or older gcc, it generates expected 3 bytes xor target code.
-> 
-> I use the default Makefile to build the binaries, and I cannot figure out why this
-> happens, so it comes this patch, maybe you have better solution to resolve the
-> issue. If you know how things work in this way, please let me know, thanks!
-
-Use `xor %%eax, %%eax`.  That should always generate a 2 byte instruction.
-Encoding a 64-bit operation would technically be legal, but I doubt any
-compiler would do that in practice.
