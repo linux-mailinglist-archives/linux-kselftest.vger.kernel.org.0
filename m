@@ -2,112 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 118F2245AD4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Aug 2020 04:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF43245AD6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Aug 2020 04:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726648AbgHQCxm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 16 Aug 2020 22:53:42 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37491 "EHLO
+        id S1726924AbgHQCy1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 16 Aug 2020 22:54:27 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:37501 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726667AbgHQCxg (ORCPT
+        with ESMTP id S1726680AbgHQCyZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 16 Aug 2020 22:53:36 -0400
-Received: from mail-pl1-f197.google.com ([209.85.214.197])
+        Sun, 16 Aug 2020 22:54:25 -0400
+Received: from mail-lj1-f198.google.com ([209.85.208.198])
         by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <po-hsu.lin@canonical.com>)
-        id 1k7VHB-0008NU-Vz
-        for linux-kselftest@vger.kernel.org; Mon, 17 Aug 2020 02:53:34 +0000
-Received: by mail-pl1-f197.google.com with SMTP id bc7so9090735plb.4
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2020 19:53:33 -0700 (PDT)
+        id 1k7VHz-0008Qu-SD
+        for linux-kselftest@vger.kernel.org; Mon, 17 Aug 2020 02:54:23 +0000
+Received: by mail-lj1-f198.google.com with SMTP id h5so2551381ljj.10
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2020 19:54:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3thZXTBTKrCmlLY4l7vI4Z+3HdNyGpWqEUhf/airL/4=;
-        b=GSLrxYzRKvfXqORf7qXcQBSInmCf6C3CVzOAhzm6mtPk/tAePVG7M9KLEM7SKKVHrt
-         dDZGWDANin7yMbv2nDAmPAekLHq+h0NeqAbTGN1VqQmAsoldKDbpfTACR8aW91bHItZ3
-         9x3MtOLLqwjouRKRSp9jZEwfrcxCLEBZYJB5Js6iH+6y50GHWJkLBEnNz4/h9qCP4NJ1
-         XHNmydYVlB29vu5h7PyuxEjqbllC47ze+qY3D/FvNkzpJ3EYrWCsZs5DVdiF1e7rmyy1
-         fZhGvj/dDeZY25Hjpn15YJ+XMynn52nlHXTrx2cGxV0WpgI/+1kbm6dC2XC3mDnlTqiG
-         +hyg==
-X-Gm-Message-State: AOAM5325bWnfguhtryl1A707nydLTt1kOIGBeF0iS75wds9cR2+nv6Hb
-        nrtMWZnLf9J5oiyIvRnhLzWZrHoZNy820Tdj6dAu4aOpY3ImAa509eKUf1PaWtpXozPhGvytxZy
-        60q3DBcq7tr4+KdjPtfZLVUkSprNxNO2cJklUg92o2ryB
-X-Received: by 2002:a17:902:9a90:: with SMTP id w16mr9349556plp.181.1597632812246;
-        Sun, 16 Aug 2020 19:53:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxYSrXFxMVskI/6CjR5bWlyUSO/dR2wuoqndwsRqss2tPsixONO1ZHIaA3LLldYtnYjj5KQsw==
-X-Received: by 2002:a17:902:9a90:: with SMTP id w16mr9349547plp.181.1597632811920;
-        Sun, 16 Aug 2020 19:53:31 -0700 (PDT)
-Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
-        by smtp.gmail.com with ESMTPSA id ez7sm15094834pjb.10.2020.08.16.19.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Aug 2020 19:53:31 -0700 (PDT)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     davem@davemloft.net, kuba@kernel.org, skhan@linuxfoundation.org
-Cc:     po-hsu.lin@canonical.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCHv2] selftests: rtnetlink: load fou module for kci_test_encap_fou()
-Date:   Mon, 17 Aug 2020 10:52:13 +0800
-Message-Id: <20200813044422.46713-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.17.1
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q2jjPmQel1pxO3MR/VLtINS4dkeaCDgPDRMj2nur9GY=;
+        b=HY+8tngXPg4mlj7JIR4e3PrMmEmiZs6Oyc/G8dLmxJ4LVCiYnTJU3oI7fVa7A8oAsP
+         kGkNPlB8HEZYtTrsHZmw5bkyW/DBKZH74G6NQkF03Lazlm+KqISDW1DZFzzNN1Uvn+X9
+         DW0iDQDCc5sGd24YoNEvja6IgGcLmUsRnux+/BorR+5a8yGPlTfe/lE1O1vlhF+++L9U
+         M8ldQkXq5iZAyBCWzWnh3+ppImU/QLcMy0b+ssBKGqo/k9tWnRLGoOdsSdczdzMx02WM
+         043H6iNbDmtKqqcTOhg1EvakYkXjCpys725V39alaI5b/oUJbNvf6hurCEjcFjUlb3x8
+         cXfw==
+X-Gm-Message-State: AOAM533TX30/idBQ1GhLOQp7zkJptfvaN/mr/QvKmXx0lh6RGCSr/Lcy
+        cMwBMmYcTcG2u6XPOGUEfppm0R9OBrGLXpf497B1/QXoYQB+JPJt/2YcbG16ERDLBUnMSrDi8Ff
+        XDcuNlQiQiMduB7iyjcXhkD9u+BNVa3AWm14By5UPXlLicAAPtgi4hP5MHthf
+X-Received: by 2002:a2e:5852:: with SMTP id x18mr5999010ljd.132.1597632863219;
+        Sun, 16 Aug 2020 19:54:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyKXtlo/YWR4lvo0OddtBB/rs+kUFiIctf6mWJJC51t+bciEX3/ht7hX9V6E1ApK6z9Nw/nUfoKWf/ZsXlQ39Q=
+X-Received: by 2002:a2e:5852:: with SMTP id x18mr5999003ljd.132.1597632863006;
+ Sun, 16 Aug 2020 19:54:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200813044422.46713-1-po-hsu.lin@canonical.com> <20200814.164354.1568500831741804705.davem@davemloft.net>
+In-Reply-To: <20200814.164354.1568500831741804705.davem@davemloft.net>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Mon, 17 Aug 2020 10:54:12 +0800
+Message-ID: <CAMy_GT8bnVCDEgDfDEbVexpV6vgmCBRPe+v6WVxnOYdCXft=nQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: rtnetlink: load fou module for kci_test_encap_fou()
+To:     David Miller <davem@davemloft.net>
+Cc:     kuba@kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
-needs the fou module to work. Otherwise it will fail with:
-
-  $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
-  RTNETLINK answers: No such file or directory
-  Error talking to the kernel
-
-Add the CONFIG_NET_FOU into the config file as well. Which needs at
-least to be set as a loadable module.
-
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/net/config       | 1 +
- tools/testing/selftests/net/rtnetlink.sh | 6 ++++++
- 2 files changed, 7 insertions(+)
-
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 3b42c06b..96d2763 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -31,3 +31,4 @@ CONFIG_NET_SCH_ETF=m
- CONFIG_NET_SCH_NETEM=y
- CONFIG_TEST_BLACKHOLE_DEV=m
- CONFIG_KALLSYMS=y
-+CONFIG_NET_FOU=m
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index bdbf4b3..7931b65 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -521,6 +521,11 @@ kci_test_encap_fou()
- 		return $ksft_skip
- 	fi
- 
-+	if ! /sbin/modprobe -q -n fou; then
-+		echo "SKIP: module fou is not found"
-+		return $ksft_skip
-+	fi
-+	/sbin/modprobe -q fou
- 	ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
- 	if [ $? -ne 0 ];then
- 		echo "FAIL: can't add fou port 7777, skipping test"
-@@ -541,6 +546,7 @@ kci_test_encap_fou()
- 		return 1
- 	fi
- 
-+	/sbin/modprobe -q -r fou
- 	echo "PASS: fou"
- }
- 
--- 
-2.7.4
-
+On Sat, Aug 15, 2020 at 7:43 AM David Miller <davem@davemloft.net> wrote:
+>
+> From: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> Date: Thu, 13 Aug 2020 12:44:22 +0800
+>
+> > diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+> > index 3b42c06b..96d2763 100644
+> > --- a/tools/testing/selftests/net/config
+> > +++ b/tools/testing/selftests/net/config
+> > @@ -31,3 +31,4 @@ CONFIG_NET_SCH_ETF=m
+> >  CONFIG_NET_SCH_NETEM=y
+> >  CONFIG_TEST_BLACKHOLE_DEV=m
+> >  CONFIG_KALLSYMS=y
+> > +CONFIG_NET_FOU
+>
+> You need to assign it a value, not just add it to the file by itself.
+Oops!
+Patch re-submitted.
+Thanks for catching this.
