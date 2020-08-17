@@ -2,114 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C64246E51
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Aug 2020 19:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DBE247872
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Aug 2020 23:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389462AbgHQR1g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Aug 2020 13:27:36 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48650 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730957AbgHQRTY (ORCPT
+        id S1726135AbgHQVBS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Aug 2020 17:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727081AbgHQVBM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Aug 2020 13:19:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597684762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eFPMSvpIlcEi9vKnp4yTX8jZZSPCc4zsy0BQSz8767o=;
-        b=EAFr4JEWWQ1W9fFaNEYjFcMfuqqotR1MBG4PrKluQXH3oLA3b1XTfoV967oQVUO9uauML9
-        d6EPl6OZv4n4EofMd0YoDvGPPzs4zpmbO4GZamXXlUfEDJi8O6ena2ngev+WhACfsbosz6
-        Xt2Bc8qhQ1faPG/x+9GnyTQ2FtIcAP0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-270-99MXLCRsPo2Zg_nMFz8qOQ-1; Mon, 17 Aug 2020 13:19:20 -0400
-X-MC-Unique: 99MXLCRsPo2Zg_nMFz8qOQ-1
-Received: by mail-wr1-f70.google.com with SMTP id t12so7338657wrp.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2020 10:19:20 -0700 (PDT)
+        Mon, 17 Aug 2020 17:01:12 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65E8C061342
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2020 14:01:11 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id h16so14557709oti.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2020 14:01:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=li7/F1QxAHMT3HlXtBKHPKuGkDNlHShRldK1/b2ptEE=;
+        b=p1WuDpCoxMkf/1Src7GUIJVwp95M+yStBX9RyIIDTXVnnhPXquUBytkGYr7U5k192s
+         Sa/fAAj3vZNZUzntUuHugq4fjEYYBGO1Xbphqfs2WSqzrQrB20TqrV6ulWrPMBvc1h5S
+         eacUQLpPVURfdKEGOa3mIwNneS0bOHJsbejOA1D6h/HQt63O2AreYeCnxztJPYV2n4cd
+         vb7zqR8mvZagwYWzK4NrbSVqi/06Unl4fx+2GuFZ58kWjz+1RBmyYGKVIQmA+Av3hUQS
+         DifBysU4gdtYAjFaDSIxuCcUsZ/yAUT54lnhHy5efkSEsVu1LG30YZeCRoiLBGJM8HGt
+         lGZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eFPMSvpIlcEi9vKnp4yTX8jZZSPCc4zsy0BQSz8767o=;
-        b=suuDODgXmVob0SzlC9YL/mHzz1Qql00ZqcevAJK9t0k4zbhKBHphSyjKHznDYV09xa
-         Pc/N5Is+bpQ+r9ZxEzuP9MBzPaghorLii2g1RJyejKqs6o38LeTCT2GKnKZGPUBWMZ8a
-         haIDLU/0VBC6i1E3q9sVqmdubumTBOJ4Dngfylm0pWsJXOEL23MP0y48xAQKNL2EmYfi
-         /ohjyclVwJifaumTGcTsS5PMi/dmDKZmzRXrNXFLoR2cp81c8TasVsvVP24HBdJ6/NT/
-         cVEclsWKlo/Ut7o/24VEs/m6WRRxy+GKQURQ+pf26jaaBHgNpqOf0rz47sc9ZOQKIea4
-         9K7w==
-X-Gm-Message-State: AOAM533H714xeIoorOOH6Di/HtWIJC3ehaqLcQvLTJhLI4tkh8oAY5+e
-        xAc2uh5/zqBTf7tSxc9jzR1TcLQN8BhKOilgYbnqvyoId58RJnPhhkBzfnZZVY9OXUHdRNydsdh
-        Evxas2s3vuanDR8uLhMGeRzz22HRK
-X-Received: by 2002:adf:e486:: with SMTP id i6mr16096847wrm.258.1597684759141;
-        Mon, 17 Aug 2020 10:19:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzBsO9sI7JfPb/GTHTpiEfT134+1sQNfi3YoKjidFt0K8JQ4tn1XRcdb2IstK/hgHWmfZIjMg==
-X-Received: by 2002:adf:e486:: with SMTP id i6mr16096831wrm.258.1597684758913;
-        Mon, 17 Aug 2020 10:19:18 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:a0d1:fc42:c610:f977? ([2001:b07:6468:f312:a0d1:fc42:c610:f977])
-        by smtp.gmail.com with ESMTPSA id p8sm32192744wrq.9.2020.08.17.10.19.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Aug 2020 10:19:18 -0700 (PDT)
-Subject: Re: [PATCH] selftests: kvm: Fix an unexpected failure with newer gcc
- compiler
-To:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Yang Weijiang <weijiang.yang@intel.com>
-Cc:     kvm@vger.kernel.org, shuah@kernel.org, peterx@redhat.com,
-        linux-kselftest@vger.kernel.org
-References: <20200814132105.5122-1-weijiang.yang@intel.com>
- <20200817164238.GD22407@linux.intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <7ad0f9fa-bb57-4c19-475b-3439d7a61bcd@redhat.com>
-Date:   Mon, 17 Aug 2020 19:19:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=li7/F1QxAHMT3HlXtBKHPKuGkDNlHShRldK1/b2ptEE=;
+        b=Z3rETrJ9YcWp79u1LK+s7lU9RCALo0dLHzW05JgqMVfxerKShMnwAgZC2OcEuwoIF4
+         L39gWcZDYynBmVywwUGr4oY50St1+wA6s+s+T/N5Qoy33/2fN81i7lW5RAeImUsypIrN
+         pTP6v1cRfGq/QUc49rWyBfOMgZKcU4LjMZKB+l1D/IEsS6N7Y/IbjkDgWumPIIbpDm5K
+         r2FN3pPtBBsHQuRaBGEn+DmqvbowbLOveZl6CK5qybbBcsUgTKTW/55CUbMfU8dJMjin
+         L/2o6NKlZU8ZyDnRt8xxoTMnvOY1WmJu4WFyBrnTZ0ILt6bznHSlpVqcP6845R3uraHd
+         mFHA==
+X-Gm-Message-State: AOAM532HvSNDB+K34mbGdSjSNnucRkvAEic3v2gO1LEMNatlhAOLnmp/
+        NBbvG5S3DSsd4nsHg7/fDk2CHLC6M3fG+KNlHL47JA==
+X-Google-Smtp-Source: ABdhPJw6RaFO/BQHfKJyZcB4TOw93cJ1X820d/Plez6lRk2tja6UMbKLfbMSUvyu2PkFUacStPL6ZdWluVdvfaxxFO4=
+X-Received: by 2002:a05:6830:614:: with SMTP id w20mr13272524oti.283.1597698069848;
+ Mon, 17 Aug 2020 14:01:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200817164238.GD22407@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200814205527.1833459-1-urielguajardojr@gmail.com>
+ <20200815083029.GA2430016@gmail.com> <20200815084443.GO3982@worktop.programming.kicks-ass.net>
+ <20200815091721.GC2444151@gmail.com>
+In-Reply-To: <20200815091721.GC2444151@gmail.com>
+From:   Uriel Guajardo <urielguajardo@google.com>
+Date:   Mon, 17 Aug 2020 16:00:59 -0500
+Message-ID: <CAG30EecDS+yaW0k62Wu2sHoe2+amTe-=U4NAVHJcCfD2US+Enw@mail.gmail.com>
+Subject: Re: [PATCH v3] kunit: added lockdep support
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Uriel Guajardo <urielguajardojr@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>, mingo@redhat.com,
+        will@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17/08/20 18:42, Sean Christopherson wrote:
-> On Fri, Aug 14, 2020 at 09:21:05PM +0800, Yang Weijiang wrote:
->> If debug_regs.c is built with newer gcc, e.g., 8.3.1 on my side, then the generated
->> binary looks like over-optimized by gcc:
->>
->> asm volatile("ss_start: "
->>              "xor %%rax,%%rax\n\t"
->>              "cpuid\n\t"
->>              "movl $0x1a0,%%ecx\n\t"
->>              "rdmsr\n\t"
->>              : : : "rax", "ecx");
->>
->> is translated to :
->>
->>   000000000040194e <ss_start>:
->>   40194e:       31 c0                   xor    %eax,%eax     <----- rax->eax?
->>   401950:       0f a2                   cpuid
->>   401952:       b9 a0 01 00 00          mov    $0x1a0,%ecx
->>   401957:       0f 32                   rdmsr
->>
->> As you can see rax is replaced with eax in taret binary code.
-> 
-> It's an optimization.  `xor rax, rax` and `xor eax, eax` yield the exact
-> same result, as writing the lower 32 bits of a GPR in 64-bit mode clears
-> the upper 32 bits.  Using the eax variant avoids the REX prefix and saves
-> a byte of code.
+On Sat, Aug 15, 2020 at 4:17 AM Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> > On Sat, Aug 15, 2020 at 10:30:29AM +0200, Ingo Molnar wrote:
+> > >
+> > > * Uriel Guajardo <urielguajardojr@gmail.com> wrote:
+> > >
+> > > > From: Uriel Guajardo <urielguajardo@google.com>
+> > > >
+> > > > KUnit will fail tests upon observing a lockdep failure. Because lockdep
+> > > > turns itself off after its first failure, only fail the first test and
+> > > > warn users to not expect any future failures from lockdep.
+> > > >
+> > > > Similar to lib/locking-selftest [1], we check if the status of
+> > > > debug_locks has changed after the execution of a test case. However, we
+> > > > do not reset lockdep afterwards.
+> > > >
+> > > > Like the locking selftests, we also fix possible preemption count
+> > > > corruption from lock bugs.
+> > >
+> > > > --- a/lib/kunit/Makefile
+> > > > +++ b/lib/kunit/Makefile
+> > >
+> > > > +void kunit_check_lockdep(struct kunit *test, struct kunit_lockdep *lockdep) {
+> > > > + int saved_preempt_count = lockdep->preempt_count;
+> > > > + bool saved_debug_locks = lockdep->debug_locks;
+> > > > +
+> > > > + if (DEBUG_LOCKS_WARN_ON(preempt_count() != saved_preempt_count))
+> > > > +         preempt_count_set(saved_preempt_count);
+> > > > +
+> > > > +#ifdef CONFIG_TRACE_IRQFLAGS
+> > > > + if (softirq_count())
+> > > > +         current->softirqs_enabled = 0;
+> > > > + else
+> > > > +         current->softirqs_enabled = 1;
+> > > > +#endif
+> > > > +
+> > > > + if (saved_debug_locks && !debug_locks) {
+> > > > +         kunit_set_failure(test);
+> > > > +         kunit_warn(test, "Dynamic analysis tool failure from LOCKDEP.");
+> > > > +         kunit_warn(test, "Further tests will have LOCKDEP disabled.");
+> > > > + }
+> > >
+> > >
+> > > So this basically duplicates what the boot-time locking self-tests do,
+> > > in a poor fashion?
+> >
+> > No, it makes sure that any kunit based self-test fails when it messes up
+> > it's locking.
+>
+> We have a flag for whether lockdep is running though, so is this
+> basically a very complicated way to parse /proc/lockdep_debug? :-)
+>
 
-I would have expected that from binutils though, not GCC.
+I may be missing something here, but what would be the advantage of
+using another flag or using other means to find lockdep's status?
 
-> Use `xor %%eax, %%eax`.  That should always generate a 2 byte instruction.
-> Encoding a 64-bit operation would technically be legal, but I doubt any
-> compiler would do that in practice.
+This patch is basically checking if debug_locks has changed after a
+KUnit test case has executed. It's not sufficient to only check if
+debug_locks is off, since it could have already been off many test
+cases ago.
 
-Indeed, and in addition the clobbers are incorrect since they miss rbx
-and rdx.  I've sent a patch.
-
-Paolo
-
+I imagine the only difference would be replacing "debug_locks" with
+another flag or code checking lockdep's status, and I don't see that
+as being any less complicated.
