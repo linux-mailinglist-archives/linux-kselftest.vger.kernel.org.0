@@ -2,91 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCB52485E9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Aug 2020 15:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC0A248D46
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Aug 2020 19:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726398AbgHRNR7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Aug 2020 09:17:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:25225 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbgHRNR6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Aug 2020 09:17:58 -0400
-IronPort-SDR: uHYqtMT/M54AWW3BlBdHudQ2bJfUXkwXJqXao1hiF/ZWyWdwh5sV9dB8oouSfV6GHWcVmJpZ8t
- oBje9+COTsgg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="155976632"
-X-IronPort-AV: E=Sophos;i="5.76,327,1592895600"; 
-   d="scan'208";a="155976632"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 06:17:48 -0700
-IronPort-SDR: uFtynHMcWZI6xURtD/H07dODdvGvzmqr+/TXJuel2NcLbuEW6vESpjCzFGXlEtgS+ppjkQop7l
- e3uQW/TWUsgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,327,1592895600"; 
-   d="scan'208";a="296839664"
-Received: from local-michael-cet-test.sh.intel.com (HELO localhost) ([10.239.159.128])
-  by orsmga006.jf.intel.com with ESMTP; 18 Aug 2020 06:17:46 -0700
-Date:   Tue, 18 Aug 2020 21:25:26 +0800
-From:   Yang Weijiang <weijiang.yang@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Yang Weijiang <weijiang.yang@intel.com>, kvm@vger.kernel.org,
-        shuah@kernel.org, peterx@redhat.com,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: kvm: Fix an unexpected failure with newer gcc
- compiler
-Message-ID: <20200818132525.GA14830@local-michael-cet-test.sh.intel.com>
-References: <20200814132105.5122-1-weijiang.yang@intel.com>
- <20200817164238.GD22407@linux.intel.com>
- <7ad0f9fa-bb57-4c19-475b-3439d7a61bcd@redhat.com>
+        id S1728864AbgHRRgL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Aug 2020 13:36:11 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:52411 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728388AbgHRRe3 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 Aug 2020 13:34:29 -0400
+Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1k85V6-0003E9-LE; Tue, 18 Aug 2020 17:34:20 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Christoph Hewllig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>, linux-doc@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-kselftest@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
+Date:   Tue, 18 Aug 2020 19:34:00 +0200
+Message-Id: <20200818173411.404104-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ad0f9fa-bb57-4c19-475b-3439d7a61bcd@redhat.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 17, 2020 at 07:19:17PM +0200, Paolo Bonzini wrote:
-> On 17/08/20 18:42, Sean Christopherson wrote:
-> > On Fri, Aug 14, 2020 at 09:21:05PM +0800, Yang Weijiang wrote:
-> >> If debug_regs.c is built with newer gcc, e.g., 8.3.1 on my side, then the generated
-> >> binary looks like over-optimized by gcc:
-> >>
-> >> asm volatile("ss_start: "
-> >>              "xor %%rax,%%rax\n\t"
-> >>              "cpuid\n\t"
-> >>              "movl $0x1a0,%%ecx\n\t"
-> >>              "rdmsr\n\t"
-> >>              : : : "rax", "ecx");
-> >>
-> >> is translated to :
-> >>
-> >>   000000000040194e <ss_start>:
-> >>   40194e:       31 c0                   xor    %eax,%eax     <----- rax->eax?
-> >>   401950:       0f a2                   cpuid
-> >>   401952:       b9 a0 01 00 00          mov    $0x1a0,%ecx
-> >>   401957:       0f 32                   rdmsr
-> >>
-> >> As you can see rax is replaced with eax in taret binary code.
-> > 
-> > It's an optimization.  `xor rax, rax` and `xor eax, eax` yield the exact
-> > same result, as writing the lower 32 bits of a GPR in 64-bit mode clears
-> > the upper 32 bits.  Using the eax variant avoids the REX prefix and saves
-> > a byte of code.
-> 
-> I would have expected that from binutils though, not GCC.
-> 
-> > Use `xor %%eax, %%eax`.  That should always generate a 2 byte instruction.
-> > Encoding a 64-bit operation would technically be legal, but I doubt any
-> > compiler would do that in practice.
-> 
-> Indeed, and in addition the clobbers are incorrect since they miss rbx
-> and rdx.  I've sent a patch.
->
-Thanks Paolo and Sean for the feedback!
+Hey everyone,
 
-> Paolo
+This is a follow-up to the do_fork() cleanup from last cycle based on a
+short discussion this was merged.
+Last cycle we removed copy_thread_tls() and the associated Kconfig
+option for each architecture. Now we are only left with copy_thread().
+Part of this work was removing the old do_fork() legacy clone()-style
+calling convention in favor of the new struct kernel_clone args calling
+convention.
+The only remaining function callable outside of kernel/fork.c is
+_do_fork(). It doesn't really follow the naming of kernel-internal
+syscall helpers as Christoph righly pointed out. Switch all callers and
+references to kernel_clone() and remove _do_fork() once and for all.
+
+For all architectures I have done a full git rebase v5.9-rc1 -x "make
+-j31". There were no built failures and the changes were fairly
+mechanical.
+
+The only helpers we have left now are kernel_thread() and kernel_clone()
+where kernel_thread() just calls kernel_clone().
+
+Thanks!
+Christian
+
+Christian Brauner (11):
+  fork: introduce kernel_clone()
+  h8300: switch to kernel_clone()
+  ia64: switch to kernel_clone()
+  m68k: switch to kernel_clone()
+  nios2: switch to kernel_clone()
+  sparc: switch to kernel_clone()
+  x86: switch to kernel_clone()
+  kprobes: switch to kernel_clone()
+  kgdbts: switch to kernel_clone()
+  tracing: switch to kernel_clone()
+  sched: remove _do_fork()
+
+ Documentation/trace/histogram.rst             |  4 +-
+ arch/h8300/kernel/process.c                   |  2 +-
+ arch/ia64/kernel/process.c                    |  4 +-
+ arch/m68k/kernel/process.c                    | 10 ++--
+ arch/nios2/kernel/process.c                   |  2 +-
+ arch/sparc/kernel/process.c                   |  6 +--
+ arch/x86/kernel/sys_ia32.c                    |  2 +-
+ drivers/misc/kgdbts.c                         | 48 +++++++++----------
+ include/linux/sched/task.h                    |  2 +-
+ kernel/fork.c                                 | 14 +++---
+ samples/kprobes/kprobe_example.c              |  6 +--
+ samples/kprobes/kretprobe_example.c           |  4 +-
+ .../test.d/dynevent/add_remove_kprobe.tc      |  2 +-
+ .../test.d/dynevent/clear_select_events.tc    |  2 +-
+ .../test.d/dynevent/generic_clear_event.tc    |  2 +-
+ .../test.d/ftrace/func-filter-stacktrace.tc   |  4 +-
+ .../ftrace/test.d/kprobe/add_and_remove.tc    |  2 +-
+ .../ftrace/test.d/kprobe/busy_check.tc        |  2 +-
+ .../ftrace/test.d/kprobe/kprobe_args.tc       |  4 +-
+ .../ftrace/test.d/kprobe/kprobe_args_comm.tc  |  2 +-
+ .../test.d/kprobe/kprobe_args_string.tc       |  4 +-
+ .../test.d/kprobe/kprobe_args_symbol.tc       | 10 ++--
+ .../ftrace/test.d/kprobe/kprobe_args_type.tc  |  2 +-
+ .../ftrace/test.d/kprobe/kprobe_ftrace.tc     | 14 +++---
+ .../ftrace/test.d/kprobe/kprobe_multiprobe.tc |  2 +-
+ .../test.d/kprobe/kprobe_syntax_errors.tc     | 12 ++---
+ .../ftrace/test.d/kprobe/kretprobe_args.tc    |  4 +-
+ .../selftests/ftrace/test.d/kprobe/profile.tc |  2 +-
+ 28 files changed, 87 insertions(+), 87 deletions(-)
+
+
+base-commit: 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5
+-- 
+2.28.0
+
