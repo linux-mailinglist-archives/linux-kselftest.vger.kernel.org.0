@@ -2,137 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73DBE247872
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Aug 2020 23:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9392E2481A5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Aug 2020 11:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbgHQVBS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Aug 2020 17:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbgHQVBM (ORCPT
+        id S1726728AbgHRJPW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Aug 2020 05:15:22 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:60682 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgHRJPT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Aug 2020 17:01:12 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65E8C061342
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2020 14:01:11 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id h16so14557709oti.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2020 14:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=li7/F1QxAHMT3HlXtBKHPKuGkDNlHShRldK1/b2ptEE=;
-        b=p1WuDpCoxMkf/1Src7GUIJVwp95M+yStBX9RyIIDTXVnnhPXquUBytkGYr7U5k192s
-         Sa/fAAj3vZNZUzntUuHugq4fjEYYBGO1Xbphqfs2WSqzrQrB20TqrV6ulWrPMBvc1h5S
-         eacUQLpPVURfdKEGOa3mIwNneS0bOHJsbejOA1D6h/HQt63O2AreYeCnxztJPYV2n4cd
-         vb7zqR8mvZagwYWzK4NrbSVqi/06Unl4fx+2GuFZ58kWjz+1RBmyYGKVIQmA+Av3hUQS
-         DifBysU4gdtYAjFaDSIxuCcUsZ/yAUT54lnhHy5efkSEsVu1LG30YZeCRoiLBGJM8HGt
-         lGZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=li7/F1QxAHMT3HlXtBKHPKuGkDNlHShRldK1/b2ptEE=;
-        b=Z3rETrJ9YcWp79u1LK+s7lU9RCALo0dLHzW05JgqMVfxerKShMnwAgZC2OcEuwoIF4
-         L39gWcZDYynBmVywwUGr4oY50St1+wA6s+s+T/N5Qoy33/2fN81i7lW5RAeImUsypIrN
-         pTP6v1cRfGq/QUc49rWyBfOMgZKcU4LjMZKB+l1D/IEsS6N7Y/IbjkDgWumPIIbpDm5K
-         r2FN3pPtBBsHQuRaBGEn+DmqvbowbLOveZl6CK5qybbBcsUgTKTW/55CUbMfU8dJMjin
-         L/2o6NKlZU8ZyDnRt8xxoTMnvOY1WmJu4WFyBrnTZ0ILt6bznHSlpVqcP6845R3uraHd
-         mFHA==
-X-Gm-Message-State: AOAM532HvSNDB+K34mbGdSjSNnucRkvAEic3v2gO1LEMNatlhAOLnmp/
-        NBbvG5S3DSsd4nsHg7/fDk2CHLC6M3fG+KNlHL47JA==
-X-Google-Smtp-Source: ABdhPJw6RaFO/BQHfKJyZcB4TOw93cJ1X820d/Plez6lRk2tja6UMbKLfbMSUvyu2PkFUacStPL6ZdWluVdvfaxxFO4=
-X-Received: by 2002:a05:6830:614:: with SMTP id w20mr13272524oti.283.1597698069848;
- Mon, 17 Aug 2020 14:01:09 -0700 (PDT)
+        Tue, 18 Aug 2020 05:15:19 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I9DP2v034473;
+        Tue, 18 Aug 2020 09:14:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=bODkJj/SYYVTqZjf0h99hHqVYgZyhbZHfVzYRtKndNU=;
+ b=cDzWxBOzDAfGmrlVpBY8U6MQrsSXYJfpVti+6XDdX+NuNmdKl9krxmYmOOy2BK6BSjuf
+ Mik21QRTyeKmrMvFf+2JIzIta1HnByz5R3UEnDk5PkomJlUrARRB1r+VUcKpn9XsqMvg
+ IROz1n6dPLMP8JSFUuRzqGPVCq8NDBkygRzH/7ais2DCMhZ+WrR+JnLIuOFXlOgfVG9z
+ 26IwEw9JE56qQcp50xZ5Iyh1D4A0y7MBOICPkXj9IEd3Ag3Tc4foTuvyYEwQbrA4Uy8S
+ 2Sl2ENDNYQ31o4I6+3QD37w+n1Vt8fNkPU4G2byj0td/YfZUn+xC2QlKjinp2inv5utO fA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 32x7nmbjkt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Aug 2020 09:14:26 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07I98Cv1084323;
+        Tue, 18 Aug 2020 09:12:25 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 32xsfrmy3v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Aug 2020 09:12:24 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 07I9CK7A026936;
+        Tue, 18 Aug 2020 09:12:20 GMT
+Received: from dhcp-10-175-204-131.vpn.oracle.com (/10.175.204.131)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 18 Aug 2020 02:12:19 -0700
+Date:   Tue, 18 Aug 2020 10:12:05 +0100 (IST)
+From:   Alan Maguire <alan.maguire@oracle.com>
+X-X-Sender: alan@localhost
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+cc:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+        daniel@iogearbox.net, andriin@fb.com, yhs@fb.com,
+        linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 2/4] bpf: make BTF show support generic,
+ apply to seq files/bpf_trace_printk
+In-Reply-To: <20200814170120.q5gcmlapm7aldmzg@ast-mbp.dhcp.thefacebook.com>
+Message-ID: <alpine.LRH.2.21.2008180945380.3461@localhost>
+References: <1596724945-22859-1-git-send-email-alan.maguire@oracle.com> <1596724945-22859-3-git-send-email-alan.maguire@oracle.com> <20200813014616.6enltdpq6hzlri6r@ast-mbp.dhcp.thefacebook.com> <alpine.LRH.2.21.2008141344560.6816@localhost>
+ <20200814170120.q5gcmlapm7aldmzg@ast-mbp.dhcp.thefacebook.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-References: <20200814205527.1833459-1-urielguajardojr@gmail.com>
- <20200815083029.GA2430016@gmail.com> <20200815084443.GO3982@worktop.programming.kicks-ass.net>
- <20200815091721.GC2444151@gmail.com>
-In-Reply-To: <20200815091721.GC2444151@gmail.com>
-From:   Uriel Guajardo <urielguajardo@google.com>
-Date:   Mon, 17 Aug 2020 16:00:59 -0500
-Message-ID: <CAG30EecDS+yaW0k62Wu2sHoe2+amTe-=U4NAVHJcCfD2US+Enw@mail.gmail.com>
-Subject: Re: [PATCH v3] kunit: added lockdep support
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Uriel Guajardo <urielguajardojr@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>, mingo@redhat.com,
-        will@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Alan Maguire <alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9716 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ spamscore=0 suspectscore=3 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008180064
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9716 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 spamscore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 mlxscore=0 mlxlogscore=999
+ lowpriorityscore=0 bulkscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2008180065
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 15, 2020 at 4:17 AM Ingo Molnar <mingo@kernel.org> wrote:
->
->
-> * Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > On Sat, Aug 15, 2020 at 10:30:29AM +0200, Ingo Molnar wrote:
-> > >
-> > > * Uriel Guajardo <urielguajardojr@gmail.com> wrote:
-> > >
-> > > > From: Uriel Guajardo <urielguajardo@google.com>
-> > > >
-> > > > KUnit will fail tests upon observing a lockdep failure. Because lockdep
-> > > > turns itself off after its first failure, only fail the first test and
-> > > > warn users to not expect any future failures from lockdep.
-> > > >
-> > > > Similar to lib/locking-selftest [1], we check if the status of
-> > > > debug_locks has changed after the execution of a test case. However, we
-> > > > do not reset lockdep afterwards.
-> > > >
-> > > > Like the locking selftests, we also fix possible preemption count
-> > > > corruption from lock bugs.
-> > >
-> > > > --- a/lib/kunit/Makefile
-> > > > +++ b/lib/kunit/Makefile
-> > >
-> > > > +void kunit_check_lockdep(struct kunit *test, struct kunit_lockdep *lockdep) {
-> > > > + int saved_preempt_count = lockdep->preempt_count;
-> > > > + bool saved_debug_locks = lockdep->debug_locks;
-> > > > +
-> > > > + if (DEBUG_LOCKS_WARN_ON(preempt_count() != saved_preempt_count))
-> > > > +         preempt_count_set(saved_preempt_count);
-> > > > +
-> > > > +#ifdef CONFIG_TRACE_IRQFLAGS
-> > > > + if (softirq_count())
-> > > > +         current->softirqs_enabled = 0;
-> > > > + else
-> > > > +         current->softirqs_enabled = 1;
-> > > > +#endif
-> > > > +
-> > > > + if (saved_debug_locks && !debug_locks) {
-> > > > +         kunit_set_failure(test);
-> > > > +         kunit_warn(test, "Dynamic analysis tool failure from LOCKDEP.");
-> > > > +         kunit_warn(test, "Further tests will have LOCKDEP disabled.");
-> > > > + }
-> > >
-> > >
-> > > So this basically duplicates what the boot-time locking self-tests do,
-> > > in a poor fashion?
-> >
-> > No, it makes sure that any kunit based self-test fails when it messes up
-> > it's locking.
->
-> We have a flag for whether lockdep is running though, so is this
-> basically a very complicated way to parse /proc/lockdep_debug? :-)
->
 
-I may be missing something here, but what would be the advantage of
-using another flag or using other means to find lockdep's status?
+On Fri, 14 Aug 2020, Alexei Starovoitov wrote:
 
-This patch is basically checking if debug_locks has changed after a
-KUnit test case has executed. It's not sufficient to only check if
-debug_locks is off, since it could have already been off many test
-cases ago.
+> On Fri, Aug 14, 2020 at 02:06:37PM +0100, Alan Maguire wrote:
+> > On Wed, 12 Aug 2020, Alexei Starovoitov wrote:
+> > 
+> > > On Thu, Aug 06, 2020 at 03:42:23PM +0100, Alan Maguire wrote:
+> > > > 
+> > > > The bpf_trace_printk tracepoint is augmented with a "trace_id"
+> > > > field; it is used to allow tracepoint filtering as typed display
+> > > > information can easily be interspersed with other tracing data,
+> > > > making it hard to read.  Specifying a trace_id will allow users
+> > > > to selectively trace data, eliminating noise.
+> > > 
+> > > Since trace_id is not seen in trace_pipe, how do you expect users
+> > > to filter by it?
+> > 
+> > Sorry should have specified this.  The approach is to use trace
+> > instances and filtering such that we only see events associated
+> > with a specific trace_id.  There's no need for the trace event to
+> > actually display the trace_id - it's still usable as a filter.
+> > The steps involved are:
+> > 
+> > 1. create a trace instance within which we can specify a fresh
+> >    set of trace event enablings, filters etc.
+> > 
+> > mkdir /sys/kernel/debug/tracing/instances/traceid100
+> > 
+> > 2. enable the filter for the specific trace id
+> > 
+> > echo "trace_id == 100" > 
+> > /sys/kernel/debug/tracing/instances/traceid100/events/bpf_trace/bpf_trace_printk/filter
+> > 
+> > 3. enable the trace event
+> > 
+> > echo 1 > 
+> > /sys/kernel/debug/tracing/instances/events/bpf_trace/bpf_trace_printk/enable
+> > 
+> > 4. ensure the BPF program uses a trace_id 100 when calling bpf_trace_btf()
+> 
+> ouch.
+> I think you interpreted the acceptance of the
+> commit 7fb20f9e901e ("bpf, doc: Remove references to warning message when using bpf_trace_printk()")
+> in the wrong way.
+> 
+> Everything that doc had said is still valid. In particular:
+> -A: This is done to nudge program authors into better interfaces when
+> -programs need to pass data to user space. Like bpf_perf_event_output()
+> -can be used to efficiently stream data via perf ring buffer.
+> -BPF maps can be used for asynchronous data sharing between kernel
+> -and user space. bpf_trace_printk() should only be used for debugging.
+> 
+> bpf_trace_printk is for debugging only. _debugging of bpf programs themselves_.
+> What you're describing above is logging and tracing. It's not debugging of programs.
+> perf buffer, ring buffer, and seq_file interfaces are the right
+> interfaces for tracing, logging, and kernel debugging.
+> 
+> > > It also feels like workaround. May be let bpf prog print the whole
+> > > struct in one go with multiple new lines and call
+> > > trace_bpf_trace_printk(buf) once?
+> > 
+> > We can do that absolutely, but I'd be interested to get your take
+> > on the filtering mechanism before taking that approach.  I'll add
+> > a description of the above mechanism to the cover letter and
+> > patch to be clearer next time too.
+> 
+> I think patch 3 is no go, because it takes bpf_trace_printk in
+> the wrong direction.
+> Instead please refactor it to use string buffer or seq_file as an output.
 
-I imagine the only difference would be replacing "debug_locks" with
-another flag or code checking lockdep's status, and I don't see that
-as being any less complicated.
+Fair enough. I'm thinking a helper like
+
+long bpf_btf_snprintf(char *str, u32 str_size, struct btf_ptr *ptr,
+		      u32 ptr_size, u64 flags);
+
+Then the user can choose perf event or ringbuf interfaces
+to share the results with userspace.
+
+> If the user happen to use bpf_trace_printk("%s", buf);
+> after that to print that string buffer to trace_pipe that's user's choice.
+> I can see such use case when program author wants to debug
+> their bpf program. That's fine. But for kernel debugging, on demand and
+> "always on" logging and tracing the documentation should point
+> to sustainable interfaces that don't interfere with each other,
+> can be run in parallel by multiple users, etc.
+> 
+
+The problem with bpf_trace_printk() under this approach is
+that the string size for %s arguments is very limited;
+bpf_trace_printk() restricts these to 64 bytes in size.
+Looks like bpf_seq_printf() restricts a %s string to 128
+bytes also.  We could add an additional helper for the 
+bpf_seq case which calls bpf_seq_printf() for each component
+in the object, i.e.
+
+long bpf_seq_btf_printf(struct seq_file *m, struct btf_ptr *ptr,
+			u32 ptr_size, u64 flags);
+
+This would steer users away from bpf_trace_printk()
+for this use case - since it can print only a small
+amount of the string - while supporting all 
+the other user-space communication mechanisms.
+
+Alan
