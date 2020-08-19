@@ -2,63 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7811249980
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 11:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3188B249AB5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 12:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726782AbgHSJim (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Aug 2020 05:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727794AbgHSJh4 (ORCPT
+        id S1727952AbgHSKro (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Aug 2020 06:47:44 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:53968 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726919AbgHSKra (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 05:37:56 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704CCC06134E
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 02:37:55 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id r15so10897010wrp.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 02:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FDpi2QIDOUNs+oTRdf9VTGQOJTmQUxGd6EEehSUSOqc=;
-        b=rBXwlDqmQW2mi1eDwy4yCmDy+M/G0KgX4nrRLieMNgsDNPMtj48MeMupJpAkXcSfmW
-         UE6FXBfkK6LLbyyWSoydJcxOERfic38uXyWnijiDTbbfTCAqZ48Hex2oF7ewCoviuE08
-         57gSGtLv9G0fKd7/xffCssHOyLaPVJTw9/o00=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FDpi2QIDOUNs+oTRdf9VTGQOJTmQUxGd6EEehSUSOqc=;
-        b=uHDMBCwA+uF+Qm86x1Pr34YY14i1vTbSSGqN0YvSLQJ86EY2LNUgmgeHdERVxrORkC
-         I3GUGutb10+4mHSLE0PI4R0iMCsAW5yeM9U82l2nDJm5v66ygN1pV0CTBgT6Joz7+tx9
-         mMBog631oaRZtIaOEKoesooIZQSRAGbG99SdDjFnnQKAD76xA0+65XMFjNjZpqQ/dEb0
-         vbrzpzkn2N7WqB/9l7A/L2hILXBP4ZkCt01ktd8Az+HcjMegICgFhb5T5hdZXN/v/e51
-         3e9Pj+VHG0iawKWojG4ZMaCnZ27dalBG4bkOpzRGQNiqvOJp5ul56GueUe569yEgcIIA
-         OYVg==
-X-Gm-Message-State: AOAM532OoCchKnJnvJPWh0eVBbpIsp8RouOL/DcvXxdyz/fD+2FyCiwX
-        zGTV93HNEJVUhnO2fPjdGzYcJA==
-X-Google-Smtp-Source: ABdhPJzJ5o5wV5OdLa3eRVHCRMu61AKEaX+ywMO2j7xpboPjL0u2x/kdvZgCLds8X1cMmb4o0Mr4Sg==
-X-Received: by 2002:adf:9526:: with SMTP id 35mr25432425wrs.326.1597829874068;
-        Wed, 19 Aug 2020 02:37:54 -0700 (PDT)
-Received: from antares.lan (c.d.0.4.4.2.3.3.e.9.1.6.6.d.0.6.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:60d6:619e:3324:40dc])
-        by smtp.gmail.com with ESMTPSA id 3sm4204565wms.36.2020.08.19.02.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 02:37:53 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     jakub@cloudflare.com, john.fastabend@gmail.com,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next 6/6] selftests: bpf: test sockmap update from BPF
-Date:   Wed, 19 Aug 2020 10:24:36 +0100
-Message-Id: <20200819092436.58232-7-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200819092436.58232-1-lmb@cloudflare.com>
-References: <20200819092436.58232-1-lmb@cloudflare.com>
+        Wed, 19 Aug 2020 06:47:30 -0400
+Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1k8Lco-0006IE-NK; Wed, 19 Aug 2020 10:47:22 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>, linux-doc@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hewllig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH v2 00/11] Introduce kernel_clone(), kill _do_fork()
+Date:   Wed, 19 Aug 2020 12:46:44 +0200
+Message-Id: <20200819104655.436656-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -66,171 +60,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test which copies a socket from a sockmap into another sockmap
-or sockhash. This excercises bpf_map_update_elem support from BPF
-context. Compare the socket cookies from source and destination to
-ensure that the copy succeeded.
+Hey everyone,
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 76 +++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_copy.c   | 48 ++++++++++++
- 2 files changed, 124 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_copy.c
+This is a follow-up to the fork-related cleanup. It's based on a brief
+discussion after the initial series was merged.
+Last cycle we removed copy_thread_tls() and the associated Kconfig
+option for each architecture. Now we are only left with copy_thread().
+Part of this work was removing the old do_fork() legacy clone()-style
+calling convention in favor of the new struct kernel_clone args calling
+convention.
+The only remaining function callable outside of kernel/fork.c is
+_do_fork(). It doesn't really follow the naming of kernel-internal
+syscall helpers as Christoph righly pointed out. Switch all callers and
+references to kernel_clone() and remove _do_fork() once and for all also
+switching the return value for kernel_clone() from long to pid_t since
+that's what we use in all other places where we're dealing with process
+identifiers.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 96e7b7f84c65..d30cabc00e9e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -4,6 +4,7 @@
- 
- #include "test_progs.h"
- #include "test_skmsg_load_helpers.skel.h"
-+#include "test_sockmap_copy.skel.h"
- 
- #define TCP_REPAIR		19	/* TCP sock is under repair right now */
- 
-@@ -101,6 +102,77 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
- 	test_skmsg_load_helpers__destroy(skel);
- }
- 
-+static void test_sockmap_copy(enum bpf_map_type map_type)
-+{
-+	struct bpf_prog_test_run_attr attr;
-+	struct test_sockmap_copy *skel;
-+	__u64 src_cookie, dst_cookie;
-+	int err, prog, s, src, dst;
-+	const __u32 zero = 0;
-+	char dummy[14] = {0};
-+
-+	s = connected_socket_v4();
-+	if (CHECK_FAIL(s == -1))
-+		return;
-+
-+	skel = test_sockmap_copy__open_and_load();
-+	if (CHECK_FAIL(!skel)) {
-+		close(s);
-+		perror("test_sockmap_copy__open_and_load");
-+		return;
-+	}
-+
-+	prog = bpf_program__fd(skel->progs.copy_sock_map);
-+	src = bpf_map__fd(skel->maps.src);
-+	if (map_type == BPF_MAP_TYPE_SOCKMAP)
-+		dst = bpf_map__fd(skel->maps.dst_sock_map);
-+	else
-+		dst = bpf_map__fd(skel->maps.dst_sock_hash);
-+
-+	err = bpf_map_update_elem(src, &zero, &s, BPF_NOEXIST);
-+	if (CHECK_FAIL(err)) {
-+		perror("bpf_map_update");
-+		goto out;
-+	}
-+
-+	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
-+	if (CHECK_FAIL(err)) {
-+		perror("bpf_map_lookup_elem(src)");
-+		goto out;
-+	}
-+
-+	attr = (struct bpf_prog_test_run_attr){
-+		.prog_fd = prog,
-+		.repeat = 1,
-+		.data_in = dummy,
-+		.data_size_in = sizeof(dummy),
-+	};
-+
-+	err = bpf_prog_test_run_xattr(&attr);
-+	if (err) {
-+		test__fail();
-+		perror("bpf_prog_test_run");
-+		goto out;
-+	} else if (!attr.retval) {
-+		PRINT_FAIL("bpf_prog_test_run: program returned %u\n",
-+			   attr.retval);
-+		goto out;
-+	}
-+
-+	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
-+	if (CHECK_FAIL(err)) {
-+		perror("bpf_map_lookup_elem(dst)");
-+		goto out;
-+	}
-+
-+	if (dst_cookie != src_cookie)
-+		PRINT_FAIL("cookie %llu != %llu\n", dst_cookie, src_cookie);
-+
-+out:
-+	close(s);
-+	test_sockmap_copy__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -111,4 +183,8 @@ void test_sockmap_basic(void)
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
- 	if (test__start_subtest("sockhash sk_msg load helpers"))
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKHASH);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_copy.c b/tools/testing/selftests/bpf/progs/test_sockmap_copy.c
-new file mode 100644
-index 000000000000..9d0c9f28cab2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_copy.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Cloudflare
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} src SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_hash SEC(".maps");
-+
-+SEC("classifier/copy_sock_map")
-+int copy_sock_map(void *ctx)
-+{
-+	struct bpf_sock *sk;
-+	bool failed = false;
-+	__u32 key = 0;
-+
-+	sk = bpf_map_lookup_elem(&src, &key);
-+	if (!sk)
-+		return SK_DROP;
-+
-+	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
-+		failed = true;
-+
-+	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
-+		failed = true;
-+
-+	bpf_sk_release(sk);
-+	return failed ? SK_DROP : SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+For all architectures I have done a full git rebase v5.9-rc1 -x "make
+-j31". There were no built failures and the changes were fairly
+mechanical.
+
+The only helpers we have left now are kernel_thread() and kernel_clone()
+where kernel_thread() just calls kernel_clone().
+
+Thanks!
+Christian
+
+Christian Brauner (11):
+  fork: introduce kernel_clone()
+  h8300: switch to kernel_clone()
+  ia64: switch to kernel_clone()
+  m68k: switch to kernel_clone()
+  nios2: switch to kernel_clone()
+  sparc: switch to kernel_clone()
+  x86: switch to kernel_clone()
+  kprobes: switch to kernel_clone()
+  kgdbts: switch to kernel_clone()
+  tracing: switch to kernel_clone()
+  sched: remove _do_fork()
+
+ Documentation/trace/histogram.rst             |  4 +-
+ arch/h8300/kernel/process.c                   |  2 +-
+ arch/ia64/kernel/process.c                    |  4 +-
+ arch/m68k/kernel/process.c                    | 10 ++--
+ arch/nios2/kernel/process.c                   |  2 +-
+ arch/sparc/kernel/process.c                   |  6 +--
+ arch/x86/kernel/sys_ia32.c                    |  2 +-
+ drivers/misc/kgdbts.c                         | 48 +++++++++----------
+ include/linux/sched/task.h                    |  2 +-
+ kernel/fork.c                                 | 16 +++----
+ samples/kprobes/kprobe_example.c              |  6 +--
+ samples/kprobes/kretprobe_example.c           |  4 +-
+ .../test.d/dynevent/add_remove_kprobe.tc      |  2 +-
+ .../test.d/dynevent/clear_select_events.tc    |  2 +-
+ .../test.d/dynevent/generic_clear_event.tc    |  2 +-
+ .../test.d/ftrace/func-filter-stacktrace.tc   |  4 +-
+ .../ftrace/test.d/kprobe/add_and_remove.tc    |  2 +-
+ .../ftrace/test.d/kprobe/busy_check.tc        |  2 +-
+ .../ftrace/test.d/kprobe/kprobe_args.tc       |  4 +-
+ .../ftrace/test.d/kprobe/kprobe_args_comm.tc  |  2 +-
+ .../test.d/kprobe/kprobe_args_string.tc       |  4 +-
+ .../test.d/kprobe/kprobe_args_symbol.tc       | 10 ++--
+ .../ftrace/test.d/kprobe/kprobe_args_type.tc  |  2 +-
+ .../ftrace/test.d/kprobe/kprobe_ftrace.tc     | 14 +++---
+ .../ftrace/test.d/kprobe/kprobe_multiprobe.tc |  2 +-
+ .../test.d/kprobe/kprobe_syntax_errors.tc     | 12 ++---
+ .../ftrace/test.d/kprobe/kretprobe_args.tc    |  4 +-
+ .../selftests/ftrace/test.d/kprobe/profile.tc |  2 +-
+ 28 files changed, 88 insertions(+), 88 deletions(-)
+
+
+base-commit: 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5
 -- 
-2.25.1
+2.28.0
 
