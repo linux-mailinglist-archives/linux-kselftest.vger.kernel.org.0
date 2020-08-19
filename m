@@ -2,25 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BA4248D95
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Aug 2020 19:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDD324979E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 09:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgHRR56 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Aug 2020 13:57:58 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:53273 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726552AbgHRR55 (ORCPT
+        id S1726749AbgHSHoW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Aug 2020 03:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgHSHoU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Aug 2020 13:57:57 -0400
-Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1k85rt-0005EW-F5; Tue, 18 Aug 2020 17:57:53 +0000
-Date:   Tue, 18 Aug 2020 19:57:51 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
+        Wed, 19 Aug 2020 03:44:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97393C061389;
+        Wed, 19 Aug 2020 00:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=J4VLIDE+jMck3vXa9rHkkbq93VX4dA7h042aAl3zgek=; b=GSbjxZPVDWY9S2GcrIk8B4gIZK
+        j92/xIYVxtuoQcdVQihAza5CL3O+d/4dVnYCOtqcw95X6MI1MCZZSH6hwnnNv59Rv6M/0DxxfI85Z
+        UetDLZWdWsUi0gxQgyvX8fGCj5GmxgkNMNSwgrePOzzo081IyNCOy8gMqm/f6tWnpCOgk7R6crldh
+        OlQrG9icVQmb7q55F07IEfNtZO5gIevhdDF5gCkOdzt7019673F7x8Bn8IOD8fbZrRBUSRYhjoZpr
+        mvZYw/yBuHHrZ3B/X+3SaSMawrw2fW9khhY7o7saT7DmXZNOoFnK3Bqb3KZy6UsHyVp/CwyDsiZsC
+        KS6aDo8Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k8Il4-0004Sk-Ty; Wed, 19 Aug 2020 07:43:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 033743003E1;
+        Wed, 19 Aug 2020 09:43:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D771C21A87267; Wed, 19 Aug 2020 09:43:40 +0200 (CEST)
+Date:   Wed, 19 Aug 2020 09:43:40 +0200
+From:   peterz@infradead.org
 To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hewllig <hch@infradead.org>,
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Christoph Hewllig <hch@infradead.org>,
         linux-kernel@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
@@ -35,7 +54,6 @@ Cc:     Christoph Hewllig <hch@infradead.org>,
         x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Steven Rostedt <rostedt@goodmis.org>,
         Stafford Horne <shorne@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Kars de Jong <jongk@linux-m68k.org>,
         Kees Cook <keescook@chromium.org>,
         Greentime Hu <green.hu@gmail.com>,
@@ -50,11 +68,11 @@ Cc:     Christoph Hewllig <hch@infradead.org>,
         kgdb-bugreport@lists.sourceforge.net,
         linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
-Message-ID: <20200818175751.xg726hgyirbt354d@wittgenstein>
+Message-ID: <20200819074340.GW2674@hirez.programming.kicks-ass.net>
 References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
  <20200818174447.GV17456@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20200818174447.GV17456@casper.infradead.org>
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -74,16 +92,4 @@ On Tue, Aug 18, 2020 at 06:44:47PM +0100, Matthew Wilcox wrote:
 > within the kernel, despite the return type of clone3().  It'll save us
 > some work if we ever go through the hassle of growing pid_t beyond 31-bit.
 
-It should be safe to switch kernel_clone() to return pid_t. (Afair, the
-syscall wrappers all have "long" as return type. (I think Linus provided
-some more details on that in another mail. Also see
-include/linux/syscalls.h. So the return type for clone3() is really
-somewhat a userspace thing, I think.)
-
-I wonder whether I should take the opportunity and switch the advertised
-flag arguments for the legacy clone() syscalls and kernel_thread() from
-unsigned long to unsigned int so we can get rid of the lower
-		.flags		= (lower_32_bits(clone_flags) & ~CSIGNAL),
-calls I added to fix sign extension issues glibc ran into...
-
-Christian
+We have at least the futex ABI restricting PID space to 30 bits.
