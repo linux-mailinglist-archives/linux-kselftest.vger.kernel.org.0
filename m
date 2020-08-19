@@ -2,91 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09624A84C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 23:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BCC24A881
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 23:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbgHSVOy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Aug 2020 17:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
+        id S1726998AbgHSVaQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Aug 2020 17:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726729AbgHSVOy (ORCPT
+        with ESMTP id S1726646AbgHSVaQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 17:14:54 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500FFC061757
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 14:14:54 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id v16so21696plo.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 14:14:54 -0700 (PDT)
+        Wed, 19 Aug 2020 17:30:16 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651AEC061757
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 14:30:15 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id v16so37748plo.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 14:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+umGhDcbGIZE1xFjxqU0bxabGlCttQLBQ+Y53ytOqC0=;
-        b=KJecqVZ9hLXEAzJJNx3+s6VztJjf7IdAGVe1xvxkaR3MIOOrRYV+x5q4PkAmG97E47
-         c9AfgbCo5kEgRCZ8hdbUxNjLSW4rUHKYJHgBYeI3No9tx1HVqRlWqvIUn26TUA+AX14V
-         oI6hp4R03d/+IOM+djlJ6fbgWl+wRl5B/Ynr1CRdTtUZSJ7mP1IA3WAWXKZbcoVTHxky
-         HJaON41XS9BzhwFiIwRDESb3MP5Zr4dLmn8S7gctlrq5qeF7GH/LTAl44vjXwKCSwhDZ
-         tdBh+2voGT5VV/9cixVn2JjqYAj65P2LXuMvq6ETnzRPAreAd+K1RuNRDQZm6Ax6r9/r
-         2LUg==
+        bh=Z4HmIdyoBmXa8bkZpNumWiq3Il4t2eScz31sD6PXX/8=;
+        b=LzHyIxwxQomF+vwcfBJ/wkdpfAg5oSLCfChvQzGOt35G+kfh3rTm0ZnvD5izA0tBnl
+         Jc26yTxW8LPFJSedWNocy9HsICLGj7EAfvUG5VtOwEoG7yeaN5PLuw2GLxAk4tlRRyVr
+         iVVYvp0Q1xDUF3awSzz7/gX4VpseJgpZrKAJu8F78NoELp3Ax3CHspGAXBNh5VWamwce
+         6KUltCZzJ8VISkoiKmk08zfssHJ+kjaClWuYS4z2HPYtlSQX1loZkZdT44tAUmNfZKTw
+         mCCNbrtnJI2Lp+kNvoKYD7NUqn99mt6C/ajSFf/V4utAwhuHQDgYL49oakCD4AvW+F+j
+         7hOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+umGhDcbGIZE1xFjxqU0bxabGlCttQLBQ+Y53ytOqC0=;
-        b=T5L9YC2Mn9t1ZaWecztdw0fV2IViRR8PMEaG55wvSBC/G/BnyYZn9TZIHOKdD8PIMY
-         n3sd9hnvnEbbUDc/Ha3VAWLxNCYc/2UJN5H2OBQL51pukOxj8ThzcbodiwbJmTBqJeD2
-         AqmtM32jd3WYROpo6+5IxPbo8PYDEcQ8ojFwNvnSsYuk7JPsAA1mARqzN1s8Af7rfKgz
-         nQSQx7ZauI00r0+zDW8DMYQUL3wnrBoEofa6D8LJ201dBfJB9jTkWYvi7MBvj8m6fyzW
-         E6bgcnQjbzwHuKXeTS94qz4C22W4ISA7/OtCu1shNqZzZrxKuzF9nM+IU/jO+1H2cYPB
-         AUew==
-X-Gm-Message-State: AOAM533CDQLTOZjlyBvqVRTgK2pCYyntWiI/x6FT40amqUpjv42nlcNt
-        DFBGGNxh5XRv73HzMA00ZlJHCt2lnhOCCbY1aOoLQQ==
-X-Google-Smtp-Source: ABdhPJxD98fjtFT8GxHwT05Ahp/1ulXZG6efUm0uXvNqB6cqEVXrUsqo9M64hDCvdg13zcl6KOod3fU3jP+YqsQ4JBs=
-X-Received: by 2002:a17:90a:4603:: with SMTP id w3mr1306384pjg.20.1597871693322;
- Wed, 19 Aug 2020 14:14:53 -0700 (PDT)
+        bh=Z4HmIdyoBmXa8bkZpNumWiq3Il4t2eScz31sD6PXX/8=;
+        b=eTDVz9GEJvuuMMup1oQbScwEcucSrY7NRGuKqcED22hDVrEw8LFk8iDw6t+ROeG8Kj
+         P9PIWkT6OF0Wq9WxvPPWm8FuGACQLDTb/PRTxgSG1Q77WkhpaLERTT6efzTldJ4+3rkv
+         4EL7Huu3CKPb2AvhOP9juQqy0FOPBe9gpgVtZMFkjQ8xPm+pMpXTwHA4EdJXir0nAHHG
+         K9uBCFmQ1ADPR6IJCqf9KXnRhm/Z4fDprnPE0LrKBLdbOxRJ/PjZFcTyZ8l+kYyCNX3m
+         zVsO/C+QO6IIBQCexWjw1cCHr8RZJeZsV5ouMtL2nFWsM062GJhLP24n+suebUwRBZRn
+         HGhg==
+X-Gm-Message-State: AOAM531C1RBUEoavkv40QjjqrBw4nM/vBdU83xVeLHzUPl8eEwRBOUoH
+        VYFk+uEOa9fsNDYjTwLdYUXchPAdBt+QXFFU3tVQ4w==
+X-Google-Smtp-Source: ABdhPJwKDzgJeqCba5RnsNXuHqPXbk2gkIIWoy+1Kv/N+HGJOGjTDlTIEKuxXw8RAASJaziJiQ8ofTFcWNHRyyTvwEo=
+X-Received: by 2002:a17:902:c382:: with SMTP id g2mr51370plg.297.1597872614809;
+ Wed, 19 Aug 2020 14:30:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200729192357.477350-1-vitor@massaru.org>
-In-Reply-To: <20200729192357.477350-1-vitor@massaru.org>
+References: <20200819194634.68976-1-vitor@massaru.org>
+In-Reply-To: <20200819194634.68976-1-vitor@massaru.org>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 19 Aug 2020 14:14:42 -0700
-Message-ID: <CAFd5g45rRMDD8=wQOzh+cGHEM4WJ=4vSu44W+4yPCFNFM2SB9A@mail.gmail.com>
-Subject: Re: [PATCH] lib: kunit: add list_sort test conversion to KUnit
+Date:   Wed, 19 Aug 2020 14:30:03 -0700
+Message-ID: <CAFd5g45AuxZYY_92rOXwtVjmbaGuts+DV6WpqhHNxWYNotxq+g@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix: kunit_binary_assert_format() only prints
+ signed int
 To:     Vitor Massaru Iha <vitor@massaru.org>
 Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, elfring@users.sourceforge.net,
-        mhocko@suse.com
+        linux-kernel-mentees@lists.linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 12:24 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
+On Wed, Aug 19, 2020 at 12:46 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
 >
-> This adds the conversion of the runtime tests of test_list_sort,
-> from `lib/test_list_sort.c` to KUnit tests.
->
-> Please apply this commit first (linux-kselftest/kunit-fixes):
-> 3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
->
-> Code Style Documentation: [0]
+> Some tests, such as overflow_kunit(), uses unsigned int,
+> But kunit_binary_assert_format() only prints signed int,
+> this commit also deals with the unsigned int print.
 >
 > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-> Link: [0] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/T/#u
+> ---
+>  lib/kunit/assert.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index 202f9fdeed0e..3ae90c09986a 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -104,12 +104,23 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+>                                   binary_assert->left_text,
+>                                   binary_assert->operation,
+>                                   binary_assert->right_text);
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
+> +
+> +               if (binary_assert->left_value - 1 < 0) {
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
+> +                                 binary_assert->left_text,
+> +                                 binary_assert->left_value);
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
+> +                                 binary_assert->right_text,
+> +                                 binary_assert->right_value);
+> +               }
+> +               else {
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %llu\n",
+>                                   binary_assert->left_text,
+>                                   binary_assert->left_value);
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %llu",
+>                                   binary_assert->right_text,
+>                                   binary_assert->right_value);
+> +               }
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+I agree that you found a bug here; however, I disagree that this is
+the correct fix. Given that the value is stored as a long long; isn't
+the value always stored as a signed value? So if the value overflows,
+won't it still not pass the check you have here?
 
-It would still be good to get some of the original authors/reviewers
-to review this.
+>         }
+>         kunit_assert_print_msg(assert, stream);
+>  }
+>
+> base-commit: d43c7fb05765152d4d4a39a8ef957c4ea14d8847
+> prerequisite-patch-id: bf4b0962b0b955e4e45f5d25fece889562118158
+> --
+> 2.26.2
+>
