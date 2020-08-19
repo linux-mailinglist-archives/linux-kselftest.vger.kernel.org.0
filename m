@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D772624A99B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 00:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AA424A999
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 00:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbgHSWlt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Aug 2020 18:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
+        id S1727959AbgHSWl2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Aug 2020 18:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727914AbgHSWky (ORCPT
+        with ESMTP id S1726681AbgHSWk5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 18:40:54 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B73C061357
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 15:40:48 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id f7so216826plj.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 15:40:48 -0700 (PDT)
+        Wed, 19 Aug 2020 18:40:57 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7BAC061342
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 15:40:51 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id b16so12215814pft.18
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 15:40:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=NLjzglEfUx/tYjZ6bE489vKKomGgM6zRTKGgnxbmNyw=;
-        b=oyjRIqCqy9fSSlUqNZozmrxpfmDEkCPtM3Cbc/Cnz1QCDqFxh3i6SpKu6iDmReppja
-         dtK/A8mDKHu06jn23AvBgZCKx+ZRrUwIpzpfBg67FF20329ReDCclK/KenPGjzDVbi98
-         M/i6GSj6NgfhscpB31fcZDq2zOuBc8qGR9VzGqpidj4qwhW9LalXAE+AUV0PoPFcUY9B
-         yZ6wFH/k8ZWaUpOO5ECXxkMp0iL2iw8lOmzQ+Orr4ailvkpDzMw7hclCPDS5ZBHPhWPo
-         Dq+URx2udIlMrRS4wtzgbHWS3ZgzuF6n4c6ZSwSGsPPm61DvhzDOWej2iH6nWltjmrNv
-         vP/w==
+        bh=DU+DeOt4r+Fv0uxk+6Q5tVdQKnGcEbfoUocacOxwgMU=;
+        b=Jk23KIiA7W88ZhegNRM2yFYJA2nirIUkscEgy3RSxO65DBKHFteJW8rfJvsuIIMNYC
+         JtSJALfn/NCRxOG5lOZKqD9fbP+hoHU03zqswpWd3wv/rZRI7SaFg2PIc+bHzXDkQGDc
+         z/rfsKXh3vSr1jYoSm3tbO/kxyOJlYtmn/AP3rJoReDr7JVP2OfoJFUVPLt46PqeWCD3
+         +UGaXlRuokYAEYkJqiw6jFIF0mcmD6zFSicEmY0SqNrFYttXI3E6XGP5ipylrDE8poOp
+         M0u2GSMFQWJWrNYJchrUXS1zvckkPOZZLROZSv57idk0dZob7fsWwjs9eHPZCk+eUVFC
+         wXWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=NLjzglEfUx/tYjZ6bE489vKKomGgM6zRTKGgnxbmNyw=;
-        b=WDDWGqv1TDkPbCBoSbBs8DaqSBF+F0rmU9P3Yt/7eIFqRUlOmSeLuUvCW03IjSMUbm
-         K6TOzLcJVK+zbcHDoLY3hiTyjOTnQWrkEscDQRbUX29LaGHJ3pMYdI/LQCHlDO2eJpwm
-         IEwnuP8XWcZVsLzfAj7Ns+u54VVQGZ1YKA/eaEw+rgHc9LG9zTTt4L8MHSlCotyJI6q6
-         Q3llY240G1vByDs6APIq2vDX7GVDUfcoModjzUe8ZFLaABnsqaDC0cLGYKaUw8kj4v/C
-         S9niu+arWmY4lyzOHKAu4QnZWyQDnw6WoTDbdnw0mNkJgTrl9qiYhshq/8NkfVTt2a6Z
-         2xdw==
-X-Gm-Message-State: AOAM532rwzNYIDdU8BuS0A/zkqqmXaxeUhU0VrIsilbBFGUfkG72g2np
-        4pXRTL5WsSaMTIeDhmAlVKK83I2L1Ao=
-X-Google-Smtp-Source: ABdhPJx1hKQ8+B9EP1bBAT5p24RynlXXCuRT/DErWwZMGYM0QNfK2w7ueHo92OOANb7IeKdC4KJnmB+h4jw=
+        bh=DU+DeOt4r+Fv0uxk+6Q5tVdQKnGcEbfoUocacOxwgMU=;
+        b=JZsukcWjinwfkKpPNw/9xaG/m/ZNwxy1iUZjNVDMDMa7SgwZjPb8nklPEA16ovd97B
+         7xLdVYPP055Px864R1uWPYRnmA1XiNDesKbnzln4vOqfUR4FIxpA/XKitIN9IQyftApz
+         Xb0RR4JZxeE8zeeiDZ+s0TShBbiWPM0xTs6aZZG/Qtoln9WRuPmSdKDdW6Qxybm0IGKR
+         Hp3yriOEVB3JgtoNAgkSgp3wzsvvHC3VeALdAraMK8mSXK8voqHj7V3eQQFoQLB1nurD
+         VOgEXxCV0RkWu+psLHf7NwwZvjrvpnH9DMP5QL6RWgszOI8v5Ky5cSmTpyyxobXXSiPi
+         8YPA==
+X-Gm-Message-State: AOAM530vW/nSNjr91pCXC2DI4gIuhwAyncseprW+xJDDClwn5rA0UX3t
+        RGiVwj3vzxresEeqk6zi2xERIoqsQqo=
+X-Google-Smtp-Source: ABdhPJwbVXCs5G7r9UtdEIL5EAxGaM9Kalf4iGsFal/f5OTBIlAgdKRFO2oDzF3oxIHTTNIrcbUPT9YIo4M=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:a17:90a:7485:: with SMTP id
- p5mr92595pjk.130.1597876848380; Wed, 19 Aug 2020 15:40:48 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 15:40:29 -0700
+ (user=haoluo job=sendgmr) by 2002:a63:2482:: with SMTP id k124mr422506pgk.251.1597876850514;
+ Wed, 19 Aug 2020 15:40:50 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 15:40:30 -0700
 In-Reply-To: <20200819224030.1615203-1-haoluo@google.com>
-Message-Id: <20200819224030.1615203-8-haoluo@google.com>
+Message-Id: <20200819224030.1615203-9-haoluo@google.com>
 Mime-Version: 1.0
 References: <20200819224030.1615203-1-haoluo@google.com>
 X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
-Subject: [PATCH bpf-next v1 7/8] bpf: Propagate bpf_per_cpu_ptr() to /tools
+Subject: [PATCH bpf-next v1 8/8] bpf/selftests: Test for bpf_per_cpu_ptr()
 From:   Hao Luo <haoluo@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
@@ -73,46 +73,68 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sync tools/include/linux/uapi/bpf.h with include/linux/uapi/bpf.h
+Test bpf_per_cpu_ptr(). Test two paths in the kernel. If the base
+pointer points to a struct, the returned reg is of type PTR_TO_BTF_ID.
+Direct pointer dereference can be applied on the returned variable.
+If the base pointer isn't a struct, the returned reg is of type
+PTR_TO_MEM, which also supports direct pointer dereference.
 
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- tools/include/uapi/linux/bpf.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ .../testing/selftests/bpf/prog_tests/ksyms_btf.c  |  4 ++++
+ .../testing/selftests/bpf/progs/test_ksyms_btf.c  | 15 ++++++++++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 468376f2910b..7e3dfb2bbb86 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3415,6 +3415,20 @@ union bpf_attr {
-  *		A non-negative value equal to or less than *size* on success,
-  *		or a negative error in case of failure.
-  *
-+ * void *bpf_per_cpu_ptr(const void *ptr, u32 cpu)
-+ *	Description
-+ *		Take the address of a percpu ksym and return a pointer pointing
-+ *		to the variable on *cpu*. A ksym is an extern variable decorated
-+ *		with '__ksym'. A ksym is percpu if there is a global percpu var
-+ *		(either static or global) defined of the same name in the kernel.
-+ *
-+ *		bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the
-+ *		kernel, except that bpf_per_cpu_ptr() may return NULL. This
-+ *		happens if *cpu* is larger than nr_cpu_ids. The caller of
-+ *		bpf_per_cpu_ptr() must check the returned value.
-+ *	Return
-+ *		A generic pointer pointing to the variable on *cpu*.
-+ *
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3559,6 +3573,7 @@ union bpf_attr {
- 	FN(skc_to_tcp_request_sock),	\
- 	FN(skc_to_udp6_sock),		\
- 	FN(get_task_stack),		\
-+	FN(bpf_per_cpu_ptr),		\
- 	/* */
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
+index 1dad61ba7e99..bdedd4a76b42 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
+@@ -71,6 +71,10 @@ void test_ksyms_btf(void)
+ 	      "got %llu, exp %llu\n", data->out__runqueues, runqueues_addr);
+ 	CHECK(data->out__bpf_prog_active != bpf_prog_active_addr, "bpf_prog_active",
+ 	      "got %llu, exp %llu\n", data->out__bpf_prog_active, bpf_prog_active_addr);
++	CHECK(data->out__rq_cpu != 1, "rq_cpu",
++	      "got %u, exp %u\n", data->out__rq_cpu, 1);
++	CHECK(data->out__process_counts == -1, "process_counts",
++	      "got %lu, exp != -1", data->out__process_counts);
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+ cleanup:
+ 	test_ksyms_btf__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
+index e04e31117f84..78cf1ebb753d 100644
+--- a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
++++ b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
+@@ -7,16 +7,29 @@
+ 
+ __u64 out__runqueues = -1;
+ __u64 out__bpf_prog_active = -1;
++__u32 out__rq_cpu = -1;
++unsigned long out__process_counts = -1;
+ 
+-extern const struct rq runqueues __ksym; /* struct type global var. */
++extern const struct rq runqueues __ksym; /* struct type percpu var. */
+ extern const int bpf_prog_active __ksym; /* int type global var. */
++extern const unsigned long process_counts __ksym; /* int type percpu var. */
+ 
+ SEC("raw_tp/sys_enter")
+ int handler(const void *ctx)
+ {
++	struct rq *rq;
++	unsigned long *count;
++
+ 	out__runqueues = (__u64)&runqueues;
+ 	out__bpf_prog_active = (__u64)&bpf_prog_active;
+ 
++	rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, 1);
++	if (rq)
++		out__rq_cpu = rq->cpu;
++	count = (unsigned long *)bpf_per_cpu_ptr(&process_counts, 1);
++	if (count)
++		out__process_counts = *count;
++
+ 	return 0;
+ }
+ 
 -- 
 2.28.0.220.ged08abb693-goog
 
