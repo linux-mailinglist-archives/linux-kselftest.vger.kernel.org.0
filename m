@@ -2,110 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B41F24A3FE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 18:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827B224A43A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 18:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbgHSQYc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Aug 2020 12:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        id S1726731AbgHSQnb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Aug 2020 12:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbgHSQYL (ORCPT
+        with ESMTP id S1726461AbgHSQn0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 12:24:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62D5C061343;
-        Wed, 19 Aug 2020 09:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0qj0NgMXE9N5E+k0q9ljNMUsiRWKFkmPnIi16FDMGEc=; b=HlZ9h/mQIGWHSczZdWzzLw8l+9
-        Jb7IErUxYlL78RPZ71SMSGS/HV3yVvuUiIK/YrwfyvTC10O8KcRT6VMnYVL0aU6CO/PcKoxUKjbEg
-        FMPh3GoEkEasFRBXmnoogUTGVM8X1nLXrNJ16FeiPqu6ZKF55STetGuo6F7oJDkb7OFe+PK4ovJbA
-        LbxobzPdOK8V+J3D2xXSgj1M/Gi/FLJ8k0qHIh30NkHE5oScUHkA9+e2lUTAXyQG8c7I3ipBoYqQG
-        U0zEH7NCWDF7DOH+DTnpfm8m7ACzQHtRlw8IFMlAy1bIPMlB4/FKC98szZaxVo3aceR5NEss3m70T
-        PvKLLcqw==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k8Qsd-0004c3-7w; Wed, 19 Aug 2020 16:24:03 +0000
-Date:   Wed, 19 Aug 2020 17:24:03 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "'Eric W. Biederman'" <ebiederm@xmission.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        Christoph Hewllig <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "x86@kernel.org" <x86@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Kars de Jong <jongk@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Xiao Yang <yangx.jy@cn.fujitsu.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "uclinux-h8-devel@lists.sourceforge.jp" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
-Message-ID: <20200819162403.GF17456@casper.infradead.org>
-References: <20200818174447.GV17456@casper.infradead.org>
- <20200819074340.GW2674@hirez.programming.kicks-ass.net>
- <20200819084556.im5zfpm2iquzvzws@wittgenstein>
- <20200819111851.GY17456@casper.infradead.org>
- <87a6yq222c.fsf@x220.int.ebiederm.org>
- <20200819134629.mvd4nupme7q2hmtz@wittgenstein>
- <87mu2qznlv.fsf@x220.int.ebiederm.org>
- <df7f7e17a730405ea182ec778eec22e1@AcuMS.aculab.com>
- <20200819154521.GE17456@casper.infradead.org>
- <ee30fecfbd534c19a6bfd11d2c4b8263@AcuMS.aculab.com>
+        Wed, 19 Aug 2020 12:43:26 -0400
+Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE6C061383
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 09:43:26 -0700 (PDT)
+Received: by mail-oo1-xc42.google.com with SMTP id j19so5018860oor.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2020 09:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fHtiyHduMLuRLeSYVULskmD3eviA1+GnUpgLjTZc2NY=;
+        b=oQrKEZqORIk9R0UwmTBg5mgKl6sr3zgh18kc6CBOZ1pad8zDks+B4cNffrlmcb4ntD
+         4Le1Dcva8QTtqOlngwBSywEDFptBbab+gVR/fVdpsU9vpZkhSezMXEGuFNByLWUlgVQn
+         0ZpYuWEXo//S4rRHtIk3YK4d9iIPtOi9wBj0w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fHtiyHduMLuRLeSYVULskmD3eviA1+GnUpgLjTZc2NY=;
+        b=pw1ydI4/V4Pl8NSNGN1vInOZ10EJh1CyF2R2gsqfbMzP8Y+Z85anutlWwCabySxbUy
+         Jdue/eihqUFp88EwPX9q6W58Suq3v8nZs4cgwERpCH1nwebGhy9Uyhked+io/YphFFUw
+         7UfRKh22yk/VK3XPmeqUhuVkijN2tb0f4JkYERGEqatoH6MNEUIpMCxlwIr+wiYh3R0A
+         A1tKqCZBtXp93GBd1h/atBvfVBHwKXSx2ol1LPHodDCfz70BU5Nifmp6THoQPBUZyEDG
+         s6qHnWHSILppkPhYOkPIYhRB6P4z3rczm9RPfaY8TKLqyg8qqlEwI7kdt+8/sjdNl/j+
+         dbwA==
+X-Gm-Message-State: AOAM533twU8Mwv0wkG+jKHFdyR9KwI5X/sSmH+n4XgYkc6/7hVwQnK0Z
+        ZqRm9t3As8MNTbloYxd154bvyQ==
+X-Google-Smtp-Source: ABdhPJz8CYYAnJTKUGBNqv3snd38wIzCI9/fcynxM2uB7imMbOtN1VEPxzxY5VjIfcsHyE+mD/1Wbg==
+X-Received: by 2002:a4a:de11:: with SMTP id y17mr18767887oot.29.1597855405443;
+        Wed, 19 Aug 2020 09:43:25 -0700 (PDT)
+Received: from ravnica.hsd1.co.comcast.net ([2601:285:8380:9270::f2a2])
+        by smtp.gmail.com with ESMTPSA id z72sm4520036ooa.42.2020.08.19.09.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Aug 2020 09:43:24 -0700 (PDT)
+From:   Ross Zwisler <zwisler@chromium.org>
+X-Google-Original-From: Ross Zwisler <zwisler@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org
+Cc:     Mattias Nissler <mnissler@chromium.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Benjamin Gordon <bmgordon@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Micah Morton <mortonm@google.com>,
+        Raul Rangel <rrangel@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Ross Zwisler <zwisler@google.com>
+Subject: [PATCH v8 1/2] Add a "nosymfollow" mount option.
+Date:   Wed, 19 Aug 2020 10:43:16 -0600
+Message-Id: <20200819164317.637421-1-zwisler@google.com>
+X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ee30fecfbd534c19a6bfd11d2c4b8263@AcuMS.aculab.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 03:55:47PM +0000, David Laight wrote:
-> From: Matthew Wilcox
-> > Sent: 19 August 2020 16:45
-> > 
-> > On Wed, Aug 19, 2020 at 03:41:48PM +0000, David Laight wrote:
-> > > Does linux have an O(1) (or do I mean o(1)) pid allocator?
-> > > Or does it have to do a linear scan to find a gap??
-> > 
-> > O(log(n)).  It uses the IDR allocator, so 'n' in this case is the
-> > number of PIDs currently allocated, and it's log_64 rather than log_2
-> > (which makes no difference to O() but does make a bit of a difference
-> > to performance)
-> 
-> Still worse that O(1) - when that is just replacing a variable
-> with a value read out of an array.
-> Made pid lookup a trivial O(1) as well.
+From: Mattias Nissler <mnissler@chromium.org>
 
-You'd be surprised.  We replaced the custom PID allocator with the
-generic IDR allocator a few years ago and got a pretty decent speedup.
+For mounts that have the new "nosymfollow" option, don't follow symlinks
+when resolving paths. The new option is similar in spirit to the
+existing "nodev", "noexec", and "nosuid" options, as well as to the
+LOOKUP_NO_SYMLINKS resolve flag in the openat2(2) syscall. Various BSD
+variants have been supporting the "nosymfollow" mount option for a long
+time with equivalent implementations.
 
-If you think you can do better, then submit patches.  You have to support
-all the existing use cases, of course.
+Note that symlinks may still be created on file systems mounted with
+the "nosymfollow" option present. readlink() remains functional, so
+user space code that is aware of symlinks can still choose to follow
+them explicitly.
+
+Setting the "nosymfollow" mount option helps prevent privileged
+writers from modifying files unintentionally in case there is an
+unexpected link along the accessed path. The "nosymfollow" option is
+thus useful as a defensive measure for systems that need to deal with
+untrusted file systems in privileged contexts.
+
+More information on the history and motivation for this patch can be
+found here:
+
+https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/hardening-against-malicious-stateful-data#TOC-Restricting-symlink-traversal
+
+Signed-off-by: Mattias Nissler <mnissler@chromium.org>
+Signed-off-by: Ross Zwisler <zwisler@google.com>
+Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
+---
+Changes since v7 [1]:
+ * Rebased onto v5.9-rc1.
+ * Added selftest in second patch.
+ * Added Aleska's Reviewed-By tag.  Thank you for the review!
+
+After this lands I will upstream changes to util-linux[2] and man-pages
+[3].
+
+[1]: https://lkml.org/lkml/2020/8/11/896
+[2]: https://github.com/rzwisler/util-linux/commit/7f8771acd85edb70d97921c026c55e1e724d4e15
+[3]: https://github.com/rzwisler/man-pages/commit/b8fe8079f64b5068940c0144586e580399a71668
+---
+ fs/namei.c                 | 3 ++-
+ fs/namespace.c             | 2 ++
+ fs/proc_namespace.c        | 1 +
+ fs/statfs.c                | 2 ++
+ include/linux/mount.h      | 3 ++-
+ include/linux/statfs.h     | 1 +
+ include/uapi/linux/mount.h | 1 +
+ 7 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/fs/namei.c b/fs/namei.c
+index e99e2a9da0f7d..12d92af2e2ca7 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -1626,7 +1626,8 @@ static const char *pick_link(struct nameidata *nd, struct path *link,
+ 			return ERR_PTR(error);
+ 	}
+ 
+-	if (unlikely(nd->flags & LOOKUP_NO_SYMLINKS))
++	if (unlikely(nd->flags & LOOKUP_NO_SYMLINKS) ||
++			unlikely(nd->path.mnt->mnt_flags & MNT_NOSYMFOLLOW))
+ 		return ERR_PTR(-ELOOP);
+ 
+ 	if (!(nd->flags & LOOKUP_RCU)) {
+diff --git a/fs/namespace.c b/fs/namespace.c
+index bae0e95b3713a..6408788a649e1 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -3160,6 +3160,8 @@ int path_mount(const char *dev_name, struct path *path,
+ 		mnt_flags &= ~(MNT_RELATIME | MNT_NOATIME);
+ 	if (flags & MS_RDONLY)
+ 		mnt_flags |= MNT_READONLY;
++	if (flags & MS_NOSYMFOLLOW)
++		mnt_flags |= MNT_NOSYMFOLLOW;
+ 
+ 	/* The default atime for remount is preservation */
+ 	if ((flags & MS_REMOUNT) &&
+diff --git a/fs/proc_namespace.c b/fs/proc_namespace.c
+index 3059a9394c2d6..e59d4bb3a89e4 100644
+--- a/fs/proc_namespace.c
++++ b/fs/proc_namespace.c
+@@ -70,6 +70,7 @@ static void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt)
+ 		{ MNT_NOATIME, ",noatime" },
+ 		{ MNT_NODIRATIME, ",nodiratime" },
+ 		{ MNT_RELATIME, ",relatime" },
++		{ MNT_NOSYMFOLLOW, ",nosymfollow" },
+ 		{ 0, NULL }
+ 	};
+ 	const struct proc_fs_opts *fs_infop;
+diff --git a/fs/statfs.c b/fs/statfs.c
+index 2616424012ea7..59f33752c1311 100644
+--- a/fs/statfs.c
++++ b/fs/statfs.c
+@@ -29,6 +29,8 @@ static int flags_by_mnt(int mnt_flags)
+ 		flags |= ST_NODIRATIME;
+ 	if (mnt_flags & MNT_RELATIME)
+ 		flags |= ST_RELATIME;
++	if (mnt_flags & MNT_NOSYMFOLLOW)
++		flags |= ST_NOSYMFOLLOW;
+ 	return flags;
+ }
+ 
+diff --git a/include/linux/mount.h b/include/linux/mount.h
+index de657bd211fa6..aaf343b38671c 100644
+--- a/include/linux/mount.h
++++ b/include/linux/mount.h
+@@ -30,6 +30,7 @@ struct fs_context;
+ #define MNT_NODIRATIME	0x10
+ #define MNT_RELATIME	0x20
+ #define MNT_READONLY	0x40	/* does the user want this to be r/o? */
++#define MNT_NOSYMFOLLOW	0x80
+ 
+ #define MNT_SHRINKABLE	0x100
+ #define MNT_WRITE_HOLD	0x200
+@@ -46,7 +47,7 @@ struct fs_context;
+ #define MNT_SHARED_MASK	(MNT_UNBINDABLE)
+ #define MNT_USER_SETTABLE_MASK  (MNT_NOSUID | MNT_NODEV | MNT_NOEXEC \
+ 				 | MNT_NOATIME | MNT_NODIRATIME | MNT_RELATIME \
+-				 | MNT_READONLY)
++				 | MNT_READONLY | MNT_NOSYMFOLLOW)
+ #define MNT_ATIME_MASK (MNT_NOATIME | MNT_NODIRATIME | MNT_RELATIME )
+ 
+ #define MNT_INTERNAL_FLAGS (MNT_SHARED | MNT_WRITE_HOLD | MNT_INTERNAL | \
+diff --git a/include/linux/statfs.h b/include/linux/statfs.h
+index 9bc69edb8f188..fac4356ea1bfc 100644
+--- a/include/linux/statfs.h
++++ b/include/linux/statfs.h
+@@ -40,6 +40,7 @@ struct kstatfs {
+ #define ST_NOATIME	0x0400	/* do not update access times */
+ #define ST_NODIRATIME	0x0800	/* do not update directory access times */
+ #define ST_RELATIME	0x1000	/* update atime relative to mtime/ctime */
++#define ST_NOSYMFOLLOW	0x2000	/* do not follow symlinks */
+ 
+ struct dentry;
+ extern int vfs_get_fsid(struct dentry *dentry, __kernel_fsid_t *fsid);
+diff --git a/include/uapi/linux/mount.h b/include/uapi/linux/mount.h
+index 96a0240f23fed..dd8306ea336c1 100644
+--- a/include/uapi/linux/mount.h
++++ b/include/uapi/linux/mount.h
+@@ -16,6 +16,7 @@
+ #define MS_REMOUNT	32	/* Alter flags of a mounted FS */
+ #define MS_MANDLOCK	64	/* Allow mandatory locks on an FS */
+ #define MS_DIRSYNC	128	/* Directory modifications are synchronous */
++#define MS_NOSYMFOLLOW	256	/* Do not follow symlinks */
+ #define MS_NOATIME	1024	/* Do not update access times. */
+ #define MS_NODIRATIME	2048	/* Do not update directory access times */
+ #define MS_BIND		4096
+-- 
+2.28.0.220.ged08abb693-goog
+
