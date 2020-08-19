@@ -2,105 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD0E249B93
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 13:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC67249C89
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Aug 2020 13:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728050AbgHSLTI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Aug 2020 07:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727807AbgHSLTB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:19:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13242C061757;
-        Wed, 19 Aug 2020 04:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=S3ViV7VOxKoiTfVgrvw4ZTEB3xmhm4rVfkGYugjh9Xc=; b=PqH95VsKVPNJwI5a/Er+qYg1YE
-        2cP0Ceuh2EDSbznFUi6KCJU7M7Tnu1YxtinWU5IogRZ5X49Svh2ING9dG/X8+rguc0s8CNSZJSVjz
-        sraZ7CGNbsDhWzRg8+UC6yH+tcPq9EXMZaDIgh2vnz9pMYTUAJGAn4dbA7FDtXtyG0dgROnOxjecF
-        HOVDUZCBr76yq9h8gCFemMaMo2+mPHghmOxYz2YkVf+ANSqWMa0srF34jYala3pRYzPD19EoNJfdq
-        Ood3xlpgoQ1+iBy6EacDpMR9Obz0ZXPuj8jDYzWyRwFWRGHSlTe43zBy51TCIlPCVr09ikGje2dIK
-        +jtFq6ig==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k8M7H-00015G-Od; Wed, 19 Aug 2020 11:18:51 +0000
-Date:   Wed, 19 Aug 2020 12:18:51 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     peterz@infradead.org, Christoph Hewllig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Kars de Jong <jongk@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Xiao Yang <yangx.jy@cn.fujitsu.com>, linux-doc@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
-Message-ID: <20200819111851.GY17456@casper.infradead.org>
-References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
- <20200818174447.GV17456@casper.infradead.org>
- <20200819074340.GW2674@hirez.programming.kicks-ass.net>
- <20200819084556.im5zfpm2iquzvzws@wittgenstein>
+        id S1727926AbgHSLvZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Aug 2020 07:51:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727970AbgHSLuq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Aug 2020 07:50:46 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DCDA205CB;
+        Wed, 19 Aug 2020 11:50:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597837845;
+        bh=4f5tVEWkke+JY2bFp1jVyAlyp6I8bhFSJk6GSfdkc+w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bcTXGy6L2gwsxBS7GuKvVY8AXSwHZj0xLZ2CImHhLAI/UwJRzIMNyn1cJMsvMMllH
+         AbqtlhQGxc0G02A0abGJIpnWuvQEW/jfqUDzn5z1my0UgsktAujxw/l9F38aMOnvgh
+         AwIvqPwXTjkt6PP+WMAC77CWJleOuZ0tWSwFKL/M=
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/6] selftests: arm64: Add floating point selftests
+Date:   Wed, 19 Aug 2020 12:48:31 +0100
+Message-Id: <20200819114837.51466-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200819084556.im5zfpm2iquzvzws@wittgenstein>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 10:45:56AM +0200, Christian Brauner wrote:
-> On Wed, Aug 19, 2020 at 09:43:40AM +0200, peterz@infradead.org wrote:
-> > On Tue, Aug 18, 2020 at 06:44:47PM +0100, Matthew Wilcox wrote:
-> > > On Tue, Aug 18, 2020 at 07:34:00PM +0200, Christian Brauner wrote:
-> > > > The only remaining function callable outside of kernel/fork.c is
-> > > > _do_fork(). It doesn't really follow the naming of kernel-internal
-> > > > syscall helpers as Christoph righly pointed out. Switch all callers and
-> > > > references to kernel_clone() and remove _do_fork() once and for all.
-> > > 
-> > > My only concern is around return type.  long, int, pid_t ... can we
-> > > choose one and stick to it?  pid_t is probably the right return type
-> > > within the kernel, despite the return type of clone3().  It'll save us
-> > > some work if we ever go through the hassle of growing pid_t beyond 31-bit.
-> > 
-> > We have at least the futex ABI restricting PID space to 30 bits.
-> 
-> Ok, looking into kernel/futex.c I see 
-> 
-> pid_t pid = uval & FUTEX_TID_MASK;
-> 
-> which is probably what this referes to and /proc/sys/kernel/threads-max
-> is restricted to FUTEX_TID_MASK.
-> 
-> Afaict, that doesn't block switching kernel_clone() to return pid_t. It
-> can't create anything > FUTEX_TID_MASK anyway without yelling EAGAIN at
-> userspace. But it means that _if_ we were to change the size of pid_t
-> we'd likely need a new futex API. 
+This series imports a series of tests for FPSIMD and SVE originally
+written by Dave Martin to the tree. Since these extensions have some
+overlap in terms of register usage and must sometimes be tested together
+they're dropped into a single directory. I've adapted some of the tests
+to run within the kselftest framework but there are also some stress
+tests here that are intended to be run as soak tests so aren't suitable
+for running by default and are mostly just integrated with the build
+system. There doesn't seem to be a more suitable home for those stress
+tests and they are very useful for work on these areas of the code so it
+seems useful to have them somewhere in tree.
 
-Yes, there would be a lot of work to do to increase the size of pid_t.
-I'd just like to not do anything to make that harder _now_.  Stick to
-using pid_t within the kernel.
+v2: Rebased onto v5.9-rc1
+
+Mark Brown (6):
+  selftests: arm64: Test case for enumeration of SVE vector lengths
+  selftests: arm64: Add test for the SVE ptrace interface
+  selftests: arm64: Add stress tests for FPSMID and SVE context
+    switching
+  selftests: arm64: Add utility to set SVE vector lengths
+  selftests: arm64: Add wrapper scripts for stress tests
+  selftests: arm64: Add build and documentation for FP tests
+
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ tools/testing/selftests/arm64/fp/.gitignore   |   5 +
+ tools/testing/selftests/arm64/fp/Makefile     |  17 +
+ tools/testing/selftests/arm64/fp/README       | 100 +++
+ .../testing/selftests/arm64/fp/asm-offsets.h  |  11 +
+ tools/testing/selftests/arm64/fp/assembler.h  |  57 ++
+ .../testing/selftests/arm64/fp/fpsimd-stress  |  60 ++
+ .../testing/selftests/arm64/fp/fpsimd-test.S  | 482 +++++++++++++
+ .../selftests/arm64/fp/sve-probe-vls.c        |  58 ++
+ .../selftests/arm64/fp/sve-ptrace-asm.S       |  33 +
+ tools/testing/selftests/arm64/fp/sve-ptrace.c | 336 +++++++++
+ tools/testing/selftests/arm64/fp/sve-stress   |  59 ++
+ tools/testing/selftests/arm64/fp/sve-test.S   | 672 ++++++++++++++++++
+ tools/testing/selftests/arm64/fp/vlset.c      | 155 ++++
+ 14 files changed, 2046 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/fp/Makefile
+ create mode 100644 tools/testing/selftests/arm64/fp/README
+ create mode 100644 tools/testing/selftests/arm64/fp/asm-offsets.h
+ create mode 100644 tools/testing/selftests/arm64/fp/assembler.h
+ create mode 100755 tools/testing/selftests/arm64/fp/fpsimd-stress
+ create mode 100644 tools/testing/selftests/arm64/fp/fpsimd-test.S
+ create mode 100644 tools/testing/selftests/arm64/fp/sve-probe-vls.c
+ create mode 100644 tools/testing/selftests/arm64/fp/sve-ptrace-asm.S
+ create mode 100644 tools/testing/selftests/arm64/fp/sve-ptrace.c
+ create mode 100755 tools/testing/selftests/arm64/fp/sve-stress
+ create mode 100644 tools/testing/selftests/arm64/fp/sve-test.S
+ create mode 100644 tools/testing/selftests/arm64/fp/vlset.c
+
+-- 
+2.20.1
+
