@@ -2,103 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 444B224C681
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 22:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5C224C763
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 23:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728106AbgHTUDA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Aug 2020 16:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S1727807AbgHTVxc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Aug 2020 17:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727033AbgHTUC5 (ORCPT
+        with ESMTP id S1725819AbgHTVxc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Aug 2020 16:02:57 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D948C061385
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 13:02:57 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id u6so1803310ybf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 13:02:57 -0700 (PDT)
+        Thu, 20 Aug 2020 17:53:32 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DC5C061385;
+        Thu, 20 Aug 2020 14:53:31 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id h12so1777350pgm.7;
+        Thu, 20 Aug 2020 14:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pKzOsx3lB8pzuOnpghHkzifipDVHUez5Ep3w+VChvf0=;
-        b=iV5dB/t3SeBM+FwAbkWuzlVj7dB/3sx6clIP6cToxRAKGcIsGtW43y7PIOaTMuPXOb
-         xRI8hv+9CZJ1X5Z2rRl94DLH3a/Ls8H6OX1cjHiy3lOIrqI4LThU43BR8aDebN82Z/Ol
-         eTEded8ta1Rq53oy8ny+wdVIS6YIqmJWFXFjfy7mmIdyy7vagX7XpsAEAgUz46sQThTv
-         D3gjB1/GosxtfNunimcT9BPagecNLl004x0DAUeY5dBeYfW6zCieS0S0GslqBSY/Us1m
-         FoFnE4IQIX9qcWbekRlyAkngQnj8V6qaV+AfXL4JCxY0ywsiQWEPqXLSMQTIG3v55ezo
-         nTmg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S9Z8hpT+5e288agiJKvAQ+cPNXvehT28abc/4EOiIj4=;
+        b=Qy5SWJE12sxzcIftKB1/LCUfZ0kqq4F9mdgTqJ7o7Qe6le4UECdsoS6jAHLuVEwFAG
+         EZodBvtj0SKUHoC0qq6j2SHZd3It0H6LcDTl8KuqWk/NGMeb1iz7o/ywXO9Jk8d9rkmG
+         S/Gislu7WKnunM3AM7mxy/FjwWq5Tqb6O5OSgxT9aqkwgOQgzPFYSwSsyatDljdYdPe1
+         zqgrLgIRXL1khYDyQirUv/76SphJeZlSbBZiDPa1d6Fc/dwVcASNu3tz60CYnr5jMxUN
+         i0WC7RCk/Ti2BnQ6fx0v5TtDleDxjyX6yPVWvdfcSiZQ8OKkpFZWAiOuzSbJAR5Hg9zz
+         JWVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pKzOsx3lB8pzuOnpghHkzifipDVHUez5Ep3w+VChvf0=;
-        b=W3KIQvdX3JZmCWMV/nz7qQyQUYawDornPKLkwviCNDkmRrcNmX9Hotf7iSeU/qNtYc
-         6gx36rLCS7xs/jFXM+c6GQiu+almS/wKCpsPob79nRQ8RfoBrcMzJdNII/9SeIjUfj3k
-         Gs9i8eJlyKgdr22TbPuozBM7x/Heme/kknfIF85/RjMKBD8qfajrlZgyoxkr+NKQJFU9
-         lyvu01WfXHrLDztdVYZdtupkFOqAHnGxGxXFC6seTrAGHwHH/QVEjaDBwml/sbh4BcBH
-         DrMHkh9eRUt5ltkKva7uXNX1h3Sk+q5ySC4Rh6dde04usaO8OfHoXzklo1x4u1OTDxfy
-         MiZw==
-X-Gm-Message-State: AOAM530V1Q0nMgjV+yHH1XxeNnztlFx9Hk4TJrRM64QCvb2TN2Za+c0J
-        t3pfYMhXn6AKd7hw3krm2Zqu6K9kR0eFtllXynxwNQ==
-X-Google-Smtp-Source: ABdhPJxiVxLbcB0tn2f/pg5YuwsWHw31MGw6sjXeQSIBYBTKIYOVjOLw2jEetHYAwMcfXDPX8GrHs38hjbuuVhldjD4=
-X-Received: by 2002:a5b:c44:: with SMTP id d4mr6648410ybr.488.1597953775217;
- Thu, 20 Aug 2020 13:02:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S9Z8hpT+5e288agiJKvAQ+cPNXvehT28abc/4EOiIj4=;
+        b=Gdcgr4EU0KYEW5f9MLf5Pu4cQbHLSD5Wx/3PDT6HDAJ1v7Vf3KMxyR4ZSRYYFwU2hH
+         9d4buX7og1iVTi+kQG2a7G5X4Vcma3RiM6WJPTAkRWNN8jMWkDMPqbUgd0Zu8BDplEus
+         PkC0FeOdUi75G8VMuar7IomyCnOIK/o1fYbIzDEJ0yk6RmhWtqLT/x2FPOIHoz9PTUr2
+         BnMu8xAwS9Z15+qryiN9yYjD1A3NguwI0TuEYF/GC4oiN/64HpAUTg1ZnupoQFlFUjVJ
+         IYF1zT1cERZZu2/gtToOexFuJRfYJIveQHH0MDLwzVIbzNMBdwv56D0f55RBDEkNpa+/
+         pPcw==
+X-Gm-Message-State: AOAM532W9IISbxkJxnw+ATAwr94PO5ow30ts9PElzYIVHQUnItDPToTK
+        VXJ4oizfd+4b9kp+4GNmy1g=
+X-Google-Smtp-Source: ABdhPJwEOLAr4dCCQrc1S7uU7K/MDHikhI6jwqO4ud3WICgef1abJYYFxKi+yurZi1hirc408MUDbA==
+X-Received: by 2002:a63:e258:: with SMTP id y24mr74849pgj.434.1597960411194;
+        Thu, 20 Aug 2020 14:53:31 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:8791])
+        by smtp.gmail.com with ESMTPSA id w9sm3443224pgg.76.2020.08.20.14.53.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2020 14:53:30 -0700 (PDT)
+Date:   Thu, 20 Aug 2020 14:53:27 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Subject: Re: [PATCH bpf-next v1 1/8] bpf: Introduce pseudo_btf_id
+Message-ID: <20200820215327.jsvjbsvv6ts3x4wn@ast-mbp.dhcp.thefacebook.com>
+References: <20200819224030.1615203-1-haoluo@google.com>
+ <20200819224030.1615203-2-haoluo@google.com>
 MIME-Version: 1.0
-References: <20200819193917.67409-1-vitor@massaru.org> <CAFd5g45_6mA7c4Bu9jSigEzeGqQgLz=o5v6VrSM7Qx39c_WDFQ@mail.gmail.com>
-In-Reply-To: <CAFd5g45_6mA7c4Bu9jSigEzeGqQgLz=o5v6VrSM7Qx39c_WDFQ@mail.gmail.com>
-From:   Vitor Massaru Iha <vitor@massaru.org>
-Date:   Thu, 20 Aug 2020 17:02:19 -0300
-Message-ID: <CADQ6JjVDvfUaT-rZ2PVYgKpyBZfOm7UmyfaY=btZAmfHXLBjBA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Customize KUNIT_EXCEPT/KUNIT_ASSERT Expected messages
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200819224030.1615203-2-haoluo@google.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 7:24 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Wed, Aug 19, 2020 at 12:39 PM Vitor Massaru Iha <vitor@massaru.org> wrote:
-> >
-> > In some cases, to maintain the consistency of the Expected messages
-> > with the original runtime test, it is necessary to customize the
-> > Expected messages on KUnit.
-> >
-> > As an example test_overflow conversion to KUnit (I added 1,
-> > p->s_of+1, just to fail the test).
-> >
-> > Using KUNIT_EXPECT_EQ:
-> >
-> > Expected _of == p->s_of+1, but
-> >   _of == 0
-> >   p->s_of+1 == 1
-> > not ok 1 - overflow_calculation_test
-> > ok 2 - overflow_shift_test
-> >
-> > Using KUNIT_EXPECT_EQ_CUSTOM_MSG:
-> >
-> > Expected 0 + 0 to not overflow (type u8)
-> > not ok 1 - overflow_calculation_test
-> >
-> > Which is more similar to the error message of the original test.
-> >
-> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
->
-> All in all this looks pretty reasonable to me; however, is there any
-> chance you could provide an example of its usage?
+On Wed, Aug 19, 2020 at 03:40:23PM -0700, Hao Luo wrote:
+> +
+>  /* verify BPF_LD_IMM64 instruction */
+>  static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  {
+> @@ -7234,6 +7296,9 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>  		return 0;
+>  	}
+>  
+> +	if (insn->src_reg == BPF_PSEUDO_BTF_ID)
+> +		return check_pseudo_btf_id(env, insn);
+> +
+>  	map = env->used_maps[aux->map_index];
+>  	mark_reg_known_zero(env, regs, insn->dst_reg);
+>  	regs[insn->dst_reg].map_ptr = map;
+> @@ -9255,6 +9320,9 @@ static int replace_map_fd_with_map_ptr(struct bpf_verifier_env *env)
+>  				/* valid generic load 64-bit imm */
+>  				goto next_insn;
+>  
+> +			if (insn[0].src_reg == BPF_PSEUDO_BTF_ID)
+> +				goto next_insn;
+> +
 
-Sure I'll do that.
-
-I am reviewing the errors reported by 0day in the overflow_kunit patch v3,
-and I noticed when compiling overflow_kunit with the parameters of
-0day and this patch, there were some errors related to this patch that I sent.
-
-I'll fix it too.
+Why did you choose to do it during main do_check() walk instead of this pre-pass ?
+check_ld_imm() can be called multiple times for the same insn,
+so it's faster and less surprising to do it during replace_map_fd_with_map_ptr().
+BTF needs to be parsed first, of course.
+You can either move check_btf_info() before replace_map_fd_with_map_ptr() or
+move replace_map_fd_with_map_ptr() after check_btf_info().
+The latter is probably cleaner.
