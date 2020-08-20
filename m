@@ -2,81 +2,230 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4D524BBEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 14:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBCA24C02E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 16:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgHTMfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Aug 2020 08:35:44 -0400
-Received: from mail.zx2c4.com ([192.95.5.64]:39071 "EHLO mail.zx2c4.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729515AbgHTJsH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Aug 2020 05:48:07 -0400
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 2a71feb8;
-        Thu, 20 Aug 2020 09:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
-        :references:in-reply-to:from:date:message-id:subject:to:cc
-        :content-type; s=mail; bh=cC4XKmjMItkWu82Ddd4N3/mfNJY=; b=aH3z0j
-        ih2A6UbHCt3IxPb9cGURoW1AdUF79cwHzp+slOvV8CXFkpZjl6EwYEA+JlKT5gjg
-        zXUFARHfV2sFXTmSREd8NhJunCIHY4nLafXpXu1CpMGAdsfYq1ZI7Ulbh+f6nFuU
-        GLpyQGqn20N+3jb0blAVWJ4mBsKgajaVO0bu5fJURP7VRaYN89n0QypNDmBbRufv
-        ee0CyvIMq5UV+mGRrzaGLR7yKNhLsfMBrsRgpAAPY0ix1nrsuR83acVzKS7914El
-        0vW2TT1WjeT+Ulx5s/6fFxHTTSITqe0SO9LaYWBs5aRN38VHZxd5DoUNpQtc1oJx
-        mQHl+eYy/l9WTo+Q==
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 18dd5401 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 20 Aug 2020 09:21:41 +0000 (UTC)
-Received: by mail-io1-f50.google.com with SMTP id z17so385964ioi.6;
-        Thu, 20 Aug 2020 02:48:06 -0700 (PDT)
-X-Gm-Message-State: AOAM533pN3W79s134djddKcgXm3DtAhueZEDHWNsMOx+g89DE9LGy6Z0
-        nvgqpWN0nwu7SaecnD3KF0JrCiBgFDzwFZD/hPw=
-X-Google-Smtp-Source: ABdhPJwxqXuh3zpZ+vXV6pG3wfV26J+WMkYRDPSnD0jh7SwXM3vLbJ0QIOl7CaiQOrNMVRuAQnK6mTMYW9n8YZipXUs=
-X-Received: by 2002:a05:6638:138a:: with SMTP id w10mr2407389jad.36.1597916885689;
- Thu, 20 Aug 2020 02:48:05 -0700 (PDT)
+        id S1726872AbgHTOJ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Aug 2020 10:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731196AbgHTN6f (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Aug 2020 09:58:35 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C721C06134F
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 06:58:15 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id f1so2136253wro.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 06:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Mjkc+uOFGofk3IvrwN78/tWylXT0mT1Xub0o04o3B+A=;
+        b=RMZGaVEW5IVGuTA6PbP9MNBnRo5TEV7o9K9/YR0QKsq+59hK1vhRjJIMb0omsq4lUk
+         vIryb+QTQUt6ZxOjsFBRj9QteTdzHtsCJOEV8spsa6Bd4G9psvbwGgeCFtv1Eg0dMerz
+         cQNzWwlaS+eWMFvlZn0EfDOaeen8+lWXnEIPU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Mjkc+uOFGofk3IvrwN78/tWylXT0mT1Xub0o04o3B+A=;
+        b=R15vQeWueCkcKSQ1tOLB0Ql+NIutwcoeo5RHQUGJky39WfurXFhluFkQPeXxKRff6g
+         KN7EJNvoHjdhsV0DIDgWwYibPNbYEqryOHNfp8H5sj2PWrqcqxGHSAESl2cjpzAAO8m5
+         R3DjtMMYsBHWN+AvS+LwmrtjogAKUq8PgOYi6qkzjXaP8PWhs18qveFEGEcnKDAQDe1E
+         TEKP9D6GlmgLry8I1TPx3jNp2OkbeOvQ+y+yYuay3QYgZm2if96Lm1x5tGAByo3eUnyG
+         3d2fBcNGV1JQ0E/FPH4bU3aRVIirtx8QnxaZhJZAXbeNjisJU8a2SzBSxxHTlV2K1WxM
+         7cSQ==
+X-Gm-Message-State: AOAM531QILT/jMTSsoXXRh2c7xH/kEEP0iebieaE1ouoOISht904+bPv
+        3pl/cPW4cjd+s+XoqV8+OgUPcA==
+X-Google-Smtp-Source: ABdhPJyH87ZSVi7lwlb71OnrwdhOs5eqoIN0EC6j3eBTBrVN4KUyVTyeUyzAfJF4d0iy4rXjxT8tdg==
+X-Received: by 2002:a5d:4c83:: with SMTP id z3mr3297909wrs.359.1597931893722;
+        Thu, 20 Aug 2020 06:58:13 -0700 (PDT)
+Received: from antares.lan (d.0.f.e.b.c.7.2.d.c.3.8.4.8.d.9.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:9d84:83cd:27cb:ef0d])
+        by smtp.gmail.com with ESMTPSA id l81sm4494215wmf.4.2020.08.20.06.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2020 06:58:12 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     jakub@cloudflare.com, john.fastabend@gmail.com,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 6/6] selftests: bpf: test sockmap update from BPF
+Date:   Thu, 20 Aug 2020 14:57:29 +0100
+Message-Id: <20200820135729.135783-7-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200820135729.135783-1-lmb@cloudflare.com>
+References: <20200820135729.135783-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-References: <000000000000a7e38a05a997edb2@google.com> <0000000000005c13f505ad3f5c42@google.com>
-In-Reply-To: <0000000000005c13f505ad3f5c42@google.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 20 Aug 2020 11:47:54 +0200
-X-Gmail-Original-Message-ID: <CAHmME9rd+54EOO-b=wmVxtzbvckET2WSMm-3q8LJmfp38A9ceg@mail.gmail.com>
-Message-ID: <CAHmME9rd+54EOO-b=wmVxtzbvckET2WSMm-3q8LJmfp38A9ceg@mail.gmail.com>
-Subject: Re: WARNING in __cfg80211_connect_result
-To:     syzbot <syzbot+cc4c0f394e2611edba66@syzkaller.appspotmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, kvalo@codeaurora.org,
-        leon@kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 8:42 PM syzbot
-<syzbot+cc4c0f394e2611edba66@syzkaller.appspotmail.com> wrote:
->
-> syzbot has bisected this issue to:
->
-> commit e7096c131e5161fa3b8e52a650d7719d2857adfd
-> Author: Jason A. Donenfeld <Jason@zx2c4.com>
-> Date:   Sun Dec 8 23:27:34 2019 +0000
->
->     net: WireGuard secure network tunnel
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=175ad8b1900000
-> start commit:   e3ec1e8c net: eliminate meaningless memcpy to data in pskb..
-> git tree:       net-next
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=14dad8b1900000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10dad8b1900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3d400a47d1416652
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cc4c0f394e2611edba66
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15d9de91900000
->
-> Reported-by: syzbot+cc4c0f394e2611edba66@syzkaller.appspotmail.com
-> Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+Add a test which copies a socket from a sockmap into another sockmap
+or sockhash. This excercises bpf_map_update_elem support from BPF
+context. Compare the socket cookies from source and destination to
+ensure that the copy succeeded.
 
-Having trouble linking this back to wireguard... Those oopses don't
-have anything to do with it either. Bisection error?
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 71 +++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_copy.c   | 48 +++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_copy.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 96e7b7f84c65..cd05ff5e88e1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -4,6 +4,7 @@
+ 
+ #include "test_progs.h"
+ #include "test_skmsg_load_helpers.skel.h"
++#include "test_sockmap_copy.skel.h"
+ 
+ #define TCP_REPAIR		19	/* TCP sock is under repair right now */
+ 
+@@ -101,6 +102,72 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
+ 	test_skmsg_load_helpers__destroy(skel);
+ }
+ 
++static void test_sockmap_copy(enum bpf_map_type map_type)
++{
++	struct bpf_prog_test_run_attr tattr;
++	struct test_sockmap_copy *skel;
++	__u64 src_cookie, dst_cookie;
++	int err, prog, src, dst;
++	const __u32 zero = 0;
++	char dummy[14] = {0};
++	__s64 sk;
++
++	sk = connected_socket_v4();
++	if (CHECK_FAIL(sk == -1))
++		return;
++
++	skel = test_sockmap_copy__open_and_load();
++	if (CHECK_FAIL(!skel)) {
++		close(sk);
++		perror("test_sockmap_copy__open_and_load");
++		return;
++	}
++
++	prog = bpf_program__fd(skel->progs.copy_sock_map);
++	src = bpf_map__fd(skel->maps.src);
++	if (map_type == BPF_MAP_TYPE_SOCKMAP)
++		dst = bpf_map__fd(skel->maps.dst_sock_map);
++	else
++		dst = bpf_map__fd(skel->maps.dst_sock_hash);
++
++	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
++	if (CHECK_FAIL(err)) {
++		perror("bpf_map_update");
++		goto out;
++	}
++
++	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
++	if (CHECK_FAIL(err)) {
++		perror("bpf_map_lookup_elem(src)");
++		goto out;
++	}
++
++	tattr = (struct bpf_prog_test_run_attr){
++		.prog_fd = prog,
++		.repeat = 1,
++		.data_in = dummy,
++		.data_size_in = sizeof(dummy),
++	};
++
++	err = bpf_prog_test_run_xattr(&tattr);
++	if (CHECK_ATTR(err || !tattr.retval, "bpf_prog_test_run",
++		       "errno=%u retval=%u\n", errno, tattr.retval))
++		goto out;
++
++	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
++	if (CHECK_FAIL(err)) {
++		perror("bpf_map_lookup_elem(dst)");
++		goto out;
++	}
++
++	if (dst_cookie != src_cookie)
++		PRINT_FAIL("cookie %llu != %llu\n", dst_cookie, src_cookie);
++
++out:
++	close(sk);
++	test_sockmap_copy__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -111,4 +178,8 @@ void test_sockmap_basic(void)
+ 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
+ 	if (test__start_subtest("sockhash sk_msg load helpers"))
+ 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
++	if (test__start_subtest("sockmap copy"))
++		test_sockmap_copy(BPF_MAP_TYPE_SOCKMAP);
++	if (test__start_subtest("sockhash copy"))
++		test_sockmap_copy(BPF_MAP_TYPE_SOCKHASH);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_copy.c b/tools/testing/selftests/bpf/progs/test_sockmap_copy.c
+new file mode 100644
+index 000000000000..9d0c9f28cab2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_copy.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Cloudflare
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} src SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} dst_sock_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKHASH);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} dst_sock_hash SEC(".maps");
++
++SEC("classifier/copy_sock_map")
++int copy_sock_map(void *ctx)
++{
++	struct bpf_sock *sk;
++	bool failed = false;
++	__u32 key = 0;
++
++	sk = bpf_map_lookup_elem(&src, &key);
++	if (!sk)
++		return SK_DROP;
++
++	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
++		failed = true;
++
++	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
++		failed = true;
++
++	bpf_sk_release(sk);
++	return failed ? SK_DROP : SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.25.1
+
