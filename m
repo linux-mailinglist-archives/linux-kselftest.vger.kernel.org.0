@@ -2,62 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 821AB24C420
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 19:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A892F24C46A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 19:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730215AbgHTRHo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Aug 2020 13:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730377AbgHTRFQ (ORCPT
+        id S1730511AbgHTRVU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Aug 2020 13:21:20 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:4892 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727917AbgHTRVE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Aug 2020 13:05:16 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEE6C061387
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 10:05:06 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id o23so3401234ejr.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 10:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Io5tdLMfOwzBnOTgWMWIIWlg9YYSmolrrRZ0RRvwKR8=;
-        b=kh+7Oi77zCYs0Sv7wjusq4Fc5vU9fpUjsb6r/DE/kUtxx0CQITSCQqoDaZMzjaZZ0n
-         b1VJBkGhEFH8feITupWHQFvEFbhGDN845BnvjWUre/C1K2N+lPbdhqaIylz5UM+JGll+
-         GAVJaLbBjUVw3gF32YxoWxhiSe7a6YeLphd03FE7liKLJ5lz6XlIf+0N3dLp2wHQZ2P2
-         53QhRJ8b2V+Ssvr4++sy0/W/vhM+NV6FRxAvOqnSw4Nm2O2HY9sBxZRz1vMCOGY4jAbH
-         UjkJOxnjy+aZJDIrRyJTTdd0XsUtqpmNCMnzV1KqEUvUC7x54C+Gl0x7HdYdkHKrC7ng
-         JLZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Io5tdLMfOwzBnOTgWMWIIWlg9YYSmolrrRZ0RRvwKR8=;
-        b=S6nWh0aoxeTXwVI0apHT6TvfFhrMIsYgNjKMKAV1A38PbgIEg3UD0Q76IuwiGmUzhb
-         sfbh8bP2hLHKxSwZzogKku7GR2k+kcUfKKz3/n+WOstvDdZaeBBy38H4d81g5BClBGGG
-         21aeZmOM4q0eeC//X3S6pg5ryFUtRVzMQMTe4UE8mjqpVIPLR91pHhDWSviciX7Ypy5V
-         LxaH7Qa9qHTtfyNu9dJHnBoAOBXJJZrLbpR+m0O8aA8pBiZIejXZ7/C3GC6XqrPax+k8
-         1NxUdkUY5XipuvKYM/LGGDJ1l7BsVlrDP3Pets97yzBwkkROBYiBiQaZfNSMXHuK3FQd
-         2WuQ==
-X-Gm-Message-State: AOAM530CtrkOEWsMXVBvl93nFl4K1SkRzCHEcxBTx1n/1lglAQ/TWoUZ
-        iTu9dAH5sQ+O3Ce1pspz+7xWN+KFS+OJCX2jrZ1a9w==
-X-Google-Smtp-Source: ABdhPJxmhN2XhjhlawKzSbrnBdxU0whJpUJmBc0bEkLW6GcfQwO/fGclhykmEtouej1+n+vSOnBFgnayetnB0wumRKM=
-X-Received: by 2002:a17:906:54d3:: with SMTP id c19mr4419389ejp.408.1597943104367;
- Thu, 20 Aug 2020 10:05:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200819224030.1615203-1-haoluo@google.com> <20200819224030.1615203-2-haoluo@google.com>
- <35519fec-754c-0a17-4f01-9d6e39a8a7e8@fb.com>
-In-Reply-To: <35519fec-754c-0a17-4f01-9d6e39a8a7e8@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 20 Aug 2020 10:04:53 -0700
-Message-ID: <CA+khW7jYgRxsjvqSWwLQDP5PpuXB0HJDNMLGFAOPddi7SdMP0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/8] bpf: Introduce pseudo_btf_id
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Thu, 20 Aug 2020 13:21:04 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07KHILrm010851;
+        Thu, 20 Aug 2020 10:20:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=5WxRxUZnWNhbfX4EfmCF4q0zsNsJkuC7JzpteQdmMHk=;
+ b=Iz7u6d/QJK/a9qWMivetiHIJ/ui/wQjkhElxOU3zAmC6psPtSxxEDYnaEkH98xTdmVN7
+ gdUepbAcsE00tsHr5y3O7BfDpcKM/c8UGO0rdlgNw/ZgpeZ5CY5pVBXfYB9mtUqNditq
+ ugpuIHQkha+et28mgTo1/I9RlsZgv1Z9DCY= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 3304jjfdvq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 20 Aug 2020 10:20:16 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 20 Aug 2020 10:20:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hgAvlwUO0hs8AJub4b3On2Zly5NhbLsN/eiRwJFN+Es+mBKNDhbUTc362Ow0bb1CS9kdvM40f56Vi+EQcyUzLGU39Zk54lu02PaXEexHlsWjDgYVKUWjEoztlM5IWbuHic/Jxu32bz3FwfiNuhFBebKig3+cgiC44QpWRyCYDDj7MJTC8iCJ9DsnG29yU4wkccyPts2tU6PB//SfJK8b2/8wpRggMwuUu+UJdBznKY/pUhgFuIMARDwYRQ1Ljh6nX17tmMiEQJf4B09lw/zYdOSq9zJc1NTRs9bR+XuEJ1UoCH4oEy4ltC/ipahpy/IZ0y0DV+vWkq3xY3TSlxbBmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5WxRxUZnWNhbfX4EfmCF4q0zsNsJkuC7JzpteQdmMHk=;
+ b=Ei6fFLBNaWOapJa2RE8uN+boun61E37fa/QvTrce/yoXBdPyHCGiBcyvkgIecZ30VoTXDkEokYX99lXyxGm2lduGN8wOmUXXjVonnz0ZkwPqbggOiYPQV6nYdN8iSSytZ8tjwO8dKMuxdSIcuS0wzYCOoNc1hPrO1JWNgGV0cqW/QEhLaPGlBwvUbvF31KTIeaMp41WLwSdiAqDiBmsYsyyZxXYe2/aPeUWN4oaeDKCQcBnbvb95IemkmJ2ULwtPGPJwfxAwLCG20emt6M24y84ohXiuYKlZqDvGoD+KMAm3laLuYUC1z+ovIdRWVClJ68f14t1mWOpMpU3PQW3OvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5WxRxUZnWNhbfX4EfmCF4q0zsNsJkuC7JzpteQdmMHk=;
+ b=dQnqXaXYlQHfKjk5DeItOVBc9wLNe6bRIia+3F6bRJmVoFVtoopT1yuBuv8jFJq1b9N+tlEqkPtI38BtX7p79mmEa6z9cf5fc3nzfERFJn0XEoQ8VSFQWBXodzjbtUcvuWeTxkOra95hJdQTdnrRnY6aCvRolebOK2jQ5KekbeM=
+Authentication-Results: cloudflare.com; dkim=none (message not signed)
+ header.d=none;cloudflare.com; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB2407.namprd15.prod.outlook.com (2603:10b6:a02:8d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24; Thu, 20 Aug
+ 2020 17:20:13 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80%7]) with mapi id 15.20.3305.026; Thu, 20 Aug 2020
+ 17:20:13 +0000
+Subject: Re: [PATCH bpf-next v1 3/8] bpf: Introduce help function to validate
+ ksym's type.
+To:     Hao Luo <haoluo@google.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
@@ -67,187 +71,285 @@ Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Quentin Monnet <quentin@isovalent.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Sitnicki <jakub@cloudflare.com>
+References: <20200819224030.1615203-1-haoluo@google.com>
+ <20200819224030.1615203-4-haoluo@google.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <d50a1530-9a9f-45b2-5aba-05fe4b895fbc@fb.com>
+Date:   Thu, 20 Aug 2020 10:20:07 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.11.0
+In-Reply-To: <20200819224030.1615203-4-haoluo@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR02CA0061.namprd02.prod.outlook.com
+ (2603:10b6:207:3d::38) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from 255.255.255.255 (255.255.255.255) by BL0PR02CA0061.namprd02.prod.outlook.com (2603:10b6:207:3d::38) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25 via Frontend Transport; Thu, 20 Aug 2020 17:20:10 +0000
+X-Originating-IP: [2620:10d:c091:480::1:7ec1]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f480da57-89ab-4ae3-8a04-08d8452d4c75
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2407:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2407DBE8757EAF8A5D1A745BD35A0@BYAPR15MB2407.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:923;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D575INhQv2JNU+vnk4p0sGFLZWR5AOu7lkpPHIuEjaQNi8SQgaREiyzFfJqlmOOnKK+OF0NH7chYeStJmQ/vAFNfbnMJilHYsjFPCYIWNozVJtcHfEGEENxBVKOxY5naAtyIyVwGUfXobYLjsQm7vBlPDwnsRMplkG4CnO0EAvzN0+G6QLlYmZ5QKaMFfjMGnGLkcBEwbT8VzEbEIZ4nRtmTExAW5v7x5/pSNb0oOnZGHY4XsqjvbZd6aee14D2+yUooayE5QAXVOXHd4uva9+y4ZsY9q4LkXG+MqeLYmERUv6bSq3Qpr/ED2SzIvNFLDz5f2FKYhlu0dPuaB1IByo5JVTrAwzma23UIhrWeJhwqOg//EoGAYRzPRib/CoaU/rfP6ip+A73PjAlkbM0vAs4RMUYBSVgtxcDdifmUPnY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(366004)(376002)(346002)(136003)(956004)(8676002)(2616005)(316002)(5660300002)(66476007)(54906003)(66556008)(53546011)(36756003)(16576012)(4326008)(186003)(8936002)(86362001)(52116002)(478600001)(31696002)(83380400001)(110011004)(31686004)(6486002)(66946007)(7416002)(2906002)(6666004)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: v8yu9X/yQVMdZkJloyx4tzxbxT5KOoHEEKZSPPxV3h2wfWQ23icEX77QizTpzrIMKBSDdtdNkMJzUzHIBPga07/DLlN4UotjOPH9e4VKOqvVYczecvO0rTvp8naVM7plHZMJMlZmr4ZxDnEF5vBOZfr77/9evpMjRmrISnVipt/iGP6L1DeaVzY77vglkgXm1n377kgi720UyKnyQEf6ynToyYcRTBp22eKGA71CDQXAK3j+E7zQhtmWXI/y6gkHLYaUaPTBe1OBaeX5CjY86E4bvHPRHAbsZ5jkcq35hCpH5J+ISxgD4WlkYTKrNCz3w3sbes/4hE3V1tPegC919akLfPlXh6axQqeCTRBsDAlKiUzgR0VNnfot8NRK/EaXrdXnyxcrVu/ED3hgWiI05g0c1909bJAjcqBgZO18ZVGBm3Oy/2+559cNdiQF6CVrRg8K2A7latBOJFHy6gl+fd5d53Ejbab/6aNAyaHrarvVlL2uxC5lmPqnX029HVlhRG+bJmnZeyuqIfQ2YwnnzfmGF6qb4zT/sec9E/dD5w/694Q/n7qK7r8OQ+L5jUMiZYreQ3ArT8QYWf9BRDxy39+1U/cv39xFJiflvPH9/8nJspcS7sit0quif/1o8gPhD+vW4HbHWjbSgkodU7TViovOzzXzDujSDtCP43Ty5CFZ03N30ym5LIPYvjElNHv5
+X-MS-Exchange-CrossTenant-Network-Message-Id: f480da57-89ab-4ae3-8a04-08d8452d4c75
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2020 17:20:13.3460
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J8+c37FEtKW+Hs6faPeRv1JoGsLEWSmjILGLScvKWRJqc8OnxZiOsqLFU2cNhZ9B
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2407
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-20_03:2020-08-19,2020-08-20 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=2
+ lowpriorityscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=814 phishscore=0 mlxscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008200140
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Yonghong,
-
-Thank you for taking a look. Explicitly cc'ing Arnaldo to see if he
-has any immediate insights. In the meantime, I'll dedicate time to
-investigate this issue you found.
-
-Thanks,
-Hao
 
 
-On Thu, Aug 20, 2020 at 8:23 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 8/19/20 3:40 PM, Hao Luo wrote:
-> > Pseudo_btf_id is a type of ld_imm insn that associates a btf_id to a
-> > ksym so that further dereferences on the ksym can use the BTF info
-> > to validate accesses. Internally, when seeing a pseudo_btf_id ld insn,
-> > the verifier reads the btf_id stored in the insn[0]'s imm field and
-> > marks the dst_reg as PTR_TO_BTF_ID. The btf_id points to a VAR_KIND,
-> > which is encoded in btf_vminux by pahole. If the VAR is not of a struct
-> > type, the dst reg will be marked as PTR_TO_MEM instead of PTR_TO_BTF_ID
-> > and the mem_size is resolved to the size of the VAR's type.
-> >
-> >  From the VAR btf_id, the verifier can also read the address of the
-> > ksym's corresponding kernel var from kallsyms and use that to fill
-> > dst_reg.
-> >
-> > Therefore, the proper functionality of pseudo_btf_id depends on (1)
-> > kallsyms and (2) the encoding of kernel global VARs in pahole, which
-> > should be available since pahole v1.18.
->
-> I tried your patch with latest pahole but it did not generate
-> expected BTF_TYPE_VARs. My pahole head is:
->    f3d9054ba8ff btf_encoder: Teach pahole to store percpu variables in
-> vmlinux BTF.
->
-> First I made the following changes to facilitate debugging:
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index 982f59d..f94c3a6 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -334,6 +334,9 @@ int cu__encode_btf(struct cu *cu, int verbose, bool
-> force)
->                  /* percpu variables are allocated in global space */
->                  if (variable__scope(var) != VSCOPE_GLOBAL)
->                          continue;
-> +               /* type 0 is void, probably an internal error */
-> +               if (var->ip.tag.type == 0)
-> +                       continue;
->                  has_global_var = true;
->                  head = &hash_addr[hashaddr__fn(var->ip.addr)];
->                  hlist_add_head(&var->tool_hnode, head);
-> @@ -399,8 +402,8 @@ int cu__encode_btf(struct cu *cu, int verbose, bool
-> force)
->                  }
->
->                  if (verbose)
-> -                       printf("symbol '%s' of address 0x%lx encoded\n",
-> -                              sym_name, addr);
-> +                       printf("symbol '%s' of address 0x%lx encoded,
-> type %u\n",
-> +                              sym_name, addr, type);
->
->                  /* add a BTF_KIND_VAR in btfe->types */
->                  linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED :
-> BTF_VAR_STATIC;
-> diff --git a/libbtf.c b/libbtf.c
-> index 7a01ded..3a0d8d7 100644
-> --- a/libbtf.c
-> +++ b/libbtf.c
-> @@ -304,6 +304,8 @@ static const char * const btf_kind_str[NR_BTF_KINDS] = {
->          [BTF_KIND_RESTRICT]     = "RESTRICT",
->          [BTF_KIND_FUNC]         = "FUNC",
->          [BTF_KIND_FUNC_PROTO]   = "FUNC_PROTO",
-> +       [BTF_KIND_VAR]          = "VAR",
-> +       [BTF_KIND_DATASEC]      = "DATASEC",
->   };
->
->   static const char *btf_elf__name_in_gobuf(const struct btf_elf *btfe,
-> uint32_t offset)
-> @@ -671,7 +673,7 @@ int32_t btf_elf__add_var_type(struct btf_elf *btfe,
-> uint32_t type, uint32_t name
->                  return -1;
->          }
->
-> -       btf_elf__log_type(btfe, &t.type, false, false, "type=%u name=%s",
-> +       btf_elf__log_type(btfe, &t.type, false, false, "type=%u name=%s\n",
->                            t.type.type, btf_elf__name_in_gobuf(btfe,
-> t.type.name_off));
->
->          return btfe->type_index;
->
-> It would be good if you can add some of the above changes to
-> pahole for easier `pahole -JV` dump.
->
-> With the above change, I only got static per cpu variables.
-> For example,
->     static DEFINE_PER_CPU(unsigned int , mirred_rec_level);
-> in net/sched/act_mirred.c.
->
-> [10] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)
-> [74536] VAR 'mirred_rec_level' type_id=10, linkage=static
->
-> The dwarf debug_info entry for `mirred_rec_level`:
-> 0x0001d8d6:   DW_TAG_variable
->                  DW_AT_name      ("mirred_rec_level")
->                  DW_AT_decl_file
-> ("/data/users/yhs/work/net-next/net/sched/act_mirred.c")
->                  DW_AT_decl_line (31)
->                  DW_AT_decl_column       (0x08)
->                  DW_AT_type      (0x00000063 "unsigned int")
->                  DW_AT_location  (DW_OP_addr 0x0)
-> It is not a declaration and it contains type.
->
-> All global per cpu variables do not have BTF_KIND_VAR generated.
-> I did a brief investigation and found this mostly like to be a
-> pahole issue. For example, for global per cpu variable
-> bpf_prog_active,
->    include/linux/bpf.h
->          DECLARE_PER_CPU(int , bpf_prog_active);
->    kernel/bpf/syscall.c
->          DEFINE_PER_CPU(int , bpf_prog_active);
-> it is declared in the header include/linux/bpf.h and
-> defined in kernel/bpf/syscall.c.
->
-> In many cu's, you will see:
-> 0x0003592a:   DW_TAG_variable
->                  DW_AT_name      ("bpf_prog_active")
->                  DW_AT_decl_file
-> ("/data/users/yhs/work/net-next/include/linux/bpf.h")
->                  DW_AT_decl_line (1074)
->                  DW_AT_decl_column       (0x01)
->                  DW_AT_type      (0x0001fa7e "int")
->                  DW_AT_external  (true)
->                  DW_AT_declaration       (true)
->
-> In kernel/bpf/syscall.c, I see
-> the following dwarf entry for real definition:
-> 0x00013534:   DW_TAG_variable
->                  DW_AT_name      ("bpf_prog_active")
->                  DW_AT_decl_file
-> ("/data/users/yhs/work/net-next/include/linux/bpf.h")
->                  DW_AT_decl_line (1074)
->                  DW_AT_decl_column       (0x01)
->                  DW_AT_type      (0x000000d6 "int")
->                  DW_AT_external  (true)
->                  DW_AT_declaration       (true)
->
-> 0x00021a25:   DW_TAG_variable
->                  DW_AT_specification     (0x00013534 "bpf_prog_active")
->                  DW_AT_decl_file
-> ("/data/users/yhs/work/net-next/kernel/bpf/syscall.c")
->                  DW_AT_decl_line (43)
->                  DW_AT_location  (DW_OP_addr 0x0)
->
-> Note that for the second entry DW_AT_specification points to the
-> declaration. I am not 100% sure whether pahole handle this properly or
-> not. It generates a type id 0 (void) for bpf_prog_active variable.
->
-> Could you investigate this a little more?
->
-> I am using gcc 8.2.1. Using kernel default dwarf (dwarf 2) exposed
-> the above issue. Tries to use dwarf 4 and the problem still exists.
->
->
-> >
-> > Signed-off-by: Hao Luo <haoluo@google.com>
-> > ---
-> >   include/linux/btf.h      | 15 +++++++++
-> >   include/uapi/linux/bpf.h | 38 ++++++++++++++++------
-> >   kernel/bpf/btf.c         | 15 ---------
-> >   kernel/bpf/verifier.c    | 68 ++++++++++++++++++++++++++++++++++++++++
-> >   4 files changed, 112 insertions(+), 24 deletions(-)
-> >
-> [...]
+On 8/19/20 3:40 PM, Hao Luo wrote:
+> For a ksym to be safely dereferenced and accessed, its type defined in
+> bpf program should basically match its type defined in kernel. Implement
+> a help function for a quick matching, which is used by libbpf when
+> resolving the kernel btf_id of a ksym.
+> 
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> ---
+>   tools/lib/bpf/btf.c | 171 ++++++++++++++++++++++++++++++++++++++++++++
+>   tools/lib/bpf/btf.h |   2 +
+>   2 files changed, 173 insertions(+)
+> 
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index a3d259e614b0..2ff31f244d7a 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -1005,6 +1005,177 @@ int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
+>   	return 0;
+>   }
+>   
+> +/*
+> + * Basic type check for ksym support. Only checks type kind and resolved size.
+> + */
+> +static inline
+> +bool btf_ksym_equal_type(const struct btf *ba, __u32 type_a,
+> +			 const struct btf *bb, __u32 type_b)
+
+"ba" and "bb" is not descriptive. Maybe "btf_a" or "btf_b"?
+or even "btf1" or "btf2" since the number does not carry
+extra meaning compared to letters.
+
+The same for below, may be t1, t2?
+
+> +{
+> +	const struct btf_type *ta, *tb;
+> +
+> +	ta = btf__type_by_id(ba, type_a);
+> +	tb = btf__type_by_id(bb, type_b);
+> +
+> +	/* compare type kind */
+> +	if (btf_kind(ta) != btf_kind(tb))
+> +		return false;
+> +
+> +	/* compare resolved type size */
+> +	return btf__resolve_size(ba, type_a) == btf__resolve_size(bb, type_b);
+> +}
+> +
+> +/*
+> + * Match a ksym's type defined in bpf programs against its type encoded in
+> + * kernel btf.
+> + */
+> +bool btf_ksym_type_match(const struct btf *ba, __u32 id_a,
+> +			 const struct btf *bb, __u32 id_b)
+> +{
+> +	const struct btf_type *ta = btf__type_by_id(ba, id_a);
+> +	const struct btf_type *tb = btf__type_by_id(bb, id_b);
+> +	int i;
+> +
+> +	/* compare type kind */
+> +	if (btf_kind(ta) != btf_kind(tb)) {
+> +		pr_warn("%s:mismatched type kind (%d v.s. %d).\n",
+> +			__func__, btf_kind(ta), btf_kind(tb));
+> +		return false;
+> +	}
+> +
+> +	switch (btf_kind(ta)) {
+> +	case BTF_KIND_INT: { /* compare size and encoding */
+> +		__u32 ea, eb;
+> +
+> +		if (ta->size != tb->size) {
+> +			pr_warn("%s:INT size mismatch, (%u v.s. %u)\n",
+> +				__func__, ta->size, tb->size);
+> +			return false;
+> +		}
+> +		ea = *(__u32 *)(ta + 1);
+> +		eb = *(__u32 *)(tb + 1);
+> +		if (ea != eb) {
+> +			pr_warn("%s:INT encoding mismatch (%u v.s. %u)\n",
+> +				__func__, ea, eb);
+> +			return false;
+> +		}
+> +		break;
+> +	}
+> +	case BTF_KIND_ARRAY: { /* compare type and number of elements */
+> +		const struct btf_array *ea, *eb;
+> +
+> +		ea = btf_array(ta);
+> +		eb = btf_array(tb);
+> +		if (!btf_ksym_equal_type(ba, ea->type, bb, eb->type)) {
+> +			pr_warn("%s:ARRAY elem type mismatch.\n", __func__);
+> +			return false;
+> +		}
+> +		if (ea->nelems != eb->nelems) {
+> +			pr_warn("%s:ARRAY nelems mismatch (%d v.s. %d)\n",
+> +				__func__, ea->nelems, eb->nelems);
+> +			return false;
+> +		}
+> +		break;
+> +	}
+> +	case BTF_KIND_STRUCT:
+> +	case BTF_KIND_UNION: { /* compare size, vlen and member offset, name */
+> +		const struct btf_member *ma, *mb;
+> +
+> +		if (ta->size != tb->size) {
+> +			pr_warn("%s:STRUCT size mismatch, (%u v.s. %u)\n",
+> +				__func__, ta->size, tb->size);
+> +			return false;
+> +		}
+> +		if (btf_vlen(ta) != btf_vlen(tb)) {
+> +			pr_warn("%s:STRUCT vlen mismatch, (%u v.s. %u)\n",
+> +				__func__, btf_vlen(ta), btf_vlen(tb));
+> +			return false;
+> +		}
+> +
+> +		ma = btf_members(ta);
+> +		mb = btf_members(tb);
+> +		for (i = 0; i < btf_vlen(ta); i++, ma++, mb++) {
+> +			const char *na, *nb;
+> +
+> +			if (ma->offset != mb->offset) {
+> +				pr_warn("%s:STRUCT field offset mismatch, (%u v.s. %u)\n",
+> +					__func__, ma->offset, mb->offset);
+> +				return false;
+> +			}
+> +			na = btf__name_by_offset(ba, ma->name_off);
+> +			nb = btf__name_by_offset(bb, mb->name_off);
+> +			if (strcmp(na, nb)) {
+> +				pr_warn("%s:STRUCT field name mismatch, (%s v.s. %s)\n",
+> +					__func__, na, nb);
+> +				return false;
+> +			}
+> +		}
+
+I am wondering whether this is too strict and how this can co-work with 
+CO-RE. Forcing users to write almost identical structure definition to 
+the underlying kernel will not be user friendly and may not work cross
+kernel versions even if the field user cares have not changed.
+
+Maybe we can relax the constraint here. You can look at existing
+libbpf CO-RE code.
+
+> +		break;
+> +	}
+> +	case BTF_KIND_ENUM: { /* compare vlen and member value, name */
+> +		const struct btf_enum *ma, *mb;
+> +
+> +		if (btf_vlen(ta) != btf_vlen(tb)) {
+> +			pr_warn("%s:ENUM vlen mismatch, (%u v.s. %u)\n",
+> +				__func__, btf_vlen(ta), btf_vlen(tb));
+> +			return false;
+> +		}
+> +
+> +		ma = btf_enum(ta);
+> +		mb = btf_enum(tb);
+> +		for (i = 0; i < btf_vlen(ta); i++, ma++, mb++) {
+> +			if (ma->val != mb->val) {
+> +				pr_warn("%s:ENUM val mismatch, (%u v.s. %u)\n",
+> +					__func__, ma->val, mb->val);
+> +				return false;
+> +			}
+> +		}
+> +		break;
+> +	}
+> +	case BTF_KIND_PTR: { /* naive compare of ref type for PTR */
+> +		if (!btf_ksym_equal_type(ba, ta->type, bb, tb->type)) {
+> +			pr_warn("%s:PTR ref type mismatch.\n", __func__);
+> +			return false;
+> +		}
+> +		break;
+> +	}
+> +	case BTF_KIND_FUNC_PROTO: { /* naive compare of vlen and param types */
+> +		const struct btf_param *pa, *pb;
+> +
+> +		if (btf_vlen(ta) != btf_vlen(tb)) {
+> +			pr_warn("%s:FUNC_PROTO vlen mismatch, (%u v.s. %u)\n",
+> +				__func__, btf_vlen(ta), btf_vlen(tb));
+> +			return false;
+> +		}
+> +
+> +		pa = btf_params(ta);
+> +		pb = btf_params(tb);
+> +		for (i = 0; i < btf_vlen(ta); i++, pa++, pb++) {
+> +			if (!btf_ksym_equal_type(ba, pa->type, bb, pb->type)) {
+> +				pr_warn("%s:FUNC_PROTO params type mismatch.\n",
+> +					__func__);
+> +				return false;
+> +			}
+> +		}
+> +		break;
+> +	}
+> +	case BTF_KIND_FUNC:
+> +	case BTF_KIND_CONST:
+> +	case BTF_KIND_VOLATILE:
+> +	case BTF_KIND_RESTRICT:
+> +	case BTF_KIND_TYPEDEF:
+> +	case BTF_KIND_VAR:
+> +	case BTF_KIND_DATASEC:
+> +		pr_warn("unexpected type for matching ksym types.\n");
+> +		return false;
+> +	default:
+> +		pr_warn("unsupported btf types.\n");
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>   struct btf_ext_sec_setup_param {
+>   	__u32 off;
+>   	__u32 len;
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index 91f0ad0e0325..5ef220e52485 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -52,6 +52,8 @@ LIBBPF_API int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
+>   				    __u32 expected_key_size,
+>   				    __u32 expected_value_size,
+>   				    __u32 *key_type_id, __u32 *value_type_id);
+> +LIBBPF_API bool btf_ksym_type_match(const struct btf *ba, __u32 id_a,
+> +				    const struct btf *bb, __u32 id_b);
+>   
+>   LIBBPF_API struct btf_ext *btf_ext__new(__u8 *data, __u32 size);
+>   LIBBPF_API void btf_ext__free(struct btf_ext *btf_ext);
+
+The new API function should be added to libbpf.map.
