@@ -2,61 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E8B24C78A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 00:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D3924C78C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 00:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727872AbgHTWGD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Aug 2020 18:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S1728052AbgHTWGH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Aug 2020 18:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726792AbgHTWGC (ORCPT
+        with ESMTP id S1726976AbgHTWGC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 20 Aug 2020 18:06:02 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBEFC061385;
-        Thu, 20 Aug 2020 15:06:01 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id p18so2975723ilm.7;
-        Thu, 20 Aug 2020 15:06:01 -0700 (PDT)
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C82C061386;
+        Thu, 20 Aug 2020 15:06:02 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id c6so2949941ilo.13;
+        Thu, 20 Aug 2020 15:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ImZDF05n05n/CkmaZKAhMdW71wiSD26NsvWqe+Zqg4g=;
-        b=JnvK7sHT6F/CmrDC+vS+458nEjhjpj/PR0QXvOeH9/jsshse9i3sVAODwmwfzz6n0Y
-         c56Mm+PuFwsTibWEaqDx35yNmEEhh/GgQhF7JVPMxnQgOeEZmyLC8lGmhbLG3GkEa6TD
-         iyfoiYojJ0AfNxIfntEnV0KU+jtY/s6OsN4URbm2jLf4O0LJzQGc/j62+tU5skqC7rZv
-         FD8o0EVxwahI5HfllDJ4fXaTTLm5QgN1A3hsLy9L4Rm/DC5tsXzSaDFwJr/jx1/n42Rt
-         drGeaMT0LomIupSLngAsXAj6rH0F0Pd5MiyL/hCmgaDSrSc7lVylL6tANc5WiMc36QAf
-         vViQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DzG5wNvIiElD5ig1Fzkuaob5nmroEr2fSQQ8nLhwOlg=;
+        b=ob+ZIoDQv0++jw2FtN0RkOhURwOOrJKdKw+JyUWM/kDqk5Si3/fQgOHtIi1r6UwYPe
+         WNe/OyatWM39FiRo59Kz3RnKJDGNSdS9r2hIEIvWlgcsOizt298LPSf8ayBCC7fbT3Pj
+         Z7unfzBgcQeo79quSBUIZzQKlmI8f2PsetFpysAXacODjqZc39YF036q7gWpPSpzvXnW
+         OvqDUJ+abxwvI7bJrDM6HJyGmlWyUQ6vYW60GRVlAT9tiR2sh5Q+Dy5QPABGgqHfoBai
+         Ea02qQzFcaawVrH9jdnS6zvLI1sV+/BocgioGW1vgu50YsSok/h/szX3os4vZtA5Hdfv
+         g7Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ImZDF05n05n/CkmaZKAhMdW71wiSD26NsvWqe+Zqg4g=;
-        b=YEhgpV9k/3iimNJyo0ZKzw8eCePu/R5qk8eimuxm9rC7I8cfLGMayUX2DfKYJPfzCz
-         9Go7ZL49UOYKiID5di1tDAmU9RT7lU00eCVo8/9ogwikOYvP1yLV6DxvBOXKKMuu/rSA
-         qJukCyWNtvGOFF9M6Mp5VP6GPBGSNloT3i7ZgPRk2roqNLUi0nBPmMprc860CfQXI9qo
-         8A+MwArWcQvjzd8PCVxd7r4qm39FMjql+7kxqr90kNSPy6FBRD7sTnji1TNO7iYPAIqq
-         JMreqkq1mg2cTbtY23PcpCqLcXJipwphLxCZTQ1B5NR8WmtLBvgsY2qSJomlOQ1evbn5
-         BcYw==
-X-Gm-Message-State: AOAM531dYo8xnaqinEnJf/bLreuHz9mzvgSH1V/qftKQJR+RnmFKBFvW
-        Tpl4o6gznl4hZApuXU0s+Tk=
-X-Google-Smtp-Source: ABdhPJzbBAcSVBX+eQeZrSaXJ/fePxRGSv5oRrJzb6/L7T/wyBK+lc8uB/deuNFKd/XMEbBAEmvelQ==
-X-Received: by 2002:a92:5a05:: with SMTP id o5mr136847ilb.58.1597961160968;
-        Thu, 20 Aug 2020 15:06:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DzG5wNvIiElD5ig1Fzkuaob5nmroEr2fSQQ8nLhwOlg=;
+        b=VpIibwgu8K1etUElTrArHRt+tvjiPasU10UJaH2eqdC5SbzxIMi2FXbgjqxrNrxQ/I
+         b1a3lV0C9Hh5OCRZrDgETcYlxFR2v8CV1ONwQ21XCjVt35G8UXqVREiNT+aDViY8nY3t
+         B7plHqD3Mh/HO9uDx+AjYpbWbdQjluSRaD13m1Ea5v6rYQWihevlrm1zuxDzH3zAnUgI
+         /q4YWJSPXtoDGasCm5iCJngARUCozrVYkSBuAZ56CxWIET4wwft7swstTJmoCYgzz7XM
+         s8hUAqoSEd+KRY7zJsEHRckWS4ZwTk0yUiSe9iDITlW6XBIAiHKD1v8EfDD9cT2TtEw9
+         emCQ==
+X-Gm-Message-State: AOAM530eXrh3EnGXFUrSpfL8Pf/bNbRwWJEfA1PhKdcskYydExun0oRf
+        QTvyli+djxVqrdDgl0SXrIPmhE4Ft56chw==
+X-Google-Smtp-Source: ABdhPJz0cLp2ifcpQ06WZItz/8AV4PeS5zxBtPimniRBTpwS5c0w/X/wDS6T+Lb4KYlwLtrbbFVZMQ==
+X-Received: by 2002:a05:6e02:ef3:: with SMTP id j19mr135251ilk.88.1597961161668;
+        Thu, 20 Aug 2020 15:06:01 -0700 (PDT)
 Received: from urieldev.c.googlers.com.com (243.199.238.35.bc.googleusercontent.com. [35.238.199.243])
-        by smtp.gmail.com with ESMTPSA id u124sm2162827iod.20.2020.08.20.15.05.59
+        by smtp.gmail.com with ESMTPSA id u124sm2162827iod.20.2020.08.20.15.06.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 15:06:00 -0700 (PDT)
+        Thu, 20 Aug 2020 15:06:01 -0700 (PDT)
 From:   Uriel Guajardo <urielguajardojr@gmail.com>
 To:     brendanhiggins@google.com
 Cc:     urielguajardo@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Uriel Guajardo <urielguajardojr@gmail.com>
-Subject: [PATCH 1/2] kunit: expect failures from dynamic analysis tools
-Date:   Thu, 20 Aug 2020 22:05:51 +0000
-Message-Id: <20200820220552.3427995-1-urielguajardojr@gmail.com>
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] kunit: port UBSAN tests to KUnit
+Date:   Thu, 20 Aug 2020 22:05:52 +0000
+Message-Id: <20200820220552.3427995-2-urielguajardojr@gmail.com>
 X-Mailer: git-send-email 2.28.0.297.g1956fa8f8d-goog
+In-Reply-To: <20200820220552.3427995-1-urielguajardojr@gmail.com>
+References: <20200820220552.3427995-1-urielguajardojr@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -64,187 +65,265 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds support to KUnit for failure expectation for specific tools. Uses
-named KUnit resources to keep track of whether or not a failure expectation has
-been set by the user.
+From: Uriel Guajardo <urielguajardo@google.com>
 
-- Adds a generic KUNIT_EXPECT_TOOL_FAIL macro that can expect failure from any
-supported tool that uses the same identifying name
+UBSAN tests are ported to the KUnit testing framework using the tool failure
+expectation feature added to KUnit.
 
-- Adds kunit_fail_from_tool which is used to flag failures for specific
-tools.
+I've commented out test_ubsan_divrem_overflow and
+test_ubsan_out_of_bounds since they both consistently crash the kernel.
+The former gives me a divide error and the latter gives a corrupted kernel
+stack error. If this is only on my end, let me know.
 
-Requires "kunit: suppport failure from dynamic analysis tools":
-https://lore.kernel.org/linux-kselftest/20200813205722.1384108-1-urielguajardojr@gmail.com/
+Kconfig file is reformatted according the KUnit naming guidelines:
+https://lore.kernel.org/linux-kselftest/20200702071416.1780522-1-davidgow@google.com/
+
+Requires "kunit: UBSAN integration":
+https://lore.kernel.org/linux-kselftest/20200813205722.1384108-2-urielguajardojr@gmail.com/
 
 Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
 ---
- include/kunit/test-bug.h | 53 ++++++++++++++++++++++++++++++++++++++++
- include/kunit/test.h     |  5 ++++
- lib/kunit/test.c         | 46 +++++++++++++++++++++++++++++-----
- 3 files changed, 98 insertions(+), 6 deletions(-)
+ lib/Kconfig.ubsan | 12 ++++--
+ lib/Makefile      |  2 +-
+ lib/test_ubsan.c  | 96 ++++++++++++++++++++++++-----------------------
+ lib/ubsan.c       |  2 +-
+ 4 files changed, 59 insertions(+), 53 deletions(-)
 
-diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-index 283c19ec328f..383198f70cb5 100644
---- a/include/kunit/test-bug.h
-+++ b/include/kunit/test-bug.h
-@@ -9,16 +9,69 @@
- #ifndef _KUNIT_TEST_BUG_H
- #define _KUNIT_TEST_BUG_H
+diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+index 774315de555a..aab5fbecd19a 100644
+--- a/lib/Kconfig.ubsan
++++ b/lib/Kconfig.ubsan
+@@ -80,11 +80,15 @@ config UBSAN_ALIGNMENT
+ 	  Enabling this option on architectures that support unaligned
+ 	  accesses may produce a lot of false positives.
  
-+/**
-+ * struct kunit_expectation - represents expectations in KUnit, specifically
-+ * used to keep track of failure expectations from analysis tools
-+ */
-+struct kunit_expectation {
-+	bool expected;
-+	bool found;
-+};
-+
- #if IS_ENABLED(CONFIG_KUNIT)
+-config TEST_UBSAN
+-	tristate "Module for testing for undefined behavior detection"
+-	depends on m
++config UBSAN_KUNIT_TEST
++	tristate "Tests for undefined behavior detection" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+-	  This is a test module for UBSAN.
++	  This is a test suite for UBSAN using the KUnit testing framework.
+ 	  It triggers various undefined behavior, and detect it.
  
- extern void kunit_fail_current_test(void);
++	  For more information on KUnit and unit tests in general, please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit
++
+ endif	# if UBSAN
+diff --git a/lib/Makefile b/lib/Makefile
+index b1c42c10073b..8b1a134f5bf1 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -67,7 +67,7 @@ obj-$(CONFIG_TEST_IDA) += test_ida.o
+ obj-$(CONFIG_TEST_KASAN) += test_kasan.o
+ CFLAGS_test_kasan.o += -fno-builtin
+ CFLAGS_test_kasan.o += $(call cc-disable-warning, vla)
+-obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
++obj-$(CONFIG_UBSAN_KUNIT_TEST) += test_ubsan.o
+ CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
+ UBSAN_SANITIZE_test_ubsan.o := y
+ obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
+diff --git a/lib/test_ubsan.c b/lib/test_ubsan.c
+index 9ea10adf7a66..ec724cddf005 100644
+--- a/lib/test_ubsan.c
++++ b/lib/test_ubsan.c
+@@ -2,63 +2,65 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <kunit/test.h>
  
-+/**
-+ * kunit_fail_from_tool() - Fails the currently running KUnit tests under the
-+ * given tool name.
-+ *
-+ * Note: Uses a named KUnit resource to track state. Do not use the name
-+ * KUNIT_TOOL_{tool} for KUnit resources outside of here.
-+ */
-+#define kunit_fail_from_tool(tool)			\
-+	if (current->kunit_test)			\
-+		kunit_tool_fail(current->kunit_test, #tool,\
-+				"KUNIT_TOOL_" #tool)
-+
-+/**
-+ * kunit_tool_expectation() - Returns the kunit_expectation for the given
-+ * tool. If it cannot find the expectation, it creates an expectation and
-+ * returns it.
-+ *
-+ * Note: Uses a named KUnit resource to track state. Do not use the name
-+ * KUNIT_TOOL_{tool} for KUnit resources outside of here.
-+ */
-+#define kunit_tool_expectation(test, tool)			\
-+	kunit_find_expectation(test, "KUNIT_TOOL_" #tool)
-+
-+
-+/**
-+ * KUNIT_EXPECT_TOOL_FAIL() - Fails the currently running KUnit test if the
-+ * condition does not cause an error within the given tool.
-+ *
-+ * Note: 'tool' must be consistent with the name specified in
-+ * kunit_fail_from_tool(). If the tool fails KUnit using another name, KUnit
-+ * will treat it as a separate tool.
-+ */
-+#define KUNIT_EXPECT_TOOL_FAIL(test, condition, tool) do {		\
-+	struct kunit_expectation *data = kunit_tool_expectation(test, tool);\
-+	data->expected = true;						\
-+	data->found = false;						\
-+	condition;							\
-+	KUNIT_EXPECT_EQ(test, data->expected, data->found);		\
-+	data->expected = false;						\
-+	data->found = false;						\
-+} while (0)
-+
- #else
+-typedef void(*test_ubsan_fp)(void);
++#define KUNIT_EXPECT_UBSAN_FAIL(test, condition) \
++	KUNIT_EXPECT_TOOL_FAIL(test, condition, UBSAN)
  
- static inline void kunit_fail_current_test(void)
+-static void test_ubsan_add_overflow(void)
++static void test_ubsan_add_overflow(struct kunit *test)
  {
+ 	volatile int val = INT_MAX;
+ 
+-	val += 2;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val += 2);
  }
  
-+#define kunit_fail_from_tool(tool) do { } while (0)
-+
- #endif
+-static void test_ubsan_sub_overflow(void)
++static void test_ubsan_sub_overflow(struct kunit *test)
+ {
+ 	volatile int val = INT_MIN;
+ 	volatile int val2 = 2;
  
- #endif /* _KUNIT_TEST_BUG_H */
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 81bf43a1abda..3da8e17ee32b 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -511,6 +511,11 @@ static inline int kunit_destroy_named_resource(struct kunit *test,
-  */
- void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
- 
-+void kunit_tool_fail(struct kunit *test, char *tool_name, char *resource_name);
-+
-+struct kunit_expectation *kunit_find_expectation(struct kunit *test,
-+						 char *resource_name);
-+
- /**
-  * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-  * @test: The test context object.
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index d8189d827368..458d1ad2daf2 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -22,6 +22,45 @@ void kunit_fail_current_test(void)
- 		kunit_set_failure(current->kunit_test);
+-	val -= val2;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val -= val2);
  }
  
-+static void kunit_data_free(struct kunit_resource *res)
-+{
-+	kfree(res->data);
-+}
-+
-+struct kunit_expectation *kunit_find_expectation(struct kunit *test,
-+						 char *resource_name)
-+{
-+	struct kunit_resource *resource;
-+	struct kunit_expectation *expectation;
-+
-+	struct kunit_resource *existing = kunit_find_named_resource(
-+			test, resource_name);
-+	if (!existing) {
-+		expectation = kzalloc(sizeof(*expectation), GFP_KERNEL);
-+		resource = kunit_alloc_and_get_resource(test, NULL,
-+					kunit_data_free, GFP_KERNEL,
-+					expectation);
-+		resource->name = resource_name;
-+		kunit_put_resource(resource);
-+		return expectation;
-+	}
-+	kunit_put_resource(existing);
-+	return existing->data;
-+}
-+EXPORT_SYMBOL_GPL(kunit_find_expectation);
-+
-+void kunit_tool_fail(struct kunit *test, char *tool_name, char *resource_name)
-+{
-+	struct kunit_expectation *data = kunit_find_expectation(test,
-+								resource_name);
-+	if (!data->expected) {
-+		kunit_warn(test, "Dynamic analysis tool failure from %s",
-+			   tool_name);
-+		return kunit_fail_current_test();
-+	}
-+	data->found = true;
-+}
-+
- static void kunit_print_tap_version(void)
+-static void test_ubsan_mul_overflow(void)
++static void test_ubsan_mul_overflow(struct kunit *test)
  {
- 	static bool kunit_has_printed_tap_version;
-@@ -538,11 +577,6 @@ static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
+ 	volatile int val = INT_MAX / 2;
+ 
+-	val *= 3;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val *= 3);
+ }
+ 
+-static void test_ubsan_negate_overflow(void)
++static void test_ubsan_negate_overflow(struct kunit *test)
+ {
+ 	volatile int val = INT_MIN;
+ 
+-	val = -val;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val = -val);
+ }
+ 
+-static void test_ubsan_divrem_overflow(void)
++static void test_ubsan_divrem_overflow(struct kunit *test)
+ {
+ 	volatile int val = 16;
+ 	volatile int val2 = 0;
+ 
+-	val /= val2;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val /= val2);
+ }
+ 
+-static void test_ubsan_shift_out_of_bounds(void)
++static void test_ubsan_shift_out_of_bounds(struct kunit *test)
+ {
+ 	volatile int val = -1;
+ 	int val2 = 10;
+ 
+-	val2 <<= val;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val2 <<= val);
+ }
+ 
+-static void test_ubsan_out_of_bounds(void)
++static void test_ubsan_out_of_bounds(struct kunit *test)
+ {
+ 	volatile int i = 4, j = 5;
+ 	volatile int arr[4];
+ 
+-	arr[j] = i;
++	KUNIT_EXPECT_UBSAN_FAIL(test, arr[j] = i);
+ }
+ 
+-static void test_ubsan_load_invalid_value(void)
++static void test_ubsan_load_invalid_value(struct kunit *test)
+ {
+ 	volatile char *dst, *src;
+ 	bool val, val2, *ptr;
+@@ -69,10 +71,10 @@ static void test_ubsan_load_invalid_value(void)
+ 	*dst = *src;
+ 
+ 	ptr = &val2;
+-	val2 = val;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val2 = val);
+ }
+ 
+-static void test_ubsan_null_ptr_deref(void)
++static void test_ubsan_null_ptr_deref(struct kunit *test)
+ {
+ 	volatile int *ptr = NULL;
+ 	int val;
+@@ -80,56 +82,56 @@ static void test_ubsan_null_ptr_deref(void)
+ 	val = *ptr;
+ }
+ 
+-static void test_ubsan_misaligned_access(void)
++static void test_ubsan_misaligned_access(struct kunit *test)
+ {
+ 	volatile char arr[5] __aligned(4) = {1, 2, 3, 4, 5};
+ 	volatile int *ptr, val = 6;
+ 
+ 	ptr = (int *)(arr + 1);
+-	*ptr = val;
++	KUNIT_EXPECT_UBSAN_FAIL(test, *ptr = val);
+ }
+ 
+-static void test_ubsan_object_size_mismatch(void)
++static void test_ubsan_object_size_mismatch(struct kunit *test)
+ {
+ 	/* "((aligned(8)))" helps this not into be misaligned for ptr-access. */
+ 	volatile int val __aligned(8) = 4;
+ 	volatile long long *ptr, val2;
+ 
+ 	ptr = (long long *)&val;
+-	val2 = *ptr;
++	KUNIT_EXPECT_UBSAN_FAIL(test, val2 = *ptr);
+ }
+ 
+-static const test_ubsan_fp test_ubsan_array[] = {
+-	test_ubsan_add_overflow,
+-	test_ubsan_sub_overflow,
+-	test_ubsan_mul_overflow,
+-	test_ubsan_negate_overflow,
+-	test_ubsan_divrem_overflow,
+-	test_ubsan_shift_out_of_bounds,
+-	test_ubsan_out_of_bounds,
+-	test_ubsan_load_invalid_value,
+-	//test_ubsan_null_ptr_deref, /* exclude it because there is a crash */
+-	test_ubsan_misaligned_access,
+-	test_ubsan_object_size_mismatch,
++static struct kunit_case ubsan_test_cases[] = {
++	KUNIT_CASE(test_ubsan_add_overflow),
++	KUNIT_CASE(test_ubsan_sub_overflow),
++	KUNIT_CASE(test_ubsan_mul_overflow),
++	KUNIT_CASE(test_ubsan_negate_overflow),
++	//KUNIT_CASE(test_ubsan_divrem_overflow), /* exclude because it crashes*/
++	KUNIT_CASE(test_ubsan_shift_out_of_bounds),
++	//KUNIT_CASE(test_ubsan_out_of_bounds), /* exclude because it crashes */
++	KUNIT_CASE(test_ubsan_load_invalid_value),
++	//KUNIT_CASE(test_ubsan_null_ptr_deref), /* exclude because it crashes */
++	KUNIT_CASE(test_ubsan_misaligned_access),
++	KUNIT_CASE(test_ubsan_object_size_mismatch),
++	{}
+ };
+ 
+-static int __init test_ubsan_init(void)
++static int test_ubsan_init(struct kunit *test)
+ {
+-	unsigned int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(test_ubsan_array); i++)
+-		test_ubsan_array[i]();
+-
+-	(void)test_ubsan_null_ptr_deref; /* to avoid unsed-function warning */
++	/* Avoid unused-function warnings */
++	(void)test_ubsan_divrem_overflow;
++	(void)test_ubsan_out_of_bounds;
++	(void)test_ubsan_null_ptr_deref;
  	return 0;
  }
+-module_init(test_ubsan_init);
  
--static void kunit_kmalloc_free(struct kunit_resource *res)
+-static void __exit test_ubsan_exit(void)
 -{
--	kfree(res->data);
+-	/* do nothing */
 -}
--
- void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
- {
- 	struct kunit_kmalloc_params params = {
-@@ -552,7 +586,7 @@ void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
+-module_exit(test_ubsan_exit);
++static struct kunit_suite ubsan_test_suite = {
++	.name = "ubsan",
++	.init = test_ubsan_init,
++	.test_cases = ubsan_test_cases,
++};
++
++kunit_test_suites(&ubsan_test_suite);
  
- 	return kunit_alloc_resource(test,
- 				    kunit_kmalloc_init,
--				    kunit_kmalloc_free,
-+				    kunit_data_free,
- 				    gfp,
- 				    &params);
- }
+ MODULE_AUTHOR("Jinbum Park <jinb.park7@gmail.com>");
+ MODULE_LICENSE("GPL v2");
+diff --git a/lib/ubsan.c b/lib/ubsan.c
+index 1460e2c828c8..9fe357eb1e81 100644
+--- a/lib/ubsan.c
++++ b/lib/ubsan.c
+@@ -138,7 +138,7 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
+ {
+ 	current->in_ubsan++;
+ 
+-	kunit_fail_current_test();
++	kunit_fail_from_tool(UBSAN);
+ 	pr_err("========================================"
+ 		"========================================\n");
+ 	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
 -- 
 2.28.0.297.g1956fa8f8d-goog
 
