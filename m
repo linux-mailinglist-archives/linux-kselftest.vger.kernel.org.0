@@ -2,230 +2,209 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBCA24C02E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 16:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B0124C0E7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Aug 2020 16:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgHTOJ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Aug 2020 10:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731196AbgHTN6f (ORCPT
+        id S1727888AbgHTOt5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Aug 2020 10:49:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42432 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726885AbgHTOtk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Aug 2020 09:58:35 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C721C06134F
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 06:58:15 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id f1so2136253wro.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2020 06:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Mjkc+uOFGofk3IvrwN78/tWylXT0mT1Xub0o04o3B+A=;
-        b=RMZGaVEW5IVGuTA6PbP9MNBnRo5TEV7o9K9/YR0QKsq+59hK1vhRjJIMb0omsq4lUk
-         vIryb+QTQUt6ZxOjsFBRj9QteTdzHtsCJOEV8spsa6Bd4G9psvbwGgeCFtv1Eg0dMerz
-         cQNzWwlaS+eWMFvlZn0EfDOaeen8+lWXnEIPU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Mjkc+uOFGofk3IvrwN78/tWylXT0mT1Xub0o04o3B+A=;
-        b=R15vQeWueCkcKSQ1tOLB0Ql+NIutwcoeo5RHQUGJky39WfurXFhluFkQPeXxKRff6g
-         KN7EJNvoHjdhsV0DIDgWwYibPNbYEqryOHNfp8H5sj2PWrqcqxGHSAESl2cjpzAAO8m5
-         R3DjtMMYsBHWN+AvS+LwmrtjogAKUq8PgOYi6qkzjXaP8PWhs18qveFEGEcnKDAQDe1E
-         TEKP9D6GlmgLry8I1TPx3jNp2OkbeOvQ+y+yYuay3QYgZm2if96Lm1x5tGAByo3eUnyG
-         3d2fBcNGV1JQ0E/FPH4bU3aRVIirtx8QnxaZhJZAXbeNjisJU8a2SzBSxxHTlV2K1WxM
-         7cSQ==
-X-Gm-Message-State: AOAM531QILT/jMTSsoXXRh2c7xH/kEEP0iebieaE1ouoOISht904+bPv
-        3pl/cPW4cjd+s+XoqV8+OgUPcA==
-X-Google-Smtp-Source: ABdhPJyH87ZSVi7lwlb71OnrwdhOs5eqoIN0EC6j3eBTBrVN4KUyVTyeUyzAfJF4d0iy4rXjxT8tdg==
-X-Received: by 2002:a5d:4c83:: with SMTP id z3mr3297909wrs.359.1597931893722;
-        Thu, 20 Aug 2020 06:58:13 -0700 (PDT)
-Received: from antares.lan (d.0.f.e.b.c.7.2.d.c.3.8.4.8.d.9.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:9d84:83cd:27cb:ef0d])
-        by smtp.gmail.com with ESMTPSA id l81sm4494215wmf.4.2020.08.20.06.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 06:58:12 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     jakub@cloudflare.com, john.fastabend@gmail.com,
+        Thu, 20 Aug 2020 10:49:40 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07KEkDj8012255;
+        Thu, 20 Aug 2020 07:49:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=N2JYciGo3stDKphKVw7wGi1y0bjU92X5HW8zClleyAc=;
+ b=q4J1QYtrkw0uydnVFRM9GNhK9/3qhOrPusD7JsTS+jlkmbH+o8Zn+L1sIgSoKsjo1riJ
+ v4qaeVukQndGV1t//u8B4QqkiMwTiTDndMzLUGERZDGnpMFSx0XASIGqgqAey5xUPCuz
+ 078owbax8Fp+/3cjhrv2UwWEqCz51Na7xrU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3304nxxgfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 20 Aug 2020 07:49:21 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 20 Aug 2020 07:49:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HjxTyDlzD9MXyZXnHVqJOW+/pRgOEEIZtn4X2CsvdyWbOqSboN8Ay5n+BA7r8M1w4CineLXzZLoe2/60yR10Z48SEiGh04NZMMhrs5he7NZQ2l1Y/tbYoFNsdhA3eD8HFa0ZDcWhUYyy20QgShD7vVdiOCKVaaEn3+Ma7k7x3OCTMpCRU2nUMZ+BUpv1jRYdcMWMN7qkA1xQj5aIcQqc0xbLMorqCao9Q+fQ9ZIgtAz7EPvgJ9sTRnhRg/NcmvLcCOk8lFsNeoOE5nMpoTrsb6tcCAf8wWxYML092NJkgEVUmHEycNJUHIyw0VoHkrX5pRe1E5LUAwjWObLt/Dxrbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N2JYciGo3stDKphKVw7wGi1y0bjU92X5HW8zClleyAc=;
+ b=OHrX+xAuYguWBPrK2e2G5PrYRGRYyeUZSMOWyMuvZSdRK+kp8U9rdr5hEFwpLRDUMv3P9n53Ysrfg9R945v5vtopoBZbIcITEG132/tQVKwQjGJoCWAgKp2csmN4BJOLBO2Kwj+mD8zuuW5+ROv6e78g3Dm5yLzqBCQG3eCx1RHygSjIY5aifgIeWQsuvWUUXX2cUjkxk9DdA/0Yp4YGdoBbRgJxupU/gZlPt4QmwV3gHDlbdD/B7x6mBDv1QcuwiTa/+vXpwqHktgRJCECz58qlXSE1CnzMyyHd0FDWGNQK7X64vEzaAIWbnB/k2NRXO9T8QVzEa6yJIyH4ZC+Gsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N2JYciGo3stDKphKVw7wGi1y0bjU92X5HW8zClleyAc=;
+ b=a0ITvzthAnk+5mbBPVIffzLfsZ3uijfbcgc76C3B+PXeLh9OFwyFNvsoXhIdIDwh2rMNlQurWMyYHnYmROyIfw1hXoJflmWLdRIeESZmgQDvX/xzt3Cd3+pla7yLwLO+lJhrn25/Xvczy46QIILBd8LHb1zDHSqnfpFALx3ZWCI=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB2695.namprd15.prod.outlook.com (2603:10b6:a03:150::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Thu, 20 Aug
+ 2020 14:49:19 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80%7]) with mapi id 15.20.3305.026; Thu, 20 Aug 2020
+ 14:49:19 +0000
+Subject: Re: [PATCH bpf-next 6/6] selftests: bpf: test sockmap update from BPF
+To:     Lorenz Bauer <lmb@cloudflare.com>
+CC:     Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 6/6] selftests: bpf: test sockmap update from BPF
-Date:   Thu, 20 Aug 2020 14:57:29 +0100
-Message-Id: <20200820135729.135783-7-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820135729.135783-1-lmb@cloudflare.com>
-References: <20200820135729.135783-1-lmb@cloudflare.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@cloudflare.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+References: <20200819092436.58232-1-lmb@cloudflare.com>
+ <20200819092436.58232-7-lmb@cloudflare.com>
+ <1ad29823-1925-01ee-f042-20b422a62a73@fb.com>
+ <CACAyw9-ORs29Gt0c02qsco9ah_h88OqQh5cq36SpDCD19x89uw@mail.gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <582e57e2-58e6-8a37-7dbc-67a2a1db7ecb@fb.com>
+Date:   Thu, 20 Aug 2020 07:49:14 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.11.0
+In-Reply-To: <CACAyw9-ORs29Gt0c02qsco9ah_h88OqQh5cq36SpDCD19x89uw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR06CA0001.namprd06.prod.outlook.com
+ (2603:10b6:208:23d::6) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from 255.255.255.255 (255.255.255.255) by MN2PR06CA0001.namprd06.prod.outlook.com (2603:10b6:208:23d::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24 via Frontend Transport; Thu, 20 Aug 2020 14:49:16 +0000
+X-Originating-IP: [2620:10d:c091:480::1:7ec1]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 60fc5185-03ce-4398-e1b3-08d8451837a1
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2695:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2695E2E59F06E3F87C34B16BD35A0@BYAPR15MB2695.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:257;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nVsqDQ5iPuDYQc/jwoGTFTDO1S27gJOJaHoKtjGQ3jIGZso3ek21ZBhVQQha8EY3BzB5LNSPbpFI/4vteQDEDLe85o5IQ9FQeT3m2XqVxfe26djWZ6+79Lutyi5+ueRRsFgIq+JVZD5T7rOOZZVbp4XHrBWvcCNzfh2Qe0nDkDZUj7LaHsGg98IJb/Je7lKExTyXqmFu+hCpJqJjdqr3LkK57h/prNe4Qlqp5dzY57ThDhuUNnttT+ADNDhh9eDF0OgbtDUw3mGJHTBtuj3nTNZmsOJjznajUJEaA29fldpmfSn8/iuv42+q14Rh+CNJEuSpNfUB27ZiiwhawtNhAgtzLfJtJ7ZjIwSn0AQGPKcuHPVnblzW3UH+PlvCa7Jje/JdR7o8Jpq7gWD6giaXxk52GbbyD+um+erjL4z1JAU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(396003)(376002)(346002)(39860400002)(2906002)(86362001)(186003)(52116002)(54906003)(316002)(36756003)(5660300002)(16576012)(6916009)(110011004)(956004)(31696002)(53546011)(2616005)(66946007)(8676002)(66556008)(66476007)(8936002)(31686004)(478600001)(4326008)(6486002)(7416002)(83380400001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: vSMGNQsY3x8/ubSqS2mGpy4Obp6hbcO9DXa59L7Yk5eZCMXfciAtd6eJVritLoUyOvwqigtJgAc/Vl+VbyQUvb8RcuSG4a3Et+cGWIha/OSxWd7dzU1Vql0HbO/j5JKnFdS3rS+urSYHPQxvtxz6op2U7pl6Xpg3y3ex/cwVFb60/XmGdJI/EJNjno3D3b8iIo9pTUlXmjXHl3G5CIW/UaGSabZA/9r1MSCSw3vG0DjRHJkyF1r02ZoikX2X70iO0qCpJzfPEiDUhVqwrdcfDcbLN7ajXAsYdI/ObbaHeSd/ax1buHFyfObtaKI66dPbWRMIkSvngVNWONuy2YWHi2ljLL748wTV7GY8hGd01I9wF32jHeW5RlRKtixoIIQRkmNeCutgksVFkAD/y5xLLTMG/ADZgSuwPl7yaiGLXO/OuHPO2xwILqbn73zqBuoqtaaP+BhiyCo7By3NAOqwt7pSsSII/pnqHv9wpJV86uUbsHyM8Pka4sYdeXeoZendd1xTyBtXlECfMIW4MVFhj710HybZRrEF7L9jzjxvYzdc2wHOeOtorb2RJQiA3WgRMt4FbHNTk7wIOhz/IZxM6HE2Sd2evZ1/rb95kFHf58rN4N83UTIGLecpbPBrtzLyWK4M76Kw2ata8Aa8+6S7zZICqpENjW0Bbu8z7bGzWXQUfdR/6+Z0wHtI//1ggGZy
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60fc5185-03ce-4398-e1b3-08d8451837a1
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2020 14:49:18.9711
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Pamo3EOtw0EmFwvbWr6x+hudulvzRr6NflH4rgkYn8YA/+c7ZlDogHvgtMx90dQr
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2695
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-20_03:2020-08-19,2020-08-20 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008200123
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test which copies a socket from a sockmap into another sockmap
-or sockhash. This excercises bpf_map_update_elem support from BPF
-context. Compare the socket cookies from source and destination to
-ensure that the copy succeeded.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 71 +++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_copy.c   | 48 +++++++++++++
- 2 files changed, 119 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_copy.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 96e7b7f84c65..cd05ff5e88e1 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -4,6 +4,7 @@
- 
- #include "test_progs.h"
- #include "test_skmsg_load_helpers.skel.h"
-+#include "test_sockmap_copy.skel.h"
- 
- #define TCP_REPAIR		19	/* TCP sock is under repair right now */
- 
-@@ -101,6 +102,72 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
- 	test_skmsg_load_helpers__destroy(skel);
- }
- 
-+static void test_sockmap_copy(enum bpf_map_type map_type)
-+{
-+	struct bpf_prog_test_run_attr tattr;
-+	struct test_sockmap_copy *skel;
-+	__u64 src_cookie, dst_cookie;
-+	int err, prog, src, dst;
-+	const __u32 zero = 0;
-+	char dummy[14] = {0};
-+	__s64 sk;
-+
-+	sk = connected_socket_v4();
-+	if (CHECK_FAIL(sk == -1))
-+		return;
-+
-+	skel = test_sockmap_copy__open_and_load();
-+	if (CHECK_FAIL(!skel)) {
-+		close(sk);
-+		perror("test_sockmap_copy__open_and_load");
-+		return;
-+	}
-+
-+	prog = bpf_program__fd(skel->progs.copy_sock_map);
-+	src = bpf_map__fd(skel->maps.src);
-+	if (map_type == BPF_MAP_TYPE_SOCKMAP)
-+		dst = bpf_map__fd(skel->maps.dst_sock_map);
-+	else
-+		dst = bpf_map__fd(skel->maps.dst_sock_hash);
-+
-+	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
-+	if (CHECK_FAIL(err)) {
-+		perror("bpf_map_update");
-+		goto out;
-+	}
-+
-+	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
-+	if (CHECK_FAIL(err)) {
-+		perror("bpf_map_lookup_elem(src)");
-+		goto out;
-+	}
-+
-+	tattr = (struct bpf_prog_test_run_attr){
-+		.prog_fd = prog,
-+		.repeat = 1,
-+		.data_in = dummy,
-+		.data_size_in = sizeof(dummy),
-+	};
-+
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	if (CHECK_ATTR(err || !tattr.retval, "bpf_prog_test_run",
-+		       "errno=%u retval=%u\n", errno, tattr.retval))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
-+	if (CHECK_FAIL(err)) {
-+		perror("bpf_map_lookup_elem(dst)");
-+		goto out;
-+	}
-+
-+	if (dst_cookie != src_cookie)
-+		PRINT_FAIL("cookie %llu != %llu\n", dst_cookie, src_cookie);
-+
-+out:
-+	close(sk);
-+	test_sockmap_copy__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -111,4 +178,8 @@ void test_sockmap_basic(void)
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
- 	if (test__start_subtest("sockhash sk_msg load helpers"))
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKHASH);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_copy.c b/tools/testing/selftests/bpf/progs/test_sockmap_copy.c
-new file mode 100644
-index 000000000000..9d0c9f28cab2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_copy.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Cloudflare
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} src SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_hash SEC(".maps");
-+
-+SEC("classifier/copy_sock_map")
-+int copy_sock_map(void *ctx)
-+{
-+	struct bpf_sock *sk;
-+	bool failed = false;
-+	__u32 key = 0;
-+
-+	sk = bpf_map_lookup_elem(&src, &key);
-+	if (!sk)
-+		return SK_DROP;
-+
-+	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
-+		failed = true;
-+
-+	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
-+		failed = true;
-+
-+	bpf_sk_release(sk);
-+	return failed ? SK_DROP : SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.25.1
+On 8/20/20 4:58 AM, Lorenz Bauer wrote:
+> On Wed, 19 Aug 2020 at 21:46, Yonghong Song <yhs@fb.com> wrote:
+>>
+>>
+>>
+>> On 8/19/20 2:24 AM, Lorenz Bauer wrote:
+>>> Add a test which copies a socket from a sockmap into another sockmap
+>>> or sockhash. This excercises bpf_map_update_elem support from BPF
+>>> context. Compare the socket cookies from source and destination to
+>>> ensure that the copy succeeded.
+>>>
+>>> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+>>> ---
+>>>    .../selftests/bpf/prog_tests/sockmap_basic.c  | 76 +++++++++++++++++++
+>>>    .../selftests/bpf/progs/test_sockmap_copy.c   | 48 ++++++++++++
+>>>    2 files changed, 124 insertions(+)
+>>>    create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_copy.c
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>>> index 96e7b7f84c65..d30cabc00e9e 100644
+>>> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+>>> @@ -4,6 +4,7 @@
+>>>
+>>>    #include "test_progs.h"
+>>>    #include "test_skmsg_load_helpers.skel.h"
+>>> +#include "test_sockmap_copy.skel.h"
+>>>
+>>>    #define TCP_REPAIR          19      /* TCP sock is under repair right now */
+>>>
+>>> @@ -101,6 +102,77 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
+>>>        test_skmsg_load_helpers__destroy(skel);
+>>>    }
+>>>
+>>> +static void test_sockmap_copy(enum bpf_map_type map_type)
+>>> +{
+>>> +     struct bpf_prog_test_run_attr attr;
+>>> +     struct test_sockmap_copy *skel;
+>>> +     __u64 src_cookie, dst_cookie;
+>>> +     int err, prog, s, src, dst;
+>>> +     const __u32 zero = 0;
+>>> +     char dummy[14] = {0};
+>>> +
+>>> +     s = connected_socket_v4();
+>>
+>> Maybe change variable name to "sk" for better clarity?
+> 
+> Yup!
+> 
+>>
+>>> +     if (CHECK_FAIL(s == -1))
+>>> +             return;
+>>> +
+>>> +     skel = test_sockmap_copy__open_and_load();
+>>> +     if (CHECK_FAIL(!skel)) {
+>>> +             close(s);
+>>> +             perror("test_sockmap_copy__open_and_load");
+>>> +             return;
+>>> +     }
+>>
+>> Could you use CHECK instead of CHECK_FAIL?
+>> With CHECK, you can print additional information without perror.
+> 
+> I avoid CHECK because it requires `duration`, which doesn't make sense
+> for most things that I call CHECK_FAIL on here. So either it outputs 0
+> nsec (which is bogus) or it outputs the value from the last
+> bpf_prog_test_run call (which is also bogus). How do other tests
+> handle this? Just ignore it?
 
+Just ignore it. You can define a static variable duration in the 
+beginning of file and then use CHECK in the rest of file.
+
+> 
+>>
+>>
+>>> +
+>>> +     prog = bpf_program__fd(skel->progs.copy_sock_map);
+>>> +     src = bpf_map__fd(skel->maps.src);
+>>> +     if (map_type == BPF_MAP_TYPE_SOCKMAP)
+>>> +             dst = bpf_map__fd(skel->maps.dst_sock_map);
+>>> +     else
+>>> +             dst = bpf_map__fd(skel->maps.dst_sock_hash);
+>>> +
+[...]
