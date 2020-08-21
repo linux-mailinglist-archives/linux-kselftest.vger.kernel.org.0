@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7296224DA28
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 18:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213BC24DA7E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 18:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbgHUQSr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Aug 2020 12:18:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50368 "EHLO mail.kernel.org"
+        id S1728394AbgHUQUm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Aug 2020 12:20:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727824AbgHUQRi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:17:38 -0400
+        id S1728356AbgHUQUH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:20:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 629DB22D06;
-        Fri, 21 Aug 2020 16:17:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 21A7022E03;
+        Fri, 21 Aug 2020 16:19:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026656;
-        bh=Bdpad47Y9xaJkg3DYY8jaH4brrvoaBEGpKqgrVpA5KM=;
+        s=default; t=1598026760;
+        bh=yKqhpIt2E7otdBYwhnTyQ4kLewxec0P6sMq8BMGFrfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HoTAXiuMFjXWlIiDGG+s7aHk3kEDh/ejN3I0UuYjOO0m01ZevEdKX8hivoXqKEueN
-         u3MO6lTMy3rpmisedc1A1a1tQ6dT4TS+D6EJXZNsxUFInmfjaEBZdZul0NBeYkPZ+N
-         UpZDpeBdQdIJq0vgZo5RyNaAJpZ1GA9AVI1BYCiY=
+        b=2Wr50MoJZjs7rxRdcanhI7oiPNhKIw8m3838ij528kwN8x2U+IoSKWsbYRMm1sscp
+         +qcLiOM7FlPWC7ueXRabZ4ricjuWq3S74fxezSfytR3s8pgVydmkzpCsaTf0K+x2Wl
+         bHHoNRXJf3y0NjlaXaJMR4KH0plW0Wk/6ybgLGN8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>,
@@ -30,12 +30,12 @@ Cc:     "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 25/48] selftests/powerpc: Purge extra count_pmc() calls of ebb selftests
-Date:   Fri, 21 Aug 2020 12:16:41 -0400
-Message-Id: <20200821161704.348164-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 17/30] selftests/powerpc: Purge extra count_pmc() calls of ebb selftests
+Date:   Fri, 21 Aug 2020 12:18:44 -0400
+Message-Id: <20200821161857.348955-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161704.348164-1-sashal@kernel.org>
-References: <20200821161704.348164-1-sashal@kernel.org>
+In-Reply-To: <20200821161857.348955-1-sashal@kernel.org>
+References: <20200821161857.348955-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -95,7 +95,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  11 files changed, 26 deletions(-)
 
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c b/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c
-index a2d7b0e3dca97..a26ac122c759f 100644
+index 94110b1dcd3d8..031baa43646fb 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c
 @@ -91,8 +91,6 @@ int back_to_back_ebbs(void)
@@ -108,7 +108,7 @@ index a2d7b0e3dca97..a26ac122c759f 100644
  
  	event_close(&event);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c b/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c
-index bc893813483ee..bb9f587fa76e8 100644
+index 7c57a8d79535d..361e0be9df9ae 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c
 @@ -42,8 +42,6 @@ int cycles(void)
@@ -121,7 +121,7 @@ index bc893813483ee..bb9f587fa76e8 100644
  
  	event_close(&event);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c
-index dcd351d203289..9ae795ce314e6 100644
+index ecf5ee3283a3e..fe7d0dc2a1a26 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c
 @@ -99,8 +99,6 @@ int cycles_with_freeze(void)
@@ -134,7 +134,7 @@ index dcd351d203289..9ae795ce314e6 100644
  
  	printf("EBBs while frozen %d\n", ebbs_while_frozen);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c
-index 94c99c12c0f23..4b45a2e70f62b 100644
+index c0faba520b35c..b9b30f974b5ea 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c
 @@ -71,8 +71,6 @@ int cycles_with_mmcr2(void)
@@ -147,7 +147,7 @@ index 94c99c12c0f23..4b45a2e70f62b 100644
  
  	event_close(&event);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-index dfbc5c3ad52d7..21537d6eb6b7d 100644
+index 46681fec549b8..2694ae161a84a 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
 @@ -396,8 +396,6 @@ int ebb_child(union pipe read_pipe, union pipe write_pipe)
@@ -160,7 +160,7 @@ index dfbc5c3ad52d7..21537d6eb6b7d 100644
  
  	event_close(&event);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c b/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c
-index ca2f7d729155b..b208bf6ad58d3 100644
+index a991d2ea8d0a1..174e4f4dae6c0 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c
 @@ -38,8 +38,6 @@ static int victim_child(union pipe read_pipe, union pipe write_pipe)
@@ -173,7 +173,7 @@ index ca2f7d729155b..b208bf6ad58d3 100644
  
  	FAIL_IF(ebb_state.stats.ebb_count == 0);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c b/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c
-index ac3e6e182614a..ba2681a12cc7b 100644
+index eb8acb78bc6c1..531083accfcad 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c
 @@ -75,7 +75,6 @@ static int test_body(void)
@@ -185,7 +185,7 @@ index ac3e6e182614a..ba2681a12cc7b 100644
  
  	dump_summary_ebb_state();
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c b/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c
-index b8242e9d97d2d..791d37ba327b5 100644
+index 6ff8c8ff27d66..035c02273cd49 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c
 @@ -70,13 +70,6 @@ int multi_counter(void)
@@ -203,7 +203,7 @@ index b8242e9d97d2d..791d37ba327b5 100644
  
  	for (i = 0; i < 6; i++)
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c b/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c
-index a05c0e18ded63..9b0f70d597020 100644
+index 037cb6154f360..3e9d4ac965c85 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c
 @@ -61,8 +61,6 @@ static int cycles_child(void)
@@ -216,7 +216,7 @@ index a05c0e18ded63..9b0f70d597020 100644
  
  	event_close(&event);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c b/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c
-index 153ebc92234fd..2904c741e04e5 100644
+index c5fa64790c22e..d90891fe96a32 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c
 @@ -82,8 +82,6 @@ static int test_body(void)
@@ -229,7 +229,7 @@ index 153ebc92234fd..2904c741e04e5 100644
  
  	if (mmcr0_mismatch)
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c b/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c
-index eadad75ed7e6f..b29f8ba22d1e6 100644
+index 30e1ac62e8cb4..8ca92b9ee5b01 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c
 @@ -76,8 +76,6 @@ int pmc56_overflow(void)
