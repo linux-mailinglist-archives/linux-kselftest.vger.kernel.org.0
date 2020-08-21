@@ -2,270 +2,270 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E05024CD08
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 06:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330DC24D25F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 12:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbgHUEyo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Aug 2020 00:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S1728649AbgHUKar (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Aug 2020 06:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725908AbgHUEyn (ORCPT
+        with ESMTP id S1728149AbgHUKa3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Aug 2020 00:54:43 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A9FC061385;
-        Thu, 20 Aug 2020 21:54:43 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id h2so354094plr.0;
-        Thu, 20 Aug 2020 21:54:43 -0700 (PDT)
+        Fri, 21 Aug 2020 06:30:29 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F38C06138B
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id x5so1351236wmi.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FeLWSTdoM4nf+36Zjzc7ne8kyEInVTO4IOni7rUwpas=;
-        b=cwe7WcRuGsa6f/zGPnLYLtWyVucgzXqUMN+gDwsJfZZ8jjhKvHxJOX30r7GqxWs7Qd
-         qfh9x+hbvHjsz/jwN2Pc/brQaR0Kaaa67FRBA2VicBgJqjmoaV/Wi/JYnwxrHhW4zgxX
-         P7wYR1zBZLOGPqK3Hrx/FjuFz3i7oWT9a9+D5VZUSvFx9A3DyjjaXTbWLZGqdqyx0cd0
-         9Rx/UzHI3cP1klYZhfnNeraGjE8tb9MdCUg0bIE5kQ50QJRRBXronFnF8iytC3ml/Frd
-         c83dKCeL+Hwei5yesXlif/HeqnQ/6cRJHSGeY86DxYzhlUzWBqoNK6W+A0u3ntzUJAwM
-         zVaA==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
+        b=R6p7I49mAyk1+W/1Y8Pnkj+mPEMAav3VZSQytD31wbItfpPh1Qs0BJRa8ngMSMmjVq
+         lsT3jzTRAxyRpyrFWE4AEx/R/OIiq4h52+GF1ZVtXGRHSjxdRyzllAiImC/uBP6TtXnM
+         wkVWRM2JUBizEGV5pleLWeCgkBHVUm4VjMoLs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FeLWSTdoM4nf+36Zjzc7ne8kyEInVTO4IOni7rUwpas=;
-        b=GBpXe1M6Geizj99R0XGk50P+98jP9/HXNyDfbrXszVBnpQBW2WJ/YhucFID5ZaR2eE
-         lXN2IIam7Sv48bBDHWV1HdeDQJBP1HsegwPEXti6gJyxQC4GacN43y4LRLwVXCAlavXX
-         Fd3LVbI7NA65f/jQDfTs19HA0iK2zbuq6XL57iEoRrq2xle0hZSCgqcdHSYLkpL69mWw
-         Lv2A/azGea5imfpFLFBZ2B/PVektOaMG1nYaYLRWJK86b0T4zok+9D7aSrxc2407MkjJ
-         KVSpw2n3oWLE0suyeQUm5s02bLYhTNu+EaxViSYGqD6aTMbHI2oD3ChJVq6N0xgz/4Nv
-         H7jA==
-X-Gm-Message-State: AOAM531I0MrEKm8i6OHfBXDaViqx1Z9Z5y/lp+TtgRi24YXqLLSW3kLR
-        sr8bFLRIKss2oLVE0wLnoJjSGyeJzfZsbkNO
-X-Google-Smtp-Source: ABdhPJwSYeHb6R0XOe+q1qknq8go0JYAceoF6n2aOzvEaYKe5W+Xf6Gec0ftsAnTCpKMlQp/dhtA3g==
-X-Received: by 2002:a17:902:b681:: with SMTP id c1mr1017367pls.214.1597985682615;
-        Thu, 20 Aug 2020 21:54:42 -0700 (PDT)
-Received: from [192.168.86.81] ([49.206.11.137])
-        by smtp.gmail.com with ESMTPSA id b185sm829596pfg.71.2020.08.20.21.54.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2020 21:54:41 -0700 (PDT)
-Subject: Re: [PATCH] lib: Convert test_printf.c to KUnit
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        brendanhiggins@google.com, skhan@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20200817043028.76502-1-98.arpi@gmail.com>
- <f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasmusvillemoes.dk>
-From:   Arpitha Raghunandan <98.arpi@gmail.com>
-Message-ID: <2e1d1e40-b448-9389-d7d2-93841af60a88@gmail.com>
-Date:   Fri, 21 Aug 2020 10:24:36 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
+        b=Hb4ra90ZAkIXAp0SinTlFLN86X1MrP2rDWX95qzup86I32DtWREleCY9aDch+6Qj8I
+         BOMojIrVZ1W8EIhj5Wt2TEpw+u0lJywR4Vt88LIG8DzlLJuQRDlFTTuNtUPVwGwudRbm
+         k9bQUTFr/xfPMEa4P0WTZvz8NwQdk5kNcHF8S+o3cXYI0LMl1PmJcYhGcmvkkRFFRhC0
+         audZ5KRZ9MIy2dTV4cWDWP7IttfAh7tbcWeso9eIW3oq1cJyiNaFbUrKIcodVBpqyTSz
+         c4CwgWdut0UAzVMoiir7j4TJenMoSc1iZI6gQWCp0sbks1fTCo1UbttPmMNe4NpzS19I
+         Qc/A==
+X-Gm-Message-State: AOAM532GT46fojxF4ZEa0WoTSC/ycuYqfXblvelwPM1uqMrOgI2Gvb5L
+        67epWFPuea+6mwzAHgBP4xMNoA==
+X-Google-Smtp-Source: ABdhPJz9f3ah9Zo/6HnA8IeHmu273+Rifoigfi0sKLMZW8R0SQvk9WprxK0NUVRIpTs//b2yLmRzdg==
+X-Received: by 2002:a1c:9803:: with SMTP id a3mr2979278wme.57.1598005817804;
+        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
+Received: from antares.lan (2.2.9.a.d.9.4.f.6.1.8.9.f.9.8.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:589f:9816:f49d:a922])
+        by smtp.gmail.com with ESMTPSA id o2sm3296885wrj.21.2020.08.21.03.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     jakub@cloudflare.com, john.fastabend@gmail.com, yhs@fb.com,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v3 6/6] selftests: bpf: test sockmap update from BPF
+Date:   Fri, 21 Aug 2020 11:29:48 +0100
+Message-Id: <20200821102948.21918-7-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200821102948.21918-1-lmb@cloudflare.com>
+References: <20200821102948.21918-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-In-Reply-To: <f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17/08/20 12:36 pm, Rasmus Villemoes wrote:
-> On 17/08/2020 06.30, Arpitha Raghunandan wrote:
->> Converts test lib/test_printf.c to KUnit.
->> More information about KUnit can be found at
->> https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
->> KUnit provides a common framework for unit tests in the kernel.
-> 
-> So I can continue to build a kernel with some appropriate CONFIG set to
-> y, boot it under virt-me, run dmesg and see if I broke printf? That's
-> what I do now, and I don't want to have to start using some enterprisy
-> framework.
-> 
+Add a test which copies a socket from a sockmap into another sockmap
+or sockhash. This excercises bpf_map_update_elem support from BPF
+context. Compare the socket cookies from source and destination to
+ensure that the copy succeeded.
 
-Yes, the test can be run on boot up. More information about this can be found here: https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html#running-tests-without-the-kunit-wrapper.
+Also check that the verifier rejects map_update from unsafe contexts.
 
->> diff --git a/lib/test_printf.c b/lib/printf_kunit.c
->> similarity index 45%
->> rename from lib/test_printf.c
->> rename to lib/printf_kunit.c
->> index 7ac87f18a10f..68ac5f9b8d28 100644
->> --- a/lib/test_printf.c
->> +++ b/lib/printf_kunit.c
->> @@ -5,6 +5,7 @@
->>  
->>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->>  
->> +#include <kunit/test.h>
->>  #include <linux/init.h>
->>  #include <linux/kernel.h>
->>  #include <linux/module.h>
->> @@ -30,79 +31,61 @@
->>  #define PAD_SIZE 16
->>  #define FILL_CHAR '$'
->>  
->> -static unsigned total_tests __initdata;
->> -static unsigned failed_tests __initdata;
->> -static char *test_buffer __initdata;
->> -static char *alloced_buffer __initdata;
->> +static char *test_buffer;
->> +static char *alloced_buffer;
->>  
->> -static int __printf(4, 0) __init
->> -do_test(int bufsize, const char *expect, int elen,
->> +static void __printf(5, 0)
->> +do_test(struct kunit *kunittest, int bufsize, const char *expect, int elen,
->>  	const char *fmt, va_list ap)
->>  {
->>  	va_list aq;
->>  	int ret, written;
->>  
->> -	total_tests++;
->> -
->>  	memset(alloced_buffer, FILL_CHAR, BUF_SIZE + 2*PAD_SIZE);
->>  	va_copy(aq, ap);
->>  	ret = vsnprintf(test_buffer, bufsize, fmt, aq);
->>  	va_end(aq);
->>  
->> -	if (ret != elen) {
->> -		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
->> +	KUNIT_EXPECT_EQ_MSG(kunittest, ret, elen,
->> +			"vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
->>  			bufsize, fmt, ret, elen);
->> -		return 1;
->> -	}
-> 
-> 
-> IIRC, some of these early returns are required to ensure the following
-> checks do not fail (as in, potentially crash the kernel) simply because
-> they go off into the weeds. Please double-check that they are all safe
-> to continue to perform (though, another reason I might have put them in
-> is to simply avoid lots of useless collateral).
-> 
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 78 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_invalid_update.c   | 23 ++++++
+ .../selftests/bpf/progs/test_sockmap_update.c | 48 ++++++++++++
+ 3 files changed, 149 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_update.c
 
-These are safe to perform. I will check once again though.
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 96e7b7f84c65..65ce7c289534 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -4,6 +4,8 @@
+ 
+ #include "test_progs.h"
+ #include "test_skmsg_load_helpers.skel.h"
++#include "test_sockmap_update.skel.h"
++#include "test_sockmap_invalid_update.skel.h"
+ 
+ #define TCP_REPAIR		19	/* TCP sock is under repair right now */
+ 
+@@ -101,6 +103,76 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
+ 	test_skmsg_load_helpers__destroy(skel);
+ }
+ 
++static void test_sockmap_update(enum bpf_map_type map_type)
++{
++	struct bpf_prog_test_run_attr tattr;
++	int err, prog, src, dst, duration = 0;
++	struct test_sockmap_update *skel;
++	__u64 src_cookie, dst_cookie;
++	const __u32 zero = 0;
++	char dummy[14] = {0};
++	__s64 sk;
++
++	sk = connected_socket_v4();
++	if (CHECK(sk == -1, "connected_socket_v4", "cannot connect\n"))
++		return;
++
++	skel = test_sockmap_update__open_and_load();
++	if (CHECK(!skel, "open_and_load", "cannot load skeleton\n")) {
++		close(sk);
++		return;
++	}
++
++	prog = bpf_program__fd(skel->progs.copy_sock_map);
++	src = bpf_map__fd(skel->maps.src);
++	if (map_type == BPF_MAP_TYPE_SOCKMAP)
++		dst = bpf_map__fd(skel->maps.dst_sock_map);
++	else
++		dst = bpf_map__fd(skel->maps.dst_sock_hash);
++
++	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
++	if (CHECK(err, "update_elem(src)", "errno=%u\n", errno))
++		goto out;
++
++	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
++	if (CHECK(err, "lookup_elem(src, cookie)", "errno=%u\n", errno))
++		goto out;
++
++	tattr = (struct bpf_prog_test_run_attr){
++		.prog_fd = prog,
++		.repeat = 1,
++		.data_in = dummy,
++		.data_size_in = sizeof(dummy),
++	};
++
++	err = bpf_prog_test_run_xattr(&tattr);
++	if (CHECK_ATTR(err || !tattr.retval, "bpf_prog_test_run",
++		       "errno=%u retval=%u\n", errno, tattr.retval))
++		goto out;
++
++	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
++	if (CHECK(err, "lookup_elem(dst, cookie)", "errno=%u\n", errno))
++		goto out;
++
++	CHECK(dst_cookie != src_cookie, "cookie mismatch", "%llu != %llu\n",
++	      dst_cookie, src_cookie);
++
++out:
++	close(sk);
++	test_sockmap_update__destroy(skel);
++}
++
++static void test_sockmap_invalid_update(void)
++{
++	struct test_sockmap_invalid_update *skel;
++	int duration = 0;
++
++	skel = test_sockmap_invalid_update__open_and_load();
++	CHECK(skel, "open_and_load", "verifier accepted map_update\n");
++	if (skel)
++		test_sockmap_invalid_update__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -111,4 +183,10 @@ void test_sockmap_basic(void)
+ 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
+ 	if (test__start_subtest("sockhash sk_msg load helpers"))
+ 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
++	if (test__start_subtest("sockmap update"))
++		test_sockmap_update(BPF_MAP_TYPE_SOCKMAP);
++	if (test__start_subtest("sockhash update"))
++		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
++	if (test__start_subtest("sockmap update in unsafe context"))
++		test_sockmap_invalid_update();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
+new file mode 100644
+index 000000000000..02a59e220cbc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Cloudflare
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} map SEC(".maps");
++
++SEC("sockops")
++int bpf_sockmap(struct bpf_sock_ops *skops)
++{
++	__u32 key = 0;
++
++	if (skops->sk)
++		bpf_map_update_elem(&map, &key, skops->sk, 0);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
+new file mode 100644
+index 000000000000..9d0c9f28cab2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Cloudflare
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} src SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} dst_sock_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKHASH);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} dst_sock_hash SEC(".maps");
++
++SEC("classifier/copy_sock_map")
++int copy_sock_map(void *ctx)
++{
++	struct bpf_sock *sk;
++	bool failed = false;
++	__u32 key = 0;
++
++	sk = bpf_map_lookup_elem(&src, &key);
++	if (!sk)
++		return SK_DROP;
++
++	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
++		failed = true;
++
++	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
++		failed = true;
++
++	bpf_sk_release(sk);
++	return failed ? SK_DROP : SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.25.1
 
-> 
->> -	if (memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE)) {
->> +	KUNIT_EXPECT_EQ_MSG(kunittest, memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE), NULL,
-> 
->> -		if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZE)) {
->> +		KUNIT_EXPECT_FALSE_MSG(kunittest,
-> 
->> -	if (memchr_inv(test_buffer + written + 1, FILL_CHAR, BUF_SIZE + PAD_SIZE - (written + 1))) {
->> +	KUNIT_EXPECT_FALSE_MSG(kunittest,
->> +			memchr_inv(test_buffer + written + 1, FILL_CHAR, BUF_SIZE + PAD_SIZE - (written + 1))
-> 
-> Why the inconsistency in what a memchr_inv != NULL check gets converted to?
-> 
-
-Oh my bad. I will make this consistent.
-
-> 
->>  
->> -static void __printf(3, 4) __init
->> -__test(const char *expect, int elen, const char *fmt, ...)
->> +static void __printf(4, 5)
->> +__test(struct kunit *kunittest, const char *expect, int elen, const char *fmt, ...)
->>  {
->>  	va_list ap;
->>  	int rand;
->>  	char *p;
->>  
->> -	if (elen >= BUF_SIZE) {
->> -		pr_err("error in test suite: expected output length %d too long. Format was '%s'.\n",
->> -		       elen, fmt);
->> -		failed_tests++;
->> -		return;
->> -	}
->> +	KUNIT_EXPECT_LT_MSG(kunittest, elen, BUF_SIZE,
->> +			"error in test suite: expected output length %d too long. Format was '%s'.\n",
->> +			elen, fmt);
-> 
-> And it's ok to continue with the tests when the test suite itself is
-> buggy because? [*]
-> 
->>  	va_start(ap, fmt);
->>  
->> @@ -112,49 +95,46 @@ __test(const char *expect, int elen, const char *fmt, ...)
->>  	 * enough and 0), and then we also test that kvasprintf would
->>  	 * be able to print it as expected.
->>  	 */
->> -	failed_tests += do_test(BUF_SIZE, expect, elen, fmt, ap);
->> +	do_test(kunittest, BUF_SIZE, expect, elen, fmt, ap);
->>  	rand = 1 + prandom_u32_max(elen+1);
->>  	/* Since elen < BUF_SIZE, we have 1 <= rand <= BUF_SIZE. */
->> -	failed_tests += do_test(rand, expect, elen, fmt, ap);
-> 
-> [*] Certainly this invariant gets violated, so we (may) provide do_test
-> with a buffer size larger than, well, BUF_SIZE.
-> 
->>  
->> -#define test(expect, fmt, ...)					\
->> -	__test(expect, strlen(expect), fmt, ##__VA_ARGS__)
->> +#define test(kunittest, expect, fmt, ...)					\
->> +	__test(kunittest, expect, strlen(expect), fmt, ##__VA_ARGS__)
->>  
->> -static void __init
->> -test_basic(void)
->> +static void
->> +test_basic(struct kunit *kunittest)
->>  {
->>  	/* Work around annoying "warning: zero-length gnu_printf format string". */
->>  	char nul = '\0';
->>  
->> -	test("", &nul);
->> -	test("100%", "100%%");
->> -	test("xxx%yyy", "xxx%cyyy", '%');
->> -	__test("xxx\0yyy", 7, "xxx%cyyy", '\0');
->> +	test(kunittest, "", &nul);
->> +	test(kunittest, "100%", "100%%");
->> +	test(kunittest, "xxx%yyy", "xxx%cyyy", '%');
->> +	__test(kunittest, "xxx\0yyy", 7, "xxx%cyyy", '\0');
-> 
-> Am I reading this right that all this is simply to prepend kunittest to
-> the arguments? How about just redefining the test macro so it
-> automagically does that instead of all this churn? The few cases that
-> use __test may need to be handled specially.
-> 
->> +
->> +static void selftest(struct kunit *kunittest)
->>  {
->>  	alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
->>  	if (!alloced_buffer)
->>  		return;
->>  	test_buffer = alloced_buffer + PAD_SIZE;
->>  
->> -	test_basic();
->> -	test_number();
->> -	test_string();
->> -	test_pointer();
->> +	test_basic(kunittest);
->> +	test_number(kunittest);
->> +	test_string(kunittest);
->> +	test_pointer(kunittest);
->>  
->>  	kfree(alloced_buffer);
->>  }
-> 
-> Even better, since the whole thing still relies on the static variables
-> test_buffer and alloced_buffer, why not just stash the struct kunit*
-> that the framework passes in a file-scope static and avoid even more
-> churn? Then only the newly introduce KUNIT_CHECK_* macros need to refer
-> to it, and none of the existing code (or future cases) needs that piece
-> of boilerplate.
-> 
-
-Yes, using file-scope static will be better. I will make this change.
-
-> BTW, does the framework have some kind of logic that ensures nobody runs
-> the printf suite twice in parallel?
-> 
-
-Brendan would have a better idea about this. But, it wouldn't be possible at boot up because KUnit only dispatches each test once. The other way for a KUnit test to be executed currently is as a module, and a module can only be loaded once until it is unloaded.
-
-Thanks for the review.
