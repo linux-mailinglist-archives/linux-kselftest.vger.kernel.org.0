@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B858A24DB75
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 18:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C87524DB20
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 18:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728080AbgHUQk1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Aug 2020 12:40:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51618 "EHLO mail.kernel.org"
+        id S1728543AbgHUQdJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Aug 2020 12:33:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728241AbgHUQUo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:20:44 -0400
+        id S1728450AbgHUQV0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:21:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3817E23100;
-        Fri, 21 Aug 2020 16:19:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C9A4120656;
+        Fri, 21 Aug 2020 16:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026797;
-        bh=yKqhpIt2E7otdBYwhnTyQ4kLewxec0P6sMq8BMGFrfk=;
+        s=default; t=1598026830;
+        bh=7Uo2pJuwCbbTqy/tnaGNXjPYUXUGLFNxprM4K3WLQlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wnxd7sbxH4bHnSmT6e+1IcfgZMlT2IvNGBFpXxnhygv4r6NAA2ESU/42xzl9ciJb6
-         81CmLcFXriPWLd5Zaj43nxgmtiAeGy/u5Wxpd64/+KVkV+7tdTghVNvxpOBlt2I6aH
-         ygb7NQS89GHmxLNiV9kIQnImfltxWmFDHcKAMQ10=
+        b=h3rgCuAF+FLQrzTYYQy9/XyHDmkCE5RoJnpZeKHVTZ8E8YcpIG8mW+4Fy4JXeX8Z1
+         l27OUKekRu3+PJ3tXZTSfrwQ/IJ/ted/YDLIlXA1I98CS6rXs7Sj0nZMpP3tt5UCaK
+         T7s8jI+65p9+gVrGQXWpO+gfsW+SfsUwIYs7YTY8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>,
@@ -30,12 +30,12 @@ Cc:     "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 14/26] selftests/powerpc: Purge extra count_pmc() calls of ebb selftests
-Date:   Fri, 21 Aug 2020 12:19:25 -0400
-Message-Id: <20200821161938.349246-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 12/22] selftests/powerpc: Purge extra count_pmc() calls of ebb selftests
+Date:   Fri, 21 Aug 2020 12:20:04 -0400
+Message-Id: <20200821162014.349506-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161938.349246-1-sashal@kernel.org>
-References: <20200821161938.349246-1-sashal@kernel.org>
+In-Reply-To: <20200821162014.349506-1-sashal@kernel.org>
+References: <20200821162014.349506-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -147,10 +147,10 @@ index c0faba520b35c..b9b30f974b5ea 100644
  
  	event_close(&event);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-index 46681fec549b8..2694ae161a84a 100644
+index 9729d9f902187..4154498bc5dc5 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-@@ -396,8 +396,6 @@ int ebb_child(union pipe read_pipe, union pipe write_pipe)
+@@ -398,8 +398,6 @@ int ebb_child(union pipe read_pipe, union pipe write_pipe)
  	ebb_global_disable();
  	ebb_freeze_pmcs();
  
