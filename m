@@ -2,270 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 330DC24D25F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 12:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928E324D41C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Aug 2020 13:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728649AbgHUKar (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Aug 2020 06:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728149AbgHUKa3 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Aug 2020 06:30:29 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F38C06138B
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id x5so1351236wmi.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
-        b=R6p7I49mAyk1+W/1Y8Pnkj+mPEMAav3VZSQytD31wbItfpPh1Qs0BJRa8ngMSMmjVq
-         lsT3jzTRAxyRpyrFWE4AEx/R/OIiq4h52+GF1ZVtXGRHSjxdRyzllAiImC/uBP6TtXnM
-         wkVWRM2JUBizEGV5pleLWeCgkBHVUm4VjMoLs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
-        b=Hb4ra90ZAkIXAp0SinTlFLN86X1MrP2rDWX95qzup86I32DtWREleCY9aDch+6Qj8I
-         BOMojIrVZ1W8EIhj5Wt2TEpw+u0lJywR4Vt88LIG8DzlLJuQRDlFTTuNtUPVwGwudRbm
-         k9bQUTFr/xfPMEa4P0WTZvz8NwQdk5kNcHF8S+o3cXYI0LMl1PmJcYhGcmvkkRFFRhC0
-         audZ5KRZ9MIy2dTV4cWDWP7IttfAh7tbcWeso9eIW3oq1cJyiNaFbUrKIcodVBpqyTSz
-         c4CwgWdut0UAzVMoiir7j4TJenMoSc1iZI6gQWCp0sbks1fTCo1UbttPmMNe4NpzS19I
-         Qc/A==
-X-Gm-Message-State: AOAM532GT46fojxF4ZEa0WoTSC/ycuYqfXblvelwPM1uqMrOgI2Gvb5L
-        67epWFPuea+6mwzAHgBP4xMNoA==
-X-Google-Smtp-Source: ABdhPJz9f3ah9Zo/6HnA8IeHmu273+Rifoigfi0sKLMZW8R0SQvk9WprxK0NUVRIpTs//b2yLmRzdg==
-X-Received: by 2002:a1c:9803:: with SMTP id a3mr2979278wme.57.1598005817804;
-        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
-Received: from antares.lan (2.2.9.a.d.9.4.f.6.1.8.9.f.9.8.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:589f:9816:f49d:a922])
-        by smtp.gmail.com with ESMTPSA id o2sm3296885wrj.21.2020.08.21.03.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     jakub@cloudflare.com, john.fastabend@gmail.com, yhs@fb.com,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 6/6] selftests: bpf: test sockmap update from BPF
-Date:   Fri, 21 Aug 2020 11:29:48 +0100
-Message-Id: <20200821102948.21918-7-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821102948.21918-1-lmb@cloudflare.com>
-References: <20200821102948.21918-1-lmb@cloudflare.com>
+        id S1728169AbgHULha (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Aug 2020 07:37:30 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38010 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728015AbgHULhX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 21 Aug 2020 07:37:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 7F617B800;
+        Fri, 21 Aug 2020 11:37:39 +0000 (UTC)
+Date:   Fri, 21 Aug 2020 13:37:10 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>, brendanhiggins@google.com,
+        skhan@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] lib: Convert test_printf.c to KUnit
+Message-ID: <20200821113710.GA26290@alley>
+References: <20200817043028.76502-1-98.arpi@gmail.com>
+ <f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasmusvillemoes.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasmusvillemoes.dk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test which copies a socket from a sockmap into another sockmap
-or sockhash. This excercises bpf_map_update_elem support from BPF
-context. Compare the socket cookies from source and destination to
-ensure that the copy succeeded.
+On Mon 2020-08-17 09:06:32, Rasmus Villemoes wrote:
+> On 17/08/2020 06.30, Arpitha Raghunandan wrote:
+> > Converts test lib/test_printf.c to KUnit.
+> > More information about KUnit can be found at
+> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
+> > KUnit provides a common framework for unit tests in the kernel.
+> 
+> So I can continue to build a kernel with some appropriate CONFIG set to
+> y, boot it under virt-me, run dmesg and see if I broke printf? That's
+> what I do now, and I don't want to have to start using some enterprisy
+> framework.
 
-Also check that the verifier rejects map_update from unsafe contexts.
+I had the same concern. I have tried it. It compiled a module called
+printf_kunit.c.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 78 +++++++++++++++++++
- .../bpf/progs/test_sockmap_invalid_update.c   | 23 ++++++
- .../selftests/bpf/progs/test_sockmap_update.c | 48 ++++++++++++
- 3 files changed, 149 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_update.c
+    #> modprobe printf_kunit
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 96e7b7f84c65..65ce7c289534 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -4,6 +4,8 @@
- 
- #include "test_progs.h"
- #include "test_skmsg_load_helpers.skel.h"
-+#include "test_sockmap_update.skel.h"
-+#include "test_sockmap_invalid_update.skel.h"
- 
- #define TCP_REPAIR		19	/* TCP sock is under repair right now */
- 
-@@ -101,6 +103,76 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
- 	test_skmsg_load_helpers__destroy(skel);
- }
- 
-+static void test_sockmap_update(enum bpf_map_type map_type)
-+{
-+	struct bpf_prog_test_run_attr tattr;
-+	int err, prog, src, dst, duration = 0;
-+	struct test_sockmap_update *skel;
-+	__u64 src_cookie, dst_cookie;
-+	const __u32 zero = 0;
-+	char dummy[14] = {0};
-+	__s64 sk;
-+
-+	sk = connected_socket_v4();
-+	if (CHECK(sk == -1, "connected_socket_v4", "cannot connect\n"))
-+		return;
-+
-+	skel = test_sockmap_update__open_and_load();
-+	if (CHECK(!skel, "open_and_load", "cannot load skeleton\n")) {
-+		close(sk);
-+		return;
-+	}
-+
-+	prog = bpf_program__fd(skel->progs.copy_sock_map);
-+	src = bpf_map__fd(skel->maps.src);
-+	if (map_type == BPF_MAP_TYPE_SOCKMAP)
-+		dst = bpf_map__fd(skel->maps.dst_sock_map);
-+	else
-+		dst = bpf_map__fd(skel->maps.dst_sock_hash);
-+
-+	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
-+	if (CHECK(err, "update_elem(src)", "errno=%u\n", errno))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
-+	if (CHECK(err, "lookup_elem(src, cookie)", "errno=%u\n", errno))
-+		goto out;
-+
-+	tattr = (struct bpf_prog_test_run_attr){
-+		.prog_fd = prog,
-+		.repeat = 1,
-+		.data_in = dummy,
-+		.data_size_in = sizeof(dummy),
-+	};
-+
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	if (CHECK_ATTR(err || !tattr.retval, "bpf_prog_test_run",
-+		       "errno=%u retval=%u\n", errno, tattr.retval))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
-+	if (CHECK(err, "lookup_elem(dst, cookie)", "errno=%u\n", errno))
-+		goto out;
-+
-+	CHECK(dst_cookie != src_cookie, "cookie mismatch", "%llu != %llu\n",
-+	      dst_cookie, src_cookie);
-+
-+out:
-+	close(sk);
-+	test_sockmap_update__destroy(skel);
-+}
-+
-+static void test_sockmap_invalid_update(void)
-+{
-+	struct test_sockmap_invalid_update *skel;
-+	int duration = 0;
-+
-+	skel = test_sockmap_invalid_update__open_and_load();
-+	CHECK(skel, "open_and_load", "verifier accepted map_update\n");
-+	if (skel)
-+		test_sockmap_invalid_update__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -111,4 +183,10 @@ void test_sockmap_basic(void)
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
- 	if (test__start_subtest("sockhash sk_msg load helpers"))
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap update"))
-+		test_sockmap_update(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash update"))
-+		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap update in unsafe context"))
-+		test_sockmap_invalid_update();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
-new file mode 100644
-index 000000000000..02a59e220cbc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Cloudflare
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} map SEC(".maps");
-+
-+SEC("sockops")
-+int bpf_sockmap(struct bpf_sock_ops *skops)
-+{
-+	__u32 key = 0;
-+
-+	if (skops->sk)
-+		bpf_map_update_elem(&map, &key, skops->sk, 0);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
-new file mode 100644
-index 000000000000..9d0c9f28cab2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Cloudflare
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} src SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_hash SEC(".maps");
-+
-+SEC("classifier/copy_sock_map")
-+int copy_sock_map(void *ctx)
-+{
-+	struct bpf_sock *sk;
-+	bool failed = false;
-+	__u32 key = 0;
-+
-+	sk = bpf_map_lookup_elem(&src, &key);
-+	if (!sk)
-+		return SK_DROP;
-+
-+	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
-+		failed = true;
-+
-+	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
-+		failed = true;
-+
-+	bpf_sk_release(sk);
-+	return failed ? SK_DROP : SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.25.1
+produced the following in dmesg:
 
+[   60.931175] printf_kunit: module verification failed: signature and/or required key missing - tainting kernel
+[   60.942209] TAP version 14
+[   60.945197]     # Subtest: printf-kunit-test
+[   60.945200]     1..1
+[   60.951092]     ok 1 - selftest
+[   60.953414] ok 1 - printf-kunit-test
+
+I could live with the above. Then I tried to break a test by the following change:
+
+
+diff --git a/lib/printf_kunit.c b/lib/printf_kunit.c
+index 68ac5f9b8d28..1689dadd70a3 100644
+--- a/lib/printf_kunit.c
++++ b/lib/printf_kunit.c
+@@ -395,7 +395,7 @@ ip4(struct kunit *kunittest)
+        sa.sin_port = cpu_to_be16(12345);
+        sa.sin_addr.s_addr = cpu_to_be32(0x7f000001);
+ 
+-       test(kunittest, "127.000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
++       test(kunittest, "127-000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
+        test(kunittest, "127.000.000.001|127.0.0.1", "%piS|%pIS", &sa, &sa);
+        sa.sin_addr.s_addr = cpu_to_be32(0x01020304);
+        test(kunittest, "001.002.003.004:12345|1.2.3.4:12345", "%piSp|%pISp", &sa, &sa);
+
+
+It produced::
+
+[   56.786858] TAP version 14
+[   56.787493]     # Subtest: printf-kunit-test
+[   56.787494]     1..1
+[   56.788612]     # selftest: EXPECTATION FAILED at lib/printf_kunit.c:76
+                   Expected memcmp(test_buffer, expect, written) == 0, but
+                       memcmp(test_buffer, expect, written) == 1
+                       0 == 0
+               vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
+[   56.795433]     # selftest: EXPECTATION FAILED at lib/printf_kunit.c:76
+                   Expected memcmp(test_buffer, expect, written) == 0, but
+                       memcmp(test_buffer, expect, written) == 1
+                       0 == 0
+               vsnprintf(buf, 20, "%pi4|%pI4", ...) wrote '127.000.000.001|127', expected '127-000.000.001|127'
+[   56.800909]     # selftest: EXPECTATION FAILED at lib/printf_kunit.c:108
+                   Expected memcmp(p, expect, elen+1) == 0, but
+                       memcmp(p, expect, elen+1) == 1
+                       0 == 0
+               kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
+[   56.806497]     not ok 1 - selftest
+[   56.806497] not ok 1 - printf-kunit-test
+
+while the original code would have written the following error messages:
+
+[   95.859225] test_printf: loaded.
+[   95.860031] test_printf: vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
+[   95.862630] test_printf: vsnprintf(buf, 6, "%pi4|%pI4", ...) wrote '127.0', expected '127-0'
+[   95.864118] test_printf: kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
+[   95.866589] test_printf: failed 3 out of 388 tests
+
+
+Even the error output is acceptable for me. I am just curious why
+the 2nd failure is different:
+
+   + original code: vsnprintf(buf, 6, "%pi4|%pI4", ...) wrote '127.0', expected '127-0'
+   + kunit code: vsnprintf(buf, 20, "%pi4|%pI4", ...) wrote '127.000.000.001|127', expected '127-000.000.001|127'   
+
+
+I am also a bit scared by the following note at
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html#running-tests-without-the-kunit-wrapper
+
+   "KUnit is not designed for use in a production system, and it’s
+   possible that tests may reduce the stability or security of the
+   system."
+
+What does it mean thay it might reduce stability or security?
+Is it because the tests might cause problems?
+Or because the kunit framework modifies functionality of the running
+system all the time?
+
+
+Best Regards,
+Petr
+
+PS: I still have to look at the code. Anwyay, the comments from Rasmus make
+sense.
