@@ -2,127 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4EC524E632
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Aug 2020 09:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79142502ED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Aug 2020 18:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727824AbgHVHzV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 22 Aug 2020 03:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727802AbgHVHzU (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 22 Aug 2020 03:55:20 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D20C061573;
-        Sat, 22 Aug 2020 00:55:20 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id u6so2303998ybf.1;
-        Sat, 22 Aug 2020 00:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3FGIc23gIcAL+scd1gVHTER4ApVxnptisLCy0nOA3ec=;
-        b=RSzSqkuk2hxMrHDgNEpuWCYiDfGZ3ACWe7ZA3ruJMeA/Y1jKDRp2N7eo+K+HWkuOhT
-         NEcgA6U5EZ4g9jrmuDDYJ0DsiA7/FYDxn5Xb7wvxwT5aguFaEuF3VCxgfovw8q00cD1i
-         V1hPb1wxj3LBqItsJYj0Rw7VzzMLfjgN48w9XQM33H3lzwL2rpXw4uA/JOzicBnQ1zyT
-         5NzldIftdoAo9G3m/c9gFEBsTu0D4LTmeLNgYvb8etkJViKZvvJ3hmTeHq+I8Im5DxLJ
-         a8teefzkh2SOisuAnh4eXkzwDO07XgfG1v996L6RAHFY94ECcBvIUHBQB00bIQDYqIdJ
-         JT4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3FGIc23gIcAL+scd1gVHTER4ApVxnptisLCy0nOA3ec=;
-        b=gVPLfIz4RPt+AjN5bPhwkZe2tFtjhc2VphtVUT2C5OScSTas1GwVOLyMDYefoq4iqJ
-         ss5kQPEtYaFhHGqypHUnvJ0XIlIckZhtLImAprD96m5LwNdQh68n1Ui/Z06LJ7o+v/ht
-         0liPYi5irNEWaM8PNEAXnhdAHdJZsGc/T4EUxXYLu+XHRIImpJRlOZg5pppy/49F5/as
-         h10IHzK1iG5bL7mUl8ZxCpr/BTn9zRi5bd+WaTRAK36dOCg3eX7btHHOJz4LkCsNbFLX
-         NS0Kd0uv1HomdZHVEzNGqTk5VhV3cgt6atiygTpOY8wbdrHo/39G+a1qeVMploQlpLyf
-         xeJw==
-X-Gm-Message-State: AOAM533cFpRr2doHB+ILD2Gsqf9hC+JSQBut+z++UqpqjWTiuXBitrmS
-        ASLwd88UK8wDKcMub6HEzrd8c0DlmUqgsx2BC7U=
-X-Google-Smtp-Source: ABdhPJwlkJniKwUnZRzObGLsXHNYy3Kczys5fZJbeSKZ6lFpfoqfikT6wmGUzFODlcdPWsMox3Zwhh+ziW5xQAAFHIo=
-X-Received: by 2002:a25:bc50:: with SMTP id d16mr7987916ybk.230.1598082919371;
- Sat, 22 Aug 2020 00:55:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200819224030.1615203-1-haoluo@google.com> <20200819224030.1615203-7-haoluo@google.com>
- <CAEf4BzZY2LyJvF9HCdAzHM7WG26GO0qqX=Wc6EiXArks=kmazA@mail.gmail.com>
- <CAEf4BzZ+uqE73tM6W1vXyc-hu6fB8B9ZNniq-XHYhFDjhHg9gA@mail.gmail.com> <CA+khW7jQmdw-TZMnST_rBcQWmxZ_eVw4ja+nsrqCM9HSkeWaXQ@mail.gmail.com>
-In-Reply-To: <CA+khW7jQmdw-TZMnST_rBcQWmxZ_eVw4ja+nsrqCM9HSkeWaXQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sat, 22 Aug 2020 00:55:08 -0700
-Message-ID: <CAEf4BzZwtpvBSE=00XyHGr2p2OD6X_rwnntwvSZBjGvZUEZKCA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 6/8] bpf: Introduce bpf_per_cpu_ptr()
-To:     Hao Luo <haoluo@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        id S1728384AbgHXQhr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Aug 2020 12:37:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728044AbgHXQgx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:36:53 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C0AA522B49;
+        Mon, 24 Aug 2020 16:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598286988;
+        bh=elLIwk+vXIz3X/dNZdhcxZlWgo/Xj0p8DfSj9gycQNg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=yCWE7NgoqdSuzd+hE9k0yfjNDrsSkvYlqJaZpwuWXOralpziX4+Pw3xzIfTfZMLPV
+         KILJ1ucjxj+ikjztHMvVGhftJJpqICCqcopL7Sbk1bUxNlxgM7Rb+C1qxXAxHa376Q
+         OTDoCVxuuOBCNdJXfsUveCayvZrNtc4Zsl0rkumE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 61/63] bpf: selftests: global_funcs: Check err_str before strstr
+Date:   Mon, 24 Aug 2020 12:35:01 -0400
+Message-Id: <20200824163504.605538-61-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200824163504.605538-1-sashal@kernel.org>
+References: <20200824163504.605538-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 22, 2020 at 12:49 AM Hao Luo <haoluo@google.com> wrote:
->
-> On Fri, Aug 21, 2020 at 8:31 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Aug 21, 2020 at 8:26 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Aug 19, 2020 at 3:42 PM Hao Luo <haoluo@google.com> wrote:
-> > > >
-> > > > Add bpf_per_cpu_ptr() to help bpf programs access percpu vars.
-> > > > bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the kernel
-> > > > except that it may return NULL. This happens when the cpu parameter is
-> > > > out of range. So the caller must check the returned value.
-> > > >
-> > > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > > ---
-> > >
-> > > The logic looks correct, few naming nits, but otherwise:
-> > >
-> > > Acked-by: Andrii Nakryiko <andriin@fb.com>
-> > >
-> > > >  include/linux/bpf.h      |  3 ++
-> > > >  include/linux/btf.h      | 11 +++++++
-> > > >  include/uapi/linux/bpf.h | 14 +++++++++
-> > > >  kernel/bpf/btf.c         | 10 -------
-> > > >  kernel/bpf/verifier.c    | 64 ++++++++++++++++++++++++++++++++++++++--
-> > > >  kernel/trace/bpf_trace.c | 18 +++++++++++
-> > > >  6 files changed, 107 insertions(+), 13 deletions(-)
-> [...]
-> >
-> > btw, having bpf_this_cpu_ptr(const void *ptr) seems worthwhile as well, WDYT?
-> >
->
-> It's probably not a good idea, IMHO. How does it interact with
-> preemption? Should we treat it as __this_cpu_ptr()? If so, I feel it's
-> easy to be misused, if the bpf program is called in a preemptible
-> context.
->
-> Btw, is bpf programs always called with preemption disabled? How about
-> interrupts? I haven't thought about these questions before but I think
-> they matter as we start to have more ways for bpf programs to interact
-> with the kernel.
+From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 
-non-sleepable BPF is always disabling CPU migration, so there is no
-problem with this_cpu_ptr. For sleepable not sure, but we can disable
-this helper for sleepable BPF programs, if that's a problem.
+[ Upstream commit c210773d6c6f595f5922d56b7391fe343bc7310e ]
 
->
-> Best,
-> Hao
+The error path in libbpf.c:load_program() has calls to pr_warn()
+which ends up for global_funcs tests to
+test_global_funcs.c:libbpf_debug_print().
+
+For the tests with no struct test_def::err_str initialized with a
+string, it causes call of strstr() with NULL as the second argument
+and it segfaults.
+
+Fix it by calling strstr() only for non-NULL err_str.
+
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20200820115843.39454-1-yauheni.kaliuta@redhat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/test_global_funcs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
+index 25b068591e9a4..193002b14d7f6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
+@@ -19,7 +19,7 @@ static int libbpf_debug_print(enum libbpf_print_level level,
+ 	log_buf = va_arg(args, char *);
+ 	if (!log_buf)
+ 		goto out;
+-	if (strstr(log_buf, err_str) == 0)
++	if (err_str && strstr(log_buf, err_str) == 0)
+ 		found = true;
+ out:
+ 	printf(format, log_buf);
+-- 
+2.25.1
+
