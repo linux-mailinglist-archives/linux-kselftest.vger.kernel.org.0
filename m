@@ -2,78 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A55AC250473
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Aug 2020 19:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A459F250CB8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Aug 2020 02:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726798AbgHXRCy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Aug 2020 13:02:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40658 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728481AbgHXQii (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:38:38 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C5BE022D70;
-        Mon, 24 Aug 2020 16:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598287102;
-        bh=suhF0qwwSU0yECNHcaKgTLO11nlKyMh0NmEMGkWs6+U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dX8jLqaCNJBKjhDYgGwXGWVEG8+ahICXV+iXVorxpb9nm+ifSoO+Aydw6W0QkAdCU
-         iE/ro1uJpzGKi0mh8jeCEVEmNfD02N49/77+Qjyd0LcG8rLMvTGBUsTJrQmyjBvBgQ
-         RxqY88GyxAfSmRoe8khZzSJuXgpdcVlxrgqiNKFY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Ahern <dsahern@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 23/38] selftests: disable rp_filter for icmp_redirect.sh
-Date:   Mon, 24 Aug 2020 12:37:35 -0400
-Message-Id: <20200824163751.606577-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163751.606577-1-sashal@kernel.org>
-References: <20200824163751.606577-1-sashal@kernel.org>
+        id S1726828AbgHYAFj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Aug 2020 20:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbgHYAFg (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Aug 2020 20:05:36 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0502C061755
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2020 17:05:35 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id d11so13958386ejt.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2020 17:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qSJ3hn6SwlvnIDydC8UlMXM4TqY2oPyCDRxRi3ibWKE=;
+        b=QApUvtXGB19mVLe2YJN+0fc/ADwHcSDUAddvOk2oAlHGx94SRMwAiMJTJvczmY5/LJ
+         5H8+z7s7ZKd4wBvGD40WowzmVgvVsHC7ykBwWbntxs+LCdWQ0VlGq5aJy0tz0qdKFdin
+         uqbcvQg3gw5dEsFtO/tv+zUPbf76fN0Xd+WIdO2tZWQV+cPBuKHwpaS0iqoIazyjb0WC
+         0VZo8VziYEC6cUStvp9KOD1OLo0QqjVFLoqT/QcWYj/HyXpaO7wUMO/DhvkzYkOkf+Q8
+         50J2vA7dD1LC81Uhbyha05eeIKaAFh7rlFdSCBn2tV5rFA3cEm13F4JrxvRfM0oeesYi
+         BmQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qSJ3hn6SwlvnIDydC8UlMXM4TqY2oPyCDRxRi3ibWKE=;
+        b=cYgYnQ2OdJgfBRHfAVVAEambbk/ToEr/wZGwMcshHcNm6wzGiFpicakwWnN/fmu0LK
+         fGbL7KFLgwou6fk+/N+2mEKjROIKym9y6FIloWx9xubyveujowhvSD1zz6PfQ/FhnRcc
+         S1t/TCD9pR4KlzOBkildgOeixg9Euov/321u44kTIUXBkUotZWKO29iUaT4OONw0SGB3
+         MyZiVRGPPwXnHMbgogKUZTGC9NlgR9VoQZ+LjLc3rPgbc4lrvsnettmR5bZ5raQ5yia+
+         /sNCdbj7SyVAcN7aQIBw72yWU5zrBjQCWjI9mnwb49H/wlfgbMAbhHPNDRhxgCc83DVL
+         4ysQ==
+X-Gm-Message-State: AOAM531/e3JiFZSL2x/PJNBMmH8gbh3DtFG0N3S3JvxjiffJm58N7Yij
+        dzyWjz1CG8nttjNECT62su5OXE127Tm33JwPiqcjmQ==
+X-Google-Smtp-Source: ABdhPJwq7yY0fgxViANrAk7HQzEo+kQDYpeeuJOcuEDl5RbeTE9wZIRWTSGvgD/2fC4+y7BPhunkS6W3JpETlvNIrSg=
+X-Received: by 2002:a17:906:a085:: with SMTP id q5mr7825181ejy.136.1598313933985;
+ Mon, 24 Aug 2020 17:05:33 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200819224030.1615203-1-haoluo@google.com> <20200819224030.1615203-2-haoluo@google.com>
+ <35519fec-754c-0a17-4f01-9d6e39a8a7e8@fb.com>
+In-Reply-To: <35519fec-754c-0a17-4f01-9d6e39a8a7e8@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 24 Aug 2020 17:05:22 -0700
+Message-ID: <CA+khW7iGs=tN2FT=rEiPZMQ_Z9=sqhRe4dY7dKbVoViwX666BQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/8] bpf: Introduce pseudo_btf_id
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+Yonghong,
 
-[ Upstream commit bcf7ddb0186d366f761f86196b480ea6dd2dc18c ]
+An update on this thread. I successfully reproduced this issue on a
+8.2.0 gcc compiler, It looks like gcc 4.9 did not have this issue. I
+was also using clang which did not show this bug.
 
-h1 is initially configured to reach h2 via r1 rather than the
-more direct path through r2. If rp_filter is set and inherited
-for r2, forwarding fails since the source address of h1 is
-reachable from eth0 vs the packet coming to it via r1 and eth1.
-Since rp_filter setting affects the test, explicitly reset it.
+It seems having a DW_AT_specification that refers to another
+DW_TAG_variable isn't handled in pahole. I have a (maybe hacky) pahole
+patch as fix and let me clean it up and post for review soon.
 
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/net/icmp_redirect.sh | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/net/icmp_redirect.sh b/tools/testing/selftests/net/icmp_redirect.sh
-index 18c5de53558af..bf361f30d6ef9 100755
---- a/tools/testing/selftests/net/icmp_redirect.sh
-+++ b/tools/testing/selftests/net/icmp_redirect.sh
-@@ -180,6 +180,8 @@ setup()
- 			;;
- 		r[12]) ip netns exec $ns sysctl -q -w net.ipv4.ip_forward=1
- 		       ip netns exec $ns sysctl -q -w net.ipv4.conf.all.send_redirects=1
-+		       ip netns exec $ns sysctl -q -w net.ipv4.conf.default.rp_filter=0
-+		       ip netns exec $ns sysctl -q -w net.ipv4.conf.all.rp_filter=0
- 
- 		       ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=1
- 		       ip netns exec $ns sysctl -q -w net.ipv6.route.mtu_expires=10
--- 
-2.25.1
-
+Hao
