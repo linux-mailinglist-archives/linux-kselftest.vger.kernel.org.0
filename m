@@ -2,133 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA62250E0A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Aug 2020 03:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8656325113A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Aug 2020 07:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbgHYBDs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Aug 2020 21:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728093AbgHYBDp (ORCPT
+        id S1728463AbgHYFDB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Aug 2020 01:03:01 -0400
+Received: from smtprelay0191.hostedemail.com ([216.40.44.191]:45466 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728377AbgHYFDB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Aug 2020 21:03:45 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE9EC061795
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2020 18:03:44 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id i26so9743337edv.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2020 18:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ve340FBnE1IFfQ0W0GtQ2RPw5r9LpjCO3O73FDEbehQ=;
-        b=ZVSlGEmPWwd7gWYd9D33C6IPSJ1bADML54SZ4oGBBcAx6QjuZc609Nwwiyv0dfvLr4
-         lztF+M4JcAQla0H8qITYK1KIRboJkvaxb9dXaxTkUUnNreZ7TMkfUZyVgaE3S8WpkL7M
-         mRJLCoPwWEOR/gzP5qb1coo8WhvBr757QM7ooR7S18gzTPIBIrT/MT85oMsBfxxJc34m
-         E9L1V3KV+kLCDVQhFIrYxQ63YR7UfG80Wpk9QlKaVAw9p+e/vU5lKDwfXnMXshgSGE3x
-         BJhrFFjAH0vQUs27NFMoeBGqBDXQUtNM36h9WVoayiHLuTBbn90pE9zsSRpl453witZq
-         qF1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ve340FBnE1IFfQ0W0GtQ2RPw5r9LpjCO3O73FDEbehQ=;
-        b=l20Ms/ztUf1E5b4/oAk38nMkg0/b7Hv4vIVyVsy1wYqkq+O8+aysbzH/xq8cjrfICX
-         JkomnPHA6jQMWRVCTAGN/i8Jx3nTV6eRltgxUguQg0/Q9uXyFMjQ/o5O4MERrVSsfwxP
-         FH8okRuu5tzKXrEOumUoj6tY3DqQIcUeb0REIBJBPCCdrD7fGQztKv9Xe+HBBnnFE7p7
-         2vjqXgXvgOSD/4yodrE8mJRFaCD4/UlenuZwxZnnfi5pMOdnbp1Gbm4pAXuQHCmsrXnE
-         p3Hrn7q1MQeNOtwGRPHrL0B/eXD3SaY1WT9xRxtTsme9q+cafEOdyaBDNYH0pgyoSKXm
-         uuhg==
-X-Gm-Message-State: AOAM531JTchhyM58EamKAz5P564SVXNXcCxTt8x8a7qdbmvoTiNjXprK
-        8lCBDi+82uzIW98Z6Tkn99/60rWkJQiPScM/nR6Djg==
-X-Google-Smtp-Source: ABdhPJzo/IRL6/MLWaK55PlZr8vGi6D4/kvR6VzUg92D3PIT1yMsWDjDHTyBPY2K4zxTwvCl6CflSF1/6FmThoSF/5M=
-X-Received: by 2002:aa7:d912:: with SMTP id a18mr96788edr.18.1598317422894;
- Mon, 24 Aug 2020 18:03:42 -0700 (PDT)
+        Tue, 25 Aug 2020 01:03:01 -0400
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id AE13F18024CF4;
+        Tue, 25 Aug 2020 04:56:49 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id B846B180A9F54;
+        Tue, 25 Aug 2020 04:56:42 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:541:857:966:967:973:988:989:1260:1311:1314:1345:1437:1515:1535:1544:1711:1730:1747:1777:1792:1801:2196:2199:2393:2525:2560:2563:2682:2685:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3354:3865:3867:3868:3870:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4384:4385:4395:4605:5007:6119:6261:6737:6742:7875:9025:10004:10848:11026:11473:11658:11914:12043:12048:12050:12297:12438:12555:12679:12895:12986:13161:13229:13894:14096:14181:14394:14721:21080:21433:21451:21627:21740:21773:30054:30056,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: chalk60_631385f27059
+X-Filterd-Recvd-Size: 5825
+Received: from joe-laptop.perches.com (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf08.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 25 Aug 2020 04:56:38 +0000 (UTC)
+From:   Joe Perches <joe@perches.com>
+To:     Jiri Kosina <trivial@kernel.org>, oprofile-list@lists.sf.net,
+        linux-ide@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-bcache@vger.kernel.org, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-fbdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 00/29] treewide: Convert comma separated statements
+Date:   Mon, 24 Aug 2020 21:55:57 -0700
+Message-Id: <cover.1598331148.git.joe@perches.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-References: <20200819224030.1615203-1-haoluo@google.com> <20200819224030.1615203-7-haoluo@google.com>
- <CAEf4BzZY2LyJvF9HCdAzHM7WG26GO0qqX=Wc6EiXArks=kmazA@mail.gmail.com>
- <CAEf4BzZ+uqE73tM6W1vXyc-hu6fB8B9ZNniq-XHYhFDjhHg9gA@mail.gmail.com>
- <CA+khW7jQmdw-TZMnST_rBcQWmxZ_eVw4ja+nsrqCM9HSkeWaXQ@mail.gmail.com> <CAEf4BzZwtpvBSE=00XyHGr2p2OD6X_rwnntwvSZBjGvZUEZKCA@mail.gmail.com>
-In-Reply-To: <CAEf4BzZwtpvBSE=00XyHGr2p2OD6X_rwnntwvSZBjGvZUEZKCA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 24 Aug 2020 18:03:31 -0700
-Message-ID: <CA+khW7gR=oCPvs07=XwsBPV2NiY4ne2d6mX9L_dj6fYy5grsyA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 6/8] bpf: Introduce bpf_per_cpu_ptr()
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 22, 2020 at 12:55 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sat, Aug 22, 2020 at 12:49 AM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Fri, Aug 21, 2020 at 8:31 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Fri, Aug 21, 2020 at 8:26 PM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Wed, Aug 19, 2020 at 3:42 PM Hao Luo <haoluo@google.com> wrote:
-> > > > >
-> > > > > Add bpf_per_cpu_ptr() to help bpf programs access percpu vars.
-> > > > > bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the kernel
-> > > > > except that it may return NULL. This happens when the cpu parameter is
-> > > > > out of range. So the caller must check the returned value.
-> > > > >
-> > > > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > > > ---
-> > > >
-> > > > The logic looks correct, few naming nits, but otherwise:
-> > > >
-> > > > Acked-by: Andrii Nakryiko <andriin@fb.com>
-> > > >
-> > > > >  include/linux/bpf.h      |  3 ++
-> > > > >  include/linux/btf.h      | 11 +++++++
-> > > > >  include/uapi/linux/bpf.h | 14 +++++++++
-> > > > >  kernel/bpf/btf.c         | 10 -------
-> > > > >  kernel/bpf/verifier.c    | 64 ++++++++++++++++++++++++++++++++++++++--
-> > > > >  kernel/trace/bpf_trace.c | 18 +++++++++++
-> > > > >  6 files changed, 107 insertions(+), 13 deletions(-)
-> > [...]
-> > >
-> > > btw, having bpf_this_cpu_ptr(const void *ptr) seems worthwhile as well, WDYT?
-> > >
-> >
-> > It's probably not a good idea, IMHO. How does it interact with
-> > preemption? Should we treat it as __this_cpu_ptr()? If so, I feel it's
-> > easy to be misused, if the bpf program is called in a preemptible
-> > context.
-> >
-> > Btw, is bpf programs always called with preemption disabled? How about
-> > interrupts? I haven't thought about these questions before but I think
-> > they matter as we start to have more ways for bpf programs to interact
-> > with the kernel.
->
-> non-sleepable BPF is always disabling CPU migration, so there is no
-> problem with this_cpu_ptr. For sleepable not sure, but we can disable
-> this helper for sleepable BPF programs, if that's a problem.
->
+There are many comma separated statements in the kernel.
+See:https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2008201856110.2524@hadrien/
 
-Sounds good. I see there is bpf_get_smp_processor_id() and we are
-already doing this. I can add this_cpu_ptr() in v2.
+Convert the comma separated statements that are in if/do/while blocks
+to use braces and semicolons.
 
-Hao
+Many comma separated statements still exist but those are changes for
+another day.
+
+Joe Perches (29):
+  coding-style.rst: Avoid comma statements
+  alpha: Avoid comma separated statements
+  ia64: Avoid comma separated statements
+  sparc: Avoid comma separated statements
+  ata: Avoid comma separated statements
+  drbd: Avoid comma separated statements
+  lp: Avoid comma separated statements
+  dma-buf: Avoid comma separated statements
+  drm/gma500: Avoid comma separated statements
+  drm/i915: Avoid comma separated statements
+  hwmon: (scmi-hwmon): Avoid comma separated statements
+  Input: MT - Avoid comma separated statements
+  bcache: Avoid comma separated statements
+  media: Avoid comma separated statements
+  mtd: Avoid comma separated statements
+  8390: Avoid comma separated statements
+  fs_enet: Avoid comma separated statements
+  wan: sbni: Avoid comma separated statements
+  s390/tty3270: Avoid comma separated statements
+  scai/arm: Avoid comma separated statements
+  media: atomisp: Avoid comma separated statements
+  video: fbdev: Avoid comma separated statements
+  fuse: Avoid comma separated statements
+  reiserfs: Avoid comma separated statements
+  lib/zlib: Avoid comma separated statements
+  lib: zstd: Avoid comma separated statements
+  ipv6: fib6: Avoid comma separated statements
+  sunrpc: Avoid comma separated statements
+  tools: Avoid comma separated statements
+
+ Documentation/process/coding-style.rst        |  17 +
+ arch/alpha/kernel/pci_iommu.c                 |   8 +-
+ arch/alpha/oprofile/op_model_ev4.c            |  22 +-
+ arch/alpha/oprofile/op_model_ev5.c            |   8 +-
+ arch/ia64/kernel/smpboot.c                    |   7 +-
+ arch/sparc/kernel/smp_64.c                    |   7 +-
+ drivers/ata/pata_icside.c                     |  21 +-
+ drivers/block/drbd/drbd_receiver.c            |   6 +-
+ drivers/char/lp.c                             |   6 +-
+ drivers/dma-buf/st-dma-fence.c                |   7 +-
+ drivers/gpu/drm/gma500/mdfld_intel_display.c  |  44 ++-
+ drivers/gpu/drm/i915/gt/gen8_ppgtt.c          |   8 +-
+ drivers/gpu/drm/i915/gt/intel_gt_requests.c   |   6 +-
+ .../gpu/drm/i915/gt/selftest_workarounds.c    |   6 +-
+ drivers/gpu/drm/i915/intel_runtime_pm.c       |   6 +-
+ drivers/hwmon/scmi-hwmon.c                    |   6 +-
+ drivers/input/input-mt.c                      |  11 +-
+ drivers/md/bcache/bset.c                      |  12 +-
+ drivers/md/bcache/sysfs.c                     |   6 +-
+ drivers/media/i2c/msp3400-kthreads.c          |  12 +-
+ drivers/media/pci/bt8xx/bttv-cards.c          |   6 +-
+ drivers/media/pci/saa7134/saa7134-video.c     |   7 +-
+ drivers/mtd/devices/lart.c                    |  10 +-
+ drivers/net/ethernet/8390/axnet_cs.c          |  19 +-
+ drivers/net/ethernet/8390/lib8390.c           |  14 +-
+ drivers/net/ethernet/8390/pcnet_cs.c          |   6 +-
+ .../ethernet/freescale/fs_enet/fs_enet-main.c |  11 +-
+ drivers/net/wan/sbni.c                        | 101 +++---
+ drivers/s390/char/tty3270.c                   |   6 +-
+ drivers/scsi/arm/cumana_2.c                   |  19 +-
+ drivers/scsi/arm/eesox.c                      |   9 +-
+ drivers/scsi/arm/powertec.c                   |   9 +-
+ .../media/atomisp/pci/atomisp_subdev.c        |   6 +-
+ drivers/video/fbdev/tgafb.c                   |  12 +-
+ fs/fuse/dir.c                                 |  24 +-
+ fs/reiserfs/fix_node.c                        |  36 ++-
+ lib/zlib_deflate/deftree.c                    |  49 ++-
+ lib/zstd/compress.c                           | 120 ++++---
+ lib/zstd/fse_compress.c                       |  24 +-
+ lib/zstd/huf_compress.c                       |   6 +-
+ net/ipv6/ip6_fib.c                            |  12 +-
+ net/sunrpc/sysctl.c                           |   6 +-
+ tools/lib/subcmd/help.c                       |  10 +-
+ tools/power/cpupower/utils/cpufreq-set.c      |  14 +-
+ tools/testing/selftests/vm/gup_benchmark.c    |  18 +-
+ tools/testing/selftests/vm/userfaultfd.c      | 296 +++++++++++-------
+ 46 files changed, 694 insertions(+), 382 deletions(-)
+
+-- 
+2.26.0
+
