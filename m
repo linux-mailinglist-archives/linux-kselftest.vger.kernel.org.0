@@ -2,128 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6418B253628
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Aug 2020 19:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B748253953
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Aug 2020 22:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726854AbgHZRry (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Aug 2020 13:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S1726820AbgHZUsZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Aug 2020 16:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726798AbgHZRrs (ORCPT
+        with ESMTP id S1726609AbgHZUsZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Aug 2020 13:47:48 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9FFC061574
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2020 10:47:47 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id m22so4025112eje.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2020 10:47:47 -0700 (PDT)
+        Wed, 26 Aug 2020 16:48:25 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302E1C061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2020 13:48:24 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id j2so1329090ioj.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2020 13:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DZhvz/VcmtyOV5FpCQGhe3jSJp/wS6UPaYcPASL+W/w=;
-        b=HEdiitSKEBxMSHU8oTLa3sOT98ZqvBgSHQoEa8wKCD7Bep9IfA3SmowbtjCNMgkw9i
-         jku1yi1AxvYbxckP53qA3tB5mi0Xeepx/+gdavzei1K18KH4XJJ7ql/2GL6DWC7FoP0J
-         DFVlciGxbX1urrNma8ZDr07/YRWt/Uy8XWkxyo6yHLhilLIZNM9TZ2slZHDFGktyk3/Q
-         9E9A0VZvOP44jHPNyTpdKN92CKWEsGHxifxkxymJ/Nlu23ojN81Emuo0TqlFKCCQ0/bZ
-         QVpX4GgvoQA463xPcCxrkOn6bIi3vIyOL5CtkIXlfdLEfYTsyzwlhbzOju+HDjTrlITC
-         zxLA==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GYZ/IYnL+Ejk8On59DCFq1qjJvZujhshbpaYtFkE1R8=;
+        b=fgr2FDPuuOFPfNtfWqDsufpkMYmHHkvJqPJqR9DYQu2fBa6a8i94cTveYLvPe8rwPB
+         cBJKNqx5qPeAgOo5uNPQaI1rQeHzy4HiIdcioANP2/qrPeBMye11kYFHf8lkqhxYfS93
+         rlzwWk51dEw7macHuYgBf8aYM0cyMW00LF6iPKzr0pgqf331i1XC/qAm8sF6FH5STsik
+         jqo4ibr1DA6OjUZHdisZKVD9djHc7K2gYcCX8SExQXoWdmcMlVMDKV3/sZ0uGECvjFT0
+         VBvno0Qd9SEtJP1haonwQTmPrbsnw0ZMFeXFC1miWd1ZCtach4LnN24ujGEzXa1nuMet
+         eUcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DZhvz/VcmtyOV5FpCQGhe3jSJp/wS6UPaYcPASL+W/w=;
-        b=YXvegyhCmB3dfEtAh/3nptgPhSduUR5OuZOeb8Ki/hICY5doRFY31egpWOaEUEBhKi
-         Oe852nmuw4rw3GSG5WCXGxjFvC2jQ7QatsAYIxXtIfFZ4DiWnnDB2y3Rmo1JAoXdv+xi
-         54HmgFntVOj2CeUbX1jaBdBJzUwKAnn2bYr9prI3ZW0azMvxtglUD3nUsd/roJpe6uw3
-         80jr9rYdlrkvS3Ycl2C2bPSS3ZPGO91fBkByTdgBnqwqYtv99n1mwbVS1Vi52MzgQROC
-         RyLU9ffTYIuEvqM+LsVV3QxYojSE8Ks/tt3OZqWA4Qkp+3Pm1jNTQ99sld7eLlDy+uVA
-         E1zg==
-X-Gm-Message-State: AOAM5339/XR/nRPB3UnZy1x1TyOHV7eq1Em2Wv1a2LM76MhbpTjs+WQT
-        KkSsGmo5Mw7KuhepaHr3R2ZdZGAhaxR1mvXLzaju3CzV5iF+9g==
-X-Google-Smtp-Source: ABdhPJzus1ddDpcAB3sDL3goLET4zr36SFUC2Lm7kSX43cr3KBZpmMROLLbNpz+1kIMWiaUywpNuyma7UHpBq/QSea8=
-X-Received: by 2002:a17:906:c10c:: with SMTP id do12mr13194774ejc.92.1598464066662;
- Wed, 26 Aug 2020 10:47:46 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GYZ/IYnL+Ejk8On59DCFq1qjJvZujhshbpaYtFkE1R8=;
+        b=asKqgx5PKX6xgWFqVUzNmRW4R2q0NsB3VL0npIhZz3bhZutfxuXm3ok00mqeeZN7dG
+         4L4IZF9kT8/9DdLE7smVR1ACBjhwd5KonY9wNU1dP9H/MWNcrSUoonoClymdmDm4LEOv
+         cvyyRPX1DxO1A18o4w4nEIUF8AgNrX+wqhqf6x0YVfgXbxVVhlkbAWdQL56ZXyFbZ+7y
+         vpF4V5ZJd3VfbD5Gg+T77VuNrsroAHkTNdyTBe9e/doT5CU9qwHQSnTLMR45XIxixepc
+         qqOCW+XbZgelXID5lAcMzrfGkYcEfjTRUAIaYh9zMM8ehEOPS93uDTPRjdGickDi6Qn8
+         cDyA==
+X-Gm-Message-State: AOAM533MV3+GZItCROD3QL4FQPoVbJt+QHSabbDyVemYN6GmIWDVbdt7
+        c22AYlkl4MJ3JdkmSf+mv1s3Rw==
+X-Google-Smtp-Source: ABdhPJyjH+VPjhzGpxN1j0RJJ5T32c17PK5Hy829DQuYywUr8Sqy6bzaiccBnyyeSJ1SgTbObhl/sw==
+X-Received: by 2002:a05:6638:2a3:: with SMTP id d3mr3127575jaq.0.1598474903204;
+        Wed, 26 Aug 2020 13:48:23 -0700 (PDT)
+Received: from google.com ([2601:285:8380:9270::f2a2])
+        by smtp.gmail.com with ESMTPSA id i144sm75064ioa.55.2020.08.26.13.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 13:48:22 -0700 (PDT)
+Date:   Wed, 26 Aug 2020 14:48:19 -0600
+From:   Ross Zwisler <zwisler@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org,
+        Mattias Nissler <mnissler@chromium.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Benjamin Gordon <bmgordon@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Micah Morton <mortonm@google.com>,
+        Raul Rangel <rrangel@google.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v8 1/2] Add a "nosymfollow" mount option.
+Message-ID: <20200826204819.GA4414@google.com>
+References: <20200819164317.637421-1-zwisler@google.com>
 MIME-Version: 1.0
-References: <1583589765-19344-1-git-send-email-hexiaolong2008@gmail.com>
-In-Reply-To: <1583589765-19344-1-git-send-email-hexiaolong2008@gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Wed, 26 Aug 2020 14:47:35 -0300
-Message-ID: <CAAEAJfA0w+xs95vnOiFnnMPpzh-0qJDey95bXdbv27O98cpWHA@mail.gmail.com>
-Subject: Re: [v2] dma-buf: heaps: bugfix for selftest failure
-To:     Leon He <hexiaolong2008@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org, Leon He <leon.he@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200819164317.637421-1-zwisler@google.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Leon, Shuah,
-
-Thanks for the fix. I had this issue pending to fix,
-but have been lazy about it, I appreciate you are taking care of it!
-
-On Sat, 7 Mar 2020 at 11:03, Leon He <hexiaolong2008@gmail.com> wrote:
->
-> From: Leon He <leon.he@unisoc.com>
->
-> There are two errors in the dmabuf-heap selftest:
-> 1. The 'char name[5]' was not initialized to zero, which will cause
->    strcmp(name, "vgem") failed in check_vgem().
-> 2. The return value of test_alloc_errors() should be reversed, other-
->    wise the while loop in main() will be broken.
->
-> Signed-off-by: Leon He <leon.he@unisoc.com>
+O Wed, Aug 19, 2020 at 10:43:16AM -0600, Ross Zwisler wrote:
+> From: Mattias Nissler <mnissler@chromium.org>
+> 
+> For mounts that have the new "nosymfollow" option, don't follow symlinks
+> when resolving paths. The new option is similar in spirit to the
+> existing "nodev", "noexec", and "nosuid" options, as well as to the
+> LOOKUP_NO_SYMLINKS resolve flag in the openat2(2) syscall. Various BSD
+> variants have been supporting the "nosymfollow" mount option for a long
+> time with equivalent implementations.
+> 
+> Note that symlinks may still be created on file systems mounted with
+> the "nosymfollow" option present. readlink() remains functional, so
+> user space code that is aware of symlinks can still choose to follow
+> them explicitly.
+> 
+> Setting the "nosymfollow" mount option helps prevent privileged
+> writers from modifying files unintentionally in case there is an
+> unexpected link along the accessed path. The "nosymfollow" option is
+> thus useful as a defensive measure for systems that need to deal with
+> untrusted file systems in privileged contexts.
+> 
+> More information on the history and motivation for this patch can be
+> found here:
+> 
+> https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/hardening-against-malicious-stateful-data#TOC-Restricting-symlink-traversal
+> 
+> Signed-off-by: Mattias Nissler <mnissler@chromium.org>
+> Signed-off-by: Ross Zwisler <zwisler@google.com>
+> Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
 > ---
->  tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> index cd5e1f6..836b185 100644
-> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-> @@ -22,7 +22,7 @@
->  static int check_vgem(int fd)
->  {
->         drm_version_t version = { 0 };
-> -       char name[5];
-> +       char name[5] = { 0 };
->         int ret;
->
+> Changes since v7 [1]:
+>  * Rebased onto v5.9-rc1.
+>  * Added selftest in second patch.
+>  * Added Aleska's Reviewed-By tag.  Thank you for the review!
+> 
+> After this lands I will upstream changes to util-linux[2] and man-pages
+> [3].
+> 
+> [1]: https://lkml.org/lkml/2020/8/11/896
+> [2]: https://github.com/rzwisler/util-linux/commit/7f8771acd85edb70d97921c026c55e1e724d4e15
+> [3]: https://github.com/rzwisler/man-pages/commit/b8fe8079f64b5068940c0144586e580399a71668
+> ---
 
-As Shuah already mentioned, I think we want to use strncmp
-to be on the safe side.
+Friendly ping on this.
 
->         version.name_len = 4;
-> @@ -357,7 +357,7 @@ static int test_alloc_errors(char *heap_name)
->         if (heap_fd >= 0)
->                 close(heap_fd);
->
-> -       return ret;
-> +       return !ret;
-
-I agree with Shuah, this change makes no sense, just drop it.
-
-I think the fact this test was broken and nobody noticed
-uncovers the fact that the test isn't being run.
-
-Any reason why this test isn't a regular TARGET?
-Or any idea how we can make sure this is run by CIs
-and any other testing system?
-
-Thanks!
-Ezequiel
-
->  }
->
->  int main(void)
-> --
-> 2.7.4
->
+Al, now that the changes to fs/namei.c have landed and we're past the merge
+window for v5.9, what are your thoughts on this patch and the associated test?
