@@ -2,356 +2,196 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2005254BA7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Aug 2020 19:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C352254D0C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Aug 2020 20:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbgH0RKE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Aug 2020 13:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S1726120AbgH0S2T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Aug 2020 14:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726217AbgH0RKB (ORCPT
+        with ESMTP id S1726291AbgH0S2Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Aug 2020 13:10:01 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2F4C061233
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 10:10:00 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id s2so6624266ioo.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 10:10:00 -0700 (PDT)
+        Thu, 27 Aug 2020 14:28:16 -0400
+Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00890C06121B
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 11:28:15 -0700 (PDT)
+Received: by mail-oo1-xc43.google.com with SMTP id y30so1452776ooj.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 11:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JueOAVgNYgqbWYVYqLooj1vIHH/WeKWbvTedzr6nkHI=;
-        b=YKb3uzdI72no6P2AMeLmB/dQ7L5o4c89fhaInwgUEQzNIl3gqfWzfygxqN9yuB7NnO
-         1La7m8T0c4shQtFDVoltp4emyuNj4ozrOcdlPivRM6j9BEx3d172BPAHSzCd0xYfM7Fg
-         fXn/li9z6G+ll/lP1jZPEcJS01PYlySWTPpkw=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VxlbWvka+07kHZPf01+EUiW1alBItC8Pr3Tn8LbFklQ=;
+        b=peXan55M41airQcwalxfGsmf4nrB+F5Ll5GMwX64kU3Vo+5HB9b0f6CVxw1o5JIs3q
+         qZ1b9XUIpYjcqMCSHU5FYiwzFopbgLt5b5goPNP3CJiLS26g40+KVQQHRs19X8ec+wXI
+         Xvr5EvMmOs1yZkUPeL/kQlKWiXmXba5jtBQAySYJNjc4Rm/i1YZoaPMdb2vMwvr+/FTw
+         x0tessMx4QzIUMHJHQ+JdDglMcj79qIbKsnVSgvYulpOR68h2/iijrZIV/E9/izUpTwq
+         CUOXq35T8mtWgQFiElp3fpAP2sfUGIMa427iA9whE8zHrop8cZewgZmKWf2O3h3R4MSx
+         vtsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JueOAVgNYgqbWYVYqLooj1vIHH/WeKWbvTedzr6nkHI=;
-        b=Agt9HI2RDgQq/PR67/WWTUBa7qXBhWS/GOA0wGcv4KOg8f/2vo1O1+4BMkGAHPsgo6
-         HH1PYoANzYxmL7P9kvCgSMffi34wIBStqHhhlPZoJMl/02ZubGGVBtFP37RgAWw4qzxT
-         OWVwEjhwmD6JDl/3ikV7CXc8DWOU0qtMDlXOSO5CpBBGJ1ysMW92lPVadYv39BFDAxvU
-         kZmzk7+6KUZsyNK9DMOa+NMR0SQPSaaWzW/3r6sdB60GYo0acMf/OZqE7hl5OmM+QAEw
-         qxd4g8u9nE7YLZHqyl1lbRsfXixX9EuUuG/Dqecyof6KlUBQZ4mlkjbtPZPIvoSCx+kd
-         gITg==
-X-Gm-Message-State: AOAM530cStUk4bD/0kuKdcU2TD0JMw/9/Y51ayQeBiKf6dRotR+lOIQx
-        9Ddj1dSklR1pCMfcQYN8pgb16Q==
-X-Google-Smtp-Source: ABdhPJwgdpRQdR/omvo7NV4K3vZad1KgZMYV8A3SZEKwH4TFMRbIRvi58Y6c3e2vKc0zdS3D1L7yBg==
-X-Received: by 2002:a6b:681a:: with SMTP id d26mr17763852ioc.70.1598548199537;
-        Thu, 27 Aug 2020 10:09:59 -0700 (PDT)
-Received: from ravnica.hsd1.co.comcast.net ([2601:285:8380:9270::f2a2])
-        by smtp.gmail.com with ESMTPSA id 137sm1501157ioc.20.2020.08.27.10.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 10:09:58 -0700 (PDT)
-From:   Ross Zwisler <zwisler@chromium.org>
-X-Google-Original-From: Ross Zwisler <zwisler@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
-        Mattias Nissler <mnissler@chromium.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Benjamin Gordon <bmgordon@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Micah Morton <mortonm@google.com>,
-        Raul Rangel <rrangel@google.com>, Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v9 2/2] selftests: mount: add nosymfollow tests
-Date:   Thu, 27 Aug 2020 11:09:47 -0600
-Message-Id: <20200827170947.429611-2-zwisler@google.com>
-X-Mailer: git-send-email 2.28.0.297.g1956fa8f8d-goog
-In-Reply-To: <20200827170947.429611-1-zwisler@google.com>
-References: <20200827170947.429611-1-zwisler@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VxlbWvka+07kHZPf01+EUiW1alBItC8Pr3Tn8LbFklQ=;
+        b=nPxxZLnT+Egn0mzTWSdkjD2RuZCiBWxdZ+D84/3nb+Aj3amgIiKrIFRNUo11U+4ej9
+         m0q4YiF8JdGoapE1e/857XQBEGB8PlMVRFKtyewOhPDaB9CHmidka0az1ZFywbH5LFVa
+         gcUb5SLTVm+29k+b6CGpF423F4symQkKxnl3FyqpPP7Cm1543iqdFGriJttyrczHZsXM
+         v4M2PjdLG/nOp+U4lfBA3LhlNm5xlzPSvGRssc7DQKdK7lPnKK1eqz9szLdGRk6HHH0E
+         ORRtBehnSisDT8MS8GxjR4IQnGf5j4SPFC5RfRvjoqtzIvr0g5KqEFtyB7PshxDFFIu5
+         Ur+g==
+X-Gm-Message-State: AOAM532b8p/WlNH89hg+/EWbdltCHVfzAE2WOPxgyKKRVcZ95+QEGX92
+        B2f21jwqTjgEXmfjDU9vV/hwbeqb0Mzb3rXtq8gjkw==
+X-Google-Smtp-Source: ABdhPJyZof+lv2Rdb068ddJIG0Fuq/ptEYfL7PHggKV923EZOQ/WvcqDXzxtwSckF1WY8r2ySti4FCh5wtjONGhRl3g=
+X-Received: by 2002:a05:6820:24c:: with SMTP id b12mr15207106ooe.36.1598552894223;
+ Thu, 27 Aug 2020 11:28:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200702071416.1780522-1-davidgow@google.com> <20200827131438.GA3597431@elver.google.com>
+ <CABVgOSmoiFh5i8Ue14MtCLwq-LbGgQ1hf4MyRYLFWFQrkushjQ@mail.gmail.com>
+In-Reply-To: <CABVgOSmoiFh5i8Ue14MtCLwq-LbGgQ1hf4MyRYLFWFQrkushjQ@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 27 Aug 2020 20:28:03 +0200
+Message-ID: <CANpmjNP0mGdEEFj5u-Crsvj0iaWvnt3OS+ioJNeZNjg=s0kpLQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: Add naming guidelines
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Randy Dunlap <rd.dunlab@gmail.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Tim Bird <Tim.Bird@sony.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests for the new 'nosymfollow' mount option.  We test to make sure
-that symlink traversal fails with ELOOP when 'nosymfollow' is set, but
-that readlink(2) and realpath(3) still work as expected.  We also verify
-that statfs(2) correctly returns ST_NOSYMFOLLOW when we are mounted with
-the 'nosymfollow' option.
+On Thu, 27 Aug 2020 at 18:17, David Gow <davidgow@google.com> wrote:
+[...]
+> > First of all, thanks for the talk yesterday! I only looked at this
+> > because somebody pasted the LKML link. :-)
+>
+> No worries! Clearly this document needed linking -- even I was
+> starting to suspect the reason no-one was complaining about this was
+> that no-one had read it. :-)
+[...]
+> >
+> > While I guess this ship has sailed, and *_kunit.c is the naming
+> > convention now, I hope this is still just a recommendation and names of
+> > the form *-test.c are not banned!
+>
+> The ship hasn't technically sailed until this patch is actually
+> accepted. Thus far, we hadn't had any real complaints about the
+> _kunit.c idea, though that may have been due to this email not
+> reaching enough people. If you haven't read the discussion in
+> https://lore.kernel.org/linux-kselftest/202006141005.BA19A9D3@keescook/t/#u
+> it's worthwhile: the _kunit.c name is discussed, and Kees lays out
+> some more detailed rationale for it as well.
 
-Signed-off-by: Ross Zwisler <zwisler@google.com>
----
- tools/testing/selftests/mount/.gitignore      |   1 +
- tools/testing/selftests/mount/Makefile        |   4 +-
- .../selftests/mount/nosymfollow-test.c        | 218 ++++++++++++++++++
- .../selftests/mount/run_nosymfollow.sh        |   4 +
- ...n_tests.sh => run_unprivileged_remount.sh} |   0
- 5 files changed, 225 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/mount/nosymfollow-test.c
- create mode 100755 tools/testing/selftests/mount/run_nosymfollow.sh
- rename tools/testing/selftests/mount/{run_tests.sh => run_unprivileged_remount.sh} (100%)
+Thanks, I can see the rationale. AFAIK the main concern was "it does
+not distinguish it from other tests".
 
-diff --git a/tools/testing/selftests/mount/.gitignore b/tools/testing/selftests/mount/.gitignore
-index 0bc64a6d4c181..17f2d84151622 100644
---- a/tools/testing/selftests/mount/.gitignore
-+++ b/tools/testing/selftests/mount/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- unprivileged-remount-test
-+nosymfollow-test
-diff --git a/tools/testing/selftests/mount/Makefile b/tools/testing/selftests/mount/Makefile
-index 026890744215b..2d9454841644a 100644
---- a/tools/testing/selftests/mount/Makefile
-+++ b/tools/testing/selftests/mount/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS = -Wall \
-          -O2
- 
--TEST_PROGS := run_tests.sh
--TEST_GEN_FILES := unprivileged-remount-test
-+TEST_PROGS := run_unprivileged_remount.sh run_nosymfollow.sh
-+TEST_GEN_FILES := unprivileged-remount-test nosymfollow-test
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/mount/nosymfollow-test.c b/tools/testing/selftests/mount/nosymfollow-test.c
-new file mode 100644
-index 0000000000000..650d6d80a1d27
---- /dev/null
-+++ b/tools/testing/selftests/mount/nosymfollow-test.c
-@@ -0,0 +1,218 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <sched.h>
-+#include <stdarg.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <sys/vfs.h>
-+#include <unistd.h>
-+
-+#ifndef MS_NOSYMFOLLOW
-+# define MS_NOSYMFOLLOW 256     /* Do not follow symlinks */
-+#endif
-+
-+#ifndef ST_NOSYMFOLLOW
-+# define ST_NOSYMFOLLOW 0x2000  /* Do not follow symlinks */
-+#endif
-+
-+#define DATA "/tmp/data"
-+#define LINK "/tmp/symlink"
-+#define TMP  "/tmp"
-+
-+static void die(char *fmt, ...)
-+{
-+	va_list ap;
-+
-+	va_start(ap, fmt);
-+	vfprintf(stderr, fmt, ap);
-+	va_end(ap);
-+	exit(EXIT_FAILURE);
-+}
-+
-+static void vmaybe_write_file(bool enoent_ok, char *filename, char *fmt,
-+		va_list ap)
-+{
-+	ssize_t written;
-+	char buf[4096];
-+	int buf_len;
-+	int fd;
-+
-+	buf_len = vsnprintf(buf, sizeof(buf), fmt, ap);
-+	if (buf_len < 0)
-+		die("vsnprintf failed: %s\n", strerror(errno));
-+
-+	if (buf_len >= sizeof(buf))
-+		die("vsnprintf output truncated\n");
-+
-+	fd = open(filename, O_WRONLY);
-+	if (fd < 0) {
-+		if ((errno == ENOENT) && enoent_ok)
-+			return;
-+		die("open of %s failed: %s\n", filename, strerror(errno));
-+	}
-+
-+	written = write(fd, buf, buf_len);
-+	if (written != buf_len) {
-+		if (written >= 0) {
-+			die("short write to %s\n", filename);
-+		} else {
-+			die("write to %s failed: %s\n",
-+				filename, strerror(errno));
-+		}
-+	}
-+
-+	if (close(fd) != 0)
-+		die("close of %s failed: %s\n", filename, strerror(errno));
-+}
-+
-+static void maybe_write_file(char *filename, char *fmt, ...)
-+{
-+	va_list ap;
-+
-+	va_start(ap, fmt);
-+	vmaybe_write_file(true, filename, fmt, ap);
-+	va_end(ap);
-+}
-+
-+static void write_file(char *filename, char *fmt, ...)
-+{
-+	va_list ap;
-+
-+	va_start(ap, fmt);
-+	vmaybe_write_file(false, filename, fmt, ap);
-+	va_end(ap);
-+}
-+
-+static void create_and_enter_ns(void)
-+{
-+	uid_t uid = getuid();
-+	gid_t gid = getgid();
-+
-+	if (unshare(CLONE_NEWUSER) != 0)
-+		die("unshare(CLONE_NEWUSER) failed: %s\n", strerror(errno));
-+
-+	maybe_write_file("/proc/self/setgroups", "deny");
-+	write_file("/proc/self/uid_map", "0 %d 1", uid);
-+	write_file("/proc/self/gid_map", "0 %d 1", gid);
-+
-+	if (setgid(0) != 0)
-+		die("setgid(0) failed %s\n", strerror(errno));
-+	if (setuid(0) != 0)
-+		die("setuid(0) failed %s\n", strerror(errno));
-+
-+	if (unshare(CLONE_NEWNS) != 0)
-+		die("unshare(CLONE_NEWNS) failed: %s\n", strerror(errno));
-+}
-+
-+static void setup_symlink(void)
-+{
-+	int data, err;
-+
-+	data = creat(DATA, O_RDWR);
-+	if (data < 0)
-+		die("creat failed: %s\n", strerror(errno));
-+
-+	err = symlink(DATA, LINK);
-+	if (err < 0)
-+		die("symlink failed: %s\n", strerror(errno));
-+
-+	if (close(data) != 0)
-+		die("close of %s failed: %s\n", DATA, strerror(errno));
-+}
-+
-+static void test_link_traversal(bool nosymfollow)
-+{
-+	int link;
-+
-+	link = open(LINK, 0, O_RDWR);
-+	if (nosymfollow) {
-+		if ((link != -1 || errno != ELOOP)) {
-+			die("link traversal unexpected result: %d, %s\n",
-+					link, strerror(errno));
-+		}
-+	} else {
-+		if (link < 0)
-+			die("link traversal failed: %s\n", strerror(errno));
-+
-+		if (close(link) != 0)
-+			die("close of link failed: %s\n", strerror(errno));
-+	}
-+}
-+
-+static void test_readlink(void)
-+{
-+	char buf[4096];
-+	ssize_t ret;
-+
-+	bzero(buf, sizeof(buf));
-+
-+	ret = readlink(LINK, buf, sizeof(buf));
-+	if (ret < 0)
-+		die("readlink failed: %s\n", strerror(errno));
-+	if (strcmp(buf, DATA) != 0)
-+		die("readlink strcmp failed: '%s' '%s'\n", buf, DATA);
-+}
-+
-+static void test_realpath(void)
-+{
-+	char *path = realpath(LINK, NULL);
-+
-+	if (!path)
-+		die("realpath failed: %s\n", strerror(errno));
-+	if (strcmp(path, DATA) != 0)
-+		die("realpath strcmp failed\n");
-+
-+	free(path);
-+}
-+
-+static void test_statfs(bool nosymfollow)
-+{
-+	struct statfs buf;
-+	int ret;
-+
-+	ret = statfs(TMP, &buf);
-+	if (ret)
-+		die("statfs failed: %s\n", strerror(errno));
-+
-+	if (nosymfollow) {
-+		if ((buf.f_flags & ST_NOSYMFOLLOW) == 0)
-+			die("ST_NOSYMFOLLOW not set on %s\n", TMP);
-+	} else {
-+		if ((buf.f_flags & ST_NOSYMFOLLOW) != 0)
-+			die("ST_NOSYMFOLLOW set on %s\n", TMP);
-+	}
-+}
-+
-+static void run_tests(bool nosymfollow)
-+{
-+	test_link_traversal(nosymfollow);
-+	test_readlink();
-+	test_realpath();
-+	test_statfs(nosymfollow);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	create_and_enter_ns();
-+
-+	if (mount("testing", TMP, "ramfs", 0, NULL) != 0)
-+		die("mount failed: %s\n", strerror(errno));
-+
-+	setup_symlink();
-+	run_tests(false);
-+
-+	if (mount("testing", TMP, "ramfs", MS_REMOUNT|MS_NOSYMFOLLOW, NULL) != 0)
-+		die("remount failed: %s\n", strerror(errno));
-+
-+	run_tests(true);
-+
-+	return EXIT_SUCCESS;
-+}
-diff --git a/tools/testing/selftests/mount/run_nosymfollow.sh b/tools/testing/selftests/mount/run_nosymfollow.sh
-new file mode 100755
-index 0000000000000..5fbbf03043a2e
---- /dev/null
-+++ b/tools/testing/selftests/mount/run_nosymfollow.sh
-@@ -0,0 +1,4 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+./nosymfollow-test
-diff --git a/tools/testing/selftests/mount/run_tests.sh b/tools/testing/selftests/mount/run_unprivileged_remount.sh
-similarity index 100%
-rename from tools/testing/selftests/mount/run_tests.sh
-rename to tools/testing/selftests/mount/run_unprivileged_remount.sh
--- 
-2.28.0.297.g1956fa8f8d-goog
+> > $> git grep 'KUNIT.*-test.o'
+> >         drivers/base/power/Makefile:obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
+> >         drivers/base/test/Makefile:obj-$(CONFIG_KUNIT_DRIVER_PE_TEST) += property-entry-test.o
+> >         fs/ext4/Makefile:obj-$(CONFIG_EXT4_KUNIT_TESTS)         += ext4-inode-test.o
+> >         kernel/Makefile:obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
+> >         lib/Makefile:obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+> >         lib/kunit/Makefile:obj-$(CONFIG_KUNIT_TEST) +=          kunit-test.o
+> >         lib/kunit/Makefile:obj-$(CONFIG_KUNIT_TEST) +=          string-stream-test.o
+> >         lib/kunit/Makefile:obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=  kunit-example-test.o
+> >
+> > $> git grep 'KUNIT.*_kunit.o'
+> > # Returns nothing
+> >
+>
+> This was definitely something we noted. Part of the goal of having
+> _kunit.c as a filename suffix (and, perhaps more importantly, the
+> _kunit module name suffix) was to have a way of both distinguishing
+> KUnit tests from non-KUnit ones (of which there are quite a few
+> already with -test names), and to have a way of quickly determining
+> what modules contain KUnit tests. That really only works if everyone
+> is using it, so the plan was to push this as much as possible. This'd
+> probably include renaming most of the existing test files to match,
+> which is a bit of a pain (particularly when converting non-KUnit tests
+> to KUnit and similar), but is a one-time thing.
 
+Feel free to ignore the below, but here might be one concern:
+
+I think the problem of distinguishing KUnit tests from non-KUnit tests
+is a technical problem (in fact, the Kconfig entries have all the info
+we need), but a solution that sacrifices readability might cause
+unnecessary friction.
+
+The main issue I foresee is that the _kunit.c name is opaque as to
+what the file does, but merely indicates one of its dependencies. Most
+of us clearly know that KUnit is a test framework, but it's a level of
+indirection nevertheless. (But _kunit_test.c is also bad, because it's
+unnecessarily long.) For a dozen tests, that's probably still fine.
+But now imagine 100s of tests, people will quickly wonder "what's this
+_kunit thing?". And if KUnit tests are eventually the dominant tests,
+does it still matter?
+
+I worry that because of the difficulty of enforcing the name, choosing
+something unintuitive will also achieve the opposite result:
+proliferation of even more diverse names. A generic convention like
+"*-test.c" will be close enough to what's intuitive for most people,
+and we might actually have a chance of getting everyone to stick to
+it.
+
+The problem of identifying all KUnit tests can be solved with a script.
+
+> > Just an idea: Maybe the names are also an opportunity to distinguish
+> > real _unit_ style tests and then the rarer integration-style tests. I
+> > personally prefer using the more generic *-test.c, at least for the
+> > integration-style tests I've been working on (KUnit is still incredibly
+> > valuable for integration-style tests, because otherwise I'd have to roll
+> > my own poor-man's version of KUnit, so thank you!). Using *_kunit.c for
+> > such tests is unintuitive, because the word "unit" hints at "unit tests"
+> > -- and having descriptive (and not misleading) filenames is still
+> > important. So I hope you won't mind if *-test.c are still used where
+> > appropriate.
+>
+> As Brendan alluded to in the talk, the popularity of KUnit for these
+> integration-style tests came as something of a surprise (more due to
+> our lack of imagination than anything else, I suspect). It's great
+> that it's working, though: I don't think anyone wants the world filled
+> with more single-use test "frameworks" than is necessary!
+>
+> I guess the interesting thing to note is that we've to date not really
+> made a distinction between KUnit the framework and the suite of all
+> KUnit tests. Maybe having a separate file/module naming scheme could
+> be a way of making that distinction, though it'd really only appear
+> when loading tests as modules -- there'd be no indication in e.g.,
+> suite names or test results. The more obvious solution to me (at
+> least, based on the current proposal) would be to have "integration"
+> or similar be part of the suite name (and hence the filename, so
+> _integration_kunit.c or similar), though even I admit that that's much
+> uglier.
+
+Yeah, that's not great either.  Again, in the end it's probably
+entirely up to you, but it'd be good if the filenames are descriptive
+and readable (vs. a puzzle).
+
+> Maybe the idea of having the subsystem/suite distinction be
+> represented in the code could pave the way to having different suites
+> support different suffixes like that.
+
+> Do you know of any cases where something has/would have both
+> unit-style tests and integration-style tests built with KUnit where
+> the distinction needs to be clear?
+
+None I know of, so probably not a big deal.
+
+> Brendan, Kees: do you have any thoughts?
+>
+
+> Cheers,
+> -- David
+
+Thanks,
+-- Marco
