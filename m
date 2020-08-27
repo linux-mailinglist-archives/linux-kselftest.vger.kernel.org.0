@@ -2,153 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C242254919
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Aug 2020 17:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C322549B2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Aug 2020 17:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728250AbgH0PVE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Aug 2020 11:21:04 -0400
-Received: from mga05.intel.com ([192.55.52.43]:16015 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728234AbgH0PUz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Aug 2020 11:20:55 -0400
-IronPort-SDR: 55Yqlb798kOgvMHQZhnXcBcTdeo+Xo1dt6DAcqiTTA9gJTKHgeL2bFtI+NYg5rfBB8jtOfPZiU
- TBxlyZhVzsTw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="241320086"
-X-IronPort-AV: E=Sophos;i="5.76,359,1592895600"; 
-   d="scan'208";a="241320086"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2020 08:20:53 -0700
-IronPort-SDR: 2ftvRexz4LzBoob2AWoL+hj30qCYj3C4kUREAoXxllKNIiFmgRvAhAGhznSW/hfX99yOfY3vov
- 1w/1LiuwvBTg==
-X-IronPort-AV: E=Sophos;i="5.76,359,1592895600"; 
-   d="scan'208";a="337196893"
-Received: from sjchrist-ice.jf.intel.com (HELO sjchrist-ice) ([10.54.31.34])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2020 08:20:52 -0700
-Date:   Thu, 27 Aug 2020 08:20:51 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Nathaniel McCallum <npmccallum@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, linux-sgx@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
+        id S1726266AbgH0PmG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Aug 2020 11:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726232AbgH0PmG (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 27 Aug 2020 11:42:06 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050::465:202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AD3C061264;
+        Thu, 27 Aug 2020 08:41:59 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Bcn5t3dKJzQl8P;
+        Thu, 27 Aug 2020 17:41:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id OOd35QMJSPWg; Thu, 27 Aug 2020 17:41:50 +0200 (CEST)
+Date:   Fri, 28 Aug 2020 01:41:39 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Ross Zwisler <zwisler@google.com>, linux-kernel@vger.kernel.org,
+        Mattias Nissler <mnissler@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        asapek@google.com, Borislav Petkov <bp@alien8.de>,
-        "Xing, Cedric" <cedric.xing@intel.com>, chenalexchen@google.com,
-        Conrad Parker <conradparker@google.com>, cyhanish@google.com,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Svahn, Kai" <kai.svahn@intel.com>, Keith Moyer <kmoy@google.com>,
-        Christian Ludloff <ludloff@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Neil Horman <nhorman@redhat.com>,
-        Patrick Uiterwijk <puiterwijk@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>, yaozhangx@google.com
-Subject: Re: [PATCH v36 22/24] selftests/x86: Add a selftest for SGX
-Message-ID: <20200827152051.GB22351@sjchrist-ice>
-References: <20200716135303.276442-1-jarkko.sakkinen@linux.intel.com>
- <20200716135303.276442-23-jarkko.sakkinen@linux.intel.com>
- <CAOASepO-DuQW88hxtAJv5Ki4GNYnkGNz5qK_dTEK_y8roMdPkg@mail.gmail.com>
+        Benjamin Gordon <bmgordon@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Micah Morton <mortonm@google.com>,
+        Raul Rangel <rrangel@google.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v8 1/2] Add a "nosymfollow" mount option.
+Message-ID: <20200827154139.vwuflrlvj257krnw@yavin.dot.cyphar.com>
+References: <20200819164317.637421-1-zwisler@google.com>
+ <20200826204819.GA4414@google.com>
+ <20200827015940.GY1236603@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ylgwp663kchqyfqy"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOASepO-DuQW88hxtAJv5Ki4GNYnkGNz5qK_dTEK_y8roMdPkg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200827015940.GY1236603@ZenIV.linux.org.uk>
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -7.65 / 15.00 / 15.00
+X-Rspamd-Queue-Id: EB1AD179E
+X-Rspamd-UID: d7ba09
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 12:47:04AM -0400, Nathaniel McCallum wrote:
-> > +int main(int argc, char *argv[], char *envp[])
-> > +{
-> > +       struct sgx_enclave_exception exception;
-> > +       struct vdso_symtab symtab;
-> > +       Elf64_Sym *eenter_sym;
-> > +       uint64_t result = 0;
-> > +       struct encl encl;
-> > +       unsigned int i;
-> > +       void *addr;
-> > +
-> > +       if (!encl_load("test_encl.elf", &encl))
-> > +               goto err;
-> > +
-> > +       if (!encl_measure(&encl))
-> > +               goto err;
-> > +
-> > +       if (!encl_build(&encl))
-> > +               goto err;
-> > +
-> > +       /*
-> > +        * An enclave consumer only must do this.
-> > +        */
-> > +       for (i = 0; i < encl.nr_segments; i++) {
-> > +               struct encl_segment *seg = &encl.segment_tbl[i];
-> > +
-> > +               addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
-> > +                           seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
-> 
-> My patch version is a bit behind (v32), but I suspect this still
-> applies. I discovered the following by accident.
-> 
-> In the Enarx code base, this invocation succeeds:
-> mmap(0x200000000000, 0x1000, PROT_READ | PROT_WRITE, MAP_SHARED |
-> MAP_FIXED, sgxfd, 0)
-> 
-> However, this one fails with -EINVAL:
-> mmap(0x200000000000, 0x1000, PROT_READ | PROT_WRITE,
-> MAP_SHARED_VALIDATE | MAP_FIXED, sgxfd, 0)
-> 
-> From man mmap:
-> 
->        MAP_SHARED_VALIDATE (since Linux 4.15)
->               This flag provides the same behavior as MAP_SHARED
-> except that MAP_SHARED mappings ignore unknown
->               flags in flags.  By contrast, when creating a mapping
-> using MAP_SHARED_VALIDATE, the kernel veri‐
->               fies  all  passed  flags  are  known  and fails the
-> mapping with the error EOPNOTSUPP for unknown
->               flags.  This mapping type is also required to be able to
-> use some mapping flags (e.g., MAP_SYNC).
-> 
-> I can try again on a newer patch set tomorrow if need be. But the
-> documentation of mmap() doesn't match the behavior I'm seeing. A brief
-> look through the patch set didn't turn up anything obvious that could
-> be causing this.
 
-This is a bug in sgx_get_unmapped_area().  EPC must be mapped SHARED, and
-so MAP_PRIVATE is disallowed.  The current check is:
+--ylgwp663kchqyfqy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  if (flags & MAP_PRIVATE)
-          return -EINVAL;
+On 2020-08-27, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Wed, Aug 26, 2020 at 02:48:19PM -0600, Ross Zwisler wrote:
+>=20
+> > Al, now that the changes to fs/namei.c have landed and we're past the m=
+erge
+> > window for v5.9, what are your thoughts on this patch and the associate=
+d test?
+>=20
+> Humm...  should that be nd->path.mnt->mnt_flags or link->mnt->mnt_flags?
+> Usually it's the same thing, but they might differ.  IOW, is that about t=
+he
+> directory we'd found it in, or is it about the link itself?
 
-and the base "flags" are:
+Now that you mention it, I think link->mnt->mnt_flags makes more sense.
+The restriction should apply in the context of whatever filesystem
+contains the symlink, and that would matches FreeBSD's semantics (at
+least as far as I can tell from a quick look at sys/kern/vfs_lookup.c).
 
-  #define MAP_SHARED      0x01            /* Share changes */
-  #define MAP_PRIVATE     0x02            /* Changes are private */
-  #define MAP_SHARED_VALIDATE 0x03        /* share + validate extension flags */
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-which causes the SGX check to interpret MAP_SHARED_VALIDATE as MAP_PRIVATE.
-The types are just that, types, not flag modifiers.  So the SGX code needs
-to be:
+--ylgwp663kchqyfqy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  if ((flags & MAP_TYPE) == MAP_PRIVATE)
-          return -EINVAL;
+-----BEGIN PGP SIGNATURE-----
 
-or
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCX0fULwAKCRCdlLljIbnQ
+EnZCAP4+fXAsTWkSGZi6M5GB5CszbuzshNh586bsaZW11vQU7QEArCC+2bjdBmuT
+jArxG3CPumBoXcAHgAJquKQGdsh50wM=
+=NnGT
+-----END PGP SIGNATURE-----
 
-  unsigned long map_type = (flags & MAP_TYPE);
-
-  if (map_type != MAP_SHARED && map_type != MAP_SHARED_VALIDATE)
-          return -EINVAL;
-
-
-Side topic, there is at least one existing bug of this nature, in mm/nommu.c.
-I'll send a patch for that and look for any other instances of the bad
-pattern.
+--ylgwp663kchqyfqy--
