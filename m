@@ -2,57 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2ED254B19
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Aug 2020 18:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E20254BA5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Aug 2020 19:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbgH0QtG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Aug 2020 12:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
+        id S1726246AbgH0RKC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Aug 2020 13:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726946AbgH0QtC (ORCPT
+        with ESMTP id S1726093AbgH0RJ7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Aug 2020 12:49:02 -0400
+        Thu, 27 Aug 2020 13:09:59 -0400
 Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17061C061232
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 09:49:02 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id i10so6548563iow.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 09:49:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0598C06121B
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 10:09:58 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id i10so6624643iow.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2020 10:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/xGpOY5v3rYoFqTd5QFQEPCm9lS0N53r2cL3cEdKtPw=;
-        b=mx+FJh+qUi0eylsu7L5BZKzqa0QvffqcQd1piV8hJ6N9eT9+EcGAtY/vTkjhlPEDuW
-         i4bJW+Hw5vkXE3QOjP00yzvGOx8NdmAa5xDpJxtAH1b5y/tb+6lcmCXNX04NRc+y3ZGO
-         Tz4AfmmZltBKDUOJrlkUu4MwuW1406+6ICT01nQWL7eOtK1K7beaV3+fgjuvh9xLhMGb
-         1rdiHTd4Wm9XHDp5nDwcQsgX1umcQciurhny3pj2qPHE/IeYwdyvZVs437s79yJd4Pd1
-         qQ4F0jgXjb7kjVvvsCi6v5HMTX/eP5Xw6c88+9OJjIQmO9nUDfZHpZ+yJF9iMaD1WVC5
-         Sovw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+zy8MaawGAdFvMcnl51+12kZuV9xAVAJV7h+dgIdsiM=;
+        b=KPLMugwGcD3nlza4Rs5RTIo6IMyVGmmVEgEVxvajeNXATLXtpr5Lr+ALT6hqbzvd3f
+         mGP000eROkxNeYFFhZnd1SNyNe+xFCBghJgQiDThi+TkPDGOG9c6yQfZmN40JpuLnfe+
+         tcS9hA1cPKax8hys2sUSc7+7+SjxthF+giWyg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/xGpOY5v3rYoFqTd5QFQEPCm9lS0N53r2cL3cEdKtPw=;
-        b=FbKs/Jx7fh/gHT6nvohYMt2vRBUPhWHxe7I0KUAsS0F6+f34QsR6Yz+XjNvwWtuRfS
-         WmDQI4hgZtcIhOVIbLGrIz/IjIKWWchQ7+t3e3GJ4H2QJOHdnUDR1V3ruiQ69kXZYdcb
-         J+OjNJD0OXv4dx1GkmVjK/TPcaqLbjYz/PSRAiQ38LcXhKxN4mDgmCjPwamI4h8Hmrq9
-         juiEhZ6dTaV3mjctA9t/Dev0XQhUgdQvzFIrrCr5MExkrFWLN11uQAnT2OHPiYNCEjXZ
-         bizX+1qfeE5y8udk0ZCxOwBZqfUDfHotwx4X5DBh327hodTnJn4uovZ1lozBzJwrpSiq
-         QgaQ==
-X-Gm-Message-State: AOAM5327xG2TYzOrQRGWAOR+pEHPcdax6cpa5hXzJGNPS00VVwOJTX77
-        My/8Llf4ox0mXrFpcUONQHsgDQ==
-X-Google-Smtp-Source: ABdhPJx+UxHqjKJ/wh4vVsrsKz1c7ecfzQJTGkjRy2EK647UYYIw8L0JJ2F4rqhbalqI+shH+xs5XQ==
-X-Received: by 2002:a5d:924c:: with SMTP id e12mr17853974iol.28.1598546940951;
-        Thu, 27 Aug 2020 09:49:00 -0700 (PDT)
-Received: from google.com ([2601:285:8380:9270::f2a2])
-        by smtp.gmail.com with ESMTPSA id 187sm1430125iow.34.2020.08.27.09.48.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+zy8MaawGAdFvMcnl51+12kZuV9xAVAJV7h+dgIdsiM=;
+        b=Ml3RMvG0RZL40aIgcpv/umT0ys3zQ6CixI5TXWuLNCvY6pD2RId7P+zbH37xE1KOMo
+         HCKbFv5Tpw5JLYLvvjQYpO0O9ZBuPJod4WvngKswaccdrAg3uWfWbYGoTfnkzCWiacCg
+         /LdpfrXf5LTp5RHiULZ8cAq2vb64NskQFyxv8FdPffgVS7nE8V6ttJjNYwt4+dAVI3Fm
+         qYpzXfB8oUeMiPhxK0wxtlO4AdJnzu0EG6MSG7AJpZE3z49aT7RqOivq1ORnJDbtCvp8
+         ydhYxpMT65GmEEF6TXHtNtHPXwpY9A3Yhoj04ZoNggKTzvrz+XVwJai7rCSjB+4d1soO
+         lvCA==
+X-Gm-Message-State: AOAM5327Z63Zzk3JNCmHYLTnDWlTrDjSValaKIIjf4RuZLSoY7er+AgN
+        Nybw0E9LJ+3V3Fx+dGd4YLf6KA==
+X-Google-Smtp-Source: ABdhPJxdXpbX9zOohWhDwMe+Emquhqqdolb1snr/FP4PBePPjkpr8GDZfiZBB0hWDpxh8BYaDA0sfg==
+X-Received: by 2002:a6b:c404:: with SMTP id y4mr2930588ioa.153.1598548197970;
+        Thu, 27 Aug 2020 10:09:57 -0700 (PDT)
+Received: from ravnica.hsd1.co.comcast.net ([2601:285:8380:9270::f2a2])
+        by smtp.gmail.com with ESMTPSA id 137sm1501157ioc.20.2020.08.27.10.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 09:49:00 -0700 (PDT)
-Date:   Thu, 27 Aug 2020 10:48:57 -0600
-From:   Ross Zwisler <zwisler@google.com>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org,
-        Mattias Nissler <mnissler@chromium.org>,
+        Thu, 27 Aug 2020 10:09:57 -0700 (PDT)
+From:   Ross Zwisler <zwisler@chromium.org>
+X-Google-Original-From: Ross Zwisler <zwisler@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org
+Cc:     Mattias Nissler <mnissler@chromium.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Benjamin Gordon <bmgordon@google.com>,
         David Howells <dhowells@redhat.com>,
@@ -61,38 +59,167 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Matthew Wilcox <willy@infradead.org>,
         Micah Morton <mortonm@google.com>,
-        Raul Rangel <rrangel@google.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v8 1/2] Add a "nosymfollow" mount option.
-Message-ID: <20200827164857.GA414369@google.com>
-References: <20200819164317.637421-1-zwisler@google.com>
- <20200826204819.GA4414@google.com>
- <20200827015940.GY1236603@ZenIV.linux.org.uk>
- <20200827154139.vwuflrlvj257krnw@yavin.dot.cyphar.com>
+        Raul Rangel <rrangel@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Ross Zwisler <zwisler@google.com>
+Subject: [PATCH v9 1/2] Add a "nosymfollow" mount option.
+Date:   Thu, 27 Aug 2020 11:09:46 -0600
+Message-Id: <20200827170947.429611-1-zwisler@google.com>
+X-Mailer: git-send-email 2.28.0.297.g1956fa8f8d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200827154139.vwuflrlvj257krnw@yavin.dot.cyphar.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 01:41:39AM +1000, Aleksa Sarai wrote:
-> On 2020-08-27, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > On Wed, Aug 26, 2020 at 02:48:19PM -0600, Ross Zwisler wrote:
-> > 
-> > > Al, now that the changes to fs/namei.c have landed and we're past the merge
-> > > window for v5.9, what are your thoughts on this patch and the associated test?
-> > 
-> > Humm...  should that be nd->path.mnt->mnt_flags or link->mnt->mnt_flags?
-> > Usually it's the same thing, but they might differ.  IOW, is that about the
-> > directory we'd found it in, or is it about the link itself?
-> 
-> Now that you mention it, I think link->mnt->mnt_flags makes more sense.
-> The restriction should apply in the context of whatever filesystem
-> contains the symlink, and that would matches FreeBSD's semantics (at
-> least as far as I can tell from a quick look at sys/kern/vfs_lookup.c).
+From: Mattias Nissler <mnissler@chromium.org>
 
-Yep, changing this to link->mnt->mnt_flags makes sense to me, as you're right
-that we care about the link itself and not the link's parent directory.  Thank
-you for the review, and I'll send out v9 momentarily.
+For mounts that have the new "nosymfollow" option, don't follow symlinks
+when resolving paths. The new option is similar in spirit to the
+existing "nodev", "noexec", and "nosuid" options, as well as to the
+LOOKUP_NO_SYMLINKS resolve flag in the openat2(2) syscall. Various BSD
+variants have been supporting the "nosymfollow" mount option for a long
+time with equivalent implementations.
+
+Note that symlinks may still be created on file systems mounted with
+the "nosymfollow" option present. readlink() remains functional, so
+user space code that is aware of symlinks can still choose to follow
+them explicitly.
+
+Setting the "nosymfollow" mount option helps prevent privileged
+writers from modifying files unintentionally in case there is an
+unexpected link along the accessed path. The "nosymfollow" option is
+thus useful as a defensive measure for systems that need to deal with
+untrusted file systems in privileged contexts.
+
+More information on the history and motivation for this patch can be
+found here:
+
+https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/hardening-against-malicious-stateful-data#TOC-Restricting-symlink-traversal
+
+Signed-off-by: Mattias Nissler <mnissler@chromium.org>
+Signed-off-by: Ross Zwisler <zwisler@google.com>
+Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
+---
+Changes since v8 [1]:
+ * Look for MNT_NOSYMFOLLOW in link->mnt->mnt_flags so we are testing
+   the link itself rather than the directory holding the link. (Al Viro)
+ * Rebased onto v5.9-rc2.
+
+After this lands I will upstream changes to util-linux[2] and man-pages
+[3].
+
+[1]: https://patchwork.kernel.org/patch/11724607/
+[2]: https://github.com/rzwisler/util-linux/commit/7f8771acd85edb70d97921c026c55e1e724d4e15
+[3]: https://github.com/rzwisler/man-pages/commit/b8fe8079f64b5068940c0144586e580399a71668
+---
+ fs/namei.c                 | 3 ++-
+ fs/namespace.c             | 2 ++
+ fs/proc_namespace.c        | 1 +
+ fs/statfs.c                | 2 ++
+ include/linux/mount.h      | 3 ++-
+ include/linux/statfs.h     | 1 +
+ include/uapi/linux/mount.h | 1 +
+ 7 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/fs/namei.c b/fs/namei.c
+index e99e2a9da0f7d..33e8c79bc761e 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -1626,7 +1626,8 @@ static const char *pick_link(struct nameidata *nd, struct path *link,
+ 			return ERR_PTR(error);
+ 	}
+ 
+-	if (unlikely(nd->flags & LOOKUP_NO_SYMLINKS))
++	if (unlikely(nd->flags & LOOKUP_NO_SYMLINKS) ||
++			unlikely(link->mnt->mnt_flags & MNT_NOSYMFOLLOW))
+ 		return ERR_PTR(-ELOOP);
+ 
+ 	if (!(nd->flags & LOOKUP_RCU)) {
+diff --git a/fs/namespace.c b/fs/namespace.c
+index bae0e95b3713a..6408788a649e1 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -3160,6 +3160,8 @@ int path_mount(const char *dev_name, struct path *path,
+ 		mnt_flags &= ~(MNT_RELATIME | MNT_NOATIME);
+ 	if (flags & MS_RDONLY)
+ 		mnt_flags |= MNT_READONLY;
++	if (flags & MS_NOSYMFOLLOW)
++		mnt_flags |= MNT_NOSYMFOLLOW;
+ 
+ 	/* The default atime for remount is preservation */
+ 	if ((flags & MS_REMOUNT) &&
+diff --git a/fs/proc_namespace.c b/fs/proc_namespace.c
+index 3059a9394c2d6..e59d4bb3a89e4 100644
+--- a/fs/proc_namespace.c
++++ b/fs/proc_namespace.c
+@@ -70,6 +70,7 @@ static void show_mnt_opts(struct seq_file *m, struct vfsmount *mnt)
+ 		{ MNT_NOATIME, ",noatime" },
+ 		{ MNT_NODIRATIME, ",nodiratime" },
+ 		{ MNT_RELATIME, ",relatime" },
++		{ MNT_NOSYMFOLLOW, ",nosymfollow" },
+ 		{ 0, NULL }
+ 	};
+ 	const struct proc_fs_opts *fs_infop;
+diff --git a/fs/statfs.c b/fs/statfs.c
+index 2616424012ea7..59f33752c1311 100644
+--- a/fs/statfs.c
++++ b/fs/statfs.c
+@@ -29,6 +29,8 @@ static int flags_by_mnt(int mnt_flags)
+ 		flags |= ST_NODIRATIME;
+ 	if (mnt_flags & MNT_RELATIME)
+ 		flags |= ST_RELATIME;
++	if (mnt_flags & MNT_NOSYMFOLLOW)
++		flags |= ST_NOSYMFOLLOW;
+ 	return flags;
+ }
+ 
+diff --git a/include/linux/mount.h b/include/linux/mount.h
+index de657bd211fa6..aaf343b38671c 100644
+--- a/include/linux/mount.h
++++ b/include/linux/mount.h
+@@ -30,6 +30,7 @@ struct fs_context;
+ #define MNT_NODIRATIME	0x10
+ #define MNT_RELATIME	0x20
+ #define MNT_READONLY	0x40	/* does the user want this to be r/o? */
++#define MNT_NOSYMFOLLOW	0x80
+ 
+ #define MNT_SHRINKABLE	0x100
+ #define MNT_WRITE_HOLD	0x200
+@@ -46,7 +47,7 @@ struct fs_context;
+ #define MNT_SHARED_MASK	(MNT_UNBINDABLE)
+ #define MNT_USER_SETTABLE_MASK  (MNT_NOSUID | MNT_NODEV | MNT_NOEXEC \
+ 				 | MNT_NOATIME | MNT_NODIRATIME | MNT_RELATIME \
+-				 | MNT_READONLY)
++				 | MNT_READONLY | MNT_NOSYMFOLLOW)
+ #define MNT_ATIME_MASK (MNT_NOATIME | MNT_NODIRATIME | MNT_RELATIME )
+ 
+ #define MNT_INTERNAL_FLAGS (MNT_SHARED | MNT_WRITE_HOLD | MNT_INTERNAL | \
+diff --git a/include/linux/statfs.h b/include/linux/statfs.h
+index 9bc69edb8f188..fac4356ea1bfc 100644
+--- a/include/linux/statfs.h
++++ b/include/linux/statfs.h
+@@ -40,6 +40,7 @@ struct kstatfs {
+ #define ST_NOATIME	0x0400	/* do not update access times */
+ #define ST_NODIRATIME	0x0800	/* do not update directory access times */
+ #define ST_RELATIME	0x1000	/* update atime relative to mtime/ctime */
++#define ST_NOSYMFOLLOW	0x2000	/* do not follow symlinks */
+ 
+ struct dentry;
+ extern int vfs_get_fsid(struct dentry *dentry, __kernel_fsid_t *fsid);
+diff --git a/include/uapi/linux/mount.h b/include/uapi/linux/mount.h
+index 96a0240f23fed..dd8306ea336c1 100644
+--- a/include/uapi/linux/mount.h
++++ b/include/uapi/linux/mount.h
+@@ -16,6 +16,7 @@
+ #define MS_REMOUNT	32	/* Alter flags of a mounted FS */
+ #define MS_MANDLOCK	64	/* Allow mandatory locks on an FS */
+ #define MS_DIRSYNC	128	/* Directory modifications are synchronous */
++#define MS_NOSYMFOLLOW	256	/* Do not follow symlinks */
+ #define MS_NOATIME	1024	/* Do not update access times. */
+ #define MS_NODIRATIME	2048	/* Do not update directory access times */
+ #define MS_BIND		4096
+-- 
+2.28.0.297.g1956fa8f8d-goog
+
