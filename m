@@ -2,87 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6020C255979
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Aug 2020 13:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EAC255B2A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Aug 2020 15:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729267AbgH1LiG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Aug 2020 07:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729258AbgH1Lgl (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Aug 2020 07:36:41 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D28C061232
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2020 04:13:26 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id e5so408496qth.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2020 04:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7gQIGUiMIeeIo12Il7bUrjYk58mhEZJndN/EWd9XYIE=;
-        b=PioKAFn8fdNLwzxhcOWCr/lhW22EBcVyqYD2T6CTGQZkstnAaUdV1g6cmo/nDhzkFv
-         8ivLGloms6Xx44/b/6rT4bCjJUK9+S0HHoMjMfHKpd9eyjbJ3KeKeiPMfDPweuUxJA4U
-         N88wCwKGRIP24st+U/LnJWxvhuHvfLGiYqCrmiSaZJAmQZMxoTvUg4h5I9fNFX1Ta3pH
-         QkfARA7GGBGCUF9YijF7xzszb2J62whoTNOleglB/edmTYLCnvEV2NtlX9JRvXrOEXsM
-         H516mXmB8M2kkvhVWOZLpShcQV3/oUrbrp4eLw3zvTIDO7jL0TPtW8zA/y2UGZZjwRg/
-         LUQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7gQIGUiMIeeIo12Il7bUrjYk58mhEZJndN/EWd9XYIE=;
-        b=BYgywXpv5ctBtXu0/ljuXiICXRRJi2vH7ZX3kGWLWln3+17c0aBHbmJQxppnLewJfi
-         AsuI0HSVe3kkwOThIIzVIW0u/YRKY/pr8ng+p2TWBGZRc/QvkU70NYiDR+mUvRVHasgq
-         p0EkA27fXjQzQpBTUm5QV73B2ztFpi6+6UXKnffGpQwpJO/0LWGJF0nDT1UhTwix/kyx
-         +4f61VxWVaz7ip7Om75bh2jNzo6hzimmypWQ1vxAJh+P08IZSkAAlZ57lqPBR5+dRuSW
-         pHLiIe0qNS5hH10TJHTu/88esFL+f7su1jUC1L2xh5qH6Hoef3iU/wZWPdW9waYosspb
-         2Ayg==
-X-Gm-Message-State: AOAM533wmePyeMf4ndoAn9ee69mpuOxQl94/wZ5arRVZZ76yX3ZC+Xqx
-        GtQSnU/5OJEh9pIHjoHP/5vpGw==
-X-Google-Smtp-Source: ABdhPJzGPBju0yAnoEhn5EAXcBFDqYwo7FFOY5QZTG0TPwuwKj933CaIS8c3I9oJh+7hCv3p9iYf+A==
-X-Received: by 2002:ac8:6052:: with SMTP id k18mr1060677qtm.60.1598613206205;
-        Fri, 28 Aug 2020 04:13:26 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id i1sm447103qkd.58.2020.08.28.04.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2020 04:13:25 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kBcJw-000OQc-IU; Fri, 28 Aug 2020 08:13:24 -0300
-Date:   Fri, 28 Aug 2020 08:13:24 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
+        id S1729324AbgH1NYc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Aug 2020 09:24:32 -0400
+Received: from foss.arm.com ([217.140.110.172]:49352 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729234AbgH1NY0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 28 Aug 2020 09:24:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC4AA1FB;
+        Fri, 28 Aug 2020 06:16:22 -0700 (PDT)
+Received: from e124572.arm.com (unknown [10.57.13.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B1983F66B;
+        Fri, 28 Aug 2020 06:16:20 -0700 (PDT)
+From:   Boyan Karatotev <boyan.karatotev@arm.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     vincenzo.frascino@arm.com, amit.kachhap@arm.com,
+        boian4o1@gmail.com, Boyan Karatotev <boyan.karatotev@arm.com>,
         Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] mm/test: use the new SKIP() macro
-Message-ID: <20200828111324.GU24045@ziepe.ca>
-References: <20200827190400.12608-1-rcampbell@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200827190400.12608-1-rcampbell@nvidia.com>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH 0/4] kselftests/arm64: add PAuth tests
+Date:   Fri, 28 Aug 2020 14:16:02 +0100
+Message-Id: <20200828131606.7946-1-boyan.karatotev@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 12:04:00PM -0700, Ralph Campbell wrote:
-> Some tests might not be able to be run if resources like huge pages are
-> not available. Mark these tests as skipped instead of simply passing.
-> 
-> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-> ---
-> 
-> This applies to linux-mm and is for Andrew Morton's tree.
-> 
->  tools/testing/selftests/vm/hmm-tests.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Pointer Authentication (PAuth) is a security feature introduced in ARMv8.3.
+It introduces instructions to sign addresses and later check for potential
+corruption using a second modifier value and one of a set of keys. The
+signature, in the form of the Pointer Authentication Code (PAC), is stored
+in some of the top unused bits of the virtual address (e.g. [54: 49] if
+TBID0 is enabled and TnSZ is set to use a 48 bit VA space). A set of
+controls are present to enable/disable groups of instructions (which use
+certain keys) for compatibility with libraries that do not utilize the
+feature. PAuth is used to verify the integrity of return addresses on the
+stack with less memory than the stack canary.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+This patchset adds kselftests to verify the kernel's configuration of the
+feature and its runtime behaviour. There are 7 tests which verify that:
+	* an authentication failure leads to a SIGSEGV
+	* the data/instruction instruction groups are enabled
+	* the generic instructions are enabled
+	* all 5 keys are unique for a single thread
+	* exec() changes all keys to new unique ones
+	* context switching preserves the 4 data/instruction keys
+	* context switching preserves the generic keys
 
-Jason
+The tests have been verified to work on qemu without a working PAUTH
+Implementation and on ARM's FVP with a full or partial PAuth
+implementation.
+
+Note: This patchset is only verified for ARMv8.3 and there will be some
+changes required for ARMv8.6. More details can be found here [1]. Once
+ARMv8.6 PAuth is merged the first test in this series will required to be
+updated.
+
+[1] https://lore.kernel.org/linux-arm-kernel/1597734671-23407-1-git-send-email-amit.kachhap@arm.com/
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
+
+Boyan Karatotev (4):
+  kselftests/arm64: add a basic Pointer Authentication test
+  kselftests/arm64: add nop checks for PAuth tests
+  kselftests/arm64: add PAuth test for whether exec() changes keys
+  kselftests/arm64: add PAuth tests for single threaded consistency and
+    key uniqueness
+
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ .../testing/selftests/arm64/pauth/.gitignore  |   2 +
+ tools/testing/selftests/arm64/pauth/Makefile  |  29 ++
+ .../selftests/arm64/pauth/exec_target.c       |  35 ++
+ tools/testing/selftests/arm64/pauth/helper.c  |  41 +++
+ tools/testing/selftests/arm64/pauth/helper.h  |  30 ++
+ tools/testing/selftests/arm64/pauth/pac.c     | 347 ++++++++++++++++++
+ .../selftests/arm64/pauth/pac_corruptor.S     |  36 ++
+ 8 files changed, 521 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/pauth/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/pauth/Makefile
+ create mode 100644 tools/testing/selftests/arm64/pauth/exec_target.c
+ create mode 100644 tools/testing/selftests/arm64/pauth/helper.c
+ create mode 100644 tools/testing/selftests/arm64/pauth/helper.h
+ create mode 100644 tools/testing/selftests/arm64/pauth/pac.c
+ create mode 100644 tools/testing/selftests/arm64/pauth/pac_corruptor.S
+
+--
+2.17.1
+
