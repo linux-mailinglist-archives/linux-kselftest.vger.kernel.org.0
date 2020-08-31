@@ -2,69 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDFE258382
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 23:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5ED72583B4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 23:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730267AbgHaV3z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Aug 2020 17:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
+        id S1729027AbgHaVlz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Aug 2020 17:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730264AbgHaV3z (ORCPT
+        with ESMTP id S1725987AbgHaVly (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Aug 2020 17:29:55 -0400
+        Mon, 31 Aug 2020 17:41:54 -0400
 Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EC7C061575
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:29:54 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id w8so2480999ilj.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:29:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCE0C061575
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:41:54 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id c6so2488193ilo.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ukrTRysPReBmmeihk4CoXLCpd16/lRS5smuSWOxODRo=;
-        b=QNusu1YEHzCf+rQCWjp0IkGxE8MyBmTOnXlX6mwtPYEMGKZvkRHr1g1WXp6N2MSDNp
-         hPbNsmLHOp2gtrFoLKeQ7Ra8CPbKyiAGFAs5HVjGY/Yo5y2xEsH9VgrL6tQd+8NHROMa
-         V6v2ab/reO5XdipVWf9vJGCc7jSOY1woWT89U=
+        bh=cHr43YW5+iuDSdOUC12gPmWiPSezUttSApUwF+cX1IU=;
+        b=BPxJwCD7kcNv/87qq8Ed4NTQiQ8rH4eYBBTgEhfwAEywW/yl08Knnr7Dg43wiEKCTC
+         gOneUWSA0tkw21myD+rGkiVVk+avwQVJn31zchc/ZRu0K0X3DbygFrc3D3jbSsNfmGoB
+         zCMUEqzpG/MMq2jBpndcF0y8aO6/QEBGjRCi0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ukrTRysPReBmmeihk4CoXLCpd16/lRS5smuSWOxODRo=;
-        b=WwqNqfoz0W4CudD7BvIcjscN/1RKBNTAiihrRix3l+stDQXYZhLkF21BR8WzT8NhHb
-         xKznsues9MelYtlt9c9/jCYcXvTAvGKE7aZz3VWy8OlIgMtCS2tm8X4DHXB4NNiDV3hL
-         TfB36f1+uOscDk8zWBRN3U5rpFhyuZ7D7WSF/eXsHREQZW0FF5CETMPwlDqWowK/LPpd
-         ONQ5UrgfPkwId15lycBeiXFfxDOYY/jhkaGByb2nkeMDwehtUyNXKUJvjqqUy6Gd6J1z
-         fvCl3dxHBmO+OJr6/lUQAuhFOF+bF/eoB7DLfOr1M4o7tTr0zK637Q0v+M3davrCD0eX
-         aivA==
-X-Gm-Message-State: AOAM533J3rlAjOs5gM/MXmEdrIO7emxJRaOZOMo54e5TpjwqbHGPIXf1
-        pmAOdM7auaGa6Suj1Ian90DrPQ==
-X-Google-Smtp-Source: ABdhPJz7TtEbBPoFn/idxbqmirN5xvay9s5X8FVcVKuVjQ5sCkqOOsqp3wP7NjeCDn9J9tdxYgHwQg==
-X-Received: by 2002:a92:d08e:: with SMTP id h14mr3087541ilh.1.1598909394319;
-        Mon, 31 Aug 2020 14:29:54 -0700 (PDT)
+        bh=cHr43YW5+iuDSdOUC12gPmWiPSezUttSApUwF+cX1IU=;
+        b=rAlZXM+Z4PdFHiW7QvlH3ow3EthL3QZnzY0SYjwk5+jJBeENfwNKDcpKpSf8Wy6nwM
+         ZGw60ioWFPAPCmMpy9sA5dqRfTEGnp9yfJcUfCBlk+DMQFPD7g4mQ4uQPkgZZxA4XyWY
+         6viuJEFkPFE77HhkfCkAITEtKH/4/uqIPmfxPob9abUIgWT+Msywj2B7znD1fuiZvxFm
+         r1snej8UAFsiIRkHCLu+oF7i/3jIT8tNnP2O7GAZHTaanQEbRB0h0lXUET0Ec/NGzGvr
+         eF3gUVLlWu5J7/IwTX6pnQXH7gttPk1SGhyG4vPDS4qgFpqBwYXfSRH1NGOwscmCx+hF
+         xriw==
+X-Gm-Message-State: AOAM530S83W+C2ZqJvx5UbDeOA4HN0Ymab7ou6DW4yzVurap8EF+ZPZP
+        N+OoGnq+d4yG8pIRjRR4KT8KaQ==
+X-Google-Smtp-Source: ABdhPJxm6kdMsYQeFuxNFnd52GSbvYpPf3wn08xmFREmWsPNSBi6H/ns5n2GuEAgF7WAxi9omLSJkA==
+X-Received: by 2002:a92:d186:: with SMTP id z6mr2876415ilz.149.1598910113451;
+        Mon, 31 Aug 2020 14:41:53 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id p18sm4319248iog.1.2020.08.31.14.29.53
+        by smtp.gmail.com with ESMTPSA id y19sm3139539ili.47.2020.08.31.14.41.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Aug 2020 14:29:53 -0700 (PDT)
-Subject: Re: [PATCH 2/2] kunit: ubsan integration
-To:     Uriel Guajardo <urielguajardojr@gmail.com>,
-        brendanhiggins@google.com
-Cc:     urielguajardo@google.com, akpm@linux-foundation.org,
-        keescook@chromium.org, rdunlap@infradead.org,
-        herbert@gondor.apana.org.au, christian.brauner@ubuntu.com,
-        peterz@infradead.org, ardb@kernel.og, arnd@arndb.de,
-        julien.grall@arm.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200813205722.1384108-1-urielguajardojr@gmail.com>
- <20200813205722.1384108-2-urielguajardojr@gmail.com>
+        Mon, 31 Aug 2020 14:41:52 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] kunit: tool: fix running kunit_tool from outside
+ kernel tree
+To:     Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org,
+        davidgow@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Tim.Bird@sony.com,
+        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
+References: <20200811212756.3328740-1-brendanhiggins@google.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5064a46f-f73f-5833-5eb9-f69a0aecea4e@linuxfoundation.org>
-Date:   Mon, 31 Aug 2020 15:29:52 -0600
+Message-ID: <d073fd4d-93e6-4c43-a814-c13719ac2259@linuxfoundation.org>
+Date:   Mon, 31 Aug 2020 15:41:51 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200813205722.1384108-2-urielguajardojr@gmail.com>
+In-Reply-To: <20200811212756.3328740-1-brendanhiggins@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -73,38 +69,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/13/20 2:57 PM, Uriel Guajardo wrote:
-> Integrates UBSAN into the KUnit testing framework. It fails KUnit tests
-> whenever it reports undefined behavior.
+On 8/11/20 3:27 PM, Brendan Higgins wrote:
+> Currently kunit_tool does not work correctly when executed from a path
+> outside of the kernel tree, so make sure that the current working
+> directory is correct and the kunit_dir is properly initialized before
+> running.
 > 
-> Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > ---
->   lib/ubsan.c | 2 ++
->   1 file changed, 2 insertions(+)
+>   tools/testing/kunit/kunit.py | 13 +++++--------
+>   1 file changed, 5 insertions(+), 8 deletions(-)
 > 
-> diff --git a/lib/ubsan.c b/lib/ubsan.c
-> index cb9af3f6b77e..1460e2c828c8 100644
-> --- a/lib/ubsan.c
-> +++ b/lib/ubsan.c
-> @@ -14,6 +14,7 @@
->   #include <linux/types.h>
->   #include <linux/sched.h>
->   #include <linux/uaccess.h>
-> +#include <kunit/test.h>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 425ef40067e7e..e2caf4e24ecb2 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -237,9 +237,13 @@ def main(argv, linux=None):
 >   
->   #include "ubsan.h"
+>   	cli_args = parser.parse_args(argv)
 >   
-> @@ -137,6 +138,7 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
->   {
->   	current->in_ubsan++;
+> +	if get_kernel_root_path():
+> +		os.chdir(get_kernel_root_path())
+> +
+>   	if cli_args.subcommand == 'run':
+>   		if not os.path.exists(cli_args.build_dir):
+>   			os.mkdir(cli_args.build_dir)
+> +			create_default_kunitconfig()
 >   
-> +	kunit_fail_current_test();
->   	pr_err("========================================"
->   		"========================================\n");
->   	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
+>   		if not linux:
+>   			linux = kunit_kernel.LinuxSourceTree()
+> @@ -257,6 +261,7 @@ def main(argv, linux=None):
+>   		if cli_args.build_dir:
+>   			if not os.path.exists(cli_args.build_dir):
+>   				os.mkdir(cli_args.build_dir)
+> +				create_default_kunitconfig()
+>   
+>   		if not linux:
+>   			linux = kunit_kernel.LinuxSourceTree()
+> @@ -270,10 +275,6 @@ def main(argv, linux=None):
+>   		if result.status != KunitStatus.SUCCESS:
+>   			sys.exit(1)
+>   	elif cli_args.subcommand == 'build':
+> -		if cli_args.build_dir:
+> -			if not os.path.exists(cli_args.build_dir):
+> -				os.mkdir(cli_args.build_dir)
+> -
+>   		if not linux:
+>   			linux = kunit_kernel.LinuxSourceTree()
+>   
+> @@ -288,10 +289,6 @@ def main(argv, linux=None):
+>   		if result.status != KunitStatus.SUCCESS:
+>   			sys.exit(1)
+>   	elif cli_args.subcommand == 'exec':
+> -		if cli_args.build_dir:
+> -			if not os.path.exists(cli_args.build_dir):
+> -				os.mkdir(cli_args.build_dir)
+> -
+>   		if not linux:
+>   			linux = kunit_kernel.LinuxSourceTree()
+>   
+> 
+> base-commit: 30185b69a2d533c4ba6ca926b8390ce7de495e29
 > 
 
-I applied this to linux-kselftest kunit for 5.10-rc1.
+
+Applied the two patches in this seeries to linux-kselftest kunit-fixes
+for the next 5.9-rc fixes
 
 thanks,
 -- Shuah
