@@ -2,197 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3146F257AB4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 15:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17AA258300
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 22:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbgHaNsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Aug 2020 09:48:08 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:43643 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727815AbgHaNr3 (ORCPT
+        id S1729143AbgHaUty (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Aug 2020 16:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728355AbgHaUtx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Aug 2020 09:47:29 -0400
-Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kCk90-00062w-W7; Mon, 31 Aug 2020 13:46:47 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christian Brauner <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        linux-kselftest@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 4/4] tests: add waitid() tests for non-blocking pidfds
-Date:   Mon, 31 Aug 2020 15:45:51 +0200
-Message-Id: <20200831134551.1599689-5-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
-References: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
+        Mon, 31 Aug 2020 16:49:53 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F385AC061575
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 13:49:52 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id z195so2184707oia.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 13:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DXLdw2EqWHhI2TwwrM4XKt/5YHttNOrLrhTDhUQWFAg=;
+        b=a58amqfO6WuUD4Noh1GsIb+tsswivJ0nu660wqYL5R2D7jdZaR8vqDpVk+wS5iFLgi
+         BvReR4oTMyY5KUix15VtUCRDn7a3xjKWJX20qftFOJHCWEvuD0QQXkwAnPqfFR9LonOZ
+         W7j1IXgpoeLq1x355d/+O+Ub8UcWA1QtCuF54=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DXLdw2EqWHhI2TwwrM4XKt/5YHttNOrLrhTDhUQWFAg=;
+        b=K5l/t6mWuxkVNg5v/YyvFdDZ0QvXxE0uKCXDEQ/fTIBDpWlLMGy6DgYrZiH1WT8Pir
+         nX1lPDcQ/RfnlEpsypMriv0izWGQC6N3PIY/cP/j9tFV1NH8naHwyROfc31ZK4xdx76s
+         I5fTsWEh0PUNtfjFPFRUwa+0uQp4o56iohrn+G9h+cVrvBSt2QV0EpvEQ4GEx/rnsV5j
+         m4X+6Piy77Ny9isThBOXZVFSsJ6zoI3c9mlCt4oVb1W4DTsHOXtiVWLFcS9D/wPcsDNo
+         s7R0crzQ4C5E05ajqlH6c/dFPgIcwGjGA7kY2drKz80LHeJS77foxT7VxgfvPmQqD0ot
+         FVsg==
+X-Gm-Message-State: AOAM530oGCKpNIakZoJKlm8muRXYyYfnvDYC+kl79Q5iiO31SVEzVwmP
+        6lu5DLsF3a468dE1//HboKpLmmFqHyd78g==
+X-Google-Smtp-Source: ABdhPJyZnOHiWoW/j0WJMwcoA5h8XCMzg98FexYAoM57h/Zd3reUKXgNajigD561Ru00ls+Vhnee+A==
+X-Received: by 2002:aca:ccd3:: with SMTP id c202mr695607oig.146.1598906992242;
+        Mon, 31 Aug 2020 13:49:52 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id o5sm1983694otp.8.2020.08.31.13.49.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Aug 2020 13:49:51 -0700 (PDT)
+Subject: Re: [PATCH] selftests: use "$(MAKE)" instead of "make" for
+ headers_install
+To:     Denys Vlasenko <dvlasenk@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200817150946.21477-1-dvlasenk@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8ea61655-c4b3-0fa9-ec70-b63adbbe5c84@linuxfoundation.org>
+Date:   Mon, 31 Aug 2020 14:49:50 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200817150946.21477-1-dvlasenk@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify that the PIDFD_NONBLOCK flag works with pidfd_open() and that
-waitid() with a non-blocking pidfd returns EAGAIN:
+On 8/17/20 9:09 AM, Denys Vlasenko wrote:
+> If top make invocation uses -j4 or larger, this patch reduces
+> "make headers_install" subtask run time from 30 to 7 seconds.
+> 
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: Shuah Khan <skhan@linuxfoundation.org>
+> CC: linux-kselftest@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> Signed-off-by: Denys Vlasenko <dvlasenk@redhat.com>
+> ---
+>   tools/testing/selftests/lib.mk | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 7a17ea815736..51124b962d56 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -47,9 +47,9 @@ ARCH		?= $(SUBARCH)
+>   khdr:
+>   ifndef KSFT_KHDR_INSTALL_DONE
+>   ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+> -	make --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+> +	$(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+>   else
+> -	make --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
+> +	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
+>   		ARCH=$(ARCH) -C $(top_srcdir) headers_install
+>   endif
+>   endif
+> 
 
-	TAP version 13
-	1..3
-	# Starting 3 tests from 1 test cases.
-	#  RUN           global.wait_simple ...
-	#            OK  global.wait_simple
-	ok 1 global.wait_simple
-	#  RUN           global.wait_states ...
-	#            OK  global.wait_states
-	ok 2 global.wait_states
-	#  RUN           global.wait_nonblock ...
-	#            OK  global.wait_nonblock
-	ok 3 global.wait_nonblock
-	# PASSED: 3 / 3 tests passed.
-	# Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+Thanks for the patch. Applied to linux-kselftest next for 5.10
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- tools/testing/selftests/pidfd/pidfd.h      |  4 ++
- tools/testing/selftests/pidfd/pidfd_wait.c | 83 +++++++++++++++++++++-
- 2 files changed, 86 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-index a2c80914e3dc..01f8d3c0cf2c 100644
---- a/tools/testing/selftests/pidfd/pidfd.h
-+++ b/tools/testing/selftests/pidfd/pidfd.h
-@@ -46,6 +46,10 @@
- #define __NR_pidfd_getfd -1
- #endif
- 
-+#ifndef PIDFD_NONBLOCK
-+#define PIDFD_NONBLOCK O_NONBLOCK
-+#endif
-+
- /*
-  * The kernel reserves 300 pids via RESERVED_PIDS in kernel/pid.c
-  * That means, when it wraps around any pid < 300 will be skipped.
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index 075c716f6fb8..cefce4d3d2f6 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -21,6 +21,11 @@
- 
- #define ptr_to_u64(ptr) ((__u64)((uintptr_t)(ptr)))
- 
-+/* Attempt to de-conflict with the selftests tree. */
-+#ifndef SKIP
-+#define SKIP(s, ...)	XFAIL(s, ##__VA_ARGS__)
-+#endif
-+
- static pid_t sys_clone3(struct clone_args *args)
- {
- 	return syscall(__NR_clone3, args, sizeof(struct clone_args));
-@@ -65,7 +70,7 @@ TEST(wait_simple)
- 	pidfd = -1;
- 
- 	pid = sys_clone3(&args);
--	ASSERT_GE(pid, 1);
-+	ASSERT_GE(pid, 0);
- 
- 	if (pid == 0)
- 		exit(EXIT_SUCCESS);
-@@ -133,4 +138,80 @@ TEST(wait_states)
- 	EXPECT_EQ(close(pidfd), 0);
- }
- 
-+TEST(wait_nonblock)
-+{
-+	int pidfd, status = 0;
-+	unsigned int flags = 0;
-+	pid_t parent_tid = -1;
-+	struct clone_args args = {
-+		.parent_tid = ptr_to_u64(&parent_tid),
-+		.flags = CLONE_PARENT_SETTID,
-+		.exit_signal = SIGCHLD,
-+	};
-+	int ret;
-+	pid_t pid;
-+	siginfo_t info = {
-+		.si_signo = 0,
-+	};
-+
-+	/*
-+	 * Callers need to see ECHILD with non-blocking pidfds when no child
-+	 * processes exists.
-+	 */
-+	pidfd = sys_pidfd_open(getpid(), PIDFD_NONBLOCK);
-+	EXPECT_GE(pidfd, 0) {
-+		/* pidfd_open() doesn't support PIDFD_NONBLOCK. */
-+		ASSERT_EQ(errno, EINVAL);
-+		SKIP(return, "Skipping PIDFD_NONBLOCK test");
-+	}
-+
-+	pid = sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL);
-+	ASSERT_LT(pid, 0);
-+	ASSERT_EQ(errno, ECHILD);
-+	EXPECT_EQ(close(pidfd), 0);
-+
-+	pid = sys_clone3(&args);
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		kill(getpid(), SIGSTOP);
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	pidfd = sys_pidfd_open(pid, PIDFD_NONBLOCK);
-+	EXPECT_GE(pidfd, 0) {
-+		/* pidfd_open() doesn't support PIDFD_NONBLOCK. */
-+		ASSERT_EQ(errno, EINVAL);
-+		SKIP(return, "Skipping PIDFD_NONBLOCK test");
-+	}
-+
-+	flags = fcntl(pidfd, F_GETFL, 0);
-+	ASSERT_GT(flags, 0);
-+	ASSERT_GT((flags & O_NONBLOCK), 0);
-+
-+	/*
-+	 * Callers need to see EAGAIN/EWOULDBLOCK with non-blocking pidfd when
-+	 * child processes exist but none have exited.
-+	 */
-+	pid = sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL);
-+	ASSERT_LT(pid, 0);
-+	ASSERT_EQ(errno, EAGAIN);
-+
-+	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
-+	ASSERT_EQ(info.si_signo, SIGCHLD);
-+	ASSERT_EQ(info.si_code, CLD_STOPPED);
-+	ASSERT_EQ(info.si_pid, parent_tid);
-+
-+	ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
-+
-+	ASSERT_EQ(fcntl(pidfd, F_SETFL, (flags & ~O_NONBLOCK)), 0);
-+
-+	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL), 0);
-+	ASSERT_EQ(info.si_signo, SIGCHLD);
-+	ASSERT_EQ(info.si_code, CLD_EXITED);
-+	ASSERT_EQ(info.si_pid, parent_tid);
-+
-+	EXPECT_EQ(close(pidfd), 0);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.28.0
-
+thanks,
+-- Shuah
