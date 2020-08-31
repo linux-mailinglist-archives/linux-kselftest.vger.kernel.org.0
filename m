@@ -2,21 +2,21 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B2E257AB2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 15:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12CE257AC1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 15:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727861AbgHaNry (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Aug 2020 09:47:54 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:43642 "EHLO
+        id S1727037AbgHaNs3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Aug 2020 09:48:29 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43637 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727783AbgHaNr3 (ORCPT
+        with ESMTP id S1727066AbgHaNr2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Aug 2020 09:47:29 -0400
+        Mon, 31 Aug 2020 09:47:28 -0400
 Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kCk8y-00062w-R6; Mon, 31 Aug 2020 13:46:44 +0000
+        id 1kCk8z-00062w-Hy; Mon, 31 Aug 2020 13:46:45 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Christian Brauner <christian@brauner.io>,
@@ -31,10 +31,11 @@ Cc:     Christian Brauner <christian@brauner.io>,
         linux-kselftest@vger.kernel.org,
         Josh Triplett <josh@joshtriplett.org>,
         Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH 1/4] pidfd: support PIDFD_NONBLOCK in pidfd_open()
-Date:   Mon, 31 Aug 2020 15:45:48 +0200
-Message-Id: <20200831134551.1599689-2-christian.brauner@ubuntu.com>
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH 2/4] exit: support non-blocking pidfds
+Date:   Mon, 31 Aug 2020 15:45:49 +0200
+Message-Id: <20200831134551.1599689-3-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
 References: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
@@ -45,107 +46,148 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce PIDFD_NONBLOCK to support non-blocking pidfd file descriptors.
+Passing a non-blocking pidfd to waitid() currently has no effect, i.e.
+is not supported. There are users which would like to use waitid() on
+pidfds that are O_NONBLOCK and mix it with pidfds that are blocking and
+both pass them to waitid().
+The expected behavior is to have waitid() return -EAGAIN for
+non-blocking pidfds and to block for blocking pidfds without needing to
+perform any additional checks for flags set on the pidfd before passing
+it to waitid().
+Non-blocking pidfds will return EAGAIN from waitid() when no child
+process is ready yet. Returning -EAGAIN for non-blocking pidfds makes it
+easier for event loops that handle EAGAIN specially.
 
-Ever since the introduction of pidfds and more advanced async io various
-programming languages such as Rust have grown support for async event
-libraries. These libraries are created to help build epoll-based event loops
-around file descriptors. A common pattern is to automatically make all file
-descriptors they manage to O_NONBLOCK.
+It also makes the API more consistent and uniform. In essence, waitid()
+is treated like a read on a non-blocking pidfd or a recvmsg() on a
+non-blocking socket.
+With the addition of support for non-blocking pidfds we support the same
+functionality that sockets do. For sockets() recvmsg() supports
+MSG_DONTWAIT for pidfds waitid() supports WNOHANG. Both flags are
+per-call options. In contrast non-blocking pidfds and non-blocking
+sockets are a setting on an open file description affecting all threads
+in the calling process as well as other processes that hold file
+descriptors referring to the same open file description. Both behaviors,
+per call and per open file description, have genuine use-cases.
 
-For such libraries the EAGAIN error code is treated specially. When a function
-is called that returns EAGAIN the function isn't called again until the event
-loop indicates the the file descriptor is ready. Supporting EAGAIN when
-waiting on pidfds makes such libraries just work with little effort. In the
-following patch we will extend waitid() internally to support non-blocking
-pidfds.
+The implementation should be straightforward, we simply raise the
+WNOHANG flag when a non-blocking pidfd is passed and introduce a
+eagain_error member in struct wait_opts similar to the notask_error
+member. The former is set to -EAGAIN for non-blocking pidfds and to zero
+for all other cases. If no child process exists non-blocking pidfd users
+will continue to see ECHILD but if child processes exist but have not
+yet exited users will see EAGAIN.
+
+A concrete use-case that was brought on-list was Josh's async pidfd
+library. Ever since the introduction of pidfds and more advanced async
+io various programming languages such as Rust have grown support for
+async event libraries. These libraries are created to help build
+epoll-based event loops around file descriptors. A common pattern is to
+automatically make all file descriptors they manage to O_NONBLOCK.
+
+For such libraries the EAGAIN error code is treated specially. When a
+function is called that returns EAGAIN the function isn't called again
+until the event loop indicates the the file descriptor is ready.
+Supporting EAGAIN when waiting on pidfds makes such libraries just work
+with little effort.
 
 Link: https://lore.kernel.org/lkml/20200811181236.GA18763@localhost/
 Link: https://github.com/joshtriplett/async-pidfd
 Cc: Kees Cook <keescook@chromium.org>
 Cc: Sargun Dhillon <sargun@sargun.me>
+Cc: Jann Horn <jannh@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
 Suggested-by: Josh Triplett <josh@joshtriplett.org>
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
- include/uapi/linux/pidfd.h | 12 ++++++++++++
- kernel/pid.c               | 12 +++++++-----
- 2 files changed, 19 insertions(+), 5 deletions(-)
- create mode 100644 include/uapi/linux/pidfd.h
+ kernel/exit.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/pidfd.h b/include/uapi/linux/pidfd.h
-new file mode 100644
-index 000000000000..5406fbc13074
---- /dev/null
-+++ b/include/uapi/linux/pidfd.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+
-+#ifndef _UAPI_LINUX_PIDFD_H
-+#define _UAPI_LINUX_PIDFD_H
-+
-+#include <linux/types.h>
-+#include <linux/fcntl.h>
-+
-+/* Flags for pidfd_open().  */
-+#define PIDFD_NONBLOCK O_NONBLOCK
-+
-+#endif /* _UAPI_LINUX_PIDFD_H */
-diff --git a/kernel/pid.c b/kernel/pid.c
-index b2562a7ce525..74ddbff1a6ba 100644
---- a/kernel/pid.c
-+++ b/kernel/pid.c
-@@ -43,6 +43,7 @@
- #include <linux/sched/task.h>
- #include <linux/idr.h>
- #include <net/sock.h>
-+#include <uapi/linux/pidfd.h>
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 733e80f334e7..598f2fefd721 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -934,6 +934,7 @@ struct wait_opts {
  
- struct pid init_struct_pid = {
- 	.count		= REFCOUNT_INIT(1),
-@@ -522,7 +523,8 @@ struct pid *find_ge_pid(int nr, struct pid_namespace *ns)
- /**
-  * pidfd_create() - Create a new pid file descriptor.
-  *
-- * @pid:  struct pid that the pidfd will reference
-+ * @pid:   struct pid that the pidfd will reference
-+ * @flags: flags to pass
-  *
-  * This creates a new pid file descriptor with the O_CLOEXEC flag set.
-  *
-@@ -532,12 +534,12 @@ struct pid *find_ge_pid(int nr, struct pid_namespace *ns)
-  * Return: On success, a cloexec pidfd is returned.
-  *         On error, a negative errno number will be returned.
-  */
--static int pidfd_create(struct pid *pid)
-+static int pidfd_create(struct pid *pid, unsigned int flags)
+ 	wait_queue_entry_t		child_wait;
+ 	int			notask_error;
++	int			eagain_error;
+ };
+ 
+ static int eligible_pid(struct wait_opts *wo, struct task_struct *p)
+@@ -1461,6 +1462,8 @@ static long do_wait(struct wait_opts *wo)
+ 
+ notask:
+ 	retval = wo->notask_error;
++	if (!retval)
++		retval = wo->eagain_error;
+ 	if (!retval && !(wo->wo_flags & WNOHANG)) {
+ 		retval = -ERESTARTSYS;
+ 		if (!signal_pending(current)) {
+@@ -1474,7 +1477,7 @@ static long do_wait(struct wait_opts *wo)
+ 	return retval;
+ }
+ 
+-static struct pid *pidfd_get_pid(unsigned int fd)
++static struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags)
  {
- 	int fd;
+ 	struct fd f;
+ 	struct pid *pid;
+@@ -1484,8 +1487,10 @@ static struct pid *pidfd_get_pid(unsigned int fd)
+ 		return ERR_PTR(-EBADF);
  
- 	fd = anon_inode_getfd("[pidfd]", &pidfd_fops, get_pid(pid),
--			      O_RDWR | O_CLOEXEC);
-+			      flags | O_RDWR | O_CLOEXEC);
- 	if (fd < 0)
- 		put_pid(pid);
+ 	pid = pidfd_pid(f.file);
+-	if (!IS_ERR(pid))
++	if (!IS_ERR(pid)) {
+ 		get_pid(pid);
++		*flags = f.file->f_flags;
++	}
  
-@@ -565,7 +567,7 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
- 	int fd;
- 	struct pid *p;
+ 	fdput(f);
+ 	return pid;
+@@ -1498,6 +1503,7 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
+ 	struct pid *pid = NULL;
+ 	enum pid_type type;
+ 	long ret;
++	unsigned int f_flags = 0;
  
--	if (flags)
-+	if (flags & ~PIDFD_NONBLOCK)
+ 	if (options & ~(WNOHANG|WNOWAIT|WEXITED|WSTOPPED|WCONTINUED|
+ 			__WNOTHREAD|__WCLONE|__WALL))
+@@ -1531,9 +1537,10 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
+ 		if (upid < 0)
+ 			return -EINVAL;
+ 
+-		pid = pidfd_get_pid(upid);
++		pid = pidfd_get_pid(upid, &f_flags);
+ 		if (IS_ERR(pid))
+ 			return PTR_ERR(pid);
++
+ 		break;
+ 	default:
  		return -EINVAL;
+@@ -1544,6 +1551,11 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
+ 	wo.wo_flags	= options;
+ 	wo.wo_info	= infop;
+ 	wo.wo_rusage	= ru;
++	wo.eagain_error = 0;
++	if (f_flags & O_NONBLOCK) {
++		wo.wo_flags	|= WNOHANG;
++		wo.eagain_error	= -EAGAIN;
++	}
+ 	ret = do_wait(&wo);
  
- 	if (pid <= 0)
-@@ -576,7 +578,7 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
- 		return -ESRCH;
- 
- 	if (pid_has_task(p, PIDTYPE_TGID))
--		fd = pidfd_create(p);
-+		fd = pidfd_create(p, flags);
- 	else
- 		fd = -EINVAL;
- 
+ 	put_pid(pid);
+@@ -1618,6 +1630,7 @@ long kernel_wait4(pid_t upid, int __user *stat_addr, int options,
+ 	wo.wo_info	= NULL;
+ 	wo.wo_stat	= 0;
+ 	wo.wo_rusage	= ru;
++	wo.eagain_error	= 0;
+ 	ret = do_wait(&wo);
+ 	put_pid(pid);
+ 	if (ret > 0 && stat_addr && put_user(wo.wo_stat, stat_addr))
 -- 
 2.28.0
 
