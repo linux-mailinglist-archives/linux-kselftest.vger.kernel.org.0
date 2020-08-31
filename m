@@ -2,67 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B35FB258338
-	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 23:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709F825837C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 31 Aug 2020 23:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730210AbgHaVEV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 31 Aug 2020 17:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S1730239AbgHaV3R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 31 Aug 2020 17:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730201AbgHaVEU (ORCPT
+        with ESMTP id S1728956AbgHaV3Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Aug 2020 17:04:20 -0400
+        Mon, 31 Aug 2020 17:29:16 -0400
 Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A2BC061575
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:04:20 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id r9so2122871ioa.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:04:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB88C061575
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:29:16 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id g128so7577875iof.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 14:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Me0l90lHBcIiWc7V/ZnOYLUZoEWFXUMKq05fR5MgBoI=;
-        b=TX4maE3GZYKy+0cHbPXR7wmQYueLPMQhRbMPLA+SMHLhy91uuGkHhQfZdUxQLjaOde
-         HbTD/JwxShVg9W5T3VN0xO5HcRCgvnlYoco1ijAzsJLzDVkvNi8gfQVaXUFo1K+1UpyP
-         yrP3KMVlxFfJLEYkkXz11j2xpk/IIClE9mmnQ=
+        bh=va7gdVSZd9oGcktmFSi4633m1KmqtF16W8cC99ywrMo=;
+        b=WjlB03xtnU+43wht78tHLoS8a424N3Kd+/ROTOPBFZ7Kk02fAInH1cmTngPOuY1KNe
+         UeIBt8RalhfROJkDxcePklvzDqg8TmWtuYWfvTRq58aE+XIrld97k8ukOw8yPapfzKPS
+         U7adjw89nSoej8pbAX+2Gj0ZNyJPVqhqYmxqg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Me0l90lHBcIiWc7V/ZnOYLUZoEWFXUMKq05fR5MgBoI=;
-        b=HBbQYmCXVERaODFYIWQkuz7K4m46utuqBaSzkHa/KTDmZEucqCmCtnYKV/G7ifh8/j
-         zhn1dL9yz+gimyKWWqMGDwo+7Ubxwkhbi17yfWS2Iu1WfFd5LYgOryo//IXozZB9xuZe
-         flH++zBUWIhCXyMJ+/ALTkQGxEh5FnXzqP75w4wvqNxTAecAtUTmtu6DKhP8jV8FrOwL
-         22VCUxkCEdAO8J8ISCFNshksIv7Db7SmKc5N6QPSxa0YVqMyOhtei2gueTL/zgcab+5e
-         vNhV9p12aX9FkO9KBTMBe0pJvggeRfnd4M0+Y9E85ZyqVUZvUm5Cp3088W/KRYXWjjXr
-         0G4Q==
-X-Gm-Message-State: AOAM531Ka02LsZ5ahQ8HOqdktc8TYulkalJXX0cm8dYUnti7cQi4BPr8
-        0Bt3JDFo8tp0k2gwpxNMLMzQ0g==
-X-Google-Smtp-Source: ABdhPJyi/O4/QkvK0vdP1ocRmXkb7lxwJC7RNGtV8T+Y+zuP/wovhJwJYeLyTH+iFy9k43M+/CN3AA==
-X-Received: by 2002:a5d:824f:: with SMTP id n15mr2710901ioo.95.1598907859727;
-        Mon, 31 Aug 2020 14:04:19 -0700 (PDT)
+        bh=va7gdVSZd9oGcktmFSi4633m1KmqtF16W8cC99ywrMo=;
+        b=ZrQW+Q69R+ywbx4tYD8E+ImUuHxIPArPWcJe1ymldY44VpYZP1dsq+b/3kyx9qws9R
+         7gM/3m3tfDj0u6W5z0W5tksuhLNVTA8jgzC1UCv9E4oOHHmVWJ0Ye/1kQymhAI2Uyc84
+         AXCU3xjIci1mYuV3yZ0kMUcie9HdrPXCLIbbrCqRDWa2FoNhFSHSX2Tb2fhRVkAQjCAN
+         TXVO9Qogd40tRKIbkmshhUuu2gtQCpmQvsWu0u1O+YK87en72Wb5qgS4s2OXxKhg42Dx
+         i40R2DjcxbDYJ7eWbDSRBB2NSvXZYywOcOhBySVFfzvG30iwX8/2QqzRhY217P/WXNTl
+         yLsg==
+X-Gm-Message-State: AOAM5332W51pKri+mQu2AjQf7H/4TASBGAY0LHGfZiyc0zEwsZWujGwR
+        sxB3jA8qDqFWtJnbtsK6Ct8ob2rNEGmVhg==
+X-Google-Smtp-Source: ABdhPJy48awb963u3Jr6eP4TskOJYw/H3bcAOBQuCF1AsS/1fowlxgVQDhdVetgBTVCcuH5yHNXHFg==
+X-Received: by 2002:a6b:d811:: with SMTP id y17mr2890886iob.16.1598909355836;
+        Mon, 31 Aug 2020 14:29:15 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id t67sm4685400ill.88.2020.08.31.14.04.18
+        by smtp.gmail.com with ESMTPSA id j66sm4476366ili.71.2020.08.31.14.29.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Aug 2020 14:04:19 -0700 (PDT)
-Subject: Re: [PATCH v2 0/4] kselftests/arm64: add PAuth tests
-To:     Boyan Karatotev <boyan.karatotev@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     vincenzo.frascino@arm.com, amit.kachhap@arm.com,
-        boian4o1@gmail.com, Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        Mon, 31 Aug 2020 14:29:15 -0700 (PDT)
+Subject: Re: [PATCH 1/2] kunit: support failure from dynamic analysis tools
+To:     Uriel Guajardo <urielguajardojr@gmail.com>,
+        brendanhiggins@google.com
+Cc:     urielguajardo@google.com, akpm@linux-foundation.org,
+        keescook@chromium.org, rdunlap@infradead.org,
+        herbert@gondor.apana.org.au, christian.brauner@ubuntu.com,
+        peterz@infradead.org, ardb@kernel.og, arnd@arndb.de,
+        julien.grall@arm.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20200831110450.30188-1-boyan.karatotev@arm.com>
+References: <20200813205722.1384108-1-urielguajardojr@gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f4589c6e-2bf9-1554-4ee7-d04bbe0e9391@linuxfoundation.org>
-Date:   Mon, 31 Aug 2020 15:04:18 -0600
+Message-ID: <ae0e6555-5c10-4133-a975-3c28dca01d2f@linuxfoundation.org>
+Date:   Mon, 31 Aug 2020 15:29:13 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200831110450.30188-1-boyan.karatotev@arm.com>
+In-Reply-To: <20200813205722.1384108-1-urielguajardojr@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,87 +72,139 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/31/20 5:04 AM, Boyan Karatotev wrote:
-> Pointer Authentication (PAuth) is a security feature introduced in ARMv8.3.
-> It introduces instructions to sign addresses and later check for potential
-> corruption using a second modifier value and one of a set of keys. The
-> signature, in the form of the Pointer Authentication Code (PAC), is stored
-> in some of the top unused bits of the virtual address (e.g. [54: 49] if
-> TBID0 is enabled and TnSZ is set to use a 48 bit VA space). A set of
-> controls are present to enable/disable groups of instructions (which use
-> certain keys) for compatibility with libraries that do not utilize the
-> feature. PAuth is used to verify the integrity of return addresses on the
-> stack with less memory than the stack canary.
+On 8/13/20 2:57 PM, Uriel Guajardo wrote:
+> Adds an API to allow dynamic analysis tools to fail the currently
+> running KUnit test case.
 > 
-> This patchset adds kselftests to verify the kernel's configuration of the
-> feature and its runtime behaviour. There are 7 tests which verify that:
-> 	* an authentication failure leads to a SIGSEGV
-> 	* the data/instruction instruction groups are enabled
-> 	* the generic instructions are enabled
-> 	* all 5 keys are unique for a single thread
-> 	* exec() changes all keys to new unique ones
-> 	* context switching preserves the 4 data/instruction keys
-> 	* context switching preserves the generic keys
+> - Always places the kunit test in the task_struct to allow other tools
+> to access the currently running KUnit test.
 > 
-> The tests have been verified to work on qemu without a working PAUTH
-> Implementation and on ARM's FVP with a full or partial PAuth
-> implementation.
+> - Creates a new header file to avoid circular dependencies that could be
+> created from the test.h file.
 > 
-> Changes in v2:
-> * remove extra lines at end of files
-> * Patch 1: "kselftests: add a basic arm64 Pointer Authentication test"
-> 	* add checks for a compatible compiler in Makefile
-> * Patch 4: "kselftests: add PAuth tests for single threaded consistency and
-> key uniqueness"
-> 	* rephrase comment for clarity in pac.c
+> Requires KASAN-KUnit integration patch to access the kunit test from
+> task_struct:
+> https://lore.kernel.org/linux-kselftest/20200606040349.246780-2-davidgow@google.com/
 > 
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
-> Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
-> Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
+> Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+> ---
+>   include/kunit/test-bug.h | 24 ++++++++++++++++++++++++
+>   include/kunit/test.h     |  1 +
+>   lib/kunit/test.c         | 10 ++++++----
+>   3 files changed, 31 insertions(+), 4 deletions(-)
+>   create mode 100644 include/kunit/test-bug.h
 > 
-> Boyan Karatotev (4):
->    kselftests/arm64: add a basic Pointer Authentication test
->    kselftests/arm64: add nop checks for PAuth tests
->    kselftests/arm64: add PAuth test for whether exec() changes keys
->    kselftests/arm64: add PAuth tests for single threaded consistency and
->      key uniqueness
-> 
->   tools/testing/selftests/arm64/Makefile        |   2 +-
->   .../testing/selftests/arm64/pauth/.gitignore  |   2 +
->   tools/testing/selftests/arm64/pauth/Makefile  |  39 ++
->   .../selftests/arm64/pauth/exec_target.c       |  35 ++
->   tools/testing/selftests/arm64/pauth/helper.c  |  40 ++
->   tools/testing/selftests/arm64/pauth/helper.h  |  29 ++
->   tools/testing/selftests/arm64/pauth/pac.c     | 348 ++++++++++++++++++
->   .../selftests/arm64/pauth/pac_corruptor.S     |  35 ++
->   8 files changed, 529 insertions(+), 1 deletion(-)
->   create mode 100644 tools/testing/selftests/arm64/pauth/.gitignore
->   create mode 100644 tools/testing/selftests/arm64/pauth/Makefile
->   create mode 100644 tools/testing/selftests/arm64/pauth/exec_target.c
->   create mode 100644 tools/testing/selftests/arm64/pauth/helper.c
->   create mode 100644 tools/testing/selftests/arm64/pauth/helper.h
->   create mode 100644 tools/testing/selftests/arm64/pauth/pac.c
->   create mode 100644 tools/testing/selftests/arm64/pauth/pac_corruptor.S
-> 
-> --
-> 2.17.1
-> 
+> diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+> new file mode 100644
+> index 000000000000..283c19ec328f
+> --- /dev/null
+> +++ b/include/kunit/test-bug.h
+> @@ -0,0 +1,24 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * KUnit API allowing dynamic analysis tools to interact with KUnit tests
+> + *
+> + * Copyright (C) 2020, Google LLC.
+> + * Author: Uriel Guajardo <urielguajardo@google.com>
+> + */
+> +
+> +#ifndef _KUNIT_TEST_BUG_H
+> +#define _KUNIT_TEST_BUG_H
+> +
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +
+> +extern void kunit_fail_current_test(void);
+> +
+> +#else
+> +
+> +static inline void kunit_fail_current_test(void)
+> +{
+> +}
+> +
+> +#endif
+> +
+> +#endif /* _KUNIT_TEST_BUG_H */
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 3391f38389f8..81bf43a1abda 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -11,6 +11,7 @@
+>   
+>   #include <kunit/assert.h>
+>   #include <kunit/try-catch.h>
+> +#include <kunit/test-bug.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/slab.h>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index dcc35fd30d95..d8189d827368 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -16,6 +16,12 @@
+>   #include "string-stream.h"
+>   #include "try-catch-impl.h"
+>   
+> +void kunit_fail_current_test(void)
+> +{
+> +	if (current->kunit_test)
+> +		kunit_set_failure(current->kunit_test);
+> +}
+> +
+>   static void kunit_print_tap_version(void)
+>   {
+>   	static bool kunit_has_printed_tap_version;
+> @@ -284,9 +290,7 @@ static void kunit_try_run_case(void *data)
+>   	struct kunit_suite *suite = ctx->suite;
+>   	struct kunit_case *test_case = ctx->test_case;
+>   
+> -#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
+>   	current->kunit_test = test;
+> -#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT) */
+>   
+>   	/*
+>   	 * kunit_run_case_internal may encounter a fatal error; if it does,
+> @@ -602,9 +606,7 @@ void kunit_cleanup(struct kunit *test)
+>   		spin_unlock(&test->lock);
+>   		kunit_remove_resource(test, res);
+>   	}
+> -#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
+>   	current->kunit_test = NULL;
+> -#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT)*/
+>   }
+>   EXPORT_SYMBOL_GPL(kunit_cleanup);
+>   
 > 
 
-Will, Catalin,
+Is this patch still needed. Doesn't apply on top of Linux 5.9. From
+q quick review, doesn't looks like it is needed. Not seeing any
+CONFIG_KASAN's in lib/kunit/test.c
 
-Patches look good to me from selftests perspective. My acked by
-for these patches to go through arm64.
+Here is the .rej
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+--- lib/kunit/test.c
++++ lib/kunit/test.c
+@@ -290,9 +296,7 @@ static void kunit_try_run_case(void *data)
+         struct kunit_suite *suite = ctx->suite;
+         struct kunit_case *test_case = ctx->test_case;
 
-If you would like me to take these through kselftest tree, give
-me your Acks. I can queue these up for 5.10-rc1
+-#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
+         current->kunit_test = test;
+-#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT) */
+
+         /*
+          * kunit_run_case_internal may encounter a fatal error; if it does,
+@@ -608,9 +612,7 @@ void kunit_cleanup(struct kunit *test)
+                 spin_unlock(&test->lock);
+                 kunit_remove_resource(test, res);
+         }
+-#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
+         current->kunit_test = NULL;
+-#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT)*/
+  }
+  EXPORT_SYMBOL_GPL(kunit_cleanup);
+
+If this is still needed, please send me rebased patch.
 
 thanks,
 -- Shuah
-
 
