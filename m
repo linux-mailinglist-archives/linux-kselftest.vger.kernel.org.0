@@ -2,192 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7D5258B7F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Sep 2020 11:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABEE258D00
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Sep 2020 12:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbgIAJ14 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Sep 2020 05:27:56 -0400
-Received: from foss.arm.com ([217.140.110.172]:39178 "EHLO foss.arm.com"
+        id S1726091AbgIAKri (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Sep 2020 06:47:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35490 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726789AbgIAJ1z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Sep 2020 05:27:55 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF1361045;
-        Tue,  1 Sep 2020 02:27:54 -0700 (PDT)
-Received: from a077416.arm.com (unknown [10.57.6.112])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3CD573F71F;
-        Tue,  1 Sep 2020 02:27:51 -0700 (PDT)
-From:   Amit Daniel Kachhap <amit.kachhap@arm.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S1725949AbgIAKrd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Sep 2020 06:47:33 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D2D7206C0;
+        Tue,  1 Sep 2020 10:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598957252;
+        bh=eP4q1p11WzN5WKwI6hk4Fgwfr7yOfJDe2qOvgtwwQTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DyUUJmZwGkDbPfnBuDAsMAVRUYPLtj5Kr9BhIzz5qrnoN5aluJHp1WfhbaDgUwm6c
+         Z3Tix+VNtTyCnPR8c0/jHtkHiPZGz+ifRX0ngD1nz8v9uFw5yBNlj4aAPqsnbafdNO
+         nSQIWlFzoicfHMr3WRIxW4mz9XJ0gz+Muv1w3Tf4=
+Date:   Tue, 1 Sep 2020 11:46:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>
-Subject: [PATCH 6/6] kselftest/arm64: Check mte tagged user address in kernel
-Date:   Tue,  1 Sep 2020 14:57:19 +0530
-Message-Id: <20200901092719.9918-7-amit.kachhap@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200901092719.9918-1-amit.kachhap@arm.com>
-References: <20200901092719.9918-1-amit.kachhap@arm.com>
+        linux-arm-kernel@lists.infradead.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 0/5] arm64: vdso: getcpu() support
+Message-ID: <20200901104652.GA6262@sirena.org.uk>
+References: <20200819121318.52158-1-broonie@kernel.org>
+ <315d97af-715a-9942-a731-11de2fbbbded@linuxfoundation.org>
+ <20200901092551.GG5561@gaia>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Disposition: inline
+In-Reply-To: <20200901092551.GG5561@gaia>
+X-Cookie: Equal bytes for women.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a testcase to check that user address with valid/invalid
-mte tag works in kernel mode. This test verifies the kernel API's
-__arch_copy_from_user/__arch_copy_to_user works by considering
-if the user pointer has valid/invalid allocation tags.
 
-In MTE sync mode a SIGSEV fault is generated if a user memory
-with invalid tag is accessed in kernel. In async mode no such
-fault occurs.
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
----
- tools/testing/selftests/arm64/mte/.gitignore  |   1 +
- .../selftests/arm64/mte/check_user_mem.c      | 118 ++++++++++++++++++
- 2 files changed, 119 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/mte/check_user_mem.c
+On Tue, Sep 01, 2020 at 10:25:52AM +0100, Catalin Marinas wrote:
 
-diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
-index 44e9bfdaeca6..bc3ac63f3314 100644
---- a/tools/testing/selftests/arm64/mte/.gitignore
-+++ b/tools/testing/selftests/arm64/mte/.gitignore
-@@ -3,3 +3,4 @@ check_tags_inclusion
- check_child_memory
- check_mmap_options
- check_ksm_options
-+check_user_mem
-diff --git a/tools/testing/selftests/arm64/mte/check_user_mem.c b/tools/testing/selftests/arm64/mte/check_user_mem.c
-new file mode 100644
-index 000000000000..9df0681af5bd
---- /dev/null
-+++ b/tools/testing/selftests/arm64/mte/check_user_mem.c
-@@ -0,0 +1,118 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2020 ARM Limited
-+
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <ucontext.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+
-+#include "kselftest.h"
-+#include "mte_common_util.h"
-+#include "mte_def.h"
-+
-+static size_t page_sz;
-+
-+static int check_usermem_access_fault(int mem_type, int mode, int mapping)
-+{
-+	int fd, ret, i, err;
-+	char val = 'A';
-+	size_t len, read_len;
-+	void *ptr, *ptr_next;
-+	bool fault;
-+
-+	len = 2 * page_sz;
-+	err = KSFT_FAIL;
-+	/*
-+	 * Accessing user memory in kernel with invalid tag should fault in sync
-+	 * mode but may not fault in async mode as per the implemented MTE
-+	 * support in Arm64 kernel.
-+	 */
-+	if (mode == MTE_ASYNC_ERR)
-+		fault = false;
-+	else
-+		fault = true;
-+	mte_switch_mode(mode, MTE_ALLOW_NON_ZERO_TAG);
-+	fd = create_temp_file();
-+	if (fd == -1)
-+		return KSFT_FAIL;
-+	for (i = 0; i < len; i++)
-+		write(fd, &val, sizeof(val));
-+	lseek(fd, 0, 0);
-+	ptr = mte_allocate_memory(len, mem_type, mapping, true);
-+	if (check_allocated_memory(ptr, len, mem_type, true) != KSFT_PASS) {
-+		close(fd);
-+		return KSFT_FAIL;
-+	}
-+	mte_initialize_current_context(mode, (uintptr_t)ptr, len);
-+	/* Copy from file into buffer with valid tag */
-+	read_len = read(fd, ptr, len);
-+	ret = errno;
-+	mte_wait_after_trig();
-+	if ((cur_mte_cxt.fault_valid == true) || ret == EFAULT || read_len < len)
-+		goto usermem_acc_err;
-+	/* Verify same pattern is read */
-+	for (i = 0; i < len; i++)
-+		if (*(char *)(ptr + i) != val)
-+			break;
-+	if (i < len)
-+		goto usermem_acc_err;
-+
-+	/* Tag the next half of memory with different value */
-+	ptr_next = (void *)((unsigned long)ptr + page_sz);
-+	ptr_next = mte_insert_tags(ptr_next, page_sz);
-+	if (!ptr_next)
-+		goto usermem_acc_err;
-+	lseek(fd, 0, 0);
-+	/* Copy from file into buffer with invalid tag */
-+	read_len = read(fd, ptr, len);
-+	ret = errno;
-+	mte_wait_after_trig();
-+	if ((fault == true) &&
-+	    (cur_mte_cxt.fault_valid == true || ret == EFAULT || read_len < len)) {
-+		err = KSFT_PASS;
-+	} else if ((fault == false) &&
-+		   (cur_mte_cxt.fault_valid == false && read_len == len)) {
-+		err = KSFT_PASS;
-+	}
-+usermem_acc_err:
-+	mte_free_memory((void *)ptr, len, mem_type, true);
-+	close(fd);
-+	return err;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int err;
-+
-+	page_sz = getpagesize();
-+	if (!page_sz) {
-+		ksft_print_msg("ERR: Unable to get page size\n");
-+		return KSFT_FAIL;
-+	}
-+	err = mte_default_setup();
-+	if (err)
-+		return err;
-+	/* Register signal handlers */
-+	mte_register_signal(SIGSEGV, mte_default_handler);
-+
-+	evaluate_test(check_usermem_access_fault(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE),
-+		"Check memory access from kernel in sync mode, private mapping and mmap memory\n");
-+	evaluate_test(check_usermem_access_fault(USE_MMAP, MTE_SYNC_ERR, MAP_SHARED),
-+		"Check memory access from kernel in sync mode, shared mapping and mmap memory\n");
-+
-+	evaluate_test(check_usermem_access_fault(USE_MMAP, MTE_ASYNC_ERR, MAP_PRIVATE),
-+		"Check memory access from kernel in async mode, private mapping and mmap memory\n");
-+	evaluate_test(check_usermem_access_fault(USE_MMAP, MTE_ASYNC_ERR, MAP_SHARED),
-+		"Check memory access from kernel in async mode, shared mapping and mmap memory\n");
-+
-+	mte_restore_setup();
-+	ksft_print_cnts();
-+	return ksft_get_fail_cnt() == 0 ? KSFT_PASS : KSFT_FAIL;
-+}
--- 
-2.17.1
+> Thanks Shuah for the ack. We are still pondering whether the merge these
+> patches as they have some limitations (the per-CPU data structures may
+> not fit in the sole data vDSO page).
 
+They definitely don't fit, I did have some half-written proof of concept
+patches that I posted that extend this but I was waiting to see if there
+was any interest in a vDSO getcpu() at all before taking it further.
+Vincenzo's work on doing the multipage user data that he announced at
+Plumbers would cover it as well, I hadn't been aware of that.
+
+--liOOAslEiF7prFVr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9OJpwACgkQJNaLcl1U
+h9AJbwf+NnZaU2qy244rbX9A60dIIsoejhe2IdUqWfUtrupmdl8JK7s0VP5Bxh7z
+0UeIlPxLb8xY7OalRrmWDLYEJAK9zVDVmRaUkuwWaKQICNAfkwq/G0aMXndKLBA3
+CvQVNZXFuzW39z3W2e/+DZ3pwW2AYQmD6hiLv9Y7TTat+JM4CL73C1xH4R82Wsdo
+HicEuEvSfuR0mvCcK2/W521PXabdaSPPQZAkhd41FflS3SXUgfTdUsdx4ZV00c36
+Or6s+JRdKTQ5CyGb8cfdi4myEKu9kXAn6Lw7FOS5WUYDomiZPi7eTFHX0e6xTUZ5
+2dWx1UbtRwR3o4anKiDjinQB2JgHUg==
+=FH9R
+-----END PGP SIGNATURE-----
+
+--liOOAslEiF7prFVr--
