@@ -2,87 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5766258F0B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Sep 2020 15:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073F025925C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Sep 2020 17:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728047AbgIANZy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Sep 2020 09:25:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48258 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727941AbgIANWF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Sep 2020 09:22:05 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F19B20767;
-        Tue,  1 Sep 2020 13:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598966524;
-        bh=NyBYlco/JNLZMS+aKzmoMM9nULs46wwavVWBQ7eUyTI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YurMTajYCVS45RPNj7kcIbxsJfXYwHmOvSWxrHoIh6to5KpmtCkyrPS+T1PuiGX2O
-         1ZEeHPmqyhLrCHt2XHxBDfM8x4IbhT0OpvJBmXLfYasLi0MjjWUPsHRm6gxa+sFhPK
-         ce6F+P4PWDF84iuE/PgG2f1K5OQhtyZhwonsW1VE=
-Date:   Tue, 1 Sep 2020 14:21:59 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/6] selftests: arm64: Add floating point selftests
-Message-ID: <20200901132159.GA3579@willie-the-truck>
-References: <20200819114837.51466-1-broonie@kernel.org>
- <cd9979be-34a3-375d-0fa1-61937337ca14@linuxfoundation.org>
+        id S1727108AbgIAPKB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Sep 2020 11:10:01 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:51569 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726771AbgIAPJh (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Sep 2020 11:09:37 -0400
+Received: from mail-pl1-f199.google.com ([209.85.214.199])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1kD7ug-00048g-9J
+        for linux-kselftest@vger.kernel.org; Tue, 01 Sep 2020 15:09:34 +0000
+Received: by mail-pl1-f199.google.com with SMTP id b14so764890pls.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2020 08:09:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JWz4w/tKyZ/PP+PlUCJ8+eDDTwAKqJWDoeBWELU6jAM=;
+        b=PaQF6FG+NzsooowKMGjcQVwqAmZyo7a9Y/B6VYV3OZdBlBycVzbuO4oNCSuFRpt+1W
+         uKO2tAakvNZKTGJVpbJHi1jlT0I50ZSB1AlPVD4uOKK49AoycpSuRxJcGFZuSzScc7V6
+         1UOQD2HJW8V2dPXaFTLclQ/HVtyeSxJ0qRSEGOqu4Nj8r4roduOQm1f+hmadQ+iQAoyW
+         xW9kQxVrit2g+/tO0ewOrM7syuAMu85hp0i62RTYAZIpozFxEtwePKaxpwbMY4xT2qum
+         Dclbg0rLWhFIYB01o9rxeH15icWQyPvbPB4FGjXDyx6EMAcMjD2sE1MZo8lusycqBA+R
+         9Wgw==
+X-Gm-Message-State: AOAM531e9d23ps91VnWlZQwX4P2AA0sEm1XvxUDbNcuxXD8IUXhvAs32
+        ajhTgWP6tesjTo+vcc1ubel9jajliXALWht2UblevX8yd2/jdZSWlm7Qb5MHqarr/2G9xY5olTj
+        jMn6+Zpbok1LyGBUgRBM5WDWDeaGdGoJq5zNcG2BboJMh
+X-Received: by 2002:a05:6a00:15d0:: with SMTP id o16mr1610233pfu.231.1598972972771;
+        Tue, 01 Sep 2020 08:09:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxNSfUNALPQS+9nTX7oFc7jV43D9g7tlXj9ZJWwL0ajWGT5buiowf8haAL9Usk5V2m8MfmNqA==
+X-Received: by 2002:a05:6a00:15d0:: with SMTP id o16mr1610207pfu.231.1598972972424;
+        Tue, 01 Sep 2020 08:09:32 -0700 (PDT)
+Received: from localhost.localdomain (114-136-253-112.emome-ip.hinet.net. [114.136.253.112])
+        by smtp.gmail.com with ESMTPSA id y4sm2391098pfr.46.2020.09.01.08.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 08:09:31 -0700 (PDT)
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     po-hsu.lin@canonical.com, davem@davemloft.net, kuba@kernel.org,
+        skhan@linuxfoundation.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/net: improve descriptions for XFAIL cases in psock_snd.sh
+Date:   Tue,  1 Sep 2020 23:09:23 +0800
+Message-Id: <20200901150923.36083-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd9979be-34a3-375d-0fa1-61937337ca14@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 03:45:46PM -0600, Shuah Khan wrote:
-> On 8/19/20 5:48 AM, Mark Brown wrote:
-> > This series imports a series of tests for FPSIMD and SVE originally
-> > written by Dave Martin to the tree. Since these extensions have some
-> > overlap in terms of register usage and must sometimes be tested together
-> > they're dropped into a single directory. I've adapted some of the tests
-> > to run within the kselftest framework but there are also some stress
-> > tests here that are intended to be run as soak tests so aren't suitable
-> > for running by default and are mostly just integrated with the build
-> > system. There doesn't seem to be a more suitable home for those stress
-> > tests and they are very useful for work on these areas of the code so it
-> > seems useful to have them somewhere in tree.
-> > 
-> > v2: Rebased onto v5.9-rc1
-> > 
-> > Mark Brown (6):
-> >    selftests: arm64: Test case for enumeration of SVE vector lengths
-> >    selftests: arm64: Add test for the SVE ptrace interface
-> >    selftests: arm64: Add stress tests for FPSMID and SVE context
-> >      switching
-> >    selftests: arm64: Add utility to set SVE vector lengths
-> >    selftests: arm64: Add wrapper scripts for stress tests
-> >    selftests: arm64: Add build and documentation for FP tests
-> 
-> Patches look good to me from selftests perspective. My acked by
-> for these patches to go through arm64.
-> 
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Before changing this it's a bit confusing to read test output:
+  raw csum_off with bad offset (fails)
+  ./psock_snd: write: Invalid argument
 
-Thanks, Shuah.
+Change "fails" in the test case description to "expected to fail", so
+that the test output can be more understandable.
 
-> If you would like me to take these through kselftest tree, give
-> me your Acks. I can queue these up for 5.10-rc1
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/psock_snd.sh | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Given there are a few arm64 kselftests series pending at the moment, I'll
-queue them in the arm64 tree, but on their own branch in case you end up
-needing to pull it in as well. I'll drop you a note once I've done that
-(I'm just starting to queue stuff this week).
+diff --git a/tools/testing/selftests/net/psock_snd.sh b/tools/testing/selftests/net/psock_snd.sh
+index 6331d91..170be65 100755
+--- a/tools/testing/selftests/net/psock_snd.sh
++++ b/tools/testing/selftests/net/psock_snd.sh
+@@ -45,7 +45,7 @@ echo "raw vnet hdr"
+ echo "raw csum_off"
+ ./in_netns.sh ./psock_snd -v -c
+ 
+-echo "raw csum_off with bad offset (fails)"
++echo "raw csum_off with bad offset (expected to fail)"
+ (! ./in_netns.sh ./psock_snd -v -c -C)
+ 
+ 
+@@ -57,7 +57,7 @@ echo "raw min size"
+ echo "raw mtu size"
+ ./in_netns.sh ./psock_snd -l "${mss}"
+ 
+-echo "raw mtu size + 1 (fails)"
++echo "raw mtu size + 1 (expected to fail)"
+ (! ./in_netns.sh ./psock_snd -l "${mss_exceeds}")
+ 
+ # fails due to ARPHRD_ETHER check in packet_extra_vlan_len_allowed
+@@ -65,19 +65,19 @@ echo "raw mtu size + 1 (fails)"
+ # echo "raw vlan mtu size"
+ # ./in_netns.sh ./psock_snd -V -l "${mss}"
+ 
+-echo "raw vlan mtu size + 1 (fails)"
++echo "raw vlan mtu size + 1 (expected to fail)"
+ (! ./in_netns.sh ./psock_snd -V -l "${mss_exceeds}")
+ 
+ echo "dgram mtu size"
+ ./in_netns.sh ./psock_snd -d -l "${mss}"
+ 
+-echo "dgram mtu size + 1 (fails)"
++echo "dgram mtu size + 1 (expected to fail)"
+ (! ./in_netns.sh ./psock_snd -d -l "${mss_exceeds}")
+ 
+-echo "raw truncate hlen (fails: does not arrive)"
++echo "raw truncate hlen (expected to fail: does not arrive)"
+ (! ./in_netns.sh ./psock_snd -t "$((${vnet_hlen} + ${eth_hlen}))")
+ 
+-echo "raw truncate hlen - 1 (fails: EINVAL)"
++echo "raw truncate hlen - 1 (expected to fail: EINVAL)"
+ (! ./in_netns.sh ./psock_snd -t "$((${vnet_hlen} + ${eth_hlen} - 1))")
+ 
+ 
+@@ -86,13 +86,13 @@ echo "raw truncate hlen - 1 (fails: EINVAL)"
+ echo "raw gso min size"
+ ./in_netns.sh ./psock_snd -v -c -g -l "${mss_exceeds}"
+ 
+-echo "raw gso min size - 1 (fails)"
++echo "raw gso min size - 1 (expected to fail)"
+ (! ./in_netns.sh ./psock_snd -v -c -g -l "${mss}")
+ 
+ echo "raw gso max size"
+ ./in_netns.sh ./psock_snd -v -c -g -l "${max_mss}"
+ 
+-echo "raw gso max size + 1 (fails)"
++echo "raw gso max size + 1 (expected to fail)"
+ (! ./in_netns.sh ./psock_snd -v -c -g -l "${max_mss_exceeds}")
+ 
+ echo "OK. All tests passed"
+-- 
+2.7.4
 
-Will
