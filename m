@@ -2,84 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F8D2596B4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Sep 2020 18:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DFF25973A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Sep 2020 18:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731613AbgIAQGH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Sep 2020 12:06:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:44860 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729211AbgIAQGD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Sep 2020 12:06:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 18DE21045;
-        Tue,  1 Sep 2020 09:06:03 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 32FA13F71F;
-        Tue,  1 Sep 2020 09:06:02 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 17:06:00 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
+        id S1731761AbgIAQMO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Sep 2020 12:12:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30160 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731382AbgIAQML (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Sep 2020 12:12:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1598976729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y+b5xXaX5m8wZ2FgPgUYG/nIzSZ1Byhj+uYXSWe5fXo=;
+        b=ZDOXO4pM/ZWXrxruRjcIUN6MSRyyz9F9upKol4a3h4Uv7uhCzW4Rl+TUiK3pLampse1FPm
+        +HpGlfBjFCZDwiiazh/xG3xQr2C67CpfA/Jt6noWpySr1FVT1LXEg/MB7l3Pz5D/JIUeYX
+        tKSI3Q8q2pt8KWENcbw+WvMQb0ZFUEU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-392-TlXE-Fu8OJ2wdU5uqK2MJQ-1; Tue, 01 Sep 2020 12:12:05 -0400
+X-MC-Unique: TlXE-Fu8OJ2wdU5uqK2MJQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8EB8510ABDAB;
+        Tue,  1 Sep 2020 16:12:02 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.114])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 333F01002D51;
+        Tue,  1 Sep 2020 16:11:56 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue,  1 Sep 2020 18:12:02 +0200 (CEST)
+Date:   Tue, 1 Sep 2020 18:11:54 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Aleksa Sarai <cyphar@cyphar.com>,
         linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 6/6] selftests: arm64: Add build and documentation for
- FP tests
-Message-ID: <20200901160559.GC6642@arm.com>
-References: <20200819114837.51466-1-broonie@kernel.org>
- <20200819114837.51466-7-broonie@kernel.org>
- <20200901153840.GA6642@arm.com>
- <20200901154702.GF6262@sirena.org.uk>
+        Josh Triplett <josh@joshtriplett.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/4] exit: support non-blocking pidfds
+Message-ID: <20200901161154.GA4386@redhat.com>
+References: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
+ <20200831134551.1599689-3-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901154702.GF6262@sirena.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200831134551.1599689-3-christian.brauner@ubuntu.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 04:47:02PM +0100, Mark Brown wrote:
-> On Tue, Sep 01, 2020 at 04:38:42PM +0100, Dave Martin wrote:
-> 
-> > I don't know whether this is worth following up with a TODO?
-> 
-> > Some things I was aware of:
-> 
-> Well volunteered :P
-> 
-> >  * The sve-test/fpsimd-test programs contain a lot of common
-> >    boilerplate and could probably be merged together.
-> 
-> >  * A fair amount of the asm in sve-test/fpsimd-test could be converted
-> >    to C, with -fgeneral-regs-only.  This would be helpful since the
-> >    code is highly unmaintainable in its current form (I know, I've
-> >    tried).  Calling library functions would still be a problem, but we
-> >    might be able to lift a printf implementation and some basic syscall
-> >    wrappers from elsewhere rather than reimplementing everything from
-> >    scratch.
-> 
-> Or just keep the existing asm for the syscall/print wrappers.
-> 
-> >  * The sve-stress/fpsimd-stress scripts could likewise be merged.
-> >    Also, doing the required process management from the shell seems a
-> >    doomed enterprise and it never really worked 100% right.  Eventually
-> >    it might be worth rewriting a common test driver for these in a real
-> >    language.
-> 
-> >  * While the tests confirm that basic aspects of the SVE support don't
-> >    explode, there is not a lot of checking that the kernel does the
-> >    _correct_ thing -- so there's scope for improvement here if somebody
-> >    gets around to it.
-> 
-> Yeah, more errors get trapped by the kernel's own internal checking than
-> by the tests themselves.
+On 08/31, Christian Brauner wrote:
+>
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -934,6 +934,7 @@ struct wait_opts {
+>  
+>  	wait_queue_entry_t		child_wait;
+>  	int			notask_error;
+> +	int			eagain_error;
+>  };
+>  
+>  static int eligible_pid(struct wait_opts *wo, struct task_struct *p)
+> @@ -1461,6 +1462,8 @@ static long do_wait(struct wait_opts *wo)
+>  
+>  notask:
+>  	retval = wo->notask_error;
+> +	if (!retval)
+> +		retval = wo->eagain_error;
+>  	if (!retval && !(wo->wo_flags & WNOHANG)) {
+>  		retval = -ERESTARTSYS;
 
+I must have missed something but I don't understand why do we need
+the new ->eagain_error and the change in do_wait().
 
-OK, I can follow up with a patch so long as these points sounds
-reasonable to you.  Either way, it's not urgent.
+> @@ -1544,6 +1551,11 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
+>  	wo.wo_flags	= options;
+>  	wo.wo_info	= infop;
+>  	wo.wo_rusage	= ru;
+> +	wo.eagain_error = 0;
+> +	if (f_flags & O_NONBLOCK) {
+> +		wo.wo_flags	|= WNOHANG;
+> +		wo.eagain_error	= -EAGAIN;
+> +	}
+>  	ret = do_wait(&wo);
 
-Cheers
----Dave
+Can't kernel_waitid() simply do
+
+	if (f_flags & O_NONBLOCK)
+		wo.wo_flags |= WNOHANG;
+	ret = do_wait();
+	if (!ret & (f_flags & O_NONBLOCK))
+		ret = -EAGAIN;
+
+?
+
+Oleg.
+
