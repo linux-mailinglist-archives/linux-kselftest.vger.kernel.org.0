@@ -2,87 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E179525AEC5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 17:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6583525B208
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 18:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727963AbgIBPZ4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Sep 2020 11:25:56 -0400
-Received: from mga04.intel.com ([192.55.52.120]:10435 "EHLO mga04.intel.com"
+        id S1726742AbgIBQsa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Sep 2020 12:48:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:42456 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726927AbgIBPZs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Sep 2020 11:25:48 -0400
-IronPort-SDR: CmAeaSXKEuI2EX3CGO99S4RiPWEK8rouML4cKz2J2P5WbP12Orp0MPN/3cCSe55zZ2Qr5U6uHo
- 5PqNXGDO+2DQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="154808921"
-X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
-   d="scan'208";a="154808921"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 08:25:28 -0700
-IronPort-SDR: L67woUpoVuqgVtgy6pkvyyzRjvNctYT8LWivC1LtOEmUFWlgEn3YgaVHpkdyYY9cehcrxZ7c+N
- uMZlBfRn1XBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
-   d="scan'208";a="325821419"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Sep 2020 08:25:28 -0700
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.ger.corp.intel.com [10.237.72.186])
-        by linux.intel.com (Postfix) with ESMTP id 341F158041C;
-        Wed,  2 Sep 2020 08:25:25 -0700 (PDT)
-Message-ID: <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
-Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
- measurement
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-Reply-To: dedekind1@gmail.com
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>, rjw@rjwysocki.net,
-        daniel.lezcano@linaro.org, srivatsa@csail.mit.edu,
-        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
-        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        pratik.r.sampat@gmail.com
-Date:   Wed, 02 Sep 2020 18:25:24 +0300
-In-Reply-To: <20200902114506.45809-2-psampat@linux.ibm.com>
-References: <20200902114506.45809-1-psampat@linux.ibm.com>
-         <20200902114506.45809-2-psampat@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+        id S1726526AbgIBQsa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Sep 2020 12:48:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F34E1045;
+        Wed,  2 Sep 2020 09:48:29 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FFFE3F66F;
+        Wed,  2 Sep 2020 09:48:28 -0700 (PDT)
+Date:   Wed, 2 Sep 2020 17:48:26 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Boyan Karatotev <boyan.karatotev@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, boian4o1@gmail.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        amit.kachhap@arm.com, vincenzo.frascino@arm.com,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 0/4] kselftests/arm64: add PAuth tests
+Message-ID: <20200902164825.GH6642@arm.com>
+References: <20200828131606.7946-1-boyan.karatotev@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200828131606.7946-1-boyan.karatotev@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2020-09-02 at 17:15 +0530, Pratik Rajesh Sampat wrote:
-> Measure cpuidle latencies on wakeup to determine and compare with the
-> advertsied wakeup latencies for each idle state.
+On Fri, Aug 28, 2020 at 02:16:02PM +0100, Boyan Karatotev wrote:
+> Pointer Authentication (PAuth) is a security feature introduced in ARMv8.3.
+> It introduces instructions to sign addresses and later check for potential
+> corruption using a second modifier value and one of a set of keys. The
+> signature, in the form of the Pointer Authentication Code (PAC), is stored
+> in some of the top unused bits of the virtual address (e.g. [54: 49] if
+> TBID0 is enabled and TnSZ is set to use a 48 bit VA space). A set of
+> controls are present to enable/disable groups of instructions (which use
+> certain keys) for compatibility with libraries that do not utilize the
+> feature. PAuth is used to verify the integrity of return addresses on the
+> stack with less memory than the stack canary.
+> 
+> This patchset adds kselftests to verify the kernel's configuration of the
+> feature and its runtime behaviour. There are 7 tests which verify that:
+> 	* an authentication failure leads to a SIGSEGV
+> 	* the data/instruction instruction groups are enabled
+> 	* the generic instructions are enabled
+> 	* all 5 keys are unique for a single thread
+> 	* exec() changes all keys to new unique ones
+> 	* context switching preserves the 4 data/instruction keys
+> 	* context switching preserves the generic keys
+> 
+> The tests have been verified to work on qemu without a working PAUTH
+> Implementation and on ARM's FVP with a full or partial PAuth
+> implementation.
+> 
+> Note: This patchset is only verified for ARMv8.3 and there will be some
+> changes required for ARMv8.6. More details can be found here [1]. Once
+> ARMv8.6 PAuth is merged the first test in this series will required to be
+> updated.
 
-It looks like the measurements include more than just C-state wake,
-they also include the overhead of waking up the proces, context switch,
-and potentially any interrupts that happen on that CPU. I am not saying
-this is not interesting data, it surely is, but it is going to be
-larger than you see in cpuidle latency tables. Potentially
-significantly larger.
+Nit: is it worth running checkpatch over this series?
 
-Therefore, I am not sure this program should be advertised as "cpuidle
-measurement". It really measures the "IPI latency" in case of the IPI
-method.
+Although this is not kernel code, there are a number of formatting
+weirdnesses and surplus blank lines etc. that checkpatch would probably
+warn about.
 
-> A baseline measurement for each case of IPI and timers is taken at
-> 100 percent CPU usage to quantify for the kernel-userpsace overhead
-> during execution.
+[...]
 
-At least on Intel platforms, this will mean that the IPI method won't
-cover deep C-states like, say, PC6, because one CPU is busy. Again, not
-saying this is not interesting, just pointing out the limitation.
-
-I was working on a somewhat similar stuff for x86 platforms, and I am
-almost ready to publish that on github. I can notify you when I do so
-if you are interested. But here is a small presentation of the approach
-that I did on Plumbers last year:
-
-https://youtu.be/Opk92aQyvt0?t=8266
-
-(the link points to the start of my talk)
-
+Cheers
+---Dave
