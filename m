@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA6325B286
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 19:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D627125B2B3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 19:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728746AbgIBRBF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Sep 2020 13:01:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:42792 "EHLO foss.arm.com"
+        id S1726467AbgIBRI7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Sep 2020 13:08:59 -0400
+Received: from foss.arm.com ([217.140.110.172]:43028 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728428AbgIBRA5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Sep 2020 13:00:57 -0400
+        id S1726285AbgIBRI6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Sep 2020 13:08:58 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 003021045;
-        Wed,  2 Sep 2020 10:00:57 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D1BE1045;
+        Wed,  2 Sep 2020 10:08:58 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A4BFD3F66F;
-        Wed,  2 Sep 2020 10:00:55 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 18:00:53 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0CDB3F66F;
+        Wed,  2 Sep 2020 10:08:56 -0700 (PDT)
+Date:   Wed, 2 Sep 2020 18:08:54 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Boyan Karatotev <boyan.karatotev@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -26,22 +26,22 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Catalin Marinas <catalin.marinas@arm.com>,
         amit.kachhap@arm.com, vincenzo.frascino@arm.com,
         Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 3/4] kselftests/arm64: add PAuth test for whether exec()
- changes keys
-Message-ID: <20200902170052.GJ6642@arm.com>
-References: <20200828131606.7946-1-boyan.karatotev@arm.com>
- <20200828131606.7946-4-boyan.karatotev@arm.com>
+Subject: Re: [PATCH v2 3/4] kselftests/arm64: add PAuth test for whether
+ exec() changes keys
+Message-ID: <20200902170854.GK6642@arm.com>
+References: <20200831110450.30188-1-boyan.karatotev@arm.com>
+ <20200831110450.30188-4-boyan.karatotev@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200828131606.7946-4-boyan.karatotev@arm.com>
+In-Reply-To: <20200831110450.30188-4-boyan.karatotev@arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 02:16:05PM +0100, Boyan Karatotev wrote:
+On Mon, Aug 31, 2020 at 12:04:49PM +0100, Boyan Karatotev wrote:
 > Kernel documentation states that it will change PAuth keys on exec() calls.
 > 
 > Verify that all keys are correctly switched to new ones.
@@ -49,6 +49,8 @@ On Fri, Aug 28, 2020 at 02:16:05PM +0100, Boyan Karatotev wrote:
 > Cc: Shuah Khan <shuah@kernel.org>
 > Cc: Catalin Marinas <catalin.marinas@arm.com>
 > Cc: Will Deacon <will@kernel.org>
+> Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
+> Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
 > Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
 > ---
 >  tools/testing/selftests/arm64/pauth/Makefile  |   4 +
@@ -59,18 +61,18 @@ On Fri, Aug 28, 2020 at 02:16:05PM +0100, Boyan Karatotev wrote:
 >  create mode 100644 tools/testing/selftests/arm64/pauth/exec_target.c
 > 
 > diff --git a/tools/testing/selftests/arm64/pauth/Makefile b/tools/testing/selftests/arm64/pauth/Makefile
-> index a017d1c8dd58..2e237b21ccf6 100644
+> index 5c0dd129562f..72e290b0b10c 100644
 > --- a/tools/testing/selftests/arm64/pauth/Makefile
 > +++ b/tools/testing/selftests/arm64/pauth/Makefile
-> @@ -5,6 +5,7 @@ CFLAGS += -mbranch-protection=pac-ret
->  
+> @@ -13,6 +13,7 @@ pauth_cc_support := $(shell if ($(CC) $(CFLAGS) -march=armv8.3-a -E -x c /dev/nu
+>  ifeq ($(pauth_cc_support),1)
 >  TEST_GEN_PROGS := pac
 >  TEST_GEN_FILES := pac_corruptor.o helper.o
 > +TEST_GEN_PROGS_EXTENDED := exec_target
+>  endif
 >  
 >  include ../../lib.mk
->  
-> @@ -20,6 +21,9 @@ $(OUTPUT)/helper.o: helper.c
+> @@ -30,6 +31,9 @@ $(OUTPUT)/helper.o: helper.c
 >  # greater, gcc emits pac* instructions which are not in HINT NOP space,
 >  # preventing the tests from occurring at all. Compile for ARMv8.2 so tests can
 >  # run on earlier targets and print a meaningful error messages
@@ -79,7 +81,7 @@ On Fri, Aug 28, 2020 at 02:16:05PM +0100, Boyan Karatotev wrote:
 > +
 >  $(OUTPUT)/pac: pac.c $(OUTPUT)/pac_corruptor.o $(OUTPUT)/helper.o
 >  	$(CC) $^ -o $@ $(CFLAGS) -march=armv8.2-a
->  
+>  endif
 > diff --git a/tools/testing/selftests/arm64/pauth/exec_target.c b/tools/testing/selftests/arm64/pauth/exec_target.c
 > new file mode 100644
 > index 000000000000..07addef5a1d7
@@ -122,7 +124,7 @@ On Fri, Aug 28, 2020 at 02:16:05PM +0100, Boyan Karatotev wrote:
 > +	return 0;
 > +}
 > diff --git a/tools/testing/selftests/arm64/pauth/helper.h b/tools/testing/selftests/arm64/pauth/helper.h
-> index b3cf709e249d..fceaa1e4824a 100644
+> index e2ed910c9863..da6457177727 100644
 > --- a/tools/testing/selftests/arm64/pauth/helper.h
 > +++ b/tools/testing/selftests/arm64/pauth/helper.h
 > @@ -6,6 +6,16 @@
@@ -143,7 +145,7 @@ On Fri, Aug 28, 2020 at 02:16:05PM +0100, Boyan Karatotev wrote:
 >  void pac_corruptor(void);
 >  
 > diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-> index cdbffa8bf61e..16dea47b11c7 100644
+> index 035fdd6aae9b..1b9e3acfeb61 100644
 > --- a/tools/testing/selftests/arm64/pauth/pac.c
 > +++ b/tools/testing/selftests/arm64/pauth/pac.c
 > @@ -2,6 +2,8 @@
@@ -192,11 +194,36 @@ On Fri, Aug 28, 2020 at 02:16:05PM +0100, Boyan Karatotev wrote:
 > +
 > +int exec_sign_all(struct signatures *signed_vals, size_t val)
 > +{
+> +	int new_stdin[2];
+> +	int new_stdout[2];
+> +	int status;
+> +	ssize_t ret;
+> +	pid_t pid;
 
-Could popen(3) be used here?
+Can we simplify this with popen(3)?  Fork-and-exec is notoriously
+fiddly...
 
-Fork-and-exec is notoriously fiddly, so it's preferable to use a library
-function to do it where applicable.
+[...]
+
+> +/*
+> + * fork() does not change keys. Only exec() does so call a worker program.
+> + * Its only job is to sign a value and report back the resutls
+> + */
+> +TEST(exec_unique_keys)
+> +{
+
+The kernel doesn't guarantee that keys are unique.
+
+Can we present all the "unique keys" wording differently, say
+
+	exec_key_collision_likely()
+
+Otherwise people might infer from this test code that the keys are
+supposed to be truly unique and start reporting bugs on the kernel.
+
+I can't see an obvious security argument for unique keys (rather, the
+keys just need to be "unique enough".  That's the job of
+get_random_bytes().)
 
 [...]
 
