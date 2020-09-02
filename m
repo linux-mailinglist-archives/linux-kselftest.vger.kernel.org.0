@@ -2,200 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66EC25A951
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 12:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF04C25AA7C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 13:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbgIBKX0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Sep 2020 06:23:26 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:49502 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgIBKXX (ORCPT
+        id S1726298AbgIBLpe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Sep 2020 07:45:34 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8964 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726268AbgIBLpX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Sep 2020 06:23:23 -0400
-Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kDPvE-00069F-Af; Wed, 02 Sep 2020 10:23:20 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christian Brauner <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        linux-kselftest@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v2 4/4] tests: add waitid() tests for non-blocking pidfds
-Date:   Wed,  2 Sep 2020 12:21:30 +0200
-Message-Id: <20200902102130.147672-5-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200902102130.147672-1-christian.brauner@ubuntu.com>
-References: <20200902102130.147672-1-christian.brauner@ubuntu.com>
+        Wed, 2 Sep 2020 07:45:23 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 082BfPPb054953;
+        Wed, 2 Sep 2020 07:45:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
+ date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=T6fpH/Ru1BzDNdcKAGM7+hLUwS8hQAfx6nhqQ2wxrVY=;
+ b=ffa/h1AgLMC8JrAIDWuwbfM+9X+NHLkSPSglZb4A7ezU4Tw79UZ+I1C/UWnTeTKvlhYo
+ fuj430gezH2eHWnVSxKOXw0oiwgKX8i/eZYytQxkHr3pTc/6l7zmOxxhm8aF0dV5gDIM
+ 9uAVX/6v6HaOuffcglHh68wu7EXXNRM6fMlfsuCuLmGEfmyXZIqGC1AiN36dY/SSp5LY
+ 29ReB09NGt5saQDQolMGRJ953Wolm43uobczD4/IEk7RtX8rlDQYRURe3UZSOdnDp6Bn
+ y5BM7bvKOLkuFvYxpZKFLbc5sVsLkZVfbPIpuomiskS4fL9Z3uBrtNya8Gd3wXyr0gsV Cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33aar302yk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Sep 2020 07:45:14 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 082BgGmE056911;
+        Wed, 2 Sep 2020 07:45:14 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33aar302xs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Sep 2020 07:45:14 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 082Bh8bh016372;
+        Wed, 2 Sep 2020 11:45:12 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 339ap7s6b9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Sep 2020 11:45:12 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 082Bj98u61604268
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Sep 2020 11:45:09 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 79B89AE058;
+        Wed,  2 Sep 2020 11:45:09 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAEF0AE055;
+        Wed,  2 Sep 2020 11:45:06 +0000 (GMT)
+Received: from pratiks-thinkpad.ibmuc.com (unknown [9.77.200.65])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Sep 2020 11:45:06 +0000 (GMT)
+From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        srivatsa@csail.mit.edu, shuah@kernel.org, npiggin@gmail.com,
+        ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
+        psampat@linux.ibm.com
+Subject: [RFC v4 0/1] Selftest for cpuidle latency measurement
+Date:   Wed,  2 Sep 2020 17:15:05 +0530
+Message-Id: <20200902114506.45809-1-psampat@linux.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-02_03:2020-09-02,2020-09-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
+ mlxscore=0 adultscore=0 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxlogscore=913
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009020105
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify that the PIDFD_NONBLOCK flag works with pidfd_open() and that
-waitid() with a non-blocking pidfd returns EAGAIN:
-
-	TAP version 13
-	1..3
-	# Starting 3 tests from 1 test cases.
-	#  RUN           global.wait_simple ...
-	#            OK  global.wait_simple
-	ok 1 global.wait_simple
-	#  RUN           global.wait_states ...
-	#            OK  global.wait_states
-	ok 2 global.wait_states
-	#  RUN           global.wait_nonblock ...
-	#            OK  global.wait_nonblock
-	ok 3 global.wait_nonblock
-	# PASSED: 3 / 3 tests passed.
-	# Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Changelog v3-->v4:
+1. Overhaul in implementation from kernel module to a userspace selftest 
 ---
-/* v2 */
-unchanged
----
- tools/testing/selftests/pidfd/pidfd.h      |  4 ++
- tools/testing/selftests/pidfd/pidfd_wait.c | 83 +++++++++++++++++++++-
- 2 files changed, 86 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-index a2c80914e3dc..01f8d3c0cf2c 100644
---- a/tools/testing/selftests/pidfd/pidfd.h
-+++ b/tools/testing/selftests/pidfd/pidfd.h
-@@ -46,6 +46,10 @@
- #define __NR_pidfd_getfd -1
- #endif
- 
-+#ifndef PIDFD_NONBLOCK
-+#define PIDFD_NONBLOCK O_NONBLOCK
-+#endif
-+
- /*
-  * The kernel reserves 300 pids via RESERVED_PIDS in kernel/pid.c
-  * That means, when it wraps around any pid < 300 will be skipped.
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index 075c716f6fb8..cefce4d3d2f6 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -21,6 +21,11 @@
- 
- #define ptr_to_u64(ptr) ((__u64)((uintptr_t)(ptr)))
- 
-+/* Attempt to de-conflict with the selftests tree. */
-+#ifndef SKIP
-+#define SKIP(s, ...)	XFAIL(s, ##__VA_ARGS__)
-+#endif
-+
- static pid_t sys_clone3(struct clone_args *args)
- {
- 	return syscall(__NR_clone3, args, sizeof(struct clone_args));
-@@ -65,7 +70,7 @@ TEST(wait_simple)
- 	pidfd = -1;
- 
- 	pid = sys_clone3(&args);
--	ASSERT_GE(pid, 1);
-+	ASSERT_GE(pid, 0);
- 
- 	if (pid == 0)
- 		exit(EXIT_SUCCESS);
-@@ -133,4 +138,80 @@ TEST(wait_states)
- 	EXPECT_EQ(close(pidfd), 0);
- }
- 
-+TEST(wait_nonblock)
-+{
-+	int pidfd, status = 0;
-+	unsigned int flags = 0;
-+	pid_t parent_tid = -1;
-+	struct clone_args args = {
-+		.parent_tid = ptr_to_u64(&parent_tid),
-+		.flags = CLONE_PARENT_SETTID,
-+		.exit_signal = SIGCHLD,
-+	};
-+	int ret;
-+	pid_t pid;
-+	siginfo_t info = {
-+		.si_signo = 0,
-+	};
-+
-+	/*
-+	 * Callers need to see ECHILD with non-blocking pidfds when no child
-+	 * processes exists.
-+	 */
-+	pidfd = sys_pidfd_open(getpid(), PIDFD_NONBLOCK);
-+	EXPECT_GE(pidfd, 0) {
-+		/* pidfd_open() doesn't support PIDFD_NONBLOCK. */
-+		ASSERT_EQ(errno, EINVAL);
-+		SKIP(return, "Skipping PIDFD_NONBLOCK test");
-+	}
-+
-+	pid = sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL);
-+	ASSERT_LT(pid, 0);
-+	ASSERT_EQ(errno, ECHILD);
-+	EXPECT_EQ(close(pidfd), 0);
-+
-+	pid = sys_clone3(&args);
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		kill(getpid(), SIGSTOP);
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	pidfd = sys_pidfd_open(pid, PIDFD_NONBLOCK);
-+	EXPECT_GE(pidfd, 0) {
-+		/* pidfd_open() doesn't support PIDFD_NONBLOCK. */
-+		ASSERT_EQ(errno, EINVAL);
-+		SKIP(return, "Skipping PIDFD_NONBLOCK test");
-+	}
-+
-+	flags = fcntl(pidfd, F_GETFL, 0);
-+	ASSERT_GT(flags, 0);
-+	ASSERT_GT((flags & O_NONBLOCK), 0);
-+
-+	/*
-+	 * Callers need to see EAGAIN/EWOULDBLOCK with non-blocking pidfd when
-+	 * child processes exist but none have exited.
-+	 */
-+	pid = sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL);
-+	ASSERT_LT(pid, 0);
-+	ASSERT_EQ(errno, EAGAIN);
-+
-+	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
-+	ASSERT_EQ(info.si_signo, SIGCHLD);
-+	ASSERT_EQ(info.si_code, CLD_STOPPED);
-+	ASSERT_EQ(info.si_pid, parent_tid);
-+
-+	ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
-+
-+	ASSERT_EQ(fcntl(pidfd, F_SETFL, (flags & ~O_NONBLOCK)), 0);
-+
-+	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL), 0);
-+	ASSERT_EQ(info.si_signo, SIGCHLD);
-+	ASSERT_EQ(info.si_code, CLD_EXITED);
-+	ASSERT_EQ(info.si_pid, parent_tid);
-+
-+	EXPECT_EQ(close(pidfd), 0);
-+}
-+
- TEST_HARNESS_MAIN
+The patch series introduces a mechanism to measure wakeup latency for
+IPI and timer based interrupts
+The motivation behind this series is to find significant deviations
+behind advertised latency and residency values
+
+To achieve this in the userspace, IPI latencies are calculated by
+sending information through pipes and inducing a wakeup, similarly
+alarm events are setup for calculate timer based wakeup latencies.
+
+To account for delays from kernel-userspace interactions baseline
+observations are taken on a 100% busy CPU and subsequent obervations
+must be considered relative to that.
+
+In theory, wakeups induced by IPI and Timers should have similar
+wakeup latencies, however in practice there may be deviations which may
+need to be captured.
+
+One downside of the userspace approach in contrast to the kernel
+implementation is that the run to run variance can turn out to be high
+in the order of ms; which is the scope of the experiments at times.
+
+Another downside of the userspace approach is that it takes much longer
+to run and hence a command-line option quick and full are added to make
+sure quick 1 CPU tests can be carried out when needed and otherwise it
+can carry out a full system comprehensive test.
+
+Usage
+---
+./cpuidle --mode <full / quick / num_cpus> --output <output location> 
+full: runs on all CPUS
+quick: run on a random CPU
+num_cpus: Limit the number of CPUS to run on
+
+Sample output snippet
+---------------------
+--IPI Latency Test---
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+...
+  0          5       256178
+  0          6       478161
+  0          7       285445
+  0          8       273553
+Expected IPI latency(ns): 100000
+Observed Average IPI latency(ns): 248334
+
+--Timeout Latency Test--
+--Baseline Timeout Latency measurement: CPU Busy--
+Wakeup_src Baseline_delay(ns)
+...
+ 32          972405
+ 33         1004287
+ 34          986663
+ 35          994022
+Expected timeout(ns): 10000000
+Observed Average timeout diff(ns): 991844
+
+Pratik Rajesh Sampat (1):
+  selftests/cpuidle: Add support for cpuidle latency measurement
+
+ tools/testing/selftests/Makefile          |   1 +
+ tools/testing/selftests/cpuidle/Makefile  |   7 +
+ tools/testing/selftests/cpuidle/cpuidle.c | 616 ++++++++++++++++++++++
+ tools/testing/selftests/cpuidle/settings  |   1 +
+ 4 files changed, 625 insertions(+)
+ create mode 100644 tools/testing/selftests/cpuidle/Makefile
+ create mode 100644 tools/testing/selftests/cpuidle/cpuidle.c
+ create mode 100644 tools/testing/selftests/cpuidle/settings
+
 -- 
-2.28.0
+2.26.2
 
