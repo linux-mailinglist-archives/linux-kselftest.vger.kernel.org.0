@@ -2,230 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D627125B2B3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 19:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875ED25B54D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Sep 2020 22:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726467AbgIBRI7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Sep 2020 13:08:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:43028 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726285AbgIBRI6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Sep 2020 13:08:58 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D1BE1045;
-        Wed,  2 Sep 2020 10:08:58 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0CDB3F66F;
-        Wed,  2 Sep 2020 10:08:56 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 18:08:54 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Boyan Karatotev <boyan.karatotev@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>, boian4o1@gmail.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        amit.kachhap@arm.com, vincenzo.frascino@arm.com,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2 3/4] kselftests/arm64: add PAuth test for whether
- exec() changes keys
-Message-ID: <20200902170854.GK6642@arm.com>
-References: <20200831110450.30188-1-boyan.karatotev@arm.com>
- <20200831110450.30188-4-boyan.karatotev@arm.com>
+        id S1726586AbgIBUaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Sep 2020 16:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726226AbgIBUaL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Sep 2020 16:30:11 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4664AC061244;
+        Wed,  2 Sep 2020 13:30:10 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id e23so573306eja.3;
+        Wed, 02 Sep 2020 13:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3zH/GO18AuMjI+jK60xohkdSw2ATSnXJ1BTZdunQxr8=;
+        b=IAoO8HB+G4Gyxmg6TnoHZXWP6md6wpAtsLFdpd3vUebwvRvqcoVRuBCDnz/KwTghTi
+         FMiWdDJHnmdrDXvNpHBztg0GN7b8bTiFnsayrcfnI5gVZh6gHQL9mBRnYmP7nP+EZ9lZ
+         TX97o8nHu5w0HGswgD+AbbJl4hU4O1TNzhIPFumoWsQFXQX8UWHdmpLFtVm1F5lO93sd
+         4wxacqz8aXRzM2jY6iIRrO9fDA8ROkic5StX2H+QWptrC3xT6ASA8y/hnreHlV01VAQQ
+         LvKvikYQuQseVGP2U3g1JwLzFdOhSLOMqVSUxAzm8qa3Olc6wd79QZJlwZFNTXIQ/dSx
+         oz3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3zH/GO18AuMjI+jK60xohkdSw2ATSnXJ1BTZdunQxr8=;
+        b=k/65fwrewiikprofofflsd+Laf/VacLprJM7SUtRd/617XDhwaLno8t/1pGknI6oJ2
+         1cfsX5F684U6uzcwXUKYWJiAehwLeFuSWcInB+3MYGCJ+W3h91IGum0f7FPBIRUuUoZw
+         yaRpcy5PzcofvKQwdZkMRz6WYWsntQGFJ5hBysy/Ja6nYgUZK+a+mHjwOcDRY7CflKSw
+         tqezygQ7KwWOIve5WwxfQQEbFLkpr+pqqmI5Jic8fJNpR2UQKMXdBUnvI/XzHCpRC0z/
+         Ihv7JBR9XXmetamcMKqHBFcSSNLjc2l/Jd0btHBZLHu9pkOw+WYImsK1Gnxpg/LgzVtr
+         34dg==
+X-Gm-Message-State: AOAM530/+WbXEPTy2LoVBBwaRSIV/MWO8CCj/Jdh8r8vVcPAkTMKZ8H4
+        aMo6L9Ay2vO4h+PRiC1mfooczR3ozw6eAqhTA2Y=
+X-Google-Smtp-Source: ABdhPJyzZFQeDPZketWOBEluKgnVpcrzxpuAdbHhXq4uZ8DSciz92IF8wEci8O8j7o4XyYup4i+USOLVMflTEi0tKuM=
+X-Received: by 2002:a17:906:3a85:: with SMTP id y5mr1758578ejd.507.1599078608948;
+ Wed, 02 Sep 2020 13:30:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200831110450.30188-4-boyan.karatotev@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20200902165830.5367-1-rcampbell@nvidia.com> <20200902165830.5367-2-rcampbell@nvidia.com>
+In-Reply-To: <20200902165830.5367-2-rcampbell@nvidia.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 2 Sep 2020 13:29:56 -0700
+Message-ID: <CAHbLzkqAHfVq4upkJBvWQ9XtXFfFx5=qUO4+i5XjFeNwS9XVHg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] mm/thp: fix __split_huge_pmd_locked() for
+ migration PMD
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     Linux MM <linux-mm@kvack.org>, nouveau@lists.freedesktop.org,
+        linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 31, 2020 at 12:04:49PM +0100, Boyan Karatotev wrote:
-> Kernel documentation states that it will change PAuth keys on exec() calls.
-> 
-> Verify that all keys are correctly switched to new ones.
-> 
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
-> Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
-> Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
+On Wed, Sep 2, 2020 at 9:58 AM Ralph Campbell <rcampbell@nvidia.com> wrote:
+>
+> A migrating transparent huge page has to already be unmapped. Otherwise,
+> the page could be modified while it is being copied to a new page and
+> data could be lost. The function __split_huge_pmd() checks for a PMD
+> migration entry before calling __split_huge_pmd_locked() leading one to
+> think that __split_huge_pmd_locked() can handle splitting a migrating PMD.
+> However, the code always increments the page->_mapcount and adjusts the
+> memory control group accounting assuming the page is mapped.
+> Also, if the PMD entry is a migration PMD entry, the call to
+> is_huge_zero_pmd(*pmd) is incorrect because it calls pmd_pfn(pmd) instead
+> of migration_entry_to_pfn(pmd_to_swp_entry(pmd)).
+> Fix these problems by checking for a PMD migration entry.
+
+Thanks for catching this. The fix looks good to me. Reviewed-by: Yang
+Shi <shy828301@gmail.com>
+
+I think this fix can go separately with the series.
+>
+> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
 > ---
->  tools/testing/selftests/arm64/pauth/Makefile  |   4 +
->  .../selftests/arm64/pauth/exec_target.c       |  35 +++++
->  tools/testing/selftests/arm64/pauth/helper.h  |  10 ++
->  tools/testing/selftests/arm64/pauth/pac.c     | 148 ++++++++++++++++++
->  4 files changed, 197 insertions(+)
->  create mode 100644 tools/testing/selftests/arm64/pauth/exec_target.c
-> 
-> diff --git a/tools/testing/selftests/arm64/pauth/Makefile b/tools/testing/selftests/arm64/pauth/Makefile
-> index 5c0dd129562f..72e290b0b10c 100644
-> --- a/tools/testing/selftests/arm64/pauth/Makefile
-> +++ b/tools/testing/selftests/arm64/pauth/Makefile
-> @@ -13,6 +13,7 @@ pauth_cc_support := $(shell if ($(CC) $(CFLAGS) -march=armv8.3-a -E -x c /dev/nu
->  ifeq ($(pauth_cc_support),1)
->  TEST_GEN_PROGS := pac
->  TEST_GEN_FILES := pac_corruptor.o helper.o
-> +TEST_GEN_PROGS_EXTENDED := exec_target
->  endif
->  
->  include ../../lib.mk
-> @@ -30,6 +31,9 @@ $(OUTPUT)/helper.o: helper.c
->  # greater, gcc emits pac* instructions which are not in HINT NOP space,
->  # preventing the tests from occurring at all. Compile for ARMv8.2 so tests can
->  # run on earlier targets and print a meaningful error messages
-> +$(OUTPUT)/exec_target: exec_target.c $(OUTPUT)/helper.o
-> +	$(CC) $^ -o $@ $(CFLAGS) -march=armv8.2-a
+>  mm/huge_memory.c | 42 +++++++++++++++++++++++-------------------
+>  1 file changed, 23 insertions(+), 19 deletions(-)
+>
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 2a468a4acb0a..606d712d9505 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2023,7 +2023,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+>                 put_page(page);
+>                 add_mm_counter(mm, mm_counter_file(page), -HPAGE_PMD_NR);
+>                 return;
+> -       } else if (is_huge_zero_pmd(*pmd)) {
+> +       } else if (pmd_trans_huge(*pmd) && is_huge_zero_pmd(*pmd)) {
+>                 /*
+>                  * FIXME: Do we want to invalidate secondary mmu by calling
+>                  * mmu_notifier_invalidate_range() see comments below inside
+> @@ -2117,30 +2117,34 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+>                 pte = pte_offset_map(&_pmd, addr);
+>                 BUG_ON(!pte_none(*pte));
+>                 set_pte_at(mm, addr, pte, entry);
+> -               atomic_inc(&page[i]._mapcount);
+> -               pte_unmap(pte);
+> -       }
+> -
+> -       /*
+> -        * Set PG_double_map before dropping compound_mapcount to avoid
+> -        * false-negative page_mapped().
+> -        */
+> -       if (compound_mapcount(page) > 1 && !TestSetPageDoubleMap(page)) {
+> -               for (i = 0; i < HPAGE_PMD_NR; i++)
+> +               if (!pmd_migration)
+>                         atomic_inc(&page[i]._mapcount);
+> +               pte_unmap(pte);
+>         }
+>
+> -       lock_page_memcg(page);
+> -       if (atomic_add_negative(-1, compound_mapcount_ptr(page))) {
+> -               /* Last compound_mapcount is gone. */
+> -               __dec_lruvec_page_state(page, NR_ANON_THPS);
+> -               if (TestClearPageDoubleMap(page)) {
+> -                       /* No need in mapcount reference anymore */
+> +       if (!pmd_migration) {
+> +               /*
+> +                * Set PG_double_map before dropping compound_mapcount to avoid
+> +                * false-negative page_mapped().
+> +                */
+> +               if (compound_mapcount(page) > 1 &&
+> +                   !TestSetPageDoubleMap(page)) {
+>                         for (i = 0; i < HPAGE_PMD_NR; i++)
+> -                               atomic_dec(&page[i]._mapcount);
+> +                               atomic_inc(&page[i]._mapcount);
+> +               }
 > +
->  $(OUTPUT)/pac: pac.c $(OUTPUT)/pac_corruptor.o $(OUTPUT)/helper.o
->  	$(CC) $^ -o $@ $(CFLAGS) -march=armv8.2-a
->  endif
-> diff --git a/tools/testing/selftests/arm64/pauth/exec_target.c b/tools/testing/selftests/arm64/pauth/exec_target.c
-> new file mode 100644
-> index 000000000000..07addef5a1d7
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/pauth/exec_target.c
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (C) 2020 ARM Limited
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <sys/auxv.h>
-> +
-> +#include "helper.h"
-> +
-> +
-> +int main(void)
-> +{
-> +	struct signatures signed_vals;
-> +	unsigned long hwcaps;
-> +	size_t val;
-> +
-> +	fread(&val, sizeof(size_t), 1, stdin);
-> +
-> +	/* don't try to execute illegal (unimplemented) instructions) caller
-> +	 * should have checked this and keep worker simple
-> +	 */
-> +	hwcaps = getauxval(AT_HWCAP);
-> +
-> +	if (hwcaps & HWCAP_PACA) {
-> +		signed_vals.keyia = keyia_sign(val);
-> +		signed_vals.keyib = keyib_sign(val);
-> +		signed_vals.keyda = keyda_sign(val);
-> +		signed_vals.keydb = keydb_sign(val);
-> +	}
-> +	signed_vals.keyg = (hwcaps & HWCAP_PACG) ?  keyg_sign(val) : 0;
-> +
-> +	fwrite(&signed_vals, sizeof(struct signatures), 1, stdout);
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/arm64/pauth/helper.h b/tools/testing/selftests/arm64/pauth/helper.h
-> index e2ed910c9863..da6457177727 100644
-> --- a/tools/testing/selftests/arm64/pauth/helper.h
-> +++ b/tools/testing/selftests/arm64/pauth/helper.h
-> @@ -6,6 +6,16 @@
->  
->  #include <stdlib.h>
->  
-> +#define NKEYS 5
-> +
-> +
-> +struct signatures {
-> +	size_t keyia;
-> +	size_t keyib;
-> +	size_t keyda;
-> +	size_t keydb;
-> +	size_t keyg;
-> +};
->  
->  void pac_corruptor(void);
->  
-> diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-> index 035fdd6aae9b..1b9e3acfeb61 100644
-> --- a/tools/testing/selftests/arm64/pauth/pac.c
-> +++ b/tools/testing/selftests/arm64/pauth/pac.c
-> @@ -2,6 +2,8 @@
->  // Copyright (C) 2020 ARM Limited
->  
->  #include <sys/auxv.h>
-> +#include <sys/types.h>
-> +#include <sys/wait.h>
->  #include <signal.h>
->  
->  #include "../../kselftest_harness.h"
-> @@ -33,6 +35,117 @@ do { \
->  } while (0)
->  
->  
-> +void sign_specific(struct signatures *sign, size_t val)
-> +{
-> +	sign->keyia = keyia_sign(val);
-> +	sign->keyib = keyib_sign(val);
-> +	sign->keyda = keyda_sign(val);
-> +	sign->keydb = keydb_sign(val);
-> +}
-> +
-> +void sign_all(struct signatures *sign, size_t val)
-> +{
-> +	sign->keyia = keyia_sign(val);
-> +	sign->keyib = keyib_sign(val);
-> +	sign->keyda = keyda_sign(val);
-> +	sign->keydb = keydb_sign(val);
-> +	sign->keyg  = keyg_sign(val);
-> +}
-> +
-> +int are_same(struct signatures *old, struct signatures *new, int nkeys)
-> +{
-> +	int res = 0;
-> +
-> +	res |= old->keyia == new->keyia;
-> +	res |= old->keyib == new->keyib;
-> +	res |= old->keyda == new->keyda;
-> +	res |= old->keydb == new->keydb;
-> +	if (nkeys == NKEYS)
-> +		res |= old->keyg  == new->keyg;
-> +
-> +	return res;
-> +}
-> +
-> +int exec_sign_all(struct signatures *signed_vals, size_t val)
-> +{
-> +	int new_stdin[2];
-> +	int new_stdout[2];
-> +	int status;
-> +	ssize_t ret;
-> +	pid_t pid;
-
-Can we simplify this with popen(3)?  Fork-and-exec is notoriously
-fiddly...
-
-[...]
-
-> +/*
-> + * fork() does not change keys. Only exec() does so call a worker program.
-> + * Its only job is to sign a value and report back the resutls
-> + */
-> +TEST(exec_unique_keys)
-> +{
-
-The kernel doesn't guarantee that keys are unique.
-
-Can we present all the "unique keys" wording differently, say
-
-	exec_key_collision_likely()
-
-Otherwise people might infer from this test code that the keys are
-supposed to be truly unique and start reporting bugs on the kernel.
-
-I can't see an obvious security argument for unique keys (rather, the
-keys just need to be "unique enough".  That's the job of
-get_random_bytes().)
-
-[...]
-
-Cheers
----Dave
+> +               lock_page_memcg(page);
+> +               if (atomic_add_negative(-1, compound_mapcount_ptr(page))) {
+> +                       /* Last compound_mapcount is gone. */
+> +                       __dec_lruvec_page_state(page, NR_ANON_THPS);
+> +                       if (TestClearPageDoubleMap(page)) {
+> +                               /* No need in mapcount reference anymore */
+> +                               for (i = 0; i < HPAGE_PMD_NR; i++)
+> +                                       atomic_dec(&page[i]._mapcount);
+> +                       }
+>                 }
+> +               unlock_page_memcg(page);
+>         }
+> -       unlock_page_memcg(page);
+>
+>         smp_wmb(); /* make pte visible before pmd */
+>         pmd_populate(mm, pmd, pgtable);
+> --
+> 2.20.1
+>
+>
