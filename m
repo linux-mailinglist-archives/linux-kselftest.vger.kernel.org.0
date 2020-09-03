@@ -2,29 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AF525CE93
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 01:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E20425CE96
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 01:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729446AbgICXy7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Sep 2020 19:54:59 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:39655 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbgICXy7 (ORCPT
+        id S1728015AbgICX5O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Sep 2020 19:57:14 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:36013 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgICX5O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Sep 2020 19:54:59 -0400
+        Thu, 3 Sep 2020 19:57:14 -0400
 X-Originating-IP: 50.39.163.217
 Received: from localhost (50-39-163-217.bvtn.or.frontiernet.net [50.39.163.217])
         (Authenticated sender: josh@joshtriplett.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 6C0091C0002;
-        Thu,  3 Sep 2020 23:54:48 +0000 (UTC)
-Date:   Thu, 3 Sep 2020 16:54:45 -0700
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id B11B61BF203;
+        Thu,  3 Sep 2020 23:57:03 +0000 (UTC)
+Date:   Thu, 3 Sep 2020 16:56:59 -0700
 From:   Josh Triplett <josh@joshtriplett.org>
 To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org,
         Christian Brauner <christian@brauner.io>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
+        Oleg Nesterov <oleg@redhat.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Kees Cook <keescook@chromium.org>,
         Sargun Dhillon <sargun@sargun.me>,
@@ -32,45 +33,78 @@ Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
         linux-api@vger.kernel.org, Jann Horn <jannh@google.com>
 Subject: Re: [PATCH v2 2/4] exit: support non-blocking pidfds
-Message-ID: <20200903235445.GB210207@localhost>
+Message-ID: <20200903235659.GC210207@localhost>
 References: <20200902102130.147672-1-christian.brauner@ubuntu.com>
  <20200902102130.147672-3-christian.brauner@ubuntu.com>
- <20200903142241.GI4386@redhat.com>
- <20200903153847.zvi5dzwj6v4eap6i@wittgenstein>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200903153847.zvi5dzwj6v4eap6i@wittgenstein>
+In-Reply-To: <20200902102130.147672-3-christian.brauner@ubuntu.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 05:38:47PM +0200, Christian Brauner wrote:
-> On Thu, Sep 03, 2020 at 04:22:42PM +0200, Oleg Nesterov wrote:
-> > On 09/02, Christian Brauner wrote:
-> > >
-> > > It also makes the API more consistent and uniform. In essence, waitid() is
-> > > treated like a read on a non-blocking pidfd or a recvmsg() on a non-blocking
-> > > socket.
-> > > With the addition of support for non-blocking pidfds we support the same
-> > > functionality that sockets do. For sockets() recvmsg() supports MSG_DONTWAIT
-> > > for pidfds waitid() supports WNOHANG.
-> > 
-> > What I personally do not like is that waitid(WNOHANG) returns zero or EAGAIN
-> > depending on f_flags & O_NONBLOCK... This doesn't match recvmsg(MSG_DONTWAIT)
-> > and doesn't look consistent to me.
+On Wed, Sep 02, 2020 at 12:21:28PM +0200, Christian Brauner wrote:
+> Passing a non-blocking pidfd to waitid() currently has no effect, i.e.  is not
+> supported. There are users which would like to use waitid() on pidfds that are
+> O_NONBLOCK and mix it with pidfds that are blocking and both pass them to
+> waitid().
+> The expected behavior is to have waitid() return -EAGAIN for non-blocking
+> pidfds and to block for blocking pidfds without needing to perform any
+> additional checks for flags set on the pidfd before passing it to waitid().
+> Non-blocking pidfds will return EAGAIN from waitid() when no child process is
+> ready yet. Returning -EAGAIN for non-blocking pidfds makes it easier for event
+> loops that handle EAGAIN specially.
 > 
-> It's not my favorite thing either but async event loops are usually
-> modeled around EAGAIN so I think this has benefits. Josh can speak more
-> to that.
+> It also makes the API more consistent and uniform. In essence, waitid() is
+> treated like a read on a non-blocking pidfd or a recvmsg() on a non-blocking
+> socket.
+> With the addition of support for non-blocking pidfds we support the same
+> functionality that sockets do. For sockets() recvmsg() supports MSG_DONTWAIT
+> for pidfds waitid() supports WNOHANG. Both flags are per-call options. In
+> contrast non-blocking pidfds and non-blocking sockets are a setting on an open
+> file description affecting all threads in the calling process as well as other
+> processes that hold file descriptors referring to the same open file
+> description. Both behaviors, per call and per open file description, have
+> genuine use-cases.
+> 
+> The implementation should be straightforward, we simply raise the WNOHANG flag
+> when a non-blocking pidfd is passed and when do_wait() returns without finding
+> an eligible task and the pidfd is non-blocking we set EAGAIN.  If no child
+> process exists non-blocking pidfd users will continue to see ECHILD but if
+> child processes exist but have not yet exited users will see EAGAIN.
+> 
+> A concrete use-case that was brought on-list was Josh's async pidfd library.
+> Ever since the introduction of pidfds and more advanced async io various
+> programming languages such as Rust have grown support for async event
+> libraries. These libraries are created to help build epoll-based event loops
+> around file descriptors. A common pattern is to automatically make all file
+> descriptors they manage to O_NONBLOCK.
+> 
+> For such libraries the EAGAIN error code is treated specially. When a function
+> is called that returns EAGAIN the function isn't called again until the event
+> loop indicates the the file descriptor is ready.  Supporting EAGAIN when
+> waiting on pidfds makes such libraries just work with little effort.
+> 
+> Link: https://lore.kernel.org/lkml/20200811181236.GA18763@localhost/
+> Link: https://github.com/joshtriplett/async-pidfd
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Sargun Dhillon <sargun@sargun.me>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Oleg Nesterov <oleg@redhat.com>
+> Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+> Suggested-by: Josh Triplett <josh@joshtriplett.org>
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-I wouldn't expect the same application to use both WNOHANG and
-O_NONBLOCK, since the latter makes the former unnecessary. I'd have no
-objection if WNOHANG continued to have the same "return 0 and you have
-to check the structure to figure out what that means" behavior
-regardless of the fd flags, for compatibility with an application or
-library that expects that behavior with WNOHANG and didn't expect the
-return value to change with a non-blocking fd.  waitid could just return
-EAGAIN on a non-blocking fd if *not* passed WNOHANG, which would make
-pidfd Just Work in non-blocking event loops.
+With or without the discussed change to WNOHANG behavior for
+compatibility:
+Reviewed-by: Josh Triplett <josh@joshtriplett.org>
+
+Also, I think you should flip the order of patches 1 and 2, so that
+there isn't a one-patch window in kernel history where you can create an
+O_NONBLOCK pidfd with pidfd_open but it has no effect. I'd expect
+userspace to use pidfd_open accepting or EINVAL-ing the flag as an
+indication of whether it'll work.
