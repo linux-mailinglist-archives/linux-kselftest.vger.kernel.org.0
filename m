@@ -2,123 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3435025C3C8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 16:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C6825C49B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 17:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729244AbgICO61 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Sep 2020 10:58:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57668 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729083AbgICO6U (ORCPT
+        id S1728814AbgICPNI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Sep 2020 11:13:08 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18844 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728797AbgICMDK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Sep 2020 10:58:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599145098;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bAzDqUsZ3/S0Arl+SG6AfwuZzD/9UqKF/7Kwa7yb0iM=;
-        b=JcYJKD481mBrUK/yADnlAMQ5VClUde9ixQdnpVhDZVCDNsCuN8lpG4PKwAA/QD7DsCt35Z
-        gYCaDPlTo1w/brTFp+fsBP0YPfec8otpTF2UU5efLpEI0pYzzqhlbawZnUWegTbLO3zQuy
-        /Ciho6Dxa4y+mSpeXVED1W+xfxrtdsc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-43-QvP6zRKEMW6q3GiEMxQAfg-1; Thu, 03 Sep 2020 10:58:16 -0400
-X-MC-Unique: QvP6zRKEMW6q3GiEMxQAfg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5F18CF9BB;
-        Thu,  3 Sep 2020 14:58:14 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.114])
-        by smtp.corp.redhat.com (Postfix) with SMTP id CE33186580;
-        Thu,  3 Sep 2020 14:58:10 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu,  3 Sep 2020 16:58:14 +0200 (CEST)
-Date:   Thu, 3 Sep 2020 16:58:09 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        linux-kselftest@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] pidfd: support PIDFD_NONBLOCK in pidfd_open()
-Message-ID: <20200903145808.GK4386@redhat.com>
-References: <20200902102130.147672-1-christian.brauner@ubuntu.com>
- <20200902102130.147672-2-christian.brauner@ubuntu.com>
+        Thu, 3 Sep 2020 08:03:10 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 083BYxRM180240;
+        Thu, 3 Sep 2020 08:00:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RwwxTYzL444FMU+fHZcE8N87UoE2Q8WJIZikb7QZa3I=;
+ b=dTa3ylzR3BGFnO0m4dOSwyzg+q4xQgTsYm2q0vzicbi1+UOKUaYnEimQleTvLKt28hTR
+ hJS96hjQvanU6/BndcA11lm9KkfB0ok8ZKaap0/CFqASfi7AlAA9ldltSUeF5NBFWXsY
+ uZTxXyjQoCOkY2ssQGKFMx++koaytSIBC7ojfJZaVjordMCrbqA/YwH3O13ROQwFsp3U
+ Nasj6dQB8kp2kaS3j6MmyGHqbiEQHUrZ9VGrSuRgnpUSRPj7rI/7s2IdRUKCCHJjzfz+
+ ng0LHlca+pr7wHIFPH5pWuYbXHgI9q9tk/XAwv9C6+1HbopNdfyPn5oGz5gsPkGZXCOo tA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33ay8ehgev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Sep 2020 08:00:16 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 083BaRVf184429;
+        Thu, 3 Sep 2020 08:00:15 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33ay8ehgdd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Sep 2020 08:00:15 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 083Bwq4M009411;
+        Thu, 3 Sep 2020 12:00:13 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 337e9gwtr5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Sep 2020 12:00:13 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 083Bwddp41746860
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Sep 2020 11:58:39 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0500E11C0AF;
+        Thu,  3 Sep 2020 12:00:10 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BB7111C0A1;
+        Thu,  3 Sep 2020 12:00:08 +0000 (GMT)
+Received: from [9.79.210.158] (unknown [9.79.210.158])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Sep 2020 12:00:07 +0000 (GMT)
+Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
+ measurement
+To:     dedekind1@gmail.com, rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        srivatsa@csail.mit.edu, shuah@kernel.org, npiggin@gmail.com,
+        ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com
+References: <20200902114506.45809-1-psampat@linux.ibm.com>
+ <20200902114506.45809-2-psampat@linux.ibm.com>
+ <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
+From:   Pratik Sampat <psampat@linux.ibm.com>
+Message-ID: <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
+Date:   Thu, 3 Sep 2020 17:30:07 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902102130.147672-2-christian.brauner@ubuntu.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-03_05:2020-09-03,2020-09-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxscore=0 phishscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=907 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009030102
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Christian, off-topic question...
+Hello Artem,
 
-On 09/02, Christian Brauner wrote:
+On 02/09/20 8:55 pm, Artem Bityutskiy wrote:
+> On Wed, 2020-09-02 at 17:15 +0530, Pratik Rajesh Sampat wrote:
+>> Measure cpuidle latencies on wakeup to determine and compare with the
+>> advertsied wakeup latencies for each idle state.
+
+Thank you for pointing me to your talk. It was very interesting!
+I certainly did not know about that the Intel architecture being aware
+of timers and pre-wakes the CPUs which makes the timer experiment
+observations void.
+
+> It looks like the measurements include more than just C-state wake,
+> they also include the overhead of waking up the proces, context switch,
+> and potentially any interrupts that happen on that CPU. I am not saying
+> this is not interesting data, it surely is, but it is going to be
+> larger than you see in cpuidle latency tables. Potentially
+> significantly larger.
+
+The measurements will definitely include overhead than just the C-State
+wakeup.
+
+However, we are also collecting a baseline measurement wherein we run
+the same test on a 100% busy CPU and the measurement of latency from
+that could be considered to the kernel-userspace overhead.
+The rest of the measurements would be considered keeping this baseline
+in mind.
+
+> Therefore, I am not sure this program should be advertised as "cpuidle
+> measurement". It really measures the "IPI latency" in case of the IPI
+> method.
+
+Now with the new found knowledge of timers in Intel, I understand that
+this really only seems to measure IPI latency and not timer latency,
+although both the observations shouldn't be too far off anyways.
+
+>> A baseline measurement for each case of IPI and timers is taken at
+>> 100 percent CPU usage to quantify for the kernel-userpsace overhead
+>> during execution.
+> At least on Intel platforms, this will mean that the IPI method won't
+> cover deep C-states like, say, PC6, because one CPU is busy. Again, not
+> saying this is not interesting, just pointing out the limitation.
+
+That's a valid point. We have similar deep idle states in POWER too.
+The idea here is that this test should be run on an already idle
+system, of course there will be kernel jitters along the way
+which can cause little skewness in observations across some CPUs but I
+believe the observations overall should be stable.
+
+Another solution to this could be using isolcpus, but that just
+increases the complexity all the more.
+If you have any suggestions of any other way that could guarantee
+idleness that would be great.
+
 >
-> -static int pidfd_create(struct pid *pid)
-> +static int pidfd_create(struct pid *pid, unsigned int flags)
->  {
->  	int fd;
+> I was working on a somewhat similar stuff for x86 platforms, and I am
+> almost ready to publish that on github. I can notify you when I do so
+> if you are interested. But here is a small presentation of the approach
+> that I did on Plumbers last year:
 >
->  	fd = anon_inode_getfd("[pidfd]", &pidfd_fops, get_pid(pid),
-> -			      O_RDWR | O_CLOEXEC);
-> +			      flags | O_RDWR | O_CLOEXEC);
+> https://youtu.be/Opk92aQyvt0?t=8266
+>
+> (the link points to the start of my talk)
+>
+Sure thing. Do notify me when it comes up.
+I would be happy to have a look at it.
 
-I just noticed this comment above pidfd_create:
-
-	 * Note, that this function can only be called after the fd table has
-	 * been unshared to avoid leaking the pidfd to the new process.
-
-what does it mean?
-
-Of course, if fd table is shared then pidfd can "leak" to another process,
-but this is true for any file and sys_pidfd_open() doesn't do any check?
-
-
-
-In fact I think this helper buys nothing but adds the unnecessary get/put_pid,
-we can kill it and change pidfd_open() to do
-
-	SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
-	{
-		int fd;
-		struct pid *p;
-
-		if (flags & ~PIDFD_NONBLOCK)
-			return -EINVAL;
-
-		if (pid <= 0)
-			return -EINVAL;
-
-		p = find_get_pid(pid);
-		if (!p)
-			return -ESRCH;
-
-		fd = -EINVAL;
-		if (pid_has_task(p, PIDTYPE_TGID)) {
-			fd = anon_inode_getfd("[pidfd]", &pidfd_fops, pid,
-						flags | O_RDWR | O_CLOEXEC);
-		}
-		if (fd < 0)
-			put_pid(p);
-		return fd;
-	}
-
-but this is cosmetic and off-topic too.
-
-Oleg.
+--
+Thanks!
+Pratik
 
