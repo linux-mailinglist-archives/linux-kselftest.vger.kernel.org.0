@@ -2,100 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A230F25B647
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 00:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986EC25BE95
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 11:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbgIBWCo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Sep 2020 18:02:44 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:19894 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgIBWCo (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Sep 2020 18:02:44 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f5016550000>; Wed, 02 Sep 2020 15:01:57 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 02 Sep 2020 15:02:44 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 02 Sep 2020 15:02:44 -0700
-Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 2 Sep
- 2020 22:02:43 +0000
-Subject: Re: [PATCH v2 1/7] mm/thp: fix __split_huge_pmd_locked() for
- migration PMD
-To:     Zi Yan <ziy@nvidia.com>
-CC:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Jerome Glisse" <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Alistair Popple" <apopple@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <stable@vger.kernel.org>
-References: <20200902165830.5367-1-rcampbell@nvidia.com>
- <20200902165830.5367-2-rcampbell@nvidia.com>
- <78B69571-13C6-4BF5-8478-6AAA4AB2C287@nvidia.com>
-From:   Ralph Campbell <rcampbell@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <171f31cd-91e5-5c74-a68a-ec7cbd9bb450@nvidia.com>
-Date:   Wed, 2 Sep 2020 15:02:43 -0700
+        id S1726292AbgICJqi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Sep 2020 05:46:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:57742 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725984AbgICJqi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 3 Sep 2020 05:46:38 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46C25101E;
+        Thu,  3 Sep 2020 02:46:37 -0700 (PDT)
+Received: from [10.57.7.89] (unknown [10.57.7.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B47E3F68F;
+        Thu,  3 Sep 2020 02:46:35 -0700 (PDT)
+Subject: Re: [PATCH 0/4] kselftests/arm64: add PAuth tests
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, boian4o1@gmail.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        amit.kachhap@arm.com, vincenzo.frascino@arm.com,
+        Shuah Khan <shuah@kernel.org>
+References: <20200828131606.7946-1-boyan.karatotev@arm.com>
+ <20200902164825.GH6642@arm.com>
+From:   Boyan Karatotev <boyan.karatotev@arm.com>
+Message-ID: <7ed52c37-a448-55c9-4ec8-b803ec62ecf6@arm.com>
+Date:   Thu, 3 Sep 2020 10:46:33 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <78B69571-13C6-4BF5-8478-6AAA4AB2C287@nvidia.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20200902164825.GH6642@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1599084117; bh=kkuRtxf1vezbhGt7LWXFhp9w3lxcVmX2TYTJjhJna0A=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=PYlXhRotiQZLfTXQ3wUKaNi2lAIqWGmhDdY0PnXG5Z+lN/QCMYFo0RG5cTDV6WwFH
-         CnfNo7aO+sfSX2fI+lJwU6aarLglAM/a5KXmMrCwp2e1o9Baq4M81nd71iUwdUgx//
-         uZ/a2+LKxSXP2G1SaaWWxXeK+62Cc8u3wUAa1bnCoMsdwDkTq4p9UjZ7iM9A35rRXq
-         JIFyutr6uKQ66rQKeR1y+8M4g0+cnTjIYBu59SdC1oEOjQqwNU4m4C6gP6n5Hhq5ba
-         bJJgl8MHVyNQvB3qHhrFcZXNGUdYAp0il6xrP4DrP96t1panNvmqFIm5/Wpc+h4Dk6
-         GwYzA74WFlDOQ==
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-On 9/2/20 2:47 PM, Zi Yan wrote:
-> On 2 Sep 2020, at 12:58, Ralph Campbell wrote:
->=20
->> A migrating transparent huge page has to already be unmapped. Otherwise,
->> the page could be modified while it is being copied to a new page and
->> data could be lost. The function __split_huge_pmd() checks for a PMD
->> migration entry before calling __split_huge_pmd_locked() leading one to
->> think that __split_huge_pmd_locked() can handle splitting a migrating PM=
-D.
->> However, the code always increments the page->_mapcount and adjusts the
->> memory control group accounting assuming the page is mapped.
->> Also, if the PMD entry is a migration PMD entry, the call to
->> is_huge_zero_pmd(*pmd) is incorrect because it calls pmd_pfn(pmd) instea=
-d
->> of migration_entry_to_pfn(pmd_to_swp_entry(pmd)).
->> Fix these problems by checking for a PMD migration entry.
+On 02/09/2020 17:48, Dave Martin wrote:
+> On Fri, Aug 28, 2020 at 02:16:02PM +0100, Boyan Karatotev wrote:
+>> Pointer Authentication (PAuth) is a security feature introduced in ARMv8.3.
+>> It introduces instructions to sign addresses and later check for potential
+>> corruption using a second modifier value and one of a set of keys. The
+>> signature, in the form of the Pointer Authentication Code (PAC), is stored
+>> in some of the top unused bits of the virtual address (e.g. [54: 49] if
+>> TBID0 is enabled and TnSZ is set to use a 48 bit VA space). A set of
+>> controls are present to enable/disable groups of instructions (which use
+>> certain keys) for compatibility with libraries that do not utilize the
+>> feature. PAuth is used to verify the integrity of return addresses on the
+>> stack with less memory than the stack canary.
 >>
->> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
->=20
-> Thanks for the fix. You can add Reviewed-by: Zi Yan <ziy@nvidia.com>
->=20
-> I think you also want to add the Fixes tag and cc stable.
->=20
-> Fixes 84c3fc4e9c56 (=E2=80=9Cmm: thp: check pmd migration entry in common=
- path=E2=80=9D)
-> cc: stable@vger.kernel.org # 4.14+
+>> This patchset adds kselftests to verify the kernel's configuration of the
+>> feature and its runtime behaviour. There are 7 tests which verify that:
+>> 	* an authentication failure leads to a SIGSEGV
+>> 	* the data/instruction instruction groups are enabled
+>> 	* the generic instructions are enabled
+>> 	* all 5 keys are unique for a single thread
+>> 	* exec() changes all keys to new unique ones
+>> 	* context switching preserves the 4 data/instruction keys
+>> 	* context switching preserves the generic keys
+>>
+>> The tests have been verified to work on qemu without a working PAUTH
+>> Implementation and on ARM's FVP with a full or partial PAuth
+>> implementation.
+>>
+>> Note: This patchset is only verified for ARMv8.3 and there will be some
+>> changes required for ARMv8.6. More details can be found here [1]. Once
+>> ARMv8.6 PAuth is merged the first test in this series will required to be
+>> updated.
+> 
+> Nit: is it worth running checkpatch over this series?
+> 
+> Although this is not kernel code, there are a number of formatting
+> weirdnesses and surplus blank lines etc. that checkpatch would probably
+> warn about.
+> 
+I ran it through checkpatch and it came out clean except for some
+MAINTAINERS warnings. I see that when I add --strict it does complain
+about multiple blank lines which I can fix for the next version. Are
+there any other flags I should be running checkpatch with?
+> [...]
+> 
+> Cheers
+> ---Dave
+> 
 
-Thanks, I'll add these.
+
+-- 
+Regards,
+Boyan
