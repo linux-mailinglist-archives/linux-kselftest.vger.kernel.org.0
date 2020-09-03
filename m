@@ -2,67 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3412F25C58D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 17:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB03B25C65E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 18:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727786AbgICPiv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Sep 2020 11:38:51 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37292 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726025AbgICPiv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Sep 2020 11:38:51 -0400
-Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kDrK4-00029t-Nm; Thu, 03 Sep 2020 15:38:48 +0000
-Date:   Thu, 3 Sep 2020 17:38:47 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        linux-kselftest@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH v2 2/4] exit: support non-blocking pidfds
-Message-ID: <20200903153847.zvi5dzwj6v4eap6i@wittgenstein>
-References: <20200902102130.147672-1-christian.brauner@ubuntu.com>
- <20200902102130.147672-3-christian.brauner@ubuntu.com>
- <20200903142241.GI4386@redhat.com>
+        id S1728501AbgICQNY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Sep 2020 12:13:24 -0400
+Received: from mga14.intel.com ([192.55.52.115]:51539 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728575AbgICQNU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 3 Sep 2020 12:13:20 -0400
+IronPort-SDR: SEn1VCuIgsSlG4ssSl4gkLqRSlIVgUEbUNeVCbYmj9ma/kuteeNfItz+Nevx6P9/Werl/LkiwM
+ yHstA9pgaOVA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="156874695"
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="156874695"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 09:13:19 -0700
+IronPort-SDR: fk5N31e8TGXqszp/hkGx3Y27Do4CNUaLdLlqnJp1760vL/L5dq2hrU3xSP3351G+w/bgBSa+0U
+ R2mw+5q6ydyw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="331834658"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2020 09:13:19 -0700
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.ger.corp.intel.com [10.237.72.186])
+        by linux.intel.com (Postfix) with ESMTP id 247D458079D;
+        Thu,  3 Sep 2020 09:13:15 -0700 (PDT)
+Message-ID: <515651b2caa08799df03f07dcc429321b4dcc05e.camel@gmail.com>
+Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
+ measurement
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To:     Pratik Sampat <psampat@linux.ibm.com>, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
+        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+Date:   Thu, 03 Sep 2020 19:13:15 +0300
+In-Reply-To: <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
+References: <20200902114506.45809-1-psampat@linux.ibm.com>
+         <20200902114506.45809-2-psampat@linux.ibm.com>
+         <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
+         <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
+         <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200903142241.GI4386@redhat.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 04:22:42PM +0200, Oleg Nesterov wrote:
-> On 09/02, Christian Brauner wrote:
-> >
-> > It also makes the API more consistent and uniform. In essence, waitid() is
-> > treated like a read on a non-blocking pidfd or a recvmsg() on a non-blocking
-> > socket.
-> > With the addition of support for non-blocking pidfds we support the same
-> > functionality that sockets do. For sockets() recvmsg() supports MSG_DONTWAIT
-> > for pidfds waitid() supports WNOHANG.
-> 
-> What I personally do not like is that waitid(WNOHANG) returns zero or EAGAIN
-> depending on f_flags & O_NONBLOCK... This doesn't match recvmsg(MSG_DONTWAIT)
-> and doesn't look consistent to me.
+On Thu, 2020-09-03 at 17:50 +0300, Artem Bityutskiy wrote:
+> Well, things depend on platform, it is really "void", it is just
+> different and it measures an optimized case. The result may be smaller
+> observed latency.
 
-It's not my favorite thing either but async event loops are usually
-modeled around EAGAIN so I think this has benefits. Josh can speak more
-to that.
+Sorry, I meant to say it is _not_ really "void".
 
-Christian
