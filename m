@@ -2,114 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A091A25C364
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 16:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3435025C3C8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 16:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728918AbgICOuc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Sep 2020 10:50:32 -0400
-Received: from mga02.intel.com ([134.134.136.20]:58808 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729221AbgICOua (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Sep 2020 10:50:30 -0400
-IronPort-SDR: 6Sz4wc/NfUDnUKmYLIKE3ehT6FTSAK8RQN8MaQmqjtIT7BnyqH6lAczhzd/iKRcXq4DjjBpPZu
- ACJx+DChaFqw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="145321772"
-X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
-   d="scan'208";a="145321772"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 07:50:29 -0700
-IronPort-SDR: BwfK41eGLvTp+sj057B+tx268htgpgChICs9sUe69HpeljkYMvFuz5O4Phxc8mh3C6kWui8ZDp
- jglQq2nL/hvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
-   d="scan'208";a="375890461"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 03 Sep 2020 07:50:29 -0700
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.ger.corp.intel.com [10.237.72.186])
-        by linux.intel.com (Postfix) with ESMTP id 586515807B5;
-        Thu,  3 Sep 2020 07:50:26 -0700 (PDT)
-Message-ID: <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
-Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
- measurement
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-Reply-To: dedekind1@gmail.com
-To:     Pratik Sampat <psampat@linux.ibm.com>, rjw@rjwysocki.net,
-        daniel.lezcano@linaro.org, srivatsa@csail.mit.edu,
-        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
-        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        pratik.r.sampat@gmail.com
-Date:   Thu, 03 Sep 2020 17:50:25 +0300
-In-Reply-To: <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
-References: <20200902114506.45809-1-psampat@linux.ibm.com>
-         <20200902114506.45809-2-psampat@linux.ibm.com>
-         <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
-         <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+        id S1729244AbgICO61 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Sep 2020 10:58:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57668 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729083AbgICO6U (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:58:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599145098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bAzDqUsZ3/S0Arl+SG6AfwuZzD/9UqKF/7Kwa7yb0iM=;
+        b=JcYJKD481mBrUK/yADnlAMQ5VClUde9ixQdnpVhDZVCDNsCuN8lpG4PKwAA/QD7DsCt35Z
+        gYCaDPlTo1w/brTFp+fsBP0YPfec8otpTF2UU5efLpEI0pYzzqhlbawZnUWegTbLO3zQuy
+        /Ciho6Dxa4y+mSpeXVED1W+xfxrtdsc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-43-QvP6zRKEMW6q3GiEMxQAfg-1; Thu, 03 Sep 2020 10:58:16 -0400
+X-MC-Unique: QvP6zRKEMW6q3GiEMxQAfg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5F18CF9BB;
+        Thu,  3 Sep 2020 14:58:14 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.114])
+        by smtp.corp.redhat.com (Postfix) with SMTP id CE33186580;
+        Thu,  3 Sep 2020 14:58:10 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  3 Sep 2020 16:58:14 +0200 (CEST)
+Date:   Thu, 3 Sep 2020 16:58:09 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        linux-kselftest@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] pidfd: support PIDFD_NONBLOCK in pidfd_open()
+Message-ID: <20200903145808.GK4386@redhat.com>
+References: <20200902102130.147672-1-christian.brauner@ubuntu.com>
+ <20200902102130.147672-2-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200902102130.147672-2-christian.brauner@ubuntu.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2020-09-03 at 17:30 +0530, Pratik Sampat wrote:
-> I certainly did not know about that the Intel architecture being aware
-> of timers and pre-wakes the CPUs which makes the timer experiment
-> observations void.
+Christian, off-topic question...
 
-Well, things depend on platform, it is really "void", it is just
-different and it measures an optimized case. The result may be smaller
-observed latency. And things depend on the platform.
+On 09/02, Christian Brauner wrote:
+>
+> -static int pidfd_create(struct pid *pid)
+> +static int pidfd_create(struct pid *pid, unsigned int flags)
+>  {
+>  	int fd;
+>
+>  	fd = anon_inode_getfd("[pidfd]", &pidfd_fops, get_pid(pid),
+> -			      O_RDWR | O_CLOEXEC);
+> +			      flags | O_RDWR | O_CLOEXEC);
 
-> However, we are also collecting a baseline measurement wherein we run
-> the same test on a 100% busy CPU and the measurement of latency from
-> that could be considered to the kernel-userspace overhead.
-> The rest of the measurements would be considered keeping this baseline
-> in mind.
+I just noticed this comment above pidfd_create:
 
-Yes, this should give the idea of the overhead, but still, at least for
-many Intel platforms I would not be comfortable using the resulting
-number (measured latency - baseline) for a cpuidle driver, because
-there are just too many variables there. I am not sure I could assume
-the baseline measured this way is an invariant - it could be noticeably
-different depending on whether you use C-states or not.
+	 * Note, that this function can only be called after the fd table has
+	 * been unshared to avoid leaking the pidfd to the new process.
 
-> > At least on Intel platforms, this will mean that the IPI method won't
-> > cover deep C-states like, say, PC6, because one CPU is busy. Again, not
-> > saying this is not interesting, just pointing out the limitation.
-> 
-> That's a valid point. We have similar deep idle states in POWER too.
-> The idea here is that this test should be run on an already idle
-> system, of course there will be kernel jitters along the way
-> which can cause little skewness in observations across some CPUs but I
-> believe the observations overall should be stable.
+what does it mean?
 
-If baseline and cpuidle latency are numbers of same order of magnitude,
-and you are measuring in a controlled lab system, may be yes. But if
-baseline is, say, in milliseconds, and you are measuring a 10
-microseconds C-state, then probably no.
+Of course, if fd table is shared then pidfd can "leak" to another process,
+but this is true for any file and sys_pidfd_open() doesn't do any check?
 
-> Another solution to this could be using isolcpus, but that just
-> increases the complexity all the more.
-> If you have any suggestions of any other way that could guarantee
-> idleness that would be great.
 
-Well, I did not try to guarantee idleness. I just use timers and
-external device (the network card), so no CPUs needs to be busy and the
-system can enter deep C-states. Then I just look at median, 99%-th
-percentile, etc.
 
-But by all means IPI is also a very interesting experiment. Just covers
-a different usage scenario.
+In fact I think this helper buys nothing but adds the unnecessary get/put_pid,
+we can kill it and change pidfd_open() to do
 
-When I started experimenting in this area, one of my main early
-takeaways was realization that C-state latency really depends on the
-event source.
+	SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+	{
+		int fd;
+		struct pid *p;
 
-HTH,
-Artem.
+		if (flags & ~PIDFD_NONBLOCK)
+			return -EINVAL;
+
+		if (pid <= 0)
+			return -EINVAL;
+
+		p = find_get_pid(pid);
+		if (!p)
+			return -ESRCH;
+
+		fd = -EINVAL;
+		if (pid_has_task(p, PIDTYPE_TGID)) {
+			fd = anon_inode_getfd("[pidfd]", &pidfd_fops, pid,
+						flags | O_RDWR | O_CLOEXEC);
+		}
+		if (fd < 0)
+			put_pid(p);
+		return fd;
+	}
+
+but this is cosmetic and off-topic too.
+
+Oleg.
 
