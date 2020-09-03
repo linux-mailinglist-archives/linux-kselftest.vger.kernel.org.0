@@ -2,92 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6438325C85A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 20:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A1425C8CC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Sep 2020 20:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbgICSBn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Sep 2020 14:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726025AbgICSBl (ORCPT
+        id S1726678AbgICSdM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Sep 2020 14:33:12 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17604 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726990AbgICSch (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Sep 2020 14:01:41 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E573C061245
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2020 11:01:41 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id c78so3622381ybf.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2020 11:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=Kysrwv2vyroocCwa+tcRYatIjOGKit3xRO3evVtQFbc=;
-        b=Cq3p3J6MuBLmXs4+BsJhTAo9WFB6do5dQd5DtPvLivFpB+4Ju12w4vUq6lbWXAzjlm
-         TbcW3W73CMNquCeiwEyKd9wULH55FwWxBcJpvqcNQcSVJIerstXZYAml83qKstkbK1SU
-         okUjrP6TZJ46ow8QUFxy4cJEvShbzmqd/tMJGhc/ubslAQw5E5fKNSN+mDR7fcIMvWkl
-         T5OyxJjCB5mabyFXVA/Kv+8UqCZMU/3HwpGbWxy6Qw6coOJcnVywx1qpwbmB4Rg2DxxW
-         vRrg6aEM7P7/YB4eK0LrHrEquLEDOltwMIB5NacuCaNG7muP/MqjrNPvcOSChtXfdvOR
-         opNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=Kysrwv2vyroocCwa+tcRYatIjOGKit3xRO3evVtQFbc=;
-        b=AazzBpJfK+tkZXhQoBVWUQjLgfQew+9NZQ6SIXQhx/r3xcyF6/QHjQB0ejq+xvCD4O
-         OtwKH6Wd3XWxWuQ+lEYj0i5C4Hvq9ivZ+A90WtuWoiNaLTD/0DlmsA1xDWZjdR1czzfv
-         2lJZhyS9XZSf4/ps9ZpYX5pRM10IFAhcq9fpZ7UCMIq+s50mQT6OB2hGLChn4/CYFuUU
-         /aWznGEQk5s/TFQKyo1SiR8cGW9ZlIeHScRI53MRtzxIQaAebvBg+WPs4D4Ux/5OKrWW
-         vURKQtRiXvSlpiRPfgEQP/Gfl2TF5UUnLvLc+GCXdMiSGX4abFhVfUPXN5V6zRSrIH8V
-         nyxw==
-X-Gm-Message-State: AOAM533gMvT8qTSHCZyZaq4BQSdnTPSxzPGbU1kBJjsR+uWJrheG2Q36
-        /aRDKqJ2+JGf4/6KsSZJ8XSy7VOvaac=
-X-Google-Smtp-Source: ABdhPJznIT58g0Z8TdpOroAqfZSJEPyQbKcKvYMhot5h+i6tLXl0hXMlUC/qJtrEQeftD65KiOHntPOzGCQ=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:a25:70c6:: with SMTP id l189mr4414948ybc.263.1599156100416;
- Thu, 03 Sep 2020 11:01:40 -0700 (PDT)
-Date:   Thu,  3 Sep 2020 11:01:21 -0700
-Message-Id: <20200903180121.662887-1-haoluo@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-Subject: [PATCH] selftests/bpf: Fix check in global_data_init.
-From:   Hao Luo <haoluo@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>,
-        KP Singh <kpsingh@chromium.org>, Hao Luo <haoluo@google.com>
+        Thu, 3 Sep 2020 14:32:37 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f5136b50002>; Thu, 03 Sep 2020 11:32:21 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 03 Sep 2020 11:32:35 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 03 Sep 2020 11:32:35 -0700
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 3 Sep
+ 2020 18:32:34 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 3 Sep 2020 18:32:34 +0000
+Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f5136c20001>; Thu, 03 Sep 2020 11:32:34 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Jason Gunthorpe" <jgg@nvidia.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        <stable@vger.kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Zi Yan <ziy@nvidia.com>
+Subject: [PATCH v3] mm/thp: fix __split_huge_pmd_locked() for migration PMD
+Date:   Thu, 3 Sep 2020 11:31:40 -0700
+Message-ID: <20200903183140.19055-1-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+X-NVConfidentiality: public
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1599157941; bh=7zznCtZjQxXg4R9UxK0DP2/ItNxobmt3cvTtuXZ9tDw=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Type:
+         Content-Transfer-Encoding;
+        b=kQkSzzz56spCoiUMRfWZxXMXZ+w8kLW0MWfK0XIBCWkopz/baY0XkLc8Bk8PNHgiX
+         6AsHFjObxmg8rhEKKPHKu2cg1o5hsj2G4NUJr5wlWf1jlTxUyoCArFdhlo6J4wTUDA
+         8NlMBkgTKMTRkV+RdVwvJ5WPCHFQHEkNRqT9emPfLOpBvDiALNTqOqhHCSGbdAEcZc
+         Qtz5NLypSNn/NpKNSgMarMK2nA5GB/fSwFnhDNO45DNLY0grwNex/ixT4tlxNwp6si
+         Y1RiAjsXqNPz4ITslaueky4TELu1YTy5U7w2m3Uap/jtiNc5nAQ1V8AaaOkPboVDol
+         YC7JWXLIIEkZw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The returned value of bpf_object__open_file() should be checked with
-IS_ERR() rather than NULL. This fix makes test_progs not crash when
-test_global_data.o is not present.
+A migrating transparent huge page has to already be unmapped. Otherwise,
+the page could be modified while it is being copied to a new page and
+data could be lost. The function __split_huge_pmd() checks for a PMD
+migration entry before calling __split_huge_pmd_locked() leading one to
+think that __split_huge_pmd_locked() can handle splitting a migrating PMD.
+However, the code always increments the page->_mapcount and adjusts the
+memory control group accounting assuming the page is mapped.
+Also, if the PMD entry is a migration PMD entry, the call to
+is_huge_zero_pmd(*pmd) is incorrect because it calls pmd_pfn(pmd) instead
+of migration_entry_to_pfn(pmd_to_swp_entry(pmd)).
+Fix these problems by checking for a PMD migration entry.
 
-Signed-off-by: Hao Luo <haoluo@google.com>
+Fixes: 84c3fc4e9c56 ("mm: thp: check pmd migration entry in common path")
+cc: stable@vger.kernel.org # 4.14+
+Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 ---
- tools/testing/selftests/bpf/prog_tests/global_data_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 3bdaa5a40744..1ece86d5c519 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -12,7 +12,7 @@ void test_global_data_init(void)
- 	size_t sz;
- 
- 	obj = bpf_object__open_file(file, NULL);
--	if (CHECK_FAIL(!obj))
-+	if (CHECK_FAIL(IS_ERR(obj)))
+No changes in v3 to this patch, just added reviewed-by and fixes to the
+change log and sending this as a separate patch from the rest of the
+series ("mm/hmm/nouveau: add THP migration to migrate_vma_*").
+I'll hold off resending the series without this patch unless there are
+changes needed.
+
+ mm/huge_memory.c | 42 +++++++++++++++++++++++-------------------
+ 1 file changed, 23 insertions(+), 19 deletions(-)
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 2a468a4acb0a..606d712d9505 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2023,7 +2023,7 @@ static void __split_huge_pmd_locked(struct vm_area_st=
+ruct *vma, pmd_t *pmd,
+ 		put_page(page);
+ 		add_mm_counter(mm, mm_counter_file(page), -HPAGE_PMD_NR);
  		return;
- 
- 	map = bpf_object__find_map_by_name(obj, "test_glo.rodata");
--- 
-2.28.0.402.g5ffc5be6b7-goog
+-	} else if (is_huge_zero_pmd(*pmd)) {
++	} else if (pmd_trans_huge(*pmd) && is_huge_zero_pmd(*pmd)) {
+ 		/*
+ 		 * FIXME: Do we want to invalidate secondary mmu by calling
+ 		 * mmu_notifier_invalidate_range() see comments below inside
+@@ -2117,30 +2117,34 @@ static void __split_huge_pmd_locked(struct vm_area_=
+struct *vma, pmd_t *pmd,
+ 		pte =3D pte_offset_map(&_pmd, addr);
+ 		BUG_ON(!pte_none(*pte));
+ 		set_pte_at(mm, addr, pte, entry);
+-		atomic_inc(&page[i]._mapcount);
+-		pte_unmap(pte);
+-	}
+-
+-	/*
+-	 * Set PG_double_map before dropping compound_mapcount to avoid
+-	 * false-negative page_mapped().
+-	 */
+-	if (compound_mapcount(page) > 1 && !TestSetPageDoubleMap(page)) {
+-		for (i =3D 0; i < HPAGE_PMD_NR; i++)
++		if (!pmd_migration)
+ 			atomic_inc(&page[i]._mapcount);
++		pte_unmap(pte);
+ 	}
+=20
+-	lock_page_memcg(page);
+-	if (atomic_add_negative(-1, compound_mapcount_ptr(page))) {
+-		/* Last compound_mapcount is gone. */
+-		__dec_lruvec_page_state(page, NR_ANON_THPS);
+-		if (TestClearPageDoubleMap(page)) {
+-			/* No need in mapcount reference anymore */
++	if (!pmd_migration) {
++		/*
++		 * Set PG_double_map before dropping compound_mapcount to avoid
++		 * false-negative page_mapped().
++		 */
++		if (compound_mapcount(page) > 1 &&
++		    !TestSetPageDoubleMap(page)) {
+ 			for (i =3D 0; i < HPAGE_PMD_NR; i++)
+-				atomic_dec(&page[i]._mapcount);
++				atomic_inc(&page[i]._mapcount);
++		}
++
++		lock_page_memcg(page);
++		if (atomic_add_negative(-1, compound_mapcount_ptr(page))) {
++			/* Last compound_mapcount is gone. */
++			__dec_lruvec_page_state(page, NR_ANON_THPS);
++			if (TestClearPageDoubleMap(page)) {
++				/* No need in mapcount reference anymore */
++				for (i =3D 0; i < HPAGE_PMD_NR; i++)
++					atomic_dec(&page[i]._mapcount);
++			}
+ 		}
++		unlock_page_memcg(page);
+ 	}
+-	unlock_page_memcg(page);
+=20
+ 	smp_wmb(); /* make pte visible before pmd */
+ 	pmd_populate(mm, pmd, pgtable);
+--=20
+2.20.1
 
