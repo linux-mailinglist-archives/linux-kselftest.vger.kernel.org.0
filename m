@@ -2,118 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F2525D454
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 11:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C6D25D633
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 12:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729949AbgIDJLJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Sep 2020 05:11:09 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:33239 "EHLO
+        id S1730137AbgIDK3Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Sep 2020 06:29:16 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35547 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729950AbgIDJKz (ORCPT
+        with ESMTP id S1726171AbgIDK3O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Sep 2020 05:10:55 -0400
-Received: from mail-lj1-f199.google.com ([209.85.208.199])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        Fri, 4 Sep 2020 06:29:14 -0400
+Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kE7kB-0004js-M2
-        for linux-kselftest@vger.kernel.org; Fri, 04 Sep 2020 09:10:51 +0000
-Received: by mail-lj1-f199.google.com with SMTP id f16so1912735ljm.17
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Sep 2020 02:10:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MpOzB7dmCTuCyJm4q5JJcfMsN2ZZvsAlJt0YiaUL728=;
-        b=JQMCxFXSxh0o4BmoZCHwmxCXwn6iLviZuzF4A9xYUfrskpwbZswiqlF4Go+Eed1jl+
-         nNe+hFG+X2ktuxjYsYVlQc4zs5W0jCzIfeRV37j9/45wMj9iSONHTUwfQWQMvxGeEF+5
-         lvAhIYCyeneYFRgDIwywFkCpu8fCRhSC1bXuk93pirTnI4yd4SH7ynFkJ5A9IIzSsvV1
-         kbKNqJBrNYkv3q3XRNemH+ajGUzf1pgJGhIocrD3/g6GMcJQquJvAXfWEGRHLFTm/Hbw
-         CHYTHkMAkYhSsnJZEs8oNEk8IoL7/nelPiSFluNJlVd5CC2CTXtO6pPxMyrVtRzHjWM8
-         ZqEw==
-X-Gm-Message-State: AOAM530JwO5yR8KhLYh7KS+HKrjfjnt1IEkQTfqHhQQTygs4TTJv89mH
-        53JIYWfo+DfCK5vIc5gvebJDvJ5IjiMeVx7s0sPwLgP6bWd5DRMU0k7N5CoWnc0IeWacBx1SCK3
-        DNdDikIXIYkveHAhRxzVV00nHwoTqggaQWehZVgywsJsJV3B4b7pEORQPptfo
-X-Received: by 2002:a2e:a16f:: with SMTP id u15mr3550082ljl.5.1599210651098;
-        Fri, 04 Sep 2020 02:10:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyRBBq/qjRBD6kgJssSry/FlrnrAD8qz7ovDVT+hqOyTrNsEtHy4P1ksymgoBxNoaZOC5pVhIT6RcxFjIk7xas=
-X-Received: by 2002:a2e:a16f:: with SMTP id u15mr3550055ljl.5.1599210650811;
- Fri, 04 Sep 2020 02:10:50 -0700 (PDT)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kE8xv-0001oE-SE; Fri, 04 Sep 2020 10:29:07 +0000
+Date:   Fri, 4 Sep 2020 12:29:07 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        linux-kselftest@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-api@vger.kernel.org, Jann Horn <jannh@google.com>
+Subject: Re: [PATCH v2 2/4] exit: support non-blocking pidfds
+Message-ID: <20200904102907.2t6w6k7ud5i6ak2o@wittgenstein>
+References: <20200902102130.147672-1-christian.brauner@ubuntu.com>
+ <20200902102130.147672-3-christian.brauner@ubuntu.com>
+ <20200903235659.GC210207@localhost>
 MIME-Version: 1.0
-References: <20200813044422.46713-1-po-hsu.lin@canonical.com>
-In-Reply-To: <20200813044422.46713-1-po-hsu.lin@canonical.com>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Fri, 4 Sep 2020 17:10:39 +0800
-Message-ID: <CAMy_GT8jOOPw+esd53X2LQ4aY9eqpE0rv9vDgr_eBD6fy5Wmqg@mail.gmail.com>
-Subject: Re: [PATCHv2] selftests: rtnetlink: load fou module for kci_test_encap_fou()
-To:     David Miller <davem@davemloft.net>, kuba@kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200903235659.GC210207@localhost>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello David,
+On Thu, Sep 03, 2020 at 04:56:59PM -0700, Josh Triplett wrote:
+> On Wed, Sep 02, 2020 at 12:21:28PM +0200, Christian Brauner wrote:
+> > Passing a non-blocking pidfd to waitid() currently has no effect, i.e.  is not
+> > supported. There are users which would like to use waitid() on pidfds that are
+> > O_NONBLOCK and mix it with pidfds that are blocking and both pass them to
+> > waitid().
+> > The expected behavior is to have waitid() return -EAGAIN for non-blocking
+> > pidfds and to block for blocking pidfds without needing to perform any
+> > additional checks for flags set on the pidfd before passing it to waitid().
+> > Non-blocking pidfds will return EAGAIN from waitid() when no child process is
+> > ready yet. Returning -EAGAIN for non-blocking pidfds makes it easier for event
+> > loops that handle EAGAIN specially.
+> > 
+> > It also makes the API more consistent and uniform. In essence, waitid() is
+> > treated like a read on a non-blocking pidfd or a recvmsg() on a non-blocking
+> > socket.
+> > With the addition of support for non-blocking pidfds we support the same
+> > functionality that sockets do. For sockets() recvmsg() supports MSG_DONTWAIT
+> > for pidfds waitid() supports WNOHANG. Both flags are per-call options. In
+> > contrast non-blocking pidfds and non-blocking sockets are a setting on an open
+> > file description affecting all threads in the calling process as well as other
+> > processes that hold file descriptors referring to the same open file
+> > description. Both behaviors, per call and per open file description, have
+> > genuine use-cases.
+> > 
+> > The implementation should be straightforward, we simply raise the WNOHANG flag
+> > when a non-blocking pidfd is passed and when do_wait() returns without finding
+> > an eligible task and the pidfd is non-blocking we set EAGAIN.  If no child
+> > process exists non-blocking pidfd users will continue to see ECHILD but if
+> > child processes exist but have not yet exited users will see EAGAIN.
+> > 
+> > A concrete use-case that was brought on-list was Josh's async pidfd library.
+> > Ever since the introduction of pidfds and more advanced async io various
+> > programming languages such as Rust have grown support for async event
+> > libraries. These libraries are created to help build epoll-based event loops
+> > around file descriptors. A common pattern is to automatically make all file
+> > descriptors they manage to O_NONBLOCK.
+> > 
+> > For such libraries the EAGAIN error code is treated specially. When a function
+> > is called that returns EAGAIN the function isn't called again until the event
+> > loop indicates the the file descriptor is ready.  Supporting EAGAIN when
+> > waiting on pidfds makes such libraries just work with little effort.
+> > 
+> > Link: https://lore.kernel.org/lkml/20200811181236.GA18763@localhost/
+> > Link: https://github.com/joshtriplett/async-pidfd
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Cc: Sargun Dhillon <sargun@sargun.me>
+> > Cc: Jann Horn <jannh@google.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@kernel.org>
+> > Cc: Oleg Nesterov <oleg@redhat.com>
+> > Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+> > Suggested-by: Josh Triplett <josh@joshtriplett.org>
+> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> 
+> With or without the discussed change to WNOHANG behavior for
+> compatibility:
+> Reviewed-by: Josh Triplett <josh@joshtriplett.org>
 
-do you need more information for this V2 patch?
+I think that WNOHANG compatibility change might be a good idea. So I've
+changed this to:
 
-Thank you
-PHLin
+	ret = do_wait(&wo);
+	if (!ret && !(options & WNOHANG) && (f_flags & O_NONBLOCK))
+		ret = -EAGAIN;
 
-On Mon, Aug 17, 2020 at 10:53 AM Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
->
-> The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
-> needs the fou module to work. Otherwise it will fail with:
->
->   $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
->   RTNETLINK answers: No such file or directory
->   Error talking to the kernel
->
-> Add the CONFIG_NET_FOU into the config file as well. Which needs at
-> least to be set as a loadable module.
->
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> ---
->  tools/testing/selftests/net/config       | 1 +
->  tools/testing/selftests/net/rtnetlink.sh | 6 ++++++
->  2 files changed, 7 insertions(+)
->
-> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-> index 3b42c06b..96d2763 100644
-> --- a/tools/testing/selftests/net/config
-> +++ b/tools/testing/selftests/net/config
-> @@ -31,3 +31,4 @@ CONFIG_NET_SCH_ETF=m
->  CONFIG_NET_SCH_NETEM=y
->  CONFIG_TEST_BLACKHOLE_DEV=m
->  CONFIG_KALLSYMS=y
-> +CONFIG_NET_FOU=m
-> diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-> index bdbf4b3..7931b65 100755
-> --- a/tools/testing/selftests/net/rtnetlink.sh
-> +++ b/tools/testing/selftests/net/rtnetlink.sh
-> @@ -521,6 +521,11 @@ kci_test_encap_fou()
->                 return $ksft_skip
->         fi
->
-> +       if ! /sbin/modprobe -q -n fou; then
-> +               echo "SKIP: module fou is not found"
-> +               return $ksft_skip
-> +       fi
-> +       /sbin/modprobe -q fou
->         ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
->         if [ $? -ne 0 ];then
->                 echo "FAIL: can't add fou port 7777, skipping test"
-> @@ -541,6 +546,7 @@ kci_test_encap_fou()
->                 return 1
->         fi
->
-> +       /sbin/modprobe -q -r fou
->         echo "PASS: fou"
->  }
->
-> --
-> 2.7.4
->
+> 
+> Also, I think you should flip the order of patches 1 and 2, so that
+> there isn't a one-patch window in kernel history where you can create an
+> O_NONBLOCK pidfd with pidfd_open but it has no effect. I'd expect
+> userspace to use pidfd_open accepting or EINVAL-ing the flag as an
+> indication of whether it'll work.
+
+Good point! I've changed the order now.
+
+Thanks!
+Christian
