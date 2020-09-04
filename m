@@ -2,175 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 140FB25E27F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 22:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AB725E2E1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 22:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbgIDUPk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Sep 2020 16:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S1728057AbgIDUcD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Sep 2020 16:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726791AbgIDUPi (ORCPT
+        with ESMTP id S1726621AbgIDUcB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Sep 2020 16:15:38 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7875DC061244;
-        Fri,  4 Sep 2020 13:15:37 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id s92so5255213ybi.2;
-        Fri, 04 Sep 2020 13:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=97wzGZNbKGw+kQNf1bsqW3kl5yXeq4pPu+Jx+t1WtzM=;
-        b=hICa4+M6d+Nqw5YUWT81HMx3smIYig/Jb+N+cjagh6RRYrH4CymwW47A+c3FbXFvMD
-         KzRJm49qOCVX8WdxXV6cFGGI3PS/dzHRcR6XMyicTXS+DOfqlK/9m/bgTkWcJHOVQGW4
-         qQcLjethrLRfvElVjKdxMFKTPR+Q+DOTXx4aFP/1heVBGhoTAXziqG9ifVJzqrOStkxI
-         QZbEjM/qc8NZXq80lAyk51ahNuv+ICL7LOyNy1AEoeHYnu+8bEnCrYjyZSCwvxBG2S2B
-         zjoXMw0mAnoIQsRwF1p+rmcSgvGLfs7MjSxMi4V1wAUrJjqoNcLx1bQDVJGmeyM4csK4
-         uZAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=97wzGZNbKGw+kQNf1bsqW3kl5yXeq4pPu+Jx+t1WtzM=;
-        b=uYT+5aNttDllwPsDvNEjyA5/e4FZJz7PumU8as6VSOA2ZkOovxkv8wB0CnhuTQp5oZ
-         4J+LloSx9SSPgJG83JK+qsYkL3OzLGrYlZMueEIgs1/2iMbsjF7ousa3ggzFgFalcFXy
-         4wqyuGCrF+0KDPSTnXXumANDJU9N3BSiUgRd7l8n8ILHbebQgGHrYk/XcXRl3Y6CKSwx
-         XhPu+haCB/2UzUQdvEoIpkeeQZHHov5tGqv3TH/c6yssTOhrcY0I4VIDU2adXhZYkChK
-         d7jxmYky+ZfrUlTj8U4nBeLHldZYRas6nhYSS9rZgrT790HkvFAbhIkuSuT9+GNaBDor
-         amfQ==
-X-Gm-Message-State: AOAM530tOPv6jxrbcax4xYBsRza8Gx7Gut786hOGikZHaZ0dibMncWhc
-        bpJpjAvrwgiHRGnXPaqjUQIH2WL7IxoweyOjrwo=
-X-Google-Smtp-Source: ABdhPJw921xqUNKFTY3kqidSmF8NHNWMNXNRdfJiST4Nyh8faFKrC8j/KeTMJYoUzHNrK/iv4c2bwDoqDZKN0FOG5sk=
-X-Received: by 2002:a25:cb57:: with SMTP id b84mr12280536ybg.425.1599250536285;
- Fri, 04 Sep 2020 13:15:36 -0700 (PDT)
+        Fri, 4 Sep 2020 16:32:01 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE51CC061244;
+        Fri,  4 Sep 2020 13:32:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id D3A1129B031
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, willy@infradead.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v6 0/9] Syscall User Dispatch
+Date:   Fri,  4 Sep 2020 16:31:38 -0400
+Message-Id: <20200904203147.2908430-1-krisman@collabora.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20200903223332.881541-1-haoluo@google.com> <20200903223332.881541-7-haoluo@google.com>
-In-Reply-To: <20200903223332.881541-7-haoluo@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Sep 2020 13:15:25 -0700
-Message-ID: <CAEf4BzZ9krnVzAR=0oQMe+f96cZff5MSdV3_EHiS-mSNF8MieQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 6/6] bpf/selftests: Test for bpf_per_cpu_ptr()
- and bpf_this_cpu_ptr()
-To:     Hao Luo <haoluo@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 3, 2020 at 3:35 PM Hao Luo <haoluo@google.com> wrote:
->
-> Test bpf_per_cpu_ptr() and bpf_this_cpu_ptr(). Test two paths in the
-> kernel. If the base pointer points to a struct, the returned reg is
-> of type PTR_TO_BTF_ID. Direct pointer dereference can be applied on
-> the returned variable. If the base pointer isn't a struct, the
-> returned reg is of type PTR_TO_MEM, which also supports direct pointer
-> dereference.
->
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> ---
->  .../selftests/bpf/prog_tests/ksyms_btf.c      | 10 +++++++
->  .../selftests/bpf/progs/test_ksyms_btf.c      | 26 +++++++++++++++++++
->  2 files changed, 36 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-> index 7b6846342449..22cc642dbc0e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-> @@ -58,6 +58,16 @@ void test_ksyms_btf(void)
->         CHECK(data->out__bpf_prog_active != bpf_prog_active_addr, "bpf_prog_active",
->               "got %llu, exp %llu\n", data->out__bpf_prog_active, bpf_prog_active_addr);
->
-> +       CHECK(data->out__rq_cpu == -1, "rq_cpu",
-> +             "got %u, exp != -1\n", data->out__rq_cpu);
-> +       CHECK(data->out__percpu_bpf_prog_active == -1, "percpu_bpf_prog_active",
-> +             "got %d, exp != -1\n", data->out__percpu_bpf_prog_active);
-> +
-> +       CHECK(data->out__this_rq_cpu == -1, "this_rq_cpu",
-> +             "got %u, exp != -1\n", data->out__this_rq_cpu);
-> +       CHECK(data->out__this_bpf_prog_active == -1, "this_bpf_prog_active",
-> +             "got %d, exp != -1\n", data->out__this_bpf_prog_active);
+Hi,
 
-see below for few suggestions to make these test more specific
+The v6 of this patch series include only the type change requested by
+Andy on the vdso patch, but since v5 included some bigger changes, I'm
+documenting them in this cover letter as well.
 
-out__this_bpf_prog_active it should always be > 0, no?
+Please note this applies on top of Linus tree, and it succeeds seccomp
+and syscall user dispatch selftests.
 
-> +
->  cleanup:
->         test_ksyms_btf__destroy(skel);
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-> index e04e31117f84..02d564349892 100644
-> --- a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-> +++ b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-> @@ -8,15 +8,41 @@
->  __u64 out__runqueues = -1;
->  __u64 out__bpf_prog_active = -1;
->
-> +__u32 out__rq_cpu = -1; /* percpu struct fields */
-> +int out__percpu_bpf_prog_active = -1; /* percpu int */
-> +
-> +__u32 out__this_rq_cpu = -1;
-> +int out__this_bpf_prog_active = -1;
-> +
->  extern const struct rq runqueues __ksym; /* struct type global var. */
->  extern const int bpf_prog_active __ksym; /* int type global var. */
->
->  SEC("raw_tp/sys_enter")
->  int handler(const void *ctx)
->  {
-> +       struct rq *rq;
-> +       int *active;
-> +       __u32 cpu;
-> +
->         out__runqueues = (__u64)&runqueues;
->         out__bpf_prog_active = (__u64)&bpf_prog_active;
->
-> +       cpu = bpf_get_smp_processor_id();
-> +
-> +       /* test bpf_per_cpu_ptr() */
-> +       rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, cpu);
-> +       if (rq)
-> +               out__rq_cpu = rq->cpu;
-> +       active = (int *)bpf_per_cpu_ptr(&bpf_prog_active, cpu);
-> +       if (active)
-> +               out__percpu_bpf_prog_active = *active;
+v5 cover letter
+--------------
 
-this is equivalent to using bpf_this_cpu_ptr(), so:
+This is v5 of Syscall User Dispatch.  It has some big changes in
+comparison to v4.
 
-1. you can compare value with out__this_xxx in user-space
+First of all, it allows the vdso trampoline code for architectures that
+support it.  This is exposed through an arch hook.  It also addresses
+the concern about what happens when a bad selector is provided, instead
+of SIGSEGV, we fail with SIGSYS, which is more debug-able.
 
-2. it's interesting to also test that you can read value from some
-other CPU. Can you add another variable and get value from CPU #0
-always? E.g., for out__cpu_0_rq_cpu it should always be zero, right?
+Another major change is that it is now based on top of Gleixner's common
+syscall entry work, and is supposed to only be used by that code.
+Therefore, the entry symbol is not exported outside of kernel/entry/ code.
 
-> +
-> +       /* test bpf_this_cpu_ptr */
-> +       rq = (struct rq *)bpf_this_cpu_ptr(&runqueues);
-> +       out__this_rq_cpu = rq->cpu;
-> +       active = (int *)bpf_this_cpu_ptr(&bpf_prog_active);
-> +       out__this_bpf_prog_active = *active;
-> +
->         return 0;
->  }
->
-> --
-> 2.28.0.526.ge36021eeef-goog
->
+The biggest change in this version is the attempt to avoid using one of
+the final TIF flags on x86 32 bit, without increasing the size of that
+variable to 64 bit.  My expectation is that, with this work, plus the
+removal of TIF_IA32, TIF_X32 and TIF_FORCE_TF, we might be able to avoid
+changing this field to 64 bits at all.  Instead, this follows the
+suggestion by Andy to have a generic TIF flag for SECCOMP and this
+mechanism, and use another field to decide which one is enabled.  The
+code for this is not complex, so it seems like a viable approach.
+
+Finally, this version adds some documentation to the feature.
+
+Kees, I dropped your reviewed-by on patch 5, given the amount of
+changes.
+
+Thanks,
+
+Previous submissions are archived at:
+
+RFC/v1: https://lkml.org/lkml/2020/7/8/96
+v2: https://lkml.org/lkml/2020/7/9/17
+v3: https://lkml.org/lkml/2020/7/12/4
+v4: https://www.spinics.net/lists/linux-kselftest/msg16377.html
+v5: https://lkml.org/lkml/2020/8/10/1320
+
+Gabriel Krisman Bertazi (9):
+  kernel: Support TIF_SYSCALL_INTERCEPT flag
+  kernel: entry: Support TIF_SYSCAL_INTERCEPT on common entry code
+  x86: vdso: Expose sigreturn address on vdso to the kernel
+  signal: Expose SYS_USER_DISPATCH si_code type
+  kernel: Implement selective syscall userspace redirection
+  kernel: entry: Support Syscall User Dispatch for common syscall entry
+  x86: Enable Syscall User Dispatch
+  selftests: Add kselftest for syscall user dispatch
+  doc: Document Syscall User Dispatch
+
+ .../admin-guide/syscall-user-dispatch.rst     |  87 ++++++
+ arch/Kconfig                                  |  21 ++
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/entry/vdso/vdso2c.c                  |   2 +
+ arch/x86/entry/vdso/vdso32/sigreturn.S        |   2 +
+ arch/x86/entry/vdso/vma.c                     |  15 +
+ arch/x86/include/asm/elf.h                    |   1 +
+ arch/x86/include/asm/thread_info.h            |   4 +-
+ arch/x86/include/asm/vdso.h                   |   2 +
+ arch/x86/kernel/signal_compat.c               |   2 +-
+ fs/exec.c                                     |   8 +
+ include/linux/entry-common.h                  |   6 +-
+ include/linux/sched.h                         |   8 +-
+ include/linux/seccomp.h                       |  20 +-
+ include/linux/syscall_intercept.h             |  71 +++++
+ include/linux/syscall_user_dispatch.h         |  29 ++
+ include/uapi/asm-generic/siginfo.h            |   3 +-
+ include/uapi/linux/prctl.h                    |   5 +
+ kernel/entry/Makefile                         |   1 +
+ kernel/entry/common.c                         |  32 +-
+ kernel/entry/common.h                         |  15 +
+ kernel/entry/syscall_user_dispatch.c          | 101 ++++++
+ kernel/fork.c                                 |  10 +-
+ kernel/seccomp.c                              |   7 +-
+ kernel/sys.c                                  |   5 +
+ tools/testing/selftests/Makefile              |   1 +
+ .../syscall_user_dispatch/.gitignore          |   2 +
+ .../selftests/syscall_user_dispatch/Makefile  |   9 +
+ .../selftests/syscall_user_dispatch/config    |   1 +
+ .../syscall_user_dispatch.c                   | 292 ++++++++++++++++++
+ 30 files changed, 744 insertions(+), 19 deletions(-)
+ create mode 100644 Documentation/admin-guide/syscall-user-dispatch.rst
+ create mode 100644 include/linux/syscall_intercept.h
+ create mode 100644 include/linux/syscall_user_dispatch.h
+ create mode 100644 kernel/entry/common.h
+ create mode 100644 kernel/entry/syscall_user_dispatch.c
+ create mode 100644 tools/testing/selftests/syscall_user_dispatch/.gitignore
+ create mode 100644 tools/testing/selftests/syscall_user_dispatch/Makefile
+ create mode 100644 tools/testing/selftests/syscall_user_dispatch/config
+ create mode 100644 tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c
+
+-- 
+2.28.0
+
