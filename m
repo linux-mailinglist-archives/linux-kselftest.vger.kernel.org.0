@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C24025E230
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 21:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9057D25E256
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Sep 2020 22:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbgIDTtS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Sep 2020 15:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S1727860AbgIDUE7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Sep 2020 16:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726842AbgIDTtR (ORCPT
+        with ESMTP id S1726618AbgIDUE7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Sep 2020 15:49:17 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B004EC061245;
-        Fri,  4 Sep 2020 12:49:16 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id c17so5217266ybe.0;
-        Fri, 04 Sep 2020 12:49:16 -0700 (PDT)
+        Fri, 4 Sep 2020 16:04:59 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C13C061244;
+        Fri,  4 Sep 2020 13:04:58 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id h20so5206448ybj.8;
+        Fri, 04 Sep 2020 13:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iKxO9iJ5L6PJ3FfNUJvxQcSb/6FSTKaJ7GKUZ/DrJ3k=;
-        b=cdslCMWs0Ce20BNa66hcBHDN4yQPS884urDnbWnXdJmjFI/rfi9tuzF8rpIb4vMERT
-         SESZmPA+PxkiGHc/HVwMo2NXf4RuTsrvAdB/AwnR6WaLFHvSPC+xr8CMrBQALqXo07KP
-         0xTuIelQAPen/Nf9sDYE+tNGOirtNpCN7pnc93Hgg6LunF6YiuWrIgr0D2JVuF1p5X2o
-         4cOAEeBloMkcH2WOz8Xwnbz7s07Q5HjJGmNFD/vlmz6AA38GdJcI3OfMfMMM0tryu9tS
-         U1MJlQqyEx5T7Mv54BGuiwnnPJ4nlMbNLwHEV36jiE7V+0NofuFZMNdgJQK5M/qL3oBJ
-         Gxkw==
+        bh=Kj14KP6/VcOiJJjze5t/hv3r+bWLxu2fNc2t04HWClc=;
+        b=hC2McHBM+3hAZD75Kv0zXHjXfQiLAwgWvz4xdToLgX25/9MvZdAUqoZclVwEqvY1qU
+         72ORMWTmVPl6grLwCT5gkwPSlB+DVrKLfb4UIyIz+/+JWg+TjmGj/rfz09QKpxBw0XuF
+         VHVIJLeNpxEQsR885oojIwwvVTR6tKZ5db9h2+6gu8jM23RBsB2Olh/jVWfghofa0h30
+         QF5Pu0NjlA1qpulwdbH81adHWXbswH0qCdKr7qmVc8A6XkI2nfIhDfQXNSHqfKu/9mZp
+         bG9alR0k87fXBoAovRQ8fKmBaMU8LNYcxW4EegNmT2s/nSCBXIVZODUjzNjuRvTDsMn9
+         dCkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iKxO9iJ5L6PJ3FfNUJvxQcSb/6FSTKaJ7GKUZ/DrJ3k=;
-        b=Q3SJpom290mLfK99xjm0IP99cv03QFvQtR8yOnREo6kcBy1gmOwK/kpg/zZCAmUf+1
-         zNvtaJSc9p0k6qwr9lir9kRJJUMsKfO5vbLvDuINYtzqTuiicEJHBgp5GL2PzPPFh8QO
-         9EiTZ6nyLQzIlWWDu53cenQ+s1LvKd66nW2LDMkpPgCyAVsU7eNgLjAUpT8VLbdrq9dE
-         joiut8tvCNlJrB9/lcBcjAdls0ZZNKZSBRQIp/51bpO111x59tHwOdkIw4UaFbVcWwYP
-         x3l59xQ9Xh12r58r0sIjxNIOanJrrWkj/SLF5wRV+qM68LO65Wuj2bFyWVrlGEekdZKI
-         lJ5g==
-X-Gm-Message-State: AOAM5339Ql2U3Rxn6zLC9VgL6HRYgLVfP4VEckrmy/rcPNmNF93+il6Z
-        C4biaaZM0a5czUmtKvNIMBVq4M9j0k8ERavnCRI=
-X-Google-Smtp-Source: ABdhPJwGwS4i852REew6ZZu38pwBVO5T5/QlNjqid6jCwKsd8EWOFKX/UJNWNDrnH2YjBKk4O4WjHOiGLT2Myzhsgh0=
-X-Received: by 2002:a5b:44d:: with SMTP id s13mr12441105ybp.403.1599248955889;
- Fri, 04 Sep 2020 12:49:15 -0700 (PDT)
+        bh=Kj14KP6/VcOiJJjze5t/hv3r+bWLxu2fNc2t04HWClc=;
+        b=oJN6wBTs2m/SB09BmraJJeEuSP55Qu8yCeKKi/U1YbRgNFFbs58/mRVFxc5BNn3tqB
+         ZXFpL8cIHpCL3RHt9x1BRRLdTzFPtCnzu0h4XNPxfWcI6G973zQ0jT5xxS/io415MvUg
+         fDQv3QBwwSAO9s8wfQkk2n7Ms/e3LNwW9u0QzQ00wxWRnIQjZcE0iozsRxMeu590e1Wv
+         qMYzPKLmpxLp5I5wJISky+Lq5QFGa1Cko82kWK97/w9jHyQC0KuuEnknchIqyog7Q1ly
+         mTkxMLuyXqVNVzKOrIVb8HHC6/lzF7mu4Puw3dUGlWAKZdOZ9N4LiQX3mAZw/EyPae5F
+         zrnQ==
+X-Gm-Message-State: AOAM533RI4coie1pUd9HjnsmVyq2TevB3sPcZ53bvR6eCKBIQ9TAHk2I
+        ygDPSdU0uPMyOUVbclzPFPeoXI612m1cvCAtsZU=
+X-Google-Smtp-Source: ABdhPJwV7CKpfHX5aSy0Hy+FxkAO6LCfZGL8FJ76YhS5jq1TRfmbqP4O7OqQwg7V4W+hgDwrZFtMA+LAePY0GQnDclc=
+X-Received: by 2002:a25:ef43:: with SMTP id w3mr10615086ybm.230.1599249897363;
+ Fri, 04 Sep 2020 13:04:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200903223332.881541-1-haoluo@google.com> <20200903223332.881541-4-haoluo@google.com>
-In-Reply-To: <20200903223332.881541-4-haoluo@google.com>
+References: <20200903223332.881541-1-haoluo@google.com> <20200903223332.881541-5-haoluo@google.com>
+In-Reply-To: <20200903223332.881541-5-haoluo@google.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Sep 2020 12:49:04 -0700
-Message-ID: <CAEf4BzZPMwe=kz_K8P-6aeLiJo4rC69bMvju4=JEEv0CDEE9_w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/6] bpf/selftests: ksyms_btf to test typed ksyms
+Date:   Fri, 4 Sep 2020 13:04:46 -0700
+Message-ID: <CAEf4BzYbpp2jiODvN=GO4R4SNpw-w5shPMaR+=jssv7fNLA0oA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/6] bpf: Introduce bpf_per_cpu_ptr()
 To:     Hao Luo <haoluo@google.com>
 Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
@@ -75,203 +75,210 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Thu, Sep 3, 2020 at 3:35 PM Hao Luo <haoluo@google.com> wrote:
 >
-> Selftests for typed ksyms. Tests two types of ksyms: one is a struct,
-> the other is a plain int. This tests two paths in the kernel. Struct
-> ksyms will be converted into PTR_TO_BTF_ID by the verifier while int
-> typed ksyms will be converted into PTR_TO_MEM.
+> Add bpf_per_cpu_ptr() to help bpf programs access percpu vars.
+> bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the kernel
+> except that it may return NULL. This happens when the cpu parameter is
+> out of range. So the caller must check the returned value.
 >
+> Acked-by: Andrii Nakryiko <andriin@fb.com>
 > Signed-off-by: Hao Luo <haoluo@google.com>
 > ---
->  .../testing/selftests/bpf/prog_tests/ksyms.c  | 31 +++------
->  .../selftests/bpf/prog_tests/ksyms_btf.c      | 63 +++++++++++++++++++
->  .../selftests/bpf/progs/test_ksyms_btf.c      | 23 +++++++
->  tools/testing/selftests/bpf/trace_helpers.c   | 26 ++++++++
->  tools/testing/selftests/bpf/trace_helpers.h   |  4 ++
->  5 files changed, 123 insertions(+), 24 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_btf.c
+>  include/linux/bpf.h            |  3 ++
+>  include/linux/btf.h            | 11 ++++++
+>  include/uapi/linux/bpf.h       | 17 +++++++++
+>  kernel/bpf/btf.c               | 10 ------
+>  kernel/bpf/verifier.c          | 66 +++++++++++++++++++++++++++++++---
+>  kernel/trace/bpf_trace.c       | 18 ++++++++++
+>  tools/include/uapi/linux/bpf.h | 17 +++++++++
+>  7 files changed, 128 insertions(+), 14 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index c6d9f2c444f4..6b2034f7665e 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -292,6 +292,7 @@ enum bpf_arg_type {
+>         ARG_PTR_TO_ALLOC_MEM,   /* pointer to dynamically allocated memory */
+>         ARG_PTR_TO_ALLOC_MEM_OR_NULL,   /* pointer to dynamically allocated memory or NULL */
+>         ARG_CONST_ALLOC_SIZE_OR_ZERO,   /* number of allocated bytes requested */
+> +       ARG_PTR_TO_PERCPU_BTF_ID,       /* pointer to in-kernel percpu type */
+>  };
+>
+>  /* type of values returned from helper functions */
+> @@ -305,6 +306,7 @@ enum bpf_return_type {
+>         RET_PTR_TO_SOCK_COMMON_OR_NULL, /* returns a pointer to a sock_common or NULL */
+>         RET_PTR_TO_ALLOC_MEM_OR_NULL,   /* returns a pointer to dynamically allocated memory or NULL */
+>         RET_PTR_TO_BTF_ID_OR_NULL,      /* returns a pointer to a btf_id or NULL */
+> +       RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL, /* returns a pointer to a valid memory or a btf_id or NULL */
+>  };
+>
+>  /* eBPF function prototype used by verifier to allow BPF_CALLs from eBPF programs
+> @@ -385,6 +387,7 @@ enum bpf_reg_type {
+>         PTR_TO_RDONLY_BUF_OR_NULL, /* reg points to a readonly buffer or NULL */
+>         PTR_TO_RDWR_BUF,         /* reg points to a read/write buffer */
+>         PTR_TO_RDWR_BUF_OR_NULL, /* reg points to a read/write buffer or NULL */
+> +       PTR_TO_PERCPU_BTF_ID,    /* reg points to percpu kernel type */
+>  };
+>
+>  /* The information passed from prog-specific *_is_valid_access
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index 592373d359b9..07b7de1c05b0 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
+> @@ -71,6 +71,11 @@ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+>              i < btf_type_vlen(struct_type);                    \
+>              i++, member++)
+>
+> +#define for_each_vsi(i, struct_type, member)                   \
+
+datasec_type?
+
+> +       for (i = 0, member = btf_type_var_secinfo(struct_type); \
+> +            i < btf_type_vlen(struct_type);                    \
+> +            i++, member++)
+> +
+>  static inline bool btf_type_is_ptr(const struct btf_type *t)
+>  {
+>         return BTF_INFO_KIND(t->info) == BTF_KIND_PTR;
+> @@ -155,6 +160,12 @@ static inline const struct btf_member *btf_type_member(const struct btf_type *t)
+>         return (const struct btf_member *)(t + 1);
+>  }
+>
+> +static inline const struct btf_var_secinfo *btf_type_var_secinfo(
+> +               const struct btf_type *t)
+> +{
+> +       return (const struct btf_var_secinfo *)(t + 1);
+> +}
+> +
+>  #ifdef CONFIG_BPF_SYSCALL
+>  const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
+>  const char *btf_name_by_offset(const struct btf *btf, u32 offset);
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index ab00ad9b32e5..d0ec94d5bdbf 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3596,6 +3596,22 @@ union bpf_attr {
+>   *             the data in *dst*. This is a wrapper of copy_from_user().
+>   *     Return
+>   *             0 on success, or a negative error in case of failure.
+> + *
+> + * void *bpf_per_cpu_ptr(const void *percpu_ptr, u32 cpu)
+> + *     Description
+> + *             Take a pointer to a percpu ksym, *percpu_ptr*, and return a
+> + *             pointer to the percpu kernel variable on *cpu*. A ksym is an
+> + *             extern variable decorated with '__ksym'. For ksym, there is a
+> + *             global var (either static or global) defined of the same name
+> + *             in the kernel. The ksym is percpu if the global var is percpu.
+> + *             The returned pointer points to the global percpu var on *cpu*.
+> + *
+> + *             bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the
+> + *             kernel, except that bpf_per_cpu_ptr() may return NULL. This
+> + *             happens if *cpu* is larger than nr_cpu_ids. The caller of
+> + *             bpf_per_cpu_ptr() must check the returned value.
+> + *     Return
+> + *             A generic pointer pointing to the kernel percpu variable on *cpu*.
+
+Or NULL, if *cpu* is invalid.
+
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)          \
+>         FN(unspec),                     \
+> @@ -3747,6 +3763,7 @@ union bpf_attr {
+>         FN(inode_storage_delete),       \
+>         FN(d_path),                     \
+>         FN(copy_from_user),             \
+> +       FN(bpf_per_cpu_ptr),            \
+>         /* */
 >
 
 [...]
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-> new file mode 100644
-> index 000000000000..7b6846342449
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2020 Google */
-> +
-> +#include <test_progs.h>
-> +#include <bpf/libbpf.h>
-> +#include <bpf/btf.h>
-> +#include "test_ksyms_btf.skel.h"
-> +
-> +static int duration;
-> +
-> +void test_ksyms_btf(void)
-> +{
-> +       __u64 runqueues_addr, bpf_prog_active_addr;
-> +       struct test_ksyms_btf *skel;
-> +       struct test_ksyms_btf__data *data;
-> +       struct btf *btf;
-> +       int percpu_datasec;
-> +       int err;
-> +
-> +       err = kallsyms_find("runqueues", &runqueues_addr);
-> +       if (CHECK(err == -ENOENT, "kallsyms_fopen", "failed to open: %d\n", errno))
-> +               return;
-> +       if (CHECK(err == -EINVAL, "ksym_find", "symbol 'runqueues' not found\n"))
-> +               return;
-> +
-> +       err = kallsyms_find("bpf_prog_active", &bpf_prog_active_addr);
-> +       if (CHECK(err == -EINVAL, "ksym_find", "symbol 'bpf_prog_active' not found\n"))
-> +               return;
-> +
-> +       btf = libbpf_find_kernel_btf();
-> +       if (CHECK(IS_ERR(btf), "btf_exists", "failed to load kernel BTF: %ld\n",
-> +                 PTR_ERR(btf)))
-> +               return;
-> +
-> +       percpu_datasec = btf__find_by_name_kind(btf, ".data..percpu",
-> +                                               BTF_KIND_DATASEC);
-> +       if (percpu_datasec < 0) {
-> +               printf("%s:SKIP:no PERCPU DATASEC in kernel btf\n",
-> +                      __func__);
-> +               test__skip();
-
-leaking btf here
-
-> +               return;
-> +       }
-> +
-> +       skel = test_ksyms_btf__open_and_load();
-> +       if (CHECK(!skel, "skel_open", "failed to open and load skeleton\n"))
-
-here
-
-> +               return;
-> +
-> +       err = test_ksyms_btf__attach(skel);
-> +       if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-> +               goto cleanup;
-> +
-> +       /* trigger tracepoint */
-> +       usleep(1);
-> +
-> +       data = skel->data;
-> +       CHECK(data->out__runqueues != runqueues_addr, "runqueues",
-> +             "got %llu, exp %llu\n", data->out__runqueues, runqueues_addr);
-> +       CHECK(data->out__bpf_prog_active != bpf_prog_active_addr, "bpf_prog_active",
-> +             "got %llu, exp %llu\n", data->out__bpf_prog_active, bpf_prog_active_addr);
-
-u64 is not %llu on some arches, please cast explicitly to (unsigned long long)
-
-> +
-> +cleanup:
-
-... and here (I suggest to just jump from all those locations here for cleanup)
-
-> +       test_ksyms_btf__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-> new file mode 100644
-> index 000000000000..e04e31117f84
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-> @@ -0,0 +1,23 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2020 Google */
-> +
-> +#include "vmlinux.h"
-> +
-> +#include <bpf/bpf_helpers.h>
-> +
-> +__u64 out__runqueues = -1;
-> +__u64 out__bpf_prog_active = -1;
-
-this is addresses, not values, so _addr part would make it clearer.
-
-> +
-> +extern const struct rq runqueues __ksym; /* struct type global var. */
-> +extern const int bpf_prog_active __ksym; /* int type global var. */
-
-When we add non-per-CPU kernel variables, I wonder if the fact that we
-have both per-CPU and global kernel variables under the same __ksym
-section would cause any problems and confusion? It's not clear to me
-if we need to have a special __percpu_ksym section or not?..
-
-> +
-> +SEC("raw_tp/sys_enter")
-> +int handler(const void *ctx)
-> +{
-> +       out__runqueues = (__u64)&runqueues;
-> +       out__bpf_prog_active = (__u64)&bpf_prog_active;
-> +
-> +       return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-> index 4d0e913bbb22..ade555fe8294 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.c
-> +++ b/tools/testing/selftests/bpf/trace_helpers.c
-> @@ -90,6 +90,32 @@ long ksym_get_addr(const char *name)
->         return 0;
->  }
->
-> +/* open kallsyms and read symbol addresses on the fly. Without caching all symbols,
-> + * this is faster than load + find. */
-> +int kallsyms_find(const char *sym, unsigned long long *addr)
-> +{
-> +       char type, name[500];
-> +       unsigned long long value;
-> +       int err = 0;
-> +       FILE *f;
-> +
-> +       f = fopen("/proc/kallsyms", "r");
-> +       if (!f)
-> +               return -ENOENT;
-> +
-> +       while (fscanf(f, "%llx %c %499s%*[^\n]\n", &value, &type, name) > 0) {
-> +               if (strcmp(name, sym) == 0) {
-> +                       *addr = value;
-> +                       goto out;
+> @@ -4003,6 +4008,15 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+>                         if (type != expected_type)
+>                                 goto err_type;
+>                 }
+> +       } else if (arg_type == ARG_PTR_TO_PERCPU_BTF_ID) {
+> +               expected_type = PTR_TO_PERCPU_BTF_ID;
+> +               if (type != expected_type)
+> +                       goto err_type;
+> +               if (!reg->btf_id) {
+> +                       verbose(env, "Helper has invalid btf_id in R%d\n", regno);
+> +                       return -EACCES;
 > +               }
-> +       }
-> +       err = -EINVAL;
+> +               meta->ret_btf_id = reg->btf_id;
+>         } else if (arg_type == ARG_PTR_TO_BTF_ID) {
+>                 bool ids_match = false;
+>
+> @@ -5002,6 +5016,30 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+>                 regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
+>                 regs[BPF_REG_0].id = ++env->id_gen;
+>                 regs[BPF_REG_0].mem_size = meta.mem_size;
+> +       } else if (fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL) {
 
-These error codes seem backward to me. If you fail to open
-/proc/kallsyms, that's an unexpected and invalid situation, so EINVAL
-makes a bit more sense there. But -ENOENT is clearly for cases where
-you didn't find what you were looking for, which is exactly this case.
+Given this is internal implementation detail, this return type is
+fine, but I'm wondering if it would be better to just make
+PTR_TO_BTF_ID to allow not just structs? E.g., if we have an int, just
+allow reading those 4 bytes.
 
+Not sure what the implications are in terms of implementation, but
+conceptually that shouldn't be a problem, given we do have BTF type ID
+describing size and all.
 
+> +               const struct btf_type *t;
 > +
-> +out:
-> +       fclose(f);
-> +       return err;
+> +               mark_reg_known_zero(env, regs, BPF_REG_0);
+> +               t = btf_type_skip_modifiers(btf_vmlinux, meta.ret_btf_id, NULL);
+> +               if (!btf_type_is_struct(t)) {
+> +                       u32 tsize;
+> +                       const struct btf_type *ret;
+> +                       const char *tname;
+> +
+> +                       /* resolve the type size of ksym. */
+> +                       ret = btf_resolve_size(btf_vmlinux, t, &tsize);
+> +                       if (IS_ERR(ret)) {
+> +                               tname = btf_name_by_offset(btf_vmlinux, t->name_off);
+> +                               verbose(env, "unable to resolve the size of type '%s': %ld\n",
+> +                                       tname, PTR_ERR(ret));
+> +                               return -EINVAL;
+> +                       }
+> +                       regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
+> +                       regs[BPF_REG_0].mem_size = tsize;
+> +               } else {
+> +                       regs[BPF_REG_0].type = PTR_TO_BTF_ID_OR_NULL;
+> +                       regs[BPF_REG_0].btf_id = meta.ret_btf_id;
+> +               }
+>         } else if (fn->ret_type == RET_PTR_TO_BTF_ID_OR_NULL) {
+>                 int ret_btf_id;
+>
+
+[...]
+
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index b2a5380eb187..d474c1530f87 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1144,6 +1144,22 @@ static const struct bpf_func_proto bpf_d_path_proto = {
+>         .allowed        = bpf_d_path_allowed,
+>  };
+>
+> +BPF_CALL_2(bpf_per_cpu_ptr, const void *, ptr, u32, cpu)
+> +{
+> +       if (cpu >= nr_cpu_ids)
+> +               return 0;
+> +
+> +       return (u64)per_cpu_ptr(ptr, cpu);
+
+not sure, but on 32-bit arches this might cause compilation warning,
+case to (unsigned long) instead?
+
 > +}
 > +
->  void read_trace_pipe(void)
->  {
->         int trace_fd;
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-> index 25ef597dd03f..f62fdef9e589 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.h
-> +++ b/tools/testing/selftests/bpf/trace_helpers.h
-> @@ -12,6 +12,10 @@ struct ksym {
->  int load_kallsyms(void);
->  struct ksym *ksym_search(long key);
->  long ksym_get_addr(const char *name);
+> +static const struct bpf_func_proto bpf_per_cpu_ptr_proto = {
+> +       .func           = bpf_per_cpu_ptr,
+> +       .gpl_only       = false,
+> +       .ret_type       = RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL,
+> +       .arg1_type      = ARG_PTR_TO_PERCPU_BTF_ID,
+> +       .arg2_type      = ARG_ANYTHING,
+> +};
 > +
-> +/* open kallsyms and find addresses on the fly, faster than load + search. */
-> +int kallsyms_find(const char *sym, unsigned long long *addr);
-> +
->  void read_trace_pipe(void);
->
->  #endif
-> --
-> 2.28.0.526.ge36021eeef-goog
->
+
+[...]
