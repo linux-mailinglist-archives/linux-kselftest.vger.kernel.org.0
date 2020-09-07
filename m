@@ -2,95 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 360742601E3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Sep 2020 19:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E043260568
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Sep 2020 22:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729729AbgIGROK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Sep 2020 13:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729637AbgIGOQb (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:16:31 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA057C061574
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Sep 2020 07:15:55 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id d6so1648729pfn.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2020 07:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=pMKtnu62KrFlClqQRGBjCSOknfMgdgn3+wr6HnRppNY=;
-        b=D64xvzFLBlnNeTQkT8TNQY9QSEEmAeebO85yfOC8NPD1qtRe6ZhnRviUtvOdxf7zNs
-         K5w9Tc56LdukXCGiVOV0RnjgFVbBUOBeD0YvkNdcyIRUZqHMAGLUalClCgCTARRRghvX
-         0syIVDRXlYXf/9UkCbwkjho2LiGFWDgF0jefQzrfll1AaP8/1iF03O7LOXwtlHzPC5o2
-         I7l8npCZsBDhjEaTB0HUB7llatpo1fnrqibiAczZYpjt9RwxiE1/4IJ0nbgeUY7dfu0K
-         DdpHrv1SwsxdcqShg+ockpxLo9zrZWTK4NGRi2HGlIb9t7VQbc2feZTADbtP9rlW2EI0
-         cR4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=pMKtnu62KrFlClqQRGBjCSOknfMgdgn3+wr6HnRppNY=;
-        b=M5zyN3Exyl8fzagFDG6Yqlp/p3Epi8BA4fG1dGu5v0huwXRGoqn1SHfYZoBOUjb6B2
-         cnHdrXPpdS89ZYzIvka2DaS8e6ervI2KE38poTgRZoWPKdYZY5K5EMFwqjbqEsMwg9C+
-         0I7YKE8yNj8o5KC6D0KoUspbWxtcs0dDluG+z4evqaW7GFTjuIoV4kleImOX65x3lZaY
-         RMA8nGsAgaO4EV4ta+6ujE28bEjPMNQ3MeUxU+OI9h3CEOtRbTNLZrg+TCfEZYu4YCip
-         x2jWMbX5AKEni0o0pOYj1oZsviNz/tZwIpvDc1kH7ZtsgViR69kLerrgqEipbfvf4KGK
-         Lk5Q==
-X-Gm-Message-State: AOAM533sK8CqQ9aX5ymtu8s1cqAzcV/BIgxWOF25QYukdzAgoqZUE/H0
-        En5G8cL3HAzJP2sTMO507qB9NQ==
-X-Google-Smtp-Source: ABdhPJxDzNPgTKU+KaHZmsuByNel5l69rVNLnkpVmRixOH4K76E96CSThsbS7P+Xe0BpNllo+5a76Q==
-X-Received: by 2002:a63:4a19:: with SMTP id x25mr16395793pga.56.1599488154774;
-        Mon, 07 Sep 2020 07:15:54 -0700 (PDT)
-Received: from ?IPv6:2600:1010:b025:3136:b1da:8d24:b138:6fff? ([2600:1010:b025:3136:b1da:8d24:b138:6fff])
-        by smtp.gmail.com with ESMTPSA id m25sm15245324pfa.32.2020.09.07.07.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2020 07:15:53 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v6 6/9] kernel: entry: Support Syscall User Dispatch for common syscall entry
-Date:   Mon, 7 Sep 2020 07:15:52 -0700
-Message-Id: <0639209E-B6C6-4F86-84F4-04B91E1CC8AA@amacapital.net>
-References: <20200907101522.zo6qzgp4qfzkz7cs@wittgenstein>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>, luto@kernel.org,
-        tglx@linutronix.de, keescook@chromium.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        willy@infradead.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, kernel@collabora.com
-In-Reply-To: <20200907101522.zo6qzgp4qfzkz7cs@wittgenstein>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-X-Mailer: iPhone Mail (17H35)
+        id S1728907AbgIGUMV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Sep 2020 16:12:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728834AbgIGUMV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 7 Sep 2020 16:12:21 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7271921556;
+        Mon,  7 Sep 2020 20:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599509540;
+        bh=EOaPtAh03DeyQBLF3axC14+NF/h3MulP7m20/5/Q5C8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KKif5jRX8IOQ8WTb4utcN3D8+wCpPYWY2XIAkT80zR4sHa9khMmoUJgrVkFSRgVJj
+         6Wcn6cr07ZkKlwuCBD3vrniXrzWm6JKKDw8PiDdL/bzw8oPngw040M78WzsOFDICmE
+         +BtmCr1sAzo7cEjqL2ton0nsI3i8Zl2qSoXCgZq8=
+Date:   Mon, 7 Sep 2020 13:12:17 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     davem@davemloft.net, skhan@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCHv3] selftests: rtnetlink: load fou module for
+ kci_test_encap_fou() test
+Message-ID: <20200907131217.61643ada@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20200907035010.9154-1-po-hsu.lin@canonical.com>
+References: <20200907035010.9154-1-po-hsu.lin@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon,  7 Sep 2020 11:50:10 +0800 Po-Hsu Lin wrote:
+> The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
+> needs the fou module to work. Otherwise it will fail with:
+> 
+>   $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
+>   RTNETLINK answers: No such file or directory
+>   Error talking to the kernel
+> 
+> Add the CONFIG_NET_FOU into the config file as well. Which needs at
+> least to be set as a loadable module.
+> 
+> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
 
+> diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+> index 7c38a90..a711b3e 100755
+> --- a/tools/testing/selftests/net/rtnetlink.sh
+> +++ b/tools/testing/selftests/net/rtnetlink.sh
+> @@ -520,6 +520,11 @@ kci_test_encap_fou()
+>  		return $ksft_skip
+>  	fi
+>  
+> +	if ! /sbin/modprobe -q -n fou; then
+> +		echo "SKIP: module fou is not found"
+> +		return $ksft_skip
+> +	fi
+> +	/sbin/modprobe -q fou
+>  	ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
+>  	if [ $? -ne 0 ];then
+>  		echo "FAIL: can't add fou port 7777, skipping test"
+> @@ -540,6 +545,7 @@ kci_test_encap_fou()
+>  		return 1
+>  	fi
+>  
+> +	/sbin/modprobe -q -r fou
 
-> On Sep 7, 2020, at 3:15 AM, Christian Brauner <christian.brauner@ubuntu.co=
-m> wrote:
->=20
-> =EF=BB=BFOn Fri, Sep 04, 2020 at 04:31:44PM -0400, Gabriel Krisman Bertazi=
- wrote:
->> Syscall User Dispatch (SUD) must take precedence over seccomp, since the
->> use case is emulation (it can be invoked with a different ABI) such that
->> seccomp filtering by syscall number doesn't make sense in the first
->> place.  In addition, either the syscall is dispatched back to userspace,
->> in which case there is no resource for seccomp to protect, or the
->=20
-> Tbh, I'm torn here. I'm not a super clever attacker but it feels to me
-> that this is still at least a clever way to circumvent a seccomp
-> sandbox.
-> If I'd be confined by a seccomp profile that would cause me to be
-> SIGKILLed when I try do open() I could prctl() myself to do user
-> dispatch to prevent that from happening, no?
->=20
+I think the common practice is to not remove the module at the end of
+the test. It may be used by something else than the test itself.
 
-Not really, I think. The idea is that you didn=E2=80=99t actually do open().=
- You did a SYSCALL instruction which meant something else, and the syscall d=
-ispatch correctly prevented the kernel from misinterpreting it as open().
+>  	echo "PASS: fou"
+>  }
+>  
 
