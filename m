@@ -2,69 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4BD25E740
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Sep 2020 13:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C132825F15C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Sep 2020 03:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728472AbgIELZM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Sep 2020 07:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728469AbgIELZJ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Sep 2020 07:25:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A8BC061244;
-        Sat,  5 Sep 2020 04:24:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RcCo8rpDVaNpQkStt8c1HunAQwH7Y1hkDms25uGh7OM=; b=H5fhTYLnze+6FRQQl4W6tmfH1q
-        pcIodbtZk0OZNy1KMaQTx5BS8S0CDbBZcr/8epL6/qMDSFzs52nOdoO8lVQW9tofPDZJDQx8A+nQZ
-        SP5WBd5Lt7+WFiHjRZ5U5NeD1JdUH8LYQ7LRVitgJBSLXj3PIdezDLjvbFnFEAf/LB+tlBvhjd/P6
-        8W+BoR9OzLU7bO4kjLDP5F483ZezNZPg/YwE/lreGRBFF+PmZJ4NbBZyU+iC9qBiUciNFrmN7V7/I
-        1ls9g2doQTwnJH+JRPyGSZbHF2VKf89ceWGTMDjCGVhY0amiyxJlqK06cFWWIHxhPnmnb1G91GUwD
-        AZ2H91Gw==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kEWJC-0006qo-6M; Sat, 05 Sep 2020 11:24:38 +0000
-Date:   Sat, 5 Sep 2020 12:24:38 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, kernel@collabora.com,
-        Paul Gofman <gofmanp@gmail.com>
-Subject: Re: [PATCH v6 5/9] kernel: Implement selective syscall userspace
- redirection
-Message-ID: <20200905112438.GA16750@casper.infradead.org>
-References: <20200904203147.2908430-1-krisman@collabora.com>
- <20200904203147.2908430-6-krisman@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200904203147.2908430-6-krisman@collabora.com>
+        id S1726802AbgIGBMj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Sep 2020 21:12:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33570 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726564AbgIGBMh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 6 Sep 2020 21:12:37 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A6EA82080A;
+        Mon,  7 Sep 2020 01:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599441156;
+        bh=xyTSMPG3pyBCZv5zMohBYPXtrUS10O0YxLED9qNXz1I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=z4ctw8TGu/NMj1f6Hv2KXkrBHHa+hL7RZJDYAkBwkP7Zi0ELinKFYmIOB4m2bj+Br
+         REdUI3oczw2sfJo0SbI9XIY3sEtUK+33VKxfvPvGwHzxwMucx5Nbb4xzObhrn0k+Zq
+         pn0XJDjrIvvplQXYJSINInsZBA/KoOuJSe+bM3zE=
+Date:   Mon, 7 Sep 2020 10:12:26 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>, linux-doc@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hewllig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH v2 08/11] kprobes: switch to kernel_clone()
+Message-Id: <20200907101226.ab0d00639be953e81d4576c2@kernel.org>
+In-Reply-To: <20200819104655.436656-9-christian.brauner@ubuntu.com>
+References: <20200819104655.436656-1-christian.brauner@ubuntu.com>
+        <20200819104655.436656-9-christian.brauner@ubuntu.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 04:31:43PM -0400, Gabriel Krisman Bertazi wrote:
-> +int set_syscall_user_dispatch(int mode, unsigned long dispatcher_start,
-> +			      unsigned long dispatcher_end, char __user *selector)
-> +{
-> +	switch (mode) {
-> +	case PR_SYS_DISPATCH_OFF:
-...
-> +	case PR_SYS_DISPATCH_ON:
-...
-> +	default:
-> +		return -EINVAL;
-...
-> +	case PR_SET_SYSCALL_USER_DISPATCH:
-> +		error = set_syscall_user_dispatch((int) arg2, arg3, arg4,
-> +						  (char __user *) arg5);
+Hi,
 
-This makes aliases of DISPATCH_OFF and DISPATCH_ON every 4GB throughout
-the 64-bit space of arg2.  I don't think that was intentional (nor
-desirable).  I'd suggest just making 'mode' a long and dropping the cast.
+On Wed, 19 Aug 2020 12:46:52 +0200
+Christian Brauner <christian.brauner@ubuntu.com> wrote:
+
+> The old _do_fork() helper is removed in favor of the new kernel_clone() helper.
+> The latter adheres to naming conventions for kernel internal syscall helpers.
+
+This looks good to me.
+
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you!
+
+> 
+> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Cc: Alexandre Chartre <alexandre.chartre@oracle.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> ---
+> /* v2 */
+> unchanged
+> ---
+>  samples/kprobes/kprobe_example.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
+> index 240f2435ce6f..a02f53836ee1 100644
+> --- a/samples/kprobes/kprobe_example.c
+> +++ b/samples/kprobes/kprobe_example.c
+> @@ -2,13 +2,13 @@
+>  /*
+>   * NOTE: This example is works on x86 and powerpc.
+>   * Here's a sample kernel module showing the use of kprobes to dump a
+> - * stack trace and selected registers when _do_fork() is called.
+> + * stack trace and selected registers when kernel_clone() is called.
+>   *
+>   * For more information on theory of operation of kprobes, see
+>   * Documentation/staging/kprobes.rst
+>   *
+>   * You will see the trace data in /var/log/messages and on the console
+> - * whenever _do_fork() is invoked to create a new process.
+> + * whenever kernel_clone() is invoked to create a new process.
+>   */
+>  
+>  #include <linux/kernel.h>
+> @@ -16,7 +16,7 @@
+>  #include <linux/kprobes.h>
+>  
+>  #define MAX_SYMBOL_LEN	64
+> -static char symbol[MAX_SYMBOL_LEN] = "_do_fork";
+> +static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
+>  module_param_string(symbol, symbol, sizeof(symbol), 0644);
+>  
+>  /* For each probe you need to allocate a kprobe structure */
+> -- 
+> 2.28.0
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
