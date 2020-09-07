@@ -2,161 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E41F25F818
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Sep 2020 12:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5F825F7F8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Sep 2020 12:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728406AbgIGK03 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Sep 2020 06:26:29 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:59727 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728721AbgIGKQX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Sep 2020 06:16:23 -0400
-Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kFECA-0005WP-VQ; Mon, 07 Sep 2020 10:16:19 +0000
-Date:   Mon, 7 Sep 2020 12:16:18 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, willy@infradead.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v6 2/9] kernel: entry: Support TIF_SYSCAL_INTERCEPT on
- common entry code
-Message-ID: <20200907101618.dnxv5n4x4vty73hr@wittgenstein>
-References: <20200904203147.2908430-1-krisman@collabora.com>
- <20200904203147.2908430-3-krisman@collabora.com>
+        id S1728451AbgIGKYJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Sep 2020 06:24:09 -0400
+Received: from foss.arm.com ([217.140.110.172]:59986 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728424AbgIGKYC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 7 Sep 2020 06:24:02 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35F29106F;
+        Mon,  7 Sep 2020 03:24:01 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9BA73F66E;
+        Mon,  7 Sep 2020 03:23:59 -0700 (PDT)
+Date:   Mon, 7 Sep 2020 11:23:57 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Boyan Karatotev <boyan.karatotev@arm.com>
+Cc:     Shuah Khan <shuah@kernel.org>, boian4o1@gmail.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        amit.kachhap@arm.com, vincenzo.frascino@arm.com,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/4] kselftests/arm64: add a basic Pointer Authentication
+ test
+Message-ID: <20200907102354.GL6642@arm.com>
+References: <20200828131606.7946-1-boyan.karatotev@arm.com>
+ <20200828131606.7946-2-boyan.karatotev@arm.com>
+ <20200902164858.GI6642@arm.com>
+ <ebcefdf0-a71b-3b67-b133-3f47419f9ec8@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200904203147.2908430-3-krisman@collabora.com>
+In-Reply-To: <ebcefdf0-a71b-3b67-b133-3f47419f9ec8@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 04:31:40PM -0400, Gabriel Krisman Bertazi wrote:
-> Syscalls that use common entry code (x86 at the moment of this writing)
-> need to have their defines updated inside this commit.  This added a
-> measureable overhead of 1ns to seccomp_benchmark selftests on a
-> bare-metal AMD system.
-> 
-> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-> ---
->  arch/x86/include/asm/thread_info.h |  4 ++--
->  include/linux/entry-common.h       |  6 +-----
->  kernel/entry/common.c              | 24 +++++++++++++++++++++---
->  3 files changed, 24 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/thread_info.h
-> index 267701ae3d86..cf723181e1f2 100644
-> --- a/arch/x86/include/asm/thread_info.h
-> +++ b/arch/x86/include/asm/thread_info.h
-> @@ -82,7 +82,7 @@ struct thread_info {
->  #define TIF_SSBD		5	/* Speculative store bypass disable */
->  #define TIF_SYSCALL_EMU		6	/* syscall emulation active */
->  #define TIF_SYSCALL_AUDIT	7	/* syscall auditing active */
-> -#define TIF_SECCOMP		8	/* secure computing */
-> +#define TIF_SYSCALL_INTERCEPT	8	/* Intercept system call */
->  #define TIF_SPEC_IB		9	/* Indirect branch speculation mitigation */
->  #define TIF_SPEC_FORCE_UPDATE	10	/* Force speculation MSR update in context switch */
->  #define TIF_USER_RETURN_NOTIFY	11	/* notify kernel of userspace return */
-> @@ -112,7 +112,7 @@ struct thread_info {
->  #define _TIF_SSBD		(1 << TIF_SSBD)
->  #define _TIF_SYSCALL_EMU	(1 << TIF_SYSCALL_EMU)
->  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
-> -#define _TIF_SECCOMP		(1 << TIF_SECCOMP)
-> +#define _TIF_SYSCALL_INTERCEPT	(1 << TIF_SYSCALL_INTERCEPT)
->  #define _TIF_SPEC_IB		(1 << TIF_SPEC_IB)
->  #define _TIF_SPEC_FORCE_UPDATE	(1 << TIF_SPEC_FORCE_UPDATE)
->  #define _TIF_USER_RETURN_NOTIFY	(1 << TIF_USER_RETURN_NOTIFY)
-> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> index efebbffcd5cc..72ce9ca860c6 100644
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -21,10 +21,6 @@
->  # define _TIF_SYSCALL_TRACEPOINT	(0)
->  #endif
->  
-> -#ifndef _TIF_SECCOMP
-> -# define _TIF_SECCOMP			(0)
-> -#endif
-> -
->  #ifndef _TIF_SYSCALL_AUDIT
->  # define _TIF_SYSCALL_AUDIT		(0)
->  #endif
-> @@ -45,7 +41,7 @@
->  #endif
->  
->  #define SYSCALL_ENTER_WORK						\
-> -	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | _TIF_SECCOMP |	\
-> +	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | _TIF_SYSCALL_INTERCEPT | \
->  	 _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_EMU |			\
->  	 ARCH_SYSCALL_ENTER_WORK)
->  
-> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> index fcae019158ca..44fd089d59da 100644
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -4,6 +4,7 @@
->  #include <linux/entry-common.h>
->  #include <linux/livepatch.h>
->  #include <linux/audit.h>
-> +#include <linux/syscall_intercept.h>
->  
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/syscalls.h>
-> @@ -41,6 +42,20 @@ static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
->  	}
->  }
->  
-> +static inline long do_syscall_intercept(struct pt_regs *regs)
+On Thu, Sep 03, 2020 at 11:12:02AM +0100, Boyan Karatotev wrote:
+> On 02/09/2020 17:49, Dave Martin wrote:
+> > On Fri, Aug 28, 2020 at 02:16:03PM +0100, Boyan Karatotev wrote:
+> >> PAuth signs and verifies return addresses on the stack. It does so by
+> >> inserting a Pointer Authentication code (PAC) into some of the unused top
+> >> bits of an address. This is achieved by adding paciasp/autiasp instructions
+> >> at the beginning and end of a function.
+> >>
+> >> This feature is partially backwards compatible with earlier versions of the
+> >> ARM architecture. To coerce the compiler into emitting fully backwards
+> >> compatible code the main file is compiled to target an earlier ARM version.
+> >> This allows the tests to check for the feature and print meaningful error
+> >> messages instead of crashing.
+> >>
+> >> Add a test to verify that corrupting the return address results in a
+> >> SIGSEGV on return.
+> >>
+> >> Cc: Shuah Khan <shuah@kernel.org>
+> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> >> Cc: Will Deacon <will@kernel.org>
+> >> Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
+> >> ---
 
-Hey Gabriel,
+[...]
 
-I think you can drop the pt_regs argument and just have this be
+> >> diff --git a/tools/testing/selftests/arm64/pauth/pac_corruptor.S b/tools/testing/selftests/arm64/pauth/pac_corruptor.S
+> >> new file mode 100644
+> >> index 000000000000..6a34ec23a034
+> >> --- /dev/null
+> >> +++ b/tools/testing/selftests/arm64/pauth/pac_corruptor.S
+> >> @@ -0,0 +1,36 @@
+> >> +/* SPDX-License-Identifier: GPL-2.0 */
+> >> +/* Copyright (C) 2020 ARM Limited */
+> >> +
+> >> +.global pac_corruptor
+> >> +
+> >> +.text
+> >> +/*
+> >> + * Corrupting a single bit of the PAC ensures the authentication will fail.  It
+> >> + * also guarantees no possible collision. TCR_EL1.TBI0 is set by default so no
+> >> + * top byte PAC is tested
+> >> + */
+> >> + pac_corruptor:
+> >> +	paciasp
+> >> +
+> >> +	/* make stack frame */
+> >> +	sub sp, sp, #16
+> >> +	stp x29, lr, [sp]
+> > 
+> > Nit: if respinning, you can optimise a few sequences of this sort, e.g.
+> > 
+> > 	stp	x29, lr, [sp, #-16]!
+> > 
+> >> +	mov x29, sp
+> >> +
+> >> +	/* prepare mask for bit to be corrupted (bit 54) */
+> >> +	mov x1, xzr
+> >> +	add x1, x1, #1
+> >> +	lsl x1, x1, #54
+> > 
+> > Nit:
+> > 
+> > 	mov	x1, #1 << 54
+> Thank you for this, didn't know I could do it this way.
+> > 
+> > but anyway, the logic operations can encode most simple bitmasks
+> > directly as immediate operands, so you can skip this and just do
+> > 
+> >> +
+> >> +	/* get saved lr, corrupt selected bit, put it back */
+> >> +	ldr x0, [sp, #8]
+> >> +	eor x0, x0, x1
+> > 
+> > 	eor	x0, x0, #1 << 54
+> > 
+> >> +	str x0, [sp, #8]
+> >> +
+> >> +	/* remove stack frame */
+> >> +	ldp x29, lr, [sp]
+> >> +	add sp, sp, #16
+> > 
+> > 	ldp	x29, lr, [sp], #16
+> > 
+> > [...]
+> > 
+> > Actually, since there are no leaf nested function calls and no trap is
+> > expected until the function returns (so backtracing in the middle of
+> > this function is unlikely to be needed), could we optimise this whole
+> > thing down to the following?
+> > 
+> I suppose you're right. The intent was to emulate a c function but there
+> really is no point in doing all this extra work. Will change it.
 
-static inline do_syscall_intercept(void)
+It's not critical either way, but this way it's at least less code to
+maintain / read.
 
-otherwise
+> > pac_corruptor:
+> > 	paciasp
+> > 	eor	lr, lr, #1 << 53
+> > 	autiasp
+> > 	ret
+> > 
+> > Cheers
+> > ---Dave
 
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+[...]
 
-> +{
-> +	int sysint_work = READ_ONCE(current->syscall_intercept);
-> +	int ret;
-> +
-> +	if (sysint_work & SYSINT_SECCOMP) {
-> +		ret = __secure_computing(NULL);
-> +		if (ret == -1L)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static long syscall_trace_enter(struct pt_regs *regs, long syscall,
->  				unsigned long ti_work)
->  {
-> @@ -53,9 +68,12 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
->  			return -1L;
->  	}
->  
-> -	/* Do seccomp after ptrace, to catch any tracer changes. */
-> -	if (ti_work & _TIF_SECCOMP) {
-> -		ret = __secure_computing(NULL);
-> +	/*
-> +	 * Do syscall interception like seccomp after ptrace, to catch
-> +	 * any tracer changes.
-> +	 */
-> +	if (ti_work & _TIF_SYSCALL_INTERCEPT) {
-> +		ret = do_syscall_intercept(regs);
->  		if (ret == -1L)
->  			return ret;
->  	}
-> -- 
-> 2.28.0
+Cheers
+---Dave
