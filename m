@@ -2,134 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C132825F15C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Sep 2020 03:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C2425F236
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Sep 2020 05:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgIGBMj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 6 Sep 2020 21:12:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33570 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726564AbgIGBMh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Sep 2020 21:12:37 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6EA82080A;
-        Mon,  7 Sep 2020 01:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599441156;
-        bh=xyTSMPG3pyBCZv5zMohBYPXtrUS10O0YxLED9qNXz1I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=z4ctw8TGu/NMj1f6Hv2KXkrBHHa+hL7RZJDYAkBwkP7Zi0ELinKFYmIOB4m2bj+Br
-         REdUI3oczw2sfJo0SbI9XIY3sEtUK+33VKxfvPvGwHzxwMucx5Nbb4xzObhrn0k+Zq
-         pn0XJDjrIvvplQXYJSINInsZBA/KoOuJSe+bM3zE=
-Date:   Mon, 7 Sep 2020 10:12:26 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kars de Jong <jongk@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Xiao Yang <yangx.jy@cn.fujitsu.com>, linux-doc@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hewllig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH v2 08/11] kprobes: switch to kernel_clone()
-Message-Id: <20200907101226.ab0d00639be953e81d4576c2@kernel.org>
-In-Reply-To: <20200819104655.436656-9-christian.brauner@ubuntu.com>
-References: <20200819104655.436656-1-christian.brauner@ubuntu.com>
-        <20200819104655.436656-9-christian.brauner@ubuntu.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726389AbgIGDuZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Sep 2020 23:50:25 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:49304 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbgIGDuX (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 6 Sep 2020 23:50:23 -0400
+Received: from mail-pl1-f198.google.com ([209.85.214.198])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1kF8Ae-0005v9-Iw
+        for linux-kselftest@vger.kernel.org; Mon, 07 Sep 2020 03:50:20 +0000
+Received: by mail-pl1-f198.google.com with SMTP id y13so3383779plr.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 06 Sep 2020 20:50:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3g3V+QNt3GCtg2Hc+UJaZtxoWISK1rJHJzXJXHO3wbk=;
+        b=JzeemAXJFs0sGJKLionAUb7m6X7vZG8/adBYuhAC8jdB4zhUp2uMZm7ZlXZ98mNSiq
+         RZYvLl6BoqWCR8DctVYi2G9YfMn4tJD/b8AlnaeedW4HqSgZv0Aj1EYf7nS2E7KafEpy
+         pClgLRF1w7G/AL8j9OJEtqQsKM9QI14anh3s/oFJC8qS/AQpA4lO85fCem7z30ytzAxJ
+         K8s61Mi7qEnvXOX3C1qQHO1myMNAh6SiAiVOi/GhJztxrgeFmVtY2uqNCdTw/WT7xeWK
+         sJgEmR7k6jwDav9tNFtvCfbSOx3QG1dfoAJOrSscVh0/CPAEa1R0hW2NFckBxpEy86OT
+         Q86A==
+X-Gm-Message-State: AOAM530Trb2OmcgahhOoT31+aW4rJzbtoFviZc7b7BG7BtKC/AU8SXV3
+        h/bB2Sc4fJv9w7rRaFwX/is7y8gIA9d2H6sSf04ZdqnAyiQr8q5XKkBa++5t7itMvPLkSC0Z4Sf
+        cd4Kj7P1k8J6PyPyEmhDqNZ1mu4Hu/YTI0TL2Zkvkd4TL
+X-Received: by 2002:aa7:8b02:: with SMTP id f2mr17326305pfd.59.1599450618941;
+        Sun, 06 Sep 2020 20:50:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwiw6zva7WG2JalWfZO5CnnUA49jrjPIHrcrSaL3UTwr1qmqpBYYx79C1OGaVQ4e1GVoN+a1g==
+X-Received: by 2002:aa7:8b02:: with SMTP id f2mr17326293pfd.59.1599450618608;
+        Sun, 06 Sep 2020 20:50:18 -0700 (PDT)
+Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id e1sm10828706pjv.17.2020.09.06.20.50.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Sep 2020 20:50:17 -0700 (PDT)
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     davem@davemloft.net, kuba@kernel.org, skhan@linuxfoundation.org
+Cc:     po-hsu.lin@canonical.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCHv3] selftests: rtnetlink: load fou module for kci_test_encap_fou() test
+Date:   Mon,  7 Sep 2020 11:50:10 +0800
+Message-Id: <20200907035010.9154-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
+needs the fou module to work. Otherwise it will fail with:
 
-On Wed, 19 Aug 2020 12:46:52 +0200
-Christian Brauner <christian.brauner@ubuntu.com> wrote:
+  $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
+  RTNETLINK answers: No such file or directory
+  Error talking to the kernel
 
-> The old _do_fork() helper is removed in favor of the new kernel_clone() helper.
-> The latter adheres to naming conventions for kernel internal syscall helpers.
+Add the CONFIG_NET_FOU into the config file as well. Which needs at
+least to be set as a loadable module.
 
-This looks good to me.
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/config       | 1 +
+ tools/testing/selftests/net/rtnetlink.sh | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you!
-
-> 
-> Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Cc: Alexandre Chartre <alexandre.chartre@oracle.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> ---
-> /* v2 */
-> unchanged
-> ---
->  samples/kprobes/kprobe_example.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
-> index 240f2435ce6f..a02f53836ee1 100644
-> --- a/samples/kprobes/kprobe_example.c
-> +++ b/samples/kprobes/kprobe_example.c
-> @@ -2,13 +2,13 @@
->  /*
->   * NOTE: This example is works on x86 and powerpc.
->   * Here's a sample kernel module showing the use of kprobes to dump a
-> - * stack trace and selected registers when _do_fork() is called.
-> + * stack trace and selected registers when kernel_clone() is called.
->   *
->   * For more information on theory of operation of kprobes, see
->   * Documentation/staging/kprobes.rst
->   *
->   * You will see the trace data in /var/log/messages and on the console
-> - * whenever _do_fork() is invoked to create a new process.
-> + * whenever kernel_clone() is invoked to create a new process.
->   */
->  
->  #include <linux/kernel.h>
-> @@ -16,7 +16,7 @@
->  #include <linux/kprobes.h>
->  
->  #define MAX_SYMBOL_LEN	64
-> -static char symbol[MAX_SYMBOL_LEN] = "_do_fork";
-> +static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
->  module_param_string(symbol, symbol, sizeof(symbol), 0644);
->  
->  /* For each probe you need to allocate a kprobe structure */
-> -- 
-> 2.28.0
-> 
-
-
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 3b42c06b..c5e50ab 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -31,3 +31,4 @@ CONFIG_NET_SCH_ETF=m
+ CONFIG_NET_SCH_NETEM=y
+ CONFIG_TEST_BLACKHOLE_DEV=m
+ CONFIG_KALLSYMS=y
++CONFIG_NET_FOU=m
+diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+index 7c38a90..a711b3e 100755
+--- a/tools/testing/selftests/net/rtnetlink.sh
++++ b/tools/testing/selftests/net/rtnetlink.sh
+@@ -520,6 +520,11 @@ kci_test_encap_fou()
+ 		return $ksft_skip
+ 	fi
+ 
++	if ! /sbin/modprobe -q -n fou; then
++		echo "SKIP: module fou is not found"
++		return $ksft_skip
++	fi
++	/sbin/modprobe -q fou
+ 	ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
+ 	if [ $? -ne 0 ];then
+ 		echo "FAIL: can't add fou port 7777, skipping test"
+@@ -540,6 +545,7 @@ kci_test_encap_fou()
+ 		return 1
+ 	fi
+ 
++	/sbin/modprobe -q -r fou
+ 	echo "PASS: fou"
+ }
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.7.4
+
