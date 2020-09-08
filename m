@@ -2,173 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1260262380
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Sep 2020 01:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D24262388
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Sep 2020 01:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726434AbgIHXSW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Sep 2020 19:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S1728643AbgIHXW4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Sep 2020 19:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbgIHXSU (ORCPT
+        with ESMTP id S1726002AbgIHXWz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Sep 2020 19:18:20 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0002EC061573
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2020 16:18:19 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id t14so624037pgl.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2020 16:18:19 -0700 (PDT)
+        Tue, 8 Sep 2020 19:22:55 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C368C061573
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Sep 2020 16:22:55 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id g29so663755pgl.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Sep 2020 16:22:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wu24fROSE6OJyT2U+h+4ypV+AtKEO78txVznCuf+1MM=;
-        b=G3VvR59v/PehD0iZFR5hVbo4hLWkwmK96kgLc5vuv2xdwKaItX+gfsJMez7EnNLVuP
-         WjNPco9VHueCsxy7M/t54x8Yqc+2DUR398+cTSERl4pUov63+KGg6Eq80ryRtVeaUaCj
-         N5cJ7RkbCGVTd9Fnr4KKuP1Uoi83l5JUjvARI=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8vw8y/keL8WobWtmOV5HZRJN8/Uakg/hovhFlM5RtH0=;
+        b=dhgVv6ytoDhKtI7epFtTsWzhO99dRLXs9qP6tHOGr0W9iPEBMxhPEYFzCPy4e45x1p
+         iv7oDHrhvzoFHFQbgnieeDK9qlcnx9jCxpTM73Wv9OxRI1dQYBAzJ5GwMJlhCteDErSG
+         EnPe8FFbiKqJ1TpYawiqNukVf+bzmUYQIoggE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wu24fROSE6OJyT2U+h+4ypV+AtKEO78txVznCuf+1MM=;
-        b=A3iRCnLZ2C40+ByTMLhrJGKTwDQ7WFVENnEB8zbGtOb+hxYIRxDsajJF+T9BP2GAPk
-         o2rvz/8sq2bQWgTRdDZ2vnyD3U5w9xa9iIazFftwi04biMzJY5zHoWj4y0frWInxtxu6
-         Mh75fvIjZzFornJV4mHc2X0RdNHkat0GFWsM3DqatnekNBzwPEijqYJ2LLChRra0RmTn
-         scaDRgqUkvhGT19KukANo6gYMRjC8TWOQhxpGsPioMLLivyU5N+m/jDAq+UrBbFVQaDH
-         Ypo9nbM6SyX55RJ96aQqbFhzmY6wD6sFLkm1V+lYWkDtukdvl5HKRfFZjibIdbe8CKF1
-         KTOw==
-X-Gm-Message-State: AOAM532qJgoyKGrDZXhtycmfYCeh7CEtaKCv9Z1FeOmBD8JRq3UI1kp0
-        Hx5S03sqVW7FnbiBMfqsSf49Kg==
-X-Google-Smtp-Source: ABdhPJznkhzxWTeVOWGaIC4OeBgnWbnmUmyxL57hr9a1gp/duDJ16gJvr1mTfjFgfp4fA/mHh/6eOw==
-X-Received: by 2002:aa7:911a:0:b029:13e:d13d:a13d with SMTP id 26-20020aa7911a0000b029013ed13da13dmr1321139pfh.37.1599607099458;
-        Tue, 08 Sep 2020 16:18:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8vw8y/keL8WobWtmOV5HZRJN8/Uakg/hovhFlM5RtH0=;
+        b=XiSsF/4F0mn4nuazQaJDSqyj0p3bD0kcxY5PJy4P0cbKgU5RwR3RFfbvDWeRNHv0J7
+         q+JGaK/rDbDKrxYjTP8iA37p6LtP/PXgvdlF1WyMSszGu+SqpPJ2yAGo4CGqehA7lXK0
+         FYsjy4rHS6JEXLMs/myqcVSWr5lftJcOWdDU2nqTwacOiSnOSDksgGvKq1OmUj7l8yNP
+         L6LKpFJWF6BM0WV2/3m0AxT1ScQNNaRkooNR8rxZC/ktyiyNSLGJ0uPPkbiu8bmvfvnK
+         ga0qdRYNstW7gvKOYJQUp4KCNj193kcJNIwkmwBK3MrcmI3up6l0SDwTxOddSUMmiZiy
+         nAJg==
+X-Gm-Message-State: AOAM530maWdyLVpnGdg3+vkdZZpD4KQ865gDPWpNprA52IIFSyVMvqCp
+        34JgDrmLL+E1LBpbk9mVh9nyQA==
+X-Google-Smtp-Source: ABdhPJyWsjXkHCgvBe7fbOxyDUTgQ0nowPHAXIjoEPMa62KZxAej8RSYGYurVX5t0SOTnFuQ0UNLDw==
+X-Received: by 2002:aa7:942a:: with SMTP id y10mr1046719pfo.68.1599607374934;
+        Tue, 08 Sep 2020 16:22:54 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 25sm242806pjh.57.2020.09.08.16.18.18
+        by smtp.gmail.com with ESMTPSA id 194sm474000pfy.44.2020.09.08.16.22.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 16:18:18 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 16:18:17 -0700
+        Tue, 08 Sep 2020 16:22:54 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     linux-kselftest@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH] selftests/seccomp: fix ptrace tests on powerpc
-Message-ID: <202009081505.D9FE52510B@keescook>
-References: <20200630164739.1268222-1-cascardo@canonical.com>
+To:     kafai@fb.com, songliubraving@fb.com,
+        linux-kselftest@vger.kernel.org, luto@amacapital.net,
+        wad@chromium.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        kpsingh@chromium.org, shuah@kernel.org, netdev@vger.kernel.org,
+        Zou Wei <zou_wei@huawei.com>, yhs@fb.com, andriin@fb.com,
+        bpf@vger.kernel.org, ast@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH -next] selftests/seccomp: Use bitwise instead of arithmetic operator for flags
+Date:   Tue,  8 Sep 2020 16:22:12 -0700
+Message-Id: <159960731879.1678444.6814133998182138035.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1586924101-65940-1-git-send-email-zou_wei@huawei.com>
+References: <1586924101-65940-1-git-send-email-zou_wei@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200630164739.1268222-1-cascardo@canonical.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 01:47:39PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> As pointed out by Michael Ellerman, the ptrace ABI on powerpc does not
-> allow or require the return code to be set on syscall entry when
-> skipping the syscall. It will always return ENOSYS and the return code
-> must be set on syscall exit.
+On Wed, 15 Apr 2020 12:15:01 +0800, Zou Wei wrote:
+> This silences the following coccinelle warning:
 > 
-> This code does that, behaving more similarly to strace. It still sets
-> the return code on entry, which is overridden on powerpc, and it will
-> always repeat the same on exit. Also, on powerpc, the errno is not
-> inverted, and depends on ccr.so being set.
+> "WARNING: sum of probable bitmasks, consider |"
 > 
-> This has been tested on powerpc and amd64.
-> 
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Kees Cook <keescook@google.com>
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+> tools/testing/selftests/seccomp/seccomp_bpf.c:3131:17-18: WARNING: sum of probable bitmasks, consider |
+> tools/testing/selftests/seccomp/seccomp_bpf.c:3133:18-19: WARNING: sum of probable bitmasks, consider |
+> tools/testing/selftests/seccomp/seccomp_bpf.c:3134:18-19: WARNING: sum of probable bitmasks, consider |
+> tools/testing/selftests/seccomp/seccomp_bpf.c:3135:18-19: WARNING: sum of probable bitmasks, consider |
 
-Yikes, I missed this from a while ago. I apologize for responding so
-late!
+Applied, thanks!
 
-This appears still unfixed; is that correct?
+[1/1] selftests/seccomp: Use bitwise instead of arithmetic operator for flags
+      https://git.kernel.org/kees/c/76993fe3c1e4
 
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 24 +++++++++++++++----
->  1 file changed, 20 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 252140a52553..b90a9190ba88 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -1738,6 +1738,14 @@ void change_syscall(struct __test_metadata *_metadata,
->  		TH_LOG("Can't modify syscall return on this architecture");
->  #else
->  		regs.SYSCALL_RET = result;
-> +# if defined(__powerpc__)
-> +		if (result < 0) {
-> +			regs.SYSCALL_RET = -result;
-> +			regs.ccr |= 0x10000000;
-> +		} else {
-> +			regs.ccr &= ~0x10000000;
-> +		}
-> +# endif
->  #endif
-
-Just so I understand correctly: for ppc to "see" this result, it needs
-to be both negative AND have this specific register set?
-
->  
->  #ifdef HAVE_GETREGS
-> @@ -1796,6 +1804,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
->  	int ret, nr;
->  	unsigned long msg;
->  	static bool entry;
-> +	int *syscall_nr = args;
->  
->  	/*
->  	 * The traditional way to tell PTRACE_SYSCALL entry/exit
-> @@ -1809,10 +1818,15 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
->  	EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->  			: PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
->  
-> -	if (!entry)
-> +	if (!entry && !syscall_nr)
->  		return;
->  
-> -	nr = get_syscall(_metadata, tracee);
-> +	if (entry)
-> +		nr = get_syscall(_metadata, tracee);
-> +	else
-> +		nr = *syscall_nr;
-
-This is weird? Shouldn't get_syscall() be modified to do the right thing
-here instead of depending on the extra arg?
-
-> +	if (syscall_nr)
-> +		*syscall_nr = nr;
->  
->  	if (nr == __NR_getpid)
->  		change_syscall(_metadata, tracee, __NR_getppid, 0);
-> @@ -1889,9 +1903,10 @@ TEST_F(TRACE_syscall, ptrace_syscall_redirected)
->  
->  TEST_F(TRACE_syscall, ptrace_syscall_errno)
->  {
-> +	int syscall_nr = -1;
->  	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
->  	teardown_trace_fixture(_metadata, self->tracer);
-> -	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
-> +	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, &syscall_nr,
->  					   true);
->  
->  	/* Tracer should skip the open syscall, resulting in ESRCH. */
-> @@ -1900,9 +1915,10 @@ TEST_F(TRACE_syscall, ptrace_syscall_errno)
->  
->  TEST_F(TRACE_syscall, ptrace_syscall_faked)
->  {
-> +	int syscall_nr = -1;
->  	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
->  	teardown_trace_fixture(_metadata, self->tracer);
-> -	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
-> +	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, &syscall_nr,
->  					   true);
->  
->  	/* Tracer should skip the gettid syscall, resulting fake pid. */
-> -- 
-> 2.25.1
-> 
+Sorry for the massive delay on this one! I lost this email in my inbox. :)
 
 -- 
 Kees Cook
+
