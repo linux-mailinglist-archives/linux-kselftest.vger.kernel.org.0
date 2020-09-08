@@ -2,111 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C04D2609B7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Sep 2020 06:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02527260B5F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Sep 2020 08:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgIHE7z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Sep 2020 00:59:55 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47178 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbgIHE7z (ORCPT
+        id S1729123AbgIHG5l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Sep 2020 02:57:41 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:58429 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728562AbgIHG5k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Sep 2020 00:59:55 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 2488328F7E8
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, willy@infradead.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v6 1/9] kernel: Support TIF_SYSCALL_INTERCEPT flag
-Organization: Collabora
-References: <20200904203147.2908430-1-krisman@collabora.com>
-        <20200904203147.2908430-2-krisman@collabora.com>
-        <20200907101608.ldfhhvcy3vmrkg6b@wittgenstein>
-Date:   Tue, 08 Sep 2020 00:59:49 -0400
-In-Reply-To: <20200907101608.ldfhhvcy3vmrkg6b@wittgenstein> (Christian
-        Brauner's message of "Mon, 7 Sep 2020 12:16:08 +0200")
-Message-ID: <87wo14n9ru.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Tue, 8 Sep 2020 02:57:40 -0400
+Received: from mail-lf1-f70.google.com ([209.85.167.70])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1kFXZQ-0002qT-U1
+        for linux-kselftest@vger.kernel.org; Tue, 08 Sep 2020 06:57:37 +0000
+Received: by mail-lf1-f70.google.com with SMTP id f13so944147lfs.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Sep 2020 23:57:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vzp7zmy16qSTY1Tj4XpNRu/ljIgkqSbcbe8XDlpXvi4=;
+        b=S9Y9Tjq614Oz42DWrNWaS6VUmBFReIo89GIQnKyB1EuUVvP7bh939wAzg/oQlzmiHF
+         vrx8w1+OTx8cYgmbluM/hZdBTnobmclF4O26RlUiYwGch+sWbYxjvK9FnId6gOqUFua9
+         kO4f8Bs09LVOrvftN5lDI5r6AZmqzi9MPc5byCin7IHO+VpNYz24DSfHw4vn2UxoXI22
+         128ZaNxdScfU30iXnMa+yKw9FkYAahQmx/pZBXPaG815rz0zTo6kp/5a6uHfbFDeF4DS
+         EMoK/35g60wQK1edEgeGRmgyZZob5v8/954iweukcI9wyUYigxhn7eilJTkpOve70F5C
+         xyGw==
+X-Gm-Message-State: AOAM532cMu3OPWNQ4R/lTHbG89+qCUW9fnawOwMVe3kj4bSpYzZraZqn
+        QdFXiXus/S7dd3G/ypJ2Rgq9pCy2QTfZqOyrNlj5hU+CsdZMuRgAyfgsDToL7NaZu9WvOksujkY
+        4dq54KpXT7iT85pcfbxYAtxABoeup4AwWHe2UnUnyfAE0Y63LaKOIinqA6ANo
+X-Received: by 2002:a19:a411:: with SMTP id q17mr11860166lfc.203.1599548256274;
+        Mon, 07 Sep 2020 23:57:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJygp/Cy9i5kwwqPW29UqRHI61VnfUXcFf9tILlkpm11JRKPQHotL77csl2OK1RXodhDbYgfkWa4aatVJw3RBRA=
+X-Received: by 2002:a19:a411:: with SMTP id q17mr11860150lfc.203.1599548255889;
+ Mon, 07 Sep 2020 23:57:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200907035010.9154-1-po-hsu.lin@canonical.com> <20200907131217.61643ada@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20200907131217.61643ada@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Tue, 8 Sep 2020 14:57:24 +0800
+Message-ID: <CAMy_GT-kaqkcdR+0q5eKoW3CJn7dZSCfr+UxRf6e5iRzZMiKTA@mail.gmail.com>
+Subject: Re: [PATCHv3] selftests: rtnetlink: load fou module for
+ kci_test_encap_fou() test
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Christian Brauner <christian.brauner@ubuntu.com> writes:
-
-> On Fri, Sep 04, 2020 at 04:31:39PM -0400, Gabriel Krisman Bertazi wrote:
->> index afe01e232935..3511c98a7849 100644
->> --- a/include/linux/sched.h
->> +++ b/include/linux/sched.h
->> @@ -959,7 +959,11 @@ struct task_struct {
->>  	kuid_t				loginuid;
->>  	unsigned int			sessionid;
->>  #endif
->> -	struct seccomp			seccomp;
->> +
->> +	struct {
->> +		unsigned int			syscall_intercept;
->> +		struct seccomp			seccomp;
->> +	};
+On Tue, Sep 8, 2020 at 4:12 AM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> If there's no specific reason to do this I'd not wrap this in an
-> anonymous struct. It doesn't really buy anything and there doesn't seem
-> to be  precedent in struct task_struct right now. Also, if this somehow
-> adds padding it seems you might end up increasing the size of struct
-> task_struct more than necessary by accident? (I might be wrong
-> though.)
-
-Hi Christian,
-
-Thanks for your review on this and on the other patches of this series.
-
-I wrapped these to prevent struct layout randomization from separating
-the flags field from seccomp, as they are going to be used together and
-I was trying to reduce overhead to seccomp entry due to two cache misses
-when reading this structure.  Measuring it seccomp_benchmark didn't show
-any difference with the unwrapped version, so perhaps it was a bit of
-premature optimization?
-
->> diff --git a/include/linux/syscall_intercept.h b/include/linux/syscall_intercept.h
->> new file mode 100644
->> index 000000000000..725d157699da
->> --- /dev/null
->> +++ b/include/linux/syscall_intercept.h
->> @@ -0,0 +1,70 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020 Collabora Ltd.
->> + */
->> +#ifndef _SYSCALL_INTERCEPT_H
->> +#define _SYSCALL_INTERCEPT_H
->> +
->> +#include <linux/sched.h>
->> +#include <linux/sched/signal.h>
->> +#include <linux/thread_info.h>
->> +
->> +#define SYSINT_SECCOMP		0x1
+> On Mon,  7 Sep 2020 11:50:10 +0800 Po-Hsu Lin wrote:
+> > The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
+> > needs the fou module to work. Otherwise it will fail with:
+> >
+> >   $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
+> >   RTNETLINK answers: No such file or directory
+> >   Error talking to the kernel
+> >
+> > Add the CONFIG_NET_FOU into the config file as well. Which needs at
+> > least to be set as a loadable module.
+> >
+> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
 >
-> <bikeshed>
+> > diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+> > index 7c38a90..a711b3e 100755
+> > --- a/tools/testing/selftests/net/rtnetlink.sh
+> > +++ b/tools/testing/selftests/net/rtnetlink.sh
+> > @@ -520,6 +520,11 @@ kci_test_encap_fou()
+> >               return $ksft_skip
+> >       fi
+> >
+> > +     if ! /sbin/modprobe -q -n fou; then
+> > +             echo "SKIP: module fou is not found"
+> > +             return $ksft_skip
+> > +     fi
+> > +     /sbin/modprobe -q fou
+> >       ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
+> >       if [ $? -ne 0 ];then
+> >               echo "FAIL: can't add fou port 7777, skipping test"
+> > @@ -540,6 +545,7 @@ kci_test_encap_fou()
+> >               return 1
+> >       fi
+> >
+> > +     /sbin/modprobe -q -r fou
 >
-> Can we maybe use a better name for this? I noone minds the extra
-> characters I'd suggest:
-> SYSCALL_INTERCEPT_SECCOMP
-> or
-> SYS_INTERCEPT_SECCOMP
+> I think the common practice is to not remove the module at the end of
+> the test. It may be used by something else than the test itself.
 >
-> </bikeshed>
+Hello Jakub,
+Thanks for your feedback.
+
+For this case I think it's safe to remove the module here, as it was
+never loaded before and thus causing this test to fail.
+If other tests in this rtnetlink.sh need this fou module, we should be
+able to spot those failures too, however this is the only failure as I
+can see.
+(pmtu.sh will need fou module to run as well, but it will be loaded there.)
+
+Shouldn't we insert the required module whenever the test needs it? So
+that we can run the test itself directly, without depending on other
+tests.
+Also, I can see modules for tests were being unloaded in other tests as well.
+
+Thanks
+
+> >       echo "PASS: fou"
+> >  }
+> >
 >
-
-will do.
-
-Thanks,
-
--- 
-Gabriel Krisman Bertazi
