@@ -2,97 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7777F26330E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Sep 2020 18:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1AC2636DB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Sep 2020 21:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730403AbgIIPvU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Sep 2020 11:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S1729908AbgIITtR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Sep 2020 15:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730356AbgIIPvM (ORCPT
+        with ESMTP id S1727900AbgIITtM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Sep 2020 11:51:12 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A487DC061757
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2020 08:51:08 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id p9so4275860ejf.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2020 08:51:08 -0700 (PDT)
+        Wed, 9 Sep 2020 15:49:12 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED85C061755
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2020 12:49:11 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id t7so1857683pjd.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2020 12:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ebI2CZT5sFSOyIJmsHXUvAoUxP/mIFBJnxrOROHyq1w=;
-        b=j+YHjrcPZ12jt2TR6VZ0SQLasTjXLm4QzCvH5I2QEq+TUS19U2aDKWvL4m3OSGEwX1
-         27sy149nq1tT/ngLrFPEjv3Qwi7oeD6dbVzHxonhKo90/tZwF9WN8vcMJDyd50A8sMrL
-         DzAzS4WAx8T4ldCFNWw2BLm0vsDAwPZU3f0wo=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oqhYmx0NFZNOAJE/eiypbxplY3MuONMIE6qhP6ssddY=;
+        b=H0bHFQ3ASMEAVTRUPtHvl7e6oC+0uJShA88H73hKX19wZcyGfPYU3ObDK/Y4120mWt
+         ybQL2m65jouKpt/NlMoDXLYE1qWA7pxMuoi0ztnpQ3V6o5/yX8ZXd/2s7TV3MF3ANKJX
+         vFku7hYNnUG2uqMyhPP+wCL+4OMsefFwdXQmc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ebI2CZT5sFSOyIJmsHXUvAoUxP/mIFBJnxrOROHyq1w=;
-        b=HU81Eed2leYyy+XyDYmLxv+yQ++ADM4rvQtC9RFmBWQiny/O2/MJ0lSQITPMrzB/PR
-         bGkyjwTPOVSfvf0pAJsnWCIeV8Zm/7g2OzhNllgkWesBAMBVx9eeUrd8MpBpb8cxVjDp
-         RayvmkwONyaimwZNAOsEz9O5o/cojdOG8BQIrox4s/6xf5lBu6cXzP6rlSzi1GTT08yg
-         4HfxJ8z0DYB+ONMsePXSWrsEflvNKOxFhbC5wdnkQEk3kbK3zyzaOJ6hR5t6QesPNuFh
-         T9Er92zNf2WQCdA7yuxdTwSdTP5gRdrWHSQcSK7fZrxOIyo7yqoCUGnxbwubT96Mpv8B
-         bBcQ==
-X-Gm-Message-State: AOAM530c7Gv435FCB3YDsGXBNInbQgqhjdVEAlWOkE25oP9r85cTaxk0
-        blI5ljnZrc8SZG28IJBLSeUA7IV6G9IWLA==
-X-Google-Smtp-Source: ABdhPJz4omn7xn5oarwE9DaIvcjRznlDer5axIP/K0pZRRWh+H3707/dTbc+SNR8I4dYo/EdSz5STg==
-X-Received: by 2002:a17:907:2055:: with SMTP id pg21mr4432456ejb.501.1599666666614;
-        Wed, 09 Sep 2020 08:51:06 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id ec11sm2812324ejb.123.2020.09.09.08.51.03
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 08:51:05 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id r7so4235648ejs.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2020 08:51:03 -0700 (PDT)
-X-Received: by 2002:a17:906:cec9:: with SMTP id si9mr4172770ejb.351.1599666663650;
- Wed, 09 Sep 2020 08:51:03 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oqhYmx0NFZNOAJE/eiypbxplY3MuONMIE6qhP6ssddY=;
+        b=PECfFglZg2fKY5LrC4b6B2KuLZye+XhCHT9zPJUS0H4VeKtGuzmLd0m19fPOtVVa6r
+         EHxhdLrSY23Ilc1YF3+X3epgXE4MVkkfv0wAHT8wZ0Ta54/fmXBt0BQmacW9JF9oWMWk
+         WlBcIzsVjQ6pwVJO+KdvrmdWypSxwrCj6YCFuMisFfvU3rO72W2J3SEdt6P0XUbYsf/z
+         wTh2RnDbkHLgN+kLusM5fdiOmnad4yIBFEBRpZ4ksMoQKmakMEZcjvNBY54/VNil8OTz
+         IHHtzCG79cr7GKQRLFaZOZOU5z8Wo9pirXUE6lQHKfVC7Y6KgQ46kzboXfxYg0/lmeXx
+         ZTOw==
+X-Gm-Message-State: AOAM531rFmQY1b8SSnTEY74waKBD2wCFdLEi5u68L5hvMMOc2wGxKOI5
+        ypiYfkJ8JqUMckZobZmkQggGYQ==
+X-Google-Smtp-Source: ABdhPJxU9aNjxN137DFaJhJ9P+8qFGxNKraARUvOOUlchRyN5dF2XrloEu5kn+x5DFLgaSun59zKsA==
+X-Received: by 2002:a17:90a:c83:: with SMTP id v3mr2067243pja.229.1599680951499;
+        Wed, 09 Sep 2020 12:49:11 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f19sm3231001pfj.25.2020.09.09.12.49.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 12:49:10 -0700 (PDT)
+Date:   Wed, 9 Sep 2020 12:49:09 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
+Message-ID: <202009091247.C10CDA60C@keescook>
+References: <202006261358.3E8AA623A9@keescook>
 MIME-Version: 1.0
-References: <20200827170947.429611-1-zwisler@google.com> <20200827200801.GB1236603@ZenIV.linux.org.uk>
- <20200827201015.GC1236603@ZenIV.linux.org.uk> <20200827202517.GA484488@google.com>
-In-Reply-To: <20200827202517.GA484488@google.com>
-From:   Ross Zwisler <zwisler@chromium.org>
-Date:   Wed, 9 Sep 2020 09:50:52 -0600
-X-Gmail-Original-Message-ID: <CAGRrVHxj6sJfToQm3-fhDfDbQVuvU+aOnRdnfo4L6CYYnurSew@mail.gmail.com>
-Message-ID: <CAGRrVHxj6sJfToQm3-fhDfDbQVuvU+aOnRdnfo4L6CYYnurSew@mail.gmail.com>
-Subject: Re: [PATCH v9 1/2] Add a "nosymfollow" mount option.
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Mattias Nissler <mnissler@chromium.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Benjamin Gordon <bmgordon@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Micah Morton <mortonm@google.com>,
-        Raul Rangel <rrangel@google.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202006261358.3E8AA623A9@keescook>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 2:25 PM Ross Zwisler <zwisler@google.com> wrote:
-> On Thu, Aug 27, 2020 at 09:10:15PM +0100, Al Viro wrote:
-> > On Thu, Aug 27, 2020 at 09:08:01PM +0100, Al Viro wrote:
-> > Applied (to -rc1) and pushed
->
-> Many thanks!
 
-(apologies for the resend, the previous one had HTML and was rejected
-by the lists)
+On Fri, Jun 26, 2020 at 01:59:43PM -0700, Kees Cook wrote:
+> Instead of full GNU diff (which smaller boot environments may not have),
+> use "comm" which is more available.
+> 
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Link: https://lore.kernel.org/lkml/CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com
+> Fixes: f131d9edc29d ("selftests/lkdtm: Don't clear dmesg when running tests")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Just FYI, here is the related commit in upstream util-linux:
+Shuah, this really needs to land to fix lkdtm tests on busybox. Can
+you add this to -next? (Or is it better to direct this to Greg for the
+lkdtm tree?)
 
-https://github.com/karelzak/util-linux/commit/50a531f667c31d54fbb920d394e6008df89ae636
+Thanks!
 
-and the thread to linux-man, which I will ping when the v5.10 merge
-window closes:
+-Kees
 
-https://lore.kernel.org/linux-man/CAKgNAkiAkyUjd=cUvASaT2tyhaCdiMF48KA3Ov_1mQf0=J2PXw@mail.gmail.com/
+> ---
+>  tools/testing/selftests/lkdtm/run.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
+> index 8383eb89d88a..5fe23009ae13 100755
+> --- a/tools/testing/selftests/lkdtm/run.sh
+> +++ b/tools/testing/selftests/lkdtm/run.sh
+> @@ -82,7 +82,7 @@ dmesg > "$DMESG"
+>  ($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
+>  
+>  # Record and dump the results
+> -dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
+> +dmesg | comm -13 "$DMESG" - > "$LOG" || true
+>  
+>  cat "$LOG"
+>  # Check for expected output
+> -- 
+> 2.25.1
+> 
+> 
+> -- 
+> Kees Cook
+
+-- 
+Kees Cook
