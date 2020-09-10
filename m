@@ -2,271 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D37263AE9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Sep 2020 04:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F0C263DFC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Sep 2020 09:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730321AbgIJB7S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Sep 2020 21:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S1730288AbgIJHFi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Sep 2020 03:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728442AbgIJBhb (ORCPT
+        with ESMTP id S1730285AbgIJHDn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Sep 2020 21:37:31 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB88C061372;
-        Wed,  9 Sep 2020 18:21:06 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id c18so3605363qtw.5;
-        Wed, 09 Sep 2020 18:21:06 -0700 (PDT)
+        Thu, 10 Sep 2020 03:03:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504C8C061757
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2020 00:03:42 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id u128so4562323ybg.17
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2020 00:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OCjRFBD7NU49turQlnVW81Mg28iHO5E7HqPSd/MOeR4=;
-        b=DKUWKouS+Lpfjuq6qitHH5Aki/47pGmwkydGG/Zg3J/0WS0im0P0fGNAyojixo6br2
-         XKn45CZCKbkBpBLAPcs2N5+MR0W4PZH70ZUI07WRA9OaYlSREwJwElUSe2gatjoMR8ol
-         roxlhIIUaVZGYLVbKXvDqN309H88Xt6SXRuxD//WwGqgPFDdGe0kn6ni3bj/dZyi8Byv
-         h5sCEgDIkCaWakY/90spLLWZYvmnpBjWVowljpr+tlTIJ8FktiZjWnDotbfJZL7NXLMl
-         pjASqkDnoSsq1hSrI2PtTSSpilaEwAu698R51bLQPma3dKcbpbqnl2cB6LWsOgzji2C4
-         rWiw==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=cAxIDHIAu5nqfj/dy7DKq8nUC3kZ+oYozl0NSp+uVoc=;
+        b=RnP/BqkgjlRBjwBdbRVTo5s4usvYG1pROI5DR/pSPywRgzwcSdqJ+Tpo9IyoEFn+pW
+         kvvco52PBhPHsMVYq5G4um1085JUn/74mXPVxssLWR7i20bJgeMDGlzXiNPl6A7VGUFu
+         tV2Mwu2vCvWsoDR4e0RZIS31qnyjw90WRkIKbRa3nwgDKwl+k8CFLW7tvrDk1JK+8b9K
+         Ri/uqNoRHOlWn+aYoywGjGH90Ul2YRzZrdxGnwsCg8Hdae59YIDEuyI9MIfI6d6vbEFF
+         j8qxwkW06kvYWrT+PVwTlUXgO1x6TY+CZ1CpA0LAyGEyDjAdQ+uiCfSap+GK0teEB5HG
+         QmLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OCjRFBD7NU49turQlnVW81Mg28iHO5E7HqPSd/MOeR4=;
-        b=m7G8jweQ14tztcXly0nvpkaIWFS/s2LevSthwpQhMwqF7d65IWCsazWbeZXtdqO1hV
-         5W+tTjCDqMh1ZVvxmbNg7izZgl2cxQ2fQFAruoreBWQWWmOdxYBh4u++U0vowcPPJ39v
-         dbHEw/plMZub+dx7XCwzchWE7d1fz49e1SqbWAm7DhejmtmXer8qXiA1pugVEnS9B3wq
-         aOUSg1+OBDwz+L+6JdYNsXo4ixh++G0AfBr86/Ikdf0S3GN9SrcZEF62eXEPUo5QEDYF
-         7pZqiRbKLqsvsemHKUQ10esRjunBocJHYiNr8V1zoJxpRpj+NwD12lKyn9CKlsfD7o6+
-         zaCQ==
-X-Gm-Message-State: AOAM530aKcRAMC7sUF0jUh89g+jAOvmsuN2YxBgJQoP8jUpuxtGnBVom
-        /15Af4ryU7BfuTyFKSmiPTEjI6DXYch7IzQnU7SktqnXo8E=
-X-Google-Smtp-Source: ABdhPJw5ALkYeIGw8hE6RyBHu894F7qwoDbjGlLPy8ECKmz83tbtyWSX/ohdJVbqOduC+kplj+d96pJVZEhg0O5TdgY=
-X-Received: by 2002:ac8:743:: with SMTP id k3mr6124648qth.182.1599700865339;
- Wed, 09 Sep 2020 18:21:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200309101256.868-1-liuhangbin@gmail.com> <20200316072626.24037-1-liuhangbin@gmail.com>
-In-Reply-To: <20200316072626.24037-1-liuhangbin@gmail.com>
-From:   Hangbin Liu <liuhangbin@gmail.com>
-Date:   Thu, 10 Sep 2020 09:20:54 +0800
-Message-ID: <CAPwn2JR=WzpuMjA=x+39GFAbXpTFLt16bcD37LyfH5NtU=Mqvw@mail.gmail.com>
-Subject: Re: [RFC PATCHv2] selftests/run_kselftest.sh: make each test
- individually selectable
-To:     linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=cAxIDHIAu5nqfj/dy7DKq8nUC3kZ+oYozl0NSp+uVoc=;
+        b=WnTg+Hs55dhNRwr4SV9fU6htQuZHGTPuP8L3oHDOfHdfM7DQqspk6celWM7m1256/P
+         3ZaHfQ8DTeO1xJWDZtbwECv8Jwd4jHXpbrv8xmbZGnUeSjIAoKUK8gV7GgpR5M6zIz/D
+         cnphhQHyUVAEReTNABij+x6Ue+QRddlO1MhmpJNJ6WF4QXa0pU8HwH8MQRoUo9OSN3Dh
+         O1eOfqtcOfjyhAlapZFtjlylvD7sYYp81iKqNMRQ7AjkugvlwgQpOyXrF/U7RccTaUPI
+         vzlguMYA/SCGjgMlDNdKPlct2d1SSG3WWa8lCKciAhEPsNwF6t5o36MhUiQSI6yZIaO7
+         i3lA==
+X-Gm-Message-State: AOAM530neAi3jrvNUlbjltkIWfUYx3GXtbLHfjH6okr5nBiBOfUA2T6D
+        HzDlVS+Wi/OtfE9HDnGdFoLIGEaSp2Brdg==
+X-Google-Smtp-Source: ABdhPJzMandSFJg72wbyCQXU5b0jQbuTABdf/gsTxIim5/05LEyse/hpxNMhgAY/HoZdZA+qM8ORQvCGhHsyTw==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:42a8:f0ff:fe4d:3548])
+ (user=davidgow job=sendgmr) by 2002:a25:2d1:: with SMTP id
+ 200mr1111668ybc.210.1599721421325; Thu, 10 Sep 2020 00:03:41 -0700 (PDT)
+Date:   Thu, 10 Sep 2020 00:03:25 -0700
+Message-Id: <20200910070331.3358048-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.526.ge36021eeef-goog
+Subject: [PATCH v13 0/5] KASAN-KUnit Integration
+From:   David Gow <davidgow@google.com>
+To:     trishalfonso@google.com, brendanhiggins@google.com,
+        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, andreyknvl@google.com,
+        shuah@kernel.org, akpm@linux-foundation.org
+Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+This patchset contains everything needed to integrate KASAN and KUnit.
 
-What do you think of this change? Any comments?
-If you are OK, I can rebase the patch and repost it.
+KUnit will be able to:
+(1) Fail tests when an unexpected KASAN error occurs
+(2) Pass tests when an expected KASAN error occurs
 
-Thanks
-Hangbin
+Convert KASAN tests to KUnit with the exception of copy_user_test
+because KUnit is unable to test those.
 
-On Mon, 16 Mar 2020 at 15:26, Hangbin Liu <liuhangbin@gmail.com> wrote:
->
-> Currently, after generating run_kselftest.sh, there is no way to choose
-> which test we could run. All the tests are listed together and we have
-> to run all every time. This patch enhanced the run_kselftest.sh to make
-> the tests individually selectable. e.g.
->
->   $ ./run_kselftest.sh -t "bpf size timers"
->
-> Note: I use `tr -s "/-" "_"` to cover the path name to function name in
-> tests. e.g. networking/timestamping -> networking_timestamping.
->
-> Before the patch:
->
-> $ cat run_kselftest.sh
-> \#!/bin/sh
-> BASE_DIR=$(realpath $(dirname $0))
-> cd $BASE_DIR
-> . ./kselftest/runner.sh
-> ROOT=$PWD
-> if [ "$1" = "--summary" ]; then
->   logfile=$BASE_DIR/output.log
->   cat /dev/null > $logfile
-> fi
-> [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
-> cd android
-> run_many        \
->         "run.sh"
-> cd $ROOT
-> ...<snip>...
-> [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
-> cd zram
-> run_many        \
->         "zram.sh"
-> cd $ROOT
->
-> After the patch:
-> $ cat run_kselftest.sh
-> \#!/bin/sh
-> BASE_DIR=$(realpath $(dirname $0))
-> . ./kselftest/runner.sh
-> TESTS="android ...<snip>... zram"
->
-> run_android()
-> {
->         [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
->         cd android
->         run_many        \
->                 "run.sh"
->         cd $ROOT
-> }
->
-> ...<snip>...
->
-> run_zram()
-> {
->         [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
->         cd zram
->         run_many        \
->                 "zram.sh"
->         cd $ROOT
-> }
->
-> usage()
-> {
->         cat <<EOF
-> usage: ${0##*/} OPTS
->         -s | --summary          Only print summary info and put detailed log in output.log
->         -t | --tests            Test name you want to run specifically
->         -h | --help             Show this usage info
-> EOF
-> }
->
-> while true; do
->         case "$1" in
->         -s | --summary ) logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;
->         -t | --tests ) TESTS=$2; shift 2 ;;
->         -h | --help ) usage; exit 0;;
->         "" ) break;;
->         * ) usage; exit 1;;
->         esac
-> done
->
-> cd $BASE_DIR
-> ROOT=$PWD
-> for test in $TESTS; do
->         run_$test
-> done
->
-> v2: update document and commit description.
->
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
->  Documentation/dev-tools/kselftest.rst |  4 +++
->  tools/testing/selftests/Makefile      | 48 +++++++++++++++++++++------
->  tools/testing/selftests/lib.mk        |  2 +-
->  3 files changed, 43 insertions(+), 11 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index 61ae13c44f91..e856713a1deb 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -151,6 +151,10 @@ note some tests will require root privileges::
->     $ cd kselftest
->     $ ./run_kselftest.sh
->
-> +Or you can run some specific test cases in the installed Kselftests by::
-> +
-> +   $ ./run_kselftest.sh -t "bpf size timers"
-> +
->  Contributing new tests
->  ======================
->
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index be22dbe94a4c..5481ea0634cf 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -212,13 +212,9 @@ ifdef INSTALL_PATH
->         @# Ask all targets to emit their test scripts
->         echo "#!/bin/sh" > $(ALL_SCRIPT)
->         echo "BASE_DIR=\$$(realpath \$$(dirname \$$0))" >> $(ALL_SCRIPT)
-> -       echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
->         echo ". ./kselftest/runner.sh" >> $(ALL_SCRIPT)
-> -       echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
-> -       echo "if [ \"\$$1\" = \"--summary\" ]; then" >> $(ALL_SCRIPT)
-> -       echo "  logfile=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
-> -       echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
-> -       echo "fi" >> $(ALL_SCRIPT)
-> +       echo "TESTS=\"$(TARGETS)\"" | tr -s "/-" "_" >> $(ALL_SCRIPT)
-> +       echo "" >> $(ALL_SCRIPT);
->
->         @# While building run_kselftest.sh skip also non-existent TARGET dirs:
->         @# they could be the result of a build failure and should NOT be
-> @@ -226,15 +222,47 @@ ifdef INSTALL_PATH
->         for TARGET in $(TARGETS); do \
->                 BUILD_TARGET=$$BUILD/$$TARGET;  \
->                 [ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
-> -               echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
-> -               echo "cd $$TARGET" >> $(ALL_SCRIPT); \
-> -               echo -n "run_many" >> $(ALL_SCRIPT); \
-> +               echo "run_$$TARGET()" | tr -s "/-" "_" >> $(ALL_SCRIPT); \
-> +               echo "{" >> $(ALL_SCRIPT); \
-> +               echo -e "\t[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
-> +               echo -e "\tcd $$TARGET" >> $(ALL_SCRIPT); \
-> +               echo -en "\trun_many" >> $(ALL_SCRIPT); \
->                 echo -n "Emit Tests for $$TARGET\n"; \
->                 $(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
->                 echo "" >> $(ALL_SCRIPT);           \
-> -               echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
-> +               echo -e "\tcd \$$ROOT" >> $(ALL_SCRIPT); \
-> +               echo "}" >> $(ALL_SCRIPT); \
-> +               echo "" >> $(ALL_SCRIPT); \
->         done;
->
-> +       echo "usage()" >> $(ALL_SCRIPT);
-> +       echo "{" >> $(ALL_SCRIPT);
-> +       echo -e "\tcat <<EOF" >> $(ALL_SCRIPT);
-> +       echo "usage: \$${0##*/} OPTS" >> $(ALL_SCRIPT);
-> +       echo -e "\t-s | --summary\t\tOnly print summary info and put detailed log in output.log" >> $(ALL_SCRIPT);
-> +       echo -e "\t-t | --tests\t\tTest name you want to run specifically" >> $(ALL_SCRIPT);
-> +       echo -e "\t-h | --help\t\tShow this usage info" >> $(ALL_SCRIPT);
-> +       echo "EOF" >> $(ALL_SCRIPT);
-> +       echo "}" >> $(ALL_SCRIPT);
-> +       echo "" >> $(ALL_SCRIPT);
-> +
-> +       echo "while true; do" >> $(ALL_SCRIPT);
-> +       echo -e "\tcase \"\$$1\" in" >> $(ALL_SCRIPT);
-> +       echo -e "\t-s | --summary ) logfile=\$$BASE_DIR/output.log; cat /dev/null > \$$logfile; shift ;;" >> $(ALL_SCRIPT);
-> +       echo -e "\t-t | --tests ) TESTS=\$$2; shift 2 ;;" >> $(ALL_SCRIPT);
-> +       echo -e "\t-h | --help ) usage; exit 0;;" >> $(ALL_SCRIPT);
-> +       echo -e "\t\"\" ) break;;" >> $(ALL_SCRIPT);
-> +       echo -e "\t* ) usage; exit 1;;" >> $(ALL_SCRIPT);
-> +       echo -e "\tesac" >> $(ALL_SCRIPT);
-> +       echo "done" >> $(ALL_SCRIPT);
-> +       echo "" >> $(ALL_SCRIPT);
-> +
-> +       echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
-> +       echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
-> +
-> +       echo "for test in \$$TESTS; do" >> $(ALL_SCRIPT); \
-> +       echo -e "\trun_\$$test" >> $(ALL_SCRIPT); \
-> +       echo "done" >> $(ALL_SCRIPT); \
->         chmod u+x $(ALL_SCRIPT)
->  else
->         $(error Error: set INSTALL_PATH to use install)
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 1c8a1963d03f..2dc5a0cca6f3 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -107,7 +107,7 @@ emit_tests:
->         for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
->                 BASENAME_TEST=`basename $$TEST`;        \
->                 echo "  \\";                            \
-> -               echo -n "       \"$$BASENAME_TEST\"";   \
-> +               echo -ne "\t\t\"$$BASENAME_TEST\"";     \
->         done;                                           \
->
->  # define if isn't already. It is undefined in make O= case.
-> --
-> 2.19.2
->
+Add documentation on how to run the KASAN tests with KUnit and what to
+expect when running these tests.
+
+The dependencies for this patchset are all present in 5.9-rc1+.
+
+Changes from v12:
+ - Rebased on top of mainline (ab29a807)
+ - Updated to match latest KUnit guidelines (no longer rename the test)
+ - Fix some small issues with the documentation to match the correct
+   test name and mention the module name.
+
+Changes from v11:
+ - Rebased on top of latest -next (20200810)
+ - Fixed a redundant memchr() call in kasan_memchr()
+ - Added Andrey's "Tested-by" to everything.
+
+Changes from v10:
+ - Fixed some whitespace issues in patch 2.
+ - Split out the renaming of the KUnit test suite into a separate patch.
+
+Changes from v9:
+ - Rebased on top of linux-next (20200731) + kselftest/kunit and [7]
+ - Note that the kasan_rcu_uaf test has not been ported to KUnit, and
+   remains in test_kasan_module. This is because:
+   (a) KUnit's expect failure will not check if the RCU stacktraces
+       show.
+   (b) KUnit is unable to link the failure to the test, as it occurs in
+       an RCU callback.
+
+Changes from v8:
+ - Rebased on top of kselftest/kunit
+ - (Which, with this patchset, should rebase cleanly on 5.8-rc7)
+ - Renamed the KUnit test suite, config name to patch the proposed
+   naming guidelines for KUnit tests[6]
+
+Changes from v7:
+ - Rebased on top of kselftest/kunit
+ - Rebased on top of v4 of the kunit resources API[1]
+ - Rebased on top of v4 of the FORTIFY_SOURCE fix[2,3,4]
+ - Updated the Kconfig entry to support KUNIT_ALL_TESTS
+
+Changes from v6:
+ - Rebased on top of kselftest/kunit
+ - Rebased on top of Daniel Axtens' fix for FORTIFY_SOURCE
+   incompatibilites [2]
+ - Removed a redundant report_enabled() check.
+ - Fixed some places with out of date Kconfig names in the
+   documentation.
+
+Changes from v5:
+ - Split out the panic_on_warn changes to a separate patch.
+ - Fix documentation to fewer to the new Kconfig names.
+ - Fix some changes which were in the wrong patch.
+ - Rebase on top of kselftest/kunit (currently identical to 5.7-rc1)
+
+Changes from v4:
+ - KASAN no longer will panic on errors if both panic_on_warn and
+   kasan_multishot are enabled.
+ - As a result, the KASAN tests will no-longer disable panic_on_warn.
+ - This also means panic_on_warn no-longer needs to be exported.
+ - The use of temporary "kasan_data" variables has been cleaned up
+   somewhat.
+ - A potential refcount/resource leak should multiple KASAN errors
+   appear during an assertion was fixed.
+ - Some wording changes to the KASAN test Kconfig entries.
+
+Changes from v3:
+ - KUNIT_SET_KASAN_DATA and KUNIT_DO_EXPECT_KASAN_FAIL have been
+ combined and included in KUNIT_DO_EXPECT_KASAN_FAIL() instead.
+ - Reordered logic in kasan_update_kunit_status() in report.c to be
+ easier to read.
+ - Added comment to not use the name "kasan_data" for any kunit tests
+ outside of KUNIT_EXPECT_KASAN_FAIL().
+
+Changes since v2:
+ - Due to Alan's changes in [1], KUnit can be built as a module.
+ - The name of the tests that could not be run with KUnit has been
+ changed to be more generic: test_kasan_module.
+ - Documentation on how to run the new KASAN tests and what to expect
+ when running them has been added.
+ - Some variables and functions are now static.
+ - Now save/restore panic_on_warn in a similar way to kasan_multi_shot
+ and renamed the init/exit functions to be more generic to accommodate.
+ - Due to [4] in kasan_strings, kasan_memchr, and
+ kasan_memcmp will fail if CONFIG_AMD_MEM_ENCRYPT is enabled so return
+ early and print message explaining this circumstance.
+ - Changed preprocessor checks to C checks where applicable.
+
+Changes since v1:
+ - Make use of Alan Maguire's suggestion to use his patch that allows
+   static resources for integration instead of adding a new attribute to
+   the kunit struct
+ - All KUNIT_EXPECT_KASAN_FAIL statements are local to each test
+ - The definition of KUNIT_EXPECT_KASAN_FAIL is local to the
+   test_kasan.c file since it seems this is the only place this will
+   be used.
+ - Integration relies on KUnit being builtin
+ - copy_user_test has been separated into its own file since KUnit
+   is unable to test these. This can be run as a module just as before,
+   using CONFIG_TEST_KASAN_USER
+ - The addition to the current task has been separated into its own
+   patch as this is a significant enough change to be on its own.
+
+
+[1] https://lore.kernel.org/linux-kselftest/CAFd5g46Uu_5TG89uOm0Dj5CMq+11cwjBnsd-k_CVy6bQUeU4Jw@mail.gmail.com/T/#t
+[2] https://lore.kernel.org/linux-mm/20200424145521.8203-1-dja@axtens.net/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adb72ae1915db28f934e9e02c18bfcea2f3ed3b7
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47227d27e2fcb01a9e8f5958d8997cf47a820afc
+[5] https://bugzilla.kernel.org/show_bug.cgi?id=206337
+[6] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/
+[7] https://lkml.org/lkml/2020/7/31/571
+[8] https://lore.kernel.org/linux-kselftest/8d43e88e-1356-cd63-9152-209b81b16746@linuxfoundation.org/T/#u
+
+
+David Gow (1):
+  mm: kasan: Do not panic if both panic_on_warn and kasan_multishot set
+
+Patricia Alfonso (4):
+  Add KUnit Struct to Current Task
+  KUnit: KASAN Integration
+  KASAN: Port KASAN Tests to KUnit
+  KASAN: Testing Documentation
+
+ Documentation/dev-tools/kasan.rst |  70 +++
+ include/kunit/test.h              |   5 +
+ include/linux/kasan.h             |   6 +
+ include/linux/sched.h             |   4 +
+ lib/Kconfig.kasan                 |  22 +-
+ lib/Makefile                      |   3 +-
+ lib/kunit/test.c                  |  13 +-
+ lib/test_kasan.c                  | 728 ++++++++++++------------------
+ lib/test_kasan_module.c           | 111 +++++
+ mm/kasan/report.c                 |  34 +-
+ 10 files changed, 553 insertions(+), 443 deletions(-)
+ create mode 100644 lib/test_kasan_module.c
+
+-- 
+2.28.0.526.ge36021eeef-goog
+
