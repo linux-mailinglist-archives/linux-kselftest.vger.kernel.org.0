@@ -2,114 +2,271 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC7026388A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Sep 2020 23:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D37263AE9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Sep 2020 04:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728442AbgIIVfE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Sep 2020 17:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S1730321AbgIJB7S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Sep 2020 21:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbgIIVfD (ORCPT
+        with ESMTP id S1728442AbgIJBhb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Sep 2020 17:35:03 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939CAC061573
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Sep 2020 14:35:02 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id b6so4822931iof.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Sep 2020 14:35:02 -0700 (PDT)
+        Wed, 9 Sep 2020 21:37:31 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB88C061372;
+        Wed,  9 Sep 2020 18:21:06 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id c18so3605363qtw.5;
+        Wed, 09 Sep 2020 18:21:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iFwcM5UOt2dpyB2PsU5iJo0w889YT6WLHO2nVi3J24g=;
-        b=J0LLvpo1cupuJbGq53hbp03wzOvwvtjlXRh2BNTpOPik1+TAzMNARHV+0u9Dsqkw2Q
-         UVOWKAKJ0/pJuo+XPq06078vVF/QefyQepMqhy76QGGMwWtFW1nE8/N1lWk/4aXezzt9
-         0QJebhL8Lhz8LjxzL/CNjj3l1uEIXaLl2IL44=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OCjRFBD7NU49turQlnVW81Mg28iHO5E7HqPSd/MOeR4=;
+        b=DKUWKouS+Lpfjuq6qitHH5Aki/47pGmwkydGG/Zg3J/0WS0im0P0fGNAyojixo6br2
+         XKn45CZCKbkBpBLAPcs2N5+MR0W4PZH70ZUI07WRA9OaYlSREwJwElUSe2gatjoMR8ol
+         roxlhIIUaVZGYLVbKXvDqN309H88Xt6SXRuxD//WwGqgPFDdGe0kn6ni3bj/dZyi8Byv
+         h5sCEgDIkCaWakY/90spLLWZYvmnpBjWVowljpr+tlTIJ8FktiZjWnDotbfJZL7NXLMl
+         pjASqkDnoSsq1hSrI2PtTSSpilaEwAu698R51bLQPma3dKcbpbqnl2cB6LWsOgzji2C4
+         rWiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=iFwcM5UOt2dpyB2PsU5iJo0w889YT6WLHO2nVi3J24g=;
-        b=M9cabu2pktgjEe3jnWKsIeYgRzGHwD35J0y+aCM9qsRIrwgEvDIBVfVsHoni7kSGA2
-         /5bIEvKsGwfka4shCbcaQ40PxHQrupdyQ/06zIwQSMjFRWdRf9j0iwKcPctm1MYMgeWl
-         RJKFL+fenctmJcFjdH6wsdB9Rfti3ECiYn7zZWyEf2tC3amHVgIIx6FfU224DiSK+EFb
-         IV3hyanjtGTvYH2/5WarA19p1H8UPIzKG/Hy86+5DZShbbcqZjw7AY01+5aco1erzLLo
-         HH2xNJg7s+ELp0o4duUdyFmOX0KePVCYttf0S/T1S0pVpLWqyx+5dCUtO0yld3WA+THj
-         EjrA==
-X-Gm-Message-State: AOAM530UE2v47HHNvWy0WUtP5KI8LdNawqUtBYDQk5h09dinYGQ+/rjL
-        CmtL6UZUmtGbwNqmWeiTgSIx2A==
-X-Google-Smtp-Source: ABdhPJw0ea5MrnRi+Y4QQcTgIBMEGCPv9JcBQ/7/MH5C82chfmjUlsoEHZA7di9RgOwbJPC4KJqDSg==
-X-Received: by 2002:a05:6602:22cf:: with SMTP id e15mr4928006ioe.114.1599687301932;
-        Wed, 09 Sep 2020 14:35:01 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id m12sm1939383ilg.55.2020.09.09.14.35.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 14:35:01 -0700 (PDT)
-Subject: Re: [PATCH v2] selftests/lkdtm: Use "comm" instead of "diff" for
- dmesg
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-kselftest@vger.kernel.org,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-References: <20200909211700.2399399-1-keescook@chromium.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f92a05d3-6932-d644-e95f-d63c0a34fa19@linuxfoundation.org>
-Date:   Wed, 9 Sep 2020 15:35:00 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OCjRFBD7NU49turQlnVW81Mg28iHO5E7HqPSd/MOeR4=;
+        b=m7G8jweQ14tztcXly0nvpkaIWFS/s2LevSthwpQhMwqF7d65IWCsazWbeZXtdqO1hV
+         5W+tTjCDqMh1ZVvxmbNg7izZgl2cxQ2fQFAruoreBWQWWmOdxYBh4u++U0vowcPPJ39v
+         dbHEw/plMZub+dx7XCwzchWE7d1fz49e1SqbWAm7DhejmtmXer8qXiA1pugVEnS9B3wq
+         aOUSg1+OBDwz+L+6JdYNsXo4ixh++G0AfBr86/Ikdf0S3GN9SrcZEF62eXEPUo5QEDYF
+         7pZqiRbKLqsvsemHKUQ10esRjunBocJHYiNr8V1zoJxpRpj+NwD12lKyn9CKlsfD7o6+
+         zaCQ==
+X-Gm-Message-State: AOAM530aKcRAMC7sUF0jUh89g+jAOvmsuN2YxBgJQoP8jUpuxtGnBVom
+        /15Af4ryU7BfuTyFKSmiPTEjI6DXYch7IzQnU7SktqnXo8E=
+X-Google-Smtp-Source: ABdhPJw5ALkYeIGw8hE6RyBHu894F7qwoDbjGlLPy8ECKmz83tbtyWSX/ohdJVbqOduC+kplj+d96pJVZEhg0O5TdgY=
+X-Received: by 2002:ac8:743:: with SMTP id k3mr6124648qth.182.1599700865339;
+ Wed, 09 Sep 2020 18:21:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200909211700.2399399-1-keescook@chromium.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200309101256.868-1-liuhangbin@gmail.com> <20200316072626.24037-1-liuhangbin@gmail.com>
+In-Reply-To: <20200316072626.24037-1-liuhangbin@gmail.com>
+From:   Hangbin Liu <liuhangbin@gmail.com>
+Date:   Thu, 10 Sep 2020 09:20:54 +0800
+Message-ID: <CAPwn2JR=WzpuMjA=x+39GFAbXpTFLt16bcD37LyfH5NtU=Mqvw@mail.gmail.com>
+Subject: Re: [RFC PATCHv2] selftests/run_kselftest.sh: make each test
+ individually selectable
+To:     linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/9/20 3:17 PM, Kees Cook wrote:
-> Instead of full GNU diff (which smaller boot environments may not have),
-> use "comm" which is more available.
-> 
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Fixes: f131d9edc29d ("selftests/lkdtm: Don't clear dmesg when running tests")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Hi Shuah,
+
+What do you think of this change? Any comments?
+If you are OK, I can rebase the patch and repost it.
+
+Thanks
+Hangbin
+
+On Mon, 16 Mar 2020 at 15:26, Hangbin Liu <liuhangbin@gmail.com> wrote:
+>
+> Currently, after generating run_kselftest.sh, there is no way to choose
+> which test we could run. All the tests are listed together and we have
+> to run all every time. This patch enhanced the run_kselftest.sh to make
+> the tests individually selectable. e.g.
+>
+>   $ ./run_kselftest.sh -t "bpf size timers"
+>
+> Note: I use `tr -s "/-" "_"` to cover the path name to function name in
+> tests. e.g. networking/timestamping -> networking_timestamping.
+>
+> Before the patch:
+>
+> $ cat run_kselftest.sh
+> \#!/bin/sh
+> BASE_DIR=$(realpath $(dirname $0))
+> cd $BASE_DIR
+> . ./kselftest/runner.sh
+> ROOT=$PWD
+> if [ "$1" = "--summary" ]; then
+>   logfile=$BASE_DIR/output.log
+>   cat /dev/null > $logfile
+> fi
+> [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
+> cd android
+> run_many        \
+>         "run.sh"
+> cd $ROOT
+> ...<snip>...
+> [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
+> cd zram
+> run_many        \
+>         "zram.sh"
+> cd $ROOT
+>
+> After the patch:
+> $ cat run_kselftest.sh
+> \#!/bin/sh
+> BASE_DIR=$(realpath $(dirname $0))
+> . ./kselftest/runner.sh
+> TESTS="android ...<snip>... zram"
+>
+> run_android()
+> {
+>         [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
+>         cd android
+>         run_many        \
+>                 "run.sh"
+>         cd $ROOT
+> }
+>
+> ...<snip>...
+>
+> run_zram()
+> {
+>         [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
+>         cd zram
+>         run_many        \
+>                 "zram.sh"
+>         cd $ROOT
+> }
+>
+> usage()
+> {
+>         cat <<EOF
+> usage: ${0##*/} OPTS
+>         -s | --summary          Only print summary info and put detailed log in output.log
+>         -t | --tests            Test name you want to run specifically
+>         -h | --help             Show this usage info
+> EOF
+> }
+>
+> while true; do
+>         case "$1" in
+>         -s | --summary ) logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;
+>         -t | --tests ) TESTS=$2; shift 2 ;;
+>         -h | --help ) usage; exit 0;;
+>         "" ) break;;
+>         * ) usage; exit 1;;
+>         esac
+> done
+>
+> cd $BASE_DIR
+> ROOT=$PWD
+> for test in $TESTS; do
+>         run_$test
+> done
+>
+> v2: update document and commit description.
+>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > ---
-> v2: add --nocheck-order, thanks to Joe Lawrence
-> v1: https://lore.kernel.org/lkml/202006261358.3E8AA623A9@keescook/
-> ---
->   tools/testing/selftests/lkdtm/run.sh | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
-> index 8383eb89d88a..bb7a1775307b 100755
-> --- a/tools/testing/selftests/lkdtm/run.sh
-> +++ b/tools/testing/selftests/lkdtm/run.sh
-> @@ -82,7 +82,7 @@ dmesg > "$DMESG"
->   ($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
->   
->   # Record and dump the results
-> -dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
-> +dmesg | comm --nocheck-order -13 "$DMESG" - > "$LOG" || true
->   
->   cat "$LOG"
->   # Check for expected output
-> 
-
-Greg,
-
-Would you like me to take this through kselftest tree?
-
-If you want to take it through lkdtm tree, here is my Ack:
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+>  Documentation/dev-tools/kselftest.rst |  4 +++
+>  tools/testing/selftests/Makefile      | 48 +++++++++++++++++++++------
+>  tools/testing/selftests/lib.mk        |  2 +-
+>  3 files changed, 43 insertions(+), 11 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+> index 61ae13c44f91..e856713a1deb 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -151,6 +151,10 @@ note some tests will require root privileges::
+>     $ cd kselftest
+>     $ ./run_kselftest.sh
+>
+> +Or you can run some specific test cases in the installed Kselftests by::
+> +
+> +   $ ./run_kselftest.sh -t "bpf size timers"
+> +
+>  Contributing new tests
+>  ======================
+>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index be22dbe94a4c..5481ea0634cf 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -212,13 +212,9 @@ ifdef INSTALL_PATH
+>         @# Ask all targets to emit their test scripts
+>         echo "#!/bin/sh" > $(ALL_SCRIPT)
+>         echo "BASE_DIR=\$$(realpath \$$(dirname \$$0))" >> $(ALL_SCRIPT)
+> -       echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
+>         echo ". ./kselftest/runner.sh" >> $(ALL_SCRIPT)
+> -       echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
+> -       echo "if [ \"\$$1\" = \"--summary\" ]; then" >> $(ALL_SCRIPT)
+> -       echo "  logfile=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
+> -       echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
+> -       echo "fi" >> $(ALL_SCRIPT)
+> +       echo "TESTS=\"$(TARGETS)\"" | tr -s "/-" "_" >> $(ALL_SCRIPT)
+> +       echo "" >> $(ALL_SCRIPT);
+>
+>         @# While building run_kselftest.sh skip also non-existent TARGET dirs:
+>         @# they could be the result of a build failure and should NOT be
+> @@ -226,15 +222,47 @@ ifdef INSTALL_PATH
+>         for TARGET in $(TARGETS); do \
+>                 BUILD_TARGET=$$BUILD/$$TARGET;  \
+>                 [ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+> -               echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+> -               echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+> -               echo -n "run_many" >> $(ALL_SCRIPT); \
+> +               echo "run_$$TARGET()" | tr -s "/-" "_" >> $(ALL_SCRIPT); \
+> +               echo "{" >> $(ALL_SCRIPT); \
+> +               echo -e "\t[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+> +               echo -e "\tcd $$TARGET" >> $(ALL_SCRIPT); \
+> +               echo -en "\trun_many" >> $(ALL_SCRIPT); \
+>                 echo -n "Emit Tests for $$TARGET\n"; \
+>                 $(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+>                 echo "" >> $(ALL_SCRIPT);           \
+> -               echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+> +               echo -e "\tcd \$$ROOT" >> $(ALL_SCRIPT); \
+> +               echo "}" >> $(ALL_SCRIPT); \
+> +               echo "" >> $(ALL_SCRIPT); \
+>         done;
+>
+> +       echo "usage()" >> $(ALL_SCRIPT);
+> +       echo "{" >> $(ALL_SCRIPT);
+> +       echo -e "\tcat <<EOF" >> $(ALL_SCRIPT);
+> +       echo "usage: \$${0##*/} OPTS" >> $(ALL_SCRIPT);
+> +       echo -e "\t-s | --summary\t\tOnly print summary info and put detailed log in output.log" >> $(ALL_SCRIPT);
+> +       echo -e "\t-t | --tests\t\tTest name you want to run specifically" >> $(ALL_SCRIPT);
+> +       echo -e "\t-h | --help\t\tShow this usage info" >> $(ALL_SCRIPT);
+> +       echo "EOF" >> $(ALL_SCRIPT);
+> +       echo "}" >> $(ALL_SCRIPT);
+> +       echo "" >> $(ALL_SCRIPT);
+> +
+> +       echo "while true; do" >> $(ALL_SCRIPT);
+> +       echo -e "\tcase \"\$$1\" in" >> $(ALL_SCRIPT);
+> +       echo -e "\t-s | --summary ) logfile=\$$BASE_DIR/output.log; cat /dev/null > \$$logfile; shift ;;" >> $(ALL_SCRIPT);
+> +       echo -e "\t-t | --tests ) TESTS=\$$2; shift 2 ;;" >> $(ALL_SCRIPT);
+> +       echo -e "\t-h | --help ) usage; exit 0;;" >> $(ALL_SCRIPT);
+> +       echo -e "\t\"\" ) break;;" >> $(ALL_SCRIPT);
+> +       echo -e "\t* ) usage; exit 1;;" >> $(ALL_SCRIPT);
+> +       echo -e "\tesac" >> $(ALL_SCRIPT);
+> +       echo "done" >> $(ALL_SCRIPT);
+> +       echo "" >> $(ALL_SCRIPT);
+> +
+> +       echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
+> +       echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
+> +
+> +       echo "for test in \$$TESTS; do" >> $(ALL_SCRIPT); \
+> +       echo -e "\trun_\$$test" >> $(ALL_SCRIPT); \
+> +       echo "done" >> $(ALL_SCRIPT); \
+>         chmod u+x $(ALL_SCRIPT)
+>  else
+>         $(error Error: set INSTALL_PATH to use install)
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 1c8a1963d03f..2dc5a0cca6f3 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -107,7 +107,7 @@ emit_tests:
+>         for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
+>                 BASENAME_TEST=`basename $$TEST`;        \
+>                 echo "  \\";                            \
+> -               echo -n "       \"$$BASENAME_TEST\"";   \
+> +               echo -ne "\t\t\"$$BASENAME_TEST\"";     \
+>         done;                                           \
+>
+>  # define if isn't already. It is undefined in make O= case.
+> --
+> 2.19.2
+>
