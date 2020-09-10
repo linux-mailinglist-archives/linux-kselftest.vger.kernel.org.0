@@ -2,105 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CED263DFD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Sep 2020 09:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD332640A1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Sep 2020 10:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730435AbgIJHGG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Sep 2020 03:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730157AbgIJHDw (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Sep 2020 03:03:52 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F3EC06179F
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2020 00:03:51 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id k3so4633674ybp.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2020 00:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=yVT9yLW7JYWhoMqFcNSvIQqOD/OC9Y5kGyMXj6mDfzA=;
-        b=SWzaAF3z61UdDBRXy/OCKHiF8fjMlKLNvdTmk6/Dbh+Kq1lqavqta7ibeGJDMVVjK9
-         9axKITn1wFqjz5tlBRpOkLHHQYFcxzoWXqmY1Wr+HNvMkBdSC5mKf3xMXU+ryg27V0jn
-         Th4btmcNJXuVRUgMFzA+P1ccT7ZakwLeIba9vmrMXLytgcsHgtPq/ujpT4Fvy8CJSLCl
-         Qe3OIPeflNh4YVVch2brsFc0DsYZFIzzMQKNykwBbU9Kf3BE4FGLV7RgkC7+kUlkcYlm
-         vQCACO2h7BOQiACwrP48GTHlEEljHMJN9F8kLZF8t731qo/RgTIaPzL/vO9bN/p+0HRJ
-         8pZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=yVT9yLW7JYWhoMqFcNSvIQqOD/OC9Y5kGyMXj6mDfzA=;
-        b=YSkNne0CV03wmL1PMunjYIsF8sSQA+sP+CUIbJQYpzlEcWhy2Z/as52Mxl8Tu+dtS8
-         vmsNGamUm5EJ+IxJThaMbg8A6DKdwbX7M/g6Oyo3J51vCF4i4RvTkhmv881B+1KglwLE
-         icZvuiNrxdodY+eWhS33yRxk0RmPJe4Q+AgRY7vvFmuJuAHNZWhYyfYzK6byorvgQUqg
-         lOTb0oTCPzaZbYuUez6OXinszd8eQOHU/0a37Q+B2zK6TU/GBjkkM7WOZtfbcilG5Pp8
-         xQjzQxjXFTDT1j1+59AMzmRgyP8f+s0upl8/SbwyKEdOVcOld1eQs/fPcaeQY5TJrlBm
-         gWFA==
-X-Gm-Message-State: AOAM533+1POS0vBE6sJbx0Aj2wLfIE4AlUV1WaE2fINI9yKxwlHTHL62
-        mB54sflayv/28OQW/tuFZLp6VdxS+UuNLA==
-X-Google-Smtp-Source: ABdhPJx6wYqq0LRezDVx5FLW+SCF9/8HZEb3hTyx5Wg3k/fevn1boLeFIzGzqQKYhcL1qVh2j1dn8STpGk5QXw==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:42a8:f0ff:fe4d:3548])
- (user=davidgow job=sendgmr) by 2002:a25:ef03:: with SMTP id
- g3mr9920500ybd.364.1599721430919; Thu, 10 Sep 2020 00:03:50 -0700 (PDT)
-Date:   Thu, 10 Sep 2020 00:03:30 -0700
-In-Reply-To: <20200910070331.3358048-1-davidgow@google.com>
-Message-Id: <20200910070331.3358048-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20200910070331.3358048-1-davidgow@google.com>
-X-Mailer: git-send-email 2.28.0.526.ge36021eeef-goog
-Subject: [PATCH v13 5/5] mm: kasan: Do not panic if both panic_on_warn and
- kasan_multishot set
-From:   David Gow <davidgow@google.com>
-To:     trishalfonso@google.com, brendanhiggins@google.com,
-        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, andreyknvl@google.com,
-        shuah@kernel.org, akpm@linux-foundation.org
-Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1730411AbgIJIzv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Sep 2020 04:55:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36766 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727820AbgIJIzB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Sep 2020 04:55:01 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62B492078B;
+        Thu, 10 Sep 2020 08:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599728100;
+        bh=wI+o7l6xyWnZkwD9Z2sUxIBAfYQ5d3573I9H1mMjVxo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fs19XQ7nPvnlkUAZcRhKE9n5KkZbFVK1xCOCrH9eofj82OgUCWwdDTgV1tcKAi/az
+         xifMX33ajKxnsujvAg/mm1Kvp3nuBgetTCxAF4v0GLztP6Q5fEytYrrvdaciIXFRgZ
+         SA7xGF8TLicYox9Znt0fU36myjsissLBdkHJ8D2M=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/8] tracing/boot: Add new options for tracing specific period
+Date:   Thu, 10 Sep 2020 17:54:54 +0900
+Message-Id: <159972809455.428528.4737752126800169128.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KASAN errors will currently trigger a panic when panic_on_warn is set.
-This renders kasan_multishot useless, as further KASAN errors won't be
-reported if the kernel has already paniced. By making kasan_multishot
-disable this behaviour for KASAN errors, we can still have the benefits
-of panic_on_warn for non-KASAN warnings, yet be able to use
-kasan_multishot.
+Hi,
 
-This is particularly important when running KASAN tests, which need to
-trigger multiple KASAN errors: previously these would panic the system
-if panic_on_warn was set, now they can run (and will panic the system
-should non-KASAN warnings show up).
+Here is the 3rd version of the series to improve the boot-time tracing to
+support kretprobe and tracing_on option. Previous version is here:
 
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Andrey Konovalov <andreyknvl@google.com>
+ https://lkml.kernel.org/r/159894698993.1478826.2813843560314595660.stgit@devnote2
+
+This version adds uprobe %return suffix support ([5/8]) and the testcases
+([8/8]), and update kprobe %suffix support([4/8]) and the uprobe event
+document([6/8]).
+
+
+The combination of tracing_on and kretprobe allows us to trace events
+while a specific function call period. For example, the below bootconfig
+will make a function callgraph in the pci_proc_init() function at boot
+time.
+
+ftrace {
+	tracing_on = 0  # off at start
+	tracer = function_graph
+	event.kprobes {
+		start_event {
+			probes = "pci_proc_init"
+			actions = "traceon"
+		}
+		end_event {
+			probes = "pci_proc_init%return"
+			actions = "traceoff"
+		}
+	}
+}
+
+Here is the example output;
+
+# tracer: function_graph
+#
+# CPU  DURATION                  FUNCTION CALLS
+# |     |   |                     |   |   |   |
+ 0)               |  pci_proc_init() {
+ 0)               |    proc_mkdir() {
+ 0)               |      proc_mkdir_data() {
+ 0)               |        __proc_create() {
+ 0)               |          _raw_read_lock() {
+ 0)   0.179 us    |            preempt_count_add();
+ 0)   0.203 us    |            do_raw_read_lock();
+ 0)   1.210 us    |          }
+ 0)               |          __xlate_proc_name() {
+ 0)   0.449 us    |            pde_subdir_find();
+ 0)   0.913 us    |          }
+ 0)               |          _raw_read_unlock() {
+ 0)   0.169 us    |            do_raw_read_unlock();
+ 0)   0.175 us    |            preempt_count_sub();
+ 0)   0.841 us    |          }
+ 0)               |          kmem_cache_alloc() {
+ 0)               |            fs_reclaim_acquire() {
+ 0)   0.154 us    |              __need_fs_reclaim();
+ 0)   0.240 us    |              fs_reclaim_acquire.part.0();
+ 0)   0.889 us    |            }
+ 0)               |            fs_reclaim_release() {
+ 0)   0.174 us    |              __need_fs_reclaim();
+ 0)   0.516 us    |            }
+ 0)   0.157 us    |            should_failslab();
+ 0)               |            rcu_read_lock_sched_held() {
+ 0)               |              rcu_read_lock_held_common() {
+ 0)   0.156 us    |                rcu_is_watching();
+ 0)   0.158 us    |                rcu_lockdep_current_cpu_online();
+ 0)   0.735 us    |              }
+ 0)   1.054 us    |            }
+ 0)   3.407 us    |          }
+ 0)   0.168 us    |          __raw_spin_lock_init();
+ 0)   7.575 us    |        }
+ 0)               |        proc_register() {
+ 0)               |          _raw_spin_lock_irqsave() {
+ 0)   0.187 us    |            preempt_count_add();
+...
+
+
+Thank you,
+
 ---
- mm/kasan/report.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index e2c14b10bc81..00a53f1355ae 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -95,7 +95,7 @@ static void end_report(unsigned long *flags)
- 	pr_err("==================================================================\n");
- 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
- 	spin_unlock_irqrestore(&report_lock, *flags);
--	if (panic_on_warn) {
-+	if (panic_on_warn && !test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags)) {
- 		/*
- 		 * This thread may hit another WARN() in the panic path.
- 		 * Resetting this prevents additional WARN() from panicking the
--- 
-2.28.0.526.ge36021eeef-goog
+Masami Hiramatsu (8):
+      kprobes: tracing/kprobes: Fix to kill kprobes on initmem after boot
+      tracing/boot: Add per-instance tracing_on option support
+      Documentation: tracing: Add tracing_on option to boot-time tracer
+      tracing/kprobes: Support perf-style return probe
+      tracing/uprobes: Support perf-style return probe
+      Documentation: tracing: Add %return suffix description
+      Documentation: tracing: boot: Add an example of tracing function-calls
+      selftests/ftrace: Add %return suffix tests
 
+
+ Documentation/trace/boottime-trace.rst             |   24 ++++++++++++++++++++
+ Documentation/trace/kprobetrace.rst                |    2 ++
+ Documentation/trace/uprobetracer.rst               |    2 ++
+ include/linux/kprobes.h                            |    5 ++++
+ init/main.c                                        |    2 ++
+ kernel/kprobes.c                                   |   22 ++++++++++++++++++
+ kernel/trace/trace.c                               |    4 ++-
+ kernel/trace/trace_boot.c                          |   10 ++++++++
+ kernel/trace/trace_kprobe.c                        |   18 ++++++++++++++-
+ kernel/trace/trace_probe.h                         |    1 +
+ kernel/trace/trace_uprobe.c                        |   15 ++++++++++++-
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    6 +++++
+ .../test.d/kprobe/kretprobe_return_suffix.tc       |   21 ++++++++++++++++++
+ .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    6 +++++
+ 14 files changed, 134 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kretprobe_return_suffix.tc
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
