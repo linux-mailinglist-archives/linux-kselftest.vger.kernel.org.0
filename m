@@ -2,75 +2,394 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC8C265CBC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Sep 2020 11:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8F32661AC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Sep 2020 16:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725776AbgIKJqm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Sep 2020 05:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S1726176AbgIKO65 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Sep 2020 10:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbgIKJqm (ORCPT
+        with ESMTP id S1726185AbgIKO6U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Sep 2020 05:46:42 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCB3C061573;
-        Fri, 11 Sep 2020 02:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NEEs3sphOm5r5iiLL/EE/1iKkrXLyqvJjoXYEVBIkeA=; b=AR8Q0ajzeTXTHvxHzwx2/HKp6G
-        nYtbzV0y21U6m9kM52QxCp1XYwqxhxJFNapZLNM2uZNUEYq2pCspiNmqyti2WUOiw1MXIjogYTzSB
-        Ry5X9KNf3rQ88rMOf7/BoNucuk/FS5/zy/OIRofIII6eyvn2uX3o3gNuKb/7wrHq1QlZCiUbnRgvP
-        DSHkpt0OrpPIJAv/BDXLMxe8xqKxWekRMHopWL3ZiFbCc83w0ksvAmAbDa0xo/88/r7MVCU58Wren
-        4s7Gw/g3rNJyVR8F1f6TNSLWTD5j8JVvEmXIq13e2ZxhFkY7CG/CQM4FH1rRfW3XygP3bISzsQdjU
-        szKWpiFg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kGfdc-0005tL-Eg; Fri, 11 Sep 2020 09:46:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F0A96305815;
-        Fri, 11 Sep 2020 11:46:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DBFD72B06B003; Fri, 11 Sep 2020 11:46:34 +0200 (CEST)
-Date:   Fri, 11 Sep 2020 11:46:34 +0200
-From:   peterz@infradead.org
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, willy@infradead.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v6 6/9] kernel: entry: Support Syscall User Dispatch for
- common syscall entry
-Message-ID: <20200911094634.GG1362448@hirez.programming.kicks-ass.net>
-References: <20200904203147.2908430-1-krisman@collabora.com>
- <20200904203147.2908430-7-krisman@collabora.com>
+        Fri, 11 Sep 2020 10:58:20 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30E6C061363
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2020 07:31:16 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id i26so14059843ejb.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Sep 2020 07:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+i8R58kw/leW4I2M13LKbuHEybfMrzesYwlJiGTgtNk=;
+        b=a15BUZJRqua56q81WMjBEDQ3iSAVjqj55mNjlT0LHm7fj8zncIWlNPf3SrHkC/eofS
+         MUhGOCYkv34QW1doX+CMNH+ev+OYMNBtjPe9GoTZyrcxRq00tSwp53Z8f4pxs2Jw1udo
+         Z6k1oSYZLFfsSuR/MgGY022bxzWljeVKwumPP+KmaGAHP0/7QGVkbf3SA2+C8GzGvjt5
+         wDsUMZSigxwNqh19nEEHq3Yn9wkEF05CIk2+FnoopbRLINo3K1qss/pCs8zx7AwKQMhX
+         ROL8xgPAq1U794RkujJ3S5Bi024Rd92qVakoS/PyvX/Vv9XhMrkfYcv/0ovX0sczmaHf
+         sISg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+i8R58kw/leW4I2M13LKbuHEybfMrzesYwlJiGTgtNk=;
+        b=Y2VNDxBn4MVJA0bBHmnJC4hzJPqaAHswPy5uNZh/bk696wwBz9nViY6hlJV+ufrHH5
+         jIPfzwIORgcQgPRE2W4DPhXduASOUXnaGyBCgu+g7oCAE1OLiT+BhjbGL6JkKBtFrtEB
+         yKsreygqCPAVRiM3ZD+MNXf18FqhIr290LS9QlzS70RlJxLILtlD93Pa/gCQxCdCte8l
+         LENgkc32cfcsjZYfcgxRskF1MkdG681pJEybAoyX6gCv2rrrKKj+cE3mU2x93FFfcytv
+         eK+uk2GeHWrrxlRC9fBADtwAhynGc1Won5L7YJ3Sn+RmiSFtMf17K5yVaI7BptpUn11T
+         HEDQ==
+X-Gm-Message-State: AOAM533gA5KgbtCg+DZ7U/NZ/UnSFgUeAE/HAWxrzv5Os+JNXaGDnACT
+        LNKSbqgmDIg1RQu9hM3zsG1Kow==
+X-Google-Smtp-Source: ABdhPJy1pF6nMvBpXqraqaRNOATVMTu/betL9JR2wN4Oe0zmBlv0YY5nb7O5C/sfCFUnKtFrAXQASw==
+X-Received: by 2002:a17:906:1b55:: with SMTP id p21mr2425207ejg.457.1599834675454;
+        Fri, 11 Sep 2020 07:31:15 -0700 (PDT)
+Received: from localhost.localdomain ([87.66.33.240])
+        by smtp.gmail.com with ESMTPSA id y21sm1716261eju.46.2020.09.11.07.31.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2020 07:31:14 -0700 (PDT)
+From:   Nicolas Rybowski <nicolas.rybowski@tessares.net>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Cc:     Nicolas Rybowski <nicolas.rybowski@tessares.net>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 4/5] bpf: selftests: add MPTCP test base
+Date:   Fri, 11 Sep 2020 16:30:19 +0200
+Message-Id: <20200911143022.414783-4-nicolas.rybowski@tessares.net>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
+References: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200904203147.2908430-7-krisman@collabora.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 04:31:44PM -0400, Gabriel Krisman Bertazi wrote:
-> Syscall User Dispatch (SUD) must take precedence over seccomp, since the
-> use case is emulation (it can be invoked with a different ABI) such that
-> seccomp filtering by syscall number doesn't make sense in the first
-> place.  In addition, either the syscall is dispatched back to userspace,
-> in which case there is no resource for seccomp to protect, or the
-> syscall will be executed, and seccomp will execute next.
-> 
-> Regarding ptrace, I experimented with before and after, and while the
-> same ABI argument applies, I felt it was easier to debug if I let ptrace
-> happen for syscalls that are dispatched back to userspace.  In addition,
-> doing it after ptrace makes the code in syscall_exit_work slightly
-> simpler, since it doesn't require special handling for this feature.
+This patch adds a base for MPTCP specific tests.
 
-I think I'm with Andy that this should be before ptrace(). ptrace()
-users will attempt to interpret things like they're regular syscalls,
-and that's definitely not the case.
+It is currently limited to the is_mptcp field in case of plain TCP
+connection because for the moment there is no easy way to get the subflow
+sk from a msk in userspace. This implies that we cannot lookup the
+sk_storage attached to the subflow sk in the sockops program.
+
+Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
+---
+
+Notes:
+    v1 -> v2:
+    - new patch: mandatory selftests (Alexei)
+
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/network_helpers.c |  37 +++++-
+ tools/testing/selftests/bpf/network_helpers.h |   3 +
+ .../testing/selftests/bpf/prog_tests/mptcp.c  | 119 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/mptcp.c     |  48 +++++++
+ 5 files changed, 203 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/mptcp.c
+ create mode 100644 tools/testing/selftests/bpf/progs/mptcp.c
+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 2118e23ac07a..8377836ea976 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -39,3 +39,4 @@ CONFIG_BPF_JIT=y
+ CONFIG_BPF_LSM=y
+ CONFIG_SECURITY=y
+ CONFIG_LIRC=y
++CONFIG_MPTCP=y
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 12ee40284da0..85cbb683965c 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -14,6 +14,10 @@
+ #include "bpf_util.h"
+ #include "network_helpers.h"
+ 
++#ifndef IPPROTO_MPTCP
++#define IPPROTO_MPTCP 262
++#endif
++
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) ({						\
+ 			int __save = errno;				\
+@@ -66,8 +70,8 @@ static int settimeo(int fd, int timeout_ms)
+ 
+ #define save_errno_close(fd) ({ int __save = errno; close(fd); errno = __save; })
+ 
+-int start_server(int family, int type, const char *addr_str, __u16 port,
+-		 int timeout_ms)
++static int start_server_proto(int family, int type, int protocol,
++			      const char *addr_str, __u16 port, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr = {};
+ 	socklen_t len;
+@@ -76,7 +80,7 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
+ 	if (make_sockaddr(family, addr_str, port, &addr, &len))
+ 		return -1;
+ 
+-	fd = socket(family, type, 0);
++	fd = socket(family, type, protocol);
+ 	if (fd < 0) {
+ 		log_err("Failed to create server socket");
+ 		return -1;
+@@ -104,6 +108,19 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
+ 	return -1;
+ }
+ 
++int start_server(int family, int type, const char *addr_str, __u16 port,
++		 int timeout_ms)
++{
++	return start_server_proto(family, type, 0, addr_str, port, timeout_ms);
++}
++
++int start_mptcp_server(int family, const char *addr_str, __u16 port,
++		       int timeout_ms)
++{
++	return start_server_proto(family, SOCK_STREAM, IPPROTO_MPTCP, addr_str,
++				  port, timeout_ms);
++}
++
+ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
+ 		     int timeout_ms)
+ {
+@@ -153,7 +170,7 @@ static int connect_fd_to_addr(int fd,
+ 	return 0;
+ }
+ 
+-int connect_to_fd(int server_fd, int timeout_ms)
++static int connect_to_fd_proto(int server_fd, int protocol, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr;
+ 	struct sockaddr_in *addr_in;
+@@ -173,7 +190,7 @@ int connect_to_fd(int server_fd, int timeout_ms)
+ 	}
+ 
+ 	addr_in = (struct sockaddr_in *)&addr;
+-	fd = socket(addr_in->sin_family, type, 0);
++	fd = socket(addr_in->sin_family, type, protocol);
+ 	if (fd < 0) {
+ 		log_err("Failed to create client socket");
+ 		return -1;
+@@ -192,6 +209,16 @@ int connect_to_fd(int server_fd, int timeout_ms)
+ 	return -1;
+ }
+ 
++int connect_to_fd(int server_fd, int timeout_ms)
++{
++	return connect_to_fd_proto(server_fd, 0, timeout_ms);
++}
++
++int connect_to_mptcp_fd(int server_fd, int timeout_ms)
++{
++	return connect_to_fd_proto(server_fd, IPPROTO_MPTCP, timeout_ms);
++}
++
+ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 7205f8afdba1..336423a789e9 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -35,7 +35,10 @@ extern struct ipv6_packet pkt_v6;
+ 
+ int start_server(int family, int type, const char *addr, __u16 port,
+ 		 int timeout_ms);
++int start_mptcp_server(int family, const char *addr, __u16 port,
++		       int timeout_ms);
+ int connect_to_fd(int server_fd, int timeout_ms);
++int connect_to_mptcp_fd(int server_fd, int timeout_ms);
+ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms);
+ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
+ 		     int timeout_ms);
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+new file mode 100644
+index 000000000000..0e65d64868e9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++struct mptcp_storage {
++	__u32 invoked;
++	__u32 is_mptcp;
++};
++
++static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 is_mptcp)
++{
++	int err = 0, cfd = client_fd;
++	struct mptcp_storage val;
++
++	/* Currently there is no easy way to get back the subflow sk from the MPTCP
++	 * sk, thus we cannot access here the sk_storage associated to the subflow
++	 * sk. Also, there is no sk_storage associated with the MPTCP sk since it
++	 * does not trigger sockops events.
++	 * We silently pass this situation at the moment.
++	 */
++	if (is_mptcp == 1)
++		return 0;
++
++	if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &cfd, &val) < 0)) {
++		perror("Failed to read socket storage");
++		return -1;
++	}
++
++	if (val.invoked != 1) {
++		log_err("%s: unexpected invoked count %d != %d",
++			msg, val.invoked, 1);
++		err++;
++	}
++
++	if (val.is_mptcp != is_mptcp) {
++		log_err("%s: unexpected bpf_tcp_sock.is_mptcp %d != %d",
++			msg, val.is_mptcp, is_mptcp);
++		err++;
++	}
++
++	return err;
++}
++
++static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
++{
++	int client_fd, prog_fd, map_fd, err;
++	struct bpf_object *obj;
++	struct bpf_map *map;
++
++	struct bpf_prog_load_attr attr = {
++		.prog_type = BPF_PROG_TYPE_SOCK_OPS,
++		.file = "./mptcp.o",
++		.expected_attach_type = BPF_CGROUP_SOCK_OPS,
++	};
++
++	err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
++	if (err) {
++		log_err("Failed to load BPF object");
++		return -1;
++	}
++
++	map = bpf_map__next(NULL, obj);
++	map_fd = bpf_map__fd(map);
++
++	err = bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0);
++	if (err) {
++		log_err("Failed to attach BPF program");
++		goto close_bpf_object;
++	}
++
++	client_fd = is_mptcp ? connect_to_mptcp_fd(server_fd, 0) :
++			       connect_to_fd(server_fd, 0);
++	if (client_fd < 0) {
++		err = -1;
++		goto close_client_fd;
++	}
++
++	err += is_mptcp ? verify_sk(map_fd, client_fd, "MPTCP subflow socket", 1) :
++			  verify_sk(map_fd, client_fd, "plain TCP socket", 0);
++
++close_client_fd:
++	close(client_fd);
++
++close_bpf_object:
++	bpf_object__close(obj);
++	return err;
++}
++
++void test_mptcp(void)
++{
++	int server_fd, cgroup_fd;
++
++	cgroup_fd = test__join_cgroup("/mptcp");
++	if (CHECK_FAIL(cgroup_fd < 0))
++		return;
++
++	/* without MPTCP */
++	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	if (CHECK_FAIL(server_fd < 0))
++		goto with_mptcp;
++
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, false));
++
++	close(server_fd);
++
++with_mptcp:
++	/* with MPTCP */
++	server_fd = start_mptcp_server(AF_INET, NULL, 0, 0);
++	if (CHECK_FAIL(server_fd < 0))
++		goto close_cgroup_fd;
++
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, true));
++
++	close(server_fd);
++
++close_cgroup_fd:
++	close(cgroup_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/mptcp.c b/tools/testing/selftests/bpf/progs/mptcp.c
+new file mode 100644
+index 000000000000..be5ee8dac2b3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/mptcp.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++__u32 _version SEC("version") = 1;
++
++struct mptcp_storage {
++	__u32 invoked;
++	__u32 is_mptcp;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct mptcp_storage);
++} socket_storage_map SEC(".maps");
++
++SEC("sockops")
++int _sockops(struct bpf_sock_ops *ctx)
++{
++	struct mptcp_storage *storage;
++	struct bpf_tcp_sock *tcp_sk;
++	int op = (int)ctx->op;
++	struct bpf_sock *sk;
++
++	sk = ctx->sk;
++	if (!sk)
++		return 1;
++
++	storage = bpf_sk_storage_get(&socket_storage_map, sk, 0,
++				     BPF_SK_STORAGE_GET_F_CREATE);
++	if (!storage)
++		return 1;
++
++	if (op != BPF_SOCK_OPS_TCP_CONNECT_CB)
++		return 1;
++
++	tcp_sk = bpf_tcp_sock(sk);
++	if (!tcp_sk)
++		return 1;
++
++	storage->invoked++;
++	storage->is_mptcp = tcp_sk->is_mptcp;
++
++	return 1;
++}
+-- 
+2.28.0
+
