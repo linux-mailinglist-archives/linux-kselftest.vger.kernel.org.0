@@ -2,414 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDE2265821
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Sep 2020 06:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9344265BA6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Sep 2020 10:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725446AbgIKEYR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Sep 2020 00:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S1725710AbgIKIbS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Sep 2020 04:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725300AbgIKEYK (ORCPT
+        with ESMTP id S1725550AbgIKIbO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Sep 2020 00:24:10 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA81DC061573
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2020 21:24:09 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id y189so502378yby.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Sep 2020 21:24:09 -0700 (PDT)
+        Fri, 11 Sep 2020 04:31:14 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B712DC061573;
+        Fri, 11 Sep 2020 01:31:14 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id gf14so1344111pjb.5;
+        Fri, 11 Sep 2020 01:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=Y+vgdsLpWeFIoRUQrc5tQaEtzBTWJTMOkPsydt7cOUw=;
-        b=Tr5EEPMOhaP2HRjLcpu1PiIIaGMfc04boRmrkSzShZojuel7rWC6prNmB7i+y6Ky9Y
-         KpW+SX3tvBLgkBYqHScKFxmRsY9Jp3Z70ftExBONa4UNeAnjjAB+kvg5t7p1fPPH0QND
-         ZolaBafzXa8xed6CEQBEE5keuMqwulFfgjz23edEVwIjE+tla79Q4XGromHjQF2dejh6
-         +TzDXOgXbhVoy53K0/miA5hM85IgTyN8LoReuJhAiiWUCBwMNjnjCDLcqHgwQoI5aTXU
-         a4dYQspBDhikev9lXUVyN4hIvGGLJw7zRVHNs2xTuNfNNRl+MRQcYvP8UZhlK09MDl7d
-         uwZQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LbQB3S5x6xx4Jb0zTm7XcQVbWl22yVn5g91syEiS2MQ=;
+        b=syVOVe01zamEEPtzfkERcVBgF2XqcoIOensW1NDs3k5WbB5AycPUJOdgKYPtS37I/i
+         6bk/tCHeeZ1/6Wj97w+BE6rWK6kWU8L9mBUWBdYVr5EQ9zD3ZBqcFaLQZ0RxEzoeUxSf
+         wScWUqf9iiNM/QFLCFFBRe2dg/OtTosjHYCqI4pHSLTgsP41s7FucscOwYt+8gbNFrr9
+         4Ebp0E8JYXJ7vR5wqWtPSIA/sxoKgtdiQnhbJcoxxzjUejFk//H1ajDpmz+u/t2SvSZ6
+         Rs19fFRDDk0HvmrJZwGkVjImUg/9+HSiUGKrFUOGgkZCSnQt02/jcZzjj64k4YwjKmia
+         SwNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc:content-transfer-encoding;
-        bh=Y+vgdsLpWeFIoRUQrc5tQaEtzBTWJTMOkPsydt7cOUw=;
-        b=oXC2xzlfsLGlGVwCkQ0lKCmI4qaVmCCLKknJcJbyNURA23DlGvm4kGJPhaoQHFXEni
-         1DTxVsGgNoxF/sXIhvhQRM9GtAZw7XpQf1NYzqity3yBSZnQ9fA8oJfsvETUZP1DNeU8
-         45jJX19YFWVTBGCMuWaH40yMu2UBLG6GyiBbarqscUPQQiUcPYQiRDTxUEr+nM+NOAMq
-         yTE/JRumO4eZm/g8m2pIVDvgvyx82hl/QkvadlL+rOEhokTIpRlanOKgdZbdGknMupgP
-         LVfF3hDQ35CotwJ5CocVNG39f3qzckeM19Kw9h5YBeIYY1rqxSsuZtR2TAaGooE30fs9
-         QCDA==
-X-Gm-Message-State: AOAM532nVkWuIMmahJvv2D7JEClCynxo00oYyva7z1DjInqZUC0IVtj+
-        waapXuTquWAH5iQdzz/OAf3QTgp5+3NlTw==
-X-Google-Smtp-Source: ABdhPJyJ/6Am6xOkaH7vnbs8Q+53D3D0uevtaE64CS2J/ZzqV6/Vvdx1FLU4iJZ4aw9n0KPj7ETUgOv10DJWTQ==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:42a8:f0ff:fe4d:3548])
- (user=davidgow job=sendgmr) by 2002:a25:8404:: with SMTP id
- u4mr18332107ybk.176.1599798247251; Thu, 10 Sep 2020 21:24:07 -0700 (PDT)
-Date:   Thu, 10 Sep 2020 21:24:04 -0700
-Message-Id: <20200911042404.3598910-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.526.ge36021eeef-goog
-Subject: [PATCH v3] Documentation: kunit: Add naming guidelines
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Randy Dunlap <rd.dunlab@gmail.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Tim Bird <Tim.Bird@sony.com>,
-        Marco Elver <elver@google.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LbQB3S5x6xx4Jb0zTm7XcQVbWl22yVn5g91syEiS2MQ=;
+        b=glF+9fUiEKAn1cN4w4jUACANwh/gWBBDP4mheLHVV9KMIsXVCdCtsforZUBZzEHjWS
+         9OLhBQDh7Ub0sFG8Get0uV5dE/etj13htgboH9G7Lv/gGXsXfYyaM2Kqryxzq4qLIiHW
+         99yyWZ1/l+jTFiIGLeeQkRFzDsGd8ZTNgWDWDnEY6/bL1EXMAFuVlkm9QCeo89mpmmIA
+         EkizsvzHLUjq/DcHQH6Bk9lksC84bzXNVCNuqBelxPdLVRoi4x8mP3wUJYuMa+FCWPfx
+         bLegasXO+IglrW7JAYYiWSvrLMcpfxgSPpCzbf2kttvknbB8L/JfCCrlgHgia2piMLhM
+         xkyg==
+X-Gm-Message-State: AOAM530hxytLFCxoQE8P9bzrsBFuyN8SJFQVaBZMyF4dwCwu5nXfagTp
+        9ZMMhVTirv+aVCjDwvqHs1FPkN8EVTMmXQ==
+X-Google-Smtp-Source: ABdhPJzf5Vdy7OT8jta7JYuEdU/QgbIjnz8gLz87+YOYvLHhXECrx3I5CToJgiX7oZFsXO0xmgUP9g==
+X-Received: by 2002:a17:90a:a081:: with SMTP id r1mr1249361pjp.159.1599813073748;
+        Fri, 11 Sep 2020 01:31:13 -0700 (PDT)
+Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id x9sm1527084pfj.96.2020.09.11.01.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2020 01:31:13 -0700 (PDT)
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>, Tim Bird <tim.bird@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv3] selftests/run_kselftest.sh: make each test individually selectable
+Date:   Fri, 11 Sep 2020 16:30:53 +0800
+Message-Id: <20200911083053.2816576-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20200316072626.24037-1-liuhangbin@gmail.com>
+References: <20200316072626.24037-1-liuhangbin@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As discussed in [1], KUnit tests have hitherto not had a particularly
-consistent naming scheme. This adds documentation outlining how tests
-and test suites should be named, including how those names should be
-used in Kconfig entries and filenames.
+Currently, after generating run_kselftest.sh, there is no way to choose
+which test we could run. All the tests are listed together and we have
+to run all every time. This patch enhanced the run_kselftest.sh to make
+the tests individually selectable. e.g.
 
-[1]:
-https://lore.kernel.org/linux-kselftest/202006141005.BA19A9D3@keescook/t/#u
+  $ ./run_kselftest.sh -t "bpf size timers"
 
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Reviewed-by: Tim Bird <tim.bird@sony.com>
+Before the patch:
+================
+
+$ cat run_kselftest.sh
+\#!/bin/sh
+BASE_DIR=$(realpath $(dirname $0))
+cd $BASE_DIR
+. ./kselftest/runner.sh
+ROOT=$PWD
+if [ "$1" = "--summary" ]; then
+  logfile=$BASE_DIR/output.log
+  cat /dev/null > $logfile
+fi
+[ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
+cd android
+run_many        \
+        "run.sh"
+cd $ROOT
+...<snip>...
+[ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
+cd zram
+run_many        \
+        "zram.sh"
+cd $ROOT
+
+After the patch:
+===============
+
+$ cat run_kselftest.sh
+\#!/bin/sh
+BASE_DIR=$(realpath $(dirname $0))
+. ./kselftest/runner.sh
+TESTS="android ...<snip>... filesystems/binderfs ...<snip>... zram"
+
+run_android()
+{
+        [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
+        cd android
+        run_many        \
+                "run.sh"
+        cd $ROOT
+}
+
+...<snip>...
+
+run_filesystems_binderfs()
+{
+        [ -w /dev/kmsg ] && echo "kselftest: Running tests in filesystems/binderfs" >> /dev/kmsg
+        cd filesystems/binderfs
+        run_many        \
+                "binderfs_test"
+        cd $ROOT
+}
+
+...<snip>...
+
+run_zram()
+{
+        [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
+        cd zram
+        run_many        \
+                "zram.sh"
+        cd $ROOT
+}
+
+usage()
+{
+        cat <<EOF
+usage: ${0##*/} OPTS
+        -s | --summary          Only print summary info and put detailed log in output.log
+        -t | --tests            Test name you want to run specifically
+        -h | --help             Show this usage info
+EOF
+}
+
+while true; do
+        case "$1" in
+        -s | --summary ) logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;
+        -t | --tests ) TESTS=$2; shift 2 ;;
+        -h | --help ) usage; exit 0;;
+        "" ) break;;
+        * ) usage; exit 1;;
+        esac
+done
+
+cd $BASE_DIR
+ROOT=$PWD
+for folder in $TESTS; do
+        folder=$(echo $folder | tr -s '/-' '_')
+        run_$folder
+done
+
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+
 ---
-
-This is v3 of the KUnit test naming guidelines. It's basically just v2
-with some spelling fixes (thanks Marco).
-
-Changelog:
-
 v3:
-- Fix a few typos.
-- Add Marco and Tim's Reviewed-bys.
+1) rebase the patch to latest code
+2) move `tr -s "/-" "_"` to the for loop at the end so user could use test
+   folder name directly. Before the update, user need to run
+   ./run_kselftest.sh -t 'networking_forwarding'. Now they can just run
+   ./run_kselftest.sh -t 'networking/forwarding' directly.
 
-v2:
-https://lore.kernel.org/linux-kselftest/20200909051631.2960347-1-davidgow@g=
-oogle.com/
-- Rewrote the filename section to use "_test" as a suffix, and focus on
-  module names, not filenames.
-- Add a motivating introduction, which also calls out existing tests and
-  tests which cause problems when run automatically (long running,
-  flaky tests) as reasons to avoid the guidelines.
-- Talk about including the type of test in the suite name, but only if
-  theres an actual confict. (And update the example for this).
+v2: update document and commit description.
+---
+ Documentation/dev-tools/kselftest.rst |  4 +++
+ tools/testing/selftests/Makefile      | 49 +++++++++++++++++++++------
+ tools/testing/selftests/lib.mk        |  2 +-
+ 3 files changed, 44 insertions(+), 11 deletions(-)
 
-v1:
-https://lore.kernel.org/linux-kselftest/20200702071416.1780522-1-davidgow@g=
-oogle.com/
-- Fixed a bit of space/tab confusion in the index (Thanks, Randy)
-- Added some more examples (and some test case examples).
-- Added some examples of what not to call subsystems and suites.
-- No longer explicitly require "If unsure, put N" in Kconfig entries.
-- Minor formatting changes
-
-RFC:
-https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@go=
-ogle.com/T/#u
-- Initial version
-
- Documentation/dev-tools/kunit/index.rst |   1 +
- Documentation/dev-tools/kunit/style.rst | 207 ++++++++++++++++++++++++
- 2 files changed, 208 insertions(+)
- create mode 100644 Documentation/dev-tools/kunit/style.rst
-
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-to=
-ols/kunit/index.rst
-index e93606ecfb01..c234a3ab3c34 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -11,6 +11,7 @@ KUnit - Unit Testing for the Linux Kernel
- 	usage
- 	kunit-tool
- 	api/index
-+	style
- 	faq
-=20
- What is KUnit?
-diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/dev-to=
-ols/kunit/style.rst
-new file mode 100644
-index 000000000000..2352b7292eb5
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/style.rst
-@@ -0,0 +1,207 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index 469d115a95f1..94da633dd5f8 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -151,6 +151,10 @@ note some tests will require root privileges::
+    $ cd kselftest
+    $ ./run_kselftest.sh
+ 
++Or you can run some specific test cases in the installed Kselftests by::
 +
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-+Test Style and Nomenclature
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
++   $ ./run_kselftest.sh -t "bpf size timers"
 +
-+To make finding, writing, and using KUnit tests as simple as possible, it'=
-s
-+strongly encouraged that they are named and written according to the guide=
-lines
-+below. While it's possible to write KUnit tests which do not follow these =
-rules,
-+they may break some tooling, may conflict with other tests, and may not be=
- run
-+automatically by testing systems.
+ Packaging selftests
+ ===================
+ 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 15c1c1359c50..6b11d5e33019 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -225,13 +225,9 @@ ifdef INSTALL_PATH
+ 	@# Ask all targets to emit their test scripts
+ 	echo "#!/bin/sh" > $(ALL_SCRIPT)
+ 	echo "BASE_DIR=\$$(realpath \$$(dirname \$$0))" >> $(ALL_SCRIPT)
+-	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
+ 	echo ". ./kselftest/runner.sh" >> $(ALL_SCRIPT)
+-	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
+-	echo "if [ \"\$$1\" = \"--summary\" ]; then" >> $(ALL_SCRIPT)
+-	echo "  logfile=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
+-	echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
+-	echo "fi" >> $(ALL_SCRIPT)
++	echo "TESTS=\"$(TARGETS)\"" >> $(ALL_SCRIPT)
++	echo "" >> $(ALL_SCRIPT);
+ 
+ 	@# While building run_kselftest.sh skip also non-existent TARGET dirs:
+ 	@# they could be the result of a build failure and should NOT be
+@@ -239,15 +235,48 @@ ifdef INSTALL_PATH
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+-		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+-		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+-		echo -n "run_many" >> $(ALL_SCRIPT); \
++		echo "run_$$TARGET()" | tr -s "/-" "_" >> $(ALL_SCRIPT); \
++		echo "{" >> $(ALL_SCRIPT); \
++		echo -e "\t[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
++		echo -e "\tcd $$TARGET" >> $(ALL_SCRIPT); \
++		echo -en "\trun_many" >> $(ALL_SCRIPT); \
+ 		echo -n "Emit Tests for $$TARGET\n"; \
+ 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+ 		echo "" >> $(ALL_SCRIPT);	    \
+-		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
++		echo -e "\tcd \$$ROOT" >> $(ALL_SCRIPT); \
++		echo "}" >> $(ALL_SCRIPT); \
++		echo "" >> $(ALL_SCRIPT); \
+ 	done;
+ 
++	echo "usage()" >> $(ALL_SCRIPT);
++	echo "{" >> $(ALL_SCRIPT);
++	echo -e "\tcat <<EOF" >> $(ALL_SCRIPT);
++	echo "usage: \$${0##*/} OPTS" >> $(ALL_SCRIPT);
++	echo -e "\t-s | --summary\t\tOnly print summary info and put detailed log in output.log" >> $(ALL_SCRIPT);
++	echo -e "\t-t | --tests\t\tTest name you want to run specifically" >> $(ALL_SCRIPT);
++	echo -e "\t-h | --help\t\tShow this usage info" >> $(ALL_SCRIPT);
++	echo "EOF" >> $(ALL_SCRIPT);
++	echo "}" >> $(ALL_SCRIPT);
++	echo "" >> $(ALL_SCRIPT);
 +
-+It's recommended that you only deviate from these guidelines when:
++	echo "while true; do" >> $(ALL_SCRIPT);
++	echo -e "\tcase \"\$$1\" in" >> $(ALL_SCRIPT);
++	echo -e "\t-s | --summary ) logfile=\$$BASE_DIR/output.log; cat /dev/null > \$$logfile; shift ;;" >> $(ALL_SCRIPT);
++	echo -e "\t-t | --tests ) TESTS=\$$2; shift 2 ;;" >> $(ALL_SCRIPT);
++	echo -e "\t-h | --help ) usage; exit 0;;" >> $(ALL_SCRIPT);
++	echo -e "\t\"\" ) break;;" >> $(ALL_SCRIPT);
++	echo -e "\t* ) usage; exit 1;;" >> $(ALL_SCRIPT);
++	echo -e "\tesac" >> $(ALL_SCRIPT);
++	echo "done" >> $(ALL_SCRIPT);
++	echo "" >> $(ALL_SCRIPT);
 +
-+1. Porting tests to KUnit which are already known with an existing name, o=
-r
-+2. Writing tests which would cause serious problems if automatically run (=
-e.g.,
-+   non-deterministically producing false positives or negatives, or taking=
- an
-+   extremely long time to run).
++	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
++	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
 +
-+Subsystems, Suites, and Tests
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-+
-+In order to make tests as easy to find as possible, they're grouped into s=
-uites
-+and subsystems. A test suite is a group of tests which test a related area=
- of
-+the kernel, and a subsystem is a set of test suites which test different p=
-arts
-+of the same kernel subsystem or driver.
-+
-+Subsystems
-+----------
-+
-+Every test suite must belong to a subsystem. A subsystem is a collection o=
-f one
-+or more KUnit test suites which test the same driver or part of the kernel=
-. A
-+rule of thumb is that a test subsystem should match a single kernel module=
-. If
-+the code being tested can't be compiled as a module, in many cases the sub=
-system
-+should correspond to a directory in the source tree or an entry in the
-+MAINTAINERS file. If unsure, follow the conventions set by tests in simila=
-r
-+areas.
-+
-+Test subsystems should be named after the code being tested, either after =
-the
-+module (wherever possible), or after the directory or files being tested. =
-Test
-+subsystems should be named to avoid ambiguity where necessary.
-+
-+If a test subsystem name has multiple components, they should be separated=
- by
-+underscores. *Do not* include "test" or "kunit" directly in the subsystem =
-name
-+unless you are actually testing other tests or the kunit framework itself.
-+
-+Example subsystems could be:
-+
-+``ext4``
-+  Matches the module and filesystem name.
-+``apparmor``
-+  Matches the module name and LSM name.
-+``kasan``
-+  Common name for the tool, prominent part of the path ``mm/kasan``
-+``snd_hda_codec_hdmi``
-+  Has several components (``snd``, ``hda``, ``codec``, ``hdmi``) separated=
- by
-+  underscores. Matches the module name.
-+
-+Avoid names like these:
-+
-+``linear-ranges``
-+  Names should use underscores, not dashes, to separate words. Prefer
-+  ``linear_ranges``.
-+``qos-kunit-test``
-+  As well as using underscores, this name should not have "kunit-test" as =
-a
-+  suffix, and ``qos`` is ambiguous as a subsystem name. ``power_qos`` woul=
-d be a
-+  better name.
-+``pc_parallel_port``
-+  The corresponding module name is ``parport_pc``, so this subsystem shoul=
-d also
-+  be named ``parport_pc``.
-+
-+.. note::
-+        The KUnit API and tools do not explicitly know about subsystems. T=
-hey're
-+        simply a way of categorising test suites and naming modules which
-+        provides a simple, consistent way for humans to find and run tests=
-. This
-+        may change in the future, though.
-+
-+Suites
-+------
-+
-+KUnit tests are grouped into test suites, which cover a specific area of
-+functionality being tested. Test suites can have shared initialisation and
-+shutdown code which is run for all tests in the suite.
-+Not all subsystems will need to be split into multiple test suites (e.g. s=
-imple drivers).
-+
-+Test suites are named after the subsystem they are part of. If a subsystem
-+contains several suites, the specific area under test should be appended t=
-o the
-+subsystem name, separated by an underscore.
-+
-+In the event that there are multiple types of test using KUnit within a
-+subsystem (e.g., both unit tests and integration tests), they should be pu=
-t into
-+separate suites, with the type of test as the last element in the suite na=
-me.
-+Unless these tests are actually present, avoid using ``_test``, ``_unittes=
-t`` or
-+similar in the suite name.
-+
-+The full test suite name (including the subsystem name) should be specifie=
-d as
-+the ``.name`` member of the ``kunit_suite`` struct, and forms the base for=
- the
-+module name (see below).
-+
-+Example test suites could include:
-+
-+``ext4_inode``
-+  Part of the ``ext4`` subsystem, testing the ``inode`` area.
-+``kunit_try_catch``
-+  Part of the ``kunit`` implementation itself, testing the ``try_catch`` a=
-rea.
-+``apparmor_property_entry``
-+  Part of the ``apparmor`` subsystem, testing the ``property_entry`` area.
-+``kasan``
-+  The ``kasan`` subsystem has only one suite, so the suite name is the sam=
-e as
-+  the subsystem name.
-+
-+Avoid names like:
-+
-+``ext4_ext4_inode``
-+  There's no reason to state the subsystem twice.
-+``property_entry``
-+  The suite name is ambiguous without the subsystem name.
-+``kasan_integration_test``
-+  Because there is only one suite in the ``kasan`` subsystem, the suite sh=
-ould
-+  just be called ``kasan``. There's no need to redundantly add
-+  ``integration_test``. Should a separate test suite with, for example, un=
-it
-+  tests be added, then that suite could be named ``kasan_unittest`` or sim=
-ilar.
-+
-+Test Cases
-+----------
-+
-+Individual tests consist of a single function which tests a constrained
-+codepath, property, or function. In the test output, individual tests' res=
-ults
-+will show up as subtests of the suite's results.
-+
-+Tests should be named after what they're testing. This is often the name o=
-f the
-+function being tested, with a description of the input or codepath being t=
-ested.
-+As tests are C functions, they should be named and written in accordance w=
-ith
-+the kernel coding style.
-+
-+.. note::
-+        As tests are themselves functions, their names cannot conflict wit=
-h
-+        other C identifiers in the kernel. This may require some creative
-+        naming. It's a good idea to make your test functions `static` to a=
-void
-+        polluting the global namespace.
-+
-+Example test names include:
-+
-+``unpack_u32_with_null_name``
-+  Tests the ``unpack_u32`` function when a NULL name is passed in.
-+``test_list_splice``
-+  Tests the ``list_splice`` macro. It has the prefix ``test_`` to avoid a
-+  name conflict with the macro itself.
-+
-+
-+Should it be necessary to refer to a test outside the context of its test =
-suite,
-+the *fully-qualified* name of a test should be the suite name followed by =
-the
-+test name, separated by a colon (i.e. ``suite:test``).
-+
-+Test Kconfig Entries
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Every test suite should be tied to a Kconfig entry.
-+
-+This Kconfig entry must:
-+
-+* be named ``CONFIG_<name>_KUNIT_TEST``: where <name> is the name of the t=
-est
-+  suite.
-+* be listed either alongside the config entries for the driver/subsystem b=
-eing
-+  tested, or be under [Kernel Hacking]=E2=86=92[Kernel Testing and Coverag=
-e]
-+* depend on ``CONFIG_KUNIT``
-+* be visible only if ``CONFIG_KUNIT_ALL_TESTS`` is not enabled.
-+* have a default value of ``CONFIG_KUNIT_ALL_TESTS``.
-+* have a brief description of KUnit in the help text
-+
-+Unless there's a specific reason not to (e.g. the test is unable to be bui=
-lt as
-+a module), Kconfig entries for tests should be tristate.
-+
-+An example Kconfig entry:
-+
-+.. code-block:: none
-+
-+        config FOO_KUNIT_TEST
-+                tristate "KUnit test for foo" if !KUNIT_ALL_TESTS
-+                depends on KUNIT
-+                default KUNIT_ALL_TESTS
-+                help
-+                    This builds unit tests for foo.
-+
-+                    For more information on KUnit and unit tests in genera=
-l, please refer
-+                    to the KUnit documentation in Documentation/dev-tools/=
-kunit
-+
-+                    If unsure, say N
-+
-+
-+Test File and Module Names
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-+
-+KUnit tests can often be compiled as a module. These modules should be nam=
-ed
-+after the test suite, followed by ``_test``. If this is likely to conflict=
- with
-+non-KUnit tests, the suffix ``_kunit`` can also be used.
-+
-+The easiest way of achieving this is to name the file containing the test =
-suite
-+``<suite>_test.c`` (or, as above, ``<suite>_kunit.c``). This file should b=
-e
-+placed next to the code under test.
-+
-+If the suite name contains some or all of the name of the test's parent
-+directory, it may make sense to modify the source filename to reduce redun=
-dancy.
-+For example, a ``foo_firmware`` suite could be in the ``foo/firmware_test.=
-c``
-+file.
-+
-+
---=20
-2.28.0.526.ge36021eeef-goog
++	echo "for folder in \$$TESTS; do" >> $(ALL_SCRIPT); \
++	echo -e "\tfolder=\$$(echo \$$folder | tr -s '/-' '_')" >> $(ALL_SCRIPT); \
++	echo -e "\trun_\$$folder" >> $(ALL_SCRIPT); \
++	echo "done" >> $(ALL_SCRIPT); \
+ 	chmod u+x $(ALL_SCRIPT)
+ else
+ 	$(error Error: set INSTALL_PATH to use install)
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 51124b962d56..3c4c94a5d184 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -108,7 +108,7 @@ emit_tests:
+ 	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
+ 		BASENAME_TEST=`basename $$TEST`;	\
+ 		echo "	\\";				\
+-		echo -n "	\"$$BASENAME_TEST\"";	\
++		echo -ne "\t\t\"$$BASENAME_TEST\"";	\
+ 	done;						\
+ 
+ # define if isn't already. It is undefined in make O= case.
+-- 
+2.25.4
 
