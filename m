@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3260D26827F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Sep 2020 04:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7238C26828C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Sep 2020 04:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725993AbgINCSR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 13 Sep 2020 22:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
+        id S1725965AbgINCW6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 13 Sep 2020 22:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbgINCSQ (ORCPT
+        with ESMTP id S1726048AbgINCWx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Sep 2020 22:18:16 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A6EC06174A;
-        Sun, 13 Sep 2020 19:18:16 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id w7so11289035pfi.4;
-        Sun, 13 Sep 2020 19:18:16 -0700 (PDT)
+        Sun, 13 Sep 2020 22:22:53 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6377BC06174A;
+        Sun, 13 Sep 2020 19:22:53 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id o16so4668409pjr.2;
+        Sun, 13 Sep 2020 19:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5ctOhTHxOolnlh5TPIYvHhN0DI5aH/8Wn2gnRn9uyfU=;
-        b=Q5LHpPGACyqsbY7QE8dJizCKdFa+fRxQbS5af9M0O3K6fplgNLy/mwTtw0PxZtJzMQ
-         vsWhlwJRA2LeVg8EqQ0ZQi5SHVtGyfjbsjHG8Kvd560UsXg2Je/TiSPuZzCEm3KJkkeQ
-         H6zCZ6ieJNaj4eNgb6nWFoUdlw6O1f4nH1R48dhWy2Jbnw16KAEUNMU5sq063Q98hZRk
-         uW1U2izrJMpKaUaJRn+JLqq/2Dbn0ZYbrIhvPnTePt+f+80NnBLaMuCVl041MqRq9JnY
-         XrYhXl0mnGs8QFpRlyIL8REXOgX+cpyi7l9S7DQM96QT83zm/gcii4OURUbJGqSUl4KJ
-         JUCw==
+        bh=b2bBXZkh0jhvef6kCSC1RofX3ZIFXsI/OhQfJ9yWyI8=;
+        b=ba7opNHLboxB61OBFimi217/Gvjk9FYh6u1x8tswdV5o5eHlZDncYNta6PXyzBH8VX
+         xlxdVX/0xC9Z0fbagyoVFSeLQAXhARaqHRv+6+II4Mab7neZ5UufDYnuV9UcD0NWbSTX
+         M46oPX5wMqrBHXQvc9Du2xV0Ru65n+NH8Oga5dsfO+ejxIHxD/eMom89rZyhBPHWLWQD
+         6k0htSaRJO39e21r4zWZqgy1Ai44ku74FSyxFLpS097HL4L+gqu+QiurJjHd7nV73vHU
+         ThR/Dzf2Rlk6EdASFmX3vvoPglvvXnIKfr+AmkArpjrdXuIhZIQHa8BgQjmVbBd+f9Va
+         QtGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5ctOhTHxOolnlh5TPIYvHhN0DI5aH/8Wn2gnRn9uyfU=;
-        b=ATGztfpAnmgsM58NQfgEbYbr3kGarhg2jTsvbx45HMMLzzfEdJSEuk0GAfLcULnrv8
-         LEmKEvhVRtYfiWnzeCjtEJvhwgfJ0/35tTIKp8A56SqWk1hh71alQuSM+PbC5j014kUN
-         tBeCOwj0zkgDgHH5psIQE+qbnkGc9RIeNVf2a4M/XZH+3h6e6WKZtfjIUdNRNg2EeZx4
-         hHhDmNsxcJx0hen7A+MEqDhogDWDpuYAKS2atV9xr43VFXpjW5x3NJLSEoIhQuKmArXM
-         S7KSfGIYBuJMpw9N1FWRH3UNdE85U9BrJAxmMoCMYno6SfDvu8EYJtSBYDIr04wWVpBk
-         hIOQ==
-X-Gm-Message-State: AOAM530HY359Cia/ur14dvr3c84ie1cNL8snJdljsWvMWV6EqSGrqNl6
-        XQM856oygk7k0qxlmsHebt2N3y7LvwWX3w==
-X-Google-Smtp-Source: ABdhPJx72Hlhqco1iFweESzw6h/Gw+Dzg93zCAOwxlZB2NlZtygME8RtAyyQV8DgRxq+gsoFHe/ssQ==
-X-Received: by 2002:a17:902:ab92:: with SMTP id f18mr12385449plr.12.1600049895446;
-        Sun, 13 Sep 2020 19:18:15 -0700 (PDT)
+        bh=b2bBXZkh0jhvef6kCSC1RofX3ZIFXsI/OhQfJ9yWyI8=;
+        b=OZrCJEh/oCvPUaocep4CmciBkRhIkWumbXs6CQM4a27eXt7dYGSkW3b9js4KoiGC8t
+         Gwyp1wvaM4L5/kZqQH3S77Lw1B4l8kp6IU3T+jgsprvmWo7giCv/4OZTxOyCoAMHCSpd
+         z69Ug/V0stOD+omQmvooM2YvrCMh6i2H/MXZbfZMtMTtnqOknynuflseYt+3A16mnTkj
+         zcTWYx6Lc2I6nbAWlQODgNR/V6nkEYQZd65bA6PE6q/21ZyHmLunym3VeSCJVe2K1NnL
+         trzZ0xm5cfklgQHy6iINot7ZcxT+mQkBKOtpHEuMcg8+aMytJjjYE0xg/dww1/1MVpiF
+         2zJQ==
+X-Gm-Message-State: AOAM530LgOXznktpSe1hYWSSFhBTTIMbINYDLNWr9ulOscFI4f7bvNOT
+        d+gPbZWck7gCPQ3qc+iLPdKOtb2G45NfKQ==
+X-Google-Smtp-Source: ABdhPJybRO5QZZZU7FOZj/R0+f/hWTOqWRxKUsJlGGHX038s2f3u9fSPj91Hyt4IWNR6U/2gHn8HzA==
+X-Received: by 2002:a17:90a:a787:: with SMTP id f7mr11264165pjq.99.1600050172656;
+        Sun, 13 Sep 2020 19:22:52 -0700 (PDT)
 Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id o20sm7312743pgh.63.2020.09.13.19.18.12
+        by smtp.gmail.com with ESMTPSA id n2sm8398125pfa.182.2020.09.13.19.22.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Sep 2020 19:18:14 -0700 (PDT)
+        Sun, 13 Sep 2020 19:22:52 -0700 (PDT)
 From:   Hangbin Liu <liuhangbin@gmail.com>
 To:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Tim.Bird@sony.com,
         Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv4 kselftest next] selftests/run_kselftest.sh: make each test individually selectable
-Date:   Mon, 14 Sep 2020 10:17:58 +0800
-Message-Id: <20200914021758.420874-1-liuhangbin@gmail.com>
+Subject: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each test individually selectable
+Date:   Mon, 14 Sep 2020 10:22:27 +0800
+Message-Id: <20200914022227.437143-1-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200911083053.2816576-1-liuhangbin@gmail.com>
-References: <20200911083053.2816576-1-liuhangbin@gmail.com>
+In-Reply-To: <20200914021758.420874-1-liuhangbin@gmail.com/>
+References: <20200914021758.420874-1-liuhangbin@gmail.com/>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -152,7 +152,8 @@ while true; do
         case "$1" in
         -s | --summary ) logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;
         -t | --tests ) TESTS=$2; shift 2 ;;
-        -h | --help ) usage; exit 0;;
+	-l | --list ) echo $TESTS; exit 0 ;;
+        -h | --help ) usage; exit 0 ;;
         "" ) break;;
         * ) usage; exit 1;;
         esac
@@ -168,6 +169,9 @@ done
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 
 ---
+v5:
+Forgot to update commit description for the new added -l option
+
 v4:
 Add parameter -l to list available tests, suggested by Bird, Tim
 
