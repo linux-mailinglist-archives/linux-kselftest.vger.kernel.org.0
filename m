@@ -2,142 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68647269474
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Sep 2020 20:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0DC269685
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Sep 2020 22:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgINSJg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Sep 2020 14:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S1726179AbgINU11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Sep 2020 16:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726202AbgINSJR (ORCPT
+        with ESMTP id S1726145AbgINUUm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Sep 2020 14:09:17 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE046C06174A;
-        Mon, 14 Sep 2020 11:09:16 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id k2so548966ybp.7;
-        Mon, 14 Sep 2020 11:09:16 -0700 (PDT)
+        Mon, 14 Sep 2020 16:20:42 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FAFC061353
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2020 13:20:36 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id z19so522523pfn.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2020 13:20:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=so1lhnXSV+Q1fNFA9pCNKDjNqWeQTG29k8KOhsDMenA=;
-        b=bvpLQv9twuL9Gtw0qJYz+jdFfuSY431ujBeL6K/GmOBPujdG9xTSuwHAzT7nsIHCxR
-         v17d7AenY6LZ9AeAPMiHb/mIxkkKyIgcQlubcLlvAd+RPh3PW18fy2MOoB0Iu5jBqsFJ
-         KfK2ZPqqYtftwjPZ0f3Ro9zxFUTLs1EEGM0KQEeeueV98vnOxpQ1yDK9IC8eRAu9EOMB
-         71cz6tHf9PV6PQOWDpg+WGM0bSsgGziNf82dq46SMdLGsA3R/Tl6Ugnx2vhJTirbNLIs
-         IJHouAYaD8bvwfSWbaQdEWDhU3wr0Kg9v5v5WKumSEQq602r4ZFkx8jXLGjugHUDVXht
-         RxIg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qEpgx25Jil12k55o2aeOued7nizFpjWJtIRv7RIrrgA=;
+        b=oF8La/idpVXp4VfUhwPPRt9IR/o1RPig2nmeyh8YrhsmHCRvroMtluVJ4o5U4K8AFY
+         VbIWbH4IFHNJ2TFc1OFb1H1xtGH98TXoNvfhyYpAj/BvKsAp8ayWj8ANKhK3ots4YK+n
+         3o6kijVtSkUUK+lTSVOjqNR35ksbqN8yyS7c8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=so1lhnXSV+Q1fNFA9pCNKDjNqWeQTG29k8KOhsDMenA=;
-        b=sp5WM1/C349VuQ0o9afp71sA7p5IrZyzYipMQDFnGYs+Dfj7sw5/323z0ap7Q6iB2/
-         p2ErMmxzyGldAuzWhmyquUG0uYnvpuhd8mVtJ0NfkARZw1Cdv8vz4ueM3kmnOxVHe6Yr
-         /nvTPNRpuf63EOKvZp5//eBB6/6x5ZRhDxfYgjONkaJme7Exng3YruDxWKxdLRTY+peP
-         uhDE+a9OwYuaBFo1tcqJbMkHd+8dLBCMPX2VkJ5amJG+Guk9w6g7zGyTbQDK2W5xahL4
-         33RQdBbkvQUpdw8+sz1kp4wrPELFhSojiVGp/4ixjcVtnLVn3SR3SZs20qfwapT1uide
-         ad2w==
-X-Gm-Message-State: AOAM531mPrUWQ6j7ZEv160T5ciqag8T7lASXS4u6luxx6tZHwLf801Tf
-        LSDo5ENMxOAfHSSdrA656AbfTQoKAXQvWdvei24=
-X-Google-Smtp-Source: ABdhPJx3MHbiy5SPBwLNISkJzc2l7TGFXz9mJmllm5GTu0J7lQ6yohxOZy0fLOzI3ZwaLi8Icsvl3h06PJ20EwpEFcg=
-X-Received: by 2002:a25:ef43:: with SMTP id w3mr19690513ybm.230.1600106955983;
- Mon, 14 Sep 2020 11:09:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qEpgx25Jil12k55o2aeOued7nizFpjWJtIRv7RIrrgA=;
+        b=ROlBlG8Ph44M0PsaN8tfca+nFvsJpyKmKeRWV7+C/3HSl7yhABY3+bo67eCnueNyaq
+         uACIqhb2NKzsHBd2XQOZtTkcE9S3sTXZ+OuDInsspj0cfiMDld6P/OFtNEbUUnlEhlFt
+         fk5jeMzm1ViKa2AgzwtKeUUfWh7fCBfYHnr0jSTQQy0XwoxjCvlZZnLDG31bfJsHIpkn
+         b2gDKpSaB8me3po8k69xhUvpECfuSa2yAwynAESJiuUfspPWttPc7NjqNfp9+UxIzsJB
+         gm7IjAgKrd+4szodHs4273XVGHHQ93+2jmErPvd4Y7qTWKAE1g2Fk34GRxjHPjJR+JfL
+         Lc0w==
+X-Gm-Message-State: AOAM530eykMftZDtyS48MhW6APe+UUd7/UrObxvHKaTeZgyCVbl2NTiW
+        pZd2wPjidiW4cGtuL6u9UTsgQQ==
+X-Google-Smtp-Source: ABdhPJwzC+6nA3eNHS7MaPMnpM3EiFR22Z/iXFg5GeiL+THEWa6N+D4e+5+NMXy6erXWVC35l1hZ8Q==
+X-Received: by 2002:a63:471b:: with SMTP id u27mr12121165pga.139.1600114835739;
+        Mon, 14 Sep 2020 13:20:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u6sm10068865pjy.37.2020.09.14.13.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 13:20:34 -0700 (PDT)
+Date:   Mon, 14 Sep 2020 13:20:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 13/15] selftests/seccomp: powerpc: Set syscall return
+ during ptrace syscall exit
+Message-ID: <202009141319.FC017B0DB@keescook>
+References: <20200912110820.597135-1-keescook@chromium.org>
+ <20200912110820.597135-14-keescook@chromium.org>
+ <87zh5sq59a.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20200903223332.881541-1-haoluo@google.com> <20200903223332.881541-5-haoluo@google.com>
- <CAEf4BzYbpp2jiODvN=GO4R4SNpw-w5shPMaR+=jssv7fNLA0oA@mail.gmail.com> <CA+khW7goxucH5dNcW5nU+9r7JgCHo=MkL1orDsju-OOv7u1UNw@mail.gmail.com>
-In-Reply-To: <CA+khW7goxucH5dNcW5nU+9r7JgCHo=MkL1orDsju-OOv7u1UNw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 14 Sep 2020 11:09:05 -0700
-Message-ID: <CAEf4BzZWr7aw0D3d0Etmm=AVrLVsgDbY5W+1Aj9o8iBYkhJWew@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/6] bpf: Introduce bpf_per_cpu_ptr()
-To:     Hao Luo <haoluo@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zh5sq59a.fsf@mpe.ellerman.id.au>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Sep 13, 2020 at 10:01 PM Hao Luo <haoluo@google.com> wrote:
->
-> Thanks for review, Andrii.
->
-> One question, should I add bpf_{per, this}_cpu_ptr() to the
-> bpf_base_func_proto() in kernel/bpf/helpers.c?
+On Mon, Sep 14, 2020 at 03:47:13PM +1000, Michael Ellerman wrote:
+> Kees Cook <keescook@chromium.org> writes:
+> > Some archs (like ppc) only support changing the return code during
+> > syscall exit when ptrace is used. As the syscall number might not
+> > be available anymore during syscall exit, it needs to be saved
+> > during syscall enter. Adjust the ptrace tests to do this.
+> 
+> I'm not that across all the fixture stuff, but if I'm reading it right
+> you're now calling change_syscall() on both entry and exit for all
+> arches.
 
-Yes, probably, but given it allows poking at kernel memory, it
-probably needs to be guarded by perfmon_capable() check, similar to
-bpf_get_current_task_proto.
+Correct.
 
->
-> On Fri, Sep 4, 2020 at 1:04 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Sep 3, 2020 at 3:35 PM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > Add bpf_per_cpu_ptr() to help bpf programs access percpu vars.
-> > > bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the kernel
-> > > except that it may return NULL. This happens when the cpu parameter is
-> > > out of range. So the caller must check the returned value.
-> > >
-> > > Acked-by: Andrii Nakryiko <andriin@fb.com>
-> > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > ---
-> > >  include/linux/bpf.h            |  3 ++
-> > >  include/linux/btf.h            | 11 ++++++
-> > >  include/uapi/linux/bpf.h       | 17 +++++++++
-> > >  kernel/bpf/btf.c               | 10 ------
-> > >  kernel/bpf/verifier.c          | 66 +++++++++++++++++++++++++++++++---
-> > >  kernel/trace/bpf_trace.c       | 18 ++++++++++
-> > >  tools/include/uapi/linux/bpf.h | 17 +++++++++
-> > >  7 files changed, 128 insertions(+), 14 deletions(-)
-> > >
+> That should work, but it no longer tests changing the return code on
+> entry on the arches that support it, which seems like a backward step?
 
-[...]
+That's a good point. I wouldn't be in a position to notice a regression
+for the other architectures. I will refactor this one...
 
-> > > @@ -5002,6 +5016,30 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
-> > >                 regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
-> > >                 regs[BPF_REG_0].id = ++env->id_gen;
-> > >                 regs[BPF_REG_0].mem_size = meta.mem_size;
-> > > +       } else if (fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL) {
-> >
-> > Given this is internal implementation detail, this return type is
-> > fine, but I'm wondering if it would be better to just make
-> > PTR_TO_BTF_ID to allow not just structs? E.g., if we have an int, just
-> > allow reading those 4 bytes.
-> >
-> > Not sure what the implications are in terms of implementation, but
-> > conceptually that shouldn't be a problem, given we do have BTF type ID
-> > describing size and all.
-> >
->
-> Yeah. Totally agree. I looked at it initially. My take is
-> PTR_TO_BTF_ID is meant for struct types. It required some code
-> refactoring to break this assumption. I can add it to my TODO list and
-> investigate it if this makes more sense.
-
-PTR_TO_BTF_ID was *implemented* for struct, but at least naming-wise
-nothing suggests it has to be restricted to structs. But yeah, this
-should be a separate change, don't block your patches on that.
-
->
-> > > +               const struct btf_type *t;
-> > > +
-
-[...]
+-- 
+Kees Cook
