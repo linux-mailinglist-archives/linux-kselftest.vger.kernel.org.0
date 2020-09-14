@@ -2,195 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A562696AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Sep 2020 22:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AF3269891
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Sep 2020 00:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbgINUc2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Sep 2020 16:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
+        id S1726044AbgINWGg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Sep 2020 18:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbgINUcL (ORCPT
+        with ESMTP id S1725926AbgINWGc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Sep 2020 16:32:11 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978BAC061788
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2020 13:32:11 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id gf14so488608pjb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2020 13:32:11 -0700 (PDT)
+        Mon, 14 Sep 2020 18:06:32 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6935DC06174A;
+        Mon, 14 Sep 2020 15:06:31 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id h126so995411ybg.4;
+        Mon, 14 Sep 2020 15:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MAegNs4VOwWv9UrQbG/3KsC+fif9tz3H9h+v9DTenlg=;
-        b=fLq43tsj0idL5YeRKTDNHNUi+/bcp9W/YMHPxve4qth42qg71hfTUM5Xq3cazIdDrI
-         NFB+4SH1S70GAC48b8DplcyZACd4EXVyXgXskD80RFmDCDa/3pUt9RLyrlu1vxpWwB4f
-         i2X0eeheLlVij915s5y5BUr4hEXriYpLc1OPM=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qjXTDrZsJtVC0UTN/zfoow5ilYHg2sYH2n/teLc5H/4=;
+        b=Qw6cBHvSogrZmbGiHDwR7HFjNftujO7Sd6TjpwZvPkcwwL6NUS7qjbunscoh9ES0lR
+         xFVtL6bkHXKZ3i5EW0egCPiVlm74VnAUVTSZRJvNCm6j+nXJr14xH4JViYXRA3BkBtbd
+         ip4fS5NwcORHLqI7pdnPcA6Ji8czYXjdAOLu1JP55sZQoKATNjDbqoZNPx5IkATUvtIL
+         pHtV4uKmhr8Qx3g4bhmAzcyNLm0LEErHfqRuTuvk/eFWCa2bemYuBIO2xXD1BKitnSUd
+         wtzslH7FXex4cGT/G00Fmpwg5tk4DO7tsF/FXhZXIc9+7a1z5knakeqRsPmZEqcd+uD+
+         Gzwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MAegNs4VOwWv9UrQbG/3KsC+fif9tz3H9h+v9DTenlg=;
-        b=hDX/AnQBJkjmH3dG8+gJiC8/dcGMk3JCKt/PRISlbl6bT7yv+jgG0ZKdU5TRdysb6r
-         FgUWv5jEcC4r6eL1Rxh9cRyXG/LdCzkti3775w4ovjjCTST6g0tTglIR+9Uvc89sVXha
-         d8HN+ui9pU5ypc8FUynscDZadosi2thVuJkqdPe7ZNIbjIlljchp4xfhx5pflzgue7PI
-         tfEjAOjLrAN6mXCVHfooYtsLLSlQVcCaeTnTebc4ed/41l/Cud2qkUUHoz0bU+3Z8B1/
-         X/JvhGFdhxsHv1MopFgxSDoXeBExt+vkPKSrN/Ss37Mbi4jO6ssDQELX42Dive74iN+A
-         jc+A==
-X-Gm-Message-State: AOAM532SvP22yXJGRxYCFbdQdpia9hm4mD6wFe+GiwgH42q70Y1nmJOW
-        p5GyJorOidBgKka6/ZyZZg56AQ==
-X-Google-Smtp-Source: ABdhPJwLrAeD4ZMb7OCOucEtPSfmxZNEDPJonNkzAiZJUR7jlcfwd9QjlJseUiJhoAyO2uqhAGri2A==
-X-Received: by 2002:a17:90b:364c:: with SMTP id nh12mr972235pjb.182.1600115531070;
-        Mon, 14 Sep 2020 13:32:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j19sm11207357pfi.51.2020.09.14.13.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 13:32:10 -0700 (PDT)
-Date:   Mon, 14 Sep 2020 13:32:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 00/15] selftests/seccomp: Refactor change_syscall()
-Message-ID: <202009141321.366935EF52@keescook>
-References: <20200912110820.597135-1-keescook@chromium.org>
- <87wo0wpnah.fsf@mpe.ellerman.id.au>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qjXTDrZsJtVC0UTN/zfoow5ilYHg2sYH2n/teLc5H/4=;
+        b=bjlo4x7d/e32GQjuD2rEsCrAsuyvSVL7ezr2jM5zUoZqT7dsg414SNx7vIdjzGJtm0
+         gDFQPZ141oBF4QiHEVC/7YgLT6i0hUhmqrkccPvykcHpz7nUSNLwNtDnFOXE0wMB50E3
+         uck+eCH4z5dLIGhWBxu46uZ5bkD1gNKbfyTA+xr/AhpSbS/qgfW7pta9HLqXZHRb53fB
+         cHRwvNaUgRZljP/nyxOayhgcehgkptHYYEvaAk5fFKY76tc01YtI7aXT0VQTqGNUAEFC
+         s18p3MjGwgVYeZRQ8zfdezs339TVEywFnTIP9y/iiHTNnUEu3VtLwUkVPgeGp+2F28yV
+         TrTQ==
+X-Gm-Message-State: AOAM530H7cizaqfBsGaZ7aZO6sxPNsUI4I2drnl2XTlbsMA4RFsGgZd+
+        34KitNCNF+/xuXJqHgr5bjmyA+gltL1lG/CMk6g=
+X-Google-Smtp-Source: ABdhPJwysH7nAwjlgvWCOzljKDnsSGQmPChYgS8uR6UmMoJQit46Ww8wpXwxUk329AzLTfIrCjdyEtbZeUrVchUqb2I=
+X-Received: by 2002:a25:33c4:: with SMTP id z187mr10197978ybz.27.1600121190211;
+ Mon, 14 Sep 2020 15:06:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wo0wpnah.fsf@mpe.ellerman.id.au>
+References: <20200903223332.881541-1-haoluo@google.com> <20200903223332.881541-4-haoluo@google.com>
+ <CAEf4BzZPMwe=kz_K8P-6aeLiJo4rC69bMvju4=JEEv0CDEE9_w@mail.gmail.com> <CA+khW7gWaMfok5wxyB0_EiVBnULR08vi6mtVZMwat2bhJY+k8Q@mail.gmail.com>
+In-Reply-To: <CA+khW7gWaMfok5wxyB0_EiVBnULR08vi6mtVZMwat2bhJY+k8Q@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 14 Sep 2020 15:06:18 -0700
+Message-ID: <CAEf4BzbcQv2w-zZTUrwEuCckx_uUime023fb=qGyL3t2x35QRQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/6] bpf/selftests: ksyms_btf to test typed ksyms
+To:     Hao Luo <haoluo@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 10:15:18PM +1000, Michael Ellerman wrote:
-> Kees Cook <keescook@chromium.org> writes:
-> > Hi,
+On Sun, Sep 13, 2020 at 9:58 PM Hao Luo <haoluo@google.com> wrote:
+>
+> Thanks for taking a look, Andrii.
+>
+> On Fri, Sep 4, 2020 at 12:49 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > This refactors the seccomp selftest macros used in change_syscall(),
-> > in an effort to remove special cases for mips, arm, arm64, and xtensa,
-> > which paves the way for powerpc fixes.
+> > On Thu, Sep 3, 2020 at 3:35 PM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > Selftests for typed ksyms. Tests two types of ksyms: one is a struct,
+> > > the other is a plain int. This tests two paths in the kernel. Struct
+> > > ksyms will be converted into PTR_TO_BTF_ID by the verifier while int
+> > > typed ksyms will be converted into PTR_TO_MEM.
+> > >
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > ---
+> > >  .../testing/selftests/bpf/prog_tests/ksyms.c  | 31 +++------
+> > >  .../selftests/bpf/prog_tests/ksyms_btf.c      | 63 +++++++++++++++++++
+> > >  .../selftests/bpf/progs/test_ksyms_btf.c      | 23 +++++++
+> > >  tools/testing/selftests/bpf/trace_helpers.c   | 26 ++++++++
+> > >  tools/testing/selftests/bpf/trace_helpers.h   |  4 ++
+> > >  5 files changed, 123 insertions(+), 24 deletions(-)
+> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
+> > >  create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_btf.c
+> > >
+>
+
+[...]
+
+> > > +
+> > > +extern const struct rq runqueues __ksym; /* struct type global var. */
+> > > +extern const int bpf_prog_active __ksym; /* int type global var. */
 > >
-> > I'm not entirely done testing, but all-arch build tests and x86_64
-> > selftests pass. I'll be doing arm, arm64, and i386 selftests shortly,
-> > but I currently don't have an easy way to check xtensa, mips, nor
-> > powerpc. Any help there would be appreciated!
-> 
-> The series builds fine for me, and all the tests pass (see below).
-> 
-> Thanks for picking up those changes to deal with powerpc being oddball.
-> 
-> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> > When we add non-per-CPU kernel variables, I wonder if the fact that we
+> > have both per-CPU and global kernel variables under the same __ksym
+> > section would cause any problems and confusion? It's not clear to me
+> > if we need to have a special __percpu_ksym section or not?..
+> >
+>
+> Yeah. Totally agree. I thought about this. I think a separate
+> __percpu_ksym attribute is *probably* more clear. Not sure though. How
+> about we introduce a "__percpu_ksym" and make it an alias to "__ksym"
+> for now? If needed, we make an actual section for it in future.
 
-Awesome; thanks!
+Let's keep it in __ksym as is. Verifier will have enough insight to
+produce a meaningful error message, it won't be easy to misuse this
+feature.
 
-However...
+>
+> > > +
+> > > +SEC("raw_tp/sys_enter")
+> > > +int handler(const void *ctx)
+> > > +{
+> > > +       out__runqueues = (__u64)&runqueues;
+> > > +       out__bpf_prog_active = (__u64)&bpf_prog_active;
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +char _license[] SEC("license") = "GPL";
+> > > diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> > > index 4d0e913bbb22..ade555fe8294 100644
+> > > --- a/tools/testing/selftests/bpf/trace_helpers.c
+> > > +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> > > @@ -90,6 +90,32 @@ long ksym_get_addr(const char *name)
+> > >         return 0;
+> > >  }
+> > >
+> > > +/* open kallsyms and read symbol addresses on the fly. Without caching all symbols,
+> > > + * this is faster than load + find. */
+> > > +int kallsyms_find(const char *sym, unsigned long long *addr)
+> > > +{
+> > > +       char type, name[500];
+> > > +       unsigned long long value;
+> > > +       int err = 0;
+> > > +       FILE *f;
+> > > +
+> > > +       f = fopen("/proc/kallsyms", "r");
+> > > +       if (!f)
+> > > +               return -ENOENT;
+> > > +
+> > > +       while (fscanf(f, "%llx %c %499s%*[^\n]\n", &value, &type, name) > 0) {
+> > > +               if (strcmp(name, sym) == 0) {
+> > > +                       *addr = value;
+> > > +                       goto out;
+> > > +               }
+> > > +       }
+> > > +       err = -EINVAL;
+> >
+> > These error codes seem backward to me. If you fail to open
+> > /proc/kallsyms, that's an unexpected and invalid situation, so EINVAL
+> > makes a bit more sense there. But -ENOENT is clearly for cases where
+> > you didn't find what you were looking for, which is exactly this case.
+> >
+> >
+>
+> I thought about it. I used -ENOENT for fopen failure because I found
+> -ENOENT is for the case when a file/directory is not found, which is
+> more reasonable in describing fopen error. But your proposal also
+> makes  sense and that is what I originally had. It doesn't sound like
+> a big deal, I can switch the order them in v3.
 
-> 
-> cheers
-> 
-> 
-> ./seccomp_bpf
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> #  RUN           global.kcmp ...
-> #            OK  global.kcmp
-> ok 1 global.kcmp
-> [...]
-> #  RUN           global.KILL_thread ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
+For me, ENOENT is about the logical entity the function is working
+with. For fopen() that would be file, so if it's not found -- ENOENT.
+But here, for kallsyms_find it's a ksym. If /proc/kallsyms isn't there
+or can't be open -- that's unexpected (EINVAL). But if /proc/kallsyms
+was open but didn't contain the entity we are looking for (requested
+ksym) -- that's ENOENT.
 
-Was this a mis-paste, or has something very very bad happened here in
-global.KILL_one_arg_six finishes?
-
-> #  RUN           global.kcmp ...
-> #            OK  global.kcmp
-> ok 1 global.kcmp
-> [...]
-> #  RUN           global.user_notification_basic ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_basic ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_signal ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_closed_listener ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_child_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_sibling_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_sibling_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_sibling_pid_ns ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_fault_recv ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_continue ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_filter_empty ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_filter_empty_threaded ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_addfd ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> #  RUN           global.user_notification_addfd_rlimit ...
-> TAP version 13
-> 1..86
-> # Starting 86 tests from 7 test cases.
-> [...]
-> # PASSED: 86 / 86 tests passed.
-> # Totals: pass:86 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-And after every user_notification test? O_O
-
--- 
-Kees Cook
+>
+> > > +
+> > > +out:
+> > > +       fclose(f);
+> > > +       return err;
+> > > +}
+> > > +
+> > >  void read_trace_pipe(void)
+> > >  {
+> > >         int trace_fd;
+> > > diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+> > > index 25ef597dd03f..f62fdef9e589 100644
+> > > --- a/tools/testing/selftests/bpf/trace_helpers.h
+> > > +++ b/tools/testing/selftests/bpf/trace_helpers.h
+> > > @@ -12,6 +12,10 @@ struct ksym {
+> > >  int load_kallsyms(void);
+> > >  struct ksym *ksym_search(long key);
+> > >  long ksym_get_addr(const char *name);
+> > > +
+> > > +/* open kallsyms and find addresses on the fly, faster than load + search. */
+> > > +int kallsyms_find(const char *sym, unsigned long long *addr);
+> > > +
+> > >  void read_trace_pipe(void);
+> > >
+> > >  #endif
+> > > --
+> > > 2.28.0.526.ge36021eeef-goog
+> > >
