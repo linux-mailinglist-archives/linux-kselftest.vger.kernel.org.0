@@ -2,196 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA75E26AE30
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Sep 2020 21:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55C026AE48
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Sep 2020 21:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbgIORHX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Sep 2020 13:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727788AbgIOQsd (ORCPT
+        id S1727839AbgIOT6f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Sep 2020 15:58:35 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:43642 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727859AbgIOT6O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Sep 2020 12:48:33 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88528C061355
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2020 09:36:12 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id m17so4822315ioo.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Sep 2020 09:36:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hTYtDNRWZ3IQd17IVwiFvjdPJC2m5bl5cpimFc01bsE=;
-        b=dd8bL7ebVaZyzMDfsYKo20tvtiuZtcDmrHxwpMH6xunQdc01MjGuk18V+0XPn8WHrl
-         Fis6Uo8ZkZSeYMw/H78zlSzVvrGy4lwsCvjqkxiT5CkoD8OYqyA+IbeH5o+YrirpA6r0
-         K8iLbnom0h1MLtbmdJo3GIQKZLGp8PT7JlepSGsUyzIZ6zgUM0WQ7PA3XVS8h2Jhq2pJ
-         kzHaBtpJJTkGGvgCKfbE1evnoBXp1Dad1Boq4Vl9c9ekuQvXK4qX4JS1c1w7QWEIZ0q7
-         lhbLIxyyUMt0OvM1lYg8LZlT0B+Pe0m3kwJXdmKVS7TF7Hciljn7WW/NJvTrGqu6jynF
-         Td1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hTYtDNRWZ3IQd17IVwiFvjdPJC2m5bl5cpimFc01bsE=;
-        b=fU+F9eE+lMH8pLU2HYKv24gl2HyRuGsC6jDJcoouYFUvB9kyesiT8BUUC0k8Q9Y6/Y
-         po8e6iq3fUyxFBOZ3s82hkoYLJpPhcJQtd4jIhPpGW5PE22FKky05o3aEkU8hQHukvs5
-         XfIv/00kMb9sFceaGVyOVjHMm5XdpZrMLOsZHWzi6cxoOHZ/tMUdTftCPxE2ZA/0FN7l
-         n3/gCasdtFyTpZArR1B9Dy6fs/4VkP/FbfhKrECCw7LcMvwUIZOVa0e4pF8kq3Go+bH9
-         7qPsfIYdXECRXsaU5M+MDlP/489EgvBeTyjhFgZLQ/coAWcuoYGNcfRvc6T0gNeOHh46
-         kLEA==
-X-Gm-Message-State: AOAM530iB6lFr4c4nK4fuqQDZC8xn3VtNGs10/9Eljf/zW0iBcGsrfPL
-        2j3OCH1i/IK7sg3UEPRBjeXbm67B/ws6YcdrS0xsxQ==
-X-Google-Smtp-Source: ABdhPJxfSpUADTY11rW/0vm2ayF8vH2q7+GTpuu5qgBeHOpVJABcAhpG1Zc/csWA4GJs7zkMIHdIbQ5efNp5B3lCemM=
-X-Received: by 2002:a05:6638:1643:: with SMTP id a3mr18483174jat.4.1600187770959;
- Tue, 15 Sep 2020 09:36:10 -0700 (PDT)
+        Tue, 15 Sep 2020 15:58:14 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600199857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WUf3cR8tRBv7eifn3bYRJqwOE06JyVH+YNcuAlhPEzY=;
+        b=R4Zt8iBiRf9a+cl1bV87aTb7PzjrsY9fDXMhiBS8K2ot+081OXV43gzpJxoKPhJ+bG/r3d
+        IZ+XMelmwH6I1/IeBzA0fsbvOLaK8KTaPACawTHUg6jjadOJqPR3b3oHieYk1VWz6/0oQm
+        160PfMvRl4sOXnVT35YSXZOTlM61qgXSYzZSMF7oaVHQZW8+sX+YqTW5CPNn3M/4wDy6pz
+        FqyKA3YK/qnHJa+/v8mb9TXFlw3YCbBIJGJZD6NGKFvRIxsCkXAfwQ3qqvw+SkHnN/x3SA
+        Xr1GzKJIli+LvQNZjFraeH3J5TJIjCZBBRyHcln921IMOu/pI6tJi9qyOaIRUA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600199857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WUf3cR8tRBv7eifn3bYRJqwOE06JyVH+YNcuAlhPEzY=;
+        b=GHgvirbCN6gxc0oKsh65B0tX+BLegnUGJa5AhDfyLfEqCZ+BxU1R9tgqcRPDwCSIqCwX9J
+        bXubW9jdXnVc0gCA==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+In-Reply-To: <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com> <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com> <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+Date:   Tue, 15 Sep 2020 21:57:37 +0200
+Message-ID: <87y2la4xu6.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-References: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
- <20200911143022.414783-4-nicolas.rybowski@tessares.net> <CAPhsuW5Gbx2pWgM1XcSYqVsN6L=q+0u3QFNxG7A+Qez=Tziu2A@mail.gmail.com>
-In-Reply-To: <CAPhsuW5Gbx2pWgM1XcSYqVsN6L=q+0u3QFNxG7A+Qez=Tziu2A@mail.gmail.com>
-From:   Nicolas Rybowski <nicolas.rybowski@tessares.net>
-Date:   Tue, 15 Sep 2020 18:35:59 +0200
-Message-ID: <CACXrtpRzZuCyZnduYcV+1d2Z3qTK2b7Mcj2gQvcRbnv7+k0VRw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/5] bpf: selftests: add MPTCP test base
-To:     Song Liu <song@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Song,
+On Tue, Sep 15 2020 at 10:35, Linus Torvalds wrote:
+> On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> OTOH, having a working 'preemptible()' or maybe better named
+>> 'can_schedule()' check makes tons of sense to make decisions about
+>> allocation modes or other things.
+>
+> No. I think that those kinds of decisions about actual behavior are
+> always simply fundamentally wrong.
+>
+> Note that this is very different from having warnings about invalid
+> use. THAT is correct. It may not warn in all configurations, but that
+> doesn't matter: what matters is that it warns in common enough
+> configurations that developers will catch it.
 
-Thanks for the feedback !
+You wish. I just found a 7 year old bug in a 10G network driver which
+surely would have been found if people would enable debug configs and
+not just run the crap on their PREEMPT_NONE, all debug off kernel. And
+that driver is not subject to bitrot, it gets regular bug fixes from
+people who seem to care (distro folks).
 
-On Mon, Sep 14, 2020 at 8:07 PM Song Liu <song@kernel.org> wrote:
->
-> On Fri, Sep 11, 2020 at 8:02 AM Nicolas Rybowski
-> <nicolas.rybowski@tessares.net> wrote:
-> >
-> > This patch adds a base for MPTCP specific tests.
-> >
-> > It is currently limited to the is_mptcp field in case of plain TCP
-> > connection because for the moment there is no easy way to get the subflow
-> > sk from a msk in userspace. This implies that we cannot lookup the
-> > sk_storage attached to the subflow sk in the sockops program.
-> >
-> > Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> > Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
->
-> Acked-by: Song Liu <songliubraving@fb.com>
->
-> With some nitpicks below.
->
-> > ---
-> >
-> > Notes:
-> >     v1 -> v2:
-> >     - new patch: mandatory selftests (Alexei)
-> >
-> [...]
-> >                      int timeout_ms);
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> > new file mode 100644
-> > index 000000000000..0e65d64868e9
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> > @@ -0,0 +1,119 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +#include <test_progs.h>
-> > +#include "cgroup_helpers.h"
-> > +#include "network_helpers.h"
-> > +
-> > +struct mptcp_storage {
-> > +       __u32 invoked;
-> > +       __u32 is_mptcp;
-> > +};
-> > +
-> > +static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 is_mptcp)
-> > +{
-> > +       int err = 0, cfd = client_fd;
-> > +       struct mptcp_storage val;
-> > +
-> > +       /* Currently there is no easy way to get back the subflow sk from the MPTCP
-> > +        * sk, thus we cannot access here the sk_storage associated to the subflow
-> > +        * sk. Also, there is no sk_storage associated with the MPTCP sk since it
-> > +        * does not trigger sockops events.
-> > +        * We silently pass this situation at the moment.
-> > +        */
-> > +       if (is_mptcp == 1)
-> > +               return 0;
-> > +
-> > +       if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &cfd, &val) < 0)) {
-> > +               perror("Failed to read socket storage");
->
-> Maybe simplify this with CHECK(), which contains a customized error message?
-> Same for some other calls.
->
+> So having a warning in "might_sleep()" that doesn't always trigger,
+> because you have a limited configuration that can't even detect the
+> situation, that's fine and dandy and intentional.
 
-The whole logic here is strongly inspired from prog_tests/tcp_rtt.c
-where CHECK_FAIL is used.
-Also the CHECK macro will print a PASS message on successful map
-lookup, which is not expected at this point of the tests.
-I think it would be more interesting to leave it as it is to keep a
-cohesion between TCP and MPTCP selftests. What do you think?
+and lets people get away with their crap.
 
-If there are no objections, I will send a v3 with the other requested
-changes and a rebase on the latest bpf-next.
+> But having code like
+>
+>        if (can_schedule())
+>            .. do something different ..
+>
+> is fundamentally complete and utter garbage.
+>
+> It's one thing if you test for "am I in hardware interrupt context".
+> Those tests aren't great either, but at least they make sense.
 
-> > +               return -1;
-> > +       }
-> > +
-> > +       if (val.invoked != 1) {
-> > +               log_err("%s: unexpected invoked count %d != %d",
-> > +                       msg, val.invoked, 1);
-> > +               err++;
-> > +       }
-> > +
-> > +       if (val.is_mptcp != is_mptcp) {
-> > +               log_err("%s: unexpected bpf_tcp_sock.is_mptcp %d != %d",
-> > +                       msg, val.is_mptcp, is_mptcp);
-> > +               err++;
-> > +       }
-> > +
-> > +       return err;
-> > +}
-> > +
-> > +static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
-> [...]
+They make sense in limited situations like exception handlers and such
+which really have to know from which context an exception was raised.
+
+But with the above reasoning such checks do not make sense in any other
+general code. 'in hard interrupt context' is just another context where
+you can't do stuff which you can do when in preemptible task context.
+
+Most tests are way broader than a single context. in_interrupt() is true
+for hard interrupt, soft interrupt delivery and all BH disabled
+contexts, which is completely ill defined.
+
+> But a driver - or some library routine - making a difference based on
+> some nebulous "can I schedule" is fundamentally and basically WRONG.
 >
-> > +
-> > +       client_fd = is_mptcp ? connect_to_mptcp_fd(server_fd, 0) :
-> > +                              connect_to_fd(server_fd, 0);
-> > +       if (client_fd < 0) {
-> > +               err = -1;
-> > +               goto close_client_fd;
->
-> This should be "goto close_bpf_object;", and we don't really need the label
-> close_client_fd.
->
-> > +       }
-> > +
-> > +       err += is_mptcp ? verify_sk(map_fd, client_fd, "MPTCP subflow socket", 1) :
->
-> It doesn't really change the logic, but I guess we only need "err = xxx"?
->
-> > +                         verify_sk(map_fd, client_fd, "plain TCP socket", 0);
-> > +
-> > +close_client_fd:
-> > +       close(client_fd);
-> > +
-> > +close_bpf_object:
-> > +       bpf_object__close(obj);
-> > +       return err;
-> > +}
-> > +
+> If some code changes behavior, it needs to be explicit to the *caller*
+> of that code.
+
+I'm fine with that, but then we have to be consequent and ban _all_ of
+these and not just declare can_schedule() to be a bad one.
+
+Thanks,
+
+        tglx
