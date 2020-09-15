@@ -2,354 +2,1386 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E9726A13A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Sep 2020 10:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48FD26A44D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Sep 2020 13:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgIOIpq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Sep 2020 04:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S1726137AbgIOLlk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Sep 2020 07:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbgIOIpn (ORCPT
+        with ESMTP id S1726293AbgIOLkw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Sep 2020 04:45:43 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39ECC06174A;
-        Tue, 15 Sep 2020 01:45:42 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id i26so3801835ejb.12;
-        Tue, 15 Sep 2020 01:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V3eC1eCYe5T3GPH8jjvGIL65MP0qJgY9qagVEB5NEUM=;
-        b=rgTEeTmT5hPjvm2bKmEqGkP22ayUWAL9Ee1i/i512DcFR0MZ8WN+RCXai6SzpNAEzI
-         fTlHaW50Y0ogod04Q+3yhm0XDKYFT9iOOdDsUL6v/LANOFbQxqJrArLSSLzUPBLGO2HE
-         mu5+jq8mhEZvIr/locCDVmGRP3nIn06yeoYjkxf4OH6hnkVpllY/3QepRr8NH1hmpVto
-         J1L+Xxf036iirk/JJDaAaMhw9XVvBU+PtFsQ57mlqxVpZkqOd55edJnupny/jO5RmGT/
-         WyYYWLC58L5zmZgchnvINiSMiXNETagz6npJFsiisXKXZfj7QykxoX6r0FA393jzTU+l
-         x/2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V3eC1eCYe5T3GPH8jjvGIL65MP0qJgY9qagVEB5NEUM=;
-        b=d03Oh3FMBLG9DvUXqMx3A9XBfIwha9vGbh9XRQCcBQ9/LxRODEVlAZ4+WmmDSDxNWv
-         GHJWFHKV4pXhGyIyRl+gIU120/VEroedZyrzd+jtqFPamChvJybamidgc4TZrKv+EKFx
-         OeA/4xM+DcBbJLPM9ts2SOSe2adv23HuAZnhp/787bDWvomn3kd4AaTYAkkSpHxONWX0
-         nNfuQzfD6euMYYG4/Pm01lLTRiJM4xSVI2Z1Dd4PVAGqeUXiaNOZn5Mc9HNdKFDDkLE6
-         1PAfZJQgB0EIW5BfhS1db+R6mc4OdfqWQ7d/IgWRwz3dsDuguT04mD4CDckWqTBTb2S/
-         KHwg==
-X-Gm-Message-State: AOAM531Htq6JXwnVIIOIrFB/voOSBQw+0F4EOE9GU6oJwFxhM4QWaCrF
-        AfYmWtP2P5tXAR5oWonPXNCvO2iLmUx5Y8jAKFc89xRlriE=
-X-Google-Smtp-Source: ABdhPJw2kLy7Aha/hSiLEl/7aoJex5orYrjIN0pmqmUZ+0OUd948tWCv81SyuEdvlEktTSSsGKd3RzKOTQRTWZCEAFY=
-X-Received: by 2002:a17:906:b784:: with SMTP id dt4mr19883626ejb.376.1600159541482;
- Tue, 15 Sep 2020 01:45:41 -0700 (PDT)
+        Tue, 15 Sep 2020 07:40:52 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1B3C061788;
+        Tue, 15 Sep 2020 04:40:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=CaRtCA1GM3MflPckYTmuyfarHyZ8vTd15BMkl2Uhh90=; b=a4pjQxBuoa8fP538n/pFr4MEEL
+        rRWf/tDt9rUh0Qat/yAL8gi2fb7JCungDX53wf81KtPwWUB8BtQAHk1cXa9P1p6tbIgJRBcDPzrpi
+        +CZy4SmPuKABFaPq18pJdn16392eTohFzHcAjIrn7/cz6G6j9tRaanxolzbeKjq+44JAsHMb+IN1R
+        fg1I6lNEQu6t+387ebOkHVjuioRdpTIRNg7NA6oWd/tzPYIBu74btN2gOY1Op26gblhxSVrALApUR
+        QauFsMKkqMqhnngI4dsSAUxPMnsSuia/DEMeqIT6FJKSujX9R2hmrb1qbZx/tz6L1Pw4XFS7onh9w
+        GPbS8zYw==;
+Received: from 83-245-197-237.elisa-laajakaista.fi ([83.245.197.237] helo=localhost)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <jarkko.sakkinen@linux.intel.com>)
+        id 1kI8mH-00060b-QA; Tue, 15 Sep 2020 14:05:37 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     x86@kernel.org, linux-sgx@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
+        andriy.shevchenko@linux.intel.com, asapek@google.com, bp@alien8.de,
+        cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com,
+        josh@joshtriplett.org, kai.huang@intel.com, kai.svahn@intel.com,
+        kmoy@google.com, ludloff@google.com, luto@kernel.org,
+        nhorman@redhat.com, npmccallum@redhat.com, puiterwijk@redhat.com,
+        rientjes@google.com, sean.j.christopherson@intel.com,
+        tglx@linutronix.de, yaozhangx@google.com
+Subject: [PATCH v38 22/24] selftests/x86: Add a selftest for SGX
+Date:   Tue, 15 Sep 2020 14:05:20 +0300
+Message-Id: <20200915110522.893152-23-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200915110522.893152-1-jarkko.sakkinen@linux.intel.com>
+References: <20200915110522.893152-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-References: <20200912110820.597135-1-keescook@chromium.org>
-In-Reply-To: <20200912110820.597135-1-keescook@chromium.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 15 Sep 2020 01:45:30 -0700
-Message-ID: <CAMo8BfLsKgnRutWAMX0O8yK7nZbBJJLeJXVSQRR0NQin9PfuPg@mail.gmail.com>
-Subject: Re: [PATCH 00/15] selftests/seccomp: Refactor change_syscall()
-To:     Kees Cook <keescook@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 83.245.197.237
+X-SA-Exim-Mail-From: jarkko.sakkinen@linux.intel.com
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+Add a selftest for SGX. It is a trivial test where a simple enclave
+copies one 64-bit word of memory between two memory locations.
 
-On Sat, Sep 12, 2020 at 4:08 AM Kees Cook <keescook@chromium.org> wrote:
-> This refactors the seccomp selftest macros used in change_syscall(),
-> in an effort to remove special cases for mips, arm, arm64, and xtensa,
-> which paves the way for powerpc fixes.
->
-> I'm not entirely done testing, but all-arch build tests and x86_64
-> selftests pass. I'll be doing arm, arm64, and i386 selftests shortly,
-> but I currently don't have an easy way to check xtensa, mips, nor
-> powerpc. Any help there would be appreciated!
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/sgx/.gitignore        |   2 +
+ tools/testing/selftests/sgx/Makefile          |  53 +++
+ tools/testing/selftests/sgx/call.S            |  44 ++
+ tools/testing/selftests/sgx/defines.h         |  21 +
+ tools/testing/selftests/sgx/load.c            | 277 ++++++++++++
+ tools/testing/selftests/sgx/main.c            | 232 ++++++++++
+ tools/testing/selftests/sgx/main.h            |  38 ++
+ tools/testing/selftests/sgx/sigstruct.c       | 395 ++++++++++++++++++
+ tools/testing/selftests/sgx/test_encl.c       |  20 +
+ tools/testing/selftests/sgx/test_encl.lds     |  40 ++
+ .../selftests/sgx/test_encl_bootstrap.S       |  89 ++++
+ 12 files changed, 1212 insertions(+)
+ create mode 100644 tools/testing/selftests/sgx/.gitignore
+ create mode 100644 tools/testing/selftests/sgx/Makefile
+ create mode 100644 tools/testing/selftests/sgx/call.S
+ create mode 100644 tools/testing/selftests/sgx/defines.h
+ create mode 100644 tools/testing/selftests/sgx/load.c
+ create mode 100644 tools/testing/selftests/sgx/main.c
+ create mode 100644 tools/testing/selftests/sgx/main.h
+ create mode 100644 tools/testing/selftests/sgx/sigstruct.c
+ create mode 100644 tools/testing/selftests/sgx/test_encl.c
+ create mode 100644 tools/testing/selftests/sgx/test_encl.lds
+ create mode 100644 tools/testing/selftests/sgx/test_encl_bootstrap.S
 
-I've built and tested this series on xtensa. I had to disable two tests:
-user_notification_addfd and user_notification_addfd_rlimit because
-they use memfd_create and prlimit which are not available in uClibc.
-With this change I've got all 86 tests passing with the following log:
-
-./seccomp_bpf
-TAP version 13
-1..86
-# Starting 86 tests from 7 test cases.
-#  RUN           TRAP.dfl ...
-#            OK  TRAP.dfl
-ok 1 TRAP.dfl
-#  RUN           TRAP.ign ...
-#            OK  TRAP.ign
-ok 2 TRAP.ign
-#  RUN           TRAP.handler ...
-#            OK  TRAP.handler
-ok 3 TRAP.handler
-#  RUN           precedence.allow_ok ...
-#            OK  precedence.allow_ok
-ok 4 precedence.allow_ok
-#  RUN           precedence.kill_is_highest ...
-#            OK  precedence.kill_is_highest
-ok 5 precedence.kill_is_highest
-#  RUN           precedence.kill_is_highest_in_any_order ...
-#            OK  precedence.kill_is_highest_in_any_order
-ok 6 precedence.kill_is_highest_in_any_order
-#  RUN           precedence.trap_is_second ...
-#            OK  precedence.trap_is_second
-ok 7 precedence.trap_is_second
-#  RUN           precedence.trap_is_second_in_any_order ...
-#            OK  precedence.trap_is_second_in_any_order
-ok 8 precedence.trap_is_second_in_any_order
-#  RUN           precedence.errno_is_third ...
-#            OK  precedence.errno_is_third
-ok 9 precedence.errno_is_third
-#  RUN           precedence.errno_is_third_in_any_order ...
-#            OK  precedence.errno_is_third_in_any_order
-ok 10 precedence.errno_is_third_in_any_order
-#  RUN           precedence.trace_is_fourth ...
-#            OK  precedence.trace_is_fourth
-ok 11 precedence.trace_is_fourth
-#  RUN           precedence.trace_is_fourth_in_any_order ...
-#            OK  precedence.trace_is_fourth_in_any_order
-ok 12 precedence.trace_is_fourth_in_any_order
-#  RUN           precedence.log_is_fifth ...
-#            OK  precedence.log_is_fifth
-ok 13 precedence.log_is_fifth
-#  RUN           precedence.log_is_fifth_in_any_order ...
-#            OK  precedence.log_is_fifth_in_any_order
-ok 14 precedence.log_is_fifth_in_any_order
-#  RUN           TRACE_poke.read_has_side_effects ...
-#            OK  TRACE_poke.read_has_side_effects
-ok 15 TRACE_poke.read_has_side_effects
-#  RUN           TRACE_poke.getpid_runs_normally ...
-#            OK  TRACE_poke.getpid_runs_normally
-ok 16 TRACE_poke.getpid_runs_normally
-#  RUN           TRACE_syscall.ptrace.negative_ENOSYS ...
-#            OK  TRACE_syscall.ptrace.negative_ENOSYS
-ok 17 TRACE_syscall.ptrace.negative_ENOSYS
-#  RUN           TRACE_syscall.ptrace.syscall_allowed ...
-#            OK  TRACE_syscall.ptrace.syscall_allowed
-ok 18 TRACE_syscall.ptrace.syscall_allowed
-#  RUN           TRACE_syscall.ptrace.syscall_redirected ...
-#            OK  TRACE_syscall.ptrace.syscall_redirected
-ok 19 TRACE_syscall.ptrace.syscall_redirected
-#  RUN           TRACE_syscall.ptrace.syscall_errno ...
-#            OK  TRACE_syscall.ptrace.syscall_errno
-ok 20 TRACE_syscall.ptrace.syscall_errno
-#  RUN           TRACE_syscall.ptrace.syscall_faked ...
-#            OK  TRACE_syscall.ptrace.syscall_faked
-ok 21 TRACE_syscall.ptrace.syscall_faked
-#  RUN           TRACE_syscall.ptrace.skip_after ...
-#            OK  TRACE_syscall.ptrace.skip_after
-ok 22 TRACE_syscall.ptrace.skip_after
-#  RUN           TRACE_syscall.ptrace.kill_after ...
-#            OK  TRACE_syscall.ptrace.kill_after
-ok 23 TRACE_syscall.ptrace.kill_after
-#  RUN           TRACE_syscall.seccomp.negative_ENOSYS ...
-#            OK  TRACE_syscall.seccomp.negative_ENOSYS
-ok 24 TRACE_syscall.seccomp.negative_ENOSYS
-#  RUN           TRACE_syscall.seccomp.syscall_allowed ...
-#            OK  TRACE_syscall.seccomp.syscall_allowed
-ok 25 TRACE_syscall.seccomp.syscall_allowed
-#  RUN           TRACE_syscall.seccomp.syscall_redirected ...
-#            OK  TRACE_syscall.seccomp.syscall_redirected
-ok 26 TRACE_syscall.seccomp.syscall_redirected
-#  RUN           TRACE_syscall.seccomp.syscall_errno ...
-#            OK  TRACE_syscall.seccomp.syscall_errno
-ok 27 TRACE_syscall.seccomp.syscall_errno
-#  RUN           TRACE_syscall.seccomp.syscall_faked ...
-#            OK  TRACE_syscall.seccomp.syscall_faked
-ok 28 TRACE_syscall.seccomp.syscall_faked
-#  RUN           TRACE_syscall.seccomp.skip_after ...
-#            OK  TRACE_syscall.seccomp.skip_after
-ok 29 TRACE_syscall.seccomp.skip_after
-#  RUN           TRACE_syscall.seccomp.kill_after ...
-#            OK  TRACE_syscall.seccomp.kill_after
-ok 30 TRACE_syscall.seccomp.kill_after
-#  RUN           TSYNC.siblings_fail_prctl ...
-#            OK  TSYNC.siblings_fail_prctl
-ok 31 TSYNC.siblings_fail_prctl
-#  RUN           TSYNC.two_siblings_with_ancestor ...
-#            OK  TSYNC.two_siblings_with_ancestor
-ok 32 TSYNC.two_siblings_with_ancestor
-#  RUN           TSYNC.two_sibling_want_nnp ...
-#            OK  TSYNC.two_sibling_want_nnp
-ok 33 TSYNC.two_sibling_want_nnp
-#  RUN           TSYNC.two_siblings_with_no_filter ...
-#            OK  TSYNC.two_siblings_with_no_filter
-ok 34 TSYNC.two_siblings_with_no_filter
-#  RUN           TSYNC.two_siblings_with_one_divergence ...
-#            OK  TSYNC.two_siblings_with_one_divergence
-ok 35 TSYNC.two_siblings_with_one_divergence
-#  RUN           TSYNC.two_siblings_with_one_divergence_no_tid_in_err ...
-#            OK  TSYNC.two_siblings_with_one_divergence_no_tid_in_err
-ok 36 TSYNC.two_siblings_with_one_divergence_no_tid_in_err
-#  RUN           TSYNC.two_siblings_not_under_filter ...
-#            OK  TSYNC.two_siblings_not_under_filter
-ok 37 TSYNC.two_siblings_not_under_filter
-#  RUN           global.kcmp ...
-#            OK  global.kcmp
-ok 38 global.kcmp
-#  RUN           global.mode_strict_support ...
-#            OK  global.mode_strict_support
-ok 39 global.mode_strict_support
-#  RUN           global.mode_strict_cannot_call_prctl ...
-#            OK  global.mode_strict_cannot_call_prctl
-ok 40 global.mode_strict_cannot_call_prctl
-#  RUN           global.no_new_privs_support ...
-#            OK  global.no_new_privs_support
-ok 41 global.no_new_privs_support
-#  RUN           global.mode_filter_support ...
-#            OK  global.mode_filter_support
-ok 42 global.mode_filter_support
-#  RUN           global.mode_filter_without_nnp ...
-#            OK  global.mode_filter_without_nnp
-ok 43 global.mode_filter_without_nnp
-#  RUN           global.filter_size_limits ...
-#            OK  global.filter_size_limits
-ok 44 global.filter_size_limits
-#  RUN           global.filter_chain_limits ...
-#            OK  global.filter_chain_limits
-ok 45 global.filter_chain_limits
-#  RUN           global.mode_filter_cannot_move_to_strict ...
-#            OK  global.mode_filter_cannot_move_to_strict
-ok 46 global.mode_filter_cannot_move_to_strict
-#  RUN           global.mode_filter_get_seccomp ...
-#            OK  global.mode_filter_get_seccomp
-ok 47 global.mode_filter_get_seccomp
-#  RUN           global.ALLOW_all ...
-#            OK  global.ALLOW_all
-ok 48 global.ALLOW_all
-#  RUN           global.empty_prog ...
-#            OK  global.empty_prog
-ok 49 global.empty_prog
-#  RUN           global.log_all ...
-#            OK  global.log_all
-ok 50 global.log_all
-#  RUN           global.unknown_ret_is_kill_inside ...
-#            OK  global.unknown_ret_is_kill_inside
-ok 51 global.unknown_ret_is_kill_inside
-#  RUN           global.unknown_ret_is_kill_above_allow ...
-#            OK  global.unknown_ret_is_kill_above_allow
-ok 52 global.unknown_ret_is_kill_above_allow
-#  RUN           global.KILL_all ...
-#            OK  global.KILL_all
-ok 53 global.KILL_all
-#  RUN           global.KILL_one ...
-#            OK  global.KILL_one
-ok 54 global.KILL_one
-#  RUN           global.KILL_one_arg_one ...
-#            OK  global.KILL_one_arg_one
-ok 55 global.KILL_one_arg_one
-#  RUN           global.KILL_one_arg_six ...
-#            OK  global.KILL_one_arg_six
-ok 56 global.KILL_one_arg_six
-#  RUN           global.KILL_thread ...
-#            OK  global.KILL_thread
-ok 57 global.KILL_thread
-#  RUN           global.KILL_process ...
-#            OK  global.KILL_process
-ok 58 global.KILL_process
-#  RUN           global.arg_out_of_range ...
-#            OK  global.arg_out_of_range
-ok 59 global.arg_out_of_range
-#  RUN           global.ERRNO_valid ...
-#            OK  global.ERRNO_valid
-ok 60 global.ERRNO_valid
-#  RUN           global.ERRNO_zero ...
-#            OK  global.ERRNO_zero
-ok 61 global.ERRNO_zero
-#  RUN           global.ERRNO_capped ...
-#            OK  global.ERRNO_capped
-ok 62 global.ERRNO_capped
-#  RUN           global.ERRNO_order ...
-#            OK  global.ERRNO_order
-ok 63 global.ERRNO_order
-#  RUN           global.negative_ENOSYS ...
-#            OK  global.negative_ENOSYS
-ok 64 global.negative_ENOSYS
-#  RUN           global.seccomp_syscall ...
-#            OK  global.seccomp_syscall
-ok 65 global.seccomp_syscall
-#  RUN           global.seccomp_syscall_mode_lock ...
-#            OK  global.seccomp_syscall_mode_lock
-ok 66 global.seccomp_syscall_mode_lock
-#  RUN           global.detect_seccomp_filter_flags ...
-#            OK  global.detect_seccomp_filter_flags
-ok 67 global.detect_seccomp_filter_flags
-#  RUN           global.TSYNC_first ...
-#            OK  global.TSYNC_first
-ok 68 global.TSYNC_first
-#  RUN           global.syscall_restart ...
-#            OK  global.syscall_restart
-ok 69 global.syscall_restart
-#  RUN           global.filter_flag_log ...
-#            OK  global.filter_flag_log
-ok 70 global.filter_flag_log
-#  RUN           global.get_action_avail ...
-#            OK  global.get_action_avail
-ok 71 global.get_action_avail
-#  RUN           global.get_metadata ...
-#            OK  global.get_metadata
-ok 72 global.get_metadata
-#  RUN           global.user_notification_basic ...
-#            OK  global.user_notification_basic
-ok 73 global.user_notification_basic
-#  RUN           global.user_notification_with_tsync ...
-#            OK  global.user_notification_with_tsync
-ok 74 global.user_notification_with_tsync
-#  RUN           global.user_notification_kill_in_middle ...
-#            OK  global.user_notification_kill_in_middle
-ok 75 global.user_notification_kill_in_middle
-#  RUN           global.user_notification_signal ...
-#            OK  global.user_notification_signal
-ok 76 global.user_notification_signal
-#  RUN           global.user_notification_closed_listener ...
-#            OK  global.user_notification_closed_listener
-ok 77 global.user_notification_closed_listener
-#  RUN           global.user_notification_child_pid_ns ...
-#            OK  global.user_notification_child_pid_ns
-ok 78 global.user_notification_child_pid_ns
-#  RUN           global.user_notification_sibling_pid_ns ...
-#            OK  global.user_notification_sibling_pid_ns
-ok 79 global.user_notification_sibling_pid_ns
-#  RUN           global.user_notification_fault_recv ...
-#            OK  global.user_notification_fault_recv
-ok 80 global.user_notification_fault_recv
-#  RUN           global.seccomp_get_notif_sizes ...
-#            OK  global.seccomp_get_notif_sizes
-ok 81 global.seccomp_get_notif_sizes
-#  RUN           global.user_notification_continue ...
-#            OK  global.user_notification_continue
-ok 82 global.user_notification_continue
-#  RUN           global.user_notification_filter_empty ...
-#            OK  global.user_notification_filter_empty
-ok 83 global.user_notification_filter_empty
-#  RUN           global.user_notification_filter_empty_threaded ...
-#            OK  global.user_notification_filter_empty_threaded
-ok 84 global.user_notification_filter_empty_threaded
-#  RUN           global.user_notification_addfd ...
-#            OK  global.user_notification_addfd
-ok 85 global.user_notification_addfd
-#  RUN           global.user_notification_addfd_rlimit ...
-#            OK  global.user_notification_addfd_rlimit
-ok 86 global.user_notification_addfd_rlimit
-# PASSED: 86 / 86 tests passed.
-# Totals: pass:86 fail:0 xfail:0 xpass:0 skip:0 error:0
-
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 9018f45d631d..fee80cda6304 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -68,6 +68,7 @@ TARGETS += user
+ TARGETS += vm
+ TARGETS += x86
+ TARGETS += zram
++TARGETS += sgx
+ #Please keep the TARGETS list alphabetically sorted
+ # Run "make quicktest=1 run_tests" or
+ # "make quicktest=1 kselftest" from top level Makefile
+diff --git a/tools/testing/selftests/sgx/.gitignore b/tools/testing/selftests/sgx/.gitignore
+new file mode 100644
+index 000000000000..fbaf0bda9a92
+--- /dev/null
++++ b/tools/testing/selftests/sgx/.gitignore
+@@ -0,0 +1,2 @@
++test_sgx
++test_encl.elf
+diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
+new file mode 100644
+index 000000000000..95e5c4df8014
+--- /dev/null
++++ b/tools/testing/selftests/sgx/Makefile
+@@ -0,0 +1,53 @@
++top_srcdir = ../../../..
++
++include ../lib.mk
++
++.PHONY: all clean
++
++CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh $(CC) \
++			    ../x86/trivial_64bit_program.c)
++
++ifndef OBJCOPY
++OBJCOPY := $(CROSS_COMPILE)objcopy
++endif
++
++INCLUDES := -I$(top_srcdir)/tools/include
++HOST_CFLAGS := -Wall -Werror -g $(INCLUDES) -fPIC -z noexecstack
++ENCL_CFLAGS := -Wall -Werror -static -nostdlib -nostartfiles -fPIC \
++	       -fno-stack-protector -mrdrnd $(INCLUDES)
++
++TEST_CUSTOM_PROGS := $(OUTPUT)/test_sgx $(OUTPUT)/test_encl.elf
++
++ifeq ($(CAN_BUILD_X86_64), 1)
++all: $(TEST_CUSTOM_PROGS)
++endif
++
++$(OUTPUT)/test_sgx: $(OUTPUT)/main.o \
++		    $(OUTPUT)/load.o \
++		    $(OUTPUT)/sigstruct.o \
++		    $(OUTPUT)/call.o
++	$(CC) $(HOST_CFLAGS) -o $@ $^ -lcrypto
++
++$(OUTPUT)/main.o: main.c
++	$(CC) $(HOST_CFLAGS) -c $< -o $@
++
++$(OUTPUT)/load.o: load.c
++	$(CC) $(HOST_CFLAGS) -c $< -o $@
++
++$(OUTPUT)/sigstruct.o: sigstruct.c
++	$(CC) $(HOST_CFLAGS) -c $< -o $@
++
++$(OUTPUT)/call.o: call.S
++	$(CC) $(HOST_CFLAGS) -c $< -o $@
++
++$(OUTPUT)/test_encl.elf: test_encl.lds test_encl.c test_encl_bootstrap.S
++	$(CC) $(ENCL_CFLAGS) -T $^ -o $@
++
++EXTRA_CLEAN := \
++	$(OUTPUT)/test_encl.elf \
++	$(OUTPUT)/load.o \
++	$(OUTPUT)/call.o \
++	$(OUTPUT)/main.o \
++	$(OUTPUT)/sigstruct.o \
++	$(OUTPUT)/test_sgx \
++	$(OUTPUT)/test_sgx.o \
+diff --git a/tools/testing/selftests/sgx/call.S b/tools/testing/selftests/sgx/call.S
+new file mode 100644
+index 000000000000..f640532cda93
+--- /dev/null
++++ b/tools/testing/selftests/sgx/call.S
+@@ -0,0 +1,44 @@
++/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
++/**
++* Copyright(c) 2016-18 Intel Corporation.
++*/
++
++	.text
++
++	.global sgx_call_vdso
++sgx_call_vdso:
++	.cfi_startproc
++	push	%r15
++	.cfi_adjust_cfa_offset	8
++	.cfi_rel_offset		%r15, 0
++	push	%r14
++	.cfi_adjust_cfa_offset	8
++	.cfi_rel_offset		%r14, 0
++	push	%r13
++	.cfi_adjust_cfa_offset	8
++	.cfi_rel_offset		%r13, 0
++	push	%r12
++	.cfi_adjust_cfa_offset	8
++	.cfi_rel_offset		%r12, 0
++	push	%rbx
++	.cfi_adjust_cfa_offset	8
++	.cfi_rel_offset		%rbx, 0
++	push	$0
++	.cfi_adjust_cfa_offset	8
++	push	0x38(%rsp)
++	.cfi_adjust_cfa_offset	8
++	call	*eenter(%rip)
++	add	$0x10, %rsp
++	.cfi_adjust_cfa_offset	-0x10
++	pop	%rbx
++	.cfi_adjust_cfa_offset	-8
++	pop	%r12
++	.cfi_adjust_cfa_offset	-8
++	pop	%r13
++	.cfi_adjust_cfa_offset	-8
++	pop	%r14
++	.cfi_adjust_cfa_offset	-8
++	pop	%r15
++	.cfi_adjust_cfa_offset	-8
++	ret
++	.cfi_endproc
+diff --git a/tools/testing/selftests/sgx/defines.h b/tools/testing/selftests/sgx/defines.h
+new file mode 100644
+index 000000000000..be8969922804
+--- /dev/null
++++ b/tools/testing/selftests/sgx/defines.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright(c) 2016-19 Intel Corporation.
++ */
++
++#ifndef DEFINES_H
++#define DEFINES_H
++
++#include <stdint.h>
++
++#define PAGE_SIZE 4096
++#define PAGE_MASK (~(PAGE_SIZE - 1))
++
++#define __aligned(x) __attribute__((__aligned__(x)))
++#define __packed __attribute__((packed))
++
++#include "../../../../arch/x86/kernel/cpu/sgx/arch.h"
++#include "../../../../arch/x86/include/asm/enclu.h"
++#include "../../../../arch/x86/include/uapi/asm/sgx.h"
++
++#endif /* DEFINES_H */
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+new file mode 100644
+index 000000000000..8ce0c4ac9a49
+--- /dev/null
++++ b/tools/testing/selftests/sgx/load.c
+@@ -0,0 +1,277 @@
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
++// Copyright(c) 2016-18 Intel Corporation.
++
++#include <assert.h>
++#include <elf.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/time.h>
++#include <sys/types.h>
++#include "defines.h"
++#include "main.h"
++
++void encl_delete(struct encl *encl)
++{
++	if (encl->encl_base)
++		munmap((void *)encl->encl_base, encl->encl_size);
++
++	if (encl->bin)
++		munmap(encl->bin, encl->bin_size);
++
++	if (encl->fd)
++		close(encl->fd);
++
++	if (encl->segment_tbl)
++		free(encl->segment_tbl);
++
++	memset(encl, 0, sizeof(*encl));
++}
++
++static bool encl_map_bin(const char *path, struct encl *encl)
++{
++	struct stat sb;
++	void *bin;
++	int ret;
++	int fd;
++
++	fd = open(path, O_RDONLY);
++	if (fd == -1)  {
++		perror("open()");
++		return false;
++	}
++
++	ret = stat(path, &sb);
++	if (ret) {
++		perror("stat()");
++		goto err;
++	}
++
++	bin = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
++	if (bin == MAP_FAILED) {
++		perror("mmap()");
++		goto err;
++	}
++
++	encl->bin = bin;
++	encl->bin_size = sb.st_size;
++
++	close(fd);
++	return true;
++
++err:
++	close(fd);
++	return false;
++}
++
++static bool encl_ioc_create(struct encl *encl)
++{
++	struct sgx_secs *secs = &encl->secs;
++	struct sgx_enclave_create ioc;
++	int rc;
++
++	assert(encl->encl_base != 0);
++
++	memset(secs, 0, sizeof(*secs));
++	secs->ssa_frame_size = 1;
++	secs->attributes = SGX_ATTR_MODE64BIT;
++	secs->xfrm = 3;
++	secs->base = encl->encl_base;
++	secs->size = encl->encl_size;
++
++	ioc.src = (unsigned long)secs;
++	rc = ioctl(encl->fd, SGX_IOC_ENCLAVE_CREATE, &ioc);
++	if (rc) {
++		fprintf(stderr, "SGX_IOC_ENCLAVE_CREATE failed: errno=%d\n",
++			errno);
++		munmap((void *)secs->base, encl->encl_size);
++		return false;
++	}
++
++	return true;
++}
++
++static bool encl_ioc_add_pages(struct encl *encl, struct encl_segment *seg)
++{
++	struct sgx_enclave_add_pages ioc;
++	struct sgx_secinfo secinfo;
++	int rc;
++
++	memset(&secinfo, 0, sizeof(secinfo));
++	secinfo.flags = seg->flags;
++
++	ioc.src = (uint64_t)encl->src + seg->offset;
++	ioc.offset = seg->offset;
++	ioc.length = seg->size;
++	ioc.secinfo = (unsigned long)&secinfo;
++	ioc.flags = SGX_PAGE_MEASURE;
++
++	rc = ioctl(encl->fd, SGX_IOC_ENCLAVE_ADD_PAGES, &ioc);
++	if (rc < 0) {
++		fprintf(stderr, "SGX_IOC_ENCLAVE_ADD_PAGES failed: errno=%d.\n",
++			errno);
++		return false;
++	}
++
++	return true;
++}
++
++bool encl_load(const char *path, struct encl *encl)
++{
++	Elf64_Phdr *phdr_tbl;
++	off_t src_offset;
++	Elf64_Ehdr *ehdr;
++	int i, j;
++	int ret;
++
++	memset(encl, 0, sizeof(*encl));
++
++	ret = open("/dev/sgx/enclave", O_RDWR);
++	if (ret < 0) {
++		fprintf(stderr, "Unable to open /dev/sgx\n");
++		goto err;
++	}
++
++	encl->fd = ret;
++
++	if (!encl_map_bin(path, encl))
++		goto err;
++
++	ehdr = encl->bin;
++	phdr_tbl = encl->bin + ehdr->e_phoff;
++
++	for (i = 0; i < ehdr->e_phnum; i++) {
++		Elf64_Phdr *phdr = &phdr_tbl[i];
++
++		if (phdr->p_type == PT_LOAD)
++			encl->nr_segments++;
++	}
++
++	encl->segment_tbl = calloc(encl->nr_segments,
++				   sizeof(struct encl_segment));
++	if (!encl->segment_tbl)
++		goto err;
++
++	for (i = 0, j = 0; i < ehdr->e_phnum; i++) {
++		Elf64_Phdr *phdr = &phdr_tbl[i];
++		unsigned int flags = phdr->p_flags;
++		struct encl_segment *seg;
++
++		if (phdr->p_type != PT_LOAD)
++			continue;
++
++		seg = &encl->segment_tbl[j];
++
++		if (!!(flags & ~(PF_R | PF_W | PF_X))) {
++			fprintf(stderr,
++				"%d has invalid segment flags 0x%02x.\n", i,
++				phdr->p_flags);
++			goto err;
++		}
++
++		if (j == 0 && flags != (PF_R | PF_W)) {
++			fprintf(stderr,
++				"TCS has invalid segment flags 0x%02x.\n",
++				phdr->p_flags);
++			goto err;
++		}
++
++		if (j == 0) {
++			src_offset = (phdr->p_offset & PAGE_MASK) - src_offset;
++
++			seg->prot = PROT_READ | PROT_WRITE;
++			seg->flags = SGX_PAGE_TYPE_TCS << 8;
++		} else  {
++			seg->prot = (phdr->p_flags & PF_R) ? PROT_READ : 0;
++			seg->prot |= (phdr->p_flags & PF_W) ? PROT_WRITE : 0;
++			seg->prot |= (phdr->p_flags & PF_X) ? PROT_EXEC : 0;
++			seg->flags = (SGX_PAGE_TYPE_REG << 8) | seg->prot;
++		}
++
++		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
++		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
++
++		printf("0x%016lx 0x%016lx 0x%02x\n", seg->offset, seg->size,
++		       seg->prot);
++
++		j++;
++	}
++
++	assert(j == encl->nr_segments);
++
++	encl->src = encl->bin + src_offset;
++	encl->src_size = encl->segment_tbl[j - 1].offset +
++			 encl->segment_tbl[j - 1].size;
++
++	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
++		encl->encl_size <<= 1;
++
++	return true;
++
++err:
++	encl_delete(encl);
++	return false;
++}
++
++static bool encl_map_area(struct encl *encl)
++{
++	size_t encl_size = encl->encl_size;
++	void *area;
++
++	area = mmap(NULL, encl_size * 2, PROT_NONE,
++		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (area == MAP_FAILED) {
++		perror("mmap");
++		return false;
++	}
++
++	encl->encl_base = ((uint64_t)area + encl_size - 1) & ~(encl_size - 1);
++
++	munmap(area, encl->encl_base - (uint64_t)area);
++	munmap((void *)(encl->encl_base + encl_size),
++	       (uint64_t)area + encl_size - encl->encl_base);
++
++	return true;
++}
++
++bool encl_build(struct encl *encl)
++{
++	struct sgx_enclave_init ioc;
++	int ret;
++	int i;
++
++	if (!encl_map_area(encl))
++		return false;
++
++	if (!encl_ioc_create(encl))
++		return false;
++
++	/*
++	 * Pages must be added before mapping VMAs because their permissions
++	 * cap the VMA permissions.
++	 */
++	for (i = 0; i < encl->nr_segments; i++) {
++		struct encl_segment *seg = &encl->segment_tbl[i];
++
++		if (!encl_ioc_add_pages(encl, seg))
++			return false;
++	}
++
++	ioc.sigstruct = (uint64_t)&encl->sigstruct;
++	ret = ioctl(encl->fd, SGX_IOC_ENCLAVE_INIT, &ioc);
++	if (ret) {
++		fprintf(stderr, "SGX_IOC_ENCLAVE_INIT failed: errno=%d\n",
++			errno);
++		return false;
++	}
++
++	return true;
++}
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+new file mode 100644
+index 000000000000..44acb3c72067
+--- /dev/null
++++ b/tools/testing/selftests/sgx/main.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
++// Copyright(c) 2016-18 Intel Corporation.
++
++#include <elf.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/time.h>
++#include <sys/types.h>
++#include "defines.h"
++#include "main.h"
++
++static const uint64_t MAGIC = 0x1122334455667788ULL;
++vdso_sgx_enter_enclave_t eenter;
++
++struct vdso_symtab {
++	Elf64_Sym *elf_symtab;
++	const char *elf_symstrtab;
++	Elf64_Word *elf_hashtab;
++};
++
++static void *vdso_get_base_addr(char *envp[])
++{
++	Elf64_auxv_t *auxv;
++	int i;
++
++	for (i = 0; envp[i]; i++)
++		;
++
++	auxv = (Elf64_auxv_t *)&envp[i + 1];
++
++	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
++		if (auxv[i].a_type == AT_SYSINFO_EHDR)
++			return (void *)auxv[i].a_un.a_val;
++	}
++
++	return NULL;
++}
++
++static Elf64_Dyn *vdso_get_dyntab(void *addr)
++{
++	Elf64_Ehdr *ehdr = addr;
++	Elf64_Phdr *phdrtab = addr + ehdr->e_phoff;
++	int i;
++
++	for (i = 0; i < ehdr->e_phnum; i++)
++		if (phdrtab[i].p_type == PT_DYNAMIC)
++			return addr + phdrtab[i].p_offset;
++
++	return NULL;
++}
++
++static void *vdso_get_dyn(void *addr, Elf64_Dyn *dyntab, Elf64_Sxword tag)
++{
++	int i;
++
++	for (i = 0; dyntab[i].d_tag != DT_NULL; i++)
++		if (dyntab[i].d_tag == tag)
++			return addr + dyntab[i].d_un.d_ptr;
++
++	return NULL;
++}
++
++static bool vdso_get_symtab(void *addr, struct vdso_symtab *symtab)
++{
++	Elf64_Dyn *dyntab = vdso_get_dyntab(addr);
++
++	symtab->elf_symtab = vdso_get_dyn(addr, dyntab, DT_SYMTAB);
++	if (!symtab->elf_symtab)
++		return false;
++
++	symtab->elf_symstrtab = vdso_get_dyn(addr, dyntab, DT_STRTAB);
++	if (!symtab->elf_symstrtab)
++		return false;
++
++	symtab->elf_hashtab = vdso_get_dyn(addr, dyntab, DT_HASH);
++	if (!symtab->elf_hashtab)
++		return false;
++
++	return true;
++}
++
++static unsigned long elf_sym_hash(const char *name)
++{
++	unsigned long h = 0, high;
++
++	while (*name) {
++		h = (h << 4) + *name++;
++		high = h & 0xf0000000;
++
++		if (high)
++			h ^= high >> 24;
++
++		h &= ~high;
++	}
++
++	return h;
++}
++
++static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
++{
++	Elf64_Word bucketnum = symtab->elf_hashtab[0];
++	Elf64_Word *buckettab = &symtab->elf_hashtab[2];
++	Elf64_Word *chaintab = &symtab->elf_hashtab[2 + bucketnum];
++	Elf64_Sym *sym;
++	Elf64_Word i;
++
++	for (i = buckettab[elf_sym_hash(name) % bucketnum]; i != STN_UNDEF;
++	     i = chaintab[i]) {
++		sym = &symtab->elf_symtab[i];
++		if (!strcmp(name, &symtab->elf_symstrtab[sym->st_name]))
++			return sym;
++	}
++
++	return NULL;
++}
++
++int check_result(struct sgx_enclave_run *run, int ret, uint64_t result,
++		 const char *test)
++{
++	if (ret) {
++		printf("FAIL: %s() returned: %d\n", test, ret);
++		return ret;
++	} else if (run->exit_reason != SGX_SYNCHRONOUS_EXIT) {
++		printf("FAIL: %s() exit reason, expected: %u, got: %u\n",
++		       test, SGX_SYNCHRONOUS_EXIT, run->exit_reason);
++		return -EIO;
++	} else if (result != MAGIC) {
++		printf("FAIL: %s(), expected: 0x%lx, got: 0x%lx\n",
++		       test, MAGIC, result);
++		return -EIO;
++	} else if (run->user_data) {
++		printf("FAIL: %s() user data, expected: 0x0, got: 0x%llx\n",
++		       test, run->user_data);
++		return -EIO;
++	}
++	return 0;
++}
++
++static int exit_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r9,
++			struct sgx_enclave_run *run)
++{
++	run->user_data = 0;
++	return 0;
++}
++
++int main(int argc, char *argv[], char *envp[])
++{
++	struct sgx_enclave_run run;
++	struct vdso_symtab symtab;
++	Elf64_Sym *eenter_sym;
++	uint64_t result = 0;
++	struct encl encl;
++	unsigned int i;
++	void *addr;
++	int ret;
++
++	if (!encl_load("test_encl.elf", &encl))
++		goto err;
++
++	if (!encl_measure(&encl))
++		goto err;
++
++	if (!encl_build(&encl))
++		goto err;
++
++	/*
++	 * An enclave consumer only must do this.
++	 */
++	for (i = 0; i < encl.nr_segments; i++) {
++		struct encl_segment *seg = &encl.segment_tbl[i];
++
++		addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
++			    seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
++		if (addr == MAP_FAILED) {
++			fprintf(stderr, "mmap() failed, errno=%d.\n", errno);
++			exit(1);
++		}
++	}
++
++	memset(&run, 0, sizeof(run));
++	run.tcs = encl.encl_base;
++
++	addr = vdso_get_base_addr(envp);
++	if (!addr)
++		goto err;
++
++	if (!vdso_get_symtab(addr, &symtab))
++		goto err;
++
++	eenter_sym = vdso_symtab_get(&symtab, "__vdso_sgx_enter_enclave");
++	if (!eenter_sym)
++		goto err;
++
++	eenter = addr + eenter_sym->st_value;
++
++	ret = sgx_call_vdso((void *)&MAGIC, &result, 0, EENTER, NULL, NULL, &run);
++	if (check_result(&run, ret, result, "sgx_call_vdso"))
++		goto err;
++
++
++	/* Invoke the vDSO directly. */
++	result = 0;
++	ret = eenter((unsigned long)&MAGIC, (unsigned long)&result, 0, EENTER,
++		     0, 0, &run);
++	if (check_result(&run, ret, result, "eenter"))
++		goto err;
++
++	/* And with an exit handler. */
++	run.user_handler = exit_handler;
++	run.user_data = 0xdeadbeef;
++	ret = eenter((unsigned long)&MAGIC, (unsigned long)&result, 0, EENTER,
++		     0, 0, &run);
++	if (check_result(&run, ret, result, "exit_handler"))
++		goto err;
++
++	printf("SUCCESS\n");
++	encl_delete(&encl);
++	exit(0);
++
++err:
++	encl_delete(&encl);
++	exit(1);
++}
+diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+new file mode 100644
+index 000000000000..2b4777942500
+--- /dev/null
++++ b/tools/testing/selftests/sgx/main.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright(c) 2016-19 Intel Corporation.
++ */
++
++#ifndef MAIN_H
++#define MAIN_H
++
++struct encl_segment {
++	off_t offset;
++	size_t size;
++	unsigned int prot;
++	unsigned int flags;
++};
++
++struct encl {
++	int fd;
++	void *bin;
++	off_t bin_size;
++	void *src;
++	size_t src_size;
++	size_t encl_size;
++	off_t encl_base;
++	unsigned int nr_segments;
++	struct encl_segment *segment_tbl;
++	struct sgx_secs secs;
++	struct sgx_sigstruct sigstruct;
++};
++
++void encl_delete(struct encl *ctx);
++bool encl_load(const char *path, struct encl *encl);
++bool encl_measure(struct encl *encl);
++bool encl_build(struct encl *encl);
++
++int sgx_call_vdso(void *rdi, void *rsi, long rdx, u32 leaf, void *r8, void *r9,
++		  struct sgx_enclave_run *run);
++
++#endif /* MAIN_H */
+diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+new file mode 100644
+index 000000000000..ceddad478672
+--- /dev/null
++++ b/tools/testing/selftests/sgx/sigstruct.c
+@@ -0,0 +1,395 @@
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
++// Copyright(c) 2016-18 Intel Corporation.
++
++#define _GNU_SOURCE
++#include <assert.h>
++#include <getopt.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <unistd.h>
++#include <openssl/err.h>
++#include <openssl/pem.h>
++#include "defines.h"
++#include "main.h"
++
++struct q1q2_ctx {
++	BN_CTX *bn_ctx;
++	BIGNUM *m;
++	BIGNUM *s;
++	BIGNUM *q1;
++	BIGNUM *qr;
++	BIGNUM *q2;
++};
++
++static void free_q1q2_ctx(struct q1q2_ctx *ctx)
++{
++	BN_CTX_free(ctx->bn_ctx);
++	BN_free(ctx->m);
++	BN_free(ctx->s);
++	BN_free(ctx->q1);
++	BN_free(ctx->qr);
++	BN_free(ctx->q2);
++}
++
++static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
++			   struct q1q2_ctx *ctx)
++{
++	ctx->bn_ctx = BN_CTX_new();
++	ctx->s = BN_bin2bn(s, SGX_MODULUS_SIZE, NULL);
++	ctx->m = BN_bin2bn(m, SGX_MODULUS_SIZE, NULL);
++	ctx->q1 = BN_new();
++	ctx->qr = BN_new();
++	ctx->q2 = BN_new();
++
++	if (!ctx->bn_ctx || !ctx->s || !ctx->m || !ctx->q1 || !ctx->qr ||
++	    !ctx->q2) {
++		free_q1q2_ctx(ctx);
++		return false;
++	}
++
++	return true;
++}
++
++static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
++		      uint8_t *q2)
++{
++	struct q1q2_ctx ctx;
++
++	if (!alloc_q1q2_ctx(s, m, &ctx)) {
++		fprintf(stderr, "Not enough memory for Q1Q2 calculation\n");
++		return false;
++	}
++
++	if (!BN_mul(ctx.q1, ctx.s, ctx.s, ctx.bn_ctx))
++		goto out;
++
++	if (!BN_div(ctx.q1, ctx.qr, ctx.q1, ctx.m, ctx.bn_ctx))
++		goto out;
++
++	if (BN_num_bytes(ctx.q1) > SGX_MODULUS_SIZE) {
++		fprintf(stderr, "Too large Q1 %d bytes\n",
++			BN_num_bytes(ctx.q1));
++		goto out;
++	}
++
++	if (!BN_mul(ctx.q2, ctx.s, ctx.qr, ctx.bn_ctx))
++		goto out;
++
++	if (!BN_div(ctx.q2, NULL, ctx.q2, ctx.m, ctx.bn_ctx))
++		goto out;
++
++	if (BN_num_bytes(ctx.q2) > SGX_MODULUS_SIZE) {
++		fprintf(stderr, "Too large Q2 %d bytes\n",
++			BN_num_bytes(ctx.q2));
++		goto out;
++	}
++
++	BN_bn2bin(ctx.q1, q1);
++	BN_bn2bin(ctx.q2, q2);
++
++	free_q1q2_ctx(&ctx);
++	return true;
++out:
++	free_q1q2_ctx(&ctx);
++	return false;
++}
++
++struct sgx_sigstruct_payload {
++	struct sgx_sigstruct_header header;
++	struct sgx_sigstruct_body body;
++};
++
++static bool check_crypto_errors(void)
++{
++	int err;
++	bool had_errors = false;
++	const char *filename;
++	int line;
++	char str[256];
++
++	for ( ; ; ) {
++		if (ERR_peek_error() == 0)
++			break;
++
++		had_errors = true;
++		err = ERR_get_error_line(&filename, &line);
++		ERR_error_string_n(err, str, sizeof(str));
++		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
++	}
++
++	return had_errors;
++}
++
++static inline const BIGNUM *get_modulus(RSA *key)
++{
++#if OPENSSL_VERSION_NUMBER < 0x10100000L
++	return key->n;
++#else
++	const BIGNUM *n;
++
++	RSA_get0_key(key, &n, NULL, NULL);
++	return n;
++#endif
++}
++
++static RSA *gen_sign_key(void)
++{
++	BIGNUM *e;
++	RSA *key;
++	int ret;
++
++	e = BN_new();
++	key = RSA_new();
++
++	if (!e || !key)
++		goto err;
++
++	ret = BN_set_word(e, RSA_3);
++	if (ret != 1)
++		goto err;
++
++	ret = RSA_generate_key_ex(key, 3072, e, NULL);
++	if (ret != 1)
++		goto err;
++
++	BN_free(e);
++
++	return key;
++
++err:
++	RSA_free(key);
++	BN_free(e);
++
++	return NULL;
++}
++
++static void reverse_bytes(void *data, int length)
++{
++	int i = 0;
++	int j = length - 1;
++	uint8_t temp;
++	uint8_t *ptr = data;
++
++	while (i < j) {
++		temp = ptr[i];
++		ptr[i] = ptr[j];
++		ptr[j] = temp;
++		i++;
++		j--;
++	}
++}
++
++enum mrtags {
++	MRECREATE = 0x0045544145524345,
++	MREADD = 0x0000000044444145,
++	MREEXTEND = 0x00444E4554584545,
++};
++
++static bool mrenclave_update(EVP_MD_CTX *ctx, const void *data)
++{
++	if (!EVP_DigestUpdate(ctx, data, 64)) {
++		fprintf(stderr, "digest update failed\n");
++		return false;
++	}
++
++	return true;
++}
++
++static bool mrenclave_commit(EVP_MD_CTX *ctx, uint8_t *mrenclave)
++{
++	unsigned int size;
++
++	if (!EVP_DigestFinal_ex(ctx, (unsigned char *)mrenclave, &size)) {
++		fprintf(stderr, "digest commit failed\n");
++		return false;
++	}
++
++	if (size != 32) {
++		fprintf(stderr, "invalid digest size = %u\n", size);
++		return false;
++	}
++
++	return true;
++}
++
++struct mrecreate {
++	uint64_t tag;
++	uint32_t ssaframesize;
++	uint64_t size;
++	uint8_t reserved[44];
++} __attribute__((__packed__));
++
++
++static bool mrenclave_ecreate(EVP_MD_CTX *ctx, uint64_t blob_size)
++{
++	struct mrecreate mrecreate;
++	uint64_t encl_size;
++
++	for (encl_size = 0x1000; encl_size < blob_size; )
++		encl_size <<= 1;
++
++	memset(&mrecreate, 0, sizeof(mrecreate));
++	mrecreate.tag = MRECREATE;
++	mrecreate.ssaframesize = 1;
++	mrecreate.size = encl_size;
++
++	if (!EVP_DigestInit_ex(ctx, EVP_sha256(), NULL))
++		return false;
++
++	return mrenclave_update(ctx, &mrecreate);
++}
++
++struct mreadd {
++	uint64_t tag;
++	uint64_t offset;
++	uint64_t flags; /* SECINFO flags */
++	uint8_t reserved[40];
++} __attribute__((__packed__));
++
++static bool mrenclave_eadd(EVP_MD_CTX *ctx, uint64_t offset, uint64_t flags)
++{
++	struct mreadd mreadd;
++
++	memset(&mreadd, 0, sizeof(mreadd));
++	mreadd.tag = MREADD;
++	mreadd.offset = offset;
++	mreadd.flags = flags;
++
++	return mrenclave_update(ctx, &mreadd);
++}
++
++struct mreextend {
++	uint64_t tag;
++	uint64_t offset;
++	uint8_t reserved[48];
++} __attribute__((__packed__));
++
++static bool mrenclave_eextend(EVP_MD_CTX *ctx, uint64_t offset,
++			      const uint8_t *data)
++{
++	struct mreextend mreextend;
++	int i;
++
++	for (i = 0; i < 0x1000; i += 0x100) {
++		memset(&mreextend, 0, sizeof(mreextend));
++		mreextend.tag = MREEXTEND;
++		mreextend.offset = offset + i;
++
++		if (!mrenclave_update(ctx, &mreextend))
++			return false;
++
++		if (!mrenclave_update(ctx, &data[i + 0x00]))
++			return false;
++
++		if (!mrenclave_update(ctx, &data[i + 0x40]))
++			return false;
++
++		if (!mrenclave_update(ctx, &data[i + 0x80]))
++			return false;
++
++		if (!mrenclave_update(ctx, &data[i + 0xC0]))
++			return false;
++	}
++
++	return true;
++}
++
++static bool mrenclave_segment(EVP_MD_CTX *ctx, struct encl *encl,
++			      struct encl_segment *seg)
++{
++	uint64_t end = seg->offset + seg->size;
++	uint64_t offset;
++
++	for (offset = seg->offset; offset < end; offset += PAGE_SIZE) {
++		if (!mrenclave_eadd(ctx, offset, seg->flags))
++			return false;
++
++		if (!mrenclave_eextend(ctx, offset, encl->src + offset))
++			return false;
++	}
++
++	return true;
++}
++
++bool encl_measure(struct encl *encl)
++{
++	uint64_t header1[2] = {0x000000E100000006, 0x0000000000010000};
++	uint64_t header2[2] = {0x0000006000000101, 0x0000000100000060};
++	struct sgx_sigstruct *sigstruct = &encl->sigstruct;
++	struct sgx_sigstruct_payload payload;
++	uint8_t digest[SHA256_DIGEST_LENGTH];
++	unsigned int siglen;
++	RSA *key = NULL;
++	EVP_MD_CTX *ctx;
++	int i;
++
++	memset(sigstruct, 0, sizeof(*sigstruct));
++
++	sigstruct->header.header1[0] = header1[0];
++	sigstruct->header.header1[1] = header1[1];
++	sigstruct->header.header2[0] = header2[0];
++	sigstruct->header.header2[1] = header2[1];
++	sigstruct->exponent = 3;
++	sigstruct->body.attributes = SGX_ATTR_MODE64BIT;
++	sigstruct->body.xfrm = 3;
++
++	/* sanity check */
++	if (check_crypto_errors())
++		goto err;
++
++	key = gen_sign_key();
++	if (!key)
++		goto err;
++
++	BN_bn2bin(get_modulus(key), sigstruct->modulus);
++
++	ctx = EVP_MD_CTX_create();
++	if (!ctx)
++		goto err;
++
++	if (!mrenclave_ecreate(ctx, encl->src_size))
++		goto err;
++
++	for (i = 0; i < encl->nr_segments; i++) {
++		struct encl_segment *seg = &encl->segment_tbl[i];
++
++		if (!mrenclave_segment(ctx, encl, seg))
++			goto err;
++	}
++
++	if (!mrenclave_commit(ctx, sigstruct->body.mrenclave))
++		goto err;
++
++	memcpy(&payload.header, &sigstruct->header, sizeof(sigstruct->header));
++	memcpy(&payload.body, &sigstruct->body, sizeof(sigstruct->body));
++
++	SHA256((unsigned char *)&payload, sizeof(payload), digest);
++
++	if (!RSA_sign(NID_sha256, digest, SHA256_DIGEST_LENGTH,
++		      sigstruct->signature, &siglen, key))
++		goto err;
++
++	if (!calc_q1q2(sigstruct->signature, sigstruct->modulus, sigstruct->q1,
++		       sigstruct->q2))
++		goto err;
++
++	/* BE -> LE */
++	reverse_bytes(sigstruct->signature, SGX_MODULUS_SIZE);
++	reverse_bytes(sigstruct->modulus, SGX_MODULUS_SIZE);
++	reverse_bytes(sigstruct->q1, SGX_MODULUS_SIZE);
++	reverse_bytes(sigstruct->q2, SGX_MODULUS_SIZE);
++
++	EVP_MD_CTX_destroy(ctx);
++	RSA_free(key);
++	return true;
++
++err:
++	EVP_MD_CTX_destroy(ctx);
++	RSA_free(key);
++	return false;
++}
+diff --git a/tools/testing/selftests/sgx/test_encl.c b/tools/testing/selftests/sgx/test_encl.c
+new file mode 100644
+index 000000000000..ede915399742
+--- /dev/null
++++ b/tools/testing/selftests/sgx/test_encl.c
+@@ -0,0 +1,20 @@
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
++// Copyright(c) 2016-18 Intel Corporation.
++
++#include <stddef.h>
++#include "defines.h"
++
++static void *memcpy(void *dest, const void *src, size_t n)
++{
++	size_t i;
++
++	for (i = 0; i < n; i++)
++		((char *)dest)[i] = ((char *)src)[i];
++
++	return dest;
++}
++
++void encl_body(void *rdi, void *rsi)
++{
++	memcpy(rsi, rdi, 8);
++}
+diff --git a/tools/testing/selftests/sgx/test_encl.lds b/tools/testing/selftests/sgx/test_encl.lds
+new file mode 100644
+index 000000000000..0fbbda7e665e
+--- /dev/null
++++ b/tools/testing/selftests/sgx/test_encl.lds
+@@ -0,0 +1,40 @@
++OUTPUT_FORMAT(elf64-x86-64)
++
++PHDRS
++{
++	tcs PT_LOAD;
++	text PT_LOAD;
++	data PT_LOAD;
++}
++
++SECTIONS
++{
++	. = 0;
++	.tcs : {
++		*(.tcs*)
++	} : tcs
++
++	. = ALIGN(4096);
++	.text : {
++		*(.text*)
++		*(.rodata*)
++	} : text
++
++	. = ALIGN(4096);
++	.data : {
++		*(.data*)
++	} : data
++
++	/DISCARD/ : {
++		*(.comment*)
++		*(.note*)
++		*(.debug*)
++		*(.eh_frame*)
++	}
++}
++
++ASSERT(!DEFINED(.altinstructions), "ALTERNATIVES are not supported in enclaves")
++ASSERT(!DEFINED(.altinstr_replacement), "ALTERNATIVES are not supported in enclaves")
++ASSERT(!DEFINED(.discard.retpoline_safe), "RETPOLINE ALTERNATIVES are not supported in enclaves")
++ASSERT(!DEFINED(.discard.nospec), "RETPOLINE ALTERNATIVES are not supported in enclaves")
++ASSERT(!DEFINED(.got.plt), "Libcalls are not supported in enclaves")
+diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+new file mode 100644
+index 000000000000..6836ea86126e
+--- /dev/null
++++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+@@ -0,0 +1,89 @@
++/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
++/*
++ * Copyright(c) 2016-18 Intel Corporation.
++ */
++
++	.macro ENCLU
++	.byte 0x0f, 0x01, 0xd7
++	.endm
++
++	.section ".tcs", "aw"
++	.balign	4096
++
++	.fill	1, 8, 0			# STATE (set by CPU)
++	.fill	1, 8, 0			# FLAGS
++	.quad	encl_ssa		# OSSA
++	.fill	1, 4, 0			# CSSA (set by CPU)
++	.fill	1, 4, 1			# NSSA
++	.quad	encl_entry		# OENTRY
++	.fill	1, 8, 0			# AEP (set by EENTER and ERESUME)
++	.fill	1, 8, 0			# OFSBASE
++	.fill	1, 8, 0			# OGSBASE
++	.fill	1, 4, 0xFFFFFFFF 	# FSLIMIT
++	.fill	1, 4, 0xFFFFFFFF	# GSLIMIT
++	.fill	4024, 1, 0		# Reserved
++
++	# Identical to the previous TCS.
++	.fill	1, 8, 0			# STATE (set by CPU)
++	.fill	1, 8, 0			# FLAGS
++	.quad	encl_ssa		# OSSA
++	.fill	1, 4, 0			# CSSA (set by CPU)
++	.fill	1, 4, 1			# NSSA
++	.quad	encl_entry		# OENTRY
++	.fill	1, 8, 0			# AEP (set by EENTER and ERESUME)
++	.fill	1, 8, 0			# OFSBASE
++	.fill	1, 8, 0			# OGSBASE
++	.fill	1, 4, 0xFFFFFFFF 	# FSLIMIT
++	.fill	1, 4, 0xFFFFFFFF	# GSLIMIT
++	.fill	4024, 1, 0		# Reserved
++
++	.text
++
++encl_entry:
++	# RBX contains the base address for TCS, which is also the first address
++	# inside the enclave. By adding the value of le_stack_end to it, we get
++	# the absolute address for the stack.
++	lea	(encl_stack)(%rbx), %rax
++	xchg	%rsp, %rax
++	push	%rax
++
++	push	%rcx # push the address after EENTER
++	push	%rbx # push the enclave base address
++
++	call	encl_body
++
++	pop	%rbx # pop the enclave base address
++
++	/* Clear volatile GPRs, except RAX (EEXIT leaf). */
++	xor     %rcx, %rcx
++	xor     %rdx, %rdx
++	xor     %rdi, %rdi
++	xor     %rsi, %rsi
++	xor     %r8, %r8
++	xor     %r9, %r9
++	xor     %r10, %r10
++	xor     %r11, %r11
++
++	# Reset status flags.
++	add     %rdx, %rdx # OF = SF = AF = CF = 0; ZF = PF = 1
++
++	# Prepare EEXIT target by popping the address of the instruction after
++	# EENTER to RBX.
++	pop	%rbx
++
++	# Restore the caller stack.
++	pop	%rax
++	mov	%rax, %rsp
++
++	# EEXIT
++	mov	$4, %rax
++	enclu
++
++	.section ".data", "aw"
++
++encl_ssa:
++	.space 4096
++
++	.balign 4096
++	.space 8192
++encl_stack:
 -- 
-Thanks.
--- Max
+2.25.1
+
