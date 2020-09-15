@@ -2,48 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82545269E5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Sep 2020 08:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3647D26A10A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Sep 2020 10:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726110AbgIOGVN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Sep 2020 02:21:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42494 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726033AbgIOGVL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Sep 2020 02:21:11 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E769820829;
-        Tue, 15 Sep 2020 06:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600150871;
-        bh=yHPOwHAJMf2CyGYn5iaGApE31+NbMN1jtYRrQr3OqtY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TmmxknEGZyvx8vlGW5CGW73+O4uXGgraFnOf4HjrP8W3fP+hO00OxomgQPDZMrWul
-         TTPtnmKpuFwwNrUFpHPuMsrGwVxISsxidGAMi4sBmKygdDvEVG1y6hO3MT19lxjr8u
-         N8b5Mw4ZsilvmmxhDCjXlk2EUymtxsG5fkzIFbZw=
-Received: by mail-oi1-f181.google.com with SMTP id t76so2601491oif.7;
-        Mon, 14 Sep 2020 23:21:10 -0700 (PDT)
-X-Gm-Message-State: AOAM532JEFrNyVHpVvb+wHWzd3dsPQ590j1jMbQS1d/HZBmAzKD+2EmP
-        mFapXA9Xoy8foO4dBQsD5kaexBIBbd9lTXLeW0Y=
-X-Google-Smtp-Source: ABdhPJyUSykKZBGXRh2yEfSyDpEqCADm2R5enp/Wn0v7qrNEGX7YgMeVQQUInE2Y4YU+sX9Jw9CdsuzBUOw9ncgQn/s=
-X-Received: by 2002:aca:d845:: with SMTP id p66mr2094330oig.47.1600150870261;
- Mon, 14 Sep 2020 23:21:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
- <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
- <CAHk-=wjOV6f_ddg+QVCF6RUe+pXPhSR2WevnNyOs9oT+q2ihEA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjOV6f_ddg+QVCF6RUe+pXPhSR2WevnNyOs9oT+q2ihEA@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 15 Sep 2020 09:20:59 +0300
-X-Gmail-Original-Message-ID: <CAMj1kXHrDU50D08TwLfzz2hCK+8+C7KGPF99PphXtsOYZ-ff1g@mail.gmail.com>
-Message-ID: <CAMj1kXHrDU50D08TwLfzz2hCK+8+C7KGPF99PphXtsOYZ-ff1g@mail.gmail.com>
-Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
+        id S1726205AbgIOIjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Sep 2020 04:39:55 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:40486 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726161AbgIOIjx (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 15 Sep 2020 04:39:53 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600159189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a15vj77Xa9KXo3Ek21dMycAwDWIIiMUe5bjhvVzzjCs=;
+        b=4ZO6BoNleN8HQgP0z8q+4JbOh4PFsXqPl2O1VMMFsqMl6Je+Vd4svU6GjBOnz4JBLm59ef
+        n28q3APVdlSA6QtUBbVtHjAsCDNA9DMNxmpB3Xs8JDO2mhj9om6HKXu9jHt5uTY4drNVe+
+        Xi88yb65/jAIcWHRrtrHzz6pJv5CkGBo0rMdCdV0m6UGwcjwsaPqQyFAYyPj9eb+iOpbLb
+        OyGnJVFkDuM2Xw/Zd91HZnJtSCpZf4n90+HYVnsyWEI2CIiSdIZikeb1E30oqvvQPgJtwy
+        7GKY8eCHlWViBl9/zu9LXs5HqsgBdJJ10OMSGETAETJYeANond9fGhpnX7IhVQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600159189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a15vj77Xa9KXo3Ek21dMycAwDWIIiMUe5bjhvVzzjCs=;
+        b=8ik3d8quF/oYipmw+L5R6EnAKiYsBpkerr1Z3ToGRa9dHoJtFKl9KfoiSlZU5EwJHOK7Qp
+        VqVAEKjJfZ9P9ICw==
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Valentin Schneider <valentin.schneider@arm.com>,
@@ -87,79 +79,65 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
         Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+In-Reply-To: <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com> <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+Date:   Tue, 15 Sep 2020 10:39:48 +0200
+Message-ID: <87bli75t7v.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 15 Sep 2020 at 01:43, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Mon, Sep 14 2020 at 15:24, Linus Torvalds wrote:
+> On Mon, Sep 14, 2020 at 2:55 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> Yes it does generate better code, but I tried hard to spot a difference
+>> in various metrics exposed by perf. It's all in the noise and I only
+>> can spot a difference when the actual preemption check after the
+>> decrement
 >
-> On Mon, Sep 14, 2020 at 3:24 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > Ard and Herbert added to participants: see
-> > chacha20poly1305_crypt_sg_inplace(), which does
-> >
-> >         flags = SG_MITER_TO_SG;
-> >         if (!preemptible())
-> >                 flags |= SG_MITER_ATOMIC;
-> >
-> > introduced in commit d95312a3ccc0 ("crypto: lib/chacha20poly1305 -
-> > reimplement crypt_from_sg() routine").
->
-> As far as I can tell, the only reason for this all is to try to use
-> "kmap()" rather than "kmap_atomic()".
->
-> And kmap() actually has the much more complex "might_sleep()" tests,
-> and apparently the "preemptible()" check wasn't even the proper full
-> debug check, it was just a complete hack to catch the one that
-> triggered.
->
+> I'm somewhat more worried about the small-device case.
 
-This was not driven by a failing check.
+I just checked on one of my old UP ARM toys which I run at home. The .text
+increase is about 2% (75k) and none of the tests I ran showed any
+significant difference. Couldn't verify with perf though as the PMU on
+that piece of art is unusable.
 
-The documentation of kmap_atomic() states the following:
-
- * The use of kmap_atomic/kunmap_atomic is discouraged - kmap/kunmap
- * gives a more generic (and caching) interface. But kmap_atomic can
- * be used in IRQ contexts, so in some (very limited) cases we need
- * it.
-
-so if this is no longer accurate, perhaps we should fix it?
-
-But another reason I tried to avoid kmap_atomic() is that it disables
-preemption unconditionally, even on 64-bit architectures where HIGHMEM
-is irrelevant. So using kmap_atomic() here means that the bulk of
-WireGuard packet encryption runs with preemption disabled, essentially
-for legacy reasons.
-
-
-> From a quick look, that code should probably just get rid of
-> SG_MITER_ATOMIC entirely, and alwayse use kmap_atomic().
+> That said, the diffstat certainly has its very clear charm, and I do
+> agree that it makes things simpler.
 >
-> kmap_atomic() is actually the faster and proper interface to use
-> anyway (never mind that any of this matters on any sane hardware). The
-> old kmap() and kunmap() interfaces should generally be avoided like
-> the plague - yes, they allow sleeping in the middle and that is
-> sometimes required, but if you don't need that, you should never ever
-> use them.
->
-> We used to have a very nasty kmap_atomic() that required people to be
-> very careful and know exactly which atomic entry to use, and that was
-> admitedly quite nasty.
->
-> So it _looks_ like this code started using kmap() - probably back when
-> kmap_atomic() was so cumbersome to use - and was then converted
-> (conditionally) to kmap_atomic() rather than just changed whole-sale.
-> Is there actually something that wants to use those sg_miter functions
-> and sleep?
->
-> Because if there is, that choice should come from the outside, not
-> from inside lib/scatterlist.c trying to make some bad guess based on
-> the wrong thing entirely.
->
->                  Linus
+> I'm just not convinced people should ever EVER do things like that "if
+> (preemptible())" garbage. It sounds like somebody is doing seriously
+> bad things.
+
+OTOH, having a working 'preemptible()' or maybe better named
+'can_schedule()' check makes tons of sense to make decisions about
+allocation modes or other things.
+
+We're currently looking through all of in_atomic(), in_interrupt()
+etc. usage sites and quite some of them are historic and have the clear
+intent of checking whether the code is called from task context or
+hard/softirq context. Lots of them are completely broken or just work by
+chance.
+
+But there is clearly historic precendence that context checks are
+useful, but they only can be useful if we have a consistent mechanism
+which works everywhere.
+
+Of course we could mandate that every interface which might be called
+from one or the other context has a context argument or provides two
+variants of the same thing. But I'm not really convinced whether that's
+a win over having a consistent and reliable set of checks.
+
+Thanks,
+
+        tglx
+
+
+
+
