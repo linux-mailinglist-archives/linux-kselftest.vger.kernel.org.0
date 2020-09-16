@@ -2,193 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D9026C515
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Sep 2020 18:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158CB26C779
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Sep 2020 20:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgIPQYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Sep 2020 12:24:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37646 "EHLO mail.kernel.org"
+        id S1728019AbgIPS03 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Sep 2020 14:26:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:35106 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726494AbgIPQUE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Sep 2020 12:20:04 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B64F12245B;
-        Wed, 16 Sep 2020 15:29:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600270196;
-        bh=7NyPhCsJFe+XnywOE0R6a34Zb8JkKakmIMyfHGRY4M4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=RDn2wViv7vu9hmTmpsb1bbpxLvCuo/SWaPWp9V1mUJjTgcbrPb3R9uT93osWEIaEM
-         9afuPUPWLKufiQ8ziF9Odhp5i1jimAe0xZ86J+gr+sITpv+bXYsBTi2jsiSuqu37hP
-         IQWviNGI8iEhKKuiZkBJY1pWiLjStFx1TIayKIP0=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 4FBEC3522836; Wed, 16 Sep 2020 08:29:56 -0700 (PDT)
-Date:   Wed, 16 Sep 2020 08:29:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-Message-ID: <20200916152956.GV29330@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200914204209.256266093@linutronix.de>
- <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
- <871rj4owfn.fsf@nanos.tec.linutronix.de>
- <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
- <87bli75t7v.fsf@nanos.tec.linutronix.de>
- <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
- <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+        id S1727999AbgIPSZl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Sep 2020 14:25:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 676C230E;
+        Wed, 16 Sep 2020 05:11:18 -0700 (PDT)
+Received: from [10.57.10.184] (unknown [10.57.10.184])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 876B03F68F;
+        Wed, 16 Sep 2020 05:11:15 -0700 (PDT)
+Subject: Re: [PATCH v2 1/4] kselftests/arm64: add a basic Pointer
+ Authentication test
+To:     Boyan Karatotev <boyan.karatotev@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     vincenzo.frascino@arm.com, boian4o1@gmail.com,
+        Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+References: <20200831110450.30188-1-boyan.karatotev@arm.com>
+ <20200831110450.30188-2-boyan.karatotev@arm.com>
+From:   Amit Kachhap <amit.kachhap@arm.com>
+Message-ID: <2e89a5ff-738b-5484-bd00-9ccdeccf9f60@arm.com>
+Date:   Wed, 16 Sep 2020 17:41:11 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200831110450.30188-2-boyan.karatotev@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 09:37:17AM +0200, Daniel Vetter wrote:
-> On Tue, Sep 15, 2020 at 7:35 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > >
-> > > OTOH, having a working 'preemptible()' or maybe better named
-> > > 'can_schedule()' check makes tons of sense to make decisions about
-> > > allocation modes or other things.
-> >
-> > No. I think that those kinds of decisions about actual behavior are
-> > always simply fundamentally wrong.
-> >
-> > Note that this is very different from having warnings about invalid
-> > use. THAT is correct. It may not warn in all configurations, but that
-> > doesn't matter: what matters is that it warns in common enough
-> > configurations that developers will catch it.
-> >
-> > So having a warning in "might_sleep()" that doesn't always trigger,
-> > because you have a limited configuration that can't even detect the
-> > situation, that's fine and dandy and intentional.
-> >
-> > But having code like
-> >
-> >        if (can_schedule())
-> >            .. do something different ..
-> >
-> > is fundamentally complete and utter garbage.
-> >
-> > It's one thing if you test for "am I in hardware interrupt context".
-> > Those tests aren't great either, but at least they make sense.
-> >
-> > But a driver - or some library routine - making a difference based on
-> > some nebulous "can I schedule" is fundamentally and basically WRONG.
-> >
-> > If some code changes behavior, it needs to be explicit to the *caller*
-> > of that code.
-> >
-> > So this is why GFP_ATOMIC is fine, but "if (!can_schedule())
-> > do_something_atomic()" is pure shite.
-> >
-> > And I am not IN THE LEAST interested in trying to help people doing
-> > pure shite. We need to fix them. Like the crypto code is getting
-> > fixed.
+Hi Boyan,
+
+On 8/31/20 4:34 PM, Boyan Karatotev wrote:
+> PAuth signs and verifies return addresses on the stack. It does so by
+> inserting a Pointer Authentication code (PAC) into some of the unused top
+> bits of an address. This is achieved by adding paciasp/autiasp instructions
+> at the beginning and end of a function.
 > 
-> Just figured I'll throw my +1 in from reading too many (gpu) drivers.
-> Code that tries to cleverly adjust its behaviour depending upon the
-> context it's running in is harder to understand and blows up in more
-> interesting ways. We still have drm_can_sleep() and it's mostly just
-> used for debug code, and I've largely ended up just deleting
-> everything that used it because when you're driver is blowing up the
-> last thing you want is to realize your debug code and output can't be
-> relied upon. Or worse, that the only Oops you have is the one in the
-> debug code, because the real one scrolled away - the original idea
-> behind drm_can_sleep was to make all the modeset code work
-> automagically both in normal ioctl/kworker context and in the panic
-> handlers or kgdb callbacks. Wishful thinking at best.
+> This feature is partially backwards compatible with earlier versions of the
+> ARM architecture. To coerce the compiler into emitting fully backwards
+> compatible code the main file is compiled to target an earlier ARM version.
+> This allows the tests to check for the feature and print meaningful error
+> messages instead of crashing.
 > 
-> Also at least for me that extends to everything, e.g. I much prefer
-> explicit spin_lock and spin_lock_irq vs magic spin_lock_irqsave for
-> locks shared with interrupt handlers, since the former two gives me
-> clear information from which contexts such function can be called.
-> Other end is the memalloc_no*_save/restore functions, where I recently
-> made a real big fool of myself because I didn't realize how much that
-> impacts everything that's run within - suddenly "GFP_KERNEL for small
-> stuff never fails" is wrong everywhere.
+> Add a test to verify that corrupting the return address results in a
+> SIGSEGV on return.
 > 
-> It's all great for debugging and sanity checks (and we run with all
-> that stuff enabled in our CI), but really semantic changes depending
-> upon magic context checks freak my out :-)
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
+> Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
+> Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
+> ---
+>   tools/testing/selftests/arm64/Makefile        |  2 +-
 
-All fair, but some of us need to write code that must handle being
-invoked from a wide variety of contexts.  Now perhaps you like the idea of
-call_rcu() for schedulable contexts, call_rcu_nosched() when preemption
-is disabled, call_rcu_irqs_are_disabled() when interrupts are disabled,
-call_rcu_raw_atomic() from contexts where (for example) raw spinlocks
-are held, and so on.  However, from what I can see, most people instead
-consistently prefer that the RCU API instead be consolidated.
+[...]
 
-Some in-flight cache-efficiency work for kvfree_rcu() and call_rcu()
-needs to be able to allocate memory occasionally.  It can do that when
-invoked from some contexts, but not when invoked from others.  Right now,
-in !PREEMPT kernels, it cannot tell, and must either do things to the
-memory allocators that some of the MM hate or must unnecessarily invoke
-workqueues.  Thomas's patches would allow the code to just allocate in
-the common case when these primitives are invoked from contexts where
-allocation is permitted.
+> +
+> +/* check that a corrupted PAC results in SIGSEGV */
+> +TEST_SIGNAL(corrupt_pac, SIGSEGV)
+> +{
+> +	ASSERT_PAUTH_ENABLED();
+> +
+> +	pac_corruptor();
 
-If we want to restrict access to the can_schedule() or whatever primitive,
-fine and good.  We can add a check to checkpatch.pl, for example.  Maybe
-we can go back to the old brlock approach of requiring certain people's
-review for each addition to the kernel.
+With 8.6-Pauth extension merged in arm tree [1]. It makes sense to 
+verify PAC corruption for both SIGSEGV and SIGILL signals.
 
-But there really are use cases that it would greatly help.
+Code something like below handles both the cases.
 
-							Thanx, Paul
+-----------------------------------------------------------------------------------
+  int exec_sign_all(struct signatures *signed_vals, size_t val)
+@@ -187,12 +188,29 @@ int exec_sign_all(struct signatures *signed_vals, 
+size_t val)
+         return 0;
+  }
+
+-/* check that a corrupted PAC results in SIGSEGV */
+-TEST_SIGNAL(corrupt_pac, SIGSEGV)
++sigjmp_buf jmpbuf;
++void pac_signal_handler(int signum, siginfo_t *si, void *uc)
+  {
+-       ASSERT_PAUTH_ENABLED();
++       if (signum == SIGSEGV || signum == SIGILL) {
++               siglongjmp(jmpbuf, 1);
++       }
++}
++
++/* check that a corrupted PAC results in SIGSEGV or SIGILL */
++TEST(corrupt_pac)
++{
++       struct sigaction sa;
+
+-       pac_corruptor();
++       ASSERT_PAUTH_ENABLED();
++       if (sigsetjmp(jmpbuf, 1) == 0) {
++               sa.sa_sigaction = pac_signal_handler;
++               sa.sa_flags = SA_SIGINFO;
++               sigemptyset(&sa.sa_mask);
++               sigaction(SIGSEGV, &sa, NULL);
++               sigaction(SIGILL, &sa, NULL);
++               pac_corruptor();
++               ASSERT_TRUE(0) TH_LOG("SIGSEGV/SIGILL signal did not 
+occur");
++       }
+  }
+
+  /*
+@@ -265,7 +283,7 @@ TEST(single_thread_different_keys)
+
+                 tmp = n_same_single_set(&signed_vals, nkeys);
+---------------------------------------------------------------------------------------
+
+
+Thanks,
+Amit Daniel
+
+[1]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/log/?h=for-next/ptrauth
+
+
+Regards,
+Amit Daniel
+> +}
+> +
+> +TEST_HARNESS_MAIN
+
+[...]
