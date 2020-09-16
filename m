@@ -2,178 +2,267 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4791826CEE0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 00:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23CC26CEF2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 00:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgIPWiX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Sep 2020 18:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726680AbgIPWiF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Sep 2020 18:38:05 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6CCC061788
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 15:38:05 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id g1so119711plo.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 15:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=JLM5w5hYSsW0qJqRG7+lzcIWvPmux4DmpSItCWGXz70=;
-        b=qI7T8dLXOKCOwJwgmjJBLFmkdLXsmVm1HiZ4fVRUOpEXr0ATFrW8sLP7IzvHUwqYE7
-         gGLlgVir1Uc1MgDjaOasWtFa2kmKAHBGqZnmoJv6X3fQ11a3Xwy+yRmN5iHFeMD2Aucj
-         OGJELx22XZMvLGUcV2sNmxHjTg4XBTKlNt1b7eJe0IZcDC8P5y4swGI3ConDDuLpVPfQ
-         o8MrBLm6h/yLrd2Ochr8/Mz12/2ODJS5zKqE0rP7qbcTlJWo+Fe3R6oraCtOgb6RCyWB
-         ZFA8dvivblHeDnUbBayFEd8p+GtzA2ErupKN4HAOX5PJWTdY17gvRLWQ9/45k39D8tOh
-         tI2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=JLM5w5hYSsW0qJqRG7+lzcIWvPmux4DmpSItCWGXz70=;
-        b=uVLTw4AI5bCMHov3KyeV2nFh1zJU8pb2or5WzPOb0BIly1HI4E81vzf2oP0Upj5RCC
-         MOAM2EjNKGrUiYbLAx+RhZ9XSd/su7brx72O65aABdPMn14hiIsi5yITNo9RGLKn5xS5
-         Fq4YOHHMahPkZfL9xlN7c3a/Th76sB7ZrddQyru3pEuhWhoVk86jhJOu5F8K6FTMJ8tI
-         PWn2w5+kDlRR8TNtZB3VteyO3YhzkCBZ5Q3FlZDhBJ2yTWbEojEoUFn4nErqbt44YxGl
-         cGJkDCBsDbO3q6tDPXiKGK0OTAJRq2Lv5GItE/aZmMh1bnXpK2zYT0VIQgOcs+ypGihc
-         4zyA==
-X-Gm-Message-State: AOAM531VZQF7GTG/gS/L+PiMz/GLqwv+wmijqn7xxHofLOCSoAgcC6pg
-        HTODDLCjWRWMUbNt8ND+SlvKSEgTkVg=
-X-Google-Smtp-Source: ABdhPJw9SXIdnPt57d5YkKmEbaKIe1Qn3RB78m3mRl3ctmi/pAjjrb1/IoPFyMRXiaObUEN/l95F+JsfCaA=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:a17:902:8c81:b029:d1:f369:1fe4 with SMTP id
- t1-20020a1709028c81b02900d1f3691fe4mr3355071plo.76.1600295884687; Wed, 16 Sep
- 2020 15:38:04 -0700 (PDT)
-Date:   Wed, 16 Sep 2020 15:35:12 -0700
-In-Reply-To: <20200916223512.2885524-1-haoluo@google.com>
-Message-Id: <20200916223512.2885524-7-haoluo@google.com>
-Mime-Version: 1.0
-References: <20200916223512.2885524-1-haoluo@google.com>
-X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-Subject: [PATCH bpf-next v3 6/6] bpf/selftests: Test for bpf_per_cpu_ptr() and bpf_this_cpu_ptr()
-From:   Hao Luo <haoluo@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Hao Luo <haoluo@google.com>,
+        id S1727022AbgIPWj6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Sep 2020 18:39:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46756 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726397AbgIPWjx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Sep 2020 18:39:53 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9997D2080C;
+        Wed, 16 Sep 2020 22:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600295991;
+        bh=RCUp2GsaUjP3KjD3p3qyvmzKntp/WbVM0ouPcgzRRDU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fKFN6BcMv+15//IDmLi2f2NV7C8b6ABIsMYin7ITdJ80ZX8PLb7gIP4LBXom3WNzq
+         szBDRTf0ftJFsk5mVlvgZQXvg2eXlz+UKDOGlM2y0ArIF5ljHuARigv2cYf8VCFi3E
+         2UWWYXuOPaiwDqHd9OF74mk5aMOanoaxnWNoKiHg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 5954A3522BA0; Wed, 16 Sep 2020 15:39:51 -0700 (PDT)
+Date:   Wed, 16 Sep 2020 15:39:51 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+Message-ID: <20200916223951.GG29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
+ <871rj4owfn.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+ <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+ <20200916152956.GV29330@paulmck-ThinkPad-P72>
+ <CAKMK7uGFyfhEyt=jmdk2jDO-hq0_Pf0ck+cKSELHjr2U3rPuYQ@mail.gmail.com>
+ <20200916205840.GD29330@paulmck-ThinkPad-P72>
+ <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test bpf_per_cpu_ptr() and bpf_this_cpu_ptr(). Test two paths in the
-kernel. If the base pointer points to a struct, the returned reg is
-of type PTR_TO_BTF_ID. Direct pointer dereference can be applied on
-the returned variable. If the base pointer isn't a struct, the
-returned reg is of type PTR_TO_MEM, which also supports direct pointer
-dereference.
+On Wed, Sep 16, 2020 at 11:43:02PM +0200, Daniel Vetter wrote:
+> On Wed, Sep 16, 2020 at 10:58 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Wed, Sep 16, 2020 at 10:29:06PM +0200, Daniel Vetter wrote:
+> > > On Wed, Sep 16, 2020 at 5:29 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Wed, Sep 16, 2020 at 09:37:17AM +0200, Daniel Vetter wrote:
+> > > > > On Tue, Sep 15, 2020 at 7:35 PM Linus Torvalds
+> > > > > <torvalds@linux-foundation.org> wrote:
+> > > > > >
+> > > > > > On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > > > > > >
+> > > > > > > OTOH, having a working 'preemptible()' or maybe better named
+> > > > > > > 'can_schedule()' check makes tons of sense to make decisions about
+> > > > > > > allocation modes or other things.
+> > > > > >
+> > > > > > No. I think that those kinds of decisions about actual behavior are
+> > > > > > always simply fundamentally wrong.
+> > > > > >
+> > > > > > Note that this is very different from having warnings about invalid
+> > > > > > use. THAT is correct. It may not warn in all configurations, but that
+> > > > > > doesn't matter: what matters is that it warns in common enough
+> > > > > > configurations that developers will catch it.
+> > > > > >
+> > > > > > So having a warning in "might_sleep()" that doesn't always trigger,
+> > > > > > because you have a limited configuration that can't even detect the
+> > > > > > situation, that's fine and dandy and intentional.
+> > > > > >
+> > > > > > But having code like
+> > > > > >
+> > > > > >        if (can_schedule())
+> > > > > >            .. do something different ..
+> > > > > >
+> > > > > > is fundamentally complete and utter garbage.
+> > > > > >
+> > > > > > It's one thing if you test for "am I in hardware interrupt context".
+> > > > > > Those tests aren't great either, but at least they make sense.
+> > > > > >
+> > > > > > But a driver - or some library routine - making a difference based on
+> > > > > > some nebulous "can I schedule" is fundamentally and basically WRONG.
+> > > > > >
+> > > > > > If some code changes behavior, it needs to be explicit to the *caller*
+> > > > > > of that code.
+> > > > > >
+> > > > > > So this is why GFP_ATOMIC is fine, but "if (!can_schedule())
+> > > > > > do_something_atomic()" is pure shite.
+> > > > > >
+> > > > > > And I am not IN THE LEAST interested in trying to help people doing
+> > > > > > pure shite. We need to fix them. Like the crypto code is getting
+> > > > > > fixed.
+> > > > >
+> > > > > Just figured I'll throw my +1 in from reading too many (gpu) drivers.
+> > > > > Code that tries to cleverly adjust its behaviour depending upon the
+> > > > > context it's running in is harder to understand and blows up in more
+> > > > > interesting ways. We still have drm_can_sleep() and it's mostly just
+> > > > > used for debug code, and I've largely ended up just deleting
+> > > > > everything that used it because when you're driver is blowing up the
+> > > > > last thing you want is to realize your debug code and output can't be
+> > > > > relied upon. Or worse, that the only Oops you have is the one in the
+> > > > > debug code, because the real one scrolled away - the original idea
+> > > > > behind drm_can_sleep was to make all the modeset code work
+> > > > > automagically both in normal ioctl/kworker context and in the panic
+> > > > > handlers or kgdb callbacks. Wishful thinking at best.
+> > > > >
+> > > > > Also at least for me that extends to everything, e.g. I much prefer
+> > > > > explicit spin_lock and spin_lock_irq vs magic spin_lock_irqsave for
+> > > > > locks shared with interrupt handlers, since the former two gives me
+> > > > > clear information from which contexts such function can be called.
+> > > > > Other end is the memalloc_no*_save/restore functions, where I recently
+> > > > > made a real big fool of myself because I didn't realize how much that
+> > > > > impacts everything that's run within - suddenly "GFP_KERNEL for small
+> > > > > stuff never fails" is wrong everywhere.
+> > > > >
+> > > > > It's all great for debugging and sanity checks (and we run with all
+> > > > > that stuff enabled in our CI), but really semantic changes depending
+> > > > > upon magic context checks freak my out :-)
+> > > >
+> > > > All fair, but some of us need to write code that must handle being
+> > > > invoked from a wide variety of contexts.  Now perhaps you like the idea of
+> > > > call_rcu() for schedulable contexts, call_rcu_nosched() when preemption
+> > > > is disabled, call_rcu_irqs_are_disabled() when interrupts are disabled,
+> > > > call_rcu_raw_atomic() from contexts where (for example) raw spinlocks
+> > > > are held, and so on.  However, from what I can see, most people instead
+> > > > consistently prefer that the RCU API instead be consolidated.
+> > > >
+> > > > Some in-flight cache-efficiency work for kvfree_rcu() and call_rcu()
+> > > > needs to be able to allocate memory occasionally.  It can do that when
+> > > > invoked from some contexts, but not when invoked from others.  Right now,
+> > > > in !PREEMPT kernels, it cannot tell, and must either do things to the
+> > > > memory allocators that some of the MM hate or must unnecessarily invoke
+> > > > workqueues.  Thomas's patches would allow the code to just allocate in
+> > > > the common case when these primitives are invoked from contexts where
+> > > > allocation is permitted.
+> > > >
+> > > > If we want to restrict access to the can_schedule() or whatever primitive,
+> > > > fine and good.  We can add a check to checkpatch.pl, for example.  Maybe
+> > > > we can go back to the old brlock approach of requiring certain people's
+> > > > review for each addition to the kernel.
+> > > >
+> > > > But there really are use cases that it would greatly help.
+> > >
+> > > We can deadlock in random fun places if random stuff we're calling
+> > > suddenly starts allocating. Sometimes. Maybe once in a blue moon, to
+> > > make it extra fun to reproduce. Maybe most driver subsystems are less
+> > > brittle, but gpu drivers definitely need to know about the details for
+> > > exactly this example. And yes gpu drivers use rcu for freeing
+> > > dma_fence structures, and that tends to happen in code that we only
+> > > recently figured out should really not allocate memory.
+> > >
+> > > I think minimally you need to throw in an unconditional
+> > > fs_reclaim_acquire();fs_reclaim_release(); so that everyone who runs
+> > > with full debugging knows what might happen. It's kinda like
+> > > might_sleep, but a lot more specific. might_sleep() alone is not
+> > > enough, because in the specific code paths I'm thinking of (and
+> > > created special lockdep annotations for just recently) sleeping is
+> > > allowed, but any memory allocations with GFP_RECLAIM set are no-go.
+> >
+> > Completely agreed!  Any allocation on any free path must be handled
+> > -extremely- carefully.  To that end...
+> >
+> > First, there is always a fallback in case the allocation fails.  Which
+> > might have performance or corner-case robustness issues, but which will
+> > at least allow forward progress.  Second, we consulted with a number of
+> > MM experts to arrive at appropriate GFP_* flags (and their patience is
+> > greatly appreciated).  Third, the paths that can allocate will do so about
+> > one time of 500, so any issues should be spotted sooner rather than later.
+> >
+> > So you are quite right to be concerned, but I believe we will be doing the
+> > right things.  And based on his previous track record, I am also quite
+> > certain that Mr. Murphy will be on hand to provide me any additional
+> > education that I might require.
+> >
+> > Finally, I have noted down your point about fs_reclaim_acquire() and
+> > fs_reclaim_release().  Whether or not they prove to be needed, I do
+> > appreciate your calling them to my attention.
+> 
+> I just realized that since these dma_fence structs are refcounted and
+> userspace can hold references (directly, it can pass them around
+> behind file descriptors) we might never hit such a path until slightly
+> unusual or evil userspace does something interesting. Do you have
+> links to those patches? Some googling didn't turn up anything. I can
+> then figure out whether it's better to risk not spotting issues with
+> call_rcu vs slapping a memalloc_noio_save/restore around all these
+> critical section which force-degrades any allocation to GFP_ATOMIC at
+> most, but has the risk that we run into code that assumes "GFP_KERNEL
+> never fails for small stuff" and has a decidedly less tested fallback
+> path than rcu code.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- .../selftests/bpf/prog_tests/ksyms_btf.c      | 18 +++++++++++
- .../selftests/bpf/progs/test_ksyms_btf.c      | 32 +++++++++++++++++++
- 2 files changed, 50 insertions(+)
+Here is the previous early draft version, which will change considerably
+for the next version:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-index c6ef06c0629a..28e26bd3e0ca 100644
---- a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
-@@ -11,6 +11,8 @@ static int duration;
- void test_ksyms_btf(void)
- {
- 	__u64 runqueues_addr, bpf_prog_active_addr;
-+	__u32 this_rq_cpu;
-+	int this_bpf_prog_active;
- 	struct test_ksyms_btf *skel = NULL;
- 	struct test_ksyms_btf__data *data;
- 	struct btf *btf;
-@@ -64,6 +66,22 @@ void test_ksyms_btf(void)
- 	      (unsigned long long)data->out__bpf_prog_active_addr,
- 	      (unsigned long long)bpf_prog_active_addr);
- 
-+	CHECK(data->out__rq_cpu == -1, "rq_cpu",
-+	      "got %u, exp != -1\n", data->out__rq_cpu);
-+	CHECK(data->out__bpf_prog_active < 0, "bpf_prog_active",
-+	      "got %d, exp >= 0\n", data->out__bpf_prog_active);
-+	CHECK(data->out__cpu_0_rq_cpu != 0, "cpu_rq(0)->cpu",
-+	      "got %u, exp 0\n", data->out__cpu_0_rq_cpu);
-+
-+	this_rq_cpu = data->out__this_rq_cpu;
-+	CHECK(this_rq_cpu != data->out__rq_cpu, "this_rq_cpu",
-+	      "got %u, exp %u\n", this_rq_cpu, data->out__rq_cpu);
-+
-+	this_bpf_prog_active = data->out__this_bpf_prog_active;
-+	CHECK(this_bpf_prog_active != data->out__bpf_prog_active, "this_bpf_prog_active",
-+	      "got %d, exp %d\n", this_bpf_prog_active,
-+	      data->out__bpf_prog_active);
-+
- cleanup:
- 	btf__free(btf);
- 	test_ksyms_btf__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-index 7dde2082131d..bb8ea9270f29 100644
---- a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
-@@ -8,15 +8,47 @@
- __u64 out__runqueues_addr = -1;
- __u64 out__bpf_prog_active_addr = -1;
- 
-+__u32 out__rq_cpu = -1; /* percpu struct fields */
-+int out__bpf_prog_active = -1; /* percpu int */
-+
-+__u32 out__this_rq_cpu = -1;
-+int out__this_bpf_prog_active = -1;
-+
-+__u32 out__cpu_0_rq_cpu = -1; /* cpu_rq(0)->cpu */
-+
- extern const struct rq runqueues __ksym; /* struct type global var. */
- extern const int bpf_prog_active __ksym; /* int type global var. */
- 
- SEC("raw_tp/sys_enter")
- int handler(const void *ctx)
- {
-+	struct rq *rq;
-+	int *active;
-+	__u32 cpu;
-+
- 	out__runqueues_addr = (__u64)&runqueues;
- 	out__bpf_prog_active_addr = (__u64)&bpf_prog_active;
- 
-+	cpu = bpf_get_smp_processor_id();
-+
-+	/* test bpf_per_cpu_ptr() */
-+	rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, cpu);
-+	if (rq)
-+		out__rq_cpu = rq->cpu;
-+	active = (int *)bpf_per_cpu_ptr(&bpf_prog_active, cpu);
-+	if (active)
-+		out__bpf_prog_active = *active;
-+
-+	rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, 0);
-+	if (rq) /* should always be valid, but we can't spare the check. */
-+		out__cpu_0_rq_cpu = rq->cpu;
-+
-+	/* test bpf_this_cpu_ptr */
-+	rq = (struct rq *)bpf_this_cpu_ptr(&runqueues);
-+	out__this_rq_cpu = rq->cpu;
-+	active = (int *)bpf_this_cpu_ptr(&bpf_prog_active);
-+	out__this_bpf_prog_active = *active;
-+
- 	return 0;
- }
- 
--- 
-2.28.0.618.gf4bc123cb7-goog
+	lore.kernel.org/lkml/20200809204354.20137-1-urezki@gmail.com
 
+This does kvfree_rcu(), but we expect to handle call_rcu() similarly.
+
+The version in preparation will use workqueues to do the allocation in a
+known-safe environment and also use lockless access to certain portions
+of the allocator caches (as noted earlier, this last is not much loved
+by some of the MM guys).  Given Thomas's patch, we could with high
+probability allocate directly, perhaps even not needing memory-allocator
+modifications.
+
+Either way, kvfree_rcu(), and later call_rcu(), will avoid asking the
+allocator to do anything that the calling context prohibits.  So what
+types of bugs are you looking for?  Where reclaim calls back into the
+driver or some such?
+
+							Thanx, Paul
