@@ -2,69 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 067F226C7A8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Sep 2020 20:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6F426C7D5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Sep 2020 20:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727934AbgIPSc1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Sep 2020 14:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+        id S1728136AbgIPSfj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Sep 2020 14:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728129AbgIPScY (ORCPT
+        with ESMTP id S1728210AbgIPSfR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Sep 2020 14:32:24 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F62C06178A
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 11:32:23 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id k25so6825490ljk.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 11:32:22 -0700 (PDT)
+        Wed, 16 Sep 2020 14:35:17 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA802C06178C
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 11:35:12 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id k25so6768480ljg.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 11:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oa2KOKBruJIa8JzwEuXDvn8lq/AyW8Gh05WzKpjKQjk=;
-        b=UEueMUHZ3w1bML4TffC03SPtwmMbG26ZS04QoHTBFtkbazq0zj1LMx+FyboyvzzASg
-         nydFo8G58LEHhfHuiZfy7mbpmIDsIlzAJfeeTzYG6VJXbIqW/NS9VqvGKvKAt1o7QE3H
-         aEBuUY03yHBMaYNPFFjhHL22z9bGvgl38mViw=
+        bh=AxuwlCpSO8TsaLIcauC4aS5tgqsK9SeD3UYfP7DN7g0=;
+        b=ZKGyeh6DjOj0P0poUJri2yvAXd4omTbSKkycPwhZ3i+69eOgCicq7HjntIxGCUS9d/
+         zNZFDIECDK4GwkaKDrKuGgCWjAAnhqqHdcPPPF/38HaA25t0OpynH7kdnV1WYZaxFMxz
+         W50ov+r+RFsylVih7TsRScGj6r7RgJSz63qJs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oa2KOKBruJIa8JzwEuXDvn8lq/AyW8Gh05WzKpjKQjk=;
-        b=hBeu5q3DuqfqP5vzwC4sWihmHymohKpoan5YuqvmuAFJN8W60KaH3h2qfnDxBDXr4h
-         VFxqOjjrVV8xBLfEIz0wQDcIZONdXpsAniaaPRnksBR7T9NIWqSp1iqqMTYf80UxcbwU
-         Pex2t1r83+nTIvEs/m0CimW8yTu53iXzzJmfbKVHBSXbLARFnZomOK/UpdfF05pqTms1
-         m7K1BSI1Eo1soYMiQegHrw4cWUAkh9PeSPF0hVjT3Pm5GaAC8pa0e1a98BAIk5HEyZxH
-         5th8Xkv6uCYj25fF9FH+/jQAvGZNbR/mUuEhUnMUgt6efspiXhA7C9uDnrvzcezk/xou
-         vnrw==
-X-Gm-Message-State: AOAM532DwwcnhEwp0PcotLz3KoEbAlmy4/8P86aT2jsdKkFcEyD66ss1
-        6XhsyHjqrTFfq2Ttz/uCS9QIt+8TZurnjg==
-X-Google-Smtp-Source: ABdhPJzgfXQOAreKLQEOzfxetJ6YY6TGj36P2rayCcEgyGsXgMfgs211udo8R2EjODqIV4LOcL5AWQ==
-X-Received: by 2002:a2e:b5d9:: with SMTP id g25mr8144225ljn.335.1600281141114;
-        Wed, 16 Sep 2020 11:32:21 -0700 (PDT)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id x21sm5088643lff.67.2020.09.16.11.32.19
+        bh=AxuwlCpSO8TsaLIcauC4aS5tgqsK9SeD3UYfP7DN7g0=;
+        b=I8BYK7kk/+Z8WE02H1hZskqywtpgynYJI10BTkIW7BYw1zmb4Vj4T90z8fhnTfQTpC
+         bIoTMG6TNLlxjvuqqjwJDSJdxgzC7ZI0HPCktZUxPq5wNtMu37czdGTDQS8GIH2mvCv7
+         WHiUijTrZ/zfdtUquqPEpI6PcP+BFMt3YkMVedbkPSB7qUqFPrtiGztIfPQIgWL6ScVJ
+         geGBVIB869taOGouzCr03Kn/Uix4PpkxbHbNe4zwGqqmWBv+hWDq69aVZlN3c0HiFI8e
+         V3/kMrLZz6RbvRrJxzU2/PJ6TxMQRsi4YVT5jQtebVIELJ5YUybQlJALDWPtGHP6nQ/X
+         Dm+Q==
+X-Gm-Message-State: AOAM5336RZP3uL8fSniNcrMMOUsb/ddGLOk4uB/c8TjRz4oEgPwYAcdl
+        yo8yAr91nWhiFtdWJ6hWXDASFEs8XVA9PA==
+X-Google-Smtp-Source: ABdhPJwSIHcfOIULjQa65FDmGCroHwyNE5TLmmbSD75GPjM3vxZCCJClwzdso4sxh/PoMlnbASjFLg==
+X-Received: by 2002:a2e:b6cd:: with SMTP id m13mr9497968ljo.383.1600281310797;
+        Wed, 16 Sep 2020 11:35:10 -0700 (PDT)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id j20sm4756182lfe.181.2020.09.16.11.35.08
         for <linux-kselftest@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2020 11:32:20 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id m5so8040733lfp.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 11:32:19 -0700 (PDT)
-X-Received: by 2002:a19:e00a:: with SMTP id x10mr9071213lfg.603.1600281136741;
- Wed, 16 Sep 2020 11:32:16 -0700 (PDT)
+        Wed, 16 Sep 2020 11:35:10 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id w11so8092386lfn.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 11:35:08 -0700 (PDT)
+X-Received: by 2002:a19:521a:: with SMTP id m26mr9002648lfb.133.1600281306776;
+ Wed, 16 Sep 2020 11:35:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
  <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
  <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
- <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com> <20200916152956.GV29330@paulmck-ThinkPad-P72>
-In-Reply-To: <20200916152956.GV29330@paulmck-ThinkPad-P72>
+ <87y2la4xu6.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <87y2la4xu6.fsf@nanos.tec.linutronix.de>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 16 Sep 2020 11:32:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
-Message-ID: <CAHk-=wjsMycgMHJrCmeetR3r+K5bpSRtmVWfd8iaoQCYd_VYAg@mail.gmail.com>
+Date:   Wed, 16 Sep 2020 11:34:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whvULv3M2dQzPra1W-uGiX=_6Z_YeGnRDodbtXgJpihWA@mail.gmail.com>
+Message-ID: <CAHk-=whvULv3M2dQzPra1W-uGiX=_6Z_YeGnRDodbtXgJpihWA@mail.gmail.com>
 Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -102,8 +100,10 @@ Cc:     Daniel Vetter <daniel@ffwll.ch>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         intel-gfx <intel-gfx@lists.freedesktop.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Josh Triplett <josh@joshtriplett.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
@@ -116,35 +116,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 8:29 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Tue, Sep 15, 2020 at 12:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> All fair, but some of us need to write code that must handle being
-> invoked from a wide variety of contexts.
+> You wish. I just found a 7 year old bug in a 10G network driver which
+> surely would have been found if people would enable debug configs and
+> not just run the crap on their PREEMPT_NONE, all debug off kernel. And
+> that driver is not subject to bitrot, it gets regular bug fixes from
+> people who seem to care (distro folks).
 
-Note that I think that core functionality is different from random drivers.
+That driver clearly cannot be very well maintained. All the distro
+kernels have the basic debug checks in place, afaik.
 
-Of course core code can (and will) look at things like
+Is it some wonderful "enterprise hardware" garbage again that only
+gets used in special data centers?
 
-        if (in_interrupt())
-            .. schedule work asynchronously ..
+Becasue the "enterprise" people really are special. Very much in the
+"short bus" special kind of way. The fact that they have fooled so
+much of the industry into thinking that they are the competent and
+serious people is a disgrace.
 
-because core code ends up being called from odd places, and code like
-that is expected to have understanding of the rules it plays with.
-
-But something like RCU is a very different beast from some "walk the
-scatter-gather list" code.
-
-RCU does its work in the background, and works with lots of different
-things. And it's so core and used everywhere that it knows about these
-things. I mean, we literally have special code explicitly to let RCU
-know "we entered kernel context now".
-
-But something like a driver list walking thing should not be doing
-different things behind peoples back depending on whether they hold
-spinlocks or not. It should either just work regardless, or there
-should be a flag (or special interface) for the "you're being called
-in a crtitical region".
-
-Because dynamically changing behavior really is very confusing.
-
-               Linus
+              Linus
