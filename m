@@ -2,77 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFCC26D6AB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 10:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A3A26D83D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 12:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726106AbgIQIdK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Sep 2020 04:33:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36364 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726191AbgIQIdJ (ORCPT
+        id S1726410AbgIQKAS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Sep 2020 06:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbgIQKAS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Sep 2020 04:33:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600331587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LYKzEuRLnXn1tFjbAdxREws6PF3YO56THLfLneD1eRo=;
-        b=Br2Z5w4BsJNKR78wVIJ/oZWsPpTHIU2Q5pPqj59a4pRYGv36wDUTMZZhqQLPQO+hEtsyVK
-        3t86YwVcTdTVvhRKF7detCh09YFjolZ0L+Selwcr74K6XGDFGL8t2JEfO8JMooLpp125k+
-        OBodU4vR5QFNxCwWz8CO+RIF2ZmGF4Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-283-jnj7EB0KMA-AvKDpH3WMaQ-1; Thu, 17 Sep 2020 04:17:42 -0400
-X-MC-Unique: jnj7EB0KMA-AvKDpH3WMaQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0CB9F1017DC1;
-        Thu, 17 Sep 2020 08:17:40 +0000 (UTC)
-Received: from ovpn-114-192.ams2.redhat.com (ovpn-114-192.ams2.redhat.com [10.36.114.192])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EFA0D7880C;
-        Thu, 17 Sep 2020 08:17:36 +0000 (UTC)
-Message-ID: <1cb1ca491d7ea2fb8a928c14a56e3a2a5c5e7917.camel@redhat.com>
-Subject: Re: [PATCH net-next] selftests: mptcp: interpret \n as a new line
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Florian Westphal <fw@strlen.de>
-Cc:     netdev@vger.kernel.org, mptcp@lists.01.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 17 Sep 2020 10:17:35 +0200
-In-Reply-To: <20200916131352.3072764-1-matthieu.baerts@tessares.net>
-References: <20200916131352.3072764-1-matthieu.baerts@tessares.net>
+        Thu, 17 Sep 2020 06:00:18 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF14DC06174A;
+        Thu, 17 Sep 2020 03:00:17 -0700 (PDT)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1kIqi5-005Vc1-O3; Thu, 17 Sep 2020 12:00:13 +0200
+Message-ID: <cfcb01c087fdd9f22a875721444a7659bceec05f.camel@sipsolutions.net>
+Subject: Re: [PATCH] lib: kunit: add bitfield test conversion to KUnit
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kvalo@codeaurora.org
+Date:   Thu, 17 Sep 2020 12:00:12 +0200
+In-Reply-To: <CAFd5g47s09BfsqNx2RY1Zdp-TC4KbKgsMgr9-SHv1Nf6P9vAMQ@mail.gmail.com> (sfid-20200819_231025_419730_3D8DCC68)
+References: <20200729175849.148332-1-vitor@massaru.org>
+         <CAFd5g47s09BfsqNx2RY1Zdp-TC4KbKgsMgr9-SHv1Nf6P9vAMQ@mail.gmail.com>
+         (sfid-20200819_231025_419730_3D8DCC68)
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2020-09-16 at 15:13 +0200, Matthieu Baerts wrote:
-> In case of errors, this message was printed:
+On Wed, 2020-08-19 at 14:10 -0700, Brendan Higgins wrote:
+> On Wed, Jul 29, 2020 at 10:58 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
+> > This adds the conversion of the runtime tests of test_bitfield,
+> > from `lib/test_bitfield.c` to KUnit tests.
+> > 
+> > Please apply this commit first (linux-kselftest/kunit-fixes):
+> > 3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
+> > 
+> > Code Style Documentation: [0]
+> > 
+> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> > Link: [0] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/T/#u
 > 
->   (...)
->   # read: Resource temporarily unavailable
->   #  client exit code 0, server 3
->   # \nnetns ns1-0-BJlt5D socket stat for 10003:
->   (...)
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 > 
-> Obviously, the idea was to add a new line before the socket stat and not
-> print "\nnetns".
-> 
-> Fixes: b08fbf241064 ("selftests: add test-cases for MPTCP MP_JOIN")
-> Fixes: 048d19d444be ("mptcp: add basic kselftest for mptcp")
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Probably still want a review from Johannes though.
 
-Acked-by: Paolo Abeni <pabeni@redhat.com>
+Huh, sorry, this slipped through the cracks.
+
+Yeah, don't really care, looks fine to me? I'm not familiar with the
+kunit infrastructure much yet.
+
+Not sure I see much value in converting TEST_BITFIELD_COMPILE to a
+KUNIT_CASE though, because anyway it will not compile if you enable
+that? IOW, just leaving the function there without any KUNIT_CASE()
+reference to it should be fine and saves you an ifdef ...
+
+johannes
 
