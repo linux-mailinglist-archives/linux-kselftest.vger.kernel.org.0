@@ -2,110 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA93626DC3F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 14:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322EC26DE07
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 16:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbgIQM66 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Sep 2020 08:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S1726861AbgIQNus (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Sep 2020 09:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727229AbgIQM61 (ORCPT
+        with ESMTP id S1726956AbgIQNun (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:58:27 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFADC061788
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 05:58:26 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id 185so2320581oie.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 05:58:26 -0700 (PDT)
+        Thu, 17 Sep 2020 09:50:43 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3546C06178A;
+        Thu, 17 Sep 2020 06:38:07 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id d4so2002517wmd.5;
+        Thu, 17 Sep 2020 06:38:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=v+fNl0lP+nDgkIqWYqUCp9ojQxRjrA9fuGvhmoD3cl4=;
-        b=Xx9BA4CJAQ+/KNh9Oytu6Cp3JJRd7dZPKb0a9lbgdBNsP4TrCuCoM2hv/MeNZDJOt2
-         MIgdbjC+wvFlCsmnuqIU88Zn/DGSfwCm49nVbgVhm4JGYS3rQqQQ8VztYVsEiBaiVSYt
-         P3rMGajvrLFM8xPLxVdoUq+XX/LyQQsFsonFU=
+        bh=+U0ANCedTXmZ61Vy39O8cbQewFJtCfyUeqxdMzTRfeI=;
+        b=aXLBgkvZ+ZfiutVcnS66UN2sRHTXikqw7/zapXEEIDwy0eQeON4QoRRRD6Ao1T8dwV
+         7FO3T7eIg7kcILN2sryGMUCwHsECE9/agmSY2853xlLwyTRvkLv3gGq2ZxlgakZ8fpYY
+         ff0WMgflSn7Fcfb3twf/Fj/YjLg6S7pj5DnqK0JLe9C0aikZPolN+dEHAE2YPGDuKz9J
+         TY9SdL586qjoBuJjU/CgXTbMKZjXAPY1uyUVGbkV+cnO+id+bLX+cknOXGr1weKLGlGP
+         IRgyqun/WPUdyJV5Oy9Xh7ZocWZc0u96uSd5f/lIuwhW6MoWB38PaCJOEbJN+WtO/340
+         awSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=v+fNl0lP+nDgkIqWYqUCp9ojQxRjrA9fuGvhmoD3cl4=;
-        b=Gne3pel7igPoXmfvul73ybaeR876QHxqPLdBOmeiD7LxEP+vHUKmQGSzEHLg7Jgcd1
-         bVMyLksfZeuzzfBZTPrt9XcSmiAE0QyFt0OmEYGGBD1b+rbI4rUSRkltlS+/jtG2g0qp
-         ++FnwcT+LjI9tz9F2M5pl3LY2wvIFJMQung/vtz0o8t7iMcJ4wzQV+1qUaPX+OG8Vfgb
-         SRtlUZizQYxsokeVzw8tj1cR4v/qLMyvTK8su/dOigek9vl1nKCZGTTbzoH0wGpdiBwG
-         NlVNzPe8L/p5XipdtiF77ZP/CoFHpudfRc/GQVFEZPbZrryUZPBySz29fMXFoNsuHt9G
-         KMGg==
-X-Gm-Message-State: AOAM531JfSYtm83Ls/zjEkkirTUVGFEWMVvLy72iBc3jxJ3Bi+68euh4
-        +cFmpUzAA7LR2vNZktjQad5oKQ==
-X-Google-Smtp-Source: ABdhPJxJ+hJC5NgrepAXypYOwEjQMM4lNMMM27TkWxWgD7WozscsKqRmtHl4Tv93I1l3RzjjxNAuQw==
-X-Received: by 2002:aca:a88e:: with SMTP id r136mr5904429oie.13.1600347506033;
-        Thu, 17 Sep 2020 05:58:26 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h14sm10380230otr.21.2020.09.17.05.58.24
+        bh=+U0ANCedTXmZ61Vy39O8cbQewFJtCfyUeqxdMzTRfeI=;
+        b=ft5bINY4lCsr0wapocG3O+guGWGLDlxXw1A/YrCxzxeDP3FYZ5ZiPosBv2aO9pykQb
+         VmQYNgIIjW+552FS1t0Lp0Psc/q2cnpF7m1dBKrGZXpjRK+HNI/aIEQl/CVWjEiPB0OJ
+         3UpFmSvEVrIVK0doRoxx4yma3h383VnjTrplelKV2eA/2zeLhyBqnh7ZMEqVY2ZHn/17
+         FDYmmNzr/BSF1NufArdVXcxAndnmjxjL9PsFBlkcPnB4cPsxn56z7xWNZgFmL4D/582q
+         zIAS641LvRfiDTrCu8hy5tz6kACaKWyv599rUpQR8hWtLn4NesQ9tZUb7wHFo8bZGBd3
+         ablA==
+X-Gm-Message-State: AOAM530rJ7gj4FQ1FElNJz8IPa3f4mHLaLGAn/1pXeRqXk7oyDiQoiar
+        UAdYorgY0SFS14oUnR5PkJBQ97129GH50OrJ4GM=
+X-Google-Smtp-Source: ABdhPJz1QhTvKBayChW0luBSxMLyl3aJeFDYaFiBJypZp081zAtDL6V9mW0etuBU1zghbDwqBk4WqA==
+X-Received: by 2002:a1c:3985:: with SMTP id g127mr10531746wma.32.1600349886086;
+        Thu, 17 Sep 2020 06:38:06 -0700 (PDT)
+Received: from [10.127.42.2] ([94.156.155.144])
+        by smtp.gmail.com with ESMTPSA id y207sm11911056wmc.17.2020.09.17.06.38.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2020 05:58:25 -0700 (PDT)
-Subject: Re: [PATCH] selftests/harness: Flush stdout before forking
-To:     Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200917041519.3284582-1-mpe@ellerman.id.au>
- <CAMo8BfJ5j4nG0z1Bk00J=3xPM++J68Hp2idJ-D5aHT84-vOzsQ@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e24df908-c50d-59ef-563c-9db24c819248@linuxfoundation.org>
-Date:   Thu, 17 Sep 2020 06:58:23 -0600
+        Thu, 17 Sep 2020 06:38:05 -0700 (PDT)
+Subject: Re: [PATCH v2 1/4] kselftests/arm64: add a basic Pointer
+ Authentication test
+To:     Amit Kachhap <amit.kachhap@arm.com>,
+        Boyan Karatotev <boyan.karatotev@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     vincenzo.frascino@arm.com, Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+References: <20200831110450.30188-1-boyan.karatotev@arm.com>
+ <20200831110450.30188-2-boyan.karatotev@arm.com>
+ <2e89a5ff-738b-5484-bd00-9ccdeccf9f60@arm.com>
+From:   Boyan Karatotev <boian4o1@gmail.com>
+Message-ID: <fa24987e-c8e9-0130-d2bc-ec114a729491@gmail.com>
+Date:   Thu, 17 Sep 2020 14:38:01 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMo8BfJ5j4nG0z1Bk00J=3xPM++J68Hp2idJ-D5aHT84-vOzsQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <2e89a5ff-738b-5484-bd00-9ccdeccf9f60@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/16/20 10:53 PM, Max Filippov wrote:
-> On Wed, Sep 16, 2020 at 9:16 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->>
->> The test harness forks() a child to run each test. Both the parent and
->> the child print to stdout using libc functions. That can lead to
->> duplicated (or more) output if the libc buffers are not flushed before
->> forking.
->>
->> It's generally not seen when running programs directly, because stdout
->> will usually be line buffered when it's pointing to a terminal.
->>
->> This was noticed when running the seccomp_bpf test, eg:
->>
->>    $ ./seccomp_bpf | tee test.log
->>    $ grep -c "TAP version 13" test.log
->>    2
->>
->> But we only expect the TAP header to appear once.
->>
->> It can be exacerbated using stdbuf to increase the buffer size:
->>
->>    $ stdbuf -o 1MB ./seccomp_bpf > test.log
->>    $ grep -c "TAP version 13" test.log
->>    13
->>
->> The fix is simple, we just flush stdout & stderr before fork. Usually
->> stderr is unbuffered, but that can be changed, so flush it as well
->> just to be safe.
->>
->> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->> ---
->>   tools/testing/selftests/kselftest_harness.h | 5 +++++
->>   1 file changed, 5 insertions(+)
-> 
-> Tested-by: Max Filippov <jcmvbkbc@gmail.com>
-> 
+On 16/09/2020 1:11 pm, Amit Kachhap wrote:
+> On 8/31/20 4:34 PM, Boyan Karatotev wrote:
+>> PAuth signs and verifies return addresses on the stack. It does so by
+>> +
+>> +/* check that a corrupted PAC results in SIGSEGV */
+>> +TEST_SIGNAL(corrupt_pac, SIGSEGV)
+>> +{
+>> +    ASSERT_PAUTH_ENABLED();
+>> +
+>> +    pac_corruptor();
+>
+> With 8.6-Pauth extension merged in arm tree [1]. It makes sense to
+> verify PAC corruption for both SIGSEGV and SIGILL signals.
+>
+> Code something like below handles both the cases.
+>
+>
+-----------------------------------------------------------------------------------
+>
+>  int exec_sign_all(struct signatures *signed_vals, size_t val)
+> @@ -187,12 +188,29 @@ int exec_sign_all(struct signatures *signed_vals,
+> size_t val)
+>         return 0;
+>  }
+>
+> -/* check that a corrupted PAC results in SIGSEGV */
+> -TEST_SIGNAL(corrupt_pac, SIGSEGV)
+> +sigjmp_buf jmpbuf;
+> +void pac_signal_handler(int signum, siginfo_t *si, void *uc)
+>  {
+> -       ASSERT_PAUTH_ENABLED();
+> +       if (signum == SIGSEGV || signum == SIGILL) {
+> +               siglongjmp(jmpbuf, 1);
+> +       }
+> +}
+> +
+> +/* check that a corrupted PAC results in SIGSEGV or SIGILL */
+> +TEST(corrupt_pac)
+> +{
+> +       struct sigaction sa;
+>
+> -       pac_corruptor();
+> +       ASSERT_PAUTH_ENABLED();
+> +       if (sigsetjmp(jmpbuf, 1) == 0) {
+> +               sa.sa_sigaction = pac_signal_handler;
+> +               sa.sa_flags = SA_SIGINFO;
+> +               sigemptyset(&sa.sa_mask);
+> +               sigaction(SIGSEGV, &sa, NULL);
+> +               sigaction(SIGILL, &sa, NULL);
+> +               pac_corruptor();
+> +               ASSERT_TRUE(0) TH_LOG("SIGSEGV/SIGILL signal did not
+> occur");
+> +       }
+>  }
+>
+>  /*
+> @@ -265,7 +283,7 @@ TEST(single_thread_different_keys)
+>
+>                 tmp = n_same_single_set(&signed_vals, nkeys);
+>
+---------------------------------------------------------------------------------------
+>
+>
+>
+> Thanks,
+> Amit Daniel
+>
+> [1]:
+>
+https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/log/?h=for-next/ptrauth
 
-Thank you both. Applying to linux-kselftest fixes for 5.9-rc7
+Okay, I will add this and post it with the next version.
 
-thanks,
--- Shuah
+Regards,
+Boyan
