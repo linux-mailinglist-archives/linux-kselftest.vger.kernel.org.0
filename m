@@ -2,134 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C75AE26E521
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 21:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F5526E7F0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 00:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbgIQTNV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Sep 2020 15:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S1726054AbgIQWGm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Sep 2020 18:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726445AbgIQTNJ (ORCPT
+        with ESMTP id S1725886AbgIQWGl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Sep 2020 15:13:09 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC899C061756
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 12:12:59 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id q13so4784906ejo.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 12:12:59 -0700 (PDT)
+        Thu, 17 Sep 2020 18:06:41 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF56C061756
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 15:06:41 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id v14so1908477pjd.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 15:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3LEPP0iVO4pOzmayuWFbUiTrC/zzrJHdmu9l66uZ3ww=;
-        b=A8v+LFGmLAiO8xRtH9s3ZBA0ErXORvSRkCXdgySdxxbuOJB+chA7rl6b2sM/AI825O
-         Duj98X4AUtCKr3G6eEUT0XjUWGnlWIKxlHKBnAnETBWPH492e2lWXygqMxF2mxj6qp3V
-         29WHJr0FOv9xnowF0TTP/IZx7KBni2v04ANGLmndnlpXSmjQAO/gL+Y93X+C8GxZLcKr
-         QHbPxm+Sy/tBBQyvrA1YiwkhB6EXXh1JJhsIGzjbIYDvesYwtwnYxldcZs7OkNdjeqLG
-         QlfB9h7T6clAyJiCmitV6GggXDkLu4D2bSEUuO04R1kWjvEQ0524+xyPUOqr0N3IKtGS
-         Gmmw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=KGNmIQxkdvUG3FJy4i5PBk+ji2PTypNkOa0bskKz16s=;
+        b=EaqigPaJOr6zzGO1gy3rVaDoZkIxYX1OWLosQF+sjumKAYPELnTLFQ6bdp1H+yafVN
+         HXWuwkjp9Zd4RV142Qe0R8wi6t+9dYOVRkwH0gGxAIL9j2GhMUlDd76IwzQZTGTCjyAT
+         gGCBimh9PMJ72w2Oa2z4sAEFv0bybwKf8JJ04=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3LEPP0iVO4pOzmayuWFbUiTrC/zzrJHdmu9l66uZ3ww=;
-        b=Kowdrq716fYx/dcYWMJw7L7tj8z9S3r1YCFoYbcoY1H7przumDRfZLSowFAbxDWfDb
-         DfF4GS/ozlNjXlttj0RVMKfu7cLXZj/4or63Zrj0eLZGiQat2JU8XfXOsAkOwShkbu9n
-         rfndlQ9M0s3bGkC6r2H8+QOHpAKY+IDSV+zL0dvCfUJb/AMXxGYw/HyJTUTLgckupL2U
-         5ICF4e1KXtX5CSm81Ht5sHvSE0cr3bVmFLTRc47cmXLgBkeR7YJKPCKrSypRZCDJd20U
-         8L+UHTyw0/CK+qeIMMQRnSDuCvyZCku8ydnzr+TAQvrTtLJcAv1kZSkh0lhRz+aT7Gc4
-         m9kw==
-X-Gm-Message-State: AOAM5327pOPT4m2l20QeVU5XEXTwWqVURPZOF4WhazqWS11rvZ8tyl/C
-        1lR0mmdbs/zpjamYFXYiH4/U8xK4ZCLBjKE/MqZvbg==
-X-Google-Smtp-Source: ABdhPJwQfuJiXhXQahr+dOg2pgt3CLLw7RBQj5IqI09dioBvbhiK8kYARiekAKmguXmiDhUnJ9irhoIyWQ2VuILnUQA=
-X-Received: by 2002:a17:906:4553:: with SMTP id s19mr31491477ejq.475.1600369978174;
- Thu, 17 Sep 2020 12:12:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=KGNmIQxkdvUG3FJy4i5PBk+ji2PTypNkOa0bskKz16s=;
+        b=hFMioPqyynjjUT2/nRZljTmURjw6J7xwKMnLJTd/FFTukUpHQO14j4lNJzA3YQHTMg
+         K6q9OxQD3i2+Fc3URJ/nuw8fupTqHqRFxJt+qaCr38/Oll6dmRaBPIJb4qQiKZ3bhCG8
+         7xkLYRREK/9TEsxKx84YqMYkU4OJHV1Agl4D8FLPySmeTkPS8HELocW9B6j5ajKioSsW
+         3B69beMYlN5toIlJ0oCJfK8KoN2ZpAu46X6I+aAccfkHrx94X8mZ6U9PohJDw8UDgYhw
+         Y1FRO5rShUSqikd3C2KRhLzcokk9Jn6V9C1UGi7ZzeBpgd7J+DBXkahw7kuSmeSJGcSF
+         o9iQ==
+X-Gm-Message-State: AOAM531g851RDxC+AIeYjoffLTApGAn9nqZ0lVxk0ilONYdSc53gPUoG
+        GBXZO/9B49L1rzZ/LOaDETqXLA==
+X-Google-Smtp-Source: ABdhPJxVxMDAVNtxxj0yGmkKjx8X6uSL8vN/TWKF3VyOltmqZVZ34+YdBYAC7vSM7w8gckWvKUnQVg==
+X-Received: by 2002:a17:902:b10b:b029:d1:e5e7:bdf8 with SMTP id q11-20020a170902b10bb02900d1e5e7bdf8mr12609117plr.43.1600380401403;
+        Thu, 17 Sep 2020 15:06:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d128sm661053pfc.8.2020.09.17.15.06.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 15:06:40 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 15:06:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/harness: Flush stdout before forking
+Message-ID: <202009171506.535C5678@keescook>
+References: <20200917041519.3284582-1-mpe@ellerman.id.au>
+ <CAMo8BfJ5j4nG0z1Bk00J=3xPM++J68Hp2idJ-D5aHT84-vOzsQ@mail.gmail.com>
+ <e24df908-c50d-59ef-563c-9db24c819248@linuxfoundation.org>
+ <99f67c84-4dcd-278a-e7b8-e19054818ecf@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20200916223512.2885524-5-haoluo@google.com> <202009170943.rYEs5XMN%lkp@intel.com>
-In-Reply-To: <202009170943.rYEs5XMN%lkp@intel.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 17 Sep 2020 12:12:47 -0700
-Message-ID: <CA+khW7iDK+g_W30doEtjse1BSHmB62GcrtmkH3pMk7shymw=XA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/6] bpf: Introduce bpf_per_cpu_ptr()
-To:     kernel test robot <lkp@intel.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kbuild-all@lists.01.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <99f67c84-4dcd-278a-e7b8-e19054818ecf@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I need to cast the pointer to "const void __percpu *" before passing
-into per_cpu_ptr. I will update and resend.
+On Thu, Sep 17, 2020 at 10:51:32AM -0600, Shuah Khan wrote:
+> On 9/17/20 6:58 AM, Shuah Khan wrote:
+> > On 9/16/20 10:53 PM, Max Filippov wrote:
+> > > On Wed, Sep 16, 2020 at 9:16 PM Michael Ellerman
+> > > <mpe@ellerman.id.au> wrote:
+> > > > 
+> > > > The test harness forks() a child to run each test. Both the parent and
+> > > > the child print to stdout using libc functions. That can lead to
+> > > > duplicated (or more) output if the libc buffers are not flushed before
+> > > > forking.
+> > > > 
+> > > > It's generally not seen when running programs directly, because stdout
+> > > > will usually be line buffered when it's pointing to a terminal.
+> > > > 
+> > > > This was noticed when running the seccomp_bpf test, eg:
+> > > > 
+> > > >    $ ./seccomp_bpf | tee test.log
+> > > >    $ grep -c "TAP version 13" test.log
+> > > >    2
+> > > > 
+> > > > But we only expect the TAP header to appear once.
+> > > > 
+> > > > It can be exacerbated using stdbuf to increase the buffer size:
+> > > > 
+> > > >    $ stdbuf -o 1MB ./seccomp_bpf > test.log
+> > > >    $ grep -c "TAP version 13" test.log
+> > > >    13
+> > > > 
+> > > > The fix is simple, we just flush stdout & stderr before fork. Usually
+> > > > stderr is unbuffered, but that can be changed, so flush it as well
+> > > > just to be safe.
+> > > > 
+> > > > Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> > > > ---
+> > > >   tools/testing/selftests/kselftest_harness.h | 5 +++++
+> > > >   1 file changed, 5 insertions(+)
+> > > 
+> > > Tested-by: Max Filippov <jcmvbkbc@gmail.com>
+> > > 
+> > 
+> > Thank you both. Applying to linux-kselftest fixes for 5.9-rc7
+> > 
+> 
+> Kees,
+> 
+> I haven't pulled this in yet. If you want to take this through seccomp
+> tree for dependencies:
+> 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-On Wed, Sep 16, 2020 at 6:14 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Hao,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on bpf-next/master]
->
-> url:    https://github.com/0day-ci/linux/commits/Hao-Luo/bpf-BTF-support-for-ksyms/20200917-064052
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> config: powerpc-randconfig-s032-20200916 (attached as .config)
-> compiler: powerpc64-linux-gcc (GCC) 9.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.2-201-g24bdaac6-dirty
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=powerpc
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
->
-> sparse warnings: (new ones prefixed by >>)
->
-> >> kernel/bpf/helpers.c:631:31: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void const * @@
-> >> kernel/bpf/helpers.c:631:31: sparse:     expected void const [noderef] __percpu *__vpp_verify
-> >> kernel/bpf/helpers.c:631:31: sparse:     got void const *
->
-> # https://github.com/0day-ci/linux/commit/3f6ea3c1c73efe466a96ff7499219fe3b03b8f48
-> git remote add linux-review https://github.com/0day-ci/linux
-> git fetch --no-tags linux-review Hao-Luo/bpf-BTF-support-for-ksyms/20200917-064052
-> git checkout 3f6ea3c1c73efe466a96ff7499219fe3b03b8f48
-> vim +631 kernel/bpf/helpers.c
->
->    625
->    626  BPF_CALL_2(bpf_per_cpu_ptr, const void *, ptr, u32, cpu)
->    627  {
->    628          if (cpu >= nr_cpu_ids)
->    629                  return (unsigned long)NULL;
->    630
->  > 631          return (unsigned long)per_cpu_ptr(ptr, cpu);
->    632  }
->    633
->    634  const struct bpf_func_proto bpf_per_cpu_ptr_proto = {
->    635          .func           = bpf_per_cpu_ptr,
->    636          .gpl_only       = false,
->    637          .ret_type       = RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL,
->    638          .arg1_type      = ARG_PTR_TO_PERCPU_BTF_ID,
->    639          .arg2_type      = ARG_ANYTHING,
->    640  };
->    641
->  > 642  const struct bpf_func_proto bpf_get_current_task_proto __weak;
->    643  const struct bpf_func_proto bpf_probe_read_user_proto __weak;
->    644  const struct bpf_func_proto bpf_probe_read_user_str_proto __weak;
->    645  const struct bpf_func_proto bpf_probe_read_kernel_proto __weak;
->    646  const struct bpf_func_proto bpf_probe_read_kernel_str_proto __weak;
->    647
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+You can have it -- it's a global fix and more than the seccomp selftest
+is likely affected. :)
+
+-- 
+Kees Cook
