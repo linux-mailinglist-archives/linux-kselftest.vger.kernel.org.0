@@ -2,736 +2,304 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1306026E05C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 18:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6904A26E0C0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Sep 2020 18:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728233AbgIQQLy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Sep 2020 12:11:54 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:46158 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727793AbgIQPpG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Sep 2020 11:45:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=iv2huwi6zmqabdt6b4lbuyos6pcvh5gh; d=linaro.org; t=1600357503;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=DUT+KD3hQRqMZHTo4f/7k2nNDfSYevFwwR9HlT4vEng=;
-        b=dEku3hl531CVJGNwECI5nOdCbNaV5DbJ6T+SNqvJweeWo80X93sUAKAwzmm4OK9D
-        J8TRLviz0p5bvWT+y+eo0o81npAAQ+0qucwSCPxUHEImn9YogRYnoZK42mEGl37lvZ0
-        N3Si2Qk6jA4iIddwRKOIQ+WYqTnZx9RCDaZbPkgE=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1600357503;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=DUT+KD3hQRqMZHTo4f/7k2nNDfSYevFwwR9HlT4vEng=;
-        b=g/65AurTZuj5lz5qTx8Me6rSErGP3dwIqSY4LmQLl9GDuN2bytevz3EOzimS4ILR
-        GeRVj+Rwp4SBE51M9o5uMOxg27usbV0y45ElRrb996RL4qASZlI5zgokar/O2vHYKzg
-        CujEsgXCe9zYYxKxC0Qoef1K57Uqiu4W8v1+4HqI=
-From:   LKFT <lkft@linaro.org>
-To:     lkft@linaro.org, lkft-triage@lists.linaro.org,
-        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org
-Cc:     sfr@canb.auug.org.au, shuah@kernel.org
-Subject: [REGRESSION] kselftest: next-20200916
+        id S1728532AbgIQQ2u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Sep 2020 12:28:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40134 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728507AbgIQQ2p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 17 Sep 2020 12:28:45 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64D8B2078D;
+        Thu, 17 Sep 2020 16:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600360116;
+        bh=aMFXA6dujAeFH2LkCq1Js2d4JSd24Yo67kBaDY8oEtE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=0JMcW2qGu3G1e5DVBtzJABiddeYBZnLe86UtPsGxTUL/4ALcJgIf+j3ymeD7EPM2P
+         6kaOd5bIdCt+s6hbZKXuLz52eYjpLqZ8ZyEpCbKf1UrpJVe2pWmLkdF4dkyyeOqgTy
+         aFd4GM66CCyEMI5keOxMq1USdAbb5ATC2PcNgjU0=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 0E5CF35225FA; Thu, 17 Sep 2020 09:28:36 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 09:28:36 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+Message-ID: <20200917162836.GJ29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+ <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+ <20200916152956.GV29330@paulmck-ThinkPad-P72>
+ <CAKMK7uGFyfhEyt=jmdk2jDO-hq0_Pf0ck+cKSELHjr2U3rPuYQ@mail.gmail.com>
+ <20200916205840.GD29330@paulmck-ThinkPad-P72>
+ <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
+ <20200916223951.GG29330@paulmck-ThinkPad-P72>
+ <CAKMK7uFXD7FzGZJZx0QAR2WdbewGmLnsSVaH7+HD0XSr--f0kw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <010001749cbd911d-afe37612-fcd3-4f1b-ac2a-cfa59f1844b2-000000@email.amazonses.com>
-Date:   Thu, 17 Sep 2020 15:45:03 +0000
-X-SES-Outgoing: 2020.09.17-54.240.8.97
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uFXD7FzGZJZx0QAR2WdbewGmLnsSVaH7+HD0XSr--f0kw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Kernel
-* kernel: 5.9.0-rc5
-* git repo: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: 5fa35f247b563a7893f3f68f19d00ace2ccf3dff
-* git describe: next-20200916
-* Test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200916
+On Thu, Sep 17, 2020 at 09:52:30AM +0200, Daniel Vetter wrote:
+> On Thu, Sep 17, 2020 at 12:39 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Wed, Sep 16, 2020 at 11:43:02PM +0200, Daniel Vetter wrote:
+> > > On Wed, Sep 16, 2020 at 10:58 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Wed, Sep 16, 2020 at 10:29:06PM +0200, Daniel Vetter wrote:
+> > > > > On Wed, Sep 16, 2020 at 5:29 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > >
+> > > > > > On Wed, Sep 16, 2020 at 09:37:17AM +0200, Daniel Vetter wrote:
+> > > > > > > On Tue, Sep 15, 2020 at 7:35 PM Linus Torvalds
+> > > > > > > <torvalds@linux-foundation.org> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > > > > > > > >
+> > > > > > > > > OTOH, having a working 'preemptible()' or maybe better named
+> > > > > > > > > 'can_schedule()' check makes tons of sense to make decisions about
+> > > > > > > > > allocation modes or other things.
+> > > > > > > >
+> > > > > > > > No. I think that those kinds of decisions about actual behavior are
+> > > > > > > > always simply fundamentally wrong.
+> > > > > > > >
+> > > > > > > > Note that this is very different from having warnings about invalid
+> > > > > > > > use. THAT is correct. It may not warn in all configurations, but that
+> > > > > > > > doesn't matter: what matters is that it warns in common enough
+> > > > > > > > configurations that developers will catch it.
+> > > > > > > >
+> > > > > > > > So having a warning in "might_sleep()" that doesn't always trigger,
+> > > > > > > > because you have a limited configuration that can't even detect the
+> > > > > > > > situation, that's fine and dandy and intentional.
+> > > > > > > >
+> > > > > > > > But having code like
+> > > > > > > >
+> > > > > > > >        if (can_schedule())
+> > > > > > > >            .. do something different ..
+> > > > > > > >
+> > > > > > > > is fundamentally complete and utter garbage.
+> > > > > > > >
+> > > > > > > > It's one thing if you test for "am I in hardware interrupt context".
+> > > > > > > > Those tests aren't great either, but at least they make sense.
+> > > > > > > >
+> > > > > > > > But a driver - or some library routine - making a difference based on
+> > > > > > > > some nebulous "can I schedule" is fundamentally and basically WRONG.
+> > > > > > > >
+> > > > > > > > If some code changes behavior, it needs to be explicit to the *caller*
+> > > > > > > > of that code.
+> > > > > > > >
+> > > > > > > > So this is why GFP_ATOMIC is fine, but "if (!can_schedule())
+> > > > > > > > do_something_atomic()" is pure shite.
+> > > > > > > >
+> > > > > > > > And I am not IN THE LEAST interested in trying to help people doing
+> > > > > > > > pure shite. We need to fix them. Like the crypto code is getting
+> > > > > > > > fixed.
+> > > > > > >
+> > > > > > > Just figured I'll throw my +1 in from reading too many (gpu) drivers.
+> > > > > > > Code that tries to cleverly adjust its behaviour depending upon the
+> > > > > > > context it's running in is harder to understand and blows up in more
+> > > > > > > interesting ways. We still have drm_can_sleep() and it's mostly just
+> > > > > > > used for debug code, and I've largely ended up just deleting
+> > > > > > > everything that used it because when you're driver is blowing up the
+> > > > > > > last thing you want is to realize your debug code and output can't be
+> > > > > > > relied upon. Or worse, that the only Oops you have is the one in the
+> > > > > > > debug code, because the real one scrolled away - the original idea
+> > > > > > > behind drm_can_sleep was to make all the modeset code work
+> > > > > > > automagically both in normal ioctl/kworker context and in the panic
+> > > > > > > handlers or kgdb callbacks. Wishful thinking at best.
+> > > > > > >
+> > > > > > > Also at least for me that extends to everything, e.g. I much prefer
+> > > > > > > explicit spin_lock and spin_lock_irq vs magic spin_lock_irqsave for
+> > > > > > > locks shared with interrupt handlers, since the former two gives me
+> > > > > > > clear information from which contexts such function can be called.
+> > > > > > > Other end is the memalloc_no*_save/restore functions, where I recently
+> > > > > > > made a real big fool of myself because I didn't realize how much that
+> > > > > > > impacts everything that's run within - suddenly "GFP_KERNEL for small
+> > > > > > > stuff never fails" is wrong everywhere.
+> > > > > > >
+> > > > > > > It's all great for debugging and sanity checks (and we run with all
+> > > > > > > that stuff enabled in our CI), but really semantic changes depending
+> > > > > > > upon magic context checks freak my out :-)
+> > > > > >
+> > > > > > All fair, but some of us need to write code that must handle being
+> > > > > > invoked from a wide variety of contexts.  Now perhaps you like the idea of
+> > > > > > call_rcu() for schedulable contexts, call_rcu_nosched() when preemption
+> > > > > > is disabled, call_rcu_irqs_are_disabled() when interrupts are disabled,
+> > > > > > call_rcu_raw_atomic() from contexts where (for example) raw spinlocks
+> > > > > > are held, and so on.  However, from what I can see, most people instead
+> > > > > > consistently prefer that the RCU API instead be consolidated.
+> > > > > >
+> > > > > > Some in-flight cache-efficiency work for kvfree_rcu() and call_rcu()
+> > > > > > needs to be able to allocate memory occasionally.  It can do that when
+> > > > > > invoked from some contexts, but not when invoked from others.  Right now,
+> > > > > > in !PREEMPT kernels, it cannot tell, and must either do things to the
+> > > > > > memory allocators that some of the MM hate or must unnecessarily invoke
+> > > > > > workqueues.  Thomas's patches would allow the code to just allocate in
+> > > > > > the common case when these primitives are invoked from contexts where
+> > > > > > allocation is permitted.
+> > > > > >
+> > > > > > If we want to restrict access to the can_schedule() or whatever primitive,
+> > > > > > fine and good.  We can add a check to checkpatch.pl, for example.  Maybe
+> > > > > > we can go back to the old brlock approach of requiring certain people's
+> > > > > > review for each addition to the kernel.
+> > > > > >
+> > > > > > But there really are use cases that it would greatly help.
+> > > > >
+> > > > > We can deadlock in random fun places if random stuff we're calling
+> > > > > suddenly starts allocating. Sometimes. Maybe once in a blue moon, to
+> > > > > make it extra fun to reproduce. Maybe most driver subsystems are less
+> > > > > brittle, but gpu drivers definitely need to know about the details for
+> > > > > exactly this example. And yes gpu drivers use rcu for freeing
+> > > > > dma_fence structures, and that tends to happen in code that we only
+> > > > > recently figured out should really not allocate memory.
+> > > > >
+> > > > > I think minimally you need to throw in an unconditional
+> > > > > fs_reclaim_acquire();fs_reclaim_release(); so that everyone who runs
+> > > > > with full debugging knows what might happen. It's kinda like
+> > > > > might_sleep, but a lot more specific. might_sleep() alone is not
+> > > > > enough, because in the specific code paths I'm thinking of (and
+> > > > > created special lockdep annotations for just recently) sleeping is
+> > > > > allowed, but any memory allocations with GFP_RECLAIM set are no-go.
+> > > >
+> > > > Completely agreed!  Any allocation on any free path must be handled
+> > > > -extremely- carefully.  To that end...
+> > > >
+> > > > First, there is always a fallback in case the allocation fails.  Which
+> > > > might have performance or corner-case robustness issues, but which will
+> > > > at least allow forward progress.  Second, we consulted with a number of
+> > > > MM experts to arrive at appropriate GFP_* flags (and their patience is
+> > > > greatly appreciated).  Third, the paths that can allocate will do so about
+> > > > one time of 500, so any issues should be spotted sooner rather than later.
+> > > >
+> > > > So you are quite right to be concerned, but I believe we will be doing the
+> > > > right things.  And based on his previous track record, I am also quite
+> > > > certain that Mr. Murphy will be on hand to provide me any additional
+> > > > education that I might require.
+> > > >
+> > > > Finally, I have noted down your point about fs_reclaim_acquire() and
+> > > > fs_reclaim_release().  Whether or not they prove to be needed, I do
+> > > > appreciate your calling them to my attention.
+> > >
+> > > I just realized that since these dma_fence structs are refcounted and
+> > > userspace can hold references (directly, it can pass them around
+> > > behind file descriptors) we might never hit such a path until slightly
+> > > unusual or evil userspace does something interesting. Do you have
+> > > links to those patches? Some googling didn't turn up anything. I can
+> > > then figure out whether it's better to risk not spotting issues with
+> > > call_rcu vs slapping a memalloc_noio_save/restore around all these
+> > > critical section which force-degrades any allocation to GFP_ATOMIC at
+> > > most, but has the risk that we run into code that assumes "GFP_KERNEL
+> > > never fails for small stuff" and has a decidedly less tested fallback
+> > > path than rcu code.
+> >
+> > Here is the previous early draft version, which will change considerably
+> > for the next version:
+> >
+> >         lore.kernel.org/lkml/20200809204354.20137-1-urezki@gmail.com
+> >
+> > This does kvfree_rcu(), but we expect to handle call_rcu() similarly.
+> >
+> > The version in preparation will use workqueues to do the allocation in a
+> > known-safe environment and also use lockless access to certain portions
+> > of the allocator caches (as noted earlier, this last is not much loved
+> > by some of the MM guys).  Given Thomas's patch, we could with high
+> > probability allocate directly, perhaps even not needing memory-allocator
+> > modifications.
+> >
+> > Either way, kvfree_rcu(), and later call_rcu(), will avoid asking the
+> > allocator to do anything that the calling context prohibits.  So what
+> > types of bugs are you looking for?  Where reclaim calls back into the
+> > driver or some such?
+> 
+> Yeah pretty much. It's a problem for gpu, fs, block drivers and really
+> anything else that's remotely involved in memory reclaim somehow.
+> Generally this is all handled explicitly by passing gfp_t flags down
+> any call chain, but in some cases it's instead solved with the
+> memalloc_no* functions. E.g. sunrpc uses that to make sure the network
+> stack (which generally just assumes it can allocate memory) doesn't,
+> to avoid recursions back into nfs/sunrpc. To my knowledge there's no
+> way to check at runtime with which gfp flags you're allowed to
+> allocate memory, a preemptible check is definitely not enough.
+> Disabled preemption implies only GFP_ATOMIC is allowed (ignoring nmi
+> and stuff like that), but the inverse is not true.
 
-## Regressions (compared to build next-20200915)
+Thank you for the confirmation!
 
-x86:
-  kselftest-vsyscall-mode-none:
-    * kvm_vmx_preemption_timer_test
-  kselftest:
-    * kvm_vmx_preemption_timer_test
+> So if you want the automagic in call_rcu I think either
+> - we need to replace all explicit gfp flags with the context marking
+> memalloc_no* across the entire kernel, or at least anywhere rcu might
+> be used.
+> - audit all callchains and make sure a call_rcu_noalloc is used
+> anywhere there might be a problem. probably better to have a
+> call_rcu_gfp with explicit gfp flags parameter, since generally that
+> needs to be passed down.
+> 
+> But at least to me the lockless magic in mm sounds a lot safer, since
+> it contains the complexity and doesn't leak it out to callers of
+> call_rcu.
 
-## Fixes (compared to build next-20200915)
+Agreed, I greatly prefer Peter Zijlstra's lockless-allocation patch
+myself.
 
-x86:
-  kselftest-vsyscall-mode-native:
-    * cgroup_test_freezer
-    * kvm_vmx_preemption_timer_test
+In the meantime, it looks like we will start by causing the allocation to
+happen in a safe environment.  That may have issues with delays, but is
+at least something that can be done entirely within the confines of RCU.
 
-## Summary
-### i386, kselftest
-* total: 294
-* pass: 123
-* fail: 133
-* skip: 38
-* xfail: 0
-### x86, kselftest
-* total: 312
-* pass: 167
-* fail: 112
-* skip: 33
-* xfail: 0
-### x86, kselftest-vsyscall-mode-native
-* total: 313
-* pass: 165
-* fail: 115
-* skip: 33
-* xfail: 0
-### x86, kselftest-vsyscall-mode-none
-* total: 310
-* pass: 166
-* fail: 111
-* skip: 33
-* xfail: 0
-
-## Environments
-* dragonboard-410c
-* hi6220-hikey
-* i386
-* juno-r2
-* juno-r2-compat
-* juno-r2-kasan
-* nxp-ls2088
-* qemu_arm
-* qemu_arm64
-* qemu_i386
-* qemu_x86_64
-* x15
-* x86
-* x86-kasan
-
-## Suites
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-## Failures
-### i386, kselftest
-* bpf_test_progs
-* bpf_test_dev_cgroup
-* bpf_test_tcpbpf_user
-* bpf_get_cgroup_id_user
-* bpf_test_socket_cookie
-* bpf_test_tcpnotify_user
-* bpf_test_sock_fields
-* bpf_test_sysctl
-* bpf_test_progs-no_alu32
-* bpf_test_sock_addr.sh
-* bpf_test_tunnel.sh
-* bpf_test_lwt_seg6local.sh
-* bpf_test_flow_dissector.sh
-* bpf_test_lwt_ip_encap.sh
-* bpf_test_tc_tunnel.sh
-* bpf_test_tc_edt.sh
-* bpf_test_xdping.sh
-* bpf_test_bpftool.sh
-* clone3_clone3_clear_sighand
-* clone3_clone3_cap_checkpoint_restore
-* core_close_range_test
-* firmware_fw_run_tests.sh
-* ftrace_ftracetest
-* intel_pstate_run.sh
-* kvm_cr4_cpuid_sync_test
-* kvm_evmcs_test
-* kvm_hyperv_cpuid
-* kvm_mmio_warning_test
-* kvm_platform_info_test
-* kvm_set_sregs_test
-* kvm_smm_test
-* kvm_state_test
-* kvm_vmx_preemption_timer_test
-* kvm_svm_vmcall_test
-* kvm_sync_regs_test
-* kvm_vmx_close_while_nested_test
-* kvm_vmx_dirty_log_test
-* kvm_vmx_set_nested_state_test
-* kvm_vmx_tsc_adjust_test
-* kvm_xss_msr_test
-* kvm_debug_regs
-* kvm_clear_dirty_log_test
-* kvm_demand_paging_test
-* kvm_dirty_log_test
-* kvm_kvm_create_max_vcpus
-* kvm_set_memory_region_test
-* kvm_steal_time
-* lkdtm_BUG.sh
-* lkdtm_WARNING.sh
-* lkdtm_WARNING_MESSAGE.sh
-* lkdtm_EXCEPTION.sh
-* lkdtm_CORRUPT_LIST_ADD.sh
-* lkdtm_CORRUPT_LIST_DEL.sh
-* lkdtm_STACK_GUARD_PAGE_LEADING.sh
-* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
-* lkdtm_UNSET_SMEP.sh
-* lkdtm_DOUBLE_FAULT.sh
-* lkdtm_CORRUPT_PAC.sh
-* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
-* lkdtm_READ_AFTER_FREE.sh
-* lkdtm_READ_BUDDY_AFTER_FREE.sh
-* lkdtm_SLAB_FREE_DOUBLE.sh
-* lkdtm_SLAB_FREE_CROSS.sh
-* lkdtm_SLAB_FREE_PAGE.sh
-* lkdtm_EXEC_DATA.sh
-* lkdtm_EXEC_STACK.sh
-* lkdtm_EXEC_KMALLOC.sh
-* lkdtm_EXEC_VMALLOC.sh
-* lkdtm_EXEC_RODATA.sh
-* lkdtm_EXEC_USERSPACE.sh
-* lkdtm_EXEC_NULL.sh
-* lkdtm_ACCESS_USERSPACE.sh
-* lkdtm_ACCESS_NULL.sh
-* lkdtm_WRITE_RO.sh
-* lkdtm_WRITE_RO_AFTER_INIT.sh
-* lkdtm_WRITE_KERN.sh
-* lkdtm_REFCOUNT_INC_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_DEC_ZERO.sh
-* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_INC_ZERO.sh
-* lkdtm_REFCOUNT_ADD_ZERO.sh
-* lkdtm_REFCOUNT_INC_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_SATURATED.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
-* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
-* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
-* lkdtm_USERCOPY_STACK_FRAME_TO.sh
-* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
-* lkdtm_USERCOPY_STACK_BEYOND.sh
-* lkdtm_USERCOPY_KERNEL.sh
-* lkdtm_STACKLEAK_ERASING.sh
-* lkdtm_CFI_FORWARD_PROTO.sh
-* mincore_mincore_selftest
-* mqueue_mq_perf_tests
-* net_fib_tests.sh
-* net_fib-onlink-tests.sh
-* net_pmtu.sh
-* net_udpgso_bench.sh
-* net_psock_snd.sh
-* net_test_vxlan_under_vrf.sh
-* net_l2tp.sh
-* net_traceroute.sh
-* net_altnames.sh
-* net_icmp_redirect.sh
-* net_txtimestamp.sh
-* net_vrf-xfrm-tests.sh
-* net_devlink_port_split.py
-* netfilter_nft_concat_range.sh
-* netfilter_nft_queue.sh
-* pidfd_pidfd_open_test
-* pidfd_pidfd_poll_test
-* proc_proc-self-syscall
-* proc_proc-fsconfig-hidepid
-* pstore_pstore_tests
-* ptrace_vmaccess
-* openat2_openat2_test
-* openat2_resolve_test
-* openat2_rename_attack_test
-* rtc_rtctest
-* seccomp_seccomp_bpf
-* seccomp_seccomp_benchmark
-* splice_short_splice_read.sh
-### x86, kselftest
-* bpf_test_progs
-* bpf_test_dev_cgroup
-* bpf_test_tcpbpf_user
-* bpf_get_cgroup_id_user
-* bpf_test_socket_cookie
-* bpf_test_netcnt
-* bpf_test_tcpnotify_user
-* bpf_test_sock_fields
-* bpf_test_sysctl
-* bpf_test_progs-no_alu32
-* bpf_test_sock_addr.sh
-* bpf_test_tunnel.sh
-* bpf_test_lwt_seg6local.sh
-* bpf_test_flow_dissector.sh
-* bpf_test_lwt_ip_encap.sh
-* bpf_test_tc_tunnel.sh
-* bpf_test_tc_edt.sh
-* bpf_test_xdping.sh
-* bpf_test_bpftool.sh
-* clone3_clone3_cap_checkpoint_restore
-* core_close_range_test
-* firmware_fw_run_tests.sh
-* ftrace_ftracetest
-* intel_pstate_run.sh
-* kvm_debug_regs
-* lkdtm_BUG.sh
-* lkdtm_WARNING.sh
-* lkdtm_WARNING_MESSAGE.sh
-* lkdtm_EXCEPTION.sh
-* lkdtm_CORRUPT_LIST_ADD.sh
-* lkdtm_CORRUPT_LIST_DEL.sh
-* lkdtm_STACK_GUARD_PAGE_LEADING.sh
-* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
-* lkdtm_UNSET_SMEP.sh
-* lkdtm_CORRUPT_PAC.sh
-* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
-* lkdtm_READ_AFTER_FREE.sh
-* lkdtm_READ_BUDDY_AFTER_FREE.sh
-* lkdtm_SLAB_FREE_DOUBLE.sh
-* lkdtm_SLAB_FREE_CROSS.sh
-* lkdtm_SLAB_FREE_PAGE.sh
-* lkdtm_EXEC_DATA.sh
-* lkdtm_EXEC_STACK.sh
-* lkdtm_EXEC_KMALLOC.sh
-* lkdtm_EXEC_VMALLOC.sh
-* lkdtm_EXEC_RODATA.sh
-* lkdtm_EXEC_USERSPACE.sh
-* lkdtm_EXEC_NULL.sh
-* lkdtm_ACCESS_USERSPACE.sh
-* lkdtm_ACCESS_NULL.sh
-* lkdtm_WRITE_RO.sh
-* lkdtm_WRITE_RO_AFTER_INIT.sh
-* lkdtm_WRITE_KERN.sh
-* lkdtm_REFCOUNT_INC_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_DEC_ZERO.sh
-* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_INC_ZERO.sh
-* lkdtm_REFCOUNT_ADD_ZERO.sh
-* lkdtm_REFCOUNT_INC_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_SATURATED.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
-* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
-* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
-* lkdtm_USERCOPY_STACK_FRAME_TO.sh
-* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
-* lkdtm_USERCOPY_STACK_BEYOND.sh
-* lkdtm_USERCOPY_KERNEL.sh
-* lkdtm_STACKLEAK_ERASING.sh
-* lkdtm_CFI_FORWARD_PROTO.sh
-* mincore_mincore_selftest
-* mqueue_mq_perf_tests
-* net_xfrm_policy.sh
-* net_fib_tests.sh
-* net_fib-onlink-tests.sh
-* net_pmtu.sh
-* net_udpgso_bench.sh
-* net_psock_snd.sh
-* net_test_vxlan_under_vrf.sh
-* net_l2tp.sh
-* net_traceroute.sh
-* net_altnames.sh
-* net_icmp_redirect.sh
-* net_txtimestamp.sh
-* net_vrf-xfrm-tests.sh
-* net_devlink_port_split.py
-* netfilter_nft_concat_range.sh
-* netfilter_nft_queue.sh
-* pidfd_pidfd_open_test
-* pidfd_pidfd_poll_test
-* proc_proc-fsconfig-hidepid
-* pstore_pstore_tests
-* ptrace_vmaccess
-* openat2_openat2_test
-* openat2_resolve_test
-* openat2_rename_attack_test
-* rtc_rtctest
-* seccomp_seccomp_bpf
-* seccomp_seccomp_benchmark
-* splice_short_splice_read.sh
-* vm_run_vmtests
-* x86_syscall_numbering_64
-### x86, kselftest-vsyscall-mode-native
-* bpf_test_progs
-* bpf_test_dev_cgroup
-* bpf_test_tcpbpf_user
-* bpf_get_cgroup_id_user
-* bpf_test_socket_cookie
-* bpf_test_netcnt
-* bpf_test_tcpnotify_user
-* bpf_test_sock_fields
-* bpf_test_sysctl
-* bpf_test_progs-no_alu32
-* bpf_test_sock_addr.sh
-* bpf_test_tunnel.sh
-* bpf_test_lwt_seg6local.sh
-* bpf_test_flow_dissector.sh
-* bpf_test_lwt_ip_encap.sh
-* bpf_test_tc_tunnel.sh
-* bpf_test_tc_edt.sh
-* bpf_test_xdping.sh
-* bpf_test_bpftool.sh
-* cgroup_test_freezer
-* clone3_clone3_cap_checkpoint_restore
-* core_close_range_test
-* firmware_fw_run_tests.sh
-* ftrace_ftracetest
-* intel_pstate_run.sh
-* kvm_vmx_preemption_timer_test
-* kvm_debug_regs
-* lkdtm_BUG.sh
-* lkdtm_WARNING.sh
-* lkdtm_WARNING_MESSAGE.sh
-* lkdtm_EXCEPTION.sh
-* lkdtm_CORRUPT_LIST_ADD.sh
-* lkdtm_CORRUPT_LIST_DEL.sh
-* lkdtm_STACK_GUARD_PAGE_LEADING.sh
-* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
-* lkdtm_UNSET_SMEP.sh
-* lkdtm_CORRUPT_PAC.sh
-* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
-* lkdtm_READ_AFTER_FREE.sh
-* lkdtm_READ_BUDDY_AFTER_FREE.sh
-* lkdtm_SLAB_FREE_DOUBLE.sh
-* lkdtm_SLAB_FREE_CROSS.sh
-* lkdtm_SLAB_FREE_PAGE.sh
-* lkdtm_EXEC_DATA.sh
-* lkdtm_EXEC_STACK.sh
-* lkdtm_EXEC_KMALLOC.sh
-* lkdtm_EXEC_VMALLOC.sh
-* lkdtm_EXEC_RODATA.sh
-* lkdtm_EXEC_USERSPACE.sh
-* lkdtm_EXEC_NULL.sh
-* lkdtm_ACCESS_USERSPACE.sh
-* lkdtm_ACCESS_NULL.sh
-* lkdtm_WRITE_RO.sh
-* lkdtm_WRITE_RO_AFTER_INIT.sh
-* lkdtm_WRITE_KERN.sh
-* lkdtm_REFCOUNT_INC_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_DEC_ZERO.sh
-* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_INC_ZERO.sh
-* lkdtm_REFCOUNT_ADD_ZERO.sh
-* lkdtm_REFCOUNT_INC_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_SATURATED.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
-* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
-* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
-* lkdtm_USERCOPY_STACK_FRAME_TO.sh
-* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
-* lkdtm_USERCOPY_STACK_BEYOND.sh
-* lkdtm_USERCOPY_KERNEL.sh
-* lkdtm_STACKLEAK_ERASING.sh
-* lkdtm_CFI_FORWARD_PROTO.sh
-* mincore_mincore_selftest
-* mqueue_mq_perf_tests
-* net_run_netsocktests
-* net_xfrm_policy.sh
-* net_fib_tests.sh
-* net_fib-onlink-tests.sh
-* net_pmtu.sh
-* net_udpgso_bench.sh
-* net_psock_snd.sh
-* net_test_vxlan_under_vrf.sh
-* net_l2tp.sh
-* net_traceroute.sh
-* net_altnames.sh
-* net_icmp_redirect.sh
-* net_txtimestamp.sh
-* net_vrf-xfrm-tests.sh
-* net_devlink_port_split.py
-* netfilter_nft_concat_range.sh
-* netfilter_nft_queue.sh
-* pidfd_pidfd_open_test
-* pidfd_pidfd_poll_test
-* proc_proc-fsconfig-hidepid
-* pstore_pstore_tests
-* ptrace_vmaccess
-* openat2_openat2_test
-* openat2_resolve_test
-* openat2_rename_attack_test
-* rtc_rtctest
-* seccomp_seccomp_bpf
-* seccomp_seccomp_benchmark
-* splice_short_splice_read.sh
-* vm_run_vmtests
-* x86_syscall_numbering_64
-### x86, kselftest-vsyscall-mode-none
-* bpf_test_progs
-* bpf_test_dev_cgroup
-* bpf_test_tcpbpf_user
-* bpf_get_cgroup_id_user
-* bpf_test_socket_cookie
-* bpf_test_netcnt
-* bpf_test_tcpnotify_user
-* bpf_test_sock_fields
-* bpf_test_sysctl
-* bpf_test_progs-no_alu32
-* bpf_test_sock_addr.sh
-* bpf_test_tunnel.sh
-* bpf_test_lwt_seg6local.sh
-* bpf_test_flow_dissector.sh
-* bpf_test_lwt_ip_encap.sh
-* bpf_test_tc_tunnel.sh
-* bpf_test_tc_edt.sh
-* bpf_test_xdping.sh
-* bpf_test_bpftool.sh
-* clone3_clone3_cap_checkpoint_restore
-* core_close_range_test
-* firmware_fw_run_tests.sh
-* ftrace_ftracetest
-* intel_pstate_run.sh
-* kvm_debug_regs
-* lkdtm_BUG.sh
-* lkdtm_WARNING.sh
-* lkdtm_WARNING_MESSAGE.sh
-* lkdtm_EXCEPTION.sh
-* lkdtm_CORRUPT_LIST_ADD.sh
-* lkdtm_CORRUPT_LIST_DEL.sh
-* lkdtm_STACK_GUARD_PAGE_LEADING.sh
-* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
-* lkdtm_UNSET_SMEP.sh
-* lkdtm_CORRUPT_PAC.sh
-* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
-* lkdtm_READ_AFTER_FREE.sh
-* lkdtm_READ_BUDDY_AFTER_FREE.sh
-* lkdtm_SLAB_FREE_DOUBLE.sh
-* lkdtm_SLAB_FREE_CROSS.sh
-* lkdtm_SLAB_FREE_PAGE.sh
-* lkdtm_EXEC_DATA.sh
-* lkdtm_EXEC_STACK.sh
-* lkdtm_EXEC_KMALLOC.sh
-* lkdtm_EXEC_VMALLOC.sh
-* lkdtm_EXEC_RODATA.sh
-* lkdtm_EXEC_USERSPACE.sh
-* lkdtm_EXEC_NULL.sh
-* lkdtm_ACCESS_USERSPACE.sh
-* lkdtm_ACCESS_NULL.sh
-* lkdtm_WRITE_RO.sh
-* lkdtm_WRITE_RO_AFTER_INIT.sh
-* lkdtm_WRITE_KERN.sh
-* lkdtm_REFCOUNT_INC_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
-* lkdtm_REFCOUNT_DEC_ZERO.sh
-* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
-* lkdtm_REFCOUNT_INC_ZERO.sh
-* lkdtm_REFCOUNT_ADD_ZERO.sh
-* lkdtm_REFCOUNT_INC_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_SATURATED.sh
-* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
-* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
-* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
-* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
-* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
-* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
-* lkdtm_USERCOPY_STACK_FRAME_TO.sh
-* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
-* lkdtm_USERCOPY_STACK_BEYOND.sh
-* lkdtm_USERCOPY_KERNEL.sh
-* lkdtm_STACKLEAK_ERASING.sh
-* lkdtm_CFI_FORWARD_PROTO.sh
-* mincore_mincore_selftest
-* mqueue_mq_perf_tests
-* net_run_netsocktests
-* net_xfrm_policy.sh
-* net_fib_tests.sh
-* net_fib-onlink-tests.sh
-* net_pmtu.sh
-* net_udpgso_bench.sh
-* net_test_vxlan_under_vrf.sh
-* net_l2tp.sh
-* net_traceroute.sh
-* net_altnames.sh
-* net_icmp_redirect.sh
-* net_txtimestamp.sh
-* net_vrf-xfrm-tests.sh
-* net_devlink_port_split.py
-* netfilter_nft_concat_range.sh
-* netfilter_nft_queue.sh
-* pidfd_pidfd_open_test
-* pidfd_pidfd_poll_test
-* proc_proc-fsconfig-hidepid
-* pstore_pstore_tests
-* ptrace_vmaccess
-* openat2_openat2_test
-* openat2_resolve_test
-* openat2_rename_attack_test
-* seccomp_seccomp_bpf
-* seccomp_seccomp_benchmark
-* splice_short_splice_read.sh
-* vm_run_vmtests
-* x86_syscall_numbering_64
-
-## Skips
-### i386, kselftest
-* bpf_test_xdp_veth.sh
-* cgroup_test_memcontrol
-* cgroup_test_kmem
-* cgroup_test_core
-* cgroup_test_stress.sh
-* efivarfs_efivarfs.sh
-* fpu_run_test_fpu.sh
-* ir_ir_loopback.sh
-* kexec_test_kexec_load.sh
-* kexec_test_kexec_file_load.sh
-* livepatch_test-livepatch.sh
-* livepatch_test-callbacks.sh
-* livepatch_test-shadow-vars.sh
-* livepatch_test-state.sh
-* livepatch_test-ftrace.sh
-* lkdtm_PANIC.sh
-* lkdtm_LOOP.sh
-* lkdtm_EXHAUST_STACK.sh
-* lkdtm_CORRUPT_STACK.sh
-* lkdtm_CORRUPT_STACK_STRONG.sh
-* lkdtm_OVERWRITE_ALLOCATION.sh
-* lkdtm_WRITE_AFTER_FREE.sh
-* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
-* lkdtm_SOFTLOCKUP.sh
-* lkdtm_HARDLOCKUP.sh
-* lkdtm_SPINLOCKUP.sh
-* lkdtm_HUNG_TASK.sh
-* lkdtm_REFCOUNT_TIMING.sh
-* lkdtm_ATOMIC_TIMING.sh
-* memory-hotplug_mem-on-off-test.sh
-* net_reuseport_bpf_numa
-* netfilter_ipvs.sh
-* netfilter_nft_conntrack_helper.sh
-* netfilter_nft_meta.sh
-* proc_proc-pid-vm
-* pstore_pstore_post_reboot_tests
-* tpm2_test_smoke.sh
-* tpm2_test_space.sh
-### x86, kselftest
-* bpf_test_xdp_veth.sh
-* cgroup_test_memcontrol
-* cgroup_test_kmem
-* cgroup_test_core
-* cgroup_test_stress.sh
-* efivarfs_efivarfs.sh
-* fpu_run_test_fpu.sh
-* ir_ir_loopback.sh
-* kexec_test_kexec_load.sh
-* kexec_test_kexec_file_load.sh
-* kvm_mmio_warning_test
-* kvm_svm_vmcall_test
-* lkdtm_PANIC.sh
-* lkdtm_LOOP.sh
-* lkdtm_EXHAUST_STACK.sh
-* lkdtm_CORRUPT_STACK.sh
-* lkdtm_CORRUPT_STACK_STRONG.sh
-* lkdtm_DOUBLE_FAULT.sh
-* lkdtm_OVERWRITE_ALLOCATION.sh
-* lkdtm_WRITE_AFTER_FREE.sh
-* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
-* lkdtm_SOFTLOCKUP.sh
-* lkdtm_HARDLOCKUP.sh
-* lkdtm_SPINLOCKUP.sh
-* lkdtm_HUNG_TASK.sh
-* lkdtm_REFCOUNT_TIMING.sh
-* lkdtm_ATOMIC_TIMING.sh
-* netfilter_ipvs.sh
-* netfilter_nft_conntrack_helper.sh
-* netfilter_nft_meta.sh
-* pstore_pstore_post_reboot_tests
-* tpm2_test_smoke.sh
-* tpm2_test_space.sh
-### x86, kselftest-vsyscall-mode-native
-* bpf_test_xdp_veth.sh
-* cgroup_test_memcontrol
-* cgroup_test_kmem
-* cgroup_test_core
-* cgroup_test_stress.sh
-* efivarfs_efivarfs.sh
-* fpu_run_test_fpu.sh
-* ir_ir_loopback.sh
-* kexec_test_kexec_load.sh
-* kexec_test_kexec_file_load.sh
-* kvm_mmio_warning_test
-* kvm_svm_vmcall_test
-* lkdtm_PANIC.sh
-* lkdtm_LOOP.sh
-* lkdtm_EXHAUST_STACK.sh
-* lkdtm_CORRUPT_STACK.sh
-* lkdtm_CORRUPT_STACK_STRONG.sh
-* lkdtm_DOUBLE_FAULT.sh
-* lkdtm_OVERWRITE_ALLOCATION.sh
-* lkdtm_WRITE_AFTER_FREE.sh
-* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
-* lkdtm_SOFTLOCKUP.sh
-* lkdtm_HARDLOCKUP.sh
-* lkdtm_SPINLOCKUP.sh
-* lkdtm_HUNG_TASK.sh
-* lkdtm_REFCOUNT_TIMING.sh
-* lkdtm_ATOMIC_TIMING.sh
-* netfilter_ipvs.sh
-* netfilter_nft_conntrack_helper.sh
-* netfilter_nft_meta.sh
-* pstore_pstore_post_reboot_tests
-* tpm2_test_smoke.sh
-* tpm2_test_space.sh
-### x86, kselftest-vsyscall-mode-none
-* bpf_test_xdp_veth.sh
-* cgroup_test_memcontrol
-* cgroup_test_kmem
-* cgroup_test_core
-* cgroup_test_stress.sh
-* efivarfs_efivarfs.sh
-* fpu_run_test_fpu.sh
-* ir_ir_loopback.sh
-* kexec_test_kexec_load.sh
-* kexec_test_kexec_file_load.sh
-* kvm_mmio_warning_test
-* kvm_svm_vmcall_test
-* lkdtm_PANIC.sh
-* lkdtm_LOOP.sh
-* lkdtm_EXHAUST_STACK.sh
-* lkdtm_CORRUPT_STACK.sh
-* lkdtm_CORRUPT_STACK_STRONG.sh
-* lkdtm_DOUBLE_FAULT.sh
-* lkdtm_OVERWRITE_ALLOCATION.sh
-* lkdtm_WRITE_AFTER_FREE.sh
-* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
-* lkdtm_SOFTLOCKUP.sh
-* lkdtm_HARDLOCKUP.sh
-* lkdtm_SPINLOCKUP.sh
-* lkdtm_HUNG_TASK.sh
-* lkdtm_REFCOUNT_TIMING.sh
-* lkdtm_ATOMIC_TIMING.sh
-* netfilter_ipvs.sh
-* netfilter_nft_conntrack_helper.sh
-* netfilter_nft_meta.sh
-* pstore_pstore_post_reboot_tests
-* tpm2_test_smoke.sh
-* tpm2_test_space.sh
-
---
-Linaro LKFT
-https://lkft.linaro.org
+							Thanx, Paul
