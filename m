@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 748D0270412
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 20:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE874270419
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 20:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbgIRScJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Sep 2020 14:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S1726415AbgIRScM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Sep 2020 14:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726392AbgIRScH (ORCPT
+        with ESMTP id S1726379AbgIRScK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 14:32:07 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B985C0613D2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:07 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id q131so5265682qke.22
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:07 -0700 (PDT)
+        Fri, 18 Sep 2020 14:32:10 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE76C0613CE
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:09 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id u11so3851340pls.16
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=y15UkrpVILsyPpJzSCvvGnSuGfIrAVdnneb1O3jNsec=;
-        b=GsTN0Fqqhr374zpwIsk8tbfwFUnxs21Z1dtpKfsPyeb7jpd9rHIdP8GYAg8FnOXys1
-         OIELCjgsdH3BIVjw86Wfbp18sFXjglTYNmRe6WyWgnHdOnmLf5OHztZ1z1ZsqesIbc/F
-         ESNH2BQqgu6t3B+r0/gAd+vKO/SpgK/Pf81UF3UtC1s7TjsIsWzzw46LzqRHl/I2DYbi
-         rWiuctWHFJSS6NqpRtIJ/yInOZp/06u+5rFNOk48qJN7KI+sTVNFrZxcQAqy2Rwyaf8u
-         GKZXXZ6VfYpG0agd95n5l1D9JPG7YS586nJzRMU4OZfPEhJa+ScjBra5/BaqPPynH/yV
-         jtkg==
+        bh=qypWKHXedF8/KF4Xvr3+aRHP7U3dz5Tf83jt6mtBndg=;
+        b=HE7e9clCmg0oUbqIj6monaOTb6MIK+LUI55ECVMtIlloc5B8VzAkzFnU0gyPsDHJgH
+         iIIye2eWrKZnyoGgt2TEuNE9+qL/jWfafuKj6NGlsfpHAqfXcn1xcfoG+DvA31ITA7nu
+         Li/yxBaMGDYA9V6rZOuB22hcPsst3Ff9CaVYyskZz5EuAvS7w3ElSQtEkpQ1woVf04nq
+         ROK2YC2LzNGcgbwX9SF6lePqMy4bUbGphxrPnGyuHn1u2I+ihRE/boFfgY6lyiXP6WGf
+         YEWbHJUTsCPfutKMDALCrCGKcGSKgQM6UMK+LhuKRzWoXPdV6fMve59gDerYVbpEx7CM
+         l3LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=y15UkrpVILsyPpJzSCvvGnSuGfIrAVdnneb1O3jNsec=;
-        b=a+3q7BafcOcJoq/72lxtIXybpLYfvXe0LOdkjQcFqa1ivkYysIB8ErGqd1tuMrH5Bw
-         BQymVlH/gsRDY5rZZKe/PtKoZ/g1UlPWMrR7r7fCymX9dOPZ8ERS1kHrLmuyWIAUCL/v
-         uqVJ/YANvu+yhAwnzHgeX4K2zDj3PLaER9XV1uUZk2U33GLv4soWrmOFP570MnpNx/16
-         8a1mW+I9rlBb99BE+tVo23aH9gvwTF+IXYDXLvi9QP1pwhT512LJFzPFro7cDvSn8EcJ
-         tPh8y/QMsGK8SJAxV6e2vUYV109insGOx2RrX4yYPJXmR9BHeDt2WHvtqHlu8AWjBDzt
-         fwFg==
-X-Gm-Message-State: AOAM531fNndCWel8jNGp7uTE4TsOaMTc9sAR0IcLkohlh4w0dS+UcylA
-        0YubvgauLsF+sEByA81YwMxmkMfiUDl3iA==
-X-Google-Smtp-Source: ABdhPJzjKGUVA/MU3if7G/38erCuSrsG3UTt9u//MEEn/WGslt9fIIYhmXXIsbH6L0FlpdMCZ1OrFueu6Rarmw==
+        bh=qypWKHXedF8/KF4Xvr3+aRHP7U3dz5Tf83jt6mtBndg=;
+        b=fMvhOd051VAhIkEQPrqlSIM2H1FUeb+1KEqF7a5S3C49ItaQfTOPaERYrFGcxU+I3w
+         Fx7Q8xlRsm5I64AW3w6kW1gHnDrZ0F3SBXlQzf4Z/0BqOWxAZc6oE74IYrtReYf8Gl4q
+         Dvo6wJRb2lkVvEXkvATOLyMaPEP7r+naQrd48r+NYnqF+uEPZAiAJvpAaZWG4d1iY/fJ
+         F89vET/yQqnH96S866t0Aw8rZW/GicitSH10sHXAbHqiOySrmyTv71FTDJrhiyJYmghD
+         UDjixd/a97yiVW3ufZYGYDSHW7KQEIObwzCsqrQ09vugy5mV90QUfuwSagX4Dbi2Mblw
+         RT6g==
+X-Gm-Message-State: AOAM530Ag+jKWxAexhnc1TjSZVvngKqmv8cZWP1JhstJ0jG7OvWtiQA9
+        +vGMIDGtFTApIszTIRjmv/OXOMcoe806NA==
+X-Google-Smtp-Source: ABdhPJwE60WXp8KeBIxu4dUHV/wIrnmb9FtigordbJCGRWafmNbNCRY4un4uphCWJLcNigZuC037SafvKmapEQ==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:ad4:58e7:: with SMTP id
- di7mr18236843qvb.36.1600453926645; Fri, 18 Sep 2020 11:32:06 -0700 (PDT)
-Date:   Fri, 18 Sep 2020 11:31:09 -0700
+ (user=dlatypov job=sendgmr) by 2002:a63:f34b:: with SMTP id
+ t11mr28170252pgj.111.1600453929259; Fri, 18 Sep 2020 11:32:09 -0700 (PDT)
+Date:   Fri, 18 Sep 2020 11:31:10 -0700
 In-Reply-To: <20200918183114.2571146-1-dlatypov@google.com>
-Message-Id: <20200918183114.2571146-8-dlatypov@google.com>
+Message-Id: <20200918183114.2571146-9-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20200918183114.2571146-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
-Subject: [RFC v1 07/12] kunit: mock: add internal mock infrastructure
+Subject: [RFC v1 08/12] kunit: mock: add basic matchers and actions
 From:   Daniel Latypov <dlatypov@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         David Gow <davidgow@google.com>,
@@ -69,535 +69,541 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Brendan Higgins <brendanhiggins@google.com>
 
-Add the core internal mechanisms that mocks are implemented with; in
-particular, this adds the mechanisms by which expectation on mocks are
-validated and by which actions may be supplied and then executed when
-mocks are called.
+Add basic matchers and actions needed for any kind of mocking to be
+useful; these matchers and actions are how expectations for mocks are
+described: what calls the mocks are expected to receive, and what the
+mock should do under those circumstances.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+Co-developed-by: Daniel Latypov <dlatypov@google.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- include/kunit/mock.h | 126 +++++++++++++++
- lib/kunit/Makefile   |   1 +
- lib/kunit/mock.c     | 364 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 491 insertions(+)
- create mode 100644 include/kunit/mock.h
- create mode 100644 lib/kunit/mock.c
+ include/kunit/mock.h     | 222 ++++++++++++++++++++++++++++++++
+ lib/kunit/Makefile       |   1 +
+ lib/kunit/common-mocks.c | 271 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 494 insertions(+)
+ create mode 100644 lib/kunit/common-mocks.c
 
 diff --git a/include/kunit/mock.h b/include/kunit/mock.h
-new file mode 100644
-index 000000000000..299b423fdd51
---- /dev/null
+index 299b423fdd51..13fdeb8730b5 100644
+--- a/include/kunit/mock.h
 +++ b/include/kunit/mock.h
-@@ -0,0 +1,126 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+@@ -123,4 +123,226 @@ struct mock_expectation *mock_add_matcher(struct mock *mock,
+ 					  struct mock_param_matcher *matchers[],
+ 					  int len);
+ 
++#define CONVERT_TO_ACTUAL_TYPE(type, ptr) (*((type *) ptr))
++
++/**
++ * DOC: Built In Matchers
++ *
++ * These are the matchers that can be used when matching arguments in
++ * :c:func:`KUNIT_EXPECT_CALL` (more can be defined manually).
++ *
++ * For example, there's a matcher that matches any arguments:
++ *
++ * .. code-block:: c
++ *
++ *    struct mock_param_matcher *any(struct kunit *test);
++ *
++ * There are matchers for integers based on the binary condition:
++ *
++ * * eq: equals to
++ * * ne: not equal to
++ * * lt: less than
++ * * le: less than or equal to
++ * * gt: greater than
++ * * ge: greater than or equal to
++ *
++ * .. code-block:: c
++ *
++ *    struct mock_param_matcher *kunit_int_eq(struct kunit *test, int expected);
++ *    struct mock_param_matcher *kunit_int_ne(struct kunit *test, int expected);
++ *    struct mock_param_matcher *kunit_int_lt(struct kunit *test, int expected);
++ *    struct mock_param_matcher *kunit_int_le(struct kunit *test, int expected);
++ *    struct mock_param_matcher *kunit_int_gt(struct kunit *test, int expected);
++ *    struct mock_param_matcher *kunit_int_ge(struct kunit *test, int expected);
++ *
++ * For a detailed list, please see
++ * ``include/linux/mock.h``.
++ */
++
++/* Matches any argument */
++struct mock_param_matcher *kunit_any(struct kunit *test);
++
 +/*
-+ * Mocking API for KUnit.
-+ *
-+ * Copyright (C) 2020, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins@google.com>
++ * Matches different types of integers, the argument is compared to the
++ * `expected` field, based on the comparison defined.
 + */
++struct mock_param_matcher *kunit_u8_eq(struct kunit *test, u8 expected);
++struct mock_param_matcher *kunit_u8_ne(struct kunit *test, u8 expected);
++struct mock_param_matcher *kunit_u8_le(struct kunit *test, u8 expected);
++struct mock_param_matcher *kunit_u8_lt(struct kunit *test, u8 expected);
++struct mock_param_matcher *kunit_u8_ge(struct kunit *test, u8 expected);
++struct mock_param_matcher *kunit_u8_gt(struct kunit *test, u8 expected);
 +
-+#ifndef _KUNIT_MOCK_H
-+#define _KUNIT_MOCK_H
++struct mock_param_matcher *kunit_u16_eq(struct kunit *test, u16 expected);
++struct mock_param_matcher *kunit_u16_ne(struct kunit *test, u16 expected);
++struct mock_param_matcher *kunit_u16_le(struct kunit *test, u16 expected);
++struct mock_param_matcher *kunit_u16_lt(struct kunit *test, u16 expected);
++struct mock_param_matcher *kunit_u16_ge(struct kunit *test, u16 expected);
++struct mock_param_matcher *kunit_u16_gt(struct kunit *test, u16 expected);
 +
-+#include <linux/types.h>
-+#include <linux/tracepoint.h> /* For PARAMS(...) */
-+#include <kunit/test.h>
-+#include <kunit/kunit-stream.h>
-+#include <kunit/params.h>
++struct mock_param_matcher *kunit_u32_eq(struct kunit *test, u32 expected);
++struct mock_param_matcher *kunit_u32_ne(struct kunit *test, u32 expected);
++struct mock_param_matcher *kunit_u32_le(struct kunit *test, u32 expected);
++struct mock_param_matcher *kunit_u32_lt(struct kunit *test, u32 expected);
++struct mock_param_matcher *kunit_u32_ge(struct kunit *test, u32 expected);
++struct mock_param_matcher *kunit_u32_gt(struct kunit *test, u32 expected);
 +
-+/**
-+ * struct mock_param_matcher - represents a matcher used in a *call expectation*
-+ * @match: the function that performs the matching
-+ *
-+ * The matching function takes a couple of parameters:
-+ *
-+ * - ``this``: refers to the parent struct
-+ * - ``stream``: a &kunit_stream to which a detailed message should be added as
-+ *   to why the parameter matches or not
-+ * - ``param``: a pointer to the parameter to check for a match
-+ *
-+ * The matching function should return whether or not the passed parameter
-+ * matches.
-+ */
-+struct mock_param_matcher {
-+	bool (*match)(struct mock_param_matcher *this,
-+		      struct kunit_stream *stream,
-+		      const void *param);
-+};
++struct mock_param_matcher *kunit_u64_eq(struct kunit *test, u64 expected);
++struct mock_param_matcher *kunit_u64_ne(struct kunit *test, u64 expected);
++struct mock_param_matcher *kunit_u64_le(struct kunit *test, u64 expected);
++struct mock_param_matcher *kunit_u64_lt(struct kunit *test, u64 expected);
++struct mock_param_matcher *kunit_u64_ge(struct kunit *test, u64 expected);
++struct mock_param_matcher *kunit_u64_gt(struct kunit *test, u64 expected);
 +
-+#define MOCK_MAX_PARAMS 255
++struct mock_param_matcher *kunit_char_eq(struct kunit *test, char expected);
++struct mock_param_matcher *kunit_char_ne(struct kunit *test, char expected);
++struct mock_param_matcher *kunit_char_le(struct kunit *test, char expected);
++struct mock_param_matcher *kunit_char_lt(struct kunit *test, char expected);
++struct mock_param_matcher *kunit_char_ge(struct kunit *test, char expected);
++struct mock_param_matcher *kunit_char_gt(struct kunit *test, char expected);
 +
-+struct mock_matcher {
-+	struct mock_param_matcher *matchers[MOCK_MAX_PARAMS];
-+	int num;
-+};
++struct mock_param_matcher *kunit_uchar_eq(struct kunit *test,
++					 unsigned char expected);
++struct mock_param_matcher *kunit_uchar_ne(struct kunit *test,
++					 unsigned char expected);
++struct mock_param_matcher *kunit_uchar_le(struct kunit *test,
++					 unsigned char expected);
++struct mock_param_matcher *kunit_uchar_lt(struct kunit *test,
++					 unsigned char expected);
++struct mock_param_matcher *kunit_uchar_ge(struct kunit *test,
++					 unsigned char expected);
++struct mock_param_matcher *kunit_uchar_gt(struct kunit *test,
++					 unsigned char expected);
 +
-+/**
-+ * struct mock_action - Represents an action that a mock performs when
-+ *                      expectation is matched
-+ * @do_action: the action to perform
-+ *
-+ * The action function is given some parameters:
-+ *
-+ * - ``this``: refers to the parent struct
-+ * - ``params``: an array of pointers to the params passed into the mocked
-+ *   method or function. **The class argument is excluded for a mocked class
-+ *   method.**
-+ * - ``len``: size of ``params``
-+ *
-+ * The action function returns a pointer to the value that the mocked method
-+ * or function should be returning.
-+ */
-+struct mock_action {
-+	void *(*do_action)(struct mock_action *this,
-+			   const void **params,
-+			   int len);
-+};
++struct mock_param_matcher *kunit_schar_eq(struct kunit *test,
++					 signed char expected);
++struct mock_param_matcher *kunit_schar_ne(struct kunit *test,
++					 signed char expected);
++struct mock_param_matcher *kunit_schar_le(struct kunit *test,
++					 signed char expected);
++struct mock_param_matcher *kunit_schar_lt(struct kunit *test,
++					 signed char expected);
++struct mock_param_matcher *kunit_schar_ge(struct kunit *test,
++					 signed char expected);
++struct mock_param_matcher *kunit_schar_gt(struct kunit *test,
++					 signed char expected);
 +
-+/**
-+ * struct mock_expectation - represents a *call expectation* on a function.
-+ * @action: A &struct mock_action to perform when the function is called.
-+ * @max_calls_expected: maximum number of times an expectation may be called.
-+ * @min_calls_expected: minimum number of times an expectation may be called.
-+ * @retire_on_saturation: no longer match once ``max_calls_expected`` is
-+ *			  reached.
-+ *
-+ * Represents a *call expectation* on a function created with
-+ * KUNIT_EXPECT_CALL().
-+ */
-+struct mock_expectation {
-+	struct mock_action *action;
-+	int max_calls_expected;
-+	int min_calls_expected;
-+	bool retire_on_saturation;
-+	/* private: internal use only. */
-+	const char *expectation_name;
-+	struct list_head node;
-+	struct mock_matcher *matcher;
-+	int times_called;
-+};
++struct mock_param_matcher *kunit_short_eq(struct kunit *test, short expected);
++struct mock_param_matcher *kunit_short_ne(struct kunit *test, short expected);
++struct mock_param_matcher *kunit_short_le(struct kunit *test, short expected);
++struct mock_param_matcher *kunit_short_lt(struct kunit *test, short expected);
++struct mock_param_matcher *kunit_short_ge(struct kunit *test, short expected);
++struct mock_param_matcher *kunit_short_gt(struct kunit *test, short expected);
 +
-+struct mock_method {
-+	struct list_head node;
-+	const char *method_name;
-+	const void *method_ptr;
-+	struct mock_action *default_action;
-+	struct list_head expectations;
-+};
++struct mock_param_matcher *kunit_ushort_eq(struct kunit *test,
++					  unsigned short expected);
++struct mock_param_matcher *kunit_ushort_ne(struct kunit *test,
++					  unsigned short expected);
++struct mock_param_matcher *kunit_ushort_le(struct kunit *test,
++					  unsigned short expected);
++struct mock_param_matcher *kunit_ushort_lt(struct kunit *test,
++					  unsigned short expected);
++struct mock_param_matcher *kunit_ushort_ge(struct kunit *test,
++					  unsigned short expected);
++struct mock_param_matcher *kunit_ushort_gt(struct kunit *test,
++					  unsigned short expected);
 +
-+struct mock {
-+	struct kunit_post_condition parent;
-+	struct kunit *test;
-+	struct list_head methods;
-+	/* TODO(brendanhiggins@google.com): add locking to do_expect. */
-+	const void *(*do_expect)(struct mock *mock,
-+				 const char *method_name,
-+				 const void *method_ptr,
-+				 const char * const *param_types,
-+				 const void **params,
-+				 int len);
-+};
++struct mock_param_matcher *kunit_int_eq(struct kunit *test, int expected);
++struct mock_param_matcher *kunit_int_ne(struct kunit *test, int expected);
++struct mock_param_matcher *kunit_int_lt(struct kunit *test, int expected);
++struct mock_param_matcher *kunit_int_le(struct kunit *test, int expected);
++struct mock_param_matcher *kunit_int_gt(struct kunit *test, int expected);
++struct mock_param_matcher *kunit_int_ge(struct kunit *test, int expected);
 +
-+void mock_init_ctrl(struct kunit *test, struct mock *mock);
++struct mock_param_matcher *kunit_uint_eq(struct kunit *test,
++					unsigned int expected);
++struct mock_param_matcher *kunit_uint_ne(struct kunit *test,
++					unsigned int expected);
++struct mock_param_matcher *kunit_uint_lt(struct kunit *test,
++					unsigned int expected);
++struct mock_param_matcher *kunit_uint_le(struct kunit *test,
++					unsigned int expected);
++struct mock_param_matcher *kunit_uint_gt(struct kunit *test,
++					unsigned int expected);
++struct mock_param_matcher *kunit_uint_ge(struct kunit *test,
++					unsigned int expected);
 +
-+void mock_validate_expectations(struct mock *mock);
++struct mock_param_matcher *kunit_long_eq(struct kunit *test, long expected);
++struct mock_param_matcher *kunit_long_ne(struct kunit *test, long expected);
++struct mock_param_matcher *kunit_long_le(struct kunit *test, long expected);
++struct mock_param_matcher *kunit_long_lt(struct kunit *test, long expected);
++struct mock_param_matcher *kunit_long_ge(struct kunit *test, long expected);
++struct mock_param_matcher *kunit_long_gt(struct kunit *test, long expected);
 +
-+int mock_set_default_action(struct mock *mock,
-+			    const char *method_name,
-+			    const void *method_ptr,
-+			    struct mock_action *action);
++struct mock_param_matcher *kunit_ulong_eq(struct kunit *test,
++					 unsigned long expected);
++struct mock_param_matcher *kunit_ulong_ne(struct kunit *test,
++					 unsigned long expected);
++struct mock_param_matcher *kunit_ulong_le(struct kunit *test,
++					 unsigned long expected);
++struct mock_param_matcher *kunit_ulong_lt(struct kunit *test,
++					 unsigned long expected);
++struct mock_param_matcher *kunit_ulong_ge(struct kunit *test,
++					 unsigned long expected);
++struct mock_param_matcher *kunit_ulong_gt(struct kunit *test,
++					 unsigned long expected);
 +
-+struct mock_expectation *mock_add_matcher(struct mock *mock,
-+					  const char *method_name,
-+					  const void *method_ptr,
-+					  struct mock_param_matcher *matchers[],
-+					  int len);
++struct mock_param_matcher *kunit_longlong_eq(struct kunit *test,
++					    long long expected);
++struct mock_param_matcher *kunit_longlong_ne(struct kunit *test,
++					    long long expected);
++struct mock_param_matcher *kunit_longlong_le(struct kunit *test,
++					    long long expected);
++struct mock_param_matcher *kunit_longlong_lt(struct kunit *test,
++					    long long expected);
++struct mock_param_matcher *kunit_longlong_ge(struct kunit *test,
++					    long long expected);
++struct mock_param_matcher *kunit_longlong_gt(struct kunit *test,
++					    long long expected);
 +
-+#endif /* _KUNIT_MOCK_H */
++struct mock_param_matcher *kunit_ulonglong_eq(struct kunit *test,
++					     unsigned long long expected);
++struct mock_param_matcher *kunit_ulonglong_ne(struct kunit *test,
++					     unsigned long long expected);
++struct mock_param_matcher *kunit_ulonglong_le(struct kunit *test,
++					     unsigned long long expected);
++struct mock_param_matcher *kunit_ulonglong_lt(struct kunit *test,
++					     unsigned long long expected);
++struct mock_param_matcher *kunit_ulonglong_ge(struct kunit *test,
++					     unsigned long long expected);
++struct mock_param_matcher *kunit_ulonglong_gt(struct kunit *test,
++					     unsigned long long expected);
++
++/* Matches pointers. */
++struct mock_param_matcher *kunit_ptr_eq(struct kunit *test, void *expected);
++struct mock_param_matcher *kunit_ptr_ne(struct kunit *test, void *expected);
++struct mock_param_matcher *kunit_ptr_lt(struct kunit *test, void *expected);
++struct mock_param_matcher *kunit_ptr_le(struct kunit *test, void *expected);
++struct mock_param_matcher *kunit_ptr_gt(struct kunit *test, void *expected);
++struct mock_param_matcher *kunit_ptr_ge(struct kunit *test, void *expected);
++
++/* Matches memory sections and strings. */
++struct mock_param_matcher *kunit_memeq(struct kunit *test,
++				      const void *buf,
++				      size_t size);
++struct mock_param_matcher *kunit_streq(struct kunit *test, const char *str);
++
++struct mock_action *kunit_u8_return(struct kunit *test, u8 ret);
++struct mock_action *kunit_u16_return(struct kunit *test, u16 ret);
++struct mock_action *kunit_u32_return(struct kunit *test, u32 ret);
++struct mock_action *kunit_u64_return(struct kunit *test, u64 ret);
++struct mock_action *kunit_char_return(struct kunit *test, char ret);
++struct mock_action *kunit_uchar_return(struct kunit *test, unsigned char ret);
++struct mock_action *kunit_schar_return(struct kunit *test, signed char ret);
++struct mock_action *kunit_short_return(struct kunit *test, short ret);
++struct mock_action *kunit_ushort_return(struct kunit *test, unsigned short ret);
++struct mock_action *kunit_int_return(struct kunit *test, int ret);
++struct mock_action *kunit_uint_return(struct kunit *test, unsigned int ret);
++struct mock_action *kunit_long_return(struct kunit *test, long ret);
++struct mock_action *kunit_ulong_return(struct kunit *test, unsigned long ret);
++struct mock_action *kunit_longlong_return(struct kunit *test, long long ret);
++struct mock_action *kunit_ulonglong_return(struct kunit *test,
++					  unsigned long long ret);
++struct mock_action *kunit_ptr_return(struct kunit *test, void *ret);
++
+ #endif /* _KUNIT_MOCK_H */
 diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 1707660c8b1c..a51157970502 100644
+index a51157970502..a7a3c5e0a8bf 100644
 --- a/lib/kunit/Makefile
 +++ b/lib/kunit/Makefile
-@@ -1,6 +1,7 @@
- obj-$(CONFIG_KUNIT) +=			kunit.o
+@@ -2,6 +2,7 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
  
  kunit-objs +=				test.o \
-+					mock.o \
+ 					mock.o \
++					common-mocks.o \
  					string-stream.o \
  					assert.o \
  					kunit-stream.o \
-diff --git a/lib/kunit/mock.c b/lib/kunit/mock.c
+diff --git a/lib/kunit/common-mocks.c b/lib/kunit/common-mocks.c
 new file mode 100644
-index 000000000000..12fb88899451
+index 000000000000..b3a410fda63a
 --- /dev/null
-+++ b/lib/kunit/mock.c
-@@ -0,0 +1,364 @@
++++ b/lib/kunit/common-mocks.c
+@@ -0,0 +1,271 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Mocking API for KUnit.
++ * Common KUnit mock call arg matchers and formatters.
 + *
 + * Copyright (C) 2020, Google LLC.
 + * Author: Brendan Higgins <brendanhiggins@google.com>
 + */
 +
++#include <linux/kernel.h>
 +#include <kunit/mock.h>
 +
-+static bool mock_match_params(struct mock_matcher *matcher,
-+			      struct kunit_stream *stream,
-+			      const void **params,
-+			      int len)
++static bool match_any(struct mock_param_matcher *pmatcher,
++		      struct kunit_stream *stream,
++		      const void *actual)
 +{
-+	struct mock_param_matcher *param_matcher;
-+	bool ret = true, tmp;
++	kunit_stream_add(stream, "don't care");
++	return true;
++}
++
++static struct mock_param_matcher any_matcher = {
++	.match = match_any,
++};
++
++struct mock_param_matcher *kunit_any(struct kunit *test)
++{
++	return &any_matcher;
++}
++
++#define DEFINE_MATCHER_STRUCT(type_name, type)				       \
++		struct mock_##type_name##_matcher {			       \
++			struct mock_param_matcher matcher;		       \
++			type expected;					       \
++		}
++
++#define DEFINE_TO_MATCHER_STRUCT(type_name)				       \
++		struct mock_##type_name##_matcher *			       \
++		to_mock_##type_name##_matcher(				       \
++				struct mock_param_matcher *matcher)	       \
++		{							       \
++			return container_of(matcher,			       \
++					    struct mock_##type_name##_matcher, \
++					    matcher);			       \
++		}
++
++#define DEFINE_MATCH_FUNC(type_name, type, op_name, op)			       \
++		bool match_##type_name##_##op_name(			       \
++				struct mock_param_matcher *pmatcher,	       \
++				struct kunit_stream *stream,		       \
++				const void *pactual)			       \
++		{							       \
++			struct mock_##type_name##_matcher *matcher =	       \
++				to_mock_##type_name##_matcher(pmatcher);       \
++			type actual = *((type *) pactual);		       \
++			bool matches = actual op matcher->expected;	       \
++									       \
++			if (matches)					       \
++				kunit_stream_add(stream,		       \
++						 "%d "#op" %d",		       \
++						 actual,		       \
++						 matcher->expected);	       \
++			else						       \
++				kunit_stream_add(stream,		       \
++						 "%d not "#op" %d",	       \
++						 actual,		       \
++						 matcher->expected);	       \
++									       \
++			return matches;					       \
++		}
++
++#define DEFINE_MATCH_FACTORY(type_name, type, op_name)			       \
++		struct mock_param_matcher *kunit_##type_name##_##op_name(      \
++				struct kunit *test, type expected)	       \
++		{							       \
++			struct mock_##type_name##_matcher *matcher;	       \
++									       \
++			matcher = kunit_kmalloc(test,			       \
++					       sizeof(*matcher),	       \
++					       GFP_KERNEL);		       \
++			if (!matcher)					       \
++				return NULL;				       \
++									       \
++			matcher->matcher.match = match_##type_name##_##op_name;\
++			matcher->expected = expected;			       \
++			return &matcher->matcher;			       \
++		}
++
++#define DEFINE_MATCHER_WITH_TYPENAME(type_name, type)			       \
++		DEFINE_MATCHER_STRUCT(type_name, type);			       \
++		DEFINE_TO_MATCHER_STRUCT(type_name)			       \
++		DEFINE_MATCH_FUNC(type_name, type, eq, ==)		       \
++		DEFINE_MATCH_FACTORY(type_name, type, eq)		       \
++		DEFINE_MATCH_FUNC(type_name, type, ne, !=)		       \
++		DEFINE_MATCH_FACTORY(type_name, type, ne)		       \
++		DEFINE_MATCH_FUNC(type_name, type, le, <=)		       \
++		DEFINE_MATCH_FACTORY(type_name, type, le)		       \
++		DEFINE_MATCH_FUNC(type_name, type, lt, <)		       \
++		DEFINE_MATCH_FACTORY(type_name, type, lt)		       \
++		DEFINE_MATCH_FUNC(type_name, type, ge, >=)		       \
++		DEFINE_MATCH_FACTORY(type_name, type, ge)		       \
++		DEFINE_MATCH_FUNC(type_name, type, gt, >)		       \
++		DEFINE_MATCH_FACTORY(type_name, type, gt)
++
++#define DEFINE_MATCHER(type) DEFINE_MATCHER_WITH_TYPENAME(type, type)
++
++DEFINE_MATCHER(u8);
++DEFINE_MATCHER(u16);
++DEFINE_MATCHER(u32);
++DEFINE_MATCHER(u64);
++DEFINE_MATCHER(char);
++DEFINE_MATCHER_WITH_TYPENAME(uchar, unsigned char);
++DEFINE_MATCHER_WITH_TYPENAME(schar, signed char);
++DEFINE_MATCHER(short);
++DEFINE_MATCHER_WITH_TYPENAME(ushort, unsigned short);
++DEFINE_MATCHER(int);
++DEFINE_MATCHER_WITH_TYPENAME(uint, unsigned int);
++DEFINE_MATCHER(long);
++DEFINE_MATCHER_WITH_TYPENAME(ulong, unsigned long);
++DEFINE_MATCHER_WITH_TYPENAME(longlong, long long);
++DEFINE_MATCHER_WITH_TYPENAME(ulonglong, unsigned long long);
++
++DEFINE_MATCHER_WITH_TYPENAME(ptr, void *);
++
++struct mock_memeq_matcher {
++	struct mock_param_matcher matcher;
++	const void *expected;
++	size_t size;
++};
++
++static bool match_memeq(struct mock_param_matcher *pmatcher,
++			struct kunit_stream *stream,
++			const void *pactual)
++{
++	struct mock_memeq_matcher *matcher =
++			container_of(pmatcher,
++				     struct mock_memeq_matcher,
++				     matcher);
++	const void *actual = CONVERT_TO_ACTUAL_TYPE(const void *, pactual);
++	bool matches = !memcmp(actual, matcher->expected, matcher->size);
 +	int i;
 +
-+	BUG_ON(matcher->num != len);
++	for (i = 0; i < matcher->size; i++)
++		kunit_stream_add(stream, "%02x, ", ((const char *) actual)[i]);
++	if (matches)
++		kunit_stream_add(stream, "== ");
++	else
++		kunit_stream_add(stream, "!= ");
++	for (i = 0; i < matcher->size; i++)
++		kunit_stream_add(stream,
++			    "%02x, ",
++			    ((const char *) matcher->expected)[i]);
 +
-+	for (i = 0; i < matcher->num; i++) {
-+		param_matcher = matcher->matchers[i];
-+		kunit_stream_add(stream, "\t");
-+		tmp = param_matcher->match(param_matcher, stream, params[i]);
-+		ret = ret && tmp;
-+		kunit_stream_add(stream, "\n");
-+	}
-+
-+	return ret;
++	return matches;
 +}
 +
-+static const void *mock_do_expect(struct mock *mock,
-+				  const char *method_name,
-+				  const void *method_ptr,
-+				  const char * const *type_names,
-+				  const void **params,
-+				  int len);
-+
-+static void fail_and_flush(struct kunit *test, struct kunit_stream *stream)
++struct mock_param_matcher *kunit_memeq(struct kunit *test,
++				      const void *buf,
++				      size_t size)
 +{
-+	kunit_set_failure(test);
-+	kunit_stream_commit(stream);
-+}
++	struct mock_memeq_matcher *matcher;
 +
-+void mock_validate_expectations(struct mock *mock)
-+{
-+	struct mock_expectation *expectation, *expectation_safe;
-+	struct kunit_stream *stream;
-+	struct mock_method *method;
-+	int times_called;
-+
-+	stream = alloc_kunit_stream(mock->test, GFP_KERNEL);
-+	list_for_each_entry(method, &mock->methods, node) {
-+		list_for_each_entry_safe(expectation, expectation_safe,
-+					 &method->expectations, node) {
-+			times_called = expectation->times_called;
-+			if (!(expectation->min_calls_expected <= times_called &&
-+			      times_called <= expectation->max_calls_expected)
-+			    ) {
-+				kunit_stream_add(stream,
-+						 "Expectation was not called the specified number of times:\n\t");
-+				kunit_stream_add(stream,
-+						 "Function: %s, min calls: %d, max calls: %d, actual calls: %d\n",
-+						 method->method_name,
-+						 expectation->min_calls_expected,
-+						 expectation->max_calls_expected,
-+						 times_called);
-+				fail_and_flush(mock->test, stream);
-+			}
-+			list_del(&expectation->node);
-+		}
-+	}
-+}
-+
-+static void mock_validate_wrapper(struct kunit_post_condition *condition)
-+{
-+	struct mock *mock = container_of(condition, struct mock, parent);
-+
-+	mock_validate_expectations(mock);
-+}
-+
-+void mock_init_ctrl(struct kunit *test, struct mock *mock)
-+{
-+	mock->test = test;
-+	INIT_LIST_HEAD(&mock->methods);
-+	mock->do_expect = mock_do_expect;
-+	mock->parent.validate = mock_validate_wrapper;
-+	list_add_tail(&mock->parent.node, &test->post_conditions);
-+}
-+
-+static struct mock_method *mock_lookup_method(struct mock *mock,
-+					      const void *method_ptr)
-+{
-+	struct mock_method *ret;
-+
-+	list_for_each_entry(ret, &mock->methods, node) {
-+		if (ret->method_ptr == method_ptr)
-+			return ret;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct mock_method *mock_add_method(struct mock *mock,
-+					   const char *method_name,
-+					   const void *method_ptr)
-+{
-+	struct mock_method *method;
-+
-+	method = kunit_kzalloc(mock->test, sizeof(*method), GFP_KERNEL);
-+	if (!method)
-+		return NULL;
-+
-+	INIT_LIST_HEAD(&method->expectations);
-+	method->method_name = method_name;
-+	method->method_ptr = method_ptr;
-+	list_add_tail(&method->node, &mock->methods);
-+
-+	return method;
-+}
-+
-+static int mock_add_expectation(struct mock *mock,
-+				const char *method_name,
-+				const void *method_ptr,
-+				struct mock_expectation *expectation)
-+{
-+	struct mock_method *method;
-+
-+	method = mock_lookup_method(mock, method_ptr);
-+	if (!method) {
-+		method = mock_add_method(mock, method_name, method_ptr);
-+		if (!method)
-+			return -ENOMEM;
-+	}
-+
-+	list_add_tail(&expectation->node, &method->expectations);
-+
-+	return 0;
-+}
-+
-+struct mock_expectation *mock_add_matcher(struct mock *mock,
-+					  const char *method_name,
-+					  const void *method_ptr,
-+					  struct mock_param_matcher *matchers[],
-+					  int len)
-+{
-+	struct mock_expectation *expectation;
-+	struct mock_matcher *matcher;
-+	int ret;
-+
-+	expectation = kunit_kzalloc(mock->test,
-+				   sizeof(*expectation),
-+				   GFP_KERNEL);
-+	if (!expectation)
-+		return NULL;
-+
-+	matcher = kunit_kmalloc(mock->test, sizeof(*matcher), GFP_KERNEL);
++	matcher = kunit_kzalloc(test, sizeof(*matcher), GFP_KERNEL);
 +	if (!matcher)
 +		return NULL;
 +
-+	memcpy(&matcher->matchers, matchers, sizeof(*matchers) * len);
-+	matcher->num = len;
++	matcher->matcher.match = match_memeq;
++	matcher->expected = buf;
++	matcher->size = size;
 +
-+	expectation->matcher = matcher;
-+	expectation->max_calls_expected = 1;
-+	expectation->min_calls_expected = 1;
++	return &matcher->matcher;
++}
 +
-+	ret = mock_add_expectation(mock, method_name, method_ptr, expectation);
-+	if (ret < 0)
++struct mock_streq_matcher {
++	struct mock_param_matcher matcher;
++	const char *expected;
++};
++
++static bool match_streq(struct mock_param_matcher *pmatcher,
++			struct kunit_stream *stream,
++			const void *pactual)
++{
++	struct mock_streq_matcher *matcher =
++			container_of(pmatcher,
++				     struct mock_streq_matcher,
++				     matcher);
++	const char *actual = CONVERT_TO_ACTUAL_TYPE(const char *, pactual);
++	bool matches = !strcmp(actual, matcher->expected);
++
++	if (matches)
++		kunit_stream_add(stream, "%s == %s", actual, matcher->expected);
++	else
++		kunit_stream_add(stream, "%s != %s", actual, matcher->expected);
++
++	return matches;
++}
++
++struct mock_param_matcher *kunit_streq(struct kunit *test, const char *str)
++{
++	struct mock_streq_matcher *matcher;
++
++	matcher = kunit_kzalloc(test, sizeof(*matcher), GFP_KERNEL);
++	if (!matcher)
 +		return NULL;
 +
-+	return expectation;
++	matcher->matcher.match = match_streq;
++	matcher->expected = str;
++
++	return &matcher->matcher;
 +}
 +
-+int mock_set_default_action(struct mock *mock,
-+			    const char *method_name,
-+			    const void *method_ptr,
-+			    struct mock_action *action)
-+{
-+	struct mock_method *method;
-+
-+	method = mock_lookup_method(mock, method_ptr);
-+	if (!method) {
-+		method = mock_add_method(mock, method_name, method_ptr);
-+		if (!method)
-+			return -ENOMEM;
-+	}
-+
-+	method->default_action = action;
-+
-+	return 0;
-+}
-+
-+static void mock_format_param(struct kunit_stream *stream,
-+			      const char *type_name,
-+			      const void *param)
-+{
-+	/*
-+	 * Cannot find formatter, so just print the pointer of the
-+	 * symbol.
-+	 */
-+	kunit_stream_add(stream, "<%pS>", param);
-+}
-+
-+static void mock_add_method_declaration_to_stream(
-+		struct kunit_stream *stream,
-+		const char *function_name,
-+		const char * const *type_names,
-+		const void **params,
-+		int len)
-+{
-+	int i;
-+
-+	kunit_stream_add(stream, "%s(", function_name);
-+	for (i = 0; i < len; i++) {
-+		mock_format_param(stream, type_names[i], params[i]);
-+		if (i < len - 1)
-+			kunit_stream_add(stream, ", ");
-+	}
-+	kunit_stream_add(stream, ")\n");
-+}
-+
-+static struct kunit_stream *mock_initialize_failure_message(
-+		struct kunit *test,
-+		const char *function_name,
-+		const char * const *type_names,
-+		const void **params,
-+		int len)
-+{
-+	struct kunit_stream *stream;
-+
-+	stream = alloc_kunit_stream(test, GFP_KERNEL);
-+	if (!stream)
-+		return NULL;
-+
-+	kunit_stream_add(stream,
-+			 "EXPECTATION FAILED: no expectation for call: ");
-+	mock_add_method_declaration_to_stream(stream,
-+					      function_name,
-+					      type_names,
-+					      params,
-+					      len);
-+	return stream;
-+}
-+
-+static bool mock_is_expectation_retired(struct mock_expectation *expectation)
-+{
-+	return expectation->retire_on_saturation &&
-+			expectation->times_called ==
-+			expectation->max_calls_expected;
-+}
-+
-+static void mock_add_method_expectation_error(struct kunit *test,
-+					      struct kunit_stream *stream,
-+					      char *message,
-+					      struct mock *mock,
-+					      struct mock_method *method,
-+					      const char * const *type_names,
-+					      const void **params,
-+					      int len)
-+{
-+	kunit_stream_clear(stream);
-+	kunit_stream_add(stream, message);
-+	mock_add_method_declaration_to_stream(stream,
-+		method->method_name, type_names, params, len);
-+}
-+
-+static struct mock_expectation *mock_apply_expectations(
-+		struct mock *mock,
-+		struct mock_method *method,
-+		const char * const *type_names,
-+		const void **params,
-+		int len)
-+{
-+	struct kunit_stream *attempted_matching_stream;
-+	bool expectations_all_saturated = true;
-+	struct kunit *test = mock->test;
-+	struct kunit_stream *stream = alloc_kunit_stream(test, GFP_KERNEL);
-+	struct mock_expectation *ret;
-+
-+	if (list_empty(&method->expectations)) {
-+		mock_add_method_expectation_error(test, stream,
-+			"Method was called with no expectations declared: ",
-+			mock, method, type_names, params, len);
-+		kunit_stream_commit(stream);
-+		return NULL;
-+	}
-+
-+	attempted_matching_stream = mock_initialize_failure_message(
-+			test,
-+			method->method_name,
-+			type_names,
-+			params,
-+			len);
-+
-+	list_for_each_entry(ret, &method->expectations, node) {
-+		if (mock_is_expectation_retired(ret))
-+			continue;
-+		expectations_all_saturated = false;
-+
-+		kunit_stream_add(attempted_matching_stream,
-+				 "Tried expectation: %s, but\n",
-+				 ret->expectation_name);
-+		if (mock_match_params(ret->matcher,
-+			attempted_matching_stream, params, len)) {
-+			/*
-+			 * Matcher was found; we won't print, so clean up the
-+			 * log.
-+			 */
-+			kunit_stream_clear(attempted_matching_stream);
-+			return ret;
++#define DEFINE_RETURN_ACTION_STRUCT(type_name, type)			       \
++		struct mock_##type_name##_action {			       \
++			struct mock_action action;			       \
++			type ret;					       \
 +		}
-+	}
 +
-+	if (expectations_all_saturated) {
-+		mock_add_method_expectation_error(test, stream,
-+			"Method was called with fully saturated expectations: ",
-+			mock, method, type_names, params, len);
-+	} else {
-+		mock_add_method_expectation_error(test, stream,
-+			"Method called that did not match any expectations: ",
-+			mock, method, type_names, params, len);
-+		kunit_stream_append(stream, attempted_matching_stream);
-+	}
-+	fail_and_flush(test, stream);
-+	kunit_stream_clear(attempted_matching_stream);
-+	return NULL;
-+}
++#define DEFINE_RETURN_ACTION_FUNC(type_name, type)			       \
++		void *do_##type_name##_return(struct mock_action *paction,     \
++					      const void **params,	       \
++					      int len)			       \
++		{							       \
++			struct mock_##type_name##_action *action =	       \
++					container_of(paction,		       \
++						     struct mock_##type_name##_action,\
++						     action);		       \
++									       \
++			return (void *) &action->ret;			       \
++		}
 +
-+static const void *mock_do_expect(struct mock *mock,
-+				  const char *method_name,
-+				  const void *method_ptr,
-+				  const char * const *param_types,
-+				  const void **params,
-+				  int len)
-+{
-+	struct mock_expectation *expectation;
-+	struct mock_method *method;
-+	struct mock_action *action;
++#define DEFINE_RETURN_ACTION_FACTORY(type_name, type)			       \
++		struct mock_action *kunit_##type_name##_return(		       \
++				struct kunit *test,			       \
++				type ret)				       \
++		{							       \
++			struct mock_##type_name##_action *action;	       \
++									       \
++			action = kunit_kmalloc(test,			       \
++					      sizeof(*action),		       \
++					      GFP_KERNEL);		       \
++			if (!action)					       \
++				return NULL;				       \
++									       \
++			action->action.do_action = do_##type_name##_return;    \
++			action->ret = ret;				       \
++									       \
++			return &action->action;				       \
++		}
 +
-+	method = mock_lookup_method(mock, method_ptr);
-+	if (!method)
-+		return NULL;
++#define DEFINE_RETURN_ACTION_WITH_TYPENAME(type_name, type)		       \
++		DEFINE_RETURN_ACTION_STRUCT(type_name, type);		       \
++		DEFINE_RETURN_ACTION_FUNC(type_name, type);		       \
++		DEFINE_RETURN_ACTION_FACTORY(type_name, type)
 +
-+	expectation = mock_apply_expectations(mock,
-+					      method,
-+					      param_types,
-+					      params,
-+					      len);
-+	if (!expectation) {
-+		action = method->default_action;
-+	} else {
-+		expectation->times_called++;
-+		if (expectation->action)
-+			action = expectation->action;
-+		else
-+			action = method->default_action;
-+	}
-+	if (!action)
-+		return NULL;
++#define DEFINE_RETURN_ACTION(type) \
++		DEFINE_RETURN_ACTION_WITH_TYPENAME(type, type)
 +
-+	return action->do_action(action, params, len);
-+}
++DEFINE_RETURN_ACTION(u8);
++DEFINE_RETURN_ACTION(u16);
++DEFINE_RETURN_ACTION(u32);
++DEFINE_RETURN_ACTION(u64);
++DEFINE_RETURN_ACTION(char);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(uchar, unsigned char);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(schar, signed char);
++DEFINE_RETURN_ACTION(short);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(ushort, unsigned short);
++DEFINE_RETURN_ACTION(int);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(uint, unsigned int);
++DEFINE_RETURN_ACTION(long);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(ulong, unsigned long);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(longlong, long long);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(ulonglong, unsigned long long);
++DEFINE_RETURN_ACTION_WITH_TYPENAME(ptr, void *);
 -- 
 2.28.0.681.g6f77f65b4e-goog
 
