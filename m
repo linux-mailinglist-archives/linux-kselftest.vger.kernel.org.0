@@ -2,129 +2,275 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB2126FC45
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 14:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD4A26FEAD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 15:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbgIRMNN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Sep 2020 08:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbgIRMNI (ORCPT
+        id S1726891AbgIRNgn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Sep 2020 09:36:43 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:47382 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726863AbgIRNgm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 08:13:08 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27433C06178A
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 05:13:08 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id b12so5795935edz.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 05:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=le+49qeMoYWRiEHhru6tG/8VGXjg9SNJqhqTvJk1qpk=;
-        b=0BiUsPGSnuJXW5JQTU39UHmRTLNDfi7jJOSkypi0tNCA15smhA9ME1h/R1UaO/4xbq
-         kyo1f63q6EMOhHU00lzjtcfngDzP2/2W2TBdUkwY0mz5bvAG9SOvrNUeu1BACNTzJrDT
-         LYnmlDWwtuMkhNeyW1iozuM+niWWT2PDQrWPQmxox3rJQ+cG51CIKreVGpj5qDDhmY7L
-         saILPzlkN6DBgSea4r12W38ZqQk2tkFzGFUkzvdx2sMo3zZkIzaAXQKtcOQDVgdFfLKd
-         UghQ+HS14l/6qlNkwu+x0nb5mNiKoIfQTf3IRhUrlJzGqAHRknR3FjdZ3DaVwZv8P4eH
-         rvrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=le+49qeMoYWRiEHhru6tG/8VGXjg9SNJqhqTvJk1qpk=;
-        b=qJq9qNU9MXgCqZq3S2lOA0x0MtdBt5n+aii8PceKq295o5LwOampbhSRdCy9XxLUjg
-         lA2ZfPcnjhT3aF4fLtvNdihF68m8KkTTyhUrM7et4VYfBDxydT4rvjo450j0EAo4Oyn4
-         cs6cDGrYb2lTE2sewKhVy93J0/7N559iGtQEwL3rjvmk6SVvJ1+6UBHk8AoaHKDwCnRZ
-         aQmiyzWCTc8AgMwyS3eNPR+uIQ0fm0ZR2324dO+Sqe0O8xpeiQ6VgkW1EtuNgoNrmFVV
-         RMNw9U4YTP/+VzwKQ+nMTrOFv1/CQhFA0aJN/hpcVhd3mCfqm3IP+AxzwPdGQ4hpBOEO
-         lK1A==
-X-Gm-Message-State: AOAM531XO+cIhpz26sdIB9k1V9MpOFe9WHtgFCbKu2fq4Mpm7tHoCKZB
-        K+ouFJvUtFbYXzpx5YEhhhoPaQ==
-X-Google-Smtp-Source: ABdhPJyKjkptyqJsAy01GKrydbIkNu2sZeVapOZjiUlBmUdqZEUCrEEHBOKj+j5rztEhjWWwOnBb+g==
-X-Received: by 2002:a50:f687:: with SMTP id d7mr39719908edn.353.1600431186848;
-        Fri, 18 Sep 2020 05:13:06 -0700 (PDT)
-Received: from localhost.localdomain ([87.66.33.240])
-        by smtp.gmail.com with ESMTPSA id h64sm2084555edd.50.2020.09.18.05.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2020 05:13:06 -0700 (PDT)
-From:   Nicolas Rybowski <nicolas.rybowski@tessares.net>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Cc:     Nicolas Rybowski <nicolas.rybowski@tessares.net>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mptcp@lists.01.org,
-        netdev@vger.kernel.org
-Subject: [PATCH bpf-next v3 0/5] bpf: add MPTCP subflow support
-Date:   Fri, 18 Sep 2020 14:10:45 +0200
-Message-Id: <20200918121046.190240-6-nicolas.rybowski@tessares.net>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200918121046.190240-1-nicolas.rybowski@tessares.net>
-References: <20200918121046.190240-1-nicolas.rybowski@tessares.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 18 Sep 2020 09:36:42 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08IDYYtW098550;
+        Fri, 18 Sep 2020 13:35:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=vVO2dqI3Hu2lDSzIOuSUh07ftmDih38AG3cWYXUzy1U=;
+ b=MvynwSzWJ8nS7P3YOtthNt9ooTtkgdDWaUxtsa9GqoNbchSUrnDEYgfqAXKw9Kc+1/+t
+ Kf0ke/9EDk0flB4qIVTci/NYjRz+X9XBvzDEI6zvAWm7FyVZtla05ogCSZFvkqtskHXk
+ SVVzDeqBGlg/Mc905ZORKhdEMVHCSlWOSgntyZWE0fF3Mt2VoBHcXMl3D1yuO+AeHOSv
+ LpEhiLtigTgYzo8oqtsALqwc8qZRq2xJ0/FKawDGfiWLBmzVuD7mO+oMrsI77lW6vhnx
+ kHBNJAw7nw/TVdFLTubtsjLLr6umwCOE1Nb0XHmVIyQNlt5RIekYiIyz48ikDHkdlWaA jg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 33j91e0uny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Sep 2020 13:35:40 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08IDYwfv091789;
+        Fri, 18 Sep 2020 13:35:40 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33megbeqd5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Sep 2020 13:35:40 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08IDZYrg018285;
+        Fri, 18 Sep 2020 13:35:34 GMT
+Received: from localhost.uk.oracle.com (/10.175.217.104)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 18 Sep 2020 13:35:33 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
+Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v5 bpf-next 0/6] bpf: add helpers to support BTF-based kernel data display
+Date:   Fri, 18 Sep 2020 14:34:29 +0100
+Message-Id: <1600436075-2961-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009180111
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
+ clxscore=1011 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009180110
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously it was not possible to make a distinction between plain TCP
-sockets and MPTCP subflow sockets on the BPF_PROG_TYPE_SOCK_OPS hook.
+This series attempts to provide a simple way for BPF programs (and in
+future other consumers) to utilize BPF Type Format (BTF) information
+to display kernel data structures in-kernel.  The use case this
+functionality is applied to here is to support a snprintf()-like
+helper to copy a BTF representation of kernel data to a string,
+and a BPF seq file helper to display BTF data for an iterator.
 
-This patch series now enables a fine control of subflow sockets. In its
-current state, it allows to put different sockopt on each subflow from a
-same MPTCP connection (socket mark, TCP congestion algorithm, ...) using
-BPF programs.
+There is already support in kernel/bpf/btf.c for "show" functionality;
+the changes here generalize that support from seq-file specific
+verifier display to the more generic case and add another specific
+use case; rather than seq_printf()ing the show data, it is copied
+to a supplied string using a snprintf()-like function.  Other future
+consumers of the show functionality could include a bpf_printk_btf()
+function which printk()ed the data instead.  Oops messaging in
+particular would be an interesting application for such functionality.
 
-It should also be the basis of exposing MPTCP-specific fields through BPF.
+The above potential use case hints at a potential reply to
+a reasonable objection that such typed display should be
+solved by tracing programs, where the in-kernel tracing records
+data and the userspace program prints it out.  While this
+is certainly the recommended approach for most cases, I
+believe having an in-kernel mechanism would be valuable
+also.  Critically in BPF programs it greatly simplifies
+debugging and tracing of such data to invoking a simple
+helper.
 
-v2 -> v3:
-- minor modifications in new MPTCP selftests (Song). More details in patch notes.
-- rebase on latest bpf-next
-- the new is_mptcp field in bpf_tcp_sock is left as an __u32 to keep cohesion 
-with the is_fullsock field from bpf_sock_ops. Also it seems easier with a __u32 
-on the verifier side.
+One challenge raised in an earlier iteration of this work -
+where the BTF printing was implemented as a printk() format
+specifier - was that the amount of data printed per
+printk() was large, and other format specifiers were far
+simpler.  Here we sidestep that concern by printing
+components of the BTF representation as we go for the
+seq file case, and in the string case the snprintf()-like
+operation is intended to be a basis for perf event or
+ringbuf output.  The reasons for avoiding bpf_trace_printk
+are that
 
-v1 -> v2:
-- add basic mandatory selftests for the new helper and is_mptcp field (Alexei)
-- rebase on latest bpf-next
+1. bpf_trace_printk() strings are restricted in size and
+cannot display anything beyond trivial data structures; and
+2. bpf_trace_printk() is for debugging purposes only.
 
-Nicolas Rybowski (5):
-  bpf: expose is_mptcp flag to bpf_tcp_sock
-  mptcp: attach subflow socket to parent cgroup
-  bpf: add 'bpf_mptcp_sock' structure and helper
-  bpf: selftests: add MPTCP test base
-  bpf: selftests: add bpf_mptcp_sock() verifier tests
+As Alexei suggested, a bpf_trace_puts() helper could solve
+this in the future but it still would be limited by the
+1000 byte limit for traced strings.
 
- include/linux/bpf.h                           |  33 +++++
- include/uapi/linux/bpf.h                      |  15 +++
- kernel/bpf/verifier.c                         |  30 +++++
- net/core/filter.c                             |  13 +-
- net/mptcp/Makefile                            |   2 +
- net/mptcp/bpf.c                               |  72 +++++++++++
- net/mptcp/subflow.c                           |  27 ++++
- scripts/bpf_helpers_doc.py                    |   2 +
- tools/include/uapi/linux/bpf.h                |  15 +++
- tools/testing/selftests/bpf/config            |   1 +
- tools/testing/selftests/bpf/network_helpers.c |  37 +++++-
- tools/testing/selftests/bpf/network_helpers.h |   3 +
- .../testing/selftests/bpf/prog_tests/mptcp.c  | 118 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/mptcp.c     |  48 +++++++
- tools/testing/selftests/bpf/verifier/sock.c   |  63 ++++++++++
- 15 files changed, 473 insertions(+), 6 deletions(-)
- create mode 100644 net/mptcp/bpf.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/mptcp.c
- create mode 100644 tools/testing/selftests/bpf/progs/mptcp.c
+Default output for an sk_buff looks like this (zeroed fields
+are omitted):
+
+(struct sk_buff){
+ .transport_header = (__u16)65535,
+ .mac_header = (__u16)65535,
+ .end = (sk_buff_data_t)192,
+ .head = (unsigned char *)0x000000007524fd8b,
+ .data = (unsigned char *)0x000000007524fd8b,
+ .truesize = (unsigned int)768,
+ .users = (refcount_t){
+  .refs = (atomic_t){
+   .counter = (int)1,
+  },
+ },
+}
+
+Flags can modify aspects of output format; see patch 3
+for more details.
+
+Changes since v4:
+
+- Changed approach from a BPF trace event-centric design to one
+  utilizing a snprintf()-like helper and an iter helper (Alexei,
+  patches 3,5)
+- Added tests to verify BTF output (patch 4)
+- Added support to tests for verifying BTF type_id-based display
+  as well as type name via __builtin_btf_type_id (Andrii, patch 4).
+- Augmented task iter tests to cover the BTF-based seq helper.
+  Because a task_struct's BTF-based representation would overflow
+  the PAGE_SIZE limit on iterator data, the "struct fs_struct"
+  (task->fs) is displayed for each task instead (Alexei, patch 6).
+
+Changes since v3:
+
+- Moved to RFC since the approach is different (and bpf-next is
+  closed)
+- Rather than using a printk() format specifier as the means
+  of invoking BTF-enabled display, a dedicated BPF helper is
+  used.  This solves the issue of printk() having to output
+  large amounts of data using a complex mechanism such as
+  BTF traversal, but still provides a way for the display of
+  such data to be achieved via BPF programs.  Future work could
+  include a bpf_printk_btf() function to invoke display via
+  printk() where the elements of a data structure are printk()ed
+  one at a time.  Thanks to Petr Mladek, Andy Shevchenko and
+  Rasmus Villemoes who took time to look at the earlier printk()
+  format-specifier-focused version of this and provided feedback
+  clarifying the problems with that approach.
+- Added trace id to the bpf_trace_printk events as a means of
+  separating output from standard bpf_trace_printk() events,
+  ensuring it can be easily parsed by the reader.
+- Added bpf_trace_btf() helper tests which do simple verification
+  of the various display options.
+
+Changes since v2:
+
+- Alexei and Yonghong suggested it would be good to use
+  probe_kernel_read() on to-be-shown data to ensure safety
+  during operation.  Safe copy via probe_kernel_read() to a
+  buffer object in "struct btf_show" is used to support
+  this.  A few different approaches were explored
+  including dynamic allocation and per-cpu buffers. The
+  downside of dynamic allocation is that it would be done
+  during BPF program execution for bpf_trace_printk()s using
+  %pT format specifiers. The problem with per-cpu buffers
+  is we'd have to manage preemption and since the display
+  of an object occurs over an extended period and in printk
+  context where we'd rather not change preemption status,
+  it seemed tricky to manage buffer safety while considering
+  preemption.  The approach of utilizing stack buffer space
+  via the "struct btf_show" seemed like the simplest approach.
+  The stack size of the associated functions which have a
+  "struct btf_show" on their stack to support show operation
+  (btf_type_snprintf_show() and btf_type_seq_show()) stays
+  under 500 bytes. The compromise here is the safe buffer we
+  use is small - 256 bytes - and as a result multiple
+  probe_kernel_read()s are needed for larger objects. Most
+  objects of interest are smaller than this (e.g.
+  "struct sk_buff" is 224 bytes), and while task_struct is a
+  notable exception at ~8K, performance is not the priority for
+  BTF-based display. (Alexei and Yonghong, patch 2).
+- safe buffer use is the default behaviour (and is mandatory
+  for BPF) but unsafe display - meaning no safe copy is done
+  and we operate on the object itself - is supported via a
+  'u' option.
+- pointers are prefixed with 0x for clarity (Alexei, patch 2)
+- added additional comments and explanations around BTF show
+  code, especially around determining whether objects such
+  zeroed. Also tried to comment safe object scheme used. (Yonghong,
+  patch 2)
+- added late_initcall() to initialize vmlinux BTF so that it would
+  not have to be initialized during printk operation (Alexei,
+  patch 5)
+- removed CONFIG_BTF_PRINTF config option as it is not needed;
+  CONFIG_DEBUG_INFO_BTF can be used to gate test behaviour and
+  determining behaviour of type-based printk can be done via
+  retrieval of BTF data; if it's not there BTF was unavailable
+  or broken (Alexei, patches 4,6)
+- fix bpf_trace_printk test to use vmlinux.h and globals via
+  skeleton infrastructure, removing need for perf events
+  (Andrii, patch 8)
+
+Changes since v1:
+
+- changed format to be more drgn-like, rendering indented type info
+  along with type names by default (Alexei)
+- zeroed values are omitted (Arnaldo) by default unless the '0'
+  modifier is specified (Alexei)
+- added an option to print pointer values without obfuscation.
+  The reason to do this is the sysctls controlling pointer display
+  are likely to be irrelevant in many if not most tracing contexts.
+  Some questions on this in the outstanding questions section below...
+- reworked printk format specifer so that we no longer rely on format
+  %pT<type> but instead use a struct * which contains type information
+  (Rasmus). This simplifies the printk parsing, makes use more dynamic
+  and also allows specification by BTF id as well as name.
+- removed incorrect patch which tried to fix dereferencing of resolved
+  BTF info for vmlinux; instead we skip modifiers for the relevant
+  case (array element type determination) (Alexei).
+- fixed issues with negative snprintf format length (Rasmus)
+- added test cases for various data structure formats; base types,
+  typedefs, structs, etc.
+- tests now iterate through all typedef, enum, struct and unions
+  defined for vmlinux BTF and render a version of the target dummy
+  value which is either all zeros or all 0xff values; the idea is this
+  exercises the "skip if zero" and "print everything" cases.
+- added support in BPF for using the %pT format specifier in
+  bpf_trace_printk()
+- added BPF tests which ensure %pT format specifier use works (Alexei).
+
+Alan Maguire (6):
+  bpf: provide function to get vmlinux BTF information
+  bpf: move to generic BTF show support, apply it to seq files/strings
+  bpf: add bpf_btf_snprintf helper
+  selftests/bpf: add bpf_btf_snprintf helper tests
+  bpf: add bpf_seq_btf_write helper
+  selftests/bpf: add test for bpf_seq_btf_write helper
+
+ include/linux/bpf.h                                |   3 +
+ include/linux/btf.h                                |  40 +
+ include/uapi/linux/bpf.h                           |  78 ++
+ kernel/bpf/btf.c                                   | 978 ++++++++++++++++++---
+ kernel/bpf/helpers.c                               |   4 +
+ kernel/bpf/verifier.c                              |  18 +-
+ kernel/trace/bpf_trace.c                           | 133 +++
+ scripts/bpf_helpers_doc.py                         |   2 +
+ tools/include/uapi/linux/bpf.h                     |  78 ++
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c  |  66 ++
+ .../selftests/bpf/prog_tests/btf_snprintf.c        |  55 ++
+ .../selftests/bpf/progs/bpf_iter_task_btf.c        |  49 ++
+ .../selftests/bpf/progs/netif_receive_skb.c        | 260 ++++++
+ 13 files changed, 1656 insertions(+), 108 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_snprintf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_btf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/netif_receive_skb.c
 
 -- 
-2.28.0
+1.8.3.1
 
