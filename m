@@ -2,53 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 831EF270407
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 20:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FB427040A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 20:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbgIRSbm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Sep 2020 14:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        id S1726247AbgIRSb4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Sep 2020 14:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbgIRSbm (ORCPT
+        with ESMTP id S1726115AbgIRSb4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 14:31:42 -0400
+        Fri, 18 Sep 2020 14:31:56 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10947C0613CF
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:31:42 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id x10so6291361ybj.19
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:31:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62B1C0613CE
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:31:55 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b3so6345144ybg.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=DeXDuUtT3ERKXFaZ9czxvy+mnBXL+Q8IuCQwjq+CRG8=;
-        b=tYG3PAYZyuB+gJ3pWzCBZjfjLT7d3sDXpWSyPtQyYeyLXbJJdrq7j17QtuNuEnRNQK
-         IoQPWyuyfJu0OjMWuVEZ3facRh9WgLXK/LaSau4Lr7k7NniMv9zbCTlIVG97Sk/AfBL4
-         h8aXdmxAt4XTx3fN2q4B6CbR6UBeJwQnK414FyTcSaxYCRFq3W372Rk2dN1c5o0X4KL4
-         dQ4QuHO9X6DMhD7Bc64aEBZBr1ItgdUrDyjir04eLWfbeA367LTSSNJ13blp4tATY/oy
-         2hj3B4F+I1vV8xxONGAtRoDDu/Wu95tueyvoAAEro2UQx45pGSkKUY1Lws5gYc3/H70A
-         gyFw==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=PEmUDbjvrGtIt5ILMrydpet8OPOcVBultAlwDCtIyW8=;
+        b=RznnfiEAaqIT24xuzVZDm3+yTkIZ9ZI+dfka9s07Tixvv6TfioMLO+c88bNOUsjWVQ
+         BhqUKFWB3iVDAI0Q11S0V63UD2/SiSVChMdGBj3ETSyX+QjwpXsWuq/65Dp4lXJzbkPr
+         PIRnOjse6TDQ3RR9jAO+9qRLF97J/3OOpqvygZUEornKQJWLzANDy2W9UoqeAiK6T48X
+         UESrdJEsXN+VRIkHlJE0SUyt8BKMEg/jFkgTqy7rQq0xJEkRIP2zeODOzPx5a2mIxJYI
+         Hkn0aHFxqXViO5EuScFwkEkJtBuOAILBcEZTl4plQ6VtP/3wLx+cYntpPZwbOEZby04F
+         C0Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=DeXDuUtT3ERKXFaZ9czxvy+mnBXL+Q8IuCQwjq+CRG8=;
-        b=EGcot9KbWIhywWVZzXVtlCEm5W1UGKQDBSvyR2VRxMEbqU4xYGH+q0FMULZm4MOSAM
-         GF/Dj0pdKOES45i/2Vh/mSJPVO4vwcpIqOoMOQtib9Fu1yh+00NJp8VPK31Ookv1JcaO
-         yBmHAPhH9Zh7xroAoTz0uMQc2gtxDOxJV0r1G2Y/hPWVuwhtF1diQR0Yo4iCyrBpo6R9
-         eNiUaRUuXb+n5zuxd1XG6hYrULcekf3nT4OiJ7afTGt+XwpRybtguvJvnRY1qdkhcSrb
-         ewLr1C9PceDEYq/AADYA/2wWjSrOOsN0A/zqdmCXX4ONhK1ipjNqYGxAKGn6toTfkNr1
-         trzg==
-X-Gm-Message-State: AOAM530TrLQSwlG5ZldFuCn9/VUQxZ+F93jM9qBvkvZzcf2srRpTx/eu
-        S5C8cONFxmy/9wQD8uPBX0XJypvnHAftNw==
-X-Google-Smtp-Source: ABdhPJxj54cIniYTUS8GJ7IQ2SLQ8DyD9JSQR5BoXLZT7An3oX7WrlY1DKW/CX0tANCLPN/uegZLvvRSbKJHJw==
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=PEmUDbjvrGtIt5ILMrydpet8OPOcVBultAlwDCtIyW8=;
+        b=axjkqUjqO3zFuIx5iuKd9bR2uh7LBjvtwSEdmrx1JLL/7R8k5O42Cunx7MsIhd5PFT
+         ay8I6sEl9W/0ldDXUKE9BFZ3IHS7c7qzORochMmPLhaUNwY40Z/zgLzlvbx6wYC2HNp/
+         ysK1+FYRYtgV0NgvmHbV55qjBAlvLj+GoavDudnmtZAonORemXuFcqmcS/CQjI1ZfwOH
+         whi9Hznr7eobtxX0CkdhVgXQPBqq5kDJGj8SW/v2+mUORRSg6RKWWyqBew0tgJSqMaIb
+         LJreN5AjkoMvuf8v0pCIhz5Lz2yLGCnFtEqs0vfr5g393RDGwv2Wn31eVpWxY6TU5xZg
+         YKYw==
+X-Gm-Message-State: AOAM531H35ZmjkGVKBYeSkjBefkRhUtp0df5D6uZ85gk6wwsJAf7+7bJ
+        Ul54R7p0vBHZ8I6N0EK3FS1iAEs6pUjQ5w==
+X-Google-Smtp-Source: ABdhPJysajG+ug0OLvuv1HEarJBCsIqUKd6kDko+vGSXIDRbECOI4edlauAezU0MvGW8Vp2e7rEKCNR0BToPsw==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:a25:df13:: with SMTP id
- w19mr18988278ybg.145.1600453901181; Fri, 18 Sep 2020 11:31:41 -0700 (PDT)
-Date:   Fri, 18 Sep 2020 11:31:02 -0700
-Message-Id: <20200918183114.2571146-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a25:586:: with SMTP id
+ 128mr49834204ybf.484.1600453915060; Fri, 18 Sep 2020 11:31:55 -0700 (PDT)
+Date:   Fri, 18 Sep 2020 11:31:03 -0700
+In-Reply-To: <20200918183114.2571146-1-dlatypov@google.com>
+Message-Id: <20200918183114.2571146-2-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20200918183114.2571146-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
-Subject: [RFC v1 00/12] kunit: introduce class mocking support.
+Subject: [RFC v1 01/12] Revert "kunit: move string-stream.h to lib/kunit"
 From:   Daniel Latypov <dlatypov@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         David Gow <davidgow@google.com>,
@@ -64,117 +67,111 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-# Background
-KUnit currently lacks any first-class support for mocking.
-For an overview and discussion on the pros and cons, see
-https://martinfowler.com/articles/mocksArentStubs.html
+This reverts commit 109fb06fdc6f6788df7dfbc235f7636a38e28fd4.
 
-This patch set introduces the basic machinery needed for mocking:
-setting and validating expectations, setting default actions, etc.
+string-stream will be used by kunit mocking code to print messages about
+mock expectations.
+It makes the code signifcantly simpler if string-stream objects can be
+part of structs declared in mocking headers.
 
-Using that basic infrastructure, we add macros for "class mocking", as
-it's probably the easiest type of mocking to start with.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ include/kunit/assert.h                 | 3 +--
+ {lib => include}/kunit/string-stream.h | 0
+ lib/kunit/assert.c                     | 2 --
+ lib/kunit/string-stream-test.c         | 3 +--
+ lib/kunit/string-stream.c              | 3 +--
+ lib/kunit/test.c                       | 2 +-
+ 6 files changed, 4 insertions(+), 9 deletions(-)
+ rename {lib => include}/kunit/string-stream.h (100%)
 
-## Class mocking
-
-By "class mocking", we're referring mocking out function pointers stored
-in structs like:
-  struct sender {
-  	int (*send)(struct sender *sender, int data);
-  };
-
-After the necessary DEFINE_* macros, we can then write code like
-  struct MOCK(sender) mock_sender = CONSTRUCT_MOCK(sender, test);
-
-  /* Fake an error for a specific input. */
-  handle = KUNIT_EXPECT_CALL(send(<omitted>, kunit_int_eq(42)));
-  handle->action = kunit_int_return(test, -EINVAL);
-
-  /* Pass the mocked object to some code under test. */
-  KUNIT_EXPECT_EQ(test, -EINVAL, send_message(...));
-
-I.e. the goal is to make it easier to test
-1) with less dependencies (we don't need to setup a real `sender`)
-2) unusual/error conditions more easily.
-
-In the future, we hope to build upon this to support mocking in more
-contexts, e.g. standalone funcs, etc.
-
-# TODOs
-
-## Naming
-This introduces a number of new macros for dealing with mocks,
-e.g:
-  DEFINE_STRUCT_CLASS_MOCK(METHOD(foo), CLASS(example),
-                           RETURNS(int),
-                           PARAMS(struct example *, int));
-  ...
-  KUNIT_EXPECT_CALL(foo(mock_get_ctrl(mock_example), ...);
-For consistency, we could prefix everything with KUNIT, e.g.
-`KUNIT_DEFINE_STRUCT_CLASS_MOCK` and `kunit_mock_get_ctrl`, but it feels
-like the names might be long enough that they would hinder readability.
-
-## Usage
-For now the only use of class mocking is in kunit-example-test.c
-As part of changing this from an RFC to a real patch set, we're hoping
-to include at least one example.
-
-Pointers to bits of code where this would be useful that aren't too
-hairy would be appreciated.
-E.g. could easily add a test for tools/perf/ui/progress.h, e.g. that
-ui_progress__init() calls ui_progress_ops.init(), but that likely isn't
-useful to anyone.
-
-
-Brendan Higgins (9):
-  kunit: test: add kunit_stream a std::stream like logger
-  kunit: test: add concept of post conditions
-  checkpatch: add support for struct MOCK(foo) syntax
-  kunit: mock: add parameter list manipulation macros
-  kunit: mock: add internal mock infrastructure
-  kunit: mock: add basic matchers and actions
-  kunit: mock: add class mocking support
-  kunit: mock: add struct param matcher
-  kunit: mock: implement nice, strict and naggy mock distinctions
-
-Daniel Latypov (2):
-  Revert "kunit: move string-stream.h to lib/kunit"
-  kunit: expose kunit_set_failure() for use by mocking
-
-Marcelo Schmitt (1):
-  kunit: mock: add macro machinery to pick correct format args
-
- include/kunit/assert.h                 |   3 +-
- include/kunit/kunit-stream.h           |  94 +++
- include/kunit/mock.h                   | 902 +++++++++++++++++++++++++
- include/kunit/params.h                 | 305 +++++++++
- {lib => include}/kunit/string-stream.h |   2 +
- include/kunit/test.h                   |   9 +
- lib/kunit/Makefile                     |   9 +-
- lib/kunit/assert.c                     |   2 -
- lib/kunit/common-mocks.c               | 409 +++++++++++
- lib/kunit/kunit-example-test.c         |  90 +++
- lib/kunit/kunit-stream.c               | 110 +++
- lib/kunit/mock-macro-test.c            | 241 +++++++
- lib/kunit/mock-test.c                  | 531 +++++++++++++++
- lib/kunit/mock.c                       | 370 ++++++++++
- lib/kunit/string-stream-test.c         |   3 +-
- lib/kunit/string-stream.c              |   5 +-
- lib/kunit/test.c                       |  15 +-
- scripts/checkpatch.pl                  |   4 +
- 18 files changed, 3091 insertions(+), 13 deletions(-)
- create mode 100644 include/kunit/kunit-stream.h
- create mode 100644 include/kunit/mock.h
- create mode 100644 include/kunit/params.h
- rename {lib => include}/kunit/string-stream.h (95%)
- create mode 100644 lib/kunit/common-mocks.c
- create mode 100644 lib/kunit/kunit-stream.c
- create mode 100644 lib/kunit/mock-macro-test.c
- create mode 100644 lib/kunit/mock-test.c
- create mode 100644 lib/kunit/mock.c
-
-
-base-commit: 10b82d5176488acee2820e5a2cf0f2ec5c3488b6
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index ad889b539ab3..db6a0fca09b4 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -9,11 +9,10 @@
+ #ifndef _KUNIT_ASSERT_H
+ #define _KUNIT_ASSERT_H
+ 
++#include <kunit/string-stream.h>
+ #include <linux/err.h>
+-#include <linux/kernel.h>
+ 
+ struct kunit;
+-struct string_stream;
+ 
+ /**
+  * enum kunit_assert_type - Type of expectation/assertion.
+diff --git a/lib/kunit/string-stream.h b/include/kunit/string-stream.h
+similarity index 100%
+rename from lib/kunit/string-stream.h
+rename to include/kunit/string-stream.h
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index 33acdaa28a7d..9c12e30792ba 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -8,8 +8,6 @@
+ #include <kunit/assert.h>
+ #include <kunit/test.h>
+ 
+-#include "string-stream.h"
+-
+ void kunit_base_assert_format(const struct kunit_assert *assert,
+ 			      struct string_stream *stream)
+ {
+diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
+index 110f3a993250..121f9ab11501 100644
+--- a/lib/kunit/string-stream-test.c
++++ b/lib/kunit/string-stream-test.c
+@@ -6,11 +6,10 @@
+  * Author: Brendan Higgins <brendanhiggins@google.com>
+  */
+ 
++#include <kunit/string-stream.h>
+ #include <kunit/test.h>
+ #include <linux/slab.h>
+ 
+-#include "string-stream.h"
+-
+ static void string_stream_test_empty_on_creation(struct kunit *test)
+ {
+ 	struct string_stream *stream = alloc_string_stream(test, GFP_KERNEL);
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index 141789ca8949..151a0e7ac349 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -6,12 +6,11 @@
+  * Author: Brendan Higgins <brendanhiggins@google.com>
+  */
+ 
++#include <kunit/string-stream.h>
+ #include <kunit/test.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
+ 
+-#include "string-stream.h"
+-
+ struct string_stream_fragment_alloc_context {
+ 	struct kunit *test;
+ 	int len;
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c36037200310..670d1cc9c105 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -7,12 +7,12 @@
+  */
+ 
+ #include <kunit/test.h>
++#include <kunit/string-stream.h>
+ #include <linux/kernel.h>
+ #include <linux/kref.h>
+ #include <linux/sched/debug.h>
+ 
+ #include "debugfs.h"
+-#include "string-stream.h"
+ #include "try-catch-impl.h"
+ 
+ static void kunit_set_failure(struct kunit *test)
 -- 
 2.28.0.681.g6f77f65b4e-goog
 
