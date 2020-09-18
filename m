@@ -2,272 +2,397 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9642526FAE3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 12:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7825C26FC40
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 14:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgIRKry (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Sep 2020 06:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S1726716AbgIRMM7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Sep 2020 08:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgIRKru (ORCPT
+        with ESMTP id S1726713AbgIRMMx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 06:47:50 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8C9C061788;
-        Fri, 18 Sep 2020 03:47:49 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id q9so4868942wmj.2;
-        Fri, 18 Sep 2020 03:47:49 -0700 (PDT)
+        Fri, 18 Sep 2020 08:12:53 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96541C06178A
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 05:12:52 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id gr14so7858649ejb.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 05:12:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RXEWTobRs9s4LJElS8zg1xI5BJD4hPEpT7/WyMI0e3E=;
-        b=tLIzLF1385PXg1qesSX6Ao/H78e7i6GpdmrAz11ynssT3DtTjFVN2OJ5aykNxkqPVD
-         1wdd0ygyRWN03W9bYycXGfGflKa2zAulQT3+TFSXAr3G8XVwSgFoCNp4GtudmijXbVkQ
-         vXA4XqqaH/0+v5dfDffV7dwV08iwMe8lg45Gt9hacm8RaQKM6pGKgx4dvhpyg/4IkKDn
-         zT4OXsSSaMl3MSutU2MfWNZlKeuwCV/mBH4Uoum0XYJeuCWvnygWWshK1A7lJPGD4oDT
-         ITsb1PYfO17ipwV6UaekjbQAg6RZHvN76urKQjGUWDok5r2yevKby5vgYefS9VHz8vGy
-         XWig==
+        bh=PhrdaTSNLUxlusGwoTxFJq+hrRjF+9y+Lo9/SXLsLig=;
+        b=D7qxyxl88Zm4JNH8EYAr81ZO2nm0wNqMvtgtXm3k3y3897CPebHJxgl2XEAAgmLGES
+         5GOvqNm1ZAkRTfoBkTJqTpGIrOvVNuIcOeayUSlguuaaICBWSG1ev2cKZKOF+qdAWLpF
+         XLOCKUBC2NVPJBQCLVZVxqqzZS9CiNaLzmcmvKL8kMU7UuqdgzwDm1OyR/Ra9zAAhLjd
+         Y9SOZmY1WsIc2WF1zk5Pnw30W17vTSqzqpH6+J6KqYQ2K0E1g119uP1JeFXVJZp1cj1W
+         IpgOMYdC+/YHGIp+mABUzClQv8+XQcY2JTmj/lZbdLIpgt28FPmuPqCy3riaEQqQhiXb
+         37CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RXEWTobRs9s4LJElS8zg1xI5BJD4hPEpT7/WyMI0e3E=;
-        b=hRO7wvBHdPENMz+ONCVoWeg8qrwnH3yR7cdLkBF2dGo/tlHhJiEfOQEnyn74F5cdjg
-         wITEInsUly0uRFlWNugwBGWhY3iHrfXuepoRgNfTTGeCZnzwY5cralt3foFVtX5C7aGt
-         AkmtLK9QMXbn/71zxero8rbHPmwJZ2weRzZn/C8HX7p+JndR30l7LN8slsUfdvpYSHxZ
-         I30lAutPBxtTAQWfqJfGKXPMzQZDLJ7cAMf1T3VDOA7zRw84sW6BdnKpvhOVGJ8omAG2
-         dqZlhzPu8+/h3Vff1UfnDXIgLuFxIACnc+Pl4lN0co5O8BfmEkHl+tNKYIDELlAqXj1F
-         /GTA==
-X-Gm-Message-State: AOAM5306Q6ZO/YK2XeYveDK3k5Nea5FSHtmkT89RCPus+DYQpASnZFEE
-        hsu1bGJoz/Uy50ovr7E6dzI=
-X-Google-Smtp-Source: ABdhPJx+JMAvI8aS57FSOrkxf9jA7gU15ImEW1d0y0N9Gei37t0QRZBKOUQzrhl5UZIy8UQvPwZ93A==
-X-Received: by 2002:a7b:c210:: with SMTP id x16mr14534401wmi.37.1600426068480;
-        Fri, 18 Sep 2020 03:47:48 -0700 (PDT)
-Received: from trantor.home (cpc153975-seac28-2-0-cust722.7-2.cable.virginm.net. [81.109.38.211])
-        by smtp.gmail.com with ESMTPSA id h4sm5197846wrm.54.2020.09.18.03.47.47
+        bh=PhrdaTSNLUxlusGwoTxFJq+hrRjF+9y+Lo9/SXLsLig=;
+        b=U88bcBV4oUqf1S+0kD7ygCdXYqd7IxZXWZe7cwJRke26F5Z5/eb+W7uw2r6IRO8qU9
+         SfH8XsCvoYTh01eGH/j3DlQLI2fnLt1OC4Sf3MZQaizLr8SBl5Td5wddMq9UsfwOvMDc
+         th+uhRoU/iraweYx4XgGTaNnTvW5KfIAUgw2RnqY69bTZh0BUE6wK0JM9vbz1KWhzArr
+         0BBaRZCB2kIbkIs4gp3z15J06zCdyFFXQ+fC29xi00xf9rDB2ndEHYpFrXcsH7gj9AfQ
+         fIur2DVKlCiyAVHXVxC/sZWKbM6cr1kssE1hnf6mHujwDQZBLTj/0MqeM/doJG+/VF01
+         ybMw==
+X-Gm-Message-State: AOAM532K4T9UvaW9f1OUZMGlJE5CADozfgiyIj4jyHfjWB3Djyq2Tq8s
+        wbdhNiKUEqSdvBu1cQMvekKm4Q==
+X-Google-Smtp-Source: ABdhPJwicqcD55dRU4RYcXE1WqMUhpL0NB2TFr8YAzsTvRTo369mc6CQDlRcEkynYxMjjfsFqgm+pQ==
+X-Received: by 2002:a17:906:4107:: with SMTP id j7mr37149022ejk.533.1600431171171;
+        Fri, 18 Sep 2020 05:12:51 -0700 (PDT)
+Received: from localhost.localdomain ([87.66.33.240])
+        by smtp.gmail.com with ESMTPSA id h64sm2084555edd.50.2020.09.18.05.12.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2020 03:47:48 -0700 (PDT)
-From:   Boyan Karatotev <boian4o1@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Boyan Karatotev <boian4o1@gmail.com>,
-        Boyan Karatotev <boyan.karatotev@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v3 4/4] kselftests/arm64: add PAuth tests for single threaded consistency and differently initialized keys
-Date:   Fri, 18 Sep 2020 11:47:15 +0100
-Message-Id: <20200918104715.182310-5-boian4o1@gmail.com>
+        Fri, 18 Sep 2020 05:12:50 -0700 (PDT)
+From:   Nicolas Rybowski <nicolas.rybowski@tessares.net>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Cc:     Nicolas Rybowski <nicolas.rybowski@tessares.net>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v3 4/5] bpf: selftests: add MPTCP test base
+Date:   Fri, 18 Sep 2020 14:10:43 +0200
+Message-Id: <20200918121046.190240-4-nicolas.rybowski@tessares.net>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200918104715.182310-1-boian4o1@gmail.com>
-References: <20200918104715.182310-1-boian4o1@gmail.com>
+In-Reply-To: <20200918121046.190240-1-nicolas.rybowski@tessares.net>
+References: <20200918121046.190240-1-nicolas.rybowski@tessares.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Boyan Karatotev <boyan.karatotev@arm.com>
+This patch adds a base for MPTCP specific tests.
 
-PAuth adds 5 different keys that can be used to sign addresses.
+It is currently limited to the is_mptcp field in case of plain TCP
+connection because for the moment there is no easy way to get the subflow
+sk from a msk in userspace. This implies that we cannot lookup the
+sk_storage attached to the subflow sk in the sockops program.
 
-Add a test that verifies that the kernel initializes them to different
-values and preserves them across context switches.
-
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
-Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
+Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
 ---
- tools/testing/selftests/arm64/pauth/pac.c | 123 ++++++++++++++++++++++
- 1 file changed, 123 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-index b363ad6a0b50..592fe538506e 100644
---- a/tools/testing/selftests/arm64/pauth/pac.c
-+++ b/tools/testing/selftests/arm64/pauth/pac.c
-@@ -1,11 +1,14 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (C) 2020 ARM Limited
+Notes:
+    v2 -> v3:
+    - remove useless close_client_fd label (Song)
+    - remove error count increment (Song)
+    
+    v1 -> v2:
+    - new patch: mandatory selftests (Alexei)
+
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/network_helpers.c |  37 +++++-
+ tools/testing/selftests/bpf/network_helpers.h |   3 +
+ .../testing/selftests/bpf/prog_tests/mptcp.c  | 118 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/mptcp.c     |  48 +++++++
+ 5 files changed, 202 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/mptcp.c
+ create mode 100644 tools/testing/selftests/bpf/progs/mptcp.c
+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 2118e23ac07a..8377836ea976 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -39,3 +39,4 @@ CONFIG_BPF_JIT=y
+ CONFIG_BPF_LSM=y
+ CONFIG_SECURITY=y
+ CONFIG_LIRC=y
++CONFIG_MPTCP=y
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 12ee40284da0..85cbb683965c 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -14,6 +14,10 @@
+ #include "bpf_util.h"
+ #include "network_helpers.h"
  
-+#define _GNU_SOURCE
++#ifndef IPPROTO_MPTCP
++#define IPPROTO_MPTCP 262
++#endif
 +
- #include <sys/auxv.h>
- #include <sys/types.h>
- #include <sys/wait.h>
- #include <signal.h>
- #include <setjmp.h>
-+#include <sched.h>
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) ({						\
+ 			int __save = errno;				\
+@@ -66,8 +70,8 @@ static int settimeo(int fd, int timeout_ms)
  
- #include "../../kselftest_harness.h"
- #include "helper.h"
-@@ -17,6 +20,7 @@
-  * The VA space size is 48 bits. Bigger is opt-in.
-  */
- #define PAC_MASK (~0xff80ffffffffffff)
-+#define ARBITRARY_VALUE (0x1234)
- #define ASSERT_PAUTH_ENABLED() \
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
-@@ -61,13 +65,37 @@ int n_same(struct signatures *old, struct signatures *new, int nkeys)
- 	return res;
+ #define save_errno_close(fd) ({ int __save = errno; close(fd); errno = __save; })
+ 
+-int start_server(int family, int type, const char *addr_str, __u16 port,
+-		 int timeout_ms)
++static int start_server_proto(int family, int type, int protocol,
++			      const char *addr_str, __u16 port, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr = {};
+ 	socklen_t len;
+@@ -76,7 +80,7 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
+ 	if (make_sockaddr(family, addr_str, port, &addr, &len))
+ 		return -1;
+ 
+-	fd = socket(family, type, 0);
++	fd = socket(family, type, protocol);
+ 	if (fd < 0) {
+ 		log_err("Failed to create server socket");
+ 		return -1;
+@@ -104,6 +108,19 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
+ 	return -1;
  }
  
-+int n_same_single_set(struct signatures *sign, int nkeys)
++int start_server(int family, int type, const char *addr_str, __u16 port,
++		 int timeout_ms)
 +{
-+	size_t vals[nkeys];
-+	int same = 0;
-+
-+	vals[0] = sign->keyia & PAC_MASK;
-+	vals[1] = sign->keyib & PAC_MASK;
-+	vals[2] = sign->keyda & PAC_MASK;
-+	vals[3] = sign->keydb & PAC_MASK;
-+
-+	if (nkeys >= 4)
-+		vals[4] = sign->keyg & PAC_MASK;
-+
-+	for (int i = 0; i < nkeys - 1; i++) {
-+		for (int j = i + 1; j < nkeys; j++) {
-+			if (vals[i] == vals[j])
-+				same += 1;
-+		}
-+	}
-+	return same;
++	return start_server_proto(family, type, 0, addr_str, port, timeout_ms);
 +}
 +
- int exec_sign_all(struct signatures *signed_vals, size_t val)
++int start_mptcp_server(int family, const char *addr_str, __u16 port,
++		       int timeout_ms)
++{
++	return start_server_proto(family, SOCK_STREAM, IPPROTO_MPTCP, addr_str,
++				  port, timeout_ms);
++}
++
+ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
+ 		     int timeout_ms)
  {
- 	int new_stdin[2];
- 	int new_stdout[2];
- 	int status;
-+	int i;
- 	ssize_t ret;
- 	pid_t pid;
-+	cpu_set_t mask;
+@@ -153,7 +170,7 @@ static int connect_fd_to_addr(int fd,
+ 	return 0;
+ }
  
- 	ret = pipe(new_stdin);
- 	if (ret == -1) {
-@@ -81,6 +109,20 @@ int exec_sign_all(struct signatures *signed_vals, size_t val)
- 		return -1;
+-int connect_to_fd(int server_fd, int timeout_ms)
++static int connect_to_fd_proto(int server_fd, int protocol, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr;
+ 	struct sockaddr_in *addr_in;
+@@ -173,7 +190,7 @@ int connect_to_fd(int server_fd, int timeout_ms)
  	}
  
-+	/*
-+	 * pin this process and all its children to a single CPU, so it can also
-+	 * guarantee a context switch with its child
-+	 */
-+	sched_getaffinity(0, sizeof(mask), &mask);
-+
-+	for (i = 0; i < sizeof(cpu_set_t); i++)
-+		if (CPU_ISSET(i, &mask))
-+			break;
-+
-+	CPU_ZERO(&mask);
-+	CPU_SET(i, &mask);
-+	sched_setaffinity(0, sizeof(mask), &mask);
-+
- 	pid = fork();
- 	// child
- 	if (pid == 0) {
-@@ -205,6 +247,44 @@ TEST(pac_instructions_not_nop_generic)
- 	ASSERT_NE(0, keyg)  TH_LOG("keyg instructions did nothing");
+ 	addr_in = (struct sockaddr_in *)&addr;
+-	fd = socket(addr_in->sin_family, type, 0);
++	fd = socket(addr_in->sin_family, type, protocol);
+ 	if (fd < 0) {
+ 		log_err("Failed to create client socket");
+ 		return -1;
+@@ -192,6 +209,16 @@ int connect_to_fd(int server_fd, int timeout_ms)
+ 	return -1;
  }
  
-+TEST(single_thread_different_keys)
++int connect_to_fd(int server_fd, int timeout_ms)
 +{
-+	int same = 10;
-+	int nkeys = NKEYS;
-+	int tmp;
-+	struct signatures signed_vals;
-+	unsigned long hwcaps = getauxval(AT_HWCAP);
-+
-+	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
-+	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	if (!(hwcaps & HWCAP_PACG)) {
-+		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
-+		nkeys = NKEYS - 1;
-+	}
-+
-+	/*
-+	 * In Linux the PAC field can be up to 7 bits wide. Even if keys are
-+	 * different, there is about 5% chance for PACs to collide with
-+	 * different addresses. This chance rapidly increases with fewer bits
-+	 * allocated for the PAC (e.g. wider address). A comparison of the keys
-+	 * directly will be more reliable.
-+	 * All signed values need to be different at least once out of n
-+	 * attempts to be certain that the keys are different
-+	 */
-+	for (int i = 0; i < PAC_COLLISION_ATTEMPTS; i++) {
-+		if (nkeys == NKEYS)
-+			sign_all(&signed_vals, i);
-+		else
-+			sign_specific(&signed_vals, i);
-+
-+		tmp = n_same_single_set(&signed_vals, nkeys);
-+		if (tmp < same)
-+			same = tmp;
-+	}
-+
-+	ASSERT_EQ(0, same) TH_LOG("%d keys clashed every time", same);
++	return connect_to_fd_proto(server_fd, 0, timeout_ms);
 +}
 +
- /*
-  * fork() does not change keys. Only exec() does so call a worker program.
-  * Its only job is to sign a value and report back the resutls
-@@ -242,4 +322,47 @@ TEST(exec_changed_keys)
- 	ASSERT_EQ(0, same) TH_LOG("exec() did not change %d keys", same);
- }
++int connect_to_mptcp_fd(int server_fd, int timeout_ms)
++{
++	return connect_to_fd_proto(server_fd, IPPROTO_MPTCP, timeout_ms);
++}
++
+ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 7205f8afdba1..336423a789e9 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -35,7 +35,10 @@ extern struct ipv6_packet pkt_v6;
  
-+TEST(context_switch_keep_keys)
+ int start_server(int family, int type, const char *addr, __u16 port,
+ 		 int timeout_ms);
++int start_mptcp_server(int family, const char *addr, __u16 port,
++		       int timeout_ms);
+ int connect_to_fd(int server_fd, int timeout_ms);
++int connect_to_mptcp_fd(int server_fd, int timeout_ms);
+ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms);
+ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
+ 		     int timeout_ms);
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+new file mode 100644
+index 000000000000..9accf2cfce36
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++struct mptcp_storage {
++	__u32 invoked;
++	__u32 is_mptcp;
++};
++
++static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 is_mptcp)
 +{
-+	int ret;
-+	struct signatures trash;
-+	struct signatures before;
-+	struct signatures after;
++	int err = 0, cfd = client_fd;
++	struct mptcp_storage val;
 +
-+	ASSERT_PAUTH_ENABLED();
++	/* Currently there is no easy way to get back the subflow sk from the MPTCP
++	 * sk, thus we cannot access here the sk_storage associated to the subflow
++	 * sk. Also, there is no sk_storage associated with the MPTCP sk since it
++	 * does not trigger sockops events.
++	 * We silently pass this situation at the moment.
++	 */
++	if (is_mptcp == 1)
++		return 0;
 +
-+	sign_specific(&before, ARBITRARY_VALUE);
++	if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &cfd, &val) < 0)) {
++		perror("Failed to read socket storage");
++		return -1;
++	}
 +
-+	/* will context switch with a process with different keys at least once */
-+	ret = exec_sign_all(&trash, ARBITRARY_VALUE);
-+	ASSERT_EQ(0, ret) TH_LOG("failed to run worker");
++	if (val.invoked != 1) {
++		log_err("%s: unexpected invoked count %d != %d",
++			msg, val.invoked, 1);
++		err++;
++	}
 +
-+	sign_specific(&after, ARBITRARY_VALUE);
++	if (val.is_mptcp != is_mptcp) {
++		log_err("%s: unexpected bpf_tcp_sock.is_mptcp %d != %d",
++			msg, val.is_mptcp, is_mptcp);
++		err++;
++	}
 +
-+	ASSERT_EQ(before.keyia, after.keyia) TH_LOG("keyia changed after context switching");
-+	ASSERT_EQ(before.keyib, after.keyib) TH_LOG("keyib changed after context switching");
-+	ASSERT_EQ(before.keyda, after.keyda) TH_LOG("keyda changed after context switching");
-+	ASSERT_EQ(before.keydb, after.keydb) TH_LOG("keydb changed after context switching");
++	return err;
 +}
 +
-+TEST(context_switch_keep_keys_generic)
++static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
 +{
-+	int ret;
-+	struct signatures trash;
-+	size_t before;
-+	size_t after;
++	int client_fd, prog_fd, map_fd, err;
++	struct bpf_object *obj;
++	struct bpf_map *map;
 +
-+	ASSERT_GENERIC_PAUTH_ENABLED();
++	struct bpf_prog_load_attr attr = {
++		.prog_type = BPF_PROG_TYPE_SOCK_OPS,
++		.file = "./mptcp.o",
++		.expected_attach_type = BPF_CGROUP_SOCK_OPS,
++	};
 +
-+	before = keyg_sign(ARBITRARY_VALUE);
++	err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
++	if (err) {
++		log_err("Failed to load BPF object");
++		return -1;
++	}
 +
-+	/* will context switch with a process with different keys at least once */
-+	ret = exec_sign_all(&trash, ARBITRARY_VALUE);
-+	ASSERT_EQ(0, ret) TH_LOG("failed to run worker");
++	map = bpf_map__next(NULL, obj);
++	map_fd = bpf_map__fd(map);
 +
-+	after = keyg_sign(ARBITRARY_VALUE);
++	err = bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0);
++	if (err) {
++		log_err("Failed to attach BPF program");
++		goto close_bpf_object;
++	}
 +
-+	ASSERT_EQ(before, after) TH_LOG("keyg changed after context switching");
++	client_fd = is_mptcp ? connect_to_mptcp_fd(server_fd, 0) :
++			       connect_to_fd(server_fd, 0);
++	if (client_fd < 0) {
++		err = -1;
++		goto close_bpf_object;
++	}
++
++	err = is_mptcp ? verify_sk(map_fd, client_fd, "MPTCP subflow socket", 1) :
++			  verify_sk(map_fd, client_fd, "plain TCP socket", 0);
++
++	close(client_fd);
++
++close_bpf_object:
++	bpf_object__close(obj);
++	return err;
 +}
 +
- TEST_HARNESS_MAIN
++void test_mptcp(void)
++{
++	int server_fd, cgroup_fd;
++
++	cgroup_fd = test__join_cgroup("/mptcp");
++	if (CHECK_FAIL(cgroup_fd < 0))
++		return;
++
++	/* without MPTCP */
++	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	if (CHECK_FAIL(server_fd < 0))
++		goto with_mptcp;
++
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, false));
++
++	close(server_fd);
++
++with_mptcp:
++	/* with MPTCP */
++	server_fd = start_mptcp_server(AF_INET, NULL, 0, 0);
++	if (CHECK_FAIL(server_fd < 0))
++		goto close_cgroup_fd;
++
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, true));
++
++	close(server_fd);
++
++close_cgroup_fd:
++	close(cgroup_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/mptcp.c b/tools/testing/selftests/bpf/progs/mptcp.c
+new file mode 100644
+index 000000000000..be5ee8dac2b3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/mptcp.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++__u32 _version SEC("version") = 1;
++
++struct mptcp_storage {
++	__u32 invoked;
++	__u32 is_mptcp;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct mptcp_storage);
++} socket_storage_map SEC(".maps");
++
++SEC("sockops")
++int _sockops(struct bpf_sock_ops *ctx)
++{
++	struct mptcp_storage *storage;
++	struct bpf_tcp_sock *tcp_sk;
++	int op = (int)ctx->op;
++	struct bpf_sock *sk;
++
++	sk = ctx->sk;
++	if (!sk)
++		return 1;
++
++	storage = bpf_sk_storage_get(&socket_storage_map, sk, 0,
++				     BPF_SK_STORAGE_GET_F_CREATE);
++	if (!storage)
++		return 1;
++
++	if (op != BPF_SOCK_OPS_TCP_CONNECT_CB)
++		return 1;
++
++	tcp_sk = bpf_tcp_sock(sk);
++	if (!tcp_sk)
++		return 1;
++
++	storage->invoked++;
++	storage->is_mptcp = tcp_sk->is_mptcp;
++
++	return 1;
++}
 -- 
 2.28.0
 
