@@ -2,91 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0E726F4C2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 05:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C587326F5D6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Sep 2020 08:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbgIRDhp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Sep 2020 23:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
+        id S1726054AbgIRGWi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Sep 2020 02:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgIRDhn (ORCPT
+        with ESMTP id S1726022AbgIRGWi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Sep 2020 23:37:43 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E78C06174A
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 20:37:43 -0700 (PDT)
+        Fri, 18 Sep 2020 02:22:38 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177F5C06174A
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 23:22:38 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bt0035J9Yz9sRR;
-        Fri, 18 Sep 2020 13:37:39 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bt3fL2Pwyz9sRR;
+        Fri, 18 Sep 2020 16:22:34 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1600400259;
-        bh=f+WI+4Y5FqCAKO5vI/9vI4pfQazkTL/VYPrdXvYY8fc=;
+        s=201909; t=1600410154;
+        bh=APF+Hu9MA5D4HnG4laKM+f7u7SvD7NRYuT//39Fs6VQ=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=d/6/w5s6c9CO1f97Mol+q4eV4zfmEBkZqG2s4JuhiDKVhnNJWc5BrI+ZbKp2yPZXm
-         rLb+teRkc65mrjjFi+LJg8GF0cteV4C/iDp1HzFSLeUK/dNWZ3umckQ0LclSP5GfeG
-         waXRmi+DsFeLUFM7gpHcWFKIe9HGtH6ZDQe9EAnZM07N5jAVZCuKaHCqI8KjRYysWi
-         yVQZJJEDSU7s3+hfcQvRZdbs+BJ0EtylUCIAncVEyAzhORUMv9qVlvP2du5Im7ucvi
-         TlSUp4EMTrAqCyJPK066nR0sZ0PVZ+VvAODpl4clbLW+MKNT7nn8a0aWOfx6Rk0ZOW
-         b2AGwACZctcDw==
+        b=l7dNtbkM9rdm64fN3MmtDmKbUJqqvo0XqjGPRY26OL/JuHsWcWAlU+fdVo9xHrHxR
+         caKYIUL9BQg7CZQRu3ZxFtppBVoehgNzeHtHE8TpT95SV3M/T7SLVcAq6TW3wW5rqq
+         dTAUGu3j0ue7ItvpsE6ERycHGQSWthnScq0Y+cte/bB+gJufIcwj8OQG9BknS5z/h4
+         yUTALq2hbVNaQsWK0QW/kSxY//EkirQ7SA8bG5s/Iy1LHP7cr7TX947UBgh2LkCJbZ
+         fbmJEMNRZur46nOD0pNayZUFMWdSq3EHlgf3jfGFg9f3Jd1sFexgRhz1+MoRu/nLi0
+         sJFYRAP0mGe4g==
 From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/harness: Flush stdout before forking
-In-Reply-To: <e24df908-c50d-59ef-563c-9db24c819248@linuxfoundation.org>
-References: <20200917041519.3284582-1-mpe@ellerman.id.au> <CAMo8BfJ5j4nG0z1Bk00J=3xPM++J68Hp2idJ-D5aHT84-vOzsQ@mail.gmail.com> <e24df908-c50d-59ef-563c-9db24c819248@linuxfoundation.org>
-Date:   Fri, 18 Sep 2020 13:37:33 +1000
-Message-ID: <87o8m3oiv6.fsf@mpe.ellerman.id.au>
+To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kselftest@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] selftests/seccomp: fix ptrace tests on powerpc
+In-Reply-To: <20200917225100.GG314880@mussarela>
+References: <20200630164739.1268222-1-cascardo@canonical.com> <202009081505.D9FE52510B@keescook> <20200911180637.GI4002@mussarela> <875z8hrh2o.fsf@mpe.ellerman.id.au> <202009171536.7FACD19@keescook> <20200917225100.GG314880@mussarela>
+Date:   Fri, 18 Sep 2020 16:22:31 +1000
+Message-ID: <87imcbob88.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Shuah Khan <skhan@linuxfoundation.org> writes:
-> On 9/16/20 10:53 PM, Max Filippov wrote:
->> On Wed, Sep 16, 2020 at 9:16 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->>>
->>> The test harness forks() a child to run each test. Both the parent and
->>> the child print to stdout using libc functions. That can lead to
->>> duplicated (or more) output if the libc buffers are not flushed before
->>> forking.
->>>
->>> It's generally not seen when running programs directly, because stdout
->>> will usually be line buffered when it's pointing to a terminal.
->>>
->>> This was noticed when running the seccomp_bpf test, eg:
->>>
->>>    $ ./seccomp_bpf | tee test.log
->>>    $ grep -c "TAP version 13" test.log
->>>    2
->>>
->>> But we only expect the TAP header to appear once.
->>>
->>> It can be exacerbated using stdbuf to increase the buffer size:
->>>
->>>    $ stdbuf -o 1MB ./seccomp_bpf > test.log
->>>    $ grep -c "TAP version 13" test.log
->>>    13
->>>
->>> The fix is simple, we just flush stdout & stderr before fork. Usually
->>> stderr is unbuffered, but that can be changed, so flush it as well
->>> just to be safe.
->>>
->>> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->>> ---
->>>   tools/testing/selftests/kselftest_harness.h | 5 +++++
->>>   1 file changed, 5 insertions(+)
+Thadeu Lima de Souza Cascardo <cascardo@canonical.com> writes:
+> On Thu, Sep 17, 2020 at 03:37:16PM -0700, Kees Cook wrote:
+>> On Sun, Sep 13, 2020 at 10:34:23PM +1000, Michael Ellerman wrote:
+>> > Thadeu Lima de Souza Cascardo <cascardo@canonical.com> writes:
+>> > > On Tue, Sep 08, 2020 at 04:18:17PM -0700, Kees Cook wrote:
+>> > >> On Tue, Jun 30, 2020 at 01:47:39PM -0300, Thadeu Lima de Souza Cascardo wrote:
+>> > ...
+>> > >> > @@ -1809,10 +1818,15 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+>> > >> >  	EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>> > >> >  			: PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
+>> > >> >  
+>> > >> > -	if (!entry)
+>> > >> > +	if (!entry && !syscall_nr)
+>> > >> >  		return;
+>> > >> >  
+>> > >> > -	nr = get_syscall(_metadata, tracee);
+>> > >> > +	if (entry)
+>> > >> > +		nr = get_syscall(_metadata, tracee);
+>> > >> > +	else
+>> > >> > +		nr = *syscall_nr;
+>> > >> 
+>> > >> This is weird? Shouldn't get_syscall() be modified to do the right thing
+>> > >> here instead of depending on the extra arg?
+>> > >> 
+>> > >
+>> > > R0 might be clobered. Same documentation mentions it as volatile. So, during
+>> > > syscall exit, we can't tell for sure that R0 will have the original syscall
+>> > > number. So, we need to grab it during syscall enter, save it somewhere and
+>> > > reuse it. I used the test context/args for that.
+>> > 
+>> > The user r0 (in regs->gpr[0]) shouldn't be clobbered.
+>> > 
+>> > But it is modified if the tracer skips the syscall, by setting the
+>> > syscall number to -1. Or if the tracer changes the syscall number.
+>> > 
+>> > So if you need the original syscall number in the exit path then I think
+>> > you do need to save it at entry.
 >> 
->> Tested-by: Max Filippov <jcmvbkbc@gmail.com>
+>> ... the selftest code wants to test the updated syscall (-1 or
+>> whatever), so this sounds correct. Was this test actually failing on
+>> powerpc? (I'd really rather not split entry/exit if I don't have to.)
 >
-> Thank you both. Applying to linux-kselftest fixes for 5.9-rc7
+> Yes, it started failing when the return code started being changed as well.
+> Though ptrace can change the syscall at entry (IIRC), it can't change the
+> return code. And that is part of the ABI. If ppc is changed so it allows
+> changing the return code during ptrace entry, some strace uses will break. So
+> that is not an option.
 
-It can wait for v5.10 IMHO, but up to you.
+Yep.
+
+I don't know that it would break anything to change that part of the
+ptrace ABI, but it definitely could break things and it would be subtle,
+so it's not really an option.
+
+So for powerpc we do need the return code change done in the exit hook,
+sorry.
 
 cheers
