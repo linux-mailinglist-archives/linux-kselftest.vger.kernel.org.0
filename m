@@ -2,93 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A74A12726CE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Sep 2020 16:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD782727BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Sep 2020 16:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbgIUOSX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Sep 2020 10:18:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39738 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726395AbgIUOSX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Sep 2020 10:18:23 -0400
-Received: from gaia (unknown [31.124.44.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E1DF020BED;
-        Mon, 21 Sep 2020 14:18:21 +0000 (UTC)
-Date:   Mon, 21 Sep 2020 15:18:19 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Amit Daniel Kachhap <amit.kachhap@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Gabor Kertesz <gabor.kertesz@arm.com>
-Subject: Re: [PATCH 1/6] kselftest/arm64: Add utilities and a test to
- validate mte memory
-Message-ID: <20200921141817.GC13882@gaia>
-References: <20200901092719.9918-1-amit.kachhap@arm.com>
- <20200901092719.9918-2-amit.kachhap@arm.com>
+        id S1727570AbgIUOhB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Sep 2020 10:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727448AbgIUOhB (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Sep 2020 10:37:01 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB53C061755
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2020 07:37:00 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id q9so12382430wmj.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Sep 2020 07:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=googlenew;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v8pcZTN+i/7Fb4vyTfG/UopYgDCcumlDoCD0Nm0/ODM=;
+        b=BuWNVkVr+wdx6IkSh0we8UYHMffxew16ocu/iGlVvYfgUg4rEdJVZkztwR2qvUWYjb
+         lDc1zsfBltXWC/+nWZ+9wHihwIGvCc/Q6Wq9NOKrL3vZHrzzjpPOPlyTHZjB6x+wFY6o
+         f1CGSkr4HoW1CwUGvfjIjxF4VhJbuo01ipe7SbBU4fbK/1k2diIlFUUjVDNfxkTN1koc
+         5sXZk8Bkgawx9re+wKExncSEd750J/1+bCIneEXYBOm72sId9diP9GdgKobiWhtlxNVA
+         NhNdNxERkEbKiF8DVGGnDBLJdA86/ST/PkCdSmwz6SloR33+7bOPaik7waYy7BJwdhSu
+         io+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v8pcZTN+i/7Fb4vyTfG/UopYgDCcumlDoCD0Nm0/ODM=;
+        b=P4POM8jwLANRu2qABbHYZqKaozo5ndJJnUdBFvtfbd/Mp+ZBTYXTlG/yxXwSsMuEDx
+         ZQRRPAVdOBTjXbqOroA3FzWoF8fxkhWmKCT4JNJNw0HbhmbPG+21Txzcr2SHTrIyu5+0
+         ryWi2ctsvEV04n6YC3Bs0l37zDYIGqNv+n2eUytEL9IlknQgBArEGX2i8R7fdsleM24T
+         AVvs0Obk/bHXBZq1B4WNMlEMM/B4JeimnDLNF1qL683FnQx8wIA5hFIUKlWOiZZw98Rc
+         FThSNClsIBNexepb9n/aJYvdSX4rIGd2O2Pf2VE+A0kiRzRCJmMrvT3X9Qw1B4lTFAVO
+         /zDg==
+X-Gm-Message-State: AOAM532RTMG4rRu4OQQELF9Wi5T/SjkK8eJTq/mvHJVJ7fVE62HAoHIL
+        +COmyzIxFXU3dR0KOFMvD6cNfw==
+X-Google-Smtp-Source: ABdhPJyUhXBQD62+KY+Pt4EzYAFVHYmRbhAVbXQ3qfCQzil0ho1EGOP5684hLHI3efWhFKAYI1JaUg==
+X-Received: by 2002:a1c:f20b:: with SMTP id s11mr203831wmc.144.1600699019590;
+        Mon, 21 Sep 2020 07:36:59 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id c14sm20370753wrv.12.2020.09.21.07.36.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2020 07:36:58 -0700 (PDT)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Westphal <fw@strlen.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/7] xfrm: Add compat layer
+Date:   Mon, 21 Sep 2020 15:36:50 +0100
+Message-Id: <20200921143657.604020-1-dima@arista.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200901092719.9918-2-amit.kachhap@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 02:57:14PM +0530, Amit Daniel Kachhap wrote:
-> diff --git a/tools/testing/selftests/arm64/mte/mte_helper.S b/tools/testing/selftests/arm64/mte/mte_helper.S
-> new file mode 100644
-> index 000000000000..91af6d1293f8
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/mte/mte_helper.S
-> @@ -0,0 +1,116 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (C) 2020 ARM Limited */
-> +
-> +#include "mte_def.h"
-> +
-> +#define ENTRY(name) \
-> +	.globl name ;\
-> +	.p2align 2;\
-> +	.type name, @function ;\
-> +name:
-> +
-> +#define ENDPROC(name) \
-> +	.size name, .-name ;
-> +
-> +	.text
-> +/*
-> + * mte_insert_random_tag: Insert random tag and different from
-> + *			 the orginal tag if source pointer has it.
-> + * Input:
-> + *		x0 - source pointer with a tag/no-tag
-> + * Return:
-> + *		x0 - pointer with random tag
-> + */
-> +ENTRY(mte_insert_random_tag)
-> +	mov	x1, #0x0
-> +	gmi	x1, x0, x1
-> +	irg	x0, x0, x1
-> +	ret
-> +ENDPROC(mte_insert_random_tag)
+Changes since v2:
+- added struct xfrm_translator as API to register xfrm_compat.ko with
+  xfrm_state.ko. This allows compilation of translator as a loadable
+  module
+- fixed indention and collected reviewed-by (Johannes Berg)
+- moved boilerplate from commit messages into cover-letter (Steffen
+  Klassert)
+- found on KASAN build and fixed non-initialised stack variable usage
+  in the translator
 
-What was the reason for gmi here? The test fails when you have an
-include mask of 0x8000 (exclude mask 0x7fff) and x0 has tag 0xf. In this
-case we exclude the only allowed tag here, so the CPU falls back to the
-default tag 0.
+The resulting v2/v3 diff can be found here:
+https://gist.github.com/0x7f454c46/8f68311dfa1f240959fdbe7c77ed2259
 
-You can (a) stop the check_multiple_included_tags() earlier to have two
-allowed tags here, (b) clear the pointer old tag so that you don't end
-up in this scenario or (c) simply remove the gmi. My preference is the
-latter, we don't test the hardware here, we only want to check whether
-the kernel sets the GCR_EL1 correctly.
+Patches as a .git branch:
+https://github.com/0x7f454c46/linux/tree/xfrm-compat-v3
 
-BTW, you also remove mov x1, #0, just:
+Changes since v1:
+- reworked patches set to use translator
+- separated the compat layer into xfrm_compat.c,
+  compiled under XFRM_USER_COMPAT config
+- 32-bit messages now being sent in frag_list (like wext-core does)
+- instead of __packed add compat_u64 members in compat structures
+- selftest reworked to kselftest lib API
+- added netlink dump testing to the selftest
 
-	irg	x0, x0, xzr
+XFRM is disabled for compatible users because of the UABI difference.
+The difference is in structures paddings and in the result the size
+of netlink messages differ.
 
+Possibility for compatible application to manage xfrm tunnels was
+disabled by: the commmit 19d7df69fdb2 ("xfrm: Refuse to insert 32 bit
+userspace socket policies on 64 bit systems") and the commit 74005991b78a
+("xfrm: Do not parse 32bits compiled xfrm netlink msg on 64bits host").
+
+This is my second attempt to resolve the xfrm/compat problem by adding
+the 64=>32 and 32=>64 bit translators those non-visibly to a user
+provide translation between compatible user and kernel.
+Previous attempt was to interrupt the message ABI according to a syscall
+by xfrm_user, which resulted in over-complicated code [1].
+
+Florian Westphal provided the idea of translator and some draft patches
+in the discussion. In these patches, his idea is reused and some of his
+initial code is also present.
+
+There were a couple of attempts to solve xfrm compat problem:
+https://lkml.org/lkml/2017/1/20/733
+https://patchwork.ozlabs.org/patch/44600/
+http://netdev.vger.kernel.narkive.com/2Gesykj6/patch-net-next-xfrm-correctly-parse-netlink-msg-from-32bits-ip-command-on-64bits-host
+
+All the discussions end in the conclusion that xfrm should have a full
+compatible layer to correctly work with 32-bit applications on 64-bit
+kernels:
+https://lkml.org/lkml/2017/1/23/413
+https://patchwork.ozlabs.org/patch/433279/
+
+In some recent lkml discussion, Linus said that it's worth to fix this
+problem and not giving people an excuse to stay on 32-bit kernel:
+https://lkml.org/lkml/2018/2/13/752
+
+There is also an selftest for ipsec tunnels.
+It doesn't depend on any library and compat version can be easy
+build with: make CFLAGS=-m32 net/ipsec
+
+[1]: https://lkml.kernel.org/r/20180726023144.31066-1-dima@arista.com
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Florian Westphal <fw@strlen.de>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: Stephen Suryaputra <ssuryaextr@gmail.com>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: netdev@vger.kernel.org
+
+Dmitry Safonov (7):
+  xfrm: Provide API to register translator module
+  xfrm/compat: Add 64=>32-bit messages translator
+  xfrm/compat: Attach xfrm dumps to 64=>32 bit translator
+  netlink/compat: Append NLMSG_DONE/extack to frag_list
+  xfrm/compat: Add 32=>64-bit messages translator
+  xfrm/compat: Translate 32-bit user_policy from sockptr
+  selftest/net/xfrm: Add test for ipsec tunnel
+
+ MAINTAINERS                            |    1 +
+ include/net/xfrm.h                     |   33 +
+ net/netlink/af_netlink.c               |   47 +-
+ net/xfrm/Kconfig                       |   11 +
+ net/xfrm/Makefile                      |    1 +
+ net/xfrm/xfrm_compat.c                 |  625 +++++++
+ net/xfrm/xfrm_state.c                  |   77 +-
+ net/xfrm/xfrm_user.c                   |  110 +-
+ tools/testing/selftests/net/.gitignore |    1 +
+ tools/testing/selftests/net/Makefile   |    1 +
+ tools/testing/selftests/net/ipsec.c    | 2195 ++++++++++++++++++++++++
+ 11 files changed, 3066 insertions(+), 36 deletions(-)
+ create mode 100644 net/xfrm/xfrm_compat.c
+ create mode 100644 tools/testing/selftests/net/ipsec.c
+
+
+base-commit: ba4f184e126b751d1bffad5897f263108befc780
 -- 
-Catalin
+2.28.0
+
