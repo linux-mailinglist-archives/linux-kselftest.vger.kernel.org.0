@@ -2,54 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6698B271C5A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Sep 2020 09:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A562722A9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Sep 2020 13:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726324AbgIUHye (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Sep 2020 03:54:34 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:49555 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgIUHye (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Sep 2020 03:54:34 -0400
-Received: from ip5f5af089.dynamic.kabel-deutschland.de ([95.90.240.137] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kKGee-0001xR-V7; Mon, 21 Sep 2020 07:54:33 +0000
-Date:   Mon, 21 Sep 2020 09:54:32 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 4/4] selftests/clone3: Avoid OS-defined clone_args
-Message-ID: <20200921075432.u4gis3s2o5qrsb5g@wittgenstein>
-References: <20200919080637.259478-1-keescook@chromium.org>
- <20200919080637.259478-5-keescook@chromium.org>
+        id S1726696AbgIULgi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Sep 2020 07:36:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58274 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726460AbgIULgi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Sep 2020 07:36:38 -0400
+Received: from gaia (unknown [31.124.44.166])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DA9F52071A;
+        Mon, 21 Sep 2020 11:36:36 +0000 (UTC)
+Date:   Mon, 21 Sep 2020 12:36:34 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Amit Daniel Kachhap <amit.kachhap@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Gabor Kertesz <gabor.kertesz@arm.com>
+Subject: Re: [PATCH 1/6] kselftest/arm64: Add utilities and a test to
+ validate mte memory
+Message-ID: <20200921113633.GB13882@gaia>
+References: <20200901092719.9918-1-amit.kachhap@arm.com>
+ <20200901092719.9918-2-amit.kachhap@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200919080637.259478-5-keescook@chromium.org>
+In-Reply-To: <20200901092719.9918-2-amit.kachhap@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 01:06:37AM -0700, Kees Cook wrote:
-> As the UAPI headers start to appear in distros, we need to avoid outdated
-> versions of struct clone_args to be able to test modern features;
-> rename to "struct __clone_args". Additionally update the struct size
-> macro names to match UAPI names.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+On Tue, Sep 01, 2020 at 02:57:14PM +0530, Amit Daniel Kachhap wrote:
+> diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
+> new file mode 100644
+> index 000000000000..ac311919567d
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
+> @@ -0,0 +1,374 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (C) 2020 ARM Limited
+> +
+> +#include <fcntl.h>
+> +#include <sched.h>
+> +#include <signal.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +
+> +#include <linux/auxvec.h>
+> +#include <sys/auxv.h>
+> +#include <sys/mman.h>
+> +#include <sys/prctl.h>
+> +
+> +#include <asm/hwcap.h>
+> +
+> +#include "kselftest.h"
+> +#include "mte_common_util.h"
+> +#include "mte_def.h"
+> +
+> +/* The temp file must be created in a tmpfs filesystem */
+> +#ifdef ANDROID
+> +# define TEMPFILENAME    "/storage/tmp_XXXXXX"
+> +#else
+> +# define TEMPFILENAME    "/tmp/tmp_XXXXXX"
+> +#endif
 
-Looks good, thanks!
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+That's not guaranteed to be tmpfs (it's not on my Debian install). I
+think you'd have a better chance with /dev/shm/tmp_XXXXXX.
+
+-- 
+Catalin
