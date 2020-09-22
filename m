@@ -2,87 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA85727495D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Sep 2020 21:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EFA274D3E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Sep 2020 01:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726629AbgIVToX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Sep 2020 15:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S1726871AbgIVXV4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Sep 2020 19:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726607AbgIVToX (ORCPT
+        with ESMTP id S1726846AbgIVXVy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Sep 2020 15:44:23 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90479C0613D0
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2020 12:44:23 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id b124so13393986pfg.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2020 12:44:23 -0700 (PDT)
+        Tue, 22 Sep 2020 19:21:54 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C88C0613D0
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2020 16:21:53 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id z40so17492285ybi.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Sep 2020 16:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Xz2HRr+8jfMHydCknS290/QHwlWp02k4FcjW+L/Em9I=;
-        b=ACQkpKsGyBx/9tLSKJxE1NFnviev8kAWHtBnoSKLT5BmiA8AMEf3biF7Dvxu/xrvkb
-         rEG+qpMKSnNwKiVYJ+OPsL6Cja3hCbjsHb8r83MGK7ya4LYrr+UVXnMVQRZcVJ/a9oa8
-         Lk6ydusXQZWGWSzcp11iod8TBdF2x1zUCzvFc=
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=tGcXn3sDm57uE3gVQiqH/xFvLNTI0/uhdj25yBP9OJM=;
+        b=cAARJB9tQz4JFwu+kbKkxA+YQXekK4ONh76aUVGk60ANDFmn3LzczEkxUmIX4dGUqE
+         5+GexyhewVbiCnAS31iStuersWlZoY0hTROpLlnUSlfVGrQHCJ2YtjP4qsvuUxs3VDh7
+         0LVX4wegpTtuYdKicQnFOMYiwk5PNRomalJTdjJ5fYR0jNP2Vw9EjgKuYUk0iI+OGons
+         5gnMGnR6RFuE7FhM0OmkQ375mP8hPvNt8oJ+AXJdM0lKaRwJ7H7wmg4i61m2rzjx4Aw1
+         yT7rcgrxPn1Wd2aPKjHIaDsFP4mx6wTg/AFk910wUEuvevcrWly6ccaxezXXXi5tE90G
+         ZlUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Xz2HRr+8jfMHydCknS290/QHwlWp02k4FcjW+L/Em9I=;
-        b=uk7RNqxdWt3QxnOCU/IP6h4dZgJ2BRJdxOJ5iR7PeAUSFvtL/TsrWhPM5nFamTGO/l
-         B2QyZ4VKJYEeKcEOM6VHH5BUfipFk01SxSza6K0ZLMrwFaeGBBlQec9oSwAs79DfcgW+
-         hMBj9tW2T/rdVZjGhStjdT05hQYLMTGwD5O5rxC/azFRQRT5TUfZtjKOqEjgwhpg3mcs
-         tGi6CR1HzBWCBcuyzaDaL0LqsgwTH0TaY4YAZ/L1D+pJJPN5FDf9fd2mkaS3JWSickcm
-         6GysOPQEbVJhiP2jFDzDrjf8VFnI8wdpBqb2bYCfMWZATYE3tSyLmm4XSHn/fmUPSlK2
-         mUlQ==
-X-Gm-Message-State: AOAM531ZGRUSdeLGh6hC6kaChucEfVhR5EN+1M8yu1Xq6hdaFHBpft4G
-        AyxDeQmBbadPlYdYZTbuLNBw7w==
-X-Google-Smtp-Source: ABdhPJwLjM/xlaOXDWl7V4N8DTEvXRhf788Id/eAhytvJdLPhBf2gP7Vr1izUKxLKTT9rrCbjA1OOw==
-X-Received: by 2002:a63:441a:: with SMTP id r26mr197932pga.290.1600803863106;
-        Tue, 22 Sep 2020 12:44:23 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u71sm16397776pfc.43.2020.09.22.12.44.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 12:44:22 -0700 (PDT)
-Date:   Tue, 22 Sep 2020 12:44:21 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        willy@infradead.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v6 1/9] kernel: Support TIF_SYSCALL_INTERCEPT flag
-Message-ID: <202009221243.6BC5635E@keescook>
-References: <20200904203147.2908430-1-krisman@collabora.com>
- <20200904203147.2908430-2-krisman@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200904203147.2908430-2-krisman@collabora.com>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=tGcXn3sDm57uE3gVQiqH/xFvLNTI0/uhdj25yBP9OJM=;
+        b=IFHpNOxJjPT77RdLWkMWrhczJ9E9rErpXjTT9Ye0/K7UMDbiFbjp95b8qBWuxeoyHL
+         XnhJ/hBmAhCjvasDrLb3YqFqQps1SqcOLmdbcKVQpkDruzEek13WRSD92vUUYO8Kjdxq
+         jzmRz1E9uEriKrpMr9qh36IaPeiNnWQkD7e/m83x3RTnFKBScZe/Y0B49xPK9XgaiUSV
+         5gk9nquCshFyluCbUBS2CkiB9c3wKBU4+s3DM9D11LxU0bPmNO+3yBqcoX9mWJLupFAP
+         0YUjEKywySzMrOrqFuP6QjDf26SwbbfC3ymHltKiFYZp9NwYFO/m7ft/c/S3d3sKvQ39
+         8xYA==
+X-Gm-Message-State: AOAM533/pbwGz7ApT6p8u9Smy7L6alH1ZejnGzC2Mr3Gl9pQzgVlXyE7
+        8SIQc8kn+BcZ3pNVYrMkFL0khCL2
+X-Google-Smtp-Source: ABdhPJxUgxwW4VA+vB29eR+veCkKgDowzHp+nyf81WrQ9ev1/t+X3X9+s1UrsuH08x6IBr4JM162UcMNug==
+Sender: "morbo via sendgmr" <morbo@fawn.svl.corp.google.com>
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:7220:84ff:fe0f:9f6a])
+ (user=morbo job=sendgmr) by 2002:a25:3453:: with SMTP id b80mr10708338yba.237.1600816912562;
+ Tue, 22 Sep 2020 16:21:52 -0700 (PDT)
+Date:   Tue, 22 Sep 2020 16:21:40 -0700
+Message-Id: <20200922232140.1994390-1-morbo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+Subject: [PATCH] kbuild: explicitly specify the build id style
+From:   Bill Wendling <morbo@google.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Will Deacon <will@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 04:31:39PM -0400, Gabriel Krisman Bertazi wrote:
-> Convert TIF_SECCOMP into a generic TI flag for any syscall interception
-> work being done by the kernel.  The actual type of work is exposed by a
-> new flag field outside of thread_info.  This ensures that the
-> syscall_intercept field is only accessed if struct seccomp has to be
-> accessed already, such that it doesn't incur in a much higher cost to
-> the seccomp path.
-> 
-> In order to avoid modifying every architecture at once, this patch has a
-> transition mechanism, such that architectures that define TIF_SECCOMP
-> continue to work by ignoring the syscall_intercept flag, as long as they
-> don't support other syscall interception mechanisms like the future
-> syscall user dispatch.  When migrating TIF_SECCOMP to
-> TIF_SYSCALL_INTERCEPT, they should adopt the semantics of checking the
-> syscall_intercept flag, like it is done in the common entry syscall
-> code, or even better, migrate to the common syscall entry code.
+ld's --build-id defaults to "sha1" style, while lld defaults to "fast".
+The build IDs are very different between the two, which may confuse
+programs that reference them.
 
-Can we "eat" all the other flags like ptrace, audit, etc, too? Doing
-this only for seccomp seems strange.
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+ Makefile                             | 4 ++--
+ arch/arm/vdso/Makefile               | 2 +-
+ arch/arm64/kernel/vdso/Makefile      | 2 +-
+ arch/arm64/kernel/vdso32/Makefile    | 2 +-
+ arch/mips/vdso/Makefile              | 2 +-
+ arch/riscv/kernel/vdso/Makefile      | 2 +-
+ arch/s390/kernel/vdso64/Makefile     | 2 +-
+ arch/sparc/vdso/Makefile             | 2 +-
+ arch/x86/entry/vdso/Makefile         | 2 +-
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 10 files changed, 11 insertions(+), 11 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 2b66d3398878..7e6f41c9803a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -973,8 +973,8 @@ KBUILD_CPPFLAGS += $(KCPPFLAGS)
+ KBUILD_AFLAGS   += $(KAFLAGS)
+ KBUILD_CFLAGS   += $(KCFLAGS)
+ 
+-KBUILD_LDFLAGS_MODULE += --build-id
+-LDFLAGS_vmlinux += --build-id
++KBUILD_LDFLAGS_MODULE += --build-id=sha1
++LDFLAGS_vmlinux += --build-id=sha1
+ 
+ ifeq ($(CONFIG_STRIP_ASM_SYMS),y)
+ LDFLAGS_vmlinux	+= $(call ld-option, -X,)
+diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+index a54f70731d9f..150ce6e6a5d3 100644
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -19,7 +19,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO32
+ ldflags-$(CONFIG_CPU_ENDIAN_BE8) := --be8
+ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
+ 	    -z max-page-size=4096 -nostdlib -shared $(ldflags-y) \
+-	    --hash-style=sysv --build-id \
++	    --hash-style=sysv --build-id=sha1 \
+ 	    -T
+ 
+ obj-$(CONFIG_VDSO) += vdso.o
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index 45d5cfe46429..871915097f9d 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -24,7 +24,7 @@ btildflags-$(CONFIG_ARM64_BTI_KERNEL) += -z force-bti
+ # routines, as x86 does (see 6f121e548f83 ("x86, vdso: Reimplement vdso.so
+ # preparation in build-time C")).
+ ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1 --hash-style=sysv	\
+-	     -Bsymbolic $(call ld-option, --no-eh-frame-hdr) --build-id -n	\
++	     -Bsymbolic $(call ld-option, --no-eh-frame-hdr) --build-id=sha1 -n	\
+ 	     $(btildflags-y) -T
+ 
+ ccflags-y := -fno-common -fno-builtin -fno-stack-protector -ffixed-x18
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index d6adb4677c25..4fa4b3fe8efb 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -128,7 +128,7 @@ VDSO_LDFLAGS += -Wl,-Bsymbolic -Wl,--no-undefined -Wl,-soname=linux-vdso.so.1
+ VDSO_LDFLAGS += -Wl,-z,max-page-size=4096 -Wl,-z,common-page-size=4096
+ VDSO_LDFLAGS += -nostdlib -shared -mfloat-abi=soft
+ VDSO_LDFLAGS += -Wl,--hash-style=sysv
+-VDSO_LDFLAGS += -Wl,--build-id
++VDSO_LDFLAGS += -Wl,--build-id=sha1
+ VDSO_LDFLAGS += $(call cc32-ldoption,-fuse-ld=bfd)
+ 
+ 
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index 57fe83235281..5810cc12bc1d 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -61,7 +61,7 @@ endif
+ # VDSO linker flags.
+ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
+ 	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
+-	-G 0 --eh-frame-hdr --hash-style=sysv --build-id -T
++	-G 0 --eh-frame-hdr --hash-style=sysv --build-id=sha1 -T
+ 
+ CFLAGS_REMOVE_vdso.o = -pg
+ 
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 478e7338ddc1..7d6a94d45ec9 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -49,7 +49,7 @@ $(obj)/vdso.so.dbg: $(src)/vdso.lds $(obj-vdso) FORCE
+ # refer to these symbols in the kernel code rather than hand-coded addresses.
+ 
+ SYSCFLAGS_vdso.so.dbg = -shared -s -Wl,-soname=linux-vdso.so.1 \
+-	-Wl,--build-id -Wl,--hash-style=both
++	-Wl,--build-id=sha1 -Wl,--hash-style=both
+ $(obj)/vdso-dummy.o: $(src)/vdso.lds $(obj)/rt_sigreturn.o FORCE
+ 	$(call if_changed,vdsold)
+ 
+diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
+index 4a66a1cb919b..edc473b32e42 100644
+--- a/arch/s390/kernel/vdso64/Makefile
++++ b/arch/s390/kernel/vdso64/Makefile
+@@ -19,7 +19,7 @@ KBUILD_AFLAGS_64 += -m64 -s
+ KBUILD_CFLAGS_64 := $(filter-out -m64,$(KBUILD_CFLAGS))
+ KBUILD_CFLAGS_64 += -m64 -fPIC -shared -fno-common -fno-builtin
+ ldflags-y := -fPIC -shared -nostdlib -soname=linux-vdso64.so.1 \
+-	     --hash-style=both --build-id -T
++	     --hash-style=both --build-id=sha1 -T
+ 
+ $(targets:%=$(obj)/%.dbg): KBUILD_CFLAGS = $(KBUILD_CFLAGS_64)
+ $(targets:%=$(obj)/%.dbg): KBUILD_AFLAGS = $(KBUILD_AFLAGS_64)
+diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
+index f44355e46f31..469dd23887ab 100644
+--- a/arch/sparc/vdso/Makefile
++++ b/arch/sparc/vdso/Makefile
+@@ -115,7 +115,7 @@ quiet_cmd_vdso = VDSO    $@
+ 		       -T $(filter %.lds,$^) $(filter %.o,$^) && \
+ 		sh $(srctree)/$(src)/checkundef.sh '$(OBJDUMP)' '$@'
+ 
+-VDSO_LDFLAGS = -shared --hash-style=both --build-id -Bsymbolic
++VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 -Bsymbolic
+ GCOV_PROFILE := n
+ 
+ #
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 215376d975a2..ebba25ed9a38 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -176,7 +176,7 @@ quiet_cmd_vdso = VDSO    $@
+ 		       -T $(filter %.lds,$^) $(filter %.o,$^) && \
+ 		 sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
+ 
+-VDSO_LDFLAGS = -shared --hash-style=both --build-id \
++VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 \
+ 	$(call ld-option, --eh-frame-hdr) -Bsymbolic
+ GCOV_PROFILE := n
+ 
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index fc946b7ac288..daf186f88a63 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -133,7 +133,7 @@ $(OUTPUT)/%:%.c
+ 
+ $(OUTPUT)/urandom_read: urandom_read.c
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(CC) $(LDFLAGS) -o $@ $< $(LDLIBS) -Wl,--build-id
++	$(Q)$(CC) $(LDFLAGS) -o $@ $< $(LDLIBS) -Wl,--build-id=sha1
+ 
+ $(OUTPUT)/test_stub.o: test_stub.c $(BPFOBJ)
+ 	$(call msg,CC,,$@)
 -- 
-Kees Cook
+2.28.0.681.g6f77f65b4e-goog
+
