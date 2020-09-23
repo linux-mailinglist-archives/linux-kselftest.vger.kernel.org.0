@@ -2,102 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BFF276278
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Sep 2020 22:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280CA2762F8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Sep 2020 23:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbgIWUt5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Sep 2020 16:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
+        id S1726650AbgIWVTr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Sep 2020 17:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbgIWUt5 (ORCPT
+        with ESMTP id S1726515AbgIWVTr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Sep 2020 16:49:57 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5934EC0613D2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 13:49:57 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id kk9so341943pjb.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 13:49:57 -0700 (PDT)
+        Wed, 23 Sep 2020 17:19:47 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84B6C0613D1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 14:19:46 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id 139so658293qkl.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 14:19:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vR/4IIWUNKe15foWwpTS+9b9UDo/Qa9Bzr4DnMS8/ac=;
-        b=cvjPnC0ctMeBB9Bs+hCjmPTbXFlh28AtvRC9s1zm2hw5bXo4ZM3zQP6zMGV/EI6SFo
-         ZCLDgL2ZjoUvZ0VvL5o3QAIC/+pFqbd6cKVOng6IcDOjV9fnoffLoUMEnL06XcnSYhD5
-         +9ECmXqHcYULlG40Fvwx9JHw4WrGQFnblwk/g=
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=TH7NITt1/yHWLLqIMcLUH9XOOzYm0k8mnM3wRK4YRh8=;
+        b=WgG8VKS18X+Z+jXJohpNfVgAhGpTnwAYZbGIWi+8sGilAcec/NVcKG5BlYbMnM8Qxo
+         QaAc4E3ThgHPxOZx+QeuMvr4ynnOTly5AHb11TJcpRvcycNfW+CU07vyXZTYaI4pTPNv
+         bOuaL8pokxQSWjwCaAbtkVyXrLnyfX+Udjpi4uwfMmg1Lda7d31f/Dfn4MfpbO9k6Koe
+         acj8k8k1BRIYBtX7hzST5Qxk1xBtt+to87EAliTUqE5H2lDFM9MGUQGcN28+kEmeLK8u
+         BV6956ogKNdVDwfmwOzK8UsCcgFWc8vdOFfHLV1lRdlB9jmCWVr4MVXWqZQpHeethTLS
+         I60Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vR/4IIWUNKe15foWwpTS+9b9UDo/Qa9Bzr4DnMS8/ac=;
-        b=sFdlRdfxAS6LQVb3DF/F4fxEnyQSlszsloOaK2tSvFlTdjvIgTdw4yqJTNWCL08J80
-         cz0LD2Jt/xy/Y+4tgL7RLFhgrEeiuoVle2hpv69cTQQdSYFKSKsNr1xJQ7LkwOYWKS8k
-         WSQm/y4bbL/UIpGX/6qOUYEDXIA96FaYxwifKCSE3BJOBVQiNv6MBKl4bU96rSsrIPCv
-         +lsVDFaROt6hIzgEmhWB0kfTGz1RKqHDaJVm3w7gPRCCf5uMV+iw/SShDZdQAD85OoVt
-         faQZkxgp2bn6kGxdynDkZXwCnd8XzeoVLDrxRkMk/lCnhbSv974nC0H5jeku7DULEJSe
-         Os5Q==
-X-Gm-Message-State: AOAM5336FU4YxdVFF//+cOJmiYGqghnDtE/JcNMr+6GoyjO1HsB1wnkt
-        Ac6vxhRaXwzUTsW0EMX/JMI+vw==
-X-Google-Smtp-Source: ABdhPJzAZbjKC++0LwmLMQfeQPatEJ5NMT1jot2+hrKf5dZand6yk9QurwfKoHW0Dn2mkHpfk4pEKA==
-X-Received: by 2002:a17:90b:3c3:: with SMTP id go3mr1124426pjb.64.1600894196835;
-        Wed, 23 Sep 2020 13:49:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m20sm514433pfa.115.2020.09.23.13.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 13:49:55 -0700 (PDT)
-Date:   Wed, 23 Sep 2020 13:49:54 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     tglx@linutronix.de, luto@kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        willy@infradead.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v6 1/9] kernel: Support TIF_SYSCALL_INTERCEPT flag
-Message-ID: <202009231349.4A25EAF@keescook>
-References: <20200904203147.2908430-1-krisman@collabora.com>
- <20200904203147.2908430-2-krisman@collabora.com>
- <202009221243.6BC5635E@keescook>
- <874kno6yct.fsf@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874kno6yct.fsf@collabora.com>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=TH7NITt1/yHWLLqIMcLUH9XOOzYm0k8mnM3wRK4YRh8=;
+        b=gnJvkGhShBlKDgaC2vlZuTPCy8Y6VLmtCNdo56HNzhGU3z+gAWznVisqSVYfqob6mr
+         A+gPn7h50+iniHdpCpTLas97jnYuppcV/zLV4ljLJjHT4MFCDIehdo2ZW0N8j2rc1rX4
+         Mca6mSCVS29nqKUrpk/LxxAd+5KVshKJQbingLBOXtdayk1ZmZcoKgrOqbZ2am65XqNl
+         oa4U+YYQccsqM2j/dfpc1e5/sXDhl2b1p14nFnSuQRDdc2cuL9MzBLxNiZc1EAXaTGlt
+         qpWywPa/ZgR8+rhGrqU2hTzmINBvyHzrVcQAHwgI4i83GoTHYbs5xPenphzTKoXPXS8W
+         wDLg==
+X-Gm-Message-State: AOAM532RDFTrQcX4WedzR8KnAE4b0vGq3sYFwaLa/ZtBo31cktfG6O5C
+        zoNArAIM1EUGig54SzgqGmfil6uIFF/m0YWA+FGdIg==
+X-Google-Smtp-Source: ABdhPJw43+sjSUo7FKERKf2xCxxc8JPOYcaeJHrxsWgON3azJYYkTt6PQXCKR9w1wBB51KBkOXp8oqPSBu6aZD1+dNNVJQ==
+Sender: "brendanhiggins via sendgmr" 
+        <brendanhiggins@mactruck.svl.corp.google.com>
+X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:1:c634:6bff:fe71:d8d1])
+ (user=brendanhiggins job=sendgmr) by 2002:a0c:eac5:: with SMTP id
+ y5mr2205279qvp.2.1600895985596; Wed, 23 Sep 2020 14:19:45 -0700 (PDT)
+Date:   Wed, 23 Sep 2020 14:19:38 -0700
+Message-Id: <20200923211938.3727976-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+Subject: [PATCH v1] kunit: tool: fix --alltests flag
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah@kernel.org, davidgow@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 04:18:26PM -0400, Gabriel Krisman Bertazi wrote:
-> Kees Cook <keescook@chromium.org> writes:
-> 
-> > On Fri, Sep 04, 2020 at 04:31:39PM -0400, Gabriel Krisman Bertazi wrote:
-> >> Convert TIF_SECCOMP into a generic TI flag for any syscall interception
-> >> work being done by the kernel.  The actual type of work is exposed by a
-> >> new flag field outside of thread_info.  This ensures that the
-> >> syscall_intercept field is only accessed if struct seccomp has to be
-> >> accessed already, such that it doesn't incur in a much higher cost to
-> >> the seccomp path.
-> >> 
-> >> In order to avoid modifying every architecture at once, this patch has a
-> >> transition mechanism, such that architectures that define TIF_SECCOMP
-> >> continue to work by ignoring the syscall_intercept flag, as long as they
-> >> don't support other syscall interception mechanisms like the future
-> >> syscall user dispatch.  When migrating TIF_SECCOMP to
-> >> TIF_SYSCALL_INTERCEPT, they should adopt the semantics of checking the
-> >> syscall_intercept flag, like it is done in the common entry syscall
-> >> code, or even better, migrate to the common syscall entry code.
-> >
-> > Can we "eat" all the other flags like ptrace, audit, etc, too? Doing
-> > this only for seccomp seems strange.
-> 
-> Hi Kees, Thanks again for the review.
-> 
-> Yes, we can, and I'm happy to follow up with that as part of my TIF
-> clean up work, but can we not block the current patchset to be merged
-> waiting for that, as this already grew a lot from the original feature
-> submission?
+Alltests flag evidently stopped working when run from outside of the
+root of the source tree, so fix that. Also add an additional broken
+config to the broken_on_uml config.
 
-In that case, I'd say just add the new TIF flag. The consolidation can
-come later.
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+---
+ tools/testing/kunit/configs/broken_on_uml.config |  1 +
+ tools/testing/kunit/kunit_kernel.py              | 15 ++++++++++-----
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
+index 239b9f03da2c..a7f0603d33f6 100644
+--- a/tools/testing/kunit/configs/broken_on_uml.config
++++ b/tools/testing/kunit/configs/broken_on_uml.config
+@@ -39,3 +39,4 @@
+ # CONFIG_QCOM_CPR is not set
+ # CONFIG_RESET_BRCMSTB_RESCAL is not set
+ # CONFIG_RESET_INTEL_GW is not set
++# CONFIG_ADI_AXI_ADC is not set
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index e20e2056cb38..1b1826500f61 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -53,18 +53,23 @@ class LinuxSourceTreeOperations(object):
+ 		except subprocess.CalledProcessError as e:
+ 			raise ConfigError(e.output)
+ 
+-	def make_allyesconfig(self):
++	def make_allyesconfig(self, build_dir, make_options):
+ 		kunit_parser.print_with_timestamp(
+ 			'Enabling all CONFIGs for UML...')
++		command = ['make', 'ARCH=um', 'allyesconfig']
++		if make_options:
++			command.extend(make_options)
++		if build_dir:
++			command += ['O=' + build_dir]
+ 		process = subprocess.Popen(
+-			['make', 'ARCH=um', 'allyesconfig'],
++			command,
+ 			stdout=subprocess.DEVNULL,
+ 			stderr=subprocess.STDOUT)
+ 		process.wait()
+ 		kunit_parser.print_with_timestamp(
+ 			'Disabling broken configs to run KUnit tests...')
+ 		with ExitStack() as es:
+-			config = open(KCONFIG_PATH, 'a')
++			config = open(get_kconfig_path(build_dir), 'a')
+ 			disable = open(BROKEN_ALLCONFIG_PATH, 'r').read()
+ 			config.write(disable)
+ 		kunit_parser.print_with_timestamp(
+@@ -161,9 +166,9 @@ class LinuxSourceTree(object):
+ 			return self.build_config(build_dir, make_options)
+ 
+ 	def build_um_kernel(self, alltests, jobs, build_dir, make_options):
+-		if alltests:
+-			self._ops.make_allyesconfig()
+ 		try:
++			if alltests:
++				self._ops.make_allyesconfig(build_dir, make_options)
+ 			self._ops.make_olddefconfig(build_dir, make_options)
+ 			self._ops.make(jobs, build_dir, make_options)
+ 		except (ConfigError, BuildError) as e:
+
+base-commit: 92a2b470086f68bf35eb9f94b6cb5ebdfac41b25
 -- 
-Kees Cook
+2.28.0.681.g6f77f65b4e-goog
+
