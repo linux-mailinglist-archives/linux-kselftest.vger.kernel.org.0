@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E052761DF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Sep 2020 22:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C272761F8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Sep 2020 22:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgIWUSg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Sep 2020 16:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S1726515AbgIWUXe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Sep 2020 16:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbgIWUSg (ORCPT
+        with ESMTP id S1726460AbgIWUXe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Sep 2020 16:18:36 -0400
+        Wed, 23 Sep 2020 16:23:34 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79D7C0613CE;
-        Wed, 23 Sep 2020 13:18:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C666C0613CE;
+        Wed, 23 Sep 2020 13:23:34 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: krisman)
-        with ESMTPSA id 9B0BA28B795
+        with ESMTPSA id E869829C1E8
 From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Kees Cook <keescook@chromium.org>, tglx@linutronix.de
-Cc:     luto@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, willy@infradead.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v6 1/9] kernel: Support TIF_SYSCALL_INTERCEPT flag
+To:     Kees Cook <keescook@chromium.org>
+Cc:     luto@kernel.org, tglx@linutronix.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        willy@infradead.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v6 7/9] x86: Enable Syscall User Dispatch
 Organization: Collabora
 References: <20200904203147.2908430-1-krisman@collabora.com>
-        <20200904203147.2908430-2-krisman@collabora.com>
-        <202009221243.6BC5635E@keescook>
-Date:   Wed, 23 Sep 2020 16:18:26 -0400
-In-Reply-To: <202009221243.6BC5635E@keescook> (Kees Cook's message of "Tue, 22
-        Sep 2020 12:44:21 -0700")
-Message-ID: <874kno6yct.fsf@collabora.com>
+        <20200904203147.2908430-8-krisman@collabora.com>
+        <202009221236.04AA334C2@keescook>
+Date:   Wed, 23 Sep 2020 16:23:26 -0400
+In-Reply-To: <202009221236.04AA334C2@keescook> (Kees Cook's message of "Tue,
+        22 Sep 2020 12:37:02 -0700")
+Message-ID: <87zh5g5jk1.fsf@collabora.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -42,39 +42,35 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Kees Cook <keescook@chromium.org> writes:
 
-> On Fri, Sep 04, 2020 at 04:31:39PM -0400, Gabriel Krisman Bertazi wrote:
->> Convert TIF_SECCOMP into a generic TI flag for any syscall interception
->> work being done by the kernel.  The actual type of work is exposed by a
->> new flag field outside of thread_info.  This ensures that the
->> syscall_intercept field is only accessed if struct seccomp has to be
->> accessed already, such that it doesn't incur in a much higher cost to
->> the seccomp path.
+> On Fri, Sep 04, 2020 at 04:31:45PM -0400, Gabriel Krisman Bertazi wrote:
+>> Syscall User Dispatch requirements are fully supported in x86. This
+>> patch flips the switch, marking it as supported.  This was tested
+>> against Syscall User Dispatch selftest.
 >> 
->> In order to avoid modifying every architecture at once, this patch has a
->> transition mechanism, such that architectures that define TIF_SECCOMP
->> continue to work by ignoring the syscall_intercept flag, as long as they
->> don't support other syscall interception mechanisms like the future
->> syscall user dispatch.  When migrating TIF_SECCOMP to
->> TIF_SYSCALL_INTERCEPT, they should adopt the semantics of checking the
->> syscall_intercept flag, like it is done in the common entry syscall
->> code, or even better, migrate to the common syscall entry code.
+>> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+>> ---
+>>  arch/x86/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 7101ac64bb20..56ac8de99021 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -150,6 +150,7 @@ config X86
+>>  	select HAVE_ARCH_COMPAT_MMAP_BASES	if MMU && COMPAT
+>>  	select HAVE_ARCH_PREL32_RELOCATIONS
+>>  	select HAVE_ARCH_SECCOMP_FILTER
+>> +	select HAVE_ARCH_SYSCALL_USER_DISPATCH
 >
-> Can we "eat" all the other flags like ptrace, audit, etc, too? Doing
-> this only for seccomp seems strange.
+> Is this needed at all? I think simply "the architecture uses the generic
+> entry code" is sufficient to enable it. (Especially since there's a top
+> level config for SYSCALL_USER_DISPATCH, it feels like overkill).
 
-Hi Kees, Thanks again for the review.
-
-Yes, we can, and I'm happy to follow up with that as part of my TIF
-clean up work, but can we not block the current patchset to be merged
-waiting for that, as this already grew a lot from the original feature
-submission?
-
-Also, Thomas do you mind this approach to reduce the usage of TIF_
-flags?  I remember you suggested simply expanding the variable to 64
-bits at some point.
-
-Thanks,
-
+Maybe it is not necessary.  The reason I have this is to prevent
+architectures migrating to the generic entry code from inadvertently
+starting to support this feature, without thinking in advance whether
+arch_syscall_is_vdso_sigreturn is needed.  If that is not a good reason,
+I'm happy to drop it.
 
 -- 
 Gabriel Krisman Bertazi
