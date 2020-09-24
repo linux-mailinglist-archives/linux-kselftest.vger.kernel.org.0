@@ -2,446 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 173F627725E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Sep 2020 15:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095572772B7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Sep 2020 15:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgIXNaa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Sep 2020 09:30:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51466 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728078AbgIXNa3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Sep 2020 09:30:29 -0400
-Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D8C2C2076D;
-        Thu, 24 Sep 2020 13:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600954228;
-        bh=ZF6ebB6ByDsVPLqbeCAiZ/D5kFit/eGAiTgw70Mqjh0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RyVUh10cgDLiIdEqoRsO4Go/maTrDx6hf/gA6CT7BTYPMUcxh8gbb1QtRGyTj9JHD
-         MW+bufqUeQloXkLoxL7WWTaiaNCtDvOQZPp8tGZPJENMn0a4jJo+B9RALkyJQaO6k5
-         1K8hF4tr6/W/LUOczKEP0RsH7toijiGM3qJp2MDc=
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        id S1728094AbgIXNkJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Sep 2020 09:40:09 -0400
+Received: from mail.efficios.com ([167.114.26.124]:43014 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727888AbgIXNkI (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 24 Sep 2020 09:40:08 -0400
+X-Greylist: delayed 407 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Sep 2020 09:40:08 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id AC5182D436C;
+        Thu, 24 Sep 2020 09:33:19 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id jVRFleH8muaP; Thu, 24 Sep 2020 09:33:19 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 6B8682D4834;
+        Thu, 24 Sep 2020 09:33:19 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6B8682D4834
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1600954399;
+        bh=n0Ma1mvUkm8thcjDR5/ATCG3mBGIJfRm+0QJYEa7HJM=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=R8JgVc56t7B3ZIeF+o/ZFrI7mki4iThekm3LuqcAekP4s1RkGjIKenOQlq/Jd8KLD
+         S3FNX26ezPo2l0nbjZo6j/SF0DynKydjGuQTZFlvQg2aW40Cjrnz3hPg6q320DWM5q
+         U9BV7YtpqosIVWfLGBnXUOihGZlVAhhrZYOcI8wS/wG18kL39U42wl5cn7UawlxcvR
+         ah34b9SjGsIg7HeybP3JBfGQ94aEUc9xvYePSNW4nuFIfXEEhs0at0FHFNGuVsbgzG
+         KTtKMlQzCsFn+cvCsBXZrm1KQWWrhbbtYbHIeeZLPqr/UWVBWdM6v2VMbgtP8cmqD2
+         cBirZ1Y1bN5Kg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id cuZ8Ybh6vSyP; Thu, 24 Sep 2020 09:33:19 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 5CBDE2D4756;
+        Thu, 24 Sep 2020 09:33:19 -0400 (EDT)
+Date:   Thu, 24 Sep 2020 09:33:19 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Oskolkov <posk@google.com>
+Cc:     paulmck <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: [PATCH v6 6/6] secretmem: test: add basic selftest for memfd_secret(2)
-Date:   Thu, 24 Sep 2020 16:29:04 +0300
-Message-Id: <20200924132904.1391-7-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200924132904.1391-1-rppt@kernel.org>
-References: <20200924132904.1391-1-rppt@kernel.org>
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Turner <pjt@google.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Peter Oskolkov <posk@posk.io>, shuah <shuah@kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>
+Message-ID: <1143241390.67886.1600954399326.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20200923233618.2572849-2-posk@google.com>
+References: <20200923233618.2572849-1-posk@google.com> <20200923233618.2572849-2-posk@google.com>
+Subject: Re: [PATCH v8 2/3] rseq/selftests: add rseq_offset_deref_addv
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3965 (ZimbraWebClient - FF80 (Linux)/8.8.15_GA_3963)
+Thread-Topic: rseq/selftests: add rseq_offset_deref_addv
+Thread-Index: YpoSNcdzzS1e6+zsawvuzl/Rfjrswg==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+----- On Sep 23, 2020, at 7:36 PM, Peter Oskolkov posk@google.com wrote:
 
-The test verifies that file descriptor created with memfd_secret does
-not allow read/write operations, that secret memory mappings respect
-RLIMIT_MEMLOCK and that remote accesses with process_vm_read() and
-ptrace() to the secret memory fail.
+The patch title should state that it only adds rseq_offset_deref_addv
+to x86-64. Considering that other architecture maintainers will look
+at it as inspiration for other architectures, we should also state in
+the commit message that architectures implementing it should define
+"RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV".
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- tools/testing/selftests/vm/.gitignore     |   1 +
- tools/testing/selftests/vm/Makefile       |   3 +-
- tools/testing/selftests/vm/memfd_secret.c | 301 ++++++++++++++++++++++
- tools/testing/selftests/vm/run_vmtests    |  17 ++
- 4 files changed, 321 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/vm/memfd_secret.c
+Thanks,
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 849e8226395a..8a951fed3c3f 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -20,3 +20,4 @@ va_128TBswitch
- map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
-+memfd_secret
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index a9026706d597..937afee6a8af 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -21,6 +21,7 @@ TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
- TEST_GEN_FILES += khugepaged
-+TEST_GEN_FILES += memfd_secret
- 
- ifeq ($(ARCH),x86_64)
- CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
-@@ -112,4 +113,4 @@ endif
- 
- $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
- 
--$(OUTPUT)/mlock-random-test: LDLIBS += -lcap
-+$(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
-diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-new file mode 100644
-index 000000000000..81e1a8689241
---- /dev/null
-+++ b/tools/testing/selftests/vm/memfd_secret.c
-@@ -0,0 +1,301 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2020, Mike Rapoport, IBM Corporation.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <sys/uio.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <sys/types.h>
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/resource.h>
-+#include <sys/capability.h>
-+
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <stdio.h>
-+
-+#include "../kselftest.h"
-+
-+#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
-+#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
-+#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
-+
-+#ifdef __NR_memfd_secret
-+
-+#include <linux/secretmem.h>
-+
-+#define PATTERN	0x55
-+
-+static const int prot = PROT_READ | PROT_WRITE;
-+static const int mode = MAP_SHARED;
-+
-+static unsigned long page_size;
-+static unsigned long mlock_limit_cur;
-+static unsigned long mlock_limit_max;
-+
-+static int memfd_secret(unsigned long flags)
-+{
-+	return syscall(__NR_memfd_secret, flags);
-+}
-+
-+static void test_file_apis(int fd)
-+{
-+	char buf[64];
-+
-+	if ((read(fd, buf, sizeof(buf)) >= 0) ||
-+	    (write(fd, buf, sizeof(buf)) >= 0) ||
-+	    (pread(fd, buf, sizeof(buf), 0) >= 0) ||
-+	    (pwrite(fd, buf, sizeof(buf), 0) >= 0))
-+		fail("unexpected file IO\n");
-+	else
-+		pass("file IO is blocked as expected\n");
-+}
-+
-+static void test_mlock_limit(int fd)
-+{
-+	size_t len;
-+	char *mem;
-+
-+	len = mlock_limit_cur;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("unable to mmap secret memory\n");
-+		return;
-+	}
-+	munmap(mem, len);
-+
-+	len = mlock_limit_max * 2;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem != MAP_FAILED) {
-+		fail("unexpected mlock limit violation\n");
-+		munmap(mem, len);
-+		return;
-+	}
-+
-+	pass("mlock limit is respected\n");
-+}
-+
-+static void try_process_vm_read(int fd, int pipefd[2])
-+{
-+	struct iovec liov, riov;
-+	char buf[64];
-+	char *mem;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		exit(KSFT_FAIL);
-+	}
-+
-+	liov.iov_len = riov.iov_len = sizeof(buf);
-+	liov.iov_base = buf;
-+	riov.iov_base = mem;
-+
-+	if (process_vm_readv(getppid(), &liov, 1, &riov, 1, 0) < 0) {
-+		if (errno == ENOSYS)
-+			exit(KSFT_SKIP);
-+		exit(KSFT_PASS);
-+	}
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void try_ptrace(int fd, int pipefd[2])
-+{
-+	pid_t ppid = getppid();
-+	int status;
-+	char *mem;
-+	long ret;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		perror("pipe write");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = ptrace(PTRACE_ATTACH, ppid, 0, 0);
-+	if (ret) {
-+		perror("ptrace_attach");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = waitpid(ppid, &status, WUNTRACED);
-+	if ((ret != ppid) || !(WIFSTOPPED(status))) {
-+		fprintf(stderr, "weird waitppid result %ld stat %x\n",
-+			ret, status);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	/* this access should fail and the task should be killed */
-+	ret = ptrace(PTRACE_PEEKDATA, ppid, mem, 0);
-+	if (ret < 0) {
-+		perror("ptrace_peek");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	/* we shouldn't survive PTRACE_PEEKDATA */
-+	exit(KSFT_FAIL);
-+}
-+
-+static void check_child_status(pid_t pid, const char *name)
-+{
-+	int status;
-+
-+	waitpid(pid, &status, 0);
-+
-+	if (WIFEXITED(status) && WEXITSTATUS(status) == KSFT_SKIP) {
-+		skip("%s is not supported\n", name);
-+		return;
-+	}
-+
-+	if ((WIFEXITED(status) && WEXITSTATUS(status) == KSFT_PASS) ||
-+	    WIFSIGNALED(status)) {
-+		pass("%s failed as expected\n", name);
-+		return;
-+	}
-+
-+	fail("%s: unexpected memory access\n", name);
-+}
-+
-+static void test_remote_access(int fd, const char *name,
-+			       void (*func)(int fd, int pipefd[2]))
-+{
-+	int pipefd[2];
-+	pid_t pid;
-+	char *mem;
-+
-+	if (pipe(pipefd)) {
-+		fail("pipe failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		fail("fork failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	if (pid == 0) {
-+		func(fd, pipefd);
-+		return;
-+	}
-+
-+	mem = mmap(NULL, page_size, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("Unable to mmap secret memory\n");
-+		return;
-+	}
-+
-+	ftruncate(fd, page_size);
-+	memset(mem, PATTERN, page_size);
-+
-+	if (write(pipefd[1], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	check_child_status(pid, name);
-+}
-+
-+static void test_process_vm_read(int fd)
-+{
-+	test_remote_access(fd, "process_vm_read", try_process_vm_read);
-+}
-+
-+static void test_ptrace(int fd)
-+{
-+	test_remote_access(fd, "ptrace", try_ptrace);
-+}
-+
-+static int set_cap_limits(rlim_t max)
-+{
-+	struct rlimit new;
-+	cap_t cap = cap_init();
-+
-+	new.rlim_cur = max;
-+	new.rlim_max = max;
-+	if (setrlimit(RLIMIT_MEMLOCK, &new)) {
-+		perror("setrlimit() returns error");
-+		return -1;
-+	}
-+
-+	/* drop capabilities including CAP_IPC_LOCK */
-+	if (cap_set_proc(cap)) {
-+		perror("cap_set_proc() returns error");
-+		return -2;
-+	}
-+
-+	return 0;
-+}
-+
-+static void prepare(void)
-+{
-+	struct rlimit rlim;
-+
-+	page_size = sysconf(_SC_PAGE_SIZE);
-+	if (!page_size)
-+		ksft_exit_fail_msg("Failed to get page size %s\n",
-+				   strerror(errno));
-+
-+	if (getrlimit(RLIMIT_MEMLOCK, &rlim))
-+		ksft_exit_fail_msg("Unable to detect mlock limit: %s\n",
-+				   strerror(errno));
-+
-+	mlock_limit_cur = rlim.rlim_cur;
-+	mlock_limit_max = rlim.rlim_max;
-+
-+	printf("page_size: %ld, mlock.soft: %ld, mlock.hard: %ld\n",
-+	       page_size, mlock_limit_cur, mlock_limit_max);
-+
-+	if (page_size > mlock_limit_cur)
-+		mlock_limit_cur = page_size;
-+	if (page_size > mlock_limit_max)
-+		mlock_limit_max = page_size;
-+
-+	if (set_cap_limits(mlock_limit_max))
-+		ksft_exit_fail_msg("Unable to set mlock limit: %s\n",
-+				   strerror(errno));
-+}
-+
-+#define NUM_TESTS 4
-+
-+int main(int argc, char *argv[])
-+{
-+	int fd;
-+
-+	prepare();
-+
-+	ksft_print_header();
-+	ksft_set_plan(NUM_TESTS);
-+
-+	fd = memfd_secret(0);
-+	if (fd < 0) {
-+		if (errno == ENOSYS)
-+			ksft_exit_skip("memfd_secret is not supported\n");
-+		else
-+			ksft_exit_fail_msg("memfd_secret failed: %s\n",
-+					   strerror(errno));
-+	}
-+
-+	test_mlock_limit(fd);
-+	test_file_apis(fd);
-+	test_process_vm_read(fd);
-+	test_ptrace(fd);
-+
-+	close(fd);
-+
-+	ksft_exit(!ksft_get_fail_cnt());
-+}
-+
-+#else /* __NR_memfd_secret */
-+
-+int main(int argc, char *argv[])
-+{
-+	printf("skip: skipping memfd_secret test (missing __NR_memfd_secret)\n");
-+	return KSFT_SKIP;
-+}
-+
-+#endif /* __NR_memfd_secret */
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index a3f4f30f0a2e..bee7365f3cc2 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -323,4 +323,21 @@ else
- 	exitcode=1
- fi
- 
-+echo "running memfd_secret test"
-+echo "------------------------------------"
-+./memfd_secret
-+ret_val=$?
-+
-+if [ $ret_val -eq 0 ]; then
-+	echo "[PASS]"
-+elif [ $ret_val -eq $ksft_skip ]; then
-+	echo "[SKIP]"
-+	exitcode=$ksft_skip
-+else
-+	echo "[FAIL]"
-+	exitcode=1
-+fi
-+
-+exit $exitcode
-+
- exit $exitcode
+Mathieu
+
+> This patch adds rseq_offset_deref_addv function to
+> tools/testing/selftests/rseq/rseq-x86.h, to be used
+> in a selftest in the next patch in the patchset.
+> 
+> v7->v8: this patch split out of the v7 selftest patch.
+> 
+> Signed-off-by: Peter Oskolkov <posk@google.com>
+> ---
+> tools/testing/selftests/rseq/rseq-x86.h | 57 +++++++++++++++++++++++++
+> 1 file changed, 57 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/rseq/rseq-x86.h
+> b/tools/testing/selftests/rseq/rseq-x86.h
+> index b2da6004fe30..640411518e46 100644
+> --- a/tools/testing/selftests/rseq/rseq-x86.h
+> +++ b/tools/testing/selftests/rseq/rseq-x86.h
+> @@ -279,6 +279,63 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+> #endif
+> }
+> 
+> +#define RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV
+> +
+> +/*
+> + *   pval = *(ptr+off)
+> + *  *pval += inc;
+> + */
+> +static inline __attribute__((always_inline))
+> +int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
+> +{
+> +	RSEQ_INJECT_C(9)
+> +
+> +	__asm__ __volatile__ goto (
+> +		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
+> +#ifdef RSEQ_COMPARE_TWICE
+> +		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
+> +#endif
+> +		/* Start rseq by storing table entry pointer into rseq_cs. */
+> +		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+> +		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+> +		RSEQ_INJECT_ASM(3)
+> +#ifdef RSEQ_COMPARE_TWICE
+> +		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
+> +#endif
+> +		/* get p+v */
+> +		"movq %[ptr], %%rbx\n\t"
+> +		"addq %[off], %%rbx\n\t"
+> +		/* get pv */
+> +		"movq (%%rbx), %%rcx\n\t"
+> +		/* *pv += inc */
+> +		"addq %[inc], (%%rcx)\n\t"
+> +		"2:\n\t"
+> +		RSEQ_INJECT_ASM(4)
+> +		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
+> +		: /* gcc asm goto does not allow outputs */
+> +		: [cpu_id]		"r" (cpu),
+> +		  [rseq_abi]		"r" (&__rseq_abi),
+> +		  /* final store input */
+> +		  [ptr]			"m" (*ptr),
+> +		  [off]			"er" (off),
+> +		  [inc]			"er" (inc)
+> +		: "memory", "cc", "rax", "rbx", "rcx"
+> +		  RSEQ_INJECT_CLOBBER
+> +		: abort
+> +#ifdef RSEQ_COMPARE_TWICE
+> +		  , error1
+> +#endif
+> +	);
+> +	return 0;
+> +abort:
+> +	RSEQ_INJECT_FAILED
+> +	return -1;
+> +#ifdef RSEQ_COMPARE_TWICE
+> +error1:
+> +	rseq_bug("cpu_id comparison failed");
+> +#endif
+> +}
+> +
+> static inline __attribute__((always_inline))
+> int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+> 				 intptr_t *v2, intptr_t newv2,
+> --
+> 2.28.0.709.gb0816b6eb0-goog
+
 -- 
-2.28.0
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
