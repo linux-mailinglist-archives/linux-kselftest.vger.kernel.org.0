@@ -2,260 +2,396 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5693277276
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Sep 2020 15:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C945127730D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Sep 2020 15:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728015AbgIXNf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Sep 2020 09:35:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53762 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727742AbgIXNf2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Sep 2020 09:35:28 -0400
-Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90FE6238E4;
-        Thu, 24 Sep 2020 13:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600954527;
-        bh=gmPXyAX6NRORABRS1X+O+hlaJaxz4SMaYcsWwU32+YQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p32nBzNWVSlkrVPnxwe/lSmc0i585xyETJ13vozHH4MSaiQYdYQhbLRYp8OcGNviF
-         A3s8z1nuUKq2G3l1nKn8slJz++kKmb/ls5QtnT5kqETxZYNCs9p2nQ4ZN/ur/PWnmp
-         cAZVHTBRLlUKnA2dGaS9fYLKh/bUtZqXJRPNtM3c=
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Michael Kerrisk <mtk.manpages@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        id S1728091AbgIXNsZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Sep 2020 09:48:25 -0400
+Received: from mail.efficios.com ([167.114.26.124]:45462 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727970AbgIXNsY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 24 Sep 2020 09:48:24 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 3F4462D496B;
+        Thu, 24 Sep 2020 09:48:22 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id aPd9KrK3dchO; Thu, 24 Sep 2020 09:48:21 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 9E6922D4B8E;
+        Thu, 24 Sep 2020 09:48:21 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9E6922D4B8E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1600955301;
+        bh=voxn1eHtF54rqk8k4eFkeQTTNPOuzfqo+ZoGAAsWH2Y=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=PsNHH39zrWTJUW+SiCUup14yqeraLcu6fCUCcnDtdD54DT5S0xBv0rdC3vK0QvTse
+         mBp9RtwPrqFyw6B/nnolGEt5eYOgg5IcyJo1fnZdC1om7fTrIqhDBBR+esxHRFbHTN
+         0g2gwrSJdTahtsl+0s94+khc5aiXvmuand3/mmB+20ZXCsjwPxnB19xVw85uHh2YtL
+         2pXX0OjsgQNUWF4uFoQeO9BJjRPDHnUaR3RwDMU63cb6GnpOMgGLzeMfFGJ6Y74l80
+         2HKU+cWXVDy9mJJQwVNWAlnvVFE4qgOhHMYUa/1yr6Y9HiVyJT+Mi7/kzTbAjCVRUQ
+         +p1JpVAj9lraw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hnWDdOzXHOeu; Thu, 24 Sep 2020 09:48:21 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 848A12D4A1C;
+        Thu, 24 Sep 2020 09:48:21 -0400 (EDT)
+Date:   Thu, 24 Sep 2020 09:48:21 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Oskolkov <posk@google.com>
+Cc:     paulmck <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: [PATCH] man2: new page describing memfd_secret() system call
-Date:   Thu, 24 Sep 2020 16:35:13 +0300
-Message-Id: <20200924133513.1589-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200924132904.1391-1-rppt@kernel.org>
-References: <20200924132904.1391-1-rppt@kernel.org>
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Turner <pjt@google.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Peter Oskolkov <posk@posk.io>, shuah <shuah@kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>
+Message-ID: <1096125156.67906.1600955301444.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20200923233618.2572849-3-posk@google.com>
+References: <20200923233618.2572849-1-posk@google.com> <20200923233618.2572849-3-posk@google.com>
+Subject: Re: [PATCH v8 3/3] rseq/selftests: test
+ MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3965 (ZimbraWebClient - FF80 (Linux)/8.8.15_GA_3963)
+Thread-Topic: rseq/selftests: test MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ
+Thread-Index: 3OkqHNXzOlqgv1xXNXg9kB+AB61rcw==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+----- On Sep 23, 2020, at 7:36 PM, Peter Oskolkov posk@google.com wrote:
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- man2/memfd_secret.2 | 176 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 176 insertions(+)
- create mode 100644 man2/memfd_secret.2
+> Based on Google-internal RSEQ work done by
+> Paul Turner and Andrew Hunter.
+> 
+> This patch adds a selftest for MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ.
+> The test quite often fails without the previous patch in this patchset,
+> but consistently passes with it.
+> 
+> v3: added rseq_offset_deref_addv() to x86_64 to make the test
+>    more explicit; on other architectures I kept using existing
+>    rseq_cmpeqv_cmpeqv_storev() as I have no easy way to test
+>    there.  Added a comment explaining why the test works this way.
+> v4: skipped the test if rseq_offset_deref_addv() is not present
+>    (that is, on all architectures other than x86_64).
+> v8: split rseq_offset_deref_addv() into a separate patch;
+>    moved the test to param_test; other minor tweaks.
+> 
+> Signed-off-by: Peter Oskolkov <posk@google.com>
 
-diff --git a/man2/memfd_secret.2 b/man2/memfd_secret.2
-new file mode 100644
-index 000000000..e4ecd3662
---- /dev/null
-+++ b/man2/memfd_secret.2
-@@ -0,0 +1,176 @@
-+.\" Copyright (c) 2020, IBM Corporation.
-+.\" Written by Mike Rapoport <rppt@linux.ibm.com>
-+.\"
-+.\" Based on memfd_create(2) man page
-+.\" Copyright (C) 2014 Michael Kerrisk <mtk.manpages@gmail.com>
-+.\" and Copyright (C) 2014 David Herrmann <dh.herrmann@gmail.com>
-+.\"
-+.\" %%%LICENSE_START(GPLv2+)
-+.\"
-+.\" This program is free software; you can redistribute it and/or modify
-+.\" it under the terms of the GNU General Public License as published by
-+.\" the Free Software Foundation; either version 2 of the License, or
-+.\" (at your option) any later version.
-+.\"
-+.\" This program is distributed in the hope that it will be useful,
-+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
-+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-+.\" GNU General Public License for more details.
-+.\"
-+.\" You should have received a copy of the GNU General Public
-+.\" License along with this manual; if not, see
-+.\" <http://www.gnu.org/licenses/>.
-+.\" %%%LICENSE_END
-+.\"
-+.TH MEMFD_SECRET 2 2020-08-02 Linux "Linux Programmer's Manual"
-+.SH NAME
-+memfd_secret \- create an anonymous file to map secret memory regions
-+.SH SYNOPSIS
-+.nf
-+.B #include <linux/secretmem.h>
-+.PP
-+.BI "int memfd_secret(unsigned long " flags ");"
-+.fi
-+.PP
-+.IR Note :
-+There is no glibc wrapper for this system call; see NOTES.
-+.SH DESCRIPTION
-+.BR memfd_secret ()
-+creates an anonymous file and returns a file descriptor that refers to it.
-+The file can only be memory-mapped;
-+the memory in such mapping
-+will have stronger protection than usual memory mapped files,
-+and so it can be used to store application secrets.
-+Unlike a regular file, a file created with
-+.BR memfd_secret ()
-+lives in RAM and has a volatile backing storage.
-+Once all references to the file are dropped, it is automatically released.
-+The initial size of the file is set to 0.
-+Following the call, the file size should be set using
-+.BR ftruncate (2).
-+.PP
-+The memory areas obtained with
-+.BR mmap (2)
-+from the file descriptor are exclusive to the owning context.
-+These areas are removed from the kernel page tables
-+and only the page table of the process holding the file descriptor
-+maps the corresponding physical memory.
-+.PP
-+The following values may be bitwise ORed in
-+.IR flags
-+to control the behavior of
-+.BR memfd_secret (2):
-+.TP
-+.BR FD_CLOEXEC
-+Set the close-on-exec flag on the new file descriptor.
-+See the description of the
-+.B O_CLOEXEC
-+flag in
-+.BR open (2)
-+for reasons why this may be useful.
-+.PP
-+.TP
-+.BR SECRETMEM_UNCACHED
-+In addition to excluding memory areas from the kernel page tables,
-+mark the memory mappings uncached in the page table of the owning process.
-+Such mappings can be used to prevent speculative loads
-+and cache-based side channels.
-+This mode of
-+.BR memfd_secret ()
-+is not supported on all architectures.
-+.PP
-+See also NOTES below.
-+.PP
-+As its return value,
-+.BR memfd_secret ()
-+returns a new file descriptor that can be used to refer to an anonymous file.
-+This file descriptor is opened for both reading and writing
-+.RB ( O_RDWR )
-+and
-+.B O_LARGEFILE
-+is set for the file descriptor.
-+.PP
-+With respect to
-+.BR fork (2)
-+and
-+.BR execve (2),
-+the usual semantics apply for the file descriptor created by
-+.BR memfd_secret ().
-+A copy of the file descriptor is inherited by the child produced by
-+.BR fork (2)
-+and refers to the same file.
-+The file descriptor is preserved across
-+.BR execve (2),
-+unless the close-on-exec flag has been set.
-+.PP
-+The memory regions backed with
-+.BR memfd_secret ()
-+are locked in the same way as
-+.BR mlock (2),
-+however the implementation will not try to
-+populate the whole range during the
-+.BR mmap ()
-+call.
-+The amount of memory allowed for memory mappings
-+of the file descriptor obeys the same rules as
-+.BR mlock (2)
-+and cannot exceed
-+.B RLIMIT_MEMLOCK.
-+.SH RETURN VALUE
-+On success,
-+.BR memfd_secret ()
-+returns a new file descriptor.
-+On error, \-1 is returned and
-+.I errno
-+is set to indicate the error.
-+.SH ERRORS
-+.TP
-+.B ENOSYS
-+.BR memfd_secret ()
-+is not implemented on this architecture.
-+.TP
-+.B EINVAL
-+.I flags
-+included unknown bits.
-+.TP
-+.B EMFILE
-+The per-process limit on the number of open file descriptors has been reached.
-+.TP
-+.B EMFILE
-+The system-wide limit on the total number of open files has been reached.
-+.TP
-+.B ENOMEM
-+There was insufficient memory to create a new anonymous file.
-+.SH VERSIONS
-+The
-+.BR memfd_secret (2)
-+system call first appeared in Linux 5.X;
-+.SH CONFORMING TO
-+The
-+.BR memfd_secret (2)
-+system call is Linux-specific.
-+.SH NOTES
-+The
-+.BR memfd_secret (2)
-+system call provides an ability to hide information
-+from the operating system.
-+Normally Linux userspace mappings are protected from other users,
-+but they are visible to the privileged code.
-+The mappings created using
-+.BR memfd_secret ()
-+are hidden from the kernel as well.
-+.PP
-+If an architecture supports
-+.B SECRETMEM_UNCACHED,
-+the mappings also have protection from speculative execution vulnerabilties,
-+at the expense of increased memory access latency.
-+Care should be taken when using
-+.B
-+SECRETMEM_UNCACHED
-+to avoid degrading application performance.
-+.SH SEE ALSO
-+.BR fcntl (2),
-+.BR ftruncate (2),
-+.BR mlock (2),
-+.BR mmap (2),
-+.BR setrlimit (2),
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+Thanks!
+
+Mathieu
+
+> ---
+> tools/testing/selftests/rseq/param_test.c     | 223 +++++++++++++++++-
+> .../testing/selftests/rseq/run_param_test.sh  |   2 +
+> 2 files changed, 224 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rseq/param_test.c
+> b/tools/testing/selftests/rseq/param_test.c
+> index e8a657a5f48a..384589095864 100644
+> --- a/tools/testing/selftests/rseq/param_test.c
+> +++ b/tools/testing/selftests/rseq/param_test.c
+> @@ -1,8 +1,10 @@
+> // SPDX-License-Identifier: LGPL-2.1
+> #define _GNU_SOURCE
+> #include <assert.h>
+> +#include <linux/membarrier.h>
+> #include <pthread.h>
+> #include <sched.h>
+> +#include <stdatomic.h>
+> #include <stdint.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> @@ -1131,6 +1133,220 @@ static int set_signal_handler(void)
+> 	return ret;
+> }
+> 
+> +struct test_membarrier_thread_args {
+> +	int stop;
+> +	intptr_t percpu_list_ptr;
+> +};
+> +
+> +/* Worker threads modify data in their "active" percpu lists. */
+> +void *test_membarrier_worker_thread(void *arg)
+> +{
+> +	struct test_membarrier_thread_args *args =
+> +		(struct test_membarrier_thread_args *)arg;
+> +	const int iters = opt_reps;
+> +	int i;
+> +
+> +	if (rseq_register_current_thread()) {
+> +		fprintf(stderr, "Error: rseq_register_current_thread(...) failed(%d): %s\n",
+> +			errno, strerror(errno));
+> +		abort();
+> +	}
+> +
+> +	/* Wait for initialization. */
+> +	while (!atomic_load(&args->percpu_list_ptr)) {}
+> +
+> +	for (i = 0; i < iters; ++i) {
+> +		int ret;
+> +
+> +		do {
+> +			int cpu = rseq_cpu_start();
+> +
+> +			ret = rseq_offset_deref_addv(&args->percpu_list_ptr,
+> +				sizeof(struct percpu_list_entry) * cpu, 1, cpu);
+> +		} while (rseq_unlikely(ret));
+> +	}
+> +
+> +	if (rseq_unregister_current_thread()) {
+> +		fprintf(stderr, "Error: rseq_unregister_current_thread(...) failed(%d):
+> %s\n",
+> +			errno, strerror(errno));
+> +		abort();
+> +	}
+> +	return NULL;
+> +}
+> +
+> +void test_membarrier_init_percpu_list(struct percpu_list *list)
+> +{
+> +	int i;
+> +
+> +	memset(list, 0, sizeof(*list));
+> +	for (i = 0; i < CPU_SETSIZE; i++) {
+> +		struct percpu_list_node *node;
+> +
+> +		node = malloc(sizeof(*node));
+> +		assert(node);
+> +		node->data = 0;
+> +		node->next = NULL;
+> +		list->c[i].head = node;
+> +	}
+> +}
+> +
+> +void test_membarrier_free_percpu_list(struct percpu_list *list)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < CPU_SETSIZE; i++)
+> +		free(list->c[i].head);
+> +}
+> +
+> +static int sys_membarrier(int cmd, int flags, int cpu_id)
+> +{
+> +	return syscall(__NR_membarrier, cmd, flags, cpu_id);
+> +}
+> +
+> +/*
+> + * The manager thread swaps per-cpu lists that worker threads see,
+> + * and validates that there are no unexpected modifications.
+> + */
+> +void *test_membarrier_manager_thread(void *arg)
+> +{
+> +	struct test_membarrier_thread_args *args =
+> +		(struct test_membarrier_thread_args *)arg;
+> +	struct percpu_list list_a, list_b;
+> +	intptr_t expect_a = 0, expect_b = 0;
+> +	int cpu_a = 0, cpu_b = 0;
+> +
+> +	if (rseq_register_current_thread()) {
+> +		fprintf(stderr, "Error: rseq_register_current_thread(...) failed(%d): %s\n",
+> +			errno, strerror(errno));
+> +		abort();
+> +	}
+> +
+> +	/* Init lists. */
+> +	test_membarrier_init_percpu_list(&list_a);
+> +	test_membarrier_init_percpu_list(&list_b);
+> +
+> +	atomic_store(&args->percpu_list_ptr, (intptr_t)&list_a);
+> +
+> +	while (!atomic_load(&args->stop)) {
+> +		/* list_a is "active". */
+> +		cpu_a = rand() % CPU_SETSIZE;
+> +		/*
+> +		 * As list_b is "inactive", we should never see changes
+> +		 * to list_b.
+> +		 */
+> +		if (expect_b != atomic_load(&list_b.c[cpu_b].head->data)) {
+> +			fprintf(stderr, "Membarrier test failed\n");
+> +			abort();
+> +		}
+> +
+> +		/* Make list_b "active". */
+> +		atomic_store(&args->percpu_list_ptr, (intptr_t)&list_b);
+> +		if (sys_membarrier(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
+> +					MEMBARRIER_CMD_FLAG_CPU, cpu_a) &&
+> +				errno != ENXIO /* missing CPU */) {
+> +			perror("sys_membarrier");
+> +			abort();
+> +		}
+> +		/*
+> +		 * Cpu A should now only modify list_b, so the values
+> +		 * in list_a should be stable.
+> +		 */
+> +		expect_a = atomic_load(&list_a.c[cpu_a].head->data);
+> +
+> +		cpu_b = rand() % CPU_SETSIZE;
+> +		/*
+> +		 * As list_a is "inactive", we should never see changes
+> +		 * to list_a.
+> +		 */
+> +		if (expect_a != atomic_load(&list_a.c[cpu_a].head->data)) {
+> +			fprintf(stderr, "Membarrier test failed\n");
+> +			abort();
+> +		}
+> +
+> +		/* Make list_a "active". */
+> +		atomic_store(&args->percpu_list_ptr, (intptr_t)&list_a);
+> +		if (sys_membarrier(MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ,
+> +					MEMBARRIER_CMD_FLAG_CPU, cpu_b) &&
+> +				errno != ENXIO /* missing CPU*/) {
+> +			perror("sys_membarrier");
+> +			abort();
+> +		}
+> +		/* Remember a value from list_b. */
+> +		expect_b = atomic_load(&list_b.c[cpu_b].head->data);
+> +	}
+> +
+> +	test_membarrier_free_percpu_list(&list_a);
+> +	test_membarrier_free_percpu_list(&list_b);
+> +
+> +	if (rseq_unregister_current_thread()) {
+> +		fprintf(stderr, "Error: rseq_unregister_current_thread(...) failed(%d):
+> %s\n",
+> +			errno, strerror(errno));
+> +		abort();
+> +	}
+> +	return NULL;
+> +}
+> +
+> +/* Test MEMBARRIER_CMD_PRIVATE_RESTART_RSEQ_ON_CPU membarrier command. */
+> +#ifdef RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV
+> +void test_membarrier(void)
+> +{
+> +	const int num_threads = opt_threads;
+> +	struct test_membarrier_thread_args thread_args;
+> +	pthread_t worker_threads[num_threads];
+> +	pthread_t manager_thread;
+> +	int i, ret;
+> +
+> +	if (sys_membarrier(MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ, 0, 0)) {
+> +		perror("sys_membarrier");
+> +		abort();
+> +	}
+> +
+> +	thread_args.stop = 0;
+> +	thread_args.percpu_list_ptr = 0;
+> +	ret = pthread_create(&manager_thread, NULL,
+> +			test_membarrier_manager_thread, &thread_args);
+> +	if (ret) {
+> +		errno = ret;
+> +		perror("pthread_create");
+> +		abort();
+> +	}
+> +
+> +	for (i = 0; i < num_threads; i++) {
+> +		ret = pthread_create(&worker_threads[i], NULL,
+> +				test_membarrier_worker_thread, &thread_args);
+> +		if (ret) {
+> +			errno = ret;
+> +			perror("pthread_create");
+> +			abort();
+> +		}
+> +	}
+> +
+> +
+> +	for (i = 0; i < num_threads; i++) {
+> +		ret = pthread_join(worker_threads[i], NULL);
+> +		if (ret) {
+> +			errno = ret;
+> +			perror("pthread_join");
+> +			abort();
+> +		}
+> +	}
+> +
+> +	atomic_store(&thread_args.stop, 1);
+> +	ret = pthread_join(manager_thread, NULL);
+> +	if (ret) {
+> +		errno = ret;
+> +		perror("pthread_join");
+> +		abort();
+> +	}
+> +}
+> +#else /* RSEQ_ARCH_HAS_OFFSET_DEREF_ADDV */
+> +void test_membarrier(void)
+> +{
+> +	fprintf(stderr, "rseq_offset_deref_addv is not implemented on this
+> architecture. "
+> +			"Skipping membarrier test.\n");
+> +}
+> +#endif
+> +
+> static void show_usage(int argc, char **argv)
+> {
+> 	printf("Usage : %s <OPTIONS>\n",
+> @@ -1153,7 +1369,7 @@ static void show_usage(int argc, char **argv)
+> 	printf("	[-r N] Number of repetitions per thread (default 5000)\n");
+> 	printf("	[-d] Disable rseq system call (no initialization)\n");
+> 	printf("	[-D M] Disable rseq for each M threads\n");
+> -	printf("	[-T test] Choose test: (s)pinlock, (l)ist, (b)uffer, (m)emcpy,
+> (i)ncrement\n");
+> +	printf("	[-T test] Choose test: (s)pinlock, (l)ist, (b)uffer, (m)emcpy,
+> (i)ncrement, membarrie(r)\n");
+> 	printf("	[-M] Push into buffer and memcpy buffer with memory barriers.\n");
+> 	printf("	[-v] Verbose output.\n");
+> 	printf("	[-h] Show this help.\n");
+> @@ -1268,6 +1484,7 @@ int main(int argc, char **argv)
+> 			case 'i':
+> 			case 'b':
+> 			case 'm':
+> +			case 'r':
+> 				break;
+> 			default:
+> 				show_usage(argc, argv);
+> @@ -1320,6 +1537,10 @@ int main(int argc, char **argv)
+> 		printf_verbose("counter increment\n");
+> 		test_percpu_inc();
+> 		break;
+> +	case 'r':
+> +		printf_verbose("membarrier\n");
+> +		test_membarrier();
+> +		break;
+> 	}
+> 	if (!opt_disable_rseq && rseq_unregister_current_thread())
+> 		abort();
+> diff --git a/tools/testing/selftests/rseq/run_param_test.sh
+> b/tools/testing/selftests/rseq/run_param_test.sh
+> index e426304fd4a0..f51bc83c9e41 100755
+> --- a/tools/testing/selftests/rseq/run_param_test.sh
+> +++ b/tools/testing/selftests/rseq/run_param_test.sh
+> @@ -15,6 +15,7 @@ TEST_LIST=(
+> 	"-T m"
+> 	"-T m -M"
+> 	"-T i"
+> +	"-T r"
+> )
+> 
+> TEST_NAME=(
+> @@ -25,6 +26,7 @@ TEST_NAME=(
+> 	"memcpy"
+> 	"memcpy with barrier"
+> 	"increment"
+> +	"membarrier"
+> )
+> IFS="$OLDIFS"
+> 
+> --
+> 2.28.0.709.gb0816b6eb0-goog
+
 -- 
-2.25.4
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
