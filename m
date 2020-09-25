@@ -2,69 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE71278220
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 10:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C229C27829F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 10:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727699AbgIYIAZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 04:00:25 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:54494 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727464AbgIYIAZ (ORCPT
+        id S1727689AbgIYIWG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 04:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727571AbgIYIWF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 04:00:25 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1601020823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A7tZCaYWus9D2ZS4daJYEMgBfuoBYxyWLPGiZSLMXaY=;
-        b=s0CdCqEVfAgOYDqpHWHxDBGEKwSHX+1gkF5gQASiD2bmpXqe9VQdR5ae6y2w+5VoqzjcuJ
-        YRCydyDRW8j2IcQU2v28TVTfy8PpS4aHvPXbd4dLdA5qJC0I7TZDzukKW0QhmbAXe5SJ4W
-        6fVDMo5Dv/RvVMI1fgkyuERnBHmbxTNCNh9NvxzlQpNK/y38IMi/SydTOG04ilX8tbcp5L
-        uaSQMYUkjxepoQxarE4in0DGKjSpHWYtI1iXYNCZrL++C5lO2nMW9d00yjvMzxSh2k+q+5
-        Z2rGL/savL5yayxjT84r+gaFJy38DyhQ79xtIS44aK/MXM9d5gmm84Na1mjZRA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1601020823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A7tZCaYWus9D2ZS4daJYEMgBfuoBYxyWLPGiZSLMXaY=;
-        b=MD8ejMcwGoLzfPtsVHTldRLXKZseJkJfn7HfyFevNDP1cROrhEJ9LqOV8G7BI5BtPPrUz9
-        8iNRm1Weh5PRYgDg==
-To:     Kees Cook <keescook@chromium.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     luto@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, willy@infradead.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v6 1/9] kernel: Support TIF_SYSCALL_INTERCEPT flag
-In-Reply-To: <202009231349.4A25EAF@keescook>
-References: <20200904203147.2908430-1-krisman@collabora.com> <20200904203147.2908430-2-krisman@collabora.com> <202009221243.6BC5635E@keescook> <874kno6yct.fsf@collabora.com> <202009231349.4A25EAF@keescook>
-Date:   Fri, 25 Sep 2020 10:00:21 +0200
-Message-ID: <87o8luuvze.fsf@nanos.tec.linutronix.de>
+        Fri, 25 Sep 2020 04:22:05 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E63C0613D5
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 01:22:05 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id n26so654682uao.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 01:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WvDyteRu76pYPa4UAHUwSYLYJxuuyxc2Dt1PKdTqcpM=;
+        b=yTnQ4SV+hkPVxsQOZuljNgG+ll2vkUcmkTeES9wkAB2E6MwbdALDRKC5/qErzxHexZ
+         70H9PmgMHqXNxxZIIjZGiKvr2WozB4tuEMjUho6Xp9AT5Y/zRF5qQCJ7qulTMbtogqoz
+         isGEDVKW+sgSMRbs/PJV8waGVvK8XpmEIRI8gm1t6JTpicOBLWftuIWzMlMzjmw16tyt
+         BVKhk9gLbpJPVej+XcRMQlOxXCM3ZqVob/MbQz+/+hQPeKos8VHuZTutglw2wY5TUFq5
+         PxGaWlGgp7KiDuOq18dRuA6kjn9PGg9ur8FI/N4bggCtUJXjvo2hGb7IFjVa1fGufd3F
+         IYCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WvDyteRu76pYPa4UAHUwSYLYJxuuyxc2Dt1PKdTqcpM=;
+        b=BbNpS8WpPkt/QY2x8BETaV/f7I8I8GHv9c6NjbI5HkMYa/4motrCgXVixx4wAWGR7S
+         kvQkDtgA2N3p+g9/3TXjUKYTmvKrbz5JJjqy9FgrINdo1tx2rrq9FYNOk4bVzzFFAvjE
+         i+YnWA7tmMT39ZIOf3PvTlLzfh1xD/NABMnczpVIDjsdQ/XJYTdLIJ60I5mncL+WwBl/
+         xgf9RflohwX7WSKZ9Rc8WXod9+HMHLK2qJ+CMEgBV349N8jnY3b40FnWR/RKBqb7m1jB
+         CCC4oTkGFeRVJInIL7GnGGxW5gkCVA7z53yCcg+qBIwzciJJ5O/M2JA1VbXjAfMzdoo6
+         vVWQ==
+X-Gm-Message-State: AOAM533r4a6YORbtDkIBDivdg0aqegH8DT0CSdzbKtf85COBAIauwaG4
+        f9TqcvgZGdMNyumenGw1FPqi7LlX8WpQFIYDBSwFbA==
+X-Google-Smtp-Source: ABdhPJzLpE+AUK3XJTcofgSAmKvjhVK7+3tvguttC5HmiCpeMiYmNklBnlRfzt2LXLjnlt0nX+EaErShGSTZoNR/zHY=
+X-Received: by 2002:ab0:1450:: with SMTP id c16mr1693683uae.27.1601022124294;
+ Fri, 25 Sep 2020 01:22:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200914021758.420874-1-liuhangbin@gmail.com/> <20200914022227.437143-1-liuhangbin@gmail.com>
+In-Reply-To: <20200914022227.437143-1-liuhangbin@gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 25 Sep 2020 13:51:53 +0530
+Message-ID: <CA+G9fYvT6Mw2BamoiVyw=wLUqD-3LB2oaDqcuabOyWfFxEN1qg@mail.gmail.com>
+Subject: Re: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each
+ test individually selectable
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, Tim.Bird@sony.com,
+        lkft-triage@lists.linaro.org, Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 23 2020 at 13:49, Kees Cook wrote:
-> On Wed, Sep 23, 2020 at 04:18:26PM -0400, Gabriel Krisman Bertazi wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> Yes, we can, and I'm happy to follow up with that as part of my TIF
->> clean up work, but can we not block the current patchset to be merged
->> waiting for that, as this already grew a lot from the original feature
->> submission?
+On Mon, 14 Sep 2020 at 07:53, Hangbin Liu <liuhangbin@gmail.com> wrote:
 >
-> In that case, I'd say just add the new TIF flag. The consolidation can
-> come later.
+> Currently, after generating run_kselftest.sh, there is no way to choose
+> which test we could run. All the tests are listed together and we have
+> to run all every time. This patch enhanced the run_kselftest.sh to make
+> the tests individually selectable. e.g.
+>
+>   $ ./run_kselftest.sh -t "bpf size timers"
 
-No. This is exactly the wrong order. Cleanup and consolidation have
-precedence over features. I'm tired of 'we'll do that later' songs,
-simply because in the very end I'm going to be the idiot who mops up the
-resulting mess.
+My test run break on linux next
 
-Thanks,
+./run_kselftest.sh: line 1331: syntax error near unexpected token `)'
+./run_kselftest.sh: line 1331: `-e -s | --summary )
+logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;'
 
-        tglx
+steps do run:
+# run_kselftest.sh file generated by kselftest Makefile and included in tarball
+./run_kselftest.sh 2>&1 | tee "${LOGFILE}"
+
+ref:
+https://github.com/nareshkamboju/test-definitions/blob/master/automated/linux/kselftest/kselftest.sh#L222
+
+full test run log:
+https://lkft.validation.linaro.org/scheduler/job/1786826#L1391
+
+>
+> Before the patch:
+> ================
+>
+> $ cat run_kselftest.sh
+> \#!/bin/sh
+> BASE_DIR=$(realpath $(dirname $0))
+> cd $BASE_DIR
+> . ./kselftest/runner.sh
+> ROOT=$PWD
+> if [ "$1" = "--summary" ]; then
+>   logfile=$BASE_DIR/output.log
+>   cat /dev/null > $logfile
+> fi
+> [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
+> cd android
+> run_many        \
+>         "run.sh"
+> cd $ROOT
+> ...<snip>...
+> [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
+> cd zram
+> run_many        \
+>         "zram.sh"
+> cd $ROOT
+>
+> After the patch:
+> ===============
+>
+> $ cat run_kselftest.sh
+> \#!/bin/sh
+> BASE_DIR=$(realpath $(dirname $0))
+> . ./kselftest/runner.sh
+> TESTS="android ...<snip>... filesystems/binderfs ...<snip>... zram"
+>
+> run_android()
+> {
+>         [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
+>         cd android
+>         run_many        \
+>                 "run.sh"
+>         cd $ROOT
+> }
+>
+> ...<snip>...
+>
+> run_filesystems_binderfs()
+> {
+>         [ -w /dev/kmsg ] && echo "kselftest: Running tests in filesystems/binderfs" >> /dev/kmsg
+>         cd filesystems/binderfs
+>         run_many        \
+>                 "binderfs_test"
+>         cd $ROOT
+> }
+>
+> ...<snip>...
+>
+> run_zram()
+> {
+>         [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
+>         cd zram
+>         run_many        \
+>                 "zram.sh"
+>         cd $ROOT
+> }
+>
+> usage()
+> {
+>         cat <<EOF
+> usage: ${0##*/} OPTS
+>         -s | --summary          Only print summary info and put detailed log in output.log
+>         -t | --tests            Test name you want to run specifically
+>         -h | --help             Show this usage info
+> EOF
+> }
+>
+> while true; do
+>         case "$1" in
+>         -s | --summary ) logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;
+>         -t | --tests ) TESTS=$2; shift 2 ;;
+>         -l | --list ) echo $TESTS; exit 0 ;;
+>         -h | --help ) usage; exit 0 ;;
+>         "" ) break;;
+>         * ) usage; exit 1;;
+>         esac
+> done
+>
+> cd $BASE_DIR
+> ROOT=$PWD
+> for folder in $TESTS; do
+>         folder=$(echo $folder | tr -s '/-' '_')
+>         run_$folder
+> done
+>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
