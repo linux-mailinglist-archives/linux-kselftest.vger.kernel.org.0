@@ -2,120 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C42F278464
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 11:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013D0278488
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 11:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbgIYJu5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 05:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
+        id S1727428AbgIYJ5E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 05:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727733AbgIYJu5 (ORCPT
+        with ESMTP id S1728093AbgIYJ4u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 05:50:57 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47002C0613CE;
-        Fri, 25 Sep 2020 02:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=28F9ogfbtjbZVl/n21rnRnyA08/27VBA9tFd1Emv+00=; b=eDtTZJcKIKXiogPX8IEoroVaur
-        XW7EI4ZB21PTkWWr9eWrFNLyAkJMplmIZMrBeAnSzW1ixnZ6BrvaKgafONbS0Joxy2CeX/wnHxrF3
-        QqwrtXqNNoROvt9GzJImRgUczIUwWbo+Q/n6g6pLgQxTCohc5HZjzKY9ukoT8pzxVga7MCJTci00u
-        0GD1c38oFcQp82w8s0Sb1WyrTVLELnCaIlpKcH9QKL4xD5S/TA24mg6YoIDwpyhlh+50WQmGXx9t3
-        Am6sBfG2czlVMfNPRh2C6JExGJ+N5gbSe/yCFv0CGD1FP+tm8XQ/O71XwgOzhlYZ/Xlfujol8O6M7
-        B2891KUQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kLkN6-0000zO-FY; Fri, 25 Sep 2020 09:50:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D5927301A27;
-        Fri, 25 Sep 2020 11:50:29 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BEFA320104626; Fri, 25 Sep 2020 11:50:29 +0200 (CEST)
-Date:   Fri, 25 Sep 2020 11:50:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20200925095029.GX2628@hirez.programming.kicks-ass.net>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20200924132904.1391-6-rppt@kernel.org>
- <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
- <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
+        Fri, 25 Sep 2020 05:56:50 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510C7C0613D5
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 02:56:50 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id j2so2890506wrx.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 02:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Hgo0C+B4MaRA4y0HWxs83icuwRAx25Hc6vqvCgKEaCI=;
+        b=hgflbRDP43OZ7SZdMBUgrklofR66d165te97OJ57TYTmIauCiAKaFL/uTtX6sWWwie
+         +HFTWwM6RcVFfsXFEi8mmxSxEWrnxq6qtjugy97WrASGz/JRlkrm4iYk0l/2mXxpVa4t
+         te5MO5y8ABd/uwNrFf2aGqJTgjGQYmM1OvjBA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Hgo0C+B4MaRA4y0HWxs83icuwRAx25Hc6vqvCgKEaCI=;
+        b=emOw7JfArqfX+wPi7mYojxVLce5gu1eWsg+uG/sRXmzrfexlswBJIaMtBLohQmwLOR
+         cHxEpoPioR9XbxWYnKstPiFWot+plvarZtnU9kVUkJPonTXXpvGqZBBgQwRuSUKjo42L
+         7EbAOGl9v3UDomFbdbKKPKf1MvBIdajHEX2cFYucLCxADXuAI1nJrI6Rb7rRxRQXi2pZ
+         eCBl/Eu9ajbLaeAqG4vkOt1fT5qiJbDExbVci/kr5ZHjWD/5wPsctGB+7A9iygLVdUXF
+         CBDhqmQkQ/LIM230aPxbCs+CkMXgmgPWBooqYmer5KJ6FTAW3ZqJKImhjJf4V/mHr1kC
+         ubXQ==
+X-Gm-Message-State: AOAM531bRpJpv6/S/TPy+VlmoS3HBipY/qsKyD+J8YJ/ttRF9JnOjVCz
+        /7uSKRLeyvMK1CAqp0o9AwMB6Q==
+X-Google-Smtp-Source: ABdhPJxyYFSCZ/adlVgERShTbNj7iNxb/bRt0IxJq0ZdWHSsumlBwGG2ReAw4FCEjcZRGuqiWJ3zTA==
+X-Received: by 2002:adf:f903:: with SMTP id b3mr3710169wrr.142.1601027808967;
+        Fri, 25 Sep 2020 02:56:48 -0700 (PDT)
+Received: from antares.lan (e.0.c.6.b.e.c.e.a.c.9.7.c.2.1.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:12c:79ca:eceb:6c0e])
+        by smtp.gmail.com with ESMTPSA id l10sm2225084wru.59.2020.09.25.02.56.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 02:56:48 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 2/4] selftests: bpf: Add helper to compare socket cookies
+Date:   Fri, 25 Sep 2020 10:56:28 +0100
+Message-Id: <20200925095630.49207-3-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200925095630.49207-1-lmb@cloudflare.com>
+References: <20200925095630.49207-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 11:00:30AM +0200, David Hildenbrand wrote:
-> On 25.09.20 09:41, Peter Zijlstra wrote:
-> > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
-> >> From: Mike Rapoport <rppt@linux.ibm.com>
-> >>
-> >> Removing a PAGE_SIZE page from the direct map every time such page is
-> >> allocated for a secret memory mapping will cause severe fragmentation of
-> >> the direct map. This fragmentation can be reduced by using PMD-size pages
-> >> as a pool for small pages for secret memory mappings.
-> >>
-> >> Add a gen_pool per secretmem inode and lazily populate this pool with
-> >> PMD-size pages.
-> > 
-> > What's the actual efficacy of this? Since the pmd is per inode, all I
-> > need is a lot of inodes and we're in business to destroy the directmap,
-> > no?
-> > 
-> > Afaict there's no privs needed to use this, all a process needs is to
-> > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
-> > page will utterly destroy the direct map.
-> > 
-> > I really don't like this, at all.
-> 
-> As I expressed earlier, I would prefer allowing allocation of secretmem
-> only from a previously defined CMA area. This would physically locally
-> limit the pain.
+We compare socket cookies to ensure that insertion into a sockmap worked.
+Pull this out into a helper function for use in other tests.
 
-Given that this thing doesn't have a migrate hook, that seems like an
-eminently reasonable contraint. Because not only will it mess up the
-directmap, it will also destroy the ability of the page-allocator /
-compaction to re-form high order blocks by sprinkling holes throughout.
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 50 +++++++++++++------
+ 1 file changed, 36 insertions(+), 14 deletions(-)
 
-Also, this is all very close to XPFO, yet I don't see that mentioned
-anywhere.
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 4b7a527e7e82..67d3301bdf81 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -50,6 +50,37 @@ static int connected_socket_v4(void)
+ 	return -1;
+ }
+ 
++static void compare_cookies(struct bpf_map *src, struct bpf_map *dst)
++{
++	__u32 i, max_entries = bpf_map__max_entries(src);
++	int err, duration, src_fd, dst_fd;
++
++	src_fd = bpf_map__fd(src);
++	dst_fd = bpf_map__fd(dst);
++
++	for (i = 0; i < max_entries; i++) {
++		__u64 src_cookie, dst_cookie;
++
++		err = bpf_map_lookup_elem(src_fd, &i, &src_cookie);
++		if (err && errno == ENOENT) {
++			err = bpf_map_lookup_elem(dst_fd, &i, &dst_cookie);
++			CHECK(!err, "map_lookup_elem(dst)", "element %u not deleted\n", i);
++			CHECK(err && errno != ENOENT, "map_lookup_elem(dst)", "%s\n",
++			      strerror(errno));
++			continue;
++		}
++		if (CHECK(err, "lookup_elem(src)", "%s\n", strerror(errno)))
++			continue;
++
++		err = bpf_map_lookup_elem(dst_fd, &i, &dst_cookie);
++		if (CHECK(err, "lookup_elem(dst)", "%s\n", strerror(errno)))
++			continue;
++
++		CHECK(dst_cookie != src_cookie, "cookie mismatch",
++		      "%llu != %llu (pos %u)\n", dst_cookie, src_cookie, i);
++	}
++}
++
+ /* Create a map, populate it with one socket, and free the map. */
+ static void test_sockmap_create_update_free(enum bpf_map_type map_type)
+ {
+@@ -109,9 +140,9 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
+ static void test_sockmap_update(enum bpf_map_type map_type)
+ {
+ 	struct bpf_prog_test_run_attr tattr;
+-	int err, prog, src, dst, duration = 0;
++	int err, prog, src, duration = 0;
+ 	struct test_sockmap_update *skel;
+-	__u64 src_cookie, dst_cookie;
++	struct bpf_map *dst_map;
+ 	const __u32 zero = 0;
+ 	char dummy[14] = {0};
+ 	__s64 sk;
+@@ -127,18 +158,14 @@ static void test_sockmap_update(enum bpf_map_type map_type)
+ 	prog = bpf_program__fd(skel->progs.copy_sock_map);
+ 	src = bpf_map__fd(skel->maps.src);
+ 	if (map_type == BPF_MAP_TYPE_SOCKMAP)
+-		dst = bpf_map__fd(skel->maps.dst_sock_map);
++		dst_map = skel->maps.dst_sock_map;
+ 	else
+-		dst = bpf_map__fd(skel->maps.dst_sock_hash);
++		dst_map = skel->maps.dst_sock_hash;
+ 
+ 	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
+ 	if (CHECK(err, "update_elem(src)", "errno=%u\n", errno))
+ 		goto out;
+ 
+-	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
+-	if (CHECK(err, "lookup_elem(src, cookie)", "errno=%u\n", errno))
+-		goto out;
+-
+ 	tattr = (struct bpf_prog_test_run_attr){
+ 		.prog_fd = prog,
+ 		.repeat = 1,
+@@ -151,12 +178,7 @@ static void test_sockmap_update(enum bpf_map_type map_type)
+ 		       "errno=%u retval=%u\n", errno, tattr.retval))
+ 		goto out;
+ 
+-	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
+-	if (CHECK(err, "lookup_elem(dst, cookie)", "errno=%u\n", errno))
+-		goto out;
+-
+-	CHECK(dst_cookie != src_cookie, "cookie mismatch", "%llu != %llu\n",
+-	      dst_cookie, src_cookie);
++	compare_cookies(skel->maps.src, dst_map);
+ 
+ out:
+ 	test_sockmap_update__destroy(skel);
+-- 
+2.25.1
 
-Further still, it has this HAVE_SECRETMEM_UNCACHED nonsense which is
-completely unused. I'm not at all sure exposing UNCACHED to random
-userspace is a sane idea.
