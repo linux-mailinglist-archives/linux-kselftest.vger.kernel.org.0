@@ -2,164 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CA6278C14
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 17:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2481278DE0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 18:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729232AbgIYPH0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 11:07:26 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:50581 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729152AbgIYPGW (ORCPT
+        id S1728964AbgIYQQA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 12:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727402AbgIYQP7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 11:06:22 -0400
-X-Greylist: delayed 523 seconds by postgrey-1.27 at vger.kernel.org; Fri, 25 Sep 2020 11:06:20 EDT
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6C28D580762;
-        Fri, 25 Sep 2020 10:57:25 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 25 Sep 2020 10:57:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=tBfuOWmQyjKgArCfu4khNo2TUG7
-        Jq21FgCLcBIcnmPM=; b=OofIQppgkot+WhAGmGPKk5hZgjNlpN1ZlHwJkZhHUT7
-        KzQ9a4UKLvBtvt6IoY28ep/w/+2zSquvjNGRBmkSersamyUPK4mq6bGc213GAiGs
-        6eeA6co4G2jngyV6y9+g8szoci4GiiwwXywXX2pXq0HGjzmMhlmRWxQ85LK/DlDy
-        irsPbph5wkukocpS6KgwRtiTKpYoXd3eKdxCN9qwKIkQcRRXIio+zFQ2SjqkppTg
-        SNQPkGiduZegcLFBIHP5gJ/Op/FSZLeDDXJiOr9hfVgoldvcVMrRECA9TV6Wq7zO
-        8FAbll8jR/Sd8TZyP6RpX6gZdv/A69N8+b8xGORjw1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=tBfuOW
-        mQyjKgArCfu4khNo2TUG7Jq21FgCLcBIcnmPM=; b=O2AlydY1ltQyDVNghirgyE
-        d0O51zrG8EUimzMadviff/NiqC0auMDDpsNj82EjtYhLCHLnvp4ul7cmJcKB4oic
-        8GyaGwvleCXSsdBrsydeqkvzbq2T7kD4/ki04+EPu9S3o67WbG3C4srDADzAbfLV
-        SaqsEs/JPQPxAl+TMoyLW00k6FlCJFMhhZSC9xeH5+0jlcUcku9NsJuXufMDdzoq
-        zdAtNnQpSuuO9acwwrKLSyqcC1vJ24Bg4hY3bq8wGRJsi/GvmWV6uSzubM/akmk0
-        XCtdH3b4xnADHi4BE95Cgt9gxaWKV/9k1KSsSHPJtWhz0FVMgsaL4L1E5bop9FyA
-        ==
-X-ME-Sender: <xms:UwVuXzT2_EVK-X89sY8bB0QEc5kSSYKtd5Y6-1axvefCEYWOlYSnYA>
-    <xme:UwVuX0yozWkEYrLjnjNMdRGhiQbd_yK2RWC7ovDaSPkcaNL6mvOJ2S11sWTDI9fTG
-    93ab4J4YjRsXoIH6_s>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddtgdekudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghhohcu
-    tehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrfgrth
-    htvghrnhepgeekfeejgeektdejgfefudelkeeuteejgefhhfeugffffeelheegieefvdfg
-    tefhnecukfhppedukeegrdduieejrddvtddruddvjeenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehthigthhhosehthigthhhordhpihiiiigr
-X-ME-Proxy: <xmx:UwVuX41INdcWU29T0AMGhJaB3HJIGlhdpwpZMI-KwyruwPc6EXwYOw>
-    <xmx:UwVuXzD-ve1UN48X78PrtetY1smAql28prAO4tEFqGl7ymEh84gqxQ>
-    <xmx:UwVuX8geyBzOSq6I0Ijh-k5-hQ3NuL4eld4Pjyi37IJqiLjeZx6tRA>
-    <xmx:VQVuX1Bsar3AUsWBYtFGXXzyHoYMRcAzPxIbRAmmT678sqzqCjgIfI7lyA7qd_3J>
-Received: from cisco (184-167-020-127.res.spectrum.com [184.167.20.127])
-        by mail.messagingengine.com (Postfix) with ESMTPA id B8B0B328005D;
-        Fri, 25 Sep 2020 10:57:18 -0400 (EDT)
-Date:   Fri, 25 Sep 2020 08:57:17 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20200925145717.GA284424@cisco>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20200924132904.1391-6-rppt@kernel.org>
- <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
- <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
- <20200925095029.GX2628@hirez.programming.kicks-ass.net>
- <20200925103114.GA7407@C02TD0UTHF1T.local>
+        Fri, 25 Sep 2020 12:15:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9498C0613CE;
+        Fri, 25 Sep 2020 09:15:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id 9F94829D78D
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Kees Cook <keescook@chromium.org>, luto@kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        willy@infradead.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v6 1/9] kernel: Support TIF_SYSCALL_INTERCEPT flag
+Organization: Collabora
+References: <20200904203147.2908430-1-krisman@collabora.com>
+        <20200904203147.2908430-2-krisman@collabora.com>
+        <202009221243.6BC5635E@keescook> <874kno6yct.fsf@collabora.com>
+        <202009231349.4A25EAF@keescook>
+        <87o8luuvze.fsf@nanos.tec.linutronix.de>
+Date:   Fri, 25 Sep 2020 12:15:54 -0400
+In-Reply-To: <87o8luuvze.fsf@nanos.tec.linutronix.de> (Thomas Gleixner's
+        message of "Fri, 25 Sep 2020 10:00:21 +0200")
+Message-ID: <87k0whsuh1.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200925103114.GA7407@C02TD0UTHF1T.local>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 11:31:14AM +0100, Mark Rutland wrote:
-> Hi,
-> 
-> Sorry to come to this so late; I've been meaning to provide feedback on
-> this for a while but have been indisposed for a bit due to an injury.
-> 
-> On Fri, Sep 25, 2020 at 11:50:29AM +0200, Peter Zijlstra wrote:
-> > On Fri, Sep 25, 2020 at 11:00:30AM +0200, David Hildenbrand wrote:
-> > > On 25.09.20 09:41, Peter Zijlstra wrote:
-> > > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
-> > > >> From: Mike Rapoport <rppt@linux.ibm.com>
-> > > >>
-> > > >> Removing a PAGE_SIZE page from the direct map every time such page is
-> > > >> allocated for a secret memory mapping will cause severe fragmentation of
-> > > >> the direct map. This fragmentation can be reduced by using PMD-size pages
-> > > >> as a pool for small pages for secret memory mappings.
-> > > >>
-> > > >> Add a gen_pool per secretmem inode and lazily populate this pool with
-> > > >> PMD-size pages.
-> > > > 
-> > > > What's the actual efficacy of this? Since the pmd is per inode, all I
-> > > > need is a lot of inodes and we're in business to destroy the directmap,
-> > > > no?
-> > > > 
-> > > > Afaict there's no privs needed to use this, all a process needs is to
-> > > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
-> > > > page will utterly destroy the direct map.
-> > > > 
-> > > > I really don't like this, at all.
-> > > 
-> > > As I expressed earlier, I would prefer allowing allocation of secretmem
-> > > only from a previously defined CMA area. This would physically locally
-> > > limit the pain.
-> > 
-> > Given that this thing doesn't have a migrate hook, that seems like an
-> > eminently reasonable contraint. Because not only will it mess up the
-> > directmap, it will also destroy the ability of the page-allocator /
-> > compaction to re-form high order blocks by sprinkling holes throughout.
-> > 
-> > Also, this is all very close to XPFO, yet I don't see that mentioned
-> > anywhere.
-> 
-> Agreed. I think if we really need something like this, something between
-> XPFO and DEBUG_PAGEALLOC would be generally better, since:
+Thomas Gleixner <tglx@linutronix.de> writes:
 
-Perhaps we can brainstorm on this? XPFO has mostly been abandoned
-because there's no good/safe way to make it faster. There was work on
-eliminating TLB flushes, but that waters down the protection. When I
-was last thinking about it in anger, it just seemed like it was
-destined to be slow, especially on $large_num_cores machines, since
-you have to flush everyone else's map too.
+> On Wed, Sep 23 2020 at 13:49, Kees Cook wrote:
+>> On Wed, Sep 23, 2020 at 04:18:26PM -0400, Gabriel Krisman Bertazi wrote:
+>>> Kees Cook <keescook@chromium.org> writes:
+>>> Yes, we can, and I'm happy to follow up with that as part of my TIF
+>>> clean up work, but can we not block the current patchset to be merged
+>>> waiting for that, as this already grew a lot from the original feature
+>>> submission?
+>>
+>> In that case, I'd say just add the new TIF flag. The consolidation can
+>> come later.
+>
+> No. This is exactly the wrong order. Cleanup and consolidation have
+> precedence over features. I'm tired of 'we'll do that later' songs,
+> simply because in the very end I'm going to be the idiot who mops up the
+> resulting mess.
+>
 
-I think the idea of "opt in to XPFO" is mostly attractive because then
-people only have to pay the slowness cost for memory they really care
-about. But if there's some way to make XPFO, or some alternative
-design, that may be better.
+No problem.  I will follow up with a patchset consolidating those flags
+into this syscall_intercept interface I proposed.  I assume there is no
+immediate concerns with the consolidation approach itself.
 
-Tycho
+-- 
+Gabriel Krisman Bertazi
