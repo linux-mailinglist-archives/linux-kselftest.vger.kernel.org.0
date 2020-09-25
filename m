@@ -2,169 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD81B27848A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 11:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E54227851D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 12:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728170AbgIYJ5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 05:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728148AbgIYJ44 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 05:56:56 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB4EC0613D7
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 02:56:55 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id k18so2583441wmj.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 02:56:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7RJH7pZMCVV5iroyiFLpiFRNTiQn0SSX+69PgDO+op4=;
-        b=Z5Tay6EcQTWazV7dTKt9RehYD/4epP7kRU3Ga/PrUGWrecnu5q/y5u3cYUdQDXeJ9c
-         Tyz/nwhilwMzR4ntbwLfx6EoZ16+hl0EzUT8i/ih1BZiBOcm/WzdG1KAcIMWDxNltI6s
-         e+yJCM3wjpKF1BppOv7Dp6OVp7eTZLCqSO4w8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7RJH7pZMCVV5iroyiFLpiFRNTiQn0SSX+69PgDO+op4=;
-        b=qlp43v5MDcesPKd2+SLP+D2a6O/79kWT5euPAXFcgJXwdEyuJXknYaZ0Jgm3ZpOlpN
-         9FgtBGZVEZMKXVGmO/HZqBM7lAEVWgri88cHq3wUMw3PQNMhWqmprq4OYxqf3A+xZubM
-         FWDrqIH8gDstq4yZV1cqfFrsU1ZV5Pl2roGWjn9wbDlkWOQhPFFLSsXIAgE0b2cY77W1
-         luMrg7gvBzRNh2KlrAQfGd9iaj6r0s0TMIzyxqHmuAzQHWj6H/w3RcIA8HYdavHlA1mB
-         TlNxyfbzsktVb0C1g6y+S/9axBrheHDWjdo+IGL8+z7LnKLGIb8sgHjgkiEHE3UT0QDF
-         Iyrg==
-X-Gm-Message-State: AOAM5319a+sYqEyaCoJCGngHZeusrGQ1V5CSAocwerRuMNJuwy82h6Qm
-        TviemrHCYZ3qJO5wuhklVn/m3A==
-X-Google-Smtp-Source: ABdhPJyXHCb7Koa9bhkkDBnbpeFU8UXjBvkZiVeQ6G92Q1rH+QgQoM9tP3HlGHJwhr+7X2lyLuGuKQ==
-X-Received: by 2002:a7b:cc17:: with SMTP id f23mr2095213wmh.166.1601027813944;
-        Fri, 25 Sep 2020 02:56:53 -0700 (PDT)
-Received: from antares.lan (e.0.c.6.b.e.c.e.a.c.9.7.c.2.1.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:12c:79ca:eceb:6c0e])
-        by smtp.gmail.com with ESMTPSA id l10sm2225084wru.59.2020.09.25.02.56.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 02:56:53 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 4/4] selftest: bpf: Test copying a sockmap and sockhash
-Date:   Fri, 25 Sep 2020 10:56:30 +0100
-Message-Id: <20200925095630.49207-5-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200925095630.49207-1-lmb@cloudflare.com>
-References: <20200925095630.49207-1-lmb@cloudflare.com>
+        id S1727796AbgIYKba (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 06:31:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:41500 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727044AbgIYKba (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 25 Sep 2020 06:31:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1AE91045;
+        Fri, 25 Sep 2020 03:31:28 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [10.57.16.138])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1DFE3F718;
+        Fri, 25 Sep 2020 03:31:21 -0700 (PDT)
+Date:   Fri, 25 Sep 2020 11:31:14 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20200925103114.GA7407@C02TD0UTHF1T.local>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924132904.1391-6-rppt@kernel.org>
+ <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
+ <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
+ <20200925095029.GX2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200925095029.GX2628@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since we can now call map_update_elem(sockmap) from bpf_iter context
-it's possible to copy a sockmap or sockhash in the kernel. Add a
-selftest which exercises this.
+Hi,
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 14 +++++-----
- .../selftests/bpf/progs/bpf_iter_sockmap.c    | 27 +++++++++++++++----
- 2 files changed, 30 insertions(+), 11 deletions(-)
+Sorry to come to this so late; I've been meaning to provide feedback on
+this for a while but have been indisposed for a bit due to an injury.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index e8a4bfb4d9f4..854a508e81ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -194,7 +194,7 @@ static void test_sockmap_invalid_update(void)
- 		test_sockmap_invalid_update__destroy(skel);
- }
- 
--static void test_sockmap_iter(enum bpf_map_type map_type)
-+static void test_sockmap_copy(enum bpf_map_type map_type)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
- 	int err, len, src_fd, iter_fd, duration = 0;
-@@ -242,7 +242,7 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
- 	linfo.map.map_fd = src_fd;
- 	opts.link_info = &linfo;
- 	opts.link_info_len = sizeof(linfo);
--	link = bpf_program__attach_iter(skel->progs.count_elems, &opts);
-+	link = bpf_program__attach_iter(skel->progs.copy, &opts);
- 	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
- 		goto out;
- 
-@@ -265,6 +265,8 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
- 		  skel->bss->socks, num_sockets))
- 		goto close_iter;
- 
-+	compare_cookies(src, skel->maps.dst);
-+
- close_iter:
- 	close(iter_fd);
- free_link:
-@@ -294,8 +296,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
- 	if (test__start_subtest("sockmap update in unsafe context"))
- 		test_sockmap_invalid_update();
--	if (test__start_subtest("sockmap iter"))
--		test_sockmap_iter(BPF_MAP_TYPE_SOCKMAP);
--	if (test__start_subtest("sockhash iter"))
--		test_sockmap_iter(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKHASH);
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c b/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-index 1af7555f6057..f3af0e30cead 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-@@ -22,21 +22,38 @@ struct {
- 	__type(value, __u64);
- } sockhash SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 64);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst SEC(".maps");
-+
- __u32 elems = 0;
- __u32 socks = 0;
- 
- SEC("iter/sockmap")
--int count_elems(struct bpf_iter__sockmap *ctx)
-+int copy(struct bpf_iter__sockmap *ctx)
- {
- 	struct sock *sk = ctx->sk;
- 	__u32 tmp, *key = ctx->key;
- 	int ret;
- 
--	if (key)
--		elems++;
-+	if (!key)
-+		return 0;
- 
--	if (sk)
-+	elems++;
-+
-+	/* We need a temporary buffer on the stack, since the verifier doesn't
-+	 * let us use the pointer from the context as an argument to the helper.
-+	 */
-+	tmp = *key;
-+
-+	if (sk) {
- 		socks++;
-+		return bpf_map_update_elem(&dst, &tmp, sk, 0) != 0;
-+	}
- 
--	return 0;
-+	ret = bpf_map_delete_elem(&dst, &tmp);
-+	return ret && ret != -ENOENT;
- }
--- 
-2.25.1
+On Fri, Sep 25, 2020 at 11:50:29AM +0200, Peter Zijlstra wrote:
+> On Fri, Sep 25, 2020 at 11:00:30AM +0200, David Hildenbrand wrote:
+> > On 25.09.20 09:41, Peter Zijlstra wrote:
+> > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
+> > >> From: Mike Rapoport <rppt@linux.ibm.com>
+> > >>
+> > >> Removing a PAGE_SIZE page from the direct map every time such page is
+> > >> allocated for a secret memory mapping will cause severe fragmentation of
+> > >> the direct map. This fragmentation can be reduced by using PMD-size pages
+> > >> as a pool for small pages for secret memory mappings.
+> > >>
+> > >> Add a gen_pool per secretmem inode and lazily populate this pool with
+> > >> PMD-size pages.
+> > > 
+> > > What's the actual efficacy of this? Since the pmd is per inode, all I
+> > > need is a lot of inodes and we're in business to destroy the directmap,
+> > > no?
+> > > 
+> > > Afaict there's no privs needed to use this, all a process needs is to
+> > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
+> > > page will utterly destroy the direct map.
+> > > 
+> > > I really don't like this, at all.
+> > 
+> > As I expressed earlier, I would prefer allowing allocation of secretmem
+> > only from a previously defined CMA area. This would physically locally
+> > limit the pain.
+> 
+> Given that this thing doesn't have a migrate hook, that seems like an
+> eminently reasonable contraint. Because not only will it mess up the
+> directmap, it will also destroy the ability of the page-allocator /
+> compaction to re-form high order blocks by sprinkling holes throughout.
+> 
+> Also, this is all very close to XPFO, yet I don't see that mentioned
+> anywhere.
 
+Agreed. I think if we really need something like this, something between
+XPFO and DEBUG_PAGEALLOC would be generally better, since:
+
+* Secretmem puts userspace in charge of kernel internals (AFAICT without
+  any ulimits?), so that seems like an avenue for malicious or buggy
+  userspace to exploit and trigger DoS, etc. The other approaches leave
+  the kernel in charge at all times, and it's a system-level choice
+  which is easier to reason about and test.
+
+* Secretmem interaction with existing ABIs is unclear. Should uaccess
+  primitives work for secretmem? If so, this means that it's not valid
+  to transform direct uaccesses in syscalls etc into accesses via the
+  linear/direct map. If not, how do we prevent syscalls? The other
+  approaches are clear that this should always work, but the kernel
+  should avoid mappings wherever possible.
+
+* The uncached option doesn't work in a number of situations, such as
+  systems which are purely cache coherent at all times, or where the
+  hypervisor has overridden attributes. The kernel cannot even know that
+  whther this works as intended. On its own this doens't solve a
+  particular problem, and I think this is a solution looking for a
+  problem.
+
+... and fundamentally, this seems like a "more security, please" option
+that is going to be abused, since everyone wants security, regardless of
+how we say it *should* be used. The few use-cases that may make sense
+(e.g. protection of ketys and/or crypto secrrets), aren't going to be
+able to rely on this (since e.g. other uses may depelete memory pools),
+so this is going to be best-effort. With all that in mind, I struggle to
+beleive that this is going to be worth the maintenance cost (e.g. with
+any issues arising from uaccess, IO, etc).
+
+Overall, I would prefer to not see this syscall in the kernel.
+
+> Further still, it has this HAVE_SECRETMEM_UNCACHED nonsense which is
+> completely unused. I'm not at all sure exposing UNCACHED to random
+> userspace is a sane idea.
+
+I agree the uncached stuff should be removed. It is at best misleading
+since the kernel can't guarantee it does what it says, I think it's
+liable to lead to issues in future (e.g. since it can cause memory
+operations to raise different exceptions relative to what they can
+today), and as above it seems like a solution looking for a problem.
+
+Thanks,
+Mark.
