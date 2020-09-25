@@ -2,104 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F11DC27947D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Sep 2020 01:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C022794E3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Sep 2020 01:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728606AbgIYXGG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 19:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S1729424AbgIYXpi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 19:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725272AbgIYXGG (ORCPT
+        with ESMTP id S1729469AbgIYXpi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 19:06:06 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D66C0613CE
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 16:06:05 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id t76so4477149oif.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 16:06:05 -0700 (PDT)
+        Fri, 25 Sep 2020 19:45:38 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55472C0613CE
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 16:45:38 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id f18so4732145pfa.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 16:45:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=76AVeLPThqJyq9xRW6clpHIRKAOCQwmI85cgL3Cyres=;
-        b=c+XpSxQO/nxlyT0ft4XZzdREUsZN6qokIzkZCdfBlxYsfnKoDcsMJJ9R5g4+Qi8D+p
-         gSLotVkVSfHXVSAXrZMhoIhhcDe0Lkxo/ye47mROh45ZpOWSOW1FHnGe2RuIUda9iVXy
-         W4gjczoxcJKDDxiloVI1ZfzdGNVBkcFaAIUSw=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cCvjyh3GAWHODp3gNqO/cxpjyT+UK9hE3i+NYvWYWug=;
+        b=UaBaPWPOtq6Ku6r+E/aktfyx2R2zJ+wD62Bxd9SCvodOkjq446bGgfddVvHaqJ5ZQv
+         tievxaUuKaBeq+7npte/4zLwlBxDDR3mz9dCXRJcIJkGTv4dIDWeyziPvNaRxHbd+ThX
+         hJzLkj0XnH6NjDHuGuo8XH+MMqxth9IEeOwF8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=76AVeLPThqJyq9xRW6clpHIRKAOCQwmI85cgL3Cyres=;
-        b=SsaMDo5MozSngZm1rH4KPIy4zxGcR3Ng0xBfnaJBnQHjCCXhg8EHhaCMCQwhaiKcOp
-         4w10y9Pca78PnKLlqWsqtKtGOtififPFIfFPxWL/TFSET7L0Z9LOOtH6kPPFo8Vsj9+p
-         4/zfjEF5DbogBBzz5NzesfyX7I3bHbBuBFnNYTFbxB3CnCtzd/x31AWqFeqRp0bgCusc
-         /zlQh/wsT221bToby6TFFcvoTKftVLyRbytUsTD/a6my3VEM1jnVdqRaDPBBf9bZYIUs
-         sQWVoWwgChwuzBJxNpR5BkpPJGnlaLPRYSOkj2BRShdz9vhuaWFdBk2E7ks9zwwQSq0p
-         sV+w==
-X-Gm-Message-State: AOAM532lO8mH+9DPDozUb/nRnm2dz+CaUi9IHLIZb8H7j85co5cqtDVu
-        dO2p5dWYYiJ2PlWVFSWkNgMVng==
-X-Google-Smtp-Source: ABdhPJyWna6d5P8FvJbM90Pt7OdJcvYVRXH0ouob2XpQcut86to6eu59wT9/3fQh+R4sVTzQdTqGSg==
-X-Received: by 2002:a05:6808:996:: with SMTP id a22mr483988oic.109.1601075165095;
-        Fri, 25 Sep 2020 16:06:05 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 74sm996786otc.65.2020.09.25.16.06.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2020 16:06:04 -0700 (PDT)
-Subject: Re: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each
- test individually selectable
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Hangbin Liu <liuhangbin@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
+        bh=cCvjyh3GAWHODp3gNqO/cxpjyT+UK9hE3i+NYvWYWug=;
+        b=V0Q99IDy48orzs855tw5e1FsoHx0n6PbKWXJK/SrXeXzbbD1f6hxjUHvEqmkVoPBs+
+         EMuUQpmEj9J8m4OidJSQ7LRCukkiil1oHMRolE47fCyqQ+g/eLy22GNd0lkK/XgmGiu5
+         jMzTo2KbHGF0ODdlQ1AapSPh2DcivpCbwnM77UageB7RhojrETYhAYAAfjSBuQg2jLPD
+         6zq79M3UQjeO9X/WUxFRgFzyC8lZkwDpE6C0sI1yeUIxTjdt+6srcqqR7ipOh94NRaKN
+         +jPOswYCMwxkk7+Afo+cZI4pZNx4c0Qn9cL2P31gz3W5MfY9J5YUnU+53RQQ++EzOL8Z
+         InTg==
+X-Gm-Message-State: AOAM532MYZMYUqlSEuB25eCAS6BKbpPUpNqsiHoxFIFio/q2c4KZMavm
+        dTVlWFqPx96LbKIa/4Vwxkzaxg==
+X-Google-Smtp-Source: ABdhPJx/ssB0AJWYYp3cLL8gzai0BTOQP/wl4iZKIWPv0+GRei9MwCIslR5o26fmdgEwQGo/+OrXgg==
+X-Received: by 2002:aa7:96f1:0:b029:142:2501:39ed with SMTP id i17-20020aa796f10000b0290142250139edmr859126pfq.60.1601077537908;
+        Fri, 25 Sep 2020 16:45:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n9sm3119447pgi.2.2020.09.25.16.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 16:45:36 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Hangbin Liu <liuhangbin@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, Tim.Bird@sony.com,
-        lkft-triage@lists.linaro.org,
+        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
         Anders Roxell <anders.roxell@linaro.org>,
         Justin Cook <justin.cook@linaro.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200914021758.420874-1-liuhangbin@gmail.com/>
- <20200914022227.437143-1-liuhangbin@gmail.com>
- <CA+G9fYvT6Mw2BamoiVyw=wLUqD-3LB2oaDqcuabOyWfFxEN1qg@mail.gmail.com>
- <202009251414.15274C0@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f375a87d-7ba3-f97f-b39a-06b61f80c552@linuxfoundation.org>
-Date:   Fri, 25 Sep 2020 17:06:02 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] selftests: Extract run_kselftest.sh and generate stand-alone test list
+Date:   Fri, 25 Sep 2020 16:45:25 -0700
+Message-Id: <20200925234527.1885234-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <202009251414.15274C0@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/25/20 3:16 PM, Kees Cook wrote:
-> On Fri, Sep 25, 2020 at 01:51:53PM +0530, Naresh Kamboju wrote:
->> On Mon, 14 Sep 2020 at 07:53, Hangbin Liu <liuhangbin@gmail.com> wrote:
->>>
->>> Currently, after generating run_kselftest.sh, there is no way to choose
->>> which test we could run. All the tests are listed together and we have
->>> to run all every time. This patch enhanced the run_kselftest.sh to make
->>> the tests individually selectable. e.g.
->>>
->>>    $ ./run_kselftest.sh -t "bpf size timers"
->>
->> My test run break on linux next
->>
->> ./run_kselftest.sh: line 1331: syntax error near unexpected token `)'
->> ./run_kselftest.sh: line 1331: `-e -s | --summary )
->> logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;'
-> 
-> Yes, please revert this patch. The resulting script is completely
-> trashed:
-> 
+Hi!
 
-Thank you both. Now reverted.
+I really like Hangbin Liu's intent[1] but I think we need to be a little
+more clean about the implementation. This extracts run_kselftest.sh from
+the Makefile so it can actually be changed without embeds, etc. Instead,
+generate the test list into a text file. Everything gets much simpler.
+:)
 
-thanks,
--- Shuah
+And in patch 2, I add back Hangin Liu's new options (with some extra
+added) with knowledge of "collections" (i.e. Makefile TARGETS) and
+subtests. This should work really well with LAVA too, which needs to
+manipulate the lists of tests being run.
+
+Thoughts?
+
+-Kees
+
+[1] https://lore.kernel.org/lkml/20200914022227.437143-1-liuhangbin@gmail.com/
+
+Kees Cook (2):
+  selftests: Extract run_kselftest.sh and generate stand-alone test list
+  selftests/run_kselftest.sh: Make each test individually selectable
+
+ tools/testing/selftests/Makefile         | 26 ++-----
+ tools/testing/selftests/lib.mk           |  5 +-
+ tools/testing/selftests/run_kselftest.sh | 89 ++++++++++++++++++++++++
+ 3 files changed, 98 insertions(+), 22 deletions(-)
+ create mode 100755 tools/testing/selftests/run_kselftest.sh
+
+-- 
+2.25.1
+
