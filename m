@@ -2,141 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8B8278FB9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 19:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8DE279258
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 22:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbgIYRg4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 13:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S1728434AbgIYUiy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 16:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727812AbgIYRgz (ORCPT
+        with ESMTP id S1728169AbgIYUif (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 13:36:55 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE199C0613CE;
-        Fri, 25 Sep 2020 10:36:55 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id v60so2530884ybi.10;
-        Fri, 25 Sep 2020 10:36:55 -0700 (PDT)
+        Fri, 25 Sep 2020 16:38:35 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA0BC0613AF
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 13:30:59 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id z18so4352568pfg.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 13:30:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zZpRGIpf6h/aLDjQFUhOtDraQ6nKlUQ/ODEe9CGcDmc=;
-        b=cujWZWU8IghE94FXDBFzzIKGrFjKmylSufF0j/hVSTuXBKM86g01jOvAobW92zW7cM
-         +zsy0hqbeAeRHpAjnBmIv8s6U3mrgj261Nxw4R7o51yhomJUvu+3stONpXN0Ptkf6R5P
-         ezagbL39cN6s6hEb/7m2ooP5E4F84YwQDn8fEjuKJ6JE6lhj/aNVXfRStdQB40Woo4e9
-         AaP8lxoCuqP+RK2JboOcWyHdTRe8a/cxAXTClTu8K6yH9TuJjeUfieBYG0CzCnEaYHXs
-         iism18H0r9+sKkywsK3ach/nD4Rb8oLivU+lNN6Znuau3BTOfNoGDseRsdueozz4SxSo
-         t8cA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xalch59fDuEKl76YuuW9L6ISBYkH/TTx0Ff+RgikJxo=;
+        b=hYaTNdNHJvLXhzfO+DdQhP+Y6AQFVGOXPqty1ToYGSxhw3Gg9u0qORgOjwXhmBR7X+
+         3RBtz3lDH0PW6AmY/qY7MMzKY6CsGoSJzyEB+byHzQg5n948zglNKeCBqL+BXCy6ISuz
+         pLQE8ykuQBc1+Zol1mYktHi8NsaELoQn/dyBc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zZpRGIpf6h/aLDjQFUhOtDraQ6nKlUQ/ODEe9CGcDmc=;
-        b=W2td9uoBKUAmSGayzPij5VM2L0zYtGcdwsptwN3EJ1POy9t6Jh5yHNxPrJbUOmw/rG
-         DrcJWB8RZ9Rv1KeORsuUHV3wGCZKm3XzE1IXuNz+RQqboNPud1bKrAgDxHsQ8SVW+FCK
-         DAH+QKJ9aJn73/nWMXlGpFd1ZXS+fFdgARMb2E4AO69iOqTZ2qaPzoR7gGiEsKt9zs9g
-         BxfWRVSYReHTdazFqN39c0Eg2FGgD5pv1WtxAKBdtjGln+LjiJFHdzvExKxkFnKjOzVS
-         i/vEYKZ3vuZnJ+890xB7kOcyWgKMyBdmXuYUtJQa+BBQcn1pzqwdb1R4MlGxOG/1RT9/
-         RiLg==
-X-Gm-Message-State: AOAM533lKAsHoUVIMi2Nt/2NzwNptH+eUU7TfLEy21ezraUQ0FGbJtxI
-        DcAlbuOz8yxcGly1Rx9UW1uQUQ2E+R0nUbPG4msc7Tws39cB1DAP
-X-Google-Smtp-Source: ABdhPJxcScgubceKQGCd2YGjstpAhFXV+DIbP3KAs6SqVOIEK/EzRliRGa84SmGu6OoNz8sDo/BnrefAqFjsn/fTojU=
-X-Received: by 2002:a25:6644:: with SMTP id z4mr379569ybm.347.1601055414943;
- Fri, 25 Sep 2020 10:36:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xalch59fDuEKl76YuuW9L6ISBYkH/TTx0Ff+RgikJxo=;
+        b=p/tXZNw2grXVVtmCHijtEKRrAzebBbvBVMWwkaKFe3iqstu6w6XjEq+wavrFx763FQ
+         ESyZ/ax2QVMyNqmL3jAbsAatZwoZLGK9p4yzYGaQI9EXD8abVqFlvh1pAmJ9/MsWJyVd
+         V9GZ7OL2Es8RLBolLmiaUX4w8VAoCXcKPCgmi7LkcWfzM7OlBvLRUS2iA5PAifsY1UT0
+         clcAjCZFWLDtfNwCKpvTxJLsmETvJEQQwmTHMywyYguX37bp6ST9uxepzzHCywc5PZCE
+         ON808BkyTQPCcJUaIHTgU/RZZ9mszP7fWXBCf5d9oFFPGgfweqX7RvGHP7C7YK10kbpf
+         hsOA==
+X-Gm-Message-State: AOAM531Iu9RjKWGnCivHaUphiwF5h0GqqOA0KSUUIAerN60LSJYx4ROk
+        fADx8HbbPLOQtglZ8MnuVPodUQ==
+X-Google-Smtp-Source: ABdhPJzmfj4AEPYzK8yIYg6dWta0UdlI0MvUEx+twtC6hiM5Se1DgdD+x9UOcYpIEItGRJ46ESH7fA==
+X-Received: by 2002:a17:902:c252:b029:d2:4345:5c7 with SMTP id 18-20020a170902c252b02900d2434505c7mr1152244plg.4.1601065859302;
+        Fri, 25 Sep 2020 13:30:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g1sm70849pjs.30.2020.09.25.13.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 13:30:58 -0700 (PDT)
+Date:   Fri, 25 Sep 2020 13:30:57 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, luto@kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, willy@infradead.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH v6 1/9] kernel: Support TIF_SYSCALL_INTERCEPT flag
+Message-ID: <202009251327.587D111@keescook>
+References: <20200904203147.2908430-1-krisman@collabora.com>
+ <20200904203147.2908430-2-krisman@collabora.com>
+ <202009221243.6BC5635E@keescook>
+ <874kno6yct.fsf@collabora.com>
+ <202009231349.4A25EAF@keescook>
+ <87o8luuvze.fsf@nanos.tec.linutronix.de>
+ <87k0whsuh1.fsf@collabora.com>
 MIME-Version: 1.0
-References: <1600883188-4831-1-git-send-email-alan.maguire@oracle.com>
- <1600883188-4831-5-git-send-email-alan.maguire@oracle.com> <20200925005051.nqf6ru46psex7oh4@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20200925005051.nqf6ru46psex7oh4@ast-mbp.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 25 Sep 2020 10:36:44 -0700
-Message-ID: <CAEf4BzZxWC2cO9dmZczWWCQgGH6TLLjmDSiO_LrMzSu7Es5ZSw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 4/6] selftests/bpf: add bpf_snprintf_btf
- helper tests
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        andriy.shevchenko@linux.intel.com, Petr Mladek <pmladek@suse.com>,
-        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Andrey Ignatov <rdna@fb.com>, scott.branden@broadcom.com,
-        Quentin Monnet <quentin@isovalent.com>,
-        Carlos Neira <cneirabustos@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k0whsuh1.fsf@collabora.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 24, 2020 at 5:51 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Sep 23, 2020 at 06:46:26PM +0100, Alan Maguire wrote:
-> > +static int __strncmp(const void *m1, const void *m2, size_t len)
-> > +{
-> > +     const unsigned char *s1 = m1;
-> > +     const unsigned char *s2 = m2;
-> > +     int i, delta = 0;
-> > +
-> > +#pragma clang loop unroll(full)
->
-> Shouldn't be needed?
-> The verifier supports bounded loops.
->
-> > +     for (i = 0; i < len; i++) {
-> > +             delta = s1[i] - s2[i];
-> > +             if (delta || s1[i] == 0 || s2[i] == 0)
-> > +                     break;
-> > +     }
-> > +     return delta;
-> > +}
-> > +
-> > +/* Use __builtin_btf_type_id to test snprintf_btf by type id instead of name */
-> > +#if __has_builtin(__builtin_btf_type_id)
-> > +#define TEST_BTF_BY_ID(_str, _typestr, _ptr, _hflags)                        \
-> > +     do {                                                            \
-> > +             int _expected_ret = ret;                                \
-> > +             _ptr.type = 0;                                          \
-> > +             _ptr.type_id = __builtin_btf_type_id(_typestr, 0);      \
->
-> The test is passing for me, but I don't understand why :)
-> __builtin_btf_type_id(, 0); means btf_id of the bpf program.
-> While bpf_snprintf_btf() is treating it as btf_id of vmlinux_btf.
-> So it really should have been __builtin_btf_type_id(,1);
+On Fri, Sep 25, 2020 at 12:15:54PM -0400, Gabriel Krisman Bertazi wrote:
+> Thomas Gleixner <tglx@linutronix.de> writes:
+> 
+> > On Wed, Sep 23 2020 at 13:49, Kees Cook wrote:
+> >> On Wed, Sep 23, 2020 at 04:18:26PM -0400, Gabriel Krisman Bertazi wrote:
+> >>> Kees Cook <keescook@chromium.org> writes:
+> >>> Yes, we can, and I'm happy to follow up with that as part of my TIF
+> >>> clean up work, but can we not block the current patchset to be merged
+> >>> waiting for that, as this already grew a lot from the original feature
+> >>> submission?
+> >>
+> >> In that case, I'd say just add the new TIF flag. The consolidation can
+> >> come later.
+> >
+> > No. This is exactly the wrong order. Cleanup and consolidation have
+> > precedence over features. I'm tired of 'we'll do that later' songs,
+> > simply because in the very end I'm going to be the idiot who mops up the
+> > resulting mess.
+> >
+> 
+> No problem.  I will follow up with a patchset consolidating those flags
+> into this syscall_intercept interface I proposed.  I assume there is no
+> immediate concerns with the consolidation approach itself.
 
-Better still to use bpf_core_type_id_kernel() macro from bpf_core_read.h.
+I think the only issue is just finding a clean way to set/unset the
+flags safely/quickly (a lock seems too heavy to me).
 
->
-> The following diff works:
-> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> index b4f96f1f6830..bffa786e3b03 100644
-> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> @@ -45,7 +45,7 @@ static int __strncmp(const void *m1, const void *m2, size_t len)
->         do {                                                            \
->                 int _expected_ret = ret;                                \
->                 _ptr.type = 0;                                          \
-> -               _ptr.type_id = __builtin_btf_type_id(_typestr, 0);      \
-> +               _ptr.type_id = __builtin_btf_type_id(_typestr, 1);      \
->                 ret = bpf_snprintf_btf(_str, STRSIZE, &_ptr,            \
->                                        sizeof(_ptr), _hflags);          \
->                 if (ret != _expected_ret) {                             \
-> @@ -88,7 +88,7 @@ static int __strncmp(const void *m1, const void *m2, size_t len)
->                         ret = -EBADMSG;                                 \
->                         break;                                          \
->                 }                                                       \
-> -               TEST_BTF_BY_ID(_str, #_type, _ptr, _hflags);            \
-> +               TEST_BTF_BY_ID(_str, _ptr, _ptr, _hflags);              \
->
-> But still makes me suspicious of the test. I haven't debugged further.
+Should thread_info hold an entire u32 for all intercept flags (then the
+TIF_WORK tests is just a zero-test of the intercept u32 word)? Or should
+there be a TIF_INTERCEPT and a totally separate u32 (e.g. in
+task_struct) indicating which intercepts? (And if they're separate, how
+do we atomically set/unset)
+
+i.e.:
+
+atomic_start
+	toggle a per-intercept bit
+	set TIF_INTERCEPT = !!(intercept word)
+atomic_end
+
+-- 
+Kees Cook
