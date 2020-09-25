@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1868F277CEE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 02:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371DD277D18
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 02:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726694AbgIYAd3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Sep 2020 20:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S1726885AbgIYAme (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Sep 2020 20:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbgIYAd3 (ORCPT
+        with ESMTP id S1726694AbgIYAme (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Sep 2020 20:33:29 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6042C0613CE;
-        Thu, 24 Sep 2020 17:33:28 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id g29so1027240pgl.2;
-        Thu, 24 Sep 2020 17:33:28 -0700 (PDT)
+        Thu, 24 Sep 2020 20:42:34 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB51CC0613CE;
+        Thu, 24 Sep 2020 17:42:33 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id x22so1407235pfo.12;
+        Thu, 24 Sep 2020 17:42:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=heSZ+vYMpgFHhWomcOAQ0pB3xOxWwgLlUEvkB5nligg=;
-        b=qolVVq1IXAH2KQsr1j+mJ189ZPsIRozzGguGVAMYYXukIe7sljhxPZT+XB3Z4bB0mh
-         1nMqK1+EN03THQFbpx6SY1wavqCTlq3Jd8q9ehUKXQfwrKIGfJNmPo/M7XpfoUAhe5mS
-         skl1yghN9442sSafo5zZml7QG5D6QMWG4kYn5xW8TTRFrvuQjp0TRXLR2I1UNoIJpVE2
-         pUCUl71FFEaJLNeCWT7X/o3URttG5Sc9kK7uclod8TPYVNywP4UpAXyKy3QaAwy9g9NY
-         LwaMVHdhWQwBdhkLSUTWoThubO+wLdUH0wZ+4YgfvsmRQeu74S2CyaKZYO/4cCt/nwoD
-         FF8A==
+        bh=+powH/NZMvQuXjnBMTSajRNp+zvL8Zx326js1nzMJMY=;
+        b=pgWhZiYHP6aKFn9msBnbnfp5w3TUkGvZ1CIF7N+uRE6hYTPaFP+gLjc+myLaRL7ROj
+         5WbKXasafJcu3NaLbnEvv/KMxrVVIWvOYVyNDG9bOxKp3yfEaEdc6EoG2Msk+IgcKlC7
+         5foJveBhrcXk1OsKIeUFsA3oJoDKCWBFoDP8reppLd1Yxb/NJJGCW1bNo9PJ7wUjY5mf
+         DdXV8M5HFxMtH1Cos/8C3EcMdIulfMKOczaEgsyH3Bw/XU5mxIa1TxGWCj7bF6yZ/ZCG
+         uuiY0JM6i7aXoqBZHiugQJXm7TIM1ZX5I0tqFvFmRUa9iaB0rcEf8F2CLZBwRLrLhLOw
+         oFRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=heSZ+vYMpgFHhWomcOAQ0pB3xOxWwgLlUEvkB5nligg=;
-        b=UiXn4GtBcrC1SWJmj5aGGrXGfpDKs7/vDwYELr59/4vjwuYFBbudwkQqE22UAwR0vr
-         13zYeC1HbcQRVjr+FJFC0B2+lJK4uSrPlChgIOdswov2pmaGs8RoWnRtwGRoDfWVp6ul
-         09RjRJELF0N/CJbGL98KS+8M1DeVpInZ/zYwWqGwShg3TT8qyrFrOpBQjgp9qkw7X8Sy
-         J5tI+pH2cahxsJdFHM6v6eMY/hAEnQNXZYoyCyg48xloaFeElDpezeHAq1+S0fM0WZIX
-         FXTR6Z2YyWkmcFfovrzxSpz0ixHkqBAIdrcv1cmAOlci7naPoqvmEub7ts+yyjBMQG0u
-         g4eQ==
-X-Gm-Message-State: AOAM530nhcGjOm/glfGznAi4j2NG02syU9jAtnVMWD6lwu2DrYjb4uom
-        p4mIYe42dguNWTRy9aO0VQk=
-X-Google-Smtp-Source: ABdhPJzAV7rIzcHLywe8VSGKzhq95U0ycxS2I81hHRVEYrbo3sKMnkRgNi8ea0dj1c2XdBuo85vX0w==
-X-Received: by 2002:aa7:9986:0:b029:142:2501:39db with SMTP id k6-20020aa799860000b0290142250139dbmr1599765pfh.42.1600994008051;
-        Thu, 24 Sep 2020 17:33:28 -0700 (PDT)
+        bh=+powH/NZMvQuXjnBMTSajRNp+zvL8Zx326js1nzMJMY=;
+        b=uDjtRzWGLJ3PbcL/AduLQlfMJIs0uKEZ5tekgQb8e01v101kB/rheZhWmZjPvhHjYj
+         ddZ4+d3FcGHtsolUBZ4o/vFileZqqcJlSeFmy95v7/KUiAuW5weEZO0VOjmQ6lx6F76g
+         tRycsIlSDaFw9toNO/1n5DxhQZMC+qjog01Pjzedt22tc+Q+HcUmezAXRBegLHDBaBMO
+         IifyK45yQ8Nj3tyqrdRqZj/idxjHNtYs1bJO98hqig29CmU6FDVs4GhEwiXu5dMIy8eC
+         HEE3NpWYCOEHpgxlE8vZBZBl6J+/L8Sr2ySLwVhopHoJiqu1AhAqSmF5Vq/KUTAS8flp
+         xcqg==
+X-Gm-Message-State: AOAM533353mvD8gGc2nhyAqiXyzmZJ2iO3xWLC4iTTALjt8vyTGNoKiY
+        4BC3jomm/YkKKBhYnZ+qvpM=
+X-Google-Smtp-Source: ABdhPJzIQMgfdCv1Hybed7eHSxZ/ZnIzeyJ3+9YDxi6wvp8cgLMLUcO1ihhQu+hfrmiO253i2vYwoQ==
+X-Received: by 2002:a17:902:7144:b029:d1:e5e7:be22 with SMTP id u4-20020a1709027144b02900d1e5e7be22mr1659323plm.85.1600994553413;
+        Thu, 24 Sep 2020 17:42:33 -0700 (PDT)
 Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:49ed])
-        by smtp.gmail.com with ESMTPSA id z7sm594743pfj.75.2020.09.24.17.33.25
+        by smtp.gmail.com with ESMTPSA id 126sm582972pfg.192.2020.09.24.17.42.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 17:33:27 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 17:33:23 -0700
+        Thu, 24 Sep 2020 17:42:32 -0700 (PDT)
+Date:   Thu, 24 Sep 2020 17:42:29 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com,
@@ -60,132 +60,88 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com,
         rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         acme@kernel.org
-Subject: Re: [PATCH v6 bpf-next 2/6] bpf: move to generic BTF show support,
- apply it to seq files/strings
-Message-ID: <20200925003323.u2s2vyyqq2uhtij7@ast-mbp.dhcp.thefacebook.com>
+Subject: Re: [PATCH v6 bpf-next 3/6] bpf: add bpf_snprintf_btf helper
+Message-ID: <20200925004229.memxz26rt4jkzd4m@ast-mbp.dhcp.thefacebook.com>
 References: <1600883188-4831-1-git-send-email-alan.maguire@oracle.com>
- <1600883188-4831-3-git-send-email-alan.maguire@oracle.com>
+ <1600883188-4831-4-git-send-email-alan.maguire@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1600883188-4831-3-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1600883188-4831-4-git-send-email-alan.maguire@oracle.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 06:46:24PM +0100, Alan Maguire wrote:
->  
-> +/* Chunk size we use in safe copy of data to be shown. */
-> +#define BTF_SHOW_OBJ_SAFE_SIZE		256
-
-sizeof(struct btf_show) == 472
-It's allocated on stack and called from bpf prog.
-It's a leaf function, but it still worries me a bit.
-I've trimmed it down to 32 and everything seems to be printing fine.
-There will be more calls to copy_from_kernel_nofault(), but so what?
-Is there a downside to make it that small?
-
-Similarly state.name is 128 bytes. May be use 80 there?
-I think that should be plenty still.
-
-> + * Another problem is we want to ensure the data for display is safe to
-> + * access.  To support this, the "struct obj" is used to track the data
-
-'struct obj' doesn't exist. It's an anon field 'struct {} obj;' inside btf_show
-that you're referring to, right?
-Would be good to fix this comment.
-
-> +struct btf_show {
-> +	u64 flags;
-> +	void *target;	/* target of show operation (seq file, buffer) */
-> +	void (*showfn)(struct btf_show *show, const char *fmt, ...);
-
-buildbot complained that this field needs to be annotated.
-
-> +#define btf_show(show, ...)						      \
-> +	do {								      \
-> +		if (!show->state.depth_check)				      \
-> +			show->showfn(show, __VA_ARGS__);		      \
-> +	} while (0)
-
-Does it have to be a macro? What are you gaining from macro
-instead of vararg function?
-
-> +static inline const char *__btf_show_indent(struct btf_show *show)
-
-please remove all 'inline' from .c file.
-There is no need to give such hints to the compiler.
-
-> +#define btf_show_indent(show)						       \
-> +	((show->flags & BTF_SHOW_COMPACT) ? "" : __btf_show_indent(show))
+On Wed, Sep 23, 2020 at 06:46:25PM +0100, Alan Maguire wrote:
 > +
-> +#define btf_show_newline(show)						       \
-> +	((show->flags & BTF_SHOW_COMPACT) ? "" : "\n")
-> +
-> +#define btf_show_delim(show)						       \
-> +	(show->state.depth == 0 ? "" :					       \
-> +	 ((show->flags & BTF_SHOW_COMPACT) && show->state.type &&	       \
-> +	  BTF_INFO_KIND(show->state.type->info) == BTF_KIND_UNION) ? "|" : ",")
-> +
-> +#define btf_show_type_value(show, fmt, value)				       \
-> +	do {								       \
-> +		if ((value) != 0 || (show->flags & BTF_SHOW_ZERO) ||	       \
-> +		    show->state.depth == 0) {				       \
-> +			btf_show(show, "%s%s" fmt "%s%s",		       \
-> +				 btf_show_indent(show),			       \
-> +				 btf_show_name(show),			       \
-> +				 value, btf_show_delim(show),		       \
-> +				 btf_show_newline(show));		       \
-> +			if (show->state.depth > show->state.depth_to_show)     \
-> +				show->state.depth_to_show = show->state.depth; \
-> +		}							       \
-> +	} while (0)
-> +
-> +#define btf_show_type_values(show, fmt, ...)				       \
-> +	do {								       \
-> +		btf_show(show, "%s%s" fmt "%s%s", btf_show_indent(show),       \
-> +			 btf_show_name(show),				       \
-> +			 __VA_ARGS__, btf_show_delim(show),		       \
-> +			 btf_show_newline(show));			       \
-> +		if (show->state.depth > show->state.depth_to_show)	       \
-> +			show->state.depth_to_show = show->state.depth;	       \
-> +	} while (0)
-> +
-> +/* How much is left to copy to safe buffer after @data? */
-> +#define btf_show_obj_size_left(show, data)				       \
-> +	(show->obj.head + show->obj.size - data)
-> +
-> +/* Is object pointed to by @data of @size already copied to our safe buffer? */
-> +#define btf_show_obj_is_safe(show, data, size)				       \
-> +	(data >= show->obj.data &&					       \
-> +	 (data + size) < (show->obj.data + BTF_SHOW_OBJ_SAFE_SIZE))
-> +
-> +/*
-> + * If object pointed to by @data of @size falls within our safe buffer, return
-> + * the equivalent pointer to the same safe data.  Assumes
-> + * copy_from_kernel_nofault() has already happened and our safe buffer is
-> + * populated.
-> + */
-> +#define __btf_show_obj_safe(show, data, size)				       \
-> +	(btf_show_obj_is_safe(show, data, size) ?			       \
-> +	 show->obj.safe + (data - show->obj.data) : NULL)
-
-Similarly I don't understand the benefit of macros.
-They all could have been normal functions.
-
-> +static inline void *btf_show_obj_safe(struct btf_show *show,
-> +				      const struct btf_type *t,
-> +				      void *data)
-
-drop 'inline' pls.
-
+> +static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
+> +				  u64 flags, const struct btf **btf,
+> +				  s32 *btf_id)
 > +{
-> +	int size_left, size;
-> +	void *safe = NULL;
+> +	u8 btf_kind = BTF_KIND_TYPEDEF;
+> +	char type_name[KSYM_NAME_LEN];
+> +	const struct btf_type *t;
+> +	const char *btf_type;
+> +	int ret;
 > +
-> +	if (show->flags & BTF_SHOW_UNSAFE)
-> +		return data;
+> +	if (unlikely(flags & ~(BTF_F_ALL)))
+> +		return -EINVAL;
 > +
-> +	(void) btf_resolve_size(show->btf, t, &size);
+> +	if (btf_ptr_size != sizeof(struct btf_ptr))
+> +		return -EINVAL;
+> +
+> +	*btf = bpf_get_btf_vmlinux();
+> +
+> +	if (IS_ERR_OR_NULL(*btf))
+> +		return PTR_ERR(*btf);
+> +
+> +	if (ptr->type != NULL) {
+> +		ret = copy_from_kernel_nofault(type_name, ptr->type,
+> +					       sizeof(type_name));
 
-Is this ok to ignore the error?
+nofault copy from bpf program global data... hmm...
+I guess that works, but...
+
+> +		if (ret)
+> +			return ret;
+> +
+> +		btf_type = type_name;
+> +
+> +		if (strncmp(btf_type, "struct ", strlen("struct ")) == 0) {
+> +			btf_kind = BTF_KIND_STRUCT;
+> +			btf_type += strlen("struct ");
+> +		} else if (strncmp(btf_type, "union ", strlen("union ")) == 0) {
+> +			btf_kind = BTF_KIND_UNION;
+> +			btf_type += strlen("union ");
+> +		} else if (strncmp(btf_type, "enum ", strlen("enum ")) == 0) {
+> +			btf_kind = BTF_KIND_ENUM;
+> +			btf_type += strlen("enum ");
+> +		}
+> +
+> +		if (strlen(btf_type) == 0)
+> +			return -EINVAL;
+> +
+> +		/* Assume type specified is a typedef as there's not much
+> +		 * benefit in specifying int types other than wasting time
+> +		 * on BTF lookups; we optimize for the most useful path.
+> +		 *
+> +		 * Fall back to BTF_KIND_INT if this fails.
+> +		 */
+> +		*btf_id = btf_find_by_name_kind(*btf, btf_type, btf_kind);
+> +		if (*btf_id < 0)
+> +			*btf_id = btf_find_by_name_kind(*btf, btf_type,
+> +							BTF_KIND_INT);
+
+with all that fragility...
+
+> +	} else if (ptr->type_id > 0)
+> +		*btf_id = ptr->type_id;
+
+since __builtin_btf_type_id() landed in llvm in February and it works
+may be support type_id only?
+
+Manually specifying type name as a string is error prone.
+Plus that copy_from_kernel... which is doing copy from bpf prog.
+I slept on it, but still feels unclean.
+May be do type_id only for now and if we really really need string types
+we can add it later after initial patches land?
