@@ -2,59 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D1E279443
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Sep 2020 00:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11DC27947D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Sep 2020 01:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729044AbgIYWhs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 18:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S1728606AbgIYXGG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 19:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729001AbgIYWhs (ORCPT
+        with ESMTP id S1725272AbgIYXGG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 18:37:48 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17557C0613D5
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 15:37:48 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id x69so4408282oia.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 15:37:48 -0700 (PDT)
+        Fri, 25 Sep 2020 19:06:06 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D66C0613CE
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 16:06:05 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id t76so4477149oif.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Sep 2020 16:06:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1GUnPWZQb3wmsz17jd8cPsFjDlwSIdeaeunn4YKd8bc=;
-        b=cUGmiVVab0u8mYTiDe3U8u1ya2bN2aQHwiRyr0oN+SEQeoBac0yel+rVAJpG23d6Cw
-         SkWYyhXR+Q0RhmtVczpwc52Ra7P92GEyVfLujifP74L85bN+J8e9V+D07zbcd4hggTWn
-         sTf5Y3Nm3Lj+rn13yl8gTMvITuy5xWYxaBBBg=
+        bh=76AVeLPThqJyq9xRW6clpHIRKAOCQwmI85cgL3Cyres=;
+        b=c+XpSxQO/nxlyT0ft4XZzdREUsZN6qokIzkZCdfBlxYsfnKoDcsMJJ9R5g4+Qi8D+p
+         gSLotVkVSfHXVSAXrZMhoIhhcDe0Lkxo/ye47mROh45ZpOWSOW1FHnGe2RuIUda9iVXy
+         W4gjczoxcJKDDxiloVI1ZfzdGNVBkcFaAIUSw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=1GUnPWZQb3wmsz17jd8cPsFjDlwSIdeaeunn4YKd8bc=;
-        b=iQVcqCAnZoajqYOSBKnyQCwHdLoVq8t0/Aitq+DJAbdZdw2SJupqNBWIiQvnt9xYH+
-         RQ/avtU5xqfunkiu03Lzek7OOWD5KuDIkjSXJCdTkBbFuTc8zozhxBSM9Nc0F3sus767
-         p6CEBwdDiNT1oCN6AtnrOIh3tXHmBzlPv6z7JyfdkRXhNxPuWpvPhaE8iU2hG76ZuZ5z
-         oQlygZL41RFHMstBRLegE/4uWF1d/FEyiclUUhnY0KF8nvqX8Vt++TWBYDLvlfgzNy+v
-         8ocVHXaY+7KonlAfrnzrtJLZ/0nhkAUU4J9LoOw9hdKe9q+RmJJTeWDlGrMikswkCCxa
-         0maw==
-X-Gm-Message-State: AOAM5309Pm6SEIbKuw2Lpu9peclpsmV2koeRyQtzF5cjuTz+uOACqvgN
-        ywteKQtIQpOtUxg3YDQ/CE9Hwg==
-X-Google-Smtp-Source: ABdhPJzlc9XcIwkgj1jA3voZXHCy+z/zzMdn6CUvY2QhJa2e+80Yy/KlTGUEECczFqtoREwqoRqFAA==
-X-Received: by 2002:aca:d693:: with SMTP id n141mr496407oig.26.1601073467264;
-        Fri, 25 Sep 2020 15:37:47 -0700 (PDT)
+        bh=76AVeLPThqJyq9xRW6clpHIRKAOCQwmI85cgL3Cyres=;
+        b=SsaMDo5MozSngZm1rH4KPIy4zxGcR3Ng0xBfnaJBnQHjCCXhg8EHhaCMCQwhaiKcOp
+         4w10y9Pca78PnKLlqWsqtKtGOtififPFIfFPxWL/TFSET7L0Z9LOOtH6kPPFo8Vsj9+p
+         4/zfjEF5DbogBBzz5NzesfyX7I3bHbBuBFnNYTFbxB3CnCtzd/x31AWqFeqRp0bgCusc
+         /zlQh/wsT221bToby6TFFcvoTKftVLyRbytUsTD/a6my3VEM1jnVdqRaDPBBf9bZYIUs
+         sQWVoWwgChwuzBJxNpR5BkpPJGnlaLPRYSOkj2BRShdz9vhuaWFdBk2E7ks9zwwQSq0p
+         sV+w==
+X-Gm-Message-State: AOAM532lO8mH+9DPDozUb/nRnm2dz+CaUi9IHLIZb8H7j85co5cqtDVu
+        dO2p5dWYYiJ2PlWVFSWkNgMVng==
+X-Google-Smtp-Source: ABdhPJyWna6d5P8FvJbM90Pt7OdJcvYVRXH0ouob2XpQcut86to6eu59wT9/3fQh+R4sVTzQdTqGSg==
+X-Received: by 2002:a05:6808:996:: with SMTP id a22mr483988oic.109.1601075165095;
+        Fri, 25 Sep 2020 16:06:05 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id i7sm983027oto.62.2020.09.25.15.37.45
+        by smtp.gmail.com with ESMTPSA id 74sm996786otc.65.2020.09.25.16.06.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2020 15:37:46 -0700 (PDT)
+        Fri, 25 Sep 2020 16:06:04 -0700 (PDT)
 Subject: Re: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each
  test individually selectable
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
 Cc:     Hangbin Liu <liuhangbin@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         open list <linux-kernel@vger.kernel.org>, Tim.Bird@sony.com,
         lkft-triage@lists.linaro.org,
         Anders Roxell <anders.roxell@linaro.org>,
@@ -66,8 +65,8 @@ References: <20200914021758.420874-1-liuhangbin@gmail.com/>
  <CA+G9fYvT6Mw2BamoiVyw=wLUqD-3LB2oaDqcuabOyWfFxEN1qg@mail.gmail.com>
  <202009251414.15274C0@keescook>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <659b23c9-abf5-0387-c4c6-5d0a48e3afdc@linuxfoundation.org>
-Date:   Fri, 25 Sep 2020 16:37:45 -0600
+Message-ID: <f375a87d-7ba3-f97f-b39a-06b61f80c552@linuxfoundation.org>
+Date:   Fri, 25 Sep 2020 17:06:02 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
@@ -99,27 +98,8 @@ On 9/25/20 3:16 PM, Kees Cook wrote:
 > Yes, please revert this patch. The resulting script is completely
 > trashed:
 > 
-> BASE_DIR=$(realpath $(dirname $0))
-> . ./kselftest/runner.sh
-> TESTS="seccomp"
-> 
-> run_seccomp()
-> {
-> -e      [ -w /dev/kmsg ] && echo "kselftest: Running tests in seccomp" >> /dev/kmsg
-> -e      cd seccomp
-> -en     run_many
->          \
-> -ne             "seccomp_bpf"
->          \
-> -ne             "seccomp_benchmark"
-> 
-> -e      cd $ROOT
-> }
-> 
-> 
-> 
 
-Will do.
+Thank you both. Now reverted.
 
 thanks,
 -- Shuah
