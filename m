@@ -2,87 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32A2278645
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 13:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CA6278C14
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Sep 2020 17:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbgIYLuu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Sep 2020 07:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727749AbgIYLut (ORCPT
+        id S1729232AbgIYPH0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Sep 2020 11:07:26 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:50581 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729152AbgIYPGW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Sep 2020 07:50:49 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A5DC0613CE;
-        Fri, 25 Sep 2020 04:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=atIdSYTqVSN1dET93QWRtzKrDD+NO7g1yKt3hVPjYBg=; b=kli1xR+OQ0PRUhBLc+8iQpag70
-        B5PNVdY+OrX2/xM6ZLwl/uOtK6gZLG+YERi8/mcOfA3VFZiVCTwN/Da8185peOgS6tSZwuCcPPuVR
-        Q2i2UrZsUEHdCVKo9HfDzpgUhDCHO2PLnMreNhNf5amRVsfg5HtUBTOus4FkFQ1F0Hr8gaGk9U50d
-        WtESu1YZsGsafvP2I4XhbhKNnBKlgmPM5+GIn1n06NJ65l2D6JCq/Bdm3JYetz2F7sw+DyauYGBh9
-        f3ln1BkbzA6jFvx/SiGqF03QTADi+MnIFGjoDsF6ER6G4Q8cXaUf9+ZERUWFSkMlXj8nyIuEdvZfh
-        CgwNWw+g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kLmFO-0002f2-HQ; Fri, 25 Sep 2020 11:50:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3CCF4302753;
-        Fri, 25 Sep 2020 13:50:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8DD5720839A41; Fri, 25 Sep 2020 13:50:40 +0200 (CEST)
-Date:   Fri, 25 Sep 2020 13:50:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@google.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, Paul Turner <pjt@google.com>,
-        Chris Kennelly <ckennelly@google.com>,
-        Peter Oskolkov <posk@posk.io>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 1/3] rseq/membarrier: add
- MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ
-Message-ID: <20200925115040.GZ2628@hirez.programming.kicks-ass.net>
-References: <20200923233618.2572849-1-posk@google.com>
+        Fri, 25 Sep 2020 11:06:22 -0400
+X-Greylist: delayed 523 seconds by postgrey-1.27 at vger.kernel.org; Fri, 25 Sep 2020 11:06:20 EDT
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6C28D580762;
+        Fri, 25 Sep 2020 10:57:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 25 Sep 2020 10:57:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=tBfuOWmQyjKgArCfu4khNo2TUG7
+        Jq21FgCLcBIcnmPM=; b=OofIQppgkot+WhAGmGPKk5hZgjNlpN1ZlHwJkZhHUT7
+        KzQ9a4UKLvBtvt6IoY28ep/w/+2zSquvjNGRBmkSersamyUPK4mq6bGc213GAiGs
+        6eeA6co4G2jngyV6y9+g8szoci4GiiwwXywXX2pXq0HGjzmMhlmRWxQ85LK/DlDy
+        irsPbph5wkukocpS6KgwRtiTKpYoXd3eKdxCN9qwKIkQcRRXIio+zFQ2SjqkppTg
+        SNQPkGiduZegcLFBIHP5gJ/Op/FSZLeDDXJiOr9hfVgoldvcVMrRECA9TV6Wq7zO
+        8FAbll8jR/Sd8TZyP6RpX6gZdv/A69N8+b8xGORjw1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=tBfuOW
+        mQyjKgArCfu4khNo2TUG7Jq21FgCLcBIcnmPM=; b=O2AlydY1ltQyDVNghirgyE
+        d0O51zrG8EUimzMadviff/NiqC0auMDDpsNj82EjtYhLCHLnvp4ul7cmJcKB4oic
+        8GyaGwvleCXSsdBrsydeqkvzbq2T7kD4/ki04+EPu9S3o67WbG3C4srDADzAbfLV
+        SaqsEs/JPQPxAl+TMoyLW00k6FlCJFMhhZSC9xeH5+0jlcUcku9NsJuXufMDdzoq
+        zdAtNnQpSuuO9acwwrKLSyqcC1vJ24Bg4hY3bq8wGRJsi/GvmWV6uSzubM/akmk0
+        XCtdH3b4xnADHi4BE95Cgt9gxaWKV/9k1KSsSHPJtWhz0FVMgsaL4L1E5bop9FyA
+        ==
+X-ME-Sender: <xms:UwVuXzT2_EVK-X89sY8bB0QEc5kSSYKtd5Y6-1axvefCEYWOlYSnYA>
+    <xme:UwVuX0yozWkEYrLjnjNMdRGhiQbd_yK2RWC7ovDaSPkcaNL6mvOJ2S11sWTDI9fTG
+    93ab4J4YjRsXoIH6_s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvddtgdekudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghhohcu
+    tehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrfgrth
+    htvghrnhepgeekfeejgeektdejgfefudelkeeuteejgefhhfeugffffeelheegieefvdfg
+    tefhnecukfhppedukeegrdduieejrddvtddruddvjeenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehthigthhhosehthigthhhordhpihiiiigr
+X-ME-Proxy: <xmx:UwVuX41INdcWU29T0AMGhJaB3HJIGlhdpwpZMI-KwyruwPc6EXwYOw>
+    <xmx:UwVuXzD-ve1UN48X78PrtetY1smAql28prAO4tEFqGl7ymEh84gqxQ>
+    <xmx:UwVuX8geyBzOSq6I0Ijh-k5-hQ3NuL4eld4Pjyi37IJqiLjeZx6tRA>
+    <xmx:VQVuX1Bsar3AUsWBYtFGXXzyHoYMRcAzPxIbRAmmT678sqzqCjgIfI7lyA7qd_3J>
+Received: from cisco (184-167-020-127.res.spectrum.com [184.167.20.127])
+        by mail.messagingengine.com (Postfix) with ESMTPA id B8B0B328005D;
+        Fri, 25 Sep 2020 10:57:18 -0400 (EDT)
+Date:   Fri, 25 Sep 2020 08:57:17 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20200925145717.GA284424@cisco>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924132904.1391-6-rppt@kernel.org>
+ <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
+ <8435eff6-7fa9-d923-45e5-d8850e4c6d73@redhat.com>
+ <20200925095029.GX2628@hirez.programming.kicks-ass.net>
+ <20200925103114.GA7407@C02TD0UTHF1T.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200923233618.2572849-1-posk@google.com>
+In-Reply-To: <20200925103114.GA7407@C02TD0UTHF1T.local>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 04:36:16PM -0700, Peter Oskolkov wrote:
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -974,7 +974,7 @@ asmlinkage long sys_execveat(int dfd, const char __user *filename,
->  			const char __user *const __user *argv,
->  			const char __user *const __user *envp, int flags);
->  asmlinkage long sys_userfaultfd(int flags);
-> -asmlinkage long sys_membarrier(int cmd, int flags);
-> +asmlinkage long sys_membarrier(int cmd, int flags, int cpu_id);
->  asmlinkage long sys_mlock2(unsigned long start, size_t len, int flags);
->  asmlinkage long sys_copy_file_range(int fd_in, loff_t __user *off_in,
->  				    int fd_out, loff_t __user *off_out,
+On Fri, Sep 25, 2020 at 11:31:14AM +0100, Mark Rutland wrote:
+> Hi,
+> 
+> Sorry to come to this so late; I've been meaning to provide feedback on
+> this for a while but have been indisposed for a bit due to an injury.
+> 
+> On Fri, Sep 25, 2020 at 11:50:29AM +0200, Peter Zijlstra wrote:
+> > On Fri, Sep 25, 2020 at 11:00:30AM +0200, David Hildenbrand wrote:
+> > > On 25.09.20 09:41, Peter Zijlstra wrote:
+> > > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
+> > > >> From: Mike Rapoport <rppt@linux.ibm.com>
+> > > >>
+> > > >> Removing a PAGE_SIZE page from the direct map every time such page is
+> > > >> allocated for a secret memory mapping will cause severe fragmentation of
+> > > >> the direct map. This fragmentation can be reduced by using PMD-size pages
+> > > >> as a pool for small pages for secret memory mappings.
+> > > >>
+> > > >> Add a gen_pool per secretmem inode and lazily populate this pool with
+> > > >> PMD-size pages.
+> > > > 
+> > > > What's the actual efficacy of this? Since the pmd is per inode, all I
+> > > > need is a lot of inodes and we're in business to destroy the directmap,
+> > > > no?
+> > > > 
+> > > > Afaict there's no privs needed to use this, all a process needs is to
+> > > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
+> > > > page will utterly destroy the direct map.
+> > > > 
+> > > > I really don't like this, at all.
+> > > 
+> > > As I expressed earlier, I would prefer allowing allocation of secretmem
+> > > only from a previously defined CMA area. This would physically locally
+> > > limit the pain.
+> > 
+> > Given that this thing doesn't have a migrate hook, that seems like an
+> > eminently reasonable contraint. Because not only will it mess up the
+> > directmap, it will also destroy the ability of the page-allocator /
+> > compaction to re-form high order blocks by sprinkling holes throughout.
+> > 
+> > Also, this is all very close to XPFO, yet I don't see that mentioned
+> > anywhere.
+> 
+> Agreed. I think if we really need something like this, something between
+> XPFO and DEBUG_PAGEALLOC would be generally better, since:
 
-The below is required to make arm build... I'll update the patch and
-push out again.
+Perhaps we can brainstorm on this? XPFO has mostly been abandoned
+because there's no good/safe way to make it faster. There was work on
+eliminating TLB flushes, but that waters down the protection. When I
+was last thinking about it in anger, it just seemed like it was
+destined to be slow, especially on $large_num_cores machines, since
+you have to flush everyone else's map too.
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 466c993e52bf..06db09875aa4 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -974,7 +974,7 @@ asmlinkage long sys_execveat(int dfd, const char __user *filename,
- 			const char __user *const __user *argv,
- 			const char __user *const __user *envp, int flags);
- asmlinkage long sys_userfaultfd(int flags);
--asmlinkage long sys_membarrier(int cmd, int flags, int cpu_id);
-+asmlinkage long sys_membarrier(int cmd, unsigned int flags, int cpu_id);
- asmlinkage long sys_mlock2(unsigned long start, size_t len, int flags);
- asmlinkage long sys_copy_file_range(int fd_in, loff_t __user *off_in,
- 				    int fd_out, loff_t __user *off_out,
+I think the idea of "opt in to XPFO" is mostly attractive because then
+people only have to pay the slowness cost for memory they really care
+about. But if there's some way to make XPFO, or some alternative
+design, that may be better.
+
+Tycho
