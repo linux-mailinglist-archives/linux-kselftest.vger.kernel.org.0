@@ -2,149 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFCF27B636
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Sep 2020 22:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D988327B661
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Sep 2020 22:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgI1U1A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Sep 2020 16:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S1726878AbgI1Uee (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Sep 2020 16:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbgI1U05 (ORCPT
+        with ESMTP id S1726668AbgI1Uee (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Sep 2020 16:26:57 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C348C0613D5
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 13:26:56 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id a9so1377855pjg.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 13:26:56 -0700 (PDT)
+        Mon, 28 Sep 2020 16:34:34 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D57EC0613CE
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 13:34:34 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id d9so2232415pfd.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 13:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=84Wkm7II+zR8a1S1XbEc0SAaLAitSu9by2LK3K8LLZY=;
-        b=jzjFbeQC0BOwC59BlIVN2ZD9Bjg+kpxXoCamP3rbFMeNXlT5A44rhrBi1/hP2VR/2N
-         Yz4xMvTvF/IVCMTawSARPCrWJFAyxjqHWONLjXci0pBwHhpp+qK7flV9anmFW0vYRW97
-         kRVlk0d7tppB+g7b5R7BN30fkEEi2ATsg6ztU=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fSqGGre3K5gDxqZQhBBAgkB/XW4ArHnxdL9/PVe8UEw=;
+        b=NhEgCMqvIk+RvaHqH61RFdho/oyavhy1mnawXx73Z32KtMmWrdQ3TF3Wdl5xGJWAF4
+         HJ7MvCec9xWmOfe2vmH4pRHVPw4F2RLEFJS+4IHA6SOXqWq1vixOup+3/VsF76zS/3fH
+         NNK2l+sjcwTbNoDengDe+AnKeGhAQtj5ceh68=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=84Wkm7II+zR8a1S1XbEc0SAaLAitSu9by2LK3K8LLZY=;
-        b=gTKsTmBYpfthIjDJ++tiWSSkHflY2tOw74PCZdmkIVQrVYUTk923g57aua+ldnEdcZ
-         1VlX6UyuTcvZ6jrlxP0clasIjl+bRRgvZzgK01nzECgmAa7WioBbIa5VoiBlx5wAnp7M
-         UghVzS3hl0s648+Q7CbnEsurt2I0IW8EDMhj20IFpgQopSfPlvnBo/CJtqP8GtqhbTbj
-         41bxtT172xGPSNZAsf7xF+NdmMUCFScFocSfX/SPKFmhV8xfaOq0me2Hl/KbLsLoDbEO
-         Y1SQR3g5IgRvAy5AiSdNV2tH11+dGW2wHbns0dPt6Dt6QQD8je2I+qDFCFvaMK6Rkix0
-         ajjw==
-X-Gm-Message-State: AOAM533KiArREj47zoqAWM8MDzNApRKXbVoWvd37/XO3L3ZmuEDjwUF9
-        PpV+7V1KxXVOoVZqsnE13IHD5A==
-X-Google-Smtp-Source: ABdhPJzunOfjF8LprL3XY61w3FvvpSkqtHIqXlVfnXXgRC88QVU+My/W354njw01Dr7RLCEJWbZv+Q==
-X-Received: by 2002:a17:90a:e38a:: with SMTP id b10mr817027pjz.17.1601324815742;
-        Mon, 28 Sep 2020 13:26:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fSqGGre3K5gDxqZQhBBAgkB/XW4ArHnxdL9/PVe8UEw=;
+        b=Ofpi3crUahM8pxJu8yaUYCxEdo6Zgnl9kKGlJJ4B8kYKryCrpcgdFPlO+BsCFRoGdL
+         6pcS+Uw+H1ooiKa6sNN2mRBmCaYm8DCdt6DWMOkpm7+Aeil/4q04dPnfdBHxI9kFirBB
+         AWxt2oaTjR0CbVBshxS/hfNyKlXoRbRa7TCnCi82WZAA6+7CpAhDA9aE8SoRCloNNUm0
+         jmIZNVOZIzPgIY5eiDEaz767PTGa/ci6HV5s1DxdN6jkU4pxDw3aoXrfByZvZozYJsfH
+         b46Gj+8swG3VoZHg74iRH+jrxYyzWDLyM0Q6ydXsD5EDpEw076gGUC1gm6cmLuyRBEuL
+         BZ8A==
+X-Gm-Message-State: AOAM532FUKCpYsbTiOQ+RgGom587uJ7CQpEw6o+wE5lOLBH565Ad+jMl
+        QX5Yt4IPcbDea1+JZAnoRFPSrw==
+X-Google-Smtp-Source: ABdhPJyzYBgjXDVfi/ERFQgeS7WYZoqBnC+zZTP9Vn+PQLPLjF+pMQ37sNjCiSdOAaPnfO95UdERzg==
+X-Received: by 2002:a17:902:7589:b029:d2:686a:4ede with SMTP id j9-20020a1709027589b02900d2686a4edemr1142882pll.45.1601325273788;
+        Mon, 28 Sep 2020 13:34:33 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s16sm2107828pgl.78.2020.09.28.13.26.52
+        by smtp.gmail.com with ESMTPSA id t14sm2209702pgm.42.2020.09.28.13.34.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 13:26:53 -0700 (PDT)
+        Mon, 28 Sep 2020 13:34:32 -0700 (PDT)
+Date:   Mon, 28 Sep 2020 13:34:31 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 3/3] doc: dev-tools: kselftest.rst: Update examples and paths
-Date:   Mon, 28 Sep 2020 13:26:50 -0700
-Message-Id: <20200928202650.2530280-4-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200928202650.2530280-1-keescook@chromium.org>
-References: <20200928202650.2530280-1-keescook@chromium.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
+        gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
+        johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, arve@android.com,
+        tkjos@android.com, maco@android.com, christian@brauner.io,
+        hridya@google.com, surenb@google.com, minyard@acm.org,
+        arnd@arndb.de, mchehab@kernel.org, rric@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devel@driverdev.osuosl.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org
+Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
+Message-ID: <202009281331.444F36A7B@keescook>
+References: <cover.1601073127.git.skhan@linuxfoundation.org>
+ <20200927233526.GA500818@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200927233526.GA500818@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Update the installation commands and path details, detail the new
-options available in the run_kselftests.sh script.
+On Sun, Sep 27, 2020 at 07:35:26PM -0400, Joel Fernandes wrote:
+> On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
+> > This patch series is a result of discussion at the refcount_t BOF
+> > the Linux Plumbers Conference. In this discussion, we identified
+> > a need for looking closely and investigating atomic_t usages in
+> > the kernel when it is used strictly as a counter without it
+> > controlling object lifetimes and state changes.
+> > 
+> > There are a number of atomic_t usages in the kernel where atomic_t api
+> > is used strictly for counting and not for managing object lifetime. In
+> > some cases, atomic_t might not even be needed.
+> >     
+> > The purpose of these counters is twofold: 1. clearly differentiate
+> > atomic_t counters from atomic_t usages that guard object lifetimes,
+> > hence prone to overflow and underflow errors. It allows tools that scan
+> > for underflow and overflow on atomic_t usages to detect overflow and
+> > underflows to scan just the cases that are prone to errors. 2. provides
+> > non-atomic counters for cases where atomic isn't necessary.
+> 
+> Nice series :)
+> 
+> It appears there is no user of counter_simple in this series other than the
+> selftest. Would you be planning to add any conversions in the series itself,
+> for illustration of use? Sorry if I missed a usage.
+> 
+> Also how do we guard against atomicity of counter_simple RMW operations? Is
+> the implication that it should be guarded using other synchronization to
+> prevent lost-update problem?
+> 
+> Some more comments:
+> 
+> 1.  atomic RMW operations that have a return value are fully ordered. Would
+>     you be adding support to counter_simple for such ordering as well, for
+>     consistency?
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- Documentation/dev-tools/kselftest.rst | 35 +++++++++++++++++----------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+No -- there is no atomicity guarantee for counter_simple. I would prefer
+counter_simple not exist at all, specifically for this reason.
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index 469d115a95f1..a901def730d9 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -125,32 +125,41 @@ Note that some tests will require root privileges.
- Install selftests
- =================
- 
--You can use the kselftest_install.sh tool to install selftests in the
--default location, which is tools/testing/selftests/kselftest, or in a
--user specified location.
-+You can use the "install" target of "make" (which calls the `kselftest_install.sh`
-+tool) to install selftests in the default location (`tools/testing/selftests/kselftest_install`),
-+or in a user specified location via the `INSTALL_PATH` "make" variable.
- 
- To install selftests in default location::
- 
--   $ cd tools/testing/selftests
--   $ ./kselftest_install.sh
-+   $ make -C tools/testing/selftests install
- 
- To install selftests in a user specified location::
- 
--   $ cd tools/testing/selftests
--   $ ./kselftest_install.sh install_dir
-+   $ make -C tools/testing/selftests install INSTALL_PATH=/some/other/path
- 
- Running installed selftests
- ===========================
- 
--Kselftest install as well as the Kselftest tarball provide a script
--named "run_kselftest.sh" to run the tests.
-+Found in the install directory, as well as in the Kselftest tarball,
-+is a script named `run_kselftest.sh` to run the tests.
- 
- You can simply do the following to run the installed Kselftests. Please
- note some tests will require root privileges::
- 
--   $ cd kselftest
-+   $ cd kselftest_install
-    $ ./run_kselftest.sh
- 
-+To see the list of available tests, the `-l` option can be used::
-+
-+   $ ./run_kselftest.sh -l
-+
-+The `-c` option can be used to run all the tests from a test collection, or
-+the `-t` option for specific single tests. Either can be used multiple times::
-+
-+   $ ./run_kselftest.sh -c bpf -c seccomp -t timers:posix_timers -t timer:nanosleep
-+
-+For other features see the script usage output, seen with the `-h` option.
-+
- Packaging selftests
- ===================
- 
-@@ -160,9 +169,9 @@ different system. To package selftests, run::
-    $ make -C tools/testing/selftests gen_tar
- 
- This generates a tarball in the `INSTALL_PATH/kselftest-packages` directory. By
--default, `.gz` format is used. The tar format can be overridden by specifying
--a `FORMAT` make variable. Any value recognized by `tar's auto-compress`_ option
--is supported, such as::
-+default, `.gz` format is used. The tar compression format can be overridden by
-+specifying a `FORMAT` make variable. Any value recognized by `tar's auto-compress`_
-+option is supported, such as::
- 
-     $ make -C tools/testing/selftests gen_tar FORMAT=.xz
- 
+> 2. I felt counter_atomic and counter_atomic64 would be nice equivalents to
+>    the atomic and atomic64 naming currently used (i.e. dropping the '32').
+>    However that is just my opinion and I am ok with either naming.
+
+I had asked that they be size-named to avoid any confusion (i.e. we're
+making a new API).
+
 -- 
-2.25.1
-
+Kees Cook
