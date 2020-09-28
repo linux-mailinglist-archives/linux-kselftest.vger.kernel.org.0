@@ -2,90 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D5D27B5F7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Sep 2020 22:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A0827B5FB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Sep 2020 22:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgI1UJi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Sep 2020 16:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726409AbgI1UJi (ORCPT
+        id S1726551AbgI1UK1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Sep 2020 16:10:27 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:2425 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbgI1UKZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Sep 2020 16:09:38 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A4AC0613CF
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 13:09:38 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id w7so2154094pfi.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 13:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=S99N8rvF/t2so08QhL6pclkzbq8/CXYQ8U2vW/BH+ec=;
-        b=At/lupLafCk7dwPh75O9pTw9C98MC2piMlqqdXjCzrWBQEXwERGK3FCRzSXAetk9zy
-         wZhTjK+f3R0DZzkscP2AJNyOVoNpsfj0X+47zeF7OmSmo6FJKe1aSrrNF9LeOUO0Yt6M
-         FhtmIbkzd0YQyxlBLICX1+SPytq0egZ0FJQn8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=S99N8rvF/t2so08QhL6pclkzbq8/CXYQ8U2vW/BH+ec=;
-        b=CCNgGzHPcQb/8DzfgrWlpUDjNH9/Bru+Z2A8B/Ny6g/qxeUHtROIYwGBj7Jj9Lypu1
-         4wEoga1QFk2Opz1+B/+vua68EeFfAQrE1Qbwax5YYQR5BR4RvRVhyeuzqRYEbQgcQ6xa
-         dHgD/ionFQ7nYRQ4DR47e2j5esGoXL2iUCPQ+FhYPg61tugQWwQ/B29mvvNiOzMtpEzs
-         yXhp9Aqls6WXqar1lwZ5Zc+dtZXFd3w+oXYrJuMMq2jUg+ULkpAD9JuvJJhoqYQUe8QG
-         XcXpei8I7E8M+SAlfTqBeY4v4zF9GTecMRwvn+d2+2pPYForCEwv/kK2A0uajdM8fH1U
-         8Ziw==
-X-Gm-Message-State: AOAM531awzeu2ckhVOFx116fVHwJ1SB2duf+zYIteYWECyCbZ78xD+No
-        FK/19S2VwvQug4gOW9rE0CrTiA==
-X-Google-Smtp-Source: ABdhPJxweUo6JrIl7VJ75Z4XsJc91vU6Ojb4p0GxGm9M1MwgskGNvzWJmdsuLPOU9Iac8TJrkoyTMA==
-X-Received: by 2002:a63:165c:: with SMTP id 28mr527069pgw.302.1601323777776;
-        Mon, 28 Sep 2020 13:09:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l14sm2165383pfc.170.2020.09.28.13.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 13:09:36 -0700 (PDT)
-Date:   Mon, 28 Sep 2020 13:09:36 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/run_kselftest.sh: Make each test
- individually selectable
-Message-ID: <202009281306.CF94D1786@keescook>
-References: <20200925234527.1885234-1-keescook@chromium.org>
- <20200925234527.1885234-3-keescook@chromium.org>
- <20200927024840.GD2531@dhcp-12-153.nay.redhat.com>
+        Mon, 28 Sep 2020 16:10:25 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f7242cd0001>; Mon, 28 Sep 2020 13:08:45 -0700
+Received: from [10.2.53.30] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 28 Sep
+ 2020 20:10:25 +0000
+Subject: Re: [PATCH 2/8] selftests/vm: use a common gup_test.h
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-s390@vger.kernel.org>
+References: <20200928062159.923212-1-jhubbard@nvidia.com>
+ <20200928062159.923212-3-jhubbard@nvidia.com>
+ <20200928125739.GP9916@ziepe.ca>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <6481e78f-c70d-133a-ff4a-325b5cd8fd5d@nvidia.com>
+Date:   Mon, 28 Sep 2020 13:10:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200927024840.GD2531@dhcp-12-153.nay.redhat.com>
+In-Reply-To: <20200928125739.GP9916@ziepe.ca>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1601323725; bh=IAnhMRFhLfn/o6VnG/j9EvoCmqTmaObpHGzh20VLI9s=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=Slv3IPRUCeDcWuWxM01TTCUoBJWicUemyGsxm/6RNDdcGQpHWQLGXDmIOGle6OOzh
+         Z13TcLVKa9oyblsqo/g5IF/kN/sYc6kmWKe7ToJhj4aSX55bNSXnJAB9jmdf0RyPr5
+         5xX62Yli3Gq/8uK34J0zfHHo9SfVNnknqzANpt3D1d7I11DTt0r7eJdimwfz4sKFci
+         K+OJvAfBY4Him88DqKw3E1qgSea6y3oJ6KDyZtsKESoB4z7qAgbG2Xyrq55AJsp393
+         QcOX6hxekpQouSt3/HCpYTYEdRbcU6DqhNUhQwALEnKykLFoG0r2GY7JAQUKfyzALi
+         /UCG9d8kRPtFQ==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Sep 27, 2020 at 10:48:40AM +0800, Hangbin Liu wrote:
-> On Fri, Sep 25, 2020 at 04:45:27PM -0700, Kees Cook wrote:
-> > Currently with run_kselftest.sh there is no way to choose which test
-> > we could run. All the tests listed in kselftest-list.txt are all run
-> > every time. This patch enhanced the run_kselftest.sh to make the test
-> > collections (or tests) individually selectable. e.g.:
-> > 
-> > $ ./run_kselftest.sh -c seccomp -t timers:posix_timers -t timers:nanosleep
-> > 
-> > Additionally adds a way to list all known tests with "-l", usage
-> > with "-h", and perform a dry run without running tests with "-n".
+On 9/28/20 5:57 AM, Jason Gunthorpe wrote:
+> On Sun, Sep 27, 2020 at 11:21:53PM -0700, John Hubbard wrote:
+>> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+>> index d1ae706d9927..9cc6bc087461 100644
+>> +++ b/tools/testing/selftests/vm/Makefile
+>> @@ -130,3 +130,5 @@ endif
+>>   $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+>>   
+>>   $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
+>> +
+>> +$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
 > 
-> This is better than my previous patch and we can modify run_kselftest.sh
-> easily. The Documentation/dev-tools/kselftest.rst should also be update.
+> There is no reason to do this, the auto depends will pick up header
+> files, and gup_test.h isn't a generated file
+> 
 
-Thanks! I will send a v2.
+It is less capable than you might think. Without the admittedly ugly technique
+above, it fails to build, and as you can see, the include paths that are fed to
+gcc are just a single one: usr/include:
 
+$ make
+make --no-builtin-rules ARCH=x86 -C ../../../.. headers_install
+gcc -Wall -I ../../../../usr/include     gup_test.c 
+/kernel_work/linux-next-github/tools/testing/selftests/kselftest_harness.h 
+/kernel_work/linux-next-github/tools/testing/selftests/kselftest.h ../../../../mm/gup_test.h -lrt -o 
+/kernel_work/linux-next-github/tools/testing/selftests/vm/gup_test
+make[1]: Entering directory '/kernel_work/linux-next-github'
+gup_test.c:10:10: fatal error: gup_test.h: No such file or directory
+    10 | #include "gup_test.h"
+       |          ^~~~~~~~~~~~
+
+
+thanks,
 -- 
-Kees Cook
+John Hubbard
+NVIDIA
