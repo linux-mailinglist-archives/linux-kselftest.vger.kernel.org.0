@@ -2,92 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E6327B95A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 03:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CFD127BA64
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 03:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbgI2B1o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Sep 2020 21:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S1726379AbgI2Bl0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Sep 2020 21:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726396AbgI2B1o (ORCPT
+        with ESMTP id S1725272AbgI2Bl0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Sep 2020 21:27:44 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5830BC061755;
-        Mon, 28 Sep 2020 18:27:44 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id u24so2502166pgi.1;
-        Mon, 28 Sep 2020 18:27:44 -0700 (PDT)
+        Mon, 28 Sep 2020 21:41:26 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613F2C061755;
+        Mon, 28 Sep 2020 18:41:25 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id u8so3605014lff.1;
+        Mon, 28 Sep 2020 18:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=haBHYNhGyPDlpdCEcHOoSLCHhaYXNjWfLyF4J9/wU0M=;
-        b=nqNVNfAc7trRJ8ELoXvA2l0ORldRE8sJpjt7nLGhGL+CWYopAosU/XnJuncU+gCN4v
-         c1O5D/gkag2cBPT5YkU6P5vxFFF9c6MOA6mpMdoFwWoIi7KpKtKlRMw8Y10a7FFdVmuA
-         xZD3kwUENIcV8odQSIfEy1ARotNtGjnK48OQmHcp68rMk3zH5JfjB6QFKIEvP1t+sodO
-         Ge661L9mb3P654FmmO8kw0BMx5XuUUoXSj9JkuamXBbeF5qlu//CKY2MGFF4dhSPf1hK
-         U31w9QriOFnlYwX86xeHiAxt2PJBnpIRrLqar2iKhDaa3YMA+kDW8/+neN9rpswpt1xR
-         7csg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Abk1BbjdM00OPRd2uWXilrq7XrEyhsA1YlL5eIiAOQk=;
+        b=Ptvbu4P9DCSuekWRtfhjMZE06Me6IMHCoxGgTUCYPevR8cH5RNlW86knbQQDPhAtuI
+         M13rD57niMA36oBQACsQezC4knFkkAzwu6Gq1/trQaVmygY16yctQGLKOJ6XNEx9m4Iw
+         gIP0qKgLuam6QHnm5MyJQs55EbdANVKO3KlYfCs9mdXL4e6mshCAJV6nflznYI9ZgN0L
+         XfuXCJ1mfg98O9lUbExY1tK5tBlTpZVdGI6qv4I9shpI39mZxVQWHRm575ntMtreflLN
+         U6QTrkHIOOnWoJHDFQCZgxgO2K+kN+68UyXwYYTdc1GhMJAhNK0XA9lxS3sxgcPbTprS
+         FrFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=haBHYNhGyPDlpdCEcHOoSLCHhaYXNjWfLyF4J9/wU0M=;
-        b=PCc0ia2mCMEz/IZCi/P9z73JzN5JoR2R2O1dsu9n/hnEj8hpfO83pNbb4eKQ/j0Wge
-         4O6D/tWjFoA5nruMiHuJugROrzcdjuc6kKGXmP4WTJE3FK+vNLAxQUFtjXbgv74lQ2c7
-         NNacs0pKVZF9pVOfZ5CBK4eJZlI6CEZI/R5zmnpKMgS3Fix0eo97qTBUgIwixk6XovCz
-         9egbt2gwNMRmHnXTg7jc9+XNxnY3likUADz8reMG06RaeI53EMjhLDruQ9kOcXzWYW62
-         NODg9O9DuwXR/uRh8dFXRQxThf6GaAmq3hLt3goNxFZSG5xQBcHrerHJGSKTTOFiipE8
-         ZTgQ==
-X-Gm-Message-State: AOAM530qH+Til+IiOkViB8S2kFxzUdd7QB6qv0IGeLtj3ILgv4G4Os8l
-        inogv/wNtqOKbkJVsWHUNxY=
-X-Google-Smtp-Source: ABdhPJxAFUoStsPpjfspG7G2Tgct9zO/DSeQ4pDbiiKDUYg9tJO5ut3kzNKyDZpzsxD5QUpQUL5uiw==
-X-Received: by 2002:a63:121d:: with SMTP id h29mr1314164pgl.285.1601342863833;
-        Mon, 28 Sep 2020 18:27:43 -0700 (PDT)
-Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id g9sm2502607pgm.79.2020.09.28.18.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 18:27:42 -0700 (PDT)
-Date:   Tue, 29 Sep 2020 09:27:31 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-doc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, Tim.Bird@sony.com,
-        lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each
- test individually selectable
-Message-ID: <20200929012731.GE2531@dhcp-12-153.nay.redhat.com>
-References: <20200914021758.420874-1-liuhangbin@gmail.com/>
- <20200914022227.437143-1-liuhangbin@gmail.com>
- <CA+G9fYvT6Mw2BamoiVyw=wLUqD-3LB2oaDqcuabOyWfFxEN1qg@mail.gmail.com>
- <202009251414.15274C0@keescook>
- <20200927015334.GC2531@dhcp-12-153.nay.redhat.com>
- <202009281305.E6F9595@keescook>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Abk1BbjdM00OPRd2uWXilrq7XrEyhsA1YlL5eIiAOQk=;
+        b=jSkB3rWPRYJguh4H/DivRE3KC81x3PEXbJdJQhx++G2Jkq4pHTIQrPPw1TUSZmJVjN
+         MzB38DjY6Olsh1+ZWHyC+WodTI3eMXN6zLYoK21/BGiJ/OOBhQEXf1Hl5vtJ3C1sruNM
+         oiqYxW+Ji0HmOLRn3WiZplGhrghYHOdJFhHL0sqy3vVumDctMG06TAIner0lpUfuEX+q
+         5vvILDh+lGoQU+Nlk/IDOdIUEVZHhOhmmZTdHY5JOpWC/IBKGMxVWtxrFbyXWbKR+3Hy
+         b/fa5/mW9DBgmLlv8CG+iZeaKqcuCBWhRkdYOx2lv6q6H2CJCr++bBSgBzjA749prIwW
+         XsPw==
+X-Gm-Message-State: AOAM5325Z9AJGcNVv2WMrznQwh7Rc3GLbefhFWgH/Rcqv+Na8YQBekPr
+        5anrw0EWVLG+ITx6zEk5/kJM54HvWfXwR4xPv5I=
+X-Google-Smtp-Source: ABdhPJxxF3quQ4a9pf5J7PQ5Ts2VVam9GUZMb+6YyxfzFXvPphQaXipRI0kMcEUXYzR9EzjEflvD/4WvC+ouOCDl0Cw=
+X-Received: by 2002:a19:8606:: with SMTP id i6mr303196lfd.263.1601343681439;
+ Mon, 28 Sep 2020 18:41:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202009281305.E6F9595@keescook>
+References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 28 Sep 2020 18:41:10 -0700
+Message-ID: <CAADnVQ+Va+gZQb2ShMB3yS3SpW-2uuqe9GL+Hz0A8NZkiNhsEA@mail.gmail.com>
+Subject: Re: [PATCH v7 bpf-next 0/8] bpf: add helpers to support BTF-based
+ kernel data display
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Andrey Ignatov <rdna@fb.com>, scott.branden@broadcom.com,
+        Quentin Monnet <quentin@isovalent.com>,
+        carlos antonio neira bustos <cneirabustos@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 01:06:15PM -0700, Kees Cook wrote:
-> > I'm really sorry to make this trouble. And I'm OK to revert the patch.
-> > I just a little wondering how do you generate this script.
-> 
-> This issue is with which shell is used. I suspect your /bin/sh is full
-> /bin/bash, where as Naresh's, the CI's, and mine are /bin/dash (which
-> lacks "-e" support for the built-in "echo").
+On Mon, Sep 28, 2020 at 4:33 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> Default output for an sk_buff looks like this (zeroed fields
+> are omitted):
+>
+> (struct sk_buff){
+>  .transport_header = (__u16)65535,
+>  .mac_header = (__u16)65535,
+>  .end = (sk_buff_data_t)192,
+>  .head = (unsigned char *)0x000000007524fd8b,
+>  .data = (unsigned char *)0x000000007524fd8b,
+>  .truesize = (unsigned int)768,
+>  .users = (refcount_t){
+>   .refs = (atomic_t){
+>    .counter = (int)1,
+>   },
+>  },
+> }
+>
+> Flags can modify aspects of output format; see patch 3
+> for more details.
 
-Ah, got it. Thanks for your explanation.
-
-Regards
-Hangbin
+Applied. Thanks a lot.
