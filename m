@@ -2,172 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C25027BC96
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 07:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E6527BCAB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 07:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727410AbgI2FzG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Sep 2020 01:55:06 -0400
-Received: from mga01.intel.com ([192.55.52.88]:61546 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725355AbgI2FzF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 01:55:05 -0400
-IronPort-SDR: t0pSNbRhJHaQ9yYpAppY7kdL892TmrOfdqGBm1bIkZEgdtZronCb/RhYfSe1YlX2HnmX6NWPX+
- L+gBcWUXXuNA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9758"; a="180270377"
-X-IronPort-AV: E=Sophos;i="5.77,317,1596524400"; 
-   d="scan'208";a="180270377"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 21:58:56 -0700
-IronPort-SDR: MTa3SG/D44iPy0JwazIs4vYf6q4sqQXDHzSUKL55ywUxjojUAHVckBJLYiTCfwbvERNG4JggIG
- lQ0mmaWesEtA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,317,1596524400"; 
-   d="scan'208";a="307614587"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2020 21:58:55 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+        id S1725535AbgI2F7a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Sep 2020 01:59:30 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45850 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725300AbgI2F7a (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 29 Sep 2020 01:59:30 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08T5sBkM019987;
+        Mon, 28 Sep 2020 22:59:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=xn5yoK+w5zvVtBmK4MukckVBCA+NBSsMteEZDOtoJRI=;
+ b=fUWIzb23UPMFrt5iCo8ah9/YwN7p+5JXlbp3a0ArHhtvPpAlqmvHQ43TsTQILT2fEBJ8
+ Jq7HPfk9h6aTITjhpRIMo+1lnr4tYNPaXu79S0uLHEg0GsGicJn3kWJuyUsVgkpX5KdV
+ 5fcnI9H5tmh52hs+LblTAghgyaNrAMF7G5M= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33tnfm0u63-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 28 Sep 2020 22:59:16 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Mon, 28 Sep 2020 21:58:54 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Mon, 28 Sep 2020 21:58:54 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Mon, 28 Sep 2020 21:58:47 -0700
+ 15.1.1979.3; Mon, 28 Sep 2020 22:59:13 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cjk+TjRFFzrQVZP8/NQqAuTdBvNyVCNKraSHHBOXgS7Jr8314m9q6gf/1kSny7UgDvIPTwNLlhA6aJ3IaU8ZKL6cNNrIDQETGm4ln0Z3VBdqNXUAjGD2K7jckaYQ5TOREnRWPsvTZENdUSGoIJ4gakMYQxdFmWExiKneE5euY9hoFOhRivoa7Infe3Afj/GyVuvlrdEHsQ1W64U2qbPAyyoc68HailuVnp+tVyHVZhC1fFobNzEn3Ab+gP0LtfgsLw9lhHAVypqB+lJU87RuRYuIw8MPQXRxY75HCkzf82KeKHwIhEiD5gKM7bDnosxctfDeN5iXNnKS7SRRfbjgrQ==
+ b=E6UcwCNsyx51w/bjBsPzTF4vEu96fYRZQXSx+SMikdBvkhrWGSgcshHNJfZvVtue7I8dnboKCgbjn1UBK99TKxuqBufLkPCYDHTDDd9GSV1cqsZapDmL1kurOP8nZsSwjvgaHfc3nLSyZyzwvlZKaMSevqSxnODGFfFxVyywvxigBqN75f6qk5uTPnDD5nS0X+0Ib0y1vZrOVXLsQPZHju/rTUa0xUWC0QDmCZ8DO38pmHzanTt0XDH3c1S5M150RA0cDGZicVHSkZ2Q62ENjfVN0et2H5WTCVkFGtH2k1cAk2jZMYToDgoY/7sT/cX58N9N+Xv2cDx+hxebX7BqwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FUsklQmapfplnqf1yTcJidXuvWTsT7CgEvKfdT9uYGA=;
- b=Yo3WbhvaZyeUOlSYy6/LeB8v7qWxBpxXv1nlOx4h8+M5NxzrST0pP54laPmmf9XVDzS6zCGgusYntb6hvenQNoyCYBedXo5YkZDTNKe1hkpsUA+caIZGGuB+GEb68qneDVOiHPxkdRuInma79ixhjkE2STdUqbbnRIokk6azsjZsMhgpGJlm9HVqMQI1BdVG5V1NK5SUq7A6P5flWabkHR3S1NdMNSHxeILJsx+pHV6OuuB7pF55ml/jQPFiDxNNlFQqQ5JM2uVl11sIolXjcyNADdFY/mSTEsr353aX8qz3olUUEyv8UDBJukHZhYDOrm7mFnQpF97xodFJbPmClQ==
+ bh=xn5yoK+w5zvVtBmK4MukckVBCA+NBSsMteEZDOtoJRI=;
+ b=Gb37ybdHIphG7MbtkLntkjQEsyH7shSPNAfi4IXb2UY1c2j0U9kKgLMMdnwsIoE9RyI94DCXjQrb6Uq/9cNIOZCWH3y15BkV0Vh6LpJTRqAAIUJA3sK3TPSux3FnCFUiGE2lQzXU8gI3WAQuj5EzoCBVfsPEDjqDGxK91Fm8brW+BliraU0nVScYZXxV2g/r9MM6f4+BXl6gBsu++py7hKkvieIJLb4nYSjaODH8tfHQ2WKsVjcJmVTJc/28fAfHXBrCF+P7ns4H3jN8RUJTxWx7C1X6DsVMCpRGLH01eXoP6dl4RSOrnBX3U2CXbU6//iksTHCGZhBoluorMA/j9Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FUsklQmapfplnqf1yTcJidXuvWTsT7CgEvKfdT9uYGA=;
- b=jEE2yb6RnQ0rsQ9qDKcMYvr/aBP5IoS3W6zJ8EuQy4gulLXEIFXDj82054aAg54qBKUZyECehLlNfWmEZF36bHOeMMlAXfNMLXpZ/n9chorIBzMpIxsQw5+lFBoAtLRVwimT4LVTvMdKGVOxGXw4rbJTJf3lj/ow/BTQvLxJ74Y=
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com (2603:10b6:805:bd::17)
- by SA0PR11MB4653.namprd11.prod.outlook.com (2603:10b6:806:94::19) with
+ bh=xn5yoK+w5zvVtBmK4MukckVBCA+NBSsMteEZDOtoJRI=;
+ b=F2xlqspkd3YUEf9KgZfgpneDRrAc0zIQsOKMF9k3+X8N/p2lavoIwsMThFcIIlqt146O1LYGJBQT9pky6cvTu2CdRmQYoeoFRqm54Hv0+M6WZHIx3Gc8xr/jFYp6w/lRT/xtjDNOUUCLEepzVaTSCH7S7qkbMbQUqnxBCrwsBvI=
+Authentication-Results: cloudflare.com; dkim=none (message not signed)
+ header.d=none;cloudflare.com; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB3207.namprd15.prod.outlook.com (2603:10b6:a03:101::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22; Tue, 29 Sep
- 2020 04:58:44 +0000
-Received: from SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::b901:8e07:4340:6704]) by SN6PR11MB3184.namprd11.prod.outlook.com
- ([fe80::b901:8e07:4340:6704%7]) with mapi id 15.20.3412.029; Tue, 29 Sep 2020
- 04:58:44 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "rppt@kernel.org" <rppt@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC:     "tycho@tycho.ws" <tycho@tycho.ws>,
-        "david@redhat.com" <david@redhat.com>,
-        "cl@linux.com" <cl@linux.com>, "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "idan.yaniv@ibm.com" <idan.yaniv@ibm.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-nvdimm@lists.01.org" <linux-nvdimm@lists.01.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-Subject: Re: [PATCH v6 3/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Thread-Topic: [PATCH v6 3/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Thread-Index: AQHWlh00WOVRjW6Kw0OmwswTJieWmg==
-Date:   Tue, 29 Sep 2020 04:58:44 +0000
-Message-ID: <d466e1f13ff615332fe1f513f6c1d763db28bd9a.camel@intel.com>
-References: <20200924132904.1391-1-rppt@kernel.org>
-         <20200924132904.1391-4-rppt@kernel.org>
-In-Reply-To: <20200924132904.1391-4-rppt@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.30.1 (3.30.1-1.fc29) 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
-x-originating-ip: [192.55.55.43]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f70bc009-fad6-405a-8e4d-08d8643457cd
-x-ms-traffictypediagnostic: SA0PR11MB4653:
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SA0PR11MB4653F3AF8D931E8B3292D667C9320@SA0PR11MB4653.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ieS4qv3igJqVq2uNt8hS2k67axxhLmQpSmyH4p/UhJwfou7k9DeSxTNFgFcZlnjNXNBMA6P2MLM9paGd+6AJcLBwAI1LeqPtFqG83RPIPUiL3OB4uDE/RYQARLa+BPcvje3Kw++No46etp7OUi1bN3DJijZEBPbruuqh/eH7tquAnQogNbIRK1irozw17BH6RXIkJlIY6kql/wSavqO9h22SfkFejG9U4Qb0LcOrizbvhCL+Hw9iXN69n2E76JdQjcfNKxVeEijTRbHeK2zBCE1VDHk5B777G73nJ6I07P0V3/DQPTagPN75esUsU7FEiMyHbTUw/FeClE0pcEQ8LHSvIWMke6S8Yl2ClKSas5+v00NZ9N4cBqqj3ziG6FSjGsiGDzFOfw1xFVnH28GcZo+sbbogI4h3MRV/T8Dbc3M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3184.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(366004)(396003)(136003)(7406005)(316002)(66446008)(4326008)(64756008)(186003)(5660300002)(66476007)(66556008)(6512007)(6486002)(8936002)(26005)(91956017)(76116006)(66946007)(8676002)(86362001)(36756003)(83380400001)(110136005)(7416002)(6506007)(2906002)(478600001)(71200400001)(2616005)(54906003)(219293001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: RxwwA1BEh2ArsB3KR0Moev6U8/fZwfr8YodkyCbo1nSTSbC3k2hqil6A7vXde1YZGqgwqG0OnuBn/XSfKLUeFRbHFXziVwc/57IA4IE2iFNh/1U+YRGE6ZWFWJ0o9lJIE9FCJ58Vh0h6Tg4Mh0VWth/UrvqgkjcsYBY2hI7PIeu/sMOvsQqJkmOAvNno4QeIYZUPyfq6mtaddTP0wjeEG51ws5/L0YuTmTizeH+LBrmy6GnxdMo/uFjp7jlYn2uVo9JI6mFgxSGbKC+tPl1jMB15kE8pbOcjIpcA0/0SBeUZsfEukKryQv8VvPm61qrHj29la/xPD7RWjeSlywFBy820BJBsz+tQ3JjgbesYr3WnpCFMLjmIQMTYBFVbvARNut0SmOE7iDjp3m9VJ42uD4gIa2Rl4malMnc76DZhXDzhvbXQgN+5IeIfAMDJKgc7vBlnI8TVXeADuRQZ7vt2ZJDJVnBq0tQt7mytDphUgP+zBu79/3SV4raAm6IMyxM+iaZaYafqhv0Qmg7ZY6Fr7ERxwLvhr2nK9cznuw2x7Su/JMGvuNcpPDvef237krn4qOQORCXM3V31YueNAw0UpZIDEXFIz9ezmDrdPA9yGjPqjiMnga2pbWmA6dgiNGJBt7KUxWQ0q3XYF19KSJxZ4Q==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9FEAF26BDE791E4CAE434527DF482AD0@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20; Tue, 29 Sep
+ 2020 05:59:11 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3412.029; Tue, 29 Sep 2020
+ 05:59:11 +0000
+Date:   Mon, 28 Sep 2020 22:59:05 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        <kernel-team@cloudflare.com>, <linux-kselftest@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 2/4] selftests: bpf: Add helper to compare
+ socket cookies
+Message-ID: <20200929055851.n7fa3os7iu7grni3@kafai-mbp>
+References: <20200928090805.23343-1-lmb@cloudflare.com>
+ <20200928090805.23343-3-lmb@cloudflare.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200928090805.23343-3-lmb@cloudflare.com>
+X-Originating-IP: [2620:10d:c090:400::5:d609]
+X-ClientProxiedBy: CO1PR15CA0085.namprd15.prod.outlook.com
+ (2603:10b6:101:20::29) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp (2620:10d:c090:400::5:d609) by CO1PR15CA0085.namprd15.prod.outlook.com (2603:10b6:101:20::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22 via Frontend Transport; Tue, 29 Sep 2020 05:59:10 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 864bc275-3401-4845-d346-08d8643cc94f
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3207:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3207356CA0CCE1A9114056C2D5320@BYAPR15MB3207.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wZdoL0sAaQRJ3l9nMlCATfanpKVn3a3MAMJuC2jir9K32eRxwsQ+I1H+MNTUj0QNzookxdBi5F0lo4SmG8XS7RpnbwGZLcf0C0QKsWKdth2XNd2CqpjQnyeqWEzxLduvl2lssBozC+rmYQaTzhIbJBksJXLHf3EtgacRk5m0abcofQWNhrsRJGl8HgWHrKiv/COqRV4lZ0mrZLnNgIRgGggcpTNBcccTd37pld25Ti9kbjgyeOuD2RqSkWgNUOBqbxSZjlGyvnceMERAhJepSkWTu3mOaqpCbzo5Dgz8sAzd9EyPzhXUQZ+T/Y7JSQ4q9S8nuFs4PmcyP8o4Ai0oqgog7klp3peYAPx3anAoK/s8Rx66oh22FRdocHcsPl3+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(346002)(376002)(366004)(396003)(66946007)(66556008)(66476007)(4744005)(1076003)(4326008)(2906002)(86362001)(33716001)(8676002)(316002)(8936002)(478600001)(6666004)(6916009)(54906003)(52116002)(5660300002)(186003)(83380400001)(55016002)(9686003)(16526019)(6496006);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: TRIrg1HdjDoSHUFNE1+fprx0J0tLM4BeDS0leMD28a3nFYT/08fgskuU49T9R1Yazdn6Q39KHyutw87+QyVCH+cPfNvmUT5le2LrFlcLry9Qhpz5J9BVZrH99VEet2aUvE00ZyN0ESzrFfkekHNvFNi03yReXfsqdKcdwSTzqaopnawWuGsczJbvbEGBAF03VGiKORSajlmvWB/NSgFO/iMSAo3GyqNKdG7IX7D+L1QKscrRykXiYSDrtJKEvDl4ImlxhxmfxtPRv9/XeykIxV+RniwAJERXxPc0UUMEO2j6ScZMmsAT4rpQfjHSHZ27M2rnpl8SYVrxe0jwLP2ns8k0/zwD4w8+aFvjpT+FEwtNE1PomOU+bTsampepcSmoOEHHVc5k5J6NLqkS/aHFGIyYnlgJEL/Ub157Wedy6jC7+hKZ/pHRJhYSrIAnyQb9OMnO2E9HGkY6dQVCPvzOGCLyAoZl58H+rRe67nL77U0iqFZfmaOo8Nwf41tskHirtFPrRI4+lxoicr31ObDZoiSKxr6VRnH3ySw6qqBP3pCmw0LugiNY2XewpciPbwVq81TZE7kgYVuMJ5UsscPDEArW1fQj+tFobdSPIVVSJFpJgKMCX7sFAhfpG7xH2Bqz/lFUcUquLrXpzC8vxQSbrXPzWEjDRwBv/ezrZYprIp1AbjxOwoAggOUhd2r6OCXL
+X-MS-Exchange-CrossTenant-Network-Message-Id: 864bc275-3401-4845-d346-08d8643cc94f
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3184.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f70bc009-fad6-405a-8e4d-08d8643457cd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2020 04:58:44.4152
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2020 05:59:11.6389
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: etO50W/t3kxQxurmTtPYdwh2lIDsJCMEOsAsZgbyH0b+f4mv2fltU/sZqL5BUysy+feywqIiVmJEnSrFbZ2N2W7WcYwG47lolWQLnvPYgCI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4653
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: srlgCrocJeCKVxXHcYUKxLM7yIcb6thjMR9zmSILWNqcICNx72Dz+USbwLFpqbnl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3207
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-29_01:2020-09-29,2020-09-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 priorityscore=1501 adultscore=0 clxscore=1011
+ lowpriorityscore=0 malwarescore=0 suspectscore=1 impostorscore=0
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009290058
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA5LTI0IGF0IDE2OjI5ICswMzAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
-PiBJbnRyb2R1Y2UgIm1lbWZkX3NlY3JldCIgc3lzdGVtIGNhbGwgd2l0aCB0aGUgYWJpbGl0eSB0
-byBjcmVhdGUNCj4gbWVtb3J5DQo+IGFyZWFzIHZpc2libGUgb25seSBpbiB0aGUgY29udGV4dCBv
-ZiB0aGUgb3duaW5nIHByb2Nlc3MgYW5kIG5vdA0KPiBtYXBwZWQgbm90DQo+IG9ubHkgdG8gb3Ro
-ZXIgcHJvY2Vzc2VzIGJ1dCBpbiB0aGUga2VybmVsIHBhZ2UgdGFibGVzIGFzIHdlbGwuDQo+IA0K
-PiBUaGUgdXNlciB3aWxsIGNyZWF0ZSBhIGZpbGUgZGVzY3JpcHRvciB1c2luZyB0aGUgbWVtZmRf
-c2VjcmV0KCkNCj4gc3lzdGVtIGNhbGwNCj4gd2hlcmUgZmxhZ3Mgc3VwcGxpZWQgYXMgYSBwYXJh
-bWV0ZXIgdG8gdGhpcyBzeXN0ZW0gY2FsbCB3aWxsIGRlZmluZQ0KPiB0aGUNCj4gZGVzaXJlZCBw
-cm90ZWN0aW9uIG1vZGUgZm9yIHRoZSBtZW1vcnkgYXNzb2NpYXRlZCB3aXRoIHRoYXQgZmlsZQ0K
-PiBkZXNjcmlwdG9yLg0KPiANCj4gIEN1cnJlbnRseSB0aGVyZSBhcmUgdHdvIHByb3RlY3Rpb24g
-bW9kZXM6DQo+IA0KPiAqIGV4Y2x1c2l2ZSAtIHRoZSBtZW1vcnkgYXJlYSBpcyB1bm1hcHBlZCBm
-cm9tIHRoZSBrZXJuZWwgZGlyZWN0IG1hcA0KPiBhbmQgaXQNCj4gICAgICAgICAgICAgICBpcyBw
-cmVzZW50IG9ubHkgaW4gdGhlIHBhZ2UgdGFibGVzIG9mIHRoZSBvd25pbmcgbW0uDQoNClNlZW1z
-IGxpa2UgdGhlcmUgd2VyZSBzb21lIGNvbmNlcm5zIHJhaXNlZCBhcm91bmQgZGlyZWN0IG1hcA0K
-ZWZmaWNpZW5jeSwgYnV0IGluIGNhc2UgeW91IGFyZSBnb2luZyB0byByZXdvcmsgdGhpcy4uLmhv
-dyBkb2VzIHRoaXMNCm1lbW9yeSB3b3JrIGZvciB0aGUgZXhpc3Rpbmcga2VybmVsIGZ1bmN0aW9u
-YWxpdHkgdGhhdCBkb2VzIHRoaW5ncyBsaWtlDQp0aGlzPw0KDQpnZXRfdXNlcl9wYWdlcygsICZw
-YWdlKTsNCnB0ciA9IGttYXAocGFnZSk7DQpmb28gPSAqcHRyOw0KDQpOb3Qgc3VyZSBpZiBJJ20g
-bWlzc2luZyBzb21ldGhpbmcsIGJ1dCBJIHRoaW5rIGFwcHMgY291bGQgY2F1c2UgdGhlDQprZXJu
-ZWwgdG8gYWNjZXNzIGEgbm90LXByZXNlbnQgcGFnZSBhbmQgb29wcy4NCg==
+On Mon, Sep 28, 2020 at 10:08:03AM +0100, Lorenz Bauer wrote:
+> We compare socket cookies to ensure that insertion into a sockmap worked.
+> Pull this out into a helper function for use in other tests.
+> 
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ---
+>  .../selftests/bpf/prog_tests/sockmap_basic.c  | 50 +++++++++++++------
+>  1 file changed, 36 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index 4b7a527e7e82..67d3301bdf81 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> @@ -50,6 +50,37 @@ static int connected_socket_v4(void)
+>  	return -1;
+>  }
+>  
+> +static void compare_cookies(struct bpf_map *src, struct bpf_map *dst)
+> +{
+> +	__u32 i, max_entries = bpf_map__max_entries(src);
+> +	int err, duration, src_fd, dst_fd;
+This should have a compiler warning.  "duration" is not initialized.
