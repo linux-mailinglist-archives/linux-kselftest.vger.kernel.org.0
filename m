@@ -2,99 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 086D327D289
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 17:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBC027D313
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 17:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730111AbgI2PQU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Sep 2020 11:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S1729608AbgI2Psn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Sep 2020 11:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729064AbgI2PQT (ORCPT
+        with ESMTP id S1725497AbgI2Psm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 11:16:19 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F58C061755;
-        Tue, 29 Sep 2020 08:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rt/gWACyTIQuj5nIeNUdzNcwr8s1YVFasvFCFOsspG0=; b=C1EjOj6Mt1xdWZh3XPn8rkOVq0
-        OxLNUps2Qyz7f+SRn0b0qVlwpJY3G1qjZJrXsr79+xSJN576WRyGRCJBvE33ahL+K3bAl6J52zeHS
-        wSJqYA3kcEN4r81o5iv8mrkQNdTtpmXlgU0m94t4jobUJQw63e2MEofWlPsisf6M5B5+P7V7uo9JR
-        L+B8gNbZ5jGR4O4c1ouioTzYDVNXI11/fjGCnBu9osfq4flDd/ZImbGrL1Nb/QcxcZUrcloACztpk
-        f+A0BvS7dJrAKnyy1KN+GuPecThd5yRmSmk4dIzSCm/hex1K24N5dt/nnCwUMW+yOhjXGoH3qt8AN
-        HBl2N0ng==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kNHMC-0000zG-2k; Tue, 29 Sep 2020 15:15:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 191E5300F7A;
-        Tue, 29 Sep 2020 17:15:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 004CF210E84D8; Tue, 29 Sep 2020 17:15:52 +0200 (CEST)
-Date:   Tue, 29 Sep 2020 17:15:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <20200929151552.GS2628@hirez.programming.kicks-ass.net>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20200924132904.1391-6-rppt@kernel.org>
- <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
- <20200929130529.GE2142832@kernel.org>
- <20200929141216.GO2628@hirez.programming.kicks-ass.net>
- <20200929145813.GA3226834@linux.ibm.com>
+        Tue, 29 Sep 2020 11:48:42 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A61FC061755;
+        Tue, 29 Sep 2020 08:48:42 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id 77so6129326lfj.0;
+        Tue, 29 Sep 2020 08:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C03GfNtAEwKiwdCU07tZSqak/2i7nim8viiXxocdJ8s=;
+        b=Nf1tAi65bXqFvbQR7DC7chb2QRkBiFvi+mbBp/rVXUYcwqzp9+MsEIGVvS3NVt2Xp8
+         FRODo4nI0CUJswMiLZdLW8uSOI5Z7mkOrz/k8sfxT+FwEZ6nTAIyN1M0gACOb0qipOvO
+         W+1Hgx+0G5BMQDLTgwnNzx2P5NIuAL0oqLJib12Ms3XFuZ39ej8b63mWtw5hugkHvc/8
+         zUUWLrryv78Xe7ppgZWEwpN67UUjQgq9q0u6V1Gis5PQdvObWGzvzAW4xpyL22iSoTyx
+         yZpVQWz2yZdE442psFGNgJ6f4rIuRN3PW2GrFIluk31K+i1j+BHv4QROiB8WlPpc9MAK
+         3ccg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C03GfNtAEwKiwdCU07tZSqak/2i7nim8viiXxocdJ8s=;
+        b=HTxE//uW0Dveifo6vvOTeOoIVpaTIKYh5xXPNYR9E33eNmbLa3kSUIPlZTaGyA480i
+         D+E6Kw1dN6QW2LCkKuXWCOEGkig/APHO4E3Q9sohxidqTY+XyWluY3oI/a7Emc9MU3Ym
+         2sul6CN+gG8DGHR2fhDNAs1oar4fI9P2vyAwwdfexTuaRedcDVe17RJsiV23WthOzJPH
+         YwcH3ZVvsIN0UPr1ryTQMrAZBBorOSuCyw6putDyUAd859XCHLIuLqTxvGEtx6eHXKYe
+         A/zS/I+h/hYEepogs/QgsZQAFnUkQ5wQbZRQGdMeXMfgLVliqC1eyftXWssr1QyX7Cjo
+         GPbg==
+X-Gm-Message-State: AOAM530nnyf1ox8Fpcb4M1ZPz2sHKuZ9Ivz31Y+JnzsRFHa0hVlXzsJ/
+        6ejEfDNNX+eY2jKk8NNSxuF5+8TPyYJT60BOaoI=
+X-Google-Smtp-Source: ABdhPJzknCWMQwp+7qyeON2fWeuJIJJaiL/XmYGkLKkBYBQfctT04GHRqvm1krAtMPimnWCbcsDBbMxS4gjjcIz6W8Y=
+X-Received: by 2002:a19:9141:: with SMTP id y1mr1361477lfj.554.1601394520576;
+ Tue, 29 Sep 2020 08:48:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200929145813.GA3226834@linux.ibm.com>
+References: <20200928090805.23343-1-lmb@cloudflare.com> <20200928090805.23343-3-lmb@cloudflare.com>
+ <20200929055851.n7fa3os7iu7grni3@kafai-mbp>
+In-Reply-To: <20200929055851.n7fa3os7iu7grni3@kafai-mbp>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 29 Sep 2020 08:48:27 -0700
+Message-ID: <CAADnVQLwpWMea1rbFAwvR_k+GzOphaOW-kUGORf90PJ-Ezxm4w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/4] selftests: bpf: Add helper to compare
+ socket cookies
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     Lorenz Bauer <lmb@cloudflare.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@cloudflare.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 05:58:13PM +0300, Mike Rapoport wrote:
-> On Tue, Sep 29, 2020 at 04:12:16PM +0200, Peter Zijlstra wrote:
+On Mon, Sep 28, 2020 at 10:59 PM Martin KaFai Lau <kafai@fb.com> wrote:
+> >
+> > +static void compare_cookies(struct bpf_map *src, struct bpf_map *dst)
+> > +{
+> > +     __u32 i, max_entries = bpf_map__max_entries(src);
+> > +     int err, duration, src_fd, dst_fd;
+> This should have a compiler warning.  "duration" is not initialized.
 
-> > It will drop them down to 4k pages. Given enough inodes, and allocating
-> > only a single sekrit page per pmd, we'll shatter the directmap into 4k.
-> 
-> Why? Secretmem allocates PMD-size page per inode and uses it as a pool
-> of 4K pages for that inode. This way it ensures that
-> __kernel_map_pages() is always called on PMD boundaries.
-
-Oh, you unmap the 2m page upfront? I read it like you did the unmap at
-the sekrit page alloc, not the pool alloc side of things.
-
-Then yes, but then you're wasting gobs of memory. Basically you can pin
-2M per inode while only accounting a single page.
+There was a warning. I noticed it while applying and fixed it up.
+Lorenz, please upgrade your compiler. This is not the first time such
+warning has been missed.
