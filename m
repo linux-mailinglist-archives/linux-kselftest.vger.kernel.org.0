@@ -2,79 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBC027D313
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 17:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3567C27D3B7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 18:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729608AbgI2Psn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Sep 2020 11:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S1728273AbgI2QfK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Sep 2020 12:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725497AbgI2Psm (ORCPT
+        with ESMTP id S1728184AbgI2QfK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 11:48:42 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A61FC061755;
-        Tue, 29 Sep 2020 08:48:42 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id 77so6129326lfj.0;
-        Tue, 29 Sep 2020 08:48:42 -0700 (PDT)
+        Tue, 29 Sep 2020 12:35:10 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFFFC061755
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 09:35:10 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id v123so4931394qkd.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 09:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C03GfNtAEwKiwdCU07tZSqak/2i7nim8viiXxocdJ8s=;
-        b=Nf1tAi65bXqFvbQR7DC7chb2QRkBiFvi+mbBp/rVXUYcwqzp9+MsEIGVvS3NVt2Xp8
-         FRODo4nI0CUJswMiLZdLW8uSOI5Z7mkOrz/k8sfxT+FwEZ6nTAIyN1M0gACOb0qipOvO
-         W+1Hgx+0G5BMQDLTgwnNzx2P5NIuAL0oqLJib12Ms3XFuZ39ej8b63mWtw5hugkHvc/8
-         zUUWLrryv78Xe7ppgZWEwpN67UUjQgq9q0u6V1Gis5PQdvObWGzvzAW4xpyL22iSoTyx
-         yZpVQWz2yZdE442psFGNgJ6f4rIuRN3PW2GrFIluk31K+i1j+BHv4QROiB8WlPpc9MAK
-         3ccg==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AvWrqu4w8v60zfj2vEQkFZY/xpWiyVwwYui+w1mVyjU=;
+        b=fR1L6woBIk8eiQBenugUHgU9eVdCRDD/5atyqGvpoCazfJHmOMjvTeBvJs2Xdjheej
+         jiV6lTQvsxMeEonqGZc2tVOZpqUQspfncpoVfSKFCqpn66Pohu9bIoAjIGrD6UGjMXrL
+         stvCCTBoORB27HXTQOyygRY7pqwDWjZAtQ1unwlRab6EPjDztL+9F9XlqDB86NXlOWAy
+         6LhARGXTHsRe0GBK4OAHZU9uZtcX+WqZ8c3q+cwp0000xZRGkSsdZnIg1RruYiey178l
+         TB34YjYUQaFhc8I7AYm2DnNVKv6vWocOkXlOgdqYUhrn9fSTSXeQcek2kBFyAUa+XXQI
+         aHEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C03GfNtAEwKiwdCU07tZSqak/2i7nim8viiXxocdJ8s=;
-        b=HTxE//uW0Dveifo6vvOTeOoIVpaTIKYh5xXPNYR9E33eNmbLa3kSUIPlZTaGyA480i
-         D+E6Kw1dN6QW2LCkKuXWCOEGkig/APHO4E3Q9sohxidqTY+XyWluY3oI/a7Emc9MU3Ym
-         2sul6CN+gG8DGHR2fhDNAs1oar4fI9P2vyAwwdfexTuaRedcDVe17RJsiV23WthOzJPH
-         YwcH3ZVvsIN0UPr1ryTQMrAZBBorOSuCyw6putDyUAd859XCHLIuLqTxvGEtx6eHXKYe
-         A/zS/I+h/hYEepogs/QgsZQAFnUkQ5wQbZRQGdMeXMfgLVliqC1eyftXWssr1QyX7Cjo
-         GPbg==
-X-Gm-Message-State: AOAM530nnyf1ox8Fpcb4M1ZPz2sHKuZ9Ivz31Y+JnzsRFHa0hVlXzsJ/
-        6ejEfDNNX+eY2jKk8NNSxuF5+8TPyYJT60BOaoI=
-X-Google-Smtp-Source: ABdhPJzknCWMQwp+7qyeON2fWeuJIJJaiL/XmYGkLKkBYBQfctT04GHRqvm1krAtMPimnWCbcsDBbMxS4gjjcIz6W8Y=
-X-Received: by 2002:a19:9141:: with SMTP id y1mr1361477lfj.554.1601394520576;
- Tue, 29 Sep 2020 08:48:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AvWrqu4w8v60zfj2vEQkFZY/xpWiyVwwYui+w1mVyjU=;
+        b=PH8VDL2eDaQurawooKsV0FlhMnsET1pI8dnxV5I09PJ6YKN+/3xwcQy8a08WoGa67I
+         zE1O3uNUFSZDaVKtg5mUCkcu1Pfl1NSBcFpxlqyLUYaPbXNQG0L/4YixfpWlYMcvT/jW
+         ripEsUY+roQLhiLD+rDYasJWg4Hc5GA6N7yly3bLgkEsD7r/H13oNgCw7fTkgSgJslz3
+         sAl9mwHqd3SW4CPnGAWEpkl0kXZohj2+62PsZG5vHOxT5bYgC/lpyU/fUWhKYPhlu1je
+         3lNt8TEkIKSd54+qanRvql4ewNHUUBs6n/y6SSjFKqSOt5I2LFXD2cxTVaMTe17xqVzJ
+         jYIw==
+X-Gm-Message-State: AOAM530y3lHFNBbiGLBPyQJ5Z5toUdgqETNhWe5pEHgD/n0ilGB3g06G
+        oLg2i9U1OIyJvsrSBeabt/jM2bSk65HmOgzE
+X-Google-Smtp-Source: ABdhPJyewvSBGSVMwAlEAvWjCrriQubfC+7x0uBqT5YF2razgiDMHSz5KydCKgV0wLG7QOaWdDR93g==
+X-Received: by 2002:a37:a04e:: with SMTP id j75mr5059496qke.400.1601397309354;
+        Tue, 29 Sep 2020 09:35:09 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id z26sm4994871qkj.107.2020.09.29.09.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 09:35:08 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1kNIap-003Aax-P1; Tue, 29 Sep 2020 13:35:07 -0300
+Date:   Tue, 29 Sep 2020 13:35:07 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 2/8] selftests/vm: use a common gup_test.h
+Message-ID: <20200929163507.GV9916@ziepe.ca>
+References: <20200928062159.923212-1-jhubbard@nvidia.com>
+ <20200928062159.923212-3-jhubbard@nvidia.com>
+ <20200928125739.GP9916@ziepe.ca>
+ <6481e78f-c70d-133a-ff4a-325b5cd8fd5d@nvidia.com>
 MIME-Version: 1.0
-References: <20200928090805.23343-1-lmb@cloudflare.com> <20200928090805.23343-3-lmb@cloudflare.com>
- <20200929055851.n7fa3os7iu7grni3@kafai-mbp>
-In-Reply-To: <20200929055851.n7fa3os7iu7grni3@kafai-mbp>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 29 Sep 2020 08:48:27 -0700
-Message-ID: <CAADnVQLwpWMea1rbFAwvR_k+GzOphaOW-kUGORf90PJ-Ezxm4w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/4] selftests: bpf: Add helper to compare
- socket cookies
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        kernel-team <kernel-team@cloudflare.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6481e78f-c70d-133a-ff4a-325b5cd8fd5d@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 10:59 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> >
-> > +static void compare_cookies(struct bpf_map *src, struct bpf_map *dst)
-> > +{
-> > +     __u32 i, max_entries = bpf_map__max_entries(src);
-> > +     int err, duration, src_fd, dst_fd;
-> This should have a compiler warning.  "duration" is not initialized.
+On Mon, Sep 28, 2020 at 01:10:24PM -0700, John Hubbard wrote:
+> On 9/28/20 5:57 AM, Jason Gunthorpe wrote:
+> > On Sun, Sep 27, 2020 at 11:21:53PM -0700, John Hubbard wrote:
+> > > diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> > > index d1ae706d9927..9cc6bc087461 100644
+> > > +++ b/tools/testing/selftests/vm/Makefile
+> > > @@ -130,3 +130,5 @@ endif
+> > >   $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+> > >   $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
+> > > +
+> > > +$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
+> > 
+> > There is no reason to do this, the auto depends will pick up header
+> > files, and gup_test.h isn't a generated file
+> > 
+> 
+> It is less capable than you might think. Without the admittedly ugly technique
+> above, it fails to build, and as you can see, the include paths that are fed to
+> gcc are just a single one: usr/include:
+> 
+> $ make
+> make --no-builtin-rules ARCH=x86 -C ../../../.. headers_install
+> gcc -Wall -I ../../../../usr/include     gup_test.c
+> /kernel_work/linux-next-github/tools/testing/selftests/kselftest_harness.h
+> /kernel_work/linux-next-github/tools/testing/selftests/kselftest.h
+> ../../../../mm/gup_test.h -lrt -o
+> /kernel_work/linux-next-github/tools/testing/selftests/vm/gup_test
+> make[1]: Entering directory '/kernel_work/linux-next-github'
+> gup_test.c:10:10: fatal error: gup_test.h: No such file or directory
+>    10 | #include "gup_test.h"
+>       |          ^~~~~~~~~~~~
 
-There was a warning. I noticed it while applying and fixed it up.
-Lorenz, please upgrade your compiler. This is not the first time such
-warning has been missed.
+You are supposed to use
+
+  #include "../../../../mm/gup_test.h"
+
+I have no idea what weird behavior the makefile is triggering that the
+above include works
+
+Jason
