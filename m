@@ -2,92 +2,209 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2116627D88A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 22:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BEA27D98E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 23:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729750AbgI2UhC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Sep 2020 16:37:02 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2631 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729557AbgI2Ugc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 16:36:32 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f739ac30002>; Tue, 29 Sep 2020 13:36:19 -0700
-Received: from [10.2.53.30] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 29 Sep
- 2020 20:36:31 +0000
-Subject: Re: [PATCH 2/8] selftests/vm: use a common gup_test.h
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-s390@vger.kernel.org>
-References: <20200928062159.923212-1-jhubbard@nvidia.com>
- <20200928062159.923212-3-jhubbard@nvidia.com>
- <20200928125739.GP9916@ziepe.ca>
- <6481e78f-c70d-133a-ff4a-325b5cd8fd5d@nvidia.com>
- <20200929163507.GV9916@ziepe.ca>
- <aab477bf-4353-5e6b-4cc9-9872c9376ed2@nvidia.com>
- <20200929175524.GX9916@ziepe.ca>
- <715c49ec-d2a8-45cb-8ace-c6b1b4b8f978@nvidia.com>
- <20200929190816.GY9916@ziepe.ca>
- <3022912c-f11b-f564-3a8a-f516ca259a37@nvidia.com>
- <20200929195356.GZ9916@ziepe.ca>
- <64bb5ba7-77f7-2f09-44f0-29ee9329b183@linuxfoundation.org>
- <554699c6-cc01-4c3c-3ed5-26d22ac3bac0@nvidia.com>
- <9372727e-1a79-913b-5391-e0c4a85bf5a7@linuxfoundation.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <da9047fa-d1f8-9710-04a3-0308606bb1e9@nvidia.com>
-Date:   Tue, 29 Sep 2020 13:36:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <9372727e-1a79-913b-5391-e0c4a85bf5a7@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1601411779; bh=n1mhQyb3EairzkA8SLPi4ID9Etv8RANKs+TlCUc3N/s=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=bVgMFrvChQ8jKDMZFKWE07OUOuPnvJ1XnygiwxMR+P7cfn7CqeOvNC7snuRyxGl9L
-         hKUVZcYvc+GQmpMWeAwnRbTZBjEdCyvznKysMqU5MjLz7fyciAYeutCL4lCmVCcVig
-         PjiVEIpB075drNakFXOJzPBWzJUFtYVy+KI9+5WKwyTjsCuXAwHh+9ZHhp+RpjHQ23
-         TaI26yNFfoNnSvJ1N82K13yqn+bbv/XIEAwqlO7ddkhOi4yJ5C2l89ahva6/8r36gU
-         ai34rj5N978gUpWIyiU0UNXo+Nh2ZAHACQFZobLb6ulODmitUVF5FqRxug1yzdgGQL
-         wAETj0J8xeKFg==
+        id S1729668AbgI2VCB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Sep 2020 17:02:01 -0400
+Received: from mga02.intel.com ([134.134.136.20]:60586 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729505AbgI2VBv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 29 Sep 2020 17:01:51 -0400
+IronPort-SDR: Lq0PViJxmY1uP8KGodi2JqHdYk8kjGBUmC6mj+lEw2LVYgLSMIgnPIBPjUl3gOqCjaM9v+TM0r
+ s/zJhHXXsP0A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9759"; a="149947663"
+X-IronPort-AV: E=Sophos;i="5.77,319,1596524400"; 
+   d="scan'208";a="149947663"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 14:01:23 -0700
+IronPort-SDR: i/Ul4YSRlf2Yq4mhSG68LhP7ueH5mGywtcQoqJtQLYzXpn0xstxi/9/KN5b+u1uBXv3e1aEwTh
+ shQuKZ77/Dow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,319,1596524400"; 
+   d="scan'208";a="514024822"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Sep 2020 14:01:22 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, mpe@ellerman.id.au, tony.luck@intel.com,
+        ravi.v.shankar@intel.com, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com,
+        linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 4/4] selftest/x86/signal: Include test cases for validating sigaltstack
+Date:   Tue, 29 Sep 2020 13:57:46 -0700
+Message-Id: <20200929205746.6763-5-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200929205746.6763-1-chang.seok.bae@intel.com>
+References: <20200929205746.6763-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/29/20 1:20 PM, Shuah Khan wrote:
-> On 9/29/20 2:11 PM, John Hubbard wrote:
-...
->> Do you have a link or two for that? Especially about the pushback, and
->> conclusions reached, if any.
->>
-> 
-> Unfortunately no. A I recall it was workflow related issues and ease of
-> running individual subsystem tests and backwards compatibility with
-> stables.
-> 
-> Let's start a new discussion and see where we land.
-> 
-OK, sure. I can take a quick pass at converting just the selftests/vm
-directory to kbuild, and post that as an RFC to start the discussion.
+The test measures the kernel's signal delivery with different (enough vs.
+insufficient) stack sizes.
 
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: x86@kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ tools/testing/selftests/x86/Makefile      |   2 +-
+ tools/testing/selftests/x86/sigaltstack.c | 126 ++++++++++++++++++++++
+ 2 files changed, 127 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/sigaltstack.c
 
-thanks,
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 6703c7906b71..e0c52e5ab49e 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			test_vdso test_vsyscall mov_ss_trap \
+-			syscall_arg_fault fsgsbase_restore
++			syscall_arg_fault fsgsbase_restore sigaltstack
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
+new file mode 100644
+index 000000000000..353679df6901
+--- /dev/null
++++ b/tools/testing/selftests/x86/sigaltstack.c
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#define _GNU_SOURCE
++#include <signal.h>
++#include <stdio.h>
++#include <stdbool.h>
++#include <string.h>
++#include <err.h>
++#include <errno.h>
++#include <limits.h>
++#include <sys/mman.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <sys/resource.h>
++#include <setjmp.h>
++
++/* sigaltstack()-enforced minimum stack */
++#define ENFORCED_MINSIGSTKSZ	2048
++
++#ifndef AT_MINSIGSTKSZ
++#  define AT_MINSIGSTKSZ	51
++#endif
++
++static int nerrs;
++
++static bool sigalrm_expected;
++
++static unsigned long at_minstack_size;
++
++static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
++		       int flags)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_sigaction = handler;
++	sa.sa_flags = SA_SIGINFO | flags;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++static void clearhandler(int sig)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_handler = SIG_DFL;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++static int setup_altstack(void *start, unsigned long size)
++{
++	stack_t ss;
++
++	memset(&ss, 0, sizeof(ss));
++	ss.ss_size = size;
++	ss.ss_sp = start;
++
++	return sigaltstack(&ss, NULL);
++}
++
++static jmp_buf jmpbuf;
++
++static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
++{
++	if (sigalrm_expected) {
++		printf("[FAIL]\tSIGSEGV signal delivered.\n");
++		nerrs++;
++	} else {
++		printf("[OK]\tSIGSEGV signal expectedly delivered.\n");
++	}
++
++	siglongjmp(jmpbuf, 1);
++}
++
++static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
++{
++	if (!sigalrm_expected) {
++		printf("[FAIL]\tSIGALRM sigal delivered.\n");
++		nerrs++;
++	} else {
++		printf("[OK]\tSIGALRM signal expectedly delivered.\n");
++	}
++}
++
++static void test_sigaltstack(void *altstack, unsigned long size)
++{
++	if (setup_altstack(altstack, size))
++		err(1, "sigaltstack()");
++
++	sigalrm_expected = (size > at_minstack_size) ? true : false;
++
++	sethandler(SIGSEGV, sigsegv, 0);
++	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
++
++	if (sigsetjmp(jmpbuf, 1) == 0) {
++		printf("[RUN]\tTest an %s sigaltstack\n",
++		       sigalrm_expected ? "enough" : "insufficient");
++		raise(SIGALRM);
++	}
++
++	clearhandler(SIGALRM);
++	clearhandler(SIGSEGV);
++}
++
++int main(void)
++{
++	void *altstack;
++
++	at_minstack_size = getauxval(AT_MINSIGSTKSZ);
++
++	altstack = mmap(NULL, at_minstack_size + SIGSTKSZ, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
++	if (altstack == MAP_FAILED)
++		err(1, "mmap()");
++
++	if ((ENFORCED_MINSIGSTKSZ + 1) < at_minstack_size)
++		test_sigaltstack(altstack, ENFORCED_MINSIGSTKSZ + 1);
++
++	test_sigaltstack(altstack, at_minstack_size + SIGSTKSZ);
++
++	return nerrs == 0 ? 0 : 1;
++}
 -- 
-John Hubbard
-NVIDIA
+2.17.1
+
