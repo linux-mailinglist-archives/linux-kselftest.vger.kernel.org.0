@@ -2,170 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3A527C144
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 11:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2860627CE66
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 15:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728167AbgI2Jbf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Sep 2020 05:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728115AbgI2JbO (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 05:31:14 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA43C0613D0
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 02:31:14 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id q9so3910802wmj.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 02:31:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YMC53wjAecyfQSgyYtJfzRQQFrJ1VKu1cXscoS4ApIg=;
-        b=tWoRTVisUgP1ckiKLUkup+xCM00Ez0PcUOmdR1SJhxtrKfdWyc0haa6xSaNE8DCQtU
-         A6mSXNR4kZaS0ZXnEVyJWd8ovvIQTd8fXwrSh3iBfLLi39Pi/ME8Y0n0SDkupWTdw5cW
-         OCBm4bCkjWt3Mwgv6kmmrye0E1+wdwgB0LNbc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YMC53wjAecyfQSgyYtJfzRQQFrJ1VKu1cXscoS4ApIg=;
-        b=EPeM4QgcvCw+3pdlBwSPhxnc5xQfFADtUcKkI89CR/INnfBbeQKNy4CoMcqEZPLR3M
-         UylWyqFxjLG3ZuWMpWKh03MxaNJDnS9cjxnsIEMV6yrqTmtu3oDg4X5LaKPg9CNbRjNN
-         Dfgxzidrk8O5cj33I77sZrxGSoR4EMDuL5m8mSVOlbTfU9258YPYoVpJ+n7ZWc09J3ZM
-         QEpCdhyQ6leD4ktcghrAz4sphIq3KpaAVFeyKb/5babTpQ0BXTqJRUcvdf4zqgwZuMak
-         3kXW/cseTSznZAlVJgzaY1RbFPdbjeSzQxS0mXAvqAdIRvcSP64CjZkQfXlmyyy/DaoJ
-         uEeA==
-X-Gm-Message-State: AOAM5337xytCjdtl/ukkp706oGIGwU/eLjtqXcy3LBqpowVOLXrbIPtn
-        on7jMQ1gsV1a+/0liRPq1gFJdg==
-X-Google-Smtp-Source: ABdhPJwuUNLZWqnkIYJEydinSUNuZES0TsyLsuyBrJHY2m6+lymw1UCXmR/xrvpaKiuBllPdsQEMSA==
-X-Received: by 2002:a7b:c848:: with SMTP id c8mr3336277wml.184.1601371872926;
-        Tue, 29 Sep 2020 02:31:12 -0700 (PDT)
-Received: from antares.lan (1.f.1.6.a.e.6.5.a.0.3.2.4.7.4.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:474:230a:56ea:61f1])
-        by smtp.gmail.com with ESMTPSA id i16sm5246798wrq.73.2020.09.29.02.31.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 02:31:12 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     kafai@fb.com, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 4/4] selftest: bpf: Test copying a sockmap and sockhash
-Date:   Tue, 29 Sep 2020 10:30:39 +0100
-Message-Id: <20200929093039.73872-5-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200929093039.73872-1-lmb@cloudflare.com>
-References: <20200929093039.73872-1-lmb@cloudflare.com>
+        id S1728714AbgI2NFr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Sep 2020 09:05:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46754 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728674AbgI2NFr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 29 Sep 2020 09:05:47 -0400
+Received: from kernel.org (unknown [87.71.73.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4CD4820848;
+        Tue, 29 Sep 2020 13:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601384746;
+        bh=w8jEjdPVhwgAP8ieOGmZq7rvrkzmFW13pl6Bcj/9DDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YfoO9Oo/YwKl80W7Ps/3xh0cfYEHin8QOUrn/iFqhLYw+b2DAWHKu9Y+mnqgIAACA
+         uQkYtRdB+liRGsxjQlUpAtvTPmGTHbQnf35XbZMDwXCeXkiEteBW7/GT/3ZbUZnHCL
+         kuQnBbyQK81Mz6jqRSLbGj/2AcjW0JSpMYmSqJQw=
+Date:   Tue, 29 Sep 2020 16:05:29 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20200929130529.GE2142832@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924132904.1391-6-rppt@kernel.org>
+ <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since we can now call map_update_elem(sockmap) from bpf_iter context
-it's possible to copy a sockmap or sockhash in the kernel. Add a
-selftest which exercises this.
+On Fri, Sep 25, 2020 at 09:41:25AM +0200, Peter Zijlstra wrote:
+> On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > Removing a PAGE_SIZE page from the direct map every time such page is
+> > allocated for a secret memory mapping will cause severe fragmentation of
+> > the direct map. This fragmentation can be reduced by using PMD-size pages
+> > as a pool for small pages for secret memory mappings.
+> > 
+> > Add a gen_pool per secretmem inode and lazily populate this pool with
+> > PMD-size pages.
+> 
+> What's the actual efficacy of this? Since the pmd is per inode, all I
+> need is a lot of inodes and we're in business to destroy the directmap,
+> no?
+> 
+> Afaict there's no privs needed to use this, all a process needs is to
+> stay below the mlock limit, so a 'fork-bomb' that maps a single secret
+> page will utterly destroy the direct map.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 14 +++++-----
- .../selftests/bpf/progs/bpf_iter_sockmap.c    | 27 +++++++++++++++----
- 2 files changed, 30 insertions(+), 11 deletions(-)
+This indeed will cause 1G pages in the direct map to be split into 2M
+chunks, but I disagree with 'destroy' term here. Citing the cover letter
+of an earlier version of this series:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 316c4e271b36..4c4224e3e10a 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -194,7 +194,7 @@ static void test_sockmap_invalid_update(void)
- 		test_sockmap_invalid_update__destroy(skel);
- }
+  I've tried to find some numbers that show the benefit of using larger
+  pages in the direct map, but I couldn't find anything so I've run a
+  couple of benchmarks from phoronix-test-suite on my laptop (i7-8650U
+  with 32G RAM).
+  
+  I've tested three variants: the default with 28G of the physical
+  memory covered with 1G pages, then I disabled 1G pages using
+  "nogbpages" in the kernel command line and at last I've forced the
+  entire direct map to use 4K pages using a simple patch to
+  arch/x86/mm/init.c.  I've made runs of the benchmarks with SSD and
+  tmpfs.
+  
+  Surprisingly, the results does not show huge advantage for large
+  pages. For instance, here the results for kernel build with
+  'make -j8', in seconds:
+  
+                        |  1G    |  2M    |  4K
+  ----------------------+--------+--------+---------
+  ssd, mitigations=on	| 308.75 | 317.37 | 314.9
+  ssd, mitigations=off	| 305.25 | 295.32 | 304.92
+  ram, mitigations=on	| 301.58 | 322.49 | 306.54
+  ram, mitigations=off	| 299.32 | 288.44 | 310.65
+  
+  All the results I have are available here:
  
--static void test_sockmap_iter(enum bpf_map_type map_type)
-+static void test_sockmap_copy(enum bpf_map_type map_type)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
- 	int err, len, src_fd, iter_fd, duration = 0;
-@@ -242,7 +242,7 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
- 	linfo.map.map_fd = src_fd;
- 	opts.link_info = &linfo;
- 	opts.link_info_len = sizeof(linfo);
--	link = bpf_program__attach_iter(skel->progs.count_elems, &opts);
-+	link = bpf_program__attach_iter(skel->progs.copy, &opts);
- 	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
- 		goto out;
- 
-@@ -265,6 +265,8 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
- 		  skel->bss->socks, num_sockets))
- 		goto close_iter;
- 
-+	compare_cookies(src, skel->maps.dst);
-+
- close_iter:
- 	close(iter_fd);
- free_link:
-@@ -294,8 +296,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
- 	if (test__start_subtest("sockmap update in unsafe context"))
- 		test_sockmap_invalid_update();
--	if (test__start_subtest("sockmap iter"))
--		test_sockmap_iter(BPF_MAP_TYPE_SOCKMAP);
--	if (test__start_subtest("sockhash iter"))
--		test_sockmap_iter(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKHASH);
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c b/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-index 1af7555f6057..f3af0e30cead 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-@@ -22,21 +22,38 @@ struct {
- 	__type(value, __u64);
- } sockhash SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 64);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst SEC(".maps");
-+
- __u32 elems = 0;
- __u32 socks = 0;
- 
- SEC("iter/sockmap")
--int count_elems(struct bpf_iter__sockmap *ctx)
-+int copy(struct bpf_iter__sockmap *ctx)
- {
- 	struct sock *sk = ctx->sk;
- 	__u32 tmp, *key = ctx->key;
- 	int ret;
- 
--	if (key)
--		elems++;
-+	if (!key)
-+		return 0;
- 
--	if (sk)
-+	elems++;
-+
-+	/* We need a temporary buffer on the stack, since the verifier doesn't
-+	 * let us use the pointer from the context as an argument to the helper.
-+	 */
-+	tmp = *key;
-+
-+	if (sk) {
- 		socks++;
-+		return bpf_map_update_elem(&dst, &tmp, sk, 0) != 0;
-+	}
- 
--	return 0;
-+	ret = bpf_map_delete_elem(&dst, &tmp);
-+	return ret && ret != -ENOENT;
- }
+  https://docs.google.com/spreadsheets/d/1tdD-cu8e93vnfGsTFxZ5YdaEfs2E1GELlvWNOGkJV2U/edit?usp=sharing
+
+The numbers suggest that using smaller pages in the direct map does not
+necessarily leads to performance degradation and some runs produced
+better results with smaller pages in the direct map.
+
+> I really don't like this, at all.
+> 
+> IIRC Kirill looked at merging the directmap. I think he ran into
+> performance issues there, but we really need something like that before
+> something like this lands.
+
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
