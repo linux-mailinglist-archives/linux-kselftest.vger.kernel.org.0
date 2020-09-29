@@ -2,196 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CF827C050
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 11:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94B727C0ED
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 11:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727704AbgI2JAJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Sep 2020 05:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727035AbgI2JAJ (ORCPT
+        id S1725372AbgI2JUw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Sep 2020 05:20:52 -0400
+Received: from www62.your-server.de ([213.133.104.62]:36576 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727653AbgI2JUv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 05:00:09 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F25C061755
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 02:00:08 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id y15so3960866wmi.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 02:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l8n+Qtmools068Op1SBkscZ3rmiXf/OnO40zpDWJvQs=;
-        b=HSfJ7A4FNQbt4jfghWagnZ0q3COkKg8qz4BPThTLTJ7eDRMt1DvHHeb7XKEZ522gOH
-         eWGtprOnXgZp5uEMLqACAESKMKR8I99jBaCAbi8CJzl/OnYlzX1P6crhIyasKLf4c1bf
-         2XybbZVEohhAC+dLedQmm8E/GOTp7GyR5iP8M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=l8n+Qtmools068Op1SBkscZ3rmiXf/OnO40zpDWJvQs=;
-        b=bEGjsMVj7JhQH99jVdtkBXQ/kvrANjKfQ9/f+rOJeClRB1T0TFwy4VRILsSljqk6O6
-         jkxq8KZKfTEMh36AWEaoHJQ7rFo/2UWnu59zx1ZH4fAhdQSkz+lxXQeSiczso4w1r+kB
-         MGD5aDloLvpgh4uzRkRU7wXYi7n9z51sPtaZFm9OHay/1JpmEVbIEfDBNnmojzR5mkBM
-         PFtogkBAjoBBX+Fl0NkJFeYgxHDMZvwCr1RJOfUHNZbNEzTsTppjQu7fHi4/hOMNzco9
-         SvSUlR7dwDT6rDbkMDHQ1U95IoVnbeAdsyNkT5DaCQWdAPXBHWR6SZiI7YI4v/3CdCuf
-         60Hw==
-X-Gm-Message-State: AOAM532i55ofvwFHexJ7y9OYULozEK9jwgEbGMHePSEhKRym3MokIGsJ
-        mRCd9oEorT2Nj3MxZzQ1vALUKQ==
-X-Google-Smtp-Source: ABdhPJxYoSwWp1/Rwj6+DAZKjozJGei8dnC1WhCd/eu2wZIqXPLzEpFDxM+EMdAcXI41uJyANz2nYw==
-X-Received: by 2002:a1c:a5c8:: with SMTP id o191mr3465483wme.127.1601370007530;
-        Tue, 29 Sep 2020 02:00:07 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id z191sm1552480wme.40.2020.09.29.02.00.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 02:00:06 -0700 (PDT)
-Date:   Tue, 29 Sep 2020 11:00:03 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ben Segall <bsegall@google.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-hexagon@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Brian Cain <bcain@codeaurora.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mel Gorman <mgorman@suse.de>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        linux-xtensa@linux-xtensa.org, Shuah Khan <shuah@kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>, rcu@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
-Message-ID: <20200929090003.GG438822@phenom.ffwll.local>
-Mail-Followup-To: Michal Hocko <mhocko@suse.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ben Segall <bsegall@google.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Brian Cain <bcain@codeaurora.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, David Airlie <airlied@linux.ie>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mel Gorman <mgorman@suse.de>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        linux-xtensa@linux-xtensa.org, Shuah Khan <shuah@kernel.org>,
-        Jeff Dike <jdike@addtoit.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>, rcu@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <871rj4owfn.fsf@nanos.tec.linutronix.de>
- <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
- <87bli75t7v.fsf@nanos.tec.linutronix.de>
- <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
- <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
- <20200916152956.GV29330@paulmck-ThinkPad-P72>
- <CAKMK7uGFyfhEyt=jmdk2jDO-hq0_Pf0ck+cKSELHjr2U3rPuYQ@mail.gmail.com>
- <20200916205840.GD29330@paulmck-ThinkPad-P72>
- <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
- <20200929081938.GC22035@dhcp22.suse.cz>
+        Tue, 29 Sep 2020 05:20:51 -0400
+X-Greylist: delayed 1772 seconds by postgrey-1.27 at vger.kernel.org; Tue, 29 Sep 2020 05:20:50 EDT
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kNBLf-00061o-Oa; Tue, 29 Sep 2020 10:50:59 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kNBLf-0004qV-AC; Tue, 29 Sep 2020 10:50:59 +0200
+Subject: Re: [PATCH v7 bpf-next 4/8] selftests/bpf: add bpf_snprintf_btf
+ helper tests
+To:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+        andriin@fb.com, yhs@fb.com
+Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, acme@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+ <1601292670-1616-5-git-send-email-alan.maguire@oracle.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <30b2a441-9772-1662-ca03-13bfa0b37d46@iogearbox.net>
+Date:   Tue, 29 Sep 2020 10:50:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200929081938.GC22035@dhcp22.suse.cz>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+In-Reply-To: <1601292670-1616-5-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25941/Mon Sep 28 15:55:11 2020)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 10:19:38AM +0200, Michal Hocko wrote:
-> On Wed 16-09-20 23:43:02, Daniel Vetter wrote:
-> > I can
-> > then figure out whether it's better to risk not spotting issues with
-> > call_rcu vs slapping a memalloc_noio_save/restore around all these
-> > critical section which force-degrades any allocation to GFP_ATOMIC at
+On 9/28/20 1:31 PM, Alan Maguire wrote:
+> Tests verifying snprintf()ing of various data structures,
+> flags combinations using a tp_btf program. Tests are skipped
+> if __builtin_btf_type_id is not available to retrieve BTF
+> type ids.
 > 
-> did you mean memalloc_noreclaim_* here?
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+[...]
+> +void test_snprintf_btf(void)
+> +{
+> +	struct netif_receive_skb *skel;
+> +	struct netif_receive_skb__bss *bss;
+> +	int err, duration = 0;
+> +
+> +	skel = netif_receive_skb__open();
+> +	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+> +		return;
+> +
+> +	err = netif_receive_skb__load(skel);
+> +	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
+> +		goto cleanup;
+> +
+> +	bss = skel->bss;
+> +
+> +	err = netif_receive_skb__attach(skel);
+> +	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
+> +		goto cleanup;
+> +
+> +	/* generate receive event */
+> +	system("ping -c 1 127.0.0.1 > /dev/null");
 
-Yeah I picked the wrong one of that family of functions.
+This generates the following new warning when compiling BPF selftests:
 
-> > most, but has the risk that we run into code that assumes "GFP_KERNEL
-> > never fails for small stuff" and has a decidedly less tested fallback
-> > path than rcu code.
-> 
-> Even if the above then please note that memalloc_noreclaim_* or
-> PF_MEMALLOC should be used with an extreme care. Essentially only for
-> internal memory reclaimers. It grants access to _all_ the available
-> memory so any abuse can be detrimental to the overall system operation.
-> Allocation failure in this mode means that we are out of memory and any
-> code relying on such an allocation has to carefuly consider failure.
-> This is not a random allocation mode.
+   [...]
+   EXT-OBJ  [test_progs] cgroup_helpers.o
+   EXT-OBJ  [test_progs] trace_helpers.o
+   EXT-OBJ  [test_progs] network_helpers.o
+   EXT-OBJ  [test_progs] testing_helpers.o
+   TEST-OBJ [test_progs] snprintf_btf.test.o
+/root/bpf-next/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c: In function ‘test_snprintf_btf’:
+/root/bpf-next/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c:30:2: warning: ignoring return value of ‘system’, declared with attribute warn_unused_result [-Wunused-result]
+   system("ping -c 1 127.0.0.1 > /dev/null");
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   [...]
 
-Agreed, that's why I don't like having these kind of automagic critical
-sections. It's a bit a shotgun approach. Paul said that the code would
-handle failures, but the problem is that it applies everywhere.
-
-Anyway my understanding is that call_rcu will be reworked and gain a pile
-of tricks so that these problems for the callchains leading to call_rcu
-all disappear.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Please fix, thx!
