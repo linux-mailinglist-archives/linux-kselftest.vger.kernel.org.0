@@ -2,84 +2,183 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6B027BA85
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 03:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E35F27BA88
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 03:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727285AbgI2BxO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Sep 2020 21:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S1727205AbgI2Byz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Sep 2020 21:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgI2BxO (ORCPT
+        with ESMTP id S1726064AbgI2Byz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Sep 2020 21:53:14 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91918C061755;
-        Mon, 28 Sep 2020 18:53:12 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id x16so2550356pgj.3;
-        Mon, 28 Sep 2020 18:53:12 -0700 (PDT)
+        Mon, 28 Sep 2020 21:54:55 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5674CC061755;
+        Mon, 28 Sep 2020 18:54:55 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id jw11so1806404pjb.0;
+        Mon, 28 Sep 2020 18:54:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=muPavyROLoVVZRpBtwcBY8n2nc+gVoJRAgcTPB/X6ZE=;
-        b=kZWT8SqKokpVld4pvJkGZNeOBwSb95rOoGWG0rc0+4oXZ2RoFfoYWn+wITl1j9Tidz
-         wn8RWKJXdomdGPjaJ9g7DX2cvHImFS7CLc+4XeBZAXsjJE7h/w9doKLuqOu3qOkK6hiP
-         lCBG+GSHYg5XSIZgtjdHvsrOqV+OB2gLv8XjQAJC4XXB7n5WkdYNFJPJ7rX78OuXaFQj
-         4id2ToKQzfkxlvH/3VyBLEQ8EF8PTgobYbHbSL8ExTrroVDk1aIGcBlH6Epu8a4s5vq2
-         JG8eW52GZ7QZmQOq7ZBrrMNt6HmquhiUGSqC/gEaoo0xEtSXsrdrvy8OHUge9kwaynjn
-         ed/g==
+        bh=2SzB7isKAREqUjXH+YUlW/DpD7dRh0cjXqpB4hYOMVM=;
+        b=uJtjQGkwh05rX2CZ4v+Qn3bQAHgTuyU3oV3YAdRR/T8rsoyy9vp/a4bTakkZXv5SnR
+         c1EBCWjtRgJhSOanZueb+HOttgxiw4RMgWuFcw274b9ZmnsTGggpNfkITxraUKIlB5eu
+         qZ2U1PBEppaf58W354aroZvTjSBwC5uVn3wDwaovp/Jr0YwkjuDvhmi2U0eBLCHTNpzK
+         9+VFms2abgNGDGaFSXk9CSIa5vngmnlkCFBKBvg+0SOOpV+Gz24Y8qQ3RehnRLWQwiXx
+         bulFArQl2BcKMQimOHwhVoLMNG3UAmPP5HM5hnRA5mRVLykHo8PTi7PqvI10XLkVakr9
+         WJxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=muPavyROLoVVZRpBtwcBY8n2nc+gVoJRAgcTPB/X6ZE=;
-        b=iVLc9jSIfQ09efEpovkVXi+F0aoLTZN4NLZDbwh3cFhqn4GoB6h249dpioxjKXo0gI
-         ElwIzQk0W6ZwhgcNikvmiAPgLIglEjtPpQLvRG/JUGeSg3W+DZf/SH/RSqmD34k/qtEP
-         +iXn+KVjpOo3/TMXYbtQkMyOqMguFW7Zt/BdlLC2gv3KybaPtbVa5M8pTcXOkgSzXvnJ
-         uq1mJf8QHkC5j86eOJuG/ChTyNPELUxzuVTEn1nYS+dwU5e/uL49L7m0Qa4Yn0pqXXA3
-         +rmzmA5MqJoWlGNFGx5foI0vYac9HzU5SuIYreKdIyH4GgkR7bsifBaRp0H3hgar3YsE
-         IYEQ==
-X-Gm-Message-State: AOAM533Zjw/6qn4v+HnCyd4TZb284zpn4XTvlhXaSocpGQ9feEWptZu3
-        JGqzuqoSTBw5E0lBbohbEqc=
-X-Google-Smtp-Source: ABdhPJySH5jWlyKpCINSKeeLxOGCz1qDXpeHznFZN5cKcil/EGZrWRzINUp4yQnTRPgDPbCndKjS5g==
-X-Received: by 2002:a62:5:0:b029:13e:d13d:a05a with SMTP id 5-20020a6200050000b029013ed13da05amr1931737pfa.32.1601344392114;
-        Mon, 28 Sep 2020 18:53:12 -0700 (PDT)
-Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id i1sm3155742pfk.21.2020.09.28.18.53.08
+        bh=2SzB7isKAREqUjXH+YUlW/DpD7dRh0cjXqpB4hYOMVM=;
+        b=M1DuJgEEgiAYDebQnLnvKDH/qBgkAilJiU4QhmLkMb1UjfrjicSRU79Rs+AIMfgRFG
+         h7Bs4fOgXneBVBvsv1Ynd/v9Pi+Y3duYEJUTfSPQdLvDbvmckTw4sjReWHb4AN8ooPK0
+         SLMDSNNHQilWDLwicGQ+lsPacdKF5QN/LOYrf3WHCkPSWOZiLR3FRH65BF9IC6+SzaLv
+         vTkRt1VIlySlXTrfm8xNTwPaYRdZ71QHV/Eyc8EgAn/hdQ6j/31ZBzip/mEmlT1jJ0s0
+         OFoI45I0lV7cHUAwayYmK3/Ox9ZDYIPG8S/mmViNqL/GZfyj1Ggu7EOrIAKzQYlzrlM+
+         Gq+w==
+X-Gm-Message-State: AOAM532UJsmD2eB8jkJMsphax8CcsOiFbhTPkndD7Y9WAMr+0pyQYE56
+        jnWfGupMGYol5fvtXnp5bew=
+X-Google-Smtp-Source: ABdhPJwCmZSmOLbppa1vFzQqfZJlJ7yfoINWoTLVTS9qpnpFboFlltQXt94V0opqudRriRPRFSg+Ew==
+X-Received: by 2002:a17:90b:4b8e:: with SMTP id lr14mr1817137pjb.100.1601344494769;
+        Mon, 28 Sep 2020 18:54:54 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:8e77])
+        by smtp.gmail.com with ESMTPSA id z7sm2674142pgc.35.2020.09.28.18.54.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 18:53:11 -0700 (PDT)
-Date:   Tue, 29 Sep 2020 09:53:00 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Extract run_kselftest.sh and generate stand-alone
- test list
-Message-ID: <20200929015300.GF2531@dhcp-12-153.nay.redhat.com>
-References: <20200928202650.2530280-1-keescook@chromium.org>
+        Mon, 28 Sep 2020 18:54:53 -0700 (PDT)
+Date:   Mon, 28 Sep 2020 18:54:50 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        andriy.shevchenko@linux.intel.com, Petr Mladek <pmladek@suse.com>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Andrey Ignatov <rdna@fb.com>, scott.branden@broadcom.com,
+        Quentin Monnet <quentin@isovalent.com>,
+        Carlos Neira <cneirabustos@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH v6 bpf-next 6/6] selftests/bpf: add test for
+ bpf_seq_printf_btf helper
+Message-ID: <20200929015450.das2bxw4f3q7oyup@ast-mbp.dhcp.thefacebook.com>
+References: <1600883188-4831-1-git-send-email-alan.maguire@oracle.com>
+ <1600883188-4831-7-git-send-email-alan.maguire@oracle.com>
+ <20200925012611.jebtlvcttusk3hbx@ast-mbp.dhcp.thefacebook.com>
+ <alpine.LRH.2.21.2009281500220.13299@localhost>
+ <CAEf4Bzb2JE_V7cQ=LGto6jHbiKUAg+A5MuqQ0LGb9L8qTUk6yg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200928202650.2530280-1-keescook@chromium.org>
+In-Reply-To: <CAEf4Bzb2JE_V7cQ=LGto6jHbiKUAg+A5MuqQ0LGb9L8qTUk6yg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 01:26:47PM -0700, Kees Cook wrote:
-> v2:
-> - update documentation
-> - include SPDX line in extracted script
-> v1: https://lore.kernel.org/linux-kselftest/20200925234527.1885234-1-keescook@chromium.org/
+On Mon, Sep 28, 2020 at 10:51:19AM -0700, Andrii Nakryiko wrote:
+> On Mon, Sep 28, 2020 at 7:14 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> >
+> >
+> > On Thu, 24 Sep 2020, Alexei Starovoitov wrote:
+> >
+> > > to whatever number, but printing single task_struct needs ~800 lines and
+> > > ~18kbytes. Humans can scroll through that much spam, but can we make it less
+> > > verbose by default somehow?
+> > > May be not in this patch set, but in the follow up?
+> > >
+> >
+> > One approach that might work would be to devote 4 bits or so of
+> > flag space to a "maximum depth" specifier; i.e. at depth 1,
+> > only base types are displayed, no aggregate types like arrays,
+> > structs and unions.  We've already got depth processing in the
+> > code to figure out if possibly zeroed nested data needs to be
+> > displayed, so it should hopefully be a simple follow-up.
+
+That sounds great to me.
+
+Would it be possible to specify the depth from the other side as well?
+Like a lot of 'leaf' fields are struct list_head, struct lockdep_map,
+atomic_t, struct callback_head, etc.
+When printing a big struct I'm interested in the data that the
+struct provides, but many small inner structs are not that useful.
+So the data is at the top level and in few layers down,
+but depth is different at different fields.
+If I could tell printf to avoid printing the last depth I think
+it will make the output more concise.
+Whereas if I say print depth=2 from the top it will still print
+'struct list_head' that happened to be at the top level.
+
+> >
+> > One way to express it would be to use "..." to denote field(s)
+> > were omitted. We could even use the number of "."s to denote
+> > cases where multiple fields were omitted, giving a visual sense
+> > of how much data was omitted.  So for example with
+> > BTF_F_MAX_DEPTH(1), task_struct looks like this:
+> >
+> > (struct task_struct){
+> >  .state = ()1,
+> >  .stack = ( *)0x00000000029d1e6f,
+> >  ...
+> >  .flags = (unsigned int)4194560,
+> >  ...
+> >  .cpu = (unsigned int)36,
+> >  .wakee_flips = (unsigned int)11,
+> >  .wakee_flip_decay_ts = (long unsigned int)4294914874,
+> >  .last_wakee = (struct task_struct *)0x000000006c7dfe6d,
+> >  .recent_used_cpu = (int)19,
+> >  .wake_cpu = (int)36,
+> >  .prio = (int)120,
+> >  .static_prio = (int)120,
+> >  .normal_prio = (int)120,
+> >  .sched_class = (struct sched_class *)0x00000000ad1561e6,
+> >  ...
+> >  .exec_start = (u64)674402577156,
+> >  .sum_exec_runtime = (u64)5009664110,
+> >  .vruntime = (u64)167038057,
+> >  .prev_sum_exec_runtime = (u64)5009578167,
+> >  .nr_migrations = (u64)54,
+> >  .depth = (int)1,
+> >  .parent = (struct sched_entity *)0x00000000cba60e7d,
+> >  .cfs_rq = (struct cfs_rq *)0x0000000014f353ed,
+> >  ...
+> >
+> > ...etc. What do you think?
 > 
+> It's not clear to me what exactly is omitted with ... ? Would it make
+> sense to still at least list a field name and "abbreviated" value.
+> E.g., for arrays:
+> 
+> .array_field = (int[16]){ ... },
+> 
+> Similarly for struct:
+> 
+> .struct_field = (struct my_struct){ ... },
 
-I'm not sure if the doc update are all appropriate. Need others help review.
-The script part looks good to me. Thanks for your update.
++1
+Something like this would be great.
 
-Regards
-Hangbin
+Another idea...
+If there is only one field in the struct can we omit it?
+Like instead of:
+   .refs = (atomic_t){
+    .counter = (int)2,
+   },
+print
+   .refs = (atomic_t){ 2 },
+
+From C point of view it is still a valid initializer and
+it's not ambiguous which field being inited, since there is only
+one field.
