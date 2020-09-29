@@ -2,31 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EB627D64B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 21:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5225327D66D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Sep 2020 21:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgI2S75 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Sep 2020 14:59:57 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:13455 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728172AbgI2S75 (ORCPT
+        id S1728532AbgI2TIT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Sep 2020 15:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728417AbgI2TIS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 14:59:57 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f7383c70000>; Tue, 29 Sep 2020 11:58:15 -0700
-Received: from [10.2.53.30] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 29 Sep
- 2020 18:59:56 +0000
-Subject: Re: [PATCH 2/8] selftests/vm: use a common gup_test.h
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Tue, 29 Sep 2020 15:08:18 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD93C0613D1
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 12:08:18 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id c18so4510027qtw.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 12:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ubN7nDZwcIPlTTYHe5FaCTt3Iw6Y7lTVBnmXQgBCqO4=;
+        b=dJuYu1b4GUdaRAFl3BrJoBgZhhuqb3ew4gTbyPaC+SO4QId0/YLmHm+BWdFQNUTHCN
+         L9NQY1+GFtFJqHEKvGnFkC2Dy4IPF5CnhPdGd1fJszGf2ZEQyJm499vH4e8pQEkhZkNe
+         2DA5AGCGBIVaHfJ2KSjtfpAdAoDFhc7KfUehLdrNdZNzp7zM6DG9gKPeZLSAAyv8mDVl
+         6LjPHZfWBe23kDrmbBzukp9kCLteTNknBCHhp/K2k8vAvDlmvu6tVwUL2Z8h3CQsuLPu
+         oVz7EFQEHFCPwkbdjkjpRbqYdjNZc9ospOvLohv3eVaMAiEhwk52DkB8bYh1WLBukhsM
+         YDGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ubN7nDZwcIPlTTYHe5FaCTt3Iw6Y7lTVBnmXQgBCqO4=;
+        b=L5fE1X+p9vlNcQtYLLDF9cE99r//Rcq+SZSDB7iTQGl8cLkj7IjBKMnUzLvAdK8P1+
+         9AsKrdLEPi8kZyLDStdaaXGyyc4yQHaAehI2RSWPN2WlUXZoi40oosUjDfra5h+mCobt
+         1t/36QNHCljQ9qNSA2yz5at/6Dx+C070055VnIR57jvOTzqqQWHyBurVq1x81lBGwEG5
+         9in4TRSpZLzRzk8bf1wWiEYIWBN5jEoFeVIVNYKys3PNBV566Ab3giLI99zc0e65vmK0
+         6vEyzhX2zTOJLtJb50XE0Lr2cOJ/xu5X43slQmBEgjFNHW+QfFrckZcKCrd/MZWvy2Cy
+         2lfQ==
+X-Gm-Message-State: AOAM5314TI9VaJRt6sxs2wus3XcKnKmuDSIsonDsYBT+H3zV8J3+r8B3
+        DyGMRMnV89NlhxJ9BDZIvRliFA==
+X-Google-Smtp-Source: ABdhPJycYyIQXPXHmrimJcfRCfX8unjWqtXljPgcHzqOrxl8KM8vlavGzhbBfP33+3I4oV8FDS/vHA==
+X-Received: by 2002:ac8:1763:: with SMTP id u32mr4951171qtk.14.1601406497766;
+        Tue, 29 Sep 2020 12:08:17 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id t20sm5804267qke.79.2020.09.29.12.08.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 12:08:17 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1kNKz2-003Exd-Hx; Tue, 29 Sep 2020 16:08:16 -0300
+Date:   Tue, 29 Sep 2020 16:08:16 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
         Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-s390@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 2/8] selftests/vm: use a common gup_test.h
+Message-ID: <20200929190816.GY9916@ziepe.ca>
 References: <20200928062159.923212-1-jhubbard@nvidia.com>
  <20200928062159.923212-3-jhubbard@nvidia.com>
  <20200928125739.GP9916@ziepe.ca>
@@ -34,67 +71,32 @@ References: <20200928062159.923212-1-jhubbard@nvidia.com>
  <20200929163507.GV9916@ziepe.ca>
  <aab477bf-4353-5e6b-4cc9-9872c9376ed2@nvidia.com>
  <20200929175524.GX9916@ziepe.ca>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <715c49ec-d2a8-45cb-8ace-c6b1b4b8f978@nvidia.com>
-Date:   Tue, 29 Sep 2020 11:59:55 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ <715c49ec-d2a8-45cb-8ace-c6b1b4b8f978@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20200929175524.GX9916@ziepe.ca>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1601405895; bh=DnmTNplotRRR/qxw4AWftTeBjRlYNWMKBBfAgIjGMJM=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=ayxqxoWrh8CnUTzyfHWb9J4A5gPuRtiEduP2eFCYc38cvJTvbmnYbMndIFDpHd+F/
-         lA3vFdd4TyZ2V4QdwHIuQY3746GyhQkfmPuC72+KQ2agHmnfq1XjLcarkPcA+esGNk
-         +zJxX87yMrBcXZ3NPFIVilBE2+uaQC/RjGtA44gPSBoXo5/fc+QkrXpVCDlO0UMfpV
-         BLWyyZ+3o8fkKNMMAz+llCFL9pFhhLshyxzxsdQKPeIXPGgvuu5MaiWxs0s3G3Rnld
-         1cE+QIUrmDaGCu0q/LzmnT8CaKQjMITbruodKASFrF9T9Db5ChT6APdi21UtgS7cn6
-         bC7KgIIBIb79g==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <715c49ec-d2a8-45cb-8ace-c6b1b4b8f978@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/29/20 10:55 AM, Jason Gunthorpe wrote:
-> On Tue, Sep 29, 2020 at 10:44:31AM -0700, John Hubbard wrote:
->> On 9/29/20 9:35 AM, Jason Gunthorpe wrote:
->>> On Mon, Sep 28, 2020 at 01:10:24PM -0700, John Hubbard wrote:
->>>> On 9/28/20 5:57 AM, Jason Gunthorpe wrote:
->>>>> On Sun, Sep 27, 2020 at 11:21:53PM -0700, John Hubbard wrote:
-...
->> I don't see any "gcc -m" type of dependency generation pass happening
->> in this relatively simple Make system.
+On Tue, Sep 29, 2020 at 11:59:55AM -0700, John Hubbard wrote:
+> On 9/29/20 10:55 AM, Jason Gunthorpe wrote:
+> > On Tue, Sep 29, 2020 at 10:44:31AM -0700, John Hubbard wrote:
+> > > On 9/29/20 9:35 AM, Jason Gunthorpe wrote:
+> > > > On Mon, Sep 28, 2020 at 01:10:24PM -0700, John Hubbard wrote:
+> > > > > On 9/28/20 5:57 AM, Jason Gunthorpe wrote:
+> > > > > > On Sun, Sep 27, 2020 at 11:21:53PM -0700, John Hubbard wrote:
+> ...
+> > > I don't see any "gcc -m" type of dependency generation pass happening
+> > > in this relatively simple Make system.
+> > 
+> > It happens with -MD, all the deps are stored in files like mm/.init-mm.o.cmd
+> > and sucked into the build.
 > 
-> It happens with -MD, all the deps are stored in files like mm/.init-mm.o.cmd
-> and sucked into the build.
+> You are thinking of kbuild. This is not kbuild. There are no such artifacts
+> being generated.
 
-You are thinking of kbuild. This is not kbuild. There are no such artifacts
-being generated.
+Oh. Really? That's horrible.
 
->> And so, without including an explicit header file dependency (at
->> least, that's the simplest way), changes to gup_test.h are not
->> detected.
-> 
-> Shouldn't be
-> 
->> Both the Makefile code and the observed behavior back this up. (I
->> expect that this is because there is less use of header files in
->> this area, because most unit tests are self-contained within a
->> single .c file.)
-> 
-> Something else is very wrong then.
-> 
-
-Not really, it's just a less-cabable system than kbuild.
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+Jason
