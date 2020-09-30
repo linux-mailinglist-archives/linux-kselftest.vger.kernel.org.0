@@ -2,83 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DAC27E54E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Sep 2020 11:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2399E27E675
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Sep 2020 12:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729009AbgI3JiG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Sep 2020 05:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728399AbgI3JiG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Sep 2020 05:38:06 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EF1C0613D0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 02:38:06 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id m12so1203978otr.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 02:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TfzEw5x0NiRRju3CPhetGru5/pRnoeNXGN+8SqIx2Xg=;
-        b=xSNlabK0wj27CX+1Qcx2VTudu5ZW9FuibpTZ0nWLnP7KiZc1Y26yZKB8Eh31WGDcm6
-         8swxBpO09W7KLsdWCfcJLGpNOa9gUdbATUzXP1GsumP4vcMrlnAxEcLj8eox2M6rO4QT
-         LYOYeyB9ved5GDo1QpgQlQh7SernXIJ3tBNMc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TfzEw5x0NiRRju3CPhetGru5/pRnoeNXGN+8SqIx2Xg=;
-        b=uigNKfK7Ygvs31jcu4fotrFh8JyPpmYbI0XXl3+ZyKxg542m5AlNadiRPMk9QagLf4
-         ZFnx9WM4GORwnlv/7apLP3oBgsFMH8yQ217G1wzVw/xHW2iUCwqLmgKhXSDwSigT1f1L
-         FAOQzKVCslce+IkjCV0lqzh4+5UIrPbiv9E0PA+58se967mZB0I06ThqSMzQfAbDKyln
-         clu4vURiJL+xVOF1W93t5m4Ak+wxDnr6yqg0WfJB0rBLDQUgkfis6Q2lwB3tmZt4UHPB
-         zbtg3W+9eJgYOEnw6k94BHGl6vjpUKcACrX7fh7VjD2YzBh4aQS2zYV+T08G8kBuiOQy
-         HarQ==
-X-Gm-Message-State: AOAM532ZhO/O40obOD5AzNgTi+KwlQMFPnNq+utDnsnrWvxU2fziKJlE
-        zAyMXMustleJrH3XRtxLiBkmGUZHcnHtQJ/KR4zseg==
-X-Google-Smtp-Source: ABdhPJyEFIY605VtSWbEn3ZkRUtaTSsucUs4nlzLVLBbPX+b1HdTLS14fXU+7V2yAvC7hyiex42j1bUzvOLQo1flGe0=
-X-Received: by 2002:a9d:6e90:: with SMTP id a16mr962799otr.132.1601458684868;
- Wed, 30 Sep 2020 02:38:04 -0700 (PDT)
+        id S1728235AbgI3KUs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Sep 2020 06:20:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38218 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725776AbgI3KUs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 30 Sep 2020 06:20:48 -0400
+Received: from kernel.org (unknown [87.71.73.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD4B3205F4;
+        Wed, 30 Sep 2020 10:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601461247;
+        bh=6oXQqyXoqD62Xsdx5psnVPQRRFcKJD7TzaHCNaM+cfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jcekzk5dBYwe2jH5pSJRmExmxQTx5Y/sk708kFA+J4dcQopXM92llD+OqjWCXgKuT
+         dmrRBkYzNmmpQuJcEzNThsHaZcV+G7b6pQg9hev7AIEYe3G8ksdc6iTRWS4tzmiNvV
+         tQmVGE7L8Bxs8vTgd7E6jHGnxc1rUFFqUOmdsY+s=
+Date:   Wed, 30 Sep 2020 13:20:31 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 5/6] mm: secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+Message-ID: <20200930102031.GJ2142832@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20200924132904.1391-6-rppt@kernel.org>
+ <20200925074125.GQ2628@hirez.programming.kicks-ass.net>
+ <20200929130529.GE2142832@kernel.org>
+ <20200929141216.GO2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20200928090805.23343-1-lmb@cloudflare.com> <20200928090805.23343-5-lmb@cloudflare.com>
- <20200929060619.psnobg3cz3zbfx6u@kafai-mbp> <CACAyw9-hSfaxfHHMaVMVqBU7MHLoqgPyo55UwQ3w7NKREHcCxw@mail.gmail.com>
- <20200929172340.hogj6zficvhkpibx@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20200929172340.hogj6zficvhkpibx@kafai-mbp.dhcp.thefacebook.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Wed, 30 Sep 2020 10:37:53 +0100
-Message-ID: <CACAyw9_wfD39OCKR5zMN4g=GjcYH31Dg7skoyhPVHVTspgvarA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/4] selftest: bpf: Test copying a sockmap and sockhash
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        kernel-team <kernel-team@cloudflare.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200929141216.GO2628@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 29 Sep 2020 at 18:23, Martin KaFai Lau <kafai@fb.com> wrote:
+On Tue, Sep 29, 2020 at 04:12:16PM +0200, Peter Zijlstra wrote:
+> On Tue, Sep 29, 2020 at 04:05:29PM +0300, Mike Rapoport wrote:
+> > On Fri, Sep 25, 2020 at 09:41:25AM +0200, Peter Zijlstra wrote:
+> > > On Thu, Sep 24, 2020 at 04:29:03PM +0300, Mike Rapoport wrote:
+> > > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > > 
+> > > > Removing a PAGE_SIZE page from the direct map every time such page is
+> > > > allocated for a secret memory mapping will cause severe fragmentation of
+> > > > the direct map. This fragmentation can be reduced by using PMD-size pages
+> > > > as a pool for small pages for secret memory mappings.
+> > > > 
+> > > > Add a gen_pool per secretmem inode and lazily populate this pool with
+> > > > PMD-size pages.
+> > > 
+> > > What's the actual efficacy of this? Since the pmd is per inode, all I
+> > > need is a lot of inodes and we're in business to destroy the directmap,
+> > > no?
+> > > 
+> > > Afaict there's no privs needed to use this, all a process needs is to
+> > > stay below the mlock limit, so a 'fork-bomb' that maps a single secret
+> > > page will utterly destroy the direct map.
+> > 
+> > This indeed will cause 1G pages in the direct map to be split into 2M
+> > chunks, but I disagree with 'destroy' term here. Citing the cover letter
+> > of an earlier version of this series:
+> 
+> It will drop them down to 4k pages. Given enough inodes, and allocating
+> only a single sekrit page per pmd, we'll shatter the directmap into 4k.
+> 
+> >   I've tried to find some numbers that show the benefit of using larger
+> >   pages in the direct map, but I couldn't find anything so I've run a
+> >   couple of benchmarks from phoronix-test-suite on my laptop (i7-8650U
+> >   with 32G RAM).
+> 
+> Existing benchmarks suck at this, but FB had a load that had a
 
-...
+I tried to dig the regression report in the mailing list, and the best I
+could find is
 
-> > Yeah, I think so. We'd need to do something similar to your
-> > sock_common work for PTR_TO_RDONLY_BUF_OR_NULL. The fact that the
-> > pointer is read only makes it a bit more difficult I think. After
-> I thought the key arg should be used as read-only in the map's helper.
-> or there is map type's helper that modifies the key?
+https://lore.kernel.org/lkml/20190823052335.572133-1-songliubraving@fb.com/
 
-I don't know, that's what I meant by more difficult. If map keys are
-always read-only like you say this would be straight forward to do
-(famous last words).
+which does not mention the actual performance regression but it only
+complaints about kernel text mapping being split into 4K pages.
+
+Any chance you have the regression report handy? 
+
+> deterministic enough performance regression to bisect to a directmap
+> issue, fixed by:
+> 
+>   7af0145067bc ("x86/mm/cpa: Prevent large page split when ftrace flips RW on kernel text")
+
+This commit talks about large page split for the text and mentions iTLB
+performance.
+Could it be that for data the behavoiur is different?
+
+> >   I've tested three variants: the default with 28G of the physical
+> >   memory covered with 1G pages, then I disabled 1G pages using
+> >   "nogbpages" in the kernel command line and at last I've forced the
+> >   entire direct map to use 4K pages using a simple patch to
+> >   arch/x86/mm/init.c.  I've made runs of the benchmarks with SSD and
+> >   tmpfs.
+> >   
+> >   Surprisingly, the results does not show huge advantage for large
+> >   pages. For instance, here the results for kernel build with
+> >   'make -j8', in seconds:
+> 
+> Your benchmark should stress the TLB of your uarch, such that additional
+> pressure added by the shattered directmap shows up.
+
+I understand that the benchmark should stress the TLB, but it's not that
+we can add something like random access to a large working set as a
+kernel module and insmod it. The userspace should do something that will
+cause the stress to the TLB so that entries corresponding to the direct
+map will be evicted frequently. And, frankly, 
+
+> And no, I don't have one either.
+> 
+> >                         |  1G    |  2M    |  4K
+> >   ----------------------+--------+--------+---------
+> >   ssd, mitigations=on	| 308.75 | 317.37 | 314.9
+> >   ssd, mitigations=off	| 305.25 | 295.32 | 304.92
+> >   ram, mitigations=on	| 301.58 | 322.49 | 306.54
+> >   ram, mitigations=off	| 299.32 | 288.44 | 310.65
+> 
+> These results lack error data, but assuming the reults are significant,
+> then this very much makes a case for 1G mappings. 5s on a kernel builds
+> is pretty good.
+
+The standard error for those are between 2.5 and 4.5 out of 3 runs for
+each variant. 
+
+For kernel build 1G mappings perform better, but here 5s is only 1.6% of
+300s and the direct map fragmentation was taken to the extreme here.
+I'm not saying that the direct map fragmentation comes with no cost, but
+the cost is not so big to dismiss features that cause the fragmentation
+out of hand.
+
+There were also benchmarks that actually performed better with 2M pages
+in the direct map, so I'm still not convinced that 1G pages in the
+direct map are the clear cut winner.
 
 -- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
-
-www.cloudflare.com
+Sincerely yours,
+Mike.
