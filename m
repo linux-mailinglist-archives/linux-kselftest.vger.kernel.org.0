@@ -2,115 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 348E227EEC4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Sep 2020 18:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EB927F154
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Sep 2020 20:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731035AbgI3QSB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Sep 2020 12:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S1728042AbgI3ScT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Sep 2020 14:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbgI3QSB (ORCPT
+        with ESMTP id S1725355AbgI3ScQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Sep 2020 12:18:01 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972B3C0613D1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 09:18:01 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id z1so645538ooj.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 09:18:01 -0700 (PDT)
+        Wed, 30 Sep 2020 14:32:16 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D6AC061755
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 11:32:14 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id n13so2606230ybk.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 11:32:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QY2l/Yt+N6Qm5zwEsafOSNC/Vn5PVtgIOgVEBv2bpzc=;
-        b=enqjfInlrBuTD//8bd1nIYeKHK/pBJcmYVk1pRtxQAJfynhwLhsAbwJu/a8NGRTBng
-         EPXUmFjbMGVH3UDVYZRS2LyQi7OmXp+RLZbpPOzDU6pdcLQRnsiOtS+sh9A93BUBwh3N
-         zkVrB6Q0VSXEBP2FcH4Spiaq8QDmQpIMgkK/VoyLy6G7J4xw3Z8my9GrNyUo6OtP0ouE
-         GnIXWKIDIW8mY4gIJqZOW4d7ko3aarGG32xxla4i7ivAhHS3jmDA18ZzjMzvT4K3K4rg
-         Eq/XE+0/52E4tDpTOxwoVFRMD0P3+qaSZHWxqD5ivAXZa9gZ9u/syditveIyoiT/pg8j
-         J4Pw==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=/2LbwaWNooOMKpnLJAJw9jcrrnwee0nQQaqBBLf78/Y=;
+        b=b2Siq8d72wpXcNEVybG6qBGKlSWmEL42dSqiz9ouNhXXklc8D2RdftQoRCRXyX/MeE
+         bZQgBzkyZ79eF8q3Tizg87UYoitBaPNfBYmsN2WIpcPDsBUhhg2v5aj3FBmJuVKuOsOG
+         DnSvO28Pa4phSvpkJOCOgNDDeBwDztVoGrSxMfB9YY7ws/YZQc2BWP2/TTCQMIiSufLh
+         I0++KeGrpb9RPNt5hs8cE9EbBnxep2qX3rZDxnTxJ3gAQx2WPrbwteopc8Drwt22pZa9
+         dVFTKyMxhZ96Kfk6DbFmpDECSqWWS0EcetqedQDdH5UOCHHvvHlKlw4IVav8hvEzujo9
+         5ilQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QY2l/Yt+N6Qm5zwEsafOSNC/Vn5PVtgIOgVEBv2bpzc=;
-        b=amInfFoOV3i0c4bfWSi0tEXUfr0+SyM4NywlLYTMSVcTddjYfyexCnssJD9jUI5TbA
-         X5xws87X8cJoWkyXNqOOJuuTXGaB2pyrSOOydQCHdxuek0Trt1uxDX26eHGVofFpkjoJ
-         eOVN+xExLdum8kPiSV5gCTdLNnPxyJxt5YdFDE3g4kevTqtu0WeBQNgVKbVxchwWj6x7
-         QVBf9g+l116O5jPTDuadUpSwwLCoZivM4qd1jsPROlxwE4gdlXyNirkWUaxuHL47LV75
-         PAXRYDI0n78NP8Nq/RtiN4QWmmuhw8LbcARHKftKSYPCji58HrtrZhpvnH981feNq4nr
-         b5ig==
-X-Gm-Message-State: AOAM531HC3jsd+vZl27oxfaRg757ccAEhMjQrSEGoWGPpEvrmVPpa/SI
-        h+pCPNfkhgjaUYj/gVJfzDRdtwJJj6UAh4/dqiQfJA==
-X-Google-Smtp-Source: ABdhPJwwfh1/zkpRwXrKHRDJQHq/uW5ADaFJO6+Jcorf/fVowmls8HVvF/f/Gsmv2V+j+VYAEwZTs/wmqYcI/M6B+BM=
-X-Received: by 2002:a4a:95f1:: with SMTP id p46mr2358703ooi.93.1601482680767;
- Wed, 30 Sep 2020 09:18:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200928202650.2530280-1-keescook@chromium.org>
-In-Reply-To: <20200928202650.2530280-1-keescook@chromium.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 30 Sep 2020 21:47:49 +0530
-Message-ID: <CA+G9fYtAWPuL=SEd3=K0WF3xVu6wwx4ETLadASxKKs0dMYbdWQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Extract run_kselftest.sh and generate stand-alone
- test list
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc:content-transfer-encoding;
+        bh=/2LbwaWNooOMKpnLJAJw9jcrrnwee0nQQaqBBLf78/Y=;
+        b=Vp5yHuX5SOTsvxSD7YKQYFTHKexg82zsBMR6FAKtCGj7PObBH/h/RljAxGzkaNOzx1
+         15fe3K66Biuj5uEbIOAdXuCDiWaLadcV15Y7n+lvkfAOmlg/L0kybOIFxD5rZ3Funk3x
+         mR2HMn7iPcD9HNYOtRdO2Q6/iLpl+lxBKVv4wQmXJ5b2QO5nevbpHVVkbl/PVYrRCSJ3
+         hpWMPljM1JbeVE14ddK+n+2bN6t5gwkRhmfAoYtSnCH2FRGn+xRdUj4nojFxwL7AdaD3
+         jUNnAv9DxWm/nVLALoZPuEMyAv5gn4gehilUkYTtRsnuikvp/yHwibMbxhyftkT7Zf30
+         Q6IQ==
+X-Gm-Message-State: AOAM532PNMaMYvz7Nqp5PD/EJ6GnlENhuf6bv3d9N7xLbP6RcAkKULHp
+        pt/xklU+0IayBM9Glh7g9Knhe0ItuRJg4g==
+X-Google-Smtp-Source: ABdhPJxCZVQmy6aKg+oaaWzvBreZE/7lds9Y9QPeBscFiVG3hKr6AbO/lAHJKvJ8GuzJolIk6nMXTYJVn2IFFg==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
+ (user=dlatypov job=sendgmr) by 2002:a25:6805:: with SMTP id
+ d5mr4814916ybc.4.1601490733625; Wed, 30 Sep 2020 11:32:13 -0700 (PDT)
+Date:   Wed, 30 Sep 2020 11:31:51 -0700
+Message-Id: <20200930183151.1046716-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.806.g8561365e88-goog
+Subject: [PATCH] kunit: tool: fix display of make errors
+From:   Daniel Latypov <dlatypov@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 29 Sep 2020 at 01:56, Kees Cook <keescook@chromium.org> wrote:
->
-> v2:
-> - update documentation
-> - include SPDX line in extracted script
-> v1: https://lore.kernel.org/linux-kselftest/20200925234527.1885234-1-keescook@chromium.org/
->
->
-> Hi!
->
-> I really like Hangbin Liu's intent[1] but I think we need to be a little
-> more clean about the implementation. This extracts run_kselftest.sh from
-> the Makefile so it can actually be changed without embeds, etc. Instead,
-> generate the test list into a text file. Everything gets much simpler.
-> :)
->
-> And in patch 2, I add back Hangbin Liu's new options (with some extra
-> added) with knowledge of "collections" (i.e. Makefile TARGETS) and
-> subtests. This should work really well with LAVA too, which needs to
-> manipulate the lists of tests being run.
->
-> Thoughts?
+CalledProcessError stores the output of the failed process as `bytes`,
+not a `str`.
 
-I have tested this patch set on LAVA with full run and it went well.
+So when we log it on build error, the make output is all crammed into
+one line with "\n" instead of actually printing new lines.
 
->
-> -Kees
->
-> [1] https://lore.kernel.org/lkml/20200914022227.437143-1-liuhangbin@gmail.com/
->
-> Kees Cook (3):
->   selftests: Extract run_kselftest.sh and generate stand-alone test list
->   selftests/run_kselftest.sh: Make each test individually selectable
->   doc: dev-tools: kselftest.rst: Update examples and paths
->
->  Documentation/dev-tools/kselftest.rst    | 35 +++++----
->  tools/testing/selftests/Makefile         | 26 ++-----
->  tools/testing/selftests/lib.mk           |  5 +-
->  tools/testing/selftests/run_kselftest.sh | 93 ++++++++++++++++++++++++
->  4 files changed, 124 insertions(+), 35 deletions(-)
->  create mode 100755 tools/testing/selftests/run_kselftest.sh
->
-> --
-> 2.25.1
->
+After this change, we get readable output with new lines, e.g.
+>   CC      lib/kunit/kunit-example-test.o
+> In file included from ../lib/kunit/test.c:9:
+> ../include/kunit/test.h:22:1: error: unknown type name =E2=80=98invalid_t=
+ype_that_causes_compile=E2=80=99
+>    22 | invalid_type_that_causes_compile errors;
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> make[3]: *** [../scripts/Makefile.build:283: lib/kunit/test.o] Error 1
 
-- Naresh
+Secondly, trying to concat exceptions to strings will fail with
+> TypeError: can only concatenate str (not "OSError") to str
+so fix this with an explicit cast to str.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_kernel.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kuni=
+t_kernel.py
+index e20e2056cb38..0e19089f62f0 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -36,9 +36,9 @@ class LinuxSourceTreeOperations(object):
+ 		try:
+ 			subprocess.check_output(['make', 'mrproper'], stderr=3Dsubprocess.STDOU=
+T)
+ 		except OSError as e:
+-			raise ConfigError('Could not call make command: ' + e)
++			raise ConfigError('Could not call make command: ' + str(e))
+ 		except subprocess.CalledProcessError as e:
+-			raise ConfigError(e.output)
++			raise ConfigError(e.output.decode())
+=20
+ 	def make_olddefconfig(self, build_dir, make_options):
+ 		command =3D ['make', 'ARCH=3Dum', 'olddefconfig']
+@@ -49,9 +49,9 @@ class LinuxSourceTreeOperations(object):
+ 		try:
+ 			subprocess.check_output(command, stderr=3Dsubprocess.STDOUT)
+ 		except OSError as e:
+-			raise ConfigError('Could not call make command: ' + e)
++			raise ConfigError('Could not call make command: ' + str(e))
+ 		except subprocess.CalledProcessError as e:
+-			raise ConfigError(e.output)
++			raise ConfigError(e.output.decode())
+=20
+ 	def make_allyesconfig(self):
+ 		kunit_parser.print_with_timestamp(
+@@ -79,9 +79,9 @@ class LinuxSourceTreeOperations(object):
+ 		try:
+ 			subprocess.check_output(command, stderr=3Dsubprocess.STDOUT)
+ 		except OSError as e:
+-			raise BuildError('Could not call execute make: ' + e)
++			raise BuildError('Could not call execute make: ' + str(e))
+ 		except subprocess.CalledProcessError as e:
+-			raise BuildError(e.output)
++			raise BuildError(e.output.decode())
+=20
+ 	def linux_bin(self, params, timeout, build_dir, outfile):
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+
+base-commit: ccc1d052eff9f3cfe59d201263903fe1d46c79a5
+--=20
+2.28.0.709.gb0816b6eb0-goog
+
