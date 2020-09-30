@@ -2,151 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05BE27F5A2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Oct 2020 01:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E080027F5EF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Oct 2020 01:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731977AbgI3XDi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Sep 2020 19:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
+        id S1732229AbgI3XZn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Sep 2020 19:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730307AbgI3XDi (ORCPT
+        with ESMTP id S1730763AbgI3XZn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Sep 2020 19:03:38 -0400
+        Wed, 30 Sep 2020 19:25:43 -0400
 Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AE0C0613D0
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 16:03:38 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id m34so2240952pgl.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 16:03:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC2BC061755
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 16:25:42 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id 197so2296319pge.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 16:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1qp3UfALwxeAkbBnOuUerX7dWpuQSQY7BSRCIH5z6dw=;
-        b=MRZTPRpgiLd4dVo5yTkwFJrkJWJlwV1/Ezu7hIJ7Rs59u2t/dqz8e00FFVEDetPozz
-         aQ6imer5vWRCnbV6wLq2YWB2w5P39mAy7li/GgpuxmnbWKoykyGMCqIlKa2bWy2kET/8
-         L/MyhQWSOovNqkrAEJ2e43CZq1U3ek+y2etGG2+Eu2ERHPBYEgLmCGAwSaAawfHkhuwz
-         F78WlOn7b1307xFpv/seXC/bjszTNQyOetB8iXFcIBs6nk4xrEp0URmgonq76kjLlh8o
-         mR5t7CGRCkY/rRjBb4gEuqL7VHhXjekm3+BeoVxpgKakUH/xZJ+fSVpYpIOevV/28v/V
-         ScUA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hlKJ+FfSVyIeAzaG/EkGK7Un9Pk3Wxr576MJ7E0I3IY=;
+        b=nOvXiMAlZRb1yYmHnykzlJkQbKnxwV9bDYf+wWvHWfHj0HDv1wrV0dIHsJcaRF6xB9
+         6IvRQ3xg0G1NMN2hzZF8NzoFqBkCXbYsA1JlYu/FAqyq4SGaLPL3KNfQ7zZK2f6xAkwC
+         oVAqbFCmOv7bXjgEFR1YXgLTsGqgSRFnNEYuA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1qp3UfALwxeAkbBnOuUerX7dWpuQSQY7BSRCIH5z6dw=;
-        b=V1H0UTvzfaODklvaIzFZB6DdS5Ff+KwbUn4LPfcgbzQaj6IuKxjutXCgIS+QIVFFv4
-         9DkQcGWK6bM7g5I7R6ivn0XfSQqBDirXSTNN+zHN7qayZScxZ8ESVG3nbFLH1fB4C9g+
-         xY0+AcarpJ1PxiY4LjeQdXOfA1AvMpfxuUJLNvcqnSGz4y8VyHykyr9XqwRRu7BaOeLF
-         ugoXWCb3F0jkWfeFytZJZF+LFpwZT/wIrfv7zzd+Dx+rTtif9YlFJRGD0ynqMg+X+aHD
-         3KESa7j2xyqZTuCYykMu5mfftAEPbWP+VzlVsPnKoYuUWq0FagNqlbIJi1cHa0CgFMgt
-         4eAQ==
-X-Gm-Message-State: AOAM533x9yOkxhc3ZAmx19861LP0cGMIPK9+uZdJg0WY51lR/qg+NDRx
-        15rDwmbGec158grvLuJvX4vKUKt8Jzi5byRzrm+AlQ==
-X-Google-Smtp-Source: ABdhPJyhsf7xgXoZCwes3Wso6sNqelOwWRnGZknPTFob1tIYQqEMLBUree89qUifxh5a278FlT9ON5/JJAYto1X3Vqw=
-X-Received: by 2002:a17:902:8509:b029:d3:89e2:7931 with SMTP id
- bj9-20020a1709028509b02900d389e27931mr531392plb.51.1601507017712; Wed, 30 Sep
- 2020 16:03:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200930222130.4175584-1-kaleshsingh@google.com>
- <20200930223207.5xepuvu6wr6xw5bb@black.fi.intel.com> <CA+EESO5ABYANQuynOs57UGYMcOaMjKN9TQdv4T2PObY5ng_1nw@mail.gmail.com>
- <CAJWu+oo7R6qQWz0_TnrTk_tmCfK2LgvLM-3PvhHv1wq2EyD_qg@mail.gmail.com>
-In-Reply-To: <CAJWu+oo7R6qQWz0_TnrTk_tmCfK2LgvLM-3PvhHv1wq2EyD_qg@mail.gmail.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Wed, 30 Sep 2020 19:03:26 -0400
-Message-ID: <CAC_TJvcmYQxcPTqRpsP=8QgjAC5Sj8P7=xFsoCKVa6QbTbqM0Q@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Speed up mremap on large regions
-To:     Joel Fernandes <joelaf@google.com>
-Cc:     Lokesh Gidra <lokeshgidra@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Minchan Kim <minchan@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Hassan Naveed <hnaveed@wavecomp.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@kernel.org>, Gavin Shan <gshan@redhat.com>,
-        Zhenyu Ye <yezhenyu2@huawei.com>, Jia He <justin.he@arm.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Ram Pai <linuxram@us.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        SeongJae Park <sjpark@amazon.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hlKJ+FfSVyIeAzaG/EkGK7Un9Pk3Wxr576MJ7E0I3IY=;
+        b=glw7XTDIBw0XVnpdyDgiV4PhE9yNp9m6pxBwKtUkYF042NU+e5KY1AotF7K/IC+Z/Y
+         +02NB7Z18zdlg+axOyhRifFVQ+nF7Y/ESuZI5uuNhbLXD7sTIEyHnYkYXEoL0UyzUsV+
+         5LgaQjeDcb0grT3tG8cNHQBkfurjuNdk3+556D61mVkE3jMv6vozpi32U2EJHuD0dhtI
+         F+2B4Zb+6eJTlXCAB9QuANaQ4CmB/VWD3yCPsdwbsAWKa+pMaLyfTcgdBOFgvaV1cCz2
+         6lmLltQKSlKxyE/5KBW0IlqDbWgNSywslReDomklutAJLYPVUOVyrPDafIEVT+K/jW3e
+         /pjw==
+X-Gm-Message-State: AOAM532OfsOd/Y6IeiDM1SWPlFxw2UdeT5JJ4ZAcAGJGpV9yk5u8Tw3e
+        J8MgwLRVzbY8Wt5A57T5qRHDMQ==
+X-Google-Smtp-Source: ABdhPJz4E75cT8NJjYPlBQdG+MQ2UTB47oeQ8Y0P9yaLMPFMg8LU1mJHM799gXVf6QspTSWIIxJs3g==
+X-Received: by 2002:a63:c04d:: with SMTP id z13mr3928899pgi.215.1601508342469;
+        Wed, 30 Sep 2020 16:25:42 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id fz22sm3262561pjb.46.2020.09.30.16.25.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 16:25:41 -0700 (PDT)
+Date:   Wed, 30 Sep 2020 16:25:40 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 0/3] Extract run_kselftest.sh and generate stand-alone
+ test list
+Message-ID: <202009301624.5698D652C4@keescook>
+References: <20200928202650.2530280-1-keescook@chromium.org>
+ <CA+G9fYtAWPuL=SEd3=K0WF3xVu6wwx4ETLadASxKKs0dMYbdWQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtAWPuL=SEd3=K0WF3xVu6wwx4ETLadASxKKs0dMYbdWQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 6:47 PM Joel Fernandes <joelaf@google.com> wrote:
->
-> On Wed, Sep 30, 2020 at 6:42 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
+On Wed, Sep 30, 2020 at 09:47:49PM +0530, Naresh Kamboju wrote:
+> On Tue, 29 Sep 2020 at 01:56, Kees Cook <keescook@chromium.org> wrote:
 > >
-> > On Wed, Sep 30, 2020 at 3:32 PM Kirill A. Shutemov
-> > <kirill.shutemov@linux.intel.com> wrote:
-> > >
-> > > On Wed, Sep 30, 2020 at 10:21:17PM +0000, Kalesh Singh wrote:
-> > > > mremap time can be optimized by moving entries at the PMD/PUD level if
-> > > > the source and destination addresses are PMD/PUD-aligned and
-> > > > PMD/PUD-sized. Enable moving at the PMD and PUD levels on arm64 and
-> > > > x86. Other architectures where this type of move is supported and known to
-> > > > be safe can also opt-in to these optimizations by enabling HAVE_MOVE_PMD
-> > > > and HAVE_MOVE_PUD.
-> > > >
-> > > > Observed Performance Improvements for remapping a PUD-aligned 1GB-sized
-> > > > region on x86 and arm64:
-> > > >
-> > > >     - HAVE_MOVE_PMD is already enabled on x86 : N/A
-> > > >     - Enabling HAVE_MOVE_PUD on x86   : ~13x speed up
-> > > >
-> > > >     - Enabling HAVE_MOVE_PMD on arm64 : ~ 8x speed up
-> > > >     - Enabling HAVE_MOVE_PUD on arm64 : ~19x speed up
-> > > >
-> > > >           Altogether, HAVE_MOVE_PMD and HAVE_MOVE_PUD
-> > > >           give a total of ~150x speed up on arm64.
-> > >
-> > > Is there a *real* workload that benefit from HAVE_MOVE_PUD?
-> > >
-> > We have a Java garbage collector under development which requires
-> > moving physical pages of multi-gigabyte heap using mremap. During this
-> > move, the application threads have to be paused for correctness. It is
-> > critical to keep this pause as short as possible to avoid jitters
-> > during user interaction. This is where HAVE_MOVE_PUD will greatly
-> > help.
->
-> And that detail should totally have gone into the commit message :-/
-Hi Joel,
-The patch that introduces HAVE_MOVE_PUD in the series mentions the
-Android garbage collection use case. I can add these details there in
-the next version.
-Thanks,
-Kalesh
->
-> Thanks,
->
->  - Joel
+> > v2:
+> > - update documentation
+> > - include SPDX line in extracted script
+> > v1: https://lore.kernel.org/linux-kselftest/20200925234527.1885234-1-keescook@chromium.org/
+> >
+> >
+> > Hi!
+> >
+> > I really like Hangbin Liu's intent[1] but I think we need to be a little
+> > more clean about the implementation. This extracts run_kselftest.sh from
+> > the Makefile so it can actually be changed without embeds, etc. Instead,
+> > generate the test list into a text file. Everything gets much simpler.
+> > :)
+> >
+> > And in patch 2, I add back Hangbin Liu's new options (with some extra
+> > added) with knowledge of "collections" (i.e. Makefile TARGETS) and
+> > subtests. This should work really well with LAVA too, which needs to
+> > manipulate the lists of tests being run.
+> >
+> > Thoughts?
+> 
+> I have tested this patch set on LAVA with full run and it went well.
+
+Thank you! You can include this as a tag too, so a "b4 am" will pick it
+up:
+
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+
+-Kees
+
+> 
+> >
+> > -Kees
+> >
+> > [1] https://lore.kernel.org/lkml/20200914022227.437143-1-liuhangbin@gmail.com/
+> >
+> > Kees Cook (3):
+> >   selftests: Extract run_kselftest.sh and generate stand-alone test list
+> >   selftests/run_kselftest.sh: Make each test individually selectable
+> >   doc: dev-tools: kselftest.rst: Update examples and paths
+> >
+> >  Documentation/dev-tools/kselftest.rst    | 35 +++++----
+> >  tools/testing/selftests/Makefile         | 26 ++-----
+> >  tools/testing/selftests/lib.mk           |  5 +-
+> >  tools/testing/selftests/run_kselftest.sh | 93 ++++++++++++++++++++++++
+> >  4 files changed, 124 insertions(+), 35 deletions(-)
+> >  create mode 100755 tools/testing/selftests/run_kselftest.sh
+> >
+> > --
+> > 2.25.1
+> >
+> 
+> - Naresh
+
+-- 
+Kees Cook
