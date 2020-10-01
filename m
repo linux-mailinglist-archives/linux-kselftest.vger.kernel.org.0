@@ -2,154 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DE427F8F4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Oct 2020 07:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D53F27FA2D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Oct 2020 09:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725921AbgJAFOI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Oct 2020 01:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
+        id S1730357AbgJAHXw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Oct 2020 03:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725925AbgJAFOH (ORCPT
+        with ESMTP id S1725921AbgJAHXw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Oct 2020 01:14:07 -0400
-Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CB8C0613D1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 22:14:07 -0700 (PDT)
-Received: by mail-oo1-xc44.google.com with SMTP id k13so1143996oor.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Sep 2020 22:14:07 -0700 (PDT)
+        Thu, 1 Oct 2020 03:23:52 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BCBC0613D0;
+        Thu,  1 Oct 2020 00:23:52 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id k8so3682234pfk.2;
+        Thu, 01 Oct 2020 00:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vhERQZh6diFhV3SJ8DG5mSXhB50dMWp+CwSZp5o02Lo=;
-        b=kymtirw2PgNXq8PIVui+ydpCSZaECut8qe5YGYcdMDANnh6OKLtQ4kHQb0Rz2ZMkhP
-         F/F6w5rqN265K1y600K9iBTU+MxH/JOyM6msApRrqwtC5aXL1mnqyOurmrK1OUjv5Gm3
-         nu6TFABC51h/P4XTo/ey+NgN+n94ASYgjMf16JrNlR8xrBmCnh0kMJU0k+jKbcJFBwJL
-         hnf/dikruR3VKsuBKjw2pUuuK/daIsYkHpH4u8ZLAA8tIki1rl2MvoeNAjUMwrTHyzKm
-         V2IukplsHjTQHc5wwHE7W7k5Uey2YWVmudwp2AcjTBz4U8QmvgdHYOwr2BxrTgRMKthe
-         TPnw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=LrYLWDQM8stmz0yFz3Wg0u7Rhgkk0IZGCSoh4qC8NGo=;
+        b=WEi+4jZWtcRSC7DoRUySz4lbViIHSOBrrCEPUcWUqRej/P4QjjjyRot4hI1BEllrkY
+         uP/JYMH6mDG9HccOuI1SWE5eQDBOw5SJkGLzfQoq94tFB2JBcbA5TedKCFTDrr97+++b
+         MAXob9d8uIvxaCwXgdu5LMXmQqxMDkcLksBLKJ9TxnF/62YPOfGNFQGiZhw0MIjJhlS3
+         Ll+IYCKndZwdLXZkDLdvPMknncD+URg7GGOj+XZCGZSsK684H0MP7bRovCGsxHDHFWYE
+         37Kdw8pGDepYQ1jsTjAoio2QxjM9/Banr+hIUpvWXWtVkO/S5ahWOtUPmESjgX5x5BXU
+         +p7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vhERQZh6diFhV3SJ8DG5mSXhB50dMWp+CwSZp5o02Lo=;
-        b=cczH65etaLFw6eH+bmluVFV1Odfu0sJyTOOPB6LSrX/9PSiKQledJ4fstfJnLAc5O2
-         7W8X/Q6NYOk5MUzcONvkvCJnjnau6TeK+f/n5EPKFWoNKnLZWf/VAQ76XYF56WKwEth4
-         MHFqLh9DSS+IW91AMTmcmsaukaLO8CkuRRP/+RXH5y6EuR+IkPnmpw1mr6f0g2xMDm8R
-         SY3taE9VYrIaAnDqVC3FGPQDisTHrNdj8MwJVojY5+MzYoEFgP2/1ALxlqMJ5pNIOZ3Q
-         kbj+dO2vMmfz4uScNHISsndvTahrQbWLGaEHBfjW8/WAof26kN5duFOSJUa/lTqVcYQg
-         jbSA==
-X-Gm-Message-State: AOAM53396YrCaa5pG8oM6G74c1GlmT1jTZFj4cLxWkSImsY9f9Qtax0m
-        9AJZaYx1c+NIZTKX13r8wOBTMDbVQeDCR+AR3A7vxw==
-X-Google-Smtp-Source: ABdhPJx+IDn3sYkvcPvZmlD9Kp9hsWRRiJTst2phVq+L2CAy9g+5kmxW+ag+gf6CjMUZzwpSxRpC2sec1qhZnbs777M=
-X-Received: by 2002:a4a:5d84:: with SMTP id w126mr4389788ooa.1.1601529246600;
- Wed, 30 Sep 2020 22:14:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200928202650.2530280-1-keescook@chromium.org> <20200928202650.2530280-4-keescook@chromium.org>
-In-Reply-To: <20200928202650.2530280-4-keescook@chromium.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 1 Oct 2020 10:43:55 +0530
-Message-ID: <CA+G9fYumUQ5Dr2Sbv=cAB0=cpvi4QA-=pDvLnt5t2Df4KYwMJw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] doc: dev-tools: kselftest.rst: Update examples and paths
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LrYLWDQM8stmz0yFz3Wg0u7Rhgkk0IZGCSoh4qC8NGo=;
+        b=qPa4pGrZQwkzQAgsEL5iu9gbi6zh3EVpdUcBQiSPKYZk9H6oR8bXoKevP6q+btX9qF
+         Bae+mNu0+KaWnRR4mXQfvfXmGaThYCVgTMmB018z+nrmYO269toyaOFcTmGQruyK5+jr
+         kxWzyhVndCY83EkNn1l0cieN2hVxzcgyuZBpJOHcaz2ny1mgZ6lDbCdq0FN/Hji0grE8
+         TZ2lPfir4fkSzuwCkaDWta9MYDrgVX+8sg53+Kn3eLsqywGlXKL0oY34gx+/ZUI+5w62
+         wz8WX+yRhHWMdJG69/TcRtgYMLBPaVTkyl5XdGSmG9oOJ4SPkY4ClZS8tLNbmD+RMrJm
+         h7YA==
+X-Gm-Message-State: AOAM531ywrCWokadB/hFyvxWWSrHSk6KvrHp1Np1r9TQ3pnHuDlndyPT
+        xssRxZhmhcz5f6I6IzbaFaA=
+X-Google-Smtp-Source: ABdhPJwMyLOXMi2i32b5+lOK7RIN4L5ZLWJ8vMk6L5e/S71dxOIZstKJCsskm0686d08wPnHTn9YBg==
+X-Received: by 2002:a65:5802:: with SMTP id g2mr4917679pgr.261.1601537031863;
+        Thu, 01 Oct 2020 00:23:51 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:76d9])
+        by smtp.gmail.com with ESMTPSA id c20sm5141227pfc.209.2020.10.01.00.23.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2020 00:23:50 -0700 (PDT)
+Date:   Thu, 1 Oct 2020 00:23:48 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@cloudflare.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 2/4] selftests: bpf: Add helper to compare
+ socket cookies
+Message-ID: <20201001072348.hxhpuoqmeln6twxw@ast-mbp.dhcp.thefacebook.com>
+References: <20200928090805.23343-1-lmb@cloudflare.com>
+ <20200928090805.23343-3-lmb@cloudflare.com>
+ <20200929055851.n7fa3os7iu7grni3@kafai-mbp>
+ <CAADnVQLwpWMea1rbFAwvR_k+GzOphaOW-kUGORf90PJ-Ezxm4w@mail.gmail.com>
+ <CACAyw98WzZGcFnnr7ELvbCziz2axJA_7x2mcoQTf2DYWDYJ=KA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACAyw98WzZGcFnnr7ELvbCziz2axJA_7x2mcoQTf2DYWDYJ=KA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 29 Sep 2020 at 01:56, Kees Cook <keescook@chromium.org> wrote:
->
-> Update the installation commands and path details, detail the new
-> options available in the run_kselftests.sh script.
->
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Wed, Sep 30, 2020 at 10:28:33AM +0100, Lorenz Bauer wrote:
+> On Tue, 29 Sep 2020 at 16:48, Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> 
+> ...
+> 
+> > There was a warning. I noticed it while applying and fixed it up.
+> > Lorenz, please upgrade your compiler. This is not the first time such
+> > warning has been missed.
+> 
+> I tried reproducing this on latest bpf-next (b0efc216f577997) with gcc
+> 9.3.0 by removing the initialization of duration:
+> 
+> make: Entering directory '/home/lorenz/dev/bpf-next/tools/testing/selftests/bpf'
+>   TEST-OBJ [test_progs] sockmap_basic.test.o
+>   TEST-HDR [test_progs] tests.h
+>   EXT-OBJ  [test_progs] test_progs.o
+>   EXT-OBJ  [test_progs] cgroup_helpers.o
+>   EXT-OBJ  [test_progs] trace_helpers.o
+>   EXT-OBJ  [test_progs] network_helpers.o
+>   EXT-OBJ  [test_progs] testing_helpers.o
+>   BINARY   test_progs
+> make: Leaving directory '/home/lorenz/dev/bpf-next/tools/testing/selftests/bpf'
+> 
+> So, gcc doesn't issue a warning. Jakub did the following little experiment:
+> 
+> jkbs@toad ~/tmp $ cat warning.c
+> #include <stdio.h>
+> 
+> int main(void)
+> {
+>         int duration;
+> 
+>         fprintf(stdout, "%d", duration);
+> 
+>         return 0;
+> }
+> jkbs@toad ~/tmp $ gcc -Wall -o /dev/null warning.c
+> warning.c: In function ‘main’:
+> warning.c:7:2: warning: ‘duration’ is used uninitialized in this
+> function [-Wuninitialized]
+>     7 |  fprintf(stdout, "%d", duration);
+>       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> 
+> The simple case seems to work. However, adding the macro breaks things:
+> 
+> jkbs@toad ~/tmp $ cat warning.c
+> #include <stdio.h>
+> 
+> #define _CHECK(duration) \
+>         ({                                                      \
+>                 fprintf(stdout, "%d", duration);                \
+>         })
+> #define CHECK() _CHECK(duration)
+> 
+> int main(void)
+> {
+>         int duration;
+> 
+>         CHECK();
+> 
+>         return 0;
+> }
+> jkbs@toad ~/tmp $ gcc -Wall -o /dev/null warning.c
+> jkbs@toad ~/tmp $
 
-Reviewed-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+That's very interesting. Thanks for the pointers.
+I'm using gcc version 9.1.1 20190605 (Red Hat 9.1.1-2)
+and I saw this warning while compiling selftests,
+but I don't see it with above warning.c example.
+clang warns correctly in both cases.
 
-> ---
->  Documentation/dev-tools/kselftest.rst | 35 +++++++++++++++++----------
->  1 file changed, 22 insertions(+), 13 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index 469d115a95f1..a901def730d9 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -125,32 +125,41 @@ Note that some tests will require root privileges.
->  Install selftests
->  =================
->
-> -You can use the kselftest_install.sh tool to install selftests in the
-> -default location, which is tools/testing/selftests/kselftest, or in a
-> -user specified location.
-> +You can use the "install" target of "make" (which calls the `kselftest_install.sh`
-> +tool) to install selftests in the default location (`tools/testing/selftests/kselftest_install`),
-> +or in a user specified location via the `INSTALL_PATH` "make" variable.
->
->  To install selftests in default location::
->
-> -   $ cd tools/testing/selftests
-> -   $ ./kselftest_install.sh
-> +   $ make -C tools/testing/selftests install
->
->  To install selftests in a user specified location::
->
-> -   $ cd tools/testing/selftests
-> -   $ ./kselftest_install.sh install_dir
-> +   $ make -C tools/testing/selftests install INSTALL_PATH=/some/other/path
->
->  Running installed selftests
->  ===========================
->
-> -Kselftest install as well as the Kselftest tarball provide a script
-> -named "run_kselftest.sh" to run the tests.
-> +Found in the install directory, as well as in the Kselftest tarball,
-> +is a script named `run_kselftest.sh` to run the tests.
->
->  You can simply do the following to run the installed Kselftests. Please
->  note some tests will require root privileges::
->
-> -   $ cd kselftest
-> +   $ cd kselftest_install
->     $ ./run_kselftest.sh
->
-> +To see the list of available tests, the `-l` option can be used::
-> +
-> +   $ ./run_kselftest.sh -l
-> +
-> +The `-c` option can be used to run all the tests from a test collection, or
-> +the `-t` option for specific single tests. Either can be used multiple times::
-> +
-> +   $ ./run_kselftest.sh -c bpf -c seccomp -t timers:posix_timers -t timer:nanosleep
-> +
-> +For other features see the script usage output, seen with the `-h` option.
-> +
->  Packaging selftests
->  ===================
->
-> @@ -160,9 +169,9 @@ different system. To package selftests, run::
->     $ make -C tools/testing/selftests gen_tar
->
->  This generates a tarball in the `INSTALL_PATH/kselftest-packages` directory. By
-> -default, `.gz` format is used. The tar format can be overridden by specifying
-> -a `FORMAT` make variable. Any value recognized by `tar's auto-compress`_ option
-> -is supported, such as::
-> +default, `.gz` format is used. The tar compression format can be overridden by
-> +specifying a `FORMAT` make variable. Any value recognized by `tar's auto-compress`_
-> +option is supported, such as::
->
->      $ make -C tools/testing/selftests gen_tar FORMAT=.xz
->
-> --
-> 2.25.1
->
+> Maybe this is https://gcc.gnu.org/bugzilla/show_bug.cgi?id=18501 ? The
+> problem is still there on gcc 10. Compiling test_progs with clang does
+> issue a warning FWIW, but it seems like other things break when doing
+> that.
 
-- Naresh
+That gcc bug has been opened since transition to ssa. That was a huge
+transition for gcc. But I think the bug number is not correct. It points to a
+different issue. I've checked -fdump-tree-uninit-all dump with and without
+macro. They're identical. The tree-ssa-uninit pass suppose to warn, but it
+doesn't. I wish I had more time to dig into it. A bit of debugging in
+gcc/tree-ssa-uninit.c can probably uncover the root cause.
