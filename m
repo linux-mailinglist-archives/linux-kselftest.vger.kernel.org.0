@@ -2,65 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE19A281B89
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Oct 2020 21:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB24281E02
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Oct 2020 00:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388405AbgJBTV5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Oct 2020 15:21:57 -0400
-Received: from mx.metalurgs.lv ([81.198.125.103]:64928 "EHLO mx.metalurgs.lv"
+        id S1725601AbgJBWFW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Oct 2020 18:05:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388386AbgJBTVy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 15:21:54 -0400
-X-Greylist: delayed 336 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:21:54 EDT
-Received: from mx.metalurgs.lv (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id 0869F62B68
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 22:16:17 +0300 (EEST)
-Received: from kas30pipe.localhost (localhost [127.0.0.1])
-        by mx.metalurgs.lv (Postfix) with ESMTP id E1B6962AA5
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 22:16:16 +0300 (EEST)
-Received: by mx.metalurgs.lv (Postfix, from userid 1005)
-        id C440662C58; Fri,  2 Oct 2020 22:16:15 +0300 (EEST)
-Received: from [100.64.1.74] (unknown [190.15.125.50])
-        (Authenticated sender: admin)
-        by mx.metalurgs.lv (Postfix) with ESMTPA id 3C08962AB7;
-        Fri,  2 Oct 2020 22:16:08 +0300 (EEST)
-MIME-Version: 1.0
-Content-Description: Mail message body
-To:     Recipients <financialcapability6@gmail.com>
-From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
-Date:   Fri, 02 Oct 2020 16:16:02 -0300
-Reply-To: binmurrah@gmail.com
-X-SpamTest-Envelope-From: financialcapability6@gmail.com
-X-SpamTest-Group-ID: 00000000
-X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
-X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
-X-SpamTest-Info: {DATE: unreal year}
-X-SpamTest-Method: none
-X-SpamTest-Rate: 55
-X-SpamTest-Status: Not detected
-X-SpamTest-Status-Extended: not_detected
-X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
-Message-ID: <20201002191615.C440662C58@mx.metalurgs.lv>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-Subject: Low Rate Loan.
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20140401 #7726142, check: 20201002 notchecked
+        id S1725446AbgJBWFW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Oct 2020 18:05:22 -0400
+Received: from X1 (c-76-21-107-111.hsd1.ca.comcast.net [76.21.107.111])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AD27C20719;
+        Fri,  2 Oct 2020 22:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601676322;
+        bh=A/PUNC/h74mMFqFuFyQBZzOM4+GqXQWYyk2J9FTBXHU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gDd85F52dSGYlWT7WLjb6cPPYCWvYOjIS1DAhkHOAS81iXNE3o1e1VQntR7DqkM0x
+         ud10WxaijIbe9zMe/BQYIddIVa2H5Eaib8MiYft0L1YO+xxfhMCf8rfHr/TC2PhIjq
+         wcTv0vTS+IYJxrh6oaonopzTcGeq75KcRrd8cQNE=
+Date:   Fri, 2 Oct 2020 15:05:20 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        Sri Jayaramappa <sjayaram@akamai.com>
+Subject: Re: [PATCH 1/1] selftests/vm: 8x compaction_test speedup
+Message-Id: <20201002150520.2ea3db53d88f8d10ba8348c9@linux-foundation.org>
+In-Reply-To: <20201002080621.551044-2-jhubbard@nvidia.com>
+References: <20201002080621.551044-1-jhubbard@nvidia.com>
+        <20201002080621.551044-2-jhubbard@nvidia.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Dear,
+On Fri, 2 Oct 2020 01:06:21 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
 
-We are Investment Company offering Corporate and Personal
-Loan at 3% Interest Rate for a duration of 10Years.
+> This patch reduces the running time for compaction_test from about 27
+> sec, to 3.3 sec, which is about an 8x speedup.
+> 
+> These numbers are for an Intel x86_64 system with 32 GB of DRAM.
+> 
+> The compaction_test.c program was spending most of its time doing
+> mmap(), 1 MB at a time, on about 25 GB of memory.
+> 
+> Instead, do the mmaps 100 MB at a time. (Going past 100 MB doesn't make
+> things go much faster, because other parts of the program are using the
+> remaining time.)
 
-We also pay 1% commission to brokers, who introduce project
-owners for finance or other opportunities.
+Seems nice.  It's been 5 years, but hopefully Sri is still at Akamai?
 
-Please get back to me if you are interested for more
-details.
-
-Yours faithfully,
-Hashim Bin 
+> --- a/tools/testing/selftests/vm/compaction_test.c
+> +++ b/tools/testing/selftests/vm/compaction_test.c
+> @@ -18,7 +18,8 @@
+>  
+>  #include "../kselftest.h"
+>  
+> -#define MAP_SIZE 1048576
+> +#define MAP_SIZE_MB	100
+> +#define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
+>  
+>  struct map_list {
+>  	void *map;
+> @@ -165,7 +166,7 @@ int main(int argc, char **argv)
+>  	void *map = NULL;
+>  	unsigned long mem_free = 0;
+>  	unsigned long hugepage_size = 0;
+> -	unsigned long mem_fragmentable = 0;
+> +	long mem_fragmentable_MB = 0;
+>  
+>  	if (prereq() != 0) {
+>  		printf("Either the sysctl compact_unevictable_allowed is not\n"
+> @@ -190,9 +191,9 @@ int main(int argc, char **argv)
+>  		return -1;
+>  	}
+>  
+> -	mem_fragmentable = mem_free * 0.8 / 1024;
+> +	mem_fragmentable_MB = mem_free * 0.8 / 1024;
+>  
+> -	while (mem_fragmentable > 0) {
+> +	while (mem_fragmentable_MB > 0) {
+>  		map = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
+>  			   MAP_ANONYMOUS | MAP_PRIVATE | MAP_LOCKED, -1, 0);
+>  		if (map == MAP_FAILED)
+> @@ -213,7 +214,7 @@ int main(int argc, char **argv)
+>  		for (i = 0; i < MAP_SIZE; i += page_size)
+>  			*(unsigned long *)(map + i) = (unsigned long)map + i;
+>  
+> -		mem_fragmentable--;
+> +		mem_fragmentable_MB -= MAP_SIZE_MB;
+>  	}
+>  
+>  	for (entry = list; entry != NULL; entry = entry->next) {
+> -- 
+> 2.28.0
+> 
