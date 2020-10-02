@@ -2,51 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB24281A56
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Oct 2020 20:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE19A281B89
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Oct 2020 21:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387768AbgJBSAS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Oct 2020 14:00:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59852 "EHLO mail.kernel.org"
+        id S2388405AbgJBTV5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Oct 2020 15:21:57 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:64928 "EHLO mx.metalurgs.lv"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387602AbgJBSAS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 14:00:18 -0400
-Received: from gaia (unknown [95.149.105.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7D2FB206DD;
-        Fri,  2 Oct 2020 18:00:16 +0000 (UTC)
-Date:   Fri, 2 Oct 2020 19:00:14 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Amit Daniel Kachhap <amit.kachhap@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Gabor Kertesz <gabor.kertesz@arm.com>
-Subject: Re: [PATCH v2 0/6] kselftest: arm64/mte: Tests for user-space MTE
-Message-ID: <20201002180013.GA6099@gaia>
-References: <20201002115630.24683-1-amit.kachhap@arm.com>
+        id S2388386AbgJBTVy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Oct 2020 15:21:54 -0400
+X-Greylist: delayed 336 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:21:54 EDT
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 0869F62B68
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 22:16:17 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id E1B6962AA5
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 22:16:16 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id C440662C58; Fri,  2 Oct 2020 22:16:15 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.50])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 3C08962AB7;
+        Fri,  2 Oct 2020 22:16:08 +0300 (EEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201002115630.24683-1-amit.kachhap@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Fri, 02 Oct 2020 16:16:02 -0300
+Reply-To: binmurrah@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201002191615.C440662C58@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan.
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201002 notchecked
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 02, 2020 at 05:26:24PM +0530, Amit Daniel Kachhap wrote:
-> Amit Daniel Kachhap (6):
->   kselftest/arm64: Add utilities and a test to validate mte memory
->   kselftest/arm64: Verify mte tag inclusion via prctl
->   kselftest/arm64: Check forked child mte memory accessibility
->   kselftest/arm64: Verify all different mmap MTE options
->   kselftest/arm64: Verify KSM page merge for MTE pages
->   kselftest/arm64: Check mte tagged user address in kernel
+Hello Dear,
 
-Thanks Amit for respinning the series. Tested on FVP (some Qemu bugs get
-in the way and they fail).
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Tested-by: Catalin Marinas <catalin.marinas@arm.com>
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
+
+Please get back to me if you are interested for more
+details.
+
+Yours faithfully,
+Hashim Bin 
