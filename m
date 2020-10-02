@@ -2,104 +2,513 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB24281E02
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Oct 2020 00:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AA4281E0B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Oct 2020 00:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725601AbgJBWFW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Oct 2020 18:05:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgJBWFW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 18:05:22 -0400
-Received: from X1 (c-76-21-107-111.hsd1.ca.comcast.net [76.21.107.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD27C20719;
-        Fri,  2 Oct 2020 22:05:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601676322;
-        bh=A/PUNC/h74mMFqFuFyQBZzOM4+GqXQWYyk2J9FTBXHU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gDd85F52dSGYlWT7WLjb6cPPYCWvYOjIS1DAhkHOAS81iXNE3o1e1VQntR7DqkM0x
-         ud10WxaijIbe9zMe/BQYIddIVa2H5Eaib8MiYft0L1YO+xxfhMCf8rfHr/TC2PhIjq
-         wcTv0vTS+IYJxrh6oaonopzTcGeq75KcRrd8cQNE=
-Date:   Fri, 2 Oct 2020 15:05:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        Sri Jayaramappa <sjayaram@akamai.com>
-Subject: Re: [PATCH 1/1] selftests/vm: 8x compaction_test speedup
-Message-Id: <20201002150520.2ea3db53d88f8d10ba8348c9@linux-foundation.org>
-In-Reply-To: <20201002080621.551044-2-jhubbard@nvidia.com>
-References: <20201002080621.551044-1-jhubbard@nvidia.com>
-        <20201002080621.551044-2-jhubbard@nvidia.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1725355AbgJBWIq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Oct 2020 18:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbgJBWIo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Oct 2020 18:08:44 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E190C0613E2
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 15:08:42 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id q123so2313828pfb.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2020 15:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZTsbIZbxk/VLPosRWvsRfPC9ZULIuxmEiMaEwM9spDY=;
+        b=arFps9ZmNz+LxrAlpcG06dMwIARJR2irUoZbyHR+QUIhT4m3JXPL5Ay349I5q2Fo0V
+         0/sCkQhVxxIh5TpVOU8qj09EoY/m7jvscsKW8CIMW1Dypfj6TukHLwKdh0QGmJ/LwKrf
+         g5aQNClXmo8UQCY9POADn0C/ZR+XPMVsGAlse1oRWM6tNjBqLOYCyAW3IxqzfbDZbwnT
+         z91HvJd0a2dZpMDnTkuBS2LBKggMWlS5q1+OFnLPCFhVUVf2z9N3gorbyL21WHV4Axsv
+         cee56sC4L4TqHh0JSotOulOM4L7IpTAmgSjUUJ+727oklMHWRF8R6iErW1O2c2QHUv0D
+         GkOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZTsbIZbxk/VLPosRWvsRfPC9ZULIuxmEiMaEwM9spDY=;
+        b=WPq1eSNV2NlZQvdK4Bypn2enSXc/b0YHJC6gmJnerv/9DLwZo+FMyfCjZ7TJ9blT5S
+         oPGwxmzljQ653X6ZJrdrGAZPWUdNJeN9LOkhZIVqzVCLS22f6Ls0PMC1u0ExRnJl2Oj6
+         tYR73YM06LxsYtvToMiZN3J/Ea2hACLhVuhOfth49V3rmiv3LNsK02G+QcE9pXQWZxBU
+         2Q7wiMHh+HIgO4wGznCQnXhxwvDP8Sj+iRk+/f8fxIgJaz01drvko/h3uAPqngeeSbLQ
+         cLQEcmy3TsIlcQSKNZKe9RUFacz7ZZa/iF9GvgWmrBNZfoA0PdLWf23+igBztBc35EPd
+         3zBw==
+X-Gm-Message-State: AOAM531yuxkrDqF8jas5zYQL4MEd/AK2HkOf0/AFk6sxQJE0WqxEzkuD
+        gk7e7BTtnISDDdd1WYscthGYKVY/1HQoxi5ZG1AZYA==
+X-Google-Smtp-Source: ABdhPJzziu9jz1tm+VBXgbKFPycLeYOboaED5MZJg+7acHe57tXEkp/1yDAJ5qcnPCnqjWOrEb8bRS3OW7F7M3+LHp8=
+X-Received: by 2002:a65:5cc2:: with SMTP id b2mr4122419pgt.124.1601676521329;
+ Fri, 02 Oct 2020 15:08:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201002162101.665549-1-kaleshsingh@google.com>
+ <20201002162101.665549-4-kaleshsingh@google.com> <20201002165122.bm427a4ealmmmtqc@black.fi.intel.com>
+In-Reply-To: <20201002165122.bm427a4ealmmmtqc@black.fi.intel.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Fri, 2 Oct 2020 18:08:29 -0400
+Message-ID: <CAC_TJvdcWV=cyszkOURekZGEZP2txvDyZKDyDgKB37+g+eg3hg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] mm: Speedup mremap on 1GB or larger regions
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        kernel test robot <lkp@intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@kernel.org>, Gavin Shan <gshan@redhat.com>,
+        Chris von Recklinghausen <crecklin@redhat.com>,
+        Jia He <justin.he@arm.com>, Zhenyu Ye <yezhenyu2@huawei.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        SeongJae Park <sjpark@amazon.de>,
+        Brian Geffon <bgeffon@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2 Oct 2020 01:06:21 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+Hi Kirill, thank you for the feedback.
 
-> This patch reduces the running time for compaction_test from about 27
-> sec, to 3.3 sec, which is about an 8x speedup.
-> 
-> These numbers are for an Intel x86_64 system with 32 GB of DRAM.
-> 
-> The compaction_test.c program was spending most of its time doing
-> mmap(), 1 MB at a time, on about 25 GB of memory.
-> 
-> Instead, do the mmaps 100 MB at a time. (Going past 100 MB doesn't make
-> things go much faster, because other parts of the program are using the
-> remaining time.)
+On Fri, Oct 2, 2020 at 12:51 PM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> On Fri, Oct 02, 2020 at 04:20:48PM +0000, Kalesh Singh wrote:
+> > Android needs to move large memory regions for garbage collection.
+> > The GC requires moving physical pages of multi-gigabyte heap
+> > using mremap. During this move, the application threads have to
+> > be paused for correctness. It is critical to keep this pause as
+> > short as possible to avoid jitters during user interaction.
+> >
+> > Optimize mremap for >=3D 1GB-sized regions by moving at the PUD/PGD
+> > level if the source and destination addresses are PUD-aligned.
+> > For CONFIG_PGTABLE_LEVELS =3D=3D 3, moving at the PUD level in effect m=
+oves
+> > PGD entries, since the PUD entry is =E2=80=9Cfolded back=E2=80=9D onto =
+the PGD entry.
+> > Add HAVE_MOVE_PUD so that architectures where moving at the PUD level
+> > isn't supported/tested can turn this off by not selecting the config.
+> >
+> > Fix build test error from v1 of this series reported by
+> > kernel test robot in [1].
+> >
+> > [1] https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread=
+/CKPGL4FH4NG7TGH2CVYX2UX76L25BTA3/
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > ---
+> > Changes in v2:
+> >   - Update commit message with description of Android GC's use case.
+> >   - Move set_pud_at() to a separate patch.
+> >   - Use switch() instead of ifs in move_pgt_entry()
+> >   - Fix build test error reported by kernel test robot on x86_64 in [1]=
+.
+> >     Guard move_huge_pmd() with IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE),
+> >     since this section doesn't get optimized out in the kernel test
+> >     robot's build test when HAVE_MOVE_PUD is enabled.
+> >   - Keep WARN_ON_ONCE(1) instead of BUILD_BUG() for the aforementioned
+> >     reason.
+>
+> Okay, but IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) on the caller side woul=
+d
+> do the trick, I believe.
+I tried moving this to the caller side in move_page_tables(),
+-                       if (extent =3D=3D HPAGE_PMD_SIZE &&
++                       if (extent =3D=3D HPAGE_PMD_SIZE &&
+IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
+but it produces the same error as reported by kernel test robot:
+ld.lld: error: undefined symbol: move_huge_pmd
+I'm not sure why these are different but the kernel test robot
+compiler complains.
+>
+> >
+> >  arch/Kconfig |   7 ++
+> >  mm/mremap.c  | 220 ++++++++++++++++++++++++++++++++++++++++++++-------
+> >  2 files changed, 197 insertions(+), 30 deletions(-)
+> >
+> > diff --git a/arch/Kconfig b/arch/Kconfig
+> > index af14a567b493..5eabaa00bf9b 100644
+> > --- a/arch/Kconfig
+> > +++ b/arch/Kconfig
+> > @@ -602,6 +602,13 @@ config HAVE_IRQ_TIME_ACCOUNTING
+> >         Archs need to ensure they use a high enough resolution clock to
+> >         support irq time accounting and then call enable_sched_clock_ir=
+qtime().
+> >
+> > +config HAVE_MOVE_PUD
+> > +     bool
+> > +     help
+> > +       Architectures that select this are able to move page tables at =
+the
+> > +       PUD level. If there are only 3 page table levels, the move effe=
+ctively
+> > +       happens at the PGD level.
+> > +
+> >  config HAVE_MOVE_PMD
+> >       bool
+> >       help
+> > diff --git a/mm/mremap.c b/mm/mremap.c
+> > index 138abbae4f75..c1d6ab667d70 100644
+> > --- a/mm/mremap.c
+> > +++ b/mm/mremap.c
+> > @@ -249,14 +249,176 @@ static bool move_normal_pmd(struct vm_area_struc=
+t *vma, unsigned long old_addr,
+> >
+> >       return true;
+> >  }
+> > +#else
+> > +static inline bool move_normal_pmd(struct vm_area_struct *vma, unsigne=
+d long old_addr,
+> > +               unsigned long new_addr, pmd_t *old_pmd, pmd_t *new_pmd)
+> > +{
+> > +     return false;
+> > +}
+> >  #endif
+> >
+> > +#ifdef CONFIG_HAVE_MOVE_PUD
+> > +static pud_t *get_old_pud(struct mm_struct *mm, unsigned long addr)
+> > +{
+> > +     pgd_t *pgd;
+> > +     p4d_t *p4d;
+> > +     pud_t *pud;
+> > +
+> > +     pgd =3D pgd_offset(mm, addr);
+> > +     if (pgd_none_or_clear_bad(pgd))
+> > +             return NULL;
+> > +
+> > +     p4d =3D p4d_offset(pgd, addr);
+> > +     if (p4d_none_or_clear_bad(p4d))
+> > +             return NULL;
+> > +
+> > +     pud =3D pud_offset(p4d, addr);
+> > +     if (pud_none_or_clear_bad(pud))
+> > +             return NULL;
+> > +
+> > +     return pud;
+> > +}
+> > +
+> > +static pud_t *alloc_new_pud(struct mm_struct *mm, struct vm_area_struc=
+t *vma,
+> > +                         unsigned long addr)
+> > +{
+> > +     pgd_t *pgd;
+> > +     p4d_t *p4d;
+> > +     pud_t *pud;
+> > +
+> > +     pgd =3D pgd_offset(mm, addr);
+> > +     p4d =3D p4d_alloc(mm, pgd, addr);
+> > +     if (!p4d)
+> > +             return NULL;
+> > +     pud =3D pud_alloc(mm, p4d, addr);
+> > +     if (!pud)
+> > +             return NULL;
+> > +
+> > +     return pud;
+> > +}
+>
+> Looks like a code duplication.
+>
+> Could you move these two helpers out of #ifdef CONFIG_HAVE_MOVE_PUD and
+> make get_old_pmd() and alloc_new_pmd() use them?
+Yes, that will be cleaner. I'll update it in the next version.
+>
+> > +
+> > +static bool move_normal_pud(struct vm_area_struct *vma, unsigned long =
+old_addr,
+> > +               unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
+> > +{
+> > +     spinlock_t *old_ptl, *new_ptl;
+> > +     struct mm_struct *mm =3D vma->vm_mm;
+> > +     pud_t pud;
+> > +
+> > +     /*
+> > +      * The destination pud shouldn't be established, free_pgtables()
+> > +      * should have released it.
+> > +      */
+> > +     if (WARN_ON_ONCE(!pud_none(*new_pud)))
+> > +             return false;
+> > +
+> > +     /*
+> > +      * We don't have to worry about the ordering of src and dst
+> > +      * ptlocks because exclusive mmap_lock prevents deadlock.
+> > +      */
+> > +     old_ptl =3D pud_lock(vma->vm_mm, old_pud);
+> > +     new_ptl =3D pud_lockptr(mm, new_pud);
+> > +     if (new_ptl !=3D old_ptl)
+> > +             spin_lock_nested(new_ptl, SINGLE_DEPTH_NESTING);
+> > +
+> > +     /* Clear the pud */
+> > +     pud =3D *old_pud;
+> > +     pud_clear(old_pud);
+> > +
+> > +     VM_BUG_ON(!pud_none(*new_pud));
+> > +
+> > +     /* Set the new pud */
+> > +     set_pud_at(mm, new_addr, new_pud, pud);
+> > +     flush_tlb_range(vma, old_addr, old_addr + PUD_SIZE);
+> > +     if (new_ptl !=3D old_ptl)
+> > +             spin_unlock(new_ptl);
+> > +     spin_unlock(old_ptl);
+> > +
+> > +     return true;
+> > +}
+> > +#else
+> > +static inline bool move_normal_pud(struct vm_area_struct *vma, unsigne=
+d long old_addr,
+> > +               unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
+> > +{
+> > +     return false;
+> > +}
+> > +#endif
+> > +
+> > +enum pgt_entry {
+> > +     NORMAL_PMD,
+> > +     HPAGE_PMD,
+> > +     NORMAL_PUD,
+> > +};
+> > +
+> > +/*
+> > + * Returns an extent of the corresponding size for the pgt_entry speci=
+fied if valid.
+> > + * Else returns a smaller extent bounded by the end of the source and =
+destination
+> > + * pgt_entry. Returns 0 if an invalid pgt_entry is specified.
+> > + */
+> > +static unsigned long get_extent(enum pgt_entry entry, unsigned long ol=
+d_addr,
+> > +                     unsigned long old_end, unsigned long new_addr)
+> > +{
+> > +     unsigned long next, extent, mask, size;
+> > +
+> > +     if (entry =3D=3D NORMAL_PMD || entry =3D=3D HPAGE_PMD) {
+> > +             mask =3D PMD_MASK;
+> > +             size =3D PMD_SIZE;
+> > +     } else if (entry =3D=3D NORMAL_PUD) {
+> > +             mask =3D PUD_MASK;
+> > +             size =3D PUD_SIZE;
+> > +     } else
+> > +             return 0;
+>
+> Em. Who would ever specify invalid pgt_entry? It's bug.
+> Again, switch()?
+Sounds good. I'll use BUG() and switch() instead.
+>
+> > +
+> > +     next =3D (old_addr + size) & mask;
+> > +     /* even if next overflowed, extent below will be ok */
+> > +     extent =3D (next > old_end) ? old_end - old_addr : next - old_add=
+r;
+> > +     next =3D (new_addr + size) & mask;
+> > +     if (extent > next - new_addr)
+> > +             extent =3D next - new_addr;
+> > +     return extent;
+> > +}
+> > +
+> > +/*
+> > + * Attempts to speedup the move by moving entry at the level correspon=
+ding to
+> > + * pgt_entry. Returns true if the move was successful, else false.
+> > + */
+> > +static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct=
+ *vma,
+> > +                     unsigned long old_addr, unsigned long new_addr, v=
+oid *old_entry,
+> > +                     void *new_entry, bool need_rmap_locks)
+> > +{
+> > +     bool moved =3D false;
+> > +
+> > +     /* See comment in move_ptes() */
+> > +     if (need_rmap_locks)
+> > +             take_rmap_locks(vma);
+> > +
+> > +     switch (entry) {
+> > +     case NORMAL_PMD:
+> > +             moved =3D  move_normal_pmd(vma, old_addr, new_addr, old_e=
+ntry, new_entry);
+>
+> Nit: here and below, double space after '=3D'. Why?
+Sorry, editing mistake on my end. I'll clean this up before resending.
+>
+> > +             break;
+> > +     case NORMAL_PUD:
+> > +             moved =3D  move_normal_pud(vma, old_addr, new_addr, old_e=
+ntry, new_entry);
+> > +             break;
+> > +     case HPAGE_PMD:
+> > +             moved =3D  IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
+> > +                     move_huge_pmd(vma, old_addr, new_addr, old_entry,=
+ new_entry);
+> > +             break;
+> > +     default:
+> > +             WARN_ON_ONCE(1);
+> > +             break;
+> > +     }
+> > +
+> > +     if (need_rmap_locks)
+> > +             drop_rmap_locks(vma);
+> > +
+> > +     return moved;
+> > +}
+> > +
+> >  unsigned long move_page_tables(struct vm_area_struct *vma,
+> >               unsigned long old_addr, struct vm_area_struct *new_vma,
+> >               unsigned long new_addr, unsigned long len,
+> >               bool need_rmap_locks)
+> >  {
+> > -     unsigned long extent, next, old_end;
+> > +     unsigned long extent, old_end;
+> >       struct mmu_notifier_range range;
+> >       pmd_t *old_pmd, *new_pmd;
+> >
+> > @@ -269,14 +431,27 @@ unsigned long move_page_tables(struct vm_area_str=
+uct *vma,
+> >
+> >       for (; old_addr < old_end; old_addr +=3D extent, new_addr +=3D ex=
+tent) {
+> >               cond_resched();
+> > -             next =3D (old_addr + PMD_SIZE) & PMD_MASK;
+> > -             /* even if next overflowed, extent below will be ok */
+> > -             extent =3D next - old_addr;
+> > -             if (extent > old_end - old_addr)
+> > -                     extent =3D old_end - old_addr;
+> > -             next =3D (new_addr + PMD_SIZE) & PMD_MASK;
+> > -             if (extent > next - new_addr)
+> > -                     extent =3D next - new_addr;
+> > +#ifdef CONFIG_HAVE_MOVE_PUD
+>
+> Any chance  if (IS_ENABLED(CONFIG_HAVE_MOVE_PUD)) would work here?
+Once we move get_old_put() and alloc_new_pud() out of the #ifdefs as
+you suggested
+above, it should work. It would also now be possible to replace the
+#ifdef CONFIG_HAVE_MOVE_PMD in move_page_tables() with
+IS_ENABLED(CONFIG_HAVE_MOVE_PMD).
 
-Seems nice.  It's been 5 years, but hopefully Sri is still at Akamai?
-
-> --- a/tools/testing/selftests/vm/compaction_test.c
-> +++ b/tools/testing/selftests/vm/compaction_test.c
-> @@ -18,7 +18,8 @@
->  
->  #include "../kselftest.h"
->  
-> -#define MAP_SIZE 1048576
-> +#define MAP_SIZE_MB	100
-> +#define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
->  
->  struct map_list {
->  	void *map;
-> @@ -165,7 +166,7 @@ int main(int argc, char **argv)
->  	void *map = NULL;
->  	unsigned long mem_free = 0;
->  	unsigned long hugepage_size = 0;
-> -	unsigned long mem_fragmentable = 0;
-> +	long mem_fragmentable_MB = 0;
->  
->  	if (prereq() != 0) {
->  		printf("Either the sysctl compact_unevictable_allowed is not\n"
-> @@ -190,9 +191,9 @@ int main(int argc, char **argv)
->  		return -1;
->  	}
->  
-> -	mem_fragmentable = mem_free * 0.8 / 1024;
-> +	mem_fragmentable_MB = mem_free * 0.8 / 1024;
->  
-> -	while (mem_fragmentable > 0) {
-> +	while (mem_fragmentable_MB > 0) {
->  		map = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
->  			   MAP_ANONYMOUS | MAP_PRIVATE | MAP_LOCKED, -1, 0);
->  		if (map == MAP_FAILED)
-> @@ -213,7 +214,7 @@ int main(int argc, char **argv)
->  		for (i = 0; i < MAP_SIZE; i += page_size)
->  			*(unsigned long *)(map + i) = (unsigned long)map + i;
->  
-> -		mem_fragmentable--;
-> +		mem_fragmentable_MB -= MAP_SIZE_MB;
->  	}
->  
->  	for (entry = list; entry != NULL; entry = entry->next) {
-> -- 
-> 2.28.0
-> 
+Thanks,
+Kalesh
+>
+> > +             /*
+> > +              * If extent is PUD-sized try to speed up the move by mov=
+ing at the
+> > +              * PUD level if possible.
+> > +              */
+> > +             extent =3D get_extent(NORMAL_PUD, old_addr, old_end, new_=
+addr);
+> > +             if (extent =3D=3D PUD_SIZE) {
+> > +                     pud_t *old_pud, *new_pud;
+> > +
+> > +                     old_pud =3D get_old_pud(vma->vm_mm, old_addr);
+> > +                     if (!old_pud)
+> > +                             continue;
+> > +                     new_pud =3D alloc_new_pud(vma->vm_mm, vma, new_ad=
+dr);
+> > +                     if (!new_pud)
+> > +                             break;
+> > +                     if (move_pgt_entry(NORMAL_PUD, vma, old_addr, new=
+_addr,
+> > +                                        old_pud, new_pud, need_rmap_lo=
+cks))
+> > +                             continue;
+> > +             }
+> > +#endif
+> > +             extent =3D get_extent(NORMAL_PMD, old_addr, old_end, new_=
+addr);
+> >               old_pmd =3D get_old_pmd(vma->vm_mm, old_addr);
+> >               if (!old_pmd)
+> >                       continue;
+> > @@ -284,18 +459,10 @@ unsigned long move_page_tables(struct vm_area_str=
+uct *vma,
+> >               if (!new_pmd)
+> >                       break;
+> >               if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) || =
+pmd_devmap(*old_pmd)) {
+> > -                     if (extent =3D=3D HPAGE_PMD_SIZE) {
+> > -                             bool moved;
+> > -                             /* See comment in move_ptes() */
+> > -                             if (need_rmap_locks)
+> > -                                     take_rmap_locks(vma);
+> > -                             moved =3D move_huge_pmd(vma, old_addr, ne=
+w_addr,
+> > -                                                   old_pmd, new_pmd);
+> > -                             if (need_rmap_locks)
+> > -                                     drop_rmap_locks(vma);
+> > -                             if (moved)
+> > -                                     continue;
+> > -                     }
+> > +                     if (extent =3D=3D HPAGE_PMD_SIZE &&
+> > +                         move_pgt_entry(HPAGE_PMD, vma, old_addr, new_=
+addr, old_pmd,
+> > +                                        new_pmd, need_rmap_locks))
+> > +                             continue;
+> >                       split_huge_pmd(vma, old_pmd, old_addr);
+> >                       if (pmd_trans_unstable(old_pmd))
+> >                               continue;
+> > @@ -305,15 +472,8 @@ unsigned long move_page_tables(struct vm_area_stru=
+ct *vma,
+> >                        * If the extent is PMD-sized, try to speed the m=
+ove by
+> >                        * moving at the PMD level if possible.
+> >                        */
+> > -                     bool moved;
+> > -
+> > -                     if (need_rmap_locks)
+> > -                             take_rmap_locks(vma);
+> > -                     moved =3D move_normal_pmd(vma, old_addr, new_addr=
+,
+> > -                                             old_pmd, new_pmd);
+> > -                     if (need_rmap_locks)
+> > -                             drop_rmap_locks(vma);
+> > -                     if (moved)
+> > +                     if (move_pgt_entry(NORMAL_PMD, vma, old_addr, new=
+_addr, old_pmd,
+> > +                                        new_pmd, need_rmap_locks))
+> >                               continue;
+> >  #endif
+> >               }
+> > --
+> > 2.28.0.806.g8561365e88-goog
+> >
+>
+> --
+>  Kirill A. Shutemov
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
