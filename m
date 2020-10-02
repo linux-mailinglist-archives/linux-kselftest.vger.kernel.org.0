@@ -2,92 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B225428105C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Oct 2020 12:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C440A2811CB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Oct 2020 13:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgJBKIU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Oct 2020 06:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387759AbgJBKIR (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 06:08:17 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD5EC0613D0
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 03:08:16 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id m25so212131oou.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2020 03:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OWYUsZ+0jSI+bzR+U/Opb/r+h29XMQ6OibUPAn5KgDU=;
-        b=o7V4Ert5THuV208ZrTVLXy9I6K5MtKtKfL97eluip4dXo5wrNSzqZOFdA61OxeBZdF
-         +0sDtnWTrKMU2EyF3sU05PklgBIgEr9VudLtUJ3VGUdiPp1p6SCDlWNKteN+kFZ+fPDX
-         WtxmCVPPFeGStQHm7e7rsN0pF8YjBqtA/PWcI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OWYUsZ+0jSI+bzR+U/Opb/r+h29XMQ6OibUPAn5KgDU=;
-        b=WLxNOW7JHTJCmZW66X4CyuEOCjUIcMRhrUStG/mMGJIgBGc5yEnPlFDS9u+dW65rcA
-         cA34ge4MX77BFptCs79IZscI/YBsb6z/v5pA9i7RS84KVy1+zqI+4/j8/U2CaabmU3za
-         RMq3jM3lsiqF1RxY9v/ygqTMZUqvUizcDlzEmkqbJk9yhylnIt1jCaxtBxqUNGtGv8rA
-         MibOIH7rpD6BvJ61SZRC/fnWTabLfzoMS5GtatTD6fnE2oo0RXlsnNM9L6pytwWYWt/d
-         enKL5JW9fvAy9sjCmxObRwyf/bvV6HEVSD0eSYpStD6zxYRbcCxjbj1nDiaOgQpo3yj3
-         Wi5w==
-X-Gm-Message-State: AOAM531ysWzBu7Q4/mUwXJ0drqxUKN9SS52bVPlc6K2rD9TB3lq1QKZc
-        N+0z0GCt0cyxjLbIewdPOMgsb6E4rFHzDJM9QnBHLw==
-X-Google-Smtp-Source: ABdhPJzgSjaquUtXDnzTcQzO4uhxmbkV4B9/CSU56HbCERpxhB4ybkcXsdueLdZM5yjhwxK6nlWgW4Z+45On+tgp5ME=
-X-Received: by 2002:a4a:81:: with SMTP id 123mr1287156ooh.80.1601633295629;
- Fri, 02 Oct 2020 03:08:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200928090805.23343-1-lmb@cloudflare.com> <20200928090805.23343-3-lmb@cloudflare.com>
- <20200929055851.n7fa3os7iu7grni3@kafai-mbp> <CAADnVQLwpWMea1rbFAwvR_k+GzOphaOW-kUGORf90PJ-Ezxm4w@mail.gmail.com>
- <CACAyw98WzZGcFnnr7ELvbCziz2axJA_7x2mcoQTf2DYWDYJ=KA@mail.gmail.com>
- <20201001072348.hxhpuoqmeln6twxw@ast-mbp.dhcp.thefacebook.com>
- <CAEf4Bzbjzj3wwxX84bLi-PLy=9+Bpe1bTDt=t0qR5t=xEkNjwQ@mail.gmail.com> <CAADnVQJQeiyrN2JzOwV+zHDU5xg4TtpT0w9MgG6nujCK5z+GNQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJQeiyrN2JzOwV+zHDU5xg4TtpT0w9MgG6nujCK5z+GNQ@mail.gmail.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Fri, 2 Oct 2020 11:08:04 +0100
-Message-ID: <CACAyw99ji02q3XngQS=KbRtebRipNU4P3kUbV1ULeVy64MA3mg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/4] selftests: bpf: Add helper to compare
- socket cookies
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        kernel-team <kernel-team@cloudflare.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S2387797AbgJBL4p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Oct 2020 07:56:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:33732 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726090AbgJBL4o (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Oct 2020 07:56:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E49FD1063;
+        Fri,  2 Oct 2020 04:56:43 -0700 (PDT)
+Received: from a077416.blr.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DD6013F70D;
+        Fri,  2 Oct 2020 04:56:40 -0700 (PDT)
+From:   Amit Daniel Kachhap <amit.kachhap@arm.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Gabor Kertesz <gabor.kertesz@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>
+Subject: [PATCH v2 0/6] kselftest: arm64/mte: Tests for user-space MTE
+Date:   Fri,  2 Oct 2020 17:26:24 +0530
+Message-Id: <20201002115630.24683-1-amit.kachhap@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 1 Oct 2020 at 18:11, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> >
-> > I think this might be the same problem I fixed for libbpf with [0].
-> > Turns out, GCC explicitly calls out (somewhere in their docs) that
-> > uninitialized variable warnings work only when compiled in optimized
-> > mode, because some internal data structures used to detect this are
-> > only maintained in optimized mode build.
-> >
-> > Laurenz, can you try compiling your example with -O2?
->
-> All of my experiments I did with -O2.
+These patch series adds below kselftests to test the user-space support for the
+ARMv8.5 Memory Tagging Extension present in arm64 tree [1]. This patch
+series is based on Linux v5.9-rc3.
 
-If anybody wants to play with this more: https://godbolt.org/z/77P6P9
+1) This test-case verifies that the memory allocated by kernel mmap interface
+can support tagged memory access. It first checks the presence of tags at
+address[56:59] and then proceeds with read and write. The pass criteria for
+this test is that tag fault exception should not happen.
 
-Seems like red hat GCC has some special sauce that fixes this behaviour?
+2) This test-case crosses the valid memory to the invalid memory. In this
+memory area valid tags are not inserted so read and write should not pass. The
+pass criteria for this test is that tag fault exception should happen for all
+the illegal addresses. This test also verfies that PSTATE.TCO works properly.
+
+3) This test-case verifies that the memory inherited by child process from
+parent process should have same tags copied. The pass criteria for this test is
+that tag fault exception should not happen.
+
+4) This test checks different mmap flags with PROT_MTE memory protection.
+
+5) This testcase checks that KSM should not merge pages containing different
+MTE tag values. However, if the tags are same then the pages may merge. This
+testcase uses the generic ksm sysfs interfaces to verify the MTE behaviour, so
+this testcase is not fullproof and may be impacted due to other load in the system.
+
+6) Fifth test verifies that syscalls read/write etc works by considering that
+user pointer has valid/invalid allocation tags.
+
+Changes since v1 [2]:
+* Redefined MTE kernel header definitions to decouple kselftest compilations.
+* Removed gmi masking instructions in mte_insert_random_tag assembly
+  function. This simplifies the tag inclusion mask test with only GCR
+  mask register used.
+* Created a new mte_insert_random_tag function with gmi instruction.
+  This is useful for the 6th test which reuses the original tag.
+* Now use /dev/shm/* to hold temporary files.
+* Updated the 6th test to handle the error properly in case of failure
+  in accessing memory with invalid tag in kernel.
+* Code and comment clean-ups.
+
+Thanks,
+Amit Daniel
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/mte
+[2]: https://patchwork.kernel.org/patch/11747791/
+
+Amit Daniel Kachhap (6):
+  kselftest/arm64: Add utilities and a test to validate mte memory
+  kselftest/arm64: Verify mte tag inclusion via prctl
+  kselftest/arm64: Check forked child mte memory accessibility
+  kselftest/arm64: Verify all different mmap MTE options
+  kselftest/arm64: Verify KSM page merge for MTE pages
+  kselftest/arm64: Check mte tagged user address in kernel
+
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ tools/testing/selftests/arm64/mte/.gitignore  |   6 +
+ tools/testing/selftests/arm64/mte/Makefile    |  29 ++
+ .../selftests/arm64/mte/check_buffer_fill.c   | 475 ++++++++++++++++++
+ .../selftests/arm64/mte/check_child_memory.c  | 195 +++++++
+ .../selftests/arm64/mte/check_ksm_options.c   | 159 ++++++
+ .../selftests/arm64/mte/check_mmap_options.c  | 262 ++++++++++
+ .../arm64/mte/check_tags_inclusion.c          | 185 +++++++
+ .../selftests/arm64/mte/check_user_mem.c      | 111 ++++
+ .../selftests/arm64/mte/mte_common_util.c     | 341 +++++++++++++
+ .../selftests/arm64/mte/mte_common_util.h     | 118 +++++
+ tools/testing/selftests/arm64/mte/mte_def.h   |  60 +++
+ .../testing/selftests/arm64/mte/mte_helper.S  | 128 +++++
+ 13 files changed, 2070 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/mte/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/mte/Makefile
+ create mode 100644 tools/testing/selftests/arm64/mte/check_buffer_fill.c
+ create mode 100644 tools/testing/selftests/arm64/mte/check_child_memory.c
+ create mode 100644 tools/testing/selftests/arm64/mte/check_ksm_options.c
+ create mode 100644 tools/testing/selftests/arm64/mte/check_mmap_options.c
+ create mode 100644 tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+ create mode 100644 tools/testing/selftests/arm64/mte/check_user_mem.c
+ create mode 100644 tools/testing/selftests/arm64/mte/mte_common_util.c
+ create mode 100644 tools/testing/selftests/arm64/mte/mte_common_util.h
+ create mode 100644 tools/testing/selftests/arm64/mte/mte_def.h
+ create mode 100644 tools/testing/selftests/arm64/mte/mte_helper.S
 
 -- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+2.17.1
 
-www.cloudflare.com
