@@ -2,97 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4412821A9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Oct 2020 07:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5540A28232F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Oct 2020 11:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725648AbgJCFum (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Oct 2020 01:50:42 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15671 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbgJCFum (ORCPT
+        id S1725833AbgJCJcu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 3 Oct 2020 05:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbgJCJcr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Oct 2020 01:50:42 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f7810c90002>; Fri, 02 Oct 2020 22:48:57 -0700
-Received: from [10.2.58.214] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 3 Oct
- 2020 05:50:36 +0000
-Subject: Re: [PATCH] selftests/vm: 10x speedup for hmm-tests
-To:     SeongJae Park <sj38.park@gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Ralph Campbell <rcampbell@nvidia.com>
-References: <20201003052309.30013-1-sj38.park@gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <d602102b-5e3b-2b93-43ed-c96cd14d2531@nvidia.com>
-Date:   Fri, 2 Oct 2020 22:50:36 -0700
+        Sat, 3 Oct 2020 05:32:47 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96643C0613E8;
+        Sat,  3 Oct 2020 02:32:47 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id o5so4331149wrn.13;
+        Sat, 03 Oct 2020 02:32:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wmkJ9FxHCpTr+iWv6GHurEZpNNofEO+mT2y21utzFUs=;
+        b=i1gww9oLCuAl7ps5bghVOHqyGmypLPIhDKuBqotkCvdnqEFRaD36CeVYStIMsJFTUN
+         D6OtC9a5Pd3uni6o0V4KWqVjMy4G9aoHk65TQ0a3vqdwc8JJkyW9d2HuLnCONT5/aDfg
+         6/s3VQo5bRbDCwgHl10h4opIShPXPwp0jNEqEv/LXoy0m9KLmBLPzE2Ma/7RxYryfpvx
+         KDR4E1aW4hiJeLllUYcX3LaBX6pETHnRvDUFo4bDzUh+KpIuRoixv+Md31XOw1sV9Y0U
+         jfsAyXPOLfP0gNHv1chHDLJodyRwn8IOgMLUW4LseTUQ8ulmWGY0taiIppcuxmyOrSSX
+         QMJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wmkJ9FxHCpTr+iWv6GHurEZpNNofEO+mT2y21utzFUs=;
+        b=H6/nd45JXOBDvTLuQRJGWY8zFWX/vnRp1f9Yjso3Bm/7AUoKmu6pMEXGZahaRfm3Uu
+         YDBAMDSIvrWHUcyUYpXRCCf1CXQi52wW5y+eqYrfP0mE6tCDYLZsdLQ6sRZWVQmSozog
+         qBfdxZkd5VD3DSRKx5mNXLJpH7kqNqHAQKkoNDbUllEJQo+24HxucSYGZx1bsmkb+MS+
+         3QAdEsbi0CaI4dy7KbwHQAAuMqX9XLwMaYyna/iWLdFc8OsANPyK/R9DoWfx3nGK9g3e
+         oN3RsWxrKA0bfF0bqrHLeJXX/t8hJiMYc6dgh+7az9E/To9DXJygxb+DTC7VEK6wrQZL
+         OHYg==
+X-Gm-Message-State: AOAM530yzSJKHjgrMxaFCUiLnHNPJoqnYDBPSXfrerPWdT5z/LRnvqwy
+        wIttkG5maRCSrqRyE7Y6E8U=
+X-Google-Smtp-Source: ABdhPJxF6OsanYU7MGuhJyTy3ufPHyRz/VHEz71PltEzIDMI5xb5/GcsYkMEQc6B2ut+ufvoU3MTDA==
+X-Received: by 2002:adf:e391:: with SMTP id e17mr7048859wrm.289.1601717566307;
+        Sat, 03 Oct 2020 02:32:46 -0700 (PDT)
+Received: from [192.168.1.143] ([170.253.60.68])
+        by smtp.gmail.com with ESMTPSA id i14sm4778140wml.24.2020.10.03.02.32.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Oct 2020 02:32:45 -0700 (PDT)
+Subject: Re: [PATCH] man2: new page describing memfd_secret() system call
+From:   Alejandro Colomar <colomar.6.4.3@gmail.com>
+To:     rppt@kernel.org, mtk.manpages@gmail.com
+Cc:     akpm@linux-foundation.org, arnd@arndb.de, bp@alien8.de,
+        catalin.marinas@arm.com, cl@linux.com, dan.j.williams@intel.com,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        elena.reshetova@intel.com, hpa@zytor.com, idan.yaniv@ibm.com,
+        jejb@linux.ibm.com, kirill@shutemov.name,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-mm@kvack.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, luto@kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, peterz@infradead.org, rppt@linux.ibm.com,
+        shuah@kernel.org, tglx@linutronix.de, tycho@tycho.ws,
+        viro@zeniv.linux.org.uk, will@kernel.org, willy@infradead.org,
+        x86@kernel.org
+References: <20200924133513.1589-1-rppt@kernel.org>
+ <efb6d051-2104-af26-bfb0-995f4716feb2@gmail.com>
+Message-ID: <94cf1b3a-e191-a896-a27d-cd7649cb2c59@gmail.com>
+Date:   Sat, 3 Oct 2020 11:32:43 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201003052309.30013-1-sj38.park@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <efb6d051-2104-af26-bfb0-995f4716feb2@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1601704138; bh=SOLzP3xg8YsiH3PxRq3X4CuKhUkGJdTjj6mdMlAmI9U=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=HgaGZVEPOK+hHIKL4sU6bUI33DyJEObEq6gCCb4NspdqTuPSnwAJkabez6OtP+5qr
-         t9qAOTwGtrhhm4B6RQ9SerUtuIzc4uCQVpUbVESoASExcZ0n/zK25u9D435UhlW2Il
-         H8kuLwurjhGqOQYwf8L9KAMP7nutwEQ8/C33hkZSh7fYBP/09DvYkQzyO8DmgMsARx
-         CGVDHFSydj0rbhT3T8GOWg0QyClju/mkfSxS5t/Zvxym4+uL6WvaP1jgAzneRogE/P
-         /oqhZtdenvS6kHVLXAxLOvtBLYrQTSpgEkfcB29r4KmGhT75uPcmO42w2QyA3fTy42
-         YLcDlpv8MwkHg==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/2/20 10:23 PM, SeongJae Park wrote:
-> On Fri, 2 Oct 2020 18:17:21 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+Hi Mike and Michael,
+
+Ping. :)
+
+Thanks,
+
+Alex
+
+On 2020-09-24 16:55, Alejandro Colomar wrote:
+> * Mike Rapoport:
+>  > +.PP
+>  > +.IR Note :
+>  > +There is no glibc wrapper for this system call; see NOTES.
 > 
->> This patch reduces the running time for hmm-tests from about 10+
->> seconds, to just under 1.0 second, for an approximately 10x speedup.
->> That brings it in line with most of the other tests in selftests/vm,
->> which mostly run in < 1 sec.
->>
->> This is done with a one-line change that simply reduces the number of
->> iterations of several tests, from 256, to 10.
+> You added a reference to NOTES, but then in notes there is nothing about 
+> it.  I guess you wanted to add the following to NOTES (taken from 
+> membarrier.2):
 > 
-> Could this result in reduced test capacity?  If so, how about making the number
-> easily tweakable?
+> .PP
+> Glibc does not provide a wrapper for this system call; call it using
+> .BR syscall (2).
 > 
-
-The choice of iterations was somewhat arbitrary. Unless and until we
-have specific bugs that show up at a given number of iterations, we
-should avoid running large iteration counts that blow the testing time
-budget. Here, I'm not aware of any bugs that show up between 11 and 256
-iterations, which is why I think 10 is an acceptable iteration count.
-
-But, you are right: it's a nice thought to make the iteration count
-adjustable via the command line. That would allow hmm-tests to act as a
-quick selftest item, and also to provide a little bit more of a stress
-test, when manually invoked with a higher iteration count.
-
-That's a separate patch, though. Because TEST_F() and related unit test
-macros used in this area, expect to run the same way every time, and
-they don't really want to be fed iteration arguments. Or maybe they do,
-and I've missed it on my first quick pass through.
-
-And in fact, maybe it's not a good fit, if TEST_F() and kselftest are
-pushing for more of a CUnit/gtest style of coding.
-
-There are some design and policy questions there. It reminds me that
-some programs here don't use TEST_F() at all, actually. But anyway, I'd
-definitely like to sidestep all of that for now, and start with just
-"get the test run time down under 1 second".
-
-thanks,
---
-John Hubbard
-NVIDIA
+> Cheers,
+> 
+> Alex
