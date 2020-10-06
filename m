@@ -2,77 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFA3284F9A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 18:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2DE28512E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 19:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgJFQNC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Oct 2020 12:13:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26298 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725769AbgJFQNB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Oct 2020 12:13:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602000780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xKb7sZVPybPTfbA/gFJsTXmJHS4tONXKkrgyfpj9y48=;
-        b=gPSFc+0+ZCgcTS0MbaYXmrmejjdgpanFO59nGIguOAbn/egwzYzzQT2Nh8cXS44X+t5Wq9
-        WHmNqU6DW4E+vzUlwRFea+jcoWKqoIFh5mQe+6tqaij7osJWVau5BgQyJQvO93txqrmCTg
-        UkRufoZMYcV4/us3/K+c+cJbp7dZclM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-329-53J22Gl_PPu2IF5lEv0o2g-1; Tue, 06 Oct 2020 12:12:54 -0400
-X-MC-Unique: 53J22Gl_PPu2IF5lEv0o2g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 516D2425D4;
-        Tue,  6 Oct 2020 16:12:52 +0000 (UTC)
-Received: from ovpn-112-231.ams2.redhat.com (ovpn-112-231.ams2.redhat.com [10.36.112.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E6CC15C1C4;
-        Tue,  6 Oct 2020 16:12:47 +0000 (UTC)
-Message-ID: <c750c3256bec4ceab91a95f2725e4bc026f4b5dc.camel@redhat.com>
-Subject: Re: [PATCH net-next] selftests: mptcp: interpret \n as a new line
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, mptcp@lists.01.org,
+        id S1726680AbgJFRsj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Oct 2020 13:48:39 -0400
+Received: from namei.org ([65.99.196.166]:33334 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725925AbgJFRsj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 6 Oct 2020 13:48:39 -0400
+X-Greylist: delayed 1831 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Oct 2020 13:48:38 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 096HHqvb007464;
+        Tue, 6 Oct 2020 17:17:52 GMT
+Date:   Wed, 7 Oct 2020 04:17:52 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     Kees Cook <keescook@chromium.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 06 Oct 2020 18:12:45 +0200
-In-Reply-To: <20201006160631.3987766-1-matthieu.baerts@tessares.net>
-References: <20201006160631.3987766-1-matthieu.baerts@tessares.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+Subject: Re: [PATCH v5 01/16] fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER
+ enum
+In-Reply-To: <20201002173828.2099543-2-keescook@chromium.org>
+Message-ID: <alpine.LRH.2.21.2010070417400.18879@namei.org>
+References: <20201002173828.2099543-1-keescook@chromium.org> <20201002173828.2099543-2-keescook@chromium.org>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2020-10-06 at 18:06 +0200, Matthieu Baerts wrote:
-> In case of errors, this message was printed:
-> 
->   (...)
->   balanced bwidth with unbalanced delay       5233 max 5005  [ fail ]
->   client exit code 0, server 0
->   \nnetns ns3-0-EwnkPH socket stat for 10003:
->   (...)
-> 
-> Obviously, the idea was to add a new line before the socket stat and not
-> print "\nnetns".
-> 
-> The commit 8b974778f998 ("selftests: mptcp: interpret \n as a new line")
-> is very similar to this one. But the modification in simult_flows.sh was
-> missed because this commit above was done in parallel to one here below.
-> 
-> Fixes: 1a418cb8e888 ("mptcp: simult flow self-tests")
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+On Fri, 2 Oct 2020, Kees Cook wrote:
 
-Acked-by: Paolo Abeni <pabeni@redhat.com>
+> FIRMWARE_PREALLOC_BUFFER is a "how", not a "what", and confuses the LSMs
+> that are interested in filtering between types of things. The "how"
+> should be an internal detail made uninteresting to the LSMs.
+> 
+> Fixes: a098ecd2fa7d ("firmware: support loading into a pre-allocated buffer")
+> Fixes: fd90bc559bfb ("ima: based on policy verify firmware signatures (pre-allocated buffer)")
+> Fixes: 4f0496d8ffa3 ("ima: based on policy warn about loading firmware (pre-allocated buffer)")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Acked-by: Scott Branden <scott.branden@broadcom.com>
+> Cc: stable@vger.kernel.org
+
+
+Reviewed-by: James Morris <jamorris@linux.microsoft.com>
+
+
+-- 
+James Morris
+<jmorris@namei.org>
 
