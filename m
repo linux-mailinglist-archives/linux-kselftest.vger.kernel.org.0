@@ -2,236 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 692FD2841A1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Oct 2020 22:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE35284EC9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 17:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbgJEUpW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Oct 2020 16:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S1726329AbgJFPVI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Oct 2020 11:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725864AbgJEUpW (ORCPT
+        with ESMTP id S1726197AbgJFPVG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Oct 2020 16:45:22 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A38C0613CE
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Oct 2020 13:45:22 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id a200so2887976pfa.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Oct 2020 13:45:22 -0700 (PDT)
+        Tue, 6 Oct 2020 11:21:06 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB98DC0613D3
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2020 08:21:04 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id t12so11326109ilh.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2020 08:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VMCvM/lVmSD+WoCXLV03EzHmNxDtsAkuJmb4ll+kKtw=;
-        b=AIKmxUEZMVDxIcg4HDZZ+EWVJoorsD2ZAvAuSzmr2xiBCxBBInJKEqNLtgwRijVi1o
-         NQDA1gGYhDFfByHmbEUT7KdTnwM+WC56xrdpnNaNeWxehBLmen+AolAiZtMbKSJKJDDL
-         YCTrr8HUyH4yokR8Q6GoVT47D0p276zMrnMCY=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mmj7x7pJat8UNIIwIa7Sd+SRNOWKvcmn8r90tiL0s1A=;
+        b=IXQwwVAi7F6pRyGOUEQ8zaCzPCqLYGzR6fWH1AMiUEwCFiSYJ471FkLdAmCwbx2c54
+         ItJ9whV/AqUo+mM2d7MbaozYvKfTm/b80nFjzDVrSdzgt+4L5TPDPIQZWJW4+sAYwEpy
+         BbucuKw8YdnI1BxGGqAvEq5di/ZoXDjLG4oTw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=VMCvM/lVmSD+WoCXLV03EzHmNxDtsAkuJmb4ll+kKtw=;
-        b=ZBySrz/W8IRLA3M+5PrZikokAMQS8E3C3AlhuJlPHbEEcoln4z/Vm7dSVCBcPdO4bV
-         iMKN1+36omSDW75VITYW1HYwAXk3WKXHm6PdOak+xOnsWa+66IIHW6WHLACxYM/FQqov
-         07KZVafYhKdT73DMSrbU8xRu523Vkrdcyab4OMnOpfBFXWh9zcF5DU3dWUy6zIlm0yBA
-         +25e+HQvZqMHQ+NppKDuN9erc8xrzwolTpguLMJre+sfwemxdjhF8SgSSpZR7SEKky8t
-         E5Kh5gahmLsbe2iQlNjPwSY4K62JqjOa1iKi4FyK1N3ZliVkpTr/sPxcajAG7Yyu/YeF
-         FuCg==
-X-Gm-Message-State: AOAM533a0dBrcLGc26TpEnZTYfAjp3NL3BcDbu95nvwtN2xAt+WAj0Dm
-        3QaodufzOQoiRrusT3hRUPOpDg==
-X-Google-Smtp-Source: ABdhPJxGnRw0v6Z5EdICY7GvvnOsRaK8GQdlmuTPfJGHKAxCOIZBLjUIdSH/e7cTEU/ZnbdVPz/c/w==
-X-Received: by 2002:aa7:9522:0:b029:142:2501:3986 with SMTP id c2-20020aa795220000b029014225013986mr1325575pfp.75.1601930721886;
-        Mon, 05 Oct 2020 13:45:21 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s4sm800489pfu.107.2020.10.05.13.45.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 13:45:21 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <rong.a.chen@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: splice: Adjust for handler fallback removal
-Date:   Mon,  5 Oct 2020 13:45:17 -0700
-Message-Id: <20201005204517.2652730-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
+        bh=mmj7x7pJat8UNIIwIa7Sd+SRNOWKvcmn8r90tiL0s1A=;
+        b=HFGEZ+YORDdZ4T+NynUi+Iy4E0N3fJ3xVnJLV0+itBcQM896SKnmjotBainZcv0LJb
+         /Oq+5SRtCPVsr7ctHK+syHe3NSeHrtnchfKl99tcVVsB2657uRBi4Vdsqhh7vQBLlpse
+         ZlitfcGkfegJexVB2xcbftInNsKPR+KbyHSE8oqtvBw5Tpmt/KtG6FNPpKH2/K0Rcbib
+         knVc0lwPOtx+qjX7j1gK8RQ7VeNWRU1Bep7cNlzwZsGpjHjy9oVD8T+47dQu3yDAV9aY
+         YHyyxoiUqL9bkDoZMchQwO6rqIZqijYtgCXntYh5fntN/QiN7cK1WRWFGKU94f4n4puz
+         K+Ew==
+X-Gm-Message-State: AOAM532+ZKYqKxTGZAhIFU1WIkNBSd04lyvHZRMx8+ERvUxBF9ApTaJx
+        emWxqVOET2Jhz3E83bNykOFktw==
+X-Google-Smtp-Source: ABdhPJyqEmZz43/2Pp1HykB1ZUp+7my5maxDOMBk3deo+zKUWBRwafPlIzkV/qrgjjh1lVhgQ7y1zw==
+X-Received: by 2002:a92:b50b:: with SMTP id f11mr4049407ile.109.1601997664092;
+        Tue, 06 Oct 2020 08:21:04 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id z76sm349366ilf.76.2020.10.06.08.21.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Oct 2020 08:21:03 -0700 (PDT)
+Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
+To:     Kees Cook <keescook@chromium.org>
+Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
+        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
+        surenb@google.com, minyard@acm.org, arnd@arndb.de,
+        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1601073127.git.skhan@linuxfoundation.org>
+ <202009260923.9A2606CFF6@keescook>
+ <3929a023-eb7a-509c-50e1-ee72dca05191@linuxfoundation.org>
+ <202009281612.EDC1C0078@keescook>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <700f0ed4-fe09-7610-b460-89b5ad08452c@linuxfoundation.org>
+Date:   Tue, 6 Oct 2020 09:21:01 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <202009281612.EDC1C0078@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some pseudo-filesystems do not have an explicit splice fops since adding
-commit 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops"),
-and now will reject attempts to use splice() in those filesystem paths.
+On 9/28/20 5:13 PM, Kees Cook wrote:
+> On Mon, Sep 28, 2020 at 04:41:47PM -0600, Shuah Khan wrote:
+>> On 9/26/20 10:29 AM, Kees Cook wrote:
+>>> On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
+>>>>      7. Verified that the test module compiles in kunit env. and test
+>>>>         module can be loaded to run the test.
+>>>
+>>> I meant write it using KUnit interfaces (e.g. KUNIT_EXPECT*(),
+>>> kunit_test_suite(), etc):
+>>> https://www.kernel.org/doc/html/latest/dev-tools/kunit/
+>>>
+>>> Though I see the docs are still not updated[1] to reflect the Kconfig
+>>> (CONFIG_foo_KUNIT_TEST) and file naming conventions (foo_kunit.c).
+>>>
+>>
+>> I would like to be able to run this test outside Kunit env., hence the
+>> choice to go with a module and kselftest script. It makes it easier to
+>> test as part of my workflow as opposed to doing a kunit and build and
+>> running it that way.
+> 
+> It does -- you just load it normally like before and it prints out
+> everything just fine. This is how I use the lib/test_user_copy.c and
+> lib/test_overflow.c before/after their conversions.
+> 
 
-Reported-by: kernel test robot <rong.a.chen@intel.com>
-Link: https://lore.kernel.org/lkml/202009181443.C2179FB@keescook/
-Fixes: 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops")
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- .../selftests/splice/short_splice_read.sh     | 119 ++++++++++++++----
- 1 file changed, 98 insertions(+), 21 deletions(-)
+I am not seeing any kunit links to either of these tests. I find the
+lib/test_overflow.c very hard to read.
 
-diff --git a/tools/testing/selftests/splice/short_splice_read.sh b/tools/testing/selftests/splice/short_splice_read.sh
-index 7810d3589d9a..22b6c8910b18 100755
---- a/tools/testing/selftests/splice/short_splice_read.sh
-+++ b/tools/testing/selftests/splice/short_splice_read.sh
-@@ -1,21 +1,87 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
-+#
-+# Test for mishandling of splice() on pseudofilesystems, which should catch
-+# bugs like 11990a5bd7e5 ("module: Correctly truncate sysfs sections output")
-+#
-+# Since splice fallback was removed as part of the set_fs() rework, many of these
-+# tests expect to fail now. See https://lore.kernel.org/lkml/202009181443.C2179FB@keescook/
- set -e
- 
-+DIR=$(dirname "$0")
-+
- ret=0
- 
-+expect_success()
-+{
-+	title="$1"
-+	shift
-+
-+	echo "" >&2
-+	echo "$title ..." >&2
-+
-+	set +e
-+	"$@"
-+	rc=$?
-+	set -e
-+
-+	case "$rc" in
-+	0)
-+		echo "ok: $title succeeded" >&2
-+		;;
-+	1)
-+		echo "FAIL: $title should work" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	*)
-+		echo "FAIL: something else went wrong" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	esac
-+}
-+
-+expect_failure()
-+{
-+	title="$1"
-+	shift
-+
-+	echo "" >&2
-+	echo "$title ..." >&2
-+
-+	set +e
-+	"$@"
-+	rc=$?
-+	set -e
-+
-+	case "$rc" in
-+	0)
-+		echo "FAIL: $title unexpectedly worked" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	1)
-+		echo "ok: $title correctly failed" >&2
-+		;;
-+	*)
-+		echo "FAIL: something else went wrong" >&2
-+		ret=$(( ret + 1 ))
-+		;;
-+	esac
-+}
-+
- do_splice()
- {
- 	filename="$1"
- 	bytes="$2"
- 	expected="$3"
-+	report="$4"
- 
--	out=$(./splice_read "$filename" "$bytes" | cat)
-+	out=$("$DIR"/splice_read "$filename" "$bytes" | cat)
- 	if [ "$out" = "$expected" ] ; then
--		echo "ok: $filename $bytes"
-+		echo "      matched $report" >&2
-+		return 0
- 	else
--		echo "FAIL: $filename $bytes"
--		ret=1
-+		echo "      no match: '$out' vs $report" >&2
-+		return 1
- 	fi
- }
- 
-@@ -23,34 +89,45 @@ test_splice()
- {
- 	filename="$1"
- 
-+	echo "  checking $filename ..." >&2
-+
- 	full=$(cat "$filename")
-+	rc=$?
-+	if [ $rc -ne 0 ] ; then
-+		return 2
-+	fi
-+
- 	two=$(echo "$full" | grep -m1 . | cut -c-2)
- 
- 	# Make sure full splice has the same contents as a standard read.
--	do_splice "$filename" 4096 "$full"
-+	echo "    splicing 4096 bytes ..." >&2
-+	if ! do_splice "$filename" 4096 "$full" "full read" ; then
-+		return 1
-+	fi
- 
- 	# Make sure a partial splice see the first two characters.
--	do_splice "$filename" 2 "$two"
-+	echo "    splicing 2 bytes ..." >&2
-+	if ! do_splice "$filename" 2 "$two" "'$two'" ; then
-+		return 1
-+	fi
-+
-+	return 0
- }
- 
--# proc_single_open(), seq_read()
--test_splice /proc/$$/limits
--# special open, seq_read()
--test_splice /proc/$$/comm
-+### /proc/$pid/ has no splice interface; these should all fail.
-+expect_failure "proc_single_open(), seq_read() splice" test_splice /proc/$$/limits
-+expect_failure "special open(), seq_read() splice" test_splice /proc/$$/comm
- 
--# proc_handler, proc_dointvec_minmax
--test_splice /proc/sys/fs/nr_open
--# proc_handler, proc_dostring
--test_splice /proc/sys/kernel/modprobe
--# proc_handler, special read
--test_splice /proc/sys/kernel/version
-+### /proc/sys/ has a splice interface; these should all succeed.
-+expect_success "proc_handler: proc_dointvec_minmax() splice" test_splice /proc/sys/fs/nr_open
-+expect_success "proc_handler: proc_dostring() splice" test_splice /proc/sys/kernel/modprobe
-+expect_success "proc_handler: special read splice" test_splice /proc/sys/kernel/version
- 
-+### /sys/ has no splice interface; these should all fail.
- if ! [ -d /sys/module/test_module/sections ] ; then
--	modprobe test_module
-+	expect_success "test_module kernel module load" modprobe test_module
- fi
--# kernfs, attr
--test_splice /sys/module/test_module/coresize
--# kernfs, binattr
--test_splice /sys/module/test_module/sections/.init.text
-+expect_failure "kernfs attr splice" test_splice /sys/module/test_module/coresize
-+expect_failure "kernfs binattr splice" test_splice /sys/module/test_module/sections/.init.text
- 
- exit $ret
--- 
-2.25.1
+I am going to stick with what I have for now and handle conversion
+later.
 
+I think it might be a good idea to add tests for atomic_t and refcount_t
+APIS as well at some point.
+
+thanks,
+-- Shuah
