@@ -2,114 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE35284EC9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 17:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B934284F78
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 18:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgJFPVI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Oct 2020 11:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S1726128AbgJFQGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Oct 2020 12:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbgJFPVG (ORCPT
+        with ESMTP id S1725902AbgJFQGi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Oct 2020 11:21:06 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB98DC0613D3
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2020 08:21:04 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id t12so11326109ilh.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2020 08:21:04 -0700 (PDT)
+        Tue, 6 Oct 2020 12:06:38 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23ACDC0613D1
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2020 09:06:38 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id md26so18414126ejb.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2020 09:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mmj7x7pJat8UNIIwIa7Sd+SRNOWKvcmn8r90tiL0s1A=;
-        b=IXQwwVAi7F6pRyGOUEQ8zaCzPCqLYGzR6fWH1AMiUEwCFiSYJ471FkLdAmCwbx2c54
-         ItJ9whV/AqUo+mM2d7MbaozYvKfTm/b80nFjzDVrSdzgt+4L5TPDPIQZWJW4+sAYwEpy
-         BbucuKw8YdnI1BxGGqAvEq5di/ZoXDjLG4oTw=
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q+y9F2HEpHR7lpSOgScZpt3aZTxZ1exfih7MMVF+3Hw=;
+        b=jf88Ccrjz6JfstZvP1H6vKpUwaTbdYZQWbaqcorUPs55gtjmyI3fseCArUh1epVqS3
+         4eYNRt440ub75D4QaXWpqP8ARoht8EmKsdCjpkhEIHbxaEiablFizXmgczRurfzefJaY
+         zHLPbvcCYjtcnCnQUd+ADgEZcRIHNZrjL53518daGtLB6NDrV9XNi8ab5/Kmg7WBizOK
+         egSWWtXN9UmDmdu/uHETlYZsUpP5g/rIPVYVi8wWudAApcmJy5zAxn1vKXvoMZ91HADg
+         CH4TGBFnVr2ZxtiL9Dg1jVYUTLNPXugnvf+aOl77pBULkmJm+Zmahy+rlgX5ebxHRGwS
+         xwXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=mmj7x7pJat8UNIIwIa7Sd+SRNOWKvcmn8r90tiL0s1A=;
-        b=HFGEZ+YORDdZ4T+NynUi+Iy4E0N3fJ3xVnJLV0+itBcQM896SKnmjotBainZcv0LJb
-         /Oq+5SRtCPVsr7ctHK+syHe3NSeHrtnchfKl99tcVVsB2657uRBi4Vdsqhh7vQBLlpse
-         ZlitfcGkfegJexVB2xcbftInNsKPR+KbyHSE8oqtvBw5Tpmt/KtG6FNPpKH2/K0Rcbib
-         knVc0lwPOtx+qjX7j1gK8RQ7VeNWRU1Bep7cNlzwZsGpjHjy9oVD8T+47dQu3yDAV9aY
-         YHyyxoiUqL9bkDoZMchQwO6rqIZqijYtgCXntYh5fntN/QiN7cK1WRWFGKU94f4n4puz
-         K+Ew==
-X-Gm-Message-State: AOAM532+ZKYqKxTGZAhIFU1WIkNBSd04lyvHZRMx8+ERvUxBF9ApTaJx
-        emWxqVOET2Jhz3E83bNykOFktw==
-X-Google-Smtp-Source: ABdhPJyqEmZz43/2Pp1HykB1ZUp+7my5maxDOMBk3deo+zKUWBRwafPlIzkV/qrgjjh1lVhgQ7y1zw==
-X-Received: by 2002:a92:b50b:: with SMTP id f11mr4049407ile.109.1601997664092;
-        Tue, 06 Oct 2020 08:21:04 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id z76sm349366ilf.76.2020.10.06.08.21.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2020 08:21:03 -0700 (PDT)
-Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
-To:     Kees Cook <keescook@chromium.org>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
-        surenb@google.com, minyard@acm.org, arnd@arndb.de,
-        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1601073127.git.skhan@linuxfoundation.org>
- <202009260923.9A2606CFF6@keescook>
- <3929a023-eb7a-509c-50e1-ee72dca05191@linuxfoundation.org>
- <202009281612.EDC1C0078@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <700f0ed4-fe09-7610-b460-89b5ad08452c@linuxfoundation.org>
-Date:   Tue, 6 Oct 2020 09:21:01 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        bh=q+y9F2HEpHR7lpSOgScZpt3aZTxZ1exfih7MMVF+3Hw=;
+        b=svDBRzzfJkKAYnavGtQ+NN/UJiwAM7LyxLrrTz8ZHAD9wTH4DVUUKtyLkcW+BkAUtn
+         I0Eyck5kCac5F9qEm061e24Q9kULD9hIbx0edSOnHDkK+6VIk7ZQp06xp4wq4WyZG14Q
+         AGzfbqhYEmfl2qvjToObeRfXIy11yXMNGKG3hyfQmZAKMb6uX5+yxgCL9InlzOADoPA3
+         ZHMLr81DTajnaKo5gC0rSCn3jg06NzRW1SXVyDyLILbAn/jerjj0vNJpd0ovxCt1Eq6E
+         k762Odi2pVJU39D8VhXCyWDvguGbwONRg9+jwPT+Avma+4HCITirde2eDVd/IgvOans1
+         geLA==
+X-Gm-Message-State: AOAM533MC7KhpLErlT7iYScvZ1mEkrhP4GIIUSi95Ins7mI/7yPd7TS4
+        XDEpUCL8/n3Zf0BlN02aSrI0eA==
+X-Google-Smtp-Source: ABdhPJyzjVYRacyR1diWDrgUya8FodDmT9FCiesreDN+9KHyafL2720b1WgbdyuWdfsIk2q8a1ZJlw==
+X-Received: by 2002:a17:906:441:: with SMTP id e1mr213966eja.396.1602000396693;
+        Tue, 06 Oct 2020 09:06:36 -0700 (PDT)
+Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
+        by smtp.gmail.com with ESMTPSA id jw9sm2412039ejb.33.2020.10.06.09.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2020 09:06:36 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, mptcp@lists.01.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] selftests: mptcp: interpret \n as a new line
+Date:   Tue,  6 Oct 2020 18:06:30 +0200
+Message-Id: <20201006160631.3987766-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <202009281612.EDC1C0078@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/28/20 5:13 PM, Kees Cook wrote:
-> On Mon, Sep 28, 2020 at 04:41:47PM -0600, Shuah Khan wrote:
->> On 9/26/20 10:29 AM, Kees Cook wrote:
->>> On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
->>>>      7. Verified that the test module compiles in kunit env. and test
->>>>         module can be loaded to run the test.
->>>
->>> I meant write it using KUnit interfaces (e.g. KUNIT_EXPECT*(),
->>> kunit_test_suite(), etc):
->>> https://www.kernel.org/doc/html/latest/dev-tools/kunit/
->>>
->>> Though I see the docs are still not updated[1] to reflect the Kconfig
->>> (CONFIG_foo_KUNIT_TEST) and file naming conventions (foo_kunit.c).
->>>
->>
->> I would like to be able to run this test outside Kunit env., hence the
->> choice to go with a module and kselftest script. It makes it easier to
->> test as part of my workflow as opposed to doing a kunit and build and
->> running it that way.
-> 
-> It does -- you just load it normally like before and it prints out
-> everything just fine. This is how I use the lib/test_user_copy.c and
-> lib/test_overflow.c before/after their conversions.
-> 
+In case of errors, this message was printed:
 
-I am not seeing any kunit links to either of these tests. I find the
-lib/test_overflow.c very hard to read.
+  (...)
+  balanced bwidth with unbalanced delay       5233 max 5005  [ fail ]
+  client exit code 0, server 0
+  \nnetns ns3-0-EwnkPH socket stat for 10003:
+  (...)
 
-I am going to stick with what I have for now and handle conversion
-later.
+Obviously, the idea was to add a new line before the socket stat and not
+print "\nnetns".
 
-I think it might be a good idea to add tests for atomic_t and refcount_t
-APIS as well at some point.
+The commit 8b974778f998 ("selftests: mptcp: interpret \n as a new line")
+is very similar to this one. But the modification in simult_flows.sh was
+missed because this commit above was done in parallel to one here below.
 
-thanks,
--- Shuah
+Fixes: 1a418cb8e888 ("mptcp: simult flow self-tests")
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+ tools/testing/selftests/net/mptcp/simult_flows.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
+index 0d88225daa02..2f649b431456 100755
+--- a/tools/testing/selftests/net/mptcp/simult_flows.sh
++++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
+@@ -200,9 +200,9 @@ do_transfer()
+ 
+ 	echo " [ fail ]"
+ 	echo "client exit code $retc, server $rets" 1>&2
+-	echo "\nnetns ${ns3} socket stat for $port:" 1>&2
++	echo -e "\nnetns ${ns3} socket stat for $port:" 1>&2
+ 	ip netns exec ${ns3} ss -nita 1>&2 -o "sport = :$port"
+-	echo "\nnetns ${ns1} socket stat for $port:" 1>&2
++	echo -e "\nnetns ${ns1} socket stat for $port:" 1>&2
+ 	ip netns exec ${ns1} ss -nita 1>&2 -o "dport = :$port"
+ 	ls -l $sin $cout
+ 	ls -l $cin $sout
+-- 
+2.27.0
+
