@@ -2,116 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E932852F7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 22:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA7728532C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 22:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727178AbgJFUR0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Oct 2020 16:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbgJFUR0 (ORCPT
+        id S1727293AbgJFUel (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Oct 2020 16:34:41 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:1832 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726012AbgJFUej (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Oct 2020 16:17:26 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB7BC0613D4
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2020 13:17:25 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id e22so12693310ejr.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2020 13:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5D/KhjYZ/F6OUNTmASsZK9nvaTQ/z+uGyjhYNK/ZLao=;
-        b=syAFmJ6PHpLQ9fBKdlbTtyFbIIYk45rz96pMdgVFxTy7qX0h51U+ZxMNsnSRSU2GJy
-         7xcG1DinKA8nylHJjK2+tQGvVOXqBIvE8CJz0i3hmzBJv3nPx3uPHeWDDUwLlNTcdQ4c
-         qKtvJo8YYYhrJ1lLkBDZpBjPniVJRV6A8ZosbeMOVDmKUTcajvaLe72Zv/iSEpkWdi7r
-         M0smO2oXTKmzTEw2bOehubTqJDBIiEPRKFepcmoBNYKrb3l2zxFP9ab1lnEJlo7okgJH
-         cds/M4qXZq/8w0CcTu3h8RuVh57fVOv+9DlEAqbbeIt5NYmRVz/y2cLkl5pNtyt/uBxT
-         9NjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5D/KhjYZ/F6OUNTmASsZK9nvaTQ/z+uGyjhYNK/ZLao=;
-        b=l3AWF/fz8lixaY685X92Hcwlz0YPyA3Z8TP0LyPhVnQizfGLH39aORGLTNeaguxNIK
-         mKfI+2gpBpYAOOB4/3GzGggPsKopOF/Q1Za3opxMP7r2CT7pL6B6ZYr8wm+1rD0L5E4u
-         RZeV+mtI/SfxvTfhZUN3b/ww2kqFCTCTcF8vgbpaNlX1WtuNwqGpNCltgXwPuomKqApU
-         5GENQZIG04w7y4y+OLm74z5z/+7HFYm2aWx/3KWDUwyDeJMpeM3S9/7gVJVadRV1q7We
-         2umYjXIu8Q5OP//1F9SdEuX1D6VoGbQ9Fe/fmLCH67zP8j0Ni/JEUGQ2UWNB+POVLOuE
-         0Hlw==
-X-Gm-Message-State: AOAM532+eqDAgCz5iC8yqFzDGz+0rExFc4zVrAZRwG1/Y/7KTPuVYQZk
-        n2PC9AmpSwT2MM/NL6iEkgqn5BrWW3Zg1NGI/PZhng==
-X-Google-Smtp-Source: ABdhPJx+AZ5o3eCgoq4q+6PjDXINFIUIJE5Lw9X2W3HZ87fOvOk/cHg1VfIGCTbUJXMe1/ribhgrE6IY0RMLjypdmbE=
-X-Received: by 2002:a17:906:7d52:: with SMTP id l18mr1343800ejp.220.1602015443789;
- Tue, 06 Oct 2020 13:17:23 -0700 (PDT)
+        Tue, 6 Oct 2020 16:34:39 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f7cd4d20001>; Tue, 06 Oct 2020 13:34:26 -0700
+Received: from [10.2.60.163] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 6 Oct
+ 2020 20:34:38 +0000
+Subject: Re: [PATCH] selftests/vm: 10x speedup for hmm-tests
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        Ralph Campbell <rcampbell@nvidia.com>
+References: <20201003011721.44238-1-jhubbard@nvidia.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <6c07b012-4cfc-e89c-43f0-13266d71bf8c@nvidia.com>
+Date:   Tue, 6 Oct 2020 13:34:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-References: <20200929235049.2533242-1-haoluo@google.com> <20200929235049.2533242-2-haoluo@google.com>
- <CAADnVQKc4m6X62udhpPE3EBBvuOA2ngyWSOKQ7fc-rtqdeQj6w@mail.gmail.com>
-In-Reply-To: <CAADnVQKc4m6X62udhpPE3EBBvuOA2ngyWSOKQ7fc-rtqdeQj6w@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 6 Oct 2020 13:17:12 -0700
-Message-ID: <CA+khW7jKU733tUHCMou0X8ivsSJSHCWT7+aq3AqssH5C74n+PQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/6] bpf: Introduce pseudo_btf_id
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201003011721.44238-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1602016466; bh=vC8aiUH6oYwpjzYwxS+gKtqylCBpiarACXAaIkYiZEM=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=RJqfGKZik3ODyVLBzBTsrfS8Ull/oAJzjTHXWBol2ruz4L0FZz+Ogjy59v5S2krPl
+         7De2UB+2JGx6/UakGY6TkoWvFeXLIWqmqP0RTdIcfMDqkGAX1sBjuaUDHgWJlZ3Afo
+         ZK1YFB046OAsqA3bPfoK5u8wQACge6BR0Sa0nLPCS+4cCbAKuShr+2omayaZ8nqyov
+         yck6z2dupJU6iLTBQUTa2UhDYPMP/YkNg4y+zPtUlBdHGrDnECQRe90KNtLj5OjaZf
+         /5nceadIEVfO74PyAk7+BkcfcyGzrxyex91Q43Zf7vuQn4WybLM19EDGRbPeQO2xft
+         3py58OHcDr3jg==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ack. Will do.
+On 10/2/20 6:17 PM, John Hubbard wrote:
+> This patch reduces the running time for hmm-tests from about 10+
+> seconds, to just under 1.0 second, for an approximately 10x speedup.
+> That brings it in line with most of the other tests in selftests/vm,
+> which mostly run in < 1 sec.
+> 
+> This is done with a one-line change that simply reduces the number of
+> iterations of several tests, from 256, to 10. Thanks to Ralph Campbell
+> for suggesting changing NTIMES as a way to get the speedup.
+> 
+> Suggested-by: Ralph Campbell <rcampbell@nvidia.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
 
-On Tue, Oct 6, 2020 at 12:05 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Sep 29, 2020 at 4:50 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > -       ret = replace_map_fd_with_map_ptr(env);
-> > -       if (ret < 0)
-> > -               goto skip_full_check;
-> > -
-> >         if (bpf_prog_is_dev_bound(env->prog->aux)) {
-> >                 ret = bpf_prog_offload_verifier_prep(env->prog);
-> >                 if (ret)
-> > @@ -11662,6 +11757,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
-> >         if (ret)
-> >                 goto skip_full_check;
-> >
-> > +       ret = resolve_pseudo_ldimm64(env);
-> > +       if (ret < 0)
-> > +               goto skip_full_check;
-> > +
->
-> Hao,
->
-> this change broke several tests in test_verifier:
-> #21/u empty prog FAIL
-> Unexpected error message!
->     EXP: unknown opcode 00
->     RES: last insn is not an exit or jmp
->
-> #656/u test5 ld_imm64 FAIL
-> Unexpected error message!
->     EXP: invalid bpf_ld_imm64 insn
->     RES: last insn is not an exit or jmp
->
-> #656/p test5 ld_imm64 FAIL
-> Unexpected error message!
->     EXP: invalid bpf_ld_imm64 insn
->     RES: last insn is not an exit or jmp
->
-> Please send a fix.
-> Thanks
+Andrew, do you think we can get this one merged into mmotm? I think it's
+pretty low risk.
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+> 
+> This is based on mmotm.
+> 
+>   tools/testing/selftests/vm/hmm-tests.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftests/vm/hmm-tests.c
+> index 6b79723d7dc6..5d1ac691b9f4 100644
+> --- a/tools/testing/selftests/vm/hmm-tests.c
+> +++ b/tools/testing/selftests/vm/hmm-tests.c
+> @@ -49,7 +49,7 @@ struct hmm_buffer {
+>   #define TWOMEG		(1 << 21)
+>   #define HMM_BUFFER_SIZE (1024 << 12)
+>   #define HMM_PATH_MAX    64
+> -#define NTIMES		256
+> +#define NTIMES		10
+>   
+>   #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
+>   
+> 
+
