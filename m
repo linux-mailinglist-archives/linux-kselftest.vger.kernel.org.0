@@ -2,142 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F92285359
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Oct 2020 22:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36851285CFD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Oct 2020 12:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727343AbgJFUpu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Oct 2020 16:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S1727781AbgJGKgn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Oct 2020 06:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727332AbgJFUpq (ORCPT
+        with ESMTP id S1727773AbgJGKgn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Oct 2020 16:45:46 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55757C061755
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Oct 2020 13:45:46 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id q1so126555ilt.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Oct 2020 13:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QJIYIgyrqCiWMzT/Dqk/C0paHkprMmoejDFq2Ds2CjI=;
-        b=HBjUSoVMYo8I4oCixKd5VLIoFWCMgqEJyqLPLBTGkQI1cx6K7VnUUVX4diQfmHLv38
-         lPbI4K0+lx9jSjEbth/nCH5yLUDfzgHM24DLLQZPcXltwt4nZnbovHlOpmL1+94E9/70
-         g+nIUflrO9XI+RYG3SCv7e1dzay94aAMpuFyU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QJIYIgyrqCiWMzT/Dqk/C0paHkprMmoejDFq2Ds2CjI=;
-        b=HABbmT5cUsOlW0ISkvGl1Neop4b4BoOeyDPni+bznYgny20Brkg0ItWTcNB/GKhNOJ
-         vLTsuYgvSYaQMnqy7prPduVYwWpSMxbMs2gqfH38/8yKo0mRqjKiPQ8wwbNfVMzAjHst
-         0mPAMPddLFP6oRQXsujXga/865NTn2MHTCgHMykeR3CuO2VVPAQPMdqz/owc85v5OeO1
-         WYXKDKMomcwp5rM5jCKT0nuxjChwpPYILxDcQpU5hjwTNgqbifewoVBUtEz+sHEr3VeG
-         qR0DTruzITIfgagYetUsDaHHpzzR2JpajuGbPPmXqS/vYuX0RbH1WmH/IKtehKGRu7EM
-         kIDQ==
-X-Gm-Message-State: AOAM5321Lea5XS/z9MBNLjeChpmZnAdIbCodwbvfJhGEiCXCEp3sIaI0
-        RwJXGSHUASZP7eN/fxATrjz+YQ==
-X-Google-Smtp-Source: ABdhPJzgXRZJcYVcGpyc+YcMGHiDUBKQng+aWWzztb5Xctf9UkSeR+DUoU879vSnxa+MSYIlQjAA5Q==
-X-Received: by 2002:a05:6e02:44d:: with SMTP id a13mr5245547ils.273.1602017145731;
-        Tue, 06 Oct 2020 13:45:45 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s69sm1665627ili.54.2020.10.06.13.45.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 13:45:45 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, keescook@chromium.org, gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 02/11] selftests:lib:test_counters: add new test for counters
-Date:   Tue,  6 Oct 2020 14:44:33 -0600
-Message-Id: <dd751c3ecedef23f3bd12c043863a6233fceb0d9.1602011710.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1602011710.git.skhan@linuxfoundation.org>
-References: <cover.1602011710.git.skhan@linuxfoundation.org>
+        Wed, 7 Oct 2020 06:36:43 -0400
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050::465:103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1315AC061755;
+        Wed,  7 Oct 2020 03:36:43 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4C5rNk6tpzzKmh1;
+        Wed,  7 Oct 2020 12:36:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id GCodGCpHNCIN; Wed,  7 Oct 2020 12:36:32 +0200 (CEST)
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>, stable@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        containers@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] openat2: reject RESOLVE_BENEATH|RESOLVE_IN_ROOT
+Date:   Wed,  7 Oct 2020 21:36:08 +1100
+Message-Id: <20201007103608.17349-1-cyphar@cyphar.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -7.86 / 15.00 / 15.00
+X-Rspamd-Queue-Id: 94FA014AF
+X-Rspamd-UID: 962eff
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new selftest for testing counter_atomic* Counters API. This test
-load test_counters test modules and unloads.
+This was an oversight in the original implementation, as it makes no
+sense to specify both scoping flags to the same openat2(2) invocation
+(before this patch, the result of such an invocation was equivalent to
+RESOLVE_IN_ROOT being ignored).
 
-The test module runs tests and prints results in dmesg.
+This is a userspace-visible ABI change, but the only user of openat2(2)
+at the moment is LXC which doesn't specify both flags and so no
+userspace programs will break as a result.
 
-There are a number of atomic_t usages in the kernel where atomic_t api
-is used strictly for counting and not for managing object lifetime. In
-some cases, atomic_t might not even be needed.
-
-The purpose of these counters is to clearly differentiate atomic_t
-counters from atomic_t usages that guard object lifetimes, hence prone
-to overflow and underflow errors. It allows tools that scan for underflow
-and overflow on atomic_t usages to detect overflow and underflows to scan
-just the cases that are prone to errors.
-
-Simple atomic counters api provides interfaces for simple atomic counters
-that just count, and don't guard resource lifetimes. Counter will wrap
-around to 0 when it overflows and should not be used to guard resource
-lifetimes, device usage and open counts that control state changes, and
-pm states.
-
-Using counter_atomic* to guard lifetimes could lead to use-after free
-when it overflows and undefined behavior when used to manage state
-changes and device usage/open states.
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: <stable@vger.kernel.org> # v5.6+
+Fixes: fddb5d430ad9 ("open: introduce openat2(2) syscall")
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
 ---
- MAINTAINERS                                  | 1 +
- tools/testing/selftests/lib/Makefile         | 1 +
- tools/testing/selftests/lib/config           | 1 +
- tools/testing/selftests/lib/test_counters.sh | 5 +++++
- 4 files changed, 8 insertions(+)
- create mode 100755 tools/testing/selftests/lib/test_counters.sh
+ fs/open.c                                      | 4 ++++
+ tools/testing/selftests/openat2/openat2_test.c | 8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4e82d0ffcab0..26719b8dd48e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15845,6 +15845,7 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	include/linux/counters.h
- F:	lib/test_counters.c
-+F:	tools/testing/selftests/lib/test_counters.sh
+diff --git a/fs/open.c b/fs/open.c
+index 9af548fb841b..4d7537ae59df 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1010,6 +1010,10 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
+ 	if (how->resolve & ~VALID_RESOLVE_FLAGS)
+ 		return -EINVAL;
  
- SIMPLE FIRMWARE INTERFACE (SFI)
- S:	Obsolete
-diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-index a105f094676e..e8960d7934e2 100644
---- a/tools/testing/selftests/lib/Makefile
-+++ b/tools/testing/selftests/lib/Makefile
-@@ -5,5 +5,6 @@
- all:
++	/* Scoping flags are mutually exclusive. */
++	if ((how->resolve & RESOLVE_BENEATH) && (how->resolve & RESOLVE_IN_ROOT))
++		return -EINVAL;
++
+ 	/* Deal with the mode. */
+ 	if (WILL_CREATE(flags)) {
+ 		if (how->mode & ~S_IALLUGO)
+diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
+index b386367c606b..381d874cce99 100644
+--- a/tools/testing/selftests/openat2/openat2_test.c
++++ b/tools/testing/selftests/openat2/openat2_test.c
+@@ -155,7 +155,7 @@ struct flag_test {
+ 	int err;
+ };
  
- TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
-+TEST_PROGS += test_counters.sh
+-#define NUM_OPENAT2_FLAG_TESTS 23
++#define NUM_OPENAT2_FLAG_TESTS 24
  
- include ../lib.mk
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index b80ee3f6e265..6ed25024d371 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -3,3 +3,4 @@ CONFIG_TEST_BITMAP=m
- CONFIG_PRIME_NUMBERS=m
- CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_BITOPS=m
-+CONFIG_TEST_COUNTERS=m
-diff --git a/tools/testing/selftests/lib/test_counters.sh b/tools/testing/selftests/lib/test_counters.sh
-new file mode 100755
-index 000000000000..c8731aef2498
---- /dev/null
-+++ b/tools/testing/selftests/lib/test_counters.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Tests the Simple Atomic Counters interfaces using test_counters
-+# kernel module
-+$(dirname $0)/../kselftest/module.sh "test_counters" test_counters
+ void test_openat2_flags(void)
+ {
+@@ -210,6 +210,12 @@ void test_openat2_flags(void)
+ 		  .how.flags = O_TMPFILE | O_RDWR,
+ 		  .how.mode = 0x0000A00000000000ULL, .err = -EINVAL },
+ 
++		/* ->resolve flags must not conflict. */
++		{ .name = "incompatible resolve flags (BENEATH | IN_ROOT)",
++		  .how.flags = O_RDONLY,
++		  .how.resolve = RESOLVE_BENEATH | RESOLVE_IN_ROOT,
++		  .err = -EINVAL },
++
+ 		/* ->resolve must only contain RESOLVE_* flags. */
+ 		{ .name = "invalid how.resolve and O_RDONLY",
+ 		  .how.flags = O_RDONLY,
 -- 
-2.25.1
+2.28.0
 
