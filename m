@@ -2,79 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBA7286483
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Oct 2020 18:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D460A286699
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Oct 2020 20:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgJGQeh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Oct 2020 12:34:37 -0400
-Received: from sonic307-9.consmr.mail.ne1.yahoo.com ([66.163.190.32]:33534
-        "EHLO sonic307-9.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727278AbgJGQeg (ORCPT
+        id S1728792AbgJGSME (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Oct 2020 14:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727927AbgJGSME (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Oct 2020 12:34:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602088475; bh=PxMwWzXvs+dqOoH0/FHvFmQpYH2JguaCUHYAVLLmaiw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=om5tBXO1MUE4f6+f4xnFN9x5d2/5IYIAeIBMswjaEIwtW089yQDuSG/luF+tDoD+zd6Oi+rxTTe8mG6tSRMXscN5stxwJEP9yKEixmX5EqORKyM466AkyQa3/EzRxjvsu+OHn16DyB8ejdKdM3DDJnx0K0y6vReB07SmQ3mHKSaOyHtEptDDeP0gMBKEkLBxIMXT3pHpgYdMnyDt6VFqkd3xEUgYKPLJlyCN/EEsV8F5DvarMgisqtALGla8pfwuJJRnAsnrUxI/rO7bon0BITFvuaO2I16IxJ6VX1JVMgpwBNzskpj4HcduhiIKA5utm66RRMLtQ1v2MGJ5X4JXrg==
-X-YMail-OSG: jToXWE0VM1nzLfnAi.fh_JvlF083PZNrtGPwwm6dXilaodfraqrw2aNCX2v_k3_
- DK_O.X0e3tsrRqX3bLwtH7FUqOvAmQRZrkuXDkVU3i25inZj9YBMhLuUD8JfZuJ4RB5yS8K3lhC4
- .AOZny2akjMtg_D6ZfhJAfmdaRC3jyiiAF5nrbOskapSEWLCOeEVuh9VYHUCpGLSabcqmifT2C1y
- RSNqkMGtbHoOUqFs2NC.tGLppW2CuyuGcbZTP.kAriMyPAD_A_E7v91uErDEX5z6c3w_kImZLMmf
- .f0S4jiBdE4tr696RmlNImu8NvXT8xWmGaoca0GTeTploOXPYGuRAAtPLljjd4nInlEc3kg5DoXj
- Ff5DwMVrJXPDF.xrLbMi.cLxFdHFBZSylBPyR9ZbXPy1gZSVWojE7QZ5ooRy5ok7ECsc_0uA0V55
- O7.dBhhR8ZMiPETMLzWHjiOGQwMPIyBNfc.1LIxKssJMm_pKpM_g9_wTl4DMey5CKFMuFCqpmJpc
- cRoj7JtRLNVH0By0icyx_X9s.R5XeNdayNoMCU0_1zC42dz33K.z6e4JdCAUwebhxYPrWxLHe26z
- 7xbaYPEq2nLCu3FluX_8K9oe16K9q8_PWXA6LLmuPWefh_tPPZIlWGepIjZqvybV5Q2eugSO6hKW
- 7lPsLYt748eKlqpT321x03HM71Qda1MkyvAzqh.uCwtLhGBlYpvKs1_BEEbW2FRN.rD9hJqOAGho
- WEELp_AgSNArM_zpr3x0WiINWQguROCLDUtSE0bY4d1TgZJpiyT79akjcnghn8AZm5Rpa9T8.b1e
- 7TmNMpkj0RrCXMjmeZY5muGCnfYVaulaMsBvPiQ4NLQHCYWygOJmJs7kMXgx6gF0.z89lksCb4wa
- Y2RgymIt8P9pMZNHLspFXc70L8WREprbcZw6T4gPkxkLYOV33GQWSN6pb8o7t2TX8D9myQ4LIf7I
- fUBljmypUyAatjFr14vs2T18O.BVH3W.0AzOGIHRKpLhXEt5ltUaT2BQyMj7adPOeRi.VzjRbZLM
- UceRmcgUtnye.cs.qniwsyq0fI.73zsGI.F4ME3d6xTD1Gtk2PtkNlyiU87Q_AjzbTHnhr3MNQTU
- wURzQ2drltpwdLDlgBCV1yyiH_Ojj_UMBxce_e0FfuVG1xz0M1Rkq0.JPx.1Y.mQQ7oP4wIwfov5
- jdUB9ndPTwui2gpq87gzYt_nVrpatGagYD1ne3kwAve2EzBGNuriD3a6FM4L0IeKx1fWK.YFM1V8
- KauSQxtA6HechEs_UAVht3gpya7JFkX7Eskk456NCu9pXvficeZDZgdmimgGmyW0y8QuPbQa2OHN
- JgA8t7a2_Zse3FMTitlYRDelY0T3HW0sdQnRVTlwX_iCK6oSbKCYviDcOfNkOFH3vS.SQBjKE3n3
- 1Kj9pM18U_2Zqrm8FBiFeqftV3cJ.alZ2Tok9iQ--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Oct 2020 16:34:35 +0000
-Date:   Wed, 7 Oct 2020 16:34:32 +0000 (UTC)
-From:   Marilyn Robert <fredodinga22@gmail.com>
-Reply-To: marilyobert@gmail.com
-Message-ID: <632062844.281145.1602088472450@mail.yahoo.com>
-Subject: =?UTF-8?B?0J3QsNGY0LzQuNC70LAg0LrQsNGYINCz0L7RgdC/0L7QtNCw0YDQvtGC?=
+        Wed, 7 Oct 2020 14:12:04 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BE6C061755
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Oct 2020 11:12:04 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id p11so1404347pld.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Oct 2020 11:12:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U51R3R0x1HlDU/rwfEcnqrw14Df1DxhtYwUuphhicTo=;
+        b=HD/l7WlDsgTbjiMNQseskrrD3WamWgf+2tA58r3lFd72ZBZ4ncrD3IWyow15G+CJhg
+         Y7naLw1dtmz4H13LtnKtTtXr5tFXOJ/OAJUnM1drGRS7MrOr22aFhGLSgDaESWo8ZNr6
+         cyLCWLelwiKdaT4+U4LRUez+2R3Li2Fz5/BUs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U51R3R0x1HlDU/rwfEcnqrw14Df1DxhtYwUuphhicTo=;
+        b=aQj7s9phdvLvnbSsEz/pO4CRIL1CWruMn3raVWFsFzwQEjJmzwueKIbG/Z9LpK6kTn
+         giFbsGttnr0V3ORSky3BIvLGbjx6h5wE8yWvle8lBILu3M2WzgmjnWlqnjR3yS6vs3rC
+         Zc9J7G8X8En781rRq6ro0A+r+Kh3UcSdF7HBPTGBIsAT51zszX0a0TaqfLqJyl3p+A5O
+         78ZqF0gxjJUh7ZJvItuURJuFkorjqsSNKOH515vQWu31Sf8UoR3eCVLI/xwm9yCLrvTe
+         Sz6iyeFtP0yaE2kAtafgIAUZM/XM5atq2P0OQf8JwBAV9TadQ4Hlkb4R0cclO1COsBWU
+         LexA==
+X-Gm-Message-State: AOAM531zcNKXO7gJlTIKbfMbyEIYF9coJ5B0yZ+TIhN+EY1+eBRpjAtT
+        FZBF5YEQtRV2FdasofExiqlJ9A==
+X-Google-Smtp-Source: ABdhPJybWHoqusi93W9Aq6yodO08L83RzLwuH6q440Ymxn5QdLI/Kyd7aRpJaYbzEXCVsMdsAl0y+w==
+X-Received: by 2002:a17:902:c3c5:b029:d3:df24:1ffb with SMTP id j5-20020a170902c3c5b02900d3df241ffbmr3979932plj.35.1602094323642;
+        Wed, 07 Oct 2020 11:12:03 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q2sm3810459pfu.193.2020.10.07.11.12.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Oct 2020 11:12:02 -0700 (PDT)
+Date:   Wed, 7 Oct 2020 11:12:01 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 02/11] selftests:lib:test_counters: add new test for
+ counters
+Message-ID: <202010071111.F3968C04@keescook>
+References: <cover.1602011710.git.skhan@linuxfoundation.org>
+ <dd751c3ecedef23f3bd12c043863a6233fceb0d9.1602011710.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-References: <632062844.281145.1602088472450.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd751c3ecedef23f3bd12c043863a6233fceb0d9.1602011710.git.skhan@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCtCd0LDRmNC80LjQu9CwINC60LDRmCDQs9C+0YHQv9C+0LTQsNGA0L7Rgg0KDQrQiNCw0YEg
-0YHRg9C8IDY4LdCz0L7QtNC40YjQvdCwINC20LXQvdCwLCDQutC+0ZjQsCDRgdGC0YDQsNC00LAg
-0L7QtCDQv9GA0L7QtNC+0LvQttC10L0g0LrQsNGA0YbQuNC90L7QvCDQvdCwINC00L7RmNC60LAs
-INC+0LQg0YHQuNGC0LUg0LzQtdC00LjRhtC40L3RgdC60Lgg0LjQvdC00LjQutCw0YbQuNC4LCDQ
-vNC+0ZjQsNGC0LAg0YHQvtGB0YLQvtGY0LHQsCDQvdCw0LLQuNGB0YLQuNC90LAg0YHQtSDQstC7
-0L7RiNC4INC4INC+0YfQuNCz0LvQtdC00L3QviDQtSDQtNC10LrQsCDQvNC+0LbQtdCx0Lgg0L3Q
-tdC80LAg0LTQsCDQttC40LLQtdCw0Lwg0L/QvtCy0LXRnNC1INC+0LQg0YjQtdGB0YIg0LzQtdGB
-0LXRhtC4INC60LDQutC+INGA0LXQt9GD0LvRgtCw0YIg0L3QsCDQsdGA0LfQuNC+0YIg0YDQsNGB
-0YIg0Lgg0LHQvtC70LrQsNGC0LAg0YjRgtC+INGB0LUg0ZjQsNCy0YPQstCwINC60LDRmCDQvdC1
-0LAuINCc0L7RmNC+0YIg0YHQvtC/0YDRg9CzINC/0L7Rh9C40L3QsCDQvdC10LrQvtC70LrRgyDQ
-s9C+0LTQuNC90Lgg0L3QsNC90LDQt9Cw0LQg0Lgg0L3QsNGI0LjRgtC1INC00L7Qu9Cz0Lgg0LPQ
-vtC00LjQvdC4INCx0YDQsNC6INC90LUg0LHQtdCwINCx0LvQsNCz0L7RgdC70L7QstC10L3QuCDR
-gdC+INC90LjRgtGDINC10LTQvdC+INC00LXRgtC1LCDQv9C+INC90LXQs9C+0LLQsNGC0LAg0YHQ
-vNGA0YIg0LPQviDQvdCw0YHQu9C10LTQuNCyINGG0LXQu9C+0YLQviDQvdC10LPQvtCy0L4g0LHQ
-vtCz0LDRgtGB0YLQstC+Lg0KDQrQlNC+0LDRk9Cw0Lwg0LrQsNGYINCy0LDRgSDQvtGC0LrQsNC6
-0L4g0YHQtSDQv9C+0LzQvtC70LjQsiDQt9CwINGC0L7QsCwg0L/QvtC00LPQvtGC0LLQtdC9INGB
-0YPQvCDQtNCwINC00L7QvdC40YDQsNC8INGB0YPQvNCwINC+0LQgMiwgMzAwLCAwMDAg0LXQstGA
-0LAg0LfQsCDQv9C+0LzQvtGIINC90LAg0YHQuNGA0L7QvNCw0YjQvdC40YLQtSwg0YHQuNGA0L7Q
-vNCw0YjQvdC40YLQtSDQuCDQv9C+0LzQsNC70LrRgyDQv9GA0LjQstC40LvQtdCz0LjRgNCw0L3Q
-uNGC0LUg0LzQtdGT0YMg0LLQsNGI0LjRgtC1INGB0L7QsdGA0LDQvdC40ZjQsCAvINC+0L/RiNGC
-0LXRgdGC0LLQvi4g0JfQsNCx0LXQu9C10LbQtdGC0LUg0LTQtdC60LAg0L7QstC+0Zgg0YTQvtC9
-0LQg0LUg0LTQtdC/0L7QvdC40YDQsNC9INCy0L4g0LHQsNC90LrQsCDQutCw0LTQtSDRiNGC0L4g
-0YDQsNCx0L7RgtC10YjQtSDQvNC+0ZjQvtGCINGB0L7Qv9GA0YPQsy4gQXBwcmVjaWF0ZdC1INGG
-0LXQvdCw0Lwg0LDQutC+INC+0LHRgNC90LXRgtC1INCy0L3QuNC80LDQvdC40LUg0L3QsCDQvNC+
-0LXRgtC+INCx0LDRgNCw0ZrQtSDQt9CwINC/0YDQvtC/0LDQs9C40YDQsNGa0LUg0L3QsCDQvNCw
-0YHQsNC20LDRgtCwINC90LAg0LrRgNCw0LvRgdGC0LLQvtGC0L4sINGc0LUg0LLQuCDQtNCw0LTQ
-sNC8INC/0L7QstC10ZzQtSDQtNC10YLQsNC70Lgg0LfQsCDRgtC+0LAg0LrQsNC60L4g0LTQsCDQ
-v9C+0YHRgtCw0L/QuNGC0LUuDQoNCtCR0LvQsNCz0L7QtNCw0YDQsNC8DQrQky3Rk9CwINCc0LXR
-gNC40LvQuNC9INCg0L7QsdC10YDRgg==
+On Tue, Oct 06, 2020 at 02:44:33PM -0600, Shuah Khan wrote:
+> Add a new selftest for testing counter_atomic* Counters API. This test
+> load test_counters test modules and unloads.
+> 
+> The test module runs tests and prints results in dmesg.
+> 
+> There are a number of atomic_t usages in the kernel where atomic_t api
+> is used strictly for counting and not for managing object lifetime. In
+> some cases, atomic_t might not even be needed.
+> 
+> The purpose of these counters is to clearly differentiate atomic_t
+> counters from atomic_t usages that guard object lifetimes, hence prone
+> to overflow and underflow errors. It allows tools that scan for underflow
+> and overflow on atomic_t usages to detect overflow and underflows to scan
+> just the cases that are prone to errors.
+> 
+> Simple atomic counters api provides interfaces for simple atomic counters
+> that just count, and don't guard resource lifetimes. Counter will wrap
+> around to 0 when it overflows and should not be used to guard resource
+> lifetimes, device usage and open counts that control state changes, and
+> pm states.
+> 
+> Using counter_atomic* to guard lifetimes could lead to use-after free
+> when it overflows and undefined behavior when used to manage state
+> changes and device usage/open states.
+> 
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
