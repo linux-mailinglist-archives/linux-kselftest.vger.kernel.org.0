@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6049D28740F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Oct 2020 14:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72722287421
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Oct 2020 14:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729945AbgJHM1H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Oct 2020 08:27:07 -0400
-Received: from mail-eopbgr30102.outbound.protection.outlook.com ([40.107.3.102]:26784
+        id S1730017AbgJHM1l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Oct 2020 08:27:41 -0400
+Received: from mail-eopbgr30090.outbound.protection.outlook.com ([40.107.3.90]:33432
         "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729915AbgJHM1C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Oct 2020 08:27:02 -0400
+        id S1729939AbgJHM1I (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 8 Oct 2020 08:27:08 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QzayCMfRSUDqCIR/xEKSWwDqmSDQ3kx0XumRnIB9YB/9qbxoBGF7E7XhKgMP/ldQle5rcUgrhcFESibyIG035z9IqmWOtUw6+hpj2ODOC60dHw9RJcZVMmsij1tDm5qkoeOJXIwoG7A7BB0f+gsw9z51M+2b/QF1K+BKv2ciGs7Fgc65OV+lNmL0eQqICRTdDMdy2yTWGebjIr9kBpXopM9Bj1WtY5xa+T2nO/1CRcRvoWeb0NGaMC7UULeWT3y7k9iiJLdtgEGf/hSls2l2v0dbKFsvK/RcPQksO2Favb4XfM/OtwIlnI9cCLXMlECbJ1u1Gs5nfH+z1UdwwReHUA==
+ b=Eh3OogAj6xWazGKNQyrCNMk6Bcik2Y47ogVlfVJOmicc1heTtSc68AX84ei0U9cSsslNNYnIWMys5bJJMm4rrp6+y5WwlkP8MSAkHAih3dQQVjSWd7t/XzjxS4x3ChYqxblkAPvaNpGJMEJaRTaWyP4DMUiMVNY4tH7BehHhlwgTbDoNJz4uqkpk5oaW5xqm0vxiUGuNFSaqP0I0n0r1n2NPCkHOyVA8kazI8mdk3i9cKhLRk+mUA8eHVm2nLW2RrMUHhOg4EW3hfIk+kYliZ4VXtzSgaoNl0+iv8IB43kkWCTbXw+CdtMCExHVPnlqVrVKLxNDbAO6aoD16DqX6nQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pzohc8NPpE8vXXtTFCLX7KK4vCZK4MkRRoOj+6DpMkc=;
- b=dhzufNv4xnOi+K8t1b1o2g9ZQan5y9SQ1cKFeaZA5KmiUN8VDj6BnC4CKzAw+2QJRi8fSBoYxP+XQxkG8Wzy6ET7sUMKp+/cJkq0c4fy6DuqhwA9BcYITlgfdCMjvdvOgpOAkALXgcsWPzk5DwtAuH2yKp5/lsHVWGsTnBNCuOVSstxBAV9u8yCrlxB/6r5fCU2Zmx0l+Z2zrAKU8z8d3pIkGR8cmUeYQqjqBnqCKgC6eIGI1Lf7wa0IFZSyRLBMrsuvCIqKbyKHXfmH+3A/iufAnz92bxs2Z1s3EqZ1Cn20BgPcnHAcHbY9oC7FsPWMjzX0M7dkN7xcpMcdLOL3Ng==
+ bh=/V8V7hvPdD87KEwNoxinB3bcOm2zpVNQYvV1P5UpCCE=;
+ b=lG28dHjbbp6pv79NnYxwYgfXxq0T5KUj8J0Z1XvPuDlEA1FcGVpPKbMl5IkHc0AN4a4W2ygVR4nPFj1XRTP5OJQ7wrPtIB39XKX1Jan61BHuaSMsWqHOwPYOPK013xUpozGbQeUqmZlBgVY4N34jdYc6CFKMGXit87OkgPFxeHR24mYK49dGTcPvYlJS5TzAb45n3wu6TtoESac/PI9M8KNK4/7Xeakm9GUtL2wWrALdEtaVrcDsNvaH0B/9Vwd9EMbWusCP7he88bePBn/R9NN5y2q0+34VJ9/FXMe/+OETex0r8Jq2def5Z2uy116qQO34AYXhSvQgZ29Pj0D5MA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pzohc8NPpE8vXXtTFCLX7KK4vCZK4MkRRoOj+6DpMkc=;
- b=wyQXnHiOPKcYsYelG2zDfWBaiS2Z3Pt1jBeAhLCUTUxkC3VM5xrgl2AEmGZQpIok7SpuWgDYD+cn6ZkWgA7ECmc5VVSSDps0/p1Ftrydx0wq9H4GtIuCnpcUSLfF5shlLbltOnT8Q608L7prlkOOGYYYiyiA4igAoUfHB/BRUB0=
+ bh=/V8V7hvPdD87KEwNoxinB3bcOm2zpVNQYvV1P5UpCCE=;
+ b=t0ZvnKRf1De7bobWtxZHbyciILxdOtDLlZ7+fOeO6R5WfBX2ZekFxLd9t0OO6pWFEIM2ttim5IHNyFYQw6NWS5nAKOQkLpulCRZYtLlBb1XxiQnue76P4WiIU7NvqMZWirAlQiBTztK//JA1+sfblKm1JzGmrPwvldsRZVlrxAU=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
 Received: from HE1PR07MB3450.eurprd07.prod.outlook.com (2603:10a6:7:2c::17) by
@@ -42,9 +42,9 @@ To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>
 Cc:     Tommi Rantala <tommi.t.rantala@nokia.com>,
         Christian Brauner <christian@brauner.io>
-Subject: [PATCH 05/13] selftests: pidfd: use ksft_test_result_skip() when skipping test
-Date:   Thu,  8 Oct 2020 15:26:25 +0300
-Message-Id: <20201008122633.687877-6-tommi.t.rantala@nokia.com>
+Subject: [PATCH 06/13] selftests: pidfd: skip test on kcmp() ENOSYS
+Date:   Thu,  8 Oct 2020 15:26:26 +0300
+Message-Id: <20201008122633.687877-7-tommi.t.rantala@nokia.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
 References: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
@@ -56,72 +56,58 @@ X-ClientProxiedBy: HE1PR08CA0076.eurprd08.prod.outlook.com
  (2603:10a6:7:2c::17)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from trfedora.emea.nsn-net.net (131.228.2.17) by HE1PR08CA0076.eurprd08.prod.outlook.com (2603:10a6:7:2a::47) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21 via Frontend Transport; Thu, 8 Oct 2020 12:26:50 +0000
+Received: from trfedora.emea.nsn-net.net (131.228.2.17) by HE1PR08CA0076.eurprd08.prod.outlook.com (2603:10a6:7:2a::47) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21 via Frontend Transport; Thu, 8 Oct 2020 12:26:51 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: da02f38d-990c-4180-0d63-08d86b856ed0
+X-MS-Office365-Filtering-Correlation-Id: 5da0ec03-8547-42dd-85aa-08d86b856f5a
 X-MS-TrafficTypeDiagnostic: HE1PR0701MB2347:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <HE1PR0701MB23475765EDC4BA9538FC2116B40B0@HE1PR0701MB2347.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:264;
+X-Microsoft-Antispam-PRVS: <HE1PR0701MB234732368B38EBFF38F2D984B40B0@HE1PR0701MB2347.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:949;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ww7f9mSti76AeXgryYlJUmrvTbN7lTiZvpfEYYn7FOJAefYSZRzZiQFF+OUyl009RN4VC7OvL1WOaJcWedBn8ru6GVXkrNq7kmjVoYw67hmek+H0Z0Hz9Hu/Q8Ds2wmivGsxytk8x0TG1kwaLc2jdo8RbopYkCRviNFKfxUGEjRg0jWs+sPTB6+ngjKoB0NIIC8rMbXXdCC36YyDjVoCci1w3dOsv3Pg0JyPmqFZQHFH3CUCK5kPzyQFTSdunQu0h9KEULeb8ugzCVORsCljgAzkwSkPF75w7fGp8wOPat6wb06GYkAOkf4dRpQCRJbyc7/dF1mX5WlbRJOHgP/8yQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR07MB3450.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(66556008)(66476007)(103116003)(36756003)(5660300002)(6666004)(86362001)(66946007)(2906002)(54906003)(6486002)(4326008)(1076003)(316002)(6512007)(6916009)(26005)(52116002)(8936002)(83380400001)(186003)(478600001)(16526019)(6506007)(8676002)(956004)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: krcGlC1dPNJK+28GbykaELSFShmfV6rUVcaFoxP/vfCyYU1BYDnIPyeFBEv3JTpWzmO2L6RHqVf36c2wS56xU08qHL5RdLM/fXImSRWNETCNT6VnqEABJYN+aNg9MWzkncsVB5Elgo2KN3mX7U4syZMxX0PveCeT1YOwt+4RBBaYofWERJuabURH9lRT3J0ndbqMkTdfH/buMzMG7zNIoeIFBv/271gH+EyE+pVCzZ+B7CFZdVMOjTWJQb0ZAMvtWulj8ZaBmMfBn/2+ISLQTyE6BVgaYoWaGLDR2r4wIvVZAwRgL/Xm8T/vU/yEug804diF2izzLJsRuEMSPUrfwFXxzx3zcWD9iRxFrI56p6NKRp6wU5NYl9sB8vUa4bZvM95eqXLmZtcfpwpm29Mqzhe0wSJg6+sFWcenlOJ/wybw3ABIFnS1Cy/BpO0NDePIvPUjizTCFZ1z26TrFiUuqgyQqxW52fdqJvmkm5NkugV/o5/tPZn0fVXgelFqEB/5ONVObUCig0u/xcd82e2t4k9LZis3u2J3dAf37PHoHuH8lUZbp40NdNgbLGzEyz3ph+cyQEEcbhuCUi9EjQOqhTyjWlf/FUy3f/OeI04hRFpnE3w47BGTRCmPXVsoJwFcP13p0pxFLXRuVIvo4TrI/w==
+X-Microsoft-Antispam-Message-Info: ljCjYhPApl8/r6TYrZmyhSw6rcjZpH0jUGi13/q+Aql9SynKhM88D/TS12i5GSGHS+exCNabsoSB1IhWox6X4wuliKLUvZzf8jrCa/lBNn8DaETzwM785pUmO9DBJMHCtM2Jqa6Lqdt8iA7W7ZHVijEGr9uqbYWhmWqdLEp5930cwSSD4bovguHd9g0uwpaWO4Kyf1w6+R4sjSh2Gq0hLHVYKstNRz8UCSVXVnPoRVcodQl/kOWiaosPbdf8Y4FYyL/SPOdM+JvReNMue9XFgbPFUMCGXVUTDBL0ptE/JmLu/Zpe95d1Vr96K1aotuU30Ykt9qbU/p3gXO213cFynQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR07MB3450.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(66556008)(66476007)(4744005)(103116003)(36756003)(5660300002)(6666004)(86362001)(66946007)(2906002)(54906003)(6486002)(4326008)(1076003)(316002)(6512007)(6916009)(26005)(52116002)(8936002)(83380400001)(186003)(478600001)(16526019)(6506007)(8676002)(956004)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: ShsUJzLAQYFD/WZiCKqyblbR5/qKidNn+NOjofmn4csCAmAjYYAMVTuFZBMBHJXEnBUFHVaZUcR+bKc3kIKbOrK506gxLT72TrW3eDsvIikRvEho65nD9XvBiEPyLX+0H6bfAA/ctJqGXS92Wc44VU/RC03/XKJYaMYl0oBHuS1031WNpbT7VbjG6jGaElFb0iWfv0LdA+g9TVQr2GZo3nA8ORms8fL9/5ZekVpfCHEGw9s+sqEe46MmcQ0IuK/l8tx9xEHXVJFIFwsIYMUSdsEuyBROnMrw7TZMoQ5/tv097rOWpsGDM9FphrlsILqamCCvBo9xAmi/CXUh2lEJYAEtQZqK8qk/IT066ztIZduZ9bXaOnF/BrKlr3CPP4Szu8CdjqvxqMm4JAPAoAPYYpD4IGA/6qh/0SQgzRxgk5e7K/wux6DzeVV8Y0BTtKjF22CYyitE6q6c5cVBShxmD09N5fKYKR3JuNgpRX1VvYinhHc8QflAhXxAdPNT8i7htkRZf23nqh0YoyKZjmKbToP9QBM30fL6466K2xEQB4UY/ivIRZx+3a35RgMKntXR2i/iOecRDihtEfymnurAatDbN4pAklXbw5QRUf08Ybwq9/NZGlHUAYbYwfOsKYrIA1MApKEiinH7g7PewNvv8A==
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da02f38d-990c-4180-0d63-08d86b856ed0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5da0ec03-8547-42dd-85aa-08d86b856f5a
 X-MS-Exchange-CrossTenant-AuthSource: HE1PR07MB3450.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2020 12:26:51.0664
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2020 12:26:51.7650
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3F7maxnw2brzZem9il7e6cBM9W3IINckgg1wROrkC+cySBl/UnExF7enEdzXhcview+WpBXWRvaDHqGFsWMWB6oG5IuqxHxhDlV2+iCuA+8=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5f35oM0C3HWvwydmjgOV3xzWckw6esw/hwflSnF1OVddsrJsapVKUPtY8/O46BBogJwCOkdIiq1f6T4e80TNcGKqyYwo7nK6jtWRVAbuZcY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0701MB2347
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There's planned tests != run tests in pidfd_test when some test is
-skipped:
-
-  $ ./pidfd_test
-  TAP version 13
-  1..8
-  [...]
-  # pidfd_send_signal signal recycled pid test: Skipping test
-  # Planned tests != run tests (8 != 7)
-  # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Fix by using ksft_test_result_skip():
-
-  $ ./pidfd_test
-  TAP version 13
-  1..8
-  [...]
-  ok 8 # SKIP pidfd_send_signal signal recycled pid test: Unsharing pid namespace not permitted
-  # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:1 error:0
+Skip test if kcmp() is not available, for example if kernel is compiled
+without CONFIG_CHECKPOINT_RESTORE=y.
 
 Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
 ---
- tools/testing/selftests/pidfd/pidfd_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/pidfd/pidfd_getfd_test.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index c585aaa2acd8..529eb700ac26 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -330,7 +330,7 @@ static int test_pidfd_send_signal_recycled_pid_fail(void)
- 		ksft_exit_fail_msg("%s test: Failed to recycle pid %d\n",
- 				   test_name, PID_RECYCLE);
- 	case PIDFD_SKIP:
--		ksft_print_msg("%s test: Skipping test\n", test_name);
-+		ksft_test_result_skip("%s test: Skipping test\n", test_name);
- 		ret = 0;
- 		break;
- 	case PIDFD_XFAIL:
+diff --git a/tools/testing/selftests/pidfd/pidfd_getfd_test.c b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
+index 7758c98be015..0930e2411dfb 100644
+--- a/tools/testing/selftests/pidfd/pidfd_getfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
+@@ -204,7 +204,10 @@ TEST_F(child, fetch_fd)
+ 	fd = sys_pidfd_getfd(self->pidfd, self->remote_fd, 0);
+ 	ASSERT_GE(fd, 0);
+ 
+-	EXPECT_EQ(0, sys_kcmp(getpid(), self->pid, KCMP_FILE, fd, self->remote_fd));
++	ret = sys_kcmp(getpid(), self->pid, KCMP_FILE, fd, self->remote_fd);
++	if (ret < 0 && errno == ENOSYS)
++		SKIP(return, "kcmp() syscall not supported");
++	EXPECT_EQ(ret, 0);
+ 
+ 	ret = fcntl(fd, F_GETFD);
+ 	ASSERT_GE(ret, 0);
 -- 
 2.26.2
 
