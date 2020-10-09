@@ -2,185 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 229572899A4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Oct 2020 22:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C011A2899EE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Oct 2020 22:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390846AbgJIUSa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Oct 2020 16:18:30 -0400
-Received: from mga04.intel.com ([192.55.52.120]:45442 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731521AbgJIUS1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Oct 2020 16:18:27 -0400
-IronPort-SDR: ZH6OHsc+e0nxvlORZDUJw/FV78YNy4xcuiSpNRkz3acBTnhmmsJaKyMyY1gjL6j1EzLQAGii87
- 14UvhHMr1uYw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="162895849"
-X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="162895849"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 13:18:25 -0700
-IronPort-SDR: EPIUO6Sq8Ni44u09CTNBCky6tlBQ3tCFyV5bqnAJ9cDrxp+dSvLhEAuIf8hRZbdCSG1SROpCwp
- 0Z4ffgAZVLlQ==
-X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="354973816"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 13:18:24 -0700
-Date:   Fri, 9 Oct 2020 13:18:24 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V3 0/9] PKS: Add Protection Keys Supervisor (PKS)
- support RFC v3
-Message-ID: <20201009201824.GW2046448@iweiny-DESK2.sc.intel.com>
-References: <20201009194258.3207172-1-ira.weiny@intel.com>
+        id S2390246AbgJIUpq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Oct 2020 16:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733003AbgJIUpq (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 9 Oct 2020 16:45:46 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29831C0613D2
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2020 13:45:46 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id f19so7822579pfj.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2020 13:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hVX5+FfHI4ZUM/n+lt7+FKmZQZljIf9JA1OHbdRm9dM=;
+        b=VXDV+aZd/7WAFMj+s91i6dzU5o9niIOJr9LtvzDbExqBX92/o43XJ4mLdkWsssdUYW
+         59/mf+Vx9HTFuB+s5Uq+SPPb/V+sG7AmiVA9XX0Je/8LgHrwTkCyhv3fT9fvBKLsQUI1
+         kv3u9MueBXwLYe6awXe3LxmAvsJGNqzekmkq0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hVX5+FfHI4ZUM/n+lt7+FKmZQZljIf9JA1OHbdRm9dM=;
+        b=PD+z7lpCMI6WnHOTu85162tTpfmcNd/VV6x1a1D4hBC88UyaerdH1bhkoTAo6iPBuu
+         5aU8uIMJIWQ0oRQ7bOYoW0u+1NGYtYRpylFBu2tVHaIxDMWC1O5AQmG0TOWFQfdyyNe6
+         x1BScO4vYFU0X/E0/aLRs6egWANTcxO4V8alGqdN0sEoTro5Ha8AnNWManXd5TXVdz9h
+         ktGHEDQcEKAnLfRmTWrIp8pK/itGEP6Y2ZINAHAJ9WV0sEMAcbbOeEpcXxVHYSWPNQ5n
+         vGyQpuqdmSt01H+Y61POf1Yt+H5A9lLU6rdXKMZ7QHav4p7ADip0qCUdSALIVDT4geKr
+         g8EA==
+X-Gm-Message-State: AOAM533gynn1UokRpBA28BTgOIUYHYnmOBmgl3gRt9ptKypK57y6Zgm/
+        oep9xa1CblMVHZNbMZpyV8jSbQ==
+X-Google-Smtp-Source: ABdhPJzSAKjeywiz0Od20lW+Cape3t34gBitYgmyJAvlFQsFShOemku3ICOQ9rzytzKY66XYHOnlUw==
+X-Received: by 2002:a17:90a:1548:: with SMTP id y8mr6533282pja.113.1602276345630;
+        Fri, 09 Oct 2020 13:45:45 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j25sm11474436pfn.212.2020.10.09.13.45.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 13:45:44 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 13:45:43 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
+        gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
+        johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, arve@android.com,
+        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
+        christian@brauner.io, hridya@google.com, surenb@google.com,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
+Message-ID: <202010091255.246395A6@keescook>
+References: <cover.1602209970.git.skhan@linuxfoundation.org>
+ <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201009194258.3207172-1-ira.weiny@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 12:42:49PM -0700, 'Ira Weiny' wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On Fri, Oct 09, 2020 at 09:37:46PM +0200, Peter Zijlstra wrote:
+> On Fri, Oct 09, 2020 at 09:55:55AM -0600, Shuah Khan wrote:
+> > Simple atomic counters api provides interfaces for simple atomic counters
+> > that just count, and don't guard resource lifetimes. The interfaces are
+> > built on top of atomic_t api, providing a smaller subset of atomic_t
+> > interfaces necessary to support simple counters.
 > 
-> This RFC series has been reviewed by Dave Hansen.
-> 
-> Introduce a new page protection mechanism for supervisor pages, Protection Key
-> Supervisor (PKS).
-> 
-> 2 use cases for PKS are being developed, trusted keys and PMEM.
+> To what actual purpose?!? AFACIT its pointless wrappery, it gets us
+> nothing.
 
-RFC patch sets for these use cases have also been posted:
+It's not pointless. There is value is separating types for behavioral
+constraint to avoid flaws. atomic_t provides a native operation. We gained
+refcount_t for the "must not wrap" type, and this gets us the other side
+of that behavioral type, which is "wrapping is expected". Separating the
+atomic_t uses allows for a clearer path to being able to reason about
+code flow, whether it be a human or a static analyzer.
 
-PMEM:
-https://lore.kernel.org/lkml/20201009195033.3208459-1-ira.weiny@intel.com/
+The counter wrappers add nothing to the image size, and only serve to
+confine the API to one that cannot be used for lifetime management.
 
-Trusted Keys:
-https://lore.kernel.org/lkml/20201009201410.3209180-1-ira.weiny@intel.com/
+Once conversions are done, we have a clean line between refcounting
+and statistical atomics, which means we have a much lower chance of
+introducing new flaws (and maybe we'll fix flaws during the conversion,
+which we've certainly seen before when doing this stricter type/language
+changes).
 
-Ira
+I don't see why this is an objectionable goal.
 
-> Trusted keys
-> is a newer use case which is still being explored.  PMEM was submitted as part
-> of the RFC (v2) series[1].  However, since then it was found that some callers
-> of kmap() require a global implementation of PKS.  Specifically some users of
-> kmap() expect mappings to be available to all kernel threads.  While global use
-> of PKS is rare it needs to be included for correctness.  Unfortunately the
-> kmap() updates required a large patch series to make the needed changes at the
-> various kmap() call sites so that patch set has been split out.  Because the
-> global PKS feature is only required for that use case it will be deferred to
-> that set as well.[2]  This patch set is being submitted as a precursor to both
-> of the use cases.
-> 
-> For an overview of the entire PKS ecosystem, a git tree including this series
-> and the 2 use cases can be found here:
-> 
-> 	https://github.com/weiny2/linux-kernel/tree/pks-rfc-v3
-> 
-> 
-> PKS enables protections on 'domains' of supervisor pages to limit supervisor
-> mode access to those pages beyond the normal paging protections.  PKS works in
-> a similar fashion to user space pkeys, PKU.  As with PKU, supervisor pkeys are
-> checked in addition to normal paging protections and Access or Writes can be
-> disabled via a MSR update without TLB flushes when permissions change.  Also
-> like PKU, a page mapping is assigned to a domain by setting pkey bits in the
-> page table entry for that mapping.
-> 
-> Access is controlled through a PKRS register which is updated via WRMSR/RDMSR.
-> 
-> XSAVE is not supported for the PKRS MSR.  Therefore the implementation
-> saves/restores the MSR across context switches and during exceptions.  Nested
-> exceptions are supported by each exception getting a new PKS state.
-> 
-> For consistent behavior with current paging protections, pkey 0 is reserved and
-> configured to allow full access via the pkey mechanism, thus preserving the
-> default paging protections on mappings with the default pkey value of 0.
-> 
-> Other keys, (1-15) are allocated by an allocator which prepares us for key
-> contention from day one.  Kernel users should be prepared for the allocator to
-> fail either because of key exhaustion or due to PKS not being supported on the
-> arch and/or CPU instance.
-> 
-> The following are key attributes of PKS.
-> 
->    1) Fast switching of permissions
-> 	1a) Prevents access without page table manipulations
-> 	1b) No TLB flushes required
->    2) Works on a per thread basis
-> 
-> PKS is available with 4 and 5 level paging.  Like PKRU it consumes 4 bits from
-> the PTE to store the pkey within the entry.
-> 
-> 
-> [1] https://lore.kernel.org/lkml/20200717072056.73134-1-ira.weiny@intel.com/
-> [2] https://github.com/weiny2/linux-kernel/commit/f10abb0f0d7b4e14f03fc8890313a5830cde1e49
-> 	and a testing patch
->     https://github.com/weiny2/linux-kernel/commit/2a8e0fc7654a7c69b243d628f63b01ff26a5a797
-> 
-> 
-> Fenghua Yu (3):
->   x86/fpu: Refactor arch_set_user_pkey_access() for PKS support
->   x86/pks: Enable Protection Keys Supervisor (PKS)
->   x86/pks: Add PKS kernel API
-> 
-> Ira Weiny (6):
->   x86/pkeys: Create pkeys_common.h
->   x86/pks: Preserve the PKRS MSR on context switch
->   x86/entry: Pass irqentry_state_t by reference
->   x86/entry: Preserve PKRS MSR across exceptions
->   x86/fault: Report the PKRS state on fault
->   x86/pks: Add PKS test code
-> 
->  Documentation/core-api/protection-keys.rst  | 102 ++-
->  arch/x86/Kconfig                            |   1 +
->  arch/x86/entry/common.c                     |  57 +-
->  arch/x86/include/asm/cpufeatures.h          |   1 +
->  arch/x86/include/asm/idtentry.h             |  29 +-
->  arch/x86/include/asm/msr-index.h            |   1 +
->  arch/x86/include/asm/pgtable.h              |  13 +-
->  arch/x86/include/asm/pgtable_types.h        |  12 +
->  arch/x86/include/asm/pkeys.h                |  15 +
->  arch/x86/include/asm/pkeys_common.h         |  36 +
->  arch/x86/include/asm/processor.h            |  13 +
->  arch/x86/include/uapi/asm/processor-flags.h |   2 +
->  arch/x86/kernel/cpu/common.c                |  17 +
->  arch/x86/kernel/cpu/mce/core.c              |   4 +
->  arch/x86/kernel/fpu/xstate.c                |  22 +-
->  arch/x86/kernel/kvm.c                       |   4 +-
->  arch/x86/kernel/nmi.c                       |   7 +-
->  arch/x86/kernel/process.c                   |  21 +
->  arch/x86/kernel/traps.c                     |  21 +-
->  arch/x86/mm/fault.c                         |  86 ++-
->  arch/x86/mm/pkeys.c                         | 188 +++++-
->  include/linux/entry-common.h                |  19 +-
->  include/linux/pgtable.h                     |   4 +
->  include/linux/pkeys.h                       |  23 +-
->  kernel/entry/common.c                       |  28 +-
->  lib/Kconfig.debug                           |  12 +
->  lib/Makefile                                |   3 +
->  lib/pks/Makefile                            |   3 +
->  lib/pks/pks_test.c                          | 690 ++++++++++++++++++++
->  mm/Kconfig                                  |   2 +
->  tools/testing/selftests/x86/Makefile        |   3 +-
->  tools/testing/selftests/x86/test_pks.c      |  65 ++
->  32 files changed, 1376 insertions(+), 128 deletions(-)
->  create mode 100644 arch/x86/include/asm/pkeys_common.h
->  create mode 100644 lib/pks/Makefile
->  create mode 100644 lib/pks/pks_test.c
->  create mode 100644 tools/testing/selftests/x86/test_pks.c
-> 
-> -- 
-> 2.28.0.rc0.12.gb6a658bd00c9
-> 
+-- 
+Kees Cook
