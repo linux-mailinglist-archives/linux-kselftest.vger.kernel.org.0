@@ -2,151 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 523DA288D74
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Oct 2020 17:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A76288F5F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Oct 2020 19:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389517AbgJIP4V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Oct 2020 11:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389355AbgJIP4O (ORCPT
+        id S2389965AbgJIRBa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Oct 2020 13:01:30 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:59164 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389640AbgJIRB1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Oct 2020 11:56:14 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDDDC0613D6
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2020 08:56:13 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id q21so9399196ota.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2020 08:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NhVKT+1Dp3cLQ927y3IeE45PijqPHl/y1tcL0VMnAkY=;
-        b=MJ59A2zSUmOd4vH98m00yfAlFCElHYcQzDfBMYHrVQy7lR2WZx36tRcnEIiex/HpTh
-         psiwZkcYnFqUu7CqyFJf/2WggvVUrR8lhitdRnQgqBvey72k6+WleuW5MyqR1ij81nka
-         s1sooOAOzyxbgRa3UcAAW84OfUXQpR1PvmUpI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NhVKT+1Dp3cLQ927y3IeE45PijqPHl/y1tcL0VMnAkY=;
-        b=aI87CwbuB6NIEZyFAdrlRiJN1ziu99XY5v2h4PkHY2icxr2HfiFCkk+7a1HYjs7l+J
-         Yvr42cf9s9mOQDgFRdWhteCIXHvaVgZyGs+qj2YOX++vcCN9rsXovhNlPV6oMSoERJQX
-         N6qWRfGh+ITIRdyy3oDGnM96B5qTwKcfDnvjl03EvaHnOoLRUCEi6hmqIfeR4F0JarwO
-         zWmn5spBFOOMAVPyShIquzZEr1xHte5QVOB91O5rIo4jLHgjgferAMz7EZiWRV+OD7xt
-         eyJl/ukVSK8Ynhq9qGaq1zJck65pXRXQpFctkRtkGqUX9xeosolhf/wZORyPUodRwsCG
-         PM8A==
-X-Gm-Message-State: AOAM533WzdeVuengUEfWNNltswr9VO5uV+7eNaH4Gdkp5ogC83OWGP7o
-        HoFS/T8Z9muIy3SfGz+PyPhE1A==
-X-Google-Smtp-Source: ABdhPJxStfMuXX1WzYtWLp3zKvwHlUVTk033Hdfs1+nAN/BlfU0MSSy8ICasd76nlLmEKo4UR+BpUQ==
-X-Received: by 2002:a05:6830:1d75:: with SMTP id l21mr8771101oti.89.1602258972855;
-        Fri, 09 Oct 2020 08:56:12 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id e7sm7347246oia.9.2020.10.09.08.56.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 08:56:12 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, keescook@chromium.org, gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 02/11] selftests:lib:test_counters: add new test for counters
-Date:   Fri,  9 Oct 2020 09:55:57 -0600
-Message-Id: <688424d7ff981d34523cd6794d7ce3c27cfe57b4.1602209970.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1602209970.git.skhan@linuxfoundation.org>
-References: <cover.1602209970.git.skhan@linuxfoundation.org>
+        Fri, 9 Oct 2020 13:01:27 -0400
+Date:   Fri, 09 Oct 2020 17:01:23 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1602262884;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=qa5BYAQ/xKA+kV57+AUnTiO/P44u/O6wIIY1Yvzzttg=;
+        b=RY0DZp/jR4qFU2CsQ3SkU4CeCA7L9+U7TauNgFCu5/dc34SvxPKnF55BGnw0yU17c/mbca
+        HbwtdhU0yeCOXM8x1Rdhm5CrfgapCIs1tlxPnA72pCAR9PAIxoBvnghTmQfQRlzq6M1vCU
+        vAN1T4k+1JJrx6B4v4Q+QUvhOmm4FnC1PqbH2zppO4DkjDvHCOqgNDNtHHt2P4CTEb2mCg
+        GrZAz8qP+O6IBdlMzlBQMm2PnXP7/rCKC0C8MdiLruE91jYXxs1n+p1ZNJ527ZgkN617Zk
+        6PehEdCy9TAGpkZDOo48rvdZD/oaI4pab0YPq2og6/J36DaNtuPnQggoHG1cpw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1602262884;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=qa5BYAQ/xKA+kV57+AUnTiO/P44u/O6wIIY1Yvzzttg=;
+        b=D48HoQUB7Ht5aqnr8tshiG4W7V5hgq04Ov0vSApG90sKUEk/Cwlg8RLyXH5iYWtMggGTNH
+        N9AtH8SSYts8G1AQ==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/rcu] rcutorture: Cleanup PREEMPT_COUNT leftovers
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, x86 <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <160226288348.7002.14672482612676279557.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2.linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new selftest for testing counter_atomic* Counters API. This test
-load test_counters test modules and unloads.
+The following commit has been merged into the core/rcu branch of tip:
 
-The test module runs tests and prints results in dmesg.
+Commit-ID:     27405ee98aee7a25bbca59b0aba04f33b6acc561
+Gitweb:        https://git.kernel.org/tip/27405ee98aee7a25bbca59b0aba04f33b6acc561
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Mon, 14 Sep 2020 19:37:36 +02:00
+Committer:     Paul E. McKenney <paulmck@kernel.org>
+CommitterDate: Thu, 01 Oct 2020 09:05:16 -07:00
 
-There are a number of atomic_t usages in the kernel where atomic_t api
-is used strictly for counting and not for managing object lifetime. In
-some cases, atomic_t might not even be needed.
+rcutorture: Cleanup PREEMPT_COUNT leftovers
 
-The purpose of these counters is to clearly differentiate atomic_t
-counters from atomic_t usages that guard object lifetimes, hence prone
-to overflow and underflow errors. It allows tools that scan for underflow
-and overflow on atomic_t usages to detect overflow and underflows to scan
-just the cases that are prone to errors.
+CONFIG_PREEMPT_COUNT is now unconditionally enabled and will be
+removed. Cleanup the leftovers before doing so.
 
-Simple atomic counters api provides interfaces for simple atomic counters
-that just count, and don't guard resource lifetimes. The interfaces are
-built on top of atomic_t api, providing a smaller subset of atomic_t
-interfaces necessary to support simple counters.
-
-Counter wraps around to INT_MIN when it overflows and should not be used
-to guard resource lifetimes, device usage and open counts that control
-state changes, and pm states. Overflowing to INT_MIN is consistent with
-the atomic_t api, which it is built on top of.
-
-Using counter_atomic* to guard lifetimes could lead to use-after free
-when it overflows and undefined behavior when used to manage state
-changes and device usage/open states.
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: rcu@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- MAINTAINERS                                  |  1 +
- tools/testing/selftests/lib/Makefile         |  1 +
- tools/testing/selftests/lib/config           |  1 +
- tools/testing/selftests/lib/test_counters.sh | 10 ++++++++++
- 4 files changed, 13 insertions(+)
- create mode 100755 tools/testing/selftests/lib/test_counters.sh
+ tools/testing/selftests/rcutorture/configs/rcu/SRCU-t            | 1 -
+ tools/testing/selftests/rcutorture/configs/rcu/SRCU-u            | 1 -
+ tools/testing/selftests/rcutorture/configs/rcu/TINY01            | 1 -
+ tools/testing/selftests/rcutorture/doc/TINY_RCU.txt              | 5 ++---
+ tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt      | 1 -
+ tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h | 1 -
+ 6 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4e82d0ffcab0..26719b8dd48e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15845,6 +15845,7 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	include/linux/counters.h
- F:	lib/test_counters.c
-+F:	tools/testing/selftests/lib/test_counters.sh
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t
+index 6c78022..553cf65 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t
++++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t
+@@ -7,4 +7,3 @@ CONFIG_RCU_TRACE=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_DEBUG_ATOMIC_SLEEP=y
+-#CHECK#CONFIG_PREEMPT_COUNT=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u
+index c15ada8..99563da 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u
++++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u
+@@ -7,4 +7,3 @@ CONFIG_RCU_TRACE=n
+ CONFIG_DEBUG_LOCK_ALLOC=y
+ CONFIG_PROVE_LOCKING=y
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+-CONFIG_PREEMPT_COUNT=n
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TINY01 b/tools/testing/selftests/rcutorture/configs/rcu/TINY01
+index 6db705e..9b22b8e 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TINY01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TINY01
+@@ -10,4 +10,3 @@ CONFIG_RCU_TRACE=n
+ #CHECK#CONFIG_RCU_STALL_COMMON=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+-CONFIG_PREEMPT_COUNT=n
+diff --git a/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt b/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt
+index a75b169..d30cedf 100644
+--- a/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt
++++ b/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt
+@@ -3,11 +3,10 @@ This document gives a brief rationale for the TINY_RCU test cases.
  
- SIMPLE FIRMWARE INTERFACE (SFI)
- S:	Obsolete
-diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-index a105f094676e..e8960d7934e2 100644
---- a/tools/testing/selftests/lib/Makefile
-+++ b/tools/testing/selftests/lib/Makefile
-@@ -5,5 +5,6 @@
- all:
+ Kconfig Parameters:
  
- TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
-+TEST_PROGS += test_counters.sh
+-CONFIG_DEBUG_LOCK_ALLOC -- Do all three and none of the three.
+-CONFIG_PREEMPT_COUNT
++CONFIG_DEBUG_LOCK_ALLOC -- Do both and none of the two.
+ CONFIG_RCU_TRACE
  
- include ../lib.mk
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index b80ee3f6e265..6ed25024d371 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -3,3 +3,4 @@ CONFIG_TEST_BITMAP=m
- CONFIG_PRIME_NUMBERS=m
- CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_BITOPS=m
-+CONFIG_TEST_COUNTERS=m
-diff --git a/tools/testing/selftests/lib/test_counters.sh b/tools/testing/selftests/lib/test_counters.sh
-new file mode 100755
-index 000000000000..78726cad5c7a
---- /dev/null
-+++ b/tools/testing/selftests/lib/test_counters.sh
-@@ -0,0 +1,10 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2020 Shuah Khan <skhan@linuxfoundation.org>
-+# Copyright (c) 2020 The Linux Foundation
-+#
-+# Tests the Simple Atomic Counters interfaces using test_counters
-+# kernel module
-+#
-+$(dirname $0)/../kselftest/module.sh "test_counters" test_counters
--- 
-2.25.1
-
+-The theory here is that randconfig testing will hit the other six possible
++The theory here is that randconfig testing will hit the other two possible
+ combinations of these parameters.
+ 
+ 
+diff --git a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
+index 1b96d68..cfdd48f 100644
+--- a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
++++ b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
+@@ -43,7 +43,6 @@ CONFIG_64BIT
+ 
+ 	Used only to check CONFIG_RCU_FANOUT value, inspection suffices.
+ 
+-CONFIG_PREEMPT_COUNT
+ CONFIG_PREEMPT_RCU
+ 
+ 	Redundant with CONFIG_PREEMPT, ignore.
+diff --git a/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h b/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h
+index 283d710..d0d485d 100644
+--- a/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h
++++ b/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h
+@@ -8,7 +8,6 @@
+ #undef CONFIG_HOTPLUG_CPU
+ #undef CONFIG_MODULES
+ #undef CONFIG_NO_HZ_FULL_SYSIDLE
+-#undef CONFIG_PREEMPT_COUNT
+ #undef CONFIG_PREEMPT_RCU
+ #undef CONFIG_PROVE_RCU
+ #undef CONFIG_RCU_NOCB_CPU
