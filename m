@@ -2,140 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CE928AE02
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 07:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001B928AE8E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 08:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbgJLF4b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Oct 2020 01:56:31 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36380 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbgJLF4a (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 01:56:30 -0400
-Received: from mail-lj1-f198.google.com ([209.85.208.198])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kRqou-0002CL-0s
-        for linux-kselftest@vger.kernel.org; Mon, 12 Oct 2020 05:56:28 +0000
-Received: by mail-lj1-f198.google.com with SMTP id a4so2109927ljb.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2020 22:56:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MG6dr6dkYjbuidZHOqbfSuEQ8chzRGiJ/r5QM2M/mPI=;
-        b=Wqk2GxJvCN9s/RVKzdpFUqn1uCK8fk2bMH480Vhu4Pdooh5jvmY3196qEvACVKWutc
-         CbdQbyD+bKVklkzZZ2ik8bTxgqVWsDUcccFhBpANtpG6oDZR9eN4rG49VZFjALzpJCJg
-         68jmXndw/rKhF0DZZ3wfRUs2OWDzpiiDR3AlhN52EcQFDLpfsdpmKHizi6q0fop+ehLN
-         uB1DZwU09zdwmTV0pNAWipFmoFPrjbKrYMosxiFyoSaQjrWwSVYMxMkvX9GuwhEWWcbH
-         3FFfNMc5/f3laJ9XmIDd86EQYPqh9OSAwn6PS5jg0lxoVuSSBIcjKx5Bh0thswX3iwT0
-         4YdA==
-X-Gm-Message-State: AOAM530mAlZVO2o2ZvpvCp4gnT4jKCpbXZyILTi9mk/xEBh7guhy1JJn
-        5wPRLcr0jBdTFeonLfRZT25Sp7GrZqEtLICg5mCk8kdaImOmuAhZx3lncMTVQpzez7wo9HP2FoI
-        bVVaHGmUfefcW3zwqyxRQYR9gjhbjS/ja9MPEqewEFVgZSvCn5qKv0ZocqTaI
-X-Received: by 2002:ac2:5e6c:: with SMTP id a12mr1947637lfr.568.1602482187422;
-        Sun, 11 Oct 2020 22:56:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwoCKfffCt19WVgrVsF4yF4GyeBHzR1CkXFM5Wcu9g2IAxq3X1X3p1GzScUUEVKhUm+XfQYsVpWEn/D3wEnFNw=
-X-Received: by 2002:ac2:5e6c:: with SMTP id a12mr1947631lfr.568.1602482187140;
- Sun, 11 Oct 2020 22:56:27 -0700 (PDT)
+        id S1726756AbgJLG4r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Oct 2020 02:56:47 -0400
+Received: from mga11.intel.com ([192.55.52.93]:8586 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726123AbgJLG4p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Oct 2020 02:56:45 -0400
+IronPort-SDR: KdOQg+ZBqIiV/ltrco9eP5XufL+zHKA8feyxTD5Z0KzKXfiHluIayIhHF5kMMjoAONeEwr8w70
+ b6av5HCblNFg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9771"; a="162232222"
+X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
+   d="scan'208";a="162232222"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2020 23:56:37 -0700
+IronPort-SDR: DSpSIoZKV7KPLq4zxFvBA+ZLKNkpgmuUQCwMmUi8wsqk6OFxxWBKXoVpyUUZRY9EN2DChpPczf
+ 4EPhWIQlBVGQ==
+X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
+   d="scan'208";a="529842687"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2020 23:56:35 -0700
+Date:   Sun, 11 Oct 2020 23:56:35 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, linux-aio@kvack.org,
+        linux-efi@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        target-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, samba-technical@lists.samba.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-afs@lists.infradead.org, cluster-devel@redhat.com,
+        linux-cachefs@redhat.com, intel-wired-lan@lists.osuosl.org,
+        xen-devel@lists.xenproject.org, linux-ext4@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, intel-gfx@lists.freedesktop.org,
+        linux-erofs@lists.ozlabs.org, reiserfs-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        io-uring@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, netdev@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH RFC PKS/PMEM 22/58] fs/f2fs: Utilize new kmap_thread()
+Message-ID: <20201012065635.GB2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009195033.3208459-1-ira.weiny@intel.com>
+ <20201009195033.3208459-23-ira.weiny@intel.com>
+ <20201009213434.GA839@sol.localdomain>
+ <20201010003954.GW20115@casper.infradead.org>
+ <20201010013036.GD1122@sol.localdomain>
 MIME-Version: 1.0
-References: <20200907035010.9154-1-po-hsu.lin@canonical.com>
- <20200907131217.61643ada@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAMy_GT-kaqkcdR+0q5eKoW3CJn7dZSCfr+UxRf6e5iRzZMiKTA@mail.gmail.com> <CAMy_GT-0ad7dnWZ=sVt7kZQSMeKQ-9AXdxTe+LqD4uuFnVd+Vw@mail.gmail.com>
-In-Reply-To: <CAMy_GT-0ad7dnWZ=sVt7kZQSMeKQ-9AXdxTe+LqD4uuFnVd+Vw@mail.gmail.com>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Mon, 12 Oct 2020 13:56:15 +0800
-Message-ID: <CAMy_GT9hALtE9-qBU95QCR7=VN8hwRps4U=hDjsWeKzssnMbKg@mail.gmail.com>
-Subject: Re: [PATCHv3] selftests: rtnetlink: load fou module for
- kci_test_encap_fou() test
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201010013036.GD1122@sol.localdomain>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
-Is there any update on this patch?
-Thanks!
-PHLin
-
-On Fri, Sep 18, 2020 at 6:39 PM Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
->
-> Hello folks,
->
-> any thoughts on this patch?
-> It can make the test pass and reduce the failure numbers in
-> kselftests, it will be great to have this applied.
->
-> Thanks
-> PHLin
->
->
-> On Tue, Sep 8, 2020 at 2:57 PM Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
-> >
-> > On Tue, Sep 8, 2020 at 4:12 AM Jakub Kicinski <kuba@kernel.org> wrote:
-> > >
-> > > On Mon,  7 Sep 2020 11:50:10 +0800 Po-Hsu Lin wrote:
-> > > > The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
-> > > > needs the fou module to work. Otherwise it will fail with:
+On Fri, Oct 09, 2020 at 06:30:36PM -0700, Eric Biggers wrote:
+> On Sat, Oct 10, 2020 at 01:39:54AM +0100, Matthew Wilcox wrote:
+> > On Fri, Oct 09, 2020 at 02:34:34PM -0700, Eric Biggers wrote:
+> > > On Fri, Oct 09, 2020 at 12:49:57PM -0700, ira.weiny@intel.com wrote:
+> > > > The kmap() calls in this FS are localized to a single thread.  To avoid
+> > > > the over head of global PKRS updates use the new kmap_thread() call.
 > > > >
-> > > >   $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
-> > > >   RTNETLINK answers: No such file or directory
-> > > >   Error talking to the kernel
-> > > >
-> > > > Add the CONFIG_NET_FOU into the config file as well. Which needs at
-> > > > least to be set as a loadable module.
-> > > >
-> > > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> > >
-> > > > diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-> > > > index 7c38a90..a711b3e 100755
-> > > > --- a/tools/testing/selftests/net/rtnetlink.sh
-> > > > +++ b/tools/testing/selftests/net/rtnetlink.sh
-> > > > @@ -520,6 +520,11 @@ kci_test_encap_fou()
-> > > >               return $ksft_skip
-> > > >       fi
-> > > >
-> > > > +     if ! /sbin/modprobe -q -n fou; then
-> > > > +             echo "SKIP: module fou is not found"
-> > > > +             return $ksft_skip
-> > > > +     fi
-> > > > +     /sbin/modprobe -q fou
-> > > >       ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
-> > > >       if [ $? -ne 0 ];then
-> > > >               echo "FAIL: can't add fou port 7777, skipping test"
-> > > > @@ -540,6 +545,7 @@ kci_test_encap_fou()
-> > > >               return 1
-> > > >       fi
-> > > >
-> > > > +     /sbin/modprobe -q -r fou
-> > >
-> > > I think the common practice is to not remove the module at the end of
-> > > the test. It may be used by something else than the test itself.
-> > >
-> > Hello Jakub,
-> > Thanks for your feedback.
-> >
-> > For this case I think it's safe to remove the module here, as it was
-> > never loaded before and thus causing this test to fail.
-> > If other tests in this rtnetlink.sh need this fou module, we should be
-> > able to spot those failures too, however this is the only failure as I
-> > can see.
-> > (pmtu.sh will need fou module to run as well, but it will be loaded there.)
-> >
-> > Shouldn't we insert the required module whenever the test needs it? So
-> > that we can run the test itself directly, without depending on other
-> > tests.
-> > Also, I can see modules for tests were being unloaded in other tests as well.
-> >
-> > Thanks
-> >
-> > > >       echo "PASS: fou"
+> > > > @@ -2410,12 +2410,12 @@ static inline struct page *f2fs_pagecache_get_page(
+> > > >  
+> > > >  static inline void f2fs_copy_page(struct page *src, struct page *dst)
+> > > >  {
+> > > > -	char *src_kaddr = kmap(src);
+> > > > -	char *dst_kaddr = kmap(dst);
+> > > > +	char *src_kaddr = kmap_thread(src);
+> > > > +	char *dst_kaddr = kmap_thread(dst);
+> > > >  
+> > > >  	memcpy(dst_kaddr, src_kaddr, PAGE_SIZE);
+> > > > -	kunmap(dst);
+> > > > -	kunmap(src);
+> > > > +	kunmap_thread(dst);
+> > > > +	kunmap_thread(src);
 > > > >  }
-> > > >
-> > >
+> > > 
+> > > Wouldn't it make more sense to switch cases like this to kmap_atomic()?
+> > > The pages are only mapped to do a memcpy(), then they're immediately unmapped.
+> > 
+> > Maybe you missed the earlier thread from Thomas trying to do something
+> > similar for rather different reasons ...
+> > 
+> > https://lore.kernel.org/lkml/20200919091751.011116649@linutronix.de/
+> 
+> I did miss it.  I'm not subscribed to any of the mailing lists it was sent to.
+> 
+> Anyway, it shouldn't matter.  Patchsets should be standalone, and not require
+> reading random prior threads on linux-kernel to understand.
+
+Sorry, but I did not think that the discussion above was directly related.  If
+I'm not mistaken, Thomas' work was directed at relaxing kmap_atomic() into
+kmap_thread() calls.  While interesting, it is not the point of this series.  I
+want to restrict kmap() callers into kmap_thread().
+
+For this series it was considered to change the kmap_thread() call sites to
+kmap_atomic().  But like I said in the cover letter kmap_atomic() is not the
+same semantic.  It is too strict.  Perhaps I should have expanded that
+explanation.
+
+> 
+> And I still don't really understand.  After this patchset, there is still code
+> nearly identical to the above (doing a temporary mapping just for a memcpy) that
+> would still be using kmap_atomic().
+
+I don't understand.  You mean there would be other call sites calling:
+
+kmap_atomic()
+memcpy()
+kunmap_atomic()
+
+?
+
+> Is the idea that later, such code will be
+> converted to use kmap_thread() instead?  If not, why use one over the other?
+ 
+
+The reason for the new call is that with PKS added behind kmap we have 3 levels
+of mapping we want.
+
+global kmap (can span threads and sleep)
+'thread' kmap (can sleep but not span threads)
+'atomic' kmap (can't sleep nor span threads [by definition])
+
+As Matthew said perhaps 'global kmaps' may be best changed to vmaps?  I just
+don't know the details of every call site.
+
+And since I don't know the call site details if there are kmap_thread() calls
+which are better off as kmap_atomic() calls I think it is worth converting
+them.  But I made the assumption that kmap users would already be calling
+kmap_atomic() if they could (because it is more efficient).
+
+Ira
