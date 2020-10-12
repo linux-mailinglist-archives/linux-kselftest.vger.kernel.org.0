@@ -2,125 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E1528C3BB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 23:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6604228C49D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Oct 2020 00:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731903AbgJLVDJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Oct 2020 17:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S2388218AbgJLWVD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Oct 2020 18:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731847AbgJLVDI (ORCPT
+        with ESMTP id S2388682AbgJLWVC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 17:03:08 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB68C0613D0
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 14:03:08 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id n9so2155052pgt.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 14:03:08 -0700 (PDT)
+        Mon, 12 Oct 2020 18:21:02 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F45C0613D1
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:02 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id v187so13260575pgv.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b/TAN4DgDbRq78KqjsPZvJBxycvwlCcdCcdTr+Ek7Og=;
-        b=P+n28kBusJXK2wX8qUVrbwldVwyq54gUynSy7mBzZ9CQt7v340G5/ZkQkl2QVkngvZ
-         66PjP02ma9k+2+AJ0ci3ZnvC5c720Vhtn51PlaCcyXBQHG/ond0nQFbbeh2TqbhNFtTI
-         +6XaOrqijFTUAuHph0GU7zKOA3JLrLRqd2UamYfYe+pvQPSroChvZCtL1dgIgdBx/weo
-         TqvpCARRsPxKRIN2cCA7gheHrJkhvw0RoSEH+Fge/ZcDjX1R6ruPhAIoFSAvoGdPqPLr
-         hxwrFlEBNAKVpJxfGZm5g8NfHalTD6RhlIVz597pyZEa6AmD2RtK7A0WFHuSQWYE3MsO
-         D/YA==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=kKRoFuTiEqTnO54yX/Z4jVdaiC2DU26pFFAEeweQEpw=;
+        b=InnYARZEi+W7gIM39a8oDBXumH9E/S+G4+iTHogC7IWaC8eeY45xUD6debtN9hMF1p
+         4XtDkMPhFNYscUJiJv4mPzN5Bhw2FEXXbHkDn/7YrelDTSOLVYFeo3jb9Ny20JqGk92x
+         +xCmrmnNG9lXZOOyNTUZLSab2eV6rJ9g0GVUV/Kg4vKEBBtRxPVYtInobKlNnsLpaBYg
+         59wUrIcdV8+TCcHxrug1jAXQ5zUzq/ZViz/k8/1JUHyW2Wg5B/e5gpiKe4OaH9JocGVg
+         l/m08/hVI0r3fjfu4dB32bHjPQgITHt3FvWMdOd4giROhjCNePa/eap78NFvLjWe44pc
+         CUig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b/TAN4DgDbRq78KqjsPZvJBxycvwlCcdCcdTr+Ek7Og=;
-        b=lEzFy/5ecGoeOQuveuMajndT42z5hzeWVoE70iytlh4OqNoZz8zMQ4LjTBMKluxTKK
-         jlXt7U21v3c2M/6eXIRHxMB8E/1QEL9QwQvKvoKZ1Y4L8Vr/SijuX9RUlSrMNIuM9+me
-         1PY28UHCPhovN8lJBz4ViMhI8Lq70ynjiLI2oZvXF7Hpry/54aguHcU50mmDakXcR2HI
-         W7S5b06Sbjtsb+AvJyo0epA4RA6rYlHiVD3Xo6Ni/8S916h72pgPqAZaGRuw/kiFwu1v
-         22cNyzQduyYHbbd/7+1LUtw0WlpvWwSEqNL5MdrbL6ZGIdw9Nyl8x84MYnNfasuVQ9p2
-         LFwg==
-X-Gm-Message-State: AOAM533jjF9kjwcSlyORMXdP/MKpy4WxB0Ro4t9n9P9dU8TfVegGBxa+
-        DWnb//Y4iHtmVElXlEn7NsNal1JMl8vke3L+oplsDg==
-X-Google-Smtp-Source: ABdhPJwIqtkqX0s+O7rGfHATFdJHihF17V4UMLnv5pGyiTA1XTsNZtRMs/y29n25CQKI5VwrwyLp6EpyeDim8He9q+c=
-X-Received: by 2002:a17:90a:7144:: with SMTP id g4mr20595295pjs.80.1602536587672;
- Mon, 12 Oct 2020 14:03:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200729201146.537433-1-vitor@massaru.org> <20200729203908.GD2655@hirez.programming.kicks-ass.net>
- <CADQ6JjW-=SNjV-abGpGA9NfHD4yGG_bD5FmvW99W-Vo06twkbw@mail.gmail.com>
- <20200804132517.GK2657@hirez.programming.kicks-ass.net> <CADQ6JjWzze-VAmg_b9EkS4iVySt5pw8V4FSxYpDFAj8jvBxuGA@mail.gmail.com>
- <20200804142344.GM2674@hirez.programming.kicks-ass.net> <CADQ6JjWbCsyWxZKQ5=kkxx8hkaW=mbCjDodPXDAv5vH-=tVvEQ@mail.gmail.com>
-In-Reply-To: <CADQ6JjWbCsyWxZKQ5=kkxx8hkaW=mbCjDodPXDAv5vH-=tVvEQ@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 12 Oct 2020 14:02:56 -0700
-Message-ID: <CAFd5g46DzWRzp9yXkpHbtyJuv236E=z7OaWeqXnfuiy6CTBL4A@mail.gmail.com>
-Subject: Re: [PATCH] lib: kunit: add test_min_heap test conversion to KUnit
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Ian Rogers <irogers@google.com>, Ingo Molnar <mingo@kernel.org>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=kKRoFuTiEqTnO54yX/Z4jVdaiC2DU26pFFAEeweQEpw=;
+        b=UCLq4Cu3rM8XSePAdD9C0AGAVZBv4gtpPx5v8S+L7WHiQN3i+RaP57gF/551pAp/8c
+         DcAKzaithzJYfsdnU8AXMGMfhtH6pEPxOGQ9EAxh/ecv+LLEzkKBfmo7JCr2ZRqEdjI+
+         SCpeyHgeKu8OoEiArllay6C7Nd0IlzOmS3cjRttiB/GS0suUXOQoJ167c2EqcvzZGa/e
+         NRA6SLakQzgP9chKYV6uYxiiaZL87tM99DjBfJfQr+3NQoDL7wWCWPo7u9r3jZ9z4DHg
+         Vq9V/XWWdGwHZ/yOuMxrdnnJDZIrKn0Vgf2x9YKIu7+5ZoF/+4vNapOeZ1XGRdyMTxkJ
+         RVcQ==
+X-Gm-Message-State: AOAM530rbZYU8RFI/eDoqiF/W5YSo4rcnDCmVf6wB93Q+uzqub2vP6Ib
+        lpVohbFQr/tKhWESH8ESw82xDgD2Sxye0g==
+X-Google-Smtp-Source: ABdhPJzUrVKr+mzamRTaLzkeLip1zoVFBmINqer7dbQV3X16Ga7hCT6KXUlbADykH+ryPxsDlISBfkEROgQdVQ==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
+ (user=dlatypov job=sendgmr) by 2002:a17:90b:4c0c:: with SMTP id
+ na12mr21426056pjb.25.1602541261593; Mon, 12 Oct 2020 15:21:01 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 15:20:38 -0700
+Message-Id: <20201012222050.999431-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
+Subject: [RFC v2 00/12] kunit: introduce class mocking support.
+From:   Daniel Latypov <dlatypov@google.com>
+To:     dlatypov@google.com
+Cc:     alan.maguire@oracle.com, brendanhiggins@google.com,
+        davidgow@google.com, keescook@chromium.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, mcgrof@kernel.org,
+        sboyd@kernel.org, skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 4, 2020 at 9:22 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
->
-> Hi Peter,
->
-> On Tue, Aug 4, 2020 at 11:23 AM <peterz@infradead.org> wrote:
-> >
-> > On Tue, Aug 04, 2020 at 10:46:21AM -0300, Vitor Massaru Iha wrote:
-> > > On Tue, Aug 4, 2020 at 10:25 AM <peterz@infradead.org> wrote:
-> > > > On Wed, Jul 29, 2020 at 06:57:17PM -0300, Vitor Massaru Iha wrote:
-> > > >
-> > > > > The results can be seen this way:
-> > > > >
-> > > > > This is an excerpt from the test.log with the result in TAP format:
-> > > > > [snip]
-> > > > > ok 5 - example
-> > > > >     # Subtest: min-heap
-> > > > >     1..6
-> > > > >     ok 1 - test_heapify_all_true
-> > > > >     ok 2 - test_heapify_all_false
-> > > > >     ok 3 - test_heap_push_true
-> > > > >     ok 4 - test_heap_push_false
-> > > > >     ok 5 - test_heap_pop_push_true
-> > > > >     ok 6 - test_heap_pop_push_false
-> > > > > [snip]
-> >
-> > So ^ is TAP format?
->
-> Yep, you can see the spec here: https://testanything.org/tap-specification.html
->
-> >
-> > > > I don't care or care to use either; what does dmesg do? It used to be
-> > > > that just building the self-tests was sufficient and any error would
-> > > > show in dmesg when you boot the machine.
-> > > >
-> > > > But if I now have to use some damn tool, this is a regression.
-> > >
-> > > If you don't want to, you don't need to use the kunit-tool. If you
-> > > compile the tests as builtin and run the Kernel on your machine
-> > > the test result will be shown in dmesg in TAP format.
-> >
-> > That's seems a lot more verbose than it is now. I've recently even done
-> > a bunch of tests that don't print anything on success, dmesg is clutter
-> > enough already.
->
-> What tests do you refer to?
->
-> Running the test_min_heap.c, I got this from dmesg:
->
-> min_heap_test: test passed
->
-> And running min_heap_kunit.c:
->
-> ok 1 - min-heap
+# Background
+KUnit currently lacks any first-class support for mocking.
+For an overview and discussion on the pros and cons, see
+https://martinfowler.com/articles/mocksArentStubs.html
 
-Gentle poke. I think Vitor was looking for a response. My guess is
-that Ian was waiting for a follow up patch.
+This patch set introduces the basic machinery needed for mocking:
+setting and validating expectations, setting default actions, etc.
+
+Using that basic infrastructure, we add macros for "class mocking", as
+it's probably the easiest type of mocking to start with.
+
+## Class mocking
+
+By "class mocking", we're referring mocking out function pointers stored
+in structs like:
+  struct sender {
+        int (*send)(struct sender *sender, int data);
+  };
+or in ops structs
+  struct sender {
+        struct send_ops *ops; // contains `send`
+  };
+
+After the necessary DEFINE_* macros, we can then write code like
+  struct MOCK(sender) mock_sender = CONSTRUCT_MOCK(sender, test);
+
+  /* Fake an error for a specific input. */
+  handle = KUNIT_EXPECT_CALL(send(<omitted>, kunit_int_eq(42)));
+  handle->action = kunit_int_return(test, -EINVAL);
+
+  /* Pass the mocked object to some code under test. */
+  KUNIT_EXPECT_EQ(test, -EINVAL, send_message(...));
+
+I.e. the goal is to make it easier to test
+1) with less dependencies (we don't need to setup a real `sender`)
+2) unusual/error conditions more easily.
+
+In the future, we hope to build upon this to support mocking in more
+contexts, e.g. standalone funcs, etc.
+
+# TODOs
+
+## Naming
+This introduces a number of new macros for dealing with mocks,
+e.g:
+  DEFINE_STRUCT_CLASS_MOCK(METHOD(foo), CLASS(example),
+                           RETURNS(int),
+                           PARAMS(struct example *, int));
+  ...
+  KUNIT_EXPECT_CALL(foo(mock_get_ctrl(mock_example), ...);
+For consistency, we could prefix everything with KUNIT, e.g.
+`KUNIT_DEFINE_STRUCT_CLASS_MOCK` and `kunit_mock_get_ctrl`, but it feels
+like the names might be long enough that they would hinder readability.
+
+## Usage
+For now the only use of class mocking is in kunit-example-test.c
+As part of changing this from an RFC to a real patch set, we're hoping
+to include at least one example.
+
+Pointers to bits of code where this would be useful that aren't too
+hairy would be appreciated.
+E.g. could easily add a test for tools/perf/ui/progress.h, e.g. that
+ui_progress__init() calls ui_progress_ops.init(), but that likely isn't
+useful to anyone.
+
+---
+v2: 
+* Pass `struct kunit *` to mock init's to allow allocating ops structs.
+* Update kunit-example-test.cc to do so as a more realistic example.
+v1: https://lore.kernel.org/linux-kselftest/20200918183114.2571146-1-dlatypov@google.com/
+---
+
+Brendan Higgins (9):
+  kunit: test: add kunit_stream a std::stream like logger
+  kunit: test: add concept of post conditions
+  checkpatch: add support for struct MOCK(foo) syntax
+  kunit: mock: add parameter list manipulation macros
+  kunit: mock: add internal mock infrastructure
+  kunit: mock: add basic matchers and actions
+  kunit: mock: add class mocking support
+  kunit: mock: add struct param matcher
+  kunit: mock: implement nice, strict and naggy mock distinctions
+
+Daniel Latypov (2):
+  Revert "kunit: move string-stream.h to lib/kunit"
+  kunit: expose kunit_set_failure() for use by mocking
+
+Marcelo Schmitt (1):
+  kunit: mock: add macro machinery to pick correct format args
+
+ include/kunit/assert.h                 |   3 +-
+ include/kunit/kunit-stream.h           |  94 +++
+ include/kunit/mock.h                   | 902 +++++++++++++++++++++++++
+ include/kunit/params.h                 | 305 +++++++++
+ {lib => include}/kunit/string-stream.h |   2 +
+ include/kunit/test.h                   |   9 +
+ lib/kunit/Makefile                     |   9 +-
+ lib/kunit/assert.c                     |   2 -
+ lib/kunit/common-mocks.c               | 409 +++++++++++
+ lib/kunit/kunit-example-test.c         |  98 +++
+ lib/kunit/kunit-stream.c               | 110 +++
+ lib/kunit/mock-macro-test.c            | 241 +++++++
+ lib/kunit/mock-test.c                  | 531 +++++++++++++++
+ lib/kunit/mock.c                       | 370 ++++++++++
+ lib/kunit/string-stream-test.c         |   3 +-
+ lib/kunit/string-stream.c              |   5 +-
+ lib/kunit/test.c                       |  15 +-
+ scripts/checkpatch.pl                  |   4 +
+ 18 files changed, 3099 insertions(+), 13 deletions(-)
+ create mode 100644 include/kunit/kunit-stream.h
+ create mode 100644 include/kunit/mock.h
+ create mode 100644 include/kunit/params.h
+ rename {lib => include}/kunit/string-stream.h (95%)
+ create mode 100644 lib/kunit/common-mocks.c
+ create mode 100644 lib/kunit/kunit-stream.c
+ create mode 100644 lib/kunit/mock-macro-test.c
+ create mode 100644 lib/kunit/mock-test.c
+ create mode 100644 lib/kunit/mock.c
+
+
+base-commit: 10b82d5176488acee2820e5a2cf0f2ec5c3488b6
+-- 
+2.28.0.1011.ga647a8990f-goog
+
