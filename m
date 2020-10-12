@@ -2,64 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B5D28C4B0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Oct 2020 00:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AABC28C4B2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Oct 2020 00:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389401AbgJLWVy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Oct 2020 18:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S2389575AbgJLWVz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Oct 2020 18:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389275AbgJLWVj (ORCPT
+        with ESMTP id S2389479AbgJLWVz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 18:21:39 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD55C0613D7
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:38 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id z22so3231581qtn.15
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:38 -0700 (PDT)
+        Mon, 12 Oct 2020 18:21:55 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DCC0613DA
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:40 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id b195so622193pfb.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=bC8bc00tDP9ynAbL7H/K4risArdoFSp41x3R2A78u04=;
-        b=CHeTDQjDQWk5SugZGUsEbJWXZVoztLD39IQw73+TiXG0em9ZzdG1BuIpf9eRPn8aeB
-         GWSfpQjI9D/ReFvjMd8JGGQYFg5mljDB2bxYZYBlvh69C34PGI5aIjareTWZZWn98pv0
-         pD5UBgTeGviwXlBuhRisgLGdq1TrDgdN0vvKlJLl0OOZ6ApM7/BqE23f3QKGYcXfpY8d
-         1ktSmP8kfEW5iDFzA3ft5RcHEiFrUn+ztBnloGP0yYuqDze4W7/wpz9cuxQWjx5rlItO
-         iEQ68vik4Y7PeFGWY3T+QNrLihYxAPnTtd3qwzTo9iJcflq65ORB6N4CFX9oSHH8TBZA
-         n2AA==
+        bh=9Th6mUnf1orXMoZTMICnpRC/n4+G40+olevdzmz/HgE=;
+        b=juTrzXlL2Q0Pwx2p4xz0BhaNDy7J5jjipurRYDi8Gl4v5DhfPH3YhWfYc6HUaUW0Y1
+         Udm+/h3sP6kMWCsCN/QjuXUxoSkz6sib5GE66Foi1DY+1IOYUskvzJexEeccriN2I0F1
+         XQlnzE8q5oSrP5ivcuZ2zPY06fTwC1tmmGDjyYzytEJSW+rEB/KL/zjogo+edLfjiTS5
+         57jiEfGFvxYI+uwmCr7e77Mm1xzBeOrxMbikhmTAqeUB4x2dPGww8db48ovqLSRydlZH
+         KrQKrM/DSgdgNpqZPxQPmbcR4aocrQemva1PtputWi9PjKRa7AU6UufUdZfYYrkhKFGc
+         1QCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=bC8bc00tDP9ynAbL7H/K4risArdoFSp41x3R2A78u04=;
-        b=j06PtboFZORWyl2513pWXwNM55Ik3VfnBwh6QQXJTSIJJMS9N44NYUaTQlrss41T5B
-         WFyot/ETRX+Nayc98zzHSPOaqT/9DxF/RIdm+rWlQHVJLhxeOw5eoaXedq9a5nzysHwi
-         oW1z/129ZpbA8y9V2A1jYAByoC57NHVxRbzQVC87EJ3z6R9UfRnmwPKV2xNmMp5R4vS/
-         m06PVNedlbCIBsrz1CIP4SUKQVBOWuAb19YF71oDERCGXyimPVwS+zrBDpJIJa8lKZFU
-         1+x6d+1t7jEdcLMsmGrrfNIRa3xc1fOf3uQCjp8twy97Gclnode/W2hHevchIvbC0Aos
-         riqg==
-X-Gm-Message-State: AOAM532UVH0nnsjdcptoJdA1Umsw+jfCLAMBJvHsuNRO7IzZ1VmrfFfX
-        stjqRFqSfWjEeW6v81C0BkR5xiSUBDUR1w==
-X-Google-Smtp-Source: ABdhPJyiX8+zF0fcLXehSLljEM5NsLHgQTcclOSA1APGR/J55WSVCeeSczEIyl0nWkmhxyfo2oWO7Oaffboong==
+        bh=9Th6mUnf1orXMoZTMICnpRC/n4+G40+olevdzmz/HgE=;
+        b=GIDOm9GFGXtMmeRDQXfqACAPydcoTlbv62q9mtuVSGeq6dzBP+wQu5/XP3K5Wkss19
+         Y4U3wCfGNrocjZ1iqx7woTR1tvTug05TH+dPHJxFK9u+AcaDrx+I2vSO0uka1DX3CDXa
+         a6sx28Wmvr+XfhQwiIJACOyUbkqiJ1PjrqF/sHwzle6cwVqGcqfZ0cf05KSoBxUnihlF
+         7X0w4UOFbnC11aTKlaMKOVVzeCl89y4R7Ee97qOH3Z9pFO+H7JMqGGa1Lurz1QdHOXVk
+         WAESJUZupEnAAA1JArV3vAfZ/VRXdIg32VmwA5su5ikGYz/Zf8UewpW7QBIrLlrKsZdA
+         Oa/g==
+X-Gm-Message-State: AOAM530p4lfLHri+KC0V7E4otJpXYMln1i0PMFWxhDpG16jQZ4vAnMHo
+        8hl/kqfo4RoKMp1XLekQ6dnjBQ0Z6f2Tnw==
+X-Google-Smtp-Source: ABdhPJxdIiBhhKKuPn910V8JLEhKFAWzVKZJvQlUbkhuSeHIuyo1IdN4FoikCowbs2tdRCyZZ+HWO626m3+8+A==
 Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:ad4:5843:: with SMTP id
- de3mr27933829qvb.12.1602541297970; Mon, 12 Oct 2020 15:21:37 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 15:20:49 -0700
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:2e05:: with SMTP id
+ q5mr706390pjd.0.1602541299837; Mon, 12 Oct 2020 15:21:39 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 15:20:50 -0700
 In-Reply-To: <20201012222050.999431-1-dlatypov@google.com>
-Message-Id: <20201012222050.999431-12-dlatypov@google.com>
+Message-Id: <20201012222050.999431-13-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20201012222050.999431-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [RFC v2 11/12] kunit: mock: add struct param matcher
+Subject: [RFC v2 12/12] kunit: mock: implement nice, strict and naggy mock distinctions
 From:   Daniel Latypov <dlatypov@google.com>
 To:     dlatypov@google.com
 Cc:     alan.maguire@oracle.com, brendanhiggins@google.com,
         davidgow@google.com, keescook@chromium.org,
         kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, mcgrof@kernel.org,
-        sboyd@kernel.org, skhan@linuxfoundation.org
+        sboyd@kernel.org, skhan@linuxfoundation.org,
+        Felix Guo <felixguoxiuping@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -67,259 +68,156 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Brendan Higgins <brendanhiggins@google.com>
 
-Add parameter matcher builder for matching struct values.
+Nice mocks only fail when there is an expectation on a method, but none
+match a given call. Strict mocks only pass when there is a matching
+expectation for every call. Naggy mocks have the same pass/fail behavior
+as nice, but report a warning in any case a strict mock would fail.
 
+Signed-off-by: Felix Guo <felixguoxiuping@gmail.com>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- include/kunit/mock.h     |  58 +++++++++++++++++++
- lib/kunit/common-mocks.c | 117 +++++++++++++++++++++++++++++++++++++++
- lib/kunit/mock-test.c    |  40 +++++++++++++
- 3 files changed, 215 insertions(+)
+ include/kunit/mock.h  |  63 ++++++++++++++++
+ lib/kunit/mock-test.c | 171 ++++++++++++++++++++++++++++++++++++++++++
+ lib/kunit/mock.c      |  10 ++-
+ 3 files changed, 242 insertions(+), 2 deletions(-)
 
 diff --git a/include/kunit/mock.h b/include/kunit/mock.h
-index 9252a0abd295..df99ae5ac721 100644
+index df99ae5ac721..12e70a3f82c5 100644
 --- a/include/kunit/mock.h
 +++ b/include/kunit/mock.h
-@@ -758,8 +758,18 @@ struct mock_param_matcher *kunit_ptr_ge(struct kunit *test, void *expected);
- struct mock_param_matcher *kunit_memeq(struct kunit *test,
- 				      const void *buf,
- 				      size_t size);
-+
- struct mock_param_matcher *kunit_streq(struct kunit *test, const char *str);
+@@ -95,10 +95,17 @@ struct mock_method {
+ 	struct list_head expectations;
+ };
  
-+struct mock_param_matcher *kunit_str_contains(struct kunit *test,
-+					      const char *needle);
++enum mock_type {
++	MOCK_TYPE_NICE,
++	MOCK_TYPE_NAGGY,
++	MOCK_TYPE_STRICT
++};
 +
-+/* Matches var-arg arguments. */
-+struct mock_param_matcher *kunit_va_format_cmp(
-+		struct kunit *test,
-+		struct mock_param_matcher *fmt_matcher,
-+		struct mock_param_matcher *va_matcher);
+ struct mock {
+ 	struct kunit_post_condition parent;
+ 	struct kunit *test;
+ 	struct list_head methods;
++	enum mock_type type;
+ 	/* TODO(brendanhiggins@google.com): add locking to do_expect. */
+ 	const void *(*do_expect)(struct mock *mock,
+ 				 const char *method_name,
+@@ -108,6 +115,8 @@ struct mock {
+ 				 int len);
+ };
+ 
++#define DEFAULT_MOCK_TYPE MOCK_TYPE_NAGGY
 +
- struct mock_action *kunit_u8_return(struct kunit *test, u8 ret);
- struct mock_action *kunit_u16_return(struct kunit *test, u16 ret);
- struct mock_action *kunit_u32_return(struct kunit *test, u32 ret);
-@@ -778,4 +788,52 @@ struct mock_action *kunit_ulonglong_return(struct kunit *test,
- 					  unsigned long long ret);
- struct mock_action *kunit_ptr_return(struct kunit *test, void *ret);
+ void mock_init_ctrl(struct kunit *test, struct mock *mock);
+ 
+ void mock_validate_expectations(struct mock *mock);
+@@ -125,6 +134,60 @@ struct mock_expectation *mock_add_matcher(struct mock *mock,
+ 
+ #define MOCK(name) name##_mock
  
 +/**
-+ * struct mock_struct_matcher_entry - composed with other &struct
-+ *                                    mock_struct_matcher_entry to make a
-+ *                                    &struct struct_matcher
-+ * @member_offset: offset of this member
-+ * @matcher: matcher for this particular member
++ * STRICT_MOCK() - sets the mock to be strict and returns the mock
++ * @mock: the mock
 + *
-+ * This is used for struct_cmp() matchers.
++ * For an example, see ``The Nice, the Strict, and the Naggy`` under
++ * ``Using KUnit``.
 + */
-+struct mock_struct_matcher_entry {
-+	size_t member_offset;
-+	struct mock_param_matcher *matcher;
-+};
++#define STRICT_MOCK(mock) \
++({ \
++	mock_get_ctrl(mock)->type = MOCK_TYPE_STRICT; \
++	mock; \
++})
 +
-+static inline void init_mock_struct_matcher_entry_internal(
-+		struct mock_struct_matcher_entry *entry,
-+		size_t offset,
-+		struct mock_param_matcher *matcher)
++static inline bool is_strict_mock(struct mock *mock)
 +{
-+	entry->member_offset = offset;
-+	entry->matcher = matcher;
++	return mock->type == MOCK_TYPE_STRICT;
 +}
 +
 +/**
-+ * INIT_MOCK_STRUCT_MATCHER_ENTRY()
-+ * @entry: the &struct mock_struct_matcher_entry to initialize
-+ * @type: the struct being matched
-+ * @member: the member of the struct being matched, used to calculate the offset
-+ * @matcher: matcher to match that member
++ * NICE_MOCK() - sets the mock to be nice and returns the mock
++ * @mock: the mock
 + *
-+ * Initializes ``entry`` to match ``type->member`` with ``matcher``.
++ * For an example, see ``The Nice, the Strict, and the Naggy`` under
++ * ``Using KUnit``.
 + */
-+#define INIT_MOCK_STRUCT_MATCHER_ENTRY(entry, type, member, matcher)	       \
-+		init_mock_struct_matcher_entry_internal(entry,		       \
-+							offsetof(type, member),\
-+							matcher)
++#define NICE_MOCK(mock) \
++({ \
++	mock_get_ctrl(mock)->type = MOCK_TYPE_NICE; \
++	mock; \
++})
 +
-+static inline void INIT_MOCK_STRUCT_MATCHER_ENTRY_LAST(
-+		struct mock_struct_matcher_entry *entry)
++static inline bool is_nice_mock(struct mock *mock)
 +{
-+	entry->matcher = NULL;
++	return mock->type == MOCK_TYPE_NICE;
 +}
 +
-+struct mock_param_matcher *kunit_struct_cmp(
-+		struct kunit *test,
-+		const char *struct_name,
-+		struct mock_struct_matcher_entry *entries);
++/**
++ * NAGGY_MOCK() - sets the mock to be naggy and returns the mock
++ * @mock: the mock
++ *
++ * For an example, see ``The Nice, the Strict, and the Naggy`` under
++ * ``Using KUnit``.
++ */
++#define NAGGY_MOCK(mock) \
++({ \
++	mock_get_ctrl(mock)->type = MOCK_TYPE_NAGGY; \
++	mock; \
++})
 +
- #endif /* _KUNIT_MOCK_H */
-diff --git a/lib/kunit/common-mocks.c b/lib/kunit/common-mocks.c
-index ce8929157ded..6a4cc9c60427 100644
---- a/lib/kunit/common-mocks.c
-+++ b/lib/kunit/common-mocks.c
-@@ -228,6 +228,123 @@ struct mock_param_matcher *kunit_streq(struct kunit *test, const char *str)
- 	return &matcher->matcher;
- }
- 
-+struct mock_str_contains_matcher {
-+	struct mock_param_matcher matcher;
-+	const char *needle;
-+};
-+
-+static bool match_str_contains(struct mock_param_matcher *pmatcher,
-+			       struct kunit_stream *stream,
-+			       const void *phaystack)
++static inline bool is_naggy_mock(struct mock *mock)
 +{
-+	struct mock_str_contains_matcher *matcher =
-+		container_of(pmatcher,
-+			     struct mock_str_contains_matcher,
-+			     matcher);
-+	const char *haystack = CONVERT_TO_ACTUAL_TYPE(const char *, phaystack);
-+	bool matches = strstr(haystack, matcher->needle);
-+
-+	if (matches)
-+		kunit_stream_add(stream,
-+				 "'%s' found in '%s'",
-+				 matcher->needle,
-+				 haystack);
-+	else
-+		kunit_stream_add(stream,
-+				 "'%s' not found in '%s'",
-+				 matcher->needle,
-+				 haystack);
-+	return matches;
++	return mock->type == MOCK_TYPE_NAGGY;
 +}
 +
-+struct mock_param_matcher *kunit_str_contains(struct kunit *test,
-+					      const char *str)
-+{
-+	struct mock_str_contains_matcher *matcher;
-+
-+	matcher = kunit_kzalloc(test, sizeof(*matcher), GFP_KERNEL);
-+	if (!matcher)
-+		return NULL;
-+
-+	matcher->matcher.match = match_str_contains;
-+	matcher->needle = str;
-+
-+	return &matcher->matcher;
-+}
-+
-+struct mock_param_matcher *kunit_va_format_cmp(
-+		struct kunit *test,
-+		struct mock_param_matcher *fmt_matcher,
-+		struct mock_param_matcher *va_matcher)
-+{
-+	struct mock_struct_matcher_entry *entries;
-+
-+	entries = kunit_kzalloc(test, sizeof(*entries) * 3, GFP_KERNEL);
-+	if (!entries)
-+		return NULL;
-+
-+	INIT_MOCK_STRUCT_MATCHER_ENTRY(&entries[0],
-+				       struct va_format,
-+				       fmt,
-+				       fmt_matcher);
-+	INIT_MOCK_STRUCT_MATCHER_ENTRY(&entries[1],
-+				       struct va_format,
-+				       va,
-+				       va_matcher);
-+	INIT_MOCK_STRUCT_MATCHER_ENTRY_LAST(&entries[2]);
-+
-+	return kunit_struct_cmp(test, "va_format", entries);
-+}
-+
-+struct mock_struct_matcher {
-+	struct mock_param_matcher matcher;
-+	const char *struct_name;
-+	struct mock_struct_matcher_entry *entries;
-+};
-+
-+static bool match_struct(struct mock_param_matcher *pmatcher,
-+			 struct kunit_stream *stream,
-+			 const void *pactual)
-+{
-+	struct mock_struct_matcher *matcher =
-+			container_of(pmatcher,
-+				     struct mock_struct_matcher,
-+				     matcher);
-+	struct mock_struct_matcher_entry *entry;
-+	const char *actual = CONVERT_TO_ACTUAL_TYPE(const char *, pactual);
-+	const char *member_ptr;
-+	bool matches = true, tmp;
-+
-+	kunit_stream_add(stream, "struct %s {", matcher->struct_name);
-+	for (entry = matcher->entries; entry->matcher; entry++) {
-+		member_ptr = actual + entry->member_offset;
-+		tmp = entry->matcher->match(entry->matcher, stream, member_ptr);
-+		matches = matches && tmp;
-+		kunit_stream_add(stream, ", ");
-+	}
-+	kunit_stream_add(stream, "}");
-+
-+	return matches;
-+}
-+
-+struct mock_param_matcher *kunit_struct_cmp(
-+		struct kunit *test,
-+		const char *struct_name,
-+		struct mock_struct_matcher_entry *entries)
-+{
-+	struct mock_struct_matcher *matcher;
-+
-+	matcher = kunit_kzalloc(test, sizeof(*matcher), GFP_KERNEL);
-+	if (!matcher)
-+		return NULL;
-+
-+	matcher->matcher.match = match_struct;
-+	matcher->struct_name = struct_name;
-+	matcher->entries = entries;
-+
-+	return &matcher->matcher;
-+}
-+
- #define DEFINE_RETURN_ACTION_STRUCT(type_name, type)			       \
- 		struct mock_##type_name##_action {			       \
- 			struct mock_action action;			       \
+ /**
+  * KUNIT_EXPECT_CALL() - Declares a *call expectation* on a mock function.
+  * @expectation_call: a mocked method or function with parameters replaced with
 diff --git a/lib/kunit/mock-test.c b/lib/kunit/mock-test.c
-index 8a0fa33d087c..df0969b43ade 100644
+index df0969b43ade..1c2aa2aa9c1b 100644
 --- a/lib/kunit/mock-test.c
 +++ b/lib/kunit/mock-test.c
-@@ -243,6 +243,45 @@ static void mock_test_do_expect_default_return(struct kunit *test)
+@@ -243,6 +243,50 @@ static void mock_test_do_expect_default_return(struct kunit *test)
  	KUNIT_EXPECT_EQ(test, 0, expectation->times_called);
  }
  
-+/*
-+ * Method called on naggy mock with no expectations will not fail, but will show
-+ * a warning message
++/**
++ * DOC: Testing the failure condition of different mock types.
++ *
++ * The following tests will test the behaviour of expectations under different
++ * conditions. For example, what happens when an expectation:
++ * - is not satisfied at the end of the test
++ * - is fulfilled but the expected function is called again
++ * - a function is called without expectations set on it
++ *
++ * For each of these conditions, there may be variations between the different
++ * types of mocks: nice mocks, naggy mocks (the default) and strict mocks.
++ *
++ * More information about these mocks can be found in the kernel documentation
++ * under Documentation/test/api/class-and-function-mocking
 + */
-+static void mock_test_naggy_no_expectations_no_fail(struct kunit *test)
++
++/* Method called on strict mock with no expectations will fail */
++static void mock_test_strict_no_expectations_will_fail(struct kunit *test)
 +{
 +	struct mock_test_context *ctx = test->priv;
 +	struct kunit *failing_test = ctx->failing_test;
 +	struct mock *mock = ctx->mock;
-+
 +	int param0 = 5, param1 = -5;
 +	static const char * const two_param_types[] = {"int", "int"};
 +	const void *two_params[] = {&param0, &param1};
 +
++	mock->type = MOCK_TYPE_STRICT;
++
 +	mock_set_default_action(mock,
 +				"add",
-+				real_add,
++				mock_add,
 +				kunit_int_return(failing_test, -4));
-+
-+
-+	KUNIT_EXPECT_CALL(mock_add(
-+			mock,
-+			kunit_any(failing_test),
-+			kunit_va_format_cmp(failing_test,
-+					    kunit_str_contains(failing_test,
-+							       "Method was called with no expectations declared"),
-+					    kunit_any(failing_test))));
 +
 +	mock->do_expect(mock,
 +			"add",
-+			real_add,
++			mock_add,
 +			two_param_types,
 +			two_params,
 +			ARRAY_SIZE(two_params));
@@ -328,17 +226,200 @@ index 8a0fa33d087c..df0969b43ade 100644
 +	KUNIT_EXPECT_FALSE(test, failing_test->success);
 +}
 +
+ /*
+  * Method called on naggy mock with no expectations will not fail, but will show
+  * a warning message
+@@ -257,6 +301,8 @@ static void mock_test_naggy_no_expectations_no_fail(struct kunit *test)
+ 	static const char * const two_param_types[] = {"int", "int"};
+ 	const void *two_params[] = {&param0, &param1};
+ 
++	mock->type = MOCK_TYPE_NAGGY;
++
+ 	mock_set_default_action(mock,
+ 				"add",
+ 				real_add,
+@@ -282,6 +328,77 @@ static void mock_test_naggy_no_expectations_no_fail(struct kunit *test)
+ 	KUNIT_EXPECT_FALSE(test, failing_test->success);
+ }
+ 
++/* Method called on nice mock with no expectations will do nothing. */
++static void mock_test_nice_no_expectations_do_nothing(struct kunit *test)
++{
++	struct mock_test_context *ctx = test->priv;
++	struct kunit *failing_test = ctx->failing_test;
++	struct mock *mock = ctx->mock;
++	int param0 = 5, param1 = -5;
++	static const char * const two_param_types[] = {"int", "int"};
++	const void *two_params[] = {&param0, &param1};
++
++	mock->type = MOCK_TYPE_NICE;
++
++	mock->do_expect(mock,
++			"add",
++			mock_add,
++			two_param_types,
++			two_params,
++			ARRAY_SIZE(two_params));
++	mock_validate_expectations(mock);
++
++	KUNIT_EXPECT_TRUE(test, failing_test->success);
++}
++
++/* Test that method called on a mock (of any type) with no matching expectations
++ * will fail test and print all the tried expectations.
++ */
++static void
++run_method_called_but_no_matching_expectation_test(struct kunit *test,
++						   enum mock_type mock_type)
++{
++	struct mock_test_context *ctx = test->priv;
++	struct kunit *failing_test = ctx->failing_test;
++	struct mock *mock = ctx->mock;
++	int param0 = 5, param1 = -5;
++	static const char * const two_param_types[] = {"int", "int"};
++	const void *two_params[] = {&param0, &param1};
++	struct mock_param_matcher *two_matchers[] = {
++		kunit_int_eq(failing_test, 100),
++		kunit_int_eq(failing_test, 100)
++	};
++
++	mock_add_matcher(mock, "add", mock_add, two_matchers,
++			 ARRAY_SIZE(two_matchers));
++
++	mock->type = mock_type;
++
++	mock->do_expect(mock, "add", mock_add, two_param_types, two_params,
++			ARRAY_SIZE(two_params));
++
++	/* Even nice mocks should fail if there's an unmet expectation. */
++	KUNIT_EXPECT_FALSE(test, failing_test->success);
++}
++
++static void mock_test_naggy_no_matching_expectations_fail(struct kunit *test)
++{
++	run_method_called_but_no_matching_expectation_test(test,
++							   MOCK_TYPE_NAGGY);
++}
++
++static void mock_test_strict_no_matching_expectations_fail(struct kunit *test)
++{
++	run_method_called_but_no_matching_expectation_test(test,
++							   MOCK_TYPE_STRICT);
++}
++
++static void mock_test_nice_no_matching_expectations_fail(struct kunit *test)
++{
++	run_method_called_but_no_matching_expectation_test(test,
++							   MOCK_TYPE_NICE);
++}
++
  static void mock_test_mock_validate_expectations(struct kunit *test)
  {
  	struct mock_test_context *ctx = test->priv;
-@@ -307,6 +346,7 @@ static struct kunit_case mock_test_cases[] = {
+@@ -309,6 +426,54 @@ static void mock_test_mock_validate_expectations(struct kunit *test)
+ 	KUNIT_EXPECT_FALSE(test, failing_test->success);
+ }
+ 
++static void mock_test_validate_clears_expectations(struct kunit *test)
++{
++	struct mock_test_context *ctx = test->priv;
++	struct kunit *failing_test = ctx->failing_test;
++	struct mock *mock = ctx->mock;
++	struct mock_param_matcher *matchers[] = {
++		kunit_int_eq(failing_test, 5),
++		kunit_int_eq(failing_test, -4)
++	};
++	int param0 = 5, param1 = -4;
++	static const char * const two_param_types[] = {"int", "int"};
++	const void *two_params[] = {&param0, &param1};
++
++	struct mock_expectation *expectation;
++
++	mock->type = MOCK_TYPE_STRICT;
++
++	/* Add an arbitrary matcher for 0 calls */
++	expectation = mock_add_matcher(mock, "add", mock_add,
++				       matchers, ARRAY_SIZE(matchers));
++	expectation->times_called = 0;
++	expectation->min_calls_expected = 0;
++	expectation->max_calls_expected = 0;
++
++	/* Should have 0 calls and should clear the previous expectation */
++	mock_validate_expectations(mock);
++
++	/* Add a new matcher for 1 call */
++	expectation = mock_add_matcher(mock, "add", mock_add,
++				       matchers, ARRAY_SIZE(matchers));
++	expectation->times_called = 0;
++	expectation->min_calls_expected = 1;
++	expectation->max_calls_expected = 1;
++
++	/* Satisfy previous matcher */
++	mock->do_expect(mock, "add", mock_add, two_param_types, two_params,
++			ARRAY_SIZE(two_params));
++
++	/*
++	 * Validate previous satisfy; if we didn't clear the previous
++	 * expectation, it would fail the mock_test.
++	 */
++	mock_validate_expectations(mock);
++
++	/* If all goes well, shouldn't fail the test. */
++	KUNIT_EXPECT_TRUE(test, failing_test->success);
++}
++
+ static int mock_test_init(struct kunit *test)
+ {
+ 	struct mock_test_context *ctx;
+@@ -346,7 +511,13 @@ static struct kunit_case mock_test_cases[] = {
  	KUNIT_CASE(mock_test_failed_expect_call_fails_test),
  	KUNIT_CASE(mock_test_do_expect_default_return),
  	KUNIT_CASE(mock_test_mock_validate_expectations),
-+	KUNIT_CASE(mock_test_naggy_no_expectations_no_fail),
++	KUNIT_CASE(mock_test_strict_no_expectations_will_fail),
+ 	KUNIT_CASE(mock_test_naggy_no_expectations_no_fail),
++	KUNIT_CASE(mock_test_nice_no_expectations_do_nothing),
++	KUNIT_CASE(mock_test_strict_no_matching_expectations_fail),
++	KUNIT_CASE(mock_test_naggy_no_matching_expectations_fail),
++	KUNIT_CASE(mock_test_nice_no_matching_expectations_fail),
++	KUNIT_CASE(mock_test_validate_clears_expectations),
  	{}
  };
  
+diff --git a/lib/kunit/mock.c b/lib/kunit/mock.c
+index 12fb88899451..f1fa7a5b9dd4 100644
+--- a/lib/kunit/mock.c
++++ b/lib/kunit/mock.c
+@@ -85,6 +85,7 @@ void mock_init_ctrl(struct kunit *test, struct mock *mock)
+ 	mock->test = test;
+ 	INIT_LIST_HEAD(&mock->methods);
+ 	mock->do_expect = mock_do_expect;
++	mock->type = DEFAULT_MOCK_TYPE;
+ 	mock->parent.validate = mock_validate_wrapper;
+ 	list_add_tail(&mock->parent.node, &test->post_conditions);
+ }
+@@ -283,7 +284,12 @@ static struct mock_expectation *mock_apply_expectations(
+ 		mock_add_method_expectation_error(test, stream,
+ 			"Method was called with no expectations declared: ",
+ 			mock, method, type_names, params, len);
+-		kunit_stream_commit(stream);
++		if (is_strict_mock(mock))
++			fail_and_flush(test, stream);
++		else if (is_naggy_mock(mock))
++			kunit_stream_commit(stream);
++		else
++			kunit_stream_clear(stream);
+ 		return NULL;
+ 	}
+ 
+@@ -313,7 +319,7 @@ static struct mock_expectation *mock_apply_expectations(
+ 		}
+ 	}
+ 
+-	if (expectations_all_saturated) {
++	if (expectations_all_saturated && !is_nice_mock(mock)) {
+ 		mock_add_method_expectation_error(test, stream,
+ 			"Method was called with fully saturated expectations: ",
+ 			mock, method, type_names, params, len);
 -- 
 2.28.0.1011.ga647a8990f-goog
 
