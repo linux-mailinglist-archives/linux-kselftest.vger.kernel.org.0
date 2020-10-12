@@ -2,246 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E0C28C344
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 22:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E1528C3BB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 23:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731137AbgJLUtE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Oct 2020 16:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S1731903AbgJLVDJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Oct 2020 17:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgJLUtE (ORCPT
+        with ESMTP id S1731847AbgJLVDI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 16:49:04 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B586C0613D0
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 13:49:04 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d23so9331297pll.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 13:49:04 -0700 (PDT)
+        Mon, 12 Oct 2020 17:03:08 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB68C0613D0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 14:03:08 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id n9so2155052pgt.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 14:03:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=gM5ubYzG27vt0QdpAC5kBFMLhscZEvN14dCPbrDfOfM=;
-        b=Mcm5WR1/rQDht3VQR4YSx4CH89Q/TShAdVSst9OT9WGLFyecwLeG9ZQsJizhDKIzJG
-         gmDEXDFimGC3KgVfdTT675Dm1PB8EIkRSt5zKrLNEK8JB69aNyAICuNyyjHoDYZoewVw
-         x8os1FDsXxWYFhNc1conb8HlirSVg355+Lv41izx/a9lgYuctKBXrK0posDd1792Rr4q
-         OB5w/lYd9FEVSK4uOW6smNTEhdOy3mFVmeFgRvvlOkTCS4jBWgU1gtD4GSy/UU0+u/VT
-         hVvakyAV2lVJFPB6yDClobSS0BsFnBzOSy3Kj5NHPoG0FwKjpQj4/8PBxml5yNS74KMf
-         6b+A==
+         :cc;
+        bh=b/TAN4DgDbRq78KqjsPZvJBxycvwlCcdCcdTr+Ek7Og=;
+        b=P+n28kBusJXK2wX8qUVrbwldVwyq54gUynSy7mBzZ9CQt7v340G5/ZkQkl2QVkngvZ
+         66PjP02ma9k+2+AJ0ci3ZnvC5c720Vhtn51PlaCcyXBQHG/ond0nQFbbeh2TqbhNFtTI
+         +6XaOrqijFTUAuHph0GU7zKOA3JLrLRqd2UamYfYe+pvQPSroChvZCtL1dgIgdBx/weo
+         TqvpCARRsPxKRIN2cCA7gheHrJkhvw0RoSEH+Fge/ZcDjX1R6ruPhAIoFSAvoGdPqPLr
+         hxwrFlEBNAKVpJxfGZm5g8NfHalTD6RhlIVz597pyZEa6AmD2RtK7A0WFHuSQWYE3MsO
+         D/YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gM5ubYzG27vt0QdpAC5kBFMLhscZEvN14dCPbrDfOfM=;
-        b=WRjlf3mi5GbyU1U/UX9uL9AmUXEGQ48eXWczNkh4pmwkHUYHm05D1hAdsjC8hP+oCw
-         4bhKie+TP+m+2FNuenkcOPNaku9d3XETmIm2gg8CeIy7CtNeQ4OFXO7xuqwO6NwCb0mu
-         ycECqeWfTLMB7G8LIzADrRsy0zeFqSk6WkSboZP4NXnBKJqnRsfZwRlYaoP8EKe72Tqh
-         FJRZ4KB5rrEC8r5K8Psa9a2ldffaQQaCLZjZBYE1rRW4VFyXA32u0cHicVBCD+8NMhsz
-         debDcAaJur1HZza1m3VrVgzrQx/CSNwbravKcJDUyKF+plO7ui6+WRgOv9Zl7c6r6xjN
-         uORw==
-X-Gm-Message-State: AOAM5331zJBlu99oIZK4nEACViZKsprnEdQGrznrJu8UxTEJMQ6Kqjc7
-        jfvxNgUan+qKqdD2YnQbwrsKhfzQZzzvL6EXt+RYtw==
-X-Google-Smtp-Source: ABdhPJweSb6gr8p1s1xN6pfPGYBVIo6pPALc9y0IkXQdTLrfLkFOfo4vuL6WAOIf63JQtLx0DoUOm0n7IxJewr8nUi4=
-X-Received: by 2002:a17:902:ba8c:b029:d2:aa93:c8b4 with SMTP id
- k12-20020a170902ba8cb02900d2aa93c8b4mr25677253pls.80.1602535743355; Mon, 12
- Oct 2020 13:49:03 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=b/TAN4DgDbRq78KqjsPZvJBxycvwlCcdCcdTr+Ek7Og=;
+        b=lEzFy/5ecGoeOQuveuMajndT42z5hzeWVoE70iytlh4OqNoZz8zMQ4LjTBMKluxTKK
+         jlXt7U21v3c2M/6eXIRHxMB8E/1QEL9QwQvKvoKZ1Y4L8Vr/SijuX9RUlSrMNIuM9+me
+         1PY28UHCPhovN8lJBz4ViMhI8Lq70ynjiLI2oZvXF7Hpry/54aguHcU50mmDakXcR2HI
+         W7S5b06Sbjtsb+AvJyo0epA4RA6rYlHiVD3Xo6Ni/8S916h72pgPqAZaGRuw/kiFwu1v
+         22cNyzQduyYHbbd/7+1LUtw0WlpvWwSEqNL5MdrbL6ZGIdw9Nyl8x84MYnNfasuVQ9p2
+         LFwg==
+X-Gm-Message-State: AOAM533jjF9kjwcSlyORMXdP/MKpy4WxB0Ro4t9n9P9dU8TfVegGBxa+
+        DWnb//Y4iHtmVElXlEn7NsNal1JMl8vke3L+oplsDg==
+X-Google-Smtp-Source: ABdhPJwIqtkqX0s+O7rGfHATFdJHihF17V4UMLnv5pGyiTA1XTsNZtRMs/y29n25CQKI5VwrwyLp6EpyeDim8He9q+c=
+X-Received: by 2002:a17:90a:7144:: with SMTP id g4mr20595295pjs.80.1602536587672;
+ Mon, 12 Oct 2020 14:03:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200817043028.76502-1-98.arpi@gmail.com> <f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasmusvillemoes.dk>
- <20200821113710.GA26290@alley> <4e26f696-3b50-d781-00fd-7fc6fdc2c3eb@rasmusvillemoes.dk>
- <CAFd5g45VABAd-Z3A39ORJ-VJM0oz=YQDjE=4C_jjw1LCzh67iw@mail.gmail.com>
-In-Reply-To: <CAFd5g45VABAd-Z3A39ORJ-VJM0oz=YQDjE=4C_jjw1LCzh67iw@mail.gmail.com>
+References: <20200729201146.537433-1-vitor@massaru.org> <20200729203908.GD2655@hirez.programming.kicks-ass.net>
+ <CADQ6JjW-=SNjV-abGpGA9NfHD4yGG_bD5FmvW99W-Vo06twkbw@mail.gmail.com>
+ <20200804132517.GK2657@hirez.programming.kicks-ass.net> <CADQ6JjWzze-VAmg_b9EkS4iVySt5pw8V4FSxYpDFAj8jvBxuGA@mail.gmail.com>
+ <20200804142344.GM2674@hirez.programming.kicks-ass.net> <CADQ6JjWbCsyWxZKQ5=kkxx8hkaW=mbCjDodPXDAv5vH-=tVvEQ@mail.gmail.com>
+In-Reply-To: <CADQ6JjWbCsyWxZKQ5=kkxx8hkaW=mbCjDodPXDAv5vH-=tVvEQ@mail.gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 12 Oct 2020 13:48:52 -0700
-Message-ID: <CAFd5g47wrVks-+rfPp=3qm+RYm9f+qvStw8TVwH_Eh8wh_Fzng@mail.gmail.com>
-Subject: Re: [PATCH] lib: Convert test_printf.c to KUnit
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+Date:   Mon, 12 Oct 2020 14:02:56 -0700
+Message-ID: <CAFd5g46DzWRzp9yXkpHbtyJuv236E=z7OaWeqXnfuiy6CTBL4A@mail.gmail.com>
+Subject: Re: [PATCH] lib: kunit: add test_min_heap test conversion to KUnit
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Vitor Massaru Iha <vitor@massaru.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Ian Rogers <irogers@google.com>, Ingo Molnar <mingo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 1:13 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
+On Tue, Aug 4, 2020 at 9:22 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
 >
-> On Fri, Aug 21, 2020 at 5:19 AM Rasmus Villemoes
-> <linux@rasmusvillemoes.dk> wrote:
+> Hi Peter,
 >
-> Sorry about the late reply. I saw activity on this before and thought
-> it was under control. I only saw the unresolved state now looking
-> through patchwork.
+> On Tue, Aug 4, 2020 at 11:23 AM <peterz@infradead.org> wrote:
+> >
+> > On Tue, Aug 04, 2020 at 10:46:21AM -0300, Vitor Massaru Iha wrote:
+> > > On Tue, Aug 4, 2020 at 10:25 AM <peterz@infradead.org> wrote:
+> > > > On Wed, Jul 29, 2020 at 06:57:17PM -0300, Vitor Massaru Iha wrote:
+> > > >
+> > > > > The results can be seen this way:
+> > > > >
+> > > > > This is an excerpt from the test.log with the result in TAP format:
+> > > > > [snip]
+> > > > > ok 5 - example
+> > > > >     # Subtest: min-heap
+> > > > >     1..6
+> > > > >     ok 1 - test_heapify_all_true
+> > > > >     ok 2 - test_heapify_all_false
+> > > > >     ok 3 - test_heap_push_true
+> > > > >     ok 4 - test_heap_push_false
+> > > > >     ok 5 - test_heap_pop_push_true
+> > > > >     ok 6 - test_heap_pop_push_false
+> > > > > [snip]
+> >
+> > So ^ is TAP format?
 >
-> > On 21/08/2020 13.37, Petr Mladek wrote:
-> > > On Mon 2020-08-17 09:06:32, Rasmus Villemoes wrote:
-> > >> On 17/08/2020 06.30, Arpitha Raghunandan wrote:
-> > >>> Converts test lib/test_printf.c to KUnit.
-> > >>> More information about KUnit can be found at
-> > >>> https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
-> > >>> KUnit provides a common framework for unit tests in the kernel.
-> > >>
-> > >> So I can continue to build a kernel with some appropriate CONFIG set=
- to
-> > >> y, boot it under virt-me, run dmesg and see if I broke printf? That'=
-s
-> > >> what I do now, and I don't want to have to start using some enterpri=
-sy
-> > >> framework.
-> > >
-> > > I had the same concern. I have tried it.
-> >
-> > Thanks for doing that and reporting the results.
-> >
-> > >     #> modprobe printf_kunit
-> > >
-> > > produced the following in dmesg:
-> > >
-> > > [   60.931175] printf_kunit: module verification failed: signature an=
-d/or required key missing - tainting kernel
-> > > [   60.942209] TAP version 14
-> > > [   60.945197]     # Subtest: printf-kunit-test
-> > > [   60.945200]     1..1
-> > > [   60.951092]     ok 1 - selftest
-> > > [   60.953414] ok 1 - printf-kunit-test
-> > >
-> > > I could live with the above. Then I tried to break a test by the foll=
-owing change:
-> > >
-> > >
-> > > diff --git a/lib/printf_kunit.c b/lib/printf_kunit.c
-> > > index 68ac5f9b8d28..1689dadd70a3 100644
-> > > --- a/lib/printf_kunit.c
-> > > +++ b/lib/printf_kunit.c
-> > > @@ -395,7 +395,7 @@ ip4(struct kunit *kunittest)
-> > >         sa.sin_port =3D cpu_to_be16(12345);
-> > >         sa.sin_addr.s_addr =3D cpu_to_be32(0x7f000001);
-> > >
-> > > -       test(kunittest, "127.000.000.001|127.0.0.1", "%pi4|%pI4", &sa=
-.sin_addr, &sa.sin_addr);
-> > > +       test(kunittest, "127-000.000.001|127.0.0.1", "%pi4|%pI4", &sa=
-.sin_addr, &sa.sin_addr);
-> > >         test(kunittest, "127.000.000.001|127.0.0.1", "%piS|%pIS", &sa=
-, &sa);
-> > >         sa.sin_addr.s_addr =3D cpu_to_be32(0x01020304);
-> > >         test(kunittest, "001.002.003.004:12345|1.2.3.4:12345", "%piSp=
-|%pISp", &sa, &sa);
-> > >
-> > >
-> > > It produced::
-> > >
-> > > [   56.786858] TAP version 14
-> > > [   56.787493]     # Subtest: printf-kunit-test
-> > > [   56.787494]     1..1
-> > > [   56.788612]     # selftest: EXPECTATION FAILED at lib/printf_kunit=
-.c:76
-> > >                    Expected memcmp(test_buffer, expect, written) =3D=
-=3D 0, but
-> > >                        memcmp(test_buffer, expect, written) =3D=3D 1
-> > >                        0 =3D=3D 0
-> > >                vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.0=
-00.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > [   56.795433]     # selftest: EXPECTATION FAILED at lib/printf_kunit=
-.c:76
-> > >                    Expected memcmp(test_buffer, expect, written) =3D=
-=3D 0, but
-> > >                        memcmp(test_buffer, expect, written) =3D=3D 1
-> > >                        0 =3D=3D 0
-> > >                vsnprintf(buf, 20, "%pi4|%pI4", ...) wrote '127.000.00=
-0.001|127', expected '127-000.000.001|127'
-> > > [   56.800909]     # selftest: EXPECTATION FAILED at lib/printf_kunit=
-.c:108
-> > >                    Expected memcmp(p, expect, elen+1) =3D=3D 0, but
-> > >                        memcmp(p, expect, elen+1) =3D=3D 1
-> > >                        0 =3D=3D 0
-> > >                kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.00=
-0.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > [   56.806497]     not ok 1 - selftest
-> > > [   56.806497] not ok 1 - printf-kunit-test
-> > >
-> > > while the original code would have written the following error messag=
-es:
-> > >
-> > > [   95.859225] test_printf: loaded.
-> > > [   95.860031] test_printf: vsnprintf(buf, 256, "%pi4|%pI4", ...) wro=
-te '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > [   95.862630] test_printf: vsnprintf(buf, 6, "%pi4|%pI4", ...) wrote=
- '127.0', expected '127-0'
-> > > [   95.864118] test_printf: kvasprintf(..., "%pi4|%pI4", ...) returne=
-d '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > [   95.866589] test_printf: failed 3 out of 388 tests
-> > >
-> > >
-> > > Even the error output is acceptable for me.
-> >
-> > Urgh. Yeah, perhaps, but the original is much more readable; it really
-> > doesn't matter that a memcmp() fails to compare equal to 0, that's
-> > merely how we figured out that the output was wrong.
+> Yep, you can see the spec here: https://testanything.org/tap-specification.html
 >
-> We can go back to the original error reporting format, just as long as
-> you don't mind the "ok" lines interspersed throughout (this is part of
-> an attempt to standardize around the KTAP reporting format[1].
+> >
+> > > > I don't care or care to use either; what does dmesg do? It used to be
+> > > > that just building the self-tests was sufficient and any error would
+> > > > show in dmesg when you boot the machine.
+> > > >
+> > > > But if I now have to use some damn tool, this is a regression.
+> > >
+> > > If you don't want to, you don't need to use the kunit-tool. If you
+> > > compile the tests as builtin and run the Kernel on your machine
+> > > the test result will be shown in dmesg in TAP format.
+> >
+> > That's seems a lot more verbose than it is now. I've recently even done
+> > a bunch of tests that don't print anything on success, dmesg is clutter
+> > enough already.
 >
-> > I am just curious why
-> > > the 2nd failure is different:
-> > >
-> > >    + original code: vsnprintf(buf, 6, "%pi4|%pI4", ...) wrote '127.0'=
-, expected '127-0'
-> > >    + kunit code: vsnprintf(buf, 20, "%pi4|%pI4", ...) wrote '127.000.=
-000.001|127', expected '127-000.000.001|127'
-> >
-> > That's by design. If you read the code, there's a comment that says we
-> > do every test case four times: With a buffer that is large enough to do
-> > the whole output, with a 0 size buffer (that's essential to allowing
-> > kasprintf to know how much to allocate),  with kvasprintf - but also
-> > with a buffer size that's guaranteed to ensure the output gets truncate=
-d
-> > somewhere. And that size is chosen randomly - I guess one could test
-> > every single buffer size between 0 and elen+1, but that's overkill.
-> >
-> > Now I should probably have made the tests deterministic in the sense of
-> > getting a random seed for a PRNG, printing that seed and allowing a
-> > module parameter to set the seed in order to repeat the exact same
-> > tests. But so far I haven't really seen any bugs caught by test_printf
-> > which would have been easier to fix with that.
-> >
-> > The reason I added that "chop it off somewhere randomly" was, IIRC, due
-> > to some %p extensions that behaved rather weirdly depending on whether
-> > there was enough room left or not, but I fixed those bugs before
-> > creating test_printf (and they were in turn the reason for creating
-> > test_printf). See for example 41416f2330, where %pE at the beginning of
-> > the format string would work ok, but if anything preceded it and the
-> > buffer was too small we'd crash.
-> >
-> > >
-> > > I am also a bit scared by the following note at
-> > > https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html#run=
-ning-tests-without-the-kunit-wrapper
-> > >
-> > >    "KUnit is not designed for use in a production system, and it=E2=
-=80=99s
-> > >    possible that tests may reduce the stability or security of the
-> > >    system."
-> > >
-> > > What does it mean thay it might reduce stability or security?
-> > > Is it because the tests might cause problems?
-> > > Or because the kunit framework modifies functionality of the running
-> > > system all the time?
+> What tests do you refer to?
 >
-> Oh yeah, that's just because we are afraid that tests might cause
-> problems. KUnit by itself does nothing to affect the stability or
-> security of the system.
+> Running the test_min_heap.c, I got this from dmesg:
+>
+> min_heap_test: test passed
+>
+> And running min_heap_kunit.c:
+>
+> ok 1 - min-heap
 
-And I forgot the link to KTAP[1]. I am really batting a thousand here.
-
-[1] https://lore.kernel.org/linux-kselftest/CY4PR13MB1175B804E31E502221BC81=
-63FD830@CY4PR13MB1175.namprd13.prod.outlook.com/
+Gentle poke. I think Vitor was looking for a response. My guess is
+that Ian was waiting for a follow up patch.
