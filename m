@@ -2,121 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C107628ADF4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 07:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CE928AE02
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 07:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbgJLFwW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Oct 2020 01:52:22 -0400
-Received: from mga12.intel.com ([192.55.52.136]:18020 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726072AbgJLFwU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 01:52:20 -0400
-IronPort-SDR: CLPkUE8ZXL9RG0hlY2fQGhUxycBLQsChKLafCW6TnTmty/B4AJSVoYo8VkwfX4+LMLJe/TrE5a
- 9755N6FOm/YQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9771"; a="145014271"
-X-IronPort-AV: E=Sophos;i="5.77,365,1596524400"; 
-   d="scan'208";a="145014271"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2020 22:52:20 -0700
-IronPort-SDR: Ya9EDAn3SOMd08SCKVKBtueoni+yyq9EF8H8N9tr+YE/IrdFHweYy6SREcwPgxnde0DbbLRvxa
- rOKYCbITG9ew==
-X-IronPort-AV: E=Sophos;i="5.77,365,1596524400"; 
-   d="scan'208";a="520573207"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2020 22:52:19 -0700
-Date:   Sun, 11 Oct 2020 22:52:19 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kexec@lists.infradead.org, linux-bcache@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devel@driverdev.osuosl.org,
-        linux-efi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-aio@kvack.org,
-        io-uring@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-um@lists.infradead.org, linux-ntfs-dev@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-nilfs@vger.kernel.org, cluster-devel@redhat.com,
-        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
-        samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH RFC PKS/PMEM 57/58] nvdimm/pmem: Stray access protection
- for pmem->virt_addr
-Message-ID: <20201012055218.GA2046448@iweiny-DESK2.sc.intel.com>
-References: <20201009195033.3208459-1-ira.weiny@intel.com>
- <20201009195033.3208459-58-ira.weiny@intel.com>
- <bd3f5ece-0e7b-4c15-abbc-1b3b943334dc@nvidia.com>
+        id S1726527AbgJLF4b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Oct 2020 01:56:31 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:36380 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726434AbgJLF4a (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Oct 2020 01:56:30 -0400
+Received: from mail-lj1-f198.google.com ([209.85.208.198])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1kRqou-0002CL-0s
+        for linux-kselftest@vger.kernel.org; Mon, 12 Oct 2020 05:56:28 +0000
+Received: by mail-lj1-f198.google.com with SMTP id a4so2109927ljb.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Oct 2020 22:56:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MG6dr6dkYjbuidZHOqbfSuEQ8chzRGiJ/r5QM2M/mPI=;
+        b=Wqk2GxJvCN9s/RVKzdpFUqn1uCK8fk2bMH480Vhu4Pdooh5jvmY3196qEvACVKWutc
+         CbdQbyD+bKVklkzZZ2ik8bTxgqVWsDUcccFhBpANtpG6oDZR9eN4rG49VZFjALzpJCJg
+         68jmXndw/rKhF0DZZ3wfRUs2OWDzpiiDR3AlhN52EcQFDLpfsdpmKHizi6q0fop+ehLN
+         uB1DZwU09zdwmTV0pNAWipFmoFPrjbKrYMosxiFyoSaQjrWwSVYMxMkvX9GuwhEWWcbH
+         3FFfNMc5/f3laJ9XmIDd86EQYPqh9OSAwn6PS5jg0lxoVuSSBIcjKx5Bh0thswX3iwT0
+         4YdA==
+X-Gm-Message-State: AOAM530mAlZVO2o2ZvpvCp4gnT4jKCpbXZyILTi9mk/xEBh7guhy1JJn
+        5wPRLcr0jBdTFeonLfRZT25Sp7GrZqEtLICg5mCk8kdaImOmuAhZx3lncMTVQpzez7wo9HP2FoI
+        bVVaHGmUfefcW3zwqyxRQYR9gjhbjS/ja9MPEqewEFVgZSvCn5qKv0ZocqTaI
+X-Received: by 2002:ac2:5e6c:: with SMTP id a12mr1947637lfr.568.1602482187422;
+        Sun, 11 Oct 2020 22:56:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwoCKfffCt19WVgrVsF4yF4GyeBHzR1CkXFM5Wcu9g2IAxq3X1X3p1GzScUUEVKhUm+XfQYsVpWEn/D3wEnFNw=
+X-Received: by 2002:ac2:5e6c:: with SMTP id a12mr1947631lfr.568.1602482187140;
+ Sun, 11 Oct 2020 22:56:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bd3f5ece-0e7b-4c15-abbc-1b3b943334dc@nvidia.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <20200907035010.9154-1-po-hsu.lin@canonical.com>
+ <20200907131217.61643ada@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAMy_GT-kaqkcdR+0q5eKoW3CJn7dZSCfr+UxRf6e5iRzZMiKTA@mail.gmail.com> <CAMy_GT-0ad7dnWZ=sVt7kZQSMeKQ-9AXdxTe+LqD4uuFnVd+Vw@mail.gmail.com>
+In-Reply-To: <CAMy_GT-0ad7dnWZ=sVt7kZQSMeKQ-9AXdxTe+LqD4uuFnVd+Vw@mail.gmail.com>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Mon, 12 Oct 2020 13:56:15 +0800
+Message-ID: <CAMy_GT9hALtE9-qBU95QCR7=VN8hwRps4U=hDjsWeKzssnMbKg@mail.gmail.com>
+Subject: Re: [PATCHv3] selftests: rtnetlink: load fou module for
+ kci_test_encap_fou() test
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 07:53:07PM -0700, John Hubbard wrote:
-> On 10/9/20 12:50 PM, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > The pmem driver uses a cached virtual address to access its memory
-> > directly.  Because the nvdimm driver is well aware of the special
-> > protections it has mapped memory with, we call dev_access_[en|dis]able()
-> > around the direct pmem->virt_addr (pmem_addr) usage instead of the
-> > unnecessary overhead of trying to get a page to kmap.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > ---
-> >   drivers/nvdimm/pmem.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> > index fab29b514372..e4dc1ae990fc 100644
-> > --- a/drivers/nvdimm/pmem.c
-> > +++ b/drivers/nvdimm/pmem.c
-> > @@ -148,7 +148,9 @@ static blk_status_t pmem_do_read(struct pmem_device *pmem,
-> >   	if (unlikely(is_bad_pmem(&pmem->bb, sector, len)))
-> >   		return BLK_STS_IOERR;
-> > +	dev_access_enable(false);
-> >   	rc = read_pmem(page, page_off, pmem_addr, len);
-> > +	dev_access_disable(false);
-> 
-> Hi Ira!
-> 
-> The APIs should be tweaked to use a symbol (GLOBAL, PER_THREAD), instead of
-> true/false. Try reading the above and you'll see that it sounds like it's
-> doing the opposite of what it is ("enable_this(false)" sounds like a clumsy
-> API design to *disable*, right?). And there is no hint about the scope.
+Hello,
+Is there any update on this patch?
+Thanks!
+PHLin
 
-Sounds reasonable.
-
-> 
-> And it *could* be so much more readable like this:
-> 
->     dev_access_enable(DEV_ACCESS_THIS_THREAD);
-
-I'll think about the flag name.  I'm not liking 'this thread'.
-
-Maybe DEV_ACCESS_[GLOBAL|THREAD]
-
-Ira
-
+On Fri, Sep 18, 2020 at 6:39 PM Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
+>
+> Hello folks,
+>
+> any thoughts on this patch?
+> It can make the test pass and reduce the failure numbers in
+> kselftests, it will be great to have this applied.
+>
+> Thanks
+> PHLin
+>
+>
+> On Tue, Sep 8, 2020 at 2:57 PM Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
+> >
+> > On Tue, Sep 8, 2020 at 4:12 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > >
+> > > On Mon,  7 Sep 2020 11:50:10 +0800 Po-Hsu Lin wrote:
+> > > > The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
+> > > > needs the fou module to work. Otherwise it will fail with:
+> > > >
+> > > >   $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
+> > > >   RTNETLINK answers: No such file or directory
+> > > >   Error talking to the kernel
+> > > >
+> > > > Add the CONFIG_NET_FOU into the config file as well. Which needs at
+> > > > least to be set as a loadable module.
+> > > >
+> > > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> > >
+> > > > diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+> > > > index 7c38a90..a711b3e 100755
+> > > > --- a/tools/testing/selftests/net/rtnetlink.sh
+> > > > +++ b/tools/testing/selftests/net/rtnetlink.sh
+> > > > @@ -520,6 +520,11 @@ kci_test_encap_fou()
+> > > >               return $ksft_skip
+> > > >       fi
+> > > >
+> > > > +     if ! /sbin/modprobe -q -n fou; then
+> > > > +             echo "SKIP: module fou is not found"
+> > > > +             return $ksft_skip
+> > > > +     fi
+> > > > +     /sbin/modprobe -q fou
+> > > >       ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
+> > > >       if [ $? -ne 0 ];then
+> > > >               echo "FAIL: can't add fou port 7777, skipping test"
+> > > > @@ -540,6 +545,7 @@ kci_test_encap_fou()
+> > > >               return 1
+> > > >       fi
+> > > >
+> > > > +     /sbin/modprobe -q -r fou
+> > >
+> > > I think the common practice is to not remove the module at the end of
+> > > the test. It may be used by something else than the test itself.
+> > >
+> > Hello Jakub,
+> > Thanks for your feedback.
+> >
+> > For this case I think it's safe to remove the module here, as it was
+> > never loaded before and thus causing this test to fail.
+> > If other tests in this rtnetlink.sh need this fou module, we should be
+> > able to spot those failures too, however this is the only failure as I
+> > can see.
+> > (pmtu.sh will need fou module to run as well, but it will be loaded there.)
+> >
+> > Shouldn't we insert the required module whenever the test needs it? So
+> > that we can run the test itself directly, without depending on other
+> > tests.
+> > Also, I can see modules for tests were being unloaded in other tests as well.
+> >
+> > Thanks
+> >
+> > > >       echo "PASS: fou"
+> > > >  }
+> > > >
+> > >
