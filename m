@@ -2,119 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4BB28BF8C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 20:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE6C28C1B2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Oct 2020 21:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387936AbgJLSUM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Oct 2020 14:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387583AbgJLSUM (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 14:20:12 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15113C0613D0;
-        Mon, 12 Oct 2020 11:20:12 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id a3so24470749ejy.11;
-        Mon, 12 Oct 2020 11:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to;
-        bh=zKR9KbIkinjPzqJD1ltq5DuEQ4lH3nYSPjUa+vf7uVg=;
-        b=OFXOwfvc/nyJT3C6V7aZzJjdeu59DoQMuQZoSOtGc3bLesxHvZmy3dEyJLZ73P9Y/w
-         7oCoMUkzceseBVLu0gQ3xhEQNeiUZNLNTC1KaqVNeUzn/a9zZsMxN+8kj2rrn27BB4Hg
-         EcKJzG1Ad+PIK66lBQxnbdgxb2ckmutN8kTdEvFnggZntydZAW3f2pLOWDJI5fesrFf6
-         wxH7flaAzKjK+CHy/P3VG6hf8Idh2JyUehQvTDsR2OTG7jPHBOeTaCR/niGG+LTGviv8
-         VjQws/Z6rl2kWQIeuSj4xxHMUunlMkia43Ywnh4K8YIGztFmpUpJcAcRhrhnb/HBnXzN
-         uN8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to;
-        bh=zKR9KbIkinjPzqJD1ltq5DuEQ4lH3nYSPjUa+vf7uVg=;
-        b=q1PPh4jIDYmDAGyGBIfiZGsro+5TCe49CLV+cu/dt5MtebdvU7DKfW6qpMhnjjwwXt
-         sbsYe1ocx6S0apBZMasGQVcCW1yZFQP8bsUFK6tCtpytlHFNNF4dRlcccNA9WX+vEytf
-         7fvIbD+ui73/idx8XM0wE+B6WQ0oSdJNb+TQrQ19BHQYQem32IgKl+xwDdYVZYB9XaTn
-         VMIQSL8CgSeewChmT0y84Dsj3zkTCrlgQwbLFRf/Rv2khpUkhm6NIvFEWvBmpPuOI1CM
-         7hjTEyyy59izN8DiHZPZ8FoNZv3MBXsbg3sYHNHBXoIJILqyBhNYC65muUz6RrTRcvuz
-         4faQ==
-X-Gm-Message-State: AOAM533W14bp2dscXARrwiTOeZQbLXNjXcSkpvF6U2pXLvzZ41k4DFz8
-        zhIDFXMt3upqwGzNNB69Xls=
-X-Google-Smtp-Source: ABdhPJxuoj1awCfPte30yIGodd2SIxl+1sPPHRD4hqdHcmhUGgbZUL5GPvZgz76WioXAz8ehwFuFJw==
-X-Received: by 2002:a17:906:d292:: with SMTP id ay18mr29949820ejb.244.1602526810678;
-        Mon, 12 Oct 2020 11:20:10 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:2450:10d2:194d:d57e:4a0f:cbf8:37db])
-        by smtp.gmail.com with ESMTPSA id ok21sm4581528ejb.96.2020.10.12.11.20.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 11:20:09 -0700 (PDT)
-From:   SeongJae Park <sj38.park@gmail.com>
-X-Google-Original-From: SeongJae Park <sjpark@amazon.de>
-To:     Marco Elver <elver@google.com>
-Cc:     SeongJae Park <sjpark@amazon.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        SeongJae Park <sjpark@amazon.de>,
-        Jonathan Corbet <corbet@lwn.net>, skhan@linuxfoundation.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Documentation: kunit: Update Kconfig parts for KUNIT's module support
-Date:   Mon, 12 Oct 2020 20:19:48 +0200
-Message-Id: <20201012181948.1459-1-sjpark@amazon.de>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CANpmjNP3oZZsOkE4sP---sXoa-K8yBB9fBXc8JzqQNXs2MwKUg@mail.gmail.com>
+        id S2388844AbgJLTx7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Oct 2020 15:53:59 -0400
+Received: from mga09.intel.com ([134.134.136.24]:29002 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726676AbgJLTx5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Oct 2020 15:53:57 -0400
+IronPort-SDR: sHEBSwDrhTzQU2S1NEllE7XlTU+xF+PhbrOIMhK+ymP1xuGREJ/BLRLAOafpJKPLRy0iKRj28m
+ +ZZbJv87UD9w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="165907662"
+X-IronPort-AV: E=Sophos;i="5.77,367,1596524400"; 
+   d="scan'208";a="165907662"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 12:53:55 -0700
+IronPort-SDR: fkO3cV1AstS50IlWJFeIR7IMIWTUvxOVu0RxBH9tBAb2aFjzmjvlioAsa4gAQcEu3X0zxNtHVX
+ KqidbmrXoAPg==
+X-IronPort-AV: E=Sophos;i="5.77,367,1596524400"; 
+   d="scan'208";a="530096227"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 12:53:54 -0700
+Date:   Mon, 12 Oct 2020 12:53:54 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, linux-aio@kvack.org,
+        linux-efi@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        target-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, samba-technical@lists.samba.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-afs@lists.infradead.org, cluster-devel@redhat.com,
+        linux-cachefs@redhat.com, intel-wired-lan@lists.osuosl.org,
+        xen-devel@lists.xenproject.org, linux-ext4@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, intel-gfx@lists.freedesktop.org,
+        linux-erofs@lists.ozlabs.org, reiserfs-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        io-uring@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, netdev@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH RFC PKS/PMEM 22/58] fs/f2fs: Utilize new kmap_thread()
+Message-ID: <20201012195354.GC2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009195033.3208459-1-ira.weiny@intel.com>
+ <20201009195033.3208459-23-ira.weiny@intel.com>
+ <20201009213434.GA839@sol.localdomain>
+ <20201010003954.GW20115@casper.infradead.org>
+ <20201010013036.GD1122@sol.localdomain>
+ <20201012065635.GB2046448@iweiny-DESK2.sc.intel.com>
+ <20201012161946.GA858@sol.localdomain>
+ <5d621db9-23d4-e140-45eb-d7fca2093d2b@intel.com>
+ <20201012164438.GA20115@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201012164438.GA20115@casper.infradead.org>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 12 Oct 2020 13:28:42 +0200 Marco Elver <elver@google.com> wrote:
-
-> On Mon, 12 Oct 2020 at 12:54, 'SeongJae Park' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > From: SeongJae Park <sjpark@amazon.de>
-> >
-> > If 'CONFIG_KUNIT=m', letting kunit tests that do not support loadable
-> > module build depends on 'KUNIT' instead of 'KUNIT=y' result in compile
-> > errors.  This commit updates the document for this.
-> >
-> > Fixes: 9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
-> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> > ---
-> >  Documentation/dev-tools/kunit/start.rst | 2 +-
-> >  Documentation/dev-tools/kunit/usage.rst | 5 +++++
-> >  2 files changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> > index d23385e3e159..454f307813ea 100644
-> > --- a/Documentation/dev-tools/kunit/start.rst
-> > +++ b/Documentation/dev-tools/kunit/start.rst
-> > @@ -197,7 +197,7 @@ Now add the following to ``drivers/misc/Kconfig``:
-> >
-> >         config MISC_EXAMPLE_TEST
-> >                 bool "Test for my example"
-> > -               depends on MISC_EXAMPLE && KUNIT
-> > +               depends on MISC_EXAMPLE && KUNIT=y
-> >
-> >  and the following to ``drivers/misc/Makefile``:
-> >
-> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> > index 3c3fe8b5fecc..410380fc7fb4 100644
-> > --- a/Documentation/dev-tools/kunit/usage.rst
-> > +++ b/Documentation/dev-tools/kunit/usage.rst
-> > @@ -556,6 +556,11 @@ Once the kernel is built and installed, a simple
-> >
-> >  ...will run the tests.
-> >
-> > +.. note::
-> > +   Note that you should make your test depends on ``KUNIT=y`` in Kcofig if the
-> > +   test does not support module build.  Otherwise, it will trigger compile
-> > +   errors if ``CONFIG_KUNIT`` is ``m``.
+On Mon, Oct 12, 2020 at 05:44:38PM +0100, Matthew Wilcox wrote:
+> On Mon, Oct 12, 2020 at 09:28:29AM -0700, Dave Hansen wrote:
+> > kmap_atomic() is always preferred over kmap()/kmap_thread().
+> > kmap_atomic() is _much_ more lightweight since its TLB invalidation is
+> > always CPU-local and never broadcast.
+> > 
+> > So, basically, unless you *must* sleep while the mapping is in place,
+> > kmap_atomic() is preferred.
 > 
-> s/Kcofig/Kconfig/
+> But kmap_atomic() disables preemption, so the _ideal_ interface would map
+> it only locally, then on preemption make it global.  I don't even know
+> if that _can_ be done.  But this email makes it seem like kmap_atomic()
+> has no downsides.
 
-Thanks, I will fix this in the next version of this patch.
+And that is IIUC what Thomas was trying to solve.
 
+Also, Linus brought up that kmap_atomic() has quirks in nesting.[1]
 
-Thanks,
-SeongJae Park
+From what I can see all of these discussions support the need to have something
+between kmap() and kmap_atomic().
+
+However, the reason behind converting call sites to kmap_thread() are different
+between Thomas' patch set and mine.  Both require more kmap granularity.
+However, they do so with different reasons and underlying implementations but
+with the _same_ resulting semantics; a thread local mapping which is
+preemptable.[2]  Therefore they each focus on changing different call sites.
+
+While this patch set is huge I think it serves a valuable purpose to identify a
+large number of call sites which are candidates for this new semantic.
+
+Ira
+
+[1] https://lore.kernel.org/lkml/CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com/
+[2] It is important to note these implementations are not incompatible with
+each other.  So I don't see yet another 'kmap_something()' being required.
