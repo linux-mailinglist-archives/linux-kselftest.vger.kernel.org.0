@@ -2,76 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9508928C749
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Oct 2020 04:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7D728C8B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Oct 2020 08:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbgJMCsP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Oct 2020 22:48:15 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37279 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726623AbgJMCsP (ORCPT
+        id S2389559AbgJMGiP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Oct 2020 02:38:15 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:23530 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389433AbgJMGiO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 22:48:15 -0400
-Received: from mail-lj1-f200.google.com ([209.85.208.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kSAMG-0007wS-H2
-        for linux-kselftest@vger.kernel.org; Tue, 13 Oct 2020 02:48:12 +0000
-Received: by mail-lj1-f200.google.com with SMTP id g15so1185436ljj.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 19:48:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G9YMzKKemL4yEtTpZq3swTQnWFUcuccAdAOgQPyZkCE=;
-        b=EhDN34wEjTjCSmhNi9AU/9JFTIcWHJt/XcipuZkCH490brX39RHXgPMAR/Ikl15v6x
-         w860BbAvBA0fuSTDVTRVDz5CIhsthLO1D4hF59uVjE94eNYYS+1rycc58VzzfGUHwUC/
-         AxKu1koJ3z+HvydENIe9yvsLQ5CZf2MnyJSMSGIV07Q+JiW1E8ky0tOBDgnJzvb65VJP
-         yB6h5IvhJ+aV0HGdxCFpe/RrOuW3OHJEOzqacOtEOxJTmBh9cbtEoPbGiEwdL7Bex+5Q
-         1biLG8e1SSWsEIGhBWBWKla56H27aSDDVVEyqwPiNJFvzzvWmYXWfedapZXiQyAYrJZH
-         TAsg==
-X-Gm-Message-State: AOAM532diuYmktXzg7C2It8qFzzc8FTAhKnEzJmFFgfObWQ15ledwV17
-        VQm7qW6sX06ZjLPsOUzkn/kKTtSgl89W+rRJ1WguEm2rfa6twt6TTlzA47JrMnUbH4yUa7WiM9K
-        5vwNhalNckW/FQ+J3y8eHNaI/EFh6Do4D/nLtuhbbCeXMID8ogflCtJ3e5O5x
-X-Received: by 2002:a2e:b610:: with SMTP id r16mr2368432ljn.145.1602557291846;
-        Mon, 12 Oct 2020 19:48:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxrY7bJ1GyblOrZbBZ/9DUes654EWYmtWMOXL+aPPrxh6huWVRZ0454gyfaETS768LcE/4Wi7MmDRY5X70GNrk=
-X-Received: by 2002:a2e:b610:: with SMTP id r16mr2368423ljn.145.1602557291594;
- Mon, 12 Oct 2020 19:48:11 -0700 (PDT)
+        Tue, 13 Oct 2020 02:38:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1602571094; x=1634107094;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=aHrNIi6Spaa8PTVDo9sFuO7JRmGUmYOw/fAbYNNAQdY=;
+  b=RQfbt1qjlcVA+yuLRiiMBYMLENj2h/NK+eCtbXquvUBEsly8wpKyod1O
+   qh/B6Pao7Y/HP1ToBels6fD5DQFhWi9yahTRVVCL8rcpLAtSqwGnl4nfi
+   gJTmOxzxTHSbx1QYIB1KMMUw9gCBBWgq8g2ESer5uiM6O+97bX0XczAUp
+   E=;
+X-IronPort-AV: E=Sophos;i="5.77,369,1596499200"; 
+   d="scan'208";a="83990110"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 13 Oct 2020 06:38:08 +0000
+Received: from EX13D31EUB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com (Postfix) with ESMTPS id 212CCA1ECF;
+        Tue, 13 Oct 2020 06:38:04 +0000 (UTC)
+Received: from u3f2cd687b01c55.ant.amazon.com (10.43.160.27) by
+ EX13D31EUB001.ant.amazon.com (10.43.166.210) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Tue, 13 Oct 2020 06:38:00 +0000
+From:   SeongJae Park <sjpark@amazon.com>
+To:     <brendanhiggins@google.com>
+CC:     SeongJae Park <sjpark@amazon.de>, <corbet@lwn.net>,
+        <skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>,
+        <kunit-dev@googlegroups.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] Documentation: kunit: Update Kconfig parts for KUNIT's module support
+Date:   Tue, 13 Oct 2020 08:37:43 +0200
+Message-ID: <20201013063743.32179-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20200907035010.9154-1-po-hsu.lin@canonical.com>
- <20200907131217.61643ada@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAMy_GT-kaqkcdR+0q5eKoW3CJn7dZSCfr+UxRf6e5iRzZMiKTA@mail.gmail.com>
- <CAMy_GT-0ad7dnWZ=sVt7kZQSMeKQ-9AXdxTe+LqD4uuFnVd+Vw@mail.gmail.com>
- <CAMy_GT9hALtE9-qBU95QCR7=VN8hwRps4U=hDjsWeKzssnMbKg@mail.gmail.com> <20201012082819.1c51b4cf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201012082819.1c51b4cf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Tue, 13 Oct 2020 10:48:01 +0800
-Message-ID: <CAMy_GT-_7oh_fwsN4-9VMdf=cSBNL0jwE9AWa9-Dr09x_zam1A@mail.gmail.com>
-Subject: Re: [PATCHv3] selftests: rtnetlink: load fou module for
- kci_test_encap_fou() test
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.27]
+X-ClientProxiedBy: EX13D50UWA004.ant.amazon.com (10.43.163.5) To
+ EX13D31EUB001.ant.amazon.com (10.43.166.210)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 11:28 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon, 12 Oct 2020 13:56:15 +0800 Po-Hsu Lin wrote:
-> > Is there any update on this patch?
->
-> You received feedback. Don't remove modules after tests, something else
-> could be using them.
+From: SeongJae Park <sjpark@amazon.de>
 
-Hello Jakub,
-I have my feedback regarding your input [1], so I guess it's not
-persuasive enough?
-Thanks
+If 'CONFIG_KUNIT=m', letting kunit tests that do not support loadable
+module build depends on 'KUNIT' instead of 'KUNIT=y' result in compile
+errors.  This commit updates the document for this.
 
-[1] https://marc.info/?l=linux-kernel&m=159954826414645&w=2
+Fixes: 9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+---
+
+Changes from v1
+(https://lore.kernel.org/linux-kselftest/20201012105420.5945-1-sjpark@amazon.com/):
+- Fix a typo (Marco Elver)
+
+---
+ Documentation/dev-tools/kunit/start.rst | 2 +-
+ Documentation/dev-tools/kunit/usage.rst | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index d23385e3e159..454f307813ea 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -197,7 +197,7 @@ Now add the following to ``drivers/misc/Kconfig``:
+ 
+ 	config MISC_EXAMPLE_TEST
+ 		bool "Test for my example"
+-		depends on MISC_EXAMPLE && KUNIT
++		depends on MISC_EXAMPLE && KUNIT=y
+ 
+ and the following to ``drivers/misc/Makefile``:
+ 
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 3c3fe8b5fecc..b331f5a5b0b9 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -556,6 +556,11 @@ Once the kernel is built and installed, a simple
+ 
+ ...will run the tests.
+ 
++.. note::
++   Note that you should make your test depends on ``KUNIT=y`` in Kconfig if the
++   test does not support module build.  Otherwise, it will trigger compile
++   errors if ``CONFIG_KUNIT`` is ``m``.
++
+ Writing new tests for other architectures
+ -----------------------------------------
+ 
+-- 
+2.17.1
+
