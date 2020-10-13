@@ -2,165 +2,217 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 908E228CB3C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Oct 2020 11:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2CA28CC45
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Oct 2020 13:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727255AbgJMJzI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Oct 2020 05:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727209AbgJMJzI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Oct 2020 05:55:08 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EF1C0613D0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 02:55:07 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id e23so13302400wme.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 02:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YKvSNZR9ptBFcO/UUrxR/7or/yI++iP0x0q1ZQ9abEs=;
-        b=e67f5vWv4SyTTBTEAc0A4DjwfBj/qCC2NMYqNap0zrsSrh++RjL7CBlWcy79R6Dvx7
-         oLkmyRmfA7dTIPOVyYizGts/ef0Q9mHcqm5TJiCzbyVTlnTpFTojo6gHmtYJtQ9TJ5C8
-         KCQDUIw9lQTXo+i39SCWIoYhBI32fzZwGg3/k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YKvSNZR9ptBFcO/UUrxR/7or/yI++iP0x0q1ZQ9abEs=;
-        b=OkP+A8ZEQeQeObeUlIgH7KEQ8xOGXphwC3ebBi7OPUQWcTBkRCBeLnJan75/sb8llY
-         g3VlbrAxx9/5VRrqZ8oGSitWDb5tEvARHUpYJoom8caRPlL6IVR6FUwpJEX14xC5mCly
-         /bUxjVgy1a2WDvdoU3cqjyxA31zyav/9rbWwo/9Q9hdNprrUILJwltUIIYchsurdCrFu
-         XbHrr1a4wIUxnG1zDO27zgHp/fcPHz4CIbGYkLORngmxEoGDAwLJavXXf1HMPTjs1LNc
-         xBCHoYpMobGDda4ulvLcqev5U/7cZuOGCZ+jfIjlwZ6kgXRKVu3rFPYIquyRnBsUJ4j6
-         3zzA==
-X-Gm-Message-State: AOAM530QV4e3NGV/Z3DZMAUjsQ0NKAVVYlQleOMgQC2IMiErnF9p95hV
-        3aNeatAm3OtCkSh3dTG54KF36ZeOw8bX6fchjS8=
-X-Google-Smtp-Source: ABdhPJwNzHOzFBFSlEaLslgNSlVhrb2Hfm4ARc29+Fg45XaZhkHoBe0aLO3suD+2MxFxFgKOty4nLQ==
-X-Received: by 2002:a1c:6643:: with SMTP id a64mr15174306wmc.142.1602582906104;
-        Tue, 13 Oct 2020 02:55:06 -0700 (PDT)
-Received: from [172.16.11.132] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id o194sm25490462wme.24.2020.10.13.02.55.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 02:55:05 -0700 (PDT)
-Subject: Re: [PATCH] lib: Convert test_printf.c to KUnit
+        id S1730454AbgJMLJt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Oct 2020 07:09:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43926 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726662AbgJMLJs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Oct 2020 07:09:48 -0400
+Received: from coco.lan (unknown [95.90.213.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C746520659;
+        Tue, 13 Oct 2020 11:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602587387;
+        bh=rtkVLlfLr6PN9eUQhxVzbDDGszd1byyijI9PT2xKGqk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nZQe+kbSoOC+QbX5z+Oo7NTk9qhgO9eT7IxPVkhteoXz9VuS/foh48IK7+12oW4c9
+         GYj30PuLutNXc7Ff1M5RYkzWQbd3do+gxcnCNAnWA0mIkcSNlQpEgpiZMLHBhikYmj
+         J8xJ4eSU4G8gm4Qa/HoL/IcWSnSyQWjnAjhrC+pI=
+Date:   Tue, 13 Oct 2020 13:09:36 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        skhan@linuxfoundation.org, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20200817043028.76502-1-98.arpi@gmail.com>
- <f408efbd-10f7-f1dd-9baa-0f1233cafffc@rasmusvillemoes.dk>
- <20200821113710.GA26290@alley> <20200821122849.GS1891694@smile.fi.intel.com>
- <20201012204625.GA56597@google.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <876cc862-56f1-7330-f988-0248bec2fbad@rasmusvillemoes.dk>
-Date:   Tue, 13 Oct 2020 11:55:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        skhan@linuxfoundation.org
+Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        arnd@arndb.de, keescook@chromium.org, alan.maguire@oracle.com,
+        yzaikin@google.com, davidgow@google.com, akpm@linux-foundation.org,
+        rppt@linux.ibm.com, frowand.list@gmail.com,
+        gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        mcgrof@kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 2/5] kunit: test: create a single centralized
+ executor for all tests
+Message-ID: <20201013130936.708562f6@coco.lan>
+In-Reply-To: <20200804204745.987648-3-brendanhiggins@google.com>
+References: <20200804204745.987648-1-brendanhiggins@google.com>
+        <20200804204745.987648-3-brendanhiggins@google.com>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20201012204625.GA56597@google.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/10/2020 22.46, Brendan Higgins wrote:
-> On Fri, Aug 21, 2020 at 03:28:49PM +0300, Andy Shevchenko wrote:
->> On Fri, Aug 21, 2020 at 01:37:10PM +0200, Petr Mladek wrote:
->>> On Mon 2020-08-17 09:06:32, Rasmus Villemoes wrote:
->>>> On 17/08/2020 06.30, Arpitha Raghunandan wrote:
->>>>> Converts test lib/test_printf.c to KUnit.
->>>>> More information about KUnit can be found at
->>>>> https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
->>>>> KUnit provides a common framework for unit tests in the kernel.
->>>>
->>>> So I can continue to build a kernel with some appropriate CONFIG set to
->>>> y, boot it under virt-me, run dmesg and see if I broke printf? That's
->>>> what I do now, and I don't want to have to start using some enterprisy
->>>> framework.
->>>
->>> I had the same concern. I have tried it.
+Em Tue,  4 Aug 2020 13:47:42 -0700
+Brendan Higgins <brendanhiggins@google.com> escreveu:
+
+> From: Alan Maguire <alan.maguire@oracle.com>
 > 
-> Sorry you feel that way. Do you have any suggestions on how we can make
-> it seem less enterprisy? Seems like there are people here who are not a
-> fan of the output format, so of which we can fix here, some of which is
-> part of KTAP[1].
+> Add a centralized executor to dispatch tests rather than relying on
+> late_initcall to schedule each test suite separately. Centralized
+> execution is for built-in tests only; modules will execute tests when
+> loaded.
 
-I'm fine with machine-readable TAP, but I most defintely also want
-human-readable, which means all the excessive and pointless lines need
-to go away.
+This patch adds 3 new warnings when doing "make htmldocs".
+Those two are trivial to fix:
 
->> Which raises an obvious question: did the people who convert this test this
->> themselves? Looks like a janitor work in the area without understanding the
->> area good enough.
+	../include/kunit/test.h:282: warning: Function parameter or member '__suites' not described in 'kunit_test_suites_for_module'
+	../include/kunit/test.h:282: warning: Excess function parameter 'suites_list' description in 'kunit_test_suites_for_module'
+
+<patch>
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index a423fffefea0..f2c387c60fac 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -256,9 +256,9 @@ static inline int kunit_run_all_tests(void)
+  * kunit_test_suites() - used to register one or more &struct kunit_suite
+  *			 with KUnit.
+  *
+- * @suites_list...: a statically allocated list of &struct kunit_suite.
++ * @__suites: a statically allocated list of &struct kunit_suite.
+  *
+- * Registers @suites_list with the test framework. See &struct kunit_suite for
++ * Registers @__suites with the test framework. See &struct kunit_suite for
+  * more information.
+  *
+  * If a test suite is built-in, module_init() gets translated into
+</patch>
+
 > 
-> Looks to me like Arpitha ran it, but you are right, we don't have a lot
-> of familiarity with this area; we were treating it as "janitor work" as
-> you say.
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Co-developed-by: Iurii Zaikin <yzaikin@google.com>
+> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> Co-developed-by: Brendan Higgins <brendanhiggins@google.com>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/kunit/test.h | 67 +++++++++++++++++++++++++++++---------------
+>  lib/kunit/Makefile   |  3 +-
+>  lib/kunit/executor.c | 28 ++++++++++++++++++
+>  lib/kunit/test.c     |  2 +-
+>  4 files changed, 76 insertions(+), 24 deletions(-)
+>  create mode 100644 lib/kunit/executor.c
 > 
-> Our intention was just to take some existing tests and as non-invasively
-> as possible, get them to report using a common format, and maybe even
-> get some of the tests to follow a common pattern.
-> 
->> Probably I will NAK all those patches from now on, until it will be good commit
->> messages and cover of risen aspects, including reference to before and after
->> outcome for passed and failed test cases.
-> 
-> Fair enough, hopefully we can address these issues in the next revision.
-> 
-> One issue though, with the "before and after outcome" you are
-> referencing; are you referring to the issue that Petr pointed out in how
-> they are inconsistent:
-> 
->    + original code: vsnprintf(buf, 6, "%pi4|%pI4", ...) wrote '127.0', expected '127-0'
->    + kunit code: vsnprintf(buf, 20, "%pi4|%pI4", ...) wrote '127.000.000.001|127', expected '127-000.000.001|127'  
-> 
-> (I think Rasmus addressed this.) Or are your referring to something
-> else?
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 47e61e1d53370..f3e86c3953a2b 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -224,7 +224,7 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite);
+>  unsigned int kunit_test_case_num(struct kunit_suite *suite,
+>  				 struct kunit_case *test_case);
+>  
+> -int __kunit_test_suites_init(struct kunit_suite **suites);
+> +int __kunit_test_suites_init(struct kunit_suite * const * const suites);
+>  
+>  void __kunit_test_suites_exit(struct kunit_suite **suites);
+>  
+> @@ -237,34 +237,57 @@ void __kunit_test_suites_exit(struct kunit_suite **suites);
+>   * Registers @suites_list with the test framework. See &struct kunit_suite for
+>   * more information.
+>   *
+> - * When builtin, KUnit tests are all run as late_initcalls; this means
+> - * that they cannot test anything where tests must run at a different init
+> - * phase. One significant restriction resulting from this is that KUnit
+> - * cannot reliably test anything that is initialize in the late_init phase;
+> - * another is that KUnit is useless to test things that need to be run in
+> - * an earlier init phase.
+> - *
+> - * An alternative is to build the tests as a module.  Because modules
+> - * do not support multiple late_initcall()s, we need to initialize an
+> - * array of suites for a module.
+> - *
+> - * TODO(brendanhiggins@google.com): Don't run all KUnit tests as
+> - * late_initcalls.  I have some future work planned to dispatch all KUnit
+> - * tests from the same place, and at the very least to do so after
+> - * everything else is definitely initialized.
+> + * If a test suite is built-in, module_init() gets translated into
+> + * an initcall which we don't want as the idea is that for builtins
+> + * the executor will manage execution.  So ensure we do not define
+> + * module_{init|exit} functions for the builtin case when registering
+> + * suites via kunit_test_suites() below.
+>   */
+> -#define kunit_test_suites(suites_list...)				\
+> -	static struct kunit_suite *suites[] = {suites_list, NULL};	\
+> -	static int kunit_test_suites_init(void)				\
+> +#ifdef MODULE
+> +#define kunit_test_suites_for_module(__suites)				\
+> +	static int __init kunit_test_suites_init(void)			\
+>  	{								\
+> -		return __kunit_test_suites_init(suites);		\
+> +		return __kunit_test_suites_init(__suites);		\
+>  	}								\
+> -	late_initcall(kunit_test_suites_init);				\
+> +	module_init(kunit_test_suites_init);				\
+> +									\
+>  	static void __exit kunit_test_suites_exit(void)			\
+>  	{								\
+> -		return __kunit_test_suites_exit(suites);		\
+> +		return __kunit_test_suites_exit(__suites);		\
+>  	}								\
+>  	module_exit(kunit_test_suites_exit)
+> +#else
+> +#define kunit_test_suites_for_module(__suites)
+> +#endif /* MODULE */
+> +
+> +#define __kunit_test_suites(unique_array, unique_suites, ...)		       \
+> +	static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
+> +	kunit_test_suites_for_module(unique_array);			       \
+> +	static struct kunit_suite **unique_suites			       \
+> +	__used __section(.kunit_test_suites) = unique_array
+> +
+> +/**
+> + * kunit_test_suites() - used to register one or more &struct kunit_suite
+> + *			 with KUnit.
+> + *
+> + * @suites: a statically allocated list of &struct kunit_suite.
+> + *
+> + * Registers @suites with the test framework. See &struct kunit_suite for
+> + * more information.
+> + *
+> + * When builtin,  KUnit tests are all run via executor; this is done
+> + * by placing the array of struct kunit_suite * in the .kunit_test_suites
+> + * ELF section.
+> + *
+> + * An alternative is to build the tests as a module.  Because modules do not
+> + * support multiple initcall()s, we need to initialize an array of suites for a
+> + * module.
+> + *
+> + */
+> +#define kunit_test_suites(...)						\
+> +	__kunit_test_suites(__UNIQUE_ID(array),				\
+> +			    __UNIQUE_ID(suites),			\
+> +			    __VA_ARGS__)
 
-Yeah, that change is fine and expected, can we stop bringing that up.
+But the third warning:
 
-It's all the explicit "memcmp() == 0 failed" gunk at least I am
-concerned with. If you can get rid of that (basically, stop stringifying
-the code, that's completely irrelevant) and just get the messages from
-the test itself that explains what went wrong. I'm fine with
-interspersing that with a few TAP-readable lines. But things like
+	../include/kunit/test.h:314: warning: Excess function parameter 'suites' description in 'kunit_test_suites'
 
- Expected memcmp(test_buffer, expect, written) == 0, but
-                       memcmp(test_buffer, expect, written) == 1
-                       0 == 0
+is more problematic.
 
-are utterly useless. We're not _testing_ memcmp, we're _using_ it to
-know if vsprintf() did as we expected. So just mechanically changing
-"memcmp() == 0" into "SOME_MACRO(memcmp(), 0)" is never going to work,
-at least when SOME_MACRO does the stringify and ends up producing the
-above. But if you can end up producing
+At least for me, it sounds a **very bad** idea to not pass "array"
+and "suites" to this macro, but, instead, to rely that some
+previous code would have added such vars with those specific
+names.
 
-[   56.795433]     # selftest: EXPECTATION FAILED at lib/printf_kunit.c:76
-               vsnprintf(buf, 20, "%pi4|%pI4", ...) wrote
-'127.000.000.001|127', expected '127-000.000.001|127'
+Also, you can't document a parameter "suites" that it is not a
+parameter.
 
-that's fine; that's basically just prepending an EXPECTATION FAILED line
-to the existing output.
+IMO, the right fix would be to define the macro as:
 
-So doing it properly would probably be either
+	#define kunit_test_suites(array, suites, arg...)			\
+		__kunit_test_suites(__UNIQUE_ID(array),			\
+				    __UNIQUE_ID(suites),		\
+				    ## arg)
 
-- change the existing pr_warn()s to use some KUNIT macro that generates
-whatever extra info is needed by TAP, in addition to the current
-human-readable message, and/or
-- just add a few lines of TAP-suitable FAIL/PASS lines here and there
+and then document "array", "suites" and "arg" using kernel-doc
+markups.
 
-but let me repeat that the control flow (early returns) in do_test()
-cannot be modified.
-
-Rasmus
+Thanks,
+Mauro
