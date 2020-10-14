@@ -2,302 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EDD28E001
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Oct 2020 13:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC2C28E39C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Oct 2020 17:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388435AbgJNLtr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Oct 2020 07:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S1728259AbgJNPxX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Oct 2020 11:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388364AbgJNLtq (ORCPT
+        with ESMTP id S1728254AbgJNPxX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 07:49:46 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9935FC0613D3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 04:49:46 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id l16so4686732ilj.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 04:49:46 -0700 (PDT)
+        Wed, 14 Oct 2020 11:53:23 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04B0C061755;
+        Wed, 14 Oct 2020 08:53:22 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id l24so3656586edj.8;
+        Wed, 14 Oct 2020 08:53:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ZNJolRz2m/OrIIPEVWnU6jnci1i43YaodPxZ7EspMqk=;
-        b=f02vCXkq0h2K6O9fLtRbGFGSGVtxhRymYov9DOr6tELJocnbrQ8bU3J9M0v6dC5Ex5
-         i+yfmbsD6xOabkNEtsK5zrW1mQk6e/xlyD1DoRYEWT7eDd0YWVYVJOGGJRp72TxQEO7G
-         BFZTon1M1pXuXdOG1gr8jAPBk7aO8w+fjNqHlcPVPV0enE+9bCpYK1zdlKAxONHirGAM
-         jLoQpTTqKZL368s4P2ABGpMDqnfoT7ryux2xHR9KWx+SdIrRTsG5xnainT4HfRqxEcue
-         BBrrkxOCIkCw7aHdw8qX6trc7vU4UZjr2VbPNMfHQ14xvkeaxl7SnRLKcN88E0IBPUhP
-         5wdQ==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FCeRwnRHpBRW2gbHKnyqjomhwY8PEDcYxzfNQP/7LoU=;
+        b=BsRDrsKkem1/EJ21sYF99A0VMAZTtevuW2QrYxYUmt6sYdyndmABJ/nmg6cKVDgXpw
+         vHIGp6YKub+GJsoCObugr5wZ2Cv59thi76GG/Vy1ruIYmFtTaxwlk6+dZ8tzeWkez0/0
+         XZXXE4UkjKnFu3HUw/Vo0ejrzm0/jt152eztZgoztDnhIGZwyB58Bp6C9pyqPDWukVsz
+         wisbhHxfCaMw3p8G6rE9x8x/HQPXbJfJ1HCxW5aKzHCLGCBT2dXuqbkzsJL/pQcodaKi
+         hjFaagvCG3FEoJLjhumYFw4HadWvZWasYUGRQZCE352W/8iw4F5rBQe/6F+SGHKK6kEf
+         eKzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ZNJolRz2m/OrIIPEVWnU6jnci1i43YaodPxZ7EspMqk=;
-        b=nysnZb1iuwRvJlNJyCussBMlkqtTY4eusINWy1HrJZgN0TDuVsnPxPQ5wJbyRbMU0c
-         PZ5+c9f6l9AS1knOy4pJqB46TYFw3lUz6OKZXuPtLpdclYaLdcnU8Gcb/TzIiN3dcD2E
-         U8/nKQVr/e5n7b+MRAdNGE9uLHHbGzoUjxc8dtKJBNGiE1DDn8n5A6r4PG8OzBvgCPuy
-         12uyH1vfmv84sgkpIWDtZwaE4NdH4ROUnaYGlD2qTj9iyToD5KiP2DU8KR9l/4ycftB/
-         bPu4fIzLl4A3JA50C3uEJMuKIzwZlvTQl2pmSaC38fx97tsCgjwkPyaPSTDX6C777K8N
-         Cp2w==
-X-Gm-Message-State: AOAM530Rb3FsE1wQKq5cu5iJM6LsY3jrrmxL0VW2EO56gAtvDkQ3QT13
-        r7Lch30cWPtvkzbhpzhiSd1+pQyuzUaaW2hN8J4W4uFBGjBHy0wH
-X-Google-Smtp-Source: ABdhPJyC1vnhl27SGg71MW38ft3eslfIQYWPY565caESAFYaSdD58mPgpHtzcFsGirfJNvR4iu3qqZqZ7lXGw1AoQ8A=
-X-Received: by 2002:a92:9944:: with SMTP id p65mr3301909ili.127.1602676184947;
- Wed, 14 Oct 2020 04:49:44 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 14 Oct 2020 17:19:33 +0530
-Message-ID: <CA+G9fYv=zPRGCKyhi9DeUsvyb6ZLVVXdV3hW+15XnQN2R3ircQ@mail.gmail.com>
-Subject: selftests: netfilter: nft_nat.sh: /dev/stdin:2:9-15: Error: syntax
- error, unexpected counter
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org
-Cc:     pablo@netfilter.org, Florian Westphal <fw@strlen.de>,
-        fabf@skynet.be, Shuah Khan <shuah@kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=FCeRwnRHpBRW2gbHKnyqjomhwY8PEDcYxzfNQP/7LoU=;
+        b=aj49qYe8oOV7JR4KrT/ZO56z/b9Qpmgj6+lzbVlj2g8aWy9Ou1AAKLJb0BjUgKLzD0
+         xUwNHxQ7X678Cx+OOPdqRIg1lAPuiaO9CNeos/w64qFAjeNir+MyGq6Jvs/ya+CTmX5f
+         5vwyYZ5h8BsM5QnCaZBbT7T9im32O+R8AZVT2wnpYX0ilNPHQumgbcO+j8pTb5l/pIM2
+         VgeuyrELo21ZPpttaGnCc5HfGxp6sf5MT3KAvTteaTi7fn3pAHtTFY5F4RvW4bXoh0/B
+         h09QlE4j6t2xfRXst4qoi00UOJ5B9nPT0uobMESvkFenGdgvJxVqbtfgQaJutCSiBRN3
+         G8Tw==
+X-Gm-Message-State: AOAM533Mt4rom/bqJ8mqhGJr7pXPmxmXOTdCPlLvBWxSWTBnc3/7TNi4
+        b0cOXQyKBEwlkO+zWPLGW1M=
+X-Google-Smtp-Source: ABdhPJxEwur8sPLU2aoBqv3RE/RaHeiWbyEZv0tpx/0pn8DdiaO+u6EiBnlbQAjLeeZ9G+3Cw4+J7g==
+X-Received: by 2002:aa7:d2d5:: with SMTP id k21mr5761855edr.62.1602690801739;
+        Wed, 14 Oct 2020 08:53:21 -0700 (PDT)
+Received: from gmail.com (563B81C8.dsl.pool.telekom.hu. [86.59.129.200])
+        by smtp.gmail.com with ESMTPSA id vr3sm2018390ejb.124.2020.10.14.08.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2020 08:53:21 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 14 Oct 2020 17:53:18 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, minchan@google.com, joelaf@google.com,
+        lokeshgidra@google.com, kernel-team@android.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Gavin Shan <gshan@redhat.com>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Jia He <justin.he@arm.com>, John Hubbard <jhubbard@nvidia.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>, Zi Yan <ziy@nvidia.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] x86: mremap speedup - Enable HAVE_MOVE_PUD
+Message-ID: <20201014155318.GA3014922@gmail.com>
+References: <20201014005320.2233162-1-kaleshsingh@google.com>
+ <20201014005320.2233162-6-kaleshsingh@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201014005320.2233162-6-kaleshsingh@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While running kselftest netfilter test on x86_64 devices linux next
-tag 20201013 kernel
-these errors are noticed. This not specific to kernel version we have
-noticed these errors
-earlier also.
 
-Am I missing configs ?
-Please refer to the config file we are using.
-We are using the minimal busybox shell.
-BusyBox v1.27.2 (2020-07-17 18:42:50 UTC) multi-call binary.
+* Kalesh Singh <kaleshsingh@google.com> wrote:
 
-metadata:
-  git branch: master
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git commit: f2fb1afc57304f9dd68c20a08270e287470af2eb
-  git describe: next-20201013
-  make_kernelversion: 5.9.0
-  kernel-config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/879/config
+> HAVE_MOVE_PUD enables remapping pages at the PUD level if both the
+> source and destination addresses are PUD-aligned.
+> 
+> With HAVE_MOVE_PUD enabled it can be inferred that there is approximately
+> a 13x improvement in performance on x86. (See data below).
+> 
+> ------- Test Results ---------
+> 
+> The following results were obtained using a 5.4 kernel, by remapping
+> a PUD-aligned, 1GB sized region to a PUD-aligned destination.
+> The results from 10 iterations of the test are given below:
+> 
+> Total mremap times for 1GB data on x86. All times are in nanoseconds.
+> 
+> Control        HAVE_MOVE_PUD
+> 
+> 180394         15089
+> 235728         14056
+> 238931         25741
+> 187330         13838
+> 241742         14187
+> 177925         14778
+> 182758         14728
+> 160872         14418
+> 205813         15107
+> 245722         13998
+> 
+> 205721.5       15594    <-- Mean time in nanoseconds
+> 
+> A 1GB mremap completion time drops from ~205 microseconds
+> to ~15 microseconds on x86. (~13x speed up).
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: H. Peter Anvin <hpa@zytor.com>
 
-Test output log:
---------------------
-selftests: netfilter: nft_nat.sh
-[ 1207.251385] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[ 1207.342479] IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-# /dev/stdin:2:9-15: Error: syntax error, unexpected counter
-# counter ns0in {}
-#         ^^^^^^^
-# /dev/stdin:3:9-15: Error: syntax error, unexpected counter
-# counter ns1in {}
-#         ^^^^^^^
-# /dev/stdin:4:9-15: Error: syntax error, unexpected counter
-# counter ns2in {}
-#         ^^^^^^^
-# /dev/stdin:6:9-15: Error: syntax error, unexpected counter
-# counter ns0out {}
-#         ^^^^^^^
+Nice!
 
-<trim>
+Assuming it's all correct code:
 
-# /dev/stdin:12:9-15: Error: syntax error, unexpected counter
-# counter ns2in6 {}
-#         ^^^^^^^
-# /dev/stdin:14:9-15: Error: syntax error, unexpected counter
-# counter ns0out6 {}
-#         ^^^^^^^
-[ 1208.229989] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter ns0in
-#      ^^^^^^^
-# ERROR: ns0in counter in ns1-loU9Vlmj has unexpected value (expected
-packets 1 bytes 84) at check_counters 1
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter ns0in
-#      ^^^^^^^
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter ns0out
-#      ^^^^^^^
-# ERROR: ns0out counter in ns1-loU9Vlmj has unexpected value (expected
-packets 1 bytes 84) at check_counters 2
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter ns0out
-#      ^^^^^^^
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter ns0in6
+Acked-by: Ingo Molnar <mingo@kernel.org>
 
-# ERROR: ns1 counter in ns0-loU9Vlmj has unexpected value (expected
-packets 1 bytes 104) at check_ns0_counters 5
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter ns1
-#      ^^^^^^^
+Thanks,
 
-<trim>
-
-# <cmdline>:1:16-19: Error: syntax error, unexpected inet
-# reset counters inet
-#                ^^^^
-# <cmdline>:1:16-19: Error: syntax error, unexpected inet
-# reset counters inet
-#                ^^^^
-# FAIL: nftables v0.7 (Scrooge McDuck)
-not ok 2 selftests: netfilter: nft_nat.sh # exit=1
-# selftests: netfilter: bridge_brouter.sh
-# SKIP: Could not run test without ebtables
-ok 3 selftests: netfilter: bridge_brouter.sh # SKIP
-# selftests: netfilter: conntrack_icmp_related.sh
-[ 1215.679815] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[ 1215.698932] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[ 1215.711612] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[ 1216.678043] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter unknown
-#      ^^^^^^^
-# ERROR: counter unknown in nsclient1 has unexpected value (expected
-packets 0 bytes 0)
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter unknown
-#      ^^^^^^^
-
-<trim>
-
-# ERROR: counter related in nsclient1 has unexpected value (expected
-packets 2 bytes 1856)
-# <cmdline>:1:6-12: Error: syntax error, unexpected counter
-# list counter inet filter related
-#      ^^^^^^^
-# ERROR: icmp error RELATED state test has failed
-not ok 4 selftests: netfilter: conntrack_icmp_related.sh # exit=1
-# selftests: netfilter: nft_flowtable.sh
-# Cannot create namespace file \"/var/run/netns/ns1\": File exists
-[ 1230.570705] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[ 1230.757525] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[ 1230.843221] IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# PASS: netns routing/connectivity: ns1 can reach ns2
-# BusyBox v1.27.2 (2020-07-17 18:42:50 UTC) multi-call binary.
-#
-# Usage: nc [IPADDR PORT]
-# BusyBox v1.27.2 (2020-07-17 18:42:50 UTC) multi-call binary.
-#
-# Usage: nc [IPADDR PORT]
-# FAIL: file mismatch for ns1 -> ns2
-# -rw------- 1 root root 1079296 Oct 13 09:54 /tmp/tmp.EyNCJDBncG
-# -rw------- 1 root root 0 Oct 13 09:54 /tmp/tmp.CR5cdEqIHB
-# FAIL: file mismatch for ns1 <- ns2
-# -rw------- 1 root root 4677632 Oct 13 09:54 /tmp/tmp.NkSMo4ZijB
-# -rw------- 1 root root 0 Oct 13 09:54 /tmp/tmp.irBE9wPUAV
-# FAIL: flow offload for ns1/ns2:
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# BusyBox v1.27.2 (2020-07-17 18:42:50 UTC) multi-call binary.
-#
-# Usage: nc [IPADDR PORT]
-# BusyBox v1.27.2 (2020-07-17 18:42:50 UTC) multi-call binary.
-#
-# Usage: nc [IPADDR PORT]
-# FAIL: file mismatch for ns1 -> ns2
-# -rw------- 1 root root 1079296 Oct 13 09:54 /tmp/tmp.EyNCJDBncG
-# -rw------- 1 root root 0 Oct 13 09:54 /tmp/tmp.CR5cdEqIHB
-# FAIL: file mismatch for ns1 <- ns2
-# -rw------- 1 root root 4677632 Oct 13 09:54 /tmp/tmp.NkSMo4ZijB
-# -rw------- 1 root root 0 Oct 13 09:54 /tmp/tmp.irBE9wPUAV
-# FAIL: flow offload for ns1/ns2 with NAT
-# <cmdline>:1:1-23: Error: Could not process rule: Table 'filter' does not exist
-# list table inet filter
-# ^^^^^^^^^^^^^^^^^^^^^^^
-# <cmdline>:1:32-32: Error: syntax error, unexpected newline, expecting handle
-# delete rule inet filter forward
-#                                ^
-# FAIL: Could not delete large-packet accept rule
-not ok 5 selftests: netfilter: nft_flowtable.sh # exit=1
-# selftests: netfilter: ipvs.sh
-# skip: could not run test without ipvs module
-ok 6 selftests: netfilter: ipvs.sh # SKIP
-# selftests: netfilter: nft_concat_range.sh
-# TEST: reported issues
-#   Add two elements, flush, re-add                               [
-1240.096121] kauditd_printk_skb: 40 callbacks suppressed
-[ 1240.096124] audit: type=1325 audit(1602582894.032:87830):
-table=t:72;?:0 family=2 entries=1 op=nft_register_table pid=9084
-subj=kernel comm=\"nft\"
-[ 1240.114551] audit: type=1325 audit(1602582894.032:87830):
-table=t:72;s:1 family=2 entries=0 op=nft_register_set pid=9084
-subj=kernel comm=\"nft\"
-[ 1240.127450] audit: type=1325 audit(1602582894.032:87830):
-table=?:0;?:0 family=0 entries=2 op=nft_register_gen pid=9084
-subj=kernel comm=\"nft\"
-[FAIL]
-[ 1240.169015] audit: type=1325 audit(1602582894.105:87831):
-table=t:72;s:1 family=2 entries=0 op=nft_unregister_set pid=9087
-subj=kernel comm=\"nft\"
-[ 1240.182153] audit: type=1325 audit(1602582894.105:87831):
-table=t:72;?:0 family=2 entries=0 op=nft_unregister_table pid=9087
-subj=kernel comm=\"nft\"
-[ 1240.195412] audit: type=1325 audit(1602582894.105:87831):
-table=?:0;?:0 family=0 entries=3 op=nft_register_gen pid=9087
-subj=kernel comm=\"nft\"
-not ok 7 selftests: netfilter: nft_concat_range.sh # exit=1
-# selftests: netfilter: nft_conntrack_helper.sh
-# SKIP: Could not run test without conntrack tool
-ok 8 selftests: netfilter: nft_conntrack_helper.sh # SKIP
-# selftests: netfilter: nft_queue.sh
-[ 1242.587245] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[ 1242.605473] IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-[ 1243.557996] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-# PASS: ns1-4ngWFkmc can reach ns2-4ngWFkmc
-# internal:0:0-0: Error: Could not open file \"-\": No such file or directory
-#
-#
-# FAIL: ip expected failure, got 0
-not ok 9 selftests: netfilter: nft_queue.sh # exit=1
-# selftests: netfilter: nft_meta.sh
-# /dev/stdin:2:9-15: Error: syntax error, unexpected counter
-# counter iifcount {}
-#         ^^^^^^^
-# /dev/stdin:3:9-15: Error: syntax error, [ 1245.942205] kselftest:
-Running tests in nsfs
-unexpected counter
-# counter iifnamecount {}
-#         ^^^^^^^
-# /dev/stdin:4:9-15: Error: syntax error, unexpected counter
-# counter iifgroupcount {}
-#         ^^^^^^^
-
-<trim>
-
-# /dev/stdin:11:9-15: Error: syntax error, unexpected counter
-# counter icurrentyearc[ 1246.027275] kselftest: Running tests in pidfd
-ounter {}
-#         ^^^^^^^
-# SKIP: Could not add test ruleset
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-Full test log link,
-https://lkft.validation.linaro.org/scheduler/job/1839013#L12339
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+	Ingo
