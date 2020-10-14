@@ -2,148 +2,371 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0408428EAA9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Oct 2020 04:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6808F28EAFE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Oct 2020 04:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728885AbgJOCAH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Oct 2020 22:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S1730448AbgJOCOj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Oct 2020 22:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732493AbgJOB7h (ORCPT
+        with ESMTP id S1730445AbgJOCOj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 21:59:37 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D98C08EC73
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 16:31:45 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id b26so780033pff.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 16:31:45 -0700 (PDT)
+        Wed, 14 Oct 2020 22:14:39 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F724C025278
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 16:47:53 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id z6so995272qkz.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 16:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HXVUBRNSSqTPt62/mgLGqwfLQyF1yjV/YHL73Dao6W8=;
-        b=jCAqi4iTXHmrlmTxFYn6GS2VgUo/8myl3KBrmWg0lRxHbNQgb3vs1osYENVe61bW0P
-         M+4wkDUWjW0myaMTX5a1Gxf50PJCa/e+uOHI7EyM+POftZ0Y/9LfYtXSwlA+pbBlCT0Z
-         p+qpDy78UxHceaiLraq0fP4f7UgNDPeMM5qHQ=
+        d=massaru-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3wrnn6DD0M5Puv0hp8zDhFVfWjeqMqGBFBnj5V/64+8=;
+        b=qEnFg0M6WRHbr0ghrj4kW7FV63er+uXVMUMlGSqITZvQ5UbcP3ssFjukWGpoOMlRPb
+         AZCECvbM+LTJrelT+H7lo+etK1CkVQvdrDhnuTJhiwhKXIcVgCuo83fepS64ijCj5I27
+         19wRwXz/L/4fRVFncSXnZ6xadj7OGe0xA66hC1X4uDvHjyx8EJUbOx3Ug4tfs+yW+ocy
+         V3Q2Zbrf+GzTcW0ve0Mg9zKrwZEL8zTCYbpPPkAWTCTyxIoVvzs61OjPokHNdPFdtA9G
+         Q6uHJosqD3wFRY4wGouwq9SI7myfHxIzp8FzjoH8w5hrmMsbV8rTF5OEqE6C/oC1BEGT
+         Xf8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HXVUBRNSSqTPt62/mgLGqwfLQyF1yjV/YHL73Dao6W8=;
-        b=oVpIlbTLuHd+z0HYiqgIW+VP9zWHD0PwWIejovfG48Q7ZfuF8BIyTwCgURLD9rIXgP
-         YtHaVcJLNZJrTtBoc/ii1bQE7iQkqDl1UloTj/iwJzeOCnBmVYdVjKtUdYQEvgbZsnGY
-         eyOWJDBOjoGsE9FPAL1l+YCG9Qt7msF20oYzOYSApRktiz7iEmMbcCfpAXEhe9vFNImi
-         ANMsUucmqEADHKg84pI6O4/gdX3v6BQ6/clYpkGzELryR8mkPZxAYp9L9rbBd/t22+9E
-         fgZDVwwjLtWvwGXUNFHATgNpgqK7n6GM8rrAO+AKtwsQ+Pou+aOPxTI3Pnh/SEnbaMCt
-         Fe8w==
-X-Gm-Message-State: AOAM531yfo9m5hKM1uuUr7DeS/rYU4caBQr9Eo8y1oBSdyrKSpWoY4Gc
-        cOQkqg+2fZZgUMFj2CpP4fQ9EA==
-X-Google-Smtp-Source: ABdhPJxOwI5RHIhqZd5sqTZJ3BeFjY/QwyZ69aihzdHcq4MYx7e3PrGhvAMQ5MYwvG0KK4zLFTqSZQ==
-X-Received: by 2002:a63:d66:: with SMTP id 38mr983974pgn.400.1602718304430;
-        Wed, 14 Oct 2020 16:31:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r201sm780160pfc.98.2020.10.14.16.31.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3wrnn6DD0M5Puv0hp8zDhFVfWjeqMqGBFBnj5V/64+8=;
+        b=Ey2ftUXkKzUgAuOWs9i4Ldydt3aVtkjXMvpUJR8P3ffmwLNOOdPHQClWi0ZQB94roe
+         OZDhx/VAmbnR5/NDlsRErkaqbCl0C2Xubt4CwczNiLGPPbdKdlXtOGGcA4YstIYhx+eA
+         drQYZn4PSMp/vzBJyZywHPxUV1O53Ph2ekkxQD9gD0ttwQlE7GKqyOFSO3xkW/PBK3vU
+         bVmqG0W/TJqaNajZvLwA0Vn8DphXd6G/kjt0E/1lf4E7vIrQnUJiw/+Cq5MOTr81mHuE
+         LfRa38BjELtWtmBADQoct1mL97ESJf8EtrVG9kPtpKcd9KEIVOutZkF1BYzJrrm4xdnP
+         Ut/A==
+X-Gm-Message-State: AOAM532h7NFD31tE+jGUlK/GaFUpWdOQ4i9HjkLb7qKSDAAbIkZVEHFZ
+        BcBeb0RCNYjB4MrlCeM2kTw9oQ==
+X-Google-Smtp-Source: ABdhPJyYMusmq4hM6y9MlxGdGlBhIL8YURIXybDIuyDfZEwkjVaG+VBd2wyeSMTiriXa4qUw5u9TPw==
+X-Received: by 2002:a05:620a:6d2:: with SMTP id 18mr1613165qky.280.1602719271253;
+        Wed, 14 Oct 2020 16:47:51 -0700 (PDT)
+Received: from localhost.localdomain ([2804:431:c7cb:5e0b:6f3d:fca0:306c:a15d])
+        by smtp.gmail.com with ESMTPSA id l25sm515286qtf.18.2020.10.14.16.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 16:31:43 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 16:31:42 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
-        gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
-        johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, arve@android.com,
-        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
-        christian@brauner.io, hridya@google.com, surenb@google.com,
-        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
-        rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
-Message-ID: <202010141611.70B7A38@keescook>
-References: <cover.1602209970.git.skhan@linuxfoundation.org>
- <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
- <202010091255.246395A6@keescook>
- <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
- <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
- <20201014091720.GC2628@hirez.programming.kicks-ass.net>
+        Wed, 14 Oct 2020 16:47:50 -0700 (PDT)
+From:   Vitor Massaru Iha <vitor@massaru.org>
+To:     kunit-dev@googlegroups.com, irogers@google.com,
+        brendanhiggins@google.com
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        peterz@infradead.org, mingo@kernel.org
+Subject: [PATCH v2] lib: kunit: add test_min_heap test conversion to KUnit
+Date:   Wed, 14 Oct 2020 20:47:46 -0300
+Message-Id: <20201014234746.235634-1-vitor@massaru.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201014091720.GC2628@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 11:17:20AM +0200, Peter Zijlstra wrote:
-> On Tue, Oct 13, 2020 at 08:12:20PM -0600, Shuah Khan wrote:
-> 
-> > They don't add any new behavior, As Kees mentioned they do give us a
-> > way to clearly differentiate atomic usages that can wrap.
-> 
-> No it doesn't! atomic_t can wrap, this thing can wrap, no distinction.
-> 
-> All it does is fragment the API and sow confusion. FOR NO BENEFIT.
+This adds the conversion of the runtime tests of test_min_heap,
+from `lib/test_min_heap.c` to KUnit tests.
 
-I really don't see it this way. It's a distinct subset of the atomic_t
-API. The trouble that has existed here has been with an atomic_t being
-originally used NOT for lifetime management, that mutates into something
-like that because of the available API, but doing so without realizing
-it. atomic_t gets used for all kinds of algorithms, and the "counter"
-type is way too easily accidentally transformed into a "lifetime
-tracker" and we get bugs.
+Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+---
+  v2: 
+    * min_heap test now runs when enabling full test coverage (KUNIT_ALL_TESTS).
+---
+ lib/Kconfig.debug                         |  29 ++++--
+ lib/Makefile                              |   2 +-
+ lib/{test_min_heap.c => min_heap_kunit.c} | 117 ++++++++++++----------
+ 3 files changed, 83 insertions(+), 65 deletions(-)
+ rename lib/{test_min_heap.c => min_heap_kunit.c} (60%)
 
-If we have a distinct type for wrapping-counters that limits the API,
-then it is much harder for folks to shoot themselves in the foot. I don't
-see why this is so bad: we end up with safer usage, more easily auditable
-code behavior ("how was this atomic_t instance _intended_ to be used?"),
-and no change in binary size.
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 4f09c6505a2e..b75f4541e7d2 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1915,16 +1915,6 @@ config TEST_LIST_SORT
+ 
+ 	  If unsure, say N.
+ 
+-config TEST_MIN_HEAP
+-	tristate "Min heap test"
+-	depends on DEBUG_KERNEL || m
+-	help
+-	  Enable this to turn on min heap function tests. This test is
+-	  executed only once during system boot (so affects only boot time),
+-	  or at module load time.
+-
+-	  If unsure, say N.
+-
+ config TEST_SORT
+ 	tristate "Array-based sort test"
+ 	depends on DEBUG_KERNEL || m
+@@ -2256,6 +2246,25 @@ config BITS_TEST
+ 
+ 	  If unsure, say N.
+ 
++config MIN_HEAP_KUNIT
++	tristate "KUnit test for Min heap" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this to turn on min heap function tests. This test is
++	  executed only once during system boot (so affects only boot time),
++	  or at module load time.
++
++	  KUnit tests run during boot and output the results to the debug log
++	  in TAP format (http://testanything.org/). Only useful for kernel devs
++	  running the KUnit test harness, and not intended for inclusion into a
++	  production build.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index d862d41fdc3d..c88ade843502 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -68,7 +68,6 @@ CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
+ UBSAN_SANITIZE_test_ubsan.o := y
+ obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
+ obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
+-obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
+ obj-$(CONFIG_TEST_LKM) += test_module.o
+ obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
+ obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
+@@ -343,3 +342,4 @@ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) += test_bits.o
++obj-$(CONFIG_MIN_HEAP_KUNIT) += min_heap_kunit.o
+diff --git a/lib/test_min_heap.c b/lib/min_heap_kunit.c
+similarity index 60%
+rename from lib/test_min_heap.c
+rename to lib/min_heap_kunit.c
+index d19c8080fd4d..398db1c63146 100644
+--- a/lib/test_min_heap.c
++++ b/lib/min_heap_kunit.c
+@@ -7,9 +7,8 @@
+ 
+ #include <linux/log2.h>
+ #include <linux/min_heap.h>
+-#include <linux/module.h>
+-#include <linux/printk.h>
+ #include <linux/random.h>
++#include <kunit/test.h>
+ 
+ static __init bool less_than(const void *lhs, const void *rhs)
+ {
+@@ -29,37 +28,34 @@ static __init void swap_ints(void *lhs, void *rhs)
+ 	*(int *)rhs = temp;
+ }
+ 
+-static __init int pop_verify_heap(bool min_heap,
++static __init void pop_verify_heap(struct kunit *context,
++				bool min_heap,
+ 				struct min_heap *heap,
+ 				const struct min_heap_callbacks *funcs)
+ {
+ 	int *values = heap->data;
+-	int err = 0;
+ 	int last;
+ 
+ 	last = values[0];
+ 	min_heap_pop(heap, funcs);
+ 	while (heap->nr > 0) {
+ 		if (min_heap) {
+-			if (last > values[0]) {
+-				pr_err("error: expected %d <= %d\n", last,
+-					values[0]);
+-				err++;
+-			}
++			KUNIT_EXPECT_FALSE_MSG(context,
++					       last > values[0],
++					       "expected %d <= %d\n",
++					       last, values[0]);
+ 		} else {
+-			if (last < values[0]) {
+-				pr_err("error: expected %d >= %d\n", last,
+-					values[0]);
+-				err++;
+-			}
++			KUNIT_EXPECT_FALSE_MSG(context,
++					       last < values[0],
++					       "expected %d >= %d\n",
++					       last, values[0]);
+ 		}
+ 		last = values[0];
+ 		min_heap_pop(heap, funcs);
+ 	}
+-	return err;
+ }
+ 
+-static __init int test_heapify_all(bool min_heap)
++static __init void test_heapify_all(struct kunit *context, bool min_heap)
+ {
+ 	int values[] = { 3, 1, 2, 4, 0x8000000, 0x7FFFFFF, 0,
+ 			 -3, -1, -2, -4, 0x8000000, 0x7FFFFFF };
+@@ -73,12 +69,11 @@ static __init int test_heapify_all(bool min_heap)
+ 		.less = min_heap ? less_than : greater_than,
+ 		.swp = swap_ints,
+ 	};
+-	int i, err;
++	int i;
+ 
+ 	/* Test with known set of values. */
+ 	min_heapify_all(&heap, &funcs);
+-	err = pop_verify_heap(min_heap, &heap, &funcs);
+-
++	pop_verify_heap(context, min_heap, &heap, &funcs);
+ 
+ 	/* Test with randomly generated values. */
+ 	heap.nr = ARRAY_SIZE(values);
+@@ -86,12 +81,10 @@ static __init int test_heapify_all(bool min_heap)
+ 		values[i] = get_random_int();
+ 
+ 	min_heapify_all(&heap, &funcs);
+-	err += pop_verify_heap(min_heap, &heap, &funcs);
+-
+-	return err;
++	pop_verify_heap(context, min_heap, &heap, &funcs);
+ }
+ 
+-static __init int test_heap_push(bool min_heap)
++static __init void test_heap_push(struct kunit *context, bool min_heap)
+ {
+ 	const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
+ 			     -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
+@@ -106,25 +99,22 @@ static __init int test_heap_push(bool min_heap)
+ 		.less = min_heap ? less_than : greater_than,
+ 		.swp = swap_ints,
+ 	};
+-	int i, temp, err;
++	int i, temp;
+ 
+ 	/* Test with known set of values copied from data. */
+ 	for (i = 0; i < ARRAY_SIZE(data); i++)
+ 		min_heap_push(&heap, &data[i], &funcs);
+-
+-	err = pop_verify_heap(min_heap, &heap, &funcs);
++	pop_verify_heap(context, min_heap, &heap, &funcs);
+ 
+ 	/* Test with randomly generated values. */
+ 	while (heap.nr < heap.size) {
+ 		temp = get_random_int();
+ 		min_heap_push(&heap, &temp, &funcs);
+ 	}
+-	err += pop_verify_heap(min_heap, &heap, &funcs);
+-
+-	return err;
++	pop_verify_heap(context, min_heap, &heap, &funcs);
+ }
+ 
+-static __init int test_heap_pop_push(bool min_heap)
++static __init void test_heap_pop_push(struct kunit *context, bool min_heap)
+ {
+ 	const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
+ 			     -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
+@@ -139,7 +129,7 @@ static __init int test_heap_pop_push(bool min_heap)
+ 		.less = min_heap ? less_than : greater_than,
+ 		.swp = swap_ints,
+ 	};
+-	int i, temp, err;
++	int i, temp;
+ 
+ 	/* Fill values with data to pop and replace. */
+ 	temp = min_heap ? 0x80000000 : 0x7FFFFFFF;
+@@ -149,8 +139,7 @@ static __init int test_heap_pop_push(bool min_heap)
+ 	/* Test with known set of values copied from data. */
+ 	for (i = 0; i < ARRAY_SIZE(data); i++)
+ 		min_heap_pop_push(&heap, &data[i], &funcs);
+-
+-	err = pop_verify_heap(min_heap, &heap, &funcs);
++	pop_verify_heap(context, min_heap, &heap, &funcs);
+ 
+ 	heap.nr = 0;
+ 	for (i = 0; i < ARRAY_SIZE(data); i++)
+@@ -161,34 +150,54 @@ static __init int test_heap_pop_push(bool min_heap)
+ 		temp = get_random_int();
+ 		min_heap_pop_push(&heap, &temp, &funcs);
+ 	}
+-	err += pop_verify_heap(min_heap, &heap, &funcs);
++	pop_verify_heap(context, min_heap, &heap, &funcs);
++}
+ 
+-	return err;
++static void __init test_heapify_all_true(struct kunit *context)
++{
++	test_heapify_all(context, true);
+ }
+ 
+-static int __init test_min_heap_init(void)
++static void __init test_heapify_all_false(struct kunit *context)
+ {
+-	int err = 0;
+-
+-	err += test_heapify_all(true);
+-	err += test_heapify_all(false);
+-	err += test_heap_push(true);
+-	err += test_heap_push(false);
+-	err += test_heap_pop_push(true);
+-	err += test_heap_pop_push(false);
+-	if (err) {
+-		pr_err("test failed with %d errors\n", err);
+-		return -EINVAL;
+-	}
+-	pr_info("test passed\n");
+-	return 0;
++	test_heapify_all(context, true);
++}
++
++static void __init test_heap_push_true(struct kunit *context)
++{
++	test_heap_push(context, true);
++}
++
++static void __init test_heap_push_false(struct kunit *context)
++{
++	test_heap_push(context, false);
+ }
+-module_init(test_min_heap_init);
+ 
+-static void __exit test_min_heap_exit(void)
++static void __init test_heap_pop_push_true(struct kunit *context)
+ {
+-	/* do nothing */
++	test_heap_pop_push(context, true);
+ }
+-module_exit(test_min_heap_exit);
++
++static void __init test_heap_pop_push_false(struct kunit *context)
++{
++	test_heap_pop_push(context, false);
++}
++
++static struct kunit_case __refdata min_heap_test_cases[] = {
++	KUNIT_CASE(test_heapify_all_true),
++	KUNIT_CASE(test_heapify_all_false),
++	KUNIT_CASE(test_heap_push_true),
++	KUNIT_CASE(test_heap_push_false),
++	KUNIT_CASE(test_heap_pop_push_true),
++	KUNIT_CASE(test_heap_pop_push_false),
++	{}
++};
++
++static struct kunit_suite min_heap_test_suite = {
++	.name = "min-heap",
++	.test_cases = min_heap_test_cases,
++};
++
++kunit_test_suites(&min_heap_test_suite);
+ 
+ MODULE_LICENSE("GPL");
 
-> > There is no need to keep inc_return in this API as such. I included it
-> > so it can be used for above cases 1 and 2, so the users don't have to
-> > call inc() followed by read(). It can be left out of the API.
-
-I go back and forth on this, but after looking at these instances,
-it makes sense to have inc_return(), for where counters are actually
-"serial numbers". An argument could be made[1], however, that such uses
-should not end up in the position of _reusing_ earlier identifiers, which
-means it's actually can't wrap. (And some cases just need u64 to make this
-happen[2] -- and in that specific case, don't even need to be atomic_t).
-
-[1] https://lore.kernel.org/lkml/202010071334.8298F3FA7@keescook/
-[2] https://git.kernel.org/linus/d1e7fd6462ca9fc76650fbe6ca800e35b24267da
-
-> Wrong! The atomic usage in mutex doesn't fall in any of those
-> categories.
-
-But the atomic usage in mutex is *IN* mutex -- it's a separate data
-type, etc. We don't build mutexes manually, so why build counters
-manually?
-
-> The only thing you're all saying that makes sense is that unintentional
-> wrapping can have bad consequences, the rest is pure confusion.
-> 
-> Focus on the non-wrapping cases, _everything_ else is not going
-> anywhere.
-
-I view this as a way to do so: this subset of wrapping cases is being
-identified and removed from the pool of all the atomic_t cases so that
-they will have been classified, and we can continue to narrow down all
-the atomic_t uses to find any potentially mis-used non-wrapping cases.
-
-The other option is adding some kind of attribute to the declarations
-(which gets us the annotation) but doesn't provide a limit to the API.
-(e.g. no counter should ever call dec_return).
-
-> So audit the kernel, find the cases that should not wrap, categorize and
-> create APIs for them that trap the wrapping. But don't go around
-> confusing things that don't need confusion.
-
-That's what's happening here. But as it turns out, it's easier to do
-this by employing both the process of elimination (mark the counters)
-and direct identification (mark the refcount_t). Then the pool of
-"unannotated" atomic_t instances continues to shrink.
-
+base-commit: d2585f5164c298aaaed14c2c8d313cbe7bd5b253
 -- 
-Kees Cook
+2.26.2
+
