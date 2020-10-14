@@ -2,201 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5B228DD21
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Oct 2020 11:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F3728DD58
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Oct 2020 11:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbgJNJWd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Oct 2020 05:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        id S1728315AbgJNJX7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Oct 2020 05:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729968AbgJNJVv (ORCPT
+        with ESMTP id S1731144AbgJNJWk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:21:51 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3BAC0F26CF
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 19:12:24 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id q1so3429614ilt.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 19:12:24 -0700 (PDT)
+        Wed, 14 Oct 2020 05:22:40 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA43BC05110D
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 23:50:14 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id t18so3892581ilo.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 23:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=O0EZovHPBRBu6d4nMiG34aB96fSPYJLap8VHOicm/qs=;
-        b=DbWW5TtsBc6Dyb8YsskACaBaCbQEtISHSCVxTRgFAHlHJjmD1dU40N2/h5pZJ6i9bJ
-         +F2NBNfzuZOj7AsXvJYavEYGwGPq4uL8mop/7Jirc9xAaKdAITSdhsoI+JolGBgvo7jC
-         FaHWhFiSslkjQ7vjKYWsBMu2t4YFei5779oSs=
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=4ElDEesyg0K0qnDmN25EoqLVZHDvVGnEe9oIGE+GbpY=;
+        b=yGsJGrunBc8kcDsuG6rQsb9Gi1UWyLuGHPMOjfNqcJYM8NYjLqrxTBD9axJuRe18zU
+         HQkqtoT0925++y4wEzZBq13ntiRfp+ztZ0mDXnUdL/DvJhCreJEXfAa182D+qe97LEkO
+         irPKkX4zfBbl1xcfW5PpBAR52e4Oxl4tjn5J3Yh3jn1ITYtzYpjqrPFLqodqCN8XfrUk
+         dLs6vZPItghAdRarI9xQ1Cxs2V5c5nxJNBgLLgZBspfGmq2VhatarOyYFOVd0EAD4080
+         lhCt/ii1JOENmaqe3S7tG0tp2S0XruPJjXdxCV4VttS68y59UWFitMvHdujhyBd/saDj
+         eSRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=O0EZovHPBRBu6d4nMiG34aB96fSPYJLap8VHOicm/qs=;
-        b=d4eL5H+vBIpYuF6IBRp6vidIBryX0nBoJDc1sGqlAIrM/FekaGKlX3jprwdp+MFUHZ
-         AqroBGCSeI9nZxR8CIntBn5yy4vkH2ABC+Qa5j6zSoIKeYADdB3GlGvYPxNlXZH2sDp7
-         hzNf7acz1gUavcORSPJKb79u5pdlqphqW6BRTpq5vAG7YVn+CSoXy0CG4y/pXPWXNqWF
-         eplBKUkmG9QeC5kSZdk/vQ7+kdZHGKDTYxPJR///Qml4ppmc1lOWRqdrbfqrkupW6O6z
-         6fnj/GzqLEGgx6Zu6U3koHbNX+i4rgAk4KP4ejLwgjPDMaThNA1cNLMfU74NJI508gE2
-         3VBg==
-X-Gm-Message-State: AOAM530WUeDG8Qw+WYMmFEPHXg44+Doom+q4HKGCtgn36kSangxj/Eo7
-        GYehFhL7LozkySL7fNDV9Gql6A==
-X-Google-Smtp-Source: ABdhPJzg8Uk3iABEzJ4woM5C8q7wCnJ5fWvm66m83Hyk77SwQ9t1b/UHHFa4UxnY/E8z7l/WVw75Zg==
-X-Received: by 2002:a92:bb0d:: with SMTP id w13mr2338778ili.168.1602641542819;
-        Tue, 13 Oct 2020 19:12:22 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 15sm1611292ilz.66.2020.10.13.19.12.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 19:12:22 -0700 (PDT)
-Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
-        surenb@google.com, minyard@acm.org, arnd@arndb.de,
-        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1602209970.git.skhan@linuxfoundation.org>
- <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
- <202010091255.246395A6@keescook>
- <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
-Date:   Tue, 13 Oct 2020 20:12:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=4ElDEesyg0K0qnDmN25EoqLVZHDvVGnEe9oIGE+GbpY=;
+        b=hsBeJdaRyd00dthNcu7n5tx9ZB2m6EzqZQuo8ykxC2wwDAbwsiIWedy0kZrnS4tTj5
+         3k4pBZh5iP85EEqWEbHkx3ZPPbvbMJGTpsySF81vSBTkkdAnGEvwv371mx4Jg3NaLxs9
+         oWb9hfvxDxG9ZP3Xg7+n6Mv+TBkMH/nO1uqdqfqCiQHreDKevkw9RX2w4MOoulayKBfa
+         9fnHaTljOYVgnq/aiVEbfdzw92txwGBLfHsSJaHf0eGxXwau07R7ObWpq8HQa52VmRED
+         17ST4doqdIHU+/+BfOuENp3/KkeFEHcLLDDilc819QzMjHwnnlEIvUwec5U102gDGVjM
+         AoJg==
+X-Gm-Message-State: AOAM530vBwqM5QLcAVLIMMOK4UZ//Vg79VuOVeqVMsMeRvtf20kiYbCH
+        9kddfQ6AsuD36C0DKnO/qVxxpTuzMTf6pElrGCIIByg9KPGdRFBg
+X-Google-Smtp-Source: ABdhPJwp3I8FXlHDe3+yUeiJIWIJmB6SHTRFkbQNvXxGizAU1lL1FALkkQgXS5sL9C/VXtC/MPUiLkp0WUpyy1PrrpA=
+X-Received: by 2002:a05:6e02:5ad:: with SMTP id k13mr1306184ils.71.1602658213139;
+ Tue, 13 Oct 2020 23:50:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Oct 2020 12:20:00 +0530
+Message-ID: <CA+G9fYvFUpODs+NkSYcnwKnXm62tmP=ksLeBPmB+KFrB2rvCtQ@mail.gmail.com>
+Subject: WARNING: at net/netfilter/nf_tables_api.c:622 lockdep_nfnl_nft_mutex_not_held+0x28/0x38
+ [nf_tables]
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        open list <linux-kernel@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org
+Cc:     pablo@netfilter.org, Florian Westphal <fw@strlen.de>,
+        fabf@skynet.be, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/10/20 5:09 AM, Peter Zijlstra wrote:
-> On Fri, Oct 09, 2020 at 01:45:43PM -0700, Kees Cook wrote:
->> On Fri, Oct 09, 2020 at 09:37:46PM +0200, Peter Zijlstra wrote:
->>> On Fri, Oct 09, 2020 at 09:55:55AM -0600, Shuah Khan wrote:
->>>> Simple atomic counters api provides interfaces for simple atomic counters
->>>> that just count, and don't guard resource lifetimes. The interfaces are
->>>> built on top of atomic_t api, providing a smaller subset of atomic_t
->>>> interfaces necessary to support simple counters.
->>>
->>> To what actual purpose?!? AFACIT its pointless wrappery, it gets us
->>> nothing.
->>
->> It's not pointless. There is value is separating types for behavioral
->> constraint to avoid flaws. atomic_t provides a native operation. We gained
->> refcount_t for the "must not wrap" type, and this gets us the other side
->> of that behavioral type, which is "wrapping is expected". Separating the
->> atomic_t uses allows for a clearer path to being able to reason about
->> code flow, whether it be a human or a static analyzer.
-> 
-> refcount_t got us actual rutime exceptions that atomic_t doesn't. This
-> propsal gets us nothing.
-> 
-> atomic_t is very much expected to wrap.
-> 
->> The counter wrappers add nothing to the image size, and only serve to
->> confine the API to one that cannot be used for lifetime management.
-> 
-> It doesn't add anything period. It doesn't get us new behaviour, it
-> splits a 'can wrap' use-case from a 'can wrap' type. That's sodding
-> pointless.
-> 
+While running kselftest netfilter on arm64 hikey device on Linux next
+20201013 the following
+kernel warning noticed.
 
-They don't add any new behavior, As Kees mentioned they do give us a
-way to clearly differentiate atomic usages that can wrap.
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: f2fb1afc57304f9dd68c20a08270e287470af2eb
+  git describe: next-20201013
+  make_kernelversion: 5.9.0
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/hikey/lkft/linux-next/879/config
 
-Let's discuss the problem at hand before dismissing it as pointless.
+steps to reproduce:
+---------------------------
+# cd /opt/kselftests/default-in-kernel/
+# ./run_kselftest.sh -c netfilter
 
-> Worse, it mixes 2 unrelated cases into one type, which just makes a
-> mockery of things (all the inc_return users are not statistics, some
-> might even mis-behave if they wrap).
-> 
+crash log:
+----------------
+# selftests: netfilter: nft_trans_stress.sh
+[ 1913.862919] ------------[ cut here ]------------
+[ 1913.869773] WARNING: CPU: 2 PID: 31416 at
+/usr/src/kernel/net/netfilter/nf_tables_api.c:622
+lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1913.885399] Modules linked in: nf_tables nfnetlink act_mirred
+cls_u32 sch_etf xt_conntrack nf_conntrack nf_defrag_ipv4 libcrc32c
+ip6_tables nf_defrag_ipv6 ip_tables x_tables netdevsim 8021q garp mrp
+bridge stp llc sch_fq sch_ingress veth algif_hash wl18xx wlcore
+mac80211 cfg80211 snd_soc_hdmi_codec hci_uart btqca btbcm crct10dif_ce
+snd_soc_audio_graph_card snd_soc_simple_card_utils adv7511 wlcore_sdio
+cec bluetooth kirin_drm lima rfkill dw_drm_dsi gpu_sched
+drm_kms_helper drm fuse [last unloaded: test_blackhole_dev]
+[ 1913.941924] CPU: 2 PID: 31416 Comm: nft Tainted: G        W
+5.9.0-next-20201013 #1
+[ 1913.954131] Hardware name: HiKey Development Board (DT)
+[ 1913.963342] pstate: 00000005 (nzcv daif -PAN -UAO -TCO BTYPE=--)
+[ 1913.973483] pc : lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1913.984271] lr : lockdep_nfnl_nft_mutex_not_held+0x18/0x38 [nf_tables]
+[ 1913.995018] sp : ffff800013bc3550
+[ 1914.002559] x29: ffff800013bc3550 x28: ffff800013bc3930
+[ 1914.012197] x27: 0000000000000001 x26: ffff000045dc4e00
+[ 1914.021880] x25: 0000000000000001 x24: ffff000045dc4e00
+[ 1914.031565] x23: ffff800013bc3930 x22: 0000000000000001
+[ 1914.041298] x21: ffff800012750000 x20: ffff800013bc3668
+[ 1914.051068] x19: ffff800012750000 x18: 0000000000000000
+[ 1914.060876] x17: 0000000000000000 x16: 0000000000000000
+[ 1914.070699] x15: 0000000000000000 x14: ffff800009996d48
+[ 1914.080534] x13: ffffffffff000000 x12: 0000000000000028
+[ 1914.090418] x11: 0101010101010101 x10: 7f7f7f7f7f7f7f7f
+[ 1914.100355] x9 : fefefefefefefeff x8 : 7f7f7f7f7f7f7f7f
+[ 1914.110325] x7 : fefeff53544f4d48 x6 : 0000000000007ab8
+[ 1914.120339] x5 : 0000000000000005 x4 : 0000000000000001
+[ 1914.130388] x3 : 0000000000000001 x2 : 0000000000000000
+[ 1914.140454] x1 : 00000000ffffffff x0 : 0000000000000001
+[ 1914.150529] Call trace:
+[ 1914.157789]  lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1914.168967]  nft_chain_parse_hook+0x58/0x320 [nf_tables]
+[ 1914.179342]  nf_tables_addchain.isra.66+0xb8/0x510 [nf_tables]
+[ 1914.190340]  nf_tables_newchain+0x408/0x618 [nf_tables]
+[ 1914.200734]  nfnetlink_rcv_batch+0x4a0/0x610 [nfnetlink]
+[ 1914.211284]  nfnetlink_rcv+0x174/0x1a8 [nfnetlink]
+[ 1914.221351]  netlink_unicast+0x1dc/0x290
+[ 1914.230589]  netlink_sendmsg+0x2b8/0x3f8
+[ 1914.239840]  ____sys_sendmsg+0x288/0x2d0
+[ 1914.249117]  ___sys_sendmsg+0x90/0xd0
+[ 1914.258154]  __sys_sendmsg+0x78/0xd0
+[ 1914.267140]  __arm64_sys_sendmsg+0x2c/0x38
+[ 1914.276705]  el0_svc_common.constprop.3+0x7c/0x198
+[ 1914.287041]  do_el0_svc+0x34/0xa0
+[ 1914.295928]  el0_sync_handler+0x128/0x190
+[ 1914.305567]  el0_sync+0x140/0x180
+[ 1914.314535] CPU: 2 PID: 31416 Comm: nft Tainted: G        W
+5.9.0-next-20201013 #1
+[ 1914.328670] Hardware name: HiKey Development Board (DT)
+[ 1914.339812] Call trace:
+[ 1914.348184]  dump_backtrace+0x0/0x1f0
+[ 1914.357841]  show_stack+0x2c/0x80
+[ 1914.367181]  dump_stack+0xf8/0x160
+[ 1914.376615]  __warn+0xac/0x168
+[ 1914.385732]  report_bug+0xcc/0x180
+[ 1914.395242]  bug_handler+0x24/0x78
+[ 1914.404783]  call_break_hook+0x80/0xa0
+[ 1914.414725]  brk_handler+0x28/0x68
+[ 1914.424358]  do_debug_exception+0xbc/0x128
+[ 1914.434744]  el1_sync_handler+0x7c/0x128
+[ 1914.445017]  el1_sync+0x7c/0x100
+[ 1914.454625]  lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1914.467351]  nft_chain_parse_hook+0x58/0x320 [nf_tables]
+[ 1914.479276]  nf_tables_addchain.isra.66+0xb8/0x510 [nf_tables]
+[ 1914.491818]  nf_tables_newchain+0x408/0x618 [nf_tables]
+[ 1914.503774]  nfnetlink_rcv_batch+0x4a0/0x610 [nfnetlink]
+[ 1914.515899]  nfnetlink_rcv+0x174/0x1a8 [nfnetlink]
+[ 1914.527525]  netlink_unicast+0x1dc/0x290
+[ 1914.538318]  netlink_sendmsg+0x2b8/0x3f8
+[ 1914.549125]  ____sys_sendmsg+0x288/0x2d0
+[ 1914.559959]  ___sys_sendmsg+0x90/0xd0
+[ 1914.570557]  __sys_sendmsg+0x78/0xd0
+[ 1914.581111]  __arm64_sys_sendmsg+0x2c/0x38
+[ 1914.592241]  el0_svc_common.constprop.3+0x7c/0x198
+[ 1914.604152]  do_el0_svc+0x34/0xa0
+[ 1914.614497]  el0_sync_handler+0x128/0x190
+[ 1914.625540]  el0_sync+0x140/0x180
+[ 1914.635652] irq event stamp: 0
+[ 1914.645091] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[ 1914.657471] hardirqs last disabled at (0): [<ffff80001008975c>]
+copy_process+0x68c/0x1910
+[ 1914.671402] softirqs last  enabled at (0): [<ffff80001008975c>]
+copy_process+0x68c/0x1910
+[ 1914.685201] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[ 1914.696977] ---[ end trace 180274a5ab806f4e ]---
+[ 1917.244483] hisi_thermal f7030700.tsensor: sensor <2> THERMAL
+ALARM: 66385 > 65000
 
-You are right that all inc_return usages aren't statistics. There are
-3 distinct usages:
-
-1. Stats
-2. Cases where wrapping is fine
-3. Cases where wrapping could be a problem. In which case, this API
-    shouldn't be used.
-
-There is no need to keep inc_return in this API as such. I included it
-so it can be used for above cases 1 and 2, so the users don't have to
-call inc() followed by read(). It can be left out of the API.
-
-The atomic_t usages in the kernel fall into the following categories:
-
-1. Stats (tolerance for accuracy determines whether they need to be
-    atomic or not). RFC version included non-atomic API for cases
-    when lossiness is acceptable. All these cases use/need just init
-    and inc. There are two variations in this case:
-
-    a. No checks for wrapping. Use signed value.
-    b. No checks for wrapping, but return unsigned.
-
-2. Reference counters that release resource and rapping could result
-    in use-after-free type problems. There are two variations in this
-    case:
-
-    a. Increments and decrements aren't bounded.
-    b. Increments and decrements are bounded.
-
-    Currently tools that flag unsafe atomic_t usages that are candidates
-    for refcount_t conversions don't make a distinction between the two.
-
-    The second case, since increments and decrements are bounded, it is
-    safe to continue to use it. At the moment there is no good way to
-    tell them apart other than looking at each of these cases.
-
-3. Reference counters that manage/control states. Wrapping is a problem
-    in this case, as it could lead to undefined behavior. These cases
-    don't use test and free, use inc/dec. At the moment there is no good
-    way to tell them apart other than looking at each of these cases.
-    This is addressed by REFCOUNT_SATURATED case.
-
-This API addresses 1a. Stats. No checks for wrapping. Use signed value
-at the moment with plan to add support for unsigned for cases where
-unsigned is being used.
-
-It is possible to cover 2b in this API, so it becomes easier to make a
-clear distinction the two cases and we can focus on only the atomic_t
-cases that need to converted to refcount_t. This is easy to do by
-allowing max. threshold for the variable and checking against that
-and not letting it go above it.
-
-There are several atomic_t usages that use just:
-
--- init or set and inc
--- init or set and inc/dec (including the ones that manage state)
--- Increments and decrements are bounded
-
-Creating a sub-set of atomic_t api would help us with differentiate
-these cases and make it easy for us identify and fix cases where
-refcount_t should be used.
-
-Would you be open to considering a subset if it addresses 2b and
-unsigned returns for stats?
-
-thanks,
--- Shuah
-
-
-
-
-
-
-
-
-
+Full test log link,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201013/testrun/3302070/suite/linux-log-parser/test/check-kernel-warning-1839079/log
 
 
-
+-- 
+Linaro LKFT
+https://lkft.linaro.org
