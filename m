@@ -2,84 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9A228EB5B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Oct 2020 05:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF5228EBBA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Oct 2020 05:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbgJODCF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Oct 2020 23:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726361AbgJODCF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 23:02:05 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4265EC0613D3
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 20:02:05 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id k1so2409787ilc.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 20:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JE37yiXefAPuWdOvXCxECs8BTHKeK76YuEhnWlDbpwo=;
-        b=k+4SOOKNx1rO/LBOD7BT3yOb7lmbfJwQgep7TIo5grne3cBSlnHHLzBVr2DDxyT8v2
-         Twe5JLel24/2t229GtyKyKZYb+Bkm+mw/s0NDWPPittJ/EeD1bb/4YleFanrgizR8fLJ
-         eZ8JFL0z3YTOYpSrXDiB0FVryT4A94S4ClVArEESMi7XQhcr1TaJ20PBNkCi3G0b2IMs
-         U+Ii7tbkh8tEEmOY1FH98Qk7xDwUFZcftvHayY3s+3+5YisjHbwcuzhmKRV+q3vSnTNY
-         A50YoE+vZA0UrWAm9p7puIfoTn16Z8hBDEQ7ZglGfmW5IsEw0VIeQRCqWPFBZNAPPFp5
-         7DJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JE37yiXefAPuWdOvXCxECs8BTHKeK76YuEhnWlDbpwo=;
-        b=sY0EdjCGiGIgoDWcgxsWsUYFznECa4livyCHsPS+KM9OQLCIEDwZe57xm0R4ucSgqF
-         MoDUYR6p7QS/z96ZXVk1WbeYb+J7JUjf78vCdKkSz4oZKvnNQdCcdOM8FnECc/YS692B
-         IsgjnyXL2Q+k/3PHSn0tuFGDiZAMSly9sbqT2H8g3XuUcPQdN1sPcO6ri+T2eRIvZcbH
-         LZXYpMI5+nMz+rhpwVYIXY+s41mqRxPHP3wwrjwyZzFNT+MTwYVYIQYEn0il0+8ICiZI
-         H4yviegPT5Tm8z6zixS4SzLMERiWBJ7klcdxyAN8vJZxESu2xwFHCOnWO7OJT2EQL4qP
-         vdVw==
-X-Gm-Message-State: AOAM533zvvxXnno/eLjl7GJPEmFo8wBHGj6H/D178ZlimZ2YF7Ijs8ry
-        8ZxgYxx1FPg2GRy6XvDO3ImJa8Ha9GAE/YXyA54E0w==
-X-Google-Smtp-Source: ABdhPJxtJ8xfLbGX5R7RGysvv/WdX3cvUvH9P/82SA5nT+JuPN/1E9QJ150Dqu8NvMgFOtDQV4i5oWT0snQaSy2PQNs=
-X-Received: by 2002:a05:6e02:bf4:: with SMTP id d20mr1615013ilu.252.1602730924068;
- Wed, 14 Oct 2020 20:02:04 -0700 (PDT)
+        id S1730320AbgJODqq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Oct 2020 23:46:46 -0400
+Received: from mga03.intel.com ([134.134.136.65]:19759 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727281AbgJODqq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 14 Oct 2020 23:46:46 -0400
+IronPort-SDR: oqXXNKu6P/DWlqnbFJQN/3W5BEe+cUTAQc62mFUJ4eOu11uxTB1rGIl7Nz3Skg62oOoQYh9E4R
+ hSPkgNwu9Mhg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9774"; a="166313689"
+X-IronPort-AV: E=Sophos;i="5.77,377,1596524400"; 
+   d="scan'208";a="166313689"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2020 20:46:45 -0700
+IronPort-SDR: frVKPMJAzb1m9jivZ/XfXNx7VCqDkNNADy0hOKKQpIfrYnJ8mOjxbWGy/FPBq9IrrLYbuNMuZF
+ XeLLSEBZdFVw==
+X-IronPort-AV: E=Sophos;i="5.77,377,1596524400"; 
+   d="scan'208";a="531094057"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2020 20:46:45 -0700
+Date:   Wed, 14 Oct 2020 20:46:45 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V3 7/9] x86/entry: Preserve PKRS MSR across exceptions
+Message-ID: <20201015034645.GQ2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009194258.3207172-1-ira.weiny@intel.com>
+ <20201009194258.3207172-8-ira.weiny@intel.com>
+ <6006a4c8-32bd-04ca-95cc-b2736a5cef72@intel.com>
 MIME-Version: 1.0
-References: <CA+G9fYv=zPRGCKyhi9DeUsvyb6ZLVVXdV3hW+15XnQN2R3ircQ@mail.gmail.com>
- <20201014193034.GA14337@salvia>
-In-Reply-To: <20201014193034.GA14337@salvia>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 15 Oct 2020 08:31:52 +0530
-Message-ID: <CA+G9fYsnPH4nQWoY0bpdw+DS5sqO4xcxDXuu-tfEHxXEGrMyUA@mail.gmail.com>
-Subject: Re: selftests: netfilter: nft_nat.sh: /dev/stdin:2:9-15: Error:
- syntax error, unexpected counter
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Florian Westphal <fw@strlen.de>, fabf@skynet.be,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6006a4c8-32bd-04ca-95cc-b2736a5cef72@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 15 Oct 2020 at 01:00, Pablo Neira Ayuso <pablo@netfilter.org> wrote:
->
-> On Wed, Oct 14, 2020 at 05:19:33PM +0530, Naresh Kamboju wrote:
-> > While running kselftest netfilter test on x86_64 devices linux next
-> > tag 20201013 kernel
-> > these errors are noticed. This not specific to kernel version we have
-> > noticed these errors
-> > earlier also.
-> >
-> > Am I missing configs ?
->
-> What nftables version are you using?
+On Tue, Oct 13, 2020 at 11:52:32AM -0700, Dave Hansen wrote:
+> On 10/9/20 12:42 PM, ira.weiny@intel.com wrote:
+> > @@ -341,6 +341,9 @@ noinstr void irqentry_enter(struct pt_regs *regs, irqentry_state_t *state)
+> >  	/* Use the combo lockdep/tracing function */
+> >  	trace_hardirqs_off();
+> >  	instrumentation_end();
+> > +
+> > +done:
+> > +	irq_save_pkrs(state);
+> >  }
+> 
+> One nit: This saves *and* sets PKRS.  It's not obvious from the call
+> here that PKRS is altered at this site.  Seems like there could be a
+> better name.
+> 
+> Even if we did:
+> 
+> 	irq_save_set_pkrs(state, INIT_VAL);
+> 
+> It would probably compile down to the same thing, but be *really*
+> obvious what's going on.
 
-nft --version
-nftables v0.7 (Scrooge McDuck)
+I suppose that is true.  But I think it is odd having a parameter which is the
+same for every call site.
 
-- Naresh
+But I'm not going to quibble over something like this.
+
+Changed,
+Ira
+
+> 
+> >  void irqentry_exit_cond_resched(void)
+> > @@ -362,7 +365,12 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t *state)
+> >  	/* Check whether this returns to user mode */
+> >  	if (user_mode(regs)) {
+> >  		irqentry_exit_to_user_mode(regs);
+> > -	} else if (!regs_irqs_disabled(regs)) {
+> > +		return;
+> > +	}
+> > +
+> > +	irq_restore_pkrs(state);
+> > +
+> > +	if (!regs_irqs_disabled(regs)) {
+> >  		/*
+> >  		 * If RCU was not watching on entry this needs to be done
+> >  		 * carefully and needs the same ordering of lockdep/tracing
+> > 
+> 
