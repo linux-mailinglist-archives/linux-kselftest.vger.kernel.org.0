@@ -2,110 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FA728F1D9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Oct 2020 14:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CF728F21D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Oct 2020 14:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbgJOMI5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Oct 2020 08:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S1728430AbgJOMcH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Oct 2020 08:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbgJOMI5 (ORCPT
+        with ESMTP id S1726814AbgJOMcG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Oct 2020 08:08:57 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEFCC0613D3
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2020 05:08:57 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id y198so2133430qka.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2020 05:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cQCnc1kT4X0rScHBlHIsBu1n631S09tQozQXpWQBp88=;
-        b=Jpxx71PqIJw5HtnGe3yI6um31Ic6Lg7W3j67tcXbUfPv0lQ7aqem+RbXuSnkEQwpMv
-         YBcNsdwlx1RWwUQvdO2/Lu5h/sAB/C398QH5nCZa9CNodfJ4zVQzNCI1SwxY7G67rDkH
-         eg8yRtkP6DKztGMkh9KgxvaixgfObHKtvn6ulRdx2ff0IRGsLIOZ1g2vixRCUDewP9iu
-         w7QOLOf0mZmmlQtfFhc/2eTpWqIwyuWPus3UVsy5JEyPs3tel9h6v/XVsqfwg0NxI4OY
-         iFrft2fb7/lnFwjZwLcdsJY4X6sULq5fIuXpkv2xaGfiOkd2DA2T9U6VshZPR5mWnJNe
-         x0lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cQCnc1kT4X0rScHBlHIsBu1n631S09tQozQXpWQBp88=;
-        b=VR/lZay0mIWRmKvUYB0epuyqKpJwa47fIgqM15NrnXo6FT4D1IW4dDweSIIi2gb+LU
-         k2T9+uEWYaZ4MvnTdVBkcd8a7Kq0gxU7Y9mP1FLCNxJgXgJj6xUNVOXsttodajFSXfXW
-         TuI3wvL8nviMtIyF742MqI2+BrO9LDq0bSvt0QZsoJdAFVUdaIIIkFGd2YBA5c/PoVKF
-         8bDGDdeLynnSmyNwCEMq/V0/YloSz4CmsrHoV7CPCO03ickG94fcy3nvN1yr2jrvTPi0
-         ry/LEhsGKnkMjp8PCrcX5aYDQ89r6V8ezExn0/3Ulrin+ojZ6awslWR/Gpl1e/JAfGyt
-         G0SQ==
-X-Gm-Message-State: AOAM531MD8LVg0s8+Fq3XBRNFSarBzRSKrN9CXKpoXu2CIybyqwF4J3E
-        4pSjAYy01izKT3Z5sdG1eV+9iw==
-X-Google-Smtp-Source: ABdhPJxCINnDLk7Akc7ItVHO/kczk3TZJd90eFchjG6pzINskpyBQpZJsp895Zc8y/tkzYcHWsAPlQ==
-X-Received: by 2002:a37:b782:: with SMTP id h124mr3705031qkf.169.1602763736095;
-        Thu, 15 Oct 2020 05:08:56 -0700 (PDT)
-Received: from localhost.localdomain ([2804:431:c7cb:5e0b:6f3d:fca0:306c:a15d])
-        by smtp.gmail.com with ESMTPSA id 124sm1045375qkn.47.2020.10.15.05.08.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2020 05:08:55 -0700 (PDT)
-From:   Vitor Massaru Iha <vitor@massaru.org>
-To:     sfr@canb.auug.org.au, skhan@linuxfoundation.org,
-        brendanhiggins@google.com, kunit-dev@googlegroups.com,
-        johannes@sipsolutions.net
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] lib: kunit: Fix compilation test when using TEST_BIT_FIELD_COMPILE
-Date:   Thu, 15 Oct 2020 09:08:51 -0300
-Message-Id: <20201015120851.229242-1-vitor@massaru.org>
-X-Mailer: git-send-email 2.26.2
+        Thu, 15 Oct 2020 08:32:06 -0400
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CA1C061755
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2020 05:32:05 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CBpZB5fPXzlhTQt;
+        Thu, 15 Oct 2020 14:32:02 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CBpZ66ymBzlh8V2;
+        Thu, 15 Oct 2020 14:31:58 +0200 (CEST)
+Subject: Re: [PATCH v21 12/12] landlock: Add user and kernel documentation
+To:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Richard Weinberger <richard@nod.at>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20201008153103.1155388-1-mic@digikod.net>
+ <20201008153103.1155388-13-mic@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <fc1c5675-034b-bf5b-ba2b-6be06e03b458@digikod.net>
+Date:   Thu, 15 Oct 2020 14:31:58 +0200
+User-Agent: 
 MIME-Version: 1.0
+In-Reply-To: <20201008153103.1155388-13-mic@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A build condition was missing around a compilation test, this compilation
-test comes from the original test_bitfield code.
 
-And removed unnecessary code for this test.
+On 08/10/2020 17:31, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> This documentation can be built with the Sphinx framework.
+> 
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
+> ---
+> 
+> Changes since v20:
+> * Update examples and documentation with the new syscalls.
+> 
+> Changes since v19:
+> * Update examples and documentation with the new syscalls.
+> 
+> Changes since v15:
+> * Add current limitations.
+> 
+> Changes since v14:
+> * Fix spelling (contributed by Randy Dunlap).
+> * Extend documentation about inheritance and explain layer levels.
+> * Remove the use of now-removed access rights.
+> * Use GitHub links.
+> * Improve kernel documentation.
+> * Add section for tests.
+> * Update example.
+> 
+> Changes since v13:
+> * Rewrote the documentation according to the major revamp.
+> 
+> Previous changes:
+> https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
+> ---
+>  Documentation/security/index.rst           |   1 +
+>  Documentation/security/landlock/index.rst  |  18 ++
+>  Documentation/security/landlock/kernel.rst |  69 ++++++
+>  Documentation/security/landlock/user.rst   | 242 +++++++++++++++++++++
+>  4 files changed, 330 insertions(+)
+>  create mode 100644 Documentation/security/landlock/index.rst
+>  create mode 100644 Documentation/security/landlock/kernel.rst
+>  create mode 100644 Documentation/security/landlock/user.rst
+> 
+> diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
+> index 8129405eb2cc..e3f2bf4fef77 100644
+> --- a/Documentation/security/index.rst
+> +++ b/Documentation/security/index.rst
+> @@ -16,3 +16,4 @@ Security Documentation
+>     siphash
+>     tpm/index
+>     digsig
+> +   landlock/index
+> diff --git a/Documentation/security/landlock/index.rst b/Documentation/security/landlock/index.rst
+> new file mode 100644
+> index 000000000000..2520f8f33f5e
+> --- /dev/null
+> +++ b/Documentation/security/landlock/index.rst
+> @@ -0,0 +1,18 @@
+> +=========================================
+> +Landlock LSM: unprivileged access control
+> +=========================================
+> +
+> +:Author: Mickaël Salaün
+> +
+> +The goal of Landlock is to enable to restrict ambient rights (e.g.  global
+> +filesystem access) for a set of processes.  Because Landlock is a stackable
+> +LSM, it makes possible to create safe security sandboxes as new security layers
+> +in addition to the existing system-wide access-controls. This kind of sandbox
+> +is expected to help mitigate the security impact of bugs or
+> +unexpected/malicious behaviors in user-space applications. Landlock empowers
+> +any process, including unprivileged ones, to securely restrict themselves.
+> +
+> +.. toctree::
+> +
+> +    user
+> +    kernel
+> diff --git a/Documentation/security/landlock/kernel.rst b/Documentation/security/landlock/kernel.rst
+> new file mode 100644
+> index 000000000000..27c0933a0b6e
+> --- /dev/null
+> +++ b/Documentation/security/landlock/kernel.rst
+> @@ -0,0 +1,69 @@
+> +==============================
+> +Landlock: kernel documentation
+> +==============================
+Cf. https://landlock.io/linux-doc/landlock-v21/security/landlock/kernel.html
 
-Fixes: d2585f5164c2 ("lib: kunit: add bitfield test conversion to KUnit")
-Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-Link: https://lore.kernel.org/linux-next/20201015163056.56fcc835@canb.auug.org.au/
----
- lib/bitfield_kunit.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+I guess this is the good place for kernel API documentation.
 
-diff --git a/lib/bitfield_kunit.c b/lib/bitfield_kunit.c
-index d63a2be5aff8..1473d8b4bf0f 100644
---- a/lib/bitfield_kunit.c
-+++ b/lib/bitfield_kunit.c
-@@ -125,7 +125,7 @@ static void __init test_bitfields_variables(struct kunit *context)
- 	CHECK(u64, 0x0000001f8000000ull);
- }
- 
--
-+#ifdef TEST_BITFIELD_COMPILE
- static void __init test_bitfields_compile(struct kunit *context)
- {
- 	/* these should fail compilation */
-@@ -135,13 +135,11 @@ static void __init test_bitfields_compile(struct kunit *context)
- 	/* this should at least give a warning */
- 	u16_encode_bits(0, 0x60000);
- }
-+#endif
- 
- static struct kunit_case __refdata bitfields_test_cases[] = {
- 	KUNIT_CASE(test_bitfields_constants),
- 	KUNIT_CASE(test_bitfields_variables),
--#ifdef TEST_BITFIELD_COMPILE
--	KUNIT_CASE(test_bitfields_compile),
--#endif
- 	{}
- };
- 
+> diff --git a/Documentation/security/landlock/user.rst b/Documentation/security/landlock/user.rst
+> new file mode 100644
+> index 000000000000..e6fbc75c1af1
+> --- /dev/null
+> +++ b/Documentation/security/landlock/user.rst
+> @@ -0,0 +1,242 @@
+> +=================================
+> +Landlock: userspace documentation
+> +=================================
+Cf. https://landlock.io/linux-doc/landlock-v21/security/landlock/user.html
 
-base-commit: d2585f5164c298aaaed14c2c8d313cbe7bd5b253
--- 
-2.26.2
+Shouldn't this go in Documentation/userspace-api/ instead?
 
+Documentation/security/lsm-development.rst says that LSM documentation
+should go to Documentation/admin-guide/LSM/ but this is not (like
+seccomp) an admin documentation.
+Should the Documentation/userspace-api/landlock.rst be linked from
+Documentation/admin-guide/LSM/index.rst too?
