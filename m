@@ -2,343 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE76129059C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Oct 2020 14:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7B4290639
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Oct 2020 15:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407903AbgJPMzZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Oct 2020 08:55:25 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:44424 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395281AbgJPMzZ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Oct 2020 08:55:25 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1602852921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IFWVugT+dTTDWBodFUMTGKF6FcevqFcG4mwU/SJ4v3Y=;
-        b=SNrpEftLssya9LMStEuqL5omNeFMJKimnual6z3+V6aJAqwaUJ7YhPr4HzoDb5wJNKmhRa
-        ERXtUA+56vN9HATCTKMxDnfdtRHBWpx51mO+jg65f8EUy0e8KQSw9VR/MgAZeIF2yb4pIJ
-        I8n7wZQnZwcr+K19jvygnHDNq4Jk/L0IBKQg2QRt/1nxF+GrNzUTrIIeEE/5W9iFdWRaC8
-        lUCpqI+kFsLqt/pBhvB4Tb9aeb+1JzLwvWXgr0Nn+pnOmqqfBQEZLUJDWw7Riu+RZAobpx
-        u2dPba2xPUPusgwNKAatKpyuyYl0UYBTxqbdxYuQCB+X8rh00DTnvQrUQEncLg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1602852921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IFWVugT+dTTDWBodFUMTGKF6FcevqFcG4mwU/SJ4v3Y=;
-        b=iwKyGQXNsIU0MpOOMuSbEs4FgUEjJn4OHYUpcfwCy4h0dcT5Zw7jZ+W1pdwzI3jGgKmLmi
-        IWRicg8gEqquLqBg==
-To:     Peter Zijlstra <peterz@infradead.org>, ira.weiny@intel.com
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V3 6/9] x86/entry: Pass irqentry_state_t by reference
-In-Reply-To: <20201016114510.GO2611@hirez.programming.kicks-ass.net>
-References: <20201009194258.3207172-1-ira.weiny@intel.com> <20201009194258.3207172-7-ira.weiny@intel.com> <20201016114510.GO2611@hirez.programming.kicks-ass.net>
-Date:   Fri, 16 Oct 2020 14:55:21 +0200
-Message-ID: <87lfg6tjnq.fsf@nanos.tec.linutronix.de>
+        id S2407829AbgJPNX3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Oct 2020 09:23:29 -0400
+Received: from mail-vi1eur05on2091.outbound.protection.outlook.com ([40.107.21.91]:50656
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2407819AbgJPNX3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 16 Oct 2020 09:23:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I9OIt/PYwIUQbs/XirQ/F/KcorIDeS4zeVokHeAzlXShZ7l+PsQmJRGEX6PKO5tQPW8dHHoYiCYmfdVmv44Fj6EdpRL/nlvFq5vnABtFqVGWtMCKjKbl1IT9u9SgiCj+YkmqZkmrjSMcoU8pHsGroMmtcl6uCWSrTyouDzDFN0DG9fER5uE8FE4dxtY/iOZ6xJw0+/77k4Hck2KFWe8wjgwilXGOGeenug7larp/VzC9zw7zoDNVCJsMZP31MXQnymBGMDDIcCQMTFDL8fnKjVLoF6NQT+Xc9t0PUgYXAkqbzc/yJuMa93JeI4SLUqrOCmLhzmLvwjtH2CzNPerQwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k69WgFdPUxj/YEU81hZbDk/tG6uQP8mlHN+OYzpP+qI=;
+ b=ca8ZoarHaQteexYvgkx+bVMkme2XqaquTgt2N+M6vi7nonmtZqdhw554SMhnL0tNNz2fFGGhw4tceRXnbD/No7H4Ctko5lYKj2Iifj+pD5uNd4thiFNAMOkU9gjSyCGKxBA+9yqyc3bsaOg2UI9vwHAn8ZbHFsEMyJ5vCbbaq50hV0oXYg+XI4rh7lXu6dQ8dcM/KHh64w+ygHS3FsfZqvbYG+bDqrEPUTLSDFPzMZp66YEoL9tYMn2jCEijGdAElQwD7J1Yo4twAvJr2AC68KRIUCeJZ9t+fLLi+CjFvQJ1UIyBtCk+fwvnYoidWj5Htj9vhOyf7LUusyZOj82PLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
+ dkim=pass header.d=nokia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k69WgFdPUxj/YEU81hZbDk/tG6uQP8mlHN+OYzpP+qI=;
+ b=n0ZuhOHQ6tYJ+0HzqfIRsLIiw0gA7SfxQIZ0Bw0AFY9TJh7PwF0KIycya7+BSEU8kWsc4uAnKd50AaicfHHoq3/dNMbe/P6ZpoNN9FRTpfI/8y9Ys/zVVnQ/1VZueCD/4PYl3zAufxe2twLkSZi2Bt/iZbNFN7GZlQjs+PbjEvk=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
+Received: from HE1PR07MB3450.eurprd07.prod.outlook.com (2603:10a6:7:2c::17) by
+ HE1PR0701MB2891.eurprd07.prod.outlook.com (2603:10a6:3:4b::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3499.7; Fri, 16 Oct 2020 13:23:25 +0000
+Received: from HE1PR07MB3450.eurprd07.prod.outlook.com
+ ([fe80::eca3:4085:434:e74]) by HE1PR07MB3450.eurprd07.prod.outlook.com
+ ([fe80::eca3:4085:434:e74%6]) with mapi id 15.20.3477.019; Fri, 16 Oct 2020
+ 13:23:25 +0000
+From:   Tommi Rantala <tommi.t.rantala@nokia.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Tommi Rantala <tommi.t.rantala@nokia.com>
+Subject: [PATCH] selftests: intel_pstate: ftime() is deprecated
+Date:   Fri, 16 Oct 2020 16:22:44 +0300
+Message-Id: <20201016132245.73378-1-tommi.t.rantala@nokia.com>
+X-Mailer: git-send-email 2.26.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [131.228.2.26]
+X-ClientProxiedBy: CH2PR19CA0005.namprd19.prod.outlook.com
+ (2603:10b6:610:4d::15) To HE1PR07MB3450.eurprd07.prod.outlook.com
+ (2603:10a6:7:2c::17)
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from trfedora.emea.nsn-net.net (131.228.2.26) by CH2PR19CA0005.namprd19.prod.outlook.com (2603:10b6:610:4d::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.20 via Frontend Transport; Fri, 16 Oct 2020 13:23:23 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 917eedc1-9111-4ceb-fca9-08d871d6a946
+X-MS-TrafficTypeDiagnostic: HE1PR0701MB2891:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <HE1PR0701MB28919F3F3810FBA16C941B11B4030@HE1PR0701MB2891.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:352;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Bq4BX06K9oJJR/fWm7Gn2ZzGNxf8g5X46LQRIJHCrwCaIy/oluVozuyKDN+lndiymN5yYZke3s6qzSIYQibc2gBxo0CBNEs2Ze4ZsFJv04t3KlRUxgNaSrifSGLMMciZs3EQGC1iL4spWyiJfnQFHwS+FQZQhoyNnYxLnSWt8wZ3QzwbvwoAcMAoIUQK4A7Lcyo2k7VrKdpBfPiUSXX+8neFmNcqRgmVAabi4RGmPUe3kQFX5/kzz4ns9ydzr+3HeTVaHKccwA6UsYZOD/ZdO6R129kvzGPS86wFqYU2oauiQDGDwcx3FG/qli8Yh69ItQvax4ICB7Rm3/QL/va3DaSCu5EoEV06IS2rKOWEjTcOZmRJfsvLFvSJmfv/7Fb8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR07MB3450.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(366004)(39860400002)(376002)(396003)(4326008)(6916009)(186003)(6666004)(316002)(2616005)(8936002)(956004)(36756003)(66946007)(8676002)(86362001)(5660300002)(6486002)(103116003)(478600001)(6512007)(107886003)(52116002)(2906002)(66476007)(66556008)(6506007)(1076003)(16526019)(34490700002)(83380400001)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: GsEwy6m+bkiuza4UAqQJuXlpuPRkfEwG1mzILSbTLj6BiBmd0cCS+fI6CtGTh/iMdGpba+NfrnrtwRN8IprsfUiTCX0x3LJWA0ATxGnuvgBAxex5xfR7g+cC0wd61ZOErdF7M2bDWV966axCUoBF3GZ5Afd0tsQp/Bby86mR/sohIiBc+GT10eC8UZm6aCBsq8S+BwS+xMkbCNcDJiwPV5eRMA/FuB/7Cze8V4G3dtXkP+8a5rH2N5tKPIkHJH69aZIo75DDP6NqZ4R+TffTgjDTr3f3IEIVMQuWCs4n0jL3lR1eFzZdj2pq4rUm9H7SFCd0hlg41UVgjIOf+q1obnrU0VuVQ5tBtYZSELDTQhutAOjN2iAIbmbgZnTmKE1d68gP4QN8tK3OwlVXJW967cHYeCrcX1YlpJiDx44n6y6QZn9DoEWCU9FsaWFFutixQvywp5vUL+FlfzXNd8F6Mx6Oy6uVVOhv8bYhqSxTkvTM0ES0sqV0lzMXI/Pf900NZUGAG8f6RK7pmQtTHXjYgg0dD/zXKrP6H9tmdvN5gUoyZznaht6f2g+A/ZcxUe/LeULxdji+eQ/lDFC/0XlOn5b0s/Gp6+HD0GtvRZELYBbmbnJP8CCY+V96nZeDger2ZkOzSsk+EAmkyYnJNfoJjw==
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 917eedc1-9111-4ceb-fca9-08d871d6a946
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR07MB3450.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2020 13:23:25.2645
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q82/HGDqZqIpG7UJD2+VSGogk0uDmg6P1p5OL4BV6Z26+SieY4v4IDxoTAkKV0LsoxjNJgfWA980nPfbXmSRktJWeCjrxm5JaegWI5J2G/k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0701MB2891
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 16 2020 at 13:45, Peter Zijlstra wrote:
-> On Fri, Oct 09, 2020 at 12:42:55PM -0700, ira.weiny@intel.com wrote:
->> @@ -238,7 +236,7 @@ noinstr void idtentry_exit_nmi(struct pt_regs *regs, bool restore)
->>  
->>  	rcu_nmi_exit();
->>  	lockdep_hardirq_exit();
->> -	if (restore)
->> +	if (irq_state->exit_rcu)
->>  		lockdep_hardirqs_on(CALLER_ADDR0);
->>  	__nmi_exit();
->>  }
->
-> That's not nice.. The NMI path is different from the IRQ path and has a
-> different variable. Yes, this works, but *groan*.
->
-> Maybe union them if you want to avoid bloating the structure, but the
-> above makes it really hard to read.
+Use clock_gettime() instead of deprecated ftime().
 
-Right, and also that nmi entry thing should not be in x86. Something
-like the untested below as first cleanup.
+  aperf.c: In function ‘main’:
+  aperf.c:58:2: warning: ‘ftime’ is deprecated [-Wdeprecated-declarations]
+     58 |  ftime(&before);
+        |  ^~~~~
+  In file included from aperf.c:9:
+  /usr/include/sys/timeb.h:39:12: note: declared here
+     39 | extern int ftime (struct timeb *__timebuf)
+        |            ^~~~~
 
-Thanks,
-
-        tglx
-----
-Subject: x86/entry: Move nmi entry/exit into common code
-From: Thomas Gleixner <tglx@linutronix.de>
-Date: Fri, 11 Sep 2020 10:09:56 +0200
-
-Add blurb here.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
 ---
- arch/x86/entry/common.c         |   34 ----------------------------------
- arch/x86/include/asm/idtentry.h |    3 ---
- arch/x86/kernel/cpu/mce/core.c  |    6 +++---
- arch/x86/kernel/nmi.c           |    6 +++---
- arch/x86/kernel/traps.c         |   13 +++++++------
- include/linux/entry-common.h    |   20 ++++++++++++++++++++
- kernel/entry/common.c           |   36 ++++++++++++++++++++++++++++++++++++
- 7 files changed, 69 insertions(+), 49 deletions(-)
+ tools/testing/selftests/intel_pstate/aperf.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
---- a/arch/x86/entry/common.c
-+++ b/arch/x86/entry/common.c
-@@ -209,40 +209,6 @@ SYSCALL_DEFINE0(ni_syscall)
- 	return -ENOSYS;
- }
+diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
+index f6cd03a87493..eea9dbab459b 100644
+--- a/tools/testing/selftests/intel_pstate/aperf.c
++++ b/tools/testing/selftests/intel_pstate/aperf.c
+@@ -10,6 +10,7 @@
+ #include <sched.h>
+ #include <errno.h>
+ #include <string.h>
++#include <time.h>
+ #include "../kselftest.h"
  
--noinstr bool idtentry_enter_nmi(struct pt_regs *regs)
--{
--	bool irq_state = lockdep_hardirqs_enabled();
--
--	__nmi_enter();
--	lockdep_hardirqs_off(CALLER_ADDR0);
--	lockdep_hardirq_enter();
--	rcu_nmi_enter();
--
--	instrumentation_begin();
--	trace_hardirqs_off_finish();
--	ftrace_nmi_enter();
--	instrumentation_end();
--
--	return irq_state;
--}
--
--noinstr void idtentry_exit_nmi(struct pt_regs *regs, bool restore)
--{
--	instrumentation_begin();
--	ftrace_nmi_exit();
--	if (restore) {
--		trace_hardirqs_on_prepare();
--		lockdep_hardirqs_on_prepare(CALLER_ADDR0);
--	}
--	instrumentation_end();
--
--	rcu_nmi_exit();
--	lockdep_hardirq_exit();
--	if (restore)
--		lockdep_hardirqs_on(CALLER_ADDR0);
--	__nmi_exit();
--}
--
- #ifdef CONFIG_XEN_PV
- #ifndef CONFIG_PREEMPTION
- /*
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -11,9 +11,6 @@
+ void usage(char *name) {
+@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
+ 	long long tsc, old_tsc, new_tsc;
+ 	long long aperf, old_aperf, new_aperf;
+ 	long long mperf, old_mperf, new_mperf;
+-	struct timeb before, after;
++	struct timespec before, after;
+ 	long long int start, finish, total;
+ 	cpu_set_t cpuset;
  
- #include <asm/irq_stack.h>
- 
--bool idtentry_enter_nmi(struct pt_regs *regs);
--void idtentry_exit_nmi(struct pt_regs *regs, bool irq_state);
--
- /**
-  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
-  *		      No error code pushed by hardware
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1983,7 +1983,7 @@ void (*machine_check_vector)(struct pt_r
- 
- static __always_inline void exc_machine_check_kernel(struct pt_regs *regs)
- {
--	bool irq_state;
-+	irqentry_state_t irq_state;
- 
- 	WARN_ON_ONCE(user_mode(regs));
- 
-@@ -1995,7 +1995,7 @@ static __always_inline void exc_machine_
- 	    mce_check_crashing_cpu())
- 		return;
- 
--	irq_state = idtentry_enter_nmi(regs);
-+	irq_state = irqentry_nmi_enter(regs);
- 	/*
- 	 * The call targets are marked noinstr, but objtool can't figure
- 	 * that out because it's an indirect call. Annotate it.
-@@ -2006,7 +2006,7 @@ static __always_inline void exc_machine_
- 	if (regs->flags & X86_EFLAGS_IF)
- 		trace_hardirqs_on_prepare();
- 	instrumentation_end();
--	idtentry_exit_nmi(regs, irq_state);
-+	irqentry_nmi_exit(regs, irq_state);
- }
- 
- static __always_inline void exc_machine_check_user(struct pt_regs *regs)
---- a/arch/x86/kernel/nmi.c
-+++ b/arch/x86/kernel/nmi.c
-@@ -475,7 +475,7 @@ static DEFINE_PER_CPU(unsigned long, nmi
- 
- DEFINE_IDTENTRY_RAW(exc_nmi)
- {
--	bool irq_state;
-+	irqentry_state_t irq_state;
- 
- 	/*
- 	 * Re-enable NMIs right here when running as an SEV-ES guest. This might
-@@ -502,14 +502,14 @@ DEFINE_IDTENTRY_RAW(exc_nmi)
- 
- 	this_cpu_write(nmi_dr7, local_db_save());
- 
--	irq_state = idtentry_enter_nmi(regs);
-+	irq_state = irqentry_nmi_enter(regs);
- 
- 	inc_irq_stat(__nmi_count);
- 
- 	if (!ignore_nmis)
- 		default_do_nmi(regs);
- 
--	idtentry_exit_nmi(regs, irq_state);
-+	irqentry_nmi_exit(regs, irq_state);
- 
- 	local_db_restore(this_cpu_read(nmi_dr7));
- 
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -405,7 +405,7 @@ DEFINE_IDTENTRY_DF(exc_double_fault)
+@@ -55,7 +56,10 @@ int main(int argc, char **argv) {
+ 		return 1;
  	}
- #endif
  
--	idtentry_enter_nmi(regs);
-+	irqentry_nmi_enter(regs);
- 	instrumentation_begin();
- 	notify_die(DIE_TRAP, str, regs, error_code, X86_TRAP_DF, SIGSEGV);
- 
-@@ -651,12 +651,13 @@ DEFINE_IDTENTRY_RAW(exc_int3)
- 		instrumentation_end();
- 		irqentry_exit_to_user_mode(regs);
- 	} else {
--		bool irq_state = idtentry_enter_nmi(regs);
-+		irqentry_state_t irq_state = irqentry_nmi_enter(regs);
-+
- 		instrumentation_begin();
- 		if (!do_int3(regs))
- 			die("int3", regs, 0);
- 		instrumentation_end();
--		idtentry_exit_nmi(regs, irq_state);
-+		irqentry_nmi_exit(regs, irq_state);
- 	}
- }
- 
-@@ -864,7 +865,7 @@ static __always_inline void exc_debug_ke
- 	 * includes the entry stack is excluded for everything.
- 	 */
- 	unsigned long dr7 = local_db_save();
--	bool irq_state = idtentry_enter_nmi(regs);
-+	irqentry_state_t irq_state = irqentry_nmi_enter(regs);
- 	instrumentation_begin();
- 
- 	/*
-@@ -907,7 +908,7 @@ static __always_inline void exc_debug_ke
- 		regs->flags &= ~X86_EFLAGS_TF;
- out:
- 	instrumentation_end();
--	idtentry_exit_nmi(regs, irq_state);
-+	irqentry_nmi_exit(regs, irq_state);
- 
- 	local_db_restore(dr7);
- }
-@@ -925,7 +926,7 @@ static __always_inline void exc_debug_us
- 
- 	/*
- 	 * NB: We can't easily clear DR7 here because
--	 * idtentry_exit_to_usermode() can invoke ptrace, schedule, access
-+	 * irqentry_exit_to_usermode() can invoke ptrace, schedule, access
- 	 * user memory, etc.  This means that a recursive #DB is possible.  If
- 	 * this happens, that #DB will hit exc_debug_kernel() and clear DR7.
- 	 * Since we're not on the IST stack right now, everything will be
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -343,6 +343,7 @@ void irqentry_exit_to_user_mode(struct p
- #ifndef irqentry_state
- typedef struct irqentry_state {
- 	bool	exit_rcu;
-+	bool	lockdep;
- } irqentry_state_t;
- #endif
- 
-@@ -402,4 +403,23 @@ void irqentry_exit_cond_resched(void);
-  */
- void noinstr irqentry_exit(struct pt_regs *regs, irqentry_state_t state);
- 
-+/**
-+ * irqentry_nmi_enter - Handle NMI entry
-+ * @regs:	Pointer to currents pt_regs
-+ *
-+ * Similar to irqentry_enter() but taking care of the NMI constraints.
-+ */
-+irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs);
-+
-+/**
-+ * irqentry_nmi_exit - Handle return from NMI handling
-+ * @regs:	Pointer to pt_regs (NMI entry regs)
-+ * @state:	Return value from matching call to irqentry_nmi_enter()
-+ *
-+ * Last action before returning to the low level assmenbly code.
-+ *
-+ * Counterpart to irqentry_nmi_enter().
-+ */
-+void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t irq_state);
-+
- #endif
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -398,3 +398,39 @@ noinstr void irqentry_exit(struct pt_reg
- 			rcu_irq_exit();
- 	}
- }
-+
-+irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs)
-+{
-+	irqentry_state_t irq_state;
-+
-+	irq_state.lockdep = lockdep_hardirqs_enabled();
-+
-+	__nmi_enter();
-+	lockdep_hardirqs_off(CALLER_ADDR0);
-+	lockdep_hardirq_enter();
-+	rcu_nmi_enter();
-+
-+	instrumentation_begin();
-+	trace_hardirqs_off_finish();
-+	ftrace_nmi_enter();
-+	instrumentation_end();
-+
-+	return irq_state;
-+}
-+
-+void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t irq_state)
-+{
-+	instrumentation_begin();
-+	ftrace_nmi_exit();
-+	if (irq_state.lockdep) {
-+		trace_hardirqs_on_prepare();
-+		lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+-	ftime(&before);
++	if (clock_gettime(CLOCK_MONOTONIC, &before) < 0) {
++		perror("clock_gettime");
++		return 1;
 +	}
-+	instrumentation_end();
-+
-+	rcu_nmi_exit();
-+	lockdep_hardirq_exit();
-+	if (irq_state.lockdep)
-+		lockdep_hardirqs_on(CALLER_ADDR0);
-+	__nmi_exit();
-+}
-
-
-
-
+ 	pread(fd, &old_tsc,  sizeof(old_tsc), 0x10);
+ 	pread(fd, &old_aperf,  sizeof(old_mperf), 0xe7);
+ 	pread(fd, &old_mperf,  sizeof(old_aperf), 0xe8);
+@@ -64,7 +68,10 @@ int main(int argc, char **argv) {
+ 		sqrt(i);
+ 	}
+ 
+-	ftime(&after);
++	if (clock_gettime(CLOCK_MONOTONIC, &after) < 0) {
++		perror("clock_gettime");
++		return 1;
++	}
+ 	pread(fd, &new_tsc,  sizeof(new_tsc), 0x10);
+ 	pread(fd, &new_aperf,  sizeof(new_mperf), 0xe7);
+ 	pread(fd, &new_mperf,  sizeof(new_aperf), 0xe8);
+@@ -73,8 +80,8 @@ int main(int argc, char **argv) {
+ 	aperf = new_aperf-old_aperf;
+ 	mperf = new_mperf-old_mperf;
+ 
+-	start = before.time*1000 + before.millitm;
+-	finish = after.time*1000 + after.millitm;
++	start = before.tv_sec*1000 + before.tv_nsec/1000000L;
++	finish = after.tv_sec*1000 + after.tv_nsec/1000000L;
+ 	total = finish - start;
+ 
+ 	printf("runTime: %4.2f\n", 1.0*total/1000);
+-- 
+2.26.2
 
