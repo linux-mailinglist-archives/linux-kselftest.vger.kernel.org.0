@@ -2,58 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9787290E33
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Oct 2020 01:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD34290F5D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Oct 2020 07:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408935AbgJPXcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Oct 2020 19:32:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56868 "EHLO mail.kernel.org"
+        id S2392698AbgJQFfS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 17 Oct 2020 01:35:18 -0400
+Received: from mga05.intel.com ([192.55.52.43]:43562 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393631AbgJPXcT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Oct 2020 19:32:19 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8CE0C20878;
-        Fri, 16 Oct 2020 23:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602891170;
-        bh=6pL1XCVytgmpRnR4l50cm/43H5MnqCsPmvMDP0dsgeU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qKxVXH2gVDAeY3+r52ZyJ4SQ7GDqzkoQkqC6xja/S/MPJKffa1kIanTo750ozfbAy
-         Pgoa7A9Vgd0DI/xZVQJD7TUKgiMKbZB+n9lA/zSoseEgb2l520n/lxRz/LVRHFucN7
-         zIzYA/DcFo0yaQAYSwK/HpB9RkQUrjbXCKehkeUY=
-Date:   Fri, 16 Oct 2020 16:32:48 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     davem@davemloft.net, skhan@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv4] selftests: rtnetlink: load fou module for
- kci_test_encap_fou() test
-Message-ID: <20201016163248.57af2b95@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201016041211.18827-1-po-hsu.lin@canonical.com>
-References: <20201016041211.18827-1-po-hsu.lin@canonical.com>
+        id S2409430AbgJQFfS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 17 Oct 2020 01:35:18 -0400
+IronPort-SDR: RXH8Q+dOWLdkHKyiD1mnGpbys3Efva8uFXdh1cQEs5Gn+pMZMMsNDAQBRD4RcawbjgLSC08fi2
+ jj3u1XCjZPiw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9776"; a="251422269"
+X-IronPort-AV: E=Sophos;i="5.77,385,1596524400"; 
+   d="scan'208";a="251422269"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 20:32:03 -0700
+IronPort-SDR: kvyfzP2MmHEewAuij6J97fqoPkF27+6ntcl4pUo67Y0ey7WhiD8GVW1pnB6mjR8DSQp0w+kBVn
+ R3ZScB5JlEAA==
+X-IronPort-AV: E=Sophos;i="5.77,385,1596524400"; 
+   d="scan'208";a="521393708"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 20:32:03 -0700
+Date:   Fri, 16 Oct 2020 20:32:03 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V3 2/9] x86/fpu: Refactor arch_set_user_pkey_access()
+ for PKS support
+Message-ID: <20201017033202.GV2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009194258.3207172-1-ira.weiny@intel.com>
+ <20201009194258.3207172-3-ira.weiny@intel.com>
+ <20201016105743.GK2611@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201016105743.GK2611@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 16 Oct 2020 12:12:11 +0800 Po-Hsu Lin wrote:
-> The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
-> needs the fou module to work. Otherwise it will fail with:
+On Fri, Oct 16, 2020 at 12:57:43PM +0200, Peter Zijlstra wrote:
+> On Fri, Oct 09, 2020 at 12:42:51PM -0700, ira.weiny@intel.com wrote:
+> > From: Fenghua Yu <fenghua.yu@intel.com>
+> > 
+> > Define a helper, update_pkey_val(), which will be used to support both
+> > Protection Key User (PKU) and the new Protection Key for Supervisor
+> > (PKS) in subsequent patches.
+> > 
+> > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> > ---
+> >  arch/x86/include/asm/pkeys.h |  2 ++
+> >  arch/x86/kernel/fpu/xstate.c | 22 ++++------------------
+> >  arch/x86/mm/pkeys.c          | 21 +++++++++++++++++++++
+> >  3 files changed, 27 insertions(+), 18 deletions(-)
 > 
->   $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
->   RTNETLINK answers: No such file or directory
->   Error talking to the kernel
+> This is not from Fenghua.
 > 
-> Add the CONFIG_NET_FOU into the config file as well. Which needs at
-> least to be set as a loadable module.
+>   https://lkml.kernel.org/r/20200717085442.GX10769@hirez.programming.kicks-ass.net
 > 
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> This is your patch based on the code I wrote.
 
-Doesn't apply :( Could you rebase on top of:
+Ok, I apologize.  Yes the code below was all yours.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
+Is it ok to add?
+
+Co-developed-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+
+?
+
+Thanks,
+Ira
+
+> 
+> > diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+> > index f5efb4007e74..3cf8f775f36d 100644
+> > --- a/arch/x86/mm/pkeys.c
+> > +++ b/arch/x86/mm/pkeys.c
+> > @@ -208,3 +208,24 @@ static __init int setup_init_pkru(char *opt)
+> >  	return 1;
+> >  }
+> >  __setup("init_pkru=", setup_init_pkru);
+> > +
+> > +/*
+> > + * Update the pk_reg value and return it.
+> > + *
+> > + * Kernel users use the same flags as user space:
+> > + *     PKEY_DISABLE_ACCESS
+> > + *     PKEY_DISABLE_WRITE
+> > + */
+> > +u32 update_pkey_val(u32 pk_reg, int pkey, unsigned int flags)
+> > +{
+> > +	int pkey_shift = pkey * PKR_BITS_PER_PKEY;
+> > +
+> > +	pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
+> > +
+> > +	if (flags & PKEY_DISABLE_ACCESS)
+> > +		pk_reg |= PKR_AD_BIT << pkey_shift;
+> > +	if (flags & PKEY_DISABLE_WRITE)
+> > +		pk_reg |= PKR_WD_BIT << pkey_shift;
+> > +
+> > +	return pk_reg;
+> > +}
+> > -- 
+> > 2.28.0.rc0.12.gb6a658bd00c9
+> > 
