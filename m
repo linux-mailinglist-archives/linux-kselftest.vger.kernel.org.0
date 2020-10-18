@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 385EF291DDB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Oct 2020 21:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467C9291DE8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Oct 2020 21:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729434AbgJRTV3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 18 Oct 2020 15:21:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33590 "EHLO mail.kernel.org"
+        id S1729653AbgJRTV4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 18 Oct 2020 15:21:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34408 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729423AbgJRTV3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:29 -0400
+        id S1728196AbgJRTVz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:21:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EE1ED222E8;
-        Sun, 18 Oct 2020 19:21:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C46E4222C8;
+        Sun, 18 Oct 2020 19:21:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048888;
-        bh=/VH/Uh4ppG8CqszpVW7ftboKw3ENRADID/FSq+mRDz4=;
+        s=default; t=1603048914;
+        bh=D2rn82u9XBoGzM/QeR1D+rIp50ldv11A3HZpYHRRCSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CYzwmXNPUKhKRqzlXyY0ZqL8L4jY9nIRullLkrn0tqDDTVhC8EQh5ko+lAfnErOE4
-         pQeqNHiLNhOfzs/D62OCibNEznSao7nhKHtNF7C54p0VaGViK6mMAYHl9JySJ7EORT
-         dNFJNv9psc68i+Ag2sq1DSfdvnrAt9qcyFvZ55T8=
+        b=2PZdyTyboKasAZtG0L1Jl361BQKOUNyljkVli8pvBScEjvyfCRK4DRsN9Kt/pqFJ4
+         g+/ItHzrpPdA3qlLz/qMJ5oaq86RZ1IfzDcbl5O4rNG/IfVy4SFrbUzct1gTcbkSgt
+         aY+hGD/U4Jv7MgfqzrUZTYoQ589n8R3z5lk0f4AY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
+Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 051/101] selftests/bpf: Fix overflow tests to reflect iter size increase
-Date:   Sun, 18 Oct 2020 15:19:36 -0400
-Message-Id: <20201018192026.4053674-51-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 073/101] selftests/bpf: Fix test_sysctl_loop{1, 2} failure due to clang change
+Date:   Sun, 18 Oct 2020 15:19:58 -0400
+Message-Id: <20201018192026.4053674-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
 References: <20201018192026.4053674-1-sashal@kernel.org>
@@ -43,60 +43,127 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit eb58bbf2e5c7917aa30bf8818761f26bbeeb2290 ]
+[ Upstream commit 7fb5eefd76394cfefb380724a87ca40b47d44405 ]
 
-bpf iter size increase to PAGE_SIZE << 3 means overflow tests assuming
-page size need to be bumped also.
+Andrii reported that with latest clang, when building selftests, we have
+error likes:
+  error: progs/test_sysctl_loop1.c:23:16: in function sysctl_tcp_mem i32 (%struct.bpf_sysctl*):
+  Looks like the BPF stack limit of 512 bytes is exceeded.
+  Please move large on stack variables into BPF per-cpu array map.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+The error is triggered by the following LLVM patch:
+  https://reviews.llvm.org/D87134
+
+For example, the following code is from test_sysctl_loop1.c:
+  static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+  {
+    volatile char tcp_mem_name[] = "net/ipv4/tcp_mem/very_very_very_very_long_pointless_string";
+    ...
+  }
+Without the above LLVM patch, the compiler did optimization to load the string
+(59 bytes long) with 7 64bit loads, 1 8bit load and 1 16bit load,
+occupying 64 byte stack size.
+
+With the above LLVM patch, the compiler only uses 8bit loads, but subregister is 32bit.
+So stack requirements become 4 * 59 = 236 bytes. Together with other stuff on
+the stack, total stack size exceeds 512 bytes, hence compiler complains and quits.
+
+To fix the issue, removing "volatile" key word or changing "volatile" to
+"const"/"static const" does not work, the string is put in .rodata.str1.1 section,
+which libbpf did not process it and errors out with
+  libbpf: elf: skipping unrecognized data section(6) .rodata.str1.1
+  libbpf: prog 'sysctl_tcp_mem': bad map relo against '.L__const.is_tcp_mem.tcp_mem_name'
+          in section '.rodata.str1.1'
+
+Defining the string const as global variable can fix the issue as it puts the string constant
+in '.rodata' section which is recognized by libbpf. In the future, when libbpf can process
+'.rodata.str*.*' properly, the global definition can be changed back to local definition.
+
+Defining tcp_mem_name as a global, however, triggered a verifier failure.
+   ./test_progs -n 7/21
+  libbpf: load bpf program failed: Permission denied
+  libbpf: -- BEGIN DUMP LOG ---
+  libbpf:
+  invalid stack off=0 size=1
+  verification time 6975 usec
+  stack depth 160+64
+  processed 889 insns (limit 1000000) max_states_per_insn 4 total_states
+  14 peak_states 14 mark_read 10
+
+  libbpf: -- END LOG --
+  libbpf: failed to load program 'sysctl_tcp_mem'
+  libbpf: failed to load object 'test_sysctl_loop2.o'
+  test_bpf_verif_scale:FAIL:114
+  #7/21 test_sysctl_loop2.o:FAIL
+This actually exposed a bpf program bug. In test_sysctl_loop{1,2}, we have code
+like
+  const char tcp_mem_name[] = "<...long string...>";
+  ...
+  char name[64];
+  ...
+  for (i = 0; i < sizeof(tcp_mem_name); ++i)
+      if (name[i] != tcp_mem_name[i])
+          return 0;
+In the above code, if sizeof(tcp_mem_name) > 64, name[i] access may be
+out of bound. The sizeof(tcp_mem_name) is 59 for test_sysctl_loop1.c and
+79 for test_sysctl_loop2.c.
+
+Without promotion-to-global change, old compiler generates code where
+the overflowed stack access is actually filled with valid value, so hiding
+the bpf program bug. With promotion-to-global change, the code is different,
+more specifically, the previous loading constants to stack is gone, and
+"name" occupies stack[-64:0] and overflow access triggers a verifier error.
+To fix the issue, adjust "name" buffer size properly.
+
+Reported-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/1601292670-1616-7-git-send-email-alan.maguire@oracle.com
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20200909171542.3673449-1-yhs@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 4 ++--
+ tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 87c29dde1cf96..669f195de2fa0 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -249,7 +249,7 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 	struct bpf_map_info map_info = {};
- 	struct bpf_iter_test_kern4 *skel;
- 	struct bpf_link *link;
--	__u32 page_size;
-+	__u32 iter_size;
- 	char *buf;
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
+index 458b0d69133e4..553a282d816ab 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
+@@ -18,11 +18,11 @@
+ #define MAX_ULONG_STR_LEN 7
+ #define MAX_VALUE_STR_LEN (TCP_MEM_LOOPS * MAX_ULONG_STR_LEN)
  
- 	skel = bpf_iter_test_kern4__open();
-@@ -271,19 +271,19 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 		  "map_creation failed: %s\n", strerror(errno)))
- 		goto free_map1;
++const char tcp_mem_name[] = "net/ipv4/tcp_mem/very_very_very_very_long_pointless_string";
+ static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+-	volatile char tcp_mem_name[] = "net/ipv4/tcp_mem/very_very_very_very_long_pointless_string";
+ 	unsigned char i;
+-	char name[64];
++	char name[sizeof(tcp_mem_name)];
+ 	int ret;
  
--	/* bpf_seq_printf kernel buffer is one page, so one map
-+	/* bpf_seq_printf kernel buffer is 8 pages, so one map
- 	 * bpf_seq_write will mostly fill it, and the other map
- 	 * will partially fill and then trigger overflow and need
- 	 * bpf_seq_read restart.
- 	 */
--	page_size = sysconf(_SC_PAGE_SIZE);
-+	iter_size = sysconf(_SC_PAGE_SIZE) << 3;
+ 	memset(name, 0, sizeof(name));
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
+index b2e6f9b0894d8..2b64bc563a12e 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
+@@ -18,11 +18,11 @@
+ #define MAX_ULONG_STR_LEN 7
+ #define MAX_VALUE_STR_LEN (TCP_MEM_LOOPS * MAX_ULONG_STR_LEN)
  
- 	if (test_e2big_overflow) {
--		skel->rodata->print_len = (page_size + 8) / 8;
--		expected_read_len = 2 * (page_size + 8);
-+		skel->rodata->print_len = (iter_size + 8) / 8;
-+		expected_read_len = 2 * (iter_size + 8);
- 	} else if (!ret1) {
--		skel->rodata->print_len = (page_size - 8) / 8;
--		expected_read_len = 2 * (page_size - 8);
-+		skel->rodata->print_len = (iter_size - 8) / 8;
-+		expected_read_len = 2 * (iter_size - 8);
- 	} else {
- 		skel->rodata->print_len = 1;
- 		expected_read_len = 2 * 8;
++const char tcp_mem_name[] = "net/ipv4/tcp_mem/very_very_very_very_long_pointless_string_to_stress_byte_loop";
+ static __attribute__((noinline)) int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+-	volatile char tcp_mem_name[] = "net/ipv4/tcp_mem/very_very_very_very_long_pointless_string_to_stress_byte_loop";
+ 	unsigned char i;
+-	char name[64];
++	char name[sizeof(tcp_mem_name)];
+ 	int ret;
+ 
+ 	memset(name, 0, sizeof(name));
 -- 
 2.25.1
 
