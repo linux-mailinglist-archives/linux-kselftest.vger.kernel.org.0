@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 467C9291DE8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Oct 2020 21:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF58291A62
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Oct 2020 21:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729653AbgJRTV4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 18 Oct 2020 15:21:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34408 "EHLO mail.kernel.org"
+        id S1730431AbgJRTXp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 18 Oct 2020 15:23:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37256 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728196AbgJRTVz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:55 -0400
+        id S1730410AbgJRTXo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:23:44 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C46E4222C8;
-        Sun, 18 Oct 2020 19:21:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F3D7E222E7;
+        Sun, 18 Oct 2020 19:23:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048914;
-        bh=D2rn82u9XBoGzM/QeR1D+rIp50ldv11A3HZpYHRRCSg=;
+        s=default; t=1603049023;
+        bh=XvMgVztAh3JO68OK0QUk3KY/LnZc26xvhCUuPLNnCpA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2PZdyTyboKasAZtG0L1Jl361BQKOUNyljkVli8pvBScEjvyfCRK4DRsN9Kt/pqFJ4
-         g+/ItHzrpPdA3qlLz/qMJ5oaq86RZ1IfzDcbl5O4rNG/IfVy4SFrbUzct1gTcbkSgt
-         aY+hGD/U4Jv7MgfqzrUZTYoQ589n8R3z5lk0f4AY=
+        b=TL+3xUUzxxqwSgrZ2kvFwfJ0zHu3QPuQ/vwlAcyWMYYwWFtX4s16nGZJkKqUnpgQr
+         LQZViAorEsdKQiTIx/1X6IaEsZb+BceZJa2PihmJIQJ01EM5mSHOfDWilh4PKRDYte
+         MtcUvQZAOPFcgTXFGtbFlPnBDUuIZ47kXdOiiuBc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 073/101] selftests/bpf: Fix test_sysctl_loop{1, 2} failure due to clang change
-Date:   Sun, 18 Oct 2020 15:19:58 -0400
-Message-Id: <20201018192026.4053674-73-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 57/80] selftests/bpf: Fix test_sysctl_loop{1, 2} failure due to clang change
+Date:   Sun, 18 Oct 2020 15:22:08 -0400
+Message-Id: <20201018192231.4054535-57-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
-References: <20201018192026.4053674-1-sashal@kernel.org>
+In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
+References: <20201018192231.4054535-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -129,7 +129,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-index 458b0d69133e4..553a282d816ab 100644
+index d22e438198cf7..9af8822ece477 100644
 --- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
 +++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
 @@ -18,11 +18,11 @@
@@ -147,7 +147,7 @@ index 458b0d69133e4..553a282d816ab 100644
  
  	memset(name, 0, sizeof(name));
 diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-index b2e6f9b0894d8..2b64bc563a12e 100644
+index cb201cbe11e77..55251046c9b73 100644
 --- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
 +++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
 @@ -18,11 +18,11 @@
