@@ -2,99 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE29292160
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Oct 2020 05:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C3B29223C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Oct 2020 07:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731436AbgJSDJt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 18 Oct 2020 23:09:49 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:49519 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731376AbgJSDJs (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 18 Oct 2020 23:09:48 -0400
-Received: from mail-pf1-f200.google.com ([209.85.210.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kULYQ-0006Zq-61
-        for linux-kselftest@vger.kernel.org; Mon, 19 Oct 2020 03:09:46 +0000
-Received: by mail-pf1-f200.google.com with SMTP id 192so4930668pfb.21
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Oct 2020 20:09:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Pj6q4HWe0k0tbwlWbAngPQFUEd/hNK+pTPGNhrSqmPM=;
-        b=JS3Kd8Q2sNRiMi7cG70XN0N7oW1BJp0oZQqQ4oyQZ/WFEj6RCzPyZ07GoBbIZ01Ww0
-         v+bCusF6u5aD+TkvFzLA5ltW5pae63Dw786q76TROTIUTNNT/BZyZAZuKoz96kS3OdA+
-         jgMH6FaSe/k7N31Q59CQxu87lVvgskgQGfV3vPBPb/5BGbg4aSmHkcLwDo8BYA65cRQH
-         xYygItsR6V1Bj0I/Deia9T+gr1Mx57dx+hs/t0cTDf2mgoUswSE34tuil73DffDJxOtf
-         eco2JICMcp7vX4L2O+3OU9a+qTUSjgM/RrgVxYVnVHTinylShvQdxB+ZPNBmWAlc4Ff+
-         NpHg==
-X-Gm-Message-State: AOAM5317k1QYYov+zN8pTLEKYIJCrBcxD7ez3VcZUyNf575IScIIs+rK
-        ek3JfhmAJdHGMwi+9U1Gzsi8hL556uzEDdAcWNfOvnqwfJuwnabfN8oQ6Anoyp+S6w0vvhvKqo4
-        GW5J9K+tLRAqBbUJt+uGYwRH89hNgPaE29XUCundKtrHE
-X-Received: by 2002:a63:5312:: with SMTP id h18mr10677182pgb.75.1603076984603;
-        Sun, 18 Oct 2020 20:09:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyPgV6YGPl+Wc2EzbriXge5wY1hmqcBKLT/ClI2pcRqnTp7Ot3LJF/d+2PMLKeEU01MWAxnOw==
-X-Received: by 2002:a63:5312:: with SMTP id h18mr10677163pgb.75.1603076984221;
-        Sun, 18 Oct 2020 20:09:44 -0700 (PDT)
-Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
-        by smtp.gmail.com with ESMTPSA id q8sm10077687pfg.118.2020.10.18.20.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2020 20:09:43 -0700 (PDT)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     kuba@kernel.org, davem@davemloft.net, skhan@linuxfoundation.org
-Cc:     po-hsu.lin@canonical.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCHv5] selftests: rtnetlink: load fou module for kci_test_encap_fou() test
-Date:   Mon, 19 Oct 2020 11:09:28 +0800
-Message-Id: <20201019030928.9859-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726447AbgJSFhv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Oct 2020 01:37:51 -0400
+Received: from mga07.intel.com ([134.134.136.100]:36748 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725306AbgJSFhv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 19 Oct 2020 01:37:51 -0400
+IronPort-SDR: BCttGlvxXOv8IEMavzW7QCZDOzs1MO3AV/WwrIlbEaiYnCGxWVJREPVdnNqGF0ZSMH0+EnvcXG
+ K6A+Vch2xQIA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="231162684"
+X-IronPort-AV: E=Sophos;i="5.77,393,1596524400"; 
+   d="scan'208";a="231162684"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2020 22:37:46 -0700
+IronPort-SDR: RnOUFQmkYUDicpOlOT0tpOrIh/gyVBYXkd84kJDS4ikMZgrYuGPAp0+a9qjCzEuNsRXlsKxGfm
+ 7ykQey1Ml/Rw==
+X-IronPort-AV: E=Sophos;i="5.77,393,1596524400"; 
+   d="scan'208";a="532493630"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2020 22:37:37 -0700
+Date:   Sun, 18 Oct 2020 22:37:36 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V3 6/9] x86/entry: Pass irqentry_state_t by reference
+Message-ID: <20201019053639.GA3713473@iweiny-DESK2.sc.intel.com>
+References: <20201009194258.3207172-1-ira.weiny@intel.com>
+ <20201009194258.3207172-7-ira.weiny@intel.com>
+ <20201016114510.GO2611@hirez.programming.kicks-ass.net>
+ <87lfg6tjnq.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lfg6tjnq.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kci_test_encap_fou() test from kci_test_encap() in rtnetlink.sh
-needs the fou module to work. Otherwise it will fail with:
+On Fri, Oct 16, 2020 at 02:55:21PM +0200, Thomas Gleixner wrote:
+> On Fri, Oct 16 2020 at 13:45, Peter Zijlstra wrote:
+> > On Fri, Oct 09, 2020 at 12:42:55PM -0700, ira.weiny@intel.com wrote:
+> >> @@ -238,7 +236,7 @@ noinstr void idtentry_exit_nmi(struct pt_regs *regs, bool restore)
+> >>  
+> >>  	rcu_nmi_exit();
+> >>  	lockdep_hardirq_exit();
+> >> -	if (restore)
+> >> +	if (irq_state->exit_rcu)
+> >>  		lockdep_hardirqs_on(CALLER_ADDR0);
+> >>  	__nmi_exit();
+> >>  }
+> >
+> > That's not nice.. The NMI path is different from the IRQ path and has a
+> > different variable. Yes, this works, but *groan*.
+> >
+> > Maybe union them if you want to avoid bloating the structure, but the
+> > above makes it really hard to read.
+> 
+> Right, and also that nmi entry thing should not be in x86. Something
+> like the untested below as first cleanup.
 
-  $ ip netns exec "$testns" ip fou add port 7777 ipproto 47
-  RTNETLINK answers: No such file or directory
-  Error talking to the kernel
+Ok, I see what Peter was talking about.  I've added this patch to the series.
 
-Add the CONFIG_NET_FOU into the config file as well. Which needs at
-least to be set as a loadable module.
+> 
+> Thanks,
+> 
+>         tglx
+> ----
+> Subject: x86/entry: Move nmi entry/exit into common code
+> From: Thomas Gleixner <tglx@linutronix.de>
+> Date: Fri, 11 Sep 2020 10:09:56 +0200
+> 
+> Add blurb here.
 
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/net/config       | 1 +
- tools/testing/selftests/net/rtnetlink.sh | 5 +++++
- 2 files changed, 6 insertions(+)
+How about:
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 4364924..4d5df8e 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -33,3 +33,4 @@ CONFIG_KALLSYMS=y
- CONFIG_TRACEPOINTS=y
- CONFIG_NET_DROP_MONITOR=m
- CONFIG_NETDEVSIM=m
-+CONFIG_NET_FOU=m
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index 8a2fe6d..c9ce3df 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -520,6 +520,11 @@ kci_test_encap_fou()
- 		return $ksft_skip
- 	fi
- 
-+	if ! /sbin/modprobe -q -n fou; then
-+		echo "SKIP: module fou is not found"
-+		return $ksft_skip
-+	fi
-+	/sbin/modprobe -q fou
- 	ip -netns "$testns" fou add port 7777 ipproto 47 2>/dev/null
- 	if [ $? -ne 0 ];then
- 		echo "FAIL: can't add fou port 7777, skipping test"
--- 
-2.7.4
+To prepare for saving PKRS values across NMI's we lift the
+idtentry_[enter|exit]_nmi() to the common code.  Rename them to
+irqentry_nmi_[enter|exit]() to reflect the new generic nature and store the
+state in the same irqentry_state_t structure as the other irqentry_*()
+functions.  Finally, differentiate the state being stored between the NMI and
+IRQ path by adding 'lockdep' to irqentry_state_t.
 
+?
+
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  arch/x86/entry/common.c         |   34 ----------------------------------
+>  arch/x86/include/asm/idtentry.h |    3 ---
+>  arch/x86/kernel/cpu/mce/core.c  |    6 +++---
+>  arch/x86/kernel/nmi.c           |    6 +++---
+>  arch/x86/kernel/traps.c         |   13 +++++++------
+>  include/linux/entry-common.h    |   20 ++++++++++++++++++++
+>  kernel/entry/common.c           |   36 ++++++++++++++++++++++++++++++++++++
+>  7 files changed, 69 insertions(+), 49 deletions(-)
+> 
+
+[snip]
+
+> --- a/include/linux/entry-common.h
+> +++ b/include/linux/entry-common.h
+> @@ -343,6 +343,7 @@ void irqentry_exit_to_user_mode(struct p
+>  #ifndef irqentry_state
+>  typedef struct irqentry_state {
+>  	bool	exit_rcu;
+> +	bool	lockdep;
+>  } irqentry_state_t;
+
+Building on what Peter said do you agree this should be made into a union?
+
+It may not be strictly necessary in this patch but I think it would reflect the
+mutual exclusivity better and could be changed easy enough in the follow on
+patch which adds the pkrs state.
+
+Ira
