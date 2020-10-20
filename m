@@ -2,130 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00537293E4D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Oct 2020 16:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EF9294045
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Oct 2020 18:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407839AbgJTOKa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Oct 2020 10:10:30 -0400
-Received: from mga14.intel.com ([192.55.52.115]:52692 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407842AbgJTOKa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Oct 2020 10:10:30 -0400
-IronPort-SDR: F6UDmgcB74y5Abu1N5mh1hLwJizDX+vUR9iVUW7/DKQWDmr3tGJZ8dayAlPiUURHu9roZ+Xl4b
- fhrzJ4dA//hQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="166435279"
-X-IronPort-AV: E=Sophos;i="5.77,397,1596524400"; 
-   d="scan'208";a="166435279"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 07:10:29 -0700
-IronPort-SDR: 5xB2GYyzejmXwfcx8S0E0keerXvIVZmHeJ9k8p8SkKxbYpm+GEU2CaHzDyn4xNTNrYc7te8yIK
- wI4dOY831O1w==
-X-IronPort-AV: E=Sophos;i="5.77,397,1596524400"; 
-   d="scan'208";a="533074263"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 07:10:29 -0700
-Date:   Tue, 20 Oct 2020 07:10:29 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V3 6/9] x86/entry: Pass irqentry_state_t by reference
-Message-ID: <20201020141029.GE3713473@iweiny-DESK2.sc.intel.com>
-References: <20201009194258.3207172-1-ira.weiny@intel.com>
- <20201009194258.3207172-7-ira.weiny@intel.com>
- <20201016114510.GO2611@hirez.programming.kicks-ass.net>
- <87lfg6tjnq.fsf@nanos.tec.linutronix.de>
- <20201019053639.GA3713473@iweiny-DESK2.sc.intel.com>
- <87k0vma7ct.fsf@nanos.tec.linutronix.de>
- <20201019202647.GD3713473@iweiny-DESK2.sc.intel.com>
- <871rhtapir.fsf@nanos.tec.linutronix.de>
+        id S2394492AbgJTQNe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Oct 2020 12:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394490AbgJTQNe (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Oct 2020 12:13:34 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC995C0613D1
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 09:13:33 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id q9so4258330iow.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 09:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NaxRi7kvLJ1FskAsBPACru6r029rXEomACB+lv9Amw4=;
+        b=H6B1qgktg82wnkl+cqaDJxP6x4cwURPzrKMC2/ZRrfV7jmpUXZVjsxoNuPjLXYE5gv
+         MRY3sOsHBClN5xYEmq7QiZAgyFKmQvRmA2vghUiXlxKfkhNqp23TOn/oHwY6ApVFC4ai
+         xRIDXhzLA3PFm1QkE42bJAeSWkQwRlgZu3ObCxLWCWhmRzPMZNyx0Vndk1EO471xelCj
+         Q5xotjOPGRnbYA5hLpjmsz7uuTxs5b1P8FR99/2iyKzrTm39eOkBzBPTQmXbYUjXAQEU
+         GQzlqlGp1FUVuudby0dvbb4U9yh9NqtVSd25D1CmS9sC4hmzTKd3Q32ScK8evBykBxEI
+         p8WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NaxRi7kvLJ1FskAsBPACru6r029rXEomACB+lv9Amw4=;
+        b=bxuVjPioqIN5XdYf+72NloyDoEa4vBtfSg9t0weQUoo5D6HTCmyYPuXOM3B5P8qaHL
+         iKdT4TXm6HkAwNZ6GEAoucMe4+G6i1RQ2D43zK8dUTlKOBQeuYvoC7+7aQygqRLQ7X6e
+         8JRbrpWXBZF1ypGVLeI2UIfqQC/JPCeZejhGUPihuD0t2/p9+bzI3v8RrtkdPbDiRzfA
+         EHCFC6VmyZ8QpOoPk7DYCyNgQLsgc8lAfpEbijY+T0FVPQ+jNoSSy8f7Fb9KKyryFQ6i
+         8C127GahAWinzXlP1ckEZPJwLql3aez++GStvR4Cdfl+8Fzbl43MjA4qiqMH15Wjq52Y
+         4U9w==
+X-Gm-Message-State: AOAM533rcgRurVQ6giZ2lb8QD3RGxQHAgkloXesCu2PQVR9Tr07/2yU0
+        JUnXBp2IHfd6tSQsLZVLqsA399xJN7zULpRI1P646w==
+X-Google-Smtp-Source: ABdhPJyr5FuIimEj3h/NbXNgXiQl7kbObhHVPO2vIADQz81HzFwgSvEapxqytCPNdPED3Ofk7V1LQWRF/FPZS5eY4HQ=
+X-Received: by 2002:a02:a60f:: with SMTP id c15mr2775749jam.48.1603210412874;
+ Tue, 20 Oct 2020 09:13:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871rhtapir.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <20201019224556.3536790-1-dlatypov@google.com> <20201020080943.GY4077@smile.fi.intel.com>
+In-Reply-To: <20201020080943.GY4077@smile.fi.intel.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 20 Oct 2020 09:13:21 -0700
+Message-ID: <CAGS_qxpPJJXa_fzeaapyAwjWKFdyzHgN7ZZgLE5V=6YR5VD1Sg@mail.gmail.com>
+Subject: Re: [PATCH] lib: add basic KUnit test for lib/math
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 11:12:44PM +0200, Thomas Gleixner wrote:
-> On Mon, Oct 19 2020 at 13:26, Ira Weiny wrote:
-> > On Mon, Oct 19, 2020 at 11:32:50AM +0200, Thomas Gleixner wrote:
-> > Sorry, let me clarify.  After this patch we have.
+On Tue, Oct 20, 2020 at 1:08 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Oct 19, 2020 at 03:45:56PM -0700, Daniel Latypov wrote:
+> > Add basic test coverage for files that don't require any config options:
+> > * gcd.c
+> > * lcm.c
+> > * int_sqrt.c
+> > * reciprocal_div.c
+> > (Ignored int_pow.c since it's a simple textbook algorithm.)
 > >
-> > typedef union irqentry_state {
-> > 	bool	exit_rcu;
-> > 	bool	lockdep;
-> > } irqentry_state_t;
-> >
-> > Which reflects the mutual exclusion of the 2 variables.
-> 
-> Huch? From the patch I gave you:
-> 
->  #ifndef irqentry_state
->  typedef struct irqentry_state {
->  	bool    exit_rcu;
-> +       bool    lockdep;
->  } irqentry_state_t;
->  #endif
-> 
-> How is that a union?
+> > These tests aren't particularly interesting, but
+> > * they're chosen as easy to understand examples of how to write tests
+> > * provides a place to add tests for any new files in this dir
+> > * written so adding new test cases to cover edge cases should be easy
+>
+> Is documentation not enough?
+>
+> I have recently wrote my first KUnit test and I found documentation pretty good
+> for the start. I think we actually need more complex examples in the code (and
+> useful).
 
-I was proposing to make it a union.
+I should have been more clear.
+The documentation clearly covers the mechanics of how to set up a test
+suite with some test cases and KUNIT_EXPECT_* calls.
 
-> 
-> > But then when the pkrs stuff is added the union changes back to a structure and
-> > looks like this.
-> 
-> So you want:
-> 
->   1) Move stuff to struct irqentry_state (my patch)
-> 
->   2) Change it to a union and pass it as pointer at the same time
+But it doesn't provide much guidance in the way of _how_ to structure tests.
+Or how to use more advanced features, e.g. there are only two files
+tree-wide using the _MSG variants of macros:
+$ ag KUNIT_.*MSG -l --ignore include/kunit/test.h
+fs/ext4/inode-test.c
+lib/bitfield_kunit.c
+(And both happen to be written by people working on/with KUnit).
 
-No, I would have made it a union in your patch.
+While the _MSG macros are not perfect, they add some context when
+calling KUNIT_* in a loop.
+I already see some tests merged that probably would benefit from using it.
+Considering the perspective of an outsider whose change broke one of
+those tests, they'd need to first edit the test to add more debug info
+to even understand what failed.
 
-Pass by reference would remain largely the same.
+But I can see a case for mentioning the _MSG variants in the example
+test or Documentation/kunit instead of this patch.
+There doesn't seem to be any mention of them at present in the docs.
 
-> 
->   3) Change it back to struct to add PKRS
+To put it in kunit_example_test.c (and have the value be clear), we'd
+need something like
+@@ -27,6 +28,9 @@ static void example_simple_test(struct kunit *test)
+         * behavior matched what was expected.
+         */
+        KUNIT_EXPECT_EQ(test, 1 + 1, 2);
++
++       for (x = 0; x < 2; ++x)
++               KUNIT_EXPECT_EQ_MSG(test, 42, myfunc(x), "myfunc(%d)", x);
+ }
 
-Yes.  :-/
+Using and testing an actual function like gcd() et al. felt a bit
+better than adding a trivial function there.
 
-> 
-> > Is that clear?
-> 
-> What's clear is that the above is nonsense. We can just do
-> 
->  #ifndef irqentry_state
->  typedef struct irqentry_state {
->  	union {
->          	bool    exit_rcu;
->                 bool    lockdep;
->         };        
->  } irqentry_state_t;
->  #endif
-> 
-> right in the patch which I gave you. Because that actually makes sense.
+>
+> So, I'm in doubt these test are a good point to start with.
 
-Ok I'm very sorry.  I was thinking that having a struct containing nothing but
-an anonymous union would be unacceptable as a stand alone item in your patch.
-In my experience other maintainers would have rejected such a change and
-would have asked; 'why not just make it a union'?
+If the above still seems too contrived, I can take a look at where to
+update kunit/usage.rst instead.
 
-I'm very happy skipping the gymnastics on individual patches in favor of making
-the whole series work out in the end.
 
-Thank you for your help again.  :-)
 
-Ira
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
