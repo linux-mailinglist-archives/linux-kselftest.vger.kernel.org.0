@@ -2,74 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A4429366F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Oct 2020 10:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00537293E4D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Oct 2020 16:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387422AbgJTIIp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Oct 2020 04:08:45 -0400
-Received: from mga04.intel.com ([192.55.52.120]:28580 "EHLO mga04.intel.com"
+        id S2407839AbgJTOKa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Oct 2020 10:10:30 -0400
+Received: from mga14.intel.com ([192.55.52.115]:52692 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727761AbgJTIIm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Oct 2020 04:08:42 -0400
-IronPort-SDR: FKg5ojdE59EwWR4Yb7ofH7SQoSyPQXrPcof6D1I88vRIbuYFU8UzRZrOuq7uGRkDR0v0qQKpEb
- ykEzH5JegmjA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="164562994"
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="164562994"
+        id S2407842AbgJTOKa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Oct 2020 10:10:30 -0400
+IronPort-SDR: F6UDmgcB74y5Abu1N5mh1hLwJizDX+vUR9iVUW7/DKQWDmr3tGJZ8dayAlPiUURHu9roZ+Xl4b
+ fhrzJ4dA//hQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="166435279"
+X-IronPort-AV: E=Sophos;i="5.77,397,1596524400"; 
+   d="scan'208";a="166435279"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 01:08:42 -0700
-IronPort-SDR: fi4SDY4KZtt7W2/BqYzzEnZn9S/MCUh+oO49ItV0Bq3+40Vn4cWi5agurP4DDcGN7kBoGD9JFw
- owWP7wAvoTOA==
-X-IronPort-AV: E=Sophos;i="5.77,396,1596524400"; 
-   d="scan'208";a="523420990"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 01:08:40 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kUmiF-00BHRg-Dx; Tue, 20 Oct 2020 11:09:43 +0300
-Date:   Tue, 20 Oct 2020 11:09:43 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH] lib: add basic KUnit test for lib/math
-Message-ID: <20201020080943.GY4077@smile.fi.intel.com>
-References: <20201019224556.3536790-1-dlatypov@google.com>
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 07:10:29 -0700
+IronPort-SDR: 5xB2GYyzejmXwfcx8S0E0keerXvIVZmHeJ9k8p8SkKxbYpm+GEU2CaHzDyn4xNTNrYc7te8yIK
+ wI4dOY831O1w==
+X-IronPort-AV: E=Sophos;i="5.77,397,1596524400"; 
+   d="scan'208";a="533074263"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 07:10:29 -0700
+Date:   Tue, 20 Oct 2020 07:10:29 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V3 6/9] x86/entry: Pass irqentry_state_t by reference
+Message-ID: <20201020141029.GE3713473@iweiny-DESK2.sc.intel.com>
+References: <20201009194258.3207172-1-ira.weiny@intel.com>
+ <20201009194258.3207172-7-ira.weiny@intel.com>
+ <20201016114510.GO2611@hirez.programming.kicks-ass.net>
+ <87lfg6tjnq.fsf@nanos.tec.linutronix.de>
+ <20201019053639.GA3713473@iweiny-DESK2.sc.intel.com>
+ <87k0vma7ct.fsf@nanos.tec.linutronix.de>
+ <20201019202647.GD3713473@iweiny-DESK2.sc.intel.com>
+ <871rhtapir.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201019224556.3536790-1-dlatypov@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <871rhtapir.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 19, 2020 at 03:45:56PM -0700, Daniel Latypov wrote:
-> Add basic test coverage for files that don't require any config options:
-> * gcd.c
-> * lcm.c
-> * int_sqrt.c
-> * reciprocal_div.c
-> (Ignored int_pow.c since it's a simple textbook algorithm.)
+On Mon, Oct 19, 2020 at 11:12:44PM +0200, Thomas Gleixner wrote:
+> On Mon, Oct 19 2020 at 13:26, Ira Weiny wrote:
+> > On Mon, Oct 19, 2020 at 11:32:50AM +0200, Thomas Gleixner wrote:
+> > Sorry, let me clarify.  After this patch we have.
+> >
+> > typedef union irqentry_state {
+> > 	bool	exit_rcu;
+> > 	bool	lockdep;
+> > } irqentry_state_t;
+> >
+> > Which reflects the mutual exclusion of the 2 variables.
 > 
-> These tests aren't particularly interesting, but
-> * they're chosen as easy to understand examples of how to write tests
-> * provides a place to add tests for any new files in this dir
-> * written so adding new test cases to cover edge cases should be easy
+> Huch? From the patch I gave you:
+> 
+>  #ifndef irqentry_state
+>  typedef struct irqentry_state {
+>  	bool    exit_rcu;
+> +       bool    lockdep;
+>  } irqentry_state_t;
+>  #endif
+> 
+> How is that a union?
 
-Is documentation not enough?
+I was proposing to make it a union.
 
-I have recently wrote my first KUnit test and I found documentation pretty good
-for the start. I think we actually need more complex examples in the code (and
-useful).
+> 
+> > But then when the pkrs stuff is added the union changes back to a structure and
+> > looks like this.
+> 
+> So you want:
+> 
+>   1) Move stuff to struct irqentry_state (my patch)
+> 
+>   2) Change it to a union and pass it as pointer at the same time
 
-So, I'm in doubt these test are a good point to start with.
+No, I would have made it a union in your patch.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Pass by reference would remain largely the same.
 
+> 
+>   3) Change it back to struct to add PKRS
 
+Yes.  :-/
+
+> 
+> > Is that clear?
+> 
+> What's clear is that the above is nonsense. We can just do
+> 
+>  #ifndef irqentry_state
+>  typedef struct irqentry_state {
+>  	union {
+>          	bool    exit_rcu;
+>                 bool    lockdep;
+>         };        
+>  } irqentry_state_t;
+>  #endif
+> 
+> right in the patch which I gave you. Because that actually makes sense.
+
+Ok I'm very sorry.  I was thinking that having a struct containing nothing but
+an anonymous union would be unacceptable as a stand alone item in your patch.
+In my experience other maintainers would have rejected such a change and
+would have asked; 'why not just make it a union'?
+
+I'm very happy skipping the gymnastics on individual patches in favor of making
+the whole series work out in the end.
+
+Thank you for your help again.  :-)
+
+Ira
