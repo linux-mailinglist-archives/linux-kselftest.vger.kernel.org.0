@@ -2,375 +2,437 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90637294155
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Oct 2020 19:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A452941DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Oct 2020 20:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390954AbgJTRXh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Oct 2020 13:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S2408943AbgJTSFm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Oct 2020 14:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390905AbgJTRXh (ORCPT
+        with ESMTP id S1728578AbgJTSFm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Oct 2020 13:23:37 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294E6C0613D1
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 10:23:37 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id 13so2649800wmf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 10:23:37 -0700 (PDT)
+        Tue, 20 Oct 2020 14:05:42 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2B1C0613CE
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 11:05:41 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id l16so3545878ilj.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 11:05:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aHul1OxumjXdzLDFboabsxgP+T8wu9OYStK55aNunxk=;
-        b=HwMoGSohPzWVlNfG4Z/+SYlX1rZDSqxxQkRj94FVYgfvOBuVCInBTS8uEIKoC0PW6P
-         YWkueLP9ZP9VKntRpePZK+VOUMB5ZFjLrZojLdqOBZIdZJNrF511bV5Ng2y08AI3Uq3E
-         Xld/Qn4WCDjyuitZz+sRaDNQZZ6m7cMmLWM0SDt204ZrBmAkavhUQidDAJ2GUMrxIPst
-         vhCw6B5zEPRWJDNbc2gMJ6mGLl2ISM2E9gLEdrFFVawnSFBux7ujvkBsR1PCb7yUt9+x
-         eUE/aW0NgOGxTDpI0KYlnSkq7Oy2XoqyrOJE8KZQuC0UUW/OBa5RLI9bVw7GYyrLYSwu
-         DHKA==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=r82QmIbFF2xFdXg/o0KpezumP1MatOfRuk9pVxv+U4s=;
+        b=hpVCgt8KtuPblM0JNOiebIXuyI9GZhrskkMVpYo+AWlKO7XwwT0xu79OidGe72ywd0
+         abdzkeofBn4vuG7Vwm6Rte07Ca8d2QntF0e1QWMWjpXQuGBYJf8OBhhE8LPGF6/eXfc0
+         M+e9UePYZ+KUWF5zqV4B/+DWB9YIfKvkFibtEZ+5CJ5pDAKxrxRY/rdQx+BY7KCfD95v
+         icKX39ZFPkG+7yx8vAYSEN+i3bnQ1y9bj3Y0KoYI9gWzraR0oTe71XUq8I7qpS81i/4Y
+         +kddmlYJUYC/F8dIzdAnTAjaorqu5XkAW8J+0H8A27ZeF1IMN7NzcJrucmFa81X6c9QX
+         ZtUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aHul1OxumjXdzLDFboabsxgP+T8wu9OYStK55aNunxk=;
-        b=NZ3zcC7mFCvkrmXf7hC+MxB2ALULCy/vARfHxrPWudmRoGP6qCxnipvJ8pVmGleTr5
-         lmt1DljJu8mvT8gxf70/tf8lGp78NbjIcH+P2/cbDNPar3vgyh0wSFnJSZcniTRR5kVW
-         cI4ztL0ljD4+kMrRpg5GPArFrAFYu4GHdtV+98JySrFcOBcMCwVQfwcKwgywRBZHvdFe
-         7Yvu8H4IwwXolTZv99ba9NMMzgBeLypiI0Sgj8n78+wQ++P1jMe5lTwEHig6zPDHwr3A
-         BiQXcli+DTqLwp9WFZjmqPFcnugvW0jRdKdx44TuIgWppj/+C4/CrRCIPXfpKb5JBaFd
-         xExw==
-X-Gm-Message-State: AOAM533jXhjmJD7sd3oVTOpDofDhqYnSKKDuu2vX0jozNvQVsDJBqfOi
-        iFU7MJ/3gs+Grl4J7YRMu+dXbtPSzoGFEDlMV7YPaxgOLv8=
-X-Google-Smtp-Source: ABdhPJyBz8fiCvV4lgzvnRTjIxDLzCtl8EGS2CXkKOerO4VVgWpe8sC2tT8oe6pv8aiQhwhb9gUHlr6JLMqrbzinG7A=
-X-Received: by 2002:a1c:2cc2:: with SMTP id s185mr4136218wms.77.1603214615616;
- Tue, 20 Oct 2020 10:23:35 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=r82QmIbFF2xFdXg/o0KpezumP1MatOfRuk9pVxv+U4s=;
+        b=Y+GwcHv6+AnBAvelr1niyUEjn+TgSVfYJ8hYnE7Lr/xx/680pGp7wS7KxR+iwjLud9
+         nlXgSsJcMsgKy+A6ir43CDNLOYxET0Um6B369NBFOElQ0TIKlHeLSQduMFV0YKgkoJhe
+         MFq5F0gmKahgqyuVlq9ex8ZtR/S0aAcVe+jKOkFD1QILDEVLnMw6egWQemFTl3wFjlob
+         /ZukJ3UN0uvVs/Z9scu2rRyMOixGc/pl8EErYmH1K8F1sLn8aeB2plhl0oMkdEK/flew
+         yl3CfHj6fHkPr80qn7Zqk4NMA8LGu7ZgzjJlASnxe60gzQrYJwBLdeiYXB4sTQD+f1b+
+         B0LQ==
+X-Gm-Message-State: AOAM530bkHEo34lZv2D8tuWNN8bBQv+Z3Rk2topb89AmGUfQb8GvFjkf
+        jduZDBKuRV52SY0hALf4iiDbJEOBiBOtZhQfOcpkrg==
+X-Google-Smtp-Source: ABdhPJx/xkusFUQ/PyeJLvJ0hdsIzn5vTNv6CVzc+adHtzV6cn1+Z6skT3dhIkI4lIJVMUqzPCEGgRhhjLVmpvuzKzw=
+X-Received: by 2002:a92:9944:: with SMTP id p65mr2845837ili.127.1603217139924;
+ Tue, 20 Oct 2020 11:05:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201015170217.291916-1-vitor@massaru.org>
-In-Reply-To: <20201015170217.291916-1-vitor@massaru.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 20 Oct 2020 10:23:24 -0700
-Message-ID: <CAP-5=fV+4GijgjEPCqPZDL77HtqBO=tGzrt-PNiiO1d1xDS4kA@mail.gmail.com>
-Subject: Re: [PATCH v3] lib: kunit: add test_min_heap test conversion to KUnit
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 20 Oct 2020 23:35:28 +0530
+Message-ID: <CA+G9fYs7YLWx=90425onuwZU8WOLWwpH4T9EQgv0b9Y3tiPe=w@mail.gmail.com>
+Subject: BUG: unable to handle page fault for address - PF: supervisor read
+ access in kernel mode
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Netdev <netdev@vger.kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, linux-mm <linux-mm@kvack.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Chris Down <chris@chrisdown.name>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 10:02 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
->
-> This adds the conversion of the runtime tests of test_min_heap,
-> from `lib/test_min_heap.c` to KUnit tests.
->
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+while running selftests net icmp_redirect.sh the following crash noticed on
+x86_64 on linux-next master.
 
-Acked-by: Ian Rogers <irogers@google.com>
+BUG: unable to handle page fault for address: ffff9c00302d7872
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 2c401067 P4D 2c401067 PUD 0
+Oops: 0000 [#1] SMP PTI
+CPU: 1 PID: 887 Comm: ip Tainted: G        W     K   5.9.0-next-20201016 #1
+Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS 2.0b 07/27/2017
+RIP: 0010:__kmalloc_track_caller+0x100/0x340
 
-Thanks,
-Ian
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-> ---
->   v2:
->     * change Kconfig entries to be more adherent to KUnit documentation,
->       min_heap test runs when enabling full test coverage (KUNIT_ALL_TESTS).
->     * make kconfig help more concise;
->     * fix KUNIT_TEST sufix;
->   v3:
->     * change KUNIT_EXPECT_FALSE_MSG for KUNIT_EXPECT_LE and KUNIT_EXPECT_GE
->       where they are applicable;
-> ---
->  lib/Kconfig.debug                         |  24 +++--
->  lib/Makefile                              |   2 +-
->  lib/{test_min_heap.c => min_heap_kunit.c} | 111 +++++++++++-----------
->  3 files changed, 72 insertions(+), 65 deletions(-)
->  rename lib/{test_min_heap.c => min_heap_kunit.c} (62%)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 4f09c6505a2e..0e10ef1176de 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1915,16 +1915,6 @@ config TEST_LIST_SORT
->
->           If unsure, say N.
->
-> -config TEST_MIN_HEAP
-> -       tristate "Min heap test"
-> -       depends on DEBUG_KERNEL || m
-> -       help
-> -         Enable this to turn on min heap function tests. This test is
-> -         executed only once during system boot (so affects only boot time),
-> -         or at module load time.
-> -
-> -         If unsure, say N.
-> -
->  config TEST_SORT
->         tristate "Array-based sort test"
->         depends on DEBUG_KERNEL || m
-> @@ -2256,6 +2246,20 @@ config BITS_TEST
->
->           If unsure, say N.
->
-> +config MIN_HEAP_KUNIT_TEST
-> +       tristate "KUnit test for Min heap" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         Enable this to turn on min heap function tests. This test is
-> +         executed only once during system boot (so affects only boot time),
-> +         or at module load time.
-> +
-> +         For more information on KUnit and unit tests in general please refer
-> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +         If unsure, say N.
-> +
->  config TEST_UDELAY
->         tristate "udelay test driver"
->         help
-> diff --git a/lib/Makefile b/lib/Makefile
-> index d862d41fdc3d..03d12e672cf8 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -68,7 +68,6 @@ CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
->  UBSAN_SANITIZE_test_ubsan.o := y
->  obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
->  obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
-> -obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
->  obj-$(CONFIG_TEST_LKM) += test_module.o
->  obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
->  obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
-> @@ -343,3 +342,4 @@ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
->  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
->  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
->  obj-$(CONFIG_BITS_TEST) += test_bits.o
-> +obj-$(CONFIG_MIN_HEAP_KUNIT_TEST) += min_heap_kunit.o
-> diff --git a/lib/test_min_heap.c b/lib/min_heap_kunit.c
-> similarity index 62%
-> rename from lib/test_min_heap.c
-> rename to lib/min_heap_kunit.c
-> index d19c8080fd4d..97c5771f2b5e 100644
-> --- a/lib/test_min_heap.c
-> +++ b/lib/min_heap_kunit.c
-> @@ -7,9 +7,8 @@
->
->  #include <linux/log2.h>
->  #include <linux/min_heap.h>
-> -#include <linux/module.h>
-> -#include <linux/printk.h>
->  #include <linux/random.h>
-> +#include <kunit/test.h>
->
->  static __init bool less_than(const void *lhs, const void *rhs)
->  {
-> @@ -29,37 +28,28 @@ static __init void swap_ints(void *lhs, void *rhs)
->         *(int *)rhs = temp;
->  }
->
-> -static __init int pop_verify_heap(bool min_heap,
-> +static __init void pop_verify_heap(struct kunit *context,
-> +                               bool min_heap,
->                                 struct min_heap *heap,
->                                 const struct min_heap_callbacks *funcs)
->  {
->         int *values = heap->data;
-> -       int err = 0;
->         int last;
->
->         last = values[0];
->         min_heap_pop(heap, funcs);
->         while (heap->nr > 0) {
->                 if (min_heap) {
-> -                       if (last > values[0]) {
-> -                               pr_err("error: expected %d <= %d\n", last,
-> -                                       values[0]);
-> -                               err++;
-> -                       }
-> +            KUNIT_EXPECT_LE(context, last, values[0]);
->                 } else {
-> -                       if (last < values[0]) {
-> -                               pr_err("error: expected %d >= %d\n", last,
-> -                                       values[0]);
-> -                               err++;
-> -                       }
-> +            KUNIT_EXPECT_GE(context, last, values[0]);
->                 }
->                 last = values[0];
->                 min_heap_pop(heap, funcs);
->         }
-> -       return err;
->  }
->
-> -static __init int test_heapify_all(bool min_heap)
-> +static __init void test_heapify_all(struct kunit *context, bool min_heap)
->  {
->         int values[] = { 3, 1, 2, 4, 0x8000000, 0x7FFFFFF, 0,
->                          -3, -1, -2, -4, 0x8000000, 0x7FFFFFF };
-> @@ -73,12 +63,11 @@ static __init int test_heapify_all(bool min_heap)
->                 .less = min_heap ? less_than : greater_than,
->                 .swp = swap_ints,
->         };
-> -       int i, err;
-> +       int i;
->
->         /* Test with known set of values. */
->         min_heapify_all(&heap, &funcs);
-> -       err = pop_verify_heap(min_heap, &heap, &funcs);
-> -
-> +       pop_verify_heap(context, min_heap, &heap, &funcs);
->
->         /* Test with randomly generated values. */
->         heap.nr = ARRAY_SIZE(values);
-> @@ -86,12 +75,10 @@ static __init int test_heapify_all(bool min_heap)
->                 values[i] = get_random_int();
->
->         min_heapify_all(&heap, &funcs);
-> -       err += pop_verify_heap(min_heap, &heap, &funcs);
-> -
-> -       return err;
-> +       pop_verify_heap(context, min_heap, &heap, &funcs);
->  }
->
-> -static __init int test_heap_push(bool min_heap)
-> +static __init void test_heap_push(struct kunit *context, bool min_heap)
->  {
->         const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
->                              -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
-> @@ -106,25 +93,22 @@ static __init int test_heap_push(bool min_heap)
->                 .less = min_heap ? less_than : greater_than,
->                 .swp = swap_ints,
->         };
-> -       int i, temp, err;
-> +       int i, temp;
->
->         /* Test with known set of values copied from data. */
->         for (i = 0; i < ARRAY_SIZE(data); i++)
->                 min_heap_push(&heap, &data[i], &funcs);
-> -
-> -       err = pop_verify_heap(min_heap, &heap, &funcs);
-> +       pop_verify_heap(context, min_heap, &heap, &funcs);
->
->         /* Test with randomly generated values. */
->         while (heap.nr < heap.size) {
->                 temp = get_random_int();
->                 min_heap_push(&heap, &temp, &funcs);
->         }
-> -       err += pop_verify_heap(min_heap, &heap, &funcs);
-> -
-> -       return err;
-> +       pop_verify_heap(context, min_heap, &heap, &funcs);
->  }
->
-> -static __init int test_heap_pop_push(bool min_heap)
-> +static __init void test_heap_pop_push(struct kunit *context, bool min_heap)
->  {
->         const int data[] = { 3, 1, 2, 4, 0x80000000, 0x7FFFFFFF, 0,
->                              -3, -1, -2, -4, 0x80000000, 0x7FFFFFFF };
-> @@ -139,7 +123,7 @@ static __init int test_heap_pop_push(bool min_heap)
->                 .less = min_heap ? less_than : greater_than,
->                 .swp = swap_ints,
->         };
-> -       int i, temp, err;
-> +       int i, temp;
->
->         /* Fill values with data to pop and replace. */
->         temp = min_heap ? 0x80000000 : 0x7FFFFFFF;
-> @@ -149,8 +133,7 @@ static __init int test_heap_pop_push(bool min_heap)
->         /* Test with known set of values copied from data. */
->         for (i = 0; i < ARRAY_SIZE(data); i++)
->                 min_heap_pop_push(&heap, &data[i], &funcs);
-> -
-> -       err = pop_verify_heap(min_heap, &heap, &funcs);
-> +       pop_verify_heap(context, min_heap, &heap, &funcs);
->
->         heap.nr = 0;
->         for (i = 0; i < ARRAY_SIZE(data); i++)
-> @@ -161,34 +144,54 @@ static __init int test_heap_pop_push(bool min_heap)
->                 temp = get_random_int();
->                 min_heap_pop_push(&heap, &temp, &funcs);
->         }
-> -       err += pop_verify_heap(min_heap, &heap, &funcs);
-> +       pop_verify_heap(context, min_heap, &heap, &funcs);
-> +}
->
-> -       return err;
-> +static void __init test_heapify_all_true(struct kunit *context)
-> +{
-> +       test_heapify_all(context, true);
->  }
->
-> -static int __init test_min_heap_init(void)
-> +static void __init test_heapify_all_false(struct kunit *context)
->  {
-> -       int err = 0;
-> -
-> -       err += test_heapify_all(true);
-> -       err += test_heapify_all(false);
-> -       err += test_heap_push(true);
-> -       err += test_heap_push(false);
-> -       err += test_heap_pop_push(true);
-> -       err += test_heap_pop_push(false);
-> -       if (err) {
-> -               pr_err("test failed with %d errors\n", err);
-> -               return -EINVAL;
-> -       }
-> -       pr_info("test passed\n");
-> -       return 0;
-> +       test_heapify_all(context, true);
-> +}
-> +
-> +static void __init test_heap_push_true(struct kunit *context)
-> +{
-> +       test_heap_push(context, true);
-> +}
-> +
-> +static void __init test_heap_push_false(struct kunit *context)
-> +{
-> +       test_heap_push(context, false);
->  }
-> -module_init(test_min_heap_init);
->
-> -static void __exit test_min_heap_exit(void)
-> +static void __init test_heap_pop_push_true(struct kunit *context)
->  {
-> -       /* do nothing */
-> +       test_heap_pop_push(context, true);
->  }
-> -module_exit(test_min_heap_exit);
-> +
-> +static void __init test_heap_pop_push_false(struct kunit *context)
-> +{
-> +       test_heap_pop_push(context, false);
-> +}
-> +
-> +static struct kunit_case __refdata min_heap_test_cases[] = {
-> +       KUNIT_CASE(test_heapify_all_true),
-> +       KUNIT_CASE(test_heapify_all_false),
-> +       KUNIT_CASE(test_heap_push_true),
-> +       KUNIT_CASE(test_heap_push_false),
-> +       KUNIT_CASE(test_heap_pop_push_true),
-> +       KUNIT_CASE(test_heap_pop_push_false),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite min_heap_test_suite = {
-> +       .name = "min-heap",
-> +       .test_cases = min_heap_test_cases,
-> +};
-> +
-> +kunit_test_suites(&min_heap_test_suite);
->
->  MODULE_LICENSE("GPL");
->
-> base-commit: d2585f5164c298aaaed14c2c8d313cbe7bd5b253
-> --
-> 2.26.2
->
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: b2926c108f9fd225d3fe9ea73fb5c35f48735d20
+  git describe: next-20201016
+  make_kernelversion: 5.9.0
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/881/config
+
+steps to reproduce:
+----------------------------
+# cd /opt/kselftests/default-in-kernel/
+# ./run_kselftest.sh -t net:icmp_redirect.sh
+
+crash log:
+----------
+# selftests: net: icmp_redirect.sh
+<trim>
+[ 1062.257877] eth0: renamed from r1h1
+[ 1062.311218] eth0: renamed from r2h1
+[ 1062.321114] device eth1 left promiscuous mode
+[ 1062.325655] br0: port 2(eth1) entered disabled state
+[ 1062.325671] audit: type=1700 audit(1602906729.931:89088): dev=eth1
+prom=0 old_prom=256 auid=4294967295 uid=0 gid=0 ses=4294967295
+[ 1062.353160] device eth0 left promiscuous mode
+[ 1062.357640] br0: port 1(eth0) entered disabled state
+[ 1062.357707] audit: type=1700 audit(1602906729.963:89089): dev=eth0
+prom=0 old_prom=256 auid=4294967295 uid=0 gid=0 ses=4294967295
+[ 1062.506822] eth2: renamed from r2h2
+[ 1062.516999] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+[ 1062.529632] BUG: unable to handle page fault for address: ffff9c00302d7872
+[ 1062.536516] #PF: supervisor read access in kernel mode
+[ 1062.541655] #PF: error_code(0x0000) - not-present page
+[ 1062.546786] PGD 2c401067 P4D 2c401067 PUD 0
+[ 1062.551058] Oops: 0000 [#1] SMP PTI
+[ 1062.554544] CPU: 1 PID: 887 Comm: ip Tainted: G        W     K
+5.9.0-next-20201016 #1
+[ 1062.562540] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[ 1062.570013] RIP: 0010:__kmalloc_track_caller+0x100/0x340
+[ 1062.575325] Code: 4d 8b 04 24 65 49 8b 50 08 65 4c 03 05 01 70 20
+4a 49 8b 00 48 85 c0 48 89 45 c8 0f 84 ba 01 00 00 41 8b 4c 24 28 49
+8b 3c 24 <48> 8b 1c 08 48 8d 4a 01 65 48 0f c7 0f 0f 94 c0 84 c0 74 c2
+41 8b
+[ 1062.594070] RSP: 0018:ffffb83c009f3ce8 EFLAGS: 00010286
+[ 1062.599296] RAX: ffff9c00302d7872 RBX: 0000000000000cc0 RCX: 0000000000000000
+[ 1062.606420] RDX: 000000000031bfb3 RSI: 0000000000000cc0 RDI: 000000000002f2d0
+[ 1062.613544] RBP: ffffb83c009f3d28 R08: ffff9c541fcaf2d0 R09: 0000000000000000
+[ 1062.620666] R10: ffffb83c009f3b98 R11: 0000000000000246 R12: ffff9c50c0042e00
+[ 1062.627791] R13: 0000000000000cc0 R14: 0000000000000005 R15: ffffffffb5da0814
+[ 1062.634917] FS:  00007f74b53d9440(0000) GS:ffff9c541fc80000(0000)
+knlGS:0000000000000000
+[ 1062.642999] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1062.648738] CR2: ffff9c00302d7872 CR3: 0000000105d3e002 CR4: 00000000003706e0
+[ 1062.655861] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1062.662984] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1062.670109] Call Trace:
+[ 1062.672558]  kstrdup+0x31/0x60
+[ 1062.675616]  kstrdup_const+0x24/0x30
+[ 1062.679193]  alloc_vfsmnt+0x64/0x1a0
+[ 1062.682774]  clone_mnt+0x36/0x2f0
+[ 1062.686092]  copy_tree+0x12e/0x390
+[ 1062.689498]  copy_mnt_ns+0xb5/0x380
+[ 1062.692983]  create_new_namespaces+0x61/0x2c0
+[ 1062.697340]  unshare_nsproxy_namespaces+0x5a/0xb0
+[ 1062.702040]  ksys_unshare+0x1e5/0x370
+[ 1062.705704]  __x64_sys_unshare+0x12/0x20
+[ 1062.709631]  do_syscall_64+0x37/0x50
+[ 1062.713208]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[ 1062.718256] RIP: 0033:0x7f74b46d4d27
+[ 1062.721831] Code: 73 01 c3 48 8b 0d 71 a1 2b 00 f7 d8 64 89 01 48
+83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 10 01 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 41 a1 2b 00 f7 d8 64 89
+01 48
+[ 1062.740569] RSP: 002b:00007fff74b0dbb8 EFLAGS: 00000206 ORIG_RAX:
+0000000000000110
+[ 1062.748135] RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007f74b46d4d27
+[ 1062.755257] RDX: 0000000000080000 RSI: 0000000040000000 RDI: 0000000000020000
+[ 1062.762380] RBP: 00007fff74b11c45 R08: 0000000000000002 R09: 0000000000000000
+[ 1062.769504] R10: 0000000000000358 R11: 0000000000000206 R12: 00007fff74b10ec8
+[ 1062.776628] R13: 0000000000470deb R14: 00007fff74b11c3b R15: 00007fff74b10ed0
+[ 1062.783757] Modules linked in: ip6table_mangle mpls_iptunnel
+mpls_router sch_etf ip6table_filter xt_conntrack nf_conntrack
+nf_defrag_ipv4 libcrc32c ip6_tables nf_defrag_ipv6 iptable_filter
+ip_tables netdevsim vrf 8021q bridge stp llc sch_fq sch_ingress veth
+algif_hash x86_pkg_temp_thermal fuse [last unloaded:
+test_blackhole_dev]
+[ 1062.812840] CR2: ffff9c00302d7872
+[ 1062.816158] ---[ end trace 47c4f9ef0796b428 ]---
+[ 1062.820769] RIP: 0010:__kmalloc_track_caller+0x100/0x340
+[ 1062.826081] Code: 4d 8b 04 24 65 49 8b 50 08 65 4c 03 05 01 70 20
+4a 49 8b 00 48 85 c0 48 89 45 c8 0f 84 ba 01 00 00 41 8b 4c 24 28 49
+8b 3c 24 <48> 8b 1c 08 48 8d 4a 01 65 48 0f c7 0f 0f 94 c0 84 c0 74 c2
+41 8b
+[ 1062.844817] RSP: 0018:ffffb83c009f3ce8 EFLAGS: 00010286
+[ 1062.850033] RAX: ffff9c00302d7872 RBX: 0000000000000cc0 RCX: 0000000000000000
+[ 1062.857158] RDX: 000000000031bfb3 RSI: 0000000000000cc0 RDI: 000000000002f2d0
+[ 1062.864284] RBP: ffffb83c009f3d28 R08: ffff9c541fcaf2d0 R09: 0000000000000000
+[ 1062.871415] R10: ffffb83c009f3b98 R11: 0000000000000246 R12: ffff9c50c0042e00
+[ 1062.878540] R13: 0000000000000cc0 R14: 0000000000000005 R15: ffffffffb5da0814
+[ 1062.885662] FS:  00007f74b53d9440(0000) GS:ffff9c541fc80000(0000)
+knlGS:0000000000000000
+[ 1062.893740] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1062.899475] CR2: ffff9c00302d7872 CR3: 0000000105d3e002 CR4: 00000000003706e0
+[ 1062.906600] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1062.913726] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1062.920850] BUG: sleeping function called from invalid context at
+/usr/src/kernel/include/linux/percpu-rwsem.h:49
+[ 1062.931101] in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid:
+887, name: ip
+[ 1062.938485] INFO: lockdep is turned off.
+[ 1062.942403] irq event stamp: 2686
+[ 1062.945715] hardirqs last  enabled at (2685): [<ffffffffb6aef301>]
+_raw_spin_unlock_irqrestore+0x31/0x40
+[ 1062.955186] hardirqs last disabled at (2686): [<ffffffffb6adfb31>]
+irqentry_enter+0x21/0x50
+[ 1062.963522] softirqs last  enabled at (1978): [<ffffffffb6755555>]
+release_sock+0x85/0xb0
+[ 1062.971686] softirqs last disabled at (1976): [<ffffffffb67554ee>]
+release_sock+0x1e/0xb0
+[ 1062.979850] CPU: 1 PID: 887 Comm: ip Tainted: G      D W     K
+5.9.0-next-20201016 #1
+[ 1062.987841] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[ 1062.995310] Call Trace:
+[ 1062.997756]  dump_stack+0x7d/0x9f
+[ 1063.001066]  ___might_sleep+0x163/0x250
+[ 1063.004897]  __might_sleep+0x4a/0x80
+[ 1063.008469]  exit_signals+0x33/0x2f0
+[ 1063.012047]  do_exit+0xa9/0xcb0
+[ 1063.015185]  rewind_stack_do_exit+0x17/0x20
+[ 1063.019369] RIP: 0033:0x7f74b46d4d27
+[ 1063.022941] Code: 73 01 c3 48 8b 0d 71 a1 2b 00 f7 d8 64 89 01 48
+83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 10 01 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 41 a1 2b 00 f7 d8 64 89
+01 48
+[ 1063.041677] RSP: 002b:00007fff74b0dbb8 EFLAGS: 00000206 ORIG_RAX:
+0000000000000110
+[ 1063.049233] RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007f74b46d4d27
+[ 1063.056359] RDX: 0000000000080000 RSI: 0000000040000000 RDI: 0000000000020000
+[ 1063.063483] RBP: 00007fff74b11c45 R08: 0000000000000002 R09: 0000000000000000
+[ 1063.070614] R10: 0000000000000358 R11: 0000000000000206 R12: 00007fff74b10ec8
+[ 1063.077739] R13: 0000000000470deb R14: 00007fff74b11c3b R15: 00007fff74b10ed0
+# ./icmp_redirect.sh: line 165:   887 Killed                  ip
+-netns r1 li add eth1 type veth peer name r2r1
+[ 1067.354852] BUG: unable to handle page fault for address: ffff9c00302d7872
+[ 1067.361741] #PF: supervisor read access in kernel mode
+[ 1067.361742] #PF: error_code(0x0000) - not-present page
+[ 1067.361743] PGD 2c401067 P4D 2c401067 PUD 0
+[ 1067.361746] Oops: 0000 [#2] SMP PTI
+[ 1067.361747] CPU: 1 PID: 332 Comm: systemd-journal Tainted: G      D
+W     K   5.9.0-next-20201016 #1
+[ 1067.361748] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[ 1067.361751] RIP: 0010:__kmalloc_track_caller+0x100/0x340
+[ 1067.361753] Code: 4d 8b 04 24 65 49 8b 50 08 65 4c 03 05 01 70 20
+4a 49 8b 00 48 85 c0 48 89 45 c8 0f 84 ba 01 00 00 41 8b 4c 24 28 49
+8b 3c 24 <48> 8b 1c 08 48 8d 4a 01 65 48 0f c7 0f 0f 94 c0 84 c0 74 c2
+41 8b
+[ 1067.361754] RSP: 0018:ffffb83c00ca7ad8 EFLAGS: 00010286
+[ 1067.361755] RAX: ffff9c00302d7872 RBX: 0000000000000a20 RCX: 0000000000000000
+[ 1067.361755] RDX: 000000000031bfb3 RSI: 0000000000000a20 RDI: 000000000002f2d0
+[ 1067.361756] RBP: ffffb83c00ca7b18 R08: ffff9c541fcaf2d0 R09: 0000000000000000
+[ 1067.361757] R10: ffffffffb884f560 R11: ffffb83c00ca7dd8 R12: ffff9c50c0042e00
+[ 1067.361757] R13: 0000000000000a20 R14: 0000000000000007 R15: ffffffffb603d886
+[ 1067.361758] FS:  00007f0aa293b480(0000) GS:ffff9c541fc80000(0000)
+knlGS:0000000000000000
+[ 1067.361759] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1067.361760] CR2: ffff9c00302d7872 CR3: 00000001040e2006 CR4: 00000000003706e0
+[ 1067.361761] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1067.361761] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1067.361762] Call Trace:
+[ 1067.361766]  kmemdup+0x20/0x50
+[ 1067.361769]  security_sid_to_context_core+0x86/0x290
+[ 1067.361771]  ? __might_fault+0x79/0x80
+[ 1067.361774]  security_sid_to_context+0x14/0x20
+[ 1067.515084]  selinux_secid_to_secctx+0x1d/0x20
+[ 1067.519522]  security_secid_to_secctx+0x41/0x60
+[ 1067.524054]  unix_dgram_recvmsg+0x46b/0x600
+[ 1067.528241]  ? lock_release+0xcf/0x270
+[ 1067.531995]  sock_recvmsg+0x6d/0x70
+[ 1067.535486]  ____sys_recvmsg+0x9b/0x1b0
+[ 1067.539325]  ? import_iovec+0x1b/0x20
+[ 1067.542989]  ? copy_msghdr_from_user+0x60/0x90
+[ 1067.547426]  ? avc_has_perm+0x139/0x2b0
+[ 1067.551259]  ___sys_recvmsg+0x8c/0xd0
+[ 1067.554923]  ? sock_ioctl+0x280/0x3c0
+[ 1067.558580]  ? file_has_perm+0xc6/0xd0
+[ 1067.562324]  ? sock_ioctl+0x280/0x3c0
+[ 1067.565984]  __sys_recvmsg+0x66/0xb0
+[ 1067.569561]  ? __sys_recvmsg+0x66/0xb0
+[ 1067.573307]  ? do_syscall_64+0x13/0x50
+[ 1067.577058]  __x64_sys_recvmsg+0x1f/0x30
+[ 1067.580975]  do_syscall_64+0x37/0x50
+[ 1067.584547]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[ 1067.589602] RIP: 0033:0x7f0aa20e26a7
+[ 1067.593179] Code: 44 00 00 41 54 41 89 d4 55 48 89 f5 53 89 fb 48
+83 ec 10 e8 8b eb ff ff 44 89 e2 48 89 ee 89 df 41 89 c0 b8 2f 00 00
+00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 48 89 44 24 08 e8 c4 eb ff
+ff 48
+[ 1067.611924] RSP: 002b:00007ffec379aca0 EFLAGS: 00000293 ORIG_RAX:
+000000000000002f
+[ 1067.619487] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f0aa20e26a7
+[ 1067.626611] RDX: 0000000040000040 RSI: 00007ffec379ad10 RDI: 0000000000000004
+[ 1067.633737] RBP: 00007ffec379ad10 R08: 0000000000000000 R09: 000000000000042a
+[ 1067.640867] R10: 00000000ffffffff R11: 0000000000000293 R12: 0000000040000040
+[ 1067.647993] R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000000
+[ 1067.655118] Modules linked in: ip6table_mangle mpls_iptunnel
+mpls_router sch_etf ip6table_filter xt_conntrack nf_conntrack
+nf_defrag_ipv4 libcrc32c ip6_tables nf_defrag_ipv6 iptable_filter
+ip_tables netdevsim vrf 8021q bridge stp llc sch_fq sch_ingress veth
+algif_hash x86_pkg_temp_thermal fuse [last unloaded:
+test_blackhole_dev]
+[ 1067.684200] CR2: ffff9c00302d7872
+[ 1067.687511] ---[ end trace 47c4f9ef0796b429 ]---
+[ 1067.692123] RIP: 0010:__kmalloc_track_caller+0x100/0x340
+[ 1067.697425] Code: 4d 8b 04 24 65 49 8b 50 08 65 4c 03 05 01 70 20
+4a 49 8b 00 48 85 c0 48 89 45 c8 0f 84 ba 01 00 00 41 8b 4c 24 28 49
+8b 3c 24 <48> 8b 1c 08 48 8d 4a 01 65 48 0f c7 0f 0f 94 c0 84 c0 74 c2
+41 8b
+[ 1067.716163] RSP: 0018:ffffb83c009f3ce8 EFLAGS: 00010286
+[ 1067.721380] RAX: ffff9c00302d7872 RBX: 0000000000000cc0 RCX: 0000000000000000
+[ 1067.728505] RDX: 000000000031bfb3 RSI: 0000000000000cc0 RDI: 000000000002f2d0
+[ 1067.735629] RBP: ffffb83c009f3d28 R08: ffff9c541fcaf2d0 R09: 0000000000000000
+[ 1067.742753] R10: ffffb83c009f3b98 R11: 0000000000000246 R12: ffff9c50c0042e00
+[ 1067.749874] R13: 0000000000000cc0 R14: 0000000000000005 R15: ffffffffb5da0814
+[ 1067.756999] FS:  00007f0aa293b480(0000) GS:ffff9c541fc80000(0000)
+knlGS:0000000000000000
+[ 1067.765078] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1067.770813] CR2: ffff9c00302d7872 CR3: 00000001040e2006 CR4: 00000000003706e0
+[ 1067.777938] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1067.785060] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1067.792185] BUG: sleeping function called from invalid context at
+/usr/src/kernel/include/linux/percpu-rwsem.h:49
+[ 1067.802429] in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid:
+332, name: systemd-journal
+[ 1067.810941] INFO: lockdep is turned off.
+[ 1067.814859] irq event stamp: 16046288
+[ 1067.818523] hardirqs last  enabled at (16046287):
+[<ffffffffb6aef8c7>] _raw_write_unlock_irq+0x27/0x40
+[ 1067.827816] hardirqs last disabled at (16046288):
+[<ffffffffb6ae8724>] __schedule+0x624/0x950
+[ 1067.836334] softirqs last  enabled at (16044926):
+[<ffffffffb6e00308>] __do_softirq+0x308/0x42a
+[ 1067.845018] softirqs last disabled at (16044919):
+[<ffffffffb6c00f82>] asm_call_irq_on_stack+0x12/0x20
+[ 1067.854316] CPU: 1 PID: 332 Comm: systemd-journal Tainted: G      D
+W     K   5.9.0-next-20201016 #1
+[ 1067.863432] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[ 1067.870903] Call Trace:
+[ 1067.873349]  dump_stack+0x7d/0x9f
+[ 1067.876668]  ___might_sleep+0x163/0x250
+[ 1067.880506]  __might_sleep+0x4a/0x80
+[ 1067.884078]  exit_signals+0x33/0x2f0
+[ 1067.887656]  do_exit+0xa9/0xcb0
+[ 1067.890796]  rewind_stack_do_exit+0x17/0x20
+[ 1067.894980] RIP: 0033:0x7f0aa20e26a7
+[ 1067.898551] Code: 44 00 00 41 54 41 89 d4 55 48 89 f5 53 89 fb 48
+83 ec 10 e8 8b eb ff ff 44 89 e2 48 89 ee 89 df 41 89 c0 b8 2f 00 00
+00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 48 89 44 24 08 e8 c4 eb ff
+ff 48
+[ 1067.917294] RSP: 002b:00007ffec379aca0 EFLAGS: 00000293 ORIG_RAX:
+000000000000002f
+[ 1067.924852] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f0aa20e26a7
+[ 1067.931975] RDX: 0000000040000040 RSI: 00007ffec379ad10 RDI: 0000000000000004
+[ 1067.939100] RBP: 00007ffec379ad10 R08: 0000000000000000 R09: 000000000000042a
+[ 1067.946224] R10: 00000000ffffffff R11: 0000000000000293 R12: 0000000040000040
+[ 1067.953348] R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000000
+[ 1067.961618] systemd[1]: systemd-journald.service: Service has no
+hold-off time, scheduling restart.
+[ 1067.970722] systemd[1]: systemd-journald.service: Scheduled restart
+job, restart counter is at 1.
+[ 1067.980063] systemd[1]: Stopped Flush Journal to Persistent Storage.
+[ 1067.986435] systemd[1]: Stopping Flush Journal to Persistent Storage...
+[ 1067.993060] systemd[1]: Stopped Journal Service.
+[ 1067.998163] audit: type=1334 audit(1602906735.603:89090):
+prog-id=43815 op=LOAD
+[ 1068.005571] audit: type=1334 audit(1602906735.611:89091):
+prog-id=43816 op=LOAD
+[ 1068.005978] systemd[1]: Starting Journal Service...
+[ 1068.014259] audit: type=1305 audit(1602906735.619:89092): op=set
+audit_enabled=1 old=1 auid=4294967295 ses=4294967295 subj=kernel res=1
+[ 1068.014935] systemd-journald[890]: File
+/run/log/journal/b58194f5bd004118b8471b91dd8d1ce6/system.journal
+corrupted or uncleanly shut down, renaming and replacing.
+[ 1068.044478] audit: type=1334 audit(1602906735.624:89093):
+prog-id=11 op=UNLOAD
+[ 1068.051740] audit: type=1334 audit(1602906735.624:89094):
+prog-id=10 op=UNLOAD
+[ 1068.072184] systemd[1]: Started Journal Service.
+[ 1068.077987] BUG: unable to handle page fault for address: ffff9c00302d7872
+[ 1068.084862] #PF: supervisor read access in kernel mode
+[ 1068.089991] #PF: error_code(0x0000) - not-present page
+[ 1068.095122] PGD 2c401067 P4D 2c401067 PUD 0
+[ 1068.099388] Oops: 0000 [#3] SMP PTI
+[ 1068.102873] CPU: 1 PID: 891 Comm: (urnalctl) Tainted: G      D W
+ K   5.9.0-next-20201016 #1
+[ 1068.111562] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[ 1068.119037] RIP: 0010:__kmalloc+0x100/0x330
+[ 1068.123220] Code: 4d 8b 04 24 65 49 8b 50 08 65 4c 03 05 a1 7a 20
+4a 49 8b 00 48 85 c0 48 89 45 c8 0f 84 bf 01 00 00 41 8b 4c 24 28 49
+8b 3c 24 <48> 8b 1c 08 48 8d 4a 01 65 48 0f c7 0f 0f 94 c0 84 c0 74 c2
+41 8b
+[ 1068.141958] RSP: 0018:ffffb83c00107e20 EFLAGS: 00010286
+[ 1068.147181] RAX: ffff9c00302d7872 RBX: 0000000000000cc0 RCX: 0000000000000000
+[ 1068.154307] RDX: 000000000031bfb3 RSI: 0000000000000cc0 RDI: 000000000002f2d0
+[ 1068.161431] RBP: ffffb83c00107e60 R08: ffff9c541fcaf2d0 R09: 0000000000000000
+[ 1068.168554] R10: 0000000000000000 R11: 0000000000000001 R12: ffff9c50c0042e00
+[ 1068.175678] R13: 0000000000000cc0 R14: 0000000000000005 R15: 0000000000000000
+[ 1068.182803] FS:  00007f31ad0f4840(0000) GS:ffff9c541fc80000(0000)
+knlGS:0000000000000000
+[ 1068.190880] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1068.196616] CR2: ffff9c00302d7872 CR3: 00000001040e2001 CR4: 00000000003706e0
+[ 1068.203740] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1068.210865] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1068.217986] Call Trace:
+[ 1068.220436]  ? kernfs_fop_write+0xcf/0x1c0
+[ 1068.224533]  kernfs_fop_write+0xcf/0x1c0
+[ 1068.228458]  vfs_write+0xed/0x240
+[ 1068.231768]  ksys_write+0xad/0xf0
+[ 1068.235080]  __x64_sys_write+0x1a/0x20
+[ 1068.238833]  do_syscall_64+0x37/0x50
+[ 1068.242411]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[ 1068.247456] RIP: 0033:0x7f31ab8ed177
+[ 1068.251033] Code: 0f 1f 00 41 54 49 89 d4 55 48 89 f5 53 89 fb 48
+83 ec 10 e8 5b ad 01 00 4c 89 e2 48 89 ee 89 df 41 89 c0 b8 01 00 00
+00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 48 89 44 24 08 e8 94 ad 01
+00 48
+[ 1068.269769] RSP: 002b:00007ffe1b95a340 EFLAGS: 00000293 ORIG_RAX:
+0000000000000001
+[ 1068.277327] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f31ab8ed177
+[ 1068.284451] RDX: 0000000000000004 RSI: 000055bf0a08e8f0 RDI: 0000000000000003
+[ 1068.291575] RBP: 000055bf0a08e8f0 R08: 0000000000000000 R09: 00007ffe1b95a2a5
+[ 1068.298700] R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000004
+[ 1068.305823] R13: 0000000000000004 R14: 00007f31abbb2760 R15: 0000000000000004
+[ 1068.312951] Modules linked in: ip6table_mangle mpls_iptunnel
+mpls_router sch_etf ip6table_filter xt_conntrack nf_conntrack
+nf_defrag_ipv4 libcrc32c ip6_tables nf_defrag_ipv6 iptable_filter
+ip_tables netdevsim vrf 8021q bridge stp llc sch_fq sch_ingress veth
+algif_hash x86_pkg_temp_thermal fuse [last unloaded:
+test_blackhole_dev]
+[ 1068.342031] CR2: ffff9c00302d7872
+[ 1068.345342] ---[ end trace 47c4f9ef0796b42a ]---
+[ 1068.349953] RIP: 0010:__kmalloc_track_caller+0x100/0x340
+
+ref:
+https://lkft.validation.linaro.org/scheduler/job/1851078#L11407
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
