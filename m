@@ -2,114 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8515294575
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 01:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47855294584
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 01:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405819AbgJTXcr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Oct 2020 19:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403818AbgJTXcq (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Oct 2020 19:32:46 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2FBC0613D3
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 16:32:46 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id y77so139346qkb.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 16:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=E9uxO3CjxUS2kC6NcJgLaAvLCBGXBzIc+1gLUHWGOek=;
-        b=LB2sZ/NbYi//qqW3C37gTvqG+ngqGM3cMsQL7BgMqthFE+/XGYKIwm9VoEns+T6E4W
-         XGddkM0BpRHry/DrBJpP7b/X9dx9M2VzQj/uKP5G1wN4Z85ffdRT8qQd1GBy8oBqKUog
-         IOy38cWVyhi9AGd1IqgWwBe2RJUNbyrIwSPuRQN2shBN+lPlQnXQGr6zSka+9BtzLfec
-         lROvUCuILrrCnXyf0naC8eozoMJdmir1bljgQMxOtCICZj/UGwJoP0dAWxGkyZgsjcc9
-         udLNzpyGCuYkp1UTfnIpt+pThW5mT2DVzz5dEzUHrwOVZdGPm1TV5YScWKNSzoFw0UQz
-         gGUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=E9uxO3CjxUS2kC6NcJgLaAvLCBGXBzIc+1gLUHWGOek=;
-        b=P5io1jxGiQptV3EstjphIoGKr6W5fOvIlmpTe9LZQbPnpz6zMgrC07j7eGedfI8mFa
-         36rNViVYq9kp4UndfYrxCfX9Qyi9CXyCXoNXn07MPusuFthS5NMXrwJmdX+/SzIg/l7L
-         /S7dA4skozT+XooN9SxbNAlBRgHN2Q6FQvPwK1zDQtSAobbwtPEFG6ulj798oTY1V/69
-         usakudE8lDTYRIB7qXxSMgw9N9+PDi5pd70IrOPT7ZRoIR6xJKnJDFi2Ww9zhU4QTVKw
-         3ptppL6+ghf8+sSTu/mzNBdWNUywuYpyJaiQ8H7A7qj8YYd/aJo1DbXI/gUsqX/YQ007
-         vr0Q==
-X-Gm-Message-State: AOAM531qgLQIDaUZ/unTTiUY2ClPeU8ToYKOx3+Uj0PDYYM+6zw4lARE
-        TX+cbSQ+Rjw7vfj3U5Syjp7guAwPcTa2tA==
-X-Google-Smtp-Source: ABdhPJws7EK3mtUONqq0sUL0LOCu+Y4SMSgouYWHDftgo5x/ed8PQNzB12o6a7vIUTNBQifWcHQJbcQfkDtOFw==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:a05:6214:184c:: with SMTP id
- d12mr266418qvy.11.1603236765716; Tue, 20 Oct 2020 16:32:45 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 16:32:19 -0700
-Message-Id: <20201020233219.4146059-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-Subject: [PATCH] kunit: tool: fix extra trailing \n in parsed test output
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S2410705AbgJTXva (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Oct 2020 19:51:30 -0400
+Received: from mga01.intel.com ([192.55.52.88]:63667 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2410704AbgJTXv3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Oct 2020 19:51:29 -0400
+IronPort-SDR: mi8NZ77TT/Tk1SmggqCiXCuu0PieNYKc4IGYhbz4mIjk45bQZ8k2dOdjE/MXNWICY5/4dQaut8
+ hqyvUUJRFWkA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="184942254"
+X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
+   d="scan'208";a="184942254"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:29 -0700
+IronPort-SDR: nEs4TcPqvAsVzoU7gLOU76mQKDtHTBJUPauQ4XCcyu/cYjEILn+ucS6anEdYnXJFRFYWRM/HnC
+ aUk1RIfnD1jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
+   d="scan'208";a="320833801"
+Received: from otcwcpicx6.sc.intel.com ([172.25.55.29])
+  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:28 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Shuah Khan" <shuah@kernel.org>,
+        "Reinette Chatre" <reinette.chatre@intel.com>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Babu Moger" <babu.moger@amd.com>,
+        "James Morse" <james.morse@arm.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ravi V Shankar" <ravi.v.shankar@intel.com>
+Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH v3 00/21] Miscellaneous fixes for resctrl selftests
+Date:   Tue, 20 Oct 2020 23:51:05 +0000
+Message-Id: <20201020235126.1871815-1-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.29.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For simplcity, strip all trailing whitespace from parsed output.
-I imagine no one is printing out meaningful trailing whitespace via
-KUNIT_FAIL() or similar, and that if they are, they really shouldn't.
+This patch set has several miscellaneous fixes to resctrl selftest tool
+that are easily visible to user. V1 had fixes to CAT test and CMT test
+but they were dropped in V2 because having them here made the patchset
+humongous. So, changes to CAT test and CMT test will be posted in another
+patchset.
 
-At some point, the lines from `isolate_kunit_output()` started having
-trailing \n, which results in artifacty output like this:
+Change Log:
+v3:
+Address various comments (commit messages, return value on test failure,
+print failure info on test failure etc) from Reinette and Tony.
+[v2: https://lore.kernel.org/linux-kselftest/cover.1589835155.git.sai.praneeth.prakhya@intel.com/]
 
-$ ./tools/testing/kunit/kunit.py run
-[16:16:46] [FAILED] example_simple_test
-[16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+v2:
+1. Dropped changes to CAT test and CMT test as they will be posted in a later
+   series.
+2. Added several other fixes
+[v1: https://lore.kernel.org/linux-kselftest/cover.1583657204.git.sai.praneeth.prakhya@intel.com/]
 
-[16:16:46]     Expected 1 + 1 == 3, but
+Fenghua Yu (18):
+  selftests/resctrl: Rename CQM test as CMT test
+  selftests/resctrl: Declare global variables as extern
+  selftests/resctrl: Return if resctrl file system is not supported
+  selftests/resctrl: Check for resctrl mount point only if resctrl FS is
+    supported
+  selftests/resctrl: Use resctrl/info for feature detection
+  selftests/resctrl: Fix missing options "-n" and "-p"
+  selftests/resctrl: Fix MBA/MBM results reporting format
+  selftests/resctrl: Abort running tests if not root user
+  selftests/resctrl: Enable gcc checks to detect buffer overflows
+  selftests/resctrl: Don't hard code value of "no_of_bits" variable
+  selftests/resctrl: Modularize resctrl test suite main() function
+  selftests/resctrl: Skip the test if requested resctrl feature is not
+    supported
+  selftests/resctrl: Umount resctrl FS only if mounted
+  selftests/resctrl: Unmount resctrl FS after running all tests
+  selftests/resctrl: Fix incorrect parsing of iMC counters
+  selftests/resctrl: Fix checking for < 0 for unsigned values
+  selftests/resctrl: Fix unnecessary usage of global variables
+  selftests/resctrl: Don't use global variable for capacity bitmask
+    (CBM)
 
-[16:16:46]         1 + 1 == 2
+Reinette Chatre (3):
+  selftests/resctrl: Fix typo
+  selftests/resctrl: Fix typo in help text
+  selftests/resctrl: Ensure sibling CPU is not same as original CPU
 
-[16:16:46]         3 == 3
+ tools/testing/selftests/resctrl/Makefile      |   2 +-
+ tools/testing/selftests/resctrl/README        |   4 +-
+ tools/testing/selftests/resctrl/cache.c       |   4 +-
+ tools/testing/selftests/resctrl/cat_test.c    |  20 +--
+ .../resctrl/{cqm_test.c => cmt_test.c}        |  34 ++--
+ tools/testing/selftests/resctrl/mba_test.c    |  23 ++-
+ tools/testing/selftests/resctrl/mbm_test.c    |  16 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  20 ++-
+ .../testing/selftests/resctrl/resctrl_tests.c | 156 ++++++++++++------
+ tools/testing/selftests/resctrl/resctrl_val.c |  75 ++++++---
+ tools/testing/selftests/resctrl/resctrlfs.c   |  79 ++++++---
+ 11 files changed, 272 insertions(+), 161 deletions(-)
+ rename tools/testing/selftests/resctrl/{cqm_test.c => cmt_test.c} (85%)
 
-[16:16:46]     not ok 1 - example_simple_test
-
-[16:16:46]
-
-After this change:
-[16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
-[16:16:46]     Expected 1 + 1 == 3, but
-[16:16:46]         1 + 1 == 2
-[16:16:46]         3 == 3
-[16:16:46]     not ok 1 - example_simple_test
-[16:16:46]
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_parser.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 8019e3dd4c32..e68b1c66a73f 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -342,7 +342,8 @@ def parse_run_tests(kernel_output) -> TestResult:
- 	total_tests = 0
- 	failed_tests = 0
- 	crashed_tests = 0
--	test_result = parse_test_result(list(isolate_kunit_output(kernel_output)))
-+	test_result = parse_test_result(list(
-+            l.rstrip() for l in isolate_kunit_output(kernel_output)))
- 	if test_result.status == TestStatus.NO_TESTS:
- 		print(red('[ERROR] ') + yellow('no tests run!'))
- 	elif test_result.status == TestStatus.FAILURE_TO_PARSE_TESTS:
-
-base-commit: c4d6fe7311762f2e03b3c27ad38df7c40c80cc93
 -- 
-2.29.0.rc1.297.gfa9743e501-goog
+2.29.0
 
