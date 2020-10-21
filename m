@@ -2,552 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B10629527D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 20:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD462952F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 21:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504246AbgJUSwK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Oct 2020 14:52:10 -0400
-Received: from smtp.uniroma2.it ([160.80.6.22]:47236 "EHLO smtp.uniroma2.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437133AbgJUSwK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Oct 2020 14:52:10 -0400
-Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 09LIga9j005673
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 21 Oct 2020 20:42:38 +0200
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shrijeet Mukherjee <shrijeet@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [RFC,net-next, 4/4] selftests: add selftest for the SRv6 End.DT4 behavior
-Date:   Wed, 21 Oct 2020 20:41:16 +0200
-Message-Id: <20201021184116.2722-5-andrea.mayer@uniroma2.it>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201021184116.2722-1-andrea.mayer@uniroma2.it>
-References: <20201021184116.2722-1-andrea.mayer@uniroma2.it>
+        id S2504943AbgJUT0P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Oct 2020 15:26:15 -0400
+Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:59109 "EHLO
+        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504940AbgJUT0P (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 21 Oct 2020 15:26:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1603308374; x=1634844374;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   mime-version;
+  bh=fFKxxCGbpTJspLKrpQWtvorN+UB7EaCdCZuZVGvPFIg=;
+  b=NobhBe3yloaMDrrYDUXj67NxrdUWTlSJwU/dIcWh0YoFvmTA7ntkimRE
+   MgICJYvrM+TbvrNK+an69ufYDfYLOxx4WjMmORybXa/FJmSFbY58y7PhC
+   6q8KJYVuJd8eNn7NS2F6D6IdeyUGoaMKjMxOfd/tLWTZq4sHL6Sc8lRhE
+   g=;
+X-IronPort-AV: E=Sophos;i="5.77,401,1596499200"; 
+   d="scan'208";a="78947680"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2a-c5104f52.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 21 Oct 2020 19:18:19 +0000
+Received: from EX13D31EUB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2a-c5104f52.us-west-2.amazon.com (Postfix) with ESMTPS id 76BB1A1E2D;
+        Wed, 21 Oct 2020 19:18:18 +0000 (UTC)
+Received: from u3f2cd687b01c55.ant.amazon.com (10.43.161.25) by
+ EX13D31EUB001.ant.amazon.com (10.43.166.210) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Wed, 21 Oct 2020 19:18:12 +0000
+From:   SeongJae Park <sjpark@amazon.com>
+To:     David Gow <davidgow@google.com>
+CC:     SeongJae Park <sjpark@amazon.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        SeongJae Park <sjpark@amazon.de>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "KUnit Development" <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] Documentation: kunit: Update Kconfig parts for KUNIT's module support
+Date:   Wed, 21 Oct 2020 21:17:57 +0200
+Message-ID: <20201021191757.29007-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CABVgOSm3RuJBrevk8W5T6fLVo=uCT5F0OUVLuVTu=TrPnPyxNg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.25]
+X-ClientProxiedBy: EX13D43UWA003.ant.amazon.com (10.43.160.9) To
+ EX13D31EUB001.ant.amazon.com (10.43.166.210)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-this selftest is designed for evaluating the new SRv6 End.DT4 behavior
-used, in this example, for implementing IPv4 L3 VPN use cases.
+On Wed, 21 Oct 2020 12:06:13 +0800 David Gow <davidgow@google.com> wrote:
 
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
----
- .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 490 ++++++++++++++++++
- 1 file changed, 490 insertions(+)
- create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+> On Tue, Oct 13, 2020 at 2:38 PM 'SeongJae Park' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+> >
+> > From: SeongJae Park <sjpark@amazon.de>
+> >
+> > If 'CONFIG_KUNIT=m', letting kunit tests that do not support loadable
+> > module build depends on 'KUNIT' instead of 'KUNIT=y' result in compile
+> > errors.  This commit updates the document for this.
+> >
+> > Fixes: 9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
+> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> 
+> Sorry for the delay in looking at this. Apart from another minuscule
+> typo below, this looks good to me.
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
 
-diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-new file mode 100755
-index 000000000000..c04437667399
---- /dev/null
-+++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-@@ -0,0 +1,490 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# author: Andrea Mayer <andrea.mayer@uniroma2.it>
-+
-+# This test is designed for evaluating the new SRv6 End.DT4 behavior used for
-+# implementing IPv4 L3 VPN use cases.
-+#
-+# Hereafter a network diagram is shown, where two different tenants (named 100
-+# and 200) offer IPv4 L3 VPN services allowing hosts to communicate with each
-+# other across an IPv6 network.
-+#
-+# Only hosts belonging to the same tenant (and to the same VPN) can communicate
-+# with each other. Instead, the communication among hosts of different tenants
-+# is forbidden.
-+# In other words, hosts hs-t100-1 and hs-t100-2 are connected through the IPv4
-+# L3 VPN of tenant 100 while hs-t200-3 and hs-t200-4 are connected using the
-+# IPv4 L3 VPN of tenant 200. Cross connection between tenant 100 and tenant 200
-+# is forbidden and thus, for example, hs-t100-1 cannot reach hs-t200-3 and vice
-+# versa.
-+#
-+# Routers rt-1 and rt-2 implement the IPv4 L3 VPN services leveraging the SRv6
-+# architecture. The key components for such L3 VPNs are: a) SRv6 Encap
-+# behavior, b) SRv6 End.DT4 behavior and c) VRF.
-+#
-+# To explain how those L3 VPNs work, let us briefly consider an example where
-+# the host hs-t100-1 pings the host hs-t100-2.
-+#
-+# First of all, L2 reachability of the host hs-t100-2 is taken into account by
-+# the router rt-1 which acts as an arp proxy.
-+#
-+# When the host hs-t100-1 sends an IPv4 packet destined to hs-t100-2, the
-+# router rt-1 receives the packet on the internal veth-t100 interface. Such
-+# interface is enslaved to the VRF vrf-100 whose associated table contains the
-+# SRv6 Encap route for encapsulating the IPv4 packet in a IPv6 plus the Segment
-+# Routing Header (SRH) packet. Then, it is sent through the (IPv6) core network
-+# up to the router rt-2 that receives it on veth0 interface.
-+#
-+# The router rt-2 makes use of the routing table 'localsid' for processing
-+# IPv6+SRH packets. In this IPv4 L3 VPN scenario, the SRv6 End.DT4 behavior is
-+# used for decapsulating the inner (IPv4) packets and for forwarding them to
-+# the hosts.
-+# The forwarding operation is carried out by using the routing table which has
-+# been set during the configuration of a specific SRv6 End.DT4 behavior
-+# instance.
-+# In this example, an IPv4 packet destined to hs-t100-2 is forwarded to
-+# the host using the routing table 100.
-+#
-+# The ping response follows the same processing but this time the role of rt-1
-+# and rt-2 are swapped.
-+#
-+# Of course, the IPv4 L3 VPN for tenant 200 works exactly as the IPv4 L3 VPN
-+# for tenant 100. In this case, only hosts hs-t200-3 and hs-t200-4 are able to
-+# connect with each other.
-+#
-+#
-+# +-------------------+                                   +-------------------+
-+# |                   |                                   |                   |
-+# |  hs-t100-1 netns  |                                   |  hs-t100-2 netns  |
-+# |                   |                                   |                   |
-+# |  +-------------+  |                                   |  +-------------+  |
-+# |  |    veth0    |  |                                   |  |    veth0    |  |
-+# |  | 10.0.0.1/24 |  |                                   |  | 10.0.0.2/24 |  |
-+# |  +-------------+  |                                   |  +-------------+  |
-+# |        .          |                                   |         .         |
-+# +-------------------+                                   +-------------------+
-+#          .                                                        .
-+#          .                                                        .
-+#          .                                                        .
-+# +-----------------------------------+   +-----------------------------------+
-+# |        .                          |   |                         .         |
-+# | +---------------+                 |   |                 +---------------- |
-+# | |   veth-t100   |                 |   |                 |   veth-t100   | |
-+# | | 10.0.0.254/24 |    +----------+ |   | +----------+    | 10.0.0.254/24 | |
-+# | +-------+-------+    | localsid | |   | | localsid |    +-------+-------- |
-+# |         |            |   table  | |   | |   table  |            |         |
-+# |    +----+----+       +----------+ |   | +----------+       +----+----+    |
-+# |    | vrf-100 |                    |   |                    | vrf-100 |    |
-+# |    +---------+     +------------+ |   | +------------+     +---------+    |
-+# |                    |   veth0    | |   | |   veth0    |                    |
-+# |                    | fd00::1/64 |.|...|.| fd00::2/64 |                    |
-+# |    +---------+     +------------+ |   | +------------+     +---------+    |
-+# |    | vrf-200 |                    |   |                    | vrf-200 |    |
-+# |    +----+----+                    |   |                    +----+----+    |
-+# |         |                         |   |                         |         |
-+# | +---------------+                 |   |                 +---------------- |
-+# | |   veth-t200   |                 |   |                 |   veth-t200   | |
-+# | | 10.0.0.254/24 |                 |   |                 | 10.0.0.254/24 | |
-+# | +---------------+      rt-1 netns |   | rt-2 netns      +---------------- |
-+# |        .                          |   |                          .        |
-+# +-----------------------------------+   +-----------------------------------+
-+#          .                                                         .
-+#          .                                                         .
-+#          .                                                         .
-+#          .                                                         .
-+# +-------------------+                                   +-------------------+
-+# |        .          |                                   |          .        |
-+# |  +-------------+  |                                   |  +-------------+  |
-+# |  |    veth0    |  |                                   |  |    veth0    |  |
-+# |  | 10.0.0.3/24 |  |                                   |  | 10.0.0.4/24 |  |
-+# |  +-------------+  |                                   |  +-------------+  |
-+# |                   |                                   |                   |
-+# |  hs-t200-3 netns  |                                   |  hs-t200-4 netns  |
-+# |                   |                                   |                   |
-+# +-------------------+                                   +-------------------+
-+#
-+#
-+# ~~~~~~~~~~~~~~~~~~~~~~~~~
-+# | Network configuration |
-+# ~~~~~~~~~~~~~~~~~~~~~~~~~
-+#
-+# rt-1: localsid table (table 90)
-+# +-----------------------------------+
-+# |SID              |Action           |
-+# +-----------------------------------+
-+# |fc00:21:100::6004|End.DT4 table 100|
-+# +-----------------------------------+
-+# |fc00:21:200::6004|End.DT4 table 200|
-+# +-----------------------------------+
-+#
-+# rt-1: VRF tenant 100 (table 100)
-+# +--------------------------------------------------+
-+# |host       |Action                                |
-+# +--------------------------------------------------+
-+# |10.0.0.2   |seg6 encap fc00:12:100::6004 dev veth0|
-+# +--------------------------------------------------+
-+# |10.0.0.0/24|forward dev veth_t100                 |
-+# +--------------------------------------------------+
-+#
-+# rt-1: VRF tenant 200 (table 200)
-+# +--------------------------------------------------+
-+# |host       |Action                                |
-+# +--------------------------------------------------+
-+# |10.0.0.4   |seg6 encap fc00:12:200::6004 dev veth0|
-+# +--------------------------------------------------+
-+# |10.0.0.0/24|forward dev veth_t200                 |
-+# +--------------------------------------------------+
-+#
-+#
-+# rt-2: localsid table (table 90)
-+# +-----------------------------------+
-+# |SID              |Action           |
-+# +-----------------------------------+
-+# |fc00:12:100::6004|End.DT4 table 100|
-+# +-----------------------------------+
-+# |fc00:12:200::6004|End.DT4 table 200|
-+# +-----------------------------------+
-+#
-+# rt-2: VRF tenant 100 (table 100)
-+# +--------------------------------------------------+
-+# |host       |Action                                |
-+# +--------------------------------------------------+
-+# |10.0.0.1   |seg6 encap fc00:21:100::6004 dev veth0|
-+# +--------------------------------------------------+
-+# |10.0.0.0/24|forward dev veth_t100                 |
-+# +--------------------------------------------------+
-+#
-+# rt-2: VRF tenant 200 (table 200)
-+# +--------------------------------------------------+
-+# |host       |Action                                |
-+# +--------------------------------------------------+
-+# |10.0.0.3   |seg6 encap fc00:21:200::6004 dev veth0|
-+# +--------------------------------------------------+
-+# |10.0.0.0/24|forward dev veth_t200                 |
-+# +--------------------------------------------------+
-+#
-+
-+readonly LOCALSID_TABLE_ID=90
-+readonly IPv6_RT_NETWORK=fd00
-+readonly IPv4_HS_NETWORK=10.0.0
-+readonly VPN_LOCATOR_SERVICE=fc00
-+PING_TIMEOUT_SEC=4
-+
-+ret=0
-+
-+PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
-+
-+log_test()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ ${rc} -eq ${expected} ]; then
-+		nsuccess=$((nsuccess+1))
-+		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
-+	else
-+		ret=1
-+		nfail=$((nfail+1))
-+		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+			echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
-+}
-+
-+print_log_test_results()
-+{
-+	if [ "$TESTS" != "none" ]; then
-+		printf "\nTests passed: %3d\n" ${nsuccess}
-+		printf "Tests failed: %3d\n"   ${nfail}
-+	fi
-+}
-+
-+log_section()
-+{
-+	echo
-+	echo "################################################################################"
-+	echo "TEST SECTION: $*"
-+	echo "################################################################################"
-+}
-+
-+cleanup()
-+{
-+	ip link del veth-rt-1 2>/dev/null || true
-+	ip link del veth-rt-2 2>/dev/null || true
-+
-+	# destroy routers rt-* and hosts hs-*
-+	for ns in $(ip netns show | grep -E 'rt-*|hs-*'); do
-+		ip netns del ${ns} || true
-+	done
-+}
-+
-+# Setup the basic networking for the routers
-+setup_rt_networking()
-+{
-+	local rt=$1
-+	local nsname=rt-${rt}
-+
-+	ip netns add ${nsname}
-+	ip link set veth-rt-${rt} netns ${nsname}
-+	ip -netns ${nsname} link set veth-rt-${rt} name veth0
-+
-+	ip -netns ${nsname} addr add ${IPv6_RT_NETWORK}::${rt}/64 dev veth0
-+	ip -netns ${nsname} link set veth0 up
-+	ip -netns ${nsname} link set lo up
-+
-+	ip netns exec ${nsname} sysctl -wq net.ipv4.ip_forward=1
-+	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.all.forwarding=1
-+}
-+
-+setup_hs()
-+{
-+	local hs=$1
-+	local rt=$2
-+	local tid=$3
-+	local hsname=hs-t${tid}-${hs}
-+	local rtname=rt-${rt}
-+	local rtveth=veth-t${tid}
-+
-+	# set the networking for the host
-+	ip netns add ${hsname}
-+	ip -netns ${hsname} link add veth0 type veth peer name ${rtveth}
-+	ip -netns ${hsname} link set ${rtveth} netns ${rtname}
-+	ip -netns ${hsname} addr add ${IPv4_HS_NETWORK}.${hs}/24 dev veth0
-+	ip -netns ${hsname} link set veth0 up
-+	ip -netns ${hsname} link set lo up
-+
-+	# configure the VRF for the tenant X on the router which is directly
-+	# connected to the source host.
-+	ip -netns ${rtname} link add vrf-${tid} type vrf table ${tid}
-+	ip -netns ${rtname} link set vrf-${tid} up
-+
-+	# enslave the veth-tX interface to the vrf-X in the access router
-+	ip -netns ${rtname} link set ${rtveth} master vrf-${tid}
-+	ip -netns ${rtname} addr add ${IPv4_HS_NETWORK}.254/24 dev ${rtveth}
-+	ip -netns ${rtname} link set ${rtveth} up
-+
-+	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.${rtveth}.proxy_arp=1
-+
-+	# disable the rp_filter otherwise the kernel gets confused about how
-+	# to route decap ipv4 packets.
-+	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.all.rp_filter=0
-+	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.${rtveth}.rp_filter=0
-+
-+	ip netns exec ${rtname} sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
-+}
-+
-+setup_vpn_config()
-+{
-+	local hssrc=$1
-+	local rtsrc=$2
-+	local hsdst=$3
-+	local rtdst=$4
-+	local tid=$5
-+
-+	local hssrc_name=hs-t${tid}-${hssrc}
-+	local hsdst_name=hs-t${tid}-${hsdst}
-+	local rtsrc_name=rt-${rtsrc}
-+	local rtdst_name=rt-${rtdst}
-+	local vpn_sid=${VPN_LOCATOR_SERVICE}:${hssrc}${hsdst}:${tid}::6004
-+
-+	# set the encap route for encapsulating packets which arrive from the
-+	# host hssrc and destined to the access router rtsrc.
-+	ip -netns ${rtsrc_name} -4 route add ${IPv4_HS_NETWORK}.${hsdst}/32 vrf vrf-${tid} \
-+		encap seg6 mode encap segs ${vpn_sid} dev veth0
-+	ip -netns ${rtsrc_name} -6 route add ${vpn_sid}/128 vrf vrf-${tid} \
-+		via fd00::${rtdst} dev veth0
-+
-+	# set the decap route for decapsulating packets which arrive from
-+	# the rtdst router and destined to the hsdst host.
-+	ip -netns ${rtdst_name} -6 route add ${vpn_sid}/128 table ${LOCALSID_TABLE_ID} \
-+		encap seg6local action End.DT4 table ${tid} dev vrf-${tid}
-+
-+	# all sids for VPNs start with a common locator which is fc00::/16.
-+	# Routes for handling the SRv6 End.DT4 behavior instances are grouped
-+	# together in the 'localsid' table.
-+	#
-+	# NOTE: added only once
-+	if [ -z "$(ip -netns ${rtdst_name} -6 rule show | \
-+	    grep "to ${VPN_LOCATOR_SERVICE}::/16 lookup ${LOCALSID_TABLE_ID}")" ]; then
-+		ip -netns ${rtdst_name} -6 rule add \
-+			to ${VPN_LOCATOR_SERVICE}::/16 \
-+			lookup ${LOCALSID_TABLE_ID} prio 999
-+	fi
-+}
-+
-+setup()
-+{
-+	ip link add veth-rt-1 type veth peer name veth-rt-2
-+	# setup the networking for router rt-1 and router rt-2
-+	setup_rt_networking 1
-+	setup_rt_networking 2
-+
-+	# setup two hosts for the tenant 100.
-+	#  - host hs-1 is directly connected to the router rt-1;
-+	#  - host hs-2 is directly connected to the router rt-2.
-+	setup_hs 1 1 100  #args: host router tenant
-+	setup_hs 2 2 100
-+
-+	# setup two hosts for the tenant 200
-+	#  - host hs-3 is directly connected to the router rt-1;
-+	#  - host hs-4 is directly connected to the router rt-2.
-+	setup_hs 3 1 200
-+	setup_hs 4 2 200
-+
-+	# setup the IPv4 L3 VPN which connects the host hs-t100-1 and host
-+	# hs-t100-2 within the same tenant 100.
-+	setup_vpn_config 1 1 2 2 100  #args: src_host src_router dst_host dst_router tenant
-+	setup_vpn_config 2 2 1 1 100
-+
-+	# setup the IPv4 L3 VPN which connects the host hs-t200-3 and host
-+	# hs-t200-4 within the same tenant 200.
-+	setup_vpn_config 3 1 4 2 200
-+	setup_vpn_config 4 2 3 1 200
-+}
-+
-+check_rt_connectivity()
-+{
-+	local rtsrc=$1
-+	local rtdst=$2
-+
-+	ip netns exec rt-${rtsrc} ping -c 1 -W 1 ${IPv6_RT_NETWORK}::${rtdst} \
-+		>/dev/null 2>&1
-+}
-+
-+check_and_log_rt_connectivity()
-+{
-+	local rtsrc=$1
-+	local rtdst=$2
-+
-+	check_rt_connectivity ${rtsrc} ${rtdst}
-+	log_test $? 0 "Routers connectivity: rt-${rtsrc} -> rt-${rtdst}"
-+}
-+
-+check_hs_connectivity()
-+{
-+	local hssrc=$1
-+	local hsdst=$2
-+	local tid=$3
-+
-+	ip netns exec hs-t${tid}-${hssrc} ping -c 1 -W ${PING_TIMEOUT_SEC} \
-+		${IPv4_HS_NETWORK}.${hsdst} >/dev/null 2>&1
-+}
-+
-+check_and_log_hs_connectivity()
-+{
-+	local hssrc=$1
-+	local hsdst=$2
-+	local tid=$3
-+
-+	check_hs_connectivity ${hssrc} ${hsdst} ${tid}
-+	log_test $? 0 "Hosts connectivity: hs-t${tid}-${hssrc} -> hs-t${tid}-${hsdst} (tenant ${tid})"
-+}
-+
-+check_and_log_hs_isolation()
-+{
-+	local hssrc=$1
-+	local tidsrc=$2
-+	local hsdst=$3
-+	local tiddst=$4
-+
-+	check_hs_connectivity ${hssrc} ${hsdst} ${tidsrc}
-+	# NOTE: ping should fail
-+	log_test $? 1 "Hosts isolation: hs-t${tidsrc}-${hssrc} -X-> hs-t${tiddst}-${hsdst}"
-+}
-+
-+
-+check_and_log_hs2gw_connectivity()
-+{
-+	local hssrc=$1
-+	local tid=$2
-+
-+	check_hs_connectivity ${hssrc} 254 ${tid}
-+	log_test $? 0 "Hosts connectivity: hs-t${tid}-${hssrc} -> gw (tenant ${tid})"
-+}
-+
-+router_tests()
-+{
-+	log_section "IPv6 routers connectivity test"
-+
-+	check_and_log_rt_connectivity 1 2
-+	check_and_log_rt_connectivity 2 1
-+}
-+
-+host2gateway_tests()
-+{
-+	log_section "IPv4 connectivity test among hosts and gateway"
-+
-+	check_and_log_hs2gw_connectivity 1 100
-+	check_and_log_hs2gw_connectivity 2 100
-+
-+	check_and_log_hs2gw_connectivity 3 200
-+	check_and_log_hs2gw_connectivity 4 200
-+}
-+
-+host_vpn_tests()
-+{
-+	log_section "SRv6 VPN connectivity test among hosts in the same tenant"
-+
-+	check_and_log_hs_connectivity 1 2 100
-+	check_and_log_hs_connectivity 2 1 100
-+
-+	check_and_log_hs_connectivity 3 4 200
-+	check_and_log_hs_connectivity 4 3 200
-+}
-+
-+host_vpn_isolation_tests()
-+{
-+	local i
-+	local j
-+	local k
-+	local tmp
-+	local l1="1 2"
-+	local l2="3 4"
-+	local t1=100
-+	local t2=200
-+
-+	log_section "SRv6 VPN isolation test among hosts in different tentants"
-+
-+	for k in 0 1; do
-+		for i in ${l1}; do
-+			for j in ${l2}; do
-+				check_and_log_hs_isolation ${i} ${t1} ${j} ${t2}
-+			done
-+		done
-+
-+		# let us test the reverse path
-+		tmp="${l1}"; l1="${l2}"; l2="${tmp}"
-+		tmp=${t1}; t1=${t2}; t2=${tmp}
-+	done
-+}
-+
-+if [ "$(id -u)" -ne 0 ];then
-+	echo "SKIP: Need root privileges"
-+	exit 0
-+fi
-+
-+if [ ! -x "$(command -v ip)" ]; then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit 0
-+fi
-+
-+cleanup >/dev/null 2>&1
-+
-+setup
-+
-+router_tests
-+host2gateway_tests
-+host_vpn_tests
-+host_vpn_isolation_tests
-+
-+print_log_test_results
-+
-+cleanup >/dev/null 2>&1
-+
-+exit ${ret}
--- 
-2.20.1
+Thanks!
 
+> 
+> Cheers,
+> -- David
+> 
+> > ---
+> >
+> > Changes from v1
+> > (https://lore.kernel.org/linux-kselftest/20201012105420.5945-1-sjpark@amazon.com/):
+> > - Fix a typo (Marco Elver)
+> >
+> > ---
+> >  Documentation/dev-tools/kunit/start.rst | 2 +-
+> >  Documentation/dev-tools/kunit/usage.rst | 5 +++++
+> >  2 files changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> > index d23385e3e159..454f307813ea 100644
+> > --- a/Documentation/dev-tools/kunit/start.rst
+> > +++ b/Documentation/dev-tools/kunit/start.rst
+> > @@ -197,7 +197,7 @@ Now add the following to ``drivers/misc/Kconfig``:
+> >
+> >         config MISC_EXAMPLE_TEST
+> >                 bool "Test for my example"
+> > -               depends on MISC_EXAMPLE && KUNIT
+> > +               depends on MISC_EXAMPLE && KUNIT=y
+> >
+> >  and the following to ``drivers/misc/Makefile``:
+> >
+> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> > index 3c3fe8b5fecc..b331f5a5b0b9 100644
+> > --- a/Documentation/dev-tools/kunit/usage.rst
+> > +++ b/Documentation/dev-tools/kunit/usage.rst
+> > @@ -556,6 +556,11 @@ Once the kernel is built and installed, a simple
+> >
+> >  ...will run the tests.
+> >
+> > +.. note::
+> > +   Note that you should make your test depends on ``KUNIT=y`` in Kconfig if the
+> nit: Grammatically, this should technically be either "depend" (2nd
+> person), or something like "make sure [that] your test depends".
+
+Good eye!  I will fix this in the next version.
+
+
+Thanks,
+SeongJae Park
