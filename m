@@ -2,199 +2,353 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6DD294591
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 01:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239BC29470A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 05:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439410AbgJTXvm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Oct 2020 19:51:42 -0400
-Received: from mga07.intel.com ([134.134.136.100]:11170 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439408AbgJTXvk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Oct 2020 19:51:40 -0400
-IronPort-SDR: 2NjDcXx9c9YXvtHvLx8i1aD12V4eWTQxBmnDcL35kDfVldTyovEgIUO4jRWBRObaDt/Je54gaa
- ZynMcvvHCpnQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486373"
-X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="231486373"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:34 -0700
-IronPort-SDR: UTZd5P1nura7GF2szGIcSqWtC0LeH0+kaKvklBOW/iLDlXUKBGDbyZuIL6tyihGebpSjc8Rmo4
- 8/QQ2NB/JVcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="320833905"
-Received: from otcwcpicx6.sc.intel.com ([172.25.55.29])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:33 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Shuah Khan" <shuah@kernel.org>,
-        "Reinette Chatre" <reinette.chatre@intel.com>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Babu Moger" <babu.moger@amd.com>,
-        "James Morse" <james.morse@arm.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ravi V Shankar" <ravi.v.shankar@intel.com>
-Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 21/21] selftests/resctrl: Don't use global variable for capacity bitmask (CBM)
-Date:   Tue, 20 Oct 2020 23:51:26 +0000
-Message-Id: <20201020235126.1871815-22-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
-References: <20201020235126.1871815-1-fenghua.yu@intel.com>
+        id S2411806AbgJUDkh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Oct 2020 23:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2411796AbgJUDkg (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Oct 2020 23:40:36 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0522AC0613D3
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 20:40:34 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id 77so1090141lfl.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Oct 2020 20:40:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9JoE0kjuYNgBx2amTFrwP2jZ4AlMXTR1jOZVE1qRHmg=;
+        b=Dk1/Wx5tGmv4Yk9/p5QXncgQuBT6RNrlcFPcC96ZjucnlkoQCzl7IV7s9D0AkCWNP5
+         ZaOEVsbrsr872Es5Snjm+Zw4AzzVOYX6/o2IZAW3oNC0/KTPsyZMXRC5EAypg3LBudJy
+         0Tx/I9PPMtfe7VB80hp573mcMNj4C6lKVRkniBloZkU9MuFtC2anbsJNxp4T1CVDjJhL
+         drk0XSTWrDTN32N8bGuO6MM6s4lvZ1ZC2X1VFZCDisC97QPW2NXeP5ydzcplCWErKPN/
+         dtBOICPKpJ+m3ZrchlbpxCziMlBMHPTydT1H/afM2VVoe1a63wgxH4UNwneu0D041eGJ
+         YjFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9JoE0kjuYNgBx2amTFrwP2jZ4AlMXTR1jOZVE1qRHmg=;
+        b=KMbpRRqj9XjqQHS2xaCDwSMbDGZso1V2nCbOY7qDl3ojnaRR2rt7/a8MKC8fTgXTJ3
+         OySptMvToWOeRunb3HGIMSnRapXDphLOHo41nk1+zV0dzcicjV/PSG/JM9qdCC1/d27r
+         fhiMjmo6+eX26E7IRisaoPc4Gzc0tWkaB0SEAjo5jrOpkT0Xi7GZPo6UCITfakdZ+7kx
+         x8D2jp907ZnccKGilMjHrakUu4j3a3P/p6m5ecdnnKJUrfu9cbPu1RQArnX/YvIW6X8K
+         D/ZUw8bQ+9F0RV6WsHsQ5TwHj1zNhLlC1mphLAMhM5+XjAlfcTQSuVKDlSpasfuO/FSG
+         hDhA==
+X-Gm-Message-State: AOAM532+0TwTJR5URdA+p0socCPKjwW+8e61kPqUnvawTnlFUwvswPbI
+        8PeVVGHtmy4CUAmgyIpbWG/IYoJWsMOnzk+xkgwOEw==
+X-Google-Smtp-Source: ABdhPJwV/9B9pIMkPEIjM/8xuyHC4acUnUYj40tEDGr523skSmuf4LNG/0GQzL5nf0PlzTiS5TBxaqlBB2p/vubk5Vc=
+X-Received: by 2002:a05:6512:3691:: with SMTP id d17mr334184lfs.243.1603251632186;
+ Tue, 20 Oct 2020 20:40:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201019224556.3536790-1-dlatypov@google.com>
+In-Reply-To: <20201019224556.3536790-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 21 Oct 2020 11:40:20 +0800
+Message-ID: <CABVgOS=Kucf3QV=jpo3cLDgG38WvnuKpzEdP_RkBtRwHHPLe3Q@mail.gmail.com>
+Subject: Re: [PATCH] lib: add basic KUnit test for lib/math
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Reinette reported following compilation issue on Fedora 32, gcc version
-10.1.1
+On Tue, Oct 20, 2020 at 6:46 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Add basic test coverage for files that don't require any config options:
+> * gcd.c
+> * lcm.c
+> * int_sqrt.c
+> * reciprocal_div.c
+> (Ignored int_pow.c since it's a simple textbook algorithm.)
+>
+I don't see a particular reason why int_pow.c being a simple algorithm
+means it shouldn't be tested. I'm not saying it has to be tested by
+this particular change -- and I doubt the test would be
+earth-shatteringly interesting -- but there's no real reason against
+testing it.
 
-/usr/bin/ld: cmt_test.o:<src_dir>/cmt_test.c:19: multiple definition of
-`cbm_mask'; cat_test.o:<src_dir>/cat_test.c:20: first defined here
-/usr/bin/ld: resctrlfs.o:<src_dir>/resctrlfs.c:52: multiple definition of
-`cbm_mask'; cat_test.o:<src_dir>/cat_test.c:20: first defined here
+> These tests aren't particularly interesting, but
+> * they're chosen as easy to understand examples of how to write tests
+> * provides a place to add tests for any new files in this dir
+> * written so adding new test cases to cover edge cases should be easy
 
-Compiler throws an error because cbm_mask is defined as a global
-variable in three different .c files, namely resctrlfs.c, cat_test.c and
-cmt_test.c.
+I think these tests can stand on their own merits, rather than just as
+examples (though I do think they do make good additional examples for
+how to test these sorts of functions).
+So, I'd treat this as an actual test of the maths functions (and
+you've got what seems to me a decent set of test cases for that,
+though there are a couple of comments below) first, and any use it
+gains as an example is sort-of secondary to that (anything that makes
+it a better example is likely to make it a better test anyway).
 
-cbm_mask is a global variable that is supposed to hold the capacity
-bitmask (CBM) value read from resctrl/info directory. This is done by
-get_cbm_mask() function which then sets the global variable.
+In any case, modulo the comments below, this seems good to me.
 
-To reduce the use of global variables (thereby improving readability and
-maintainability) change get_cbm_mask() implementation such that it now
-accepts a reference to a string. Upon success, get_cbm_mask() populates the
-string with CBM value read from resctrl/info directory and returns 0 and on
-failure, returns -1.
+-- David
 
-Please note that this change to get_cbm_mask() fixes the issue reported by
-Reinette because cbm_mask isn't a global variable anymore.
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+>  lib/math/Kconfig     |   5 ++
+>  lib/math/Makefile    |   2 +
+>  lib/math/math_test.c | 197 +++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 204 insertions(+)
+>  create mode 100644 lib/math/math_test.c
+>
+> diff --git a/lib/math/Kconfig b/lib/math/Kconfig
+> index f19bc9734fa7..6ba8680439c1 100644
+> --- a/lib/math/Kconfig
+> +++ b/lib/math/Kconfig
+> @@ -15,3 +15,8 @@ config PRIME_NUMBERS
+>
+>  config RATIONAL
+>         bool
+> +
+> +config MATH_KUNIT_TEST
+> +       tristate "KUnit test for lib/math" if !KUNIT_ALL_TESTS
+> +       default KUNIT_ALL_TESTS
+> +       depends on KUNIT
+> diff --git a/lib/math/Makefile b/lib/math/Makefile
+> index be6909e943bd..fba6fe90f50b 100644
+> --- a/lib/math/Makefile
+> +++ b/lib/math/Makefile
+> @@ -4,3 +4,5 @@ obj-y += div64.o gcd.o lcm.o int_pow.o int_sqrt.o reciprocal_div.o
+>  obj-$(CONFIG_CORDIC)           += cordic.o
+>  obj-$(CONFIG_PRIME_NUMBERS)    += prime_numbers.o
+>  obj-$(CONFIG_RATIONAL)         += rational.o
+> +
+> +obj-$(CONFIG_MATH_KUNIT_TEST)  += math_test.o
+> diff --git a/lib/math/math_test.c b/lib/math/math_test.c
+> new file mode 100644
+> index 000000000000..6f4681ea7c72
+> --- /dev/null
+> +++ b/lib/math/math_test.c
+> @@ -0,0 +1,197 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Simple KUnit suite for math helper funcs that are always enabled.
+> + *
+> + * Copyright (C) 2020, Google LLC.
+> + * Author: Daniel Latypov <dlatypov@google.com>
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/gcd.h>
+> +#include <linux/kernel.h>
+> +#include <linux/lcm.h>
+> +#include <linux/reciprocal_div.h>
+> +
+> +/* Generic test case for unsigned long inputs. */
+> +struct test_case {
+> +       unsigned long a, b;
+> +       unsigned long result;
+> +};
+> +
+> +static void gcd_test(struct kunit *test)
+> +{
+> +       const char *message_fmt = "gcd(%lu, %lu)";
+> +       int i;
+> +
+> +       struct test_case test_cases[] = {
+> +               {
+> +                       .a = 0, .b = 1,
+> +                       .result = 1,
+> +               },
+> +               {
+> +                       .a = 2, .b = 2,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = 2, .b = 4,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = 3, .b = 5,
+> +                       .result = 1,
+> +               },
+> +               {
+> +                       .a = 3*9, .b = 3*5,
+> +                       .result = 3,
+> +               },
+> +               {
+> +                       .a = 3*5*7, .b = 3*5*11,
+> +                       .result = 15,
+> +               },
+> +               {
+> +                       .a = (1 << 21) - 1,
+> +                       .b = (1 << 22) - 1,
 
-Fixes: 78941183d1b15 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
-Fixes: 790bf585b0eee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
-Reported-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
----
- tools/testing/selftests/resctrl/cat_test.c  |  5 ++---
- tools/testing/selftests/resctrl/cmt_test.c  |  5 ++---
- tools/testing/selftests/resctrl/resctrl.h   |  2 +-
- tools/testing/selftests/resctrl/resctrlfs.c | 10 +++++-----
- 4 files changed, 10 insertions(+), 12 deletions(-)
+It might be worth noting the factors of these (7^2*127*337 and
+3*23*89*683) in a comment.
+They aren't mersenne primes, if that's what you were going for, though
+they are coprime.
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index e518f8f7b4d8..60b31b85b484 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -17,8 +17,6 @@
- #define MAX_DIFF_PERCENT	4
- #define MAX_DIFF		1000000
- 
--char cbm_mask[256];
--
- /*
-  * Change schemata. Write schemata to specified
-  * con_mon grp, mon_grp in resctrl FS.
-@@ -120,6 +118,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- {
- 	unsigned long l_mask, l_mask_1, long_mask, cache_size;
- 	int ret, pipefd[2], sibling_cpu_no, count_of_bits;
-+	char cbm_mask[256];
- 	char pipe_message;
- 	pid_t bm_pid;
- 
-@@ -130,7 +129,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 		return ret;
- 
- 	/* Get default cbm mask for L3/L2 cache */
--	ret = get_cbm_mask(cache_type);
-+	ret = get_cbm_mask(cache_type, cbm_mask);
- 	if (ret)
- 		return ret;
- 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index f0cb441cca9f..0bee3e6480a3 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -16,8 +16,6 @@
- #define MAX_DIFF		2000000
- #define MAX_DIFF_PERCENT	15
- 
--char cbm_mask[256];
--
- static int cmt_setup(int num, ...)
- {
- 	struct resctrl_val_param *p;
-@@ -112,6 +110,7 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
- {
- 	int ret, mum_resctrlfs, count_of_bits;
- 	unsigned long long_mask, cache_size;
-+	char cbm_mask[256];
- 
- 	cache_size = 0;
- 	mum_resctrlfs = 1;
-@@ -120,7 +119,7 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
- 	if (ret)
- 		return ret;
- 
--	ret = get_cbm_mask("L3");
-+	ret = get_cbm_mask("L3", cbm_mask);
- 	if (ret)
- 		return ret;
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 65ca24bf3eac..2546435864d0 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -96,7 +96,7 @@ void tests_cleanup(void);
- void mbm_test_cleanup(void);
- int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
- void mba_test_cleanup(void);
--int get_cbm_mask(char *cache_type);
-+int get_cbm_mask(char *cache_type, char *cbm_mask);
- int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int cat_val(struct resctrl_val_param *param);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 21281fd895b7..a07118e01590 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -49,8 +49,6 @@ static int find_resctrl_mount(char *buffer)
- 	return -ENOENT;
- }
- 
--char cbm_mask[256];
--
- /*
-  * remount_resctrlfs - Remount resctrl FS at /sys/fs/resctrl
-  * @mum_resctrlfs:	Should the resctrl FS be remounted?
-@@ -208,16 +206,18 @@ int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size)
- /*
-  * get_cbm_mask - Get cbm mask for given cache
-  * @cache_type:	Cache level L2/L3
-- *
-- * Mask is stored in cbm_mask which is global variable.
-+ * @cbm_mask:	cbm_mask returned as a string
-  *
-  * Return: = 0 on success, < 0 on failure.
-  */
--int get_cbm_mask(char *cache_type)
-+int get_cbm_mask(char *cache_type, char *cbm_mask)
- {
- 	char cbm_mask_path[1024];
- 	FILE *fp;
- 
-+	if (!cbm_mask)
-+		return -1;
-+
- 	sprintf(cbm_mask_path, "%s/%s/cbm_mask", CBM_MASK_PATH, cache_type);
- 
- 	fp = fopen(cbm_mask_path, "r");
--- 
-2.29.0
+> +                       .result = 1,
+> +               },
+> +       };
+> +
+> +       for (i = 0; i < ARRAY_SIZE(test_cases); ++i) {
+> +               KUNIT_EXPECT_EQ_MSG(test, test_cases[i].result,
+> +                                   gcd(test_cases[i].a, test_cases[i].b),
+> +                                   message_fmt, test_cases[i].a,
+> +                                   test_cases[i].b);
+> +
+> +               /* gcd(a,b) == gcd(b,a) */
+> +               KUNIT_EXPECT_EQ_MSG(test, test_cases[i].result,
+> +                                   gcd(test_cases[i].b, test_cases[i].a),
+> +                                   message_fmt, test_cases[i].b,
+> +                                   test_cases[i].a);
+> +       }
+> +}
+> +
+> +static void lcm_test(struct kunit *test)
+> +{
+> +       const char *message_fmt = "lcm(%lu, %lu)";
+> +       int i;
+> +
+> +       struct test_case test_cases[] = {
+> +               {
+> +                       .a = 0, .b = 1,
+> +                       .result = 0,
+> +               },
+> +               {
+> +                       .a = 1, .b = 2,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = 2, .b = 2,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = 3*5, .b = 3*7,
+> +                       .result = 3*5*7,
+> +               },
 
+If you were looking for extra testcases here, one where b < a would be nice.
+
+> +       };
+> +
+> +       for (i = 0; i < ARRAY_SIZE(test_cases); ++i) {
+> +               KUNIT_EXPECT_EQ_MSG(test, test_cases[i].result,
+> +                                   lcm(test_cases[i].a, test_cases[i].b),
+> +                                   message_fmt, test_cases[i].a,
+> +                                   test_cases[i].b);
+> +
+> +               /* lcm(a,b) == lcm(b,a) */
+> +               KUNIT_EXPECT_EQ_MSG(test, test_cases[i].result,
+> +                                   lcm(test_cases[i].b, test_cases[i].a),
+> +                                   message_fmt, test_cases[i].b,
+> +                                   test_cases[i].a);
+> +       }
+> +}
+> +
+
+Again, not pushing for it in this test, but lcm_not_zero() could be
+worth testing at some point, too...
+
+> +static void int_sqrt_test(struct kunit *test)
+> +{
+> +       const char *message_fmt = "sqrt(%lu)";
+> +       int i;
+> +
+> +       struct test_case test_cases[] = {
+> +               {
+> +                       .a = 0,
+> +                       .result = 0,
+> +               },
+> +               {
+> +                       .a = 1,
+> +                       .result = 1,
+> +               },
+> +               {
+> +                       .a = 4,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = 5,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = 8,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = 1UL >> 32,
+> +                       .result = 1UL >> 16,
+
+As the kernel test robot noted, these are wrong (the shifts go the
+wrong way, 2^32 might not fit in an unsigned long).
+
+> +               },
+> +       };
+> +
+> +       for (i = 0; i < ARRAY_SIZE(test_cases); ++i) {
+> +               KUNIT_EXPECT_EQ_MSG(test, int_sqrt(test_cases[i].a),
+> +                                   test_cases[i].result, message_fmt,
+> +                                   test_cases[i].a);
+> +       }
+> +}
+> +
+> +struct reciprocal_test_case {
+> +       u32 a, b;
+> +       u32 result;
+> +};
+> +
+> +static void reciprocal_div_test(struct kunit *test)
+> +{
+> +       int i;
+> +       struct reciprocal_value rv;
+> +       struct reciprocal_test_case test_cases[] = {
+> +               {
+> +                       .a = 0, .b = 1,
+> +                       .result = 0,
+> +               },
+> +               {
+> +                       .a = 42, .b = 20,
+> +                       .result = 2,
+> +               },
+> +               {
+> +                       .a = (1<<16), .b = (1<<14),
+> +                       .result = 1<<2,
+> +               },
+> +       };
+> +
+> +       for (i = 0; i < ARRAY_SIZE(test_cases); ++i) {
+> +               rv = reciprocal_value(test_cases[i].b);
+> +               KUNIT_EXPECT_EQ_MSG(test, test_cases[i].result,
+> +                                   reciprocal_divide(test_cases[i].a, rv),
+> +                                   "reciprocal_divide(%u, %u)",
+> +                                   test_cases[i].a, test_cases[i].b);
+> +       }
+> +}
+> +
+> +static struct kunit_case math_test_cases[] = {
+> +       KUNIT_CASE(gcd_test),
+> +       KUNIT_CASE(lcm_test),
+> +       KUNIT_CASE(int_sqrt_test),
+> +       KUNIT_CASE(reciprocal_div_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite math_test_suite = {
+> +       .name = "lib-math",
+> +       .test_cases = math_test_cases,
+> +};
+> +
+> +kunit_test_suites(&math_test_suite);
+> +
+> +MODULE_LICENSE("GPL v2");
+>
+> base-commit: 7cf726a59435301046250c42131554d9ccc566b8
+> --
+> 2.29.0.rc1.297.gfa9743e501-goog
+>
