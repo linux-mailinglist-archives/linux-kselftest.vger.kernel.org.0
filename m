@@ -2,106 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C844C2948A6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 09:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12533294C5F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Oct 2020 14:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395140AbgJUHQN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Oct 2020 03:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394593AbgJUHQN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Oct 2020 03:16:13 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CAFC0613D4
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2020 00:16:13 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id d16so839225qvy.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Oct 2020 00:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=o3AeT4jhmaAGtCcg59SA4YDqldF6/B2ILaDP9JPf7io=;
-        b=RCz8D3HThvOtGZ7oHWqKITCgloC233W7AgYBP6A27M051XCOx80NCXQTnCvm3Q3ngk
-         yGQHJo6cBCjBwo4bjUHmc56X4wkwHCOCuzuVzefr6egIsRBMiff/ugvIPO5bKg+pGGFD
-         abM9jGE9NaXHDC3cbDywFqj86xt09c+nCfyagu/tUs3YqvZzYQffMXGA8KrawlJJDGWZ
-         fGOVADIn7w8WL2+hPTJEopQ7Vzq5MjXIai0DJvp8GXJB1CCJc4X5wEy+WBljqbYezlDK
-         YfP9GnuuSttu4eHkNnP2lhu8/WK3RUTb+3CBdrTQyppIdp3X02rxrlOcf8hRZNXGhfWl
-         Mkwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=o3AeT4jhmaAGtCcg59SA4YDqldF6/B2ILaDP9JPf7io=;
-        b=MM5YsrScrJyVKsUGC9wT2kaYXCwv9hn8144g9xdPKwigenpEXP6VjvVjOMDmPHOkDH
-         xIYZfFWZwKpUCCrNkOBQllabKI68acrNGhidpYF9+R/Y9PcQ90WrwySJvcuWDgjAXSWm
-         prUtmejZOyxMHmG+p6Cgp0PF1Zp+apYUiO4cTwS4I7oGLne7t4cvyGyOUzDA6KaEOJws
-         CDF5LiKGiIDmuUml0QY/NNNDk+5Kte0WjWLz65pBstgJnsKyVpHJlpHBxOEdy9ZHWyGQ
-         DKNo+qn1Yo+cVrGFMovwhVn1oq8ltX0rRAn8ZPnSrsq1WHP6l6dg1iHBPgnh4oeXXtJ8
-         bQPw==
-X-Gm-Message-State: AOAM533LqWnAaVuZ/7N9mVRkN3KTOC06ZuINu7FB68uNf2K8i/OU918y
-        8uaiyVeyg6Mh3iH/UsJQGFcI4B9w23z7ww==
-X-Google-Smtp-Source: ABdhPJyo2rGxrbCSzrvoNvAO2k2ZRVKy/WYS+Oz08PyWkeaJXHH6Fpe+Rxunm4mPKpUp4gHjFapXkvKpMA1MwQ==
-Sender: "davidgow via sendgmr" <davidgow@spirogrip.svl.corp.google.com>
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:42a8:f0ff:fe4d:3548])
- (user=davidgow job=sendgmr) by 2002:ad4:4eaf:: with SMTP id
- ed15mr1702288qvb.40.1603264572501; Wed, 21 Oct 2020 00:16:12 -0700 (PDT)
-Date:   Wed, 21 Oct 2020 00:16:03 -0700
-Message-Id: <20201021071603.1558098-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-Subject: [PATCH] kunit: Fix kunit.py parse subcommand (use null build_dir)
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Heidi Fahim <heidifahim@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S2442271AbgJUMRd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Oct 2020 08:17:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2411517AbgJUMRc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 21 Oct 2020 08:17:32 -0400
+Received: from mail.kernel.org (ip5f5ad5a8.dynamic.kabel-deutschland.de [95.90.213.168])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F6A422453;
+        Wed, 21 Oct 2020 12:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603282651;
+        bh=ZThY5uPrN8m7PVeYj6yV3k4YTH50nRqHVbTBxoDTc5M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eLjiVAUbctSCqXFNEqOjYCcD0lD36EsozUQwQLXQib17OkD1maRKTKIGr2Sfggau3
+         MkRA3zzFiQNh47QZlV8cJjzX/nrnNCZAV/sHmguIAyCCH4oLr9VIY1qSgtkUKuBp7s
+         7Q/wiluVMS9Ay8unKODOQ7hNqNbe2LcMEjwM37mg=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kVD3Y-001U2X-88; Wed, 21 Oct 2020 14:17:28 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Bernard Zhao <bernard@vivo.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Colton Lewis <colton.w.lewis@protonmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        David Sterba <dsterba@suse.com>, Dennis Li <Dennis.Li@amd.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Jann Horn <jannh@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
+        Yamin Friedman <yaminf@mellanox.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH v3 0/6] Documentation build fixes against upstream
+Date:   Wed, 21 Oct 2020 14:17:21 +0200
+Message-Id: <cover.1603282193.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When JSON support was added in [1], the KunitParseRequest tuple was
-updated to contain a 'build_dir' field, but kunit.py parse doesn't
-accept --build_dir as an option. The code nevertheless tried to access
-it, resulting in this error:
+As we're close to the end of the merge window for Kernel 5.10,
+this series contain the patches from the past two documentation
+fix series I sent during the merge window and that required more
+work.
 
-AttributeError: 'Namespace' object has no attribute 'build_dir'
+It is based on the top of upstream. The full series with the patches
+that either didn't generate any reply or have been acked is on
+this branch:
 
-Given that the parser only uses the build_dir variable to set the
-'build_environment' json field, we set it to None (which gives the JSON
-'null') for now. Ultimately, we probably do want to be able to set this,
-but since it's new functionality which (for the parse subcommand) never
-worked, this is the quickest way of getting it back up and running.
+	https://git.linuxtv.org/mchehab/experimental.git/log/?h=docs_for_v5.10
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=21a6d1780d5bbfca0ce9b8104ca6233502fcbf86
+There are a couple of warnings that aren't addressed here, because
+they don't show at linux-next. I'm keeping a second patch series 
+against next-20201021 fixing additional warnings caused by patches
+pending merges.
 
-Fixes: 21a6d1780d5bbfca0ce9b8104ca6233502fcbf86 ("kunit: tool: allow generating test results in JSON")
-Signed-off-by: David Gow <davidgow@google.com>
----
+I'll be posting those in separate.
 
-This is a quick fix because kunit.py parse is completely broken: it
-appears it was introduced in the rebase of the JSON parser after the
-separation of concerns patch.
+Regards,
+Mauro
 
- tools/testing/kunit/kunit.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Mauro Carvalho Chehab (6):
+  drm: amdgpu: kernel-doc: update some adev parameters
+  docs: lockdep-design: fix some warning issues
+  locking/refcount: move kernel-doc markups to the proper place
+  IB/srpt: docs: add a description for cq_size  member
+  kunit: test: fix remaining kernel-doc warnings
+  docs: fs: api-summary.rst: get rid of kernel-doc include
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index ebf5f5763dee..a6d5f219f714 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -337,7 +337,7 @@ def main(argv, linux=None):
- 				kunit_output = f.read().splitlines()
- 		request = KunitParseRequest(cli_args.raw_output,
- 					    kunit_output,
--					    cli_args.build_dir,
-+					    None,
- 					    cli_args.json)
- 		result = parse_tests(request)
- 		if result.status != KunitStatus.SUCCESS:
+ Documentation/filesystems/api-summary.rst    |   3 -
+ Documentation/locking/lockdep-design.rst     |  51 +++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c   |  28 ++--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c  |   6 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c |   7 +-
+ drivers/infiniband/ulp/srpt/ib_srpt.h        |   1 +
+ include/kunit/test.h                         |  16 +-
+ include/linux/refcount.h                     | 158 +++++++++----------
+ 8 files changed, 139 insertions(+), 131 deletions(-)
 
-base-commit: c4d6fe7311762f2e03b3c27ad38df7c40c80cc93
 -- 
-2.29.0.rc1.297.gfa9743e501-goog
+2.26.2
+
 
