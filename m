@@ -2,359 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2457296182
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Oct 2020 17:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051152962A5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Oct 2020 18:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2509922AbgJVPOa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Oct 2020 11:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S2897065AbgJVQ05 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Oct 2020 12:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2509793AbgJVPOa (ORCPT
+        with ESMTP id S2896986AbgJVQ05 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Oct 2020 11:14:30 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7ADC0613CE;
-        Thu, 22 Oct 2020 08:14:30 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id o7so1110294pgv.6;
-        Thu, 22 Oct 2020 08:14:30 -0700 (PDT)
+        Thu, 22 Oct 2020 12:26:57 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E9DC0613CE
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2020 09:26:57 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id p10so2274924ile.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2020 09:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KZ/U65zjA9u6hMXsaiRL/mSlzHa3ohaGcy+QrWOeCZs=;
-        b=Fj/9Ua9LZjX1ogWCvx6x9V2T3WspUdgEnxPcTOgA2S+i5pocpE8RAAnELpu5+bER3C
-         se0syPVx3FXHuq+mshitx3zk2P13r8qcy2yqhf5/i+fH0051tDH0jk9ShCe4gnR6cz2V
-         v+IXGlMEs5eLfSFG/yyg8XDl//WjYjTqD4NL63BgjrIkZmuhvAymQKvhGEXPVcrcPft+
-         fGS4symGSQnkdwJoeU5qViq82MXoKEvRChiagBubdfKa/MLGZNEVqUDdZWXOrH+2rud1
-         GbmXj4adph1BIDxERtowli3aP9b8i+PMX0fVDTn1w/T0IvR3qKLhi6AYPWKKFXmCPrJ9
-         26sQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KZFvf3Ldb3rFeZOwf1If8ODWGX8g/S9h9Con/ZQJhTY=;
+        b=JtM0iJmE6RRrEXd+MT7jIZKLx0kAkZLPovF2TeerZFALAeroqqLSOZx4PrKi7hUI4g
+         0yuWHR4xm/tThpgwo+RNiM8gVwLCvPyEsTLFQfRu3ZKkWLKShfIOoAGQ4n9o/cl3CEYA
+         4BwklKnalgc8nHYmDPIvBgR/l97VhTaCwKmwt/58IfI/RFBlrcarYyAr+JOTWMMDI12X
+         9i6zmQSr6okD6AsOvbYBJft619i0VdbZWL7pfDFqzj8y/o9fBMiVqZ2VlTYB6rmSHWxj
+         170s+EUHyq4tNm5nmLaFUONUYWPbAvnHKBxNj38eR3E6eZdNIaUjFI4CDB8F6Z/WK6g4
+         fM4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KZ/U65zjA9u6hMXsaiRL/mSlzHa3ohaGcy+QrWOeCZs=;
-        b=Zl1pxPay0I40GlfMeaee11d5TL/wdRZmghYxAv+WEobGcQJEZn3n+pET3iXQa2+xZc
-         JEnt7g02wllwgdsDsejZx0CEZzh0uLEnNF/rCpsdPnWjF2nYZk9GK9OzOaTdki0CqLle
-         TW5sJFT4HVEQ6O34hmpG6tD/qD/JFoTZ3ZFD6/Jfy9+/oI+mvLMAg6VfAwmo8vS2vYHA
-         G7j2G+A1Hitbvi96K/FztmeZMXWn+H6Z7SBt8xpEK6I51pK0OacqLB5iLp6x9mvqxLep
-         e5X1tugS2nxMxvVqPa1hsCOsVHS0OiFK1OG0KnnTWGVTyu6lKfn8Ug6Az8q+BQ10VRgl
-         CA+w==
-X-Gm-Message-State: AOAM533kASofgTAgxBimybLEx3Pjd7gSfh1NP91M3wVWp5HvRHnxyRhu
-        A7H5i/Godd5AmrEWca0lZLk=
-X-Google-Smtp-Source: ABdhPJy42DS6N7bC4UmjQLH4ThqM/A7jF0kkk3sDqAO6LScCP14YJLihJnQogZ5D64Vm6haSY84+tQ==
-X-Received: by 2002:a65:5a4d:: with SMTP id z13mr1379207pgs.297.1603379669614;
-        Thu, 22 Oct 2020 08:14:29 -0700 (PDT)
-Received: from arpitha-Inspiron-7570.lan ([106.51.242.32])
-        by smtp.gmail.com with ESMTPSA id b16sm2704489pfp.195.2020.10.22.08.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2020 08:14:28 -0700 (PDT)
-From:   Arpitha Raghunandan <98.arpi@gmail.com>
-To:     brendanhiggins@google.com, skhan@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, pmladek@suse.com,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        linux@rasmusvillemoes.dk, alexandre.belloni@bootlin.com,
-        gregkh@linuxfoundation.org, rdunlap@infradead.org,
-        idryomov@gmail.com
-Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v2] lib: Convert test_printf.c to KUnit
-Date:   Thu, 22 Oct 2020 20:43:49 +0530
-Message-Id: <20201022151349.47436-1-98.arpi@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KZFvf3Ldb3rFeZOwf1If8ODWGX8g/S9h9Con/ZQJhTY=;
+        b=nPS3ofUic7lVin04fFRLIjnw0B5QlwZaeHyjP+J97mVUuR81+HMp1CqwGbb2GEuSMs
+         MaO3Wy7IuQIhZIvw8TDxPKB/An+AZUp6uOPSVJOH5RxyjDexOwamnBbSJqDoIUCupsFy
+         GG9pnNBkO+R60CCBEZ7ZmT4AjUYqoz8laVWWpmw/tLCCgcnZsuBMJkUI+O160fxp4u3+
+         CtY5cJ3y4GjQ/Ao2FIfrc2DL+cRfwJu4+1EIIouJEmyehW8OSulSjvaPIB6C/+BYT4Ik
+         PNJxmtVMWS+L/4kluEy3LBXZ4m/08XYVizVDnyeGm9yQ5b/gMngKHo8PEr0TX2NtKNZb
+         yu8A==
+X-Gm-Message-State: AOAM530rbPJfER7WwmEHphDHi/3dBmhItrMgDQtjBfWIIL1o+pSK99Pb
+        Qbl1+wJl6MP4iPJ3sV233cukqkJP2+ABuxW3br9UmQ==
+X-Google-Smtp-Source: ABdhPJw0PaEY23SWooD58Hk6Txf21V5SNFAkA1N1WbunJIPEbRw4F9u/rwglgWIKXyXVJqnuwKqwn0u6tH8TaSTeIkc=
+X-Received: by 2002:a92:cf44:: with SMTP id c4mr1547289ilr.110.1603384016294;
+ Thu, 22 Oct 2020 09:26:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201019224556.3536790-1-dlatypov@google.com> <CABVgOS=Kucf3QV=jpo3cLDgG38WvnuKpzEdP_RkBtRwHHPLe3Q@mail.gmail.com>
+ <CAGS_qxpX0Do+z-wzCC=twbt-htL=Jkqvrk4L4rKTtXFPfX-TCA@mail.gmail.com> <20201022150648.GH4077@smile.fi.intel.com>
+In-Reply-To: <20201022150648.GH4077@smile.fi.intel.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 22 Oct 2020 09:26:45 -0700
+Message-ID: <CAGS_qxogKfYBr=5jPsON60NTAoqqSK2y+dQodnZ5r0Uo0ecJ3Q@mail.gmail.com>
+Subject: Re: [PATCH] lib: add basic KUnit test for lib/math
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Convert test lib/test_printf.c to KUnit. More information about
-KUnit can be found at:
-https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
-KUnit provides a common framework for unit tests in the kernel.
-KUnit and kselftest are standardizing around KTAP, converting this
-test to KUnit makes this test output in KTAP which we are trying to
-make the standard test result format for the kernel. More about
-the KTAP format can be found at:
-https://lore.kernel.org/linux-kselftest/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com/.
-I ran both the original and converted tests as is to produce the
-output for success of the test in the two cases. I also ran these
-tests with a small modification to show the difference in the output
-for failure of the test in both cases. The modification I made is:
-- test("127.000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
-+ test("127-000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
+On Thu, Oct 22, 2020 at 8:06 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Oct 21, 2020 at 10:47:50AM -0700, Daniel Latypov wrote:
+> > On Tue, Oct 20, 2020 at 8:40 PM David Gow <davidgow@google.com> wrote:
+> > > On Tue, Oct 20, 2020 at 6:46 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > > >
+> > > > Add basic test coverage for files that don't require any config options:
+> > > > * gcd.c
+> > > > * lcm.c
+> > > > * int_sqrt.c
+> > > > * reciprocal_div.c
+> > > > (Ignored int_pow.c since it's a simple textbook algorithm.)
+> > > >
+> > > I don't see a particular reason why int_pow.c being a simple algorithm
+> > > means it shouldn't be tested. I'm not saying it has to be tested by
+> > > this particular change -- and I doubt the test would be
+> > > earth-shatteringly interesting -- but there's no real reason against
+> > > testing it.
+> >
+> > Agreed on principle, but int_pow() feels like a special case.
+> > I've written it the exact same way (modulo variable names+types)
+> > several times in personal projects.
+> > Even the spacing matched exactly in a few of those...
+>
+> But if you would like to *teach* somebody by this exemplary piece of code, you
+> better do it close to ideal.
+>
+> > > > These tests aren't particularly interesting, but
+> > > > * they're chosen as easy to understand examples of how to write tests
+> > > > * provides a place to add tests for any new files in this dir
+> > > > * written so adding new test cases to cover edge cases should be easy
+> > >
+> > > I think these tests can stand on their own merits, rather than just as
+> > > examples (though I do think they do make good additional examples for
+> > > how to test these sorts of functions).
+> > > So, I'd treat this as an actual test of the maths functions (and
+> > > you've got what seems to me a decent set of test cases for that,
+> > > though there are a couple of comments below) first, and any use it
+> > > gains as an example is sort-of secondary to that (anything that makes
+> > > it a better example is likely to make it a better test anyway).
+> > >
+> > > In any case, modulo the comments below, this seems good to me.
+> >
+> > Ack.
+> > I'll wait on Andy's input before deciding whether or not to push out a
+> > v2 with the changes.
+>
+> You need to put detailed comments in the code to have it as real example how to
+> create the KUnit test. But hey, it will mean that documentation sucks. So,
 
-Original test success:
-[    0.591262] test_printf: loaded.
-[    0.591409] test_printf: all 388 tests passed
+Out of curiosity
+* By "it will mean that documentation sucks," do you mean that the
+documentation will rot faster if people are using the existing in-tree
+tests as their entrypoint?
+* What level of detailed comments? On the level of kunit-example-test.c?
+  * More concretely, then we'd have a comment block linking to the
+example and then describing table driven unit testing?
+  * And then maybe another block about invariants instead of the
+perhaps too-terse /* gcd(a,b) == gcd(b,a) */ ?
 
-Original test failure:
-[    0.619345] test_printf: loaded.
-[    0.619394] test_printf: vsnprintf(buf, 256, "%piS|%pIS", ...)
-wrote '127.000.000.001|127.0.0.1', expected
-'127-000.000.001|127.0.0.1'
-[    0.619395] test_printf: vsnprintf(buf, 25, "%piS|%pIS", ...) wrote
-'127.000.000.001|127.0.0.', expected '127-000.000.001|127.0.0.'
-[    0.619396] test_printf: kvasprintf(..., "%piS|%pIS", ...) returned
-'127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-[    0.619495] test_printf: failed 3 out of 388 tests
+> please update documentation to cover issues that you found and which motivated
+> you to create these test cases.
+>
+> Summarize this, please create usable documentation first.
 
-Converted test success:
-    # Subtest: printf-kunit-test
-    1..1
-    ok 1 - selftest
-ok 1 - printf-kunit-test
+Sounds good.
+I'm generally wary people not reading the docs, and of documentation
+examples becoming bitrotted faster than actual code.
+But so far KUnit seems to be doing relatively well on both fronts.
 
-Converted test failure:
-    # Subtest: printf-kunit-test
-    1..1
-    # selftest: EXPECTATION FAILED at lib/printf_kunit.c:82
-vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote
-'127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-    # selftest: EXPECTATION FAILED at lib/printf_kunit.c:82
-vsnprintf(buf, 5, "%pi4|%pI4", ...) wrote '127.', expected '127-'
-    # selftest: EXPECTATION FAILED at lib/printf_kunit.c:118
-kvasprintf(..., "%pi4|%pI4", ...) returned
-'127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-    not ok 1 - selftest
-not ok 1 - printf-kunit-test
+usage.rst is currently the best place for this, but it felt like it
+would quickly become a dumping ground for miscellaneous tips and
+tricks.
+I'll spend some time thinking if we want a new file or not, based on
+how much I want to write about the things this test demonstrated
+(EXPECT_*MSG, table driven tests, testing invariants, etc).
 
-Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
----
-Changes v1->v2:
-- Retain the control flow (early returns) in do_test()
-- Display less irrelevant information on test failure
-- A more detailed commit message
+In offline discussions with David, the idea had come up with having a
+set of (relatively) simple tests in tree that the documentation could
+point to as examples of these things. That would keep the line count
+in usage.rst down a bit.
+(But then it would necessitate more tests like this math_test.c)
 
- lib/Kconfig.debug                     |  7 +--
- lib/Makefile                          |  2 +-
- lib/{test_printf.c => printf_kunit.c} | 76 +++++++++++++--------------
- 3 files changed, 43 insertions(+), 42 deletions(-)
- rename lib/{test_printf.c => printf_kunit.c} (91%)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 66d44d35cc97..e82ca893ed5b 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2053,9 +2053,6 @@ config TEST_STRSCPY
- config TEST_KSTRTOX
- 	tristate "Test kstrto*() family of functions at runtime"
- 
--config TEST_PRINTF
--	tristate "Test printf() family of functions at runtime"
--
- config TEST_BITMAP
- 	tristate "Test bitmap_*() family of functions at runtime"
- 	help
-@@ -2282,6 +2279,10 @@ config BITS_TEST
- 
- 	  If unsure, say N.
- 
-+config PRINTF_KUNIT_TEST
-+	tristate "KUnit test for printf() family of functions at runtime"
-+	depends on KUNIT
-+
- config TEST_UDELAY
- 	tristate "udelay test driver"
- 	help
-diff --git a/lib/Makefile b/lib/Makefile
-index ce45af50983a..c323447022b7 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -84,7 +84,6 @@ obj-$(CONFIG_TEST_SORT) += test_sort.o
- obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
--obj-$(CONFIG_TEST_PRINTF) += test_printf.o
- obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
- obj-$(CONFIG_TEST_STRSCPY) += test_strscpy.o
- obj-$(CONFIG_TEST_UUID) += test_uuid.o
-@@ -352,3 +351,4 @@ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_BITS_TEST) += test_bits.o
-+obj-$(CONFIG_PRINTF_KUNIT_TEST) += printf_kunit.o
-diff --git a/lib/test_printf.c b/lib/printf_kunit.c
-similarity index 91%
-rename from lib/test_printf.c
-rename to lib/printf_kunit.c
-index 7ac87f18a10f..e4dc1b1c8972 100644
---- a/lib/test_printf.c
-+++ b/lib/printf_kunit.c
-@@ -5,6 +5,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <kunit/test.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -30,64 +31,57 @@
- #define PAD_SIZE 16
- #define FILL_CHAR '$'
- 
--static unsigned total_tests __initdata;
--static unsigned failed_tests __initdata;
- static char *test_buffer __initdata;
- static char *alloced_buffer __initdata;
-+struct kunit *kunittest;
- 
--static int __printf(4, 0) __init
-+static void __printf(4, 0) __init
- do_test(int bufsize, const char *expect, int elen,
- 	const char *fmt, va_list ap)
- {
- 	va_list aq;
- 	int ret, written;
- 
--	total_tests++;
--
- 	memset(alloced_buffer, FILL_CHAR, BUF_SIZE + 2*PAD_SIZE);
- 	va_copy(aq, ap);
- 	ret = vsnprintf(test_buffer, bufsize, fmt, aq);
- 	va_end(aq);
- 
- 	if (ret != elen) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
- 			bufsize, fmt, ret, elen);
--		return 1;
-+		return;
- 	}
- 
- 	if (memchr_inv(alloced_buffer, FILL_CHAR, PAD_SIZE)) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote before buffer\n", bufsize, fmt);
--		return 1;
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote before buffer\n", bufsize, fmt);
-+		return;
- 	}
- 
- 	if (!bufsize) {
--		if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZE)) {
--			pr_warn("vsnprintf(buf, 0, \"%s\", ...) wrote to buffer\n",
--				fmt);
--			return 1;
--		}
--		return 0;
-+		if (memchr_inv(test_buffer, FILL_CHAR, BUF_SIZE + PAD_SIZE))
-+			KUNIT_FAIL(kunittest, "vsnprintf(buf, 0, \"%s\", ...) wrote to buffer\n", fmt);
-+		return;
- 	}
- 
- 	written = min(bufsize-1, elen);
- 	if (test_buffer[written]) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer\n",
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) did not nul-terminate buffer\n",
- 			bufsize, fmt);
--		return 1;
-+		return;
- 	}
- 
- 	if (memchr_inv(test_buffer + written + 1, FILL_CHAR, BUF_SIZE + PAD_SIZE - (written + 1))) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator\n",
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator\n",
- 			bufsize, fmt);
--		return 1;
-+		return;
- 	}
- 
- 	if (memcmp(test_buffer, expect, written)) {
--		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'\n",
-+		KUNIT_FAIL(kunittest, "vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'\n",
- 			bufsize, fmt, test_buffer, written, expect);
--		return 1;
-+		return;
- 	}
--	return 0;
- }
- 
- static void __printf(3, 4) __init
-@@ -98,9 +92,8 @@ __test(const char *expect, int elen, const char *fmt, ...)
- 	char *p;
- 
- 	if (elen >= BUF_SIZE) {
--		pr_err("error in test suite: expected output length %d too long. Format was '%s'.\n",
-+		KUNIT_FAIL(kunittest, "error in test suite: expected output length %d too long. Format was '%s'.\n",
- 		       elen, fmt);
--		failed_tests++;
- 		return;
- 	}
- 
-@@ -112,19 +105,17 @@ __test(const char *expect, int elen, const char *fmt, ...)
- 	 * enough and 0), and then we also test that kvasprintf would
- 	 * be able to print it as expected.
- 	 */
--	failed_tests += do_test(BUF_SIZE, expect, elen, fmt, ap);
-+	do_test(BUF_SIZE, expect, elen, fmt, ap);
- 	rand = 1 + prandom_u32_max(elen+1);
- 	/* Since elen < BUF_SIZE, we have 1 <= rand <= BUF_SIZE. */
--	failed_tests += do_test(rand, expect, elen, fmt, ap);
--	failed_tests += do_test(0, expect, elen, fmt, ap);
-+	do_test(rand, expect, elen, fmt, ap);
-+	do_test(0, expect, elen, fmt, ap);
- 
- 	p = kvasprintf(GFP_KERNEL, fmt, ap);
- 	if (p) {
--		total_tests++;
- 		if (memcmp(p, expect, elen+1)) {
--			pr_warn("kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'\n",
-+			KUNIT_FAIL(kunittest, "kvasprintf(..., \"%s\", ...) returned '%s', expected '%s'\n",
- 				fmt, p, expect);
--			failed_tests++;
- 		}
- 		kfree(p);
- 	}
-@@ -303,16 +294,13 @@ plain(void)
- 
- 	err = plain_hash();
- 	if (err) {
--		pr_warn("plain 'p' does not appear to be hashed\n");
--		failed_tests++;
-+		KUNIT_FAIL(kunittest, "plain 'p' does not appear to be hashed\n");
- 		return;
- 	}
- 
- 	err = plain_format();
--	if (err) {
--		pr_warn("hashing plain 'p' has unexpected format\n");
--		failed_tests++;
--	}
-+	if (err)
-+		KUNIT_FAIL(kunittest, "hashing plain 'p' has unexpected format\n");
- }
- 
- static void __init
-@@ -696,8 +684,9 @@ test_pointer(void)
- 	fwnode_pointer();
- }
- 
--static void __init selftest(void)
-+static void __init selftest(struct kunit *ktest)
- {
-+	kunittest = ktest;
- 	alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
- 	if (!alloced_buffer)
- 		return;
-@@ -711,6 +700,17 @@ static void __init selftest(void)
- 	kfree(alloced_buffer);
- }
- 
--KSTM_MODULE_LOADERS(test_printf);
-+static struct kunit_case printf_test_cases[] = {
-+	KUNIT_CASE(selftest),
-+	{}
-+};
-+
-+static struct kunit_suite printf_test_suite = {
-+	.name = "printf-kunit-test",
-+	.test_cases = printf_test_cases,
-+};
-+
-+kunit_test_suite(printf_test_suite);
-+
- MODULE_AUTHOR("Rasmus Villemoes <linux@rasmusvillemoes.dk>");
- MODULE_LICENSE("GPL");
--- 
-2.25.1
-
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
