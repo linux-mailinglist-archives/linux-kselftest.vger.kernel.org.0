@@ -2,104 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3DB295A79
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Oct 2020 10:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789EB296168
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Oct 2020 17:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2508110AbgJVIg2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Oct 2020 04:36:28 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:51832 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503413AbgJVIg2 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Oct 2020 04:36:28 -0400
-Received: from mail-pf1-f197.google.com ([209.85.210.197])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kVW5C-0003FX-E2
-        for linux-kselftest@vger.kernel.org; Thu, 22 Oct 2020 08:36:26 +0000
-Received: by mail-pf1-f197.google.com with SMTP id e7so765982pfh.14
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2020 01:36:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F2jy434wIuwXoLXzyeW6c/CAdjOSlRMynxqAD7g4/dU=;
-        b=qGtF2aft8qkyzijpEBYk+cUHXRsBTOQHERs4nRCMfRk8jhe98XPY7xjZHyqIG4Amjl
-         nJtS91TT4SQ3SUNG6UTIB6s6dvlw6x0dIdgYvL3xuTMkkfmC2PyrJ/m272iYs9ZrsrXF
-         zlav7SK5qs6s7WeGNI9o7bRT7PTx8bOaPyHRbKMLe+/GxwdlG9w1Z/EPJUT7kclOtFeQ
-         Y3PReU2v45GyXj418q185iH9H6XVa9DK7oxnS5UrIJgPsg4i0fHgR776VfgvDELC4QPk
-         BRovv5oTG0DNG3GVs6SJF4jo1uyAc0zoyV14oWxFqC0IcpX42xNiUFSyMnww3gBYyTIU
-         ypGg==
-X-Gm-Message-State: AOAM531oXBMLSrKAxs+NZUuXwawgU3RooI4ciSqLxAyKTYyH1ZBaUQ4k
-        u3RQeZTAgKBRAbjki2O++VppgSRN08EQQzNDDZUII0FT9YhG37YtDTrqthaUbMvht8p6QtaGvVb
-        erlIrAlgKjdPMUkRe2NcJrRK4tDCucSuVhO3h5rWyjRqk
-X-Received: by 2002:a17:90b:438c:: with SMTP id in12mr1367419pjb.32.1603355784923;
-        Thu, 22 Oct 2020 01:36:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxNakAo0xdaw0VJxwPqXKhIaUfkhybuIzehY4Ztq4OIlZTIcIge6pr0+zczxLDbkwa2t0WsBg==
-X-Received: by 2002:a17:90b:438c:: with SMTP id in12mr1367403pjb.32.1603355784654;
-        Thu, 22 Oct 2020 01:36:24 -0700 (PDT)
-Received: from localhost.localdomain (223-137-29-213.emome-ip.hinet.net. [223.137.29.213])
-        by smtp.gmail.com with ESMTPSA id y191sm1335465pfb.175.2020.10.22.01.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2020 01:36:23 -0700 (PDT)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Cc:     po-hsu.lin@canonical.com, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, shuah@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com, mathieu.desnoyers@efficios.com
-Subject: [PATCH] selftests/powerpc/eeh: disable kselftest timeout setting for eeh-basic
-Date:   Thu, 22 Oct 2020 16:36:16 +0800
-Message-Id: <20201022083616.41666-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S2507870AbgJVPFy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Oct 2020 11:05:54 -0400
+Received: from mga18.intel.com ([134.134.136.126]:16215 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2507864AbgJVPFy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 22 Oct 2020 11:05:54 -0400
+IronPort-SDR: jGLKn9jVCYCzuc714i2A5p3okMZKclyjAdgRsw1Efo0gcl5SI2WE1Y5cIiK6IsA74vIYg3Fdhj
+ EQzxFQYt5Upw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9781"; a="155326398"
+X-IronPort-AV: E=Sophos;i="5.77,404,1596524400"; 
+   d="scan'208";a="155326398"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2020 08:05:47 -0700
+IronPort-SDR: DnmKSl2doFkSe4e5/aQAyrAEi/WAuS5/1ZSXNRx0fGbgtOg5YM2+9nD5dFXl0cs9pP3wWNgJBB
+ D0w/4/ruMU8w==
+X-IronPort-AV: E=Sophos;i="5.77,404,1596524400"; 
+   d="scan'208";a="524308747"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2020 08:05:45 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kVcAy-00DMeS-90; Thu, 22 Oct 2020 18:06:48 +0300
+Date:   Thu, 22 Oct 2020 18:06:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] lib: add basic KUnit test for lib/math
+Message-ID: <20201022150648.GH4077@smile.fi.intel.com>
+References: <20201019224556.3536790-1-dlatypov@google.com>
+ <CABVgOS=Kucf3QV=jpo3cLDgG38WvnuKpzEdP_RkBtRwHHPLe3Q@mail.gmail.com>
+ <CAGS_qxpX0Do+z-wzCC=twbt-htL=Jkqvrk4L4rKTtXFPfX-TCA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGS_qxpX0Do+z-wzCC=twbt-htL=Jkqvrk4L4rKTtXFPfX-TCA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The eeh-basic test got its own 60 seconds timeout (defined in commit
-414f50434aa2 "selftests/eeh: Bump EEH wait time to 60s") per breakable
-device.
+On Wed, Oct 21, 2020 at 10:47:50AM -0700, Daniel Latypov wrote:
+> On Tue, Oct 20, 2020 at 8:40 PM David Gow <davidgow@google.com> wrote:
+> > On Tue, Oct 20, 2020 at 6:46 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > >
+> > > Add basic test coverage for files that don't require any config options:
+> > > * gcd.c
+> > > * lcm.c
+> > > * int_sqrt.c
+> > > * reciprocal_div.c
+> > > (Ignored int_pow.c since it's a simple textbook algorithm.)
+> > >
+> > I don't see a particular reason why int_pow.c being a simple algorithm
+> > means it shouldn't be tested. I'm not saying it has to be tested by
+> > this particular change -- and I doubt the test would be
+> > earth-shatteringly interesting -- but there's no real reason against
+> > testing it.
+> 
+> Agreed on principle, but int_pow() feels like a special case.
+> I've written it the exact same way (modulo variable names+types)
+> several times in personal projects.
+> Even the spacing matched exactly in a few of those...
 
-And we have discovered that the number of breakable devices varies
-on different hardware. The device recovery time ranges from 0 to 35
-seconds. In our test pool it will take about 30 seconds to run on a
-Power8 system that with 5 breakable devices, 60 seconds to run on a
-Power9 system that with 4 breakable devices.
+But if you would like to *teach* somebody by this exemplary piece of code, you
+better do it close to ideal.
 
-Thus it's better to disable the default 45 seconds timeout setting in
-the kselftest framework to give it a chance to finish. And let the
-test to take care of the timeout control.
+> > > These tests aren't particularly interesting, but
+> > > * they're chosen as easy to understand examples of how to write tests
+> > > * provides a place to add tests for any new files in this dir
+> > > * written so adding new test cases to cover edge cases should be easy
+> >
+> > I think these tests can stand on their own merits, rather than just as
+> > examples (though I do think they do make good additional examples for
+> > how to test these sorts of functions).
+> > So, I'd treat this as an actual test of the maths functions (and
+> > you've got what seems to me a decent set of test cases for that,
+> > though there are a couple of comments below) first, and any use it
+> > gains as an example is sort-of secondary to that (anything that makes
+> > it a better example is likely to make it a better test anyway).
+> >
+> > In any case, modulo the comments below, this seems good to me.
+> 
+> Ack.
+> I'll wait on Andy's input before deciding whether or not to push out a
+> v2 with the changes.
 
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/powerpc/eeh/Makefile | 2 +-
- tools/testing/selftests/powerpc/eeh/settings | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/powerpc/eeh/settings
+You need to put detailed comments in the code to have it as real example how to
+create the KUnit test. But hey, it will mean that documentation sucks. So,
+please update documentation to cover issues that you found and which motivated
+you to create these test cases.
 
-diff --git a/tools/testing/selftests/powerpc/eeh/Makefile b/tools/testing/selftests/powerpc/eeh/Makefile
-index b397bab..ae963eb 100644
---- a/tools/testing/selftests/powerpc/eeh/Makefile
-+++ b/tools/testing/selftests/powerpc/eeh/Makefile
-@@ -3,7 +3,7 @@ noarg:
- 	$(MAKE) -C ../
- 
- TEST_PROGS := eeh-basic.sh
--TEST_FILES := eeh-functions.sh
-+TEST_FILES := eeh-functions.sh settings
- 
- top_srcdir = ../../../../..
- include ../../lib.mk
-diff --git a/tools/testing/selftests/powerpc/eeh/settings b/tools/testing/selftests/powerpc/eeh/settings
-new file mode 100644
-index 0000000..e7b9417
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/eeh/settings
-@@ -0,0 +1 @@
-+timeout=0
+Summarize this, please create usable documentation first.
+
 -- 
-2.7.4
+With Best Regards,
+Andy Shevchenko
+
 
