@@ -2,100 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC41296895
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Oct 2020 04:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D96296B80
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Oct 2020 10:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S374728AbgJWCpu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Oct 2020 22:45:50 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:50190 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S374725AbgJWCpu (ORCPT
+        id S460901AbgJWIwl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Oct 2020 04:52:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32416 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S460899AbgJWIwk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Oct 2020 22:45:50 -0400
-Received: from mail-pf1-f200.google.com ([209.85.210.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kVn5P-0006lc-P7
-        for linux-kselftest@vger.kernel.org; Fri, 23 Oct 2020 02:45:48 +0000
-Received: by mail-pf1-f200.google.com with SMTP id g24so2568760pfo.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Oct 2020 19:45:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=w+LvmvsmtGzZ1uHzJzeUdiay07yaHYmlemmh1WTIDHI=;
-        b=jxOR4WHbU6RNYgYsl/4hWi0jhYl7yZUUli1ScZRnZ3C+zr4eVKaDANakmSfD/LfhNW
-         T4WZjEJRdMpmIWzWZZ+Qu0E11ak5vzFeoKxOVzH6uYrwQlZP+eqHX4w0rx06ZA5QveOe
-         C2aXQzqc0EG5Xip4ixTpQqjfcwpMQVBpQisqTNA08Gwy17BFl5VvpNqvzI5eYKVArqW5
-         AklvirSYfkaT4kDfnJ9U6/7QXycsQdYsVwWvO5iBz8b+OXMbH4Kz9xDBmYd0ZaWOZSma
-         I9LhlFg8FWmybBJ5yFwQtxe/sIbOi/iDa1bEo1dLs44S/97AjwXtttyBv1mlY2k3o3F2
-         HVaQ==
-X-Gm-Message-State: AOAM533KOikAibQVKB4vPFL76nTWtZjjg0xnBGK+aCJZk/jIzbhCHUDQ
-        3wBvCZlpcuJ/Fr2lyZ8zJdVz+EXq8mPd/q4EOBBIDTzHqDCuphSsAliXsPpNGUoibW5XQfi8lrU
-        VznuWIARWfLKjxCu67LBCDFk5JZsadRRoDRqCxN8V6DDa
-X-Received: by 2002:aa7:93b6:0:b029:155:3b0b:d47a with SMTP id x22-20020aa793b60000b02901553b0bd47amr43913pff.47.1603421146345;
-        Thu, 22 Oct 2020 19:45:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyv5aNbWQd3UURPz7hMTf6/sNTaQY+8/+utv3JQsZSdOZBhomxuettop494BLNfghDk6NDxdA==
-X-Received: by 2002:aa7:93b6:0:b029:155:3b0b:d47a with SMTP id x22-20020aa793b60000b02901553b0bd47amr43896pff.47.1603421145874;
-        Thu, 22 Oct 2020 19:45:45 -0700 (PDT)
-Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
-        by smtp.gmail.com with ESMTPSA id b10sm101465pfr.135.2020.10.22.19.45.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2020 19:45:45 -0700 (PDT)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, mpe@ellerman.id.au
-Cc:     po-hsu.lin@canonical.com, benh@kernel.crashing.org,
-        shuah@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-        mathieu.desnoyers@efficios.com
-Subject: [PATCHv2] selftests/powerpc/eeh: disable kselftest timeout setting for eeh-basic
-Date:   Fri, 23 Oct 2020 10:45:39 +0800
-Message-Id: <20201023024539.9512-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 23 Oct 2020 04:52:40 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09N8Vur5133576;
+        Fri, 23 Oct 2020 04:52:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id; s=pp1;
+ bh=PE7YuQTS+QuVbjfnC7LUKKiGrNQ4ubzehaHLOeqNMMk=;
+ b=DbsP8ndMAxlKKqAQLgNXtAFZZZGPS+7itzv3zOQ2wfjg5Qvb4+oO0jAYNS2AE73Huz7k
+ CJ5h3tl1O9bMo52fHnDvQ5pldQumd6+TsnVWkDJy7+C5taeU5Ixc7nHuW323/20QiGuP
+ o5yJ/45DzK3hfOr1m3Ipp8mwq19v0IU5MVn7xnw58d490+C3S2ZfA2C98ERfksl6rETj
+ y12VZoBSFsvY9nz2fDs5CKkXHGsPHav5eZYS/tZvDGxm9xUBTQbiiUIdjSt7MpvWtSiE
+ WJVa/gs8Py/5Ud3fpG1O/nXUy8u0uqCpWViXQ77bAUKZOjeI/9qLIlpSQrMypO8sU0t/ uA== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34bh70qt6v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Oct 2020 04:52:10 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09N8oreK030096;
+        Fri, 23 Oct 2020 08:52:08 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 347r88b9j5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Oct 2020 08:52:08 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09N8q5jr22544828
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Oct 2020 08:52:05 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 99E894204D;
+        Fri, 23 Oct 2020 08:52:05 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34A2E42047;
+        Fri, 23 Oct 2020 08:52:05 +0000 (GMT)
+Received: from oc3871087118.ibm.com (unknown [9.145.85.144])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 23 Oct 2020 08:52:05 +0000 (GMT)
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: [PATCH] selftests/ftrace: remove _do_fork() leftovers
+Date:   Fri, 23 Oct 2020 10:52:03 +0200
+Message-Id: <1603443123-17457-1-git-send-email-agordeev@linux.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
+ definitions=2020-10-23_03:2020-10-23,2020-10-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 spamscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ adultscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010230055
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The eeh-basic test got its own 60 seconds timeout (defined in commit
-414f50434aa2 "selftests/eeh: Bump EEH wait time to 60s") per breakable
-device.
+The _do_fork() is not completely removed from selftests
+in favor of the kernel_clone().
 
-And we have discovered that the number of breakable devices varies
-on different hardware. The device recovery time ranges from 0 to 35
-seconds. In our test pool it will take about 30 seconds to run on a
-Power8 system that with 5 breakable devices, 60 seconds to run on a
-Power9 system that with 4 breakable devices.
-
-Extend the timeout setting in the kselftest framework to 5 minutes
-to give it a chance to finish.
-
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+Fixes: eea11285dab3 ("tracing: switch to kernel_clone()")
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 ---
- tools/testing/selftests/powerpc/eeh/Makefile | 2 +-
- tools/testing/selftests/powerpc/eeh/settings | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/powerpc/eeh/settings
+ tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc | 2 +-
+ tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/powerpc/eeh/Makefile b/tools/testing/selftests/powerpc/eeh/Makefile
-index b397bab..ae963eb 100644
---- a/tools/testing/selftests/powerpc/eeh/Makefile
-+++ b/tools/testing/selftests/powerpc/eeh/Makefile
-@@ -3,7 +3,7 @@ noarg:
- 	$(MAKE) -C ../
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
+index acb17ce..0ddb948 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
+@@ -39,7 +39,7 @@ do_test() {
+     disable_tracing
  
- TEST_PROGS := eeh-basic.sh
--TEST_FILES := eeh-functions.sh
-+TEST_FILES := eeh-functions.sh settings
+     echo do_execve* > set_ftrace_filter
+-    echo *do_fork >> set_ftrace_filter
++    echo kernel_clone >> set_ftrace_filter
  
- top_srcdir = ../../../../..
- include ../../lib.mk
-diff --git a/tools/testing/selftests/powerpc/eeh/settings b/tools/testing/selftests/powerpc/eeh/settings
-new file mode 100644
-index 0000000..694d707
---- /dev/null
-+++ b/tools/testing/selftests/powerpc/eeh/settings
-@@ -0,0 +1 @@
-+timeout=300
+     echo $PID > set_ftrace_notrace_pid
+     echo function > current_tracer
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+index 9f0a968..71319b3 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+@@ -39,7 +39,7 @@ do_test() {
+     disable_tracing
+ 
+     echo do_execve* > set_ftrace_filter
+-    echo *do_fork >> set_ftrace_filter
++    echo kernel_clone >> set_ftrace_filter
+ 
+     echo $PID > set_ftrace_pid
+     echo function > current_tracer
 -- 
-2.7.4
+1.8.3.1
 
