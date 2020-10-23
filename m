@@ -2,74 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A8329785D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Oct 2020 22:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECFB2978A5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Oct 2020 23:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1756267AbgJWUln (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Oct 2020 16:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1756266AbgJWUln (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Oct 2020 16:41:43 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10A6C0613CE
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2020 13:41:42 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id h7so2367892pfn.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2020 13:41:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3jRLKAOatzcRG4uv+zWWEBnrsrQv4zMb+2Jv/LTBO98=;
-        b=PgeVBzkEvc5TURkeOJbp897PLpbZTfKIBG4x4RoJpcAAoU6GIptK+EiyApO8BhXHD2
-         lSm1HW7vdPLPwZNTEHZlMv8/XJKsMt6pJogo/skFpzkLhsqUX8tGNJkQMm9CRDw9E+0d
-         kOsCNqDaCIctmk+lk7Sqaow6M3EJhfMoSdsDeKKEIUP8I0v/SmHealcjTQfc8KRgoGD2
-         Q5U8ppaOzxMcy75AuVfRe4POUgmc6sv5ROqYPkimkHtzox6J0pIpBq/4F8sam8PwyKjM
-         4dUiY737i5q9hszKMOCBDIwVNtqa6SX610QqnUjyMNN6phcTWvQuekqsFlcfrKBzHvuY
-         94Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3jRLKAOatzcRG4uv+zWWEBnrsrQv4zMb+2Jv/LTBO98=;
-        b=TAILd2WVyK3jrEk4jxU1+WKfUhqPrJTWsTydIYbqYS0a9ZonL2q8nfqSsDxapInOfl
-         EkTnUcip6pY8pOsrl3+L61V0pE0bNR8NEuN0gdBl9h2HtC551NZS6Vl3ljLUyDh7lyk7
-         2r6AL/RnFdBwBy8n94adQTX0Y/hhm/u9cFi++7SQ460g/+80vIi4WMtYeuWRjApL/Ziu
-         l6yqwRUfkqun72V05LW/x9IOxO+EAOlLisNbl+Mk7WWRDObaCWa3i7qbovAdf73MzGK6
-         O0mPkQctpIZu6KVh/TYbLbML5xVFOoZpzCa1QMFWtWNMLuDyLfLUNdOgyqA3LQYvl4YD
-         rm3A==
-X-Gm-Message-State: AOAM5333Uh7KTYrmSbEioJl7CSso+04htxOFguzczXXnVU27sM6I2Gkz
-        0an3AgYW6z4akNnXr/ZIQ4RcZtMT3L2Ipz6r5ByZ3g==
-X-Google-Smtp-Source: ABdhPJxUClnmi/c5pRRsR8HQHwAXhcyVCuGHIpT1ObPnfmWRxCxokBtbpwajmCwCAz/Ct4RAw/l6Qunt83ffqNlKfPY=
-X-Received: by 2002:aa7:808a:0:b029:160:167d:d332 with SMTP id
- v10-20020aa7808a0000b0290160167dd332mr888781pff.1.1603485702307; Fri, 23 Oct
- 2020 13:41:42 -0700 (PDT)
+        id S1752363AbgJWVIH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Oct 2020 17:08:07 -0400
+Received: from ws86-195-133-112.rcil.gov.in ([112.133.192.86]:59763 "EHLO
+        notokin.jp" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1752338AbgJWVIG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 23 Oct 2020 17:08:06 -0400
+X-Greylist: delayed 82695 seconds by postgrey-1.27 at vger.kernel.org; Fri, 23 Oct 2020 17:08:05 EDT
+Reply-To: info@free551.com
+From:   "FM" <info@notokin.jp>
+To:     linux-kselftest@vger.kernel.org
+Subject: =?UTF-8?B?44GU5oyo5ou2?=
+Date:   24 Oct 2020 02:38:02 +0530
+Message-ID: <20201024023802.59B25AA292AECB92@notokin.jp>
 MIME-Version: 1.0
-References: <20201015152348.65147-1-andriy.shevchenko@linux.intel.com> <20201015152348.65147-3-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20201015152348.65147-3-andriy.shevchenko@linux.intel.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 23 Oct 2020 13:41:30 -0700
-Message-ID: <CAFd5g47snMFts+HpAqMbvqndjqO3L4qVho=5kg+d5o4Arr_woA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] kunit: Introduce get_file_path() helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 8:23 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Helper allows to derive file names depending on --build_dir argument.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
-
-Greatly appreciated!
+ご挨拶、
+ 
+私の名前はフェリックスです。亡くなった口座名義人が所有する清算されたBTC口座から生じた900万米ドルを超える資金に関する緊急事項
+（取引）についてご連絡いたします。 
+私の計画と、私があなたの返事を受け取り、あなたの信頼を得た後、私が最初にあなたに連絡することを選んだ理由をあなたに知らせます。
+ 
+たくさんの感謝とあなたの返事を楽しみにしています。
+ 
+フェリックス。
