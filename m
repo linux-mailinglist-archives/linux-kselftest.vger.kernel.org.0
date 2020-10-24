@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 502D7297AFA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Oct 2020 08:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D12F297B01
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Oct 2020 08:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1759675AbgJXGAA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 24 Oct 2020 02:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S1759688AbgJXGGE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 24 Oct 2020 02:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1759673AbgJXGAA (ORCPT
+        with ESMTP id S1753093AbgJXGGE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 24 Oct 2020 02:00:00 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF312C0613CE
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2020 22:59:59 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id c196so4774531ybf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2020 22:59:59 -0700 (PDT)
+        Sat, 24 Oct 2020 02:06:04 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930ECC0613CE
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2020 23:06:02 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 19so2801319pgq.18
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Oct 2020 23:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=WWTPfd5xmp18C4dnceJjip+0VC8CvsF5yQ79HhchZt4=;
-        b=EiDRns/yqyf8MQuc/2BLaOFf6DpcdVP/zf5aVp/Qx6sBdJTWgV04AWvZ1exV1LWYSP
-         OYaOeOLcjDYPeRD2vyRdjTHIBZy3Y9fhN1MzTIHm+6eDglRnib7SLkTPfhpe4ApS3UE4
-         n5CaGgLbmuYstLA0PxpVRkfL+5n/1nVVXsnoFsXZDJR0QG5921EOszCHVP96JGoOaDzj
-         taRK+j3xwwIexVo1QWwXBUYJNbdXriJELcBGFyOzTFHf39frRYCczGodq7PCyEYXljlr
-         yjlIEBu9hiFGgFsk2JjvsPckmxqXzgHaOAP1jl55H+XEqJMU3OogFp6ueAfqHHcdJkGi
-         OIGg==
+        bh=ry+Iqml06PNTc8bJ3PEGJRoNBcfTj/VSmq8UqYUAxho=;
+        b=B71AmuzWEE8JGvM6TJA5JL8fS+0POX7+hD32qaoIrrd35I5AOMdnyUQDxihMZ2j4nt
+         TsgkWbG2PRtf7e8cKQ2Enb759gebRLHIK+j0WUIoFk4f0OfUoVelDs/1HhjbxVOl5Wxm
+         85+Eu2lnCiZz2WInjyDGhmpXPm9bAb/y6om5sZVNNNNWJZwZPvZEyDvNUcU5OFG3zDim
+         ViiQrNJuURypnSemCBdrGbnPFrPLUX5AQ3VPQ6OKuE6FEbJVJdMdcLMmzjo/V0qeYlck
+         phDQYEXTSFOLgCsgZs2te1ugf1WaX4vjx9pOVGVMrBIZXZcR/CF/HAPTF/8+MsUy+bol
+         yOrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=WWTPfd5xmp18C4dnceJjip+0VC8CvsF5yQ79HhchZt4=;
-        b=imoXeOoC/LdMTIJohehJZWbRnxN4z1GIyzjtHBvNPy1ooh6yTs4wfsN3rbV9ABF9rS
-         zSQN3SYkeJ6pKqyfTBNsh5aJlKGcB7w23Rh6SLY7lb5pKzvZ4LermwMDmr5LJ4jo3TuG
-         bEvOwGatdyx/QdVh95qGgG1le00QX9BCBLuCbmdSUVtVmpd6O6rg63Vkrsjvf2vlB7dH
-         DADEfp92XznKXp961T8/bj2fx5gcOFjgNoUYGeYJei3pmObVk++HmmcVTaipUz0zE1VY
-         x4K5gzEsJ1S/neqpO58TgyJBkJ22EkZ7CdiSm8jZRAPGwkuAtKJOU/9A/j5a5wDgPmA7
-         wXBg==
-X-Gm-Message-State: AOAM531rgu0hLvsV0fFhvsgOJIxyAyUF0B9MB7h32flE0Md/H85ZSl4L
-        jJoFqRz75Wj18GWXj7dNTr2dcWMShI8P8Q==
-X-Google-Smtp-Source: ABdhPJz6wZ1d3Bcbq5hbvVns615zlGq1vvS48E887voerwXq+wP/aYpVMUn4ZxGV5wXo+L/SaGLVx/LkGWHOMQ==
+        bh=ry+Iqml06PNTc8bJ3PEGJRoNBcfTj/VSmq8UqYUAxho=;
+        b=nG3vjmmxs8UhBxYje4rgPhsGpYSx3mAUDEEiEH69r/KaYFcYYsKo4Kjv7NCOsAjxYY
+         +1BXCthiCvau6cpEyNGz1WbGIvDDvjIn7f2EvDSPKXf0Lo4AY+GABp0UUg4/r3uZEBGS
+         w4yYlzrSl3GqNIbdv/6ZzoxpS8HtK7+/nFXOXi6A5BE/1zAbcEdWjCh2ox/73xxkvcYZ
+         8T990IuCbsJdFfoxi4g4Fr2LDULMfjTm5Bgn4tIdYxeuPaESTmYKHMF5PIx+YB6Mi1WA
+         RvKfcvEvd+l6l09A0E4UvmZz99+69O+uWAo1qTOSZGG9ZQjWVo4np6ZvOdDt11gU8Flj
+         /ZiQ==
+X-Gm-Message-State: AOAM530XIVuLx93WwMLYFBr7HQIVrfdRw15rPW3qQb8J8QzhioYADbUn
+        nhIvi2FSoEcl+5+CFxQEcYCqB7Uuvuiyeg==
+X-Google-Smtp-Source: ABdhPJyOa3SwW+GXGIYlgT4mYM6YGAsy16HVTbZFZkFo9aEFRVDdbBCytkLviWTPwDuzoitPtM4O0xR0QttYgw==
 Sender: "davidgow via sendgmr" <davidgow@spirogrip.svl.corp.google.com>
 X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:42a8:f0ff:fe4d:3548])
- (user=davidgow job=sendgmr) by 2002:a25:2d6e:: with SMTP id
- s46mr9069812ybe.434.1603519198978; Fri, 23 Oct 2020 22:59:58 -0700 (PDT)
-Date:   Fri, 23 Oct 2020 22:59:55 -0700
-In-Reply-To: <20201024052047.2526780-1-davidgow@google.com>
-Message-Id: <20201024055955.2553966-1-davidgow@google.com>
+ (user=davidgow job=sendgmr) by 2002:a17:902:c40b:b029:d3:def2:d90f with SMTP
+ id k11-20020a170902c40bb02900d3def2d90fmr2358205plk.29.1603519561878; Fri, 23
+ Oct 2020 23:06:01 -0700 (PDT)
+Date:   Fri, 23 Oct 2020 23:05:58 -0700
+In-Reply-To: <20201024055955.2553966-1-davidgow@google.com>
+Message-Id: <20201024060558.2556249-1-davidgow@google.com>
 Mime-Version: 1.0
-References: <20201024052047.2526780-1-davidgow@google.com>
+References: <20201024055955.2553966-1-davidgow@google.com>
 X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
-Subject: [PATCH v5] fat: Add KUnit tests for checksums and timestamps
+Subject: [PATCH v6] fat: Add KUnit tests for checksums and timestamps
 From:   David Gow <davidgow@google.com>
 To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
         Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org
@@ -81,12 +82,13 @@ https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext4/
 Signed-off-by: David Gow <davidgow@google.com>
 Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
 ---
-Whoops! Sent out a broken early version of this as v4 instead.
-Sorry about that!
+
+I am _so_ sorry: I sent out the wrong version again! It's clearly not my
+day! This version actually has the fix!
 -- David
 
 
-Changes since v4:
+Changes since v4/v5:
 https://lore.kernel.org/linux-kselftest/20201024052047.2526780-1-davidgow@google.com/
 - Fix a typo introduced in the Kconfig. It builds now.
 
@@ -111,6 +113,8 @@ https://lore.kernel.org/linux-kselftest/20201017064107.375174-1-davidgow@google.
 [2]:
 https://lore.kernel.org/linux-ext4/52959e99-4105-3de9-730c-c46894b82bdd@infradead.org/T/#t
 
+
+
  fs/fat/Kconfig    |  12 +++
  fs/fat/Makefile   |   2 +
  fs/fat/fat_test.c | 196 ++++++++++++++++++++++++++++++++++++++++++++++
@@ -119,7 +123,7 @@ https://lore.kernel.org/linux-ext4/52959e99-4105-3de9-730c-c46894b82bdd@infradea
  create mode 100644 fs/fat/fat_test.c
 
 diff --git a/fs/fat/Kconfig b/fs/fat/Kconfig
-index 66532a71e8fd..5f44bf94224e 100644
+index 66532a71e8fd..4e66f7e8defc 100644
 --- a/fs/fat/Kconfig
 +++ b/fs/fat/Kconfig
 @@ -115,3 +115,15 @@ config FAT_DEFAULT_UTF8
@@ -129,7 +133,7 @@ index 66532a71e8fd..5f44bf94224e 100644
 +
 +config FAT_KUNIT_TEST
 +	tristate "Unit Tests for FAT filesystems" if !KUNIT_ALL_TESTS
-+	depends on KUNIT & (MSDOS_FS || VFAT_FS)
++	depends on KUNIT && (MSDOS_FS || VFAT_FS)
 +	default KUNIT_ALL_TESTS
 +	help
 +	  This builds the FAT KUnit tests
