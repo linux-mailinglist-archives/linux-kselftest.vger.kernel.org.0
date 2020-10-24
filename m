@@ -2,85 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F29329792A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Oct 2020 23:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6B2297A2F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Oct 2020 03:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S465554AbgJWV4g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Oct 2020 17:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S465494AbgJWV4f (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Oct 2020 17:56:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C9DC0613CE;
-        Fri, 23 Oct 2020 14:56:35 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1603490194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=79rTg2SKZLoa/evVojUPAbe7jLqXBquN2CeaB2ok8dM=;
-        b=EetW5+h2WAFfLhHoLTCZ9y+9G7Ei5unrNieHG1oDovYqkcijqZVi/zV19BnVNHeDAYAq1y
-        5BPQvOBeenBqLGZsMVj0lxrhTePplE91mlRbpz6CwZlY5ngqViOYE+dIpuSbgEqXN/hk+p
-        jZgnfrBD4hxFmjvZv0feO4rHUiJ10r7PGhwlaj55UBGIzybRn6FLG3VxHgQfGbyY8XfR5y
-        ZWdJnyBKnvxoeq281PMRil6StYpFCqPQgpfBqwHXqkT9CU72euIqVkVtoVbuIqm2lzXkVL
-        8SmRG2kKrV0hOeL1M2wDVZUriXPi0GcVcw6UJ+cQfZoek59YI4kGMXrtfSvuHw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1603490194;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=79rTg2SKZLoa/evVojUPAbe7jLqXBquN2CeaB2ok8dM=;
-        b=+wyfQHnakkKyqSE/2uGjxNcZTwxnMUoslSbSCXRrWkS+13bWcBa+tI0OQQwYJbaGoQJY9w
-        kc67vWEIFcKYyjAw==
-To:     ira.weiny@intel.com, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 07/10] x86/entry: Pass irqentry_state_t by reference
-In-Reply-To: <20201022222701.887660-8-ira.weiny@intel.com>
-References: <20201022222701.887660-1-ira.weiny@intel.com> <20201022222701.887660-8-ira.weiny@intel.com>
-Date:   Fri, 23 Oct 2020 23:56:33 +0200
-Message-ID: <87y2jw4ne6.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1759114AbgJXBbC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Oct 2020 21:31:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1758421AbgJXBbC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 23 Oct 2020 21:31:02 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3605924248;
+        Sat, 24 Oct 2020 01:31:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603503077;
+        bh=3bvdQpcDajIOAP+NZa60PaBpOWVSUIRRs73iCB/PJYg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VJUuzDMyLzhSfjNDGnzhTiRlYAJygQ/WpGw+lktpMqgGFJ4vREbf0tzwRqvCNARyX
+         RTQjhCmSQ2v7r0dRb4dSrUAZ3NHGoLu+81ygMn80B2WQYanEcxkOeuZd4blB8xwuxH
+         85GJL0KHhX2ffLQk/i048N6ieHn/9Z5XM8wAgnVo=
+Date:   Sat, 24 Oct 2020 10:31:12 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH] selftests/ftrace: remove _do_fork() leftovers
+Message-Id: <20201024103112.64372203e6729279e9ef92f5@kernel.org>
+In-Reply-To: <20201023093523.65c495f8@gandalf.local.home>
+References: <1603443123-17457-1-git-send-email-agordeev@linux.ibm.com>
+        <20201023093523.65c495f8@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 22 2020 at 15:26, ira weiny wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
->
-> In preparation for adding PKS information to struct irqentry_state_t
-> change all call sites and usages to pass the struct by reference
-> instead of by value.
+On Fri, 23 Oct 2020 09:35:23 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-This still does not explain WHY you need to do that. 'Preparation' is a
-pretty useless information.
+> On Fri, 23 Oct 2020 10:52:03 +0200
+> Alexander Gordeev <agordeev@linux.ibm.com> wrote:
+> 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
+> > index acb17ce..0ddb948 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-notrace-pid.tc
+> > @@ -39,7 +39,7 @@ do_test() {
+> >      disable_tracing
+> >  
+> >      echo do_execve* > set_ftrace_filter
+> > -    echo *do_fork >> set_ftrace_filter
+> > +    echo kernel_clone >> set_ftrace_filter
+> >  
+> >      echo $PID > set_ftrace_notrace_pid
+> >      echo function > current_tracer
+> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> > index 9f0a968..71319b3 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> > @@ -39,7 +39,7 @@ do_test() {
+> >      disable_tracing
+> >  
+> >      echo do_execve* > set_ftrace_filter
+> > -    echo *do_fork >> set_ftrace_filter
+> > +    echo kernel_clone >> set_ftrace_filter
+> >  
+> >      echo $PID > set_ftrace_pid
+> >      echo function > current_tracer
+> 
+> The issue I have with this, is that I run these tests on older kernels too,
+> and tests that use to work on older kernels should still work. In fact,
+> this fails on the kernel I'm currently adding new changes to!
+> 
+> Perhaps we should have:
+> 
+> 	# older kernels have do_fork, but newer kernels have kernel_clone
+> 	echo kernel_clone >> set_ftrace_filter || echo *do_fork >> set_ftrace_filter
 
-What is the actual reason for this? Just because PKS information feels
-better that way?
+Good catch. BTW, can we check the filter-bility by grep the pattern from set_ftrace_filter?
 
-Also what is PKS information? Changelogs have to make sense on their own
-and not only in the context of a larger series of changes.
+Thank you,
 
-> While we are editing the call sites it is a good time to standardize on
-> the name 'irq_state'.
 
-  While at it change all usage sites to consistently use the variable
-  name 'irq_state'.
-
-Or something like that. See Documentation/process/...
-
-Thanks,
-
-        tglx
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
