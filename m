@@ -2,99 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD722981B0
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Oct 2020 13:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B163C2981BE
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Oct 2020 14:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1415765AbgJYMib (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 25 Oct 2020 08:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392429AbgJYMia (ORCPT
+        id S1416147AbgJYNBF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 25 Oct 2020 09:01:05 -0400
+Received: from fgw21-7.mail.saunalahti.fi ([62.142.5.82]:34216 "EHLO
+        fgw21-7.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1416145AbgJYNBF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Oct 2020 08:38:30 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A46C0613CE;
-        Sun, 25 Oct 2020 05:38:30 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id j5so3357161plk.7;
-        Sun, 25 Oct 2020 05:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fvuSDo2wkE4QwOENh8boyLlP4PQz8fyvgGKS3pbuxLw=;
-        b=p8dQBhRkN7fEu+O1NeZ4Xa+o73YiAbgZRasX+99jvsgirWRrEOVNpP7cNFzQBV1ej4
-         2yKfOCiJbHBFbSfeJL9eLJdKGeYPtNn3YQLKvJrrjQ1ppj4OlCR7oHYutNr+JenXWiuv
-         aKNpIA8usS4sSxh+VhqWnEvjE9VeMFW6334nns9Ooffb6A7GOwRrY0uknwFiL+K5mX5i
-         PsvxFI9yR1TNyUVhfhEIb3fkD+j8yZiyIjRLADqgR7gcxsvxoe7uDRnc3lZtaDewPiS+
-         h9Ve59Ul9ji3VvEDomkSf6l7Md438NCLLh+ZOm83oYeNxB5oUiipDtuTYneR4oTF+ATF
-         n2qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fvuSDo2wkE4QwOENh8boyLlP4PQz8fyvgGKS3pbuxLw=;
-        b=UyDAuC0c91j0v/uVaR8C7e530FiMY7VjZ2U3zCLpdO3v85PemZzmq/GGBONZJFvy99
-         2tXtBmP6ps1wVlI8gE0+YkNVqTL+Iju/i1wE555WxM7zaWPXC19A/WSXITJAlloK1sYg
-         cSIc74DVznxgBJggdJzvFIR4IoqVsN7DTyGhz7e2edCwzoB0BAAzawRTtwOxTqsQjm48
-         hr6uEPCBnbdxKdtF6W6tLI/V7m6MMeHwnXa1dEmPlUB1uW8FmCWEE4bW/L/ZFFHFMZFo
-         XsCrDmabyoecIheYPckwyzy+o01kMN8kBrn0Gu2w0eRJED243uMcg0zWizo/2OMkW0wN
-         SJ6g==
-X-Gm-Message-State: AOAM532VxtrIFwTRoMkKCMU/et6EPIzB5+h2Vdri9WaEX2naRhsOLp5V
-        Axms06MEpQLhtgMd5blXvq1oKI5uwwGG+O8Q4ws=
-X-Google-Smtp-Source: ABdhPJw6EPtQqi2auFy61TxpN2g6nCTZxCBfBMdZEJBnxR41xBu40iSeXHfknEXojy0kMHOCOFIkhvaaQYW4yrijlyo=
-X-Received: by 2002:a17:902:6bc8:b029:d6:d9d:f28c with SMTP id
- m8-20020a1709026bc8b02900d60d9df28cmr4532185plt.17.1603629509336; Sun, 25 Oct
- 2020 05:38:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201022151349.47436-1-98.arpi@gmail.com> <20201023173108.GG32486@alley>
-In-Reply-To: <20201023173108.GG32486@alley>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 25 Oct 2020 14:38:13 +0200
-Message-ID: <CAHp75VeEcb3CtQWeZXQz-UFMgqL6ERwDjudPmcCCNJgHesb3pg@mail.gmail.com>
-Subject: Re: [PATCH v2] lib: Convert test_printf.c to KUnit
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        Sun, 25 Oct 2020 09:01:05 -0400
+X-Greylist: delayed 962 seconds by postgrey-1.27 at vger.kernel.org; Sun, 25 Oct 2020 09:01:04 EDT
+Received: from localhost (88-115-248-186.elisa-laajakaista.fi [88.115.248.186])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id e49f1d72-16bf-11eb-9eb8-005056bdd08f;
+        Sun, 25 Oct 2020 14:44:59 +0200 (EET)
+Date:   Sun, 25 Oct 2020 14:44:59 +0200
+From:   andy@surfacebook.localdomain
+To:     SeongJae Park <sjpark@amazon.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        SeongJae Park <sjpark@amazon.de>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ilya Dryomov <idryomov@gmail.com>, kunit-dev@googlegroups.com,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] kunit: tool: Mark 'kunittest_config' as constant
+ again
+Message-ID: <20201025124459.GA1157488@surfacebook.localdomain>
+References: <CAFd5g44CxPuXbHund397PJSQPHGhWy1-7ij7JnJNzCO0NF6dCA@mail.gmail.com>
+ <20201022063526.12554-1-sjpark@amazon.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201022063526.12554-1-sjpark@amazon.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Oct 24, 2020 at 2:07 AM Petr Mladek <pmladek@suse.com> wrote:
-> On Thu 2020-10-22 20:43:49, Arpitha Raghunandan wrote:
-> > Convert test lib/test_printf.c to KUnit. More information about
+On Thu, Oct 22, 2020 at 08:35:26AM +0200, SeongJae Park wrote:
+> On Wed, 21 Oct 2020 14:32:52 -0700 Brendan Higgins <brendanhiggins@google.com> wrote:
+> 
+> > On Mon, Oct 12, 2020 at 3:27 AM SeongJae Park <sjpark@amazon.com> wrote:
+> > >
+> > > From: SeongJae Park <sjpark@amazon.de>
+> > >
+> > > 'kunit_kernel.kunittest_config' was constant at first, and therefore it
+> > > used UPPER_SNAKE_CASE naming convention that usually means it is
+> > > constant in Python world.  But, commit e3212513a8f0 ("kunit: Create
+> > > default config in '--build_dir'") made it modifiable to fix a use case
+> > > of the tool and thus the naming also changed to lower_snake_case.
+> > > However, this resulted in a confusion.  As a result, some successing
+> > > changes made the tool unittest fail, and a fix[1] of it again incurred
+> > > the '--build_dir' use case failure.
+> > >
+> > > As the previous commit fixed the '--build_dir' use case without
+> > > modifying the variable again, this commit marks the variable as constant
+> > > again with UPPER_SNAKE_CASE, to reduce future confusions.
+> > >
+> > > [1] Commit d43c7fb05765 ("kunit: tool: fix improper treatment of file location")
+> > >
+> > > Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> > 
+> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> 
+> Thanks :)
+> 
+> > 
+> > Thanks for this! This is something I meant to fix a while ago and forgot about.
+> > 
+> > One minor issue, this patch does not apply on torvalds/master right
+> > now. Could you please rebase this?
+> 
+> Surely of course, I will send next version soon.
 
-...
+May I ask what happened to [1]?
+I mean it seems these two are goind to collide.
 
-> > not ok 1 - printf-kunit-test
->
-> > --- a/lib/test_printf.c
-> > +++ b/lib/printf_kunit.c
->
-> There is no standard at the moment.
+Brendan?
 
-JFYI: from v5.10-rc1 it is expected to have documentation clarifying
-the naming scheme. Also there is a pending series [1] to move KUnit
-based test cases to the defined schema.
-
-> Please, either unify names of all the above modules or keep test_printf.c
-
-[1]: https://lore.kernel.org/linux-kselftest/20201016110836.52613-1-andriy.shevchenko@linux.intel.com/
+[1]: https://lore.kernel.org/linux-kselftest/20201015152348.65147-1-andriy.shevchenko@linux.intel.com/
 
 
 -- 
 With Best Regards,
 Andy Shevchenko
+
+
