@@ -2,83 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2801C298A1A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Oct 2020 11:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A29D298C4C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Oct 2020 12:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1768422AbgJZJsN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Oct 2020 05:48:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47420 "EHLO mx2.suse.de"
+        id S1773999AbgJZLuJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Oct 2020 07:50:09 -0400
+Received: from foss.arm.com ([217.140.110.172]:36476 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1768410AbgJZJsN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Oct 2020 05:48:13 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1603705691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SlRTfCqLtyIBSnFe1uknaKbGad8itHiONy0aNY9FDgo=;
-        b=JhFDzd3J++hEnEzoRBaqwNWv2fiLphklER9BPvVbuQwTMEi8uzeaOfKsoLXM2yLuyKcr5X
-        I8nZTO8D3hFAHiJvimHHlxm7iJcufndpC0AhaJuxydfSsuznKUmN+cTRDJ0e1AHY6tM+zX
-        yYbzVwgKoyxVx+rXolhn++ggmuAvh8A=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 01CBEB2CB;
-        Mon, 26 Oct 2020 09:48:11 +0000 (UTC)
-Date:   Mon, 26 Oct 2020 10:48:10 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ilya Dryomov <idryomov@gmail.com>, kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v2] lib: Convert test_printf.c to KUnit
-Message-ID: <20201026094810.GJ32486@alley>
-References: <20201022151349.47436-1-98.arpi@gmail.com>
- <20201023173108.GG32486@alley>
- <CAHp75VeEcb3CtQWeZXQz-UFMgqL6ERwDjudPmcCCNJgHesb3pg@mail.gmail.com>
+        id S1773995AbgJZLuJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Oct 2020 07:50:09 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2ABC4101E;
+        Mon, 26 Oct 2020 04:50:08 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D913D3F719;
+        Mon, 26 Oct 2020 04:50:06 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v4 0/5] kselftest: Extend vDSO tests
+Date:   Mon, 26 Oct 2020 11:49:40 +0000
+Message-Id: <20201026114945.48532-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VeEcb3CtQWeZXQz-UFMgqL6ERwDjudPmcCCNJgHesb3pg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun 2020-10-25 14:38:13, Andy Shevchenko wrote:
-> On Sat, Oct 24, 2020 at 2:07 AM Petr Mladek <pmladek@suse.com> wrote:
-> > On Thu 2020-10-22 20:43:49, Arpitha Raghunandan wrote:
-> > > Convert test lib/test_printf.c to KUnit. More information about
-> 
-> ...
-> 
-> > > not ok 1 - printf-kunit-test
-> >
-> > > --- a/lib/test_printf.c
-> > > +++ b/lib/printf_kunit.c
-> >
-> > There is no standard at the moment.
-> 
-> JFYI: from v5.10-rc1 it is expected to have documentation clarifying
-> the naming scheme. Also there is a pending series [1] to move KUnit
-> based test cases to the defined schema.
->
-> > Please, either unify names of all the above modules or keep test_printf.c
-> 
-> [1]: https://lore.kernel.org/linux-kselftest/20201016110836.52613-1-andriy.shevchenko@linux.intel.com/
+This series extends the kselftests for the vDSO library making sure: that
+they compile correctly on non x86 platforms, that they can be cross
+compiled and introducing new tests that verify the correctness of the
+library.
 
-Great, thanks for the pointer. I seems that this patch actually
-follows the proposed naming schema. I am fine with it then.
+The so extended vDSO kselftests have been verified on all the platforms
+supported by the unified vDSO library [1].
 
-Best Regards,
-Petr
+The only new patch that this series introduces is the first one, patch 2 and
+patch 3 have already been reviewed in past as part of other series [2] [3].
+
+[1] https://lore.kernel.org/lkml/20190621095252.32307-1-vincenzo.frascino@arm.com
+[2] https://lore.kernel.org/lkml/20190621095252.32307-26-vincenzo.frascino@arm.com
+[3] https://lore.kernel.org/lkml/20190523112116.19233-4-vincenzo.frascino@arm.com
+
+It is possible to build the series using the command below:
+
+make -C tools/testing/selftests/ ARCH=<arch> TARGETS=vDSO CC=<compiler>
+
+A version of the series rebased on 5.10-rc1 to simplify the testing can be found
+at [4].
+
+[4] https://git.gitlab.arm.com/linux-arm/linux-vf.git vdso/v4.tests
+
+Changes:
+--------
+v4:
+  - Rebased on 5.10-rc1.
+v3:
+  - Added correctness test for clock_gettime64.
+  - Rebased on 5.7-rc4.
+v2:
+  - Addressed review comments from Andy.
+  - Rebased on 5.7-rc3.
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+Vincenzo Frascino (5):
+  kselftest: Enable vDSO test on non x86 platforms
+  kselftest: Extend vDSO selftest
+  kselftest: Extend vDSO selftest to clock_getres
+  kselftest: Move test_vdso to the vDSO test suite
+  kselftest: Extend vdso correctness test to clock_gettime64
+
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/vDSO/Makefile         |  16 +-
+ tools/testing/selftests/vDSO/vdso_config.h    |  92 +++++++
+ tools/testing/selftests/vDSO/vdso_test_abi.c  | 244 ++++++++++++++++++
+ .../selftests/vDSO/vdso_test_clock_getres.c   | 124 +++++++++
+ .../vdso_test_correctness.c}                  | 115 ++++++++-
+ tools/testing/selftests/x86/Makefile          |   2 +-
+ 7 files changed, 586 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/vDSO/vdso_config.h
+ create mode 100644 tools/testing/selftests/vDSO/vdso_test_abi.c
+ create mode 100644 tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+ rename tools/testing/selftests/{x86/test_vdso.c => vDSO/vdso_test_correctness.c} (73%)
+
+-- 
+2.28.0
+
