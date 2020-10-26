@@ -2,52 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 695C02991C6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Oct 2020 17:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713F0299339
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Oct 2020 18:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1784733AbgJZQEW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Oct 2020 12:04:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49184 "EHLO mail.kernel.org"
+        id S1775136AbgJZRA6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Oct 2020 13:00:58 -0400
+Received: from mga03.intel.com ([134.134.136.65]:41213 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1784723AbgJZQD0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Oct 2020 12:03:26 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2AFF22400;
-        Mon, 26 Oct 2020 16:03:25 +0000 (UTC)
-Date:   Mon, 26 Oct 2020 12:03:23 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: Re: [PATCH] selftests/ftrace: remove _do_fork() leftovers
-Message-ID: <20201026120323.14058f56@gandalf.local.home>
-In-Reply-To: <20201024103112.64372203e6729279e9ef92f5@kernel.org>
-References: <1603443123-17457-1-git-send-email-agordeev@linux.ibm.com>
-        <20201023093523.65c495f8@gandalf.local.home>
-        <20201024103112.64372203e6729279e9ef92f5@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1775084AbgJZQ7e (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Oct 2020 12:59:34 -0400
+IronPort-SDR: hRO8CWHJ3l72QuwvLPIBpngum61AkITOzZiiqfqSVDhtt++nOV8YSWF6OCFR2qO6QdMzH8i4Qz
+ a13DkNPt6VFA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="168053454"
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="168053454"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 09:59:32 -0700
+IronPort-SDR: Zh1vOoIEYEncgKH2PUXTR3S26wF/8pzmkm2XlFsX2eFFP05wqn00WxrdRZhqXdZ/jeDFkGU6FW
+ zmBtQ+8G1RoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="334093414"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 26 Oct 2020 09:59:30 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 650C214F; Mon, 26 Oct 2020 18:59:29 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, SeongJae Park <sjpark@amazon.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: [PATCH v2 1/3] kunit: Do not pollute source directory with generated files (.kunitconfig)
+Date:   Mon, 26 Oct 2020 18:59:25 +0200
+Message-Id: <20201026165927.19020-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 24 Oct 2020 10:31:12 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+When --build_dir is provided use it and do not pollute source directory
+which even can be mounted over network or read-only.
 
-> > Perhaps we should have:
-> > 
-> > 	# older kernels have do_fork, but newer kernels have kernel_clone
-> > 	echo kernel_clone >> set_ftrace_filter || echo *do_fork >> set_ftrace_filter  
-> 
-> Good catch. BTW, can we check the filter-bility by grep the pattern from set_ftrace_filter?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v2: renamed *_uniconfig -> *_kunitconfig (Brendan), added tags (Brendan)
+ tools/testing/kunit/kunit.py        | 25 ++++++++++++-------------
+ tools/testing/kunit/kunit_kernel.py | 24 +++++++++++++++++++-----
+ 2 files changed, 31 insertions(+), 18 deletions(-)
 
-I think we need to use /proc/kallsyms, as the kprobe code should still work
-if function tracing is disabled, and the function filter files will not
-exist.
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index ebf5f5763dee..8cfeee98097f 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -11,7 +11,6 @@ import argparse
+ import sys
+ import os
+ import time
+-import shutil
+ 
+ from collections import namedtuple
+ from enum import Enum, auto
+@@ -44,11 +43,6 @@ class KunitStatus(Enum):
+ 	BUILD_FAILURE = auto()
+ 	TEST_FAILURE = auto()
+ 
+-def create_default_kunitconfig():
+-	if not os.path.exists(kunit_kernel.kunitconfig_path):
+-		shutil.copyfile('arch/um/configs/kunit_defconfig',
+-				kunit_kernel.kunitconfig_path)
+-
+ def get_kernel_root_path():
+ 	parts = sys.argv[0] if not __file__ else __file__
+ 	parts = os.path.realpath(parts).split('tools/testing/kunit')
+@@ -61,7 +55,6 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	kunit_parser.print_with_timestamp('Configuring KUnit Kernel ...')
+ 
+ 	config_start = time.time()
+-	create_default_kunitconfig()
+ 	success = linux.build_reconfig(request.build_dir, request.make_options)
+ 	config_end = time.time()
+ 	if not success:
+@@ -262,12 +255,12 @@ def main(argv, linux=None):
+ 		if not os.path.exists(cli_args.build_dir):
+ 			os.mkdir(cli_args.build_dir)
+ 
+-		if not os.path.exists(kunit_kernel.kunitconfig_path):
+-			create_default_kunitconfig()
+-
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+ 
++		linux.create_kunitconfig(cli_args.build_dir)
++		linux.read_kunitconfig(cli_args.build_dir)
++
+ 		request = KunitRequest(cli_args.raw_output,
+ 				       cli_args.timeout,
+ 				       cli_args.jobs,
+@@ -283,12 +276,12 @@ def main(argv, linux=None):
+ 				not os.path.exists(cli_args.build_dir)):
+ 			os.mkdir(cli_args.build_dir)
+ 
+-		if not os.path.exists(kunit_kernel.kunitconfig_path):
+-			create_default_kunitconfig()
+-
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+ 
++		linux.create_kunitconfig(cli_args.build_dir)
++		linux.read_kunitconfig(cli_args.build_dir)
++
+ 		request = KunitConfigRequest(cli_args.build_dir,
+ 					     cli_args.make_options)
+ 		result = config_tests(linux, request)
+@@ -301,6 +294,9 @@ def main(argv, linux=None):
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+ 
++		linux.create_kunitconfig(cli_args.build_dir)
++		linux.read_kunitconfig(cli_args.build_dir)
++
+ 		request = KunitBuildRequest(cli_args.jobs,
+ 					    cli_args.build_dir,
+ 					    cli_args.alltests,
+@@ -315,6 +311,9 @@ def main(argv, linux=None):
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+ 
++		linux.create_kunitconfig(cli_args.build_dir)
++		linux.read_kunitconfig(cli_args.build_dir)
++
+ 		exec_request = KunitExecRequest(cli_args.timeout,
+ 						cli_args.build_dir,
+ 						cli_args.alltests)
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index b557b1e93f98..633a2efcfdbd 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -6,10 +6,10 @@
+ # Author: Felix Guo <felixguoxiuping@gmail.com>
+ # Author: Brendan Higgins <brendanhiggins@google.com>
+ 
+-
+ import logging
+ import subprocess
+ import os
++import shutil
+ import signal
+ 
+ from contextlib import ExitStack
+@@ -18,7 +18,8 @@ import kunit_config
+ import kunit_parser
+ 
+ KCONFIG_PATH = '.config'
+-kunitconfig_path = '.kunitconfig'
++KUNITCONFIG_PATH = '.kunitconfig'
++DEFAULT_KUNITCONFIG_PATH = 'arch/um/configs/kunit_defconfig'
+ BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+ 
+ class ConfigError(Exception):
+@@ -99,19 +100,22 @@ class LinuxSourceTreeOperations(object):
+ 						   stderr=subprocess.STDOUT)
+ 			process.wait(timeout)
+ 
+-
+ def get_kconfig_path(build_dir):
+ 	kconfig_path = KCONFIG_PATH
+ 	if build_dir:
+ 		kconfig_path = os.path.join(build_dir, KCONFIG_PATH)
+ 	return kconfig_path
+ 
++def get_kunitconfig_path(build_dir):
++	kunitconfig_path = KUNITCONFIG_PATH
++	if build_dir:
++		kunitconfig_path = os.path.join(build_dir, KUNITCONFIG_PATH)
++	return kunitconfig_path
++
+ class LinuxSourceTree(object):
+ 	"""Represents a Linux kernel source tree with KUnit tests."""
+ 
+ 	def __init__(self):
+-		self._kconfig = kunit_config.Kconfig()
+-		self._kconfig.read_from_file(kunitconfig_path)
+ 		self._ops = LinuxSourceTreeOperations()
+ 		signal.signal(signal.SIGINT, self.signal_handler)
+ 
+@@ -123,6 +127,16 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return True
+ 
++	def create_kunitconfig(self, build_dir, defconfig=DEFAULT_KUNITCONFIG_PATH):
++		kunitconfig_path = get_kunitconfig_path(build_dir)
++		if not os.path.exists(kunitconfig_path):
++			shutil.copyfile(defconfig, kunitconfig_path)
++
++	def read_kunitconfig(self, build_dir):
++		kunitconfig_path = get_kunitconfig_path(build_dir)
++		self._kconfig = kunit_config.Kconfig()
++		self._kconfig.read_from_file(kunitconfig_path)
++
+ 	def validate_config(self, build_dir):
+ 		kconfig_path = get_kconfig_path(build_dir)
+ 		validated_kconfig = kunit_config.Kconfig()
+-- 
+2.28.0
 
--- Steve
