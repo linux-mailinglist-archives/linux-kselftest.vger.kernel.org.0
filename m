@@ -2,105 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A70829A68E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 09:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5B929A73E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 10:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894773AbgJ0I0u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Oct 2020 04:26:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28470 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2395416AbgJ0I0t (ORCPT
+        id S2895300AbgJ0JD5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 05:03:57 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:33338 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2895295AbgJ0JD4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 04:26:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603787207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0SgGH32DtkrCtTnKEBBNXoBqjBSTDBuSJiubuSpA7gY=;
-        b=CNcWELZgl/i8VEGASEGwbUrFRgRtHW/x1BxAcbC0hwfbF8Y1TJeUqPY4yDC4gdUbXoaM2g
-        5EFodU1hRlwVZm4Ga0qyjGqkTlFvHs/qEBRVR1JjtZgPSKIhI+ys0QnZQuRU/DMljzHqTE
-        X1pt5jwrI0+5g9XNcOOZP1Fae68Wgq0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-211-6RoR-GSeOCmfUqCmMk5Dsg-1; Tue, 27 Oct 2020 04:26:42 -0400
-X-MC-Unique: 6RoR-GSeOCmfUqCmMk5Dsg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51A7C5705E;
-        Tue, 27 Oct 2020 08:26:38 +0000 (UTC)
-Received: from [10.36.113.185] (ovpn-113-185.ams2.redhat.com [10.36.113.185])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 492196EF45;
-        Tue, 27 Oct 2020 08:26:31 +0000 (UTC)
-Subject: Re: [PATCH v7 1/7] mm: add definition of PMD_PAGE_ORDER
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-References: <20201026083752.13267-1-rppt@kernel.org>
- <20201026083752.13267-2-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <9728bfdf-9f40-68dd-3862-5befc770268b@redhat.com>
-Date:   Tue, 27 Oct 2020 09:26:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        Tue, 27 Oct 2020 05:03:56 -0400
+Received: by mail-ot1-f66.google.com with SMTP id x7so506894ota.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 02:03:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mMR/HImx8HeIWOB1IW4d4ooUwHbJnSc4ChopXkol+tY=;
+        b=Xg2AvIHdQY3taxJqct+JFiPWoBWewED7SFBkf4BNfR8mWwmjMyETCb7JSxfSEs0hPf
+         rbB3JqF2ytHB7sdY7A0nMedrzTQKTen4NmuBvIyzFus5llPQA6pXSCAMQ6+FEMJnwbUL
+         PzDkMEmWnJC0dpKvP6NgS3wIU8J9wM0m/dPRroMHL7iVwBQl+PQAGqm0EpGAahxKp7IT
+         3lZ7zIO+ZPxfVkt6qx7UGfvOKrzzXSobfGAmI3qvkLKVUx5TeFmMPl7c6SP19c22VBea
+         TxQrpdjd1oQGrZUd8t3wEaghVw5V369fiJkpMO3fMWc+z2zqZvioeorot5DL4qZrwbz7
+         6Q5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mMR/HImx8HeIWOB1IW4d4ooUwHbJnSc4ChopXkol+tY=;
+        b=chjOXxUDY23Dg6juMt1V1il4pyF7wArhovgNlJRqwelJjo/4J7TYls0OwoW0mhqYQ4
+         edBXz7lqEB+1D+ejduqFExHS2Z3cY8f9Zeh0DDpz/evjxIFGditUUxLB+PaNeI+BmrPg
+         kQMeqU1Mt0wvu4D0QVot2l5RMq8sfn95BxVYqwTdV+zCUAc728mra68wH3R0ZqXFXTlo
+         TawJKNXSY7sxEqs6Gt7TUJ9y+WAzFqVMpTApDKpcGZVNPHfliV0++/ILu+tzfA+XZakr
+         WR9BUBhw965n2Eto/0iD9TdgK/mInMWmtolc6XoYOrwQFS8tqUTMTNHHpIvwivvDC+PJ
+         AggA==
+X-Gm-Message-State: AOAM532aBoQ2lRQ0ssQbM16md1kj6Ez9VR4iaPce2MqAI+fRlKJHE56a
+        46MSFxLqkY4jYh74sWAepmvFV7y5our3l/oXqF/HDg==
+X-Google-Smtp-Source: ABdhPJydV7HAJnVLV858KglXx9BeIvDM+HKegy4BHuUfvYe2R4pzwEQ10NdLr42Xw7Ixiclt+mW3kOlv1r6uNqDoQog=
+X-Received: by 2002:a9d:3a65:: with SMTP id j92mr811798otc.17.1603789435179;
+ Tue, 27 Oct 2020 02:03:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201026083752.13267-2-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20201026183523.82749-1-98.arpi@gmail.com>
+In-Reply-To: <20201026183523.82749-1-98.arpi@gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 27 Oct 2020 10:03:43 +0100
+Message-ID: <CANpmjNMnkXLFeQU6xZNwj3bWqE4Ap47wQKkL3-0ENX+R1YoLOg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] kunit: Support for Parameterized Testing
+To:     Arpitha Raghunandan <98.arpi@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26.10.20 09:37, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> The definition of PMD_PAGE_ORDER denoting the number of base pages in the
-> second-level leaf page is already used by DAX and maybe handy in other
-> cases as well.
-> 
-> Several architectures already have definition of PMD_ORDER as the size of
-> second level page table, so to avoid conflict with these definitions use
-> PMD_PAGE_ORDER name and update DAX respectively.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+I just tried to give this a spin on some of my tests and noticed some
+more things (apologies for the multiple rounds of comments):
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+On Mon, 26 Oct 2020 at 19:36, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+[...]
+>  /**
+>   * struct kunit_suite - describes a related collection of &struct kunit_case
+> @@ -208,6 +217,15 @@ struct kunit {
+>         const char *name; /* Read only after initialization! */
+>         char *log; /* Points at case log after initialization */
+>         struct kunit_try_catch try_catch;
+> +       /* param_values points to test case parameters in parameterized tests */
+> +       void *param_values;
 
+This should be singular, i.e. "param_value", since the generator only
+generates 1 value for each test. Whether or not that value is a
+pointer that points to more than 1 value or is an integer etc. is
+entirely test-dependent.
 
--- 
+> +       /*
+> +        * current_param stores the index of the parameter in
+> +        * the array of parameters in parameterized tests.
+> +        * current_param + 1 is printed to indicate the parameter
+> +        * that causes the test to fail in case of test failure.
+> +        */
+> +       int current_param;
+
+I think, per your comment above, this should be named "param_index".
+Also, I would suggest removing the mention of "array" in the comment,
+because the parameters aren't dependent on use of an array.
+
+>         /*
+>          * success starts as true, and may only be set to false during a
+>          * test case; thus, it is safe to update this across multiple
+> @@ -1742,4 +1760,18 @@ do {                                                                            \
+>                                                 fmt,                           \
+>                                                 ##__VA_ARGS__)
+>
+> +/**
+> + * KUNIT_PARAM_GENERATOR() - Helper method for test parameter generators
+> + *                          required in parameterized tests.
+> + * @name:  prefix of the name for the test parameter generator function.
+> + * @prev: a pointer to the previous test parameter, NULL for first parameter.
+> + * @array: a user-supplied pointer to an array of test parameters.
+> + */
+> +#define KUNIT_PARAM_GENERATOR(name, array)                                                     \
+> +       static void *name##_gen_params(void *prev)                                              \
+> +       {                                                                                       \
+> +               typeof((array)[0]) * __next = prev ? ((typeof(__next)) prev) + 1 : (array);     \
+> +               return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;                  \
+> +       }
+> +
+>  #endif /* _KUNIT_TEST_H */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 750704abe89a..b70ab9b12f3b 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -127,6 +127,11 @@ unsigned int kunit_test_case_num(struct kunit_suite *suite,
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_test_case_num);
+>
+> +static void kunit_print_failed_param(struct kunit *test)
+> +{
+> +       kunit_err(test, "\n\tTest failed at parameter: %d\n", test->current_param + 1);
+> +}
+
+Is this the only place where the param index is used? It might be
+helpful to show the index together with the test-case name, otherwise
+we get a series of test cases in the output which are all named the
+same which can be confusing.
+
+>  static void kunit_print_string_stream(struct kunit *test,
+>                                       struct string_stream *stream)
+>  {
+> @@ -168,6 +173,8 @@ static void kunit_fail(struct kunit *test, struct kunit_assert *assert)
+>         assert->format(assert, stream);
+>
+>         kunit_print_string_stream(test, stream);
+> +       if (test->param_values)
+> +               kunit_print_failed_param(test);
+>
+>         WARN_ON(string_stream_destroy(stream));
+>  }
+> @@ -239,7 +246,18 @@ static void kunit_run_case_internal(struct kunit *test,
+>                 }
+>         }
+>
+> -       test_case->run_case(test);
+> +       if (!test_case->generate_params) {
+> +               test_case->run_case(test);
+> +       } else {
+> +               test->param_values = test_case->generate_params(NULL);
+> +               test->current_param = 0;
+> +
+> +               while (test->param_values) {
+> +                       test_case->run_case(test);
+> +                       test->param_values = test_case->generate_params(test->param_values);
+> +                       test->current_param++;
+> +               }
+> +       }
+>  }
+
+Looking forward to v4. :-)
+
 Thanks,
-
-David / dhildenb
-
+-- Marco
