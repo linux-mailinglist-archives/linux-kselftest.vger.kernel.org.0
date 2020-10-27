@@ -2,188 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32AB629A37D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 04:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F1429A3E3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 06:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505306AbgJ0D53 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Oct 2020 23:57:29 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4588 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505303AbgJ0D52 (ORCPT
+        id S2505755AbgJ0FOO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 01:14:14 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44466 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410224AbgJ0FOO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Oct 2020 23:57:28 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CKyZz2bmKzhZsq;
-        Tue, 27 Oct 2020 11:57:31 +0800 (CST)
-Received: from SWX921481.china.huawei.com (10.126.202.177) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 27 Oct 2020 11:57:18 +0800
-From:   Barry Song <song.bao.hua@hisilicon.com>
-To:     <iommu@lists.linux-foundation.org>, <hch@lst.de>,
-        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
-CC:     <joro@8bytes.org>, <will@kernel.org>, <shuah@kernel.org>,
-        <linuxarm@huawei.com>, <linux-kselftest@vger.kernel.org>,
-        Barry Song <song.bao.hua@hisilicon.com>
-Subject: [PATCH 2/2] selftests/dma: add test application for DMA_MAP_BENCHMARK
-Date:   Tue, 27 Oct 2020 16:53:30 +1300
-Message-ID: <20201027035330.29612-3-song.bao.hua@hisilicon.com>
-X-Mailer: git-send-email 2.21.0.windows.1
-In-Reply-To: <20201027035330.29612-1-song.bao.hua@hisilicon.com>
-References: <20201027035330.29612-1-song.bao.hua@hisilicon.com>
+        Tue, 27 Oct 2020 01:14:14 -0400
+Received: by mail-pf1-f194.google.com with SMTP id 133so211076pfx.11;
+        Mon, 26 Oct 2020 22:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=V6b7HwvvFZ2s1xYsjf24gbEkjeQ0R1jZb5gJGqmof84=;
+        b=QV32QpdFiFdGKP8KIf3ztwU5B2L+kQ1TISGCOSyRr7wqANt+4iKpSWIDz9FXOVJiNY
+         irLnmSzzDG34JYL9ztGPJT7Eu5o9dNRCr+tOE0KqM0LTMF2R1QqmDVmeEQnFLrO+ZweC
+         ha3pZVAxePVmy3GHH67EPgBWSFxuJKrHP+97wFhhBV6yhEdvo3FE2bbeikaYjl3tmVF/
+         mmwIaskRvfZYnHtO+qHXJ8WhB5NYnRpnt5wwgzEyqcPDWKsgDkrCg5fs4W8g/SDqlGi/
+         aYXSL0GyEmyycjfKZOBm5SKJM9vpR9Sx0ZffKH+Pn539f+rUzDYRAOo2ZEPjRTSC9CXn
+         DF7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=V6b7HwvvFZ2s1xYsjf24gbEkjeQ0R1jZb5gJGqmof84=;
+        b=JUv4B7shyAacOnifvW/OsjcrsKyX5p9SbdW70EyrweELHAa0iZB3XyHnpSR7sVjacm
+         nf1F8qZ/A1Xawnp0kKbt5Nk47TjmOXsPjzicxP+GO1bLvKBX8DiBExz98wy3TqaIet8u
+         8JizuSL/Y+fXnFKDU+3lAkn6ritJjSI+UBRWrVpesH5y7vqkhurxZEycqU8N4+AdVy4P
+         8A3AJIyMdOLO3YoOi8GgITTzMNH1Yta8vCNHRqjfhInp8tWcS64/S7HlFU4UbdRrYHRz
+         Aw3R+uSqo8Za/K4MSu0BJgsRpgKxYYI+9ih1XAFuufQ2mz6efxiP1aIOKoCIHlb/FutK
+         40Ag==
+X-Gm-Message-State: AOAM530Bgvgs4YydoSp2O5ekUTGqChbDOqXhFGy6U3Xlc1gGN68PWRRA
+        MR6sq0sWztnfsrhSEuRCKdY6oKNYET1yIsk6
+X-Google-Smtp-Source: ABdhPJwI7iAg84+0QDG22suSqnWNw8moOpZOVmTy5bWa+NEsj3D7XxDRHLUnPHTYynMmO4JLGk72yg==
+X-Received: by 2002:a63:af08:: with SMTP id w8mr411863pge.419.1603775651104;
+        Mon, 26 Oct 2020 22:14:11 -0700 (PDT)
+Received: from [192.168.86.81] ([106.51.240.100])
+        by smtp.gmail.com with ESMTPSA id 78sm512426pfz.211.2020.10.26.22.14.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Oct 2020 22:14:10 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] kunit: Support for Parameterized Testing
+To:     Marco Elver <elver@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+References: <20201026183523.82749-1-98.arpi@gmail.com>
+ <CANpmjNNQtGC_jDp8TSHRHOMXi7aTQgwjtUiCWE+YqBgq-G2z5Q@mail.gmail.com>
+From:   Arpitha Raghunandan <98.arpi@gmail.com>
+Message-ID: <f25c881d-03f9-e246-d8d4-e985d9662d04@gmail.com>
+Date:   Tue, 27 Oct 2020 10:44:05 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.126.202.177]
-X-CFilter-Loop: Reflected
+In-Reply-To: <CANpmjNNQtGC_jDp8TSHRHOMXi7aTQgwjtUiCWE+YqBgq-G2z5Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch provides the test application for DMA_MAP_BENCHMARK.
+On 27/10/20 4:44 am, Marco Elver wrote:
+> On Mon, 26 Oct 2020 at 19:36, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+>>
+>> Implementation of support for parameterized testing in KUnit.
+>> This approach requires the creation of a test case using the
+>> KUNIT_CASE_PARAM macro that accepts a generator function as input.
+>> This generator function should return the next parameter given the
+>> previous parameter in parameterized tests. It also provides
+>> a macro to generate common-case generators.
+>>
+>> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+>> Co-developed-by: Marco Elver <elver@google.com>
+>> Signed-off-by: Marco Elver <elver@google.com>
+>> ---
+>> Changes v2->v3:
+>> - Modifictaion of generator macro and method
+> 
+> Great to see it worked as expected!
+> 
+>> Changes v1->v2:
+>> - Use of a generator method to access test case parameters
+>>
+>>  include/kunit/test.h | 32 ++++++++++++++++++++++++++++++++
+>>  lib/kunit/test.c     | 20 +++++++++++++++++++-
+>>  2 files changed, 51 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/kunit/test.h b/include/kunit/test.h
+>> index a423fffefea0..16bf9f334e2c 100644
+>> --- a/include/kunit/test.h
+>> +++ b/include/kunit/test.h
+>> @@ -142,6 +142,12 @@ struct kunit_case {
+>>         void (*run_case)(struct kunit *test);
+>>         const char *name;
+>>
+>> +       /*
+>> +        * Pointer to test parameter generator function.
+>> +        * Used only for parameterized tests.
+> 
+> What I meant was to give a description of the protocol, so that if
+> somebody wanted, they could (without reading the implementation)
+> implement their own custom generator without the helper macro.
+> 
+> E.g. something like: "The generator function is used to lazily
+> generate a series of arbitrarily typed values that fit into a void*.
+> The argument @prev is the previously returned value, which should be
+> used to derive the next value; @prev is set to NULL on the initial
+> generator call. When no more values are available, the generator must
+> return NULL."
+>
 
-Before running the test application, we need to bind a device to dma_map_
-benchmark driver. For example, unbind "xxx" from its original driver and
-bind to dma_map_benchmark:
-
-echo dma_map_benchmark > /sys/bus/platform/devices/xxx/driver_override
-echo xxx > /sys/bus/platform/drivers/xxx/unbind
-echo xxx > /sys/bus/platform/drivers/dma_map_benchmark/bind
-
-Then, run 10 threads on numa node 1 for 10 seconds on device "xxx":
-./dma_map_benchmark -t 10 -s 10 -n 1
-dma mapping benchmark: average map_nsec:3619 average unmap_nsec:2423
-
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
----
- MAINTAINERS                                   |  6 ++
- tools/testing/selftests/dma/Makefile          |  6 ++
- tools/testing/selftests/dma/config            |  1 +
- .../testing/selftests/dma/dma_map_benchmark.c | 72 +++++++++++++++++++
- 4 files changed, 85 insertions(+)
- create mode 100644 tools/testing/selftests/dma/Makefile
- create mode 100644 tools/testing/selftests/dma/config
- create mode 100644 tools/testing/selftests/dma/dma_map_benchmark.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f310f0a09904..552389874ca2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5220,6 +5220,12 @@ F:	include/linux/dma-mapping.h
- F:	include/linux/dma-map-ops.h
- F:	kernel/dma/
+Oh okay. I am not sure if this is the best place to add documentation for this.
  
-+DMA MAPPING BENCHMARK
-+M:	Barry Song <song.bao.hua@hisilicon.com>
-+L:	iommu@lists.linux-foundation.org
-+F:	kernel/dma/map_benchmark.c
-+F:	tools/testing/selftests/dma/
-+
- DMA-BUF HEAPS FRAMEWORK
- M:	Sumit Semwal <sumit.semwal@linaro.org>
- R:	Andrew F. Davis <afd@ti.com>
-diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
-new file mode 100644
-index 000000000000..aa8e8b5b3864
---- /dev/null
-+++ b/tools/testing/selftests/dma/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -I../../../../usr/include/
-+
-+TEST_GEN_PROGS := dma_map_benchmark
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/dma/config b/tools/testing/selftests/dma/config
-new file mode 100644
-index 000000000000..6102ee3c43cd
---- /dev/null
-+++ b/tools/testing/selftests/dma/config
-@@ -0,0 +1 @@
-+CONFIG_DMA_MAP_BENCHMARK=y
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-new file mode 100644
-index 000000000000..e03bd03e101e
---- /dev/null
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020 Hisilicon Limited.
-+ */
-+
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <linux/types.h>
-+
-+#define DMA_MAP_BENCHMARK	_IOWR('d', 1, struct map_benchmark)
-+
-+struct map_benchmark {
-+	__u64 map_nsec;
-+	__u64 unmap_nsec;
-+	__u32 threads; /* how many threads will do map/unmap in parallel */
-+	__u32 seconds; /* how long the test will last */
-+	int node; /* which numa node this benchmark will run on */
-+	__u64 expansion[10];	/* For future use */
-+};
-+
-+int main(int argc, char **argv)
-+{
-+	struct map_benchmark map;
-+	int fd, opt, threads = 0, seconds = 0, node = -1;
-+	int cmd = DMA_MAP_BENCHMARK;
-+	char *p;
-+
-+	while ((opt = getopt(argc, argv, "t:s:n:")) != -1) {
-+		switch (opt) {
-+		case 't':
-+			threads = atoi(optarg);
-+			break;
-+		case 's':
-+			seconds = atoi(optarg);
-+			break;
-+		case 'n':
-+			node = atoi(optarg);
-+			break;
-+		default:
-+			return -1;
-+		}
-+	}
-+
-+	if (threads <= 0 || seconds <= 0) {
-+		perror("invalid number of threads or seconds");
-+		exit(1);
-+	}
-+
-+	fd = open("/sys/kernel/debug/dma_map_benchmark", O_RDWR);
-+	if (fd == -1) {
-+		perror("open");
-+		exit(1);
-+	}
-+
-+	map.seconds = seconds;
-+	map.threads = threads;
-+	map.node = node;
-+	if (ioctl(fd, cmd, &map)) {
-+		perror("ioctl");
-+		exit(1);
-+	}
-+
-+	printf("dma mapping benchmark: average map_nsec:%lld average unmap_nsec:%lld\n",
-+			map.map_nsec,
-+			map.unmap_nsec);
-+
-+	return 0;
-+}
--- 
-2.25.1
+>> +        */
+>> +       void* (*generate_params)(void *prev);
+>> +
+>>         /* private: internal use only. */
+>>         bool success;
+>>         char *log;
+>> @@ -162,6 +168,9 @@ static inline char *kunit_status_to_string(bool status)
+>>   * &struct kunit_case for an example on how to use it.
+>>   */
+>>  #define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+>> +#define KUNIT_CASE_PARAM(test_name, gen_params)                        \
+>> +               { .run_case = test_name, .name = #test_name,    \
+>> +                 .generate_params = gen_params }
+>>
+>>  /**
+>>   * struct kunit_suite - describes a related collection of &struct kunit_case
+>> @@ -208,6 +217,15 @@ struct kunit {
+>>         const char *name; /* Read only after initialization! */
+>>         char *log; /* Points at case log after initialization */
+>>         struct kunit_try_catch try_catch;
+>> +       /* param_values points to test case parameters in parameterized tests */
+>> +       void *param_values;
+>> +       /*
+>> +        * current_param stores the index of the parameter in
+>> +        * the array of parameters in parameterized tests.
+>> +        * current_param + 1 is printed to indicate the parameter
+>> +        * that causes the test to fail in case of test failure.
+>> +        */
+>> +       int current_param;
+>>         /*
+>>          * success starts as true, and may only be set to false during a
+>>          * test case; thus, it is safe to update this across multiple
+>> @@ -1742,4 +1760,18 @@ do {                                                                            \
+>>                                                 fmt,                           \
+>>                                                 ##__VA_ARGS__)
+>>
+>> +/**
+>> + * KUNIT_PARAM_GENERATOR() - Helper method for test parameter generators
+>> + *                          required in parameterized tests.
+> 
+> This is only for arrays, which is why I suggested KUNIT_ARRAY_PARAM()
+> as the name.
+> 
+> A generator can very well be implemented without an array, so this
+> macro name is confusing. In future somebody might want to provide a
+> macro that takes a start + end value (and maybe a step value) to
+> generate a series of values. That generator could be named
+> KUNIT_RANGE_PARAM(name, start, end, step) and gives us a generator
+> that is also named name##_gen_params. (If you want to try implementing
+> that macro, I'd suggest doing it as a separate patch.)
+> 
+> And I don't think we need to put "GENERATOR" into the name of these
+> macros, because the generators are now the fundamental method with
+> which to get parameterized tests. We don't need to state the obvious,
+> in favor of some brevity.
+>
 
+Okay, makes sense. I will change it to KUNIT_ARRAY_PARAM() for the next version.
+ 
+>> + * @name:  prefix of the name for the test parameter generator function.
+>> + * @prev: a pointer to the previous test parameter, NULL for first parameter.
+>> + * @array: a user-supplied pointer to an array of test parameters.
+>> + */
+>> +#define KUNIT_PARAM_GENERATOR(name, array)                                                     \
+>> +       static void *name##_gen_params(void *prev)                                              \
+>> +       {                                                                                       \
+>> +               typeof((array)[0]) * __next = prev ? ((typeof(__next)) prev) + 1 : (array);     \
+>> +               return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;                  \
+>> +       }
+>> +
+>>  #endif /* _KUNIT_TEST_H */
+> 
+> Thanks,
+> -- Marco
+> 
+
+Thanks!
