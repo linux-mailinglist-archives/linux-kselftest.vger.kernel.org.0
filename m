@@ -2,69 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEAD29CB60
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 22:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985DE29CB98
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 22:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S374230AbgJ0Vkz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Oct 2020 17:40:55 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:39937 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2506372AbgJ0Vky (ORCPT
+        id S374657AbgJ0Vzf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 17:55:35 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:37603 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S374656AbgJ0Vzf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 17:40:54 -0400
-Received: by mail-qk1-f195.google.com with SMTP id h140so2732165qke.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 14:40:53 -0700 (PDT)
+        Tue, 27 Oct 2020 17:55:35 -0400
+Received: by mail-il1-f196.google.com with SMTP id y17so2913485ilg.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 14:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sbV13dQpmTzExWsfaHqMxXa/LCrpQNykUloI1j/cNyY=;
-        b=SZ4eOGm4BsvC9ji8PGjcebSa+LMmczTgeAElhnetuu//7iKmjjMibbd8g5iI/wLhyD
-         wXewNVyvv1y9VdFOjewo7ATYit5ETGO5efJZEdo2IpY6tZk93CEalI+3YoQaTgSrelkE
-         ZwKv01YoXxXcdxor/LUQg7iKsQG6AS9fEA90c=
+        bh=lgKSCb5c9tdTkF5QdAPCpCA9DpL5KH988jr8fE7us3c=;
+        b=fXEsD4d3KHbwjy0Hy7AOYfmlTutjASNHaqDSuDAP/mkXXgOS7eZ0sgGYNtvvD0nLSn
+         1v2NL+sdlQ5mD7k5IkU6gS3f2ETZo3ZQgS+3MfCv5HkyYidCUGtZusRzrYBnXO19GDkD
+         +cood94qqgOzQw57psef08614etVetRd4PM9I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=sbV13dQpmTzExWsfaHqMxXa/LCrpQNykUloI1j/cNyY=;
-        b=MHgMisuFymSBeuANFw10XOpiMTamczYjYY8nxcuvxYImKBZOBIUd0VrFK6Zvoywwfp
-         CIhrqxLZLslE66uEktt8uWk1Bk7zM6SLNInc6fkh+LmkZLpwBjIT/+mhM2NqjdmXSPx/
-         obdfLjSeJytbGxqe+RImruqBqbZDl7VWePo67cj+MJo8hOwDaro0vn2s/ghk7yI2mbNp
-         JKtPZ/ROJmFSktlAFCrW/FwpveU4A3QzauKS+DTa6uW4jJv83cpsjVyIcFApiecMb5rs
-         uTIWmYMGTlN4dsBKlYIUHNYkdEVPL/VMRFt9NZ1JbHBQCsZloYtHjDMWelZIelO37KEk
-         LdAg==
-X-Gm-Message-State: AOAM530xgHYM/n0JX98PwYlhLCxrQBx07zts8+Tz8UIuAx+QgfsQh/Pe
-        V5WqdX8XA5Jfq75GPM7zfX4LdUcYa/in1g==
-X-Google-Smtp-Source: ABdhPJwURr5tW++4/oS77FQCPV4gJ30krmxDqjH5wY2UKUo4WHDfdpLjTqGOKt9aN+7NY3XQnYmiZg==
-X-Received: by 2002:a05:6638:a11:: with SMTP id 17mr4316056jan.59.1603834460050;
-        Tue, 27 Oct 2020 14:34:20 -0700 (PDT)
+        bh=lgKSCb5c9tdTkF5QdAPCpCA9DpL5KH988jr8fE7us3c=;
+        b=Mh6k5c/fKR4LDdDv70pRNFnSgkgV4WmsUrbsDYWq+6A5/LK8QffvM+nLKfs+jsjSxc
+         OZTdeI2+ssDAchX0OmL+QV3RHYYHAS7bHbaPZeQ7WFI+SmEraQC0AhE2k7s1esAu86QS
+         bLjQ/chCSotYbfW7zE8/txd6K+/2koTfAwyBN66CH6bcBtmaX1fIWVRHaWNC1vsvGF06
+         D0IRpMjj+4HOUEq5TkKFp5CCjySPXq2D2EV5kI696W7Z68sbHVRF/7Yj+Of2p4m3VcXE
+         K/FH/9b95JKUgmXQwmcj0Per2NYFkfHGqRA1rJKkKamhgXUoKir/OBNgzF7zMqk9WG9G
+         V9xw==
+X-Gm-Message-State: AOAM533xbiS7MBSOVi8nT/MZeo3joRH0LPx1u5fOItcE80NFieiAP1tj
+        MWoF98Vt6aPY3jrny8fFfPmwuw==
+X-Google-Smtp-Source: ABdhPJzmC1cbguyZPZtlPtoJsAGQaNltsHYTu67efw7/gCtEowygE8ptitCW3/02DXT/NydkLPM70A==
+X-Received: by 2002:a92:41c6:: with SMTP id o189mr3745351ila.261.1603835733784;
+        Tue, 27 Oct 2020 14:55:33 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 186sm1611593ile.4.2020.10.27.14.34.18
+        by smtp.gmail.com with ESMTPSA id p17sm1498718ilh.34.2020.10.27.14.55.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 14:34:19 -0700 (PDT)
-Subject: Re: [PATCH v3 05/21] selftests/resctrl: Return if resctrl file system
- is not supported
-To:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>
-Cc:     linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
+        Tue, 27 Oct 2020 14:55:32 -0700 (PDT)
+Subject: Re: [PATCH] selftests/ftrace: remove _do_fork() leftovers
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20201020235126.1871815-1-fenghua.yu@intel.com>
- <20201020235126.1871815-6-fenghua.yu@intel.com>
+References: <1603443123-17457-1-git-send-email-agordeev@linux.ibm.com>
+ <20201023093523.65c495f8@gandalf.local.home>
+ <20201023151243.GA1537@oc3871087118.ibm.com>
+ <20201023114948.6900aa68@gandalf.local.home>
+ <20201023115111.1c0e8768@gandalf.local.home>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <aec728b0-6262-58ef-c408-93f19c281ad8@linuxfoundation.org>
-Date:   Tue, 27 Oct 2020 15:34:18 -0600
+Message-ID: <cedad9bf-ba6b-78ad-644f-ce5074f2fbed@linuxfoundation.org>
+Date:   Tue, 27 Oct 2020 15:55:32 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201020235126.1871815-6-fenghua.yu@intel.com>
+In-Reply-To: <20201023115111.1c0e8768@gandalf.local.home>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,54 +70,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/20/20 5:51 PM, Fenghua Yu wrote:
-> check_resctrlfs_support() checks if the platform supports resctrl file
-> system or not by looking for resctrl in /proc/filesystems and returns a
-> boolean value. The main function of resctrl test suite calls
-> check_resctrlfs_support() but forgets to check for it's return value. This
-> means that resctrl test suite will attempt to run resctrl tests (like CMT,
-> CAT, MBM and MBA) even if the platform doesn't support resctrl file system.
+On 10/23/20 9:51 AM, Steven Rostedt wrote:
+> On Fri, 23 Oct 2020 11:49:48 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> Fix this by checking for the return value of check_resctrlfs_support() in
-> the main function. If resctrl file system isn't supported on the platform
-> then exit the test suite gracefully without attempting to run any of
-> resctrl unit tests.
+>> On Fri, 23 Oct 2020 17:12:44 +0200
+>> Alexander Gordeev <agordeev@linux.ibm.com> wrote:
+>>
+>>>> Perhaps we should have:
+>>>>
+>>>> 	# older kernels have do_fork, but newer kernels have kernel_clone
+>>>> 	echo kernel_clone >> set_ftrace_filter || echo *do_fork >> set_ftrace_filter
+>>>
+>>> Would you suggest to do the same with all occurences in
+>>> eea11285dab3 ("tracing: switch to kernel_clone()")?
+>>> Otherwise it does not really make sense to just fix couple
+>>> of tests out of dozens.
+>>
+>> Yes. I haven't pulled in the updated tests, so I haven't hit the errors yet
+>> (nor have I merged my work with the switch to the new name yet). So those
+>> will most definitely break my tests.
+>>
+>> But because it's a more generic issue, we should have a way to find what to
+>> use. Perhaps add to the test.d/functions, something like:
+>>
+>> FUNCTION_FORK=`(if grep '\bkernel_clone\b' /proc/kallsyms > /dev/null; then
+>>                  echo kernel_clone; else echo '_do_fork'; fi)`
+>>
+>> and use $FUNCTION_FORK everywhere that references it.
+>>
+>>
 > 
-> Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> ---
->   tools/testing/selftests/resctrl/resctrl_tests.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
+> Let me pull in the latest changes, and whip up a patch that works on both
+> the older kernels as well as the newer ones.
 > 
-> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> index b2a560c0c5dc..d24de546d4ef 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -155,7 +155,11 @@ int main(int argc, char **argv)
->   	sprintf(bw_report, "reads");
->   	sprintf(bm_type, "fill_buf");
->   
-> -	check_resctrlfs_support();
-> +	if (!check_resctrlfs_support()) {
-> +		printf("Bail out! resctrl FS does not exist\n");
-> +		goto out;
-> +	}
-> +
+> -- Steve
+> 
 
-Adding config file makes sense to specify dependencies.
+Assume this is handled by
 
->   	filter_dmesg();
->   
->   	if (!is_amd && mbm_test) {
-> @@ -196,6 +200,7 @@ int main(int argc, char **argv)
->   		cat_test_cleanup();
->   	}
->   
-> +out:
->   	printf("1..%d\n", tests_run);
->   
->   	return 0;
-> 
+selftests/ftrace: Use $FUNCTION_FORK to reference kernel fork function
+https://patchwork.kernel.org/project/linux-kselftest/patch/20201026162032.124c728d@gandalf.local.home/
+
+Just making sure.
 
 thanks,
 -- Shuah
+
