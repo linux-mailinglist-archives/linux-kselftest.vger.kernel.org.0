@@ -2,422 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E467029C3A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 18:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E26929C515
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 19:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1822342AbgJ0RtW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Oct 2020 13:49:22 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44942 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1822197AbgJ0Rr4 (ORCPT
+        id S1824173AbgJ0SDw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 14:03:52 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:47242 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1757354AbgJ0OSx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 13:47:56 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 133so1335066pfx.11;
-        Tue, 27 Oct 2020 10:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2bsQHC5DZtuUUrvI1rRBcwjjv8eCFP0l3LClWzLm5IA=;
-        b=pgtWLgtlV1NC+9/DyX0mFoYjhehoUp8wLcepWGZZbvVkjNx5+DmZNTEMEsM3kejY1T
-         ivhd491uiGgZTzIzVpAAwYEz1qNLGauyfr+rffxq5aRMoEQblLssihkIMcQTrbJECi0D
-         NG8EiZVCf8u4lRKWKhpN2N5SB2r0EKW+mA0I4iv9wZV/+v4qAIMOofKSgzQHk7Swdhw1
-         eJpznXw25FmaJ6xz4QPnn+M3pvxhYZAwKK5VkQqXsHEkfNtbM3ZTtjmStUlf1M3MNJ7e
-         kpgi/Ss47J1bhvW9FC3XBFKBARe4rV9mSFMm+7Yn/xqUBSrijDF4unxj9seTm73DXxBI
-         c5Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2bsQHC5DZtuUUrvI1rRBcwjjv8eCFP0l3LClWzLm5IA=;
-        b=Vq9haW0FlX1KTWr3/+7L/lnvQvA1UiJ/k3dEhJZ7W7o2uNhrjC7Thx+dZ/eA7XUOgw
-         tRnfta4p1obkiiFZ/xptWaA98mT2v3Qpqp5em6VmMRVIGEylFXbMYQE26hgDKqqRjvZg
-         YgAUIxETIm/Jn/6791/6pbi+1mvsnFfFclWrb943V0Pwm/zn3cP/4DPlq5D/xBpybyOX
-         jVPEAGX1+ktgP1S800MOvYaJoGfZy7dVjbbYBC2/3CbbburYzR3AetHMvlH0OYl1iWoS
-         jEqzdB55O6H0F40BIEUGTstOEQw+pIYxDVadNPDXL9aY2LlnLrAe5e6QeqVg+ypEm3hg
-         UkOw==
-X-Gm-Message-State: AOAM533W0RvZaucMBjpEGuHpBFRdXIeXs/m/yb0VL9JUUPsG8rZaoFEP
-        SMJzBxp17uMsFPeLX/fNrWI=
-X-Google-Smtp-Source: ABdhPJyukS8BshuctT2H741Yp61LT+mg8/sJqeishhp6tIPJXuGf4cZz6wtWe7qJDTrl9zaybaowPg==
-X-Received: by 2002:a62:fcd0:0:b029:152:28de:e20 with SMTP id e199-20020a62fcd00000b029015228de0e20mr3341379pfh.28.1603820875293;
-        Tue, 27 Oct 2020 10:47:55 -0700 (PDT)
-Received: from arpitha-Inspiron-7570.lan ([106.51.240.100])
-        by smtp.gmail.com with ESMTPSA id m3sm2521157pjv.52.2020.10.27.10.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 10:47:54 -0700 (PDT)
-From:   Arpitha Raghunandan <98.arpi@gmail.com>
-To:     brendanhiggins@google.com, skhan@linuxfoundation.org,
-        elver@google.com, yzaikin@google.com, tytso@mit.edu,
-        adilger.kernel@dilger.ca
-Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-ext4@vger.kernel.org
-Subject: [PATCH v4 2/2] fs: ext4: Modify inode-test.c to use KUnit parameterized testing feature
-Date:   Tue, 27 Oct 2020 23:17:26 +0530
-Message-Id: <20201027174726.85284-1-98.arpi@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201027174630.85213-1-98.arpi@gmail.com>
-References: <20201027174630.85213-1-98.arpi@gmail.com>
+        Tue, 27 Oct 2020 10:18:53 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1603808330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bp5AhnmI6jiWnr53CzwF3Og28djxSNnmYmmHL2UuOt8=;
+        b=4caFk+lCP6PVdjBxaNFbTnShKMIwXnD+J+z7qE1HQdjW6s3bBKNN3Bs6728AGd9MPL0sTq
+        cYISE15GvnXPm9FGyuLiMR+CXo90PPIGeKy4DIMtc3s1N8yEU+cp0JemmMnvP0tmsvjdLD
+        Dgt9qUFlO4cIdf888uV1s5K3Wq1JXAGPw04msakKd7SPj/5U5SEsoekRKEZfOjEP+ikZ0v
+        roYhgpyqP6twzv+qYS4VFH5HHtA9R8ZukptrIJi9OkB7HMo5cY7HJ0fR8aK5O+PQSYaZkP
+        N7NhwIvmvA2WYXJ0FhoK7NEbPHOL9li9UV0eZaQcxedHi6C0wLyEmpV5NFsQmg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1603808330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bp5AhnmI6jiWnr53CzwF3Og28djxSNnmYmmHL2UuOt8=;
+        b=lTRRlHFYQ0djlr+fFdTRbzmeeMFyKa1T2J8cQAjJqIC+Llz0DlhTmFB4EFQ6PWRoIWCjfH
+        dmJid13IGhNMJAAA==
+To:     Ira Weiny <ira.weiny@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 06/10] x86/entry: Move nmi entry/exit into common code
+In-Reply-To: <20201027070750.GM534324@iweiny-DESK2.sc.intel.com>
+References: <20201022222701.887660-1-ira.weiny@intel.com> <20201022222701.887660-7-ira.weiny@intel.com> <874kmk6298.fsf@nanos.tec.linutronix.de> <20201027070750.GM534324@iweiny-DESK2.sc.intel.com>
+Date:   Tue, 27 Oct 2020 15:18:50 +0100
+Message-ID: <87pn5321md.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Modify fs/ext4/inode-test.c to use the parameterized testing
-feature of KUnit.
+On Tue, Oct 27 2020 at 00:07, Ira Weiny wrote:
+> On Fri, Oct 23, 2020 at 11:50:11PM +0200, Thomas Gleixner wrote:
+>> >  #ifndef irqentry_state
+>> >  typedef struct irqentry_state {
+>> > -	bool	exit_rcu;
+>> > +	union {
+>> > +		bool	exit_rcu;
+>> > +		bool	lockdep;
+>> > +	};
+>> >  } irqentry_state_t;
+>> >  #endif
+>> 
+>>   -E_NO_KERNELDOC
+>
+> Adding: Paul McKenney
+>
+> I'm happy to write something but I'm very unfamiliar with this code.  So I'm
+> getting confused what exactly exit_rcu is flagging.
+>
+> I can see that exit_rcu is a bad name for the state used in
+> irqentry_nmi_[enter|exit]().  Furthermore, I see why 'lockdep' is a better
+> name.  But similar lockdep handling is used in irqentry_exit() if exit_rcu is
+> true...
 
-Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
----
-Changes v3->v4:
-- Modification based on latest implementation of KUnit parameterized testing
-Changes v2->v3:
-- Marked hardcoded test data const
-- Modification based on latest implementation of KUnit parameterized testing
-Changes v1->v2:
-- Modification based on latest implementation of KUnit parameterized testing
+No, it's not similar at all. Lockdep state vs. interrupts and regular
+exceptions is always consistent.
 
- fs/ext4/inode-test.c | 314 ++++++++++++++++++++++---------------------
- 1 file changed, 158 insertions(+), 156 deletions(-)
+In the NMI case, that's not guaranteed because of
 
-diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
-index d62d802c9c12..ebf1b1af4f1d 100644
---- a/fs/ext4/inode-test.c
-+++ b/fs/ext4/inode-test.c
-@@ -80,6 +80,139 @@ struct timestamp_expectation {
- 	bool lower_bound;
- };
- 
-+static const struct timestamp_expectation test_data[] = {
-+	{
-+		.test_case_name = LOWER_BOUND_NEG_NO_EXTRA_BITS_CASE,
-+		.msb_set = true,
-+		.lower_bound = true,
-+		.extra_bits = 0,
-+		.expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NEG_NO_EXTRA_BITS_CASE,
-+		.msb_set = true,
-+		.lower_bound = false,
-+		.extra_bits = 0,
-+		.expected = {.tv_sec = -1LL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = LOWER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
-+		.msb_set = false,
-+		.lower_bound = true,
-+		.extra_bits = 0,
-+		.expected = {0LL, 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
-+		.msb_set = false,
-+		.lower_bound = false,
-+		.extra_bits = 0,
-+		.expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = LOWER_BOUND_NEG_LO_1_CASE,
-+		.msb_set = true,
-+		.lower_bound = true,
-+		.extra_bits = 1,
-+		.expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NEG_LO_1_CASE,
-+		.msb_set = true,
-+		.lower_bound = false,
-+		.extra_bits = 1,
-+		.expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = LOWER_BOUND_NONNEG_LO_1_CASE,
-+		.msb_set = false,
-+		.lower_bound = true,
-+		.extra_bits = 1,
-+		.expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NONNEG_LO_1_CASE,
-+		.msb_set = false,
-+		.lower_bound = false,
-+		.extra_bits = 1,
-+		.expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = LOWER_BOUND_NEG_HI_1_CASE,
-+		.msb_set = true,
-+		.lower_bound = true,
-+		.extra_bits =  2,
-+		.expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NEG_HI_1_CASE,
-+		.msb_set = true,
-+		.lower_bound = false,
-+		.extra_bits = 2,
-+		.expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = LOWER_BOUND_NONNEG_HI_1_CASE,
-+		.msb_set = false,
-+		.lower_bound = true,
-+		.extra_bits = 2,
-+		.expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NONNEG_HI_1_CASE,
-+		.msb_set = false,
-+		.lower_bound = false,
-+		.extra_bits = 2,
-+		.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NONNEG_HI_1_NS_1_CASE,
-+		.msb_set = false,
-+		.lower_bound = false,
-+		.extra_bits = 6,
-+		.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
-+	},
-+
-+	{
-+		.test_case_name = LOWER_BOUND_NONNEG_HI_1_NS_MAX_CASE,
-+		.msb_set = false,
-+		.lower_bound = true,
-+		.extra_bits = 0xFFFFFFFF,
-+		.expected = {.tv_sec = 0x300000000LL,
-+			     .tv_nsec = MAX_NANOSECONDS},
-+	},
-+
-+	{
-+		.test_case_name = LOWER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
-+		.msb_set = false,
-+		.lower_bound = true,
-+		.extra_bits = 3,
-+		.expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
-+	},
-+
-+	{
-+		.test_case_name = UPPER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
-+		.msb_set = false,
-+		.lower_bound = false,
-+		.extra_bits = 3,
-+		.expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
-+	}
-+};
-+
-+KUNIT_ARRAY_PARAM(ext4_inode, test_data);
-+
- static time64_t get_32bit_time(const struct timestamp_expectation * const test)
- {
- 	if (test->msb_set) {
-@@ -101,166 +234,35 @@ static time64_t get_32bit_time(const struct timestamp_expectation * const test)
-  */
- static void inode_test_xtimestamp_decoding(struct kunit *test)
- {
--	const struct timestamp_expectation test_data[] = {
--		{
--			.test_case_name = LOWER_BOUND_NEG_NO_EXTRA_BITS_CASE,
--			.msb_set = true,
--			.lower_bound = true,
--			.extra_bits = 0,
--			.expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NEG_NO_EXTRA_BITS_CASE,
--			.msb_set = true,
--			.lower_bound = false,
--			.extra_bits = 0,
--			.expected = {.tv_sec = -1LL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = LOWER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
--			.msb_set = false,
--			.lower_bound = true,
--			.extra_bits = 0,
--			.expected = {0LL, 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
--			.msb_set = false,
--			.lower_bound = false,
--			.extra_bits = 0,
--			.expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = LOWER_BOUND_NEG_LO_1_CASE,
--			.msb_set = true,
--			.lower_bound = true,
--			.extra_bits = 1,
--			.expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NEG_LO_1_CASE,
--			.msb_set = true,
--			.lower_bound = false,
--			.extra_bits = 1,
--			.expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = LOWER_BOUND_NONNEG_LO_1_CASE,
--			.msb_set = false,
--			.lower_bound = true,
--			.extra_bits = 1,
--			.expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NONNEG_LO_1_CASE,
--			.msb_set = false,
--			.lower_bound = false,
--			.extra_bits = 1,
--			.expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = LOWER_BOUND_NEG_HI_1_CASE,
--			.msb_set = true,
--			.lower_bound = true,
--			.extra_bits =  2,
--			.expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NEG_HI_1_CASE,
--			.msb_set = true,
--			.lower_bound = false,
--			.extra_bits = 2,
--			.expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = LOWER_BOUND_NONNEG_HI_1_CASE,
--			.msb_set = false,
--			.lower_bound = true,
--			.extra_bits = 2,
--			.expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NONNEG_HI_1_CASE,
--			.msb_set = false,
--			.lower_bound = false,
--			.extra_bits = 2,
--			.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NONNEG_HI_1_NS_1_CASE,
--			.msb_set = false,
--			.lower_bound = false,
--			.extra_bits = 6,
--			.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
--		},
--
--		{
--			.test_case_name = LOWER_BOUND_NONNEG_HI_1_NS_MAX_CASE,
--			.msb_set = false,
--			.lower_bound = true,
--			.extra_bits = 0xFFFFFFFF,
--			.expected = {.tv_sec = 0x300000000LL,
--				     .tv_nsec = MAX_NANOSECONDS},
--		},
--
--		{
--			.test_case_name = LOWER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
--			.msb_set = false,
--			.lower_bound = true,
--			.extra_bits = 3,
--			.expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
--		},
--
--		{
--			.test_case_name = UPPER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
--			.msb_set = false,
--			.lower_bound = false,
--			.extra_bits = 3,
--			.expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
--		}
--	};
--
- 	struct timespec64 timestamp;
--	int i;
--
--	for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
--		timestamp.tv_sec = get_32bit_time(&test_data[i]);
--		ext4_decode_extra_time(&timestamp,
--				       cpu_to_le32(test_data[i].extra_bits));
--
--		KUNIT_EXPECT_EQ_MSG(test,
--				    test_data[i].expected.tv_sec,
--				    timestamp.tv_sec,
--				    CASE_NAME_FORMAT,
--				    test_data[i].test_case_name,
--				    test_data[i].msb_set,
--				    test_data[i].lower_bound,
--				    test_data[i].extra_bits);
--		KUNIT_EXPECT_EQ_MSG(test,
--				    test_data[i].expected.tv_nsec,
--				    timestamp.tv_nsec,
--				    CASE_NAME_FORMAT,
--				    test_data[i].test_case_name,
--				    test_data[i].msb_set,
--				    test_data[i].lower_bound,
--				    test_data[i].extra_bits);
--	}
-+
-+	struct timestamp_expectation *test_param =
-+			(struct timestamp_expectation *)(test->param_value);
-+
-+	timestamp.tv_sec = get_32bit_time(test_param);
-+	ext4_decode_extra_time(&timestamp,
-+			       cpu_to_le32(test_param->extra_bits));
-+
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    test_param->expected.tv_sec,
-+			    timestamp.tv_sec,
-+			    CASE_NAME_FORMAT,
-+			    test_param->test_case_name,
-+			    test_param->msb_set,
-+			    test_param->lower_bound,
-+			    test_param->extra_bits);
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    test_param->expected.tv_nsec,
-+			    timestamp.tv_nsec,
-+			    CASE_NAME_FORMAT,
-+			    test_param->test_case_name,
-+			    test_param->msb_set,
-+			    test_param->lower_bound,
-+			    test_param->extra_bits);
- }
- 
- static struct kunit_case ext4_inode_test_cases[] = {
--	KUNIT_CASE(inode_test_xtimestamp_decoding),
-+	KUNIT_CASE_PARAM(inode_test_xtimestamp_decoding, ext4_inode_gen_params),
- 	{}
- };
- 
--- 
-2.25.1
+       local_irq_disable()
+         arch_local_irq_disable()
+                                        <- NMI race window
+         trace_hardirqs_off()
 
+same the other way round
+
+       local_irq_enable()
+         trace_hardirqs_on()
+                                        <- NMI race window
+         arch_local_irq_enable()
+
+IOW, the hardware state and the lockdep state are not consistent.
+
+> /**
+>  * struct irqentry_state - Opaque object for exception state storage
+>  * @exit_rcu: Used exclusively in the irqentry_*() calls; tracks if the
+>  *            exception hit the idle task which requires special handling,
+>  *            including calling rcu_irq_exit(), when the exception
+>  exits.
+
+calls; signals whether the exit path has to invoke rcu_irq_exit().
+
+>  * @lockdep: Used exclusively in the irqentry_nmi_*() calls; ensures lockdep
+>  *           tracking is maintained if hardirqs were already enabled
+
+   ensures that lockdep state is restored correctly on exit from nmi.
+
+>  *
+>  * This opaque object is filled in by the irqentry_*_enter() functions and
+>  * should be passed back into the corresponding irqentry_*_exit()
+>  functions
+
+s/should/must/
+
+>  * when the exception is complete.
+>  *
+>  * Callers of irqentry_*_[enter|exit]() should consider this structure
+>  opaque
+
+s/should/must/
+
+>  * and all members private.  Descriptions of the members are provided to aid in
+>  * the maintenance of the irqentry_*() functions.
+>  */
+>
+> Perhaps Paul can enlighten me on how exit_rcu is used beyond just flagging a
+> call to rcu_irq_exit()?
+
+I can do that as well :) The only purpose is to invoke rcu_irq_exit()
+conditionally.
+
+> Why do we call lockdep_hardirqs_off() only when in the idle task?  That implies
+> that regs_irqs_disabled() can only be false if we were in the idle task to
+> match up the lockdep on/off calls.
+
+You're reading the code slightly wrong.
+
+> This does not make sense to me because why do we need the extra check
+> for exit_rcu?  I'm still trying to understand when regs_irqs_disabled() is false.
+
+It's false when the interrupted context had interrupts enabled.
+
+So we have the following scenarios:
+
+ Usermode   Idletask   irqs enabled  RCU entry  RCU exit
+   Y           N           Y		Y          Y
+
+   N           N           Y            N          N 
+   N           N           N            N          N
+   N           Y           Y            Y          Y
+   N           Y           N            Y          Y                       
+
+Now you might wonder about irqs enabled/disabled. This code is not only
+used for interrupts (device, ipi, local timer...) where interrupts are
+obviously enabled, it's also used for exception entry/exit. You can have
+e.g. pagefaults in interrupt disabled regions.
+
+> Also, the comment in irqentry_enter() refers to irq_enter_from_user_mode() which
+> does not seem to exist anymore.  So I'm not sure what careful sequence it is
+> referring to.
+
+That was renamed to irqentry_enter_from_user_mode() and the comment was
+not updated. Sorry for leaving this hard to solve puzzle around.
+
+Thanks,
+
+        tglx
