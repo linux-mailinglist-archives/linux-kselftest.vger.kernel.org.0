@@ -2,95 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 916BF29A546
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 08:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 776B329A562
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 08:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2507353AbgJ0HLQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Oct 2020 03:11:16 -0400
-Received: from mga11.intel.com ([192.55.52.93]:1077 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390835AbgJ0HLQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 03:11:16 -0400
-IronPort-SDR: bHTFB4LiCz3fGH6e3b2LSe6mKCDgTCOvaCqFDV+G6jZoAuE8E8MUWl570i+9W+9q6V7eDYw1Mf
- xSZgrD4FjcWw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="164537400"
-X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="164537400"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 00:11:15 -0700
-IronPort-SDR: yxpbvNXqR2ZH8VELzLKdveHPiLfaOg4FP6eotaVuipb+Li1gAU22E4WQmw0d7T2iCHSawR5QAw
- LXDe2LDQzbVA==
-X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
-   d="scan'208";a="535680174"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 00:11:15 -0700
-Date:   Tue, 27 Oct 2020 00:11:14 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 07/10] x86/entry: Pass irqentry_state_t by reference
-Message-ID: <20201027071114.GN534324@iweiny-DESK2.sc.intel.com>
-References: <20201022222701.887660-1-ira.weiny@intel.com>
- <20201022222701.887660-8-ira.weiny@intel.com>
- <87y2jw4ne6.fsf@nanos.tec.linutronix.de>
+        id S1726054AbgJ0HTl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 03:19:41 -0400
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:42518 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728828AbgJ0HTi (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Oct 2020 03:19:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1603783178; x=1635319178;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   mime-version;
+  bh=MfowExY2M2X/2s1QHjhgoi8PsO3M+98xml+DmfUlIhA=;
+  b=vqgG6QEdHUYbkFCBgt3rEM2FkRUbmjXMtGLOPjDthEOemGhiTbSJPnr8
+   XsnOcCO0ekck4KKNMYKWKxMTafI7X8Zp1TsLn4/nHWA9cANWzCaZGgw39
+   Clb17FncWluVYx106Oob9vi6wJVgrs5Y+SXvPEEm5L40sc/BsUH3tSHCz
+   w=;
+X-IronPort-AV: E=Sophos;i="5.77,422,1596499200"; 
+   d="scan'208";a="61107540"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1a-af6a10df.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 27 Oct 2020 07:19:31 +0000
+Received: from EX13D31EUB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-1a-af6a10df.us-east-1.amazon.com (Postfix) with ESMTPS id 0CA6CA1F1C;
+        Tue, 27 Oct 2020 07:19:28 +0000 (UTC)
+Received: from u3f2cd687b01c55.ant.amazon.com (10.43.160.67) by
+ EX13D31EUB001.ant.amazon.com (10.43.166.210) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Tue, 27 Oct 2020 07:19:24 +0000
+From:   SeongJae Park <sjpark@amazon.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        SeongJae Park <sjpark@amazon.com>,
+        SeongJae Park <sjpark@amazon.de>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] kunit: tool: Mark 'kunittest_config' as constant again
+Date:   Tue, 27 Oct 2020 08:19:08 +0100
+Message-ID: <20201027071908.26454-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAFd5g45N_7HTTObU799_S-9QPFXhQkeQ=yqvH-J79ROvKSXs4A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y2jw4ne6.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.67]
+X-ClientProxiedBy: EX13D23UWA001.ant.amazon.com (10.43.160.68) To
+ EX13D31EUB001.ant.amazon.com (10.43.166.210)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 11:56:33PM +0200, Thomas Gleixner wrote:
-> On Thu, Oct 22 2020 at 15:26, ira weiny wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
+On Mon, 26 Oct 2020 13:44:33 -0700 Brendan Higgins <brendanhiggins@google.com> wrote:
+
+> On Sun, Oct 25, 2020 at 5:45 AM <andy@surfacebook.localdomain> wrote:
 > >
-> > In preparation for adding PKS information to struct irqentry_state_t
-> > change all call sites and usages to pass the struct by reference
-> > instead of by value.
+> > On Thu, Oct 22, 2020 at 08:35:26AM +0200, SeongJae Park wrote:
+> > > On Wed, 21 Oct 2020 14:32:52 -0700 Brendan Higgins <brendanhiggins@google.com> wrote:
+> > >
+> > > > On Mon, Oct 12, 2020 at 3:27 AM SeongJae Park <sjpark@amazon.com> wrote:
+> > > > >
+> > > > > From: SeongJae Park <sjpark@amazon.de>
+> > > > >
+> > > > > 'kunit_kernel.kunittest_config' was constant at first, and therefore it
+> > > > > used UPPER_SNAKE_CASE naming convention that usually means it is
+> > > > > constant in Python world.  But, commit e3212513a8f0 ("kunit: Create
+> > > > > default config in '--build_dir'") made it modifiable to fix a use case
+> > > > > of the tool and thus the naming also changed to lower_snake_case.
+> > > > > However, this resulted in a confusion.  As a result, some successing
+> > > > > changes made the tool unittest fail, and a fix[1] of it again incurred
+> > > > > the '--build_dir' use case failure.
+> > > > >
+> > > > > As the previous commit fixed the '--build_dir' use case without
+> > > > > modifying the variable again, this commit marks the variable as constant
+> > > > > again with UPPER_SNAKE_CASE, to reduce future confusions.
+> > > > >
+> > > > > [1] Commit d43c7fb05765 ("kunit: tool: fix improper treatment of file location")
+> > > > >
+> > > > > Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> > > >
+> > > > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> > >
+> > > Thanks :)
+> > >
+> > > >
+> > > > Thanks for this! This is something I meant to fix a while ago and forgot about.
+> > > >
+> > > > One minor issue, this patch does not apply on torvalds/master right
+> > > > now. Could you please rebase this?
+> > >
+> > > Surely of course, I will send next version soon.
+> >
+> > May I ask what happened to [1]?
+> > I mean it seems these two are goind to collide.
+> >
+> > Brendan?
+> >
+> > [1]: https://lore.kernel.org/linux-kselftest/20201015152348.65147-1-andriy.shevchenko@linux.intel.com/
 > 
-> This still does not explain WHY you need to do that. 'Preparation' is a
-> pretty useless information.
+> Sorry for the confusion here. After an initial glance at your patches
+> (before I did the review end of last week) I thought only the first
+> patch from SeongJae would potentially conflict with yours (Andy's)
+> (hence why I hadn't reviewed it yet, I was waiting until after I
+> looked at yours).
 > 
-> What is the actual reason for this? Just because PKS information feels
-> better that way?
+> I noticed on Friday that SeongJae's changes were actually fully
+> encompassed by Andy's, so I am taking Andy's not SongJae's. Sorry, I
+> was going to notify SongJae today, but you beat me to it.
 > 
-> Also what is PKS information? Changelogs have to make sense on their own
-> and not only in the context of a larger series of changes.
+> Sorry everyone.
 
-I've reworded this to explain the addition of new members which would make
-passing by value less efficient with additional structure changes being added
-later in the series.
+It's ok, I understand the situation and respect your decision.  After all, what
+I really wanted was just fixing the problem by whoever.  I would like to say
+thank you to Andy for fixing it instead of me :)  Also, thank you Brendan, for
+maintaining the cool Kunit ;)
 
-> 
-> > While we are editing the call sites it is a good time to standardize on
-> > the name 'irq_state'.
-> 
->   While at it change all usage sites to consistently use the variable
->   name 'irq_state'.
-> 
-> Or something like that. See Documentation/process/...
-
-Sorry, bad habit.
-
-Fixed.
 
 Thanks,
-Ira
-
-> 
-> Thanks,
-> 
->         tglx
-> 
+SeongJae Park
