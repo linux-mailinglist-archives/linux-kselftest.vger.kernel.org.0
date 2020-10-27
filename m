@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E9529B41B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 16:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2E629B71F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 16:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1783357AbgJ0O6K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Oct 2020 10:58:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59340 "EHLO mail.kernel.org"
+        id S1798624AbgJ0P3S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 11:29:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45576 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1783346AbgJ0O6J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 10:58:09 -0400
+        id S1798617AbgJ0P3Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Oct 2020 11:29:16 -0400
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF64320714;
-        Tue, 27 Oct 2020 14:58:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 412462225E;
+        Tue, 27 Oct 2020 15:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603810688;
+        s=default; t=1603812554;
         bh=vT6TQiAhfCEnptE16SMHV42f9bp7lBiVGUO/RjqiwFg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OByCnbB5mJqKl8mykiHfttSJQvFV5Qj23j6/qv5UGxjIGww6xSD7J5xA7mIROt+e7
-         UH52qCdMRL38aKJdfCCEkESWD7UKN/bt6lskAuft8Q98JjQyUbF/ZoV6JyPiMVtqAY
-         HIgT3obHesQm2h4s3yA9Yzm20HFK3IvNoxxLqjpk=
+        b=e+9aEIqwiR/tRtP9gru36SFKo0icLdNVXUOSyeeGq4AUHoG+dQRjTwyEt08w38WDZ
+         +aqGPs11pq+7Ruwig/ancFMUe0NR8SfUmARl4cFBqP1nF8VBg4c8fu9d2V2jD0biMj
+         7QJtWbHS9MgxcgidjBTTiY9fPkTcFPPsFaCaWNyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.8 211/633] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
-Date:   Tue, 27 Oct 2020 14:49:14 +0100
-Message-Id: <20201027135532.579821523@linuxfoundation.org>
+Subject: [PATCH 5.9 251/757] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
+Date:   Tue, 27 Oct 2020 14:48:21 +0100
+Message-Id: <20201027135502.347605691@linuxfoundation.org>
 X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201027135522.655719020@linuxfoundation.org>
-References: <20201027135522.655719020@linuxfoundation.org>
+In-Reply-To: <20201027135450.497324313@linuxfoundation.org>
+References: <20201027135450.497324313@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
