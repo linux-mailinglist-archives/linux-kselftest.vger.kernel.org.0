@@ -2,204 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F1429A3E3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 06:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB3129A539
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 08:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505755AbgJ0FOO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Oct 2020 01:14:14 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44466 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410224AbgJ0FOO (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 01:14:14 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 133so211076pfx.11;
-        Mon, 26 Oct 2020 22:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=V6b7HwvvFZ2s1xYsjf24gbEkjeQ0R1jZb5gJGqmof84=;
-        b=QV32QpdFiFdGKP8KIf3ztwU5B2L+kQ1TISGCOSyRr7wqANt+4iKpSWIDz9FXOVJiNY
-         irLnmSzzDG34JYL9ztGPJT7Eu5o9dNRCr+tOE0KqM0LTMF2R1QqmDVmeEQnFLrO+ZweC
-         ha3pZVAxePVmy3GHH67EPgBWSFxuJKrHP+97wFhhBV6yhEdvo3FE2bbeikaYjl3tmVF/
-         mmwIaskRvfZYnHtO+qHXJ8WhB5NYnRpnt5wwgzEyqcPDWKsgDkrCg5fs4W8g/SDqlGi/
-         aYXSL0GyEmyycjfKZOBm5SKJM9vpR9Sx0ZffKH+Pn539f+rUzDYRAOo2ZEPjRTSC9CXn
-         DF7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=V6b7HwvvFZ2s1xYsjf24gbEkjeQ0R1jZb5gJGqmof84=;
-        b=JUv4B7shyAacOnifvW/OsjcrsKyX5p9SbdW70EyrweELHAa0iZB3XyHnpSR7sVjacm
-         nf1F8qZ/A1Xawnp0kKbt5Nk47TjmOXsPjzicxP+GO1bLvKBX8DiBExz98wy3TqaIet8u
-         8JizuSL/Y+fXnFKDU+3lAkn6ritJjSI+UBRWrVpesH5y7vqkhurxZEycqU8N4+AdVy4P
-         8A3AJIyMdOLO3YoOi8GgITTzMNH1Yta8vCNHRqjfhInp8tWcS64/S7HlFU4UbdRrYHRz
-         Aw3R+uSqo8Za/K4MSu0BJgsRpgKxYYI+9ih1XAFuufQ2mz6efxiP1aIOKoCIHlb/FutK
-         40Ag==
-X-Gm-Message-State: AOAM530Bgvgs4YydoSp2O5ekUTGqChbDOqXhFGy6U3Xlc1gGN68PWRRA
-        MR6sq0sWztnfsrhSEuRCKdY6oKNYET1yIsk6
-X-Google-Smtp-Source: ABdhPJwI7iAg84+0QDG22suSqnWNw8moOpZOVmTy5bWa+NEsj3D7XxDRHLUnPHTYynMmO4JLGk72yg==
-X-Received: by 2002:a63:af08:: with SMTP id w8mr411863pge.419.1603775651104;
-        Mon, 26 Oct 2020 22:14:11 -0700 (PDT)
-Received: from [192.168.86.81] ([106.51.240.100])
-        by smtp.gmail.com with ESMTPSA id 78sm512426pfz.211.2020.10.26.22.14.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Oct 2020 22:14:10 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] kunit: Support for Parameterized Testing
-To:     Marco Elver <elver@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-ext4@vger.kernel.org
-References: <20201026183523.82749-1-98.arpi@gmail.com>
- <CANpmjNNQtGC_jDp8TSHRHOMXi7aTQgwjtUiCWE+YqBgq-G2z5Q@mail.gmail.com>
-From:   Arpitha Raghunandan <98.arpi@gmail.com>
-Message-ID: <f25c881d-03f9-e246-d8d4-e985d9662d04@gmail.com>
-Date:   Tue, 27 Oct 2020 10:44:05 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2507306AbgJ0HHw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 03:07:52 -0400
+Received: from mga11.intel.com ([192.55.52.93]:65353 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2505885AbgJ0HHw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Oct 2020 03:07:52 -0400
+IronPort-SDR: vyTdgkf3u2IPZkD9SH3BB9uJKsYl4xzB1c0bs1+RpUYmxXmcIHJDGd9Ia3LsyY1TqdhRNqTRqb
+ nG3TKpVWzf3g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="164537062"
+X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
+   d="scan'208";a="164537062"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 00:07:51 -0700
+IronPort-SDR: A5IXsCcNEXQXEcg/oDhntuvq+fWDgRPE+ldHDsUxyxBUCd/F6AsJTG2smijql50iqT70s1/Kgh
+ K0bYXPlZ5eAw==
+X-IronPort-AV: E=Sophos;i="5.77,422,1596524400"; 
+   d="scan'208";a="468194512"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2020 00:07:50 -0700
+Date:   Tue, 27 Oct 2020 00:07:50 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 06/10] x86/entry: Move nmi entry/exit into common code
+Message-ID: <20201027070750.GM534324@iweiny-DESK2.sc.intel.com>
+References: <20201022222701.887660-1-ira.weiny@intel.com>
+ <20201022222701.887660-7-ira.weiny@intel.com>
+ <874kmk6298.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <CANpmjNNQtGC_jDp8TSHRHOMXi7aTQgwjtUiCWE+YqBgq-G2z5Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874kmk6298.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 27/10/20 4:44 am, Marco Elver wrote:
-> On Mon, 26 Oct 2020 at 19:36, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
->>
->> Implementation of support for parameterized testing in KUnit.
->> This approach requires the creation of a test case using the
->> KUNIT_CASE_PARAM macro that accepts a generator function as input.
->> This generator function should return the next parameter given the
->> previous parameter in parameterized tests. It also provides
->> a macro to generate common-case generators.
->>
->> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
->> Co-developed-by: Marco Elver <elver@google.com>
->> Signed-off-by: Marco Elver <elver@google.com>
->> ---
->> Changes v2->v3:
->> - Modifictaion of generator macro and method
+On Fri, Oct 23, 2020 at 11:50:11PM +0200, Thomas Gleixner wrote:
+> On Thu, Oct 22 2020 at 15:26, ira weiny wrote:
 > 
-> Great to see it worked as expected!
+> > From: Thomas Gleixner <tglx@linutronix.de>
+> >
+> > Lockdep state handling on NMI enter and exit is nothing specific to X86. It's
+> > not any different on other architectures. Also the extra state type is not
+> > necessary, irqentry_state_t can carry the necessary information as well.
+> >
+> > Move it to common code and extend irqentry_state_t to carry lockdep
+> > state.
 > 
->> Changes v1->v2:
->> - Use of a generator method to access test case parameters
->>
->>  include/kunit/test.h | 32 ++++++++++++++++++++++++++++++++
->>  lib/kunit/test.c     | 20 +++++++++++++++++++-
->>  2 files changed, 51 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/kunit/test.h b/include/kunit/test.h
->> index a423fffefea0..16bf9f334e2c 100644
->> --- a/include/kunit/test.h
->> +++ b/include/kunit/test.h
->> @@ -142,6 +142,12 @@ struct kunit_case {
->>         void (*run_case)(struct kunit *test);
->>         const char *name;
->>
->> +       /*
->> +        * Pointer to test parameter generator function.
->> +        * Used only for parameterized tests.
+> This lacks something like:
 > 
-> What I meant was to give a description of the protocol, so that if
-> somebody wanted, they could (without reading the implementation)
-> implement their own custom generator without the helper macro.
-> 
-> E.g. something like: "The generator function is used to lazily
-> generate a series of arbitrarily typed values that fit into a void*.
-> The argument @prev is the previously returned value, which should be
-> used to derive the next value; @prev is set to NULL on the initial
-> generator call. When no more values are available, the generator must
-> return NULL."
->
+>  [ Ira: Made the states a union as they are mutually exclusive and added
+>         the missing kernel doc ]
 
-Oh okay. I am not sure if this is the best place to add documentation for this.
- 
->> +        */
->> +       void* (*generate_params)(void *prev);
->> +
->>         /* private: internal use only. */
->>         bool success;
->>         char *log;
->> @@ -162,6 +168,9 @@ static inline char *kunit_status_to_string(bool status)
->>   * &struct kunit_case for an example on how to use it.
->>   */
->>  #define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
->> +#define KUNIT_CASE_PARAM(test_name, gen_params)                        \
->> +               { .run_case = test_name, .name = #test_name,    \
->> +                 .generate_params = gen_params }
->>
->>  /**
->>   * struct kunit_suite - describes a related collection of &struct kunit_case
->> @@ -208,6 +217,15 @@ struct kunit {
->>         const char *name; /* Read only after initialization! */
->>         char *log; /* Points at case log after initialization */
->>         struct kunit_try_catch try_catch;
->> +       /* param_values points to test case parameters in parameterized tests */
->> +       void *param_values;
->> +       /*
->> +        * current_param stores the index of the parameter in
->> +        * the array of parameters in parameterized tests.
->> +        * current_param + 1 is printed to indicate the parameter
->> +        * that causes the test to fail in case of test failure.
->> +        */
->> +       int current_param;
->>         /*
->>          * success starts as true, and may only be set to false during a
->>          * test case; thus, it is safe to update this across multiple
->> @@ -1742,4 +1760,18 @@ do {                                                                            \
->>                                                 fmt,                           \
->>                                                 ##__VA_ARGS__)
->>
->> +/**
->> + * KUNIT_PARAM_GENERATOR() - Helper method for test parameter generators
->> + *                          required in parameterized tests.
-> 
-> This is only for arrays, which is why I suggested KUNIT_ARRAY_PARAM()
-> as the name.
-> 
-> A generator can very well be implemented without an array, so this
-> macro name is confusing. In future somebody might want to provide a
-> macro that takes a start + end value (and maybe a step value) to
-> generate a series of values. That generator could be named
-> KUNIT_RANGE_PARAM(name, start, end, step) and gives us a generator
-> that is also named name##_gen_params. (If you want to try implementing
-> that macro, I'd suggest doing it as a separate patch.)
-> 
-> And I don't think we need to put "GENERATOR" into the name of these
-> macros, because the generators are now the fundamental method with
-> which to get parameterized tests. We don't need to state the obvious,
-> in favor of some brevity.
->
+Fair enough.  done.
 
-Okay, makes sense. I will change it to KUNIT_ARRAY_PARAM() for the next version.
- 
->> + * @name:  prefix of the name for the test parameter generator function.
->> + * @prev: a pointer to the previous test parameter, NULL for first parameter.
->> + * @array: a user-supplied pointer to an array of test parameters.
->> + */
->> +#define KUNIT_PARAM_GENERATOR(name, array)                                                     \
->> +       static void *name##_gen_params(void *prev)                                              \
->> +       {                                                                                       \
->> +               typeof((array)[0]) * __next = prev ? ((typeof(__next)) prev) + 1 : (array);     \
->> +               return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;                  \
->> +       }
->> +
->>  #endif /* _KUNIT_TEST_H */
 > 
-> Thanks,
-> -- Marco
+> Hrm.
+>  
+> >  #ifndef irqentry_state
+> >  typedef struct irqentry_state {
+> > -	bool	exit_rcu;
+> > +	union {
+> > +		bool	exit_rcu;
+> > +		bool	lockdep;
+> > +	};
+> >  } irqentry_state_t;
+> >  #endif
 > 
+>   -E_NO_KERNELDOC
 
-Thanks!
+Adding: Paul McKenney
+
+I'm happy to write something but I'm very unfamiliar with this code.  So I'm
+getting confused what exactly exit_rcu is flagging.
+
+I can see that exit_rcu is a bad name for the state used in
+irqentry_nmi_[enter|exit]().  Furthermore, I see why 'lockdep' is a better
+name.  But similar lockdep handling is used in irqentry_exit() if exit_rcu is
+true...
+
+
+Given my limited knowledge; here is my proposed text:
+
+/**
+ * struct irqentry_state - Opaque object for exception state storage
+ * @exit_rcu: Used exclusively in the irqentry_*() calls; tracks if the
+ *            exception hit the idle task which requires special handling,
+ *            including calling rcu_irq_exit(), when the exception exits.
+ * @lockdep: Used exclusively in the irqentry_nmi_*() calls; ensures lockdep
+ *           tracking is maintained if hardirqs were already enabled
+ *
+ * This opaque object is filled in by the irqentry_*_enter() functions and
+ * should be passed back into the corresponding irqentry_*_exit() functions
+ * when the exception is complete.
+ *
+ * Callers of irqentry_*_[enter|exit]() should consider this structure opaque
+ * and all members private.  Descriptions of the members are provided to aid in
+ * the maintenance of the irqentry_*() functions.
+ */
+
+
+Perhaps Paul can enlighten me on how exit_rcu is used beyond just flagging a
+call to rcu_irq_exit()?
+
+Why do we call lockdep_hardirqs_off() only when in the idle task?  That implies
+that regs_irqs_disabled() can only be false if we were in the idle task to
+match up the lockdep on/off calls.  This does not make sense to me because why
+do we need the extra check for exit_rcu?  I'm still trying to understand when
+regs_irqs_disabled() is false.
+
+
+        } else if (!regs_irqs_disabled(regs)) {
+...
+        } else {
+                /*
+                 * IRQ flags state is correct already. Just tell RCU if it
+                 * was not watching on entry.
+                 */
+                if (state.exit_rcu)
+                        rcu_irq_exit();
+        }
+
+Also, the comment in irqentry_enter() refers to irq_enter_from_user_mode() which
+does not seem to exist anymore.  So I'm not sure what careful sequence it is
+referring to.
+
+        /*
+         * If RCU is not watching then the same careful
+         * sequence vs. lockdep and tracing is required
+         * as in irq_enter_from_user_mode().
+         */
+
+?
+
+Ira
