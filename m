@@ -2,97 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6CF29A5E4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 08:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265A929A64D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Oct 2020 09:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2508446AbgJ0Hzf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Oct 2020 03:55:35 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46361 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2508445AbgJ0Hze (ORCPT
+        id S2508852AbgJ0IMn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Oct 2020 04:12:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50677 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2394911AbgJ0IMn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 03:55:34 -0400
-Received: by mail-oi1-f196.google.com with SMTP id x1so376499oic.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 00:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DOZ/or+uXcofLUI05AASj9pqYEI1+H4nTxttRQeOH3w=;
-        b=p0ybGNuotD2awoJRp4EIUps3i33wWnSBscgfxKE+PLT03BAAfghsklin5UQ1AI5LHb
-         NKoqRRtTa/rJIBjm2EWYL+fKZ+pwXGCG9lFC5kLy0Hdm9u+zLFyksmaM+WRGUtZjYNoj
-         c3ikMGBTs+zDygIBiywKzSXWg5zfr96Pqw/VHcrTy79z5wSofz4rPXO8K3QreT1V7ylJ
-         uM14o74YCSexauZZ3iyZwyKFTdex1g9v2Uxpx9ISawxwvePFy+zZMHYdiDvPsHcAYaUx
-         0iMz9wq8LP+Qv4HgF0HBr2ybRH2ImmsnCgs1B6Prd2o6mLH7LAvmdo4V8xgU5YDNOs28
-         Oz5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DOZ/or+uXcofLUI05AASj9pqYEI1+H4nTxttRQeOH3w=;
-        b=rhlmzRnO5yIsnrTTkCtIyHveQL4rEaPzMLyYPDsqbFCZGQTzTm03qKk87AwfcxD/xH
-         WdhbE95eNb56kVH3YoWne7An8wDBIyocXZboX5bS6UMWv7L5vrpNmWBKn2Krhz3ZWZCt
-         PZeRpf8wBsJRo4b96AK//067mc1n8yO0URwD8+Fk4nGvIV+vhrLeA5rRuw7OWSc3uZnV
-         Sq4zdyKJJd06sYVkBjGaAB5p+kaEeiCRH9V9ucVYJtbRX3KHf68K6zbp43oNP8BsfFoO
-         4oSuqF0SgzpUWnnC7fjh0azMf1H8FXzUkjHH6TdWb9ms+FvJL8ldXbdZBnKhHL04bguj
-         oZkw==
-X-Gm-Message-State: AOAM533R5kVUeWkpHvo0OULxJrOdhrYQsu98M17G8GrlyrShJShFySTB
-        Qz2Jg88prj75rMVAIyIg2Hy7L300YIpKCpzI60pd0g==
-X-Google-Smtp-Source: ABdhPJy9DnGoYipYvpataI7s7gEKop4LEknvR99sUFOYQrgxmqfLbYJYMFlpKS8G5wR7l7le8Ljz97l7WA1fdaM5ZvA=
-X-Received: by 2002:a54:4812:: with SMTP id j18mr632555oij.70.1603785333575;
- Tue, 27 Oct 2020 00:55:33 -0700 (PDT)
+        Tue, 27 Oct 2020 04:12:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603786361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NAcngyuptikvYGGpjHccIA10XCuP57p7z320i7MuxeE=;
+        b=izoUNn+IN3+rLS+uPI2ugr4fH+bhc/8RPUCdLmHQIEXxgvGOf/wvzyyTrPB7qcmHFQ2/9k
+        jP0M+oSqKNyCy5F/nPCcgGu5+Edrzwpx40MNjSwx+9dsA4lbuVaukTsfGMoLisbpSEBr0C
+        4lEF0MXlDJeKQKu8jfH/D549QgKlgzc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-251-Q8AvrUgQOMaVTr9oXfijqA-1; Tue, 27 Oct 2020 04:12:38 -0400
+X-MC-Unique: Q8AvrUgQOMaVTr9oXfijqA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1338664085;
+        Tue, 27 Oct 2020 08:12:33 +0000 (UTC)
+Received: from [10.36.113.185] (ovpn-113-185.ams2.redhat.com [10.36.113.185])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AB67E5B4B3;
+        Tue, 27 Oct 2020 08:12:24 +0000 (UTC)
+Subject: Re: [PATCH v7 3/7] set_memory: allow set_direct_map_*_noflush() for
+ multiple pages
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "tycho@tycho.ws" <tycho@tycho.ws>, "cl@linux.com" <cl@linux.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-nvdimm@lists.01.org" <linux-nvdimm@lists.01.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+References: <20201026083752.13267-1-rppt@kernel.org>
+ <20201026083752.13267-4-rppt@kernel.org>
+ <e754ae3873e02e398e58091d586fe57e105803db.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <9202c4c1-9f1f-175f-0a85-fc8c30bc5e3b@redhat.com>
+Date:   Tue, 27 Oct 2020 09:12:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-References: <20201026183523.82749-1-98.arpi@gmail.com>
-In-Reply-To: <20201026183523.82749-1-98.arpi@gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 27 Oct 2020 08:55:22 +0100
-Message-ID: <CANpmjNMNd2fMmqsmBMSTwD6Cp0OBORjTgDBiDOzXD1zVyELLnw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] kunit: Support for Parameterized Testing
-To:     Arpitha Raghunandan <98.arpi@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-ext4@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e754ae3873e02e398e58091d586fe57e105803db.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 26 Oct 2020 at 19:36, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
-[...]
->          * success starts as true, and may only be set to false during a
->          * test case; thus, it is safe to update this across multiple
-> @@ -1742,4 +1760,18 @@ do {                                                                            \
->                                                 fmt,                           \
->                                                 ##__VA_ARGS__)
->
-> +/**
-> + * KUNIT_PARAM_GENERATOR() - Helper method for test parameter generators
-> + *                          required in parameterized tests.
-> + * @name:  prefix of the name for the test parameter generator function.
+On 26.10.20 20:01, Edgecombe, Rick P wrote:
+> On Mon, 2020-10-26 at 10:37 +0200, Mike Rapoport wrote:
+>> +++ b/arch/x86/mm/pat/set_memory.c
+>> @@ -2184,14 +2184,14 @@ static int __set_pages_np(struct page *page,
+>> int numpages)
+>>         return __change_page_attr_set_clr(&cpa, 0);
+>>  }
+>>  
+>> -int set_direct_map_invalid_noflush(struct page *page)
+>> +int set_direct_map_invalid_noflush(struct page *page, int numpages)
+>>  {
+>> -       return __set_pages_np(page, 1);
+>> +       return __set_pages_np(page, numpages);
+>>  }
+>>  
+>> -int set_direct_map_default_noflush(struct page *page)
+>> +int set_direct_map_default_noflush(struct page *page, int numpages)
+>>  {
+>> -       return __set_pages_p(page, 1);
+>> +       return __set_pages_p(page, numpages);
+>>  }
+> 
+> Somewhat related to your other series, this could result in large NP
+> pages and trip up hibernate.
+> 
 
-This could mention that the generator function will be suffixed by
-"_gen_params".
+It feels somewhat desirable to disable hibernation once secretmem is
+enabled, right? Otherwise you'll be writing out your secrets to swap,
+where they will remain even after booting up again ...
 
-> + * @prev: a pointer to the previous test parameter, NULL for first parameter.
-> + * @array: a user-supplied pointer to an array of test parameters.
-> + */
+Skipping secretmem pages when hibernating is the wrong approach I guess ...
 
-I just noticed this: the interface of this macro does not include
-"prev" (which is an argument of the generated function, but not
-supplied to this macro; "prev" should hopefully be explained in the
-other comment you're adding for the new struct field). So, the
-kernel-doc comment here should only list the actual arguments of this
-macro, which is only "name" and "array".
-
-> +#define KUNIT_PARAM_GENERATOR(name, array)                                                     \
-[...]
-
+-- 
 Thanks,
--- Marco
+
+David / dhildenb
+
