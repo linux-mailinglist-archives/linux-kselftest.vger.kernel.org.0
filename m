@@ -2,304 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5F329D910
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Oct 2020 23:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9880929DB7B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 01:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389508AbgJ1Wn4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Oct 2020 18:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S1726677AbgJ1X7z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Oct 2020 19:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389503AbgJ1Wnz (ORCPT
+        with ESMTP id S2387393AbgJ1X6V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:43:55 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9123BC0613CF;
-        Wed, 28 Oct 2020 15:43:55 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id f21so352264plr.5;
-        Wed, 28 Oct 2020 15:43:55 -0700 (PDT)
+        Wed, 28 Oct 2020 19:58:21 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AADC0613CF
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 16:58:21 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id k6so1334832ilq.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 16:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oaa8geg/T7Mkg1IhrPZ9ojItG/nEdjLtTyyx3XiRm1g=;
-        b=iXpwEKz4ahjXONPencKe1/fGUjTiRHXYhjFkWnYTO/LyraTFF82uNHLqAEZBITozVX
-         wSE2C0eWJjmfzlCrdqJU4gToJwL9zYQt3CoL5jYkVnAbTUcCEMOrbjnGSTyB0OajDSzY
-         0MdPKWc0+3GKM2aM7xvoVCFTshTkbxcyOiP8jnajHiAYsqB1Dgs5o40jLXH2mqh23tog
-         Td5089h6p1IAfsadUCDJagHAuNMaYoanED4Z3Osg9fSPJWv2OQ3brSAFsiB2NIEksgYg
-         xFFTLmyiBSaj1Y7W2n9ATS6iBvIKhf2CEmunsNqt0Z3M2BypMEiV4xsquHzRCI8La8RT
-         Wytw==
+        bh=d+bPcjkE2LVvE1S9DHK/44sPSiMl3Agmljqghbm1BJA=;
+        b=XvOPCvBe+/l29dhLk+GdU320nX+TYX8gpkBGik4OML59fTK5mRJTXm3dUbJTGTata/
+         y1RXyi4oApdYxQV0Em/q2E/juCAYj1yAhkRaM0OOfw3SR5ZgDmrRm2kZknUiu4pp/t3R
+         O0envp0rG4Yg8yyejP2Kv7k79egzL/KRgXWnk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=oaa8geg/T7Mkg1IhrPZ9ojItG/nEdjLtTyyx3XiRm1g=;
-        b=HVB1yCR7d7lSDWk+w7xmwPknwJbFn7Py2PEGC6XUhOvyJaa1iF1uJPrM7qBNHIOHFS
-         s1AGwiwW9mlpfwTAlBDAQ1cTQRkXIooYTWULyCdhXrFEuT6KjtxUm8b2YOo2ZjKiECiq
-         O+cf27952tvj5zGWh1c6Iidf6WLY++1e/VMWqsHtSznPLuCyHn3qMGrXSh8Bx6cW0pvh
-         yQdNfxdzwQpYcXB7q0DkFntHMfqPh8YDl4hdwQCVuciQu+DDBZ2GmvrDcJG2TyajsX8v
-         LsbvnvNZVXeNgX0ACT05PtxAKMgEF9OSQdBDmEobBsTwNsznudSHVTF+YAfySnw2QD0a
-         sRmw==
-X-Gm-Message-State: AOAM5325rCAKQwA1Vd+DRXvIN1TadLN2d9CHyabqhpIyJLYEnJD49fNv
-        kyZ1zKDZ4FAkiAiQYqMqkrVZj/BQj27mdOYH
-X-Google-Smtp-Source: ABdhPJybZt79yEe27byzOwh0sHeZgjRxRq2Pvo32WalOk1EF/2tFMOJayyDjsZx6fTAePmIzTIeISQ==
-X-Received: by 2002:a17:902:6505:b029:d5:f870:4d20 with SMTP id b5-20020a1709026505b02900d5f8704d20mr6721566plk.34.1603874728042;
-        Wed, 28 Oct 2020 01:45:28 -0700 (PDT)
-Received: from [192.168.86.81] ([106.51.242.167])
-        by smtp.gmail.com with ESMTPSA id ck21sm4196820pjb.56.2020.10.28.01.45.24
+        bh=d+bPcjkE2LVvE1S9DHK/44sPSiMl3Agmljqghbm1BJA=;
+        b=VfxlOIalqNcYlsCa7DwP23gchPnPmKo7Do4J1erBO38tAd62kQM962SIynTgZWbqEv
+         2v8OfNAYF2yWm1t0w9X9JlcnWQOYLSiQ3sROXYar7UAnYymeAwZKmTlxTAX6UVJPxW/O
+         bC/CA2+WsYCvovJ5uabe2CZBgw1GG5McBy5s5GCJDfiJ39FZGXM0xJgm5q3+jBONnKQd
+         wv/CGOEGlEZzsWNoZhZXnpeHEXwKQeUkEhJ8uFrepT7xKZnwezw4vNsQ3BYZunN79FaD
+         945qWAVYQ3sBMh4MqbC/N+E0KuDNRBcNob3EgUW9JHNI4SXhyJf1xKX0ZzC3lWoTx0xC
+         Lx2w==
+X-Gm-Message-State: AOAM532gqvhXAja9+Uq7j+GqF2k07vuDKK4gZGZkQx55VctQfWmTCazj
+        /ns2gohpRHt+sr6hiqaE+BQynODD4C2wcw==
+X-Google-Smtp-Source: ABdhPJyikOuQn42ZMGpH1yzv4D5VzSSVW1A/W0mHa8GOSOvs0WhOgM7RqHqpN9/07/EP1hAgbMqZlQ==
+X-Received: by 2002:a92:ad0f:: with SMTP id w15mr3521796ilh.97.1603845989333;
+        Tue, 27 Oct 2020 17:46:29 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e4sm1796075ill.70.2020.10.27.17.46.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2020 01:45:27 -0700 (PDT)
-Subject: Re: [PATCH v4 1/2] kunit: Support for Parameterized Testing
-To:     Marco Elver <elver@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-ext4@vger.kernel.org
-References: <20201027174630.85213-1-98.arpi@gmail.com>
- <CANpmjNOpbXHs4gs9Ro-u7hyN_zZ7s3AqDcdDy1Nqxq4ckThugA@mail.gmail.com>
-From:   Arpitha Raghunandan <98.arpi@gmail.com>
-Message-ID: <5aa41bb7-79fa-bcd6-ef51-e27dabceb5cf@gmail.com>
-Date:   Wed, 28 Oct 2020 14:15:22 +0530
+        Tue, 27 Oct 2020 17:46:28 -0700 (PDT)
+Subject: Re: [PATCH v3 00/21] Miscellaneous fixes for resctrl selftests
+To:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>
+Cc:     linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201020235126.1871815-1-fenghua.yu@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c4fe6c5a-e5c4-0653-9e35-ab03f5494744@linuxfoundation.org>
+Date:   Tue, 27 Oct 2020 18:46:27 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CANpmjNOpbXHs4gs9Ro-u7hyN_zZ7s3AqDcdDy1Nqxq4ckThugA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 28/10/20 12:51 am, Marco Elver wrote:
-> On Tue, 27 Oct 2020 at 18:47, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
->>
->> Implementation of support for parameterized testing in KUnit.
->> This approach requires the creation of a test case using the
->> KUNIT_CASE_PARAM macro that accepts a generator function as input.
->> This generator function should return the next parameter given the
->> previous parameter in parameterized tests. It also provides
->> a macro to generate common-case generators.
->>
->> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
->> Co-developed-by: Marco Elver <elver@google.com>
->> Signed-off-by: Marco Elver <elver@google.com>
->> ---
->> Changes v3->v4:
->> - Rename kunit variables
->> - Rename generator function helper macro
->> - Add documentation for generator approach
->> - Display test case name in case of failure along with param index
->> Changes v2->v3:
->> - Modifictaion of generator macro and method
->> Changes v1->v2:
->> - Use of a generator method to access test case parameters
->>
->>  include/kunit/test.h | 34 ++++++++++++++++++++++++++++++++++
->>  lib/kunit/test.c     | 21 ++++++++++++++++++++-
->>  2 files changed, 54 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/kunit/test.h b/include/kunit/test.h
->> index 9197da792336..ec2307ee9bb0 100644
->> --- a/include/kunit/test.h
->> +++ b/include/kunit/test.h
->> @@ -107,6 +107,13 @@ struct kunit;
->>   *
->>   * @run_case: the function representing the actual test case.
->>   * @name:     the name of the test case.
->> + * @generate_params: the generator function for parameterized tests.
->> + *
->> + * The generator function is used to lazily generate a series of
->> + * arbitrarily typed values that fit into a void*. The argument @prev
->> + * is the previously returned value, which should be used to derive the
->> + * next value; @prev is set to NULL on the initial generator call.
->> + * When no more values are available, the generator must return NULL.
->>   *
-> 
-> Hmm, should this really be the first paragraph? I think it should be
-> the paragraph before "Example:" maybe. But then that paragraph should
-> refer to generate_params e.g. "The generator function @generate_params
-> is used to ........".
-> 
-> The other option you have is to move this paragraph to the kernel-doc
-> comment for KUNIT_CASE_PARAM, which seems to be missing a kernel-doc
-> comment.
-> 
->>   * A test case is a function with the signature,
->>   * ``void (*)(struct kunit *)``
->> @@ -141,6 +148,7 @@ struct kunit;
->>  struct kunit_case {
->>         void (*run_case)(struct kunit *test);
->>         const char *name;
->> +       void* (*generate_params)(void *prev);
->>
->>         /* private: internal use only. */
->>         bool success;
->> @@ -162,6 +170,9 @@ static inline char *kunit_status_to_string(bool status)
->>   * &struct kunit_case for an example on how to use it.
->>   */
->>  #define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
-> 
-> I.e. create a new kernel-doc comment for KUNIT_CASE_PARAM here, and
-> simply move the paragraph describing the generator protocol into that
-> comment.
+On 10/20/20 5:51 PM, Fenghua Yu wrote:
+> This patch set has several miscellaneous fixes to resctrl selftest tool
+> that are easily visible to user. V1 had fixes to CAT test and CMT test
+> but they were dropped in V2 because having them here made the patchset
+> humongous. So, changes to CAT test and CMT test will be posted in another
+> patchset.
 > 
 
-I will make this change.
+This is still a very long patch series. Several of the patches can be
+combined and can be rearranged. 21 patches don't seem to any specific
+order.
 
->> +#define KUNIT_CASE_PARAM(test_name, gen_params)                        \
->> +               { .run_case = test_name, .name = #test_name,    \
->> +                 .generate_params = gen_params }
->>
->>  /**
->>   * struct kunit_suite - describes a related collection of &struct kunit_case
->> @@ -208,6 +219,15 @@ struct kunit {
->>         const char *name; /* Read only after initialization! */
->>         char *log; /* Points at case log after initialization */
->>         struct kunit_try_catch try_catch;
->> +       /* param_value points to test case parameters in parameterized tests */
+> Change Log:
+> v3:
+> Address various comments (commit messages, return value on test failure,
+> print failure info on test failure etc) from Reinette and Tony.
+> [v2: https://lore.kernel.org/linux-kselftest/cover.1589835155.git.sai.praneeth.prakhya@intel.com/]
 > 
-> Hmm, not quite: param_value is the current parameter value for a test
-> case. Most likely it's a pointer, but it doesn't need to be.
+> v2:
+> 1. Dropped changes to CAT test and CMT test as they will be posted in a later
+>     series.
+> 2. Added several other fixes
+> [v1: https://lore.kernel.org/linux-kselftest/cover.1583657204.git.sai.praneeth.prakhya@intel.com/]
 > 
->> +       void *param_value;
->> +       /*
->> +        * param_index stores the index of the parameter in
->> +        * parameterized tests. param_index + 1 is printed
->> +        * to indicate the parameter that causes the test
->> +        * to fail in case of test failure.
->> +        */
+> Fenghua Yu (18):
+>    selftests/resctrl: Rename CQM test as CMT test
+>    selftests/resctrl: Declare global variables as extern
+>    selftests/resctrl: Return if resctrl file system is not supported
+>    selftests/resctrl: Check for resctrl mount point only if resctrl FS is
+>      supported
+>    selftests/resctrl: Use resctrl/info for feature detection
+>    selftests/resctrl: Fix missing options "-n" and "-p"
+>    selftests/resctrl: Fix MBA/MBM results reporting format
+>    selftests/resctrl: Abort running tests if not root user
+>    selftests/resctrl: Enable gcc checks to detect buffer overflows
+>    selftests/resctrl: Don't hard code value of "no_of_bits" variable
+
+>    selftests/resctrl: Modularize resctrl test suite main() function
+
+Yes. This is a needed change. I didn't make it to this patch yet.
+
+>    selftests/resctrl: Skip the test if requested resctrl feature is not
+>      supported
+
+Commented on this patch already. Look into using config file like other
+tests.
+
+>    selftests/resctrl: Umount resctrl FS only if mounted
+>    selftests/resctrl: Unmount resctrl FS after running all tests
+>    selftests/resctrl: Fix incorrect parsing of iMC counters
+>    selftests/resctrl: Fix checking for < 0 for unsigned values
+>    selftests/resctrl: Fix unnecessary usage of global variables
+>    selftests/resctrl: Don't use global variable for capacity bitmask
+>      (CBM)
 > 
-> I think this comment needs to be reformatted, because you can use at
-> the very least use 80 cols per line. (If you use vim, visual select
-> and do 'gq'.)
+> Reinette Chatre (3):
+>    selftests/resctrl: Fix typo
+>    selftests/resctrl: Fix typo in help text
+
+Why not combine the above two patches. The commit summary doesn't
+make sense.
+
+>    selftests/resctrl: Ensure sibling CPU is not same as original CPU
 > 
->> +       int param_index;
->>         /*
->>          * success starts as true, and may only be set to false during a
->>          * test case; thus, it is safe to update this across multiple
->> @@ -1742,4 +1762,18 @@ do {                                                                            \
->>                                                 fmt,                           \
->>                                                 ##__VA_ARGS__)
->>
->> +/**
->> + * KUNIT_ARRAY_PARAM() - Helper method for test parameter generators
->> + *                      required in parameterized tests.
->> + * @name:  prefix of the name for the test parameter generator function.
->> + *        It will be suffixed by "_gen_params".
->> + * @array: a user-supplied pointer to an array of test parameters.
->> + */
->> +#define KUNIT_ARRAY_PARAM(name, array)                                                         \
->> +       static void *name##_gen_params(void *prev)                                              \
->> +       {                                                                                       \
->> +               typeof((array)[0]) * __next = prev ? ((typeof(__next)) prev) + 1 : (array);     \
->> +               return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;                  \
->> +       }
->> +
->>  #endif /* _KUNIT_TEST_H */
->> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
->> index 750704abe89a..8ad908b61494 100644
->> --- a/lib/kunit/test.c
->> +++ b/lib/kunit/test.c
->> @@ -127,6 +127,12 @@ unsigned int kunit_test_case_num(struct kunit_suite *suite,
->>  }
->>  EXPORT_SYMBOL_GPL(kunit_test_case_num);
->>
->> +static void kunit_print_failed_param(struct kunit *test)
->> +{
->> +       kunit_err(test, "\n\tTest failed at:\n\ttest case: %s\n\tparameter: %d\n",
->> +                                               test->name, test->param_index + 1);
->> +}
-> 
-> Hmm, perhaps I wasn't clear, but I think I also misunderstood how the
-> test case successes are presented: they are not, and it's all bunched
-> into a single test case.
-> 
-> Firstly, kunit_err() already prints the test name, so if we want
-> something like "  # : the_test_case_name: failed at parameter #X",
-> simply having
-> 
->     kunit_err(test, "failed at parameter #%d\n", test->param_index + 1)
-> 
-> would be what you want.
-> 
-> But I think I missed that parameters do not actually produce a set of
-> test cases (sorry for noticing late). I think in their current form,
-> the parameterized tests would not be useful for my tests, because each
-> of my tests have test cases that have specific init and exit
-> functions. For each parameter, these would also need to run.
-> 
-> Ideally, each parameter produces its own independent test case
-> "test_case#param_index". That way, CI systems will also be able to
-> logically separate different test case params, simply because each
-> param produced its own distinct test case.
-> 
-> So, for example, we would get a series of test cases from something
-> like KUNIT_CASE_PARAM(test_case, foo_gen_params), and in the output
-> we'd see:
-> 
->     ok X - test_case#1
->     ok X - test_case#2
->     ok X - test_case#3
->     ok X - test_case#4
->     ....
-> 
-> Would that make more sense?
-> 
-> That way we'd ensure that test-case specific initialization and
-> cleanup done in init and exit functions is properly taken care of, and
-> you wouldn't need kunit_print_failed_param().
-> 
-> AFAIK, for what I propose you'd have to modify kunit_print_ok_not_ok()
-> (show param_index if parameterized test) and probably
-> kunit_run_case_catch_errors() (generate params and set
-> test->param_value and param_index).
-> 
-> Was there a reason why each param cannot be a distinct test case? If
-> not, I think this would be more useful.
+>   tools/testing/selftests/resctrl/Makefile      |   2 +-
+>   tools/testing/selftests/resctrl/README        |   4 +-
+>   tools/testing/selftests/resctrl/cache.c       |   4 +-
+>   tools/testing/selftests/resctrl/cat_test.c    |  20 +--
+>   .../resctrl/{cqm_test.c => cmt_test.c}        |  34 ++--
+>   tools/testing/selftests/resctrl/mba_test.c    |  23 ++-
+>   tools/testing/selftests/resctrl/mbm_test.c    |  16 +-
+>   tools/testing/selftests/resctrl/resctrl.h     |  20 ++-
+>   .../testing/selftests/resctrl/resctrl_tests.c | 156 ++++++++++++------
+>   tools/testing/selftests/resctrl/resctrl_val.c |  75 ++++++---
+>   tools/testing/selftests/resctrl/resctrlfs.c   |  79 ++++++---
+>   11 files changed, 272 insertions(+), 161 deletions(-)
+>   rename tools/testing/selftests/resctrl/{cqm_test.c => cmt_test.c} (85%)
 > 
 
-Oh, I hadn't considered this earlier. I will try it out for the next version.
+I will review rest of the patches. Try to combine a few patches and
+collapse fixes. I would like to see all the fixes first and then
+renaming from CQM to CMT.
 
->>  static void kunit_print_string_stream(struct kunit *test,
->>                                       struct string_stream *stream)
->>  {
->> @@ -168,6 +174,8 @@ static void kunit_fail(struct kunit *test, struct kunit_assert *assert)
->>         assert->format(assert, stream);
->>
->>         kunit_print_string_stream(test, stream);
->> +       if (test->param_value)
->> +               kunit_print_failed_param(test);
->>
->>         WARN_ON(string_stream_destroy(stream));
->>  }
->> @@ -239,7 +247,18 @@ static void kunit_run_case_internal(struct kunit *test,
->>                 }
->>         }
->>
->> -       test_case->run_case(test);
->> +       if (!test_case->generate_params) {
->> +               test_case->run_case(test);
->> +       } else {
->> +               test->param_value = test_case->generate_params(NULL);
->> +               test->param_index = 0;
->> +
->> +               while (test->param_value) {
->> +                       test_case->run_case(test);
->> +                       test->param_value = test_case->generate_params(test->param_value);
->> +                       test->param_index++;
->> +               }
->> +       }
-> 
-> Thanks,
-> -- Marco
-> 
-
-I'll make all the suggested changes.
-Thanks!
+thanks,
+-- Shuah
