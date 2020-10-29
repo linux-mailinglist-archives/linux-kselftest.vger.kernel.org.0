@@ -2,53 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B71F29EF7F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 16:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A877029F02B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 16:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbgJ2PQe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Oct 2020 11:16:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726604AbgJ2PQe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Oct 2020 11:16:34 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 85ABD2076E;
-        Thu, 29 Oct 2020 15:16:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603984594;
-        bh=hSnuwO9i8vYH0fM2M1kE2SHiaxuaeLezHgMHWhG8V9I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XbVyagwuUvo3mgBgegI8R2C6DUf8z+nfLWVxD8eCFBM8CKf/XAJh7MJcATdjT2WEC
-         WJqYC6Gfu/LYbKNzMLEMayZAHlJsZjMbqslsM2tquD7sMQRWA6DIWRKCYkUDWM7DXJ
-         Hv4wqriHP/QKnMLKwGln2G/beNWq7paPv2DM5bJg=
-Date:   Thu, 29 Oct 2020 08:16:32 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH net-next 2/3] net/core: introduce default_rps_mask netns
- attribute
-Message-ID: <20201029081632.2516a39b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <9e86568c264696dbe0fd44b2a8662bd233e2c3e8.1603906564.git.pabeni@redhat.com>
-References: <cover.1603906564.git.pabeni@redhat.com>
-        <9e86568c264696dbe0fd44b2a8662bd233e2c3e8.1603906564.git.pabeni@redhat.com>
+        id S1728272AbgJ2Pf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Oct 2020 11:35:28 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:33675 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728204AbgJ2Pdz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Oct 2020 11:33:55 -0400
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kY9w1-0001OG-25; Thu, 29 Oct 2020 15:33:53 +0000
+Date:   Thu, 29 Oct 2020 16:33:51 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Use $FUNCTION_FORK to reference kernel
+ fork function
+Message-ID: <20201029153351.m6jvaymzlu34plyk@wittgenstein>
+References: <20201026162032.124c728d@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201026162032.124c728d@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 28 Oct 2020 18:46:02 +0100 Paolo Abeni wrote:
-> @@ -46,6 +47,54 @@ int sysctl_devconf_inherit_init_net __read_mostly;
->  EXPORT_SYMBOL(sysctl_devconf_inherit_init_net);
->  
->  #ifdef CONFIG_RPS
-> +struct cpumask rps_default_mask;
+On Mon, Oct 26, 2020 at 04:20:32PM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> 
+> Commit cad6967ac108 ("fork: introduce kernel_clone()") replaced "_do_fork()"
+> with "kernel_clone()". The ftrace selftests reference the fork function in
+> several of the tests. The rename will make the tests break, but if those
+> names are changed in the tests, they would then break on older kernels. The
+> same set of tests should pass older kernels if they have previously passed.
+> Obviously, a new test may not work on older kernels if the test was added
+> due to a bug or a new feature.
+> 
+> The setup of ftracetest will now create a $FUNCTION_FORK bash variable
+> that will contain "_do_fork" for older kernels and "kernel_clone" for newer
+> ones. It figures out the proper name by examining /proc/kallsyms.
+> 
+> Note, available_filter_functions could also be used, but because some tests
+> should be able to pass without function tracing enabled, it could not be
+> used.
+> 
+> Fixes: eea11285dab3 ("tracing: switch to kernel_clone()")
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-net/core/sysctl_net_core.c:50:16: warning: symbol 'rps_default_mask' was not declared. Should it be static?
+Thank you!
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
