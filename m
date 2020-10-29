@@ -2,76 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2611629EADA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 12:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B71F29EF7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 16:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725789AbgJ2LkF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Oct 2020 07:40:05 -0400
-Received: from smtp-bc09.mail.infomaniak.ch ([45.157.188.9]:48771 "EHLO
-        smtp-bc09.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725385AbgJ2LkF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Oct 2020 07:40:05 -0400
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CMNll5T2bzljbGk;
-        Thu, 29 Oct 2020 12:40:03 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CMNlk5d69zlh8TD;
-        Thu, 29 Oct 2020 12:40:02 +0100 (CET)
-Subject: Re: [PATCH v22 00/12] Landlock LSM
-To:     Jann Horn <jannh@google.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-References: <20201027200358.557003-1-mic@digikod.net>
- <CAG48ez31oct9c8fkgFHQVb5u-o5cmwdNe2pJnmitnKcidNgfzw@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <25f5ec87-5462-9d47-d265-ec442eb50046@digikod.net>
-Date:   Thu, 29 Oct 2020 12:40:02 +0100
-User-Agent: 
+        id S1727026AbgJ2PQe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Oct 2020 11:16:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726604AbgJ2PQe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Oct 2020 11:16:34 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 85ABD2076E;
+        Thu, 29 Oct 2020 15:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603984594;
+        bh=hSnuwO9i8vYH0fM2M1kE2SHiaxuaeLezHgMHWhG8V9I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XbVyagwuUvo3mgBgegI8R2C6DUf8z+nfLWVxD8eCFBM8CKf/XAJh7MJcATdjT2WEC
+         WJqYC6Gfu/LYbKNzMLEMayZAHlJsZjMbqslsM2tquD7sMQRWA6DIWRKCYkUDWM7DXJ
+         Hv4wqriHP/QKnMLKwGln2G/beNWq7paPv2DM5bJg=
+Date:   Thu, 29 Oct 2020 08:16:32 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH net-next 2/3] net/core: introduce default_rps_mask netns
+ attribute
+Message-ID: <20201029081632.2516a39b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <9e86568c264696dbe0fd44b2a8662bd233e2c3e8.1603906564.git.pabeni@redhat.com>
+References: <cover.1603906564.git.pabeni@redhat.com>
+        <9e86568c264696dbe0fd44b2a8662bd233e2c3e8.1603906564.git.pabeni@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez31oct9c8fkgFHQVb5u-o5cmwdNe2pJnmitnKcidNgfzw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, 28 Oct 2020 18:46:02 +0100 Paolo Abeni wrote:
+> @@ -46,6 +47,54 @@ int sysctl_devconf_inherit_init_net __read_mostly;
+>  EXPORT_SYMBOL(sysctl_devconf_inherit_init_net);
+>  
+>  #ifdef CONFIG_RPS
+> +struct cpumask rps_default_mask;
 
-On 29/10/2020 02:05, Jann Horn wrote:
-> On Tue, Oct 27, 2020 at 9:04 PM Mickaël Salaün <mic@digikod.net> wrote:
->> This new patch series improves documentation, cleans up comments,
->> renames ARCH_EPHEMERAL_STATES to ARCH_EPHEMERAL_INODES and removes
->> LANDLOCK_ACCESS_FS_CHROOT.
-> 
-> Thanks for continuing to work on this! This is going to be really
-> valuable for sandboxing.
-> 
-> I hadn't looked at this series for a while; but I've now read through
-> it, and I don't see any major problems left. :) That said, there still
-> are a couple small things...
-> 
-
-Thanks Jann, I really appreciate your reviews!
+net/core/sysctl_net_core.c:50:16: warning: symbol 'rps_default_mask' was not declared. Should it be static?
