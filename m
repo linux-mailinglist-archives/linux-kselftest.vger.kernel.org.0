@@ -2,156 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBA729E191
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 03:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD3E29E751
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 10:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727486AbgJ1VtO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Oct 2020 17:49:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:43167 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727461AbgJ1VtM (ORCPT
+        id S1726707AbgJ2JaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Oct 2020 05:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726524AbgJ2JaL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:49:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603921750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vRfli5Z5DUhcuyRlIgm4cbCOglHgREI9yrOIn+85HoI=;
-        b=GFAlwCKGoTzx9mf6V63YhHPBFIrZ3ARut8oZMHBjIy+5c3kkNJhQcTbvr0XxUep4aE63Js
-        FbLzmeaQLAxhSKnHkOQH7fwL6Ps94G94qnDXTLD3qSo0jDNonOVC+Bf8mtxD7S4Dz+R93A
-        WJtXZ2MgmJFj+G8rKi3LyYSYpWcXWS8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-306-VDuhqbblOD6oapEgFdZfoQ-1; Wed, 28 Oct 2020 13:47:02 -0400
-X-MC-Unique: VDuhqbblOD6oapEgFdZfoQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 00D1F18A0727;
-        Wed, 28 Oct 2020 17:46:40 +0000 (UTC)
-Received: from gerbillo.redhat.com (ovpn-115-68.ams2.redhat.com [10.36.115.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EB78F6198D;
-        Wed, 28 Oct 2020 17:46:37 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH net-next 3/3] self-tests: introduce self-tests for RPS default mask
-Date:   Wed, 28 Oct 2020 18:46:03 +0100
-Message-Id: <27a3dd523e015ba27ba5666ad727ff5d935ce3a8.1603906564.git.pabeni@redhat.com>
-In-Reply-To: <cover.1603906564.git.pabeni@redhat.com>
-References: <cover.1603906564.git.pabeni@redhat.com>
+        Thu, 29 Oct 2020 05:30:11 -0400
+Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E38C0613D3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 02:30:10 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CMKsq0bfrzljf95;
+        Thu, 29 Oct 2020 10:30:07 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CMKsn1t98zlh8Tj;
+        Thu, 29 Oct 2020 10:30:05 +0100 (CET)
+Subject: Re: [PATCH v22 01/12] landlock: Add object management
+To:     Jann Horn <jannh@google.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20201027200358.557003-1-mic@digikod.net>
+ <20201027200358.557003-2-mic@digikod.net>
+ <CAG48ez3CKa12SFHjVUPnYzJm2E7OBWnuh3JzVMrsvqdcMS1A8A@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <afa8e978-d22c-f06a-d57b-e0d1a9918062@digikod.net>
+Date:   Thu, 29 Oct 2020 10:30:04 +0100
+User-Agent: 
 MIME-Version: 1.0
+In-Reply-To: <CAG48ez3CKa12SFHjVUPnYzJm2E7OBWnuh3JzVMrsvqdcMS1A8A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ensure that RPS default mask changes take place on
-all newly created netns/devices and don't affect
-existing ones.
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
- tools/testing/selftests/net/Makefile          |  1 +
- tools/testing/selftests/net/config            |  3 +
- .../testing/selftests/net/rps_default_mask.sh | 57 +++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100644 tools/testing/selftests/net/rps_default_mask.sh
+On 29/10/2020 02:05, Jann Horn wrote:
+> On Tue, Oct 27, 2020 at 9:04 PM Mickaël Salaün <mic@digikod.net> wrote:
+>> A Landlock object enables to identify a kernel object (e.g. an inode).
+>> A Landlock rule is a set of access rights allowed on an object.  Rules
+>> are grouped in rulesets that may be tied to a set of processes (i.e.
+>> subjects) to enforce a scoped access-control (i.e. a domain).
+>>
+>> Because Landlock's goal is to empower any process (especially
+>> unprivileged ones) to sandbox themselves, we cannot rely on a
+>> system-wide object identification such as file extended attributes.
+>> Indeed, we need innocuous, composable and modular access-controls.
+>>
+>> The main challenge with these constraints is to identify kernel objects
+>> while this identification is useful (i.e. when a security policy makes
+>> use of this object).  But this identification data should be freed once
+>> no policy is using it.  This ephemeral tagging should not and may not be
+>> written in the filesystem.  We then need to manage the lifetime of a
+>> rule according to the lifetime of its objects.  To avoid a global lock,
+>> this implementation make use of RCU and counters to safely reference
+>> objects.
+>>
+>> A following commit uses this generic object management for inodes.
+>>
+>> Cc: James Morris <jmorris@namei.org>
+>> Cc: Jann Horn <jannh@google.com>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Serge E. Hallyn <serge@hallyn.com>
+>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> Reviewed-by: Jann Horn <jannh@google.com>
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index ef352477cac6..2531ec3e5027 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -21,6 +21,7 @@ TEST_PROGS += rxtimestamp.sh
- TEST_PROGS += devlink_port_split.py
- TEST_PROGS += drop_monitor_tests.sh
- TEST_PROGS += vrf_route_leaking.sh
-+TEST_PROGS += rps_default_mask.sh
- TEST_PROGS_EXTENDED := in_netns.sh
- TEST_GEN_FILES =  socket nettest
- TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 4d5df8e1eee7..5d467364f082 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -34,3 +34,6 @@ CONFIG_TRACEPOINTS=y
- CONFIG_NET_DROP_MONITOR=m
- CONFIG_NETDEVSIM=m
- CONFIG_NET_FOU=m
-+CONFIG_RPS=y
-+CONFIG_SYSFS=y
-+CONFIG_PROC_SYSCTL=y
-diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
-new file mode 100644
-index 000000000000..c81c0ac7ddfe
---- /dev/null
-+++ b/tools/testing/selftests/net/rps_default_mask.sh
-@@ -0,0 +1,57 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+readonly ksft_skip=4
-+readonly cpus=$(nproc)
-+ret=0
-+
-+[ $cpus -gt 2 ] || exit $ksft_skip
-+
-+readonly INITIAL_RPS_DEFAULT_MASK=$(cat /proc/sys/net/core/rps_default_mask)
-+readonly NETNS="ns-$(mktemp -u XXXXXX)"
-+
-+setup() {
-+	ip netns add "${NETNS}"
-+	ip -netns "${NETNS}" link set lo up
-+}
-+
-+cleanup() {
-+	echo $INITIAL_RPS_DEFAULT_MASK > /proc/sys/net/core/rps_default_mask
-+	ip netns del $NETNS
-+}
-+
-+chk_rps() {
-+	local rps_mask expected_rps_mask=$3
-+	local dev_name=$2
-+	local msg=$1
-+
-+	rps_mask=$(ip netns exec $NETNS cat /sys/class/net/$dev_name/queues/rx-0/rps_cpus)
-+	printf "%-60s" "$msg"
-+	if [ $rps_mask -eq $expected_rps_mask ]; then
-+		echo "[ ok ]"
-+	else
-+		echo "[fail] expected $expected_rps_mask found $rps_mask"
-+		ret=1
-+	fi
-+}
-+
-+trap cleanup EXIT
-+
-+echo 0 > /proc/sys/net/core/rps_default_mask
-+setup
-+chk_rps "empty rps_default_mask" lo 0
-+cleanup
-+
-+echo 1 > /proc/sys/net/core/rps_default_mask
-+setup
-+chk_rps "non zero rps_default_mask" lo 1
-+
-+echo 3 > /proc/sys/net/core/rps_default_mask
-+chk_rps "changing rps_default_mask dont affect existing netns" lo 1
-+
-+ip -n $NETNS link add type veth
-+ip -n $NETNS link set dev veth0 up
-+ip -n $NETNS link set dev veth1 up
-+chk_rps "changing rps_default_mask affect newly created devices" veth0 3
-+chk_rps "changing rps_default_mask affect newly created devices[II]" veth1 3
-+exit $ret
--- 
-2.26.2
+Thanks for the review.
 
+> 
+> except for some minor nits:
+> 
+> [...]
+>> diff --git a/security/landlock/object.c b/security/landlock/object.c
+> [...]
+>> +void landlock_put_object(struct landlock_object *const object)
+>> +{
+>> +       /*
+>> +        * The call to @object->underops->release(object) might sleep e.g.,
+> 
+> s/ e.g.,/, e.g./
+
+I indeed prefer the comma preceding the "e.g.", but it seems that there
+is a difference between UK english and US english:
+https://english.stackexchange.com/questions/16172/should-i-always-use-a-comma-after-e-g-or-i-e
+Looking at the kernel documentation makes it clear:
+$ git grep -F 'e.g. ' | wc -l
+1179
+$ git grep -F 'e.g., ' | wc -l
+160
+
+I'll apply your fix in the whole patch series.
+
+> 
+>> +        * because of iput().
+>> +        */
+>> +       might_sleep();
+>> +       if (!object)
+>> +               return;
+> [...]
+>> +}
+>> diff --git a/security/landlock/object.h b/security/landlock/object.h
+> [...]
+>> +struct landlock_object {
+>> +       /**
+>> +        * @usage: This counter is used to tie an object to the rules matching
+>> +        * it or to keep it alive while adding a new rule.  If this counter
+>> +        * reaches zero, this struct must not be modified, but this counter can
+>> +        * still be read from within an RCU read-side critical section.  When
+>> +        * adding a new rule to an object with a usage counter of zero, we must
+>> +        * wait until the pointer to this object is set to NULL (or recycled).
+>> +        */
+>> +       refcount_t usage;
+>> +       /**
+>> +        * @lock: Guards against concurrent modifications.  This lock must be
+> 
+> s/must be/must be held/ ?
+
+Right.
+
+> 
+>> +        * from the time @usage drops to zero until any weak references from
+>> +        * @underobj to this object have been cleaned up.
+>> +        *
+>> +        * Lock ordering: inode->i_lock nests inside this.
+>> +        */
+>> +       spinlock_t lock;
+> [...]
+>> +};
+>> +
+>> +struct landlock_object *landlock_create_object(
+>> +               const struct landlock_object_underops *const underops,
+>> +               void *const underojb);
+> 
+> nit: "underobj"
+> 
+
+Good catch!
