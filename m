@@ -2,109 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBB729E086
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 02:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F88029E02D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 02:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729612AbgJ1WEy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Oct 2020 18:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S1731180AbgJ2BIu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Oct 2020 21:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729491AbgJ1WCA (ORCPT
+        with ESMTP id S1729564AbgJ2BGK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:02:00 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9DCC0613CF
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:02:00 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id o70so493591ybc.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:02:00 -0700 (PDT)
+        Wed, 28 Oct 2020 21:06:10 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24392C0613D4
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:08 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id 23so1268871ljv.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=kBQEJAcsNoDypblzItIVRGC5xJLK4RkxOtKNMPRA5Z8=;
-        b=M4LUqheCRVN4aDlx34+QxY/4pY3jpcrJREx0gbY0u9MfglfuhcSTufiKC6drQol5GY
-         RjFX3yP1cSgS+W3lGG4ggcRHlYoTEIuUgNow6adQ6cHP6YMEjWoGOP8Lj/sV/7uB5fxy
-         hViG/0s2Oer/cQ5vkGhBNAv6FTV3qzFqPFWbE=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GGrU2z1MQIER/cvvO+UmfkeQMG5BianEcYdHiHe9qyQ=;
+        b=Ug/McNP55t1xm6mf6Z65dD0d/4XLutY+oae+4KAHg9dQk7Ug4H28uN0ZtA6M7NgpbT
+         I76xZ2T09J5d7Ybn9ysY9RjSdQylACxpwnNQDr/Whe2xhZiOlFqCT3OIsA9q6zLzDeCR
+         81KtjKOTYR80DEEdXwrEXNgjq/YrpBGqKd9yqxwWPNsE3aR79VfrgmiIiCuvt0LOqp4p
+         g9SdQ3WjkMfuDJcu5J+Ntpja9H+lqlKUJo2zM/NDZEiWEQKPOjO10MeAjoZ8CaD+3oKL
+         C211FUrW1ORwXJZC8XlCmBgNTqf5GZzQLzPlE4Pp9aFCrQeZrd63oWztHdhVhAjJQL1T
+         dF9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kBQEJAcsNoDypblzItIVRGC5xJLK4RkxOtKNMPRA5Z8=;
-        b=KtQcsRINSu6sPeyQMfp6Dx6CgLXAa1rXZeSHFqclTF2vj42+X7/58okun/H72+SXh/
-         ABpLv0wsihOkOW5XvUcSlQ+LMaOnzLF7KyVDp8zMKUden0MUDbi+7spzBO0cU/JkXeNR
-         AWZN5lFc/fuRqVxcL+NBINRmBJ47524Mf1XTj3tnsnH87tetSAHrLal/LJGmyQVUVtsh
-         alT+nuEGejVTbChmb3hK4GDWRfrGf8XF+qNZcshOoP6R+nIb2J5n4lLekpMuFMI2d544
-         w7tHjJ5P8rqTfXKvJNoAW9PMNZFxwR0mvsuM/v9V29JDQtp9lmVg6LW3MAeyQ3fUCClD
-         oDSg==
-X-Gm-Message-State: AOAM533oIqqdgsTRnkX0rJo1fxTTkfoC/ZXs/kIW9dDykZWbec7x/AtG
-        YXeezqj6IFLAy/YCKgRq1ws8ZZfYQYAUBg==
-X-Google-Smtp-Source: ABdhPJxjTy3T36nWQmk8c0DFM/H14BocDfoMWVqNtagjPo1S/SOliv1XFcYQLMM5E1xEglS9gQWtRQ==
-X-Received: by 2002:a05:6830:400d:: with SMTP id h13mr5615792ots.371.1603897570814;
-        Wed, 28 Oct 2020 08:06:10 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 19sm2498132oin.54.2020.10.28.08.06.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2020 08:06:10 -0700 (PDT)
-Subject: Re: [PATCH] selftests: intel_pstate: ftime() is deprecated
-To:     "Rantala, Tommi T. (Nokia - FI/Espoo)" <tommi.t.rantala@nokia.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201016132245.73378-1-tommi.t.rantala@nokia.com>
- <d315994a-3398-be41-1b26-e78f8359aa5c@linuxfoundation.org>
- <d4adb97b3325ac93295d5e42dc07e8381fb9efab.camel@nokia.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <459bc6a0-8046-e223-f88e-10e643a36dd7@linuxfoundation.org>
-Date:   Wed, 28 Oct 2020 09:06:09 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GGrU2z1MQIER/cvvO+UmfkeQMG5BianEcYdHiHe9qyQ=;
+        b=qvmOAGnEWySPrQeqYJEQzlDVVmPIb+AU5wO9Cs/d0NmgUMPUfX3s372kz9HWspxl7M
+         15CwVThCNv+emZGw5Ep9sIQn3o1sNuB+vZtFi1aHJASHP3N6bocEQq3Om5naIbDKC8kX
+         LAnS/UPyFZ7UHRvmaT9gqou84cnMsLHE3XPfBzaMXxxWaMqqyRJZAHWRL6fZ04QdPCk0
+         CXg7e0wiZXJ0IuqlfN3yEhJMn8VpgVAHomkUOqyhJbB3MA7cnLv955wg15b/Pk/KOXwy
+         EbCQt1ViGtHJw7tlTtcaGdDX19Q59V1tN98f69oZO9p7o+SWs/sgDClyINAgOAs3JcKC
+         N+jA==
+X-Gm-Message-State: AOAM530urm87F0xUJIuFu3RyQIdapKQ24okOiLwPatj2VMmvkwvw7eeW
+        6SiwFTZwzEURze7frfS2o80fEhOSlsb3hSThfLGk0A==
+X-Google-Smtp-Source: ABdhPJwED9L0K+8kxvJCn6lQw5MHjDYLpGe4e16Gh7aY6DgACpmCDb7qbKA88fIn4deadsqcNqBfZ2vFqTocP7vkRyk=
+X-Received: by 2002:a2e:9f13:: with SMTP id u19mr725677ljk.160.1603933566252;
+ Wed, 28 Oct 2020 18:06:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <d4adb97b3325ac93295d5e42dc07e8381fb9efab.camel@nokia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201027200358.557003-1-mic@digikod.net>
+In-Reply-To: <20201027200358.557003-1-mic@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 29 Oct 2020 02:05:39 +0100
+Message-ID: <CAG48ez31oct9c8fkgFHQVb5u-o5cmwdNe2pJnmitnKcidNgfzw@mail.gmail.com>
+Subject: Re: [PATCH v22 00/12] Landlock LSM
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/28/20 1:36 AM, Rantala, Tommi T. (Nokia - FI/Espoo) wrote:
-> On Tue, 2020-10-27 at 14:08 -0600, Shuah Khan wrote:
->>
->>> @@ -73,8 +80,8 @@ int main(int argc, char **argv) {
->>>    	aperf = new_aperf-old_aperf;
->>>    	mperf = new_mperf-old_mperf;
->>>    
->>> -	start = before.time*1000 + before.millitm;
->>> -	finish = after.time*1000 + after.millitm;
->>> +	start = before.tv_sec*1000 + before.tv_nsec/1000000L;
->>> +	finish = after.tv_sec*1000 + after.tv_nsec/1000000L;
->>
->> Why not use timespec dNSEC_PER_MSEC define from  include/vdso/time64.h?
-> 
-> Hi,
-> 
-> If the define was available in the UAPI headers, then certainly would make
-> sense to use it. But I would not mess with the kernel internal headers here.
+On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+> This new patch series improves documentation, cleans up comments,
+> renames ARCH_EPHEMERAL_STATES to ARCH_EPHEMERAL_INODES and removes
+> LANDLOCK_ACCESS_FS_CHROOT.
 
-Suggested the wrong file while looking up the define. I was thinking
-linux/time64.h
+Thanks for continuing to work on this! This is going to be really
+valuable for sandboxing.
 
-However it isn't part of headers_install, so can't use that one.
-
-Considering the number of places NSEC_PER_MSEC is hard coded
-and defined in headers e.g: tools/include/linux/time64.h, probably
-should be included in timespec block in time.h
-
-Not something to worry about for this patch. Please add a NSEC_PER_MSEC
-define for now in this file.
-
-thanks,
--- Shuah
-
-
-
-
-
-
+I hadn't looked at this series for a while; but I've now read through
+it, and I don't see any major problems left. :) That said, there still
+are a couple small things...
