@@ -2,183 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB6029E01F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 02:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F8629E0FF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 02:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404266AbgJ2BHm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Oct 2020 21:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S1729123AbgJ2BrT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Oct 2020 21:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729969AbgJ2BHl (ORCPT
+        with ESMTP id S1731063AbgJ2BrL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 21:07:41 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507F9C0613D4
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:07:40 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id d24so1249806ljg.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:07:40 -0700 (PDT)
+        Wed, 28 Oct 2020 21:47:11 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721CC0613CF
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:47:11 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id v6so1226983lfa.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JHdZPPn9wLM8C261Oo5ewV1obQFhVZ5ZdtkoajBWV64=;
-        b=MTIV5nTARTLRBj0lxrRgSzGzRPYNAiPZWMkB9ep/3PqQq96Sbvp39GhCCvD9P7C/9G
-         jSa0WHMFFRSKIlGXwo17x9mJaZSXNA2WyNRoeARNazqPz6DjPLBNsihFZKJM4DFVZ/CQ
-         j3PNJYC6TnyMC9tXn4jy59H788ukVUiTCREIlCJtFaO+tL4gtg47eg+1qCzJX2qAaGf0
-         OGl7m75eU0hiHajz8+lj34XqRRj/KyofTQfSSo0wWrl+kguZAe7y41ED4NaXCYy9qrEK
-         VBXAJUcNjw8AKl3YDslsCgKie01Tu2Qs1ciqvcEbb3HuzunIQUzDI9drOA7XrORLRfmD
-         yjSg==
+         :cc;
+        bh=PVBXOPloV3MHyOZJNF7ZS6bMYegt4BS5YsZsFXz0L7o=;
+        b=fZFWZa57uJkj88i0gMBcrwcPQbIDa05ne59E5oeTlZ0Fatsxx6VTjO6FBmGEStfHoG
+         CzBcwnj3hmzMpC/y6jQeaKzy5uOjci7CnqFDbHHaJYe6FWdcpQ8ilctvIZ7E/BhQQySM
+         +fB16HB8EPjqHjcMS6hh9cvoL87JZUHR7zZCDrtH0B+BrPwDveoFpyYtbP4/y132rtFj
+         B8W647wCwWOOlKjNKDnL66w+xtlzgf9EI8Mz1l9kasvXW/EANkMeUQclBkee9aOUZY6M
+         66X3K+Y1QBMlK4WlKZk3JQ55Au+YYwQpOeQPJ5mSAP5KORcbvsEQFr6ABa6ZW1D29Gg0
+         XT9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JHdZPPn9wLM8C261Oo5ewV1obQFhVZ5ZdtkoajBWV64=;
-        b=o6rwhvWjP8eNYb0oC+AMJaBaXEJzRcVY2Ynhctm2sCi9yl0izlsEN8UYC6I3U3GqFx
-         Bmd7oW+L4zxlS2gEUQ+oXjKI64cngRra75qTNL7BWvwHYttukNOcNt/GQ5WrhTJmP7VL
-         IX9hNNuEKMT+YpMXmMRFyYPcM2zCYgqb6o1RXyQebsbdW/XslKTPZK8OPY+dQomA3+Dx
-         3aJZ8vxHT4jCZsCcc6am6+XIiYqlOJZp38RqFMGnOm2cQI2qsGXUgdCaz31cA7NtMNPs
-         xdEDZTbc62oe2PYzX3+A00VezKrUL89XtrXksc4qWFMP/iK9+oTqaKx6VZsC64Srz14D
-         JqPw==
-X-Gm-Message-State: AOAM533A1DTbQigvquZFkrao0s30MOv7ZFSsADU8hVi4LYZEMUIE2ybO
-        2kRPDP66CtgBRfjcJp6iJAMTIDFs0YEAPIjYhbdmgQ==
-X-Google-Smtp-Source: ABdhPJxZF2osDmUJJYFjNdSuFzFlSzMFSQ07MX9iBFABKWDfUCx38EmD5usneiPJrsJhn41DKD8OlPb4Di5oSfLsrWI=
-X-Received: by 2002:a2e:8816:: with SMTP id x22mr663617ljh.377.1603933658573;
- Wed, 28 Oct 2020 18:07:38 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=PVBXOPloV3MHyOZJNF7ZS6bMYegt4BS5YsZsFXz0L7o=;
+        b=hqg4Ef0wrf0OS2odVjyIqe1PVCdeyGdFuAo/ncwTMMyTm015OdIbZB6TKbrBU7nypQ
+         AyHqR1uTGMbQwAdhkHZxbBSICAWHWE5bsLZvujtTX0ONK8bbRBI1jHtT95OyhbdET38d
+         f6NP/2tCjxTwNtUxQ/eR1KPlelf7XvY7Dk69VQfMW99tvG4ixNjwD5xr2VX0dRgouRzg
+         cDWno7cae/LqJqmOKmaHR39gSXms4Ckc52BrphM45Pd450OPs6FsBKrO76++wIRztvjS
+         S+yvgVRpg3Op70iEdI12rdLsHfSrNHpIoKiUf8tfgXvmJklH6/4v84P+9t+6FLjP5lia
+         NuUg==
+X-Gm-Message-State: AOAM5300V5zUKEpynzUB2AW4qQW9bPrHI8roj+mBADiu3fae6cRxtF7/
+        rN7zXuw8fhkoVN12CUXt6+UPgImJO9RRgLXlXd09rg==
+X-Google-Smtp-Source: ABdhPJyOm9LOgfKhOx0dfZcPKFbvflj3nvUGX+9YGJhueQKiIToPbzjO53CHytPzuJjOQkv9L8QNx9yAxt63pLS+UWw=
+X-Received: by 2002:a19:ae04:: with SMTP id f4mr711096lfc.436.1603936029275;
+ Wed, 28 Oct 2020 18:47:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201027200358.557003-1-mic@digikod.net> <20201027200358.557003-13-mic@digikod.net>
-In-Reply-To: <20201027200358.557003-13-mic@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 29 Oct 2020 02:07:11 +0100
-Message-ID: <CAG48ez07p+BtCRo4D75S3xsr76Kj_9Aipv3pBHsc4zyNjEiEmQ@mail.gmail.com>
-Subject: Re: [PATCH v22 12/12] landlock: Add user and kernel documentation
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
+References: <20201028174319.11817-1-rdunlap@infradead.org>
+In-Reply-To: <20201028174319.11817-1-rdunlap@infradead.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 29 Oct 2020 09:46:58 +0800
+Message-ID: <CABVgOSn6o0r71PPa69kGvBUU9iQojQaQo+vHv96J-iN6Qjrcow@mail.gmail.com>
+Subject: Re: [PATCH] KUnit: Docs: usage: wording fixes
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> This documentation can be built with the Sphinx framework.
+On Thu, Oct 29, 2020 at 1:43 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
-> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
-[...]
-> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/use=
-rspace-api/landlock.rst
-[...]
-> +Landlock rules
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +A Landlock rule enables to describe an action on an object.  An object i=
-s
+> Fix minor grammar and punctutation glitches.
+> Hyphenate "architecture-specific" instances.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: Brendan Higgins <brendanhiggins@google.com>
+> ---
 
-s/enables to describe/describes/
+These all look sensible: thanks for catching them!
 
-> +currently a file hierarchy, and the related filesystem actions are defin=
-ed in
-> +`Access rights`_.  A set of rules is aggregated in a ruleset, which can =
-then
-> +restrict the thread enforcing it, and its future children.
-> +
-> +Defining and enforcing a security policy
-> +----------------------------------------
-> +
-> +We first need to create the ruleset that will contain our rules.  For th=
-is
-> +example, the ruleset will contain rules which only allow read actions, b=
-ut
-> +write actions will be denied.  The ruleset then needs to handle both of =
-these
-> +kind of actions.  To have a backward compatibility, these actions should=
- be
-> +ANDed with the supported ones.
+Reviewed-by: David Gow <davidgow@google.com>
 
-This sounds as if there is a way for userspace to discover which
-actions are supported by the running kernel; but we don't have
-anything like that, right?
-
-If we want to make that possible, we could maybe change
-sys_landlock_create_ruleset() so that if
-ruleset_attr.handled_access_fs contains bits we don't know, we clear
-those bits and then copy the struct back to userspace? And then
-userspace can retry the syscall with the cleared bits? Or something
-along those lines?
-
-[...]
-> +We can now add a new rule to this ruleset thanks to the returned file
-> +descriptor referring to this ruleset.  The rule will only enable to read=
- the
-
-s/enable to read/allow reading/
-
-> +file hierarchy ``/usr``.  Without another rule, write actions would then=
- be
-> +denied by the ruleset.  To add ``/usr`` to the ruleset, we open it with =
-the
-> +``O_PATH`` flag and fill the &struct landlock_path_beneath_attr with thi=
-s file
-> +descriptor.
-[...]
-> +Inheritance
-> +-----------
-> +
-> +Every new thread resulting from a :manpage:`clone(2)` inherits Landlock =
-domain
-> +restrictions from its parent.  This is similar to the seccomp inheritanc=
-e (cf.
-> +:doc:`/userspace-api/seccomp_filter`) or any other LSM dealing with task=
-'s
-> +:manpage:`credentials(7)`.  For instance, one process's thread may apply
-> +Landlock rules to itself, but they will not be automatically applied to =
-other
-> +sibling threads (unlike POSIX thread credential changes, cf.
-> +:manpage:`nptl(7)`).
-> +
-> +When a thread sandbox itself, we have the grantee that the related secur=
-ity
-
-s/sandbox/sandboxes/
-s/grantee/guarantee/
-
-> +policy will stay enforced on all this thread's descendants.  This enable=
-s to
-> +create standalone and modular security policies per application, which w=
-ill
-
-s/enables to create/allows creating/
-
-
-> +automatically be composed between themselves according to their runtime =
-parent
-> +policies.
+Cheers,
+-- David
