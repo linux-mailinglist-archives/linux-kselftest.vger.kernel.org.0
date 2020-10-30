@@ -2,29 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B892A0B03
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 17:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9C52A0B0C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 17:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbgJ3QXM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 12:23:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38766 "EHLO mx2.suse.de"
+        id S1725844AbgJ3Q02 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 12:26:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40498 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725922AbgJ3QXM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 12:23:12 -0400
+        id S1726317AbgJ3Q02 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Oct 2020 12:26:28 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1604074989;
+        t=1604075186;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=64gR4AhnvtOA27gAC9tqrXw7cMfiN953TiGFaLX23T4=;
-        b=dWZtJF9lR4GPm6LH/wln66pxL5AkWykOesxPPHzfAIz0AC48Y/rs/Nr6Uph9uxvRrleQ/M
-        AKKRSRSDGPmSQe4ehHkP8GWXObZDrWLZbU0rVZ5502SDCgceWgmKCkIf/M8Sw6EgD8yUsR
-        eIjMtA0+CvpiSrJEth44Ygrpk1rFBKs=
+        bh=+a0eewLbc0DaaRq9NLSkTv7hmXsXsmk9e+rtyuIjTik=;
+        b=BYY6aVS5b0RlbLlk18+GJWhuAxIVAMOJTA0Jqv8FFXa7GY3g6PT9fsNz5PTsyoowCARt57
+        6ZbXDmw2OfJQuzr4E62ys1OE9EXYklEiIT0BARKx8ywsgRaeG6k4ENUDhiPB9xKf96GOCZ
+        AVBGKHc2Rzlhq+QU5EMFqcHHeF/Jf3A=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 64EC1ACF5;
-        Fri, 30 Oct 2020 16:23:09 +0000 (UTC)
-Date:   Fri, 30 Oct 2020 17:23:08 +0100
+        by mx2.suse.de (Postfix) with ESMTP id 257C7AC1F;
+        Fri, 30 Oct 2020 16:26:26 +0000 (UTC)
+Date:   Fri, 30 Oct 2020 17:26:25 +0100
 From:   Petr Mladek <pmladek@suse.com>
 To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
@@ -33,94 +33,63 @@ Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
         Arpitha Raghunandan <98.arpi@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH 3/4] kselftest_module.h: add struct rnd_state and seed
- parameter
-Message-ID: <20201030162308.GD20201@alley>
+Subject: Re: [PATCH 4/4] lib/test_printf.c: use deterministic sequence of
+ random numbers
+Message-ID: <20201030162625.GE20201@alley>
 References: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
- <20201025214842.5924-4-linux@rasmusvillemoes.dk>
+ <20201025214842.5924-5-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201025214842.5924-4-linux@rasmusvillemoes.dk>
+In-Reply-To: <20201025214842.5924-5-linux@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun 2020-10-25 22:48:41, Rasmus Villemoes wrote:
-> Some test suites make use of random numbers to increase the test
-> coverage when the test suite gets run on different machines and
-> increase the chance of some corner case bug being discovered - and I'm
-> planning on extending some existing ones in that direction as
-> well. However, should a bug be found this way, it's important that the
-> exact same series of tests can be repeated to verify the bug is
-> fixed. That means the random numbers must be obtained
-> deterministically from a generator private to the test module.
+On Sun 2020-10-25 22:48:42, Rasmus Villemoes wrote:
+> The printf test suite does each test with a few different buffer sizes
+> to ensure vsnprintf() behaves correctly with respect to truncation and
+> size reporting. It calls vsnprintf() with a buffer size that is
+> guaranteed to be big enough, a buffer size of 0 to ensure that nothing
+> gets written to the buffer, but it also calls vsnprintf() with a
+> buffer size chosen to guarantee the output gets truncated somewhere in
+> the middle.
 > 
-> To avoid adding boilerplate to various test modules, put some logic
-> into kselftest_module.h: If the module declares that it will use
-> random numbers, add a "seed" module parameter. If not explicitly given
-> when the module is loaded (or via kernel command line), obtain a
-> random one. In either case, print the seed used, and repeat that
-> information if there was at least one test failing.
+> That buffer size is chosen randomly to increase the chance of finding
+> some corner case bug (for example, there used to be some %p<foo>
+> extension that would fail to produce any output if there wasn't room
+> enough for it all, despite the requirement of producing as much as
+> there's room for). I'm not aware of that having found anything yet,
+> but should it happen, it's annoying not to be able to repeat the
+> test with the same sequence of truncated lengths.
+> 
+> For demonstration purposes, if we break one of the test cases
+> deliberately, we still get different buffer sizes if we don't pass the
+> seed parameter:
+> 
+> root@(none):/# modprobe test_printf
+> [   15.317783] test_printf: vsnprintf(buf, 18, "%piS|%pIS", ...) wrote '127.000.000.001|1', expected '127-000.000.001|1'
+> [   15.323182] test_printf: failed 3 out of 388 tests
+> [   15.324034] test_printf: random seed used was 0x278bb9311979cc91
+> modprobe: ERROR: could not insert 'test_printf': Invalid argument
+> 
+> root@(none):/# modprobe test_printf
+> [   13.940909] test_printf: vsnprintf(buf, 22, "%piS|%pIS", ...) wrote '127.000.000.001|127.0', expected '127-000.000.001|127.0'
+> [   13.944744] test_printf: failed 3 out of 388 tests
+> [   13.945607] test_printf: random seed used was 0x9f72eee1c9dc02e5
+> modprobe: ERROR: could not insert 'test_printf': Invalid argument
+> 
+> but to repeat a specific sequence of tests, we can do
+> 
+> root@(none):/# modprobe test_printf seed=0x9f72eee1c9dc02e5
+> [  448.328685] test_printf: vsnprintf(buf, 22, "%piS|%pIS", ...) wrote '127.000.000.001|127.0', expected '127-000.000.001|127.0'
+> [  448.331650] test_printf: failed 3 out of 388 tests
+> [  448.332295] test_printf: random seed used was 0x9f72eee1c9dc02e5
+> modprobe: ERROR: could not insert 'test_printf': Invalid argument
 > 
 > Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
->  tools/testing/selftests/kselftest_module.h | 35 ++++++++++++++++++++--
->  1 file changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest_module.h b/tools/testing/selftests/kselftest_module.h
-> index c81c0b0c054befaf665b..43f3ca58fcd550b8ac83 100644
-> --- a/tools/testing/selftests/kselftest_module.h
-> +++ b/tools/testing/selftests/kselftest_module.h
-> @@ -3,14 +3,31 @@
->  #define __KSELFTEST_MODULE_H
->  
->  #include <linux/module.h>
-> +#include <linux/prandom.h>
-> +#include <linux/random.h>
->  
->  /*
->   * Test framework for writing test modules to be loaded by kselftest.
->   * See Documentation/dev-tools/kselftest.rst for an example test module.
->   */
->  
-> +/*
-> + * If the test module makes use of random numbers, define KSTM_RANDOM
-> + * to 1 before including this header. Then a module parameter "seed"
-> + * will be defined. If not given, a random one will be obtained. In
-> + * either case, the used seed is reported, so the exact same series of
-> + * tests can be repeated by loading the module with that seed
-> + * given.
-> + */
-> +
-> +#ifndef KSTM_RANDOM
-> +#define KSTM_RANDOM 0
-> +#endif
-> +
->  static unsigned int total_tests __initdata;
->  static unsigned int failed_tests __initdata;
-> +static struct rnd_state rnd_state __initdata;
-> +static u64 seed __initdata;
->  
->  #define KSTM_CHECK_ZERO(x) do {						\
->  	total_tests++;							\
-> @@ -22,11 +39,13 @@ static unsigned int failed_tests __initdata;
->  
->  static inline int kstm_report(unsigned int total_tests, unsigned int failed_tests)
->  {
-> -	if (failed_tests == 0)
-> +	if (failed_tests == 0) {
->  		pr_info("all %u tests passed\n", total_tests);
-> -	else
-> +	} else {
->  		pr_warn("failed %u out of %u tests\n", failed_tests, total_tests);
-> -
-> +		if (KSTM_RANDOM)
-> +			pr_info("random seed used was 0x%016llx\n", seed);
 
-I have a bit mixed feelings about this. It is genial and dirty hack at the
-same time ;-) Well, it is basically the same approach as with
-IS_ENABLED(CONFIG_bla_bla).
+Great feature!
 
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 
