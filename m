@@ -2,96 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A97029FBC8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 03:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D457129FBF9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 04:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725797AbgJ3C4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Oct 2020 22:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S1726157AbgJ3DDI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Oct 2020 23:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbgJ3C4x (ORCPT
+        with ESMTP id S1726124AbgJ3DDH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Oct 2020 22:56:53 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC64C0613CF
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 19:56:52 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id 141so5985433lfn.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 19:56:52 -0700 (PDT)
+        Thu, 29 Oct 2020 23:03:07 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B06C0613D3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 20:03:05 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id a9so6006703lfc.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 20:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DNrjvpFPaX9JCWeFeLDSXzKsBxzsshfaWxjSi4R0YJE=;
-        b=l7V7a2JZ5f5Ll9BkcTvfCw3Ze4NfgNrzqAclKAQ9mrY+28c0npcACExmNe+awRn10g
-         CKUSpgtbHRGHEgmr/SPnTV3wPM1BGYDwJ+qMKQwAK14UP7R+0gxkofs+60XaGJahvSTT
-         IxXmxMeYmgfSeYpC/XqvJZmxILLphVUDVdOo23j85h3/E2bP/etL7Jf6NWGo/hs51jUG
-         GSHtcVlW3PLs9VztSlhCpGXh+WQywXEi78KpLXkqAe2UshIhUXkbL7HS2WPF6BLeIW0/
-         kY5HQ6hMlBJ5VMOn6lNzauzwrsgDYCPJWrb1oPaAAksFJGUNQCAGa7f4S6pVmjDfOOW3
-         gcgg==
+         :cc:content-transfer-encoding;
+        bh=qetmnWNVsQksjakl8dXjUkaIoxiVzA6keFiGM2ap5AY=;
+        b=AybJN8x6VEeLGCBEBx81sKm96EvpYJ8EOMN+ehVaa6kd1osmMtolGYpNiB+P0jXeBh
+         JKcVuff4V9jHq7LjenAGN4DP3DoekAwTcbRvi61IrciA2+MhWuRptX/cfrMWp2rh9BUL
+         WfSbatM3Au8j1fzzyV3HW0euf/Cis4dc9BCinMZ0G63d+e5Ck9hSrP0cmSaexwCaLIK9
+         WfxfJxdjfpqlNROWMWoWk7G1JjCULiMI0/IvyTkN/Ok5//vRUceaGL6seL1jFZ9UpPZ/
+         9JxTapyOGkoyBE2PhKDWHY3u4CBkCKKhDihE7xCjbPZeuq44+LhTw7iHPhvtRuHFZqre
+         rTQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DNrjvpFPaX9JCWeFeLDSXzKsBxzsshfaWxjSi4R0YJE=;
-        b=epI5YpFL+DLCcg4ilBUczP1L6OwqJ3p3FaWStR52H8+bymeeuX2weVeHGTVt1mFBUQ
-         vkUyom74q+lqEPMU+2AbUCsbKuTJBDpLN/zfyzD6ouE0FjZafkNMVLXs3fDDttozf5Cu
-         WbAkfnT4XZeMOunS7ah9HU+q7Y2bfXNqNf40QN1wdF28b6XO25daPVx8sop3gCSF4x2E
-         dg7bKZ0ZKjj3hSbnq8oJHJV2dIRPrWCWe911vZdaOpJ57exwFiSg7YP7iR49P14/JNLz
-         DnOfgYlGN//wESqOlUUIENP82bRT5Czwp1E5PY2+s3o0Zsx9G1631z3zUMlvoSBOFxwO
-         +P8A==
-X-Gm-Message-State: AOAM532qWdXKMB8H6DTnVK4QK5wQLi8iNiVhOHcbdjvS3SAutGkXm9jO
-        h4gathWFzh1eVFuZaLrddE8QBj5aZf4KlCmrlUZx5LAk9dBAzg==
-X-Google-Smtp-Source: ABdhPJz5z53oDU2lPKOJzPSZ4eud7lY18GzRAczMHNhnmRIzIjfdDld7+F+wWMWRazlqCLIqnataaNw1Mg8baIrsuXA=
-X-Received: by 2002:a19:6001:: with SMTP id u1mr23985lfb.277.1604026611155;
- Thu, 29 Oct 2020 19:56:51 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qetmnWNVsQksjakl8dXjUkaIoxiVzA6keFiGM2ap5AY=;
+        b=ZwIXt2gYgcaC6ZZ3SEQHhO/H7WvxvJiFOjHrvkOhHAE+BSv28YfQ5CpeMhRxqlRFYr
+         EqxCcGPUAPrfWztA0TTpgt6BHYwnaP8u2LatTlEnXPjUcS2HktwFucfGqjI3jrNo20jd
+         e3ukSbDkpysBnjhk+Q7blqbyjQ4jthDU+vwwe4Kqf4uolgKJtyfNQQ4ljxClS23qdIVV
+         /Ig1VwJWvEYgsEifuu/sVhH0Gpgy9NCOlVt7cslMHGNz8hidgRXdwiG/sPLyipbJb3fC
+         3yCxpkJlQMkx3Oo+cg9M7kAhmQUSqCRfAnsRxY/RkViKjTxtq0nN+MOEWovgzhTDhpcT
+         LCdQ==
+X-Gm-Message-State: AOAM533NoOqOpYxjoqrNtLGRWd1zPJRYYccwlnIP+nQ791pqdnFUYOHK
+        blYS8w+NZsl9DShKzV7to3OTWpXZh57PCyCwIkcuyQ==
+X-Google-Smtp-Source: ABdhPJzYTNXH60XmJevS1nU77QTkbnJdxDa2BUkj+JK2GK03XFm5dsruLADHPeQtCXNc8JlilkKNtelCRS8CC6e1sv0=
+X-Received: by 2002:a19:c357:: with SMTP id t84mr39422lff.34.1604026983869;
+ Thu, 29 Oct 2020 20:03:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201021220752.418832-1-dlatypov@google.com>
-In-Reply-To: <20201021220752.418832-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 30 Oct 2020 10:56:39 +0800
-Message-ID: <CABVgOSkXfWihPN5-1dPn2BstpJ7eiG1Qj=cg5EL2oEhv=YHj4g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: fix pre-existing python type annotation errors
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <20201027200358.557003-1-mic@digikod.net> <20201027200358.557003-2-mic@digikod.net>
+ <CAG48ez3CKa12SFHjVUPnYzJm2E7OBWnuh3JzVMrsvqdcMS1A8A@mail.gmail.com> <afa8e978-d22c-f06a-d57b-e0d1a9918062@digikod.net>
+In-Reply-To: <afa8e978-d22c-f06a-d57b-e0d1a9918062@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 30 Oct 2020 04:02:37 +0100
+Message-ID: <CAG48ez0eXxjRJ2S3pbYqEsp8xVCdHQMKrPg9WHPB_Rv_kWC_nA@mail.gmail.com>
+Subject: Re: [PATCH v22 01/12] landlock: Add object management
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 6:08 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Thu, Oct 29, 2020 at 10:30 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
+ wrote:
+> On 29/10/2020 02:05, Jann Horn wrote:
+> > On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.n=
+et> wrote:
+> >> A Landlock object enables to identify a kernel object (e.g. an inode).
+> >> A Landlock rule is a set of access rights allowed on an object.  Rules
+> >> are grouped in rulesets that may be tied to a set of processes (i.e.
+> >> subjects) to enforce a scoped access-control (i.e. a domain).
+[...]
+> >> diff --git a/security/landlock/object.c b/security/landlock/object.c
+> > [...]
+> >> +void landlock_put_object(struct landlock_object *const object)
+> >> +{
+> >> +       /*
+> >> +        * The call to @object->underops->release(object) might sleep =
+e.g.,
+> >
+> > s/ e.g.,/, e.g./
 >
-> The code uses annotations, but they aren't accurate.
-> Note that type checking in python is a separate process, running
-> `kunit.py run` will not check and complain about invalid types at
-> runtime.
+> I indeed prefer the comma preceding the "e.g.", but it seems that there
+> is a difference between UK english and US english:
+> https://english.stackexchange.com/questions/16172/should-i-always-use-a-c=
+omma-after-e-g-or-i-e
+> Looking at the kernel documentation makes it clear:
+> $ git grep -F 'e.g. ' | wc -l
+> 1179
+> $ git grep -F 'e.g., ' | wc -l
+> 160
 >
-> Fix pre-existing issues found by running a type checker
-> $ mypy *.py
->
-> All but one of these were returning `None` without denoting this
-> properly (via `Optional[Type]`).
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+> I'll apply your fix in the whole patch series.
 
-I'm not going to pretend to really understand python annotations
-completely, but this all seems correct from what I know of the code,
-and I was able to install mypy and verify the issues were fixed.
-
-Clearly, if we're going to have type annotations here, we should be
-verifying the code against them. Is there a way we could get python
-itself to verify this code when the script runs, rather than have to
-use mypy as a tool to verify it separately? Otherwise, maybe we can
-run it automatically from the kunit_tool_test.py unit tests or
-something similar?
-
-Regardless, this is
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
+Ooh, sorry. I didn't realize that that's valid in UK English...
