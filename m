@@ -2,95 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE46229FE60
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 08:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359602A03DA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 12:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726007AbgJ3HXO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 03:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbgJ3HXI (ORCPT
+        id S1725808AbgJ3LQ3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 07:16:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57146 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725888AbgJ3LQ2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 03:23:08 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27489C0613D3
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 00:23:06 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id p15so5829263ljj.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 00:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1+0+hcPw9hiA2N8VeGNQmNaGhTeQiMRTQ38kHTPj/A4=;
-        b=hRdtNuEm07hzyAkZDjHciqako2c3MS3efQ83LmgSSHeMGo4rLC9IoAvnQDaD3oQdcj
-         iIyiZAXsz4HtnNdK0NPgm+GuhsYl8WOeUcfh7OOElaj5r9+vkpXDVKJtP9PZm6bHhTQj
-         m1OZcy2oYAKEUizydv/JuHt8UUbr9AgnouOgx84QzDl5pzRklFfQ40SiV6tEtjVk/sWK
-         bLAJb/V+kyppNSuMRhTruFMou0gScpXBvG4s0CFLZWHdq8olBcpsi56UyB+yBbgigxen
-         DZ9/SbmR3oyFprrpBQkqZMQLS+XQm0AAcZv3/vcorICXW3vow2sd3anoRkXgjMbUz1rU
-         qA+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1+0+hcPw9hiA2N8VeGNQmNaGhTeQiMRTQ38kHTPj/A4=;
-        b=U60mHnc496hH1R8XFtaZz91iOip29rhkMtpExynIquI0w8BGE8blYP/EC+7mtxwkNU
-         K5hc7OWhz7KG9hdTEQM2m2cy5k5dNjBll5ed9xVRXwbv76WP9nlrOYbO/IH3gPURfafK
-         7MSpZG+lOrQUfTQJLv74plnmz/RGCgWXTI6bg6+Twedxb4AY6NFQVHJnl/vCcapJseYU
-         Cji6rKS5RunuS5sWkpri/pRkIPKa5JvDMTYN2VX3eZvHK053fUejZP30RSqMEZ7Lk3CM
-         Ro2D5sMRXKap09eISd4pGu+b2RDNQWt7pvrd6RDfROT8NJwx9CueKru1zBcWIkDcpuhO
-         NMvw==
-X-Gm-Message-State: AOAM530H9GjMNMx9mctM0IyLq9MEBwvTnRjAAhcFdv7k+nu4mA6acw7R
-        /O6vb2sgpxZViIK5re/zDCbt89DKEKRD4OmLv6HWqQ==
-X-Google-Smtp-Source: ABdhPJwh3QNHZg7opOMZVBdwLRjUA3pBcah/ZGhVI1TBFzhvygkq1Eno3AvWYaQ8ff+n7XpgNUjxjw06fWBwoFI7Ung=
-X-Received: by 2002:a2e:9789:: with SMTP id y9mr437932lji.456.1604042584493;
- Fri, 30 Oct 2020 00:23:04 -0700 (PDT)
+        Fri, 30 Oct 2020 07:16:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604056587;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zN/2wEN1nq+6oDFes+ZSVFeU2EPzWo+1IwapIFjYhac=;
+        b=XquinrHSGpyu3Rdg8QKTkkBvr6HhxFXBLzGdQSgEKO8oQEA8Oh/jqlMpdIlEqKpwdTrtxN
+        2/spPjyB+xPcvkJ2D/fnTS1qkqBQ5KIDAqqNjLYHLZmHBdgs1aYNwoNOnfxmYiXFOsGS18
+        rSz7+xojY+f/4kTko+GU4hVZqK0d188=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-13-Lp4bITb-PByMuZtL0Cekjg-1; Fri, 30 Oct 2020 07:16:25 -0400
+X-MC-Unique: Lp4bITb-PByMuZtL0Cekjg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D0AB1809DEF;
+        Fri, 30 Oct 2020 11:16:23 +0000 (UTC)
+Received: from gerbillo.redhat.com (ovpn-114-14.ams2.redhat.com [10.36.114.14])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AC71E109F192;
+        Fri, 30 Oct 2020 11:16:21 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [PATCH net-next v2 0/3] net: introduce rps_default_mask
+Date:   Fri, 30 Oct 2020 12:16:00 +0100
+Message-Id: <cover.1604055792.git.pabeni@redhat.com>
 MIME-Version: 1.0
-References: <20201030061655.162839-1-dlatypov@google.com>
-In-Reply-To: <20201030061655.162839-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 30 Oct 2020 15:22:53 +0800
-Message-ID: <CABVgOSkn1n-N50YZr7aNTgAGxkj7zkZO31B16Ji88OxM8m2WPQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: fix --raw_output to actually show output
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 2:17 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Currently --raw_output means nothing gets shown.
-> Why?
-> Because `raw_output()` has a `yield` and therefore is a generator, which
-> means it only executes when you ask it for a value.
->
-> Given no one actually is using it as a generator (checked via the added
-> type annotation), drop the yield so we actually print the output.
->
-> Also strip off the trailing \n (and any other whitespace) to avoid
->   [<601d6d3a>] ? printk+0x0/0x9b
->
->   [<601e5058>] ? kernel_init+0x23/0x14b
->
->   [<600170d2>] ? new_thread_handler+0x82/0xc0
-> making the output unreadable.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+Real-time setups try hard to ensure proper isolation between time
+critical applications and e.g. network processing performed by the
+network stack in softirq and RPS is used to move the softirq 
+activity away from the isolated core.
 
-The bug where --raw_output doesn't show anything is already fixed[1],
-but it does still show the extra newlines.
+If the network configuration is dynamic, with netns and devices
+routinely created at run-time, enforcing the correct RPS setting
+on each newly created device allowing to transient bad configuration
+became complex.
 
-Maybe it's worth making just the newline fix, and rolling it into the
-other patch[2] handling newlines?
+These series try to address the above, introducing a new
+sysctl knob: rps_default_mask. The new sysctl entry allows
+configuring a systemwide RPS mask, to be enforced since receive 
+queue creation time without any fourther per device configuration
+required.
 
-Cheers,
--- David
+Additionally, a simple self-test is introduced to check the 
+rps_default_mask behavior.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=3023d8ff3fc60e5d32dc1d05f99ad6ffa12b0033
-[2]: https://lore.kernel.org/linux-kselftest/20201020233219.4146059-1-dlatypov@google.com/
+v1 -> v2:
+ - fix sparse warning in patch 2/3
+
+Paolo Abeni (3):
+  net/sysctl: factor-out netdev_rx_queue_set_rps_mask() helper
+  net/core: introduce default_rps_mask netns attribute
+  self-tests: introduce self-tests for RPS default mask
+
+ Documentation/admin-guide/sysctl/net.rst      |  6 ++
+ include/linux/netdevice.h                     |  1 +
+ net/core/net-sysfs.c                          | 73 +++++++++++--------
+ net/core/sysctl_net_core.c                    | 58 +++++++++++++++
+ tools/testing/selftests/net/Makefile          |  1 +
+ tools/testing/selftests/net/config            |  3 +
+ .../testing/selftests/net/rps_default_mask.sh | 57 +++++++++++++++
+ 7 files changed, 169 insertions(+), 30 deletions(-)
+ create mode 100755 tools/testing/selftests/net/rps_default_mask.sh
+
+-- 
+2.26.2
+
