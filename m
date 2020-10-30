@@ -2,79 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 797BD29FDBA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 07:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC0B29FDC2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 07:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725801AbgJ3GP3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 02:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S1725880AbgJ3GRR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 02:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725790AbgJ3GP3 (ORCPT
+        with ESMTP id S1725784AbgJ3GRQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 02:15:29 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D817C0613CF;
-        Thu, 29 Oct 2020 23:15:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CMsVk01pFz9sRk;
-        Fri, 30 Oct 2020 17:15:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1604038526;
-        bh=DqLHWG5e2hCxBXi/w8h/yBrEq/gA139siSJr53GSAnQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=RtST3msMsElHFgx9tVx8HvZ8wSTJbEFHxB/h+8+UnRV4f6GP67oX7t/MnfJZP11FQ
-         LN876kHBqp7X+AvnE/4FSChHXHB2QANX1cFAbTx+XJHNKsCFrx6vEKhGjTTy0cEZR/
-         LIBWDiGfJvLKxAv2FJgkRtOaTRzLPCv18HJ1vwxLwG7/ad9NXtWJLBDH7rD8icwhe7
-         Nl0Z/zpj9sfme4jCCzTuSxjZXFtsr3udxbUNlksFiGZWbnL/ouSscMLW37DCPmyKcL
-         C3ATC6vW6d0c0KXwGHK4OVmnpzRKrks9XZ+4pxD2pg06X4hzfEqGC+TF8/+w+NwaC8
-         gTTFs8FajnOIw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Tommi Rantala <tommi.t.rantala@nokia.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH 00/13] selftests fixes
-In-Reply-To: <18daa545-b1d6-1867-fadc-cada628e2406@linuxfoundation.org>
-References: <20201008122633.687877-1-tommi.t.rantala@nokia.com> <87tuufw2on.fsf@mpe.ellerman.id.au> <18daa545-b1d6-1867-fadc-cada628e2406@linuxfoundation.org>
-Date:   Fri, 30 Oct 2020 17:15:25 +1100
-Message-ID: <87o8kkutmq.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Fri, 30 Oct 2020 02:17:16 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CE8C0613D2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 23:17:16 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id x125so5206093yba.17
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 23:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=YO54Tn56HJNBVhbrimlUnxLhvXTbKZkDHGpoiKtBB8k=;
+        b=MnLy5KfWi58tKQmOi2bgN2hpIYNcmF6fRMhxl/0fIFvHOAZM/y613TiU51QwVPcGvl
+         GHPUCVFq9YqY5jdTE5zLuUhcNY9hTZ5bi8gIx63LDC6PIGPoaCiYjET2qE+Rhn+xCXaj
+         u4UIeb79ld6YqpGT6RCBpY3/A2PRZ9694fSgcGaB0Evz/xICV/r10IR5yLBK+I5MAMfD
+         dIbaj4jKQioH0kK9g88DONPnN1yk3pRnbZtWt43prTokvwuv3UGjFJU9OW/lim1PO/5/
+         6PIoSVjKrVybXSu5BiO4w9kRbP4rTy/T1n61BJgMx6gZ0O6bsFFB4RPhoqip2whwkWmR
+         77yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=YO54Tn56HJNBVhbrimlUnxLhvXTbKZkDHGpoiKtBB8k=;
+        b=sVjMfrQJDAgBC7jD+azKI2l7KhB2dK33r37cFpgh0cs2xUPjCGUQcmidt2IIA4uJiU
+         qMSMbzbV3ReaRyDGCxjGe8JHh9BwN+OUQ2a8zKiV/VAuuoddjEDOZzp9J1DjjBaHz9a+
+         wNx9BUZRZ0NwxQvJLWktWX4D04Lhkeu/g4KyP41pza2eUFJtqVcMqALqmFj5084/hxmW
+         uoiM/1BhhY/uj4ApGzbO3gBLzlLjy4/i7P5N7XPYkTlggpyWbgBV07X1VvmwqPWbztTU
+         eYmSPFurSIpqnNYa6wmygsHT6XcSunGJbTdjN65ahWkReuGd9Sr4To8yeog9oGmlFAVo
+         N0Gw==
+X-Gm-Message-State: AOAM533YUbqC6hA80qsXjmIKO2Wn6jfz1uVdH8+Xt+E4NgSIk5HLyn/Y
+        U/B+A9rDAvplhMsI0EpLSBRvUzzkSQCZYg==
+X-Google-Smtp-Source: ABdhPJz4h/cncIdfXNYFCHiItiL5FrOJHZuYoxPSW9rrDLIqk7gZlypHCWiSfBSDItF67J+L/vzk/4+1oryyvQ==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
+ (user=dlatypov job=sendgmr) by 2002:a25:b53:: with SMTP id
+ 80mr1548340ybl.45.1604038635364; Thu, 29 Oct 2020 23:17:15 -0700 (PDT)
+Date:   Thu, 29 Oct 2020 23:16:55 -0700
+Message-Id: <20201030061655.162839-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
+Subject: [PATCH] kunit: tool: fix --raw_output to actually show output
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Shuah Khan <skhan@linuxfoundation.org> writes:
-> On 10/27/20 7:37 PM, Michael Ellerman wrote:
->> Tommi Rantala <tommi.t.rantala@nokia.com> writes:
->>> Hi, small fixes to issues I hit with selftests.
->>>
->>> Tommi Rantala (13):
->>>    selftests: filter kselftest headers from command in lib.mk
->>>    selftests: pidfd: fix compilation errors due to wait.h
->>>    selftests: add vmaccess to .gitignore
->>>    selftests/harness: prettify SKIP message whitespace again
->>>    selftests: pidfd: use ksft_test_result_skip() when skipping test
->>>    selftests: pidfd: skip test on kcmp() ENOSYS
->>>    selftests: pidfd: add CONFIG_CHECKPOINT_RESTORE=y to config
->>>    selftests: pidfd: drop needless linux/kcmp.h inclusion in
->>>      pidfd_setns_test.c
->>>    selftests: android: fix multiple definition of sock_name
->>>    selftests: proc: fix warning: _GNU_SOURCE redefined
->>>    selftests: core: use SKIP instead of XFAIL in close_range_test.c
->>>    selftests: clone3: use SKIP instead of XFAIL
->>>    selftests: binderfs: use SKIP instead of XFAIL
->> 
->> This series doesn't seem to have been picked up?
->> 
->
-> I applied them to linux-kselftest fixes yesterday.
+Currently --raw_output means nothing gets shown.
+Why?
+Because `raw_output()` has a `yield` and therefore is a generator, which
+means it only executes when you ask it for a value.
 
-Thanks.
+Given no one actually is using it as a generator (checked via the added
+type annotation), drop the yield so we actually print the output.
 
-cheers
+Also strip off the trailing \n (and any other whitespace) to avoid
+  [<601d6d3a>] ? printk+0x0/0x9b
+
+  [<601e5058>] ? kernel_init+0x23/0x14b
+
+  [<600170d2>] ? new_thread_handler+0x82/0xc0
+making the output unreadable.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_parser.py | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 8019e3dd4c32..c44bb7c27ce6 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -63,10 +63,9 @@ def isolate_kunit_output(kernel_output):
+ 		elif started:
+ 			yield line[prefix_len:] if prefix_len > 0 else line
+ 
+-def raw_output(kernel_output):
++def raw_output(kernel_output) -> None:
+ 	for line in kernel_output:
+-		print(line)
+-		yield line
++		print(line.rstrip())
+ 
+ DIVIDER = '=' * 60
+ 
+
+base-commit: 07e0887302450a62f51dba72df6afb5fabb23d1c
+-- 
+2.29.1.341.ge80a0c044ae-goog
+
