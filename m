@@ -2,96 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9C52A0B0C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 17:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCE52A0D25
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 19:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725844AbgJ3Q02 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 12:26:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40498 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbgJ3Q02 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 12:26:28 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1604075186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+a0eewLbc0DaaRq9NLSkTv7hmXsXsmk9e+rtyuIjTik=;
-        b=BYY6aVS5b0RlbLlk18+GJWhuAxIVAMOJTA0Jqv8FFXa7GY3g6PT9fsNz5PTsyoowCARt57
-        6ZbXDmw2OfJQuzr4E62ys1OE9EXYklEiIT0BARKx8ywsgRaeG6k4ENUDhiPB9xKf96GOCZ
-        AVBGKHc2Rzlhq+QU5EMFqcHHeF/Jf3A=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 257C7AC1F;
-        Fri, 30 Oct 2020 16:26:26 +0000 (UTC)
-Date:   Fri, 30 Oct 2020 17:26:25 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Willy Tarreau <w@1wt.eu>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH 4/4] lib/test_printf.c: use deterministic sequence of
- random numbers
-Message-ID: <20201030162625.GE20201@alley>
-References: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
- <20201025214842.5924-5-linux@rasmusvillemoes.dk>
+        id S1726439AbgJ3SMa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 14:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbgJ3SMa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Oct 2020 14:12:30 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F951C0613D5
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 11:12:23 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id q1so7294575ilt.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 11:12:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oMmkVHvpx+9c4Kcbr1IxBNO0GDjjw4+qKABw3ISg6v4=;
+        b=N5gZbgf19kF710L7m95j69NTDI9+S+/kt13dqsXKEGtqdmahszO6q+LxyMf6h0vNgW
+         /AYw4tKsShDI3vrPxwnfaD8K7Uwrb7eKS/K6uIDp5XH1ogWWuaDPb/23l2pPjCrSsFn9
+         MDHIxBT/lIYsv4BZCiJR1BEWDyDGfpi/nDaTTK7peWScbMM62KSxdPvCHAW0W8YRqmEB
+         yMBj3QxFi3n10BOUyGJr0Yfg9MDNaOKB+2pmZpilKinnsVq+/1T6H2FeDyUK90TBMB3C
+         zW++2tZdRiwnBJYdnp1j7yvtksHermYsihxmjFpCKXy9sZfcOLb+xzOC8rMobVki575Q
+         Lc0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oMmkVHvpx+9c4Kcbr1IxBNO0GDjjw4+qKABw3ISg6v4=;
+        b=YRhP/Zcxp4Rh2JFiP4aEg226AK5U1D7DSJksl96RPFrmJQyJRXm7yhioqxRoYSiUT9
+         PWnSFdPu3VD9wimj9R3WKsuKrvKFwJtzZb/t++RN9Qu/UOS/VULCZjjzyKKFOSzfPsia
+         rotsoY+DU1613lNiYPqd0zrvmMdqeUecgvNkBrW3wyMwxcBeroKrwq0+aXp46VjJaxsp
+         yOpChFJutKX02BzkxAbOhL2Ko1vDcFJ84Fb5qDFdtZLBf6T6O0gnXsazrtZeyxiODn8f
+         2TzbRlztb3V3SXrDTmdrY1WSoWr2EbAH6DdEdBN9Is5bsvJoRbfSa0uEk9Ap3QyPJpGD
+         WztQ==
+X-Gm-Message-State: AOAM530gKKSBo8Dn5xBe+g+UyZzNbvhLRX7YYKUedOFS+DoHWex1Ywq7
+        sKzFiObkoB7epiKEZd7lK7D0XS1jntrkUWjHOUjpTw==
+X-Google-Smtp-Source: ABdhPJz3s35TYiyIyaR/Sj8G36G1w0m+9fA+LMFiGCfrE81FXWx7wZAKort7SOId47vTRR1GdgofSZXFpFye4lMiv4U=
+X-Received: by 2002:a92:cd0e:: with SMTP id z14mr2732005iln.135.1604081542237;
+ Fri, 30 Oct 2020 11:12:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201025214842.5924-5-linux@rasmusvillemoes.dk>
+References: <20201030061655.162839-1-dlatypov@google.com> <CABVgOSkn1n-N50YZr7aNTgAGxkj7zkZO31B16Ji88OxM8m2WPQ@mail.gmail.com>
+In-Reply-To: <CABVgOSkn1n-N50YZr7aNTgAGxkj7zkZO31B16Ji88OxM8m2WPQ@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 30 Oct 2020 11:12:11 -0700
+Message-ID: <CAGS_qxpr1XiqcGPcfxnsAuxqnyJ0K+0UF-q146oQjsQqyHbm9g@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix --raw_output to actually show output
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun 2020-10-25 22:48:42, Rasmus Villemoes wrote:
-> The printf test suite does each test with a few different buffer sizes
-> to ensure vsnprintf() behaves correctly with respect to truncation and
-> size reporting. It calls vsnprintf() with a buffer size that is
-> guaranteed to be big enough, a buffer size of 0 to ensure that nothing
-> gets written to the buffer, but it also calls vsnprintf() with a
-> buffer size chosen to guarantee the output gets truncated somewhere in
-> the middle.
-> 
-> That buffer size is chosen randomly to increase the chance of finding
-> some corner case bug (for example, there used to be some %p<foo>
-> extension that would fail to produce any output if there wasn't room
-> enough for it all, despite the requirement of producing as much as
-> there's room for). I'm not aware of that having found anything yet,
-> but should it happen, it's annoying not to be able to repeat the
-> test with the same sequence of truncated lengths.
-> 
-> For demonstration purposes, if we break one of the test cases
-> deliberately, we still get different buffer sizes if we don't pass the
-> seed parameter:
-> 
-> root@(none):/# modprobe test_printf
-> [   15.317783] test_printf: vsnprintf(buf, 18, "%piS|%pIS", ...) wrote '127.000.000.001|1', expected '127-000.000.001|1'
-> [   15.323182] test_printf: failed 3 out of 388 tests
-> [   15.324034] test_printf: random seed used was 0x278bb9311979cc91
-> modprobe: ERROR: could not insert 'test_printf': Invalid argument
-> 
-> root@(none):/# modprobe test_printf
-> [   13.940909] test_printf: vsnprintf(buf, 22, "%piS|%pIS", ...) wrote '127.000.000.001|127.0', expected '127-000.000.001|127.0'
-> [   13.944744] test_printf: failed 3 out of 388 tests
-> [   13.945607] test_printf: random seed used was 0x9f72eee1c9dc02e5
-> modprobe: ERROR: could not insert 'test_printf': Invalid argument
-> 
-> but to repeat a specific sequence of tests, we can do
-> 
-> root@(none):/# modprobe test_printf seed=0x9f72eee1c9dc02e5
-> [  448.328685] test_printf: vsnprintf(buf, 22, "%piS|%pIS", ...) wrote '127.000.000.001|127.0', expected '127-000.000.001|127.0'
-> [  448.331650] test_printf: failed 3 out of 388 tests
-> [  448.332295] test_printf: random seed used was 0x9f72eee1c9dc02e5
-> modprobe: ERROR: could not insert 'test_printf': Invalid argument
-> 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+On Fri, Oct 30, 2020 at 12:23 AM David Gow <davidgow@google.com> wrote:
+>
+> On Fri, Oct 30, 2020 at 2:17 PM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > Currently --raw_output means nothing gets shown.
+> > Why?
+> > Because `raw_output()` has a `yield` and therefore is a generator, which
+> > means it only executes when you ask it for a value.
+> >
+> > Given no one actually is using it as a generator (checked via the added
+> > type annotation), drop the yield so we actually print the output.
+> >
+> > Also strip off the trailing \n (and any other whitespace) to avoid
+> >   [<601d6d3a>] ? printk+0x0/0x9b
+> >
+> >   [<601e5058>] ? kernel_init+0x23/0x14b
+> >
+> >   [<600170d2>] ? new_thread_handler+0x82/0xc0
+> > making the output unreadable.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> The bug where --raw_output doesn't show anything is already fixed[1],
+> but it does still show the extra newlines.
 
-Great feature!
+I'm not sure how I missed that, sorry for the noise.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+>
+> Maybe it's worth making just the newline fix, and rolling it into the
+> other patch[2] handling newlines?
 
-Best Regards,
-Petr
+Sounds good.
+
+>
+> Cheers,
+> -- David
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=3023d8ff3fc60e5d32dc1d05f99ad6ffa12b0033
+> [2]: https://lore.kernel.org/linux-kselftest/20201020233219.4146059-1-dlatypov@google.com/
