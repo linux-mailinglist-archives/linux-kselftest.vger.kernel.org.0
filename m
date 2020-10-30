@@ -2,120 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F8F2A060F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 13:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFBD2A08B6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 16:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbgJ3M6t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 08:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S1726930AbgJ3PAa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 11:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgJ3M6r (ORCPT
+        with ESMTP id S1726779AbgJ3PAa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 08:58:47 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D1C0613CF
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 05:58:45 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id a7so7726061lfk.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 05:58:45 -0700 (PDT)
+        Fri, 30 Oct 2020 11:00:30 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56DFC0613DA
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 07:59:35 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id dn5so6934949edb.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 07:59:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uNc4aZmCV+V66ek4n0vGZyiabsnlsPVrA/E+N6Pxy2w=;
-        b=LeCwheLxnLSKQ0afV1Zx/F0R0vdGaODFv+ShILQ1t99lDmCgZXhHgnsxb2XVZ+y75H
-         PC5Y6abOYPnX1IlhLrUphlEpSxVHu0Q8Rx7lu3oIRqDXAFXipeU12yM6ByjjGSQYfsYT
-         RRM8IA98Kyq//zkbpAYkpV+s2yFVOGGyf3GNo=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
+         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
+         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
+         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
+         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
+         Sb9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uNc4aZmCV+V66ek4n0vGZyiabsnlsPVrA/E+N6Pxy2w=;
-        b=sNjZkLaBBYvt58mzL6CkaDOQTZJCXPd2Magys65VK/mq9q2wOzHssZ/qMBSLYDMdSi
-         JyGW+VRhtDK3bB1NzAC42/kab8QA6745U0c7RvqXW5gurc6LJJp3ezOKH4HwWx6yLgyW
-         DhtxvySqznplt/X7M+1EotCzay4FxthbnnFaDsZD85mUZgqyQBc+hroG4+E4oSgAk3zz
-         W4N87Fbq1u9ObTlyChHY6bNfh9TuSYT5P7ivIL3TTmLP0CSYm5HODXZ3+mc6HmEJINMa
-         5qneUjYJivLM/9G7hUvqs3D4GbXN8OWjD3UjvU/V1EhsjGFnJb6b8a4FfxPTwO+ZLhhq
-         IcIA==
-X-Gm-Message-State: AOAM531GHJKJkyw78/EJABrvUjq7Ijjdjd2pma/tX/W9YH0B+rqMhvM9
-        1HznoDVdsZ0KDxr0mC4W61B3tw==
-X-Google-Smtp-Source: ABdhPJzY3CJVQ93L6hUMcAs1mWQGITL9zUbrGBXT9azIo9XmUImab/GfczuRGjf7PGl+41B3aWjVUA==
-X-Received: by 2002:a19:7e56:: with SMTP id z83mr813191lfc.98.1604062724149;
-        Fri, 30 Oct 2020 05:58:44 -0700 (PDT)
-Received: from [172.16.11.132] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id n18sm616110lfq.255.2020.10.30.05.58.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Oct 2020 05:58:43 -0700 (PDT)
-Subject: Re: [PATCH 0/4] deterministic random testing
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, Willy Tarreau <w@1wt.eu>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-References: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
- <20201026105927.GC4077@smile.fi.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <24397a58-17cd-7238-488c-7a3346465ab8@rasmusvillemoes.dk>
-Date:   Fri, 30 Oct 2020 13:58:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=qz8hpCqG1jcm+EHFsJkBTJ2sERgTa1lTT86w+CeWRj5CApISnkFa8RA7tTdf0SHRE/
+         L//fysKxnbaO+L1ofOtCqhKqQroZJSUNddRvSYKGSc+EGgkxN536kvOFN1q5RaLt1RjZ
+         jjloEEM8OwdXoTW+nEzryKo27kw0E/bgKVZsohIIkr0/111MUzePqrzs8rbafx+rTvgF
+         5l40cjjbscy/uu0hV3+HiMF6oPTRNUQL34JTpU+086CaTpBToUCocivAgAlEYWWMbVVm
+         gH/yWRhJRqSWJnPoR1ydDQHjT77xI18raUrUNy821FzhiAWfDpXJd2I0dEBjJQtXrJcu
+         UGAA==
+X-Gm-Message-State: AOAM532p+TvxtgJD4umDakeXfcREeQBP7KPUnJg5dKjP9MHPhskrz0XG
+        Tyze/cbp+4BysIxGpmqizonlTthHg1F3gU4TJ/OcjmCHmQ==
+X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
+X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
+ Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201026105927.GC4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
+ -0700 (PDT)
+Reply-To: li.anable85@gmail.com
+From:   Liliane Abel <k.griest04@gmail.com>
+Date:   Fri, 30 Oct 2020 15:59:34 +0100
+Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/10/2020 11.59, Andy Shevchenko wrote:
-> On Sun, Oct 25, 2020 at 10:48:38PM +0100, Rasmus Villemoes wrote:
->> This is a bit of a mixed bag.
->>
->> The background is that I have some sort() and list_sort() rework
->> planned, but as part of that series I want to extend their their test
->> suites somewhat to make sure I don't goof up - and I want to use lots
->> of random list lengths with random contents to increase the chance of
->> somebody eventually hitting "hey, sort() is broken when the length is
->> 3 less than a power of 2 and only the last two elements are out of
->> order". But when such a case is hit, it's vitally important that the
->> developer can reproduce the exact same test case, which means using a
->> deterministic sequence of random numbers.
->>
->> Since Petr noticed [1] the non-determinism in test_printf in
->> connection with Arpitha's work on rewriting it to kunit, this prompted
->> me to use test_printf as a first place to apply that principle, and
->> get the infrastructure in place that will avoid repeating the "module
->> parameter/seed the rnd_state/report the seed used" boilerplate in each
->> module.
->>
->> Shuah, assuming the kselftest_module.h changes are ok, I think it's
->> most natural if you carry these patches, though I'd be happy with any
->> other route as well.
-> 
-> Completely in favour of this.
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Dearest
 
-Thanks.
+Greeting my dear, I am Liliane Abel by name, The only daughter of late
+Mr.Benson Abel. My father is one of the top Politician in our country
+and my mother is a farmers and cocoa merchant when they were both
+alive. After the death of my mother, long ago, my father was
+controlling their business until he was poisoned by his business
+associates which he suffered and died.
 
-> One note though. AFAIU the global variables are always being used in the
-> modules that include the corresponding header. Otherwise we might have an extra
-> warning(s). I believe you have compiled with W=1 to exclude other cases.
-
-Yes, I unconditionally define the two new variables. gcc doesn't warn
-about them being unused, since they are referenced from inside a
-
-  if (0) {}
-
-block. And when those references are the only ones, gcc is smart enough
-to elide the static variables completely, so they don't even take up
-space in .data (or .init.data) - you can verify by running nm on
-test_printf.o and test_bitmap.o - the former has 'seed' and 'rnd_state'
-symbols, the latter does not.
-
-I did it that way to reduce the need for explicit preprocessor
-conditionals inside C functions.
-
-Rasmus
+Before the death of my father, He told me about (two million five
+hundred thousand united states dollars) which he deposited in the bank
+in Lome-Togo, It was the money he intended to transfer overseas for
+investment before he was poisoned. He also instructed me that I should
+seek for foreign partners in any country of my choice who will assist
+me transfer this money in overseas account where the money will be
+wisely invested.
+I am seeking for your kind assistance in the following ways:  (1) to
+provide a safe bank account into where the money will be transferred
+for investment. (2) To serve as a guardian of this fund since I am a
+girl of 19 years old. (3) To make arrangement for me to come over to
+your country to further my education. This is my reason for writing to
+you. Please if you are willing to assist me I will offer you 25% of
+the total money. Reply if  you are interested
+Best regards.
+Liliane Abel.
