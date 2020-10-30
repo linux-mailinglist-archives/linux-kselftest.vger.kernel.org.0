@@ -2,83 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFBD2A08B6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 16:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1379C2A0A33
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 16:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbgJ3PAa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 11:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726779AbgJ3PAa (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 11:00:30 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56DFC0613DA
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 07:59:35 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id dn5so6934949edb.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 07:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
-         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
-         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
-         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
-         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
-         Sb9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
-        b=qz8hpCqG1jcm+EHFsJkBTJ2sERgTa1lTT86w+CeWRj5CApISnkFa8RA7tTdf0SHRE/
-         L//fysKxnbaO+L1ofOtCqhKqQroZJSUNddRvSYKGSc+EGgkxN536kvOFN1q5RaLt1RjZ
-         jjloEEM8OwdXoTW+nEzryKo27kw0E/bgKVZsohIIkr0/111MUzePqrzs8rbafx+rTvgF
-         5l40cjjbscy/uu0hV3+HiMF6oPTRNUQL34JTpU+086CaTpBToUCocivAgAlEYWWMbVVm
-         gH/yWRhJRqSWJnPoR1ydDQHjT77xI18raUrUNy821FzhiAWfDpXJd2I0dEBjJQtXrJcu
-         UGAA==
-X-Gm-Message-State: AOAM532p+TvxtgJD4umDakeXfcREeQBP7KPUnJg5dKjP9MHPhskrz0XG
-        Tyze/cbp+4BysIxGpmqizonlTthHg1F3gU4TJ/OcjmCHmQ==
-X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
-X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
- Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
+        id S1727043AbgJ3PsH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 11:48:07 -0400
+Received: from foss.arm.com ([217.140.110.172]:38098 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726899AbgJ3PsG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Oct 2020 11:48:06 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1720B1435;
+        Fri, 30 Oct 2020 08:48:06 -0700 (PDT)
+Received: from [10.57.54.223] (unknown [10.57.54.223])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C47C3F719;
+        Fri, 30 Oct 2020 08:48:04 -0700 (PDT)
+Subject: Re: [PATCH 1/2] dma-mapping: add benchmark support for streaming DMA
+ APIs
+To:     "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>
+Cc:     "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20201027035330.29612-1-song.bao.hua@hisilicon.com>
+ <20201027035330.29612-2-song.bao.hua@hisilicon.com>
+ <f9aebee4-5081-da8c-930c-c36617ab57c4@arm.com>
+ <8fe90795064d4373b4af32959c4e9781@hisilicon.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <472cf21a-5196-dbb5-caef-c1c0d982fe1c@arm.com>
+Date:   Fri, 30 Oct 2020 15:48:03 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
- -0700 (PDT)
-Reply-To: li.anable85@gmail.com
-From:   Liliane Abel <k.griest04@gmail.com>
-Date:   Fri, 30 Oct 2020 15:59:34 +0100
-Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <8fe90795064d4373b4af32959c4e9781@hisilicon.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dearest
+On 2020-10-29 21:39, Song Bao Hua (Barry Song) wrote:
+[...]
+>>> +struct map_benchmark {
+>>> +	__u64 map_nsec;
+>>> +	__u64 unmap_nsec;
+>>> +	__u32 threads; /* how many threads will do map/unmap in parallel */
+>>> +	__u32 seconds; /* how long the test will last */
+>>> +	int node; /* which numa node this benchmark will run on */
+>>> +	__u64 expansion[10];	/* For future use */
+>>> +};
+>>
+>> I'm no expert on userspace ABIs (and what little experience I do have is
+>> mostly of Win32...), so hopefully someone else will comment if there's
+>> anything of concern here. One thing I wonder is that there's a fair
+>> likelihood of functionality evolving here over time, so might it be
+>> appropriate to have some sort of explicit versioning parameter for
+>> robustness?
+> 
+> I copied that from gup_benchmark. There is no this kind of code to
+> compare version.
+> I believe there is a likelihood that kernel module is changed but users
+> are still using old userspace tool, this might lead to the incompatible
+> data structure.
+> But not sure if it is a big problem :-)
 
-Greeting my dear, I am Liliane Abel by name, The only daughter of late
-Mr.Benson Abel. My father is one of the top Politician in our country
-and my mother is a farmers and cocoa merchant when they were both
-alive. After the death of my mother, long ago, my father was
-controlling their business until he was poisoned by his business
-associates which he suffered and died.
+Yeah, like I say I don't really have a good feeling for what would be 
+best here, I'm just thinking of what I do know and wary of the potential 
+for a "640 bits ought to be enough for anyone" issue ;)
 
-Before the death of my father, He told me about (two million five
-hundred thousand united states dollars) which he deposited in the bank
-in Lome-Togo, It was the money he intended to transfer overseas for
-investment before he was poisoned. He also instructed me that I should
-seek for foreign partners in any country of my choice who will assist
-me transfer this money in overseas account where the money will be
-wisely invested.
-I am seeking for your kind assistance in the following ways:  (1) to
-provide a safe bank account into where the money will be transferred
-for investment. (2) To serve as a guardian of this fund since I am a
-girl of 19 years old. (3) To make arrangement for me to come over to
-your country to further my education. This is my reason for writing to
-you. Please if you are willing to assist me I will offer you 25% of
-the total money. Reply if  you are interested
-Best regards.
-Liliane Abel.
+>>> +struct map_benchmark_data {
+>>> +	struct map_benchmark bparam;
+>>> +	struct device *dev;
+>>> +	struct dentry  *debugfs;
+>>> +	atomic64_t total_map_nsecs;
+>>> +	atomic64_t total_map_loops;
+>>> +	atomic64_t total_unmap_nsecs;
+>>> +	atomic64_t total_unmap_loops;
+>>> +};
+>>> +
+>>> +static int map_benchmark_thread(void *data)
+>>> +{
+>>> +	struct page *page;
+>>> +	dma_addr_t dma_addr;
+>>> +	struct map_benchmark_data *map = data;
+>>> +	int ret = 0;
+>>> +
+>>> +	page = alloc_page(GFP_KERNEL);
+>>> +	if (!page)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	while (!kthread_should_stop())  {
+>>> +		ktime_t map_stime, map_etime, unmap_stime, unmap_etime;
+>>> +
+>>> +		map_stime = ktime_get();
+>>> +		dma_addr = dma_map_page(map->dev, page, 0, PAGE_SIZE,
+>> DMA_BIDIRECTIONAL);
+>>
+>> Note that for a non-coherent device, this will give an underestimate of
+>> the real-world overhead of BIDIRECTIONAL or TO_DEVICE mappings, since
+>> the page will never be dirty in the cache (except possibly the very
+>> first time through).
+> 
+> Agreed. I'd like to add a DIRECTION parameter like "-d 0", "-d 1" after we have
+> this basic framework.
+
+That wasn't so much about the direction itself, just that if it's 
+anything other than FROM_DEVICE, we should probably do something to 
+dirty the buffer by a reasonable amount before each map. Otherwise the 
+measured performance is going to be unrealistic on many systems.
+
+[...]
+>>> +		atomic64_add((long long)ktime_to_ns(ktime_sub(unmap_etime,
+>> unmap_stime)),
+>>> +				&map->total_unmap_nsecs);
+>>> +		atomic64_inc(&map->total_map_loops);
+>>> +		atomic64_inc(&map->total_unmap_loops);
+>>
+>> I think it would be worth keeping track of the variances as well - it
+>> can be hard to tell if a reasonable-looking average is hiding terrible
+>> worst-case behaviour.
+> 
+> This is a sensible requirement. I believe it is better to be handled by the
+> existing kernel tracing method.
+> 
+> Maybe we need a histogram like:
+> Delay   sample count
+> 1-2us   1000              ***
+> 2-3us   2000              *******
+> 3-4us   100               *
+> .....
+> This will be more precise than the maximum latency in the worst
+> case.
+> 
+> I'd believe this can be handled by:
+> tracepoint  A
+> Map
+> Tracepoint  B
+> 
+> Tracepoint   C
+> Unmap
+> Tracepoint   D
+> 
+> Let the userspace ebpf to draw the histogram for the delta of B-A and D-C.
+> 
+> So I am planning to put this requirement into todo list and write an userspace
+> ebpf/bcc script for histogram and put in tools/ directory.
+> 
+> Please give your comments on this.
+
+Right, I wasn't suggesting trying to homebrew a full data collection 
+system here - I agree there are better tools for that already - just 
+that it's basically free to track a sum of squares alongside a sum, so 
+that we can trivially calculate a useful variance (or standard 
+deviation) figure alongside the mean at the end.
+
+[...]
+>>> +	for (i = 0; i < threads; i++) {
+>>> +		tsk[i] = kthread_create_on_node(map_benchmark_thread, map,
+>>> +				map->bparam.node, "dma-map-benchmark/%d", i);
+>>> +		if (IS_ERR(tsk[i])) {
+>>> +			dev_err(map->dev, "create dma_map thread failed\n");
+>>> +			return PTR_ERR(tsk[i]);
+>>> +		}
+>>> +
+>>> +		if (node != NUMA_NO_NODE && node_online(node))
+>>> +			kthread_bind_mask(tsk[i], cpu_mask);
+>>> +
+>>> +		wake_up_process(tsk[i]);
+>>
+>> Might it be better to create all the threads first, *then* start kicking
+>> them?
+> 
+> The difficulty is that we don't know how many threads we should create as
+> the thread number is a parameter to test the contention of IOMMU driver.
+> In my test case, I'd like to test things like
+> One thread
+> Two threads
+> ....
+> 8 threads
+> 12 threads
+> 16 threads...
+> 
+> On the other hand, I think it is better to drop the memory of task_struct of those
+> test threads while we are not testing dma map.
+
+I simply meant splitting the loop here into two - one to create the 
+threads and set their affinity, then another to wake them all up - so we 
+don't start unnecessarily thrashing the system while we're still trying 
+to set up the rest of the test ;)
+
+Robin.
