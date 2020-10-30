@@ -2,115 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA90C29FC0A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 04:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 800D929FD03
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 06:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726256AbgJ3DIO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Oct 2020 23:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S1725773AbgJ3FY6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 01:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726242AbgJ3DIO (ORCPT
+        with ESMTP id S1725355AbgJ3FY6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Oct 2020 23:08:14 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A2C0613D6
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 20:08:12 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id 184so6009252lfd.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 20:08:12 -0700 (PDT)
+        Fri, 30 Oct 2020 01:24:58 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56478C0613CF
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 22:24:58 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id z2so5443170ilh.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 22:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zehjsoI4/E9mlHSzS3GihRUsNzlSRlM3AQ/tc2JFGWU=;
-        b=q9NaR3BRuvTzXjW1tFWJC7ghaDMvWYJV4F/R/sfglQ1Do9mBfL2N70a3GMysG9ufy0
-         u543bRU8Q+xerhl0QLubqtnupkWBP51hSdP6NGnIl1X+ZkNPyDykSBY9poLAPBpDjUaq
-         0s/iVSYcxsg8yKonlY/PJPY/jry+VmI1lRRiHS3TdiNh6LhgQu6AH1HsJODK3KCF2zbN
-         XVJIkv9q1FDLnxGo0lUOJKAN5HFGYiHMifoR0MiKuttOYdJ8iNLqqbr7jNQUtCT2HPv6
-         PpvSh6aIPeBUKzLXaKv3qj2zy2CI2ktJbdFRW/aJd/vL4/1EkohKJVopAvgKPxXjiB09
-         YJRg==
+         :cc;
+        bh=lmMwQ8b55cUdayZvKYDJthFQ/LoSw2w1EcxeNL4OYcs=;
+        b=iwQyLSzpHg/fSGBBOvHQ7AebPJ9cDXSz+3APoggXro3e6RqW4lYDdtPUX1+GdogWT4
+         CEykeB0V7LaWqNniBdK88FmznGPeU+StD/zmUZvvMsElTYWk2ojvE8tpWtbnuWp3KwFh
+         WnSHs7JhQtUd8M0QaBdcVH46YAClF5UicuuhHZyOpXQeE57YAReA7AkurXCcYzNSvde0
+         tP5trblzCjLMuzwtBD0h8ZKF3fiy8HLtwvaEygGWbDGgfg9+nHaOTCWcUjjy914wSojY
+         5RYFPPLGDm+naHOBBUJ11PFN8w1SjoF/fH339AulsgVX2ige4kyzAVJr0hWVtCQ6aeBa
+         n+9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zehjsoI4/E9mlHSzS3GihRUsNzlSRlM3AQ/tc2JFGWU=;
-        b=N1s+F1R4Nh82h0gC4GNmzgGuSjNaPxwA/pzreDyxwRVvC3RGSOCMGk7CQbnSAVsfeS
-         DL5EMdRoq8Rm/m/SQ59bZOGu/7zR5/afoFdrM8msLBbhuF3PC7KwwojvcUkPVzEMDlkf
-         ZhUK4EAJInVgd7StV59oWp6k6HZbOfAXtfxRnMGdYckw2y4RN5HuTCYFov5QqNUcczBg
-         pfEeOlMHU9Z3LhhhXRG6Ps2N+MaqsKVUsT6tMl5qK3RWil7w9S+691Dy7XfQH51Ni+rZ
-         SNF+gZitSi3eBSxo0y486IJKKKNlowVIAZikhttN0FxRmOPurHgGARIf6lxOAaB2rKnr
-         mEpQ==
-X-Gm-Message-State: AOAM532LJTUPNhd2MIQTDdNmRlql6GmhGuiOqnfBfO972+k9VpD9bBH/
-        T7axjpmySpM5kLGGEr+TqsClxw/bGoHtEqzh2tjRfg==
-X-Google-Smtp-Source: ABdhPJwFhikEezi6cK75+Nh1jGpDUQvWygSxV/rVzK4JtvxTrHv+oYrN72yFW4FSMWmsrMzt7Jt48+wkeRxq1/Q08TY=
-X-Received: by 2002:a19:e308:: with SMTP id a8mr30300lfh.573.1604027290187;
- Thu, 29 Oct 2020 20:08:10 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=lmMwQ8b55cUdayZvKYDJthFQ/LoSw2w1EcxeNL4OYcs=;
+        b=AJn3UjI6Lf3a3QIwkRdODxlAYj5EeHI3V9ZrLn55r0+/pdMFT10N1lYQGCKgHbVLGU
+         w9M7ZZ+WzH5PoJKkt8tTJFWNavYxnse2iYoYlxwQhbpGuBtbcdNo8rQsq8qBgUmcM6LW
+         g48KjqPxGEhjOGwaUk1zASB94VlNi9XHMpnMcx4oNsnR9UYM7H35xzDT279zvX1ZGTWj
+         jqw1sVJl/OBQrn14CNm6hNGCi3aWz2iuKq6Yu5TSVXQs+VKXkLPfc2q2eqO5r7wAMAeI
+         9eMnAAQQOhJRnmErbBIu6KHY0zpFAS1svCHrk9Ull3tNlC+MMgSM6XnkGrMgTywGlQBG
+         G6Eg==
+X-Gm-Message-State: AOAM533nxnCk+IoEkWA7kJWCmZv5JwxAExTK2Fen69xN8MPRRVztovNQ
+        c1gG1c06V7wM1YPnTD77Maj3tpPdhjXVjutRsgzgmw==
+X-Google-Smtp-Source: ABdhPJzaanR4CgFbc03oJFpky18iVumfvVzkCYtCPFtLD3bf0c6h3u0Ous9bPnH+4HImwAZMVkk1jULVCOGyQIJw7AA=
+X-Received: by 2002:a05:6e02:1310:: with SMTP id g16mr684884ilr.110.1604035497455;
+ Thu, 29 Oct 2020 22:24:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201027200358.557003-1-mic@digikod.net> <20201027200358.557003-9-mic@digikod.net>
- <CAG48ez1San538w=+He309vHg4pBSCvAf7e5xeHdqeOHA6qwitw@mail.gmail.com> <de287149-ff42-40ca-5bd1-f48969880a06@digikod.net>
-In-Reply-To: <de287149-ff42-40ca-5bd1-f48969880a06@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 30 Oct 2020 04:07:44 +0100
-Message-ID: <CAG48ez1FQVkt78129WozBwFbVhAPyAr9oJAHFHAbbNxEBr9h1g@mail.gmail.com>
-Subject: Re: [PATCH v22 08/12] landlock: Add syscall implementations
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Kees Cook <keescook@chromium.org>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
+References: <20201021220752.418832-1-dlatypov@google.com> <CABVgOSkXfWihPN5-1dPn2BstpJ7eiG1Qj=cg5EL2oEhv=YHj4g@mail.gmail.com>
+In-Reply-To: <CABVgOSkXfWihPN5-1dPn2BstpJ7eiG1Qj=cg5EL2oEhv=YHj4g@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 29 Oct 2020 22:24:46 -0700
+Message-ID: <CAGS_qxrUkCaG6D+Kj-x2NjSdc-_KMg29-ncD3kqyBqgN8LR6Jg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix pre-existing python type annotation errors
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 12:30 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
- wrote:
-> On 29/10/2020 02:06, Jann Horn wrote:
-> > On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.n=
-et> wrote:
-> >> These 3 system calls are designed to be used by unprivileged processes
-> >> to sandbox themselves:
-[...]
-> >> +       /*
-> >> +        * Similar checks as for seccomp(2), except that an -EPERM may=
- be
-> >> +        * returned.
-> >> +        */
-> >> +       if (!task_no_new_privs(current)) {
-> >> +               err =3D security_capable(current_cred(), current_user_=
-ns(),
-> >> +                               CAP_SYS_ADMIN, CAP_OPT_NOAUDIT);
-> >
-> > I think this should be ns_capable_noaudit(current_user_ns(), CAP_SYS_AD=
-MIN)?
+On Thu, Oct 29, 2020 at 7:56 PM David Gow <davidgow@google.com> wrote:
 >
-> Right. The main difference is that ns_capable*() set PF_SUPERPRIV in
-> current->flags. I guess seccomp should use ns_capable_noaudit() as well?
+> On Thu, Oct 22, 2020 at 6:08 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > The code uses annotations, but they aren't accurate.
+> > Note that type checking in python is a separate process, running
+> > `kunit.py run` will not check and complain about invalid types at
+> > runtime.
+> >
+> > Fix pre-existing issues found by running a type checker
+> > $ mypy *.py
+> >
+> > All but one of these were returning `None` without denoting this
+> > properly (via `Optional[Type]`).
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> I'm not going to pretend to really understand python annotations
+> completely, but this all seems correct from what I know of the code,
+> and I was able to install mypy and verify the issues were fixed.
+>
+> Clearly, if we're going to have type annotations here, we should be
+> verifying the code against them. Is there a way we could get python
+> itself to verify this code when the script runs, rather than have to
+> use mypy as a tool to verify it separately? Otherwise, maybe we can
 
-Yeah. That seccomp code is from commit e2cfabdfd0756, with commit date
-in April 2012, while ns_capable_noaudit() was introduced in commit
-98f368e9e263, with commit date in June 2016; the seccomp code predates
-the availability of that API.
+Type annotations are https://www.python.org/dev/peps/pep-0484/
+There isn't support for python itself to type check and it calls out
+(only) mypy by name as a type-checker.
 
-Do you want to send a patch to Kees for that, or should I?
+I don't have a good answer for how we prevent them from bitrotting :/
+
+> run it automatically from the kunit_tool_test.py unit tests or
+> something similar?
+
+I don't think it's possible to do so cleanly.
+
+E.g. I don't know python that well, but here's my guess at what it'd
+have to look like:
+* We have to assume mypy is installed
+* dynamically loading the module inside a `try` (so we don't break
+users who don't have it)
+* figure out what func is the entry point to mypy and call it on
+"./kunit.py" somehow
+
+>
+> Regardless, this is
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> Cheers,
+> -- David
