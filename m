@@ -2,136 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC6229F772
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Oct 2020 23:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB8A29FB5B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 03:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725747AbgJ2WKV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Oct 2020 18:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S1726002AbgJ3Ce4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Oct 2020 22:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725562AbgJ2WKV (ORCPT
+        with ESMTP id S1725815AbgJ3Ce4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Oct 2020 18:10:21 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AA6C0613D2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 15:10:20 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id i11so2016667pgi.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 15:10:20 -0700 (PDT)
+        Thu, 29 Oct 2020 22:34:56 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20175C0613CF
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 19:34:56 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id 184so5942777lfd.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 19:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=8FO8hKhWo8C4LkpWBb3TOyUhwVl2tgrqtKgNpxdQBao=;
-        b=dyMOA9oqMOS6va+C/MbpRoprIAGsBsKj1w9S6Sa1dTZMXbYw0nv5t8CI+BZaLnrCbl
-         pumiqx7Th1d8ahZvnpzU3Ma2a2JVTcmXpmpP2XA74m3XnHXf3bX/bcF8tn1MohB/KbBd
-         UdoVF9ynHw3k8hds5HbRpLU78GHgvzaxotAUW2krmNhuXHtO++tHwvhoibMFd3bFd4Ks
-         opCJkclDRD42843Kld6nJMH50Xqhheh6gf6KNkj/zPCrVyxX0q/9/Hhxsx+zsEqcjvik
-         H3uiLcftU/ltNESOsMInt4gMcieOIFchEXaOrJsDx8xS0LJpFfruQmcUBzje25Y+fE+5
-         4uxA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P4zsJilmnXZW0eu+m4r307rdh+7PtUGOoi3k7KzIK4s=;
+        b=TJa4wI6TxOoXZos3Wi+I7LjR132HVQhiX+MfxZ6xBv+14hyDtRuv30xh0lBsaqg/YE
+         BvOBTIV/fwNsSnb0/HVxg7hgtRj2CjDpx0rv3uqQAcwdq2y+eyy2y6MBNLn5HeQEvJPu
+         Khpl07Qmlp+2NuNfGzI844MBmzfQPk6obWHghpk8XJgkmWMiHOjwkKItvi0h0Eu4X2rx
+         EWWBuA9YBimGowNUBqyVLFX6w2Grhc4CldLStYrCkDLG8OMY+yiP5jZoMbOVUPDoMN6t
+         lTVb2oRfwKYCVxxJQHI2jAXyBpq/+jav9EHAVboBROdV+k0bM69yBnwUT+/0WMRnNSZX
+         OTuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc:content-transfer-encoding;
-        bh=8FO8hKhWo8C4LkpWBb3TOyUhwVl2tgrqtKgNpxdQBao=;
-        b=lM/sxMJFX5WelbfcfhoZEOfw2w6u44yiZYw7SWAbYB5SXG8WijvYuci11ZW+hVTMiV
-         cKU/oH+d/hrY+pOzvsN5tNzLBVy+THkEdqbxdXeY9Uw4oqA38Ddgt+pbbN6Cvljg2yqh
-         /WmnPCZGEq0fLmc+hST4WOTLC2Evzvmleh3ncafcgoS9ZJYfXweMX1zCnhAJw7RtgUEI
-         SoiBZu9cgfA5eNiz55TPeMrVRFy6+xbUa0B0Hs0JX/I7UG30d6LUpMxQEYekv1oHFQSe
-         bl4K6Fv5MCrFV2vEzmboAdoecrYbHzv0VWzAZRwwIuvwhC6pkctM1dwfUlPmIwoREd2L
-         oXTw==
-X-Gm-Message-State: AOAM530rPXy2L2Jx62iX2o3jFGfJSpNbAJDAs9u67IpT6dK9Q68RMTlp
-        Yc07ZeSfowesYyIfJSxL5h6dOLI2+yH9sA==
-X-Google-Smtp-Source: ABdhPJxg7AkIoi6WznVzqpiz7XfH4HE0lhenNJ8tvH0f4uyzgciqlKQIsmU062LGVpfDclTmOoKlRwpzDOMD3Q==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:a17:90b:f85:: with SMTP id
- ft5mr100494pjb.1.1604009419252; Thu, 29 Oct 2020 15:10:19 -0700 (PDT)
-Date:   Thu, 29 Oct 2020 15:09:29 -0700
-Message-Id: <20201029220929.4068251-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
-Subject: [PATCH] kunit: tool: print out stderr from make (like build warnings)
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P4zsJilmnXZW0eu+m4r307rdh+7PtUGOoi3k7KzIK4s=;
+        b=SWYWmg6pk37RWRHcR5AC+4Bcv/uVlfEqySu87t8yHT2+oZBh/HDkAF+TJICsDv+QNY
+         wRnKEGpE+seVa4+NkooGOTV+9EYX8RI143epRWtDGN5Sd/cluptZ6ZtrDLRur9iYqMNB
+         CfFqM/UpKcd5nFNZJBFTXoo1JtDvWTcou/kX6SEzR5BnTq02K38XCNT8/m1NQq2c5+BF
+         s4h1f7qYjDBPBANyweE/sxiiEG4Ua72usOYYlYn5wGGAJostziH3pRl4Blg7Wi3LFF0w
+         jHh6eoP8uid4qPjqnqnnngcIw2RH2B54Oe4hKEjVA1TOOInD/U5JznT5ZxOHcMXZJrU1
+         fqCg==
+X-Gm-Message-State: AOAM533emkufp48MGulSF7T6g6ZJQkQHRNV6pwth6PAITy4NCzYWcoy+
+        chpQ9gAESzRYrocBKINEu7OEAwtgEaF/+UYix2GAKQ==
+X-Google-Smtp-Source: ABdhPJxwcHvtgbRR9bElBszsCcepwW9fiuSs9HIGe6x1GwF0S6O4nBT58V1TVMhlY1QihtnFyLyoYeoIyEGMKHzmGO4=
+X-Received: by 2002:a19:6001:: with SMTP id u1mr2595lfb.277.1604025294372;
+ Thu, 29 Oct 2020 19:34:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201020233219.4146059-1-dlatypov@google.com>
+In-Reply-To: <20201020233219.4146059-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 30 Oct 2020 10:34:43 +0800
+Message-ID: <CABVgOSnPpC=j7MrcmDpvvG6i_voiFQe4137ieyYX+-9B4=G39w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix extra trailing \n in parsed test output
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the tool redirects make stdout + stderr, and only shows them
-if the make command fails.
-This means build warnings aren't shown to the user.
+On Wed, Oct 21, 2020 at 7:32 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> For simplcity, strip all trailing whitespace from parsed output.
+> I imagine no one is printing out meaningful trailing whitespace via
+> KUNIT_FAIL() or similar, and that if they are, they really shouldn't.
+>
+> At some point, the lines from `isolate_kunit_output()` started having
+> trailing \n, which results in artifacty output like this:
+>
+> $ ./tools/testing/kunit/kunit.py run
+> [16:16:46] [FAILED] example_simple_test
+> [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+>
+> [16:16:46]     Expected 1 + 1 == 3, but
+>
+> [16:16:46]         1 + 1 == 2
+>
+> [16:16:46]         3 == 3
+>
+> [16:16:46]     not ok 1 - example_simple_test
+>
+> [16:16:46]
+>
+> After this change:
+> [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+> [16:16:46]     Expected 1 + 1 == 3, but
+> [16:16:46]         1 + 1 == 2
+> [16:16:46]         3 == 3
+> [16:16:46]     not ok 1 - example_simple_test
+> [16:16:46]
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-This change prints the contents of stderr even if make succeeds, under
-the assumption these are only build warnings or other messages the user
-likely wants to see.
+Thanks! This is a long-overdue fix, and it worked well for me.
 
-We drop stdout from the raised exception since we can no longer easily
-collate stdout and stderr and just showing the stderr seems fine.
+Tested-by: David Gow <davidgow@google.com>
 
-Example with a warning:
+One comment below:
 
-[14:56:35] Building KUnit Kernel ...
-../lib/kunit/kunit-test.c: In function =E2=80=98kunit_test_successful_try=
-=E2=80=99:
-../lib/kunit/kunit-test.c:19:6: warning: unused variable =E2=80=98unused=E2=
-=80=99 [-Wunused-variable]
-   19 |  int unused;
-      |      ^~~~~~
+>  tools/testing/kunit/kunit_parser.py | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 8019e3dd4c32..e68b1c66a73f 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -342,7 +342,8 @@ def parse_run_tests(kernel_output) -> TestResult:
+>         total_tests = 0
+>         failed_tests = 0
+>         crashed_tests = 0
+> -       test_result = parse_test_result(list(isolate_kunit_output(kernel_output)))
+> +       test_result = parse_test_result(list(
+> +            l.rstrip() for l in isolate_kunit_output(kernel_output)))
 
-[14:56:40] Starting KUnit Kernel ...
+Could we do this inside isolate_kunit_output() instead? That seems
+like it'd be a more logical place for it (removing the newline is a
+sort of isolating the output), and it'd avoid making this line quite
+as horrifyingly nested.
 
-Note the stderr has a trailing \n, and since we use print, we add
-another, but it helps separate make and kunit.py output.
-
-Example with a build error:
-
-[15:02:45] Building KUnit Kernel ...
-ERROR:root:../lib/kunit/kunit-test.c: In function =E2=80=98kunit_test_succe=
-ssful_try=E2=80=99:
-../lib/kunit/kunit-test.c:19:2: error: unknown type name =E2=80=98invalid_t=
-ype=E2=80=99
-   19 |  invalid_type *test =3D data;
-      |  ^~~~~~~~~~~~
-...
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_kernel.py | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kuni=
-t_kernel.py
-index b557b1e93f98..326e82746d41 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -82,11 +82,16 @@ class LinuxSourceTreeOperations(object):
- 		if build_dir:
- 			command +=3D ['O=3D' + build_dir]
- 		try:
--			subprocess.check_output(command, stderr=3Dsubprocess.STDOUT)
-+			proc =3D subprocess.Popen(command,
-+						stderr=3Dsubprocess.PIPE,
-+						stdout=3Dsubprocess.DEVNULL)
- 		except OSError as e:
--			raise BuildError('Could not call execute make: ' + str(e))
--		except subprocess.CalledProcessError as e:
--			raise BuildError(e.output.decode())
-+			raise BuildError('Could not call make command: ' + str(e))
-+		_, stderr =3D proc.communicate()
-+		if proc.returncode !=3D 0:
-+			raise BuildError(stderr.decode())
-+		if stderr:  # likely only due to build warnings
-+			print(stderr.decode())
-=20
- 	def linux_bin(self, params, timeout, build_dir, outfile):
- 		"""Runs the Linux UML binary. Must be named 'linux'."""
-
-base-commit: 07e0887302450a62f51dba72df6afb5fabb23d1c
---=20
-2.29.1.341.ge80a0c044ae-goog
-
+>         if test_result.status == TestStatus.NO_TESTS:
+>                 print(red('[ERROR] ') + yellow('no tests run!'))
+>         elif test_result.status == TestStatus.FAILURE_TO_PARSE_TESTS:
+>
+> base-commit: c4d6fe7311762f2e03b3c27ad38df7c40c80cc93
+> --
+> 2.29.0.rc1.297.gfa9743e501-goog
+>
