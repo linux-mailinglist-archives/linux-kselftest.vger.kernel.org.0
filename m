@@ -2,156 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7082A03E5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 12:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A21F2A051D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 13:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbgJ3LQl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 07:16:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:22626 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726394AbgJ3LQi (ORCPT
+        id S1726317AbgJ3MOg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 08:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgJ3MOg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 07:16:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604056597;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k0gzXhHE7P+/Znh/4h5WiQrXY+vG1ikRCGJmtVHd0No=;
-        b=bVkl2wiOPaaF30s7IXb/FXE3Fbyiy5v/hCtopI1URCNpd1G36UbaakBQH4J844lgMG1Dfd
-        YKSNOKYyoidLfiCLZXrzOqwwBMMhK1pCYX4DscWGUrBS3tlQFCvbukF22+f0SfIo8A4skJ
-        gcegvAcnG0g3hHaVYIf+2FZns8dSs34=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-156-ICrIW7KTN52hZYh9--nuxw-1; Fri, 30 Oct 2020 07:16:32 -0400
-X-MC-Unique: ICrIW7KTN52hZYh9--nuxw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B4B55393B2;
-        Fri, 30 Oct 2020 11:16:30 +0000 (UTC)
-Received: from gerbillo.redhat.com (ovpn-114-14.ams2.redhat.com [10.36.114.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C7C8B10027AA;
-        Fri, 30 Oct 2020 11:16:28 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH net-next v2 3/3] self-tests: introduce self-tests for RPS default mask
-Date:   Fri, 30 Oct 2020 12:16:03 +0100
-Message-Id: <7dd9925be21e8b09c73a18d05fae69914177eab4.1604055792.git.pabeni@redhat.com>
-In-Reply-To: <cover.1604055792.git.pabeni@redhat.com>
-References: <cover.1604055792.git.pabeni@redhat.com>
+        Fri, 30 Oct 2020 08:14:36 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6998C0613D2;
+        Fri, 30 Oct 2020 05:14:35 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id g12so6187839wrp.10;
+        Fri, 30 Oct 2020 05:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YM6lVvP1rsbQaoeXf51BiJbGQods3VmOPaRIQze1Y/4=;
+        b=HYS7Z4uAi2/xNN9o74spG3l4kzUyP8VyV1TecIsI0doBZ3KR403fmibbpqsKbbgf1I
+         3YWsELKS/7CS8edlysu8nDc8RcDcXMmEGa4o1BQqQLKZe87LrkxJ58Kz1Epu/BxhLZa2
+         SyShNcHGq1zDPLgM10ram2PFohrsa3jhJOWizJV8PO0Wz++hR+C10AzNUhRMFNrMTcIE
+         5kE+QciPzpMLTBsx/B+SjWbEm0JFjOfIgDoRl/aOyHJ8AoSyZW0z4fea/VU5b2rg3GYi
+         NWz9y4KXE6Z4SsKitRMANq9qNhAnIRcQFnigs4kXnYaJqXClKX7njkNtK1BI53TwQ2OW
+         /taQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YM6lVvP1rsbQaoeXf51BiJbGQods3VmOPaRIQze1Y/4=;
+        b=Laf0vRhRHfsWG9Jx2wY85vLWMuOA/4gVZikG/k+uhsS9l4g9Y3TTAiXFW/804wa/XE
+         PcXHfwGXTMXYFtRlVjFeoxST487kzHqT2sTilELvbV8HhZP/vi4ZMCUvsrr9s0t99RlZ
+         qAMCOdYXF8BKZvDXbG2NFrNgMjrikJYVNjzZOhI/xuFn0HLC8VJ2TRAMCyIp1H0ndYnY
+         IAJ2FcU3SInSFGTa9RnMjRLg27p0fTMs3PP+Al97gGlvGefpHB2JSneVwTqO8iEC/gEj
+         rV+y2moXGPNKVBO9hFpPK3++3UVNwWutlLcWLYvVY5NrevxGTeD9G3g7igqU6zo8BJ92
+         E2xA==
+X-Gm-Message-State: AOAM532iCEHJYwLgcARj5jhhfm+UZUqApWoG76/B2/hRzqug1zSrDiT3
+        vf50GVIeIG7VN6Ut8gmLGaxSyB3kLZ3Xo0dJ/iE=
+X-Google-Smtp-Source: ABdhPJwickHJXtZNeeSxMgk7CR4/SX9TpUvLmsnUgAWwQfcePxqc+JJdQMVbyqrvcOZmy3D37IpNYw==
+X-Received: by 2002:a05:6000:12c2:: with SMTP id l2mr2949137wrx.249.1604060073865;
+        Fri, 30 Oct 2020 05:14:33 -0700 (PDT)
+Received: from kernel-dev.chello.ie ([80.111.136.190])
+        by smtp.gmail.com with ESMTPSA id 90sm10020925wrh.35.2020.10.30.05.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2020 05:14:33 -0700 (PDT)
+From:   Weqaar Janjua <weqaar.janjua@gmail.com>
+X-Google-Original-From: Weqaar Janjua <weqaar.a.janjua@intel.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+        ast@kernel.org, magnus.karlsson@gmail.com, bjorn.topel@intel.com
+Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com
+Subject: [PATCH bpf-next 0/5] selftests/xsk: xsk selftests
+Date:   Fri, 30 Oct 2020 12:13:42 +0000
+Message-Id: <20201030121347.26984-1-weqaar.a.janjua@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ensure that RPS default mask changes take place on
-all newly created netns/devices and don't affect
-existing ones.
+This patch set adds AF_XDP selftests based on veth to selftests/xsk/.
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
- tools/testing/selftests/net/Makefile          |  1 +
- tools/testing/selftests/net/config            |  3 +
- .../testing/selftests/net/rps_default_mask.sh | 57 +++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100755 tools/testing/selftests/net/rps_default_mask.sh
+# Topology:
+# ---------
+#                 -----------
+#               _ | Process | _
+#              /  -----------  \
+#             /        |        \
+#            /         |         \
+#      -----------     |     -----------
+#      | Thread1 |     |     | Thread2 |
+#      -----------     |     -----------
+#           |          |          |
+#      -----------     |     -----------
+#      |  xskX   |     |     |  xskY   |
+#      -----------     |     -----------
+#           |          |          |
+#      -----------     |     ----------
+#      |  vethX  | --------- |  vethY |
+#      -----------   peer    ----------
+#           |          |          |
+#      namespaceX      |     namespaceY
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index ef352477cac6..2531ec3e5027 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -21,6 +21,7 @@ TEST_PROGS += rxtimestamp.sh
- TEST_PROGS += devlink_port_split.py
- TEST_PROGS += drop_monitor_tests.sh
- TEST_PROGS += vrf_route_leaking.sh
-+TEST_PROGS += rps_default_mask.sh
- TEST_PROGS_EXTENDED := in_netns.sh
- TEST_GEN_FILES =  socket nettest
- TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 4d5df8e1eee7..5d467364f082 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -34,3 +34,6 @@ CONFIG_TRACEPOINTS=y
- CONFIG_NET_DROP_MONITOR=m
- CONFIG_NETDEVSIM=m
- CONFIG_NET_FOU=m
-+CONFIG_RPS=y
-+CONFIG_SYSFS=y
-+CONFIG_PROC_SYSCTL=y
-diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
-new file mode 100755
-index 000000000000..c81c0ac7ddfe
---- /dev/null
-+++ b/tools/testing/selftests/net/rps_default_mask.sh
-@@ -0,0 +1,57 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+readonly ksft_skip=4
-+readonly cpus=$(nproc)
-+ret=0
-+
-+[ $cpus -gt 2 ] || exit $ksft_skip
-+
-+readonly INITIAL_RPS_DEFAULT_MASK=$(cat /proc/sys/net/core/rps_default_mask)
-+readonly NETNS="ns-$(mktemp -u XXXXXX)"
-+
-+setup() {
-+	ip netns add "${NETNS}"
-+	ip -netns "${NETNS}" link set lo up
-+}
-+
-+cleanup() {
-+	echo $INITIAL_RPS_DEFAULT_MASK > /proc/sys/net/core/rps_default_mask
-+	ip netns del $NETNS
-+}
-+
-+chk_rps() {
-+	local rps_mask expected_rps_mask=$3
-+	local dev_name=$2
-+	local msg=$1
-+
-+	rps_mask=$(ip netns exec $NETNS cat /sys/class/net/$dev_name/queues/rx-0/rps_cpus)
-+	printf "%-60s" "$msg"
-+	if [ $rps_mask -eq $expected_rps_mask ]; then
-+		echo "[ ok ]"
-+	else
-+		echo "[fail] expected $expected_rps_mask found $rps_mask"
-+		ret=1
-+	fi
-+}
-+
-+trap cleanup EXIT
-+
-+echo 0 > /proc/sys/net/core/rps_default_mask
-+setup
-+chk_rps "empty rps_default_mask" lo 0
-+cleanup
-+
-+echo 1 > /proc/sys/net/core/rps_default_mask
-+setup
-+chk_rps "non zero rps_default_mask" lo 1
-+
-+echo 3 > /proc/sys/net/core/rps_default_mask
-+chk_rps "changing rps_default_mask dont affect existing netns" lo 1
-+
-+ip -n $NETNS link add type veth
-+ip -n $NETNS link set dev veth0 up
-+ip -n $NETNS link set dev veth1 up
-+chk_rps "changing rps_default_mask affect newly created devices" veth0 3
-+chk_rps "changing rps_default_mask affect newly created devices[II]" veth1 3
-+exit $ret
+These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
+Ethernet interfaces.
+
+The test program contains two threads, each thread is single socket with
+a unique UMEM. It validates in-order packet delivery and packet content
+by sending packets to each other.
+
+Prerequisites setup by script TEST_PREREQUISITES.sh:
+
+   Set up veth interfaces as per the topology shown ^^:
+   * setup two veth interfaces and one namespace
+   ** veth<xxxx> in root namespace
+   ** veth<yyyy> in af_xdp<xxxx> namespace
+   ** namespace af_xdp<xxxx>
+   * create a spec file veth.spec that includes this run-time configuration
+     that is read by test scripts - filenames prefixed with TEST_XSK
+   *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
+       conflict with any existing interface.
+
+The following tests are provided:
+
+1. AF_XDP SKB mode
+   Generic mode XDP is driver independent, used when the driver does
+   not have support for XDP. Works on any netdevice using sockets and
+   generic XDP path. XDP hook from netif_receive_skb().
+   a. nopoll - soft-irq processing
+   b. poll - using poll() syscall
+   c. Socket Teardown
+      Create a Tx and a Rx socket, Tx from one socket, Rx on another.
+      Destroy both sockets, then repeat multiple times. Only nopoll mode
+	  is used
+   d. Bi-directional Sockets
+      Configure sockets as bi-directional tx/rx sockets, sets up fill
+	  and completion rings on each socket, tx/rx in both directions.
+	  Only nopoll mode is used
+
+2. AF_XDP DRV/Native mode
+   Works on any netdevice with XDP_REDIRECT support, driver dependent.
+   Processes packets before SKB allocation. Provides better performance
+   than SKB. Driver hook available just after DMA of buffer descriptor.
+   a. nopoll
+   b. poll
+   c. Socket Teardown
+   d. Bi-directional Sockets
+   * Only copy mode is supported because veth does not currently support
+     zero-copy mode
+
+Total tests: 8.
+
+Flow:
+* Single process spawns two threads: Tx and Rx
+* Each of these two threads attach to a veth interface within their
+  assigned namespaces
+* Each thread creates one AF_XDP socket connected to a unique umem
+  for each veth interface
+* Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
+* Rx thread verifies if all 10k packets were received and delivered
+  in-order, and have the right content
+
+Structure of the patch set:
+
+Patch 1: This patch adds XSK Selftests framework under
+         tools/testing/selftests/xsk, and README
+Patch 2: Adds tests: SKB poll and nopoll mode, mac-ip-udp debug,
+         and README updates
+Patch 3: Adds tests: DRV poll and nopoll mode, and README updates
+Patch 4: Adds tests: SKB and DRV Socket Teardown, and README updates
+Patch 5: Adds tests: SKB and DRV Bi-directional Sockets, and README
+         updates
+
+Thanks: Weqaar
+
+Weqaar Janjua (5):
+  selftests/xsk: xsk selftests framework
+  selftests/xsk: xsk selftests - SKB POLL, NOPOLL
+  selftests/xsk: xsk selftests - DRV POLL, NOPOLL
+  selftests/xsk: xsk selftests - Socket Teardown - SKB, DRV
+  selftests/xsk: xsk selftests - Bi-directional Sockets - SKB, DRV
+
+ MAINTAINERS                                   |    1 +
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/xsk/Makefile          |   34 +
+ tools/testing/selftests/xsk/README            |  125 +++
+ .../selftests/xsk/TEST_PREREQUISITES.sh       |   53 +
+ tools/testing/selftests/xsk/TEST_XSK.sh       |   15 +
+ .../xsk/TEST_XSK_DRV_BIDIRECTIONAL.sh         |   22 +
+ .../selftests/xsk/TEST_XSK_DRV_NOPOLL.sh      |   18 +
+ .../selftests/xsk/TEST_XSK_DRV_POLL.sh        |   18 +
+ .../selftests/xsk/TEST_XSK_DRV_TEARDOWN.sh    |   18 +
+ .../xsk/TEST_XSK_SKB_BIDIRECTIONAL.sh         |   19 +
+ .../selftests/xsk/TEST_XSK_SKB_NOPOLL.sh      |   18 +
+ .../selftests/xsk/TEST_XSK_SKB_POLL.sh        |   18 +
+ .../selftests/xsk/TEST_XSK_SKB_TEARDOWN.sh    |   18 +
+ tools/testing/selftests/xsk/config            |   12 +
+ tools/testing/selftests/xsk/prereqs.sh        |  119 ++
+ tools/testing/selftests/xsk/xdpprogs/Makefile |   64 ++
+ .../selftests/xsk/xdpprogs/Makefile.target    |   68 ++
+ .../selftests/xsk/xdpprogs/xdpxceiver.c       | 1000 +++++++++++++++++
+ .../selftests/xsk/xdpprogs/xdpxceiver.h       |  159 +++
+ tools/testing/selftests/xsk/xskenv.sh         |   33 +
+ 21 files changed, 1833 insertions(+)
+ create mode 100644 tools/testing/selftests/xsk/Makefile
+ create mode 100644 tools/testing/selftests/xsk/README
+ create mode 100755 tools/testing/selftests/xsk/TEST_PREREQUISITES.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_DRV_BIDIRECTIONAL.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_DRV_NOPOLL.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_DRV_POLL.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_DRV_TEARDOWN.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_SKB_BIDIRECTIONAL.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_SKB_NOPOLL.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_SKB_POLL.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_SKB_TEARDOWN.sh
+ create mode 100644 tools/testing/selftests/xsk/config
+ create mode 100755 tools/testing/selftests/xsk/prereqs.sh
+ create mode 100644 tools/testing/selftests/xsk/xdpprogs/Makefile
+ create mode 100644 tools/testing/selftests/xsk/xdpprogs/Makefile.target
+ create mode 100644 tools/testing/selftests/xsk/xdpprogs/xdpxceiver.c
+ create mode 100644 tools/testing/selftests/xsk/xdpprogs/xdpxceiver.h
+ create mode 100755 tools/testing/selftests/xsk/xskenv.sh
+
 -- 
-2.26.2
+2.20.1
 
