@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 800D929FD03
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 06:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF33629FD6E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Oct 2020 06:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725773AbgJ3FY6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Oct 2020 01:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S1725779AbgJ3FvD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Oct 2020 01:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgJ3FY6 (ORCPT
+        with ESMTP id S1725771AbgJ3FvD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 01:24:58 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56478C0613CF
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 22:24:58 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id z2so5443170ilh.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 22:24:58 -0700 (PDT)
+        Fri, 30 Oct 2020 01:51:03 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EB5C0613D2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 22:41:10 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id k1so5477078ilc.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Oct 2020 22:41:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lmMwQ8b55cUdayZvKYDJthFQ/LoSw2w1EcxeNL4OYcs=;
-        b=iwQyLSzpHg/fSGBBOvHQ7AebPJ9cDXSz+3APoggXro3e6RqW4lYDdtPUX1+GdogWT4
-         CEykeB0V7LaWqNniBdK88FmznGPeU+StD/zmUZvvMsElTYWk2ojvE8tpWtbnuWp3KwFh
-         WnSHs7JhQtUd8M0QaBdcVH46YAClF5UicuuhHZyOpXQeE57YAReA7AkurXCcYzNSvde0
-         tP5trblzCjLMuzwtBD0h8ZKF3fiy8HLtwvaEygGWbDGgfg9+nHaOTCWcUjjy914wSojY
-         5RYFPPLGDm+naHOBBUJ11PFN8w1SjoF/fH339AulsgVX2ige4kyzAVJr0hWVtCQ6aeBa
-         n+9Q==
+        bh=NHipm2XujaINtvFS+rrII56nB/BYuCRUdfDAjG82cBQ=;
+        b=Vp61Rc9wuxy8fhr3qgcAwZUOiVQotxZLWmpHP0u/iY9r2p+upp0njZN5FDS977qjW9
+         wEERFCcZNXzPoynCOD6jqo/btcMRtx1l5bTDFr55CzPLi5ip3+5vzK4hNhz830RQMecU
+         CMc2UmCKjsEDW6xNh3dr1/QeD4MA4vwMlJq6hBmtTydr4bajny2GEl4CPYrc+0qIUKkI
+         HJa5dMkYe645EiCdxrU7UVvDWs5mQH2Geg6o4rQywKFCpDffNue7GbqSMiw/E1FwH7iI
+         WjR7DabQ1w2DI8SbOx8pugi64VLkdkosN3a43EPXHabw4lJg+RbMFiEZSX9h7NUT2gJ1
+         R/EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lmMwQ8b55cUdayZvKYDJthFQ/LoSw2w1EcxeNL4OYcs=;
-        b=AJn3UjI6Lf3a3QIwkRdODxlAYj5EeHI3V9ZrLn55r0+/pdMFT10N1lYQGCKgHbVLGU
-         w9M7ZZ+WzH5PoJKkt8tTJFWNavYxnse2iYoYlxwQhbpGuBtbcdNo8rQsq8qBgUmcM6LW
-         g48KjqPxGEhjOGwaUk1zASB94VlNi9XHMpnMcx4oNsnR9UYM7H35xzDT279zvX1ZGTWj
-         jqw1sVJl/OBQrn14CNm6hNGCi3aWz2iuKq6Yu5TSVXQs+VKXkLPfc2q2eqO5r7wAMAeI
-         9eMnAAQQOhJRnmErbBIu6KHY0zpFAS1svCHrk9Ull3tNlC+MMgSM6XnkGrMgTywGlQBG
-         G6Eg==
-X-Gm-Message-State: AOAM533nxnCk+IoEkWA7kJWCmZv5JwxAExTK2Fen69xN8MPRRVztovNQ
-        c1gG1c06V7wM1YPnTD77Maj3tpPdhjXVjutRsgzgmw==
-X-Google-Smtp-Source: ABdhPJzaanR4CgFbc03oJFpky18iVumfvVzkCYtCPFtLD3bf0c6h3u0Ous9bPnH+4HImwAZMVkk1jULVCOGyQIJw7AA=
-X-Received: by 2002:a05:6e02:1310:: with SMTP id g16mr684884ilr.110.1604035497455;
- Thu, 29 Oct 2020 22:24:57 -0700 (PDT)
+        bh=NHipm2XujaINtvFS+rrII56nB/BYuCRUdfDAjG82cBQ=;
+        b=qEX/yrFjzoDTjg5PBjOuB3tqkTt/0jWRensaEWwXtf7S+hKn4/iDiQYxJ9MTUnM2Qa
+         pVlT/wJCJlnVv8n2tPUvSruf0B12eDRQ2yP1H/GtfCJ+R0Kud8kfEvcpVnQ2kIBb+ljn
+         p+iYnmnQFtptb8vztpKjo0QP/aV3oWgRag8HDg2RXAvZ1cuCs70lbJGH0uddjRFH/hI6
+         9Tlhe2ER9OMeqJm7sUqeHNjitKESqi56tjqwT600gOoWwNZDnAd7/FWfVYkmCsVp78hJ
+         uKjxOQDB5NJrrZJdbvxQCXJMHElYY/0YBnYRRl6J4wtmSWoGhY7gOjBFFhWdu3+wtmlV
+         621w==
+X-Gm-Message-State: AOAM532xGo9Bn0jgeH/Wj1P5SHReSwDViZFOQujepwvt8jOPKOF8YgwC
+        EnK06q8iSW4Rh76Wlq/CHGNSP64l6yLgWgi/E8wAyA==
+X-Google-Smtp-Source: ABdhPJyA5SIb0JNBWxVgZWVTFJ3rMbrPUGW1KSxc3lgsNoII7j0FjkRZgxw5Szdhk0JmHQek6YfrOb6C36D+i5HA7AM=
+X-Received: by 2002:a92:8bc6:: with SMTP id i189mr589001ild.253.1604036469916;
+ Thu, 29 Oct 2020 22:41:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201021220752.418832-1-dlatypov@google.com> <CABVgOSkXfWihPN5-1dPn2BstpJ7eiG1Qj=cg5EL2oEhv=YHj4g@mail.gmail.com>
-In-Reply-To: <CABVgOSkXfWihPN5-1dPn2BstpJ7eiG1Qj=cg5EL2oEhv=YHj4g@mail.gmail.com>
+References: <20201020233219.4146059-1-dlatypov@google.com> <CABVgOSnPpC=j7MrcmDpvvG6i_voiFQe4137ieyYX+-9B4=G39w@mail.gmail.com>
+In-Reply-To: <CABVgOSnPpC=j7MrcmDpvvG6i_voiFQe4137ieyYX+-9B4=G39w@mail.gmail.com>
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 29 Oct 2020 22:24:46 -0700
-Message-ID: <CAGS_qxrUkCaG6D+Kj-x2NjSdc-_KMg29-ncD3kqyBqgN8LR6Jg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: fix pre-existing python type annotation errors
+Date:   Thu, 29 Oct 2020 22:40:58 -0700
+Message-ID: <CAGS_qxpp5ZwA_fWuSG0_P2azS2PpojQDQjzQrwWqYoNNZYs7tg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix extra trailing \n in parsed test output
 To:     David Gow <davidgow@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -62,56 +62,104 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 7:56 PM David Gow <davidgow@google.com> wrote:
+On Thu, Oct 29, 2020 at 7:34 PM David Gow <davidgow@google.com> wrote:
 >
-> On Thu, Oct 22, 2020 at 6:08 AM Daniel Latypov <dlatypov@google.com> wrote:
+> On Wed, Oct 21, 2020 at 7:32 AM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > The code uses annotations, but they aren't accurate.
-> > Note that type checking in python is a separate process, running
-> > `kunit.py run` will not check and complain about invalid types at
-> > runtime.
+> > For simplcity, strip all trailing whitespace from parsed output.
+> > I imagine no one is printing out meaningful trailing whitespace via
+> > KUNIT_FAIL() or similar, and that if they are, they really shouldn't.
 > >
-> > Fix pre-existing issues found by running a type checker
-> > $ mypy *.py
+> > At some point, the lines from `isolate_kunit_output()` started having
+> > trailing \n, which results in artifacty output like this:
 > >
-> > All but one of these were returning `None` without denoting this
-> > properly (via `Optional[Type]`).
+> > $ ./tools/testing/kunit/kunit.py run
+> > [16:16:46] [FAILED] example_simple_test
+> > [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+> >
+> > [16:16:46]     Expected 1 + 1 == 3, but
+> >
+> > [16:16:46]         1 + 1 == 2
+> >
+> > [16:16:46]         3 == 3
+> >
+> > [16:16:46]     not ok 1 - example_simple_test
+> >
+> > [16:16:46]
+> >
+> > After this change:
+> > [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+> > [16:16:46]     Expected 1 + 1 == 3, but
+> > [16:16:46]         1 + 1 == 2
+> > [16:16:46]         3 == 3
+> > [16:16:46]     not ok 1 - example_simple_test
+> > [16:16:46]
 > >
 > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > > ---
 >
-> I'm not going to pretend to really understand python annotations
-> completely, but this all seems correct from what I know of the code,
-> and I was able to install mypy and verify the issues were fixed.
+> Thanks! This is a long-overdue fix, and it worked well for me.
 >
-> Clearly, if we're going to have type annotations here, we should be
-> verifying the code against them. Is there a way we could get python
-> itself to verify this code when the script runs, rather than have to
-> use mypy as a tool to verify it separately? Otherwise, maybe we can
+> Tested-by: David Gow <davidgow@google.com>
+>
+> One comment below:
+>
+> >  tools/testing/kunit/kunit_parser.py | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> > index 8019e3dd4c32..e68b1c66a73f 100644
+> > --- a/tools/testing/kunit/kunit_parser.py
+> > +++ b/tools/testing/kunit/kunit_parser.py
+> > @@ -342,7 +342,8 @@ def parse_run_tests(kernel_output) -> TestResult:
+> >         total_tests = 0
+> >         failed_tests = 0
+> >         crashed_tests = 0
+> > -       test_result = parse_test_result(list(isolate_kunit_output(kernel_output)))
+> > +       test_result = parse_test_result(list(
+> > +            l.rstrip() for l in isolate_kunit_output(kernel_output)))
+>
+> Could we do this inside isolate_kunit_output() instead? That seems
+> like it'd be a more logical place for it (removing the newline is a
+> sort of isolating the output), and it'd avoid making this line quite
+> as horrifyingly nested.
 
-Type annotations are https://www.python.org/dev/peps/pep-0484/
-There isn't support for python itself to type check and it calls out
-(only) mypy by name as a type-checker.
+Good point.
+We could either do it on each yield (messy), or before, i.e.
 
-I don't have a good answer for how we prevent them from bitrotting :/
+diff --git a/tools/testing/kunit/kunit_parser.py
+b/tools/testing/kunit/kunit_parser.py
+index 8019e3dd4c32..14d35deb96cd 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -54,6 +54,7 @@ kunit_end_re = re.compile('(List of all partitions:|'
+ def isolate_kunit_output(kernel_output):
+        started = False
+        for line in kernel_output:
++               line = line.rstrip()  # line always has a trailing \n
+                if kunit_start_re.search(line):
+                        prefix_len = len(line.split('TAP version')[0])
+                        started = True
 
-> run it automatically from the kunit_tool_test.py unit tests or
-> something similar?
+I had some vague concerns about this as
+  kunit_start_re = re.compile(r'TAP version [0-9]+$')
+has that anchor at the end.
 
-I don't think it's possible to do so cleanly.
+This could ostensibly make it match more things than before.
+Since I'm using rstrip() out of laziness, that means strings like
+  '<prefix we allow for some reason>TAP version 42\t\n'
+will now also match.
 
-E.g. I don't know python that well, but here's my guess at what it'd
-have to look like:
-* We have to assume mypy is installed
-* dynamically loading the module inside a `try` (so we don't break
-users who don't have it)
-* figure out what func is the entry point to mypy and call it on
-"./kunit.py" somehow
+I don't really think that's an issue, but I'd sent this as a more
+conservative change initially.
+I can send the diff above as a replacement for this patch.
 
 >
-> Regardless, this is
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> Cheers,
-> -- David
+> >         if test_result.status == TestStatus.NO_TESTS:
+> >                 print(red('[ERROR] ') + yellow('no tests run!'))
+> >         elif test_result.status == TestStatus.FAILURE_TO_PARSE_TESTS:
+> >
+> > base-commit: c4d6fe7311762f2e03b3c27ad38df7c40c80cc93
+> > --
+> > 2.29.0.rc1.297.gfa9743e501-goog
+> >
