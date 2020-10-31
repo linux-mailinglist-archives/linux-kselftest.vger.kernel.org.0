@@ -2,182 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F03D92A14ED
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Oct 2020 10:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E3F2A19AE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Oct 2020 19:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgJaJpC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 31 Oct 2020 05:45:02 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:2485 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbgJaJpB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 31 Oct 2020 05:45:01 -0400
-Received: from DGGEMM403-HUB.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4CNZ636BKXzQm6n;
-        Sat, 31 Oct 2020 17:44:59 +0800 (CST)
-Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
- DGGEMM403-HUB.china.huawei.com (10.3.20.211) with Microsoft SMTP Server (TLS)
- id 14.3.487.0; Sat, 31 Oct 2020 17:44:58 +0800
-Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
- dggemi761-chm.china.huawei.com (10.1.198.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Sat, 31 Oct 2020 17:44:58 +0800
-Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
- dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.1913.007;
- Sat, 31 Oct 2020 17:44:58 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>
-CC:     "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH 1/2] dma-mapping: add benchmark support for streaming DMA
- APIs
-Thread-Topic: [PATCH 1/2] dma-mapping: add benchmark support for streaming DMA
- APIs
-Thread-Index: AQHWrBVIy05LyAA+tkyd0F6o0ziCMamud8IAgACcg7CAALWOgIABrebg
-Date:   Sat, 31 Oct 2020 09:44:58 +0000
-Message-ID: <ebf48b2c57384f37aaaeb02ea0d3beff@hisilicon.com>
-References: <20201027035330.29612-1-song.bao.hua@hisilicon.com>
- <20201027035330.29612-2-song.bao.hua@hisilicon.com>
- <f9aebee4-5081-da8c-930c-c36617ab57c4@arm.com>
- <8fe90795064d4373b4af32959c4e9781@hisilicon.com>
- <472cf21a-5196-dbb5-caef-c1c0d982fe1c@arm.com>
-In-Reply-To: <472cf21a-5196-dbb5-caef-c1c0d982fe1c@arm.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.203.244]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728273AbgJaSkm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 31 Oct 2020 14:40:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58100 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727967AbgJaSkl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 31 Oct 2020 14:40:41 -0400
+Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (c-67-180-217-166.hsd1.ca.comcast.net [67.180.217.166])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E28BC206F9;
+        Sat, 31 Oct 2020 18:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604169641;
+        bh=AmHcrajXFTD5b2kQwoE6SZSnH0oCkrtF/rz8UCp0+G4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dfUgqPBrPA01vhYzCU2DeaQjozz7ees2NDmNV9KCPrl6+C3zWwJt68yhSRzH2m8TC
+         HA9PlIJmxg091XVBhbygZ7aTcY480RBvlXB9MZrRAJwfbgeYMdjcnKO31/DZFkJpNa
+         9M/31wupZpCmy1acJEGr2NG0Bd0SdhS8x3bpa1F4=
+Date:   Sat, 31 Oct 2020 11:40:40 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Grygorii Strashko <grygorii.strashko@ti.com>
+Cc:     "David S. Miller" <davem@davemloft.net>, <netdev@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next] selftests/net: timestamping: add ptp v2
+ support
+Message-ID: <20201031114040.1facec0b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20201029190931.30883-1-grygorii.strashko@ti.com>
+References: <20201029190931.30883-1-grygorii.strashko@ti.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUm9iaW4gTXVycGh5IFtt
-YWlsdG86cm9iaW4ubXVycGh5QGFybS5jb21dDQo+IFNlbnQ6IFNhdHVyZGF5LCBPY3RvYmVyIDMx
-LCAyMDIwIDQ6NDggQU0NCj4gVG86IFNvbmcgQmFvIEh1YSAoQmFycnkgU29uZykgPHNvbmcuYmFv
-Lmh1YUBoaXNpbGljb24uY29tPjsNCj4gaW9tbXVAbGlzdHMubGludXgtZm91bmRhdGlvbi5vcmc7
-IGhjaEBsc3QuZGU7IG0uc3p5cHJvd3NraUBzYW1zdW5nLmNvbQ0KPiBDYzogam9yb0A4Ynl0ZXMu
-b3JnOyB3aWxsQGtlcm5lbC5vcmc7IHNodWFoQGtlcm5lbC5vcmc7IExpbnV4YXJtDQo+IDxsaW51
-eGFybUBodWF3ZWkuY29tPjsgbGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9yZw0KPiBTdWJq
-ZWN0OiBSZTogW1BBVENIIDEvMl0gZG1hLW1hcHBpbmc6IGFkZCBiZW5jaG1hcmsgc3VwcG9ydCBm
-b3Igc3RyZWFtaW5nDQo+IERNQSBBUElzDQo+IA0KPiBPbiAyMDIwLTEwLTI5IDIxOjM5LCBTb25n
-IEJhbyBIdWEgKEJhcnJ5IFNvbmcpIHdyb3RlOg0KPiBbLi4uXQ0KPiA+Pj4gK3N0cnVjdCBtYXBf
-YmVuY2htYXJrIHsNCj4gPj4+ICsJX191NjQgbWFwX25zZWM7DQo+ID4+PiArCV9fdTY0IHVubWFw
-X25zZWM7DQo+ID4+PiArCV9fdTMyIHRocmVhZHM7IC8qIGhvdyBtYW55IHRocmVhZHMgd2lsbCBk
-byBtYXAvdW5tYXAgaW4gcGFyYWxsZWwNCj4gKi8NCj4gPj4+ICsJX191MzIgc2Vjb25kczsgLyog
-aG93IGxvbmcgdGhlIHRlc3Qgd2lsbCBsYXN0ICovDQo+ID4+PiArCWludCBub2RlOyAvKiB3aGlj
-aCBudW1hIG5vZGUgdGhpcyBiZW5jaG1hcmsgd2lsbCBydW4gb24gKi8NCj4gPj4+ICsJX191NjQg
-ZXhwYW5zaW9uWzEwXTsJLyogRm9yIGZ1dHVyZSB1c2UgKi8NCj4gPj4+ICt9Ow0KPiA+Pg0KPiA+
-PiBJJ20gbm8gZXhwZXJ0IG9uIHVzZXJzcGFjZSBBQklzIChhbmQgd2hhdCBsaXR0bGUgZXhwZXJp
-ZW5jZSBJIGRvIGhhdmUNCj4gPj4gaXMgbW9zdGx5IG9mIFdpbjMyLi4uKSwgc28gaG9wZWZ1bGx5
-IHNvbWVvbmUgZWxzZSB3aWxsIGNvbW1lbnQgaWYNCj4gPj4gdGhlcmUncyBhbnl0aGluZyBvZiBj
-b25jZXJuIGhlcmUuIE9uZSB0aGluZyBJIHdvbmRlciBpcyB0aGF0IHRoZXJlJ3MNCj4gPj4gYSBm
-YWlyIGxpa2VsaWhvb2Qgb2YgZnVuY3Rpb25hbGl0eSBldm9sdmluZyBoZXJlIG92ZXIgdGltZSwg
-c28gbWlnaHQNCj4gPj4gaXQgYmUgYXBwcm9wcmlhdGUgdG8gaGF2ZSBzb21lIHNvcnQgb2YgZXhw
-bGljaXQgdmVyc2lvbmluZyBwYXJhbWV0ZXINCj4gPj4gZm9yIHJvYnVzdG5lc3M/DQo+ID4NCj4g
-PiBJIGNvcGllZCB0aGF0IGZyb20gZ3VwX2JlbmNobWFyay4gVGhlcmUgaXMgbm8gdGhpcyBraW5k
-IG9mIGNvZGUgdG8NCj4gPiBjb21wYXJlIHZlcnNpb24uDQo+ID4gSSBiZWxpZXZlIHRoZXJlIGlz
-IGEgbGlrZWxpaG9vZCB0aGF0IGtlcm5lbCBtb2R1bGUgaXMgY2hhbmdlZCBidXQNCj4gPiB1c2Vy
-cyBhcmUgc3RpbGwgdXNpbmcgb2xkIHVzZXJzcGFjZSB0b29sLCB0aGlzIG1pZ2h0IGxlYWQgdG8g
-dGhlDQo+ID4gaW5jb21wYXRpYmxlIGRhdGEgc3RydWN0dXJlLg0KPiA+IEJ1dCBub3Qgc3VyZSBp
-ZiBpdCBpcyBhIGJpZyBwcm9ibGVtIDotKQ0KPiANCj4gWWVhaCwgbGlrZSBJIHNheSBJIGRvbid0
-IHJlYWxseSBoYXZlIGEgZ29vZCBmZWVsaW5nIGZvciB3aGF0IHdvdWxkIGJlIGJlc3QgaGVyZSwN
-Cj4gSSdtIGp1c3QgdGhpbmtpbmcgb2Ygd2hhdCBJIGRvIGtub3cgYW5kIHdhcnkgb2YgdGhlIHBv
-dGVudGlhbCBmb3IgYSAiNjQwIGJpdHMNCj4gb3VnaHQgdG8gYmUgZW5vdWdoIGZvciBhbnlvbmUi
-IGlzc3VlIDspDQo+IA0KPiA+Pj4gK3N0cnVjdCBtYXBfYmVuY2htYXJrX2RhdGEgew0KPiA+Pj4g
-KwlzdHJ1Y3QgbWFwX2JlbmNobWFyayBicGFyYW07DQo+ID4+PiArCXN0cnVjdCBkZXZpY2UgKmRl
-djsNCj4gPj4+ICsJc3RydWN0IGRlbnRyeSAgKmRlYnVnZnM7DQo+ID4+PiArCWF0b21pYzY0X3Qg
-dG90YWxfbWFwX25zZWNzOw0KPiA+Pj4gKwlhdG9taWM2NF90IHRvdGFsX21hcF9sb29wczsNCj4g
-Pj4+ICsJYXRvbWljNjRfdCB0b3RhbF91bm1hcF9uc2VjczsNCj4gPj4+ICsJYXRvbWljNjRfdCB0
-b3RhbF91bm1hcF9sb29wczsNCj4gPj4+ICt9Ow0KPiA+Pj4gKw0KPiA+Pj4gK3N0YXRpYyBpbnQg
-bWFwX2JlbmNobWFya190aHJlYWQodm9pZCAqZGF0YSkgew0KPiA+Pj4gKwlzdHJ1Y3QgcGFnZSAq
-cGFnZTsNCj4gPj4+ICsJZG1hX2FkZHJfdCBkbWFfYWRkcjsNCj4gPj4+ICsJc3RydWN0IG1hcF9i
-ZW5jaG1hcmtfZGF0YSAqbWFwID0gZGF0YTsNCj4gPj4+ICsJaW50IHJldCA9IDA7DQo+ID4+PiAr
-DQo+ID4+PiArCXBhZ2UgPSBhbGxvY19wYWdlKEdGUF9LRVJORUwpOw0KPiA+Pj4gKwlpZiAoIXBh
-Z2UpDQo+ID4+PiArCQlyZXR1cm4gLUVOT01FTTsNCj4gPj4+ICsNCj4gPj4+ICsJd2hpbGUgKCFr
-dGhyZWFkX3Nob3VsZF9zdG9wKCkpICB7DQo+ID4+PiArCQlrdGltZV90IG1hcF9zdGltZSwgbWFw
-X2V0aW1lLCB1bm1hcF9zdGltZSwgdW5tYXBfZXRpbWU7DQo+ID4+PiArDQo+ID4+PiArCQltYXBf
-c3RpbWUgPSBrdGltZV9nZXQoKTsNCj4gPj4+ICsJCWRtYV9hZGRyID0gZG1hX21hcF9wYWdlKG1h
-cC0+ZGV2LCBwYWdlLCAwLCBQQUdFX1NJWkUsDQo+ID4+IERNQV9CSURJUkVDVElPTkFMKTsNCj4g
-Pj4NCj4gPj4gTm90ZSB0aGF0IGZvciBhIG5vbi1jb2hlcmVudCBkZXZpY2UsIHRoaXMgd2lsbCBn
-aXZlIGFuIHVuZGVyZXN0aW1hdGUNCj4gPj4gb2YgdGhlIHJlYWwtd29ybGQgb3ZlcmhlYWQgb2Yg
-QklESVJFQ1RJT05BTCBvciBUT19ERVZJQ0UgbWFwcGluZ3MsDQo+ID4+IHNpbmNlIHRoZSBwYWdl
-IHdpbGwgbmV2ZXIgYmUgZGlydHkgaW4gdGhlIGNhY2hlIChleGNlcHQgcG9zc2libHkgdGhlDQo+
-ID4+IHZlcnkgZmlyc3QgdGltZSB0aHJvdWdoKS4NCj4gPg0KPiA+IEFncmVlZC4gSSdkIGxpa2Ug
-dG8gYWRkIGEgRElSRUNUSU9OIHBhcmFtZXRlciBsaWtlICItZCAwIiwgIi1kIDEiDQo+ID4gYWZ0
-ZXIgd2UgaGF2ZSB0aGlzIGJhc2ljIGZyYW1ld29yay4NCj4gDQo+IFRoYXQgd2Fzbid0IHNvIG11
-Y2ggYWJvdXQgdGhlIGRpcmVjdGlvbiBpdHNlbGYsIGp1c3QgdGhhdCBpZiBpdCdzIGFueXRoaW5n
-IG90aGVyDQo+IHRoYW4gRlJPTV9ERVZJQ0UsIHdlIHNob3VsZCBwcm9iYWJseSBkbyBzb21ldGhp
-bmcgdG8gZGlydHkgdGhlIGJ1ZmZlciBieSBhDQo+IHJlYXNvbmFibGUgYW1vdW50IGJlZm9yZSBl
-YWNoIG1hcC4gT3RoZXJ3aXNlIHRoZSBtZWFzdXJlZCBwZXJmb3JtYW5jZSBpcw0KPiBnb2luZyB0
-byBiZSB1bnJlYWxpc3RpYyBvbiBtYW55IHN5c3RlbXMuDQoNCk1heWJlIHB1dCBhIG1lbXNldChi
-dWYsIDAsIFBBR0VfU0laRSkgYmVmb3JlIGRtYV9tYXAgd2lsbCBoZWxwID8NCg0KPiANCj4gWy4u
-Ll0NCj4gPj4+ICsJCWF0b21pYzY0X2FkZCgobG9uZyBsb25nKWt0aW1lX3RvX25zKGt0aW1lX3N1
-Yih1bm1hcF9ldGltZSwNCj4gPj4gdW5tYXBfc3RpbWUpKSwNCj4gPj4+ICsJCQkJJm1hcC0+dG90
-YWxfdW5tYXBfbnNlY3MpOw0KPiA+Pj4gKwkJYXRvbWljNjRfaW5jKCZtYXAtPnRvdGFsX21hcF9s
-b29wcyk7DQo+ID4+PiArCQlhdG9taWM2NF9pbmMoJm1hcC0+dG90YWxfdW5tYXBfbG9vcHMpOw0K
-PiA+Pg0KPiA+PiBJIHRoaW5rIGl0IHdvdWxkIGJlIHdvcnRoIGtlZXBpbmcgdHJhY2sgb2YgdGhl
-IHZhcmlhbmNlcyBhcyB3ZWxsIC0gaXQNCj4gPj4gY2FuIGJlIGhhcmQgdG8gdGVsbCBpZiBhIHJl
-YXNvbmFibGUtbG9va2luZyBhdmVyYWdlIGlzIGhpZGluZw0KPiA+PiB0ZXJyaWJsZSB3b3JzdC1j
-YXNlIGJlaGF2aW91ci4NCj4gPg0KPiA+IFRoaXMgaXMgYSBzZW5zaWJsZSByZXF1aXJlbWVudC4g
-SSBiZWxpZXZlIGl0IGlzIGJldHRlciB0byBiZSBoYW5kbGVkDQo+ID4gYnkgdGhlIGV4aXN0aW5n
-IGtlcm5lbCB0cmFjaW5nIG1ldGhvZC4NCj4gPg0KPiA+IE1heWJlIHdlIG5lZWQgYSBoaXN0b2dy
-YW0gbGlrZToNCj4gPiBEZWxheSAgIHNhbXBsZSBjb3VudA0KPiA+IDEtMnVzICAgMTAwMCAgICAg
-ICAgICAgICAgKioqDQo+ID4gMi0zdXMgICAyMDAwICAgICAgICAgICAgICAqKioqKioqDQo+ID4g
-My00dXMgICAxMDAgICAgICAgICAgICAgICAqDQo+ID4gLi4uLi4NCj4gPiBUaGlzIHdpbGwgYmUg
-bW9yZSBwcmVjaXNlIHRoYW4gdGhlIG1heGltdW0gbGF0ZW5jeSBpbiB0aGUgd29yc3QgY2FzZS4N
-Cj4gPg0KPiA+IEknZCBiZWxpZXZlIHRoaXMgY2FuIGJlIGhhbmRsZWQgYnk6DQo+ID4gdHJhY2Vw
-b2ludCAgQQ0KPiA+IE1hcA0KPiA+IFRyYWNlcG9pbnQgIEINCj4gPg0KPiA+IFRyYWNlcG9pbnQg
-ICBDDQo+ID4gVW5tYXANCj4gPiBUcmFjZXBvaW50ICAgRA0KPiA+DQo+ID4gTGV0IHRoZSB1c2Vy
-c3BhY2UgZWJwZiB0byBkcmF3IHRoZSBoaXN0b2dyYW0gZm9yIHRoZSBkZWx0YSBvZiBCLUEgYW5k
-IEQtQy4NCj4gPg0KPiA+IFNvIEkgYW0gcGxhbm5pbmcgdG8gcHV0IHRoaXMgcmVxdWlyZW1lbnQg
-aW50byB0b2RvIGxpc3QgYW5kIHdyaXRlIGFuDQo+ID4gdXNlcnNwYWNlIGVicGYvYmNjIHNjcmlw
-dCBmb3IgaGlzdG9ncmFtIGFuZCBwdXQgaW4gdG9vbHMvIGRpcmVjdG9yeS4NCj4gPg0KPiA+IFBs
-ZWFzZSBnaXZlIHlvdXIgY29tbWVudHMgb24gdGhpcy4NCj4gDQo+IFJpZ2h0LCBJIHdhc24ndCBz
-dWdnZXN0aW5nIHRyeWluZyB0byBob21lYnJldyBhIGZ1bGwgZGF0YSBjb2xsZWN0aW9uIHN5c3Rl
-bSBoZXJlDQo+IC0gSSBhZ3JlZSB0aGVyZSBhcmUgYmV0dGVyIHRvb2xzIGZvciB0aGF0IGFscmVh
-ZHkgLSBqdXN0IHRoYXQgaXQncyBiYXNpY2FsbHkgZnJlZSB0bw0KPiB0cmFjayBhIHN1bSBvZiBz
-cXVhcmVzIGFsb25nc2lkZSBhIHN1bSwgc28gdGhhdCB3ZSBjYW4gdHJpdmlhbGx5IGNhbGN1bGF0
-ZSBhDQo+IHVzZWZ1bCB2YXJpYW5jZSAob3Igc3RhbmRhcmQNCj4gZGV2aWF0aW9uKSBmaWd1cmUg
-YWxvbmdzaWRlIHRoZSBtZWFuIGF0IHRoZSBlbmQuDQoNCkZvciB0aGlzIGNhc2UsIEkgYW0gbm90
-IHN1cmUgaWYgaXQgaXMgdHJ1ZS4gVW5sZXNzIHdlIGV4cG9zZSBtb3JlIGRhdGEgc3VjaCBhcw0K
-bWluLCBtYXggZXRjLiB0byB1c2Vyc3BhY2UsIGl0IG1ha2VzIG5vIGRpZmZlcmVuY2Ugd2hldGhl
-ciB0b3RhbF8odW4pbWFwX25zZWNzDQphbmQgdG90YWxfKHVuKW1hcF9sb29wcyBhcmUgZXhwb3Nl
-ZCBvciBub3QuDQoNCkFzIA0KdG90YWwgbG9vcHMgPSBzZWNvbmRzIC8gKGF2Z19tYXBfbGF0ZW5j
-eSArIGF2Z191bm1hcF9sYXRlbmN5KTsNCnRvdGFsX21hcF9uc2VjcyA9IHRvdGFsIGxvb3AgY291
-bnQgKiBhdmdfbWFwX2xhdGVuY3kNCnRvdGFsX3VubWFwX25zZWNzID0gdG90YWwgbG9vcCBjb3Vu
-dCAqIGF2Z191bm1hcF9sYXRlbmN5DQoNCmFsbCBvZiBzZWNvbmRzLCBhdmdfdW5tYXBfbGF0ZW5j
-eSwgYXZnX3VubWFwX2xhdGVuY3kgYXJlIGtub3duIGJ5DQp1c2Vyc3BhY2UgdG9vbC4NCg0KPiAN
-Cj4gWy4uLl0NCj4gPj4+ICsJZm9yIChpID0gMDsgaSA8IHRocmVhZHM7IGkrKykgew0KPiA+Pj4g
-KwkJdHNrW2ldID0ga3RocmVhZF9jcmVhdGVfb25fbm9kZShtYXBfYmVuY2htYXJrX3RocmVhZCwg
-bWFwLA0KPiA+Pj4gKwkJCQltYXAtPmJwYXJhbS5ub2RlLCAiZG1hLW1hcC1iZW5jaG1hcmsvJWQi
-LCBpKTsNCj4gPj4+ICsJCWlmIChJU19FUlIodHNrW2ldKSkgew0KPiA+Pj4gKwkJCWRldl9lcnIo
-bWFwLT5kZXYsICJjcmVhdGUgZG1hX21hcCB0aHJlYWQgZmFpbGVkXG4iKTsNCj4gPj4+ICsJCQly
-ZXR1cm4gUFRSX0VSUih0c2tbaV0pOw0KPiA+Pj4gKwkJfQ0KPiA+Pj4gKw0KPiA+Pj4gKwkJaWYg
-KG5vZGUgIT0gTlVNQV9OT19OT0RFICYmIG5vZGVfb25saW5lKG5vZGUpKQ0KPiA+Pj4gKwkJCWt0
-aHJlYWRfYmluZF9tYXNrKHRza1tpXSwgY3B1X21hc2spOw0KPiA+Pj4gKw0KPiA+Pj4gKwkJd2Fr
-ZV91cF9wcm9jZXNzKHRza1tpXSk7DQo+ID4+DQo+ID4+IE1pZ2h0IGl0IGJlIGJldHRlciB0byBj
-cmVhdGUgYWxsIHRoZSB0aHJlYWRzIGZpcnN0LCAqdGhlbiogc3RhcnQNCj4gPj4ga2lja2luZyB0
-aGVtPw0KPiA+DQo+ID4gVGhlIGRpZmZpY3VsdHkgaXMgdGhhdCB3ZSBkb24ndCBrbm93IGhvdyBt
-YW55IHRocmVhZHMgd2Ugc2hvdWxkIGNyZWF0ZQ0KPiA+IGFzIHRoZSB0aHJlYWQgbnVtYmVyIGlz
-IGEgcGFyYW1ldGVyIHRvIHRlc3QgdGhlIGNvbnRlbnRpb24gb2YgSU9NTVUgZHJpdmVyLg0KPiA+
-IEluIG15IHRlc3QgY2FzZSwgSSdkIGxpa2UgdG8gdGVzdCB0aGluZ3MgbGlrZSBPbmUgdGhyZWFk
-IFR3byB0aHJlYWRzDQo+ID4gLi4uLg0KPiA+IDggdGhyZWFkcw0KPiA+IDEyIHRocmVhZHMNCj4g
-PiAxNiB0aHJlYWRzLi4uDQo+ID4NCj4gPiBPbiB0aGUgb3RoZXIgaGFuZCwgSSB0aGluayBpdCBp
-cyBiZXR0ZXIgdG8gZHJvcCB0aGUgbWVtb3J5IG9mDQo+ID4gdGFza19zdHJ1Y3Qgb2YgdGhvc2Ug
-dGVzdCB0aHJlYWRzIHdoaWxlIHdlIGFyZSBub3QgdGVzdGluZyBkbWEgbWFwLg0KPiANCj4gSSBz
-aW1wbHkgbWVhbnQgc3BsaXR0aW5nIHRoZSBsb29wIGhlcmUgaW50byB0d28gLSBvbmUgdG8gY3Jl
-YXRlIHRoZSB0aHJlYWRzIGFuZA0KPiBzZXQgdGhlaXIgYWZmaW5pdHksIHRoZW4gYW5vdGhlciB0
-byB3YWtlIHRoZW0gYWxsIHVwIC0gc28gd2UgZG9uJ3Qgc3RhcnQNCj4gdW5uZWNlc3NhcmlseSB0
-aHJhc2hpbmcgdGhlIHN5c3RlbSB3aGlsZSB3ZSdyZSBzdGlsbCB0cnlpbmcgdG8gc2V0IHVwIHRo
-ZSByZXN0IG9mDQo+IHRoZSB0ZXN0IDspDQoNCkFncmVlZC4NCg0KPiANCj4gUm9iaW4uDQoNClRo
-YW5rcw0KQmFycnkNCg0K
+On Thu, 29 Oct 2020 21:09:31 +0200 Grygorii Strashko wrote:
+> The timestamping tool is supporting now only PTPv1 (IEEE-1588 2002) while
+> modern HW often supports also/only PTPv2.
+> 
+> Hence timestamping tool is still useful for sanity testing of PTP drivers
+> HW timestamping capabilities it's reasonable to upstate it to support
+> PTPv2. This patch adds corresponding support which can be enabled by using
+> new parameter "PTPV2".
+> 
+> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+
+CC: Richard
+
+> diff --git a/tools/testing/selftests/net/timestamping.c b/tools/testing/selftests/net/timestamping.c
+> index f4bb4fef0f39..21091be70688 100644
+> --- a/tools/testing/selftests/net/timestamping.c
+> +++ b/tools/testing/selftests/net/timestamping.c
+> @@ -59,7 +59,8 @@ static void usage(const char *error)
+>  	       "  SOF_TIMESTAMPING_SOFTWARE - request reporting of software time stamps\n"
+>  	       "  SOF_TIMESTAMPING_RAW_HARDWARE - request reporting of raw HW time stamps\n"
+>  	       "  SIOCGSTAMP - check last socket time stamp\n"
+> -	       "  SIOCGSTAMPNS - more accurate socket time stamp\n");
+> +	       "  SIOCGSTAMPNS - more accurate socket time stamp\n"
+> +	       "  PTPV2 - use PTPv2 messages\n");
+>  	exit(1);
+>  }
+>  
+> @@ -115,13 +116,28 @@ static const unsigned char sync[] = {
+>  	0x00, 0x00, 0x00, 0x00
+>  };
+>  
+> -static void sendpacket(int sock, struct sockaddr *addr, socklen_t addr_len)
+> +static const unsigned char sync_v2[] = {
+> +	0x00, 0x02, 0x00, 0x2C,
+> +	0x00, 0x00, 0x02, 0x00,
+> +	0x00, 0x00, 0x00, 0x00,
+> +	0x00, 0x00, 0x00, 0x00,
+> +	0x00, 0x00, 0x00, 0x00,
+> +	0x00, 0x00, 0x00, 0xFF,
+> +	0xFE, 0x00, 0x00, 0x00,
+> +	0x00, 0x01, 0x00, 0x01,
+> +	0x00, 0x00, 0x00, 0x00,
+> +	0x00, 0x00, 0x00, 0x00,
+> +	0x00, 0x00, 0x00, 0x00,
+> +};
+> +
+> +static void sendpacket(int sock, struct sockaddr *addr, socklen_t addr_len, int ptpv2)
+>  {
+> +	size_t sync_len = ptpv2 ? sizeof(sync_v2) : sizeof(sync);
+> +	const void *sync_p = ptpv2 ? sync_v2 : sync;
+>  	struct timeval now;
+>  	int res;
+>  
+> -	res = sendto(sock, sync, sizeof(sync), 0,
+> -		addr, addr_len);
+> +	res = sendto(sock, sync_p, sync_len, 0, addr, addr_len);
+>  	gettimeofday(&now, 0);
+>  	if (res < 0)
+>  		printf("%s: %s\n", "send", strerror(errno));
+> @@ -134,9 +150,11 @@ static void sendpacket(int sock, struct sockaddr *addr, socklen_t addr_len)
+>  static void printpacket(struct msghdr *msg, int res,
+>  			char *data,
+>  			int sock, int recvmsg_flags,
+> -			int siocgstamp, int siocgstampns)
+> +			int siocgstamp, int siocgstampns, int ptpv2)
+>  {
+>  	struct sockaddr_in *from_addr = (struct sockaddr_in *)msg->msg_name;
+> +	size_t sync_len = ptpv2 ? sizeof(sync_v2) : sizeof(sync);
+> +	const void *sync_p = ptpv2 ? sync_v2 : sync;
+>  	struct cmsghdr *cmsg;
+>  	struct timeval tv;
+>  	struct timespec ts;
+> @@ -210,10 +228,9 @@ static void printpacket(struct msghdr *msg, int res,
+>  					"probably SO_EE_ORIGIN_TIMESTAMPING"
+>  #endif
+>  					);
+> -				if (res < sizeof(sync))
+> +				if (res < sync_len)
+>  					printf(" => truncated data?!");
+> -				else if (!memcmp(sync, data + res - sizeof(sync),
+> -							sizeof(sync)))
+> +				else if (!memcmp(sync_p, data + res - sync_len, sync_len))
+>  					printf(" => GOT OUR DATA BACK (HURRAY!)");
+>  				break;
+>  			}
+> @@ -257,7 +274,7 @@ static void printpacket(struct msghdr *msg, int res,
+>  }
+>  
+>  static void recvpacket(int sock, int recvmsg_flags,
+> -		       int siocgstamp, int siocgstampns)
+> +		       int siocgstamp, int siocgstampns, int ptpv2)
+>  {
+>  	char data[256];
+>  	struct msghdr msg;
+> @@ -288,7 +305,7 @@ static void recvpacket(int sock, int recvmsg_flags,
+>  	} else {
+>  		printpacket(&msg, res, data,
+>  			    sock, recvmsg_flags,
+> -			    siocgstamp, siocgstampns);
+> +			    siocgstamp, siocgstampns, ptpv2);
+>  	}
+>  }
+>  
+> @@ -300,6 +317,7 @@ int main(int argc, char **argv)
+>  	int siocgstamp = 0;
+>  	int siocgstampns = 0;
+>  	int ip_multicast_loop = 0;
+> +	int ptpv2 = 0;
+>  	char *interface;
+>  	int i;
+>  	int enabled = 1;
+> @@ -335,6 +353,8 @@ int main(int argc, char **argv)
+>  			siocgstampns = 1;
+>  		else if (!strcasecmp(argv[i], "IP_MULTICAST_LOOP"))
+>  			ip_multicast_loop = 1;
+> +		else if (!strcasecmp(argv[i], "PTPV2"))
+> +			ptpv2 = 1;
+>  		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_TX_HARDWARE"))
+>  			so_timestamping_flags |= SOF_TIMESTAMPING_TX_HARDWARE;
+>  		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_TX_SOFTWARE"))
+> @@ -369,6 +389,7 @@ int main(int argc, char **argv)
+>  		HWTSTAMP_TX_ON : HWTSTAMP_TX_OFF;
+>  	hwconfig.rx_filter =
+>  		(so_timestamping_flags & SOF_TIMESTAMPING_RX_HARDWARE) ?
+> +		ptpv2 ? HWTSTAMP_FILTER_PTP_V2_L4_SYNC :
+>  		HWTSTAMP_FILTER_PTP_V1_L4_SYNC : HWTSTAMP_FILTER_NONE;
+>  	hwconfig_requested = hwconfig;
+>  	if (ioctl(sock, SIOCSHWTSTAMP, &hwtstamp) < 0) {
+> @@ -496,16 +517,16 @@ int main(int argc, char **argv)
+>  					printf("has error\n");
+>  				recvpacket(sock, 0,
+>  					   siocgstamp,
+> -					   siocgstampns);
+> +					   siocgstampns, ptpv2);
+>  				recvpacket(sock, MSG_ERRQUEUE,
+>  					   siocgstamp,
+> -					   siocgstampns);
+> +					   siocgstampns, ptpv2);
+>  			}
+>  		} else {
+>  			/* write one packet */
+>  			sendpacket(sock,
+>  				   (struct sockaddr *)&addr,
+> -				   sizeof(addr));
+> +				   sizeof(addr), ptpv2);
+>  			next.tv_sec += 5;
+>  			continue;
+>  		}
+
