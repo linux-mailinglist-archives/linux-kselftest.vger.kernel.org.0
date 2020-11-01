@@ -2,216 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4064E2A1D35
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Nov 2020 11:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8755D2A1D85
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Nov 2020 12:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726145AbgKAKTX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 1 Nov 2020 05:19:23 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:7391 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726123AbgKAKTX (ORCPT
+        id S1726343AbgKALJx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 1 Nov 2020 06:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbgKALJx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 1 Nov 2020 05:19:23 -0500
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CPBqB2jmvz714F;
-        Sun,  1 Nov 2020 18:19:18 +0800 (CST)
-Received: from SWX921481.china.huawei.com (10.126.200.128) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.487.0; Sun, 1 Nov 2020 18:19:09 +0800
-From:   Barry Song <song.bao.hua@hisilicon.com>
-To:     <iommu@lists.linux-foundation.org>, <hch@lst.de>,
-        <robin.murphy@arm.com>, <m.szyprowski@samsung.com>
-CC:     <linuxarm@huawei.com>, <linux-kselftest@vger.kernel.org>,
-        <xuwei5@huawei.com>, Barry Song <song.bao.hua@hisilicon.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v2 2/2] selftests/dma: add test application for DMA_MAP_BENCHMARK
-Date:   Sun, 1 Nov 2020 23:15:14 +1300
-Message-ID: <20201101101514.18840-3-song.bao.hua@hisilicon.com>
-X-Mailer: git-send-email 2.21.0.windows.1
-In-Reply-To: <20201101101514.18840-1-song.bao.hua@hisilicon.com>
-References: <20201101101514.18840-1-song.bao.hua@hisilicon.com>
+        Sun, 1 Nov 2020 06:09:53 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D07C0617A6;
+        Sun,  1 Nov 2020 03:09:53 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4CPCxT5LHFzQjy2;
+        Sun,  1 Nov 2020 12:09:49 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id 0NqHY5bM4ywr; Sun,  1 Nov 2020 12:09:42 +0100 (CET)
+Date:   Sun, 1 Nov 2020 12:09:35 +0100
+From:   Hagen Paul Pfeifer <hagen@jauu.net>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20201101110935.GA4105325@laniakea>
+References: <20200924132904.1391-1-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.126.200.128]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200924132904.1391-1-rppt@kernel.org>
+X-Key-Id: 98350C22
+X-Key-Fingerprint: 490F 557B 6C48 6D7E 5706 2EA2 4A22 8D45 9835 0C22
+X-GPG-Key: gpg --recv-keys --keyserver wwwkeys.eu.pgp.net 98350C22
+X-MBO-SPAM-Probability: *
+X-Rspamd-Score: 0.32 / 15.00 / 15.00
+X-Rspamd-Queue-Id: EBDB416FE
+X-Rspamd-UID: bd1d51
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch provides the test application for DMA_MAP_BENCHMARK.
+* Mike Rapoport | 2020-09-24 16:28:58 [+0300]:
 
-Before running the test application, we need to bind a device to dma_map_
-benchmark driver. For example, unbind "xxx" from its original driver and
-bind to dma_map_benchmark:
+>This is an implementation of "secret" mappings backed by a file descriptor. 
+>I've dropped the boot time reservation patch for now as it is not strictly
+>required for the basic usage and can be easily added later either with or
+>without CMA.
 
-echo dma_map_benchmark > /sys/bus/platform/devices/xxx/driver_override
-echo xxx > /sys/bus/platform/drivers/xxx/unbind
-echo xxx > /sys/bus/platform/drivers/dma_map_benchmark/bind
+Isn't memfd_secret currently *unnecessarily* designed to be a "one task
+feature"? memfd_secret fulfills exactly two (generic) features:
 
-Another example for PCI devices:
-echo dma_map_benchmark > /sys/bus/pci/devices/0000:00:01.0/driver_override
-echo 0000:00:01.0 > /sys/bus/pci/drivers/xxx/unbind
-echo 0000:00:01.0 > /sys/bus/pci/drivers/dma_map_benchmark/bind
+- address space isolation from kernel (aka SECRET_EXCLUSIVE, not in kernel's
+  direct map) - hide from kernel, great
+- disabling processor's memory caches against speculative-execution vulnerabilities
+  (spectre and friends, aka SECRET_UNCACHED), also great
 
-The below command will run 16 threads on numa node 0 for 10 seconds on
-the device bound to dma_map_benchmark platform_driver or pci_driver:
-./dma_map_benchmark -t 16 -s 10 -n 0
-dma mapping benchmark: threads:16 seconds:10
-average map latency(us):1.1 standard deviation:1.9
-average unmap latency(us):0.5 standard deviation:0.8
+But, what about the following use-case: implementing a hardened IPC mechanism
+where even the kernel is not aware of any data and optionally via SECRET_UNCACHED
+even the hardware caches are bypassed! With the patches we are so close to
+achieving this.
 
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
----
- -v2:
- * check parameters like threads, seconds strictly
- * print standard deviation for latencies
+How? Shared, SECRET_EXCLUSIVE and SECRET_UNCACHED mmaped pages for IPC
+involved tasks required to know this mapping (and memfd_secret fd). After IPC
+is done, tasks can copy sensitive data from IPC pages into memfd_secret()
+pages, un-sensitive data can be used/copied everywhere.
 
- MAINTAINERS                                   |  6 ++
- tools/testing/selftests/dma/Makefile          |  6 ++
- tools/testing/selftests/dma/config            |  1 +
- .../testing/selftests/dma/dma_map_benchmark.c | 87 +++++++++++++++++++
- 4 files changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/dma/Makefile
- create mode 100644 tools/testing/selftests/dma/config
- create mode 100644 tools/testing/selftests/dma/dma_map_benchmark.c
+One missing piece is still the secure zeroization of the page(s) if the
+mapping is closed by last process to guarantee a secure cleanup. This can
+probably done as an general mmap feature, not coupled to memfd_secret() and
+can be done independently ("reverse" MAP_UNINITIALIZED feature).
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 608fc8484c02..a1e38d5e14f6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5247,6 +5247,12 @@ F:	include/linux/dma-mapping.h
- F:	include/linux/dma-map-ops.h
- F:	kernel/dma/
- 
-+DMA MAPPING BENCHMARK
-+M:	Barry Song <song.bao.hua@hisilicon.com>
-+L:	iommu@lists.linux-foundation.org
-+F:	kernel/dma/map_benchmark.c
-+F:	tools/testing/selftests/dma/
-+
- DMA-BUF HEAPS FRAMEWORK
- M:	Sumit Semwal <sumit.semwal@linaro.org>
- R:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
-diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
-new file mode 100644
-index 000000000000..aa8e8b5b3864
---- /dev/null
-+++ b/tools/testing/selftests/dma/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -I../../../../usr/include/
-+
-+TEST_GEN_PROGS := dma_map_benchmark
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/dma/config b/tools/testing/selftests/dma/config
-new file mode 100644
-index 000000000000..6102ee3c43cd
---- /dev/null
-+++ b/tools/testing/selftests/dma/config
-@@ -0,0 +1 @@
-+CONFIG_DMA_MAP_BENCHMARK=y
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-new file mode 100644
-index 000000000000..4778df0c458f
---- /dev/null
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020 Hisilicon Limited.
-+ */
-+
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <linux/types.h>
-+
-+#define DMA_MAP_BENCHMARK	_IOWR('d', 1, struct map_benchmark)
-+#define DMA_MAP_MAX_THREADS	1024
-+#define DMA_MAP_MAX_SECONDS     300
-+
-+struct map_benchmark {
-+	__u64 avg_map_100ns; /* average map latency in 100ns */
-+	__u64 map_stddev; /* standard deviation of map latency */
-+	__u64 avg_unmap_100ns; /* as above */
-+	__u64 unmap_stddev;
-+	__u32 threads; /* how many threads will do map/unmap in parallel */
-+	__u32 seconds; /* how long the test will last */
-+	int node; /* which numa node this benchmark will run on */
-+	__u64 expansion[10];	/* For future use */
-+};
-+
-+int main(int argc, char **argv)
-+{
-+	struct map_benchmark map;
-+	int fd, opt;
-+	/* default single thread, run 20 seconds on NUMA_NO_NODE */
-+	int threads = 1, seconds = 20, node = -1;
-+	int cmd = DMA_MAP_BENCHMARK;
-+	char *p;
-+
-+	while ((opt = getopt(argc, argv, "t:s:n:")) != -1) {
-+		switch (opt) {
-+		case 't':
-+			threads = atoi(optarg);
-+			break;
-+		case 's':
-+			seconds = atoi(optarg);
-+			break;
-+		case 'n':
-+			node = atoi(optarg);
-+			break;
-+		default:
-+			return -1;
-+		}
-+	}
-+
-+	if (threads <= 0 || threads > DMA_MAP_MAX_THREADS) {
-+		fprintf(stderr, "invalid number of threads, must be in 1-%d\n",
-+			DMA_MAP_MAX_THREADS);
-+		exit(1);
-+	}
-+
-+	if (seconds <= 0 || seconds > DMA_MAP_MAX_SECONDS) {
-+		fprintf(stderr, "invalid number of seconds, must be in 1-%d\n",
-+			DMA_MAP_MAX_SECONDS);
-+		exit(1);
-+	}
-+
-+	fd = open("/sys/kernel/debug/dma_map_benchmark", O_RDWR);
-+	if (fd == -1) {
-+		perror("open");
-+		exit(1);
-+	}
-+
-+	map.seconds = seconds;
-+	map.threads = threads;
-+	map.node = node;
-+	if (ioctl(fd, cmd, &map)) {
-+		perror("ioctl");
-+		exit(1);
-+	}
-+
-+	printf("dma mapping benchmark: threads:%d seconds:%d\n", threads, seconds);
-+	printf("average map latency(us):%.1f standard deviation:%.1f\n",
-+			map.avg_map_100ns/10.0, map.map_stddev/10.0);
-+	printf("average unmap latency(us):%.1f standard deviation:%.1f\n",
-+			map.avg_unmap_100ns/10.0, map.unmap_stddev/10.0);
-+
-+	return 0;
-+}
--- 
-2.25.1
+PS: thank you Mike for your effort!
 
+See the following pseudo-code as an example:
+
+
+// simple assume file-descriptor and mapping is inherited
+// by child for simplicity, ptr is 
+int fd = memfd_secret(SECRETMEM_UNCACHED);
+ftruncate(fd, PAGE_SIZE);
+uint32_t *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+pid_t pid_other;
+
+void signal_handler(int sig)
+{
+	// update IPC data on shared, uncachaed, exclusive mapped page
+	*ptr += 1;
+	// inform other
+	sleep(1);
+	kill(pid_other, SIGUSR1);
+}
+
+void ipc_loop(void)
+{
+	signal(SIGUSR1, signal_handler);
+	while (1) {
+		sleep(1);
+	}
+}
+
+int main(void)
+{
+	pid_t child_pid;
+
+	switch (child_pid = fork()) {
+	case 0:
+		pid_other = getppid();
+		break;
+	default:
+		pid_other = child_pid
+		break;
+	}
+	
+	ipc_loop();
+}
+
+
+Hagen
