@@ -2,85 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B022A1BA7
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Nov 2020 03:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1882A1D32
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Nov 2020 11:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbgKACBr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 31 Oct 2020 22:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726335AbgKACBr (ORCPT
+        id S1726159AbgKAKTQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 1 Nov 2020 05:19:16 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7003 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgKAKTP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 31 Oct 2020 22:01:47 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11360C0617A6;
-        Sat, 31 Oct 2020 19:01:47 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id k9so6281042pgt.9;
-        Sat, 31 Oct 2020 19:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=a7o4jROBnfdJXuhZxO8G3X3b5+22IcMn0QJHe1EfYyA=;
-        b=A5lHhiwgQzpwq6/6EyDExcgcJAQRhIVrVdbWWkDt6SX3Y9654TOaQgGOSTBBQNSt9U
-         l2KRVoAQ+m2sPVrXpUYbwbu/WafTQFc2q+wlITg43z03SMgcdDPPF2zqqbbQn+dL4fks
-         gBiK9yfRLeOLzVHtjY2hcMKGw0RpE1Lv0TygMfPbTidoj0merEugXz/iBt0E2wI+jfD2
-         Um32ccDp3Y9MBeCRkb5ULXnDyd2JnFtJeJMOzYt57cPW/RmPW+V/jhL8dx1IcpeduA2z
-         D/oBPAEutRxWQ9Tw/2WoejxJ9i9o+uWz/6eM93XbUB1g7UTkC3gx9Iq8ao48qHlr01i/
-         QmzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=a7o4jROBnfdJXuhZxO8G3X3b5+22IcMn0QJHe1EfYyA=;
-        b=Hg/GuZQimchMzS8DJj0mfez8XfwdFTcqphkbscaDJNI1diykNxCga9VpYRB6gMdh/8
-         gsPP42/1zguwFrx5UNaZyBrId8VaIDQWyZnamii40x7P8mBMazfzic0BaxPZQB6Ow4ce
-         UUxUYhk19R1il9p59wCRjsju3GvnT5lksgkf5GdWWHwG/FRo1yvVKGa4VOhi9BfrL0kN
-         YeRrjrrcL6mqXJyHT3xtvBIs+uJh6b1a/UPjrJSeD3xK49YzHIR+Xp4q6xxbpschP4Zk
-         l1yGwZ4tFwBW33dEiGDtKNNqT5Qlz0BlgyOYDc8FdgP0eWWshPnThJ9iPHKIChGgSb6P
-         sNPw==
-X-Gm-Message-State: AOAM532pRruRIeu39ZSDwxSD29jsn9jGogGtT1/R6voRWj1c1A+vzuyW
-        r1ZjfKl3gq84CwqQjxHeBuA=
-X-Google-Smtp-Source: ABdhPJxmzixU22h1FH7oamz0b1uIIivni8AvRmO2GKxJrsV+G+zZ0Tpr5CMrYex3o8aFi66aZzQQPQ==
-X-Received: by 2002:a63:1649:: with SMTP id 9mr7774516pgw.91.1604196104635;
-        Sat, 31 Oct 2020 19:01:44 -0700 (PDT)
-Received: from hoboy.vegasvil.org (c-73-241-114-122.hsd1.ca.comcast.net. [73.241.114.122])
-        by smtp.gmail.com with ESMTPSA id j6sm9130978pgt.77.2020.10.31.19.01.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Oct 2020 19:01:43 -0700 (PDT)
-Date:   Sat, 31 Oct 2020 19:01:41 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests/net: timestamping: add ptp v2 support
-Message-ID: <20201101020141.GA2683@hoboy.vegasvil.org>
-References: <20201029190931.30883-1-grygorii.strashko@ti.com>
- <20201031114040.1facec0b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        Sun, 1 Nov 2020 05:19:15 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CPBq62hMKzhf4Z;
+        Sun,  1 Nov 2020 18:19:14 +0800 (CST)
+Received: from SWX921481.china.huawei.com (10.126.200.128) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.487.0; Sun, 1 Nov 2020 18:19:03 +0800
+From:   Barry Song <song.bao.hua@hisilicon.com>
+To:     <iommu@lists.linux-foundation.org>, <hch@lst.de>,
+        <robin.murphy@arm.com>, <m.szyprowski@samsung.com>
+CC:     <linuxarm@huawei.com>, <linux-kselftest@vger.kernel.org>,
+        <xuwei5@huawei.com>, Barry Song <song.bao.hua@hisilicon.com>
+Subject: [PATCH v2 0/2] dma-mapping: provide a benchmark for streaming DMA mapping
+Date:   Sun, 1 Nov 2020 23:15:12 +1300
+Message-ID: <20201101101514.18840-1-song.bao.hua@hisilicon.com>
+X-Mailer: git-send-email 2.21.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201031114040.1facec0b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.126.200.128]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Oct 31, 2020 at 11:40:40AM -0700, Jakub Kicinski wrote:
-> On Thu, 29 Oct 2020 21:09:31 +0200 Grygorii Strashko wrote:
-> > The timestamping tool is supporting now only PTPv1 (IEEE-1588 2002) while
-> > modern HW often supports also/only PTPv2.
-> > 
-> > Hence timestamping tool is still useful for sanity testing of PTP drivers
-> > HW timestamping capabilities it's reasonable to upstate it to support
-> > PTPv2. This patch adds corresponding support which can be enabled by using
-> > new parameter "PTPV2".
-> > 
-> > Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-> 
-> CC: Richard
+Nowadays, there are increasing requirements to benchmark the performance
+of dma_map and dma_unmap particually while the device is attached to an
+IOMMU.
 
-Acked-by: Richard Cochran <richardcochran@gmail.com>
+This patchset provides the benchmark infrastruture for streaming DMA
+mapping. The architecture of the code is pretty much similar with GUP
+benchmark:
+* mm/gup_benchmark.c provides kernel interface;
+* tools/testing/selftests/vm/gup_benchmark.c provides user program to
+call the interface provided by mm/gup_benchmark.c.
+
+In our case, kernel/dma/map_benchmark.c is like mm/gup_benchmark.c;
+tools/testing/selftests/dma/dma_map_benchmark.c is like tools/testing/
+selftests/vm/gup_benchmark.c
+
+A major difference with GUP benchmark is DMA_MAP benchmark needs to run
+on a device. Considering one board with below devices and IOMMUs
+device A  ------- IOMMU 1
+device B  ------- IOMMU 2
+device C  ------- non-IOMMU
+
+Different devices might attach to different IOMMU or non-IOMMU. To make
+benchmark run, we can either
+* create a virtual device and hack the kernel code to attach the virtual
+device to IOMMU1, IOMMU2 or non-IOMMU.
+* use the existing driver_override mechinism, unbind device A,B, OR c from
+their original driver and bind A to dma_map_benchmark platform driver or
+pci driver for benchmarking.
+
+In this patchset, I prefer to use the driver_override and avoid the ugly
+hack in kernel. We can dynamically switch device behind different IOMMUs
+to get the performance of IOMMU or non-IOMMU.
+
+-v2:
+  * add PCI support; v1 supported platform devices only
+  * replace ssleep by msleep_interruptible() to permit users to exit
+    benchmark before it is completed
+  * many changes according to Robin's suggestions, thanks! Robin
+    - add standard deviation output to reflect the worst case
+    - check users' parameters strictly like the number of threads
+    - make cache dirty before dma_map
+    - fix unpaired dma_map_page and dma_unmap_single;
+    - remove redundant "long long" before ktime_to_ns();
+    - use devm_add_action();
+    - wakeup all threads together after they are ready
+
+Barry Song (2):
+  dma-mapping: add benchmark support for streaming DMA APIs
+  selftests/dma: add test application for DMA_MAP_BENCHMARK
+
+ MAINTAINERS                                   |   6 +
+ kernel/dma/Kconfig                            |   8 +
+ kernel/dma/Makefile                           |   1 +
+ kernel/dma/map_benchmark.c                    | 295 ++++++++++++++++++
+ tools/testing/selftests/dma/Makefile          |   6 +
+ tools/testing/selftests/dma/config            |   1 +
+ .../testing/selftests/dma/dma_map_benchmark.c |  87 ++++++
+ 7 files changed, 404 insertions(+)
+ create mode 100644 kernel/dma/map_benchmark.c
+ create mode 100644 tools/testing/selftests/dma/Makefile
+ create mode 100644 tools/testing/selftests/dma/config
+ create mode 100644 tools/testing/selftests/dma/dma_map_benchmark.c
+
+-- 
+2.25.1
+
