@@ -2,88 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 016002A3726
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 00:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD77D2A3737
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 00:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbgKBX1x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Nov 2020 18:27:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33798 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725841AbgKBX1x (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 18:27:53 -0500
-Received: from lt-jalone-7480.mtl.com (c-24-6-56-119.hsd1.ca.comcast.net [24.6.56.119])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C1A322268;
-        Mon,  2 Nov 2020 23:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604359673;
-        bh=UuAkJfEzaECXbsjNNFRbJE8yk5SU++cPwgM2Re7WKuU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Zi9hhVtgXC2SYgH3NSRVhpt8luwsK69GiYg87Yp9c50ApYFjrBOAfr3aONNyJymwS
-         BBmRZm9GSjNQp32Ct2c0hKBm0EFsUJbw/OkmlKfjEWchLBkasdjwAKtl1kPA1UK4bi
-         PdUfBaYXGGaF5iR+LzspG2kDhs/RjglNlyB70t3k=
-Message-ID: <33cde8903dbe09a8abda1cd2ae7a9d3fdc2bc5e8.camel@kernel.org>
-Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Date:   Mon, 02 Nov 2020 15:27:51 -0800
-In-Reply-To: <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <cover.1604055792.git.pabeni@redhat.com>
-         <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S1726553AbgKBXgU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Nov 2020 18:36:20 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:33808 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbgKBXgU (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Nov 2020 18:36:20 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604360177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kn1MrKipST+qlcwJ1zIgvlMXZ9bQBl36MnESiK2hrlI=;
+        b=WO4xZRYluSA07JQGA2x48KKqtKPj2AWnFhCX4J0d8fVYBAG/4KfuMoZaJM3qbomnboDi2z
+        CNoPbn8hgmPj4tBAxx2T73ZlDljs9QXge+xSx3bZ+PcwOR5lyCNU9REeAlg9L0b+LqMlOJ
+        M+nbdv2UCJEEKxD3Vo67CqeXb6qvIcZzQJrF9+2il5iGZKzN+3o8X2F0Gk/EoJjsAsRUR+
+        Lt0wWGitJ3ETEGTmjWfa5e52sdgqUPh7KLMFsyHVdGhHUOuP7R2zhChRleod61fGgukIXx
+        i4TTKKT/QElFLXZav/sLONz5cABtcUlL8x6e++SDwGhZ6EqbgQJC25ccEH8AkQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604360177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kn1MrKipST+qlcwJ1zIgvlMXZ9bQBl36MnESiK2hrlI=;
+        b=bDzdY9iY6ze7qjRQmBLq0m9WmLMx8uKsr4lxx48nJ3PFoOuoYOrQ6mJCbDTbxc7miMSovu
+        UMAas1KFWr29U4Dw==
+To:     ira.weiny@intel.com, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V2 00/10] PKS: Add Protection Keys Supervisor (PKS) support
+In-Reply-To: <20201102205320.1458656-1-ira.weiny@intel.com>
+References: <20201102205320.1458656-1-ira.weiny@intel.com>
+Date:   Tue, 03 Nov 2020 00:36:16 +0100
+Message-ID: <871rhb8h73.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2020-11-02 at 14:54 -0800, Jakub Kicinski wrote:
-> On Fri, 30 Oct 2020 12:16:00 +0100 Paolo Abeni wrote:
-> > Real-time setups try hard to ensure proper isolation between time
-> > critical applications and e.g. network processing performed by the
-> > network stack in softirq and RPS is used to move the softirq 
-> > activity away from the isolated core.
-> > 
-> > If the network configuration is dynamic, with netns and devices
-> > routinely created at run-time, enforcing the correct RPS setting
-> > on each newly created device allowing to transient bad
-> > configuration
-> > became complex.
-> > 
-> > These series try to address the above, introducing a new
-> > sysctl knob: rps_default_mask. The new sysctl entry allows
-> > configuring a systemwide RPS mask, to be enforced since receive 
-> > queue creation time without any fourther per device configuration
-> > required.
-> > 
+On Mon, Nov 02 2020 at 12:53, ira weiny wrote:
+> Fenghua Yu (2):
+>   x86/pks: Enable Protection Keys Supervisor (PKS)
+>   x86/pks: Add PKS kernel API
+>
+> Ira Weiny (7):
+>   x86/pkeys: Create pkeys_common.h
+>   x86/fpu: Refactor arch_set_user_pkey_access() for PKS support
+>   x86/pks: Preserve the PKRS MSR on context switch
+>   x86/entry: Pass irqentry_state_t by reference
+>   x86/entry: Preserve PKRS MSR across exceptions
+>   x86/fault: Report the PKRS state on fault
+>   x86/pks: Add PKS test code
+>
+> Thomas Gleixner (1):
+>   x86/entry: Move nmi entry/exit into common code
 
-The whole thing can be replaced with a user daemon scripts that
-monitors all newly created devices and assign to them whatever rps mask
-(call it default).
+So the actual patch ordering is:
 
-So why do we need this special logic in kernel ? 
+   x86/pkeys: Create pkeys_common.h
+   x86/fpu: Refactor arch_set_user_pkey_access() for PKS support
+   x86/pks: Enable Protection Keys Supervisor (PKS)
+   x86/pks: Preserve the PKRS MSR on context switch
+   x86/pks: Add PKS kernel API
 
-I am not sure about this, but if rps queues sysfs are available before
-the netdev is up, then you can also use udevd to assign the rps masks
-before such devices are even brought up, so you would avoid the race
-conditions that you described, which are not really clear to me to be
-honest.
+   x86/entry: Move nmi entry/exit into common code
+   x86/entry: Pass irqentry_state_t by reference
 
-> > Additionally, a simple self-test is introduced to check the 
-> > rps_default_mask behavior.
-> 
-> RPS is disabled by default, the processing is going to happen
-> wherever
-> the IRQ is mapped, and one would hope that the IRQ is not mapped to
-> the
-> core where the critical processing runs.
-> 
-> Would you mind elaborating further on the use case?
+   x86/entry: Preserve PKRS MSR across exceptions
+   x86/fault: Report the PKRS state on fault
+   x86/pks: Add PKS test code
 
+This is the wrong ordering, really.
+
+     x86/entry: Move nmi entry/exit into common code
+
+is a general cleanup and has absolutely nothing to do with PKRS.So this
+wants to go first.
+
+Also:
+
+    x86/entry: Move nmi entry/exit into common code
+
+is a prerequisite for the rest. So why is it in the middle of the
+series?
+
+And then you enable all that muck _before_ it is usable:
+
+   Patch 3/N: x86/pks: Enable Protection Keys Supervisor (PKS)
+
+Bisectability is overrrated, right?
+
+Once again: Read an understand Documentation/process/*
+
+Aside of that using a spell checker is not optional.
+
+Thanks,
+
+        tglx
