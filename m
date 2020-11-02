@@ -2,89 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A4D2A36DA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Nov 2020 23:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FEB2A36EF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 00:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725864AbgKBW7k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Nov 2020 17:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgKBW7k (ORCPT
+        id S1725952AbgKBXI1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Nov 2020 18:08:27 -0500
+Received: from www62.your-server.de ([213.133.104.62]:57012 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbgKBXI1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 17:59:40 -0500
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483C8C061A47
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2020 14:59:40 -0800 (PST)
-Received: by mail-il1-x144.google.com with SMTP id v18so14508699ilg.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2020 14:59:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WLiJRSZDtXGLiZVllQRQGLaR655Hs+rHimHW4Xh2uCI=;
-        b=Xy3858vI46rSFVYKB418SAOtR8xhErvTZXC0kS+Ij+3CB4nlLReyT5p3EwP4xoog4L
-         U806CmRrgiBeMvnFR4bOG0UPR0HyT64powJ0A0+HYqyoTEAuNKkPtFKD+xrD169A8aRt
-         nAKCxmCfGuYjcYJ1rOVxcBsaxXPzKGcevIudZafx35sBjHUhzBjsHE2A/1nCjqOnNVjH
-         1SL+rWTrPweOT0JQ1kX/3wzU6QrNZ2+Jw2kO1SvCOdgPO/j91ror3BcgyeGl40KLm9mk
-         z8s1LkKFkuh37nPpbtLMWNh0S9upOlQ3xg8jUDN16g7AjO8BX1NFG3X5XzOli2F+fR++
-         hgdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WLiJRSZDtXGLiZVllQRQGLaR655Hs+rHimHW4Xh2uCI=;
-        b=FBR/2CaPrXhmq9P51AbentHQ9x4NHVn9BjID8isM5fC8p/wMTvc9SrugSq+LNpuix+
-         GsfsHXh8hv0oJ2mQlRlcmeceo0OoFEz2wxHuaRjpBAP4/pZ6VMoEvSyqkIoiADN2HPWY
-         fkxsnpdrwq6tm8VYNIcGR5YYN9zh3mfBYIjTyGkgrAQYgMMfqCsx3patu+Ex18KptJsD
-         QrbRptSF23mlIVeMiGZabeNlLXvD/g+NRJs8e0Ox6gKOA+yJxY8SvT+R1jnpPTBcrD8h
-         nQ/3rTaKgNfUeZRx0OKHZgpNagozCvBOUcmYKcfRzNP4cNsLY0JZimMkiFQZD1eaT95m
-         YD0A==
-X-Gm-Message-State: AOAM532ToAF9e3kwtchocE149CRHQZdNmEVyDJghAlETL+ZwY1SVobwu
-        M5YcYOIeDrqfRUXysnm/ov/mQYP5H5C4+i7FuljNsw==
-X-Google-Smtp-Source: ABdhPJyZNnTkCSdkuybuVtY86i/+/FnnBOksLKyQaq2Hm6+ySGMeObsSQN7r9P2EcPwqKSnG9hQemoVBYyH9q3cbPz8=
-X-Received: by 2002:a92:7914:: with SMTP id u20mr12435436ilc.203.1604357979556;
- Mon, 02 Nov 2020 14:59:39 -0800 (PST)
+        Mon, 2 Nov 2020 18:08:27 -0500
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kZiw4-0006ru-Gj; Tue, 03 Nov 2020 00:08:24 +0100
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kZiw4-000Dwv-8f; Tue, 03 Nov 2020 00:08:24 +0100
+Subject: Re: [PATCH bpf-next 0/5] selftests/xsk: xsk selftests
+To:     Weqaar Janjua <weqaar.janjua@gmail.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, ast@kernel.org, magnus.karlsson@gmail.com,
+        bjorn.topel@intel.com
+Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com,
+        andrii.nakryiko@gmail.com
+References: <20201030121347.26984-1-weqaar.a.janjua@intel.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <0fef6ce4-86cd-ae3a-0a29-953d87402afe@iogearbox.net>
+Date:   Tue, 3 Nov 2020 00:08:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20201027233733.1484855-1-bgardon@google.com> <20201027233733.1484855-4-bgardon@google.com>
- <20201102212715.GD20600@xz-x1>
-In-Reply-To: <20201102212715.GD20600@xz-x1>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 2 Nov 2020 14:59:28 -0800
-Message-ID: <CANgfPd8BDze5yeiyzdmdOV_p3as-KyqeoQuCT5UEAaUx6OMJ=A@mail.gmail.com>
-Subject: Re: [PATCH 3/5] KVM: selftests: Simplify demand_paging_test with timespec_diff_now
-To:     Peter Xu <peterx@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Peter Feiner <pfeiner@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201030121347.26984-1-weqaar.a.janjua@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25976/Mon Nov  2 14:23:56 2020)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 2, 2020 at 1:27 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Oct 27, 2020 at 04:37:31PM -0700, Ben Gardon wrote:
-> > Add a helper function to get the current time and return the time since
-> > a given start time. Use that function to simplify the timekeeping in the
-> > demand paging test.
->
-> Nit: timespec_diff_now() sounds less charming than timespec_elapsed() to
-> me... "diff_now" is longer, and it also does not show positive/negative of the
-> results (which in this case should always be end-start). "elapsed" should
-> always mean something positive.
+On 10/30/20 1:13 PM, Weqaar Janjua wrote:
+> This patch set adds AF_XDP selftests based on veth to selftests/xsk/.
+> 
+> # Topology:
+> # ---------
+> #                 -----------
+> #               _ | Process | _
+> #              /  -----------  \
+> #             /        |        \
+> #            /         |         \
+> #      -----------     |     -----------
+> #      | Thread1 |     |     | Thread2 |
+> #      -----------     |     -----------
+> #           |          |          |
+> #      -----------     |     -----------
+> #      |  xskX   |     |     |  xskY   |
+> #      -----------     |     -----------
+> #           |          |          |
+> #      -----------     |     ----------
+> #      |  vethX  | --------- |  vethY |
+> #      -----------   peer    ----------
+> #           |          |          |
+> #      namespaceX      |     namespaceY
+> 
+> These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
+> Ethernet interfaces.
+> 
+> The test program contains two threads, each thread is single socket with
+> a unique UMEM. It validates in-order packet delivery and packet content
+> by sending packets to each other.
+> 
+> Prerequisites setup by script TEST_PREREQUISITES.sh:
+> 
+>     Set up veth interfaces as per the topology shown ^^:
+>     * setup two veth interfaces and one namespace
+>     ** veth<xxxx> in root namespace
+>     ** veth<yyyy> in af_xdp<xxxx> namespace
+>     ** namespace af_xdp<xxxx>
+>     * create a spec file veth.spec that includes this run-time configuration
+>       that is read by test scripts - filenames prefixed with TEST_XSK
+>     *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
+>         conflict with any existing interface.
+> 
+> The following tests are provided:
+> 
+> 1. AF_XDP SKB mode
+>     Generic mode XDP is driver independent, used when the driver does
+>     not have support for XDP. Works on any netdevice using sockets and
+>     generic XDP path. XDP hook from netif_receive_skb().
+>     a. nopoll - soft-irq processing
+>     b. poll - using poll() syscall
+>     c. Socket Teardown
+>        Create a Tx and a Rx socket, Tx from one socket, Rx on another.
+>        Destroy both sockets, then repeat multiple times. Only nopoll mode
+> 	  is used
+>     d. Bi-directional Sockets
+>        Configure sockets as bi-directional tx/rx sockets, sets up fill
+> 	  and completion rings on each socket, tx/rx in both directions.
+> 	  Only nopoll mode is used
+> 
+> 2. AF_XDP DRV/Native mode
+>     Works on any netdevice with XDP_REDIRECT support, driver dependent.
+>     Processes packets before SKB allocation. Provides better performance
+>     than SKB. Driver hook available just after DMA of buffer descriptor.
+>     a. nopoll
+>     b. poll
+>     c. Socket Teardown
+>     d. Bi-directional Sockets
+>     * Only copy mode is supported because veth does not currently support
+>       zero-copy mode
+> 
+> Total tests: 8.
+> 
+> Flow:
+> * Single process spawns two threads: Tx and Rx
+> * Each of these two threads attach to a veth interface within their
+>    assigned namespaces
+> * Each thread creates one AF_XDP socket connected to a unique umem
+>    for each veth interface
+> * Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
+> * Rx thread verifies if all 10k packets were received and delivered
+>    in-order, and have the right content
+> 
+> Structure of the patch set:
+> 
+> Patch 1: This patch adds XSK Selftests framework under
+>           tools/testing/selftests/xsk, and README
+> Patch 2: Adds tests: SKB poll and nopoll mode, mac-ip-udp debug,
+>           and README updates
+> Patch 3: Adds tests: DRV poll and nopoll mode, and README updates
+> Patch 4: Adds tests: SKB and DRV Socket Teardown, and README updates
+> Patch 5: Adds tests: SKB and DRV Bi-directional Sockets, and README
+>           updates
+> 
+> Thanks: Weqaar
+> 
+> Weqaar Janjua (5):
+>    selftests/xsk: xsk selftests framework
+>    selftests/xsk: xsk selftests - SKB POLL, NOPOLL
+>    selftests/xsk: xsk selftests - DRV POLL, NOPOLL
+>    selftests/xsk: xsk selftests - Socket Teardown - SKB, DRV
+>    selftests/xsk: xsk selftests - Bi-directional Sockets - SKB, DRV
 
-That's a great suggestion and much clearer. I'll make that change in v2.
+Thanks a lot for adding the selftests, Weqaar! Given this needs to copy quite
+a bit of BPF selftest base infra e.g. from Makefiles I'd prefer if you could
+place these under selftests/bpf/ instead to avoid duplicating changes into two
+locations. I understand that these tests don't integrate well into test_progs,
+but for example see test_tc_redirect.sh or test_tc_edt.sh for stand-alone tests
+which could be done similarly with the xsk ones. Would be great if you could
+integrate them and spin a v2 with that.
 
->
-> With/Without the change above:
->
-> Reviewed-by: Peter Xu <peterx@redhat.com>
->
-> --
-> Peter Xu
->
+Thanks,
+Daniel
