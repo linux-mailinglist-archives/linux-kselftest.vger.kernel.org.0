@@ -2,162 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 701B42A2E77
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Nov 2020 16:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAEA2A2F34
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Nov 2020 17:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbgKBPkm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Nov 2020 10:40:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725791AbgKBPkm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 10:40:42 -0500
-Received: from kernel.org (unknown [87.71.17.26])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 202C12222B;
-        Mon,  2 Nov 2020 15:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604331641;
-        bh=JULj2YQjQ3lL8L8mphnth/XMQ+6I1NJ7oIH3/fDK0iU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n0o11Hfll3daQtruT1vsISN+BbHP9yaMYQE4FQMEMibOkJCKqnhjRxA+eho5Laarv
-         OhRwtWZyY8Wy3q5T3/CRffMJ7SInY7t/Bd/Gdm1eHv/y6zMnVypYr0S7YhVNWRGAWn
-         75tM+sdcYEOnYl8dKrbNCJbF2bUOfaK/T5JUAaOI=
-Date:   Mon, 2 Nov 2020 17:40:28 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Hagen Paul Pfeifer <hagen@jauu.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <20201102154028.GD4879@kernel.org>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20201101110935.GA4105325@laniakea>
+        id S1727118AbgKBQFd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Nov 2020 11:05:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727109AbgKBQFb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Nov 2020 11:05:31 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD1EC061A48
+        for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2020 08:05:31 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id a7so18082365lfk.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2020 08:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=9U519WWw6TDZQ33OGLBJjsTVpJX0KjTb47DTCYLn51c=;
+        b=XBV11D3hMt0/lfz9orFTgOOHlkoSQTctDbSg30moLGCdPgHOGNBT6FfCLaCAVj4WGa
+         GhjwiMUe5h5n0Vn+tEGbS1TbCOIYAom6xf5QDMiiPS7g5zXqzBnsmmJ3l2IN489ApUv5
+         k7cWGSbweRACd/yeHVpAPke8JH1ybfrvlMjFy6VaYUdHVc4lnjLUev7mJ01y71mXtQpQ
+         2t670Gw5HTK1J4kDdJrS4wSKcDirN+bzET+JNUBw3+eHGYYQjwP4InUCC7MtoJtv9lQf
+         FaBPFNc81s1hN8+Gb4+UHQxwj80ShQtGaNH70Wf/eus0CYugdc6oCSVQZ6R2quU62Ds9
+         8REg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=9U519WWw6TDZQ33OGLBJjsTVpJX0KjTb47DTCYLn51c=;
+        b=W+opMe47PK8irYJdV6Ku1hahWtTPznKjwMJgoblTTb1607obILnFARFSeVATNQhz2m
+         /jI+7bpLRtHS9jeH9/8DsXL0Vx2Mb2fSEx6jkm6vGEoT5s1O7WqoXnjmcvO7C7n0/N+k
+         RIszLFYUCth7Uo7jUm8DxIny36YcPOC9RppBvqouqcl2/zauj2IfjCMECatmMBCe3nIN
+         dxBOzmi1h3uZS6Y/CIUHlsnLyLr23NxsJ8pPTNP/1VI/PdcI7WnBZ4W6/596DMX71GT+
+         /aNZPYn6PpVV3jvBfaEyIg33HZ2kzfPWCJPQDLbS+4fov3aRNlKDGFVrXCs+p+MxMj7M
+         4lRQ==
+X-Gm-Message-State: AOAM532gLeuOrj8/Z/cRN+jDum6evFhdduPoK7nbOz9XwHIaux47+ERj
+        qowuNJqJryJS7m/K4QXTv7/1kf1OJQd6MA8jJVq9Ig==
+X-Google-Smtp-Source: ABdhPJxjYJNDcYkH0qMdTqpGns+/hG9ww0wj6ml3rzKOFmjcnOaTneJ5oikwOAMEMuPoUy/AsnwP0V3wKqrSsAp0hkQ=
+X-Received: by 2002:a19:4f0c:: with SMTP id d12mr2342827lfb.576.1604333129223;
+ Mon, 02 Nov 2020 08:05:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201101110935.GA4105325@laniakea>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 2 Nov 2020 17:05:02 +0100
+Message-ID: <CAG48ez2A6o423ySWfdX7s3fzrMSVn1YLYk2EnE1dV0fgZQS45g@mail.gmail.com>
+Subject: ASSERT_GE definition is backwards
+To:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Nov 01, 2020 at 12:09:35PM +0100, Hagen Paul Pfeifer wrote:
-> * Mike Rapoport | 2020-09-24 16:28:58 [+0300]:
-> 
-> >This is an implementation of "secret" mappings backed by a file descriptor. 
-> >I've dropped the boot time reservation patch for now as it is not strictly
-> >required for the basic usage and can be easily added later either with or
-> >without CMA.
-> 
-> Isn't memfd_secret currently *unnecessarily* designed to be a "one task
-> feature"? memfd_secret fulfills exactly two (generic) features:
-> 
-> - address space isolation from kernel (aka SECRET_EXCLUSIVE, not in kernel's
->   direct map) - hide from kernel, great
-> - disabling processor's memory caches against speculative-execution vulnerabilities
->   (spectre and friends, aka SECRET_UNCACHED), also great
-> 
-> But, what about the following use-case: implementing a hardened IPC mechanism
-> where even the kernel is not aware of any data and optionally via SECRET_UNCACHED
-> even the hardware caches are bypassed! With the patches we are so close to
-> achieving this.
-> 
-> How? Shared, SECRET_EXCLUSIVE and SECRET_UNCACHED mmaped pages for IPC
-> involved tasks required to know this mapping (and memfd_secret fd). After IPC
-> is done, tasks can copy sensitive data from IPC pages into memfd_secret()
-> pages, un-sensitive data can be used/copied everywhere.
+ASSERT_GE() is defined as:
 
-As long as the task share the file descriptor, they can share the
-secretmem pages, pretty much like normal memfd.
+/**
+ * ASSERT_GE(expected, seen)
+ *
+ * @expected: expected value
+ * @seen: measured value
+ *
+ * ASSERT_GE(expected, measured): expected >= measured
+ */
+#define ASSERT_GE(expected, seen) \
+__EXPECT(expected, #expected, seen, #seen, >=, 1)
 
-> One missing piece is still the secure zeroization of the page(s) if the
-> mapping is closed by last process to guarantee a secure cleanup. This can
-> probably done as an general mmap feature, not coupled to memfd_secret() and
-> can be done independently ("reverse" MAP_UNINITIALIZED feature).
+but that means that logically, if you want to write "assert that the
+measured PID X is >= the expected value 0", you actually have to use
+ASSERT_LE(0, X). That's really awkward. Normally you'd be talking
+about how the seen value compares to the expected one, not the other
+way around.
 
-There are "init_on_alloc" and "init_on_free" kernel parameters that
-enable zeroing of the pages on alloc and on free globally.
-Anyway, I'll add zeroing of the freed memory to secretmem.
+At the moment I see tests that are instead written like ASSERT_GE(X,
+0), but then that means that the expected and seen values are the
+wrong way around.
 
-> PS: thank you Mike for your effort!
-> 
-> See the following pseudo-code as an example:
-> 
-> 
-> // simple assume file-descriptor and mapping is inherited
-> // by child for simplicity, ptr is 
-> int fd = memfd_secret(SECRETMEM_UNCACHED);
-> ftruncate(fd, PAGE_SIZE);
-> uint32_t *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
- 
-The ptr here will be visible to both parent and child.
-
-> pid_t pid_other;
-> 
-> void signal_handler(int sig)
-> {
-> 	// update IPC data on shared, uncachaed, exclusive mapped page
-> 	*ptr += 1;
-> 	// inform other
-> 	sleep(1);
-> 	kill(pid_other, SIGUSR1);
-> }
-> 
-> void ipc_loop(void)
-> {
-> 	signal(SIGUSR1, signal_handler);
-> 	while (1) {
-> 		sleep(1);
-> 	}
-> }
-> 
-> int main(void)
-> {
-> 	pid_t child_pid;
-> 
-> 	switch (child_pid = fork()) {
-> 	case 0:
-> 		pid_other = getppid();
-> 		break;
-> 	default:
-> 		pid_other = child_pid
-> 		break;
-> 	}
-> 	
-> 	ipc_loop();
-> }
-> 
-> 
-> Hagen
-> 
-
--- 
-Sincerely yours,
-Mike.
+It might be good if someone could refactor the definitions of
+ASSERT_GE and such to swap around which number is the expected and
+which is the seen one.
