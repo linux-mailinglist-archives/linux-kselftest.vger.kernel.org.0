@@ -2,92 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D59F2A35FA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Nov 2020 22:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0B02A3610
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Nov 2020 22:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbgKBV1W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Nov 2020 16:27:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56103 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725852AbgKBV1V (ORCPT
+        id S1726513AbgKBVhL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Nov 2020 16:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726246AbgKBVhL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 16:27:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604352440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AcZsDHqiU0z9govFV78wlNAx19ATsA9/xILzMrob+9I=;
-        b=NL36DgANBl7bthatcKwu2QJSXovwZegzL0O90/1V0QU0KCJX3JGbwaGXoHnuSIkb3HC6FS
-        b+YA1RccLqrIHkhaokgva7tQzB7z1WBKOpZNFaVDy+n3lYfde7hDZmWKUHxJmkJaFjWZ+8
-        U+LjyFStQZHFi6ONhuhYTTbwWOZoAs4=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-279-7re557meNVOVc0px8l4WRA-1; Mon, 02 Nov 2020 16:27:18 -0500
-X-MC-Unique: 7re557meNVOVc0px8l4WRA-1
-Received: by mail-qt1-f200.google.com with SMTP id z22so8891076qtn.15
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2020 13:27:18 -0800 (PST)
+        Mon, 2 Nov 2020 16:37:11 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42124C061A04
+        for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2020 13:37:11 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id b189so15693760ybh.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2020 13:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=6QhI3kHimGu8AWgc0fDAH50nxnuO9Boew+8qHoNE/Eo=;
+        b=BApIjvn7QJ3hkYCJqm1ZEr4y5XnuniIqZJW0Q7lYJLi1jVypbSF5D90TrXEnym+bOJ
+         B1ztMqsbPnPQ4SMdybfWkdITi8ZQnCByAMmpISsEN5Md1tcnwIPHvCjlZf4nQOh8T6u0
+         4DkOL+GJcGN40B3SWlpoARtY0uHtr7jOW0uWxqlauUKzgwTxgifEGdFaTCPbvmXrtzm/
+         YlScuqb6LpbvGxxN+mDRKPb/rNhwU2HDDl2vA6udlo9NabPcbA6aXok5sWeQVWsUf2zi
+         uZrImi3XCItHlC/2uaWfp4x1ut/4y86g/1Gvqy8WsbtfV8a+m5Z1JOrEqHCJ45WBTVMt
+         RDUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AcZsDHqiU0z9govFV78wlNAx19ATsA9/xILzMrob+9I=;
-        b=MTV6oGxR2UhNP35swdPG8JcOx+2VLu1raBuHPCHJL4vhue4+qOhNANwt2rsQMG29US
-         B/DfBSxRLt9PP3cRqFoXAgSt6mo1/x1pWqasyldQx83V0YRiIRmuXuy528ejLO1aT0Of
-         WBE6seqMIMUUGcgmjqk9Xqz/u+5P1Ngfz3jnpXcR0HRtJQkDMOPH7YsO+nY2w7Qd8hVn
-         9G+s5/RqWuIvpnE2oOT1wugKzEbeHzVF1hJqCKee7pON49iyds3G/QxaXD4y9GLWpGpg
-         Q1cdecmYA99uTrA8y9K02z/IHASryPgwPYeW9JodS6pMfru7y9eOsTK377HjsjDnQpDc
-         30PQ==
-X-Gm-Message-State: AOAM531mB2DjhULR14xDRBVxNCg4Hwi9NFfNGrJkY82YfYLYgbR89lW8
-        hx+gT3b55dHnmUMToaitcrwrk34n5j7ttTckk5DFBpqybmBong7G93gb69zbHMb6FJG97v8mwMT
-        YSsjcsTF6/iZ2VJy0+0BBCY6tfR9C
-X-Received: by 2002:a37:6149:: with SMTP id v70mr16390917qkb.188.1604352438284;
-        Mon, 02 Nov 2020 13:27:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx1BX1HFiblt+dhs6jzM4c/cLeLDSoTUTDjBFSoL2oLT5fjFR9ZaovZujpYbCENwpT9VuNZRQ==
-X-Received: by 2002:a37:6149:: with SMTP id v70mr16390897qkb.188.1604352438101;
-        Mon, 02 Nov 2020 13:27:18 -0800 (PST)
-Received: from xz-x1 (bras-vprn-toroon474qw-lp130-20-174-93-89-196.dsl.bell.ca. [174.93.89.196])
-        by smtp.gmail.com with ESMTPSA id f21sm5206440qkl.131.2020.11.02.13.27.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 13:27:17 -0800 (PST)
-Date:   Mon, 2 Nov 2020 16:27:15 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH 3/5] KVM: selftests: Simplify demand_paging_test with
- timespec_diff_now
-Message-ID: <20201102212715.GD20600@xz-x1>
-References: <20201027233733.1484855-1-bgardon@google.com>
- <20201027233733.1484855-4-bgardon@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201027233733.1484855-4-bgardon@google.com>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=6QhI3kHimGu8AWgc0fDAH50nxnuO9Boew+8qHoNE/Eo=;
+        b=IEcEnpV61nVaL/VoAeAN6HawSK/KttZI+BCyyU+E8bJ3OQbJ9+seIWggDkW2vLWGmh
+         kov/ASUyX0Jkhgtly/abikya1Y0Nm8ayYbaYgIkTjp1BybpyzfNspzX4haobmu25T2XM
+         I9z4UdZ60P93+ds79uBIrGW9QKNA1+c2Mz4wSQcmRv+Dq7HiL476R+yrDy9+/XKkquPS
+         BWdwup+aaIwIBnSc2jaP5OeG37AXv25Qu5joNi2UxQVy52a5DKAnAdp+B8a7ricjbWJX
+         iTV4Nm2SlpFvVq6CVnSeVP+I947VF8GTpTt+QkMuLCb3N/0k4AXBtPIV7AlU941p3u2t
+         9XIQ==
+X-Gm-Message-State: AOAM530OdMQrn8KAvfqtayKlXPrqaStRdiRd8bM5hMwrqQlOshO5Sisn
+        JGnn5LhD268sUoGjgjKUCkZpZLuBN/du9g==
+X-Google-Smtp-Source: ABdhPJz4uKIj6Q4SL0hNCQEkGUOcERyuUqYeqLGnw1+q8cf714ZYJ06FmUwShvkid2AmogORNtzrpYJnXL77GA==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
+ (user=dlatypov job=sendgmr) by 2002:a25:b68a:: with SMTP id
+ s10mr22646893ybj.455.1604353030242; Mon, 02 Nov 2020 13:37:10 -0800 (PST)
+Date:   Mon,  2 Nov 2020 13:36:56 -0800
+Message-Id: <20201102213656.2700500-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
+Subject: [PATCH] Documentation: kunit: provide guidance for testing many inputs
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, andriy.shevchenko@linux.intel.com
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 04:37:31PM -0700, Ben Gardon wrote:
-> Add a helper function to get the current time and return the time since
-> a given start time. Use that function to simplify the timekeeping in the
-> demand paging test.
+usage.rst goes into a detailed about faking out classes, but currently
+lacks wording about how one might idiomatically test a range of inputs.
 
-Nit: timespec_diff_now() sounds less charming than timespec_elapsed() to
-me... "diff_now" is longer, and it also does not show positive/negative of the
-results (which in this case should always be end-start). "elapsed" should
-always mean something positive.
+Give an example of how one might test a hash function via macros/helper
+funcs and a table-driven test and very briefly discuss pros and cons.
 
-With/Without the change above:
+Also highlight the KUNIT_EXPECT_*_MSG() variants (that aren't mentioned
+elsewhere [1]) which are particularly useful in these situations.
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+It is also criminally underused at the moment, only appearing in 2
+tests (both written by people involved in KUnit).
 
+[1] not even on
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ Documentation/dev-tools/kunit/usage.rst | 66 +++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 62142a47488c..317390df2b96 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -451,6 +451,72 @@ We can now use it to test ``struct eeprom_buffer``:
+ 		destroy_eeprom_buffer(ctx->eeprom_buffer);
+ 	}
+ 
++Testing various inputs
++----------------------
++
++Testing just a few inputs might not be enough to have confidence that the code
++works correctly, e.g. for a hash function.
++
++In such cases, it can be helpful to have a helper macro or function, e.g. this
++fictitious example for ``md5sum(1)``
++
++.. code-block:: c
++
++	/* Note: the cast is to satisfy overly strict type-checking. */
++	#define TEST_MD5(in, want) \
++		md5sum(in, out); \
++		KUNIT_EXPECT_STREQ_MSG(test, (char *)out, want, "md5sum(%s)", in);
++
++	char out[16];
++	TEST_MD5("hello world",   "5eb63bbbe01eeed093cb22bb8f5acdc3");
++	TEST_MD5("hello world!",  "fc3ff98e8c6a0d3087d515c0473f8677");
++
++Note the use of ``KUNIT_EXPECT_STREQ_MSG`` to give more context when it fails
++and make it easier to track down. (Yes, in this example, ``want`` is likely
++going to be unique enough on its own).
++
++The ``_MSG`` variants are even more useful when the same expectation is called
++multiple times (in a loop or helper function) and thus the line number isn't
++enough to identify what failed, like below.
++
++In some cases, it can be helpful to write a *table-driven test* instead, e.g.
++
++.. code-block:: c
++
++	int i;
++	char out[16];
++
++	struct md5_test_case {
++		const char *str;
++		const char *md5;
++	};
++
++	struct md5_test_case cases[] = {
++		{
++			.str = "hello world",
++			.md5 = "5eb63bbbe01eeed093cb22bb8f5acdc3",
++		},
++		{
++			.str = "hello world!",
++			.md5 = "fc3ff98e8c6a0d3087d515c0473f8677",
++		},
++	};
++	for (i = 0; i < ARRAY_SIZE(cases); ++i) {
++		md5sum(cases[i].str, out);
++		KUNIT_EXPECT_STREQ_MSG(test, (char *)out, cases[i].md5,
++		                      "md5sum(%s)", cases[i].str);
++	}
++
++
++There's more boilerplate involved, but it can:
++
++* be more readable when there are multiple inputs/outputs thanks to field names,
++
++  * E.g. see ``fs/ext4/inode-test.c`` for an example of both.
++* reduce duplication if test cases can be shared across multiple tests.
++
++  * E.g. if we had a magical ``undo_md5sum`` function, we could reuse ``cases``.
++
+ .. _kunit-on-non-uml:
+ 
+ KUnit on non-UML architectures
+
+base-commit: 77c8473edf7f7664137f555cfcdc8c460bbd947d
 -- 
-Peter Xu
+2.29.1.341.ge80a0c044ae-goog
 
