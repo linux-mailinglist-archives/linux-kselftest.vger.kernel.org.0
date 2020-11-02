@@ -2,42 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 888992A3670
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Nov 2020 23:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B5C2A36CC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Nov 2020 23:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbgKBWXL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Nov 2020 17:23:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53186 "EHLO mail.kernel.org"
+        id S1725942AbgKBWyt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Nov 2020 17:54:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57758 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725785AbgKBWXK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 17:23:10 -0500
+        id S1725940AbgKBWyt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Nov 2020 17:54:49 -0500
 Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DEEF420786;
-        Mon,  2 Nov 2020 22:23:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 33B8A20786;
+        Mon,  2 Nov 2020 22:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604355790;
-        bh=tsPeAhkY6m0D2PMg9baceJ6VrUbgKm1p22Nk4xpgXog=;
+        s=default; t=1604357688;
+        bh=3rPNv3tweACEerZlH7qePNfQB72W6JIlqdUQEZAtz+k=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=2RUx0M1U5SZpOl/aR2APVJxfQt9L5eHpVfojICGKErv9a0YLGS+BMrI/Pm18GFZ1B
-         OGB26w/mOLIzT7/ViSTW3Q4D4FwT6wOpDVFLIRCVe5L6Z3Esp0BeQrQfd8iyhuqSpb
-         3zOlGmZQ55lnV9+3rZsBKzyIRDMMFPbWiPZxSHvw=
-Date:   Mon, 2 Nov 2020 14:23:08 -0800
+        b=ErX3h4pRsvT/GRay17JR/7/1aeDtq5vYxn2LkRiHz6rYQECdXusz7+ecxH2zEaCbc
+         bs4HfO2UTfhHCSUB0qEQ/yzeIFmV6sg5xXk5YVJA/SBpJpm9JX5+stm2we2DL7KoYk
+         YhigXpmuKF6ahrMro1UPsFVS3Dn+7llRhVa9EbCo=
+Date:   Mon, 2 Nov 2020 14:54:47 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Richard Cochran <richardcochran@gmail.com>
-Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests/net: timestamping: add ptp v2
- support
-Message-ID: <20201102142308.48d85efa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20201101020141.GA2683@hoboy.vegasvil.org>
-References: <20201029190931.30883-1-grygorii.strashko@ti.com>
-        <20201031114040.1facec0b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20201101020141.GA2683@hoboy.vegasvil.org>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
+Message-ID: <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <cover.1604055792.git.pabeni@redhat.com>
+References: <cover.1604055792.git.pabeni@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -45,21 +42,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 31 Oct 2020 19:01:41 -0700 Richard Cochran wrote:
-> On Sat, Oct 31, 2020 at 11:40:40AM -0700, Jakub Kicinski wrote:
-> > On Thu, 29 Oct 2020 21:09:31 +0200 Grygorii Strashko wrote:  
-> > > The timestamping tool is supporting now only PTPv1 (IEEE-1588 2002) while
-> > > modern HW often supports also/only PTPv2.
-> > > 
-> > > Hence timestamping tool is still useful for sanity testing of PTP drivers
-> > > HW timestamping capabilities it's reasonable to upstate it to support
-> > > PTPv2. This patch adds corresponding support which can be enabled by using
-> > > new parameter "PTPV2".
-> > > 
-> > > Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>  
-> > 
-> > CC: Richard  
+On Fri, 30 Oct 2020 12:16:00 +0100 Paolo Abeni wrote:
+> Real-time setups try hard to ensure proper isolation between time
+> critical applications and e.g. network processing performed by the
+> network stack in softirq and RPS is used to move the softirq 
+> activity away from the isolated core.
 > 
-> Acked-by: Richard Cochran <richardcochran@gmail.com>
+> If the network configuration is dynamic, with netns and devices
+> routinely created at run-time, enforcing the correct RPS setting
+> on each newly created device allowing to transient bad configuration
+> became complex.
+> 
+> These series try to address the above, introducing a new
+> sysctl knob: rps_default_mask. The new sysctl entry allows
+> configuring a systemwide RPS mask, to be enforced since receive 
+> queue creation time without any fourther per device configuration
+> required.
+> 
+> Additionally, a simple self-test is introduced to check the 
+> rps_default_mask behavior.
 
-Applied, thanks!
+RPS is disabled by default, the processing is going to happen wherever
+the IRQ is mapped, and one would hope that the IRQ is not mapped to the
+core where the critical processing runs.
+
+Would you mind elaborating further on the use case?
