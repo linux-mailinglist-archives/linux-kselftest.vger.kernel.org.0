@@ -2,141 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3842A5A14
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 23:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 665132A5A2E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 23:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730101AbgKCW1W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 17:27:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46826 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729342AbgKCW1V (ORCPT
+        id S1729484AbgKCWjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 17:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729342AbgKCWjy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 17:27:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604442439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7WnNFtdh/XhSWs/5uRGkdqLklaY8lxiV5/cBXnNnAz4=;
-        b=C55xUUtv0bGecSEhx8nuGBaIl9RKcHKAz2hHcZRMagbHE3ScCAXI1yxY2hPm1l8fQOJivo
-        VmvAByZjb/R4g81GYFr6QLcNF7x7t48fQw3U/+sromSqnYsIdOc/3hxT7Kql/Optx7xIYa
-        gbO0YlqZFV6vDE4X2jNXehy+GdZEVQc=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-582-Jc0Ikg6SOUGtYJz-Pf_ZbQ-1; Tue, 03 Nov 2020 17:27:18 -0500
-X-MC-Unique: Jc0Ikg6SOUGtYJz-Pf_ZbQ-1
-Received: by mail-qv1-f71.google.com with SMTP id j17so8146564qvi.21
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2020 14:27:18 -0800 (PST)
+        Tue, 3 Nov 2020 17:39:54 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A08C0613D1;
+        Tue,  3 Nov 2020 14:39:54 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id j12so5578406iow.0;
+        Tue, 03 Nov 2020 14:39:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Q1fSjRxkdgdb3dJlgs3KGwewyjQPFNHGcFMIqXb2OR4=;
+        b=FtZ8meo6Wv84NAh6ucBYC7C/wgd/hEk9mTHFtOuiif/RFtLceP/O8Njl5qH4GlaZK3
+         mWUXMMu6Dxh7p/3wYZoSRnMtXvmj+412+q6EOPfZ9MTMhCLBG4L5QE+AA97muzLyC8Bn
+         p+k4EEPAqpM01xqsvoAYknkFPJUDdneKW/qaPDoINySAeFtg2WPB8gMfmAhiYNtHaZ4W
+         69kY8o6gmn0czqOkSVBTcVY3YQSl9FAPkXU6AMLSrK96WbH3Yo5xnm68XTILCjRj0I59
+         vzqr58gktr/posU2xzosEWNt6mevU6FM5HUjC+hxWyR+tzuf8dKdYgolt8IPhnXXP4Wj
+         IKmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7WnNFtdh/XhSWs/5uRGkdqLklaY8lxiV5/cBXnNnAz4=;
-        b=s/qES19g3n1mJ3piz4M6z9hf08j+Td3CbIruJDzuM4GumO3Xp+95BWWx6mo7XZVnlY
-         NXF+vrVtkqgkQn3pirdcwNsb4P0+bNPyVhM+uahHwTli2ftvaCoGDcauQ+BBA4ZpGnj3
-         bgAkTFIOoT2oKgyEUp82ASC1xFdYoTsJkopI022bpjZAeVxPTXsHbrBrTixUiaY5xv/0
-         7LGpgEsqqJ0eXYoS+svlIblon78Rkcgzg3iAQHvmAAwiS+W+lfrgi+vPBuqp61pCPInt
-         ixHCq10SksjS3cNP7zIlLEgKAYOEVCMHajT5LlZMiw6zJ7KFP6Qxbrb/DW07aKx08Vx/
-         G1xA==
-X-Gm-Message-State: AOAM532S/o7aYNxAQzU32to/Bm+L4ltgTURHr8fBo9R2q7l9Zuoz002h
-        4eVCFwyWk9W5DJ044NSOGzFmjWXRzEjNPaa7gF9MQqS+LM/lnsMcl7LWWf9v0MEn8v3bqD4urEx
-        veoajoZ5l/jqaU6a15seusNA9mFMn
-X-Received: by 2002:ad4:5807:: with SMTP id dd7mr29352843qvb.35.1604442437878;
-        Tue, 03 Nov 2020 14:27:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzc70C60zkSdfPRst23C2RS+oSt5cbk//7/42r9EKzo6ozDdmjq2gYpA4ML73cF1vBY8EL8Aw==
-X-Received: by 2002:ad4:5807:: with SMTP id dd7mr29352821qvb.35.1604442437641;
-        Tue, 03 Nov 2020 14:27:17 -0800 (PST)
-Received: from xz-x1 (bras-vprn-toroon474qw-lp130-20-174-93-89-196.dsl.bell.ca. [174.93.89.196])
-        by smtp.gmail.com with ESMTPSA id q27sm169750qki.60.2020.11.03.14.27.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 14:27:16 -0800 (PST)
-Date:   Tue, 3 Nov 2020 17:27:15 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH 5/5] KVM: selftests: Introduce the dirty log perf test
-Message-ID: <20201103222715.GM20600@xz-x1>
-References: <20201027233733.1484855-1-bgardon@google.com>
- <20201027233733.1484855-6-bgardon@google.com>
- <20201102222102.GE20600@xz-x1>
- <CANgfPd_sLtqFb3sdpBpd6FWLV4MWKHXH8TSzDbPthzVSQPMJ+A@mail.gmail.com>
- <20201103011205.GG20600@xz-x1>
- <CANgfPd-cWpZviQJj6p5qUDex8rve7N9kFK0Ym_Qt3DBU7QwqJQ@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q1fSjRxkdgdb3dJlgs3KGwewyjQPFNHGcFMIqXb2OR4=;
+        b=bZk+BlJqR6Z7N/33CAsARUD9gi21cvTUq+E9EPti9BXDLF2C0/1Hu1a40Bqi5+GA2H
+         mOS1PPzUhIC8SWRdcvtfYhMBo2vYEP+NIQgQOeEgCBiPJISXmPfMJna/da5gbhSV1eJm
+         K6M8K/I3+x/FxQmoR5VDiTyFbKWN4q/t4AXtnM0sgNuBbl7jg6cd3MgNKHF+vz38P6RB
+         2LsKg9qog2TG452upabOpHu7kppZqjq5zzb1okT5tFbThPPkuVtaiq219QM0Lf/IOjD8
+         48V8+aQmkOXOvxHrYIp0H9JOD5inyWu3S7KWOQoF6md3r7bUfY+VTNU/So2G+oCjUoEO
+         O7ig==
+X-Gm-Message-State: AOAM530gKdF9vjh7NCN5rQWIjtbm8n82EYGSNQmcrvR/x1Xsiz1I81lp
+        5GqMSFSfP9WdlzGsHJReOEw=
+X-Google-Smtp-Source: ABdhPJwBfNahtlMkZcIhW0aghCVUqt9HwT/BxbSJ9uFwMnqZsMn3CrvvtI8CruKf+qXlR8xD6CMGkw==
+X-Received: by 2002:a6b:6016:: with SMTP id r22mr14997218iog.93.1604443193936;
+        Tue, 03 Nov 2020 14:39:53 -0800 (PST)
+Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:def:1f9b:2059:ffac])
+        by smtp.googlemail.com with ESMTPSA id u18sm78660iob.53.2020.11.03.14.39.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Nov 2020 14:39:53 -0800 (PST)
+Subject: Re: [net-next,v1,1/5] vrf: add mac header for tunneled packets when
+ sniffer is attached
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+References: <20201103125242.11468-1-andrea.mayer@uniroma2.it>
+ <20201103125242.11468-2-andrea.mayer@uniroma2.it>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <bf69c702-db2f-b9f2-148e-17a325a3cbda@gmail.com>
+Date:   Tue, 3 Nov 2020 15:39:50 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.4.0
 MIME-Version: 1.0
+In-Reply-To: <20201103125242.11468-2-andrea.mayer@uniroma2.it>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANgfPd-cWpZviQJj6p5qUDex8rve7N9kFK0Ym_Qt3DBU7QwqJQ@mail.gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 02:17:53PM -0800, Ben Gardon wrote:
-> On Mon, Nov 2, 2020 at 5:12 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Mon, Nov 02, 2020 at 03:56:05PM -0800, Ben Gardon wrote:
-> > > On Mon, Nov 2, 2020 at 2:21 PM Peter Xu <peterx@redhat.com> wrote:
-> > > >
-> > > > On Tue, Oct 27, 2020 at 04:37:33PM -0700, Ben Gardon wrote:
-> > > > > The dirty log perf test will time verious dirty logging operations
-> > > > > (enabling dirty logging, dirtying memory, getting the dirty log,
-> > > > > clearing the dirty log, and disabling dirty logging) in order to
-> > > > > quantify dirty logging performance. This test can be used to inform
-> > > > > future performance improvements to KVM's dirty logging infrastructure.
-> > > >
-> > > > One thing to mention is that there're a few patches in the kvm dirty ring
-> > > > series that reworked the dirty log test quite a bit (to add similar test for
-> > > > dirty ring).  For example:
-> > > >
-> > > >   https://lore.kernel.org/kvm/20201023183358.50607-11-peterx@redhat.com/
-> > > >
-> > > > Just a FYI if we're going to use separate test programs.  Merging this tests
-> > > > should benefit in many ways, of course (e.g., dirty ring may directly runnable
-> > > > with the perf tests too; so we can manually enable this "perf mode" as a new
-> > > > parameter in dirty_log_test, if possible?), however I don't know how hard -
-> > > > maybe there's some good reason to keep them separate...
-> > >
-> > > Absolutely, we definitely need a performance test for both modes. I'll
-> > > take a look at the patch you linked and see what it would take to
-> > > support dirty ring in this test.
-> >
-> > That would be highly appreciated.
-> >
-> > > Do you think that should be done in this series, or would it make
-> > > sense to add as a follow up?
-> >
-> > To me I slightly lean toward working upon those patches, since we should
-> > potentially share quite some code there (e.g., the clear dirty log cleanup
-> > seems necessary, or not easy to add the dirty ring tests anyway).  But current
-> > one is still ok to me at least as initial version - we should always be more
-> > tolerant for test cases, aren't we? :)
-> >
-> > So maybe we can wait for a 3rd opinion before you change the direction.
+On 11/3/20 5:52 AM, Andrea Mayer wrote:
+> Before this patch, a sniffer attached to a VRF used as the receiving
+> interface of L3 tunneled packets detects them as malformed packets and
+> it complains about that (i.e.: tcpdump shows bogus packets).
 > 
-> I took a look at your patches for dirty ring and dirty logging modes
-> and thought about this some more.
-> I think your patch to merge the get and clear dirty log tests is
-> great, and I can try to include it and build on it in my series as
-> well if desired. I don't think it would be hard to use the same mode
-> approach in the dirty log perf test. That said, I think it would be
-> easier to keep the functional test (dirty_log_test,
-> clear_dirty_log_test) separate from the performance test because the
-> dirty log validation is extra time and complexity not needed in the
-> dirty log perf test. I did try building them in the same test
-> initially, but it was really ugly. Perhaps a future refactoring could
-> merge them better.
+> The reason is that a tunneled L3 packet does not carry any L2
+> information and when the VRF is set as the receiving interface of a
+> decapsulated L3 packet, no mac header is currently set or valid.
+> Therefore, the purpose of this patch consists of adding a MAC header to
+> any packet which is directly received on the VRF interface ONLY IF:
+> 
+>  i) a sniffer is attached on the VRF and ii) the mac header is not set.
+> 
+> In this case, the mac address of the VRF is copied in both the
+> destination and the source address of the ethernet header. The protocol
+> type is set either to IPv4 or IPv6, depending on which L3 packet is
+> received.
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  drivers/net/vrf.c | 78 +++++++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 72 insertions(+), 6 deletions(-)
+> 
 
-We can conditionally bypass the validation part.  Let's keep it separate for
-now - which is totally fine by me.  Actually I also don't want the dirty ring
-series to block your series since I still don't know when it'll land.  That'll
-be unnecessary depencency.  Thanks,
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
--- 
-Peter Xu
 
