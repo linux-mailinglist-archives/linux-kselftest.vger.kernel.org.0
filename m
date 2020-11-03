@@ -2,163 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 755C72A4B31
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 17:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DCB2A4B89
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 17:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728433AbgKCQWu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 11:22:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50922 "EHLO mail.kernel.org"
+        id S1728348AbgKCQaS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 11:30:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728465AbgKCQWt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 11:22:49 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        id S1728082AbgKCQaS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Nov 2020 11:30:18 -0500
+Received: from kernel.org (unknown [87.71.17.26])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD20222264;
-        Tue,  3 Nov 2020 16:22:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FB1C206DF;
+        Tue,  3 Nov 2020 16:30:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604420568;
-        bh=gNW+h5DOIiV/dxUEaY1kydqcdJamrMbNqm9JY9C56q8=;
+        s=default; t=1604421016;
+        bh=jYHfX66WW2BdNqS2XWf0ysCG2+5llIa7XFBTFdDX/eI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WUKVXSG3khtp4Yf4WUZpTfy0Y9iWx6ybhNNctAFmoxLEi52dvnqIgfh+iYxE5kJWo
-         CzEIwnSeDsWYpTSK/1nRVa5PDm32bD2vuFp/gkvJmcWoeXU+JjGOj4xm3fIsUhguKF
-         yS1WboPIBw2wGnujbFmMRgrGn70ic2vj5d3Krxo0=
-Date:   Tue, 3 Nov 2020 17:23:40 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        brendanhiggins@google.com, skhan@linuxfoundation.org,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        linux@rasmusvillemoes.dk, alexandre.belloni@bootlin.com,
-        rdunlap@infradead.org, idryomov@gmail.com,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v3] lib: Convert test_printf.c to KUnit
-Message-ID: <20201103162340.GA281002@kroah.com>
-References: <20201103111049.51916-1-98.arpi@gmail.com>
- <20201103113353.GC4077@smile.fi.intel.com>
- <20201103115223.GA268796@kroah.com>
- <20201103160728.GQ20201@alley>
+        b=aIT9WT+BvHALjjzBR+JANCva7x0iax3JsHcWBCEfbBEXiFyByvncM0vQDEjoMsNzh
+         qIUHx4c/P1fmtrQLv9EIQHUB/NNPUa0sJ3XCbfY5Co0b/q6PUKAT7BitPwWCXDu5+c
+         05kTyD2Qgu6hQisAN/yBj1hMLhxnioRXXIEvqYek=
+Date:   Tue, 3 Nov 2020 18:30:02 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Hagen Paul Pfeifer <hagen@jauu.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20201103163002.GK4879@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20201101110935.GA4105325@laniakea>
+ <20201102154028.GD4879@kernel.org>
+ <1547601988.128687.1604411534845@office.mailbox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201103160728.GQ20201@alley>
+In-Reply-To: <1547601988.128687.1604411534845@office.mailbox.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 05:11:47PM +0100, Petr Mladek wrote:
-> On Tue 2020-11-03 12:52:23, Greg KH wrote:
-> > On Tue, Nov 03, 2020 at 01:33:53PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Nov 03, 2020 at 04:40:49PM +0530, Arpitha Raghunandan wrote:
-> > > > Convert test lib/test_printf.c to KUnit. More information about
-> > > > KUnit can be found at:
-> > > > https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
-> > > > KUnit provides a common framework for unit tests in the kernel.
-> > > > KUnit and kselftest are standardizing around KTAP, converting this
-> > > > test to KUnit makes this test output in KTAP which we are trying to
-> > > > make the standard test result format for the kernel. More about
-> > > > the KTAP format can be found at:
-> > > > https://lore.kernel.org/linux-kselftest/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com/.
-> > > > I ran both the original and converted tests as is to produce the
-> > > > output for success of the test in the two cases. I also ran these
-> > > > tests with a small modification to show the difference in the output
-> > > > for failure of the test in both cases. The modification I made is:
-> > > > - test("127.000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
-> > > > + test("127-000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
-> > > > 
-> > > > Original test success:
-> > > > [    0.540860] test_printf: loaded.
-> > > > [    0.540863] test_printf: random seed = 0x5c46c33837bc0619
-> > > > [    0.541022] test_printf: all 388 tests passed
-> > > > 
-> > > > Original test failure:
-> > > > [    0.537980] test_printf: loaded.
-> > > > [    0.537983] test_printf: random seed = 0x1bc1efd881954afb
-> > > > [    0.538029] test_printf: vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > > [    0.538030] test_printf: kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > > [    0.538124] test_printf: failed 2 out of 388 tests
-> > > > [    0.538125] test_printf: random seed used was 0x1bc1efd881954afb
-> > > > 
-> > > > Converted test success:
-> > > >     # Subtest: printf
-> > > >     1..25
-> > > >     ok 1 - test_basic
-> > > >     ok 2 - test_number
-> > > >     ok 3 - test_string
-> > > >     ok 4 - plain
-> > > >     ok 5 - null_pointer
-> > > >     ok 6 - error_pointer
-> > > >     ok 7 - invalid_pointer
-> > > >     ok 8 - symbol_ptr
-> > > >     ok 9 - kernel_ptr
-> > > >     ok 10 - struct_resource
-> > > >     ok 11 - addr
-> > > >     ok 12 - escaped_str
-> > > >     ok 13 - hex_string
-> > > >     ok 14 - mac
-> > > >     ok 15 - ip
-> > > >     ok 16 - uuid
-> > > >     ok 17 - dentry
-> > > >     ok 18 - struct_va_format
-> > > >     ok 19 - time_and_date
-> > > >     ok 20 - struct_clk
-> > > >     ok 21 - bitmap
-> > > >     ok 22 - netdev_features
-> > > >     ok 23 - flags
-> > > >     ok 24 - errptr
-> > > >     ok 25 - fwnode_pointer
-> > > > ok 1 - printf
-> > > > 
-> > > > Converted test failure:
-> > > >     # Subtest: printf
-> > > >     1..25
-> > > >     ok 1 - test_basic
-> > > >     ok 2 - test_number
-> > > >     ok 3 - test_string
-> > > >     ok 4 - plain
-> > > >     ok 5 - null_pointer
-> > > >     ok 6 - error_pointer
-> > > >     ok 7 - invalid_pointer
-> > > >     ok 8 - symbol_ptr
-> > > >     ok 9 - kernel_ptr
-> > > >     ok 10 - struct_resource
-> > > >     ok 11 - addr
-> > > >     ok 12 - escaped_str
-> > > >     ok 13 - hex_string
-> > > >     ok 14 - mac
-> > > >     # ip: EXPECTATION FAILED at lib/printf_kunit.c:82
-> > > > vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > >     # ip: EXPECTATION FAILED at lib/printf_kunit.c:124
-> > > > kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > > >     not ok 15 - ip
-> > > >     ok 16 - uuid
-> > > >     ok 17 - dentry
-> > > >     ok 18 - struct_va_format
-> > > >     ok 19 - time_and_date
-> > > >     ok 20 - struct_clk
-> > > >     ok 21 - bitmap
-> > > >     ok 22 - netdev_features
-> > > >     ok 23 - flags
-> > > >     ok 24 - errptr
-> > > >     ok 25 - fwnode_pointer
-> > > > not ok 1 - printf
-> > > 
-> > > Better, indeed.
-> > > 
-> > > But can be this improved to have a cumulative statistics, like showing only
-> > > number of total, succeeded, failed with details of the latter ones?
-> > 
-> > Is that the proper test output format?  We have a standard...
+On Tue, Nov 03, 2020 at 02:52:14PM +0100, Hagen Paul Pfeifer wrote:
+> > On 11/02/2020 4:40 PM Mike Rapoport <rppt@kernel.org> wrote:
 > 
-> What is the standard, please?
+> > > Isn't memfd_secret currently *unnecessarily* designed to be a "one task
+> > > feature"? memfd_secret fulfills exactly two (generic) features:
+> > > 
+> > > - address space isolation from kernel (aka SECRET_EXCLUSIVE, not in kernel's
+> > >   direct map) - hide from kernel, great
+> > > - disabling processor's memory caches against speculative-execution vulnerabilities
+> > >   (spectre and friends, aka SECRET_UNCACHED), also great
+> > > 
+> > > But, what about the following use-case: implementing a hardened IPC mechanism
+> > > where even the kernel is not aware of any data and optionally via SECRET_UNCACHED
+> > > even the hardware caches are bypassed! With the patches we are so close to
+> > > achieving this.
+> > > 
+> > > How? Shared, SECRET_EXCLUSIVE and SECRET_UNCACHED mmaped pages for IPC
+> > > involved tasks required to know this mapping (and memfd_secret fd). After IPC
+> > > is done, tasks can copy sensitive data from IPC pages into memfd_secret()
+> > > pages, un-sensitive data can be used/copied everywhere.
+> > 
+> > As long as the task share the file descriptor, they can share the
+> > secretmem pages, pretty much like normal memfd.
+> 
+> Including process_vm_readv() and process_vm_writev()? Let's take a hypothetical
+> "dbus-daemon-secure" service that receives data from process A and wants to
+> copy/distribute it to data areas of N other processes. Much like dbus but without
+> SOCK_DGRAM rather direct copy into secretmem/mmap pages (ring-buffer). Should be
+> possible, right?
 
-The TAP format should be the standard, no reason the kernel can not spit
-out the same test message format that the userspace tests do, right?
+I'm not sure I follow you here.
+For process_vm_readv() and process_vm_writev() secremem will be only
+accessible on the local part, but not on the remote.
+So copying data to secretmem pages using process_vm_writev wouldn't
+work.
 
-thanks,
+> > > One missing piece is still the secure zeroization of the page(s) if the
+> > > mapping is closed by last process to guarantee a secure cleanup. This can
+> > > probably done as an general mmap feature, not coupled to memfd_secret() and
+> > > can be done independently ("reverse" MAP_UNINITIALIZED feature).
+> > 
+> > There are "init_on_alloc" and "init_on_free" kernel parameters that
+> > enable zeroing of the pages on alloc and on free globally.
+> > Anyway, I'll add zeroing of the freed memory to secretmem.
+> 
+> Great, this allows page-specific (thus runtime-performance-optimized) zeroing
+> of secured pages. init_on_free lowers the performance to much and is not precice
+> enough.
+> 
+> Hagen
 
-greg k-h
+-- 
+Sincerely yours,
+Mike.
