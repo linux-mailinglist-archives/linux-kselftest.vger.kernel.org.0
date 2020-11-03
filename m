@@ -2,134 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF182A4967
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 16:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6142A4AAF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 17:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728158AbgKCPWk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 10:22:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30189 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728119AbgKCPWR (ORCPT
+        id S1728046AbgKCQDv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 11:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728267AbgKCQDv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 10:22:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604416936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lChGiPw5PKK8M2mjuLILlsWFMRIa+6Y0yf5fTgLfNzg=;
-        b=LoRG864AsubBWCpAi7nOG5NqXPK4y87TDHSWcqnLGPbXdiU9DvR952BiyNh/iOWL6XJg+O
-        WH+CkOIc9OTbW9OdpeATipz/K2eRL+tAi5VvOCiek509/kPfkOVlZ0vorrpSRSRjLHVFlX
-        jU+/fedqwDwD+p8LGQNdrP3j4X6++VA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-82-1LuhBAQYPcKtH7EjtH9oPA-1; Tue, 03 Nov 2020 10:22:13 -0500
-X-MC-Unique: 1LuhBAQYPcKtH7EjtH9oPA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A38E5F9C5;
-        Tue,  3 Nov 2020 15:22:11 +0000 (UTC)
-Received: from ovpn-114-173.ams2.redhat.com (ovpn-114-173.ams2.redhat.com [10.36.114.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0A0795B4BB;
-        Tue,  3 Nov 2020 15:22:08 +0000 (UTC)
-Message-ID: <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
-Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>, Saeed Mahameed <saeed@kernel.org>
-Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Date:   Tue, 03 Nov 2020 16:22:07 +0100
-In-Reply-To: <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <cover.1604055792.git.pabeni@redhat.com>
-         <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        Tue, 3 Nov 2020 11:03:51 -0500
+Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F00C0613D1;
+        Tue,  3 Nov 2020 08:03:50 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CQZMm1C8kzlhqv5;
+        Tue,  3 Nov 2020 17:03:48 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CQZMk0bzXzlh8TS;
+        Tue,  3 Nov 2020 17:03:46 +0100 (CET)
+Subject: Re: [PATCH v22 07/12] landlock: Support filesystem access-control
+To:     Jann Horn <jannh@google.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20201027200358.557003-1-mic@digikod.net>
+ <20201027200358.557003-8-mic@digikod.net>
+ <CAG48ez1xMfxkwhXK4b1BB4GrTVauNzfwPoCutn9axKt_PFRSVQ@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <056d8f1a-b45f-379f-d81a-8c13a1536c3f@digikod.net>
+Date:   Tue, 3 Nov 2020 17:03:45 +0100
+User-Agent: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <CAG48ez1xMfxkwhXK4b1BB4GrTVauNzfwPoCutn9axKt_PFRSVQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2020-11-02 at 14:54 -0800, Jakub Kicinski wrote:
-> On Fri, 30 Oct 2020 12:16:00 +0100 Paolo Abeni wrote:
-> > Real-time setups try hard to ensure proper isolation between time
-> > critical applications and e.g. network processing performed by the
-> > network stack in softirq and RPS is used to move the softirq 
-> > activity away from the isolated core.
-> > 
-> > If the network configuration is dynamic, with netns and devices
-> > routinely created at run-time, enforcing the correct RPS setting
-> > on each newly created device allowing to transient bad configuration
-> > became complex.
-> > 
-> > These series try to address the above, introducing a new
-> > sysctl knob: rps_default_mask. The new sysctl entry allows
-> > configuring a systemwide RPS mask, to be enforced since receive 
-> > queue creation time without any fourther per device configuration
-> > required.
-> > 
-> > Additionally, a simple self-test is introduced to check the 
-> > rps_default_mask behavior.
+
+On 29/10/2020 02:06, Jann Horn wrote:
+> (On Tue, Oct 27, 2020 at 9:04 PM Mickaël Salaün <mic@digikod.net> wrote:
+
+>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> [...]
+>> +static inline u32 get_file_access(const struct file *const file)
+>> +{
+>> +       u32 access = 0;
+>> +
+>> +       if (file->f_mode & FMODE_READ) {
+>> +               /* A directory can only be opened in read mode. */
+>> +               if (S_ISDIR(file_inode(file)->i_mode))
+>> +                       return LANDLOCK_ACCESS_FS_READ_DIR;
+>> +               access = LANDLOCK_ACCESS_FS_READ_FILE;
+>> +       }
+>> +       /*
+>> +        * A LANDLOCK_ACCESS_FS_APPEND could be added but we also need to check
+>> +        * fcntl(2).
+>> +        */
 > 
-> RPS is disabled by default, the processing is going to happen wherever
-> the IRQ is mapped, and one would hope that the IRQ is not mapped to the
-> core where the critical processing runs.
+> Once https://lore.kernel.org/linux-api/20200831153207.GO3265@brightrain.aerifal.cx/
+> lands, pwritev2() with RWF_NOAPPEND will also be problematic for
+> classifying "write" vs "append"; you may want to include that in the
+> comment. (Or delete the comment.)
+
+Contrary to fcntl(2), pwritev2(2) doesn't seems to modify the file
+description. Otherwise, other LSMs would need to be patched.
+I'll remove this comment anyway.
+
 > 
-> Would you mind elaborating further on the use case?
-
-On Mon, 2020-11-02 at 15:27 -0800, Saeed Mahameed wrote:
-> The whole thing can be replaced with a user daemon scripts that
-> monitors all newly created devices and assign to them whatever rps mask
-> (call it default).
+>> +       if (file->f_mode & FMODE_WRITE)
+>> +               access |= LANDLOCK_ACCESS_FS_WRITE_FILE;
+>> +       /* __FMODE_EXEC is indeed part of f_flags, not f_mode. */
+>> +       if (file->f_flags & __FMODE_EXEC)
+>> +               access |= LANDLOCK_ACCESS_FS_EXECUTE;
+>> +       return access;
+>> +}
+> [...]
 > 
-> So why do we need this special logic in kernel ? 
-> 
-> I am not sure about this, but if rps queues sysfs are available before
-> the netdev is up, then you can also use udevd to assign the rps masks
-> before such devices are even brought up, so you would avoid the race
-> conditions that you described, which are not really clear to me to be
-> honest.
-
-Thank you for the feedback.
-
-Please allow me to answer you both here, as your questions are related.
-
-The relevant use case is an host running containers (with the related
-orchestration tools) in a RT environment. Virtual devices (veths, ovs
-ports, etc.) are created by the orchestration tools at run-time.
-Critical processes are allowed to send packets/generate outgoing
-network traffic - but any interrupt is moved away from the related
-cores, so that usual incoming network traffic processing does not
-happen there.
-
-Still an xmit operation on a virtual devices may be transmitted via ovs
-or veth, with the relevant forwarding operation happening in a softirq
-on the same CPU originating the packet. 
-
-RPS is configured (even) on such virtual devices to move away the
-forwarding from the relevant CPUs.
-
-As Saeed noted, such configuration could be possibly performed via some
-user-space daemon monitoring network devices and network namespaces
-creation. That will be anyway prone to some race: the orchestation tool
-may create and enable the netns and virtual devices before the daemon
-has properly set the RPS mask.
-
-In the latter scenario some packet forwarding could still slip in the
-relevant CPU, causing measurable latency. In all non RT scenarios the
-above will be likely irrelevant, but in the RT context that is not
-acceptable - e.g. it causes in real environments latency above the
-defined limits, while the proposed patches avoid the issue.
-
-Do you see any other simple way to avoid the above race?
-
-Please let me know if the above answers your doubts,
-
-Paolo
-
