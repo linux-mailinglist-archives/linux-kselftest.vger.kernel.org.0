@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D0F2A5AC0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 00:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE892A5AB7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 00:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729952AbgKCXuU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 18:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S1729897AbgKCXuC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 18:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729843AbgKCXuA (ORCPT
+        with ESMTP id S1729713AbgKCXuC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 18:50:00 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1065DC0613D1
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2020 15:49:59 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id l23so19774654ybl.23
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2020 15:49:59 -0800 (PST)
+        Tue, 3 Nov 2020 18:50:02 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AA0C061A48
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2020 15:50:00 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id z125so13300089pfc.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2020 15:50:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=/rvRQ215UWFCJEJhlzUO5qtuO3lwlHh5VaMoCcrEX+s=;
-        b=rsyW8Y5UkM1GTtkDrny+cHgVhFeot43N6f6sj+635b6aQyEb7pJ13wXw/OC+YUpJXN
-         8UrmNPFpAi7l26YIC+iNEBFmOH9Njz2PMlYwKKsDNMiYOKznClAMaRjmYkDFcsBXVPAo
-         okgnWEe+JZvm4Efi0wROH90xv0eR6VDaVRwpJSzyoCV1GLaTSQUtj4iyjXKam4A8Jfok
-         rJDkjP98fp2DYur7vggzFagHnAkH4zJ20+wBLq0sZcacVXQmrREZxYfoac+d9C9b7ar3
-         IKO+qyssmDbEAaLretDMBFKOwrvcT5oeVZ2eR/lOhUGh7pfikmm8qGVzVU8VSGka22Ho
-         5uLw==
+        bh=uBW2auPdOSAwZzADRtRwCWhLPOMkXY0uNAUgQvk02uA=;
+        b=b0DIsj90UDtjq840xCjQLXmOn25ylqJ1klVR6pqkQ77hT+gWuDxjMIqcUbQ8qxr2kh
+         Jw9EkemE5BqiweolIHhRF759Kn9Jucxo4M71JHf1eM+H/6LR8ZVuUQKR/MozHIi1xEEB
+         Oef5Hqxy0OQ+BFeqLJ7JiflD0g/+h5skop6owPUJII23uIb1o8mElmWl9Rjjt+GYl8Xf
+         c5FqY3/ICgZlunoC8FNnOMPIubHUVm07xFOWdx2PqsqzN2gwV1hnN7vGtNyIKlhRpiUO
+         /IIH86sanyoCE0e+CeHWVhPIVSgL38mu/BWmE45sA62LusY4Y+fMuQ2zbjCROddvpZnb
+         sCnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=/rvRQ215UWFCJEJhlzUO5qtuO3lwlHh5VaMoCcrEX+s=;
-        b=SFTBvCgHhh7POzlMzyKDfQ1S0kv08NaPkmTh9szS3d3+wjm6LXW+KQsRS8JiIlcZDe
-         62Z5P/guKkSceAeRkfHLNOj1R5mTEy3dyrrl//O8R7SlaRKDLZ0GPy0Y4Ij35zC5hduY
-         Zw0JVaGNzOaHWIDS3ko1dXTwUqWWH0QcpPsa5r65NeMyBFZPefp8hmEkkRFw+t1y9i7W
-         HrBBEJ1U+2UnlaaQIE9dLP/g/2qGdmDqS9OU6n66RMvMr7ur3/tR3wy4W7VFjY3nJOso
-         Ka9Y+kwHOhBYjoxgPArggqmpjlXt7AKAEVSXKKKQHnMDG/BJTny32vpO/xiJP3BQ8idj
-         jo1w==
-X-Gm-Message-State: AOAM532AUjkTxwvEJVOzlXGjuVHxSKgH45vArS2Yzkx0jWv5HFgp6WCh
-        wUQYiFGus7liVsKFCC3APC+EFpA2Dm9P
-X-Google-Smtp-Source: ABdhPJyeneQQIACdiHcHNsri1Bs2z09mY6xqbibouKO8LH57+PiBTWAQ+FgFKtcrc14/ZVxz7lmi6C17cueS
+        bh=uBW2auPdOSAwZzADRtRwCWhLPOMkXY0uNAUgQvk02uA=;
+        b=RiTIhC0yGCM0Uo4MzrPBY3SJ1X4AMJHIYFfGT7ilcoUaxgC9kFsC2hjNx1TLpQvBDx
+         pfwB3zeaBfSoCSWOvPglVF/Np+4foih8OdITpWzsS77O7md8ozdgNFwig3yhpQ0irrA8
+         R1zpsZQo4Xg8xZfWKVB3PlSQPPjl/Hw7s6yyqGlcpoDkuJNwamigjDMiZFmvbbXL3tQT
+         rFyjvMUsQHp494UfXdgwS5WjWmejvyQ3AIOIK1KsXob8Me+EyZRL2e0IhdXbG8U/5yMT
+         BDE6vmnuuU4E8yvhhqEXF17pYOWa7Kn3sbGXtRNLVDc/wjuxNMHAGUs0YTxW/C8DvkQt
+         CeRA==
+X-Gm-Message-State: AOAM532QkClNV0NWWAUSbzVSbVHvedfRMVQ5h1W4Q+GYJNZZZjlNcFHA
+        YnXLudmXY6t8sdOya+GQJNX8T4ndAneE
+X-Google-Smtp-Source: ABdhPJz6c8hN9i6+sRwrj1TJ3rPbr1ZQTIqftoxqlKm+19gjFAsdjn/Uy8AYCRf3tOUYD/5CtX7OLx717ftT
 Sender: "bgardon via sendgmr" <bgardon@bgardon.sea.corp.google.com>
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:f693:9fff:fef4:a293])
- (user=bgardon job=sendgmr) by 2002:a5b:888:: with SMTP id e8mr30878129ybq.436.1604447398283;
- Tue, 03 Nov 2020 15:49:58 -0800 (PST)
-Date:   Tue,  3 Nov 2020 15:49:49 -0800
+ (user=bgardon job=sendgmr) by 2002:a17:902:6f10:b029:d6:e6f5:1dab with SMTP
+ id w16-20020a1709026f10b02900d6e6f51dabmr2581693plk.1.1604447400164; Tue, 03
+ Nov 2020 15:50:00 -0800 (PST)
+Date:   Tue,  3 Nov 2020 15:49:50 -0800
 In-Reply-To: <20201103234952.1626730-1-bgardon@google.com>
-Message-Id: <20201103234952.1626730-3-bgardon@google.com>
+Message-Id: <20201103234952.1626730-4-bgardon@google.com>
 Mime-Version: 1.0
 References: <20201103234952.1626730-1-bgardon@google.com>
 X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
-Subject: [PATCH v2 2/5] KVM: selftests: Factor code out of demand_paging_test
+Subject: [PATCH v2 3/5] KVM: selftests: Simplify demand_paging_test with timespec_diff_now
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -68,559 +69,159 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Much of the code in demand_paging_test can be reused by other, similar
-multi-vCPU-memory-touching-perfromance-tests. Factor that common code
-out for reuse.
-
-No functional change expected.
+Add a helper function to get the current time and return the time since
+a given start time. Use that function to simplify the timekeeping in the
+demand paging test.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- tools/testing/selftests/kvm/Makefile          |   6 +-
- .../selftests/kvm/demand_paging_test.c        | 202 ++----------------
- .../selftests/kvm/include/perf_test_util.h    |  50 +++++
- .../selftests/kvm/lib/perf_test_util.c        | 161 ++++++++++++++
- 4 files changed, 235 insertions(+), 184 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/perf_test_util.h
- create mode 100644 tools/testing/selftests/kvm/lib/perf_test_util.c
+ .../selftests/kvm/demand_paging_test.c        | 26 +++++++++----------
+ .../testing/selftests/kvm/include/test_util.h |  1 +
+ tools/testing/selftests/kvm/lib/test_util.c   | 15 +++++++++--
+ 3 files changed, 27 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 30afbad36cd55..9b2bebb64175b 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -33,8 +33,10 @@ ifeq ($(ARCH),s390)
- 	UNAME_M := s390x
- endif
- 
--LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c lib/test_util.c
--LIBKVM_x86_64 = lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c
-+LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c \
-+	 lib/test_util.c lib/perf_test_util.c
-+LIBKVM_x86_64 = lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c \
-+		lib/x86_64/ucall.c
- LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c
- LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c
- 
 diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 32a42eafc6b5c..682805dd8c2ac 100644
+index 682805dd8c2ac..63ea7c06e1141 100644
 --- a/tools/testing/selftests/kvm/demand_paging_test.c
 +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -21,18 +21,12 @@
- #include <linux/bitops.h>
- #include <linux/userfaultfd.h>
- 
--#include "test_util.h"
--#include "kvm_util.h"
-+#include "perf_test_util.h"
- #include "processor.h"
-+#include "test_util.h"
- 
- #ifdef __NR_userfaultfd
- 
--/* The memory slot index demand page */
--#define TEST_MEM_SLOT_INDEX		1
--
--/* Default guest test virtual memory offset */
--#define DEFAULT_GUEST_TEST_MEM		0xc0000000
--
- #define DEFAULT_GUEST_TEST_MEM_SIZE (1 << 30) /* 1G */
- 
- #ifdef PRINT_PER_PAGE_UPDATES
-@@ -47,74 +41,14 @@
- #define PER_VCPU_DEBUG(...) _no_printf(__VA_ARGS__)
- #endif
- 
--#define MAX_VCPUS 512
--
--/*
-- * Guest/Host shared variables. Ensure addr_gva2hva() and/or
-- * sync_global_to/from_guest() are used when accessing from
-- * the host. READ/WRITE_ONCE() should also be used with anything
-- * that may change.
-- */
--static uint64_t host_page_size;
--static uint64_t guest_page_size;
--
- static char *guest_data_prototype;
- 
--/*
-- * Guest physical memory offset of the testing memory slot.
-- * This will be set to the topmost valid physical address minus
-- * the test memory size.
-- */
--static uint64_t guest_test_phys_mem;
--
--/*
-- * Guest virtual memory offset of the testing memory slot.
-- * Must not conflict with identity mapped test code.
-- */
--static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
--
--struct vcpu_args {
--	uint64_t gva;
--	uint64_t pages;
--
--	/* Only used by the host userspace part of the vCPU thread */
--	int vcpu_id;
--	struct kvm_vm *vm;
--};
--
--static struct vcpu_args vcpu_args[MAX_VCPUS];
--
--/*
-- * Continuously write to the first 8 bytes of each page in the demand paging
-- * memory region.
-- */
--static void guest_code(uint32_t vcpu_id)
--{
--	uint64_t gva;
--	uint64_t pages;
--	int i;
--
--	/* Make sure vCPU args data structure is not corrupt. */
--	GUEST_ASSERT(vcpu_args[vcpu_id].vcpu_id == vcpu_id);
--
--	gva = vcpu_args[vcpu_id].gva;
--	pages = vcpu_args[vcpu_id].pages;
--
--	for (i = 0; i < pages; i++) {
--		uint64_t addr = gva + (i * guest_page_size);
--
--		*(uint64_t *)addr = 0x0123456789ABCDEF;
--	}
--
--	GUEST_SYNC(1);
--}
--
- static void *vcpu_worker(void *data)
- {
- 	int ret;
--	struct vcpu_args *args = (struct vcpu_args *)data;
--	struct kvm_vm *vm = args->vm;
--	int vcpu_id = args->vcpu_id;
-+	struct vcpu_args *vcpu_args = (struct vcpu_args *)data;
-+	int vcpu_id = vcpu_args->vcpu_id;
-+	struct kvm_vm *vm = perf_test_args.vm;
+@@ -50,7 +50,8 @@ static void *vcpu_worker(void *data)
+ 	int vcpu_id = vcpu_args->vcpu_id;
+ 	struct kvm_vm *vm = perf_test_args.vm;
  	struct kvm_run *run;
- 	struct timespec start, end, ts_diff;
+-	struct timespec start, end, ts_diff;
++	struct timespec start;
++	struct timespec ts_diff;
  
-@@ -140,39 +74,6 @@ static void *vcpu_worker(void *data)
- 	return NULL;
- }
+ 	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
+ 	run = vcpu_state(vm, vcpu_id);
+@@ -66,8 +67,7 @@ static void *vcpu_worker(void *data)
+ 			    exit_reason_str(run->exit_reason));
+ 	}
  
--#define PAGE_SHIFT_4K  12
--#define PTES_PER_4K_PT 512
--
--static struct kvm_vm *create_vm(enum vm_guest_mode mode, int vcpus,
--				uint64_t vcpu_memory_bytes)
--{
--	struct kvm_vm *vm;
--	uint64_t pages = DEFAULT_GUEST_PHY_PAGES;
--
--	/* Account for a few pages per-vCPU for stacks */
--	pages += DEFAULT_STACK_PGS * vcpus;
--
--	/*
--	 * Reserve twice the ammount of memory needed to map the test region and
--	 * the page table / stacks region, at 4k, for page tables. Do the
--	 * calculation with 4K page size: the smallest of all archs. (e.g., 64K
--	 * page size guest will need even less memory for page tables).
--	 */
--	pages += (2 * pages) / PTES_PER_4K_PT;
--	pages += ((2 * vcpus * vcpu_memory_bytes) >> PAGE_SHIFT_4K) /
--		 PTES_PER_4K_PT;
--	pages = vm_adjust_num_guest_pages(mode, pages);
--
--	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(mode));
--
--	vm = _vm_create(mode, pages, O_RDWR);
--	kvm_vm_elf_load(vm, program_invocation_name, 0, 0);
--#ifdef __x86_64__
--	vm_create_irqchip(vm);
--#endif
--	return vm;
--}
--
- static int handle_uffd_page_request(int uffd, uint64_t addr)
+-	clock_gettime(CLOCK_MONOTONIC, &end);
+-	ts_diff = timespec_sub(end, start);
++	ts_diff = timespec_elapsed(start);
+ 	PER_VCPU_DEBUG("vCPU %d execution time: %ld.%.9lds\n", vcpu_id,
+ 		       ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+@@ -78,7 +78,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
  {
  	pid_t tid;
-@@ -185,7 +86,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
- 
- 	copy.src = (uint64_t)guest_data_prototype;
- 	copy.dst = addr;
--	copy.len = host_page_size;
-+	copy.len = perf_test_args.host_page_size;
- 	copy.mode = 0;
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
-@@ -202,7 +103,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
- 	PER_PAGE_DEBUG("UFFDIO_COPY %d \t%ld ns\n", tid,
- 		       timespec_to_ns(timespec_sub(end, start)));
- 	PER_PAGE_DEBUG("Paged in %ld bytes at 0x%lx from thread %d\n",
--		       host_page_size, addr, tid);
-+		       perf_test_args.host_page_size, addr, tid);
- 
- 	return 0;
- }
-@@ -359,60 +260,15 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
- 	struct timespec start, end, ts_diff;
- 	int *pipefds = NULL;
- 	struct kvm_vm *vm;
--	uint64_t guest_num_pages;
- 	int vcpu_id;
+ 	struct timespec start;
+-	struct timespec end;
++	struct timespec ts_diff;
+ 	struct uffdio_copy copy;
  	int r;
  
- 	vm = create_vm(mode, vcpus, vcpu_memory_bytes);
- 
--	guest_page_size = vm_get_page_size(vm);
--
--	TEST_ASSERT(vcpu_memory_bytes % guest_page_size == 0,
--		    "Guest memory size is not guest page size aligned.");
--
--	guest_num_pages = (vcpus * vcpu_memory_bytes) / guest_page_size;
--	guest_num_pages = vm_adjust_num_guest_pages(mode, guest_num_pages);
--
--	/*
--	 * If there should be more memory in the guest test region than there
--	 * can be pages in the guest, it will definitely cause problems.
--	 */
--	TEST_ASSERT(guest_num_pages < vm_get_max_gfn(vm),
--		    "Requested more guest memory than address space allows.\n"
--		    "    guest pages: %lx max gfn: %x vcpus: %d wss: %lx]\n",
--		    guest_num_pages, vm_get_max_gfn(vm), vcpus,
--		    vcpu_memory_bytes);
--
--	host_page_size = getpagesize();
--	TEST_ASSERT(vcpu_memory_bytes % host_page_size == 0,
--		    "Guest memory size is not host page size aligned.");
--
--	guest_test_phys_mem = (vm_get_max_gfn(vm) - guest_num_pages) *
--			      guest_page_size;
--	guest_test_phys_mem &= ~(host_page_size - 1);
--
--#ifdef __s390x__
--	/* Align to 1M (segment size) */
--	guest_test_phys_mem &= ~((1 << 20) - 1);
--#endif
--
--	pr_info("guest physical test memory offset: 0x%lx\n", guest_test_phys_mem);
--
--	/* Add an extra memory slot for testing demand paging */
--	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
--				    guest_test_phys_mem,
--				    TEST_MEM_SLOT_INDEX,
--				    guest_num_pages, 0);
--
--	/* Do mapping for the demand paging memory slot */
--	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, guest_num_pages, 0);
--
--	ucall_init(vm, NULL);
--
--	guest_data_prototype = malloc(host_page_size);
-+	guest_data_prototype = malloc(perf_test_args.host_page_size);
- 	TEST_ASSERT(guest_data_prototype,
- 		    "Failed to allocate buffer for guest data pattern");
--	memset(guest_data_prototype, 0xAB, host_page_size);
-+	memset(guest_data_prototype, 0xAB, perf_test_args.host_page_size);
- 
- 	vcpu_threads = malloc(vcpus * sizeof(*vcpu_threads));
- 	TEST_ASSERT(vcpu_threads, "Memory allocation failed");
-@@ -427,22 +283,18 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
- 
- 		pipefds = malloc(sizeof(int) * vcpus * 2);
- 		TEST_ASSERT(pipefds, "Unable to allocate memory for pipefd");
--	}
- 
--	for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++) {
--		vm_paddr_t vcpu_gpa;
--		void *vcpu_hva;
--
--		vm_vcpu_add_default(vm, vcpu_id, guest_code);
-+		for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++) {
-+			vm_paddr_t vcpu_gpa;
-+			void *vcpu_hva;
- 
--		vcpu_gpa = guest_test_phys_mem + (vcpu_id * vcpu_memory_bytes);
--		PER_VCPU_DEBUG("Added VCPU %d with test mem gpa [%lx, %lx)\n",
--			       vcpu_id, vcpu_gpa, vcpu_gpa + vcpu_memory_bytes);
-+			vcpu_gpa = guest_test_phys_mem + (vcpu_id * vcpu_memory_bytes);
-+			PER_VCPU_DEBUG("Added VCPU %d with test mem gpa [%lx, %lx)\n",
-+				       vcpu_id, vcpu_gpa, vcpu_gpa + vcpu_memory_bytes);
- 
--		/* Cache the HVA pointer of the region */
--		vcpu_hva = addr_gpa2hva(vm, vcpu_gpa);
-+			/* Cache the HVA pointer of the region */
-+			vcpu_hva = addr_gpa2hva(vm, vcpu_gpa);
- 
--		if (use_uffd) {
- 			/*
- 			 * Set up user fault fd to handle demand paging
- 			 * requests.
-@@ -459,30 +311,15 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
- 			if (r < 0)
- 				exit(-r);
- 		}
--
--#ifdef __x86_64__
--		vcpu_set_cpuid(vm, vcpu_id, kvm_get_supported_cpuid());
--#endif
--
--		vcpu_args[vcpu_id].vm = vm;
--		vcpu_args[vcpu_id].vcpu_id = vcpu_id;
--		vcpu_args[vcpu_id].gva = guest_test_virt_mem +
--					 (vcpu_id * vcpu_memory_bytes);
--		vcpu_args[vcpu_id].pages = vcpu_memory_bytes / guest_page_size;
+@@ -98,10 +98,10 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
+ 		return r;
  	}
  
--	/* Export the shared variables to the guest */
--	sync_global_to_guest(vm, host_page_size);
--	sync_global_to_guest(vm, guest_page_size);
--	sync_global_to_guest(vm, vcpu_args);
--
- 	pr_info("Finished creating vCPUs and starting uffd threads\n");
+-	clock_gettime(CLOCK_MONOTONIC, &end);
++	ts_diff = timespec_elapsed(start);
+ 
+ 	PER_PAGE_DEBUG("UFFDIO_COPY %d \t%ld ns\n", tid,
+-		       timespec_to_ns(timespec_sub(end, start)));
++		       timespec_to_ns(ts_diff));
+ 	PER_PAGE_DEBUG("Paged in %ld bytes at 0x%lx from thread %d\n",
+ 		       perf_test_args.host_page_size, addr, tid);
+ 
+@@ -123,7 +123,8 @@ static void *uffd_handler_thread_fn(void *arg)
+ 	int pipefd = uffd_args->pipefd;
+ 	useconds_t delay = uffd_args->delay;
+ 	int64_t pages = 0;
+-	struct timespec start, end, ts_diff;
++	struct timespec start;
++	struct timespec ts_diff;
  
  	clock_gettime(CLOCK_MONOTONIC, &start);
- 
- 	for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++) {
- 		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
--			       &vcpu_args[vcpu_id]);
-+			       &perf_test_args.vcpu_args[vcpu_id]);
+ 	while (!quit_uffd_thread) {
+@@ -192,8 +193,7 @@ static void *uffd_handler_thread_fn(void *arg)
+ 		pages++;
  	}
  
- 	pr_info("Started all vCPUs\n");
-@@ -513,7 +350,8 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
+-	clock_gettime(CLOCK_MONOTONIC, &end);
+-	ts_diff = timespec_sub(end, start);
++	ts_diff = timespec_elapsed(start);
+ 	PER_VCPU_DEBUG("userfaulted %ld pages over %ld.%.9lds. (%f/sec)\n",
+ 		       pages, ts_diff.tv_sec, ts_diff.tv_nsec,
+ 		       pages / ((double)ts_diff.tv_sec + (double)ts_diff.tv_nsec / 100000000.0));
+@@ -257,7 +257,8 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
+ 	pthread_t *vcpu_threads;
+ 	pthread_t *uffd_handler_threads = NULL;
+ 	struct uffd_handler_args *uffd_args = NULL;
+-	struct timespec start, end, ts_diff;
++	struct timespec start;
++	struct timespec ts_diff;
+ 	int *pipefds = NULL;
+ 	struct kvm_vm *vm;
+ 	int vcpu_id;
+@@ -330,9 +331,9 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
+ 		PER_VCPU_DEBUG("Joined thread for vCPU %d\n", vcpu_id);
+ 	}
+ 
+-	pr_info("All vCPU threads joined\n");
++	ts_diff = timespec_elapsed(start);
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &end);
++	pr_info("All vCPU threads joined\n");
+ 
+ 	if (use_uffd) {
+ 		char c;
+@@ -346,7 +347,6 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
+ 		}
+ 	}
+ 
+-	ts_diff = timespec_sub(end, start);
  	pr_info("Total guest execution time: %ld.%.9lds\n",
  		ts_diff.tv_sec, ts_diff.tv_nsec);
  	pr_info("Overall demand paging rate: %f pgs/sec\n",
--		guest_num_pages / ((double)ts_diff.tv_sec + (double)ts_diff.tv_nsec / 100000000.0));
-+		perf_test_args.vcpu_args[0].pages * vcpus /
-+		((double)ts_diff.tv_sec + (double)ts_diff.tv_nsec / 100000000.0));
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index 5eb01bf51b86f..a1564f98223d9 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -64,5 +64,6 @@ int64_t timespec_to_ns(struct timespec ts);
+ struct timespec timespec_add_ns(struct timespec ts, int64_t ns);
+ struct timespec timespec_add(struct timespec ts1, struct timespec ts2);
+ struct timespec timespec_sub(struct timespec ts1, struct timespec ts2);
++struct timespec timespec_elapsed(struct timespec start);
  
- 	ucall_uninit(vm);
- 	kvm_vm_free(vm);
-diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-new file mode 100644
-index 0000000000000..4d52b9ee13c42
---- /dev/null
-+++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * tools/testing/selftests/kvm/include/perf_test_util.h
-+ *
-+ * Copyright (C) 2020, Google LLC.
-+ */
+ #endif /* SELFTEST_KVM_TEST_UTIL_H */
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index 689e97c27ee24..c2cee1ea20a31 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -4,10 +4,13 @@
+  *
+  * Copyright (C) 2020, Google LLC.
+  */
+-#include <stdlib.h>
 +
-+#ifndef SELFTEST_KVM_PERF_TEST_UTIL_H
-+#define SELFTEST_KVM_PERF_TEST_UTIL_H
++#include <assert.h>
+ #include <ctype.h>
+ #include <limits.h>
+-#include <assert.h>
++#include <stdlib.h>
++#include <time.h>
 +
-+#include "kvm_util.h"
-+#include "processor.h"
-+
-+#define MAX_VCPUS 512
-+
-+#define PAGE_SHIFT_4K  12
-+#define PTES_PER_4K_PT 512
-+
-+#define TEST_MEM_SLOT_INDEX		1
-+
-+/* Default guest test virtual memory offset */
-+#define DEFAULT_GUEST_TEST_MEM		0xc0000000
-+
-+extern uint64_t guest_test_phys_mem;
-+extern uint64_t guest_test_virt_mem;
-+
-+struct vcpu_args {
-+	uint64_t gva;
-+	uint64_t pages;
-+
-+	/* Only used by the host userspace part of the vCPU thread */
-+	int vcpu_id;
-+};
-+
-+struct perf_test_args {
-+	struct kvm_vm *vm;
-+	uint64_t host_page_size;
-+	uint64_t guest_page_size;
-+
-+	struct vcpu_args vcpu_args[MAX_VCPUS];
-+};
-+
-+extern struct perf_test_args perf_test_args;
-+
-+void guest_code(uint32_t vcpu_id);
-+
-+struct kvm_vm *create_vm(enum vm_guest_mode mode, int vcpus,
-+			 uint64_t vcpu_memory_bytes);
-+
-+#endif /* SELFTEST_KVM_PERF_TEST_UTIL_H */
-diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-new file mode 100644
-index 0000000000000..fa7efbac9ef8a
---- /dev/null
-+++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-@@ -0,0 +1,161 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * tools/testing/selftests/kvm/lib/perf_test_util.c
-+ *
-+ * Copyright (C) 2020, Google LLC.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_name */
-+
-+#include "perf_test_util.h"
-+
-+/*
-+ * Guest physical memory offset of the testing memory slot.
-+ * This will be set to the topmost valid physical address minus
-+ * the test memory size.
-+ */
-+uint64_t guest_test_phys_mem;
-+
-+/*
-+ * Guest virtual memory offset of the testing memory slot.
-+ * Must not conflict with identity mapped test code.
-+ */
-+uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
-+
-+struct perf_test_args perf_test_args;
-+
-+/*
-+ * Continuously write to the first 8 bytes of each page in the
-+ * specified region.
-+ */
-+void guest_code(uint32_t vcpu_id)
+ #include "test_util.h"
+ 
+ /*
+@@ -81,6 +84,14 @@ struct timespec timespec_sub(struct timespec ts1, struct timespec ts2)
+ 	return timespec_add_ns((struct timespec){0}, ns1 - ns2);
+ }
+ 
++struct timespec timespec_elapsed(struct timespec start)
 +{
-+	struct vcpu_args *vcpu_args = &perf_test_args.vcpu_args[vcpu_id];
-+	uint64_t gva;
-+	uint64_t pages;
-+	int i;
++	struct timespec end;
 +
-+	/* Make sure vCPU args data structure is not corrupt. */
-+	GUEST_ASSERT(vcpu_args->vcpu_id == vcpu_id);
-+
-+	gva = vcpu_args->gva;
-+	pages = vcpu_args->pages;
-+
-+	for (i = 0; i < pages; i++) {
-+		uint64_t addr = gva + (i * perf_test_args.guest_page_size);
-+
-+		*(uint64_t *)addr = 0x0123456789ABCDEF;
-+	}
-+
-+	GUEST_SYNC(1);
++	clock_gettime(CLOCK_MONOTONIC, &end);
++	return timespec_sub(end, start);
 +}
 +
-+static void add_vcpus(struct kvm_vm *vm, int vcpus, uint64_t vcpu_memory_bytes)
-+{
-+	vm_paddr_t vcpu_gpa;
-+	struct vcpu_args *vcpu_args;
-+	int vcpu_id;
-+
-+	for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++) {
-+		vcpu_args = &perf_test_args.vcpu_args[vcpu_id];
-+
-+		vm_vcpu_add_default(vm, vcpu_id, guest_code);
-+
-+#ifdef __x86_64__
-+		vcpu_set_cpuid(vm, vcpu_id, kvm_get_supported_cpuid());
-+#endif
-+
-+		vcpu_args->vcpu_id = vcpu_id;
-+		vcpu_args->gva = guest_test_virt_mem +
-+				 (vcpu_id * vcpu_memory_bytes);
-+		vcpu_args->pages = vcpu_memory_bytes /
-+				   perf_test_args.guest_page_size;
-+
-+		vcpu_gpa = guest_test_phys_mem + (vcpu_id * vcpu_memory_bytes);
-+		pr_debug("Added VCPU %d with test mem gpa [%lx, %lx)\n",
-+			 vcpu_id, vcpu_gpa, vcpu_gpa + vcpu_memory_bytes);
-+	}
-+}
-+
-+struct kvm_vm *create_vm(enum vm_guest_mode mode, int vcpus,
-+			 uint64_t vcpu_memory_bytes)
-+{
-+	struct kvm_vm *vm;
-+	uint64_t pages = DEFAULT_GUEST_PHY_PAGES;
-+	uint64_t guest_num_pages;
-+
-+	/* Account for a few pages per-vCPU for stacks */
-+	pages += DEFAULT_STACK_PGS * vcpus;
-+
-+	/*
-+	 * Reserve twice the ammount of memory needed to map the test region and
-+	 * the page table / stacks region, at 4k, for page tables. Do the
-+	 * calculation with 4K page size: the smallest of all archs. (e.g., 64K
-+	 * page size guest will need even less memory for page tables).
-+	 */
-+	pages += (2 * pages) / PTES_PER_4K_PT;
-+	pages += ((2 * vcpus * vcpu_memory_bytes) >> PAGE_SHIFT_4K) /
-+		 PTES_PER_4K_PT;
-+	pages = vm_adjust_num_guest_pages(mode, pages);
-+
-+	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(mode));
-+
-+	vm = _vm_create(mode, pages, O_RDWR);
-+	kvm_vm_elf_load(vm, program_invocation_name, 0, 0);
-+#ifdef __x86_64__
-+	vm_create_irqchip(vm);
-+#endif
-+
-+	perf_test_args.vm = vm;
-+	perf_test_args.guest_page_size = vm_get_page_size(vm);
-+	perf_test_args.host_page_size = getpagesize();
-+
-+	TEST_ASSERT(vcpu_memory_bytes % perf_test_args.guest_page_size == 0,
-+		    "Guest memory size is not guest page size aligned.");
-+
-+	guest_num_pages = (vcpus * vcpu_memory_bytes) /
-+			  perf_test_args.guest_page_size;
-+	guest_num_pages = vm_adjust_num_guest_pages(mode, guest_num_pages);
-+
-+	/*
-+	 * If there should be more memory in the guest test region than there
-+	 * can be pages in the guest, it will definitely cause problems.
-+	 */
-+	TEST_ASSERT(guest_num_pages < vm_get_max_gfn(vm),
-+		    "Requested more guest memory than address space allows.\n"
-+		    "    guest pages: %lx max gfn: %x vcpus: %d wss: %lx]\n",
-+		    guest_num_pages, vm_get_max_gfn(vm), vcpus,
-+		    vcpu_memory_bytes);
-+
-+	TEST_ASSERT(vcpu_memory_bytes % perf_test_args.host_page_size == 0,
-+		    "Guest memory size is not host page size aligned.");
-+
-+	guest_test_phys_mem = (vm_get_max_gfn(vm) - guest_num_pages) *
-+			      perf_test_args.guest_page_size;
-+	guest_test_phys_mem &= ~(perf_test_args.host_page_size - 1);
-+
-+#ifdef __s390x__
-+	/* Align to 1M (segment size) */
-+	guest_test_phys_mem &= ~((1 << 20) - 1);
-+#endif
-+
-+	pr_info("guest physical test memory offset: 0x%lx\n", guest_test_phys_mem);
-+
-+	/* Add an extra memory slot for testing */
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    guest_test_phys_mem,
-+				    TEST_MEM_SLOT_INDEX,
-+				    guest_num_pages, 0);
-+
-+	/* Do mapping for the demand paging memory slot */
-+	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, guest_num_pages, 0);
-+
-+	ucall_init(vm, NULL);
-+
-+	add_vcpus(vm, vcpus, vcpu_memory_bytes);
-+
-+	sync_global_to_guest(vm, perf_test_args);
-+
-+	return vm;
-+}
-+
+ void print_skip(const char *fmt, ...)
+ {
+ 	va_list ap;
 -- 
 2.29.1.341.ge80a0c044ae-goog
 
