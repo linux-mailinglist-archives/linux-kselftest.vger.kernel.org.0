@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 665132A5A2E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 23:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 466862A5A42
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 23:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729484AbgKCWjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 17:39:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S1729889AbgKCWqY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 17:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729342AbgKCWjy (ORCPT
+        with ESMTP id S1729575AbgKCWqY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 17:39:54 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A08C0613D1;
-        Tue,  3 Nov 2020 14:39:54 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id j12so5578406iow.0;
-        Tue, 03 Nov 2020 14:39:54 -0800 (PST)
+        Tue, 3 Nov 2020 17:46:24 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7331CC0613D1;
+        Tue,  3 Nov 2020 14:46:24 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id n5so17636486ile.7;
+        Tue, 03 Nov 2020 14:46:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Q1fSjRxkdgdb3dJlgs3KGwewyjQPFNHGcFMIqXb2OR4=;
-        b=FtZ8meo6Wv84NAh6ucBYC7C/wgd/hEk9mTHFtOuiif/RFtLceP/O8Njl5qH4GlaZK3
-         mWUXMMu6Dxh7p/3wYZoSRnMtXvmj+412+q6EOPfZ9MTMhCLBG4L5QE+AA97muzLyC8Bn
-         p+k4EEPAqpM01xqsvoAYknkFPJUDdneKW/qaPDoINySAeFtg2WPB8gMfmAhiYNtHaZ4W
-         69kY8o6gmn0czqOkSVBTcVY3YQSl9FAPkXU6AMLSrK96WbH3Yo5xnm68XTILCjRj0I59
-         vzqr58gktr/posU2xzosEWNt6mevU6FM5HUjC+hxWyR+tzuf8dKdYgolt8IPhnXXP4Wj
-         IKmQ==
+        bh=lH5i5uFYniMMbkFnLq314abTav522BASpBwrryyYWwY=;
+        b=tT3lywaupetn0TrYjXdzpPpxeD9U/1IlHZPYYir0qeOhE2FYiVW92l943BHtWSbs2v
+         Df9YMKONfCDMM1nbDOgjntrym7OaJEdA8+oONqvsOKySS4L9Qw/7MuuZWFfm7/BupbCu
+         xbNMTft7hB9pp83NslYC59CPvn1P5Feuxszcb13db+to4mZkXIzpuYTfU/j2W8La/Aiz
+         Cr18py9cDYlTKTlt1nWXzElBMaoS4xpysLNjS8O27SXhh6/caIQxDGgm7Zpb4IFA4L0m
+         YxDDVJQhVwZG/7dlBxY9QYJxSFPK0Ubj5a++0c0RBoO09xg17u1LlAfAy0TZQlpyOLOU
+         UO5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Q1fSjRxkdgdb3dJlgs3KGwewyjQPFNHGcFMIqXb2OR4=;
-        b=bZk+BlJqR6Z7N/33CAsARUD9gi21cvTUq+E9EPti9BXDLF2C0/1Hu1a40Bqi5+GA2H
-         mOS1PPzUhIC8SWRdcvtfYhMBo2vYEP+NIQgQOeEgCBiPJISXmPfMJna/da5gbhSV1eJm
-         K6M8K/I3+x/FxQmoR5VDiTyFbKWN4q/t4AXtnM0sgNuBbl7jg6cd3MgNKHF+vz38P6RB
-         2LsKg9qog2TG452upabOpHu7kppZqjq5zzb1okT5tFbThPPkuVtaiq219QM0Lf/IOjD8
-         48V8+aQmkOXOvxHrYIp0H9JOD5inyWu3S7KWOQoF6md3r7bUfY+VTNU/So2G+oCjUoEO
-         O7ig==
-X-Gm-Message-State: AOAM530gKdF9vjh7NCN5rQWIjtbm8n82EYGSNQmcrvR/x1Xsiz1I81lp
-        5GqMSFSfP9WdlzGsHJReOEw=
-X-Google-Smtp-Source: ABdhPJwBfNahtlMkZcIhW0aghCVUqt9HwT/BxbSJ9uFwMnqZsMn3CrvvtI8CruKf+qXlR8xD6CMGkw==
-X-Received: by 2002:a6b:6016:: with SMTP id r22mr14997218iog.93.1604443193936;
-        Tue, 03 Nov 2020 14:39:53 -0800 (PST)
+        bh=lH5i5uFYniMMbkFnLq314abTav522BASpBwrryyYWwY=;
+        b=Sf4oakqRG0I4j+dI7WkcwIluxZ/uo8i13m+YjRnlBaPb8QEz7/usoiwihRy2VyMbeN
+         NKAEZIM3OafFiKo5QM1qyRSdGAF93ZI/1VAiJcW7qvJI6eM6Vl4F2hbLsmQFpncFLKXo
+         hL4MCJI3yyjMq+x2Z7OsovTY0jMRutKrIi6Xoob3A70mj8Vpu3E9/Q/t0EL3mULbE0t4
+         oCq2kjbY1UI7BseB+oJFVK3N2K/FV03F1FZWyb2f5dZK1dQPMd34vJ3aKGQeD4CAy3VW
+         OmMbYts2xEZ+wj0sn9xNAfEDTUIV8wI8OKtUh1k96iFALEtBVHMwZDxB1vhUfiqSJ8mG
+         TtAQ==
+X-Gm-Message-State: AOAM531Jc5SZrGXioYpua11EOAjWSQflsAZICBxVrPbctR7gGQVsUn1H
+        JIlgiFZ4Vsc0dVYejRhgYcw=
+X-Google-Smtp-Source: ABdhPJxiZRwOga+D4mV8ngi2qwi8CBgjbZ/33tzOxuxZ1xcEHzWJMQ+P7ohOYuUCdzNqc2/HDvjSyA==
+X-Received: by 2002:a92:ae0e:: with SMTP id s14mr6751881ilh.94.1604443583815;
+        Tue, 03 Nov 2020 14:46:23 -0800 (PST)
 Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:def:1f9b:2059:ffac])
-        by smtp.googlemail.com with ESMTPSA id u18sm78660iob.53.2020.11.03.14.39.52
+        by smtp.googlemail.com with ESMTPSA id l18sm94436ioc.31.2020.11.03.14.46.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2020 14:39:53 -0800 (PST)
-Subject: Re: [net-next,v1,1/5] vrf: add mac header for tunneled packets when
- sniffer is attached
+        Tue, 03 Nov 2020 14:46:23 -0800 (PST)
+Subject: Re: [net-next,v1,5/5] selftests: add selftest for the SRv6 End.DT4
+ behavior
 To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
         "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -71,14 +71,14 @@ Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>
 References: <20201103125242.11468-1-andrea.mayer@uniroma2.it>
- <20201103125242.11468-2-andrea.mayer@uniroma2.it>
+ <20201103125242.11468-6-andrea.mayer@uniroma2.it>
 From:   David Ahern <dsahern@gmail.com>
-Message-ID: <bf69c702-db2f-b9f2-148e-17a325a3cbda@gmail.com>
-Date:   Tue, 3 Nov 2020 15:39:50 -0700
+Message-ID: <2f11e5f5-7010-36e2-1e9b-800dc76d0091@gmail.com>
+Date:   Tue, 3 Nov 2020 15:46:19 -0700
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <20201103125242.11468-2-andrea.mayer@uniroma2.it>
+In-Reply-To: <20201103125242.11468-6-andrea.mayer@uniroma2.it>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -87,28 +87,189 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 11/3/20 5:52 AM, Andrea Mayer wrote:
-> Before this patch, a sniffer attached to a VRF used as the receiving
-> interface of L3 tunneled packets detects them as malformed packets and
-> it complains about that (i.e.: tcpdump shows bogus packets).
-> 
-> The reason is that a tunneled L3 packet does not carry any L2
-> information and when the VRF is set as the receiving interface of a
-> decapsulated L3 packet, no mac header is currently set or valid.
-> Therefore, the purpose of this patch consists of adding a MAC header to
-> any packet which is directly received on the VRF interface ONLY IF:
-> 
->  i) a sniffer is attached on the VRF and ii) the mac header is not set.
-> 
-> In this case, the mac address of the VRF is copied in both the
-> destination and the source address of the ethernet header. The protocol
-> type is set either to IPv4 or IPv6, depending on which L3 packet is
-> received.
+> this selftest is designed for evaluating the new SRv6 End.DT4 behavior
+> used, in this example, for implementing IPv4 L3 VPN use cases.
 > 
 > Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 > ---
->  drivers/net/vrf.c | 78 +++++++++++++++++++++++++++++++++++++++++++----
->  1 file changed, 72 insertions(+), 6 deletions(-)
+>  .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 494 ++++++++++++++++++
+>  1 file changed, 494 insertions(+)
+>  create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
 > 
+> diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+> new file mode 100755
+> index 000000000000..a5547fed5048
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+> @@ -0,0 +1,494 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# author: Andrea Mayer <andrea.mayer@uniroma2.it>
+> +
+> +# This test is designed for evaluating the new SRv6 End.DT4 behavior used for
+> +# implementing IPv4 L3 VPN use cases.
+> +#
+> +# Hereafter a network diagram is shown, where two different tenants (named 100
+> +# and 200) offer IPv4 L3 VPN services allowing hosts to communicate with each
+> +# other across an IPv6 network.
+> +#
+> +# Only hosts belonging to the same tenant (and to the same VPN) can communicate
+> +# with each other. Instead, the communication among hosts of different tenants
+> +# is forbidden.
+> +# In other words, hosts hs-t100-1 and hs-t100-2 are connected through the IPv4
+> +# L3 VPN of tenant 100 while hs-t200-3 and hs-t200-4 are connected using the
+> +# IPv4 L3 VPN of tenant 200. Cross connection between tenant 100 and tenant 200
+> +# is forbidden and thus, for example, hs-t100-1 cannot reach hs-t200-3 and vice
+> +# versa.
+> +#
+> +# Routers rt-1 and rt-2 implement IPv4 L3 VPN services leveraging the SRv6
+> +# architecture. The key components for such VPNs are: a) SRv6 Encap behavior,
+> +# b) SRv6 End.DT4 behavior and c) VRF.
+> +#
+> +# To explain how an IPv4 L3 VPN based on SRv6 works, let us briefly consider an
+> +# example where, within the same domain of tenant 100, the host hs-t100-1 pings
+> +# the host hs-t100-2.
+> +#
+> +# First of all, L2 reachability of the host hs-t100-2 is taken into account by
+> +# the router rt-1 which acts as an arp proxy.
+> +#
+> +# When the host hs-t100-1 sends an IPv4 packet destined to hs-t100-2, the
+> +# router rt-1 receives the packet on the internal veth-t100 interface. Such
+> +# interface is enslaved to the VRF vrf-100 whose associated table contains the
+> +# SRv6 Encap route for encapsulating any IPv4 packet in a IPv6 plus the Segment
+> +# Routing Header (SRH) packet. This packet is sent through the (IPv6) core
+> +# network up to the router rt-2 that receives it on veth0 interface.
+> +#
+> +# The rt-2 router uses the 'localsid' routing table to process incoming
+> +# IPv6+SRH packets which belong to the VPN of the tenant 100. For each of these
+> +# packets, the SRv6 End.DT4 behavior removes the outer IPv6+SRH headers and
+> +# performs the lookup on the vrf-100 table using the destination address of
+> +# the decapsulated IPv4 packet. Afterwards, the packet is sent to the host
+> +# hs-t100-2 through the veth-t100 interface.
+> +#
+> +# The ping response follows the same processing but this time the role of rt-1
+> +# and rt-2 are swapped.
+> +#
+> +# Of course, the IPv4 L3 VPN for tenant 200 works exactly as the IPv4 L3 VPN
+> +# for tenant 100. In this case, only hosts hs-t200-3 and hs-t200-4 are able to
+> +# connect with each other.
+> +#
+> +#
+> +# +-------------------+                                   +-------------------+
+> +# |                   |                                   |                   |
+> +# |  hs-t100-1 netns  |                                   |  hs-t100-2 netns  |
+> +# |                   |                                   |                   |
+> +# |  +-------------+  |                                   |  +-------------+  |
+> +# |  |    veth0    |  |                                   |  |    veth0    |  |
+> +# |  | 10.0.0.1/24 |  |                                   |  | 10.0.0.2/24 |  |
+> +# |  +-------------+  |                                   |  +-------------+  |
+> +# |        .          |                                   |         .         |
+> +# +-------------------+                                   +-------------------+
+> +#          .                                                        .
+> +#          .                                                        .
+> +#          .                                                        .
+> +# +-----------------------------------+   +-----------------------------------+
+> +# |        .                          |   |                         .         |
+> +# | +---------------+                 |   |                 +---------------- |
+> +# | |   veth-t100   |                 |   |                 |   veth-t100   | |
+> +# | | 10.0.0.254/24 |    +----------+ |   | +----------+    | 10.0.0.254/24 | |
+> +# | +-------+-------+    | localsid | |   | | localsid |    +-------+-------- |
+> +# |         |            |   table  | |   | |   table  |            |         |
+> +# |    +----+----+       +----------+ |   | +----------+       +----+----+    |
+> +# |    | vrf-100 |                    |   |                    | vrf-100 |    |
+> +# |    +---------+     +------------+ |   | +------------+     +---------+    |
+> +# |                    |   veth0    | |   | |   veth0    |                    |
+> +# |                    | fd00::1/64 |.|...|.| fd00::2/64 |                    |
+> +# |    +---------+     +------------+ |   | +------------+     +---------+    |
+> +# |    | vrf-200 |                    |   |                    | vrf-200 |    |
+> +# |    +----+----+                    |   |                    +----+----+    |
+> +# |         |                         |   |                         |         |
+> +# | +---------------+                 |   |                 +---------------- |
+> +# | |   veth-t200   |                 |   |                 |   veth-t200   | |
+> +# | | 10.0.0.254/24 |                 |   |                 | 10.0.0.254/24 | |
+> +# | +---------------+      rt-1 netns |   | rt-2 netns      +---------------- |
+> +# |        .                          |   |                          .        |
+> +# +-----------------------------------+   +-----------------------------------+
+> +#          .                                                         .
+> +#          .                                                         .
+> +#          .                                                         .
+> +#          .                                                         .
+> +# +-------------------+                                   +-------------------+
+> +# |        .          |                                   |          .        |
+> +# |  +-------------+  |                                   |  +-------------+  |
+> +# |  |    veth0    |  |                                   |  |    veth0    |  |
+> +# |  | 10.0.0.3/24 |  |                                   |  | 10.0.0.4/24 |  |
+> +# |  +-------------+  |                                   |  +-------------+  |
+> +# |                   |                                   |                   |
+> +# |  hs-t200-3 netns  |                                   |  hs-t200-4 netns  |
+> +# |                   |                                   |                   |
+> +# +-------------------+                                   +-------------------+
+> +#
+> +#
+> +# ~~~~~~~~~~~~~~~~~~~~~~~~~
+> +# | Network configuration |
+> +# ~~~~~~~~~~~~~~~~~~~~~~~~~
+> +#
+> +# rt-1: localsid table (table 90)
+> +# +----------------------------------------------+
+> +# |SID              |Action                      |
+> +# +----------------------------------------------+
+> +# |fc00:21:100::6004|apply SRv6 End.DT4 table 100|
+> +# +----------------------------------------------+
+> +# |fc00:21:200::6004|apply SRv6 End.DT4 table 200|
+> +# +----------------------------------------------+
+> +#
+> +# rt-1: VRF tenant 100 (table 100)
+> +# +---------------------------------------------------+
+> +# |host       |Action                                 |
+> +# +---------------------------------------------------+
+> +# |10.0.0.2   |apply seg6 encap segs fc00:12:100::6004|
+> +# +---------------------------------------------------+
+> +# |10.0.0.0/24|forward to dev veth_t100               |
+> +# +---------------------------------------------------+
+> +#
+> +# rt-1: VRF tenant 200 (table 200)
+> +# +---------------------------------------------------+
+> +# |host       |Action                                 |
+> +# +---------------------------------------------------+
+> +# |10.0.0.4   |apply seg6 encap segs fc00:12:200::6004|
+> +# +---------------------------------------------------+
+> +# |10.0.0.0/24|forward to dev veth_t200               |
+> +# +---------------------------------------------------+
+> +#
+> +#
+> +# rt-2: localsid table (table 90)
+> +# +----------------------------------------------+
+> +# |SID              |Action                      |
+> +# +----------------------------------------------+
+> +# |fc00:12:100::6004|apply SRv6 End.DT4 table 100|
+> +# +----------------------------------------------+
+> +# |fc00:12:200::6004|apply SRv6 End.DT4 table 200|
+> +# +----------------------------------------------+
+> +#
+> +# rt-2: VRF tenant 100 (table 100)
+> +# +---------------------------------------------------+
+> +# |host       |Action                                 |
+> +# +---------------------------------------------------+
+> +# |10.0.0.1   |apply seg6 encap segs fc00:21:100::6004|
+> +# +---------------------------------------------------+
+> +# |10.0.0.0/24|forward to dev veth_t100               |
+> +# +---------------------------------------------------+
+> +#
+> +# rt-2: VRF tenant 200 (table 200)
+> +# +---------------------------------------------------+
+> +# |host       |Action                                 |
+> +# +---------------------------------------------------+
+> +# |10.0.0.3   |apply seg6 encap segs fc00:21:200::6004|
+> +# +---------------------------------------------------+
+> +# |10.0.0.0/24|forward to dev veth_t200               |
+> +# +---------------------------------------------------+
+> +#
+> +
+>
+
+thanks for creating the very well documented test case.
 
 Reviewed-by: David Ahern <dsahern@kernel.org>
 
