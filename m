@@ -2,275 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466862A5A42
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 23:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08AF2A5AB2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 00:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729889AbgKCWqY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 17:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
+        id S1729582AbgKCXt4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 18:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729575AbgKCWqY (ORCPT
+        with ESMTP id S1725769AbgKCXtz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 17:46:24 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7331CC0613D1;
-        Tue,  3 Nov 2020 14:46:24 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id n5so17636486ile.7;
-        Tue, 03 Nov 2020 14:46:24 -0800 (PST)
+        Tue, 3 Nov 2020 18:49:55 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FD2C061A47
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 Nov 2020 15:49:55 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id p63so19749361ybc.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Nov 2020 15:49:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lH5i5uFYniMMbkFnLq314abTav522BASpBwrryyYWwY=;
-        b=tT3lywaupetn0TrYjXdzpPpxeD9U/1IlHZPYYir0qeOhE2FYiVW92l943BHtWSbs2v
-         Df9YMKONfCDMM1nbDOgjntrym7OaJEdA8+oONqvsOKySS4L9Qw/7MuuZWFfm7/BupbCu
-         xbNMTft7hB9pp83NslYC59CPvn1P5Feuxszcb13db+to4mZkXIzpuYTfU/j2W8La/Aiz
-         Cr18py9cDYlTKTlt1nWXzElBMaoS4xpysLNjS8O27SXhh6/caIQxDGgm7Zpb4IFA4L0m
-         YxDDVJQhVwZG/7dlBxY9QYJxSFPK0Ubj5a++0c0RBoO09xg17u1LlAfAy0TZQlpyOLOU
-         UO5w==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=/cu3FeQS2O8Lz6S9sSrj78vp3KVX+NcuSsdaqJSggY0=;
+        b=Fwu2+C4Dx+f+IXf8ZA+5sH1P84M8IsACzDvcYafsQmNlINACCTvKfdKZi5taVl8dzv
+         DEBQVHuJuEgJZ+MKct2TG0UikfzzjTdF6DPGjitVOaIGrOzAE0Kf1vpS4tuyc3jKXvyF
+         eDRvJ+p8FQwo9MgQ5Y8iiDFCQmRGJrL8iXvPVrqCYckzJhg2/5GMBL0QrP7RQVMz/Gi3
+         WGrVui3l6/W2zOz0KYpdUpN1seLRzjFwBpzge5PihPaeZHwxzr9wOWle1yCnHAPkB7NI
+         RUyBrH0mPhZWFhr8v51xci0DBhuvo6MApT0WbWeak1kTUfnh29Zt5niTXpdU2JQEp7Du
+         8KmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lH5i5uFYniMMbkFnLq314abTav522BASpBwrryyYWwY=;
-        b=Sf4oakqRG0I4j+dI7WkcwIluxZ/uo8i13m+YjRnlBaPb8QEz7/usoiwihRy2VyMbeN
-         NKAEZIM3OafFiKo5QM1qyRSdGAF93ZI/1VAiJcW7qvJI6eM6Vl4F2hbLsmQFpncFLKXo
-         hL4MCJI3yyjMq+x2Z7OsovTY0jMRutKrIi6Xoob3A70mj8Vpu3E9/Q/t0EL3mULbE0t4
-         oCq2kjbY1UI7BseB+oJFVK3N2K/FV03F1FZWyb2f5dZK1dQPMd34vJ3aKGQeD4CAy3VW
-         OmMbYts2xEZ+wj0sn9xNAfEDTUIV8wI8OKtUh1k96iFALEtBVHMwZDxB1vhUfiqSJ8mG
-         TtAQ==
-X-Gm-Message-State: AOAM531Jc5SZrGXioYpua11EOAjWSQflsAZICBxVrPbctR7gGQVsUn1H
-        JIlgiFZ4Vsc0dVYejRhgYcw=
-X-Google-Smtp-Source: ABdhPJxiZRwOga+D4mV8ngi2qwi8CBgjbZ/33tzOxuxZ1xcEHzWJMQ+P7ohOYuUCdzNqc2/HDvjSyA==
-X-Received: by 2002:a92:ae0e:: with SMTP id s14mr6751881ilh.94.1604443583815;
-        Tue, 03 Nov 2020 14:46:23 -0800 (PST)
-Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:def:1f9b:2059:ffac])
-        by smtp.googlemail.com with ESMTPSA id l18sm94436ioc.31.2020.11.03.14.46.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2020 14:46:23 -0800 (PST)
-Subject: Re: [net-next,v1,5/5] selftests: add selftest for the SRv6 End.DT4
- behavior
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shrijeet Mukherjee <shrijeet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-References: <20201103125242.11468-1-andrea.mayer@uniroma2.it>
- <20201103125242.11468-6-andrea.mayer@uniroma2.it>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <2f11e5f5-7010-36e2-1e9b-800dc76d0091@gmail.com>
-Date:   Tue, 3 Nov 2020 15:46:19 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <20201103125242.11468-6-andrea.mayer@uniroma2.it>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=/cu3FeQS2O8Lz6S9sSrj78vp3KVX+NcuSsdaqJSggY0=;
+        b=E8jovB5zx6i3PZzJNXCZ62rFma0FoUfjFWEEqgE0r1a2MQFJ9XsOyjwg/TDn7dQm9A
+         gbA8tI08i2rqq2me+IPudFGRYzXzGovZ3x83ertYZUB1OWXcHiTd7oGKw76+ST8mPNka
+         SvJHa7DNhhglEW0B6rUV1vWAE395ac2Zx4DWKYTpliF90XDSfOLccE3wfTwkWC/504GC
+         8LlYp73vzidlANED5Swv88RVTcmaoW7NoDW7YLTPrFw6qa21qPabELJX5ZfQqYe7kOES
+         A4GmUTYJhztHb3+Iu4fwUygmMOX8PMHi9rlPM+VRTJN+h9/gDyhJSeiid46vE6AJ5Rr5
+         o5tA==
+X-Gm-Message-State: AOAM530/2bDdBAYAVjhKhukc8OyASUiNYdrRBRLjTaizURyE586+yAhg
+        q3aR+m6Qcsn/w7oI/7mp9SRFsLAcwUmq
+X-Google-Smtp-Source: ABdhPJxeFN2tpViTDExAnXIdBh+gL3Mrr/FOyn4zOu32Uoy29GCFiuUTwYsUmqKOIyRxFyG53sKXWnB1dai2
+Sender: "bgardon via sendgmr" <bgardon@bgardon.sea.corp.google.com>
+X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:f693:9fff:fef4:a293])
+ (user=bgardon job=sendgmr) by 2002:a25:d081:: with SMTP id
+ h123mr33023214ybg.160.1604447394920; Tue, 03 Nov 2020 15:49:54 -0800 (PST)
+Date:   Tue,  3 Nov 2020 15:49:47 -0800
+Message-Id: <20201103234952.1626730-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
+Subject: [PATCH v2 0/5] Add a dirty logging performance test
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Peter Feiner <pfeiner@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/3/20 5:52 AM, Andrea Mayer wrote:
-> this selftest is designed for evaluating the new SRv6 End.DT4 behavior
-> used, in this example, for implementing IPv4 L3 VPN use cases.
-> 
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 494 ++++++++++++++++++
->  1 file changed, 494 insertions(+)
->  create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-> 
-> diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-> new file mode 100755
-> index 000000000000..a5547fed5048
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-> @@ -0,0 +1,494 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# author: Andrea Mayer <andrea.mayer@uniroma2.it>
-> +
-> +# This test is designed for evaluating the new SRv6 End.DT4 behavior used for
-> +# implementing IPv4 L3 VPN use cases.
-> +#
-> +# Hereafter a network diagram is shown, where two different tenants (named 100
-> +# and 200) offer IPv4 L3 VPN services allowing hosts to communicate with each
-> +# other across an IPv6 network.
-> +#
-> +# Only hosts belonging to the same tenant (and to the same VPN) can communicate
-> +# with each other. Instead, the communication among hosts of different tenants
-> +# is forbidden.
-> +# In other words, hosts hs-t100-1 and hs-t100-2 are connected through the IPv4
-> +# L3 VPN of tenant 100 while hs-t200-3 and hs-t200-4 are connected using the
-> +# IPv4 L3 VPN of tenant 200. Cross connection between tenant 100 and tenant 200
-> +# is forbidden and thus, for example, hs-t100-1 cannot reach hs-t200-3 and vice
-> +# versa.
-> +#
-> +# Routers rt-1 and rt-2 implement IPv4 L3 VPN services leveraging the SRv6
-> +# architecture. The key components for such VPNs are: a) SRv6 Encap behavior,
-> +# b) SRv6 End.DT4 behavior and c) VRF.
-> +#
-> +# To explain how an IPv4 L3 VPN based on SRv6 works, let us briefly consider an
-> +# example where, within the same domain of tenant 100, the host hs-t100-1 pings
-> +# the host hs-t100-2.
-> +#
-> +# First of all, L2 reachability of the host hs-t100-2 is taken into account by
-> +# the router rt-1 which acts as an arp proxy.
-> +#
-> +# When the host hs-t100-1 sends an IPv4 packet destined to hs-t100-2, the
-> +# router rt-1 receives the packet on the internal veth-t100 interface. Such
-> +# interface is enslaved to the VRF vrf-100 whose associated table contains the
-> +# SRv6 Encap route for encapsulating any IPv4 packet in a IPv6 plus the Segment
-> +# Routing Header (SRH) packet. This packet is sent through the (IPv6) core
-> +# network up to the router rt-2 that receives it on veth0 interface.
-> +#
-> +# The rt-2 router uses the 'localsid' routing table to process incoming
-> +# IPv6+SRH packets which belong to the VPN of the tenant 100. For each of these
-> +# packets, the SRv6 End.DT4 behavior removes the outer IPv6+SRH headers and
-> +# performs the lookup on the vrf-100 table using the destination address of
-> +# the decapsulated IPv4 packet. Afterwards, the packet is sent to the host
-> +# hs-t100-2 through the veth-t100 interface.
-> +#
-> +# The ping response follows the same processing but this time the role of rt-1
-> +# and rt-2 are swapped.
-> +#
-> +# Of course, the IPv4 L3 VPN for tenant 200 works exactly as the IPv4 L3 VPN
-> +# for tenant 100. In this case, only hosts hs-t200-3 and hs-t200-4 are able to
-> +# connect with each other.
-> +#
-> +#
-> +# +-------------------+                                   +-------------------+
-> +# |                   |                                   |                   |
-> +# |  hs-t100-1 netns  |                                   |  hs-t100-2 netns  |
-> +# |                   |                                   |                   |
-> +# |  +-------------+  |                                   |  +-------------+  |
-> +# |  |    veth0    |  |                                   |  |    veth0    |  |
-> +# |  | 10.0.0.1/24 |  |                                   |  | 10.0.0.2/24 |  |
-> +# |  +-------------+  |                                   |  +-------------+  |
-> +# |        .          |                                   |         .         |
-> +# +-------------------+                                   +-------------------+
-> +#          .                                                        .
-> +#          .                                                        .
-> +#          .                                                        .
-> +# +-----------------------------------+   +-----------------------------------+
-> +# |        .                          |   |                         .         |
-> +# | +---------------+                 |   |                 +---------------- |
-> +# | |   veth-t100   |                 |   |                 |   veth-t100   | |
-> +# | | 10.0.0.254/24 |    +----------+ |   | +----------+    | 10.0.0.254/24 | |
-> +# | +-------+-------+    | localsid | |   | | localsid |    +-------+-------- |
-> +# |         |            |   table  | |   | |   table  |            |         |
-> +# |    +----+----+       +----------+ |   | +----------+       +----+----+    |
-> +# |    | vrf-100 |                    |   |                    | vrf-100 |    |
-> +# |    +---------+     +------------+ |   | +------------+     +---------+    |
-> +# |                    |   veth0    | |   | |   veth0    |                    |
-> +# |                    | fd00::1/64 |.|...|.| fd00::2/64 |                    |
-> +# |    +---------+     +------------+ |   | +------------+     +---------+    |
-> +# |    | vrf-200 |                    |   |                    | vrf-200 |    |
-> +# |    +----+----+                    |   |                    +----+----+    |
-> +# |         |                         |   |                         |         |
-> +# | +---------------+                 |   |                 +---------------- |
-> +# | |   veth-t200   |                 |   |                 |   veth-t200   | |
-> +# | | 10.0.0.254/24 |                 |   |                 | 10.0.0.254/24 | |
-> +# | +---------------+      rt-1 netns |   | rt-2 netns      +---------------- |
-> +# |        .                          |   |                          .        |
-> +# +-----------------------------------+   +-----------------------------------+
-> +#          .                                                         .
-> +#          .                                                         .
-> +#          .                                                         .
-> +#          .                                                         .
-> +# +-------------------+                                   +-------------------+
-> +# |        .          |                                   |          .        |
-> +# |  +-------------+  |                                   |  +-------------+  |
-> +# |  |    veth0    |  |                                   |  |    veth0    |  |
-> +# |  | 10.0.0.3/24 |  |                                   |  | 10.0.0.4/24 |  |
-> +# |  +-------------+  |                                   |  +-------------+  |
-> +# |                   |                                   |                   |
-> +# |  hs-t200-3 netns  |                                   |  hs-t200-4 netns  |
-> +# |                   |                                   |                   |
-> +# +-------------------+                                   +-------------------+
-> +#
-> +#
-> +# ~~~~~~~~~~~~~~~~~~~~~~~~~
-> +# | Network configuration |
-> +# ~~~~~~~~~~~~~~~~~~~~~~~~~
-> +#
-> +# rt-1: localsid table (table 90)
-> +# +----------------------------------------------+
-> +# |SID              |Action                      |
-> +# +----------------------------------------------+
-> +# |fc00:21:100::6004|apply SRv6 End.DT4 table 100|
-> +# +----------------------------------------------+
-> +# |fc00:21:200::6004|apply SRv6 End.DT4 table 200|
-> +# +----------------------------------------------+
-> +#
-> +# rt-1: VRF tenant 100 (table 100)
-> +# +---------------------------------------------------+
-> +# |host       |Action                                 |
-> +# +---------------------------------------------------+
-> +# |10.0.0.2   |apply seg6 encap segs fc00:12:100::6004|
-> +# +---------------------------------------------------+
-> +# |10.0.0.0/24|forward to dev veth_t100               |
-> +# +---------------------------------------------------+
-> +#
-> +# rt-1: VRF tenant 200 (table 200)
-> +# +---------------------------------------------------+
-> +# |host       |Action                                 |
-> +# +---------------------------------------------------+
-> +# |10.0.0.4   |apply seg6 encap segs fc00:12:200::6004|
-> +# +---------------------------------------------------+
-> +# |10.0.0.0/24|forward to dev veth_t200               |
-> +# +---------------------------------------------------+
-> +#
-> +#
-> +# rt-2: localsid table (table 90)
-> +# +----------------------------------------------+
-> +# |SID              |Action                      |
-> +# +----------------------------------------------+
-> +# |fc00:12:100::6004|apply SRv6 End.DT4 table 100|
-> +# +----------------------------------------------+
-> +# |fc00:12:200::6004|apply SRv6 End.DT4 table 200|
-> +# +----------------------------------------------+
-> +#
-> +# rt-2: VRF tenant 100 (table 100)
-> +# +---------------------------------------------------+
-> +# |host       |Action                                 |
-> +# +---------------------------------------------------+
-> +# |10.0.0.1   |apply seg6 encap segs fc00:21:100::6004|
-> +# +---------------------------------------------------+
-> +# |10.0.0.0/24|forward to dev veth_t100               |
-> +# +---------------------------------------------------+
-> +#
-> +# rt-2: VRF tenant 200 (table 200)
-> +# +---------------------------------------------------+
-> +# |host       |Action                                 |
-> +# +---------------------------------------------------+
-> +# |10.0.0.3   |apply seg6 encap segs fc00:21:200::6004|
-> +# +---------------------------------------------------+
-> +# |10.0.0.0/24|forward to dev veth_t200               |
-> +# +---------------------------------------------------+
-> +#
-> +
->
+Currently KVM lacks a simple, userspace agnostic, performance benchmark for
+dirty logging. Such a benchmark will be beneficial for ensuring that dirty
+logging performance does not regress, and to give a common baseline for
+validating performance improvements. The dirty log perf test introduced in
+this series builds on aspects of the existing demand paging perf test and
+provides time-based performance metrics for enabling and disabling dirty
+logging, getting the dirty log, and dirtying memory.
 
-thanks for creating the very well documented test case.
+While the test currently only has a build target for x86, I expect it will
+work on, or be easily modified to support other architectures.
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+This series was tested by running the following invocations on an Intel
+Skylake machine after apply all commits in the series:
+dirty_log_perf_test -b 20m -i 100 -v 64
+dirty_log_perf_test -b 20g -i 5 -v 4
+dirty_log_perf_test -b 4g -i 5 -v 32
+demand_paging_test -b 20m -v 64
+demand_paging_test -b 20g -v 4
+demand_paging_test -b 4g -v 32
+All behaved as expected.
 
+v1 -> v2 changes:
+(in response to comments from Peter Xu)
+- Removed pr_debugs from main test thread while waiting on vCPUs to reduce
+  log spam
+- Fixed a bug in iteration counting that caused the population stage to be
+  counted as part of the first dirty logging pass
+- Fixed a bug in which the test failed to wait for the population stage for all
+  but the first vCPU.
+- Refactored the common code in perf_test_util.c/h
+- Moved testing description to cover letter
+- Renamed timespec_diff_now to timespec_elapsed
+
+Ben Gardon (5):
+  KVM: selftests: Remove address rounding in guest code
+  KVM: selftests: Factor code out of demand_paging_test
+  KVM: selftests: Simplify demand_paging_test with timespec_diff_now
+  KVM: selftests: Add wrfract to common guest code
+  KVM: selftests: Introduce the dirty log perf test
+
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   7 +-
+ .../selftests/kvm/demand_paging_test.c        | 231 ++---------
+ .../selftests/kvm/dirty_log_perf_test.c       | 381 ++++++++++++++++++
+ .../selftests/kvm/include/perf_test_util.h    |  51 +++
+ .../testing/selftests/kvm/include/test_util.h |   2 +
+ .../selftests/kvm/lib/perf_test_util.c        | 166 ++++++++
+ tools/testing/selftests/kvm/lib/test_util.c   |  22 +-
+ 8 files changed, 661 insertions(+), 200 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/dirty_log_perf_test.c
+ create mode 100644 tools/testing/selftests/kvm/include/perf_test_util.h
+ create mode 100644 tools/testing/selftests/kvm/lib/perf_test_util.c
+
+-- 
+2.29.1.341.ge80a0c044ae-goog
 
