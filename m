@@ -2,125 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DCB2A4B89
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 17:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8852A4BFC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 17:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728348AbgKCQaS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 11:30:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53470 "EHLO mail.kernel.org"
+        id S1727901AbgKCQws (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 11:52:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58018 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728082AbgKCQaS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 11:30:18 -0500
-Received: from kernel.org (unknown [87.71.17.26])
+        id S1727999AbgKCQws (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Nov 2020 11:52:48 -0500
+Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.5])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8FB1C206DF;
-        Tue,  3 Nov 2020 16:30:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 961E920870;
+        Tue,  3 Nov 2020 16:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604421016;
-        bh=jYHfX66WW2BdNqS2XWf0ysCG2+5llIa7XFBTFdDX/eI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aIT9WT+BvHALjjzBR+JANCva7x0iax3JsHcWBCEfbBEXiFyByvncM0vQDEjoMsNzh
-         qIUHx4c/P1fmtrQLv9EIQHUB/NNPUa0sJ3XCbfY5Co0b/q6PUKAT7BitPwWCXDu5+c
-         05kTyD2Qgu6hQisAN/yBj1hMLhxnioRXXIEvqYek=
-Date:   Tue, 3 Nov 2020 18:30:02 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Hagen Paul Pfeifer <hagen@jauu.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <20201103163002.GK4879@kernel.org>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20201101110935.GA4105325@laniakea>
- <20201102154028.GD4879@kernel.org>
- <1547601988.128687.1604411534845@office.mailbox.org>
+        s=default; t=1604422367;
+        bh=ATUgDepSx8znfuwBCpbqINr4q8BPefrp2EOWlxQiwf0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U7qwLuRDXQeVl45mOrGV5DelyKEA5ux4Uyj0Dyjj5HcYPgjIyGK95KTG1rc303hgo
+         79NR5ue3xm2GfDt5nuig5H2iyhJxzPE4H/DH/Jw7sHeGs/dEZKsvUMBeVPJx47a3KM
+         4Q/JqmNC6gb2CIefRPEi7lwCSNzUvfwYjo18S0qs=
+Date:   Tue, 3 Nov 2020 08:52:45 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Saeed Mahameed <saeed@kernel.org>, netdev@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
+Message-ID: <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
+References: <cover.1604055792.git.pabeni@redhat.com>
+        <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1547601988.128687.1604411534845@office.mailbox.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 02:52:14PM +0100, Hagen Paul Pfeifer wrote:
-> > On 11/02/2020 4:40 PM Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > > Isn't memfd_secret currently *unnecessarily* designed to be a "one task
-> > > feature"? memfd_secret fulfills exactly two (generic) features:
+On Tue, 03 Nov 2020 16:22:07 +0100 Paolo Abeni wrote:
+> On Mon, 2020-11-02 at 14:54 -0800, Jakub Kicinski wrote:
+> > On Fri, 30 Oct 2020 12:16:00 +0100 Paolo Abeni wrote:  
+> > > Real-time setups try hard to ensure proper isolation between time
+> > > critical applications and e.g. network processing performed by the
+> > > network stack in softirq and RPS is used to move the softirq 
+> > > activity away from the isolated core.
 > > > 
-> > > - address space isolation from kernel (aka SECRET_EXCLUSIVE, not in kernel's
-> > >   direct map) - hide from kernel, great
-> > > - disabling processor's memory caches against speculative-execution vulnerabilities
-> > >   (spectre and friends, aka SECRET_UNCACHED), also great
+> > > If the network configuration is dynamic, with netns and devices
+> > > routinely created at run-time, enforcing the correct RPS setting
+> > > on each newly created device allowing to transient bad configuration
+> > > became complex.
 > > > 
-> > > But, what about the following use-case: implementing a hardened IPC mechanism
-> > > where even the kernel is not aware of any data and optionally via SECRET_UNCACHED
-> > > even the hardware caches are bypassed! With the patches we are so close to
-> > > achieving this.
+> > > These series try to address the above, introducing a new
+> > > sysctl knob: rps_default_mask. The new sysctl entry allows
+> > > configuring a systemwide RPS mask, to be enforced since receive 
+> > > queue creation time without any fourther per device configuration
+> > > required.
 > > > 
-> > > How? Shared, SECRET_EXCLUSIVE and SECRET_UNCACHED mmaped pages for IPC
-> > > involved tasks required to know this mapping (and memfd_secret fd). After IPC
-> > > is done, tasks can copy sensitive data from IPC pages into memfd_secret()
-> > > pages, un-sensitive data can be used/copied everywhere.
+> > > Additionally, a simple self-test is introduced to check the 
+> > > rps_default_mask behavior.  
 > > 
-> > As long as the task share the file descriptor, they can share the
-> > secretmem pages, pretty much like normal memfd.
-> 
-> Including process_vm_readv() and process_vm_writev()? Let's take a hypothetical
-> "dbus-daemon-secure" service that receives data from process A and wants to
-> copy/distribute it to data areas of N other processes. Much like dbus but without
-> SOCK_DGRAM rather direct copy into secretmem/mmap pages (ring-buffer). Should be
-> possible, right?
-
-I'm not sure I follow you here.
-For process_vm_readv() and process_vm_writev() secremem will be only
-accessible on the local part, but not on the remote.
-So copying data to secretmem pages using process_vm_writev wouldn't
-work.
-
-> > > One missing piece is still the secure zeroization of the page(s) if the
-> > > mapping is closed by last process to guarantee a secure cleanup. This can
-> > > probably done as an general mmap feature, not coupled to memfd_secret() and
-> > > can be done independently ("reverse" MAP_UNINITIALIZED feature).
+> > RPS is disabled by default, the processing is going to happen wherever
+> > the IRQ is mapped, and one would hope that the IRQ is not mapped to the
+> > core where the critical processing runs.
 > > 
-> > There are "init_on_alloc" and "init_on_free" kernel parameters that
-> > enable zeroing of the pages on alloc and on free globally.
-> > Anyway, I'll add zeroing of the freed memory to secretmem.
+> > Would you mind elaborating further on the use case?  
 > 
-> Great, this allows page-specific (thus runtime-performance-optimized) zeroing
-> of secured pages. init_on_free lowers the performance to much and is not precice
-> enough.
+> On Mon, 2020-11-02 at 15:27 -0800, Saeed Mahameed wrote:
+> > The whole thing can be replaced with a user daemon scripts that
+> > monitors all newly created devices and assign to them whatever rps mask
+> > (call it default).
+> > 
+> > So why do we need this special logic in kernel ? 
+> > 
+> > I am not sure about this, but if rps queues sysfs are available before
+> > the netdev is up, then you can also use udevd to assign the rps masks
+> > before such devices are even brought up, so you would avoid the race
+> > conditions that you described, which are not really clear to me to be
+> > honest.  
 > 
-> Hagen
+> Thank you for the feedback.
+> 
+> Please allow me to answer you both here, as your questions are related.
+> 
+> The relevant use case is an host running containers (with the related
+> orchestration tools) in a RT environment. Virtual devices (veths, ovs
+> ports, etc.) are created by the orchestration tools at run-time.
+> Critical processes are allowed to send packets/generate outgoing
+> network traffic - but any interrupt is moved away from the related
+> cores, so that usual incoming network traffic processing does not
+> happen there.
+> 
+> Still an xmit operation on a virtual devices may be transmitted via ovs
+> or veth, with the relevant forwarding operation happening in a softirq
+> on the same CPU originating the packet. 
+> 
+> RPS is configured (even) on such virtual devices to move away the
+> forwarding from the relevant CPUs.
+> 
+> As Saeed noted, such configuration could be possibly performed via some
+> user-space daemon monitoring network devices and network namespaces
+> creation. That will be anyway prone to some race: the orchestation tool
+> may create and enable the netns and virtual devices before the daemon
+> has properly set the RPS mask.
+> 
+> In the latter scenario some packet forwarding could still slip in the
+> relevant CPU, causing measurable latency. In all non RT scenarios the
+> above will be likely irrelevant, but in the RT context that is not
+> acceptable - e.g. it causes in real environments latency above the
+> defined limits, while the proposed patches avoid the issue.
+> 
+> Do you see any other simple way to avoid the above race?
+> 
+> Please let me know if the above answers your doubts,
 
--- 
-Sincerely yours,
-Mike.
+Thanks, that makes it clearer now.
+
+Depending on how RT-aware your container management is it may or may not
+be the right place to configure this, as it creates the veth interface.
+Presumably it's the container management which does the placement of
+the tasks to cores, why is it not setting other attributes, like RPS?
+
+Also I wonder if it would make sense to turn this knob into something
+more generic. When we arrive at the threaded NAPIs - could it make
+sense for the threads to inherit your mask as the CPUs they are allowed
+to run on?
