@@ -2,152 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC36F2A448E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 12:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299612A44C3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Nov 2020 13:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728483AbgKCLvd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Nov 2020 06:51:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59856 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727109AbgKCLvc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 06:51:32 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C90BC216C4;
-        Tue,  3 Nov 2020 11:51:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604404290;
-        bh=Yly+YBQXz1BJFPkxLQ3+VIkwL3j8nlMITPnLrkow/5E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pd1bnQSks9juZc5GStHYlWWB9dC3yW8B/FXDUCh4ICB51qx6joekx5V+03CPVryB7
-         GjLbfkLStPJGYTBedQPKpSdlSPhiJ6NZ0XRbq1/U8laYmfVou6Yskb01upui1nCfAX
-         VVml7+da8Hejfv8BL3w3XV7QoB4Hns1qYo1AnV8o=
-Date:   Tue, 3 Nov 2020 12:52:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Arpitha Raghunandan <98.arpi@gmail.com>, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, pmladek@suse.com, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
-        alexandre.belloni@bootlin.com, rdunlap@infradead.org,
-        idryomov@gmail.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v3] lib: Convert test_printf.c to KUnit
-Message-ID: <20201103115223.GA268796@kroah.com>
-References: <20201103111049.51916-1-98.arpi@gmail.com>
- <20201103113353.GC4077@smile.fi.intel.com>
+        id S1728867AbgKCMFf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Nov 2020 07:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728784AbgKCMFf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Nov 2020 07:05:35 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AA1C0613D1;
+        Tue,  3 Nov 2020 04:05:35 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id a200so13990772pfa.10;
+        Tue, 03 Nov 2020 04:05:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CoUtQrJSQRYVKiicQfT9b8FMAZeeb+zxod1LbaNVVzE=;
+        b=WM+YtojMtExY2bSx1rZgI2jNzAxVBzt+gQy5d6FlFB2ZQ2+tYra7w3xUImdiB+4aCf
+         74xlNxvl1zafd+USLWhF854/j/ZmXaeNwS2v68wzLERsUozQD9eavP6APlj9hD/95GCf
+         e5WhrwGzr9L0hAv7c8dBT4ZJAZ1AZkXA0byYWy7vGhF6pkyEQBvC0gk7Zya6rn5Gitmx
+         0QouET8V/OMgrTYTGYgfO4eYvYyRBauKwGxZuULll1gOABkJJO547wTYFsrCF8wTZsl+
+         7T0XRiHLRwTWQbA9BYv4YkX+abx1uCKY4dleuVBYPVruBvQi1tKqVeKpHfCUPUfRPq0L
+         VEwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CoUtQrJSQRYVKiicQfT9b8FMAZeeb+zxod1LbaNVVzE=;
+        b=Hi67p+bKa0um10GaSYgG5EcnVgkZ+4e6tctuxMVNfGR59+whH+K+P5cP2f+zpbffgj
+         lU6aRz4HCFBiSU/0ib8ks3hEbsXV7xgL8pTMQ87ljNbwRe7BDDcidNtYJGWJGTJnKICX
+         q9p+sJpIayVjcNltNicpfxg81jrZfTvWtNiQqwdo4FJuyerjeKyj30dutjYbSw26t9vF
+         3M93rYr/IXtA6MxBjcDFTNtdv5HhBjVYU2jXQ67Ew69vw7zd8RY26ZX+3Bc1dh9CwMKy
+         FLr1gbcyZkrCNF0OciK6XDQxg7tFTdIYzF6Ek9hlnslG6tJGRAHBFkU42Rw2JeY3+VMe
+         QSxw==
+X-Gm-Message-State: AOAM530AOW4WsMtEMXAnw/JJ3uY+kxa+teOAOBqy3/r1YWbh+Ub5y5sn
+        o30yoWYHTY53uNMHmPNkrkemim+utMq2Mp4n/+k=
+X-Google-Smtp-Source: ABdhPJxUO60AuqbTEpZJUSjqUhnIPjXMPgP8GNKeKA0lClIJQEIZVlsw/a1hRyj6/h1KU1n4Q3C6NkqxI7vqhDJ0z/0=
+X-Received: by 2002:a05:6a00:850:b029:18a:a8ce:d346 with SMTP id
+ q16-20020a056a000850b029018aa8ced346mr16078623pfk.73.1604405134945; Tue, 03
+ Nov 2020 04:05:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201103113353.GC4077@smile.fi.intel.com>
+References: <20201103111049.51916-1-98.arpi@gmail.com> <20201103113353.GC4077@smile.fi.intel.com>
+ <20201103115223.GA268796@kroah.com>
+In-Reply-To: <20201103115223.GA268796@kroah.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 3 Nov 2020 14:06:23 +0200
+Message-ID: <CAHp75Vcw8Hyaks9ZbRfz7HhBzPM2cJxR4ypye5PwcZqY9rsYhA@mail.gmail.com>
+Subject: Re: [PATCH v3] lib: Convert test_printf.c to KUnit
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arpitha Raghunandan <98.arpi@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ilya Dryomov <idryomov@gmail.com>, kunit-dev@googlegroups.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 01:33:53PM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 03, 2020 at 04:40:49PM +0530, Arpitha Raghunandan wrote:
-> > Convert test lib/test_printf.c to KUnit. More information about
-> > KUnit can be found at:
-> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
-> > KUnit provides a common framework for unit tests in the kernel.
-> > KUnit and kselftest are standardizing around KTAP, converting this
-> > test to KUnit makes this test output in KTAP which we are trying to
-> > make the standard test result format for the kernel. More about
-> > the KTAP format can be found at:
-> > https://lore.kernel.org/linux-kselftest/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com/.
-> > I ran both the original and converted tests as is to produce the
-> > output for success of the test in the two cases. I also ran these
-> > tests with a small modification to show the difference in the output
-> > for failure of the test in both cases. The modification I made is:
-> > - test("127.000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
-> > + test("127-000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
-> > 
-> > Original test success:
-> > [    0.540860] test_printf: loaded.
-> > [    0.540863] test_printf: random seed = 0x5c46c33837bc0619
-> > [    0.541022] test_printf: all 388 tests passed
-> > 
-> > Original test failure:
-> > [    0.537980] test_printf: loaded.
-> > [    0.537983] test_printf: random seed = 0x1bc1efd881954afb
-> > [    0.538029] test_printf: vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > [    0.538030] test_printf: kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> > [    0.538124] test_printf: failed 2 out of 388 tests
-> > [    0.538125] test_printf: random seed used was 0x1bc1efd881954afb
-> > 
-> > Converted test success:
-> >     # Subtest: printf
-> >     1..25
-> >     ok 1 - test_basic
-> >     ok 2 - test_number
-> >     ok 3 - test_string
-> >     ok 4 - plain
-> >     ok 5 - null_pointer
-> >     ok 6 - error_pointer
-> >     ok 7 - invalid_pointer
-> >     ok 8 - symbol_ptr
-> >     ok 9 - kernel_ptr
-> >     ok 10 - struct_resource
-> >     ok 11 - addr
-> >     ok 12 - escaped_str
-> >     ok 13 - hex_string
-> >     ok 14 - mac
-> >     ok 15 - ip
-> >     ok 16 - uuid
-> >     ok 17 - dentry
-> >     ok 18 - struct_va_format
-> >     ok 19 - time_and_date
-> >     ok 20 - struct_clk
-> >     ok 21 - bitmap
-> >     ok 22 - netdev_features
-> >     ok 23 - flags
-> >     ok 24 - errptr
-> >     ok 25 - fwnode_pointer
-> > ok 1 - printf
-> > 
-> > Converted test failure:
-> >     # Subtest: printf
-> >     1..25
-> >     ok 1 - test_basic
-> >     ok 2 - test_number
-> >     ok 3 - test_string
-> >     ok 4 - plain
-> >     ok 5 - null_pointer
-> >     ok 6 - error_pointer
-> >     ok 7 - invalid_pointer
-> >     ok 8 - symbol_ptr
-> >     ok 9 - kernel_ptr
-> >     ok 10 - struct_resource
-> >     ok 11 - addr
-> >     ok 12 - escaped_str
-> >     ok 13 - hex_string
-> >     ok 14 - mac
-> >     # ip: EXPECTATION FAILED at lib/printf_kunit.c:82
-> > vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> >     # ip: EXPECTATION FAILED at lib/printf_kunit.c:124
-> > kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
-> >     not ok 15 - ip
-> >     ok 16 - uuid
-> >     ok 17 - dentry
-> >     ok 18 - struct_va_format
-> >     ok 19 - time_and_date
-> >     ok 20 - struct_clk
-> >     ok 21 - bitmap
-> >     ok 22 - netdev_features
-> >     ok 23 - flags
-> >     ok 24 - errptr
-> >     ok 25 - fwnode_pointer
-> > not ok 1 - printf
-> 
-> Better, indeed.
-> 
-> But can be this improved to have a cumulative statistics, like showing only
-> number of total, succeeded, failed with details of the latter ones?
+On Tue, Nov 3, 2020 at 1:54 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Tue, Nov 03, 2020 at 01:33:53PM +0200, Andy Shevchenko wrote:
+> > On Tue, Nov 03, 2020 at 04:40:49PM +0530, Arpitha Raghunandan wrote:
 
-Is that the proper test output format?  We have a standard...
+...
 
-thanks,
+> > Better, indeed.
+> >
+> > But can be this improved to have a cumulative statistics, like showing only
+> > number of total, succeeded, failed with details of the latter ones?
+>
+> Is that the proper test output format?  We have a standard...
 
-greg k-h
+I dunno. I'm asking...
+We have few possibilities here: a) let it go like above, b) use the
+cumulative statistics, c) if there is no such available, implement and
+use it, d) ...
+
+-- 
+With Best Regards,
+Andy Shevchenko
