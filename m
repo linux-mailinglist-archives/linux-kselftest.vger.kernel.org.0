@@ -2,126 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D4C2A6BD5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 18:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608D22A6C1F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 18:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730329AbgKDRgT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Nov 2020 12:36:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35701 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730127AbgKDRgT (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 12:36:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604511378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Egp5/piH9cLQbhOxqBiQ6oUXBo8D99rZQxLNpy2SM8g=;
-        b=JgTVihE2urYmSTbc+eD5bMkiY/6E3tSxzc+hiVAebZPri/g+SqINY6xb0vjsIdVsM3Ou6h
-        amw78FihQbHWrF3NvaZIqwFcx+xGps1l6wsECzVYs3v+q6oy+bZtJgGTlv8lZXHvrAXzwE
-        YR4fiS4X2SOUfNodaJoYh5uKWMPPVb0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-156-Bbwo2LBhNzG7tSnCvjq0hw-1; Wed, 04 Nov 2020 12:36:14 -0500
-X-MC-Unique: Bbwo2LBhNzG7tSnCvjq0hw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E287F804745;
-        Wed,  4 Nov 2020 17:36:12 +0000 (UTC)
-Received: from ovpn-114-21.ams2.redhat.com (ovpn-114-21.ams2.redhat.com [10.36.114.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C7D781084273;
-        Wed,  4 Nov 2020 17:36:09 +0000 (UTC)
-Message-ID: <79c58e6cf23196b73887b20802daebd59fe89476.camel@redhat.com>
-Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Saeed Mahameed <saeed@kernel.org>, netdev@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Date:   Wed, 04 Nov 2020 18:36:08 +0100
-In-Reply-To: <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <cover.1604055792.git.pabeni@redhat.com>
-         <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-         <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
-         <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S1730555AbgKDRqv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Nov 2020 12:46:51 -0500
+Received: from mga14.intel.com ([192.55.52.115]:16659 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730524AbgKDRqv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Nov 2020 12:46:51 -0500
+IronPort-SDR: uy+PlSWFo2zvFzWa5TjSeUTD8XVCezG1JQ40JUuexWym8X027IaCDenSNSYqBa6/apYGqr200u
+ pV0+DP0YjeZQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="168476165"
+X-IronPort-AV: E=Sophos;i="5.77,451,1596524400"; 
+   d="scan'208";a="168476165"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 09:46:46 -0800
+IronPort-SDR: Q9Bmv6A8hLY7c8TvyszzEw9vj0W25YTLM3HEfYG4mwCufaGsYgJuK+k0r2131jolfBeCTxgYes
+ GJ1Yb9QiFgjQ==
+X-IronPort-AV: E=Sophos;i="5.77,451,1596524400"; 
+   d="scan'208";a="471304692"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 09:46:44 -0800
+Date:   Wed, 4 Nov 2020 09:46:44 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V2 00/10] PKS: Add Protection Keys Supervisor (PKS)
+ support
+Message-ID: <20201104174643.GC1531489@iweiny-DESK2.sc.intel.com>
+References: <20201102205320.1458656-1-ira.weiny@intel.com>
+ <871rhb8h73.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871rhb8h73.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2020-11-03 at 08:52 -0800, Jakub Kicinski wrote:
-> On Tue, 03 Nov 2020 16:22:07 +0100 Paolo Abeni wrote:
-> > The relevant use case is an host running containers (with the related
-> > orchestration tools) in a RT environment. Virtual devices (veths, ovs
-> > ports, etc.) are created by the orchestration tools at run-time.
-> > Critical processes are allowed to send packets/generate outgoing
-> > network traffic - but any interrupt is moved away from the related
-> > cores, so that usual incoming network traffic processing does not
-> > happen there.
-> > 
-> > Still an xmit operation on a virtual devices may be transmitted via ovs
-> > or veth, with the relevant forwarding operation happening in a softirq
-> > on the same CPU originating the packet. 
-> > 
-> > RPS is configured (even) on such virtual devices to move away the
-> > forwarding from the relevant CPUs.
-> > 
-> > As Saeed noted, such configuration could be possibly performed via some
-> > user-space daemon monitoring network devices and network namespaces
-> > creation. That will be anyway prone to some race: the orchestation tool
-> > may create and enable the netns and virtual devices before the daemon
-> > has properly set the RPS mask.
-> > 
-> > In the latter scenario some packet forwarding could still slip in the
-> > relevant CPU, causing measurable latency. In all non RT scenarios the
-> > above will be likely irrelevant, but in the RT context that is not
-> > acceptable - e.g. it causes in real environments latency above the
-> > defined limits, while the proposed patches avoid the issue.
-> > 
-> > Do you see any other simple way to avoid the above race?
-> > 
-> > Please let me know if the above answers your doubts,
+On Tue, Nov 03, 2020 at 12:36:16AM +0100, Thomas Gleixner wrote:
+> On Mon, Nov 02 2020 at 12:53, ira weiny wrote:
+> > Fenghua Yu (2):
+> >   x86/pks: Enable Protection Keys Supervisor (PKS)
+> >   x86/pks: Add PKS kernel API
+> >
+> > Ira Weiny (7):
+> >   x86/pkeys: Create pkeys_common.h
+> >   x86/fpu: Refactor arch_set_user_pkey_access() for PKS support
+> >   x86/pks: Preserve the PKRS MSR on context switch
+> >   x86/entry: Pass irqentry_state_t by reference
+> >   x86/entry: Preserve PKRS MSR across exceptions
+> >   x86/fault: Report the PKRS state on fault
+> >   x86/pks: Add PKS test code
+> >
+> > Thomas Gleixner (1):
+> >   x86/entry: Move nmi entry/exit into common code
 > 
-> Thanks, that makes it clearer now.
+> So the actual patch ordering is:
 > 
-> Depending on how RT-aware your container management is it may or may not
-> be the right place to configure this, as it creates the veth interface.
-> Presumably it's the container management which does the placement of
-> the tasks to cores, why is it not setting other attributes, like RPS?
+>    x86/pkeys: Create pkeys_common.h
+>    x86/fpu: Refactor arch_set_user_pkey_access() for PKS support
+>    x86/pks: Enable Protection Keys Supervisor (PKS)
+>    x86/pks: Preserve the PKRS MSR on context switch
+>    x86/pks: Add PKS kernel API
+> 
+>    x86/entry: Move nmi entry/exit into common code
+>    x86/entry: Pass irqentry_state_t by reference
+> 
+>    x86/entry: Preserve PKRS MSR across exceptions
+>    x86/fault: Report the PKRS state on fault
+>    x86/pks: Add PKS test code
+> 
+> This is the wrong ordering, really.
+> 
+>      x86/entry: Move nmi entry/exit into common code
+> 
+> is a general cleanup and has absolutely nothing to do with PKRS.So this
+> wants to go first.
+> 
 
-The container orchestration is quite complex, and I'm unsure isolation
-and networking configuration are performed (or can be performed) by the
-same precess (without an heavy refactor).
+Sorry, yes this should be a pre-patch.
 
-On the flip hand, the global rps mask knob looked quite
-straightforward to me.
+> Also:
+> 
+>     x86/entry: Move nmi entry/exit into common code
+> [from other email]
+>    >      x86/entry: Pass irqentry_state_t by reference
+>    >      > 
+>    >      >
+> 
+> is a prerequisite for the rest. So why is it in the middle of the
+> series?
 
-Possibly I can reduce the amount of new code introduced by this
-patchset removing some code duplication
-between rps_default_mask_sysctl() and flow_limit_cpu_sysctl(). Would
-that make this change more acceptable? Or should I drop this
-altogether?
+It is in the middle because passing by reference is not needed until additional
+information is added to irqentry_state_t which is done immediately after this
+patch by:
 
-> Also I wonder if it would make sense to turn this knob into something
-> more generic. When we arrive at the threaded NAPIs - could it make
-> sense for the threads to inherit your mask as the CPUs they are allowed
-> to run on?
+    x86/entry: Preserve PKRS MSR across exceptions
 
-I personally *think* this would be fine - and good. But isn't a bit
-premature discussing the integration of 2 missing pieces ? :)
+I debated squashing the 2 but it made review harder IMO.  But I thought keeping
+them in order together made a lot of sense.
+
+> 
+> And then you enable all that muck _before_ it is usable:
+> 
+
+Strictly speaking you are correct, sorry.  I will reorder the series.
+
+> 
+> Bisectability is overrrated, right?
+
+Agreed, bisectability is important.  I thought I had it covered but I was
+wrong.
+
+> 
+> Once again: Read an understand Documentation/process/*
+> 
+> Aside of that using a spell checker is not optional.
+
+Agreed.
+
+In looking closer at the entry code I've found a couple of other instances I'll
+add another precursor patch.
+
+I've also found other errors with the series which I should have caught.  My
+apologies I made some last minute changes which I should have checked more
+thoroughly.
 
 Thanks,
-
-Paolo
-
+Ira
