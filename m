@@ -2,147 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A281F2A6C94
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 19:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 984732A6D87
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 20:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732309AbgKDSTS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Nov 2020 13:19:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30633 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730061AbgKDSTS (ORCPT
+        id S1730165AbgKDTHT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Nov 2020 14:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729784AbgKDTHS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 13:19:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604513956;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I1fdCJPYIPXbd2SBDUaXIgOsXxGZIfqs2uV1OkjLCHg=;
-        b=iJAimpanfkCVPO3DOzUU88de+CJWPVt3+hwAxwx2Frqxo7maDBc9RCMBlgQ9wuG8BX2YTg
-        0avA/UBlhMBC5AJ2A56tn8Rci63zz5OuFvJX6DMkHgXsF3NVWzGrxHdYz+jMfmZOGh9Ix8
-        q6EZC62+6NVuaiYjYMIFvuSeqbjhJXw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-409-mHHtnIZVO9mdhbUFx7KpiQ-1; Wed, 04 Nov 2020 13:19:12 -0500
-X-MC-Unique: mHHtnIZVO9mdhbUFx7KpiQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4942511CC7E9;
-        Wed,  4 Nov 2020 18:19:10 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 998F75B4DC;
-        Wed,  4 Nov 2020 18:19:09 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 1DC91416C894; Wed,  4 Nov 2020 15:18:48 -0300 (-03)
-Date:   Wed, 4 Nov 2020 15:18:48 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Saeed Mahameed <saeed@kernel.org>, netdev@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
-Message-ID: <20201104181848.GA227702@fuller.cnet>
-References: <cover.1604055792.git.pabeni@redhat.com>
- <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
- <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <79c58e6cf23196b73887b20802daebd59fe89476.camel@redhat.com>
+        Wed, 4 Nov 2020 14:07:18 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EA6C0613D4
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2020 11:07:18 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id i7so15433625pgh.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2020 11:07:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hjSSC3tt8p/75sU4HCBAJWqPHKqxgfCJ1FmAe9+VYac=;
+        b=KnWHT2OUy4hMo9/BmVfv0xknGutGjNJ1KtmGKB+R/+1gSRWjJNxBtjVAvtVQfzIh5G
+         JDe2tB4aSHDYX5mLG0PLq4KT/1vXTgoaSE1ql5aTgcDsGe+65bK13hzvdJChBMbcfExj
+         sm4VIxu6QtBbMh2Kj2JucY/OIavcb4Bgbis/M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hjSSC3tt8p/75sU4HCBAJWqPHKqxgfCJ1FmAe9+VYac=;
+        b=jXmtJ9174WNv8XwegxbYJJm63d8YKYKAzPzvFt1zKO0gkIDaHNgiGbzEo+OQiCQpW5
+         isO36vs2/TJEn7X/O6CLbtg3sbHfVNbHvGwvsDB30Hpw9fRLnLC2I0tAvbl+xowFKVW2
+         0J8Ip9j3nVhXtYncoT4H/yKhZBOkuxDM3QNhA6eUehEZMzXTke4JxvOfOUjTuQ3Y5s5s
+         xNUsTzbrR5BUTnk+HeYhHCHyS25RzpynStroi42GXLwON3ifFp914/zu9AfbVYZOffZx
+         L6x4HatfQGdBjMY6BcuJozy8d0FZi13M9BXAeiLwMNug13qSXF3TtoiEI2rzR2P4NDYv
+         /UZA==
+X-Gm-Message-State: AOAM530A5ILe7T+OKeF6J7MV2qIe6Ng4bQacJPPfYjn8tqKEn1xvAOAv
+        Xg+yLl+h7RjfLua6Lxgw1WCU6Q==
+X-Google-Smtp-Source: ABdhPJzIv2cvySmYjFFmSkxxCZUKe/o/tqZdhtwdvmiPabaMXC3F2FzHiw6gBfeyzHAOjN+2/F22eQ==
+X-Received: by 2002:a65:56cd:: with SMTP id w13mr22554369pgs.132.1604516838025;
+        Wed, 04 Nov 2020 11:07:18 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w143sm3245488pfc.31.2020.11.04.11.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 11:07:17 -0800 (PST)
+Date:   Wed, 4 Nov 2020 11:07:16 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/exec: Fix building of exec test
+Message-ID: <202011041105.5A2D9D1F@keescook>
+References: <20201104100706.659089-1-mpe@ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <79c58e6cf23196b73887b20802daebd59fe89476.camel@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <20201104100706.659089-1-mpe@ellerman.id.au>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 06:36:08PM +0100, Paolo Abeni wrote:
-> On Tue, 2020-11-03 at 08:52 -0800, Jakub Kicinski wrote:
-> > On Tue, 03 Nov 2020 16:22:07 +0100 Paolo Abeni wrote:
-> > > The relevant use case is an host running containers (with the related
-> > > orchestration tools) in a RT environment. Virtual devices (veths, ovs
-> > > ports, etc.) are created by the orchestration tools at run-time.
-> > > Critical processes are allowed to send packets/generate outgoing
-> > > network traffic - but any interrupt is moved away from the related
-> > > cores, so that usual incoming network traffic processing does not
-> > > happen there.
-> > > 
-> > > Still an xmit operation on a virtual devices may be transmitted via ovs
-> > > or veth, with the relevant forwarding operation happening in a softirq
-> > > on the same CPU originating the packet. 
-> > > 
-> > > RPS is configured (even) on such virtual devices to move away the
-> > > forwarding from the relevant CPUs.
-> > > 
-> > > As Saeed noted, such configuration could be possibly performed via some
-> > > user-space daemon monitoring network devices and network namespaces
-> > > creation. That will be anyway prone to some race: the orchestation tool
-> > > may create and enable the netns and virtual devices before the daemon
-> > > has properly set the RPS mask.
-> > > 
-> > > In the latter scenario some packet forwarding could still slip in the
-> > > relevant CPU, causing measurable latency. In all non RT scenarios the
-> > > above will be likely irrelevant, but in the RT context that is not
-> > > acceptable - e.g. it causes in real environments latency above the
-> > > defined limits, while the proposed patches avoid the issue.
-> > > 
-> > > Do you see any other simple way to avoid the above race?
-> > > 
-> > > Please let me know if the above answers your doubts,
-> > 
-> > Thanks, that makes it clearer now.
-> > 
-> > Depending on how RT-aware your container management is it may or may not
-> > be the right place to configure this, as it creates the veth interface.
-> > Presumably it's the container management which does the placement of
-> > the tasks to cores, why is it not setting other attributes, like RPS?
+On Wed, Nov 04, 2020 at 09:07:06PM +1100, Michael Ellerman wrote:
+> Currently the exec test does not build:
 > 
-> The container orchestration is quite complex, and I'm unsure isolation
-> and networking configuration are performed (or can be performed) by the
-> same precess (without an heavy refactor).
-
-Also for the host side (no containers) the same issue will have to be handled 
-for PCI hotplug for example. So this fix  will have to be performed in 
-every tool that decides to create a network device (while a kernel
-solution is global).
-
-> On the flip hand, the global rps mask knob looked quite
-> straightforward to me.
+>   make[1]: Entering directory '/linux/tools/testing/selftests/exec'
+>   ...
+>   make[1]: *** No rule to make target '/output/kselftest/exec/pipe', needed by 'all'.
 > 
-> Possibly I can reduce the amount of new code introduced by this
-> patchset removing some code duplication
-> between rps_default_mask_sysctl() and flow_limit_cpu_sysctl(). Would
-> that make this change more acceptable? Or should I drop this
-> altogether?
+> This is because pipe is listed in TEST_GEN_FILES, but pipe is not
+> generated by the Makefile, it's created at runtime. So drop pipe from
+> TEST_GEN_FILES.
+
+Ah, yes, shouldn't it be added to EXTRA_CLEAN though?
+
+Fixes: 61016db15b8e ("selftests/exec: Verify execve of non-regular files fail")
+
 > 
-> > Also I wonder if it would make sense to turn this knob into something
-> > more generic. When we arrive at the threaded NAPIs - could it make
-> > sense for the threads to inherit your mask as the CPUs they are allowed
-> > to run on?
+> With that fixed, then install fails:
 > 
-> I personally *think* this would be fine - and good. But isn't a bit
-> premature discussing the integration of 2 missing pieces ? :)
+>   make[1]: Entering directory '/linux/tools/testing/selftests/exec'
+>   rsync -a binfmt_script non-regular /output/install/exec/
+>   rsync: link_stat "/linux/tools/testing/selftests/exec/non-regular" failed: No such file or directory (2)
 > 
-> Thanks,
-> 
-> Paolo
+> That's because non-regular hasn't been built, because it's in
+> TEST_PROGS, it should be part of TEST_GEN_PROGS to indicate that it
+> needs to be built.
 
-About the potential race:
+Yes, thanks again!
 
-0) network device creation starts, inherits old default_rps_mask,
-network device init sleeps
-1) set default_rps_mask (new) 
-2) change all devices across all network namespaces (walk /sys)
-3) network device init wakes up, new device shows up in /sys/ using old default_rps_mask
+Fixes: 0f71241a8e32 ("selftests/exec: add file type errno tests")
 
-Why this can't happen?
+for both:
 
+Acked-by: Kees Cook <keescook@chromium.org>
 
-
-
+-- 
+Kees Cook
