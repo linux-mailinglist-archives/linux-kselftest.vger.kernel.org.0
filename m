@@ -2,119 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427E02A6B52
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 18:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D4C2A6BD5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 18:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731588AbgKDRDG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Nov 2020 12:03:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54018 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732031AbgKDRDF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 12:03:05 -0500
-Received: from kernel.org (unknown [87.71.17.26])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730329AbgKDRgT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Nov 2020 12:36:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35701 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730127AbgKDRgT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Nov 2020 12:36:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604511378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Egp5/piH9cLQbhOxqBiQ6oUXBo8D99rZQxLNpy2SM8g=;
+        b=JgTVihE2urYmSTbc+eD5bMkiY/6E3tSxzc+hiVAebZPri/g+SqINY6xb0vjsIdVsM3Ou6h
+        amw78FihQbHWrF3NvaZIqwFcx+xGps1l6wsECzVYs3v+q6oy+bZtJgGTlv8lZXHvrAXzwE
+        YR4fiS4X2SOUfNodaJoYh5uKWMPPVb0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-156-Bbwo2LBhNzG7tSnCvjq0hw-1; Wed, 04 Nov 2020 12:36:14 -0500
+X-MC-Unique: Bbwo2LBhNzG7tSnCvjq0hw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8FD9C2071A;
-        Wed,  4 Nov 2020 17:02:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604509384;
-        bh=rNITg8eagPnFNzCzxObVDyyyLvNDMpMqrDKWRtXNo1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cbMszixDY/CCQ4Uoej0yke6wNx2huYgP8NhaGqEXUCQOQ+71BtRjL4UN747/oLhHT
-         jlOUbEPtbSsAUpPtJ4TKfNUm3RxZ3UFt+v7azAmQtFc9r46TIiMsgPqIFvZ1tNT9dj
-         lpdbGPMmI1FpQwRmAzKJsAvG+FlUBcvCqAD3nWrU=
-Date:   Wed, 4 Nov 2020 19:02:47 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Hagen Paul Pfeifer <hagen@jauu.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
-Message-ID: <20201104170247.GT4879@kernel.org>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20201101110935.GA4105325@laniakea>
- <20201102154028.GD4879@kernel.org>
- <1547601988.128687.1604411534845@office.mailbox.org>
- <20201103163002.GK4879@kernel.org>
- <1988407921.138656.1604489953944@office.mailbox.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E287F804745;
+        Wed,  4 Nov 2020 17:36:12 +0000 (UTC)
+Received: from ovpn-114-21.ams2.redhat.com (ovpn-114-21.ams2.redhat.com [10.36.114.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7D781084273;
+        Wed,  4 Nov 2020 17:36:09 +0000 (UTC)
+Message-ID: <79c58e6cf23196b73887b20802daebd59fe89476.camel@redhat.com>
+Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Saeed Mahameed <saeed@kernel.org>, netdev@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Date:   Wed, 04 Nov 2020 18:36:08 +0100
+In-Reply-To: <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+References: <cover.1604055792.git.pabeni@redhat.com>
+         <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+         <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
+         <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1988407921.138656.1604489953944@office.mailbox.org>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 12:39:13PM +0100, Hagen Paul Pfeifer wrote:
-> > On 11/03/2020 5:30 PM Mike Rapoport <rppt@kernel.org> wrote:
+On Tue, 2020-11-03 at 08:52 -0800, Jakub Kicinski wrote:
+> On Tue, 03 Nov 2020 16:22:07 +0100 Paolo Abeni wrote:
+> > The relevant use case is an host running containers (with the related
+> > orchestration tools) in a RT environment. Virtual devices (veths, ovs
+> > ports, etc.) are created by the orchestration tools at run-time.
+> > Critical processes are allowed to send packets/generate outgoing
+> > network traffic - but any interrupt is moved away from the related
+> > cores, so that usual incoming network traffic processing does not
+> > happen there.
 > > 
-> > > > As long as the task share the file descriptor, they can share the
-> > > > secretmem pages, pretty much like normal memfd.
-> > > 
-> > > Including process_vm_readv() and process_vm_writev()? Let's take a hypothetical
-> > > "dbus-daemon-secure" service that receives data from process A and wants to
-> > > copy/distribute it to data areas of N other processes. Much like dbus but without
-> > > SOCK_DGRAM rather direct copy into secretmem/mmap pages (ring-buffer). Should be
-> > > possible, right?
+> > Still an xmit operation on a virtual devices may be transmitted via ovs
+> > or veth, with the relevant forwarding operation happening in a softirq
+> > on the same CPU originating the packet. 
 > > 
-> > I'm not sure I follow you here.
-> > For process_vm_readv() and process_vm_writev() secremem will be only
-> > accessible on the local part, but not on the remote.
-> > So copying data to secretmem pages using process_vm_writev wouldn't
-> > work.
+> > RPS is configured (even) on such virtual devices to move away the
+> > forwarding from the relevant CPUs.
+> > 
+> > As Saeed noted, such configuration could be possibly performed via some
+> > user-space daemon monitoring network devices and network namespaces
+> > creation. That will be anyway prone to some race: the orchestation tool
+> > may create and enable the netns and virtual devices before the daemon
+> > has properly set the RPS mask.
+> > 
+> > In the latter scenario some packet forwarding could still slip in the
+> > relevant CPU, causing measurable latency. In all non RT scenarios the
+> > above will be likely irrelevant, but in the RT context that is not
+> > acceptable - e.g. it causes in real environments latency above the
+> > defined limits, while the proposed patches avoid the issue.
+> > 
+> > Do you see any other simple way to avoid the above race?
+> > 
+> > Please let me know if the above answers your doubts,
 > 
-> A hypothetical "dbus-daemon-secure" service will not be *process related* with communication
-> peers. E.g. a password-input process (reading a password into secured-memory page) will
-> transfer the password to dbus-daemon-secure and this service will hand-over the password to
-> two additional applications: a IPsec process on CPU0 und CPU1 (which itself use a
-> secured-memory page).
+> Thanks, that makes it clearer now.
 > 
-> So four applications IPC chain:
->  password-input -> dbus-daemon-secure -> {IPsec0, IPsec1}
-> 
-> - password-input: uses a secured page to read/save the password locally after reading from TTY
-> - dbus-daemon-secure: uses a secured page for IPC (legitimate user can write and read into the secured page)
-> - IPSecN has secured page to save the password locally (and probably other data as well), IPC memory is memset'ed after copy
-> 
-> Goal: the whole password is never saved/touched on non secured pages during IPC transfer.
-> 
-> Question: maybe a *file-descriptor passing* mechanism can do the trick? I.e. dbus-daemon-secure
-> allocates via memfd_secret/mmap secure pages and permitted processes will get the descriptor/mmaped-page
-> passed so they can use the pages directly?
+> Depending on how RT-aware your container management is it may or may not
+> be the right place to configure this, as it creates the veth interface.
+> Presumably it's the container management which does the placement of
+> the tasks to cores, why is it not setting other attributes, like RPS?
 
-Yes, this will work. The processes that share the memfd_secret file
-descriptor will have access to the same memory pages, pretty much like
-with shared memory.
+The container orchestration is quite complex, and I'm unsure isolation
+and networking configuration are performed (or can be performed) by the
+same precess (without an heavy refactor).
 
-> Hagen
+On the flip hand, the global rps mask knob looked quite
+straightforward to me.
 
--- 
-Sincerely yours,
-Mike.
+Possibly I can reduce the amount of new code introduced by this
+patchset removing some code duplication
+between rps_default_mask_sysctl() and flow_limit_cpu_sysctl(). Would
+that make this change more acceptable? Or should I drop this
+altogether?
+
+> Also I wonder if it would make sense to turn this knob into something
+> more generic. When we arrive at the threaded NAPIs - could it make
+> sense for the threads to inherit your mask as the CPUs they are allowed
+> to run on?
+
+I personally *think* this would be fine - and good. But isn't a bit
+premature discussing the integration of 2 missing pieces ? :)
+
+Thanks,
+
+Paolo
+
