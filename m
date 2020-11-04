@@ -2,104 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BA72A6B4C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 18:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427E02A6B52
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 18:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731587AbgKDRB7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Nov 2020 12:01:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731326AbgKDRB7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 12:01:59 -0500
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20041C0613D4
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 Nov 2020 09:01:59 -0800 (PST)
-Received: by mail-io1-xd42.google.com with SMTP id u21so12333587iol.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2020 09:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lKt/7khf/p0FBH94EgBjgYowDupQdP5eOw+aVFWnIE4=;
-        b=Qif5C86YMdm2wITkiOw1A3DHnWkrj5BznSur9w6S9h05s4uEH0tpfJfwkirw+OCsIa
-         5ZUWAUw2Xr0Y+yBcfMul3p6BrzjIdeyVKYTObdOQpXyGA8Jc0onI0PLPZPkY5rWtjuiX
-         KwvEwFnF1QCroLya8QNYKLFqbYxlf+Oxcuhsj/2kUx3aX6FlLQP70+THTejWseON5vTZ
-         ZBsnYJ71IQEmS3ODRZggk7Qxw4OUAzqErw5JjwSmPxCbg1lvm9Mw5zPS9hKeCh8j+tNk
-         3UZEnuPFiAywWXQTW9+s4q/6AGurkFrhGK7OBOjl186bChjLK2Wf5LPfStOaQNQY70ht
-         MXEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lKt/7khf/p0FBH94EgBjgYowDupQdP5eOw+aVFWnIE4=;
-        b=k6Ql0QW5D831n1juql2A0IhyuUsOVQmNdQHt13zraEriuIaAK75F0JSyVDxG4IvONa
-         Om34G4wzTH4HFW45NxKCTTiCVBeGAE0cMzn7hAIAahex1mDZm9en4JAU4Twj0IVYnVVR
-         RK0Mxg4vxcW3sikc45N2VLRbyid3ycZJ0d6XnaX1KwajKhYwTC3/9r/fEQ6iPANEY0DI
-         AgN4mcEI7o28rKkiNMv1PB+PSyAERQ3l+5Qb1nNxIVr8zABLAg0lTA1OLcAbhA3TriAG
-         2FKlST7ihhWq+o8j5MfCrBkY2J4E2oI5IXfTU/v0ciTNONH6nObKLsbJM0s/Q+fDUVkL
-         cbNw==
-X-Gm-Message-State: AOAM5313olZpgzKlweFSavz4G0QcfsuHVRSOTXoHQtNqociqcda0GZ7G
-        YOoNdDwRVoZPXWgwEd/MSom91sT7gjXeBDC/OF1/mA==
-X-Google-Smtp-Source: ABdhPJzL1QewBuecQ3Wuja+O1RDK1wskv/Oq/mAWRQpKntRVQ3pfff2m+nGSvCw8+CkfpP3zR3jF0Ttk0JEAXEi4DgY=
-X-Received: by 2002:a6b:e012:: with SMTP id z18mr14242690iog.157.1604509318295;
- Wed, 04 Nov 2020 09:01:58 -0800 (PST)
+        id S1731588AbgKDRDG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Nov 2020 12:03:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54018 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732031AbgKDRDF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Nov 2020 12:03:05 -0500
+Received: from kernel.org (unknown [87.71.17.26])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FD9C2071A;
+        Wed,  4 Nov 2020 17:02:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604509384;
+        bh=rNITg8eagPnFNzCzxObVDyyyLvNDMpMqrDKWRtXNo1Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cbMszixDY/CCQ4Uoej0yke6wNx2huYgP8NhaGqEXUCQOQ+71BtRjL4UN747/oLhHT
+         jlOUbEPtbSsAUpPtJ4TKfNUm3RxZ3UFt+v7azAmQtFc9r46TIiMsgPqIFvZ1tNT9dj
+         lpdbGPMmI1FpQwRmAzKJsAvG+FlUBcvCqAD3nWrU=
+Date:   Wed, 4 Nov 2020 19:02:47 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Hagen Paul Pfeifer <hagen@jauu.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20201104170247.GT4879@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20201101110935.GA4105325@laniakea>
+ <20201102154028.GD4879@kernel.org>
+ <1547601988.128687.1604411534845@office.mailbox.org>
+ <20201103163002.GK4879@kernel.org>
+ <1988407921.138656.1604489953944@office.mailbox.org>
 MIME-Version: 1.0
-References: <20201103234952.1626730-1-bgardon@google.com> <20201103234952.1626730-3-bgardon@google.com>
- <20201104121631.wvodsw7agsrdhje4@kamzik.brq.redhat.com> <20201104150017.GN20600@xz-x1>
- <20201104152823.qxdlbygza7ykn5x2@kamzik.brq.redhat.com>
-In-Reply-To: <20201104152823.qxdlbygza7ykn5x2@kamzik.brq.redhat.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 4 Nov 2020 09:01:47 -0800
-Message-ID: <CANgfPd9RPiyX9BeYpWLHGyqfO83uWZKKynfP4vkbvSbzBK9syg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] KVM: selftests: Factor code out of demand_paging_test
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Peter Feiner <pfeiner@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1988407921.138656.1604489953944@office.mailbox.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 4, 2020 at 7:28 AM Andrew Jones <drjones@redhat.com> wrote:
->
-> On Wed, Nov 04, 2020 at 10:00:17AM -0500, Peter Xu wrote:
-> > On Wed, Nov 04, 2020 at 01:16:31PM +0100, Andrew Jones wrote:
-> > > If you don't mind I'd like to try and cleanup / generalize / refactor
-> > > demand_paging_test.c and dirty_log_test.c with a few patches first for
-> > > you to base this work on. I can probably get something posted today
-> > > or tomorrow.
-> >
-> > Drew,
-> >
-> > Would you consider picking up the two patches below in the dirty ring series if
-> > you plan to rework the dirty log tests?  I got your r-b so I am making bold to
-> > think I'm ok to ask this; I just want to avoid another potential conflict
-> > within the series.
->
-> Sure, no problem.
->
-> I'll go ahead and get that cleanup / refactor series out.
+On Wed, Nov 04, 2020 at 12:39:13PM +0100, Hagen Paul Pfeifer wrote:
+> > On 11/03/2020 5:30 PM Mike Rapoport <rppt@kernel.org> wrote:
+> > 
+> > > > As long as the task share the file descriptor, they can share the
+> > > > secretmem pages, pretty much like normal memfd.
+> > > 
+> > > Including process_vm_readv() and process_vm_writev()? Let's take a hypothetical
+> > > "dbus-daemon-secure" service that receives data from process A and wants to
+> > > copy/distribute it to data areas of N other processes. Much like dbus but without
+> > > SOCK_DGRAM rather direct copy into secretmem/mmap pages (ring-buffer). Should be
+> > > possible, right?
+> > 
+> > I'm not sure I follow you here.
+> > For process_vm_readv() and process_vm_writev() secremem will be only
+> > accessible on the local part, but not on the remote.
+> > So copying data to secretmem pages using process_vm_writev wouldn't
+> > work.
+> 
+> A hypothetical "dbus-daemon-secure" service will not be *process related* with communication
+> peers. E.g. a password-input process (reading a password into secured-memory page) will
+> transfer the password to dbus-daemon-secure and this service will hand-over the password to
+> two additional applications: a IPsec process on CPU0 und CPU1 (which itself use a
+> secured-memory page).
+> 
+> So four applications IPC chain:
+>  password-input -> dbus-daemon-secure -> {IPsec0, IPsec1}
+> 
+> - password-input: uses a secured page to read/save the password locally after reading from TTY
+> - dbus-daemon-secure: uses a secured page for IPC (legitimate user can write and read into the secured page)
+> - IPSecN has secured page to save the password locally (and probably other data as well), IPC memory is memset'ed after copy
+> 
+> Goal: the whole password is never saved/touched on non secured pages during IPC transfer.
+> 
+> Question: maybe a *file-descriptor passing* mechanism can do the trick? I.e. dbus-daemon-secure
+> allocates via memfd_secret/mmap secure pages and permitted processes will get the descriptor/mmaped-page
+> passed so they can use the pages directly?
 
-Thanks Drew! I agree this will all be a lot cleaner when refactored
-for multi-vcpu tests generally.
+Yes, this will work. The processes that share the memfd_secret file
+descriptor will have access to the same memory pages, pretty much like
+with shared memory.
 
->
-> Thanks,
-> drew
->
-> >
-> > Thanks!
-> >
-> > [1] https://lore.kernel.org/kvm/20201023183358.50607-11-peterx@redhat.com/
-> > [2] https://lore.kernel.org/kvm/20201023183358.50607-12-peterx@redhat.com/
-> >
-> > --
-> > Peter Xu
-> >
->
+> Hagen
+
+-- 
+Sincerely yours,
+Mike.
