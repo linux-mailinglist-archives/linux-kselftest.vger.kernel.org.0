@@ -2,118 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53C72A6E44
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 20:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67F92A700F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 23:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729819AbgKDTma (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Nov 2020 14:42:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47168 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725889AbgKDTm3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 14:42:29 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6ADF206F9;
-        Wed,  4 Nov 2020 19:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604518948;
-        bh=hnEIJUynmmgvhXM6LNWJ3AbWQehuvhEF6/0d7tVxPgk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OywGmDa2wkQkk/FhsD+bRB9zR6KglkyRoMbANXBzP4e4dx6FgMPNTyaIhnIarG7zu
-         oFglqRYw1+Uwz3W6VMPysiR2T770vJnQAWj26vk5kLUVdEpzNHizPnxCIsJBjXgatC
-         pHCqqFYQZ/G2oxBfooxmn412DtuvdrvbNp+CcbM4=
-Date:   Wed, 4 Nov 2020 11:42:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Saeed Mahameed <saeed@kernel.org>, netdev@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
-Message-ID: <20201104114226.250a4e85@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <79c58e6cf23196b73887b20802daebd59fe89476.camel@redhat.com>
-References: <cover.1604055792.git.pabeni@redhat.com>
-        <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
-        <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <79c58e6cf23196b73887b20802daebd59fe89476.camel@redhat.com>
+        id S1732152AbgKDWAw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Nov 2020 17:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732151AbgKDWAH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Nov 2020 17:00:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C699CC0613D3;
+        Wed,  4 Nov 2020 14:00:06 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604527204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AcDsYZoZ0HQ8m/eP7LfmBFx38dKfFr6Bky2Op7UAmTc=;
+        b=uWGK10QusV8XBgAEcXVFwB1s7DNqNR5bL2JxVVUikjP6JCw35Az+lH5kDWr/WVmnsV5f1a
+        v9VKhuFzImQ6xYFX7YxIzcIJ8YdpvepoHsQWKeEDjnDCubBPSFXYO8t/8LEmfdY1e0a1LQ
+        zW4GmgphvtE89rP0MbRj0SVvzfkZIg3CNxaDvYoK0I/s21xPkV1Yp9dLyQ5pB8PaIUff08
+        VcFY0hmUO0WpT6iFhQYDoHl8KvFDJbuIcKAgCcldgqvZIvkM8szgbdWQ3TGu/eRovgBYXP
+        cx196hdriOCOBkZ0zIsChUhB5+Elt6carE/r29w1GPSqqLChVCIne7K15cElzw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604527204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AcDsYZoZ0HQ8m/eP7LfmBFx38dKfFr6Bky2Op7UAmTc=;
+        b=4RHQiyW6VNGm/O/DAJIaIeOw+XnqzvzEWcSqFGUfKYoL99s98K8xSO9iHJpE1NVxJhZwIu
+        pTGKWcex2mU6TyAg==
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V2 00/10] PKS: Add Protection Keys Supervisor (PKS) support
+In-Reply-To: <20201104174643.GC1531489@iweiny-DESK2.sc.intel.com>
+References: <20201102205320.1458656-1-ira.weiny@intel.com> <871rhb8h73.fsf@nanos.tec.linutronix.de> <20201104174643.GC1531489@iweiny-DESK2.sc.intel.com>
+Date:   Wed, 04 Nov 2020 23:00:04 +0100
+Message-ID: <87k0v0lr4r.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 04 Nov 2020 18:36:08 +0100 Paolo Abeni wrote:
-> On Tue, 2020-11-03 at 08:52 -0800, Jakub Kicinski wrote:
-> > On Tue, 03 Nov 2020 16:22:07 +0100 Paolo Abeni wrote:  
-> > > The relevant use case is an host running containers (with the related
-> > > orchestration tools) in a RT environment. Virtual devices (veths, ovs
-> > > ports, etc.) are created by the orchestration tools at run-time.
-> > > Critical processes are allowed to send packets/generate outgoing
-> > > network traffic - but any interrupt is moved away from the related
-> > > cores, so that usual incoming network traffic processing does not
-> > > happen there.
-> > > 
-> > > Still an xmit operation on a virtual devices may be transmitted via ovs
-> > > or veth, with the relevant forwarding operation happening in a softirq
-> > > on the same CPU originating the packet. 
-> > > 
-> > > RPS is configured (even) on such virtual devices to move away the
-> > > forwarding from the relevant CPUs.
-> > > 
-> > > As Saeed noted, such configuration could be possibly performed via some
-> > > user-space daemon monitoring network devices and network namespaces
-> > > creation. That will be anyway prone to some race: the orchestation tool
-> > > may create and enable the netns and virtual devices before the daemon
-> > > has properly set the RPS mask.
-> > > 
-> > > In the latter scenario some packet forwarding could still slip in the
-> > > relevant CPU, causing measurable latency. In all non RT scenarios the
-> > > above will be likely irrelevant, but in the RT context that is not
-> > > acceptable - e.g. it causes in real environments latency above the
-> > > defined limits, while the proposed patches avoid the issue.
-> > > 
-> > > Do you see any other simple way to avoid the above race?
-> > > 
-> > > Please let me know if the above answers your doubts,  
-> > 
-> > Thanks, that makes it clearer now.
-> > 
-> > Depending on how RT-aware your container management is it may or may not
-> > be the right place to configure this, as it creates the veth interface.
-> > Presumably it's the container management which does the placement of
-> > the tasks to cores, why is it not setting other attributes, like RPS?  
-> 
-> The container orchestration is quite complex, and I'm unsure isolation
-> and networking configuration are performed (or can be performed) by the
-> same precess (without an heavy refactor).
-> 
-> On the flip hand, the global rps mask knob looked quite
-> straightforward to me.
+On Wed, Nov 04 2020 at 09:46, Ira Weiny wrote:
+> On Tue, Nov 03, 2020 at 12:36:16AM +0100, Thomas Gleixner wrote:
+>> This is the wrong ordering, really.
+>> 
+>>      x86/entry: Move nmi entry/exit into common code
+>> 
+>> is a general cleanup and has absolutely nothing to do with PKRS.So this
+>> wants to go first.
+>
+> Sorry, yes this should be a pre-patch.
 
-I understand, but I can't shake the feeling this is a hack.
+I picked it out of the series and applied it to tip core/entry as I have
+other stuff coming up in that area. 
 
-Whatever sets the CPU isolation should take care of the RPS settings.
+Thanks,
 
-> Possibly I can reduce the amount of new code introduced by this
-> patchset removing some code duplication
-> between rps_default_mask_sysctl() and flow_limit_cpu_sysctl(). Would
-> that make this change more acceptable? Or should I drop this
-> altogether?
-
-I'm leaning towards drop altogether, unless you can get some
-support/review tags from other netdev developers. So far it
-appears we only got a down vote from Saeed.
-
-> > Also I wonder if it would make sense to turn this knob into something
-> > more generic. When we arrive at the threaded NAPIs - could it make
-> > sense for the threads to inherit your mask as the CPUs they are allowed
-> > to run on?  
-> 
-> I personally *think* this would be fine - and good. But isn't a bit
-> premature discussing the integration of 2 missing pieces ? :)
+        tglx
