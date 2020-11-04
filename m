@@ -2,65 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F162A6138
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 11:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9E32A62AB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 11:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729016AbgKDKJ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Nov 2020 05:09:58 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58219 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728229AbgKDKJ5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 05:09:57 -0500
-Received: by ozlabs.org (Postfix, from userid 1034)
-        id 4CR2Sx6FHYz9sVN; Wed,  4 Nov 2020 21:09:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1604484593;
-        bh=3kFSwF+mKTTL4Iah+YZCWoNxgZ901GzljCfDkfAwxW0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FSawxRlJDKo9uROKSB32k4Z/z3AOVHuT31P2LG+Q0cjSKQGpr2nSAG6pvPu7/gEP4
-         0SM90Lhy9WtXeH8oOycfvYv2DW3zzD+r/t3A7xiMybhWJqzAbB+iju8EdTrqreDOt0
-         97BAe99otfYwzOWIA+XXmDOlV0XV96p4ouMz2skY0iylXTuFuajisA6V5EGesfvN2S
-         EnWIKPp5gbDjHjv8pbw5zMIdkaEOipWJDjbISEl1XoZDWp2Ygwg5zrDyDsVAUn9lbe
-         RbBE9DjUCZ4sJ3xUIGrL2VBBtoIDzPsnA0PohN7BLvFPe7xFJoTQwXf9YDXHrZFwvd
-         2ryOz6wRJb6ww==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: [PATCH 4/4] selftests/gpio: Add to CLEAN rule rather than overriding
-Date:   Wed,  4 Nov 2020 21:08:43 +1100
-Message-Id: <20201104100843.660407-4-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201104100843.660407-1-mpe@ellerman.id.au>
-References: <20201104100843.660407-1-mpe@ellerman.id.au>
+        id S1729600AbgKDKzG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Nov 2020 05:55:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47154 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729597AbgKDKzF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Nov 2020 05:55:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604487304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q3u0+lkwsfiVe4d5JwGEYaEFEFtHacqRJXTy/nsAlx0=;
+        b=QvVRp7HTFPjU6Ea6ibUGOdrb8A7Xx38hQTYIpDaEkp8DTlpfUBj72sFvyYdJM9EMwWmCKr
+        te/HgfiEuazmRFPTY/+t5+Il5BeeiNQPdCiRQPA4GL6n9/QSnxRXk2Gkm8a4Ywx1InQ5Lw
+        Qlj8tiHZGs+DctZIhn9RUN75DziRv7Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-570-m8B7P33NNe-Xsxrs1Gxuww-1; Wed, 04 Nov 2020 05:55:00 -0500
+X-MC-Unique: m8B7P33NNe-Xsxrs1Gxuww-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 724DE8030D7;
+        Wed,  4 Nov 2020 10:54:59 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.40.192.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 28C655B4BB;
+        Wed,  4 Nov 2020 10:54:52 +0000 (UTC)
+Date:   Wed, 4 Nov 2020 11:54:50 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v2 1/5] KVM: selftests: Remove address rounding in guest
+ code
+Message-ID: <20201104105450.t2frosra4mvixrwi@kamzik.brq.redhat.com>
+References: <20201103234952.1626730-1-bgardon@google.com>
+ <20201103234952.1626730-2-bgardon@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201103234952.1626730-2-bgardon@google.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rather than overriding the CLEAN rule we can just append to it.
+On Tue, Nov 03, 2020 at 03:49:48PM -0800, Ben Gardon wrote:
+> Rounding the address the guest writes to a host page boundary
+> will only have an effect if the host page size is larger than the guest
+> page size, but in that case the guest write would still go to the same
+> host page. There's no reason to round the address down, so remove the
+> rounding to simplify the demand paging test.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  tools/testing/selftests/kvm/demand_paging_test.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> index 360cd3ea4cd67..32a42eafc6b5c 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -103,7 +103,6 @@ static void guest_code(uint32_t vcpu_id)
+>  	for (i = 0; i < pages; i++) {
+>  		uint64_t addr = gva + (i * guest_page_size);
+>  
+> -		addr &= ~(host_page_size - 1);
+>  		*(uint64_t *)addr = 0x0123456789ABCDEF;
+>  	}
+>  
+> -- 
+> 2.29.1.341.ge80a0c044ae-goog
+>
 
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
----
- tools/testing/selftests/gpio/Makefile | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index acf4088a9891..41582fe485ee 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -20,10 +20,7 @@ GPIODIR := $(realpath ../../../gpio)
- GPIOOUT := $(OUTPUT)/tools-gpio/
- GPIOOBJ := $(GPIOOUT)/gpio-utils.o
- 
--override define CLEAN
--	$(RM) $(TEST_GEN_PROGS_EXTENDED)
--	$(RM) -rf $(GPIOOUT)
--endef
-+CLEAN += ; $(RM) -rf $(GPIOOUT)
- 
- $(TEST_GEN_PROGS_EXTENDED): $(GPIOOBJ)
- 
--- 
-2.25.1
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 
