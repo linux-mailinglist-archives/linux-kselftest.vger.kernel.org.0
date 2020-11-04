@@ -2,57 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E511E2A66F6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 16:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006652A679F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Nov 2020 16:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730456AbgKDPAX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Nov 2020 10:00:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:22742 "EHLO
+        id S1729227AbgKDP2m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Nov 2020 10:28:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55730 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729962AbgKDPAX (ORCPT
+        by vger.kernel.org with ESMTP id S1726827AbgKDP2k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 10:00:23 -0500
+        Wed, 4 Nov 2020 10:28:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604502022;
+        s=mimecast20190719; t=1604503718;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=e6diWzy+RGM557EqcQ+SeKoKVh3DtYLPPbyK6Q8TIW0=;
-        b=RUP6H9OxV9hzZ9zIwZG9GKedC1rIBDfgRH0wnMiFjP7k5uUfW7/N1VrE0giq9bdgriPQGI
-        TqAKGUxKVc0sWveykkfmr6aWRJFbEaQbq8MB/CqRYgWsSTF0k7B1+rM6hfxTGaDRExPI7G
-        n9Mr+COMNV2Te8j3N5G4ARKOGbzxaIM=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-446-DHwITS1cNZirg0eCvV-fdg-1; Wed, 04 Nov 2020 10:00:20 -0500
-X-MC-Unique: DHwITS1cNZirg0eCvV-fdg-1
-Received: by mail-qk1-f199.google.com with SMTP id f9so13620572qkg.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Nov 2020 07:00:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e6diWzy+RGM557EqcQ+SeKoKVh3DtYLPPbyK6Q8TIW0=;
-        b=RGvMQ+u1dLfJCdw57p4Ikx/2oCZAo2aRhPFNXWQ75KMhR+NeV19L4jheRlJ+Pz/K+e
-         n+/4uywlegct3H35FGQ0E6vr0IS+xVRi0Om2J3jJR4vdSGurX/cd4UpzqHLyQi4bGAI2
-         54zf3gGPAIL8kAQEdelQcZy/mAdHpjSU73h+NOmHrT5t+ygcsabpfVhFoC+NHNxQ3xni
-         j/PdxcKLfiGpTO6tOGB5GCwojhmzmWt9GmXsumVQ6KcIP0Zis0egRjxhYsp81tIgP1lv
-         fA96OHt+M+fGlQUMzekvtgnKTdAIIUBV7oGUnGeXSreAbnr0zWsEovsyG46WidsFLUrr
-         IhrQ==
-X-Gm-Message-State: AOAM53013+GT0JTnRoMGiSoTGjrlpE0PY6sx091YcVou+iGO34I2RBCl
-        DEZc6UKsqdt0ihtuEpDHsMbjgxxU2uKZQfXsLMuECdiwAPn4wd3c2FUYKc+8haih8j+Y67t1UuM
-        SCkb/sVy7Xmov9qu8Sg0XW8P9k/zS
-X-Received: by 2002:a37:8107:: with SMTP id c7mr25368854qkd.361.1604502019980;
-        Wed, 04 Nov 2020 07:00:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy2eY3k9i5ObOPHDM5/bO3oV4U3c5htFt8p/dm3ffz6awRll55ijhfh7CVBUmgdIdzrQQk4og==
-X-Received: by 2002:a37:8107:: with SMTP id c7mr25368827qkd.361.1604502019710;
-        Wed, 04 Nov 2020 07:00:19 -0800 (PST)
-Received: from xz-x1 (bras-vprn-toroon474qw-lp130-20-174-93-89-196.dsl.bell.ca. [174.93.89.196])
-        by smtp.gmail.com with ESMTPSA id g13sm266060qth.27.2020.11.04.07.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 07:00:18 -0800 (PST)
-Date:   Wed, 4 Nov 2020 10:00:17 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Andrew Jones <drjones@redhat.com>
+        bh=OzvLPilVuFx00ghPxfGHTtJOpDXHfZFvWBiD6OmUMv8=;
+        b=dcQnQrggJHE/Zm8D5/A/DLKfgv88OrNvTuSIlcbJZDpRqTp38Z2dS56/gtnkbE7HFxBprG
+        XMpBesVjK7YYo54IPXKP+K9BtUt08zT11n8nmuUj13tqGuDGkW+L9ruGzeGx2fhHHmTntI
+        ozBYpdQF2wACrjz3sSbeOILjlBHBLgo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-196-3YsTLM5uMWGiO6aEmwJwCg-1; Wed, 04 Nov 2020 10:28:36 -0500
+X-MC-Unique: 3YsTLM5uMWGiO6aEmwJwCg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A32D710A0B83;
+        Wed,  4 Nov 2020 15:28:34 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.40.192.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5E00719650;
+        Wed,  4 Nov 2020 15:28:26 +0000 (UTC)
+Date:   Wed, 4 Nov 2020 16:28:23 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Peter Xu <peterx@redhat.com>
 Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -62,36 +45,48 @@ Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
         Peter Feiner <pfeiner@google.com>
 Subject: Re: [PATCH v2 2/5] KVM: selftests: Factor code out of
  demand_paging_test
-Message-ID: <20201104150017.GN20600@xz-x1>
+Message-ID: <20201104152823.qxdlbygza7ykn5x2@kamzik.brq.redhat.com>
 References: <20201103234952.1626730-1-bgardon@google.com>
  <20201103234952.1626730-3-bgardon@google.com>
  <20201104121631.wvodsw7agsrdhje4@kamzik.brq.redhat.com>
+ <20201104150017.GN20600@xz-x1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201104121631.wvodsw7agsrdhje4@kamzik.brq.redhat.com>
+In-Reply-To: <20201104150017.GN20600@xz-x1>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 01:16:31PM +0100, Andrew Jones wrote:
-> If you don't mind I'd like to try and cleanup / generalize / refactor
-> demand_paging_test.c and dirty_log_test.c with a few patches first for
-> you to base this work on. I can probably get something posted today
-> or tomorrow.
+On Wed, Nov 04, 2020 at 10:00:17AM -0500, Peter Xu wrote:
+> On Wed, Nov 04, 2020 at 01:16:31PM +0100, Andrew Jones wrote:
+> > If you don't mind I'd like to try and cleanup / generalize / refactor
+> > demand_paging_test.c and dirty_log_test.c with a few patches first for
+> > you to base this work on. I can probably get something posted today
+> > or tomorrow.
+> 
+> Drew,
+> 
+> Would you consider picking up the two patches below in the dirty ring series if
+> you plan to rework the dirty log tests?  I got your r-b so I am making bold to
+> think I'm ok to ask this; I just want to avoid another potential conflict
+> within the series.
 
-Drew,
+Sure, no problem.
 
-Would you consider picking up the two patches below in the dirty ring series if
-you plan to rework the dirty log tests?  I got your r-b so I am making bold to
-think I'm ok to ask this; I just want to avoid another potential conflict
-within the series.
+I'll go ahead and get that cleanup / refactor series out.
 
-Thanks!
+Thanks,
+drew
 
-[1] https://lore.kernel.org/kvm/20201023183358.50607-11-peterx@redhat.com/
-[2] https://lore.kernel.org/kvm/20201023183358.50607-12-peterx@redhat.com/
-
--- 
-Peter Xu
+> 
+> Thanks!
+> 
+> [1] https://lore.kernel.org/kvm/20201023183358.50607-11-peterx@redhat.com/
+> [2] https://lore.kernel.org/kvm/20201023183358.50607-12-peterx@redhat.com/
+> 
+> -- 
+> Peter Xu
+> 
 
