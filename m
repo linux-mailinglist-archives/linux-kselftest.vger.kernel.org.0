@@ -2,67 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9BB2A8975
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Nov 2020 23:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32852A89E6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Nov 2020 23:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732461AbgKEWB0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Nov 2020 17:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S1731234AbgKEWeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Nov 2020 17:34:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732415AbgKEWBZ (ORCPT
+        with ESMTP id S1726729AbgKEWeY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Nov 2020 17:01:25 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AAEC0613D2
-        for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2020 14:01:25 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id u62so3389762iod.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2020 14:01:25 -0800 (PST)
+        Thu, 5 Nov 2020 17:34:24 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93D8C0613D2
+        for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2020 14:34:23 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id e16so2866226ile.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2020 14:34:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PDQek47T74MY22gvmOdioXhtKsJNmf69/vnpKoUvh7A=;
-        b=INjz6XiqdG/PWl7SBNlG2Rv95cGqNwfrM8BSUb7v3D2Q129IeP2kPnxspVbCfrZ4Ka
-         QcjCdOzDONyjUEEBMhC4F7X8Glybw+ZYbkketsLwmn4X8Fig7/HN+JFvLRdflE3hOKVw
-         EKUyqMZIGc71QbDUIiWyWezIDmWCnaL97+m18=
+        bh=3rfBBGqUd3cpCM+8AbvtqRCTDWM5yRKCwCQaMviS5/4=;
+        b=M874ykKUTT83N9TFM7sfPy+JKh1rfxRCDr9KOe4FyA3uKKvS+aYXtPxmaumOMKLjTy
+         n/p4k7ALHcgpp+NmRsH8YDSBXfNGWTt6lYKi5sw+qw66d1pRJiJ+nUCNjSi73tKh50DG
+         bQ8n5JZAtXRxF7fHsxnzdgfWoEpXSXOQ7KO+E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=PDQek47T74MY22gvmOdioXhtKsJNmf69/vnpKoUvh7A=;
-        b=oGTQ0vrDLkaN51xJ/GxpHIY3cO2JJExOQKa3e2YB4W6IDGWiweDHt/gsyer7K3JImJ
-         DRYfONGozJ4dlM6tUu7QsxM1bhXIxdN9JW6vLtB3V26rGs+jNhHIGpY1aQGR/apjALEt
-         7ixsvVF6B4tCd3PX5+ACqI4LuNwDeAL7TQU6hZCnZrHmKERfmZ02rqpA9WCLXUm66Qr8
-         YcaUu8B++GvnBsM8JrRFSxZMJoS+DC0GfPUeDO6M8zzlrO0eEg9x/j81iCwS1oxE94zC
-         qqTJq4bFoXvMABP3t4Oseo6EOWxRuNDLV4ojcruBgTwRTJC5s5IXufWYwzNFQ6u37pLo
-         m89Q==
-X-Gm-Message-State: AOAM533bYQzdaLm6siJdgMSKMurSTTp/Eqe534to9xZc+UxdxRE334/L
-        cUUZTylFgmD54mjRYUpGqunOBQ==
-X-Google-Smtp-Source: ABdhPJw/vu9s627talg3Gz+uacwEgbLp6+XGm24ojMmme8dDNwLVVtuS64/r4JjRuAbm4vvHBqexuw==
-X-Received: by 2002:a02:6a2b:: with SMTP id l43mr3827231jac.87.1604613684967;
-        Thu, 05 Nov 2020 14:01:24 -0800 (PST)
+        bh=3rfBBGqUd3cpCM+8AbvtqRCTDWM5yRKCwCQaMviS5/4=;
+        b=LZVPQzItWmaeuYmLp5BUJm4yB2VwBUoT0aIKy2fGrtvdg3igM74uCPx8d8mPp57WYp
+         EnnWkmmgzO+xTBEi+CoDqJTtezWmpKnw+PVajN/6H6lMMXg1WD6LDU0kHc3Jt5EVtTq/
+         eOf4kVfABBAa4cJkSHbtw+wqAyEbO6IXgZxVf+gVNMNTJ2TXiuxKeePEiA6URg58Ojqr
+         ZPXaMmKrj/WYfSfmQz+rClbB24h53qtnSzgbzLjCdwcn4sdpaxQIoPIadhenxXAYf3vd
+         O3acLJ96OVF33La+NbnCq2wPhM7jz5aGF5MSuS1Ln0jYDnS6gEwB/iifAIVkfcyPo24V
+         TEuw==
+X-Gm-Message-State: AOAM533Q2HT+YiTD4O+JPwzmIoDijDw1tUpCLBFCfMwyeuxfYqT9OUmN
+        kEDiwNK6R40aVtclSaGPSpCCFbsMYTsGHA==
+X-Google-Smtp-Source: ABdhPJzShoZItpQGoHq+b5r/u50oBoRVZfFSjV0khamnbun7OYnYCNu3XBH1Ge9ctgjMsihg+++9Gg==
+X-Received: by 2002:a92:7a0c:: with SMTP id v12mr3174449ilc.37.1604615662963;
+        Thu, 05 Nov 2020 14:34:22 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f73sm187745ilh.7.2020.11.05.14.01.23
+        by smtp.gmail.com with ESMTPSA id y3sm1857480ilc.49.2020.11.05.14.34.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2020 14:01:24 -0800 (PST)
+        Thu, 05 Nov 2020 14:34:22 -0800 (PST)
 Subject: Re: Kunit fixes update for Linux 5.10-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        <linux-kselftest@vger.kernel.org>
 References: <6b9e77b0-7272-221e-d475-41b266b22496@linuxfoundation.org>
  <CAHk-=wiscEwD+a4M2mns1kf2S+yE6gcPp0sn4znVt0ZUxaP3Wg@mail.gmail.com>
- <CAHk-=whPe8hpnMw9UpXyL2s+tyWX3VaG1yL57_zzwFLjP5pw5A@mail.gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a0d87f58-7ef2-1854-ea70-5d355b20ed28@linuxfoundation.org>
-Date:   Thu, 5 Nov 2020 15:01:23 -0700
+Message-ID: <8fda76e3-4495-571b-6f8b-0b76da511108@linuxfoundation.org>
+Date:   Thu, 5 Nov 2020 15:34:21 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.3.2
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=whPe8hpnMw9UpXyL2s+tyWX3VaG1yL57_zzwFLjP5pw5A@mail.gmail.com>
+In-Reply-To: <CAHk-=wiscEwD+a4M2mns1kf2S+yE6gcPp0sn4znVt0ZUxaP3Wg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -70,33 +68,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/5/20 1:25 PM, Linus Torvalds wrote:
-> On Thu, Nov 5, 2020 at 12:02 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
+On 11/5/20 1:02 PM, Linus Torvalds wrote:
+> On Thu, Nov 5, 2020 at 8:55 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >>
->> On Thu, Nov 5, 2020 at 8:55 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>
->>>    .../kunit/test_data/test_config_printk_time.log    | Bin 1584 -> 1605 bytes
->>>    .../test_data/test_interrupted_tap_output.log      | Bin 1982 -> 2003 bytes
->>>    .../test_data/test_kernel_panic_interrupt.log      | Bin 1321 -> 1342 bytes
->>>    .../kunit/test_data/test_multiple_prefixes.log     | Bin 1832 -> 1861
->>
->> This diffstat is a bit annoying.
+>>    .../kunit/test_data/test_config_printk_time.log    | Bin 1584 -> 1605 bytes
+>>    .../test_data/test_interrupted_tap_output.log      | Bin 1982 -> 2003 bytes
+>>    .../test_data/test_kernel_panic_interrupt.log      | Bin 1321 -> 1342 bytes
+>>    .../kunit/test_data/test_multiple_prefixes.log     | Bin 1832 -> 1861
 > 
-> Oh, and another note: because you don't have the "[GIT PULL}" marker
-> on the subject line, the pr-tracker-bot doesn't react to the pull
-> requests, and you didn't get notified that it's been pulled.
+> This diffstat is a bit annoying.
 > 
-> Just FYI - I personally don't care, as your pull requests do show up
-> in _my_ queue, because you have "git" and "pull" in the body of the
-> message. But the automation doesn't see them.
+> And the reason is that we have
 > 
-Oops. I don't usually miss adding [GIT PULL] - will pay more attention.
+>      [torvalds@ryzen linux]$ cat tools/testing/kunit/.gitattributes
+>      test_data/* binary
+> 
+> iow, you're telling git that everything in that test_data directory is
+> binary blobs. Which isn't actually true.
+> 
+> This isn't new, but it was just more noticeable this time around.
+> 
+> That binary marker comes from commit afc63da64f1e ("kunit:
+> kunit_parser: make parser more robust") and I'm not really seeing the
+> reason for it.
+> 
 
-I am sorry about that. My bad on my part. Can I chalk it up
-to this weird week?
+You are right. It appears there is no need to add these binary blobs.
+Brendan and I discussed this and he will send a fix to remove the blobs
+and redo the test output. In other words fix commit afc63da64f1e.
+
+Sorry for not catching this earlier.
 
 thanks,
 -- Shuah
-
 
