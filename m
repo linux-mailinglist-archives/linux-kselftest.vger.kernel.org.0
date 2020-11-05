@@ -2,111 +2,399 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 818062A8565
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Nov 2020 18:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8A12A87A2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Nov 2020 20:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgKER4i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Nov 2020 12:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S1731860AbgKETzN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Nov 2020 14:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726214AbgKER4i (ORCPT
+        with ESMTP id S1726214AbgKETzN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Nov 2020 12:56:38 -0500
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84532C0613CF
-        for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2020 09:56:36 -0800 (PST)
-Received: by mail-io1-xd44.google.com with SMTP id j12so2717124iow.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2020 09:56:36 -0800 (PST)
+        Thu, 5 Nov 2020 14:55:13 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96388C0613D2
+        for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2020 11:55:12 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id k18so2779890wmj.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2020 11:55:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gVh7YY/0K/z+uWMXSo/b8D+4KW0g/YiOggYRfYqJqyw=;
-        b=L8aS5cL9KWxAE8Q+w1ft94QnSLHq8Aana7wRQ9xzjXKwjO1KFV22l0KYqvT6br1vzi
-         Wqb4wPtnz8KntyzIxb0yq3bG/Ul66Zj0NhAgOGc9w2/Qj+Zs+qw9bQ+xC44f+wAPAetM
-         EMETu/nK7Is2Yfo5s77zOuGvMqcZ2SH24MLzs=
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=MZwKDRqQrsQ4zOtuDWn8CpYHSaA3PZfjgaxfQ8Lvz/A=;
+        b=NBn+saBUkqIqJpqtHqt6rtowzapePx1k8oKQTFP5PxeuOA3G0OkNG41bPksIwelbYO
+         PejAhTKrb/eDzyCC08ZxjmSiAAur9pEit+ILEUm7F+Dyom01AsRBEl2LT2e7oTMvcqze
+         19RLUwVVEdsMLJg8252nlHStnHyjlufXCodHavgjkGa1HQmLelZjKvJ+ETarJNeGdaIr
+         oAoZ6TfWvKDB4E19ggLKP/kfP2YDdosadqaJDwsOCp9/zX5kkyCGOxBU0jW2MOxJJvdk
+         ea8XPYUgoplya+AX67ysNkUfMQ39/IoKtrJzsk7PWkq8Ty8EX9G2ARdrfcQTg86a228w
+         7E7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gVh7YY/0K/z+uWMXSo/b8D+4KW0g/YiOggYRfYqJqyw=;
-        b=pi/85ja+VzhGvRthClubFq/SSwIUDlcO4CAbHF8HeqAB18Lrtjqf/15H2xUwTXTuGH
-         VdTtyT+AxFIdJljRhC6Jx6s3eIbtwU0h7G3MJZWZXfVMMqOBtZtwRcvUem9W+JkvVw4h
-         aCbbWFpLsBIkoc1OesDMTQT1wJvfQ5yoGilSAeMYnjrXNFrvKOvzBFsCcsLodOZpZAHl
-         beeuCdAjRIHPaQfb2m7zXReg1b+CbKye3UEh8pcQGp3UK88rFVKbU/dbNk5u4xTIDs/A
-         2/Emfa5clEEhnyY/+h2sW07ft/U1A0X02bKj0kv7Po/RLdKm8wcjDidhgmu6NEc597gX
-         0QTw==
-X-Gm-Message-State: AOAM531dNRr3h8K6pw1sMtCMUe4PB5cAbg2+/PIEVUV87pDmED0iTFTX
-        1kSEVpzH/sN7iyDffM9gz323iA==
-X-Google-Smtp-Source: ABdhPJyCGLlqG1LHcdqWoWAE1u8lklFPjlXGXgu4QnKnnWV5X6pH6E+UDLEUJe0utYlv996jTb5sCA==
-X-Received: by 2002:a02:c547:: with SMTP id g7mr2895479jaj.88.1604598995928;
-        Thu, 05 Nov 2020 09:56:35 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id r3sm1369183iog.55.2020.11.05.09.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2020 09:56:35 -0800 (PST)
-Subject: Re: [PATCH v2 3/3] kunit: Introduce get_file_path() helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     SeongJae Park <sjpark@amazon.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=MZwKDRqQrsQ4zOtuDWn8CpYHSaA3PZfjgaxfQ8Lvz/A=;
+        b=IJgQHUWpdA8UIZc3Rul4+tyt8bbNySIFlVL+PmopuFlfDCoSzR5ohiV+m9YZHySLEp
+         ujr/Ol95T/xxSb6vTNkAZCfR1dkOcsMen8DdV2VP78L/DNCq/KgSfbN4c8U69sQSu16P
+         5W78m0ROSNZfBgQwqa9epBWqxv3575YBuLPDYH83HwEdvPOj070XZTrrA5ltsJiKV/7/
+         Eq+1UjsD/SawDQoU1tv13lI564cMw6CqyiQ8xZsWOrudOITjrwBSfRQUn2Y+SGLc1gNX
+         Y1hpOai9PHA3PiT/WyPrIKkt14RwEp0a6miPM25cmuY4LqCDZnaawGAktc7tCo2c0K+i
+         qGJQ==
+X-Gm-Message-State: AOAM53394p8ZRRvRTD2KFQ3cyOJ5F9BaKIx6MApd10Ih9JZxP3ZIsOur
+        RszlD550e87hr2rq2DUN6UH+qg==
+X-Google-Smtp-Source: ABdhPJwWdi8jg48/kPf5VHWeippxva2nmrLkrBaPBC/MBg75Uqf/eoJFRq4gHLJavMs6I4ZNbOeVnA==
+X-Received: by 2002:a1c:205:: with SMTP id 5mr4334979wmc.7.1604606110996;
+        Thu, 05 Nov 2020 11:55:10 -0800 (PST)
+Received: from elver.google.com ([100.105.32.75])
+        by smtp.gmail.com with ESMTPSA id b124sm647288wmh.13.2020.11.05.11.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 11:55:10 -0800 (PST)
+Date:   Thu, 5 Nov 2020 20:55:03 +0100
+From:   Marco Elver <elver@google.com>
+To:     Arpitha Raghunandan <98.arpi@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
-        SeongJae Park <sjpark@amazon.de>, skhan@linuxfoundation.org
-References: <20201026165927.19020-3-andriy.shevchenko@linux.intel.com>
- <20201028092915.8053-1-sjpark@amazon.com>
- <20201103112512.GZ4077@smile.fi.intel.com>
- <CAFd5g44dLoUwfNPsMqavU_KrJ5+xoLgKT0Ec2_-pxVYxjMHiWA@mail.gmail.com>
- <20201105172855.GB4077@smile.fi.intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f3c2de52-5955-6392-6b10-edb4dc4cf231@linuxfoundation.org>
-Date:   Thu, 5 Nov 2020 10:56:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] kunit: Support for Parameterized Testing
+Message-ID: <20201105195503.GA2399621@elver.google.com>
+References: <20201027174630.85213-1-98.arpi@gmail.com>
+ <CANpmjNOpbXHs4gs9Ro-u7hyN_zZ7s3AqDcdDy1Nqxq4ckThugA@mail.gmail.com>
+ <73c4e46c-10f1-9362-b4fb-94ea9d74e9b2@gmail.com>
+ <CANpmjNPxqQM0_f14ZwV3rHZzwhCtqx2fbOhHmXmiJawou6=z6Q@mail.gmail.com>
+ <77d6dc66-1086-a9ae-ccbc-bb062ff81437@gmail.com>
+ <CANpmjNORLJ4b_uwBB8v2h5cxoZF2SMTaz5K6QP37PxdUJDZUDA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201105172855.GB4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CANpmjNORLJ4b_uwBB8v2h5cxoZF2SMTaz5K6QP37PxdUJDZUDA@mail.gmail.com>
+User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/5/20 10:28 AM, Andy Shevchenko wrote:
-> On Thu, Nov 05, 2020 at 08:35:16AM -0800, Brendan Higgins wrote:
->> On Tue, Nov 3, 2020 at 3:24 AM Andy Shevchenko
->> <andriy.shevchenko@linux.intel.com> wrote:
->>> On Wed, Oct 28, 2020 at 10:29:15AM +0100, SeongJae Park wrote:
->>>> On Mon, 26 Oct 2020 18:59:27 +0200 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
->>>>
->>>>> Helper allows to derive file names depending on --build_dir argument.
->>>>>
->>>>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>>> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
->>>>> Tested-by: Brendan Higgins <brendanhiggins@google.com>
->>>>
->>>> Reviewed-by: SeongJae Park <sjpark@amazon.de>
->>>
->>> Thanks!
->>>
->>> Brendan, Shuah, can we get this series applied, please?
->>
->> I'm not actually sure that this qualifies as a fix. I certainly don't
->> mind if this goes in 5.10, in fact, I would prefer it.
->>
->> In any case, I added it to Shuah's queue. I will leave it up to Shuah
->> whether it goes in as a fix in 5.10, or needs to wait for the next
->> merge window.
-> 
-> I'm fine with either. My solely concern is that I would like to get this moved
-> forward somehow.
-> 
+On Thu, Nov 05, 2020 at 04:02PM +0100, Marco Elver wrote:
+> On Thu, 5 Nov 2020 at 15:30, Arpitha Raghunandan <98.arpi@gmail.com> wrot=
+e:
+[...]
+> > >> I tried adding support to run each parameter as a distinct test case=
+ by
+> > >> making changes to kunit_run_case_catch_errors(). The issue here is t=
+hat
+> > >> since the results are displayed in KTAP format, this change will res=
+ult in
+> > >> each parameter being considered a subtest of another subtest (test c=
+ase
+> > >> in KUnit).
+> > >
+> > > Do you have example output? That might help understand what's going o=
+n.
+> > >
+> >
+> > The change that I tried can be seen here (based on the v4 patch):
+> > https://gist.github.com/arpi-r/4822899087ca4cc34572ed9e45cc5fee.
+> >
+> > Using the kunit tool, I get this error:
+> >
+> > [19:20:41] [ERROR]  expected 7 test suites, but got -1
+> > [ERROR] no tests run!
+> > [19:20:41] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > [19:20:41] Testing complete. 0 tests run. 0 failed. 0 crashed.
+> >
+> > But this error is only because of how the tool displays the results.
+> > The test actually does run, as can be seen in the dmesg output:
+> >
+> > TAP version 14
+> > 1..7
+> >     # Subtest: ext4_inode_test
+> >     1..1
+> >     ok 1 - inode_test_xtimestamp_decoding 1
+> >     ok 1 - inode_test_xtimestamp_decoding 2
+> >     ok 1 - inode_test_xtimestamp_decoding 3
+> >     ok 1 - inode_test_xtimestamp_decoding 4
+> >     ok 1 - inode_test_xtimestamp_decoding 5
+> >     ok 1 - inode_test_xtimestamp_decoding 6
+> >     ok 1 - inode_test_xtimestamp_decoding 7
+> >     ok 1 - inode_test_xtimestamp_decoding 8
+> >     ok 1 - inode_test_xtimestamp_decoding 9
+> >     ok 1 - inode_test_xtimestamp_decoding 10
+> >     ok 1 - inode_test_xtimestamp_decoding 11
+> >     ok 1 - inode_test_xtimestamp_decoding 12
+> >     ok 1 - inode_test_xtimestamp_decoding 13
+> >     ok 1 - inode_test_xtimestamp_decoding 14
+> >     ok 1 - inode_test_xtimestamp_decoding 15
+> >     ok 1 - inode_test_xtimestamp_decoding 16
+> > ok 1 - ext4_inode_test
+> > (followed by other kunit test outputs)
+>=20
+> Hmm, interesting. Let me play with your patch a bit.
+>=20
+> One option is to just have the test case number increment as well,
+> i.e. have this:
+> |    ok 1 - inode_test_xtimestamp_decoding#1
+> |    ok 2 - inode_test_xtimestamp_decoding#2
+> |    ok 3 - inode_test_xtimestamp_decoding#3
+> |    ok 4 - inode_test_xtimestamp_decoding#4
+> |    ok 5 - inode_test_xtimestamp_decoding#5
+> ...
+>=20
+> Or is there something else I missed?
 
-Once the kunit pull request for rc3 clears, I will look at these and
-make a call. This patch series finalized during the merge window,
-hence you are going to see some delays. If it doesn't make the cut
-for fixes, it will go into 5.11
+Right, so TAP wants the exact number of tests it will run ahead of time.
+In which case we can still put the results of each parameterized test in
+a diagnostic. Please see my proposed patch below, which still does
+proper initialization/destruction of each parameter case as if it was
+its own test case.
 
-thanks,
--- Shuah
+With it the output looks as follows:
+
+| TAP version 14
+| 1..6
+|     # Subtest: ext4_inode_test
+|     1..1
+|     # ok param#0 - inode_test_xtimestamp_decoding
+|     # ok param#1 - inode_test_xtimestamp_decoding
+|     # ok param#2 - inode_test_xtimestamp_decoding
+|     # ok param#3 - inode_test_xtimestamp_decoding
+|     # ok param#4 - inode_test_xtimestamp_decoding
+|     # ok param#5 - inode_test_xtimestamp_decoding
+|     # ok param#6 - inode_test_xtimestamp_decoding
+|     # ok param#7 - inode_test_xtimestamp_decoding
+|     # ok param#8 - inode_test_xtimestamp_decoding
+|     # ok param#9 - inode_test_xtimestamp_decoding
+|     # ok param#10 - inode_test_xtimestamp_decoding
+|     # ok param#11 - inode_test_xtimestamp_decoding
+|     # ok param#12 - inode_test_xtimestamp_decoding
+|     # ok param#13 - inode_test_xtimestamp_decoding
+|     # ok param#14 - inode_test_xtimestamp_decoding
+|     # ok param#15 - inode_test_xtimestamp_decoding
+|     ok 1 - inode_test_xtimestamp_decoding
+| ok 1 - ext4_inode_test
+
+Would that be reasonable? If so, feel free to take the patch and
+test/adjust as required.
+
+I'm not sure on the best format -- is there is a recommended format for
+parameterized test result output? If not, I suppose we can put anything
+we like into the diagnostic.
+
+Thanks,
+-- Marco
+
+------ >8 ------
+
+=46rom ccbf4e2e190a2d7c6a94a51c9b1fb3b9a940e578 Mon Sep 17 00:00:00 2001
+=46rom: Arpitha Raghunandan <98.arpi@gmail.com>
+Date: Tue, 27 Oct 2020 23:16:30 +0530
+Subject: [PATCH] kunit: Support for Parameterized Testing
+
+Implementation of support for parameterized testing in KUnit.
+This approach requires the creation of a test case using the
+KUNIT_CASE_PARAM macro that accepts a generator function as input.
+This generator function should return the next parameter given the
+previous parameter in parameterized tests. It also provides
+a macro to generate common-case generators.
+
+Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+Co-developed-by: Marco Elver <elver@google.com>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+Changes v4->v5:
+- Update kernel-doc comments.
+- Use const void* for generator return and prev value types.
+- Add kernel-doc comment for KUNIT_ARRAY_PARAM.
+- Rework parameterized test case execution strategy: each parameter is exec=
+uted
+  as if it was its own test case, with its own test initialization and clea=
+nup
+  (init and exit are called, etc.). However, we cannot add new test cases p=
+er TAP
+  protocol once we have already started execution. Instead, log the result =
+of
+  each parameter run as a diagnostic comment.
+Changes v3->v4:
+- Rename kunit variables
+- Rename generator function helper macro
+- Add documentation for generator approach
+- Display test case name in case of failure along with param index
+Changes v2->v3:
+- Modifictaion of generator macro and method
+Changes v1->v2:
+- Use of a generator method to access test case parameters
+---
+ include/kunit/test.h | 36 ++++++++++++++++++++++++++++++++++
+ lib/kunit/test.c     | 46 +++++++++++++++++++++++++++++++-------------
+ 2 files changed, 69 insertions(+), 13 deletions(-)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 9197da792336..ae5488a37e48 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -107,6 +107,7 @@ struct kunit;
+  *
+  * @run_case: the function representing the actual test case.
+  * @name:     the name of the test case.
++ * @generate_params: the generator function for parameterized tests.
+  *
+  * A test case is a function with the signature,
+  * ``void (*)(struct kunit *)``
+@@ -141,6 +142,7 @@ struct kunit;
+ struct kunit_case {
+ 	void (*run_case)(struct kunit *test);
+ 	const char *name;
++	const void* (*generate_params)(const void *prev);
+=20
+ 	/* private: internal use only. */
+ 	bool success;
+@@ -163,6 +165,22 @@ static inline char *kunit_status_to_string(bool status)
+  */
+ #define KUNIT_CASE(test_name) { .run_case =3D test_name, .name =3D #test_n=
+ame }
+=20
++/**
++ * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct kunit_=
+case
++ *
++ * @test_name: a reference to a test case function.
++ * @gen_params: a reference to a parameter generator function.
++ *
++ * The generator function ``const void* gen_params(const void *prev)`` is =
+used
++ * to lazily generate a series of arbitrarily typed values that fit into a
++ * void*. The argument @prev is the previously returned value, which shoul=
+d be
++ * used to derive the next value; @prev is set to NULL on the initial gene=
+rator
++ * call.  When no more values are available, the generator must return NUL=
+L.
++ */
++#define KUNIT_CASE_PARAM(test_name, gen_params)			\
++		{ .run_case =3D test_name, .name =3D #test_name,	\
++		  .generate_params =3D gen_params }
++
+ /**
+  * struct kunit_suite - describes a related collection of &struct kunit_ca=
+se
+  *
+@@ -208,6 +226,10 @@ struct kunit {
+ 	const char *name; /* Read only after initialization! */
+ 	char *log; /* Points at case log after initialization */
+ 	struct kunit_try_catch try_catch;
++	/* param_value is the current parameter value for a test case. */
++	const void *param_value;
++	/* param_index stores the index of the parameter in parameterized tests. =
+*/
++	int param_index;
+ 	/*
+ 	 * success starts as true, and may only be set to false during a
+ 	 * test case; thus, it is safe to update this across multiple
+@@ -1742,4 +1764,18 @@ do {									       \
+ 						fmt,			       \
+ 						##__VA_ARGS__)
+=20
++/**
++ * KUNIT_ARRAY_PARAM() - Define test parameter generator from an array.
++ * @name:  prefix for the test parameter generator function.
++ * @array: array of test parameters.
++ *
++ * Define function @name_gen_params which uses @array to generate paramete=
+rs.
++ */
++#define KUNIT_ARRAY_PARAM(name, array)								\
++	static const void *name##_gen_params(const void *prev)					\
++	{											\
++		typeof((array)[0]) * __next =3D prev ? ((typeof(__next)) prev) + 1 : (ar=
+ray);	\
++		return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;			\
++	}
++
+ #endif /* _KUNIT_TEST_H */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 750704abe89a..453ebe4da77d 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -325,29 +325,25 @@ static void kunit_catch_run_case(void *data)
+  * occur in a test case and reports them as failures.
+  */
+ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+-					struct kunit_case *test_case)
++					struct kunit_case *test_case,
++					struct kunit *test)
+ {
+ 	struct kunit_try_catch_context context;
+ 	struct kunit_try_catch *try_catch;
+-	struct kunit test;
+=20
+-	kunit_init_test(&test, test_case->name, test_case->log);
+-	try_catch =3D &test.try_catch;
++	kunit_init_test(test, test_case->name, test_case->log);
++	try_catch =3D &test->try_catch;
+=20
+ 	kunit_try_catch_init(try_catch,
+-			     &test,
++			     test,
+ 			     kunit_try_run_case,
+ 			     kunit_catch_run_case);
+-	context.test =3D &test;
++	context.test =3D test;
+ 	context.suite =3D suite;
+ 	context.test_case =3D test_case;
+ 	kunit_try_catch_run(try_catch, &context);
+=20
+-	test_case->success =3D test.success;
+-
+-	kunit_print_ok_not_ok(&test, true, test_case->success,
+-			      kunit_test_case_num(suite, test_case),
+-			      test_case->name);
++	test_case->success =3D test->success;
+ }
+=20
+ int kunit_run_tests(struct kunit_suite *suite)
+@@ -356,8 +352,32 @@ int kunit_run_tests(struct kunit_suite *suite)
+=20
+ 	kunit_print_subtest_start(suite);
+=20
+-	kunit_suite_for_each_test_case(suite, test_case)
+-		kunit_run_case_catch_errors(suite, test_case);
++	kunit_suite_for_each_test_case(suite, test_case) {
++		struct kunit test =3D { .param_value =3D NULL, .param_index =3D 0 };
++		bool test_success =3D true;
++
++		if (test_case->generate_params)
++			test.param_value =3D test_case->generate_params(NULL);
++
++		do {
++			kunit_run_case_catch_errors(suite, test_case, &test);
++			test_success &=3D test_case->success;
++
++			if (test_case->generate_params) {
++				kunit_log(KERN_INFO, &test,
++					  KUNIT_SUBTEST_INDENT
++					  "# %s param#%d - %s",
++					  kunit_status_to_string(test.success),
++					  test.param_index, test_case->name);
++				test.param_value =3D test_case->generate_params(test.param_value);
++				test.param_index++;
++			}
++		} while (test.param_value);
++
++		kunit_print_ok_not_ok(&test, true, test_success,
++				      kunit_test_case_num(suite, test_case),
++				      test_case->name);
++	}
+=20
+ 	kunit_print_subtest_end(suite);
+=20
+--=20
+2.29.1.341.ge80a0c044ae-goog
+
