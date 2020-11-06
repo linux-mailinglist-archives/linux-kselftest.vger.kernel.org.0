@@ -2,124 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 796132A9E99
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Nov 2020 21:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69882A9EC0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Nov 2020 21:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728140AbgKFUew (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Nov 2020 15:34:52 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:9066 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727129AbgKFUew (ORCPT
+        id S1728464AbgKFU4x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Nov 2020 15:56:53 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:18697 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727559AbgKFU4w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Nov 2020 15:34:52 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fa5b36a0000>; Fri, 06 Nov 2020 12:34:50 -0800
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
+        Fri, 6 Nov 2020 15:56:52 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fa5b8980001>; Fri, 06 Nov 2020 12:56:56 -0800
+Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Nov
- 2020 20:34:49 +0000
+ 2020 20:56:47 +0000
 Subject: Re: [PATCH v3 1/6] mm/thp: add prep_transhuge_device_private_page()
-To:     Matthew Wilcox <willy@infradead.org>
+To:     Christoph Hellwig <hch@lst.de>
 CC:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
         <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         "Jerome Glisse" <jglisse@redhat.com>,
         John Hubbard <jhubbard@nvidia.com>,
         "Alistair Popple" <apopple@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
         Jason Gunthorpe <jgg@nvidia.com>,
         Bharata B Rao <bharata@linux.ibm.com>,
         Zi Yan <ziy@nvidia.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Yang Shi <yang.shi@linux.alibaba.com>,
         Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
+        "Andrew Morton" <akpm@linux-foundation.org>
 References: <20201106005147.20113-1-rcampbell@nvidia.com>
- <20201106005147.20113-2-rcampbell@nvidia.com>
- <20201106121407.GQ17076@casper.infradead.org>
+ <20201106005147.20113-2-rcampbell@nvidia.com> <20201106075554.GA31341@lst.de>
 From:   Ralph Campbell <rcampbell@nvidia.com>
 X-Nvconfidentiality: public
-Message-ID: <e384a09a-23a2-6a9b-dda6-db93e26c8f66@nvidia.com>
-Date:   Fri, 6 Nov 2020 12:34:49 -0800
+Message-ID: <e2d3b996-e1a9-ccc1-8b7a-31df840b8ebb@nvidia.com>
+Date:   Fri, 6 Nov 2020 12:56:47 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20201106121407.GQ17076@casper.infradead.org>
+In-Reply-To: <20201106075554.GA31341@lst.de>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
  HQMAIL107.nvidia.com (172.20.187.13)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1604694890; bh=3kQ//mMEobyQywMprE0fVaDOJaCYEqZr2rGa9riAH38=;
+        t=1604696216; bh=GkUJF2wcwNFtVtDfugtak/8XayWbGhH8zDvyol5BTOw=;
         h=Subject:To:CC:References:From:X-Nvconfidentiality:Message-ID:Date:
          User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
          Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=ZfdPSy+wi5oJm1vMDFZi1SmNpeYM/8prR76BnNgoMkSMSy4w7h5WgBEzZsEPEcS7N
-         DRqem5D7qEyAsyuyRSY1i0ypwydJcgYVspVqXuDd3UeWrYgNZ+wbrcfPkA1ygnQn0T
-         CgmMWbi80T2WSfm1AmNpNcKF6QcMvRpiihkgA3C35EL15KcKT671+VzYGb8zgXxAOJ
-         SLVF/22aNTf29FHM+5IKkAi7SOxnYjbRIIXFE+b9Kjh+qhWw4+VWDRnR6Wd7DV0QQw
-         fSpOl7pA3HC2EoGrk4/m0ZED4KnZacd2J5rab7HOFIpKm/ZWATixv9WLIel2nUmv/A
-         EnHQPaKIzWVMQ==
+        b=lbkHqjuGwbH6A6WGPayoyWp6kjVQqyl+1HlMHQmgnRCG7ImrV+QA3prCNDi0hcHWH
+         5pgzBx1Xdiu5ctXNK+U2GWo6yTLpp7AtFcK24oWgkl+tyshpzWKi3wj8nIybRWGRq2
+         vRu4YZvc9pShH8njactRwiAh/sEg82BOK8FELyMy+kNsdPDnon5t2NINVetSuGRljd
+         L/lVTVqhiQ9zwL+4m/hesd8jxRBj9zubOwR/SkuakblzyCIaImrr+oUvIdccAr+kza
+         /OQJ0ZnhXsT5Tg7g8aJFNe/0xgH5aKdy9g16stNGBndeYj4+WjornFrjd3asoPuc4z
+         qcYOZNQNpXU9w==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-On 11/6/20 4:14 AM, Matthew Wilcox wrote:
+On 11/5/20 11:55 PM, Christoph Hellwig wrote:
 > On Thu, Nov 05, 2020 at 04:51:42PM -0800, Ralph Campbell wrote:
->> Add a helper function to allow device drivers to create device private
->> transparent huge pages. This is intended to help support device private
->> THP migrations.
+>> +extern void prep_transhuge_device_private_page(struct page *page);
 > 
-> I think you'd be better off with these calling conventions:
-> 
-> -void prep_transhuge_page(struct page *page)
-> +struct page *thp_prep(struct page *page)
->   {
-> +       if (!page || compound_order(page) == 0)
-> +               return page;
->          /*
-> -        * we use page->mapping and page->indexlru in second tail page
-> +        * we use page->mapping and page->index in second tail page
->           * as list_head: assuming THP order >= 2
->           */
-> +       BUG_ON(compound_order(page) == 1);
->   
->          INIT_LIST_HEAD(page_deferred_list(page));
->          set_compound_page_dtor(page, TRANSHUGE_PAGE_DTOR);
-> +
-> +       return page;
->   }
-> 
-> It simplifies the users.
+> No need for the extern.
 
-I'm not sure what the simplification is.
-If you mean the name change from prep_transhuge_page() to thp_prep(),
-that seems fine to me. The following could also be renamed to
-thp_prep_device_private_page() or similar.
+Right, I was just copying the style.
+Would you like to see a preparatory patch that removes extern for the other
+declarations in huge_mm.h?
+
+>> +static inline void prep_transhuge_device_private_page(struct page *page)
+>> +{
+>> +}
+> 
+> Is the code to call this even reachable if THP support is configured
+> out?  If not just declaring it unconditionally and letting dead code
+> elimination do its job might be a tad cleaner.
+
+The HMM test driver depends on TRANSPARENT_HUGEPAGE but the nouveau SVM
+option doesn't and SVM is still useful if TRANSPARENT_HUGEPAGE is not configured.
+
+The problem with defining prep_transhuge_device_private_page() in huge_mm.h
+as a static inline function is that prep_compound_page() and prep_transhuge_page()
+would have to be EXPORT_SYMBOL_GPL which are currently mm internal only.
+The intent is to make this helper callable by separate device driver modules
+using struct pages created with memremap_pages().
 
 >> +void prep_transhuge_device_private_page(struct page *page)
->> +{
->> +	prep_compound_page(page, HPAGE_PMD_ORDER);
->> +	prep_transhuge_page(page);
->> +	/* Only the head page has a reference to the pgmap. */
->> +	percpu_ref_put_many(page->pgmap->ref, HPAGE_PMD_NR - 1);
->> +}
->> +EXPORT_SYMBOL_GPL(prep_transhuge_device_private_page);
 > 
-> Something else that may interest you from my patch series is support
-> for page sizes other than PMD_SIZE.  I don't know what page sizes 
-> hardware supports.  There's no support for page sizes other than PMD
-> for anonymous memory, so this might not be too useful for you yet.
+> I think a kerneldoc comment explaining what this function is useful for
+> would be helpful.
 
-I did see those changes. It might help some device drivers to do DMA in
-larger than PAGE_SIZE blocks but less than PMD_SIZE. It might help
-reduce page table sizes since 2MB, 64K, and 4K are commonly supported
-GPU page sizes. The MIGRATE_PFN_COMPOUND flag is intended to indicate
-that the page size is determined by page_size() so I was thinking ahead
-to other than PMD sized pages. However, when migrating a pte_none() or
-pmd_none() page, there is no source page to determine the size.
-Maybe I need to encode the page order in the migrate PFN entry like
-hmm_range_fault().
-
-Anyway, I agree that thinking about page sizes other than PMD is good.
+That is a good idea. I'll add it to v4.
