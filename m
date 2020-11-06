@@ -2,246 +2,393 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 805232A8E03
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Nov 2020 05:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A60B2A8F0D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Nov 2020 06:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725830AbgKFEFD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Nov 2020 23:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S1726240AbgKFFyW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Nov 2020 00:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbgKFEFD (ORCPT
+        with ESMTP id S1725828AbgKFFyW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Nov 2020 23:05:03 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B85C0613CF;
-        Thu,  5 Nov 2020 20:05:01 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id e21so2923644pgr.11;
-        Thu, 05 Nov 2020 20:05:01 -0800 (PST)
+        Fri, 6 Nov 2020 00:54:22 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92100C0613CF;
+        Thu,  5 Nov 2020 21:54:22 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id 62so75492pgg.12;
+        Thu, 05 Nov 2020 21:54:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tSjZkeVvKfttIleOvmEj75W/c02ILM34aNIYLdMmR/Y=;
-        b=HCZfpCIqxx6QwtvwBSQvKZH2eEdeYO+ZfoOE2qobk6TAOkK+3dk5g6BgT0XidAtzji
-         R8nXQdl0cL1SbbVPfvTZ/JJXkXPGXDA++j7LMjb2PaFkaHL1WusV/oV+hXyzjGUutX7G
-         Usx3CPQzQKnzATRrR++FQZEayvZEZDP0E0RnkSjCOEK4BnizkoQMGPNe1sx19zrAbTUJ
-         YJySSbpDcRrUXS4hIYi126u4g8q+gh+jafAqZ1aSHbrSWWnopi4G62go6QbjL/LFhNro
-         UFiYjPYQh1oHegvYJxMJ0myJ4Uq7Tw+MPtncsaC4ZZloJvTuI31XGinUPt1wFtAt+Z4c
-         l5cg==
+        bh=Nq5CFM2iwN1eLIgSQD0rdPsBmq4v/im+POuO6iBKUQk=;
+        b=sLT0bcky7yfsVhao1qS4JTlp+epYSHPffxnzghzUjakaB/qHgfA98sYEGEVc0zzQwe
+         J4wdoewK+/LJt7kvJiYuuMBnBRb9wjBwsj6mr5G1UFtdSKpgso3u3YTD0fqD4e9cK4Xt
+         8TORTrQqVJTw/XgUHGvZ+r/H1HA7M59rWWFEXe9agQPUIvaHoZxa71wjiMyIWODwIUBk
+         t98RieM5RVBv+ERoWh0OMBu92ztyj0NGQY5zfMLFKA57uanucGbhNTASd4wxR2K+VusB
+         hpPgEQvDRgPYHW66IeScSFgrkgbD2rNiOlycs1PpIDmY77eAWYcipV8+9sP0+RhRZPnT
+         GJ5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=tSjZkeVvKfttIleOvmEj75W/c02ILM34aNIYLdMmR/Y=;
-        b=t8V41YowS4AfwdhxHHjOqG2QUfbZpl0ddguxNzAau0Zuauys8xxsIVvDYaj6GP0jSg
-         kGWeN8O0abtHAgtzsfR9+aHAkF8T994iO3CJM2k+t6QHCLFa0nrpLhWa8ZF5BSkoy1aY
-         v8bSmq/w4EYbxtAvty/3uSpZyXEKbFKjYaW7RUQ1c3G0GA4eS+KbKOOriSZ2MJgIeTSw
-         9B7fk7CAiQJMenXfmRuDiXX0SuUsbIp4EtIBCtdzzQQ8SvkiHt5/KBvaI8LB2wQAlQB8
-         X8Mwtla0jpqXsceUkSdPMmRD/Gd54dzzrTtQT32YlG+16W38b/h5ZeIFespWeV1jHpRA
-         iZ9w==
-X-Gm-Message-State: AOAM533r12cocZWtr6daR1gNt+y3ehVD7vacynCwawMFdO3+NSPFmokz
-        Pt2yNUw8ucn8E4p6K8eFWyM/55ZYu+qc14TY
-X-Google-Smtp-Source: ABdhPJycakI4ERbODPpOJps13UtP6fCu+Eeq9f2IcF+3D5RRhtl2PDGal3+wuzCvW4YPvkPVjEcHzQ==
-X-Received: by 2002:a17:90a:11:: with SMTP id 17mr320751pja.66.1604635501146;
-        Thu, 05 Nov 2020 20:05:01 -0800 (PST)
+        bh=Nq5CFM2iwN1eLIgSQD0rdPsBmq4v/im+POuO6iBKUQk=;
+        b=YU2/j7ZYRuKtqDNL3d+6aEbQLKgrWfP6qrZAEfuyoLuXtOH9P5Dth/znLvKKKNACvq
+         cPhPcD5cXOUEkq4Eemk2wQpth+fmEASZqiIVL3EOeiA6ARK4akXdBE6K69TMa2w9wAin
+         6HsT3K6jvCELFc0HQJrhhnItf2/bUznv1mY9+ScT6VT7EKV7SDT/1WhbLBrVzfXYlH+4
+         0M0K9GWhxyaNNRXCNaWcTRXaLIwak3wXKg9PdFNuPCZAoxkj1x5HuSU0jaoB7HDtAmqO
+         +jNSwl5UZqX4uv0n1anV0LxnxMgHoqwMcNg4f7e/XFVfgeFvHjtsZI8QtoP5AAB+61/t
+         iZ3A==
+X-Gm-Message-State: AOAM531dsEv72Mb3b9V5VogbKAUd2+U/HJ9TTFoqmBMoCgcdKjX6ZdGT
+        RgqOngZEzguaI2SRXNSn/5XengiAbEvyylU0
+X-Google-Smtp-Source: ABdhPJykQHMBFsWv2so7Tyk82KDxnV1lySkZ35Kw9NzmU2PcshI7SV93xXeSJvOohnrMtfCQKFWigw==
+X-Received: by 2002:a17:90a:43c6:: with SMTP id r64mr727013pjg.128.1604642061681;
+        Thu, 05 Nov 2020 21:54:21 -0800 (PST)
 Received: from [192.168.86.81] ([106.51.243.217])
-        by smtp.gmail.com with ESMTPSA id 21sm117705pfw.105.2020.11.05.20.04.54
+        by smtp.gmail.com with ESMTPSA id 26sm251695pgu.83.2020.11.05.21.54.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Nov 2020 20:05:00 -0800 (PST)
-Subject: Re: [PATCH v3] lib: Convert test_printf.c to KUnit
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Petr Mladek <pmladek@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        brendanhiggins@google.com, skhan@linuxfoundation.org,
-        rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        alexandre.belloni@bootlin.com, rdunlap@infradead.org,
-        idryomov@gmail.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20201103111049.51916-1-98.arpi@gmail.com>
- <20201103113353.GC4077@smile.fi.intel.com>
- <20201103115223.GA268796@kroah.com> <20201103160728.GQ20201@alley>
- <57976ff4-7845-d721-ced1-1fe439000a9b@rasmusvillemoes.dk>
+        Thu, 05 Nov 2020 21:54:20 -0800 (PST)
+Subject: Re: [PATCH v4 1/2] kunit: Support for Parameterized Testing
+To:     Marco Elver <elver@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+References: <20201027174630.85213-1-98.arpi@gmail.com>
+ <CANpmjNOpbXHs4gs9Ro-u7hyN_zZ7s3AqDcdDy1Nqxq4ckThugA@mail.gmail.com>
+ <73c4e46c-10f1-9362-b4fb-94ea9d74e9b2@gmail.com>
+ <CANpmjNPxqQM0_f14ZwV3rHZzwhCtqx2fbOhHmXmiJawou6=z6Q@mail.gmail.com>
+ <77d6dc66-1086-a9ae-ccbc-bb062ff81437@gmail.com>
+ <CANpmjNORLJ4b_uwBB8v2h5cxoZF2SMTaz5K6QP37PxdUJDZUDA@mail.gmail.com>
+ <20201105195503.GA2399621@elver.google.com>
 From:   Arpitha Raghunandan <98.arpi@gmail.com>
-Message-ID: <b24a8200-b456-ecab-cc60-6f4ff10baa5d@gmail.com>
-Date:   Fri, 6 Nov 2020 09:34:51 +0530
+Message-ID: <f7e04221-607c-dd05-24a6-27c26d86919d@gmail.com>
+Date:   Fri, 6 Nov 2020 11:24:15 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <57976ff4-7845-d721-ced1-1fe439000a9b@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <20201105195503.GA2399621@elver.google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 04/11/20 1:48 pm, Rasmus Villemoes wrote:
-> On 03/11/2020 17.11, Petr Mladek wrote:
->> On Tue 2020-11-03 12:52:23, Greg KH wrote:
->>> On Tue, Nov 03, 2020 at 01:33:53PM +0200, Andy Shevchenko wrote:
->>>> On Tue, Nov 03, 2020 at 04:40:49PM +0530, Arpitha Raghunandan wrote:
->>>>> Convert test lib/test_printf.c to KUnit. More information about
->>>>> KUnit can be found at:
->>>>> https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
->>>>> KUnit provides a common framework for unit tests in the kernel.
->>>>> KUnit and kselftest are standardizing around KTAP, converting this
->>>>> test to KUnit makes this test output in KTAP which we are trying to
->>>>> make the standard test result format for the kernel. More about
->>>>> the KTAP format can be found at:
->>>>> https://lore.kernel.org/linux-kselftest/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com/.
->>>>> I ran both the original and converted tests as is to produce the
->>>>> output for success of the test in the two cases. I also ran these
->>>>> tests with a small modification to show the difference in the output
->>>>> for failure of the test in both cases. The modification I made is:
->>>>> - test("127.000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
->>>>> + test("127-000.000.001|127.0.0.1", "%pi4|%pI4", &sa.sin_addr, &sa.sin_addr);
->>>>>
->>>>> Original test success:
->>>>> [    0.540860] test_printf: loaded.
->>>>> [    0.540863] test_printf: random seed = 0x5c46c33837bc0619
->>>>> [    0.541022] test_printf: all 388 tests passed
->>>>>
->>>>> Original test failure:
->>>>> [    0.537980] test_printf: loaded.
->>>>> [    0.537983] test_printf: random seed = 0x1bc1efd881954afb
->>>>> [    0.538029] test_printf: vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
->>>>> [    0.538030] test_printf: kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
->>>>> [    0.538124] test_printf: failed 2 out of 388 tests
->>>>> [    0.538125] test_printf: random seed used was 0x1bc1efd881954afb
->>>>>
->>>>> Converted test success:
->>>>>     # Subtest: printf
->>>>>     1..25
->>>>>     ok 1 - test_basic
->>>>>     ok 2 - test_number
->>>>>     ok 3 - test_string
->>>>>     ok 4 - plain
->>>>>     ok 5 - null_pointer
->>>>>     ok 6 - error_pointer
->>>>>     ok 7 - invalid_pointer
->>>>>     ok 8 - symbol_ptr
->>>>>     ok 9 - kernel_ptr
->>>>>     ok 10 - struct_resource
->>>>>     ok 11 - addr
->>>>>     ok 12 - escaped_str
->>>>>     ok 13 - hex_string
->>>>>     ok 14 - mac
->>>>>     ok 15 - ip
->>>>>     ok 16 - uuid
->>>>>     ok 17 - dentry
->>>>>     ok 18 - struct_va_format
->>>>>     ok 19 - time_and_date
->>>>>     ok 20 - struct_clk
->>>>>     ok 21 - bitmap
->>>>>     ok 22 - netdev_features
->>>>>     ok 23 - flags
->>>>>     ok 24 - errptr
->>>>>     ok 25 - fwnode_pointer
->>>>> ok 1 - printf
->>>>>
->>>>> Converted test failure:
->>>>>     # Subtest: printf
->>>>>     1..25
->>>>>     ok 1 - test_basic
->>>>>     ok 2 - test_number
->>>>>     ok 3 - test_string
->>>>>     ok 4 - plain
->>>>>     ok 5 - null_pointer
->>>>>     ok 6 - error_pointer
->>>>>     ok 7 - invalid_pointer
->>>>>     ok 8 - symbol_ptr
->>>>>     ok 9 - kernel_ptr
->>>>>     ok 10 - struct_resource
->>>>>     ok 11 - addr
->>>>>     ok 12 - escaped_str
->>>>>     ok 13 - hex_string
->>>>>     ok 14 - mac
->>>>>     # ip: EXPECTATION FAILED at lib/printf_kunit.c:82
->>>>> vsnprintf(buf, 256, "%pi4|%pI4", ...) wrote '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
->>>>>     # ip: EXPECTATION FAILED at lib/printf_kunit.c:124
->>>>> kvasprintf(..., "%pi4|%pI4", ...) returned '127.000.000.001|127.0.0.1', expected '127-000.000.001|127.0.0.1'
->>>>>     not ok 15 - ip
->>>>>     ok 16 - uuid
->>>>>     ok 17 - dentry
->>>>>     ok 18 - struct_va_format
->>>>>     ok 19 - time_and_date
->>>>>     ok 20 - struct_clk
->>>>>     ok 21 - bitmap
->>>>>     ok 22 - netdev_features
->>>>>     ok 23 - flags
->>>>>     ok 24 - errptr
->>>>>     ok 25 - fwnode_pointer
->>>>> not ok 1 - printf
+On 06/11/20 1:25 am, Marco Elver wrote:
+> On Thu, Nov 05, 2020 at 04:02PM +0100, Marco Elver wrote:
+>> On Thu, 5 Nov 2020 at 15:30, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+> [...]
+>>>>> I tried adding support to run each parameter as a distinct test case by
+>>>>> making changes to kunit_run_case_catch_errors(). The issue here is that
+>>>>> since the results are displayed in KTAP format, this change will result in
+>>>>> each parameter being considered a subtest of another subtest (test case
+>>>>> in KUnit).
 >>>>
->>>> Better, indeed.
+>>>> Do you have example output? That might help understand what's going on.
 >>>>
->>>> But can be this improved to have a cumulative statistics, like showing only
->>>> number of total, succeeded, failed with details of the latter ones?
 >>>
->>> Is that the proper test output format?  We have a standard...
-> 
-> Actually more like xkcd#927.
-> 
+>>> The change that I tried can be seen here (based on the v4 patch):
+>>> https://gist.github.com/arpi-r/4822899087ca4cc34572ed9e45cc5fee.
+>>>
+>>> Using the kunit tool, I get this error:
+>>>
+>>> [19:20:41] [ERROR]  expected 7 test suites, but got -1
+>>> [ERROR] no tests run!
+>>> [19:20:41] ============================================================
+>>> [19:20:41] Testing complete. 0 tests run. 0 failed. 0 crashed.
+>>>
+>>> But this error is only because of how the tool displays the results.
+>>> The test actually does run, as can be seen in the dmesg output:
+>>>
+>>> TAP version 14
+>>> 1..7
+>>>     # Subtest: ext4_inode_test
+>>>     1..1
+>>>     ok 1 - inode_test_xtimestamp_decoding 1
+>>>     ok 1 - inode_test_xtimestamp_decoding 2
+>>>     ok 1 - inode_test_xtimestamp_decoding 3
+>>>     ok 1 - inode_test_xtimestamp_decoding 4
+>>>     ok 1 - inode_test_xtimestamp_decoding 5
+>>>     ok 1 - inode_test_xtimestamp_decoding 6
+>>>     ok 1 - inode_test_xtimestamp_decoding 7
+>>>     ok 1 - inode_test_xtimestamp_decoding 8
+>>>     ok 1 - inode_test_xtimestamp_decoding 9
+>>>     ok 1 - inode_test_xtimestamp_decoding 10
+>>>     ok 1 - inode_test_xtimestamp_decoding 11
+>>>     ok 1 - inode_test_xtimestamp_decoding 12
+>>>     ok 1 - inode_test_xtimestamp_decoding 13
+>>>     ok 1 - inode_test_xtimestamp_decoding 14
+>>>     ok 1 - inode_test_xtimestamp_decoding 15
+>>>     ok 1 - inode_test_xtimestamp_decoding 16
+>>> ok 1 - ext4_inode_test
+>>> (followed by other kunit test outputs)
 >>
->> What is the standard, please?
+>> Hmm, interesting. Let me play with your patch a bit.
 >>
->> The original module produced:
+>> One option is to just have the test case number increment as well,
+>> i.e. have this:
+>> |    ok 1 - inode_test_xtimestamp_decoding#1
+>> |    ok 2 - inode_test_xtimestamp_decoding#2
+>> |    ok 3 - inode_test_xtimestamp_decoding#3
+>> |    ok 4 - inode_test_xtimestamp_decoding#4
+>> |    ok 5 - inode_test_xtimestamp_decoding#5
+>> ...
 >>
->> [   48.577739] test_printf: loaded.
->> [   48.578046] test_printf: all 388 tests passed
->>
->> It comes from KSTM_MODULE_LOADERS() macro that has been created
->> by the commit eebf4dd452377921e3a26 ("kselftest: Add test module
->> framework header"). 
+>> Or is there something else I missed?
 > 
-> That's a bit of a simplification. That code was clearly lifted directly
-> from the original test_printf.c code
-> (707cc7280f452a162c52bc240eae62568b9753c2). test_bitmap.c cloned
-> test_printf.c (including a "Test cases for printf facility" comment...).
-> Later both were converted to use the KSTM header.
+> Right, so TAP wants the exact number of tests it will run ahead of time.
+> In which case we can still put the results of each parameterized test in
+> a diagnostic. Please see my proposed patch below, which still does
+> proper initialization/destruction of each parameter case as if it was
+> its own test case.
 > 
-> As the one coming up with that originally, I certainly endorse its use
-> as a standard way of producing a final, free-form, summary, and I prefer
-> to keep that total tally (i.e. 388) being printed for the reasons I've
-> previously stated. [*]
+> With it the output looks as follows:
 > 
-> That said, I have absolutely nothing against _also_ producing
-> machine-parsable TAP output. And the above looks to be a good compromise
-> between spitting out one TAP line for each of the 388 test cases (or
-> checks, or atoms, whatever the indiviual parts are to be called) and
-> treating all of test_printf.c as one single PASS/FAIL test.
+> | TAP version 14
+> | 1..6
+> |     # Subtest: ext4_inode_test
+> |     1..1
+> |     # ok param#0 - inode_test_xtimestamp_decoding
+> |     # ok param#1 - inode_test_xtimestamp_decoding
+> |     # ok param#2 - inode_test_xtimestamp_decoding
+> |     # ok param#3 - inode_test_xtimestamp_decoding
+> |     # ok param#4 - inode_test_xtimestamp_decoding
+> |     # ok param#5 - inode_test_xtimestamp_decoding
+> |     # ok param#6 - inode_test_xtimestamp_decoding
+> |     # ok param#7 - inode_test_xtimestamp_decoding
+> |     # ok param#8 - inode_test_xtimestamp_decoding
+> |     # ok param#9 - inode_test_xtimestamp_decoding
+> |     # ok param#10 - inode_test_xtimestamp_decoding
+> |     # ok param#11 - inode_test_xtimestamp_decoding
+> |     # ok param#12 - inode_test_xtimestamp_decoding
+> |     # ok param#13 - inode_test_xtimestamp_decoding
+> |     # ok param#14 - inode_test_xtimestamp_decoding
+> |     # ok param#15 - inode_test_xtimestamp_decoding
+> |     ok 1 - inode_test_xtimestamp_decoding
+> | ok 1 - ext4_inode_test
 > 
-> [*] If I add some test cases to the time_and_date and run the kernel
-> under virtme, I want to see 388 becoming something else, so that I know
-> that I actually ran the code I just added and not some stale vmlinux -
-> maybe I only did "make lib/test_printf.o" and didn't recreate vmlinux,
-> maybe I did "make vmlinux" but failed to notice the build was broken. BTDT.
+> Would that be reasonable? If so, feel free to take the patch and
+> test/adjust as required.
 > 
-> And those summary lines are even more important to keep given my
-> "deterministic random testing" series - the seed used _must_ be reported
-> (preferably also in the "all good" case, but certainly in the "some
-> failed" case).
-> 
-> Arpitha, thank you for taking that series into account. Is there some
-> way to keep the print of the total number of "atoms" as well as the
-> reporting of the random seed? Or should the "deterministic random
-> testing" be done in the context of KUNIT rather than KSTM? I'm really
-> not sure why we have both nor which one one is supposed to write
-> against. But I would prefer that the framework, whichever one, provides
-> a means to get a deterministic sequence of random numbers, so that I
-> won't have to eventually copy-paste the boilerplate to test_sort.c and
-> test_list_sort.c - it's also much nicer if all test modules have a
-> somewhat consistent interface in terms of the module parameters they accept.
-> 
-> Rasmus
+> I'm not sure on the best format -- is there is a recommended format for
+> parameterized test result output? If not, I suppose we can put anything
+> we like into the diagnostic.
 > 
 
-The total number of "atoms" can be printed by maintaining a static variable
-total_count that can be incremented as is in the original test_printf test.
-But, the reporting of the random seed currently is done in kselftest and so
-will not show up with KUnit. I am not really sure which is better in this case.
+I think this format of output should be fine for parameterized tests.
+But, this patch has the same issue as earlier. While, the tests run and
+this is the output that can be seen using dmesg, it still causes an issue on
+using the kunit tool. It gives a similar error:
+
+[11:07:38] [ERROR]  expected 7 test suites, but got -1
+[11:07:38] [ERROR] expected_suite_index -1, but got 2
+[11:07:38] [ERROR] got unexpected test suite: kunit-try-catch-test
+[ERROR] no tests run!
+[11:07:38] ============================================================
+[11:07:38] Testing complete. 0 tests run. 0 failed. 0 crashed.
 
 Thanks!
+
+> Thanks,
+> -- Marco
+> 
+> ------ >8 ------
+> 
+> From ccbf4e2e190a2d7c6a94a51c9b1fb3b9a940e578 Mon Sep 17 00:00:00 2001
+> From: Arpitha Raghunandan <98.arpi@gmail.com>
+> Date: Tue, 27 Oct 2020 23:16:30 +0530
+> Subject: [PATCH] kunit: Support for Parameterized Testing
+> 
+> Implementation of support for parameterized testing in KUnit.
+> This approach requires the creation of a test case using the
+> KUNIT_CASE_PARAM macro that accepts a generator function as input.
+> This generator function should return the next parameter given the
+> previous parameter in parameterized tests. It also provides
+> a macro to generate common-case generators.
+> 
+> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+> Co-developed-by: Marco Elver <elver@google.com>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+> Changes v4->v5:
+> - Update kernel-doc comments.
+> - Use const void* for generator return and prev value types.
+> - Add kernel-doc comment for KUNIT_ARRAY_PARAM.
+> - Rework parameterized test case execution strategy: each parameter is executed
+>   as if it was its own test case, with its own test initialization and cleanup
+>   (init and exit are called, etc.). However, we cannot add new test cases per TAP
+>   protocol once we have already started execution. Instead, log the result of
+>   each parameter run as a diagnostic comment.
+> Changes v3->v4:
+> - Rename kunit variables
+> - Rename generator function helper macro
+> - Add documentation for generator approach
+> - Display test case name in case of failure along with param index
+> Changes v2->v3:
+> - Modifictaion of generator macro and method
+> Changes v1->v2:
+> - Use of a generator method to access test case parameters
+> ---
+>  include/kunit/test.h | 36 ++++++++++++++++++++++++++++++++++
+>  lib/kunit/test.c     | 46 +++++++++++++++++++++++++++++++-------------
+>  2 files changed, 69 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 9197da792336..ae5488a37e48 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -107,6 +107,7 @@ struct kunit;
+>   *
+>   * @run_case: the function representing the actual test case.
+>   * @name:     the name of the test case.
+> + * @generate_params: the generator function for parameterized tests.
+>   *
+>   * A test case is a function with the signature,
+>   * ``void (*)(struct kunit *)``
+> @@ -141,6 +142,7 @@ struct kunit;
+>  struct kunit_case {
+>  	void (*run_case)(struct kunit *test);
+>  	const char *name;
+> +	const void* (*generate_params)(const void *prev);
+>  
+>  	/* private: internal use only. */
+>  	bool success;
+> @@ -163,6 +165,22 @@ static inline char *kunit_status_to_string(bool status)
+>   */
+>  #define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+>  
+> +/**
+> + * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct kunit_case
+> + *
+> + * @test_name: a reference to a test case function.
+> + * @gen_params: a reference to a parameter generator function.
+> + *
+> + * The generator function ``const void* gen_params(const void *prev)`` is used
+> + * to lazily generate a series of arbitrarily typed values that fit into a
+> + * void*. The argument @prev is the previously returned value, which should be
+> + * used to derive the next value; @prev is set to NULL on the initial generator
+> + * call.  When no more values are available, the generator must return NULL.
+> + */
+> +#define KUNIT_CASE_PARAM(test_name, gen_params)			\
+> +		{ .run_case = test_name, .name = #test_name,	\
+> +		  .generate_params = gen_params }
+> +
+>  /**
+>   * struct kunit_suite - describes a related collection of &struct kunit_case
+>   *
+> @@ -208,6 +226,10 @@ struct kunit {
+>  	const char *name; /* Read only after initialization! */
+>  	char *log; /* Points at case log after initialization */
+>  	struct kunit_try_catch try_catch;
+> +	/* param_value is the current parameter value for a test case. */
+> +	const void *param_value;
+> +	/* param_index stores the index of the parameter in parameterized tests. */
+> +	int param_index;
+>  	/*
+>  	 * success starts as true, and may only be set to false during a
+>  	 * test case; thus, it is safe to update this across multiple
+> @@ -1742,4 +1764,18 @@ do {									       \
+>  						fmt,			       \
+>  						##__VA_ARGS__)
+>  
+> +/**
+> + * KUNIT_ARRAY_PARAM() - Define test parameter generator from an array.
+> + * @name:  prefix for the test parameter generator function.
+> + * @array: array of test parameters.
+> + *
+> + * Define function @name_gen_params which uses @array to generate parameters.
+> + */
+> +#define KUNIT_ARRAY_PARAM(name, array)								\
+> +	static const void *name##_gen_params(const void *prev)					\
+> +	{											\
+> +		typeof((array)[0]) * __next = prev ? ((typeof(__next)) prev) + 1 : (array);	\
+> +		return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;			\
+> +	}
+> +
+>  #endif /* _KUNIT_TEST_H */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 750704abe89a..453ebe4da77d 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -325,29 +325,25 @@ static void kunit_catch_run_case(void *data)
+>   * occur in a test case and reports them as failures.
+>   */
+>  static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+> -					struct kunit_case *test_case)
+> +					struct kunit_case *test_case,
+> +					struct kunit *test)
+>  {
+>  	struct kunit_try_catch_context context;
+>  	struct kunit_try_catch *try_catch;
+> -	struct kunit test;
+>  
+> -	kunit_init_test(&test, test_case->name, test_case->log);
+> -	try_catch = &test.try_catch;
+> +	kunit_init_test(test, test_case->name, test_case->log);
+> +	try_catch = &test->try_catch;
+>  
+>  	kunit_try_catch_init(try_catch,
+> -			     &test,
+> +			     test,
+>  			     kunit_try_run_case,
+>  			     kunit_catch_run_case);
+> -	context.test = &test;
+> +	context.test = test;
+>  	context.suite = suite;
+>  	context.test_case = test_case;
+>  	kunit_try_catch_run(try_catch, &context);
+>  
+> -	test_case->success = test.success;
+> -
+> -	kunit_print_ok_not_ok(&test, true, test_case->success,
+> -			      kunit_test_case_num(suite, test_case),
+> -			      test_case->name);
+> +	test_case->success = test->success;
+>  }
+>  
+>  int kunit_run_tests(struct kunit_suite *suite)
+> @@ -356,8 +352,32 @@ int kunit_run_tests(struct kunit_suite *suite)
+>  
+>  	kunit_print_subtest_start(suite);
+>  
+> -	kunit_suite_for_each_test_case(suite, test_case)
+> -		kunit_run_case_catch_errors(suite, test_case);
+> +	kunit_suite_for_each_test_case(suite, test_case) {
+> +		struct kunit test = { .param_value = NULL, .param_index = 0 };
+> +		bool test_success = true;
+> +
+> +		if (test_case->generate_params)
+> +			test.param_value = test_case->generate_params(NULL);
+> +
+> +		do {
+> +			kunit_run_case_catch_errors(suite, test_case, &test);
+> +			test_success &= test_case->success;
+> +
+> +			if (test_case->generate_params) {
+> +				kunit_log(KERN_INFO, &test,
+> +					  KUNIT_SUBTEST_INDENT
+> +					  "# %s param#%d - %s",
+> +					  kunit_status_to_string(test.success),
+> +					  test.param_index, test_case->name);
+> +				test.param_value = test_case->generate_params(test.param_value);
+> +				test.param_index++;
+> +			}
+> +		} while (test.param_value);
+> +
+> +		kunit_print_ok_not_ok(&test, true, test_success,
+> +				      kunit_test_case_num(suite, test_case),
+> +				      test_case->name);
+> +	}
+>  
+>  	kunit_print_subtest_end(suite);
+>  
+> 
+
