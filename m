@@ -2,122 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D252AA474
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Nov 2020 11:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326802AA651
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Nov 2020 16:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbgKGKpE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Nov 2020 05:45:04 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18366 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726034AbgKGKpE (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Nov 2020 05:45:04 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A7AWfRd075183;
-        Sat, 7 Nov 2020 05:45:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=ASSvCDmGzoqF2PFS56D4BqHaEHoPz8ILlYUcwC2XJ+I=;
- b=Oym/QW+Ay382l11ERN6PepGslFgxbFgwD6cMCAJ4UJSqmcyBKyoTvu183FNl4swvxiAC
- fBL8t9FBCjrpTVvU06ceFpSwqaZgg5ZbIgwq9dygF3K67QNcE3VNTDolQMb0Jl2Iw90x
- Dt1km7b6W2b3lAUHimSXnxRtpazqVU6L3gUTQhnotboGd4NMVb3XxqNrgwgspB0sckMp
- z9i3ikwtthVkP8MtJKEctRb/N0a0fngA8RW0fnj6jrF5Z5pdfQKeNfoaUmcySws5Jjef
- mHKyIQSCFqhJ5MAEPcD4B+WwgcHtBcPzzPWbti0+7kIqoGyNxkt+cTAebcslutmIqFHw iA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34nrm71svv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 07 Nov 2020 05:45:00 -0500
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A7Ah43r105309;
-        Sat, 7 Nov 2020 05:45:00 -0500
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34nrm71sv8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 07 Nov 2020 05:44:59 -0500
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A7Ai5Gh006941;
-        Sat, 7 Nov 2020 10:44:57 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 34nk78888b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 07 Nov 2020 10:44:57 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A7Aitva7537382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 7 Nov 2020 10:44:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 672424C040;
-        Sat,  7 Nov 2020 10:44:55 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7CF0F4C046;
-        Sat,  7 Nov 2020 10:44:54 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.53.17])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat,  7 Nov 2020 10:44:54 +0000 (GMT)
-Date:   Sat, 7 Nov 2020 12:44:52 +0200
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Wang Qing <wangqing@vivo.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tool: selftests: fix spelling typo of 'writting'
-Message-ID: <20201107104452.GF301789@linux.ibm.com>
-References: <1604740776-27082-1-git-send-email-wangqing@vivo.com>
+        id S1726144AbgKGPdn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 7 Nov 2020 10:33:43 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:51959 "EHLO smtp.uniroma2.it"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726043AbgKGPdQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 7 Nov 2020 10:33:16 -0500
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0A7FW8qb010493
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 7 Nov 2020 16:32:09 +0100
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [net-next,v2,0/5] seg6: add support for SRv6 End.DT4 behavior
+Date:   Sat,  7 Nov 2020 16:31:34 +0100
+Message-Id: <20201107153139.3552-1-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1604740776-27082-1-git-send-email-wangqing@vivo.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-07_04:2020-11-05,2020-11-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_spam_definite policy=outbound score=100 clxscore=1011
- lowpriorityscore=0 suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 mlxscore=100 mlxlogscore=-1000 adultscore=0
- spamscore=100 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011070067
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Nov 07, 2020 at 05:19:35PM +0800, Wang Qing wrote:
-> writting -> writing
-> 
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
+This patchset provides support for the SRv6 End.DT4 behavior.
 
-Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
+The SRv6 End.DT4 is used to implement multi-tenant IPv4 L3 VPN. It
+decapsulates the received packets and performs IPv4 routing lookup in the
+routing table of the tenant. The SRv6 End.DT4 Linux implementation
+leverages a VRF device. The SRv6 End.DT4 is defined in the SRv6 Network
+Programming [1].
 
-> ---
->  tools/testing/selftests/vm/userfaultfd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index 9b0912a..9132fae7
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -894,7 +894,7 @@ static int faulting_process(int signal_test)
->  				count_verify[nr]);
->  	        }
->  		/*
-> -		 * Trigger write protection if there is by writting
-> +		 * Trigger write protection if there is by writing
->  		 * the same value back.
->  		 */
->  		*area_count(area_dst, nr) = count;
-> @@ -922,7 +922,7 @@ static int faulting_process(int signal_test)
->  				count_verify[nr]); exit(1);
->  		}
->  		/*
-> -		 * Trigger write protection if there is by writting
-> +		 * Trigger write protection if there is by writing
->  		 * the same value back.
->  		 */
->  		*area_count(area_dst, nr) = count;
-> -- 
-> 2.7.4
-> 
+- Patch 1/5 is needed to solve a pre-existing issue with tunneled packets
+  when a sniffer is attached;
+
+- Patch 2/5 improves the management of the seg6local attributes used by the
+  SRv6 behaviors;
+
+- Patch 3/5 introduces two callbacks used for customizing the
+  creation/destruction of a SRv6 behavior;
+
+- Patch 4/5 is the core patch that adds support for the SRv6 End.DT4
+  behavior;
+
+- Patch 5/5 adds the selftest for SRv6 End.DT4 behavior.
+
+I would like to thank David Ahern for his support during the development of
+this patch set.
+
+Comments, suggestions and improvements are very welcome!
+
+Thanks,
+Andrea Mayer
+
+v2
+ no changes made: resubmitted after false build report.
+
+v1
+ improve comments;
+
+ add new patch 2/5 titled: seg6: improve management of behavior attributes
+
+ seg6: add support for the SRv6 End.DT4 behavior
+  - remove the inline keyword in the definition of fib6_config_get_net().
+
+ selftests: add selftest for the SRv6 End.DT4 behavior
+  - add check for the vrf sysctl
+
+[1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
+
+Andrea Mayer (5):
+  vrf: add mac header for tunneled packets when sniffer is attached
+  seg6: improve management of behavior attributes
+  seg6: add callbacks for customizing the creation/destruction of a
+    behavior
+  seg6: add support for the SRv6 End.DT4 behavior
+  selftests: add selftest for the SRv6 End.DT4 behavior
+
+ drivers/net/vrf.c                             |  78 ++-
+ net/ipv6/seg6_local.c                         | 370 ++++++++++++-
+ .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 494 ++++++++++++++++++
+ 3 files changed, 927 insertions(+), 15 deletions(-)
+ create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
 
 -- 
-Sincerely yours,
-Mike.
+2.20.1
+
