@@ -2,198 +2,288 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4E72AA266
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Nov 2020 05:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B2F2AA26E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Nov 2020 05:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727458AbgKGEVR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Nov 2020 23:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S1727612AbgKGE6g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Nov 2020 23:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727020AbgKGEVR (ORCPT
+        with ESMTP id S1727020AbgKGE6g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Nov 2020 23:21:17 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDA7C0613CF
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2020 20:21:15 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id b1so4748859lfp.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2020 20:21:15 -0800 (PST)
+        Fri, 6 Nov 2020 23:58:36 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3514AC0613CF
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2020 20:58:36 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id v18so3746625ljc.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2020 20:58:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5EQ5yhtsM5FJ1ds4Py9VQndnt4warxwMwsiE54Njo84=;
-        b=CddQ03gtblTYRVvKF7bi/MX/kHeGciFqdaHcGMniZASwrJnFdWb1gAdMe/jI8Gyb0B
-         Up8zhGBlr88Nn7aBtYFFScgnIHT3CDkzhtxnuloksq7B7absgz3wCIhBFDzOIjAyv5OD
-         aT+mAiadzFdtNwGM8gHZiz61bvk7apXJyFbEPbli/G2g1O2nhbUabGifsvmurxjyugeD
-         83kg4xBtIHuMfdJetNE0Dr9SlYQ/WmHWBbqJ1tSEZ13BlyUDlMbDoO9oSwJBRt58lfir
-         hmIBlYY598rs7N7jW6x/ErKkXb12OSkk5L9KUxjvpWUn68wgOL4p0TySINOss4u41gFq
-         z5ew==
+        bh=lrcPOo6i+nOKaGcssjeCtEpFiPKYd6jzH30EXtM+xO0=;
+        b=asNQ1Vijk/0x433pPEUzyiHfiXBCMW/SaEE/XYh5Cr5VyIri1+of7lKMLILYqE2Jcy
+         6HS+GVzQy55zdJ9S0RD6cRv8BTJJdLrvbvsCXqytxB0APRI2NIMYpz8JGQhHM/FE1LbR
+         uHCYjBkugMl751yQ5IvuBpOWvsrBripyjwj9AQ2xfTGqfabtEqsMnpkG68ZlGiHVGqK3
+         mlE8ydyD1+bIwUqWDB6QKST7bGAJiEQfrW2dCs4QOfiDGXSx3iloFqCOZYol0RXeDpAR
+         dR+0f5+pg/Ia/sTBlHw4mrVaglPCqjrNBdbl1LaQCyzzZeGNnU80uDF4DuBTKo2FNZze
+         F+lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5EQ5yhtsM5FJ1ds4Py9VQndnt4warxwMwsiE54Njo84=;
-        b=Sc7Qsg6y5xiJLNjloI7/flhuzwAKAAFnVb2w6/dFBndyjJTPXQ78RsIn/9ri7hEhcT
-         0vUqAmKLdDqPuJQDD/xyEv9mR1ThBo9S6qNjb1ymZywxV2r39d8DzUQhSwKIx4fgFlTT
-         qE27rREPgq3FYuZ1v7tNGnlTaSEOxAXdnI9XL2RLQ6XaQ6lIiWHls1qrPP2cPdTtTIKD
-         aTGCFymElvszxOTMpSfLIcKAXnugdKr0izsD0JTlUnBfLZOWqeWM6yXJcIgvkIM7UZuJ
-         /bTr078tjJsM6NGXGyFOwijcFXCZnLq6fWRBum300vABfbE19fnHvJKSjHCWisN4GCjK
-         uYDA==
-X-Gm-Message-State: AOAM533Gw5i/6TaL3QqGGxBfn3JWF347d7BaHH4ick9kn/QhJGBJFA9+
-        Jtwbsfy+plOwy3q9R/Terh5FNLjVazRR3bKyPHIfzw==
-X-Google-Smtp-Source: ABdhPJzeoWWYf/2tSb7tqjA7bjSyXyn+kjOeQR9Mk7pPlvVeVG3unfTkEaigRj1wWkGDk3KIF64f5HtuoPJYXUBVZJg=
-X-Received: by 2002:a05:6512:110b:: with SMTP id l11mr1762317lfg.234.1604722873677;
- Fri, 06 Nov 2020 20:21:13 -0800 (PST)
+        bh=lrcPOo6i+nOKaGcssjeCtEpFiPKYd6jzH30EXtM+xO0=;
+        b=Tr82izBMISYRVbrdoobNLlMyIFjAkFju5rDAUf7UzgGmv7kACNpZPrOPS1XsVMfo/8
+         i/dQUYQJDSjGBlBhZsuGfTx1DaBkxK2HtqNeSa9kUaAk7BUAXJ6iAw9nLY3XGndCSwAq
+         81mX80/ymqI799WMxc8SEhnyPgDPhHyncK5xz3SkuNZ5l7wnBUWVyXFwzka5CiZgm07q
+         4+oQXJP9yuYZQ74YLOVdUluMuE8nC5E49cCsB/UmjA5PltB/vpwP4CFoFQbKwnZXJgG2
+         139qhw+Q93xI0DwQuv2dMtP9t5x9350lcibH89IjpezVoUvXx3djjNb4lPrIckiqzFZ5
+         F94w==
+X-Gm-Message-State: AOAM533ETo67xGRJlOQPNwdJrg93EV6bHaefj5P2ohmc8SWd/+zqyIBD
+        TMfaU8IWuwZbDV5uizUahjzd750HAPdYeyPGNq8YNA==
+X-Google-Smtp-Source: ABdhPJxjIeeHTsuTnNbico0DpKgO1y6BJLYflynAekFx9Ig3uYJ0B/hjIaTw6BRp9Z5i+si9det/23Pe+0kGpBA6yog=
+X-Received: by 2002:a2e:9746:: with SMTP id f6mr2022414ljj.270.1604725113176;
+ Fri, 06 Nov 2020 20:58:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20201102213656.2700500-1-dlatypov@google.com>
-In-Reply-To: <20201102213656.2700500-1-dlatypov@google.com>
+References: <20201106192154.51514-1-98.arpi@gmail.com>
+In-Reply-To: <20201106192154.51514-1-98.arpi@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 7 Nov 2020 12:21:01 +0800
-Message-ID: <CABVgOSnCkbs+5EEOq7gxUdQUpTL4vOPFvagJoMQ7t0dtg4DQeA@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: provide guidance for testing many inputs
-To:     Daniel Latypov <dlatypov@google.com>
+Date:   Sat, 7 Nov 2020 12:58:21 +0800
+Message-ID: <CABVgOSkQ6+y7OGw2494cJa2b60EkSjncLNAgc9cJDbS=X9J3WA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] kunit: Support for Parameterized Testing
+To:     Arpitha Raghunandan <98.arpi@gmail.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Marco Elver <elver@google.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 3, 2020 at 5:37 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Sat, Nov 7, 2020 at 3:22 AM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
 >
-> usage.rst goes into a detailed about faking out classes, but currently
-
-Nit: a detailed what?
-
-> lacks wording about how one might idiomatically test a range of inputs.
+> Implementation of support for parameterized testing in KUnit.
+> This approach requires the creation of a test case using the
+> KUNIT_CASE_PARAM macro that accepts a generator function as input.
+> This generator function should return the next parameter given the
+> previous parameter in parameterized tests. It also provides
+> a macro to generate common-case generators.
 >
-> Give an example of how one might test a hash function via macros/helper
-> funcs and a table-driven test and very briefly discuss pros and cons.
->
-> Also highlight the KUNIT_EXPECT_*_MSG() variants (that aren't mentioned
-> elsewhere [1]) which are particularly useful in these situations.
->
-> It is also criminally underused at the moment, only appearing in 2
-> tests (both written by people involved in KUnit).
->
-> [1] not even on
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html
-
-I suspect we'll eventually want to document the _MSG variants here as
-well, though it will bloat the page somewhat. In any case, it can be
-left to a separate patch.
-
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+> Co-developed-by: Marco Elver <elver@google.com>
+> Signed-off-by: Marco Elver <elver@google.com>
 > ---
 
-Thanks for writing this -- it's definitely a common test pattern which
-it'd be nice to encourage and explain a bit better.
+This looks good to me! A couple of minor thoughts about the output
+format below, but I'm quite happy to have this as-is regardless.
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  Documentation/dev-tools/kunit/usage.rst | 66 +++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
+> Changes v5->v6:
+> - Fix alignment to maintain consistency
+> Changes v4->v5:
+> - Update kernel-doc comments.
+> - Use const void* for generator return and prev value types.
+> - Add kernel-doc comment for KUNIT_ARRAY_PARAM.
+> - Rework parameterized test case execution strategy: each parameter is executed
+>   as if it was its own test case, with its own test initialization and cleanup
+>   (init and exit are called, etc.). However, we cannot add new test cases per TAP
+>   protocol once we have already started execution. Instead, log the result of
+>   each parameter run as a diagnostic comment.
+> Changes v3->v4:
+> - Rename kunit variables
+> - Rename generator function helper macro
+> - Add documentation for generator approach
+> - Display test case name in case of failure along with param index
+> Changes v2->v3:
+> - Modifictaion of generator macro and method
+> Changes v1->v2:
+> - Use of a generator method to access test case parameters
 >
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 62142a47488c..317390df2b96 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -451,6 +451,72 @@ We can now use it to test ``struct eeprom_buffer``:
->                 destroy_eeprom_buffer(ctx->eeprom_buffer);
->         }
+>  include/kunit/test.h | 36 ++++++++++++++++++++++++++++++++++
+>  lib/kunit/test.c     | 46 +++++++++++++++++++++++++++++++-------------
+>  2 files changed, 69 insertions(+), 13 deletions(-)
 >
-> +Testing various inputs
-> +----------------------
-Nit: "various" isn't hugely descriptive here. Maybe something like
-"Testing against multiple inputs" would be better?
-
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index db1b0ae666c4..16616d3974f9 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -107,6 +107,7 @@ struct kunit;
+>   *
+>   * @run_case: the function representing the actual test case.
+>   * @name:     the name of the test case.
+> + * @generate_params: the generator function for parameterized tests.
+>   *
+>   * A test case is a function with the signature,
+>   * ``void (*)(struct kunit *)``
+> @@ -141,6 +142,7 @@ struct kunit;
+>  struct kunit_case {
+>         void (*run_case)(struct kunit *test);
+>         const char *name;
+> +       const void* (*generate_params)(const void *prev);
+>
+>         /* private: internal use only. */
+>         bool success;
+> @@ -163,6 +165,22 @@ static inline char *kunit_status_to_string(bool status)
+>   */
+>  #define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+>
+> +/**
+> + * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct kunit_case
+> + *
+> + * @test_name: a reference to a test case function.
+> + * @gen_params: a reference to a parameter generator function.
+> + *
+> + * The generator function ``const void* gen_params(const void *prev)`` is used
+> + * to lazily generate a series of arbitrarily typed values that fit into a
+> + * void*. The argument @prev is the previously returned value, which should be
+> + * used to derive the next value; @prev is set to NULL on the initial generator
+> + * call.  When no more values are available, the generator must return NULL.
+> + */
+> +#define KUNIT_CASE_PARAM(test_name, gen_params)                        \
+> +               { .run_case = test_name, .name = #test_name,    \
+> +                 .generate_params = gen_params }
 > +
-> +Testing just a few inputs might not be enough to have confidence that the code
-> +works correctly, e.g. for a hash function.
-> +
-> +In such cases, it can be helpful to have a helper macro or function, e.g. this
-> +fictitious example for ``md5sum(1)``
-> +
-> +.. code-block:: c
-> +
-> +       /* Note: the cast is to satisfy overly strict type-checking. */
-> +       #define TEST_MD5(in, want) \
-> +               md5sum(in, out); \
-> +               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, want, "md5sum(%s)", in);
-> +
-> +       char out[16];
-> +       TEST_MD5("hello world",   "5eb63bbbe01eeed093cb22bb8f5acdc3");
-> +       TEST_MD5("hello world!",  "fc3ff98e8c6a0d3087d515c0473f8677");
-> +
-> +Note the use of ``KUNIT_EXPECT_STREQ_MSG`` to give more context when it fails
-> +and make it easier to track down. (Yes, in this example, ``want`` is likely
-> +going to be unique enough on its own).
-> +
-> +The ``_MSG`` variants are even more useful when the same expectation is called
-> +multiple times (in a loop or helper function) and thus the line number isn't
-> +enough to identify what failed, like below.
-> +
-> +In some cases, it can be helpful to write a *table-driven test* instead, e.g.
-> +
-> +.. code-block:: c
-> +
-> +       int i;
-> +       char out[16];
-> +
-> +       struct md5_test_case {
-> +               const char *str;
-> +               const char *md5;
-> +       };
-> +
-> +       struct md5_test_case cases[] = {
-> +               {
-> +                       .str = "hello world",
-> +                       .md5 = "5eb63bbbe01eeed093cb22bb8f5acdc3",
-> +               },
-> +               {
-> +                       .str = "hello world!",
-> +                       .md5 = "fc3ff98e8c6a0d3087d515c0473f8677",
-> +               },
-> +       };
-> +       for (i = 0; i < ARRAY_SIZE(cases); ++i) {
-> +               md5sum(cases[i].str, out);
-> +               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, cases[i].md5,
-> +                                     "md5sum(%s)", cases[i].str);
+>  /**
+>   * struct kunit_suite - describes a related collection of &struct kunit_case
+>   *
+> @@ -208,6 +226,10 @@ struct kunit {
+>         const char *name; /* Read only after initialization! */
+>         char *log; /* Points at case log after initialization */
+>         struct kunit_try_catch try_catch;
+> +       /* param_value is the current parameter value for a test case. */
+> +       const void *param_value;
+> +       /* param_index stores the index of the parameter in parameterized tests. */
+> +       int param_index;
+>         /*
+>          * success starts as true, and may only be set to false during a
+>          * test case; thus, it is safe to update this across multiple
+> @@ -1742,4 +1764,18 @@ do {                                                                            \
+>                                                 fmt,                           \
+>                                                 ##__VA_ARGS__)
+>
+> +/**
+> + * KUNIT_ARRAY_PARAM() - Define test parameter generator from an array.
+> + * @name:  prefix for the test parameter generator function.
+> + * @array: array of test parameters.
+> + *
+> + * Define function @name_gen_params which uses @array to generate parameters.
+> + */
+> +#define KUNIT_ARRAY_PARAM(name, array)                                                         \
+> +       static const void *name##_gen_params(const void *prev)                                  \
+> +       {                                                                                       \
+> +               typeof((array)[0]) * __next = prev ? ((typeof(__next)) prev) + 1 : (array);     \
+> +               return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;                  \
 > +       }
 > +
-> +
-> +There's more boilerplate involved, but it can:
-> +
-> +* be more readable when there are multiple inputs/outputs thanks to field names,
-> +
-> +  * E.g. see ``fs/ext4/inode-test.c`` for an example of both.
-> +* reduce duplication if test cases can be shared across multiple tests.
-> +
-> +  * E.g. if we had a magical ``undo_md5sum`` function, we could reuse ``cases``.
-> +
-
-This is a bit of a nitpick, but I don't think this is quite conveying
-the usefulness of table-based testing. Maybe it's that a hypothetical
-"undo_md5sum" is too unrealistic an example? Maybe, instead of having
-both the macro-based and table-driven examples based around md5sum(),
-the table-based one could use something more obviously invertible /
-reusable, and include both in the example code. E.g, something akin to
-toupper() and tolower() or some other conversion function. I think
-having a better example here is probably more useful than having both
-the table- and macro- driven examples test the same thing.
-
-
->  .. _kunit-on-non-uml:
+>  #endif /* _KUNIT_TEST_H */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 750704abe89a..329fee9e0634 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -325,29 +325,25 @@ static void kunit_catch_run_case(void *data)
+>   * occur in a test case and reports them as failures.
+>   */
+>  static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+> -                                       struct kunit_case *test_case)
+> +                                       struct kunit_case *test_case,
+> +                                       struct kunit *test)
+>  {
+>         struct kunit_try_catch_context context;
+>         struct kunit_try_catch *try_catch;
+> -       struct kunit test;
 >
->  KUnit on non-UML architectures
+> -       kunit_init_test(&test, test_case->name, test_case->log);
+> -       try_catch = &test.try_catch;
+> +       kunit_init_test(test, test_case->name, test_case->log);
+> +       try_catch = &test->try_catch;
 >
-> base-commit: 77c8473edf7f7664137f555cfcdc8c460bbd947d
+>         kunit_try_catch_init(try_catch,
+> -                            &test,
+> +                            test,
+>                              kunit_try_run_case,
+>                              kunit_catch_run_case);
+> -       context.test = &test;
+> +       context.test = test;
+>         context.suite = suite;
+>         context.test_case = test_case;
+>         kunit_try_catch_run(try_catch, &context);
+>
+> -       test_case->success = test.success;
+> -
+> -       kunit_print_ok_not_ok(&test, true, test_case->success,
+> -                             kunit_test_case_num(suite, test_case),
+> -                             test_case->name);
+> +       test_case->success = test->success;
+>  }
+>
+>  int kunit_run_tests(struct kunit_suite *suite)
+> @@ -356,8 +352,32 @@ int kunit_run_tests(struct kunit_suite *suite)
+>
+>         kunit_print_subtest_start(suite);
+>
+> -       kunit_suite_for_each_test_case(suite, test_case)
+> -               kunit_run_case_catch_errors(suite, test_case);
+> +       kunit_suite_for_each_test_case(suite, test_case) {
+> +               struct kunit test = { .param_value = NULL, .param_index = 0 };
+> +               bool test_success = true;
+> +
+> +               if (test_case->generate_params)
+> +                       test.param_value = test_case->generate_params(NULL);
+> +
+> +               do {
+> +                       kunit_run_case_catch_errors(suite, test_case, &test);
+> +                       test_success &= test_case->success;
+> +
+> +                       if (test_case->generate_params) {
+> +                               kunit_log(KERN_INFO, &test,
+> +                                         KUNIT_SUBTEST_INDENT
+> +                                         "# %s: param-%d %s",
+
+Would it make sense to have this imitate the TAP format a bit more?
+So, have "# [ok|not ok] - [name]" as the format? [name] could be
+something like "[test_case->name]:param-[index]" or similar.
+If we keep it commented out and don't indent it further, it won't
+formally be a nested test (though if we wanted to support those later,
+it'd be easy to add), but I think it would be nicer to be consistent
+here.
+
+My other suggestion -- albeit one outside the scope of this initial
+version -- would be to allow the "param-%d" name to be overridden
+somehow by a test. For example, the ext4 inode test has names for all
+its test cases: it'd be nice to be able to display those instead (even
+if they're not formatted as identifiers as-is).
+
+> +                                         test_case->name, test.param_index,
+> +                                         kunit_status_to_string(test.success));
+> +                               test.param_value = test_case->generate_params(test.param_value);
+> +                               test.param_index++;
+> +                       }
+> +               } while (test.param_value);
+> +
+> +               kunit_print_ok_not_ok(&test, true, test_success,
+> +                                     kunit_test_case_num(suite, test_case),
+> +                                     test_case->name);
+> +       }
+>
+>         kunit_print_subtest_end(suite);
+>
 > --
-> 2.29.1.341.ge80a0c044ae-goog
+> 2.25.1
 >
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20201106192154.51514-1-98.arpi%40gmail.com.
