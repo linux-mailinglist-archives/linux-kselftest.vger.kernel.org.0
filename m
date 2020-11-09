@@ -2,96 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E0F2AB52F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Nov 2020 11:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DA42AC33F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Nov 2020 19:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbgKIKmN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Nov 2020 05:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726423AbgKIKmM (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 05:42:12 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AB1C0613CF;
-        Mon,  9 Nov 2020 02:42:12 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1729320AbgKISJO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Nov 2020 13:09:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49996 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729247AbgKISJO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Nov 2020 13:09:14 -0500
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4CV6xs6XHyzQkm5;
-        Mon,  9 Nov 2020 11:42:09 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id GrIZVsje57hw; Mon,  9 Nov 2020 11:42:04 +0100 (CET)
-Date:   Mon, 9 Nov 2020 11:41:59 +0100 (CET)
-From:   Hagen Paul Pfeifer <hagen@jauu.net>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
-        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Message-ID: <651318720.14321.1604918519928@office.mailbox.org>
-In-Reply-To: <20201104170247.GT4879@kernel.org>
-References: <20200924132904.1391-1-rppt@kernel.org>
- <20201101110935.GA4105325@laniakea> <20201102154028.GD4879@kernel.org>
- <1547601988.128687.1604411534845@office.mailbox.org>
- <20201103163002.GK4879@kernel.org>
- <1988407921.138656.1604489953944@office.mailbox.org>
- <20201104170247.GT4879@kernel.org>
-Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
- "secret" memory areas
+        by mail.kernel.org (Postfix) with ESMTPSA id D92DF20678;
+        Mon,  9 Nov 2020 18:09:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604945353;
+        bh=JU34YanRQ67wdNLNcG1HyaIGvC4Hvn9BN1r19BodjUY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fmQaKGHZHjq7wNC0q47GooBDjXBM7yHd2ivf4TMaq4JvcqepRbx15j+7TSpVuGEiQ
+         x1fUsJrk0KtHo/jd4cbztN7OOvfkx0+AxXIE16Ig4rIYaeNm3Kz6yHJlyUz1VZ68VL
+         XyMnngEleioqfNRjZLG2RihZx0kEn+d1ZNibDNVA=
+Date:   Mon, 9 Nov 2020 10:09:11 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH 2/2] selftests: pmtu.sh: improve the test result
+ processing
+Message-ID: <20201109100911.28afc390@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CAMy_GT-Hsj7GmHKBb9Ztvsisrujud1C=E+sKE1TfHDsszwpMXA@mail.gmail.com>
+References: <20201105105051.64258-1-po-hsu.lin@canonical.com>
+        <20201105105051.64258-3-po-hsu.lin@canonical.com>
+        <20201107150200.509523e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <CAMy_GT-Hsj7GmHKBb9Ztvsisrujud1C=E+sKE1TfHDsszwpMXA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-MBO-SPAM-Probability: 
-X-Rspamd-Score: -3.01 / 15.00 / 15.00
-X-Rspamd-Queue-Id: 2C76B177D
-X-Rspamd-UID: 6438b0
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On 11/04/2020 6:02 PM Mike Rapoport <rppt@kernel.org> wrote:
+On Mon, 9 Nov 2020 11:42:33 +0800 Po-Hsu Lin wrote:
+> On Sun, Nov 8, 2020 at 7:02 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > On Thu,  5 Nov 2020 18:50:51 +0800 Po-Hsu Lin wrote:  
+> > > This test will treat all non-zero return codes as failures, it will
+> > > make the pmtu.sh test script being marked as FAILED when some
+> > > sub-test got skipped.
+> > >
+> > > Improve the result processing by
+> > >   * Only mark the whole test script as SKIP when all of the
+> > >     sub-tests were skipped
+> > >   * If the sub-tests were either passed or skipped, the overall
+> > >     result will be PASS
+> > >   * If any of them has failed, the overall result will be FAIL
+> > >   * Treat other return codes (e.g. 127 for command not found) as FAIL
+> > >
+> > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>  
+> >
+> > Patch 1 looks like a cleanup while patch 2 is more of a fix, can we
+> > separate the two and apply the former to -next and latter to 5.10?
+> > They shouldn't conflict, right?
+> >  
 > 
-> Yes, this will work. The processes that share the memfd_secret file
-> descriptor will have access to the same memory pages, pretty much like
-> with shared memory.
+> Hello Jakub,
+> 
+> Yes the first patch is just changing return code to $ksft_skip, the
+> real fix is the second one. However the second patch was based on the
+> first one, if we want to apply them separately we might need to change
+> this $ksft_skip handling part in the second patch.
 
-Perfect!
+Ah, I misread the situation, ksft_skip is 4, not 2, so the patch is
+more than just refactoring.
 
-Acked-by: Hagen Paul Pfeifer <hagen@jauu.net>
+> What should I do to deal with this?
+> Resend the former for -next and rebase + resend the latter (plus the
+> fix to remove case 1) for 5.10 without the former patch?
 
-Thank you for the effort Mike, if zeroize feature will also included it will
-be great! The memset-all-pages after use is just overkill, a dedicated flag for
-memfd_secret (or mmap) would be superior.
-
-Hagen
+Let's apply both of the patches to net-next if that's fine with you.
+Indeed detangling them is may be more effort that it's worth.
