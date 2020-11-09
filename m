@@ -2,136 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E322AB008
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Nov 2020 04:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F175B2AB169
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Nov 2020 07:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729308AbgKIDms (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Nov 2020 22:42:48 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:33700 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728904AbgKIDmr (ORCPT
+        id S1729092AbgKIGtc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Nov 2020 01:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727077AbgKIGtc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Nov 2020 22:42:47 -0500
-Received: from mail-lj1-f198.google.com ([209.85.208.198])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kby4r-0007RO-7U
-        for linux-kselftest@vger.kernel.org; Mon, 09 Nov 2020 03:42:45 +0000
-Received: by mail-lj1-f198.google.com with SMTP id 15so876786ljr.19
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Nov 2020 19:42:45 -0800 (PST)
+        Mon, 9 Nov 2020 01:49:32 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72B5C0613CF;
+        Sun,  8 Nov 2020 22:49:31 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id f38so6318108pgm.2;
+        Sun, 08 Nov 2020 22:49:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wyGY1r0td00p5C4NS8c4M57jRtSLCdR+5tu7AC1KQTY=;
+        b=OTdjcLn8iendZ3IJAfWEoU1BuhYUlFKoeZ0wxUH+TgURiGFyd/6+IvGhDtcBHbiujh
+         gxZjtLLRqsV0fObpt5/nEgYga185dz11C/ooLTLKDFY70nSzGt3VIyYv8MuQIu/+R4Rn
+         Gqbno6hjmd58LK5MhOKQ3dLMfnUAUvBXq+JPZP4uqE7A2HD3AQSEkLntue1skmuhvjm0
+         znJX9U0GYiMGZHnmwP2McL6gMY/yOPMjs9phx8fGO+MYVf3kSi54zXraya5gNYvjmdpj
+         chgkJNHxYuOnTS4billMOuDLvv/hqVpJx0xEvf1JpOX55iS49OKNYlLvk4dzhk9D4l4P
+         D6Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nUcCrCG2WCSSYmMzIiMD5eJ3e1Q9gtiF+ZTLVEFlpk4=;
-        b=ppjf4BsytIA5q61lLaty5hnWKYOYC1gBtXCc/peumPeM+f/ntqlyKw9uPV4AfBeFN/
-         K4AVTqQ8R0Q2cDmA7H4o6I1M39xkF51WlDgLl0wKXNek2dfqrVfVpHX16NpUV2pGPelk
-         tkmR5iqFLUjc6ctw96tdxBDsV3SmMUeOQTOuL3gHKHKhdLJdl1/PszyphxMRIsDH3gd7
-         EMTfTY2AHYrm2aeu2fxSwr6xeIEjZhkLIzzjK8JFFX+E+v7okUAvbr2/csqUBqQXJifd
-         gcMqDqn/+uDzY8z1lIjFnBorG15TbV8kqZLuftAn8rnquI/qN/YjTChvySnTA8yQwkRW
-         tYdg==
-X-Gm-Message-State: AOAM533kqcmSV/2KtXed60+cbovk6f4lkqpPVM/gUWTjrkx9uPu7GIgF
-        SAoaD9L2mo3tg8y91qoa00Mp/q03N+cDfke46amxZRUyQrLo6uY4L29hzGngOpHmEmZiOZ6zuh7
-        Q0wKD1Z9iDC00/pBQKHfjQqB3dh2XKJFwqfprDp1JDNrj98vJNs2j+t07Fem1
-X-Received: by 2002:ac2:5e23:: with SMTP id o3mr2576561lfg.52.1604893364387;
-        Sun, 08 Nov 2020 19:42:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxK1CNIH+0fkqb378JO7cEXuRLrjY/Qi39CLPDYJjYKo+ATQvkmLQH6wGhxbN75XHrpsqaarUY5Sv/dDt9QLFM=
-X-Received: by 2002:ac2:5e23:: with SMTP id o3mr2576555lfg.52.1604893364127;
- Sun, 08 Nov 2020 19:42:44 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wyGY1r0td00p5C4NS8c4M57jRtSLCdR+5tu7AC1KQTY=;
+        b=k6eWjilkwkarrAdI0nBfrKYTHCMvZV2CB8MijpWAtv1Oddo6JTF4etagxotz4DaOXZ
+         RIyQATTTPxo2phprnzvHU4Eq560CUy8IcVumOszRT0Mv5nlFsr3bIcY944PcjX6WXMkw
+         mrv9DO/EAhFsTwqNOeR1Z06NqvBMudr1vbfkevVSZLHFeF2XOlHWnyng4Zvl8A5RIZFD
+         8bSRwbflK06+lWjw0FniNQzcddm8uPBE95f+VNJ88/u7/sZ2BtlSxqCuEiYoH0/CJZBK
+         6JzZJ3uT2/KILnS0EozWS/PXF7huS3sEqimiG6lYLF1XcZbUo4GKK5W8WDaizToaW6Bj
+         3S+A==
+X-Gm-Message-State: AOAM533fQD8/osjbpNtguHTtsK9qOOQLJJhPAqE256foMurNUjRJFVmv
+        LwO4phBewDIiP6NRt4E6C9bFTHqTySw9KDDH
+X-Google-Smtp-Source: ABdhPJx6mLu/wejEC3V4tBx+EhCMViGlq1Tl7ztKLAAgSMePDS8QxWCD08W4jkR0obduGAY92FupZg==
+X-Received: by 2002:a63:db18:: with SMTP id e24mr11559943pgg.155.1604904570692;
+        Sun, 08 Nov 2020 22:49:30 -0800 (PST)
+Received: from [192.168.86.81] ([106.51.240.240])
+        by smtp.gmail.com with ESMTPSA id u5sm9194292pgj.28.2020.11.08.22.49.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Nov 2020 22:49:29 -0800 (PST)
+Subject: Re: [PATCH v6 1/2] kunit: Support for Parameterized Testing
+To:     Marco Elver <elver@google.com>, David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+References: <20201106192154.51514-1-98.arpi@gmail.com>
+ <CABVgOSkQ6+y7OGw2494cJa2b60EkSjncLNAgc9cJDbS=X9J3WA@mail.gmail.com>
+ <CANpmjNNp2RUCE_ypp2R4MznikTYRYeCDuF7VMp+Hbh=55KWa3A@mail.gmail.com>
+From:   Arpitha Raghunandan <98.arpi@gmail.com>
+Message-ID: <47a05c5a-485d-026b-c1c3-476ed1a97856@gmail.com>
+Date:   Mon, 9 Nov 2020 12:19:22 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20201105105051.64258-1-po-hsu.lin@canonical.com>
- <20201105105051.64258-3-po-hsu.lin@canonical.com> <20201107150200.509523e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201107150200.509523e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Mon, 9 Nov 2020 11:42:33 +0800
-Message-ID: <CAMy_GT-Hsj7GmHKBb9Ztvsisrujud1C=E+sKE1TfHDsszwpMXA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] selftests: pmtu.sh: improve the test result processing
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Miller <davem@davemloft.net>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CANpmjNNp2RUCE_ypp2R4MznikTYRYeCDuF7VMp+Hbh=55KWa3A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Nov 8, 2020 at 7:02 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu,  5 Nov 2020 18:50:51 +0800 Po-Hsu Lin wrote:
-> > This test will treat all non-zero return codes as failures, it will
-> > make the pmtu.sh test script being marked as FAILED when some
-> > sub-test got skipped.
-> >
-> > Improve the result processing by
-> >   * Only mark the whole test script as SKIP when all of the
-> >     sub-tests were skipped
-> >   * If the sub-tests were either passed or skipped, the overall
-> >     result will be PASS
-> >   * If any of them has failed, the overall result will be FAIL
-> >   * Treat other return codes (e.g. 127 for command not found) as FAIL
-> >
-> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
->
-> Patch 1 looks like a cleanup while patch 2 is more of a fix, can we
-> separate the two and apply the former to -next and latter to 5.10?
-> They shouldn't conflict, right?
->
+On 07/11/20 3:36 pm, Marco Elver wrote:
+> On Sat, 7 Nov 2020 at 05:58, David Gow <davidgow@google.com> wrote:
+>> On Sat, Nov 7, 2020 at 3:22 AM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+>>>
+>>> Implementation of support for parameterized testing in KUnit.
+>>> This approach requires the creation of a test case using the
+>>> KUNIT_CASE_PARAM macro that accepts a generator function as input.
+>>> This generator function should return the next parameter given the
+>>> previous parameter in parameterized tests. It also provides
+>>> a macro to generate common-case generators.
+>>>
+>>> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+>>> Co-developed-by: Marco Elver <elver@google.com>
+>>> Signed-off-by: Marco Elver <elver@google.com>
+>>> ---
+>>
+>> This looks good to me! A couple of minor thoughts about the output
+>> format below, but I'm quite happy to have this as-is regardless.
+>>
+>> Reviewed-by: David Gow <davidgow@google.com>
+>>
+>> Cheers,
+>> -- David
+>>
+>>> Changes v5->v6:
+>>> - Fix alignment to maintain consistency
+>>> Changes v4->v5:
+>>> - Update kernel-doc comments.
+>>> - Use const void* for generator return and prev value types.
+>>> - Add kernel-doc comment for KUNIT_ARRAY_PARAM.
+>>> - Rework parameterized test case execution strategy: each parameter is executed
+>>>   as if it was its own test case, with its own test initialization and cleanup
+>>>   (init and exit are called, etc.). However, we cannot add new test cases per TAP
+>>>   protocol once we have already started execution. Instead, log the result of
+>>>   each parameter run as a diagnostic comment.
+>>> Changes v3->v4:
+>>> - Rename kunit variables
+>>> - Rename generator function helper macro
+>>> - Add documentation for generator approach
+>>> - Display test case name in case of failure along with param index
+>>> Changes v2->v3:
+>>> - Modifictaion of generator macro and method
+>>> Changes v1->v2:
+>>> - Use of a generator method to access test case parameters
+>>>
+>>>  include/kunit/test.h | 36 ++++++++++++++++++++++++++++++++++
+>>>  lib/kunit/test.c     | 46 +++++++++++++++++++++++++++++++-------------
+>>>  2 files changed, 69 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/include/kunit/test.h b/include/kunit/test.h
+>>> index db1b0ae666c4..16616d3974f9 100644
+>>> --- a/include/kunit/test.h
+>>> +++ b/include/kunit/test.h
+>>> @@ -107,6 +107,7 @@ struct kunit;
+> [...]
+>>> -       kunit_suite_for_each_test_case(suite, test_case)
+>>> -               kunit_run_case_catch_errors(suite, test_case);
+>>> +       kunit_suite_for_each_test_case(suite, test_case) {
+>>> +               struct kunit test = { .param_value = NULL, .param_index = 0 };
+>>> +               bool test_success = true;
+>>> +
+>>> +               if (test_case->generate_params)
+>>> +                       test.param_value = test_case->generate_params(NULL);
+>>> +
+>>> +               do {
+>>> +                       kunit_run_case_catch_errors(suite, test_case, &test);
+>>> +                       test_success &= test_case->success;
+>>> +
+>>> +                       if (test_case->generate_params) {
+>>> +                               kunit_log(KERN_INFO, &test,
+>>> +                                         KUNIT_SUBTEST_INDENT
+>>> +                                         "# %s: param-%d %s",
+>>
+>> Would it make sense to have this imitate the TAP format a bit more?
+>> So, have "# [ok|not ok] - [name]" as the format? [name] could be
+>> something like "[test_case->name]:param-[index]" or similar.
+>> If we keep it commented out and don't indent it further, it won't
+>> formally be a nested test (though if we wanted to support those later,
+>> it'd be easy to add), but I think it would be nicer to be consistent
+>> here.
+> 
+> The previous attempt [1] at something similar failed because it seems
+> we'd need to teach kunit-tool new tricks [2], too.
+> [1] https://lkml.kernel.org/r/20201105195503.GA2399621@elver.google.com
+> [2] https://lkml.kernel.org/r/20201106123433.GA3563235@elver.google.com
+> 
+> So if we go with a different format, we might need a patch before this
+> one to make kunit-tool compatible with that type of diagnostic.
+> 
+> Currently I think we have the following proposals for a format:
+> 
+> 1. The current "# [test_case->name]: param-[index] [ok|not ok]" --
+> this works well, because no changes to kunit-tool are required, and it
+> also picks up the diagnostic context for the case and displays that on
+> test failure.
+> 
+> 2. Your proposed "# [ok|not ok] - [test_case->name]:param-[index]".
+> As-is, this needs a patch for kunit-tool as well. I just checked, and
+> if we change it to "# [ok|not ok] - [test_case->name]: param-[index]"
+> (note the space after ':') it works without changing kunit-tool. ;-)
+> 
+> 3. Something like "# [ok|not ok] param-[index] - [test_case->name]",
+> which I had played with earlier but kunit-tool is definitely not yet
+> happy with.
+> 
+> So my current preference is (2) with the extra space (no change to
+> kunit-tool required). WDYT?
+> 
 
-Hello Jakub,
+Which format do we finally go with?
 
-Yes the first patch is just changing return code to $ksft_skip, the
-real fix is the second one. However the second patch was based on the
-first one, if we want to apply them separately we might need to change
-this $ksft_skip handling part in the second patch.
+>> My other suggestion -- albeit one outside the scope of this initial
+>> version -- would be to allow the "param-%d" name to be overridden
+>> somehow by a test. For example, the ext4 inode test has names for all
+>> its test cases: it'd be nice to be able to display those instead (even
+>> if they're not formatted as identifiers as-is).
+> 
+> Right, I was thinking about this, but it'd need a way to optionally
+> pass another function that converts const void* params to readable
+> strings. But as you say, we should do that as a follow-up patch later
+> because it might require a few more iterations.
+> 
+> [...]
+> 
+> Thanks,
+> -- Marco
+> 
 
-What should I do to deal with this?
-Resend the former for -next and rebase + resend the latter (plus the
-fix to remove case 1) for 5.10 without the former patch?
-Thanks!
-
-> > diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-> > index fb53987..5c86fb1 100755
-> > --- a/tools/testing/selftests/net/pmtu.sh
-> > +++ b/tools/testing/selftests/net/pmtu.sh
-> > @@ -1652,7 +1652,23 @@ run_test() {
-> >       return $ret
-> >       )
-> >       ret=$?
-> > -     [ $ret -ne 0 ] && exitcode=1
-> > +     case $ret in
-> > +             0)
-> > +                     all_skipped=false
-> > +                     [ $exitcode=$ksft_skip ] && exitcode=0
-> > +             ;;
-> > +             1)
-> > +                     all_skipped=false
-> > +                     exitcode=1
-> > +             ;;
->
-> Does it make sense to remove this case? The handling is identical to
-> the default case *).
->
-
-Yes you're right, we can remove this part.
-
-> > +             $ksft_skip)
-> > +                     [ $all_skipped = true ] && exitcode=$ksft_skip
-> > +             ;;
-> > +             *)
-> > +                     all_skipped=false
-> > +                     exitcode=1
-> > +             ;;
-> > +     esac
-> >
-> >       return $ret
-> >  }
-> > @@ -1786,6 +1802,7 @@ usage() {
-> >  #
-> >  exitcode=0
-> >  desc=0
-> > +all_skipped=true
-> >
-> >  while getopts :ptv o
-> >  do
->
