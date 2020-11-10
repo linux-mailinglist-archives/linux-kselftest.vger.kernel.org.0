@@ -2,150 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117162ACA34
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 02:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300DA2ACA8B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 02:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731863AbgKJBOM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Nov 2020 20:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731267AbgKJBOA (ORCPT
+        id S1729661AbgKJBhM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Nov 2020 20:37:12 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:42578 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725889AbgKJBhJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 20:14:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE2DC0613CF;
-        Mon,  9 Nov 2020 17:13:59 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604970836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UkwosGD4CNwpr5O4mn7FToWEjHCGounmVIqa5vjwzhQ=;
-        b=DRjXCHfaWTV+37wSriT1BjBgrVPE6jdQ5QSgYOIapfxJkFIwaFOAyxB9axkmnF7jwFoYyj
-        IwVALzvZ0PuA7RxNph9leDCS6B9rTa4rL3nKcIBy/Am24PTMh01e/A2SQWp6LTkOQfBaj6
-        TPNYDFf29DCqNiv3sgD8nE6enYeIlsYkCGyKDzwB1FGN01/Y3vKoJQtpchwkYWrvNb9W70
-        4PCnBA8S0oYM/XwkwwZotKzR9vmT9oC6FdGvh5lMI1bLUaS0qdB+ZPTGprUeJSBjnvH0Xv
-        xyRk7zOTS6b0OUuDBNt+X1xYcMB1KSB7gGowiPoSA5hPR5omsqQ5g20Kt4+uKg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604970836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UkwosGD4CNwpr5O4mn7FToWEjHCGounmVIqa5vjwzhQ=;
-        b=acv/dHWHYYmtT1/z0brDNSAmBtlvEk8c07ItXmS/RUDap25yEm8biO9jTMWItRsTlNRTeF
-        x/KI3sqvslL8SkDg==
-To:     ira.weiny@intel.com, Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kexec@lists.infradead.org, linux-bcache@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devel@driverdev.osuosl.org,
-        linux-efi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-aio@kvack.org,
-        io-uring@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-um@lists.infradead.org, linux-ntfs-dev@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-nilfs@vger.kernel.org, cluster-devel@redhat.com,
-        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
-        samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH RFC PKS/PMEM 05/58] kmap: Introduce k[un]map_thread
-In-Reply-To: <20201009195033.3208459-6-ira.weiny@intel.com>
-References: <20201009195033.3208459-1-ira.weiny@intel.com> <20201009195033.3208459-6-ira.weiny@intel.com>
-Date:   Tue, 10 Nov 2020 02:13:56 +0100
-Message-ID: <87h7pyhv3f.fsf@nanos.tec.linutronix.de>
+        Mon, 9 Nov 2020 20:37:09 -0500
+Received: from mail-lf1-f70.google.com ([209.85.167.70])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1kcIao-0000qw-HH
+        for linux-kselftest@vger.kernel.org; Tue, 10 Nov 2020 01:37:07 +0000
+Received: by mail-lf1-f70.google.com with SMTP id c2so677963lfr.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2020 17:37:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xygyfviZhrqldJoh55lqm86ZBffK6xSKZWicSP9XRLw=;
+        b=Pau5MZHKestbsh5ryFzn7gpK7GmOFrjg1p5iuTUkmt6FNT+kAq4PcKtTCDViNtPrPZ
+         TVBXiGE0/dXwBUoWbwhf6cYh4ozB7OfCHnmd0TgseRqotjG14EBsdWMHkO+dNL8/HcvQ
+         4uEdgyuQjta8rPVivSuCAlRRTiGpLmw91rNtzuVTsm0VmdH7x0jZiLS4ZxGZgkqhg4n1
+         kJb7N7hpxIlmiGVOAweyM+UtXOFRG+AzwhuS3hykW8n8k1WpDO7yjODHipk8CEWBVQIh
+         FPLX0btA1f1XgZ1/SOMwpyVvC0f8ZFcXAHcoqmC4mXSPNC1m7aUIw8pIn61EgYs0o9mN
+         E5Ew==
+X-Gm-Message-State: AOAM5327nesGiL9Xyza59nTZEKMCFC/kDOZA4yefF0jNsfI/1QRsX7Jt
+        URn/OF5VpyjO9eSeRLXv4UukOZsZuLZK/2/Rtx1vuVI2fyj7Go6jNwnYeokielvP14p/bHurhAh
+        KL3hIfZEuNvUpcXqYmU/yHykngelkkWQSinRCI46TXar5vHTwlMjJ/qV73yAj
+X-Received: by 2002:a2e:8346:: with SMTP id l6mr6581913ljh.132.1604972225988;
+        Mon, 09 Nov 2020 17:37:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwD7ul4nbZVQiVfaxChsuU9NpBuXQIKlLhwaoMNAWMub6P1uHlGOMMx0ima4z8Y3LMt9V7R+6TVWgDs82IrhIo=
+X-Received: by 2002:a2e:8346:: with SMTP id l6mr6581908ljh.132.1604972225691;
+ Mon, 09 Nov 2020 17:37:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20201105105051.64258-1-po-hsu.lin@canonical.com>
+ <20201105105051.64258-3-po-hsu.lin@canonical.com> <20201107150200.509523e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAMy_GT-Hsj7GmHKBb9Ztvsisrujud1C=E+sKE1TfHDsszwpMXA@mail.gmail.com> <20201109100911.28afc390@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201109100911.28afc390@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Tue, 10 Nov 2020 09:36:54 +0800
+Message-ID: <CAMy_GT_FQrXObfebdzipkhzSuAGE7VbGiRuE3e87uH9YcjBrAA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: pmtu.sh: improve the test result processing
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ira,
-
-On Fri, Oct 09 2020 at 12:49, ira weiny wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On Tue, Nov 10, 2020 at 2:09 AM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> To correctly support the semantics of kmap() with Kernel protection keys
-> (PKS), kmap() may be required to set the protections on multiple
-> processors (globally).  Enabling PKS globally can be very expensive
-> depending on the requested operation.  Furthermore, enabling a domain
-> globally reduces the protection afforded by PKS.
+> On Mon, 9 Nov 2020 11:42:33 +0800 Po-Hsu Lin wrote:
+> > On Sun, Nov 8, 2020 at 7:02 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > >
+> > > On Thu,  5 Nov 2020 18:50:51 +0800 Po-Hsu Lin wrote:
+> > > > This test will treat all non-zero return codes as failures, it will
+> > > > make the pmtu.sh test script being marked as FAILED when some
+> > > > sub-test got skipped.
+> > > >
+> > > > Improve the result processing by
+> > > >   * Only mark the whole test script as SKIP when all of the
+> > > >     sub-tests were skipped
+> > > >   * If the sub-tests were either passed or skipped, the overall
+> > > >     result will be PASS
+> > > >   * If any of them has failed, the overall result will be FAIL
+> > > >   * Treat other return codes (e.g. 127 for command not found) as FAIL
+> > > >
+> > > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> > >
+> > > Patch 1 looks like a cleanup while patch 2 is more of a fix, can we
+> > > separate the two and apply the former to -next and latter to 5.10?
+> > > They shouldn't conflict, right?
+> > >
+> >
+> > Hello Jakub,
+> >
+> > Yes the first patch is just changing return code to $ksft_skip, the
+> > real fix is the second one. However the second patch was based on the
+> > first one, if we want to apply them separately we might need to change
+> > this $ksft_skip handling part in the second patch.
 >
-> Most kmap() (Aprox 209 of 229) callers use the map within a single thread and
-> have no need for the protection domain to be enabled globally.  However, the
-> remaining callers do not follow this pattern and, as best I can tell, expect
-> the mapping to be 'global' and available to any thread who may access the
-> mapping.[1]
+> Ah, I misread the situation, ksft_skip is 4, not 2, so the patch is
+> more than just refactoring.
 >
-> We don't anticipate global mappings to pmem, however in general there is a
-> danger in changing the semantics of kmap().  Effectively, this would cause an
-> unresolved page fault with little to no information about why the failure
-> occurred.
+> > What should I do to deal with this?
+> > Resend the former for -next and rebase + resend the latter (plus the
+> > fix to remove case 1) for 5.10 without the former patch?
 >
-> To resolve this a number of options were considered.
->
-> 1) Attempt to change all the thread local kmap() calls to kmap_atomic()[2]
-> 2) Introduce a flags parameter to kmap() to indicate if the mapping should be
->    global or not
-> 3) Change ~20 call sites to 'kmap_global()' to indicate that they require a
->    global enablement of the pages.
-> 4) Change ~209 call sites to 'kmap_thread()' to indicate that the mapping is to
->    be used within that thread of execution only
->
-> Option 1 is simply not feasible.  Option 2 would require all of the call sites
-> of kmap() to change.  Option 3 seems like a good minimal change but there is a
-> danger that new code may miss the semantic change of kmap() and not get the
-> behavior the developer intended.  Therefore, #4 was chosen.
+> Let's apply both of the patches to net-next if that's fine with you.
+> Indeed detangling them is may be more effort that it's worth.
 
-There is Option #5:
-
-Convert the thread local kmap() invocations to the proposed kmap_local()
-interface which is coming along [1].
-
-That solves a couple of issues:
-
- 1) It relieves the current kmap_atomic() usage sites from the implict
-    pagefault/preempt disable semantics which apply even when
-    CONFIG_HIGHMEM is disabled. kmap_local() still can be invoked from
-    atomic context.
-
- 2) Due to #1 it allows to replace the conditional usage of kmap() and
-    kmap_atomic() for purely thread local mappings.
-
- 3) It puts the burden on the HIGHMEM inflicted systems
-
- 4) It is actually more efficient for most of the pure thread local use
-    cases on HIGHMEM inflicted systems because it avoids the overhead of
-    the global lock and the potential kmap slot exhaustion. A potential
-    preemption will be more expensive, but that's not really the case we
-    want to optimize for.
-
- 5) It solves the RT issue vs. kmap_atomic()
-
-So instead of creating yet another variety of kmap() which is just
-scratching the particular PKRS itch, can we please consolidate all of
-that on the wider reaching kmap_local() approach?
-
-Thanks,
-
-        tglx
-     
-[1] https://lore.kernel.org/lkml/20201103092712.714480842@linutronix.de/
-
+That would be great, but allow me to resend V2 to get rid of case 1 first.
+Thanks!
