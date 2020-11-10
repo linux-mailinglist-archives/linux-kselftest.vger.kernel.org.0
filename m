@@ -2,38 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E10E2ACD86
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 05:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6585B2ACD53
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 05:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731738AbgKJDyx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Nov 2020 22:54:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55916 "EHLO mail.kernel.org"
+        id S1733217AbgKJDze (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Nov 2020 22:55:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56922 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730877AbgKJDyw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:54:52 -0500
+        id S1733204AbgKJDzd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:55:33 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8741320721;
-        Tue, 10 Nov 2020 03:54:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 87C38221F1;
+        Tue, 10 Nov 2020 03:55:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980491;
-        bh=RxdypS5yFALZA7A6ct64lelo/+SmNXp/dWCwIyV0Fao=;
+        s=default; t=1604980532;
+        bh=K50d19qP/F886/2Ft2H5yb441enUZkoFfD7ULSsqUn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J6noiNsvWnYEP4eW/fWzJTEY2RlgyrSUGsUlRzEKAlJAAq90VUt3TeBigv8+tZxjj
-         4+DRN6cvQ9a0ZL+sAWxsQJBn1hr5qhUAV/LlU2S0+CMQGSJbIXYDVHYixPQ/WJR+P/
-         sWQ1hbPLDiHrSS/gssXC4KB3i6cW21rrxRsAUF9w=
+        b=BysPmYD5g/ddyc8KkIv1e4eutt8XYEADvtPo9jneL0L7Jpbo4FVGGC8quYUn1rRik
+         d2y2FsvwQwu+8WTtROCYh1j+DfwMsxmNgi5BshRLwcKU6hmRZk/0H01Bd2vRDnOyEE
+         5z5Shn//5lrgdjG0XS4FSK9D2VR/1VlDfDXt3PiA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tommi Rantala <tommi.t.rantala@nokia.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 07/42] selftests: pidfd: fix compilation errors due to wait.h
-Date:   Mon,  9 Nov 2020 22:54:05 -0500
-Message-Id: <20201110035440.424258-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 37/42] selftests: proc: fix warning: _GNU_SOURCE redefined
+Date:   Mon,  9 Nov 2020 22:54:35 -0500
+Message-Id: <20201110035440.424258-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201110035440.424258-1-sashal@kernel.org>
 References: <20201110035440.424258-1-sashal@kernel.org>
@@ -47,50 +45,56 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Tommi Rantala <tommi.t.rantala@nokia.com>
 
-[ Upstream commit 1948172fdba5ad643529ddcd00a601c0caa913ed ]
+[ Upstream commit f3ae6c6e8a3ea49076d826c64e63ea78fbf9db43 ]
 
-Drop unneeded <linux/wait.h> header inclusion to fix pidfd compilation
-errors seen in Fedora 32:
-
-In file included from pidfd_open_test.c:9:
-../../../../usr/include/linux/wait.h:17:16: error: expected identifier before numeric constant
-   17 | #define P_ALL  0
-      |                ^
+Makefile already contains -D_GNU_SOURCE, so we can remove it from the
+*.c files.
 
 Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/pidfd/pidfd_open_test.c | 1 -
- tools/testing/selftests/pidfd/pidfd_poll_test.c | 1 -
- 2 files changed, 2 deletions(-)
+ tools/testing/selftests/proc/proc-loadavg-001.c  | 1 -
+ tools/testing/selftests/proc/proc-self-syscall.c | 1 -
+ tools/testing/selftests/proc/proc-uptime-002.c   | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_open_test.c b/tools/testing/selftests/pidfd/pidfd_open_test.c
-index b9fe75fc3e517..8a59438ccc78b 100644
---- a/tools/testing/selftests/pidfd/pidfd_open_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_open_test.c
-@@ -6,7 +6,6 @@
- #include <inttypes.h>
- #include <limits.h>
- #include <linux/types.h>
--#include <linux/wait.h>
- #include <sched.h>
- #include <signal.h>
- #include <stdbool.h>
-diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-index 4b115444dfe90..6108112753573 100644
---- a/tools/testing/selftests/pidfd/pidfd_poll_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-@@ -3,7 +3,6 @@
- #define _GNU_SOURCE
+diff --git a/tools/testing/selftests/proc/proc-loadavg-001.c b/tools/testing/selftests/proc/proc-loadavg-001.c
+index 471e2aa280776..fb4fe9188806e 100644
+--- a/tools/testing/selftests/proc/proc-loadavg-001.c
++++ b/tools/testing/selftests/proc/proc-loadavg-001.c
+@@ -14,7 +14,6 @@
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ /* Test that /proc/loadavg correctly reports last pid in pid namespace. */
+-#define _GNU_SOURCE
  #include <errno.h>
- #include <linux/types.h>
--#include <linux/wait.h>
- #include <poll.h>
- #include <signal.h>
- #include <stdbool.h>
+ #include <sched.h>
+ #include <sys/types.h>
+diff --git a/tools/testing/selftests/proc/proc-self-syscall.c b/tools/testing/selftests/proc/proc-self-syscall.c
+index 9f6d000c02455..8511dcfe67c75 100644
+--- a/tools/testing/selftests/proc/proc-self-syscall.c
++++ b/tools/testing/selftests/proc/proc-self-syscall.c
+@@ -13,7 +13,6 @@
+  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+-#define _GNU_SOURCE
+ #include <unistd.h>
+ #include <sys/syscall.h>
+ #include <sys/types.h>
+diff --git a/tools/testing/selftests/proc/proc-uptime-002.c b/tools/testing/selftests/proc/proc-uptime-002.c
+index 30e2b78490898..e7ceabed7f51f 100644
+--- a/tools/testing/selftests/proc/proc-uptime-002.c
++++ b/tools/testing/selftests/proc/proc-uptime-002.c
+@@ -15,7 +15,6 @@
+  */
+ // Test that values in /proc/uptime increment monotonically
+ // while shifting across CPUs.
+-#define _GNU_SOURCE
+ #undef NDEBUG
+ #include <assert.h>
+ #include <unistd.h>
 -- 
 2.27.0
 
