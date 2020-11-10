@@ -2,88 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9362AC751
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Nov 2020 22:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117162ACA34
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 02:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729247AbgKIVeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Nov 2020 16:34:24 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15356 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727311AbgKIVeX (ORCPT
+        id S1731863AbgKJBOM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Nov 2020 20:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731267AbgKJBOA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 16:34:23 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fa9b5e50001>; Mon, 09 Nov 2020 13:34:29 -0800
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 9 Nov
- 2020 21:34:17 +0000
-Subject: Re: [PATCH v3 3/6] mm: support THP migration to device private memory
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Jerome Glisse" <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Alistair Popple" <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Zi Yan <ziy@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-References: <20201106005147.20113-1-rcampbell@nvidia.com>
- <20201106005147.20113-4-rcampbell@nvidia.com> <20201106080322.GE31341@lst.de>
- <a7b8b90c-09b7-2009-0784-908b61f61ef2@nvidia.com>
- <20201109091415.GC28918@lst.de>
-X-Nvconfidentiality: public
-From:   Ralph Campbell <rcampbell@nvidia.com>
-Message-ID: <0ed2fbec-e855-9be5-4897-523b00391a5a@nvidia.com>
-Date:   Mon, 9 Nov 2020 13:34:17 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Mon, 9 Nov 2020 20:14:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE2DC0613CF;
+        Mon,  9 Nov 2020 17:13:59 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604970836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UkwosGD4CNwpr5O4mn7FToWEjHCGounmVIqa5vjwzhQ=;
+        b=DRjXCHfaWTV+37wSriT1BjBgrVPE6jdQ5QSgYOIapfxJkFIwaFOAyxB9axkmnF7jwFoYyj
+        IwVALzvZ0PuA7RxNph9leDCS6B9rTa4rL3nKcIBy/Am24PTMh01e/A2SQWp6LTkOQfBaj6
+        TPNYDFf29DCqNiv3sgD8nE6enYeIlsYkCGyKDzwB1FGN01/Y3vKoJQtpchwkYWrvNb9W70
+        4PCnBA8S0oYM/XwkwwZotKzR9vmT9oC6FdGvh5lMI1bLUaS0qdB+ZPTGprUeJSBjnvH0Xv
+        xyRk7zOTS6b0OUuDBNt+X1xYcMB1KSB7gGowiPoSA5hPR5omsqQ5g20Kt4+uKg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604970836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UkwosGD4CNwpr5O4mn7FToWEjHCGounmVIqa5vjwzhQ=;
+        b=acv/dHWHYYmtT1/z0brDNSAmBtlvEk8c07ItXmS/RUDap25yEm8biO9jTMWItRsTlNRTeF
+        x/KI3sqvslL8SkDg==
+To:     ira.weiny@intel.com, Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kexec@lists.infradead.org, linux-bcache@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devel@driverdev.osuosl.org,
+        linux-efi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-um@lists.infradead.org, linux-ntfs-dev@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, cluster-devel@redhat.com,
+        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
+        samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH RFC PKS/PMEM 05/58] kmap: Introduce k[un]map_thread
+In-Reply-To: <20201009195033.3208459-6-ira.weiny@intel.com>
+References: <20201009195033.3208459-1-ira.weiny@intel.com> <20201009195033.3208459-6-ira.weiny@intel.com>
+Date:   Tue, 10 Nov 2020 02:13:56 +0100
+Message-ID: <87h7pyhv3f.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20201109091415.GC28918@lst.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1604957669; bh=mGWceFZcFVepIg70odr/PpzpGbOYemVQsgtUyEDQ5DY=;
-        h=Subject:To:CC:References:X-Nvconfidentiality:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=Pl5Tvt71udJU3v/0WCu3Asq2HX/8GyNfgumDPJG9uNsgU+MIpHqO+wOIFuKESw2q/
-         T1IEais/hXVH0hE8rKE2lCAGdDwBRi9dVnYmfyzEMdvWiU8ljU/IIx8nJzLhJrm8Im
-         Jv4q8vv55QxoNkYyA59hGqNL1W7lRcfc1Bdn9fqco9eBhY/ppa0CMphwINQ0UtvxhQ
-         fInFfJZirRP0B/gQzxgf5Pduu2ywcaiKuHbCzULx8PA9audLlpSfNnuhRwqtZUBuTt
-         lKiNnMmbqI4la7ABjlO2OTxf6CZlpSP2Ead9izuGJp43VzgyLtZxafBHsW/aJGGLqs
-         sO14lMybUWHDw==
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Ira,
 
-On 11/9/20 1:14 AM, Christoph Hellwig wrote:
-> On Fri, Nov 06, 2020 at 01:26:50PM -0800, Ralph Campbell wrote:
->>
->> On 11/6/20 12:03 AM, Christoph Hellwig wrote:
->>> I hate the extra pin count magic here.  IMHO we really need to finish
->>> off the series to get rid of the extra references on the ZONE_DEVICE
->>> pages first.
->>
->> First, thanks for the review comments.
->>
->> I don't like the extra refcount either, that is why I tried to fix that up
->> before resending this series. However, you didn't like me just fixing the
->> refcount only for device private pages and I don't know the dax/pmem code
->> and peer-to-peer PCIe uses of ZONE_DEVICE pages well enough to say how
->> long it will take me to fix all the use cases.
->> So I wanted to make progress on the THP migration code in the mean time.
-> 
-> I think P2P is pretty trivial, given that ZONE_DEVICE pages are used like
-> a normal memory allocator.  DAX is the interesting case, any specific
-> help that you need with that?
+On Fri, Oct 09 2020 at 12:49, ira weiny wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> To correctly support the semantics of kmap() with Kernel protection keys
+> (PKS), kmap() may be required to set the protections on multiple
+> processors (globally).  Enabling PKS globally can be very expensive
+> depending on the requested operation.  Furthermore, enabling a domain
+> globally reduces the protection afforded by PKS.
+>
+> Most kmap() (Aprox 209 of 229) callers use the map within a single thread and
+> have no need for the protection domain to be enabled globally.  However, the
+> remaining callers do not follow this pattern and, as best I can tell, expect
+> the mapping to be 'global' and available to any thread who may access the
+> mapping.[1]
+>
+> We don't anticipate global mappings to pmem, however in general there is a
+> danger in changing the semantics of kmap().  Effectively, this would cause an
+> unresolved page fault with little to no information about why the failure
+> occurred.
+>
+> To resolve this a number of options were considered.
+>
+> 1) Attempt to change all the thread local kmap() calls to kmap_atomic()[2]
+> 2) Introduce a flags parameter to kmap() to indicate if the mapping should be
+>    global or not
+> 3) Change ~20 call sites to 'kmap_global()' to indicate that they require a
+>    global enablement of the pages.
+> 4) Change ~209 call sites to 'kmap_thread()' to indicate that the mapping is to
+>    be used within that thread of execution only
+>
+> Option 1 is simply not feasible.  Option 2 would require all of the call sites
+> of kmap() to change.  Option 3 seems like a good minimal change but there is a
+> danger that new code may miss the semantic change of kmap() and not get the
+> behavior the developer intended.  Therefore, #4 was chosen.
 
-Thanks for the offer. I'm putting a list together... :-)
+There is Option #5:
+
+Convert the thread local kmap() invocations to the proposed kmap_local()
+interface which is coming along [1].
+
+That solves a couple of issues:
+
+ 1) It relieves the current kmap_atomic() usage sites from the implict
+    pagefault/preempt disable semantics which apply even when
+    CONFIG_HIGHMEM is disabled. kmap_local() still can be invoked from
+    atomic context.
+
+ 2) Due to #1 it allows to replace the conditional usage of kmap() and
+    kmap_atomic() for purely thread local mappings.
+
+ 3) It puts the burden on the HIGHMEM inflicted systems
+
+ 4) It is actually more efficient for most of the pure thread local use
+    cases on HIGHMEM inflicted systems because it avoids the overhead of
+    the global lock and the potential kmap slot exhaustion. A potential
+    preemption will be more expensive, but that's not really the case we
+    want to optimize for.
+
+ 5) It solves the RT issue vs. kmap_atomic()
+
+So instead of creating yet another variety of kmap() which is just
+scratching the particular PKRS itch, can we please consolidate all of
+that on the wider reaching kmap_local() approach?
+
+Thanks,
+
+        tglx
+     
+[1] https://lore.kernel.org/lkml/20201103092712.714480842@linutronix.de/
+
