@@ -2,39 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B836B2ACDAF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 05:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C592ACD95
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 05:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732856AbgKJEEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Nov 2020 23:04:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55282 "EHLO mail.kernel.org"
+        id S1731551AbgKJED0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Nov 2020 23:03:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55876 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732645AbgKJDyZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:54:25 -0500
+        id S1732876AbgKJDyu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:54:50 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8CB02207BC;
-        Tue, 10 Nov 2020 03:54:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E38AC208FE;
+        Tue, 10 Nov 2020 03:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980464;
-        bh=K50d19qP/F886/2Ft2H5yb441enUZkoFfD7ULSsqUn0=;
+        s=default; t=1604980489;
+        bh=zAo+rX/HJd0EhyEP4ZjfM0EPLEC2xbl048pitavwzjs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jV75VGuG84hZi08+9ULKpJCqThxwB/F4PJM94W1Hr6sYERlTckLRAj8O2SPmyjy1S
-         vxMgbxitls69gg68NVutN2JwahF9xbyYjQI2svaPu7dCVttrkB6rItTex7fum12kmq
-         sFdKP6tZ5lWmwZ9e4Mtwc73eZv1+VBVcVRBA2sV4=
+        b=aSuBrWIKX4860vrm+fDSjA7E5dbf78EKhjasx3hEMnpEs7pTwzl3llzw5QutpphXH
+         3OeJUiw+yYIFTSs3b6xzukrvkMOqBihnht1/+GARTFO2EUqYaDCS4yxD0dinAGkRcU
+         fCZAm6NR0f2KHxM5V4XRSY5gVjwWJE5CKf1e8giA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tommi Rantala <tommi.t.rantala@nokia.com>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 46/55] selftests: proc: fix warning: _GNU_SOURCE redefined
-Date:   Mon,  9 Nov 2020 22:53:09 -0500
-Message-Id: <20201110035318.423757-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 06/42] selftests/ftrace: check for do_sys_openat2 in user-memory test
+Date:   Mon,  9 Nov 2020 22:54:04 -0500
+Message-Id: <20201110035440.424258-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201110035318.423757-1-sashal@kernel.org>
-References: <20201110035318.423757-1-sashal@kernel.org>
+In-Reply-To: <20201110035440.424258-1-sashal@kernel.org>
+References: <20201110035440.424258-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,58 +45,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Tommi Rantala <tommi.t.rantala@nokia.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit f3ae6c6e8a3ea49076d826c64e63ea78fbf9db43 ]
+[ Upstream commit e3e40312567087fbe6880f316cb2b0e1f3d8a82c ]
 
-Makefile already contains -D_GNU_SOURCE, so we can remove it from the
-*.c files.
+More recent libc implementations are now using openat/openat2 system
+calls so also add do_sys_openat2 to the tracing so that the test
+passes on these systems because do_sys_open may not be called.
 
-Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
+Thanks to Masami Hiramatsu for the help on getting this fix to work
+correctly.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/proc/proc-loadavg-001.c  | 1 -
- tools/testing/selftests/proc/proc-self-syscall.c | 1 -
- tools/testing/selftests/proc/proc-uptime-002.c   | 1 -
- 3 files changed, 3 deletions(-)
+ .../selftests/ftrace/test.d/kprobe/kprobe_args_user.tc        | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/proc/proc-loadavg-001.c b/tools/testing/selftests/proc/proc-loadavg-001.c
-index 471e2aa280776..fb4fe9188806e 100644
---- a/tools/testing/selftests/proc/proc-loadavg-001.c
-+++ b/tools/testing/selftests/proc/proc-loadavg-001.c
-@@ -14,7 +14,6 @@
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
- /* Test that /proc/loadavg correctly reports last pid in pid namespace. */
--#define _GNU_SOURCE
- #include <errno.h>
- #include <sched.h>
- #include <sys/types.h>
-diff --git a/tools/testing/selftests/proc/proc-self-syscall.c b/tools/testing/selftests/proc/proc-self-syscall.c
-index 9f6d000c02455..8511dcfe67c75 100644
---- a/tools/testing/selftests/proc/proc-self-syscall.c
-+++ b/tools/testing/selftests/proc/proc-self-syscall.c
-@@ -13,7 +13,6 @@
-  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
--#define _GNU_SOURCE
- #include <unistd.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
-diff --git a/tools/testing/selftests/proc/proc-uptime-002.c b/tools/testing/selftests/proc/proc-uptime-002.c
-index 30e2b78490898..e7ceabed7f51f 100644
---- a/tools/testing/selftests/proc/proc-uptime-002.c
-+++ b/tools/testing/selftests/proc/proc-uptime-002.c
-@@ -15,7 +15,6 @@
-  */
- // Test that values in /proc/uptime increment monotonically
- // while shifting across CPUs.
--#define _GNU_SOURCE
- #undef NDEBUG
- #include <assert.h>
- #include <unistd.h>
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
+index 0f60087583d8f..a753c73d869ab 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
+@@ -11,12 +11,16 @@ grep -A10 "fetcharg:" README | grep -q '\[u\]<offset>' || exit_unsupported
+ :;: "user-memory access syntax and ustring working on user memory";:
+ echo 'p:myevent do_sys_open path=+0($arg2):ustring path2=+u0($arg2):string' \
+ 	> kprobe_events
++echo 'p:myevent2 do_sys_openat2 path=+0($arg2):ustring path2=+u0($arg2):string' \
++	>> kprobe_events
+ 
+ grep myevent kprobe_events | \
+ 	grep -q 'path=+0($arg2):ustring path2=+u0($arg2):string'
+ echo 1 > events/kprobes/myevent/enable
++echo 1 > events/kprobes/myevent2/enable
+ echo > /dev/null
+ echo 0 > events/kprobes/myevent/enable
++echo 0 > events/kprobes/myevent2/enable
+ 
+ grep myevent trace | grep -q 'path="/dev/null" path2="/dev/null"'
+ 
 -- 
 2.27.0
 
