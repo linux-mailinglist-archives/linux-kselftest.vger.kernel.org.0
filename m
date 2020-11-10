@@ -2,448 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0BD2ADA25
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 16:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2774E2ADC30
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Nov 2020 17:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732423AbgKJPQe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Nov 2020 10:16:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58048 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730842AbgKJPQd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Nov 2020 10:16:33 -0500
-Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1297207BB;
-        Tue, 10 Nov 2020 15:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605021392;
-        bh=GcYHmVpON//HgfC+Q9fSTKhraRbGw/gcP2/N7E5anYQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IAdulAM/GhGvt6RpFgcTAcNO3AY5mIlRqeatIyKlYUDrx+cWKmckufJHghk9zmVVl
-         uFJKYcKDPTzMLxxDuwlgj6/nr17KKkxaQ5R/1TKG735EcQUESuSBmDi/EoajcuWPLN
-         URTis7QarF/wuXqwOpFPGh7dYTJmWZlZ2+Oy/pew=
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: [PATCH v8 9/9] secretmem: test: add basic selftest for memfd_secret(2)
-Date:   Tue, 10 Nov 2020 17:14:44 +0200
-Message-Id: <20201110151444.20662-10-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201110151444.20662-1-rppt@kernel.org>
-References: <20201110151444.20662-1-rppt@kernel.org>
+        id S1726688AbgKJQcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Nov 2020 11:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbgKJQcS (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Nov 2020 11:32:18 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFB4C0613CF;
+        Tue, 10 Nov 2020 08:32:18 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id i13so5848685pgm.9;
+        Tue, 10 Nov 2020 08:32:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=skC9HMwoANjiJgrhHyjN46EO+eh+8Q1iVSgyl/kti+k=;
+        b=lrXVThl9cRE9BR1zbfCFCVBXzNcgtpqP0fWsxNF9/osGeBHmpvLB0qjimR9XJ9IRD6
+         V8SYwDrU0JA0FW0kkwPIy3JgMf2+Em+0+Ukx6MjLfbzzSO75M2EZuU8/SwWhfmGJECuF
+         +fU5ROBokGQbKDq36AzvqAedsLcqKBla4/VvE2Cq+2wXVLEkdjmSW9ni8ypHJE1b8sfc
+         kXySNtF5++9oE/Q6fR9KlKh18quLXDZWkCXiEZ04wbdwRybSAeGkycDusQ7tQMFFvBnF
+         HRd/iH4vk6HOIL/jWURwJYb0Is9zybv8v/Ce1kWFUZ9JmuMzIj5fbCiiVv6ic4LOq315
+         aQOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=skC9HMwoANjiJgrhHyjN46EO+eh+8Q1iVSgyl/kti+k=;
+        b=QqJ1PlZ+J8UJdhDdD0CDGCLDYr9Iwhz8d8fsAvqjUREvnqKyoEtZ+ximVyb47oAvs9
+         2EBnlMFB1rGdRSt7Q+Xj13CEZplm7cIBWBxhSfJLj4/PGCi+/CsPzIrfxzZMq4jQoyHY
+         V7IVqiTIWAd8fgyZkM/J4yCbCx8/RIfW5Iv2iFBuF46xwEdowCafyx6C0IkCPff1MgyS
+         UG9xrHrN/O49NklnZSBqU3IlQq1gdSpCOJwehulF4yTh302N6fUPIREGY4Ctl8UU8vF3
+         f6jqH4RDF3pR6fp+exBsrE9LEfgSYuvfTu0LJiCtniCS2sjEiJfzKxm+IdhY3HnpBo+D
+         NbDQ==
+X-Gm-Message-State: AOAM530N8MNkBrTUnWS5FvTXSLPJwgdeiDMW3WHWBvJpCF7frYxLlAMI
+        H8rzVQD22CTYMkZrzG2UU76E1aaf8QmP/Q==
+X-Google-Smtp-Source: ABdhPJxjvLLvMJoo+tOGpKTDLmpwuk/X5/wwzVMh6tm20hmVtdcs5c9gZSEdbnkOhjx/bhgNzVXI+A==
+X-Received: by 2002:a63:f74c:: with SMTP id f12mr17306186pgk.434.1605025937811;
+        Tue, 10 Nov 2020 08:32:17 -0800 (PST)
+Received: from [192.168.86.81] ([106.51.240.240])
+        by smtp.gmail.com with ESMTPSA id l22sm15029777pff.27.2020.11.10.08.32.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Nov 2020 08:32:17 -0800 (PST)
+Subject: Re: [PATCH v6 1/2] kunit: Support for Parameterized Testing
+To:     Marco Elver <elver@google.com>, David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+References: <20201106192154.51514-1-98.arpi@gmail.com>
+ <CABVgOSkQ6+y7OGw2494cJa2b60EkSjncLNAgc9cJDbS=X9J3WA@mail.gmail.com>
+ <CANpmjNNp2RUCE_ypp2R4MznikTYRYeCDuF7VMp+Hbh=55KWa3A@mail.gmail.com>
+ <47a05c5a-485d-026b-c1c3-476ed1a97856@gmail.com>
+ <CABVgOSkZ9k6bHPp=LVATWfokMSrEuD87jOfE5MiVYAEbZMmaQQ@mail.gmail.com>
+ <CANpmjNMzNauQVNKK_ToWDKrwT1LKY7Tb+ApG8drX8wtBkBbWQQ@mail.gmail.com>
+From:   Arpitha Raghunandan <98.arpi@gmail.com>
+Message-ID: <06106c1a-7e1b-c317-91f2-7f9c64072794@gmail.com>
+Date:   Tue, 10 Nov 2020 22:02:11 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <CANpmjNMzNauQVNKK_ToWDKrwT1LKY7Tb+ApG8drX8wtBkBbWQQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+On 10/11/20 4:05 pm, Marco Elver wrote:
+> On Tue, 10 Nov 2020 at 08:21, David Gow <davidgow@google.com> wrote:
+> [...]
+>>>>
+>>>> The previous attempt [1] at something similar failed because it seems
+>>>> we'd need to teach kunit-tool new tricks [2], too.
+>>>> [1] https://lkml.kernel.org/r/20201105195503.GA2399621@elver.google.com
+>>>> [2] https://lkml.kernel.org/r/20201106123433.GA3563235@elver.google.com
+>>>>
+>>>> So if we go with a different format, we might need a patch before this
+>>>> one to make kunit-tool compatible with that type of diagnostic.
+>>>>
+>>>> Currently I think we have the following proposals for a format:
+>>>>
+>>>> 1. The current "# [test_case->name]: param-[index] [ok|not ok]" --
+>>>> this works well, because no changes to kunit-tool are required, and it
+>>>> also picks up the diagnostic context for the case and displays that on
+>>>> test failure.
+>>>>
+>>>> 2. Your proposed "# [ok|not ok] - [test_case->name]:param-[index]".
+>>>> As-is, this needs a patch for kunit-tool as well. I just checked, and
+>>>> if we change it to "# [ok|not ok] - [test_case->name]: param-[index]"
+>>>> (note the space after ':') it works without changing kunit-tool. ;-)
+>>>>
+>>>> 3. Something like "# [ok|not ok] param-[index] - [test_case->name]",
+>>>> which I had played with earlier but kunit-tool is definitely not yet
+>>>> happy with.
+>>>>
+>>>> So my current preference is (2) with the extra space (no change to
+>>>> kunit-tool required). WDYT?
+>>>>
+>>
+>> Hmm… that failure in kunit_tool is definitely a bug: we shouldn't care
+>> what comes after the comment character except if it's an explicit
+>> subtest declaration or a crash. I'll try to put a patch together to
+>> fix it, but I'd rather not delay this just for that.
+>>
+>> In any thought about this a bit more, It turns out that the proposed
+>> KTAP spec[1] discourages the use of ':', except as part of a subtest
+>> declaration, or perhaps an as-yet-unspecified fully-qualified test
+>> name. The latter is what I was going for, but if it's actively
+>> breaking kunit_tool, we might want to hold off on it.
+>>
+>> If we were to try to treat these as subtests in accordance with that
+>> spec, the way we'd want to use one of these options:
+>> A) "[ok|not ok] [index] - param-[index]" -- This doesn't mention the
+>> test case name, but otherwise treats things exactly the same way we
+>> treat existing subtests.
+>>
+>> B) "[ok|not ok] [index] - [test_case->name]" -- This doesn't name the
+>> "subtest", just gives repeated results with the same name.
+>>
+>> C) "[ok|not ok] [index] - [test_case->name][separator]param-[index]"
+>> -- This is equivalent to my suggestion with a separator of ":", or 2
+>> above with a separator of ": ". The in-progress spec doesn't yet
+>> specify how these fully-qualified names would work, other than that
+>> they'd use a colon somewhere, and if we comment it out, ": " is
+>> required.
+>>
+>>>
+>>> Which format do we finally go with?
+>>>
+>>
+>> I'm actually going to make another wild suggestion for this, which is
+>> a combination of (1) and (A):
+>> "# [test_case->name]: [ok|not ok] [index] - param-[index]"
+>>
+>> This gives us a KTAP-compliant result line, except prepended with "#
+>> [test_case->name]: ", which makes it formally a diagnostic line,
+>> rather than an actual subtest. Putting the test name at the start
+>> matches what kunit_tool is expecting at the moment. If we then want to
+>> turn it into a proper subtest, we can just get rid of that prefix (and
+>> add the appropriate counts elsewhere).
+>>
+>> Does that sound good?
+> 
+> Sounds reasonable to me!  The repetition of [index] seems unnecessary
+> for now, but I think if we at some point have a way to get a string
+> representation of a param, we can substitute param-[index] with a
+> string that represents the param.
+> 
 
-The test verifies that file descriptor created with memfd_secret does
-not allow read/write operations, that secret memory mappings respect
-RLIMIT_MEMLOCK and that remote accesses with process_vm_read() and
-ptrace() to the secret memory fail.
+So, with this the inode-test.c will have the following output, right?
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- tools/testing/selftests/vm/.gitignore     |   1 +
- tools/testing/selftests/vm/Makefile       |   3 +-
- tools/testing/selftests/vm/memfd_secret.c | 298 ++++++++++++++++++++++
- tools/testing/selftests/vm/run_vmtests    |  17 ++
- 4 files changed, 318 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/vm/memfd_secret.c
+TAP version 14
+1..7
+    # Subtest: ext4_inode_test
+    1..1
+    # inode_test_xtimestamp_decoding: ok 0 - param-0
+    # inode_test_xtimestamp_decoding: ok 1 - param-1
+    # inode_test_xtimestamp_decoding: ok 2 - param-2
+    # inode_test_xtimestamp_decoding: ok 3 - param-3
+    # inode_test_xtimestamp_decoding: ok 4 - param-4
+    # inode_test_xtimestamp_decoding: ok 5 - param-5
+    # inode_test_xtimestamp_decoding: ok 6 - param-6
+    # inode_test_xtimestamp_decoding: ok 7 - param-7
+    # inode_test_xtimestamp_decoding: ok 8 - param-8
+    # inode_test_xtimestamp_decoding: ok 9 - param-9
+    # inode_test_xtimestamp_decoding: ok 10 - param-10
+    # inode_test_xtimestamp_decoding: ok 11 - param-11
+    # inode_test_xtimestamp_decoding: ok 12 - param-12
+    # inode_test_xtimestamp_decoding: ok 13 - param-13
+    # inode_test_xtimestamp_decoding: ok 14 - param-14
+    # inode_test_xtimestamp_decoding: ok 15 - param-15
+    ok 1 - inode_test_xtimestamp_decoding
+ok 1 - ext4_inode_test
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 9a35c3f6a557..c8deddc81e7a 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -21,4 +21,5 @@ va_128TBswitch
- map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
-+memfd_secret
- local_config.*
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 62fb15f286ee..9ab98946fbf2 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -34,6 +34,7 @@ TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
-+TEST_GEN_FILES += memfd_secret
- TEST_GEN_FILES += mlock-random-test
- TEST_GEN_FILES += mlock2-tests
- TEST_GEN_FILES += mremap_dontunmap
-@@ -129,7 +130,7 @@ warn_32bit_failure:
- endif
- endif
- 
--$(OUTPUT)/mlock-random-test: LDLIBS += -lcap
-+$(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
- 
- $(OUTPUT)/gup_test: ../../../../mm/gup_test.h
- 
-diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
-new file mode 100644
-index 000000000000..79578dfd13e6
---- /dev/null
-+++ b/tools/testing/selftests/vm/memfd_secret.c
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright IBM Corporation, 2020
-+ *
-+ * Author: Mike Rapoport <rppt@linux.ibm.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <sys/uio.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <sys/types.h>
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/resource.h>
-+#include <sys/capability.h>
-+
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <stdio.h>
-+
-+#include "../kselftest.h"
-+
-+#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
-+#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
-+#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
-+
-+#ifdef __NR_memfd_secret
-+
-+#include <linux/secretmem.h>
-+
-+#define PATTERN	0x55
-+
-+static const int prot = PROT_READ | PROT_WRITE;
-+static const int mode = MAP_SHARED;
-+
-+static unsigned long page_size;
-+static unsigned long mlock_limit_cur;
-+static unsigned long mlock_limit_max;
-+
-+static int memfd_secret(unsigned long flags)
-+{
-+	return syscall(__NR_memfd_secret, flags);
-+}
-+
-+static void test_file_apis(int fd)
-+{
-+	char buf[64];
-+
-+	if ((read(fd, buf, sizeof(buf)) >= 0) ||
-+	    (write(fd, buf, sizeof(buf)) >= 0) ||
-+	    (pread(fd, buf, sizeof(buf), 0) >= 0) ||
-+	    (pwrite(fd, buf, sizeof(buf), 0) >= 0))
-+		fail("unexpected file IO\n");
-+	else
-+		pass("file IO is blocked as expected\n");
-+}
-+
-+static void test_mlock_limit(int fd)
-+{
-+	size_t len;
-+	char *mem;
-+
-+	len = mlock_limit_cur;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("unable to mmap secret memory\n");
-+		return;
-+	}
-+	munmap(mem, len);
-+
-+	len = mlock_limit_max * 2;
-+	mem = mmap(NULL, len, prot, mode, fd, 0);
-+	if (mem != MAP_FAILED) {
-+		fail("unexpected mlock limit violation\n");
-+		munmap(mem, len);
-+		return;
-+	}
-+
-+	pass("mlock limit is respected\n");
-+}
-+
-+static void try_process_vm_read(int fd, int pipefd[2])
-+{
-+	struct iovec liov, riov;
-+	char buf[64];
-+	char *mem;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		exit(KSFT_FAIL);
-+	}
-+
-+	liov.iov_len = riov.iov_len = sizeof(buf);
-+	liov.iov_base = buf;
-+	riov.iov_base = mem;
-+
-+	if (process_vm_readv(getppid(), &liov, 1, &riov, 1, 0) < 0) {
-+		if (errno == ENOSYS)
-+			exit(KSFT_SKIP);
-+		exit(KSFT_PASS);
-+	}
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void try_ptrace(int fd, int pipefd[2])
-+{
-+	pid_t ppid = getppid();
-+	int status;
-+	char *mem;
-+	long ret;
-+
-+	if (read(pipefd[0], &mem, sizeof(mem)) < 0) {
-+		perror("pipe write");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = ptrace(PTRACE_ATTACH, ppid, 0, 0);
-+	if (ret) {
-+		perror("ptrace_attach");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	ret = waitpid(ppid, &status, WUNTRACED);
-+	if ((ret != ppid) || !(WIFSTOPPED(status))) {
-+		fprintf(stderr, "weird waitppid result %ld stat %x\n",
-+			ret, status);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	if (ptrace(PTRACE_PEEKDATA, ppid, mem, 0))
-+		exit(KSFT_PASS);
-+
-+	exit(KSFT_FAIL);
-+}
-+
-+static void check_child_status(pid_t pid, const char *name)
-+{
-+	int status;
-+
-+	waitpid(pid, &status, 0);
-+
-+	if (WIFEXITED(status) && WEXITSTATUS(status) == KSFT_SKIP) {
-+		skip("%s is not supported\n", name);
-+		return;
-+	}
-+
-+	if ((WIFEXITED(status) && WEXITSTATUS(status) == KSFT_PASS) ||
-+	    WIFSIGNALED(status)) {
-+		pass("%s is blocked as expected\n", name);
-+		return;
-+	}
-+
-+	fail("%s: unexpected memory access\n", name);
-+}
-+
-+static void test_remote_access(int fd, const char *name,
-+			       void (*func)(int fd, int pipefd[2]))
-+{
-+	int pipefd[2];
-+	pid_t pid;
-+	char *mem;
-+
-+	if (pipe(pipefd)) {
-+		fail("pipe failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		fail("fork failed: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	if (pid == 0) {
-+		func(fd, pipefd);
-+		return;
-+	}
-+
-+	mem = mmap(NULL, page_size, prot, mode, fd, 0);
-+	if (mem == MAP_FAILED) {
-+		fail("Unable to mmap secret memory\n");
-+		return;
-+	}
-+
-+	ftruncate(fd, page_size);
-+	memset(mem, PATTERN, page_size);
-+
-+	if (write(pipefd[1], &mem, sizeof(mem)) < 0) {
-+		fail("pipe write: %s\n", strerror(errno));
-+		return;
-+	}
-+
-+	check_child_status(pid, name);
-+}
-+
-+static void test_process_vm_read(int fd)
-+{
-+	test_remote_access(fd, "process_vm_read", try_process_vm_read);
-+}
-+
-+static void test_ptrace(int fd)
-+{
-+	test_remote_access(fd, "ptrace", try_ptrace);
-+}
-+
-+static int set_cap_limits(rlim_t max)
-+{
-+	struct rlimit new;
-+	cap_t cap = cap_init();
-+
-+	new.rlim_cur = max;
-+	new.rlim_max = max;
-+	if (setrlimit(RLIMIT_MEMLOCK, &new)) {
-+		perror("setrlimit() returns error");
-+		return -1;
-+	}
-+
-+	/* drop capabilities including CAP_IPC_LOCK */
-+	if (cap_set_proc(cap)) {
-+		perror("cap_set_proc() returns error");
-+		return -2;
-+	}
-+
-+	return 0;
-+}
-+
-+static void prepare(void)
-+{
-+	struct rlimit rlim;
-+
-+	page_size = sysconf(_SC_PAGE_SIZE);
-+	if (!page_size)
-+		ksft_exit_fail_msg("Failed to get page size %s\n",
-+				   strerror(errno));
-+
-+	if (getrlimit(RLIMIT_MEMLOCK, &rlim))
-+		ksft_exit_fail_msg("Unable to detect mlock limit: %s\n",
-+				   strerror(errno));
-+
-+	mlock_limit_cur = rlim.rlim_cur;
-+	mlock_limit_max = rlim.rlim_max;
-+
-+	printf("page_size: %ld, mlock.soft: %ld, mlock.hard: %ld\n",
-+	       page_size, mlock_limit_cur, mlock_limit_max);
-+
-+	if (page_size > mlock_limit_cur)
-+		mlock_limit_cur = page_size;
-+	if (page_size > mlock_limit_max)
-+		mlock_limit_max = page_size;
-+
-+	if (set_cap_limits(mlock_limit_max))
-+		ksft_exit_fail_msg("Unable to set mlock limit: %s\n",
-+				   strerror(errno));
-+}
-+
-+#define NUM_TESTS 4
-+
-+int main(int argc, char *argv[])
-+{
-+	int fd;
-+
-+	prepare();
-+
-+	ksft_print_header();
-+	ksft_set_plan(NUM_TESTS);
-+
-+	fd = memfd_secret(0);
-+	if (fd < 0) {
-+		if (errno == ENOSYS)
-+			ksft_exit_skip("memfd_secret is not supported\n");
-+		else
-+			ksft_exit_fail_msg("memfd_secret failed: %s\n",
-+					   strerror(errno));
-+	}
-+
-+	test_mlock_limit(fd);
-+	test_file_apis(fd);
-+	test_process_vm_read(fd);
-+	test_ptrace(fd);
-+
-+	close(fd);
-+
-+	ksft_exit(!ksft_get_fail_cnt());
-+}
-+
-+#else /* __NR_memfd_secret */
-+
-+int main(int argc, char *argv[])
-+{
-+	printf("skip: skipping memfd_secret test (missing __NR_memfd_secret)\n");
-+	return KSFT_SKIP;
-+}
-+
-+#endif /* __NR_memfd_secret */
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index e953f3cd9664..95a67382f132 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -346,4 +346,21 @@ else
- 	exitcode=1
- fi
- 
-+echo "running memfd_secret test"
-+echo "------------------------------------"
-+./memfd_secret
-+ret_val=$?
-+
-+if [ $ret_val -eq 0 ]; then
-+	echo "[PASS]"
-+elif [ $ret_val -eq $ksft_skip ]; then
-+	echo "[SKIP]"
-+	exitcode=$ksft_skip
-+else
-+	echo "[FAIL]"
-+	exitcode=1
-+fi
-+
-+exit $exitcode
-+
- exit $exitcode
--- 
-2.28.0
+I will send another patch with this change.
+Thanks!
+
+> Note that once we want to make it a real subtest, we'd need to run the
+> generator twice, once to get the number of params and then to run the
+> tests. If we require that param generators are deterministic in the
+> number of params generated, this is not a problem.
+> 
+> Thanks,
+> -- Marco
+> 
 
