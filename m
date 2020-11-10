@@ -2,359 +2,359 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403322AE3E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 00:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2E62AE404
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 00:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731746AbgKJXM6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Nov 2020 18:12:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60812 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726737AbgKJXM6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Nov 2020 18:12:58 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7781720781;
-        Tue, 10 Nov 2020 23:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605049977;
-        bh=r1XIHDLnVVppsNVdPm6iiEsiEcANo/69NHDTb/ORlHU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=czftW3jppBUq/W8daxxIyhaRcc7SXtqcmlPLIH2PrvuRfXPTJB8ZGo5SZyOplip/L
-         6ny3b4PwiQcDsK52cr2kOtgtMK5oPdUAEXTcYIffyoZJZHlfHAuNW/DnCBUdDnXMBs
-         kxOmEUaJrmnaS/7HqNEpROY75G0jru0HmN1IlNKs=
-Date:   Tue, 10 Nov 2020 15:12:55 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shrijeet Mukherjee <shrijeet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-Subject: Re: [net-next,v2,4/5] seg6: add support for the SRv6 End.DT4
- behavior
-Message-ID: <20201110151255.3a86afcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201107153139.3552-5-andrea.mayer@uniroma2.it>
-References: <20201107153139.3552-1-andrea.mayer@uniroma2.it>
-        <20201107153139.3552-5-andrea.mayer@uniroma2.it>
+        id S1732013AbgKJX2I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Nov 2020 18:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726737AbgKJX2I (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Nov 2020 18:28:08 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08ABC0613D3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2020 15:28:04 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id l2so631642lfk.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2020 15:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Or4R009+0xAwqncSLQ7leMAU40PnO86t6CdPE9/qh4k=;
+        b=k/ezgD1o5+lqyyRN7hCLyW1xEKOHNTrZVXwF41loyBKssVhhOET5jjIhJfWfjMs7lv
+         QdHT0tEKUZI0oIx7b/CwtdUluWv+IHZsNVB+ABWidOCCuzpEhpkjzuk3UQXjnewPl3bj
+         unyMB60kskOiW3clwYUe4h7D7MERHxolHPSaFlIqDFG+ENasTAkeJly5JnzFZR9lGDoL
+         f9ylzx75yHTLO61Z5S+LLkuNm8AgQ/728yCd6icXO1U5GzyyBz/V95CqO3j9NNT1g8Lm
+         S2T1jh7116EB1g5MkjgcWsIzeC9yM9F5dvaeucEFIC/mLthOm3xDDSG7DTQWCkqX3bQJ
+         JrMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Or4R009+0xAwqncSLQ7leMAU40PnO86t6CdPE9/qh4k=;
+        b=uchnk9a+lqd7kRBvPkjFwxFBKUNbeCHlyk/d8eECQTTNRlhf+ODv5Uhvkb5vNGraic
+         8sSyfGiBHEDO4cpfoMSgEGo3CtoTI6e3Frs6CsjoCc7VOAfQ37XJp+Hy7fdZcEnH7HJA
+         HvCW3auC6pu/oP4f/JM+5DEjeVaUrObiwJfsy7bE9JzAemcLNzKF7tiQTm6T2mFDhHoR
+         Oy8RBgGo5IHVkGWn6QhlFS8fohCc7vrrDdYFRBSwlvOT7bMX5kyM+czYaj0INfW9DVzU
+         BX6BBsbrJLRYOFuBaXOD/5GEnDn1n6oSEmCg6GA5zgfhUVCpJ+X5emSHC2Y0ioPndn+j
+         9yFg==
+X-Gm-Message-State: AOAM5315jvK5VVXcnU/GiMoxpF0A7rnPX7raPptpn07tdhusell9Gpf/
+        tT2KrvpTlGnuxkX8sx9ntJ9GkmlnSD5uD5b68gtNRQ==
+X-Google-Smtp-Source: ABdhPJxIrOWuYaxhwkKiw0b+VIN2LLtnnTSX9JBogbwi5Y5pCn2pYjtBTqjMIgCUrwVN6t0j+w8Hr7cFOqFe8bMsVuY=
+X-Received: by 2002:ac2:59db:: with SMTP id x27mr5394024lfn.34.1605050875512;
+ Tue, 10 Nov 2020 15:27:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20201106192154.51514-1-98.arpi@gmail.com> <CABVgOSkQ6+y7OGw2494cJa2b60EkSjncLNAgc9cJDbS=X9J3WA@mail.gmail.com>
+ <CANpmjNNp2RUCE_ypp2R4MznikTYRYeCDuF7VMp+Hbh=55KWa3A@mail.gmail.com>
+ <47a05c5a-485d-026b-c1c3-476ed1a97856@gmail.com> <CABVgOSkZ9k6bHPp=LVATWfokMSrEuD87jOfE5MiVYAEbZMmaQQ@mail.gmail.com>
+ <BY5PR13MB29336C5BE374D69939DCADABFDE90@BY5PR13MB2933.namprd13.prod.outlook.com>
+In-Reply-To: <BY5PR13MB29336C5BE374D69939DCADABFDE90@BY5PR13MB2933.namprd13.prod.outlook.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 11 Nov 2020 07:27:43 +0800
+Message-ID: <CABVgOSnJAgWvTTABaF082LuYjAoAWzrBsyu9sT7x4GGMVsOD6Q@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] kunit: Support for Parameterized Testing
+To:     "Bird, Tim" <Tim.Bird@sony.com>
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-kernel-mentees@lists.linuxfoundation.org" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat,  7 Nov 2020 16:31:38 +0100 Andrea Mayer wrote:
-> SRv6 End.DT4 is defined in the SRv6 Network Programming [1].
-> 
-> The SRv6 End.DT4 is used to implement IPv4 L3VPN use-cases in
-> multi-tenants environments. It decapsulates the received packets and it
-> performs IPv4 routing lookup in the routing table of the tenant.
-> 
-> The SRv6 End.DT4 Linux implementation leverages a VRF device in order to
-> force the routing lookup into the associated routing table.
+On Wed, Nov 11, 2020 at 1:02 AM Bird, Tim <Tim.Bird@sony.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: David Gow <davidgow@google.com>
+> >
+> > On Mon, Nov 9, 2020 at 2:49 PM Arpitha Raghunandan <98.arpi@gmail.com> =
+wrote:
+> > >
+> > > On 07/11/20 3:36 pm, Marco Elver wrote:
+> > > > On Sat, 7 Nov 2020 at 05:58, David Gow <davidgow@google.com> wrote:
+> > > >> On Sat, Nov 7, 2020 at 3:22 AM Arpitha Raghunandan <98.arpi@gmail.=
+com> wrote:
+> > > >>>
+> > > >>> Implementation of support for parameterized testing in KUnit.
+> > > >>> This approach requires the creation of a test case using the
+> > > >>> KUNIT_CASE_PARAM macro that accepts a generator function as input=
+.
+> > > >>> This generator function should return the next parameter given th=
+e
+> > > >>> previous parameter in parameterized tests. It also provides
+> > > >>> a macro to generate common-case generators.
+> > > >>>
+> > > >>> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+> > > >>> Co-developed-by: Marco Elver <elver@google.com>
+> > > >>> Signed-off-by: Marco Elver <elver@google.com>
+> > > >>> ---
+> > > >>
+> > > >> This looks good to me! A couple of minor thoughts about the output
+> > > >> format below, but I'm quite happy to have this as-is regardless.
+> > > >>
+> > > >> Reviewed-by: David Gow <davidgow@google.com>
+> > > >>
+> > > >> Cheers,
+> > > >> -- David
+> > > >>
+> > > >>> Changes v5->v6:
+> > > >>> - Fix alignment to maintain consistency
+> > > >>> Changes v4->v5:
+> > > >>> - Update kernel-doc comments.
+> > > >>> - Use const void* for generator return and prev value types.
+> > > >>> - Add kernel-doc comment for KUNIT_ARRAY_PARAM.
+> > > >>> - Rework parameterized test case execution strategy: each paramet=
+er is executed
+> > > >>>   as if it was its own test case, with its own test initializatio=
+n and cleanup
+> > > >>>   (init and exit are called, etc.). However, we cannot add new te=
+st cases per TAP
+> > > >>>   protocol once we have already started execution. Instead, log t=
+he result of
+> > > >>>   each parameter run as a diagnostic comment.
+> > > >>> Changes v3->v4:
+> > > >>> - Rename kunit variables
+> > > >>> - Rename generator function helper macro
+> > > >>> - Add documentation for generator approach
+> > > >>> - Display test case name in case of failure along with param inde=
+x
+> > > >>> Changes v2->v3:
+> > > >>> - Modifictaion of generator macro and method
+> > > >>> Changes v1->v2:
+> > > >>> - Use of a generator method to access test case parameters
+> > > >>>
+> > > >>>  include/kunit/test.h | 36 ++++++++++++++++++++++++++++++++++
+> > > >>>  lib/kunit/test.c     | 46 +++++++++++++++++++++++++++++++-------=
+------
+> > > >>>  2 files changed, 69 insertions(+), 13 deletions(-)
+> > > >>>
+> > > >>> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > > >>> index db1b0ae666c4..16616d3974f9 100644
+> > > >>> --- a/include/kunit/test.h
+> > > >>> +++ b/include/kunit/test.h
+> > > >>> @@ -107,6 +107,7 @@ struct kunit;
+> > > > [...]
+> > > >>> -       kunit_suite_for_each_test_case(suite, test_case)
+> > > >>> -               kunit_run_case_catch_errors(suite, test_case);
+> > > >>> +       kunit_suite_for_each_test_case(suite, test_case) {
+> > > >>> +               struct kunit test =3D { .param_value =3D NULL, .p=
+aram_index =3D 0 };
+> > > >>> +               bool test_success =3D true;
+> > > >>> +
+> > > >>> +               if (test_case->generate_params)
+> > > >>> +                       test.param_value =3D test_case->generate_=
+params(NULL);
+> > > >>> +
+> > > >>> +               do {
+> > > >>> +                       kunit_run_case_catch_errors(suite, test_c=
+ase, &test);
+> > > >>> +                       test_success &=3D test_case->success;
+> > > >>> +
+> > > >>> +                       if (test_case->generate_params) {
+> > > >>> +                               kunit_log(KERN_INFO, &test,
+> > > >>> +                                         KUNIT_SUBTEST_INDENT
+> > > >>> +                                         "# %s: param-%d %s",
+> > > >>
+> > > >> Would it make sense to have this imitate the TAP format a bit more=
+?
+> > > >> So, have "# [ok|not ok] - [name]" as the format? [name] could be
+> > > >> something like "[test_case->name]:param-[index]" or similar.
+> > > >> If we keep it commented out and don't indent it further, it won't
+> > > >> formally be a nested test (though if we wanted to support those la=
+ter,
+> > > >> it'd be easy to add), but I think it would be nicer to be consiste=
+nt
+> > > >> here.
+> > > >
+> > > > The previous attempt [1] at something similar failed because it see=
+ms
+> > > > we'd need to teach kunit-tool new tricks [2], too.
+> > > > [1] https://lkml.kernel.org/r/20201105195503.GA2399621@elver.google=
+.com
+> > > > [2] https://lkml.kernel.org/r/20201106123433.GA3563235@elver.google=
+.com
+> > > >
+> > > > So if we go with a different format, we might need a patch before t=
+his
+> > > > one to make kunit-tool compatible with that type of diagnostic.
+> > > >
+> > > > Currently I think we have the following proposals for a format:
+> > > >
+> > > > 1. The current "# [test_case->name]: param-[index] [ok|not ok]" --
+> > > > this works well, because no changes to kunit-tool are required, and=
+ it
+> > > > also picks up the diagnostic context for the case and displays that=
+ on
+> > > > test failure.
+> > > >
+> > > > 2. Your proposed "# [ok|not ok] - [test_case->name]:param-[index]".
+> > > > As-is, this needs a patch for kunit-tool as well. I just checked, a=
+nd
+> > > > if we change it to "# [ok|not ok] - [test_case->name]: param-[index=
+]"
+> > > > (note the space after ':') it works without changing kunit-tool. ;-=
+)
+> > > >
+> > > > 3. Something like "# [ok|not ok] param-[index] - [test_case->name]"=
+,
+> > > > which I had played with earlier but kunit-tool is definitely not ye=
+t
+> > > > happy with.
+> > > >
+> > > > So my current preference is (2) with the extra space (no change to
+> > > > kunit-tool required). WDYT?
+> > > >
+> >
+> > Hmm=E2=80=A6 that failure in kunit_tool is definitely a bug: we shouldn=
+'t care
+> > what comes after the comment character except if it's an explicit
+> > subtest declaration or a crash. I'll try to put a patch together to
+> > fix it, but I'd rather not delay this just for that.
+> >
+> > In any thought about this a bit more, It turns out that the proposed
+> > KTAP spec[1] discourages the use of ':', except as part of a subtest
+> > declaration, or perhaps an as-yet-unspecified fully-qualified test
+> > name. The latter is what I was going for, but if it's actively
+> > breaking kunit_tool, we might want to hold off on it.
+> >
+> > If we were to try to treat these as subtests in accordance with that
+> > spec, the way we'd want to use one of these options:
+> > A) "[ok|not ok] [index] - param-[index]" -- This doesn't mention the
+> > test case name, but otherwise treats things exactly the same way we
+> > treat existing subtests.
+> >
+> > B) "[ok|not ok] [index] - [test_case->name]" -- This doesn't name the
+> > "subtest", just gives repeated results with the same name.
+> >
+> > C) "[ok|not ok] [index] - [test_case->name][separator]param-[index]"
+> > -- This is equivalent to my suggestion with a separator of ":", or 2
+> > above with a separator of ": ". The in-progress spec doesn't yet
+> > specify how these fully-qualified names would work, other than that
+> > they'd use a colon somewhere, and if we comment it out, ": " is
+> > required.
+> >
+> > >
+> > > Which format do we finally go with?
+> > >
+> >
+> > I'm actually going to make another wild suggestion for this, which is
+> > a combination of (1) and (A):
+> > "# [test_case->name]: [ok|not ok] [index] - param-[index]"
+>
+> I strongly object to putting actual testcase results in comments.
+> I'd rather that we found a way to include the parameter in the
+> sub-test-case name, rather than require all parsers to know about
+> specially-formatted comments.  There are tools outside
+> the kernel that parse these lines.
+>
 
-How does the behavior of DT4 compare to DT6?
+I wasn't intending to treat these as actual testcases yet: from
+KUnit's point of view, they're definitely just supposed to be
+human-readable diagnostic comments for the one combined testcase.
 
-The implementation looks quite different.
+This largely stems from KUnit being pretty rigid in its test
+hierarchy: it has test suites (the root-level testcases), which
+contain tests (the first-level subtests). Basically, arbitrary nesting
+of tests isn't supported at all by any of the KUnit tools, code,
+documentation, etc. So, if we do actually want to treat these
+individual parameters as sub-subtests, it'll require a lot of work on
+the KUnit side to be able to parse and represent those results.
 
-> To make the End.DT4 work properly, it must be guaranteed that the routing
-> table used for routing lookup operations is bound to one and only one
-> VRF during the tunnel creation. Such constraint has to be enforced by
-> enabling the VRF strict_mode sysctl parameter, i.e:
->  $ sysctl -wq net.vrf.strict_mode=1.
-> 
-> At JANOG44, LINE corporation presented their multi-tenant DC architecture
-> using SRv6 [2]. In the slides, they reported that the Linux kernel is
-> missing the support of SRv6 End.DT4 behavior.
-> 
-> The iproute2 counterpart required for configuring the SRv6 End.DT4
-> behavior is already implemented along with the other supported SRv6
-> behaviors [3].
-> 
-> [1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
-> [2] https://speakerdeck.com/line_developers/line-data-center-networking-with-srv6
-> [3] https://patchwork.ozlabs.org/patch/799837/
-> 
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> ---
->  net/ipv6/seg6_local.c | 205 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 205 insertions(+)
-> 
-> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-> index 4b0f155d641d..a41074acd43e 100644
-> --- a/net/ipv6/seg6_local.c
-> +++ b/net/ipv6/seg6_local.c
-> @@ -57,6 +57,14 @@ struct bpf_lwt_prog {
->  	char *name;
->  };
->  
-> +struct seg6_end_dt4_info {
-> +	struct net *net;
-> +	/* VRF device associated to the routing table used by the SRv6 End.DT4
-> +	 * behavior for routing IPv4 packets.
-> +	 */
-> +	int vrf_ifindex;
-> +};
-> +
->  struct seg6_local_lwt {
->  	int action;
->  	struct ipv6_sr_hdr *srh;
-> @@ -66,6 +74,7 @@ struct seg6_local_lwt {
->  	int iif;
->  	int oif;
->  	struct bpf_lwt_prog bpf;
-> +	struct seg6_end_dt4_info dt4_info;
->  
->  	int headroom;
->  	struct seg6_action_desc *desc;
-> @@ -413,6 +422,194 @@ static int input_action_end_dx4(struct sk_buff *skb,
->  	return -EINVAL;
->  }
->  
-> +#ifdef CONFIG_NET_L3_MASTER_DEV
-> +
+So, as planned at the moment, these lines won't be parsed at all (just
+passed to the user), and should KUnit support more complicated test
+hierarchies down the line, we can remove the "# [test_case->name]"
+prefix, add the test plan lines, etc, and have this be picked up by
+parsers then.
 
-no need for this empty line.
 
-> +static struct net *fib6_config_get_net(const struct fib6_config *fib6_cfg)
-> +{
-> +	const struct nl_info *nli = &fib6_cfg->fc_nlinfo;
-> +
-> +	return nli->nl_net;
-> +}
-> +
-> +static int seg6_end_dt4_build(struct seg6_local_lwt *slwt, const void *cfg,
-> +			      struct netlink_ext_ack *extack)
-> +{
-> +	struct seg6_end_dt4_info *info = &slwt->dt4_info;
-> +	int vrf_ifindex;
-> +	struct net *net;
-> +
-> +	net = fib6_config_get_net(cfg);
-> +
-> +	vrf_ifindex = l3mdev_ifindex_lookup_by_table_id(L3MDEV_TYPE_VRF, net,
-> +							slwt->table);
-> +	if (vrf_ifindex < 0) {
-> +		if (vrf_ifindex == -EPERM) {
-> +			NL_SET_ERR_MSG(extack,
-> +				       "Strict mode for VRF is disabled");
-> +		} else if (vrf_ifindex == -ENODEV) {
-> +			NL_SET_ERR_MSG(extack, "No such device");
+> >
+> > This gives us a KTAP-compliant result line, except prepended with "#
+> > [test_case->name]: ", which makes it formally a diagnostic line,
+> > rather than an actual subtest. Putting the test name at the start
+> > matches what kunit_tool is expecting at the moment. If we then want to
+> > turn it into a proper subtest, we can just get rid of that prefix (and
+> > add the appropriate counts elsewhere).
+> >
+> > Does that sound good?
+> No.
+>
+> I strongly prefer option C above:
+> "[ok|not ok] [index] - [test_case->name][separator]param-[index]"
+>
+> Except of course the second index is not the same as the first, so it
+> would be:
+> "[ok|not ok] [index] - [test_case->name][separator]param-[param-index]"
 
-That's what -ENODEV already says.
+So, the second index would be the same as the first (at most with an
+off-by-one to account for different indexing if we wished) in what I
+was thinking.
 
-> +		} else {
-> +			NL_SET_ERR_MSG(extack, "Unknown error");
+I think this boils down to how we treat these tests and parameters:
+- There is one TAP/KUnit test per-parameter, probably with a name like
+"test_case:param-n". There's no "container" test.
+- There is a test and result for the whole test, and per-parameter
+tests and results are nested in that as subtests.
+- There is a single test, and any per-parameter information is simply
+diagnostic data for the one test, not to be parsed.
 
-Useless error.
+The current code follows the last of these options, and it was my view
+that by having that diagnostic data be in a similar format to a test
+result line, it'd be easier to convert this to the second option while
+having a familiar format for people reading the results manually. Only
+the first option should need separate indices for the result and the
+parameter.
 
-> +			pr_debug("seg6local: SRv6 End.DT4 creation error=%d\n",
-> +				 vrf_ifindex);
-> +		}
-> +
-> +		return vrf_ifindex;
-> +	}
-> +
-> +	info->net = net;
-> +	info->vrf_ifindex = vrf_ifindex;
-> +
-> +	return 0;
-> +}
-> +
-> +/* The SRv6 End.DT4 behavior extracts the inner (IPv4) packet and routes the
-> + * IPv4 packet by looking at the configured routing table.
-> + *
-> + * In the SRv6 End.DT4 use case, we can receive traffic (IPv6+Segment Routing
-> + * Header packets) from several interfaces and the IPv6 destination address (DA)
-> + * is used for retrieving the specific instance of the End.DT4 behavior that
-> + * should process the packets.
-> + *
-> + * However, the inner IPv4 packet is not really bound to any receiving
-> + * interface and thus the End.DT4 sets the VRF (associated with the
-> + * corresponding routing table) as the *receiving* interface.
-> + * In other words, the End.DT4 processes a packet as if it has been received
-> + * directly by the VRF (and not by one of its slave devices, if any).
-> + * In this way, the VRF interface is used for routing the IPv4 packet in
-> + * according to the routing table configured by the End.DT4 instance.
-> + *
-> + * This design allows you to get some interesting features like:
-> + *  1) the statistics on rx packets;
-> + *  2) the possibility to install a packet sniffer on the receiving interface
-> + *     (the VRF one) for looking at the incoming packets;
-> + *  3) the possibility to leverage the netfilter prerouting hook for the inner
-> + *     IPv4 packet.
-> + *
-> + * This function returns:
-> + *  - the sk_buff* when the VRF rcv handler has processed the packet correctly;
-> + *  - NULL when the skb is consumed by the VRF rcv handler;
-> + *  - a pointer which encodes a negative error number in case of error.
-> + *    Note that in this case, the function takes care of freeing the skb.
-> + */
-> +static struct sk_buff *end_dt4_vrf_rcv(struct sk_buff *skb,
-> +				       struct net_device *dev)
-> +{
-> +	/* based on l3mdev_ip_rcv; we are only interested in the master */
-> +	if (unlikely(!netif_is_l3_master(dev) && !netif_has_l3_rx_handler(dev)))
-> +		goto drop;
-> +
-> +	if (unlikely(!dev->l3mdev_ops->l3mdev_l3_rcv))
-> +		goto drop;
-> +
-> +	/* the decap packet (IPv4) does not come with any mac header info.
-> +	 * We must unset the mac header to allow the VRF device to rebuild it,
-> +	 * just in case there is a sniffer attached on the device.
-> +	 */
-> +	skb_unset_mac_header(skb);
-> +
-> +	skb = dev->l3mdev_ops->l3mdev_l3_rcv(dev, skb, AF_INET);
-> +	if (!skb)
-> +		/* the skb buffer was consumed by the handler */
-> +		return NULL;
-> +
-> +	/* when a packet is received by a VRF or by one of its slaves, the
-> +	 * master device reference is set into the skb.
-> +	 */
-> +	if (unlikely(skb->dev != dev || skb->skb_iif != dev->ifindex))
-> +		goto drop;
-> +
-> +	return skb;
-> +
-> +drop:
-> +	kfree_skb(skb);
-> +	return ERR_PTR(-EINVAL);
-> +}
-> +
-> +static struct net_device *end_dt4_get_vrf_rcu(struct sk_buff *skb,
-> +					      struct seg6_end_dt4_info *info)
-> +{
-> +	int vrf_ifindex = info->vrf_ifindex;
-> +	struct net *net = info->net;
-> +
-> +	if (unlikely(vrf_ifindex < 0))
-> +		goto error;
-> +
-> +	if (unlikely(!net_eq(dev_net(skb->dev), net)))
-> +		goto error;
-> +
-> +	return dev_get_by_index_rcu(net, vrf_ifindex);
-> +
-> +error:
-> +	return NULL;
-> +}
-> +
-> +static int input_action_end_dt4(struct sk_buff *skb,
-> +				struct seg6_local_lwt *slwt)
-> +{
-> +	struct net_device *vrf;
-> +	struct iphdr *iph;
-> +	int err;
-> +
-> +	if (!decap_and_validate(skb, IPPROTO_IPIP))
-> +		goto drop;
-> +
-> +	if (!pskb_may_pull(skb, sizeof(struct iphdr)))
-> +		goto drop;
-> +
-> +	vrf = end_dt4_get_vrf_rcu(skb, &slwt->dt4_info);
-> +	if (unlikely(!vrf))
-> +		goto drop;
-> +
-> +	skb->protocol = htons(ETH_P_IP);
-> +
-> +	skb_dst_drop(skb);
-> +
-> +	skb_set_transport_header(skb, sizeof(struct iphdr));
-> +
-> +	skb = end_dt4_vrf_rcv(skb, vrf);
-> +	if (!skb)
-> +		/* packet has been processed and consumed by the VRF */
-> +		return 0;
-> +
-> +	if (IS_ERR(skb)) {
-> +		err = PTR_ERR(skb);
-> +		return err;
+> If ':' is problematical as a separator, let's choose something else.
+> What are the allowed and disallowed characters in the testcase name now?
+> How bad would it be to use something like % or &?
+>
+> Unless the separator is #, I think most parsers are going to just treat t=
+he whole
+> string from after the '[index] -' to a following '#' as a testcase name, =
+and it
+> should get parsed (and presented) OK. I'm not sure what kunit_tool's prob=
+lem is.
+>
 
-return PTR_ERR(skb)
+kunit_tool has a bug when parsing the comments / diagnostic lines,
+which requires a ": " to be present. This is a bug, which is being
+fixed[1], so while it's _nice_ to not trigger it, it's not really an
+important long-term goal of the format. In any case, this kunit_tool
+issue only affects the comment lines: if the per-parameter result line
+is an actual result, rather than just a diagnostic, this shouldn't be
+a problem.
 
-> +	}
-> +
-> +	iph = ip_hdr(skb);
-> +
-> +	err = ip_route_input(skb, iph->daddr, iph->saddr, 0, skb->dev);
-> +	if (err)
-> +		goto drop;
-> +
-> +	return dst_input(skb);
-> +
-> +drop:
-> +	kfree_skb(skb);
-> +	return -EINVAL;
-> +}
-> +
-> +#else
-> +
+In any case, I still prefer my proposed option for now -- noting that
+these per-parameter results are not actually supposed to be parsed --
+with then the possibility of expanding them to actual nested results
+later should we wish. But if the idea of having TAP-like lines in
+diagnostics seems too dangerous (e.g. because people will try to parse
+them anyway), then I think the options we have are to stick to the
+output format given in the current version of this patch (which
+doesn't resemble a TAP result), make each parameterised version its
+own test (without a "container test", which would require a bit of
+extra work while computing test plans), or to hold this whole feature
+back until we can support arbitrary test hierarchies in KUnit.
+Personally, I'd rather not hold this feature back, and prefer to have
+a single combined result available, so would just stick with v6 if
+so...
 
-new line not needed
+Does that make sense?
 
-> +static int seg6_end_dt4_build(struct seg6_local_lwt *slwt, const void *cfg,
-> +			      struct netlink_ext_ack *extack)
-> +{
-> +	NL_SET_ERR_MSG(extack, "Operation is not supported");
-
-This extack message probably could be more helpful. As it stands it's
-basically 
-
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static int input_action_end_dt4(struct sk_buff *skb,
-> +				struct seg6_local_lwt *slwt)
-
-Maybe just ifdef out the part of the action table instead of creating
-those stubs?
-
-> +{
-> +	kfree_skb(skb);
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +#endif
-> +
->  static int input_action_end_dt6(struct sk_buff *skb,
->  				struct seg6_local_lwt *slwt)
->  {
-> @@ -601,6 +798,14 @@ static struct seg6_action_desc seg6_action_table[] = {
-
-BTW any idea why the action table is not marked as const?
-
-Would you mind sending a patch to fix that?
-
->  		.attrs		= (1 << SEG6_LOCAL_NH4),
->  		.input		= input_action_end_dx4,
->  	},
-> +	{
-> +		.action		= SEG6_LOCAL_ACTION_END_DT4,
-> +		.attrs		= (1 << SEG6_LOCAL_TABLE),
-> +		.input		= input_action_end_dt4,
-> +		.slwt_ops	= {
-> +					.build_state = seg6_end_dt4_build,
-> +				  },
-> +	},
->  	{
->  		.action		= SEG6_LOCAL_ACTION_END_DT6,
->  		.attrs		= (1 << SEG6_LOCAL_TABLE),
-
+Cheers,
+-- David
