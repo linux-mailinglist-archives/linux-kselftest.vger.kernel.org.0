@@ -2,62 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 971F72AE76F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 05:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F162AE8A5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 07:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725894AbgKKEde (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Nov 2020 23:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgKKEde (ORCPT
+        id S1725908AbgKKGL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Nov 2020 01:11:56 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18258 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725468AbgKKGL4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Nov 2020 23:33:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE02FC0613D1;
-        Tue, 10 Nov 2020 20:33:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gL0OocahXZn8ZQNF8szmGW51uY79EBzlZ34GhrWeBso=; b=oDeBdofTe937SyWQ5KS04zcvqC
-        lgvZ1G91Fpn0+Q6hWzn8iz4pOCTvXSHpD6P1QhX5Qd04Kt1Qw+XpMngVvHfktQNVQ1ulA67YiL7nL
-        tA8aihrql/H2AMkAyYWzWFIN9Ce0745Pa94PaKzEiQEtKHdWkthYtwOI+SQpKIJw6ptG47vbEq7Sm
-        XbhcamxT5yKVkB0cRiWCzjhuX2LfopicPBECLbWzvfoBpL8c7A/pYE1TRlavFekqmDsyuYQ9Lmaqv
-        TacYawpzSIaJXXew8hPtbksnGSLMeAoHskMPJw9V8IhREGECwGEFySLXGWxjJ//+BgXGebA+WR5kI
-        gAImvbZw==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kchoe-0002CB-P0; Wed, 11 Nov 2020 04:33:04 +0000
-Date:   Wed, 11 Nov 2020 04:33:04 +0000
-From:   Matthew Wilcox <willy@infradead.org>
+        Wed, 11 Nov 2020 01:11:56 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AB62Uu5172817;
+        Wed, 11 Nov 2020 01:11:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=6ci14bMJqkzkgZzYTMvgyWJGvo3as75QRlIc4ZDxb30=;
+ b=KZF6d3+AR1pM9icpEd7dsHZm/AyKi/wyrqxHYv+KESVKIrUXHHXbC6tPeiUe0VXHrj3x
+ m2u4u79h88p1QqCWOOU6GEtzuwN9p4zLNxfSTdZoInmKLkIC26wKXllTa16gmNZbjd2/
+ RBY6sIF/kuRtvaZD/TdnqAYSK06vdl+8IqCFdX2BeUG4TEGT9NjJ71Y/QlRbEOrsdZ9v
+ LwYAUP5y0e7Y1gYhJdjtQVI3TlOMhCbJVXyr/QGC4oxfD7osIWemEsE8Q7+2E2lkaTo7
+ hzQMXDWp561YsdMTWTT1qOj8BNrY7LHCslNdUFPbRJ3WIWvKhFZgVofipaFilB4tkxYa tQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 34qgydd1pf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Nov 2020 01:11:49 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AB67Y2d010558;
+        Wed, 11 Nov 2020 06:11:47 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 34p26pk7k7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Nov 2020 06:11:47 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AB6Bi0W1376782
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Nov 2020 06:11:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C833BA4066;
+        Wed, 11 Nov 2020 06:11:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21F9AA405C;
+        Wed, 11 Nov 2020 06:11:43 +0000 (GMT)
+Received: from [9.199.52.146] (unknown [9.199.52.146])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 11 Nov 2020 06:11:42 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.17\))
+Subject: Re: [PATCH V2] selftests/cgroup: Fix build on older distros
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <50cb30c4-8e8d-7ba0-d429-3f1da4ad1f0b@linuxfoundation.org>
+Date:   Wed, 11 Nov 2020 11:41:41 +0530
+Cc:     Michael Ellerman <michael@ellerman.id.au>,
+        linux-kselftest@vger.kernel.org, christian@brauner.io,
+        linux-kernel@vger.kernel.org, keescook@chromium.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A30EBA15-D8DC-4F6B-9FF3-5E6A1BAB9500@linux.vnet.ibm.com>
+References: <160464840151.97255.15344214064240834294.sendpatchset@MacBook-Pro.local>
+ <50cb30c4-8e8d-7ba0-d429-3f1da4ad1f0b@linuxfoundation.org>
 To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
-        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
-        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 00/13] Introduce seqnum_ops
-Message-ID: <20201111043304.GS17076@casper.infradead.org>
-References: <cover.1605027593.git.skhan@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1605027593.git.skhan@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3445.104.17)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-11_01:2020-11-10,2020-11-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ malwarescore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
+ phishscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011110028
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 12:53:26PM -0700, Shuah Khan wrote:
-> There are a number of atomic_t usages in the kernel where atomic_t api
-> is used strictly for counting sequence numbers and other statistical
-> counters and not for managing object lifetime.
 
-We already have something in Linux called a sequence counter, and it's
-different from this.  ID counter?  instance number?  monotonic_t?  stat_t?
+
+> On 11-Nov-2020, at 3:45 AM, Shuah Khan <skhan@linuxfoundation.org> =
+wrote:
+>=20
+> On 11/6/20 12:40 AM, Sachin Sant wrote:
+>> ---
+>> V2: Replace all instances of clone_args by __clone_args
+>> ---
+>> diff --git a/a/tools/testing/selftests/cgroup/cgroup_util.c =
+b/b/tools/testing/selftests/cgroup/cgroup_util.c
+>> index 05853b0..0270146 100644
+>> --- a/a/tools/testing/selftests/cgroup/cgroup_util.c
+>> +++ b/b/tools/testing/selftests/cgroup/cgroup_util.c
+>=20
+> Not sure how you generated the patch. I had to use git am -p2
+>=20
+Sorry about that. Not sure what happened. Thanks.
+
+-Sachin
