@@ -2,98 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBEB2AEE01
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 10:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87182AF0B0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 13:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgKKJmw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Nov 2020 04:42:52 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:2060 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbgKKJms (ORCPT
+        id S1726111AbgKKMep (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Nov 2020 07:34:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30734 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726149AbgKKMep (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 04:42:48 -0500
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4CWKX06cr2zVmv9;
-        Wed, 11 Nov 2020 17:42:24 +0800 (CST)
-Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
- dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Wed, 11 Nov 2020 17:42:42 +0800
-Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
- dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.1913.007;
- Wed, 11 Nov 2020 17:42:42 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     John Garry <john.garry@huawei.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>
-CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Will Deacon" <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Linuxarm <linuxarm@huawei.com>, "xuwei (O)" <xuwei5@huawei.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: RE: [PATCH v3 1/2] dma-mapping: add benchmark support for streaming
- DMA APIs
-Thread-Topic: [PATCH v3 1/2] dma-mapping: add benchmark support for streaming
- DMA APIs
-Thread-Index: AQHWsO+tiT3rvc8AvUKektYgWKvLn6nBDT6Q//+EgQCAAZyYMIAABiqAgACFcyA=
-Date:   Wed, 11 Nov 2020 09:42:42 +0000
-Message-ID: <fe3cda84536849dea5cc48fe050a1cbe@hisilicon.com>
-References: <20201102080646.2180-1-song.bao.hua@hisilicon.com>
- <20201102080646.2180-2-song.bao.hua@hisilicon.com>
- <eb317e5050b944c3aec97c5fb64a74cb@hisilicon.com>
- <0658ee16-d539-61c5-1d39-77d50f559803@huawei.com>
- <88e91063b7f041bda7d147438f1c4621@hisilicon.com>
- <51f0c148-e2e3-e084-4021-ec5883919436@huawei.com>
-In-Reply-To: <51f0c148-e2e3-e084-4021-ec5883919436@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.200.81]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 11 Nov 2020 07:34:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605098084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9UPteIZ4dDhB/+pPE2bQPs1AX/E6MYzd/3oM1Nc1Zh0=;
+        b=bc15j/NOyoLPIUltfHr/y6TeGU2cM1Go93XtkYg8AiViaGYbcP0zMht/7B8s26oAx3Y0VN
+        3fh9ryHE78zgN5MLu6LArG2rk4NY3wu74iVjzJ+ITP+stkbx7KnrNNBKkG8I128nhWtLl5
+        VQH2iqldTQPITyLtvfdKTGWE3EEwi70=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-134-LJ_6VosUOn6Q7fv7WCYtKw-1; Wed, 11 Nov 2020 07:34:42 -0500
+X-MC-Unique: LJ_6VosUOn6Q7fv7WCYtKw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5D60B188C126;
+        Wed, 11 Nov 2020 12:34:41 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.40.193.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5EF9A1002C3E;
+        Wed, 11 Nov 2020 12:34:34 +0000 (UTC)
+Date:   Wed, 11 Nov 2020 13:34:31 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v2 0/5] Add a dirty logging performance test
+Message-ID: <20201111123431.k5ta7enky6k4b66j@kamzik.brq.redhat.com>
+References: <20201103234952.1626730-1-bgardon@google.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201103234952.1626730-1-bgardon@google.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSm9obiBHYXJyeQ0KPiBT
-ZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDExLCAyMDIwIDEwOjM3IFBNDQo+IFRvOiBTb25nIEJh
-byBIdWEgKEJhcnJ5IFNvbmcpIDxzb25nLmJhby5odWFAaGlzaWxpY29uLmNvbT47DQo+IGlvbW11
-QGxpc3RzLmxpbnV4LWZvdW5kYXRpb24ub3JnOyBoY2hAbHN0LmRlOyByb2Jpbi5tdXJwaHlAYXJt
-LmNvbTsNCj4gbS5zenlwcm93c2tpQHNhbXN1bmcuY29tDQo+IENjOiBsaW51eC1rc2VsZnRlc3RA
-dmdlci5rZXJuZWwub3JnOyBXaWxsIERlYWNvbiA8d2lsbEBrZXJuZWwub3JnPjsgSm9lcmcNCj4g
-Um9lZGVsIDxqb3JvQDhieXRlcy5vcmc+OyBMaW51eGFybSA8bGludXhhcm1AaHVhd2VpLmNvbT47
-IHh1d2VpIChPKQ0KPiA8eHV3ZWk1QGh1YXdlaS5jb20+OyBTaHVhaCBLaGFuIDxzaHVhaEBrZXJu
-ZWwub3JnPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYzIDEvMl0gZG1hLW1hcHBpbmc6IGFkZCBi
-ZW5jaG1hcmsgc3VwcG9ydCBmb3INCj4gc3RyZWFtaW5nIERNQSBBUElzDQo+IA0KPiBPbiAxMS8x
-MS8yMDIwIDAxOjI5LCBTb25nIEJhbyBIdWEgKEJhcnJ5IFNvbmcpIHdyb3RlOg0KPiA+IEknZCBs
-aWtlIHRvIHRoaW5rIGNoZWNraW5nIHRoaXMgaGVyZSB3b3VsZCBiZSBvdmVyZGVzaWduLiBXZSBq
-dXN0IGdpdmUgdXNlcnMgdGhlDQo+ID4gZnJlZWRvbSB0byBiaW5kIGFueSBkZXZpY2UgdGhleSBj
-YXJlIGFib3V0IHRvIHRoZSBiZW5jaG1hcmsgZHJpdmVyLiBVc3VhbGx5DQo+ID4gdGhhdCBtZWFu
-cyBhIHJlYWwgaGFyZHdhcmUgZWl0aGVyIGJlaGluZCBhbiBJT01NVSBvciB0aHJvdWdoIGEgZGly
-ZWN0DQo+ID4gbWFwcGluZy4NCj4gPg0KPiA+IGlmIGZvciBhbnkgcmVhc29uIHVzZXJzIHB1dCBh
-IHdyb25nICJkZXZpY2UiLCB0aGF0IGlzIHRoZSBjaG9pY2Ugb2YgdXNlcnMuDQo+IA0KPiBSaWdo
-dCwgYnV0IGlmIHRoZSBkZXZpY2Ugc2ltcGx5IGhhcyBubyBETUEgb3BzIHN1cHBvcnRlZCwgaXQg
-Y291bGQgYmUNCj4gYmV0dGVyIHRvIGZhaWwgdGhlIHByb2JlIHJhdGhlciB0aGFuIGxldCB0aGVt
-IHRyeSB0aGUgdGVzdCBhdCBhbGwuDQo+IA0KPiAgIEFueWhvdywNCj4gPiB0aGUgYmVsb3cgY29k
-ZSB3aWxsIHN0aWxsIGhhbmRsZSBpdCBwcm9wZXJseSBhbmQgdXNlcnMgd2lsbCBnZXQgYSByZXBv
-cnQgaW4gd2hpY2gNCj4gPiBldmVyeXRoaW5nIGlzIHplcm8uDQo+ID4NCj4gPiArc3RhdGljIGlu
-dCBtYXBfYmVuY2htYXJrX3RocmVhZCh2b2lkICpkYXRhKQ0KPiA+ICt7DQo+ID4gLi4uDQo+ID4g
-KwkJZG1hX2FkZHIgPSBkbWFfbWFwX3NpbmdsZShtYXAtPmRldiwgYnVmLCBQQUdFX1NJWkUsDQo+
-IERNQV9CSURJUkVDVElPTkFMKTsNCj4gPiArCQlpZiAodW5saWtlbHkoZG1hX21hcHBpbmdfZXJy
-b3IobWFwLT5kZXYsIGRtYV9hZGRyKSkpIHsNCj4gDQo+IERvaW5nIHRoaXMgaXMgcHJvcGVyLCBi
-dXQgSSBhbSBub3Qgc3VyZSBpZiB0aGlzIHRlbGxzIHRoZSB1c2VyIHRoZSByZWFsDQo+IHByb2Js
-ZW0uDQoNClRlbGxpbmcgdXNlcnMgdGhlIHJlYWwgcHJvYmxlbSBpc24ndCB0aGUgZGVzaWduIGlu
-dGVudGlvbiBvZiB0aGlzIHRlc3QNCmJlbmNobWFyay4gSXQgaXMgbmV2ZXIgdGhlIHB1cnBvc2Ug
-b2YgdGhpcyBiZW5jaG1hcmsuDQoNCj4gDQo+ID4gKwkJCXByX2VycigiZG1hX21hcF9zaW5nbGUg
-ZmFpbGVkIG9uICVzXG4iLA0KPiBkZXZfbmFtZShtYXAtPmRldikpOw0KPiANCj4gTm90IHN1cmUg
-d2h5IHVzZSBwcl9lcnIoKSBvdmVyIGRldl9lcnIoKS4NCg0KV2UgYXJlIHJlcG9ydGluZyBlcnJv
-cnMgaW4gZG1hLWJlbmNobWFyayBkcml2ZXIgcmF0aGVyIHRoYW4gcmVwb3J0aW5nIGVycm9ycw0K
-aW4gdGhlIGRyaXZlciBvZiB0aGUgc3BlY2lmaWMgZGV2aWNlLiBJIHRoaW5rIHdlIHNob3VsZCBo
-YXZlICJkbWEtYmVuY2htYXJrIg0KYXMgdGhlIHByZWZpeCB3aGlsZSBwcmludGluZyB0aGUgbmFt
-ZSBvZiB0aGUgZGV2aWNlIGJ5IGRldl9uYW1lKCkuDQoNCj4gDQo+ID4gKwkJCXJldCA9IC1FTk9N
-RU07DQo+ID4gKwkJCWdvdG8gb3V0Ow0KPiA+ICsJCX0NCj4gDQo+IFRoYW5rcywNCj4gSm9obg0K
-DQpUaGFua3MNCkJhcnJ5DQoNCg==
+On Tue, Nov 03, 2020 at 03:49:47PM -0800, Ben Gardon wrote:
+> Currently KVM lacks a simple, userspace agnostic, performance benchmark for
+> dirty logging. Such a benchmark will be beneficial for ensuring that dirty
+> logging performance does not regress, and to give a common baseline for
+> validating performance improvements. The dirty log perf test introduced in
+> this series builds on aspects of the existing demand paging perf test and
+> provides time-based performance metrics for enabling and disabling dirty
+> logging, getting the dirty log, and dirtying memory.
+> 
+> While the test currently only has a build target for x86, I expect it will
+> work on, or be easily modified to support other architectures.
+> 
+> This series was tested by running the following invocations on an Intel
+> Skylake machine after apply all commits in the series:
+> dirty_log_perf_test -b 20m -i 100 -v 64
+> dirty_log_perf_test -b 20g -i 5 -v 4
+> dirty_log_perf_test -b 4g -i 5 -v 32
+> demand_paging_test -b 20m -v 64
+> demand_paging_test -b 20g -v 4
+> demand_paging_test -b 4g -v 32
+> All behaved as expected.
+> 
+> v1 -> v2 changes:
+
+Considering v1 got applied,
+
+> (in response to comments from Peter Xu)
+> - Removed pr_debugs from main test thread while waiting on vCPUs to reduce
+>   log spam
+
+I didn't look at this. Maybe you and Peter can decide if a pr_debug
+cleanup patch needs to be sent.
+
+> - Fixed a bug in iteration counting that caused the population stage to be
+>   counted as part of the first dirty logging pass
+> - Fixed a bug in which the test failed to wait for the population stage for all
+>   but the first vCPU.
+
+I didn't try to confirm that these fixes were in. I do see that Paolo
+added 6d6a18fdde8b ("KVM: selftests: allow two iterations of
+dirty_log_perf_test"), which sounds like it might be fixing the same thing
+as your first "Fixed" bullet above. Anyway, you may want to check the 
+current code to see if any additional fixes should be sent.
+
+> - Refactored the common code in perf_test_util.c/h
+
+I did this part in my "Cleanups, take 2" series
+
+> - Moved testing description to cover letter
+> - Renamed timespec_diff_now to timespec_elapsed
+
+These two would have been nice, but oh well...
+
+Thanks,
+drew
+
