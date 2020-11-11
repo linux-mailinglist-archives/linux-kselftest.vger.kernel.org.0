@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6F32AFA81
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 22:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9ABE2AFA74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 22:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727202AbgKKVfI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Nov 2020 16:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S1727238AbgKKVe5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Nov 2020 16:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727267AbgKKVez (ORCPT
+        with ESMTP id S1727302AbgKKVe5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 16:34:55 -0500
-Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [IPv6:2001:1600:4:17::42a8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C12C0617A7
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2020 13:34:55 -0800 (PST)
+        Wed, 11 Nov 2020 16:34:57 -0500
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc08])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D57C0613D1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2020 13:34:57 -0800 (PST)
 Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdL62XsJzlhbQT;
-        Wed, 11 Nov 2020 22:34:54 +0100 (CET)
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdL733bMzlhdRK;
+        Wed, 11 Nov 2020 22:34:55 +0100 (CET)
 Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdL60nM9zlh8T2;
-        Wed, 11 Nov 2020 22:34:54 +0100 (CET)
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdL71P1wzlh8T6;
+        Wed, 11 Nov 2020 22:34:55 +0100 (CET)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
         "Serge E . Hallyn" <serge@hallyn.com>
@@ -30,9 +30,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v1 8/9] landlock: Add help to enable Landlock as a stacked LSM
-Date:   Wed, 11 Nov 2020 22:34:41 +0100
-Message-Id: <20201111213442.434639-9-mic@digikod.net>
+Subject: [PATCH v1 9/9] landlock: Extend documentation about limitations
+Date:   Wed, 11 Nov 2020 22:34:42 +0100
+Message-Id: <20201111213442.434639-10-mic@digikod.net>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201111213442.434639-1-mic@digikod.net>
 References: <20201111213442.434639-1-mic@digikod.net>
@@ -43,82 +43,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When using make oldconfig with a previous configuration already
-including the CONFIG_LSM variable, no question is asked to update its
-content.
-
-Update the Kconfig help and add hints to the sample to help user
-understand the required configuration.
-
-This also cut long strings to fit in 100 columns.
+Explain limitations for the maximum number of stacked ruleset, and the
+memory usage restrictions.
 
 Cc: James Morris <jmorris@namei.org>
 Cc: Jann Horn <jannh@google.com>
 Cc: Serge E. Hallyn <serge@hallyn.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- samples/landlock/sandboxer.c | 21 +++++++++++++++++++--
- security/landlock/Kconfig    |  4 +++-
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ Documentation/userspace-api/landlock.rst | 17 +++++++++++++++++
+ security/landlock/syscall.c              |  2 ++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
-index ee5ec1203cb7..127fb063c23a 100644
---- a/samples/landlock/sandboxer.c
-+++ b/samples/landlock/sandboxer.c
-@@ -169,7 +169,8 @@ int main(const int argc, char *const argv[], char *const *const envp)
- 		fprintf(stderr, "usage: %s=\"...\" %s=\"...\" %s <cmd> [args]...\n\n",
- 				ENV_FS_RO_NAME, ENV_FS_RW_NAME, argv[0]);
- 		fprintf(stderr, "Launch a command in a restricted environment.\n\n");
--		fprintf(stderr, "Environment variables containing paths, each separated by a colon:\n");
-+		fprintf(stderr, "Environment variables containing paths, "
-+				"each separated by a colon:\n");
- 		fprintf(stderr, "* %s: list of paths allowed to be used in a read-only way.\n",
- 				ENV_FS_RO_NAME);
- 		fprintf(stderr, "* %s: list of paths allowed to be used in a read-write way.\n",
-@@ -185,6 +186,21 @@ int main(const int argc, char *const argv[], char *const *const envp)
- 	ruleset_fd = landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
- 	if (ruleset_fd < 0) {
- 		perror("Failed to create a ruleset");
-+		switch (errno) {
-+		case ENOSYS:
-+			fprintf(stderr, "Hint: Landlock is not supported by the current kernel. "
-+					"To support it, build the kernel with "
-+					"CONFIG_SECURITY_LANDLOCK=y and prepend "
-+					"\"landlock,\" to the content of CONFIG_LSM.\n");
-+			break;
-+		case EOPNOTSUPP:
-+			fprintf(stderr, "Hint: Landlock is currently disabled. "
-+					"It can be enabled in the kernel configuration by "
-+					"prepending \"landlock,\" to the content of CONFIG_LSM, "
-+					"or at boot time by setting the same content to the "
-+					"\"lsm\" kernel parameter.\n");
-+			break;
-+		}
- 		return 1;
- 	}
- 	if (populate_ruleset(ENV_FS_RO_NAME, ruleset_fd,
-@@ -210,7 +226,8 @@ int main(const int argc, char *const argv[], char *const *const envp)
- 	execvpe(cmd_path, cmd_argv, envp);
- 	fprintf(stderr, "Failed to execute \"%s\": %s\n", cmd_path,
- 			strerror(errno));
--	fprintf(stderr, "Hint: access to the binary, the interpreter or shared libraries may be denied.\n");
-+	fprintf(stderr, "Hint: access to the binary, the interpreter or "
-+			"shared libraries may be denied.\n");
- 	return 1;
+diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+index 8f727de20479..7e83e5def1bc 100644
+--- a/Documentation/userspace-api/landlock.rst
++++ b/Documentation/userspace-api/landlock.rst
+@@ -186,6 +186,23 @@ Enforcing a ruleset
+ Current limitations
+ ===================
  
- err_close_ruleset:
-diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
-index cbf88bb7fd97..43e5b0bb0706 100644
---- a/security/landlock/Kconfig
-+++ b/security/landlock/Kconfig
-@@ -16,4 +16,6 @@ config SECURITY_LANDLOCK
++Ruleset layers
++--------------
++
++There is a limit of 64 layers of stacked rulesets.  This can be an issue for a
++task willing to enforce a new ruleset in complement to its 64 inherited
++rulesets.  Once this limit is reached, sys_landlock_enforce_ruleset_current()
++returns E2BIG.  It is then strongly suggested to carefully build rulesets once
++in the life of a thread, especially for applications able to launch other
++applications which may also want to sandbox themselves (e.g. shells, container
++managers, etc.).
++
++Memory usage
++------------
++
++Kernel memory allocated to create rulesets is accounted and can be restricted
++by the :doc:`/admin-guide/cgroup-v1/memory`.
++
+ File renaming and linking
+ -------------------------
  
- 	  See Documentation/userspace-api/landlock.rst for further information.
- 
--	  If you are unsure how to answer this question, answer N.
-+	  If you are unsure how to answer this question, answer N.  Otherwise, you
-+	  should also prepend "landlock," to the content of CONFIG_LSM to enable
-+	  Landlock at boot time.
+diff --git a/security/landlock/syscall.c b/security/landlock/syscall.c
+index 543ae36cd339..045bcac79e17 100644
+--- a/security/landlock/syscall.c
++++ b/security/landlock/syscall.c
+@@ -361,6 +361,8 @@ SYSCALL_DEFINE4(landlock_add_rule,
+  * - EPERM: @ruleset_fd has no read access to the underlying ruleset, or the
+  *   current thread is not running with no_new_privs, or it doesn't have
+  *   CAP_SYS_ADMIN in its namespace.
++ * - E2BIG: The maximum number of stacked rulesets is reached for the current
++ *   task.
+  */
+ SYSCALL_DEFINE2(landlock_enforce_ruleset_current,
+ 		const int, ruleset_fd, const __u32, flags)
 -- 
 2.29.2
 
