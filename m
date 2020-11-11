@@ -2,112 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C87182AF0B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 13:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BC52AF5B1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Nov 2020 17:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbgKKMep (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Nov 2020 07:34:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30734 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726149AbgKKMep (ORCPT
+        id S1727297AbgKKQDc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Nov 2020 11:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgKKQDZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 07:34:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605098084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9UPteIZ4dDhB/+pPE2bQPs1AX/E6MYzd/3oM1Nc1Zh0=;
-        b=bc15j/NOyoLPIUltfHr/y6TeGU2cM1Go93XtkYg8AiViaGYbcP0zMht/7B8s26oAx3Y0VN
-        3fh9ryHE78zgN5MLu6LArG2rk4NY3wu74iVjzJ+ITP+stkbx7KnrNNBKkG8I128nhWtLl5
-        VQH2iqldTQPITyLtvfdKTGWE3EEwi70=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-134-LJ_6VosUOn6Q7fv7WCYtKw-1; Wed, 11 Nov 2020 07:34:42 -0500
-X-MC-Unique: LJ_6VosUOn6Q7fv7WCYtKw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5D60B188C126;
-        Wed, 11 Nov 2020 12:34:41 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.40.193.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5EF9A1002C3E;
-        Wed, 11 Nov 2020 12:34:34 +0000 (UTC)
-Date:   Wed, 11 Nov 2020 13:34:31 +0100
-From:   Andrew Jones <drjones@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v2 0/5] Add a dirty logging performance test
-Message-ID: <20201111123431.k5ta7enky6k4b66j@kamzik.brq.redhat.com>
-References: <20201103234952.1626730-1-bgardon@google.com>
+        Wed, 11 Nov 2020 11:03:25 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AAEC0613D4
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2020 08:03:23 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id k1so2409181ilc.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2020 08:03:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=t1jRZwSuuEQg/bscnGGcsBqPGqmw90tTjNeAiADGZWQ=;
+        b=J0hJSJOtZ8cKp8g+AeRYn4zxI0z474RogLJ5yTPblSThyhiNsosQswbzULN0LbKveR
+         X0HAP1BB/hEjAalzEOtQYXHKBPj76Ny52sSHtoN3iZ+Hs8inttTe9EdPQNaO01FSCro6
+         PYFW08h9SJjByeNV57EQfbTW7Znk7xIl6IRI0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=t1jRZwSuuEQg/bscnGGcsBqPGqmw90tTjNeAiADGZWQ=;
+        b=B2j7Fq4nmBRBn3BUpJEvR1ShQLG6KISMwSksJV+11Mgdmt9CJN6LPKZ9aZY/h3pu/Z
+         ODTUapF5mz5Wcy3lBOdXRaZ+VmOLsRGxYbD0H9MpCC3/wohRaD9fyHO9OnyciYu9S9IH
+         XakAt22IN0agAph7cFdS5gR/ms+xZ40hJxt86qDSdCNZnhW3xcx4BMgN6Nqd3jqzIIaH
+         loECrBy5WVAjei8B6+P8ivcU/TY1qijf92MmNLvC4zx3Vym+H9V2BbRLuKqY/SKZ7A92
+         zKXQX73kZpSSYiR+G4cezbe0anlW/krOMYlRrRaOGdd66JDXC9UutghIOT+aGNnCADtk
+         5ilQ==
+X-Gm-Message-State: AOAM5315naOVJnG77UpymShga5s3i+Zuwc1nlAVFFulOVZRgpiOX2nm6
+        AE0oVfs0zE7L3s9BMBk0sSPJFw==
+X-Google-Smtp-Source: ABdhPJzfuPKbLPy0S959f+cmN74uBmhaZrB/aTXCrRPM53UdGcZ4oGHwyut2AWmWt1ZgJZjUJccyXg==
+X-Received: by 2002:a92:6c11:: with SMTP id h17mr12292757ilc.270.1605110603170;
+        Wed, 11 Nov 2020 08:03:23 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id x14sm1533054ior.7.2020.11.11.08.03.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Nov 2020 08:03:22 -0800 (PST)
+Subject: Re: [PATCH 00/13] Introduce seqnum_ops
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, skhan@linuxfoundation.org
+References: <cover.1605027593.git.skhan@linuxfoundation.org>
+ <20201111043304.GS17076@casper.infradead.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e84de5d0-f2b2-5481-eb8e-47370d632c4d@linuxfoundation.org>
+Date:   Wed, 11 Nov 2020 09:03:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201103234952.1626730-1-bgardon@google.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <20201111043304.GS17076@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 03:49:47PM -0800, Ben Gardon wrote:
-> Currently KVM lacks a simple, userspace agnostic, performance benchmark for
-> dirty logging. Such a benchmark will be beneficial for ensuring that dirty
-> logging performance does not regress, and to give a common baseline for
-> validating performance improvements. The dirty log perf test introduced in
-> this series builds on aspects of the existing demand paging perf test and
-> provides time-based performance metrics for enabling and disabling dirty
-> logging, getting the dirty log, and dirtying memory.
+On 11/10/20 9:33 PM, Matthew Wilcox wrote:
+> On Tue, Nov 10, 2020 at 12:53:26PM -0700, Shuah Khan wrote:
+>> There are a number of atomic_t usages in the kernel where atomic_t api
+>> is used strictly for counting sequence numbers and other statistical
+>> counters and not for managing object lifetime.
 > 
-> While the test currently only has a build target for x86, I expect it will
-> work on, or be easily modified to support other architectures.
+> We already have something in Linux called a sequence counter, and it's
+> different from this.  ID counter?  instance number?  monotonic_t?  stat_t?
 > 
-> This series was tested by running the following invocations on an Intel
-> Skylake machine after apply all commits in the series:
-> dirty_log_perf_test -b 20m -i 100 -v 64
-> dirty_log_perf_test -b 20g -i 5 -v 4
-> dirty_log_perf_test -b 4g -i 5 -v 32
-> demand_paging_test -b 20m -v 64
-> demand_paging_test -b 20g -v 4
-> demand_paging_test -b 4g -v 32
-> All behaved as expected.
-> 
-> v1 -> v2 changes:
 
-Considering v1 got applied,
+No results for monotonic_t or stat_t. Can you give me a pointer to what
+your referring to.
 
-> (in response to comments from Peter Xu)
-> - Removed pr_debugs from main test thread while waiting on vCPUs to reduce
->   log spam
-
-I didn't look at this. Maybe you and Peter can decide if a pr_debug
-cleanup patch needs to be sent.
-
-> - Fixed a bug in iteration counting that caused the population stage to be
->   counted as part of the first dirty logging pass
-> - Fixed a bug in which the test failed to wait for the population stage for all
->   but the first vCPU.
-
-I didn't try to confirm that these fixes were in. I do see that Paolo
-added 6d6a18fdde8b ("KVM: selftests: allow two iterations of
-dirty_log_perf_test"), which sounds like it might be fixing the same thing
-as your first "Fixed" bullet above. Anyway, you may want to check the 
-current code to see if any additional fixes should be sent.
-
-> - Refactored the common code in perf_test_util.c/h
-
-I did this part in my "Cleanups, take 2" series
-
-> - Moved testing description to cover letter
-> - Renamed timespec_diff_now to timespec_elapsed
-
-These two would have been nice, but oh well...
-
-Thanks,
-drew
-
+thanks,
+-- Shuah
