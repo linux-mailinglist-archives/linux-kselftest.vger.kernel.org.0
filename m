@@ -2,107 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0076F2B0BF8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Nov 2020 19:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AF02B0C47
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Nov 2020 19:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726779AbgKLSA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Nov 2020 13:00:26 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:15999 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbgKLSAV (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Nov 2020 13:00:21 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fad782f0001>; Thu, 12 Nov 2020 10:00:15 -0800
-Received: from [10.2.174.128] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Nov
- 2020 18:00:15 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-CC:     <linux-mm@kvack.org>, Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Roman Gushchin <guro@fb.com>,
+        id S1726181AbgKLSHi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Nov 2020 13:07:38 -0500
+Received: from mga06.intel.com ([134.134.136.31]:20332 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726041AbgKLSHh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 12 Nov 2020 13:07:37 -0500
+IronPort-SDR: gRjVopDRjOU7lZ31rYyQ8ZU1huST6gYGZtrTRIyrusKurs+j5Iie6EeZ0M2zB5Da7/LQkB8LsQ
+ XqT5Rt+FJDdA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9803"; a="231973758"
+X-IronPort-AV: E=Sophos;i="5.77,472,1596524400"; 
+   d="scan'208";a="231973758"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2020 10:07:36 -0800
+IronPort-SDR: Dk7/kHYG/57BQA7UZ4IpiePPgDyoO6723TOWdUeiCbNZ0mvdoNMu9c3Vvhw0HyV/RXBIJcH1w4
+ xKhvu7A4EO0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,472,1596524400"; 
+   d="scan'208";a="366439608"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Nov 2020 10:07:34 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 84851D2; Thu, 12 Nov 2020 20:07:33 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        "Michal Hocko" <mhocko@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Nellans <dnellans@nvidia.com>
-Subject: Re: [RFC PATCH 2/6] mm: memcg: make memcg huge page split support any
- order split.
-Date:   Thu, 12 Nov 2020 13:00:14 -0500
-X-Mailer: MailMate (1.13.2r5673)
-Message-ID: <80CEFCD9-E62A-4013-8F14-3A30D808E768@nvidia.com>
-In-Reply-To: <021b000f-dfc9-59fc-77e4-fdeaee1c108e@nvidia.com>
-References: <20201111204008.21332-1-zi.yan@sent.com>
- <20201111204008.21332-3-zi.yan@sent.com>
- <021b000f-dfc9-59fc-77e4-fdeaee1c108e@nvidia.com>
+        kunit-dev@googlegroups.com, Shuah Khan <skhan@linuxfoundation.org>,
+        Vitor Massaru Iha <vitor@massaru.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 1/6] lib/list_kunit: Follow new file name convention for KUnit tests
+Date:   Thu, 12 Nov 2020 20:07:27 +0200
+Message-Id: <20201112180732.75589-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed;
-        boundary="=_MailMate_E5F9F4CE-9B7E-42EA-B152-28A177484E2C_=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1605204015; bh=g53dneiexd4GW1IkrhDuYWbJ6jvgYe3JIzOXNEszinE=;
-        h=From:To:CC:Subject:Date:X-Mailer:Message-ID:In-Reply-To:
-         References:MIME-Version:Content-Type:X-Originating-IP:
-         X-ClientProxiedBy;
-        b=bLGyCMLGK7OYvW5lKw7opbtx4226RbhQkRK9bAFrK1cbJg/LIwSpbfW9wB8Drhipe
-         3+GizQ54sUkTWBdku9JsnHeZhYlkeEHw1klwumVdl+9fDRUqPRIJv+hyW17QToa0GD
-         8UblEVrquhge03MJrXzRuCN8XjF8eUkyHt2jvAipbNGSfqUrWdsa1B8rb1CFMjFWu5
-         kgu43d38Dg9WcyJhbVLjoufDcNkF2G9gES3SY2vXbIC5JD8ZPwtEdYMxdAQIYdh7TD
-         B7Mlk8RhprfEN6gb4wpLaTzwzN/WKGx3sj+vhUClqnTkF03PJnQ3H8UwgArBPbfO+y
-         lDCAA2EFaqcig==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=_MailMate_E5F9F4CE-9B7E-42EA-B152-28A177484E2C_=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Follow new file name convention for the KUnit tests.
+Since we have lib/*test*.c in a few variations,
+use 'kunit' suffix to distinguish usual test cases
+with KUnit-based ones.
 
-On 12 Nov 2020, at 12:58, Ralph Campbell wrote:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v4: added tag (Brendan)
+ MAINTAINERS                       | 2 +-
+ lib/Makefile                      | 2 +-
+ lib/{list-test.c => list_kunit.c} | 0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ rename lib/{list-test.c => list_kunit.c} (100%)
 
-> On 11/11/20 12:40 PM, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> It reads thp_nr_pages and splits to provided new_nr. It prepares for
->> upcoming changes to support split huge page to any lower order.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->
-> Looks OK to me.
-> Reviewed-by: Ralph Campbell <rcampbell@nvidia.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f1f088a29bc2..5901b817d0bc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10222,7 +10222,7 @@ M:	David Gow <davidgow@google.com>
+ L:	linux-kselftest@vger.kernel.org
+ L:	kunit-dev@googlegroups.com
+ S:	Maintained
+-F:	lib/list-test.c
++F:	lib/list_kunit.c
+ 
+ LITEX PLATFORM
+ M:	Karol Gugala <kgugala@antmicro.com>
+diff --git a/lib/Makefile b/lib/Makefile
+index ce45af50983a..9d78ef73d6ed 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -349,6 +349,6 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
+ 
+ # KUnit tests
+ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
+-obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
++obj-$(CONFIG_LIST_KUNIT_TEST) += list_kunit.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) += test_bits.o
+diff --git a/lib/list-test.c b/lib/list_kunit.c
+similarity index 100%
+rename from lib/list-test.c
+rename to lib/list_kunit.c
+-- 
+2.28.0
 
-Thanks.
-
-=E2=80=94
-Best Regards,
-Yan Zi
-
---=_MailMate_E5F9F4CE-9B7E-42EA-B152-28A177484E2C_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAl+teC4PHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqK5rIP/iMtjzyC5MTmgbC3+6g2Hk7D6eSSo5IEDdWI
-ASxtHTw/wztOlCreWfH8wNMKiwz2DCMcbjnuJqQhqrCJb4OU9Q05Bm1gcIaTs0hG
-nmYLSfa03KF3WVC9TwxCguudsYwUrZa+yYFEuFMFfQe9FmlozHDH/YMt/N/NgYMg
-6csfWeIMH8tFJ76d46nxBFLt7WAIVMH5XPd1mX/bF5pr7kL704Iv41RumXn/3iJR
-WW8aO4FnzH9e09Nn8l8QWnaHSkBcXg8NcfqtR39g+sqcsjOY8aodwnnX5aTLLto8
-gQFN9LUXUeSrPvw5B4+rp2vPSNtakOcTS8HVxEwvE9QVELv6PNx93UlPNPRjNETi
-ALk9mlZBSKlyXL51/93vCzYdJTBMi5hgCvBUMTHDy4GTfsJUAaFg4RyQ03K0xCi4
-fkMwLyU8ih2l9Sb03CVwkhU+omDA0a561BQ/AA4XObrTSIEPkXmHGrV26L+q6Vd8
-xaNNjTWd20nu4BCymYC0PbLBqPe3ulv7bqxJSW5RsYSugvU+tBWrftP/pgh/e/11
-MfLZYEfWGaEjZyTvuL/eiSKU+7chVRzciLhJrvbr1BzYxSp3Ic1RWOLN0/8tJ99l
-uZtRUCdQS2eOqo3hSzVt9H6UjFVdIGFMXRuS+MIGJQueM0JSKoZ9uZ7I3IwdQKio
-FZBrPW7X
-=wQ47
------END PGP SIGNATURE-----
-
---=_MailMate_E5F9F4CE-9B7E-42EA-B152-28A177484E2C_=--
