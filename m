@@ -2,53 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88132AFEAA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Nov 2020 06:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EF72AFE9C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Nov 2020 06:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729528AbgKLFjX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S1729608AbgKLFjX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Thu, 12 Nov 2020 00:39:23 -0500
-Received: from mail-proxy101.phy.heteml.jp ([157.7.189.101]:38188 "EHLO
-        mail-proxy101.phy.heteml.jp" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728344AbgKLDkS (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 22:40:18 -0500
-X-Greylist: delayed 888 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Nov 2020 22:40:14 EST
-Received: from mail-proxy101.phy.heteml.jp (localhost [127.0.0.1])
-        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTP id 5D4F41661124;
-        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-Received: from 127.0.0.1 (127.0.0.1)
- by mail-proxy101.phy.heteml.jp (HETEML-Fsecure);
- Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-X-Virus-Status: clean(HETEML-Fsecure)
-Received: from User (unknown [52.231.203.57])
-        (Authenticated sender: form@healingart-n.jp)
-        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTPA;
-        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-Reply-To: <reemhashimymail@gmail.com>
-From:   "Reem" <form@healingart-n.jp>
-Subject: Hello Friend  12/11/2020
-Date:   Thu, 12 Nov 2020 03:25:24 -0000
+Received: from namei.org ([65.99.196.166]:52612 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729185AbgKLFAH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 12 Nov 2020 00:00:07 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 0AC4xj4d005412;
+        Thu, 12 Nov 2020 04:59:45 GMT
+Date:   Thu, 12 Nov 2020 15:59:45 +1100 (AEDT)
+From:   James Morris <jmorris@namei.org>
+To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+cc:     Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v1 0/9] Landlock fixes
+In-Reply-To: <20201111213442.434639-1-mic@digikod.net>
+Message-ID: <alpine.LRH.2.21.2011121559140.5257@namei.org>
+References: <20201111213442.434639-1-mic@digikod.net>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20201112032522.5D4F41661124@mail-proxy101.phy.heteml.jp>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/mixed; boundary="1665246916-1592972126-1605157185=:5257"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-My name is Reem Hashimy, the Emirates Minister of State and Managing Director of the United Arab Emirates (Dubai) World Expo 2020 Committee which has been postponed to October 2021 to March 2022 because of the Covid-19 pandemic.
- 
-I am writing to you to manage the funds I received as financial gratification from various foreign companies I assisted to receive a participation approval to the coming event. The amount is $44,762,906.00 United States dollars. But I can not personally manage the fund in my country because of the sensitive nature of my office and the certain restriction on married Muslim women.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-For this reason, an agreement was reached with a consulting firm to direct the various financial gifts into an open beneficiary account in my name with a bank where it will be possible for me to instruct the transfer of ownership right to a third party for investment purpose; which is the reason I am contacting you to receive the fund and manage it as my investment partner. Note that the fund is NOT connected to any criminal or terrorist activity.
- 
-On your indication of interest with your information to include your name, your phone number and contact mailing address; I will instruct the consulting firm to process the fund from the bank to your country for investment purposes.
+--1665246916-1592972126-1605157185=:5257
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Regards.
-Reem Hashimy.
+On Wed, 11 Nov 2020, Mickaël Salaün wrote:
+
+> Hi,
+> 
+> This patch series fixes some issues and makes the Landlock filesystem
+> access-control more consistent and deterministic when stacking multiple
+> rulesets.  This is checked by current and new tests.  I also extended
+> documentation and example to help users.
+> 
+> This series can be applied on top of
+> https://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git/log/?h=landlock_lsm
+
+Actually, given the number of fixes here, please respin so we get a 
+cleaner initial PR for Linus.
+
+> 
+> Regards,
+> 
+> Mickaël Salaün (9):
+>   landlock: Fix memory allocation error handling
+>   landlock: Cosmetic fixes for filesystem management
+>   landlock: Enforce deterministic interleaved path rules
+>   landlock: Always intersect access rights
+>   landlock: Add extra checks when inserting a rule
+>   selftests/landlock: Extend layout1.inherit_superset
+>   landlock: Clean up get_ruleset_from_fd()
+>   landlock: Add help to enable Landlock as a stacked LSM
+>   landlock: Extend documentation about limitations
+> 
+>  Documentation/userspace-api/landlock.rst   |  17 +++
+>  samples/landlock/sandboxer.c               |  21 +++-
+>  security/landlock/Kconfig                  |   4 +-
+>  security/landlock/fs.c                     |  67 +++++-----
+>  security/landlock/object.c                 |   5 +-
+>  security/landlock/ruleset.c                |  34 ++---
+>  security/landlock/syscall.c                |  24 ++--
+>  tools/testing/selftests/landlock/fs_test.c | 140 +++++++++++++++++++--
+>  8 files changed, 239 insertions(+), 73 deletions(-)
+> 
+> 
+> base-commit: 96b3198c4025c11347651700b77e45a686d78553
+> 
+
+-- 
+James Morris
+<jmorris@namei.org>
+
+--1665246916-1592972126-1605157185=:5257--
