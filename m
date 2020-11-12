@@ -2,202 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE302B0C4C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Nov 2020 19:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF322B0D74
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Nov 2020 20:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbgKLSHn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Nov 2020 13:07:43 -0500
-Received: from mga09.intel.com ([134.134.136.24]:40522 "EHLO mga09.intel.com"
+        id S1726513AbgKLTIo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Nov 2020 14:08:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54958 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726203AbgKLSHn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Nov 2020 13:07:43 -0500
-IronPort-SDR: XBc7Wl6YjEuwzyWv4BdgCF/lBTJb9B05YCzAMxrD1xXHL5kogCyBtwtcvYcJDP80eQ56E9yNB4
- 9jUZQT6bBD3g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9803"; a="170524801"
-X-IronPort-AV: E=Sophos;i="5.77,472,1596524400"; 
-   d="scan'208";a="170524801"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2020 10:07:41 -0800
-IronPort-SDR: u+JcQyIcXV8QsAPOu6wkjD/w8gJIWsqCEOngdZIRbB9B9zeFFxdScBkLM1yl8kW/bDw4DKmG48
- g9qXIUixVdYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,472,1596524400"; 
-   d="scan'208";a="355275608"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 12 Nov 2020 10:07:38 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id BBC1D2AB; Thu, 12 Nov 2020 20:07:33 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kunit-dev@googlegroups.com, Shuah Khan <skhan@linuxfoundation.org>,
-        Vitor Massaru Iha <vitor@massaru.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v4 6/6] lib/cmdline_kunit: Add a new test suite for cmdline API
-Date:   Thu, 12 Nov 2020 20:07:32 +0200
-Message-Id: <20201112180732.75589-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201112180732.75589-1-andriy.shevchenko@linux.intel.com>
-References: <20201112180732.75589-1-andriy.shevchenko@linux.intel.com>
+        id S1726096AbgKLTIo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 12 Nov 2020 14:08:44 -0500
+Received: from kernel.org (unknown [77.125.7.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8D5220B80;
+        Thu, 12 Nov 2020 19:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605208123;
+        bh=xV//yxXQnSWrF+/xUfBz0sg6IFqo/YMvvh+jTSmycog=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AJ2VewNYER4w3booQ/KucmJAPZK4Nm1reG5FJeJdC37e1oDo0gYmUR751y+nFk/Fk
+         KTZnkXVxvIaPUC+PE+K9dv1EbVW82mMGVB67vT5tdx3BmBSmhgCrAaqtZp5v8kMCfS
+         p3TcAbQ8jXyADENOO6QdpyUsgBOodjaN9MdE79nU=
+Date:   Thu, 12 Nov 2020 21:08:27 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v8 2/9] mmap: make mlock_future_check() global
+Message-ID: <20201112190827.GP4758@kernel.org>
+References: <20201110151444.20662-1-rppt@kernel.org>
+ <20201110151444.20662-3-rppt@kernel.org>
+ <9e2fafd7-abb0-aa79-fa66-cd8662307446@redhat.com>
+ <20201110180648.GB4758@kernel.org>
+ <3194b507-a85f-965a-e0eb-512a79ede6a9@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3194b507-a85f-965a-e0eb-512a79ede6a9@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test get_option() for a starter which is provided by cmdline.c.
+On Thu, Nov 12, 2020 at 05:22:00PM +0100, David Hildenbrand wrote:
+> On 10.11.20 19:06, Mike Rapoport wrote:
+> > On Tue, Nov 10, 2020 at 06:17:26PM +0100, David Hildenbrand wrote:
+> > > On 10.11.20 16:14, Mike Rapoport wrote:
+> > > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > > 
+> > > > It will be used by the upcoming secret memory implementation.
+> > > > 
+> > > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> > > > ---
+> > > >    mm/internal.h | 3 +++
+> > > >    mm/mmap.c     | 5 ++---
+> > > >    2 files changed, 5 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/mm/internal.h b/mm/internal.h
+> > > > index c43ccdddb0f6..ae146a260b14 100644
+> > > > --- a/mm/internal.h
+> > > > +++ b/mm/internal.h
+> > > > @@ -348,6 +348,9 @@ static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
+> > > >    extern void mlock_vma_page(struct page *page);
+> > > >    extern unsigned int munlock_vma_page(struct page *page);
+> > > > +extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
+> > > > +			      unsigned long len);
+> > > > +
+> > > >    /*
+> > > >     * Clear the page's PageMlocked().  This can be useful in a situation where
+> > > >     * we want to unconditionally remove a page from the pagecache -- e.g.,
+> > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > index 61f72b09d990..c481f088bd50 100644
+> > > > --- a/mm/mmap.c
+> > > > +++ b/mm/mmap.c
+> > > > @@ -1348,9 +1348,8 @@ static inline unsigned long round_hint_to_min(unsigned long hint)
+> > > >    	return hint;
+> > > >    }
+> > > > -static inline int mlock_future_check(struct mm_struct *mm,
+> > > > -				     unsigned long flags,
+> > > > -				     unsigned long len)
+> > > > +int mlock_future_check(struct mm_struct *mm, unsigned long flags,
+> > > > +		       unsigned long len)
+> > > >    {
+> > > >    	unsigned long locked, lock_limit;
+> > > > 
+> > > 
+> > > So, an interesting question is if you actually want to charge secretmem
+> > > pages against mlock now, or if you want a dedicated secretmem cgroup
+> > > controller instead?
+> > 
+> > Well, with the current implementation there are three limits an
+> > administrator can use to control secretmem limits: mlock, memcg and
+> > kernel parameter.
+> > 
+> > The kernel parameter puts a global upper limit for secretmem usage,
+> > memcg accounts all secretmem allocations, including the unused memory in
+> > large pages caching and mlock allows per task limit for secretmem
+> > mappings, well, like mlock does.
+> > 
+> > I didn't consider a dedicated cgroup, as it seems we already have enough
+> > existing knobs and a new one would be unnecessary.
+> 
+> To me it feels like the mlock() limit is a wrong fit for secretmem. But
+> maybe there are other cases of using the mlock() limit without actually
+> doing mlock() that I am not aware of (most probably :) )?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v4: new patch
- lib/Kconfig.debug   | 11 +++++
- lib/Makefile        |  1 +
- lib/cmdline_kunit.c | 98 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 110 insertions(+)
- create mode 100644 lib/cmdline_kunit.c
+Secretmem does not explicitly calls to mlock() but it does what mlock()
+does and a bit more. Citing mlock(2):
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 6140413174be..b939740f93b7 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2283,6 +2283,17 @@ config LINEAR_RANGES_TEST
- 
- 	  If unsure, say N.
- 
-+config CMDLINE_KUNIT_TEST
-+	tristate "KUnit test for cmdline API"
-+	depends on KUNIT
-+	help
-+	  This builds the cmdline API unit test.
-+	  Tests the logic of API provided by cmdline.c.
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config BITS_TEST
- 	tristate "KUnit test for bits.h"
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index dc76e7d8a453..985c6a8909e0 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -350,5 +350,6 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
- # KUnit tests
- obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
- obj-$(CONFIG_BITS_TEST) += bits_kunit.o
-+obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += linear_ranges_kunit.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list_kunit.o
-diff --git a/lib/cmdline_kunit.c b/lib/cmdline_kunit.c
-new file mode 100644
-index 000000000000..acad1386d54c
---- /dev/null
-+++ b/lib/cmdline_kunit.c
-@@ -0,0 +1,98 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Test cases for API provided by cmdline.c
-+ */
-+
-+#include <kunit/test.h>
-+#include <linux/kernel.h>
-+#include <linux/random.h>
-+#include <linux/string.h>
-+
-+static const char *cmdline_test_strings[] = {
-+	"\"\"", ""  , "=" , "\"-", ","    , "-,"   , ",-"   , "-" ,
-+	"+,"  , "--", ",,", "''" , "\"\",", "\",\"", "-\"\"", "\"",
-+};
-+
-+static const char *cmdline_test_values[] = {
-+	1, 1, 1, 1, 2, 3, 2, 3,
-+	1, 3, 2, 1, 1, 1, 3, 1,
-+};
-+
-+static void cmdline_do_one_test(struct kunit *test, char *in, int rc, int offset)
-+{
-+	const char *fmt = "Pattern: %s";
-+	char *out = in;
-+	int dummy;
-+	int ret;
-+
-+	ret = get_option(&out, &dummy);
-+
-+	KUNIT_EXPECT_EQ_MSG(test, ret, rc, fmt, in);
-+	KUNIT_EXPECT_PTR_EQ_MSG(test, out, in + offset, fmt, in);
-+}
-+
-+static void cmdline_test_noint(struct kunit *test)
-+{
-+	unsigned int i = 0;
-+
-+	do {
-+		const char *str = cmdline_test_strings[i];
-+		int rc = 0;
-+		int offset;
-+
-+		/* Only first and leading '-' will advance the pointer */
-+		offset = !!(*str == '-');
-+		cmdline_do_one_test(test, str, rc, offset);
-+	} while (++i < ARRAY_SIZE(cmdline_test_strings));
-+}
-+
-+static void cmdline_test_lead_int(struct kunit *test)
-+{
-+	unsigned int i = 0;
-+	char in[32];
-+
-+	do {
-+		const char *str = cmdline_test_strings[i];
-+		int rc = cmdline_test_values[i];
-+		int offset;
-+
-+		sprintf(in, "%u%s", get_random_int() % 256, str);
-+		/* Only first '-' after the number will advance the pointer */
-+		offset = strlen(in) - strlen(str) + !!(rc == 2);
-+		cmdline_do_one_test(test, in, rc, offset);
-+	} while (++i < ARRAY_SIZE(cmdline_test_strings));
-+}
-+
-+static void cmdline_test_tail_int(struct kunit *test)
-+{
-+	unsigned int i = 0;
-+	char in[32];
-+
-+	do {
-+		const char *str = cmdline_test_strings[i];
-+		/* When "" or "-" the result will be valid integer */
-+		int rc = strcmp(str, "") ? (strcmp(str, "-") ? 0 : 1) : 1;
-+		int offset;
-+
-+		sprintf(in, "%s%u", str, get_random_int() % 256);
-+		/*
-+		 * Only first and leading '-' not followed by integer
-+		 * will advance the pointer.
-+		 */
-+		offset = rc ? strlen(in) : !!(*str == '-');
-+		cmdline_do_one_test(test, in, rc, offset);
-+	} while (++i < ARRAY_SIZE(cmdline_test_strings));
-+}
-+
-+static struct kunit_case cmdline_test_cases[] = {
-+	KUNIT_CASE(cmdline_test_noint),
-+	KUNIT_CASE(cmdline_test_lead_int),
-+	KUNIT_CASE(cmdline_test_tail_int),
-+	{}
-+};
-+
-+static struct kunit_suite cmdline_test_suite = {
-+	.name = "cmdline",
-+	.test_cases = cmdline_test_cases,
-+};
-+kunit_test_suite(cmdline_test_suite);
+  mlock(),  mlock2(),  and  mlockall()  lock  part  or all of the calling
+  process's virtual address space into RAM, preventing that  memory  from
+  being paged to the swap area.
+
+So, based on that secretmem pages are not swappable, I think that
+RLIMIT_MEMLOCK is appropriate here.
+
+> I mean, my concern is not earth shattering, this can be reworked later. As I
+> said, it just feels wrong.
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
+
 -- 
-2.28.0
-
+Sincerely yours,
+Mike.
