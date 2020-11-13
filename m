@@ -2,120 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0E02B2173
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Nov 2020 18:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18412B22D2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Nov 2020 18:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgKMREx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Nov 2020 12:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S1726090AbgKMRqW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Nov 2020 12:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726249AbgKMREw (ORCPT
+        with ESMTP id S1726070AbgKMRqW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Nov 2020 12:04:52 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C368C0613D1;
-        Fri, 13 Nov 2020 09:04:52 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id o11so10441176ioo.11;
-        Fri, 13 Nov 2020 09:04:52 -0800 (PST)
+        Fri, 13 Nov 2020 12:46:22 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4044C0613D1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2020 09:46:21 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id g7so9191394ilr.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2020 09:46:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6wbi7jT1+rgehcP1UuwHoeywTkGOLRJKgi1Ov4FuI0k=;
-        b=IhqMnDShVApR82yMRXsBaQrh6QrFRiBAN2apeBW6PgXcwHnkZihmR8sQGa9covr/Nr
-         E59TSvthh1GpGZ/oFHD/qN9wH8Qp78Km2FRbPWe+tCK9iyq+tjOukMRkd06r3rbkNoLy
-         UoEWaoC0UpZ1ijAuZvbKk+g87OXb4llBbA+qgAjsin4ZlGxgItwxomtStCHInkJnsfbN
-         3jtYyvmKkwSu2HmWcdIOszv8CJEFqPP8u5Y8XlQJFpSGTj1+8Ha+AcHbk4vm2wmCKWcv
-         ewQDI4w+/FsAoEitHwZOyVzItoyuY+Aq3fotYIYGWgsFIuD9NzUAMNA5o7jT/BRjLr+B
-         qNeA==
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wlkCnCceQqz7r02K1vtWGsLoDGFR8kTVMD9I+999BVU=;
+        b=f97H1ARf2FMEwRo6bCGKK0SmxlmBhNSJtwWc3H6Tp4QKaxU08w23m3Se3VH2Y6LKi1
+         gseBKxaY3ws5p5mowtY+hqCqm8ItrgLkWZnDGKw5mEp6i0F2TmRT/ux7nL/fZREJMVer
+         c6f8DNGj7zG6O5hQfyRFzevjFKbqYn7LHQRmo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6wbi7jT1+rgehcP1UuwHoeywTkGOLRJKgi1Ov4FuI0k=;
-        b=luyqJLJ99QutTq0en/YqVcZosG1ccjwCaJYrEUL798HmAzdKtI3ZrvxqlVXvcsrvH2
-         mMBGMn08YxUVWUjCDgEJV5Q20rAMIZ+Y/ctwKt+PSNrI+N/atlR5bR2XrFlJ+I+2Nkhn
-         XzzFeOhdAKUISa/Vw8XiLJD7H12yauyx0YH5Nv6QTz9Iaqp27hOpE32wj0WEBHvGqnlA
-         r0PlGy6drrMheQ8KASI3MEfm4uQK28E4o00D9lgf8eMPe4gDmhQ6W2Is2nW2jylg9iKe
-         B3yGqnpG3YKlp+At0OrTwHaDAhrOkQNVKHJtxe0a6v6HxH4fd6Yl9IGuEA6hb1cmfsML
-         RFvw==
-X-Gm-Message-State: AOAM530h2jDAj7HhspzIEjHDE0pOCDrBOoGzSLnd4P/P1QmGuD03W6cB
-        nOous6D08B6FO8qzUcyvGGs=
-X-Google-Smtp-Source: ABdhPJzV74ThdYJsJHYzIbk4mn+G8wCEjCr7oYYP4/NKzPO435awEHfPDqXLvz5gZ3yhskwv41Vgpw==
-X-Received: by 2002:a6b:6001:: with SMTP id r1mr551208iog.144.1605287087097;
-        Fri, 13 Nov 2020 09:04:47 -0800 (PST)
-Received: from Davids-MacBook-Pro.local ([2601:282:800:dc80:99e7:10e8:ee93:9a3d])
-        by smtp.googlemail.com with ESMTPSA id c8sm4471334ioq.40.2020.11.13.09.04.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2020 09:04:46 -0800 (PST)
-Subject: Re: [net-next,v2,4/5] seg6: add support for the SRv6 End.DT4 behavior
-To:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shrijeet Mukherjee <shrijeet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        bh=wlkCnCceQqz7r02K1vtWGsLoDGFR8kTVMD9I+999BVU=;
+        b=NKlkrrHHwQlacOZxPoqVaYaKA0iszYH51wW9i/VSeB3rhN9aw3UdF6a70y5Q2FCwLm
+         kCBI5Tvytqdlq0aQdzM/38kVdzwKrkukCDUFMRE3KswBYCEfFxylGvj+i8WdQX/eqLDb
+         NajBbozOqh/D24nf9ZGvZL0nKcQc0tRCRrHn4bdWGiJn9Uljne4Le61Qo4WCwnUwqTcA
+         jmyVcLR+PDfKUWtCXJWdlHdSW1qP43bfhDqiXcdkeOZl3yxrSs5kfNcHEIP7U1SD1sA3
+         9w04ZUjKucN+uv33o7tPc4s3t7n4HMjhwu2nxPYL+iFp88OgNsa86I0bUMEzMGp+R3C3
+         iVaw==
+X-Gm-Message-State: AOAM5301W5ZhbHUq9LD2HrqYoroyBRU1ZagubIzQS+g4CdKA44lxXRRa
+        O/CW1+YZtBHRdOL73AmxeZSpxuHNz10yHg==
+X-Google-Smtp-Source: ABdhPJzWnweOgT/x9lrJyFWdNrmH6LCnt9T1bjCno9YJu8lBPBBn+UixdhXRz6BHbKAiFEys/ytZcw==
+X-Received: by 2002:a92:9acd:: with SMTP id c74mr690025ill.299.1605289580958;
+        Fri, 13 Nov 2020 09:46:20 -0800 (PST)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id y14sm4772585ilb.66.2020.11.13.09.46.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2020 09:46:20 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-References: <20201107153139.3552-1-andrea.mayer@uniroma2.it>
- <20201107153139.3552-5-andrea.mayer@uniroma2.it>
- <20201110151255.3a86afcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20201113022848.dd40aa66763316ac4f4ffd56@uniroma2.it>
- <34d9b96f-a378-4817-36e8-3d9287c5b76b@gmail.com>
- <20201113085547.68e04931@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <bd3712b6-110b-acce-3761-457a6d2b4463@uniroma2.it>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <09381c96-42a3-91cd-951b-f970cd8e52cb@gmail.com>
-Date:   Fri, 13 Nov 2020 10:04:44 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.4.2
+        linux-acpi@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2 00/13] Introduce seqnum_ops
+Date:   Fri, 13 Nov 2020 10:46:02 -0700
+Message-Id: <cover.1605287778.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <bd3712b6-110b-acce-3761-457a6d2b4463@uniroma2.it>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/13/20 10:02 AM, Stefano Salsano wrote:
-> Il 2020-11-13 17:55, Jakub Kicinski ha scritto:
->> On Thu, 12 Nov 2020 18:49:17 -0700 David Ahern wrote:
->>> On 11/12/20 6:28 PM, Andrea Mayer wrote:
->>>> The implementation of SRv6 End.DT4 differs from the the
->>>> implementation of SRv6
->>>> End.DT6 due to the different *route input* lookup functions. For
->>>> IPv6 is it
->>>> possible to force the routing lookup specifying a routing table
->>>> through the
->>>> ip6_pol_route() function (as it is done in the
->>>> seg6_lookup_any_nexthop()).
->>>
->>> It is unfortunate that the IPv6 variant got in without the VRF piece.
->>
->> Should we make it a requirement for this series to also extend the v6
->> version to support the preferred VRF-based operation? Given VRF is
->> better and we require v4 features to be implemented for v6?
-> 
-> I think it is better to separate the two aspects... adding a missing
-> feature in IPv4 datapath should not depend on improving the quality of
-> the implementation of the IPv6 datapath :-)
-> 
-> I think that Andrea is willing to work on improving the IPv6
-> implementation, but this should be considered after this patchset...
-> 
+Sequence Number api provides interfaces for unsigned atomic up counters
+leveraging atomic_t and atomic64_t ops underneath.
 
-agreed. The v6 variant has existed for a while. The v4 version is
-independent.
+There are a number of atomic_t usages in the kernel where atomic_t api
+is used for counting sequence numbers and other statistical counters.
+Several of these usages, convert atomic_read() and atomic_inc_return()
+return values to unsigned. Introducing sequence number ops supports
+these use-cases with a standard core-api.
+
+The atomic_t api provides a wide range of atomic operations as a base
+api to implement atomic counters, bitops, spinlock interfaces. The usages
+also evolved into being used for resource lifetimes and state management.
+The refcount_t api was introduced to address resource lifetime problems
+related to atomic_t wrapping. There is a large overlap between the
+atomic_t api used for resource lifetimes and just counters, stats, and
+sequence numbers. It has become difficult to differentiate between the
+atomic_t usages that should be converted to refcount_t and the ones that
+can be left alone. Introducing seqnum_ops to wrap the usages that are
+stats, counters, sequence numbers makes it easier for tools that scan
+for underflow and overflow on atomic_t usages to detect overflow and
+underflows to scan just the cases that are prone to errors.
+
+In addition, to supporting sequence number use-cases, Sequence Number Ops
+helps differentiate atomic_t counter usages from atomic_t usages that guard
+object lifetimes, hence prone to overflow and underflow errors from up
+counting use-cases. It becomes easier for tools that scan for underflow and
+overflow on atomic_t usages to detect overflow and underflows to scan just
+the cases that are prone to errors.
+
+Changes since v1:
+- Removed dec based on Greg KH's comments
+- Removed read/set/inc based on the discussion with Peter Zijlstra
+- Interfaces are restricted to init, increment and return new value,
+  and fetch current value.
+- Interfaces return u32 and u64 - a few reviewers suggested unsigned.
+  After reviewing a few use-cases, I determined this is a good path
+  forward. It adds unsigned atomic support that doesn't exist now,
+  and simplifies code in drivers that currently convert atomic_t return
+  values to unsigned. All the drivers changes included in this series
+  used to convert atomic_t returns to unsigned.
+
+Patch v1 thread:
+https://lore.kernel.org/lkml/cover.1605027593.git.skhan@linuxfoundation.org/
+
+Counters thread:
+lore.kernel.org/lkml/cover.1602209970.git.skhan@linuxfoundation.org
+
+Shuah Khan (13):
+  seqnum_ops: Introduce Sequence Number Ops
+  selftests: lib:test_seqnum_ops: add new test for seqnum_ops
+  drivers/acpi: convert seqno seqnum_ops
+  drivers/acpi/apei: convert seqno to seqnum_ops
+  drivers/base/test/test_async_driver_probe: convert to use seqnum_ops
+  drivers/char/ipmi: convert stats to use seqnum_ops
+  drivers/edac: convert pci counters to seqnum_ops
+  drivers/oprofile: convert stats to use seqnum_ops
+  drivers/staging/rtl8723bs: convert stats to use seqnum_ops
+  usb: usbip/vhci: convert seqno to seqnum_ops
+  drivers/staging/rtl8188eu: convert stats to use seqnum_ops
+  drivers/staging/unisys/visorhba: convert stats to use seqnum_ops
+  security/integrity/ima: converts stats to seqnum_ops
+
+ Documentation/core-api/atomic_ops.rst         |   4 +
+ Documentation/core-api/index.rst              |   1 +
+ Documentation/core-api/seqnum_ops.rst         |  89 +++++++++++++
+ MAINTAINERS                                   |   8 ++
+ drivers/acpi/acpi_extlog.c                    |   8 +-
+ drivers/acpi/apei/ghes.c                      |   8 +-
+ drivers/base/test/test_async_driver_probe.c   |  28 +++--
+ drivers/char/ipmi/ipmi_msghandler.c           |   9 +-
+ drivers/char/ipmi/ipmi_si_intf.c              |   9 +-
+ drivers/char/ipmi/ipmi_ssif.c                 |   9 +-
+ drivers/edac/edac_pci.h                       |   5 +-
+ drivers/edac/edac_pci_sysfs.c                 |  30 ++---
+ drivers/oprofile/buffer_sync.c                |   9 +-
+ drivers/oprofile/event_buffer.c               |   3 +-
+ drivers/oprofile/oprof.c                      |   3 +-
+ drivers/oprofile/oprofile_stats.c             |  11 +-
+ drivers/oprofile/oprofile_stats.h             |  11 +-
+ drivers/oprofile/oprofilefs.c                 |   3 +-
+ drivers/staging/rtl8188eu/core/rtw_mlme_ext.c |  23 +++-
+ .../staging/rtl8188eu/include/rtw_mlme_ext.h  |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_cmd.c      |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c |  33 +++--
+ drivers/staging/rtl8723bs/include/rtw_cmd.h   |   3 +-
+ .../staging/rtl8723bs/include/rtw_mlme_ext.h  |   3 +-
+ .../staging/unisys/visorhba/visorhba_main.c   |  21 ++--
+ drivers/usb/usbip/vhci.h                      |   3 +-
+ drivers/usb/usbip/vhci_hcd.c                  |   7 +-
+ drivers/usb/usbip/vhci_rx.c                   |   5 +-
+ include/linux/oprofile.h                      |   3 +-
+ include/linux/seqnum_ops.h                    | 118 +++++++++++++++++
+ lib/Kconfig                                   |   9 ++
+ lib/Makefile                                  |   1 +
+ lib/test_seqnum_ops.c                         | 119 ++++++++++++++++++
+ security/integrity/ima/ima.h                  |   5 +-
+ security/integrity/ima/ima_api.c              |   3 +-
+ security/integrity/ima/ima_fs.c               |   5 +-
+ security/integrity/ima/ima_queue.c            |   7 +-
+ tools/testing/selftests/lib/Makefile          |   1 +
+ tools/testing/selftests/lib/config            |   1 +
+ .../testing/selftests/lib/test_seqnum_ops.sh  |  10 ++
+ 40 files changed, 524 insertions(+), 110 deletions(-)
+ create mode 100644 Documentation/core-api/seqnum_ops.rst
+ create mode 100644 include/linux/seqnum_ops.h
+ create mode 100644 lib/test_seqnum_ops.c
+ create mode 100755 tools/testing/selftests/lib/test_seqnum_ops.sh
+
+-- 
+2.27.0
+
