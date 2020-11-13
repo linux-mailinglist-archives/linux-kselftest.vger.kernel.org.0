@@ -2,68 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5494E2B28B1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Nov 2020 23:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F7D2B28F3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Nov 2020 00:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbgKMWlD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Nov 2020 17:41:03 -0500
-Received: from mail.zx2c4.com ([192.95.5.64]:32947 "EHLO mail.zx2c4.com"
+        id S1726239AbgKMXBo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Nov 2020 18:01:44 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:46406 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726039AbgKMWlC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Nov 2020 17:41:02 -0500
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 0204c346;
-        Fri, 13 Nov 2020 22:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
-        :references:in-reply-to:from:date:message-id:subject:to:cc
-        :content-type; s=mail; bh=OJIQBsQN9YtZ59U8T292O32PRFg=; b=ClGu4V
-        82JgxtH+96ZdKad/6V8fFydSOranrAO/P2pWzperym6X5Ebk09NlEza1LxNfH5et
-        zSccOxVP0OWl1XKN6LjyktNrQqgOmz79PV0rBqrCRHfHkISyxy6J9rBi4CzLwEYB
-        auVwVjk5oBrsbChH66Ihd9JI0kI+S//aLV+1eDLhCM1+jw0sA0+jxMkYX9/WqR/Q
-        t0gXQTzeFlBeHMl+ym6jLjEhVQXOZ77bdlIrvMa5J8eo/ZO1lm4cu4VE+2pm0YPp
-        TcXnEex7CyoC0JOC+YhYRsFysplWsMT876W9gq4chBHaFzQQQP4yP1l7oF6u5pU1
-        /EYRvyWvU8XGohzQ==
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7c6e6c09 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 13 Nov 2020 22:37:37 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id s8so10102244yba.13;
-        Fri, 13 Nov 2020 14:40:59 -0800 (PST)
-X-Gm-Message-State: AOAM530sYcXF4hFhZX5+N8pBV1umx3jxtC4wkcAwfRLMcTI6H0adZC/O
-        uRKYpP+UbcbKxslDffgLPs7NalYpdCGeTTCUqIc=
-X-Google-Smtp-Source: ABdhPJy4GHaEV+sM67RNRkegMlf+s/XVygZw2mSKbBF4g5x7T20uFd0ua6JodgxMauamrd8pWTxcgPSeuv0shuxsYaQ=
-X-Received: by 2002:a25:6f83:: with SMTP id k125mr6338937ybc.123.1605307258734;
- Fri, 13 Nov 2020 14:40:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20201110035318.423757-1-sashal@kernel.org> <20201110035318.423757-26-sashal@kernel.org>
- <CAHmME9pPbitUYU4CcLaikQLOMjj-=b16nVXgp6+jh1At4Y=vNg@mail.gmail.com> <X6rMJe+bF+/ZyyTz@kroah.com>
-In-Reply-To: <X6rMJe+bF+/ZyyTz@kroah.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 13 Nov 2020 23:40:47 +0100
-X-Gmail-Original-Message-ID: <CAHmME9r0Oar0Js5hhO=5U9JTqS1P04VkYjSq1cqXW19ZOvgh+g@mail.gmail.com>
-Message-ID: <CAHmME9r0Oar0Js5hhO=5U9JTqS1P04VkYjSq1cqXW19ZOvgh+g@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.9 26/55] wireguard: selftests: check that
- route_me_harder packets use the right sk
-To:     Greg KH <greg@kroah.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Chen Minqiang <ptpt52@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        WireGuard mailing list <wireguard@lists.zx2c4.com>,
-        Netdev <netdev@vger.kernel.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1725986AbgKMXBo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 13 Nov 2020 18:01:44 -0500
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0ADN0U0X031218;
+        Sat, 14 Nov 2020 00:00:35 +0100
+Received: from lubuntu-18.04 (unknown [160.80.103.126])
+        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 894221228D0;
+        Sat, 14 Nov 2020 00:00:24 +0100 (CET)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+        s=ed201904; t=1605308425; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NC/sGHYI6UNlSfTzq2TE0JHnhzPIl2+VJNmgyd0p6W0=;
+        b=98+ApqLFEqEKJJAuSPJXCvyP/VPj/VyN3VwXFW+93ICqTsomH5I7p/u9J8EuWu6JVxbs7i
+        SqcCXvFZwPK9WzDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+        t=1605308425; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NC/sGHYI6UNlSfTzq2TE0JHnhzPIl2+VJNmgyd0p6W0=;
+        b=Zc340CPggSMx8MU100dDq31ThDfdOGeIsQszKQq3/mrVmugHUePavLna6Nmbyr5xJ20wdu
+        yTT7iWfMsFe7hGu5U7hqEsJsrdIeK2y9hvzF9lOcFPZUg1MiQ63QB7RQ2Fmr4UkVZ3RwGS
+        ZEriz3awmG/eJ64/uQAtUfN+FwKX5190kiz0jUG7Ro/WTSW2rmAubzqdAmw2pQsYKc6Ii5
+        IN0YSEXcWYQWjQ8zP4E3OTsjwoYVkgzhXrDz06DmSiq6BY5D3IvYS6p/WS1Kw9ItosDOLM
+        FapOI6CKtOanTsoWhOxXoNMJ74R34hxbS16d7YVeI9QT2nnkDxEScRsbI4mI0g==
+Date:   Sat, 14 Nov 2020 00:00:24 +0100
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@gmail.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [net-next,v2,4/5] seg6: add support for the SRv6 End.DT4
+ behavior
+Message-Id: <20201114000024.614c6c097050188abc87a7ff@uniroma2.it>
+In-Reply-To: <20201113134010.5eb2a154@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20201107153139.3552-1-andrea.mayer@uniroma2.it>
+        <20201107153139.3552-5-andrea.mayer@uniroma2.it>
+        <20201110151255.3a86afcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20201113022848.dd40aa66763316ac4f4ffd56@uniroma2.it>
+        <34d9b96f-a378-4817-36e8-3d9287c5b76b@gmail.com>
+        <20201113085547.68e04931@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <bd3712b6-110b-acce-3761-457a6d2b4463@uniroma2.it>
+        <09381c96-42a3-91cd-951b-f970cd8e52cb@gmail.com>
+        <20201113114036.18e40b32@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20201113134010.5eb2a154@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 10, 2020 at 6:20 PM Greg KH <greg@kroah.com> wrote:
->
-> On Tue, Nov 10, 2020 at 01:29:41PM +0100, Jason A. Donenfeld wrote:
-> > Note that this requires
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=46d6c5ae953cc0be38efd0e469284df7c4328cf8
-> > And that commit should be backported to every kernel ever, since the
-> > bug is so old.
->
-> Sasha queued this up to 5.4.y and 5.9.y, but it looks like it doesn't
-> easily apply to older kernels.  If you think that it's needed beyond
-> that, I'll gladly take backported patches.
+Hi Jakub,
 
-Backport to older kernels coming your way shortly.
+On Fri, 13 Nov 2020 13:40:10 -0800
+Jakub Kicinski <kuba@kernel.org> wrote:
+
+> On Fri, 13 Nov 2020 11:40:36 -0800 Jakub Kicinski wrote:
+> > > agreed. The v6 variant has existed for a while. The v4 version is
+> > > independent.  
+> > 
+> > Okay, I'm not sure what's the right call so I asked DaveM.
+> 
+> DaveM raised a concern that unless we implement v6 now we can't be sure
+> the interface we create for v4 is going to fit there.
+> 
+> So Andrea unless it's a major hurdle, could you take a stab at the v6
+> version with VRFs as part of this series?
+
+I can tackle the v6 version but how do we face the compatibility issue raised
+by Stefano in his message?
+
+if it is ok to implement a uAPI that breaks the existing scripts, it is relatively
+easy to replicate the VRF-based approach also in v6.
+
+Waiting for your advice!
+
+Thanks,
+Andrea
