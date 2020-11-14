@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC102B29BB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Nov 2020 01:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC33E2B29D0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Nov 2020 01:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgKNAPf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Nov 2020 19:15:35 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63390 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725981AbgKNAPb (ORCPT
+        id S1726146AbgKNAXf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Nov 2020 19:23:35 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47178 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725866AbgKNAXf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Nov 2020 19:15:31 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AE0D7hk010840;
-        Fri, 13 Nov 2020 16:15:12 -0800
+        Fri, 13 Nov 2020 19:23:35 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AE093f2023194;
+        Fri, 13 Nov 2020 16:23:26 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
  subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=2wFkXqJpjzE1kLSTo406/xl725+Y8i76x0UASV8LcK0=;
- b=jPwov3r1v26cQEO8Eqii0sWe620faDx9pq10WuWqzERRhNMHFes9GHTgPBIyx8lSIxsI
- NqUl3Xs1pV44yJueKA5cfms9VtHsRK5oqfT4h+Ix2nJDfN2dmsVBXmZ4urONsFiHwLuP
- YPC4KPIsDZf6+rpGCyprgfE2vchZ5K2UTos= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34sdenxqmf-1
+ mime-version; s=facebook; bh=JRr+/gbsmT2o2VyuKpGbFjLHYB/f6BruHRA6EpPFkFo=;
+ b=bGQw/mgBg3x53Gt4raD9kLapqzq40+0f1P1v/Jf6aprvOLkW7bnr3YVBeOkTfYQWvfe8
+ VMJOZWtyJgpfBJ5A1xoOsOOc9KbxG33t5Yp1Vz0bXD9hba4fzPi3el0mgYRWn81BGXL8
+ ns6y6zKuRwtKA4qpVFcEhUmAiPdEQSj0mv4= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 34seqpebgq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 13 Nov 2020 16:15:12 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
+        Fri, 13 Nov 2020 16:23:26 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.230) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 13 Nov 2020 16:15:11 -0800
+ 15.1.1979.3; Fri, 13 Nov 2020 16:23:25 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lcVjjOYR3b+Htb7fh9zz8fTgb5neVPhr48DRk2uJLt7Qg/Vkm68m8psbZRdOz4De26zAWPVZxxlI6Rd0L1hapKFlg2eAXGT/nyoihmc1Q/Z07/9TBcOUffovCBYP10RGvepYn0i9CboiPA8AyRCElGk7zODHO7ir+BG9pLf0I7Si+emfKN5OMKUfZ/vYyW4guTdbggrO3gAtrTcrD4752psNTNJAiyRXv9ChpBSU5ka7i+K42U+SlbIgLZatvZ+aiVbK4LMcs3S/qKGhXz4EPvRqnR2MeN3JRRzvtPNZ/8Ox8lmjKUVoCnhneVgU3+P4hICeaLTwfaA7XmqPMLQuAg==
+ b=TADs9EpZ8hdyMMSTJ0ypCeqMMIxf4gtv8JW8nLYWXObghb4HPLZsYz1aSU5zW4BUL3GGVotmDFFQzS6Gt92cP6pD8MPSyjkJG9OE80c9Se2J/L4r+hgAyqSD/V7oFJDB8UPqxOQ7MdIdim3fBzSW/EknAJdoNKmyBMWSx4UOdySOGGnF6OPOAYr7AxPT9FVWYzp30mEbRGDVUnevMnuKBLdDII9isnzwapOYQfUHMTG+5+8b/+by3BCzfj2ic7aaHxh0giInCrjfaSLuQDG/L6oShlLNSB/0oXInEHTi/MidZnc+EbHYUy2xly7uGBtkRnUxEt/ViayqlNUBxmWfzw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2wFkXqJpjzE1kLSTo406/xl725+Y8i76x0UASV8LcK0=;
- b=ikY2JmtkaBwlQ/iu7DaRxtP3G6HA7FHw2/u/x2mKeufybCKfKVrOU5b3Oqmu/Ktg6q/7o3/2ixSHnsDVaBm3yRmHrgfUqJC9ziUuhOSknwYKYLTNzl5FUer78S39YoTbj+eCdz744TOgKp1iPtJdXhWu43mIseRoAy0Wc57+mrO6UjJOL8lI3AZwvDAGgPghV7ZxktyewQoE9/k8zq/QcBo481ChdJFA/fFO33l08VObGoRUdK2s50pRibteaiXt4pfM4eTcEb9Qf+bc72dUVJU1p0xFRurlxw/oPnTp5dRuOCMECUKCbaoCaNCppoYGfXA4ifrbvMqP4kUdtxSfdA==
+ bh=JRr+/gbsmT2o2VyuKpGbFjLHYB/f6BruHRA6EpPFkFo=;
+ b=Bb5a9RnQFCdDglB8fBHEvQvX9c1CwUfJLxlpnIT6wQq5VJJl6f+dSjJbxoOWn0fmbz4FbA9UhQGP0xeXSa7W78RCVqbfHo2mTwLvkNstjGFygYEdqJu0LQpxfO/wZhH3LmbVeyj+3PQCuf0WcyiPz55ELJPLjkDk7ulrkfVGMKO2DoHdlm1nFNUCQFLWObpLR71y56Dv4RXtrxGGMt4+Jz2/AVoO9voSfOVDCcOWzcPkGgiKi7M4j1rXd2GF6Pc8eqDM+Htil1bhZKog0wu3N6p4tHNb1KmNKKaPKVDjkqRmW9VrCa26xVvQ9Wl9SCBp1BFvOXe0VM5mS1jR2fvPow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
  s=selector2-fb-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2wFkXqJpjzE1kLSTo406/xl725+Y8i76x0UASV8LcK0=;
- b=ZGCICE2AeiH4/Uf4PtKXKVAJMKXaQtpGbkxiFffgL0GuzlVP4aGTvxSFFHwpfg9Kqu4If+nreVeEsfVVKj7eA5JgjWypZ3WsiatUmPw5TSfly0uLn7pIYyqFTErXldf/zNQFFhZNz4TcNxU1RRWywjBMN22Q4KoAV8sLhcqnKoU=
+ bh=JRr+/gbsmT2o2VyuKpGbFjLHYB/f6BruHRA6EpPFkFo=;
+ b=TqgFkcUSWaowhnIdczL/nOe5rAWHkRBkXgfY6otDvWUmQ0zZcbAV5hzEA59Eqc4kWVGxu8Bwit/Uj2EVLcjc8moQWUIQY3dj7eDZ63LlwK7pJwfOh6eE4zsAzjM4Wfo3gfXk26k7CIJOUTKWlv8gW2tOO1UtE+LldaMbjC0vyGc=
 Authentication-Results: nvidia.com; dkim=none (message not signed)
  header.d=none;nvidia.com; dmarc=none action=none header.from=fb.com;
 Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
- by BYAPR15MB2982.namprd15.prod.outlook.com (2603:10b6:a03:f8::17) with
+ by BYAPR15MB2984.namprd15.prod.outlook.com (2603:10b6:a03:b5::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Sat, 14 Nov
- 2020 00:15:10 +0000
+ 2020 00:23:24 +0000
 Received: from BYAPR15MB4136.namprd15.prod.outlook.com
  ([fe80::3925:e1f9:4c6a:9396]) by BYAPR15MB4136.namprd15.prod.outlook.com
  ([fe80::3925:e1f9:4c6a:9396%6]) with mapi id 15.20.3564.025; Sat, 14 Nov 2020
- 00:15:10 +0000
-Date:   Fri, 13 Nov 2020 16:15:05 -0800
+ 00:23:24 +0000
+Date:   Fri, 13 Nov 2020 16:23:19 -0800
 From:   Roman Gushchin <guro@fb.com>
 To:     Zi Yan <ziy@nvidia.com>
 CC:     <linux-mm@kvack.org>, Matthew Wilcox <willy@infradead.org>,
@@ -67,156 +67,135 @@ CC:     <linux-mm@kvack.org>, Matthew Wilcox <willy@infradead.org>,
         John Hubbard <jhubbard@nvidia.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
         David Nellans <dnellans@nvidia.com>
-Subject: Re: [RFC PATCH 3/6] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Message-ID: <20201114001505.GA3047204@carbon.dhcp.thefacebook.com>
+Subject: Re: [RFC PATCH 2/6] mm: memcg: make memcg huge page split support
+ any order split.
+Message-ID: <20201114002319.GB3047204@carbon.dhcp.thefacebook.com>
 References: <20201111204008.21332-1-zi.yan@sent.com>
- <20201111204008.21332-4-zi.yan@sent.com>
+ <20201111204008.21332-3-zi.yan@sent.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201111204008.21332-4-zi.yan@sent.com>
-X-Originating-IP: [2620:10d:c090:400::5:f0ce]
-X-ClientProxiedBy: MWHPR1701CA0007.namprd17.prod.outlook.com
- (2603:10b6:301:14::17) To BYAPR15MB4136.namprd15.prod.outlook.com
+In-Reply-To: <20201111204008.21332-3-zi.yan@sent.com>
+X-Originating-IP: [2620:10d:c090:400::5:93fd]
+X-ClientProxiedBy: MW4PR03CA0063.namprd03.prod.outlook.com
+ (2603:10b6:303:b6::8) To BYAPR15MB4136.namprd15.prod.outlook.com
  (2603:10b6:a03:96::24)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from carbon.dhcp.thefacebook.com (2620:10d:c090:400::5:f0ce) by MWHPR1701CA0007.namprd17.prod.outlook.com (2603:10b6:301:14::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.25 via Frontend Transport; Sat, 14 Nov 2020 00:15:08 +0000
+Received: from carbon.dhcp.thefacebook.com (2620:10d:c090:400::5:93fd) by MW4PR03CA0063.namprd03.prod.outlook.com (2603:10b6:303:b6::8) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Sat, 14 Nov 2020 00:23:22 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8d6ec300-cbb4-46c8-10e8-08d888325928
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2982:
-X-Microsoft-Antispam-PRVS: <BYAPR15MB29823FCF038628A8607F98D4BEE50@BYAPR15MB2982.namprd15.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: b4b385f6-3298-4d28-7f03-08d888337fb8
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2984:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2984DDD66FAD8DBF4F3D62FABEE50@BYAPR15MB2984.namprd15.prod.outlook.com>
 X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zxpb9jXZctvIQ6X9/t4qwvt6tfw0G/s7hR0O0lIlhvr+Hl0k12JAxxPGX1laHu+pw/T/52KY44D2R+I6MZxdc8dZJ8KYwvHZhwzwzr3lFvLXp6gaElFSHXcVlh8SDwLPHiDvh6ax18vYLP69EgMqkOWVMzhY3q4IqNRHaoDs/FUiuulvSvNEvzpeGKAMf0Rtq6i/AzqMrzWxCb/FcpC3fiGdMEc7TV5ciH2pjl1Wtsv6F3uue+OeSZmP74/f4NhfYjzEcppuJZr8chy4WFZsq3ADJpuL97oayDwyLWxqgoBXcaTqG0dv7B3GYu2neChnTLfr5xtrEVSZ5fGf5OiZFQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(39860400002)(136003)(366004)(396003)(2906002)(86362001)(8936002)(316002)(5660300002)(66476007)(66556008)(6666004)(83380400001)(8676002)(66946007)(33656002)(7696005)(6916009)(4326008)(52116002)(186003)(16526019)(7416002)(54906003)(55016002)(6506007)(9686003)(1076003)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: r9qLdex/ybBLoQUJvLHd5qLxKTohvanOQ9SzWRESot1YQzPPQWTtQw1QETEwM5o6lGZ4NhcV0M6ZY5y2LUMvDXAub3KdwwxIZUq66CNoEbuTYK9y5GsWW5W6MZDMJObNyktQAi82adHdgbAScotosFAgo/AMHYHWN08gK6PlgmYn/JCBYuIX+LLAhK8BpQlj/MoWZFoP9HR2OYWVM1OxfPY26Qs3usZse7xFoO+Hdn+/NoGnX2+xRwJPwM4neJNHoThAjSj52G8PUwyOOCP1+GsS3EaN8jFqPUBJgJZ4lWaFKE+vqdufb+zT0eLTrZX3jEyPYpAz1k7CqXLc5xrxSK6j9p4PbgCtNkTWAs4U57T4MTpaKuIMlzW1LI9Pi8MsnPJDTtzxPumoiYqcX7009jEuPxxZiz49jNCPOVojdjb6bwoziZoN/QgqFhP4T4StY7DKKdsCTBA58UAZ/3Ph+h5tfAAlCsPyHOGvZTllvCQjJyrfnleaJsBzfStuIzI/QBAq5rtD3/9Y97rE4pMA21NEZYTEYRB3vZgY+kvEgwC1vWXCblkebpO78m7B2nTMUJ5TgSplqci+jI9GBdqLrkzRzB2IVOQezHzN/Q6PPiOErpTkkHCh8wL+qCMsuVvFZUAgAFK0KJEzUVMp53hvgEgzMNabmkGX2At5xNIJjNE=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d6ec300-cbb4-46c8-10e8-08d888325928
+X-Microsoft-Antispam-Message-Info: DI/WTFXH4vYtfYjBeXeL0VQ78u0hRs3SDVt7OjtR70Eq98E6Jc65mxyuxx5Fu/WScTYm6Yf/nddVg3v780Yx9B/W+CPEgk7/37lnskihKXmZjOX66ZzwnioUGjcSpkOn+c7LZZb+b6PrLyoo9bqMq5jDJM+wuySDS7+6L/RkRx4FsO0zNJCY9i82jauiteYV7p2AEO97OMYRb6PTCmBmNrpR9dAg9gG0W2mhHR2lnH6Kvg7dIgtraWAVEJbN4lyyvU4jTJHKmAetieWfMfDd5UG1ip9G0voUlM5taLhb8D4GqNrc6fa//a2vIyqEEC1Zmyst6flcmQZ/WPxOR5LVczGva9NdaygG1XOhD9OlFRfcM8H6oeFE4qI+9si3TOFm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(346002)(376002)(396003)(39860400002)(1076003)(316002)(33656002)(8936002)(6506007)(54906003)(6666004)(16526019)(66556008)(6916009)(2906002)(478600001)(186003)(86362001)(7696005)(66476007)(8676002)(52116002)(55016002)(4326008)(5660300002)(7416002)(83380400001)(9686003)(66946007)(14583001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: wLv/gJhpGHO0w7Z6urrIOHdoRFqZk5s+YW6gTumO3LlcTmNCz/LC8f+phiN2m03OgLZ9euCykebRheq8MGobidR2bZ7hXBtOi6/2aCOuHPRaC1+EC3//6ZaXjZmOtEWPR6m+rHUalqvEkwTkKxTdaYE+xJ0P71JMNLQd6m7b1O19MPejXgv/jwf6VwrrJcQXDsE1p4JmqaGTZHcbhtSKkkWyAxELwYNuqU3T2czBFonqPbb74YcFLkLH3opVPi2LAJFE+A9yeUMPmZlJ6avcqOBzins+uWGvgGzOjpGjhnug4Fyh9VucGTqDF3NAMuNRJphgD6ePwiQdfQwI0FlJd2K8xt32VRjfaMCJFpJ6uCjGadzLtJo5m7lAUSkPtTLMy18VKPwOb7KDfWybazULiFFHSvB885lT8LpPUZ6hCcIQlj+rnzhK/PDrkosBA2e+TrBnAM+B9ICRLw0LYuy/cMEudPPOT+JqY0SHXeZ17C/M24dZwJemm7NETCjX9WTkH/7H8qTARixY4UZVNiyFJpJ4zaLZvXBmNTXgo4hNfa0B+9mhAvtud+QT6Vern6A+w/WDPYIDz1HjEf3el60Sj/KU18cgiCyHbJaKS4B0aIOYllYVIotLCIVIjNOPcCW7w4aAHXs90wXkspeJRMwSk8HfqkvwNsRGpLxdWYOUWr8=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4b385f6-3298-4d28-7f03-08d888337fb8
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2020 00:15:10.4002
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2020 00:23:24.3100
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d4l1DeJChNBYQE5uUzIRYg9sayqHdIN4Xk09XTXyqOmzQh1H8umoFKL3YvjMO8/7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2982
+X-MS-Exchange-CrossTenant-UserPrincipalName: HGcYEONBnfj8hT+cEGt2dM6M68yq5ocdniYNnJtP+kISB749daOjpZQPylRyi9j8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2984
 X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-13_21:2020-11-13,2020-11-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1011
- priorityscore=1501 phishscore=0 bulkscore=0 adultscore=0 suspectscore=1
- spamscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=999 mlxscore=0 malwarescore=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 phishscore=0 impostorscore=0 spamscore=0
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011140000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 03:40:05PM -0500, Zi Yan wrote:
+On Wed, Nov 11, 2020 at 03:40:04PM -0500, Zi Yan wrote:
 > From: Zi Yan <ziy@nvidia.com>
 > 
-> It adds a new_order parameter to set new page order in page owner.
-> It prepares for upcoming changes to support split huge page to any lower
-> order.
+> It reads thp_nr_pages and splits to provided new_nr. It prepares for
+> upcoming changes to support split huge page to any lower order.
 > 
 > Signed-off-by: Zi Yan <ziy@nvidia.com>
 > ---
->  include/linux/page_owner.h | 7 ++++---
+>  include/linux/memcontrol.h | 5 +++--
 >  mm/huge_memory.c           | 2 +-
->  mm/page_alloc.c            | 2 +-
->  mm/page_owner.c            | 6 +++---
->  4 files changed, 9 insertions(+), 8 deletions(-)
+>  mm/memcontrol.c            | 4 ++--
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
-> index 3468794f83d2..215cbb159568 100644
-> --- a/include/linux/page_owner.h
-> +++ b/include/linux/page_owner.h
-> @@ -31,10 +31,11 @@ static inline void set_page_owner(struct page *page,
->  		__set_page_owner(page, order, gfp_mask);
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 0f4dd7829fb2..b3bac79ceed6 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1105,7 +1105,7 @@ static inline void memcg_memory_event_mm(struct mm_struct *mm,
 >  }
 >  
-> -static inline void split_page_owner(struct page *page, unsigned int nr)
-> +static inline void split_page_owner(struct page *page, unsigned int nr,
-> +			unsigned int new_order)
->  {
->  	if (static_branch_unlikely(&page_owner_inited))
-> -		__split_page_owner(page, nr);
-> +		__split_page_owner(page, nr, new_order);
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> -void mem_cgroup_split_huge_fixup(struct page *head);
+> +void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_nr);
+>  #endif
+>  
+>  #else /* CONFIG_MEMCG */
+> @@ -1451,7 +1451,8 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t *pgdat, int order,
+>  	return 0;
 >  }
->  static inline void copy_page_owner(struct page *oldpage, struct page *newpage)
->  {
-> @@ -60,7 +61,7 @@ static inline void set_page_owner(struct page *page,
->  {
->  }
->  static inline void split_page_owner(struct page *page,
-> -			unsigned int order)
-> +			unsigned int nr, unsigned int new_order)
-
-With the addition of the new argument it's a bit hard to understand
-what the function is supposed to do. It seems like nr == page_order(page),
-is it right? Maybe we can pass old_order and new_order? Or just the page
-and the new order?
-
+>  
+> -static inline void mem_cgroup_split_huge_fixup(struct page *head)
+> +static inline void mem_cgroup_split_huge_fixup(struct page *head,
+> +					       unsigned int new_nr)
 >  {
 >  }
->  static inline void copy_page_owner(struct page *oldpage, struct page *newpage)
+>  
 > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index f599f5b9bf7f..8b7d771ee962 100644
+> index c4fead5ead31..f599f5b9bf7f 100644
 > --- a/mm/huge_memory.c
 > +++ b/mm/huge_memory.c
-> @@ -2459,7 +2459,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+> @@ -2429,7 +2429,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>  	lruvec = mem_cgroup_page_lruvec(head, pgdat);
 >  
->  	ClearPageCompound(head);
+>  	/* complete memcg works before add pages to LRU */
+> -	mem_cgroup_split_huge_fixup(head);
+> +	mem_cgroup_split_huge_fixup(head, 1);
 >  
-> -	split_page_owner(head, nr);
-> +	split_page_owner(head, nr, 1);
->  
->  	/* See comment in __split_huge_page_tail() */
->  	if (PageAnon(head)) {
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index d77220615fd5..a9eead0e091a 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3284,7 +3284,7 @@ void split_page(struct page *page, unsigned int order)
->  
->  	for (i = 1; i < (1 << order); i++)
->  		set_page_refcounted(page + i);
-> -	split_page_owner(page, 1 << order);
-> +	split_page_owner(page, 1 << order, 1);
->  }
->  EXPORT_SYMBOL_GPL(split_page);
->  
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index b735a8eafcdb..2b7f7e9056dc 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -204,7 +204,7 @@ void __set_page_owner_migrate_reason(struct page *page, int reason)
->  	page_owner->last_migrate_reason = reason;
->  }
->  
-> -void __split_page_owner(struct page *page, unsigned int nr)
-> +void __split_page_owner(struct page *page, unsigned int nr, unsigned int new_order)
->  {
->  	int i;
->  	struct page_ext *page_ext = lookup_page_ext(page);
-> @@ -213,9 +213,9 @@ void __split_page_owner(struct page *page, unsigned int nr)
->  	if (unlikely(!page_ext))
->  		return;
->  
-> -	for (i = 0; i < nr; i++) {
-> +	for (i = 0; i < nr; i += (1 << new_order)) {
->  		page_owner = get_page_owner(page_ext);
-> -		page_owner->order = 0;
-> +		page_owner->order = new_order;
->  		page_ext = page_ext_next(page_ext);
+>  	if (PageAnon(head) && PageSwapCache(head)) {
+>  		swp_entry_t entry = { .val = page_private(head) };
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 33f632689cee..e9705ba6bbcc 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -3247,7 +3247,7 @@ void obj_cgroup_uncharge(struct obj_cgroup *objcg, size_t size)
+>   * Because tail pages are not marked as "used", set it. We're under
+>   * pgdat->lru_lock and migration entries setup in all page mappings.
+>   */
+> -void mem_cgroup_split_huge_fixup(struct page *head)
+> +void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_nr)
 
-I believe there cannot be any leftovers because nr is always a power of 2.
-Is it true? Converting nr argument to order (if it's possible) will make it obvious.
+I'd go with unsigned int new_order, then it's obvious that we can split
+the original page without any leftovers.
 
-Other than that the patch looks good to me.
+Other than that the patch looks good!
+Acked-by: Roman Gushchin <guro@fb.com>
 
 Thanks!
+
+>  {
+>  	struct mem_cgroup *memcg = page_memcg(head);
+>  	int i;
+> @@ -3255,7 +3255,7 @@ void mem_cgroup_split_huge_fixup(struct page *head)
+>  	if (mem_cgroup_disabled())
+>  		return;
+>  
+> -	for (i = 1; i < thp_nr_pages(head); i++) {
+> +	for (i = new_nr; i < thp_nr_pages(head); i += new_nr) {
+>  		css_get(&memcg->css);
+>  		head[i].memcg_data = (unsigned long)memcg;
+>  	}
+> -- 
+> 2.28.0
+> 
