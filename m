@@ -2,238 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6AF2B29A2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Nov 2020 01:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC102B29BB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Nov 2020 01:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbgKNAO3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Nov 2020 19:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbgKNAO3 (ORCPT
+        id S1726293AbgKNAPf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Nov 2020 19:15:35 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63390 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725981AbgKNAPb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Nov 2020 19:14:29 -0500
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D4FC0613D1
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2020 16:14:27 -0800 (PST)
-Received: by mail-ot1-x341.google.com with SMTP id f16so10525463otl.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2020 16:14:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lXb79r9eQqeGrU9lZoy7WQBr2nE5wh9PY1abAkxIwPs=;
-        b=E2W3oz/2iYUeIPyV02+SezMqtQY/70ozzZZb8SOsnD0nle//BEFQDh9gLwPFDZ7O+3
-         Bj76sPInHmBxP7SG4b428XKoLBaNFeM30/icXb2FYhbMv341FQ6nNUIXr0LtW+1Xd86m
-         Vexe9vgPASuSr6Y57CNMvIJI00HEW2tY4VR/RvcJn6JrFQMcP2PCKaXjlIvi00pblRdi
-         vE+Xd6Z5FixidDIHXnWYFR0t05SRYYRcGHOhRcK+5vukPzQxZfkmm8yKCz3H+q8jXpAZ
-         drZ9hJL/b+BR246s4SS84pgtfBylk306EBVy+EEDpPwawhrv5axdDzK225mFbspKzhKL
-         8q7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lXb79r9eQqeGrU9lZoy7WQBr2nE5wh9PY1abAkxIwPs=;
-        b=V7Z/anCWcabCGYeJlexQZxYRZPTC+W/TgHzhI0+ez3s+dLQr72zswMFksUcC04nnpA
-         E1s1gplb3GlR6Ptlm5pmDTfQVCYb8IV0GaRU6EChnCqEiMVPkTdmgVW7/d75eB8XnaQg
-         LfS1hIZFz8uYa1xJ+HObZsIUFMAAkGYNB3KS+T8PVEdGNwQ/0Hf096i1PWQ01g//34G3
-         te9QHAXHnWT+U7EToHRTfJ+izDqBhdZ3bJHJERhWQylJLe1hfY1YlNInGFOxBfbq17HF
-         8TyQWUMKG6UitQsfMVXHm0QnZZ/wNT0J5ymf/EMo2fG3XyHFaBg3RSdlX6ZSlyaE/OJ0
-         UFZg==
-X-Gm-Message-State: AOAM533rAWYlBET7A/ZbOt74Ns6Ue31NvrktLUGFyQLbl8sMMiezjRb6
-        HCI2nsTnIK+Qjbuwbg+Zt6I0Lrt2mq2bk6hutULaWA==
-X-Google-Smtp-Source: ABdhPJzFtA69t1obQkfZ4EP67sQdQFhdbkzgoBtqyhc91HSeJ3YD5tUXYXYKJgU1VXjTOr/cqsuOlWQzmmRAV3N7eV4=
-X-Received: by 2002:a9d:f44:: with SMTP id 62mr3532683ott.17.1605312866894;
- Fri, 13 Nov 2020 16:14:26 -0800 (PST)
+        Fri, 13 Nov 2020 19:15:31 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AE0D7hk010840;
+        Fri, 13 Nov 2020 16:15:12 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=2wFkXqJpjzE1kLSTo406/xl725+Y8i76x0UASV8LcK0=;
+ b=jPwov3r1v26cQEO8Eqii0sWe620faDx9pq10WuWqzERRhNMHFes9GHTgPBIyx8lSIxsI
+ NqUl3Xs1pV44yJueKA5cfms9VtHsRK5oqfT4h+Ix2nJDfN2dmsVBXmZ4urONsFiHwLuP
+ YPC4KPIsDZf6+rpGCyprgfE2vchZ5K2UTos= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34sdenxqmf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 13 Nov 2020 16:15:12 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 13 Nov 2020 16:15:11 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lcVjjOYR3b+Htb7fh9zz8fTgb5neVPhr48DRk2uJLt7Qg/Vkm68m8psbZRdOz4De26zAWPVZxxlI6Rd0L1hapKFlg2eAXGT/nyoihmc1Q/Z07/9TBcOUffovCBYP10RGvepYn0i9CboiPA8AyRCElGk7zODHO7ir+BG9pLf0I7Si+emfKN5OMKUfZ/vYyW4guTdbggrO3gAtrTcrD4752psNTNJAiyRXv9ChpBSU5ka7i+K42U+SlbIgLZatvZ+aiVbK4LMcs3S/qKGhXz4EPvRqnR2MeN3JRRzvtPNZ/8Ox8lmjKUVoCnhneVgU3+P4hICeaLTwfaA7XmqPMLQuAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2wFkXqJpjzE1kLSTo406/xl725+Y8i76x0UASV8LcK0=;
+ b=ikY2JmtkaBwlQ/iu7DaRxtP3G6HA7FHw2/u/x2mKeufybCKfKVrOU5b3Oqmu/Ktg6q/7o3/2ixSHnsDVaBm3yRmHrgfUqJC9ziUuhOSknwYKYLTNzl5FUer78S39YoTbj+eCdz744TOgKp1iPtJdXhWu43mIseRoAy0Wc57+mrO6UjJOL8lI3AZwvDAGgPghV7ZxktyewQoE9/k8zq/QcBo481ChdJFA/fFO33l08VObGoRUdK2s50pRibteaiXt4pfM4eTcEb9Qf+bc72dUVJU1p0xFRurlxw/oPnTp5dRuOCMECUKCbaoCaNCppoYGfXA4ifrbvMqP4kUdtxSfdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2wFkXqJpjzE1kLSTo406/xl725+Y8i76x0UASV8LcK0=;
+ b=ZGCICE2AeiH4/Uf4PtKXKVAJMKXaQtpGbkxiFffgL0GuzlVP4aGTvxSFFHwpfg9Kqu4If+nreVeEsfVVKj7eA5JgjWypZ3WsiatUmPw5TSfly0uLn7pIYyqFTErXldf/zNQFFhZNz4TcNxU1RRWywjBMN22Q4KoAV8sLhcqnKoU=
+Authentication-Results: nvidia.com; dkim=none (message not signed)
+ header.d=none;nvidia.com; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by BYAPR15MB2982.namprd15.prod.outlook.com (2603:10b6:a03:f8::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Sat, 14 Nov
+ 2020 00:15:10 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::3925:e1f9:4c6a:9396]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::3925:e1f9:4c6a:9396%6]) with mapi id 15.20.3564.025; Sat, 14 Nov 2020
+ 00:15:10 +0000
+Date:   Fri, 13 Nov 2020 16:15:05 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Zi Yan <ziy@nvidia.com>
+CC:     <linux-mm@kvack.org>, Matthew Wilcox <willy@infradead.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        David Nellans <dnellans@nvidia.com>
+Subject: Re: [RFC PATCH 3/6] mm: page_owner: add support for splitting to any
+ order in split page_owner.
+Message-ID: <20201114001505.GA3047204@carbon.dhcp.thefacebook.com>
+References: <20201111204008.21332-1-zi.yan@sent.com>
+ <20201111204008.21332-4-zi.yan@sent.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201111204008.21332-4-zi.yan@sent.com>
+X-Originating-IP: [2620:10d:c090:400::5:f0ce]
+X-ClientProxiedBy: MWHPR1701CA0007.namprd17.prod.outlook.com
+ (2603:10b6:301:14::17) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
 MIME-Version: 1.0
-References: <CABVgOSkQ6+y7OGw2494cJa2b60EkSjncLNAgc9cJDbS=X9J3WA@mail.gmail.com>
- <CANpmjNNp2RUCE_ypp2R4MznikTYRYeCDuF7VMp+Hbh=55KWa3A@mail.gmail.com>
- <47a05c5a-485d-026b-c1c3-476ed1a97856@gmail.com> <CABVgOSkZ9k6bHPp=LVATWfokMSrEuD87jOfE5MiVYAEbZMmaQQ@mail.gmail.com>
- <BY5PR13MB29336C5BE374D69939DCADABFDE90@BY5PR13MB2933.namprd13.prod.outlook.com>
- <CABVgOSnJAgWvTTABaF082LuYjAoAWzrBsyu9sT7x4GGMVsOD6Q@mail.gmail.com>
- <BY5PR13MB293305FE7ED35EC2B2C81AF1FDE80@BY5PR13MB2933.namprd13.prod.outlook.com>
- <CABVgOSn0vUvHFTPPnFGCmg0pEotwr6TQXQieRV=EMqs1QmFYUw@mail.gmail.com>
- <20201112123706.GA2457520@elver.google.com> <CABVgOSkjExNtGny=CDT1WVaXUVgSEaf7hwx8=VY4atN5ot10KQ@mail.gmail.com>
- <20201113103056.GA1568882@elver.google.com> <CABVgOS=0Qm-Aa5qgh3PRxbcV0-2ZZaQCm-4HY0dx8597oY+yXw@mail.gmail.com>
-In-Reply-To: <CABVgOS=0Qm-Aa5qgh3PRxbcV0-2ZZaQCm-4HY0dx8597oY+yXw@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Sat, 14 Nov 2020 01:14:15 +0100
-Message-ID: <CANpmjNNmzzuHpJOVV2JAKdgA48fxmqtXjDDOUg0e4+08kfQEXg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] kunit: Support for Parameterized Testing
-To:     David Gow <davidgow@google.com>
-Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees@lists.linuxfoundation.org" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from carbon.dhcp.thefacebook.com (2620:10d:c090:400::5:f0ce) by MWHPR1701CA0007.namprd17.prod.outlook.com (2603:10b6:301:14::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.25 via Frontend Transport; Sat, 14 Nov 2020 00:15:08 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8d6ec300-cbb4-46c8-10e8-08d888325928
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2982:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB29823FCF038628A8607F98D4BEE50@BYAPR15MB2982.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zxpb9jXZctvIQ6X9/t4qwvt6tfw0G/s7hR0O0lIlhvr+Hl0k12JAxxPGX1laHu+pw/T/52KY44D2R+I6MZxdc8dZJ8KYwvHZhwzwzr3lFvLXp6gaElFSHXcVlh8SDwLPHiDvh6ax18vYLP69EgMqkOWVMzhY3q4IqNRHaoDs/FUiuulvSvNEvzpeGKAMf0Rtq6i/AzqMrzWxCb/FcpC3fiGdMEc7TV5ciH2pjl1Wtsv6F3uue+OeSZmP74/f4NhfYjzEcppuJZr8chy4WFZsq3ADJpuL97oayDwyLWxqgoBXcaTqG0dv7B3GYu2neChnTLfr5xtrEVSZ5fGf5OiZFQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(39860400002)(136003)(366004)(396003)(2906002)(86362001)(8936002)(316002)(5660300002)(66476007)(66556008)(6666004)(83380400001)(8676002)(66946007)(33656002)(7696005)(6916009)(4326008)(52116002)(186003)(16526019)(7416002)(54906003)(55016002)(6506007)(9686003)(1076003)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: r9qLdex/ybBLoQUJvLHd5qLxKTohvanOQ9SzWRESot1YQzPPQWTtQw1QETEwM5o6lGZ4NhcV0M6ZY5y2LUMvDXAub3KdwwxIZUq66CNoEbuTYK9y5GsWW5W6MZDMJObNyktQAi82adHdgbAScotosFAgo/AMHYHWN08gK6PlgmYn/JCBYuIX+LLAhK8BpQlj/MoWZFoP9HR2OYWVM1OxfPY26Qs3usZse7xFoO+Hdn+/NoGnX2+xRwJPwM4neJNHoThAjSj52G8PUwyOOCP1+GsS3EaN8jFqPUBJgJZ4lWaFKE+vqdufb+zT0eLTrZX3jEyPYpAz1k7CqXLc5xrxSK6j9p4PbgCtNkTWAs4U57T4MTpaKuIMlzW1LI9Pi8MsnPJDTtzxPumoiYqcX7009jEuPxxZiz49jNCPOVojdjb6bwoziZoN/QgqFhP4T4StY7DKKdsCTBA58UAZ/3Ph+h5tfAAlCsPyHOGvZTllvCQjJyrfnleaJsBzfStuIzI/QBAq5rtD3/9Y97rE4pMA21NEZYTEYRB3vZgY+kvEgwC1vWXCblkebpO78m7B2nTMUJ5TgSplqci+jI9GBdqLrkzRzB2IVOQezHzN/Q6PPiOErpTkkHCh8wL+qCMsuVvFZUAgAFK0KJEzUVMp53hvgEgzMNabmkGX2At5xNIJjNE=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d6ec300-cbb4-46c8-10e8-08d888325928
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2020 00:15:10.4002
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d4l1DeJChNBYQE5uUzIRYg9sayqHdIN4Xk09XTXyqOmzQh1H8umoFKL3YvjMO8/7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2982
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-13_21:2020-11-13,2020-11-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1011
+ priorityscore=1501 phishscore=0 bulkscore=0 adultscore=0 suspectscore=1
+ spamscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011140000
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 13 Nov 2020 at 23:37, David Gow <davidgow@google.com> wrote:
->
-> On Fri, Nov 13, 2020 at 6:31 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Fri, Nov 13, 2020 at 01:17PM +0800, David Gow wrote:
-> > > On Thu, Nov 12, 2020 at 8:37 PM Marco Elver <elver@google.com> wrote:
-> > [...]
-> > > > > (It also might be a little tricky with the current implementation to
-> > > > > produce the test plan, as the parameters come from a generator, and I
-> > > > > don't think there's a way of getting the number of parameters ahead of
-> > > > > time. That's a problem with the sub-subtest model, too, though at
-> > > > > least there it's a little more isolated from other tests.)
-> > > >
-> > > > The whole point of generators, as I envisage it, is to also provide the
-> > > > ability for varying parameters dependent on e.g. environment,
-> > > > configuration, number of CPUs, etc. The current array-based generator is
-> > > > the simplest possible use-case.
-> > > >
-> > > > However, we *can* require generators generate a deterministic number of
-> > > > parameters when called multiple times on the same system.
-> > >
-> > > I think this is a reasonable compromise, though it's not actually
-> > > essential. As I understand the TAP spec, the test plan is actually
-> > > optional (and/or can be at the end of the sequence of tests), though
-> > > kunit_tool currently only supports having it at the beginning (which
-> > > is strongly preferred by the spec anyway). I think we could get away
-> > > with having it at the bottom of the subtest results though, which
-> > > would save having to run the generator twice, when subtest support is
-> > > added to kunit_tool.
-> >
-> > I can't find this in the TAP spec, where should I look? Perhaps we
-> > shouldn't venture too far off the beaten path, given we might not be the
-> > only ones that want to parse this output.
-> >
->
-> It's in the "Test Lines and the Plan" section:
-> "The plan is optional but if there is a plan before the test points it
-> must be the first non-diagnostic line output by the test file. In
-> certain instances a test file may not know how many test points it
-> will ultimately be running. In this case the plan can be the last
-> non-diagnostic line in the output. The plan cannot appear in the
-> middle of the output, nor can it appear more than once."
+On Wed, Nov 11, 2020 at 03:40:05PM -0500, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> It adds a new_order parameter to set new page order in page owner.
+> It prepares for upcoming changes to support split huge page to any lower
+> order.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  include/linux/page_owner.h | 7 ++++---
+>  mm/huge_memory.c           | 2 +-
+>  mm/page_alloc.c            | 2 +-
+>  mm/page_owner.c            | 6 +++---
+>  4 files changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
+> index 3468794f83d2..215cbb159568 100644
+> --- a/include/linux/page_owner.h
+> +++ b/include/linux/page_owner.h
+> @@ -31,10 +31,11 @@ static inline void set_page_owner(struct page *page,
+>  		__set_page_owner(page, order, gfp_mask);
+>  }
+>  
+> -static inline void split_page_owner(struct page *page, unsigned int nr)
+> +static inline void split_page_owner(struct page *page, unsigned int nr,
+> +			unsigned int new_order)
+>  {
+>  	if (static_branch_unlikely(&page_owner_inited))
+> -		__split_page_owner(page, nr);
+> +		__split_page_owner(page, nr, new_order);
+>  }
+>  static inline void copy_page_owner(struct page *oldpage, struct page *newpage)
+>  {
+> @@ -60,7 +61,7 @@ static inline void set_page_owner(struct page *page,
+>  {
+>  }
+>  static inline void split_page_owner(struct page *page,
+> -			unsigned int order)
+> +			unsigned int nr, unsigned int new_order)
 
-Ah, that's fine then.
+With the addition of the new argument it's a bit hard to understand
+what the function is supposed to do. It seems like nr == page_order(page),
+is it right? Maybe we can pass old_order and new_order? Or just the page
+and the new order?
 
-> My only concern with running through the generator multiple times to
-> get the count is that it might be slow and/or more difficult if
-> someone uses a more complicated generator. I can't think of anything
-> specific yet, though, so we can always do it for now and change it
-> later if a problematic case occurs.
+>  {
+>  }
+>  static inline void copy_page_owner(struct page *oldpage, struct page *newpage)
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index f599f5b9bf7f..8b7d771ee962 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2459,7 +2459,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>  
+>  	ClearPageCompound(head);
+>  
+> -	split_page_owner(head, nr);
+> +	split_page_owner(head, nr, 1);
+>  
+>  	/* See comment in __split_huge_page_tail() */
+>  	if (PageAnon(head)) {
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index d77220615fd5..a9eead0e091a 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3284,7 +3284,7 @@ void split_page(struct page *page, unsigned int order)
+>  
+>  	for (i = 1; i < (1 << order); i++)
+>  		set_page_refcounted(page + i);
+> -	split_page_owner(page, 1 << order);
+> +	split_page_owner(page, 1 << order, 1);
+>  }
+>  EXPORT_SYMBOL_GPL(split_page);
+>  
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index b735a8eafcdb..2b7f7e9056dc 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -204,7 +204,7 @@ void __set_page_owner_migrate_reason(struct page *page, int reason)
+>  	page_owner->last_migrate_reason = reason;
+>  }
+>  
+> -void __split_page_owner(struct page *page, unsigned int nr)
+> +void __split_page_owner(struct page *page, unsigned int nr, unsigned int new_order)
+>  {
+>  	int i;
+>  	struct page_ext *page_ext = lookup_page_ext(page);
+> @@ -213,9 +213,9 @@ void __split_page_owner(struct page *page, unsigned int nr)
+>  	if (unlikely(!page_ext))
+>  		return;
+>  
+> -	for (i = 0; i < nr; i++) {
+> +	for (i = 0; i < nr; i += (1 << new_order)) {
+>  		page_owner = get_page_owner(page_ext);
+> -		page_owner->order = 0;
+> +		page_owner->order = new_order;
+>  		page_ext = page_ext_next(page_ext);
 
-I'm all for simplicity, so if nobody objects, let's just get rid of
-the number of parameters and avoid running it twice.
+I believe there cannot be any leftovers because nr is always a power of 2.
+Is it true? Converting nr argument to order (if it's possible) will make it obvious.
 
-> > > > To that end, I propose a v7 (below) that takes care of getting number of
-> > > > parameters (and also displays descriptions for each parameter where
-> > > > available).
-> > > >
-> > > > Now it is up to you how you want to turn the output from diagnostic
-> > > > lines into something TAP compliant, because now we have the number of
-> > > > parameters and can turn it into a subsubtest. But I think kunit-tool
-> > > > doesn't understand subsubtests yet, so I suggest we take these patches,
-> > > > and then somebody can prepare kunit-tool.
-> > > >
-> > >
-> > > This sounds good to me. The only thing I'm not sure about is the
-> > > format of the parameter description: thus far test names be valid C
-> > > identifier names, due to the fact they're named after the test
-> > > function. I don't think there's a fundamental reason parameters (and
-> > > hence, potentially, subsubtests) need to follow that convention as
-> > > well, but it does look a bit odd.  Equally, the square brackets around
-> > > the description shouldn't be necessary according to the TAP spec, but
-> > > do seem to make things a little more readable, particuarly with the
-> > > names in the ext4 inode test. I'm not too worried about either of
-> > > those, though: I'm sure it'll look fine once I've got used to it.
-> >
-> > The parameter description doesn't need to be a C identifier. At least
-> > that's what I could immediately glean from TAP v13 spec (I'm looking
-> > here: https://testanything.org/tap-version-13-specification.html and see
-> > e.g. "ok 1 - Input file opened" ...).
-> >
->
-> Yeah: it looked a bit weird for everything else to be an identifier
-> (given that KUnit does require it for tests), but these parameter
-> descriptions not to be. It's not a problem, though, so let's go ahead
-> with it.
->
-> > [...]
-> > > > > In any case, I'm happy to leave the final decision here to Arpitha and
-> > > > > Marco, so long as we don't actually violate the TAP/KTAP spec and
-> > > > > kunit_tool is able to read at least the top-level result. My
-> > > > > preference is still to go either with the "# [test_case->name]:
-> > > > > [ok|not ok] [index] - param-[index]", or to get rid of the
-> > > > > per-parameter results entirely for now (or just print out a diagnostic
-> > > > > message on failure). In any case, it's a decision we can revisit once
-> > > > > we have support for named parameters, better tooling, or a better idea
-> > > > > of how people are actually using this.
-> > > >
-> > > > Right, so I think we'll be in a better place if we implement: 1)
-> > > > parameter to description conversion support, 2) counting parameters. So
-> > > > I decided to see what it looks like, and it wasn't too bad. I just don't
-> > > > know how you want to fix kunit-tool to make these non-diagnostic lines
-> > > > and not complain, but as I said, it'd be good to not block these
-> > > > patches.
-> > >
-> > > Yup, I tried this v7, and it looks good to me. The kunit_tool work
-> > > will probably be a touch more involved, so I definitely don't want to
-> > > hold up supporting this on that.
-> > >
-> > > My only thoughts on the v7 patch are:
-> > > - I don't think we actually need the parameter count yet (or perhaps
-> > > ever if we go with subtests as planned), so I be okay with getting rid
-> > > of that.
-> >
-> > As noted above, perhaps we should keep it for compatibility with other
-> > parsers and CI systems we don't have much control over. It'd be a shame
-> > if 99% of KUnit output can be parsed by some partially compliant parser,
-> > yet this would break it.
->
-> KUnit has only started providing the test plans in some cases pretty
-> recently, and the spec does make it optional, so I'm not particularly
-> worried about this breaking parsers. I'm not too worried about it
-> causing problems to have it either, though, so if you'd rather keep
-> it, that's fine by me as well.
->
-> > > - It'd be a possibility to get rid of the square brackets from the
-> > > output, and if we still want them, make them part of the test itself:
-> > > if this were TAP formatted, those brackets would be part of the
-> > > subsubtest name.
-> >
-> > I don't mind. It's just that we can't prescribe a format, and as
-> > seen below the descriptions include characters -<>=,. which can be
-> > confusing. But perhaps you're right, so let's remove them.
-> >
-> > But as noted, TAP doesn't seem to care. So let's remove them.
-> >
->
-> Yeah: I have a slight preference for removing them, as TAP parsers
-> would otherwise include them in the parameter name, which looks a
-> little weird.
-> Of course, the point is moot until we actually fix kunit_tool and make
-> these subtests, so there's no fundamental reason we couldn't leave
-> them in for now, and remove them then if you thought it was
-> significantly more readable. (Personally, I'd still err on the side of
-> removing them to avoid any unnecessary churn.)
+Other than that the patch looks good to me.
 
-Sounds good.
-
-Arpitha: Do you want to send v7, but with the following modifications
-from what I proposed? Assuming nobody objects.
-
-1. Remove the num_params counter and don't print the number of params
-anymore, nor do validation that generators are deterministic.
-2. Remove the [].
-[ I'm happy to send as well, just let me know what you prefer. ]
-
-Thanks,
--- Marco
+Thanks!
