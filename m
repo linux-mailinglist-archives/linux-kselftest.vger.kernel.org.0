@@ -2,92 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BCF2B4FC2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 19:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782402B502A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 19:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731231AbgKPSc6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Nov 2020 13:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387714AbgKPScx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Nov 2020 13:32:53 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AF8C0613D1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 10:32:53 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id k1so16183193ilc.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 10:32:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=R9lE9d9/CKJRF5PYT88VMKA1TfCL9raVeHb+lUFo8Cc=;
-        b=fh59IwpEIR+cJ87j4+XJilIeVzjsOf0N8vckF1J+4V9K1IpQscf47H9lkA+wvSdy71
-         22e6No7xYC8F/kGXd+U4rL46FQbOQqfYNNPdPX5nh01oo9+7gZor3GFP/AEiNvifMpSi
-         sAgdYNWxPg0RZtcFZUJQywwXZBsAPKWlCK37A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=R9lE9d9/CKJRF5PYT88VMKA1TfCL9raVeHb+lUFo8Cc=;
-        b=CWF60JPZzHf2Tf1c2nDWlUT4qBfGx298gifkv/m5ar+WwkV7PYq/K05n/oRrrah0fV
-         r2eID5LdTGWAEMutsTRBOabaikqlGwj5ImRHNxmG5faqua87bjprwXvSLb4+Souh3tU4
-         LlCoIKIdt1EoxNWjuI83ljSz5eNH5k6sBzh6IlYOKmJcoib5C/tB8wioRJLo9IfiGim6
-         +fH0/qhvl678M9qp5C+jFxYZ3bUu+XRFUB0KA9Ty8zaLrbS3+4dguXqMZgTI2dibSrdA
-         454HCxgncP6qH+vLEf+UfJtwthHKkLs/0BOh333BZ1NgbLFvmrrHAM/wGA0vkby2LS8b
-         +q4w==
-X-Gm-Message-State: AOAM531Ajf8NlgSSbkFYnvNGFZae9CBSmGgtHF7Sk7WrSkx2/9okT4nA
-        A3caNnSu8/F+YYAgUl2S68ONJ5BlAiV5pA==
-X-Google-Smtp-Source: ABdhPJxcuzifQRoMzSvdjcej2uBH2zLWjlvT4vQb3xMGKTuEWgLl54a63oenH9NZ/uFp73baJWMHMg==
-X-Received: by 2002:a92:a041:: with SMTP id b1mr1214714ilm.242.1605551572485;
-        Mon, 16 Nov 2020 10:32:52 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id y6sm8150669iob.48.2020.11.16.10.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2020 10:32:51 -0800 (PST)
-Subject: Re: checking for "config" file existence.
-To:     Jeffrin Jose T <jeffrin@rajagiritech.edu.in>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <2ea637f38be0d03d0e0c545a6d12f36217cededc.camel@rajagiritech.edu.in>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d6e1e346-ff95-74ef-7f43-1d2468d5330c@linuxfoundation.org>
-Date:   Mon, 16 Nov 2020 11:32:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
+        id S1728109AbgKPStV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Nov 2020 13:49:21 -0500
+Received: from mga02.intel.com ([134.134.136.20]:50413 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727701AbgKPStV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Nov 2020 13:49:21 -0500
+IronPort-SDR: isxPLhZX6e4/B74nh8z4uG3vOKzpEKkpbZyptzktclqw6xWlfNfccQ56UOcem5Mvd4UkjTQlnY
+ R31xfgo1knuw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="157821919"
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="157821919"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 10:49:18 -0800
+IronPort-SDR: QM3K1Df9J/Wg+oJAcVfa83qY/TNr4BOrYcj8zI8YrrZ97jsEsonZ8J/uK1N6DUXothgxIsiUVW
+ Pzs792lhR6LA==
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="533514829"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 10:49:17 -0800
+Date:   Mon, 16 Nov 2020 10:49:16 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH V3 05/10] x86/entry: Pass irqentry_state_t by reference
+Message-ID: <20201116184916.GA722447@iweiny-DESK2.sc.intel.com>
+References: <20201106232908.364581-1-ira.weiny@intel.com>
+ <20201106232908.364581-6-ira.weiny@intel.com>
+ <87mtzi8n0z.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <2ea637f38be0d03d0e0c545a6d12f36217cededc.camel@rajagiritech.edu.in>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mtzi8n0z.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/12/20 10:40 AM, Jeffrin Jose T wrote:
-> hello,
+On Sun, Nov 15, 2020 at 07:58:52PM +0100, Thomas Gleixner wrote:
+> Ira,
 > 
-> i wrote a  small program to check for the existence of "config" files
-> for testing projects under kselftest framework.
+> On Fri, Nov 06 2020 at 15:29, ira weiny wrote:
 > 
-> chmod 755 test_config.py
-> This file should be located in "tools/testing/selftests"
-> This can be run as "./test_config.py"
+> Subject prefix wants to 'entry:'. This changes generic code and the x86
+> part is just required to fix the generic code change.
+
+Sorry, yes that was carried incorrectly from earlier versions.
+
 > 
-Why do we need a dedicated script when you can do it with:
+> > Currently struct irqentry_state_t only contains a single bool value
+> > which makes passing it by value is reasonable.  However, future patches
+> > propose to add information to this struct, for example the PKRS
+> > register/thread state.
+> >
+> > Adding information to irqentry_state_t makes passing by value less
+> > efficient.  Therefore, change the entry/exit calls to pass irq_state by
+> > reference.
+> 
+> The PKRS muck needs to add an u32 to that struct. So how is that a
+> problem?
 
-cd tools/testing/selftests; find . -name config
+There are more fields to be added for the kmap/pmem support.  So this will be
+needed eventually.  Even though it is not strictly necessary in the next patch.
 
-I see that your script also prints if config doesn't exist.
-It is not a failure not have config as config is necessary
-only when a test has config option dependencies.
+> 
+> The resulting struct still fits into 64bit which is by far more
+> efficiently passed by value than by reference. So which problem are you
+> solving here?
 
-What does this script attempting to solve?
+I'm getting ahead of myself a bit.  I will be adding more fields for the
+kmap/pmem tracking.
 
-thanks,
--- Shuah
+Would you accept just a clean up for the variable names in this patch?  I could
+then add the pass by reference when I add the new fields later.  Or would an
+update to the commit message be ok to land this now?
 
+Ira
 
+> 
+> Thanks
+> 
+>         tglx
+> 
