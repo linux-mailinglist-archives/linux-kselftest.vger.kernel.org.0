@@ -2,57 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C91012B4072
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 11:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C55B2B408E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 11:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgKPKGS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Nov 2020 05:06:18 -0500
-Received: from tigeramira.ro ([88.158.78.30]:57538 "EHLO mail.tigeramira.ro"
-        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726902AbgKPKGR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Nov 2020 05:06:17 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 30005AFF905
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2020 16:47:59 +0200 (EET)
-Received: from mail.tigeramira.ro ([127.0.0.1])
-        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id AMpF0ni-MK7Z for <linux-kselftest@vger.kernel.org>;
-        Sat, 14 Nov 2020 16:47:58 +0200 (EET)
-Received: from mail.tigeramira.ro (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 9A3B2856EDA
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2020 21:47:41 +0200 (EET)
-Received: from [156.96.44.214] (unknown [192.168.12.254])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 928C4D3FF3A
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2020 17:10:07 +0200 (EET)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1728695AbgKPKNn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Nov 2020 05:13:43 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7503 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727012AbgKPKNn (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Nov 2020 05:13:43 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CZPzZ0cxtzhXjy;
+        Mon, 16 Nov 2020 18:13:30 +0800 (CST)
+Received: from huawei.com (10.175.113.133) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Mon, 16 Nov 2020
+ 18:13:36 +0800
+From:   Wang Hai <wanghai38@huawei.com>
+To:     <shuah@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <andrii@kernel.org>, <john.fastabend@gmail.com>,
+        <kpsingh@chromium.org>, <sdf@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH bpf] selftests/bpf: fix error return code in run_getsockopt_test()
+Date:   Mon, 16 Nov 2020 18:16:33 +0800
+Message-ID: <20201116101633.64627-1-wanghai38@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Corporate and Personal Loan/
-To:     linux-kselftest@vger.kernel.org
-From:   "Investment  Corporate" <financialcapability6@gmail.com>
-Date:   Tue, 10 Nov 2020 06:10:35 -0800
-Reply-To: hmurrah39@gmail.com
-Message-Id: <20201110151008.928C4D3FF3A@mail.tigeramira.ro>
+Content-Type: text/plain
+X-Originating-IP: [10.175.113.133]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello linux-kselftest@vger.kernel.org
+Fix to return a negative error code from the error handling
+case instead of 0, as done elsewhere in this function.
 
+Fixes: 65b4414a05eb ("selftests/bpf: add sockopt test that exercises BPF_F_ALLOW_MULTI")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+---
+ tools/testing/selftests/bpf/prog_tests/sockopt_multi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
+index 29188d6f5c8d..51fac975b316 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
+@@ -138,7 +138,8 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
+ 	 */
+ 
+ 	buf = 0x40;
+-	if (setsockopt(sock_fd, SOL_IP, IP_TOS, &buf, 1) < 0) {
++	err = setsockopt(sock_fd, SOL_IP, IP_TOS, &buf, 1);
++	if (err < 0) {
+ 		log_err("Failed to call setsockopt(IP_TOS)");
+ 		goto detach;
+ 	}
+-- 
+2.17.1
 
-
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
-
-
-Please get back to me if you are interested for more
-
-details.
-
-
-Yours faithfully,
-
-Hashim Murrah
