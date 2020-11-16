@@ -2,170 +2,285 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A142B39BF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Nov 2020 22:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 234E52B3C41
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 05:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726004AbgKOVyx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Nov 2020 16:54:53 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:2306 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbgKOVyx (ORCPT
+        id S1726248AbgKPEzD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Nov 2020 23:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbgKPEzD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Nov 2020 16:54:53 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4CZ5Zk1rpTz13QFJ;
-        Mon, 16 Nov 2020 05:54:22 +0800 (CST)
-Received: from dggemi761-chm.china.huawei.com (10.1.198.147) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Mon, 16 Nov 2020 05:54:45 +0800
-Received: from dggemi761-chm.china.huawei.com ([10.9.49.202]) by
- dggemi761-chm.china.huawei.com ([10.9.49.202]) with mapi id 15.01.1913.007;
- Mon, 16 Nov 2020 05:54:45 +0800
-From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "xuwei (O)" <xuwei5@huawei.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: RE: [PATCH v3 1/2] dma-mapping: add benchmark support for streaming
- DMA APIs
-Thread-Topic: [PATCH v3 1/2] dma-mapping: add benchmark support for streaming
- DMA APIs
-Thread-Index: AQHWuqaxiT3rvc8AvUKektYgWKvLn6nIS8nQgAAQE4CAAVfXkA==
-Date:   Sun, 15 Nov 2020 21:54:45 +0000
-Message-ID: <cb7a42bd21f8488f861ebfd7fa46cef6@hisilicon.com>
-References: <20201102080646.2180-1-song.bao.hua@hisilicon.com>
- <20201102080646.2180-2-song.bao.hua@hisilicon.com>
- <20201114165336.GA24844@lst.de>
- <5c4488dd28fc4869b7e67dd842ffa208@hisilicon.com>
- <20201115084515.GA18411@lst.de>
-In-Reply-To: <20201115084515.GA18411@lst.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.126.203.73]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sun, 15 Nov 2020 23:55:03 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00468C0613CF;
+        Sun, 15 Nov 2020 20:55:02 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id w6so13019985pfu.1;
+        Sun, 15 Nov 2020 20:55:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8y8EzNwAbA7Mk6zHCNBMz+8QqO4AkN7jfQ83GAtzKaw=;
+        b=JgXdNauNUS4omz7BJcV5u4oNPci5St150RSWKlbzPC67rcAoTFCDpyCPfn969zHHKq
+         br3c0R9j32AZyLzt/737eYU6x9YfHFlR4C/0Hf19aKKHDDJ4o1Uqvkv0+WiKWG4GYtvI
+         MHmLQkUq7GCOCzzsnPFxph29nTB3vG4RMXlp5XTU+H5f/Zy9+f3h/qZQyCJOB76l8J3G
+         4ZUDHNdIa+0Czki/65jxn1BxBuIDFLi9gEI8NqtPGc1hsAqlRp1k5b3ogLBKCcot2hM7
+         aXLLEBeN0WGLYrz/+rgENN2HpWaJBb+Sfb7dj1ZbfSZmqk9TDSxGGQLRylMrtznOcRUk
+         ckKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8y8EzNwAbA7Mk6zHCNBMz+8QqO4AkN7jfQ83GAtzKaw=;
+        b=i2lNF5YEKu9EFvXJisD1C2ileqLLIKh8W9eS0KGaEmT4YKsvQPGYsahvQOw/Ed17GF
+         wPXwizzVnFP2yQswbZgErGaNVMQqWQEzs28De5PWBIMWDjM4tclZ4VQC3LbcLLN2oQj5
+         58kZjgRAO/zNvrZFdjVBiKLl5QxEhuu175aelpT4nA31ZMkfO72HCPk8X1NzMpXV8yxH
+         xhrGpfxGEAZc67zr52lK69+x1o7yh0oNMMOSFDnwCsFEs3LfInHoGItmzkc1bWs8O4Jw
+         Z/T1g86WCD8iSUODjNLvdSeuHLEd2cY7F4V7SWrI3jH4dYwl7E0VKp+A6P9+d4csDmq0
+         dXuw==
+X-Gm-Message-State: AOAM532ZbOMaf43X8/qkWKzi03wmLZFCnmniX8nwi/nopWbiLWFjCr7O
+        MLZdNQJ7t5m1DecidRP0qGSIzE2d/jRKUQ==
+X-Google-Smtp-Source: ABdhPJzm9+O7++vo06zq3bbBabM8q2zCStmcQUezajR8hzGM3/m3V9f5M5CiE9CGkndjZ3OhwgL7ww==
+X-Received: by 2002:a05:6a00:80e:b029:196:1cad:b64 with SMTP id m14-20020a056a00080eb02901961cad0b64mr10545502pfk.5.1605502502059;
+        Sun, 15 Nov 2020 20:55:02 -0800 (PST)
+Received: from [192.168.86.81] ([106.51.140.48])
+        by smtp.gmail.com with ESMTPSA id x12sm15818385pjr.51.2020.11.15.20.54.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Nov 2020 20:55:01 -0800 (PST)
+Subject: Re: [PATCH v8 2/2] fs: ext4: Modify inode-test.c to use KUnit
+ parameterized testing feature
+To:     Marco Elver <elver@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Tim Bird <Tim.Bird@sony.com>, David Gow <davidgow@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+References: <20201115185759.169279-1-98.arpi@gmail.com>
+ <20201115185905.169349-1-98.arpi@gmail.com>
+ <CANpmjNPKfPeiXUUPwz1aU6iKwOXpSZNV5ZJq22NkZZWEhE9r1w@mail.gmail.com>
+From:   Arpitha Raghunandan <98.arpi@gmail.com>
+Message-ID: <989852ba-2fb3-7570-ce79-a0db6cc7e99e@gmail.com>
+Date:   Mon, 16 Nov 2020 10:24:53 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+In-Reply-To: <CANpmjNPKfPeiXUUPwz1aU6iKwOXpSZNV5ZJq22NkZZWEhE9r1w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Christoph Hellwig [mailto:hch@lst.de]
-> Sent: Sunday, November 15, 2020 9:45 PM
-> To: Song Bao Hua (Barry Song) <song.bao.hua@hisilicon.com>
-> Cc: Christoph Hellwig <hch@lst.de>; iommu@lists.linux-foundation.org;
-> robin.murphy@arm.com; m.szyprowski@samsung.com; Linuxarm
-> <linuxarm@huawei.com>; linux-kselftest@vger.kernel.org; xuwei (O)
-> <xuwei5@huawei.com>; Joerg Roedel <joro@8bytes.org>; Will Deacon
-> <will@kernel.org>; Shuah Khan <shuah@kernel.org>
-> Subject: Re: [PATCH v3 1/2] dma-mapping: add benchmark support for
-> streaming DMA APIs
+On 16/11/20 1:14 am, Marco Elver wrote:
+> On Sun, 15 Nov 2020 at 19:59, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+>>
+>> Modify fs/ext4/inode-test.c to use the parameterized testing
+>> feature of KUnit.
+>>
+>> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+>> Signed-off-by: Marco Elver <elver@google.com>
+>> ---
+>> Changes v7->v8:
+>> - Replace strcpy() with strncpy() in timestamp_expectation_to_desc()
+>> Changes v6->v7:
+>> - Introduce timestamp_expectation_to_desc() to convert param to
+>>   description.
+>> Changes v5->v6:
+>> - No change to this patch of the patch series
+>> Changes v4->v5:
+>> - No change to this patch of the patch series
+>> Changes v3->v4:
+>> - Modification based on latest implementation of KUnit parameterized testing
+>> Changes v2->v3:
+>> - Marked hardcoded test data const
+>> - Modification based on latest implementation of KUnit parameterized testing
+>> Changes v1->v2:
+>> - Modification based on latest implementation of KUnit parameterized testing
+>>
+>>  fs/ext4/inode-test.c | 323 ++++++++++++++++++++++---------------------
+>>  1 file changed, 167 insertions(+), 156 deletions(-)
+>>
+>> diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
+>> index d62d802c9c12..2c0c00c45c6b 100644
+>> --- a/fs/ext4/inode-test.c
+>> +++ b/fs/ext4/inode-test.c
+>> @@ -80,6 +80,148 @@ struct timestamp_expectation {
+>>         bool lower_bound;
+>>  };
+>>
+>> +static const struct timestamp_expectation test_data[] = {
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NEG_NO_EXTRA_BITS_CASE,
+>> +               .msb_set = true,
+>> +               .lower_bound = true,
+>> +               .extra_bits = 0,
+>> +               .expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NEG_NO_EXTRA_BITS_CASE,
+>> +               .msb_set = true,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 0,
+>> +               .expected = {.tv_sec = -1LL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = true,
+>> +               .extra_bits = 0,
+>> +               .expected = {0LL, 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 0,
+>> +               .expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NEG_LO_1_CASE,
+>> +               .msb_set = true,
+>> +               .lower_bound = true,
+>> +               .extra_bits = 1,
+>> +               .expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NEG_LO_1_CASE,
+>> +               .msb_set = true,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 1,
+>> +               .expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NONNEG_LO_1_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = true,
+>> +               .extra_bits = 1,
+>> +               .expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NONNEG_LO_1_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 1,
+>> +               .expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NEG_HI_1_CASE,
+>> +               .msb_set = true,
+>> +               .lower_bound = true,
+>> +               .extra_bits =  2,
+>> +               .expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NEG_HI_1_CASE,
+>> +               .msb_set = true,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 2,
+>> +               .expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NONNEG_HI_1_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = true,
+>> +               .extra_bits = 2,
+>> +               .expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NONNEG_HI_1_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 2,
+>> +               .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NONNEG_HI_1_NS_1_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 6,
+>> +               .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NONNEG_HI_1_NS_MAX_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = true,
+>> +               .extra_bits = 0xFFFFFFFF,
+>> +               .expected = {.tv_sec = 0x300000000LL,
+>> +                            .tv_nsec = MAX_NANOSECONDS},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = LOWER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = true,
+>> +               .extra_bits = 3,
+>> +               .expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
+>> +       },
+>> +
+>> +       {
+>> +               .test_case_name = UPPER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
+>> +               .msb_set = false,
+>> +               .lower_bound = false,
+>> +               .extra_bits = 3,
+>> +               .expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
+>> +       }
+>> +};
+>> +
+>> +static void timestamp_expectation_to_desc(const struct timestamp_expectation *t,
+>> +                                         char *desc)
+>> +{
+>> +       int desc_length = strlen(t->test_case_name);
+>> +
+>> +       strncpy(desc, t->test_case_name, desc_length);
+>> +       desc[desc_length] = '\0';
+>> +}
 > 
-> On Sun, Nov 15, 2020 at 12:11:15AM +0000, Song Bao Hua (Barry Song)
-> wrote:
-> >
-> > Checkpatch has changed 80 to 100. That's probably why my local checkpatch
-> didn't report any warning:
-> >
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=
-> bdc48fa11e46f867ea4d
-> >
-> > I am happy to change them to be less than 80 if you like.
+> This unfortunately won't prevent out-of-bounds accesses if the
+> description is longer than KUNIT_PARAM_DESC_SIZE.
 > 
-> Don't rely on checkpath, is is broken.  Look at the codingstyle document.
+> With strncpy() we want to avoid copying more bytes than the
+> destination buffer can hold. This can be done by simply a
+> strncpy(desc, t->test_case_name, KUNIT_PARAM_DESC_SIZE). But,
+> strncpy() is unsafe in certain cases, too, so the kernel introduced
+> strscpy() -- see the note about strncpy() in
+> Documentation/process/deprecated.rst. Also have a look at the
+> documentation about str{n,l,s}cpy() in lib/string.c.
 > 
-> > > I think this needs to set a dma mask as behavior for unlimited dma
-> > > mask vs the default 32-bit one can be very different.
-> >
-> > I actually prefer users bind real devices with real dma_mask to test rather
-> than force to change
-> > the dma_mask in this benchmark.
+> So, finally, what we want here is just 1 line:
 > 
-> The mask is set by the driver, not the device.  So you need to set when
-> when you bind, real device or not.
+>     strscpy(desc, t->test_case_name, KUNIT_PARAM_DESC_SIZE);
+> 
 
-Yep while it is a little bit tricky.
+Okay, I'll look this up and make this change for v9.
 
-Sometimes, it is done by "device" in architectures, e.g. there are lots of
-dma_mask configuration code in arch/arm/mach-xxx.
-arch/arm/mach-davinci/da850.c
-static u64 da850_vpif_dma_mask = DMA_BIT_MASK(32);
-static struct platform_device da850_vpif_dev = {
-	.name		= "vpif",
-	.id		= -1,
-	.dev		= {
-		.dma_mask		= &da850_vpif_dma_mask,
-		.coherent_dma_mask	= DMA_BIT_MASK(32),
-	},
-	.resource	= da850_vpif_resource,
-	.num_resources	= ARRAY_SIZE(da850_vpif_resource),
-};
+> Patch 1/2 looks fine though, so hopefully v9 will be final. :-)
+> 
+> Thanks,
+> -- Marco
+> 
 
-Sometimes, it is done by "of" or "acpi", for example:
-drivers/acpi/arm64/iort.c
-void iort_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size)
-{
-	u64 end, mask, dmaaddr = 0, size = 0, offset = 0;
-	int ret;
-
-	...
-
-	ret = acpi_dma_get_range(dev, &dmaaddr, &offset, &size);
-	if (!ret) {
-		/*
-		 * Limit coherent and dma mask based on size retrieved from
-		 * firmware.
-		 */
-		end = dmaaddr + size - 1;
-		mask = DMA_BIT_MASK(ilog2(end) + 1);
-		dev->bus_dma_limit = end;
-		dev->coherent_dma_mask = mask;
-		*dev->dma_mask = mask;
-	}
-	...
-}
-
-Sometimes, it is done by "bus", for example, ISA:
-		isa_dev->dev.coherent_dma_mask = DMA_BIT_MASK(24);
-		isa_dev->dev.dma_mask = &isa_dev->dev.coherent_dma_mask;
-
-		error = device_register(&isa_dev->dev);
-		if (error) {
-			put_device(&isa_dev->dev);
-			break;
-		}
-
-And in many cases, it is done by driver. On the ARM64 server platform I am testing,
-actually rarely drivers set dma_mask.
-
-So to make the dma benchmark work on all platforms, it seems it is worth
-to add a dma_mask_bit parameter. But, in order to avoid breaking the
-dma_mask of those devices whose dma_mask are set by architectures, 
-acpi and bus, it seems we need to do the below in dma_benchmark:
-
-u64 old_mask;
-
-old_mask = dma_get_mask(dev);
-
-dma_set_mask(dev, &new_mask);
-
-do_map_benchmark();
-
-/* restore old dma_mask so that the dma_mask of the device is not changed due to
-benchmark when it is bound back to its original driver */
-dma_set_mask(dev, &old_mask);
-
-Thanks
-Barry
+Thanks!
 
