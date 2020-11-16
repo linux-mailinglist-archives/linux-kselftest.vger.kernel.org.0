@@ -2,135 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C412B4CC1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 18:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A902B4F11
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 19:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732827AbgKPR11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Nov 2020 12:27:27 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15772 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732824AbgKPR11 (ORCPT
+        id S1732152AbgKPSTQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Nov 2020 13:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730997AbgKPSTP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:27:27 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fb2b6880000>; Mon, 16 Nov 2020 09:27:36 -0800
-Received: from [10.2.160.29] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 16 Nov
- 2020 17:27:24 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     <linux-mm@kvack.org>, Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        "Michal Hocko" <mhocko@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Ralph Campbell" <rcampbell@nvidia.com>,
-        David Nellans <dnellans@nvidia.com>
-Subject: Re: [RFC PATCH 3/6] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Date:   Mon, 16 Nov 2020 12:27:23 -0500
-X-Mailer: MailMate (1.13.2r5673)
-Message-ID: <DFE4138B-FD60-431A-84C4-36FF67B8B7D2@nvidia.com>
-In-Reply-To: <20201116162519.f4n445yku3dp2fhw@box>
-References: <20201111204008.21332-1-zi.yan@sent.com>
- <20201111204008.21332-4-zi.yan@sent.com>
- <20201116162519.f4n445yku3dp2fhw@box>
+        Mon, 16 Nov 2020 13:19:15 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBF8C0613CF
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 10:19:15 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id o11so18394313ioo.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 10:19:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mawIBEbmW13Wb93jlGPkuc98PSBX2ThA8W0B4AdhO8g=;
+        b=KlB9P3/w9K+RCwyqEbjeTcuBUAQy+k60v5qyhMubOZfbiNTk/uxjgojdaB7WCrAGVq
+         7876+2ZanbDRnrRRZBHBPxq2HF4R9HnLASaWx0xTaih/l7fQogC527LvquFkYrwqLaTy
+         Px9fuEymvKasfnnH51cQgwdbTrEiAap48x+0o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mawIBEbmW13Wb93jlGPkuc98PSBX2ThA8W0B4AdhO8g=;
+        b=QilN75K/VoW4ZEiIcZxFiOH2sYphBWRe0VrVRh8am+PSKoL9TRIzVpe9RWXgoYkdEE
+         GC2dxkqjbfusfiQurpmknNUYDQbMJJfzd3iPr79kUT0hxuJjyWmxF9ovbtStTuXDWaAw
+         0ph1+OaSMlmoTmj3yV+CLQXB/IrFx53HR7ia+bXgmOZioUT4ok6fJ6c6VS70mFwlwzfS
+         NpDpd2DsD5bRk422eCE0hZaiOfW0RDWIu1f/f4Qbn65M8/tV1MieFxrd4DI60Q8/V05Y
+         ucQJ+AVHZtbkWHF2BDuv97i3iuui5IMEyp/q6PhEGbjAi1zcd4sjD3nGWwF78WKe0q5l
+         zTvw==
+X-Gm-Message-State: AOAM533A5iBVE5A2JrkTN18izqmjZ18avbVR49aB0dWCGIBggGwpEPJb
+        KQQpXx8sRrCWt0ptMMsNuIEPxg==
+X-Google-Smtp-Source: ABdhPJywHMSsOjVB9f2b0CDslzlQYg3TaRoqp6gqm43EXgaf4HqklNg6d1T6TDYDdPV62kd3fcW26A==
+X-Received: by 2002:a5d:8ada:: with SMTP id e26mr4573701iot.15.1605550754601;
+        Mon, 16 Nov 2020 10:19:14 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 9sm12159541ila.61.2020.11.16.10.19.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2020 10:19:13 -0800 (PST)
+Subject: Re: [PATCH v41 20/24] selftests/x86: Add a selftest for SGX
+To:     Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org,
+        linux-sgx@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Jethro Beekman <jethro@fortanix.com>,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        asapek@google.com, bp@alien8.de, cedric.xing@intel.com,
+        chenalexchen@google.com, conradparker@google.com,
+        cyhanish@google.com, dave.hansen@intel.com, haitao.huang@intel.com,
+        kai.huang@intel.com, kai.svahn@intel.com, kmoy@google.com,
+        ludloff@google.com, luto@kernel.org, nhorman@redhat.com,
+        npmccallum@redhat.com, puiterwijk@redhat.com, rientjes@google.com,
+        sean.j.christopherson@intel.com, tglx@linutronix.de,
+        yaozhangx@google.com, mikko.ylinen@intel.com
+References: <20201112220135.165028-1-jarkko@kernel.org>
+ <20201112220135.165028-21-jarkko@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e58ee564-597a-336e-53dc-7c4d172d51f5@linuxfoundation.org>
+Date:   Mon, 16 Nov 2020 11:19:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: multipart/signed;
-        boundary="=_MailMate_F877A42F-87E8-4D50-BD05-6C2E64926FC5_=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1605547656; bh=fmJvO61XIQ07SFVhGQzQ60KYW+BZyj96NVTTDuoi6To=;
-        h=From:To:CC:Subject:Date:X-Mailer:Message-ID:In-Reply-To:
-         References:MIME-Version:Content-Type:X-Originating-IP:
-         X-ClientProxiedBy;
-        b=URZZsOUsetYy+5WUsWfo/c/FODH8MioKYaCqwUpIh+ZMjqTQsFo36tbCk94mg4HL8
-         P9PPk7isVz4JwgH/2ZzPuqG/guDT7wcAlG+Em7L6N30GWwKgygyLGmHnPzrPu+rEdQ
-         dbadHfuZimKKCT9HFM5bEODiiUzBo79/bOF4pMSJ9p4nHApV8V2uqy8a6zWfEv/hjW
-         o1wHZO0Hz9q8DGyWCMqn7bWcZjptW1LIEOZzvLv/Gv7gdXqoOyLDuhIIh0HkBzhYma
-         hNHwcYKzeTDryBcEWjZ83FieMWUES+YHhXjh9Ctot/PaKopRVN8fzAcRIN7GSAHpTM
-         La4StTVIQ6GUg==
+In-Reply-To: <20201112220135.165028-21-jarkko@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=_MailMate_F877A42F-87E8-4D50-BD05-6C2E64926FC5_=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 11/12/20 3:01 PM, Jarkko Sakkinen wrote:
+> Add a selftest for SGX. It is a trivial test where a simple enclave copies
+> one 64-bit word of memory between two memory locations, but ensures that
+> all SGX hardware and software infrastructure is functioning.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Acked-by: Jethro Beekman <jethro@fortanix.com> # v40
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> Changes from v40:
+> * Remove $(OUTPUT)/test_encl.elf from TEST_CUSTOM_PROGS, as otherwise
+>    run_tests tries to execute it. Add it as a build dependency.
+> * Use the correct device path, /dev/sgx_enclave, instead of
+>    /dev/sgx/enclave.
+> * Return kselftest framework expected return codes.
+> 
+>   tools/testing/selftests/Makefile              |   1 +
+>   tools/testing/selftests/sgx/.gitignore        |   2 +
+>   tools/testing/selftests/sgx/Makefile          |  53 +++
+>   tools/testing/selftests/sgx/call.S            |  44 ++
+>   tools/testing/selftests/sgx/defines.h         |  21 +
+>   tools/testing/selftests/sgx/load.c            | 277 +++++++++++++
+>   tools/testing/selftests/sgx/main.c            | 246 +++++++++++
+>   tools/testing/selftests/sgx/main.h            |  38 ++
+>   tools/testing/selftests/sgx/sigstruct.c       | 391 ++++++++++++++++++
+>   tools/testing/selftests/sgx/test_encl.c       |  20 +
+>   tools/testing/selftests/sgx/test_encl.lds     |  40 ++
+>   .../selftests/sgx/test_encl_bootstrap.S       |  89 ++++
+>   12 files changed, 1222 insertions(+)
+>   create mode 100644 tools/testing/selftests/sgx/.gitignore
+>   create mode 100644 tools/testing/selftests/sgx/Makefile
+>   create mode 100644 tools/testing/selftests/sgx/call.S
+>   create mode 100644 tools/testing/selftests/sgx/defines.h
+>   create mode 100644 tools/testing/selftests/sgx/load.c
+>   create mode 100644 tools/testing/selftests/sgx/main.c
+>   create mode 100644 tools/testing/selftests/sgx/main.h
+>   create mode 100644 tools/testing/selftests/sgx/sigstruct.c
+>   create mode 100644 tools/testing/selftests/sgx/test_encl.c
+>   create mode 100644 tools/testing/selftests/sgx/test_encl.lds
+>   create mode 100644 tools/testing/selftests/sgx/test_encl_bootstrap.S
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index d9c283503159..aa06e3ea0250 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -68,6 +68,7 @@ TARGETS += user
+>   TARGETS += vm
+>   TARGETS += x86
+>   TARGETS += zram
+> +TARGETS += sgx
+>   #Please keep the TARGETS list alphabetically sorted
 
-On 16 Nov 2020, at 11:25, Kirill A. Shutemov wrote:
+Please keep the list sorted alphabetically as stated
+in the comment above.
 
-> On Wed, Nov 11, 2020 at 03:40:05PM -0500, Zi Yan wrote:
->> From: Zi Yan <ziy@nvidia.com>
->>
->> It adds a new_order parameter to set new page order in page owner.
->> It prepares for upcoming changes to support split huge page to any low=
-er
->> order.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
->>  include/linux/page_owner.h | 7 ++++---
->>  mm/huge_memory.c           | 2 +-
->>  mm/page_alloc.c            | 2 +-
->>  mm/page_owner.c            | 6 +++---
->>  4 files changed, 9 insertions(+), 8 deletions(-)
->>
->> diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
->> index 3468794f83d2..215cbb159568 100644
->> --- a/include/linux/page_owner.h
->> +++ b/include/linux/page_owner.h
->> @@ -31,10 +31,11 @@ static inline void set_page_owner(struct page *pag=
-e,
->>  		__set_page_owner(page, order, gfp_mask);
->>  }
->>
->> -static inline void split_page_owner(struct page *page, unsigned int n=
-r)
->> +static inline void split_page_owner(struct page *page, unsigned int n=
-r,
->> +			unsigned int new_order)
->>  {
->>  	if (static_branch_unlikely(&page_owner_inited))
->> -		__split_page_owner(page, nr);
->> +		__split_page_owner(page, nr, new_order);
->
-> Hm. Where do you correct __split_page_owner() declaration. I don't see =
-it.
 
-I missed it. Will add it. Thanks.
+> +}
+> +
+> +int main(int argc, char *argv[], char *envp[])
+> +{
+> +	struct sgx_enclave_run run;
+> +	struct vdso_symtab symtab;
+> +	Elf64_Sym *eenter_sym;
+> +	uint64_t result = 0;
+> +	struct encl encl;
+> +	unsigned int i;
+> +	void *addr;
+> +	int ret;
+> +
+> +	memset(&run, 0, sizeof(run));
+> +
+> +	if (!encl_load("test_encl.elf", &encl)) {
+> +		encl_delete(&encl);
+> +		ksft_exit_skip("cannot load enclaves\n");
+> +	}
+> +
+> +	if (!encl_measure(&encl))
+> +		goto err;
+> +
+> +	if (!encl_build(&encl))
+> +		goto err;
+> +
+> +	/*
+> +	 * An enclave consumer only must do this.
+> +	 */
+> +	for (i = 0; i < encl.nr_segments; i++) {
+> +		struct encl_segment *seg = &encl.segment_tbl[i];
+> +
+> +		addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
+> +			    seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
+> +		if (addr == MAP_FAILED) {
+> +			fprintf(stderr, "mmap() failed, errno=%d.\n", errno);
+> +			exit(1);
 
-=E2=80=94
-Best Regards,
-Yan Zi
+This should be KSFT_FAIL.
 
---=_MailMate_F877A42F-87E8-4D50-BD05-6C2E64926FC5_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAl+ytnsPHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqKq7MP/i626gBZv+jty268LRYFOSuPa54zBUrO5NMl
-m9zWZwzX7mtL524gdverS0KXCOty5z6dHWvJH+F+VkcmUpYcJKb3hYeEiOySkNmE
-DyxP9OE1keGx2kMkX0yXyn7KAsq7uRTeVkrEbrsLHlI6KMi8CMnTPeCdwkmXb3DO
-zs+jZbk+SsGySbW9u3DIlUzqMK2dShT+97btwA7PTciD1eJajrDTM+9CKxLWf7Ni
-kugBl4T+mWU7/BqX/wNtGJQGQa1XHNkcl4eX4rePouvSKjtMNKqWkvtgZY2VCbPd
-dvzo46p4W3QAKH2pspwSK0twGGwpZ288VZZcrdp/9btPAkJyyRzXOLlH0K66w82n
-CSEwM1vcGMSY77PZCGPMtcLvJMSFgfIEt4hgGRF8Mu6X4IMGLeC5+XcrvxWovfEI
-gRcHO12jlKX32dH/1a76UUYY9KGo611RkEoMPmBEITfUiNTweGpMzuvvvQMSmFxU
-+Ox2DpSfpv+HeoGVjfopOBUHRYNI43fNYY0qW+k+PhcMVxP5yE8VD/+a7R/bESNX
-jMq5UaG7xHFlOGfQwMU5LIJV37L1/M+5CbhqdJ958afd0ds+oyqgfzYu3cjJdu7h
-BeobbjDzll9ATm7s6Wwf+vPw9K2QcnaEzdAuAAZiZMH8Z/lYZrZxlssNL62a2Mrv
-/kIkI2ho
-=BS+b
------END PGP SIGNATURE-----
-
---=_MailMate_F877A42F-87E8-4D50-BD05-6C2E64926FC5_=--
+thanks,
+-- Shuah
