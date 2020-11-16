@@ -2,100 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 782402B502A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 19:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A85652B508D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 20:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728109AbgKPStV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Nov 2020 13:49:21 -0500
-Received: from mga02.intel.com ([134.134.136.20]:50413 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727701AbgKPStV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Nov 2020 13:49:21 -0500
-IronPort-SDR: isxPLhZX6e4/B74nh8z4uG3vOKzpEKkpbZyptzktclqw6xWlfNfccQ56UOcem5Mvd4UkjTQlnY
- R31xfgo1knuw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="157821919"
-X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="157821919"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 10:49:18 -0800
-IronPort-SDR: QM3K1Df9J/Wg+oJAcVfa83qY/TNr4BOrYcj8zI8YrrZ97jsEsonZ8J/uK1N6DUXothgxIsiUVW
- Pzs792lhR6LA==
-X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
-   d="scan'208";a="533514829"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 10:49:17 -0800
-Date:   Mon, 16 Nov 2020 10:49:16 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 05/10] x86/entry: Pass irqentry_state_t by reference
-Message-ID: <20201116184916.GA722447@iweiny-DESK2.sc.intel.com>
-References: <20201106232908.364581-1-ira.weiny@intel.com>
- <20201106232908.364581-6-ira.weiny@intel.com>
- <87mtzi8n0z.fsf@nanos.tec.linutronix.de>
+        id S1728233AbgKPTKq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Nov 2020 14:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgKPTKp (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Nov 2020 14:10:45 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03CBC0613CF
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 11:10:45 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id x15so8885996pll.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 11:10:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=DGgJquhYYV+Tzh8ZT7w+8c+Lo4mKYMrSfopaj2Mm3nM=;
+        b=yF8JpZDrKkv9JICmK1vHZzm4fElvqZ4erpbXNJESXLtUZJXyjhTHjDe7GReFmryXAc
+         BCGRKKOFkWPun2+ghcwXfq44o1e1/9d6qwZ103iUN0GeLZnzHU5YTto8mAXs03QGBUl1
+         v1X16aHLn9RTF8OgGlYqaJ1DBWhurxAiAc8GqgdTRRQATMhCEH52o++qLHs/erZQV5FD
+         XdDi5NofFzy33vjBxiFVCvu1Z5eWRyF0YX1ShlTaFODxuwFYIK3BA0QiyROMT3rLi0g0
+         CR4T7BYuAMX80Nhul01Ut0e8XrOAnGjmu+PoIi8mS5e13s78eKSd8MsqWzt5yeFQLtj7
+         wfxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=DGgJquhYYV+Tzh8ZT7w+8c+Lo4mKYMrSfopaj2Mm3nM=;
+        b=k+qMNUem1WQsgvamUcYeLpUR23KeHoCoB+WI7rksNKPK6Bwnc6Kyubd5khjMj2b9wK
+         z9ABU3O1r4QKy+KKcLsYWniHjuZPscU5wUlH3GakEXm5Lx/kiPdedoUTiS30KABM5/vz
+         gddTGWBw2Zu3rMJdZhUTlLRNt4QCT/NdZHzqdgI0ZUEjVkT5Xurv+oJcCsCMzZifgdL4
+         od2c+6QSUoSRuJ5G2tdL5KA+/w+PR+o4/CL2VSDcjhPJZsXR9AoDBU7R4zUX7nP4Q4cU
+         njqSKaCVC+0hkuoIMNvAn6p6n3nlNXt/7leQ1zkr2aHCx9dvOcWzsorQjNbqGLTdrxqq
+         m5qQ==
+X-Gm-Message-State: AOAM531mUBb5Rxunc2EQWGutYkG2uMdJAlPM85L6s3/UeP9SKX9FrwFK
+        aHZf3fkMwOOt0SP/v15Vg4q8Ag==
+X-Google-Smtp-Source: ABdhPJxFw/0Wd5j5UG+u3JOvfHbApC9lykSr3UwfR5lLoS0xR57D19MeWyytsAeWu2fLjcTZQbv3CQ==
+X-Received: by 2002:a17:902:c016:b029:d7:1a0:7cf0 with SMTP id v22-20020a170902c016b02900d701a07cf0mr13618172plx.64.1605553844604;
+        Mon, 16 Nov 2020 11:10:44 -0800 (PST)
+Received: from debian ([122.174.144.192])
+        by smtp.gmail.com with ESMTPSA id p15sm143488pjv.44.2020.11.16.11.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 11:10:44 -0800 (PST)
+Message-ID: <2f3d616bea4fca2f47f8db0564bbcc17169f8cfb.camel@rajagiritech.edu.in>
+Subject: Re: checking for "config" file existence.
+From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Date:   Tue, 17 Nov 2020 00:40:40 +0530
+In-Reply-To: <d6e1e346-ff95-74ef-7f43-1d2468d5330c@linuxfoundation.org>
+References: <2ea637f38be0d03d0e0c545a6d12f36217cededc.camel@rajagiritech.edu.in>
+         <d6e1e346-ff95-74ef-7f43-1d2468d5330c@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.4-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mtzi8n0z.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Nov 15, 2020 at 07:58:52PM +0100, Thomas Gleixner wrote:
-> Ira,
+On Mon, 2020-11-16 at 11:32 -0700, Shuah Khan wrote:
+> On 11/12/20 10:40 AM, Jeffrin Jose T wrote:
+> > hello,
+> > 
+> > i wrote a  small program to check for the existence of "config"
+> > files
+> > for testing projects under kselftest framework.
+> > 
+> > chmod 755 test_config.py
+> > This file should be located in "tools/testing/selftests"
+> > This can be run as "./test_config.py"
+> > 
+> Why do we need a dedicated script when you can do it with:
 > 
-> On Fri, Nov 06 2020 at 15:29, ira weiny wrote:
+> cd tools/testing/selftests; find . -name config
 > 
-> Subject prefix wants to 'entry:'. This changes generic code and the x86
-> part is just required to fix the generic code change.
-
-Sorry, yes that was carried incorrectly from earlier versions.
-
+> I see that your script also prints if config doesn't exist.
+> It is not a failure not have config as config is necessary
+> only when a test has config option dependencies.
 > 
-> > Currently struct irqentry_state_t only contains a single bool value
-> > which makes passing it by value is reasonable.  However, future patches
-> > propose to add information to this struct, for example the PKRS
-> > register/thread state.
-> >
-> > Adding information to irqentry_state_t makes passing by value less
-> > efficient.  Therefore, change the entry/exit calls to pass irq_state by
-> > reference.
-> 
-> The PKRS muck needs to add an u32 to that struct. So how is that a
-> problem?
+> What does this script attempting to solve?
 
-There are more fields to be added for the kmap/pmem support.  So this will be
-needed eventually.  Even though it is not strictly necessary in the next patch.
+according to what  you said  this script may not be necessary
+thanks for the explanation :)
 
-> 
-> The resulting struct still fits into 64bit which is by far more
-> efficiently passed by value than by reference. So which problem are you
-> solving here?
 
-I'm getting ahead of myself a bit.  I will be adding more fields for the
-kmap/pmem tracking.
+-- 
+software engineer
+rajagiri school of engineering and technology - autonomous
 
-Would you accept just a clean up for the variable names in this patch?  I could
-then add the pass by reference when I add the new fields later.  Or would an
-update to the commit message be ok to land this now?
-
-Ira
-
-> 
-> Thanks
-> 
->         tglx
-> 
