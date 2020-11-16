@@ -2,249 +2,451 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBCA2B3CD9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 07:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BE22B3F20
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Nov 2020 09:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgKPGNO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Nov 2020 01:13:14 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7630 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbgKPGNN (ORCPT
+        id S1728207AbgKPIvX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Nov 2020 03:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726172AbgKPIvX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Nov 2020 01:13:13 -0500
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CZJdz5cXVz15Lp7;
-        Mon, 16 Nov 2020 14:12:55 +0800 (CST)
-Received: from SWX921481.china.huawei.com (10.126.201.147) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 16 Nov 2020 14:12:57 +0800
-From:   Barry Song <song.bao.hua@hisilicon.com>
-To:     <iommu@lists.linux-foundation.org>, <hch@lst.de>,
-        <robin.murphy@arm.com>, <m.szyprowski@samsung.com>
-CC:     <linuxarm@huawei.com>, <linux-kselftest@vger.kernel.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v4 2/2] selftests/dma: add test application for DMA_MAP_BENCHMARK
-Date:   Mon, 16 Nov 2020 19:08:48 +1300
-Message-ID: <20201116060848.1848-3-song.bao.hua@hisilicon.com>
-X-Mailer: git-send-email 2.21.0.windows.1
-In-Reply-To: <20201116060848.1848-1-song.bao.hua@hisilicon.com>
-References: <20201116060848.1848-1-song.bao.hua@hisilicon.com>
+        Mon, 16 Nov 2020 03:51:23 -0500
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEEBC0613CF
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 00:51:22 -0800 (PST)
+Received: by mail-ot1-x341.google.com with SMTP id n89so15248624otn.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Nov 2020 00:51:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zy986Vg7ccKVkvtXBhD6NQzZqFrJZe4eCvqprIanDG0=;
+        b=JuvqGj0Cq1pYlbEVb8edLk08OVHo7+rEVlDBsptQd/hn5A8VD/z31ibnpUBhIXBNyL
+         HNn5+9FdCObQmigZ8uLvav50NVbvNFRC9O19XcnaaQqx1+IsxlVooo0JWWdicnHqYRPd
+         O60q+ykj3LZ1M/DUSjYmpfDTQr+ajOpoW9PNSgIeVpJv48KSMcsCiCzBVI9kawoz/XGV
+         efmNAyL8UwvR80V6O7jmT5CSBeE1faIXkrdFvIzk/976avizYp9YzCKo2ZC8pZHhejST
+         98BPsM/MmUhowaR9HpLQR3CnEiQsneuUs5uVHinz9LXv77QUPRbvQ8iXfL590xZxITDa
+         QMuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zy986Vg7ccKVkvtXBhD6NQzZqFrJZe4eCvqprIanDG0=;
+        b=FolS1KW3fFWpLPTGjc3xAjl9gna03XtDMdk1Vu1JBJuZuek6lQV5aqk6BwGwOEFjKb
+         fk8JiWYSBP78LjKR5I8kJ4ExlBmLqniJ6svYcPfElixJWwHPqtaT5t3DuNfrjpv3I9E3
+         KsKMaVECVqTMGUwKqpt4/OMqe84BxTliosAb57L+syga25tYwX0y9eW4/6m+lv/9g6ub
+         18aH3dOUKCOab52R047lkc5yG3vXbJzSKSkT2DEJbS7p3U2eUt0clPeru1epOJ1jIInl
+         4p583LedavBN2zuQsXclxfYi3HXM7h4iEvQdYKH+ix63RxtBgVCLorZUtcBQ9uelwp8W
+         qYWg==
+X-Gm-Message-State: AOAM530XNG0d8p0M89dwpkm0Dq8RqKZefLWSt/uYR89+wvK0f5/6OfJf
+        A6KYmhmF7uQnsoG0w9cXIK+kzWPI4cXocw4u1V+VIQ==
+X-Google-Smtp-Source: ABdhPJxWqcHBPYeajFVaGU7tSqABIWYXYXCXbbVxcowZAb2uCyBxqne0TTXqMUeS+JM5WohSWNy5mOuTmBdCG4wf8os=
+X-Received: by 2002:a9d:65d5:: with SMTP id z21mr9315212oth.251.1605516682127;
+ Mon, 16 Nov 2020 00:51:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.126.201.147]
-X-CFilter-Loop: Reflected
+References: <20201116054035.211498-1-98.arpi@gmail.com> <20201116054150.211562-1-98.arpi@gmail.com>
+In-Reply-To: <20201116054150.211562-1-98.arpi@gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 16 Nov 2020 09:51:10 +0100
+Message-ID: <CANpmjNP+4ckx+ZgkQkicA5GDDQ=NzSGiSj6_bv13g6biz-kDcQ@mail.gmail.com>
+Subject: Re: [PATCH v9 2/2] fs: ext4: Modify inode-test.c to use KUnit
+ parameterized testing feature
+To:     Arpitha Raghunandan <98.arpi@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Tim Bird <Tim.Bird@sony.com>, David Gow <davidgow@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch provides the test application for DMA_MAP_BENCHMARK.
+On Mon, 16 Nov 2020 at 06:42, Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+>
+> Modify fs/ext4/inode-test.c to use the parameterized testing
+> feature of KUnit.
+>
+> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Before running the test application, we need to bind a device to dma_map_
-benchmark driver. For example, unbind "xxx" from its original driver and
-bind to dma_map_benchmark:
+Reviewed-by: Marco Elver <elver@google.com>
 
-echo dma_map_benchmark > /sys/bus/platform/devices/xxx/driver_override
-echo xxx > /sys/bus/platform/drivers/xxx/unbind
-echo xxx > /sys/bus/platform/drivers/dma_map_benchmark/bind
+Thank you!
 
-Another example for PCI devices:
-echo dma_map_benchmark > /sys/bus/pci/devices/0000:00:01.0/driver_override
-echo 0000:00:01.0 > /sys/bus/pci/drivers/xxx/unbind
-echo 0000:00:01.0 > /sys/bus/pci/drivers/dma_map_benchmark/bind
-
-The below command will run 16 threads on numa node 0 for 10 seconds on
-the device bound to dma_map_benchmark platform_driver or pci_driver:
-./dma_map_benchmark -t 16 -s 10 -n 0
-dma mapping benchmark: threads:16 seconds:10
-average map latency(us):1.1 standard deviation:1.9
-average unmap latency(us):0.5 standard deviation:0.8
-
-Cc: Will Deacon <will@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
----
- -v4:
-  * add dma direction and mask_bit parameters
-
- MAINTAINERS                                   |   6 +
- tools/testing/selftests/dma/Makefile          |   6 +
- tools/testing/selftests/dma/config            |   1 +
- .../testing/selftests/dma/dma_map_benchmark.c | 123 ++++++++++++++++++
- 4 files changed, 136 insertions(+)
- create mode 100644 tools/testing/selftests/dma/Makefile
- create mode 100644 tools/testing/selftests/dma/config
- create mode 100644 tools/testing/selftests/dma/dma_map_benchmark.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e451dcce054f..bc851ffd3114 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5247,6 +5247,12 @@ F:	include/linux/dma-mapping.h
- F:	include/linux/dma-map-ops.h
- F:	kernel/dma/
- 
-+DMA MAPPING BENCHMARK
-+M:	Barry Song <song.bao.hua@hisilicon.com>
-+L:	iommu@lists.linux-foundation.org
-+F:	kernel/dma/map_benchmark.c
-+F:	tools/testing/selftests/dma/
-+
- DMA-BUF HEAPS FRAMEWORK
- M:	Sumit Semwal <sumit.semwal@linaro.org>
- R:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
-diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
-new file mode 100644
-index 000000000000..aa8e8b5b3864
---- /dev/null
-+++ b/tools/testing/selftests/dma/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS += -I../../../../usr/include/
-+
-+TEST_GEN_PROGS := dma_map_benchmark
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/dma/config b/tools/testing/selftests/dma/config
-new file mode 100644
-index 000000000000..6102ee3c43cd
---- /dev/null
-+++ b/tools/testing/selftests/dma/config
-@@ -0,0 +1 @@
-+CONFIG_DMA_MAP_BENCHMARK=y
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-new file mode 100644
-index 000000000000..7065163a8388
---- /dev/null
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -0,0 +1,123 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020 Hisilicon Limited.
-+ */
-+
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <linux/types.h>
-+
-+#define DMA_MAP_BENCHMARK	_IOWR('d', 1, struct map_benchmark)
-+#define DMA_MAP_MAX_THREADS	1024
-+#define DMA_MAP_MAX_SECONDS     300
-+
-+#define DMA_MAP_BIDIRECTIONAL	0
-+#define DMA_MAP_TO_DEVICE	1
-+#define DMA_MAP_FROM_DEVICE	2
-+
-+static char *directions[] = {
-+	"BIDIRECTIONAL",
-+	"TO_DEVICE",
-+	"FROM_DEVICE",
-+};
-+
-+struct map_benchmark {
-+	__u64 avg_map_100ns; /* average map latency in 100ns */
-+	__u64 map_stddev; /* standard deviation of map latency */
-+	__u64 avg_unmap_100ns; /* as above */
-+	__u64 unmap_stddev;
-+	__u32 threads; /* how many threads will do map/unmap in parallel */
-+	__u32 seconds; /* how long the test will last */
-+	__s32 node; /* which numa node this benchmark will run on */
-+	__u32 dma_bits; /* DMA addressing capability */
-+	__u32 dma_dir; /* DMA data direction */
-+	__u64 expansion[10];	/* For future use */
-+};
-+
-+int main(int argc, char **argv)
-+{
-+	struct map_benchmark map;
-+	int fd, opt;
-+	/* default single thread, run 20 seconds on NUMA_NO_NODE */
-+	int threads = 1, seconds = 20, node = -1;
-+	/* default dma mask 32bit, bidirectional DMA */
-+	int bits = 32, dir = DMA_MAP_BIDIRECTIONAL;
-+
-+	int cmd = DMA_MAP_BENCHMARK;
-+	char *p;
-+
-+	while ((opt = getopt(argc, argv, "t:s:n:b:d:")) != -1) {
-+		switch (opt) {
-+		case 't':
-+			threads = atoi(optarg);
-+			break;
-+		case 's':
-+			seconds = atoi(optarg);
-+			break;
-+		case 'n':
-+			node = atoi(optarg);
-+			break;
-+		case 'b':
-+			bits = atoi(optarg);
-+			break;
-+		case 'd':
-+			dir = atoi(optarg);
-+			break;
-+		default:
-+			return -1;
-+		}
-+	}
-+
-+	if (threads <= 0 || threads > DMA_MAP_MAX_THREADS) {
-+		fprintf(stderr, "invalid number of threads, must be in 1-%d\n",
-+			DMA_MAP_MAX_THREADS);
-+		exit(1);
-+	}
-+
-+	if (seconds <= 0 || seconds > DMA_MAP_MAX_SECONDS) {
-+		fprintf(stderr, "invalid number of seconds, must be in 1-%d\n",
-+			DMA_MAP_MAX_SECONDS);
-+		exit(1);
-+	}
-+
-+	/* suppose the mininum DMA zone is 1MB in the world */
-+	if (bits < 20 || bits > 64) {
-+		fprintf(stderr, "invalid dma mask bit, must be in 20-64\n");
-+		exit(1);
-+	}
-+
-+	if (dir != DMA_MAP_BIDIRECTIONAL && dir != DMA_MAP_TO_DEVICE &&
-+			dir != DMA_MAP_FROM_DEVICE) {
-+		fprintf(stderr, "invalid dma direction\n");
-+		exit(1);
-+	}
-+
-+	fd = open("/sys/kernel/debug/dma_map_benchmark", O_RDWR);
-+	if (fd == -1) {
-+		perror("open");
-+		exit(1);
-+	}
-+
-+	map.seconds = seconds;
-+	map.threads = threads;
-+	map.node = node;
-+	map.dma_bits = bits;
-+	map.dma_dir = dir;
-+	if (ioctl(fd, cmd, &map)) {
-+		perror("ioctl");
-+		exit(1);
-+	}
-+
-+	printf("dma mapping benchmark: threads:%d seconds:%d node:%d dir:%s\n",
-+			threads, seconds, node, dir[directions]);
-+	printf("average map latency(us):%.1f standard deviation:%.1f\n",
-+			map.avg_map_100ns/10.0, map.map_stddev/10.0);
-+	printf("average unmap latency(us):%.1f standard deviation:%.1f\n",
-+			map.avg_unmap_100ns/10.0, map.unmap_stddev/10.0);
-+
-+	return 0;
-+}
--- 
-2.25.1
-
+> ---
+> Changes v8->v9:
+> - Replace strncpy() with strscpy() in timestamp_expectation_to_desc()
+> Changes v7->v8:
+> - Replace strcpy() with strncpy() in timestamp_expectation_to_desc()
+> Changes v6->v7:
+> - Introduce timestamp_expectation_to_desc() to convert param to
+>   description.
+> Changes v5->v6:
+> - No change to this patch of the patch series
+> Changes v4->v5:
+> - No change to this patch of the patch series
+> Changes v3->v4:
+> - Modification based on latest implementation of KUnit parameterized testing
+> Changes v2->v3:
+> - Marked hardcoded test data const
+> - Modification based on latest implementation of KUnit parameterized testing
+> Changes v1->v2:
+> - Modification based on latest implementation of KUnit parameterized testing
+>
+>  fs/ext4/inode-test.c | 320 ++++++++++++++++++++++---------------------
+>  1 file changed, 164 insertions(+), 156 deletions(-)
+>
+> diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
+> index d62d802c9c12..7935ea6cf92c 100644
+> --- a/fs/ext4/inode-test.c
+> +++ b/fs/ext4/inode-test.c
+> @@ -80,6 +80,145 @@ struct timestamp_expectation {
+>         bool lower_bound;
+>  };
+>
+> +static const struct timestamp_expectation test_data[] = {
+> +       {
+> +               .test_case_name = LOWER_BOUND_NEG_NO_EXTRA_BITS_CASE,
+> +               .msb_set = true,
+> +               .lower_bound = true,
+> +               .extra_bits = 0,
+> +               .expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NEG_NO_EXTRA_BITS_CASE,
+> +               .msb_set = true,
+> +               .lower_bound = false,
+> +               .extra_bits = 0,
+> +               .expected = {.tv_sec = -1LL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = LOWER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = true,
+> +               .extra_bits = 0,
+> +               .expected = {0LL, 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = false,
+> +               .extra_bits = 0,
+> +               .expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = LOWER_BOUND_NEG_LO_1_CASE,
+> +               .msb_set = true,
+> +               .lower_bound = true,
+> +               .extra_bits = 1,
+> +               .expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NEG_LO_1_CASE,
+> +               .msb_set = true,
+> +               .lower_bound = false,
+> +               .extra_bits = 1,
+> +               .expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = LOWER_BOUND_NONNEG_LO_1_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = true,
+> +               .extra_bits = 1,
+> +               .expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NONNEG_LO_1_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = false,
+> +               .extra_bits = 1,
+> +               .expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = LOWER_BOUND_NEG_HI_1_CASE,
+> +               .msb_set = true,
+> +               .lower_bound = true,
+> +               .extra_bits =  2,
+> +               .expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NEG_HI_1_CASE,
+> +               .msb_set = true,
+> +               .lower_bound = false,
+> +               .extra_bits = 2,
+> +               .expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = LOWER_BOUND_NONNEG_HI_1_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = true,
+> +               .extra_bits = 2,
+> +               .expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NONNEG_HI_1_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = false,
+> +               .extra_bits = 2,
+> +               .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NONNEG_HI_1_NS_1_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = false,
+> +               .extra_bits = 6,
+> +               .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = LOWER_BOUND_NONNEG_HI_1_NS_MAX_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = true,
+> +               .extra_bits = 0xFFFFFFFF,
+> +               .expected = {.tv_sec = 0x300000000LL,
+> +                            .tv_nsec = MAX_NANOSECONDS},
+> +       },
+> +
+> +       {
+> +               .test_case_name = LOWER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = true,
+> +               .extra_bits = 3,
+> +               .expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
+> +       },
+> +
+> +       {
+> +               .test_case_name = UPPER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
+> +               .msb_set = false,
+> +               .lower_bound = false,
+> +               .extra_bits = 3,
+> +               .expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
+> +       }
+> +};
+> +
+> +static void timestamp_expectation_to_desc(const struct timestamp_expectation *t,
+> +                                         char *desc)
+> +{
+> +       strscpy(desc, t->test_case_name, KUNIT_PARAM_DESC_SIZE);
+> +}
+> +
+> +KUNIT_ARRAY_PARAM(ext4_inode, test_data, timestamp_expectation_to_desc);
+> +
+>  static time64_t get_32bit_time(const struct timestamp_expectation * const test)
+>  {
+>         if (test->msb_set) {
+> @@ -101,166 +240,35 @@ static time64_t get_32bit_time(const struct timestamp_expectation * const test)
+>   */
+>  static void inode_test_xtimestamp_decoding(struct kunit *test)
+>  {
+> -       const struct timestamp_expectation test_data[] = {
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NEG_NO_EXTRA_BITS_CASE,
+> -                       .msb_set = true,
+> -                       .lower_bound = true,
+> -                       .extra_bits = 0,
+> -                       .expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NEG_NO_EXTRA_BITS_CASE,
+> -                       .msb_set = true,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 0,
+> -                       .expected = {.tv_sec = -1LL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = true,
+> -                       .extra_bits = 0,
+> -                       .expected = {0LL, 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NONNEG_NO_EXTRA_BITS_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 0,
+> -                       .expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NEG_LO_1_CASE,
+> -                       .msb_set = true,
+> -                       .lower_bound = true,
+> -                       .extra_bits = 1,
+> -                       .expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NEG_LO_1_CASE,
+> -                       .msb_set = true,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 1,
+> -                       .expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NONNEG_LO_1_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = true,
+> -                       .extra_bits = 1,
+> -                       .expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NONNEG_LO_1_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 1,
+> -                       .expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NEG_HI_1_CASE,
+> -                       .msb_set = true,
+> -                       .lower_bound = true,
+> -                       .extra_bits =  2,
+> -                       .expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NEG_HI_1_CASE,
+> -                       .msb_set = true,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 2,
+> -                       .expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NONNEG_HI_1_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = true,
+> -                       .extra_bits = 2,
+> -                       .expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NONNEG_HI_1_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 2,
+> -                       .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NONNEG_HI_1_NS_1_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 6,
+> -                       .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NONNEG_HI_1_NS_MAX_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = true,
+> -                       .extra_bits = 0xFFFFFFFF,
+> -                       .expected = {.tv_sec = 0x300000000LL,
+> -                                    .tv_nsec = MAX_NANOSECONDS},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = LOWER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = true,
+> -                       .extra_bits = 3,
+> -                       .expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
+> -               },
+> -
+> -               {
+> -                       .test_case_name = UPPER_BOUND_NONNEG_EXTRA_BITS_1_CASE,
+> -                       .msb_set = false,
+> -                       .lower_bound = false,
+> -                       .extra_bits = 3,
+> -                       .expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
+> -               }
+> -       };
+> -
+>         struct timespec64 timestamp;
+> -       int i;
+> -
+> -       for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
+> -               timestamp.tv_sec = get_32bit_time(&test_data[i]);
+> -               ext4_decode_extra_time(&timestamp,
+> -                                      cpu_to_le32(test_data[i].extra_bits));
+> -
+> -               KUNIT_EXPECT_EQ_MSG(test,
+> -                                   test_data[i].expected.tv_sec,
+> -                                   timestamp.tv_sec,
+> -                                   CASE_NAME_FORMAT,
+> -                                   test_data[i].test_case_name,
+> -                                   test_data[i].msb_set,
+> -                                   test_data[i].lower_bound,
+> -                                   test_data[i].extra_bits);
+> -               KUNIT_EXPECT_EQ_MSG(test,
+> -                                   test_data[i].expected.tv_nsec,
+> -                                   timestamp.tv_nsec,
+> -                                   CASE_NAME_FORMAT,
+> -                                   test_data[i].test_case_name,
+> -                                   test_data[i].msb_set,
+> -                                   test_data[i].lower_bound,
+> -                                   test_data[i].extra_bits);
+> -       }
+> +
+> +       struct timestamp_expectation *test_param =
+> +                       (struct timestamp_expectation *)(test->param_value);
+> +
+> +       timestamp.tv_sec = get_32bit_time(test_param);
+> +       ext4_decode_extra_time(&timestamp,
+> +                              cpu_to_le32(test_param->extra_bits));
+> +
+> +       KUNIT_EXPECT_EQ_MSG(test,
+> +                           test_param->expected.tv_sec,
+> +                           timestamp.tv_sec,
+> +                           CASE_NAME_FORMAT,
+> +                           test_param->test_case_name,
+> +                           test_param->msb_set,
+> +                           test_param->lower_bound,
+> +                           test_param->extra_bits);
+> +       KUNIT_EXPECT_EQ_MSG(test,
+> +                           test_param->expected.tv_nsec,
+> +                           timestamp.tv_nsec,
+> +                           CASE_NAME_FORMAT,
+> +                           test_param->test_case_name,
+> +                           test_param->msb_set,
+> +                           test_param->lower_bound,
+> +                           test_param->extra_bits);
+>  }
+>
+>  static struct kunit_case ext4_inode_test_cases[] = {
+> -       KUNIT_CASE(inode_test_xtimestamp_decoding),
+> +       KUNIT_CASE_PARAM(inode_test_xtimestamp_decoding, ext4_inode_gen_params),
+>         {}
+>  };
+>
+> --
+> 2.25.1
+>
