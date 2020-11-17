@@ -2,76 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DF42B71A5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 23:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009572B71E2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 23:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729104AbgKQWgq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 17:36:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40450 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729099AbgKQWgp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 17:36:45 -0500
-Received: from suppilovahvero.lan (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29937206E0;
-        Tue, 17 Nov 2020 22:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605652605;
-        bh=PVDYnMNOlxFeBgT28yov8fXfUQnJR2DIJvOOtbZlJgk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HYu7Y6NJrk8WcC3v1ppEWAiJygQKKMadaDUdDZA+n6Fzu8EYEmvXs33+BpW+o2Fnz
-         ejri85xIWQsADGlCVSlQ6rFewqEoiPdzYbgqpUBKvUo1OE6c2sHLzD6+ksr/bktPtv
-         nIsxELHlfi1hyp7jfataZ5I3eYi1fBPBUWsj92iM=
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, asapek@google.com,
-        cedric.xing@intel.com, chenalexchen@google.com,
-        conradparker@google.com, cyhanish@google.com,
-        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
-        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
-        luto@kernel.org, nhorman@redhat.com, npmccallum@redhat.com,
-        puiterwijk@redhat.com, rientjes@google.com,
-        sean.j.christopherson@intel.com, tglx@linutronix.de,
-        yaozhangx@google.com, mikko.ylinen@intel.com
-Subject: [PATCH] selftests/x86: Fix malformed src_offset initialization
-Date:   Wed, 18 Nov 2020 00:36:30 +0200
-Message-Id: <20201117223630.17355-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        id S1728521AbgKQW5X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 17:57:23 -0500
+Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:39207 "EHLO
+        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729434AbgKQW5X (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 17:57:23 -0500
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1kf9ub-003JCJ-Ca; Tue, 17 Nov 2020 23:57:21 +0100
+Received: from p5b13ac4a.dip0.t-ipconnect.de ([91.19.172.74] helo=[192.168.178.139])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1kf9ub-003Fux-5w; Tue, 17 Nov 2020 23:57:21 +0100
+To:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Cc:     Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
+        Rich Felker <dalias@libc.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-kselftest@vger.kernel.org
+References: <20201117205656.1000223-1-keescook@chromium.org>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Subject: Re: [PATCH] selftests/seccomp: sh: Fix register names
+Message-ID: <a36d7b48-6598-1642-e403-0c77a86f416d@physik.fu-berlin.de>
+Date:   Tue, 17 Nov 2020 23:57:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
+In-Reply-To: <20201117205656.1000223-1-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.19.172.74
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Assign src_offset just to the p_offset, when first initialized.
-This has been probably copy-pasting accident (at least looks like
-it).
+On 11/17/20 9:56 PM, Kees Cook wrote:
+> It looks like the seccomp selftests were never actually built for sh.
+> This fixes it, though I don't have an environment to do a runtime test
+> of it yet.
+> 
+> Fixes: 0bb605c2c7f2b4b3 ("sh: Add SECCOMP_FILTER")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 7f7ecfcd66db..26c72f2b61b1 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -1804,8 +1804,8 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+>  #define SYSCALL_RET(_regs)	(_regs).a[(_regs).windowbase * 4 + 2]
+>  #elif defined(__sh__)
+>  # define ARCH_REGS		struct pt_regs
+> -# define SYSCALL_NUM(_regs)	(_regs).gpr[3]
+> -# define SYSCALL_RET(_regs)	(_regs).gpr[0]
+> +# define SYSCALL_NUM(_regs)	(_regs).regs[3]
+> +# define SYSCALL_RET(_regs)	(_regs).regs[0]
+>  #else
+>  # error "Do not know how to find your architecture's registers and syscalls"
+>  #endif
 
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- tools/testing/selftests/sgx/load.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, this fix is indeed necessary. However, there is another build issue that I ran into
+and I'm not sure why it happens, but commenting out "#include <linux/sched.h>" in
+../clone3/clone3_selftests.h fixes it.
 
-diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
-index 07988de6b767..64976f266bae 100644
---- a/tools/testing/selftests/sgx/load.c
-+++ b/tools/testing/selftests/sgx/load.c
-@@ -185,7 +185,7 @@ bool encl_load(const char *path, struct encl *encl)
- 		}
- 
- 		if (j == 0) {
--			src_offset = (phdr->p_offset & PAGE_MASK) - src_offset;
-+			src_offset = (phdr->p_offset & PAGE_MASK);
- 
- 			seg->prot = PROT_READ | PROT_WRITE;
- 			seg->flags = SGX_PAGE_TYPE_TCS << 8;
+root@tirpitz:..selftests/seccomp> make
+gcc -Wl,-no-as-needed -Wall  -lpthread  seccomp_bpf.c /usr/src/linux-5.9.8/tools/testing/selftests/kselftest_harness.h /usr/src/linux-5.9.8/tools/testing/selftests/kselftest.h  -o /usr/src/linux-5.9.8/tools/testing/selftests/seccomp/seccomp_bpf
+In file included from seccomp_bpf.c:55:
+../clone3/clone3_selftests.h:28:8: error: redefinition of ‘struct clone_args’
+   28 | struct clone_args {
+      |        ^~~~~~~~~~
+In file included from ../clone3/clone3_selftests.h:8,
+                 from seccomp_bpf.c:55:
+/usr/include/linux/sched.h:92:8: note: originally defined here
+   92 | struct clone_args {
+      |        ^~~~~~~~~~
+make: *** [../lib.mk:140: /usr/src/linux-5.9.8/tools/testing/selftests/seccomp/seccomp_bpf] Error 1
+root@tirpitz:..selftests/seccomp>
+
+Your actual register naming fix is correct in any case as without your patch, building the seccomp
+selftest fails with:
+
+seccomp_bpf.c: In function ‘get_syscall’:
+seccomp_bpf.c:1741:37: error: ‘struct pt_regs’ has no member named ‘gpr’; did you mean ‘pr’?
+ 1741 | # define SYSCALL_NUM(_regs) (_regs).gpr[3]
+      |                                     ^~~
+seccomp_bpf.c:1794:9: note: in expansion of macro ‘SYSCALL_NUM’
+ 1794 |  return SYSCALL_NUM(regs);
+      |         ^~~~~~~~~~~
+seccomp_bpf.c: In function ‘change_syscall’:
+seccomp_bpf.c:1741:37: error: ‘struct pt_regs’ has no member named ‘gpr’; did you mean ‘pr’?
+ 1741 | # define SYSCALL_NUM(_regs) (_regs).gpr[3]
+      |                                     ^~~
+seccomp_bpf.c:1817:3: note: in expansion of macro ‘SYSCALL_NUM’
+ 1817 |   SYSCALL_NUM(regs) = syscall;
+      |   ^~~~~~~~~~~
+seccomp_bpf.c:1742:37: error: ‘struct pt_regs’ has no member named ‘gpr’; did you mean ‘pr’?
+ 1742 | # define SYSCALL_RET(_regs) (_regs).gpr[0]
+      |                                     ^~~
+seccomp_bpf.c:1859:3: note: in expansion of macro ‘SYSCALL_RET’
+ 1859 |   SYSCALL_RET(regs) = result;
+      |   ^~~~~~~~~~~
+seccomp_bpf.c: In function ‘get_syscall’:
+seccomp_bpf.c:1795:1: warning: control reaches end of non-void function [-Wreturn-type]
+ 1795 | }
+      | ^
+make: *** [../lib.mk:140: /usr/src/linux-5.9.8/tools/testing/selftests/seccomp/seccomp_bpf] Error 1
+
+Adrian
+
 -- 
-2.27.0
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
