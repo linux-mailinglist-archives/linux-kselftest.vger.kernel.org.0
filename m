@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9742A2B5FEE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 14:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7083E2B5F98
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 13:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728518AbgKQM5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 07:57:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53886 "EHLO mail.kernel.org"
+        id S1728660AbgKQM5c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 07:57:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54720 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728479AbgKQM5H (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 07:57:07 -0500
+        id S1728654AbgKQM5c (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 07:57:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 85AC8223AB;
-        Tue, 17 Nov 2020 12:57:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2A526223AB;
+        Tue, 17 Nov 2020 12:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605617826;
-        bh=ecl3zqv3yW55WTq1XhYOA7gOM0uGm5OnbMOmSxcNDzQ=;
+        s=default; t=1605617851;
+        bh=qA9fL4rqujlpZBdsl3uGA3WgnfkXV4SHUiZeGzIiW58=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1f4sF+ISTuBm2dgRlzvuQElx5/uNuGERlaUlr8sFyFfetS5C1VH3GBqbknSMzRX8
-         g3gpP6oO/dw5dYH9p2fI/tO+FPBePxBNXV3MvACX9MujMB8PFUtpCb3lZAEY7SZtUp
-         VzHLyIY5czfdZpbzL46eh+cN4DT5cCogp/ZONBbk=
+        b=BsMhZxZPvtXHwq/rbiwN99y9jbU3C44DKaiHqzBYS3vCcazCjZ3b48l8yc+XBIQJe
+         6yzu8GdEvt42goZSwPl3Okr6629DkD6ICvr0XdpuLVwI470KJgpimj53nLzVPDZjY4
+         /NG+rXE3HGG1XtkKEE3hTyZgz8QtI8YLZUs56dlc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Aaron Lewis <aaronlewis@google.com>,
@@ -30,12 +30,12 @@ Cc:     Aaron Lewis <aaronlewis@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 08/21] selftests: kvm: Fix the segment descriptor layout to match the actual layout
-Date:   Tue, 17 Nov 2020 07:56:39 -0500
-Message-Id: <20201117125652.599614-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 03/11] selftests: kvm: Fix the segment descriptor layout to match the actual layout
+Date:   Tue, 17 Nov 2020 07:57:17 -0500
+Message-Id: <20201117125725.599833-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201117125652.599614-1-sashal@kernel.org>
-References: <20201117125652.599614-1-sashal@kernel.org>
+In-Reply-To: <20201117125725.599833-1-sashal@kernel.org>
+References: <20201117125725.599833-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 82b7fe16a8242..0a65e7bb5249e 100644
+index ff234018219cf..aead07c24afcf 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -59,7 +59,7 @@ struct gpr64_regs {
+@@ -57,7 +57,7 @@ enum x86_register {
  struct desc64 {
  	uint16_t limit0;
  	uint16_t base0;
@@ -78,10 +78,10 @@ index 82b7fe16a8242..0a65e7bb5249e 100644
  	uint32_t base3;
  	uint32_t zero1;
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index f6eb34eaa0d22..1ccf6c9b3476d 100644
+index 6698cb741e10a..7d8f7fc736467 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -392,11 +392,12 @@ static void kvm_seg_fill_gdt_64bit(struct kvm_vm *vm, struct kvm_segment *segp)
+@@ -446,11 +446,12 @@ static void kvm_seg_fill_gdt_64bit(struct kvm_vm *vm, struct kvm_segment *segp)
  	desc->limit0 = segp->limit & 0xFFFF;
  	desc->base0 = segp->base & 0xFFFF;
  	desc->base1 = segp->base >> 16;
