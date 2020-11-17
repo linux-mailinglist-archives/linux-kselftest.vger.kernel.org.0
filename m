@@ -2,146 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E60A12B70E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 22:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED6E2B70E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 22:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbgKQVZx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 16:25:53 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9311 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgKQVZx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 16:25:53 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fb43feb0000>; Tue, 17 Nov 2020 13:26:03 -0800
-Received: from [10.2.160.29] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 17 Nov
- 2020 21:25:48 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Roman Gushchin <guro@fb.com>, <linux-mm@kvack.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        David Nellans <dnellans@nvidia.com>
-Subject: Re: [RFC PATCH 3/6] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Date:   Tue, 17 Nov 2020 16:25:46 -0500
-X-Mailer: MailMate (1.13.2r5673)
-Message-ID: <3A55517E-7F24-45ED-A04B-061948E7EC11@nvidia.com>
-In-Reply-To: <20201117212255.GZ29991@casper.infradead.org>
-References: <20201111204008.21332-1-zi.yan@sent.com>
- <20201111204008.21332-4-zi.yan@sent.com>
- <20201114001505.GA3047204@carbon.dhcp.thefacebook.com>
- <F55878E8-22B1-443E-9CC8-E97B3DAA7EA4@nvidia.com>
- <20201114013801.GA3069806@carbon.dhcp.thefacebook.com>
- <20201117210532.GX29991@casper.infradead.org>
- <3E32BC50-700F-471E-89FD-35414610B84E@nvidia.com>
- <20201117212255.GZ29991@casper.infradead.org>
+        id S1726319AbgKQV1w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 16:27:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54114 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725823AbgKQV1w (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 16:27:52 -0500
+Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A99C124181;
+        Tue, 17 Nov 2020 21:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605648471;
+        bh=Br1SsRJzgO6llnbpsU/IxDn9+9vmyDHOXOPwMU6gD0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EjNfi9gWVLIVV32eZmFw+zfznS4OhiNaTNYzCZQvUM4yojTq9JfdMs5CFssLAiBL7
+         Lt5aRdXnA01yT3An4LbiOZdOePdglVCUPn8Gg+5Erw1yL36TdEre3RECkx1AWvD/+2
+         IuX9ASiDNsJSBwOcd9RK/WCq73L6KaXJzrkEbZaQ=
+Date:   Tue, 17 Nov 2020 23:27:42 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-sgx@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Jethro Beekman <jethro@fortanix.com>,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        asapek@google.com, cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
+        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
+        luto@kernel.org, nhorman@redhat.com, npmccallum@redhat.com,
+        puiterwijk@redhat.com, rientjes@google.com,
+        sean.j.christopherson@intel.com, tglx@linutronix.de,
+        yaozhangx@google.com, mikko.ylinen@intel.com
+Subject: Re: [PATCH v41 20/24] selftests/x86: Add a selftest for SGX
+Message-ID: <20201117212742.GA14833@kernel.org>
+References: <20201112220135.165028-1-jarkko@kernel.org>
+ <20201112220135.165028-21-jarkko@kernel.org>
+ <20201117172650.GI5719@zn.tnic>
 MIME-Version: 1.0
-Content-Type: multipart/signed;
-        boundary="=_MailMate_26D3A069-E576-44CF-990B-9BC028E6017F_=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1605648363; bh=lPJdtj5JXOpu+djq7qkfJl2/r4VpbFNQk4h33JTvPpk=;
-        h=From:To:CC:Subject:Date:X-Mailer:Message-ID:In-Reply-To:
-         References:MIME-Version:Content-Type:X-Originating-IP:
-         X-ClientProxiedBy;
-        b=eZ4HcZPBLKil2zsTRp3S0Hdq92D/HFSCbAv06hd2E3nnmAPeWtOd24sN3jUgCxYkY
-         DzBIEWInOzmNL7POdASxowrXSQIPUxtXzbn/QHdpahuMSRWw0aMD4xf+9LSg2b9IoX
-         RM0fRm72EYXyzEzGyYk1pS1ra5FeKonptOCOp7w8SGcbJNGYmhkjUFn3R9xxEYg36O
-         sFrgAqBn67rKYCrMOEtWx0ngjqb+C4pLD6vcrhX79eYur6KXowQnzpHCK1YhHftc8X
-         8l/cEMGBL3XUhx7BXiIb5TKYe3A4++sgoOGvRefsI64QOorWo3hQoqvRqzI969QqJc
-         Hz0MuirL+MP1A==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201117172650.GI5719@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=_MailMate_26D3A069-E576-44CF-990B-9BC028E6017F_=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Tue, Nov 17, 2020 at 06:26:50PM +0100, Borislav Petkov wrote:
+> On Fri, Nov 13, 2020 at 12:01:31AM +0200, Jarkko Sakkinen wrote:
+> > +bool encl_load(const char *path, struct encl *encl)
+> > +{
+> > +	Elf64_Phdr *phdr_tbl;
+> > +	off_t src_offset;
+> > +	Elf64_Ehdr *ehdr;
+> > +	int i, j;
+> > +	int ret;
+> > +
+> > +	memset(encl, 0, sizeof(*encl));
+> > +
+> > +	ret = open("/dev/sgx_enclave", O_RDWR);
+> > +	if (ret < 0) {
+> > +		fprintf(stderr, "Unable to open /dev/sgx_enclave\n");
+> > +		goto err;
+> > +	}
+> > +
+> > +	encl->fd = ret;
+> > +
+> > +	if (!encl_map_bin(path, encl))
+> > +		goto err;
+> > +
+> > +	ehdr = encl->bin;
+> > +	phdr_tbl = encl->bin + ehdr->e_phoff;
+> > +
+> > +	for (i = 0; i < ehdr->e_phnum; i++) {
+> > +		Elf64_Phdr *phdr = &phdr_tbl[i];
+> > +
+> > +		if (phdr->p_type == PT_LOAD)
+> > +			encl->nr_segments++;
+> > +	}
+> > +
+> > +	encl->segment_tbl = calloc(encl->nr_segments,
+> > +				   sizeof(struct encl_segment));
+> > +	if (!encl->segment_tbl)
+> > +		goto err;
+> > +
+> > +	for (i = 0, j = 0; i < ehdr->e_phnum; i++) {
+> > +		Elf64_Phdr *phdr = &phdr_tbl[i];
+> > +		unsigned int flags = phdr->p_flags;
+> > +		struct encl_segment *seg;
+> > +
+> > +		if (phdr->p_type != PT_LOAD)
+> > +			continue;
+> > +
+> > +		seg = &encl->segment_tbl[j];
+> > +
+> > +		if (!!(flags & ~(PF_R | PF_W | PF_X))) {
+> > +			fprintf(stderr,
+> > +				"%d has invalid segment flags 0x%02x.\n", i,
+> > +				phdr->p_flags);
+> > +			goto err;
+> > +		}
+> > +
+> > +		if (j == 0 && flags != (PF_R | PF_W)) {
+> > +			fprintf(stderr,
+> > +				"TCS has invalid segment flags 0x%02x.\n",
+> > +				phdr->p_flags);
+> > +			goto err;
+> > +		}
+> > +
+> > +		if (j == 0) {
+> > +			src_offset = (phdr->p_offset & PAGE_MASK) - src_offset;
+> > +
+> > +			seg->prot = PROT_READ | PROT_WRITE;
+> > +			seg->flags = SGX_PAGE_TYPE_TCS << 8;
+> > +		} else  {
+> > +			seg->prot = (phdr->p_flags & PF_R) ? PROT_READ : 0;
+> > +			seg->prot |= (phdr->p_flags & PF_W) ? PROT_WRITE : 0;
+> > +			seg->prot |= (phdr->p_flags & PF_X) ? PROT_EXEC : 0;
+> > +			seg->flags = (SGX_PAGE_TYPE_REG << 8) | seg->prot;
+> > +		}
+> > +
+> > +		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
+> > +		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
+> > +
+> > +		printf("0x%016lx 0x%016lx 0x%02x\n", seg->offset, seg->size,
+> > +		       seg->prot);
+> > +
+> > +		j++;
+> > +	}
+> > +
+> > +	assert(j == encl->nr_segments);
+> > +
+> > +	encl->src = encl->bin + src_offset;
+> > +	encl->src_size = encl->segment_tbl[j - 1].offset +
+> > +			 encl->segment_tbl[j - 1].size;
+> > +
+> > +	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
+> > +		encl->encl_size <<= 1;
+> 
+> Something's fishy. That selftest fails with
+> 
+> mmap: Cannot allocate memory
+> 
+> I sprinkled some printfs at this size computation above and here's what
+> it says:
+> 
+> 0x00007fdd3b4ca190 0x0000000000002000 0x03
+> 0x00007fdd3b4cc190 0x0000000000001000 0x05
+> 0x00007fdd3b4cd190 0x0000000000003000 0x03
+> encl_load: encl->nr_segments: 3
+> encl_load: seg2 offset: 0x7fdd3b4cd190, seg2 size: 12288
+> encl_load: encl_size: 140737488355328, src_size: 140588159402384
+> encl_map_area: encl_size: 140737488355328
+> mmap: Cannot allocate memory
+> 
+> src_size is computed by adding the offset and size of the last segment
+> which is at index 2.
 
-On 17 Nov 2020, at 16:22, Matthew Wilcox wrote:
+src_size does not look right. I'll debug.
 
-> On Tue, Nov 17, 2020 at 04:12:03PM -0500, Zi Yan wrote:
->> On 17 Nov 2020, at 16:05, Matthew Wilcox wrote:
->>
->>> On Fri, Nov 13, 2020 at 05:38:01PM -0800, Roman Gushchin wrote:
->>>> On Fri, Nov 13, 2020 at 08:08:58PM -0500, Zi Yan wrote:
->>>>> Matthew recently converted split_page_owner to take nr instead of o=
-rder.[1]
->>>>> But I am not
->>>>> sure why, since it seems to me that two call sites (__split_huge_pa=
-ge in
->>>>> mm/huge_memory.c and split_page in mm/page_alloc.c) can pass the or=
-der
->>>>> information.
->>>>
->>>> Yeah, I'm not sure why too. Maybe Matthew has some input here?
->>>> You can also pass new_nr, but IMO orders look so much better here.
->>>
->>> If only I'd written that information in the changelog ... oh wait, I =
-did!
->>>
->>>     mm/page_owner: change split_page_owner to take a count
->>>
->>>     The implementation of split_page_owner() prefers a count rather t=
-han the
->>>     old order of the page.  When we support a variable size THP, we w=
-on't
->>>     have the order at this point, but we will have the number of page=
-s.
->>>     So change the interface to what the caller and callee would prefe=
-r.
->>
->> There are two callers, split_page in mm/page_alloc.c and __split_huge_=
-page in
->> mm/huge_memory.c. The former has the page order. The latter has the pa=
-ge order
->> information before __split_huge_page_tail is called, so we can do
->> old_order =3D thp_order(head) instead of nr =3D thp_nr_page(head) and =
-use old_order.
->> What am I missing there?
->
-> Sure, we could also do that.  But what I wrote was true at the time I
-> wrote it.
+> The loop computes encl_size to 0x0000800000000000 then and mmap tries to
+> map double that in encl_map_area(). Looks like too much to me too.
 
-Got it. Thanks. Will change it to use old_order to make split_page_owner =
-parameters
-look more consistent.
+The enclave base must be naturally aligned in relative to its size.
 
-=E2=80=94
-Best Regards,
-Yan Zi
+> What's up?
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
---=_MailMate_26D3A069-E576-44CF-990B-9BC028E6017F_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAl+0P9oPHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqKrSgQAJyxI+rZ1uE5zujtkuQav3qyE83lKnE7QMe5
-fOjFSI2Rf0q8N9Tcv6thKs3T6CGi0NPgvf6CoUkk+gikGR09VE9V1bbFaTcXNaFD
-VnlYS8HcoH8AMFlLWBSmiM+u2QWRAdShNfdKn+bi5SfWkhqGPlax+SEushXH1qHC
-uDWvpa5GGkeBy4xf+djdAl30/ZoS2L+I84hQo6DyttoBZjSDCOuj3B1sKK2DGY98
-/mCBLR+E+8tl33aD4UK0EKHAdqx7cm9lvb0QCEzCi7udmsySt3sazrhujDOAbYNX
-CYID9Wj74W/IEhwWwHxA2loUEb2kV+3brFOKBePUKu+LrQa6EzR1BSOqJBocspGa
-IVcfC/BDJ8Ky/QBsgbWMC/aawpvdkXG83vt+dksMbjnVinl9yEcQCrG80pQ21Ez0
-YPQAl/1xTJJPM327vwF7xASrYSWm/WmVxNHVf1bG/8oqev3YFAV86+wlDuDI7kxN
-MoqxlJfexsWBFEbkTcMWOUgFAc0z59xhjFBJjAjIdaCYPgDFf/dW0HaCjuHMGj7r
-Q4P1k1YqUHDHupoKn2Xf8kJQq7oevinO98szN595ebShtQ4ioG3G8Gm7QtCHyWln
-ngbYohKFWlcutB4WZpuBUOeLn6YE79OAJxmD7a5yzaWaGYhf5l1N8j3c7vLr/XWg
-fCSM0TDk
-=qnws
------END PGP SIGNATURE-----
-
---=_MailMate_26D3A069-E576-44CF-990B-9BC028E6017F_=--
+/Jarkko
