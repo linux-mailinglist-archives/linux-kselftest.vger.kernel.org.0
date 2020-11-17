@@ -2,112 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7CB2B6F86
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 21:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949A42B7081
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 21:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729126AbgKQUCS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 15:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S1726289AbgKQU5E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 15:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730520AbgKQUCQ (ORCPT
+        with ESMTP id S1725355AbgKQU5E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 15:02:16 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C02AC061A47
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 12:02:14 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id b17so25687232ljf.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 12:02:14 -0800 (PST)
+        Tue, 17 Nov 2020 15:57:04 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B1AC0617A7
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 12:57:04 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id 10so18127322pfp.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 12:57:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GSCHMMM0D0q85Saw3BGZ1mrSdRqytsRtsFlwlLFUG1Q=;
-        b=U5ZlwbFbW6wzZ9SjWFK+Je9NtJURJfuA+CBtm8mpTtA3OAFV31Gt7/PVFooFI3hJSJ
-         FPe5GnyQ9vo+K8E4DGvg2CmIfBjU80aj+PwOMi9JxkBrfyCFhmQwE8yG25tVzzpwHM/G
-         +SLjkMHpsWn0eetojTcyUPdUG+YBEUlN6bkAREdia0RwgRe5Az5vSyoEcUpsdqwdqQS2
-         wQsiqbs+NFvyybKCLcEoNJlXX+Q79meG+WhN0TKvoL+R5ZHI5kwQtcSrRMvmI503HpW4
-         iQFfKDV7kGEefpCno1fqlRK8X77oqYAJVuKjI7LR9wx0wgLXu6vuCzgHwKA6G32zuy1F
-         Z/Mg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Uf9n4l7EOSL8uXdRL9UcruoyeN94agPo5jcXDhX5nJY=;
+        b=jMJNd1lM27olGuBxYU0sDngc2zuZeRq5lDKU5rOo2wtnUwZ4jfa4T725Tygz07t15a
+         TU8VyMCTM6dXGgeiravn3uQtZjP7pKLH09v76BS/6su0Z2BSW+JB0UMbeI5eZalXmiF0
+         8TSnButTlMZ/XkuaWmMlqSrWxG85xBInJUGVk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GSCHMMM0D0q85Saw3BGZ1mrSdRqytsRtsFlwlLFUG1Q=;
-        b=c799bImUf2kAZRq/NQgGmgxfm0Y4k53IlqeYJq9iMEYNUVhXm3iBzeN7vp+DBVGUIK
-         I02RBFaYHClcwEZBFTFckclKON+WsveENRKhalJmDBWB4RN4TCwEXb7Q2SIZtS/8aKIQ
-         oeFUUOUeA2dusBy1+CQi42aClLTZZmVZmBySN4aqhJd/lYlO9NFJ3xXAWpwinj1KAI6M
-         2tEpz/kbnU640Y43cBlRgDLdmxWISoQmDP5f6NyxspzRQMz9h6zGvcaj8xNKAyVZCZ+e
-         ckrtMBOwLJ8oWrtwEgw0K8Tm4rudnIO/sOwXIgf4QPhgwZWsT7LxMLpo4goewPV7jP7o
-         kQDA==
-X-Gm-Message-State: AOAM530f+WPxyvLaxiln0GwzETnHQGHv23HVIWtnyEWUWpncVD3abvzM
-        kYtfmuwQthJ+oEp4tvvb2TcGX18I1+vYw1lZawQ/dQ==
-X-Google-Smtp-Source: ABdhPJzrteo1SoLGHTARp2PUs3U3i4VQkUG29Mj40M+A73s5OoqlPLDhJ7M0v+3kzosqo9RIkW4zU8tz5/C7FbMtdpI=
-X-Received: by 2002:a05:651c:204c:: with SMTP id t12mr2581977ljo.347.1605643332643;
- Tue, 17 Nov 2020 12:02:12 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Uf9n4l7EOSL8uXdRL9UcruoyeN94agPo5jcXDhX5nJY=;
+        b=bvQP5PqPdAFUbpj8fGFd8GrPbfofhzymwEnO3xXZkg/dUNCIEuDOsDFRFyvHh4tCt0
+         +kWnOEHDbJn84W+TbAyqy5x80sUm2IjcG5DtwnTohY/rHy/UJNSX2urY4gqkWR42N/zZ
+         Qi8HVVTz5IBgEM69k+gaiQYhnHJURZLFT+VBalM2EuNkHz0oUpNRO6/LIoJU5aFyypFC
+         hQic6TCwCgfVo6vhB7RCPYnwLG3UH3Y84a9A8oHFEwuem1H5upikLv7MVMA6g2zPOOe/
+         xcJ1zK45kJU7QvD8dkzIgm4zhz+Q6E2ds2XgNKrzxZ19fGYlPPKsIKJ1hY0ywM1Y6rvK
+         lYfQ==
+X-Gm-Message-State: AOAM533KbJkS20jASl/CGlgW126AHdM+h1FBxRbcmZKZpPpTZQULYZYp
+        7VDlKlaJ86jcouZx5RIL2MuAdw==
+X-Google-Smtp-Source: ABdhPJw3j1XCkoo/ADs9hWbTzIJn4p6GlAXgdrb/on1MkteJCUDhZcYZTutrBGXrcTCm/MG8EIRZZA==
+X-Received: by 2002:a63:1a1e:: with SMTP id a30mr5301001pga.168.1605646623572;
+        Tue, 17 Nov 2020 12:57:03 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q12sm4412524pjl.41.2020.11.17.12.57.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Nov 2020 12:57:02 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
+        Rich Felker <dalias@libc.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/seccomp: sh: Fix register names
+Date:   Tue, 17 Nov 2020 12:56:56 -0800
+Message-Id: <20201117205656.1000223-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20201117162932.13649-1-rppt@kernel.org> <20201117162932.13649-7-rppt@kernel.org>
- <20201117193358.GB109785@carbon.dhcp.thefacebook.com>
-In-Reply-To: <20201117193358.GB109785@carbon.dhcp.thefacebook.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 17 Nov 2020 12:02:01 -0800
-Message-ID: <CALvZod5mJnR2DXoYTbp9RX4uR7zVyqAPfD+XKpqXKgxaNyJ1VA@mail.gmail.com>
-Subject: Re: [PATCH v9 6/9] secretmem: add memcg accounting
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 11:49 AM Roman Gushchin <guro@fb.com> wrote:
->
-> On Tue, Nov 17, 2020 at 06:29:29PM +0200, Mike Rapoport wrote:
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > Account memory consumed by secretmem to memcg. The accounting is updated
-> > when the memory is actually allocated and freed.
-> >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-[snip]
-> >
-> > +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
-> > +{
-> > +     int err;
-> > +
-> > +     err = memcg_kmem_charge_page(page, gfp, order);
+It looks like the seccomp selftests were never actually built for sh.
+This fixes it, though I don't have an environment to do a runtime test
+of it yet.
 
-I haven't looked at the whole series but it seems like these pages
-will be mapped into the userspace, so this patch has dependency on
-Roman's "mm: allow mapping
-accounted kernel pages to userspace" patch series.
+Fixes: 0bb605c2c7f2b4b3 ("sh: Add SECCOMP_FILTER")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 7f7ecfcd66db..26c72f2b61b1 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1804,8 +1804,8 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ #define SYSCALL_RET(_regs)	(_regs).a[(_regs).windowbase * 4 + 2]
+ #elif defined(__sh__)
+ # define ARCH_REGS		struct pt_regs
+-# define SYSCALL_NUM(_regs)	(_regs).gpr[3]
+-# define SYSCALL_RET(_regs)	(_regs).gpr[0]
++# define SYSCALL_NUM(_regs)	(_regs).regs[3]
++# define SYSCALL_RET(_regs)	(_regs).regs[0]
+ #else
+ # error "Do not know how to find your architecture's registers and syscalls"
+ #endif
+-- 
+2.25.1
+
