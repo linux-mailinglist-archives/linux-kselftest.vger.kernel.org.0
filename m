@@ -2,212 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB80F2B6848
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 16:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C942B6916
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 16:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727364AbgKQPKA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 10:10:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:28776 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727780AbgKQPJ7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 10:09:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605625798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=avqgkPhMAEZAPZkBU6g1zM+EphNhv69bq0mDQ2MSyGE=;
-        b=S8TAwo3s+rzbgiROW+UXpjWuAMeWLY0T/ao/dlLpi6P3/fzg/Cy+miIIhYAZUuSqIcENSN
-        JWwM/sonGHJvetmLJA/OD2cFD8YmR/3UEHYlN3hUx2LzUobkeP+BViO5M+M3/JccFmehoQ
-        ZJqn+FlptXuQGX05cWf+j/YCY8V4G1o=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-246-K75Q0U6RPOe3OPIwoMgYvA-1; Tue, 17 Nov 2020 10:09:53 -0500
-X-MC-Unique: K75Q0U6RPOe3OPIwoMgYvA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 87EF157090;
-        Tue, 17 Nov 2020 15:09:49 +0000 (UTC)
-Received: from [10.36.114.99] (ovpn-114-99.ams2.redhat.com [10.36.114.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BF2366BF6B;
-        Tue, 17 Nov 2020 15:09:40 +0000 (UTC)
-Subject: Re: [PATCH v8 2/9] mmap: make mlock_future_check() global
-To:     Mike Rapoport <rppt@kernel.org>
+        id S1726575AbgKQPvd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 10:51:33 -0500
+Received: from mga03.intel.com ([134.134.136.65]:56264 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725767AbgKQPvc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 10:51:32 -0500
+IronPort-SDR: WNRW3/kM6oZbruqeH4iVTgxPnPlYUWwUfIkXvgPHWF9XYXISo93YJYmxOLxxLPL9zVDcwCIXvb
+ b5OUrUlKUZpQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="171048493"
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="171048493"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 07:51:19 -0800
+IronPort-SDR: Cv3lruze8b3N6ng5La45QtfJkKs8xiHueQMBdK7RWayj8xN443vrPVb3Zo+kYoYJ5SjrDj7mXI
+ y9Sz9Pmcqyaw==
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="362547403"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 07:51:17 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kf3HG-007MJ0-Ub; Tue, 17 Nov 2020 17:52:18 +0200
+Date:   Tue, 17 Nov 2020 17:52:18 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Gow <davidgow@google.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-References: <20201112190827.GP4758@kernel.org>
- <7A16CA44-782D-4ABA-8D93-76BDD0A90F94@redhat.com>
- <20201115082625.GT4758@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <d47fdd2e-a8fa-6792-ca8f-e529be76340c@redhat.com>
-Date:   Tue, 17 Nov 2020 16:09:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Mark Brown <broonie@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: [PATCH v4 6/6] lib/cmdline_kunit: Add a new test suite for
+ cmdline API
+Message-ID: <20201117155218.GP4077@smile.fi.intel.com>
+References: <20201112180732.75589-1-andriy.shevchenko@linux.intel.com>
+ <20201112180732.75589-6-andriy.shevchenko@linux.intel.com>
+ <20201112191025.bd5df6a1f1f6b0419980da1a@linux-foundation.org>
+ <20201116095309.GR4077@smile.fi.intel.com>
+ <20201116104131.GV4077@smile.fi.intel.com>
+ <CABVgOS=2qKw6OBSWMnAMf5un3akkoWej=98zTd=e1dgpqnGTGQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201115082625.GT4758@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOS=2qKw6OBSWMnAMf5un3akkoWej=98zTd=e1dgpqnGTGQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 15.11.20 09:26, Mike Rapoport wrote:
-> On Thu, Nov 12, 2020 at 09:15:18PM +0100, David Hildenbrand wrote:
->>
->>> Am 12.11.2020 um 20:08 schrieb Mike Rapoport <rppt@kernel.org>:
->>>
->>> ﻿On Thu, Nov 12, 2020 at 05:22:00PM +0100, David Hildenbrand wrote:
->>>>> On 10.11.20 19:06, Mike Rapoport wrote:
->>>>> On Tue, Nov 10, 2020 at 06:17:26PM +0100, David Hildenbrand wrote:
->>>>>> On 10.11.20 16:14, Mike Rapoport wrote:
->>>>>>> From: Mike Rapoport <rppt@linux.ibm.com>
->>>>>>>
->>>>>>> It will be used by the upcoming secret memory implementation.
->>>>>>>
->>>>>>> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->>>>>>> ---
->>>>>>>    mm/internal.h | 3 +++
->>>>>>>    mm/mmap.c     | 5 ++---
->>>>>>>    2 files changed, 5 insertions(+), 3 deletions(-)
->>>>>>>
->>>>>>> diff --git a/mm/internal.h b/mm/internal.h
->>>>>>> index c43ccdddb0f6..ae146a260b14 100644
->>>>>>> --- a/mm/internal.h
->>>>>>> +++ b/mm/internal.h
->>>>>>> @@ -348,6 +348,9 @@ static inline void munlock_vma_pages_all(struct vm_area_struct *vma)
->>>>>>>    extern void mlock_vma_page(struct page *page);
->>>>>>>    extern unsigned int munlock_vma_page(struct page *page);
->>>>>>> +extern int mlock_future_check(struct mm_struct *mm, unsigned long flags,
->>>>>>> +                  unsigned long len);
->>>>>>> +
->>>>>>>    /*
->>>>>>>     * Clear the page's PageMlocked().  This can be useful in a situation where
->>>>>>>     * we want to unconditionally remove a page from the pagecache -- e.g.,
->>>>>>> diff --git a/mm/mmap.c b/mm/mmap.c
->>>>>>> index 61f72b09d990..c481f088bd50 100644
->>>>>>> --- a/mm/mmap.c
->>>>>>> +++ b/mm/mmap.c
->>>>>>> @@ -1348,9 +1348,8 @@ static inline unsigned long round_hint_to_min(unsigned long hint)
->>>>>>>        return hint;
->>>>>>>    }
->>>>>>> -static inline int mlock_future_check(struct mm_struct *mm,
->>>>>>> -                     unsigned long flags,
->>>>>>> -                     unsigned long len)
->>>>>>> +int mlock_future_check(struct mm_struct *mm, unsigned long flags,
->>>>>>> +               unsigned long len)
->>>>>>>    {
->>>>>>>        unsigned long locked, lock_limit;
->>>>>>>
->>>>>>
->>>>>> So, an interesting question is if you actually want to charge secretmem
->>>>>> pages against mlock now, or if you want a dedicated secretmem cgroup
->>>>>> controller instead?
->>>>>
->>>>> Well, with the current implementation there are three limits an
->>>>> administrator can use to control secretmem limits: mlock, memcg and
->>>>> kernel parameter.
->>>>>
->>>>> The kernel parameter puts a global upper limit for secretmem usage,
->>>>> memcg accounts all secretmem allocations, including the unused memory in
->>>>> large pages caching and mlock allows per task limit for secretmem
->>>>> mappings, well, like mlock does.
->>>>>
->>>>> I didn't consider a dedicated cgroup, as it seems we already have enough
->>>>> existing knobs and a new one would be unnecessary.
->>>>
->>>> To me it feels like the mlock() limit is a wrong fit for secretmem. But
->>>> maybe there are other cases of using the mlock() limit without actually
->>>> doing mlock() that I am not aware of (most probably :) )?
->>>
->>> Secretmem does not explicitly calls to mlock() but it does what mlock()
->>> does and a bit more. Citing mlock(2):
->>>
->>>   mlock(),  mlock2(),  and  mlockall()  lock  part  or all of the calling
->>>   process's virtual address space into RAM, preventing that  memory  from
->>>   being paged to the swap area.
->>>
->>> So, based on that secretmem pages are not swappable, I think that
->>> RLIMIT_MEMLOCK is appropriate here.
->>>
->>
->> The page explicitly lists mlock() system calls.
+On Tue, Nov 17, 2020 at 07:43:28AM +0800, David Gow wrote:
+> On Mon, Nov 16, 2020 at 6:40 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Mon, Nov 16, 2020 at 11:53:09AM +0200, Andy Shevchenko wrote:
+> > > On Thu, Nov 12, 2020 at 07:10:25PM -0800, Andrew Morton wrote:
+> > > > On Thu, 12 Nov 2020 20:07:32 +0200 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > >
+> > > > > Test get_option() for a starter which is provided by cmdline.c.
+> > > > >
+> > > > > ...
+> > > > >
+> > > > >  lib/cmdline_kunit.c | 98 +++++++++++++++++++++++++++++++++++++++++++++
+> > >
+> > > First of all, thanks for taking care of this!
+> > >
+> > > > The spectacular warning storm which this produces makes me wonder if
+> > > > you sent the correct version?  I mean, the cmdline_test_values[]
+> > > > definition wasn't even close.
+> > >
+> > > This now puzzles me, what happened. I will check my branches, because certainly
+> > > I was not only compiled that, but actually run those test cases.
+> >
+> > David, Brendan, can we somehow make those warnings visible when run test suite
+> > via kunit Python wrapper?
 > 
-> Well, it's mlock() man page, isn't it? ;-)
+> There's a patch in the kunit-fixes branch which should fix this this:
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=390881448b1ff1e9d82896abbbda7cdb8e0be27c
 
-;)
+Good we have a fix!
 
+> > It seems to me that I run test cases only via wrapper and I have got no
+> > warnings which are ones that must be fixed before submission. It's actual
+> > disadvantage of the framework (use of it via wrapper) that makes me feel
+> > like I would rather not hurry up with KUnit.
 > 
-> My thinking was that since secretmem does what mlock() does wrt
-> swapability, it should at least obey the same limit, i.e.
-> RLIMIT_MEMLOCK.
-
-Right, but at least currently, it behaves like any other CMA allocation 
-(IIRC they are all unmovable and, therefore, not swappable). In the 
-future, if pages would be movable (but not swappable), I guess it might 
-makes more sense. I assume we never ever want to swap secretmem.
-
-"man getrlimit" states for RLIMIT_MEMLOCK:
-
-"This is the maximum number of bytes of memory that may be
-  locked into RAM.  [...] This limit affects
-  mlock(2), mlockall(2), and the mmap(2) MAP_LOCKED operation.
-  Since Linux 2.6.9, it also affects the shmctl(2) SHM_LOCK op‐
-  eration [...]"
-
-So that place has to be updated as well I guess? Otherwise this might 
-come as a surprise for users.
-
+> Yeah: it's a pain, and I've been hit by it a couple of times recently,
+> too. If you're not able to pick up the changes in the kunit-fixes
+> branch above, then it's definitely best to also manually build a
+> kernel to get the build logs.
 > 
->> E.g., we also don‘t
->> account for gigantic pages - which might be allocated from CMA and are
->> not swappable.
->   
-> Do you mean gigantic pages in hugetlbfs?
+> In any case, that fix should be merged for 5.10.
+> 
+> Sorry for the inconvenience!
 
-Yes
-
-> It seems to me that hugetlbfs accounting is a completely different
-> story.
-
-I'd say it is right now comparable to secretmem - which is why I though 
-similar accounting would make sense.
-
+No problem, I will keep above in mind, thanks.
 
 -- 
-Thanks,
+With Best Regards,
+Andy Shevchenko
 
-David / dhildenb
 
