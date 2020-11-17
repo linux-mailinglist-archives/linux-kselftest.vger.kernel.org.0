@@ -2,111 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C942B6916
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 16:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C2F2B6936
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 16:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbgKQPvd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 10:51:33 -0500
-Received: from mga03.intel.com ([134.134.136.65]:56264 "EHLO mga03.intel.com"
+        id S1726817AbgKQP6n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 10:58:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35552 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725767AbgKQPvc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 10:51:32 -0500
-IronPort-SDR: WNRW3/kM6oZbruqeH4iVTgxPnPlYUWwUfIkXvgPHWF9XYXISo93YJYmxOLxxLPL9zVDcwCIXvb
- b5OUrUlKUZpQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="171048493"
-X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
-   d="scan'208";a="171048493"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 07:51:19 -0800
-IronPort-SDR: Cv3lruze8b3N6ng5La45QtfJkKs8xiHueQMBdK7RWayj8xN443vrPVb3Zo+kYoYJ5SjrDj7mXI
- y9Sz9Pmcqyaw==
-X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
-   d="scan'208";a="362547403"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 07:51:17 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kf3HG-007MJ0-Ub; Tue, 17 Nov 2020 17:52:18 +0200
-Date:   Tue, 17 Nov 2020 17:52:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     David Gow <davidgow@google.com>
+        id S1725767AbgKQP6m (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 10:58:42 -0500
+Received: from kernel.org (unknown [77.125.7.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D3B60238E6;
+        Tue, 17 Nov 2020 15:58:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605628721;
+        bh=9is+MjALfTGepw57FVx0JouySPxlzfHt3CDVLQ4Unmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p8sWlliyDkUNYoXZjFWSoiuQvdgEZNX+2SxP4AeRu3E6J1nQ7q1oTfz+6Ip2yE0wn
+         cmwAFaK1S/AmhU4S6q0bHx0jhCupiexg9VCuzKWD3rTOMD16YOJ0wT4exivwNxppfK
+         VG9oFzcdjadQK9Y3xyHqBPePYLUqwIL58wy/neZo=
+Date:   Tue, 17 Nov 2020 17:58:29 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Mark Brown <broonie@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: [PATCH v4 6/6] lib/cmdline_kunit: Add a new test suite for
- cmdline API
-Message-ID: <20201117155218.GP4077@smile.fi.intel.com>
-References: <20201112180732.75589-1-andriy.shevchenko@linux.intel.com>
- <20201112180732.75589-6-andriy.shevchenko@linux.intel.com>
- <20201112191025.bd5df6a1f1f6b0419980da1a@linux-foundation.org>
- <20201116095309.GR4077@smile.fi.intel.com>
- <20201116104131.GV4077@smile.fi.intel.com>
- <CABVgOS=2qKw6OBSWMnAMf5un3akkoWej=98zTd=e1dgpqnGTGQ@mail.gmail.com>
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v8 2/9] mmap: make mlock_future_check() global
+Message-ID: <20201117155829.GJ370813@kernel.org>
+References: <20201112190827.GP4758@kernel.org>
+ <7A16CA44-782D-4ABA-8D93-76BDD0A90F94@redhat.com>
+ <20201115082625.GT4758@kernel.org>
+ <d47fdd2e-a8fa-6792-ca8f-e529be76340c@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CABVgOS=2qKw6OBSWMnAMf5un3akkoWej=98zTd=e1dgpqnGTGQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d47fdd2e-a8fa-6792-ca8f-e529be76340c@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 07:43:28AM +0800, David Gow wrote:
-> On Mon, Nov 16, 2020 at 6:40 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Mon, Nov 16, 2020 at 11:53:09AM +0200, Andy Shevchenko wrote:
-> > > On Thu, Nov 12, 2020 at 07:10:25PM -0800, Andrew Morton wrote:
-> > > > On Thu, 12 Nov 2020 20:07:32 +0200 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > > Test get_option() for a starter which is provided by cmdline.c.
-> > > > >
-> > > > > ...
-> > > > >
-> > > > >  lib/cmdline_kunit.c | 98 +++++++++++++++++++++++++++++++++++++++++++++
-> > >
-> > > First of all, thanks for taking care of this!
-> > >
-> > > > The spectacular warning storm which this produces makes me wonder if
-> > > > you sent the correct version?  I mean, the cmdline_test_values[]
-> > > > definition wasn't even close.
-> > >
-> > > This now puzzles me, what happened. I will check my branches, because certainly
-> > > I was not only compiled that, but actually run those test cases.
-> >
-> > David, Brendan, can we somehow make those warnings visible when run test suite
-> > via kunit Python wrapper?
-> 
-> There's a patch in the kunit-fixes branch which should fix this this:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=390881448b1ff1e9d82896abbbda7cdb8e0be27c
+On Tue, Nov 17, 2020 at 04:09:39PM +0100, David Hildenbrand wrote:
+> On 15.11.20 09:26, Mike Rapoport wrote:
+> > On Thu, Nov 12, 2020 at 09:15:18PM +0100, David Hildenbrand wrote:
 
-Good we have a fix!
+...
 
-> > It seems to me that I run test cases only via wrapper and I have got no
-> > warnings which are ones that must be fixed before submission. It's actual
-> > disadvantage of the framework (use of it via wrapper) that makes me feel
-> > like I would rather not hurry up with KUnit.
+> > My thinking was that since secretmem does what mlock() does wrt
+> > swapability, it should at least obey the same limit, i.e.
+> > RLIMIT_MEMLOCK.
 > 
-> Yeah: it's a pain, and I've been hit by it a couple of times recently,
-> too. If you're not able to pick up the changes in the kunit-fixes
-> branch above, then it's definitely best to also manually build a
-> kernel to get the build logs.
+> Right, but at least currently, it behaves like any other CMA allocation
+> (IIRC they are all unmovable and, therefore, not swappable). In the future,
+> if pages would be movable (but not swappable), I guess it might makes more
+> sense. I assume we never ever want to swap secretmem.
 > 
-> In any case, that fix should be merged for 5.10.
+> "man getrlimit" states for RLIMIT_MEMLOCK:
 > 
-> Sorry for the inconvenience!
+> "This is the maximum number of bytes of memory that may be
+>  locked into RAM.  [...] This limit affects
+>  mlock(2), mlockall(2), and the mmap(2) MAP_LOCKED operation.
+>  Since Linux 2.6.9, it also affects the shmctl(2) SHM_LOCK op‐
+>  eration [...]"
+> 
+> So that place has to be updated as well I guess? Otherwise this might come
+> as a surprise for users.
 
-No problem, I will keep above in mind, thanks.
+Sure.
+
+> > 
+> > > E.g., we also don‘t
+> > > account for gigantic pages - which might be allocated from CMA and are
+> > > not swappable.
+> > Do you mean gigantic pages in hugetlbfs?
+> 
+> Yes
+> 
+> > It seems to me that hugetlbfs accounting is a completely different
+> > story.
+> 
+> I'd say it is right now comparable to secretmem - which is why I though
+> similar accounting would make sense.
+
+IMHO, using RLIMIT_MEMLOCK and memcg is a more straightforward way than
+a custom cgroup.
+
+And if we'll see a need for additional mechanism, we can always add it.
+ 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Sincerely yours,
+Mike.
