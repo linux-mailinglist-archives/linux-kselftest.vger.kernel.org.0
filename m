@@ -2,157 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F922B6EFB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 20:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7CB2B6F86
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 21:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729242AbgKQTm3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 14:42:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54646 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728060AbgKQTm3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 14:42:29 -0500
-Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2B622463D;
-        Tue, 17 Nov 2020 19:42:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605642147;
-        bh=WfH7BFVzUSEZv+f6jZxK9ydp1lynvYQ2oovxy7EJVXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vmvo0oLI2+zUSZRhwq0NiGDjYhcKWJZyY+Ph8A1MJPfxjbJH0Zol91ECmkxg91DyH
-         NXWk7uQXJtd/v1xuxdNQ/GI5Ed040w/C7hrjjZBRrgfQy+sNkrZpD48Pz8cg82N6po
-         cl4QXLIN7mw/CndOK2P3ZytLUp2cBUGrSWYQ5kVI=
-Date:   Tue, 17 Nov 2020 21:42:17 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     x86@kernel.org, linux-sgx@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Jethro Beekman <jethro@fortanix.com>,
-        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
-        asapek@google.com, bp@alien8.de, cedric.xing@intel.com,
-        chenalexchen@google.com, conradparker@google.com,
-        cyhanish@google.com, dave.hansen@intel.com, haitao.huang@intel.com,
-        kai.huang@intel.com, kai.svahn@intel.com, kmoy@google.com,
-        ludloff@google.com, luto@kernel.org, nhorman@redhat.com,
-        npmccallum@redhat.com, puiterwijk@redhat.com, rientjes@google.com,
-        sean.j.christopherson@intel.com, tglx@linutronix.de,
-        yaozhangx@google.com, mikko.ylinen@intel.com
-Subject: Re: [PATCH v41 20/24] selftests/x86: Add a selftest for SGX
-Message-ID: <20201117194217.GG10393@kernel.org>
-References: <20201112220135.165028-1-jarkko@kernel.org>
- <20201112220135.165028-21-jarkko@kernel.org>
- <e58ee564-597a-336e-53dc-7c4d172d51f5@linuxfoundation.org>
+        id S1729126AbgKQUCS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 15:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730520AbgKQUCQ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 15:02:16 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C02AC061A47
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 12:02:14 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id b17so25687232ljf.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 12:02:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GSCHMMM0D0q85Saw3BGZ1mrSdRqytsRtsFlwlLFUG1Q=;
+        b=U5ZlwbFbW6wzZ9SjWFK+Je9NtJURJfuA+CBtm8mpTtA3OAFV31Gt7/PVFooFI3hJSJ
+         FPe5GnyQ9vo+K8E4DGvg2CmIfBjU80aj+PwOMi9JxkBrfyCFhmQwE8yG25tVzzpwHM/G
+         +SLjkMHpsWn0eetojTcyUPdUG+YBEUlN6bkAREdia0RwgRe5Az5vSyoEcUpsdqwdqQS2
+         wQsiqbs+NFvyybKCLcEoNJlXX+Q79meG+WhN0TKvoL+R5ZHI5kwQtcSrRMvmI503HpW4
+         iQFfKDV7kGEefpCno1fqlRK8X77oqYAJVuKjI7LR9wx0wgLXu6vuCzgHwKA6G32zuy1F
+         Z/Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GSCHMMM0D0q85Saw3BGZ1mrSdRqytsRtsFlwlLFUG1Q=;
+        b=c799bImUf2kAZRq/NQgGmgxfm0Y4k53IlqeYJq9iMEYNUVhXm3iBzeN7vp+DBVGUIK
+         I02RBFaYHClcwEZBFTFckclKON+WsveENRKhalJmDBWB4RN4TCwEXb7Q2SIZtS/8aKIQ
+         oeFUUOUeA2dusBy1+CQi42aClLTZZmVZmBySN4aqhJd/lYlO9NFJ3xXAWpwinj1KAI6M
+         2tEpz/kbnU640Y43cBlRgDLdmxWISoQmDP5f6NyxspzRQMz9h6zGvcaj8xNKAyVZCZ+e
+         ckrtMBOwLJ8oWrtwEgw0K8Tm4rudnIO/sOwXIgf4QPhgwZWsT7LxMLpo4goewPV7jP7o
+         kQDA==
+X-Gm-Message-State: AOAM530f+WPxyvLaxiln0GwzETnHQGHv23HVIWtnyEWUWpncVD3abvzM
+        kYtfmuwQthJ+oEp4tvvb2TcGX18I1+vYw1lZawQ/dQ==
+X-Google-Smtp-Source: ABdhPJzrteo1SoLGHTARp2PUs3U3i4VQkUG29Mj40M+A73s5OoqlPLDhJ7M0v+3kzosqo9RIkW4zU8tz5/C7FbMtdpI=
+X-Received: by 2002:a05:651c:204c:: with SMTP id t12mr2581977ljo.347.1605643332643;
+ Tue, 17 Nov 2020 12:02:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e58ee564-597a-336e-53dc-7c4d172d51f5@linuxfoundation.org>
+References: <20201117162932.13649-1-rppt@kernel.org> <20201117162932.13649-7-rppt@kernel.org>
+ <20201117193358.GB109785@carbon.dhcp.thefacebook.com>
+In-Reply-To: <20201117193358.GB109785@carbon.dhcp.thefacebook.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 17 Nov 2020 12:02:01 -0800
+Message-ID: <CALvZod5mJnR2DXoYTbp9RX4uR7zVyqAPfD+XKpqXKgxaNyJ1VA@mail.gmail.com>
+Subject: Re: [PATCH v9 6/9] secretmem: add memcg accounting
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 11:19:12AM -0700, Shuah Khan wrote:
-> On 11/12/20 3:01 PM, Jarkko Sakkinen wrote:
-> > Add a selftest for SGX. It is a trivial test where a simple enclave copies
-> > one 64-bit word of memory between two memory locations, but ensures that
-> > all SGX hardware and software infrastructure is functioning.
-> > 
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: linux-kselftest@vger.kernel.org
-> > Acked-by: Jethro Beekman <jethro@fortanix.com> # v40
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> > Changes from v40:
-> > * Remove $(OUTPUT)/test_encl.elf from TEST_CUSTOM_PROGS, as otherwise
-> >    run_tests tries to execute it. Add it as a build dependency.
-> > * Use the correct device path, /dev/sgx_enclave, instead of
-> >    /dev/sgx/enclave.
-> > * Return kselftest framework expected return codes.
-> > 
-> >   tools/testing/selftests/Makefile              |   1 +
-> >   tools/testing/selftests/sgx/.gitignore        |   2 +
-> >   tools/testing/selftests/sgx/Makefile          |  53 +++
-> >   tools/testing/selftests/sgx/call.S            |  44 ++
-> >   tools/testing/selftests/sgx/defines.h         |  21 +
-> >   tools/testing/selftests/sgx/load.c            | 277 +++++++++++++
-> >   tools/testing/selftests/sgx/main.c            | 246 +++++++++++
-> >   tools/testing/selftests/sgx/main.h            |  38 ++
-> >   tools/testing/selftests/sgx/sigstruct.c       | 391 ++++++++++++++++++
-> >   tools/testing/selftests/sgx/test_encl.c       |  20 +
-> >   tools/testing/selftests/sgx/test_encl.lds     |  40 ++
-> >   .../selftests/sgx/test_encl_bootstrap.S       |  89 ++++
-> >   12 files changed, 1222 insertions(+)
-> >   create mode 100644 tools/testing/selftests/sgx/.gitignore
-> >   create mode 100644 tools/testing/selftests/sgx/Makefile
-> >   create mode 100644 tools/testing/selftests/sgx/call.S
-> >   create mode 100644 tools/testing/selftests/sgx/defines.h
-> >   create mode 100644 tools/testing/selftests/sgx/load.c
-> >   create mode 100644 tools/testing/selftests/sgx/main.c
-> >   create mode 100644 tools/testing/selftests/sgx/main.h
-> >   create mode 100644 tools/testing/selftests/sgx/sigstruct.c
-> >   create mode 100644 tools/testing/selftests/sgx/test_encl.c
-> >   create mode 100644 tools/testing/selftests/sgx/test_encl.lds
-> >   create mode 100644 tools/testing/selftests/sgx/test_encl_bootstrap.S
-> > 
-> > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> > index d9c283503159..aa06e3ea0250 100644
-> > --- a/tools/testing/selftests/Makefile
-> > +++ b/tools/testing/selftests/Makefile
-> > @@ -68,6 +68,7 @@ TARGETS += user
-> >   TARGETS += vm
-> >   TARGETS += x86
-> >   TARGETS += zram
-> > +TARGETS += sgx
-> >   #Please keep the TARGETS list alphabetically sorted
-> 
-> Please keep the list sorted alphabetically as stated
-> in the comment above.
-> 
-> 
-> > +}
-> > +
-> > +int main(int argc, char *argv[], char *envp[])
+On Tue, Nov 17, 2020 at 11:49 AM Roman Gushchin <guro@fb.com> wrote:
+>
+> On Tue, Nov 17, 2020 at 06:29:29PM +0200, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> >
+> > Account memory consumed by secretmem to memcg. The accounting is updated
+> > when the memory is actually allocated and freed.
+> >
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+[snip]
+> >
+> > +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
 > > +{
-> > +	struct sgx_enclave_run run;
-> > +	struct vdso_symtab symtab;
-> > +	Elf64_Sym *eenter_sym;
-> > +	uint64_t result = 0;
-> > +	struct encl encl;
-> > +	unsigned int i;
-> > +	void *addr;
-> > +	int ret;
+> > +     int err;
 > > +
-> > +	memset(&run, 0, sizeof(run));
-> > +
-> > +	if (!encl_load("test_encl.elf", &encl)) {
-> > +		encl_delete(&encl);
-> > +		ksft_exit_skip("cannot load enclaves\n");
-> > +	}
-> > +
-> > +	if (!encl_measure(&encl))
-> > +		goto err;
-> > +
-> > +	if (!encl_build(&encl))
-> > +		goto err;
-> > +
-> > +	/*
-> > +	 * An enclave consumer only must do this.
-> > +	 */
-> > +	for (i = 0; i < encl.nr_segments; i++) {
-> > +		struct encl_segment *seg = &encl.segment_tbl[i];
-> > +
-> > +		addr = mmap((void *)encl.encl_base + seg->offset, seg->size,
-> > +			    seg->prot, MAP_SHARED | MAP_FIXED, encl.fd, 0);
-> > +		if (addr == MAP_FAILED) {
-> > +			fprintf(stderr, "mmap() failed, errno=%d.\n", errno);
-> > +			exit(1);
-> 
-> This should be KSFT_FAIL.
-> 
-> thanks,
-> -- Shuah
+> > +     err = memcg_kmem_charge_page(page, gfp, order);
 
-Thanks.
-
-/Jarkko
+I haven't looked at the whole series but it seems like these pages
+will be mapped into the userspace, so this patch has dependency on
+Roman's "mm: allow mapping
+accounted kernel pages to userspace" patch series.
