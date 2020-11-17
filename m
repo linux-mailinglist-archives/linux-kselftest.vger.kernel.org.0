@@ -2,91 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B18C42B7169
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 23:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DF42B71A5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Nov 2020 23:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728918AbgKQWTU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 17:19:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36408 "EHLO mail.kernel.org"
+        id S1729104AbgKQWgq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Nov 2020 17:36:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40450 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726182AbgKQWTT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 17:19:19 -0500
-Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (c-67-180-217-166.hsd1.ca.comcast.net [67.180.217.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1729099AbgKQWgp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 17:36:45 -0500
+Received: from suppilovahvero.lan (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 17315206B6;
-        Tue, 17 Nov 2020 22:19:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29937206E0;
+        Tue, 17 Nov 2020 22:36:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605651557;
-        bh=GHrSTxL7y3OT9VIhqMi4Mq1l4vD6ZvPCLHA7AVK0P+Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0gbGqcecJOh+OuHZeLlQZ3w2i+xeQKPcOORZrxJCrb/uEJlakRM+cizA6CGkYf6Hr
-         Wji5N+xTP+/p8dUX/3ehUQtUgvOr/0NqFj7YTAjLIkQTaOuH6fljIuYUVsj29DdmRw
-         +Vwr/jq1XwjWyrM1HI/eEAvNkAFeEKOXVLBBoVJM=
-Date:   Tue, 17 Nov 2020 14:19:14 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Ben Segall <bsegall@google.com>,
-        Colin Cross <ccross@android.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Jan Kara <jack@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Mel Gorman <mgorman@suse.de>, Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Gong <richard.gong@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Reichel <sre@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Drewry <wad@chromium.org>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, target-devel@vger.kernel.org
-Subject: Re: [PATCH v4 00/27]Fix several bad kernel-doc markups
-Message-ID: <20201117141914.73056d1f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <cover.1605521731.git.mchehab+huawei@kernel.org>
-References: <cover.1605521731.git.mchehab+huawei@kernel.org>
+        s=default; t=1605652605;
+        bh=PVDYnMNOlxFeBgT28yov8fXfUQnJR2DIJvOOtbZlJgk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HYu7Y6NJrk8WcC3v1ppEWAiJygQKKMadaDUdDZA+n6Fzu8EYEmvXs33+BpW+o2Fnz
+         ejri85xIWQsADGlCVSlQ6rFewqEoiPdzYbgqpUBKvUo1OE6c2sHLzD6+ksr/bktPtv
+         nIsxELHlfi1hyp7jfataZ5I3eYi1fBPBUWsj92iM=
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
+        andriy.shevchenko@linux.intel.com, asapek@google.com,
+        cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
+        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
+        luto@kernel.org, nhorman@redhat.com, npmccallum@redhat.com,
+        puiterwijk@redhat.com, rientjes@google.com,
+        sean.j.christopherson@intel.com, tglx@linutronix.de,
+        yaozhangx@google.com, mikko.ylinen@intel.com
+Subject: [PATCH] selftests/x86: Fix malformed src_offset initialization
+Date:   Wed, 18 Nov 2020 00:36:30 +0200
+Message-Id: <20201117223630.17355-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 16 Nov 2020 11:17:56 +0100 Mauro Carvalho Chehab wrote:
-> Kernel-doc has always be limited to a probably bad documented
-> rule:
-> 
-> The kernel-doc markups should appear *imediatelly before* the
-> function or data structure that it documents.
+Assign src_offset just to the p_offset, when first initialized.
+This has been probably copy-pasting accident (at least looks like
+it).
 
-Applied 1-3 to net-next, thanks!
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ tools/testing/selftests/sgx/load.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+index 07988de6b767..64976f266bae 100644
+--- a/tools/testing/selftests/sgx/load.c
++++ b/tools/testing/selftests/sgx/load.c
+@@ -185,7 +185,7 @@ bool encl_load(const char *path, struct encl *encl)
+ 		}
+ 
+ 		if (j == 0) {
+-			src_offset = (phdr->p_offset & PAGE_MASK) - src_offset;
++			src_offset = (phdr->p_offset & PAGE_MASK);
+ 
+ 			seg->prot = PROT_READ | PROT_WRITE;
+ 			seg->flags = SGX_PAGE_TYPE_TCS << 8;
+-- 
+2.27.0
+
