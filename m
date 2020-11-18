@@ -2,141 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5BD2B74D3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Nov 2020 04:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0872D2B75F8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Nov 2020 06:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbgKRD3Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Nov 2020 22:29:25 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:55438 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbgKRD3Y (ORCPT
+        id S1726131AbgKRFeJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Nov 2020 00:34:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbgKRFeJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 22:29:24 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 041B41F44AB3
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org
-Cc:     christian.brauner@ubuntu.com, peterz@infradead.org,
-        willy@infradead.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org, gofmanp@gmail.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v7 7/7] docs: Document Syscall User Dispatch
-Date:   Tue, 17 Nov 2020 22:28:40 -0500
-Message-Id: <20201118032840.3429268-8-krisman@collabora.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201118032840.3429268-1-krisman@collabora.com>
-References: <20201118032840.3429268-1-krisman@collabora.com>
+        Wed, 18 Nov 2020 00:34:09 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE0CC061A4F
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 21:34:08 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id f20so995233ejz.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Nov 2020 21:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BopsKmSar3n4P2J12Sr3SxLSSPQixGWTU7etCFUvEQ0=;
+        b=CugPd5MD9jNugwhqO/Gr9MkjMcbb6CXIe/YBJ6yWCBjU5fr3YpbYt4AZzxNba/bSYl
+         uyDHBGpm4uVezOQh7dKVM83R0kZ0IlQvAbA2PN+lNfsIoadedA4zFWuhVkRA1gYbxIyD
+         Xm3as8ORxmOYFMdHgqBb4FkvJgHMHGu4ToX8hECpJACyOPamikY/1/UQHszQLjnJPhQ7
+         ebIlRScaG0El2TITFAhbsoeURuVy0UEm4iEaqnsPyHE3UjvEiQA3nOZkrq6d2WzVBVfl
+         F+q1amVs1YcZsOVix0qmYlgKOBbaBbP5i+Ul8Y6SMKKYzy7Xtq4pCHAAHoH6UcGMqR6s
+         cfvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BopsKmSar3n4P2J12Sr3SxLSSPQixGWTU7etCFUvEQ0=;
+        b=qyIMs0/f/iEefCAF/IYLEhYxv87uI1peNohzUhVHNOK2NPPQ7wMR65Nb8BDiM5N/Eg
+         NYv/55VFb6v2L/aWUxCAlq3+17QOBTCpzWYvZFju64iJkWEp5TCwvPMoo6mZ0vtH13XD
+         6cDlNfn0iMiwOsoPjLduK+IswQxeOBImAfYpwmTz7cfGBKoY1YfZMULh3j5j6Ys0j7wY
+         nX0PYHh9C06WMMbXCThbH+vKxyqPBOrAmfAcYMZkisTI6Vs62fZbxZ8I4lroiAiaLNJH
+         t0mOvknYEbf6dKJEbcUgiMlAiWP4Gl4td3yF/Azr9Vsnmyy/ropV3DW2UHMer9+MYqpz
+         cHQg==
+X-Gm-Message-State: AOAM530jGvnq+J/X+FuyjtiC3egrTSKU6mecVrBc/hTRYDfYrBivcaGN
+        e7iBDs0uMUbMkGvjCatZ7fWrg13W3CBrb0wnqeXcLw==
+X-Google-Smtp-Source: ABdhPJwogktE2pJm2xh3pNFBobna/9Th5ECROtOqF+Zx+ceiLF964yBgqeJMX0OYZPoDfFT6pYfrw/wIJCLy66utgj8=
+X-Received: by 2002:a17:906:3087:: with SMTP id 7mr21857605ejv.375.1605677647248;
+ Tue, 17 Nov 2020 21:34:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201117122138.925150709@linuxfoundation.org>
+In-Reply-To: <20201117122138.925150709@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 Nov 2020 11:03:55 +0530
+Message-ID: <CA+G9fYt+YNy=34HLHpDrc6=73Nhu14NEf7AP+woyZryny+b-2Q@mail.gmail.com>
+Subject: Re: [PATCH 5.9 000/255] 5.9.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de,
+        linux- stable <stable@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Explain the interface, provide some background and security notes.
+On Tue, 17 Nov 2020 at 19:02, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.9.9 release.
+> There are 255 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 19 Nov 2020 12:20:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.9.9-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- .../admin-guide/syscall-user-dispatch.rst     | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 Documentation/admin-guide/syscall-user-dispatch.rst
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-new file mode 100644
-index 000000000000..e2fb36926f97
---- /dev/null
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -0,0 +1,87 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================
-+Syscall User Dispatch
-+=====================
-+
-+Background
-+----------
-+
-+Compatibility layers like Wine need a way to efficiently emulate system
-+calls of only a part of their process - the part that has the
-+incompatible code - while being able to execute native syscalls without
-+a high performance penalty on the native part of the process.  Seccomp
-+falls short on this task, since it has limited support to efficiently
-+filter syscalls based on memory regions, and it doesn't support removing
-+filters.  Therefore a new mechanism is necessary.
-+
-+Syscall User Dispatch brings the filtering of the syscall dispatcher
-+address back to userspace.  The application is in control of a flip
-+switch, indicating the current personality of the process.  A
-+multiple-personality application can then flip the switch without
-+invoking the kernel, when crossing the compatibility layer API
-+boundaries, to enable/disable the syscall redirection and execute
-+syscalls directly (disabled) or send them to be emulated in userspace
-+through a SIGSYS.
-+
-+The goal of this design is to provide very quick compatibility layer
-+boundary crosses, which is achieved by not executing a syscall to change
-+personality every time the compatibility layer executes.  Instead, a
-+userspace memory region exposed to the kernel indicates the current
-+personality, and the application simply modifies that variable to
-+configure the mechanism.
-+
-+There is a relatively high cost associated with handling signals on most
-+architectures, like x86, but at least for Wine, syscalls issued by
-+native Windows code are currently not known to be a performance problem,
-+since they are quite rare, at least for modern gaming applications.
-+
-+Since this mechanism is designed to capture syscalls issued by
-+non-native applications, it must function on syscalls whose invocation
-+ABI is completely unexpected to Linux.  Syscall User Dispatch, therefore
-+doesn't rely on any of the syscall ABI to make the filtering.  It uses
-+only the syscall dispatcher address and the userspace key.
-+
-+Interface
-+---------
-+
-+A process can setup this mechanism on supported kernels
-+CONFIG_SYSCALL_USER_DISPATCH) by executing the following prctl:
-+
-+  prctl(PR_SET_SYSCALL_USER_DISPATCH, <op>, <offset>, <length>, [selector])
-+
-+<op> is either PR_SYS_DISPATCH_ON or PR_SYS_DISPATCH_OFF, to enable and
-+disable the mechanism globally for that thread.  When
-+PR_SYS_DISPATCH_OFF is used, the other fields must be zero.
-+
-+<offset> and <offset+length> delimit a closed memory region interval
-+from which syscalls are always executed directly, regardless of the
-+userspace selector.  This provides a fast path for the C library, which
-+includes the most common syscall dispatchers in the native code
-+applications, and also provides a way for the signal handler to return
-+without triggering a nested SIGSYS on (rt_)sigreturn.  Users of this
-+interface should make sure that at least the signal trampoline code is
-+included in this region. In addition, for syscalls that implement the
-+trampoline code on the vDSO, that trampoline is never intercepted.
-+
-+[selector] is a pointer to a char-sized region in the process memory
-+region, that provides a quick way to enable disable syscall redirection
-+thread-wide, without the need to invoke the kernel directly.  selector
-+can be set to PR_SYS_DISPATCH_ON or PR_SYS_DISPATCH_OFF.  Any other
-+value should terminate the program with a SIGSYS.
-+
-+Security Notes
-+--------------
-+
-+Syscall User Dispatch provides functionality for compatibility layers to
-+quickly capture system calls issued by a non-native part of the
-+application, while not impacting the Linux native regions of the
-+process.  It is not a mechanism for sandboxing system calls, and it
-+should not be seen as a security mechanism, since it is trivial for a
-+malicious application to subvert the mechanism by jumping to an allowed
-+dispatcher region prior to executing the syscall, or to discover the
-+address and modify the selector value.  If the use case requires any
-+kind of security sandboxing, Seccomp should be used instead.
-+
-+Any fork or exec of the existing process resets the mechanism to
-+PR_SYS_DISPATCH_OFF.
--- 
-2.29.2
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+NOTE:
+1)
+BUG: Invalid wait context on arm64 db410c device while booting.
+This issue has not reproduced after several testing loops.
+https://lore.kernel.org/stable/CA+G9fYsk54r9Re4E9BWpqsoxLjpCvxRKFWRgdiKVcPo=
+YE5z0Hw@mail.gmail.com/T/#u
+
+2)
+kselftest test suite version upgrade to v5.9
+
+3)
+While running kselftest netfilter on x86, i386, arm64 and arm devices
+the following kernel warning was noticed.
+WARNING: at net/netfilter/nf_tables_api.c:622
+lockdep_nfnl_nft_mutex_not_held+0x19/0x20 [nf_tables]
+https://lore.kernel.org/linux-kselftest/CA+G9fYvFUpODs+NkSYcnwKnXm62tmP=3Dk=
+sLeBPmB+KFrB2rvCtQ@mail.gmail.com/
+
+4)
+From this release we have started building kernels with clang-10 toolchain
+and testing LTP testsuite on qemu_arm64, qemu_arm, qemu_x86_64 and qemu_i38=
+6.
+
+Summary
+------------------------------------------------------------------------
+
+kernel: 5.9.9-rc1
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
+le-rc.git
+git branch: linux-5.9.y
+git commit: fb1622495321923cbb1ae2c6cf2da1e9ca286800
+git describe: v5.9.8-256-gfb1622495321
+Test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.9.=
+y/build/v5.9.8-256-gfb1622495321
+
+No regressions (compared to build v5.9.8)
+
+No fixes (compared to build v5.9.8)
+
+Ran 52946 total tests in the following environments and test suites.
+
+Environments
+--------------
+- dragonboard-410c
+- hi6220-hikey
+- i386
+- juno-r2
+- juno-r2-compat
+- juno-r2-kasan
+- nxp-ls2088
+- qemu-arm-clang
+- qemu-arm64-clang
+- qemu-arm64-kasan
+- qemu-i386-clang
+- qemu-x86_64-clang
+- qemu-x86_64-kasan
+- qemu_arm
+- qemu_arm64
+- qemu_arm64-compat
+- qemu_i386
+- qemu_x86_64
+- qemu_x86_64-compat
+- x15
+- x86
+- x86-kasan
+
+Test Suites
+-----------
+* build
+* install-android-platform-tools-r2600
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* perf
+* v4l2-compliance
+* ltp-controllers-tests
+* ltp-cve-tests
+* network-basic-tests
+* kselftest
+* ltp-open-posix-tests
+* kvm-unit-tests
+* kunit
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+--=20
+Linaro LKFT
+https://lkft.linaro.org
