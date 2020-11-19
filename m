@@ -2,83 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E73E2B8B3A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Nov 2020 07:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A812B8BF6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Nov 2020 08:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725778AbgKSGDk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Nov 2020 01:03:40 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51637 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725648AbgKSGDk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Nov 2020 01:03:40 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cc8Hs6Rdnz9sTv;
-        Thu, 19 Nov 2020 17:03:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1605765817;
-        bh=+pZz8i6g7OW4NmP3Iuj693zPmlv8QYjXt7afMQdN6hE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=V4dsU87ALmKVfy4tqYomzsbnaVJHR20L5N3ndFKpV2IVqKhJ/yqxgQ8p151HOofey
-         1xrEuX6BOPCEF5p9l3fGBjt+CiS2hkL1YGoFyxG2zfi04+UNz5nwZoixuYHj01+Sae
-         2haUvRoyfyYWCCGT0wMp/3I3l16XUkFrh7+40y81m6X3hFxD3AXYQy+Tfc7tn94Fjg
-         dr4sefW4e08FS5xumP7CmJHp48+8kEriOc85xKdgorrf8K0i8/ig+LO/S2HD+0rlxC
-         Digtvx5vBb+UvSVaRyuMms4qN8wSmUj7XFWwds7EiJxQPqU3KY962y+gsUBSGoP//u
-         6jNsEKLf97VFA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/seccomp: powerpc: Fix typo in macro variable name
-In-Reply-To: <20201117210104.1000661-1-keescook@chromium.org>
-References: <20201117210104.1000661-1-keescook@chromium.org>
-Date:   Thu, 19 Nov 2020 17:03:34 +1100
-Message-ID: <87y2ix2895.fsf@mpe.ellerman.id.au>
+        id S1725931AbgKSHFJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Nov 2020 02:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725915AbgKSHFJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 19 Nov 2020 02:05:09 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4ACC0617A7
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2020 23:05:08 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id d18so4696246edt.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Nov 2020 23:05:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=JrAdhbw6sISA41zs66HyAySXleshjPJsnyUygqmXzd4=;
+        b=Kte3ZMop7gHdmXBNNyISQ+I+Qlghzcly9y+STCKDivQVQ3VYeouCeIksoMF+Hg7clf
+         LQHSHDu9JpNQYxnRTLa+cbGESnC6VqEWZgq7OuvfzfJHO+vH/vJwaJ7PjLYRXgzVPTFU
+         NlYHlkdK2WfxX7akSE7yngoR9gmoP1LKFdowfPTZurR9atuz72SezAjsbtkLiknB9hwm
+         l/N3gy74XfcVaTfavq3+0GdBoeix1U8gwGGQdN5jBcnZaZPk7prpPB3GoQK5jNaTpWet
+         BETTTz4I852ygeI6J3AGxTt9zY3FvYUuMy2UE061M5Ch07l7YhFCAVvLWSkY9jBjSpm0
+         KBKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=JrAdhbw6sISA41zs66HyAySXleshjPJsnyUygqmXzd4=;
+        b=WS9ERjQxXWSy4IQoaFvkXxeM6E12KFb3KN8pMZjErSS0F4o/ag+PVsREcGGnMuiYK+
+         e+MJC/hrrEKLYI2rPqonW95e/f71uPG+ciUaFaZPYCGQ99SfgpRgQ3ukFmkHhmB8/nQn
+         eS0znvJaqJ1lLLTFdwfwV/6Uq4ZKOU/wf7TN77w3sbGVa+ow7Yk5OKRYCe/fBK4Q4Qw6
+         3+s+NtdKL63OPTnyg+BFoCJl16K9bnsV6WYwrEkKo+hxr9a6VG00C6s9LpZZj8BYv2ts
+         DCpL1c6IiDjrCQFSmO3h9Gx9imG+qR7wZz03iXa0BJFrp0u42xmSL9gfB1GrFE7qXgTz
+         vDhQ==
+X-Gm-Message-State: AOAM531RtlfG/9QfDeEapX82Ir5ufl+nNDgrR79zi1d26xebsxMw0kHr
+        6DFQx/pKJ9bHyns3OGxmF6Ztbx96RaifkxJJUQeXgA==
+X-Google-Smtp-Source: ABdhPJzinwnANI3eodWZfO09btpe7t9l0FLxTHA4w6yIz8S9dbyyyamvJS7w6SayMhss0zBtfFsSoRB+N/fVlfrQXvg=
+X-Received: by 2002:aa7:c2d7:: with SMTP id m23mr29176107edp.230.1605769507167;
+ Wed, 18 Nov 2020 23:05:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 19 Nov 2020 12:34:55 +0530
+Message-ID: <CA+G9fYvkRAKBzthvdurQ44q_f9HimG2ur9+M=bgyZ0c+XWucgg@mail.gmail.com>
+Subject: WARNING: net/mptcp/protocol.c:719 mptcp_reset_timer+0x40/0x50
+To:     Netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, mptcp@lists.01.org
+Cc:     Shuah Khan <shuah@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        mathew.j.martineau@linux.intel.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Geliang Tang <geliangtang@gmail.com>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-> A typo sneaked into the powerpc selftest. Fix the name so it builds again.
->
-> Fixes: 46138329faea ("selftests/seccomp: powerpc: Fix seccomp return value testing")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+While running kselftest net/mptcp: mptcp_join.sh on x86_64 device running
+linux next 20201118 tag the following warning was noticed.
 
-I hit that and thought I'd sent a patch for it, but seems I never
-actually sent it.
+# selftests: net/mptcp: mptcp_join.sh
+<trim>
+[ 1276.053194] ------------[ cut here ]------------
+[ 1276.057857] WARNING: CPU: 2 PID: 27452 at
+/usr/src/kernel/net/mptcp/protocol.c:719 mptcp_reset_timer+0x40/0x50
+[ 1276.067870] Modules linked in: xt_tcpudp xt_bpf act_mirred cls_u32
+ip6table_mangle mpls_gso mpls_iptunnel mpls_router sch_etf
+ip6table_nat xt_nat iptable_nat nf_nat ip6table_filter xt_conntrack
+nf_conntrack nf_defrag_ipv4 libcrc32c ip6_tables nf_defrag_ipv6 bridge
+stp llc vrf xt_policy sch_fq 8021q iptable_filter xt_mark ip_tables
+x_tables cls_bpf sch_ingress veth algif_hash x86_pkg_temp_thermal fuse
+[last unloaded: test_blackhole_dev]
+[ 1276.106416] CPU: 2 PID: 27452 Comm: kworker/2:4 Tainted: G        W
+    K   5.10.0-rc4-next-20201118 #1
+[ 1276.115808] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[ 1276.123293] Workqueue: events mptcp_worker
+[ 1276.127407] RIP: 0010:mptcp_reset_timer+0x40/0x50
+[ 1276.132119] Code: 45 ff 3c 07 74 22 48 8b 87 30 08 00 00 48 85 c0
+74 18 48 8b 15 e1 34 d4 00 48 8d b7 50 06 00 00 48 01 c2 e8 72 3b ca
+ff c9 c3 <0f> 0b b8 c8 00 00 00 eb df 0f 1f 80 00 00 00 00 0f 1f 44 00
+00 55
+[ 1276.150863] RSP: 0018:ffffa20b41137d28 EFLAGS: 00010246
+[ 1276.156091] RAX: 0000000000000000 RBX: ffff95a6d444b090 RCX: 0000000000000000
+[ 1276.163222] RDX: 0000000000000000 RSI: 00000000ffffffff RDI: ffff95a6d444a800
+[ 1276.170354] RBP: ffffa20b41137d30 R08: 0000000000000000 R09: 0000000000000000
+[ 1276.177487] R10: 0000000000024200 R11: fefefefefefefeff R12: ffff95a6d444a800
+[ 1276.184621] R13: 0000000000000000 R14: ffff95a6da9e44d8 R15: 0000000000000000
+[ 1276.191752] FS:  0000000000000000(0000) GS:ffff95a9dfd00000(0000)
+knlGS:0000000000000000
+[ 1276.199838] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1276.205585] CR2: 00007f1770beb810 CR3: 0000000131026005 CR4: 00000000003706e0
+[ 1276.212718] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1276.219849] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1276.226983] Call Trace:
+[ 1276.229438]  mptcp_push_pending+0x5bf/0x6c0
+[ 1276.233633]  mptcp_worker+0xf0/0x650
+[ 1276.237218]  ? mptcp_worker+0xf0/0x650
+[ 1276.240971]  ? process_one_work+0x21c/0x5e0
+[ 1276.245157]  process_one_work+0x289/0x5e0
+[ 1276.249171]  worker_thread+0x3c/0x3f0
+[ 1276.252836]  ? __kthread_parkme+0x6f/0xa0
+[ 1276.256848]  ? process_one_work+0x5e0/0x5e0
+[ 1276.261034]  kthread+0x142/0x160
+[ 1276.264269]  ? kthread_insert_work_sanity_check+0x60/0x60
+[ 1276.269674]  ret_from_fork+0x22/0x30
+[ 1276.273254] irq event stamp: 0
+[ 1276.276316] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[ 1276.282587] hardirqs last disabled at (0): [<ffffffffbbfbbf4d>]
+copy_process+0x75d/0x1d60
+[ 1276.290759] softirqs last  enabled at (0): [<ffffffffbbfbbf4d>]
+copy_process+0x75d/0x1d60
+[ 1276.298932] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[ 1276.305197] ---[ end trace fe4f318db7e06cdb ]---
 
-So thanks. I assume Shuah will take it.
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: 2052923327794192c5d884623b5ee5fec1867bda
+  git describe: next-20201118
+  make_kernelversion: 5.10.0-rc4
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/902/config
 
-cheers
+Full test log link,
+https://lkft.validation.linaro.org/scheduler/job/1952957#L15217
 
-
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 76c458055c54..26c72f2b61b1 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -1758,10 +1758,10 @@ TEST_F(TRACE_poke, getpid_runs_normally)
->  		 * and the code is stored as a positive value.	\
->  		 */						\
->  		if (_result < 0) {				\
-> -			SYSCALL_RET(_regs) = -result;		\
-> +			SYSCALL_RET(_regs) = -_result;		\
->  			(_regs).ccr |= 0x10000000;		\
->  		} else {					\
-> -			SYSCALL_RET(_regs) = result;		\
-> +			SYSCALL_RET(_regs) = _result;		\
->  			(_regs).ccr &= ~0x10000000;		\
->  		}						\
->  	} while (0)
-> -- 
-> 2.25.1
+-- 
+Linaro LKFT
+https://lkft.linaro.org
