@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 159102B9756
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Nov 2020 17:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD322B9765
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Nov 2020 17:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbgKSQGj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Nov 2020 11:06:39 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:41859 "EHLO
+        id S1727983AbgKSQG5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Nov 2020 11:06:57 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:43701 "EHLO
         wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727990AbgKSQGj (ORCPT
+        by vger.kernel.org with ESMTP id S1727991AbgKSQGj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 19 Nov 2020 11:06:39 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 5E12FED5;
+        by mailnew.west.internal (Postfix) with ESMTP id BDCADE96;
         Thu, 19 Nov 2020 11:06:37 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
   by compute6.internal (MEProxy); Thu, 19 Nov 2020 11:06:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
         :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=jekI5tMSgt2QD
-        NEmEebnlTl09MgC4oLm1jXTahZK9g8=; b=xCI3YILoNwMJ1q3mpREI968HKniUl
-        KJDnSdZzmgVVnjECKpH0wPvIbLnmzCkMphzUtMR+5cfiqfcM3tdtcgpeXb65wCiM
-        +urbVtIAJgLnh4DAo36h/KT2nPVhjyCmXMfW94sVucMb6gq14hB5feX/s1fV55IL
-        HvNWnWw9k8l/6oBlGLyAvt/RHInv5y8QDxe425V5nAVfsS6sTaaM0NGuYA/K4lm1
-        X5EIOb3NC+6B27XbyjE5qlwsVYSj/LwU18Z7V+ZwVGDSGUEoEgOmBXKUe0lzX2qY
-        IigGXIu4vHfIauHTQw1qnIsy/XsFbEr22aPH9sgE5nlh63K+48ca/462Q==
+        :mime-version:content-transfer-encoding; s=fm2; bh=mH0cmjCFFHawR
+        fu2fp7V1aZ23JKakX1bmunG/jk3ld4=; b=A09NhnlLth9AQs85DScDDR2MgWzXd
+        prjq6bmdlLKZn0ZEFWuts6n4+bz/y47V2XPGS3Vk9H9j3ulvm8a05iqHjewAF+Ba
+        ApGMO9A9xRDrPuJPLRb5r1WzBKuZNVdg8iE9d+OA2sQIbEgJees7HvU2kdS7X/VC
+        DPGdXnZqIB6qCL+GDOGDshFfj6jgh8lUxxg7vFA/659eEaDsol3Bl1qHAQ/KUePe
+        1kWch0bJYbkAy3YyF+n12VsmPEVr2SH8udGr4u/E0KFMDvJ8p2NbFnjAtPgFdDTK
+        mk0gwLGNYxz6btwntr5pFxbwEks136YS+6jRMcMdZgugNceXnXRcMwhTA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:reply-to:subject
         :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=jekI5tMSgt2QDNEmEebnlTl09MgC4oLm1jXTahZK9g8=; b=dWEJemL6
-        go/dlyGtVNcvQPCyNYEQ4yAE6bfsE+reEGbEUhp6yeoM5z3kgyGSEtZxebUWNw2n
-        oS0zkUppYyq+pWeh0WOmuhUSi+o5U4L6DNanYirO56FTtCLQKqteopJ9FMV0e8Mq
-        xYOqKCiqs26cw/s+nyawd38+64QErA6NQ2SYm61oV7ZFeN7VByBtLdu1iaHZ8h46
-        g1hfFE7el4ri55sbEkTcBip04TxyiMexaaLMZknsz2NzL2adjVRmufxJWpUfdxEO
-        ur5tYdjoPSiKb1SILXp5X8gLdP87QKduHxw2IeYOy8aH73SxKFI0hx+Gf+BhyZXA
-        ulQJHYSJPPSQzg==
-X-ME-Sender: <xms:DJi2X3hdRGEwMBbNlMIA8iBE6IzdKPog_la8q013Ru-Tb9Uke3j9ag>
-    <xme:DJi2X0C4q1gk_2_gKiKS617ps4Cv8WtgrkU1hfNTdzOOeQBMRusK0cP-XLju2wd9r
-    87rywqUxK3zqt5GVQ>
+        fm1; bh=mH0cmjCFFHawRfu2fp7V1aZ23JKakX1bmunG/jk3ld4=; b=QRnzrNRm
+        Rw+rqQrua0o+q4j5TfPTmPFEX1Zstcx3I14GeMFTvIj/F/5Xxf7bsGvb9w4GYN28
+        WXre3l7UJkoosap2LDoy6Mz6yDjtwzy9po60oxlGqKWZv9GbHPRdgZ7u7ZbUdZHo
+        1IVYWYxcAixjzs1hyaQFuVN0jwpjRZxSlAxL4+oGVibPFSS+ed1P0LlrbywS+EG3
+        xg2JJmTC/iErijvaDl3Sm4CPyErAtpv7V8wuz3KplTdkGnDGksllyDmISe+UimCg
+        193rI8sLPGNLJaSnRJq7jpuzW8JqLfnEEqC1Yxtdotwde4+s/YaRLdZT9fIToWwu
+        xr6S4Qdr5JXHjA==
+X-ME-Sender: <xms:DZi2X8NHZa9d3yL3s8khUouKYLBBhtK3pQrfzOLwz7m5n2xkI5fm1g>
+    <xme:DZi2Xy_cUjaQhC2ynAYag4-LZadPVp8kIMi1y6Ios3Q1tWhqrnLZmK2A1M2Ja-mrf
+    jMJTenYVfREKb3Itw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudefjedgkeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -48,12 +48,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudefjedgkeefucetufdoteggod
     dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedu
     vddrgeeirddutdeirdduieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
     hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
-X-ME-Proxy: <xmx:DJi2X3FLB1siYoJDsYQW6l1O09NdjCiHPkHywzyEXyh0Hp7FET2yuw>
-    <xmx:DJi2X0QR8h6fOwHaKM2rpomuxqy5C0Q01f6NZINe8Ph0J6w0kMIJWQ>
-    <xmx:DJi2X0w2iMf4pwxoZXqG9N1rSJ-UYFzp1IcqCEhtWEp6Jph33Wymag>
-    <xmx:DJi2X5rz2GSuLNuioUrdp35uaYBXtLhBQ4L9OWE0_9TQpLDRp8niL9NjDPA>
+X-ME-Proxy: <xmx:DZi2XzRSzke9wQVsWjpTufixSZT-MSwVXkQWCEhnQXPpX2heuq9ODg>
+    <xmx:DZi2X0skhxWsizIfYWMp7qE7KYi6LM5-fMvAJSh3nt_sbvBOKjNngA>
+    <xmx:DZi2X0eajVCCOMtXXbeXVtWrTQ6liv6iZojYMerqNexArecFHKPZag>
+    <xmx:DZi2X1VMu6dYUHHOXmmTzQrXnnXPXXe51xVTlg8CxsCtRH8xUMbssbeTd0w>
 Received: from nvrsysarch6.NVidia.COM (unknown [12.46.106.164])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 686B03064AB4;
+        by mail.messagingengine.com (Postfix) with ESMTPA id AD9AB3064AB5;
         Thu, 19 Nov 2020 11:06:36 -0500 (EST)
 From:   Zi Yan <zi.yan@sent.com>
 To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
@@ -66,9 +66,9 @@ Cc:     Roman Gushchin <guro@fb.com>,
         John Hubbard <jhubbard@nvidia.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
         David Nellans <dnellans@nvidia.com>, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH 3/7] mm: memcg: make memcg huge page split support any order split.
-Date:   Thu, 19 Nov 2020 11:06:01 -0500
-Message-Id: <20201119160605.1272425-4-zi.yan@sent.com>
+Subject: [PATCH 4/7] mm: page_owner: add support for splitting to any order in split page_owner.
+Date:   Thu, 19 Nov 2020 11:06:02 -0500
+Message-Id: <20201119160605.1272425-5-zi.yan@sent.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201119160605.1272425-1-zi.yan@sent.com>
 References: <20201119160605.1272425-1-zi.yan@sent.com>
@@ -81,83 +81,127 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-It sets memcg information for the pages after the split. A new parameter
-new_order is added to tell the new page order, always 0 for now. It
-prepares for upcoming changes to support split huge page to any lower order.
+It adds a new_order parameter to set new page order in page owner and
+uses old_order instead of nr to make the parameters look consistent.
+It prepares for upcoming changes to support split huge page to any
+lower order.
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
-Reviewed-by: Ralph Campbell <rcampbell@nvidia.com>
-Acked-by: Roman Gushchin <guro@fb.com>
 ---
- include/linux/memcontrol.h | 5 +++--
- mm/huge_memory.c           | 2 +-
- mm/memcontrol.c            | 6 +++---
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ include/linux/page_owner.h | 10 ++++++----
+ mm/huge_memory.c           |  3 ++-
+ mm/page_alloc.c            |  2 +-
+ mm/page_owner.c            | 13 +++++++------
+ 4 files changed, 16 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index a8d5daf95988..39707feae505 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1062,7 +1062,7 @@ static inline void memcg_memory_event_mm(struct mm_st=
-ruct *mm,
+diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
+index 3468794f83d2..9caaed51403c 100644
+--- a/include/linux/page_owner.h
++++ b/include/linux/page_owner.h
+@@ -11,7 +11,8 @@ extern struct page_ext_operations page_owner_ops;
+ extern void __reset_page_owner(struct page *page, unsigned int order);
+ extern void __set_page_owner(struct page *page,
+ 			unsigned int order, gfp_t gfp_mask);
+-extern void __split_page_owner(struct page *page, unsigned int nr);
++extern void __split_page_owner(struct page *page, unsigned int old_order,
++			unsigned int new_order);
+ extern void __copy_page_owner(struct page *oldpage, struct page *newpage);
+ extern void __set_page_owner_migrate_reason(struct page *page, int reason);
+ extern void __dump_page_owner(struct page *page);
+@@ -31,10 +32,11 @@ static inline void set_page_owner(struct page *page,
+ 		__set_page_owner(page, order, gfp_mask);
  }
 =20
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
--void mem_cgroup_split_huge_fixup(struct page *head);
-+void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_order=
-);
- #endif
-=20
- #else /* CONFIG_MEMCG */
-@@ -1396,7 +1396,8 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t=
- *pgdat, int order,
- 	return 0;
+-static inline void split_page_owner(struct page *page, unsigned int nr)
++static inline void split_page_owner(struct page *page, unsigned int old_or=
+der,
++			unsigned int new_order)
+ {
+ 	if (static_branch_unlikely(&page_owner_inited))
+-		__split_page_owner(page, nr);
++		__split_page_owner(page, old_order, new_order);
  }
-=20
--static inline void mem_cgroup_split_huge_fixup(struct page *head)
-+static inline void mem_cgroup_split_huge_fixup(struct page *head,
-+					       unsigned int new_order)
+ static inline void copy_page_owner(struct page *oldpage, struct page *newp=
+age)
+ {
+@@ -60,7 +62,7 @@ static inline void set_page_owner(struct page *page,
  {
  }
-=20
+ static inline void split_page_owner(struct page *page,
+-			unsigned int order)
++			unsigned int old_order, unsigned int new_order)
+ {
+ }
+ static inline void copy_page_owner(struct page *oldpage, struct page *newp=
+age)
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 88d8b7fce5d7..d7ab5cac5851 100644
+index d7ab5cac5851..aae7405a0989 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -2428,7 +2428,7 @@ static void __split_huge_page(struct page *page, stru=
+@@ -2422,6 +2422,7 @@ static void __split_huge_page(struct page *page, stru=
 ct list_head *list,
- 	lruvec =3D mem_cgroup_page_lruvec(head, pgdat);
+ 	struct lruvec *lruvec;
+ 	struct address_space *swap_cache =3D NULL;
+ 	unsigned long offset =3D 0;
++	unsigned int order =3D thp_order(head);
+ 	unsigned int nr =3D thp_nr_pages(head);
+ 	int i;
 =20
- 	/* complete memcg works before add pages to LRU */
--	mem_cgroup_split_huge_fixup(head);
-+	mem_cgroup_split_huge_fixup(head, 0);
+@@ -2458,7 +2459,7 @@ static void __split_huge_page(struct page *page, stru=
+ct list_head *list,
 =20
- 	if (PageAnon(head) && PageSwapCache(head)) {
- 		swp_entry_t entry =3D { .val =3D page_private(head) };
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index de5869dd354d..4521ed3a51b7 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3223,15 +3223,15 @@ void obj_cgroup_uncharge(struct obj_cgroup *objcg, =
-size_t size)
-  * Because tail pages are not marked as "used", set it. We're under
-  * pgdat->lru_lock and migration entries setup in all page mappings.
-  */
--void mem_cgroup_split_huge_fixup(struct page *head)
-+void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_order)
+ 	ClearPageCompound(head);
+=20
+-	split_page_owner(head, nr);
++	split_page_owner(head, order, 0);
+=20
+ 	/* See comment in __split_huge_page_tail() */
+ 	if (PageAnon(head)) {
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 63d8d8b72c10..414f26950190 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3297,7 +3297,7 @@ void split_page(struct page *page, unsigned int order)
+=20
+ 	for (i =3D 1; i < (1 << order); i++)
+ 		set_page_refcounted(page + i);
+-	split_page_owner(page, 1 << order);
++	split_page_owner(page, order, 0);
+ }
+ EXPORT_SYMBOL_GPL(split_page);
+=20
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index b735a8eafcdb..00a679a1230b 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -204,19 +204,20 @@ void __set_page_owner_migrate_reason(struct page *pag=
+e, int reason)
+ 	page_owner->last_migrate_reason =3D reason;
+ }
+=20
+-void __split_page_owner(struct page *page, unsigned int nr)
++void __split_page_owner(struct page *page, unsigned int old_order,
++			unsigned int new_order)
  {
- 	struct mem_cgroup *memcg =3D page_memcg(head);
 -	int i;
-+	int i, new_nr =3D 1 << new_order;
+-	struct page_ext *page_ext =3D lookup_page_ext(page);
++	int i, old_nr =3D 1 << old_order, new_nr =3D 1 << new_order;
++	struct page_ext *page_ext;
+ 	struct page_owner *page_owner;
 =20
- 	if (mem_cgroup_disabled())
+ 	if (unlikely(!page_ext))
  		return;
 =20
--	for (i =3D 1; i < thp_nr_pages(head); i++) {
-+	for (i =3D new_nr; i < thp_nr_pages(head); i +=3D new_nr) {
- 		css_get(&memcg->css);
- 		head[i].memcg_data =3D (unsigned long)memcg;
+-	for (i =3D 0; i < nr; i++) {
++	for (i =3D 0; i < old_nr; i +=3D new_nr) {
++		page_ext =3D lookup_page_ext(page + i);
+ 		page_owner =3D get_page_owner(page_ext);
+-		page_owner->order =3D 0;
+-		page_ext =3D page_ext_next(page_ext);
++		page_owner->order =3D new_order;
  	}
+ }
+=20
 --=20
 2.28.0
 
