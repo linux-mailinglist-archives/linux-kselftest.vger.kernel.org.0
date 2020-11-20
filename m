@@ -2,216 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A832BB5A4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Nov 2020 20:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 597682BB632
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Nov 2020 21:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728320AbgKTTfE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Nov 2020 14:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728282AbgKTTfD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Nov 2020 14:35:03 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4D9C0613CF;
-        Fri, 20 Nov 2020 11:35:03 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id 10so9586169ybx.9;
-        Fri, 20 Nov 2020 11:35:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Gz1739iBwCHgCBSlGtAiZOrgVZxBWr1CGt1BZBmpYLc=;
-        b=RzB+vNPhSCrctwjVn+9T6hR6Yb4xLi2sRuLX5y1dyGHE7S8qBKJTP60ZFndycLLjWR
-         cfZ+4EeKHWR71BqEEFTdnENFAxgmfIon80UfZY5zzs1BMIRtrNZnKpjAQZ2jfwAaXwGE
-         jIg/wU69lERt1QJmrwiZwBKz+VKPrZ84qCz09yBB4/r1tJ+AQAjppUqBzoTAMzpyXj2f
-         3AXR+EkVhJq9cCM41bfk6ku3vfZOHOhskQX7KJSl+jlDlndy8ihR8rfBKvXxJpFZbt1G
-         z7JrXTeaCMs8evhudiSzZVJOMGJNsPn91wKBD6buBKCemHjbaww+P/VmG3PVi0jU+YPo
-         iuEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Gz1739iBwCHgCBSlGtAiZOrgVZxBWr1CGt1BZBmpYLc=;
-        b=c64RCKBjyJD2N0j+EMO2CtRNAG5sGkx1ty64uDgxAjh6WGSUZ5NKTbHF40whbg4Y5i
-         PKcx8R4zWIkxlrvu63pEoSj179Z5qExblzza2arThZ9dIb9IGEgVhcnXiNU/l0CPK5Zo
-         DrZAvA2K1zzPnERDz2HoRyDUFkkNGD/uNb7Z0mkB4+y6d43k0Wj+yPgCAQdpxmB+QGOj
-         ckkaKkHULOlZBEcvXaYu2nacp/CtJU0Llc6yCkGoTfJFhubpOAedmvQwMVlrO1UxVFkl
-         Oo7lzQrp4a8daSeBbedo078VwyPSecECC3VnKefW+1DcXpACFWj5ewlKR2EsN2eWhUDa
-         S2ng==
-X-Gm-Message-State: AOAM533oJjhSLh7Cus2abLtgPUT3am4ZUIQIJG2k5Ki0qM0ulxZ+GFPx
-        hMV49fYNceJ5unQO4wmQSSRFjQFT6YxZFjNaY8U=
-X-Google-Smtp-Source: ABdhPJwkW17RSiw+obd1e5Nm9Hj38vu7NKehRzeU4T+FN+Gb8602HMGA3LC/1ktxDY/miOWB9z+AA91gQ2RHOGaaUf4=
-X-Received: by 2002:a25:254a:: with SMTP id l71mr30667864ybl.439.1605900902740;
- Fri, 20 Nov 2020 11:35:02 -0800 (PST)
+        id S1729575AbgKTUBp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Nov 2020 15:01:45 -0500
+Received: from nat-hk.nvidia.com ([203.18.50.4]:16759 "EHLO nat-hk.nvidia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729529AbgKTUBo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Nov 2020 15:01:44 -0500
+Received: from HKMAIL103.nvidia.com (Not Verified[10.18.92.77]) by nat-hk.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fb820a70004>; Sat, 21 Nov 2020 04:01:43 +0800
+Received: from HKMAIL104.nvidia.com (10.18.16.13) by HKMAIL103.nvidia.com
+ (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 20 Nov
+ 2020 20:01:38 +0000
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ HKMAIL104.nvidia.com (10.18.16.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Fri, 20 Nov 2020 20:01:38 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fzVcSizvsxf4yCVuRNWmvdeJ4G3cPgLEAA/d72jV8W7xeLtG/rXrobzqF/+YvI3D+P4564dq70E8sgcnPMryK/X6h74JMSr9Um4r3EVHV2JwVk5MbSPaj9oQpCPHRE05Sp2kG+ROOI3fLWwVEDRFTnUuLSU4A6C3H1Xuzi+nJv+VgND0oA6l9mB10IuqTgazCY7znEjG1lOHB9DqdPCo3n+AAmI5gGE7lOiH37xZzGgy4wxmQ/POjrjPo6Ng02KnGWxoPQFSYUIkiN79Da5a/HA5B0InekhyGSBzS4/FmfXnLQF4yLlA9v4/rxXMVUbjuPscaYfSrZe3YdbKds0JdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IFfp8hz1DSdZvGULg6OJS/UGwcunZv40bBdS/Y5/ieE=;
+ b=Gknug4ZDgH9xKjS8xdBlHwLnwHYfDcYOocagXQ13v7PVMNe0U4eewnzCiTRfnZ6X7HfZSgNwH/17JurhmX7v/MRaVdxRsG2RVRa8dLWI4oN8q5eAhgJjCQnPhQ5OBJ5xywdfYrJ/h7BcFHORBEQh0yvgXV/jGU/parERfCJRA6TNM/nWYQb+NV+pw/cC9oED4A5zIWrCKw49QXrzziLWooZuyQZ9hWzvuKm8Z9wqJB5L5EYOVfdI6gK9Jw8N8VgGG3+SEAHG5WddvS6MQqUyhmzhb/vVc1xwdeA69uvd7tQGAxvaBiqXfC3GqvpUlE6RnHQaV3oHePztJbUgbYj3NA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
+ by DM6PR12MB2809.namprd12.prod.outlook.com (2603:10b6:5:4a::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.28; Fri, 20 Nov
+ 2020 20:01:35 +0000
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9]) by DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9%7]) with mapi id 15.20.3589.022; Fri, 20 Nov 2020
+ 20:01:35 +0000
+Date:   Fri, 20 Nov 2020 16:01:33 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+CC:     Christoph Hellwig <hch@lst.de>, <linux-mm@kvack.org>,
+        <nouveau@lists.freedesktop.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jerome Glisse <jglisse@redhat.com>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Zi Yan <ziy@nvidia.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 3/6] mm: support THP migration to device private memory
+Message-ID: <20201120200133.GH917484@nvidia.com>
+References: <20201106005147.20113-1-rcampbell@nvidia.com>
+ <20201106005147.20113-4-rcampbell@nvidia.com> <20201106080322.GE31341@lst.de>
+ <a7b8b90c-09b7-2009-0784-908b61f61ef2@nvidia.com>
+ <20201109091415.GC28918@lst.de>
+ <bbf1f0df-85f3-5887-050e-beb2aad750f2@nvidia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <bbf1f0df-85f3-5887-050e-beb2aad750f2@nvidia.com>
+X-ClientProxiedBy: MN2PR03CA0016.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::21) To DM6PR12MB3834.namprd12.prod.outlook.com
+ (2603:10b6:5:14a::12)
 MIME-Version: 1.0
-References: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
- <20201120130026.19029-3-weqaar.a.janjua@intel.com> <c73ca08d-4eae-c56f-f5fe-b4dd1440773b@fb.com>
-In-Reply-To: <c73ca08d-4eae-c56f-f5fe-b4dd1440773b@fb.com>
-From:   Weqaar Janjua <weqaar.janjua@gmail.com>
-Date:   Fri, 20 Nov 2020 19:34:36 +0000
-Message-ID: <CAPLEeBaq5yu5Be4dd1KxRxk5JX24PynuA-xreBm9qm-3uMrS0A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: xsk selftests - SKB POLL, NOPOLL
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        jonathan.lemon@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mlx.ziepe.ca (156.34.48.30) by MN2PR03CA0016.namprd03.prod.outlook.com (2603:10b6:208:23a::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Fri, 20 Nov 2020 20:01:34 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1kgCb7-008wuP-OH; Fri, 20 Nov 2020 16:01:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1605902503; bh=IFfp8hz1DSdZvGULg6OJS/UGwcunZv40bBdS/Y5/ieE=;
+        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
+         From:To:CC:Subject:Message-ID:References:Content-Type:
+         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
+         X-MS-Exchange-MessageSentRepresentingType;
+        b=kEd8yQ8SWwe0ENlF6IPdDz1ts9iHDbWIpG2xLqqwwl4/XwyPtzkpkomCvABqpYeZ7
+         /V4kqwKMkZ7/bCpZh9GNf1SBWcxDOfGH0wuOFKSbJA8JqmEmSjy8x1tJ2JTy82OGTa
+         CnMR56uNxSmQuXrBWQsxzlpTWAx7OMgcZCZTJDWl5DjFZVN2vazZ3dGz2I4N7dO9Om
+         niay8qxI/PQtDxIpjbRZkj11WHNZd6vLTu0dHk0VWuXPPa3RRdeCWrhwEbdqS9LxmB
+         BNuo4jRG+X4PxBy0puRkATAIBo7tx3kk+fgelHEIUhlc+zHo6GcbIGJxTX//0m5cqU
+         dr6NeWVeV1kpQ==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 20 Nov 2020 at 18:54, Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 11/20/20 5:00 AM, Weqaar Janjua wrote:
-> > Adds following tests:
-> >
-> > 1. AF_XDP SKB mode
-> >     Generic mode XDP is driver independent, used when the driver does
-> >     not have support for XDP. Works on any netdevice using sockets and
-> >     generic XDP path. XDP hook from netif_receive_skb().
-> >     a. nopoll - soft-irq processing
-> >     b. poll - using poll() syscall
-> >
-> > Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile          |   5 +-
-> >   .../selftests/bpf/test_xsk_prerequisites.sh   |  15 +-
-> >   .../selftests/bpf/test_xsk_skb_nopoll.sh      |  20 +
-> >   ..._xsk_framework.sh => test_xsk_skb_poll.sh} |  12 +-
-> >   tools/testing/selftests/bpf/xdpxceiver.c      | 961 ++++++++++++++++++
-> >   tools/testing/selftests/bpf/xdpxceiver.h      | 151 +++
-> >   tools/testing/selftests/bpf/xsk_env.sh        |  17 +
-> >   7 files changed, 1174 insertions(+), 7 deletions(-)
-> >   create mode 100755 tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh
-> >   rename tools/testing/selftests/bpf/{test_xsk_framework.sh => test_xsk_skb_poll.sh} (61%)
-> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.c
-> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.h
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index 51436db24f32..17af570a32d7 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -73,7 +73,8 @@ TEST_PROGS := test_kmod.sh \
-> >       test_bpftool.sh \
-> >       test_bpftool_metadata.sh \
-> >       test_xsk_prerequisites.sh \
-> > -     test_xsk_framework.sh
-> > +     test_xsk_skb_nopoll.sh \
-> > +     test_xsk_skb_poll.sh
-> >
-> >   TEST_PROGS_EXTENDED := with_addr.sh \
-> >       with_tunnels.sh \
-> > @@ -84,7 +85,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
-> >   # Compile but not part of 'make run_tests'
-> >   TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
-> >       flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
-> > -     test_lirc_mode2_user xdping test_cpp runqslower bench
-> > +     test_lirc_mode2_user xdping test_cpp runqslower bench xdpxceiver
-> >
-> >   TEST_CUSTOM_PROGS = urandom_read
-> >
-> > diff --git a/tools/testing/selftests/bpf/test_xsk_prerequisites.sh b/tools/testing/selftests/bpf/test_xsk_prerequisites.sh
-> > index 00bfcf53127c..a9ce8887dffc 100755
-> > --- a/tools/testing/selftests/bpf/test_xsk_prerequisites.sh
-> > +++ b/tools/testing/selftests/bpf/test_xsk_prerequisites.sh
-> > @@ -8,8 +8,17 @@
-> >   #
-> >   # Topology:
-> >   # ---------
-> > -#      -----------           -----------
-> > -#      |  xskX   | --------- |  xskY   |
-> > +#                 -----------
-> > +#               _ | Process | _
-> > +#              /  -----------  \
-> > +#             /        |        \
-> > +#            /         |         \
-> > +#      -----------     |     -----------
-> > +#      | Thread1 |     |     | Thread2 |
-> > +#      -----------     |     -----------
-> > +#           |          |          |
-> > +#      -----------     |     -----------
-> > +#      |  xskX   |     |     |  xskY   |
-> >   #      -----------     |     -----------
-> >   #           |          |          |
-> >   #      -----------     |     ----------
-> > @@ -40,6 +49,8 @@
-> >   #       conflict with any existing interface
-> >   #   * tests the veth and xsk layers of the topology
-> >   #
-> > +# See the source xdpxceiver.c for information on each test
-> > +#
-> >   # Kernel configuration:
-> >   # ---------------------
-> >   # See "config" file for recommended kernel config options.
-> > diff --git a/tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh b/tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh
-> > new file mode 100755
-> > index 000000000000..96600b0f5136
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh
-> > @@ -0,0 +1,20 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# Copyright(c) 2020 Intel Corporation.
-> > +
-> > +# See test_xsk_prerequisites.sh for detailed information on tests
-> > +
-> > +. xsk_prereqs.sh
-> > +. xsk_env.sh
-> > +
-> > +TEST_NAME="SKB NOPOLL"
-> > +
-> > +vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
-> > +
-> > +params=("-S")
-> > +execxdpxceiver params
-> > +
-> > +retval=$?
-> > +test_status $retval "${TEST_NAME}"
-> > +
-> > +test_exit $retval 0
-> > diff --git a/tools/testing/selftests/bpf/test_xsk_framework.sh b/tools/testing/selftests/bpf/test_xsk_skb_poll.sh
-> > similarity index 61%
-> > rename from tools/testing/selftests/bpf/test_xsk_framework.sh
-> > rename to tools/testing/selftests/bpf/test_xsk_skb_poll.sh
-> > index 2e3f099d001c..d152c8a24251 100755
-> > --- a/tools/testing/selftests/bpf/test_xsk_framework.sh
-> > +++ b/tools/testing/selftests/bpf/test_xsk_skb_poll.sh
-> > @@ -7,11 +7,17 @@
-> >   . xsk_prereqs.sh
-> >   . xsk_env.sh
->
-> Here both xsk_prereqs.sh and xsk_env.sh are executed.
-> But xsk_env.sh also calls xsk_prereqs.sh. This double
-> execution of xsk_prereqs.sh is required or is an
-> oversight?
->
-Oversight, will fix as v3 - in all 5/5 test_xsk_*.sh, thanks
+On Wed, Nov 11, 2020 at 03:38:42PM -0800, Ralph Campbell wrote:
 
-> >
-> > -TEST_NAME="XSK FRAMEWORK"
-> > +TEST_NAME="SKB POLL"
-> >
-> > -test_status $ksft_pass "${TEST_NAME}"
-> > +vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
-> > +
-> > +params=("-S" "-p")
-> > +execxdpxceiver params
-> > +
-> > +retval=$?
-> > +test_status $retval "${TEST_NAME}"
-> >
-> >   # Must be called in the last test to execute
-> >   cleanup_exit ${VETH0} ${VETH1} ${NS1}
-> >
-> > -test_exit $ksft_pass 0
-> > +test_exit $retval 0
-> > diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-> [...]
+> MEMORY_DEVICE_GENERIC:
+> Struct pages are created in dev_dax_probe() and represent non-volatile memory.
+> The device can be mmap()'ed which calls dax_mmap() which sets
+> vma->vm_flags | VM_HUGEPAGE.
+> A CPU page fault will result in a PTE, PMD, or PUD sized page
+> (but not compound) to be inserted by vmf_insert_mixed() which will call either
+> insert_pfn() or insert_page().
+> Neither insert_pfn() nor insert_page() increments the page reference
+> count.
+
+But why was this done? It seems very strange to put a pfn with a
+struct page into a VMA and then deliberately not take the refcount for
+the duration of that pfn being in the VMA?
+
+What prevents memunmap_pages() from progressing while VMAs still point
+at the memory?
+
+> I think just leaving the page reference count at one is better than trying
+> to use the mmu_interval_notifier or changing vmf_insert_mixed() and
+> invalidations of pfn_t_devmap(pfn) to adjust the page reference count.
+
+Why so? The entire point of getting struct page's for this stuff was
+to be able to follow the struct page flow. I never did learn a reason
+why there is devmap stuff all over the place in the page table code...
+
+> MEMORY_DEVICE_FS_DAX:
+> Struct pages are created in pmem_attach_disk() and virtio_fs_setup_dax() with
+> an initial reference count of one.
+> The problem I see is that there are 3 states that are important:
+> a) memory is free and not allocated to any file (page_ref_count() == 0).
+> b) memory is allocated to a file and in the page cache (page_ref_count() == 1).
+> c) some gup() or I/O has a reference even after calling unmap_mapping_pages()
+>    (page_ref_count() > 1). ext4_break_layouts() basically waits until the
+>    page_ref_count() == 1 with put_page() calling wake_up_var(&page->_refcount)
+>    to wake up ext4_break_layouts().
+> The current code doesn't seem to distinguish (a) and (b). If we want to use
+> the 0->1 reference count to signal (c), then the page cache would have hold
+> entries with a page_ref_count() == 0 which doesn't match the general page cache
+> assumptions.
+
+This explanation feels confusing. If *anything* has a reference on the
+page it cannot be recycled. I would have guess the logic is to remove
+it from the page cache then wait for a 0 reference??
+
+Jason
