@@ -2,94 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9872BA006
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Nov 2020 02:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9DD2BAAB0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Nov 2020 14:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726580AbgKTBxc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Nov 2020 20:53:32 -0500
-Received: from namei.org ([65.99.196.166]:54324 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726122AbgKTBxb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Nov 2020 20:53:31 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 0AK1qcDI017804;
-        Fri, 20 Nov 2020 01:52:38 GMT
-Date:   Fri, 20 Nov 2020 12:52:38 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Jann Horn <jannh@google.com>
-cc:     "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?ISO-8859-15?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v24 02/12] landlock: Add ruleset and domain management
-In-Reply-To: <20201112205141.775752-3-mic@digikod.net>
-Message-ID: <alpine.LRH.2.21.2011201251010.15634@namei.org>
-References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-3-mic@digikod.net>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1727479AbgKTNAp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Nov 2020 08:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726559AbgKTNAo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Nov 2020 08:00:44 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C992C0613CF;
+        Fri, 20 Nov 2020 05:00:44 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id o15so9958979wru.6;
+        Fri, 20 Nov 2020 05:00:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YrVsl77v5RNxUEy41ZltptpT1I1IuhiAow2CCvYm/oU=;
+        b=FUE6BYKWeAe99FY0tXXcBVFU8+15IPNBEimyfGdMReEdhx0NtZH8izu2WPfj+KO1GL
+         vfEYrLwK20jSaU+1R9CuI3f2SavbO8BC6iUHu7Vr9MdapEbWxkS/U2+rmaXc+IomToUR
+         kK4UgMnjdWquuIw6ZrrVUON04MWqpLScvQpqaHFHp8ITxrv9eM0sfz82d6zcM3k9MSBP
+         TAwsfSZ6fXff2wIxVbAIqZ31VKnv7YiHhQG1jg4o7+YXVzIGrOEG9TN3Gu9o1KLik3Rr
+         wMqAQjRMTh3QsjxkEQOcdzX4n05MHM1hH8cGkxsmeHSPMavlMKkrRMzKwH8jFhc6twRj
+         w3rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YrVsl77v5RNxUEy41ZltptpT1I1IuhiAow2CCvYm/oU=;
+        b=QHypDm7Lqm/lfVExtNKYIQhLoXqONB9r711L5TYK4yIayAiHOpDZwRqghusfR9Dkd/
+         64hN9i0CdNZS5auRf+SSQPRXutOwMZ2wmX8H048KPg+DmJ5O0eVQFJGC+7Z2pFHHhW9s
+         k7U0cg8QGbyXB+TCkIRbHpdvyu/HRfbwxeSVWAS0FO8FUq1dXP6nOMWp124ONAnP/T9B
+         Nq76t+Our9AziDncnWj/3G9jR8pJngXVjxUJAilk7Wo0Ym9QD1Q3UhmM1tT5s4SqfcQA
+         VBBqBPrJ1K36gyxyocSG1h69cro7FWi301h7UbPD20dQsTkRwxhyoLpORyH51BO1ZkZf
+         r93g==
+X-Gm-Message-State: AOAM532iuUDB7Ibq8tscm/36Rnaz53orrZpaSo6oF/+2dcKdmBiyTzb2
+        nOUModdtXt2jIGgjHD0YNwtENcJh0+EXZNmGvgQ=
+X-Google-Smtp-Source: ABdhPJxAZWJtipjhs2JU9ZAazaiRGPpeDpEw6BxxDAR42F0jPu4BnxvVoNU6ubheBSdXvghn6f+eXQ==
+X-Received: by 2002:adf:814f:: with SMTP id 73mr15670252wrm.174.1605877242467;
+        Fri, 20 Nov 2020 05:00:42 -0800 (PST)
+Received: from kernel-dev.chello.ie ([80.111.136.190])
+        by smtp.gmail.com with ESMTPSA id b8sm4074238wmj.9.2020.11.20.05.00.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2020 05:00:41 -0800 (PST)
+From:   Weqaar Janjua <weqaar.janjua@gmail.com>
+X-Google-Original-From: Weqaar Janjua <weqaar.a.janjua@intel.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+        ast@kernel.org, magnus.karlsson@gmail.com, bjorn.topel@intel.com
+Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com
+Subject: [PATCH bpf-next v2 0/5] selftests/bpf: xsk selftests
+Date:   Fri, 20 Nov 2020 13:00:21 +0000
+Message-Id: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1665246916-1401825409-1605837159=:15634"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+This patch set adds AF_XDP selftests based on veth to selftests/bpf.
 
---1665246916-1401825409-1605837159=:15634
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+# Topology:
+# ---------
+#                 -----------
+#               _ | Process | _
+#              /  -----------  \
+#             /        |        \
+#            /         |         \
+#      -----------     |     -----------
+#      | Thread1 |     |     | Thread2 |
+#      -----------     |     -----------
+#           |          |          |
+#      -----------     |     -----------
+#      |  xskX   |     |     |  xskY   |
+#      -----------     |     -----------
+#           |          |          |
+#      -----------     |     ----------
+#      |  vethX  | --------- |  vethY |
+#      -----------   peer    ----------
+#           |          |          |
+#      namespaceX      |     namespaceY
 
-On Thu, 12 Nov 2020, Mickaël Salaün wrote:
+These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
+Ethernet interfaces.
 
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> ---
-> 
-> Changes since v23:
-> * Always intersect access rights.  Following the filesystem change
->   logic, make ruleset updates more consistent by always intersecting
->   access rights (boolean AND) instead of combining them (boolean OR) for
->   the same layer.  This defensive approach could also help avoid user
->   space to inadvertently allow multiple access rights for the same
->   object (e.g.  write and execute access on a path hierarchy) instead of
->   dealing with such inconsistency.  This can happen when there is no
->   deduplication of objects (e.g. paths and underlying inodes) whereas
->   they get different access rights with landlock_add_rule(2).
-> * Add extra checks to make sure that:
->   - there is always an (allocated) object in each used rules;
->   - when updating a ruleset with a new rule (i.e. not merging two
->     rulesets), the ruleset doesn't contain multiple layers.
-> * Hide merge parameter from the public landlock_insert_rule() API.  This
->   helps avoid misuse of this function.
-> * Replace a remaining hardcoded 1 with SINGLE_DEPTH_NESTING.
+The test program contains two threads, each thread is single socket with
+a unique UMEM. It validates in-order packet delivery and packet content
+by sending packets to each other.
 
-Jann: any chance you could review this patch again given the changes 
-above?
+Prerequisites setup by script test_xsk_prerequisites.sh:
 
-Thanks.
+   Set up veth interfaces as per the topology shown ^^:
+   * setup two veth interfaces and one namespace
+   ** veth<xxxx> in root namespace
+   ** veth<yyyy> in af_xdp<xxxx> namespace
+   ** namespace af_xdp<xxxx>
+   * create a spec file veth.spec that includes this run-time configuration
+     that is read by test scripts - filenames prefixed with test_xsk_
+   *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
+       conflict with any existing interface
 
+The following tests are provided:
+
+1. AF_XDP SKB mode
+   Generic mode XDP is driver independent, used when the driver does
+   not have support for XDP. Works on any netdevice using sockets and
+   generic XDP path. XDP hook from netif_receive_skb().
+   a. nopoll - soft-irq processing
+   b. poll - using poll() syscall
+   c. Socket Teardown
+      Create a Tx and a Rx socket, Tx from one socket, Rx on another.
+      Destroy both sockets, then repeat multiple times. Only nopoll mode
+	  is used
+   d. Bi-directional Sockets
+      Configure sockets as bi-directional tx/rx sockets, sets up fill
+	  and completion rings on each socket, tx/rx in both directions.
+	  Only nopoll mode is used
+
+2. AF_XDP DRV/Native mode
+   Works on any netdevice with XDP_REDIRECT support, driver dependent.
+   Processes packets before SKB allocation. Provides better performance
+   than SKB. Driver hook available just after DMA of buffer descriptor.
+   a. nopoll
+   b. poll
+   c. Socket Teardown
+   d. Bi-directional Sockets
+   * Only copy mode is supported because veth does not currently support
+     zero-copy mode
+
+Total tests: 8
+
+Flow:
+* Single process spawns two threads: Tx and Rx
+* Each of these two threads attach to a veth interface within their
+  assigned namespaces
+* Each thread creates one AF_XDP socket connected to a unique umem
+  for each veth interface
+* Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
+* Rx thread verifies if all 10k packets were received and delivered
+  in-order, and have the right content
+
+v2 changes:
+* Move selftests/xsk to selftests/bpf
+* Remove Makefiles under selftests/xsk, and utilize selftests/bpf/Makefile
+
+Structure of the patch set:
+
+Patch 1: This patch adds XSK Selftests framework under selftests/bpf
+Patch 2: Adds tests: SKB poll and nopoll mode, and mac-ip-udp debug
+Patch 3: Adds tests: DRV poll and nopoll mode
+Patch 4: Adds tests: SKB and DRV Socket Teardown
+Patch 5: Adds tests: SKB and DRV Bi-directional Sockets
+
+Thanks: Weqaar
+
+Weqaar Janjua (5):
+  selftests/bpf: xsk selftests framework
+  selftests/bpf: xsk selftests - SKB POLL, NOPOLL
+  selftests/bpf: xsk selftests - DRV POLL, NOPOLL
+  selftests/bpf: xsk selftests - Socket Teardown - SKB, DRV
+  selftests/bpf: xsk selftests - Bi-directional Sockets - SKB, DRV
+
+ tools/testing/selftests/bpf/Makefile          |   15 +-
+ .../bpf/test_xsk_drv_bidirectional.sh         |   23 +
+ .../selftests/bpf/test_xsk_drv_nopoll.sh      |   20 +
+ .../selftests/bpf/test_xsk_drv_poll.sh        |   20 +
+ .../selftests/bpf/test_xsk_drv_teardown.sh    |   20 +
+ .../selftests/bpf/test_xsk_prerequisites.sh   |  127 ++
+ .../bpf/test_xsk_skb_bidirectional.sh         |   20 +
+ .../selftests/bpf/test_xsk_skb_nopoll.sh      |   20 +
+ .../selftests/bpf/test_xsk_skb_poll.sh        |   20 +
+ .../selftests/bpf/test_xsk_skb_teardown.sh    |   20 +
+ tools/testing/selftests/bpf/xdpxceiver.c      | 1056 +++++++++++++++++
+ tools/testing/selftests/bpf/xdpxceiver.h      |  158 +++
+ tools/testing/selftests/bpf/xsk_env.sh        |   28 +
+ tools/testing/selftests/bpf/xsk_prereqs.sh    |  119 ++
+ 14 files changed, 1664 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_drv_bidirectional.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_drv_nopoll.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_drv_poll.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_drv_teardown.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_prerequisites.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_skb_bidirectional.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_skb_poll.sh
+ create mode 100755 tools/testing/selftests/bpf/test_xsk_skb_teardown.sh
+ create mode 100644 tools/testing/selftests/bpf/xdpxceiver.c
+ create mode 100644 tools/testing/selftests/bpf/xdpxceiver.h
+ create mode 100755 tools/testing/selftests/bpf/xsk_env.sh
+ create mode 100755 tools/testing/selftests/bpf/xsk_prereqs.sh
 
 -- 
-James Morris
-<jmorris@namei.org>
+2.20.1
 
---1665246916-1401825409-1605837159=:15634--
