@@ -2,439 +2,262 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165392BAABC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Nov 2020 14:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B6A2BB492
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Nov 2020 20:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728261AbgKTNAx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Nov 2020 08:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726559AbgKTNAv (ORCPT
+        id S1732126AbgKTSyg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Nov 2020 13:54:36 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37560 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732123AbgKTSyg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Nov 2020 08:00:51 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB7EC061A04;
-        Fri, 20 Nov 2020 05:00:51 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id u12so10010026wrt.0;
-        Fri, 20 Nov 2020 05:00:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OXlpaQIDyg9ZFDN08mZX7r8jSWVn06ExvLj0ie0139E=;
-        b=ZbgQ5ibFU2mPzfl/QMcQRiDV0HwiNmhUuFwiQFDeHqepzdqtZxVMMcfC5MYyD//OF8
-         yamIhIzwRWIcG7aknQz9md3VZTvYK99qjTooWXUuYFtxIg6JLC1kPng+zNUdEGxYl7x6
-         Lz0xoi32ezdscDN5KRK02sTC9PPHHrW0Mzeri+mDI3tHHJ1P6HZUER074RRst0Oha75K
-         3J8jgWgqY3tsMeDeqyE/7sK+HFevIYSZJTHfA4LDDFd4ySM7CR1tkeMdptkeNEIcILDi
-         ck5cAhOB6qFEtHtdnp2EGt/eU+aoQ5N0+18mTse0rVh1C4MCObSUrGzCnaYDDkRy8ljb
-         Ja3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OXlpaQIDyg9ZFDN08mZX7r8jSWVn06ExvLj0ie0139E=;
-        b=d8G3UQkAS/LHF0WvI/3ga2yBB8b1aGz+RSV1uF8Iyxf4HOh5C97OKAKlzPazBVGP5z
-         XKjTfl7CbTmoE6+mSWDEUSAyHmMNekAJW/P4WVZyxCwk67VAX6rgVFpCZ0oAsNAtPFd+
-         +IzaWiIGFDjcX3lrgsxN7SYkC4udgk9zIYFMVi6CwnFPv6eRM69d3sbP5KfNdDdk1XVM
-         w8OSJXdYhm8S/TSf2ik6Uoh9HrdzxsPlR7bz92TUNgf5eOlJ0oH+je6o4Ziz7AutjRk8
-         hO5E2HubjecJafpx7oHX2Xr7VK3cpLDaZMRUs8q78vHcuYDyAsnKw0lLn2urSOu+71/C
-         tO3A==
-X-Gm-Message-State: AOAM531WDnKp5zI/IvInTWGRHaZAEqENJDK8A45uP6rbnGCx+IO34qrd
-        Xh5/N1E0EBh9lz9nPE2kGMKJrk49XVKsXUzzJys=
-X-Google-Smtp-Source: ABdhPJw4/59+AtUIEh6+aIzgdha5swltN+qhhMYRiYEMvsz20HmHgxV1iiEr/OSW96MM7NAhTWQqaQ==
-X-Received: by 2002:adf:db4a:: with SMTP id f10mr15562622wrj.420.1605877249035;
-        Fri, 20 Nov 2020 05:00:49 -0800 (PST)
-Received: from kernel-dev.chello.ie ([80.111.136.190])
-        by smtp.gmail.com with ESMTPSA id b8sm4074238wmj.9.2020.11.20.05.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 05:00:48 -0800 (PST)
-From:   Weqaar Janjua <weqaar.janjua@gmail.com>
-X-Google-Original-From: Weqaar Janjua <weqaar.a.janjua@intel.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
-        ast@kernel.org, magnus.karlsson@gmail.com, bjorn.topel@intel.com
-Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        anders.roxell@linaro.org, jonathan.lemon@gmail.com
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: xsk selftests - Bi-directional Sockets - SKB, DRV
-Date:   Fri, 20 Nov 2020 13:00:26 +0000
-Message-Id: <20201120130026.19029-6-weqaar.a.janjua@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
+        Fri, 20 Nov 2020 13:54:36 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AKIoCOa005313;
+        Fri, 20 Nov 2020 10:54:15 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=2lARocLmhZeuVxBFzz0qnGj7F3eZIZSFU54OSkNvk58=;
+ b=T4pUPQlR8LFiT9T/9YYhbVYoMTqaX20D3mWpi9h1VUFek74KEss+t3ZCPvC6aAfzFWWK
+ Bl7ouuj3aEscb2dPV+GBo5D0G+qhXq90MMWSIXHA8zuIvpf9Jrm+E0CQ4L0bDsIqfCAj
+ G6Hgajji7L+IplSY/1ST87CgAetbYQZpPQA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 34xat42w8a-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 20 Nov 2020 10:54:14 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 20 Nov 2020 10:54:14 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dJuxbtY9fgw501QOoJB9r9eQCFW1iVnH+YDS4ty5hcuAieypqo//RHB+vB6u189cGsyIxiZLVeHeqwDFR/qEXgK5wzkeSu3R+bFNHAfdwBHQe0K5tAfNM87IIXGe63fc0U1qNZeuFiNqx7V14PGdFgQvYeO3bGmMpiDbzZCx0lq1TZvhtx1vthVNiI4soTwCIDZhfif3AEU+1oKjfa+K2dZEJw+/Pi39slF1+onGzoNBdjRZ6h99p7yGsEfW2482C/09xN6107dTTV6lC0imbd/pCjyE1SAQMBwZhG9ZSi+lV+7SsutGR/pEh08QHJK52KvRJ1YrySkXFsogOTBCyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2lARocLmhZeuVxBFzz0qnGj7F3eZIZSFU54OSkNvk58=;
+ b=eea46y/Zt9JQFOfpeqQ2MUPzsfpKhoNnLfZqf+wr3OF8vv/0HCt1PgE+V+19YGOkD+OovN63Iu2kWFNYdahMT35SlotJQkQg5EGP3BSNuuOMiGrFDL6eRdefao88ST3hAeFtPPYRJmWBDI+8mQSqYyU4NnBwszum3IcWI4qTvfvqLOtWgfR6Cutbjvuy6xjCs+/ZKOrmMXSxwp/TOAjVqn+X7X3tBRVNvbaK6flJLROOP6CKPBegskSI8z7HweoxZksnOXFC1Yf4MIQZFapfa+ZfdW9s2/BglnW0MoJtvx4swSEOIJqFnJl15brf/6PyJRmt8drOET+lxQsPMnmAxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2lARocLmhZeuVxBFzz0qnGj7F3eZIZSFU54OSkNvk58=;
+ b=Emn1MYIOvzxE0sZ5aRrgH8ZCgsJ7A3F//nYbamrA6umJM2tGvMyvreATxHPrSVTvmiEHH5OaRFVR4UJ+mZHR8asdd1jNuE8MlRLOiskWO9gy3RA+uSqnrlqtC8U8LhHbW7r+vKPo3bXRYZN7bCGXPWAdC+hWwIm5gJ549tFhYoU=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB3302.namprd15.prod.outlook.com (2603:10b6:a03:10f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Fri, 20 Nov
+ 2020 18:54:12 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%6]) with mapi id 15.20.3564.028; Fri, 20 Nov 2020
+ 18:54:12 +0000
+Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: xsk selftests - SKB POLL,
+ NOPOLL
+To:     Weqaar Janjua <weqaar.janjua@gmail.com>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
+        <magnus.karlsson@gmail.com>, <bjorn.topel@intel.com>
+CC:     Weqaar Janjua <weqaar.a.janjua@intel.com>, <shuah@kernel.org>,
+        <skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>,
+        <anders.roxell@linaro.org>, <jonathan.lemon@gmail.com>
 References: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
+ <20201120130026.19029-3-weqaar.a.janjua@intel.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <c73ca08d-4eae-c56f-f5fe-b4dd1440773b@fb.com>
+Date:   Fri, 20 Nov 2020 10:54:09 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.4.3
+In-Reply-To: <20201120130026.19029-3-weqaar.a.janjua@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:f0a]
+X-ClientProxiedBy: MWHPR22CA0069.namprd22.prod.outlook.com
+ (2603:10b6:300:12a::31) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21c1::1688] (2620:10d:c090:400::5:f0a) by MWHPR22CA0069.namprd22.prod.outlook.com (2603:10b6:300:12a::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Fri, 20 Nov 2020 18:54:11 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d669d0ce-b573-49f0-43c5-08d88d85abdd
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3302:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB33026F602285DDD35775AEADD3FF0@BYAPR15MB3302.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 00N+pj34qcyhZHgaM+3ylY5jTFZOP7mnG1+CCC5y9p9ipt8K9ArN2eDY0a4UDIjy0BIkWaA0Tn2FrW/we+w91nTI5exQ9VbqB75uo11If75ca5Y5qBTsjRG4sxiFuaw52s3RqPNAKSkFR2JECslKnnz4YYXpVb+6j/Fok0fTDcqvtaqY470mHzXP4R42S0/yEBs0v4usXoKqjSWmE/OyJAah7adqQZJu3CdEQUaVxvs/LkcU4LTkOcaM8atjk+f+Ky6P4MLxoZQwTlQAk8+6VfJJymif0cvQmS0Y3lYPxLlwotUG6h3JGxFi3mK9Ygq3q7dzj1cBwxC6p0RnhMjorpnc8O6XsDbp3NPmcx2hjMOkI8WdcbfvVG79BXC4zecw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(39860400002)(136003)(366004)(396003)(36756003)(5660300002)(53546011)(2906002)(8676002)(186003)(52116002)(16526019)(4326008)(6486002)(7416002)(8936002)(31696002)(316002)(2616005)(66946007)(66476007)(31686004)(83380400001)(66556008)(478600001)(86362001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: Gw/M3Fje9C8zZWpw3F0Fn1Xmg44e/ryQYhkOVFjzrqQcVA91DMjuF7WqX7qcUL6E8Ymjcmr5b4Jwhh+irfFCeDC+pQ2LR/HGUXZy6Rkahv65IU6WkP3+8MZU3rEDBBT7bkV12NqAvEUv5aWGykNwPYcbaISwwPNd4LbcLufvKouUbJDECywNcqDqoNro3A0yxOyNUSDAmB3J8yrXq872AYmJmTjBAb0Sqdq86C0gVgzP9jMxQ88AJExQkEvku78bfEh2bNBVS7nILQsqeWV462GnF1iE1LwImnZWN5n0aMvZHqx9qE/taOtm8ECKEUkkfDOFRBmF4F3J0lCYmTu4ZXO74+66kyGsNYyH55TK3Q5OoUyLSj7ha1R7LLjhrnAT8W2D9F6qUWtcEAmplOff5fXkWaquHGXs9TOictAahrgZ3wVv9fhmffSVJB9QrDBqJPNBG7BejajIHaFgrRmkmuNz64CJvZzy6+MejPeF9TuIJDQgg5gtLzoK1Xvzy4/1lhZJB/GMpIpWfeBl+w3SnSnfC13bTtaJYNqsaUVCYyoNE/azSYHu1AW56Tlgkga9mbSsc2VtggfZcmrB8u7GMmkbYhdp5rD2ssZC0rJFJayjFwmahH5CydW1FixXEROVKgbHRRtUKpgC+bBSGgH4oMaNhmOlxt6zuk49vucqpDUoxU+bp23y+fbsTGC083U7TZ9Vf90zPG0ZvYkMkfyMZuJJ/OnjVRyhugL6ezB4H408Vziojax3+2VIbGpRXA6DiGyrARl0b7paq12Yen+AAKLUwGHUZsxW288O1qE/LZXmb4k1LPzlPRroKA9pqOXypHhIXJTSwdcFqoeZWDToAbJhOWLUwMiuJ5f9daOJnEvvPOPqHfOaxWHl1rYr1wVwqaNJtDm9HijEBRuT8n7kW5wKWiIGEpLrbnYrOz58S6g=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d669d0ce-b573-49f0-43c5-08d88d85abdd
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2020 18:54:12.8215
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: crLNVXUHQt78b80Xlbo0M0N304mLUaYaiQZ1Q4ndC3EgmDVS5hLp9LAgynWluH/V
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3302
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-20_12:2020-11-20,2020-11-20 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 lowpriorityscore=0 phishscore=0 clxscore=1011 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011200128
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds following tests:
 
-1. AF_XDP SKB mode
-   d. Bi-directional Sockets
-      Configure sockets as bi-directional tx/rx sockets, sets up fill
-      and completion rings on each socket, tx/rx in both directions.
-      Only nopoll mode is used
 
-2. AF_XDP DRV/Native mode
-   d. Bi-directional Sockets
-   * Only copy mode is supported because veth does not currently support
-     zero-copy mode
+On 11/20/20 5:00 AM, Weqaar Janjua wrote:
+> Adds following tests:
+> 
+> 1. AF_XDP SKB mode
+>     Generic mode XDP is driver independent, used when the driver does
+>     not have support for XDP. Works on any netdevice using sockets and
+>     generic XDP path. XDP hook from netif_receive_skb().
+>     a. nopoll - soft-irq processing
+>     b. poll - using poll() syscall
+> 
+> Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
+> ---
+>   tools/testing/selftests/bpf/Makefile          |   5 +-
+>   .../selftests/bpf/test_xsk_prerequisites.sh   |  15 +-
+>   .../selftests/bpf/test_xsk_skb_nopoll.sh      |  20 +
+>   ..._xsk_framework.sh => test_xsk_skb_poll.sh} |  12 +-
+>   tools/testing/selftests/bpf/xdpxceiver.c      | 961 ++++++++++++++++++
+>   tools/testing/selftests/bpf/xdpxceiver.h      | 151 +++
+>   tools/testing/selftests/bpf/xsk_env.sh        |  17 +
+>   7 files changed, 1174 insertions(+), 7 deletions(-)
+>   create mode 100755 tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh
+>   rename tools/testing/selftests/bpf/{test_xsk_framework.sh => test_xsk_skb_poll.sh} (61%)
+>   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.c
+>   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.h
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 51436db24f32..17af570a32d7 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -73,7 +73,8 @@ TEST_PROGS := test_kmod.sh \
+>   	test_bpftool.sh \
+>   	test_bpftool_metadata.sh \
+>   	test_xsk_prerequisites.sh \
+> -	test_xsk_framework.sh
+> +	test_xsk_skb_nopoll.sh \
+> +	test_xsk_skb_poll.sh
+>   
+>   TEST_PROGS_EXTENDED := with_addr.sh \
+>   	with_tunnels.sh \
+> @@ -84,7 +85,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
+>   # Compile but not part of 'make run_tests'
+>   TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
+>   	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
+> -	test_lirc_mode2_user xdping test_cpp runqslower bench
+> +	test_lirc_mode2_user xdping test_cpp runqslower bench xdpxceiver
+>   
+>   TEST_CUSTOM_PROGS = urandom_read
+>   
+> diff --git a/tools/testing/selftests/bpf/test_xsk_prerequisites.sh b/tools/testing/selftests/bpf/test_xsk_prerequisites.sh
+> index 00bfcf53127c..a9ce8887dffc 100755
+> --- a/tools/testing/selftests/bpf/test_xsk_prerequisites.sh
+> +++ b/tools/testing/selftests/bpf/test_xsk_prerequisites.sh
+> @@ -8,8 +8,17 @@
+>   #
+>   # Topology:
+>   # ---------
+> -#      -----------           -----------
+> -#      |  xskX   | --------- |  xskY   |
+> +#                 -----------
+> +#               _ | Process | _
+> +#              /  -----------  \
+> +#             /        |        \
+> +#            /         |         \
+> +#      -----------     |     -----------
+> +#      | Thread1 |     |     | Thread2 |
+> +#      -----------     |     -----------
+> +#           |          |          |
+> +#      -----------     |     -----------
+> +#      |  xskX   |     |     |  xskY   |
+>   #      -----------     |     -----------
+>   #           |          |          |
+>   #      -----------     |     ----------
+> @@ -40,6 +49,8 @@
+>   #       conflict with any existing interface
+>   #   * tests the veth and xsk layers of the topology
+>   #
+> +# See the source xdpxceiver.c for information on each test
+> +#
+>   # Kernel configuration:
+>   # ---------------------
+>   # See "config" file for recommended kernel config options.
+> diff --git a/tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh b/tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh
+> new file mode 100755
+> index 000000000000..96600b0f5136
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/test_xsk_skb_nopoll.sh
+> @@ -0,0 +1,20 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright(c) 2020 Intel Corporation.
+> +
+> +# See test_xsk_prerequisites.sh for detailed information on tests
+> +
+> +. xsk_prereqs.sh
+> +. xsk_env.sh
+> +
+> +TEST_NAME="SKB NOPOLL"
+> +
+> +vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
+> +
+> +params=("-S")
+> +execxdpxceiver params
+> +
+> +retval=$?
+> +test_status $retval "${TEST_NAME}"
+> +
+> +test_exit $retval 0
+> diff --git a/tools/testing/selftests/bpf/test_xsk_framework.sh b/tools/testing/selftests/bpf/test_xsk_skb_poll.sh
+> similarity index 61%
+> rename from tools/testing/selftests/bpf/test_xsk_framework.sh
+> rename to tools/testing/selftests/bpf/test_xsk_skb_poll.sh
+> index 2e3f099d001c..d152c8a24251 100755
+> --- a/tools/testing/selftests/bpf/test_xsk_framework.sh
+> +++ b/tools/testing/selftests/bpf/test_xsk_skb_poll.sh
+> @@ -7,11 +7,17 @@
+>   . xsk_prereqs.sh
+>   . xsk_env.sh
 
-Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
----
- tools/testing/selftests/bpf/Makefile          |   4 +-
- .../bpf/test_xsk_drv_bidirectional.sh         |  23 ++++
- .../selftests/bpf/test_xsk_drv_teardown.sh    |   3 -
- .../bpf/test_xsk_skb_bidirectional.sh         |  20 ++++
- tools/testing/selftests/bpf/xdpxceiver.c      | 100 +++++++++++++-----
- tools/testing/selftests/bpf/xdpxceiver.h      |   4 +
- 6 files changed, 126 insertions(+), 28 deletions(-)
- create mode 100755 tools/testing/selftests/bpf/test_xsk_drv_bidirectional.sh
- create mode 100755 tools/testing/selftests/bpf/test_xsk_skb_bidirectional.sh
+Here both xsk_prereqs.sh and xsk_env.sh are executed.
+But xsk_env.sh also calls xsk_prereqs.sh. This double
+execution of xsk_prereqs.sh is required or is an
+oversight?
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 515b29d321d7..258bd72812e0 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -78,7 +78,9 @@ TEST_PROGS := test_kmod.sh \
- 	test_xsk_drv_nopoll.sh \
- 	test_xsk_drv_poll.sh \
- 	test_xsk_skb_teardown.sh \
--	test_xsk_drv_teardown.sh
-+	test_xsk_drv_teardown.sh \
-+	test_xsk_skb_bidirectional.sh \
-+	test_xsk_drv_bidirectional.sh
- 
- TEST_PROGS_EXTENDED := with_addr.sh \
- 	with_tunnels.sh \
-diff --git a/tools/testing/selftests/bpf/test_xsk_drv_bidirectional.sh b/tools/testing/selftests/bpf/test_xsk_drv_bidirectional.sh
-new file mode 100755
-index 000000000000..d3a7e2934d83
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_xsk_drv_bidirectional.sh
-@@ -0,0 +1,23 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright(c) 2020 Intel Corporation.
-+
-+# See test_xsk_prerequisites.sh for detailed information on tests
-+
-+. xsk_prereqs.sh
-+. xsk_env.sh
-+
-+TEST_NAME="DRV BIDIRECTIONAL SOCKETS"
-+
-+vethXDPnative ${VETH0} ${VETH1} ${NS1}
-+
-+params=("-N" "-B")
-+execxdpxceiver params
-+
-+retval=$?
-+test_status $retval "${TEST_NAME}"
-+
-+# Must be called in the last test to execute
-+cleanup_exit ${VETH0} ${VETH1} ${NS1}
-+
-+test_exit $retval 0
-diff --git a/tools/testing/selftests/bpf/test_xsk_drv_teardown.sh b/tools/testing/selftests/bpf/test_xsk_drv_teardown.sh
-index 28bf730b589e..7f11033747ac 100755
---- a/tools/testing/selftests/bpf/test_xsk_drv_teardown.sh
-+++ b/tools/testing/selftests/bpf/test_xsk_drv_teardown.sh
-@@ -17,7 +17,4 @@ execxdpxceiver params
- retval=$?
- test_status $retval "${TEST_NAME}"
- 
--# Must be called in the last test to execute
--cleanup_exit ${VETH0} ${VETH1} ${NS1}
--
- test_exit $retval 0
-diff --git a/tools/testing/selftests/bpf/test_xsk_skb_bidirectional.sh b/tools/testing/selftests/bpf/test_xsk_skb_bidirectional.sh
-new file mode 100755
-index 000000000000..8ae1b6694f02
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_xsk_skb_bidirectional.sh
-@@ -0,0 +1,20 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright(c) 2020 Intel Corporation.
-+
-+# See test_xsk_prerequisites.sh for detailed information on tests
-+
-+. xsk_prereqs.sh
-+. xsk_env.sh
-+
-+TEST_NAME="SKB BIDIRECTIONAL SOCKETS"
-+
-+vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
-+
-+params=("-S" "-B")
-+execxdpxceiver params
-+
-+retval=$?
-+test_status $retval "${TEST_NAME}"
-+
-+test_exit $retval 0
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index ba5de1ef9f64..277d9344ce34 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -29,6 +29,10 @@
-  *    c. Socket Teardown
-  *       Create a Tx and a Rx socket, Tx from one socket, Rx on another. Destroy
-  *       both sockets, then repeat multiple times. Only nopoll mode is used
-+ *    d. Bi-directional sockets
-+ *       Configure sockets as bi-directional tx/rx sockets, sets up fill and
-+ *       completion rings on each socket, tx/rx in both directions. Only nopoll
-+ *       mode is used
-  *
-  * 2. AF_XDP DRV/Native mode
-  *    Works on any netdevice with XDP_REDIRECT support, driver dependent. Processes
-@@ -37,10 +41,11 @@
-  *    a. nopoll
-  *    b. poll
-  *    c. Socket Teardown
-+ *    d. Bi-directional sockets
-  *    - Only copy mode is supported because veth does not currently support
-  *      zero-copy mode
-  *
-- * Total tests: 6
-+ * Total tests: 8
-  *
-  * Flow:
-  * -----
-@@ -100,8 +105,9 @@ static void __exit_with_error(int error, const char *file, const char *func, int
- #define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
- 
- #define print_ksft_result(void)\
--	(ksft_test_result_pass("PASS: %s %s %s\n", uut ? "DRV" : "SKB", opt_poll ? "POLL" :\
--			       "NOPOLL", opt_teardown ? "Socket Teardown" : ""))
-+	(ksft_test_result_pass("PASS: %s %s %s%s\n", uut ? "DRV" : "SKB", opt_poll ? "POLL" :\
-+			       "NOPOLL", opt_teardown ? "Socket Teardown" : "",\
-+			       opt_bidi ? "Bi-directional Sockets" : ""))
- 
- static void pthread_init_mutex(void)
- {
-@@ -307,8 +313,13 @@ static int xsk_configure_socket(struct ifobject *ifobject)
- 	cfg.xdp_flags = opt_xdp_flags;
- 	cfg.bind_flags = opt_xdp_bind_flags;
- 
--	rxr = (ifobject->fv.vector == rx) ? &ifobject->xsk->rx : NULL;
--	txr = (ifobject->fv.vector == tx) ? &ifobject->xsk->tx : NULL;
-+	if (!opt_bidi) {
-+		rxr = (ifobject->fv.vector == rx) ? &ifobject->xsk->rx : NULL;
-+		txr = (ifobject->fv.vector == tx) ? &ifobject->xsk->tx : NULL;
-+	} else {
-+		rxr = &ifobject->xsk->rx;
-+		txr = &ifobject->xsk->tx;
-+	}
- 
- 	ret = xsk_socket__create(&ifobject->xsk->xsk, ifobject->ifname,
- 				 opt_queue, ifobject->umem->umem, rxr, txr, &cfg);
-@@ -327,6 +338,7 @@ static struct option long_options[] = {
- 	{"xdp-native", no_argument, 0, 'N'},
- 	{"copy", no_argument, 0, 'c'},
- 	{"tear-down", no_argument, 0, 'T'},
-+	{"bidi", optional_argument, 0, 'B'},
- 	{"debug", optional_argument, 0, 'D'},
- 	{"tx-pkt-count", optional_argument, 0, 'C'},
- 	{0, 0, 0, 0}
-@@ -344,6 +356,7 @@ static void usage(const char *prog)
- 	    "  -N, --xdp-native=n   Enforce XDP DRV (native) mode\n"
- 	    "  -c, --copy           Force copy mode\n"
- 	    "  -T, --tear-down      Tear down sockets by repeatedly recreating them\n"
-+	    "  -B, --bidi           Bi-directional sockets test\n"
- 	    "  -D, --debug          Debug mode - dump packets L2 - L5\n"
- 	    "  -C, --tx-pkt-count=n Number of packets to send\n";
- 	ksft_print_msg(str, prog);
-@@ -434,7 +447,7 @@ static void parse_command_line(int argc, char **argv)
- 	opterr = 0;
- 
- 	for (;;) {
--		c = getopt_long(argc, argv, "i:q:pSNcTDC:", long_options, &option_index);
-+		c = getopt_long(argc, argv, "i:q:pSNcTBDC:", long_options, &option_index);
- 
- 		if (c == -1)
- 			break;
-@@ -475,6 +488,9 @@ static void parse_command_line(int argc, char **argv)
- 		case 'T':
- 			opt_teardown = 1;
- 			break;
-+		case 'B':
-+			opt_bidi = 1;
-+			break;
- 		case 'D':
- 			debug_pkt_dump = 1;
- 			break;
-@@ -784,22 +800,25 @@ static void *worker_testapp_validate(void *arg)
- 	struct generic_data *data = (struct generic_data *)malloc(sizeof(struct generic_data));
- 	struct iphdr *ip_hdr = (struct iphdr *)(pkt_data + sizeof(struct ethhdr));
- 	struct ethhdr *eth_hdr = (struct ethhdr *)pkt_data;
--	void *bufs;
-+	void *bufs = NULL;
- 
- 	pthread_attr_setstacksize(&attr, THREAD_STACK);
- 
--	bufs = mmap(NULL, num_frames * XSK_UMEM__DEFAULT_FRAME_SIZE,
--		    PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
--	if (bufs == MAP_FAILED)
--		exit_with_error(errno);
-+	if (!bidi_pass) {
-+		bufs = mmap(NULL, num_frames * XSK_UMEM__DEFAULT_FRAME_SIZE,
-+			    PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+		if (bufs == MAP_FAILED)
-+			exit_with_error(errno);
- 
--	if (strcmp(((struct ifobject *)arg)->nsname, ""))
--		switch_namespace(((struct ifobject *)arg)->ifdict_index);
-+		if (strcmp(((struct ifobject *)arg)->nsname, ""))
-+			switch_namespace(((struct ifobject *)arg)->ifdict_index);
-+	}
- 
- 	if (((struct ifobject *)arg)->fv.vector == tx) {
- 		int spinningrxctr = 0;
- 
--		thread_common_ops(arg, bufs, &sync_mutex_tx, &spinning_tx);
-+		if (!bidi_pass)
-+			thread_common_ops(arg, bufs, &sync_mutex_tx, &spinning_tx);
- 
- 		while (atomic_load(&spinning_rx) && spinningrxctr < SOCK_RECONF_CTR) {
- 			spinningrxctr++;
-@@ -829,7 +848,8 @@ static void *worker_testapp_validate(void *arg)
- 		struct pollfd fds[MAX_SOCKS] = { };
- 		int ret;
- 
--		thread_common_ops(arg, bufs, &sync_mutex_tx, &spinning_rx);
-+		if (!bidi_pass)
-+			thread_common_ops(arg, bufs, &sync_mutex_tx, &spinning_rx);
- 
- 		ksft_print_msg("Interface [%s] vector [Rx]\n", ((struct ifobject *)arg)->ifname);
- 		xsk_populate_fill_ring(((struct ifobject *)arg)->umem);
-@@ -868,8 +888,10 @@ static void *worker_testapp_validate(void *arg)
- 			ksft_print_msg("Destroying socket\n");
- 	}
- 
--	xsk_socket__delete(((struct ifobject *)arg)->xsk->xsk);
--	(void)xsk_umem__delete(((struct ifobject *)arg)->umem->umem);
-+	if (!opt_bidi || (opt_bidi && bidi_pass)) {
-+		xsk_socket__delete(((struct ifobject *)arg)->xsk->xsk);
-+		(void)xsk_umem__delete(((struct ifobject *)arg)->umem->umem);
-+	}
- 	pthread_exit(NULL);
- }
- 
-@@ -878,11 +900,26 @@ static void testapp_validate(void)
- 	pthread_attr_init(&attr);
- 	pthread_attr_setstacksize(&attr, THREAD_STACK);
- 
-+	if (opt_bidi && bidi_pass) {
-+		pthread_init_mutex();
-+		if (!switching_notify) {
-+			ksft_print_msg("Switching Tx/Rx vectors\n");
-+			switching_notify++;
-+		}
-+	}
-+
- 	pthread_mutex_lock(&sync_mutex);
- 
- 	/*Spawn RX thread */
--	if (pthread_create(&t0, &attr, worker_testapp_validate, (void *)ifdict[1]))
--		exit_with_error(errno);
-+	if (!opt_bidi || (opt_bidi && !bidi_pass)) {
-+		if (pthread_create(&t0, &attr, worker_testapp_validate, (void *)ifdict[1]))
-+			exit_with_error(errno);
-+	} else if (opt_bidi && bidi_pass) {
-+		/*switch Tx/Rx vectors */
-+		ifdict[0]->fv.vector = rx;
-+		if (pthread_create(&t0, &attr, worker_testapp_validate, (void *)ifdict[0]))
-+			exit_with_error(errno);
-+	}
- 
- 	struct timespec max_wait = { 0, 0 };
- 
-@@ -896,8 +933,15 @@ static void testapp_validate(void)
- 	pthread_mutex_unlock(&sync_mutex);
- 
- 	/*Spawn TX thread */
--	if (pthread_create(&t1, &attr, worker_testapp_validate, (void *)ifdict[0]))
--		exit_with_error(errno);
-+	if (!opt_bidi || (opt_bidi && !bidi_pass)) {
-+		if (pthread_create(&t1, &attr, worker_testapp_validate, (void *)ifdict[0]))
-+			exit_with_error(errno);
-+	} else if (opt_bidi && bidi_pass) {
-+		/*switch Tx/Rx vectors */
-+		ifdict[1]->fv.vector = tx;
-+		if (pthread_create(&t1, &attr, worker_testapp_validate, (void *)ifdict[1]))
-+			exit_with_error(errno);
-+	}
- 
- 	pthread_join(t1, NULL);
- 	pthread_join(t0, NULL);
-@@ -911,18 +955,19 @@ static void testapp_validate(void)
- 		free(pkt_buf);
- 	}
- 
--	if (!opt_teardown)
-+	if (!opt_teardown && !opt_bidi)
- 		print_ksft_result();
- }
- 
- static void testapp_sockets(void)
- {
--	for (int i = 0; i < MAX_TEARDOWN_ITER; i++) {
-+	for (int i = 0; i < (opt_teardown ? MAX_TEARDOWN_ITER : MAX_BIDI_ITER); i++) {
- 		pkt_counter = 0;
- 		prev_pkt = -1;
- 		sigvar = 0;
- 		ksft_print_msg("Creating socket\n");
- 		testapp_validate();
-+		opt_bidi ? bidi_pass++ : bidi_pass;
- 	}
- 
- 	print_ksft_result();
-@@ -991,7 +1036,14 @@ int main(int argc, char **argv)
- 
- 	ksft_set_plan(1);
- 
--	opt_teardown ? testapp_sockets() : testapp_validate();
-+	if (!opt_teardown && !opt_bidi) {
-+		testapp_validate();
-+	} else if (opt_teardown && opt_bidi) {
-+		ksft_test_result_fail("ERROR: parameters -T and -B cannot be used together\n");
-+		ksft_exit_xfail();
-+	} else {
-+		testapp_sockets();
-+	}
- 
- 	for (int i = 0; i < MAX_INTERFACES; i++)
- 		free(ifdict[i]);
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index 9d2670f28d86..d6630a19140b 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -22,6 +22,7 @@
- #define MAX_INTERFACES_NAMESPACE_CHARS 10
- #define MAX_SOCKS 1
- #define MAX_TEARDOWN_ITER 10
-+#define MAX_BIDI_ITER 2
- #define PKT_HDR_SIZE (sizeof(struct ethhdr) + sizeof(struct iphdr) + \
- 			sizeof(struct udphdr))
- #define MIN_PKT_SIZE 64
-@@ -51,12 +52,15 @@ enum TESTS {
- u8 uut;
- u8 debug_pkt_dump;
- u32 num_frames;
-+u8 switching_notify;
-+u8 bidi_pass;
- 
- static u32 opt_xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
- static int opt_queue;
- static int opt_pkt_count;
- static int opt_poll;
- static int opt_teardown;
-+static int opt_bidi;
- static u32 opt_xdp_bind_flags = XDP_USE_NEED_WAKEUP;
- static u8 pkt_data[XSK_UMEM__DEFAULT_FRAME_SIZE];
- static u32 pkt_counter;
--- 
-2.20.1
-
+>   
+> -TEST_NAME="XSK FRAMEWORK"
+> +TEST_NAME="SKB POLL"
+>   
+> -test_status $ksft_pass "${TEST_NAME}"
+> +vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
+> +
+> +params=("-S" "-p")
+> +execxdpxceiver params
+> +
+> +retval=$?
+> +test_status $retval "${TEST_NAME}"
+>   
+>   # Must be called in the last test to execute
+>   cleanup_exit ${VETH0} ${VETH1} ${NS1}
+>   
+> -test_exit $ksft_pass 0
+> +test_exit $retval 0
+> diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+[...]
