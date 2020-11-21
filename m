@@ -2,109 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A212BBE5D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Nov 2020 11:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5462BC1D8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Nov 2020 20:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbgKUKLb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Nov 2020 05:11:31 -0500
-Received: from smtp-42ac.mail.infomaniak.ch ([84.16.66.172]:45335 "EHLO
-        smtp-42ac.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726709AbgKUKLa (ORCPT
+        id S1728504AbgKUTxg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 Nov 2020 14:53:36 -0500
+Received: from condef-02.nifty.com ([202.248.20.67]:51719 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728501AbgKUTxf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Nov 2020 05:11:30 -0500
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CdThx34w6zlhnKD;
-        Sat, 21 Nov 2020 11:11:29 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CdThv53fQzlh8T9;
-        Sat, 21 Nov 2020 11:11:27 +0100 (CET)
-Subject: Re: [PATCH v24 01/12] landlock: Add object management
-To:     Jann Horn <jannh@google.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201112205141.775752-1-mic@digikod.net>
- <20201112205141.775752-2-mic@digikod.net>
- <CAG48ez0GryN4i0xCP22utLTqF5_o5J3nMBs+VC0DpQ+s09Bx6g@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <b684a6b7-93d5-3040-32ca-caf4d244cd6f@digikod.net>
-Date:   Sat, 21 Nov 2020 11:11:27 +0100
-User-Agent: 
+        Sat, 21 Nov 2020 14:53:35 -0500
+X-Greylist: delayed 398 seconds by postgrey-1.27 at vger.kernel.org; Sat, 21 Nov 2020 14:53:34 EST
+Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-02.nifty.com with ESMTP id 0ALJiGEX025043;
+        Sun, 22 Nov 2020 04:44:43 +0900
+Received: from grover.flets-west.jp (softbank126090211135.bbtec.net [126.90.211.135]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 0ALJhlQW018082;
+        Sun, 22 Nov 2020 04:43:48 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 0ALJhlQW018082
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1605987828;
+        bh=kMMLEunEMIDisWEYWqEwz2gIWOM0bj/iT9P6aQkYuAA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ed4YR6jCsEtGEDLmMjHzJsPekt449R4rvo+kLcDiqhConMsBK7GnZj47QGbL9Zfvz
+         F7JN4vuT9U42wImHJxZC+JkSuW358QGOQsiIWcKKZt0X5K85iY4qxq4urVA3MoG+dJ
+         HdGOZZ9UcddBdtjwbgdME9cB6bRr9PPT0YA3ZgBqxHvync6gU9yfgKSoCXMC2O6bP5
+         E5JpIg82ZiGWVerVt3xqwloF+WbkRVv6L5JjdF38neunrDIRCBP34+JIuLX3KARh2+
+         gpLzk4lSZFr22g9gqJGBDP1+T6Jz7yNfHWOCtfFIqtyA3Z3LpAWQWN7nt/nJuhj0TL
+         h8TjAVnBvm7AA==
+X-Nifty-SrcIP: [126.90.211.135]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        wireguard@lists.zx2c4.com
+Subject: [PATCH] compiler_attribute: remove CONFIG_ENABLE_MUST_CHECK
+Date:   Sun, 22 Nov 2020 04:43:39 +0900
+Message-Id: <20201121194339.52290-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez0GryN4i0xCP22utLTqF5_o5J3nMBs+VC0DpQ+s09Bx6g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Revert commit cebc04ba9aeb ("add CONFIG_ENABLE_MUST_CHECK").
 
-On 21/11/2020 08:00, Jann Horn wrote:
-> On Thu, Nov 12, 2020 at 9:51 PM Mickaël Salaün <mic@digikod.net> wrote:
->> A Landlock object enables to identify a kernel object (e.g. an inode).
->> A Landlock rule is a set of access rights allowed on an object.  Rules
->> are grouped in rulesets that may be tied to a set of processes (i.e.
->> subjects) to enforce a scoped access-control (i.e. a domain).
->>
->> Because Landlock's goal is to empower any process (especially
->> unprivileged ones) to sandbox themselves, we cannot rely on a
->> system-wide object identification such as file extended attributes.
->> Indeed, we need innocuous, composable and modular access-controls.
->>
->> The main challenge with these constraints is to identify kernel objects
->> while this identification is useful (i.e. when a security policy makes
->> use of this object).  But this identification data should be freed once
->> no policy is using it.  This ephemeral tagging should not and may not be
->> written in the filesystem.  We then need to manage the lifetime of a
->> rule according to the lifetime of its objects.  To avoid a global lock,
->> this implementation make use of RCU and counters to safely reference
->> objects.
->>
->> A following commit uses this generic object management for inodes.
->>
->> Cc: James Morris <jmorris@namei.org>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Serge E. Hallyn <serge@hallyn.com>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Reviewed-by: Jann Horn <jannh@google.com>
-> 
-> Still looks good, except for one comment:
-> 
-> [...]
->> +       /**
->> +        * @lock: Guards against concurrent modifications.  This lock might be
->> +        * held from the time @usage drops to zero until any weak references
->> +        * from @underobj to this object have been cleaned up.
->> +        *
->> +        * Lock ordering: inode->i_lock nests inside this.
->> +        */
->> +       spinlock_t lock;
-> 
-> Why did you change this to "might be held" (v22 had "must")? Is the
-> "might" a typo?
-> 
+A lot of warn_unused_result warnings existed in 2006, but until now
+they have been fixed thanks to people doing allmodconfig tests.
 
-Good catch, a typo indeed.
+Our goal is to always enable __must_check where appreciate, so this
+CONFIG option is no longer needed.
+
+I see a lot of defconfig (arch/*/configs/*_defconfig) files having:
+
+    # CONFIG_ENABLE_MUST_CHECK is not set
+
+I did not touch them for now since it would be a big churn. If arch
+maintainers want to clean them up, please go ahead.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ include/linux/compiler_types.h                      | 4 ----
+ lib/Kconfig.debug                                   | 8 --------
+ tools/testing/selftests/wireguard/qemu/debug.config | 1 -
+ 3 files changed, 13 deletions(-)
+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index ac3fa37a84f9..02f6d3fbad9d 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -110,11 +110,7 @@ struct ftrace_likely_data {
+ 	unsigned long			constant;
+ };
+ 
+-#ifdef CONFIG_ENABLE_MUST_CHECK
+ #define __must_check		__attribute__((__warn_unused_result__))
+-#else
+-#define __must_check
+-#endif
+ 
+ #if defined(CC_USING_HOTPATCH)
+ #define notrace			__attribute__((hotpatch(0, 0)))
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index c789b39ed527..cb8ef4fd0d02 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -286,14 +286,6 @@ config GDB_SCRIPTS
+ 
+ endif # DEBUG_INFO
+ 
+-config ENABLE_MUST_CHECK
+-	bool "Enable __must_check logic"
+-	default y
+-	help
+-	  Enable the __must_check logic in the kernel build.  Disable this to
+-	  suppress the "warning: ignoring return value of 'foo', declared with
+-	  attribute warn_unused_result" messages.
+-
+ config FRAME_WARN
+ 	int "Warn for stack frames larger than"
+ 	range 0 8192
+diff --git a/tools/testing/selftests/wireguard/qemu/debug.config b/tools/testing/selftests/wireguard/qemu/debug.config
+index b50c2085c1ac..fe07d97df9fa 100644
+--- a/tools/testing/selftests/wireguard/qemu/debug.config
++++ b/tools/testing/selftests/wireguard/qemu/debug.config
+@@ -1,5 +1,4 @@
+ CONFIG_LOCALVERSION="-debug"
+-CONFIG_ENABLE_MUST_CHECK=y
+ CONFIG_FRAME_POINTER=y
+ CONFIG_STACK_VALIDATION=y
+ CONFIG_DEBUG_KERNEL=y
+-- 
+2.25.1
+
