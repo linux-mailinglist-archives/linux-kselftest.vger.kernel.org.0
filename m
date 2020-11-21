@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 317B32BBD9A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Nov 2020 08:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183FB2BBDAF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Nov 2020 08:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgKUHA2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Nov 2020 02:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S1726556AbgKUHAY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 Nov 2020 02:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726673AbgKUHA1 (ORCPT
+        with ESMTP id S1726341AbgKUHAY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Nov 2020 02:00:27 -0500
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C680C061A48
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2020 23:00:27 -0800 (PST)
-Received: by mail-lj1-x244.google.com with SMTP id r17so12432953ljg.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2020 23:00:27 -0800 (PST)
+        Sat, 21 Nov 2020 02:00:24 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1C4C061A4B
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2020 23:00:23 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id y16so12456897ljk.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Nov 2020 23:00:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=P7RjcsAj6PX+UJP0fflQn8MvjwEMgqrgy1hcrPo11aE=;
-        b=CqqdXLzD4RSHdi1Ar3pP94BnBGH2/7bkpPzT9SZ3UVxCKNiRlNpe2RQapzql1gIm0T
-         am2xz+0cm1WQPK4hE+ua1jVGF9VC83UFcIaMXQypAw6jE5utgWdZxOUYUFylOjfHEs4k
-         cbp452z2BIJGzCSR/2hAGhsY0QSIsJEbDk4heZBZkmBlDwTtBd/AS/iCd8874yBuTf5T
-         QD+koJXBJ9jZQb3KOZ/bZx4j7vb4L3rrLTabgKItYXXLtwSGDtDG7O0HsRGP6T2iCLK+
-         GNND4eZIvTwEJpJW7cZw1UxpXIjICH63bduH7dU7mXrLoZSkTtgZZS91V8myLILWnfZq
-         nenA==
+        bh=X7o0m3hQXVmVofbCR6L473p8htdBcLYyTWc2pJqZOUM=;
+        b=NAf9nl2J7IrdmpQMU2t/+SODdOjUjzxQqsSksle5M3l6Ywri6/LWuLY60ItJmETxox
+         z2485qDtzcZq4U8ptX5mV32Ds+iGsHITL/G++mgluYxor/atna2PNO96gnuZ9eSDli3A
+         5YrOYozkM2esFvaUNe2lQ0jxlcdKo64nZZ8pWX8rKG3JIFhXACukB9nxastIxuNvxQwi
+         m72FEnkLoHzVUECvi7NKtdHoiQma263Ss/twJenvsetmtxc+Fz3/ib+Kowi86tegJZ9T
+         L5IzUl6TiURt6iNTyUYZjfH9tlL3oH6hVOmtT19/HgNgWR2EhrXZODwaZrS85DwyHUuy
+         aGmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P7RjcsAj6PX+UJP0fflQn8MvjwEMgqrgy1hcrPo11aE=;
-        b=D5YmzXOa8niOmbk4eIKO456eiyntsg1eXrbTek78gniX+PilVRihtEWN5+58ifPlVD
-         VIj+iO+dI9QKppDcRBB3Z8Y0PcuRZl41qB7Frl4DnbesIREx8i4238OSgHEqkyCLyFLa
-         ohfPaVz4IrIbX43z6rRO9Z7cjQZxQrlQxuCxlKA4MBxJVN5Dcx93VZ/e5MMcbbcx0/0m
-         VKrVHHHRke0K4H5WibPCILQtDRgJeEnrakIvSd8YizgVDgjA/ud2Tqz9AbzMm4ZrEtlW
-         tR0PaBzC4nSgDi+HJid67hbf6n8kgWvjxxU3pA0NbrAOV3E6r1gITQgp5Vfbj33/dvdH
-         1yiA==
-X-Gm-Message-State: AOAM533PxZ5frmovYe14HkTMfrwBq921sxcT+8jFwjLRA1VVSBL2LXqD
-        SXdOKoqOkjFUiW4eF4azLqmwJe+mdtJ2dI/FhXWK3g==
-X-Google-Smtp-Source: ABdhPJye0kUCNabvyYI/kru6Sk+gDfuo1c3+OQCYedsONLwptjC7PC4GO6R82FjXNTZ0iHwPOIZ11/4ebb/ZeEYyrjQ=
-X-Received: by 2002:a2e:8891:: with SMTP id k17mr8949700lji.326.1605942025591;
- Fri, 20 Nov 2020 23:00:25 -0800 (PST)
+        bh=X7o0m3hQXVmVofbCR6L473p8htdBcLYyTWc2pJqZOUM=;
+        b=PfEaEDQw/T4ZWFdMGVzhRFOs8JpLYr4B5WMHLYlYsnJPF0BQfFhY//pnXLWTId+sDd
+         T2RihTH1XnACeNKPXFHT6j/6fnqdDP2s8wXV7gHLKp8q+AFws+FHyL24OOLExRkolNxk
+         CG1YKlqtGWRmnsmfLGjpU10phomcVV8Iwo7PyTeSwl5o7Hg4tkuykzPnuUwOdh1wpmZT
+         Uke+iDe2/C9iFipHTE6SomOSPVkREuC1KIvIwrVSFfpBAaBMwyD4kDqSFittT2QLKDsv
+         dNBnM67+r+T+7pk5WtH9xnVGUftCxilSwlqGfsarbNz/AcFrrWMsGysU3fl9jKaoh4eI
+         /NIQ==
+X-Gm-Message-State: AOAM530WwgHmZSM6Ojfb3TbBuL7JqPnC6rLRciX3RTIV0LSxrGEGCkEA
+        7jUhrMNyCKyvOKyBSV/ZaMfLJr0McznATX/0q9FDsw==
+X-Google-Smtp-Source: ABdhPJyQlluKPoz0OIWNJejUmA2oBeD6J48fIKEWng63DXZFe9Wj5F7lo9xUW1sQakHx3A+Zc/rgyFU8fgOEwoYO4Ic=
+X-Received: by 2002:a2e:8350:: with SMTP id l16mr9449286ljh.47.1605942021665;
+ Fri, 20 Nov 2020 23:00:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-9-mic@digikod.net>
-In-Reply-To: <20201112205141.775752-9-mic@digikod.net>
+References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-2-mic@digikod.net>
+In-Reply-To: <20201112205141.775752-2-mic@digikod.net>
 From:   Jann Horn <jannh@google.com>
 Date:   Sat, 21 Nov 2020 08:00:00 +0100
-Message-ID: <CAG48ez28mn2YH65D67sr22Ur25kdNUchDbfuph+0TJ4iPwwvwg@mail.gmail.com>
-Subject: Re: [PATCH v24 08/12] landlock: Add syscall implementations
+Message-ID: <CAG48ez0GryN4i0xCP22utLTqF5_o5J3nMBs+VC0DpQ+s09Bx6g@mail.gmail.com>
+Subject: Re: [PATCH v24 01/12] landlock: Add object management
 To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
 Cc:     James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
@@ -83,44 +83,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 9:52 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+On Thu, Nov 12, 2020 at 9:51 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
 wrote:
-> These 3 system calls are designed to be used by unprivileged processes
-> to sandbox themselves:
-> * landlock_create_ruleset(2): Creates a ruleset and returns its file
->   descriptor.
-> * landlock_add_rule(2): Adds a rule (e.g. file hierarchy access) to a
->   ruleset, identified by the dedicated file descriptor.
-> * landlock_enforce_ruleset_current(2): Enforces a ruleset on the current
->   thread and its future children (similar to seccomp).  This syscall has
->   the same usage restrictions as seccomp(2): the caller must have the
->   no_new_privs attribute set or have CAP_SYS_ADMIN in the current user
->   namespace.
+> A Landlock object enables to identify a kernel object (e.g. an inode).
+> A Landlock rule is a set of access rights allowed on an object.  Rules
+> are grouped in rulesets that may be tied to a set of processes (i.e.
+> subjects) to enforce a scoped access-control (i.e. a domain).
 >
-> All these syscalls have a "flags" argument (not currently used) to
-> enable extensibility.
+> Because Landlock's goal is to empower any process (especially
+> unprivileged ones) to sandbox themselves, we cannot rely on a
+> system-wide object identification such as file extended attributes.
+> Indeed, we need innocuous, composable and modular access-controls.
 >
-> Here are the motivations for these new syscalls:
-> * A sandboxed process may not have access to file systems, including
->   /dev, /sys or /proc, but it should still be able to add more
->   restrictions to itself.
-> * Neither prctl(2) nor seccomp(2) (which was used in a previous version)
->   fit well with the current definition of a Landlock security policy.
+> The main challenge with these constraints is to identify kernel objects
+> while this identification is useful (i.e. when a security policy makes
+> use of this object).  But this identification data should be freed once
+> no policy is using it.  This ephemeral tagging should not and may not be
+> written in the filesystem.  We then need to manage the lifetime of a
+> rule according to the lifetime of its objects.  To avoid a global lock,
+> this implementation make use of RCU and counters to safely reference
+> objects.
 >
-> All passed structs (attributes) are checked at build time to ensure that
-> they don't contain holes and that they are aligned the same way for each
-> architecture.
+> A following commit uses this generic object management for inodes.
 >
-> See the user and kernel documentation for more details (provided by a
-> following commit):
-> * Documentation/userspace-api/landlock.rst
-> * Documentation/security/landlock.rst
->
-> Cc: Arnd Bergmann <arnd@arndb.de>
 > Cc: James Morris <jmorris@namei.org>
-> Cc: Jann Horn <jannh@google.com>
 > Cc: Kees Cook <keescook@chromium.org>
 > Cc: Serge E. Hallyn <serge@hallyn.com>
 > Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> Reviewed-by: Jann Horn <jannh@google.com>
 
-Reviewed-by: Jann Horn <jannh@google.com>
+Still looks good, except for one comment:
+
+[...]
+> +       /**
+> +        * @lock: Guards against concurrent modifications.  This lock mig=
+ht be
+> +        * held from the time @usage drops to zero until any weak referen=
+ces
+> +        * from @underobj to this object have been cleaned up.
+> +        *
+> +        * Lock ordering: inode->i_lock nests inside this.
+> +        */
+> +       spinlock_t lock;
+
+Why did you change this to "might be held" (v22 had "must")? Is the
+"might" a typo?
