@@ -2,186 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550272C1338
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 19:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 319662C14AB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 20:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730488AbgKWScw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Nov 2020 13:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S1730972AbgKWTom (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Nov 2020 14:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730127AbgKWScv (ORCPT
+        with ESMTP id S1730714AbgKWTom (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Nov 2020 13:32:51 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B692FC061A4D
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 10:32:51 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id l17so4596037pgk.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 10:32:51 -0800 (PST)
+        Mon, 23 Nov 2020 14:44:42 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA3C061A51
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 11:44:40 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id v14so3292153lfo.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 11:44:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S7/hBpw1jQOsZMLR0IbK2KfjxCPz/Q4abhld7R5NsEg=;
-        b=SH8NHO+1xWkDR50tGl49lWYygXwiwAVbL6pWVt8cexJe28y12AH98PlDBb+bNEmajh
-         hG7cMe1ewLuLJW0fE5LMuM029fASO1fiq3GYgsB9MzhTb9EH09QxyXJ2Y3adyNM7raSt
-         7JLMETAAAXHYGhTObezN0F7mDbBfkRcf5fwZuQ5ULQbgaiGddNe2oTIrk0FVxDyHtvZk
-         ruB+evS+yNP1GAG2Xy17Hjhnz996natTnFA8Jyp9ERYCD/Hi5Ke257PiKonhAsU1uI1h
-         63f+VQhxDoe6VQNePqy8gDEG/Y7iem69ebDNTuQ06PVHaJKLsLIjLO9NZsmJo5TXcwk8
-         iSmQ==
+         :cc:content-transfer-encoding;
+        bh=WkkyfzYc5dkm/KIiF9W4jRT3BRx+3sqZpO+ldzSWHAU=;
+        b=ucprSht07o3L8qhZLLc2Vt4PubCLLYecCKNAauQVntt/WOQx0TnUKdvhSMo4O3kPUB
+         uaUTYfr9u7VuLEvtbM35aoZwakgOWHYVHjw4Mng7Nx7VrQbWv4Tt/KS5ugKh9SaGeFX2
+         RVWHUO8H6oE35g5xy4ExNT0J9tz1RPg7b9HOQlsjqvp5KHt1ZdUObef9cJxmfTjtGs3e
+         thKIj2KnAjmAnht0O8u+JMUIDM9eFbTD7ieYfOqhRhtEVosbjAvqv+gyPmolJ+wWqzdt
+         5ZUswM45maUXB35BfcN7RSu535krwgoOUgZM4t2JGI8pMMDiwiDnaCVZppVOab7LjX70
+         E/mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S7/hBpw1jQOsZMLR0IbK2KfjxCPz/Q4abhld7R5NsEg=;
-        b=i/GGmjvkQTerlv9+rggyL4iZT1NHL6006rjdvXnwCf1VeeJNc9qzn6FeSvW8+OAXJb
-         bonSIZAjBi+ogpxAv0b6LHAG6hGU4PVB+JtfXSWBmKIXIK/pmXDqifhSTjMHKhn0jw85
-         /mDNWXmmn/VHjL3/sSJgT+M5Rd43Xfz4gTLrb92NLYsNce8L+JoBsYpTdT0MjTEJutvV
-         S7QlpsdrVZ77ozcc9S3QvTZ/q8dgw/rJ5KH6AuKuEh+C/KSe+HE7aXyJmCfzcS7CZXLA
-         VEQjF6kLGJnaBU2VO4TiHlzKGEyW6uiyqQr/FCvjZuWEuO4pGGulhrgmduaqwLrCuCt8
-         oQMA==
-X-Gm-Message-State: AOAM530d3bQK2qlhhl725JZyIkbus7ZH+csa3CysW0vdrONQNpD+TiIz
-        Nzu8Eqfv/dkpdWSRQYUJe3Hz0+cQpDaf5YfKaG7T9w==
-X-Google-Smtp-Source: ABdhPJwp/eni12FlnqhdbmPy5+kG09MywIckNKy1/Sk5R3WAhaS9ew0U7snU5Ja4SQmVa02m84SeiDXupBLBMirZDx8=
-X-Received: by 2002:a63:1e5e:: with SMTP id p30mr620564pgm.159.1606156370956;
- Mon, 23 Nov 2020 10:32:50 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WkkyfzYc5dkm/KIiF9W4jRT3BRx+3sqZpO+ldzSWHAU=;
+        b=A50QAZEM0KOFDOI3Pb0DFxCa1QP2v0qjHNXyUd/ViGsWmR3MFr3HPTgmfEDeir4bnY
+         KmVfZP9pJPbyjAeppNFVfo9e2yDQCfwawcWLXeJkcsmViiBSeIverv1TUlBhXTfIIXm6
+         qvULnBqH1b589DqEnxUZmeFMlfbuwUF2WKGsUaXoL4LGZGpeCixY4b8Mw56DobPmyx0E
+         qMWyr7GyXR150SBVwrWobC+cHzLqKrR16Qgiu5KHQs7ugWCpkHdg0AWZqDe/TWAVLe1o
+         wfLpHIgjJEyofOevK+727Iomf/35jxhChg/PkuLd/jGCCr6YbsWldS3CmIsBmEO2+Log
+         +/Gw==
+X-Gm-Message-State: AOAM532Wi/2xyHvEaySHZRHIwqXWixHFkM+LcEOkebZdd6A0nEo47AT5
+        02pwg65Ak8WK6gUvoSfCWN42BQwkeJMVs9WasNCvWA==
+X-Google-Smtp-Source: ABdhPJxvAu80d98nm8DgUgnbxicof2cbnVoJUKvK4sfJq22s1FLjdXhc3R1+79TzlVPSsvuacsn9pSzptfgKcYYBWqk=
+X-Received: by 2002:ac2:5a49:: with SMTP id r9mr259465lfn.381.1606160678276;
+ Mon, 23 Nov 2020 11:44:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20201102213656.2700500-1-dlatypov@google.com>
-In-Reply-To: <20201102213656.2700500-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 23 Nov 2020 10:32:39 -0800
-Message-ID: <CAFd5g45GK-sQY-nXcOORoJNu_0JGPY1veZd8PuM0MDtGtDRHSg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: provide guidance for testing many inputs
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-8-mic@digikod.net>
+ <CAG48ez3HA63CX852LLDFCcNyzRGwAr3x_cvA1-t8tgDxfF1dOQ@mail.gmail.com> <1d524ea9-85eb-049c-2156-05cad6d6fcfd@digikod.net>
+In-Reply-To: <1d524ea9-85eb-049c-2156-05cad6d6fcfd@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 23 Nov 2020 20:44:11 +0100
+Message-ID: <CAG48ez2cmsrZbUEmQmzPQugJikkvfs_MWmMizxmoyspCeXAXRQ@mail.gmail.com>
+Subject: Re: [PATCH v24 07/12] landlock: Support filesystem access-control
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 2, 2020 at 1:37 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Sat, Nov 21, 2020 at 11:06 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
+ wrote:
+> On 21/11/2020 08:00, Jann Horn wrote:
+> > On Thu, Nov 12, 2020 at 9:52 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.n=
+et> wrote:
+> >> Thanks to the Landlock objects and ruleset, it is possible to identify
+> >> inodes according to a process's domain.  To enable an unprivileged
+> >> process to express a file hierarchy, it first needs to open a director=
+y
+> >> (or a file) and pass this file descriptor to the kernel through
+> >> landlock_add_rule(2).  When checking if a file access request is
+> >> allowed, we walk from the requested dentry to the real root, following
+> >> the different mount layers.  The access to each "tagged" inodes are
+> >> collected according to their rule layer level, and ANDed to create
+> >> access to the requested file hierarchy.  This makes possible to identi=
+fy
+> >> a lot of files without tagging every inodes nor modifying the
+> >> filesystem, while still following the view and understanding the user
+> >> has from the filesystem.
+> >>
+> >> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
+> >> keep the same struct inodes for the same inodes whereas these inodes a=
+re
+> >> in use.
+> >>
+> >> This commit adds a minimal set of supported filesystem access-control
+> >> which doesn't enable to restrict all file-related actions.  This is th=
+e
+> >> result of multiple discussions to minimize the code of Landlock to eas=
+e
+> >> review.  Thanks to the Landlock design, extending this access-control
+> >> without breaking user space will not be a problem.  Moreover, seccomp
+> >> filters can be used to restrict the use of syscall families which may
+> >> not be currently handled by Landlock.
+> >>
+> >> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> >> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> >> Cc: James Morris <jmorris@namei.org>
+> >> Cc: Jann Horn <jannh@google.com>
+> >> Cc: Jeff Dike <jdike@addtoit.com>
+> >> Cc: Kees Cook <keescook@chromium.org>
+> >> Cc: Richard Weinberger <richard@nod.at>
+> >> Cc: Serge E. Hallyn <serge@hallyn.com>
+> >> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> >> ---
+> >>
+> >> Changes since v23:
+> >> * Enforce deterministic interleaved path rules.  To have consistent
+> >>   layered rules, granting access to a path implies that all accesses
+> >>   tied to inodes, from the requested file to the real root, must be
+> >>   checked.  Otherwise, stacked rules may result to overzealous
+> >>   restrictions.  By excluding the ability to add exceptions in the sam=
+e
+> >>   layer (e.g. /a allowed, /a/b denied, and /a/b/c allowed), we get
+> >>   deterministic interleaved path rules.  This removes an optimization
+> >
+> > I don't understand the "deterministic interleaved path rules" part.
 >
-> usage.rst goes into a detailed about faking out classes, but currently
-> lacks wording about how one might idiomatically test a range of inputs.
+> I explain bellow.
 >
-> Give an example of how one might test a hash function via macros/helper
-> funcs and a table-driven test and very briefly discuss pros and cons.
+> >
+> >
+> > What if I have a policy like this?
+> >
+> > /home/user READ
+> > /home/user/Downloads READ+WRITE
+> >
+> > That's a reasonable policy, right?
 >
-> Also highlight the KUNIT_EXPECT_*_MSG() variants (that aren't mentioned
-> elsewhere [1]) which are particularly useful in these situations.
+> Definitely, I forgot this, thanks for the outside perspective!
 >
-> It is also criminally underused at the moment, only appearing in 2
-> tests (both written by people involved in KUnit).
+> >
+> > If I then try to open /home/user/Downloads/foo in WRITE mode, the loop
+> > will first check against the READ+WRITE rule for /home/user, that
+> > check will pass, and then it will check against the READ rule for /,
+> > which will deny the access, right? That seems bad.
 >
-> [1] not even on
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html
+> Yes that was the intent.
 >
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> >
+> >
+> > The v22 code ensured that for each layer, the most specific rule (the
+> > first we encounter on the walk) always wins, right? What's the problem
+> > with that?
+>
+> This can be explained with the interleaved_masked_accesses test:
+> https://github.com/landlock-lsm/linux/blob/landlock-v24/tools/testing/sel=
+ftests/landlock/fs_test.c#L647
+>
+> In this case there is 4 stacked layers:
+> layer 1: allows s1d1/s1d2/s1d3/file1
+> layer 2: allows s1d1/s1d2/s1d3
+>          denies s1d1/s1d2
+> layer 3: allows s1d1
+> layer 4: allows s1d1/s1d2
+>
+> In the v23, access to file1 would be allowed until layer 3, but layer 4
+> would merge a new rule for the s1d2 inode. Because we don't record where
+> exactly the access come from, we can't tell that layer 2 allowed access
+> thanks to s1d3 and that its s1d2 rule was ignored. I think this behavior
+> doesn't make sense from the user point of view.
 
-Aside from the minor comment I made below, I like the patch; it is a
-definite improvement, but I think the test you wrote that ultimately
-led to this documentation fix had more information in it than this
-documentation. I think it only contains the pattern that you outlined
-here, but I think it does include some other best practices. Maybe we
-should add some more documentation patches with more code examples in
-the future?
+Aah, I think I'm starting to understand the issue now. Basically, with
+the current UAPI, the semantics have to be "an access is permitted if,
+for each policy layer, at least one rule encountered on the pathwalk
+permits the access; rules that deny the access are irrelevant". And if
+it turns out that someone needs to be able to deny access to specific
+inodes, we'll have to extend struct landlock_path_beneath_attr.
 
-Anyway, like I said, I think this patch in and of itself looks pretty good.
+That reminds me... if we do need to make such a change in the future,
+it would be easier in terms of UAPI compatibility if
+landlock_add_rule() used copy_struct_from_user(), which is designed to
+create backwards and forwards compatibility with other version of UAPI
+headers. So adding that now might save us some headaches later.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-> ---
->  Documentation/dev-tools/kunit/usage.rst | 66 +++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
+> In the v24, access to file1 would only be allowed with layer 1. The
+> layer 2, would deny access to file1 because of the s1d2 rule. This makes
+> the reasoning consistent and deterministic whatever the layers are,
+> while storing the same access and layer bits. But I agree that this may
+> not be desirable.
 >
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 62142a47488c..317390df2b96 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -451,6 +451,72 @@ We can now use it to test ``struct eeprom_buffer``:
->                 destroy_eeprom_buffer(ctx->eeprom_buffer);
->         }
->
-> +Testing various inputs
-> +----------------------
+> In a perfect v25, file1 should be allowed by all these layers. I didn't
+> find a simple solution to this while minimizing the memory allocated by
+> rule (cf. struct landlock_rule: mainly 32-bits for access rights and
+> 64-bits for the layers that contributed to this ANDed accesses). I would
+> like to avoid storing 32-bits access rights per stacked layer. Do you
+> see another solution?
 
-Since this, by my count, the second test pattern that we are
-introducing here, could we maybe call that out with a subheading or a
-new section or something? It would be nice if we could sort of build
-up a cookbook of testing patterns.
+I don't think you can avoid storing the access rights per layer unless
+you actually merge the layers when setting up the ruleset (which would
+be messy). But I don't think that's a big problem. A straightforward
+implementation might become inefficient if you stack too many policy
+layers, but I don't think that's a problem for an initial
+implementation - the common usecase is probably going to be a single
+layer, or maybe two, or something like that?
 
-> +Testing just a few inputs might not be enough to have confidence that the code
-> +works correctly, e.g. for a hash function.
-> +
-> +In such cases, it can be helpful to have a helper macro or function, e.g. this
-> +fictitious example for ``md5sum(1)``
-> +
-> +.. code-block:: c
-> +
-> +       /* Note: the cast is to satisfy overly strict type-checking. */
-> +       #define TEST_MD5(in, want) \
-> +               md5sum(in, out); \
-> +               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, want, "md5sum(%s)", in);
-> +
-> +       char out[16];
-> +       TEST_MD5("hello world",   "5eb63bbbe01eeed093cb22bb8f5acdc3");
-> +       TEST_MD5("hello world!",  "fc3ff98e8c6a0d3087d515c0473f8677");
-> +
-> +Note the use of ``KUNIT_EXPECT_STREQ_MSG`` to give more context when it fails
-> +and make it easier to track down. (Yes, in this example, ``want`` is likely
-> +going to be unique enough on its own).
-> +
-> +The ``_MSG`` variants are even more useful when the same expectation is called
-> +multiple times (in a loop or helper function) and thus the line number isn't
-> +enough to identify what failed, like below.
-> +
-> +In some cases, it can be helpful to write a *table-driven test* instead, e.g.
-> +
-> +.. code-block:: c
-> +
-> +       int i;
-> +       char out[16];
-> +
-> +       struct md5_test_case {
-> +               const char *str;
-> +               const char *md5;
-> +       };
-> +
-> +       struct md5_test_case cases[] = {
-> +               {
-> +                       .str = "hello world",
-> +                       .md5 = "5eb63bbbe01eeed093cb22bb8f5acdc3",
-> +               },
-> +               {
-> +                       .str = "hello world!",
-> +                       .md5 = "fc3ff98e8c6a0d3087d515c0473f8677",
-> +               },
-> +       };
-> +       for (i = 0; i < ARRAY_SIZE(cases); ++i) {
-> +               md5sum(cases[i].str, out);
-> +               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, cases[i].md5,
-> +                                     "md5sum(%s)", cases[i].str);
-> +       }
-> +
-> +
-> +There's more boilerplate involved, but it can:
-> +
-> +* be more readable when there are multiple inputs/outputs thanks to field names,
-> +
-> +  * E.g. see ``fs/ext4/inode-test.c`` for an example of both.
-> +* reduce duplication if test cases can be shared across multiple tests.
-> +
-> +  * E.g. if we had a magical ``undo_md5sum`` function, we could reuse ``cases``.
-> +
->  .. _kunit-on-non-uml:
->
->  KUnit on non-UML architectures
->
-> base-commit: 77c8473edf7f7664137f555cfcdc8c460bbd947d
-> --
-> 2.29.1.341.ge80a0c044ae-goog
->
+If you had a ton of layers, most of them would likely specify the same
+access permissions - so one possible optimization might be to use the
+current representation if all rules matching the inode specify the
+same permissions, and use a different representation otherwise. But I
+don't think such an optimization is necessary at this point.
