@@ -2,79 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C42B2BC379
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Nov 2020 05:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613CA2BFEBF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 04:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgKVEB3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Nov 2020 23:01:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726693AbgKVEB3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Nov 2020 23:01:29 -0500
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4D646208D5
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 Nov 2020 04:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606017688;
-        bh=LnEcfZ7EAuRy2LnECDQWn5gnjgsq8GFNBn8ODQ8+JHw=;
+        id S1726917AbgKWDhf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 22 Nov 2020 22:37:35 -0500
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:60881 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbgKWDhf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 22 Nov 2020 22:37:35 -0500
+X-Greylist: delayed 114773 seconds by postgrey-1.27 at vger.kernel.org; Sun, 22 Nov 2020 22:37:34 EST
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 0AN3atLh032027;
+        Mon, 23 Nov 2020 12:36:56 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 0AN3atLh032027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1606102616;
+        bh=YL64JWX8+POTNkn/GZ7B+nszuW5O8YQqSfoss8+OVhk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=2kk/o/n2UXsfdST6NrShZUKZx/bEouQTk/Uf/iK4FXK6jujwtSM0cvU5mDUlhoiCm
-         JloGw20EL2XYMwmQM/5np5luC2U+XCYoz98vRUDswUQp7TGa3gY7ZKvEEu0wzGk+qN
-         1iCMFoIYtVZmO9fucvcghC0ljetLapqj1o2Vvfb8=
-Received: by mail-wr1-f52.google.com with SMTP id 64so1595073wra.11
-        for <linux-kselftest@vger.kernel.org>; Sat, 21 Nov 2020 20:01:28 -0800 (PST)
-X-Gm-Message-State: AOAM531J3QvMNLup9cMlpr54fA0K+4AgymX+wT2HJM6TEpDWVkHElMD6
-        0UUCzay3EDM71mAbunEb9fyQTpXjEQ2jN2/SUs2NCQ==
-X-Google-Smtp-Source: ABdhPJya2Fm7AlpR23qNwFPbMhB3Yi5SpFa44AWfIgtph6ZFjNt5Z0ShzA45Sx29UK9mTBQd+usd0uxSXWq5vA+n26o=
-X-Received: by 2002:a5d:4e87:: with SMTP id e7mr5785186wru.70.1606017686782;
- Sat, 21 Nov 2020 20:01:26 -0800 (PST)
+        b=ooQtKrxm1EI5JJsobUKyeYXAjIV+RoefFSoPmKabq0sodI0Y1kw+Yxf5jMgOU3v1w
+         W5HSJfgC7Ej7Hg80VGtMAFcmNyxPtUQaK73w6lhwLwGliH3flZ7yc57MtqiU0FIx1m
+         6ei0KbX+XgpmmGOGSBQzYwXM2775PqN2AfMu9nvZqWvl9UpfrzAvVIN8/t7ILYBwYH
+         45J1SGSHpQVjwYtVGtQYTkEn2Kr42iG243csfHSuHHxaWZznhqAqqXpo8QhOA2CISk
+         fTy4GoIZHjWNKw1q5jrUotX5w6+Bpqm4pJdEapeAZihlZrCYUbcY4lRZB9/0cdKDIn
+         5Z0iWPVnvOMWg==
+X-Nifty-SrcIP: [209.85.214.174]
+Received: by mail-pl1-f174.google.com with SMTP id p6so5794187plr.7;
+        Sun, 22 Nov 2020 19:36:55 -0800 (PST)
+X-Gm-Message-State: AOAM531WfhrVdtMP9OyP5ISyB7HQDflJ/SYNzwEHso0Q801m5Q3ktDC6
+        0MTESIXBhHJtfiI9lAS6ceYpFz0FcBrgmLPCrqE=
+X-Google-Smtp-Source: ABdhPJzNuqDamg2p4M+v2AI8oS/thdIABCwyrr94QP7NGfbG5kGWuCZOsctgZMaDSWL8YqmDoi92WL62fYY5d0QrEd4=
+X-Received: by 2002:a17:902:ff0e:b029:d6:820d:cb81 with SMTP id
+ f14-20020a170902ff0eb02900d6820dcb81mr22899656plj.47.1606102615011; Sun, 22
+ Nov 2020 19:36:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20201118032840.3429268-1-krisman@collabora.com>
- <20201118032840.3429268-4-krisman@collabora.com> <87a6vdmedy.fsf@collabora.com>
- <202011201618.62E507D@keescook>
-In-Reply-To: <202011201618.62E507D@keescook>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Sat, 21 Nov 2020 20:01:10 -0800
-X-Gmail-Original-Message-ID: <CALCETrVtwmS0707L5RbWvJpyw-+xtT73xph59DJC2TGa-Hhw1Q@mail.gmail.com>
-Message-ID: <CALCETrVtwmS0707L5RbWvJpyw-+xtT73xph59DJC2TGa-Hhw1Q@mail.gmail.com>
-Subject: Re: [PATCH v7 3/7] kernel: Implement selective syscall userspace redirection
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Andrew Lutomirski <luto@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
+References: <20201121194339.52290-1-masahiroy@kernel.org> <CANiq72nL7yxGj-Q6aOxG68967g_fB6=hDED0mTBrZ_SjC=U-Pg@mail.gmail.com>
+In-Reply-To: <CANiq72nL7yxGj-Q6aOxG68967g_fB6=hDED0mTBrZ_SjC=U-Pg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 23 Nov 2020 12:36:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARjU5HTcTjJG1-sQTJBFqohC1O8aAvFs3Hn_sXscH_pdg@mail.gmail.com>
+Message-ID: <CAK7LNARjU5HTcTjJG1-sQTJBFqohC1O8aAvFs3Hn_sXscH_pdg@mail.gmail.com>
+Subject: Re: [PATCH] compiler_attribute: remove CONFIG_ENABLE_MUST_CHECK
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Paul Gofman <gofmanp@gmail.com>, kernel@collabora.com
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        wireguard@lists.zx2c4.com,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 4:18 PM Kees Cook <keescook@chromium.org> wrote:
+On Sun, Nov 22, 2020 at 5:45 AM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> On Thu, Nov 19, 2020 at 12:43:05PM -0500, Gabriel Krisman Bertazi wrote:
-> > The existing interface could be extended with a flags field as part of
-> > the opcode passed in argument 2, which is currently reserved, and then
-> > return a FD, just like seccomp(2) does.  So it is not like the current
-> > patches couldn't be extended in the future if needed, unless I'm
-> > mistaken.
+> On Sat, Nov 21, 2020 at 8:44 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Our goal is to always enable __must_check where appreciate, so this
+> > CONFIG option is no longer needed.
 >
-> Yes, I'd prefer this series go in as-is, and if there is a need for
-> extending the API, arg2 can have more values added.
-
-I agree.
-
-
-
+> This would be great. It also implies we can then move it to
+> `compiler_attributes.h` since it does not depend on config options
+> anymore.
 >
-> --
-> Kees Cook
+> We should also rename it to `__nodiscard`, since that is the
+> standardized name (coming soon to C2x and in C++ for years).
+>
+> Cc'ing the Clang folks too to make them aware.
+>
+
+I can move it to compiler_attribute.h
+
+This attribute is supported by gcc, clang, and icc.
+https://godbolt.org/z/ehd6so
+
+I can send v2.
+
+
+
+I do not mind renaming, but it should be done in a separate patch.
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
