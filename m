@@ -2,203 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 883E42C0A0D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 14:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 294522C0ED8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 16:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387572AbgKWNQM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Nov 2020 08:16:12 -0500
-Received: from mga09.intel.com ([134.134.136.24]:21645 "EHLO mga09.intel.com"
+        id S1732043AbgKWP2n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Nov 2020 10:28:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36762 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733151AbgKWNQD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Nov 2020 08:16:03 -0500
-IronPort-SDR: 0FkDYs1Tihi5bf+F/Pc9RBV19SM3nODPX8rWHJfiTnH/hRnZi+O1bUEsfqH0vmwvC0q8PalZFq
- HNGPFpxK1KrA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="171920115"
-X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
-   d="scan'208";a="171920115"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 05:15:58 -0800
-IronPort-SDR: opjIh0SfR+qcuwJ63MUK5+FFRYvTqAUr+8ek3GSZ7jA2gkh3UQztQVuTGibv0S6J2Am1OgIMdO
- xeL/BfTjTC6g==
-X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
-   d="scan'208";a="546408371"
-Received: from gcavallu-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.53.119])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 05:15:54 -0800
-Subject: Re: [PATCH bpf-next v2 0/5] selftests/bpf: xsk selftests
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-To:     Yonghong Song <yhs@fb.com>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        magnus.karlsson@gmail.com
-Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        anders.roxell@linaro.org, jonathan.lemon@gmail.com
-References: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
- <586d63b4-1828-f633-a4ff-88e4e23d164a@fb.com>
- <8b7cccf1-9845-fd9a-6f6b-bc70b9b3f9b1@intel.com>
-Message-ID: <732c1252-1fac-20b9-0fd8-f1663b18de45@intel.com>
-Date:   Mon, 23 Nov 2020 14:15:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
+        id S1732037AbgKWP2k (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 23 Nov 2020 10:28:40 -0500
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 09FE2221EB
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 15:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606145319;
+        bh=brIo8Xk+cpg0T6s0IpQa46LwLk4mVPqFLLwG7n90WGU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NQZmlnHOZiaM7ybcSwWzusNQy1pIzNLZhcrN2FxiI5VI77KySCK6gXqHvbc4GeRrP
+         YSCkK4YhIEwNNqxjz0cYUoQdSP0hpYXSadkkeXAKDctf0PJDujPReGf2go++Ttg8qu
+         rA7cZa4607GuG26Tp3k6RmHtRqCHyFe1H0bZsEVY=
+Received: by mail-wm1-f42.google.com with SMTP id d142so18237893wmd.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 07:28:38 -0800 (PST)
+X-Gm-Message-State: AOAM5303b3Cn1NxWh+L35ZgEI/IGDlDn+eHgUrbyBFZP11LpIhwAi2PN
+        Bg/E/xXqsaPFyCxjjDF3z5EYNbuE5Ly2rDGvJLy0rw==
+X-Google-Smtp-Source: ABdhPJzEhjqlImvathm/jOwbcq17IbRsly+UVqGOW3wf5Zw5ZyQfK4pkOn8rE+oX1x7EWd6oQaZF3bxA3Eqxcxk30tI=
+X-Received: by 2002:a1c:e0c3:: with SMTP id x186mr24542133wmg.21.1606145315717;
+ Mon, 23 Nov 2020 07:28:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <8b7cccf1-9845-fd9a-6f6b-bc70b9b3f9b1@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20201123095432.5860-1-rppt@kernel.org>
+In-Reply-To: <20201123095432.5860-1-rppt@kernel.org>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 23 Nov 2020 07:28:22 -0800
+X-Gmail-Original-Message-ID: <CALCETrXr-9ABs7rzXcCrh1VXn-15AfpwjA6bQA7aU9Ta7DR+bw@mail.gmail.com>
+Message-ID: <CALCETrXr-9ABs7rzXcCrh1VXn-15AfpwjA6bQA7aU9Ta7DR+bw@mail.gmail.com>
+Subject: Re: [PATCH v10 0/9] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-riscv@lists.infradead.org, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-11-23 13:20, Björn Töpel wrote:
-> On 2020-11-21 01:31, Yonghong Song wrote:
->>
->>
->> On 11/20/20 5:00 AM, Weqaar Janjua wrote:
->>> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
->>>
->>> # Topology:
->>> # ---------
->>> #                 -----------
->>> #               _ | Process | _
->>> #              /  -----------  \
->>> #             /        |        \
->>> #            /         |         \
->>> #      -----------     |     -----------
->>> #      | Thread1 |     |     | Thread2 |
->>> #      -----------     |     -----------
->>> #           |          |          |
->>> #      -----------     |     -----------
->>> #      |  xskX   |     |     |  xskY   |
->>> #      -----------     |     -----------
->>> #           |          |          |
->>> #      -----------     |     ----------
->>> #      |  vethX  | --------- |  vethY |
->>> #      -----------   peer    ----------
->>> #           |          |          |
->>> #      namespaceX      |     namespaceY
->>>
->>> These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
->>> Ethernet interfaces.
->>>
->>> The test program contains two threads, each thread is single socket with
->>> a unique UMEM. It validates in-order packet delivery and packet content
->>> by sending packets to each other.
->>>
->>> Prerequisites setup by script test_xsk_prerequisites.sh:
->>>
->>>     Set up veth interfaces as per the topology shown ^^:
->>>     * setup two veth interfaces and one namespace
->>>     ** veth<xxxx> in root namespace
->>>     ** veth<yyyy> in af_xdp<xxxx> namespace
->>>     ** namespace af_xdp<xxxx>
->>>     * create a spec file veth.spec that includes this run-time 
->>> configuration
->>>       that is read by test scripts - filenames prefixed with test_xsk_
->>>     *** xxxx and yyyy are randomly generated 4 digit numbers used to 
->>> avoid
->>>         conflict with any existing interface
->>>
->>> The following tests are provided:
->>>
->>> 1. AF_XDP SKB mode
->>>     Generic mode XDP is driver independent, used when the driver does
->>>     not have support for XDP. Works on any netdevice using sockets and
->>>     generic XDP path. XDP hook from netif_receive_skb().
->>>     a. nopoll - soft-irq processing
->>>     b. poll - using poll() syscall
->>>     c. Socket Teardown
->>>        Create a Tx and a Rx socket, Tx from one socket, Rx on another.
->>>        Destroy both sockets, then repeat multiple times. Only nopoll 
->>> mode
->>>       is used
->>>     d. Bi-directional Sockets
->>>        Configure sockets as bi-directional tx/rx sockets, sets up fill
->>>       and completion rings on each socket, tx/rx in both directions.
->>>       Only nopoll mode is used
->>>
->>> 2. AF_XDP DRV/Native mode
->>>     Works on any netdevice with XDP_REDIRECT support, driver dependent.
->>>     Processes packets before SKB allocation. Provides better performance
->>>     than SKB. Driver hook available just after DMA of buffer descriptor.
->>>     a. nopoll
->>>     b. poll
->>>     c. Socket Teardown
->>>     d. Bi-directional Sockets
->>>     * Only copy mode is supported because veth does not currently 
->>> support
->>>       zero-copy mode
->>>
->>> Total tests: 8
->>>
->>> Flow:
->>> * Single process spawns two threads: Tx and Rx
->>> * Each of these two threads attach to a veth interface within their
->>>    assigned namespaces
->>> * Each thread creates one AF_XDP socket connected to a unique umem
->>>    for each veth interface
->>> * Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
->>> * Rx thread verifies if all 10k packets were received and delivered
->>>    in-order, and have the right content
->>>
->>> v2 changes:
->>> * Move selftests/xsk to selftests/bpf
->>> * Remove Makefiles under selftests/xsk, and utilize 
->>> selftests/bpf/Makefile
->>>
->>> Structure of the patch set:
->>>
->>> Patch 1: This patch adds XSK Selftests framework under selftests/bpf
->>> Patch 2: Adds tests: SKB poll and nopoll mode, and mac-ip-udp debug
->>> Patch 3: Adds tests: DRV poll and nopoll mode
->>> Patch 4: Adds tests: SKB and DRV Socket Teardown
->>> Patch 5: Adds tests: SKB and DRV Bi-directional Sockets
->>
->> I just want to report that after applying the above 5 patches
->> on top of bpf-next commit 450d060e8f75 ("bpftool: Add {i,d}tlb_misses 
->> support for bpftool profile"), I hit the following error with below 
->> command sequences:
->>
->>   $ ./test_xsk_prerequisites.sh
->>   $ ./test_xsk_skb_poll.sh
->> # Interface found: ve1480
->> # Interface found: ve9258
->> # NS switched: af_xdp9258
->> 1..1
->> # Interface [ve9258] vector [Rx]
->> # Interface [ve1480] vector [Tx]
->> # Sending 10000 packets on interface ve1480
->> [  331.741244] ------------[ cut here ]------------
->> [  331.741741] kernel BUG at net/core/skbuff.c:1621!
->> [  331.742265] invalid opcode: 0000 [#1] PREEMPT SMP PTI
->> [  331.742837] CPU: 0 PID: 1883 Comm: xdpxceiver Not tainted 
->> 5.10.0-rc3+ #1037
->> [  331.743468] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
->> BIOS 1.9.3
->> -1.el7.centos 04/01/2014
->> [  331.744300] RIP: 0010:pskb_expand_head+0x27b/0x310
-> 
-> Ugh, looks like the tests are working. :-P
-> 
-> This is a BUG_ON(skb_shared(skb)) trigger, related to the skbuff 
-> refcount changes done recently in AF_XDP.
-> 
-> I'll cook a patch! Thanks for the report!
+On Mon, Nov 23, 2020 at 1:54 AM Mike Rapoport <rppt@kernel.org> wrote:
 >
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> Hi,
+>
+> This is an implementation of "secret" mappings backed by a file descriptor.
+>
+> The file descriptor backing secret memory mappings is created using a
+> dedicated memfd_secret system call The desired protection mode for the
+> memory is configured using flags parameter of the system call. The mmap()
+> of the file descriptor created with memfd_secret() will create a "secret"
+> memory mapping. The pages in that mapping will be marked as not present in
+> the direct map and will have desired protection bits set in the user page
+> table. For instance, current implementation allows uncached mappings.
 
-Posted a fix [1].
+I'm still not ready to ACK uncached mappings on x86.  I'm fine with
+the concept of allowing privileged users to create UC memory on x86
+for testing and experimentation, but it's a big can of worms in
+general.  The issues that immediately come to mind are:
 
-Please not that it's for the bpf tree, so when Weqaar pushes the v3 of
-the selftests to bpf-next, [1] needs to be pulled in.
+- Performance and DoS potential.  UC will have bizarre, architecture-
+and platform-dependent performance characteristics.  For all I know,
+even the access semantics might be architecture dependent.  I'm not
+convinced it's possible to write portable code in C using the uncached
+feature.  I'm also concerned that certain operation (unaligned locks,
+for example, and possibly any locked access) will trigger bus locks on
+x86, which, depending on CPU and kernel config will either DoS all
+other CPUs or send signals.  (Or cause the hypervisor to terminate or
+otherwise penalize the the VM, which would be nasty.)
 
+ - Correctness.  I have reports that different x86 hypervisors do
+different things with UC mappings, including treating them as regular
+WB mappings.  So the memory type you get out when you ask for
+"uncached" might not actually be uncached.
 
-
-Björn
-
-[1] 
-https://lore.kernel.org/bpf/20201123131215.136131-1-bjorn.topel@gmail.com/
-
-
-> 
-> Björn
+UC is really an MMIO feature, not a "protect my data" feature.
+Abusing it to protect data is certainly interesting, but I'm far from
+convinced that it's wise.  I'm especially unconvinced that
+monkey-patching a program to use uncached memory when it expects
+regular malloced memory is a reasonable thing to do.
