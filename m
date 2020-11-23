@@ -2,236 +2,206 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC472C1792
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 22:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9282C1849
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 23:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730609AbgKWVUC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Nov 2020 16:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S1731113AbgKWWNy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Nov 2020 17:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730158AbgKWVUB (ORCPT
+        with ESMTP id S1728895AbgKWWNy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Nov 2020 16:20:01 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72995C061A4D
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 13:20:01 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id l11so25892691lfg.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 13:20:01 -0800 (PST)
+        Mon, 23 Nov 2020 17:13:54 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3E4C0613CF
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 14:13:54 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id t8so19780557iov.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Nov 2020 14:13:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=D4j9ipcYfkgbYW3IfC3r3VIMquqoN+L6cwpP+cS0BfI=;
-        b=fbC4IE3Ma5k4BEntewlv8v44ErN69EIIdl+LZnfvxK31fInFQJfwmWF2sg7nACKjA9
-         I6b6ZNKtoWl64a5fVPHAmoBsBsZ6nToMj+Obly0NP8Ez97fTOJgdkj7137/mnilNhpEh
-         BqN/AIpYIzPy50MtZSNUjDDXyHutg+qwuyV4uGBbMumFfpKVEfROV/wlL9zO6wHExM4K
-         moZZ3tIvtcR81IIWpQIx6JoA2Jqcw0URh9PDkR4MFHcyap+48kzcU5s1UCS3OtJ7ukUf
-         tIaKNvwoxdNVe3mpc7VFjd4B+mci1IQXbzUjkulToK+KErFEffmZ/hPOqt64fX6Z14DN
-         s4EQ==
+         :cc;
+        bh=YbOBzNVExiH64clQRI32BJmv9D/fQUmJHwb5YfTyaEc=;
+        b=shaloUoNGlZyIAlKhS4E08L6THzCDtAQOmdPCBHKFHm3dZGLZJeqZ7B500HxM2BPgF
+         hdV0c7KN0kg0IIc3E4TWeOn6nkixjiXx5H8l+jp1hnUPWnlLphDVAeHAGcnZRBNUhZWC
+         X0x3Rv0G4cpfb2dZE3DXkW48wW4IJy2dFqWbTqOUmFHITmEKypc4f1eVqGMGBTmRgoSS
+         F1rvVOrycEtsQ9Ob4SaMUj8HdqHhAwn1/sP2CC3+qIAxu3rss9vDeA/o9B9R78sFl8Uw
+         epsQT6BOCw4jpFkPvW1fJ7sBFKAW+ls2kKuzKhdcF00pq+30RYpykwliz1cBLV5kfKs6
+         hhig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=D4j9ipcYfkgbYW3IfC3r3VIMquqoN+L6cwpP+cS0BfI=;
-        b=g1wz8+Q2ysyz8lzHeQ4JvFPMIflXDp26SgDMquFQqsjVyqGAUb4jeGm3fOwpSjxNqx
-         vV84WyzdRUwnvL5INuNyuXv+sy7S/i+bb/kZj06AGheyPzpshx0fRFtNQHAxqU/JZc8R
-         uK8CzZV9Hu+x/je/bVug39IcPdFwfr1n70qpe1LlZfegdKJV6Xr/jLR2mKpobHLQKEpB
-         Tw2Xh11VhzwwP4gYhX9RO7k3JTiUNcpkwSb3bsfaq4YA3X+LOUCYIy37btuOfzJHfJ6l
-         79FWliavbUlEeEJmBNAAv+FhcN2rHpq8ckLTx5Q7r8kSUjPc1OEiZMG/sTQWS9B0MRHH
-         wXSA==
-X-Gm-Message-State: AOAM53012D4wtIGbNpkogM+jBP61T942zEwsJ8I+bX5Y+3lmami8DQyp
-        Md28oG4bXoo0LHBOEDLiI3G0x6gf+JMYw2mEmZ0b9w==
-X-Google-Smtp-Source: ABdhPJyZNIPvvHuqqE5lpIUT0dScn3UUr49Bfga2lpEazQCiXcQJAC/sc7oZqgLOpkGR6U56kkuVO/8yEnsIFrrECV4=
-X-Received: by 2002:ac2:5a49:: with SMTP id r9mr381970lfn.381.1606166399488;
- Mon, 23 Nov 2020 13:19:59 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=YbOBzNVExiH64clQRI32BJmv9D/fQUmJHwb5YfTyaEc=;
+        b=qcIkVsAWJTaLzWNScarvAwLPwhxch42QRq49CeUW6FebCScEbJ7Mj49N+lAdbWBPI2
+         m5mb6iDluksxMgGFuh2GZFqjzOK1dosTlyWECJoOG3+yuoC9KIo5S+4alY6tIzl2By+f
+         XnVBZfxzeekBUj5ks3dzhofrDJUSrhiN2Nmw5f0aqDxdKRYhB8CBYaOhJqH1ulCs26nB
+         26O+ERzvlGQu5hU7L2NBPl/E8hmEJfW1u6S3xxDdXObNmVhJUg0S9w0NFcqjwRxT9YFu
+         nxFxieaLGLI8eaOuX2IezEMrH+i/3bYHQsNnCM672FpKu9BCRBkIt48gPckpSDgd5Wm7
+         44Vw==
+X-Gm-Message-State: AOAM531WXOR6wqWJW7JVZpHdkURnWF6RP7oUhCKtXQkG74aWTM2Ojwmd
+        sHNNJLcsj3eIWRlezRv9uLhSi2nguJxDZOYlrgvrjw==
+X-Google-Smtp-Source: ABdhPJwp+twyRELPjRee3jPv4vD6OTveZtl1e0GPwaKoFaW8Av/s71zgKaTh9U9wb3Tj+JOgvS04hUZ6tDmVNRryW8I=
+X-Received: by 2002:a6b:750c:: with SMTP id l12mr1568590ioh.57.1606169633317;
+ Mon, 23 Nov 2020 14:13:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20201112205141.775752-1-mic@digikod.net> <20201112205141.775752-8-mic@digikod.net>
- <CAG48ez3HA63CX852LLDFCcNyzRGwAr3x_cvA1-t8tgDxfF1dOQ@mail.gmail.com>
- <1d524ea9-85eb-049c-2156-05cad6d6fcfd@digikod.net> <CAG48ez2cmsrZbUEmQmzPQugJikkvfs_MWmMizxmoyspCeXAXRQ@mail.gmail.com>
- <7831e55d-34ef-cf74-3d47-15e2e1edf96c@digikod.net>
-In-Reply-To: <7831e55d-34ef-cf74-3d47-15e2e1edf96c@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 23 Nov 2020 22:19:32 +0100
-Message-ID: <CAG48ez2V-eSH2+HL9zrYYD4QMpP4a5y8=mTQtk20PB0wUz_4Tw@mail.gmail.com>
-Subject: Re: [PATCH v24 07/12] landlock: Support filesystem access-control
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>, James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
+References: <20201102213656.2700500-1-dlatypov@google.com> <CAFd5g45GK-sQY-nXcOORoJNu_0JGPY1veZd8PuM0MDtGtDRHSg@mail.gmail.com>
+In-Reply-To: <CAFd5g45GK-sQY-nXcOORoJNu_0JGPY1veZd8PuM0MDtGtDRHSg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 23 Nov 2020 14:13:41 -0800
+Message-ID: <CAGS_qxp0zz_J759YR20FFwepffwPQmK-nYmuzb7B_C+kYpJmGg@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: provide guidance for testing many inputs
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 10:16 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
- wrote:
-> On 23/11/2020 20:44, Jann Horn wrote:
-> > On Sat, Nov 21, 2020 at 11:06 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.=
-net> wrote:
-> >> On 21/11/2020 08:00, Jann Horn wrote:
-> >>> On Thu, Nov 12, 2020 at 9:52 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod=
-.net> wrote:
-> >>>> Thanks to the Landlock objects and ruleset, it is possible to identi=
-fy
-> >>>> inodes according to a process's domain.  To enable an unprivileged
-> >>>> process to express a file hierarchy, it first needs to open a direct=
-ory
-> >>>> (or a file) and pass this file descriptor to the kernel through
-> >>>> landlock_add_rule(2).  When checking if a file access request is
-> >>>> allowed, we walk from the requested dentry to the real root, followi=
-ng
-> >>>> the different mount layers.  The access to each "tagged" inodes are
-> >>>> collected according to their rule layer level, and ANDed to create
-> >>>> access to the requested file hierarchy.  This makes possible to iden=
-tify
-> >>>> a lot of files without tagging every inodes nor modifying the
-> >>>> filesystem, while still following the view and understanding the use=
-r
-> >>>> has from the filesystem.
-> >>>>
-> >>>> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does no=
-t
-> >>>> keep the same struct inodes for the same inodes whereas these inodes=
- are
-> >>>> in use.
-> >>>>
-> >>>> This commit adds a minimal set of supported filesystem access-contro=
-l
-> >>>> which doesn't enable to restrict all file-related actions.  This is =
-the
-> >>>> result of multiple discussions to minimize the code of Landlock to e=
-ase
-> >>>> review.  Thanks to the Landlock design, extending this access-contro=
-l
-> >>>> without breaking user space will not be a problem.  Moreover, seccom=
-p
-> >>>> filters can be used to restrict the use of syscall families which ma=
-y
-> >>>> not be currently handled by Landlock.
-> >>>>
-> >>>> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> >>>> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> >>>> Cc: James Morris <jmorris@namei.org>
-> >>>> Cc: Jann Horn <jannh@google.com>
-> >>>> Cc: Jeff Dike <jdike@addtoit.com>
-> >>>> Cc: Kees Cook <keescook@chromium.org>
-> >>>> Cc: Richard Weinberger <richard@nod.at>
-> >>>> Cc: Serge E. Hallyn <serge@hallyn.com>
-> >>>> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> >>>> ---
-> >>>>
-> >>>> Changes since v23:
-> >>>> * Enforce deterministic interleaved path rules.  To have consistent
-> >>>>   layered rules, granting access to a path implies that all accesses
-> >>>>   tied to inodes, from the requested file to the real root, must be
-> >>>>   checked.  Otherwise, stacked rules may result to overzealous
-> >>>>   restrictions.  By excluding the ability to add exceptions in the s=
-ame
-> >>>>   layer (e.g. /a allowed, /a/b denied, and /a/b/c allowed), we get
-> >>>>   deterministic interleaved path rules.  This removes an optimizatio=
-n
-> >>>
-> >>> I don't understand the "deterministic interleaved path rules" part.
-> >>
-> >> I explain bellow.
-> >>
-> >>>
-> >>>
-> >>> What if I have a policy like this?
-> >>>
-> >>> /home/user READ
-> >>> /home/user/Downloads READ+WRITE
-> >>>
-> >>> That's a reasonable policy, right?
-> >>
-> >> Definitely, I forgot this, thanks for the outside perspective!
-> >>
-> >>>
-> >>> If I then try to open /home/user/Downloads/foo in WRITE mode, the loo=
-p
-> >>> will first check against the READ+WRITE rule for /home/user, that
-> >>> check will pass, and then it will check against the READ rule for /,
-> >>> which will deny the access, right? That seems bad.
-> >>
-> >> Yes that was the intent.
-> >>
-> >>>
-> >>>
-> >>> The v22 code ensured that for each layer, the most specific rule (the
-> >>> first we encounter on the walk) always wins, right? What's the proble=
-m
-> >>> with that?
-> >>
-> >> This can be explained with the interleaved_masked_accesses test:
-> >> https://github.com/landlock-lsm/linux/blob/landlock-v24/tools/testing/=
-selftests/landlock/fs_test.c#L647
-> >>
-> >> In this case there is 4 stacked layers:
-> >> layer 1: allows s1d1/s1d2/s1d3/file1
-> >> layer 2: allows s1d1/s1d2/s1d3
-> >>          denies s1d1/s1d2
-> >> layer 3: allows s1d1
-> >> layer 4: allows s1d1/s1d2
-> >>
-> >> In the v23, access to file1 would be allowed until layer 3, but layer =
-4
-> >> would merge a new rule for the s1d2 inode. Because we don't record whe=
-re
-> >> exactly the access come from, we can't tell that layer 2 allowed acces=
-s
-> >> thanks to s1d3 and that its s1d2 rule was ignored. I think this behavi=
-or
-> >> doesn't make sense from the user point of view.
+On Mon, Nov 23, 2020 at 10:32 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Mon, Nov 2, 2020 at 1:37 PM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > Aah, I think I'm starting to understand the issue now. Basically, with
-> > the current UAPI, the semantics have to be "an access is permitted if,
-> > for each policy layer, at least one rule encountered on the pathwalk
-> > permits the access; rules that deny the access are irrelevant". And if
-> > it turns out that someone needs to be able to deny access to specific
-> > inodes, we'll have to extend struct landlock_path_beneath_attr.
->
-> Right, I'll add this to the documentation (aligned with the new
-> implementation).
->
+> > usage.rst goes into a detailed about faking out classes, but currently
+> > lacks wording about how one might idiomatically test a range of inputs.
 > >
-> > That reminds me... if we do need to make such a change in the future,
-> > it would be easier in terms of UAPI compatibility if
-> > landlock_add_rule() used copy_struct_from_user(), which is designed to
-> > create backwards and forwards compatibility with other version of UAPI
-> > headers. So adding that now might save us some headaches later.
+> > Give an example of how one might test a hash function via macros/helper
+> > funcs and a table-driven test and very briefly discuss pros and cons.
+> >
+> > Also highlight the KUNIT_EXPECT_*_MSG() variants (that aren't mentioned
+> > elsewhere [1]) which are particularly useful in these situations.
+> >
+> > It is also criminally underused at the moment, only appearing in 2
+> > tests (both written by people involved in KUnit).
+> >
+> > [1] not even on
+> > https://www.kernel.org/doc/html/latest/dev-tools/kunit/api/test.html
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 >
-> I used copy_struct_from_user() before v21, but Arnd wasn't a fan of
-> having type and size arguments, so we simplified the UAPI in the v21 by
-> removing the size argument. The type argument is enough to extend the
-> structure, but indeed, we lose the forward compatibility. Relying on one
-> syscall per rule type seems too much, though.
+> Aside from the minor comment I made below, I like the patch; it is a
+> definite improvement, but I think the test you wrote that ultimately
+> led to this documentation fix had more information in it than this
+> documentation. I think it only contains the pattern that you outlined
+> here, but I think it does include some other best practices. Maybe we
+> should add some more documentation patches with more code examples in
+> the future?
+>
+> Anyway, like I said, I think this patch in and of itself looks pretty good.
+>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+>
+> > ---
+> >  Documentation/dev-tools/kunit/usage.rst | 66 +++++++++++++++++++++++++
+> >  1 file changed, 66 insertions(+)
+> >
+> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> > index 62142a47488c..317390df2b96 100644
+> > --- a/Documentation/dev-tools/kunit/usage.rst
+> > +++ b/Documentation/dev-tools/kunit/usage.rst
+> > @@ -451,6 +451,72 @@ We can now use it to test ``struct eeprom_buffer``:
+> >                 destroy_eeprom_buffer(ctx->eeprom_buffer);
+> >         }
+> >
+> > +Testing various inputs
+> > +----------------------
+>
+> Since this, by my count, the second test pattern that we are
+> introducing here, could we maybe call that out with a subheading or a
+> new section or something? It would be nice if we could sort of build
+> up a cookbook of testing patterns.
 
-You have a point there, I guess having a type argument is enough. (And
-if userspace tries to load a ruleset with "deny" rules that isn't
-supported by the current kernel, userspace will have to deal with that
-in some way anyway.)
+Good point, I noticed now the "Organization of this document" section
+would need to be updated.
+Perhaps something like
 
-So thinking about it more, I guess the current version is probably
-actually fine, too.
+-This document is organized into two main sections: Testing and Isolating
+-Behavior. The first covers what unit tests are and how to use KUnit to write
+-them. The second covers how to use KUnit to isolate code and make it possible
+-to unit test code that was otherwise un-unit-testable.
++This document is organized into two main sections: Testing and Common Patterns.
++The first covers what unit tests are and how to use KUnit to write them. The
++second covers common testing patterns, e.g. how to isolate code and make it
++possible to unit test code that was otherwise un-unit-testable.
+
+I'll send out a V2 shortly, changing the example per David's
+suggestion and with the above.
+
+>
+> > +Testing just a few inputs might not be enough to have confidence that the code
+> > +works correctly, e.g. for a hash function.
+> > +
+> > +In such cases, it can be helpful to have a helper macro or function, e.g. this
+> > +fictitious example for ``md5sum(1)``
+> > +
+> > +.. code-block:: c
+> > +
+> > +       /* Note: the cast is to satisfy overly strict type-checking. */
+> > +       #define TEST_MD5(in, want) \
+> > +               md5sum(in, out); \
+> > +               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, want, "md5sum(%s)", in);
+> > +
+> > +       char out[16];
+> > +       TEST_MD5("hello world",   "5eb63bbbe01eeed093cb22bb8f5acdc3");
+> > +       TEST_MD5("hello world!",  "fc3ff98e8c6a0d3087d515c0473f8677");
+> > +
+> > +Note the use of ``KUNIT_EXPECT_STREQ_MSG`` to give more context when it fails
+> > +and make it easier to track down. (Yes, in this example, ``want`` is likely
+> > +going to be unique enough on its own).
+> > +
+> > +The ``_MSG`` variants are even more useful when the same expectation is called
+> > +multiple times (in a loop or helper function) and thus the line number isn't
+> > +enough to identify what failed, like below.
+> > +
+> > +In some cases, it can be helpful to write a *table-driven test* instead, e.g.
+> > +
+> > +.. code-block:: c
+> > +
+> > +       int i;
+> > +       char out[16];
+> > +
+> > +       struct md5_test_case {
+> > +               const char *str;
+> > +               const char *md5;
+> > +       };
+> > +
+> > +       struct md5_test_case cases[] = {
+> > +               {
+> > +                       .str = "hello world",
+> > +                       .md5 = "5eb63bbbe01eeed093cb22bb8f5acdc3",
+> > +               },
+> > +               {
+> > +                       .str = "hello world!",
+> > +                       .md5 = "fc3ff98e8c6a0d3087d515c0473f8677",
+> > +               },
+> > +       };
+> > +       for (i = 0; i < ARRAY_SIZE(cases); ++i) {
+> > +               md5sum(cases[i].str, out);
+> > +               KUNIT_EXPECT_STREQ_MSG(test, (char *)out, cases[i].md5,
+> > +                                     "md5sum(%s)", cases[i].str);
+> > +       }
+> > +
+> > +
+> > +There's more boilerplate involved, but it can:
+> > +
+> > +* be more readable when there are multiple inputs/outputs thanks to field names,
+> > +
+> > +  * E.g. see ``fs/ext4/inode-test.c`` for an example of both.
+> > +* reduce duplication if test cases can be shared across multiple tests.
+> > +
+> > +  * E.g. if we had a magical ``undo_md5sum`` function, we could reuse ``cases``.
+> > +
+> >  .. _kunit-on-non-uml:
+> >
+> >  KUnit on non-UML architectures
+> >
+> > base-commit: 77c8473edf7f7664137f555cfcdc8c460bbd947d
+> > --
+> > 2.29.1.341.ge80a0c044ae-goog
+> >
