@@ -2,79 +2,185 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 628572C04BE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 12:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBCE2C0566
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Nov 2020 13:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728787AbgKWLjU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Nov 2020 06:39:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52226 "EHLO mail.kernel.org"
+        id S1729270AbgKWMVC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Nov 2020 07:21:02 -0500
+Received: from mga12.intel.com ([192.55.52.136]:39192 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726529AbgKWLjU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Nov 2020 06:39:20 -0500
-Received: from gaia (unknown [95.146.230.165])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 161B72072C;
-        Mon, 23 Nov 2020 11:39:12 +0000 (UTC)
-Date:   Mon, 23 Nov 2020 11:39:10 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v10 8/9] arch, mm: wire up memfd_secret system call were
- relevant
-Message-ID: <20201123113910.GC17833@gaia>
-References: <20201123095432.5860-1-rppt@kernel.org>
- <20201123095432.5860-9-rppt@kernel.org>
+        id S1728895AbgKWMVC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 23 Nov 2020 07:21:02 -0500
+IronPort-SDR: Zz1w8plttsWbmKxb9QAE8+yiizj52Rn/ml6NWfxMjoix6bYTz7Ppjhq6kZXQ9MhGcTy9NrtXqG
+ pXE3sKUyBMcQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="151013964"
+X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
+   d="scan'208";a="151013964"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 04:20:58 -0800
+IronPort-SDR: 22iTex5m9S/kk/mkkh0WkOsIP6fsqtcXP2dqrFoD/SVlO+duLAoxPnmdpsQcfNMAOcs773bhkG
+ TNsUZiYG0Dnw==
+X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
+   d="scan'208";a="546391854"
+Received: from gcavallu-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.53.119])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 04:20:53 -0800
+Subject: Re: [PATCH bpf-next v2 0/5] selftests/bpf: xsk selftests
+To:     Yonghong Song <yhs@fb.com>,
+        Weqaar Janjua <weqaar.janjua@gmail.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        magnus.karlsson@gmail.com
+Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com
+References: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
+ <586d63b4-1828-f633-a4ff-88e4e23d164a@fb.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <8b7cccf1-9845-fd9a-6f6b-bc70b9b3f9b1@intel.com>
+Date:   Mon, 23 Nov 2020 13:20:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201123095432.5860-9-rppt@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <586d63b4-1828-f633-a4ff-88e4e23d164a@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 11:54:31AM +0200, Mike Rapoport wrote:
-> diff --git a/arch/arm64/include/uapi/asm/unistd.h b/arch/arm64/include/uapi/asm/unistd.h
-> index f83a70e07df8..ce2ee8f1e361 100644
-> --- a/arch/arm64/include/uapi/asm/unistd.h
-> +++ b/arch/arm64/include/uapi/asm/unistd.h
-> @@ -20,5 +20,6 @@
->  #define __ARCH_WANT_SET_GET_RLIMIT
->  #define __ARCH_WANT_TIME32_SYSCALLS
->  #define __ARCH_WANT_SYS_CLONE3
-> +#define __ARCH_WANT_MEMFD_SECRET
->  
->  #include <asm-generic/unistd.h>
+On 2020-11-21 01:31, Yonghong Song wrote:
+> 
+> 
+> On 11/20/20 5:00 AM, Weqaar Janjua wrote:
+>> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
+>>
+>> # Topology:
+>> # ---------
+>> #                 -----------
+>> #               _ | Process | _
+>> #              /  -----------  \
+>> #             /        |        \
+>> #            /         |         \
+>> #      -----------     |     -----------
+>> #      | Thread1 |     |     | Thread2 |
+>> #      -----------     |     -----------
+>> #           |          |          |
+>> #      -----------     |     -----------
+>> #      |  xskX   |     |     |  xskY   |
+>> #      -----------     |     -----------
+>> #           |          |          |
+>> #      -----------     |     ----------
+>> #      |  vethX  | --------- |  vethY |
+>> #      -----------   peer    ----------
+>> #           |          |          |
+>> #      namespaceX      |     namespaceY
+>>
+>> These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
+>> Ethernet interfaces.
+>>
+>> The test program contains two threads, each thread is single socket with
+>> a unique UMEM. It validates in-order packet delivery and packet content
+>> by sending packets to each other.
+>>
+>> Prerequisites setup by script test_xsk_prerequisites.sh:
+>>
+>>     Set up veth interfaces as per the topology shown ^^:
+>>     * setup two veth interfaces and one namespace
+>>     ** veth<xxxx> in root namespace
+>>     ** veth<yyyy> in af_xdp<xxxx> namespace
+>>     ** namespace af_xdp<xxxx>
+>>     * create a spec file veth.spec that includes this run-time 
+>> configuration
+>>       that is read by test scripts - filenames prefixed with test_xsk_
+>>     *** xxxx and yyyy are randomly generated 4 digit numbers used to 
+>> avoid
+>>         conflict with any existing interface
+>>
+>> The following tests are provided:
+>>
+>> 1. AF_XDP SKB mode
+>>     Generic mode XDP is driver independent, used when the driver does
+>>     not have support for XDP. Works on any netdevice using sockets and
+>>     generic XDP path. XDP hook from netif_receive_skb().
+>>     a. nopoll - soft-irq processing
+>>     b. poll - using poll() syscall
+>>     c. Socket Teardown
+>>        Create a Tx and a Rx socket, Tx from one socket, Rx on another.
+>>        Destroy both sockets, then repeat multiple times. Only nopoll mode
+>>       is used
+>>     d. Bi-directional Sockets
+>>        Configure sockets as bi-directional tx/rx sockets, sets up fill
+>>       and completion rings on each socket, tx/rx in both directions.
+>>       Only nopoll mode is used
+>>
+>> 2. AF_XDP DRV/Native mode
+>>     Works on any netdevice with XDP_REDIRECT support, driver dependent.
+>>     Processes packets before SKB allocation. Provides better performance
+>>     than SKB. Driver hook available just after DMA of buffer descriptor.
+>>     a. nopoll
+>>     b. poll
+>>     c. Socket Teardown
+>>     d. Bi-directional Sockets
+>>     * Only copy mode is supported because veth does not currently support
+>>       zero-copy mode
+>>
+>> Total tests: 8
+>>
+>> Flow:
+>> * Single process spawns two threads: Tx and Rx
+>> * Each of these two threads attach to a veth interface within their
+>>    assigned namespaces
+>> * Each thread creates one AF_XDP socket connected to a unique umem
+>>    for each veth interface
+>> * Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
+>> * Rx thread verifies if all 10k packets were received and delivered
+>>    in-order, and have the right content
+>>
+>> v2 changes:
+>> * Move selftests/xsk to selftests/bpf
+>> * Remove Makefiles under selftests/xsk, and utilize 
+>> selftests/bpf/Makefile
+>>
+>> Structure of the patch set:
+>>
+>> Patch 1: This patch adds XSK Selftests framework under selftests/bpf
+>> Patch 2: Adds tests: SKB poll and nopoll mode, and mac-ip-udp debug
+>> Patch 3: Adds tests: DRV poll and nopoll mode
+>> Patch 4: Adds tests: SKB and DRV Socket Teardown
+>> Patch 5: Adds tests: SKB and DRV Bi-directional Sockets
+> 
+> I just want to report that after applying the above 5 patches
+> on top of bpf-next commit 450d060e8f75 ("bpftool: Add {i,d}tlb_misses 
+> support for bpftool profile"), I hit the following error with below 
+> command sequences:
+> 
+>   $ ./test_xsk_prerequisites.sh
+>   $ ./test_xsk_skb_poll.sh
+> # Interface found: ve1480
+> # Interface found: ve9258
+> # NS switched: af_xdp9258
+> 1..1
+> # Interface [ve9258] vector [Rx]
+> # Interface [ve1480] vector [Tx]
+> # Sending 10000 packets on interface ve1480
+> [  331.741244] ------------[ cut here ]------------
+> [  331.741741] kernel BUG at net/core/skbuff.c:1621!
+> [  331.742265] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> [  331.742837] CPU: 0 PID: 1883 Comm: xdpxceiver Not tainted 5.10.0-rc3+ 
+> #1037
+> [  331.743468] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
+> BIOS 1.9.3
+> -1.el7.centos 04/01/2014
+> [  331.744300] RIP: 0010:pskb_expand_head+0x27b/0x310
 
-For arm64:
+Ugh, looks like the tests are working. :-P
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+This is a BUG_ON(skb_shared(skb)) trigger, related to the skbuff 
+refcount changes done recently in AF_XDP.
+
+I'll cook a patch! Thanks for the report!
+
+
+Björn
