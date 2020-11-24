@@ -2,137 +2,209 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A202C1F58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Nov 2020 09:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EA62C2127
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Nov 2020 10:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730361AbgKXICf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Nov 2020 03:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730193AbgKXICe (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Nov 2020 03:02:34 -0500
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A2FC0613D6
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2020 00:02:34 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id n12so15015837otk.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Nov 2020 00:02:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a594DHYDSH28ozJvU6Q2cBNN/U0tDhb9dpOOY+Zf8ek=;
-        b=ZLeC2pXRxS7ioJzWcYY9jJ/Np48Q6UGh5Gsvxkyd73LF4tfwf8TLhewXJTemf3Jwxx
-         X7jKioju8zjZw6KC2hyAUQh8KdjAn4BYilk4LZ/TOyVQ+LIb/HsCOe7kNkmXNOQO/Uyb
-         jyr5vgrWK7sjx0NieksUlsASyKp5d6OXcUEjq6XnPDaVpGoS8nfJdjr4IGJQzY2zI5GP
-         z2ItB7Jz1rRzgJpb3exTUoZBnhzLOIGzzVGjfJyrPogi4RD9ZMM16HePxM3y3aKLFRWc
-         /mvwIDbPN6GAHDYH+pChgCdXtyxsUGeS1RxxYqjZ6AEiNKpVKwoCrPcQPsFaSR6seUcq
-         sJNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a594DHYDSH28ozJvU6Q2cBNN/U0tDhb9dpOOY+Zf8ek=;
-        b=G3zBQXLihSEua3tskzB4902UdlKR84Xn+XZUVfR2a06h3GFzZ0JaitP5TTy0OeBbd1
-         /XnPIohG+2o9IDBCixSIHTkefukqF6E0QQdlK0R5GoHNJc7csTOQ885aUdoDFDx9XwJg
-         qqEVi0ylHf9YXImEyg8Tf/ThwQ4b8Wm3jVn8e5DDkOgh1uHBtHabblnrSPENGMuCJ12S
-         Ge0q9WyteZNkVWjpBnctQ16Pne2nEI/WzqNBLRP0InCE0XYR3V4XCFckFfAME2Rx5meq
-         5W8bnRqQKvz2XddS3qLYAUT+JGkjykRjnKRzZ4bwKbNPvfGxegu8HWyBFRu5YDgzhLWv
-         zI2w==
-X-Gm-Message-State: AOAM532xH8HsvfBl0GCS+paMO6pWZMJtJXKUdotfKA9wvgMrcOAmkoB+
-        2bb+6kexLDER+DUDVoVgabiEQRS/Y0z2kRJjCJyadw==
-X-Google-Smtp-Source: ABdhPJyhU4UCNA5E8Kwo//NGX/pFWA9xTcgIEzo/Ro/rMxJ7ogdtEI+hGnzxmYgfdxM9qtIEZmZxaNzNJ3xe/7hYKPw=
-X-Received: by 2002:a05:6830:1c76:: with SMTP id s22mr2516951otg.233.1606204953329;
- Tue, 24 Nov 2020 00:02:33 -0800 (PST)
+        id S1731133AbgKXJ0O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Nov 2020 04:26:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35814 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730978AbgKXJ0N (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Nov 2020 04:26:13 -0500
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5B4272073C;
+        Tue, 24 Nov 2020 09:26:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606209971;
+        bh=Vu/loiJSNRrO77MACnjmjt+n1JsAIxW9sPzEI8Ph9s4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=yArC+oqs8UwMhkE4s7VBNMygmdJaXflqzzY4kzd8LiaNHcOU3eoinTB5Cfatt1YGu
+         ku7ryee1J1HtCFoVbBOueT+EtRc9zRXgf5egSMTHgM+vu/gHMH5yEhWHxoumvG0ktT
+         xirR2t8mG+6ImIcI4MrCjuAeIRpTEQ29ujzMRs68=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: [PATCH v11 0/9] mm: introduce memfd_secret system call to create "secret" memory areas
+Date:   Tue, 24 Nov 2020 11:25:47 +0200
+Message-Id: <20201124092556.12009-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20201116054035.211498-1-98.arpi@gmail.com> <CABVgOSkoQahYqMJ3dD1_X2+rF3OgwT658+8HRM2EZ5e0-94jmw@mail.gmail.com>
- <CANpmjNOhb13YthVHmXxMjpD2JZUO4H2Z1KZSKqHeFUv-RbM5+Q@mail.gmail.com> <CABVgOSnGnkCnAyAqVoLhMGb6XV_irtYB7pyOTon5Scab8GxKtg@mail.gmail.com>
-In-Reply-To: <CABVgOSnGnkCnAyAqVoLhMGb6XV_irtYB7pyOTon5Scab8GxKtg@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 24 Nov 2020 09:02:21 +0100
-Message-ID: <CANpmjNNfNJWJ7avZrRkwvtx2Vv7oR9V8=dmcWW_irotmKWQWGw@mail.gmail.com>
-Subject: Re: [PATCH v9 1/2] kunit: Support for Parameterized Testing
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-ext4@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 24 Nov 2020 at 08:25, David Gow <davidgow@google.com> wrote:
->
-> On Mon, Nov 23, 2020 at 9:08 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Tue, 17 Nov 2020 at 08:21, David Gow <davidgow@google.com> wrote:
-> > > On Mon, Nov 16, 2020 at 1:41 PM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
-> > > >
-> > > > Implementation of support for parameterized testing in KUnit. This
-> > > > approach requires the creation of a test case using the
-> > > > KUNIT_CASE_PARAM() macro that accepts a generator function as input.
-> > > >
-> > > > This generator function should return the next parameter given the
-> > > > previous parameter in parameterized tests. It also provides a macro to
-> > > > generate common-case generators based on arrays. Generators may also
-> > > > optionally provide a human-readable description of parameters, which is
-> > > > displayed where available.
-> > > >
-> > > > Note, currently the result of each parameter run is displayed in
-> > > > diagnostic lines, and only the overall test case output summarizes
-> > > > TAP-compliant success or failure of all parameter runs. In future, when
-> > > > supported by kunit-tool, these can be turned into subsubtest outputs.
-> > > >
-> > > > Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
-> > > > Co-developed-by: Marco Elver <elver@google.com>
-> > > > Signed-off-by: Marco Elver <elver@google.com>
-> > > > ---
-> > > [Resending this because my email client re-defaulted to HTML! Aarrgh!]
-> > >
-> > > This looks good to me! I tested it in UML and x86-64 w/ KASAN, and
-> > > both worked fine.
-> > >
-> > > Reviewed-by: David Gow <davidgow@google.com>
-> > > Tested-by: David Gow <davidgow@google.com>
-> >
-> > Thank you!
-> >
-> > > Thanks for sticking with this!
-> >
-> > Will these patches be landing in 5.11 or 5.12?
-> >
->
-> I can't think of any reason not to have these in 5.11. We haven't
-> started staging things in the kselftest/kunit branch for 5.11 yet,
-> though.
->
-> Patch 2 will probably need to be acked by Ted for ext4 first.
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Patch 2 had already had 1 Reviewed-by on v3 that got lost. The core
-bits of that test haven't changed since then, but I can't tell if it
-needs a re-review.
+Hi,
 
-https://lkml.kernel.org/r/CAAXuY3o9Xe-atK0Mja6qXLncUhmmVf4pR7hsANsqaoUX71RXVg@mail.gmail.com
+This is an implementation of "secret" mappings backed by a file descriptor.
 
-Thanks,
--- Marco
+The file descriptor backing secret memory mappings is created using a
+dedicated memfd_secret system call The desired protection mode for the
+memory is configured using flags parameter of the system call. The mmap()
+of the file descriptor created with memfd_secret() will create a "secret"
+memory mapping. The pages in that mapping will be marked as not present in
+the direct map and will be present only in the page table of the owning mm.
 
-> Brendan, Shuah: can you make sure this doesn't get lost in patchwork?
->
-> Cheers,
-> -- David
->
-> > > -- David
-> >
-> > Thanks,
-> > -- Marco
+Although normally Linux userspace mappings are protected from other users,
+such secret mappings are useful for environments where a hostile tenant is
+trying to trick the kernel into giving them access to other tenants
+mappings.
+
+Additionally, in the future the secret mappings may be used as a mean to
+protect guest memory in a virtual machine host.
+
+For demonstration of secret memory usage we've created a userspace library
+
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/secret-memory-preloader.git
+
+that does two things: the first is act as a preloader for openssl to
+redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+keys get automatically protected this way and the other thing it does is
+expose the API to the user who needs it. We anticipate that a lot of the
+use cases would be like the openssl one: many toolkits that deal with
+secret keys already have special handling for the memory to try to give
+them greater protection, so this would simply be pluggable into the
+toolkits without any need for user application modification.
+
+Hiding secret memory mappings behind an anonymous file allows (ab)use of
+the page cache for tracking pages allocated for the "secret" mappings as
+well as using address_space_operations for e.g. page migration callbacks.
+
+The anonymous file may be also used implicitly, like hugetlb files, to
+implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+ABIs in the future.
+
+To limit fragmentation of the direct map to splitting only PUD-size pages,
+I've added an amortizing cache of PMD-size pages to each file descriptor
+that is used as an allocation pool for the secret memory areas.
+
+As the memory allocated by secretmem becomes unmovable, we use CMA to back
+large page caches so that page allocator won't be surprised by failing attempt
+to migrate these pages.
+
+v11:
+* Drop support for uncached mappings
+
+v10: https://lore.kernel.org/lkml/20201123095432.5860-1-rppt@kernel.org
+* Drop changes to arm64 compatibility layer
+* Add Roman's Ack for memcg accounting
+
+v9: https://lore.kernel.org/lkml/20201117162932.13649-1-rppt@kernel.org
+* Fix build with and without CONFIG_MEMCG
+* Update memcg accounting to avoid copying memcg_data, per Roman comments
+* Fix issues in secretmem_fault(), thanks Matthew
+* Do not wire up syscall in arm64 compatibility layer
+
+v8: https://lore.kernel.org/lkml/20201110151444.20662-1-rppt@kernel.org
+* Use CMA for all secretmem allocations as David suggested
+* Update memcg accounting after transtion to CMA
+* Prevent hibernation when there are active secretmem users
+* Add zeroing of the memory before releasing it back to cma/page allocator
+* Rebase on v5.10-rc2-mmotm-2020-11-07-21-40
+
+v7: https://lore.kernel.org/lkml/20201026083752.13267-1-rppt@kernel.org
+* Use set_direct_map() instead of __kernel_map_pages() to ensure error
+  handling in case the direct map update fails
+* Add accounting of large pages used to reduce the direct map fragmentation
+* Teach get_user_pages() and frieds to refuse get/pin secretmem pages
+
+v6: https://lore.kernel.org/lkml/20200924132904.1391-1-rppt@kernel.org
+* Silence the warning about missing syscall, thanks to Qian Cai
+* Replace spaces with tabs in Kconfig additions, per Randy
+* Add a selftest.
+
+Older history:
+v5: https://lore.kernel.org/lkml/20200916073539.3552-1-rppt@kernel.org
+v4: https://lore.kernel.org/lkml/20200818141554.13945-1-rppt@kernel.org
+v3: https://lore.kernel.org/lkml/20200804095035.18778-1-rppt@kernel.org
+v2: https://lore.kernel.org/lkml/20200727162935.31714-1-rppt@kernel.org
+v1: https://lore.kernel.org/lkml/20200720092435.17469-1-rppt@kernel.org
+
+Mike Rapoport (9):
+  mm: add definition of PMD_PAGE_ORDER
+  mmap: make mlock_future_check() global
+  set_memory: allow set_direct_map_*_noflush() for multiple pages
+  mm: introduce memfd_secret system call to create "secret" memory areas
+  secretmem: use PMD-size pages to amortize direct map fragmentation
+  secretmem: add memcg accounting
+  PM: hibernate: disable when there are active secretmem users
+  arch, mm: wire up memfd_secret system call were relevant
+  secretmem: test: add basic selftest for memfd_secret(2)
+
+ arch/arm64/include/asm/cacheflush.h       |   4 +-
+ arch/arm64/include/uapi/asm/unistd.h      |   1 +
+ arch/arm64/mm/pageattr.c                  |  10 +-
+ arch/riscv/include/asm/set_memory.h       |   4 +-
+ arch/riscv/include/asm/unistd.h           |   1 +
+ arch/riscv/mm/pageattr.c                  |   8 +-
+ arch/x86/Kconfig                          |   2 +-
+ arch/x86/entry/syscalls/syscall_32.tbl    |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ arch/x86/include/asm/set_memory.h         |   4 +-
+ arch/x86/mm/pat/set_memory.c              |   8 +-
+ fs/dax.c                                  |  11 +-
+ include/linux/pgtable.h                   |   3 +
+ include/linux/secretmem.h                 |  30 ++
+ include/linux/set_memory.h                |   4 +-
+ include/linux/syscalls.h                  |   1 +
+ include/uapi/asm-generic/unistd.h         |   6 +-
+ include/uapi/linux/magic.h                |   1 +
+ kernel/power/hibernate.c                  |   5 +-
+ kernel/power/snapshot.c                   |   4 +-
+ kernel/sys_ni.c                           |   2 +
+ mm/Kconfig                                |   5 +
+ mm/Makefile                               |   1 +
+ mm/filemap.c                              |   3 +-
+ mm/gup.c                                  |  10 +
+ mm/internal.h                             |   3 +
+ mm/mmap.c                                 |   5 +-
+ mm/secretmem.c                            | 436 ++++++++++++++++++++++
+ mm/vmalloc.c                              |   5 +-
+ scripts/checksyscalls.sh                  |   4 +
+ tools/testing/selftests/vm/.gitignore     |   1 +
+ tools/testing/selftests/vm/Makefile       |   3 +-
+ tools/testing/selftests/vm/memfd_secret.c | 298 +++++++++++++++
+ tools/testing/selftests/vm/run_vmtests    |  17 +
+ 34 files changed, 863 insertions(+), 39 deletions(-)
+ create mode 100644 include/linux/secretmem.h
+ create mode 100644 mm/secretmem.c
+ create mode 100644 tools/testing/selftests/vm/memfd_secret.c
+
+
+base-commit: 9f8ce377d420db12b19d6a4f636fecbd88a725a5
+-- 
+2.28.0
+
