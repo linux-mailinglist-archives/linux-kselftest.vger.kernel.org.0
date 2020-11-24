@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA0E2C34B8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Nov 2020 00:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E602C34F5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Nov 2020 00:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389128AbgKXXkU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Nov 2020 18:40:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40730 "EHLO mail.kernel.org"
+        id S2389755AbgKXXtH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Nov 2020 18:49:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727049AbgKXXkT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Nov 2020 18:40:19 -0500
+        id S1728749AbgKXXtG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Nov 2020 18:49:06 -0500
 Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 109AD2100A;
-        Tue, 24 Nov 2020 23:40:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 16FA42100A;
+        Tue, 24 Nov 2020 23:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606261219;
-        bh=giCpZGapcxWpM5p0nQyxtcjjwLKYdsIElIRJxgcHR+E=;
+        s=default; t=1606261746;
+        bh=UOVjsou1NphjeKLK7OSCErMOgnbH953scN8q24eTPyQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DhhL9D0L0jN7zbYoTf50IX2cDaQ7oQVFRWvKMwgHtiX02VQYa4OawQAvdK8UYN9IN
-         fWa73QsOHuMDFGcD3ROkq+U6TUq8WrXtMAjTDbvsMeuStzOYN9+bQ1s21nrqb9eOb9
-         iuelTHBrjusxomQUe/qyOrBnYXC4EH2TO1lQ8QZQ=
-Date:   Tue, 24 Nov 2020 15:40:17 -0800
+        b=wtrND54xp4J5NS8JQxIuumSPUvsXL4Eqlvr2g6OQMunUB/FUHwatgHDYQp7Y++/ob
+         umRua8Z62dCAye0fwBBnkzFBwcX8fM7Ln0k3ob4nbUrru0bhbQdGgf8HwmQV4o9zj0
+         k2n/rqtCj1pBnYOCD5Nuj0c5XhkGyfAR5kZTG0yc=
+Date:   Tue, 24 Nov 2020 15:49:04 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     Andrea Mayer <andrea.mayer@uniroma2.it>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -44,12 +44,11 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Stefano Salsano <stefano.salsano@uniroma2.it>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-Subject: Re: [net-next v3 5/8] seg6: add support for the SRv6 End.DT4
+Subject: Re: [net-next v3 0/8] seg6: add support for SRv6 End.DT4/DT6
  behavior
-Message-ID: <20201124154017.4b1a905c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201123182857.4640-6-andrea.mayer@uniroma2.it>
+Message-ID: <20201124154904.0699f4c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
 References: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
-        <20201123182857.4640-6-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -57,20 +56,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 23 Nov 2020 19:28:53 +0100 Andrea Mayer wrote:
-> +static int cmp_nla_vrftable(struct seg6_local_lwt *a, struct seg6_local_lwt *b)
-> +{
-> +	struct seg6_end_dt_info *info_a = seg6_possible_end_dt_info(a);
-> +	struct seg6_end_dt_info *info_b = seg6_possible_end_dt_info(b);
-> +
-> +	if (IS_ERR(info_a) || IS_ERR(info_b))
-> +		return 1;
+On Mon, 23 Nov 2020 19:28:48 +0100 Andrea Mayer wrote:
+> - Patch 1 is needed to solve a pre-existing issue with tunneled packets
+>   when a sniffer is attached;
+> 
+> - Patch 2 improves the management of the seg6local attributes used by the
+>   SRv6 behaviors;
+> 
+> - Patch 3 adds support for optional attributes in SRv6 behaviors;
+> 
+> - Patch 4 introduces two callbacks used for customizing the
+>   creation/destruction of a SRv6 behavior;
+> 
+> - Patch 5 is the core patch that adds support for the SRv6 End.DT4
+>   behavior;
+> 
+> - Patch 6 introduces the VRF support for SRv6 End.DT6 behavior;
+> 
+> - Patch 7 adds the selftest for SRv6 End.DT4 behavior;
+> 
+> - Patch 8 adds the selftest for SRv6 End.DT6 (VRF mode) behavior;
+> 
+> - Patch 9 adds the vrftable attribute for End.DT4/DT6 behaviors in iproute2.
 
-Isn't this impossible? I thought cmp() can only be called on fully
-created lwtunnels and if !CONFIG_NET_L3_MASTER_DEV the tunnel won't 
-be created?
+LGTM! Please address the nit and repost without the iproute2 patch.
+Mixing the iproute2 patch in has confused patchwork:
 
-> +	if (info_a->vrf_table != info_b->vrf_table)
-> +		return 1;
-> +
-> +	return 0;
+https://patchwork.kernel.org/project/netdevbpf/list/?series=389667&state=*
+
+Note how it thinks that the iproute2 patch is part of the kernel
+series. This build bot-y thing is pretty new. I'll add a suggestion 
+to our process documentation not to mix patches.
+
+> I would like to thank David Ahern for his support during the development of
+> this patchset.
+
+Should I take this to mean that David has review the code off-list?
+
