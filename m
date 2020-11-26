@@ -2,94 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5812C51B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Nov 2020 11:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FEA2C5D7D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Nov 2020 22:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387517AbgKZKAV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Nov 2020 05:00:21 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:39313 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387445AbgKZKAV (ORCPT
+        id S2387960AbgKZVXK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Nov 2020 16:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387950AbgKZVXJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Nov 2020 05:00:21 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kiE4V-0000Yn-Ar; Thu, 26 Nov 2020 10:00:15 +0000
-Date:   Thu, 26 Nov 2020 11:00:12 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Xingxing Su <suxingxing@loongson.cn>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/clone3: Add gun99 to compile in Makefile.
-Message-ID: <20201126100012.hy6fhores67tnekv@wittgenstein>
-References: <1606374734-12639-1-git-send-email-suxingxing@loongson.cn>
+        Thu, 26 Nov 2020 16:23:09 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65221C0613D4;
+        Thu, 26 Nov 2020 13:23:09 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id x17so2714976ybr.8;
+        Thu, 26 Nov 2020 13:23:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hz6mv8RV7nsFp0fyTqpx+yOQXohdxFFGiPrYz7iKxiQ=;
+        b=i/O81SQNN3ngSC9cwkTouRr0V6dQJfYD+fTCxob+UFOWcOtmtjkKWWAokvEVNPH+XZ
+         3wLeXA1Q+FWkc3AqzuZnSq5KyDhKHBzgvwSq5DsZL3UNVLABTHtphAD/EMPQecZu7q+C
+         IS1G2xANrPHWg62WZVyrjVJxshDgwgMRtMTLitRV1MouMDGC7QYai/8bvxJ5KuF8sY+/
+         5hLDstIaNJfs8y4NQB0dHkZbxGEJ8mULJvSf02IS5t/vQskmynFGmlGFbCYv+cDsPxJm
+         XzJ9yFNNdBpeBS0AdaEGuRd1Ufzg8A7M2XwJSkhp+LfvqCzSjUXLUQ9GlmKhEu2A+QCT
+         mxaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hz6mv8RV7nsFp0fyTqpx+yOQXohdxFFGiPrYz7iKxiQ=;
+        b=mPgCCmcel7z2WcI8VV6b/+mkwcp2qklMKc8cbg04J9je0G8mrAlm4rbN+2ywy/hOOq
+         2Iu2nsH7JQLB1i1b/xrRhCKF8l+2OG0kXJyUs1Rr9vtAK9EXuKzj9czvxdAApqWsRGLD
+         0fjrI3clANwSGTs52O9VeCYsm/9JSzgtcH4ZTcp4X4/Ol5T/pQ9ZzzFMgS3ky0E4I2Ar
+         3xbRZm9MAJRqMDdAr+rC4AGp+zIYUrzrilt1ef2XFo+qDSE+J22gKESo8RGgG0YO9x/9
+         oJIUM6fqeR1NVb4PxO+OAIAnOplnH7lq2IifqCJDboNFvWybrjhBbG+1hlp4y7Ndi+/q
+         tJfQ==
+X-Gm-Message-State: AOAM530gwnICZYoMWYvdlKrYyszRFsj1LmZYUFmYvGotnR+NXk8uFlst
+        8dX1Z2Q0HePHHAwMjH5OgbYLyB39mahv03N/tGI=
+X-Google-Smtp-Source: ABdhPJzcHAGGZ3faJp/lkSCCOsVMenQdbyAZ17A8/LHktD+pWcWIwmtY3WQ7IYrKiLfdX1r/7PBSG5WuDZLVrDCzYvs=
+X-Received: by 2002:a25:7444:: with SMTP id p65mr5297714ybc.149.1606425788584;
+ Thu, 26 Nov 2020 13:23:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1606374734-12639-1-git-send-email-suxingxing@loongson.cn>
+References: <20201125183749.13797-1-weqaar.a.janjua@intel.com>
+ <20201125183749.13797-2-weqaar.a.janjua@intel.com> <d8eedbad-7a8e-fd80-5fec-fc53b86e6038@fb.com>
+ <1bcfb208-dfbd-7b49-e505-8ec17697239d@intel.com>
+In-Reply-To: <1bcfb208-dfbd-7b49-e505-8ec17697239d@intel.com>
+From:   Weqaar Janjua <weqaar.janjua@gmail.com>
+Date:   Thu, 26 Nov 2020 21:22:42 +0000
+Message-ID: <CAPLEeBYnYcWALN_JMBtZWt3uDnpYNtCA_HVLN6Gi7VbVk022xw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/5] selftests/bpf: xsk selftests framework
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        ast@kernel.org, Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        jonathan.lemon@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 03:12:14PM +0800, Xingxing Su wrote:
-> CFLAGS add -std=gnu99.
-> 
-> Fllowing build error:
-> 
-> test_core.c: In function ‘test_cgcore_destroy’:
-> test_core.c:87:2: error: ‘for’ loop initial declarations are only
-> allowed in C99 mode
->   for (int i = 0; i < 10; i++) {
->   ^
-> test_core.c:87:2: note: use option -std=c99 or -std=gnu99 to compile
-> your code
-> 
-> Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
-> ---
+On Thu, 26 Nov 2020 at 09:01, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>=
+ wrote:
+>
+> On 2020-11-26 07:44, Yonghong Song wrote:
+> >
+> [...]
+> >
+> > What other configures I am missing?
+> >
+> > BTW, I cherry-picked the following pick from bpf tree in this experimen=
+t.
+> >    commit e7f4a5919bf66e530e08ff352d9b78ed89574e6b (HEAD -> xsk)
+> >    Author: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> >    Date:   Mon Nov 23 18:56:00 2020 +0100
+> >
+> >        net, xsk: Avoid taking multiple skbuff references
+> >
+>
+> Hmm, I'm getting an oops, unless I cherry-pick:
+>
+> 36ccdf85829a ("net, xsk: Avoid taking multiple skbuff references")
+>
+> *AND*
+>
+> 537cf4e3cc2f ("xsk: Fix umem cleanup bug at socket destruct")
+>
+> from bpf/master.
+>
 
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Same as Bjorn's findings ^^^, additionally applying the second patch
+537cf4e3cc2f [PASS] all tests for me
 
-Seems alright to me and apparently some selftests already set. Though
-another option would be to just move the declaration. But I don't think
-it matters that much here.
+PREREQUISITES: [ PASS ]
+SKB NOPOLL: [ PASS ]
+SKB POLL: [ PASS ]
+DRV NOPOLL: [ PASS ]
+DRV POLL: [ PASS ]
+SKB SOCKET TEARDOWN: [ PASS ]
+DRV SOCKET TEARDOWN: [ PASS ]
+SKB BIDIRECTIONAL SOCKETS: [ PASS ]
+DRV BIDIRECTIONAL SOCKETS: [ PASS ]
 
-I'd change the commit message slightly though:
+With the first patch alone, as soon as we enter DRV/Native NOPOLL mode
+kernel panics, whereas in your case NOPOLL tests were falling with
+packets being *lost* as per seqnum mismatch.
 
-[PATCH] selftests/clone3: Fix build error
+Can you please test this out with both patches and let us know?
 
-When compiling the selftests with the -std=gnu99 option the build can
-fail with
+> Can I just run test_xsk.sh at tools/testing/selftests/bpf/ directory?
+> This will be easier than the above for bpf developers. If it does not
+> work, I would like to recommend to make it work.
+>
+yes test_xsk.shis self contained, will update the instructions in there wit=
+h v4.
 
-  Fllowing build error:
-  
-  test_core.c: In function ‘test_cgcore_destroy’:
-  test_core.c:87:2: error: ‘for’ loop initial declarations are only
-  allowed in C99 mode
-    for (int i = 0; i < 10; i++) {
-    ^
-  test_core.c:87:2: note: use option -std=c99 or -std=gnu99 to compile
-
-Add -std=gnu99 to the clone3 selftest Makefile to fix this.
-
-
->  tools/testing/selftests/clone3/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
-> index ef7564c..88354a8 100644
-> --- a/tools/testing/selftests/clone3/Makefile
-> +++ b/tools/testing/selftests/clone3/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -CFLAGS += -g -I../../../../usr/include/
-> +CFLAGS += -g -std=gnu99 -I../../../../usr/include/ 
->  LDLIBS += -lcap
->  
->  TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
-> -- 
-> 1.8.3.1
-> 
+Thanks,
+/Weqaar
+>
+> Bj=C3=B6rn
