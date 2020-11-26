@@ -2,78 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DED542C50DA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Nov 2020 10:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5812C51B7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Nov 2020 11:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389115AbgKZJBw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Nov 2020 04:01:52 -0500
-Received: from mga17.intel.com ([192.55.52.151]:54767 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389113AbgKZJBw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Nov 2020 04:01:52 -0500
-IronPort-SDR: MKOQ9KHPtpkrGGxs00kL5YF6pwpdnLFjYNC70q58Mr+R4kvwjauEqoLO0mbbIOA5aJXetjFybZ
- CUBCVQeh0bCg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="152092657"
-X-IronPort-AV: E=Sophos;i="5.78,371,1599548400"; 
-   d="scan'208";a="152092657"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2020 01:01:52 -0800
-IronPort-SDR: nYkBRYDqIxwypCIERqVk4pm6PF1s7RxyyN2qOGILkoSIxeI4lMwp3BKxfWODlLGSo7isrPgz0S
- 3zf3wbpbZfig==
-X-IronPort-AV: E=Sophos;i="5.78,371,1599548400"; 
-   d="scan'208";a="547641737"
-Received: from vyevtyus-mobl1.ccr.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.42.21])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2020 01:01:34 -0800
-Subject: Re: [PATCH bpf-next v3 1/5] selftests/bpf: xsk selftests framework
-To:     Yonghong Song <yhs@fb.com>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        magnus.karlsson@gmail.com
-Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        anders.roxell@linaro.org, jonathan.lemon@gmail.com
-References: <20201125183749.13797-1-weqaar.a.janjua@intel.com>
- <20201125183749.13797-2-weqaar.a.janjua@intel.com>
- <d8eedbad-7a8e-fd80-5fec-fc53b86e6038@fb.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <1bcfb208-dfbd-7b49-e505-8ec17697239d@intel.com>
-Date:   Thu, 26 Nov 2020 10:01:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
+        id S2387517AbgKZKAV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Nov 2020 05:00:21 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:39313 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387445AbgKZKAV (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 26 Nov 2020 05:00:21 -0500
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kiE4V-0000Yn-Ar; Thu, 26 Nov 2020 10:00:15 +0000
+Date:   Thu, 26 Nov 2020 11:00:12 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Xingxing Su <suxingxing@loongson.cn>
+Cc:     Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/clone3: Add gun99 to compile in Makefile.
+Message-ID: <20201126100012.hy6fhores67tnekv@wittgenstein>
+References: <1606374734-12639-1-git-send-email-suxingxing@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <d8eedbad-7a8e-fd80-5fec-fc53b86e6038@fb.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <1606374734-12639-1-git-send-email-suxingxing@loongson.cn>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-11-26 07:44, Yonghong Song wrote:
+On Thu, Nov 26, 2020 at 03:12:14PM +0800, Xingxing Su wrote:
+> CFLAGS add -std=gnu99.
 > 
-[...]
+> Fllowing build error:
 > 
-> What other configures I am missing?
+> test_core.c: In function ‘test_cgcore_destroy’:
+> test_core.c:87:2: error: ‘for’ loop initial declarations are only
+> allowed in C99 mode
+>   for (int i = 0; i < 10; i++) {
+>   ^
+> test_core.c:87:2: note: use option -std=c99 or -std=gnu99 to compile
+> your code
 > 
-> BTW, I cherry-picked the following pick from bpf tree in this experiment.
->    commit e7f4a5919bf66e530e08ff352d9b78ed89574e6b (HEAD -> xsk)
->    Author: Björn Töpel <bjorn.topel@intel.com>
->    Date:   Mon Nov 23 18:56:00 2020 +0100
+> Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
+> ---
+
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+
+Seems alright to me and apparently some selftests already set. Though
+another option would be to just move the declaration. But I don't think
+it matters that much here.
+
+I'd change the commit message slightly though:
+
+[PATCH] selftests/clone3: Fix build error
+
+When compiling the selftests with the -std=gnu99 option the build can
+fail with
+
+  Fllowing build error:
+  
+  test_core.c: In function ‘test_cgcore_destroy’:
+  test_core.c:87:2: error: ‘for’ loop initial declarations are only
+  allowed in C99 mode
+    for (int i = 0; i < 10; i++) {
+    ^
+  test_core.c:87:2: note: use option -std=c99 or -std=gnu99 to compile
+
+Add -std=gnu99 to the clone3 selftest Makefile to fix this.
+
+
+>  tools/testing/selftests/clone3/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->        net, xsk: Avoid taking multiple skbuff references
->
-
-Hmm, I'm getting an oops, unless I cherry-pick:
-
-36ccdf85829a ("net, xsk: Avoid taking multiple skbuff references")
-
-*AND*
-
-537cf4e3cc2f ("xsk: Fix umem cleanup bug at socket destruct")
-
-from bpf/master.
-
-
-Björn
+> diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
+> index ef7564c..88354a8 100644
+> --- a/tools/testing/selftests/clone3/Makefile
+> +++ b/tools/testing/selftests/clone3/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS += -g -I../../../../usr/include/
+> +CFLAGS += -g -std=gnu99 -I../../../../usr/include/ 
+>  LDLIBS += -lcap
+>  
+>  TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
+> -- 
+> 1.8.3.1
+> 
