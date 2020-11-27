@@ -2,92 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9472C6903
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 16:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE942C6AA9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 18:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729169AbgK0PzZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Nov 2020 10:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728495AbgK0PzY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Nov 2020 10:55:24 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4E5C0613D1;
-        Fri, 27 Nov 2020 07:55:24 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id v92so4927807ybi.4;
-        Fri, 27 Nov 2020 07:55:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OXr+s5wAAmU9q3J5K/pMxQtkv/iCji6oBFIpmoY8EgU=;
-        b=i8TlO/HSrIZgKHzub2Hkh91MLq6st6QSaekpQByjGZrJpv1XY0neQO2ef8ged8QYKT
-         mgRqw9QF3RrXK2LkdBc3z3quag556lJnifjP1/6NoKnkgi4Ey8tMkT8n6nQx5Dzs42IX
-         MEAiOwMggWPv9nhbQ2CEV1lqvw3GPfp0L2zk7Mke/zgnt7oc/YLWT2U04RD9p1j/dbk1
-         prPugYZEgA6xu3qIAkFkxH4NUf0v0kosbhheWtUdyIg7BDhvfH870QDFY8YHSmqG4TC7
-         Vgg2sYrlLRzXN/mqI8f3zt3o1dOprEssbaAdl7AufRg7tIWkKlKhe9vhjnlOsDwZ7MPV
-         Vqjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OXr+s5wAAmU9q3J5K/pMxQtkv/iCji6oBFIpmoY8EgU=;
-        b=o/5zk7XqF3KliZPF51QWINWcEn9wleUekpNQtWo4SH5wb0/gx2ewSoyvPdYu+BqYLw
-         BenVqhF27FtRymbAPJyuHQ5yqpqr6wAgl/3hw82Wdiy83UybgvdV+dWH7MWo1uFNHqTw
-         fjNt6AuSHCQfwwJTt7pfxkJ0ySkUvtnHPcg6vEz8NBoHPYNw2iw868o3CvqZEvFEF1nD
-         7R7tBFNwawgDXz82DV2z81DUTWFQa5ciBT55VJn2HhBot+sq/UgzLcQmrceu2nISMzUk
-         aZIAlfzv5YyBWos6IMi6n1GNiZua5rzI/WHcbSz8/h9OPEvKkC1esRGR+7/S5hUfHFsp
-         C7yg==
-X-Gm-Message-State: AOAM531ERTRFWWTfiCCJqRT2DbJXEHHL16KD1aTAmZ3lx6KtyOGvpgNz
-        i9SoLwwE0dfFEZ0klOq9mZXbHXyNvM8MuMafCpbVQa1vvVu47A==
-X-Google-Smtp-Source: ABdhPJyXmEKyWzC59hbBxUJqm85YZ2F5NFkm6gYoisaDevi695oBAQHt9/vpckMGq4moEpoQrAtQNC2b2N6x+m/6t5g=
-X-Received: by 2002:a25:df55:: with SMTP id w82mr9664030ybg.135.1606492523532;
- Fri, 27 Nov 2020 07:55:23 -0800 (PST)
+        id S1732303AbgK0Rcc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Nov 2020 12:32:32 -0500
+Received: from mx2.suse.de ([195.135.220.15]:60230 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730603AbgK0Rcc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Nov 2020 12:32:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id A5E57ABD7;
+        Fri, 27 Nov 2020 17:32:30 +0000 (UTC)
+Date:   Fri, 27 Nov 2020 18:32:29 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org, len.brown@intel.com, dave.hansen@intel.com,
+        hjl.tools@gmail.com, Dave.Martin@arm.com, mpe@ellerman.id.au,
+        tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] selftest/x86/signal: Include test cases for
+ validating sigaltstack
+Message-ID: <20201127173229.GA13262@zn.tnic>
+References: <20201119190237.626-1-chang.seok.bae@intel.com>
+ <20201119190237.626-5-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-References: <20201121194339.52290-1-masahiroy@kernel.org>
-In-Reply-To: <20201121194339.52290-1-masahiroy@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 27 Nov 2020 16:55:12 +0100
-Message-ID: <CANiq72=oFrCtd1rYw3p=AUyp6WzLoMqE2iC-2M9ndcBWBMfzFg@mail.gmail.com>
-Subject: Re: [PATCH] compiler_attribute: remove CONFIG_ENABLE_MUST_CHECK
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201119190237.626-5-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Nov 21, 2020 at 8:44 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Revert commit cebc04ba9aeb ("add CONFIG_ENABLE_MUST_CHECK").
->
-> A lot of warn_unused_result warnings existed in 2006, but until now
-> they have been fixed thanks to people doing allmodconfig tests.
->
-> Our goal is to always enable __must_check where appreciate, so this
-> CONFIG option is no longer needed.
->
-> I see a lot of defconfig (arch/*/configs/*_defconfig) files having:
->
->     # CONFIG_ENABLE_MUST_CHECK is not set
->
-> I did not touch them for now since it would be a big churn. If arch
-> maintainers want to clean them up, please go ahead.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Thu, Nov 19, 2020 at 11:02:37AM -0800, Chang S. Bae wrote:
+> +static void test_sigaltstack(void *altstack, unsigned long size)
+> +{
+> +	if (setup_altstack(altstack, size))
+> +		err(1, "sigaltstack()");
+> +
+> +	sigalrm_expected = (size > at_minstack_size) ? true : false;
+> +
+> +	sethandler(SIGSEGV, sigsegv, 0);
+> +	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
+> +
+> +	if (sigsetjmp(jmpbuf, 1) == 0) {
+> +		printf("[RUN]\tTest an %s sigaltstack\n",
 
-Picked it up through compiler-attributes with the "appreciate" typo
-fixed on my end. I did a quick compile-test with a minimal config.
-Let's see if the -next bots complain...
+[RUN]   Test an enough sigaltstack
 
-Thanks!
+That's not english, pls try again.
 
-Cheers,
-Miguel
+[OK]    SIGALRM signal expectedly delivered.
+
+What is "expectedly delivered"?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
