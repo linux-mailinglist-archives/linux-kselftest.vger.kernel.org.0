@@ -2,192 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAA42C637D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 11:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9472C6903
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 16:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727518AbgK0Kyp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Nov 2020 05:54:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31814 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726471AbgK0Kyp (ORCPT
+        id S1729169AbgK0PzZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Nov 2020 10:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728495AbgK0PzY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Nov 2020 05:54:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606474483;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ouvI00UbI/uzDqEObWfu8c5eamHZNFtUjMgSLpP+1nc=;
-        b=TaetW1pga+DdLku+NWRiZ6Do1Uz+WPc21OZFle9NubMQtEqz5tk26kI2GDQJAxfzuDLLzO
-        bsHvzg3lCR1jBikPOHMdl1LbbSNU3umA0N40bJBNxsmH8FGp68y3bSKedNUY5xrc/5iTWO
-        M0+JD/FJM49KW5vdbC6z3DXY066GDpI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-185-LK5kzVwhMMOgZRpiIqXEoA-1; Fri, 27 Nov 2020 05:54:40 -0500
-X-MC-Unique: LK5kzVwhMMOgZRpiIqXEoA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F0DC48049C7;
-        Fri, 27 Nov 2020 10:54:38 +0000 (UTC)
-Received: from yoda.fritz.box (unknown [10.40.192.235])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5DA6D60BF1;
-        Fri, 27 Nov 2020 10:54:37 +0000 (UTC)
-Date:   Fri, 27 Nov 2020 11:54:34 +0100
-From:   Antonio Cardace <acardace@redhat.com>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        kuba@kernel.org, shuah@kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH] tools/testing: add kselftest shell helper library
-Message-ID: <20201127105434.vwojcml2lpa7zvqi@yoda.fritz.box>
-References: <20201123162508.585279-1-willemdebruijn.kernel@gmail.com>
+        Fri, 27 Nov 2020 10:55:24 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4E5C0613D1;
+        Fri, 27 Nov 2020 07:55:24 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id v92so4927807ybi.4;
+        Fri, 27 Nov 2020 07:55:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OXr+s5wAAmU9q3J5K/pMxQtkv/iCji6oBFIpmoY8EgU=;
+        b=i8TlO/HSrIZgKHzub2Hkh91MLq6st6QSaekpQByjGZrJpv1XY0neQO2ef8ged8QYKT
+         mgRqw9QF3RrXK2LkdBc3z3quag556lJnifjP1/6NoKnkgi4Ey8tMkT8n6nQx5Dzs42IX
+         MEAiOwMggWPv9nhbQ2CEV1lqvw3GPfp0L2zk7Mke/zgnt7oc/YLWT2U04RD9p1j/dbk1
+         prPugYZEgA6xu3qIAkFkxH4NUf0v0kosbhheWtUdyIg7BDhvfH870QDFY8YHSmqG4TC7
+         Vgg2sYrlLRzXN/mqI8f3zt3o1dOprEssbaAdl7AufRg7tIWkKlKhe9vhjnlOsDwZ7MPV
+         Vqjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OXr+s5wAAmU9q3J5K/pMxQtkv/iCji6oBFIpmoY8EgU=;
+        b=o/5zk7XqF3KliZPF51QWINWcEn9wleUekpNQtWo4SH5wb0/gx2ewSoyvPdYu+BqYLw
+         BenVqhF27FtRymbAPJyuHQ5yqpqr6wAgl/3hw82Wdiy83UybgvdV+dWH7MWo1uFNHqTw
+         fjNt6AuSHCQfwwJTt7pfxkJ0ySkUvtnHPcg6vEz8NBoHPYNw2iw868o3CvqZEvFEF1nD
+         7R7tBFNwawgDXz82DV2z81DUTWFQa5ciBT55VJn2HhBot+sq/UgzLcQmrceu2nISMzUk
+         aZIAlfzv5YyBWos6IMi6n1GNiZua5rzI/WHcbSz8/h9OPEvKkC1esRGR+7/S5hUfHFsp
+         C7yg==
+X-Gm-Message-State: AOAM531ERTRFWWTfiCCJqRT2DbJXEHHL16KD1aTAmZ3lx6KtyOGvpgNz
+        i9SoLwwE0dfFEZ0klOq9mZXbHXyNvM8MuMafCpbVQa1vvVu47A==
+X-Google-Smtp-Source: ABdhPJyXmEKyWzC59hbBxUJqm85YZ2F5NFkm6gYoisaDevi695oBAQHt9/vpckMGq4moEpoQrAtQNC2b2N6x+m/6t5g=
+X-Received: by 2002:a25:df55:: with SMTP id w82mr9664030ybg.135.1606492523532;
+ Fri, 27 Nov 2020 07:55:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201123162508.585279-1-willemdebruijn.kernel@gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+References: <20201121194339.52290-1-masahiroy@kernel.org>
+In-Reply-To: <20201121194339.52290-1-masahiroy@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 27 Nov 2020 16:55:12 +0100
+Message-ID: <CANiq72=oFrCtd1rYw3p=AUyp6WzLoMqE2iC-2M9ndcBWBMfzFg@mail.gmail.com>
+Subject: Re: [PATCH] compiler_attribute: remove CONFIG_ENABLE_MUST_CHECK
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 11:25:08AM -0500, Willem de Bruijn wrote:
-> From: Willem de Bruijn <willemb@google.com>
-> 
-> Kselftest expects processes to signal pass/fail/skip through exitcode.
-> 
-> C programs can include kselftest.h for readable definitions.
-> 
-> Add analogous kselftest.sh for shell tests. Extract the existing
-> definitions from udpgso_bench.sh.
-> 
-> Tested: make TARGETS=net kselftest
-> Link: https://patchwork.kernel.org/project/netdevbpf/patch/20201113231655.139948-4-acardace@redhat.com/
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> 
-> ---
-> 
-> applies cleanly to netnext (f9e425e99b07) and kselftest (v5.10-rc1)
-> ---
->  tools/testing/selftests/kselftest.sh        | 52 +++++++++++++++++++++
->  tools/testing/selftests/net/udpgso_bench.sh | 42 +----------------
->  2 files changed, 53 insertions(+), 41 deletions(-)
->  create mode 100644 tools/testing/selftests/kselftest.sh
-> 
-> diff --git a/tools/testing/selftests/kselftest.sh b/tools/testing/selftests/kselftest.sh
-> new file mode 100644
-> index 000000000000..c5a1cff57402
-> --- /dev/null
-> +++ b/tools/testing/selftests/kselftest.sh
-> @@ -0,0 +1,52 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# kselftest shell test support library
-> +#
-> +# - Define pass/fail/skip exitcodes
-> +# - Multiprocess support: aggregate child process results
-> +
-> +readonly KSFT_PASS=0
-> +readonly KSFT_FAIL=1
-> +readonly KSFT_SKIP=4
-> +
-> +readonly GREEN='\033[0;92m'
-> +readonly YELLOW='\033[0;33m'
-> +readonly RED='\033[0;31m'
-> +readonly NC='\033[0m' # No Color
-> +
-> +num_pass=0
-> +num_err=0
-> +num_skip=0
-> +
-> +# Test child process exit code, add to aggregates.
-> +kselftest_test_exitcode() {
-> +	local -r exitcode=$1
-> +
-> +	if [[ ${exitcode} -eq ${KSFT_PASS} ]]; then
-> +		num_pass=$(( $num_pass + 1 ))
-> +	elif [[ ${exitcode} -eq ${KSFT_SKIP} ]]; then
-> +		num_skip=$(( $num_skip + 1 ))
-> +	else
-> +		num_err=$(( $num_err + 1 ))
-> +	fi
-> +}
-> +
-> +# Exit from main process.
-> +kselftest_exit() {
-> +	echo -e "$(basename $0): PASS=${num_pass} SKIP=${num_skip} FAIL=${num_err}"
-> +
-> +	if [[ $num_err -ne 0 ]]; then
-> +		echo -e "$(basename $0): ${RED}FAIL${NC}"
-> +		exit ${KSFT_FAIL}
-> +	fi
-> +
-> +	if [[ $num_skip -ne 0 ]]; then
-> +		echo -e "$(basename $0): ${YELLOW}SKIP${NC}"
-> +		exit ${KSFT_SKIP}
-> +	fi
-> +
-> +	echo -e "$(basename $0): ${GREEN}PASS${NC}"
-> +	exit ${KSFT_PASS}
-> +}
-> +
-> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-> index 80b5d352702e..c1f9affe6cf0 100755
-> --- a/tools/testing/selftests/net/udpgso_bench.sh
-> +++ b/tools/testing/selftests/net/udpgso_bench.sh
-> @@ -3,47 +3,7 @@
->  #
->  # Run a series of udpgso benchmarks
-> 
-> -readonly GREEN='\033[0;92m'
-> -readonly YELLOW='\033[0;33m'
-> -readonly RED='\033[0;31m'
-> -readonly NC='\033[0m' # No Color
-> -
-> -readonly KSFT_PASS=0
-> -readonly KSFT_FAIL=1
-> -readonly KSFT_SKIP=4
-> -
-> -num_pass=0
-> -num_err=0
-> -num_skip=0
-> -
-> -kselftest_test_exitcode() {
-> -	local -r exitcode=$1
-> -
-> -	if [[ ${exitcode} -eq ${KSFT_PASS} ]]; then
-> -		num_pass=$(( $num_pass + 1 ))
-> -	elif [[ ${exitcode} -eq ${KSFT_SKIP} ]]; then
-> -		num_skip=$(( $num_skip + 1 ))
-> -	else
-> -		num_err=$(( $num_err + 1 ))
-> -	fi
-> -}
-> -
-> -kselftest_exit() {
-> -	echo -e "$(basename $0): PASS=${num_pass} SKIP=${num_skip} FAIL=${num_err}"
-> -
-> -	if [[ $num_err -ne 0 ]]; then
-> -		echo -e "$(basename $0): ${RED}FAIL${NC}"
-> -		exit ${KSFT_FAIL}
-> -	fi
-> -
-> -	if [[ $num_skip -ne 0 ]]; then
-> -		echo -e "$(basename $0): ${YELLOW}SKIP${NC}"
-> -		exit ${KSFT_SKIP}
-> -	fi
-> -
-> -	echo -e "$(basename $0): ${GREEN}PASS${NC}"
-> -	exit ${KSFT_PASS}
-> -}
-> +source "$(dirname $0)/../kselftest.sh"
-> 
->  wake_children() {
->  	local -r jobs="$(jobs -p)"
-> --
-> 2.29.2.454.gaff20da3a2-goog
-> 
+On Sat, Nov 21, 2020 at 8:44 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Revert commit cebc04ba9aeb ("add CONFIG_ENABLE_MUST_CHECK").
+>
+> A lot of warn_unused_result warnings existed in 2006, but until now
+> they have been fixed thanks to people doing allmodconfig tests.
+>
+> Our goal is to always enable __must_check where appreciate, so this
+> CONFIG option is no longer needed.
+>
+> I see a lot of defconfig (arch/*/configs/*_defconfig) files having:
+>
+>     # CONFIG_ENABLE_MUST_CHECK is not set
+>
+> I did not touch them for now since it would be a big churn. If arch
+> maintainers want to clean them up, please go ahead.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Reviewed-by: Antonio Cardace <acardace@redhat>
+Picked it up through compiler-attributes with the "appreciate" typo
+fixed on my end. I did a quick compile-test with a minimal config.
+Let's see if the -next bots complain...
 
+Thanks!
+
+Cheers,
+Miguel
