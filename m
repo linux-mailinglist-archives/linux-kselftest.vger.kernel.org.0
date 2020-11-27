@@ -2,100 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDFB2C5FE3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 06:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD232C614D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 10:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392503AbgK0FuH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Nov 2020 00:50:07 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:45814 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389456AbgK0FuH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Nov 2020 00:50:07 -0500
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax6tCDk8BfNVkXAA--.44638S2;
-        Fri, 27 Nov 2020 13:49:56 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tools: selftests: Add missing munmap() in check_error_paths()
-Date:   Fri, 27 Nov 2020 13:49:55 +0800
-Message-Id: <1606456195-23965-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Ax6tCDk8BfNVkXAA--.44638S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFWrJFy8ur1fJFyxKr17ZFb_yoW8XrW7p3
-        yIg34v9F4IgF12qF47tr4DWF4Y9ry7Jay7Gw1fKw1jyF1UAr9xXrWftFy0qr4fGrZ5X393
-        CFsrJayfAryUArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4rMxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU45l8UUUUU
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+        id S1727107AbgK0JCA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Nov 2020 04:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726127AbgK0JCA (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Nov 2020 04:02:00 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33CAC0613D1;
+        Fri, 27 Nov 2020 01:01:59 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id v92so3908062ybi.4;
+        Fri, 27 Nov 2020 01:01:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LnzhICHZdVFLZlXj95yT8QtqDM8n8lX7RfvjyfJwSFA=;
+        b=FeBsvxyFG9UcDjSAKCxJV/QxRTA10Si4PGHoyP3c3m/3Xg7iYM8Y2wytEM09gIenyg
+         EgA5bsozFyhI0y0y3iM2jhRSSCBl5GFsPf/KF4+IbL/YLpw/VGGaTq60eOW8Lf1MzR4s
+         Sl/JrllstO4dmPddOZ10nZTkh/jcyLoIAusw8XViqHi1qEHzpxp2FpVA4VwUxJ13/LUI
+         6BToXfKX+NcMOJS/Ryrnd9MbfdwT9Qaq7VJBrqggAWT4zgbHPUFfkNYP7owHPjz+eJcb
+         h24pTUpZqmb/UcGLgiVVtciHEsepIEL3jJWI4WCjkWv6gevaQg4xtPhE/rR0p13z/WrP
+         kEyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LnzhICHZdVFLZlXj95yT8QtqDM8n8lX7RfvjyfJwSFA=;
+        b=H3HuNBFOE/3t2LSfpVg9D7510RUgtizqbwd2l5Sql5saCjJeX5baogpkQcQGp0Ah9E
+         9Ztt0iNBgjI3qiW5U07oJodVKGwrusmNep7G8rSwWoIqFfqTvvWHtqCfw3q1nHYTNYYf
+         Hmtp0CdND/26XjKq0sWxg6Oq+9kWGmjz3uOU6ctcrDLxdRXBjmPQV/t+uy69u3BYXmq+
+         ZeftFgJiHp/Gk8aBXP4zcJyz9QpMwyX1Xf1C7f7/lAyts2PxnASlD1MDFkxevLDfNCaw
+         mghjHgiKIzo+6UFCZ05OXRKfb6zu60gsnbfOpMTHITe07GCfhaXmU79zdlpoK7wm6AuG
+         yzpg==
+X-Gm-Message-State: AOAM530+Oc/bbjpx2FCJFzHt6rLp8RCHJk5JoZ5WPhe7lVMRhdu1FaeX
+        o2XN/h7O4/uFHhuGP6YPO5SzC3/KknuaTeIaews=
+X-Google-Smtp-Source: ABdhPJwTmui02y1nPZ7LC9rD05l67WNMzWm1CvYwnnDWCYehiWvLvq5nhP3VIM+eg+1zizBGNUlPAmWYE3GtylJz3ok=
+X-Received: by 2002:a5b:c0e:: with SMTP id f14mr10934570ybq.83.1606467718968;
+ Fri, 27 Nov 2020 01:01:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20201125183749.13797-1-weqaar.a.janjua@intel.com>
+ <20201125183749.13797-3-weqaar.a.janjua@intel.com> <394e96ea-cf70-90e1-599e-eef8e613eef8@fb.com>
+In-Reply-To: <394e96ea-cf70-90e1-599e-eef8e613eef8@fb.com>
+From:   Weqaar Janjua <weqaar.janjua@gmail.com>
+Date:   Fri, 27 Nov 2020 09:01:33 +0000
+Message-ID: <CAPLEeBZ3cd_cAw1fH0bT+CMWEA7xNXWTL7+9iwqN=CqfPp0cQA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/5] selftests/bpf: xsk selftests - SKB POLL, NOPOLL
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        jonathan.lemon@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add the missing munmap(addr_ro, PAGE_SIZE) before return.
+On Fri, 27 Nov 2020 at 04:31, Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 11/25/20 10:37 AM, Weqaar Janjua wrote:
+> > Adds following tests:
+> >
+> > 1. AF_XDP SKB mode
+> >     Generic mode XDP is driver independent, used when the driver does
+> >     not have support for XDP. Works on any netdevice using sockets and
+> >     generic XDP path. XDP hook from netif_receive_skb().
+> >     a. nopoll - soft-irq processing
+> >     b. poll - using poll() syscall
+> >
+> > Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
+> > ---
+> >   tools/testing/selftests/bpf/Makefile     |   2 +-
+> >   tools/testing/selftests/bpf/test_xsk.sh  |  36 +-
+> >   tools/testing/selftests/bpf/xdpxceiver.c | 961 ++++++++++++++++++++++=
++
+> >   tools/testing/selftests/bpf/xdpxceiver.h | 151 ++++
+> >   tools/testing/selftests/bpf/xsk_env.sh   |  17 +
+> >   5 files changed, 1158 insertions(+), 9 deletions(-)
+> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.c
+> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.h
+> >
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
+ests/bpf/Makefile
+> > index 596ee5c27906..a2be2725be11 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -83,7 +83,7 @@ TEST_PROGS_EXTENDED :=3D with_addr.sh \
+> >   # Compile but not part of 'make run_tests'
+> >   TEST_GEN_PROGS_EXTENDED =3D test_sock_addr test_skb_cgroup_id_user \
+> >       flow_dissector_load test_flow_dissector test_tcp_check_syncookie_=
+user \
+> > -     test_lirc_mode2_user xdping test_cpp runqslower bench
+> > +     test_lirc_mode2_user xdping test_cpp runqslower bench xdpxceiver
+> >
+> >   TEST_CUSTOM_PROGS =3D urandom_read
+> >
+> [...]
+> > +
+> > +static void parse_command_line(int argc, char **argv)
+> > +{
+> > +     int option_index, interface_index =3D 0, c;
+> > +
+> > +     opterr =3D 0;
+> > +
+> > +     for (;;) {
+> > +             c =3D getopt_long(argc, argv, "i:q:pScDC:", long_options,=
+ &option_index);
+> > +
+> > +             if (c =3D=3D -1)
+> > +                     break;
+> > +
+> > +             switch (c) {
+> > +             case 'i':
+> > +                     if (interface_index =3D=3D MAX_INTERFACES)
+> > +                             break;
+> > +                     char *sptr, *token;
+> > +
+> > +                     memcpy(ifdict[interface_index]->ifname,
+> > +                            strtok_r(optarg, ",", &sptr), MAX_INTERFAC=
+E_NAME_CHARS);
+>
+> During compilation, I hit the following compiler warnings,
+>
+> xdpxceiver.c: In function =E2=80=98main=E2=80=99:
+> xdpxceiver.c:461:4: warning: =E2=80=98__s=E2=80=99 may be used uninitiali=
+zed in this
+> function [-Wmaybe-uninitialized]
+>      memcpy(ifdict[interface_index]->ifname,
+>      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>             strtok_r(optarg, ",", &sptr), MAX_INTERFACE_NAME_CHARS);
+>             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> xdpxceiver.c:443:13: note: =E2=80=98__s=E2=80=99 was declared here
+>   static void parse_command_line(int argc, char **argv)
+>               ^~~~~~~~~~~~~~~~~~
+>
+> I am using gcc8. I am not sure whether we should silence such
+> warning or not (-Wno-maybe-uninitialized). Did you see such a warning
+> during your compilation?
+>
+Most probably you have hit gcc bug 71701, we do not see this warning
+as our gcc builds might be different even though mine is 8, I will try
+to get rid of strtok_r to avoid the whole thing.
 
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
- tools/testing/selftests/ptrace/peeksiginfo.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D71701
 
-diff --git a/tools/testing/selftests/ptrace/peeksiginfo.c b/tools/testing/selftests/ptrace/peeksiginfo.c
-index 5490065..3d64be4 100644
---- a/tools/testing/selftests/ptrace/peeksiginfo.c
-+++ b/tools/testing/selftests/ptrace/peeksiginfo.c
-@@ -62,7 +62,7 @@ static int check_error_paths(pid_t child)
- 			MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
- 	if (addr_ro == MAP_FAILED) {
- 		err("mmap() failed: %m\n");
--		goto out;
-+		goto out_rw;
- 	}
- 
- 	arg.nr = SIGNR;
-@@ -75,7 +75,7 @@ static int check_error_paths(pid_t child)
- 		err("sys_ptrace() returns %d (expected -1),"
- 				" errno %d (expected %d): %m\n",
- 				ret, errno, EINVAL);
--		goto out;
-+		goto out_ro;
- 	}
- 	arg.flags = 0;
- 
-@@ -84,7 +84,7 @@ static int check_error_paths(pid_t child)
- 					addr_ro - sizeof(siginfo_t) * 2);
- 	if (ret != 2) {
- 		err("sys_ptrace() returns %d (expected 2): %m\n", ret);
--		goto out;
-+		goto out_ro;
- 	}
- 
- 	/* Read-only buffer */
-@@ -93,11 +93,13 @@ static int check_error_paths(pid_t child)
- 		err("sys_ptrace() returns %d (expected -1),"
- 				" errno %d (expected %d): %m\n",
- 				ret, errno, EFAULT);
--		goto out;
-+		goto out_ro;
- 	}
- 
- 	exit_code = 0;
--out:
-+out_ro:
-+	munmap(addr_ro, PAGE_SIZE);
-+out_rw:
- 	munmap(addr_rw, 2 * PAGE_SIZE);
- 	return exit_code;
- }
--- 
-2.1.0
-
+> > +                     token =3D strtok_r(NULL, ",", &sptr);
+> > +                     if (token)
+> > +                             memcpy(ifdict[interface_index]->nsname, t=
+oken,
+> > +                                    MAX_INTERFACES_NAMESPACE_CHARS);
+> > +                     interface_index++;
+> > +                     break;
+> > +             case 'q':
+> > +                     opt_queue =3D atoi(optarg);
+> > +                     break;
+> > +             case 'p':
+> > +                     opt_poll =3D 1;
+> > +                     break;
+> > +             case 'S':
+> > +                     opt_xdp_flags |=3D XDP_FLAGS_SKB_MODE;
+> > +                     opt_xdp_bind_flags |=3D XDP_COPY;
+> > +                     uut =3D ORDER_CONTENT_VALIDATE_XDP_SKB;
+> > +                     break;
+> > +             case 'c':
+> > +                     opt_xdp_bind_flags |=3D XDP_COPY;
+> > +                     break;
+> > +             case 'D':
+> > +                     debug_pkt_dump =3D 1;
+> > +                     break;
+> > +             case 'C':
+> > +                     opt_pkt_count =3D atoi(optarg);
+> > +                     break;
+> > +             default:
+> > +                     usage(basename(argv[0]));
+> > +                     ksft_exit_xfail();
+> > +             }
+> > +     }
+> > +
+> > +     if (!validate_interfaces()) {
+> > +             usage(basename(argv[0]));
+> > +             ksft_exit_xfail();
+> > +     }
+> > +}
+> > +
+> [...]
