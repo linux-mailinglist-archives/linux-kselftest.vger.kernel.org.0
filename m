@@ -2,127 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FEA2C5D7D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Nov 2020 22:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C60C2C5EE8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 04:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387960AbgKZVXK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Nov 2020 16:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387950AbgKZVXJ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Nov 2020 16:23:09 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65221C0613D4;
-        Thu, 26 Nov 2020 13:23:09 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id x17so2714976ybr.8;
-        Thu, 26 Nov 2020 13:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hz6mv8RV7nsFp0fyTqpx+yOQXohdxFFGiPrYz7iKxiQ=;
-        b=i/O81SQNN3ngSC9cwkTouRr0V6dQJfYD+fTCxob+UFOWcOtmtjkKWWAokvEVNPH+XZ
-         3wLeXA1Q+FWkc3AqzuZnSq5KyDhKHBzgvwSq5DsZL3UNVLABTHtphAD/EMPQecZu7q+C
-         IS1G2xANrPHWg62WZVyrjVJxshDgwgMRtMTLitRV1MouMDGC7QYai/8bvxJ5KuF8sY+/
-         5hLDstIaNJfs8y4NQB0dHkZbxGEJ8mULJvSf02IS5t/vQskmynFGmlGFbCYv+cDsPxJm
-         XzJ9yFNNdBpeBS0AdaEGuRd1Ufzg8A7M2XwJSkhp+LfvqCzSjUXLUQ9GlmKhEu2A+QCT
-         mxaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hz6mv8RV7nsFp0fyTqpx+yOQXohdxFFGiPrYz7iKxiQ=;
-        b=mPgCCmcel7z2WcI8VV6b/+mkwcp2qklMKc8cbg04J9je0G8mrAlm4rbN+2ywy/hOOq
-         2Iu2nsH7JQLB1i1b/xrRhCKF8l+2OG0kXJyUs1Rr9vtAK9EXuKzj9czvxdAApqWsRGLD
-         0fjrI3clANwSGTs52O9VeCYsm/9JSzgtcH4ZTcp4X4/Ol5T/pQ9ZzzFMgS3ky0E4I2Ar
-         3xbRZm9MAJRqMDdAr+rC4AGp+zIYUrzrilt1ef2XFo+qDSE+J22gKESo8RGgG0YO9x/9
-         oJIUM6fqeR1NVb4PxO+OAIAnOplnH7lq2IifqCJDboNFvWybrjhBbG+1hlp4y7Ndi+/q
-         tJfQ==
-X-Gm-Message-State: AOAM530gwnICZYoMWYvdlKrYyszRFsj1LmZYUFmYvGotnR+NXk8uFlst
-        8dX1Z2Q0HePHHAwMjH5OgbYLyB39mahv03N/tGI=
-X-Google-Smtp-Source: ABdhPJzcHAGGZ3faJp/lkSCCOsVMenQdbyAZ17A8/LHktD+pWcWIwmtY3WQ7IYrKiLfdX1r/7PBSG5WuDZLVrDCzYvs=
-X-Received: by 2002:a25:7444:: with SMTP id p65mr5297714ybc.149.1606425788584;
- Thu, 26 Nov 2020 13:23:08 -0800 (PST)
+        id S2392325AbgK0DRJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Nov 2020 22:17:09 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42082 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388759AbgK0DRI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 26 Nov 2020 22:17:08 -0500
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_9Kqb8Bf+EsXAA--.52755S2;
+        Fri, 27 Nov 2020 11:16:58 +0800 (CST)
+From:   Xingxing Su <suxingxing@loongson.cn>
+To:     Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2] selftests/clone3: Fix build error
+Date:   Fri, 27 Nov 2020 11:16:57 +0800
+Message-Id: <1606447017-10640-1-git-send-email-suxingxing@loongson.cn>
+X-Mailer: git-send-email 2.1.0
 MIME-Version: 1.0
-References: <20201125183749.13797-1-weqaar.a.janjua@intel.com>
- <20201125183749.13797-2-weqaar.a.janjua@intel.com> <d8eedbad-7a8e-fd80-5fec-fc53b86e6038@fb.com>
- <1bcfb208-dfbd-7b49-e505-8ec17697239d@intel.com>
-In-Reply-To: <1bcfb208-dfbd-7b49-e505-8ec17697239d@intel.com>
-From:   Weqaar Janjua <weqaar.janjua@gmail.com>
-Date:   Thu, 26 Nov 2020 21:22:42 +0000
-Message-ID: <CAPLEeBYnYcWALN_JMBtZWt3uDnpYNtCA_HVLN6Gi7VbVk022xw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/5] selftests/bpf: xsk selftests framework
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Cc:     Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        ast@kernel.org, Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        jonathan.lemon@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dx_9Kqb8Bf+EsXAA--.52755S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFW3ur18ury8WryDZF1xGrg_yoWkAFXEkw
+        srKrn7u390va1kZr4SqFZ5Jryvyw4agrs8JF1YqF43Ja4DA3Z8G3WDXr1DAa18WwsIvryS
+        vFs5uF1fAr4jkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2kYjsxI4VWkKwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8GwCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5_xhJUUUUU==
+X-CM-SenderInfo: pvx0x0xj0l0wo6or00hjvr0hdfq/1tbiAQANC13QvMr+VAAHsR
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 26 Nov 2020 at 09:01, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>=
- wrote:
->
-> On 2020-11-26 07:44, Yonghong Song wrote:
-> >
-> [...]
-> >
-> > What other configures I am missing?
-> >
-> > BTW, I cherry-picked the following pick from bpf tree in this experimen=
-t.
-> >    commit e7f4a5919bf66e530e08ff352d9b78ed89574e6b (HEAD -> xsk)
-> >    Author: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> >    Date:   Mon Nov 23 18:56:00 2020 +0100
-> >
-> >        net, xsk: Avoid taking multiple skbuff references
-> >
->
-> Hmm, I'm getting an oops, unless I cherry-pick:
->
-> 36ccdf85829a ("net, xsk: Avoid taking multiple skbuff references")
->
-> *AND*
->
-> 537cf4e3cc2f ("xsk: Fix umem cleanup bug at socket destruct")
->
-> from bpf/master.
->
+When compiling the selftests with the -std=gnu99 option the build can
+fail with.
 
-Same as Bjorn's findings ^^^, additionally applying the second patch
-537cf4e3cc2f [PASS] all tests for me
+Following build error:
 
-PREREQUISITES: [ PASS ]
-SKB NOPOLL: [ PASS ]
-SKB POLL: [ PASS ]
-DRV NOPOLL: [ PASS ]
-DRV POLL: [ PASS ]
-SKB SOCKET TEARDOWN: [ PASS ]
-DRV SOCKET TEARDOWN: [ PASS ]
-SKB BIDIRECTIONAL SOCKETS: [ PASS ]
-DRV BIDIRECTIONAL SOCKETS: [ PASS ]
+  test_core.c: In function ‘test_cgcore_destroy’:
+  test_core.c:87:2: error: ‘for’ loop initial declarations are only
+  allowed in C99 mode
+    for (int i = 0; i < 10; i++) {
+    ^
+  test_core.c:87:2: note: use option -std=c99 or -std=gnu99 to compile
 
-With the first patch alone, as soon as we enter DRV/Native NOPOLL mode
-kernel panics, whereas in your case NOPOLL tests were falling with
-packets being *lost* as per seqnum mismatch.
+Add -std=gnu99 to the clone3 selftest Makefile to fix this.
 
-Can you please test this out with both patches and let us know?
+Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+ tools/testing/selftests/clone3/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Can I just run test_xsk.sh at tools/testing/selftests/bpf/ directory?
-> This will be easier than the above for bpf developers. If it does not
-> work, I would like to recommend to make it work.
->
-yes test_xsk.shis self contained, will update the instructions in there wit=
-h v4.
+diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
+index ef7564c..88354a8 100644
+--- a/tools/testing/selftests/clone3/Makefile
++++ b/tools/testing/selftests/clone3/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -g -I../../../../usr/include/
++CFLAGS += -g -std=gnu99 -I../../../../usr/include/ 
+ LDLIBS += -lcap
+ 
+ TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
+-- 
+1.8.3.1
 
-Thanks,
-/Weqaar
->
-> Bj=C3=B6rn
