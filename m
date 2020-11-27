@@ -2,198 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD232C614D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 10:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAA42C637D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Nov 2020 11:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbgK0JCA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Nov 2020 04:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726127AbgK0JCA (ORCPT
+        id S1727518AbgK0Kyp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Nov 2020 05:54:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31814 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726471AbgK0Kyp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Nov 2020 04:02:00 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33CAC0613D1;
-        Fri, 27 Nov 2020 01:01:59 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id v92so3908062ybi.4;
-        Fri, 27 Nov 2020 01:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LnzhICHZdVFLZlXj95yT8QtqDM8n8lX7RfvjyfJwSFA=;
-        b=FeBsvxyFG9UcDjSAKCxJV/QxRTA10Si4PGHoyP3c3m/3Xg7iYM8Y2wytEM09gIenyg
-         EgA5bsozFyhI0y0y3iM2jhRSSCBl5GFsPf/KF4+IbL/YLpw/VGGaTq60eOW8Lf1MzR4s
-         Sl/JrllstO4dmPddOZ10nZTkh/jcyLoIAusw8XViqHi1qEHzpxp2FpVA4VwUxJ13/LUI
-         6BToXfKX+NcMOJS/Ryrnd9MbfdwT9Qaq7VJBrqggAWT4zgbHPUFfkNYP7owHPjz+eJcb
-         h24pTUpZqmb/UcGLgiVVtciHEsepIEL3jJWI4WCjkWv6gevaQg4xtPhE/rR0p13z/WrP
-         kEyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LnzhICHZdVFLZlXj95yT8QtqDM8n8lX7RfvjyfJwSFA=;
-        b=H3HuNBFOE/3t2LSfpVg9D7510RUgtizqbwd2l5Sql5saCjJeX5baogpkQcQGp0Ah9E
-         9Ztt0iNBgjI3qiW5U07oJodVKGwrusmNep7G8rSwWoIqFfqTvvWHtqCfw3q1nHYTNYYf
-         Hmtp0CdND/26XjKq0sWxg6Oq+9kWGmjz3uOU6ctcrDLxdRXBjmPQV/t+uy69u3BYXmq+
-         ZeftFgJiHp/Gk8aBXP4zcJyz9QpMwyX1Xf1C7f7/lAyts2PxnASlD1MDFkxevLDfNCaw
-         mghjHgiKIzo+6UFCZ05OXRKfb6zu60gsnbfOpMTHITe07GCfhaXmU79zdlpoK7wm6AuG
-         yzpg==
-X-Gm-Message-State: AOAM530+Oc/bbjpx2FCJFzHt6rLp8RCHJk5JoZ5WPhe7lVMRhdu1FaeX
-        o2XN/h7O4/uFHhuGP6YPO5SzC3/KknuaTeIaews=
-X-Google-Smtp-Source: ABdhPJwTmui02y1nPZ7LC9rD05l67WNMzWm1CvYwnnDWCYehiWvLvq5nhP3VIM+eg+1zizBGNUlPAmWYE3GtylJz3ok=
-X-Received: by 2002:a5b:c0e:: with SMTP id f14mr10934570ybq.83.1606467718968;
- Fri, 27 Nov 2020 01:01:58 -0800 (PST)
+        Fri, 27 Nov 2020 05:54:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606474483;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ouvI00UbI/uzDqEObWfu8c5eamHZNFtUjMgSLpP+1nc=;
+        b=TaetW1pga+DdLku+NWRiZ6Do1Uz+WPc21OZFle9NubMQtEqz5tk26kI2GDQJAxfzuDLLzO
+        bsHvzg3lCR1jBikPOHMdl1LbbSNU3umA0N40bJBNxsmH8FGp68y3bSKedNUY5xrc/5iTWO
+        M0+JD/FJM49KW5vdbC6z3DXY066GDpI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-185-LK5kzVwhMMOgZRpiIqXEoA-1; Fri, 27 Nov 2020 05:54:40 -0500
+X-MC-Unique: LK5kzVwhMMOgZRpiIqXEoA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F0DC48049C7;
+        Fri, 27 Nov 2020 10:54:38 +0000 (UTC)
+Received: from yoda.fritz.box (unknown [10.40.192.235])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5DA6D60BF1;
+        Fri, 27 Nov 2020 10:54:37 +0000 (UTC)
+Date:   Fri, 27 Nov 2020 11:54:34 +0100
+From:   Antonio Cardace <acardace@redhat.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        kuba@kernel.org, shuah@kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH] tools/testing: add kselftest shell helper library
+Message-ID: <20201127105434.vwojcml2lpa7zvqi@yoda.fritz.box>
+References: <20201123162508.585279-1-willemdebruijn.kernel@gmail.com>
 MIME-Version: 1.0
-References: <20201125183749.13797-1-weqaar.a.janjua@intel.com>
- <20201125183749.13797-3-weqaar.a.janjua@intel.com> <394e96ea-cf70-90e1-599e-eef8e613eef8@fb.com>
-In-Reply-To: <394e96ea-cf70-90e1-599e-eef8e613eef8@fb.com>
-From:   Weqaar Janjua <weqaar.janjua@gmail.com>
-Date:   Fri, 27 Nov 2020 09:01:33 +0000
-Message-ID: <CAPLEeBZ3cd_cAw1fH0bT+CMWEA7xNXWTL7+9iwqN=CqfPp0cQA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/5] selftests/bpf: xsk selftests - SKB POLL, NOPOLL
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        jonathan.lemon@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201123162508.585279-1-willemdebruijn.kernel@gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 27 Nov 2020 at 04:31, Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 11/25/20 10:37 AM, Weqaar Janjua wrote:
-> > Adds following tests:
-> >
-> > 1. AF_XDP SKB mode
-> >     Generic mode XDP is driver independent, used when the driver does
-> >     not have support for XDP. Works on any netdevice using sockets and
-> >     generic XDP path. XDP hook from netif_receive_skb().
-> >     a. nopoll - soft-irq processing
-> >     b. poll - using poll() syscall
-> >
-> > Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile     |   2 +-
-> >   tools/testing/selftests/bpf/test_xsk.sh  |  36 +-
-> >   tools/testing/selftests/bpf/xdpxceiver.c | 961 ++++++++++++++++++++++=
-+
-> >   tools/testing/selftests/bpf/xdpxceiver.h | 151 ++++
-> >   tools/testing/selftests/bpf/xsk_env.sh   |  17 +
-> >   5 files changed, 1158 insertions(+), 9 deletions(-)
-> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.c
-> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.h
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index 596ee5c27906..a2be2725be11 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -83,7 +83,7 @@ TEST_PROGS_EXTENDED :=3D with_addr.sh \
-> >   # Compile but not part of 'make run_tests'
-> >   TEST_GEN_PROGS_EXTENDED =3D test_sock_addr test_skb_cgroup_id_user \
-> >       flow_dissector_load test_flow_dissector test_tcp_check_syncookie_=
-user \
-> > -     test_lirc_mode2_user xdping test_cpp runqslower bench
-> > +     test_lirc_mode2_user xdping test_cpp runqslower bench xdpxceiver
-> >
-> >   TEST_CUSTOM_PROGS =3D urandom_read
-> >
-> [...]
-> > +
-> > +static void parse_command_line(int argc, char **argv)
-> > +{
-> > +     int option_index, interface_index =3D 0, c;
-> > +
-> > +     opterr =3D 0;
-> > +
-> > +     for (;;) {
-> > +             c =3D getopt_long(argc, argv, "i:q:pScDC:", long_options,=
- &option_index);
-> > +
-> > +             if (c =3D=3D -1)
-> > +                     break;
-> > +
-> > +             switch (c) {
-> > +             case 'i':
-> > +                     if (interface_index =3D=3D MAX_INTERFACES)
-> > +                             break;
-> > +                     char *sptr, *token;
-> > +
-> > +                     memcpy(ifdict[interface_index]->ifname,
-> > +                            strtok_r(optarg, ",", &sptr), MAX_INTERFAC=
-E_NAME_CHARS);
->
-> During compilation, I hit the following compiler warnings,
->
-> xdpxceiver.c: In function =E2=80=98main=E2=80=99:
-> xdpxceiver.c:461:4: warning: =E2=80=98__s=E2=80=99 may be used uninitiali=
-zed in this
-> function [-Wmaybe-uninitialized]
->      memcpy(ifdict[interface_index]->ifname,
->      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->             strtok_r(optarg, ",", &sptr), MAX_INTERFACE_NAME_CHARS);
->             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> xdpxceiver.c:443:13: note: =E2=80=98__s=E2=80=99 was declared here
->   static void parse_command_line(int argc, char **argv)
->               ^~~~~~~~~~~~~~~~~~
->
-> I am using gcc8. I am not sure whether we should silence such
-> warning or not (-Wno-maybe-uninitialized). Did you see such a warning
-> during your compilation?
->
-Most probably you have hit gcc bug 71701, we do not see this warning
-as our gcc builds might be different even though mine is 8, I will try
-to get rid of strtok_r to avoid the whole thing.
+On Mon, Nov 23, 2020 at 11:25:08AM -0500, Willem de Bruijn wrote:
+> From: Willem de Bruijn <willemb@google.com>
+> 
+> Kselftest expects processes to signal pass/fail/skip through exitcode.
+> 
+> C programs can include kselftest.h for readable definitions.
+> 
+> Add analogous kselftest.sh for shell tests. Extract the existing
+> definitions from udpgso_bench.sh.
+> 
+> Tested: make TARGETS=net kselftest
+> Link: https://patchwork.kernel.org/project/netdevbpf/patch/20201113231655.139948-4-acardace@redhat.com/
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> 
+> ---
+> 
+> applies cleanly to netnext (f9e425e99b07) and kselftest (v5.10-rc1)
+> ---
+>  tools/testing/selftests/kselftest.sh        | 52 +++++++++++++++++++++
+>  tools/testing/selftests/net/udpgso_bench.sh | 42 +----------------
+>  2 files changed, 53 insertions(+), 41 deletions(-)
+>  create mode 100644 tools/testing/selftests/kselftest.sh
+> 
+> diff --git a/tools/testing/selftests/kselftest.sh b/tools/testing/selftests/kselftest.sh
+> new file mode 100644
+> index 000000000000..c5a1cff57402
+> --- /dev/null
+> +++ b/tools/testing/selftests/kselftest.sh
+> @@ -0,0 +1,52 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# kselftest shell test support library
+> +#
+> +# - Define pass/fail/skip exitcodes
+> +# - Multiprocess support: aggregate child process results
+> +
+> +readonly KSFT_PASS=0
+> +readonly KSFT_FAIL=1
+> +readonly KSFT_SKIP=4
+> +
+> +readonly GREEN='\033[0;92m'
+> +readonly YELLOW='\033[0;33m'
+> +readonly RED='\033[0;31m'
+> +readonly NC='\033[0m' # No Color
+> +
+> +num_pass=0
+> +num_err=0
+> +num_skip=0
+> +
+> +# Test child process exit code, add to aggregates.
+> +kselftest_test_exitcode() {
+> +	local -r exitcode=$1
+> +
+> +	if [[ ${exitcode} -eq ${KSFT_PASS} ]]; then
+> +		num_pass=$(( $num_pass + 1 ))
+> +	elif [[ ${exitcode} -eq ${KSFT_SKIP} ]]; then
+> +		num_skip=$(( $num_skip + 1 ))
+> +	else
+> +		num_err=$(( $num_err + 1 ))
+> +	fi
+> +}
+> +
+> +# Exit from main process.
+> +kselftest_exit() {
+> +	echo -e "$(basename $0): PASS=${num_pass} SKIP=${num_skip} FAIL=${num_err}"
+> +
+> +	if [[ $num_err -ne 0 ]]; then
+> +		echo -e "$(basename $0): ${RED}FAIL${NC}"
+> +		exit ${KSFT_FAIL}
+> +	fi
+> +
+> +	if [[ $num_skip -ne 0 ]]; then
+> +		echo -e "$(basename $0): ${YELLOW}SKIP${NC}"
+> +		exit ${KSFT_SKIP}
+> +	fi
+> +
+> +	echo -e "$(basename $0): ${GREEN}PASS${NC}"
+> +	exit ${KSFT_PASS}
+> +}
+> +
+> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
+> index 80b5d352702e..c1f9affe6cf0 100755
+> --- a/tools/testing/selftests/net/udpgso_bench.sh
+> +++ b/tools/testing/selftests/net/udpgso_bench.sh
+> @@ -3,47 +3,7 @@
+>  #
+>  # Run a series of udpgso benchmarks
+> 
+> -readonly GREEN='\033[0;92m'
+> -readonly YELLOW='\033[0;33m'
+> -readonly RED='\033[0;31m'
+> -readonly NC='\033[0m' # No Color
+> -
+> -readonly KSFT_PASS=0
+> -readonly KSFT_FAIL=1
+> -readonly KSFT_SKIP=4
+> -
+> -num_pass=0
+> -num_err=0
+> -num_skip=0
+> -
+> -kselftest_test_exitcode() {
+> -	local -r exitcode=$1
+> -
+> -	if [[ ${exitcode} -eq ${KSFT_PASS} ]]; then
+> -		num_pass=$(( $num_pass + 1 ))
+> -	elif [[ ${exitcode} -eq ${KSFT_SKIP} ]]; then
+> -		num_skip=$(( $num_skip + 1 ))
+> -	else
+> -		num_err=$(( $num_err + 1 ))
+> -	fi
+> -}
+> -
+> -kselftest_exit() {
+> -	echo -e "$(basename $0): PASS=${num_pass} SKIP=${num_skip} FAIL=${num_err}"
+> -
+> -	if [[ $num_err -ne 0 ]]; then
+> -		echo -e "$(basename $0): ${RED}FAIL${NC}"
+> -		exit ${KSFT_FAIL}
+> -	fi
+> -
+> -	if [[ $num_skip -ne 0 ]]; then
+> -		echo -e "$(basename $0): ${YELLOW}SKIP${NC}"
+> -		exit ${KSFT_SKIP}
+> -	fi
+> -
+> -	echo -e "$(basename $0): ${GREEN}PASS${NC}"
+> -	exit ${KSFT_PASS}
+> -}
+> +source "$(dirname $0)/../kselftest.sh"
+> 
+>  wake_children() {
+>  	local -r jobs="$(jobs -p)"
+> --
+> 2.29.2.454.gaff20da3a2-goog
+> 
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D71701
+Reviewed-by: Antonio Cardace <acardace@redhat>
 
-> > +                     token =3D strtok_r(NULL, ",", &sptr);
-> > +                     if (token)
-> > +                             memcpy(ifdict[interface_index]->nsname, t=
-oken,
-> > +                                    MAX_INTERFACES_NAMESPACE_CHARS);
-> > +                     interface_index++;
-> > +                     break;
-> > +             case 'q':
-> > +                     opt_queue =3D atoi(optarg);
-> > +                     break;
-> > +             case 'p':
-> > +                     opt_poll =3D 1;
-> > +                     break;
-> > +             case 'S':
-> > +                     opt_xdp_flags |=3D XDP_FLAGS_SKB_MODE;
-> > +                     opt_xdp_bind_flags |=3D XDP_COPY;
-> > +                     uut =3D ORDER_CONTENT_VALIDATE_XDP_SKB;
-> > +                     break;
-> > +             case 'c':
-> > +                     opt_xdp_bind_flags |=3D XDP_COPY;
-> > +                     break;
-> > +             case 'D':
-> > +                     debug_pkt_dump =3D 1;
-> > +                     break;
-> > +             case 'C':
-> > +                     opt_pkt_count =3D atoi(optarg);
-> > +                     break;
-> > +             default:
-> > +                     usage(basename(argv[0]));
-> > +                     ksft_exit_xfail();
-> > +             }
-> > +     }
-> > +
-> > +     if (!validate_interfaces()) {
-> > +             usage(basename(argv[0]));
-> > +             ksft_exit_xfail();
-> > +     }
-> > +}
-> > +
-> [...]
