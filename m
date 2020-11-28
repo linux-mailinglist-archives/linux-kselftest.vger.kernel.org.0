@@ -2,126 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 375A22C738E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Nov 2020 23:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829C42C7305
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Nov 2020 23:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387405AbgK1Vt5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 28 Nov 2020 16:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729811AbgK0TrT (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Nov 2020 14:47:19 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2718C061A52;
-        Fri, 27 Nov 2020 11:32:59 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 7F3451F4659F
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org
-Cc:     gofmanp@gmail.com, christian.brauner@ubuntu.com,
-        peterz@infradead.org, willy@infradead.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v8 4/7] entry: Support Syscall User Dispatch on common syscall entry
-Date:   Fri, 27 Nov 2020 14:32:35 -0500
-Message-Id: <20201127193238.821364-5-krisman@collabora.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201127193238.821364-1-krisman@collabora.com>
-References: <20201127193238.821364-1-krisman@collabora.com>
+        id S2389322AbgK1Vt6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 28 Nov 2020 16:49:58 -0500
+Received: from mail.zx2c4.com ([192.95.5.64]:36441 "EHLO mail.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730532AbgK1Slo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 28 Nov 2020 13:41:44 -0500
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id ca0b12c3;
+        Sat, 28 Nov 2020 13:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
+        :references:in-reply-to:from:date:message-id:subject:to:cc
+        :content-type; s=mail; bh=VxXDsIepi+eAd4xKb3U67HkBsHg=; b=Yc0hZL
+        6jx7GcAZ9Zc+ZKaMPi/AwDBReO8Kg+hbdIgLsby4m64EpN3IWfCCrjhNVSk/Rqev
+        Mu9gByATG7yn1gtWEPBID+O8VbrVX/+2dgeEpvHOMJmXEblJu8Zufa+7aKVcJ/Iw
+        +ChYqqi9xZzzLuPixz/5crETi0eRgJqPmr+NRFY+w+srP/78zIoQjerKkLqf9w24
+        vuHzu2YvtC+w0iklspKkcMmk0uv2wqYkn2ll3i4jBXnXAsrzW46JViHc/1zhf38Y
+        rKanxXX6hhpSRPtuSU+K26h67XWsFWkW5Ct6dTO3qhxZaUsftO5j7INFdtqiFhpY
+        rIlTnLtW7m6z2q7w==
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4a4d0eca (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 28 Nov 2020 13:09:04 +0000 (UTC)
+Received: by mail-yb1-f180.google.com with SMTP id e81so7011644ybc.1;
+        Sat, 28 Nov 2020 05:14:20 -0800 (PST)
+X-Gm-Message-State: AOAM530qYvHsg2yrzSbMCAgkDFxCj2TATba1Pgw2Kpa36AjhdIHCJzfC
+        7kubtgYf9lP3f6oOnnKfwS+jnV0TI9AHhEfPXCM=
+X-Google-Smtp-Source: ABdhPJzhpzpgqWtgM7qicLRbtzJzCdlKXMymfS4WuyC7aFryeXdSo+3zP9Yndl2qJmFaSFc5yZt4Oub26GQMTcJIL6U=
+X-Received: by 2002:a5b:2c6:: with SMTP id h6mr14695421ybp.306.1606569259874;
+ Sat, 28 Nov 2020 05:14:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201128084639.149153-1-masahiroy@kernel.org>
+In-Reply-To: <20201128084639.149153-1-masahiroy@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sat, 28 Nov 2020 14:14:09 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o7uLRRD91nAie48nM=ogNuV9-cwwQcW1dSVSXhjCfWsw@mail.gmail.com>
+Message-ID: <CAHmME9o7uLRRD91nAie48nM=ogNuV9-cwwQcW1dSVSXhjCfWsw@mail.gmail.com>
+Subject: Re: [PATCH v2] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        WireGuard mailing list <wireguard@lists.zx2c4.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Syscall User Dispatch (SUD) must take precedence over seccomp and
-ptrace, since the use case is emulation (it can be invoked with a
-different ABI) such that seccomp filtering by syscall number doesn't
-make sense in the first place.  In addition, either the syscall is
-dispatched back to userspace, in which case there is no resource for to
-trace, or the syscall will be executed, and seccomp/ptrace will execute
-next.
+On Sat, Nov 28, 2020 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Revert commit cebc04ba9aeb ("add CONFIG_ENABLE_MUST_CHECK").
+>
+> A lot of warn_unused_result wearings existed in 2006, but until now
+> they have been fixed thanks to people doing allmodconfig tests.
+>
+> Our goal is to always enable __must_check where appropriate, so this
+> CONFIG option is no longer needed.
+>
+> I see a lot of defconfig (arch/*/configs/*_defconfig) files having:
+>
+>     # CONFIG_ENABLE_MUST_CHECK is not set
+>
+> I did not touch them for now since it would be a big churn. If arch
+> maintainers want to clean them up, please go ahead.
+>
+> While I was here, I also moved __must_check to compiler_attributes.h
+> from compiler_types.h
 
-Since SUD runs before tracepoints, it needs to be a SYSCALL_WORK_EXIT as
-well, just to prevent a trace exit event when dispatch was triggered.
-For that, the on_syscall_dispatch() examines context to skip the
-tracepoint, audit and other work.
+For the wireguard test harness change:
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
-Changes since v6:
-  - Update do_syscall_intercept signature (Christian Brauner)
-  - Move it to before tracepoints
-  - Use SYSCALL_WORK flags
----
- include/linux/entry-common.h |  2 ++
- kernel/entry/common.c        | 17 +++++++++++++++++
- 2 files changed, 19 insertions(+)
-
-diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index 49b26b216e4e..a6e98b4ba8e9 100644
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -44,10 +44,12 @@
- 				 SYSCALL_WORK_SYSCALL_TRACE |		\
- 				 SYSCALL_WORK_SYSCALL_EMU |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
-+				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
- 				 ARCH_SYSCALL_WORK_ENTER)
- #define SYSCALL_WORK_EXIT	(SYSCALL_WORK_SYSCALL_TRACEPOINT |	\
- 				 SYSCALL_WORK_SYSCALL_TRACE |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
-+				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
- 				 ARCH_SYSCALL_WORK_EXIT)
- 
- /*
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index f1b12dc32ff4..ec20aba3b890 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -6,6 +6,8 @@
- #include <linux/livepatch.h>
- #include <linux/audit.h>
- 
-+#include "common.h"
-+
- #define CREATE_TRACE_POINTS
- #include <trace/events/syscalls.h>
- 
-@@ -47,6 +49,16 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
- {
- 	long ret = 0;
- 
-+	/*
-+	 * Handle Syscall User Dispatch.  This must comes first, since
-+	 * the ABI here can be something that doesn't make sense for
-+	 * other syscall_work features.
-+	 */
-+	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
-+		if (do_syscall_user_dispatch(regs))
-+			return -1L;
-+	}
-+
- 	/* Handle ptrace */
- 	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
- 		ret = arch_syscall_enter_tracehook(regs);
-@@ -232,6 +244,11 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
- {
- 	bool step;
- 
-+	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
-+		if (on_syscall_dispatch())
-+			return;
-+	}
-+
- 	audit_syscall_exit(regs);
- 
- 	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
--- 
-2.29.2
-
+Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
