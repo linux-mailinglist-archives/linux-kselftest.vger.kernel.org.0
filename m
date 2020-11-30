@@ -2,203 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 448132C7A3C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Nov 2020 18:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E352C7C46
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Nov 2020 02:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbgK2R1X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 29 Nov 2020 12:27:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49932 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725468AbgK2R1W (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 29 Nov 2020 12:27:22 -0500
-Received: from kernel.org (unknown [87.71.85.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 422E9206F4;
-        Sun, 29 Nov 2020 17:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606670801;
-        bh=193fTdj4a0UGUIyrwcsvt+1ylSiVDeNw4WwJgyyeI0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VcPgX8dFSy9Ib9kWnBH2tRtaSziWbjbmm/b3KwtE1n5ZeUaApS9TIAbB17gPzKn16
-         16Tdha8Hm4Jgj6OkL5MJvDw7grmc3v+aPRxni9lGCOKPmW+seMn30mlZzbCH+CCfcq
-         1IVHreDWn8hVqwZBOZMP3h7CF/w11Dl4ALLVGb3o=
-Date:   Sun, 29 Nov 2020 19:26:25 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: Re: [PATCH v12 07/10] secretmem: add memcg accounting
-Message-ID: <20201129172625.GD557259@kernel.org>
-References: <20201125092208.12544-1-rppt@kernel.org>
- <20201125092208.12544-8-rppt@kernel.org>
- <CALvZod4MoXod_YkbO+4k2=PS=xdMVbZa2HWWuUnMZ1G9hSr+Jw@mail.gmail.com>
+        id S1726470AbgK3BFM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 29 Nov 2020 20:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726332AbgK3BFL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 29 Nov 2020 20:05:11 -0500
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A68C0613CF;
+        Sun, 29 Nov 2020 17:04:25 -0800 (PST)
+Received: by mail-qv1-xf44.google.com with SMTP id ek7so4890498qvb.6;
+        Sun, 29 Nov 2020 17:04:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9w+jIogOsKRBrpA0BOG2mGKZgZW7G/tIHqRWbeWWJW4=;
+        b=WU2glR0TsgL7F4/RiVfuwal0YDkOeqqQo1eMszLAWLO0V78Iff5/n64/V+Tel6qT40
+         0VZPZwJwnsbjpw844pzMgW2hYIqwz9mbmNNEs6O9eqV7TWRrdnQvvljYsI+oAgmSfU9d
+         JIxDowmXVsOG4M50gjV44mXjYipYLj/9fbmyh2K14okhPO2JuJkIbpuUnR81GPub6sfc
+         rlIoxazGL6HuV4KMjGROkoGEtAMmm7Vc+Pc82fuAAMqnezRvuWTfJB0nD/O/ozmK1le2
+         0iQc4nSTPnFUJ+egMZNoYLZ/ZHipkw5XcHC1btQ4QFt9SCnPc6sbU8WpdjVCohjcBAA6
+         sP4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9w+jIogOsKRBrpA0BOG2mGKZgZW7G/tIHqRWbeWWJW4=;
+        b=uBg+pLLcCaWLE0ZI5H6R84hlEEMKyD8wSPYQJju2zAQ5f4VO7CMaB9pgY9VLs87+6d
+         B4Axb0U8vFJ9yic/cG24srxEZfdMOLf0q0Asqgam2qVReSu0Jspe3+YHyQf8A1xCKvwQ
+         GcI88b0vEPBESsVbFfvlUnqtxQ5bfs78F0oENj9gCs1BibkB68lLqe6RUE4RTvm+BWd2
+         XYIbm9x2DLnHlvphaEzqtX+pdm1Gm9D4P0sHRvhffT7iBWkBCEnlENRiRWr6a4OoPt83
+         mUh7NHbOdoLLuwPrqVMGlMrZICayRKtVV2LVubJvr/z1b0mrQJ3iRGnZe+OwoRrDhOhA
+         3nrQ==
+X-Gm-Message-State: AOAM530zkGSD/jJNA7PQPrE+S2pbKxO1mE3N/giTnbtK0nfqshI4boSQ
+        GIFHR4pSLr3VfC114sEtFYk=
+X-Google-Smtp-Source: ABdhPJxNBQJpDe6Q+07RcfAa9BO9KXU9uK23WXodIbLjKY85NBzOpU1EHUFfTEHywAlwGfo76xkVUw==
+X-Received: by 2002:a0c:fe04:: with SMTP id x4mr17013047qvr.61.1606698264424;
+        Sun, 29 Nov 2020 17:04:24 -0800 (PST)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id e19sm14025778qtp.83.2020.11.29.17.04.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Nov 2020 17:04:23 -0800 (PST)
+Date:   Sun, 29 Nov 2020 18:04:22 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        wireguard@lists.zx2c4.com
+Subject: Re: [PATCH v3] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
+Message-ID: <20201130010422.GA1956616@ubuntu-m3-large-x86>
+References: <20201128193335.219395-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALvZod4MoXod_YkbO+4k2=PS=xdMVbZa2HWWuUnMZ1G9hSr+Jw@mail.gmail.com>
+In-Reply-To: <20201128193335.219395-1-masahiroy@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Nov 29, 2020 at 07:53:45AM -0800, Shakeel Butt wrote:
-> On Wed, Nov 25, 2020 at 1:51 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > From: Mike Rapoport <rppt@linux.ibm.com>
-> >
-> > Account memory consumed by secretmem to memcg. The accounting is updated
-> > when the memory is actually allocated and freed.
-> >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > Acked-by: Roman Gushchin <guro@fb.com>
-> > ---
-> >  mm/filemap.c   |  3 ++-
-> >  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 37 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/filemap.c b/mm/filemap.c
-> > index 249cf489f5df..cf7f1dc9f4b8 100644
-> > --- a/mm/filemap.c
-> > +++ b/mm/filemap.c
-> > @@ -42,6 +42,7 @@
-> >  #include <linux/psi.h>
-> >  #include <linux/ramfs.h>
-> >  #include <linux/page_idle.h>
-> > +#include <linux/secretmem.h>
-> >  #include "internal.h"
-> >
-> >  #define CREATE_TRACE_POINTS
-> > @@ -844,7 +845,7 @@ static noinline int __add_to_page_cache_locked(struct page *page,
-> >         page->mapping = mapping;
-> >         page->index = offset;
-> >
-> > -       if (!huge) {
-> > +       if (!huge && !page_is_secretmem(page)) {
-> >                 error = mem_cgroup_charge(page, current->mm, gfp);
-> >                 if (error)
-> >                         goto error;
-> > diff --git a/mm/secretmem.c b/mm/secretmem.c
-> > index 52a900a135a5..eb6628390444 100644
-> > --- a/mm/secretmem.c
-> > +++ b/mm/secretmem.c
-> > @@ -18,6 +18,7 @@
-> >  #include <linux/memblock.h>
-> >  #include <linux/pseudo_fs.h>
-> >  #include <linux/secretmem.h>
-> > +#include <linux/memcontrol.h>
-> >  #include <linux/set_memory.h>
-> >  #include <linux/sched/signal.h>
-> >
-> > @@ -44,6 +45,32 @@ struct secretmem_ctx {
-> >
-> >  static struct cma *secretmem_cma;
-> >
-> > +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
-> > +{
-> > +       int err;
-> > +
-> > +       err = memcg_kmem_charge_page(page, gfp, order);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       /*
-> > +        * seceremem caches are unreclaimable kernel allocations, so treat
-> > +        * them as unreclaimable slab memory for VM statistics purposes
-> > +        */
-> > +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
-> > +                           PAGE_SIZE << order);
+On Sun, Nov 29, 2020 at 04:33:35AM +0900, Masahiro Yamada wrote:
+> Revert commit cebc04ba9aeb ("add CONFIG_ENABLE_MUST_CHECK").
 > 
-> Please use mod_lruvec_page_state() instead, so we get the memcg stats too.
+> A lot of warn_unused_result warnings existed in 2006, but until now
+> they have been fixed thanks to people doing allmodconfig tests.
+> 
+> Our goal is to always enable __must_check where appropriate, so this
+> CONFIG option is no longer needed.
+> 
+> I see a lot of defconfig (arch/*/configs/*_defconfig) files having:
+> 
+>     # CONFIG_ENABLE_MUST_CHECK is not set
+> 
+> I did not touch them for now since it would be a big churn. If arch
+> maintainers want to clean them up, please go ahead.
+> 
+> While I was here, I also moved __must_check to compiler_attributes.h
+> from compiler_types.h
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Ok
-
-> BTW I think secretmem deserves a vmstat entry instead of overloading
-> NR_SLAB_UNRECLAIMABLE_B.
-
-I'd prefer to wait with a dedicated vmstat for now. We can always add it
-later, once we have better picture of secremem usage.
-
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void secretmem_unaccount_pages(struct page *page, int order)
-> > +{
-> > +
-> > +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
-> > +                           -PAGE_SIZE << order);
-> > +       memcg_kmem_uncharge_page(page, order);
-> > +}
-> > +
-> >  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >  {
-> >         unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-> > @@ -56,10 +83,14 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >         if (!page)
-> >                 return -ENOMEM;
-> >
-> > -       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
-> >         if (err)
-> >                 goto err_cma_release;
-> >
-> > +       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       if (err)
-> > +               goto err_memcg_uncharge;
-> > +
-> >         addr = (unsigned long)page_address(page);
-> >         err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
-> >         if (err)
-> > @@ -76,6 +107,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >          * won't fail
-> >          */
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +err_memcg_uncharge:
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >  err_cma_release:
-> >         cma_release(secretmem_cma, page, nr_pages);
-> >         return err;
-> > @@ -302,6 +335,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
-> >         int i;
-> >
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >
-> >         for (i = 0; i < nr_pages; i++)
-> >                 clear_highpage(page + i);
-> > --
-> > 2.28.0
-> >
-
--- 
-Sincerely yours,
-Mike.
+Acked-by: Nathan Chancellor <natechancellor@gmail.com>
