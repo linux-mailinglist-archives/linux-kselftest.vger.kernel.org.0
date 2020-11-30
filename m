@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 145032C92A9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Dec 2020 00:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99CD2C92B0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Dec 2020 00:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388865AbgK3Xd5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Nov 2020 18:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S2388947AbgK3XeT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Nov 2020 18:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388826AbgK3Xd5 (ORCPT
+        with ESMTP id S2388945AbgK3XeS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Nov 2020 18:33:57 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D3BC0613D6
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Nov 2020 15:33:10 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id i184so161645ybg.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Nov 2020 15:33:10 -0800 (PST)
+        Mon, 30 Nov 2020 18:34:18 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC98BC061A04
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Nov 2020 15:33:14 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id u37so137355ybi.15
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Nov 2020 15:33:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=0KYas3tPhykALeKTm8edVjXNVmbCSCmca7ClUP4eXMo=;
-        b=uWrzZ3L5l8JGMxjpGqoOGQThfztMVVyio24+z4hyLineNn8Q3on23eMqPmHzL1+fE8
-         tYzBsWHgd1RouAMkhoOV6C7Nz9R83Z57yADIdHzeJwHZ/zYB4/WjREPVvPWMeS20Qtjv
-         9asL5BNi1fjvGH6ApGv0OruWB3PGUSnaYSe5fdImdElFR7lk59/2jvtq9QWnpK0/HL2Q
-         piL4Uu9J1tkFPIlsQGt58rBARzjhDBKS35ULzwFqYVZOe8xvqjZy7AO27Wqjr+4nkzVx
-         4IjVHn+SaaNyzgGM0vY1g+LKC7O0m+0uaJdVytvjkLEcWwbRKmg9/naa+IDfvq/AQ8gI
-         biPA==
+        bh=iVfC7CXfzzWY2c3nxjQ95SBnfThb5LdHUv97Cb716JQ=;
+        b=LwffgpbLmDvXPKj9JQ/iLtSDqUyT25tNrUl0UD+DapAPc/7RUXisuPvHI/JanAJ+q8
+         /lSHHhxuWCFBeFVGen2pk2QoDNVmm2xAulg3RQdiLwIa/ztaU2efYnt/EXCvDH7mO9Hj
+         Onxvq3IRjZn4rzif43KM/PB0ABXE3qOr/UDUhUBD9BlpLtAmbp8Fhforv7QdP1QP9ogB
+         +SVl0nJuFugdf0mGt2o0zoVEck/e8iX6ACdusbr3tk7kgDTohuHkPuerHnCtgN1cIYEA
+         eeG7UMIcxkMnkW8v0hL9x76XUs26gc3pdHOJOChCEv6qcDMxtC5LH7EEbgI2mxITPNnG
+         Sehg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=0KYas3tPhykALeKTm8edVjXNVmbCSCmca7ClUP4eXMo=;
-        b=S9fSH8hHp0CiXGxVhwu4fme6me363NY/hetlez92NPlSZJgwJfKOsQzAQxRMWNIYY/
-         /1vSRy2aSd/kuiwgRNBVZygJNm21gI7+tL1XNPkcfE+opjsd5YHkePN18ael2xsdkS1T
-         6yq6PXSGLNiGwH0P4YuNydUp1kxZfKtYs4xCZvYInFqgozaQaQFGjCv+zrOKdX7R01WI
-         MonkPkruPw9sZhZ1U8m+RkHIZsfjKRhw3MOW4x4iRRN4C8LFvSLUdtTVMnH9t/1/tnMt
-         09lVY3u+j1tnyvlW+rrushoLWVYp6Hy3HqDNTm3bTw7Td50xaCpYKW5QqYCU9zftCjJN
-         sUJQ==
-X-Gm-Message-State: AOAM533aDDNUDZmsp1qO8W12AxvYW7TR5/JCICGL8aisMeoOKEfFp/yR
-        fd1hISpXT8WLJmSLeny9FQ6749PuJtUWJg==
-X-Google-Smtp-Source: ABdhPJznJdjUXOSfNtQ53KVDEiGtw92OfprpN3x+DzArFxffCeEA8U78XywoW4Zcte/nnkxMKHZaqhSZ4+nsBw==
+        bh=iVfC7CXfzzWY2c3nxjQ95SBnfThb5LdHUv97Cb716JQ=;
+        b=b0oz+DMivBAUF1SLRDk3ov/Uk3gCg9XNLCHps5FSvxmkX94MhP0o6FHja8luoElCZM
+         pmtW5Q3x1kzFJ58xoFHo9oaynKPQYs33BuKQrQ20PDEHA1D3HxtGcxuuhaaCxY2oRFce
+         pWCVzBkWtLXzV3EjjWLnjTRDRtfpaGsKHu/Cqfrlr4yatT8ClD6ldvXSfkNSs+ATB15a
+         uKqnnFMrfn7hSYrPvT1D1dleuyrsWbRfI92qi+1jSU8oGuVkX/ftlmMioE9wf6lMTu+0
+         JajG0qLJezv0tRRJGZBF8DsQtEPOf+BgeYwca/Sq4qwcL3vtHhTuOZncYckO2diT54oN
+         FkGA==
+X-Gm-Message-State: AOAM533NNSgGVXfVB5pHkTS71Aw26p3kbOnapxbvKedmy+IzKjaNVETo
+        hXkeoPvz/2Xgs5Fm5JENMD8AfEW7H6Yjug==
+X-Google-Smtp-Source: ABdhPJwXgJSsoGTEu58lnkEBF5v9/GrYMHY3lTxuvByMkr+Ycm+3v1l92oE76H77kFU9pkVlq2K8EXIKlqujEw==
 Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:a25:390:: with SMTP id
- 138mr30858438ybd.28.1606779190196; Mon, 30 Nov 2020 15:33:10 -0800 (PST)
-Date:   Mon, 30 Nov 2020 15:32:40 -0800
+ (user=dlatypov job=sendgmr) by 2002:a25:c010:: with SMTP id
+ c16mr25433504ybf.142.1606779193971; Mon, 30 Nov 2020 15:33:13 -0800 (PST)
+Date:   Mon, 30 Nov 2020 15:32:41 -0800
 In-Reply-To: <20201130233242.78413-1-dlatypov@google.com>
-Message-Id: <20201130233242.78413-3-dlatypov@google.com>
+Message-Id: <20201130233242.78413-4-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20201130233242.78413-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-Subject: [PATCH 3/5] kunit: tool: stop using bare asserts in unit test
+Subject: [PATCH 4/5] kunit: tool: use `with open()` in unit test
 From:   Daniel Latypov <dlatypov@google.com>
 To:     davidgow@google.com
 Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
@@ -63,136 +63,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use self.assertEqual/assertNotEqual() instead.
-Besides being more appropriate in a unit test, it'll also give a better
-error message by show the unexpected values.
+The use of manual open() and .close() calls seems to be an attempt to
+keep the contents in scope.
+But Python doesn't restrict variables like that, so we can introduce new
+variables inside of a `with` and use them outside.
 
-Also
-* Delete redundant check of exception types. self.assertRaises does this.
-* s/kall/call. There's no reason to name it this way.
-  * This is probably a misunderstanding from the docs which uses it
-  since `mock.call` is in scope as `call`.
+Do so to make the code more Pythonic.
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- tools/testing/kunit/kunit_tool_test.py | 50 +++++++++++++-------------
- 1 file changed, 24 insertions(+), 26 deletions(-)
+ tools/testing/kunit/kunit_tool_test.py | 33 +++++++++++---------------
+ 1 file changed, 14 insertions(+), 19 deletions(-)
 
 diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 9f1f1e1b772a..e527ce9d3295 100755
+index e527ce9d3295..f2c12d96caa1 100755
 --- a/tools/testing/kunit/kunit_tool_test.py
 +++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -308,26 +308,26 @@ class KUnitMainTest(KUnitTest):
+@@ -106,15 +106,14 @@ class KUnitParserTest(KUnitTest):
+ 	def test_output_isolated_correctly(self):
+ 		log_path = get_absolute_path(
+ 			'test_data/test_output_isolated_correctly.log')
+-		file = open(log_path)
+-		result = kunit_parser.isolate_kunit_output(file.readlines())
++		with open(log_path) as file:
++			result = kunit_parser.isolate_kunit_output(file.readlines())
+ 		self.assertContains('TAP version 14', result)
+ 		self.assertContains('	# Subtest: example', result)
+ 		self.assertContains('	1..2', result)
+ 		self.assertContains('	ok 1 - example_simple_test', result)
+ 		self.assertContains('	ok 2 - example_mock_test', result)
+ 		self.assertContains('ok 1 - example', result)
+-		file.close()
  
- 	def test_config_passes_args_pass(self):
- 		kunit.main(['config', '--build_dir=.kunit'], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 1
--		assert self.linux_source_mock.run_kernel.call_count == 0
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-+		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+ 	def test_output_with_prefix_isolated_correctly(self):
+ 		log_path = get_absolute_path(
+@@ -149,42 +148,39 @@ class KUnitParserTest(KUnitTest):
+ 	def test_parse_successful_test_log(self):
+ 		all_passed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-all_passed.log')
+-		file = open(all_passed_log)
+-		result = kunit_parser.parse_run_tests(file.readlines())
++		with open(all_passed_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.SUCCESS,
+ 			result.status)
+-		file.close()
  
- 	def test_build_passes_args_pass(self):
- 		kunit.main(['build'], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 0
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
- 		self.linux_source_mock.build_um_kernel.assert_called_once_with(False, 8, '.kunit', None)
--		assert self.linux_source_mock.run_kernel.call_count == 0
-+		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+ 	def test_parse_failed_test_log(self):
+ 		failed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-failure.log')
+-		file = open(failed_log)
+-		result = kunit_parser.parse_run_tests(file.readlines())
++		with open(failed_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.FAILURE,
+ 			result.status)
+-		file.close()
  
- 	def test_exec_passes_args_pass(self):
- 		kunit.main(['exec'], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 0
--		assert self.linux_source_mock.run_kernel.call_count == 1
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
-+		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
- 		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='.kunit', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 	def test_no_tests(self):
+ 		empty_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-no_tests_run.log')
+-		file = open(empty_log)
+-		result = kunit_parser.parse_run_tests(
+-			kunit_parser.isolate_kunit_output(file.readlines()))
++		with open(empty_log) as file:
++			result = kunit_parser.parse_run_tests(
++				kunit_parser.isolate_kunit_output(file.readlines()))
+ 		self.assertEqual(0, len(result.suites))
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.NO_TESTS,
+ 			result.status)
+-		file.close()
  
- 	def test_run_passes_args_pass(self):
- 		kunit.main(['run'], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 1
--		assert self.linux_source_mock.run_kernel.call_count == 1
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-+		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
- 			build_dir='.kunit', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-@@ -336,35 +336,33 @@ class KUnitMainTest(KUnitTest):
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
- 		with self.assertRaises(SystemExit) as e:
- 			kunit.main(['exec'], self.linux_source_mock)
--		assert type(e.exception) == SystemExit
--		assert e.exception.code == 1
-+		self.assertEqual(e.exception.code, 1)
+ 	def test_no_kunit_output(self):
+ 		crash_log = get_absolute_path(
+ 			'test_data/test_insufficient_memory.log')
+-		file = open(crash_log)
+ 		print_mock = mock.patch('builtins.print').start()
+-		result = kunit_parser.parse_run_tests(
+-			kunit_parser.isolate_kunit_output(file.readlines()))
++		with open(crash_log) as file:
++			result = kunit_parser.parse_run_tests(
++				kunit_parser.isolate_kunit_output(file.readlines()))
+ 		print_mock.assert_any_call(StrContains('no tests run!'))
+ 		print_mock.stop()
+ 		file.close()
+@@ -192,12 +188,11 @@ class KUnitParserTest(KUnitTest):
+ 	def test_crashed_test(self):
+ 		crashed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-crash.log')
+-		file = open(crashed_log)
+-		result = kunit_parser.parse_run_tests(file.readlines())
++		with open(crashed_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.TEST_CRASHED,
+ 			result.status)
+-		file.close()
  
- 	def test_run_passes_args_fail(self):
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
- 		with self.assertRaises(SystemExit) as e:
- 			kunit.main(['run'], self.linux_source_mock)
--		assert type(e.exception) == SystemExit
--		assert e.exception.code == 1
--		assert self.linux_source_mock.build_reconfig.call_count == 1
--		assert self.linux_source_mock.run_kernel.call_count == 1
-+		self.assertEqual(e.exception.code, 1)
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-+		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
- 		self.print_mock.assert_any_call(StrContains(' 0 tests run'))
- 
- 	def test_exec_raw_output(self):
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
- 		kunit.main(['exec', '--raw_output'], self.linux_source_mock)
--		assert self.linux_source_mock.run_kernel.call_count == 1
--		for kall in self.print_mock.call_args_list:
--			assert kall != mock.call(StrContains('Testing complete.'))
--			assert kall != mock.call(StrContains(' 0 tests run'))
-+		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
-+		for call in self.print_mock.call_args_list:
-+			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
-+			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
- 
- 	def test_run_raw_output(self):
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
- 		kunit.main(['run', '--raw_output'], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 1
--		assert self.linux_source_mock.run_kernel.call_count == 1
--		for kall in self.print_mock.call_args_list:
--			assert kall != mock.call(StrContains('Testing complete.'))
--			assert kall != mock.call(StrContains(' 0 tests run'))
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-+		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
-+		for call in self.print_mock.call_args_list:
-+			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
-+			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
- 
- 	def test_exec_timeout(self):
- 		timeout = 3453
-@@ -375,7 +373,7 @@ class KUnitMainTest(KUnitTest):
- 	def test_run_timeout(self):
- 		timeout = 3453
- 		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 1
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
- 			build_dir='.kunit', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-@@ -383,7 +381,7 @@ class KUnitMainTest(KUnitTest):
- 	def test_run_builddir(self):
- 		build_dir = '.kunit'
- 		kunit.main(['run', '--build_dir=.kunit'], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 1
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
- 			build_dir=build_dir, timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-@@ -391,7 +389,7 @@ class KUnitMainTest(KUnitTest):
- 	def test_config_builddir(self):
- 		build_dir = '.kunit'
- 		kunit.main(['config', '--build_dir', build_dir], self.linux_source_mock)
--		assert self.linux_source_mock.build_reconfig.call_count == 1
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
- 
- 	def test_build_builddir(self):
- 		build_dir = '.kunit'
+ 	def test_ignores_prefix_printk_time(self):
+ 		prefix_log = get_absolute_path(
 -- 
 2.29.2.454.gaff20da3a2-goog
 
