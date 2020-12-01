@@ -2,97 +2,203 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C11F42CA0EE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Dec 2020 12:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B3C2CA250
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Dec 2020 13:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgLALGw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Dec 2020 06:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726689AbgLALGv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Dec 2020 06:06:51 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACC7C0613D2;
-        Tue,  1 Dec 2020 03:06:11 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id j13so1027564pjz.3;
-        Tue, 01 Dec 2020 03:06:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nKIYXaScaIE7TEOxHPKKOMA1edFOJVdBECoLY/zrsjk=;
-        b=gzKNikVppqu163aDscUKjy47nSF+BZMMVUkL1n8ZhDCAzk/k1f5Gz1cvFju0C5AssG
-         dMiiNelWookXTDzBGk+qPQ0pW2PrMDJ9NNNnKNDrKmJijIz4t+BzJXhM5TPeuzukh3Zp
-         8yLmjVEjzwA1R7OFORS0IAguWeLl2FGTcOajuaOJHRty478JWLV3/s58wiRfmQX9UnOj
-         QTeqaI8KUMGlLld21DZJphgMWDR3BROhD52bb5FYj+V6qK3P+f3OTwTu1hiusvUMSTAz
-         tRSvYXeCW7oSnKuSv4pTaGdtEW5EUfOtL3nJXcGrbQ1LhIQL7P4VzEDMRz4efDwgK1Ma
-         1JFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nKIYXaScaIE7TEOxHPKKOMA1edFOJVdBECoLY/zrsjk=;
-        b=jKXOD0xL7BJ/M+FQSJo9NjKCvRm7ASUXhBgqA8muLkb5U91Aa0L7PZDHhW6oCO7Sb1
-         wv2ntiJ4/G6NuMUXMpVV9iuRg6Ai6nHbNTTy6mpXlpHUVC4KyCbsqkExgYlm+6bUngM+
-         MaH4TwHfp3Hbbwen5xo+rfslXbJNtsofWVCK9yKbW5UwMDFFXJtakDuuHVVoU/KL3zb6
-         bk1Vyhr1sUR3Te3XCOju62qvMwuKVD+xrn374fjPjF2TEwxImCMk8gNb2wPJtupT62JY
-         HcCae4qr/PTjsrl7VtLDwsUyWt9iVM2/e7mOsxp6lj+ruKG1CVGm0SwHggy/nAQT2LQC
-         wttg==
-X-Gm-Message-State: AOAM532fkHOwTk2+iCQXXGCAOwWT2Dy4WJdnDJx/os1Mroa5dCmFzTA3
-        wKjrCYcYGaZh28QR7c9DVKZTbPYKdHvUk7v4MQ8=
-X-Google-Smtp-Source: ABdhPJwGj51Jga696lxn1uueNX6o3bKkRA2+c5xczsN64bmbGAJmaBGOQfx6Y32TI0yXWgAaHPiLtdss+msba2YlucA=
-X-Received: by 2002:a17:902:ac93:b029:d8:d2c5:e5b1 with SMTP id
- h19-20020a170902ac93b02900d8d2c5e5b1mr2295356plr.17.1606820771072; Tue, 01
- Dec 2020 03:06:11 -0800 (PST)
+        id S1730781AbgLAMKh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Dec 2020 07:10:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40534 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730755AbgLAMKh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Dec 2020 07:10:37 -0500
+Received: from mail.kernel.org (ip5f5ad5d9.dynamic.kabel-deutschland.de [95.90.213.217])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 66E8D221FD;
+        Tue,  1 Dec 2020 12:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606824555;
+        bh=CKU7nFOSsbN/XW/BnFcmO1V7GANr6/4MKPOejaVqscI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eqagvTWutTLcVFzb95Ciee9q0qDa5UFPbM5AAbFexOp5sfH7FAIDQn0oGeWvCXuev
+         TL7qtQMzvXDryh4IscT9uizp2JYQMu8M7zg6S2cpSqSmJfU9hbX12hd/de4h/liUaU
+         ksZGda6OQGzAGoKB9pYow+AqPj198CvdI0OsA+3E=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kk4T2-00DGcs-P1; Tue, 01 Dec 2020 13:09:12 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Ben Segall <bsegall@google.com>,
+        Colin Cross <ccross@android.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Mel Gorman <mgorman@suse.de>, Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Gong <richard.gong@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Will Drewry <wad@chromium.org>, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-rdma@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH v5 00/16]Fix several bad kernel-doc markups
+Date:   Tue,  1 Dec 2020 13:08:53 +0100
+Message-Id: <cover.1606823973.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20201201071632.68471-1-98.arpi@gmail.com>
-In-Reply-To: <20201201071632.68471-1-98.arpi@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 1 Dec 2020 13:06:59 +0200
-Message-ID: <CAHp75VfV60sRAKkzvbEKW7UEZSiDmNVfd_kB-OOKZRk5MNMeDQ@mail.gmail.com>
-Subject: Re: [PATCH v3] lib: Convert test_hexdump.c to KUnit
-To:     Arpitha Raghunandan <98.arpi@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 1, 2020 at 9:21 AM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
-> Convert test lib/test_hexdump.c to KUnit. More information about
-> KUnit can be found at:
-> https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html.
-> KUnit provides a common framework for unit tests in the kernel.
-> KUnit and kselftest are standardizing around KTAP, converting this
-> test to KUnit makes this test output in KTAP which we are trying to
-> make the standard test result format for the kernel.
+Kernel-doc has always be limited to a probably bad documented
+rule:
 
-Below doesn't suit commit message, perhaps adding it after '---' line
-would be good. In the commit message you can choose one failed case
-followed by all OK and show the difference.
+The kernel-doc markups should appear *imediatelly before* the
+function or data structure that it documents.
 
-> I ran both the original and converted tests as is to produce the
-> output for success of the test in the two cases. I also ran these
-> tests with a small modification to show the difference in the output
-> for failure of the test in both cases. The modification I made is:
->  static const char * const test_data_4_le[] __initconst = {
-> -       "7bdb32be", "b293180a", "24c4ba70", "9b34837d",
-> +       "7bdb32be", "b293180a", "24c4ba70", "9b3483d",
->
-> The difference in outputs can be seen here:
-> https://gist.github.com/arpi-r/38f53a3c65692bf684a6bf3453884b6e
+On other words, if a C file would contain something like this:
 
-Looks pretty much good, what I'm sad to see is the absence of the test
-statistics. Any ideas if we can get it back?
+	/**
+	 * foo - function foo
+	 * @args: foo args
+	 */
+	static inline void bar(int args);
+
+	/**
+	 * bar - function bar
+	 * @args: foo args
+	 */
+	static inline void foo(void *args);
+
+
+The output (in ReST format) will be:
+
+	.. c:function:: void bar (int args)
+
+	   function foo
+
+	**Parameters**
+
+	``int args``
+	  foo args
+
+
+	.. c:function:: void foo (void *args)
+
+	   function bar
+
+	**Parameters**
+
+	``void *args``
+	  foo args
+
+Which is clearly a wrong result.  Before this changeset, 
+not even a warning is produced on such cases.
+
+As placing such markups just before the documented
+data is a common practice, on most cases this is fine.
+
+However, as patches touch things, identifiers may be
+renamed, and people may forget to update the kernel-doc
+markups to follow such changes.
+
+This has been happening for quite a while, as there are
+lots of files with kernel-doc problems.
+
+This series address those issues and add a file at the
+end that will enforce that the identifier will match the
+kernel-doc markup, avoiding this problem from
+keep happening as time goes by.
+
+This series is based on current upstream tree.
+
+@maintainers: feel free to pick the patches and
+apply them directly on your trees, as all patches on 
+this series are independent from the other ones.
+
+--
+
+v5:
+  - The completion.h patch was replaced by another one which drops
+    an obsolete macro;
+  - Some typos got fixed and review tags got added;
+  - Dropped patches that were already merged at linux-next.
+
+v4:
+
+  - Patches got rebased and got some acks.
+
+Mauro Carvalho Chehab (16):
+  HSI: fix a kernel-doc markup
+  IB: fix kernel-doc markups
+  parport: fix a kernel-doc markup
+  rapidio: fix kernel-doc a markup
+  fs: fix kernel-doc markups
+  pstore/zone: fix a kernel-doc markup
+  completion: drop init_completion define
+  firmware: stratix10-svc: fix kernel-doc markups
+  connector: fix a kernel-doc markup
+  lib/crc7: fix a kernel-doc markup
+  memblock: fix kernel-doc markups
+  w1: fix a kernel-doc markup
+  sched: fix kernel-doc markup
+  selftests: kselftest_harness.h: partially fix kernel-doc markups
+  refcount.h: fix a kernel-doc markup
+  scripts: kernel-doc: validate kernel-doc markup with the actual names
+
+ drivers/hsi/hsi_core.c                        |  2 +-
+ drivers/infiniband/core/cm.c                  |  5 +-
+ drivers/infiniband/core/cq.c                  |  4 +-
+ drivers/infiniband/core/iwpm_util.h           |  2 +-
+ drivers/infiniband/core/sa_query.c            |  3 +-
+ drivers/infiniband/core/verbs.c               |  4 +-
+ drivers/infiniband/sw/rdmavt/ah.c             |  2 +-
+ drivers/infiniband/sw/rdmavt/mcast.c          | 12 ++--
+ drivers/infiniband/sw/rdmavt/qp.c             |  8 +--
+ drivers/infiniband/ulp/iser/iscsi_iser.c      |  2 +-
+ .../infiniband/ulp/opa_vnic/opa_vnic_encap.h  |  2 +-
+ .../ulp/opa_vnic/opa_vnic_vema_iface.c        |  2 +-
+ drivers/infiniband/ulp/srpt/ib_srpt.h         |  2 +-
+ drivers/parport/share.c                       |  2 +-
+ drivers/rapidio/rio.c                         |  2 +-
+ fs/dcache.c                                   | 72 +++++++++----------
+ fs/inode.c                                    |  4 +-
+ fs/pstore/zone.c                              |  2 +-
+ fs/seq_file.c                                 |  5 +-
+ fs/super.c                                    | 12 ++--
+ include/linux/completion.h                    |  5 +-
+ include/linux/connector.h                     |  2 +-
+ .../firmware/intel/stratix10-svc-client.h     | 10 +--
+ include/linux/memblock.h                      |  4 +-
+ include/linux/parport.h                       | 31 ++++++++
+ include/linux/refcount.h                      |  2 +-
+ include/linux/w1.h                            |  2 +-
+ include/rdma/ib_verbs.h                       | 11 +++
+ kernel/sched/core.c                           | 16 ++---
+ kernel/sched/fair.c                           |  2 +-
+ lib/crc7.c                                    |  2 +-
+ scripts/kernel-doc                            | 62 +++++++++++-----
+ tools/testing/selftests/kselftest_harness.h   | 22 +++---
+ 33 files changed, 197 insertions(+), 123 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.28.0
+
+
