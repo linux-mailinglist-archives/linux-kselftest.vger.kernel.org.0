@@ -2,197 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 237322CA896
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Dec 2020 17:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754942CAAF3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Dec 2020 19:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388539AbgLAQpW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Dec 2020 11:45:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728720AbgLAQpW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Dec 2020 11:45:22 -0500
-Received: from kernel.org (unknown [87.71.85.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DAF89206B7;
-        Tue,  1 Dec 2020 16:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606841081;
-        bh=GUtX0hNx32YEEtCdAUkzC5OF7zPy+e78biDig6Frozg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gvfnhaSLv1jMRih6i9BkZFwqT83+9p5JD98gXcO7JIrkTzOBB+rRro5U9QgAxqQSV
-         7dt/xWjtLVQEVt1Ex5jrQh1zNLQMN4ovnZ42jokTz+d8CL1J4Neq9s1+q39AS5euFb
-         +V52ld2bkVC2Nmbbgl6GFHYT0sShRwKokRlnOllM=
-Date:   Tue, 1 Dec 2020 18:44:24 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-Subject: Re: [PATCH v13 07/10] secretmem: add memcg accounting
-Message-ID: <20201201164424.GC751215@kernel.org>
-References: <20201201074559.27742-1-rppt@kernel.org>
- <20201201074559.27742-8-rppt@kernel.org>
- <CALvZod4bTBGf7DS=5EUCeU810p5C1aqf5sB0n1N8sc4jt5W3Tg@mail.gmail.com>
+        id S1727914AbgLASmc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Dec 2020 13:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726814AbgLASmc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Dec 2020 13:42:32 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3315C0613CF
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Dec 2020 10:41:51 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id p187so1945766iod.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Dec 2020 10:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ifLMTCdzkypMnKPu3DENVsgsRmsClQAlvMw8Ok6iiAU=;
+        b=qRokkZ5KuP39HZaO5JOt7KGeoqhmN85W00thoyigFbmg3j/o9ov2WHLCHd1WLQmWqo
+         KKeaiO7UIqiUwDvuO5HXNiS3cvETsMZfMXqX4Haua2TkE4d4lU0Kg2ZgCH0fs3I6KRE/
+         pL82YpuI/jwbxyF4rNjfGj6t2RCRsczDhCy5iS8/gc4/3eXjSvK8qboCduiazpZtl6CF
+         aO1XTnuCm/80gy61ryXKi2834ZvkbWUHeM3vBy9AvOZAyNzu4ZaIvqTSJiz/SCSaQgsD
+         99NloyqvvbrqdijkryKLwzI2VSJ9Vy2i0RQu/sJAC1yZ2ju0B7rrc6FLIkHsQplas3L+
+         VsMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ifLMTCdzkypMnKPu3DENVsgsRmsClQAlvMw8Ok6iiAU=;
+        b=PZGHZQkEoRLO1cY7B9uYW5F2mmvnhag5rY8EP2EXudi0khglURAPwGbwLyWqvdvmSE
+         hYdQ/3wplCYJ0xG0J3lvYotYISqrB/3SCUzBfv6ubw8cQmIgXVOhq4/4yHZ5AJfE24/A
+         iGGC0PL/lsWujnp/m3XG6L61H6EO1FB60xtW9gQJreuMk7DWhfkvsXqhDfVZGPGav5Bc
+         PK0GS+jCKeDmM1BLZyIjTnBXgKu+WtjcOceQte98Mne5jHi5PYXxm2+6O7fUfgkItDxs
+         0qcbobV9nY52T+Gs0/2fWQ9hixyEa9OhCA5RByFXAYdA28qJBVNQ1zXrXIKd0eP/nGrq
+         hV+w==
+X-Gm-Message-State: AOAM532ZelWzog0m0uyFKEAARJ5IwEtqWmD4vEkReboLLxuAWTDB/5b2
+        6JvPDqVsub2yCiA0Zs2ePpHieFmjZTqFJhMdJNvBKA==
+X-Google-Smtp-Source: ABdhPJyec76CXBVIfKYeX0dCaUek6qDX//GwRZuF5v3JWnkcINH2r7jRKEgj5uXOlI33emBdMLGV6QMf6Gl65aLke3M=
+X-Received: by 2002:a05:6638:22bc:: with SMTP id z28mr3866376jas.62.1606848110912;
+ Tue, 01 Dec 2020 10:41:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALvZod4bTBGf7DS=5EUCeU810p5C1aqf5sB0n1N8sc4jt5W3Tg@mail.gmail.com>
+References: <20201130233242.78413-1-dlatypov@google.com> <20201130233242.78413-4-dlatypov@google.com>
+ <CABVgOSnMAGcMH-Y0o_KhMbyNYb1y4Wx6SFZO2d3=XUjefvmuSg@mail.gmail.com>
+In-Reply-To: <CABVgOSnMAGcMH-Y0o_KhMbyNYb1y4Wx6SFZO2d3=XUjefvmuSg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 1 Dec 2020 10:41:39 -0800
+Message-ID: <CAGS_qxr3PYi16tpQg8WcQBeDpD_j2ZwB91snjKOm6C=_ptTF=A@mail.gmail.com>
+Subject: Re: [PATCH 4/5] kunit: tool: use `with open()` in unit test
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 01, 2020 at 08:26:28AM -0800, Shakeel Butt wrote:
-> On Mon, Nov 30, 2020 at 11:47 PM Mike Rapoport <rppt@kernel.org> wrote:
+On Mon, Nov 30, 2020 at 11:33 PM David Gow <davidgow@google.com> wrote:
+>
+> On Tue, Dec 1, 2020 at 7:33 AM Daniel Latypov <dlatypov@google.com> wrote:
 > >
-> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > The use of manual open() and .close() calls seems to be an attempt to
+> > keep the contents in scope.
+> > But Python doesn't restrict variables like that, so we can introduce new
+> > variables inside of a `with` and use them outside.
 > >
-> > Account memory consumed by secretmem to memcg. The accounting is updated
-> > when the memory is actually allocated and freed.
+> > Do so to make the code more Pythonic.
 > >
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > Acked-by: Roman Gushchin <guro@fb.com>
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > > ---
-> >  mm/filemap.c   |  3 ++-
-> >  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 37 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/filemap.c b/mm/filemap.c
-> > index 249cf489f5df..cf7f1dc9f4b8 100644
-> > --- a/mm/filemap.c
-> > +++ b/mm/filemap.c
-> > @@ -42,6 +42,7 @@
-> >  #include <linux/psi.h>
-> >  #include <linux/ramfs.h>
-> >  #include <linux/page_idle.h>
-> > +#include <linux/secretmem.h>
-> >  #include "internal.h"
-> >
-> >  #define CREATE_TRACE_POINTS
-> > @@ -844,7 +845,7 @@ static noinline int __add_to_page_cache_locked(struct page *page,
-> >         page->mapping = mapping;
-> >         page->index = offset;
-> >
-> > -       if (!huge) {
-> > +       if (!huge && !page_is_secretmem(page)) {
-> >                 error = mem_cgroup_charge(page, current->mm, gfp);
-> >                 if (error)
-> >                         goto error;
-> > diff --git a/mm/secretmem.c b/mm/secretmem.c
-> > index 52a900a135a5..5e3e5102ad4c 100644
-> > --- a/mm/secretmem.c
-> > +++ b/mm/secretmem.c
-> > @@ -18,6 +18,7 @@
-> >  #include <linux/memblock.h>
-> >  #include <linux/pseudo_fs.h>
-> >  #include <linux/secretmem.h>
-> > +#include <linux/memcontrol.h>
-> >  #include <linux/set_memory.h>
-> >  #include <linux/sched/signal.h>
-> >
-> > @@ -44,6 +45,32 @@ struct secretmem_ctx {
-> >
-> >  static struct cma *secretmem_cma;
-> >
-> > +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
-> > +{
-> > +       int err;
-> > +
-> > +       err = memcg_kmem_charge_page(page, gfp, order);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       /*
-> > +        * seceremem caches are unreclaimable kernel allocations, so treat
-> > +        * them as unreclaimable slab memory for VM statistics purposes
-> > +        */
-> > +       mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
-> > +                             PAGE_SIZE << order);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void secretmem_unaccount_pages(struct page *page, int order)
-> > +{
-> > +
-> > +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
-> > +                           -PAGE_SIZE << order);
-> 
-> mod_lruvec_page_state()
+> I'm fine with this, and it clearly works fine for me. Out of
+> curiosity, though, is there any difference here other than it being
+> more usual Python style?
 
-Argh... Will fix.
+Files aren't leaked if we error out due to some exception before we
+call close().
+And self.assertEqual() and friends raise exceptions on failure, so
+we're toeing that line here.
 
-> > +       memcg_kmem_uncharge_page(page, order);
-> > +}
-> > +
-> >  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >  {
-> >         unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
-> > @@ -56,10 +83,14 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >         if (!page)
-> >                 return -ENOMEM;
-> >
-> > -       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
-> >         if (err)
-> >                 goto err_cma_release;
-> >
-> > +       err = set_direct_map_invalid_noflush(page, nr_pages);
-> > +       if (err)
-> > +               goto err_memcg_uncharge;
-> > +
-> >         addr = (unsigned long)page_address(page);
-> >         err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
-> >         if (err)
-> > @@ -76,6 +107,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
-> >          * won't fail
-> >          */
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +err_memcg_uncharge:
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >  err_cma_release:
-> >         cma_release(secretmem_cma, page, nr_pages);
-> >         return err;
-> > @@ -302,6 +335,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
-> >         int i;
-> >
-> >         set_direct_map_default_noflush(page, nr_pages);
-> > +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
-> >
-> >         for (i = 0; i < nr_pages; i++)
-> >                 clear_highpage(page + i);
-> > --
-> > 2.28.0
-> >
+But other than being more robust, it should be equivalent.
 
--- 
-Sincerely yours,
-Mike.
+>
+> We've struggled a bit in the past toeing a line between trying to
+> follow "normal" Python style versus adapting it a bit to be more
+> "kernel-y". Experience thus far has actually been that going out on
+> our own has caused more problems than it solves, so I'm all for this
+> change, but I do admit that my brain does understand the older code a
+> touch more easily.
+
+Ack. Python's lack of lexical scopes is a bit disconcerting.
+But from a readability standpoint, it's a bit more self-evident than
+having to write it would be, imo.
+So I think following more standard Python style here outweighs the cost.
+
+>
+> In any case,
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+>
+> -- David
