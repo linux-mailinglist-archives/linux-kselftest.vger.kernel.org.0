@@ -2,247 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B729C2CC8BF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Dec 2020 22:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A802CCA28
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Dec 2020 23:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbgLBVQr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Dec 2020 16:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S2387841AbgLBW7Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Dec 2020 17:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgLBVQq (ORCPT
+        with ESMTP id S2387762AbgLBW7X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 16:16:46 -0500
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C742EC0617A6
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 13:16:00 -0800 (PST)
-Received: by mail-qk1-x749.google.com with SMTP id o190so91531qkf.15
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 13:16:00 -0800 (PST)
+        Wed, 2 Dec 2020 17:59:23 -0500
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7560BC0617A7
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 14:58:43 -0800 (PST)
+Received: by mail-io1-xd42.google.com with SMTP id y5so79597iow.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 14:58:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=gpYfjjVyPChH5XBEuEH1c2uCHNEnIzUnJDng/FcjP0Q=;
-        b=JxZBZcJg8zLpCUKv4LaZW1qeFFBtQrOtmtshwIIg06kKA/3KXacaS5+6dEbO7SpoPT
-         PwRGDTvg7ZNavjW19r6NwfV9cU/NCZuAhMDo8VEk3PW2Xjzlhi12W/NrvXJ+Ry/T6YmI
-         dzDiTVp+m0Fzz3dM/cOrEbzWAQeybiv9OxwbNji5/Ewb8f7Y9k2VaGvrBICO6c57nmFi
-         C4PU73aVtLcOxCGGGytlQJHoukC+rsP9hYtyQYG8PkN7dBh36MsR+ZeciaiXhRymlyeA
-         mWw2XXGVR3ETOssu2aHyzK8R5kUnSRUIbvvwQ51RyKO9ZmT2R0HzM2vE7i+bh4dL/0Sr
-         PZiw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5cB+/vzqNyGLlY6gjXLdgcPyiXRJ9zfEjY/dw9Idssc=;
+        b=X8557/AaDSnc9UMi9+sP+NzMIycm4dY1OUc43TJwqCyubHtdOXlntePdg7MSqERib7
+         2MHzSJXG1VwTGZwJ7AAfpgYiHYKhdFqqbt54Q++1yolC8XAg97L4/l6bPtqFRKYwZHMc
+         Aw1BX3BTAcOw807GmPNnGGsHLfghlU/C8d3+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=gpYfjjVyPChH5XBEuEH1c2uCHNEnIzUnJDng/FcjP0Q=;
-        b=ANoL1tn9WNvGjDjXOJJykvAqegqBPwK6qeEEDokmECxMQs4RGwCtCq9FWbMWf5Enik
-         0A1kZcufCrV5qJMJWTUGpPr16EkngTtcLvaxLZHlWZrWm/gl48kgrc6HhjGDdwwcG8At
-         oGazznMggl1bfrIc01ZRi+f4AnhxXmn7sJ8wHwgQxnI/95z/zrraZQV1IXqkqDiDrqfr
-         +NV6+68M11ZZnOXgqTFxTXbAOAmTlKWHIldo/KwPOZygQneKTGDZlPAv2SvWRgUp8E9Y
-         q+h3NuqvHHTebfFnI1UYDQOKpyh3P9vdYKf7ajzeyocqblY8fKJWIa/7IbujhNN7aBmK
-         6pIg==
-X-Gm-Message-State: AOAM532GE+8ldQFH1u+uiJZ0Zz4jQSE24sTPRdGdJoZg2ltfO7uWCWWs
-        i/hBtOYlIkNjgCSAYMj1VXpVpNfDhKfEovaNjrwF
-X-Google-Smtp-Source: ABdhPJw6a2eCfW4XxyJ1xbNVmhrHWMEtYxnLZpw5s/9d+csck/5wm1AhcaljJwd0r0z3+fENr06spZJJScBW6pyXXQq6
-Sender: "axelrasmussen via sendgmr" <axelrasmussen@ajr0.svl.corp.google.com>
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:f693:9fff:feef:c8f8])
- (user=axelrasmussen job=sendgmr) by 2002:ad4:5762:: with SMTP id
- r2mr48569qvx.45.1606943759960; Wed, 02 Dec 2020 13:15:59 -0800 (PST)
-Date:   Wed,  2 Dec 2020 13:15:42 -0800
-Message-Id: <20201202211542.1121189-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-Subject: [PATCH] userfaultfd: selftests: make __{s,u}64 format specifiers portable
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Alan Gilbert <dgilbert@redhat.com>
-Cc:     Greg Thelen <gthelen@google.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5cB+/vzqNyGLlY6gjXLdgcPyiXRJ9zfEjY/dw9Idssc=;
+        b=rRtV90kVSfeyCw017uQC14BA3BgDWP39499BbC0aqmacunvD6stuSAMzNj2gcz4qen
+         23U88ksSrHwf34fOGlCoAhYUInpqinr7bVymbJ05Eyz5Y9Bveqlg0cYTrc6IHto8nCE+
+         RvLfSpTmXUbSInSzQmeEzcPPNTcx45V/t6BCnqxA0WSJh82FEEXW9Unwblge7DzaXnrP
+         4Q+jPybpbmKg6bs72vjubFA9fvdrwOhaF4RzAodSRQvxJrOn65Rt6M7gH5SI3C+rJ36E
+         KUeUD4kU30SEnHvWOLOoXMAAx99FvNa2dg/sa9ECgzSBK3Ton3yA9etocVwzAHi04vyD
+         17lw==
+X-Gm-Message-State: AOAM533YYlD51+554DTdQejYIEXKaa8p5u1l9DysiOOSpJ91XBjDIuwW
+        SH3mj1DOg1VnkGAKjmgxPIg1+g==
+X-Google-Smtp-Source: ABdhPJzw3Rv1enCYSm9+2gzSPLTdHJBQW7KQ7rpvW60Gn0Ix2oysMP10GIdQH+AH3ho7nq+g1z7Y2Q==
+X-Received: by 2002:a6b:600a:: with SMTP id r10mr533063iog.143.1606949922814;
+        Wed, 02 Dec 2020 14:58:42 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id a3sm118730ilp.5.2020.12.02.14.58.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Dec 2020 14:58:42 -0800 (PST)
+Subject: Re: [PATCH v9 1/2] kunit: Support for Parameterized Testing
+To:     Marco Elver <elver@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Arpitha Raghunandan <98.arpi@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20201116054035.211498-1-98.arpi@gmail.com>
+ <CABVgOSkoQahYqMJ3dD1_X2+rF3OgwT658+8HRM2EZ5e0-94jmw@mail.gmail.com>
+ <CANpmjNOhb13YthVHmXxMjpD2JZUO4H2Z1KZSKqHeFUv-RbM5+Q@mail.gmail.com>
+ <CABVgOSnGnkCnAyAqVoLhMGb6XV_irtYB7pyOTon5Scab8GxKtg@mail.gmail.com>
+ <CAFd5g4768o7UtOmM3X0X5upD0uF3j-=g3txi0_Ue3z8oM_Ghow@mail.gmail.com>
+ <505b8cd0-a61e-5ec3-7e0b-239d0ff55d56@linuxfoundation.org>
+ <CANpmjNMOMD+2OhBWNh5XuFufbm1bhXTUm4Y3_YiNNdfC=G2xdQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <baa3bec1-224e-43c6-1e63-982e5eeb217f@linuxfoundation.org>
+Date:   Wed, 2 Dec 2020 15:58:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <CANpmjNMOMD+2OhBWNh5XuFufbm1bhXTUm4Y3_YiNNdfC=G2xdQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On certain platforms (powerpcle is the one on which I ran into this),
-"%Ld" and "%Lu" are unsuitable for printing __s64 and __u64,
-respectively, resulting in a build warning. Cast to {u,}int64_t, and
-use the PRI{d,u}64 macros defined in inttypes.h to print them. This
-ought to be portable to all platforms.
+On 12/1/20 4:31 PM, Marco Elver wrote:
+> On Tue, 1 Dec 2020 at 23:28, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 11/30/20 3:22 PM, Brendan Higgins wrote:
+>>> On Mon, Nov 23, 2020 at 11:25 PM David Gow <davidgow@google.com> wrote:
+>>>>
+>>>> On Mon, Nov 23, 2020 at 9:08 PM Marco Elver <elver@google.com> wrote:
+>>>>>
+>>>>> On Tue, 17 Nov 2020 at 08:21, David Gow <davidgow@google.com> wrote:
+>>>>>> On Mon, Nov 16, 2020 at 1:41 PM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+>>>>>>>
+>>>>>>> Implementation of support for parameterized testing in KUnit. This
+>>>>>>> approach requires the creation of a test case using the
+>>>>>>> KUNIT_CASE_PARAM() macro that accepts a generator function as input.
+>>>>>>>
+>>>>>>> This generator function should return the next parameter given the
+>>>>>>> previous parameter in parameterized tests. It also provides a macro to
+>>>>>>> generate common-case generators based on arrays. Generators may also
+>>>>>>> optionally provide a human-readable description of parameters, which is
+>>>>>>> displayed where available.
+>>>>>>>
+>>>>>>> Note, currently the result of each parameter run is displayed in
+>>>>>>> diagnostic lines, and only the overall test case output summarizes
+>>>>>>> TAP-compliant success or failure of all parameter runs. In future, when
+>>>>>>> supported by kunit-tool, these can be turned into subsubtest outputs.
+>>>>>>>
+>>>>>>> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+>>>>>>> Co-developed-by: Marco Elver <elver@google.com>
+>>>>>>> Signed-off-by: Marco Elver <elver@google.com>
+>>>>>>> ---
+>>>>>> [Resending this because my email client re-defaulted to HTML! Aarrgh!]
+>>>>>>
+>>>>>> This looks good to me! I tested it in UML and x86-64 w/ KASAN, and
+>>>>>> both worked fine.
+>>>>>>
+>>>>>> Reviewed-by: David Gow <davidgow@google.com>
+>>>>>> Tested-by: David Gow <davidgow@google.com>
+>>>>>
+>>>>> Thank you!
+>>>>>
+>>>>>> Thanks for sticking with this!
+>>>>>
+>>>>> Will these patches be landing in 5.11 or 5.12?
+>>>>>
+>>>>
+>>>> I can't think of any reason not to have these in 5.11. We haven't
+>>>> started staging things in the kselftest/kunit branch for 5.11 yet,
+>>>> though.
+>>>>
+>>>> Patch 2 will probably need to be acked by Ted for ext4 first.
+>>>>
+>>>> Brendan, Shuah: can you make sure this doesn't get lost in patchwork?
+>>>
+>>> Looks good to me. I would definitely like to pick this up. But yeah,
+>>> in order to pick up 2/2 we will need an ack from either Ted or Iurii.
+>>>
+>>> Ted seems to be busy right now, so I think I will just ask Shuah to go
+>>> ahead and pick this patch up by itself and we or Ted can pick up patch
+>>> 2/2 later.
+>>>
+>>> Cheers
+>>>
+>>
+>> I am seeing
+>>
+>> ERROR: need consistent spacing around '*' (ctx:WxV)
+>> #272: FILE: include/kunit/test.h:1786:
+>> +               typeof((array)[0]) *__next = prev ? ((typeof(__next)) prev) + 1 :
+>> (array);        \
+>>                                     ^
+>>
+>> Can you look into this and send v10?
+> 
+> This is a false positive. I pointed this out here before:
+> https://lkml.kernel.org/r/CANpmjNNhpe6TYt0KmBCCR-Wfz1Bxd8qnhiwegwnDQsxRAWmUMg@mail.gmail.com
+> 
+> checkpatch.pl thinks this is a multiplication, but this is a pointer,
+> so the spacing here is correct.
+> 
 
-Splitting this off into a separate function lets us remove some lines,
-and get rid of some (I would argue) stylistically odd cases where we
-joined printf() and exit() into a single statement with a ,.
+Thank you for confirming. I will apply this.
 
-Finally, this also fixes a "missing braces around initializer" warning
-when we initialize prms in wp_range().
-
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 77 +++++++++++-------------
- 1 file changed, 36 insertions(+), 41 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 9b0912a01777..31e1ff887e4b 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -55,6 +55,8 @@
- #include <setjmp.h>
- #include <stdbool.h>
- #include <assert.h>
-+#include <inttypes.h>
-+#include <stdint.h>
- 
- #include "../kselftest.h"
- 
-@@ -135,6 +137,12 @@ static void usage(void)
- 	exit(1);
- }
- 
-+static void uffd_error(const char *message, __s64 code)
-+{
-+	fprintf(stderr, "%s: %" PRId64 "\n", message, (int64_t)code);
-+	exit(1);
-+}
-+
- static void uffd_stats_reset(struct uffd_stats *uffd_stats,
- 			     unsigned long n_cpus)
- {
-@@ -331,7 +339,7 @@ static int my_bcmp(char *str1, char *str2, size_t n)
- 
- static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
- {
--	struct uffdio_writeprotect prms = { 0 };
-+	struct uffdio_writeprotect prms;
- 
- 	/* Write protection page faults */
- 	prms.range.start = start;
-@@ -340,7 +348,8 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
- 	prms.mode = wp ? UFFDIO_WRITEPROTECT_MODE_WP : 0;
- 
- 	if (ioctl(ufd, UFFDIO_WRITEPROTECT, &prms)) {
--		fprintf(stderr, "clear WP failed for address 0x%Lx\n", start);
-+		fprintf(stderr, "clear WP failed for address 0x%" PRIx64 "\n",
-+			(uint64_t)start);
- 		exit(1);
- 	}
- }
-@@ -474,14 +483,11 @@ static void retry_copy_page(int ufd, struct uffdio_copy *uffdio_copy,
- 	if (ioctl(ufd, UFFDIO_COPY, uffdio_copy)) {
- 		/* real retval in ufdio_copy.copy */
- 		if (uffdio_copy->copy != -EEXIST) {
--			fprintf(stderr, "UFFDIO_COPY retry error %Ld\n",
--				uffdio_copy->copy);
--			exit(1);
-+			uffd_error("UFFDIO_COPY retry error",
-+				   uffdio_copy->copy);
- 		}
--	} else {
--		fprintf(stderr,	"UFFDIO_COPY retry unexpected %Ld\n",
--			uffdio_copy->copy); exit(1);
--	}
-+	} else
-+		uffd_error("UFFDIO_COPY retry unexpected", uffdio_copy->copy);
- }
- 
- static int __copy_page(int ufd, unsigned long offset, bool retry)
-@@ -502,15 +508,11 @@ static int __copy_page(int ufd, unsigned long offset, bool retry)
- 	uffdio_copy.copy = 0;
- 	if (ioctl(ufd, UFFDIO_COPY, &uffdio_copy)) {
- 		/* real retval in ufdio_copy.copy */
--		if (uffdio_copy.copy != -EEXIST) {
--			fprintf(stderr, "UFFDIO_COPY error %Ld\n",
--				uffdio_copy.copy);
--			exit(1);
--		}
--	} else if (uffdio_copy.copy != page_size) {
--		fprintf(stderr, "UFFDIO_COPY unexpected copy %Ld\n",
--			uffdio_copy.copy); exit(1);
--	} else {
-+		if (uffdio_copy.copy != -EEXIST)
-+			uffd_error("UFFDIO_COPY error", uffdio_copy.copy);
-+	} else if (uffdio_copy.copy != page_size)
-+		uffd_error("UFFDIO_COPY unexpected copy", uffdio_copy.copy);
-+	else {
- 		if (test_uffdio_copy_eexist && retry) {
- 			test_uffdio_copy_eexist = false;
- 			retry_copy_page(ufd, &uffdio_copy, offset);
-@@ -788,7 +790,8 @@ static int userfaultfd_open(int features)
- 		return 1;
- 	}
- 	if (uffdio_api.api != UFFD_API) {
--		fprintf(stderr, "UFFDIO_API error %Lu\n", uffdio_api.api);
-+		fprintf(stderr, "UFFDIO_API error: %" PRIu64 "\n",
-+			(uint64_t)uffdio_api.api);
- 		return 1;
- 	}
- 
-@@ -950,13 +953,12 @@ static void retry_uffdio_zeropage(int ufd,
- 				     offset);
- 	if (ioctl(ufd, UFFDIO_ZEROPAGE, uffdio_zeropage)) {
- 		if (uffdio_zeropage->zeropage != -EEXIST) {
--			fprintf(stderr, "UFFDIO_ZEROPAGE retry error %Ld\n",
--				uffdio_zeropage->zeropage);
--			exit(1);
-+			uffd_error("UFFDIO_ZEROPAGE retry error",
-+				   uffdio_zeropage->zeropage);
- 		}
- 	} else {
--		fprintf(stderr, "UFFDIO_ZEROPAGE retry unexpected %Ld\n",
--			uffdio_zeropage->zeropage); exit(1);
-+		uffd_error("UFFDIO_ZEROPAGE retry unexpected",
-+			   uffdio_zeropage->zeropage);
- 	}
- }
- 
-@@ -979,26 +981,20 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
- 	if (ret) {
- 		/* real retval in ufdio_zeropage.zeropage */
- 		if (has_zeropage) {
--			if (uffdio_zeropage.zeropage == -EEXIST) {
--				fprintf(stderr, "UFFDIO_ZEROPAGE -EEXIST\n");
--				exit(1);
--			} else {
--				fprintf(stderr, "UFFDIO_ZEROPAGE error %Ld\n",
--					uffdio_zeropage.zeropage);
--				exit(1);
--			}
-+			uffd_error(uffdio_zeropage.zeropage == -EEXIST ?
-+						 "UFFDIO_ZEROPAGE -EEXIST" :
-+						 "UFFDIO_ZEROPAGE error",
-+				   uffdio_zeropage.zeropage);
- 		} else {
- 			if (uffdio_zeropage.zeropage != -EINVAL) {
--				fprintf(stderr,
--					"UFFDIO_ZEROPAGE not -EINVAL %Ld\n",
--					uffdio_zeropage.zeropage);
--				exit(1);
-+				uffd_error("UFFDIO_ZEROPAGE not -EINVAL",
-+					   uffdio_zeropage.zeropage);
- 			}
- 		}
- 	} else if (has_zeropage) {
- 		if (uffdio_zeropage.zeropage != page_size) {
--			fprintf(stderr, "UFFDIO_ZEROPAGE unexpected %Ld\n",
--				uffdio_zeropage.zeropage); exit(1);
-+			uffd_error("UFFDIO_ZEROPAGE unexpected",
-+				   uffdio_zeropage.zeropage);
- 		} else {
- 			if (test_uffdio_zeropage_eexist && retry) {
- 				test_uffdio_zeropage_eexist = false;
-@@ -1008,9 +1004,8 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
- 			return 1;
- 		}
- 	} else {
--		fprintf(stderr,
--			"UFFDIO_ZEROPAGE succeeded %Ld\n",
--			uffdio_zeropage.zeropage); exit(1);
-+		uffd_error("UFFDIO_ZEROPAGE succeeded",
-+			   uffdio_zeropage.zeropage);
- 	}
- 
- 	return 0;
--- 
-2.29.2.454.gaff20da3a2-goog
-
+thanks,
+-- Shuah
