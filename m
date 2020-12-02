@@ -2,87 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D992CCA2A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Dec 2020 23:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C682CCA57
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 00:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387875AbgLBW7Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Dec 2020 17:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387871AbgLBW7Z (ORCPT
+        id S1726708AbgLBXL1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Dec 2020 18:11:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39217 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726082AbgLBXL1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 17:59:25 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F214DC061A47
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 14:59:09 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id y9so180958ilb.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 14:59:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mseZ6HqpOaxIPoGJwt8mt2yChrOXFzD/3kFw06Juct4=;
-        b=hfu1TJ5/FWuZCgIbvtJbzPxMZUMTTPpCYUSRixRQIbnINFXc+KpyD55xVuCveLb/td
-         yej/IbMTjxZ/+aR2ZBJPoSU8Q8wtyCXRC+dBnJBZrqokm9Cqggv2UhGAdTaLRrKpLoCr
-         MLWrXRhiiUthOFX06zAb50sRGusEmZ43pMd1o=
+        Wed, 2 Dec 2020 18:11:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606950600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3TNiA1EC0PZeSV6z61SrYzEw361aXmtRmDOfY3tQLKM=;
+        b=CnpYlCtwMGk/7bog6uN5QdqLZOa06P1cjBXeZDF4s6QsKl2mM7BzLCeHreU/XEyggRYDqa
+        1RtvbpKngLrzk8XWnRKi5oStSJa8/Q5mIAsBq2f8CNaKjWvMRK98qvIUCEeJglg+9GtGv9
+        cZF+MNSy4okTbSuclccWZO8sI2FLs8U=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-485-SdNjLF0iOuKZUxnf47ziYQ-1; Wed, 02 Dec 2020 18:09:59 -0500
+X-MC-Unique: SdNjLF0iOuKZUxnf47ziYQ-1
+Received: by mail-qv1-f72.google.com with SMTP id o16so154279qvq.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 15:09:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mseZ6HqpOaxIPoGJwt8mt2yChrOXFzD/3kFw06Juct4=;
-        b=ZxiCVvOswpyLaHQTPWqnSIqNP4f7u1Kx6wUOyGfT9E5yuAkszAf9ac6akbdQpLteBY
-         RCLQ/vDl0g8ddOVmFefd64cERfSsjiKT/ynqSeextmlTFBAIdsU3G0LdnE1JE5SlN6oE
-         PDe7nzCpJQH/upIl2bOKfSmaTbzOQYj/7t4adt9FpTpfzoc9BGe6KE6QoFecugsJysk/
-         ldZ1RPcVwUDFyLnDL6KsTOF74cRQnug3KR7aX9/0RkypsxDud2h2B9+hW2NcLKxlABzg
-         URNPDb8HBiwCnvcuAl6I6vTAiR+O22IsLzVfpwg3wzkr1DczT4/0PDoW6gPHDW1uqliu
-         SAgA==
-X-Gm-Message-State: AOAM533HqcKdVGOv+AWPbs+VWJYO5+kmrg7z9puTaE8sJehaiZFWP2Fj
-        ZvAHdy+f9NVd+5MEMwj1Okq/ew==
-X-Google-Smtp-Source: ABdhPJziJ8mfyelB2fg3kxZvhv+Eul+12x9D5wfaeHlaNRok6QkYABL8vvJerFHYvi2rxcNcHGQECQ==
-X-Received: by 2002:a92:6410:: with SMTP id y16mr312945ilb.126.1606949949439;
-        Wed, 02 Dec 2020 14:59:09 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id n77sm98392iod.48.2020.12.02.14.59.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Dec 2020 14:59:08 -0800 (PST)
-Subject: Re: [PATCH v9 2/2] fs: ext4: Modify inode-test.c to use KUnit
- parameterized testing feature
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Arpitha Raghunandan <98.arpi@gmail.com>
-Cc:     brendanhiggins@google.com, elver@google.com, yzaikin@google.com,
-        adilger.kernel@dilger.ca, Tim.Bird@sony.com, davidgow@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-ext4@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20201116054035.211498-1-98.arpi@gmail.com>
- <20201116054150.211562-1-98.arpi@gmail.com> <20201202160742.GB390058@mit.edu>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <161a322e-e7a0-1b2b-d321-4f2871c31e0a@linuxfoundation.org>
-Date:   Wed, 2 Dec 2020 15:59:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3TNiA1EC0PZeSV6z61SrYzEw361aXmtRmDOfY3tQLKM=;
+        b=i941h5s8+sJLTEycjY7pkkfa4sBhnoQDYPHYZRMLNDN6O1iO+WTEvEpNRvkHUzOkL/
+         CP3VOsWeN6OiWb1Lbd0eG4vQVIi+k64IZXgVJmIrIJ6teWy7aCYzdiywnxNMsb+gxWHr
+         ucfoCqaJJbi3SmUiT+m4hsdhX+pab2maISRlzgtihGsfFh951O+waOIS0WkgqXr1kSQk
+         vO6pwRIAmZbF4gxzuXUBFowouK3/tMYzr/4+McqySJKoB7yzkY4edJkrLjlIOqP40eK4
+         Bmo8flB1vaykss80MwJRfcXXM/h16OBmG23dJrNSXhoQYV59RCUOqYSuO5U1+fy+DWa2
+         cX/A==
+X-Gm-Message-State: AOAM533OlVPKXv2TV+3fxheaPEATQWRr6kP6DKDBk3Kx3DY7soSDSz+v
+        GmV/TWKV1q8bDdd8Fnrhibv/ZWSsQtahrCV7hs9hqb9QQ13JO3anZuUQtL6rzVis5Vv6GoBhM6c
+        HxI7IQckyOg6CGA09/BSkz4N0O0tL
+X-Received: by 2002:a05:6214:29:: with SMTP id b9mr332650qvr.18.1606950597610;
+        Wed, 02 Dec 2020 15:09:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwExtlsTU0fsMGHmFJNZJIn0zRNxa83R1RNYHP2U77HnxFqWx3IezzuhvYhYVJqvWn2fWH/Zg==
+X-Received: by 2002:a05:6214:29:: with SMTP id b9mr332631qvr.18.1606950597431;
+        Wed, 02 Dec 2020 15:09:57 -0800 (PST)
+Received: from xz-x1 ([142.126.94.187])
+        by smtp.gmail.com with ESMTPSA id t126sm120531qkc.76.2020.12.02.15.09.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 15:09:56 -0800 (PST)
+Date:   Wed, 2 Dec 2020 18:09:54 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Alan Gilbert <dgilbert@redhat.com>,
+        Greg Thelen <gthelen@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] userfaultfd: selftests: make __{s,u}64 format specifiers
+ portable
+Message-ID: <20201202230954.GB108496@xz-x1>
+References: <20201202211542.1121189-1-axelrasmussen@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20201202160742.GB390058@mit.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201202211542.1121189-1-axelrasmussen@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/2/20 9:07 AM, Theodore Y. Ts'o wrote:
-> On Mon, Nov 16, 2020 at 11:11:50AM +0530, Arpitha Raghunandan wrote:
->> Modify fs/ext4/inode-test.c to use the parameterized testing
->> feature of KUnit.
->>
->> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
->> Signed-off-by: Marco Elver <elver@google.com>
-> 
-> Acked-by: Theodore Ts'o <tytso@mit.edu>
-> 
+Hi, Axel,
 
-Thanks Ted.
+Looks mostly good to me, but a few nitpickings below.
 
--- Shuah
+On Wed, Dec 02, 2020 at 01:15:42PM -0800, Axel Rasmussen wrote:
+
+[...]
+
+> +static void uffd_error(const char *message, __s64 code)
+> +{
+> +	fprintf(stderr, "%s: %" PRId64 "\n", message, (int64_t)code);
+> +	exit(1);
+> +}
+
+IMHO a macro that can take arbitrary parameters would be nicer, but if it
+satisfy our need, definitely ok too.
+
+[...]
+
+> @@ -340,7 +348,8 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
+>  	prms.mode = wp ? UFFDIO_WRITEPROTECT_MODE_WP : 0;
+>  
+>  	if (ioctl(ufd, UFFDIO_WRITEPROTECT, &prms)) {
+> -		fprintf(stderr, "clear WP failed for address 0x%Lx\n", start);
+> +		fprintf(stderr, "clear WP failed for address 0x%" PRIx64 "\n",
+> +			(uint64_t)start);
+>  		exit(1);
+
+Is it intended to not use uffd_error() here?
+
+>  	}
+>  }
+
+[...]
+
+> @@ -979,26 +981,20 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
+>  	if (ret) {
+>  		/* real retval in ufdio_zeropage.zeropage */
+>  		if (has_zeropage) {
+> -			if (uffdio_zeropage.zeropage == -EEXIST) {
+> -				fprintf(stderr, "UFFDIO_ZEROPAGE -EEXIST\n");
+> -				exit(1);
+> -			} else {
+> -				fprintf(stderr, "UFFDIO_ZEROPAGE error %Ld\n",
+> -					uffdio_zeropage.zeropage);
+> -				exit(1);
+> -			}
+> +			uffd_error(uffdio_zeropage.zeropage == -EEXIST ?
+> +						 "UFFDIO_ZEROPAGE -EEXIST" :
+> +						 "UFFDIO_ZEROPAGE error",
+
+Nit: The indents here are a bit odd..
+
+Thanks,
+
+-- 
+Peter Xu
+
