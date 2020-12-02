@@ -2,99 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A56AF2CBD56
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Dec 2020 13:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FEB2CBDE6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Dec 2020 14:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729884AbgLBMvW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Dec 2020 07:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727832AbgLBMvW (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 07:51:22 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A33C0613CF;
-        Wed,  2 Dec 2020 04:50:41 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id o71so1506403ybc.2;
-        Wed, 02 Dec 2020 04:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wZOsnLsRD15EE78n8bQEf+aUkvjzCWrGeOD2j6m7n7M=;
-        b=Pz5K1LSqrNHi9j26JaHRbiUG9fIgZ88xbsQOpQuqNaY6to0gMZKA3gZJQkUb0wH5DZ
-         m49l97B/Sqo285TY12ocrdpvuF1+g3C5wyRcsbz5oUmKsqn2e3S3KkpISid+6Jy9TPZJ
-         Yhi5380lJNF1O7HhBn1xvlehBO23pu1N+bhGYtju8XUuq3mjQtYO7rQGT3bt/wyhJYu2
-         nmqwt7PmuQulhc96znbjOdtX+q3UrUnUYeqP4ZRdx3XdbsSwYDKeQGZVsWKY8+j3ePUW
-         6FnR5bBGkAJxjBXXLZqpT5MNdDiJQM0xvHspl+LDp7RWfzuVkEt8IC16/vlbOKXzJ2tq
-         tkiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wZOsnLsRD15EE78n8bQEf+aUkvjzCWrGeOD2j6m7n7M=;
-        b=CmnNCMK67ydFsLA9BbYpFkJWXZoCHcqteHJmXxia+CbPGuDS2zvdFQEn/hX9wCxOCH
-         bumwxa6Hh/jHeRw00dtgKM390Sq3yu4JhdJobYNit8kdoLZmVY2ck7oRpf5iuLF33Hnz
-         ZXUt97vkWxGzwvEmmqugNOBAeSQ+cBkzE2/gTT01f4hTqclQoQZIHxXtGusYWMeo9qUO
-         dS14rc6cU8FfkO6ytou2QlmCeYTKsprHENm0MtulM4LjADqcEls2Mh398WnHr9PMg+ud
-         d4+1J+6MQz643X3mu37CbBPRgSat9jGGTQMAtd640FRs9ueWx7KGAWXg2gvZj+hL6ucp
-         FH5g==
-X-Gm-Message-State: AOAM5303PgBxLJNP0G4Mgv/DpeBv/GmpWmkwiHFcLWzzqrtFbuXcQmb9
-        fxWr94Lfl+vrDcQUZXxLgSvLNMY+OPbFEl/yMZM=
-X-Google-Smtp-Source: ABdhPJz8aVFXdWixZUHiWQB00VKrKgXW70L2NcuTpGtmUg1BcqQkFiV8/vapf4IM/PFZ+z2SfEViZMUjxnQAlGcdtd8=
-X-Received: by 2002:a25:df55:: with SMTP id w82mr3065596ybg.135.1606913441319;
- Wed, 02 Dec 2020 04:50:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20201128193335.219395-1-masahiroy@kernel.org>
-In-Reply-To: <20201128193335.219395-1-masahiroy@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 2 Dec 2020 13:50:30 +0100
-Message-ID: <CANiq72=WanQ0sqL14D3Keu0hT3L5GXBSV-znU5C9hhC1gjs=wA@mail.gmail.com>
-Subject: Re: [PATCH v3] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        id S2388775AbgLBNIo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Dec 2020 08:08:44 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:39949 "EHLO smtp.uniroma2.it"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727691AbgLBNIk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:08:40 -0500
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0B2D6XmS015624
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 2 Dec 2020 14:06:34 +0100
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [net-next v4 0/8] seg6: add support for SRv6 End.DT4/DT6 behavior
+Date:   Wed,  2 Dec 2020 14:05:09 +0100
+Message-Id: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Nov 28, 2020 at 8:34 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Revert commit cebc04ba9aeb ("add CONFIG_ENABLE_MUST_CHECK").
->
-> A lot of warn_unused_result warnings existed in 2006, but until now
-> they have been fixed thanks to people doing allmodconfig tests.
->
-> Our goal is to always enable __must_check where appropriate, so this
-> CONFIG option is no longer needed.
->
-> I see a lot of defconfig (arch/*/configs/*_defconfig) files having:
->
->     # CONFIG_ENABLE_MUST_CHECK is not set
->
-> I did not touch them for now since it would be a big churn. If arch
-> maintainers want to clean them up, please go ahead.
->
-> While I was here, I also moved __must_check to compiler_attributes.h
-> from compiler_types.h
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+This patchset provides support for the SRv6 End.DT4 and End.DT6 (VRF mode)
+behaviors.
 
-Picked this new version with the Acks etc., plus I moved it within
-compiler_attributes.h to keep it sorted (it's sorted by the second
-column, rather than the first).
+The SRv6 End.DT4 behavior is used to implement multi-tenant IPv4 L3 VPNs. It
+decapsulates the received packets and performs IPv4 routing lookup in the
+routing table of the tenant. The SRv6 End.DT4 Linux implementation leverages a
+VRF device in order to force the routing lookup into the associated routing
+table.
+The SRv6 End.DT4 behavior is defined in the SRv6 Network Programming [1].
 
-Thanks a lot!
+The Linux kernel already offers an implementation of the SRv6 End.DT6 behavior
+which allows us to set up IPv6 L3 VPNs over SRv6 networks. This new
+implementation of DT6 is based on the same VRF infrastructure already exploited
+for implementing the SRv6 End.DT4 behavior. The aim of the new SRv6 End.DT6 in
+VRF mode consists in simplifying the construction of IPv6 L3 VPN services in
+the multi-tenant environment.
+Currently, the two SRv6 End.DT6 implementations (legacy and VRF mode)
+coexist seamlessly and can be chosen according to the context and the user
+preferences.
 
-Cheers,
-Miguel
+- Patch 1 is needed to solve a pre-existing issue with tunneled packets
+  when a sniffer is attached;
+
+- Patch 2 improves the management of the seg6local attributes used by the
+  SRv6 behaviors;
+
+- Patch 3 adds support for optional attributes in SRv6 behaviors;
+
+- Patch 4 introduces two callbacks used for customizing the
+  creation/destruction of a SRv6 behavior;
+
+- Patch 5 is the core patch that adds support for the SRv6 End.DT4
+  behavior;
+
+- Patch 6 introduces the VRF support for SRv6 End.DT6 behavior;
+
+- Patch 7 adds the selftest for SRv6 End.DT4 behavior;
+
+- Patch 8 adds the selftest for SRv6 End.DT6 (VRF mode) behavior.
+
+Regarding iproute2, the support for the new "vrftable" attribute, required by
+both SRv6 End.DT4 and End.DT6 (VRF mode) behaviors, is provided in a different
+patchset that will follow shortly.
+
+I would like to thank David Ahern for his support during the development of
+this patchset.
+
+Comments, suggestions and improvements are very welcome!
+
+Thanks,
+Andrea Mayer
+
+v4
+ seg6: add support for the SRv6 End.DT4 behavior
+  - remove IS_ERR() checks in cmp_nla_vrftable(), thanks to Jakub Kicinski.
+
+ remove patch for iproute2:
+  - mixing the iproute2 patch with this patchset confused patchwork.
+
+v3
+ notes about the build bot:
+  - apparently the ',' (comma) in the subject prefix confused the build bot.
+    Removed the ',' in favor of ' ' (space). 
+    
+    Thanks to David Ahern and Konstantin Ryabitsev for shedding light on this
+    fact.
+    Thanks also to Nathan Chancellor for trying to build the patchset v2 by
+    simulating the bot issue.
+
+ add new patch for iproute2:
+  - [9/9] seg6: add support for vrftable attribute in End.DT4/DT6 behaviors
+
+ add new patch:
+  -  [8/9] selftests: add selftest for the SRv6 End.DT6 (VRF) behavior
+
+ add new patch:
+  - [6/9] seg6: add VRF support for SRv6 End.DT6 behavior
+
+ add new patch:
+  - [3/9] seg6: add support for optional attributes in SRv6 behaviors
+
+ selftests: add selftest for the SRv6 End.DT4 behavior
+  - keep David Ahern's review tag since the code wasn't changed. Thanks to David  
+    Ahern for his review.
+
+ seg6: add support for the SRv6 End.DT4 behavior
+  - remove useless error in seg6_end_dt4_build();
+  - remove #ifdef/#endif stubs for DT4 when CONFIG_NET_L3_MASTER_DEV is not
+    defined;
+  - fix coding style.
+
+    Thanks to Jakub Kicinski for his review and for all his suggestions.
+
+ seg6: add callbacks for customizing the creation/destruction of a behavior
+  - remove typedef(s) slwt_{build/destroy}_state_t;
+  - fix coding style: remove empty lines, trivial comments and rename labels in
+    the seg6_local_build_state() function.
+    
+    Thanks to Jakub Kicinski for his review and for all his suggestions.
+
+ seg6: improve management of behavior attributes
+  - remove defensive programming approach in destroy_attr_srh(),
+    destroy_attr_bpf() and destroy_attrs();
+  - change the __destroy_attrs() function signature, renaming the 'end' argument    
+    'parsed_max'. Now, the __destroy_attrs() keeps only the 'parsed_max' and
+    'slwt' arguments.
+    
+    Thanks to Jakub Kicinski for his review and for all his suggestions.
+
+ vrf: add mac header for tunneled packets when sniffer is attached
+  - keep David Ahern's review tag since the code wasn't changed. 
+    
+    Thanks to Jakub Kicinski for pointing it out and David Ahern for his review.
+
+v2
+ no changes made: resubmitted after false build report.
+
+v1
+ improve comments;
+
+ add new patch 2/5 titled: seg6: improve management of behavior attributes
+
+ seg6: add support for the SRv6 End.DT4 behavior
+  - remove the inline keyword in the definition of fib6_config_get_net().
+
+ selftests: add selftest for the SRv6 End.DT4 behavior
+  - add check for the vrf sysctl
+
+[1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
+
+Andrea Mayer (8):
+  vrf: add mac header for tunneled packets when sniffer is attached
+  seg6: improve management of behavior attributes
+  seg6: add support for optional attributes in SRv6 behaviors
+  seg6: add callbacks for customizing the creation/destruction of a
+    behavior
+  seg6: add support for the SRv6 End.DT4 behavior
+  seg6: add VRF support for SRv6 End.DT6 behavior
+  selftests: add selftest for the SRv6 End.DT4 behavior
+  selftests: add selftest for the SRv6 End.DT6 (VRF) behavior
+
+ drivers/net/vrf.c                             |  78 ++-
+ include/uapi/linux/seg6_local.h               |   1 +
+ net/ipv6/seg6_local.c                         | 590 +++++++++++++++++-
+ .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 494 +++++++++++++++
+ .../selftests/net/srv6_end_dt6_l3vpn_test.sh  | 502 +++++++++++++++
+ 5 files changed, 1646 insertions(+), 19 deletions(-)
+ create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+ create mode 100755 tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
+
+-- 
+2.20.1
+
