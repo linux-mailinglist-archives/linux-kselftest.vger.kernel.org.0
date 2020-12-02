@@ -2,80 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AA12CB10A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Dec 2020 00:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897092CB14C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Dec 2020 01:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgLAXra (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Dec 2020 18:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgLAXra (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Dec 2020 18:47:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B746AC0613CF;
-        Tue,  1 Dec 2020 15:46:49 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1606866407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JgIOpsf5LPtRog4ZlP7P6So7zHuSC1VIRrzzYKueefM=;
-        b=f5YY7G1DAL8bRimVjlZA6B3TVNlcO4rPU/jpUj6oSkaTIYj4KJ0LrJAGaUogg6Jaur6Ioh
-        3Am8yAABYiatEx0YuSAXnACslJd0HVAsSubi99TL18q1HW/XlAh0orhFWAPa5m6nHsRPOp
-        bR+7h/Oz96i9S8bOu8FJwi+qwLU9ZW80gcXbqFSB6To8fYmr5Vt2Ou5Cbpas4CP1Ksdw0N
-        +m7Oz3BCuPvuiHx7VJsRjOA7/nI56dKz7U8xrII7OEFou8jGf8A/G7DGRH+jGQoinz/SaH
-        Cg7x0knOEGf+0DvjAan5IM5jrpxGlgkD+fBiid4UBwaiSvYtymeurfqI/HJoNw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1606866407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JgIOpsf5LPtRog4ZlP7P6So7zHuSC1VIRrzzYKueefM=;
-        b=ADs6QvH5URJ+Rn5saeUG17RwepRbFMdHYbkzOVewg4UtdAka84q/I3FHV19M5KWyluJF4/
-        ac/guvANx/UcxABA==
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     luto@kernel.org, keescook@chromium.org, gofmanp@gmail.com,
-        christian.brauner@ubuntu.com, peterz@infradead.org,
-        willy@infradead.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v8 7/7] docs: Document Syscall User Dispatch
-In-Reply-To: <20201201152119.3654ba61@lwn.net>
-References: <20201127193238.821364-1-krisman@collabora.com> <20201127193238.821364-8-krisman@collabora.com> <20201201152119.3654ba61@lwn.net>
-Date:   Wed, 02 Dec 2020 00:46:47 +0100
-Message-ID: <874kl5f5so.fsf@nanos.tec.linutronix.de>
+        id S1727026AbgLBAFW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Dec 2020 19:05:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56310 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726997AbgLBAFV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Dec 2020 19:05:21 -0500
+X-Gm-Message-State: AOAM532W4eCAfUg9wllaGhqD6F5qcf+drdE2OHGi21z68PWkcF+2m9JA
+        vKl8Ii0gUvs1UhQcQEkFRwpUFzh+tcEMjV5PdhiYBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606867479;
+        bh=MqZW0Kfi+WCzwtfCOe3WGgKsYtrojnTX6iECyZ6P9Xk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=l7EZ3AnQeBR/r8NKChuI6/sqfxX0hbTSvhlgC0ZSLauwWe03sElSna+Z6JBWNaYLC
+         qv7ko/LDWbmUXrC4OpiibjmJFiC8R/ER5S74YymnJ8L+Rsm51QqBriDO7KlL8yJqeF
+         oL3OZBf5uX4vMl5myJwTKSK1ngI8BpjDKAJA3XDI=
+X-Google-Smtp-Source: ABdhPJzikCVJryvvhw4L+oXSN5ZndFaYLqG6xj4S6SpaZ4WSCAExQ4chC3KAH3f7HzB/kzju/bPFLeC6EuZ+rnWlEvw=
+X-Received: by 2002:a1c:7e87:: with SMTP id z129mr99779wmc.176.1606867477970;
+ Tue, 01 Dec 2020 16:04:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20201127193238.821364-1-krisman@collabora.com> <20201127193238.821364-5-krisman@collabora.com>
+In-Reply-To: <20201127193238.821364-5-krisman@collabora.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 1 Dec 2020 16:04:24 -0800
+X-Gmail-Original-Message-ID: <CALCETrV2SCLg1tUUbC1SeQhyn9097ktncEKvd=jh2woSZ3g8ow@mail.gmail.com>
+Message-ID: <CALCETrV2SCLg1tUUbC1SeQhyn9097ktncEKvd=jh2woSZ3g8ow@mail.gmail.com>
+Subject: Re: [PATCH v8 4/7] entry: Support Syscall User Dispatch on common
+ syscall entry
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     Andrew Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Gofman <gofmanp@gmail.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 01 2020 at 15:21, Jonathan Corbet wrote:
-> On Fri, 27 Nov 2020 14:32:38 -0500
-> Gabriel Krisman Bertazi <krisman@collabora.com> wrote:
+On Fri, Nov 27, 2020 at 11:33 AM Gabriel Krisman Bertazi
+<krisman@collabora.com> wrote:
 >
->> Explain the interface, provide some background and security notes.
->> 
->> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
->> Reviewed-by: Kees Cook <keescook@chromium.org>
->> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Syscall User Dispatch (SUD) must take precedence over seccomp and
+> ptrace, since the use case is emulation (it can be invoked with a
+> different ABI) such that seccomp filtering by syscall number doesn't
+> make sense in the first place.  In addition, either the syscall is
+> dispatched back to userspace, in which case there is no resource for to
+> trace, or the syscall will be executed, and seccomp/ptrace will execute
+> next.
 >
-> Nice to see documentation included...:)  One nit:
->> ---
->> Changes since v7:
->>   - Change process -> thread (Florian Weimer)
->>   - Drop bogus reference to CONFIG_SYSCALL_USER_DISPATCH (me)
->>   - Document the interval as a half-open interval (me)
->> ---
->>  .../admin-guide/syscall-user-dispatch.rst     | 87 +++++++++++++++++++
->>  1 file changed, 87 insertions(+)
->>  create mode 100644 Documentation/admin-guide/syscall-user-dispatch.rst
+> Since SUD runs before tracepoints, it needs to be a SYSCALL_WORK_EXIT as
+> well, just to prevent a trace exit event when dispatch was triggered.
+> For that, the on_syscall_dispatch() examines context to skip the
+> tracepoint, audit and other work.
 >
-> You need to add this file to index.rst in that directory as well so it
-> gets included in the docs build.
+> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+> Changes since v6:
+>   - Update do_syscall_intercept signature (Christian Brauner)
+>   - Move it to before tracepoints
+>   - Use SYSCALL_WORK flags
+> ---
+>  include/linux/entry-common.h |  2 ++
+>  kernel/entry/common.c        | 17 +++++++++++++++++
+>  2 files changed, 19 insertions(+)
+>
+> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+> index 49b26b216e4e..a6e98b4ba8e9 100644
+> --- a/include/linux/entry-common.h
+> +++ b/include/linux/entry-common.h
+> @@ -44,10 +44,12 @@
+>                                  SYSCALL_WORK_SYSCALL_TRACE |           \
+>                                  SYSCALL_WORK_SYSCALL_EMU |             \
+>                                  SYSCALL_WORK_SYSCALL_AUDIT |           \
+> +                                SYSCALL_WORK_SYSCALL_USER_DISPATCH |   \
+>                                  ARCH_SYSCALL_WORK_ENTER)
+>  #define SYSCALL_WORK_EXIT      (SYSCALL_WORK_SYSCALL_TRACEPOINT |      \
+>                                  SYSCALL_WORK_SYSCALL_TRACE |           \
+>                                  SYSCALL_WORK_SYSCALL_AUDIT |           \
+> +                                SYSCALL_WORK_SYSCALL_USER_DISPATCH |   \
+>                                  ARCH_SYSCALL_WORK_EXIT)
+>
+>  /*
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index f1b12dc32ff4..ec20aba3b890 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -6,6 +6,8 @@
+>  #include <linux/livepatch.h>
+>  #include <linux/audit.h>
+>
+> +#include "common.h"
+> +
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/syscalls.h>
+>
+> @@ -47,6 +49,16 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+>  {
+>         long ret = 0;
+>
+> +       /*
+> +        * Handle Syscall User Dispatch.  This must comes first, since
+> +        * the ABI here can be something that doesn't make sense for
+> +        * other syscall_work features.
+> +        */
+> +       if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
+> +               if (do_syscall_user_dispatch(regs))
+> +                       return -1L;
+> +       }
+> +
+>         /* Handle ptrace */
+>         if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
+>                 ret = arch_syscall_enter_tracehook(regs);
+> @@ -232,6 +244,11 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
+>  {
+>         bool step;
+>
+> +       if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
+> +               if (on_syscall_dispatch())
+> +                       return;
+> +       }
 
-Fixed that already after trying to build it :)
+I think this would be less confusing if you just open-coded the body
+of on_syscall_dispatch here and got rid of the helper.
+
+--Andy
