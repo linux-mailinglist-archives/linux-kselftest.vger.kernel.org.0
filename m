@@ -2,97 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0842CE160
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 23:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3C52CE1B6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 23:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728081AbgLCWLM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Dec 2020 17:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S1731829AbgLCWdI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Dec 2020 17:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727589AbgLCWLM (ORCPT
+        with ESMTP id S1731828AbgLCWdG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Dec 2020 17:11:12 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB23C061A51
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Dec 2020 14:10:32 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id x20so2294591pfm.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Dec 2020 14:10:32 -0800 (PST)
+        Thu, 3 Dec 2020 17:33:06 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AACAC061A54
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Dec 2020 14:32:26 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id z12so1920039pjn.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Dec 2020 14:32:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=nhqHUHB81FfDRC5Dmlf7b4++uLFouwQ+DbxloM/znL0=;
-        b=lET6kU1tz5H9yxZDEMqtRCf0/SXFWhxbeju2hpUgYSr+oZtUv3MSgLpla0i95J2qJI
-         PSPfEfKEw9TU9+Imn0OgG4helXYWBDiPTs1+ljRX3netRIyP+hnUHagTew6Ng0EU+Htj
-         jzS9VjM74iL8Kc0sS1och2P1Fv99LwUIEqkKy4Ek9Z7laEnGeQZN5usI12k+ZtIt/iIA
-         sAdWUr1GwY3xpT5d6ZAGX00/Pt4s9aY5tIqhW/x2OGKt1cUTl3qydSk/XRoM3oOMDu+u
-         f/A+sDLNUnjiPkT85OxmChzqP1tdwTfbCKa2Q6Hy9+6DRnsngLpPwVgH+Sz78C40hzIh
-         kHrg==
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=SPmFoB1my9jXoLv2dn26VSZIQKA7cIMRdqpuLUFB/zE=;
+        b=uibFYOvnC4zY0yQjSghNFXGoITN/klJGjUJawm7CLMgnwHLEgoSF8aYrp3JujngJOL
+         Q1/1efT1Sk1ZvEgzkg0itaC6uT+mpiCbV+wr2qFTg/EhXoM8USYjKCA49GdnVTWWZ0tP
+         rahJLwwp8GwB0lIDDNsa/yfR1+ZYu8Jzevvs/J5ONrYw8jKGlEw9eov6jWgP39zOBXFG
+         iIH8Qv+lpLNP2Zhd2G7dAvg8kGv/PxOxkG6KmZP9h1L9cCQQNa1jrvom/D1PErxBspZJ
+         iVqODTL1y2FkymUDIFPNBB6S6aotiP8SU7ZbbYz16SRlFub6isCp3ufmz/yH1ijPlqxp
+         oF/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=nhqHUHB81FfDRC5Dmlf7b4++uLFouwQ+DbxloM/znL0=;
-        b=EF0RqyjYfmnArt7JJzy8v5DRjSCNYXC+Na6LSkbvFVC4174XvhR6eI3KiHA2FbGFjE
-         AxTDW8dQ0yMozZdfXT6iyPH3tlUtxFWtf5iW6mlCGr3U9B8ol8/oGTK/sbGwBTmHzjva
-         QEL315CLEwLfL0I1Jt+cBO+oESdRAuY0DPnl7RsAKmxI2eeUuF3uVmD4o6VQ7c8iK7HF
-         Le5HysoVviPdD1zeG9UNZYd/jVwxEYHniPcIvZ4IFmGjN68nWCfr/75TwVxxcJxO4ulD
-         V8YDPa8xoTCSKYvcDfdCuSn6V7rHqotSGsUND0y7AO6aZiTMzCg43ilPmwOtZ+jmioJi
-         hmmg==
-X-Gm-Message-State: AOAM5300VLlRbfQdKHEpaIn0rjnZv5eOoc46Se+0A+PQAJ4zoksNUvIe
-        tnRRN22IrQ1fuXL5HfMfSPteSV9o6w==
-X-Google-Smtp-Source: ABdhPJyoDq63rkO5+ydSicpI3O4b+U4VThB8sabazPQvgaChurpclUhtXF0OEbx+DbHTiwjGGtS95ozEFg==
-Sender: "adelg via sendgmr" <adelg@adelg.c.googlers.com>
-X-Received: from adelg.c.googlers.com ([fda3:e722:ac3:10:24:72f4:c0a8:a16])
- (user=adelg job=sendgmr) by 2002:a17:90a:460a:: with SMTP id
- w10mr96452pjg.1.1607033431208; Thu, 03 Dec 2020 14:10:31 -0800 (PST)
-Date:   Thu,  3 Dec 2020 22:10:05 +0000
-Message-Id: <20201203221005.2813159-1-adelg@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
-Subject: [PATCH] selftests: propagate CC to selftest submakes
-From:   Andrew Delgadillo <adelg@google.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Andrew Delgadillo <adelg@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=SPmFoB1my9jXoLv2dn26VSZIQKA7cIMRdqpuLUFB/zE=;
+        b=rIU+CJMzM4UoibBiK1S9G5pD/AJiHfb41M4DzBoEV0C4xTnLfn4vKLKaN2MjQ1KQMh
+         J9PexuDHdgYywUpix1ecTFFHV0kGD3KGKhQZyL6gDrxE9FZMIPJfc2ai7GXsP2BTUxM6
+         PEGppl7tY7MgdFfJbdBf+e60XkSvcPh0psgoJC8CLDuEZimNq7aQi66jF4OFXZ8mTpbc
+         /u3qAGdAXx43GOSf8ORw4E+nEigPE8VjQCVgsb1PcwbaooRnTGf67OOM2VOWcUqvSiuO
+         XCzxLHjxzNCEq1SrND/G15qh/Zu9KBpM0RhqWg4VX8s0m8oVEy10AvvmrGcQLwE/JhM1
+         J6kg==
+X-Gm-Message-State: AOAM532YoH7jT5EhHPidQrLuFSOf6ZdeVLW3y27vp1AYnJaCQ38Q/mcC
+        skFG+9cnmtqbnjq8v4c4zyfK5A==
+X-Google-Smtp-Source: ABdhPJxhPr+P5fujnqKI96o2pvSvJ5MAQGdtq4scxTMGJtMVGb63v//A39PGQQlbMjp5MmCtDbhQGg==
+X-Received: by 2002:a17:902:469:b029:da:17d0:e755 with SMTP id 96-20020a1709020469b02900da17d0e755mr954487ple.53.1607034745298;
+        Thu, 03 Dec 2020 14:32:25 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id x23sm2646437pfo.209.2020.12.03.14.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Dec 2020 14:32:24 -0800 (PST)
+Subject: [PATCH v1 0/5] dm: dm-user: New target that proxies BIOs to userspace
+Date:   Thu,  3 Dec 2020 13:58:54 -0800
+Message-Id: <20201203215859.2719888-1-palmer@dabbelt.com>
+X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Cc:     corbet@lwn.net, song@kernel.org,
+        Palmer Dabbelt <palmerdabbelt@google.com>, shuah@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     dm-devel@redhat.com, agk@redhat.com, snitzer@redhat.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-lib.mk defaults to gcc when CC is not set. When building selftests
-as part of a kernel compilation, MAKEFLAGS is cleared to allow implicit
-build rules to be used. This has the side-effect of clearing the CC
-variable, which will cause selftests to be built with gcc regardless of
-if we are using gcc or clang. To remedy this, propagate the CC variable
-when clearing makeflags to ensure the correct compiler is used.
+This patch set contains dm-user, a device mapper target that proxies incoming
+BIOs to userspace via a misc device.  Essentially it's FUSE, but for block
+devices.  There's more information in the documentation patch and as a handful
+of commends, so I'm just going to avoid duplicating that here.  I don't really
+think there's any fundamental functionality that dm-user enables, as one could
+use something along the lines of nbd/iscsi, but dm-user does result in
+extremely simple userspace daemons -- so simple that when I tried to write a
+helper userspace library for dm-user I just ended up with nothing.
 
-Signed-off-by: Andrew Delgadillo <adelg@google.com>
----
- tools/testing/selftests/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I talked about this a bit at Plumbers and was hoping to send patches a bit
+earlier on in the process, but got tied up with a few things.  As a result this
+is actually quite far along: it's at the point where we're starting to run this
+on real devices as part of an updated Android OTA update flow, where we're
+using this to provide an Android-specific compressed backing store for
+dm-snap-persistent.  The bulk of that project is scattered throughout the
+various Android trees, so there are kselftests and a (somewhat bare for now)
+Documentation entry with the intent of making this a self-contained
+contribution.  There's a lot to the Android userspace daemon, but it doesn't
+interact with dm-user in a very complex manner.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d9c283503159..a4dd6d7e8276 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -90,10 +90,12 @@ FORCE_TARGETS ?=
- 
- # Clear LDFLAGS and MAKEFLAGS when implicit rules are missing.  This provides
- # implicit rules to sub-test Makefiles which avoids build failures in test
--# Makefile that don't have explicit build rules.
-+# Makefile that don't have explicit build rules. Since lib.mk defaults to
-+# using gcc for compilation when the CC variable is not set, we propagate the
-+# CC variable so if clang is being used, selftests will build with clang.
- ifeq (,$(LINK.c))
- override LDFLAGS =
--override MAKEFLAGS =
-+override MAKEFLAGS = CC=$(CC)
- endif
- 
- # Append kselftest to KBUILD_OUTPUT and O to avoid cluttering
--- 
-2.29.2.576.ga3fc446d84-goog
+This is still in a somewhat early stage, but it's at the point where things
+largely function.  I'm certainly not ready to commit to the user ABI
+implemented here and there are a bunch of FIXMEs scattered throughout the code,
+but I do think that it's far along enough to begin a more concrete discussion
+of where folks would like to go with something like this.  While I'd intending
+on sorting that stuff out, I'd like to at least get a feel for whether this is
+a path worth pursuing before spending a bunch more time on it.
+
+I haven't done much in the way of performance analysis for dm-user.  Earlier on
+I did some simple throughput tests and found that dm-user/ext4 was faster than
+half the speed of tmpfs, which is way out of the realm of being an issue for
+our use case (decompressing blocks out of a phone's storage).  The design of
+dm-user does preclude an extremely high performance implementation, where I
+assume one would want an explicit ring buffer and zero copy, but I feel like
+users who want that degree of performance are probably better served writing a
+proper kernel driver.  I wouldn't be opposed to pushing on performance (ideally
+without a major design change), but for now I feel like time is better spent
+fortifying the user ABI and fixing the various issues with the implementation.
+
+The patches follow as usual, but in case it's easier I've published a tree as
+well:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/palmer/dm-user.git -b dm-user-v1
+
 
