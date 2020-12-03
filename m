@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E750A2CDC1C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 18:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D74D2CDC21
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 18:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2501950AbgLCRNg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Dec 2020 12:13:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:51354 "EHLO
+        id S2501959AbgLCRNl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Dec 2020 12:13:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50279 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728925AbgLCRNf (ORCPT
+        by vger.kernel.org with ESMTP id S1731525AbgLCRNk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Dec 2020 12:13:35 -0500
+        Thu, 3 Dec 2020 12:13:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607015528;
+        s=mimecast20190719; t=1607015534;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6hX5d7i1onM6KJjcxjt4YgWrUzJK2cIDgrBlA7uN5Mk=;
-        b=MDzMptkIb51QzHUWu7AbFpA5KAhqkqvqW634w553OfQFwFEE3HK7Tzzn69XFElrD0CcikO
-        Nos/r6ApkyvlF4CGhPALJqbyri9yDAPtH1f/bQFFVnMwtB1QuCNu43yGDXLvc/C8KPmCgf
-        sMCNourTkI1D2+kWc7Fm4K5xVQFl8tI=
+        bh=wd+lJPFWy0m+3K/46pw2A3DNxUcmHii9mZMdRl39SGs=;
+        b=bBFU6PULQjuNJRlMMmpSD84lbvrCk4t2JW1k678BxsxHPp78VCha/a3N+K86lYTM+5jBYj
+        3wo5quafbMikl2umtH8J8HduHF4hEVbuJlnWli5gKjBXWb19BXrObBo8Mkze4TukwS0ft9
+        R5xczATcYVSV3XxeyJKWI8iqL5oQTRE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-270-mzLNlnliPHCl5vKZ2vvgKg-1; Thu, 03 Dec 2020 12:12:03 -0500
-X-MC-Unique: mzLNlnliPHCl5vKZ2vvgKg-1
+ us-mta-463-P_LlYtaeNaCLjF2S9EoQQw-1; Thu, 03 Dec 2020 12:12:12 -0500
+X-MC-Unique: P_LlYtaeNaCLjF2S9EoQQw-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 053AD805EE3;
-        Thu,  3 Dec 2020 17:11:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 740CA1926DBD;
+        Thu,  3 Dec 2020 17:11:49 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.35.206.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6431F6085A;
-        Thu,  3 Dec 2020 17:11:35 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 895EB60854;
+        Thu,  3 Dec 2020 17:11:42 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     "H. Peter Anvin" <hpa@zytor.com>,
@@ -55,9 +55,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         Andrew Jones <drjones@redhat.com>,
         Oliver Upton <oupton@google.com>,
         linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-Subject: [PATCH v2 2/3] KVM: x86: introduce KVM_X86_QUIRK_TSC_HOST_ACCESS
-Date:   Thu,  3 Dec 2020 19:11:17 +0200
-Message-Id: <20201203171118.372391-3-mlevitsk@redhat.com>
+Subject: [PATCH v2 3/3] kvm/selftests: update tsc_msrs_test to cover KVM_X86_QUIRK_TSC_HOST_ACCESS
+Date:   Thu,  3 Dec 2020 19:11:18 +0200
+Message-Id: <20201203171118.372391-4-mlevitsk@redhat.com>
 In-Reply-To: <20201203171118.372391-1-mlevitsk@redhat.com>
 References: <20201203171118.372391-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -67,91 +67,139 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This quirk reflects the fact that we currently treat MSR_IA32_TSC
-and MSR_TSC_ADJUST access by the host (e.g qemu) in a way that is different
-compared to an access from the guest.
+Run the test once with quirk enabled and once disabled,
+and adjust the expected values accordingly.
 
-For host's MSR_IA32_TSC read we currently always return L1 TSC value, and for
-host's write we do the tsc synchronization.
-
-For host's MSR_TSC_ADJUST write, we don't make the tsc 'jump' as we should
-for this msr.
-
-When the hypervisor uses the new TSC GET/SET state ioctls, all of this is no
-longer needed, thus leave this enabled only with a quirk
-which the hypervisor can disable.
-
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/include/uapi/asm/kvm.h |  1 +
- arch/x86/kvm/x86.c              | 19 ++++++++++++++-----
- 2 files changed, 15 insertions(+), 5 deletions(-)
+ .../selftests/kvm/x86_64/tsc_msrs_test.c      | 79 ++++++++++++++++---
+ 1 file changed, 69 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-index 8e76d3701db3f..2a60fc6674164 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -404,6 +404,7 @@ struct kvm_sync_regs {
- #define KVM_X86_QUIRK_LAPIC_MMIO_HOLE	   (1 << 2)
- #define KVM_X86_QUIRK_OUT_7E_INC_RIP	   (1 << 3)
- #define KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT (1 << 4)
-+#define KVM_X86_QUIRK_TSC_HOST_ACCESS      (1 << 5)
+diff --git a/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c b/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
+index e357d8e222d47..3900c543a7ee1 100644
+--- a/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
+@@ -79,8 +79,6 @@ static void run_vcpu(struct kvm_vm *vm, uint32_t vcpuid, int stage)
+ {
+ 	struct ucall uc;
  
- #define KVM_STATE_NESTED_FORMAT_VMX	0
- #define KVM_STATE_NESTED_FORMAT_SVM	1
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 9b8a2fe3a2398..aabded17abae4 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3091,7 +3091,8 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		break;
- 	case MSR_IA32_TSC_ADJUST:
- 		if (guest_cpuid_has(vcpu, X86_FEATURE_TSC_ADJUST)) {
--			if (!msr_info->host_initiated) {
-+			if (!msr_info->host_initiated ||
-+			    !kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_TSC_HOST_ACCESS)) {
- 				s64 adj = data - vcpu->arch.ia32_tsc_adjust_msr;
- 				adjust_tsc_offset_guest(vcpu, adj);
- 			}
-@@ -3118,7 +3119,8 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		vcpu->arch.msr_ia32_power_ctl = data;
- 		break;
- 	case MSR_IA32_TSC:
--		if (msr_info->host_initiated) {
-+		if (msr_info->host_initiated &&
-+		    kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_TSC_HOST_ACCESS)) {
- 			kvm_synchronize_tsc(vcpu, data);
- 		} else {
- 			u64 adj = kvm_compute_tsc_offset(vcpu, data) - vcpu->arch.l1_tsc_offset;
-@@ -3409,17 +3411,24 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		msr_info->data = vcpu->arch.msr_ia32_power_ctl;
- 		break;
- 	case MSR_IA32_TSC: {
-+		u64 tsc_offset;
-+
- 		/*
- 		 * Intel SDM states that MSR_IA32_TSC read adds the TSC offset
- 		 * even when not intercepted. AMD manual doesn't explicitly
- 		 * state this but appears to behave the same.
- 		 *
--		 * On userspace reads and writes, however, we unconditionally
-+		 * On userspace reads and writes, when KVM_X86_QUIRK_SPECIAL_TSC_READ
-+		 * is present, however, we unconditionally
- 		 * return L1's TSC value to ensure backwards-compatible
- 		 * behavior for migration.
- 		 */
--		u64 tsc_offset = msr_info->host_initiated ? vcpu->arch.l1_tsc_offset :
--							    vcpu->arch.tsc_offset;
-+
-+		if (msr_info->host_initiated &&
-+		    kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_TSC_HOST_ACCESS))
-+			tsc_offset = vcpu->arch.l1_tsc_offset;
-+		else
-+			tsc_offset = vcpu->arch.tsc_offset;
+-	vcpu_args_set(vm, vcpuid, 1, vcpuid);
+-
+ 	vcpu_ioctl(vm, vcpuid, KVM_RUN, NULL);
  
- 		msr_info->data = kvm_scale_tsc(vcpu, rdtsc()) + tsc_offset;
- 		break;
+ 	switch (get_ucall(vm, vcpuid, &uc)) {
+@@ -101,7 +99,7 @@ static void run_vcpu(struct kvm_vm *vm, uint32_t vcpuid, int stage)
+ 	}
+ }
+ 
+-int main(void)
++void run_test(bool quirk_disabled)
+ {
+ 	struct kvm_vm *vm;
+ 	uint64_t val;
+@@ -109,6 +107,14 @@ int main(void)
+ 	vm = vm_create_default(VCPU_ID, 0, guest_code);
+ 
+ 	val = 0;
++	if (quirk_disabled) {
++		struct kvm_enable_cap cap = {
++			.cap = KVM_CAP_DISABLE_QUIRKS,
++			.args[0] = KVM_X86_QUIRK_TSC_HOST_ACCESS,
++		};
++		vm_enable_cap(vm, &cap);
++	}
++
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), val);
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
+ 
+@@ -124,20 +130,67 @@ int main(void)
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), val);
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
+ 
+-	/*
+-	 * Host: writes to MSR_IA32_TSC set the host-side offset
+-	 * and therefore do not change MSR_IA32_TSC_ADJUST.
+-	 */
+-	vcpu_set_msr(vm, 0, MSR_IA32_TSC, HOST_ADJUST + val);
++	if (quirk_disabled) {
++		struct kvm_tsc_state state = {
++			.tsc = HOST_ADJUST + val,
++			.flags = 0
++		};
++		vcpu_ioctl(vm, VCPU_ID, KVM_SET_TSC_STATE, &state);
++	} else {
++		/*
++		 * Host: writes to MSR_IA32_TSC set the host-side offset
++		 * and therefore do not change MSR_IA32_TSC_ADJUST
++		 */
++		vcpu_set_msr(vm, 0, MSR_IA32_TSC, HOST_ADJUST + val);
++	}
++
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), HOST_ADJUST + val);
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
++
++	if (quirk_disabled) {
++		/*
++		 * Host: writes to MSR_IA32_TSC work like in the guest
++		 * when quirk is disabled
++		 */
++		vcpu_set_msr(vm, 0, MSR_IA32_TSC, val);
++		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), val);
++		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val - HOST_ADJUST);
++
++		/* Restore the value */
++		vcpu_set_msr(vm, 0, MSR_IA32_TSC, HOST_ADJUST + val);
++		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
++	}
++
+ 	run_vcpu(vm, VCPU_ID, 3);
+ 
+-	/* Host: writes to MSR_IA32_TSC_ADJUST do not modify the TSC.  */
++	/*
++	 * Host: writes to MSR_IA32_TSC_ADJUST do not modify the TSC,
++	 * (unless the quirk is disabled)
++	 */
+ 	vcpu_set_msr(vm, 0, MSR_IA32_TSC_ADJUST, UNITY * 123456);
+-	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), HOST_ADJUST + val);
++	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC),
++		  quirk_disabled ? UNITY * 123456 + HOST_ADJUST : HOST_ADJUST + val);
+ 	ASSERT_EQ(vcpu_get_msr(vm, 0, MSR_IA32_TSC_ADJUST), UNITY * 123456);
+ 
++	if (quirk_disabled) {
++		/*
++		 * Host: writes via KVM_SET_TSC_STATE
++		 * to MSR_IA32_TSC and MSR_IA32_TSC_ADJUST can be done
++		 * independently
++		 */
++		struct kvm_tsc_state state = {
++			.tsc = UNITY * 42,
++			.tsc_adjust = UNITY * 42 - HOST_ADJUST,
++			.flags = KVM_TSC_STATE_TSC_ADJUST_VALID
++		};
++
++		vcpu_ioctl(vm, VCPU_ID, KVM_SET_TSC_STATE, &state);
++
++		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), UNITY * 42);
++		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST),
++			  UNITY * 42 - HOST_ADJUST);
++	}
++
+ 	/* Restore previous value.  */
+ 	vcpu_set_msr(vm, 0, MSR_IA32_TSC_ADJUST, val);
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), HOST_ADJUST + val);
+@@ -162,6 +215,12 @@ int main(void)
+ 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val - HOST_ADJUST);
+ 
+ 	kvm_vm_free(vm);
++}
++
+ 
++int main(void)
++{
++	run_test(false);
++	run_test(true);
+ 	return 0;
+ }
 -- 
 2.26.2
 
