@@ -2,57 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5782CCD02
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 04:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEC42CCE64
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 06:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728066AbgLCDH0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Dec 2020 22:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S1726140AbgLCFQ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Dec 2020 00:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728062AbgLCDHZ (ORCPT
+        with ESMTP id S1725793AbgLCFQ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 22:07:25 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D658C061A4D
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 19:06:39 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id s27so586740lfp.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 19:06:39 -0800 (PST)
+        Thu, 3 Dec 2020 00:16:27 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B39C061A4D
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 21:15:47 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id f5so775634ilj.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 21:15:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=S4QT6Rgw62DbFRwkl+4o96eZwY9j3Q8i5Y9bbEB2ur8=;
-        b=sEscObuHVUeG/B2h90LNy0OMIsrZSv4AbklZsKm0iVkmvH66ybD1szBgIlZe7lcHOW
-         y5tZ4ln4YAiiy/EivHRY2SnvIN9oTRYvd+dovtM1HXHQQGm+7a0HhZpTuBJdWNTevXQa
-         3Dgki8PsFn/e3FQDVOw6lIukkv1iV3jbsfPoZ9sv3x1GwinJqMP0V3cnYQQiXWCp2VnS
-         QnBb+OQDuClMXAuasFUyuRAUUZWCwAqTp2cfCr4GmpsZCXEJhVujh7zhb2huD19mb8Ng
-         cD/tFXhLfmLZzxkr9DkI92gHjc/PZsqIL6OKUJZ0O3wF+fNgfa/Ljw4ze7FmAtlNBBCD
-         3vjw==
+        bh=0T2UjYq4UBSUMGz6lYJAaVtZcmgm37SkhIDDNy2JsW4=;
+        b=vu24cf5sKdq2mdtSxBorcawv5ZXvrwH7MlyE1gIoeQ9WJ2cjuZZPeYEDnrd5DKAiV5
+         MOpi4o58Cru/Y4b+Vs/UpCKHWxSt/+uEnhsrclhm4G8Sw2wEjqbGyoG1T7EGSn5XZTsD
+         +wPPlFbTPrByyHsWB34kI3r+ONgEfLXxDXJwuUD6n8SZ58cFUkiKBBPDNDSwsh7CqHcL
+         1tS22zob33fWS/rdtG3yzILwJdOsdIn3XXMmi/fQGtQpx9rLgIAho6K4dY+jij46UMFp
+         G+3m5fKJ3Ll7EMFIAF3v3yRp4frafMTHE3L6y3+Ub04ktve5qUjlMctu7ozWQnk1PCfw
+         Yk9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=S4QT6Rgw62DbFRwkl+4o96eZwY9j3Q8i5Y9bbEB2ur8=;
-        b=QovAsyTWS12a8Ube2iNJZ8usap0tbM69QnRCpn01mTUYMRv0aIMeU6ohCoC73atVmN
-         0lkFwEyLR22AGqZb0PD0o4rts7eigl3IU9D8i/OaCleIMn6MgGpvV+emB1gkv1OS9bZQ
-         t1EzEGIqVqudUchVLu2HG9YVeGnzqQB6c9mvNbN+g4l+tCtiQw4vrGcNQ0g711lnnS6j
-         CftRA0hRxQa0BX95J/8RcMLcFz+hf/FdIo9sOg8gNNNmIghZZG38Cwrm13/k0Emj4TWS
-         znnMM8zOBYNglwqUedjQMSC23n8mssQ8Nh3OwZfexwoWOPnFW4tGIvjy+9vgcJu85Hvc
-         lvdw==
-X-Gm-Message-State: AOAM532GhCUijQi4ZK2D09Kb14dVxNS/aGkcEi1h/e3sMFTlUe5S8aCv
-        2endKYmWdVaEFv8M31dfXy5mWrq90KjfcKIwEmy9dSUB4di19KD5
-X-Google-Smtp-Source: ABdhPJzegLl2vCMw4oejNw5RGZOYU8Wum7n2VOt/tD+iy7i7dN7hn0r4ul4EVy8a4FvKXpMg3wSDK7G24YATprsPXI8=
-X-Received: by 2002:a19:5e5e:: with SMTP id z30mr424001lfi.277.1606964797974;
- Wed, 02 Dec 2020 19:06:37 -0800 (PST)
+        bh=0T2UjYq4UBSUMGz6lYJAaVtZcmgm37SkhIDDNy2JsW4=;
+        b=iU38ivnOl0nHxbRqCD/mHQq3bDpJ9KNzRtxuHrrEJnrho2xyDg+ZvPa+ikZrEl9zZW
+         FOdsAVaSpMrvtzZ27IQeVeVpnq1TvotBb0XCw11JvSCLDQx5QEjI/Jhz6lH+fGnumrIt
+         7hB4dEYg8l+RJByEHL7zggqcFNFew5Wb5wPnkNwma4NfSH8KcjT6N6wIf9I5KVlCk4ba
+         BRgnoPQ+ltL2Z1iTTZy3n/fuV6ZtIqDNoKXA/jc7WlvIZtIG8+KjHjmlC391r97ppUDP
+         CCLQSiXiBTF9E3tPhX8rynLVYnWqYz1G1UgbyzWun9jDXNqhkvnuT5PGh6ZnXyqZ3cOi
+         t0aA==
+X-Gm-Message-State: AOAM533z3n3s0CAfKP3FoUbC8kVlc9yMUaood4U7A9R10uC0p6nbm+mP
+        luhuda9kN5DutiMinrBXPletpG7wwsEYk3302US8Jw==
+X-Google-Smtp-Source: ABdhPJxuiKVy82egd6udynKufvhTNmRoS1PPUdfYZA0eVelYJdnv0QGsRCGulblEB4IdDY366hWrg9QO8fliQGTV8to=
+X-Received: by 2002:a92:297:: with SMTP id 145mr1538148ilc.133.1606972546057;
+ Wed, 02 Dec 2020 21:15:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20201202190824.1309398-1-dlatypov@google.com> <20201202190824.1309398-4-dlatypov@google.com>
-In-Reply-To: <20201202190824.1309398-4-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 3 Dec 2020 11:06:26 +0800
-Message-ID: <CABVgOS=sPxdDLaQ39DwZX5rLVzgb4Fbn5SvhiQxt5S3s+QC56Q@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] minor: kunit: tool: fix unit test so it can run
- from non-root dir
-To:     Daniel Latypov <dlatypov@google.com>
+References: <20201202190824.1309398-1-dlatypov@google.com> <CABVgOSnqhes_Lu+4BRq74get5D3ya3S6XxMLqFKamqahU5-RRA@mail.gmail.com>
+In-Reply-To: <CABVgOSnqhes_Lu+4BRq74get5D3ya3S6XxMLqFKamqahU5-RRA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 2 Dec 2020 21:15:35 -0800
+Message-ID: <CAGS_qxqk_ez6hU4pO9yromMfTgamTjLmhgW_yWAZzueh9y6qZA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] kunit: tool: fix unit test cleanup handling
+To:     David Gow <davidgow@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
@@ -63,34 +62,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 3, 2020 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, Dec 2, 2020 at 7:05 PM David Gow <davidgow@google.com> wrote:
 >
-> Also take this time to rename get_absolute_path() to test_data_path().
+> On Thu, Dec 3, 2020 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > * Stop leaking file objects.
+> > * Use self.addCleanup() to ensure we call cleanup functions even if
+> > setUp() fails.
+> > * use mock.patch.stopall instead of more error-prone manual approach
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
 >
-> 1. the name is currently a lie. It gives relative paths, e.g. if I run
-> from the same dir as the test file, it gives './test_data/<file>'
+> This patch hasn't changed since v1, right?
 >
-> See https://docs.python.org/3/reference/import.html#__file__, which
-> doesn't stipulate that implementations provide absolute paths.
->
-> 2. it's only used for generating paths to tools/testing/kunit/test_data/
-> So we can tersen things by making it less general.
->
-> Cache the absolute path to the test data files per suggestion from  [1].
-> Using relative paths, the tests break because of this code in kunit.py
->   if get_kernel_root_path():
->           os.chdir(get_kernel_root_path())
->
-> [1] https://lore.kernel.org/linux-kselftest/CABVgOSnH0gz7z5JhRCGyG1wg0zDDBTLoSUCoB-gWMeXLgVTo2w@mail.gmail.com/
->
-> Fixes: 5578d008d9e0 ("kunit: tool: fix running kunit_tool from outside kernel tree")
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+> It's still:
+> Reviewed-by: David Gow <davidgow@google.com>
 
-Thanks: I much prefer this to v1. Having it work the same way as
-test_tmpdir is a bonus.
+Oops, yes. It's entirely unchanged.
 
-Reviewed-by: David Gow <davidgow@google.com>
+The only change to the entire series was a rebase + drop the second
+patch in favor of revamping the test_data_path() one.
 
-Cheers,
--- David
+>
+> Cheers,
+> -- David
