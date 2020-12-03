@@ -2,170 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C722CCBB1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 02:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3125C2CCCFD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 04:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727055AbgLCBdp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Dec 2020 20:33:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50059 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726755AbgLCBdp (ORCPT
+        id S1725955AbgLCDGV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Dec 2020 22:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725965AbgLCDGV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 20:33:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606959138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T+i4hgnbURlmHWFQ6sHh3xD+xz+pB56D5OvWJIuIZUg=;
-        b=UBIH/+ZuQ4dzQeZ9WD7xzGVMi5EQrgaHZdfkrn/c8ub5ATVLj7vaIgNPiYZYI9Xwq/x8ue
-        TaPVIXIgUtjrYjqAGeM1fpbTQY83U6nkb/b90ksZ/Eby/DnVeSdoJNUXHT2sAvD8YsmFbo
-        q4hMT5QC2TmoTmb9SGEhycNJVcRy8NE=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-434-2iIyuyj2Ot2Hm0Qm5qUVMw-1; Wed, 02 Dec 2020 20:32:16 -0500
-X-MC-Unique: 2iIyuyj2Ot2Hm0Qm5qUVMw-1
-Received: by mail-qk1-f197.google.com with SMTP id l7so633472qkl.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 17:32:16 -0800 (PST)
+        Wed, 2 Dec 2020 22:06:21 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FE1C061A4D
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 19:05:35 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id u19so578381lfr.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 19:05:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fZfjFj0HnOPxDFc3+iS8mDidBdv6khuB8oFfMET/GKI=;
+        b=u66lDIvqTNO9kjjQ2rLurjG7k042fHc8I+LGB1GaopW0Wzq1fo68Lg3tYclhHdyyj+
+         P/b6j9/SPhuBsfvwZNf0XBrTUkAYj5pfUF6ENf+tlTqrpvqdXx7MCEz+QeLVVTPE8+7Q
+         oFgVPiC3gs7AonDTk2bMELyj8+2wuT/wxZGJMMD5xr1V/u+N16BlC2rYt38C3tbdRqOq
+         xtvqpT0kEoJLGU+Y8g+IyvUXsfOq/8QTSpUnr4fuBqiKiDQCQB6Us6Zo8pbKdKyUT3M9
+         JSBdb1ElHz23dZ0dhi8V1ZPsPRNbq9n+RbsQ0nGD5oToWIcR6VJNUh5BhQhVTR2T1A3Y
+         jlZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T+i4hgnbURlmHWFQ6sHh3xD+xz+pB56D5OvWJIuIZUg=;
-        b=QwQUPLwnTRn7vdkdwr5CqCFFd7Gi6WyuNfCvnNz1etGH+FwXjfwiIVkFVaJE19eyrT
-         hr45bUXSt8kygQBV3S+4S0hxB0IaE1BqD4tj/9mzKBXU0u/RBuOfwzce34WSMixLfY3J
-         H/jki+q1dvuT8IOw2Yp4tbYWJdbsKv15vNojXEtdwVHkDgAH889IVi6fKCY0Qf3bcoP6
-         vdIFSc178yfftWZp3K2D9LevC7Q8/WDGACI8ZEvl1sM8NnP5gT30l+XNbgURjSCxwBzW
-         4IuTp7OesXNcZmdmfcieP8+Gjr7sP8L6RSxaKRIvX/dui4SiEMXTevG/zj3mh5IknDBZ
-         5jkQ==
-X-Gm-Message-State: AOAM533Ow3GMJZ910dz5roVIlZUAILqi2iyQOq5oUCPRpPRRS4xXTNgR
-        6EBmp1ps0SiIwwNgLUsy44nBQAvX21VYhCm8Wu7lX9lnZUsH/jkQCilLsjmqtjq6vSoJ4JRpZuO
-        5dpaAuszXlf8iKu9xs3yKQDnsKvGy
-X-Received: by 2002:a0c:e583:: with SMTP id t3mr1117788qvm.42.1606959136166;
-        Wed, 02 Dec 2020 17:32:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzTRKK1oR4TGx3jghmRwEPH0SBs2kLQ15yxtOulZgmC1hCRslHbj2urqxef0p2YRznc+YWv2w==
-X-Received: by 2002:a0c:e583:: with SMTP id t3mr1117759qvm.42.1606959135831;
-        Wed, 02 Dec 2020 17:32:15 -0800 (PST)
-Received: from xz-x1 ([142.126.94.187])
-        by smtp.gmail.com with ESMTPSA id m8sm547711qkn.41.2020.12.02.17.32.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 17:32:15 -0800 (PST)
-Date:   Wed, 2 Dec 2020 20:32:13 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Alan Gilbert <dgilbert@redhat.com>,
-        Greg Thelen <gthelen@google.com>,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] userfaultfd: selftests: make __{s,u}64 format specifiers
- portable
-Message-ID: <20201203013213.GE108496@xz-x1>
-References: <20201202211542.1121189-1-axelrasmussen@google.com>
- <20201202230954.GB108496@xz-x1>
- <CAJHvVch2LJa57-Si2prKa-S3VUPpu3jYxW+3-+tcLMgSXkB69w@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fZfjFj0HnOPxDFc3+iS8mDidBdv6khuB8oFfMET/GKI=;
+        b=ai5W95RMJ1gqCCfkOk0L0jLeTRvnVxsWeuXxK+/Gcv4wCyJG0rAzFkfog6t8BnYpQy
+         7Kpdu7mC6lhBG6sfp00uLvVO0a1F7Z0O1jilRyXOu6Gc2d5mmpSdaiScGtmm/Gp8DFsj
+         jYxwNvDeYz3fdhZirpFVOwfR6RM8Cye+E4EJQp4mTctObiVa4Dx2ld5opoZcQ+OWjv25
+         AZHF8Fn56atqNEfXzqKdfzSZU5sGE50btXednxgCFWVyqE87OSN2KaJ6uX1DzAV0hTPM
+         TARA4En5zVBMSpuWXBOoUsSbT92zCfGCAGYYAvhY3+jmsxHiViq+lWSnoqKJ+wTFdtom
+         /KlQ==
+X-Gm-Message-State: AOAM532AtjrL1XwE5+3TwikZuDRYRPbonovyuYPdn0bZOSKIi93AOqgN
+        QxBW0mZXzgkEqi6dXUl1CMpjTm54Om8W2McW6Jd95g==
+X-Google-Smtp-Source: ABdhPJz3uwU3OoJjqR4+1l9Ui0xIUrD2q3MRpQ1iNbJ8+r/KWnAmLW7YkvTQKvIjA1nhCoGe/AGb1DFSfK1tv9zaaCo=
+X-Received: by 2002:a19:246:: with SMTP id 67mr420225lfc.234.1606964733349;
+ Wed, 02 Dec 2020 19:05:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVch2LJa57-Si2prKa-S3VUPpu3jYxW+3-+tcLMgSXkB69w@mail.gmail.com>
+References: <20201202190824.1309398-1-dlatypov@google.com>
+In-Reply-To: <20201202190824.1309398-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 3 Dec 2020 11:05:21 +0800
+Message-ID: <CABVgOSnqhes_Lu+4BRq74get5D3ya3S6XxMLqFKamqahU5-RRA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] kunit: tool: fix unit test cleanup handling
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 02, 2020 at 03:52:56PM -0800, Axel Rasmussen wrote:
-> On Wed, Dec 2, 2020 at 3:10 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > Hi, Axel,
-> >
-> > Looks mostly good to me, but a few nitpickings below.
-> >
-> > On Wed, Dec 02, 2020 at 01:15:42PM -0800, Axel Rasmussen wrote:
-> >
-> > [...]
-> >
-> > > +static void uffd_error(const char *message, __s64 code)
-> > > +{
-> > > +     fprintf(stderr, "%s: %" PRId64 "\n", message, (int64_t)code);
-> > > +     exit(1);
-> > > +}
-> >
-> > IMHO a macro that can take arbitrary parameters would be nicer, but if it
-> > satisfy our need, definitely ok too.
-> >
-> > [...]
-> >
-> > > @@ -340,7 +348,8 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
-> > >       prms.mode = wp ? UFFDIO_WRITEPROTECT_MODE_WP : 0;
-> > >
-> > >       if (ioctl(ufd, UFFDIO_WRITEPROTECT, &prms)) {
-> > > -             fprintf(stderr, "clear WP failed for address 0x%Lx\n", start);
-> > > +             fprintf(stderr, "clear WP failed for address 0x%" PRIx64 "\n",
-> > > +                     (uint64_t)start);
-> > >               exit(1);
-> >
-> > Is it intended to not use uffd_error() here?
-> 
-> Yes, this is intentional. This particular case prints the value in
-> hexadecimal, rather than decimal.
-> 
-> (Agree that uffd_error() could be made more general to cover cases
-> like this. I opted for the simplest thing which covers all but two
-> cases - this one, and one where we "return 1;" instead of "exit(1);" -
-> but I don't feel strongly.)
+On Thu, Dec 3, 2020 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> * Stop leaking file objects.
+> * Use self.addCleanup() to ensure we call cleanup functions even if
+> setUp() fails.
+> * use mock.patch.stopall instead of more error-prone manual approach
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Actually it's as simple as:
+This patch hasn't changed since v1, right?
 
-#define  uffd_error(...)  do {                  \
-        fprintf(stderr, __VA_ARGS__);           \
-        fprintf(stderr, "\n");                  \
-        exit(1);                                \
-    } while (0)
+It's still:
+Reviewed-by: David Gow <davidgow@google.com>
 
-But it's okay, I think.
-
-> 
-> >
-> > >       }
-> > >  }
-> >
-> > [...]
-> >
-> > > @@ -979,26 +981,20 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
-> > >       if (ret) {
-> > >               /* real retval in ufdio_zeropage.zeropage */
-> > >               if (has_zeropage) {
-> > > -                     if (uffdio_zeropage.zeropage == -EEXIST) {
-> > > -                             fprintf(stderr, "UFFDIO_ZEROPAGE -EEXIST\n");
-> > > -                             exit(1);
-> > > -                     } else {
-> > > -                             fprintf(stderr, "UFFDIO_ZEROPAGE error %Ld\n",
-> > > -                                     uffdio_zeropage.zeropage);
-> > > -                             exit(1);
-> > > -                     }
-> > > +                     uffd_error(uffdio_zeropage.zeropage == -EEXIST ?
-> > > +                                              "UFFDIO_ZEROPAGE -EEXIST" :
-> > > +                                              "UFFDIO_ZEROPAGE error",
-> >
-> > Nit: The indents here are a bit odd..
-> 
-> This is what clang-format yields. Are you thinking it would be better
-> to line everything up with the ( in uffd_error( ?
-> 
-> Or, perhaps this case is a good reason to make uffd_error() a variadic
-> macro so we can insert "-EEXIST" || "error" with a "%s".
-
-Yes.  It fixes a build warning, so I think current patch is fine too.
-
-No matter whether you'd like a v2, please feel free to take:
-
-Acked-by: Peter Xu <peterx@redhat.com>
-
-Thanks,
-
--- 
-Peter Xu
-
+Cheers,
+-- David
