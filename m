@@ -2,59 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CB82CE1CD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 23:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B82DE2CE1D2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 23:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731891AbgLCWeK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Dec 2020 17:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S1731919AbgLCWec (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Dec 2020 17:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731890AbgLCWeK (ORCPT
+        with ESMTP id S1731909AbgLCWe3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Dec 2020 17:34:10 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EE1C094240
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Dec 2020 14:32:31 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 131so2287593pfb.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Dec 2020 14:32:31 -0800 (PST)
+        Thu, 3 Dec 2020 17:34:29 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ABDC09424B
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Dec 2020 14:32:32 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id n7so2308946pgg.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Dec 2020 14:32:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=Os89FkyhgmDbmc7z66QjcsmYBeoW5VWe8k4lK/4sIT4=;
-        b=SGvVhfpqKzS1X3RBZliF0Rx4KiCT7QD17PfJ1hXUfQV4COYxR+p0tkJHGcxCXWSL5k
-         n2ej4d3QQmjCO2FSBItJKqydSI1aCb4TMVnd0taV2xOGzvWin5piJ4+c1uqdw3YSOWZT
-         6Vxnviq+TVSVjA6lrfGjNPGAjRyOc/9551RNRTm86/RaMDgBo/z3kTtXMlvul9piiBPv
-         tEceJkB5Ym9vCkOFBxQGbb/UgoWvUryP4TBB6HHWMH2Hk2oOVNknpRwHD+XwA0cl1aJo
-         +vX6LvmP8JGOD6WoeAHreG4Le43VrFqz0xM73e31RnKNwEuCTVaYwYhmqgAoNDp/6MOp
-         0IDQ==
+        bh=oIMlBnB15JVo5GvJtYOEjnoSMHizrpybMOv5lys41nw=;
+        b=wMe5VvfF5acd4U/J42MRxAWyGBynt3IN4/CeVj8vsMQNIeUiNzCDweFMZUDVazkVME
+         UKIxOdRqH859A96aWpy13kHBZVX4RGAF1GS4w5yzy9vOP1wiQfIuY2gds7nB5RhARdQv
+         oCdO3ysOlUY/TGOjQyutqicGezgEQrqUsx+veg3wfkqa4hf0Wbfd21F6pdqqeHnIfiay
+         e4vXtHXAGgWvCwT36C7167/tqANmibsaOJtc1tCoQZmCs11OQdQsObhAJ988rvdBioV6
+         lr7f7oqyrwqyMy98byHyepUV4uANk29LzjMHzWp7GhOjHbvqWbHz/IaSnPuIXeEf3zh7
+         hKlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=Os89FkyhgmDbmc7z66QjcsmYBeoW5VWe8k4lK/4sIT4=;
-        b=s5EcI6vb/rZPzf+XosEmpqijAE6t4oOv9/H16Fa6Vm0oyqbQDwmUt1UJNIJL5sk/Op
-         WpCKL3eXr+7d3/1AmCPO8xie6CnULVai+m5RuLAZMaNmCnnOSBRcQEQgzudbUtOixeVW
-         MAAjtlIHGXNbOYOhJlW7rnxqzAhtDRbXwN6gDSIHLnzhnmj8uzTod6vXXS5poCJvm6y7
-         cddGNSAe3VcuQp1GxFg8UX1tGNCpGBDuampDlQgijkbnymTuqxp5eItgI2hhevjWwFDg
-         +eTnvYUPKcv2N8cqZ1L9nIF/qT5dPOjWk8bmUzoo4K927ow2AchiDXTquAGaXmpW34hS
-         cXBw==
-X-Gm-Message-State: AOAM531K5tsURmftgU53dCDsjiNmteF+iIOXihryjzED18tk4LTTjirp
-        VUmvpGJrgfG0yRawpuGqMfMymw==
-X-Google-Smtp-Source: ABdhPJzuEMFPcvHRjadXMWC/EjU3Ibl7jwqeQXoS9BGPq/1VkDPsGQUy14oeqDzcRH29rgy5E0tmsg==
-X-Received: by 2002:a62:8608:0:b029:18b:a8e:ee9 with SMTP id x8-20020a6286080000b029018b0a8e0ee9mr1050406pfd.65.1607034749870;
-        Thu, 03 Dec 2020 14:32:29 -0800 (PST)
+        bh=oIMlBnB15JVo5GvJtYOEjnoSMHizrpybMOv5lys41nw=;
+        b=p9KTRRj+7NrNuK1ldeG/MF7L9HKiMtNJi+KIIbTzyCmRDHkDulyXqF6iBFDVUvdTCs
+         IQEoAFP/HNam5hSg6DMGXHEgCFX/8m93CB7fXMmJFel/aqubLcWs8pZNyPhcfWcDwgZu
+         tLGacBk4F4289aaTOQXa5b8AJhBJhO1uYrQqyjc20UpZJRH4gvYurD/SwKO9mJuBrzhx
+         dv3AcOSYPgP/fVs8tku5fBVFZ75/UuDe2INYcnY/jYbohFmWvWydOmAXSuFozzxJtZ/a
+         4ngPgqnUaC9gfwD6Ab8oEYZimOuJuxjnyCKOfZSDhg8vL3PXGC3++lSbP7nZ2EmMF9sR
+         8GGw==
+X-Gm-Message-State: AOAM5303NSSUiDNRFSTax/syQb6ZslqfrXTq2umAgPSt7Q+myoLqB1rR
+        Bm0j9uRJh2Cx1BA5TsQ1JRch3Q==
+X-Google-Smtp-Source: ABdhPJza/ryMS859XzWd8bYQIWub0aqq0ai/rq1L5WfJpINiXZi0oBdW/6g/jNlcAIeujSn6Hsmvow==
+X-Received: by 2002:a05:6a00:1506:b029:18b:5a31:ed87 with SMTP id q6-20020a056a001506b029018b5a31ed87mr951347pfu.55.1607034751382;
+        Thu, 03 Dec 2020 14:32:31 -0800 (PST)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id u24sm3003590pfm.81.2020.12.03.14.32.28
+        by smtp.gmail.com with ESMTPSA id x4sm1879678pgg.94.2020.12.03.14.32.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 14:32:29 -0800 (PST)
-Subject: [PATCH v1 3/5] dm: dm-user: New target that proxies BIOs to userspace
-Date:   Thu,  3 Dec 2020 13:58:57 -0800
-Message-Id: <20201203215859.2719888-4-palmer@dabbelt.com>
+        Thu, 03 Dec 2020 14:32:30 -0800 (PST)
+Subject: [PATCH v1 4/5] selftests/dm-user: A handful of tests for dm-user
+Date:   Thu,  3 Dec 2020 13:58:58 -0800
+Message-Id: <20201203215859.2719888-5-palmer@dabbelt.com>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
 In-Reply-To: <20201203215859.2719888-1-palmer@dabbelt.com>
 References: <20201203215859.2719888-1-palmer@dabbelt.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Cc:     corbet@lwn.net, song@kernel.org,
         Palmer Dabbelt <palmerdabbelt@google.com>, shuah@kernel.org,
@@ -69,1307 +70,1166 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Palmer Dabbelt <palmerdabbelt@google.com>
 
-dm-user is a device mapper target that allows a userpsace process to
-handle each incoming BIO -- essentially it's Fuse, but for the block
-layer.
+These tests ruly on fsstress and fio to generate accesses to a block
+device backed by a dm-user daemon.
 
 Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
 
 ---
 
-This has numerous issues with this, which I've enumerated via FIXMEs
-scattered throughout the code.  While it's obviously in no shape to be
-merged, this does at least function at a basic level (the next patch has
-some tests).  Many of the FIXMEs are simply missing functionality, but I
-wanted to send this out earlier rather than later as I have some higher
-level questions:
+I've lumped these all together rather than splitting them up.  The tests
+themselves are independent, but the associated build/run infastructure
+is pretty simple and I got tired of handling all the merge conflicts
+that came from juggling each test as its own patch.
 
-* Does it even make sense to have this within device mapper?  There's no
-  fundamental reason for this to be a device mapper target (ie, it could
-  just be its own block device), but being this does allow us to
-  piggyback on existing mechanisms to handle the device lifecycle.
-* Is dm-user (in cooperation with the userspace daemon) responsible for
-  ordering flush-related BIOs with any other BIOs, or is that handled
-  elsewhere within the kernel?
-* Is my shared target mutex legal?
-* Is there any benefit to returing DM_MAPIO_KILLED as opposed to later
-  terminating the BIO with an IO error after it has been submitted?
+The tests themselves sholud be portable, but the harness will only run
+in my environment (ie, QEMU).  That's kind of ugly, but I'm not really
+sure how to do this in a more reasonable way.  I run the tests as
+follows:
 
-Each of the above is discussed in more detail in the code.
+    $ rm -f scratch
+    $ truncate scratch --size=10G
+    $ qemu-system-x86_64 \
+            -m 8G -smp 32 -cpu host -accel kvm \
+            -kernel "${TREE}"/arch/x86_64/boot/bzImage \
+            -initrd buildroot/output/images/rootfs.cpio \
+            -append "console=ttyS0" \
+            -drive
+            file="${TREE}"/tools/testing/selftests/kselftest_install/kselftest-packages/kselftest.squashfs,if=virtio
+            \
+            -drive
+            file=scratch,if=virtio \
+            -nographic |&
+            tee log
 ---
- drivers/md/Kconfig   |   13 +
- drivers/md/Makefile  |    1 +
- drivers/md/dm-user.c | 1227 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 1241 insertions(+)
- create mode 100644 drivers/md/dm-user.c
+ tools/testing/selftests/.gitignore            |   3 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/dm-user/.gitignore    |   3 +
+ tools/testing/selftests/dm-user/Makefile      |  23 ++
+ tools/testing/selftests/dm-user/README        |  20 ++
+ .../selftests/dm-user/daemon-example.c        | 186 ++++++++++++++
+ .../selftests/dm-user/daemon-parallel.c       | 240 ++++++++++++++++++
+ .../testing/selftests/dm-user/daemon-short.c  | 196 ++++++++++++++
+ .../selftests/dm-user/fio-rand-read-1G.fio    |  16 ++
+ .../selftests/dm-user/fio-verify-1G.fio       |  10 +
+ .../testing/selftests/dm-user/harness-fio.sh  |  45 ++++
+ .../selftests/dm-user/harness-fsstress.sh     |  44 ++++
+ .../selftests/dm-user/include/logging.h       | 148 +++++++++++
+ tools/testing/selftests/dm-user/run.sh        |  74 ++++++
+ 14 files changed, 1009 insertions(+)
+ create mode 100644 tools/testing/selftests/dm-user/.gitignore
+ create mode 100644 tools/testing/selftests/dm-user/Makefile
+ create mode 100644 tools/testing/selftests/dm-user/README
+ create mode 100644 tools/testing/selftests/dm-user/daemon-example.c
+ create mode 100644 tools/testing/selftests/dm-user/daemon-parallel.c
+ create mode 100644 tools/testing/selftests/dm-user/daemon-short.c
+ create mode 100644 tools/testing/selftests/dm-user/fio-rand-read-1G.fio
+ create mode 100644 tools/testing/selftests/dm-user/fio-verify-1G.fio
+ create mode 100755 tools/testing/selftests/dm-user/harness-fio.sh
+ create mode 100755 tools/testing/selftests/dm-user/harness-fsstress.sh
+ create mode 100644 tools/testing/selftests/dm-user/include/logging.h
+ create mode 100755 tools/testing/selftests/dm-user/run.sh
 
-diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
-index 30ba3573626c..bcafca0e571d 100644
---- a/drivers/md/Kconfig
-+++ b/drivers/md/Kconfig
-@@ -617,4 +617,17 @@ config DM_ZONED
- 
- 	  If unsure, say N.
- 
-+config DM_USER
-+	tristate "Block device in userspace"
-+	depends on BLK_DEV_DM
-+	help
-+	  This device-mapper target allows a userspace daemon to provide the
-+	  contents of a block device.  See
-+	  <file:Documentation/block/dm-user.rst> for more information.
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index 055a5019b13c..88b1938ea5e6 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -8,3 +8,6 @@ tpm2/SpaceTest.log
+ # Python bytecode and cache
+ __pycache__/
+ *.py[cod]
 +
-+	  To compile this code as a module, choose M here: the module will be
-+	  called dm-user.
-+
-+	  If unsure, say N.
-+
- endif # MD
-diff --git a/drivers/md/Makefile b/drivers/md/Makefile
-index 6d3e234dc46a..82ae3d496a00 100644
---- a/drivers/md/Makefile
-+++ b/drivers/md/Makefile
-@@ -51,6 +51,7 @@ obj-$(CONFIG_BLK_DEV_DM_BUILTIN) += dm-builtin.o
- obj-$(CONFIG_DM_UNSTRIPED)	+= dm-unstripe.o
- obj-$(CONFIG_DM_BUFIO)		+= dm-bufio.o
- obj-$(CONFIG_DM_BIO_PRISON)	+= dm-bio-prison.o
-+obj-$(CONFIG_DM_USER)		+= dm-user.o
- obj-$(CONFIG_DM_CRYPT)		+= dm-crypt.o
- obj-$(CONFIG_DM_DELAY)		+= dm-delay.o
- obj-$(CONFIG_DM_DUST)		+= dm-dust.o
-diff --git a/drivers/md/dm-user.c b/drivers/md/dm-user.c
++# selftest install dir
++/kselftest_install/
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index d9c283503159..f5e0f61c4384 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -9,6 +9,7 @@ TARGETS += clone3
+ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
++TARGETS += dm-user
+ TARGETS += drivers/dma-buf
+ TARGETS += efivarfs
+ TARGETS += exec
+diff --git a/tools/testing/selftests/dm-user/.gitignore b/tools/testing/selftests/dm-user/.gitignore
 new file mode 100644
-index 000000000000..0aaa8f39f18a
+index 000000000000..7b0aa3e4a738
 --- /dev/null
-+++ b/drivers/md/dm-user.c
-@@ -0,0 +1,1227 @@
-+// SPDX-License-Identifier: GPL-2.0+
++++ b/tools/testing/selftests/dm-user/.gitignore
+@@ -0,0 +1,3 @@
++/daemon-example
++/daemon-parallel
++/daemon-short
+diff --git a/tools/testing/selftests/dm-user/Makefile b/tools/testing/selftests/dm-user/Makefile
+new file mode 100644
+index 000000000000..98ff4f5d0fad
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/Makefile
+@@ -0,0 +1,23 @@
++# SPDX-License-Identifier: GPL-2.0
++.PHONY: all clean
++
++top_srcdir = ../../../..
++INCLUDES := -I../ -Iinclude/ -I$(top_srcdir)/usr/include
++CFLAGS := $(CFLAGS) -g -O2 -Wall -static -D_GNU_SOURCE -pthread $(INCLUDES)
++KSFT_KHDR_INSTALL := 1
++
++TEST_GEN_FILES := \
++	daemon-example \
++	daemon-parallel \
++	daemon-short
++
++TEST_PROGS := \
++	fio-rand-read-1G.fio \
++	fio-verify-1G.fio \
++	harness-fio.sh \
++	harness-fsstress.sh \
++	run.sh
++
++$(TEST_GEN_FILES): khdr
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/dm-user/README b/tools/testing/selftests/dm-user/README
+new file mode 100644
+index 000000000000..213de27db35d
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/README
+@@ -0,0 +1,20 @@
++dm-user Tests
++=============
++Tests for dm-user.
++
++Quick Start
++-----------
++It's probably a bad idea to just run this blindly, but all you need to do is:
++
++# make
++# ./run.sh
++
++Slow Start
++----------
++These tests use `dmsetup` to manage device mapper nodes, which is part of lvm2.
++Some use `fio`, and some use the `fsstress` from xfstests.  Some of the tests
++also expect "/dev/vdb" to exist and to be at least 10G.
++
++I use a simple buildroot-based initramfs to run the tests.  I've added an
++xfstests package to get fsstress, but I haven't sent out the patches yet.  I
++run everything in QEMU.
+diff --git a/tools/testing/selftests/dm-user/daemon-example.c b/tools/testing/selftests/dm-user/daemon-example.c
+new file mode 100644
+index 000000000000..b245fad192bf
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/daemon-example.c
+@@ -0,0 +1,186 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Copyright (C) 2020 Palmer Dabbelt <palmerdabbelt@google.com>
++ * Copyright 2020 Google, Inc
 + */
 +
-+#include <linux/device-mapper.h>
-+#include <uapi/linux/dm-user.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <getopt.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <poll.h>
++#include <pthread.h>
++#include <linux/dm-user.h>
++#include <sys/prctl.h>
++#include "logging.h"
 +
-+#include <linux/bio.h>
-+#include <linux/init.h>
-+#include <linux/mempool.h>
-+#include <linux/miscdevice.h>
-+#include <linux/module.h>
-+#include <linux/poll.h>
-+#include <linux/uio.h>
-+#include <linux/wait.h>
++#define SECTOR_SIZE 512
 +
-+#define DM_MSG_PREFIX "user"
++#define MAX(a, b) ((a) > (b) ? (a) : (b))
 +
-+#define MAX_OUTSTANDING_MESSAGES 128
-+
-+/*
-+ * dm-user uses four structures:
-+ *
-+ *  - "struct target", the outermost structure, corresponds to a single device
-+ *    mapper target.  This contains the set of outstanding BIOs that have been
-+ *    provided by DM and are not actively being processed by the user, along
-+ *    with a misc device that userspace can open to communicate with the
-+ *    kernel.  Each time userspaces opens the misc device a new channel is
-+ *    created.
-+ *  - "struct channel", which represents a single active communication channel
-+ *    with userspace.  Userspace may choose arbitrary read/write sizes to use
-+ *    when processing messages, channels form these into logical accesses.
-+ *    When userspace responds to a full message the channel completes the BIO
-+ *    and obtains a new message to process from the target.
-+ *  - "struct message", which wraps a BIO with the additional information
-+ *    required by the kernel to sort out what to do with BIOs when they return
-+ *    from userspace.
-+ *  - "struct dm_user_message", which is the exact message format that
-+ *    userspace sees.
-+ *
-+ * The hot path contains three distinct operations:
-+ *
-+ *  - user_map(), which is provided a BIO from device mapper that is queued
-+ *    into the target.  This allocates and enqueues a new message.
-+ *  - dev_read(), which dequeues a message, copies it to userspace.
-+ *  - dev_write(), which looks up a message (keyed by sequence number) and
-+ *    completes the corresponding BIO.
-+ *
-+ * Lock ordering (outer to inner)
-+ *
-+ * 1) miscdevice's global lock.  This is held around dev_open, so it has to be
-+ *    the outermost lock.
-+ * 2) target->lock
-+ * 3) channel->lock
-+ */
-+
-+struct message {
-+	/*
-+	 * Messages themselves do not need a lock, they're protected by either
-+	 * the target or channel's lock, depending on which can reference them
-+	 * directly.
-+	 */
-+	struct dm_user_message msg;
-+	struct bio *bio;
-+	size_t posn_to_user;
-+	size_t total_to_user;
-+	size_t posn_from_user;
-+	size_t total_from_user;
-+
-+	struct list_head from_user;
-+	struct list_head to_user;
-+
-+	/*
-+	 * These are written back from the user.  They live in the same spot in
-+	 * the message, but we need to either keep the old values around or
-+	 * call a bunch more BIO helpers.  These are only valid after write has
-+	 * adopted the message.
-+	 */
-+	u64 return_type;
-+	u64 return_flags;
-+};
-+
-+struct target {
-+	/*
-+	 * A target has a single lock, which protects everything in the target
-+	 * (but does not protect the channels associated with a target).
-+	 */
-+	struct mutex lock;
-+
-+	/*
-+	 * There is only one point at which anything blocks: userspace blocks
-+	 * reading a new message, which is woken up by device mapper providing
-+	 * a new BIO to process (or tearing down the target).  The
-+	 * corresponding write side doesn't block, instead we treat userspace's
-+	 * response containing a message that has yet to be mapped as an
-+	 * invalid operation.
-+	 */
-+	struct wait_queue_head wq;
-+
-+	/*
-+	 * Messages are delivered to userspace in order, but may be returned
-+	 * out of order.  This allows userspace to schedule IO if it wants to.
-+	 */
-+	mempool_t message_pool;
-+	u64 next_seq_to_map;
-+	u64 next_seq_to_user;
-+	struct list_head to_user;
-+
-+	/*
-+	 * There is a misc device per target.  The name is selected by
-+	 * userspace (via a DM create ioctl argument), and each ends up in
-+	 * /dev/dm-user/.  It looks like a better way to do this may be to have
-+	 * a filesystem to manage these, but this was more expedient.  The
-+	 * current mechanism is functional, but does result in an arbitrary
-+	 * number of dynamically created misc devices.
-+	 */
-+	struct miscdevice miscdev;
-+
-+	/*
-+	 * Device mapper's target destructor triggers tearing this all down,
-+	 * but we can't actually free until every channel associated with this
-+	 * target has been destroyed.  Channels each have a reference to their
-+	 * target, and there is an additional single reference that corresponds
-+	 * to both DM and the misc device (both of which are destroyed by DM).
-+	 *
-+	 * In the common case userspace will be asleep waiting for a new
-+	 * message when device mapper decides to destroy the target, which
-+	 * means no new messages will appear.  The destroyed flag triggers a
-+	 * wakeup, which will end up removing the reference.
-+	 */
-+	struct kref references;
-+	int dm_destroyed;
-+};
-+
-+struct channel {
-+	struct target *target;
-+
-+	/*
-+	 * A channel has a single lock, which prevents multiple reads (or
-+	 * multiple writes) from conflicting with each other.
-+	 */
-+	struct mutex lock;
-+
-+	struct message *cur_to_user;
-+	struct message *cur_from_user;
-+	ssize_t to_user_error;
-+	ssize_t from_user_error;
-+
-+	/*
-+	 * Once a message has been forwarded to userspace on a channel it must
-+	 * be responded to on the same channel.  This allows us to error out
-+	 * the messages that have not yet been responded to by a channel when
-+	 * that channel closes, which makes handling errors more reasonable for
-+	 * fault-tolerant userspace daemons.  It also happens to make avoiding
-+	 * shared locks between user_map() and dev_read() a lot easier.
-+	 *
-+	 * This does preclude a multi-threaded work stealing userspace
-+	 * implementation (or at least, force a degree of head-of-line blocking
-+	 * on the response path).
-+	 */
-+	struct list_head from_user;
-+
-+	/*
-+	 * Responses from userspace can arrive in arbitrarily small chunks.
-+	 * We need some place to buffer one up until we can find the
-+	 * corresponding kernel-side message to continue processing, so instead
-+	 * of allocating them we just keep one off to the side here.  This can
-+	 * only ever be pointed to by from_user_cur, and will never have a BIO.
-+	 */
-+	struct message scratch_message_from_user;
-+};
-+
-+static inline struct target *target_from_target(struct dm_target *target)
++int write_all(int fd, void *buf, size_t len)
 +{
-+	WARN_ON(target->private == NULL);
-+	return target->private;
++	char *buf_c = buf;
++	ssize_t total = 0;
++	ssize_t once;
++
++	while (total < len) {
++		once = write(fd, buf_c + total, len - total);
++		if (once <= 0)
++			return once;
++		total += once;
++	}
++
++	return total;
 +}
 +
-+static inline struct target *target_from_miscdev(struct miscdevice *miscdev)
++int read_all(int fd, void *buf, size_t len)
 +{
-+	return container_of(miscdev, struct target, miscdev);
++	char *buf_c = buf;
++	ssize_t total = 0;
++	ssize_t once;
++
++	while (total < len) {
++		once = read(fd, buf_c + total, len - total);
++		if (once <= 0)
++			return once;
++		total += once;
++	}
++
++	return total;
 +}
 +
-+static inline struct channel *channel_from_file(struct file *file)
++int simple_daemon(char *control_dev,
++		  size_t block_bytes,
++		  char *store)
++
 +{
-+	WARN_ON(file->private_data == NULL);
-+	return file->private_data;
-+}
++	int control_fd = open(control_dev, O_RDWR);
 +
-+static inline struct target *target_from_channel(struct channel *c)
-+{
-+	WARN_ON(c->target == NULL);
-+	return c->target;
-+}
-+
-+static inline size_t bio_size(struct bio *bio)
-+{
-+	struct bio_vec bvec;
-+	struct bvec_iter iter;
-+	size_t out = 0;
-+
-+	bio_for_each_segment(bvec, bio, iter)
-+		out += bio_iter_len(bio, iter);
-+	return out;
-+}
-+
-+static inline size_t bio_bytes_needed_to_user(struct bio *bio)
-+{
-+	switch (bio_op(bio)) {
-+	case REQ_OP_WRITE:
-+		return sizeof(struct dm_user_message) + bio_size(bio);
-+	case REQ_OP_READ:
-+	case REQ_OP_FLUSH:
-+	case REQ_OP_DISCARD:
-+	case REQ_OP_SECURE_ERASE:
-+	case REQ_OP_WRITE_SAME:
-+	case REQ_OP_WRITE_ZEROES:
-+	case REQ_OP_ZONE_OPEN:
-+	case REQ_OP_ZONE_CLOSE:
-+	case REQ_OP_ZONE_FINISH:
-+	case REQ_OP_ZONE_APPEND:
-+	case REQ_OP_ZONE_RESET:
-+		return sizeof(struct dm_user_message);
-+
-+	/*
-+	 * These ops are not passed to userspace under the assumption that
-+	 * they're not going to be particularly useful in that context.
-+	 */
-+	case REQ_OP_SCSI_IN:
-+	case REQ_OP_SCSI_OUT:
-+	case REQ_OP_DRV_IN:
-+	case REQ_OP_DRV_OUT:
-+	/* Anything new isn't supported,at least not yet. */
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static inline size_t bio_bytes_needed_from_user(struct bio *bio)
-+{
-+	switch (bio_op(bio)) {
-+	case REQ_OP_READ:
-+		return sizeof(struct dm_user_message) + bio_size(bio);
-+	case REQ_OP_WRITE:
-+	case REQ_OP_FLUSH:
-+	case REQ_OP_DISCARD:
-+	case REQ_OP_SECURE_ERASE:
-+	case REQ_OP_WRITE_SAME:
-+	case REQ_OP_WRITE_ZEROES:
-+	case REQ_OP_ZONE_OPEN:
-+	case REQ_OP_ZONE_CLOSE:
-+	case REQ_OP_ZONE_FINISH:
-+	case REQ_OP_ZONE_APPEND:
-+	case REQ_OP_ZONE_RESET:
-+		return sizeof(struct dm_user_message);
-+
-+	/*
-+	 * These ops are not passed to userspace under the assumption that
-+	 * they're not going to be particularly useful in that context.
-+	 */
-+	case REQ_OP_SCSI_IN:
-+	case REQ_OP_SCSI_OUT:
-+	case REQ_OP_DRV_IN:
-+	case REQ_OP_DRV_OUT:
-+	/* Anything new isn't supported,at least not yet. */
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static inline long bio_type_to_user_type(struct bio *bio)
-+{
-+	switch (bio_op(bio)) {
-+	case REQ_OP_READ:
-+		return DM_USER_REQ_MAP_READ;
-+	case REQ_OP_WRITE:
-+		return DM_USER_REQ_MAP_WRITE;
-+	case REQ_OP_FLUSH:
-+		return DM_USER_REQ_MAP_FLUSH;
-+	case REQ_OP_DISCARD:
-+		return DM_USER_REQ_MAP_DISCARD;
-+	case REQ_OP_SECURE_ERASE:
-+		return DM_USER_REQ_MAP_SECURE_ERASE;
-+	case REQ_OP_WRITE_SAME:
-+		return DM_USER_REQ_MAP_WRITE_SAME;
-+	case REQ_OP_WRITE_ZEROES:
-+		return DM_USER_REQ_MAP_WRITE_ZEROES;
-+	case REQ_OP_ZONE_OPEN:
-+		return DM_USER_REQ_MAP_ZONE_OPEN;
-+	case REQ_OP_ZONE_CLOSE:
-+		return DM_USER_REQ_MAP_ZONE_CLOSE;
-+	case REQ_OP_ZONE_FINISH:
-+		return DM_USER_REQ_MAP_ZONE_FINISH;
-+	case REQ_OP_ZONE_APPEND:
-+		return DM_USER_REQ_MAP_ZONE_APPEND;
-+	case REQ_OP_ZONE_RESET:
-+		return DM_USER_REQ_MAP_ZONE_RESET;
-+
-+	/*
-+	 * These ops are not passed to userspace under the assumption that
-+	 * they're not going to be particularly useful in that context.
-+	 */
-+	case REQ_OP_SCSI_IN:
-+	case REQ_OP_SCSI_OUT:
-+	case REQ_OP_DRV_IN:
-+	case REQ_OP_DRV_OUT:
-+	/* Anything new isn't supported,at least not yet. */
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static inline long bio_flags_to_user_flags(struct bio *bio)
-+{
-+	u64 out = 0;
-+	typeof(bio->bi_opf) opf = bio->bi_opf & ~REQ_OP_MASK;
-+
-+	if (opf & REQ_FAILFAST_DEV) {
-+		opf &= ~REQ_FAILFAST_DEV;
-+		out |= DM_USER_REQ_MAP_FLAG_FAILFAST_DEV;
++	if (control_fd < 0) {
++		ksft_print_msg("Unable to open control device %s\n", control_dev);
++		return RET_FAIL;
 +	}
 +
-+	if (opf & REQ_FAILFAST_TRANSPORT) {
-+		opf &= ~REQ_FAILFAST_TRANSPORT;
-+		out |= DM_USER_REQ_MAP_FLAG_FAILFAST_TRANSPORT;
-+	}
++	while (1) {
++		struct dm_user_message msg;
++		__u64 type;
++		char *base;
 +
-+	if (opf & REQ_FAILFAST_DRIVER) {
-+		opf &= ~REQ_FAILFAST_DRIVER;
-+		out |= DM_USER_REQ_MAP_FLAG_FAILFAST_DRIVER;
-+	}
++		if (read_all(control_fd, &msg, sizeof(msg)) < 0) {
++			if (errno == ENOTBLK)
++				return RET_PASS;
 +
-+	if (opf & REQ_SYNC) {
-+		opf &= ~REQ_SYNC;
-+		out |= DM_USER_REQ_MAP_FLAG_SYNC;
-+	}
++			perror("unable to read msg");
++			return RET_FAIL;
++		}
 +
-+	if (opf & REQ_META) {
-+		opf &= ~REQ_META;
-+		out |= DM_USER_REQ_MAP_FLAG_META;
-+	}
++		base = store + msg.sector * SECTOR_SIZE;
++		if (base + msg.len > store + block_bytes) {
++			fprintf(stderr, "access out of bounds\n");
++			return RET_FAIL;
++		}
 +
-+	if (opf & REQ_PRIO) {
-+		opf &= ~REQ_PRIO;
-+		out |= DM_USER_REQ_MAP_FLAG_PRIO;
-+	}
++		type = msg.type;
++		switch (type) {
++		case DM_USER_REQ_MAP_WRITE:
++			msg.type = DM_USER_RESP_SUCCESS;
++			if (read_all(control_fd, base, msg.len) < 0) {
++				if (errno == ENOTBLK)
++					return RET_PASS;
 +
-+	if (opf & REQ_NOMERGE) {
-+		opf &= ~REQ_NOMERGE;
-+		out |= DM_USER_REQ_MAP_FLAG_NOMERGE;
-+	}
-+
-+	if (opf & REQ_IDLE) {
-+		opf &= ~REQ_IDLE;
-+		out |= DM_USER_REQ_MAP_FLAG_IDLE;
-+	}
-+
-+	if (opf & REQ_INTEGRITY) {
-+		opf &= ~REQ_INTEGRITY;
-+		out |= DM_USER_REQ_MAP_FLAG_INTEGRITY;
-+	}
-+
-+	if (opf & REQ_FUA) {
-+		opf &= ~REQ_FUA;
-+		out |= DM_USER_REQ_MAP_FLAG_FUA;
-+	}
-+
-+	if (opf & REQ_PREFLUSH) {
-+		opf &= ~REQ_PREFLUSH;
-+		out |= DM_USER_REQ_MAP_FLAG_PREFLUSH;
-+	}
-+
-+	if (opf & REQ_PREFLUSH) {
-+		opf &= ~REQ_PREFLUSH;
-+		out |= DM_USER_REQ_MAP_FLAG_PREFLUSH;
-+	}
-+
-+	if (opf & REQ_RAHEAD) {
-+		opf &= ~REQ_RAHEAD;
-+		out |= DM_USER_REQ_MAP_FLAG_RAHEAD;
-+	}
-+
-+	if (opf & REQ_BACKGROUND) {
-+		opf &= ~REQ_BACKGROUND;
-+		out |= DM_USER_REQ_MAP_FLAG_BACKGROUND;
-+	}
-+
-+	if (opf & REQ_BACKGROUND) {
-+		opf &= ~REQ_BACKGROUND;
-+		out |= DM_USER_REQ_MAP_FLAG_BACKGROUND;
-+	}
-+
-+	if (opf & REQ_NOWAIT) {
-+		opf &= ~REQ_NOWAIT;
-+		out |= DM_USER_REQ_MAP_FLAG_NOWAIT;
-+	}
-+
-+	if (opf & REQ_CGROUP_PUNT) {
-+		opf &= ~REQ_CGROUP_PUNT;
-+		out |= DM_USER_REQ_MAP_FLAG_CGROUP_PUNT;
-+	}
-+
-+	if (opf & REQ_NOUNMAP) {
-+		opf &= ~REQ_NOUNMAP;
-+		out |= DM_USER_REQ_MAP_FLAG_NOUNMAP;
-+	}
-+
-+	if (opf & REQ_HIPRI) {
-+		opf &= ~REQ_HIPRI;
-+		out |= DM_USER_REQ_MAP_FLAG_HIPRI;
-+	}
-+
-+	if (unlikely(opf)) {
-+		pr_warn("unsupported BIO type %x\n", opf);
-+		return -EOPNOTSUPP;
-+	}
-+	WARN_ON(out < 0);
-+	return out;
-+}
-+
-+/*
-+ * Not quite what's in blk-map.c, but instead what I thought the functions in
-+ * blk-map did.  This one seems more generally useful and I think we could
-+ * write the blk-map version in terms of this one.  The differences are that
-+ * this has a return value that counts, and blk-map uses the BIO _all iters.
-+ * Neither  advance the BIO iter but don't advance the IOV iter, which is a bit
-+ * odd here.
-+ */
-+static ssize_t bio_copy_from_iter(struct bio *bio, struct iov_iter *iter)
-+{
-+	struct bio_vec bvec;
-+	struct bvec_iter biter;
-+	ssize_t out = 0;
-+
-+	bio_for_each_segment(bvec, bio, biter) {
-+		ssize_t ret;
-+
-+		ret = copy_page_from_iter(bvec.bv_page, bvec.bv_offset,
-+					  bvec.bv_len, iter);
-+
-+		/*
-+		 * FIXME: I thought that IOV copies had a mechanism for
-+		 * terminating early, if for example a signal came in while
-+		 * sleeping waiting for a page to be mapped, but I don't see
-+		 * where that would happen.
-+		 */
-+		WARN_ON(ret < 0);
-+		out += ret;
-+
-+		if (!iov_iter_count(iter))
++				perror("unable to read buf");
++				return RET_FAIL;
++			}
 +			break;
-+
-+		if (ret < bvec.bv_len)
-+			return ret;
-+	}
-+
-+	return out;
-+}
-+
-+static ssize_t bio_copy_to_iter(struct bio *bio, struct iov_iter *iter)
-+{
-+	struct bio_vec bvec;
-+	struct bvec_iter biter;
-+	ssize_t out = 0;
-+
-+	bio_for_each_segment(bvec, bio, biter) {
-+		ssize_t ret;
-+
-+		ret = copy_page_to_iter(bvec.bv_page, bvec.bv_offset,
-+					bvec.bv_len, iter);
-+
-+		/* as above */
-+		WARN_ON(ret < 0);
-+		out += ret;
-+
-+		if (!iov_iter_count(iter))
++		case DM_USER_REQ_MAP_FLUSH:
++			/* Nothing extra to do on flush, we're in memory. */
++		case DM_USER_REQ_MAP_READ:
++			msg.type = DM_USER_RESP_SUCCESS;
 +			break;
++		default:
++			msg.type = DM_USER_RESP_UNSUPPORTED;
++			break;
++		}
 +
-+		if (ret < bvec.bv_len)
-+			return ret;
-+	}
++		if (write_all(control_fd, &msg, sizeof(msg)) < 0) {
++			if (errno == ENOTBLK)
++				return RET_PASS;
 +
-+	return out;
-+}
++			perror("unable to write msg");
++			return RET_FAIL;
++		}
 +
-+static ssize_t msg_copy_to_iov(struct message *msg, struct iov_iter *to)
-+{
-+	ssize_t copied = 0;
++		if (type == DM_USER_REQ_MAP_READ) {
++			if (write_all(control_fd, base, msg.len) < 0) {
++				if (errno == ENOTBLK)
++					return RET_PASS;
 +
-+	if (!iov_iter_count(to))
-+		return 0;
-+
-+	if (msg->posn_to_user < sizeof(msg->msg)) {
-+		copied = copy_to_iter((char *)(&msg->msg) + msg->posn_to_user,
-+				      sizeof(msg->msg) - msg->posn_to_user, to);
-+	} else {
-+		copied = bio_copy_to_iter(msg->bio, to);
-+		if (copied > 0)
-+			bio_advance(msg->bio, copied);
-+	}
-+
-+	if (copied < 0)
-+		return copied;
-+
-+	msg->posn_to_user += copied;
-+	return copied;
-+}
-+
-+static ssize_t msg_copy_from_iov(struct message *msg, struct iov_iter *from)
-+{
-+	ssize_t copied = 0;
-+
-+	if (!iov_iter_count(from))
-+		return 0;
-+
-+	if (msg->posn_from_user < sizeof(msg->msg)) {
-+		copied = copy_from_iter(
-+			(char *)(&msg->msg) + msg->posn_from_user,
-+			sizeof(msg->msg) - msg->posn_from_user, from);
-+	} else {
-+		copied = bio_copy_from_iter(msg->bio, from);
-+		if (copied > 0)
-+			bio_advance(msg->bio, copied);
-+	}
-+
-+	if (copied < 0)
-+		return copied;
-+
-+	msg->posn_from_user += copied;
-+	return copied;
-+}
-+
-+static struct message *msg_get_map(struct target *t)
-+{
-+	struct message *m;
-+
-+	lockdep_assert_held(&t->lock);
-+
-+	m = mempool_alloc(&t->message_pool, GFP_NOIO);
-+	m->msg.seq = t->next_seq_to_map++;
-+	INIT_LIST_HEAD(&m->to_user);
-+	INIT_LIST_HEAD(&m->from_user);
-+	return m;
-+}
-+
-+static struct message *msg_get_to_user(struct target *t)
-+{
-+	struct message *m;
-+
-+	lockdep_assert_held(&t->lock);
-+
-+	if (list_empty(&t->to_user))
-+		return NULL;
-+
-+	m = list_first_entry(&t->to_user, struct message, to_user);
-+	list_del(&m->to_user);
-+	return m;
-+}
-+
-+static struct message *msg_get_from_user(struct channel *c, u64 seq)
-+{
-+	struct message *m;
-+	struct list_head *cur;
-+
-+	lockdep_assert_held(&c->lock);
-+
-+	list_for_each(cur, &c->from_user) {
-+		m = list_entry(cur, struct message, from_user);
-+		if (m->msg.seq == seq) {
-+			list_del(&m->from_user);
-+			return m;
++				perror("unable to write buf");
++				return RET_FAIL;
++			}
 +		}
 +	}
 +
-+	return NULL;
++	/* The daemon doesn't actully terminate for this test. */
++	perror("Unable to read from control device");
++	return RET_FAIL;
 +}
 +
-+void message_kill(struct message *m, mempool_t *pool)
++void usage(char *prog)
 +{
-+	m->bio->bi_status = BLK_STS_IOERR;
-+	bio_endio(m->bio);
-+	bio_put(m->bio);
-+	mempool_free(m, pool);
++	printf("Usage: %s\n", prog);
++	printf("  -h			Display this help message\n");
++	printf("  -v L			Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
++	       VQUIET, VCRITICAL, VINFO);
++	printf("  -c <control dev>	Control device to use for the test\n");
++	printf("  -s <sectors>		The number of sectors in the device\n");
 +}
 +
++int main(int argc, char *argv[])
++{
++	int ret = RET_PASS;
++	int c;
++	char *control_dev = NULL;
++	long block_bytes = 1024;
++	char *store;
++
++	prctl(PR_SET_IO_FLUSHER, 0, 0, 0, 0);
++
++	while ((c = getopt(argc, argv, "h:v:c:s:")) != -1) {
++		switch (c) {
++		case 'h':
++			usage(basename(argv[0]));
++			exit(0);
++		case 'v':
++			log_verbosity(atoi(optarg));
++			break;
++		case 'c':
++			control_dev = strdup(optarg);
++			break;
++		case 's':
++			block_bytes = atoi(optarg) * SECTOR_SIZE;
++			break;
++		default:
++			usage(basename(argv[0]));
++			exit(1);
++		}
++	}
++
++	ksft_print_header();
++	ksft_set_plan(1);
++	ksft_print_msg("%s: block_bytes=%zu\n",
++		       basename(argv[0]),
++		       block_bytes);
++
++	store = malloc(block_bytes);
++	for (size_t i = 0; i < block_bytes/sizeof(size_t); ++i)
++		((size_t *)(store))[i] = i;
++
++	ret = simple_daemon(control_dev, block_bytes, store);
++
++	print_result(basename(argv[0]), ret);
++	exit(ret);
++	return ret;
++}
+diff --git a/tools/testing/selftests/dm-user/daemon-parallel.c b/tools/testing/selftests/dm-user/daemon-parallel.c
+new file mode 100644
+index 000000000000..9e5303f02241
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/daemon-parallel.c
+@@ -0,0 +1,240 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Returns 0 when there is no work left to do.  This must be callable without
-+ * holding the target lock, as it is part of the waitqueue's check expression.
-+ * When called without the lock it may spuriously indicate there is remaining
-+ * work, but when called with the lock it must be accurate.
++ * Copyright 2020 Google, Inc
 + */
-+int target_poll(struct target *t)
-+{
-+	return !list_empty(&t->to_user) || t->dm_destroyed;
-+}
 +
-+void target_release(struct kref *ref)
-+{
-+	struct target *t = container_of(ref, struct target, references);
-+	struct list_head *cur;
++#include <errno.h>
++#include <fcntl.h>
++#include <getopt.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <poll.h>
++#include <pthread.h>
++#include <linux/dm-user.h>
++#include <sys/prctl.h>
++#include <sys/mman.h>
++#include "logging.h"
 +
-+	/*
-+	 * There may be outstanding BIOs that have not yet been given to
-+	 * userspace.  At this point there's nothing we can do about them, as
-+	 * there are and will never be any channels.
-+	 */
-+	list_for_each (cur, &t->to_user) {
-+		message_kill(list_entry(cur, struct message, to_user),
-+			     &t->message_pool);
++#define SECTOR_SIZE 512
++#define MAX_WORKER_COUNT 256
++
++#define MAX(a, b) ((a) > (b) ? (a) : (b))
++
++struct test_context {
++	char *control_dev;
++	size_t block_bytes;
++	char *store;
++	long worker_count;
++	char *backing_path;
++};
++
++int write_all(int fd, void *buf, size_t len)
++{
++	char *buf_c = buf;
++	ssize_t total = 0;
++	ssize_t once;
++
++	while (total < len) {
++		once = write(fd, buf_c + total, len - total);
++		if (once <= 0)
++			return once;
++		total += once;
 +	}
 +
-+	mempool_exit(&t->message_pool);
-+	mutex_unlock(&t->lock);
-+	mutex_destroy(&t->lock);
-+	kfree(t);
++	return total;
 +}
 +
-+void target_put(struct target *t)
++int read_all(int fd, void *buf, size_t len)
 +{
-+	/*
-+	 * This both releases a reference to the target and the lock.  We leave
-+	 * it up to the caller to hold the lock, as they probably needed it for
-+	 * something else.
-+	 */
-+	lockdep_assert_held(&t->lock);
++	char *buf_c = buf;
++	ssize_t total = 0;
++	ssize_t once;
 +
-+	if (!kref_put(&t->references, target_release))
-+		mutex_unlock(&t->lock);
-+}
-+
-+struct channel *channel_alloc(struct target *t)
-+{
-+	struct channel *c;
-+
-+	lockdep_assert_held(&t->lock);
-+
-+	c = kzalloc(sizeof(*c), GFP_KERNEL);
-+	if (c == NULL)
-+		return NULL;
-+
-+	kref_get(&t->references);
-+	c->target = t;
-+	c->cur_from_user = &c->scratch_message_from_user;
-+	mutex_init(&c->lock);
-+	INIT_LIST_HEAD(&c->from_user);
-+	return c;
-+}
-+
-+void channel_free(struct channel *c)
-+{
-+	struct list_head *cur;
-+
-+	lockdep_assert_held(&c->lock);
-+
-+	/*
-+	 * There may be outstanding BIOs that have been given to userspace but
-+	 * have not yet been completed.  The channel has been shut down so
-+	 * there's no way to process the rest of those messages, so we just go
-+	 * ahead and error out the BIOs.  Hopefully whatever's on the other end
-+	 * can handle the errors.  One could imagine splitting the BIOs and
-+	 * completing as much as we got, but that seems like overkill here.
-+	 *
-+	 * Our only other options would be to let the BIO hang around (which
-+	 * seems way worse) or to resubmit it to userspace in the hope there's
-+	 * another channel.  I don't really like the idea of submitting a
-+	 * message twice.
-+	 */
-+	if (c->cur_to_user != NULL)
-+		message_kill(c->cur_to_user, &c->target->message_pool);
-+	if (c->cur_from_user != &c->scratch_message_from_user)
-+		message_kill(c->cur_from_user, &c->target->message_pool);
-+	list_for_each(cur, &c->from_user)
-+		message_kill(list_entry(cur, struct message, to_user),
-+			     &c->target->message_pool);
-+
-+	mutex_lock(&c->target->lock);
-+	target_put(c->target);
-+	mutex_unlock(&c->lock);
-+	mutex_destroy(&c->lock);
-+	kfree(c);
-+}
-+
-+static int dev_open(struct inode *inode, struct file *file)
-+{
-+	struct channel *c;
-+	struct target *t;
-+
-+	/*
-+	 * This is called by miscdev, which sets private_data to point to the
-+	 * struct miscdevice that was opened.  The rest of our file operations
-+	 * want to refer to the channel that's been opened, so we swap that
-+	 * pointer out with a fresh channel.
-+	 *
-+	 * This is called with the miscdev lock held, which is also held while
-+	 * registering/unregistering the miscdev.  The miscdev must be
-+	 * registered for this to get called, which means there must be an
-+	 * outstanding reference to the target, which means it cannot be freed
-+	 * out from under us despite us not holding a reference yet.
-+	 */
-+	t = container_of(file->private_data, struct target, miscdev);
-+	mutex_lock(&t->lock);
-+	file->private_data = c = channel_alloc(t);
-+
-+	if (c == NULL) {
-+		mutex_unlock(&t->lock);
-+		return -ENOSPC;
++	while (total < len) {
++		once = read(fd, buf_c + total, len - total);
++		if (once <= 0)
++			return once;
++		total += once;
 +	}
 +
-+	mutex_unlock(&t->lock);
-+	return 0;
++	return total;
 +}
 +
-+static ssize_t dev_read(struct kiocb *iocb, struct iov_iter *to)
++void *simple_daemon(void *context_uc)
 +{
-+	struct channel *c = channel_from_file(iocb->ki_filp);
-+	ssize_t total_processed = 0;
-+	ssize_t processed;
++	struct test_context *context = context_uc;
++	char *store = context->store;
++	int control_fd = open(context->control_dev, O_RDWR);
 +
-+	mutex_lock(&c->lock);
-+
-+	if (unlikely(c->to_user_error)) {
-+		total_processed = c->to_user_error;
-+		goto cleanup_unlock;
++	if (control_fd < 0) {
++		ksft_print_msg("Unable to open control device %s\n", context->control_dev);
++		return (void *)(RET_FAIL);
 +	}
 +
-+	if (c->cur_to_user == NULL) {
-+		struct target *t = target_from_channel(c);
++	while (1) {
++		struct dm_user_message msg;
++		__u64 type;
++		char *base;
 +
-+		mutex_lock(&t->lock);
++		if (read_all(control_fd, &msg, sizeof(msg)) < 0) {
++			if (errno == ENOTBLK)
++				return (void *)(RET_PASS);
 +
-+		while (!target_poll(t)) {
-+			int e;
++			perror("unable to read msg");
++			return (void *)(RET_FAIL);
++		}
 +
-+			mutex_unlock(&t->lock);
-+			mutex_unlock(&c->lock);
-+			e = wait_event_interruptible(t->wq, target_poll(t));
-+			mutex_lock(&c->lock);
-+			mutex_lock(&t->lock);
++		base = store + msg.sector * SECTOR_SIZE;
++		if (base + msg.len > store + context->block_bytes) {
++			fprintf(stderr, "access out of bounds\n");
++			return (void *)(RET_FAIL);
++		}
 +
-+			if (unlikely(e != 0)) {
-+				/*
-+				 * We haven't processed any bytes in either the
-+				 * BIO or the IOV, so we can just terminate
-+				 * right now.  Elsewhere in the kernel handles
-+				 * restarting the syscall when appropriate.
-+				 */
-+				total_processed = e;
-+				mutex_unlock(&t->lock);
-+				goto cleanup_unlock;
++		type = msg.type;
++		switch (type) {
++		case DM_USER_REQ_MAP_READ:
++			msg.type = DM_USER_RESP_SUCCESS;
++			break;
++		case DM_USER_REQ_MAP_WRITE:
++			msg.type = DM_USER_RESP_SUCCESS;
++			if (read_all(control_fd, base, msg.len) < 0) {
++				if (errno == ENOTBLK)
++					return (void *)(RET_PASS);
++
++				perror("unable to read buf");
++				return (void *)(RET_FAIL);
++			}
++			break;
++		case DM_USER_REQ_MAP_FLUSH:
++			msg.type = DM_USER_RESP_SUCCESS;
++			sync();
++			break;
++		default:
++			msg.type = DM_USER_RESP_UNSUPPORTED;
++			break;
++		}
++
++		if (write_all(control_fd, &msg, sizeof(msg)) < 0) {
++			if (errno == ENOTBLK)
++				return (void *)(RET_PASS);
++
++			perror("unable to write msg");
++			return (void *)(RET_FAIL);
++		}
++
++		if (type == DM_USER_REQ_MAP_READ) {
++			if (write_all(control_fd, base, msg.len) < 0) {
++				if (errno == ENOTBLK)
++					return (void *)(RET_PASS);
++
++				perror("unable to write buf");
++				return (void *)(RET_FAIL);
++			}
++		}
++	}
++
++	/* The daemon doesn't actully terminate for this test. */
++	perror("Unable to read from control device");
++	return (void *)(RET_FAIL);
++}
++
++void usage(char *prog)
++{
++	printf("Usage: %s\n", prog);
++	printf("  -h			Display this help message\n");
++	printf("  -v L			Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
++	       VQUIET, VCRITICAL, VINFO);
++	printf("  -c <control dev>	Control device to use for the test\n");
++	printf("  -s <sectors>		The number of sectors in the device\n");
++}
++
++int main(int argc, char *argv[])
++{
++	int ret = RET_PASS;
++	int done = 0;
++	int c;
++	struct test_context context = {
++		.control_dev	= NULL,
++		.block_bytes	= 0,
++		.worker_count   = 1,
++		.backing_path   = NULL,
++	};
++	pthread_t daemon[MAX_WORKER_COUNT];
++	void *pthread_ret;
++
++	prctl(PR_SET_IO_FLUSHER, 0, 0, 0, 0);
++
++	while ((c = getopt(argc, argv, "h:v:c:s:w:b:")) != -1) {
++		switch (c) {
++		case 'h':
++			usage(basename(argv[0]));
++			exit(0);
++		case 'v':
++			log_verbosity(atoi(optarg));
++			break;
++		case 'c':
++			context.control_dev = strdup(optarg);
++			break;
++		case 's':
++			context.block_bytes = atoi(optarg) * SECTOR_SIZE;
++			break;
++		case 'w':
++			context.worker_count = atoi(optarg);
++			break;
++		case 'b':
++			context.backing_path = strdup(optarg);
++			break;
++		default:
++			usage(basename(argv[0]));
++			exit(1);
++		}
++	}
++
++	ksft_print_header();
++	ksft_set_plan(1);
++	ksft_print_msg("%s: block_bytes=%zu\n",
++		       basename(argv[0]),
++		       context.block_bytes);
++
++	ret = RET_PASS;
++
++	if (context.backing_path == NULL) {
++		ksft_print_msg("Using an in-memory backing store\n");
++		context.store = malloc(context.block_bytes);
++		for (size_t i = 0; i < context.block_bytes/sizeof(size_t); ++i)
++			((size_t *)(context.store))[i] = i;
++	} else {
++		int backing_fd = open(context.backing_path, O_RDWR);
++
++		ksft_print_msg("Using %s as a backing store\n", context.backing_path);
++		if (backing_fd < 0) {
++			perror("Unable to open backing store");
++			ksft_print_msg("Unable to open backing store %s\n", context.backing_path);
++			return RET_FAIL;
++		}
++
++		context.store = mmap(NULL, context.block_bytes,
++				     PROT_READ | PROT_WRITE, MAP_SHARED,
++				     backing_fd, 0);
++	}
++
++	for (size_t i = 0; i < context.worker_count; ++i)
++		if (pthread_create(&daemon[i], NULL, &simple_daemon, &context) < 0)
++			ret = RET_ERROR;
++
++	while (!done)  {
++		for (size_t i = 0; i < context.worker_count; ++i) {
++			if (pthread_tryjoin_np(daemon[i], &pthread_ret) == 0) {
++				if (pthread_ret != RET_PASS)
++					ret = RET_ERROR;
++				done = 1;
 +			}
 +		}
 +
-+		if (unlikely(t->dm_destroyed)) {
-+			/*
-+			 * DM has destroyed this target, so just lock
-+			 * the user out.  There's really nothing else
-+			 * we can do here.  Note that we don't actually
-+			 * tear any thing down until userspace has
-+			 * closed the FD, as there may still be
-+			 * outstanding BIOs.
-+			 *
-+			 * This is kind of a wacky error code to
-+			 * return.  My goal was really just to try and
-+			 * find something that wasn't likely to be
-+			 * returned by anything else in the miscdev
-+			 * path.  The message "block device required"
-+			 * seems like a somewhat reasonable thing to
-+			 * say when the target has disappeared out from
-+			 * under us, but "not block" isn't sensible.
-+			 */
-+			c->to_user_error = total_processed = -ENOTBLK;
-+			mutex_unlock(&t->lock);
-+			goto cleanup_unlock;
++		sleep(1);
++	}
++
++	print_result(basename(argv[0]), ret);
++	exit(ret);
++}
+diff --git a/tools/testing/selftests/dm-user/daemon-short.c b/tools/testing/selftests/dm-user/daemon-short.c
+new file mode 100644
+index 000000000000..40fd114cb390
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/daemon-short.c
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright 2020 Google, Inc
++ */
++
++#include <errno.h>
++#include <fcntl.h>
++#include <getopt.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <poll.h>
++#include <pthread.h>
++#include <linux/dm-user.h>
++#include <sys/prctl.h>
++#include "logging.h"
++
++#define SECTOR_SIZE 512
++
++#define MAX(a, b) ((a) > (b) ? (a) : (b))
++
++int write_all(int fd, void *buf, size_t len)
++{
++	char *buf_c = buf;
++	ssize_t total = 0;
++	ssize_t once;
++
++	while (total < len) {
++		size_t max = len - total;
++
++		if (max > 3)
++			max = max / 3;
++
++		once = write(fd, buf_c + total, max);
++		if (once <= 0)
++			return once;
++		total += once;
++	}
++
++	return total;
++}
++
++int read_all(int fd, void *buf, size_t len)
++{
++	char *buf_c = buf;
++	ssize_t total = 0;
++	ssize_t once;
++
++	while (total < len) {
++		size_t max = len - total;
++
++		if (max > 3)
++			max = max / 3;
++
++		once = read(fd, buf_c + total, max);
++		if (once <= 0)
++			return once;
++		total += once;
++	}
++
++	return total;
++}
++
++int simple_daemon(char *control_dev,
++		  size_t block_bytes,
++		  char *store)
++
++{
++	int control_fd = open(control_dev, O_RDWR);
++
++	if (control_fd < 0) {
++		ksft_print_msg("Unable to open control device %s\n", control_dev);
++		return RET_FAIL;
++	}
++
++	while (1) {
++		struct dm_user_message msg;
++		__u64 type;
++		char *base;
++
++		if (read_all(control_fd, &msg, sizeof(msg)) < 0) {
++			if (errno == ENOTBLK)
++				return RET_PASS;
++
++			perror("unable to read msg");
++			return RET_FAIL;
 +		}
 +
-+		/*
-+		 * Ensures that accesses to the message data are not ordered
-+		 * before the remote accesses that produce that message data.
-+		 *
-+		 * This pairs with the barrier in user_map(), via the
-+		 * conditional within the while loop above. Also see the lack
-+		 * of barrier in user_dtr(), which is why this can be after the
-+		 * destroyed check.
-+		 */
-+		smp_rmb();
-+
-+		c->cur_to_user = msg_get_to_user(t);
-+		WARN_ON(c->cur_to_user == NULL);
-+		mutex_unlock(&t->lock);
-+	}
-+
-+	processed = msg_copy_to_iov(c->cur_to_user, to);
-+	total_processed += processed;
-+
-+	WARN_ON(c->cur_to_user->posn_to_user > c->cur_to_user->total_to_user);
-+	if (c->cur_to_user->posn_to_user == c->cur_to_user->total_to_user) {
-+		struct message *m = c->cur_to_user;
-+
-+		c->cur_to_user = NULL;
-+		list_add_tail(&m->from_user, &c->from_user);
-+	}
-+
-+cleanup_unlock:
-+	mutex_unlock(&c->lock);
-+	return total_processed;
-+}
-+
-+static ssize_t dev_splice_read(struct file *in, loff_t *ppos,
-+			       struct pipe_inode_info *pipe, size_t len,
-+			       unsigned int flags)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static ssize_t dev_write(struct kiocb *iocb, struct iov_iter *from)
-+{
-+	struct channel *c = channel_from_file(iocb->ki_filp);
-+	ssize_t total_processed = 0;
-+	ssize_t processed;
-+
-+	mutex_lock(&c->lock);
-+
-+	if (unlikely(c->from_user_error)) {
-+		total_processed = c->from_user_error;
-+		goto cleanup_unlock;
-+	}
-+
-+	/*
-+	 * cur_from_user can never be NULL.  If there's no real message it must
-+	 * point to the scratch space.
-+	 */
-+	WARN_ON(c->cur_from_user == NULL);
-+	if (c->cur_from_user->posn_from_user < sizeof(struct dm_user_message)) {
-+		struct message *msg, *old;
-+
-+		processed = msg_copy_from_iov(c->cur_from_user, from);
-+		if (processed <= 0) {
-+			pr_warn("msg_copy_from_iov() returned %zu\n",
-+				processed);
-+			c->from_user_error = -EINVAL;
-+			goto cleanup_unlock;
++		base = store + msg.sector * SECTOR_SIZE;
++		if (base + msg.len > store + block_bytes) {
++			fprintf(stderr, "access out of bounds\n");
++			return RET_FAIL;
 +		}
-+		total_processed += processed;
 +
-+		/*
-+		 * In the unlikely event the user has provided us a very short
-+		 * write, not even big enough to fill a message, just succeed.
-+		 * We'll eventually build up enough bytes to do something.
-+		 */
-+		if (unlikely(c->cur_from_user->posn_from_user <
-+			     sizeof(struct dm_user_message)))
-+			goto cleanup_unlock;
++		type = msg.type;
++		switch (type) {
++		case DM_USER_REQ_MAP_WRITE:
++			msg.type = DM_USER_RESP_SUCCESS;
++			if (read_all(control_fd, base, msg.len) < 0) {
++				if (errno == ENOTBLK)
++					return RET_PASS;
 +
-+		old = c->cur_from_user;
-+		mutex_lock(&c->target->lock);
-+		msg = msg_get_from_user(c, c->cur_from_user->msg.seq);
-+		if (msg == NULL) {
-+			pr_info("user provided an invalid messag seq of %llx\n",
-+				old->msg.seq);
-+			mutex_unlock(&c->target->lock);
-+			c->from_user_error = -EINVAL;
-+			goto cleanup_unlock;
++				perror("unable to read buf");
++				return RET_FAIL;
++			}
++			break;
++		case DM_USER_REQ_MAP_FLUSH:
++			/* Nothing extra to do on flush, we're in memory. */
++		case DM_USER_REQ_MAP_READ:
++			msg.type = DM_USER_RESP_SUCCESS;
++			break;
++		default:
++			msg.type = DM_USER_RESP_UNSUPPORTED;
++			break;
 +		}
-+		mutex_unlock(&c->target->lock);
 +
-+		WARN_ON(old->posn_from_user != sizeof(struct dm_user_message));
-+		msg->posn_from_user = sizeof(struct dm_user_message);
-+		msg->return_type = old->msg.type;
-+		msg->return_flags = old->msg.flags;
-+		WARN_ON(msg->posn_from_user > msg->total_from_user);
-+		c->cur_from_user = msg;
-+		WARN_ON(old != &c->scratch_message_from_user);
++		if (write_all(control_fd, &msg, sizeof(msg)) < 0) {
++			if (errno == ENOTBLK)
++				return RET_PASS;
++
++			perror("unable to write msg");
++			return RET_FAIL;
++		}
++
++		if (type == DM_USER_REQ_MAP_READ) {
++			if (write_all(control_fd, base, msg.len) < 0) {
++				if (errno == ENOTBLK)
++					return RET_PASS;
++
++				perror("unable to write buf");
++				return RET_FAIL;
++			}
++		}
 +	}
 +
-+	/*
-+	 * Userspace can signal an error for single requests by overwriting the
-+	 * seq field.
-+	 */
-+	switch (c->cur_from_user->return_type) {
-+	case DM_USER_RESP_SUCCESS:
-+		c->cur_from_user->bio->bi_status = BLK_STS_OK;
-+		break;
-+	case DM_USER_RESP_ERROR:
-+	case DM_USER_RESP_UNSUPPORTED:
-+	default:
-+		c->cur_from_user->bio->bi_status = BLK_STS_IOERR;
-+		goto finish_bio;
++	/* The daemon doesn't actully terminate for this test. */
++	perror("Unable to read from control device");
++	return RET_FAIL;
++}
++
++void usage(char *prog)
++{
++	printf("Usage: %s\n", prog);
++	printf("  -h			Display this help message\n");
++	printf("  -v L			Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
++	       VQUIET, VCRITICAL, VINFO);
++	printf("  -c <control dev>	Control device to use for the test\n");
++	printf("  -s <sectors>		The number of sectors in the device\n");
++}
++
++int main(int argc, char *argv[])
++{
++	int ret = RET_PASS;
++	int c;
++	char *control_dev = NULL;
++	long block_bytes = 1024;
++	char *store;
++
++	prctl(PR_SET_IO_FLUSHER, 0, 0, 0, 0);
++
++	while ((c = getopt(argc, argv, "h:v:c:s:")) != -1) {
++		switch (c) {
++		case 'h':
++			usage(basename(argv[0]));
++			exit(0);
++		case 'v':
++			log_verbosity(atoi(optarg));
++			break;
++		case 'c':
++			control_dev = strdup(optarg);
++			break;
++		case 's':
++			block_bytes = atoi(optarg) * SECTOR_SIZE;
++			break;
++		default:
++			usage(basename(argv[0]));
++			exit(1);
++		}
 +	}
 +
-+	/*
-+	 * The op was a success as far as userspace is concerned, so process
-+	 * whatever data may come along with it.  The user may provide the BIO
-+	 * data in multiple chunks, in which case we don't need to finish the
-+	 * BIO.
-+	 */
-+	processed = msg_copy_from_iov(c->cur_from_user, from);
-+	total_processed += processed;
++	ksft_print_header();
++	ksft_set_plan(1);
++	ksft_print_msg("%s: block_bytes=%zu\n",
++		       basename(argv[0]),
++		       block_bytes);
 +
-+	if (c->cur_from_user->posn_from_user <
-+	    c->cur_from_user->total_from_user)
-+		goto cleanup_unlock;
++	store = malloc(block_bytes);
++	for (size_t i = 0; i < block_bytes/sizeof(size_t); ++i)
++		((size_t *)(store))[i] = i;
 +
-+finish_bio:
-+	/*
-+	 * When we set up this message the BIO's size matched the
-+	 * message size, if that's not still the case then something
-+	 * has gone off the rails.
-+	 */
-+	WARN_ON(bio_size(c->cur_from_user->bio) != 0);
-+	bio_endio(c->cur_from_user->bio);
-+	bio_put(c->cur_from_user->bio);
++	ret = simple_daemon(control_dev, block_bytes, store);
 +
-+	/*
-+	 * We don't actually need to take the target lock here, as all
-+	 * we're doing is freeing the message and mempools have their
-+	 * own lock.  Each channel has its ows scratch message.
-+	 */
-+	WARN_ON(c->cur_from_user == &c->scratch_message_from_user);
-+	mempool_free(c->cur_from_user, &c->target->message_pool);
-+	c->scratch_message_from_user.posn_from_user = 0;
-+	c->cur_from_user = &c->scratch_message_from_user;
-+
-+cleanup_unlock:
-+	mutex_unlock(&c->lock);
-+	return total_processed;
++	print_result(basename(argv[0]), ret);
++	exit(ret);
++	return ret;
 +}
+diff --git a/tools/testing/selftests/dm-user/fio-rand-read-1G.fio b/tools/testing/selftests/dm-user/fio-rand-read-1G.fio
+new file mode 100644
+index 000000000000..f971483e0e27
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/fio-rand-read-1G.fio
+@@ -0,0 +1,16 @@
++; fio-rand-read.job for fiotest
 +
-+static ssize_t dev_splice_write(struct pipe_inode_info *pipe, struct file *out,
-+				loff_t *ppos, size_t len, unsigned int flags)
-+{
-+	return -EOPNOTSUPP;
-+}
++[global]
++name=fio-rand-read-1G
++filename=fio-rand-read-1G
++rw=randread
++bs=4K
++direct=0
++numjobs=1
++time_based=1
++runtime=30
 +
-+static __poll_t dev_poll(struct file *file, poll_table *wait)
-+{
-+	return -EOPNOTSUPP;
-+}
++[file1]
++size=1G
++ioengine=io_uring
++iodepth=16
+diff --git a/tools/testing/selftests/dm-user/fio-verify-1G.fio b/tools/testing/selftests/dm-user/fio-verify-1G.fio
+new file mode 100644
+index 000000000000..4b626271ce7c
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/fio-verify-1G.fio
+@@ -0,0 +1,10 @@
++# The most basic form of data verification. Write the device randomly
++# in 4K chunks, then read it back and verify the contents.
++[write-and-verify]
++rw=randwrite
++bs=4k
++ioengine=libaio
++iodepth=16
++direct=1
++verify=crc32c
++size=1G
+diff --git a/tools/testing/selftests/dm-user/harness-fio.sh b/tools/testing/selftests/dm-user/harness-fio.sh
+new file mode 100755
+index 000000000000..4b95c9f5efd8
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/harness-fio.sh
+@@ -0,0 +1,45 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# Copyright 2020 Google, Inc
 +
-+static int dev_release(struct inode *inode, struct file *file)
-+{
-+	struct channel *c;
++# Just a fixed size for now, but it's passed to the tests and they're supposed
++# to respect it.
++SIZE=1024
++BLOCK=kselftest-dm-user-block
++CONTROL=kselftest-dm-user-control
++unset FIO
 +
-+	c = channel_from_file(file);
-+	mutex_lock(&c->lock);
-+	channel_free(c);
++while [ x"$1" != x"--" ]
++do
++    case "$1" in
++    "-s")    SIZE="$2";                             shift 2;;
++    "-f")    FIO="$2";                              shift 2;;
++    *)       echo "$0: unknown argument $1" >&2;    exit  1;;
++    esac
++done
++shift
 +
-+	return 0;
-+}
++# Run the benchmark again via dm-user, to see what the overhead is.
++dmsetup create $BLOCK << EOF
++0 $SIZE user 0 $SIZE $CONTROL
++EOF
 +
-+static int dev_fasync(int fd, struct file *file, int on)
-+{
-+	return -EOPNOTSUPP;
-+}
++dmsetup resume $BLOCK
 +
-+static long dev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-+{
-+	return -EOPNOTSUPP;
-+}
++"$@" -s $SIZE -c /dev/dm-user/$CONTROL &
 +
-+static const struct file_operations file_operations = {
-+	.owner = THIS_MODULE,
-+	.open = dev_open,
-+	.llseek = no_llseek,
-+	.read_iter = dev_read,
-+	.splice_read = dev_splice_read,
-+	.write_iter = dev_write,
-+	.splice_write = dev_splice_write,
-+	.poll = dev_poll,
-+	.release = dev_release,
-+	.fasync = dev_fasync,
-+	.unlocked_ioctl = dev_ioctl,
-+};
++yes | mkfs.ext2 /dev/mapper/$BLOCK
++mount /dev/mapper/$BLOCK /mnt
++cp "$FIO" /mnt/benchmark.fio
++(cd /mnt; fio benchmark.fio)
++umount /mnt
 +
-+static int user_ctr(struct dm_target *ti, unsigned int argc, char **argv)
-+{
-+	struct target *t;
-+	int r;
++# Mount again and read the whole thing, just to see if there's any corruption.
++mount /dev/mapper/$BLOCK /mnt
++find /mnt -type f | xargs cat > /dev/null
++umount /mnt
 +
-+	if (argc != 3) {
-+		ti->error = "Invalid argument count";
-+		r = -EINVAL;
-+		goto cleanup_none;
-+	}
++dmsetup remove $BLOCK
 +
-+	t = kzalloc(sizeof(*t), GFP_KERNEL);
-+	if (t == NULL) {
-+		r = -ENOSPC;
-+		goto cleanup_none;
-+	}
-+	ti->private = t;
++# Make sure the daemon actually responds to DM closing it.
++wait
+diff --git a/tools/testing/selftests/dm-user/harness-fsstress.sh b/tools/testing/selftests/dm-user/harness-fsstress.sh
+new file mode 100755
+index 000000000000..265c0ff636ca
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/harness-fsstress.sh
+@@ -0,0 +1,44 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# Copyright 2020 Google, Inc
 +
-+	/*
-+	 * We begin with a single reference to the target, which is miscdev's
-+	 * reference.  This ensures that the target won't be freed
-+	 * until after the miscdev has been unregistered and all extant
-+	 * channels have been closed.
-+	 */
-+	kref_init(&t->references);
-+	kref_get(&t->references);
++BLOCK=kselftest-dm-user-block
++CONTROL=kselftest-dm-user-control
++unset SIZE
++unset NPROC
++unset NOP
 +
-+	mutex_init(&t->lock);
-+	init_waitqueue_head(&t->wq);
-+	INIT_LIST_HEAD(&t->to_user);
-+	mempool_init_kmalloc_pool(&t->message_pool, MAX_OUTSTANDING_MESSAGES,
-+				  sizeof(struct message));
++while [ x"$1" != x"--" ]
++do
++    case "$1" in
++    "-s")    SIZE="$2";                             shift 2;;
++    "-n")    NOP="$2";                              shift 2;;
++    "-p")    NPROC="$2";                            shift 2;;
++    *)       echo "$0: unknown argument $1" >&2;    exit  1;;
++    esac
++done
++shift
 +
-+	t->miscdev.minor = MISC_DYNAMIC_MINOR;
-+	t->miscdev.fops = &file_operations;
-+	t->miscdev.name = kasprintf(GFP_KERNEL, "dm-user/%s", argv[2]);
-+	if (t->miscdev.name == NULL) {
-+		r = -ENOSPC;
-+		goto cleanup_message_pool;
-+	}
++# Runs the fs stress tests
++dmsetup create $BLOCK << EOF
++0 $SIZE user 0 $SIZE $CONTROL
++EOF
 +
-+	/*
-+	 * Once the miscdev is registered it can be opened and therefor
-+	 * concurrent references to the channel can happen.  Holding the target
-+	 * lock during misc_register() could deadlock.  If registration
-+	 * succeeds then we will not access the target again so we just stick a
-+	 * barrier here, which pairs with taking the target lock everywhere
-+	 * else the target is accessed.
-+	 *
-+	 * I forgot where we ended up on the RCpc/RCsc locks.  IIU RCsc locks
-+	 * would mean that we could take the target lock earlier and release it
-+	 * here instead of the memory barrier.  I'm not sure that's any better,
-+	 * though, and this isn't on a hot path so it probably doesn't matter
-+	 * either way.
-+	 */
-+	smp_mb();
++dmsetup resume $BLOCK
 +
-+	r = misc_register(&t->miscdev);
-+	if (r) {
-+		DMERR("Unable to register miscdev %s for dm-user",
-+		      t->miscdev.name);
-+		r = -ENOSPC;
-+		goto cleanup_misc_name;
-+	}
++"$@" -s $SIZE -c /dev/dm-user/$CONTROL &
 +
-+	return 0;
++yes | mkfs.ext2 /dev/mapper/$BLOCK
++mount /dev/mapper/$BLOCK /mnt
++/usr/xfstests/ltp/fsstress -d /mnt/ -n "$NOP" -p "$NPROC"
++umount /mnt
 +
-+cleanup_misc_name:
-+	kfree(t->miscdev.name);
-+cleanup_message_pool:
-+	mempool_exit(&t->message_pool);
-+	kfree(t);
-+cleanup_none:
-+	return r;
-+}
++# Mount again and read the whole thing, just to see if there's any corruption.
++mount /dev/mapper/$BLOCK /mnt
++find /mnt -type f | xargs cat > /dev/null
++umount /mnt
 +
-+static void user_dtr(struct dm_target *ti)
-+{
-+	struct target *t = target_from_target(ti);
++dmsetup remove $BLOCK
 +
-+	/*
-+	 * Removes the miscdev.  This must be called without the target lock
-+	 * held to avoid a possible deadlock because our open implementation is
-+	 * called holding the miscdev lock and must later take the target lock.
-+	 *
-+	 * There is no race here because only DM can register/unregister the
-+	 * miscdev, and DM ensures that doesn't happen twice.  The internal
-+	 * miscdev lock is sufficient to ensure there are no races between
-+	 * deregistering the miscdev and open.
-+	 */
-+	misc_deregister(&t->miscdev);
++# Make sure the daemon actually responds to DM closing it.
++wait
+diff --git a/tools/testing/selftests/dm-user/include/logging.h b/tools/testing/selftests/dm-user/include/logging.h
+new file mode 100644
+index 000000000000..874c69ce5cce
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/include/logging.h
+@@ -0,0 +1,148 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/******************************************************************************
++ *
++ *   Copyright © International Business Machines  Corp., 2009
++ *
++ * DESCRIPTION
++ *      Glibc independent futex library for testing kernel functionality.
++ *
++ * AUTHOR
++ *      Darren Hart <dvhart@linux.intel.com>
++ *
++ * HISTORY
++ *      2009-Nov-6: Initial version by Darren Hart <dvhart@linux.intel.com>
++ *
++ *****************************************************************************/
 +
-+	/*
-+	 * We are now free to take the target's lock and drop our reference to
-+	 * the target.  There are almost certainly tasks sleeping in read on at
-+	 * least one of the channels associated with this target, this
-+	 * explicitly wakes them up and terminates the read.
-+	 */
-+	mutex_lock(&t->lock);
-+	/*
-+	 * No barrier here, as wait/wake ensures that the flag visibility is
-+	 * correct WRT the wake/sleep state of the target tasks.
-+	 */
-+	t->dm_destroyed = true;
-+	wake_up_all(&t->wq);
-+	target_put(t);
-+}
++#ifndef _LOGGING_H
++#define _LOGGING_H
++
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <linux/futex.h>
++#include "kselftest.h"
 +
 +/*
-+ * Consumes a BIO from device mapper, queueing it up for userspace.
++ * Define PASS, ERROR, and FAIL strings with and without color escape
++ * sequences, default to no color.
 + */
-+static int user_map(struct dm_target *ti, struct bio *bio)
++#define ESC 0x1B, '['
++#define BRIGHT '1'
++#define GREEN '3', '2'
++#define YELLOW '3', '3'
++#define RED '3', '1'
++#define ESCEND 'm'
++#define BRIGHT_GREEN ESC, BRIGHT, ';', GREEN, ESCEND
++#define BRIGHT_YELLOW ESC, BRIGHT, ';', YELLOW, ESCEND
++#define BRIGHT_RED ESC, BRIGHT, ';', RED, ESCEND
++#define RESET_COLOR ESC, '0', 'm'
++static const char PASS_COLOR[] = {BRIGHT_GREEN, ' ', 'P', 'A', 'S', 'S',
++				  RESET_COLOR, 0};
++static const char ERROR_COLOR[] = {BRIGHT_YELLOW, 'E', 'R', 'R', 'O', 'R',
++				   RESET_COLOR, 0};
++static const char FAIL_COLOR[] = {BRIGHT_RED, ' ', 'F', 'A', 'I', 'L',
++				  RESET_COLOR, 0};
++static const char INFO_NORMAL[] = " INFO";
++static const char PASS_NORMAL[] = " PASS";
++static const char ERROR_NORMAL[] = "ERROR";
++static const char FAIL_NORMAL[] = " FAIL";
++const char *INFO = INFO_NORMAL;
++const char *PASS = PASS_NORMAL;
++const char *ERROR = ERROR_NORMAL;
++const char *FAIL = FAIL_NORMAL;
++
++/* Verbosity setting for INFO messages */
++#define VQUIET    0
++#define VCRITICAL 1
++#define VINFO     2
++#define VMAX      VINFO
++int _verbose = VCRITICAL;
++
++/* Functional test return codes */
++#define RET_PASS   0
++#define RET_ERROR -1
++#define RET_FAIL  -2
++
++/**
++ * log_color() - Use colored output for PASS, ERROR, and FAIL strings
++ * @use_color:	use color (1) or not (0)
++ */
++void log_color(int use_color)
 +{
-+	struct target *t;
-+	struct message *entry;
-+
-+	t = target_from_target(ti);
-+	/*
-+	 * FIXME
-+	 *
-+	 * This seems like a bad idea.  Specifically, here we're
-+	 * directly on the IO path when we take the target lock, which may also
-+	 * be taken from a user context.  The user context doesn't actively
-+	 * trigger anything that may sleep while holding the lock, but this
-+	 * still seems like a bad idea.
-+	 *
-+	 * The obvious way to fix this would be to use a proper queue, which
-+	 * would result in no shared locks between the direct IO path and user
-+	 * tasks.  I had a version that did this, but the head-of-line blocking
-+	 * from the circular buffer resulted in us needing a fairly large
-+	 * allocation in order to avoid situations in which the queue fills up
-+	 * and everything goes off the rails.
-+	 *
-+	 * I could jump through a some hoops to avoid a shared lock while still
-+	 * allowing for a large queue, but I'm not actually sure that allowing
-+	 * for very large queues is the right thing to do here.  Intuitively it
-+	 * seems better to keep the queues small in here (essentially sized to
-+	 * the user latency for performance reasons only) and signal up the
-+	 * stack to start throttling IOs.  I don't see a way to do that
-+	 * (returning DM_MAPIO_REQUEUE seems like it'd work, but doesn't do
-+	 * that).
-+	 *
-+	 * The best way I could come up with to fix this would be to use a
-+	 * two-lock concurrent queue that's of infinite size (ie, linked list
-+	 * based), which would get rid of the explicit shared lock.  The
-+	 * mempool spinlock would still be shared, but I could just defer the
-+	 * free from dev_write to user_map (and probably a worker).
-+	 */
-+	mutex_lock(&t->lock);
-+
-+	/*
-+	 * FIXME
-+	 *
-+	 * The assumption here is that there's no benefit to returning
-+	 * DM_MAPIO_KILL as opposed to just erroring out the BIO, but I'm not
-+	 * sure that's actually true -- for example, I could imagine users
-+	 * expecting that submitted BIOs are unlikely to fail and therefor
-+	 * relying on submission failure to indicate an unsupported type.
-+	 *
-+	 * There's two ways I can think of to fix this:
-+	 *   - Add DM arguments that are parsed during the constructor that
-+	 *     allow various dm_target flags to be set that indicate the op
-+	 *     types supported by this target.  This may make sense for things
-+	 *     like discard, where DM can already transform the BIOs to a form
-+	 *     that's likely to be supported.
-+	 *   - Some sort of pre-filter that allows userspace to hook in here
-+	 *     and kill BIOs before marking them as submitted.  My guess would
-+	 *     be that a userspace round trip is a bad idea here, but a BPF
-+	 *     call seems resonable.
-+	 *
-+	 * My guess is that we'd likely want to do both.  The first one is easy
-+	 * and gives DM the proper info, so it seems better.  The BPF call
-+	 * seems overly complex for just this, but one could imagine wanting to
-+	 * sometimes return _MAPPED and a BPF filter would be the way to do
-+	 * that.
-+	 *
-+	 * For example, in Android we have an in-kernel DM device called
-+	 * "dm-bow" that takes advange of some portion of the space that has
-+	 * been discarded on a device to provide opportunistic block-level
-+	 * backups.  While one could imagine just implementing this entirely in
-+	 * userspace, that would come with an appreciable performance penalty.
-+	 * Instead one could keep a BPF program that forwards most accesses
-+	 * directly to the backing block device while informing a userspace
-+	 * daemon of any discarded space and on writes to blocks that are to be
-+	 * backed up.
-+	 */
-+	if (unlikely((bio_type_to_user_type(bio) < 0)
-+		     || (bio_flags_to_user_flags(bio) < 0))) {
-+		mutex_unlock(&t->lock);
-+		pr_warn("dm-user: unsupported bio_op() %d\n", bio_op(bio));
-+		return DM_MAPIO_KILL;
++	if (use_color) {
++		PASS = PASS_COLOR;
++		ERROR = ERROR_COLOR;
++		FAIL = FAIL_COLOR;
++	} else {
++		PASS = PASS_NORMAL;
++		ERROR = ERROR_NORMAL;
++		FAIL = FAIL_NORMAL;
 +	}
-+
-+	entry = msg_get_map(t);
-+	if (unlikely(entry == NULL)) {
-+		mutex_unlock(&t->lock);
-+		pr_warn("dm-user: unable to allocate message\n");
-+		return DM_MAPIO_KILL;
-+	}
-+
-+	bio_get(bio);
-+	entry->msg.type = bio_type_to_user_type(bio);
-+	entry->msg.flags = bio_flags_to_user_flags(bio);
-+	entry->msg.sector = bio->bi_iter.bi_sector;
-+	entry->msg.len = bio_size(bio);
-+	entry->bio = bio;
-+	entry->posn_to_user = 0;
-+	entry->total_to_user = bio_bytes_needed_to_user(bio);
-+	entry->posn_from_user = 0;
-+	entry->total_from_user = bio_bytes_needed_from_user(bio);
-+	/* Pairs with the barrier in dev_read() */
-+	smp_wmb();
-+	list_add_tail(&entry->to_user, &t->to_user);
-+	wake_up_interruptible(&t->wq);
-+	mutex_unlock(&t->lock);
-+	return DM_MAPIO_SUBMITTED;
 +}
 +
-+static struct target_type user_target = {
-+	.name = "user",
-+	.version = { 1, 0, 0 },
-+	.module = THIS_MODULE,
-+	.ctr = user_ctr,
-+	.dtr = user_dtr,
-+	.map = user_map,
-+};
-+
-+static int __init dm_user_init(void)
++/**
++ * log_verbosity() - Set verbosity of test output
++ * @verbose:	Enable (1) verbose output or not (0)
++ *
++ * Currently setting verbose=1 will enable INFO messages and 0 will disable
++ * them. FAIL and ERROR messages are always displayed.
++ */
++void log_verbosity(int level)
 +{
-+	int r;
++	if (level > VMAX)
++		level = VMAX;
++	else if (level < 0)
++		level = 0;
++	_verbose = level;
++}
 +
-+	r = dm_register_target(&user_target);
-+	if (r) {
-+		DMERR("register failed %d", r);
-+		goto error;
++/**
++ * print_result() - Print standard PASS | ERROR | FAIL results
++ * @ret:	the return value to be considered: 0 | RET_ERROR | RET_FAIL
++ *
++ * print_result() is primarily intended for functional tests.
++ */
++void print_result(const char *test_name, int ret)
++{
++	switch (ret) {
++	case RET_PASS:
++		ksft_test_result_pass("%s\n", test_name);
++		ksft_print_cnts();
++		return;
++	case RET_ERROR:
++		ksft_test_result_error("%s\n", test_name);
++		ksft_print_cnts();
++		return;
++	case RET_FAIL:
++		ksft_test_result_fail("%s\n", test_name);
++		ksft_print_cnts();
++		return;
 +	}
-+
-+	return 0;
-+
-+error:
-+	return r;
 +}
 +
-+static void __exit dm_user_exit(void)
-+{
-+	dm_unregister_target(&user_target);
-+}
++/* log level macros */
++#define info(message, vargs...) \
++do { \
++	if (_verbose >= VINFO) \
++		fprintf(stderr, "\t%s: "message, INFO, ##vargs); \
++} while (0)
 +
-+module_init(dm_user_init);
-+module_exit(dm_user_exit);
-+MODULE_AUTHOR("Palmer Dabbelt <palmerdabbelt@google.com>");
-+MODULE_DESCRIPTION(DM_NAME " target returning blocks from userspace");
-+MODULE_LICENSE("GPL");
++#define error(message, err, args...) \
++do { \
++	if (_verbose >= VCRITICAL) {\
++		if (err) \
++			fprintf(stderr, "\t%s: %s: "message, \
++				ERROR, strerror(err), ##args); \
++		else \
++			fprintf(stderr, "\t%s: "message, ERROR, ##args); \
++	} \
++} while (0)
++
++#define fail(message, args...) \
++do { \
++	if (_verbose >= VCRITICAL) \
++		fprintf(stderr, "\t%s: "message, FAIL, ##args); \
++} while (0)
++
++#endif
+diff --git a/tools/testing/selftests/dm-user/run.sh b/tools/testing/selftests/dm-user/run.sh
+new file mode 100755
+index 000000000000..2ed2581e4a57
+--- /dev/null
++++ b/tools/testing/selftests/dm-user/run.sh
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright 2020 Palmer Dabbelt <palmerdabbelt@google.com>
++
++# Top-level run script for dm-user kernel self tests.  This just runs a bunch
++# of different tests back to back, relying on the kernel selftest infrastructure
++# to tease out the success/failure of each.  The tests all use the same global
++# directories and such, so it's not like there's a whole lot
++#
++# The actual test code should be fairly portable, but the scripts that run it
++# aren't.  See the README for more information.
++
++# Runs various FIO scripts against an ext2-based filesystem backed by dm-user.
++if test -e /usr/bin/fio
++then
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-example
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-short
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w   1
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w   4
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w  16
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w  64
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w 256
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w   1 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w   4 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w  16 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w  64 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-rand-read-1G.fio -- ./daemon-parallel -w 256 -b /dev/vdb
++
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-example
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-short
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w   1
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w   4
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w  16
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w  64
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w 256
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w   1 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w   4 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w  16 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w  64 -b /dev/vdb
++    ./harness-fio.sh      -s 3000000 -f fio-verify-1G.fio    -- ./daemon-parallel -w 256 -b /dev/vdb
++else
++    echo "Unable to find /usr/bin/fio"
++fi
++
++# Runs fsstress from xfstests against an ext2-based filesystem backed by
++# dm-user.
++if test -e /usr/xfstests/ltp/fsstress
++then
++    ./harness-fsstress.sh -s 3000000 -p   1 -n 10000 -- ./daemon-example
++    ./harness-fsstress.sh -s 3000000 -p   4 -n 10000 -- ./daemon-example
++    ./harness-fsstress.sh -s 3000000 -p  16 -n 10000 -- ./daemon-example
++    ./harness-fsstress.sh -s 3000000 -p  64 -n 10000 -- ./daemon-example
++    ./harness-fsstress.sh -s 3000000 -p 256 -n 10000 -- ./daemon-example
++
++    ./harness-fsstress.sh -s 3000000 -p   1 -n 10000 -- ./daemon-short
++    ./harness-fsstress.sh -s 3000000 -p   4 -n 10000 -- ./daemon-short
++    ./harness-fsstress.sh -s 3000000 -p  16 -n 10000 -- ./daemon-short
++    ./harness-fsstress.sh -s 3000000 -p  64 -n 10000 -- ./daemon-short
++    ./harness-fsstress.sh -s 3000000 -p 256 -n 10000 -- ./daemon-short
++
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w    1
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w    4
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w   16
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w   64
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w  256
++
++    ./harness-fsstress.sh -s 3000000 -p  1 -n 10000 -- ./daemon-parallel -w    1 -b /dev/vdb
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w    1 -b /dev/vdb
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w    4 -b /dev/vdb
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w   16 -b /dev/vdb
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w   64 -b /dev/vdb
++    ./harness-fsstress.sh -s 3000000 -p 64 -n 10000 -- ./daemon-parallel -w  256 -b /dev/vdb
++else
++    echo "Unable to find /usr/xfstests/ltp/fsstress"
++fi
 -- 
 2.29.2.454.gaff20da3a2-goog
 
