@@ -2,204 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D74D2CDC21
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 18:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FD52CDC91
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Dec 2020 18:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2501959AbgLCRNl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Dec 2020 12:13:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50279 "EHLO
+        id S1727790AbgLCRko (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Dec 2020 12:40:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23045 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731525AbgLCRNk (ORCPT
+        by vger.kernel.org with ESMTP id S1726689AbgLCRkn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Dec 2020 12:13:40 -0500
+        Thu, 3 Dec 2020 12:40:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607015534;
+        s=mimecast20190719; t=1607017156;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wd+lJPFWy0m+3K/46pw2A3DNxUcmHii9mZMdRl39SGs=;
-        b=bBFU6PULQjuNJRlMMmpSD84lbvrCk4t2JW1k678BxsxHPp78VCha/a3N+K86lYTM+5jBYj
-        3wo5quafbMikl2umtH8J8HduHF4hEVbuJlnWli5gKjBXWb19BXrObBo8Mkze4TukwS0ft9
-        R5xczATcYVSV3XxeyJKWI8iqL5oQTRE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-463-P_LlYtaeNaCLjF2S9EoQQw-1; Thu, 03 Dec 2020 12:12:12 -0500
-X-MC-Unique: P_LlYtaeNaCLjF2S9EoQQw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 740CA1926DBD;
-        Thu,  3 Dec 2020 17:11:49 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.35.206.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 895EB60854;
-        Thu,  3 Dec 2020 17:11:42 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        linux-kernel@vger.kernel.org (open list),
-        Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-Subject: [PATCH v2 3/3] kvm/selftests: update tsc_msrs_test to cover KVM_X86_QUIRK_TSC_HOST_ACCESS
-Date:   Thu,  3 Dec 2020 19:11:18 +0200
-Message-Id: <20201203171118.372391-4-mlevitsk@redhat.com>
-In-Reply-To: <20201203171118.372391-1-mlevitsk@redhat.com>
-References: <20201203171118.372391-1-mlevitsk@redhat.com>
+        bh=zbIwQHwInAT5GLKTqpYwDY6NAxTvt+ZgkanC6avIhjE=;
+        b=UtgUAIBlbGi0NfgPv2kUoXXoWkfe6DHkkU0N1AHkait5DUwj4EJI2ikXlfweakY80gre84
+        n2HfKF958h+oxYDKboUTeilWRlet7EXodKN2K0rBZCCtcJoWTSFD0oPsDMqSr6yeYI0GWt
+        zV4kjjGjY12mGDI2PXShBacjatJkvLY=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-381-pGD0_IVGN-CnNAO-KOHXsA-1; Thu, 03 Dec 2020 12:39:14 -0500
+X-MC-Unique: pGD0_IVGN-CnNAO-KOHXsA-1
+Received: by mail-ed1-f71.google.com with SMTP id bc27so1249015edb.18
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Dec 2020 09:39:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zbIwQHwInAT5GLKTqpYwDY6NAxTvt+ZgkanC6avIhjE=;
+        b=YZN1Tn+2eZFbcy5sN8GiiFTZMVDYhGEMw9/tU/tnzeFAR4dGY4UOJXGRSWcunEBkFM
+         HjosxAv71MVwr82O86uHh4Thi2elazg0KXhadd7LnEGcWuC/kt/psgLF+yPKdZOjB/JY
+         yBlU0jl9KuLwLbJUsjsU+hdqO2iQOU+kwuYM+TA/gVxJQIV92u1mGU1Oxo2/0Q3bNARL
+         Hl1T2l9OQINo/Pk+oDIV86o90w2Yg8Gin1BqoAAmvUMYlukAvaulLkyt5FukJ8cSFc8K
+         6OP/ELqspkaKwsX1jSH3torPDCTpW2No5f3j3W+FAcNvYborY0WAMi83cEq0pvwEvz8F
+         3ECA==
+X-Gm-Message-State: AOAM530TRGnHp/YE66PtmPAyrr6E9SubUwKQhYXJaTeFYUbZQ8P3+GGh
+        F9LDjlJleqBhUONPf/fMk/vRsg70Y2dKxH2+Pt9MZ4c33OoCiWvP+TsdEExVlDlpm+qoEmSGLuu
+        OfqCQUAwmZyqc/Kj1A6rD6ZKGnkJ5
+X-Received: by 2002:aa7:cb4a:: with SMTP id w10mr3888350edt.343.1607017153427;
+        Thu, 03 Dec 2020 09:39:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzJA9jcVQLaPryS8bR4jvZr1+czrk7Ubj//AYw6JSdyIinZP3c9Va7M1+4lGM9Ovquxqx1bmQ==
+X-Received: by 2002:aa7:cb4a:: with SMTP id w10mr3888335edt.343.1607017153262;
+        Thu, 03 Dec 2020 09:39:13 -0800 (PST)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id n17sm1278629ejh.49.2020.12.03.09.39.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Dec 2020 09:39:12 -0800 (PST)
+Subject: Re: [PATCH] selftests: kvm/set_memory_region_test: Fix race in move
+ region test
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <0fdddb94bb0e31b7da129a809a308d91c10c0b5e.1606941224.git.maciej.szmigiero@oracle.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <6e0f1fcf-c8ac-c05a-778b-eeb7a4cd50e7@redhat.com>
+Date:   Thu, 3 Dec 2020 18:39:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <0fdddb94bb0e31b7da129a809a308d91c10c0b5e.1606941224.git.maciej.szmigiero@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Run the test once with quirk enabled and once disabled,
-and adjust the expected values accordingly.
+On 02/12/20 21:35, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> The current memory region move test correctly handles the situation that
+> the second (realigning) memslot move operation would temporarily trigger
+> MMIO until it completes, however it does not handle the case in which the
+> first (misaligning) move operation does this, too.
+> This results in false test assertions in case it does so.
+> 
+> Fix this by handling temporary MMIO from the first memslot move operation
+> in the test guest code, too.
+> 
+> Fixes: 8a0639fe9201 ("KVM: sefltests: Add explicit synchronization to move mem region test")
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> ---
+>      The race is pretty hard to trigger on the current KVM memslot code,
+>      to trigger it reliably an extra delay in memslot move op is needed:
+>      --- a/virt/kvm/kvm_main.c
+>      +++ b/virt/kvm/kvm_main.c
+>      @@ -1173,7 +1173,7 @@ static struct kvm_memslots *kvm_dup_memslots(struct kvm_memslots *old,
+>      
+>              return slots;
+>       }
+>      -
+>      +#include <linux/delay.h>
+>       static int kvm_set_memslot(struct kvm *kvm,
+>                                 const struct kvm_userspace_memory_region *mem,
+>                                 struct kvm_memory_slot *old,
+>      @@ -1212,6 +1212,8 @@ static int kvm_set_memslot(struct kvm *kvm,
+>                       *      - kvm_is_visible_gfn (mmu_check_root)
+>                       */
+>                      kvm_arch_flush_shadow_memslot(kvm, slot);
+>      +
+>      +               if (change == KVM_MR_MOVE) mdelay(100);
+>              }
+>      
+>              r = kvm_arch_prepare_memory_region(kvm, new, mem, change);
+> 
+>   .../selftests/kvm/set_memory_region_test.c      | 17 +++++++++++++----
+>   1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+> index b3ece55a2da6..6f441dd9f33c 100644
+> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
+> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+> @@ -156,14 +156,23 @@ static void guest_code_move_memory_region(void)
+>   	GUEST_SYNC(0);
+>   
+>   	/*
+> -	 * Spin until the memory region is moved to a misaligned address.  This
+> -	 * may or may not trigger MMIO, as the window where the memslot is
+> -	 * invalid is quite small.
+> +	 * Spin until the memory region starts getting moved to a
+> +	 * misaligned address.
+> +	 * Every region move may or may not trigger MMIO, as the
+> +	 * window where the memslot is invalid is usually quite small.
+>   	 */
+>   	val = guest_spin_on_val(0);
+>   	GUEST_ASSERT_1(val == 1 || val == MMIO_VAL, val);
+>   
+> -	/* Spin until the memory region is realigned. */
+> +	/* Spin until the misaligning memory region move completes. */
+> +	val = guest_spin_on_val(MMIO_VAL);
+> +	GUEST_ASSERT_1(val == 1 || val == 0, val);
+> +
+> +	/* Spin until the memory region starts to get re-aligned. */
+> +	val = guest_spin_on_val(0);
+> +	GUEST_ASSERT_1(val == 1 || val == MMIO_VAL, val);
+> +
+> +	/* Spin until the re-aligning memory region move completes. */
+>   	val = guest_spin_on_val(MMIO_VAL);
+>   	GUEST_ASSERT_1(val == 1, val);
+>   
+> 
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- .../selftests/kvm/x86_64/tsc_msrs_test.c      | 79 ++++++++++++++++---
- 1 file changed, 69 insertions(+), 10 deletions(-)
+Queued, thanks.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c b/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
-index e357d8e222d47..3900c543a7ee1 100644
---- a/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/tsc_msrs_test.c
-@@ -79,8 +79,6 @@ static void run_vcpu(struct kvm_vm *vm, uint32_t vcpuid, int stage)
- {
- 	struct ucall uc;
- 
--	vcpu_args_set(vm, vcpuid, 1, vcpuid);
--
- 	vcpu_ioctl(vm, vcpuid, KVM_RUN, NULL);
- 
- 	switch (get_ucall(vm, vcpuid, &uc)) {
-@@ -101,7 +99,7 @@ static void run_vcpu(struct kvm_vm *vm, uint32_t vcpuid, int stage)
- 	}
- }
- 
--int main(void)
-+void run_test(bool quirk_disabled)
- {
- 	struct kvm_vm *vm;
- 	uint64_t val;
-@@ -109,6 +107,14 @@ int main(void)
- 	vm = vm_create_default(VCPU_ID, 0, guest_code);
- 
- 	val = 0;
-+	if (quirk_disabled) {
-+		struct kvm_enable_cap cap = {
-+			.cap = KVM_CAP_DISABLE_QUIRKS,
-+			.args[0] = KVM_X86_QUIRK_TSC_HOST_ACCESS,
-+		};
-+		vm_enable_cap(vm, &cap);
-+	}
-+
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), val);
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
- 
-@@ -124,20 +130,67 @@ int main(void)
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), val);
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
- 
--	/*
--	 * Host: writes to MSR_IA32_TSC set the host-side offset
--	 * and therefore do not change MSR_IA32_TSC_ADJUST.
--	 */
--	vcpu_set_msr(vm, 0, MSR_IA32_TSC, HOST_ADJUST + val);
-+	if (quirk_disabled) {
-+		struct kvm_tsc_state state = {
-+			.tsc = HOST_ADJUST + val,
-+			.flags = 0
-+		};
-+		vcpu_ioctl(vm, VCPU_ID, KVM_SET_TSC_STATE, &state);
-+	} else {
-+		/*
-+		 * Host: writes to MSR_IA32_TSC set the host-side offset
-+		 * and therefore do not change MSR_IA32_TSC_ADJUST
-+		 */
-+		vcpu_set_msr(vm, 0, MSR_IA32_TSC, HOST_ADJUST + val);
-+	}
-+
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), HOST_ADJUST + val);
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
-+
-+	if (quirk_disabled) {
-+		/*
-+		 * Host: writes to MSR_IA32_TSC work like in the guest
-+		 * when quirk is disabled
-+		 */
-+		vcpu_set_msr(vm, 0, MSR_IA32_TSC, val);
-+		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), val);
-+		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val - HOST_ADJUST);
-+
-+		/* Restore the value */
-+		vcpu_set_msr(vm, 0, MSR_IA32_TSC, HOST_ADJUST + val);
-+		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val);
-+	}
-+
- 	run_vcpu(vm, VCPU_ID, 3);
- 
--	/* Host: writes to MSR_IA32_TSC_ADJUST do not modify the TSC.  */
-+	/*
-+	 * Host: writes to MSR_IA32_TSC_ADJUST do not modify the TSC,
-+	 * (unless the quirk is disabled)
-+	 */
- 	vcpu_set_msr(vm, 0, MSR_IA32_TSC_ADJUST, UNITY * 123456);
--	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), HOST_ADJUST + val);
-+	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC),
-+		  quirk_disabled ? UNITY * 123456 + HOST_ADJUST : HOST_ADJUST + val);
- 	ASSERT_EQ(vcpu_get_msr(vm, 0, MSR_IA32_TSC_ADJUST), UNITY * 123456);
- 
-+	if (quirk_disabled) {
-+		/*
-+		 * Host: writes via KVM_SET_TSC_STATE
-+		 * to MSR_IA32_TSC and MSR_IA32_TSC_ADJUST can be done
-+		 * independently
-+		 */
-+		struct kvm_tsc_state state = {
-+			.tsc = UNITY * 42,
-+			.tsc_adjust = UNITY * 42 - HOST_ADJUST,
-+			.flags = KVM_TSC_STATE_TSC_ADJUST_VALID
-+		};
-+
-+		vcpu_ioctl(vm, VCPU_ID, KVM_SET_TSC_STATE, &state);
-+
-+		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), UNITY * 42);
-+		ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST),
-+			  UNITY * 42 - HOST_ADJUST);
-+	}
-+
- 	/* Restore previous value.  */
- 	vcpu_set_msr(vm, 0, MSR_IA32_TSC_ADJUST, val);
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC), HOST_ADJUST + val);
-@@ -162,6 +215,12 @@ int main(void)
- 	ASSERT_EQ(rounded_host_rdmsr(MSR_IA32_TSC_ADJUST), val - HOST_ADJUST);
- 
- 	kvm_vm_free(vm);
-+}
-+
- 
-+int main(void)
-+{
-+	run_test(false);
-+	run_test(true);
- 	return 0;
- }
--- 
-2.26.2
+paolo
 
