@@ -2,157 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8EF2CF5B6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Dec 2020 21:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527AD2CF647
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Dec 2020 22:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbgLDUgG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Dec 2020 15:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728582AbgLDUgG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Dec 2020 15:36:06 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD2DC061A4F
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Dec 2020 12:35:25 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id i184so8456733ybg.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Dec 2020 12:35:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=AnJeit01nF61jllgCw+jNN3EZnXYnoHf3OFvBuHNiIE=;
-        b=Q865+I+npgDxO5mvNz7nE0FFszUKiT1oj8XqaBePvExuhcuxk5iaxLW10s5HU4Lrb9
-         wu4fX/1igXukDWtsCu7dnMJkGlEroel7nceNG8FxOD/e666FSXT6UliuYkIM8jccC9e5
-         CzEvqEuM6aS8yQthD1G02jZ3bKUftXa/Ld3QT8mm0VtUHla15h/qGaDCi3Agd3s22nVW
-         zCamj1a1vSCOZTB+v7JZBu0M/5XfPMAQQ7wK5kuzx9nsJg8jDcIROEM4BfI5gpDwM3vv
-         Z1RFR8zSQcrSlyqPTjVr9c/M7eb1FPD90an14IUK5Vj/AAvsa7TwO06plQGM6rpUvAlP
-         GYJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=AnJeit01nF61jllgCw+jNN3EZnXYnoHf3OFvBuHNiIE=;
-        b=m8MudxczUpy7lqHOSw3sdsL/ytjv16yW3MaIHUgFpDM/FPfRfbVadOwSakoZ/HFd1F
-         XCNs3LLj6LLtP5u3T4znQ6ZDV2dRn8HZijPAmkvcWQCpvDHp4rDiAHww+0Xrc6Vdsm87
-         Pqk9YOBTvRFuvEJVtcj/AE9AcyMfCDP/OT+MZKUsSBqt1+Q+722nG06x2EHymJLtL0Ab
-         5qZaFh4pYrdmestX4+1b65WuPYpzi8CD5x60P64xQ4eXhJxm/z3q55C8zI0lgYg2s51A
-         ZgCHyIkj7WQs0wl+JmjsjmAxVsRekz6OaF9p5gzurYa2MqUsOA8jJl0rM59+biVrVtH7
-         fHVA==
-X-Gm-Message-State: AOAM530lreZDJElYFbe/fWmvSmgYfqYyGJjqUMhhGaPnLu+leQQJLdnD
-        +IqIlOeJWrDLQ7weIreHawtQf6jc/hzcOPpGNYVK
-X-Google-Smtp-Source: ABdhPJy6YTdTjZz5Hjir0b8leyA4lBtDy5pKId5K3dU4HmYu5w6p88bf0x2ctmEKd7bTpq8kTkFb8eq8fR2nNUn2x8R6
-Sender: "axelrasmussen via sendgmr" <axelrasmussen@ajr0.svl.corp.google.com>
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:f693:9fff:feef:c8f8])
- (user=axelrasmussen job=sendgmr) by 2002:a25:d895:: with SMTP id
- p143mr503872ybg.91.1607114125017; Fri, 04 Dec 2020 12:35:25 -0800 (PST)
-Date:   Fri,  4 Dec 2020 12:34:43 -0800
-Message-Id: <20201204203443.2714693-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
-Subject: [PATCH] userfaultfd: selftests: fix SIGSEGV if huge mmap fails
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        David Alan Gilbert <dgilbert@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729490AbgLDVhQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Dec 2020 16:37:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729268AbgLDVhQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 4 Dec 2020 16:37:16 -0500
+Date:   Fri, 4 Dec 2020 13:36:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607117791;
+        bh=U04B3pDX8jFTZKxagPn+lmF/MY9A/p0Uvp3pJNgnx8s=;
+        h=From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kohVDdvJOBJoL7UDt5bjD8I/yfGVRi8rYwIcC4E3D4wc82HuMQjS6sW7jNOxKPdFW
+         KVEmFXx/wKk4BRbtlALz66BY3ZRsCwm6LCkuGbX0QCZERzp913WfV6WkRA1s71JYrs
+         xuJjFd8mj2HQFux64nB1BEwdxb9W71AcloEMWFTc/NAFAUe4NIeWGKwxCbVL9a1fj7
+         hbqBivV0EBhywARFiQMl3u6vHWmQ2bPOQ2u+o4HRyE8tdgo2BFjOY3py1eF9x/jAco
+         B6xZZepnuaundzpZ+MZKSF8/1GLIZCqNfqyt7J8S8BxEU6BGPQTAmF8iceo8vADeZi
+         5kPJAm2GR3JVA==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+Subject: Re: [net-next v4 0/8] seg6: add support for SRv6 End.DT4/DT6
+ behavior
+Message-ID: <20201204133629.19549345@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+In-Reply-To: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+References: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The error handling in hugetlb_allocate_area() was incorrect for the
-hugetlb_shared test case.
+On Wed,  2 Dec 2020 14:05:09 +0100 Andrea Mayer wrote:
+> This patchset provides support for the SRv6 End.DT4 and End.DT6 (VRF mode)
+> behaviors.
+> 
+> The SRv6 End.DT4 behavior is used to implement multi-tenant IPv4 L3 VPNs. It
+> decapsulates the received packets and performs IPv4 routing lookup in the
+> routing table of the tenant. The SRv6 End.DT4 Linux implementation leverages a
+> VRF device in order to force the routing lookup into the associated routing
+> table.
+> The SRv6 End.DT4 behavior is defined in the SRv6 Network Programming [1].
+> 
+> The Linux kernel already offers an implementation of the SRv6 End.DT6 behavior
+> which allows us to set up IPv6 L3 VPNs over SRv6 networks. This new
+> implementation of DT6 is based on the same VRF infrastructure already exploited
+> for implementing the SRv6 End.DT4 behavior. The aim of the new SRv6 End.DT6 in
+> VRF mode consists in simplifying the construction of IPv6 L3 VPN services in
+> the multi-tenant environment.
+> Currently, the two SRv6 End.DT6 implementations (legacy and VRF mode)
+> coexist seamlessly and can be chosen according to the context and the user
+> preferences.
+> 
+> - Patch 1 is needed to solve a pre-existing issue with tunneled packets
+>   when a sniffer is attached;
+> 
+> - Patch 2 improves the management of the seg6local attributes used by the
+>   SRv6 behaviors;
+> 
+> - Patch 3 adds support for optional attributes in SRv6 behaviors;
+> 
+> - Patch 4 introduces two callbacks used for customizing the
+>   creation/destruction of a SRv6 behavior;
+> 
+> - Patch 5 is the core patch that adds support for the SRv6 End.DT4
+>   behavior;
+> 
+> - Patch 6 introduces the VRF support for SRv6 End.DT6 behavior;
+> 
+> - Patch 7 adds the selftest for SRv6 End.DT4 behavior;
+> 
+> - Patch 8 adds the selftest for SRv6 End.DT6 (VRF mode) behavior.
+> 
+> Regarding iproute2, the support for the new "vrftable" attribute, required by
+> both SRv6 End.DT4 and End.DT6 (VRF mode) behaviors, is provided in a different
+> patchset that will follow shortly.
+> 
+> I would like to thank David Ahern for his support during the development of
+> this patchset.
 
-Previously the behavior was:
-
-- mmap a hugetlb area
-  - If this fails, set the pointer to NULL, and carry on
-- mmap an alias of the same hugetlb fd
-  - If this fails, munmap the original area
-
-If the original mmap failed, it's likely the second one did too. If
-both failed, we'd blindly try to munmap a NULL pointer, causing a
-SIGSEGV. Instead, "goto fail" so we return before trying to mmap the
-alias.
-
-This issue can be hit "in real life" by forgetting to set
-/proc/sys/vm/nr_hugepages (leaving it at 0), and then trying to run the
-hugetlb_shared test.
-
-Another small improvement is, when the original mmap fails, don't just
-print "it failed": perror(), so we can see *why*. :)
-
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 25 +++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 9b0912a01777..c4425597769a 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -206,19 +206,19 @@ static int hugetlb_release_pages(char *rel_area)
- 	return ret;
- }
- 
--
- static void hugetlb_allocate_area(void **alloc_area)
- {
- 	void *area_alias = NULL;
- 	char **alloc_area_alias;
-+
- 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
- 			   (map_shared ? MAP_SHARED : MAP_PRIVATE) |
- 			   MAP_HUGETLB,
- 			   huge_fd, *alloc_area == area_src ? 0 :
- 			   nr_pages * page_size);
- 	if (*alloc_area == MAP_FAILED) {
--		fprintf(stderr, "mmap of hugetlbfs file failed\n");
--		*alloc_area = NULL;
-+		perror("mmap of hugetlbfs file failed");
-+		goto fail;
- 	}
- 
- 	if (map_shared) {
-@@ -227,14 +227,11 @@ static void hugetlb_allocate_area(void **alloc_area)
- 				  huge_fd, *alloc_area == area_src ? 0 :
- 				  nr_pages * page_size);
- 		if (area_alias == MAP_FAILED) {
--			if (munmap(*alloc_area, nr_pages * page_size) < 0) {
--				perror("hugetlb munmap");
--				exit(1);
--			}
--			*alloc_area = NULL;
--			return;
-+			perror("mmap of hugetlb file alias failed");
-+			goto fail_munmap;
- 		}
- 	}
-+
- 	if (*alloc_area == area_src) {
- 		huge_fd_off0 = *alloc_area;
- 		alloc_area_alias = &area_src_alias;
-@@ -243,6 +240,16 @@ static void hugetlb_allocate_area(void **alloc_area)
- 	}
- 	if (area_alias)
- 		*alloc_area_alias = area_alias;
-+
-+	return;
-+
-+fail_munmap:
-+	if (munmap(*alloc_area, nr_pages * page_size) < 0) {
-+		perror("hugetlb munmap");
-+		exit(1);
-+	}
-+fail:
-+	*alloc_area = NULL;
- }
- 
- static void hugetlb_alias_mapping(__u64 *start, size_t len, unsigned long offset)
--- 
-2.29.2.576.ga3fc446d84-goog
-
+Applied, thank you!
