@@ -2,260 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 147332CF3D2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Dec 2020 19:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4AD2CF44C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Dec 2020 19:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbgLDSTJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Dec 2020 13:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729132AbgLDSTG (ORCPT
+        id S1729710AbgLDSuT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Dec 2020 13:50:19 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:46696 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbgLDSuS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Dec 2020 13:19:06 -0500
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56E7C061A52
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Dec 2020 10:18:26 -0800 (PST)
-Received: by mail-io1-xd41.google.com with SMTP id z136so6701434iof.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Dec 2020 10:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tyzhaOntxGoZCdu/AWAta3ick3zzo0z3NSO9Ng3ArzM=;
-        b=IYIg8serPFP4EU/s5kZJ0dofMxj7m/9wc2/OwJNF1Pr656kiSxRricNroqDK97vlnb
-         fSK5hAZqwmLiNnl69rOHHWu9rfyJ3Wo9/+5n5GZ5DtNAGPE/2b7ebWO/na2iq360W9ZC
-         2lOGKhiGhVHcygzb6+P45AyNvNdEOBuuOOdsAr8S5ymhsN2p4ES1xCqdk97oEPxt2nDT
-         5MIp/s2KrJbXttK4DMkPQGTKFbnY1ZXXAkPQ2NVZbXG1nkOr6vMlh2KdDLNZpHYICT26
-         2/Kfti1ql7bdfoeuaxjZZgdkWNa1GC1+pQYbjpBdlhmYwvg/pXzqcDC4Nuq2S6pQZw8y
-         h+MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tyzhaOntxGoZCdu/AWAta3ick3zzo0z3NSO9Ng3ArzM=;
-        b=sh2vE7b+IXnzaU7tW1OijvUwHtWKBvQFTQBTJzP5O4cbWU2Y/KQ5jkDX14H9fDgx7G
-         6StOVP95Yu7gCLKcptN4mL83vtroz4sa1XJU9feOxpXXzOY55AYYHgLD3DgdTGHapf1m
-         AYwOPa7NtibTS7FHsRzbODRkFa08ozwdr24jwnZ7wSUwrGTRqbc810aiMw5JS80oBpwO
-         HHgul3WAVN/4nOuQHUT37qZuYPzpGcxahbzbAFpuFvu5xyx0VUWKc5cEtkd/Ek7HwCif
-         IlhZ8qCZdrF6y2IEXkar97QRIb7bjEjdh+woWr12tz+1kNoQciFFcVAgKQw9u6J5pFci
-         V9aw==
-X-Gm-Message-State: AOAM531TWSPe5BDz3ITJOS+UwW3ckZDE7nddu9fgep8C1vnezsUfvaDd
-        h3bBIC3qgRJCyNXd9m8QArI9VOkNcaxvwYBqro78cg==
-X-Google-Smtp-Source: ABdhPJzeBdr6CtdA5D2BmpKu9k07kysQ7ZuSzKC5gqKCv6nKVgDNMF35a1Hsx/5MeZJi7qoFc8Jy0Ek1Xjm9cnyVkvo=
-X-Received: by 2002:a02:a498:: with SMTP id d24mr7945643jam.4.1607105905464;
- Fri, 04 Dec 2020 10:18:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20201203194127.1813731-1-dlatypov@google.com> <20201203194127.1813731-3-dlatypov@google.com>
- <CABVgOS=YfJdqmmU22XR4e84YyHudhksQc8X2rR1mz=6ukN=emA@mail.gmail.com>
-In-Reply-To: <CABVgOS=YfJdqmmU22XR4e84YyHudhksQc8X2rR1mz=6ukN=emA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 4 Dec 2020 10:18:14 -0800
-Message-ID: <CAGS_qxriVvSn5GXtAHdCjh+Y6k8+tNpVJ-Qm=kVOEOEXQJ4ACQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: tool: move kunitconfig parsing into __init__
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 4 Dec 2020 13:50:18 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B4Id7aZ080569;
+        Fri, 4 Dec 2020 18:48:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=Ht4XSMFgIFxAizqaagPUCiggLuikqi6eY1y/ipcl3Pw=;
+ b=kzpr9a0E9L044Glmer2EF9HOE2WGnbBl8g3M3nrqtYigFjHmyrxFIdgl0ino/8OqR+it
+ j1H6G8apA2uUKaw3quWR2xtmzMMLJbupyfrUTZcRqe22Ir54OPFCjRic92QNxIyGj/Ra
+ iEQESH55S+1x2xio1rE5zHvAxrZVZ3u3FmfLg/dDW7fTf8j4jIhs6gt59vEYzxTolsDq
+ uOwFKD0lW4hAgpZpjX3cUvhgmzzmOdSeqIakx6K6KwrPfbEGkcvo2xzc8F9pHX3dWQXW
+ eLmfBb1v+IcHCrGas65qq0oy37IuegWXm0UsK4IYXNN0H4IPmewYQZ35qQrWTLtr6U8C GQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 353c2bcpu8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 04 Dec 2020 18:48:51 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B4IYRgd082193;
+        Fri, 4 Dec 2020 18:48:50 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 3540ayfr25-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 04 Dec 2020 18:48:50 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B4ImmFS025392;
+        Fri, 4 Dec 2020 18:48:48 GMT
+Received: from localhost.uk.oracle.com (/10.175.205.186)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 04 Dec 2020 10:48:48 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     kafai@fb.com, yhs@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        rostedt@goodmis.org, mingo@redhat.com, haoluo@google.com,
+        jolsa@kernel.org, quentin@isovalent.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, shuah@kernel.org, lmb@cloudflare.com,
+        linux-kselftest@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 0/3] bpf: support module BTF in BTF display helpers
+Date:   Fri,  4 Dec 2020 18:48:33 +0000
+Message-Id: <1607107716-14135-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9825 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012040106
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9825 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1011 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ spamscore=0 adultscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012040106
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 3, 2020 at 7:57 PM David Gow <davidgow@google.com> wrote:
->
-> On Fri, Dec 4, 2020 at 3:41 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > LinuxSourceTree will unceremoniously crash if the user doesn't call
-> > read_kunitconfig() first in a number of functions.
->
-> This patch seems to partly be reverting the changes here, right:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/tools/testing/kunit?h=kunit&id=fcdb0bc08ced274078f371e1e0fe6421a97fa9f2
-> (That patch moved the reading of kunitconfig out of __init__)
+This series aims to add support to bpf_snprintf_btf() and
+bpf_seq_printf_btf() allowing them to store string representations
+of module-specific types, as well as the kernel-specific ones
+they currently support.
 
-Yes.
+Patch 1 removes the btf_module_mutex, as since we will need to
+look up module BTF during BPF program execution, we don't want
+to risk sleeping in the various contexts in which BPF can run.
+The access patterns to the btf module list seem to conform to
+classic list RCU usage so with a few minor tweaks this seems
+workable.
 
->
-> My overall concern is that, really, there are some operations that
-> shouldn't need a kunitconfig (even if they do at the moment), so we'd
-> ideally want at least some of the operations currently under
-> LinuxSourceTree to be able to be run without first reading a
-> kunitconfig. Most notably, it'd be nice if kunit.py exec (and hence
-> LinuxSourceTree::run_kernel()) didn't need a kunitconfig, as the
-> kernel ought to already be built at this point.
->
-> Now, this is all a little bit hypothetical, as we haven't bothered to
-> make kunit.py exec work without a kunitconfig thus far, but I'm a
-> touch hesitant to make it harder to bypass the kunitconfig reading
-> anyway.
+Patch 2 replaces the unused flags field in struct btf_ptr with
+an obj_id field,  allowing the specification of the id of a
+BTF module.  If the value is 0, the core kernel vmlinux is
+assumed to contain the type's BTF information.  Otherwise the
+module with that id is used to identify the type.  If the
+object-id based lookup fails, we again fall back to vmlinux
+BTF.
 
-Fair point.
+Patch 3 is a selftest that uses veth (when built as a
+module) and a kprobe to display both a module-specific
+and kernel-specific type; both are arguments to veth_stats_rx().
+Currently it looks up the module-specific type and object ids
+using libbpf; in future, these lookups will likely be supported
+directly in the BPF program via __builtin_btf_type_id(); but
+I need to determine a good test to determine if that builtin
+supports object ids.
 
-So one alternative to this to make type-checkers happy is to declare
-_config instead of sneakily setting it in some random later method.
-Then in all the places that rely on _config, we'd need to add in
-checks that it's in fact set to give a better error message (so it's
-clear to the user that it's an internal tool bug and has nothing to do
-with them).
+Changes since RFC
 
-The copy-paste of create+read_kunitconfig() is annoying, which is why
-I went with this.
-How about __init__ takes an optional argument that can disable this parsing?
+- add patch to remove module mutex
+- modify to use obj_id instead of module name as identifier
+  in "struct btf_ptr" (Andrii)
 
-E.g.
+Alan Maguire (3):
+  bpf: eliminate btf_module_mutex as RCU synchronization can be used
+  bpf: add module support to btf display helpers
+  selftests/bpf: verify module-specific types can be shown via
+    bpf_snprintf_btf
 
-def __init__(kconfig = None):
-   if kconfig is not None:
-     self._config = kconfig
-   else:
-     // create and read
+ include/linux/btf.h                                |  12 ++
+ include/uapi/linux/bpf.h                           |  13 ++-
+ kernel/bpf/btf.c                                   |  49 +++++---
+ kernel/trace/bpf_trace.c                           |  44 ++++++--
+ tools/include/uapi/linux/bpf.h                     |  13 ++-
+ .../selftests/bpf/prog_tests/snprintf_btf_mod.c    | 124 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/bpf_iter.h       |   2 +-
+ tools/testing/selftests/bpf/progs/btf_ptr.h        |   2 +-
+ tools/testing/selftests/bpf/progs/veth_stats_rx.c  |  72 ++++++++++++
+ 9 files changed, 292 insertions(+), 39 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/snprintf_btf_mod.c
+ create mode 100644 tools/testing/selftests/bpf/progs/veth_stats_rx.c
 
-Or if we don't like the idea of requiring users who don't want a
-kconfig to pass in a dummy,
+-- 
+1.8.3.1
 
-def __init__(load_kconfig=True):
-   if not load_kconfig:
-     self._config = None
-   ...
-
->
-> >
-> > Adn currently every place we create an instance, the caller also calls
-> > create_kunitconfig() and read_kunitconfig().
-> >
-> > Move these instead into __init__() so they can't be forgotten and to
-> > reduce copy-paste.
->
-> This seems to now be missing the create_kunitconfig() stuff (see below).
-
-Ah good catch. Completely unintentional.
-I'm sure I had the create_kunitconfig() stuff in __init__() at some
-point but must have inadvertently removed it somehow later on.
-
-> >
-> > The https://github.com/google/pytype type-checker complained that
-> > _config wasn't initialized. With this, kunit_tool now type checks
-> > under both pytype and mypy.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
-> >  tools/testing/kunit/kunit.py        | 20 ++++----------------
-> >  tools/testing/kunit/kunit_kernel.py | 19 +++++++------------
-> >  2 files changed, 11 insertions(+), 28 deletions(-)
-> >
-> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> > index 08951a114654..b58fb3733cfa 100755
-> > --- a/tools/testing/kunit/kunit.py
-> > +++ b/tools/testing/kunit/kunit.py
-> > @@ -256,10 +256,7 @@ def main(argv, linux=None):
-> >                         os.mkdir(cli_args.build_dir)
-> >
-> >                 if not linux:
-> > -                       linux = kunit_kernel.LinuxSourceTree()
-> > -
-> > -               linux.create_kunitconfig(cli_args.build_dir)
-> > -               linux.read_kunitconfig(cli_args.build_dir)
-> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir)
-> >
-> >                 request = KunitRequest(cli_args.raw_output,
-> >                                        cli_args.timeout,
-> > @@ -277,10 +274,7 @@ def main(argv, linux=None):
-> >                         os.mkdir(cli_args.build_dir)
-> >
-> >                 if not linux:
-> > -                       linux = kunit_kernel.LinuxSourceTree()
-> > -
-> > -               linux.create_kunitconfig(cli_args.build_dir)
-> > -               linux.read_kunitconfig(cli_args.build_dir)
-> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir)
-> >
-> >                 request = KunitConfigRequest(cli_args.build_dir,
-> >                                              cli_args.make_options)
-> > @@ -292,10 +286,7 @@ def main(argv, linux=None):
-> >                         sys.exit(1)
-> >         elif cli_args.subcommand == 'build':
-> >                 if not linux:
-> > -                       linux = kunit_kernel.LinuxSourceTree()
-> > -
-> > -               linux.create_kunitconfig(cli_args.build_dir)
-> > -               linux.read_kunitconfig(cli_args.build_dir)
-> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir)
-> >
-> >                 request = KunitBuildRequest(cli_args.jobs,
-> >                                             cli_args.build_dir,
-> > @@ -309,10 +300,7 @@ def main(argv, linux=None):
-> >                         sys.exit(1)
-> >         elif cli_args.subcommand == 'exec':
-> >                 if not linux:
-> > -                       linux = kunit_kernel.LinuxSourceTree()
-> > -
-> > -               linux.create_kunitconfig(cli_args.build_dir)
-> > -               linux.read_kunitconfig(cli_args.build_dir)
-> > +                       linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir)
-> >
-> >                 exec_request = KunitExecRequest(cli_args.timeout,
-> >                                                 cli_args.build_dir,
-> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> > index bda7c4fd4d3e..79793031d2c4 100644
-> > --- a/tools/testing/kunit/kunit_kernel.py
-> > +++ b/tools/testing/kunit/kunit_kernel.py
-> > @@ -129,10 +129,15 @@ def get_outfile_path(build_dir) -> str:
-> >  class LinuxSourceTree(object):
-> >         """Represents a Linux kernel source tree with KUnit tests."""
-> >
-> > -       def __init__(self) -> None:
-> > -               self._ops = LinuxSourceTreeOperations()
-> > +       def __init__(self, build_dir: str, defconfig=DEFAULT_KUNITCONFIG_PATH) -> None:
-> >                 signal.signal(signal.SIGINT, self.signal_handler)
-> >
-> > +               self._ops = LinuxSourceTreeOperations()
-> > +
-> > +               kunitconfig_path = get_kunitconfig_path(build_dir)
-> > +               self._kconfig = kunit_config.Kconfig()
-> > +               self._kconfig.read_from_file(kunitconfig_path)
-> > +
-> >         def clean(self) -> bool:
-> >                 try:
-> >                         self._ops.make_mrproper()
-> > @@ -141,16 +146,6 @@ class LinuxSourceTree(object):
-> >                         return False
-> >                 return True
-> >
-> > -       def create_kunitconfig(self, build_dir, defconfig=DEFAULT_KUNITCONFIG_PATH) -> None:
-> > -               kunitconfig_path = get_kunitconfig_path(build_dir)
-> > -               if not os.path.exists(kunitconfig_path):
-> > -                       shutil.copyfile(defconfig, kunitconfig_path)
-> > -
->
-> What happened to create_kunitconfig() here? With this patch, I can no
-> longer run .../kunit.py run with an empty build_dir and get results,
-> instead getting:
-> ---
-> Traceback (most recent call last):
->  File "./tools/testing/kunit/kunit.py", line 336, in <module>
->    main(sys.argv[1:])
->  File "./tools/testing/kunit/kunit.py", line 259, in main
->    linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir)
->  File "./tools/testing/kunit/kunit_kernel.py", line 139, in __init__
->    self._kconfig.read_from_file(kunitconfig_path)
->  File "./tools/testing/kunit/kunit_config.py", line 89, in read_from_file
->    with open(path, 'r') as f:
-> FileNotFoundError: [Errno 2] No such file or directory: 'asdf/.kunitconfig'
-> ---
->
-> Prior to this change, the defconfig is copied over, and the kernel is
-> built, tests run succesfully.
->
->
-> > -       def read_kunitconfig(self, build_dir) -> None:
-> > -               kunitconfig_path = get_kunitconfig_path(build_dir)
-> > -               self._kconfig = kunit_config.Kconfig()
-> > -               self._kconfig.read_from_file(kunitconfig_path)
-> > -
-> >         def validate_config(self, build_dir) -> bool:
-> >                 kconfig_path = get_kconfig_path(build_dir)
-> >                 validated_kconfig = kunit_config.Kconfig()
-> > --
-> > 2.29.2.576.ga3fc446d84-goog
-> >
