@@ -2,59 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 527AD2CF647
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Dec 2020 22:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326AF2CF655
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Dec 2020 22:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729490AbgLDVhQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Dec 2020 16:37:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54596 "EHLO mail.kernel.org"
+        id S1725966AbgLDVlH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Dec 2020 16:41:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729268AbgLDVhQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Dec 2020 16:37:16 -0500
-Date:   Fri, 4 Dec 2020 13:36:29 -0800
+        id S1725912AbgLDVlH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 4 Dec 2020 16:41:07 -0500
+Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607117791;
-        bh=U04B3pDX8jFTZKxagPn+lmF/MY9A/p0Uvp3pJNgnx8s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kohVDdvJOBJoL7UDt5bjD8I/yfGVRi8rYwIcC4E3D4wc82HuMQjS6sW7jNOxKPdFW
-         KVEmFXx/wKk4BRbtlALz66BY3ZRsCwm6LCkuGbX0QCZERzp913WfV6WkRA1s71JYrs
-         xuJjFd8mj2HQFux64nB1BEwdxb9W71AcloEMWFTc/NAFAUe4NIeWGKwxCbVL9a1fj7
-         hbqBivV0EBhywARFiQMl3u6vHWmQ2bPOQ2u+o4HRyE8tdgo2BFjOY3py1eF9x/jAco
-         B6xZZepnuaundzpZ+MZKSF8/1GLIZCqNfqyt7J8S8BxEU6BGPQTAmF8iceo8vADeZi
-         5kPJAm2GR3JVA==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shrijeet Mukherjee <shrijeet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-Subject: Re: [net-next v4 0/8] seg6: add support for SRv6 End.DT4/DT6
- behavior
-Message-ID: <20201204133629.19549345@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-In-Reply-To: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
-References: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+        s=k20201202; t=1607118026;
+        bh=uNPuqXFYIGKlg/LtzADylh84tk1uzZd6pTpoiZDvyQs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KrnmSrLQhTkLPrrujlbupXE3NOM41MDxSi+nmir8HC5NXpQFjUlY92rJFKNU/newy
+         5k9q2/3SliGz7eqXA/H6JaTqVzpMTOxi9cel0T2tiOrFp0+0olgNVUDMOlOI6B+I/4
+         T2Sj+BlCfWpacrd8xCf5wqqsYoXqVEkd/F/Bpio5FvElrkhjtivMBDurpwBxTYztsV
+         YwqToYY/QyVsw24BxUD17U6D7xxB2Pzo0U1qhj5SKNSxLK81IAmHKJG7x5lFt4s2RE
+         eHy05hh37IZvNBGsjdJ0D+VLMIMxn8LL6EKZVfTCKr9GXuqHSqNKQzAIKNHeFYAwGi
+         JLC5fTCIdV24Q==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net-next v4 0/8] seg6: add support for SRv6 End.DT4/DT6 behavior
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160711802655.19007.16256732742816656137.git-patchwork-notify@kernel.org>
+Date:   Fri, 04 Dec 2020 21:40:26 +0000
+References: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+In-Reply-To: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc:     davem@davemloft.net, dsahern@kernel.org, kuznet@ms2.inr.ac.ru,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, shuah@kernel.org,
+        shrijeet@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, natechancellor@gmail.com,
+        stefano.salsano@uniroma2.it, paolo.lungaroni@cnit.it,
+        ahabdels.dev@gmail.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed,  2 Dec 2020 14:05:09 +0100 Andrea Mayer wrote:
+Hello:
+
+This series was applied to netdev/net-next.git (refs/heads/master):
+
+On Wed,  2 Dec 2020 14:05:09 +0100 you wrote:
 > This patchset provides support for the SRv6 End.DT4 and End.DT6 (VRF mode)
 > behaviors.
 > 
@@ -65,41 +59,29 @@ On Wed,  2 Dec 2020 14:05:09 +0100 Andrea Mayer wrote:
 > table.
 > The SRv6 End.DT4 behavior is defined in the SRv6 Network Programming [1].
 > 
-> The Linux kernel already offers an implementation of the SRv6 End.DT6 behavior
-> which allows us to set up IPv6 L3 VPNs over SRv6 networks. This new
-> implementation of DT6 is based on the same VRF infrastructure already exploited
-> for implementing the SRv6 End.DT4 behavior. The aim of the new SRv6 End.DT6 in
-> VRF mode consists in simplifying the construction of IPv6 L3 VPN services in
-> the multi-tenant environment.
-> Currently, the two SRv6 End.DT6 implementations (legacy and VRF mode)
-> coexist seamlessly and can be chosen according to the context and the user
-> preferences.
-> 
-> - Patch 1 is needed to solve a pre-existing issue with tunneled packets
->   when a sniffer is attached;
-> 
-> - Patch 2 improves the management of the seg6local attributes used by the
->   SRv6 behaviors;
-> 
-> - Patch 3 adds support for optional attributes in SRv6 behaviors;
-> 
-> - Patch 4 introduces two callbacks used for customizing the
->   creation/destruction of a SRv6 behavior;
-> 
-> - Patch 5 is the core patch that adds support for the SRv6 End.DT4
->   behavior;
-> 
-> - Patch 6 introduces the VRF support for SRv6 End.DT6 behavior;
-> 
-> - Patch 7 adds the selftest for SRv6 End.DT4 behavior;
-> 
-> - Patch 8 adds the selftest for SRv6 End.DT6 (VRF mode) behavior.
-> 
-> Regarding iproute2, the support for the new "vrftable" attribute, required by
-> both SRv6 End.DT4 and End.DT6 (VRF mode) behaviors, is provided in a different
-> patchset that will follow shortly.
-> 
-> I would like to thank David Ahern for his support during the development of
-> this patchset.
+> [...]
 
-Applied, thank you!
+Here is the summary with links:
+  - [net-next,v4,1/8] vrf: add mac header for tunneled packets when sniffer is attached
+    https://git.kernel.org/netdev/net-next/c/048939088220
+  - [net-next,v4,2/8] seg6: improve management of behavior attributes
+    https://git.kernel.org/netdev/net-next/c/964adce526a4
+  - [net-next,v4,3/8] seg6: add support for optional attributes in SRv6 behaviors
+    https://git.kernel.org/netdev/net-next/c/0a3021f1d4e5
+  - [net-next,v4,4/8] seg6: add callbacks for customizing the creation/destruction of a behavior
+    https://git.kernel.org/netdev/net-next/c/cfdf64a03406
+  - [net-next,v4,5/8] seg6: add support for the SRv6 End.DT4 behavior
+    https://git.kernel.org/netdev/net-next/c/664d6f86868b
+  - [net-next,v4,6/8] seg6: add VRF support for SRv6 End.DT6 behavior
+    https://git.kernel.org/netdev/net-next/c/20a081b7984c
+  - [net-next,v4,7/8] selftests: add selftest for the SRv6 End.DT4 behavior
+    https://git.kernel.org/netdev/net-next/c/2195444e09b4
+  - [net-next,v4,8/8] selftests: add selftest for the SRv6 End.DT6 (VRF) behavior
+    https://git.kernel.org/netdev/net-next/c/2bc035538e16
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
