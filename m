@@ -2,130 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EF62D0002
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Dec 2020 01:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE392D0360
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Dec 2020 12:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbgLFApO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 5 Dec 2020 19:45:14 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:55462 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgLFApO (ORCPT
+        id S1727395AbgLFLbI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Dec 2020 06:31:08 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30824 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725804AbgLFLbH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Dec 2020 19:45:14 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B60eEf5060353;
-        Sun, 6 Dec 2020 00:43:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2020-01-29;
- bh=HkCUOSWvqLu+nBPfr5F9soHOjj7dqb0JHi/ppMxbkoA=;
- b=SmL8LRkkNKCmIU6z3cX+05cOdon0pJBnEOmWIdqfh36Rr5bUjMrT3i+QFXk9zlg05Nym
- CiMOd/lw8Q1DX5m5ug09RGjZbXqRtZ3gQrELK1RIUZeFZoF7ps+xDAyWdFKYmp4aw5Mx
- LvwP+bDNl0hJZ6sV02xcT44ZXt3/9QafmvxC7jF+Imb7Hb/fJc3J5/4xDP/Lw66sZN+7
- Op8P0mffSbSRwBqWZbOtQ1uoEO7+0jPvNp+HzPnt+jAzuGSvXuwSek1+2g8Nu1MDjkj0
- Fk1h6fFl5JPDfzJXrfuXMgKXGDTMe4nBiCwQgIc8ITlJWw3crVWeqpiLajQTPQaL22LL VA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 3581mqhgv5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 06 Dec 2020 00:43:45 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B60aTY2068040;
-        Sun, 6 Dec 2020 00:43:45 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 358kyp1cvm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 06 Dec 2020 00:43:44 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B60hgfm032637;
-        Sun, 6 Dec 2020 00:43:42 GMT
-Received: from dhcp-10-175-160-212.vpn.oracle.com (/10.175.160.212)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 05 Dec 2020 16:43:42 -0800
-Date:   Sun, 6 Dec 2020 00:43:36 +0000 (GMT)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@localhost
-To:     Yonghong Song <yhs@fb.com>
-cc:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, rostedt@goodmis.org, mingo@redhat.com,
-        haoluo@google.com, jolsa@kernel.org, quentin@isovalent.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, shuah@kernel.org, lmb@cloudflare.com,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 0/3] bpf: support module BTF in BTF display
- helpers
-In-Reply-To: <3dce8546-60d4-bb94-2c7a-ed352882cd37@fb.com>
-Message-ID: <alpine.LRH.2.23.451.2012060038260.1505@localhost>
-References: <1607107716-14135-1-git-send-email-alan.maguire@oracle.com> <3dce8546-60d4-bb94-2c7a-ed352882cd37@fb.com>
+        Sun, 6 Dec 2020 06:31:07 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B6B2ZE7100701;
+        Sun, 6 Dec 2020 06:29:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=sTdeJYkg7s4jW58KjlXSO7YK0Uj/BAuS89bh+WjYExs=;
+ b=Rp75CbhEeYCx5VHn/zmMQm/6S+m39d3Usre2min80jBkGcuIUAFLlD1U/x+1W8OWJjzt
+ fIMqDyMisdQYl1mM9UyniGF2F3wozFBhPxC8o45xaq4jdyxerJ/476m3OKpNWyqX75Ot
+ ZzHIhjFleohS0jG/BTw5yXvXzCYd99hKPpieya0mzuihgbkU/MAWYg+oHQUWV/VR679y
+ Kd89sxaBExZT7E3BQljYIuSDAN6L4oWyttmbEubp0O3I6HjC9jWAiHlf70CcFuUqDoNe
+ FV1XlQNsQrd7V/hGnlvfLCY1r7+QZ+WUan1OAetcBZbmpiv0Bnk27tfchh/UmmiiMr/D dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 358rby5k22-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Dec 2020 06:29:52 -0500
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B6BP7Pa153868;
+        Sun, 6 Dec 2020 06:29:52 -0500
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 358rby5k1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Dec 2020 06:29:51 -0500
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B6BRVQk019021;
+        Sun, 6 Dec 2020 11:29:50 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 3581u8hkbt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Dec 2020 11:29:49 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B6BSWTZ56295740
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 6 Dec 2020 11:28:32 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9A4D9A404D;
+        Sun,  6 Dec 2020 11:28:32 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1635A4040;
+        Sun,  6 Dec 2020 11:28:28 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.50.18])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun,  6 Dec 2020 11:28:28 +0000 (GMT)
+Date:   Sun, 6 Dec 2020 13:28:26 +0200
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v14 04/10] set_memory: allow querying whether
+ set_direct_map_*() is actually enabled
+Message-ID: <20201206112826.GB123287@linux.ibm.com>
+References: <20201203062949.5484-1-rppt@kernel.org>
+ <20201203062949.5484-5-rppt@kernel.org>
+ <20201203153610.724f40f26ca1620247bc6b09@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9826 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=10 mlxlogscore=999 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012060003
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9826 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=10 mlxlogscore=999
- clxscore=1015 malwarescore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012060003
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201203153610.724f40f26ca1620247bc6b09@linux-foundation.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-06_06:2020-12-04,2020-12-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=1
+ impostorscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 clxscore=1015
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012060066
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Dec 03, 2020 at 03:36:10PM -0800, Andrew Morton wrote:
+> On Thu,  3 Dec 2020 08:29:43 +0200 Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > On arm64, set_direct_map_*() functions may return 0 without actually
+> > changing the linear map. This behaviour can be controlled using kernel
+> > parameters, so we need a way to determine at runtime whether calls to
+> > set_direct_map_invalid_noflush() and set_direct_map_default_noflush() have
+> > any effect.
+> > 
+> > Extend set_memory API with can_set_direct_map() function that allows
+> > checking if calling set_direct_map_*() will actually change the page table,
+> > replace several occurrences of open coded checks in arm64 with the new
+> > function and provide a generic stub for architectures that always modify
+> > page tables upon calls to set_direct_map APIs.
+> > 
+> > ...
+> >
+> > --- a/arch/arm64/mm/mmu.c
+> > +++ b/arch/arm64/mm/mmu.c
+> > @@ -22,6 +22,7 @@
+> >  #include <linux/io.h>
+> >  #include <linux/mm.h>
+> >  #include <linux/vmalloc.h>
+> > +#include <linux/set_memory.h>
+> >  
+> >  #include <asm/barrier.h>
+> >  #include <asm/cputype.h>
+> > @@ -477,7 +478,7 @@ static void __init map_mem(pgd_t *pgdp)
+> >  	int flags = 0;
+> >  	u64 i;
+> >  
+> > -	if (rodata_full || debug_pagealloc_enabled())
+> > +	if (can_set_direct_map())
+> >  		flags = NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> 
+> Changes in -next turned this into
+> 
+> 	if (can_set_direct_map() || crash_mem_map)
 
-On Sat, 5 Dec 2020, Yonghong Song wrote:
+Thanks for updating!
 
-> 
-> 
-> __builtin_btf_type_id() is really only supported in llvm12
-> and 64bit return value support is pushed to llvm12 trunk
-> a while back. The builtin is introduced in llvm11 but has a
-> corner bug, so llvm12 is recommended. So if people use the builtin,
-> you can assume 64bit return value. libbpf support is required
-> here. So in my opinion, there is no need to do feature detection.
-> 
-> Andrii has a patch to support 64bit return value for
-> __builtin_btf_type_id() and I assume that one should
-> be landed before or together with your patch.
-> 
-> Just for your info. The following is an example you could
-> use to determine whether __builtin_btf_type_id()
-> supports btf object id at llvm level.
-> 
-> -bash-4.4$ cat t.c
-> int test(int arg) {
->   return __builtin_btf_type_id(arg, 1);
-> }
-> 
-> Compile to generate assembly code with latest llvm12 trunk:
->   clang -target bpf -O2 -S -g -mcpu=v3 t.c
-> In the asm code, you should see one line with
->   r0 = 1 ll
-> 
-> Or you can generate obj code:
->   clang -target bpf -O2 -c -g -mcpu=v3 t.c
-> and then you disassemble the obj file
->   llvm-objdump -d --no-show-raw-insn --no-leading-addr t.o
-> You should see below in the output
->   r0 = 1 ll
-> 
-> Use earlier version of llvm12 trunk, the builtin has
-> 32bit return value, you will see
->   r0 = 1
-> which is a 32bit imm to r0, while "r0 = 1 ll" is
-> 64bit imm to r0.
->
-
-Thanks for this Yonghong!  I'm thinking the way I'll tackle it
-is to simply verify that the upper 32 bits specifying the
-veth module object id are non-zero; if they are zero, we'll skip
-the test (I think a skip probably makes sense as not everyone will
-have llvm12). Does that seem reasonable?
-
-With the additional few minor changes on top of Andrii's patch,
-the use of __builtin_btf_type_id() worked perfectly. Thanks!
-
-Alan
+-- 
+Sincerely yours,
+Mike.
