@@ -2,94 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 747452D194B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Dec 2020 20:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCD52D19AA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Dec 2020 20:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgLGTSR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Dec 2020 14:18:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60636 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726522AbgLGTSQ (ORCPT
+        id S1725874AbgLGTfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Dec 2020 14:35:44 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15610 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725814AbgLGTfo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Dec 2020 14:18:16 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B7J3MZP110573;
-        Mon, 7 Dec 2020 14:17:35 -0500
+        Mon, 7 Dec 2020 14:35:44 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B7JVmtS074937;
+        Mon, 7 Dec 2020 14:35:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=HUwqv0whGx2Tvz87hqRI0z42nXaykvc4fnwfO03BGdM=;
- b=HOYr41qscSWw46ZMe+7k6iMLF/K2z+7+yoE5T3b+JLSuoaWGsjMWimQS8mQqY18wekBE
- 9VT8Mg4sIXqNWhreirbO02Fr3ZPofKnSHjVHrYJB49n9d0ZO5BcWH4UFUnGG6zSpU5oo
- YLG2aZ03anPAyCZLlcQ02/wTJmdVHPqNgCiPyg4P4FWlMfyv4q/EG5b6OzFcyhFeLhuF
- eqesM69crjuZL7gn+w1oTzZMug2hwf41xh/8Q1eGcSSVzOFKphUr22h7zQaqlhmaUeUW
- kc7UXWf37haTRcodU3WVzihMZWgEnHZhWLSoYyEUqbwVt6MdVA4JHfW4sGPex6/M93TH mQ== 
+ bh=QKwjFnPZ6Zcn5evDTo0YCnZ76CRjGn2jNSVBgXG+ah0=;
+ b=Edg+7ON9yq1ecPP7pM3b09msux4gmZuMOaiw2i/SKS43qlYV/1nOiJiGm3RY44DEfaYt
+ 2Oaet5pGftWPYGYAiqJhwrlPRdK4DhYD2+XNJ935gylUKFGIWG7RWvlFFQGyaBrdSC3t
+ SnETwXTh/dkoVd+EyNGRue8v9U2OEjt2/9BUnn5J5Dp4CrQi4wNmjW/fWQyUWod81B64
+ E0rZRxLPJQd+vcGl+fIap88pY8lW/q0DpzRtDCSCF0fZrgrYN1BTTP1U29jGV7bNCbxH
+ jjEzVRP7MKUjQsW1MhIKQG3BiHVTKSBCTPWBGl/FglU/fyZtHx5BqrBUFxS4hTpa7Rvt 7Q== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 359s0maqq6-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 359rg83qxu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Dec 2020 14:17:35 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B7J4Fe4113916;
-        Mon, 7 Dec 2020 14:17:34 -0500
+        Mon, 07 Dec 2020 14:35:01 -0500
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B7JVuvg078495;
+        Mon, 7 Dec 2020 14:35:01 -0500
 Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 359s0maqp8-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 359rg83qwr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Dec 2020 14:17:34 -0500
+        Mon, 07 Dec 2020 14:35:01 -0500
 Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B7JHWxK021955;
-        Mon, 7 Dec 2020 19:17:32 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3581u8m4b8-1
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B7JXhHa003661;
+        Mon, 7 Dec 2020 19:34:59 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 3581u8m4um-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Dec 2020 19:17:32 +0000
+        Mon, 07 Dec 2020 19:34:59 +0000
 Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B7JExcL8258146
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B7JWQPv61473144
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Dec 2020 19:14:59 GMT
+        Mon, 7 Dec 2020 19:32:26 GMT
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8526411C04A;
-        Mon,  7 Dec 2020 19:14:59 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id A36EA11C054;
+        Mon,  7 Dec 2020 19:32:26 +0000 (GMT)
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E057D11C04C;
-        Mon,  7 Dec 2020 19:14:58 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id A532D11C050;
+        Mon,  7 Dec 2020 19:32:25 +0000 (GMT)
 Received: from oc7455500831.ibm.com (unknown [9.171.4.19])
         by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Dec 2020 19:14:58 +0000 (GMT)
+        Mon,  7 Dec 2020 19:32:25 +0000 (GMT)
 Subject: Re: [PATCH v4] self_tests/kvm: sync_regs test for diag318
 To:     Collin Walling <walling@linux.ibm.com>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
 Cc:     frankja@linux.ibm.com, david@redhat.com, thuth@redhat.com,
         cohuck@redhat.com, pbonzini@redhat.com, imbrenda@linux.ibm.com
 References: <20201207154125.10322-1-walling@linux.ibm.com>
- <acdc13f8-1da2-1633-b302-435179e9eb3f@linux.ibm.com>
 From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Message-ID: <840324b4-bd17-9d50-f448-52ae55767801@de.ibm.com>
-Date:   Mon, 7 Dec 2020 20:14:58 +0100
+Message-ID: <2ea47a0e-40fb-35bc-5819-63a9e7b2ec59@de.ibm.com>
+Date:   Mon, 7 Dec 2020 20:32:25 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <acdc13f8-1da2-1633-b302-435179e9eb3f@linux.ibm.com>
+In-Reply-To: <20201207154125.10322-1-walling@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-07_16:2020-12-04,2020-12-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- bulkscore=0 adultscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- clxscore=1015 malwarescore=0 impostorscore=0 suspectscore=2
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=2 mlxlogscore=999
+ impostorscore=0 priorityscore=1501 spamscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012070121
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 07.12.20 20:12, Collin Walling wrote:
-> The DIAGNOSE 0x0318 instruction, unique to s390x, is a privileged
-> instruction that must be intercepted via SIE, handled in userspace,
-> and the information set by the instruction is communicated back to KVM.
+On 07.12.20 16:41, Collin Walling wrote:
+> The DIAGNOSE 0x0318 instruction, unique to s390x, is a privileged call
+> that must be intercepted via SIE, handled in userspace, and the
+> information set by the instruction is communicated back to KVM.
 > 
 > To test the instruction interception, an ad-hoc handler is defined which
 > simply has a VM execute the instruction and then userspace will extract
@@ -98,7 +95,7 @@ On 07.12.20 20:12, Collin Walling wrote:
 > info returned by this handler should be used.
 > 
 > The diag318 info is communicated from userspace to KVM via a sync_regs
-> call. This is tested during a sync_regs test, where the diag318 info is
+> call. This is tested During a sync_regs test, where the diag318 info is
 > requested via the handler, then the info is stored in the appropriate
 > register in KVM via a sync registers call.
 > 
@@ -107,18 +104,12 @@ On 07.12.20 20:12, Collin Walling wrote:
 > against a value of 0.
 > 
 > Signed-off-by: Collin Walling <walling@linux.ibm.com>
-> Acked-by: Janosch Frank <frankja@linux.ibm.com>
-> Acked-by: Cornelia Huck <cohuck@redhat.com>
-> ---
-> 
-> @Christian: if you haven't picked the patch yet, here is the entire
-> patch with the properly updated commit message.
 
-No worries, I already picked and fixed this.
+Interestingly enough, this testcase actually trigger a bug:
+While we gracefully handle this (no crash)
+debugfs: Directory 'kvm-200206' with parent 's390dbf' already present!
+is certainly not ideal....
 
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
-
-thanks applied. 
 
 > ---
 >  tools/testing/selftests/kvm/Makefile          |  2 +-
@@ -126,31 +117,23 @@ thanks applied.
 >  .../kvm/lib/s390x/diag318_test_handler.c      | 82 +++++++++++++++++++
 >  .../selftests/kvm/s390x/sync_regs_test.c      | 16 +++-
 >  4 files changed, 111 insertions(+), 2 deletions(-)
->  create mode 100644
-> tools/testing/selftests/kvm/include/s390x/diag318_test_handler.h
->  create mode 100644
-> tools/testing/selftests/kvm/lib/s390x/diag318_test_handler.c
+>  create mode 100644 tools/testing/selftests/kvm/include/s390x/diag318_test_handler.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/s390x/diag318_test_handler.c
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile
-> b/tools/testing/selftests/kvm/Makefile
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
 > index 3d14ef77755e..426c78449044 100644
 > --- a/tools/testing/selftests/kvm/Makefile
 > +++ b/tools/testing/selftests/kvm/Makefile
 > @@ -36,7 +36,7 @@ endif
->  LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c
-> lib/test_util.c
->  LIBKVM_x86_64 = lib/x86_64/processor.c lib/x86_64/vmx.c
-> lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S
+>  LIBKVM = lib/assert.c lib/elf.c lib/io.c lib/kvm_util.c lib/sparsebit.c lib/test_util.c
+>  LIBKVM_x86_64 = lib/x86_64/processor.c lib/x86_64/vmx.c lib/x86_64/svm.c lib/x86_64/ucall.c lib/x86_64/handlers.S
 >  LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c
 > -LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c
-> +LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c
-> lib/s390x/diag318_test_handler.c
+> +LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_handler.c
 > 
 >  TEST_GEN_PROGS_x86_64 = x86_64/cr4_cpuid_sync_test
 >  TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
-> diff --git
-> a/tools/testing/selftests/kvm/include/s390x/diag318_test_handler.h
-> b/tools/testing/selftests/kvm/include/s390x/diag318_test_handler.h
+> diff --git a/tools/testing/selftests/kvm/include/s390x/diag318_test_handler.h b/tools/testing/selftests/kvm/include/s390x/diag318_test_handler.h
 > new file mode 100644
 > index 000000000000..b0ed71302722
 > --- /dev/null
@@ -169,9 +152,7 @@ thanks applied.
 > +uint64_t get_diag318_info(void);
 > +
 > +#endif
-> diff --git
-> a/tools/testing/selftests/kvm/lib/s390x/diag318_test_handler.c
-> b/tools/testing/selftests/kvm/lib/s390x/diag318_test_handler.c
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/diag318_test_handler.c b/tools/testing/selftests/kvm/lib/s390x/diag318_test_handler.c
 > new file mode 100644
 > index 000000000000..86b9e611ad87
 > --- /dev/null
@@ -200,11 +181,9 @@ thanks applied.
 > +}
 > +
 > +/*
-> + * The DIAGNOSE 0x0318 instruction call must be handled via userspace.
-> As such,
+> + * The DIAGNOSE 0x0318 instruction call must be handled via userspace. As such,
 > + * we create an ad-hoc VM here to handle the instruction then extract the
-> + * necessary data. It is up to the caller to decide what to do with
-> that data.
+> + * necessary data. It is up to the caller to decide what to do with that data.
 > + */
 > +static uint64_t diag318_handler(void)
 > +{
@@ -261,8 +240,7 @@ thanks applied.
 > +
 > +	return diag318_info;
 > +}
-> diff --git a/tools/testing/selftests/kvm/s390x/sync_regs_test.c
-> b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
+> diff --git a/tools/testing/selftests/kvm/s390x/sync_regs_test.c b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
 > index 5731ccf34917..caf7b8859a94 100644
 > --- a/tools/testing/selftests/kvm/s390x/sync_regs_test.c
 > +++ b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
@@ -274,14 +252,12 @@ thanks applied.
 > 
 >  #define VCPU_ID 5
 > 
-> @@ -70,7 +71,7 @@ static void compare_sregs(struct kvm_sregs *left,
-> struct kvm_sync_regs *right)
+> @@ -70,7 +71,7 @@ static void compare_sregs(struct kvm_sregs *left, struct kvm_sync_regs *right)
 > 
 >  #undef REG_COMPARE
 > 
 > -#define TEST_SYNC_FIELDS   (KVM_SYNC_GPRS|KVM_SYNC_ACRS|KVM_SYNC_CRS)
-> +#define TEST_SYNC_FIELDS
-> (KVM_SYNC_GPRS|KVM_SYNC_ACRS|KVM_SYNC_CRS|KVM_SYNC_DIAG318)
+> +#define TEST_SYNC_FIELDS   (KVM_SYNC_GPRS|KVM_SYNC_ACRS|KVM_SYNC_CRS|KVM_SYNC_DIAG318)
 >  #define INVALID_SYNC_FIELD 0x80000000
 > 
 >  int main(int argc, char *argv[])
