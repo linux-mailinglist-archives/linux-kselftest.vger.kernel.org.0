@@ -2,66 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 634782D2406
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Dec 2020 08:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745152D27C9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Dec 2020 10:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbgLHHEI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Dec 2020 02:04:08 -0500
-Received: from mga06.intel.com ([134.134.136.31]:34490 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbgLHHEI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Dec 2020 02:04:08 -0500
-IronPort-SDR: S8L20bGf2CGorsXqEnYX6mrTolC1ESgIZG8MK4EO2/ksYMO89uu0+OXLLfa7T7FKtt/S/OHg48
- 4pmcSAPlBitw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9828"; a="235443209"
-X-IronPort-AV: E=Sophos;i="5.78,401,1599548400"; 
-   d="scan'208";a="235443209"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2020 23:03:27 -0800
-IronPort-SDR: T5bzF0jYE6uQZfaVBvbR7q5Y8H2jYH6DOZcWhiY2L/MJJ/m0ydTUIVBPfSY1jJPXT5fiqzSlWH
- h6M8EAfGI7HA==
-X-IronPort-AV: E=Sophos;i="5.78,401,1599548400"; 
-   d="scan'208";a="317669101"
-Received: from snazary-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.32.66])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2020 23:03:22 -0800
-Subject: Re: [PATCH bpf-next v4 0/5] selftests/bpf: xsk selftests
-To:     Yonghong Song <yhs@fb.com>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        magnus.karlsson@gmail.com
-Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        anders.roxell@linaro.org, jonathan.lemon@gmail.com
-References: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
- <956522ac-5a57-3755-ede5-6d33169ce6e1@fb.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <a2157b4c-7498-d160-b703-60ee8fc6c83d@intel.com>
-Date:   Tue, 8 Dec 2020 08:03:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1727463AbgLHJg7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Dec 2020 04:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727132AbgLHJg6 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Dec 2020 04:36:58 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB08C061749;
+        Tue,  8 Dec 2020 01:36:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rfxjMnKfa23WCYW/uF05Lo63iUpOoHmG+cW0xP/UtyU=; b=SSGKYnga74+cAFWbhRPcCOdcBP
+        JDqUwZsReurrIA9rgUdaHS+L9ewZyFAgZ7Fs5LCRZmTdJHjZT7Xo+U926ln6+dqOc6LWjAQEFBakC
+        FjNyhVCXMu9Ok5QpiThTlRsKU1MzVXRpL0I2WtN1Nkf5Rjda09Br44yQjhoUI9EN66z/Ct4dFLdq6
+        lvnxhAITpjvh6D2bASrQboKrnwAEKv+YK5L8aqOVKQe9b6RrzqMpo3K4cuedPIh+iFwVlSR4bWu0z
+        MR0xFyc2NjgwGDedU96N9Mc7+O8QACNWFQgkBIct7vFOuz8dWqGthwCAQmNbSukNAtz+LXT+YMDF0
+        84K1QaZA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kmZPF-0001SM-Fi; Tue, 08 Dec 2020 09:35:37 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7037F3007CD;
+        Tue,  8 Dec 2020 10:35:35 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 55E43200C65DC; Tue,  8 Dec 2020 10:35:35 +0100 (CET)
+Date:   Tue, 8 Dec 2020 10:35:35 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+Message-ID: <20201208093535.GS2414@hirez.programming.kicks-ass.net>
+References: <20201203171118.372391-1-mlevitsk@redhat.com>
+ <20201203171118.372391-2-mlevitsk@redhat.com>
+ <87a6uq9abf.fsf@nanos.tec.linutronix.de>
+ <1dbbeefc7c76c259b55582468ccd3aab35a6de60.camel@redhat.com>
+ <87a6up606r.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <956522ac-5a57-3755-ede5-6d33169ce6e1@fb.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a6up606r.fsf@nanos.tec.linutronix.de>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2020-12-08 04:56, Yonghong Song wrote:
-> On 12/7/20 1:53 PM, Weqaar Janjua wrote:
->> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
-[...]
-> 
-> All tests passed in my environment.
-> Tested-by: Yonghong Song <yhs@fb.com>
-> 
+On Mon, Dec 07, 2020 at 05:38:36PM +0100, Thomas Gleixner wrote:
+> For anything halfways modern the write to TSC is reflected in TSC_ADJUST
+> which means you get the precise offset.
 
-Thanks for the hard work, Weqaar! And thanks Yonghong for testing/feedback.
-
- From my perspective this is a good selftest base for AF_XDP, and
-something we can continue to build on.
-
-For the series:
-
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
+IIRC this is true for everything that has TSC_ADJUST.
