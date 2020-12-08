@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A042D3169
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Dec 2020 18:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941232D31E9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Dec 2020 19:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730839AbgLHRop (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Dec 2020 12:44:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37618 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730826AbgLHRoo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Dec 2020 12:44:44 -0500
-X-Gm-Message-State: AOAM531zK3YQBMfe8jXvuxM0fSAU73Vod0DpXWYWYRfZZWds/8YjX9hM
-        p1MGjwN1AIrxQL+oFGGpky+6mEJ7jRyeJK6d+imr5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607449443;
-        bh=qOJEF76l9wC8yLqJEJDwkrt5AGUmhLvlKmfUMREz+ko=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dAb3IRJqoR06BqD0je5AQGVNbWRVArv9rH+FjDpIwFKjqgIMLfwl4f+JxmubOQ1ec
-         r2sacEDyxFlxt1DswVi3PMaLtJIViE4p/ms42Wkx/s8lEWFq7ygu+3ZqKscDuw3dj2
-         5HU8rwwVDrqA+9IoVaSyg1rD9F5rudJ2gxnwWmba2JOJGnGnTyoVUWLobdHUegrRKg
-         jlS4FXaRPC336p6hlLiHZ3yFgrVpRsIUR1u46UPrks0cVH6y9S+HornA802V/dk19l
-         aWkrR6Sjz/hrvgcNmOFefXAevz82mMJMcA1u0DinCF6ntbu6BisQn4c6CKHqohU2qj
-         3gllIJr1YdRuQ==
-X-Google-Smtp-Source: ABdhPJxx38F+AYzAUbFPiyi/arpdYMpWh2pcmMLnvFDFDjtyr8BqYrmCqo4vk1YSkwXojlzdjAdLKo7OSbBpcW6fBRw=
-X-Received: by 2002:a1c:1d85:: with SMTP id d127mr4943071wmd.49.1607449442016;
- Tue, 08 Dec 2020 09:44:02 -0800 (PST)
-MIME-Version: 1.0
-References: <636fecc20b0143128b484f159ff795ff65d05b82.camel@redhat.com>
- <885C1725-B479-47F6-B08D-A7181637A80A@amacapital.net> <20201207231127.GB27492@fuller.cnet>
-In-Reply-To: <20201207231127.GB27492@fuller.cnet>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 8 Dec 2020 09:43:50 -0800
-X-Gmail-Original-Message-ID: <CALCETrX7F3EgshyTfsNZy8R=NzyQNOY6JAULfiuOCxc1Fz8mPQ@mail.gmail.com>
-Message-ID: <CALCETrX7F3EgshyTfsNZy8R=NzyQNOY6JAULfiuOCxc1Fz8mPQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        kvm list <kvm@vger.kernel.org>,
+        id S1730798AbgLHSQN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Dec 2020 13:16:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50428 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730975AbgLHSQM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Dec 2020 13:16:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607451286;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M9T5kVr+CAbU/Pqq1HubTPf8M564HNxJMPku0hKIlCY=;
+        b=VT75sXUE4sYF08py/ua35cLvFjMlEUc9IDj8Svlvi9hgaa6OtyZqxPgn1YZPo13IhFMVej
+        +49p6cG6R15CQ9aUr4XhoCe3u0FCvkwlyh2GMauAHnxrX77IYE0XvDsDtcc7pyKaz9H5JS
+        YSZCLnB6D4D859HR7BcNLMpV9a9rnNY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-149-pdftyMXzODOmvHNI7kaGyA-1; Tue, 08 Dec 2020 13:14:42 -0500
+X-MC-Unique: pdftyMXzODOmvHNI7kaGyA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4D8B8804002;
+        Tue,  8 Dec 2020 18:14:40 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-8.gru2.redhat.com [10.97.112.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8D5D160877;
+        Tue,  8 Dec 2020 18:14:39 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 51416405CBC7; Tue,  8 Dec 2020 15:11:07 -0300 (-03)
+Date:   Tue, 8 Dec 2020 15:11:07 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -56,56 +56,68 @@ Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
         Andrew Jones <drjones@redhat.com>,
         Oliver Upton <oupton@google.com>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+Message-ID: <20201208181107.GA31442@fuller.cnet>
+References: <20201203171118.372391-1-mlevitsk@redhat.com>
+ <20201203171118.372391-2-mlevitsk@redhat.com>
+ <20201207232920.GD27492@fuller.cnet>
+ <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com>
+ <87sg8g2sn4.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sg8g2sn4.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 8, 2020 at 6:23 AM Marcelo Tosatti <mtosatti@redhat.com> wrote:
->
-> On Mon, Dec 07, 2020 at 10:04:45AM -0800, Andy Lutomirski wrote:
+On Tue, Dec 08, 2020 at 05:02:07PM +0100, Thomas Gleixner wrote:
+> On Tue, Dec 08 2020 at 16:50, Maxim Levitsky wrote:
+> > On Mon, 2020-12-07 at 20:29 -0300, Marcelo Tosatti wrote:
+> >> > +This ioctl allows to reconstruct the guest's IA32_TSC and TSC_ADJUST value
+> >> > +from the state obtained in the past by KVM_GET_TSC_STATE on the same vCPU.
+> >> > +
+> >> > +If 'KVM_TSC_STATE_TIMESTAMP_VALID' is set in flags,
+> >> > +KVM will adjust the guest TSC value by the time that passed since the moment
+> >> > +CLOCK_REALTIME timestamp was saved in the struct and current value of
+> >> > +CLOCK_REALTIME, and set the guest's TSC to the new value.
+> >> 
+> >> This introduces the wraparound bug in Linux timekeeping, doesnt it?
+> 
+> Which bug?
+
+max_cycles overflow. Sent a message to Maxim describing it.
+
+> 
+> > It does.
+> > Could you prepare a reproducer for this bug so I get a better idea about
+> > what are you talking about?
 > >
+> > I assume you need very long (like days worth) jump to trigger this bug
+> > and for such case we can either work around it in qemu / kernel 
+> > or fix it in the guest kernel and I strongly prefer the latter.
 > >
-> > I do have a feature request, though: IMO it would be quite nifty if the=
- new kvmclock structure could also expose NTP corrections. In other words, =
-if you could expose enough info to calculate CLOCK_MONOTONIC_RAW, CLOCK_MON=
-OTONIC, and CLOCK_REALTIME, then we could have paravirt NTP.
->
-> Hi Andy,
->
-> Any reason why drivers/ptp/ptp_kvm.c does not work for you?
->
+> > Thomas, what do you think about it?
+> 
+> For one I have no idea which bug you are talking about and if the bug is
+> caused by the VMM then why would you "fix" it in the guest kernel.
 
-It looks like it tries to accomplish the right goal, but in a rather
-roundabout way.  The host knows how to convert from TSC to
-CLOCK_REALTIME, and ptp_kvm.c exposes this data to the guest.  But,
-rather than just making the guest use the same CLOCK_REALTIME data as
-the host, ptp_kvm.c seems to expose information to usermode that a
-user daemon could use to attempt (with some degree of error?) to use
-to make the guest kernel track CLOCK_REALTIME.  This seems inefficient
-and dubiously accurate.
+1) Stop guest, save TSC value of cpu-0 = V.
+2) Wait for some amount of time = W.
+3) Start guest, load TSC value with V+W.
 
-My feature request is for this to be fully automatic and completely
-coherent.  I would like for a host user program and a guest user
-program to be able to share memory, run concurrently, and use the
-shared memory to exchange CLOCK_REALTIME values without ever observing
-the clock going backwards.  This ought to be doable.  Ideally the
-result should even be usable for Spanner-style synchronization
-assuming the host clock is good enough.  Also, this whole thing should
-work without needing to periodically wake the guest to remain
-synchronized.  If the guest sleeps for two minutes (full nohz-idle, no
-guest activity at all), the host makes a small REALTIME frequency
-adjustment, and then the guest runs user code that reads
-CLOCK_REALTIME, the guest clock should still be fully synchronized
-with the host.  I don't think that ptp_kvm.c-style synchronization can
-do this.
+Can cause an overflow on Linux timekeeping.
 
-tglx etc, I think that doing this really really nicely might involve
-promoting something like the current vDSO data structures to ABI -- a
-straightforward-ish implementation would be for the KVM host to export
-its vvar clock data to the guest and for the guest to use it, possibly
-with an offset applied.  The offset could work a lot like timens works
-today.
+> Aside of that I think I made it pretty clear what the right thing to do
+> is.
 
---Andy
+Sure: the notion of a "unique TSC offset" already exists (it is detected
+by write TSC logic, and not explicit in the interface, though).
+
+But AFAIK it works pretty well.
+
+Exposing a single TSC value on the interface level seems alright to
+me...
+
