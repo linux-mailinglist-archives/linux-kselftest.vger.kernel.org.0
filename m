@@ -2,240 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D4F2D3061
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Dec 2020 17:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 511852D3097
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Dec 2020 18:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730267AbgLHQ7u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Dec 2020 11:59:50 -0500
-Received: from mx2.suse.de ([195.135.220.15]:47994 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730227AbgLHQ7u (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Dec 2020 11:59:50 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A6FA8AC94;
-        Tue,  8 Dec 2020 16:59:07 +0000 (UTC)
-From:   pmladek@suse.cz
-Date:   Tue, 8 Dec 2020 17:59:07 +0100
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        shuah@kernel.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] lib: vsprintf: Fix handling of number field
- widths in vsscanf
-Message-ID: <X8+w2yCU+wUwLQKt@alley>
-References: <20201130145800.19960-1-rf@opensource.cirrus.com>
+        id S1728679AbgLHRJl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Dec 2020 12:09:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48901 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730351AbgLHRJk (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Dec 2020 12:09:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607447293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yF+3r9yZr3OimJtNxI93YdLbEufXdUnZo4bnKb1/obs=;
+        b=hRdLYvbCnGIF1W3I7Yp+s5zPCNKToY9jyPo6qHO4kYQ8SFmRn5lFcIoTJUPauVumXc1HpB
+        QJsqI4Q5mFgsK0iCvx6zvz5Qsy7ErU/PhkF47jJWsUJcqY8V/jNH0YFN1ijNqWVNYOgzD6
+        7OKQzB4TdQqpLwF2WQJVgHMdVjV8soE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-493-rUUp2KzZMZ--p7BszPHx1w-1; Tue, 08 Dec 2020 12:08:11 -0500
+X-MC-Unique: rUUp2KzZMZ--p7BszPHx1w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF5E58042BD;
+        Tue,  8 Dec 2020 17:08:07 +0000 (UTC)
+Received: from starship (unknown [10.35.206.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0010699A5;
+        Tue,  8 Dec 2020 17:08:01 +0000 (UTC)
+Message-ID: <047afdde655350a6701803aa8ae739a8bd1c1c14.camel@redhat.com>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Upton <oupton@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Date:   Tue, 08 Dec 2020 19:08:00 +0200
+In-Reply-To: <87lfe82quh.fsf@nanos.tec.linutronix.de>
+References: <20201203171118.372391-1-mlevitsk@redhat.com>
+         <20201203171118.372391-2-mlevitsk@redhat.com>
+         <CAOQ_Qsj6THRPj2ta3PdOxUJeCj8KxPnLkWV8EGpvN_J=qUv74A@mail.gmail.com>
+         <d3dd82950301517e47630cc86fa0e6dc84f63f90.camel@redhat.com>
+         <87lfe82quh.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201130145800.19960-1-rf@opensource.cirrus.com>
-gyFrom: Petr Mladek <pmladek@suse.com>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 2020-11-30 14:57:57, Richard Fitzgerald wrote:
-> The existing code attempted to handle numbers by doing a strto[u]l(),
-> ignoring the field width, and then bitshifting the field out of the
-> converted value. If the string contains a run of valid digits longer
-> than will fit in a long or long long, this would overflow and no amount
-> of bitshifting can recover the correct value.
+On Tue, 2020-12-08 at 17:40 +0100, Thomas Gleixner wrote:
+> On Tue, Dec 08 2020 at 13:13, Maxim Levitsky wrote:
+> > On Mon, 2020-12-07 at 11:29 -0600, Oliver Upton wrote:
+> > > How would a VMM maintain the phase relationship between guest TSCs
+> > > using these ioctls?
+> > 
+> > By using the nanosecond timestamp. 
+> >  
+> > While I did made it optional in the V2 it was done for the sole sake of being 
+> > able to set TSC on (re)boot to 0 from qemu, and for cases when qemu migrates 
+> > from a VM where the feature is not enabled.
+> > In this case the tsc is set to the given value exactly, just like you
+> > can do today with KVM_SET_MSRS.
+> > In all other cases the nanosecond timestamp will be given.
+> >  
+> > When the userspace uses the nanosecond timestamp, the phase relationship
+> > would not only be maintained but be exact, even if TSC reads were not
+> > synchronized and even if their restore on the target wasn't synchronized as well.
+> >  
+> > Here is an example:
+> >  
+> > Let's assume that TSC on source/target is synchronized, and that the guest TSC
+> > is synchronized as well.
+> > 
+> > Let's call the guest TSC frequency F (guest TSC increments by F each second)
+> >  
+> > We do KVM_GET_TSC_STATE on vcpu0 and receive (t0,tsc0).
+> > We do KVM_GET_TSC_STATE on vcpu1 after 1 second passed (exaggerated) 
+> > and receive (t0 + 1s, tsc0 + F)
 > 
-> This patch fixes vsscanf to obey number field widths when parsing
-> the number.
+> Why?
 > 
-> A new _parse_integer_limit() is added that takes a limit for the number
-> of characters to parse. The number field conversion in vsscanf is changed
-> to use this new function.
+> You freeeze the VM and store the realtime timestamp of doing that. At
+> that point assuming a full sync host system the only interesting thing
+> to store is the guest offset which is the same on all vCPUs and it is
+> known already.
 > 
-> The cases of a base prefix or leading '-' that is >= the maximum
-> field
+> So on restore the only thing which needs to be adjusted is the guest
+> wide offset.
+> 
+>      newoffset = oldoffset + (now - tfreeze)
+> 
+> Then set newoffset for all vCPUs. Anything else is complexity for no
+> value and bound to fall apart in hard to debug ways.
+> 
+> The offset is still the same for all vCPUs whether you can restore them
+> in the same nanosecond or whether you need 3 minutes for each one. It
+> does not matter because when you restore vCPU1 3 minutes after vCPU0
+> then TSC has advanced 3 minutes as well. It's still correct from the
+> guest POV.
+> 
+> Even if you support TSCADJUST and let the guest write to it does not
+> change the per guest offset at all. TSCADJUST is per [v]CPU and adds on
+> top:
+> 
+>     tscvcpu = tsc_host + guest_offset + TSC_ADJUST
+> 
+> Scaling is just orthogonal and does not change any of this.
 
-I have troubles to parse this sentence. It might be because I am
-not a native speaker.
+I agree with this, and I think that this is what we will end up doing.
+Paulo, what do you think about this?
 
+Best regards,
+	Maxim Levitsky
 
-> width is handled such that the result of a sccanf is consistent with the
-> observed behaviour of userland sscanf.
-
-Anyway, it would be great to explain this on few examples that describe
-the corner cases. See also below.
-
-
-> --- a/lib/kstrtox.c
-> +++ b/lib/kstrtox.c
-> @@ -39,20 +39,22 @@ const char *_parse_integer_fixup_radix(const char *s, unsigned int *base)
->  
->  /*
->   * Convert non-negative integer string representation in explicitly given radix
-> - * to an integer.
-> + * to an integer. A maximum of max_chars characters will be converted.
-> + *
->   * Return number of characters consumed maybe or-ed with overflow bit.
->   * If overflow occurs, result integer (incorrect) is still returned.
->   *
->   * Don't you dare use this function.
->   */
-> -unsigned int _parse_integer(const char *s, unsigned int base, unsigned long long *p)
-> +unsigned int _parse_integer_limit(const char *s, unsigned int base,
-> +				  unsigned long long *p, size_t max_chars)
->  {
->  	unsigned long long res;
->  	unsigned int rv;
->  
->  	res = 0;
->  	rv = 0;
-> -	while (1) {
-> +	for (; max_chars > 0; max_chars--) {
->  		unsigned int c = *s;
->  		unsigned int lc = c | 0x20; /* don't tolower() this line */
->  		unsigned int val;
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index 14c9a6af1b23..21145da468e0 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -53,29 +53,47 @@
->  #include <linux/string_helpers.h>
->  #include "kstrtox.h"
->  
-> -/**
-> - * simple_strtoull - convert a string to an unsigned long long
-> - * @cp: The start of the string
-> - * @endp: A pointer to the end of the parsed string will be placed here
-> - * @base: The number base to use
-> - *
-> - * This function has caveats. Please use kstrtoull instead.
-> - */
-> -unsigned long long simple_strtoull(const char *cp, char **endp, unsigned int base)
-> +static unsigned long long simple_strntoull(const char *startp, size_t max_chars,
-> +					   char **endp, unsigned int base)
->  {
-> -	unsigned long long result;
-> +	const char *cp;
-> +	unsigned long long result = 0ULL;
->  	unsigned int rv;
->  
-> -	cp = _parse_integer_fixup_radix(cp, &base);
-> -	rv = _parse_integer(cp, base, &result);
-> +	if (max_chars == 0) {
-> +		cp = startp;
-> +		goto out;
-> +	}
-> +
-> +	cp = _parse_integer_fixup_radix(startp, &base);
-> +	if ((cp - startp) >= max_chars) {
-> +		cp = startp + max_chars;
-> +		goto out;
-> +	}
-> +
-> +	max_chars -= (cp - startp);
-> +	rv = _parse_integer_limit(cp, base, &result, max_chars);
->  	/* FIXME */
->  	cp += (rv & ~KSTRTOX_OVERFLOW);
-> -
-> +out:
->  	if (endp)
->  		*endp = (char *)cp;
->  
->  	return result;
->  }
-> +
-> +/**
-> + * simple_strtoull - convert a string to an unsigned long long
-> + * @cp: The start of the string
-> + * @endp: A pointer to the end of the parsed string will be placed here
-> + * @base: The number base to use
-> + *
-> + * This function has caveats. Please use kstrtoull instead.
-> + */
-> +unsigned long long simple_strtoull(const char *cp, char **endp, unsigned int base)
-> +{
-> +	return simple_strntoull(cp, UINT_MAX, endp, base);
-
-Please, use INT_MAX everywhere. It is an arbitrary big-enough number.
-And INT_MAX is already used in vscnprintf().
-
-> +}
->  EXPORT_SYMBOL(simple_strtoull);
->  
->  /**
-> @@ -88,7 +106,7 @@ EXPORT_SYMBOL(simple_strtoull);
->   */
->  unsigned long simple_strtoul(const char *cp, char **endp, unsigned int base)
->  {
-> -	return simple_strtoull(cp, endp, base);
-> +	return simple_strntoull(cp, UINT_MAX, endp, base);
-
-Same here.
-
->  }
->  EXPORT_SYMBOL(simple_strtoul);
->  
-> @@ -109,6 +127,19 @@ long simple_strtol(const char *cp, char **endp, unsigned int base)
->  }
->  EXPORT_SYMBOL(simple_strtol);
->  
-> +static long long simple_strntoll(const char *cp, size_t max_chars, char **endp,
-> +				 unsigned int base)
-> +{
-> +	/*
-> +	 * simple_strntoull safely handles receiving max_chars==0 in the
-> +	 * case we start with max_chars==1 and find a '-' prefix.
-> +	 */
-> +	if (*cp == '-' && max_chars > 0)
-> +		return -simple_strntoull(cp + 1, max_chars - 1, endp, base);
-> +
-> +	return simple_strntoull(cp, max_chars, endp, base);
-> +}
-> +
->  /**
->   * simple_strtoll - convert a string to a signed long long
->   * @cp: The start of the string
-> @@ -119,10 +150,7 @@ EXPORT_SYMBOL(simple_strtol);
->   */
->  long long simple_strtoll(const char *cp, char **endp, unsigned int base)
->  {
-> -	if (*cp == '-')
-> -		return -simple_strtoull(cp + 1, endp, base);
-> -
-> -	return simple_strtoull(cp, endp, base);
-> +	return simple_strntoll(cp, UINT_MAX, endp, base);
-
-And here.
+> 
+> Thanks,
+> 
+>         tglx
+> 
 
 
->  }
->  EXPORT_SYMBOL(simple_strtoll);
->  
-> @@ -3433,8 +3461,11 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
->  		str = skip_spaces(str);
->  
->  		digit = *str;
-> -		if (is_sign && digit == '-')
-> +		if (is_sign && digit == '-') {
-> +			if (field_width == 1)
-> +				break;
-
-This should be handled in a separate patch. It is a subtle change that
-is hidden deep inside a big diff.
-
-1. It is quite hard to notice because the above simple_strntoll() was
-   implemented to return 0 in this case.
-
-2. The commit message describes the situation when all read numbers
-   overflow unsigned long long. And this is another corner that
-   was not clearly mentioned.
-
->  			digit = *(str + 1);
-> +		}
->  
->  		if (!digit
->  		    || (base == 16 && !isxdigit(digit))
-
-Otherwise, I really like patch. Thanks a lot for the effort.
-
-I am sorry that it took me so long to look at it. I was pretty busy
-last week. I am going to look at the huge 2nd patch tomorrow.
-
-Best Regards,
-Petr
