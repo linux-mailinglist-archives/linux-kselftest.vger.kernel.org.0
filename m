@@ -2,86 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 146502D4102
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 12:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7682D4408
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 15:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730748AbgLILXJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Dec 2020 06:23:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:41475 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730752AbgLILWz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 06:22:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607512889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=djE+2D2zg9p7K3WnWwO0e5kEP4KLE3RaXpyUdHZT+eQ=;
-        b=PCt4c/QrcNjDb+fu+dgr4xbOk9j1iA+ISIdG/8BhWsnmRWFc/BXEghXGb1lRTKQdTOB/A4
-        RqxFoRYcHkGCdJ0Orx0HOufyh3R8/G4ErzbVtCxJNEfe23gzJbd3tFvI8q+vrEJtmMcX13
-        /HE1FnoHG30cBzgDfUgvan6NFUQeFSA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-290-6w4I4Fz2P9-J5uz_Ob68Lg-1; Wed, 09 Dec 2020 06:21:26 -0500
-X-MC-Unique: 6w4I4Fz2P9-J5uz_Ob68Lg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96C62800D53;
-        Wed,  9 Dec 2020 11:21:25 +0000 (UTC)
-Received: from gerbillo.redhat.com (ovpn-112-45.ams2.redhat.com [10.36.112.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2321C620DE;
-        Wed,  9 Dec 2020 11:21:23 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: fix poll error in udpgro.sh
-Date:   Wed,  9 Dec 2020 12:21:13 +0100
-Message-Id: <66cc4a0ccb845f1b236a388bae3bc2171398fa41.1607512428.git.pabeni@redhat.com>
+        id S1729780AbgLIOQd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Dec 2020 09:16:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:41156 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729725AbgLIOQd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Dec 2020 09:16:33 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1607523345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8ZGK7g35Goq64Ci9MeapPBQgkMe+5KSgf3nOc5lvEFA=;
+        b=R47mLGAr7aLiQsrHNJH+SRoAOoJ5WYQZd5B2ksYtQu9uFF57MTwsYvxkG2obJg051NemD3
+        clV59YMSpHdpqnN4q+j/bZAUTinYcY5tmjd9e0JQi3Xml0td8ftMSjVy5XgSNdAPjpzJqP
+        4GZ6VwuFWZyTsJz/xMVIlB5+ecMEc9I=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id F016AB2DC;
+        Wed,  9 Dec 2020 14:15:44 +0000 (UTC)
+Date:   Wed, 9 Dec 2020 15:15:44 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        shuah@kernel.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] lib: test_scanf: Add tests for sscanf number
+ conversion
+Message-ID: <X9DcEL54k0qRayr+@alley>
+References: <20201130145800.19960-1-rf@opensource.cirrus.com>
+ <20201130145800.19960-2-rf@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201130145800.19960-2-rf@opensource.cirrus.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test program udpgso_bench_rx always invokes the poll()
-syscall with a timeout of 10ms. If a larger timeout is specified
-via the command line, udpgso_bench_rx is supposed to do multiple
-poll() calls till the timeout is expired or an event is received.
+On Mon 2020-11-30 14:57:58, Richard Fitzgerald wrote:
+> Adds test_sscanf to test various number conversion cases, as
+> number conversion was previously broken.
+> 
+> This also tests the simple_strtoxxx() functions exported from
+> vsprintf.c.
 
-Currently the poll() loop errors out after the first invocation with
-no events, and may causes self-tests failure alike:
+It is impressive.
 
-failed
- GRO with custom segment size            ./udpgso_bench_rx: poll: 0x0 expected 0x1
+Honestly, I do not feel to be expert on testing and mathematics.
+I am not sure how comprehensive the test is. Also I am not
+sure what experts would say about the tricks with random
+numbers.
 
-This change addresses the issue allowing the poll() loop to consume
-all the configured timeout.
+Anyway, this is much more than what I have expected. And it checks
+great number of variants and corner cases.
 
-Fixes: ada641ff6ed3 ("selftests: fixes for UDP GRO")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
- tools/testing/selftests/net/udpgso_bench_rx.c | 3 +++
- 1 file changed, 3 insertions(+)
+I suggest only one small change, see below.
 
-diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
-index db3d4a8b5a4c..76a24052f4b4 100644
---- a/tools/testing/selftests/net/udpgso_bench_rx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_rx.c
-@@ -113,6 +113,9 @@ static void do_poll(int fd, int timeout_ms)
- 				interrupted = true;
- 				break;
- 			}
-+
-+			/* no events and more time to wait, do poll again */
-+			continue;
- 		}
- 		if (pfd.revents != POLLIN)
- 			error(1, errno, "poll: 0x%x expected 0x%x\n",
--- 
-2.26.2
+> --- /dev/null
+> +++ b/lib/test_scanf.c
+> @@ -0,0 +1,747 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Test cases for sscanf facility.
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/overflow.h>
+> +#include <linux/printk.h>
+> +#include <linux/random.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +
+> +#include "../tools/testing/selftests/kselftest_module.h"
+> +
+> +#define BUF_SIZE 1024
+> +
+> +static unsigned total_tests __initdata;
+> +static unsigned failed_tests __initdata;
+> +static char *test_buffer __initdata;
+> +static char *fmt_buffer __initdata;
+> +static struct rnd_state rnd_state __initdata;
+> +
+> +typedef int (*check_fn)(const void *check_data, const char *string,
+> +			const char *fmt, int n_args, va_list ap);
+> +
+> +static void __scanf(4, 6) __init
+> +_test(check_fn fn, const void *check_data, const char *string, const char *fmt,
+> +	int n_args, ...)
+> +{
+> +	va_list ap, ap_copy;
+> +	int ret;
+> +
+> +	total_tests++;
+> +
+> +	va_start(ap, n_args);
+> +	va_copy(ap_copy, ap);
+> +	ret = vsscanf(string, fmt, ap_copy);
+> +	va_end(ap_copy);
+> +
+> +	if (ret != n_args) {
+> +		pr_warn("vsscanf(\"%s\", \"%s\", ...) returned %d expected %d\n",
+> +			string, fmt, ret, n_args);
+> +		goto fail;
+> +	}
+> +
+> +	ret = (*fn)(check_data, string, fmt, n_args, ap);
+> +	if (ret)
+> +		goto fail;
+> +
+> +	va_end(ap);
+> +
+> +	return;
+> +
+> +fail:
+> +	failed_tests++;
+> +	va_end(ap);
+> +}
+> +
+> +#define test_one_number(T, gen_fmt, scan_fmt, val, fn)			\
+> +do {									\
+> +	const T expect_val = (T)(val);					\
+> +	T result = ~expect_val; /* should be overwritten */		\
 
+If I get it correctly, this is supposed to initialize the temporary
+variable with a value that is different from the expected value.
+It will cause test failure when it is not updated by vsscanf().
+
+It does not work for zero value. A better solution might be to add
+a constant, for example:
+
+	T result = expect_val + 3; /* do not match when not overwritten */ \
+
+I did not use "+ 1" intentionally because it might hide some overflow
+issues.
+
+> +									\
+> +	snprintf(test_buffer, BUF_SIZE, gen_fmt, expect_val);		\
+> +	_test(fn, &expect_val, test_buffer, "%" scan_fmt, 1, &result);	\
+> +} while (0)
+
+Otherwise, it looks good to me.
+
+Best Regards,
+Petr
