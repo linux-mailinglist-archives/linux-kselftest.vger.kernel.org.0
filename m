@@ -2,185 +2,229 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D2F2D4906
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 19:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1F62D4A1D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 20:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732961AbgLISa2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Dec 2020 13:30:28 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:53666 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726449AbgLISa2 (ORCPT
+        id S1727855AbgLIT3r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Dec 2020 14:29:47 -0500
+Received: from smtp-8faa.mail.infomaniak.ch ([83.166.143.170]:32953 "EHLO
+        smtp-8faa.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725968AbgLIT3h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 13:30:28 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B9IP8Mb025112;
-        Wed, 9 Dec 2020 10:29:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=+OEqiiYcoRE9+DuZaQFZgD8YRc+Z4xH1L7hH/hSDK+0=;
- b=dVWX3SF5jCHczK0sFUDENz+4ziVIn3mz5bz7V7NQlUHLTsBU1ysv3J8Ybbb8Q95LaZd+
- UU/zavj73g155euqGk3Jo7MKFRdUy8eypkB1SfCO3LQgasSbigioOIuL8i0MLJCbRgCy
- G2SEozH5xyEhpL0s1sgHMc30y3J+1awB768= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 35b3erg7sm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 09 Dec 2020 10:29:31 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 9 Dec 2020 10:29:30 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=evJ5TRWHiOzMzXX3H139kAJp4PCIDN8WTKs+Y6oMxDLljprfUgb2Jg/6W+NMVXpDACqpot3VHv0X4PzUzI04im/xDvMqlmmq3gfH/eZ+7mxRqBtlvNRBIEwR2k236MhjQKx97PircZHIxNWIac6hs2YD25aOF4FG+hLj95fK1+0cluEZvh4B7z1m+3ZRsAJFg5igMh9j0bpxcEduKytAwJpULWnXGW8AzXiX+TBTwH/DhGQJQhjKpJ/5Io5y1KVwL8xl8vGpt7Qk4lKLgAhLmbgvONlHcTvTULvR7RWjbdsKv1QuHIZARKW2PoPZ+Q1DmNRr5RF6gasOAga0RuOBWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+OEqiiYcoRE9+DuZaQFZgD8YRc+Z4xH1L7hH/hSDK+0=;
- b=MdGw1/3mIi2ZRpQ7jIc/t1eQlZ7xlbSmei9wljms+/osD27YNqdXkx99hoRu1njfKe0yZr5t+aQ503SKQ8w5KnqXNKSPDAp4T2WvsKO22QRbdGpAjlMEElMAaukbpGOq19AmE2VVVYd7iXTrhz9Pnz+lZnXNgqFg7l04gmfCVWyQCgx8GUf6LsWpn9clrIAIQUNnZ1w2JFbJGZk+S7rWivORMZ/AxF/GTHpn6IbxaZTMkUFniJ4c3/f/efrRim8Mf183wkmFlAV2eKxO64DV+FbG0VaVrlsSGn1CcusB28n+rVUsuZNor/kqKM735wcPsVK9TJwehExOASpATMCg0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+OEqiiYcoRE9+DuZaQFZgD8YRc+Z4xH1L7hH/hSDK+0=;
- b=PHoIz5rsWY3hHgYlGjL1m6xKliNFG7wxCn1NEFDhv7e20npp39hkoF/ll3/2xDNMX3HaxTfi+xQtHNScWi+9u+2Jog+TgQHlxPs8UVenKgP7qyox89sxbR9r1fMtlMpBE+9oZ5a3pqsa3T5yhdOu2ZIA3u2fQG3RUOrwVoGJtMI=
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BYAPR15MB2725.namprd15.prod.outlook.com (2603:10b6:a03:158::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.21; Wed, 9 Dec
- 2020 18:29:27 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3632.021; Wed, 9 Dec 2020
- 18:29:27 +0000
-Subject: Re: [PATCH bpf-next v4 2/5] selftests/bpf: xsk selftests - SKB POLL,
- NOPOLL
-To:     Weqaar Janjua <weqaar.janjua@gmail.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
-        <magnus.karlsson@gmail.com>, <bjorn.topel@intel.com>
-CC:     Weqaar Janjua <weqaar.a.janjua@intel.com>, <shuah@kernel.org>,
-        <skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>,
-        <anders.roxell@linaro.org>, <jonathan.lemon@gmail.com>
-References: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
- <20201207215333.11586-3-weqaar.a.janjua@intel.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <760489c0-f935-437d-6213-6e8775693bbc@fb.com>
-Date:   Wed, 9 Dec 2020 10:29:25 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.5.1
-In-Reply-To: <20201207215333.11586-3-weqaar.a.janjua@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2620:10d:c090:400::5:3517]
-X-ClientProxiedBy: SJ0PR05CA0022.namprd05.prod.outlook.com
- (2603:10b6:a03:33b::27) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        Wed, 9 Dec 2020 14:29:37 -0500
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CrnCg1YRnzlhNdX;
+        Wed,  9 Dec 2020 20:28:47 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CrnCd5wFvzlh8TL;
+        Wed,  9 Dec 2020 20:28:44 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org
+Subject: [PATCH v26 00/12] Landlock LSM
+Date:   Wed,  9 Dec 2020 20:28:27 +0100
+Message-Id: <20201209192839.1396820-1-mic@digikod.net>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21c8::113f] (2620:10d:c090:400::5:3517) by SJ0PR05CA0022.namprd05.prod.outlook.com (2603:10b6:a03:33b::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.5 via Frontend Transport; Wed, 9 Dec 2020 18:29:26 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: eb43c8d2-d3b8-4734-2a63-08d89c705c66
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2725:
-X-Microsoft-Antispam-PRVS: <BYAPR15MB27252145F7DC007CFEFA7510D3CC0@BYAPR15MB2725.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d+qbOXx7mdF/s+zCuupabeED0Oi9Sd8Jz5bALoo2SzSAPP/h3j2Qxo8HD27cI4alYzv17XfklckHqJYWouLna5vHRFjNKMETsYEstgAIqIbbI0q3wneGAN7X+jScKk6S2/Cc5OlkoxZOvFluL179RCLgv9KHGe1OMS3g6ojlq6VeQ84emtz5OEPKvQN55Eo7eTjNceVhJI1eENumlwph9Nc+oRapk/rdAdGZ9+2DB8P0ynCpp3nByXhVOGWh4+N+RmTqrN0GV1eLbWCn/efhgoiNCsdPtuY7wawSk/0fH1ki76aNhRLzCsTR32KFM2CEM54fbzl4TlSflAVeLlhLO3/zXqIZ5u83nujm1grRhd+2ckh04Oqq4EehhOJ+bPyGJQVvEM+3oN8rJuFep8M11ZXmSHOCuGb7z4mN57QHZIU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(136003)(366004)(8676002)(2906002)(36756003)(8936002)(31686004)(66556008)(508600001)(31696002)(52116002)(4326008)(6486002)(66476007)(53546011)(83380400001)(186003)(5660300002)(2616005)(16526019)(86362001)(66946007)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?MDZqNnZHRkdzVmE0bWZOdHNabmRyMnIzLzRuWVVYK3NZVXBCU3k4Lzd0YUJK?=
- =?utf-8?B?ZkJGeXhkM0N6SUFyQWhSTWlNNXBhS0JmUDhqckcxeUhscVlnK1JSZmJJRzVS?=
- =?utf-8?B?dWhjaEJSVktFZ2ZsZTJtZk9pZGRIOUNmSmgwSGJRSlIyRlNoRjQvQ1VvTVdk?=
- =?utf-8?B?a0l2Zy9ueUwyMk9kTzBqNm9Kc1pPUDROY3B0RmNjOFRSTzZGZXRnUVo4YjFZ?=
- =?utf-8?B?eTVWTXdmRFpmbWQ3eXkyOGtTRlRjLzdidXhRNDFzcXpDWVgrdnFkZWtiSXpJ?=
- =?utf-8?B?QmhjL2Z0SmxrZlRYeEk4V3M2K0xDSTNRMWF3YjdLY0dPMFBvMTMrNUVVMjgz?=
- =?utf-8?B?SjBOUHFxT3VBeDRTQlFMUitOeWtMTE42Y28xQTVSU3o2Z21DNWpkWnM3UDRI?=
- =?utf-8?B?cUZJd1BoQmYrMzhFeHNYYTVsS0JmM2xyVmlCaFZRdDdDQ1UwaUdWK0s0RkQ5?=
- =?utf-8?B?ZURHQkZTYm5jTkdKSUdFa2JFUE00cHd5bFdOQkc4U0FPbGlqV0NlRFNIdHBC?=
- =?utf-8?B?TzNqY09LNThPRTNHNHRBb3VMb0ZMelFTOHMxMFpOSDVHRTJ3ZTlOT0FSOE94?=
- =?utf-8?B?b05jL1J6aDY4OU5rcEtoKzQ2OXhicEpabWtHNTVjK1B0cUJuMW9uUFhSNmU5?=
- =?utf-8?B?UjhiUzJXeHUvcXd3N3daQXFJK3E5ZG5ZRnhESUVTaFg3aWR5S2g2NFNSRUJk?=
- =?utf-8?B?dnRzcWVjQ0VDTnJtaWduRU9YN1kvMEQwa1lITnkrTy9ocE5tYzZpTFFocXdk?=
- =?utf-8?B?ZFRTa1hSY01RQkg0cUo5dWtyWEpaVFJXeU9TUkFORURlZlFDWm5MWjR0NVdY?=
- =?utf-8?B?STh4cXlXWVEvQ1BlTi9hLy8rNEE1OHBDKzZId015NG1LdDFUQk51a0R1L0pM?=
- =?utf-8?B?NUh5bFozTkpmUkRXRUVmWjFZQTlSWloyRGtwTCs2S00wZkhhMVUwdnZOWWlC?=
- =?utf-8?B?NE1VY0N3eHRZSEx1bWtadWpnUjRDSDdtdGZRa0d3bVBKanMwQkRkY0ZUQ3pw?=
- =?utf-8?B?RUJaQ3luRG5BNXcvMzFtdVQwR0Jmb01XeVBtRG45cmFzNWhBZXRWZnl1UVJh?=
- =?utf-8?B?cThKZzcrcjBXNldyVXR3eEF5RUd6dEIzcUQ5OTJJUHdXYkxOd1c3TmRjYzY1?=
- =?utf-8?B?NUZwR2lRQjlWR3NrbFBaWlVmM2NReStiaTdSZnZnc211TjdSM2I4bXNXbzU3?=
- =?utf-8?B?OG84M2FuR3BPdndJYkVuNXBMU3NXT1N4T09HTmlQblFxdWF0UE1QUm9heisz?=
- =?utf-8?B?UkUvaDZHRHlLMFdKMHA5N2NoYWh3d0RINzhDZGlOWnBCT0QwWEVDTXlra3hh?=
- =?utf-8?B?VCs2RnZJNUZJeEN6STFtNS9lQlUwMGw4U0hnVVpBUGdOK2R2dHB4dkVYdHFF?=
- =?utf-8?B?ZWtVRjFRa2ZDSkE9PQ==?=
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2020 18:29:27.1975
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb43c8d2-d3b8-4734-2a63-08d89c705c66
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iAGat96yljikAYCEdI0RybuOObrQHbGuK6SYIt3jSXmlSZc7UJpMU4SEeJ9x03AD
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2725
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-09_14:2020-12-09,2020-12-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
- priorityscore=1501 clxscore=1015 bulkscore=0 adultscore=0 mlxlogscore=823
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012090131
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi,
+
+This patch series adds new built-time checks, a new test, renames some
+variables and functions to improve readability, and shift syscall
+numbers to align with -next.
+
+The SLOC count is 1289 for security/landlock/ and 1791 for
+tools/testing/selftest/landlock/ .  Test coverage for security/landlock/
+is 94.1% of lines.  The code not covered only deals with internal kernel
+errors (e.g. memory allocation) and race conditions.
+
+The compiled documentation is available here:
+https://landlock.io/linux-doc/landlock-v26/userspace-api/landlock.html
+
+This series can be applied on top of v5.10-rc7 .  This can be tested
+with CONFIG_SECURITY_LANDLOCK, CONFIG_SAMPLE_LANDLOCK and by prepending
+"landlock," to CONFIG_LSM.  This patch series can be found in a Git
+repository here:
+https://github.com/landlock-lsm/linux/commits/landlock-v26
+I would really appreciate constructive comments on this patch series.
 
 
-On 12/7/20 1:53 PM, Weqaar Janjua wrote:
-> Adds following tests:
-> 
-> 1. AF_XDP SKB mode
->     Generic mode XDP is driver independent, used when the driver does
->     not have support for XDP. Works on any netdevice using sockets and
->     generic XDP path. XDP hook from netif_receive_skb().
->     a. nopoll - soft-irq processing
->     b. poll - using poll() syscall
-> 
-> Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
-> ---
->   tools/testing/selftests/bpf/Makefile       |   3 +-
->   tools/testing/selftests/bpf/test_xsk.sh    |  39 +-
->   tools/testing/selftests/bpf/xdpxceiver.c   | 979 +++++++++++++++++++++
->   tools/testing/selftests/bpf/xdpxceiver.h   | 153 ++++
->   tools/testing/selftests/bpf/xsk_prereqs.sh |  16 +
->   5 files changed, 1187 insertions(+), 3 deletions(-)
->   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.c
->   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.h
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6a1ddfe68f15..944ae17a39ed 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -82,7 +82,8 @@ TEST_PROGS_EXTENDED := with_addr.sh \
->   # Compile but not part of 'make run_tests'
->   TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
->   	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
-> -	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko
-> +	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
-> +	xdpxceiver
+# Landlock LSM
 
-Could you have a patch to put xdpxceiver in .gitignore?
+The goal of Landlock is to enable to restrict ambient rights (e.g.
+global filesystem access) for a set of processes.  Because Landlock is a
+stackable LSM [1], it makes possible to create safe security sandboxes
+as new security layers in addition to the existing system-wide
+access-controls. This kind of sandbox is expected to help mitigate the
+security impact of bugs or unexpected/malicious behaviors in user-space
+applications. Landlock empowers any process, including unprivileged
+ones, to securely restrict themselves.
 
-I see below:
-Untracked files:
-   (use "git add <file>..." to include in what will be committed)
-         tools/testing/selftests/bpf/xdpxceiver
+Landlock is inspired by seccomp-bpf but instead of filtering syscalls
+and their raw arguments, a Landlock rule can restrict the use of kernel
+objects like file hierarchies, according to the kernel semantic.
+Landlock also takes inspiration from other OS sandbox mechanisms: XNU
+Sandbox, FreeBSD Capsicum or OpenBSD Pledge/Unveil.
 
->   
->   TEST_CUSTOM_PROGS = urandom_read
->   
+In this current form, Landlock misses some access-control features.
+This enables to minimize this patch series and ease review.  This series
+still addresses multiple use cases, especially with the combined use of
+seccomp-bpf: applications with built-in sandboxing, init systems,
+security sandbox tools and security-oriented APIs [2].
+
+Previous version:
+https://lore.kernel.org/lkml/20201201192322.213239-1-mic@digikod.net
+
+[1] https://lore.kernel.org/lkml/50db058a-7dde-441b-a7f9-f6837fe8b69f@schaufler-ca.com/
+[2] https://lore.kernel.org/lkml/f646e1c7-33cf-333f-070c-0a40ad0468cd@digikod.net/
+
+
+Casey Schaufler (1):
+  LSM: Infrastructure management of the superblock
+
+Mickaël Salaün (11):
+  landlock: Add object management
+  landlock: Add ruleset and domain management
+  landlock: Set up the security framework and manage credentials
+  landlock: Add ptrace restrictions
+  fs,security: Add sb_delete hook
+  landlock: Support filesystem access-control
+  landlock: Add syscall implementations
+  arch: Wire up Landlock syscalls
+  selftests/landlock: Add user space tests
+  samples/landlock: Add a sandbox manager example
+  landlock: Add user and kernel documentation
+
+ Documentation/security/index.rst              |    1 +
+ Documentation/security/landlock.rst           |   79 +
+ Documentation/userspace-api/index.rst         |    1 +
+ Documentation/userspace-api/landlock.rst      |  280 +++
+ MAINTAINERS                                   |   13 +
+ arch/Kconfig                                  |    7 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |    3 +
+ arch/arm/tools/syscall.tbl                    |    3 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    6 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    3 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    3 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    3 +
+ arch/s390/kernel/syscalls/syscall.tbl         |    3 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    3 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    3 +
+ arch/um/Kconfig                               |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    3 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    3 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    3 +
+ fs/super.c                                    |    1 +
+ include/linux/lsm_hook_defs.h                 |    1 +
+ include/linux/lsm_hooks.h                     |    3 +
+ include/linux/security.h                      |    4 +
+ include/linux/syscalls.h                      |    7 +
+ include/uapi/asm-generic/unistd.h             |    8 +-
+ include/uapi/linux/landlock.h                 |  128 ++
+ kernel/sys_ni.c                               |    5 +
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 +
+ samples/landlock/.gitignore                   |    1 +
+ samples/landlock/Makefile                     |   15 +
+ samples/landlock/sandboxer.c                  |  233 +++
+ security/Kconfig                              |   11 +-
+ security/Makefile                             |    2 +
+ security/landlock/Kconfig                     |   21 +
+ security/landlock/Makefile                    |    4 +
+ security/landlock/common.h                    |   20 +
+ security/landlock/cred.c                      |   46 +
+ security/landlock/cred.h                      |   58 +
+ security/landlock/fs.c                        |  622 ++++++
+ security/landlock/fs.h                        |   56 +
+ security/landlock/limits.h                    |   21 +
+ security/landlock/object.c                    |   67 +
+ security/landlock/object.h                    |   91 +
+ security/landlock/ptrace.c                    |  120 ++
+ security/landlock/ptrace.h                    |   14 +
+ security/landlock/ruleset.c                   |  466 +++++
+ security/landlock/ruleset.h                   |  161 ++
+ security/landlock/setup.c                     |   40 +
+ security/landlock/setup.h                     |   18 +
+ security/landlock/syscall.c                   |  427 ++++
+ security/security.c                           |   51 +-
+ security/selinux/hooks.c                      |   58 +-
+ security/selinux/include/objsec.h             |    6 +
+ security/selinux/ss/services.c                |    3 +-
+ security/smack/smack.h                        |    6 +
+ security/smack/smack_lsm.c                    |   35 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/landlock/.gitignore   |    2 +
+ tools/testing/selftests/landlock/Makefile     |   24 +
+ tools/testing/selftests/landlock/base_test.c  |  219 ++
+ tools/testing/selftests/landlock/common.h     |  110 +
+ tools/testing/selftests/landlock/config       |    5 +
+ tools/testing/selftests/landlock/fs_test.c    | 1799 +++++++++++++++++
+ .../testing/selftests/landlock/ptrace_test.c  |  314 +++
+ tools/testing/selftests/landlock/true.c       |    5 +
+ 72 files changed, 5678 insertions(+), 77 deletions(-)
+ create mode 100644 Documentation/security/landlock.rst
+ create mode 100644 Documentation/userspace-api/landlock.rst
+ create mode 100644 include/uapi/linux/landlock.h
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
+ create mode 100644 security/landlock/Kconfig
+ create mode 100644 security/landlock/Makefile
+ create mode 100644 security/landlock/common.h
+ create mode 100644 security/landlock/cred.c
+ create mode 100644 security/landlock/cred.h
+ create mode 100644 security/landlock/fs.c
+ create mode 100644 security/landlock/fs.h
+ create mode 100644 security/landlock/limits.h
+ create mode 100644 security/landlock/object.c
+ create mode 100644 security/landlock/object.h
+ create mode 100644 security/landlock/ptrace.c
+ create mode 100644 security/landlock/ptrace.h
+ create mode 100644 security/landlock/ruleset.c
+ create mode 100644 security/landlock/ruleset.h
+ create mode 100644 security/landlock/setup.c
+ create mode 100644 security/landlock/setup.h
+ create mode 100644 security/landlock/syscall.c
+ create mode 100644 tools/testing/selftests/landlock/.gitignore
+ create mode 100644 tools/testing/selftests/landlock/Makefile
+ create mode 100644 tools/testing/selftests/landlock/base_test.c
+ create mode 100644 tools/testing/selftests/landlock/common.h
+ create mode 100644 tools/testing/selftests/landlock/config
+ create mode 100644 tools/testing/selftests/landlock/fs_test.c
+ create mode 100644 tools/testing/selftests/landlock/ptrace_test.c
+ create mode 100644 tools/testing/selftests/landlock/true.c
+
+
+base-commit: 0477e92881850d44910a7e94fc2c46f96faa131f
+-- 
+2.29.2
+
