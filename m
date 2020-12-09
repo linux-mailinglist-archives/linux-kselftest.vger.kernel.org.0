@@ -2,81 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F502D48D1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 19:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B732E2D4998
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 19:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730294AbgLISVF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Dec 2020 13:21:05 -0500
-Received: from mga02.intel.com ([134.134.136.20]:3636 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730119AbgLISVF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 13:21:05 -0500
-IronPort-SDR: UkssI8FhQig3q0mH3IUitGWvyZS8QFtu9bTnrpeJ7edrRoDSJKAJOr0dTV5tuj/rGKZV6kfUoa
- z28s0KRzV9bw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161174681"
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="161174681"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 10:19:18 -0800
-IronPort-SDR: NNGiuJ7nu92JG+1s67+Qy/A083oWLTpQMCFqFUNpzZPlEsH/F9akP75R7WgK+gtJRAM22g59/F
- g1v/e2sgXh1Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="376456131"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Dec 2020 10:19:17 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4E93E1C8; Wed,  9 Dec 2020 20:19:16 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org, linux-kselftest@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] um: Increase stack frame size threshold for signal.c
-Date:   Wed,  9 Dec 2020 20:19:15 +0200
-Message-Id: <20201209181915.39147-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.29.2
+        id S2387565AbgLISzv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Dec 2020 13:55:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:31676 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387562AbgLISzq (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Dec 2020 13:55:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607540059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pAnzkkggIin7jYeCuo0D9ShCd/x0gLLXGM9tw9DfkJs=;
+        b=N2Un6WOmmjf6Wt8wyGS7nC4z4QB5uo3Fhn6qllZdnN/k6IqhMZ9+Frlu6yOgLd8TDIZddf
+        CtioP0YsaEbTmCAfMj/nWIzYZIleV+ny17BsWFrVXCg+AHDFfPkPvAqJrPAfOqu0RnyYG3
+        pCQax6Y/lWD6VeSVXWlRIwE/9so9Eig=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-396-wT7oHLPBMnq1hB-gpNuBBA-1; Wed, 09 Dec 2020 13:54:15 -0500
+X-MC-Unique: wT7oHLPBMnq1hB-gpNuBBA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4BF20966E86;
+        Wed,  9 Dec 2020 18:53:46 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-5.gru2.redhat.com [10.97.112.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19EEA63B8C;
+        Wed,  9 Dec 2020 18:53:44 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 7C35C48E58F2; Wed,  9 Dec 2020 13:34:34 -0300 (-03)
+Date:   Wed, 9 Dec 2020 13:34:34 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+Message-ID: <20201209163434.GA22851@fuller.cnet>
+References: <20201203171118.372391-1-mlevitsk@redhat.com>
+ <20201203171118.372391-2-mlevitsk@redhat.com>
+ <20201207232920.GD27492@fuller.cnet>
+ <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com>
+ <87sg8g2sn4.fsf@nanos.tec.linutronix.de>
+ <20201208181107.GA31442@fuller.cnet>
+ <875z5c2db8.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875z5c2db8.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The signal.c can't use heap for bit data located on stack. However,
-by default a compiler warns us about overstepping stack frame size
-threshold:
+On Tue, Dec 08, 2020 at 10:33:15PM +0100, Thomas Gleixner wrote:
+> On Tue, Dec 08 2020 at 15:11, Marcelo Tosatti wrote:
+> > On Tue, Dec 08, 2020 at 05:02:07PM +0100, Thomas Gleixner wrote:
+> >> On Tue, Dec 08 2020 at 16:50, Maxim Levitsky wrote:
+> >> > On Mon, 2020-12-07 at 20:29 -0300, Marcelo Tosatti wrote:
+> >> >> > +This ioctl allows to reconstruct the guest's IA32_TSC and TSC_ADJUST value
+> >> >> > +from the state obtained in the past by KVM_GET_TSC_STATE on the same vCPU.
+> >> >> > +
+> >> >> > +If 'KVM_TSC_STATE_TIMESTAMP_VALID' is set in flags,
+> >> >> > +KVM will adjust the guest TSC value by the time that passed since the moment
+> >> >> > +CLOCK_REALTIME timestamp was saved in the struct and current value of
+> >> >> > +CLOCK_REALTIME, and set the guest's TSC to the new value.
+> >> >> 
+> >> >> This introduces the wraparound bug in Linux timekeeping, doesnt it?
+> >> 
+> >> Which bug?
+> >
+> > max_cycles overflow. Sent a message to Maxim describing it.
+> 
+> Truly helpful. Why the hell did you not talk to me when you ran into
+> that the first time?
 
-arch/um/os-Linux/signal.c: In function ‘sig_handler_common’:
-arch/um/os-Linux/signal.c:51:1: warning: the frame size of 2960 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-   51 | }
-      | ^
-arch/um/os-Linux/signal.c: In function ‘timer_real_alarm_handler’:
-arch/um/os-Linux/signal.c:95:1: warning: the frame size of 2960 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-    95 | }
-       | ^
+Because 
 
-Due to above increase stack frame size threshold explicitly for signal.c
-to avoid unnecessary warning.
+1) Users wanted CLOCK_BOOTTIME to stop counting while the VM 
+is paused (so we wanted to stop guest clock when VM is paused anyway).
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- arch/um/os-Linux/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+2) The solution to inject NMIs to the guest seemed overly
+complicated.
 
-diff --git a/arch/um/os-Linux/Makefile b/arch/um/os-Linux/Makefile
-index 839915b8c31c..77ac50baa3f8 100644
---- a/arch/um/os-Linux/Makefile
-+++ b/arch/um/os-Linux/Makefile
-@@ -10,6 +10,8 @@ obj-y = execvp.o file.o helper.o irq.o main.o mem.o process.o \
- 	registers.o sigio.o signal.o start_up.o time.o tty.o \
- 	umid.o user_syms.o util.o drivers/ skas/
- 
-+CFLAGS_signal.o += -Wframe-larger-than=4096
-+
- obj-$(CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA) += elf_aux.o
- 
- USER_OBJS := $(user-objs-y) elf_aux.o execvp.o file.o helper.o irq.o \
--- 
-2.29.2
+> >> For one I have no idea which bug you are talking about and if the bug is
+> >> caused by the VMM then why would you "fix" it in the guest kernel.
+> >
+> > 1) Stop guest, save TSC value of cpu-0 = V.
+> > 2) Wait for some amount of time = W.
+> > 3) Start guest, load TSC value with V+W.
+> >
+> > Can cause an overflow on Linux timekeeping.
+> 
+> Yes, because you violate the basic assumption which Linux timekeeping
+> makes. See the other mail in this thread.
+> 
+> Thanks,
+> 
+>         tglx
 
