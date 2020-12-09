@@ -2,89 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DE12D463C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 17:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F502D48D1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Dec 2020 19:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731454AbgLIQAs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Dec 2020 11:00:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55458 "EHLO mail.kernel.org"
+        id S1730294AbgLISVF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Dec 2020 13:21:05 -0500
+Received: from mga02.intel.com ([134.134.136.20]:3636 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731418AbgLIQAs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 11:00:48 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607529607;
-        bh=nPYVPZb8lF5AdNA/ZSa58MqKVIKgV5e+WU4mYaQy1hY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=O4pqR+kgMVViT91hgn8Dhj5xDIqGJ9+wWNjcsRPwEA6FYVyMBE0VjqXJxL2eVKZtR
-         DXXIXD5/q8Nv66w7ut1Tnh9o4gz0R5RRqV43VYItyLwRjthnNqV2Z2d6fvKc4wii2w
-         DFHDua+6I6cMXi6Ql/hd8gL2K2Y0JaVYYxfcCa8Lw5WH0sQc8DkUaAkDxZfdYopJBo
-         hw4AKSSLNJ6WO5we5tC3rLmQ1Ybz38v4BxNjUMUVEL/O8gGSregRRIw2PlZf6KMaAd
-         5WEqiMsd3OhBJW6QbT2zM84lVD8an0SbyO1Pp4/Y+dzS5sKa5HuHFiJFETnfBzwRBT
-         hDEKH6TpofVXg==
+        id S1730119AbgLISVF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Dec 2020 13:21:05 -0500
+IronPort-SDR: UkssI8FhQig3q0mH3IUitGWvyZS8QFtu9bTnrpeJ7edrRoDSJKAJOr0dTV5tuj/rGKZV6kfUoa
+ z28s0KRzV9bw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="161174681"
+X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
+   d="scan'208";a="161174681"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2020 10:19:18 -0800
+IronPort-SDR: NNGiuJ7nu92JG+1s67+Qy/A083oWLTpQMCFqFUNpzZPlEsH/F9akP75R7WgK+gtJRAM22g59/F
+ g1v/e2sgXh1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
+   d="scan'208";a="376456131"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Dec 2020 10:19:17 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4E93E1C8; Wed,  9 Dec 2020 20:19:16 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um@lists.infradead.org, linux-kselftest@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] um: Increase stack frame size threshold for signal.c
+Date:   Wed,  9 Dec 2020 20:19:15 +0200
+Message-Id: <20201209181915.39147-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/5] selftests/bpf: xsk selftests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160752960729.12976.12661383715171656742.git-patchwork-notify@kernel.org>
-Date:   Wed, 09 Dec 2020 16:00:07 +0000
-References: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
-In-Reply-To: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
-To:     Weqaar Janjua <weqaar.janjua@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
-        ast@kernel.org, yhs@fb.com, magnus.karlsson@gmail.com,
-        bjorn.topel@intel.com, weqaar.a.janjua@intel.com, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        anders.roxell@linaro.org, jonathan.lemon@gmail.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+The signal.c can't use heap for bit data located on stack. However,
+by default a compiler warns us about overstepping stack frame size
+threshold:
 
-This series was applied to bpf/bpf-next.git (refs/heads/master):
+arch/um/os-Linux/signal.c: In function ‘sig_handler_common’:
+arch/um/os-Linux/signal.c:51:1: warning: the frame size of 2960 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+   51 | }
+      | ^
+arch/um/os-Linux/signal.c: In function ‘timer_real_alarm_handler’:
+arch/um/os-Linux/signal.c:95:1: warning: the frame size of 2960 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+    95 | }
+       | ^
 
-On Mon,  7 Dec 2020 21:53:28 +0000 you wrote:
-> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
-> 
-> # Topology:
-> # ---------
-> #                 -----------
-> #               _ | Process | _
-> #              /  -----------  \
-> #             /        |        \
-> #            /         |         \
-> #      -----------     |     -----------
-> #      | Thread1 |     |     | Thread2 |
-> #      -----------     |     -----------
-> #           |          |          |
-> #      -----------     |     -----------
-> #      |  xskX   |     |     |  xskY   |
-> #      -----------     |     -----------
-> #           |          |          |
-> #      -----------     |     ----------
-> #      |  vethX  | --------- |  vethY |
-> #      -----------   peer    ----------
-> #           |          |          |
-> #      namespaceX      |     namespaceY
-> 
-> [...]
+Due to above increase stack frame size threshold explicitly for signal.c
+to avoid unnecessary warning.
 
-Here is the summary with links:
-  - [bpf-next,v4,1/5] selftests/bpf: xsk selftests framework
-    https://git.kernel.org/bpf/bpf-next/c/a89052572ebb
-  - [bpf-next,v4,2/5] selftests/bpf: xsk selftests - SKB POLL, NOPOLL
-    https://git.kernel.org/bpf/bpf-next/c/facb7cb2e909
-  - [bpf-next,v4,3/5] selftests/bpf: xsk selftests - DRV POLL, NOPOLL
-    https://git.kernel.org/bpf/bpf-next/c/9103a8594d93
-  - [bpf-next,v4,4/5] selftests/bpf: xsk selftests - Socket Teardown - SKB, DRV
-    https://git.kernel.org/bpf/bpf-next/c/6674bf66560a
-  - [bpf-next,v4,5/5] selftests/bpf: xsk selftests - Bi-directional Sockets - SKB, DRV
-    https://git.kernel.org/bpf/bpf-next/c/7d20441eb05e
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/um/os-Linux/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/arch/um/os-Linux/Makefile b/arch/um/os-Linux/Makefile
+index 839915b8c31c..77ac50baa3f8 100644
+--- a/arch/um/os-Linux/Makefile
++++ b/arch/um/os-Linux/Makefile
+@@ -10,6 +10,8 @@ obj-y = execvp.o file.o helper.o irq.o main.o mem.o process.o \
+ 	registers.o sigio.o signal.o start_up.o time.o tty.o \
+ 	umid.o user_syms.o util.o drivers/ skas/
+ 
++CFLAGS_signal.o += -Wframe-larger-than=4096
++
+ obj-$(CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA) += elf_aux.o
+ 
+ USER_OBJS := $(user-objs-y) elf_aux.o execvp.o file.o helper.o irq.o \
+-- 
+2.29.2
 
