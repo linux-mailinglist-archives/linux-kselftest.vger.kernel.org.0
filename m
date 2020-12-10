@@ -2,126 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA422D6612
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 20:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2316B2D6888
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 21:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390550AbgLJTMC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Dec 2020 14:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389324AbgLJTLr (ORCPT
+        id S2389939AbgLJUS5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Dec 2020 15:18:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:53342 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389999AbgLJO1t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 14:11:47 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D25C061794;
-        Thu, 10 Dec 2020 11:11:07 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id 4so3267777plk.5;
-        Thu, 10 Dec 2020 11:11:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ixjBTL8ik2zV5HfQ8pkfcH2s6ihYaw94epz6NA5THr0=;
-        b=NIkbINsBVQU/Ej6aaIkPokyGq2YzoaR4uWZQYPc8e9TfWPLJXiCkDXmG1oVhqRdEQn
-         U0wyjTEk/+B1O5c+KK0z9tDg5/Wx1h2IghT1goipV8egomZck1mc31cpKtGDoADLNh+c
-         n6/x6V5LHuy0sC3jhJOumec2GJPXQxsyVTu7uGUVS/Uy7jOmP4Q5jXCFZ0ERSSVVP/YI
-         Z+y9JHFj3ro7G/gwaLVv8ZTpWPP2yfyGzlFfbLq5XiKWZyaf6jg22Ki3XTmlrycVA166
-         4nTgIYlvGi0w8I8yFSHqWrUlMGPv8m8jJXPRGnCT2YSR5kzo0UZRVciA/zUX5AkkltPy
-         xZaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ixjBTL8ik2zV5HfQ8pkfcH2s6ihYaw94epz6NA5THr0=;
-        b=bwZ8hEKoUJkiwAI3J1EhfUBQKKMqFoV1FxiYYyVfW2XpV0KhSfU3fpRJzR7CFtynd6
-         3cyvKjuwIymH45wFv0OQQNkod9PLsMUloWGAG+jm1tO9VbzJ7k8bbcNpdvp+yJi3bFAF
-         0kgi5w64UYDRmoRxiVTTrWMQdXFWw8BYV+lPa7VF6e85v38TzTVbH894yHaE8xironAs
-         Kkmlij/8LjVWs9Rw3v53cz04h8wcsxgD1G0qjSNFqDiZnI9a/JekwEnUAcrEtsaceAhM
-         WtydM6vErHRP1AXtzx6UoD9HyWVVBvmp7SLHjt6MP3ifDfwODMUlbVcXIl7wg4lwXKzp
-         IKhg==
-X-Gm-Message-State: AOAM531uTc9VqIhpB67z1ymtXWEIMzLCX60DlTgjdsWWNAA9dd1u8wpQ
-        CA8M/tDpPMO/9FG1JoT7oJY=
-X-Google-Smtp-Source: ABdhPJxFGYpgWWb6Gi6heTy285YUjxFfSn9MdVqlYCtJiVWIsDKZjhEaDltE0LRUkUNU3eQWEwGzDw==
-X-Received: by 2002:a17:902:6b48:b029:d8:e603:75fb with SMTP id g8-20020a1709026b48b02900d8e60375fbmr7770525plt.6.1607627466851;
-        Thu, 10 Dec 2020 11:11:06 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:400::5:2a7e])
-        by smtp.gmail.com with ESMTPSA id z27sm7068050pfq.70.2020.12.10.11.11.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 11:11:06 -0800 (PST)
-Date:   Thu, 10 Dec 2020 11:11:03 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Daniel Diaz <daniel.diaz@linaro.org>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH] selftests: Skip BPF seftests by default
-Message-ID: <20201210191103.kfrna27kv3xwnshr@ast-mbp>
-References: <20201210185233.28091-1-broonie@kernel.org>
+        Thu, 10 Dec 2020 09:27:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607610382;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XemBX6GDiS8sIGiD/ca2Z1h8LOYV6Xo8hkAbb535R90=;
+        b=Fo5NgH0K0pumbaYNdlpWaUydgSzoS+PMR1Qp12Xf7zybqbWAJ0y1YQZLFG1DxhD6rq3N3L
+        bj1FFMYPLi+xVbb3+OWi5jcuhG8lR0BpgkDG0uUcWSQepf0T52nPmvBnuiCkiUMOfRSuwy
+        DaqlgjcMTbcnzpb7P5GkrA4XNgn2tpI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-256-0sU_Km6bOiuY1Rfj4BqIcA-1; Thu, 10 Dec 2020 09:26:18 -0500
+X-MC-Unique: 0sU_Km6bOiuY1Rfj4BqIcA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7D6FD1842146;
+        Thu, 10 Dec 2020 14:26:15 +0000 (UTC)
+Received: from starship (unknown [10.35.206.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3083636FA;
+        Thu, 10 Dec 2020 14:25:58 +0000 (UTC)
+Message-ID: <7846c5452644a3c029d27361759cb82c2b8d4f2e.camel@redhat.com>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Upton <oupton@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Date:   Thu, 10 Dec 2020 16:25:57 +0200
+In-Reply-To: <7c25e8c0-a7d4-8906-ae47-20714e6699fe@redhat.com>
+References: <20201203171118.372391-1-mlevitsk@redhat.com>
+         <20201203171118.372391-2-mlevitsk@redhat.com>
+         <CAOQ_Qsj6THRPj2ta3PdOxUJeCj8KxPnLkWV8EGpvN_J=qUv74A@mail.gmail.com>
+         <d3dd82950301517e47630cc86fa0e6dc84f63f90.camel@redhat.com>
+         <87lfe82quh.fsf@nanos.tec.linutronix.de>
+         <047afdde655350a6701803aa8ae739a8bd1c1c14.camel@redhat.com>
+         <7c25e8c0-a7d4-8906-ae47-20714e6699fe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201210185233.28091-1-broonie@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 06:52:33PM +0000, Mark Brown wrote:
-> The BPF selftests have build time dependencies on cutting edge versions
-> of tools in the BPF ecosystem including LLVM which are more involved
-> to satisfy than more typical requirements like installing a package from
-> your distribution.  This causes issues for users looking at kselftest in
-> as a whole who find that a default build of kselftest fails and that
-> resolving this is time consuming and adds administrative overhead.  The
-> fast pace of BPF development and the need for a full BPF stack to do
-> substantial development or validation work on the code mean that people
-> working directly on it don't see a reasonable way to keep supporting
-> older environments without causing problems with the usability of the
-> BPF tests in BPF development so these requirements are unlikely to be
-> relaxed in the immediate future.
+On Thu, 2020-12-10 at 12:48 +0100, Paolo Bonzini wrote:
+> On 08/12/20 18:08, Maxim Levitsky wrote:
+> > > Even if you support TSCADJUST and let the guest write to it does not
+> > > change the per guest offset at all. TSCADJUST is per [v]CPU and adds on
+> > > top:
+> > > 
+> > >      tscvcpu = tsc_host + guest_offset + TSC_ADJUST
+> > > 
+> > > Scaling is just orthogonal and does not change any of this.
+> > 
+> > I agree with this, and I think that this is what we will end up doing.
+> > Paulo, what do you think about this?
 > 
-> There is already support for skipping targets so in order to reduce the
-> barrier to entry for people interested in kselftest as a whole let's use
-> that to skip the BPF tests by default when people work with the top
-> level kselftest build system.  Users can still build the BPF selftests
-> as part of the wider kselftest build by specifying SKIP_TARGETS,
-> including setting an empty SKIP_TARGETS to build everything.  They can
-> also continue to build the BPF selftests individually in cases where
-> they are specifically focused on BPF.
-> 
-> This isn't ideal since it means people will need to take special steps
-> to build the BPF tests but the dependencies mean that realistically this
-> is already the case to some extent and it makes it easier for people to
-> pick up and work with the other selftests which is hopefully a net win.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  tools/testing/selftests/Makefile | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index afbab4aeef3c..8a917cb4426a 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -77,8 +77,10 @@ TARGETS += zram
->  TARGETS_HOTPLUG = cpu-hotplug
->  TARGETS_HOTPLUG += memory-hotplug
->  
-> -# User can optionally provide a TARGETS skiplist.
-> -SKIP_TARGETS ?=
-> +# User can optionally provide a TARGETS skiplist.  By default we skip
-> +# BPF since it has cutting edge build time dependencies which require
-> +# more effort to install.
-> +SKIP_TARGETS ?= bpf
+> Yes, you can have a VM ioctl that saves/restores cur_tsc_nsec and 
+> cur_tsc_write.  The restore side would loop on all vcpus.
 
-I'm fine with this, but I'd rather make an obvious second step right away
-and move selftests/bpf into a different directory.
+Why would the restore need to run on all VCPUs though?
+
+The picture that I have in mind is that we we will restore the 
+cur_tsc_nsec/cur_tsc_write pair once per VM, and then restore the 
+TSC_ADJUST value on all vCPUs as if the guest wrote it (with the quirk disabled), 
+which will restore all the horrible things that the guest did to its TSC.
+
+Since TSC adjust is enabled by default, if the user disables it in the CPUID, 
+we might as well just disable the whole thing, 
+make TSC readonly or something similar.
+
+This way we don't need to worry about TSC writes as 
+those will be reflected in the TSC_ADJUST.
+
+> 
+> However, it is not so easy: 1) it would have to be usable only if 
+> KVM_X86_QUIRK_TSC_HOST_ACCESS is false, 2) it would fail if 
+> kvm->arch.nr_vcpus_matched_tsc == kvm->online_vcpus (which basically 
+> means that userspace didn't mess up the TSC configuration).  If not, it 
+> would return -EINVAL.
+
+Note though that we don't track the guest tsc/tsc_adjust writes anymore
+via the tsc sync code, and with the quirk disabled we don't track them
+even for the host writes, thus the (2) condition will always be true
+(the only call left to kvm_synchronize_tsc is in the kvm_arch_vcpu_postcreate)
+
+However I indeed see no reason to allow new per VM API when the masterclock is
+disabled, and therefore using cur_tsc_nsec/cur_tsc_write is reasonable.
+
+The cur_tsc_nsec should IMHO be converted to absolute time (CLOCK_REALTIME
+or similiar) or should the conversion be done in the userspace? 
+I don't know yet if I can convert between different POSIX clocks
+in race/error free manner. (e.g get the offset between them).
+
+
+> 
+> Also, while at it let's burn and pour salt on the support for 
+> KVM_SET_TSC_KHZ unless TSC scaling is supported, together with 
+> vcpu->tsc_catchup and all the "tolerance" crap that is in 
+> kvm_set_tsc_khz.  And initialize vcpu->arch.virtual_tsc_khz to 
+> kvm->arch.last_tsc_khz before calling kvm_synchronize_tsc.
+
+The tsc_catchup is enabled when host TSC is unstable, so that guest
+TSC at least roughtly follows real time (which host kernel gets
+by other means).
+
+We push the guest tsc forward roughtly each time VM entry from userspace
+happens:
+
+(On each kvm_arch_vcpu_load, we raise KVM_REQ_GLOBAL_CLOCK_UPDATE
+request which (with small delay) makes all vcpus go through 
+kvm_guest_time_update which pushes the guest tsc forward)
+
+However we also have the 'tsc_always_catchup' mode which is indeed 
+something I would like to remove.
+
+It is a poor man simulation of the TSC scaling which is enabled 
+when the host doesn't support TSC scaling, but we were asked 
+to run at frequency faster than host TSC frequency is.
+
+This way guest tsc runs slower than it should, but on each VM exit,
+we punt the guest tsc offset forward so on average the guest tsc
+doesn't lag behind.
+
+Unless backward compatibility is an issue, I have no objections
+to remove that code.
+
+The tolerance thing might be needed. On many systems 
+(including mine new 3970X), the hardware doesn't have means to report 
+the unscaled host TSC frequency, thus the kernel has to 
+measure it, and since the measurement is not 100% accurate, a slightly
+different value is used every time the host boots.
+
+Thus without a small tolerance, we will always have to use TSC scaling,
+while migrating even between two identical systems.
+I don't know if this is an issue.
+
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+> Paolo
+> 
+
+
