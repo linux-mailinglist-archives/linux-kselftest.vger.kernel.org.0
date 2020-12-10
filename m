@@ -2,116 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AA82D59D9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 12:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AA32D5A27
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 13:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728763AbgLJL5A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Dec 2020 06:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S2387816AbgLJMPd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Dec 2020 07:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728740AbgLJL44 (ORCPT
+        with ESMTP id S1728530AbgLJMPc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 06:56:56 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FC6C0613D6;
-        Thu, 10 Dec 2020 03:56:16 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id x2so4428682ybt.11;
-        Thu, 10 Dec 2020 03:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EVOwB0q6/0FJtlA5FxzsP/l25lLPTS7Bl7vepfUdQJ8=;
-        b=CodRu1FpbaLNvL8+Ga8xXaoICmMw0ChPFDaczzN6U4WA+xnlYnizg05aOcYcI6HOcD
-         mVUkfT6ODz9A0na8P394nF0IaxqCAv99li/LfgdB/QPVN50dhgDALrqViBqAjoYdahur
-         WYx1WMyB5Ar0sXlh70aMhQ4flEeFWfwxbIYF/B6KJQBX9BZSq2FT+i2546yw465DeCs6
-         vPZwtchvX3L0Ke4Dl6dgxrg2o7wxdPDVz5nc66Ecg8i5FAaI7zH9qBMNC6wK61BvWDvd
-         Z34IxHx7GgluT3kj9umkkYxnzmN4390ZgtAokYF+a20aRSEzUAeRximsxd6S8dTB9bIB
-         AxIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EVOwB0q6/0FJtlA5FxzsP/l25lLPTS7Bl7vepfUdQJ8=;
-        b=TS/JLEgH6YET5phSSDmYbWrjnPTQ2RAPvOpW6rZGLt1C0OxLGft3PLFOHnoPInU8Qu
-         aDfvA5gb8TLilRHhDcSvLHdufY1QUk6gU8ij543c7wtLsXOJIn6vNoNd1hUH3MF6U1SF
-         xTof0DMwMCVAEkBolITAqXQU0D3d4QEDV163cFao70pINkDnV9gbasyBqPI77PTHYuIs
-         lv8Wq2O94kijUEaB+okT2knWipEL9ncjCCF/WPodTX/JRqRjxCb49ua0mw8N88wqPfT8
-         eTXvP3vuCp10L4uTgYo4vdHvWRVu1xtl89uoQigAbnkk9OSpPL/d34dWU81Nh6mMsVK/
-         gykQ==
-X-Gm-Message-State: AOAM532MDnWmpgyXJ3LQ6/ZB6Fv1WKH1EwQr4JFSOh2oPMX2fD3QzbQA
-        dVAqjoeyiQ9q9mYqx2++t/1pslbn+QUIeYLj5Cw=
-X-Google-Smtp-Source: ABdhPJyQM5SkpwSD0pKYYsMVyG93G+4v4pSRI+d2d+NljvTD/SbpdWIbh2U4vv1HzTWjSh8LiI5ZLd+zk/M8tAl1+0s=
-X-Received: by 2002:a25:ab31:: with SMTP id u46mr10200287ybi.179.1607601375345;
- Thu, 10 Dec 2020 03:56:15 -0800 (PST)
+        Thu, 10 Dec 2020 07:15:32 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09D5C0613CF;
+        Thu, 10 Dec 2020 04:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DB9D2pH9CmpJ5O5VlPeB8KKtAT8lj7o0SsGztCVyPIc=; b=v8XablaO9IAVxnRpzKKiYxZ6A4
+        e3FokL4c8tO2GFLkoHXXcB0+WfLH0Md9xHCFiMF/Zvq2TUuns77qGs+SKkUsi/8z2lYxR4VCcNfgQ
+        Iuo+1NrRwS+aqWX9VVo/LRALvz2V+wQg9L80vPW8+ONsZEr6OyayEEqV4aYPm+ReaXI5XP5Td9huU
+        mGNPRvEdXbiDEBWQ8LHUoZme42ePDpcoOMwArsMtSrt43XH1e2iNajNXqC0j/TuNO7DHrQEA90Xqr
+        9B78bCN15JC3/hk8Sq1KzmanZFyJTxThUUABuKpJHXg/DXAWxeQmeDcBgX1Eva0ZNZGKPdlf1evIJ
+        EncVXFBw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1knKpy-00066Z-Ct; Thu, 10 Dec 2020 12:14:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1A84A3059C6;
+        Thu, 10 Dec 2020 13:14:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D7A2F20234B76; Thu, 10 Dec 2020 13:14:17 +0100 (CET)
+Date:   Thu, 10 Dec 2020 13:14:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+Message-ID: <20201210121417.GN2414@hirez.programming.kicks-ass.net>
+References: <20201203171118.372391-1-mlevitsk@redhat.com>
+ <20201203171118.372391-2-mlevitsk@redhat.com>
+ <87a6uq9abf.fsf@nanos.tec.linutronix.de>
+ <1dbbeefc7c76c259b55582468ccd3aab35a6de60.camel@redhat.com>
+ <87im9dlpsw.fsf@vitty.brq.redhat.com>
+ <875z5d5x9m.fsf@nanos.tec.linutronix.de>
+ <b6e0656b-4e3f-cf47-5ec9-eead44b2f2e9@redhat.com>
 MIME-Version: 1.0
-References: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
- <20201207215333.11586-3-weqaar.a.janjua@intel.com> <760489c0-f935-437d-6213-6e8775693bbc@fb.com>
-In-Reply-To: <760489c0-f935-437d-6213-6e8775693bbc@fb.com>
-From:   Weqaar Janjua <weqaar.janjua@gmail.com>
-Date:   Thu, 10 Dec 2020 11:55:49 +0000
-Message-ID: <CAPLEeBbLhGATeSbA46SxEpgVXKXm__OcgjPhNKcvzoCnSk7sdA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/5] selftests/bpf: xsk selftests - SKB POLL, NOPOLL
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        jonathan.lemon@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6e0656b-4e3f-cf47-5ec9-eead44b2f2e9@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 9 Dec 2020 at 18:29, Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 12/7/20 1:53 PM, Weqaar Janjua wrote:
-> > Adds following tests:
-> >
-> > 1. AF_XDP SKB mode
-> >     Generic mode XDP is driver independent, used when the driver does
-> >     not have support for XDP. Works on any netdevice using sockets and
-> >     generic XDP path. XDP hook from netif_receive_skb().
-> >     a. nopoll - soft-irq processing
-> >     b. poll - using poll() syscall
-> >
-> > Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile       |   3 +-
-> >   tools/testing/selftests/bpf/test_xsk.sh    |  39 +-
-> >   tools/testing/selftests/bpf/xdpxceiver.c   | 979 +++++++++++++++++++++
-> >   tools/testing/selftests/bpf/xdpxceiver.h   | 153 ++++
-> >   tools/testing/selftests/bpf/xsk_prereqs.sh |  16 +
-> >   5 files changed, 1187 insertions(+), 3 deletions(-)
-> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.c
-> >   create mode 100644 tools/testing/selftests/bpf/xdpxceiver.h
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index 6a1ddfe68f15..944ae17a39ed 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -82,7 +82,8 @@ TEST_PROGS_EXTENDED := with_addr.sh \
-> >   # Compile but not part of 'make run_tests'
-> >   TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
-> >       flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
-> > -     test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko
-> > +     test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
-> > +     xdpxceiver
->
-> Could you have a patch to put xdpxceiver in .gitignore?
->
-> I see below:
-> Untracked files:
->    (use "git add <file>..." to include in what will be committed)
->          tools/testing/selftests/bpf/xdpxceiver
->
-ACK, patch on the list now
+On Thu, Dec 10, 2020 at 12:42:36PM +0100, Paolo Bonzini wrote:
+> On 07/12/20 18:41, Thomas Gleixner wrote:
+> > Right this happens still occasionally, but for quite some time this is
+> > 100% firmware sillyness and not a fundamental property of the hardware
+> > anymore.
+> 
+> It's still a fundamental property of old hardware.  Last time I tried to
+> kill support for processors earlier than Core 2, I had to revert it. That's
+> older than Nehalem.
 
-> >
-> >   TEST_CUSTOM_PROGS = urandom_read
-> >
+Core2 doesn't use TSC for timekeeping anyway. KVM shouldn't either.
