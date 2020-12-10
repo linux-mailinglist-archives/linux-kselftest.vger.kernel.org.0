@@ -2,98 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC642D5C09
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 14:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC062D5EB6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 15:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389511AbgLJNhU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Dec 2020 08:37:20 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:38045 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389422AbgLJNhR (ORCPT
+        id S2389812AbgLJOzW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Dec 2020 09:55:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:24504 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731316AbgLJOyC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:37:17 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <seth.forshee@canonical.com>)
-        id 1knM7X-0005R8-VY
-        for linux-kselftest@vger.kernel.org; Thu, 10 Dec 2020 13:36:36 +0000
-Received: by mail-io1-f69.google.com with SMTP id a2so3900504iod.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 05:36:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mwzWNqwukiO9666dcy5UFimaTAhAAx9w5jcf7BvZNzs=;
-        b=lJoBMWZnCblNJiA7mhT23tenBIjMFV9OssV1p7Fd+nYuvPf4W87czmnRyAaXrBphpm
-         rzUpjf/wiramoHkYcccrvdHMZQpY/6OBdqAFIhpuFXRd1jpQyrMT8thVzt3I3f9q4Ja/
-         eWrQ8KyWv8WGk38FF5xuyRnxXgtpmmo3QPVosN5RM/+hd4CW1ZQDpWgIKFmM5TfQUOUV
-         I3OYSjtYT8vuloWn32j2BRVJzMB6rtI5C1tIT0xTOUfuqAYDc5MKasVeT+QL8nh2Kc/z
-         QsmTkVGHwMOTT05NazyNIv0MCa2iInrfYb1lphzYuiWBjANfNbm+zegH6/nAchmQsVkc
-         AgxQ==
-X-Gm-Message-State: AOAM532QBy47Y/qPV33fR3wfgtptaUdZuQkjehwBTK99xJSVhFj15T5Q
-        6WgVR4+vd97w7zBNwdMXii5Qp3hMCTYrTNBnyClbmnQ7Osl1j/iCSv1XHEUgu/s88N+kfGjxARW
-        ZsW7ajA0f23/Zky4WVL1edCVkZa0E4TDJzmlx1OwXYns3lg==
-X-Received: by 2002:a05:6638:2a5:: with SMTP id d5mr8717991jaq.92.1607607394872;
-        Thu, 10 Dec 2020 05:36:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzDAlRH9nDs2/sDKF2FW7RjAYQtS5kLIoWftt3jEkBIPJZ2Ls4/PB9s1dnWAzZ7dDe7Fi0g6A==
-X-Received: by 2002:a05:6638:2a5:: with SMTP id d5mr8717977jaq.92.1607607394700;
-        Thu, 10 Dec 2020 05:36:34 -0800 (PST)
-Received: from localhost ([2605:a601:ac0f:820:5f:df71:1517:60e9])
-        by smtp.gmail.com with ESMTPSA id y14sm3240284ilb.66.2020.12.10.05.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 05:36:34 -0800 (PST)
-Date:   Thu, 10 Dec 2020 07:36:33 -0600
-From:   Seth Forshee <seth.forshee@canonical.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Thu, 10 Dec 2020 09:54:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607611956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/hi8a0jEzGqN1iBD0C9+/eRWGMqXO+jd3SvUGWEwjC4=;
+        b=SqlteXh4IHgm44UDbdvV93uCp2fgU9lMiqTrsMS9oRU9YCXIfaXkKrL1PK2A97+ow6dPoG
+        Zg6wvoAVspmgbty3P6KeeY7R4EBUqDuiy9LVuZCmQyg/DQIAlLCNbP/D7jT1stuaptuMYk
+        yLo3kYyWtl8l1gWG8F00XqSys9hh3SQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-392-qv4wd_1gML2sR-lxBto1jw-1; Thu, 10 Dec 2020 09:52:34 -0500
+X-MC-Unique: qv4wd_1gML2sR-lxBto1jw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2AAB1858182;
+        Thu, 10 Dec 2020 14:52:32 +0000 (UTC)
+Received: from starship (unknown [10.35.206.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E3DB19C78;
+        Thu, 10 Dec 2020 14:52:26 +0000 (UTC)
+Message-ID: <9389c1198da174bcc9483d6ebf535405aa8bdb45.camel@redhat.com>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     kvm@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: BPF selftests build failure in 5.10-rc
-Message-ID: <X9IkYa6D9QrjooOd@ubuntu-x1>
-References: <X9FOSImMbu0/SV5B@ubuntu-x1>
- <CAEf4BzYAptUF+AxmkVk7BjJWRE6UaLkPowKM+pWbFuOV9Z4GGg@mail.gmail.com>
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Date:   Thu, 10 Dec 2020 16:52:25 +0200
+In-Reply-To: <70f9a5b3-d912-2a46-3718-a9c7591cd1f4@redhat.com>
+References: <20201203171118.372391-1-mlevitsk@redhat.com>
+         <20201203171118.372391-2-mlevitsk@redhat.com>
+         <20201207232920.GD27492@fuller.cnet>
+         <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com>
+         <87sg8g2sn4.fsf@nanos.tec.linutronix.de>
+         <6f64558a029574444da417754786f711c2fec407.camel@redhat.com>
+         <87blf42dvv.fsf@nanos.tec.linutronix.de>
+         <70f9a5b3-d912-2a46-3718-a9c7591cd1f4@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYAptUF+AxmkVk7BjJWRE6UaLkPowKM+pWbFuOV9Z4GGg@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 04:15:35PM -0800, Andrii Nakryiko wrote:
-> On Wed, Dec 9, 2020 at 2:24 PM Seth Forshee <seth.forshee@canonical.com> wrote:
-> >
-> > Building the BPF selftests with clang 11, I'm getting the following
-> > error:
-> >
-> >    CLNG-LLC [test_maps] profiler1.o
-> >  In file included from progs/profiler1.c:6:
-> >  progs/profiler.inc.h:260:17: error: use of unknown builtin '__builtin_preserve_enum_value' [-Wimplicit-function-declaration]
-> >                  int cgrp_id = bpf_core_enum_value(enum cgroup_subsys_id___local,
-> >                                ^
-> >  /home/ubuntu/unstable/tools/testing/selftests/bpf/tools/include/bpf/bpf_core_read.h:179:2: note: expanded from macro 'bpf_core_enum_value'
-> >          __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
-> >          ^
-> >  1 error generated.
-> >  llc: error: llc: <stdin>:1:1: error: expected top-level entity
-> >  BPF obj compilation failed
+On Thu, 2020-12-10 at 12:48 +0100, Paolo Bonzini wrote:
+> On 08/12/20 22:20, Thomas Gleixner wrote:
+> > So now life migration comes a long time after timekeeping had set the
+> > limits and just because it's virt it expects that everything works and it
+> > just can ignore these limits.
+> > 
+> > TBH. That's not any different than SMM or hard/firmware taking the
+> > machine out for lunch. It's exactly the same: It's broken.
 > 
-> Addressed by fb3558127cb6 ("bpf: Fix selftest compilation on clang 11")
+> I agree.  If *live* migration stops the VM for 200 seconds, it's broken.
+> 
+> Sure, there's the case of snapshotting the VM over the weekend.  My 
+> favorite solution would be to just put it in S3 before doing that.  *Do 
+> what bare metal does* and you can't go that wrong.
 
-Great, thanks!
+Note though that qemu has a couple of issues with s3, and it is disabled 
+by default in libvirt. 
+I would be very happy to work on improving this if there is a need for that.
+
 
 > 
-> >
-> > I see that test_core_reloc_enumval.c takes precautions around the use of
-> > __builtin_preserve_enum_value as it is currently only available in clang
-> > 12 nightlies. Is it possible to do something similar here? Though I see
-> > that the use of the builtin is not nearly so neatly localized as it is
-> > in test_core_reloc_enumval.c.
-> >
-> > Thanks,
-> > Seth
+> In general it's userspace policy whether to keep the TSC value the same 
+> across live migration.  There's pros and cons to both approaches, so KVM 
+> should provide the functionality to keep the TSC running (which the 
+> guest will see as a very long, but not extreme SMI), and this is what 
+> this series does.  Maxim will change it to operate per-VM.  Thanks 
+> Thomas, Oliver and everyone else for the input.
+
+I agree with that.
+ 
+I still think though that we should have a discussion on feasibility
+of making the kernel time code deal with large *forward* tsc jumps 
+without crashing.
+
+If that is indeed hard to do, or will cause performance issues,
+then I agree that we might indeed inform the guest of time jumps instead.
+ 
+In fact kvmclock already have such a mechanism (KVM_KVMCLOCK_CTRL ioctl, which sets 
+the PVCLOCK_GUEST_STOPPED bit in the PV clock struct).
+That informs the guest that it was stopped (guest clears this bit), 
+and currently that makes the guest touch various watchdogs.
+ 
+I think that the guest uses it only when kvmclock is used but
+we can think about extending this to make guest use it 
+even when bare tsc is used, and also implement whatever logic is
+needed to jump the guest clock forward when this bit is set.
+
+What do you think?
+
+Best regards,
+	Maxim Levitsky
+
+> 
+> Paolo
+> 
+
+
