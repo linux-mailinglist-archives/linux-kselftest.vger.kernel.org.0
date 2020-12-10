@@ -2,130 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C512D64AC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 19:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A04F2D65AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 19:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392797AbgLJSOQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Dec 2020 13:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392495AbgLJSOG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 13:14:06 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2798C061794
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 10:13:25 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id y16so7778771ljk.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 10:13:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=et/f3RjbZyuZ9JQ6heD+AHbTOUp1bUm1tRV1afS0ffo=;
-        b=v19m+I06m7joT/AcjLb0tMF6lAJ5V8z+FKPko5snmNCFHTPv3bdEHyAb+gPnz4se2R
-         +INSchsHDnXs6CHDwyr1OX9D7lgsQLp0+HpPcFPNqyTm2K0h1yTcKG2yEcdN7vKYkDxZ
-         /r5QdIJlQZDG0tU68JwmcZR5S+hOa0hDvt1zdO/fcLCeGHukWpFmaF2PxrCHxWjHeiE0
-         gaBxJ0NFtD5oc7137LS/skmzqx28uL8EH24BWt9F/nsw2pVhq6uhRBMeYbwhLkauiQ4g
-         kiZ0QTjeICTynLVhctWqyARIy3ebvmQcwkfwaIqdz4p+gTYl4zTCqUoRiuFb3GKZl3vD
-         QPGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=et/f3RjbZyuZ9JQ6heD+AHbTOUp1bUm1tRV1afS0ffo=;
-        b=ExOTYyqmfI/qByHVfe64v593HQN8ICKWhgpZuQmJYw+RDhbttw8YplMOXILNFgMNhs
-         MS+9gNg5GM9AIk3tVQbxk4fUUmDJT8xi08knt7HdA2gq3inTZhPO2/VKqfcNmzeI+BmQ
-         CTZAK1hJLD0AkXtBu28sjVtFyQEn8rRFZnXY0pZwHWnk/kp+G6fCXckRx0wlBCB6B/aH
-         lv5u4FupF6zhoTG+qpnBwipYyElgvuBgbcdSXAMSnFwc1G7p0XxCNOs5LDlkfR5AmZJI
-         cK76ib6Jd8yGgihinHBOWSY8vVfsLcj4qXWpmw71fj4AgD+QWc92dEYZLc/PgNovYJGM
-         eINw==
-X-Gm-Message-State: AOAM53061AQmm7I9fq0VtR64bolINcn5Agqqe12NKdmiTRbRunfz0E0R
-        1mMxbyN6mZ6otbY4fq7qsCQZs/jNUZGThTQy7R58sw==
-X-Google-Smtp-Source: ABdhPJz6mHpgMVqJUnrdAcxtrWUH9N8Z8HVVDmP+wLkbZLA/HDgRzT6WQeKWJ0VSyM8PZFXMwJ9fVjlXIYWpFEccPKQ=
-X-Received: by 2002:a2e:961a:: with SMTP id v26mr3699249ljh.314.1607624003934;
- Thu, 10 Dec 2020 10:13:23 -0800 (PST)
+        id S2390578AbgLJS5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Dec 2020 13:57:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34656 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726075AbgLJS5F (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Dec 2020 13:57:05 -0500
+From:   Mark Brown <broonie@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Daniel Diaz <daniel.diaz@linaro.org>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH] selftests: Skip BPF seftests by default
+Date:   Thu, 10 Dec 2020 18:52:33 +0000
+Message-Id: <20201210185233.28091-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <9389c1198da174bcc9483d6ebf535405aa8bdb45.camel@redhat.com>
- <E4F263BE-6CAA-4152-8818-187D34D8D0FD@amacapital.net> <CAOQ_QshW0UvwSS3TUCK5PxkLQhHTqDNXNeMxwVDyf+DXc23fXQ@mail.gmail.com>
- <eb0cbfaa-251a-810b-3c12-4ee63d082bc8@redhat.com>
-In-Reply-To: <eb0cbfaa-251a-810b-3c12-4ee63d082bc8@redhat.com>
-From:   Oliver Upton <oupton@google.com>
-Date:   Thu, 10 Dec 2020 12:13:12 -0600
-Message-ID: <CAOQ_QsggH=RaPbiOTGjDviKUCa0r4YgJjLsP7ghUGbcVtr2YJQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Patch-Hashes: v=1; h=sha256; i=7Xhvzkgs2X5AXYEHO8N7h/4qCSh88rSZtK7RUR5uyKc=; m=NLFbCJ5BO0tEebe5aDGXW+BpeGH7KelNPszypI0wiNo=; p=NP0IeQiNob21poKCDV2rFRlDlnvPgTk/qWODOlZgNeE=; g=10657ae2c8ea502e09f342527ca847c8098f2fb4
+X-Patch-Sig: m=pgp; i=broonie@kernel.org; s=0xC3F436CA30F5D8EB; b=iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/SbQkACgkQJNaLcl1Uh9BTVwf8DRx FtItjWz319skvRSHPOX/iQq3C99DcGdMRQ9v+/pyEhQrdHEBp0g2WohTe/2u//PIZHTQbgtRMSU+N bsNOU0/dDxZzbk+sHVdeIawELWDoE/7pWZTHxCP2RwcSjxP7z+Kj95t5LfejBZFcUBEgmwAdWqCw3 HN5nzxYQdc466bbM5NLjevK8v7ySdo1AkGwvVKsopkn8H6E07xmPbqwWTOeA2xfnaIa7VUbmYuLas SJaTVHW+GygbiEcHSgvMYlq/5PhKxwPJCSy1r4ChUvhvMkdy1NSbC/V5Qfxf+s02o65usz6NkxF7y gvh2eWVMT03qv54xEJjxjlXy1j6xQzg==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 12:05 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 10/12/20 18:59, Oliver Upton wrote:
-> > However, I don't believe we can assume the guest's TSCs to be synchronized,
-> > even if sane guests will never touch them. In this case, I think a per-vCPU
-> > ioctl is still warranted, allowing userspace to get at the guest CPU adjust
-> > component of Thomas' equation below (paraphrased):
-> >
-> >          TSC guest CPU = host tsc base + guest base offset + guest CPU adjust
->
-> Right now that would be:
->
-> - KVM_GET_TSC_STATE (vm) returns host tsc base + guest base offset (plus
-> the associated time)
->
-> - KVM_GET_MSR *without* KVM_X86_QUIRK_TSC_HOST_ACCESS for guest CPU adjust
->
-> and the corresponding SET ioctls.  What am *I* missing?
->
-> > Alternatively, a write from userspace to the guest's IA32_TSC_ADJUST with
-> > KVM_X86_QUIRK_TSC_HOST_ACCESS could have the same effect, but that seems to be
-> > problematic for a couple reasons. First, depending on the guest's CPUID the
-> > TSC_ADJUST MSR may not even be available, meaning that the guest could've used
-> > IA32_TSC to adjust the TSC (eww).
->
-> Indeed, the host should always be able to read/write IA32_TSC and
-> IA32_TSC_ADJUST.
+The BPF selftests have build time dependencies on cutting edge versions
+of tools in the BPF ecosystem including LLVM which are more involved
+to satisfy than more typical requirements like installing a package from
+your distribution.  This causes issues for users looking at kselftest in
+as a whole who find that a default build of kselftest fails and that
+resolving this is time consuming and adds administrative overhead.  The
+fast pace of BPF development and the need for a full BPF stack to do
+substantial development or validation work on the code mean that people
+working directly on it don't see a reasonable way to keep supporting
+older environments without causing problems with the usability of the
+BPF tests in BPF development so these requirements are unlikely to be
+relaxed in the immediate future.
 
-So long as it is guaranteed that guest manipulations of IA32_TSC are
-reflected in IA32_TSC_ADJUST even if it isn't in the guest's CPUID,
-then this seems OK. I think having clear documentation on this subject
-is also necessary, as we're going to rely on the combination of
-KVM_{GET,SET}_TSC_STATE, disabling KVM_X86_QUIRK_TSC_HOST_ACCESS, and
-userspace reading/writing a possibly hidden MSR to pull this off
-right.
+There is already support for skipping targets so in order to reduce the
+barrier to entry for people interested in kselftest as a whole let's use
+that to skip the BPF tests by default when people work with the top
+level kselftest build system.  Users can still build the BPF selftests
+as part of the wider kselftest build by specifying SKIP_TARGETS,
+including setting an empty SKIP_TARGETS to build everything.  They can
+also continue to build the BPF selftests individually in cases where
+they are specifically focused on BPF.
 
---
-Thanks,
-Oliver
+This isn't ideal since it means people will need to take special steps
+to build the BPF tests but the dependencies mean that realistically this
+is already the case to some extent and it makes it easier for people to
+pick up and work with the other selftests which is hopefully a net win.
 
-> Thanks,
->
-> Paolo
->
-> > Second, userspace replaying writes to IA32_TSC
-> > (in the case IA32_TSC_ADJUST doesn't exist for the guest) seems_very_
-> > unlikely to work given all the magic handling that KVM does for
-> > writes to it.
-> >
-> > Is this roughly where we are or have I entirely missed the mark?:-)
->
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index afbab4aeef3c..8a917cb4426a 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -77,8 +77,10 @@ TARGETS += zram
+ TARGETS_HOTPLUG = cpu-hotplug
+ TARGETS_HOTPLUG += memory-hotplug
+ 
+-# User can optionally provide a TARGETS skiplist.
+-SKIP_TARGETS ?=
++# User can optionally provide a TARGETS skiplist.  By default we skip
++# BPF since it has cutting edge build time dependencies which require
++# more effort to install.
++SKIP_TARGETS ?= bpf
+ ifneq ($(SKIP_TARGETS),)
+ 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
+ 	override TARGETS := $(TMP)
+-- 
+2.20.1
+
