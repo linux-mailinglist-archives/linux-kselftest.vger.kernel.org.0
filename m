@@ -2,95 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1492D5B24
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 14:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC642D5C09
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 14:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388325AbgLJNCu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Dec 2020 08:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387506AbgLJNCt (ORCPT
+        id S2389511AbgLJNhU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Dec 2020 08:37:20 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:38045 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389422AbgLJNhR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 08:02:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94BFC0613CF;
-        Thu, 10 Dec 2020 05:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8DNWVeAUd7OvyCVtE5PeUeZEuJerl3ZR6gz0ZKvmpyo=; b=QoPx6KFRU+xS+RaJr2y1Qphzjb
-        s+yXByA3V4D2JJjPNrqJEj1y++RZMQ2QrVSvDnGQqtmx8Lo3LdXjBPtz6vEngpYhMZ98DjG9GIJ9N
-        vXErudo8loKA59o3aKxKOwrOiETZnptD4jkclkS27O9+TI1oA9mUX0LhghbGIG1XS6WdyaqIC019R
-        eJRa7Pn/tHHTPljQtMtEZc+TQJWcFm0Ef/WN0X2mlbE2Ut6pZQmyaSKeiAdBskXfwa2uDiHcEnJuN
-        GdkBDPHqdcZlK7QNdKtrpU1zccUIpK/CQWvIM06IHs+Ak9gYHhzEXczcug14IEm8h+EtHPNMYGynU
-        jDQ0bHzQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1knLZd-0004f1-BZ; Thu, 10 Dec 2020 13:01:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A3D693007CD;
-        Thu, 10 Dec 2020 14:01:31 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8C5B7209B20CB; Thu, 10 Dec 2020 14:01:31 +0100 (CET)
-Date:   Thu, 10 Dec 2020 14:01:31 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
+        Thu, 10 Dec 2020 08:37:17 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <seth.forshee@canonical.com>)
+        id 1knM7X-0005R8-VY
+        for linux-kselftest@vger.kernel.org; Thu, 10 Dec 2020 13:36:36 +0000
+Received: by mail-io1-f69.google.com with SMTP id a2so3900504iod.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 05:36:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mwzWNqwukiO9666dcy5UFimaTAhAAx9w5jcf7BvZNzs=;
+        b=lJoBMWZnCblNJiA7mhT23tenBIjMFV9OssV1p7Fd+nYuvPf4W87czmnRyAaXrBphpm
+         rzUpjf/wiramoHkYcccrvdHMZQpY/6OBdqAFIhpuFXRd1jpQyrMT8thVzt3I3f9q4Ja/
+         eWrQ8KyWv8WGk38FF5xuyRnxXgtpmmo3QPVosN5RM/+hd4CW1ZQDpWgIKFmM5TfQUOUV
+         I3OYSjtYT8vuloWn32j2BRVJzMB6rtI5C1tIT0xTOUfuqAYDc5MKasVeT+QL8nh2Kc/z
+         QsmTkVGHwMOTT05NazyNIv0MCa2iInrfYb1lphzYuiWBjANfNbm+zegH6/nAchmQsVkc
+         AgxQ==
+X-Gm-Message-State: AOAM532QBy47Y/qPV33fR3wfgtptaUdZuQkjehwBTK99xJSVhFj15T5Q
+        6WgVR4+vd97w7zBNwdMXii5Qp3hMCTYrTNBnyClbmnQ7Osl1j/iCSv1XHEUgu/s88N+kfGjxARW
+        ZsW7ajA0f23/Zky4WVL1edCVkZa0E4TDJzmlx1OwXYns3lg==
+X-Received: by 2002:a05:6638:2a5:: with SMTP id d5mr8717991jaq.92.1607607394872;
+        Thu, 10 Dec 2020 05:36:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzDAlRH9nDs2/sDKF2FW7RjAYQtS5kLIoWftt3jEkBIPJZ2Ls4/PB9s1dnWAzZ7dDe7Fi0g6A==
+X-Received: by 2002:a05:6638:2a5:: with SMTP id d5mr8717977jaq.92.1607607394700;
+        Thu, 10 Dec 2020 05:36:34 -0800 (PST)
+Received: from localhost ([2605:a601:ac0f:820:5f:df71:1517:60e9])
+        by smtp.gmail.com with ESMTPSA id y14sm3240284ilb.66.2020.12.10.05.36.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Dec 2020 05:36:34 -0800 (PST)
+Date:   Thu, 10 Dec 2020 07:36:33 -0600
+From:   Seth Forshee <seth.forshee@canonical.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-Message-ID: <20201210130131.GP2414@hirez.programming.kicks-ass.net>
-References: <20201203171118.372391-1-mlevitsk@redhat.com>
- <20201203171118.372391-2-mlevitsk@redhat.com>
- <87a6uq9abf.fsf@nanos.tec.linutronix.de>
- <1dbbeefc7c76c259b55582468ccd3aab35a6de60.camel@redhat.com>
- <87im9dlpsw.fsf@vitty.brq.redhat.com>
- <875z5d5x9m.fsf@nanos.tec.linutronix.de>
- <b6e0656b-4e3f-cf47-5ec9-eead44b2f2e9@redhat.com>
- <20201210121417.GN2414@hirez.programming.kicks-ass.net>
- <fe3e4637-b74b-864a-9d2f-c4f2d9450f2e@redhat.com>
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: BPF selftests build failure in 5.10-rc
+Message-ID: <X9IkYa6D9QrjooOd@ubuntu-x1>
+References: <X9FOSImMbu0/SV5B@ubuntu-x1>
+ <CAEf4BzYAptUF+AxmkVk7BjJWRE6UaLkPowKM+pWbFuOV9Z4GGg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fe3e4637-b74b-864a-9d2f-c4f2d9450f2e@redhat.com>
+In-Reply-To: <CAEf4BzYAptUF+AxmkVk7BjJWRE6UaLkPowKM+pWbFuOV9Z4GGg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 01:22:02PM +0100, Paolo Bonzini wrote:
-> On 10/12/20 13:14, Peter Zijlstra wrote:
-> > On Thu, Dec 10, 2020 at 12:42:36PM +0100, Paolo Bonzini wrote:
-> > > On 07/12/20 18:41, Thomas Gleixner wrote:
-> > > > Right this happens still occasionally, but for quite some time this is
-> > > > 100% firmware sillyness and not a fundamental property of the hardware
-> > > > anymore.
-> > > 
-> > > It's still a fundamental property of old hardware.  Last time I tried to
-> > > kill support for processors earlier than Core 2, I had to revert it. That's
-> > > older than Nehalem.
-> > 
-> > Core2 doesn't use TSC for timekeeping anyway. KVM shouldn't either.
+On Wed, Dec 09, 2020 at 04:15:35PM -0800, Andrii Nakryiko wrote:
+> On Wed, Dec 9, 2020 at 2:24 PM Seth Forshee <seth.forshee@canonical.com> wrote:
+> >
+> > Building the BPF selftests with clang 11, I'm getting the following
+> > error:
+> >
+> >    CLNG-LLC [test_maps] profiler1.o
+> >  In file included from progs/profiler1.c:6:
+> >  progs/profiler.inc.h:260:17: error: use of unknown builtin '__builtin_preserve_enum_value' [-Wimplicit-function-declaration]
+> >                  int cgrp_id = bpf_core_enum_value(enum cgroup_subsys_id___local,
+> >                                ^
+> >  /home/ubuntu/unstable/tools/testing/selftests/bpf/tools/include/bpf/bpf_core_read.h:179:2: note: expanded from macro 'bpf_core_enum_value'
+> >          __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
+> >          ^
+> >  1 error generated.
+> >  llc: error: llc: <stdin>:1:1: error: expected top-level entity
+> >  BPF obj compilation failed
 > 
-> On Core2, KVM guests pass TSC through kvmclock in order to get something
-> usable and not incredibly slow.
+> Addressed by fb3558127cb6 ("bpf: Fix selftest compilation on clang 11")
 
-Which is incredibly wrong.
+Great, thanks!
+
+> 
+> >
+> > I see that test_core_reloc_enumval.c takes precautions around the use of
+> > __builtin_preserve_enum_value as it is currently only available in clang
+> > 12 nightlies. Is it possible to do something similar here? Though I see
+> > that the use of the builtin is not nearly so neatly localized as it is
+> > in test_core_reloc_enumval.c.
+> >
+> > Thanks,
+> > Seth
