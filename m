@@ -2,120 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17212D6B8F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 00:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A282D6B9C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 00:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732728AbgLJXJM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Dec 2020 18:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S1732741AbgLJXLw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Dec 2020 18:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730702AbgLJXIs (ORCPT
+        with ESMTP id S1733150AbgLJXKz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 18:08:48 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7965AC061793
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:08:06 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id s21so5601641pfu.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:08:06 -0800 (PST)
+        Thu, 10 Dec 2020 18:10:55 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA224C0613CF
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:10:14 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id n142so6764703qkn.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:10:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NP1eu7QDXdN/1YqCh4O4EOd9zppr5PbDxmIdIe+pjSA=;
-        b=M/rjtOioeYVZzIK8FwCBKkHp+QeF8hYz1G+VlryRD4DXSoqGqzINxzNRERmZ2zKjkN
-         G4XKbt6rByKu1z3AagYCYrpfhUZE9dFaTGczwhxQaydu5hEkpI8H6hRF6DNYIEK6KC8K
-         V1YvnEiyAfMzzOb7qp41HUk1EUeOYSiLXGhD0QNdqEKsK/RvpHLm8djQit+4qgDyM9sF
-         p0xa3z0WxKXbIsLg5rKpzYt1dCZg7ijMW49l4IyAEokVCJFEnw2JtaQytJWSy7AGS+mn
-         oiYw4+idWG7OXPXfX6vSSWL2Bk87ztUHGPcH4ksCEPKeHzVGa9L1FZi7fBdokel4uf4T
-         tp5A==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PXNvDug05+aqIQUhCBBkkdcljepd619NYC6D67mJKng=;
+        b=KY8q1LTJ9v4+Mxdwf+O4dytJtldFCx/0lto4hGIoiFXYqFsj4/CY1XHGA1zAmQF79o
+         1WaHTHtpewLuZd7KKxgJ31nLTyBbJPaxmOR9/tBQ2WWe/iSfjdccrfudPDJyFNChMy9R
+         rYE711+SUPb2aGfyiJOvdK9YbrPFosBRQ6+CAr46RmnVdB0fhGWSv6R4dM00oSkRiStX
+         NsWy3TRqrgEH1Mx7ZoQr9YdPEPbcLbfWnTRsxfEjgRKdnLGkxjop97FkakXnNSKGVla4
+         EIA3XQbXd8m1NX8xmwZmVoNYiYPjgYdfT/CwxDcO4o9piUpE2KOXNFx5I9yC4Fvtw+uk
+         mowA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NP1eu7QDXdN/1YqCh4O4EOd9zppr5PbDxmIdIe+pjSA=;
-        b=cqXZhx3xVPRfcU/SjnGa1OAN34LJyQZiI2ghP63nFAd/h0phqhQ06YlvLRCkGvghut
-         DYwztMIaJLPvC7yNRgAogKZnk+ngsMWimljzcuQm9x8MspG2Ru03DC7hMmD8gd3yAPZi
-         QhoTSgT7XRSay7eKp2O+FXMVvmL/RMhNtxe1pkgqx+DOAAB8IJBKiAIepoG2g02+iyq7
-         xC19uVVbwO9Ybqj27kDkR9HCjfVFbioE++Q2CQ4ZVmn+gigYCpVwDpO2WtVt/xQDqlsk
-         Ei+Y+ug3OPQYyVVxTgjvgToEypfboZIYKY6rzFi8JcCPJWrK0NEw/+PySOw0CO96Z7Gi
-         tuEQ==
-X-Gm-Message-State: AOAM532VvUrY6cG+iWGnrMkfLnR+abx8pZhQrk3uAU9NP2rZLyuUKGDf
-        gREeG0LAhs/vQmm//BlktZ5ecXubkTgwUChTZT779g==
-X-Google-Smtp-Source: ABdhPJyPpYuGxS3UNNVMvIrUoOvYY0B9PyWYyBcfUUS6dyzMKocWIdKN/OXVIdGaZmMGNTMRO95SG0kFYXggpwyYwDw=
-X-Received: by 2002:a17:90b:1b05:: with SMTP id nu5mr9949695pjb.101.1607641685861;
- Thu, 10 Dec 2020 15:08:05 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PXNvDug05+aqIQUhCBBkkdcljepd619NYC6D67mJKng=;
+        b=SNeFRP9se+RfBT5kiiud4NCuLcXjisi+uCpKMTF3mVFoSlyiUgFrDzRcDPPAXuQ/qg
+         DAfEwi82jIpa0TQO9zp06jDWsdLFbvI5cr/jfDNy2btuNPjlSGKCQvQmnB9ifmuAzYNu
+         lqxp3JkG7wQsbCmkUOh2cOqOxLOPtf9xSU5uBfSy+3RkBx0TcM1LPSHKwpYB+1mWZd8j
+         KbMk7f5fTbvckqE1alwb4J6A8Q2zGyCushf4E0ErKY6oWQPWuhHhr7AAn8Img5ffvjfL
+         QyXGKOYkdgnKOFNMq+mI3xbYsZxIWLqmy9ohQnr755vR08ioY00nQWnk2BulqVk6wJct
+         iH/w==
+X-Gm-Message-State: AOAM532Ye49OqjhtLTsHyUw1oSynEVlGRVdHfT3I0dwjLCT196YIrn06
+        XiTLVrEJYm1S9sbDVB962dTbL54o7IrBvw==
+X-Google-Smtp-Source: ABdhPJzkoueWD0AlxcjmFjs2RtuEeMZedVeaGvMk46SwGtDhKkyjijfQA0BNCJhJt73MRLy1+HnARQ==
+X-Received: by 2002:a05:620a:805:: with SMTP id s5mr12513205qks.80.1607641813528;
+        Thu, 10 Dec 2020 15:10:13 -0800 (PST)
+Received: from willemb.nyc.corp.google.com ([2620:0:1003:312:f693:9fff:fef4:3e8a])
+        by smtp.gmail.com with ESMTPSA id c68sm5033671qkb.17.2020.12.10.15.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Dec 2020 15:10:12 -0800 (PST)
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org, kuba@kernel.org, keescook@chromium.org,
+        Willem de Bruijn <willemb@google.com>
+Subject: [PATCH] selftests/harness: pass variant to teardown
+Date:   Thu, 10 Dec 2020 18:10:10 -0500
+Message-Id: <20201210231010.420298-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
 MIME-Version: 1.0
-References: <20201203221005.2813159-1-adelg@google.com>
-In-Reply-To: <20201203221005.2813159-1-adelg@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 10 Dec 2020 15:07:53 -0800
-Message-ID: <CAKwvOdk6=TgL+f2-WvE7tsK0rN1XQ+NdXmeJfDkLsa8xPmgipA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: propagate CC to selftest submakes
-To:     Andrew Delgadillo <adelg@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 3, 2020 at 2:10 PM Andrew Delgadillo <adelg@google.com> wrote:
->
-> lib.mk defaults to gcc when CC is not set. When building selftests
-> as part of a kernel compilation, MAKEFLAGS is cleared to allow implicit
-> build rules to be used. This has the side-effect of clearing the CC
-> variable, which will cause selftests to be built with gcc regardless of
-> if we are using gcc or clang. To remedy this, propagate the CC variable
-> when clearing makeflags to ensure the correct compiler is used.
->
-> Signed-off-by: Andrew Delgadillo <adelg@google.com>
+From: Willem de Bruijn <willemb@google.com>
 
-Hi Andrew, thanks for the patch. Can you walk me through how to build
-the selftests?
+FIXTURE_VARIANT data is passed to FIXTURE_SETUP and TEST_F as variant.
 
-Documentation/dev-tools/kselftest.rst says:
-$ make -C tools/testing/selftests
+In some cases, the variant will change the setup, such that expections
+also change on teardown. Also pass variant to FIXTURE_TEARDOWN.
 
-And if I do:
-$ make CC=clang defconfig
-$ make CC=clang -C tools/testing/selftests -j
+The new FIXTURE_TEARDOWN logic is identical to that in FIXTURE_SETUP,
+right above.
 
-I observe a spew of errors.  If I apply your patch and rerun the
-above, I see what looks like the same spew of errors.  Am I "holding
-it wrong" or could the docs use a refresh?
+Signed-off-by: Willem de Bruijn <willemb@google.com>
 
-> ---
->  tools/testing/selftests/Makefile | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index d9c283503159..a4dd6d7e8276 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -90,10 +90,12 @@ FORCE_TARGETS ?=
->
->  # Clear LDFLAGS and MAKEFLAGS when implicit rules are missing.  This provides
->  # implicit rules to sub-test Makefiles which avoids build failures in test
-> -# Makefile that don't have explicit build rules.
-> +# Makefile that don't have explicit build rules. Since lib.mk defaults to
-> +# using gcc for compilation when the CC variable is not set, we propagate the
-> +# CC variable so if clang is being used, selftests will build with clang.
->  ifeq (,$(LINK.c))
->  override LDFLAGS =
-> -override MAKEFLAGS =
-> +override MAKEFLAGS = CC=$(CC)
->  endif
->
->  # Append kselftest to KBUILD_OUTPUT and O to avoid cluttering
-> --
-> 2.29.2.576.ga3fc446d84-goog
->
+---
 
+For one use of this see tentative
+tools/testing/selftests/filesystems/selectpoll.c kselftest at
+https://github.com/wdebruij/linux-next-mirror/commit/12b4d183ac9140c13606376bb5c6714673daf754
+---
+ tools/testing/selftests/kselftest_harness.h | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index f19804df244c..6a27e79278e8 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -283,7 +283,9 @@
+ #define FIXTURE_TEARDOWN(fixture_name) \
+ 	void fixture_name##_teardown( \
+ 		struct __test_metadata __attribute__((unused)) *_metadata, \
+-		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
++		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
++		const FIXTURE_VARIANT(fixture_name) \
++			__attribute__((unused)) *variant)
+ 
+ /**
+  * FIXTURE_VARIANT(fixture_name) - Optionally called once per fixture
+@@ -298,9 +300,9 @@
+  *       ...
+  *     };
+  *
+- * Defines type of constant parameters provided to FIXTURE_SETUP() and TEST_F()
+- * as *variant*. Variants allow the same tests to be run with different
+- * arguments.
++ * Defines type of constant parameters provided to FIXTURE_SETUP(), TEST_F() and
++ * FIXTURE_TEARDOWN as *variant*. Variants allow the same tests to be run with
++ * different arguments.
+  */
+ #define FIXTURE_VARIANT(fixture_name) struct _fixture_variant_##fixture_name
+ 
+@@ -382,7 +384,7 @@
+ 		if (!_metadata->passed) \
+ 			return; \
+ 		fixture_name##_##test_name(_metadata, &self, variant->data); \
+-		fixture_name##_teardown(_metadata, &self); \
++		fixture_name##_teardown(_metadata, &self, variant->data); \
+ 	} \
+ 	static struct __test_metadata \
+ 		      _##fixture_name##_##test_name##_object = { \
 -- 
-Thanks,
-~Nick Desaulniers
+2.29.2.576.ga3fc446d84-goog
+
