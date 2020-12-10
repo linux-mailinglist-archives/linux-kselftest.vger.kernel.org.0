@@ -2,98 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9765C2D4ED8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 00:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 827BE2D4F44
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 01:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728464AbgLIXgx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Dec 2020 18:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S1729027AbgLJAQd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Dec 2020 19:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727186AbgLIXgx (ORCPT
+        with ESMTP id S1728298AbgLJAQ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 18:36:53 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EA6C0613CF
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Dec 2020 15:36:12 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id x23so4545094lji.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Dec 2020 15:36:12 -0800 (PST)
+        Wed, 9 Dec 2020 19:16:27 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADA8C0613CF;
+        Wed,  9 Dec 2020 16:15:46 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id w127so3056022ybw.8;
+        Wed, 09 Dec 2020 16:15:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pTo7jsl561EArpZkOZylyDUIsb2DdRBwjmNyDxX906g=;
-        b=NuoCM3w040xBkq1NFSpB15nz67UGhYKJ63x/OjXgYWaOAD5v3yyBQcz0dmPTa5dR0v
-         eM28u+P90+dGqIzf4UXOU3cm/Z9o7CCqlscXVQpLEWyu5husd1c6a0jYTPq3bhkkmmT/
-         pp0LlGbDO4LnKDdhBvg68eYmKK/u6RxETzsK2y0uiC+RRfjFBjQfYnKht6XrpbZTXBxT
-         afs9KH9Ftq8H4jKC+IYoDIlSsYladyNZ+xwrwsosJDLaTATmBiUKtN/a205k5UGEm9zr
-         CdDsbyHBI+xYIHU9QUrv0Io1yA1Vh6o9tPM8IEtJa90KhjhAUyI9qGN4hRi51efs4Zyq
-         MyMw==
+         :cc;
+        bh=1vLDEYYkT2hpiBULyrspPEgHbJL3ArZe0mPVQDQCmdE=;
+        b=NoSpu5AjIWRE7XTDyPFeoWEF9hXZj9zh+RvAG9oJpWwmg4bmY2ZioLjmX6El0YgiHR
+         GUJOHKtze1UrFNU3LQcXAdQu9zHcBro+DMkjyfFVACJzx4d8ytmKkGVcgak4OKjph1vq
+         Y3SY6cEUdxy3g7gIEeUJYqNwONE5GQIHmJnidcSNv/xpFYtmy83hrxfYCDVSBKNlqn1x
+         Dti5wHHdo1U8jp4u9RURuhWlZKZQkneM6MOrJsQoi9Ps1Qa+JQsbNzs9VWKy9TTJ+Slv
+         Imdv96LCY6xybLFu40x25ZL/uIOdBrcYRg3TSF8DumMHN/5EaR8pXnIlflBY45htjwpo
+         E14A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pTo7jsl561EArpZkOZylyDUIsb2DdRBwjmNyDxX906g=;
-        b=dzoBNlZdX88IyoiCk/C9n54i7S0x2uL6H99+d7R5vHQ6TgGXYh1XbIoOBzUMQTLD5b
-         VQOK+p5TWIzLv11dFQ5Va/uvdbzgX4a2O2+2wSxi1k3i/JxFwh4VxRC4vpmILk31oOwy
-         1O0NR4TiDj38nF1fex3uU6bts+zIN+Bhlf8Cy1wTqmhMRiAMaib4KS9qDDpw48vR21Uy
-         EY/i2ilERYw2omuVY/qYOwrp8gZafyLflL4FzYVR+oCrubUsMupwp6nEXf8VubIUYMvz
-         vRy04wqd/6OgIv8aIj7GYJ7F15dNxzLlMDRbavSPRGGxXDEdtKCTg8WzxVrcZ198bzS7
-         pjJQ==
-X-Gm-Message-State: AOAM533T+2yQ438zd8sqZN+8EOzbIq9jz8TAiOE7qvwpnPEGziktsz4j
-        lheMuwaPrIAxewmPGn15MqTRSrrCp53Z2b1C6yOYw1cNhQdsRVf5
-X-Google-Smtp-Source: ABdhPJyA5S27YppqE010dDkaeBMdPpT4X7YHzYar0Vt/7/pYjjj6JSfE2myVytF57w3hI+qaRg3TYEFmqXfA0dPR6NA=
-X-Received: by 2002:a2e:a593:: with SMTP id m19mr1943857ljp.327.1607556970939;
- Wed, 09 Dec 2020 15:36:10 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=1vLDEYYkT2hpiBULyrspPEgHbJL3ArZe0mPVQDQCmdE=;
+        b=opfkhBOuQjvHY0TtIxPkigSdCZMxDzYZE7udwTQ90VCKGQDqP6fpm97t1eqFrRN+Py
+         d1JlW6MXlyRd5Q1pfshhiVej9Y1k7hAsV9VbDV3kgounDSkwzhK6XG7IeCBg/uWlpTXs
+         BDHH1nHQDkKbhtTFRzvd3qe/TyGegsMzHQxyn+0b7q1C/dkL8lww+XeFTjRHcdpFOlOr
+         eBiz19ZX9VVISj+PtJvDDsD5MKzU5XbcjUHZ6IrVhZEYjzmu26YKfVsvX0ifI8iimCKl
+         gytZFiNWfuDpJGZ919GclqO0k5XKPOax0KcCwAUfS3INu+Nmtt0bwtvxvfuHIB5uBm40
+         oiTQ==
+X-Gm-Message-State: AOAM532iq0b2iGG3AmQ+Xw18BhuO4wL1ZKDU4ll6jVuOaEhhPK0eNnof
+        cBrF2XIsnyvPrVebjZ7CYoJiMM0Ii+mi77Klww8=
+X-Google-Smtp-Source: ABdhPJz9+9UeJEXAHIfSxiKDbo6dBfe5/LMe9BQn4fxXlRn7LwtR9bNM970fC1rO2yGWy+mJdxcO1Z4dLgX7FIDfMsY=
+X-Received: by 2002:a25:6a05:: with SMTP id f5mr7285931ybc.459.1607559345847;
+ Wed, 09 Dec 2020 16:15:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20201209181915.39147-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20201209181915.39147-1-andriy.shevchenko@linux.intel.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 10 Dec 2020 07:35:59 +0800
-Message-ID: <CABVgOSm068MCw1H2m5Gz-deHicpg_U3jcU=GfJTB0S5B-g-ZUQ@mail.gmail.com>
-Subject: Re: [PATCH v1] um: Increase stack frame size threshold for signal.c
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um <linux-um@lists.infradead.org>,
+References: <X9FOSImMbu0/SV5B@ubuntu-x1>
+In-Reply-To: <X9FOSImMbu0/SV5B@ubuntu-x1>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 9 Dec 2020 16:15:35 -0800
+Message-ID: <CAEf4BzYAptUF+AxmkVk7BjJWRE6UaLkPowKM+pWbFuOV9Z4GGg@mail.gmail.com>
+Subject: Re: BPF selftests build failure in 5.10-rc
+To:     Seth Forshee <seth.forshee@canonical.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 2:23 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Wed, Dec 9, 2020 at 2:24 PM Seth Forshee <seth.forshee@canonical.com> wrote:
 >
-> The signal.c can't use heap for bit data located on stack. However,
-> by default a compiler warns us about overstepping stack frame size
-> threshold:
+> Building the BPF selftests with clang 11, I'm getting the following
+> error:
 >
-> arch/um/os-Linux/signal.c: In function =E2=80=98sig_handler_common=E2=80=
-=99:
-> arch/um/os-Linux/signal.c:51:1: warning: the frame size of 2960 bytes is =
-larger than 2048 bytes [-Wframe-larger-than=3D]
->    51 | }
->       | ^
-> arch/um/os-Linux/signal.c: In function =E2=80=98timer_real_alarm_handler=
-=E2=80=99:
-> arch/um/os-Linux/signal.c:95:1: warning: the frame size of 2960 bytes is =
-larger than 2048 bytes [-Wframe-larger-than=3D]
->     95 | }
->        | ^
->
-> Due to above increase stack frame size threshold explicitly for signal.c
-> to avoid unnecessary warning.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-Thanks -- this has been annoying me for a while!
+>    CLNG-LLC [test_maps] profiler1.o
+>  In file included from progs/profiler1.c:6:
+>  progs/profiler.inc.h:260:17: error: use of unknown builtin '__builtin_preserve_enum_value' [-Wimplicit-function-declaration]
+>                  int cgrp_id = bpf_core_enum_value(enum cgroup_subsys_id___local,
+>                                ^
+>  /home/ubuntu/unstable/tools/testing/selftests/bpf/tools/include/bpf/bpf_core_read.h:179:2: note: expanded from macro 'bpf_core_enum_value'
+>          __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
+>          ^
+>  1 error generated.
+>  llc: error: llc: <stdin>:1:1: error: expected top-level entity
+>  BPF obj compilation failed
 
-I've tested it -- the warning is indeed gone, and nothing else seems to bre=
-ak.
+Addressed by fb3558127cb6 ("bpf: Fix selftest compilation on clang 11")
 
-Tested-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
+>
+> I see that test_core_reloc_enumval.c takes precautions around the use of
+> __builtin_preserve_enum_value as it is currently only available in clang
+> 12 nightlies. Is it possible to do something similar here? Though I see
+> that the use of the builtin is not nearly so neatly localized as it is
+> in test_core_reloc_enumval.c.
+>
+> Thanks,
+> Seth
