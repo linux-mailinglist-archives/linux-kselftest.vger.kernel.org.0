@@ -2,93 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 827BE2D4F44
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 01:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC722D5183
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 04:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729027AbgLJAQd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Dec 2020 19:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728298AbgLJAQ1 (ORCPT
+        id S1730097AbgLJDjo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Dec 2020 22:39:44 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:45015 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729136AbgLJDjh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 19:16:27 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADA8C0613CF;
-        Wed,  9 Dec 2020 16:15:46 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id w127so3056022ybw.8;
-        Wed, 09 Dec 2020 16:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1vLDEYYkT2hpiBULyrspPEgHbJL3ArZe0mPVQDQCmdE=;
-        b=NoSpu5AjIWRE7XTDyPFeoWEF9hXZj9zh+RvAG9oJpWwmg4bmY2ZioLjmX6El0YgiHR
-         GUJOHKtze1UrFNU3LQcXAdQu9zHcBro+DMkjyfFVACJzx4d8ytmKkGVcgak4OKjph1vq
-         Y3SY6cEUdxy3g7gIEeUJYqNwONE5GQIHmJnidcSNv/xpFYtmy83hrxfYCDVSBKNlqn1x
-         Dti5wHHdo1U8jp4u9RURuhWlZKZQkneM6MOrJsQoi9Ps1Qa+JQsbNzs9VWKy9TTJ+Slv
-         Imdv96LCY6xybLFu40x25ZL/uIOdBrcYRg3TSF8DumMHN/5EaR8pXnIlflBY45htjwpo
-         E14A==
+        Wed, 9 Dec 2020 22:39:37 -0500
+Received: by mail-pf1-f194.google.com with SMTP id f9so2736386pfc.11;
+        Wed, 09 Dec 2020 19:39:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1vLDEYYkT2hpiBULyrspPEgHbJL3ArZe0mPVQDQCmdE=;
-        b=opfkhBOuQjvHY0TtIxPkigSdCZMxDzYZE7udwTQ90VCKGQDqP6fpm97t1eqFrRN+Py
-         d1JlW6MXlyRd5Q1pfshhiVej9Y1k7hAsV9VbDV3kgounDSkwzhK6XG7IeCBg/uWlpTXs
-         BDHH1nHQDkKbhtTFRzvd3qe/TyGegsMzHQxyn+0b7q1C/dkL8lww+XeFTjRHcdpFOlOr
-         eBiz19ZX9VVISj+PtJvDDsD5MKzU5XbcjUHZ6IrVhZEYjzmu26YKfVsvX0ifI8iimCKl
-         gytZFiNWfuDpJGZ919GclqO0k5XKPOax0KcCwAUfS3INu+Nmtt0bwtvxvfuHIB5uBm40
-         oiTQ==
-X-Gm-Message-State: AOAM532iq0b2iGG3AmQ+Xw18BhuO4wL1ZKDU4ll6jVuOaEhhPK0eNnof
-        cBrF2XIsnyvPrVebjZ7CYoJiMM0Ii+mi77Klww8=
-X-Google-Smtp-Source: ABdhPJz9+9UeJEXAHIfSxiKDbo6dBfe5/LMe9BQn4fxXlRn7LwtR9bNM970fC1rO2yGWy+mJdxcO1Z4dLgX7FIDfMsY=
-X-Received: by 2002:a25:6a05:: with SMTP id f5mr7285931ybc.459.1607559345847;
- Wed, 09 Dec 2020 16:15:45 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vl3B7XtbEhQjt2nq8MXPBFdyJIVZUFP3ezbjFEmRzg8=;
+        b=ecgffhcT4fpoyypTmpgIoOigMAIhaRhOriXOhdIrvGb8Mw5BVHA5CyMSA1evXFHITX
+         OqvmdPUKlfx+RoYkE4GPvc8N/LOWhspeAfhsJCsvlykZht/qrivh/L6DSul6txih2nf1
+         LBnOcv/fGgWpBUb7OEEX83z27uoUaxymB5ZtfrRaGIph1CYFU3b4M5VifhYoXb83yDJO
+         q2u68quyjHa/0NcFFeFaSP75Ppu+BJjJsc2/HPACmOGf8U0QgvRCb5Xu/+1CD2EFNwC8
+         3Qcvx5MnDc5sGP0hT2KVhxcFY94o9M0Oh271O3ny84gtlU/StPZ38WdQAFQQ6yDayyMs
+         Da0g==
+X-Gm-Message-State: AOAM5330b1FF6d+5nY9AcaXe39uzye+JAnJ88zIgoBb1zOLm/atWedVh
+        Fy8+hCcwCmVfNSpylPYp/FQ=
+X-Google-Smtp-Source: ABdhPJyk5LMpvJBOnoJv/cjrpAyasLKu4LBxr7jKQq4OCERkzn7Dwo1S3bQcoGiBB3763Qi0ahgwYw==
+X-Received: by 2002:a63:fe41:: with SMTP id x1mr4835088pgj.254.1607571536653;
+        Wed, 09 Dec 2020 19:38:56 -0800 (PST)
+Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id b4sm3743505pju.33.2020.12.09.19.38.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Dec 2020 19:38:55 -0800 (PST)
+Subject: Re: [dm-devel] [PATCH v1 0/5] dm: dm-user: New target that proxies
+ BIOs to userspace
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     snitzer@redhat.com, corbet@lwn.net, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, song@kernel.org, dm-devel@redhat.com,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org, agk@redhat.com,
+        Josef Bacik <josef@toxicpanda.com>,
+        Mike Christie <michael.christie@oracle.com>
+References: <mhng-97fc5874-29d0-4d9e-8c92-d3704a482f28@palmerdabbelt-glaptop1>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <6fb5be2d-c6ca-c21b-dddf-9b314973dcfe@acm.org>
+Date:   Wed, 9 Dec 2020 19:38:53 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-References: <X9FOSImMbu0/SV5B@ubuntu-x1>
-In-Reply-To: <X9FOSImMbu0/SV5B@ubuntu-x1>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 9 Dec 2020 16:15:35 -0800
-Message-ID: <CAEf4BzYAptUF+AxmkVk7BjJWRE6UaLkPowKM+pWbFuOV9Z4GGg@mail.gmail.com>
-Subject: Re: BPF selftests build failure in 5.10-rc
-To:     Seth Forshee <seth.forshee@canonical.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <mhng-97fc5874-29d0-4d9e-8c92-d3704a482f28@palmerdabbelt-glaptop1>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 9, 2020 at 2:24 PM Seth Forshee <seth.forshee@canonical.com> wrote:
->
-> Building the BPF selftests with clang 11, I'm getting the following
-> error:
->
->    CLNG-LLC [test_maps] profiler1.o
->  In file included from progs/profiler1.c:6:
->  progs/profiler.inc.h:260:17: error: use of unknown builtin '__builtin_preserve_enum_value' [-Wimplicit-function-declaration]
->                  int cgrp_id = bpf_core_enum_value(enum cgroup_subsys_id___local,
->                                ^
->  /home/ubuntu/unstable/tools/testing/selftests/bpf/tools/include/bpf/bpf_core_read.h:179:2: note: expanded from macro 'bpf_core_enum_value'
->          __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
->          ^
->  1 error generated.
->  llc: error: llc: <stdin>:1:1: error: expected top-level entity
->  BPF obj compilation failed
+On 12/7/20 10:55 AM, Palmer Dabbelt wrote:
+> All in all, I've found it a bit hard to figure out what sort of interest
+> people
+> have in dm-user: when I bring this up I seem to run into people who've done
+> similar things before and are vaguely interested, but certainly nobody is
+> chomping at the bit.  I'm sending it out in this early state to try and
+> figure
+> out if it's interesting enough to keep going.
 
-Addressed by fb3558127cb6 ("bpf: Fix selftest compilation on clang 11")
+Cc-ing Josef and Mike since their nbd contributions make me wonder
+whether this new driver could be useful to their use cases?
 
->
-> I see that test_core_reloc_enumval.c takes precautions around the use of
-> __builtin_preserve_enum_value as it is currently only available in clang
-> 12 nightlies. Is it possible to do something similar here? Though I see
-> that the use of the builtin is not nearly so neatly localized as it is
-> in test_core_reloc_enumval.c.
->
-> Thanks,
-> Seth
+Thanks,
+
+Bart.
