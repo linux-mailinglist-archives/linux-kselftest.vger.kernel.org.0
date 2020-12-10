@@ -2,76 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC722D5183
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 04:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20EE2D52E2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Dec 2020 05:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730097AbgLJDjo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Dec 2020 22:39:44 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45015 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729136AbgLJDjh (ORCPT
+        id S1732449AbgLJEhG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Dec 2020 23:37:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732437AbgLJEhG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 22:39:37 -0500
-Received: by mail-pf1-f194.google.com with SMTP id f9so2736386pfc.11;
-        Wed, 09 Dec 2020 19:39:22 -0800 (PST)
+        Wed, 9 Dec 2020 23:37:06 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF257C0613CF
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Dec 2020 20:36:25 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id w9so2295765plp.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Dec 2020 20:36:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=jH+BFqTYM/TwX75APIA2AjyEOFPXOw7P8lcdqybb7hc=;
+        b=Y/G9LwbZcGEr1UAJ0F3cFNU4kOSSyxfv3KDY4m2JT5W3oWMmwHCbAOgr+NrYLhCWUu
+         RWQmywIWSAd4qT1aEXmUzTSSmNEH1gIHGjQcGtjvfQk0SS7QAAo/+DXns+IaI1vfthwY
+         rKcrBaFWXWhAXboUQ2j3tOIbM+Ia5SOyFGMjJgWxaLo+7Sw7R6D/QEWZBCgXIxVYc5/d
+         ubA76euzm/oTEPoOId5UNIPrLjK7SJD9HkrPflWzhAHDNEjxfkHjVYcXhu8wnKYFVtJo
+         1Z/eYzV0zV0r2Qzk1JpfPobE2Cw8NK7SqeeHdRSlhf0nDa667CTkqk67pPWkslEgNeCC
+         m92w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vl3B7XtbEhQjt2nq8MXPBFdyJIVZUFP3ezbjFEmRzg8=;
-        b=ecgffhcT4fpoyypTmpgIoOigMAIhaRhOriXOhdIrvGb8Mw5BVHA5CyMSA1evXFHITX
-         OqvmdPUKlfx+RoYkE4GPvc8N/LOWhspeAfhsJCsvlykZht/qrivh/L6DSul6txih2nf1
-         LBnOcv/fGgWpBUb7OEEX83z27uoUaxymB5ZtfrRaGIph1CYFU3b4M5VifhYoXb83yDJO
-         q2u68quyjHa/0NcFFeFaSP75Ppu+BJjJsc2/HPACmOGf8U0QgvRCb5Xu/+1CD2EFNwC8
-         3Qcvx5MnDc5sGP0hT2KVhxcFY94o9M0Oh271O3ny84gtlU/StPZ38WdQAFQQ6yDayyMs
-         Da0g==
-X-Gm-Message-State: AOAM5330b1FF6d+5nY9AcaXe39uzye+JAnJ88zIgoBb1zOLm/atWedVh
-        Fy8+hCcwCmVfNSpylPYp/FQ=
-X-Google-Smtp-Source: ABdhPJyk5LMpvJBOnoJv/cjrpAyasLKu4LBxr7jKQq4OCERkzn7Dwo1S3bQcoGiBB3763Qi0ahgwYw==
-X-Received: by 2002:a63:fe41:: with SMTP id x1mr4835088pgj.254.1607571536653;
-        Wed, 09 Dec 2020 19:38:56 -0800 (PST)
-Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id b4sm3743505pju.33.2020.12.09.19.38.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Dec 2020 19:38:55 -0800 (PST)
-Subject: Re: [dm-devel] [PATCH v1 0/5] dm: dm-user: New target that proxies
- BIOs to userspace
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     snitzer@redhat.com, corbet@lwn.net, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, song@kernel.org, dm-devel@redhat.com,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org, agk@redhat.com,
-        Josef Bacik <josef@toxicpanda.com>,
-        Mike Christie <michael.christie@oracle.com>
-References: <mhng-97fc5874-29d0-4d9e-8c92-d3704a482f28@palmerdabbelt-glaptop1>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <6fb5be2d-c6ca-c21b-dddf-9b314973dcfe@acm.org>
-Date:   Wed, 9 Dec 2020 19:38:53 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
-MIME-Version: 1.0
-In-Reply-To: <mhng-97fc5874-29d0-4d9e-8c92-d3704a482f28@palmerdabbelt-glaptop1>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=jH+BFqTYM/TwX75APIA2AjyEOFPXOw7P8lcdqybb7hc=;
+        b=UJ5jbKMqQ5pY1T+P/LKYQnPaU0rtGxEs4S5Rd04GK+1JPTlf2rNyy218+5FufsP9sF
+         TJQjArBis4a5DqaPyTGI8K+ShA22nbWveGSsIBj65SgAX6M6YJDRiVqk5nnkRRVhK9or
+         d3PCzB3qZf8I2d8MrVjr+so4wmZ5QKrckEppxyqiKdyxQTwaJUBmibq7cR79zF1xIQiX
+         Jg53gPPOC+CSbKRkJn6xpVCuCqC015ekf4lRqaT16CADmcc2l9wCZHWR4P7Kf0Y0ZjbS
+         V4rsE/74G8CnQrSXzOup/kidekahJQ5P1FGNCUd1YfZ1aj6E5bq2Hm/W/m6P51bvoEV1
+         F1Ww==
+X-Gm-Message-State: AOAM5311pMrR+AG7f0joSnm+qZUTAKY+F8gLbfK/7n/EroHf7GG1+VMT
+        D+U4Z3zfoRUaPhhdDFj7W7JJOtpN
+X-Google-Smtp-Source: ABdhPJxqFIjjdoRvM3pSV/+xbG2xUOSqpD6KJIhfiBxyCLRoTswMnTSxRBNTb98N4Houy5SUkGn9oRPCIA==
+Sender: "morbo via sendgmr" <morbo@fawn.svl.corp.google.com>
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:7220:84ff:fe0f:9f6a])
+ (user=morbo job=sendgmr) by 2002:a17:902:6b02:b029:da:c6c0:d650 with SMTP id
+ o2-20020a1709026b02b02900dac6c0d650mr4893633plk.74.1607574985383; Wed, 09 Dec
+ 2020 20:36:25 -0800 (PST)
+Date:   Wed,  9 Dec 2020 20:36:11 -0800
+Message-Id: <20201210043611.3156624-1-morbo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+Subject: [PATCH] selftests: kvm: remove reassignment of non-absolute variables
+From:   Bill Wendling <morbo@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Bill Wendling <morbo@google.com>, Jian Cai <caij2003@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/7/20 10:55 AM, Palmer Dabbelt wrote:
-> All in all, I've found it a bit hard to figure out what sort of interest
-> people
-> have in dm-user: when I bring this up I seem to run into people who've done
-> similar things before and are vaguely interested, but certainly nobody is
-> chomping at the bit.  I'm sending it out in this early state to try and
-> figure
-> out if it's interesting enough to keep going.
+Clang's integrated assembler does not allow symbols with non-absolute
+values to be reassigned. Modify the interrupt entry loop macro to be
+compatible with IAS by using a label and an offset.
 
-Cc-ing Josef and Mike since their nbd contributions make me wonder
-whether this new driver could be useful to their use cases?
+Cc: Jian Cai <caij2003@gmail.com>
+Signed-off-by: Bill Wendling <morbo@google.com>
+References: https://lore.kernel.org/lkml/20200714233024.1789985-1-caij2003@gmail.com/
+---
+ tools/testing/selftests/kvm/lib/x86_64/handlers.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/handlers.S b/tools/testing/selftests/kvm/lib/x86_64/handlers.S
+index aaf7bc7d2ce1..3f9181e9a0a7 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/handlers.S
++++ b/tools/testing/selftests/kvm/lib/x86_64/handlers.S
+@@ -54,9 +54,9 @@ idt_handlers:
+ 	.align 8
+ 
+ 	/* Fetch current address and append it to idt_handlers. */
+-	current_handler = .
++0 :
+ .pushsection .rodata
+-.quad current_handler
++	.quad 0b
+ .popsection
+ 
+ 	.if ! \has_error
+-- 
+2.29.2.576.ga3fc446d84-goog
 
-Bart.
