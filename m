@@ -2,99 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 668212D75F9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 13:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1084C2D769C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 14:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405900AbgLKMrd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Dec 2020 07:47:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42248 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405546AbgLKMrH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Dec 2020 07:47:07 -0500
-Date:   Fri, 11 Dec 2020 12:46:18 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607690786;
-        bh=rkttQWduCMBKi17aoUzt0DsTYkZJR+MX7IWA7cdUVlY=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wbd8BaKYWgSUm9ty67USyQu4EjUKRzdy6YjVH0FETXoCEeUDamCUvt9WvMsADb79R
-         kLvuP/SScl3IAHOIpFnnVSQeSaDHYS9uBHTtcMRCi2xODd7jaa9gg0vPe4PgDjid+j
-         d4lnRL5wtlHE3rePA6i6eXlQB6jhy0bN1CynleEDkxJqAVqkBgI0s5TKaow4zDO9xw
-         GttO3wLOVATAj94V9l1S2VolDJSnWSjgB3IUzUIy59UT2G18gR5rYeoqBQf/AnfOLa
-         Uzt6K+E+08P24PaoYBtE/F0uL2fkgKuwd25J0ULzAfmy3yJExlOmtxRLN+PwlWBvU7
-         RiC/t/WFWzrkw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        id S2391312AbgLKNb0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Dec 2020 08:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393521AbgLKNbQ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 11 Dec 2020 08:31:16 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3246FC0613CF;
+        Fri, 11 Dec 2020 05:30:36 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1607693434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vPs+PXjGVHxlOB/Nvchr1edaRAyM1X+O6QVeZcxHz34=;
+        b=3MTDNYN7cIuhRhHt2eUJgMlAQzexhjLVGow1jvZps2MmDM1h8FFmjfFTu4VeRqE2HPQx/v
+        oLcsvEbjdF3roZDfgWgaEWQ1un6T97YP5Zhjg+S9rveXU0ixrEcZ/jvGtZaG41pdwDL1J5
+        chogprmkOqU7XIKuYHBp5YOFPlt9VEUT92lPuvrM+VmQXI9t0iX6d4NOkbPDWTGZ8kQAul
+        gsN3VU2Cpa6nO9IbFC1V3YI0zCufWfcGWZw8pvfCkbMIiSFxaz/4SXKygRQdCXnq6raK/t
+        k9V2063qDuPcdS7JZ9cDOkfeHQD2HWRc6e4EJyDJL192Yef5R5fJ6ocqk7hoNg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1607693434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vPs+PXjGVHxlOB/Nvchr1edaRAyM1X+O6QVeZcxHz34=;
+        b=um+pwlsgKjHt5srVyxPU5j7MMAhBot9S4ux0OggFrgjXX4Pgs4iBir3DISdYhOj8HUFUdS
+        WaaNGcqU/DjnkYDQ==
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
         Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Daniel Diaz <daniel.diaz@linaro.org>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH] selftests: Skip BPF seftests by default
-Message-ID: <20201211124618.GA4929@sirena.org.uk>
-References: <20201210185233.28091-1-broonie@kernel.org>
- <20201210191103.kfrna27kv3xwnshr@ast-mbp>
- <7e0ca62b-ff63-7d26-355f-c49e98a0ef36@linuxfoundation.org>
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+In-Reply-To: <20201211002703.GA47016@fuller.cnet>
+References: <20201203171118.372391-2-mlevitsk@redhat.com> <20201207232920.GD27492@fuller.cnet> <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com> <87sg8g2sn4.fsf@nanos.tec.linutronix.de> <20201208181107.GA31442@fuller.cnet> <875z5c2db8.fsf@nanos.tec.linutronix.de> <20201209163434.GA22851@fuller.cnet> <87r1nyzogg.fsf@nanos.tec.linutronix.de> <20201210152618.GB23951@fuller.cnet> <87zh2lib8l.fsf@nanos.tec.linutronix.de> <20201211002703.GA47016@fuller.cnet>
+Date:   Fri, 11 Dec 2020 14:30:34 +0100
+Message-ID: <87v9d8h3lx.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+QahgC5+KEYLbs62"
-Content-Disposition: inline
-In-Reply-To: <7e0ca62b-ff63-7d26-355f-c49e98a0ef36@linuxfoundation.org>
-X-Cookie: Nostalgia isn't what it used to be.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Dec 10 2020 at 21:27, Marcelo Tosatti wrote:
+> On Thu, Dec 10, 2020 at 10:48:10PM +0100, Thomas Gleixner wrote:
+>> You really all live in a seperate universe creating your own rules how
+>> things which other people work hard on to get it correct can be screwed
+>> over.
+>
+> 	1. T = read timestamp.
+> 	2. migrate (VM stops for a certain period).
+> 	3. use timestamp T.
 
---+QahgC5+KEYLbs62
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This is exactly the problem. Time stops at pause and continues where it
+stopped on resume.
 
-On Thu, Dec 10, 2020 at 04:41:33PM -0700, Shuah Khan wrote:
-> On 12/10/20 12:11 PM, Alexei Starovoitov wrote:
+But CLOCK_REALTIME and CLOCK_TAI advanced in reality. So up to the point
+where NTP fixes this - if there is NTP at all - the guest CLOCK_REALTIME
+and CLOCK_TAI are off by tpause.
 
-> > I'm fine with this, but I'd rather make an obvious second step right away
-> > and move selftests/bpf into a different directory.
+Now the application gets a packet from the outside world with a
+CLOCK_REALTIME timestamp which is suddenly ahead of the value it reads
+from clock_gettime(CLOCK_REALTIME) by tpause. So what is it supposed to
+do with that? Make stupid assumptions that the other end screwed up
+timekeeping, throw an error that the system it is running on screwed up
+timekeeping? And a second later when NTP catched up it gets the next
+surprise because the systems CLOCK_REALTIME jumped forward unexpectedly
+or if there is no NTP it's confused forever.
 
-> Why is this an obvious second step? If people want to run bpf, they can
-> build and run. How does moving it out of selftests directory help? It
-> would become harder on users that want to run the test.
+How can you even assume that this is correct?
 
-> I don't support moving bpf out of selftests directory in the interest
-> of Linux kernel quality and validation.
+It is exactly the same problem as we had many years ago with hardware
+clocks suddenly stopping to tick which caused quite some stuff to go
+belly up.
 
-> Let's think big picture and kernel community as a whole.
+In a proper suspend/resume scenario CLOCK_REALTIME/TAI are advanced
+(with a certain degree of accuracy) to compensate for the sleep time, so
+the other end of a communication is at least in the same ballpark, but
+not 50 seconds off.
 
-Yeah, I don't see an obvious motivation for doing that either - what
-problem does it solve?  For people running suites it's helpful to have
-fewer testsuites and test infrastructures to integrate with.  The work
-needed for the dependencies is going to be the same no matter where we
-put the tests and moving out of the shared infrastructure creates some
-additional work.
+>> This features first, correctness later frenzy is insane and it better
+>> stops now before you pile even more crap on the existing steaming pile
+>> of insanities.
+>
+> Sure.
 
---+QahgC5+KEYLbs62
-Content-Type: application/pgp-signature; name="signature.asc"
+I wish that would be true. OS people - you should know that - are
+fighting forever with hardware people over feature madness and the
+attitude of 'we can fix that in software' which turns often enough out
+to be wrong.
 
------BEGIN PGP SIGNATURE-----
+Now sadly enough people who suffered from that madness work on
+virtualization and instead of trying to avoid the same problem they go
+off and make it even worse.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/TahoACgkQJNaLcl1U
-h9AeWAf9ETlD7tAR85BtW0lTAL404AkYwyQwy58k/IFF4jFPDEH0PKZYsir8nv1G
-ef5ojZDrbjgGBZapTuDUm8GOEk24aZgBCSGoJuCz+Y0W5hmo08bModX1kYy33q9T
-0XU4nNm5sHH5lvNsDQInHXoREI7W6da5c29aQlgu/x5EElIlXsZYdqPFYgTnV4PI
-+YRzKyFo5tfa3sJmjcDCv64d05OWxV339vXdRttSu6qAqp3EzzvAlW+8eMvXY0DR
-V5nRvBmbjg7ZzTGie2IOmGvOZIgV1TKLm8heJ+tdClLZbZ2b7BDeYFpT2CDPkPXg
-LUFaeZk7RaKcU4IHztLDHKmlgxTUYQ==
-=GnSs
------END PGP SIGNATURE-----
+It's the same problem again as with hardware people. Not talking to the
+other people _before_ making uninformed assumptions and decisions.
 
---+QahgC5+KEYLbs62--
+We did it that way because big customer asked for it is not a
+justification for inflicting this on everybody else and thereby
+violating correctness. Works for me and my big customer is not a proof
+of correctness either.
+
+It's another proof that this industry just "works" by chance.
+
+Thanks,
+
+        tglx
