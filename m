@@ -2,132 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E62982D8180
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 23:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A945D2D81C2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 23:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405950AbgLKWBw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Dec 2020 17:01:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26748 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405978AbgLKWBb (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Dec 2020 17:01:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607724005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EK8HRAAQwG+zadkdfwj/A0swUara/4+Zbd8qXA1iC48=;
-        b=VaXikNQheHBTlQYnrUSRBQ6pQVolGT6xdY10dh5cjGCW1abbPYpe9iknv8jTBEFP1e+DNY
-        EKlkGeMsz06Y6fA/wDsEQ600QyvUTSTym9Ky2xW+CLUwL6/hVPddi4d9GoFmepSM8GVgq+
-        mABjdDC0OjeWYTtgEd+K0ETzMjnwSR0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-167-z80OCp0dNcmCzymAjiY_0A-1; Fri, 11 Dec 2020 17:00:03 -0500
-X-MC-Unique: z80OCp0dNcmCzymAjiY_0A-1
-Received: by mail-ed1-f72.google.com with SMTP id ca7so4569339edb.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Dec 2020 14:00:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EK8HRAAQwG+zadkdfwj/A0swUara/4+Zbd8qXA1iC48=;
-        b=UrNwBzwxMdQc/qyKrnZ1YOAou1rsxoiZ2/YIAdIsBWJ1voqWwjmN+mmqu+I/0SepX8
-         hWdcSZROq9ipjTZU4FZoxMLdNTT6/vjzUbw9pMoOHqxJTfS3QkI3zYb9e16RzOUa61R+
-         /avzG7P2KOd3fYEd2SqorTSW9H1XIO1UxICYeT24/cz4f27cWI4NlbcE3i8tFkRAJ05l
-         DovwNj0IUMhClr/N9HDaYmnlY6JS/d5Sgwoyq54bPd0ypfWHAA2vL7gp6ptpG4ddOYjN
-         v/CDBihC350MPmjCBNz7RFzfkhFMWsV9HiWXOrVotVbi4fh0cn2Z+Bx6CDV1ba94m8vZ
-         whZQ==
-X-Gm-Message-State: AOAM532LSZbXELzwAtaq+TimKleO4HCp1gFQtLm614edmd9QeUgL9w5i
-        nyadt5RR2Iq55hWwfKAghY02/KxDVoETfxhkK/u4hQuEUOWAIyJ1ZJqpHmQSUbb3yGULZM6Em7G
-        +8GRjn9x63N4H3DZ3nRBohtbFxqJT
-X-Received: by 2002:a17:906:e18:: with SMTP id l24mr12334239eji.434.1607724001749;
-        Fri, 11 Dec 2020 14:00:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxZEnlN3IFEJh4D6v54mu+Ro6WoFbJdFge0yKqBGFzqCplQ9jUb3+USgCjAlG9gzjAUdRFuyg==
-X-Received: by 2002:a17:906:e18:: with SMTP id l24mr12334212eji.434.1607724001534;
-        Fri, 11 Dec 2020 14:00:01 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id a12sm8568558edu.89.2020.12.11.13.59.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Dec 2020 14:00:00 -0800 (PST)
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
+        id S2406760AbgLKWPq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Dec 2020 17:15:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47508 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406751AbgLKWPZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 11 Dec 2020 17:15:25 -0500
+X-Gm-Message-State: AOAM532kwCN0bsxtFPe9yA7i+abDVnyzwlN7XcCSmx8mb0DJlPL5L0WW
+        Ao6ygEfUxLKwAcwRxwgXXi5bBJtxaptxF67XJA4iNw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607724882;
+        bh=70LTUMehFh83IHad/vkXff9wd8DJwarU76xfxtWTpbY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jPAdTjcAVpZyDFTaPihJOsnveXonsw5iOC6B7KbDZDjzqZNwbm7CsmLDH3yR0AMID
+         SNfPGfnjQ3iWvMryER3GLaa8smv8iVvQy2GhAyVriM92szYovmcCUtjEsGsqB+wLEu
+         7R/8evzBvMtqXX/2o39B34SfiJoMfQ9d2yPn0icWzRf3+6zFxZ2pNb/c6qokJB+How
+         9HXBSycFcdAQzwnvNh3IDX4+qV7Qgi8aIYQK+QaOB/Jj0HXGnIYfXkI3qp+mFM3IOV
+         v2A5PmGBQtslguW0eYDMFhwLH/Gqey8aJRD7LMfwaHCIDkWMKrpYuCoQlC3FRomXfL
+         wiJq08Nve+OvA==
+X-Google-Smtp-Source: ABdhPJwyiUgo4QSzbgQvODMi2EdGDgMycwa95HkgOC2v3m4y50nPJcH7R/4+bPCwIYyM+uNouuOpofy5wtqF2/93N+Q=
+X-Received: by 2002:a5d:4905:: with SMTP id x5mr825454wrq.75.1607724880704;
+ Fri, 11 Dec 2020 14:14:40 -0800 (PST)
+MIME-Version: 1.0
+References: <20201106232908.364581-6-ira.weiny@intel.com> <20201124060956.1405768-1-ira.weiny@intel.com>
+In-Reply-To: <20201124060956.1405768-1-ira.weiny@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 11 Dec 2020 14:14:28 -0800
+X-Gmail-Original-Message-ID: <CALCETrUHwZPic89oExMMe-WyDY8-O3W68NcZvse3=PGW+iW5=w@mail.gmail.com>
+Message-ID: <CALCETrUHwZPic89oExMMe-WyDY8-O3W68NcZvse3=PGW+iW5=w@mail.gmail.com>
+Subject: Re: [PATCH V3.1] entry: Pass irqentry_state_t by reference
+To:     Weiny Ira <ira.weiny@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        Linux-MM <linux-mm@kvack.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com>
- <87sg8g2sn4.fsf@nanos.tec.linutronix.de> <20201208181107.GA31442@fuller.cnet>
- <875z5c2db8.fsf@nanos.tec.linutronix.de> <20201209163434.GA22851@fuller.cnet>
- <87r1nyzogg.fsf@nanos.tec.linutronix.de> <20201210152618.GB23951@fuller.cnet>
- <87zh2lib8l.fsf@nanos.tec.linutronix.de> <20201211002703.GA47016@fuller.cnet>
- <87v9d8h3lx.fsf@nanos.tec.linutronix.de> <20201211141822.GA67764@fuller.cnet>
- <87k0togikr.fsf@nanos.tec.linutronix.de>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-Message-ID: <d9063c37-a965-d5cf-e923-c0c9f6ddc044@redhat.com>
-Date:   Fri, 11 Dec 2020 22:59:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <87k0togikr.fsf@nanos.tec.linutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/12/20 22:04, Thomas Gleixner wrote:
->> Its 100ms off with migration, and can be reduced further (customers
->> complained about 5 seconds but seem happy with 0.1ms).
-> What is 100ms? Guaranteed maximum migration time?
+On Mon, Nov 23, 2020 at 10:10 PM <ira.weiny@intel.com> wrote:
+>
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> Currently struct irqentry_state_t only contains a single bool value
+> which makes passing it by value is reasonable.  However, future patches
+> add information to this struct.  This includes the PKRS thread state,
+> included in this series, as well as information to store kmap reference
+> tracking and PKS global state outside this series.  In total, we
+> anticipate 2 new 32 bit fields and an integer field to be added to the
+> struct beyond the existing bool value.
+>
+> Adding information to irqentry_state_t makes passing by value less
+> efficient.  Therefore, change the entry/exit calls to pass irq_state by
+> reference in preparation for the changes which follow.
+>
+> While at it, make the code easier to follow by changing all the usage
+> sites to consistently use the variable name 'irq_state'.
 
-I suppose it's the length between the time from KVM_GET_CLOCK and 
-KVM_GET_MSR(IA32_TSC) to KVM_SET_CLOCK and KVM_SET_MSR(IA32_TSC).  But 
-the VM is paused for much longer, the sequence for the non-live part of 
-the migration (aka brownout) is as follows:
+After contemplating this for a bit, I think this isn't really the
+right approach.  It *works*, but we've mostly just created a bit of an
+unfortunate situation.  Our stack, on a (possibly nested) entry looks
+like:
 
-     pause
-     finish sending RAM            receive RAM               ~1 sec
-     send paused-VM state          finish receiving RAM     \
-                                   receive paused-VM state   ) 0.1 sec
-                                   restart                  /
+previous frame (or empty if we came from usermode)
+---
+SS
+RSP
+FLAGS
+CS
+RIP
+rest of pt_regs
 
-The nanosecond and TSC times are sent as part of the paused-VM state at 
-the very end of the live migration process.
+C frame
 
-So it's still true that the time advances during live migration 
-brownout; 0.1 seconds is just the final part of the live migration 
-process.  But for _live_ migration there is no need to design things 
-according to "people are happy if their clock is off by 0.1 seconds 
-only".  Again, save-to-disk, reverse debugging and the like are a 
-different story, which is why KVM should delegate policy to userspace 
-(while documenting how to do it right).
+irqentry_state_t (maybe -- the compiler is within its rights to play
+almost arbitrary games here)
 
-Paolo
+more C stuff
 
-> CLOCK_REALTIME and CLOCK_TAI are off by the time the VM is paused and
-> this state persists up to the point where NTP corrects it with a time
-> jump.
-> 
-> So if migration takes 5 seconds then CLOCK_REALTIME is not off by 100ms
-> it's off by 5 seconds.
-> 
-> CLOCK_MONOTONIC/BOOTTIME might be off by 100ms between pause and resume.
-> 
 
+So what we've accomplished is having two distinct arch register
+regions, one called pt_regs and the other stuck in irqentry_state_t.
+This is annoying because it means that, if we want to access this
+thing without passing a pointer around or access it at all from outer
+frames, we need to do something terrible with the unwinder, and we
+don't want to go there.
+
+So I propose a somewhat different solution: lay out the stack like this.
+
+SS
+RSP
+FLAGS
+CS
+RIP
+rest of pt_regs
+PKS
+^^^^^^^^ extended_pt_regs points here
+
+C frame
+more C stuff
+...
+
+IOW we have:
+
+struct extended_pt_regs {
+  bool rcu_whatever;
+  other generic fields here;
+  struct arch_extended_pt_regs arch_regs;
+  struct pt_regs regs;
+};
+
+and arch_extended_pt_regs has unsigned long pks;
+
+and instead of passing a pointer to irqentry_state_t to the generic
+entry/exit code, we just pass a pt_regs pointer.  And we have a little
+accessor like:
+
+struct extended_pt_regs *extended_regs(struct pt_regs *) { return
+container_of(...); }
+
+And we tell eBPF that extended_pt_regs is NOT ABI, and we will change
+it whenever we feel like just to keep you on your toes, thank you very
+much.
+
+Does this seem reasonable?  You get to drop patch 7 and instead modify
+the show_regs() stuff to just display one extra register.
