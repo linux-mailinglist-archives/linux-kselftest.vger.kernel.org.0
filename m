@@ -2,136 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4692D6C94
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 01:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAC62D6C9C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Dec 2020 01:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394070AbgLKA3M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Dec 2020 19:29:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25749 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2393591AbgLKA3H (ORCPT
+        id S1728493AbgLKAc4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Dec 2020 19:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730557AbgLKAci (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 19:29:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607646461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=smSusb6V6UpqcgwJnIn5HTzBcj5wuKKaCTquGzVm8wA=;
-        b=Ghc/KzfXKWaeartQ2tlocNw4Pxqm4jg2tYN6P0hRjWUtoGUvQE3OJgOxiqX8cybBruaE35
-        4BS+mOv6+Ca4oTqMylKcEJLAn+CLsb0MjmTUH/Bf3vilLC5n78vYa/L04NWR34/mq9czCv
-        NboWcHS0x+WRiEo5CoAZFWheAkGeY4o=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-545-01-RlXyYP0eRgWNEySdgJA-1; Thu, 10 Dec 2020 19:27:37 -0500
-X-MC-Unique: 01-RlXyYP0eRgWNEySdgJA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70D00180A086;
-        Fri, 11 Dec 2020 00:27:34 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-7.gru2.redhat.com [10.97.112.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DB44A100239F;
-        Fri, 11 Dec 2020 00:27:32 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id BFCF94172EDF; Thu, 10 Dec 2020 21:27:03 -0300 (-03)
-Date:   Thu, 10 Dec 2020 21:27:03 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
+        Thu, 10 Dec 2020 19:32:38 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E69C0613D3
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 16:31:58 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id u12so7131942ilv.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 16:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yiQdoMf12SNG+ZW2M45uraLJUUvpcbUlT/pdENldQuk=;
+        b=NOzXytw9rV0o+nt1jsY54EeUYWKilyIEweWh0TG7nJUVx6LuHfXmVkFK5WZcZyXjeM
+         i1cochq1LtAR7f9NkETZYT8+nJy1/SE9/J1/0XLincXyxaAbeD1GXSW8loHW3xEjk2I5
+         MDcOHGfsEkX4d7b/mt+dj0lk8Wyf7d6WF3Elk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yiQdoMf12SNG+ZW2M45uraLJUUvpcbUlT/pdENldQuk=;
+        b=moWkg5QK7Tje6RXfTrYifHeEZScgzcT6FEdV0fkdOL4WDxn8nNfdeeKswXudgbiBzy
+         EVebdoo2kKdTCWe6B+fCFWYIwEeSFRStvBTR6PacRlKbEkLk2GB8K+EpNYUBOS1bzIsV
+         VFUQkyW0LCcNN7YbU+XnuIcO1Ekbk4AFtk8EfLDLJvlpou+czLkMbTuBtHIu8Kw/dQ8Z
+         dp5YEXB0dGwbiYC+qpo2avd5AH3oQBMUXSwqqG/+8dNKx0Q+aHBGsWWx9SjlBgTz8JE0
+         mwlqfc3IREj2q1ZgOooVDBHsXw+r8wX12+N2K/Cz3sTFZZ5yWIdIRXtYCBk0DM3dgkns
+         mPLg==
+X-Gm-Message-State: AOAM5310MFEx/XYnYk6Srs5G8eTCUnLmcRtNpsS3EKIbj6HfZ85Wgqd9
+        +lkEsNbLsTXQvH+P5D32dt2zRQ==
+X-Google-Smtp-Source: ABdhPJx1/3vmncVRCjAKW3J2bHnvwcYzuWOZKTReo1KJXIzw1iQP1d06zqWGJA7p/oQJdblmqtgvTA==
+X-Received: by 2002:a05:6e02:1b8a:: with SMTP id h10mr12793622ili.266.1607646716914;
+        Thu, 10 Dec 2020 16:31:56 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id d5sm4007163ilf.33.2020.12.10.16.31.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Dec 2020 16:31:56 -0800 (PST)
+Subject: Re: [PATCH] selftests: propagate CC to selftest submakes
+To:     Andrew Delgadillo <adelg@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-Message-ID: <20201211002703.GA47016@fuller.cnet>
-References: <20201203171118.372391-2-mlevitsk@redhat.com>
- <20201207232920.GD27492@fuller.cnet>
- <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com>
- <87sg8g2sn4.fsf@nanos.tec.linutronix.de>
- <20201208181107.GA31442@fuller.cnet>
- <875z5c2db8.fsf@nanos.tec.linutronix.de>
- <20201209163434.GA22851@fuller.cnet>
- <87r1nyzogg.fsf@nanos.tec.linutronix.de>
- <20201210152618.GB23951@fuller.cnet>
- <87zh2lib8l.fsf@nanos.tec.linutronix.de>
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201203221005.2813159-1-adelg@google.com>
+ <CAKwvOdk6=TgL+f2-WvE7tsK0rN1XQ+NdXmeJfDkLsa8xPmgipA@mail.gmail.com>
+ <CAEHm+vHtMQtMThgE_BwpiBS5v0a61L_TW9vgKLaFTtcgg9HSgA@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e78c3b86-78ab-2b2e-d8be-e9118d7d2392@linuxfoundation.org>
+Date:   Thu, 10 Dec 2020 17:31:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zh2lib8l.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <CAEHm+vHtMQtMThgE_BwpiBS5v0a61L_TW9vgKLaFTtcgg9HSgA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 10:48:10PM +0100, Thomas Gleixner wrote:
-> On Thu, Dec 10 2020 at 12:26, Marcelo Tosatti wrote:
-> > On Wed, Dec 09, 2020 at 09:58:23PM +0100, Thomas Gleixner wrote:
-> >> Marcelo,
-> >> 
-> >> On Wed, Dec 09 2020 at 13:34, Marcelo Tosatti wrote:
-> >> > On Tue, Dec 08, 2020 at 10:33:15PM +0100, Thomas Gleixner wrote:
-> >> >> On Tue, Dec 08 2020 at 15:11, Marcelo Tosatti wrote:
-> >> >> > max_cycles overflow. Sent a message to Maxim describing it.
-> >> >> 
-> >> >> Truly helpful. Why the hell did you not talk to me when you ran into
-> >> >> that the first time?
-> >> >
-> >> > Because 
-> >> >
-> >> > 1) Users wanted CLOCK_BOOTTIME to stop counting while the VM 
-> >> > is paused (so we wanted to stop guest clock when VM is paused anyway).
-> >> 
-> >> How is that supposed to work w/o the guest kernels help if you have to
-> >> keep clock realtime up to date? 
-> >
-> > Upon VM resume, we notify NTP daemon in the guest to sync realtime
-> > clock.
+On 12/10/20 5:10 PM, Andrew Delgadillo wrote:
+> On Thu, Dec 10, 2020 at 3:08 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>>
+>> On Thu, Dec 3, 2020 at 2:10 PM Andrew Delgadillo <adelg@google.com> wrote:
+>>>
+>>> lib.mk defaults to gcc when CC is not set. When building selftests
+>>> as part of a kernel compilation, MAKEFLAGS is cleared to allow implicit
+>>> build rules to be used. This has the side-effect of clearing the CC
+>>> variable, which will cause selftests to be built with gcc regardless of
+>>> if we are using gcc or clang. To remedy this, propagate the CC variable
+>>> when clearing makeflags to ensure the correct compiler is used.
+>>>
+>>> Signed-off-by: Andrew Delgadillo <adelg@google.com>
+>>
+>> Hi Andrew, thanks for the patch. Can you walk me through how to build
+>> the selftests?
+>>
+>> Documentation/dev-tools/kselftest.rst says:
+>> $ make -C tools/testing/selftests
+>>
+>> And if I do:
+>> $ make CC=clang defconfig
+>> $ make CC=clang -C tools/testing/selftests -j
+>>
+>> I observe a spew of errors.  If I apply your patch and rerun the
+>> above, I see what looks like the same spew of errors.  Am I "holding
+>> it wrong" or could the docs use a refresh?
+>>
 > 
-> Brilliant. What happens if there is no NTP daemon? What happens if the
-> NTP daemon is not part of the virt orchestration magic and cannot be
-> notified, then it will notice the time jump after the next update
-> interval.
+> Hi Nick, sure thing!
 > 
-> What about correctness?
+> I also see a slew of errors when building with make -C
+> tools/testing/selftests. However, that is not the problem I am trying
+> to solve. I believe we are seeing errors building that way because it
+> is missing some make variables that are normally set up when building
+> from the kernel's top level makefile.
 > 
-> ALL CLOCK_* stop and resume when the VM is resumed at the point where
-> they stopped.
-> 
-> So up to the point where NTP catches up and corrects clock realtime and
-> TAI other processes can observe that time jumped in the outside world,
-> e.g. via a network packet or whatever, but there is no reason why time
-> should have jumped outside vs. the local one.
-> 
-> You really all live in a seperate universe creating your own rules how
-> things which other people work hard on to get it correct can be screwed
-> over.
 
-	1. T = read timestamp.
-	2. migrate (VM stops for a certain period).
-	3. use timestamp T.
+Both options are supported and should work.
 
-> Of course this all is nowhere documented in detail. At least a quick
-> search with about 10 different keyword combinations revealed absolutely
-> nothing.
-> 
-> This features first, correctness later frenzy is insane and it better
-> stops now before you pile even more crap on the existing steaming pile
-> of insanities.
+make -C tools/testing/selftests
+make kselftest
 
-Sure.
+That being said, I use gcc. Can you send the errors you are seeing?
+It is possible, a few tests aren't building and need to be fixed
+for clang and gcc.
+
+thanks,
+-- Shuah
 
