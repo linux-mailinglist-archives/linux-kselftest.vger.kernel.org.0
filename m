@@ -2,91 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2832D869C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Dec 2020 14:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473D42D8709
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Dec 2020 15:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407403AbgLLNEL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 12 Dec 2020 08:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394867AbgLLNEF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Dec 2020 08:04:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A410CC0613CF;
-        Sat, 12 Dec 2020 05:03:24 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1607778202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dm0h1kETERLgrH3MYccPKguhl9RAaSD+kQ67+0pK7gQ=;
-        b=Ym3dRr/Y+Sb79nbnelKOQlClJALoto3behsFcq1miJktOuA0kzzOVdVcS7UUx0se15/m/t
-        wdvP10HVpZpXTGthQrL3UhPTwRqNWAjn3RI4/3+an4yBMaR5kBF9P6VaMjj8XIkiXn6CFe
-        kYm6Bd7x/KzQqV8DBtfRgy1lz3PD4DI8Dma4mTgIbJWMUVwdzyqU86OpLKN2f3MULD3jyc
-        ZyXN1Vw7dfr6kisWY7hBvz9bCCZG2bZCD099FWS6Uyl3E75nsk3JBisz0hBcGPOkerunbi
-        zcEFOeB63/oY/6EuQ2uDCwdts6e87L0ImP/iZ8wdf90bvd4x3Z4TJuMmmEPSWQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1607778202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dm0h1kETERLgrH3MYccPKguhl9RAaSD+kQ67+0pK7gQ=;
-        b=limZ6dagZ2Cmsj35YZ/sv7F5dIwrMyk02ULK2mEBjFv3NwSiZb0GC8oYw4z+0SXtD+K7jO
-        /ZCrQTiJ9XcpZVAA==
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        id S2439132AbgLLOAn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 12 Dec 2020 09:00:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2439135AbgLLOAj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 12 Dec 2020 09:00:39 -0500
+Date:   Sat, 12 Dec 2020 15:59:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607781598;
+        bh=W+S3uDjo9SUaklycr1VwLEkb3P+e5VKfy1opxSFjfP4=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=flXIgTj5QPdmF322uyfveGkWCvdiCUBTDqJEmaQAdBMU+9OnpTfe38HJDNJgc0lH8
+         G3M3nYjTvl4Jk0YTIcL5XhPPhChBAc7qxqYwpPq+/oyL9pin060A7R+FLePp8EI92r
+         GwnqdckCsl6axBY1CL4fx8yH/moiz2Z+oLa3jsxNsEo1pT2EOLhqIregvSKc55N4Zj
+         WuUAHrJAd8PgEDWlSYMQSNKmu4qJ1V3ZA+z2Yx8VyWB6hblUmlV0BHoIXeUaszFyMu
+         HjV36aGN0+weJj3fLUwesb3uBHEoXTzG37NgAFnxayD4MEFDMvTjDeUmf4Kr35XObN
+         Un6GIU6DTV1SA==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
         Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-In-Reply-To: <d9063c37-a965-d5cf-e923-c0c9f6ddc044@redhat.com>
-References: <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com> <87sg8g2sn4.fsf@nanos.tec.linutronix.de> <20201208181107.GA31442@fuller.cnet> <875z5c2db8.fsf@nanos.tec.linutronix.de> <20201209163434.GA22851@fuller.cnet> <87r1nyzogg.fsf@nanos.tec.linutronix.de> <20201210152618.GB23951@fuller.cnet> <87zh2lib8l.fsf@nanos.tec.linutronix.de> <20201211002703.GA47016@fuller.cnet> <87v9d8h3lx.fsf@nanos.tec.linutronix.de> <20201211141822.GA67764@fuller.cnet> <87k0togikr.fsf@nanos.tec.linutronix.de> <d9063c37-a965-d5cf-e923-c0c9f6ddc044@redhat.com>
-Date:   Sat, 12 Dec 2020 14:03:22 +0100
-Message-ID: <87lfe3fa79.fsf@nanos.tec.linutronix.de>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: Re: [PATCH v14 10/10] secretmem: test: add basic selftest for
+ memfd_secret(2)
+Message-ID: <20201212135940.GD8946@kernel.org>
+References: <20201203062949.5484-1-rppt@kernel.org>
+ <20201203062949.5484-11-rppt@kernel.org>
+ <248f928b-1383-48ea-8584-ec10146e60c9@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <248f928b-1383-48ea-8584-ec10146e60c9@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 11 2020 at 22:59, Paolo Bonzini wrote:
-> On 11/12/20 22:04, Thomas Gleixner wrote:
-> The nanosecond and TSC times are sent as part of the paused-VM state at 
-> the very end of the live migration process.
->
-> So it's still true that the time advances during live migration 
-> brownout; 0.1 seconds is just the final part of the live migration 
-> process.  But for _live_ migration there is no need to design things 
-> according to "people are happy if their clock is off by 0.1 seconds 
-> only".
+Hi John,
 
-The problem is not the 0.1 second jump of the TSC. That's just a minor
-nuisance. The problem is the incorrectness of CLOCK_REALTIME after this
-operation which is far larger than 0.1s and this needs to be fixed.
+On Fri, Dec 11, 2020 at 10:16:23PM -0800, John Hubbard wrote:
+> On 12/2/20 10:29 PM, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> ...
+> > +#include "../kselftest.h"
+> > +
+> > +#define fail(fmt, ...) ksft_test_result_fail(fmt, ##__VA_ARGS__)
+> > +#define pass(fmt, ...) ksft_test_result_pass(fmt, ##__VA_ARGS__)
+> > +#define skip(fmt, ...) ksft_test_result_skip(fmt, ##__VA_ARGS__)
+> > +
+> > +#ifdef __NR_memfd_secret
+> > +
+> > +#include <linux/secretmem.h>
+> 
+> Hi Mike,
+> 
+> Say, when I tried this out from today's linux-next, I had to delete the
+> above line. In other words, the following was required in order to build:
+> 
+> diff --git a/tools/testing/selftests/vm/memfd_secret.c b/tools/testing/selftests/vm/memfd_secret.c
+> index 79578dfd13e6..c878c2b841fc 100644
+> --- a/tools/testing/selftests/vm/memfd_secret.c
+> +++ b/tools/testing/selftests/vm/memfd_secret.c
+> @@ -29,8 +29,6 @@
+> 
+>  #ifdef __NR_memfd_secret
+> 
+> -#include <linux/secretmem.h>
+> -
+>  #define PATTERN        0x55
+> 
+>  static const int prot = PROT_READ | PROT_WRITE;
+> 
+> 
+> ...and that makes sense to me, because:
+> 
+> a) secretmem.h is not in the uapi, which this selftests/vm build system
+>    expects (it runs "make headers_install" for us, which is *not* going
+>    to pick up items in the kernel include dirs), and
+> 
+> b) There is nothing in secretmem.h that this test uses, anyway! Just these:
+> 
+> bool vma_is_secretmem(struct vm_area_struct *vma);
+> bool page_is_secretmem(struct page *page);
+> bool secretmem_active(void);
+> 
+> 
+> ...or am I just Doing It Wrong? :)
 
-> Again, save-to-disk, reverse debugging and the like are a different
-> story, which is why KVM should delegate policy to userspace (while
-> documenting how to do it right).
+You are perfectly right, I had a stale header in uapi from the prevoius
+versions, the include in the test remained from then.
 
-One ready to use option would be suspend to idle. It's fast and readily
-available including all the notifications and kernel side handling of
-time and whatever.
+@Andrew, can you please add the hunk above as a fixup?
 
-Thanks,
+> thanks,
+> -- 
+> John Hubbard
+> NVIDIA
 
-        tglx
+-- 
+Sincerely yours,
+Mike.
