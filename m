@@ -2,78 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 541D52DA35E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Dec 2020 23:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20E02DA378
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Dec 2020 23:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440204AbgLNW2F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Dec 2020 17:28:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35008 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729522AbgLNW1y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Dec 2020 17:27:54 -0500
-Date:   Mon, 14 Dec 2020 14:27:12 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1607984833;
-        bh=xyP2b8Vm21p2QLiFLD3yX3hc/KptPq+Mkcjz6M02CkY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HrFJiy9iXJ8LuUJifJJKJKKaFaNc2qPhLDL88PM/hq25WNuNOZhGO9EwVIfyAeBgR
-         6pQWafGegoQsRB/4RxQo/jkSVjjz7fsjF//IeLw0fgNpFMMPAYtQ3HvpJzbVoHsImA
-         Pr/5gi4RDszx01ljnw/99FPdw9bbLfDNO/wXR9I0=
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Harish <harish@linux.ibm.com>
-Cc:     shuah@kernel.org, sandipan@linux.ibm.com, jhubbard@nvidia.com,
-        dave.hansen@intel.com, kirill.shutemov@linux.intel.com,
-        bgeffon@google.com, almasrymina@google.com, suxingxing@loongson.cn,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/vm: Fix building protection keys test
-Message-Id: <20201214142712.d69187b0a82504f67916696e@linux-foundation.org>
-In-Reply-To: <20201214163951.141399-1-harish@linux.ibm.com>
-References: <20201214163951.141399-1-harish@linux.ibm.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S2439348AbgLNWgb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Dec 2020 17:36:31 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:39541 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439277AbgLNWg2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 14 Dec 2020 17:36:28 -0500
+Received: from cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net ([80.193.200.194] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1kowRQ-0007kT-F7; Mon, 14 Dec 2020 22:35:40 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/bpf: fix spelling mistake "tranmission" -> "transmission"
+Date:   Mon, 14 Dec 2020 22:35:39 +0000
+Message-Id: <20201214223539.83168-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 14 Dec 2020 22:09:51 +0530 Harish <harish@linux.ibm.com> wrote:
+From: Colin Ian King <colin.king@canonical.com>
 
-> The previous patch
+There are two spelling mistakes in output messages. Fix these.
 
-d8cbe8bfa7d ("tools/testing/selftests/vm: fix build error"), yes?
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ tools/testing/selftests/bpf/xdpxceiver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> tries to include a arch check for powerpc using
-> findstring, which prevents test from building on powerpc arch.
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 014dedaa4dd2..1e722ee76b1f 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -715,7 +715,7 @@ static void worker_pkt_dump(void)
+ 		int payload = *((uint32_t *)(pkt_buf[iter]->payload + PKT_HDR_SIZE));
+ 
+ 		if (payload == EOT) {
+-			ksft_print_msg("End-of-tranmission frame received\n");
++			ksft_print_msg("End-of-transmission frame received\n");
+ 			fprintf(stdout, "---------------------------------------\n");
+ 			break;
+ 		}
+@@ -747,7 +747,7 @@ static void worker_pkt_validate(void)
+ 			}
+ 
+ 			if (payloadseqnum == EOT) {
+-				ksft_print_msg("End-of-tranmission frame received: PASS\n");
++				ksft_print_msg("End-of-transmission frame received: PASS\n");
+ 				sigvar = 1;
+ 				break;
+ 			}
+-- 
+2.29.2
 
-Why is that?  Please describe the error fully.  Presumably by pasting
-the error messages?
-
-> Fix
-> this with filtering using machine type.
-
-How does this fix whatever-the-problem-was?
-
-Presumably the 5.10 build fails under some circumstances, yes?  In
-which case a Fixes: line and a cc:stable@vger.kernel.org are needed.
-
-> Signed-off-by: Harish <harish@linux.ibm.com>
-> ---
->  tools/testing/selftests/vm/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 691893afc15d..0dc632cdbc73 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -61,7 +61,7 @@ TEST_GEN_FILES += $(BINARIES_64)
->  endif
->  else
->  
-> -ifneq (,$(findstring $(ARCH),powerpc))
-> +ifneq (,$(filter $(MACHINE),ppc64 ppc64le))
->  TEST_GEN_FILES += protection_keys
->  endif
->  
-> -- 
-> 2.26.2
