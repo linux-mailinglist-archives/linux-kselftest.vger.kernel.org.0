@@ -2,133 +2,230 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2652DAC26
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Dec 2020 12:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B41372DADB2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Dec 2020 14:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728159AbgLOLgw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Dec 2020 06:36:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30700 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728092AbgLOLgj (ORCPT
+        id S1729405AbgLONGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Dec 2020 08:06:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728701AbgLONGl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Dec 2020 06:36:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1608032112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fHDy6tJb7RYpPzJn6EeCeZW9kiSrKc2JfgDfxvwFlAk=;
-        b=D7iyaPEFCKZ6eDyiAKbFFLxj25VJZgRrf0W8YXPdYbfO4wwGl3VngftqJF0/ZjFySWRqKz
-        YfaYoa3GV9eYBcOFHCjenveclhOLS1WxbnRaYZMi65lkPMAWndTJxE/V5RqSGZUHXV8lZk
-        0n9G8H8pLNgnSx9i+g1Jc2eU3y/XMuc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-586-CSk_adk_PgiG3AJ3UeaTzw-1; Tue, 15 Dec 2020 06:35:10 -0500
-X-MC-Unique: CSk_adk_PgiG3AJ3UeaTzw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F238B80ED8A;
-        Tue, 15 Dec 2020 11:35:07 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E055C710DB;
-        Tue, 15 Dec 2020 11:35:05 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 777A9417F260; Tue, 15 Dec 2020 07:59:27 -0300 (-03)
-Date:   Tue, 15 Dec 2020 07:59:27 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-Message-ID: <20201215105927.GA3321@fuller.cnet>
-References: <875z5c2db8.fsf@nanos.tec.linutronix.de>
- <20201209163434.GA22851@fuller.cnet>
- <87r1nyzogg.fsf@nanos.tec.linutronix.de>
- <20201210152618.GB23951@fuller.cnet>
- <87zh2lib8l.fsf@nanos.tec.linutronix.de>
- <20201211002703.GA47016@fuller.cnet>
- <87v9d8h3lx.fsf@nanos.tec.linutronix.de>
- <20201211141822.GA67764@fuller.cnet>
- <87k0togikr.fsf@nanos.tec.linutronix.de>
- <d9063c37-a965-d5cf-e923-c0c9f6ddc044@redhat.com>
+        Tue, 15 Dec 2020 08:06:41 -0500
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C5BC06179C
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Dec 2020 05:06:01 -0800 (PST)
+Received: by mail-vs1-xe43.google.com with SMTP id u7so10908821vsg.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Dec 2020 05:06:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M6JcWbpI6jGa01OPHXVMD2J1Jt7vqUJ1vGYJXmb3BYg=;
+        b=GySPu3JPn5oY5z7HEHsmBkWTtINCkr42KRf5OqSuvPZXiIDp/6j7IIku1ErEVbzbla
+         TO5zYrJ5XkzpcCLkXeCcTcbXnTxbbUur4fxOhLOIvmsA0qPIy3/RrNvvHREkfCMaRgtI
+         XCgva/BiX2NszgfeuU/PudEkoE5XxRM2hnmkdGwsWBaFDPKuNnjCggRyl3WPnjL7MSCY
+         +3x/R1vUsVoavfWw8teVdheWGKGsNZcw0FO0fxpNKKi8TCaGePbm/Wtc7FrrcXk9HYFN
+         R+SmturpAPzB8742ZBC8IbFa4yieJ94bSrF59pQ9Uh94V0k5behe+HT2G0XgFdo7suIh
+         qSXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M6JcWbpI6jGa01OPHXVMD2J1Jt7vqUJ1vGYJXmb3BYg=;
+        b=kjy86PrBW3sQRo/zzMVZCXIEVnFhVlDAO+2WsdtxxZeaTSmdWFLhYuYkTgtXHi1y5J
+         1b089tcr8QakRyQ9dQbRj9IVReeUIxzvdB2NpQoMZLdJ5YAfN/GfDd3eyUnqAr7rMRz6
+         suh/iuKIVLaqzj/aAR1RM8IogM+oZXVFpxCjoI2RTK25t7SNzutMPyXmFMUB4SLIfd7n
+         V1aEjMrCcnqU1gLUv8L5UeEkqNd6DF3cJ6ZJnMi0i3ru5h1BYDIosNd4XlF/INte4xFj
+         O31nBAGHR1lmjFkGC2Qix54ab4gBRw8Mr23rZT44IYIHXw0dUbj4NKqS+39Axp3VWJ0T
+         49EQ==
+X-Gm-Message-State: AOAM533P3qMp7mZRgDkdrnOWvGD5/0KMLUk9U2HCGiw810vl2KIS6XzN
+        JA4qQ9hb6hQNI11WKNWfdc1zSjjPgTzgJ5BdTl4dc0vGnQmQNg==
+X-Google-Smtp-Source: ABdhPJzd2zd1mfj+2JOvG7Kb2IKM7m6kQfLvrUUQH1zRlLxKdNB34zX+2yZ2pPZSMkGbOyZpb8F0jrq3/7pDR8A/s0U=
+X-Received: by 2002:a05:6102:18c:: with SMTP id r12mr28967382vsq.34.1608037560466;
+ Tue, 15 Dec 2020 05:06:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d9063c37-a965-d5cf-e923-c0c9f6ddc044@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <e479c654b6ca08057bf18a4e1c1d1ed3cdf8fdc8.camel@rajagiritech.edu.in>
+In-Reply-To: <e479c654b6ca08057bf18a4e1c1d1ed3cdf8fdc8.camel@rajagiritech.edu.in>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Tue, 15 Dec 2020 18:35:24 +0530
+Message-ID: <CAG=yYwmN9vw4RqQ1pmF9oFx9BtS=npOBakMr1GO2WaHF7t1wrg@mail.gmail.com>
+Subject: [WARNING ]Re: related to fixing depreciated api
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000942ce605b6806b4a"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 10:59:59PM +0100, Paolo Bonzini wrote:
-> On 11/12/20 22:04, Thomas Gleixner wrote:
-> > > Its 100ms off with migration, and can be reduced further (customers
-> > > complained about 5 seconds but seem happy with 0.1ms).
-> > What is 100ms? Guaranteed maximum migration time?
-> 
-> I suppose it's the length between the time from KVM_GET_CLOCK and
-> KVM_GET_MSR(IA32_TSC) to KVM_SET_CLOCK and KVM_SET_MSR(IA32_TSC).  But the
-> VM is paused for much longer, the sequence for the non-live part of the
-> migration (aka brownout) is as follows:
-> 
->     pause
->     finish sending RAM            receive RAM               ~1 sec
->     send paused-VM state          finish receiving RAM     \
->                                   receive paused-VM state   ) 0.1 sec
->                                   restart                  /
-> 
-> The nanosecond and TSC times are sent as part of the paused-VM state at the
-> very end of the live migration process.
-> 
-> So it's still true that the time advances during live migration brownout;
-> 0.1 seconds is just the final part of the live migration process.  But for
-> _live_ migration there is no need to design things according to "people are
-> happy if their clock is off by 0.1 seconds only".  
+--000000000000942ce605b6806b4a
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Agree. What would be a good way to fix this? 
+On Mon, Dec 14, 2020 at 10:12 PM Jeffrin Jose T
+<jeffrin@rajagiritech.edu.in> wrote:
+>
+> hello,
+>
+> i have worked on to  fix  depreciated api issue from
+> tools/testing/selftests/intel_pstate/aerf.c
+>
+> i met with the following error related...
+>
+> --------------x------------------x----------------->
+> $pwd
+> /home/jeffrin/UP/linux-kselftest/tools/testing/selftests/intel_pstate
+> $make
+> gcc  -Wall -D_GNU_SOURCE    aperf.c /home/jeffrin/UP/linux-
+> kselftest/tools/testing/selftests/kselftest_harness.h
+> /home/jeffrin/UP/linux-kselftest/tools/testing/selftests/kselftest.h -
+> lm -o /home/jeffrin/UP/linux-
+> kselftest/tools/testing/selftests/intel_pstate/aperf
+> aperf.c: In function =E2=80=98main=E2=80=99:
+> aperf.c:58:2: warning: =E2=80=98ftime=E2=80=99 is deprecated [-Wdeprecate=
+d-
+> declarations]
+>    58 |  ftime(&before);
+>       |  ^~~~~
+> In file included from aperf.c:9:
+> /usr/include/x86_64-linux-gnu/sys/timeb.h:39:12: note: declared here
+>    39 | extern int ftime (struct timeb *__timebuf)
+>       |            ^~~~~
+> aperf.c:67:2: warning: =E2=80=98ftime=E2=80=99 is deprecated [-Wdeprecate=
+d-
+> declarations]
+>    67 |  ftime(&after);
+>       |  ^~~~~
+> In file included from aperf.c:9:
+> /usr/include/x86_64-linux-gnu/sys/timeb.h:39:12: note: declared here
+>    39 | extern int ftime (struct timeb *__timebuf)
+>       |            ^~~~~
+> $
+> ----------------x---------------x---------------------->
+>
+>
+> from ftime manual  i found that it is depreciated...
+>
+> This  function is deprecated, and will be removed in a future version
+> of the GNU C library.  Use clock_gettime(2) instead.
+>
+>
+> now clock_gettime  gives  new data structure.
+>
+>  struct timespec {
+>                time_t   tv_sec;        /* seconds */
+>                long     tv_nsec;       /* nanoseconds */
+>            };
+>
+>
+> i worked on with the new data structure and some errors that came
+> along.
+> typical final output looks good but  values of runtime and typical
+> frequency
+> does not look normal during "sudo bash run.sh".
+>
+> output of "git diff" and  a  portion of output of   "sudo bash run.sh".
+> is attached.
+>
+>
+>
+> --
+> software engineer
+> rajagiri school of engineering and technology - autonomous
+>
+>
 
-It seems to me using CLOCK_REALTIME as in the interface Maxim is
-proposing is prone to difference in CLOCK_REALTIME itself.
 
-Perhaps there is another way to measure that 0.1 sec which is
-independent of the clock values of the source and destination hosts
-(say by sending a packet once the clock stops counting).
+--=20
+software engineer
+rajagiri school of engineering and technology
 
-Then on destination measure delta = clock_restart_time - packet_receival
-and increase clock by that amount.
+--000000000000942ce605b6806b4a
+Content-Type: text/plain; charset="US-ASCII"; name="diff-or.txt"
+Content-Disposition: attachment; filename="diff-or.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kipzzvmd0>
+X-Attachment-Id: f_kipzzvmd0
 
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2ludGVsX3BzdGF0ZS9hcGVyZi5j
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvaW50ZWxfcHN0YXRlL2FwZXJmLmMKaW5kZXggZjZj
+ZDAzYTg3NDkzLi43ZTM1ZTc4NzJmMTYgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
+c3RzL2ludGVsX3BzdGF0ZS9hcGVyZi5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2lu
+dGVsX3BzdGF0ZS9hcGVyZi5jCkBAIC02LDcgKzYsNyBAQAogI2luY2x1ZGUgPHN5cy90eXBlcy5o
+PgogI2luY2x1ZGUgPHN5cy9zdGF0Lmg+CiAjaW5jbHVkZSA8ZmNudGwuaD4KLSNpbmNsdWRlIDxz
+eXMvdGltZWIuaD4KKyNpbmNsdWRlIDx0aW1lLmg+CiAjaW5jbHVkZSA8c2NoZWQuaD4KICNpbmNs
+dWRlIDxlcnJuby5oPgogI2luY2x1ZGUgPHN0cmluZy5oPgpAQCAtMjIsMTAgKzIyLDEyIEBAIGlu
+dCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikgewogCWxvbmcgbG9uZyB0c2MsIG9sZF90c2Ms
+IG5ld190c2M7CiAJbG9uZyBsb25nIGFwZXJmLCBvbGRfYXBlcmYsIG5ld19hcGVyZjsKIAlsb25n
+IGxvbmcgbXBlcmYsIG9sZF9tcGVyZiwgbmV3X21wZXJmOwotCXN0cnVjdCB0aW1lYiBiZWZvcmUs
+IGFmdGVyOworCXN0cnVjdCB0aW1lc3BlYyBiZWZvcmUsIGFmdGVyOworICAgICAgICBjbG9ja2lk
+X3QgY2xraWQ7CiAJbG9uZyBsb25nIGludCBzdGFydCwgZmluaXNoLCB0b3RhbDsKIAljcHVfc2V0
+X3QgY3B1c2V0OwogCisKIAlpZiAoYXJnYyAhPSAyKSB7CiAJCXVzYWdlKGFyZ3ZbMF0pOwogCQly
+ZXR1cm4gMTsKQEAgLTQxLDYgKzQzLDEwIEBAIGludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJn
+dikgewogCiAJc3ByaW50Zihtc3JfZmlsZV9uYW1lLCAiL2Rldi9jcHUvJWQvbXNyIiwgY3B1KTsK
+IAlmZCA9IG9wZW4obXNyX2ZpbGVfbmFtZSwgT19SRE9OTFkpOworICAgICAgICAjZGVmaW5lIENM
+T0NLRkQgMworICAgICAgICAjZGVmaW5lIEZEX1RPX0NMT0NLSUQoZmQpICAgKCh+KGNsb2NraWRf
+dCkgKGZkKSA8PCAzKSB8IENMT0NLRkQpCisgICAgICAgIGNsa2lkID0gRkRfVE9fQ0xPQ0tJRChm
+ZCk7CisKIAogCWlmIChmZCA9PSAtMSkgewogCQlwcmludGYoIi9kZXYvY3B1LyVkL21zcjogJXNc
+biIsIGNwdSwgc3RyZXJyb3IoZXJybm8pKTsKQEAgLTU1LDcgKzYxLDcgQEAgaW50IG1haW4oaW50
+IGFyZ2MsIGNoYXIgKiphcmd2KSB7CiAJCXJldHVybiAxOwogCX0KIAotCWZ0aW1lKCZiZWZvcmUp
+OworCWNsb2NrX2dldHRpbWUoY2xraWQsJmJlZm9yZSk7CiAJcHJlYWQoZmQsICZvbGRfdHNjLCAg
+c2l6ZW9mKG9sZF90c2MpLCAweDEwKTsKIAlwcmVhZChmZCwgJm9sZF9hcGVyZiwgIHNpemVvZihv
+bGRfbXBlcmYpLCAweGU3KTsKIAlwcmVhZChmZCwgJm9sZF9tcGVyZiwgIHNpemVvZihvbGRfYXBl
+cmYpLCAweGU4KTsKQEAgLTY0LDcgKzcwLDcgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiph
+cmd2KSB7CiAJCXNxcnQoaSk7CiAJfQogCi0JZnRpbWUoJmFmdGVyKTsKKwljbG9ja19nZXR0aW1l
+KGNsa2lkLCZhZnRlcik7CiAJcHJlYWQoZmQsICZuZXdfdHNjLCAgc2l6ZW9mKG5ld190c2MpLCAw
+eDEwKTsKIAlwcmVhZChmZCwgJm5ld19hcGVyZiwgIHNpemVvZihuZXdfbXBlcmYpLCAweGU3KTsK
+IAlwcmVhZChmZCwgJm5ld19tcGVyZiwgIHNpemVvZihuZXdfYXBlcmYpLCAweGU4KTsKQEAgLTcz
+LDExICs3OSwxMCBAQCBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpIHsKIAlhcGVyZiA9
+IG5ld19hcGVyZi1vbGRfYXBlcmY7CiAJbXBlcmYgPSBuZXdfbXBlcmYtb2xkX21wZXJmOwogCi0J
+c3RhcnQgPSBiZWZvcmUudGltZSoxMDAwICsgYmVmb3JlLm1pbGxpdG07Ci0JZmluaXNoID0gYWZ0
+ZXIudGltZSoxMDAwICsgYWZ0ZXIubWlsbGl0bTsKLQl0b3RhbCA9IGZpbmlzaCAtIHN0YXJ0Owot
+Ci0JcHJpbnRmKCJydW5UaW1lOiAlNC4yZlxuIiwgMS4wKnRvdGFsLzEwMDApOwotCXByaW50Zigi
+ZnJlcTogJTcuMGZcbiIsIHRzYyAvICgxLjAqYXBlcmYgLyAoMS4wICogbXBlcmYpKSAvIHRvdGFs
+KTsKKwlzdGFydCA9IGJlZm9yZS50dl9zZWMqMTAwMDAwMCArIGJlZm9yZS50dl9uc2VjOworCWZp
+bmlzaCA9IGFmdGVyLnR2X3NlYyoxMDAwMDAwICsgYWZ0ZXIudHZfbnNlYzsKKwl0b3RhbCA9IGZp
+bmlzaCAtIHN0YXJ0OyAKKwlwcmludGYoInJ1blRpbWU6ICU0LjJmXG4iLCAxLjAqdG90YWwvMTAw
+MDAwMCk7IAorCXByaW50ZigiZnJlcTogJTcuMGZcbiIsIHRzYyAvICgxLjAgKiBhcGVyZiAvMS4w
+ICogKG1wZXJmKSkgLyB0b3RhbCk7CiAJcmV0dXJuIDA7CiB9Cg==
+--000000000000942ce605b6806b4a
+Content-Type: text/plain; charset="US-ASCII"; name="shot.txt"
+Content-Disposition: attachment; filename="shot.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kiq00i4n1>
+X-Attachment-Id: f_kiq00i4n1
 
-
-> Again, save-to-disk,
-> reverse debugging and the like are a different story, which is why KVM
-> should delegate policy to userspace (while documenting how to do it right).
-> 
-> Paolo
-> 
-> > CLOCK_REALTIME and CLOCK_TAI are off by the time the VM is paused and
-> > this state persists up to the point where NTP corrects it with a time
-> > jump.
-> > 
-> > So if migration takes 5 seconds then CLOCK_REALTIME is not off by 100ms
-> > it's off by 5 seconds.
-> > 
-> > CLOCK_MONOTONIC/BOOTTIME might be off by 100ms between pause and resume.
-> > 
-
+U2V0dGluZyBtYXhpbXVtIGZyZXF1ZW5jeSB0byA1MDAKbGF1bmNoaW5nIGFwZXJmIGxvYWQgb24g
+MApsYXVuY2hpbmcgYXBlcmYgbG9hZCBvbiAxCmxhdW5jaGluZyBhcGVyZiBsb2FkIG9uIDIKbGF1
+bmNoaW5nIGFwZXJmIGxvYWQgb24gMwpzbGVlcGluZyBmb3IgNSBzZWNvbmRzCndhaXRpbmcgZm9y
+IGpvYiBpZCA3NTIxCnJ1blRpbWU6IDAuMDAKZnJlcTogICAgIGluZgpydW5UaW1lOiAwLjAwCmZy
+ZXE6ICAgICBpbmYKcnVuVGltZTogMC4wMApmcmVxOiAgICAgaW5mCnJ1blRpbWU6IDAuMDAKZnJl
+cTogICAgIGluZgp3YWl0aW5nIGZvciBqb2IgaWQgNzUyMgp3YWl0aW5nIGZvciBqb2IgaWQgNzUy
+Mwp3YWl0aW5nIGZvciBqb2IgaWQgNzUyNApTZXR0aW5nIG1heGltdW0gZnJlcXVlbmN5IHRvIDQw
+MApsYXVuY2hpbmcgYXBlcmYgbG9hZCBvbiAwCmxhdW5jaGluZyBhcGVyZiBsb2FkIG9uIDEKbGF1
+bmNoaW5nIGFwZXJmIGxvYWQgb24gMgpsYXVuY2hpbmcgYXBlcmYgbG9hZCBvbiAzCnNsZWVwaW5n
+IGZvciA1IHNlY29uZHMKd2FpdGluZyBmb3Igam9iIGlkIDc1NDAKcnVuVGltZTogMC4wMApmcmVx
+OiAgICAgaW5mCnJ1blRpbWU6IDAuMDAKZnJlcTogICAgIGluZgpydW5UaW1lOiAwLjAwCmZyZXE6
+ICAgICBpbmYKd2FpdGluZyBmb3Igam9iIGlkIDc1NDEKcnVuVGltZTogMC4wMApmcmVxOiAgICAg
+aW5mCndhaXRpbmcgZm9yIGpvYiBpZCA3NTQyCndhaXRpbmcgZm9yIGpvYiBpZCA3NTQzCj09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQpUaGUgbWFya2V0aW5nIGZyZXF1ZW5jeSBvZiB0aGUgY3B1IGlzIDIzMDAgTUh6
+ClRoZSBtYXhpbXVtIGZyZXF1ZW5jeSBvZiB0aGUgY3B1IGlzIDIzMDAgTUh6ClRoZSBtaW5pbXVt
+IGZyZXF1ZW5jeSBvZiB0aGUgY3B1IGlzIDQwMCBNSHoKVGFyZ2V0CSAgICAgIEFjdHVhbAkgICAg
+RGlmZmVyZW5jZQkgIE1TUigweDE5OSkJbWF4X3BlcmZfcGN0CjIzMDAJICAgICAgMjMwMAkgICAg
+MAkJICAweDQwMAkJMjMwMDAwCjIyMDAJICAgICAgMjIwMAkgICAgMAkJICAweDQwMAkJMjMwMDAw
+CjIxMDAJICAgICAgMjEwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjIwMDAJICAgICAgMjAwMAkg
+ICAgMAkJICAweDQwMAkJMjMwMDAwCjE5MDAJICAgICAgMTkwMAkgICAgMAkJICAweDQwMAkJMjMw
+MDAwCjE4MDAJICAgICAgMTgwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjE3MDAJICAgICAgMTcw
+MAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjE2MDAJICAgICAgMTYwMAkgICAgMAkJICAweDQwMAkJ
+MjMwMDAwCjE1MDAJICAgICAgMTUwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjE0MDAJICAgICAg
+MTQwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjEzMDAJICAgICAgMTMwMAkgICAgMAkJICAweDQw
+MAkJMjMwMDAwCjEyMDAJICAgICAgMTIwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjExMDAJICAg
+ICAgMTEwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjEwMDAJICAgICAgOTk5CSAgICAtMQkJICAw
+eDQwMAkJMjMwMDAwCjkwMAkgICAgICA5MDAJICAgIDAJCSAgMHg0MDAJCTIzMDAwMAo4MDAJICAg
+ICAgODAwCSAgICAwCQkgIDB4NDAwCQkyMzAwMDAKNzAwCSAgICAgIDcwMAkgICAgMAkJICAweDQw
+MAkJMjMwMDAwCjYwMAkgICAgICA2MDAJICAgIDAJCSAgMHg0MDAJCTIzMDAwMAo1MDAJICAgICAg
+NTAwCSAgICAwCQkgIDB4NDAwCQkyMzAwMDAKNDAwCSAgICAgIDQwMAkgICAgMAkJICAw
+--000000000000942ce605b6806b4a--
