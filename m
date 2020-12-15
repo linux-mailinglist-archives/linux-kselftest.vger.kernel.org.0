@@ -2,136 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEA92DB107
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Dec 2020 17:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAB42DB1FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Dec 2020 17:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730648AbgLOQM4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Dec 2020 11:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730624AbgLOQMx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Dec 2020 11:12:53 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00140C0617A6
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Dec 2020 08:12:12 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id n4so21018385iow.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Dec 2020 08:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QhmvISH3RhqLy0sRhM87D2JxNop7NLF9/+aZn3veZTQ=;
-        b=AC+Zkdpv84wFo84wfo3TYDHsaO0C7PpqnsxAuvX9wBkVqKrg0I7h1Sj8u//yVOWbwa
-         huj5P1rtFjETXTh9bEFqO0Gdq1V22rAnHDv1GjZA1RA0rpgulPb3s4YLN0oDCuw/9bYQ
-         qrV8MD44N96xYUGsokv0kPIHfo8GilMG0zQS4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QhmvISH3RhqLy0sRhM87D2JxNop7NLF9/+aZn3veZTQ=;
-        b=NYBDcRdQgUyVJDAd+95H3HD+JWA87VScpUKRsNZz9PfXFG5NwqtJoJ+XLREY96vmIu
-         iAwHsKUa8eX6sugjD1OE5v5HuYV8RsJ3TZY44Ln9JW3XAT5TlF/V30iJKstOzqhQKPGr
-         EmkRduw1SglU1ZyVG6P4/3wjKwHimbQSOG03zmSvduweeN7gQ1joqcJfvnsXZTDV5Bnp
-         Uex23L1Eshgp20XLtPAfNrNI4cWDb1fS1VPSHd9aprktufHhCKXZ9xnwU+nXxrFO4/ch
-         GEwMGK2rtxLwOZRC0kGj8gwu74YOr/AgcDSybUuCkuPoKsvZwXTNoZXEzrw0/WkVZPFl
-         tjZg==
-X-Gm-Message-State: AOAM531j1gU29WBfxGxoOYCZQr9KfX88uOmJqXQcQC1CpxzHRcMAyoFg
-        i9r/NzsYYT0/uaACoCmMdeTCbQ==
-X-Google-Smtp-Source: ABdhPJy0fBUADBT+e4wnn9htUjE1wXC64//qtCKtv6YNcCeFtmx4rLl55N/aBacc0D3mdMl2w6gM/w==
-X-Received: by 2002:a6b:b205:: with SMTP id b5mr37081694iof.190.1608048732136;
-        Tue, 15 Dec 2020 08:12:12 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id v23sm11092816iol.21.2020.12.15.08.12.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Dec 2020 08:12:11 -0800 (PST)
-Subject: Re: related to fixing depreciated api
-To:     Jeffrin Jose T <jeffrin@rajagiritech.edu.in>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <e479c654b6ca08057bf18a4e1c1d1ed3cdf8fdc8.camel@rajagiritech.edu.in>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <291555f8-ed17-5ed6-8ca4-42c8d5e13be9@linuxfoundation.org>
-Date:   Tue, 15 Dec 2020 09:12:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1729741AbgLOQ4P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Dec 2020 11:56:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56148 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729733AbgLOQ4J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 15 Dec 2020 11:56:09 -0500
+X-Gm-Message-State: AOAM5334F9QL4UWoTELJAqiY4PL24ThrZ9JUefd9/3pmqxFe00zoB0aF
+        9HcCw+INl8Tfm4cOQwq6aTm+wfiicBRejZiJoq3aiA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608051328;
+        bh=wxgX7rhYWEdaXnSJ6bJp8xImT47Xo70cIxCVXhRWJMk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bKx5sHyUxlKUO5O1VSKvYl+KlaKh1xk5TM0+wfneX+9+TIBF2Ie4C+vqt8p2kpB3X
+         CK624/Y76U1sBgrmcfi9FCN5fcukZN45Lozelv3Ea3HzoxndJlYYC5+FfQulzZuYrN
+         Pvj8RGFxAewuiKi2Wg7CczDgRFskM9e+OZWs/SX0PoGuSI0wPr+kvIVzKZ4UoU2BcC
+         nTdolSOetdQAWReQbNu/yqGiSiJ/Q73LRR/2qzl8i57W/cmJxFNNCI/vQRq92AKEgc
+         ZtCO8fqfbsYDLZpZ7/FWmhc94qBXM4EIVTO/xtLEhZSwreSN1H61I3dOjCj25I7bKK
+         rUViwgN8UvXhA==
+X-Google-Smtp-Source: ABdhPJw+VfdnYClq2C1NfMWCzjVSwytcRYUNwbuO86jDcwu7QTrd/YpYWhMAV2WfVcfj0qIb+FX0haGZwRfdhSVCd1Y=
+X-Received: by 2002:a5d:4905:: with SMTP id x5mr19403633wrq.75.1608051326140;
+ Tue, 15 Dec 2020 08:55:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <e479c654b6ca08057bf18a4e1c1d1ed3cdf8fdc8.camel@rajagiritech.edu.in>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <875z5c2db8.fsf@nanos.tec.linutronix.de> <20201209163434.GA22851@fuller.cnet>
+ <87r1nyzogg.fsf@nanos.tec.linutronix.de> <20201210152618.GB23951@fuller.cnet>
+ <87zh2lib8l.fsf@nanos.tec.linutronix.de> <20201211002703.GA47016@fuller.cnet>
+ <87v9d8h3lx.fsf@nanos.tec.linutronix.de> <20201211141822.GA67764@fuller.cnet>
+ <87k0togikr.fsf@nanos.tec.linutronix.de> <d9063c37-a965-d5cf-e923-c0c9f6ddc044@redhat.com>
+ <20201215105927.GA3321@fuller.cnet>
+In-Reply-To: <20201215105927.GA3321@fuller.cnet>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 15 Dec 2020 08:55:15 -0800
+X-Gmail-Original-Message-ID: <CALCETrWSnMm-mfC5LjzsFLk6Tt_40Udrif-Kh34TTj6fp_8ZLw@mail.gmail.com>
+Message-ID: <CALCETrWSnMm-mfC5LjzsFLk6Tt_40Udrif-Kh34TTj6fp_8ZLw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/14/20 9:42 AM, Jeffrin Jose T wrote:
-> hello,
-> 
-> i have worked on to  fix  depreciated api issue from
-> tools/testing/selftests/intel_pstate/aerf.c
-> 
-> i met with the following error related...
-> 
-> --------------x------------------x----------------->
-> $pwd
-> /home/jeffrin/UP/linux-kselftest/tools/testing/selftests/intel_pstate
-> $make
-> gcc  -Wall -D_GNU_SOURCE    aperf.c /home/jeffrin/UP/linux-
-> kselftest/tools/testing/selftests/kselftest_harness.h
-> /home/jeffrin/UP/linux-kselftest/tools/testing/selftests/kselftest.h -
-> lm -o /home/jeffrin/UP/linux-
-> kselftest/tools/testing/selftests/intel_pstate/aperf
-> aperf.c: In function ‘main’:
-> aperf.c:58:2: warning: ‘ftime’ is deprecated [-Wdeprecated-
-> declarations]
->     58 |  ftime(&before);
->        |  ^~~~~
-> In file included from aperf.c:9:
-> /usr/include/x86_64-linux-gnu/sys/timeb.h:39:12: note: declared here
->     39 | extern int ftime (struct timeb *__timebuf)
->        |            ^~~~~
-> aperf.c:67:2: warning: ‘ftime’ is deprecated [-Wdeprecated-
-> declarations]
->     67 |  ftime(&after);
->        |  ^~~~~
-> In file included from aperf.c:9:
-> /usr/include/x86_64-linux-gnu/sys/timeb.h:39:12: note: declared here
->     39 | extern int ftime (struct timeb *__timebuf)
->        |            ^~~~~
-> $
-> ----------------x---------------x---------------------->
-> 
-> 
-> from ftime manual  i found that it is depreciated...
-> 
-> This  function is deprecated, and will be removed in a future version
-> of the GNU C library.  Use clock_gettime(2) instead.
-> 
-> 
-> now clock_gettime  gives  new data structure.
-> 
->   struct timespec {
->                 time_t   tv_sec;        /* seconds */
->                 long     tv_nsec;       /* nanoseconds */
->             };
-> 
-> 
-> i worked on with the new data structure and some errors that came
-> along.
-> typical final output looks good but  values of runtime and typical
-> frequency
-> does not look normal during "sudo bash run.sh".
-> 
-> output of "git diff" and  a  portion of output of   "sudo bash run.sh".
-> is attached.
-> 
+On Tue, Dec 15, 2020 at 3:35 AM Marcelo Tosatti <mtosatti@redhat.com> wrote:
+>
+> On Fri, Dec 11, 2020 at 10:59:59PM +0100, Paolo Bonzini wrote:
+> > On 11/12/20 22:04, Thomas Gleixner wrote:
+> > > > Its 100ms off with migration, and can be reduced further (customers
+> > > > complained about 5 seconds but seem happy with 0.1ms).
+> > > What is 100ms? Guaranteed maximum migration time?
+> >
+> > I suppose it's the length between the time from KVM_GET_CLOCK and
+> > KVM_GET_MSR(IA32_TSC) to KVM_SET_CLOCK and KVM_SET_MSR(IA32_TSC).  But the
+> > VM is paused for much longer, the sequence for the non-live part of the
+> > migration (aka brownout) is as follows:
+> >
+> >     pause
+> >     finish sending RAM            receive RAM               ~1 sec
+> >     send paused-VM state          finish receiving RAM     \
+> >                                   receive paused-VM state   ) 0.1 sec
+> >                                   restart                  /
+> >
+> > The nanosecond and TSC times are sent as part of the paused-VM state at the
+> > very end of the live migration process.
+> >
+> > So it's still true that the time advances during live migration brownout;
+> > 0.1 seconds is just the final part of the live migration process.  But for
+> > _live_ migration there is no need to design things according to "people are
+> > happy if their clock is off by 0.1 seconds only".
+>
+> Agree. What would be a good way to fix this?
+>
 
-Please send a proper patch to fix intel_pstate to use clock_gettime.
-
-thanks,
--- Shuah
-
+Could you implement the Hyper-V clock interface?  It's much, much
+simpler than the kvmclock interface.  It has the downside that
+CLOCK_BOOTTIME won't do what you want, but I'm not really convinced
+that's a problem, and you could come up with a minimal extension to
+fix that.
