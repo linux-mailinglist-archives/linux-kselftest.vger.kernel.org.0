@@ -2,77 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F38732DBC56
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Dec 2020 08:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCD72DBC99
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Dec 2020 09:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbgLPHtt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Dec 2020 02:49:49 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:60884 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725970AbgLPHtt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Dec 2020 02:49:49 -0500
-Received: from [10.130.0.97] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxNuDiu9lfUSsBAA--.3341S3;
-        Wed, 16 Dec 2020 15:48:51 +0800 (CST)
-Subject: Re: [PATCH v2] selftests/vm: Fix building protection keys test
-To:     Harish <harish@linux.ibm.com>, shuah@kernel.org,
-        akpm@linux-foundation.org, sandipan@linux.ibm.com,
-        jhubbard@nvidia.com, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, bgeffon@google.com,
-        almasrymina@google.com
-References: <20201215100402.257376-1-harish@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-From:   suxingxing <suxingxing@loongson.cn>
-Message-ID: <3794f496-57a7-5bbf-b5e1-a1b60a8feecf@loongson.cn>
-Date:   Wed, 16 Dec 2020 15:48:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <20201215100402.257376-1-harish@linux.ibm.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9AxNuDiu9lfUSsBAA--.3341S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr15Xw17JrW7AFWxWF43GFg_yoW3WFgEyF
-        Z2ywnruw45Zws7AFsxGr45AFWkG3y7uw1Uuryv9w43Xw1Yy39xWFykWryrZa12qryrtFZ5
-        ZFWrur4ayrn2kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-AYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-        c7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
-        rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYq2NUUUUU=
-X-CM-SenderInfo: pvx0x0xj0l0wo6or00hjvr0hdfq/1tbiAQAMC13QvMwSZAABsM
+        id S1725921AbgLPIXI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Dec 2020 03:23:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40554 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725845AbgLPIXI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Dec 2020 03:23:08 -0500
+Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.11-rc1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608106948;
+        bh=ud87NcTtL2ZtYGVa9CgBAwaeW4b8Rfgv2MrZObh+9bk=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=sqQezJFETYElHGh0VcBkvEVkAE/CdKahQ+kpXvn1jgZVprQeZlguwYC7GIHQr7CbC
+         uZHBReSpMeuuWiGdimtxEbLbGD5wVtEt4Mr5f+0DouzMqBLbBjvFiyD6uYit4Nezp3
+         wwIwBcdEgKb259We6V2wmrQeDp481sRCcmRphx2A+p4eXX1EL693iSA0LBo40LkwZO
+         /P2rTSU0MCY1rtYI8sNSilwGu0CRiw/+GfC8WKuuh814VIpVrBYK8+x6YFJcB7rYha
+         guaDEmLLR7+A+4dH3anUnAB/WC3FM5WSa9B9n8tzcuIR7r9HXdx4tEMrn983gW+L5/
+         veB6bQcKMi2ew==
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <bd9a480f-80f9-5beb-2f1f-dbc28a7af80c@linuxfoundation.org>
+References: <bd9a480f-80f9-5beb-2f1f-dbc28a7af80c@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
+X-PR-Tracked-Message-Id: <bd9a480f-80f9-5beb-2f1f-dbc28a7af80c@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.11-rc1
+X-PR-Tracked-Commit-Id: 88f4ede44c585b24674dd99841040b2a1a856a76
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b80affe33fdd56c8e9f1f0f33ad99f9016a59195
+Message-Id: <160810694801.6147.17868708282743846908.pr-tracker-bot@kernel.org>
+Date:   Wed, 16 Dec 2020 08:22:28 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/15/2020 06:04 PM, Harish wrote:
+The pull request you sent on Tue, 15 Dec 2020 11:59:10 -0700:
 
-> The patch d8cbe8bfa7d tries to include a ARCH check for powerpc,
-> however ARCH is not defined in the Makefile before including
-> lib.mk. This makes test building to skip on both x86 and powerpc.
-> Fix the arch check by replacing it using machine type as it is
-> already defined and used in the test.
->
-> Fixes: d8cbe8bfa7d ("tools/testing/selftests/vm: fix build error")
-> Signed-off-by: Harish <harish@linux.ibm.com>
-> ---
->
->   
-> -ifneq (,$(findstring $(ARCH),powerpc))
-> +ifneq (,$(findstring $(MACHINE),ppc64))
->   TEST_GEN_FILES += protection_keys
->   endif
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.11-rc1
 
-Reviewed-by: Xingxing Su <suxingxing@loongson.cn>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b80affe33fdd56c8e9f1f0f33ad99f9016a59195
 
-The findstring isn't really canonical, it's my fault,
-you can replace findstring with filter like V1.
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
