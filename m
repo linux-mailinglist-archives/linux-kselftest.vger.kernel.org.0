@@ -2,57 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2678F2DBCA0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Dec 2020 09:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FEE2DC29E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Dec 2020 16:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726078AbgLPIXY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Dec 2020 03:23:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40598 "EHLO mail.kernel.org"
+        id S1726110AbgLPPA6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Dec 2020 10:00:58 -0500
+Received: from mx2.suse.de ([195.135.220.15]:35502 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725845AbgLPIXX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Dec 2020 03:23:23 -0500
-Subject: Re: [GIT PULL] KUnit update for Linux 5.11-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608106948;
-        bh=MAxkcc2T4pvNHNFzM9yul6oUiKb4Mks1V0T+fqMaXmc=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=kDdQ3bzSuJE/ZHLq4PtBMhvyGYkMGsgajLYflaE/Jc0Ujgi9jvUca52VTjbqNV24a
-         tWY/S1+f7EOhUHtxZICpHoWNlugZDNGuHT2mfT2NTA3Jt2P9y1mBlBlLDaTSDmhQ8w
-         mbet+FMU6TkFsrCWFjELzT+1f65kezJMEFeY1JPIrU4cb0tcDSP9JXq4FcxlGCDJBE
-         fZhgyLaur+C2MFdV9eaWV8KaFukk3nAI/tSJ+zflfKwWN6QUpFhneM+bChPoHHxnj0
-         OR8Po+qmnQlZaC+Jk73e88diPsCKuxMFraSziJtmasom1ouQr/uEWq4lHWVxk1e9jE
-         d5RAhijTfyCqA==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <e68b976c-0966-b26e-bb53-d80111eab8bd@linuxfoundation.org>
-References: <e68b976c-0966-b26e-bb53-d80111eab8bd@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <e68b976c-0966-b26e-bb53-d80111eab8bd@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.11-rc1
-X-PR-Tracked-Commit-Id: 5f6b99d0287de2c2d0b5e7abcb0092d553ad804a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 706451d47b3716c24e0553dfdefba11d202effc1
-Message-Id: <160810694864.6147.6246308365891660205.pr-tracker-bot@kernel.org>
-Date:   Wed, 16 Dec 2020 08:22:28 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+        id S1726098AbgLPPA5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Dec 2020 10:00:57 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1608130810; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rUr1yE3SiJ3liS7JwmJQkTdMbmwmxrWkUAvup8jy/Sk=;
+        b=P5pg2YRW4QQxMBF29dvNTPxj9jddjXPXVA/D4Vg9GcPaCuuLVH1H4VXSR3D3jgv770c43v
+        vR6CKevp8umeXyAAfrDI0lKFtE8UaY6phaXxgL0c7KYxZfnaMD6Z7JvmrvoQ8PzqF+YPbb
+        cvh2zULr2SeAjo9oCC/V9foX994yjko=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 9EAF2ACC6;
+        Wed, 16 Dec 2020 15:00:10 +0000 (UTC)
+Date:   Wed, 16 Dec 2020 16:00:10 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
+        shuah@kernel.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] lib: test_scanf: Add tests for sscanf number
+ conversion
+Message-ID: <X9og+nKP18bUsi6x@alley>
+References: <20201130145800.19960-1-rf@opensource.cirrus.com>
+ <20201130145800.19960-2-rf@opensource.cirrus.com>
+ <X9DcEL54k0qRayr+@alley>
+ <f3e97a68-71fe-c077-5add-a6c0fb397032@opensource.cirrus.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3e97a68-71fe-c077-5add-a6c0fb397032@opensource.cirrus.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Tue, 15 Dec 2020 14:52:11 -0700:
+On Tue 2020-12-15 14:26:53, Richard Fitzgerald wrote:
+> 
+> 
+> On 09/12/2020 14:15, Petr Mladek wrote:
+> > On Mon 2020-11-30 14:57:58, Richard Fitzgerald wrote:
+> > > Adds test_sscanf to test various number conversion cases, as
+> > > number conversion was previously broken.
+> > > 
+> > > This also tests the simple_strtoxxx() functions exported from
+> > > vsprintf.c.
+> > 
+> > It is impressive.
+> > 
+> > Honestly, I do not feel to be expert on testing and mathematics.
+> > I am not sure how comprehensive the test is. Also I am not
+> > sure what experts would say about the tricks with random
+> > numbers.
+> > 
+> > Anyway, this is much more than what I have expected. And it checks
+> > great number of variants and corner cases.
+> > 
+> > I suggest only one small change, see below.
+> > 
+> > > --- /dev/null
+> > > +++ b/lib/test_scanf.c
+> > > +#define test_one_number(T, gen_fmt, scan_fmt, val, fn)			\
+> > > +do {									\
+> > > +	const T expect_val = (T)(val);					\
+> > > +	T result = ~expect_val; /* should be overwritten */		\
+> > 
+> > If I get it correctly, this is supposed to initialize the temporary
+> > variable with a value that is different from the expected value.
+> > It will cause test failure when it is not updated by vsscanf().
+> > 
+> > It does not work for zero value. A better solution might be to add
+> 
+> That's a ~, not a -
+> ~0 = 0xFFFFFFFF
+> ~-1 = 0
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.11-rc1
+I see. This works well.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/706451d47b3716c24e0553dfdefba11d202effc1
+I am sorry for the noise. Sigh, I think that I need stronger glasses
+or use a monitor. I am not able to distinguish the two characeters
+without staring closely on the laptop screen. I wish I was able to
+work from the office again.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best Regards,
+Petr
