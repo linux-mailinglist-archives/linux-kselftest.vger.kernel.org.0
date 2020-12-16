@@ -2,256 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 927282DC5A6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Dec 2020 18:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAEE2DC5F2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Dec 2020 19:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727985AbgLPRrT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Dec 2020 12:47:19 -0500
-Received: from mga11.intel.com ([192.55.52.93]:21271 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727982AbgLPRrT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Dec 2020 12:47:19 -0500
-IronPort-SDR: RHp2/9W3L3m3RkY0saUzRG1yqdiSth/igyabycXvhClOiGR0yPYCF08WNQQvOHIL6v3D7vW4Cq
- bQVnIUHrBfTw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9837"; a="171593438"
-X-IronPort-AV: E=Sophos;i="5.78,424,1599548400"; 
-   d="scan'208";a="171593438"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2020 09:46:13 -0800
-IronPort-SDR: 6s/7eqTL8aFJezfJCuYyl1RK/0Mx09HmkBbcdt/0qcc2GpHptnoGcx4pLV5q8Bz/2LvrqtJ6r0
- gE2r3ziEcnXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,424,1599548400"; 
-   d="scan'208";a="391854221"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Dec 2020 09:46:13 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     tglx@linutronix.de, mingo@kernel.org, bp@suse.de, luto@kernel.org,
-        x86@kernel.org, herbert@gondor.apana.org.au
-Cc:     dan.j.williams@intel.com, dave.hansen@intel.com,
-        ravi.v.shankar@intel.com, ning.sun@intel.com,
-        kumar.n.dwarakanath@intel.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chang.seok.bae@intel.com,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 6/8] selftests/x86: Test Key Locker internal key maintenance
-Date:   Wed, 16 Dec 2020 09:41:44 -0800
-Message-Id: <20201216174146.10446-7-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201216174146.10446-1-chang.seok.bae@intel.com>
-References: <20201216174146.10446-1-chang.seok.bae@intel.com>
+        id S1729287AbgLPSH1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Dec 2020 13:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727485AbgLPSH1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Dec 2020 13:07:27 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94525C06179C;
+        Wed, 16 Dec 2020 10:06:46 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id y128so3610272ybf.10;
+        Wed, 16 Dec 2020 10:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VodWZpWl/+uWOhTMN//0IR82qShPVli3GP+B85kzebI=;
+        b=HgkKI4G/HgYCipvAAw6VhORa1cxXlRphEmiOOjtS8+2DFX+gWbUH4AgXZu1fKdwTSn
+         pSEwp3kHpSA4r7/4NxgDyoYMq0tKm/y85UCWN67D5z6XUY7lDLG22Qdtq6qYxvnvjbww
+         vpE5oMNJc7B6/xs9K2YdOq33yJV9YQTkCdIkFNfCYtqUjqu2RcgHZjRislkx1bLKOdB2
+         vKCiFImSSimyu3dWk69QIb5gQzSytCf8ye7F1iUMJgLBIAaX58tad+2YxLXOWsY63wv+
+         euV/PCLRJ3Ri7H7MY6D5AmdYQsejL4SNlH/xxbqY4xjMgJhgB1qJalD8gL2wA6C0a8Cg
+         N7rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VodWZpWl/+uWOhTMN//0IR82qShPVli3GP+B85kzebI=;
+        b=WBpr3s+nT07obq2vNyYuYfh8SSiFdX5lUAYG9YpKX7Nt/pYZBJ8r8/9BL1MTk09Nwh
+         +Y5D0m8utIxUdYEj6HfhVlsKdDG+vBUnsOVHoVsT73oU5fPIy0LZffOHNzMYJ4k+c1Vy
+         4AX/JX7BaVchwO59f6hBUkXkmAkS1ieYsi2DOmSZ3WWWbE2DJqXUokbkg3gs19lyDjjG
+         FqKdBF57qucwKoFw5yc6t008eDZCwkIurWI+6e+NVGCs/bKLxiNjQ8B0qTvOxUQybfQY
+         gZvjBuFZ843okEnVIATNXlpnOxLEG2/LcFQQtN1pQR+9/noYj8i+5TQ2Azid8LgB4drT
+         bFxA==
+X-Gm-Message-State: AOAM531ajL0MXaNg7ZM43zUEltXWJ0T0oNKrikzNEFKh4Z8x/+r3UBvJ
+        u1vgvhd72kIJ3BYbbn2fHQa/L28AcyYFcmhNJJg=
+X-Google-Smtp-Source: ABdhPJy3g5GfYo5WT+IeLrwHD6qpe8ngg3vhanZs6hYwZjszn/hqZ+Z9uHSwjKHHvo6ZnPgPboPTG5wVZW+geoDjMwc=
+X-Received: by 2002:a25:aea8:: with SMTP id b40mr52596024ybj.347.1608142005891;
+ Wed, 16 Dec 2020 10:06:45 -0800 (PST)
+MIME-Version: 1.0
+References: <CAEf4BzYBvz4TDayTE=Bc_bjqvOGaavmmw1sJhOCKhq9DwUpd4A@mail.gmail.com>
+ <20201215182011.15755-1-kamal@canonical.com>
+In-Reply-To: <20201215182011.15755-1-kamal@canonical.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 16 Dec 2020 10:06:35 -0800
+Message-ID: <CAEf4BzYgnDWRswYJPnMdtACs7K5mckbfHX2i68YXhha4q=ywFw@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: clarify build error if no vmlinux
+To:     Kamal Mostafa <kamal@canonical.com>
+Cc:     linux- stable <stable@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test validates the internal key to be the same in all CPUs.
+On Tue, Dec 15, 2020 at 10:20 AM Kamal Mostafa <kamal@canonical.com> wrote:
+>
+> If Makefile cannot find any of the vmlinux's in its VMLINUX_BTF_PATHS list,
+> it tries to run btftool incorrectly, with VMLINUX_BTF unset:
+>
+>     bpftool btf dump file $(VMLINUX_BTF) format c
+>
+> Such that the keyword 'format' is misinterpreted as the path to vmlinux.
+> The resulting build error message is fairly cryptic:
+>
+>       GEN      vmlinux.h
+>     Error: failed to load BTF from format: No such file or directory
+>
+> This patch makes the failure reason clearer by yielding this instead:
+>
+>     Makefile:...: *** cannot find a vmlinux for VMLINUX_BTF at any of
+>     "{paths}".  Stop.
+>
+> Fixes: acbd06206bbb ("selftests/bpf: Add vmlinux.h selftest exercising tracing of syscalls")
+> Cc: stable@vger.kernel.org # 5.7+
+> Signed-off-by: Kamal Mostafa <kamal@canonical.com>
+> ---
 
-It performs the validation again with the Suspend-To-RAM (ACPI S3) state.
+Applied to bpf tree, thanks. This conflicted with a67079b03165
+("selftests/bpf: fix bpf_testmod.ko recompilation logic"), I resolved
+the conflict and capitalized "Cannot" in the error message.
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/x86/Makefile    |   2 +-
- tools/testing/selftests/x86/keylocker.c | 177 ++++++++++++++++++++++++
- 2 files changed, 178 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/keylocker.c
-
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 6703c7906b71..c53e496d77b2 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vdso test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore
-+			syscall_arg_fault fsgsbase_restore keylocker
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/keylocker.c b/tools/testing/selftests/x86/keylocker.c
-new file mode 100644
-index 000000000000..3d69c1615bca
---- /dev/null
-+++ b/tools/testing/selftests/x86/keylocker.c
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * keylocker.c, validating the internal key management
-+ */
-+#undef _GNU_SOURCE
-+#define _GNU_SOURCE 1
-+
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <err.h>
-+#include <sched.h>
-+#include <setjmp.h>
-+#include <signal.h>
-+#include <unistd.h>
-+
-+#define HANDLE_SIZE	48
-+
-+static bool keylocker_disabled;
-+
-+/* Encode a 128-bit key to a 384-bit handle */
-+static inline void __encode_key(char *handle)
-+{
-+	static const unsigned char aeskey[] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
-+						0x71, 0x77, 0x74, 0x69, 0x6f, 0x6b, 0x6c, 0x78 };
-+
-+	asm volatile ("movdqu %0, %%xmm0" : : "m" (*aeskey) :);
-+
-+	/* Set no restriction to the handle */
-+	asm volatile ("mov $0, %%eax" :);
-+
-+	/* ENCODEKEY128 %EAX */
-+	asm volatile (".byte 0xf3, 0xf, 0x38, 0xfa, 0xc0");
-+
-+	asm volatile ("movdqu %%xmm0, %0; movdqu %%xmm1, %1; movdqu %%xmm2, %2;"
-+		      : "=m" (handle[0]), "=m" (handle[0x10]), "=m" (handle[0x20]));
-+}
-+
-+static jmp_buf jmpbuf;
-+
-+static void handle_sigill(int sig, siginfo_t *si, void *ctx_void)
-+{
-+	keylocker_disabled = true;
-+	siglongjmp(jmpbuf, 1);
-+}
-+
-+static bool encode_key(char *handle)
-+{
-+	bool success = true;
-+	struct sigaction sa;
-+	int ret;
-+
-+	memset(&sa, 0, sizeof(sa));
-+
-+	/* Set signal handler */
-+	sa.sa_flags = SA_SIGINFO;
-+	sa.sa_sigaction = handle_sigill;
-+	sigemptyset(&sa.sa_mask);
-+	ret = sigaction(SIGILL, &sa, 0);
-+	if (ret)
-+		err(1, "sigaction");
-+
-+	if (sigsetjmp(jmpbuf, 1))
-+		success = false;
-+	else
-+		__encode_key(handle);
-+
-+	/* Clear signal handler */
-+	sa.sa_flags = 0;
-+	sa.sa_sigaction = NULL;
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	ret = sigaction(SIGILL, &sa, 0);
-+	if (ret)
-+		err(1, "sigaction");
-+
-+	return success;
-+}
-+
-+/*
-+ * Test if the internal key is the same in all the CPUs:
-+ *
-+ * Since the value is not readable, compare the encoded output of a AES key
-+ * between CPUs.
-+ */
-+
-+static int nerrs;
-+
-+static unsigned char cpu0_handle[HANDLE_SIZE] = { 0 };
-+
-+static void test_internal_key(bool slept, long cpus)
-+{
-+	int cpu, errs;
-+
-+	printf("Test the internal key consistency between CPUs\n");
-+
-+	for (cpu = 0, errs = 0; cpu < cpus; cpu++) {
-+		char handle[HANDLE_SIZE] = { 0 };
-+		cpu_set_t mask;
-+		bool success;
-+
-+		CPU_ZERO(&mask);
-+		CPU_SET(cpu, &mask);
-+		sched_setaffinity(0, sizeof(cpu_set_t), &mask);
-+
-+		success = encode_key(handle);
-+		if (!success) {
-+			/* The encode should success after the S3 sleep */
-+			if (slept)
-+				errs++;
-+			printf("[%s]\tKey Locker disabled at CPU%d\n",
-+			       slept ? "FAIL" : "NOTE", cpu);
-+			continue;
-+		}
-+
-+		if (cpu == 0 && !slept) {
-+			/* Record the first handle value as reference */
-+			memcpy(cpu0_handle, handle, HANDLE_SIZE);
-+		} else if (memcmp(cpu0_handle, handle, HANDLE_SIZE)) {
-+			printf("[FAIL]\tMismatched internal key at CPU%d\n",
-+			       cpu);
-+			errs++;
-+		}
-+	}
-+
-+	if (errs == 0 && !keylocker_disabled)
-+		printf("[OK]\tAll the internal keys are the same\n");
-+	else
-+		nerrs += errs;
-+}
-+
-+static void switch_to_sleep(bool *slept)
-+{
-+	ssize_t bytes;
-+	int fd;
-+
-+	printf("Transition to Suspend-To-RAM state\n");
-+
-+	fd = open("/sys/power/mem_sleep", O_RDWR);
-+	if (fd < 0)
-+		err(1, "Open /sys/power/mem_sleep");
-+
-+	bytes = write(fd, "deep", strlen("deep"));
-+	if (bytes != strlen("deep"))
-+		err(1, "Write /sys/power/mem_sleep");
-+	close(fd);
-+
-+	fd = open("/sys/power/state", O_RDWR);
-+	if (fd < 0)
-+		err(1, "Open /sys/power/state");
-+
-+	bytes = write(fd, "mem", strlen("mem"));
-+	if (bytes != strlen("mem"))
-+		err(1, "Write /sys/power/state");
-+	close(fd);
-+
-+	printf("Wake up from Suspend-To-RAM state\n");
-+	*slept = true;
-+}
-+
-+int main(void)
-+{
-+	bool slept = false;
-+	long cpus;
-+
-+	cpus = sysconf(_SC_NPROCESSORS_ONLN);
-+	printf("%ld CPUs in the system\n", cpus);
-+
-+	test_internal_key(slept, cpus);
-+	if (keylocker_disabled)
-+		return nerrs ? 1 : 0;
-+
-+	switch_to_sleep(&slept);
-+	test_internal_key(slept, cpus);
-+	return nerrs ? 1 : 0;
-+}
--- 
-2.17.1
-
+>
+> [v2] moves the check to right after the VMLINUX_BTF definition.
+>
+>  tools/testing/selftests/bpf/Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 542768f5195b..7ba631f495f7 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -146,6 +146,9 @@ VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)                                \
+>                      /sys/kernel/btf/vmlinux                            \
+>                      /boot/vmlinux-$(shell uname -r)
+>  VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
+> +ifeq ($(VMLINUX_BTF),)
+> +$(error cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
+> +endif
+>
+>  DEFAULT_BPFTOOL := $(SCRATCH_DIR)/sbin/bpftool
+>
+> --
+> 2.17.1
+>
