@@ -2,167 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C58E72DD44B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 16:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E62D2DD4A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 16:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727415AbgLQPgC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Dec 2020 10:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S1728125AbgLQPyT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Dec 2020 10:54:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726012AbgLQPgC (ORCPT
+        with ESMTP id S1726595AbgLQPyS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 10:36:02 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCD9C0617B0
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:35:21 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id b8so9345363plx.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:35:21 -0800 (PST)
+        Thu, 17 Dec 2020 10:54:18 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B047C0617A7
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:53:38 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id t8so27947658iov.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:53:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=cF1lpVOfX+qqIliOA4fJEolSXJPbWdzTY82HZk7M6Ss=;
-        b=jmCoo2KfKiXBFPZ5Pu4hTHY3iB5JmJdEW2xDg11/qL0XDN1JfsdN7XyC2j8sEoH95y
-         GFMTYGr0oCS+l4J4pMyQxd8aZ/F75Twiay44FOIBLAxCIaB28JlAUo9Ib+wLBPNGhIB5
-         JZos5e7Irlc2WYQAdv2N/x8jYTVEVdXO+q3lEFoIwQJafSWpP75RiwxCcuG16exsWsl1
-         /xaldJycza+FyblXi0w7S8BUo7Flvd3XJQ13gxiBJ6wf0KNWX2NhU00LCXp3C5ufBfWG
-         twR6w2w9HVJM956l2GZbRuU5Uhi+JmF4wOm7e79KWTwg3krAg7CO6ep+OzxKH/X27pcp
-         D66A==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1tS/TPZAajsb6a4c9RGCrJLAfHltUkaFmVEdRYEivFw=;
+        b=SB3dU4WyB1PXusFJSVHyaDGab5FNdkiftmzo1JGqFGpxCsRHPYqHdndiCTPIfpyAoA
+         dZavB6mNbbXhvbdmY/9ftV0QOmkMdFayEvq7NSre/oLvfElDLFyZmo7ETmkSiCnjkKSo
+         hqEegmshqqPRw0FO9cwVBmlXxQvHe5n6xV5a0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=cF1lpVOfX+qqIliOA4fJEolSXJPbWdzTY82HZk7M6Ss=;
-        b=oIb7e07V42U7Md3wWdEWI1bHYQXCAOuSRC+x0ZEghdrCHpclvzwQn+GgiRY4WXn1Ms
-         ENS9HkIi/OD1v9+qfBT6oAzvD+nGBDXVKuqKZJoRadcuv71PBKkzr/DHT4wmggXlJ566
-         u/DqdCI5MMtKNGW2fCmVPwfmRqfwog8TdDLq5wMSri1VyUYRJRwCogXWD8cEUVOu11h7
-         Wq8/vy58qn/ojjKq/QKZjJY09aR/oURZRKf5mcyYhz3OmKgboQHIjqE2uecD7AEOFz+9
-         QmnUSDVRIOU5WBrdQ3zz5KZRiXLpiOepwGWTPQvOJGmn4YiP1xUqCi8JLttaGHiIfTIF
-         lxJA==
-X-Gm-Message-State: AOAM530/J6OrRfRoMh99xA/3oQM7Ef2zwphL3IEL43atviqfcXiuI0VH
-        5PV3r+ClClurK5q35+vVV57vlw==
-X-Google-Smtp-Source: ABdhPJxqYT8PU/t0P9GGyShWjJrS4X7K4WGiEwYmQMQu9GEUzGcTkb4Xv4/Y1sZVsWotkJYwFWmFsw==
-X-Received: by 2002:a17:902:64:b029:da:a9cf:4065 with SMTP id 91-20020a1709020064b02900daa9cf4065mr36533471pla.26.1608219321514;
-        Thu, 17 Dec 2020 07:35:21 -0800 (PST)
-Received: from ?IPv6:2601:646:c200:1ef2:9dc1:d988:a568:787a? ([2601:646:c200:1ef2:9dc1:d988:a568:787a])
-        by smtp.gmail.com with ESMTPSA id r123sm6059458pfr.68.2020.12.17.07.35.20
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1tS/TPZAajsb6a4c9RGCrJLAfHltUkaFmVEdRYEivFw=;
+        b=OiDVSVGAomIqZdzNTexw4pmAYpbIUHhR/Qob9xbNe+hzjR4QvFtSbEmgmc88h5cnis
+         Arr1ZXtLE+xXms5U+m/ujN76izj/nWWj7BvjoWBcYtctvIDt109Jf0askf3I5SB7PD+L
+         PG/a1KKAJs48zm7TDH2Zv97IrOZOsVAX+0KUiCljstM8Y1KWqcKmGMWcwUfXFvajMGbC
+         m4PmnFXYHCB51tK6L6Jp28NvdVbVALlWvbp5r7CXHegJs6OTGXDb2RDeUDcSo+cs1CCp
+         ynHO8rgKUM+0un+E/DQoBsJAfCx9IjMDduVsXPPohSXYk+nV2IERbTpA6eCR2beBt1ze
+         PkoA==
+X-Gm-Message-State: AOAM533uQ6ERdwxlseMckCPEek0Y4NIQhBlRk8QwZy/qzr3uhYdbHrMV
+        9lXqDnToAx+IMwmdOk7F+fr7iw==
+X-Google-Smtp-Source: ABdhPJwFKs72LIIAoNy8AlcxOBj2qkgjalhkB41+xRe9ghJ6Iq6ypq8oDxfJBkTODIta16gtRk8+Tg==
+X-Received: by 2002:a05:6638:83:: with SMTP id v3mr47713212jao.106.1608220417790;
+        Thu, 17 Dec 2020 07:53:37 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id j65sm3551569ilg.53.2020.12.17.07.53.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Dec 2020 07:35:20 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Andy Lutomirski <luto@amacapital.net>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH V3.1] entry: Pass irqentry_state_t by reference
-Date:   Thu, 17 Dec 2020 07:35:18 -0800
-Message-Id: <24F5DC49-1FB3-42CF-8323-B0B39D936F7F@amacapital.net>
-References: <20201217131924.GW3040@hirez.programming.kicks-ass.net>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Weiny Ira <ira.weiny@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-In-Reply-To: <20201217131924.GW3040@hirez.programming.kicks-ass.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-X-Mailer: iPhone Mail (18B121)
+        Thu, 17 Dec 2020 07:53:37 -0800 (PST)
+Subject: Re: [PATCH] selftests: Skip BPF seftests by default
+To:     Mark Brown <broonie@kernel.org>,
+        Seth Forshee <seth.forshee@canonical.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Daniel Diaz <daniel.diaz@linaro.org>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201210185233.28091-1-broonie@kernel.org>
+ <X9qExiKXPVmk3BJI@ubuntu-x1> <20201217130735.GA4708@sirena.org.uk>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <94010653-0cb3-d804-7410-a571480d6db2@linuxfoundation.org>
+Date:   Thu, 17 Dec 2020 08:53:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <20201217130735.GA4708@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 12/17/20 6:07 AM, Mark Brown wrote:
+> On Wed, Dec 16, 2020 at 04:05:58PM -0600, Seth Forshee wrote:
+>> On Thu, Dec 10, 2020 at 06:52:33PM +0000, Mark Brown wrote:
+> 
+>>> as part of the wider kselftest build by specifying SKIP_TARGETS,
+>>> including setting an empty SKIP_TARGETS to build everything.  They can
+>>> also continue to build the BPF selftests individually in cases where
+>>> they are specifically focused on BPF.
+> 
+>> Why not just remove the line which adds bpf to TARGETS? This has the
+>> same effect, but doesn't require an emtpy SKIP_TARGETS to run them. We
+>> have testing scripts which use 'make TARGETS=bpf ...' which will have to
+>> be updated, and I doubt we are the only ones.
+> 
 
-> On Dec 17, 2020, at 5:19 AM, Peter Zijlstra <peterz@infradead.org> wrote:
->=20
-> =EF=BB=BFOn Thu, Dec 17, 2020 at 02:07:01PM +0100, Thomas Gleixner wrote:
->>> On Fri, Dec 11 2020 at 14:14, Andy Lutomirski wrote:
->>>> On Mon, Nov 23, 2020 at 10:10 PM <ira.weiny@intel.com> wrote:
->>> After contemplating this for a bit, I think this isn't really the
->>> right approach.  It *works*, but we've mostly just created a bit of an
->>> unfortunate situation.  Our stack, on a (possibly nested) entry looks
->>> like:
->>>=20
->>> previous frame (or empty if we came from usermode)
->>> ---
->>> SS
->>> RSP
->>> FLAGS
->>> CS
->>> RIP
->>> rest of pt_regs
->>>=20
->>> C frame
->>>=20
->>> irqentry_state_t (maybe -- the compiler is within its rights to play
->>> almost arbitrary games here)
->>>=20
->>> more C stuff
->>>=20
->>> So what we've accomplished is having two distinct arch register
->>> regions, one called pt_regs and the other stuck in irqentry_state_t.
->>> This is annoying because it means that, if we want to access this
->>> thing without passing a pointer around or access it at all from outer
->>> frames, we need to do something terrible with the unwinder, and we
->>> don't want to go there.
->>>=20
->>> So I propose a somewhat different solution: lay out the stack like this.=
+I would prefer leaving bpf in the main Makefile TARGETS. This will be
+useful to users that have their systems setup for bpf builds.
 
->>>=20
->>> SS
->>> RSP
->>> FLAGS
->>> CS
->>> RIP
->>> rest of pt_regs
->>> PKS
->>> ^^^^^^^^ extended_pt_regs points here
->>>=20
->>> C frame
->>> more C stuff
->>> ...
->>>=20
->>> IOW we have:
->>>=20
->>> struct extended_pt_regs {
->>>  bool rcu_whatever;
->>>  other generic fields here;
->>>  struct arch_extended_pt_regs arch_regs;
->>>  struct pt_regs regs;
->>> };
->>>=20
->>> and arch_extended_pt_regs has unsigned long pks;
->>>=20
->>> and instead of passing a pointer to irqentry_state_t to the generic
->>> entry/exit code, we just pass a pt_regs pointer.
->>=20
->> While I agree vs. PKS which is architecture specific state and needed in
->> other places e.g. #PF, I'm not convinced that sticking the existing
->> state into the same area buys us anything more than an indirect access.
->>=20
->> Peter?
->=20
-> Agreed; that immediately solves the confusion Ira had as well. While
-> extending pt_regs sounds scary, I think we've isolated our pt_regs
-> implementation from actual ABI pretty well, but of course, that would
-> need an audit. We don't want to leak this into signals for example.
->=20
+>> I also feel like this creates confusing semantics around SKIP_TARGETS.
+>> If I don't supply a value then I don't get the bpf selftests, but then
+>> if I try to use SKIP_TARGETS to skip some other test suddenly I do get
+>> them. That's counterintuitive.
+> 
+> That's what I did first, it's also messy just differently.  If you
+> don't add bpf to TARGETS then if you do what's needed to get it building
+> it becomes inconvenient to run it as part of running everything else at
+> the top level since you need to enumerate all the targets.  It felt like
+> skipping is what we're actually doing here and it seems like those
+> actively working with BPF will be used to having to update things in
+> their environment.  People who start using SKIP_TARGETS are *probably*
+> going to find out about it from the Makefile anyway so will see the
+> default that's there.
+> 
+> Fundamentally having such demanding build dependencies is always going
+> to result in some kind of mess, it's just where we push it.
+> 
+>> I also wanted to point out that the net/test_bpf.sh selftest requires
+>> having the test_bpf module from the bpf selftest build. So when the bpf
+>> selftests aren't built this test is guaranteed to fail. Though it would
+>> be nice if the net selftests didn't require building the bpf self tests
+>> in order to pass.
+> 
+> Right, that's a separate issue - the net tests should really skip that
+> if they don't have BPF, as we do for other runtime detectable
+> dependencies.  It's nowhere near as severe as failing to build though.
+> 
 
-I=E2=80=99m okay with this.
+Correct. This has to be handled as a run-time dependency check and skip
+instead of fail.
 
-My suggestion for having an extended pt_regs that contains pt_regs is to kee=
-p extensions like this invisible to unsuspecting parts of the kernel. In par=
-ticular, BPF seems to pass around struct pt_regs *, and I don=E2=80=99t know=
- what the implications of effectively offsetting all the registers relative t=
-o the pointer would be.
-
-Anything that actually broke the signal regs ABI should be noticed by the x8=
-6 selftests =E2=80=94 the tests read and write registers through ucontext.
-
->=20
+thanks,
+-- Shuah
