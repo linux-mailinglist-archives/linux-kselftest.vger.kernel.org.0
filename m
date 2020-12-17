@@ -2,132 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E62D2DD4A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 16:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF9A2DD55D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 17:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728125AbgLQPyT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Dec 2020 10:54:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726595AbgLQPyS (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 10:54:18 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B047C0617A7
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:53:38 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id t8so27947658iov.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:53:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1tS/TPZAajsb6a4c9RGCrJLAfHltUkaFmVEdRYEivFw=;
-        b=SB3dU4WyB1PXusFJSVHyaDGab5FNdkiftmzo1JGqFGpxCsRHPYqHdndiCTPIfpyAoA
-         dZavB6mNbbXhvbdmY/9ftV0QOmkMdFayEvq7NSre/oLvfElDLFyZmo7ETmkSiCnjkKSo
-         hqEegmshqqPRw0FO9cwVBmlXxQvHe5n6xV5a0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1tS/TPZAajsb6a4c9RGCrJLAfHltUkaFmVEdRYEivFw=;
-        b=OiDVSVGAomIqZdzNTexw4pmAYpbIUHhR/Qob9xbNe+hzjR4QvFtSbEmgmc88h5cnis
-         Arr1ZXtLE+xXms5U+m/ujN76izj/nWWj7BvjoWBcYtctvIDt109Jf0askf3I5SB7PD+L
-         PG/a1KKAJs48zm7TDH2Zv97IrOZOsVAX+0KUiCljstM8Y1KWqcKmGMWcwUfXFvajMGbC
-         m4PmnFXYHCB51tK6L6Jp28NvdVbVALlWvbp5r7CXHegJs6OTGXDb2RDeUDcSo+cs1CCp
-         ynHO8rgKUM+0un+E/DQoBsJAfCx9IjMDduVsXPPohSXYk+nV2IERbTpA6eCR2beBt1ze
-         PkoA==
-X-Gm-Message-State: AOAM533uQ6ERdwxlseMckCPEek0Y4NIQhBlRk8QwZy/qzr3uhYdbHrMV
-        9lXqDnToAx+IMwmdOk7F+fr7iw==
-X-Google-Smtp-Source: ABdhPJwFKs72LIIAoNy8AlcxOBj2qkgjalhkB41+xRe9ghJ6Iq6ypq8oDxfJBkTODIta16gtRk8+Tg==
-X-Received: by 2002:a05:6638:83:: with SMTP id v3mr47713212jao.106.1608220417790;
-        Thu, 17 Dec 2020 07:53:37 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id j65sm3551569ilg.53.2020.12.17.07.53.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Dec 2020 07:53:37 -0800 (PST)
-Subject: Re: [PATCH] selftests: Skip BPF seftests by default
-To:     Mark Brown <broonie@kernel.org>,
-        Seth Forshee <seth.forshee@canonical.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Daniel Diaz <daniel.diaz@linaro.org>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201210185233.28091-1-broonie@kernel.org>
- <X9qExiKXPVmk3BJI@ubuntu-x1> <20201217130735.GA4708@sirena.org.uk>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <94010653-0cb3-d804-7410-a571480d6db2@linuxfoundation.org>
-Date:   Thu, 17 Dec 2020 08:53:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
-MIME-Version: 1.0
-In-Reply-To: <20201217130735.GA4708@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726999AbgLQQmX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Dec 2020 11:42:23 -0500
+Received: from sym2.noone.org ([178.63.92.236]:38674 "EHLO sym2.noone.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727303AbgLQQmW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 17 Dec 2020 11:42:22 -0500
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 4Cxcvc60hHzvjkw; Thu, 17 Dec 2020 17:31:40 +0100 (CET)
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/vDSO: add additional binaries to .gitignore
+Date:   Thu, 17 Dec 2020 17:31:40 +0100
+Message-Id: <20201217163140.22635-1-tklauser@distanz.ch>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/17/20 6:07 AM, Mark Brown wrote:
-> On Wed, Dec 16, 2020 at 04:05:58PM -0600, Seth Forshee wrote:
->> On Thu, Dec 10, 2020 at 06:52:33PM +0000, Mark Brown wrote:
-> 
->>> as part of the wider kselftest build by specifying SKIP_TARGETS,
->>> including setting an empty SKIP_TARGETS to build everything.  They can
->>> also continue to build the BPF selftests individually in cases where
->>> they are specifically focused on BPF.
-> 
->> Why not just remove the line which adds bpf to TARGETS? This has the
->> same effect, but doesn't require an emtpy SKIP_TARGETS to run them. We
->> have testing scripts which use 'make TARGETS=bpf ...' which will have to
->> be updated, and I doubt we are the only ones.
-> 
+Add the test binaries introduced by commit 693f5ca08ca0 ("kselftest:
+Extend vDSO selftest"), commit 03f55c7952c9 ("kselftest: Extend vDSO
+selftest to clock_getres") and commit c7e5789b24d3 ("kselftest: Move
+test_vdso to the vDSO test suite") to .gitignore.
 
-I would prefer leaving bpf in the main Makefile TARGETS. This will be
-useful to users that have their systems setup for bpf builds.
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+---
+ tools/testing/selftests/vDSO/.gitignore | 3 +++
+ 1 file changed, 3 insertions(+)
 
->> I also feel like this creates confusing semantics around SKIP_TARGETS.
->> If I don't supply a value then I don't get the bpf selftests, but then
->> if I try to use SKIP_TARGETS to skip some other test suddenly I do get
->> them. That's counterintuitive.
-> 
-> That's what I did first, it's also messy just differently.  If you
-> don't add bpf to TARGETS then if you do what's needed to get it building
-> it becomes inconvenient to run it as part of running everything else at
-> the top level since you need to enumerate all the targets.  It felt like
-> skipping is what we're actually doing here and it seems like those
-> actively working with BPF will be used to having to update things in
-> their environment.  People who start using SKIP_TARGETS are *probably*
-> going to find out about it from the Makefile anyway so will see the
-> default that's there.
-> 
-> Fundamentally having such demanding build dependencies is always going
-> to result in some kind of mess, it's just where we push it.
-> 
->> I also wanted to point out that the net/test_bpf.sh selftest requires
->> having the test_bpf module from the bpf selftest build. So when the bpf
->> selftests aren't built this test is guaranteed to fail. Though it would
->> be nice if the net selftests didn't require building the bpf self tests
->> in order to pass.
-> 
-> Right, that's a separate issue - the net tests should really skip that
-> if they don't have BPF, as we do for other runtime detectable
-> dependencies.  It's nowhere near as severe as failing to build though.
-> 
+diff --git a/tools/testing/selftests/vDSO/.gitignore b/tools/testing/selftests/vDSO/.gitignore
+index 5eb64d41e541..a8dc51af5a9c 100644
+--- a/tools/testing/selftests/vDSO/.gitignore
++++ b/tools/testing/selftests/vDSO/.gitignore
+@@ -1,5 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ vdso_test
++vdso_test_abi
++vdso_test_clock_getres
++vdso_test_correctness
+ vdso_test_gettimeofday
+ vdso_test_getcpu
+ vdso_standalone_test_x86
+-- 
+2.29.0
 
-Correct. This has to be handled as a run-time dependency check and skip
-instead of fail.
-
-thanks,
--- Shuah
