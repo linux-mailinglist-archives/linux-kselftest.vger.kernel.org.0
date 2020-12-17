@@ -2,112 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 813E72DDA3F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 21:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FF52DDA53
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 21:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728197AbgLQUmf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Dec 2020 15:42:35 -0500
-Received: from mga07.intel.com ([134.134.136.100]:38593 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728173AbgLQUmf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 15:42:35 -0500
-IronPort-SDR: NwCWZ0XeMDy1YcOLJgNyQ/6pTzLOx/ZLdBHfjoD81xOcRKCpWeBUygWZoGSXV+iMNfOmXrcYNi
- tbJZlQ0QQ0JQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9838"; a="239419660"
-X-IronPort-AV: E=Sophos;i="5.78,428,1599548400"; 
-   d="scan'208";a="239419660"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2020 12:41:52 -0800
-IronPort-SDR: vMqcelFZkNKz8vAko4tCHOPMa2KxvD9eHIN8YBYVMFXo3hMfi9PxbzJyIdr5mWvvQ7LKO6vevf
- Zi2Eee9tuGIw==
-X-IronPort-AV: E=Sophos;i="5.78,428,1599548400"; 
-   d="scan'208";a="558185094"
-Received: from jlcowper-mobl1.amr.corp.intel.com (HELO [10.212.113.48]) ([10.212.113.48])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2020 12:41:51 -0800
-Subject: Re: [NEEDS-REVIEW] [PATCH V3 04/10] x86/pks: Preserve the PKRS MSR on
- context switch
-To:     ira.weiny@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20201106232908.364581-1-ira.weiny@intel.com>
- <20201106232908.364581-5-ira.weiny@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <ff685068-6821-ca35-7fa8-732a66cbf266@intel.com>
-Date:   Thu, 17 Dec 2020 12:41:50 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1731492AbgLQUvb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Dec 2020 15:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727055AbgLQUvb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 17 Dec 2020 15:51:31 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF12CC0617A7
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 12:50:50 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id et9so7711572qvb.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 12:50:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oqHfltIe6StadBZi2KkdxefX4rAbzFV9jepIFW1E6FY=;
+        b=E/x8A5vMezHCFb9dLm6S0IXJq8Gyh+EPvo5BKs55Wk+POuD1PHi75XEpm0rMiyFNCO
+         HHO1b2pGTYbUDh5Hiq7MA7CpWTSo63OwzfS273kvFBXKpSIfdWF1ZTUIIbb4brsNRlK5
+         9spCH84mjZBmVt00zaRF6kNachiZDpPlmFdp9n2kbSsAFwA+VdZ4CFn9vTCc6LCSi4FW
+         ei6BeLw9IBW0givRHd5+knksA6HoU9W/sihFUzVzR961sv/rWpvQQEk9M7EOvx/H7YHm
+         oAk/kaZ+0uNu1UMZJxnoVx5JOwNnnEzv1DfYcMHinfAUV+6TYGsF8ZEtSili6jQXujtw
+         4S1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oqHfltIe6StadBZi2KkdxefX4rAbzFV9jepIFW1E6FY=;
+        b=IQUDIb7JZuE9s5l8v89G+ybEZa+CzTNpi1EQVK4xw9i42tS3i44Xq4/Co7Qd4k7109
+         b6AlPR2hDsWVNw3DL2HTlbMxo7Gd5SSH7/E2IBZXeeUuc5GbrL9EvkGLAKwH4BL0zNEE
+         BoZMKemG80HswN3Lh2sub+9/FYTJF9R+LsusT3mMrHklo/0OaVMZmP1jEoVgmatPgCd6
+         Qgu5NaUCbVN8V7daLfJf/lGg/sIkINCNGJ7BsmyUVaEZgRWroMit2wLVjrY0U9K0+9xS
+         N/KOtksMesA+99IHu6GaID9w1HraF5EbYHd3VFovOY931x7WVqZkB+h+oHwoK5XVMfLd
+         cP+Q==
+X-Gm-Message-State: AOAM533LOldMeH1nI0BwMkD9fHS6rAC2Y0MSwp6SrvbPQwQ6Y/rVeN9d
+        aMmpdkhVeR5yjK+OB/tCQlbMxQ==
+X-Google-Smtp-Source: ABdhPJxnMK/i8fyKRnAicH/iIJoa4TtlmAQCGTxXlVYSxs/wReGHF4jBJbTahp3EzGoSA6ywyXHl3Q==
+X-Received: by 2002:a0c:ea34:: with SMTP id t20mr928397qvp.5.1608238250201;
+        Thu, 17 Dec 2020 12:50:50 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
+        by smtp.gmail.com with ESMTPSA id a5sm4381546qtn.57.2020.12.17.12.50.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Dec 2020 12:50:49 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1kq0Ea-00CNWJ-NQ; Thu, 17 Dec 2020 16:50:48 -0400
+Date:   Thu, 17 Dec 2020 16:50:48 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Pavel Tatashin <pasha.tatashin@soleen.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, vbabka@suse.cz, mhocko@suse.com,
+        david@redhat.com, osalvador@suse.de, dan.j.williams@intel.com,
+        sashal@kernel.org, tyhicks@linux.microsoft.com,
+        iamjoonsoo.kim@lge.com, mike.kravetz@oracle.com,
+        rostedt@goodmis.org, mingo@redhat.com, peterz@infradead.org,
+        mgorman@suse.de, willy@infradead.org, rientjes@google.com,
+        jhubbard@nvidia.com, linux-doc@vger.kernel.org,
+        ira.weiny@intel.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 08/10] mm/gup: limit number of gup migration failures,
+ honor failures
+Message-ID: <20201217205048.GL5487@ziepe.ca>
+References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
+ <20201217185243.3288048-9-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
-In-Reply-To: <20201106232908.364581-5-ira.weiny@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201217185243.3288048-9-pasha.tatashin@soleen.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/6/20 3:29 PM, ira.weiny@intel.com wrote:
->  void disable_TSC(void)
-> @@ -644,6 +668,8 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p)
->  
->  	if ((tifp ^ tifn) & _TIF_SLD)
->  		switch_to_sld(tifn);
+On Thu, Dec 17, 2020 at 01:52:41PM -0500, Pavel Tatashin wrote:
+> +/*
+> + * Verify that there are no unpinnable (movable) pages, if so return true.
+> + * Otherwise an unpinnable pages is found return false, and unpin all pages.
+> + */
+> +static bool check_and_unpin_pages(unsigned long nr_pages, struct page **pages,
+> +				  unsigned int gup_flags)
+> +{
+> +	unsigned long i, step;
 > +
-> +	pks_sched_in();
->  }
+> +	for (i = 0; i < nr_pages; i += step) {
+> +		struct page *head = compound_head(pages[i]);
+> +
+> +		step = compound_nr(head) - (pages[i] - head);
 
-Does the selftest for this ever actually schedule()?
+You can't assume that all of a compound head is in the pages array,
+this assumption would only work inside the page walkers if the page
+was found in a PMD or something.
 
-I see it talking about context switching, but I don't immediately see
-how it would.
+> +	if (gup_flags & FOLL_PIN) {
+> +		unpin_user_pages(pages, nr_pages);
+
+So we throw everything away? Why? That isn't how the old algorithm worked
+
+> @@ -1654,22 +1664,55 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+>  				  struct vm_area_struct **vmas,
+>  				  unsigned int gup_flags)
+>  {
+> -	unsigned long flags = 0;
+> +	int migrate_retry = 0;
+> +	int isolate_retry = 0;
+> +	unsigned int flags;
+>  	long rc;
+>  
+> -	if (gup_flags & FOLL_LONGTERM)
+> -		flags = memalloc_pin_save();
+> +	if (!(gup_flags & FOLL_LONGTERM))
+> +		return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+> +					       NULL, gup_flags);
+>  
+> -	rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas, NULL,
+> -				     gup_flags);
+> +	/*
+> +	 * Without FOLL_WRITE fault handler may return zero page, which can
+> +	 * be in a movable zone, and also will fail to isolate during migration,
+> +	 * thus the longterm pin will fail.
+> +	 */
+> +	gup_flags &= FOLL_WRITE;
+
+Is &= what you mean here? |= right?
+
+Seems like we've ended up in a weird place if FOLL_LONGTERM always
+includes FOLL_WRITE. Putting the zero page in ZONE_MOVABLE seems like
+a bad idea, no?
+
+> +	/*
+> +	 * Migration may fail, we retry before giving up. Also, because after
+> +	 * migration pages[] becomes outdated, we unpin and repin all pages
+> +	 * in the range, so pages array is repopulated with new values.
+> +	 * Also, because of this we cannot retry migration failures in a loop
+> +	 * without pinning/unpinnig pages.
+> +	 */
+
+The old algorithm made continuous forward progress and only went back
+to the first migration point.
+
+> +	for (; ; ) {
+
+while (true)?
+
+> +		rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+> +					     NULL, gup_flags);
+
+> +		/* Return if error or if all pages are pinnable */
+> +		if (rc <= 0 || check_and_unpin_pages(rc, pages, gup_flags))
+> +			break;
+
+So we sweep the pages list twice now?
+
+> +		/* Some pages are not pinnable, migrate them */
+> +		rc = migrate_movable_pages(rc, pages);
+> +
+> +		/*
+> +		 * If there is an error, and we tried maximum number of times
+> +		 * bail out. Notice: we return an error code, and all pages are
+> +		 * unpinned
+> +		 */
+> +		if (rc < 0 && migrate_retry++ >= PINNABLE_MIGRATE_MAX) {
+> +			break;
+> +		} else if (rc > 0 && isolate_retry++ >= PINNABLE_ISOLATE_MAX) {
+> +			rc = -EBUSY;
+
+I don't like this at all. It shouldn't be so flakey
+
+Can you do migration without the LRU?
+
+Jason
