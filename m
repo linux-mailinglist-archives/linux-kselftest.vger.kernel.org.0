@@ -2,96 +2,296 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F29B12DD6B9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 19:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEE32DD6BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 19:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727891AbgLQSCP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Dec 2020 13:02:15 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:35266 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726773AbgLQSCP (ORCPT
+        id S1729679AbgLQSCS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Dec 2020 13:02:18 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:19448 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727368AbgLQSCS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:02:15 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BHHpgXL007072;
-        Thu, 17 Dec 2020 12:01:01 -0600
+        Thu, 17 Dec 2020 13:02:18 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BHI16Ta012623;
+        Thu, 17 Dec 2020 12:01:06 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=z4AX9nY0wUY3aYEqQYqhIIm+lM+tibJFtoRM2hd5E50=;
- b=n3cCEJrW5L8PEzwS3mJoSxLM/unZpbet3UP8SGQWlwtM740MacQuujj29N0VmbATqOin
- XzTkrGRqacWcGKU4g6lBGt/92ju5cIKcx9vOOJ78xknAtSGDVtCj9R5t021Vdfbc+Qcd
- 4OYnPSD4x2n7xDEJ/pD2MxUY/J0fnqJlFFPAs2+OgJrAvJw/RCpNNs2Txp906CbYzUHa
- ODPtk79CWohqZxTgLljLXmD7kYi9098UrGnl2sxjnYkMoqpd1LAg2aXuEfrADCF99Dkt
- hCUOJAjsZ+oNRvJYWrtYgErBQCUpPeYzbB+pTGrVJC1Qbr/kPRmwyeGcjipjgH0xgox4 9Q== 
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 35cu5ry5ne-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=8fu9rVob4ttDmg3i4lEjd8vzFMUn59WWnbMRMfd1uk8=;
+ b=mgOjpN0SxVYGfQbjhtc1FO/7jplJ83DheEV8x2f6WUFmd6Rt6BJ9O/+MIXNhYmHDDPP8
+ v1Z1pTvnylMsTT+0F4xDyqLtrRqK5gu5eeWEkH5SUbdlh1ozOLAexUnjhMGz4polUrQT
+ X3XUQqKZZOADPNd5R+vMJSmtAbahIsR7BEaS07a1GcoP7qgW7owr3WjlbCMimjZjG9qB
+ XDlKHlQGcKLIeG8tNc5CQYLPduarMwCpGjDQSB3WssVO0TBIV3Kz/5D68ENfWhVdBQSI
+ lMlBI1PHxPzv+jXKHng4OCFZXcs/Bfns5GL6IiqK+YrmLXp7MAG0vZ0iRT7ZcRnV1RmO YA== 
+Received: from ediex01.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 35cv56q95r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 17 Dec 2020 12:01:01 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 17 Dec 2020 12:01:05 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 17 Dec
  2020 18:01:00 +0000
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
  Transport; Thu, 17 Dec 2020 18:01:00 +0000
 Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.236])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BA74511CA;
-        Thu, 17 Dec 2020 18:00:59 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 296A011CC;
+        Thu, 17 Dec 2020 18:01:00 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
         <sergey.senozhatsky@gmail.com>, <shuah@kernel.org>
 CC:     <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>,
         Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v3 1/4] lib: vsprintf: scanf: Negative number must have field width > 1
-Date:   Thu, 17 Dec 2020 18:00:54 +0000
-Message-ID: <20201217180057.23786-1-rf@opensource.cirrus.com>
+Subject: [PATCH v3 2/4] lib: vsprintf: Fix handling of number field widths in vsscanf
+Date:   Thu, 17 Dec 2020 18:00:55 +0000
+Message-ID: <20201217180057.23786-2-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201217180057.23786-1-rf@opensource.cirrus.com>
+References: <20201217180057.23786-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 mlxscore=0
- mlxlogscore=384 suspectscore=0 spamscore=0 clxscore=1015 malwarescore=0
- impostorscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
+ clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0 mlxscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 malwarescore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012170123
+ definitions=main-2012170124
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If a signed number field starts with a '-' the field width must be > 1,
-or unlimited, to allow at least one digit after the '-'.
+The existing code attempted to handle numbers by doing a strto[u]l(),
+ignoring the field width, and then repeatedly dividing to extract the
+field out of the full converted value. If the string contains a run of
+valid digits longer than will fit in a long or long long, this would
+overflow and no amount of dividing can recover the correct value.
 
-This patch adds a check for this. If a signed field starts with '-'
-and field_width == 1 the scanf will quit.
+This patch fixes vsscanf to obey number field widths when parsing
+the number.
 
-It is ok for a signed number field to have a field width of 1 if it
-starts with a digit. In that case the single digit can be converted.
+A new _parse_integer_limit() is added that takes a limit for the number
+of characters to parse. The number field conversion in vsscanf is changed
+to use this new function.
+
+If a number starts with a radix prefix, the field width  must be long
+enough for at last one digit after the prefix. If not, it will be handled
+like this:
+
+ sscanf("0x4", "%1i", &i): i=0, scanning continues with the 'x'
+ sscanf("0x4", "%2i", &i): i=0, scanning continues with the '4'
+
+This is consistent with the observed behaviour of userland sscanf.
+
+Note that this patch does NOT fix the problem of a single field value
+overflowing the target type. So for example:
+
+  sscanf("123456789abcdef", "%x", &i);
+
+Will not produce the correct result because the value obviously overflows
+INT_MAX. But sscanf will report a successful conversion.
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
- lib/vsprintf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ lib/kstrtox.c  | 13 ++++++--
+ lib/kstrtox.h  |  2 ++
+ lib/vsprintf.c | 88 +++++++++++++++++++++++++++++---------------------
+ 3 files changed, 64 insertions(+), 39 deletions(-)
 
+diff --git a/lib/kstrtox.c b/lib/kstrtox.c
+index a14ccf905055..0ac2ee8bd9d0 100644
+--- a/lib/kstrtox.c
++++ b/lib/kstrtox.c
+@@ -39,20 +39,22 @@ const char *_parse_integer_fixup_radix(const char *s, unsigned int *base)
+ 
+ /*
+  * Convert non-negative integer string representation in explicitly given radix
+- * to an integer.
++ * to an integer. A maximum of max_chars characters will be converted.
++ *
+  * Return number of characters consumed maybe or-ed with overflow bit.
+  * If overflow occurs, result integer (incorrect) is still returned.
+  *
+  * Don't you dare use this function.
+  */
+-unsigned int _parse_integer(const char *s, unsigned int base, unsigned long long *p)
++unsigned int _parse_integer_limit(const char *s, unsigned int base,
++				  unsigned long long *p, size_t max_chars)
+ {
+ 	unsigned long long res;
+ 	unsigned int rv;
+ 
+ 	res = 0;
+ 	rv = 0;
+-	while (1) {
++	for (; max_chars > 0; max_chars--) {
+ 		unsigned int c = *s;
+ 		unsigned int lc = c | 0x20; /* don't tolower() this line */
+ 		unsigned int val;
+@@ -82,6 +84,11 @@ unsigned int _parse_integer(const char *s, unsigned int base, unsigned long long
+ 	return rv;
+ }
+ 
++unsigned int _parse_integer(const char *s, unsigned int base, unsigned long long *p)
++{
++	return _parse_integer_limit(s, base, p, INT_MAX);
++}
++
+ static int _kstrtoull(const char *s, unsigned int base, unsigned long long *res)
+ {
+ 	unsigned long long _res;
+diff --git a/lib/kstrtox.h b/lib/kstrtox.h
+index 3b4637bcd254..4c6536f85cac 100644
+--- a/lib/kstrtox.h
++++ b/lib/kstrtox.h
+@@ -4,6 +4,8 @@
+ 
+ #define KSTRTOX_OVERFLOW	(1U << 31)
+ const char *_parse_integer_fixup_radix(const char *s, unsigned int *base);
++unsigned int _parse_integer_limit(const char *s, unsigned int base,
++				  unsigned long long *res, size_t max_chars);
+ unsigned int _parse_integer(const char *s, unsigned int base, unsigned long long *res);
+ 
+ #endif
 diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 14c9a6af1b23..8954ff94a53c 100644
+index 8954ff94a53c..77a0b4d58174 100644
 --- a/lib/vsprintf.c
 +++ b/lib/vsprintf.c
-@@ -3433,8 +3433,12 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
- 		str = skip_spaces(str);
+@@ -53,29 +53,47 @@
+ #include <linux/string_helpers.h>
+ #include "kstrtox.h"
  
- 		digit = *str;
--		if (is_sign && digit == '-')
-+		if (is_sign && digit == '-') {
-+			if (field_width == 1)
-+				break;
+-/**
+- * simple_strtoull - convert a string to an unsigned long long
+- * @cp: The start of the string
+- * @endp: A pointer to the end of the parsed string will be placed here
+- * @base: The number base to use
+- *
+- * This function has caveats. Please use kstrtoull instead.
+- */
+-unsigned long long simple_strtoull(const char *cp, char **endp, unsigned int base)
++static unsigned long long simple_strntoull(const char *startp, size_t max_chars,
++					   char **endp, unsigned int base)
+ {
+-	unsigned long long result;
++	const char *cp;
++	unsigned long long result = 0ULL;
+ 	unsigned int rv;
+ 
+-	cp = _parse_integer_fixup_radix(cp, &base);
+-	rv = _parse_integer(cp, base, &result);
++	if (max_chars == 0) {
++		cp = startp;
++		goto out;
++	}
 +
- 			digit = *(str + 1);
-+		}
++	cp = _parse_integer_fixup_radix(startp, &base);
++	if ((cp - startp) >= max_chars) {
++		cp = startp + max_chars;
++		goto out;
++	}
++
++	max_chars -= (cp - startp);
++	rv = _parse_integer_limit(cp, base, &result, max_chars);
+ 	/* FIXME */
+ 	cp += (rv & ~KSTRTOX_OVERFLOW);
+-
++out:
+ 	if (endp)
+ 		*endp = (char *)cp;
  
- 		if (!digit
- 		    || (base == 16 && !isxdigit(digit))
+ 	return result;
+ }
++
++/**
++ * simple_strtoull - convert a string to an unsigned long long
++ * @cp: The start of the string
++ * @endp: A pointer to the end of the parsed string will be placed here
++ * @base: The number base to use
++ *
++ * This function has caveats. Please use kstrtoull instead.
++ */
++unsigned long long simple_strtoull(const char *cp, char **endp, unsigned int base)
++{
++	return simple_strntoull(cp, UINT_MAX, endp, base);
++}
+ EXPORT_SYMBOL(simple_strtoull);
+ 
+ /**
+@@ -88,7 +106,7 @@ EXPORT_SYMBOL(simple_strtoull);
+  */
+ unsigned long simple_strtoul(const char *cp, char **endp, unsigned int base)
+ {
+-	return simple_strtoull(cp, endp, base);
++	return simple_strntoull(cp, UINT_MAX, endp, base);
+ }
+ EXPORT_SYMBOL(simple_strtoul);
+ 
+@@ -109,6 +127,19 @@ long simple_strtol(const char *cp, char **endp, unsigned int base)
+ }
+ EXPORT_SYMBOL(simple_strtol);
+ 
++static long long simple_strntoll(const char *cp, size_t max_chars, char **endp,
++				 unsigned int base)
++{
++	/*
++	 * simple_strntoull safely handles receiving max_chars==0 in the
++	 * case we start with max_chars==1 and find a '-' prefix.
++	 */
++	if (*cp == '-' && max_chars > 0)
++		return -simple_strntoull(cp + 1, max_chars - 1, endp, base);
++
++	return simple_strntoull(cp, max_chars, endp, base);
++}
++
+ /**
+  * simple_strtoll - convert a string to a signed long long
+  * @cp: The start of the string
+@@ -119,10 +150,7 @@ EXPORT_SYMBOL(simple_strtol);
+  */
+ long long simple_strtoll(const char *cp, char **endp, unsigned int base)
+ {
+-	if (*cp == '-')
+-		return -simple_strtoull(cp + 1, endp, base);
+-
+-	return simple_strtoull(cp, endp, base);
++	return simple_strntoll(cp, UINT_MAX, endp, base);
+ }
+ EXPORT_SYMBOL(simple_strtoll);
+ 
+@@ -3448,25 +3476,13 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
+ 			break;
+ 
+ 		if (is_sign)
+-			val.s = qualifier != 'L' ?
+-				simple_strtol(str, &next, base) :
+-				simple_strtoll(str, &next, base);
++			val.s = simple_strntoll(str,
++						field_width > 0 ? field_width : UINT_MAX,
++						&next, base);
+ 		else
+-			val.u = qualifier != 'L' ?
+-				simple_strtoul(str, &next, base) :
+-				simple_strtoull(str, &next, base);
+-
+-		if (field_width > 0 && next - str > field_width) {
+-			if (base == 0)
+-				_parse_integer_fixup_radix(str, &base);
+-			while (next - str > field_width) {
+-				if (is_sign)
+-					val.s = div_s64(val.s, base);
+-				else
+-					val.u = div_u64(val.u, base);
+-				--next;
+-			}
+-		}
++			val.u = simple_strntoull(str,
++						 field_width > 0 ? field_width : UINT_MAX,
++						 &next, base);
+ 
+ 		switch (qualifier) {
+ 		case 'H':	/* that's 'hh' in format */
 -- 
 2.20.1
 
