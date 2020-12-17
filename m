@@ -2,109 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0B62DD6BA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 19:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA6A2DD820
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 19:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728166AbgLQSCP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Dec 2020 13:02:15 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:51660 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727368AbgLQSCP (ORCPT
+        id S1730080AbgLQSQr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Dec 2020 13:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730015AbgLQSQq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:02:15 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BHHpgXN007072;
-        Thu, 17 Dec 2020 12:01:03 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=uVWPaUAEkQl2q9gPD+VtCUXeC+LPB+fA8dWpPP4F8/A=;
- b=Wd9qA1gg3lwnieonb8GeT8R9Prn298peWouPQOMjoTADRBvRkXafbp05I9DyGcKczYiP
- 2XRrXXvQbA/6km/F7nXllbKkJYhmTY/yQeYvTeCruGl2sE0ZMwstjIhK0618KZXDpvnx
- kLtvjTGLnJhCFqg0LPdngSSzcfU1N24vP2Wl+hrty+EosQ4ROnKFzSB+GAW3MhuyxNsb
- uBuPI138NqaUqiOtm6C2gR9ieBfMgis9NINdgKgxE1GtG22P7eHXxoBXdZE+UgEsrcaf
- 17317mshz2PFYIOAS9MA3NpT6GLVV6mb8RpY20+ZqFIGlK5Wo5tqxDzPj02kmhpznuum 1g== 
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 35cu5ry5ne-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 17 Dec 2020 12:01:03 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 17 Dec
- 2020 18:01:01 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
- Transport; Thu, 17 Dec 2020 18:01:01 +0000
-Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.236])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0639D11CE;
-        Thu, 17 Dec 2020 18:01:00 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
-        <sergey.senozhatsky@gmail.com>, <shuah@kernel.org>
-CC:     <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v3 4/4] selftests: lib: Add wrapper script for test_scanf
-Date:   Thu, 17 Dec 2020 18:00:57 +0000
-Message-ID: <20201217180057.23786-4-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201217180057.23786-1-rf@opensource.cirrus.com>
-References: <20201217180057.23786-1-rf@opensource.cirrus.com>
+        Thu, 17 Dec 2020 13:16:46 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC08C0617A7
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 10:16:06 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id v3so15572555plz.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 10:16:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=n7ny5iw2j1Q3lsbSqEJ2a5WFoaKvdtqDb/7iy7kz+xE=;
+        b=ZQZgYK0Y+YMnQ6ftN0OBpFSUepPpcNy86zWIyPfUOQcWdr3ndfXN6wrbZcpmVQCi/p
+         tY9R0qvLH5ayp0PPjafD2cWNNqdQdqfAJkxKJ8Xj5l6hpLgWu+Sb7p8xYFRQdEa7RxgH
+         ZM3PCDwc2Zv4i+2NWif6gUzjpypaHo15YsZDjdwYLg5wOtOR1WVbzXugyGPFqipxCKt8
+         KVDeTTuO42ciIrzZu8zkMmInNpJlkAM1R2Lyma8Gnn0XzeM9VDGteWjXUCTg/u+FJSzY
+         9pvupkwlGX1uNZEPaC3e49QCcJ3Lli00wMgfY77k7Mn+xYlFHhZ+hmaxMqlfj6yxl6Mi
+         ex3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=n7ny5iw2j1Q3lsbSqEJ2a5WFoaKvdtqDb/7iy7kz+xE=;
+        b=ogiQ6w385gLLy3At7z3twRINSu/Xrr7QL+jEAk6CNcSMP0WPrIm3ebdEE7TbCNkbOV
+         Lf8ypeVVyWc/Ge9oUO5ArgIsFYKCEDYwKWcXRa+cB3KIqCfVE7CfPEdfE7yY4teGqzYu
+         ekkaQKMu0da7onZQNMV/4qV+yleTC0Gu94wUrSjd7wQbs7I23cZIkKR0opVKPuKzcH6s
+         pn5JTCfbRAB9+Ln6sk9Gdn6NRfmKA2oIr2/8MZtYf2Gfg6GGwM2dLvVwDuK07dTR5dkU
+         J1q8eFKmmvi6D84UoLV5FvoMMgNAkefvDob+Wt3jx5Km496WTLDQx+k0qFJ45V7+jDez
+         mQVw==
+X-Gm-Message-State: AOAM530vuzYlzeiS/+hfk+wcTmwQjSdXs2Ir3Jpc0VzOw1GD1OJuiar0
+        5az6JQkZsaSb8SkwXco15ePh3HrMLZ0/XtjdlvrNIg==
+X-Google-Smtp-Source: ABdhPJzBY0I9BHVc4SPprGLbshrbcvUE7SOZADMC1nPg24hjyeHW3NFHXqt8z3hqkeh3/tIZfdQszXiWV3oUYjyjmgU=
+X-Received: by 2002:a17:90b:16cd:: with SMTP id iy13mr427087pjb.182.1608228965614;
+ Thu, 17 Dec 2020 10:16:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 mlxscore=0
- mlxlogscore=822 suspectscore=0 spamscore=0 clxscore=1015 malwarescore=0
- impostorscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012170123
+References: <20201014005320.2233162-1-kaleshsingh@google.com>
+ <20201014005320.2233162-4-kaleshsingh@google.com> <20201217172847.GA89104@roeck-us.net>
+In-Reply-To: <20201217172847.GA89104@roeck-us.net>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 17 Dec 2020 13:15:54 -0500
+Message-ID: <CAC_TJvenGcLUnNE2sG4yBfcp_Aw3mg+cXWN2-nRyzj09bznMyQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] mm: Speedup mremap on 1GB or larger regions
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        kernel test robot <lkp@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Gavin Shan <gshan@redhat.com>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Jia He <justin.he@arm.com>, John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        SeongJae Park <sjpark@amazon.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds a wrapper shell script for the test_scanf module.
+On Thu, Dec 17, 2020 at 12:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Oct 14, 2020 at 12:53:08AM +0000, Kalesh Singh wrote:
+> > Android needs to move large memory regions for garbage collection.
+> > The GC requires moving physical pages of multi-gigabyte heap
+> > using mremap. During this move, the application threads have to
+> > be paused for correctness. It is critical to keep this pause as
+> > short as possible to avoid jitters during user interaction.
+> >
+> > Optimize mremap for >=3D 1GB-sized regions by moving at the PUD/PGD
+> > level if the source and destination addresses are PUD-aligned.
+> > For CONFIG_PGTABLE_LEVELS =3D=3D 3, moving at the PUD level in effect m=
+oves
+> > PGD entries, since the PUD entry is =E2=80=9Cfolded back=E2=80=9D onto =
+the PGD entry.
+> > Add HAVE_MOVE_PUD so that architectures where moving at the PUD level
+> > isn't supported/tested can turn this off by not selecting the config.
+> >
+> > Fix build test error from v1 of this series reported by
+> > kernel test robot in [1].
+> >
+> > [1] https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread=
+/CKPGL4FH4NG7TGH2CVYX2UX76L25BTA3/
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+>
+> I thought I reported it, but maybe I didn't. This patch causes all
+> 'parisc' qemu emulations to fail. Typical log:
+>
+> Freeing unused kernel memory: 604K
+> Write protected read-only-after-init data: 2k
+> rodata_test: end of .rodata is not page size aligned
+> Run /sbin/init as init process
+> process '/bin/busybox' started with executable stack
+> Failed to execute /sbin/init (error -12)
+>
+> Reverting this patch fixes the problem.
+>
+> Bisect log from linux-next below. The patch (and thus the problem)
+> are now in mainline Linux.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
----
- tools/testing/selftests/lib/Makefile | 2 +-
- tools/testing/selftests/lib/config   | 1 +
- tools/testing/selftests/lib/scanf.sh | 4 ++++
- 3 files changed, 6 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/lib/scanf.sh
+Hi Guenter,
 
-diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-index a105f094676e..ee71fc99d5b5 100644
---- a/tools/testing/selftests/lib/Makefile
-+++ b/tools/testing/selftests/lib/Makefile
-@@ -4,6 +4,6 @@
- # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
- all:
- 
--TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
-+TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index b80ee3f6e265..776c8c42e78d 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -1,4 +1,5 @@
- CONFIG_TEST_PRINTF=m
-+CONFIG_TEST_SCANTF=m
- CONFIG_TEST_BITMAP=m
- CONFIG_PRIME_NUMBERS=m
- CONFIG_TEST_STRSCPY=m
-diff --git a/tools/testing/selftests/lib/scanf.sh b/tools/testing/selftests/lib/scanf.sh
-new file mode 100755
-index 000000000000..b59b8ba561c3
---- /dev/null
-+++ b/tools/testing/selftests/lib/scanf.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Tests the scanf infrastructure using test_scanf kernel module.
-+$(dirname $0)/../kselftest/module.sh "scanf" test_scanf
--- 
-2.20.1
+Thanks for reporting. We enabled this on x86 and arm64. Investigating
+what the root cause is now.
 
+Kalesh
+>
+> Guenter
+>
+> ---
+> # bad: [7bba37a1591369e2e506d599b8f5d7d0516b2dbc] Add linux-next specific=
+ files for 20201214
+> # good: [0477e92881850d44910a7e94fc2c46f96faa131f] Linux 5.10-rc7
+> git bisect start 'HEAD' 'v5.10-rc7'
+> # good: [fe5c40ab90a1f82ba97294637eaf875cfdd7a05f] Merge remote-tracking =
+branch 'nand/nand/next'
+> git bisect good fe5c40ab90a1f82ba97294637eaf875cfdd7a05f
+> # good: [674a0d6de8bd290671f7dff405205871a70300b3] Merge remote-tracking =
+branch 'spi/for-next'
+> git bisect good 674a0d6de8bd290671f7dff405205871a70300b3
+> # good: [8623dae312f73a2ea3230b1c648d3004cfc224ce] Merge remote-tracking =
+branch 'vfio/next'
+> git bisect good 8623dae312f73a2ea3230b1c648d3004cfc224ce
+> # good: [dd26635f54bcd8e5d4e875a209f82a0423ba9c08] Merge remote-tracking =
+branch 'gpio/for-next'
+> git bisect good dd26635f54bcd8e5d4e875a209f82a0423ba9c08
+> # good: [86e9c9a734889fe437442e0a35eb4c61d319cb47] Merge remote-tracking =
+branch 'memblock/for-next'
+> git bisect good 86e9c9a734889fe437442e0a35eb4c61d319cb47
+> # bad: [3452331fda80b1cb5e121e6718ca6c07264382b2] userfaultfd: add user-m=
+ode only option to unprivileged_userfaultfd sysctl knob
+> git bisect bad 3452331fda80b1cb5e121e6718ca6c07264382b2
+> # bad: [19f468d54fcffc3f98b71e3e12ff23726767d953] mremap: don't allow MRE=
+MAP_DONTUNMAP on special_mappings and aio
+> git bisect bad 19f468d54fcffc3f98b71e3e12ff23726767d953
+> # good: [d89f3ababcac54493a4cb0582c61eb5f426b44e3] mm: remove pagevec_loo=
+kup_range_nr_tag()
+> git bisect good d89f3ababcac54493a4cb0582c61eb5f426b44e3
+> # good: [eba8373dcb40d30952f31d5fc0cff56b78f46273] mm/mlock: remove __mun=
+lock_isolate_lru_page()
+> git bisect good eba8373dcb40d30952f31d5fc0cff56b78f46273
+> # good: [8831d3f3564beba0f3f1b5291c88b35725bc45c9] xen/unpopulated-alloc:=
+ consolidate pgmap manipulation
+> git bisect good 8831d3f3564beba0f3f1b5291c88b35725bc45c9
+> # bad: [b8d53d70851821d8a2040ddca3aa6ee88fc8aaec] mm/page_vma_mapped.c: a=
+dd colon to fix kernel-doc markups error for check_pte
+> git bisect bad b8d53d70851821d8a2040ddca3aa6ee88fc8aaec
+> # bad: [e77846c3da1862faa25c08e186a62b03e98c862f] x86: mremap speedup - E=
+nable HAVE_MOVE_PUD
+> git bisect bad e77846c3da1862faa25c08e186a62b03e98c862f
+> # bad: [72ad8951bac1c559ea1b691a0b035fb339e4d71d] mm: speedup mremap on 1=
+GB or larger regions
+> git bisect bad 72ad8951bac1c559ea1b691a0b035fb339e4d71d
+> # good: [fa94bfe31609787501a1ff8d7659ade5734ec4e5] kselftests: vm: add mr=
+emap tests
+> git bisect good fa94bfe31609787501a1ff8d7659ade5734ec4e5
+> # first bad commit: [72ad8951bac1c559ea1b691a0b035fb339e4d71d] mm: speedu=
+p mremap on 1GB or larger regions
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
