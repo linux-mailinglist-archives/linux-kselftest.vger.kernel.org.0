@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 262F82DE9E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 20:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191BC2DEA01
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 21:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733236AbgLRTnc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Dec 2020 14:43:32 -0500
-Received: from mga12.intel.com ([192.55.52.136]:5745 "EHLO mga12.intel.com"
+        id S1730855AbgLRULT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Dec 2020 15:11:19 -0500
+Received: from mga07.intel.com ([134.134.136.100]:1630 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726177AbgLRTnb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Dec 2020 14:43:31 -0500
-IronPort-SDR: 4KIKiRYW+R+ZZxxwtKF69Aq7fHMf4kxpqF1SZJt4SgyQ+rUsNbx3lZBZ7N7b5tGaq8ZOHZRpJi
- PlJw8fnBqklQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9839"; a="154714911"
+        id S1730847AbgLRULS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Dec 2020 15:11:18 -0500
+IronPort-SDR: OkVPJvyLn7xkhpaCJCckDDOpQbG69uRuz8lcOlK9228imBVgM3H0e6B8DWKVhsyh8mLWpmYhtF
+ 49kcgH6R/D6w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9839"; a="239585997"
 X-IronPort-AV: E=Sophos;i="5.78,431,1599548400"; 
-   d="scan'208";a="154714911"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 11:42:50 -0800
-IronPort-SDR: BBwwrrlwukxd37QDB3Ll9Qrz++BOPT06uR+6+LPcKkVSGjfrA/RdeiXdJcZzBCYtIrqt3eNP4Y
- 9u53adH5mp9w==
+   d="scan'208";a="239585997"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 12:10:37 -0800
+IronPort-SDR: MAnsuBJldKXtj3wMlgkccBbRzH6y+Hwe+y9uQ6XN9CvLBPUAJtWDUf6TDR1KKtki/7Mjfpac2t
+ Yc+uaFT6/2Ig==
 X-IronPort-AV: E=Sophos;i="5.78,431,1599548400"; 
-   d="scan'208";a="370762824"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 11:42:49 -0800
-Date:   Fri, 18 Dec 2020 11:42:49 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
+   d="scan'208";a="414239977"
+Received: from nrojasva-mobl.amr.corp.intel.com (HELO [10.209.64.102]) ([10.209.64.102])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2020 12:10:36 -0800
+Subject: Re: [PATCH V3 04/10] x86/pks: Preserve the PKRS MSR on context switch
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
 Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -38,245 +38,111 @@ Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Dan Williams <dan.j.williams@intel.com>,
         Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 04/10] x86/pks: Preserve the PKRS MSR on context switch
-Message-ID: <20201218194249.GE1563847@iweiny-DESK2.sc.intel.com>
 References: <20201106232908.364581-1-ira.weiny@intel.com>
  <20201106232908.364581-5-ira.weiny@intel.com>
  <871rfoscz4.fsf@nanos.tec.linutronix.de>
  <87mtycqcjf.fsf@nanos.tec.linutronix.de>
  <878s9vqkrk.fsf@nanos.tec.linutronix.de>
+ <20201218194249.GE1563847@iweiny-DESK2.sc.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <8282c332-ab10-3670-415e-ed77580c4a26@intel.com>
+Date:   Fri, 18 Dec 2020 12:10:36 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878s9vqkrk.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <20201218194249.GE1563847@iweiny-DESK2.sc.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 18, 2020 at 02:57:51PM +0100, Thomas Gleixner wrote:
-> On Thu, Dec 17 2020 at 23:43, Thomas Gleixner wrote:
-> > The only use case for this in your tree is: kmap() and the possible
-> > usage of that mapping outside of the thread context which sets it up.
-> >
-> > The only hint for doing this at all is:
-> >
-> >     Some users, such as kmap(), sometimes requires PKS to be global.
-> >
-> > 'sometime requires' is really _not_ a technical explanation.
-> >
-> > Where is the explanation why kmap() usage 'sometimes' requires this
-> > global trainwreck in the first place and where is the analysis why this
-> > can't be solved differently?
-> >
-> > Detailed use case analysis please.
-> 
-> A lengthy conversation with Dan and Dave over IRC confirmed what I was
-> suspecting.
-> 
-> The approach of this whole PKS thing is to make _all_ existing code
-> magically "work". That means aside of the obvious thread local mappings,
-> the kmap() part is needed to solve the problem of async handling where
-> the mapping is handed to some other context which then uses it and
-> notifies the context which created the mapping when done. That's the
-> principle which was used to make highmem work long time ago.
-> 
-> IMO that was a mistake back then. The right thing would have been to
-> change the code so that it does not rely on a temporary mapping created
-> by the initiator. Instead let the initiator hand the page over to the
-> other context which then creates a temporary mapping for fiddling with
-> it. Water under the bridge...
+On 12/18/20 11:42 AM, Ira Weiny wrote:
+> Another problem would be if the kmap and kunmap happened in different
+> contexts...  :-/  I don't think that is done either but I don't know for
+> certain.
 
-But maybe not.  We are getting rid of a lot of the kmaps and once the bulk are
-gone perhaps we can change this and remove kmap completely?
+It would be really nice to put together some surveillance patches to
+help become more certain about these things.  Even a per-task counter
+would be better than nothing.
 
-> 
-> Glueing PKS on to that kmap() thing is horrible and global PKS is pretty
-> much the opposite of what PKS wants to achieve. It's disabling
-> protection systemwide for an unspecified amount of time and for all
-> contexts.
+On kmap:
+	current->kmaps++;
+On kunmap:
+	current->kmaps--;
+	WARN_ON(current->kmaps < 0);
+On exit:
+	WARN_ON(current->kmaps);
 
-I agree.  This is why I have been working on converting kmap() call sites to
-kmap_local_page().[1]
+That would at least find imbalances.  You could take it even further by
+having a little array, say:
 
-> 
-> So instead of trying to make global PKS "work" we really should go and
-> take a smarter approach.
-> 
->   1) Many kmap() use cases are strictly thread local and the mapped
->      address is never handed to some other context, which means this can
->      be replaced with kmap_local() now, which preserves the mapping
->      accross preemption. PKS just works nicely on top of that.
+struct one_kmap {
+	struct page *page;
+	depot_stack_handle_t handle;
+};
 
-Yes hence the massive kmap->kmap_thread patch set which is now becoming
-kmap_local_page().[2]
+Then:
 
-> 
->   2) Modify kmap() so that it marks the to be mapped page as 'globaly
->      unprotected' instead of doing this global unprotect PKS dance.
->      kunmap() undoes that. That obviously needs some thought
->      vs. refcounting if there are concurrent users, but that's a
->      solvable problem either as part of struct page itself or
->      stored in some global hash.
+	 struct task_struct {
+		...
+	+	struct one_kmap kmaps[10];
+	 };
 
-How would this globally unprotected flag work?  I suppose if kmap created a new
-PTE we could make that PTE non-PKS protected then we don't have to fiddle with
-the register...  I think I like that idea.
+On kmap() you make a new entry in current->kmaps[], and on kunmap() you
+try to find the corresponding entry.  If you can't find one, in the
+current task you can even go search all the other tasks and see who
+might be responsible.  If something goes and does more than 10
+simultaneous kmap()s in one thread, dump a warning and give up.  Or,
+dynamically allocate the kmaps[] array.
 
-> 
->   3) Have PKS modes:
-> 
->      - STRICT:   No pardon
->      
->      - RELAXED:  Warn and unprotect temporary for the current context
-> 
->      - SILENT:	 Like RELAXED, but w/o warning to make sysadmins happy.
->                  Default should be RELAXED.
-> 
->      - OFF:      Disable the whole PKS thing
+Then you can dump out the stack of the kmap() culprit if it exits after
+a kmap() but without a corresponding kfree().
 
-I'm not really sure how this solves the global problem but it is probably worth
-having in general.
-
-> 
-> 
->   4) Have a smart #PF mechanism which does:
-> 
->      if (error_code & X86_PF_PK) {
->          page = virt_to_page(address);
-> 
->          if (!page || !page_is_globaly_unprotected(page))
->                  goto die;
-> 
->          if (pks_mode == PKS_MODE_STRICT)
->          	 goto die;
-> 
->          WARN_ONCE(pks_mode == PKS_MODE_RELAXED, "Useful info ...");
-> 
->          temporary_unprotect(page, regs);
->          return;
->      }
-
-I feel like this is very similar to what I had in the global patch you found in
-my git tree with the exception of the RELAXED mode.  I simply had globally
-unprotected or die.
-
-global_pkey_is_enabled() handles the page_is_globaly_unprotected() and
-temporary_unprotect().[3]
-
-Anyway, I'm sorry (but not sorry) that you found it.  I've been trying to get
-0-day and other testing on it and my public tree was the easiest way to do
-that.  Anyway...
-
-The patch as a whole needs work.  You are 100% correct that if a mapping is
-handed to another context it is going to suck performance wise.  It has had
-some internal review but not much.
-
-Regardless I think unprotecting a global context is the easy part.  The code
-you had a problem with (and I see is fully broken) was the restriction of
-access.  A failure to update in that direction would only result in a wider
-window of access.  I contemplated not doing a global update at all and just
-leave the access open until the next context switch.  But the code as it stands
-tries to force an update for a couple of reasons:
-
-1) kmap_local_page() removes most of the need for global pks.  So I was
-   thinking that global PKS could be a slow path.
-
-2) kmap()'s that are handed to other contexts they are likely to be 'long term'
-   and should not need to be updated 'too' often.  I will admit that I don't
-   know how often 'too often' is.
-
-But IMO these questions are best left to after the kmaps are converted.  Thus
-this patch set was just basic support.  Other uses cases beyond pmem such as
-trusted keys or secret mem don't need a global pks feature and could build on
-the patch set submitted.  I was trying to break the problem down.
-
-> 
->      temporary_unprotect(page, regs)
->      {
->         key = page_to_key(page);
-> 
-> 	/* Return from #PF will establish this for the faulting context */
->         extended_state(regs)->pks &= ~PKS_MASK(key);
->      }
-> 
->      This temporary unprotect is undone when the context is left, so
->      depending on the context (thread, interrupt, softirq) the
->      unprotected section might be way wider than actually needed, but
->      that's still orders of magnitudes better than having this fully
->      unrestricted global PKS mode which is completely scopeless.
-
-I'm not sure I follow you.  How would we know when the context is left?
-
-> 
->      The above is at least restricted to the pages which are in use for
->      a particular operation. Stray pointers during that time are
->      obviously not caught, but that's not any different from that
->      proposed global thingy.
-> 
->      The warning allows to find the non-obvious places so they can be
->      analyzed and worked on.
-
-I could add the warning for sure.
-
-> 
->   5) The DAX case which you made "work" with dev_access_enable() and
->      dev_access_disable(), i.e. with yet another lazy approach of
->      avoiding to change a handful of usage sites.
-> 
->      The use cases are strictly context local which means the global
->      magic is not used at all. Why does it exist in the first place?
-
-I'm not following.  What is 'it'?
-
-> 
->      Aside of that this global thing would never work at all because the
->      refcounting is per thread and not global.
-> 
->      So that DAX use case is just a matter of:
-> 
->         grant/revoke_access(DEV_PKS_KEY, READ/WRITE)
-> 
->      which is effective for the current execution context and really
->      wants to be a distinct READ/WRITE protection and not the magic
->      global thing which just has on/off. All usage sites know whether
->      they want to read or write.
->    
->      That leaves the question about the refcount. AFAICT, nothing nests
->      in that use case for a given execution context. I'm surely missing
->      something subtle here.
-
-The refcount is needed for non-global pks as well as global.  I've not resolved
-if anything needs to be done with the refcount on the global update since the
-following is legal.
-
-kmap()
-kmap_local_page()
-kunmap()
-kunmap_local()
-
-Which would be a problem.  But I don't think it is ever actually done.
-
-Another problem would be if the kmap and kunmap happened in different
-contexts...  :-/  I don't think that is done either but I don't know for
-certain.
-
-Frankly, my main focus before any of this global support has been to get rid of
-as many kmaps as possible.[1]  Once that is done I think more of these
-questions can be answered better.
-
-Ira
-
-[1] https://lore.kernel.org/lkml/20201210171834.2472353-1-ira.weiny@intel.com/
-[2] https://lore.kernel.org/lkml/20201009195033.3208459-1-ira.weiny@intel.com/
-[3] Latest untested patch pushed for reference here because I can't find
-    exactly the branch you found.
-    https://github.com/weiny2/linux-kernel/commit/37439e91e141be58c13ccc4462f7782311680636
-
-> 
->      Hmm?
-> 
-> Thanks,
-> 
->         tglx
->      
+Something like that should be low overhead enough to get it into things
+like the 0day debug kernel.  It should be way cheaper than something
+like lockdep.
