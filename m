@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A0F2DE078
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 10:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563C42DE084
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 10:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733031AbgLRJhm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Dec 2020 04:37:42 -0500
-Received: from mx2.suse.de ([195.135.220.15]:53424 "EHLO mx2.suse.de"
+        id S1730512AbgLRJoN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Dec 2020 04:44:13 -0500
+Received: from mx2.suse.de ([195.135.220.15]:56658 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733025AbgLRJhl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Dec 2020 04:37:41 -0500
+        id S1725884AbgLRJoN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Dec 2020 04:44:13 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1608284215; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1608284606; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=IhZ+0dR8LrfQCW5eO/oS4fti2P98eOhf3JUH9BPkMbU=;
-        b=YS6Qhe3nSl14I6h7xJIeKCv0k7PD3x96Zt4uY8TV5Riai2MNh6SwiauxTkswUURJaPbEXA
-        39BxWbxlbthzr2VuIIkFZzCM87b11f1J/NQIr8wQeRs3ighVMbnXDE8h3D2PVaO6Sn7T7t
-        wcevud+YDfGTQNVUR2eLEdtgb3FxOgY=
+        bh=Kns51nghtkz6ndAww0GyVqmKXCNEXcevy0MsQVndr/Q=;
+        b=BeXlxK9M4wgEVguLtRScCNhQjzll21viDpb7mjSOySSiwfuIAFOm6LrI5elHH55KfG81Qf
+        t2uxwmdt6qwwCserYXTFBNQKHazYMkB5euGcVgHvByC/5JFQlY3mt5eyvJl7ihJWVtnK4X
+        63LP2G/AU+lJ0CBSxgu5n2vySg4Nto0=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 04A0DABC6;
-        Fri, 18 Dec 2020 09:36:55 +0000 (UTC)
-Date:   Fri, 18 Dec 2020 10:36:53 +0100
+        by mx2.suse.de (Postfix) with ESMTP id 29927ACC4;
+        Fri, 18 Dec 2020 09:43:26 +0000 (UTC)
+Date:   Fri, 18 Dec 2020 10:43:24 +0100
 From:   Michal Hocko <mhocko@suse.com>
 To:     Pavel Tatashin <pasha.tatashin@soleen.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -35,63 +35,32 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 03/10] mm: apply per-task gfp constraints in fast path
-Message-ID: <20201218093653.GS32193@dhcp22.suse.cz>
+Subject: Re: [PATCH v4 05/10] mm/gup: migrate pinned pages out of movable zone
+Message-ID: <20201218094324.GT32193@dhcp22.suse.cz>
 References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
- <20201217185243.3288048-4-pasha.tatashin@soleen.com>
+ <20201217185243.3288048-6-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201217185243.3288048-4-pasha.tatashin@soleen.com>
+In-Reply-To: <20201217185243.3288048-6-pasha.tatashin@soleen.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 17-12-20 13:52:36, Pavel Tatashin wrote:
-[..]
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 469016222cdb..d9546f5897f4 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -3234,11 +3234,12 @@ static bool throttle_direct_reclaim(gfp_t gfp_mask, struct zonelist *zonelist,
->  unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
->  				gfp_t gfp_mask, nodemask_t *nodemask)
->  {
-> +	gfp_t current_gfp_mask = current_gfp_context(gfp_mask);
->  	unsigned long nr_reclaimed;
->  	struct scan_control sc = {
->  		.nr_to_reclaim = SWAP_CLUSTER_MAX,
-> -		.gfp_mask = current_gfp_context(gfp_mask),
-> -		.reclaim_idx = gfp_zone(gfp_mask),
-> +		.gfp_mask = current_gfp_mask,
-> +		.reclaim_idx = gfp_zone(current_gfp_mask),
->  		.order = order,
->  		.nodemask = nodemask,
->  		.priority = DEF_PRIORITY,
-> @@ -4158,17 +4159,18 @@ static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned in
->  {
->  	/* Minimum pages needed in order to stay on node */
->  	const unsigned long nr_pages = 1 << order;
-> +	gfp_t current_gfp_mask = current_gfp_context(gfp_mask);
->  	struct task_struct *p = current;
->  	unsigned int noreclaim_flag;
->  	struct scan_control sc = {
->  		.nr_to_reclaim = max(nr_pages, SWAP_CLUSTER_MAX),
-> -		.gfp_mask = current_gfp_context(gfp_mask),
-> +		.gfp_mask = current_gfp_mask,
->  		.order = order,
->  		.priority = NODE_RECLAIM_PRIORITY,
->  		.may_writepage = !!(node_reclaim_mode & RECLAIM_WRITE),
->  		.may_unmap = !!(node_reclaim_mode & RECLAIM_UNMAP),
->  		.may_swap = 1,
-> -		.reclaim_idx = gfp_zone(gfp_mask),
-> +		.reclaim_idx = gfp_zone(current_gfp_mask),
->  	};
->  
->  	trace_mm_vmscan_node_reclaim_begin(pgdat->node_id, order,
+On Thu 17-12-20 13:52:38, Pavel Tatashin wrote:
+> +	 * 1. Pinned pages: (long-term) pinning of movable pages is avoided
+> +	 *    when pages are pinned and faulted, but it is still possible that
+> +	 *    address space already has pages in ZONE_MOVABLE at the time when
+> +	 *    pages are pinned (i.e. user has touches that memory before
+> +	 *    pinning). In such case we try to migrate them to a different zone,
+> +	 *    but if migration fails the pages can still end-up pinned in
+> +	 *    ZONE_MOVABLE. In such case, memory offlining might retry a long
+> +	 *    time and will only succeed once user application unpins pages.
 
-I was hoping we had agreed these are not necessary and they shouldn't be
-touched in the patch.
+I still dislike this. Pinning can fail so there shouldn't be any reasons
+to break MOVABLE constrain for something that can be handled. If
+anything there should be a very good reasoning behind this decision
+documented.
 -- 
 Michal Hocko
 SUSE Labs
