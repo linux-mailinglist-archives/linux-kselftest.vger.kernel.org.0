@@ -2,163 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C082DDB8F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Dec 2020 23:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD67F2DDD98
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 05:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727139AbgLQWn7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Dec 2020 17:43:59 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:49096 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726796AbgLQWn7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 17:43:59 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1608244996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/S3rCsR4wz25bQqtxLvPPE+bxBFLx2igc0E9oZoBixU=;
-        b=wRinoYpzeL4ipkhvpMBgUpezoNqnN4BwXIz6yCt/nstpu+1cIIa6AhqenWWWDuIGhiMkOk
-        CgBSGq+EQLUSN9blubISX09j3JB1cUFFvM2gc/4yVDkCmqEjWMRmnRN92OKprWuQFH8G+K
-        NkwxrRjg1k0PiQEkjqiHBNmoHeasdsNX94jSGQkWfCKi19W1Rbw3cvPUrm9IpD7TwUC+nV
-        ACdc6YScpXoHcP5diNMP4a5qX4wgyfeDV4LsY8msOVkwEM82YjXZOFroP2V/QtN6nSvTIX
-        30LaegIh2ac27qxKzekW++HDO7k8ZZdzcFJWCHEJnmZDQHdeC3vadvqArXeZTA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1608244996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/S3rCsR4wz25bQqtxLvPPE+bxBFLx2igc0E9oZoBixU=;
-        b=++W/DH+pERsrf2PJVkJS5SNOxNLygeL5yW5v2CfziX3B5GGLBVUk7yuB5f3LQe/a8v69Ue
-        IAySbYQONXjuIgAQ==
-To:     ira.weiny@intel.com, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
+        id S1732037AbgLREFv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Dec 2020 23:05:51 -0500
+Received: from mga01.intel.com ([192.55.52.88]:50611 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726851AbgLREFv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 17 Dec 2020 23:05:51 -0500
+IronPort-SDR: +Vxzu50+9Acaorum5Si1d0lAYaQ3N4DQnaEAtiA3lGP86piOurtx4rVBJAPI+gtzK70qrNnsEa
+ waC/LfErMccg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9838"; a="193782108"
+X-IronPort-AV: E=Sophos;i="5.78,429,1599548400"; 
+   d="scan'208";a="193782108"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2020 20:05:10 -0800
+IronPort-SDR: H7Ptrfhyn4Q0/MQ290Py5RH1IOQkdFP9uA3u+tCGsO9MgVxuu6W0YKL6rjeHqs7mJDR3X8q6uC
+ hP2pWdLfD4iQ==
+X-IronPort-AV: E=Sophos;i="5.78,429,1599548400"; 
+   d="scan'208";a="353728334"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2020 20:05:10 -0800
+Date:   Thu, 17 Dec 2020 20:05:09 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         linux-doc@vger.kernel.org, linux-nvdimm@lists.01.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Dan Williams <dan.j.williams@intel.com>,
         Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 04/10] x86/pks: Preserve the PKRS MSR on context switch
-In-Reply-To: <871rfoscz4.fsf@nanos.tec.linutronix.de>
-References: <20201106232908.364581-1-ira.weiny@intel.com> <20201106232908.364581-5-ira.weiny@intel.com> <871rfoscz4.fsf@nanos.tec.linutronix.de>
-Date:   Thu, 17 Dec 2020 23:43:16 +0100
-Message-ID: <87mtycqcjf.fsf@nanos.tec.linutronix.de>
+Subject: Re: [PATCH V3 10/10] x86/pks: Add PKS test code
+Message-ID: <20201218040509.GD1563847@iweiny-DESK2.sc.intel.com>
+References: <20201106232908.364581-1-ira.weiny@intel.com>
+ <20201106232908.364581-11-ira.weiny@intel.com>
+ <570ead2a-ff41-e730-d61d-0f59c67b1903@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <570ead2a-ff41-e730-d61d-0f59c67b1903@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 17 2020 at 15:50, Thomas Gleixner wrote:
-> On Fri, Nov 06 2020 at 15:29, ira weiny wrote:
->
->> +void write_pkrs(u32 new_pkrs)
->> +{
->> +	u32 *pkrs;
->> +
->> +	if (!static_cpu_has(X86_FEATURE_PKS))
->> +		return;
->> +
->> +	pkrs = get_cpu_ptr(&pkrs_cache);
->
-> So this is called from various places including schedule and also from
-> the low level entry/exit code. Why do we need to have an extra
-> preempt_disable/enable() there via get/put_cpu_ptr()?
->
-> Just because performance in those code paths does not matter?
->
->> +	if (*pkrs != new_pkrs) {
->> +		*pkrs = new_pkrs;
->> +		wrmsrl(MSR_IA32_PKRS, new_pkrs);
->> +	}
->> +	put_cpu_ptr(pkrs);
+On Thu, Dec 17, 2020 at 12:55:39PM -0800, Dave Hansen wrote:
+> On 11/6/20 3:29 PM, ira.weiny@intel.com wrote:
+> > +		/* Arm for context switch test */
+> > +		write(fd, "1", 1);
+> > +
+> > +		/* Context switch out... */
+> > +		sleep(4);
+> > +
+> > +		/* Check msr restored */
+> > +		write(fd, "2", 1);
+> 
+> These are always tricky.  What you ideally want here is:
+> 
+> 1. Switch away from this task to a non-PKS task, or
+> 2. Switch from this task to a PKS-using task, but one which has a
+>    different PKS value
 
-Which made me look at the other branch of your git repo just because I
-wanted to know about the 'other' storage requirements and I found this
-gem:
+Or both...
 
-> update_global_pkrs()
-> ...
->	/*
->	 * If we are preventing access from the old value.  Force the
->	 * update on all running threads.
->	 */
->	if (((old_val == 0) && protection) ||
->	    ((old_val & PKR_WD_BIT) && (protection & PKEY_DISABLE_ACCESS))) {
->		int cpu;
->
->		for_each_online_cpu(cpu) {
->			u32 *ptr = per_cpu_ptr(&pkrs_cache, cpu);
->
->			*ptr = update_pkey_val(*ptr, pkey, protection);
->			wrmsrl_on_cpu(cpu, MSR_IA32_PKRS, *ptr);
->			put_cpu_ptr(ptr);
+> 
+> then, switch back to this task and make sure PKS maintained its value.
+> 
+> *But*, there's no absolute guarantee that another task will run.  It
+> would not be totally unreasonable to have the kernel just sit in a loop
+> without context switching here if no other tasks can run.
+> 
+> The only way you *know* there is a context switch is by having two tasks
+> bound to the same logical CPU and make sure they run one after another.
 
-1) per_cpu_ptr() -> put_cpu_ptr() is broken as per_cpu_ptr() is not
-   disabling preemption while put_cpu_ptr() enables it which wreckages
-   the preemption count. 
+Ah...  We do that.
 
-   How was that ever tested at all with any debug option enabled?
+...
++       CPU_ZERO(&cpuset);
++       CPU_SET(0, &cpuset);
++       /* Two processes run on CPU 0 so that they go through context switch.  */
++       sched_setaffinity(getpid(), sizeof(cpu_set_t), &cpuset);
+...
 
-   Answer: Not at all
+I think this should be ensuring that both the parent and the child are
+running on CPU 0.  At least according to the man page they should be.
 
-2) How is that sequence:
+<man>
+	A child created via fork(2) inherits its parent's CPU affinity mask.
+</man>
 
-	ptr = per_cpu_ptr(&pkrs_cache, cpu);
-	*ptr = update_pkey_val(*ptr, pkey, protection);
-	wrmsrl_on_cpu(cpu, MSR_IA32_PKRS, *ptr);
+Perhaps a better method would be to synchronize the 2 threads more to ensure
+that we are really running at the 'same time' and forcing the context switch.
 
-   supposed to be correct vs. a concurrent modification of the
-   pkrs_cache of the remote CPU?
+>  This just gets itself into a state where it *CAN* context switch and
+> prays that one will happen.
 
-   Answer: Not at all
+Not sure what you mean by 'This'?  Do you mean that running on the same CPU
+will sometimes not force a context switch?  Or do you mean that the sleeps
+could be badly timed and the 2 threads could run 1 after the other on the same
+CPU?  The latter is AFAICT the most likely case.
 
-Also doing a wrmsrl_on_cpu() on _each_ online CPU is insane at best.
+> 
+> You can also run a bunch of these in parallel bound to a single CPU.
+> That would also give you higher levels of assurance that *some* context
+> switch happens at sleep().
 
-  A smp function call on a remote CPU takes ~3-5us when the remote CPU
-  is not idle and can immediately respond. If the remote CPU is deep in
-  idle it can take up to 100us depending on C-State it is in.
+I think more cycles is a good idea for sure.  But I'm more comfortable with
+forcing the test to be more synchronized so that it is actually running in the
+order we think/want it to be.
 
-  Even if the remote CPU is not not idle and just has interrupts
-  disabled for a few dozen of microseconds this adds up.
+> 
+> One critical thing with these tests is to sabotage the kernel and then
+> run them and make *sure* they fail.  Basically, if you screw up, do they
+> actually work to catch it?
 
-  So on a 256 CPU system depending on the state of the remote CPUs this
-  stalls the CPU doing the update for anything between 1 and 25ms worst
-  case.
+I'll try and come up with a more stressful test.
 
-  Of course that also violates _all_ CPU isolation mechanisms.
-
-  What for?
-
-  Just for the theoretical chance that _all_ remote CPUs have
-  seen that global permission and have it still active?
-
-  You're not serious about that, right?
-
-The only use case for this in your tree is: kmap() and the possible
-usage of that mapping outside of the thread context which sets it up.
-
-The only hint for doing this at all is:
-
-    Some users, such as kmap(), sometimes requires PKS to be global.
-
-'sometime requires' is really _not_ a technical explanation.
-
-Where is the explanation why kmap() usage 'sometimes' requires this
-global trainwreck in the first place and where is the analysis why this
-can't be solved differently?
-
-Detailed use case analysis please.
-
-Thanks,
-
-        tglx
-
-
-
+Ira
