@@ -2,76 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E1C2DE048
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 10:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A0F2DE078
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 10:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732942AbgLRJLs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Dec 2020 04:11:48 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:12005 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730833AbgLRJLs (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Dec 2020 04:11:48 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fdc722b0001>; Fri, 18 Dec 2020 01:11:07 -0800
-Received: from [10.2.61.104] (172.20.145.6) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Dec
- 2020 09:11:00 +0000
-Subject: Re: [PATCH v4 09/10] selftests/vm: test flag is broken
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <akpm@linux-foundation.org>, <vbabka@suse.cz>, <mhocko@suse.com>,
-        <david@redhat.com>, <osalvador@suse.de>,
-        <dan.j.williams@intel.com>, <sashal@kernel.org>,
-        <tyhicks@linux.microsoft.com>, <iamjoonsoo.kim@lge.com>,
-        <mike.kravetz@oracle.com>, <rostedt@goodmis.org>,
-        <mingo@redhat.com>, <jgg@ziepe.ca>, <peterz@infradead.org>,
-        <mgorman@suse.de>, <willy@infradead.org>, <rientjes@google.com>,
-        <linux-doc@vger.kernel.org>, <ira.weiny@intel.com>,
-        <linux-kselftest@vger.kernel.org>
+        id S1733031AbgLRJhm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Dec 2020 04:37:42 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53424 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733025AbgLRJhl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Dec 2020 04:37:41 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1608284215; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IhZ+0dR8LrfQCW5eO/oS4fti2P98eOhf3JUH9BPkMbU=;
+        b=YS6Qhe3nSl14I6h7xJIeKCv0k7PD3x96Zt4uY8TV5Riai2MNh6SwiauxTkswUURJaPbEXA
+        39BxWbxlbthzr2VuIIkFZzCM87b11f1J/NQIr8wQeRs3ighVMbnXDE8h3D2PVaO6Sn7T7t
+        wcevud+YDfGTQNVUR2eLEdtgb3FxOgY=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 04A0DABC6;
+        Fri, 18 Dec 2020 09:36:55 +0000 (UTC)
+Date:   Fri, 18 Dec 2020 10:36:53 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Pavel Tatashin <pasha.tatashin@soleen.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, vbabka@suse.cz, david@redhat.com,
+        osalvador@suse.de, dan.j.williams@intel.com, sashal@kernel.org,
+        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
+        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
+        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
+        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
+        linux-doc@vger.kernel.org, ira.weiny@intel.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 03/10] mm: apply per-task gfp constraints in fast path
+Message-ID: <20201218093653.GS32193@dhcp22.suse.cz>
 References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
- <20201217185243.3288048-10-pasha.tatashin@soleen.com>
- <8879f12c-2aed-1615-1298-7cf9596acc95@nvidia.com>
-Message-ID: <d0b1fec7-cc18-68d2-c574-639e665c137c@nvidia.com>
-Date:   Fri, 18 Dec 2020 01:11:00 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:84.0) Gecko/20100101
- Thunderbird/84.0
+ <20201217185243.3288048-4-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
-In-Reply-To: <8879f12c-2aed-1615-1298-7cf9596acc95@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.145.6]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1608282667; bh=3mPuCxRz8KYq0pwcFButq0DOd57iVq04TlvZG8ID//Y=;
-        h=Subject:From:To:References:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=sMmU4YUHis88+7q8FOrjOMAnSAnAGKQ2GV412pBnkj07s0+IB6Dg0kzx6uXmT0FoA
-         D9CtmbOLgNVPgEL4CjkpMgfDKZUoBsABCOj6FR/OT/Ayv3A7Mi/9K3LqDeVL/gVFke
-         11h//FrtmvBwAkHQd9dQi5uFLVyxVWtTN0/BFa3iWKJUUNLnLaN1+yvzelntj+5Qmb
-         kDkaFu3PaOExGyCeNYrlZUXyb1rhU+0ACDWvwHnqWWBu/Q9bo/NUDFniBG8FrVCx00
-         pINgEsVY0Wx6JmiWmFHoZO5zfTsFHpPRXyi8VquTqtYw9OmKYL1wIDKPMQmV2kWytw
-         vENCsi8xBVWIg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201217185243.3288048-4-pasha.tatashin@soleen.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/18/20 1:06 AM, John Hubbard wrote:
->> Add a new test_flags field, to allow raw gup_flags to work.
-> 
-> I think .test_control_flags field would be a good name, to make it very
-> clear that it's not destined for gup_flags. Just .test_flags is not quite
-> as clear a distinction from .gup_flags, as .test_control_flags is, IMHO.
-> 
+On Thu 17-12-20 13:52:36, Pavel Tatashin wrote:
+[..]
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 469016222cdb..d9546f5897f4 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -3234,11 +3234,12 @@ static bool throttle_direct_reclaim(gfp_t gfp_mask, struct zonelist *zonelist,
+>  unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
+>  				gfp_t gfp_mask, nodemask_t *nodemask)
+>  {
+> +	gfp_t current_gfp_mask = current_gfp_context(gfp_mask);
+>  	unsigned long nr_reclaimed;
+>  	struct scan_control sc = {
+>  		.nr_to_reclaim = SWAP_CLUSTER_MAX,
+> -		.gfp_mask = current_gfp_context(gfp_mask),
+> -		.reclaim_idx = gfp_zone(gfp_mask),
+> +		.gfp_mask = current_gfp_mask,
+> +		.reclaim_idx = gfp_zone(current_gfp_mask),
+>  		.order = order,
+>  		.nodemask = nodemask,
+>  		.priority = DEF_PRIORITY,
+> @@ -4158,17 +4159,18 @@ static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned in
+>  {
+>  	/* Minimum pages needed in order to stay on node */
+>  	const unsigned long nr_pages = 1 << order;
+> +	gfp_t current_gfp_mask = current_gfp_context(gfp_mask);
+>  	struct task_struct *p = current;
+>  	unsigned int noreclaim_flag;
+>  	struct scan_control sc = {
+>  		.nr_to_reclaim = max(nr_pages, SWAP_CLUSTER_MAX),
+> -		.gfp_mask = current_gfp_context(gfp_mask),
+> +		.gfp_mask = current_gfp_mask,
+>  		.order = order,
+>  		.priority = NODE_RECLAIM_PRIORITY,
+>  		.may_writepage = !!(node_reclaim_mode & RECLAIM_WRITE),
+>  		.may_unmap = !!(node_reclaim_mode & RECLAIM_UNMAP),
+>  		.may_swap = 1,
+> -		.reclaim_idx = gfp_zone(gfp_mask),
+> +		.reclaim_idx = gfp_zone(current_gfp_mask),
+>  	};
+>  
+>  	trace_mm_vmscan_node_reclaim_begin(pgdat->node_id, order,
 
-And maybe renaming .flags to .gup_flags, just to make it really clear.
-
-
-thanks,
+I was hoping we had agreed these are not necessary and they shouldn't be
+touched in the patch.
 -- 
-John Hubbard
-NVIDIA
+Michal Hocko
+SUSE Labs
