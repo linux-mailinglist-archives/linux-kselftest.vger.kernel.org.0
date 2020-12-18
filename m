@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3113B2DE2D8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 13:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED872DE2E5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 13:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725968AbgLRMdy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Dec 2020 07:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S1726419AbgLRMoe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Dec 2020 07:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbgLRMdy (ORCPT
+        with ESMTP id S1725947AbgLRMoe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Dec 2020 07:33:54 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59FCC0617B0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Dec 2020 04:33:13 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id dk8so2202561edb.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Dec 2020 04:33:13 -0800 (PST)
+        Fri, 18 Dec 2020 07:44:34 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06B3C06138C
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Dec 2020 04:43:53 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id b9so3053877ejy.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Dec 2020 04:43:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=i4auixzjhc3l5kGc5mD15oPo8KZORVAz4eHOnG9WGUU=;
-        b=n6tUjhd4sqvhp8M2z4j5VFSxJeotpjxPd0CPZa5/EEkcoeLyfyDskake0eK9yxhmwy
-         S2gV2oOJzviGu9Y+HT1JnquGMls/BLX+jC+HgjKoBbCtEGWktMPT2nMVHOoLhLl0KgvG
-         peXy3mP/v5o9GPyQ8zCeJENiWt244Qtx5yIrpCIXKcHHLKce5fQ7WLALIl8MpgCHKKD0
-         q1lOXUYw01ZQ5n/Hzb1tToYlIWOWHfXBaEMR8L39XIv4/BPtOJ3zfKkyuTXHwcwSFoiD
-         GbfceUFPcWfb8QPWxwJ3/wFiCvhjXjbRR2moF52UiyqMkdZSC0eRi45AU3BnsQyx5mMJ
-         1t7w==
+        bh=VP62gLy4L6lfMGIRwtzfjFvE+h27PxSa+U0ikjWYO+Y=;
+        b=X0hCklMnpRKCi/ALhX9mvgOwcS8w3p+GTPamqE39ttdKNscia4P58KD++FD2plVHEo
+         A2UZwBioUoldfE+g1gnuZazRSXRtwyTvuOxtpxexB4ny4bAneoWMowNMk9+NyYIUf2tE
+         fpmcwGa+RSYTcM6j2JIqqfqaD4QUyoutw2JvGnjh8ZNCVnoEaeXMnhl6/rs6njNIjw2u
+         EnZXSgbc0WUzbI2WF28Za2/SO0iaCFCLXz58pWOZi2/vvGDTdfQOlTVEBtshkQw+6Pxj
+         sj7yDpUPFFgfKQa11E681HdSZboZCp+5rRtgc3lOCDMxrce9g0AJLJRq1ieG7Dd3HOBR
+         Wphw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=i4auixzjhc3l5kGc5mD15oPo8KZORVAz4eHOnG9WGUU=;
-        b=mzBjN60f56UhOvV2xgi0CeeKzWE2jeMGJECy2rpihvpYBWRYJT6tXTE8A/2FpRrb4/
-         gyzdDIZkAff8vBJ23HCs54NfPUjP9aM43u53MGFUED163nb+Hl8vWzvz46B7esnQhsDh
-         b6+gIDVB1EzRnihEVGbbpDeyYQBAmCpe78dop0GlLZ73HcBa3OHiRR8+Nwixoeyma6PO
-         YiEtnXBZgEzxoZkFhfdjkG+Rq0noNgho+YP+3lFwXRxXL3VWovg2bxbrGFscgZDynEr5
-         gx36FW/y2U+rcStsYnhIh5sqDkvTtzzDZYalIVUcHqMoFzVI9s6e46WO6TNO2fkauSb0
-         pAHQ==
-X-Gm-Message-State: AOAM531kjE32mkY3GauM3VBfnF6cRXg3IXNEaN+Mm8xLrjh+4+2EyZW9
-        SUg60lfd6P+jyiPW8SF0nbGkJxEc+gwr3UQumFTZGg==
-X-Google-Smtp-Source: ABdhPJwgiTCZzvnrnw4pePa5kEW9sgXWm1sxNmTcGwoJHPoxUO+t4XBaVGOPekgQGbQO4lfsyuEJ3CDfnv6ztzzqldQ=
-X-Received: by 2002:a50:f404:: with SMTP id r4mr4201011edm.62.1608294792260;
- Fri, 18 Dec 2020 04:33:12 -0800 (PST)
+        bh=VP62gLy4L6lfMGIRwtzfjFvE+h27PxSa+U0ikjWYO+Y=;
+        b=picgmt0Qy8lbwpd0cUGEbQGL9dagdLI4aGMY6WS9jjMmbwlODDQgUXmBFFNTV0SwbE
+         K0NRXlD3LisofmUKzPSoPMfIMLRtQ9b8+N4Ono+/hyJ+jX5MSLjXd9cbpRp5lt+/QDRg
+         rPifjj/h1+BXGhWYxjPDibiFN3BUIeuqQWF20wuqGHluy7E/h12hSWWYe75auqP/4Klw
+         Rjnm8MLCHd2Qm0HOjdbZEp2aSniaKkEyVfg6xNu7/x8dXOILL5urGq45KnHaSd1S9//s
+         hYmmehL0f45P2yjb84xlVEawkNYo9ESmOx5lGFAYfighoMWI9geZ8/WMvSFM8w9CSFak
+         vM6g==
+X-Gm-Message-State: AOAM53352Iih7s7ixpXVw0nMOoRo28QeTKdJHVKW6MSF0+1Z00FdT4O3
+        oVd4z7Qy1a1Irs/BU8D+8qtbaUBbeBFa4JfSJ8hYj5260p6wE8jN
+X-Google-Smtp-Source: ABdhPJxxe+sAeq95UrfMrz6gv/whvetHEI4cy28Afan/x1ZYOwwIJMl5u7ZOqiPw7wthIMpPxtIbVN5HmHYvjWudbsA=
+X-Received: by 2002:a17:906:7d98:: with SMTP id v24mr3816705ejo.129.1608295432506;
+ Fri, 18 Dec 2020 04:43:52 -0800 (PST)
 MIME-Version: 1.0
 References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
- <20201217185243.3288048-8-pasha.tatashin@soleen.com> <20201218095058.GV32193@dhcp22.suse.cz>
-In-Reply-To: <20201218095058.GV32193@dhcp22.suse.cz>
+ <20201217185243.3288048-9-pasha.tatashin@soleen.com> <20201218104655.GW32193@dhcp22.suse.cz>
+In-Reply-To: <20201218104655.GW32193@dhcp22.suse.cz>
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-Date:   Fri, 18 Dec 2020 07:32:36 -0500
-Message-ID: <CA+CK2bBTtVQuZMBQ=67cFQ6fLNcFi+nuPgFWOHWMWgyiQSeEzQ@mail.gmail.com>
-Subject: Re: [PATCH v4 07/10] mm/gup: change index type to long as it counts pages
+Date:   Fri, 18 Dec 2020 07:43:15 -0500
+Message-ID: <CA+CK2bCn++2Sk4-Eunibj6f+JoOL77uJQXGU2+dScHQ3RgC7_Q@mail.gmail.com>
+Subject: Re: [PATCH v4 08/10] mm/gup: limit number of gup migration failures,
+ honor failures
 To:     Michal Hocko <mhocko@suse.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -77,49 +78,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 18, 2020 at 4:51 AM Michal Hocko <mhocko@suse.com> wrote:
+On Fri, Dec 18, 2020 at 5:46 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> On Thu 17-12-20 13:52:40, Pavel Tatashin wrote:
-> > In __get_user_pages_locked() i counts number of pages which should be
-> > long.
+> On Thu 17-12-20 13:52:41, Pavel Tatashin wrote:
+> [...]
+> > +#define PINNABLE_MIGRATE_MAX 10
+> > +#define PINNABLE_ISOLATE_MAX 100
 >
-> Do we know of any caller who would like to pin so many pages it wouldn't
-> fit into an int? I suspect this is more to sync types of nr_pages and
-> the iterator right. It would be better to be explicit about this in the
-> changelog.
+> Why would we need to limit the isolation retries. Those should always be
+> temporary failure unless I am missing something.
 
-It is to sync types. I will add it to the changelog.
+Actually, during development, I was retrying isolate errors
+infinitely, but during testing found a hung where when FOLL_TOUCH
+without FOLL_WRITE is passed (fault in kernel without write flag), the
+zero page is faulted. The isolation of the zero page was failing every
+time, therefore the process was hanging.
 
-But, in general 32-bit increasingly becomes too small for handling
-page count proportional values. It is 8T for npages. For pinning may
-be a bit too large today, but I can image RDMA this size in the
-future.
+Since then, I fixed this problem by adding FOLL_WRITE unconditionally
+to FOLL_LONGTERM, but I was worried about other possible bugs that
+would cause hangs, so decided to limit isolation errors. If you think
+it its not necessary, I can unlimit isolate retires.
 
->
-> > Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
->
-> Acked-by: Michal Hocko <mhocko@suse.com>
->
-> > ---
-> >  mm/gup.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/mm/gup.c b/mm/gup.c
-> > index 591d8e2dfc70..1ebb7cc2fbe4 100644
-> > --- a/mm/gup.c
-> > +++ b/mm/gup.c
-> > @@ -1481,7 +1481,7 @@ static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
-> >  {
-> >       struct vm_area_struct *vma;
-> >       unsigned long vm_flags;
-> > -     int i;
-> > +     long i;
-> >
-> >       /* calculate required read or write permissions.
-> >        * If FOLL_FORCE is set, we only require the "MAY" flags.
-> > --
-> > 2.25.1
->
+> I am not sure about the
+> PINNABLE_MIGRATE_MAX either. Why do we want to limit that? migrate_pages
+> already implements its retry logic why do you want to count retries on
+> top of that? I do agree that the existing logic is suboptimal because
+
+True, but again, just recently, I worked on a race bug where pages can
+end up in per-cpu list after lru_add_drain_all() but before isolation,
+so I think retry is necessary.
+
+> the migration failure might be ephemeral or permanent but that should be
+> IMHO addressed at migrate_pages (resp. unmap_and_move) and simply report
+> failures that are permanent - e.g. any potential pre-existing long term
+> pin - if that is possible at all. If not what would cause permanent
+> migration failure? OOM?
+
+Yes, OOM is the main cause for migration failures. And also a few
+cases described in movable zone comment, where it is possible during
+boot some pages can be allocated by memblock in movable zone due to
+lack of memory resources (even if those resources were added later),
+hardware page poisoning is another rare example.
+
 > --
 > Michal Hocko
 > SUSE Labs
