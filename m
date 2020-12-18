@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D7D2DE08F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 10:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AFC2DE09E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Dec 2020 10:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732363AbgLRJpa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Dec 2020 04:45:30 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57294 "EHLO mx2.suse.de"
+        id S1728240AbgLRJvs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Dec 2020 04:51:48 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59304 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727254AbgLRJpa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Dec 2020 04:45:30 -0500
+        id S1728223AbgLRJvr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Dec 2020 04:51:47 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1608284683; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1608285061; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qvWpWbEVzaGdCtT7lY02iDD8k+ikMF0dcZg/sL419MU=;
-        b=XxjUmRtsLsgb930BhBZuWO8HArjYr53zHDvbqLhbU11F5AoFpegckrbl6Lp7seCfOsPrxo
-        vJa7+rmjsW39l5Lim+zoAJPPG48d514n+n6dyL+fLEXm9WidgFnEUXaykQBsb8T9nHljwD
-        dhrssBMDGOgEH5Nqhncc1j///AKYo/w=
+        bh=Gj+Ab4/r/K+F7TiCHgR5KM1JBO4iooikxV3r5qIMkN0=;
+        b=KJcwJZ+sBdXaNQ5VKVFVQkK7bl/c8tbiCVjiliR5Os5TgKjMPWAjz+2k7x5fU1nE6a/PBZ
+        +QI0pirc1UpbxYaHxXfpsgJr9c0oEEW3NCCIr+d0qT04FpI/uxC8UHMYN28b7HFPi2E6Gs
+        hMhYREbNQXgKhgx9OYOkK8IZKE6en0o=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9A480AC7B;
-        Fri, 18 Dec 2020 09:44:43 +0000 (UTC)
-Date:   Fri, 18 Dec 2020 10:44:42 +0100
+        by mx2.suse.de (Postfix) with ESMTP id 112FFAC7B;
+        Fri, 18 Dec 2020 09:51:01 +0000 (UTC)
+Date:   Fri, 18 Dec 2020 10:50:58 +0100
 From:   Michal Hocko <mhocko@suse.com>
 To:     Pavel Tatashin <pasha.tatashin@soleen.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -35,54 +35,51 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 06/10] memory-hotplug.rst: add a note about
- ZONE_MOVABLE and page pinning
-Message-ID: <20201218094442.GU32193@dhcp22.suse.cz>
+Subject: Re: [PATCH v4 07/10] mm/gup: change index type to long as it counts
+ pages
+Message-ID: <20201218095058.GV32193@dhcp22.suse.cz>
 References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
- <20201217185243.3288048-7-pasha.tatashin@soleen.com>
+ <20201217185243.3288048-8-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201217185243.3288048-7-pasha.tatashin@soleen.com>
+In-Reply-To: <20201217185243.3288048-8-pasha.tatashin@soleen.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 17-12-20 13:52:39, Pavel Tatashin wrote:
-> Document the special handling of page pinning when ZONE_MOVABLE present.
-> 
+On Thu 17-12-20 13:52:40, Pavel Tatashin wrote:
+> In __get_user_pages_locked() i counts number of pages which should be
+> long.
+
+Do we know of any caller who would like to pin so many pages it wouldn't
+fit into an int? I suspect this is more to sync types of nr_pages and
+the iterator right. It would be better to be explicit about this in the
+changelog.
+
 > Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
 
 Acked-by: Michal Hocko <mhocko@suse.com>
 
 > ---
->  Documentation/admin-guide/mm/memory-hotplug.rst | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  mm/gup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
-> index 5c4432c96c4b..c6618f99f765 100644
-> --- a/Documentation/admin-guide/mm/memory-hotplug.rst
-> +++ b/Documentation/admin-guide/mm/memory-hotplug.rst
-> @@ -357,6 +357,15 @@ creates ZONE_MOVABLE as following.
->     Unfortunately, there is no information to show which memory block belongs
->     to ZONE_MOVABLE. This is TBD.
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 591d8e2dfc70..1ebb7cc2fbe4 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1481,7 +1481,7 @@ static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
+>  {
+>  	struct vm_area_struct *vma;
+>  	unsigned long vm_flags;
+> -	int i;
+> +	long i;
 >  
-> +.. note::
-> +   Techniques that rely on long-term pinnings of memory (especially, RDMA and
-> +   vfio) are fundamentally problematic with ZONE_MOVABLE and, therefore, memory
-> +   hot remove. Pinned pages cannot reside on ZONE_MOVABLE, to guarantee that
-> +   memory can still get hot removed - be aware that pinning can fail even if
-> +   there is plenty of free memory in ZONE_MOVABLE. In addition, using
-> +   ZONE_MOVABLE might make page pinning more expensive, because pages have to be
-> +   migrated off that zone first.
-> +
->  .. _memory_hotplug_how_to_offline_memory:
->  
->  How to offline memory
+>  	/* calculate required read or write permissions.
+>  	 * If FOLL_FORCE is set, we only require the "MAY" flags.
 > -- 
 > 2.25.1
-> 
 
 -- 
 Michal Hocko
