@@ -2,100 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6DA2E0001
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Dec 2020 19:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6217A2E00BB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Dec 2020 20:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgLUSi2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Dec 2020 13:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbgLUSi1 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Dec 2020 13:38:27 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC62C0611C5
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Dec 2020 10:37:47 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id y5so9728203iow.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Dec 2020 10:37:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ke00+sAaFKkeduiGcal2II6nKBm42LPXHyddS/muDEQ=;
-        b=G7fsaFig/DFljtn5p26bOvwUMWDifoheK4lKy+CMb1ZFBoPWocHgz594Wv8wi0F9Jp
-         zkAqnobCxFAMPqLrd1B/CFRib3g6p9YM8tEkDz8Rl4KVguTfPqQlMWNmg/Nkp4t0jAmg
-         J00yCEFgePWBOwJzkE5hTJCbe7hD2okl05Kps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ke00+sAaFKkeduiGcal2II6nKBm42LPXHyddS/muDEQ=;
-        b=ri4MR1kj6yx5RwyGH7CHSRU/C/WV5B5hDr6DyC/cNEGsVCqY/SkWmX7vQNk4lnpRGq
-         f0Hd9AWwOIvIF2ak7VZm7DhHU9EaUvKRs6lyliJM3ef/gNfSF/qc6F7IBXPNPdt3g/Yx
-         IDqAthEd69pi+S053lXCKLpWMGjs5FE3fUr1MOdFJJIu2xRq9AmZnGwS246Vl6CBHYsW
-         3Ei9/znA7RPYBNZ83QQiYWjZQMQKU4dL8UjQyQ60+3uXqqFkvM+vhcbYxkpoGh8qSVpd
-         RdzYqut6hjd8MpjZLvU1m7PK2Hx6PXUFnX598+ndehvKPzNbw1aDfo6EBQe+CEsQ7k46
-         Cn8w==
-X-Gm-Message-State: AOAM530HCBKey9832AOfTxJv809jf0XQSu8WGusM0NKbwshk54ridsAv
-        0cIl7MeTec67diauoloqYvaTuQ==
-X-Google-Smtp-Source: ABdhPJznuPZsJiFos5cD2/p2DqfDlBdezQs6HE3aX1yBCJxClA2z7gtzMYqEUy/Fxj7MbkJfmjydRw==
-X-Received: by 2002:a6b:7108:: with SMTP id q8mr15091862iog.204.1608575866710;
-        Mon, 21 Dec 2020 10:37:46 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id z18sm13168153ilb.26.2020.12.21.10.37.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Dec 2020 10:37:45 -0800 (PST)
-Subject: Re: kunit stopped working
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        brendanhiggins@google.com
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201221144302.GR4077@smile.fi.intel.com>
- <20201221144510.GS4077@smile.fi.intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
-Date:   Mon, 21 Dec 2020 11:37:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1726302AbgLUTKS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Dec 2020 14:10:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55928 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725818AbgLUTKS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Dec 2020 14:10:18 -0500
+Date:   Mon, 21 Dec 2020 14:09:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608577777;
+        bh=Vs/wCDAlf1tXrLmrsYBElNZPfe5oXS5d4dOycNslqBw=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hKd3wzV6JTACaL0Kc3NwWtIH7mFpgzb3d6YQy1+OZ88IBTR3ttit5FOVAC49uQFII
+         BUJGpSNB8BK/wPFEB+EwL8qdihnSP3C2grLJCE7B1rTPMbdscOXgcqyqxrk1q0zZcA
+         gRPoJlsKkZKHlyIJeIsLeNltY2k+GmjjZ086lpPNBzqOvhEQ/Pbjlxl/+ww8/KI9YS
+         ny7EPOflRr6a3yslsC2wl1rMbIuDjtSJ0AnKmPF/JLPauZmHfBZ0hAGnPKZrSJRZo/
+         vPcvwFBXh+O2C6h2bJluqK/FcwTt0GXh3Ppfaw9Or9U7ljIO8tHy2XWwyNgXd6c3jL
+         h1F/XAt0a7feg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.4 08/10] selftests/bpf: Fix array access with
+ signed variable test
+Message-ID: <20201221190936.GF643756@sasha-vm>
+References: <20201220033457.2728519-1-sashal@kernel.org>
+ <20201220033457.2728519-8-sashal@kernel.org>
+ <X989/9omnIGyDvzV@larix.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <20201221144510.GS4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <X989/9omnIGyDvzV@larix.localdomain>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/21/20 7:45 AM, Andy Shevchenko wrote:
-> On Mon, Dec 21, 2020 at 04:43:02PM +0200, Andy Shevchenko wrote:
->> Hi!
+On Sun, Dec 20, 2020 at 01:05:19PM +0100, Jean-Philippe Brucker wrote:
+>Hi,
+>
+>On Sat, Dec 19, 2020 at 10:34:55PM -0500, Sasha Levin wrote:
+>> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 >>
->> For last few weeks KUnit stopped working. Any insight?
+>> [ Upstream commit 77ce220c0549dcc3db8226c61c60e83fc59dfafc ]
 >>
->> P.S. I guess no need to tell that my kernel on which I run tests has not been
->> changed as well as command line for wrapper:
->>
->> 	tools/testing/kunit/kunit.py run --build_dir ~/$OUT_DIR
-> 
-> Current output (expected 18 tests to be run from several modules):
-> 
-> $ tools/testing/kunit/kunit.py run --build_dir ~/$OUT_DIR
-> [16:42:24] Configuring KUnit Kernel ...
-> [16:42:24] Building KUnit Kernel ...
-> [16:42:28] Starting KUnit Kernel ...
-> [ERROR] no tests run!
-> [16:42:28] ============================================================
-> [16:42:28] Testing complete. 0 tests run. 0 failed. 0 crashed.
-> [16:42:28] Elapsed time: 3.563s total, 0.002s configuring, 3.441s building, 0.000s running
-> 
-> 
-> 
+>> The test fails because of a recent fix to the verifier, even though this
+>
+>That fix is commit b02709587ea3 ("bpf: Fix propagation of 32-bit signed
+>bounds from 64-bit bounds.") upstream, which only needed backport to 5.9.
+>So although backporting this patch to 5.4 shouldn't break anything, I
+>wouldn't bother.
 
-Hi Andy,
+I'll drop it from 5.4, thanks!
 
-Please give more details on which repo you are using and the what's
-the top commit.
-
-thanks,
--- Shuah
+-- 
+Thanks,
+Sasha
