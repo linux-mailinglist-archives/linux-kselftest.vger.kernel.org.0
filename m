@@ -2,96 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC962E095E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Dec 2020 12:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8502E0AD1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Dec 2020 14:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbgLVLLs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Dec 2020 06:11:48 -0500
-Received: from mga11.intel.com ([192.55.52.93]:59960 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726095AbgLVLLs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Dec 2020 06:11:48 -0500
-IronPort-SDR: 4SmKW9mHX43zEDD9gF2ztnQpkenjk3rd8LSKPbXBVU+4002QEfp+iSkTuJUO5xMmQe8/6wxZAr
- MY7Dw5aEFI9A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9842"; a="172342971"
-X-IronPort-AV: E=Sophos;i="5.78,438,1599548400"; 
-   d="scan'208";a="172342971"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2020 03:10:02 -0800
-IronPort-SDR: xejfehk0d88A6yQrfKVc8UtAOaWxGdogAvpcAz5zG67R9KrHTpSVJ1+Cdos5CrmvSSo4zHaHy/
- QRYMmtezbW3A==
-X-IronPort-AV: E=Sophos;i="5.78,438,1599548400"; 
-   d="scan'208";a="416468213"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2020 03:10:00 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1krfZG-00GXwb-4i; Tue, 22 Dec 2020 13:11:02 +0200
-Date:   Tue, 22 Dec 2020 13:11:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: tool: Force the use of the 'tty' console for UML
-Message-ID: <20201222111102.GC4077@smile.fi.intel.com>
-References: <20201222073900.3490607-1-davidgow@google.com>
+        id S1727336AbgLVNdm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Dec 2020 08:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727329AbgLVNdm (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Dec 2020 08:33:42 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B9C06179C;
+        Tue, 22 Dec 2020 05:33:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L72h3sjEObPKtskr0qgLJjQgQiwOWQdgosDwtPfonDE=; b=jBaNN9MYdKMfzwMcvvDfw/KK6s
+        +0Ey2ZfmzkxF/eweGQjUgC8k8a4tOJj3JrSzTapbKYK4foMg7KIXO0qa4WgaMBBOKrPj6TFYP1GKe
+        sfFZjzxPsYevDI98Hr7rsJAvWE5Anor7VTv8auhSQ1pHuVfFP7E83W0rICTVHQ+JcrrEhAGuhXzj0
+        QfaWq/5NquWlJk4zx+Yu3fuq5SqUn666FBE+yzT20MrwiUePW4RMQezaurmQ/BNsYXGgPJS3G/6WP
+        v4o/V1Hjlk4k0eP1ylBbDrrzn7+7Y9JMlcz/xb3awLry9RiwxxC02J/t9M5qgnDmZrTXE9CuTsW5b
+        AO4F+cTw==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1krhmQ-0001SZ-29; Tue, 22 Dec 2020 13:32:46 +0000
+Date:   Tue, 22 Dec 2020 13:32:46 +0000
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     josef@toxicpanda.com, bvanassche@acm.org,
+        Christoph Hellwig <hch@infradead.org>, snitzer@redhat.com,
+        corbet@lwn.net, kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        song@kernel.org, dm-devel@redhat.com,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org, agk@redhat.com,
+        michael.christie@oracle.com
+Subject: Re: [dm-devel] [PATCH v1 0/5] dm: dm-user: New target that proxies
+ BIOs to userspace
+Message-ID: <20201222133246.GA5099@infradead.org>
+References: <30d39293-80a4-9ef5-92bb-6b6dec464be3@toxicpanda.com>
+ <mhng-2da5b1a2-20f9-4b0e-9ffd-7f60a161ebf0@palmerdabbelt-glaptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201222073900.3490607-1-davidgow@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <mhng-2da5b1a2-20f9-4b0e-9ffd-7f60a161ebf0@palmerdabbelt-glaptop>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 11:39:00PM -0800, David Gow wrote:
-> kunit_tool relies on the UML console outputting printk() output to the
-> tty in order to get results. Since the default console driver could
-> change, pass 'console=tty' to the kernel.
-> 
-> This is triggered by a change[1] to use ttynull as a fallback console
-> driver which -- by chance or by design -- seems to have changed the
-> default console output on UML, breaking kunit_tool. While this may be
-> fixed, we should be less fragile to such changes in the default.
-> 
-> [1]:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=757055ae8dedf5333af17b3b5b4b70ba9bc9da4e
+On Mon, Dec 14, 2020 at 07:00:57PM -0800, Palmer Dabbelt wrote:
+> I haven't gotten a whole lot of feedback, so I'm inclined to at least have some
+> reasonable performance numbers before bothering with a v2.
 
-Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Thanks!
-
-> Signed-off-by: David Gow <davidgow@google.com>
-> Fixes: 757055ae8ded ("init/console: Use ttynull as a fallback when there is no console")
-
-
-> ---
->  tools/testing/kunit/kunit_kernel.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 57c1724b7e5d..698358c9c0d6 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -198,7 +198,7 @@ class LinuxSourceTree(object):
->  		return self.validate_config(build_dir)
->  
->  	def run_kernel(self, args=[], build_dir='', timeout=None):
-> -		args.extend(['mem=1G'])
-> +		args.extend(['mem=1G', 'console=tty'])
->  		self._ops.linux_bin(args, timeout, build_dir)
->  		outfile = get_outfile_path(build_dir)
->  		subprocess.call(['stty', 'sane'])
-> -- 
-> 2.29.2.729.g45daf8777d-goog
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+FYI, my other main worry beside duplicating nbd is that device mapper
+really is a stacked interface that sits on top of other block device.
+Turning this into something else that just pipes data to userspace
+seems very strange.
 
