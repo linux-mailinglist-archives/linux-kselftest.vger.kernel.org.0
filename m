@@ -2,214 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F922E1184
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 02:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB742E12B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 03:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727282AbgLWB6f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Dec 2020 20:58:35 -0500
-Received: from mga06.intel.com ([134.134.136.31]:49023 "EHLO mga06.intel.com"
+        id S1730093AbgLWCX5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Dec 2020 21:23:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727039AbgLWB6f (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Dec 2020 20:58:35 -0500
-IronPort-SDR: YV/6cEsIW8UP1ReMjh0NjJu7kspgYVIMSR734cUfmi6IQA8IhYwUdcK7cyNmpJHpu13nSidyeQ
- HclGWVCsIHUA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9843"; a="237508819"
-X-IronPort-AV: E=Sophos;i="5.78,440,1599548400"; 
-   d="scan'208";a="237508819"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2020 17:57:41 -0800
-IronPort-SDR: OdpFGYu0chn/uWm4DVHIMEzjmJPRjYgdYJsFI2EIkY6G78EiLFhqi0RyIsEwPuOkNOdmsiWZi6
- CZ2eNXzH4y7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,440,1599548400"; 
-   d="scan'208";a="457755751"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2020 17:57:41 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
-        x86@kernel.org
-Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
-        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
-        tony.luck@intel.com, ravi.v.shankar@intel.com,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chang.seok.bae@intel.com, Borislav Petkov <bp@alien8.de>,
+        id S1730087AbgLWCX4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:23:56 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0167F22285;
+        Wed, 23 Dec 2020 02:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608690220;
+        bh=ZyApZxQZVk6sKMiHL/zzmD4bkGQiWvE7rBwr+GXas2s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Cuw0XGTecvubsokO9T7vXKAaO1qt0x3vnhrwDcPQdegsPuy0/j7LntzYB9q22/fTH
+         ocDLKPLydXBjpp82q/vtuialyN2eJh7Gf+uKKkOfXmMAwOCFUQEe9+K+LNbtmbUKJn
+         HsQS3qneSDmVwrn8fp4d9+j+WRoinztpzjlIsEZl3LRf+crES4JM//3mG6/VCo0pfJ
+         H09QptVJTQtTjZbhOeuHmC5PMDum7fsmro65Z+MS/+g62W2LEm8nmjnKXlYp7+D2hU
+         Ut0KK4fEeQnvdW4q7dFy3K3azSQFCHpQiRJJy248MSD+J632WbUlhW99qEALuErkQc
+         3Eaxc41p2Zsgw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 4/4] selftest/x86/signal: Include test cases for validating sigaltstack
-Date:   Tue, 22 Dec 2020 17:53:12 -0800
-Message-Id: <20201223015312.4882-5-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201223015312.4882-1-chang.seok.bae@intel.com>
-References: <20201223015312.4882-1-chang.seok.bae@intel.com>
+Subject: [PATCH AUTOSEL 4.14 38/66] selftests/x86/fsgsbase: Fix GS == 1, 2, and 3 tests
+Date:   Tue, 22 Dec 2020 21:22:24 -0500
+Message-Id: <20201223022253.2793452-38-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201223022253.2793452-1-sashal@kernel.org>
+References: <20201223022253.2793452-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test measures the kernel's signal delivery with different (enough vs.
-insufficient) stack sizes.
+From: Andy Lutomirski <luto@kernel.org>
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Reviewed-by: Len Brown <len.brown@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes from v2:
-* Revised test messages (Borislav Pekov)
----
- tools/testing/selftests/x86/Makefile      |   2 +-
- tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
- 2 files changed, 129 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/sigaltstack.c
+[ Upstream commit 716572b0003ef67a4889bd7d85baf5099c5a0248 ]
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 6703c7906b71..e0c52e5ab49e 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vdso test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore
-+			syscall_arg_fault fsgsbase_restore sigaltstack
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
-new file mode 100644
-index 000000000000..e2cbf09723c8
---- /dev/null
-+++ b/tools/testing/selftests/x86/sigaltstack.c
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define _GNU_SOURCE
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <err.h>
-+#include <errno.h>
-+#include <limits.h>
-+#include <sys/mman.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <sys/resource.h>
-+#include <setjmp.h>
-+
-+/* sigaltstack()-enforced minimum stack */
-+#define ENFORCED_MINSIGSTKSZ	2048
-+
-+#ifndef AT_MINSIGSTKSZ
-+#  define AT_MINSIGSTKSZ	51
-+#endif
-+
-+static int nerrs;
-+
-+static bool sigalrm_expected;
-+
-+static unsigned long at_minstack_size;
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
-+		       int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static void clearhandler(int sig)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		err(1, "sigaction");
-+}
-+
-+static int setup_altstack(void *start, unsigned long size)
-+{
-+	stack_t ss;
-+
-+	memset(&ss, 0, sizeof(ss));
-+	ss.ss_size = size;
-+	ss.ss_sp = start;
-+
-+	return sigaltstack(&ss, NULL);
-+}
-+
-+static jmp_buf jmpbuf;
-+
-+static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (sigalrm_expected) {
-+		printf("[FAIL]\tSIGSEGV signal delivery is wrong.\n");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGSEGV signal is delivered.\n");
-+	}
-+
-+	siglongjmp(jmpbuf, 1);
-+}
-+
-+static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	if (!sigalrm_expected) {
-+		printf("[FAIL]\tSIGALRM sigal delivery is wrong.\n");
-+		nerrs++;
-+	} else {
-+		printf("[OK]\tSIGALRM signal is delivered.\n");
-+	}
-+}
-+
-+static void test_sigaltstack(void *altstack, unsigned long size)
-+{
-+	if (setup_altstack(altstack, size))
-+		err(1, "sigaltstack()");
-+
-+	sigalrm_expected = (size > at_minstack_size) ? true : false;
-+
-+	sethandler(SIGSEGV, sigsegv, 0);
-+	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
-+
-+	if (sigsetjmp(jmpbuf, 1) == 0) {
-+		printf("[RUN]\tTest an (%s) alternate signal stack\n",
-+		       sigalrm_expected ? "enough" : "too-small");
-+		printf("\tRaise SIGALRM. %s is expected to be delivered.\n",
-+		       sigalrm_expected ? "It" : "But SIGSEGV");
-+		raise(SIGALRM);
-+	}
-+
-+	clearhandler(SIGALRM);
-+	clearhandler(SIGSEGV);
-+}
-+
-+int main(void)
-+{
-+	void *altstack;
-+
-+	at_minstack_size = getauxval(AT_MINSIGSTKSZ);
-+
-+	altstack = mmap(NULL, at_minstack_size + SIGSTKSZ, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-+	if (altstack == MAP_FAILED)
-+		err(1, "mmap()");
-+
-+	if ((ENFORCED_MINSIGSTKSZ + 1) < at_minstack_size)
-+		test_sigaltstack(altstack, ENFORCED_MINSIGSTKSZ + 1);
-+
-+	test_sigaltstack(altstack, at_minstack_size + SIGSTKSZ);
-+
-+	return nerrs == 0 ? 0 : 1;
-+}
+Setting GS to 1, 2, or 3 causes a nonsensical part of the IRET microcode
+to change GS back to zero on a return from kernel mode to user mode. The
+result is that these tests fail randomly depending on when interrupts
+happen. Detect when this happens and let the test pass.
+
+Signed-off-by: Andy Lutomirski <luto@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/7567fd44a1d60a9424f25b19a998f12149993b0d.1604346596.git.luto@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/x86/fsgsbase.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
+index f249e042b3b51..026cd644360f6 100644
+--- a/tools/testing/selftests/x86/fsgsbase.c
++++ b/tools/testing/selftests/x86/fsgsbase.c
+@@ -318,8 +318,8 @@ static void set_gs_and_switch_to(unsigned long local,
+ 		local = read_base(GS);
+ 
+ 		/*
+-		 * Signal delivery seems to mess up weird selectors.  Put it
+-		 * back.
++		 * Signal delivery is quite likely to change a selector
++		 * of 1, 2, or 3 back to 0 due to IRET being defective.
+ 		 */
+ 		asm volatile ("mov %0, %%gs" : : "rm" (force_sel));
+ 	} else {
+@@ -337,6 +337,14 @@ static void set_gs_and_switch_to(unsigned long local,
+ 	if (base == local && sel_pre_sched == sel_post_sched) {
+ 		printf("[OK]\tGS/BASE remained 0x%hx/0x%lx\n",
+ 		       sel_pre_sched, local);
++	} else if (base == local && sel_pre_sched >= 1 && sel_pre_sched <= 3 &&
++		   sel_post_sched == 0) {
++		/*
++		 * IRET is misdesigned and will squash selectors 1, 2, or 3
++		 * to zero.  Don't fail the test just because this happened.
++		 */
++		printf("[OK]\tGS/BASE changed from 0x%hx/0x%lx to 0x%hx/0x%lx because IRET is defective\n",
++		       sel_pre_sched, local, sel_post_sched, base);
+ 	} else {
+ 		nerrs++;
+ 		printf("[FAIL]\tGS/BASE changed from 0x%hx/0x%lx to 0x%hx/0x%lx\n",
 -- 
-2.17.1
+2.27.0
 
