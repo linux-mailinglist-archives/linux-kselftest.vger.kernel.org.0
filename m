@@ -2,111 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D7A2E0F73
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Dec 2020 21:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F922E1184
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 02:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbgLVUjK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Dec 2020 15:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726614AbgLVUjK (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Dec 2020 15:39:10 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B6DC0613D6
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Dec 2020 12:38:30 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id 4so8017440plk.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Dec 2020 12:38:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w7wUorTulI1SLGLyUAtcsZM5JvELPWd2Jp06S7SjCVY=;
-        b=ZNsgbNsRLxQLY7+11c14jHqKYzrHQmsqrg+2m3ddf/Ug+scMbC5go73SdBpHMpQPyB
-         FJvf7yfTrnVexb1ow0kk7CQzb2GRgaAKJLzXYhW+AMwQoJT8XPclFaqDzu06DNB+CE5b
-         gpM3g+Xh7axYHWU2/IgxH7oBU0Zn4r0jSYQmlxCZtrm0DZiozBRJdv/1YToFSbMoo2Id
-         u2Eg77AGoZCB8QKdLxHb08aagEkZ3b4wLNrs2/eTCpNxNU5wZ4HEbmxT14k41CXmXYhI
-         2KGtcBnabjtrtI/HH4vQtz7s91OwZtX1Dq3vbbQGyKuJJGyLQWJg94hsYWuf/v3eusrS
-         lOHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=w7wUorTulI1SLGLyUAtcsZM5JvELPWd2Jp06S7SjCVY=;
-        b=EE5L1HHkFTfuJo4vYtMWABIsIPi6kOkh2FSgVbWIw6Nm1X6KvITbmp4ypuWDsPhbev
-         bLUdd3tFaUVYmfmgGsu3VTXsvJ48tCi93Al3yTc3OmmFc9Uy5WsxfKscixSuJpdXM6bh
-         Hzg2xNZlbJ5giaWYxLGMZ+EBUzxs3F0VYRTXno1O9SJQ45lArsD4qZfZG0nfEQhnh+sC
-         +xNEJCUJsm4dDl0W8NWLPY3HRhtP2L7Lepjc+Ub+EMi2y3yHppzgiNDRzDyKZjJBcBJh
-         n9NIaRDVXt/a855HN+aDfWMlP+uqApTsV1i1CG8n1gHQRn1/RFM9qnZqKyeQtwz0MaRa
-         cjiQ==
-X-Gm-Message-State: AOAM531+oK7Vm/DEC8SC1qulkHAUQWs8Zbi4GkaA6VVsa5wNYPbhTsm7
-        0GqP4+DRl0ssuBX2jdfGyz56gA==
-X-Google-Smtp-Source: ABdhPJyrUEeQS+6tCykxcXi4wBUYC0ygmbARaXIsYIp63WsLg3f/qvwDb9rwYmvpLbj3fuqqf4mwnw==
-X-Received: by 2002:a17:90a:301:: with SMTP id 1mr23852780pje.195.1608669509537;
-        Tue, 22 Dec 2020 12:38:29 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id g30sm21624684pfr.152.2020.12.22.12.38.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Dec 2020 12:38:28 -0800 (PST)
-Date:   Tue, 22 Dec 2020 12:38:28 -0800 (PST)
-X-Google-Original-Date: Tue, 22 Dec 2020 12:38:26 PST (-0800)
-Subject:     Re: [PATCH v1 0/5] dm: dm-user: New target that proxies BIOs to userspace
-In-Reply-To: <20201222143616.GB12885@redhat.com>
-CC:     Christoph Hellwig <hch@infradead.org>, josef@toxicpanda.com,
-        bvanassche@acm.org, corbet@lwn.net, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, song@kernel.org, dm-devel@redhat.com,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org, agk@redhat.com,
-        michael.christie@oracle.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     snitzer@redhat.com
-Message-ID: <mhng-26d96d8e-77aa-415b-a8ee-518a0e91b6ef@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1727282AbgLWB6f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Dec 2020 20:58:35 -0500
+Received: from mga06.intel.com ([134.134.136.31]:49023 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727039AbgLWB6f (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Dec 2020 20:58:35 -0500
+IronPort-SDR: YV/6cEsIW8UP1ReMjh0NjJu7kspgYVIMSR734cUfmi6IQA8IhYwUdcK7cyNmpJHpu13nSidyeQ
+ HclGWVCsIHUA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9843"; a="237508819"
+X-IronPort-AV: E=Sophos;i="5.78,440,1599548400"; 
+   d="scan'208";a="237508819"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2020 17:57:41 -0800
+IronPort-SDR: OdpFGYu0chn/uWm4DVHIMEzjmJPRjYgdYJsFI2EIkY6G78EiLFhqi0RyIsEwPuOkNOdmsiWZi6
+ CZ2eNXzH4y7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,440,1599548400"; 
+   d="scan'208";a="457755751"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Dec 2020 17:57:41 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, Borislav Petkov <bp@alien8.de>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 4/4] selftest/x86/signal: Include test cases for validating sigaltstack
+Date:   Tue, 22 Dec 2020 17:53:12 -0800
+Message-Id: <20201223015312.4882-5-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201223015312.4882-1-chang.seok.bae@intel.com>
+References: <20201223015312.4882-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 22 Dec 2020 06:36:16 PST (-0800), snitzer@redhat.com wrote:
-> On Tue, Dec 22 2020 at  8:32am -0500,
-> Christoph Hellwig <hch@infradead.org> wrote:
->
->> On Mon, Dec 14, 2020 at 07:00:57PM -0800, Palmer Dabbelt wrote:
->> > I haven't gotten a whole lot of feedback, so I'm inclined to at least have some
->> > reasonable performance numbers before bothering with a v2.
->>
->> FYI, my other main worry beside duplicating nbd is that device mapper
->> really is a stacked interface that sits on top of other block device.
->> Turning this into something else that just pipes data to userspace
->> seems very strange.
->
-> I agree.  Only way I'd be interested is if it somehow tackled enabling
-> much more efficient IO.  Earlier discussion in this thread mentioned
-> that zero-copy and low overhead wasn't a priority (because it is hard,
-> etc).  But the hard work has already been done with io_uring.  If
-> dm-user had a prereq of leaning heavily on io_uring and also enabled IO
-> polling for bio-based then there may be a win to supporting it.
->
-> But unless lower latency (or some other more significant win) is made
-> possible I just don't care to prop up an unnatural DM bolt-on.
+The test measures the kernel's signal delivery with different (enough vs.
+insufficient) stack sizes.
 
-I don't remember if I mentioned this in the thread, but it was definately in
-the Plumbers talk, but I'd had the general idea bouncing around that it would
-be possible to write a high-performance version of this using an interface
-similar to the one provided here while relying on io_uring for the
-high-performance userspace.  That definately won't work with exactly the
-current interface, but my hope was to avoid writing my own high-performance
-ring buffer.  My worry was that it'll be too tricky to map this all to
-zero-copy, and I guess I forgot about it.
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from v2:
+* Revised test messages (Borislav Pekov)
+---
+ tools/testing/selftests/x86/Makefile      |   2 +-
+ tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
+ 2 files changed, 129 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/sigaltstack.c
 
-Now that you bring it up, it certainly seems worth taking a shot at.  We'd
-essentially have the best of both worlds: userspace implementations that want
-to be simple could just use read()/write(), while those that want to be higher
-performance could have their implicit ring buffer.
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 6703c7906b71..e0c52e5ab49e 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			test_vdso test_vsyscall mov_ss_trap \
+-			syscall_arg_fault fsgsbase_restore
++			syscall_arg_fault fsgsbase_restore sigaltstack
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
+new file mode 100644
+index 000000000000..e2cbf09723c8
+--- /dev/null
++++ b/tools/testing/selftests/x86/sigaltstack.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#define _GNU_SOURCE
++#include <signal.h>
++#include <stdio.h>
++#include <stdbool.h>
++#include <string.h>
++#include <err.h>
++#include <errno.h>
++#include <limits.h>
++#include <sys/mman.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <sys/resource.h>
++#include <setjmp.h>
++
++/* sigaltstack()-enforced minimum stack */
++#define ENFORCED_MINSIGSTKSZ	2048
++
++#ifndef AT_MINSIGSTKSZ
++#  define AT_MINSIGSTKSZ	51
++#endif
++
++static int nerrs;
++
++static bool sigalrm_expected;
++
++static unsigned long at_minstack_size;
++
++static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
++		       int flags)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_sigaction = handler;
++	sa.sa_flags = SA_SIGINFO | flags;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++static void clearhandler(int sig)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_handler = SIG_DFL;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++static int setup_altstack(void *start, unsigned long size)
++{
++	stack_t ss;
++
++	memset(&ss, 0, sizeof(ss));
++	ss.ss_size = size;
++	ss.ss_sp = start;
++
++	return sigaltstack(&ss, NULL);
++}
++
++static jmp_buf jmpbuf;
++
++static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
++{
++	if (sigalrm_expected) {
++		printf("[FAIL]\tSIGSEGV signal delivery is wrong.\n");
++		nerrs++;
++	} else {
++		printf("[OK]\tSIGSEGV signal is delivered.\n");
++	}
++
++	siglongjmp(jmpbuf, 1);
++}
++
++static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
++{
++	if (!sigalrm_expected) {
++		printf("[FAIL]\tSIGALRM sigal delivery is wrong.\n");
++		nerrs++;
++	} else {
++		printf("[OK]\tSIGALRM signal is delivered.\n");
++	}
++}
++
++static void test_sigaltstack(void *altstack, unsigned long size)
++{
++	if (setup_altstack(altstack, size))
++		err(1, "sigaltstack()");
++
++	sigalrm_expected = (size > at_minstack_size) ? true : false;
++
++	sethandler(SIGSEGV, sigsegv, 0);
++	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
++
++	if (sigsetjmp(jmpbuf, 1) == 0) {
++		printf("[RUN]\tTest an (%s) alternate signal stack\n",
++		       sigalrm_expected ? "enough" : "too-small");
++		printf("\tRaise SIGALRM. %s is expected to be delivered.\n",
++		       sigalrm_expected ? "It" : "But SIGSEGV");
++		raise(SIGALRM);
++	}
++
++	clearhandler(SIGALRM);
++	clearhandler(SIGSEGV);
++}
++
++int main(void)
++{
++	void *altstack;
++
++	at_minstack_size = getauxval(AT_MINSIGSTKSZ);
++
++	altstack = mmap(NULL, at_minstack_size + SIGSTKSZ, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
++	if (altstack == MAP_FAILED)
++		err(1, "mmap()");
++
++	if ((ENFORCED_MINSIGSTKSZ + 1) < at_minstack_size)
++		test_sigaltstack(altstack, ENFORCED_MINSIGSTKSZ + 1);
++
++	test_sigaltstack(altstack, at_minstack_size + SIGSTKSZ);
++
++	return nerrs == 0 ? 0 : 1;
++}
+-- 
+2.17.1
 
-I'm currently trying to put together a benchmarking setup that is of sufficient
-fidelity that I would believe the numbers, which is really why I don't have any
-performance numbers yet (no sense posting numbers I would shoot down :)).  I'll
-try to remember to take a shot at an io_uring based userspace (probably with
-some dm-user interface modifications) to see how it feels.
