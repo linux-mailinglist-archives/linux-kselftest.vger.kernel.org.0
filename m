@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EBD2E175C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 04:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 893082E16FB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 04:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731599AbgLWDJ3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Dec 2020 22:09:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45394 "EHLO mail.kernel.org"
+        id S1729074AbgLWDEW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Dec 2020 22:04:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728134AbgLWCSi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:18:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C979A23370;
-        Wed, 23 Dec 2020 02:17:25 +0000 (UTC)
+        id S1728602AbgLWCTW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:19:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4093E23137;
+        Wed, 23 Dec 2020 02:18:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689846;
-        bh=NY+pm1T3bmTqsuWanFH+J/5JcBxQGzGFCy4Cz8k3620=;
+        s=k20201202; t=1608689920;
+        bh=RY+wwWHzXfNXhUw1BdhCy1U6UGhSVWkIQxJRDhnyv4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=crLmU7PIG+4azxHQdOaWKjNontzbGQyxSWUKTAjVPVD+KVakQcSlPZC1F/ZCPUIsl
-         furjMYih6Lhq+rlnNkjyjYbgbpINW2leFoisSwpNZ3RgwTdwfJG7odCivKFkyOyiMa
-         Dy42/vTglGIxFsEzHdFVxQDIqf/nmFHIPxgkHQXm6hame9omy77nNpRBT8+qrwCH2z
-         vP2vNEbPEgD3by14YdwWKnGrU4woIYyuI+sr5wu/jBaT7lz4UymqffqkD37uYiQaZD
-         IU4mPISF4qyhNGL4bokjBmB67r+3S3i1Y3xyc4tG7HqFwlk6dNVqcvih9sk0x6JH5i
-         JHh38al8Wvk1g==
+        b=f5aJ0/5dRS9yzN2eRawmSELUq9eCOUtjlJKOPmLx+5o3VGCqbB15IpYcymnL4FQh+
+         /kM+fgFVosZonaca0oATcy7YeO2OMhoNX1PfimckUw9wsKvoy2sbGbvFfMsGGXxaw7
+         pRlcjNv4tYtUJQaTJvQc/X6+IjUyqCI88cLHEsyZwQJmhRXUYC9eCcHOVRn8NHrZ5P
+         2QTRSvLhBx9qZ2MTWW2XFMjXc2ZWkjKdB/qXIPORyWrKq8gbTW+7DDHk2FyI1ACuiC
+         gJPq8ouJqbnRTPubZT+VVJg83A7coqHK4edWDuDkrcu9ibuabyg1enjLSr461fOWHS
+         bpzkEfeaQcZ3Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>, rcu@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 046/217] torture: Prevent jitter processes from delaying failed run
-Date:   Tue, 22 Dec 2020 21:13:35 -0500
-Message-Id: <20201223021626.2790791-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 021/130] torture: Prevent jitter processes from delaying failed run
+Date:   Tue, 22 Dec 2020 21:16:24 -0500
+Message-Id: <20201223021813.2791612-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223021626.2790791-1-sashal@kernel.org>
-References: <20201223021626.2790791-1-sashal@kernel.org>
+In-Reply-To: <20201223021813.2791612-1-sashal@kernel.org>
+References: <20201223021813.2791612-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-index 6dc2b49b85ea0..6544a289a5832 100755
+index 33c6696197364..a0e01a69d0d25 100755
 --- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
 +++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-@@ -223,6 +223,20 @@ do
+@@ -197,6 +197,20 @@ do
  				echo "ps -fp $killpid" >> $resdir/Warnings 2>&1
  				ps -fp $killpid >> $resdir/Warnings 2>&1
  			fi
@@ -87,10 +87,10 @@ index 6dc2b49b85ea0..6544a289a5832 100755
  			echo ' ---' `date`: "Kernel done"
  		fi
 diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-index 6eb1d3f6524d5..5ad3882563ce6 100755
+index 72518580df236..a9a6f81d9564c 100755
 --- a/tools/testing/selftests/rcutorture/bin/kvm.sh
 +++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-@@ -459,8 +459,11 @@ function dump(first, pastlast, batchnum)
+@@ -404,8 +404,11 @@ function dump(first, pastlast, batchnum)
  	print "if test -n \"$needqemurun\""
  	print "then"
  	print "\techo ---- Starting kernels. `date` | tee -a " rd "log";
