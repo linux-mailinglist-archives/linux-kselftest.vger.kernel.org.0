@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF622E1382
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 03:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EBD2E175C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 04:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730869AbgLWCah (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Dec 2020 21:30:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55894 "EHLO mail.kernel.org"
+        id S1731599AbgLWDJ3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Dec 2020 22:09:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730530AbgLWCZd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:25:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 89DA422A83;
-        Wed, 23 Dec 2020 02:24:51 +0000 (UTC)
+        id S1728134AbgLWCSi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:18:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C979A23370;
+        Wed, 23 Dec 2020 02:17:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690292;
-        bh=ZyApZxQZVk6sKMiHL/zzmD4bkGQiWvE7rBwr+GXas2s=;
+        s=k20201202; t=1608689846;
+        bh=NY+pm1T3bmTqsuWanFH+J/5JcBxQGzGFCy4Cz8k3620=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=siy6Ki7eM8zFoKooFvJbxW7q2qzR8eASz63TsySEIF682qPKCovV6FZml1fnHv8zM
-         6GAZV4/AEXgDVg0von/AMukc2hHm5CIY0pg9luw1z8N7CEon7sKGgUfKvwMlsUzaur
-         uAGx8yCRuoBgr9Zh2gW0cLFFMsyFijU2+9Fm8eJNsKMg7d7c/iaT93lytXewIPVCzW
-         Y5Sphx26Mnm8eEyrZfm3NVEcf/Tb2PLN3bzz5SkmNeWuTnFeWx8tXN7/x/8KNNHPw+
-         bW2vEErrTXoVwPO/ejy/CQQFLK3d3NZvJeRGjToau+1PErfVHRrE3FA5LvPcjV6YmO
-         4H70rM0yaSzOw==
+        b=crLmU7PIG+4azxHQdOaWKjNontzbGQyxSWUKTAjVPVD+KVakQcSlPZC1F/ZCPUIsl
+         furjMYih6Lhq+rlnNkjyjYbgbpINW2leFoisSwpNZ3RgwTdwfJG7odCivKFkyOyiMa
+         Dy42/vTglGIxFsEzHdFVxQDIqf/nmFHIPxgkHQXm6hame9omy77nNpRBT8+qrwCH2z
+         vP2vNEbPEgD3by14YdwWKnGrU4woIYyuI+sr5wu/jBaT7lz4UymqffqkD37uYiQaZD
+         IU4mPISF4qyhNGL4bokjBmB67r+3S3i1Y3xyc4tG7HqFwlk6dNVqcvih9sk0x6JH5i
+         JHh38al8Wvk1g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Sasha Levin <sashal@kernel.org>,
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, rcu@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 29/48] selftests/x86/fsgsbase: Fix GS == 1, 2, and 3 tests
-Date:   Tue, 22 Dec 2020 21:23:57 -0500
-Message-Id: <20201223022417.2794032-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 046/217] torture: Prevent jitter processes from delaying failed run
+Date:   Tue, 22 Dec 2020 21:13:35 -0500
+Message-Id: <20201223021626.2790791-46-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022417.2794032-1-sashal@kernel.org>
-References: <20201223022417.2794032-1-sashal@kernel.org>
+In-Reply-To: <20201223021626.2790791-1-sashal@kernel.org>
+References: <20201223021626.2790791-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,53 +42,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andy Lutomirski <luto@kernel.org>
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-[ Upstream commit 716572b0003ef67a4889bd7d85baf5099c5a0248 ]
+[ Upstream commit c64659ef29e3901be0900ec6fb0485fa3dbdcfd8 ]
 
-Setting GS to 1, 2, or 3 causes a nonsensical part of the IRET microcode
-to change GS back to zero on a return from kernel mode to user mode. The
-result is that these tests fail randomly depending on when interrupts
-happen. Detect when this happens and let the test pass.
+Even when the kernel panics and qemu dies, runs with jitter enabled will
+continue uselessly until the jitter.sh processes terminate.  This can
+be annoying if a planned one-hour run instead dies during boot.
 
-Signed-off-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/7567fd44a1d60a9424f25b19a998f12149993b0d.1604346596.git.luto@kernel.org
+This commit therefore kills the jitter.sh processes when the run ends
+more than one minute prior to the termination time specified by the
+kvm.sh --duration argument or its default.
+
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/x86/fsgsbase.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ .../selftests/rcutorture/bin/kvm-test-1-run.sh     | 14 ++++++++++++++
+ tools/testing/selftests/rcutorture/bin/kvm.sh      |  5 ++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index f249e042b3b51..026cd644360f6 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -318,8 +318,8 @@ static void set_gs_and_switch_to(unsigned long local,
- 		local = read_base(GS);
- 
- 		/*
--		 * Signal delivery seems to mess up weird selectors.  Put it
--		 * back.
-+		 * Signal delivery is quite likely to change a selector
-+		 * of 1, 2, or 3 back to 0 due to IRET being defective.
- 		 */
- 		asm volatile ("mov %0, %%gs" : : "rm" (force_sel));
- 	} else {
-@@ -337,6 +337,14 @@ static void set_gs_and_switch_to(unsigned long local,
- 	if (base == local && sel_pre_sched == sel_post_sched) {
- 		printf("[OK]\tGS/BASE remained 0x%hx/0x%lx\n",
- 		       sel_pre_sched, local);
-+	} else if (base == local && sel_pre_sched >= 1 && sel_pre_sched <= 3 &&
-+		   sel_post_sched == 0) {
-+		/*
-+		 * IRET is misdesigned and will squash selectors 1, 2, or 3
-+		 * to zero.  Don't fail the test just because this happened.
-+		 */
-+		printf("[OK]\tGS/BASE changed from 0x%hx/0x%lx to 0x%hx/0x%lx because IRET is defective\n",
-+		       sel_pre_sched, local, sel_post_sched, base);
- 	} else {
- 		nerrs++;
- 		printf("[FAIL]\tGS/BASE changed from 0x%hx/0x%lx to 0x%hx/0x%lx\n",
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+index 6dc2b49b85ea0..6544a289a5832 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
+@@ -223,6 +223,20 @@ do
+ 				echo "ps -fp $killpid" >> $resdir/Warnings 2>&1
+ 				ps -fp $killpid >> $resdir/Warnings 2>&1
+ 			fi
++			# Reduce probability of PID reuse by allowing a one-minute buffer
++			if test $((kruntime + 60)) -lt $seconds && test -s "$resdir/../jitter_pids"
++			then
++				awk < "$resdir/../jitter_pids" '
++				NF > 0 {
++					pidlist = pidlist " " $1;
++					n++;
++				}
++				END {
++					if (n > 0) {
++						print "kill " pidlist;
++					}
++				}' | sh
++			fi
+ 		else
+ 			echo ' ---' `date`: "Kernel done"
+ 		fi
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
+index 6eb1d3f6524d5..5ad3882563ce6 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
+@@ -459,8 +459,11 @@ function dump(first, pastlast, batchnum)
+ 	print "if test -n \"$needqemurun\""
+ 	print "then"
+ 	print "\techo ---- Starting kernels. `date` | tee -a " rd "log";
+-	for (j = 0; j < njitter; j++)
++	print "\techo > " rd "jitter_pids"
++	for (j = 0; j < njitter; j++) {
+ 		print "\tjitter.sh " j " " dur " " ja[2] " " ja[3] "&"
++		print "\techo $! >> " rd "jitter_pids"
++	}
+ 	print "\twait"
+ 	print "\techo ---- All kernel runs complete. `date` | tee -a " rd "log";
+ 	print "else"
 -- 
 2.27.0
 
