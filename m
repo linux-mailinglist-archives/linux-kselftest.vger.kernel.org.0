@@ -2,97 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AE92E329F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Dec 2020 20:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE4C2E32A6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Dec 2020 21:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726131AbgL0T7K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Dec 2020 14:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
+        id S1726363AbgL0UBM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Dec 2020 15:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726123AbgL0T7K (ORCPT
+        with ESMTP id S1726351AbgL0UBL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Dec 2020 14:59:10 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F35C061794
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Dec 2020 11:58:30 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id b8so4695577plx.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Dec 2020 11:58:29 -0800 (PST)
+        Sun, 27 Dec 2020 15:01:11 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847DAC061796
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Dec 2020 12:00:31 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id iq13so4893109pjb.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Dec 2020 12:00:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gW/iYK2VcE81PLeUXP3kHrt+P7vbEZ9B8Q/7YMGr9lw=;
-        b=ukf1Cu8bYsW4fPUzCkURd04IN/uZMD7q4qHTi5qNnddkqRAnNZ5xFd+D/gPynfKR/A
-         aZKhNwapqTpbRmt2v8uPA9ZIHxhgRYVxXOWhj5fADc/wAnLOVNzkHlUMKj4smWyrIxuS
-         Psla4+ZenSDx+1sg4ZMCzOwtX+inSjF3FBjs8dU1X2HUP91gKM2Exzrlf+rLYqmhUQCm
-         iobjVloS70jirh1S54W4KQMjYpWfGttV9gWn3/ULsJ6OcNRKmFNFY2WEJPU2VYUP9jZd
-         mReYP5cYqlZ1k1CsqnsetIMIP2+h0O3NFd6yx7lZO2zUDBW9FqFzZ93zvD6i/CDc+Bzu
-         VFlA==
+        bh=CCyTtxeQ/2wD8VxKgYKuPRRB6ZhCqK8ijOpnQMPS1DI=;
+        b=cvqQ5l2UZ7Nt2IS50m3j7Q0YL/BSipq714qbez8/6cZoo9FZa/R2sL3+j5LA5md+8q
+         HCX6enAqtGIq3uD4Jhjq5Vsp5gkPRBwKJVpwQgHLPbxp4PZrf0zcYChSNfXqEfmTK7Ho
+         LG6GmKmzMDo7BMZvQfawWf1yLCbk5PTIeNJLfvQIMyc58W2PYsRz70iOG21Fv0iryyAV
+         ZUxpYGE0ydnwyc55l5hyGKKWibqR8psUdELb0feIJGKtR0+dc5Sdhsgofs3nmsLUEwrR
+         p1aBri+jaR/r/IeJmM0Q0D1rdUVgl19E4+DLPF/6E6oaKBhcEqrCyXBDpbRHu7t4Fs6U
+         s4CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gW/iYK2VcE81PLeUXP3kHrt+P7vbEZ9B8Q/7YMGr9lw=;
-        b=ge9iE2m59Cko2K7LW0KsV7c/PY4RoPwdzYHMTGl+ehiC4ymC+GvqqXLM/vftW9ZTtR
-         JQ23o8J9M6FL/S02EBtRmYCWPrj8a8qrWt3gSUo0nueEYGLBLAGoI6G26kyjW/1FXYZK
-         QYCbEUVkuXeoaf8UvPLSem/i8//Po4qBLj03AaaWRgHdB5hs956KgSOC8wBsMXybyMF3
-         jlwAoc6XlFEXaPW99iZhZxlibSRyXPqruJB28CCTar6aL3DqgnY8vNGNTbO3PyggVJWH
-         StTtCvnD+eusx7A6wPOyHYe7Ud4yGSpf3AiNqJoFMgktIxirXK5sNePaY8y550Km4gCi
-         07tg==
-X-Gm-Message-State: AOAM531TQHhySTMrD0PCLixP7cx+snxivPhttchWutX4gtcx9tTnFT8p
-        1QcSSvCnKOUYu/XrHG3OYUFl4riWAY7ViCouIH+QnA==
-X-Google-Smtp-Source: ABdhPJzY7CS5ZVAb10no9hYvOU94FrqYjQmSQbpIsyaqBojvCTcqkR8TjeO1D3FZg7rHHMNEHkht7mbCJx90VjsBpNo=
-X-Received: by 2002:a17:90a:6383:: with SMTP id f3mr17425269pjj.80.1609099109283;
- Sun, 27 Dec 2020 11:58:29 -0800 (PST)
+        bh=CCyTtxeQ/2wD8VxKgYKuPRRB6ZhCqK8ijOpnQMPS1DI=;
+        b=CkxaZIQp5v/zuYtj9W3nbx+S/Cs+0jSPNqVDXbpcCVYiKgq1r/Ec51FG34q4I3I8xF
+         uQxAAT5vhZ2tcDPcvzKMISYhMKWy/BPZ14JknfbSBMmjhy/NWyrKeud5aolt+O2OvOdz
+         VqmByrV82e81b5qy8y4zmNqzokKm/VasHfKMosbzDv0xqYXto7zQUE8ctWHFfAZ8j+vm
+         E/nsCIvHk/PliDbYo7rrB38V8bJlamcICI/hc8+h2U0UtyMseq0vlxE7umkknmF/zNly
+         HHZCfHP+ZiY2eqpgzApbiGofKacm1O4VGPg4Hyu1Bq0lx744cUfv1rs/9U9YFdE+QpAG
+         n1ig==
+X-Gm-Message-State: AOAM532d7xXoso+WFRZWPtT9hBQyOxC6HdqI1c+bk7fiDuGAnZcwwcAk
+        DtX+1nOzb6HwgGNLZGoH1k1cRFuqJbGqsetMe65LMA==
+X-Google-Smtp-Source: ABdhPJyYBl0iV8pdPVZtEVH/YOfuteMorhbLBFfcQ5BRBSId/DsaO6b6KEQynz8zit1oDdXra/faGuZIlGRAm1aq1LY=
+X-Received: by 2002:a17:902:fe87:b029:da:5d3b:4a84 with SMTP id
+ x7-20020a170902fe87b02900da5d3b4a84mr42465536plm.51.1609099230919; Sun, 27
+ Dec 2020 12:00:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20201221144302.GR4077@smile.fi.intel.com> <20201221144510.GS4077@smile.fi.intel.com>
- <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
- <20201221192757.GZ4077@smile.fi.intel.com> <20201221194008.GA4077@smile.fi.intel.com>
- <20201221200332.GB4077@smile.fi.intel.com> <CABVgOS=tz-611qhrn-pcgokyJeS_NStfxPRBnT60KpPhBVPGpA@mail.gmail.com>
- <CABVgOSnGnFf_LUhcbPxDYYq8q1f3aC228k2kas8=uXMvwVORLQ@mail.gmail.com> <20201222133446.GG4077@smile.fi.intel.com>
-In-Reply-To: <20201222133446.GG4077@smile.fi.intel.com>
+References: <20201222073900.3490607-1-davidgow@google.com>
+In-Reply-To: <20201222073900.3490607-1-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Sun, 27 Dec 2020 11:58:18 -0800
-Message-ID: <CAFd5g46UTq2MwzwCZB53ZyA3BuYV=PMcWfj-CtNn75SQZ0yheg@mail.gmail.com>
-Subject: Re: kunit stopped working
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     David Gow <davidgow@google.com>,
+Date:   Sun, 27 Dec 2020 12:00:19 -0800
+Message-ID: <CAFd5g45i-x5itqnLQe1tikSVsycF8HZcJiiKiJ-SRo4D7b9dxQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Force the use of the 'tty' console for UML
+To:     David Gow <davidgow@google.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-um <linux-um@lists.infradead.org>,
-        Johannes Berg <johannes@sipsolutions.net>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 22, 2020 at 5:33 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Mon, Dec 21, 2020 at 11:39 PM David Gow <davidgow@google.com> wrote:
 >
-> On Tue, Dec 22, 2020 at 03:26:24PM +0800, David Gow wrote:
-> > On Tue, Dec 22, 2020 at 9:43 AM David Gow <davidgow@google.com> wrote:
-> > > On Tue, Dec 22, 2020 at 4:02 AM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > On Mon, Dec 21, 2020 at 09:40:08PM +0200, Andy Shevchenko wrote:
+> kunit_tool relies on the UML console outputting printk() output to the
+> tty in order to get results. Since the default console driver could
+> change, pass 'console=tty' to the kernel.
 >
-> ...
+> This is triggered by a change[1] to use ttynull as a fallback console
+> driver which -- by chance or by design -- seems to have changed the
+> default console output on UML, breaking kunit_tool. While this may be
+> fixed, we should be less fragile to such changes in the default.
 >
-> > > > Guys, revert helps. I am open to test any solution you may propose, thanks!
+> [1]:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=757055ae8dedf5333af17b3b5b4b70ba9bc9da4e
 >
-> ...
->
-> > I'll send this out properly as a patch to kunit_tool: while I still
-> > think that the default console on UML shouldn't change, it probably
-> > makes sense for KUnit to not rely on the default.
->
-> Thanks for fast response. I have tested and answered to the patch.
+> Signed-off-by: David Gow <davidgow@google.com>
+> Fixes: 757055ae8ded ("init/console: Use ttynull as a fallback when there is no console")
 
-Sorry all, I was and still am on vacation.
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
 
-Looks like this was taken care of, nevertheless, I will make sure to
-go and ACK David's fix.
+Thanks for taking care of this!
