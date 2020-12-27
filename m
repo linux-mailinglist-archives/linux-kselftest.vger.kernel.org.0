@@ -2,242 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACCA2E21A7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Dec 2020 21:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AE92E329F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Dec 2020 20:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728730AbgLWUkK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Dec 2020 15:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S1726131AbgL0T7K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Dec 2020 14:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727498AbgLWUkJ (ORCPT
+        with ESMTP id S1726123AbgL0T7K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Dec 2020 15:40:09 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FCBC061794;
-        Wed, 23 Dec 2020 12:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=mYnRVo2UaFr9zFPBGbjYJ7pTSAghDBkk6o+o1KQqW4w=; b=cjqdwDP8RqHsTe+zifoiAzBU0d
-        Ky2JbKMUtKBrHLrjNU1VXOaev6TvR5D6fwmKI6QJWvZ4hbyql+HVBJj/vkD0+kzodZisZgvoz8GVG
-        YofQpVLSqy11/eIe1zff3Jk6LiYz+yKWDVXNhRDHrz9v33W/kOAyPtypLf/39FPtSA2qg/I7yONil
-        uHJmMMwsbxdXhjxUm54wv5MgbJ84o+NNUrAy58nzfedugeu3QE5VrjIymodu+jOQHiSb8EOpoJ565
-        cRV4FlWyEcnmZNFe48iCIuSTFtBZBcojTMkv98L96ls/Wb/84p6a/lMGfhN9WZxpoQesY8wB23Op4
-        NtWjnlyQ==;
-Received: from [2601:1c0:6280:3f0::64ea]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ksAun-0000oa-A7; Wed, 23 Dec 2020 20:39:21 +0000
-Subject: Re: [PATCH V3 08/10] x86/pks: Add PKS kernel API
-To:     ira.weiny@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20201106232908.364581-1-ira.weiny@intel.com>
- <20201106232908.364581-9-ira.weiny@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <092ec873-b023-4cd1-6301-30a2bcd3b54a@infradead.org>
-Date:   Wed, 23 Dec 2020 12:39:12 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Sun, 27 Dec 2020 14:59:10 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F35C061794
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Dec 2020 11:58:30 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id b8so4695577plx.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Dec 2020 11:58:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gW/iYK2VcE81PLeUXP3kHrt+P7vbEZ9B8Q/7YMGr9lw=;
+        b=ukf1Cu8bYsW4fPUzCkURd04IN/uZMD7q4qHTi5qNnddkqRAnNZ5xFd+D/gPynfKR/A
+         aZKhNwapqTpbRmt2v8uPA9ZIHxhgRYVxXOWhj5fADc/wAnLOVNzkHlUMKj4smWyrIxuS
+         Psla4+ZenSDx+1sg4ZMCzOwtX+inSjF3FBjs8dU1X2HUP91gKM2Exzrlf+rLYqmhUQCm
+         iobjVloS70jirh1S54W4KQMjYpWfGttV9gWn3/ULsJ6OcNRKmFNFY2WEJPU2VYUP9jZd
+         mReYP5cYqlZ1k1CsqnsetIMIP2+h0O3NFd6yx7lZO2zUDBW9FqFzZ93zvD6i/CDc+Bzu
+         VFlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gW/iYK2VcE81PLeUXP3kHrt+P7vbEZ9B8Q/7YMGr9lw=;
+        b=ge9iE2m59Cko2K7LW0KsV7c/PY4RoPwdzYHMTGl+ehiC4ymC+GvqqXLM/vftW9ZTtR
+         JQ23o8J9M6FL/S02EBtRmYCWPrj8a8qrWt3gSUo0nueEYGLBLAGoI6G26kyjW/1FXYZK
+         QYCbEUVkuXeoaf8UvPLSem/i8//Po4qBLj03AaaWRgHdB5hs956KgSOC8wBsMXybyMF3
+         jlwAoc6XlFEXaPW99iZhZxlibSRyXPqruJB28CCTar6aL3DqgnY8vNGNTbO3PyggVJWH
+         StTtCvnD+eusx7A6wPOyHYe7Ud4yGSpf3AiNqJoFMgktIxirXK5sNePaY8y550Km4gCi
+         07tg==
+X-Gm-Message-State: AOAM531TQHhySTMrD0PCLixP7cx+snxivPhttchWutX4gtcx9tTnFT8p
+        1QcSSvCnKOUYu/XrHG3OYUFl4riWAY7ViCouIH+QnA==
+X-Google-Smtp-Source: ABdhPJzY7CS5ZVAb10no9hYvOU94FrqYjQmSQbpIsyaqBojvCTcqkR8TjeO1D3FZg7rHHMNEHkht7mbCJx90VjsBpNo=
+X-Received: by 2002:a17:90a:6383:: with SMTP id f3mr17425269pjj.80.1609099109283;
+ Sun, 27 Dec 2020 11:58:29 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201106232908.364581-9-ira.weiny@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201221144302.GR4077@smile.fi.intel.com> <20201221144510.GS4077@smile.fi.intel.com>
+ <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
+ <20201221192757.GZ4077@smile.fi.intel.com> <20201221194008.GA4077@smile.fi.intel.com>
+ <20201221200332.GB4077@smile.fi.intel.com> <CABVgOS=tz-611qhrn-pcgokyJeS_NStfxPRBnT60KpPhBVPGpA@mail.gmail.com>
+ <CABVgOSnGnFf_LUhcbPxDYYq8q1f3aC228k2kas8=uXMvwVORLQ@mail.gmail.com> <20201222133446.GG4077@smile.fi.intel.com>
+In-Reply-To: <20201222133446.GG4077@smile.fi.intel.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Sun, 27 Dec 2020 11:58:18 -0800
+Message-ID: <CAFd5g46UTq2MwzwCZB53ZyA3BuYV=PMcWfj-CtNn75SQZ0yheg@mail.gmail.com>
+Subject: Re: kunit stopped working
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-um <linux-um@lists.infradead.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/6/20 3:29 PM, ira.weiny@intel.com wrote:
-> From: Fenghua Yu <fenghua.yu@intel.com>
-> 
-> PKS allows kernel users to define domains of page mappings which have
-> additional protections beyond the paging protections.
-> 
-> Add an API to allocate, use, and free a protection key which identifies
-> such a domain.  Export 5 new symbols pks_key_alloc(), pks_mknoaccess(),
-> pks_mkread(), pks_mkrdwr(), and pks_key_free().  Add 2 new macros;
-> PAGE_KERNEL_PKEY(key) and _PAGE_PKEY(pkey).
-> 
-> Update the protection key documentation to cover pkeys on supervisor
-> pages.
-> 
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> 
-> ---
-> ---
->  Documentation/core-api/protection-keys.rst | 102 +++++++++++++---
->  arch/x86/include/asm/pgtable_types.h       |  12 ++
->  arch/x86/include/asm/pkeys.h               |  11 ++
->  arch/x86/include/asm/pkeys_common.h        |   4 +
->  arch/x86/mm/pkeys.c                        | 128 +++++++++++++++++++++
->  include/linux/pgtable.h                    |   4 +
->  include/linux/pkeys.h                      |  24 ++++
->  7 files changed, 267 insertions(+), 18 deletions(-)
-> 
-> diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-> index ec575e72d0b2..c4e6c480562f 100644
-> --- a/Documentation/core-api/protection-keys.rst
-> +++ b/Documentation/core-api/protection-keys.rst
-> @@ -4,25 +4,33 @@
->  Memory Protection Keys
->  ======================
->  
-> -Memory Protection Keys for Userspace (PKU aka PKEYs) is a feature
-> -which is found on Intel's Skylake (and later) "Scalable Processor"
-> -Server CPUs. It will be available in future non-server Intel parts
-> -and future AMD processors.
-> -
-> -For anyone wishing to test or use this feature, it is available in
-> -Amazon's EC2 C5 instances and is known to work there using an Ubuntu
-> -17.04 image.
-> -
->  Memory Protection Keys provides a mechanism for enforcing page-based
+On Tue, Dec 22, 2020 at 5:33 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Tue, Dec 22, 2020 at 03:26:24PM +0800, David Gow wrote:
+> > On Tue, Dec 22, 2020 at 9:43 AM David Gow <davidgow@google.com> wrote:
+> > > On Tue, Dec 22, 2020 at 4:02 AM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > On Mon, Dec 21, 2020 at 09:40:08PM +0200, Andy Shevchenko wrote:
+>
+> ...
+>
+> > > > Guys, revert helps. I am open to test any solution you may propose, thanks!
+>
+> ...
+>
+> > I'll send this out properly as a patch to kunit_tool: while I still
+> > think that the default console on UML shouldn't change, it probably
+> > makes sense for KUnit to not rely on the default.
+>
+> Thanks for fast response. I have tested and answered to the patch.
 
-                          provide
+Sorry all, I was and still am on vacation.
 
->  protections, but without requiring modification of the page tables
-> -when an application changes protection domains.  It works by
-> -dedicating 4 previously ignored bits in each page table entry to a
-> -"protection key", giving 16 possible keys.
-> +when an application changes protection domains.
-> +
-> +PKeys Userspace (PKU) is a feature which is found on Intel's Skylake "Scalable
-> +Processor" Server CPUs and later.  And It will be available in future
-
-                                          it
-
-> +non-server Intel parts and future AMD processors.
-> +
-> +Future Intel processors will support Protection Keys for Supervisor pages
-> +(PKS).
-> +
-> +For anyone wishing to test or use user space pkeys, it is available in Amazon's
-> +EC2 C5 instances and is known to work there using an Ubuntu 17.04 image.
-> +
-> +pkeys work by dedicating 4 previously Reserved bits in each page table entry to
-> +a "protection key", giving 16 possible keys.  User and Supervisor pages are
-> +treated separately.
-> +
-> +Protections for each page are controlled with per CPU registers for each type
-
-                                                 per-CPU
- 
-> +of page User and Supervisor.  Each of these 32 bit register stores two separate
-
-                                               32-bit registers
-
-
-> +bits (Access Disable and Write Disable) for each key.
->  
-> -There is also a new user-accessible register (PKRU) with two separate
-> -bits (Access Disable and Write Disable) for each key.  Being a CPU
-> -register, PKRU is inherently thread-local, potentially giving each
-> -thread a different set of protections from every other thread.
-> +For Userspace the register is user-accessible (rdpkru/wrpkru).  For
-> +Supervisor, the register (MSR_IA32_PKRS) is accessible only to the kernel.
-> +
-> +Being a CPU register, pkeys are inherently thread-local, potentially giving
-> +each thread an independent set of protections from every other thread.
->  
->  There are two new instructions (RDPKRU/WRPKRU) for reading and writing
->  to the new register.  The feature is only available in 64-bit mode,
-> @@ -30,8 +38,11 @@ even though there is theoretically space in the PAE PTEs.  These
->  permissions are enforced on data access only and have no effect on
->  instruction fetches.
->  
-> -Syscalls
-> -========
-> +For kernel space rdmsr/wrmsr are used to access the kernel MSRs.
-> +
-> +
-> +Syscalls for user space keys
-> +============================
->  
->  There are 3 system calls which directly interact with pkeys::
->  
-> @@ -98,3 +109,58 @@ with a read()::
->  The kernel will send a SIGSEGV in both cases, but si_code will be set
->  to SEGV_PKERR when violating protection keys versus SEGV_ACCERR when
->  the plain mprotect() permissions are violated.
-> +
-> +
-> +Kernel API for PKS support
-> +==========================
-> +
-> +The following interface is used to allocate, use, and free a pkey which defines
-> +a 'protection domain' within the kernel.  Setting a pkey value in a supervisor
-> +mapping adds that mapping to the protection domain.
-> +
-> +        int pks_key_alloc(const char * const pkey_user, int flags);
-> +        #define PAGE_KERNEL_PKEY(pkey)
-> +        #define _PAGE_KEY(pkey)
-> +        void pks_mk_noaccess(int pkey);
-> +        void pks_mk_readonly(int pkey);
-> +        void pks_mk_readwrite(int pkey);
-> +        void pks_key_free(int pkey);
-> +
-> +pks_key_alloc() allocates keys dynamically to allow better use of the limited
-> +key space.  'flags' alter the allocation based on the users need.  Currently
-
-                                                         user's
-or maybe                                                 users'
-
-> +they can request an exclusive key.
-> +
-> +Callers of pks_key_alloc() _must_ be prepared for it to fail and take
-> +appropriate action.  This is due mainly to the fact that PKS may not be
-> +available on all arch's.  Failure to check the return of pks_key_alloc() and
-> +using any of the rest of the API is undefined.
-> +
-> +Kernel users must set the PTE permissions in the page table entries for the
-> +mappings they want to protect.  This can be done with PAGE_KERNEL_PKEY() or
-> +_PAGE_KEY().
-> +
-> +The pks_mk*() family of calls allows kernel users the ability to change the
-> +protections for the domain identified by the pkey specified.  3 states are
-> +available pks_mk_noaccess(), pks_mk_readonly(), and pks_mk_readwrite() which
-
-   available:
-
-> +set the access to none, read, and read/write respectively.
-> +
-> +Finally, pks_key_free() allows a user to return the key to the allocator for
-> +use by others.
-> +
-> +The interface maintains pks_mk_noaccess() (Access Disabled (AD=1)) for all keys
-> +not currently allocated.  Therefore, the user can depend on access being
-> +disabled when pks_key_alloc() returns a key and the user should remove mappings
-> +from the domain (remove the pkey from the PTE) prior to calling pks_key_free().
-> +
-> +It should be noted that the underlying WRMSR(MSR_IA32_PKRS) is not serializing
-> +but still maintains ordering properties similar to WRPKRU.  Thus it is safe to
-> +immediately use a mapping when the pks_mk*() functions returns.
-
-                                                          return.
-
-> +
-> +The current SDM section on PKRS needs updating but should be the same as that
-> +of WRPKRU.  So to quote from the WRPKRU text:
-> +
-> +	WRPKRU will never execute transiently. Memory accesses
-> +	affected by PKRU register will not execute (even transiently)
-> +	until all prior executions of WRPKRU have completed execution
-> +	and updated the PKRU register.
-> +
-
-
--- 
-~Randy
-
+Looks like this was taken care of, nevertheless, I will make sure to
+go and ACK David's fix.
