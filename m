@@ -2,104 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D90A92E93F0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jan 2021 12:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF8C2E9474
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jan 2021 13:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbhADLI6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Jan 2021 06:08:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47540 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726308AbhADLI6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Jan 2021 06:08:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1609758451;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aXmF7ZM6uSdCYSkS1zeIpIK77fT10Oniy+NfDbS/Gjs=;
-        b=PV8wZ8o7uL2UF0QOfvxdW08kkAztxxiqDoWtNG8zC/PApCm7km4DSTqcUae/cF/CljkWOq
-        NRkDdROCKsAS1m0wnox+uJb2Vmjww+41vkTC6gBcBP1ZLuZqfhRKTUlwATb5yLdQAiCtBq
-        wJ7Gw7Nl7F7DIFuBWS3DBqYH0pisJPE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-213-0Zznn-W8Mtaoj7kuGBl8xA-1; Mon, 04 Jan 2021 06:07:29 -0500
-X-MC-Unique: 0Zznn-W8Mtaoj7kuGBl8xA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726189AbhADMB6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Jan 2021 07:01:58 -0500
+Received: from correo.us.es ([193.147.175.20]:58794 "EHLO mail.us.es"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725830AbhADMB5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 4 Jan 2021 07:01:57 -0500
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id ADB4A1C438C
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Jan 2021 13:00:39 +0100 (CET)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id A09B6DA789
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Jan 2021 13:00:39 +0100 (CET)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id 96176DA791; Mon,  4 Jan 2021 13:00:39 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,USER_IN_WELCOMELIST,USER_IN_WHITELIST autolearn=disabled
+        version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 6155FDA789;
+        Mon,  4 Jan 2021 13:00:37 +0100 (CET)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Mon, 04 Jan 2021 13:00:37 +0100 (CET)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1042C59;
-        Mon,  4 Jan 2021 11:07:28 +0000 (UTC)
-Received: from yiche-home.usersys.redhat.com (ovpn-12-222.pek2.redhat.com [10.72.12.222])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1DA8B5D9C6;
-        Mon,  4 Jan 2021 11:07:24 +0000 (UTC)
-From:   Yi Chen <yiche@redhat.com>
-To:     Chen Yi <yiche@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 3DEAB426CC85;
+        Mon,  4 Jan 2021 13:00:37 +0100 (CET)
+Date:   Mon, 4 Jan 2021 13:01:13 +0100
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Yi Chen <yiche@redhat.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, Leo <liuhangbin@gmail.com>
-Subject: [PATCH net] selftests: netfilter: Pass the family parameter to conntrack tool
-Date:   Mon,  4 Jan 2021 19:07:23 +0800
-Message-Id: <20210104110723.43564-1-yiche@redhat.com>
+Subject: Re: [PATCH net] selftests: netfilter: Pass the family parameter to
+ conntrack tool
+Message-ID: <20210104120113.GA20112@salvia>
+References: <20210104110723.43564-1-yiche@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210104110723.43564-1-yiche@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: yiche <yiche@redhat.com>
+Please, Cc netfilter-devel@vger.kernel.org, and a more few comments
+below.
 
-Fix nft_conntrack_helper.sh fake fail:
-conntrack tool need "-f ipv6" parameter to show out ipv6 traffic items.
-sleep 1 second after background nc send packet, to make sure check
-result after this statement is executed.
+On Mon, Jan 04, 2021 at 07:07:23PM +0800, Yi Chen wrote:
+> From: yiche <yiche@redhat.com>
+> 
+> Fix nft_conntrack_helper.sh fake fail:
+> conntrack tool need "-f ipv6" parameter to show out ipv6 traffic items.
+> sleep 1 second after background nc send packet, to make sure check
+> result after this statement is executed.
 
-Signed-off-by: yiche <yiche@redhat.com>
----
- .../selftests/netfilter/nft_conntrack_helper.sh      | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Missing Fixes: tag ?
 
-diff --git a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
-index edf0a48da6bf..ebdf2b23c8e3 100755
---- a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
-+++ b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
-@@ -94,7 +94,13 @@ check_for_helper()
- 	local message=$2
- 	local port=$3
- 
--	ip netns exec ${netns} conntrack -L -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
-+	if [[ "$2" =~ "ipv6" ]];then
-+	local family=ipv6
-+	else
-+	local family=ipv4
-+	fi
-+
-+	ip netns exec ${netns} conntrack -L -f $family -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
- 	if [ $? -ne 0 ] ; then
- 		echo "FAIL: ${netns} did not show attached helper $message" 1>&2
- 		ret=1
-@@ -111,8 +117,8 @@ test_helper()
- 
- 	sleep 3 | ip netns exec ${ns2} nc -w 2 -l -p $port > /dev/null &
- 
--	sleep 1
- 	sleep 1 | ip netns exec ${ns1} nc -w 2 10.0.1.2 $port > /dev/null &
-+	sleep 1
- 
- 	check_for_helper "$ns1" "ip $msg" $port
- 	check_for_helper "$ns2" "ip $msg" $port
-@@ -128,8 +134,8 @@ test_helper()
- 
- 	sleep 3 | ip netns exec ${ns2} nc -w 2 -6 -l -p $port > /dev/null &
- 
--	sleep 1
- 	sleep 1 | ip netns exec ${ns1} nc -w 2 -6 dead:1::2 $port > /dev/null &
-+	sleep 1
- 
- 	check_for_helper "$ns1" "ipv6 $msg" $port
- 	check_for_helper "$ns2" "ipv6 $msg" $port
--- 
-2.26.2
+> Signed-off-by: yiche <yiche@redhat.com>
+> ---
+>  .../selftests/netfilter/nft_conntrack_helper.sh      | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
+> index edf0a48da6bf..ebdf2b23c8e3 100755
+> --- a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
+> +++ b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
+> @@ -94,7 +94,13 @@ check_for_helper()
+>  	local message=$2
+>  	local port=$3
+>  
+> -	ip netns exec ${netns} conntrack -L -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
+> +	if [[ "$2" =~ "ipv6" ]];then
+> +	local family=ipv6
+> +	else
+> +	local family=ipv4
 
+This branch coding style diverges from the existing code.
+
+> +	fi
