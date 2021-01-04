@@ -2,110 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAD72E8F48
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jan 2021 02:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90A92E93F0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jan 2021 12:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727745AbhADBwR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 3 Jan 2021 20:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727709AbhADBwQ (ORCPT
+        id S1726325AbhADLI6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Jan 2021 06:08:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47540 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726308AbhADLI6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Jan 2021 20:52:16 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4E2C061574;
-        Sun,  3 Jan 2021 17:51:36 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id l23so9537520pjg.1;
-        Sun, 03 Jan 2021 17:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1AL0gob55MTxZAza4QeD6DkjcRHthg4y8NwY/c0Om5s=;
-        b=m+wOmn+brmVAZuJkULfAwK+1sB8yJEYEbp8KCIxvdv8o6BSmOWQcY/hy4cPMFn465d
-         nkuqQ2E1WZMaKyUgbDe3MRuz2ntEbVlCVBb9zi5fCLSn3i50PTGLm5mHrF+acuMlpB7a
-         0eIQJO2JTUMmxSEVvE7eRctjb6ujeeJflARMTk8kLfvJnkr/UUPW+vBEQcFEcGzQ2X07
-         Pqpc5tUw1lSHAIOsUCwvrpFUmUELyMjRKhZUYNiUnDuYygk793YjAwPyoWsVb3F4boja
-         LDXVolVzfnOT/eDQGX70bbfnA3UAWN2975oPxYwxEDUJ2S8CCTOWVhgmuvo41NrKhMyw
-         BGXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1AL0gob55MTxZAza4QeD6DkjcRHthg4y8NwY/c0Om5s=;
-        b=Yy4Ri7HszNws9XoibyS+dnKZnpdr26b8ulaGPFi0Y4IIHlx3HJ9Rg+ja3VstD8rUlN
-         kCduafGiz9QhDfUtg2/kb0YVE8d9wbdNeoF7m6Kfi5qtfMR4tHvY0Cx4P/UDOr/nAaIW
-         1YBQc3Ebz6lI7Cpfftv/ELz4+oyCTiLPEKgGe71o5HD6A1e6MnRfOTNyBiMOPsUVOq24
-         2yYTdrhsnGytNqAklKi3/+vspjcuUK1iy1IhIjMOWEGDQmuLYxuNDNt8YvgqYKvXcmiZ
-         4rzR/FHYT9SW0++I7ewefKrltEeCAk/UNufbPt9K2osMdJome58qnkydIh8CcJbNXowu
-         7wsg==
-X-Gm-Message-State: AOAM532Vy62w00q7SwSVk9qR49hxWREZgyFgAQXyivPEZDzPc4A+8S7A
-        xZUrrz7Rn1NIxnMLLiVWn5I=
-X-Google-Smtp-Source: ABdhPJyGDYAK8fT2HPn1J5t4u7rkCEixCw5D5wmT3JkEUsURQUO+0oE56aYZZPAbMpftM38J6B8Q3w==
-X-Received: by 2002:a17:90a:1bc7:: with SMTP id r7mr28551548pjr.33.1609725096193;
-        Sun, 03 Jan 2021 17:51:36 -0800 (PST)
-Received: from sol (106-69-181-20.dyn.iinet.net.au. [106.69.181.20])
-        by smtp.gmail.com with ESMTPSA id y27sm54600750pfr.78.2021.01.03.17.51.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jan 2021 17:51:35 -0800 (PST)
-Date:   Mon, 4 Jan 2021 09:51:29 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Bamvor Jian Zhang <bamv2005@gmail.com>
-Subject: Re: [PATCH 1/7] selftests: gpio: rework and simplify test
- implementation
-Message-ID: <20210104015129.GA4939@sol>
-References: <20210102022949.92304-1-warthog618@gmail.com>
- <20210102022949.92304-2-warthog618@gmail.com>
- <CAHp75VdMs1mP7pK46qKqJbjfyrcKhSGvtyzQpTRsehMz6o=Jpg@mail.gmail.com>
- <20210103021725.GA6622@sol>
- <CAHp75VfONKY7VS0q=GkSX14i--g0=jfBg4RFBoMk4DxJPMHJFg@mail.gmail.com>
+        Mon, 4 Jan 2021 06:08:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1609758451;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aXmF7ZM6uSdCYSkS1zeIpIK77fT10Oniy+NfDbS/Gjs=;
+        b=PV8wZ8o7uL2UF0QOfvxdW08kkAztxxiqDoWtNG8zC/PApCm7km4DSTqcUae/cF/CljkWOq
+        NRkDdROCKsAS1m0wnox+uJb2Vmjww+41vkTC6gBcBP1ZLuZqfhRKTUlwATb5yLdQAiCtBq
+        wJ7Gw7Nl7F7DIFuBWS3DBqYH0pisJPE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-213-0Zznn-W8Mtaoj7kuGBl8xA-1; Mon, 04 Jan 2021 06:07:29 -0500
+X-MC-Unique: 0Zznn-W8Mtaoj7kuGBl8xA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1042C59;
+        Mon,  4 Jan 2021 11:07:28 +0000 (UTC)
+Received: from yiche-home.usersys.redhat.com (ovpn-12-222.pek2.redhat.com [10.72.12.222])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1DA8B5D9C6;
+        Mon,  4 Jan 2021 11:07:24 +0000 (UTC)
+From:   Yi Chen <yiche@redhat.com>
+To:     Chen Yi <yiche@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Leo <liuhangbin@gmail.com>
+Subject: [PATCH net] selftests: netfilter: Pass the family parameter to conntrack tool
+Date:   Mon,  4 Jan 2021 19:07:23 +0800
+Message-Id: <20210104110723.43564-1-yiche@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfONKY7VS0q=GkSX14i--g0=jfBg4RFBoMk4DxJPMHJFg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jan 03, 2021 at 05:10:10PM +0200, Andy Shevchenko wrote:
-> On Sun, Jan 3, 2021 at 4:17 AM Kent Gibson <warthog618@gmail.com> wrote:
-> > On Sun, Jan 03, 2021 at 12:20:26AM +0200, Andy Shevchenko wrote:
-> > > On Sat, Jan 2, 2021 at 4:32 AM Kent Gibson <warthog618@gmail.com> wrote:
-> 
-[snip]
-> 
-> ...
-> 
-> > > > +       local platform=`cat $SYSFS/kernel/debug/gpio | grep "$chip:" | tr -d ',' | awk '{print $5}'`
-> > >
-> > > Besides useless use of cat (and tr + awk can be simplified) why are
-> >
-> > What do you suggest for the tr/awk simplification?
-> 
-> You have `awk`, you can easily switch the entire pipeline to a little
-> awk scriptlet.
-> 
+From: yiche <yiche@redhat.com>
 
-Baah, the number that I'm after is in the $SYSFS/kernel/debug/gpio that I
-was pulling the platform from, so I can just pull it directly from there.
+Fix nft_conntrack_helper.sh fake fail:
+conntrack tool need "-f ipv6" parameter to show out ipv6 traffic items.
+sleep 1 second after background nc send packet, to make sure check
+result after this statement is executed.
 
-No need to go hunting through the file system for the base file - the
-range of GPIOs assigned to the chip is right there.
+Signed-off-by: yiche <yiche@redhat.com>
+---
+ .../selftests/netfilter/nft_conntrack_helper.sh      | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-In this example it is the 508:
-
-# e.g. gpiochip0: GPIOs 508-511, parent: platform/gpio-mockup.0, gpio-mockup-A:
-
-So I'll use that - unless it is unreliable for some reason?
-
-Cheers,
-Kent.
+diff --git a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
+index edf0a48da6bf..ebdf2b23c8e3 100755
+--- a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
++++ b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
+@@ -94,7 +94,13 @@ check_for_helper()
+ 	local message=$2
+ 	local port=$3
+ 
+-	ip netns exec ${netns} conntrack -L -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
++	if [[ "$2" =~ "ipv6" ]];then
++	local family=ipv6
++	else
++	local family=ipv4
++	fi
++
++	ip netns exec ${netns} conntrack -L -f $family -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
+ 	if [ $? -ne 0 ] ; then
+ 		echo "FAIL: ${netns} did not show attached helper $message" 1>&2
+ 		ret=1
+@@ -111,8 +117,8 @@ test_helper()
+ 
+ 	sleep 3 | ip netns exec ${ns2} nc -w 2 -l -p $port > /dev/null &
+ 
+-	sleep 1
+ 	sleep 1 | ip netns exec ${ns1} nc -w 2 10.0.1.2 $port > /dev/null &
++	sleep 1
+ 
+ 	check_for_helper "$ns1" "ip $msg" $port
+ 	check_for_helper "$ns2" "ip $msg" $port
+@@ -128,8 +134,8 @@ test_helper()
+ 
+ 	sleep 3 | ip netns exec ${ns2} nc -w 2 -6 -l -p $port > /dev/null &
+ 
+-	sleep 1
+ 	sleep 1 | ip netns exec ${ns1} nc -w 2 -6 dead:1::2 $port > /dev/null &
++	sleep 1
+ 
+ 	check_for_helper "$ns1" "ipv6 $msg" $port
+ 	check_for_helper "$ns2" "ipv6 $msg" $port
+-- 
+2.26.2
 
