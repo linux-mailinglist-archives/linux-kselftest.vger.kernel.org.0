@@ -2,89 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 020842EAE26
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jan 2021 16:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108E62EAEA0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jan 2021 16:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727019AbhAEPWp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Jan 2021 10:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725925AbhAEPWi (ORCPT
+        id S1728252AbhAEPf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Jan 2021 10:35:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37598 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727660AbhAEPf1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Jan 2021 10:22:38 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103D5C061793;
-        Tue,  5 Jan 2021 07:21:58 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id 15so41490pgx.7;
-        Tue, 05 Jan 2021 07:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=XVD1XX3XannWZQkiPFGE0hM1GlNO9UtMwgSsJNHwDMg=;
-        b=QKuUUVMX/n857o6VHwgDSqWTy/n713BPYakWBWEdURp4hpDi9/0heOFJb3AOmVCJ49
-         Qd/Opsl4xmFvFChH+s82FEABDhdC8JpYNN1PnEk9iU2X+gvSwODydEwyK/hOnBT1Cfy1
-         Os4FHV4TMfnWGxI/EIIL3rSEa8eE3CzyowquQwVG/7N+RFiU5YGeEqQ4+D8l2P17bJcj
-         QSleZT7aH2ClSLL1ZrlWJhmNGnAuUexMBTC0WZRTk56ywmEXqVYYNpMzGZEn57U1XypU
-         On3HozuwuAj9uE4e/LgIauJE2AyUUJ9LN/FVpwFsuDeRoBKgtGDiEkdvGYTPWJt6LPcS
-         svRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=XVD1XX3XannWZQkiPFGE0hM1GlNO9UtMwgSsJNHwDMg=;
-        b=ILwHH1Nn7KJSjvGiO2L+X1+GO/NMpq7VHqKFDK6b8fIlm46vzmLLxJm7aCAwFYbTFC
-         WK94mRr22jN+FZEguEI1o7hJO1oBnYh2p8HWsK9pVQa+ouPEXFzesQWkReEyeosAvkjf
-         U522D6+rrUga4vj0m5cDx3LOXVo1/ZSJu80RBxEGedx0i6ZnrjcbsaM1xTIXG2v9zWCV
-         biDjPczp4oq3BpofrLPFEbDZDQlvOXzYG8UQtk0IeivQF4U0PFOWLjYTWJaq0JjgCGn5
-         hKz2BQRmfEIMEw98xsdXsH4z5Px9nHffAk3E9VuZ/5tbPI2fm0nxsH3uPujiiuct6/VW
-         sljQ==
-X-Gm-Message-State: AOAM5312zcWwHmvVNsMXLI+/L5ttqLv1T9FAfVp51jdQHTguNP96mM58
-        PZfIATAK1yv1G9zAh+KRW9bzl7rwF0o=
-X-Google-Smtp-Source: ABdhPJwYw1QXF4XI/GYprpYoDV0KwnTx7v/DjcAXf+m06a2+DS1FV4Ptn6MjXrxKHRAZf9h4+G2k9A==
-X-Received: by 2002:a62:7693:0:b029:19d:92fb:4ec1 with SMTP id r141-20020a6276930000b029019d92fb4ec1mr47108934pfc.4.1609860117655;
-        Tue, 05 Jan 2021 07:21:57 -0800 (PST)
-Received: from localhost.localdomain ([178.236.46.205])
-        by smtp.gmail.com with ESMTPSA id b18sm15560pfi.173.2021.01.05.07.21.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 07:21:56 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: dong.menglong@zte.com.cn
-To:     shuah@kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        jamorris@linux.microsoft.com, dong.menglong@zte.com.cn,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: remove duplicate include in test_lsm
-Date:   Tue,  5 Jan 2021 07:20:47 -0800
-Message-Id: <20210105152047.6070-1-dong.menglong@zte.com.cn>
-X-Mailer: git-send-email 2.17.1
+        Tue, 5 Jan 2021 10:35:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1609860841;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pDzAcq2nT/KXhp+AqF/2GVIqAYTMHTBHiO9DQwkg9VA=;
+        b=gOX4HJPJABAXB1PmPy0l3SP1vGBwYBnboUa8AmqRXfwwtKKat9sBVt4YsyCiiW8yCgEfFc
+        uFljpUMLiZfHTLXQeUnQWMVLT6BlTUW0xjhhafpfy2vnvXAVPqhvXKEACFcE1L7C4MBGih
+        XbNd5bhtv1JjK27PSZiZ0Yaw8iGzWs4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-2-1JPyH1czPxurlL3jUNITaw-1; Tue, 05 Jan 2021 10:31:27 -0500
+X-MC-Unique: 1JPyH1czPxurlL3jUNITaw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A03F8030A3;
+        Tue,  5 Jan 2021 15:31:26 +0000 (UTC)
+Received: from yiche-home.usersys.redhat.com (ovpn-12-69.pek2.redhat.com [10.72.12.69])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F9E6271BF;
+        Tue,  5 Jan 2021 15:31:22 +0000 (UTC)
+From:   Chen Yi <yiche@redhat.com>
+To:     Chen Yi <yiche@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Leo <liuhangbin@gmail.com>
+Subject: [PATCH] selftests: netfilter: Pass family parameter "-f" to conntrack tool
+Date:   Tue,  5 Jan 2021 23:31:20 +0800
+Message-Id: <20210105153120.42710-1-yiche@redhat.com>
+Reply-To: 20210104110723.43564-1-yiche@redhat.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Menglong Dong <dong.menglong@zte.com.cn>
+Fix nft_conntrack_helper.sh false fail report:
 
-'unistd.h' included in 'selftests/bpf/prog_tests/test_lsm.c' is
-duplicated.
+1) Conntrack tool need "-f ipv6" parameter to show out ipv6 traffic items.
 
-Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
+2) Sleep 1 second after background nc send packet, to make sure check
+is after this statement executed.
+
+False report:
+FAIL: ns1-lkjUemYw did not show attached helper ip set via ruleset
+PASS: ns1-lkjUemYw connection on port 2121 has ftp helper attached
+...
+
+After fix:
+PASS: ns1-2hUniwU2 connection on port 2121 has ftp helper attached
+PASS: ns2-2hUniwU2 connection on port 2121 has ftp helper attached
+...
+
+Fixes: 619ae8e0697a6 ("selftests: netfilter: add test case for conntrack helper assignment")
+Signed-off-by: Chen Yi <yiche@redhat.com>
 ---
- tools/testing/selftests/bpf/prog_tests/test_lsm.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../selftests/netfilter/nft_conntrack_helper.sh      | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index 6ab29226c99b..2755e4f81499 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -10,7 +10,6 @@
- #include <unistd.h>
- #include <malloc.h>
- #include <stdlib.h>
--#include <unistd.h>
+diff --git a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
+index edf0a48da6bf..bf6b9626c7dd 100755
+--- a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
++++ b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
+@@ -94,7 +94,13 @@ check_for_helper()
+ 	local message=$2
+ 	local port=$3
  
- #include "lsm.skel.h"
+-	ip netns exec ${netns} conntrack -L -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
++	if echo $message |grep -q 'ipv6';then
++		local family="ipv6"
++	else
++		local family="ipv4"
++	fi
++
++	ip netns exec ${netns} conntrack -L -f $family -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
+ 	if [ $? -ne 0 ] ; then
+ 		echo "FAIL: ${netns} did not show attached helper $message" 1>&2
+ 		ret=1
+@@ -111,8 +117,8 @@ test_helper()
  
+ 	sleep 3 | ip netns exec ${ns2} nc -w 2 -l -p $port > /dev/null &
+ 
+-	sleep 1
+ 	sleep 1 | ip netns exec ${ns1} nc -w 2 10.0.1.2 $port > /dev/null &
++	sleep 1
+ 
+ 	check_for_helper "$ns1" "ip $msg" $port
+ 	check_for_helper "$ns2" "ip $msg" $port
+@@ -128,8 +134,8 @@ test_helper()
+ 
+ 	sleep 3 | ip netns exec ${ns2} nc -w 2 -6 -l -p $port > /dev/null &
+ 
+-	sleep 1
+ 	sleep 1 | ip netns exec ${ns1} nc -w 2 -6 dead:1::2 $port > /dev/null &
++	sleep 1
+ 
+ 	check_for_helper "$ns1" "ipv6 $msg" $port
+ 	check_for_helper "$ns2" "ipv6 $msg" $port
 -- 
-2.17.1
+2.26.2
 
