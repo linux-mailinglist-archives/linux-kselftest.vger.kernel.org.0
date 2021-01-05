@@ -2,116 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 108E62EAEA0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jan 2021 16:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6C62EAFDC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jan 2021 17:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728252AbhAEPf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Jan 2021 10:35:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37598 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727660AbhAEPf1 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Jan 2021 10:35:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1609860841;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=pDzAcq2nT/KXhp+AqF/2GVIqAYTMHTBHiO9DQwkg9VA=;
-        b=gOX4HJPJABAXB1PmPy0l3SP1vGBwYBnboUa8AmqRXfwwtKKat9sBVt4YsyCiiW8yCgEfFc
-        uFljpUMLiZfHTLXQeUnQWMVLT6BlTUW0xjhhafpfy2vnvXAVPqhvXKEACFcE1L7C4MBGih
-        XbNd5bhtv1JjK27PSZiZ0Yaw8iGzWs4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-2-1JPyH1czPxurlL3jUNITaw-1; Tue, 05 Jan 2021 10:31:27 -0500
-X-MC-Unique: 1JPyH1czPxurlL3jUNITaw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A03F8030A3;
-        Tue,  5 Jan 2021 15:31:26 +0000 (UTC)
-Received: from yiche-home.usersys.redhat.com (ovpn-12-69.pek2.redhat.com [10.72.12.69])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F9E6271BF;
-        Tue,  5 Jan 2021 15:31:22 +0000 (UTC)
-From:   Chen Yi <yiche@redhat.com>
-To:     Chen Yi <yiche@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Leo <liuhangbin@gmail.com>
-Subject: [PATCH] selftests: netfilter: Pass family parameter "-f" to conntrack tool
-Date:   Tue,  5 Jan 2021 23:31:20 +0800
-Message-Id: <20210105153120.42710-1-yiche@redhat.com>
-Reply-To: 20210104110723.43564-1-yiche@redhat.com
+        id S1726020AbhAEQRy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Jan 2021 11:17:54 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40710 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725838AbhAEQRy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 5 Jan 2021 11:17:54 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1609863428; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZUxBRQYDloxPC81Kmm8jC5Exvkd9T5QGXBacWO+nHjY=;
+        b=ZSbgk6dnmhPMwHjUaN4NVn5QAEdmFqmX/JkvKzlJiSkgcB8b92n3hT3920u8O5KMWMRs0C
+        5AI6wv5DHUN8wvfQCpytCNA9Ea5Yhw91A9JET6ASF7Hk+DM5l/MLD9GRTBDAfl6lJQMVFn
+        uUByI6PfqxOGU6tB3HZkSQge+4q8Isw=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 00C32AA7C;
+        Tue,  5 Jan 2021 16:17:07 +0000 (UTC)
+Date:   Tue, 5 Jan 2021 17:17:07 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        linux-um <linux-um@lists.infradead.org>
+Subject: Re: kunit stopped working
+Message-ID: <X/SRA1P8t+ONZFKb@alley>
+References: <20201221144302.GR4077@smile.fi.intel.com>
+ <20201221144510.GS4077@smile.fi.intel.com>
+ <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
+ <20201221192757.GZ4077@smile.fi.intel.com>
+ <20201221194008.GA4077@smile.fi.intel.com>
+ <20201221200332.GB4077@smile.fi.intel.com>
+ <CABVgOS=tz-611qhrn-pcgokyJeS_NStfxPRBnT60KpPhBVPGpA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOS=tz-611qhrn-pcgokyJeS_NStfxPRBnT60KpPhBVPGpA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix nft_conntrack_helper.sh false fail report:
+On Tue 2020-12-22 09:43:48, David Gow wrote:
+> On Tue, Dec 22, 2020 at 4:02 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Mon, Dec 21, 2020 at 09:40:08PM +0200, Andy Shevchenko wrote:
+> > > +Cc people from culprit commit
+> >
+> > Guys, revert helps. I am open to test any solution you may propose, thanks!
+> >
+> > ...
+> >
+> > > # first bad commit: [757055ae8dedf5333af17b3b5b4b70ba9bc9da4e] init/console: Use ttynull as a fallback when there is no console
+> >
+> > --
+> 
+> +CC linux-um
+> 
+> There appear to be two problems here:
+> 1. UML now no longer has console output by default (which KUnit needs
+> to get results)
 
-1) Conntrack tool need "-f ipv6" parameter to show out ipv6 traffic items.
+> This can be worked around for KUnit by passing console=tty to the
+> kernel. I don't think this is a "correct" fix
 
-2) Sleep 1 second after background nc send packet, to make sure check
-is after this statement executed.
+It is rather a workaround. ttynull was supposed to be an ultimate
+fallback to provide a "valid" stdin, stdout, and stderr for
+the init process. ttyX still should be used by default when
+there is no console defined on the command line.
 
-False report:
-FAIL: ns1-lkjUemYw did not show attached helper ip set via ruleset
-PASS: ns1-lkjUemYw connection on port 2121 has ftp helper attached
-...
+So the question is why ttyX was not registered with this patch.
 
-After fix:
-PASS: ns1-2hUniwU2 connection on port 2121 has ftp helper attached
-PASS: ns2-2hUniwU2 connection on port 2121 has ftp helper attached
-...
+I see the problem even when I revert the commit
+757055ae8dedf5333af ("init/console: Use ttynull as a fallback when
+there is no console") and enable the ttynull driver as built in:
 
-Fixes: 619ae8e0697a6 ("selftests: netfilter: add test case for conntrack helper assignment")
-Signed-off-by: Chen Yi <yiche@redhat.com>
----
- .../selftests/netfilter/nft_conntrack_helper.sh      | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+     CONFIG_NULL_TTY=y
 
-diff --git a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
-index edf0a48da6bf..bf6b9626c7dd 100755
---- a/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
-+++ b/tools/testing/selftests/netfilter/nft_conntrack_helper.sh
-@@ -94,7 +94,13 @@ check_for_helper()
- 	local message=$2
- 	local port=$3
- 
--	ip netns exec ${netns} conntrack -L -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
-+	if echo $message |grep -q 'ipv6';then
-+		local family="ipv6"
-+	else
-+		local family="ipv4"
-+	fi
-+
-+	ip netns exec ${netns} conntrack -L -f $family -p tcp --dport $port 2> /dev/null |grep -q 'helper=ftp'
- 	if [ $? -ne 0 ] ; then
- 		echo "FAIL: ${netns} did not show attached helper $message" 1>&2
- 		ret=1
-@@ -111,8 +117,8 @@ test_helper()
- 
- 	sleep 3 | ip netns exec ${ns2} nc -w 2 -l -p $port > /dev/null &
- 
--	sleep 1
- 	sleep 1 | ip netns exec ${ns1} nc -w 2 10.0.1.2 $port > /dev/null &
-+	sleep 1
- 
- 	check_for_helper "$ns1" "ip $msg" $port
- 	check_for_helper "$ns2" "ip $msg" $port
-@@ -128,8 +134,8 @@ test_helper()
- 
- 	sleep 3 | ip netns exec ${ns2} nc -w 2 -6 -l -p $port > /dev/null &
- 
--	sleep 1
- 	sleep 1 | ip netns exec ${ns1} nc -w 2 -6 dead:1::2 $port > /dev/null &
-+	sleep 1
- 
- 	check_for_helper "$ns1" "ipv6 $msg" $port
- 	check_for_helper "$ns2" "ipv6 $msg" $port
--- 
-2.26.2
+By other words, the problem existed even before. The commit only
+made it visible by default.
 
+I am still trying to understand arch/um and kunit code. I wonder
+if it is somehow related to stdiocons implemented in
+arch/um/drivers/stdio_console.c.
+
+Best Regards,
+Petr
