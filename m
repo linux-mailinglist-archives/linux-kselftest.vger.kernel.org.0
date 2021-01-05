@@ -2,113 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FB62EB02B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jan 2021 17:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1692EB079
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jan 2021 17:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728696AbhAEQfQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Jan 2021 11:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727471AbhAEQfP (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Jan 2021 11:35:15 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C46C061574
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Jan 2021 08:34:35 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id r9so28734889ioo.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Jan 2021 08:34:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eEsV5GjmLKE0KArAhzJzwbLWUdZGk09TCWvllXL+wYc=;
-        b=TRFc9xF6N+Gx71MTz6M6NF5Po6d8blkVfoFTFC9J49EgAaRY5M5VaRdOQJQsqCT4v8
-         0LJtM1ATwRA7DXc4MaowjrtyQGqPnHwC+pOTtoflYlrFrg6bWJY97KBo1m6HbD/KszqJ
-         yGk1bpIZBlJx5JXffjejYa8Lyfya3dyhOjsX0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eEsV5GjmLKE0KArAhzJzwbLWUdZGk09TCWvllXL+wYc=;
-        b=VD7bXaekz1Kw4Bx9aG9s0ylNHsF/HJkY4Ejw6DA0S2BcFG2oo3CA7hk9wlqiFgtkL7
-         Nh8wsgIa/UXiVFhzyY+hBTAIPblsr01si03A00xBPgXOjBbTC0dtSWZYQwzSGEMRQBC+
-         3G6npcGaor+CP5TwAHH1bWnzp3F30pyhb6D/4YyQOskgfjWhMVc1OlUzq+2d4uNKGH/H
-         QEnm426U5pybZJMs1OSTEJekn7s5FaUzMwHToBPnsKT99+R+xpXaGvjP60ma6eTosA4p
-         yLvsZy0Ap4je8Y4IL+xdx/4Rp70Y2ULGacCs84J/FwaPt8AmURyttwtliSiFLwTw7v/t
-         7QGA==
-X-Gm-Message-State: AOAM533Jy73XKUT6XWFAcLzfSF7+yQu4KOCDC7fwMRL4/zBxAO4YtWyp
-        hLVjxgeGPwjAQNevtvsO7NpZEg==
-X-Google-Smtp-Source: ABdhPJyoENdD6Y7jK8od4+dyGrYt+P3X2XmyMb3keo0+VCokN+Y87ht4X1zlOfuzyfK+JsibUwltsg==
-X-Received: by 2002:a6b:6016:: with SMTP id r22mr63753744iog.93.1609864474805;
-        Tue, 05 Jan 2021 08:34:34 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id l78sm55322ild.30.2021.01.05.08.34.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jan 2021 08:34:34 -0800 (PST)
-Subject: Re: [PATCH] kunit: tool: Force the use of the 'tty' console for UML
-To:     Petr Mladek <pmladek@suse.com>
+        id S1728391AbhAEQt4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Jan 2021 11:49:56 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37558 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728302AbhAEQt4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 5 Jan 2021 11:49:56 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1609865349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l6LxSAjbRIA0PAG3Ns610xTs3eLfkujY4rY2H8raINw=;
+        b=JZUprJx5prHnrf9+zTALhTRzYzYjfpsuZnuFe7sOK+9BKwyRjUGhIh/OhJz7hfnSZne+aq
+        GWruZVlba5OI/vamkUOPKFQ7vKag42xWldp2PYQJYLOHFRYLS72werkf73S0aTLwPsjdRr
+        Ycsw6gaIYzr7uY+QjVTwkvFM6e0Jf4Q=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 916F8AA7C;
+        Tue,  5 Jan 2021 16:49:09 +0000 (UTC)
+Date:   Tue, 5 Jan 2021 17:49:08 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     David Gow <davidgow@google.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Brendan Higgins <brendanhiggins@google.com>,
-        Senozhatsky <sergey.senozhatsky@gmail.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201222073900.3490607-1-davidgow@google.com>
- <20201222111102.GC4077@smile.fi.intel.com>
- <4ae7779c-15c5-0474-5840-44531dcf1d94@linuxfoundation.org>
- <X/SSJQ+I5zEMaYYJ@alley>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3828c7ee-52b0-42f9-5771-74ef9386756c@linuxfoundation.org>
-Date:   Tue, 5 Jan 2021 09:34:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        linux-um <linux-um@lists.infradead.org>
+Subject: Re: kunit stopped working
+Message-ID: <X/SYhBZyudfnKY1u@alley>
+References: <20201221144302.GR4077@smile.fi.intel.com>
+ <20201221144510.GS4077@smile.fi.intel.com>
+ <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
+ <20201221192757.GZ4077@smile.fi.intel.com>
+ <20201221194008.GA4077@smile.fi.intel.com>
+ <20201221200332.GB4077@smile.fi.intel.com>
+ <CABVgOS=tz-611qhrn-pcgokyJeS_NStfxPRBnT60KpPhBVPGpA@mail.gmail.com>
+ <X/SRA1P8t+ONZFKb@alley>
 MIME-Version: 1.0
-In-Reply-To: <X/SSJQ+I5zEMaYYJ@alley>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <X/SRA1P8t+ONZFKb@alley>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/5/21 9:21 AM, Petr Mladek wrote:
-> On Mon 2021-01-04 09:23:57, Shuah Khan wrote:
->> On 12/22/20 4:11 AM, Andy Shevchenko wrote:
->>> On Mon, Dec 21, 2020 at 11:39:00PM -0800, David Gow wrote:
->>>> kunit_tool relies on the UML console outputting printk() output to the
->>>> tty in order to get results. Since the default console driver could
->>>> change, pass 'console=tty' to the kernel.
->>>>
->>>> This is triggered by a change[1] to use ttynull as a fallback console
->>>> driver which -- by chance or by design -- seems to have changed the
->>>> default console output on UML, breaking kunit_tool. While this may be
->>>> fixed, we should be less fragile to such changes in the default.
->>>>
->>>> [1]:
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=757055ae8dedf5333af17b3b5b4b70ba9bc9da4e
->>>
->>> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>> Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>
->>
->> Thank you all. Now in linux-kselftest kunit-fixes branch.
->>
->> Will send this up for rc3.
->>
->> Sorry for the delay - have been away from the keyboard for a
->> bit.
+On Tue 2021-01-05 17:17:08, Petr Mladek wrote:
+> On Tue 2020-12-22 09:43:48, David Gow wrote:
+> > On Tue, Dec 22, 2020 at 4:02 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > On Mon, Dec 21, 2020 at 09:40:08PM +0200, Andy Shevchenko wrote:
+> > > > +Cc people from culprit commit
+> > >
+> > > Guys, revert helps. I am open to test any solution you may propose, thanks!
+> > >
+> > > ...
+> > >
+> > > > # first bad commit: [757055ae8dedf5333af17b3b5b4b70ba9bc9da4e] init/console: Use ttynull as a fallback when there is no console
+> > >
+> > > --
+> > 
+> > +CC linux-um
+> > 
+> > There appear to be two problems here:
+> > 1. UML now no longer has console output by default (which KUnit needs
+> > to get results)
 > 
-> JFYI, I am not sure that this is the right solution. I am
-> looking into it, see
-> https://lore.kernel.org/linux-kselftest/X%2FSRA1P8t+ONZFKb@alley/
-> for more details.
+> > This can be worked around for KUnit by passing console=tty to the
+> > kernel. I don't think this is a "correct" fix
 > 
+> It is rather a workaround. ttynull was supposed to be an ultimate
+> fallback to provide a "valid" stdin, stdout, and stderr for
+> the init process. ttyX still should be used by default when
+> there is no console defined on the command line.
+> 
+> So the question is why ttyX was not registered with this patch.
+> 
+> I see the problem even when I revert the commit
+> 757055ae8dedf5333af ("init/console: Use ttynull as a fallback when
+> there is no console") and enable the ttynull driver as built in:
+> 
+>      CONFIG_NULL_TTY=y
+> 
+> By other words, the problem existed even before. The commit only
+> made it visible by default.
+> 
+> I am still trying to understand arch/um and kunit code. I wonder
+> if it is somehow related to stdiocons implemented in
+> arch/um/drivers/stdio_console.c.
 
-Thanks Petr. I will hold off on sending the patch up to Linus and
-let you find a the right solution.
+The following change solved the problem for me as well. It causes
+that ttynull is initialized after stdiocons console.
 
-thanks,
--- Shuah
+diff --git a/drivers/tty/ttynull.c b/drivers/tty/ttynull.c
+index eced70ec54e1..602af4d30bd4 100644
+--- a/drivers/tty/ttynull.c
++++ b/drivers/tty/ttynull.c
+@@ -121,7 +121,6 @@ static void __exit ttynull_exit(void)
+ 	tty_port_destroy(&ttynull_port);
+ }
+ 
+-module_init(ttynull_init);
+-module_exit(ttynull_exit);
++late_initcall_sync(ttynull_init);
+ 
+ MODULE_LICENSE("GPL v2");
+
+But I am not completely sure that it is the right solution.
+
+It is strange. Console should get registered only when
+it was added by add_preferred_console(). It means that
+ttynull_init() should not register by default.
+
+Some clue might be in stderr_console. It has
+to be explicitly unregistered to avoid staying as
+the default console, see unregister_stderr() in
+arch/um/drivers/stderr_console.c
+
+I am going to dig more into it.
+
+Best Regards,
+Petr
