@@ -2,129 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374022EB8C9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jan 2021 05:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4A82EB8F2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jan 2021 05:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725803AbhAFEFn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Jan 2021 23:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S1726422AbhAFEaG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Jan 2021 23:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbhAFEFn (ORCPT
+        with ESMTP id S1726371AbhAFEaG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Jan 2021 23:05:43 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A9FC06134C
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Jan 2021 20:05:03 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b8so922665plx.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Jan 2021 20:05:03 -0800 (PST)
+        Tue, 5 Jan 2021 23:30:06 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F43C06134C
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Jan 2021 20:29:25 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id o19so3825146lfo.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Jan 2021 20:29:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u86KDpsNaohcaACgpBjAUocSKD2jENjUeZphyXcHzq0=;
-        b=s55iGzaqNh31q8py96tJHHm5lP6qUnW006FVV0gmUjOq39sDHbZiVsMfVqlXum7g6z
-         GQPv/djPTsif9NUGE/3hoaTLg2kk+m9770tP56XZlRok0TwDbzwanZIk132VPgLmhqI5
-         pxTf+qh0v2XtRSIlhWqI7nlG2lREBQZF3MHj4ZK+uaGt+432rlM60WJQN2vJZLjKNHfp
-         lAAmogeho+oLuTxNOzr4io0IM1P6/SO+6Dn2DTs7eSpiFI5UM9kv/yuzLJEVbad47qxv
-         WTuJm2z3FjhcItwUF8FNlYcBJN4bfjHXGu6hPIJ9x28HyPnmACZOYeYQq3AuzKToouGJ
-         XO+A==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KGZhC2xpsnbKpiPKTbZzapmNsqmvVzf26wtQMSLPyWQ=;
+        b=WmbMaBma2vnpsj9xAF30KVT18cCjMeLuG7vfriPQMmwK8sB0MvVJ4z4RPVS97rpY4z
+         gmREnPnEA2NkXFxS4U69YgtlUmEHfQEQ5HAvevDdoDukSuxkQZ16FZK6DIXAsb+5o+Co
+         mtzgFQj29uh6YiekvBcMW/sAULb6CcBFpTN859M5KykxkGos9f/I0UyPRBs45+1pe81t
+         5QbXH75MeTlMT3E9/5EAwouwjUPsWTTiv+xZH/ErBifwWwi3m3ba1f3BQkaI7ENlC3gm
+         3+0wjJpbJKlOtCVU6sM+4nbegwDbImIucxGnJtgIHyohFs/LXgbLufB1ZrCpS9RwnWqC
+         mZLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u86KDpsNaohcaACgpBjAUocSKD2jENjUeZphyXcHzq0=;
-        b=UmDr6d1HYJ4QS5hsF6r2x/0CQrj1NDARowjctV4t9m0G6YSZiSvjo5CwRhj/w9YKsZ
-         9Js/kIEhH5ga2oiYxXP6ltK7Q9L706tEhzidj9pUdCcb+ikMw8AgBJiYlurQGRjD3tFS
-         QRM2A61Oqj0umswg+9RstAAJ/yUSsEhCY9d3ZPInvjZ4i4TcLOy3CIkoZR68WruipANn
-         mEwYq568sMbqwZaMaozs3ucesiaHyjxZGM4S/NDuiO7761rPx1i9M0RaKT7RWWaNLnTf
-         aD8WHkZ6Hl5F7Iq3sPH3KTX2MWljRGY53c8qCYmw5u9YqKKw9vTCHGoEhU6bndWUNNv+
-         DE5A==
-X-Gm-Message-State: AOAM530AE0Z0v0ww9JjkaR8kGjbewlw4Dnl26kPAu8zVNcM2ByiIXZC8
-        e8B2GAbbX0WSvjthp8WziSY=
-X-Google-Smtp-Source: ABdhPJz6JjwW+EqqhiLzFHmkNJm56ty9/uuHPUgERO+2BSOkycjsaaZYu91TPg9g6W6HxlY5Qb6RTw==
-X-Received: by 2002:a17:90a:db0b:: with SMTP id g11mr2328324pjv.168.1609905902752;
-        Tue, 05 Jan 2021 20:05:02 -0800 (PST)
-Received: from localhost ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
-        by smtp.gmail.com with ESMTPSA id gb9sm600728pjb.40.2021.01.05.20.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 20:05:01 -0800 (PST)
-Date:   Wed, 6 Jan 2021 13:04:57 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KGZhC2xpsnbKpiPKTbZzapmNsqmvVzf26wtQMSLPyWQ=;
+        b=Wc829I8dsPmEgdji+CBQCniz+L6WqvWUciDyrfbI3uUNpC5LZO48guOyhcB+YoPRKG
+         xD5xGBYmsSMJu6Jb5Q1GB9dsijcDheqoMZVZWarCuwGC0rztqA+ReLubR5XsM4BaRKjv
+         m7K3T/qits2ZLIx8a2Be6ACEg8tDSyRk6Tw9O1k22ohNrWNfA0/tfZJyCAuS/PiXYB2r
+         UN7VxVLQmOSjaJ/wFTXJb29iVhXSwdgSRa9OMejC5c6Xd3EKQx/jWxQR8N6grsZK7p5w
+         lloEY9Yq/oJYOEf1tX1kH17XIvWn5rOJm3o/0652WMaeYm/UwJ/TEfqHCJyVwa+AA5fb
+         kcAw==
+X-Gm-Message-State: AOAM530vBEX6oza7P7gzx5vPYJ1s/UkY2qJNwgYJivzJbh6/EBEDf3t2
+        U1c0jptx9cCR0PmK6OYFS1aVWcZQOd+wgHY3SwVdJg==
+X-Google-Smtp-Source: ABdhPJx736G6yw9RZc8ju06zfmwq/PVcFsrW7WQukA6RjbAHMDNBIk36nt1cDn2TEDsJkiGoWrv97NeWbUJBA2V4aPk=
+X-Received: by 2002:ac2:46cf:: with SMTP id p15mr1079796lfo.628.1609907364076;
+ Tue, 05 Jan 2021 20:29:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20201222073900.3490607-1-davidgow@google.com> <20201222111102.GC4077@smile.fi.intel.com>
+ <4ae7779c-15c5-0474-5840-44531dcf1d94@linuxfoundation.org>
+ <X/SSJQ+I5zEMaYYJ@alley> <3828c7ee-52b0-42f9-5771-74ef9386756c@linuxfoundation.org>
+ <20210105185731.GT4077@smile.fi.intel.com> <918b2d05-f51b-0866-89b3-19a016abdaa3@linuxfoundation.org>
+In-Reply-To: <918b2d05-f51b-0866-89b3-19a016abdaa3@linuxfoundation.org>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 6 Jan 2021 12:29:12 +0800
+Message-ID: <CABVgOS=DZjv4-68fEweZwB1-=KB7Tb71iQEfHKHt46OTVWC94w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Force the use of the 'tty' console for UML
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
         Brendan Higgins <brendanhiggins@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        linux-um <linux-um@lists.infradead.org>
-Subject: Re: kunit stopped working
-Message-ID: <X/U26cwfHTMYJTtU@jagdpanzerIV.localdomain>
-References: <20201221144302.GR4077@smile.fi.intel.com>
- <20201221144510.GS4077@smile.fi.intel.com>
- <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
- <20201221192757.GZ4077@smile.fi.intel.com>
- <20201221194008.GA4077@smile.fi.intel.com>
- <20201221200332.GB4077@smile.fi.intel.com>
- <CABVgOS=tz-611qhrn-pcgokyJeS_NStfxPRBnT60KpPhBVPGpA@mail.gmail.com>
- <X/SRA1P8t+ONZFKb@alley>
- <X/SYhBZyudfnKY1u@alley>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X/SYhBZyudfnKY1u@alley>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On (21/01/05 17:49), Petr Mladek wrote:
-> The following change solved the problem for me as well. It causes
-> that ttynull is initialized after stdiocons console.
-> 
-> diff --git a/drivers/tty/ttynull.c b/drivers/tty/ttynull.c
-> index eced70ec54e1..602af4d30bd4 100644
-> --- a/drivers/tty/ttynull.c
-> +++ b/drivers/tty/ttynull.c
-> @@ -121,7 +121,6 @@ static void __exit ttynull_exit(void)
->  	tty_port_destroy(&ttynull_port);
->  }
->  
-> -module_init(ttynull_init);
-> -module_exit(ttynull_exit);
-> +late_initcall_sync(ttynull_init);
->  
->  MODULE_LICENSE("GPL v2");
-> 
-> But I am not completely sure that it is the right solution.
+On Wed, Jan 6, 2021 at 3:52 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 1/5/21 11:57 AM, Andy Shevchenko wrote:
+> > On Tue, Jan 05, 2021 at 09:34:33AM -0700, Shuah Khan wrote:
+> >> On 1/5/21 9:21 AM, Petr Mladek wrote:
+> >>> On Mon 2021-01-04 09:23:57, Shuah Khan wrote:
+> >>>> On 12/22/20 4:11 AM, Andy Shevchenko wrote:
+> >>>>> On Mon, Dec 21, 2020 at 11:39:00PM -0800, David Gow wrote:
+> >>>>>> kunit_tool relies on the UML console outputting printk() output to the
+> >>>>>> tty in order to get results. Since the default console driver could
+> >>>>>> change, pass 'console=tty' to the kernel.
+> >>>>>>
+> >>>>>> This is triggered by a change[1] to use ttynull as a fallback console
+> >>>>>> driver which -- by chance or by design -- seems to have changed the
+> >>>>>> default console output on UML, breaking kunit_tool. While this may be
+> >>>>>> fixed, we should be less fragile to such changes in the default.
+> >>>>>>
+> >>>>>> [1]:
+> >>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=757055ae8dedf5333af17b3b5b4b70ba9bc9da4e
+> >>>>>
+> >>>>> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >>>>> Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >>>>>
+> >>>>
+> >>>> Thank you all. Now in linux-kselftest kunit-fixes branch.
+> >>>>
+> >>>> Will send this up for rc3.
+> >>>>
+> >>>> Sorry for the delay - have been away from the keyboard for a
+> >>>> bit.
+> >>>
+> >>> JFYI, I am not sure that this is the right solution. I am
+> >>> looking into it, see
+> >>> https://lore.kernel.org/linux-kselftest/X%2FSRA1P8t+ONZFKb@alley/
+> >>> for more details.
+> >>>
+> >>
+> >> Thanks Petr. I will hold off on sending the patch up to Linus and
+> >> let you find a the right solution.
+> >
+> > Please. leave it in Linux Next at least. Otherwise kunit will be broken for a
+> > long time which is not good.
+> >
+> >
+>
+> Yes. That is the plan. It will be in there until real fix comes in.
+>
 
-Wow, hmm, puzzled. Why does it help?
+Thanks, Shuah.
 
-> It is strange. Console should get registered only when
-> it was added by add_preferred_console(). It means that
-> ttynull_init() should not register by default.
-[..]
-> Some clue might be in stderr_console. It has
-> to be explicitly unregistered to avoid staying as
-> the default console, see unregister_stderr() in
-> arch/um/drivers/stderr_console.c
+Personally, I think that this patch makes some sense to keep even if
+the underlying issue with ttynull is resolved. Given that kunit.py
+requires the console output, explicitly stating we want console=tty
+set is probably worth doing rather than relying on it being the
+default. That being said, I definitely agree that this patch doesn't
+fix the underlying issue with UML/ttynull: it just makes the kunit.py
+script less sensitive to such changes (which, while unlikely, could
+potentially occur legitimately down the track).
 
-Hmm... Some random thoughts:
-
-Looking at arch/um/drivers/stderr_console.c - it doesn't have tty
-driver and it doesn't register one. So as far as console_device()
-concerned we still don't have a workable console - it will return
-NULL to tty_lookup_driver(), which will eventually return an error
-to filp_open("/dev/console"); hence we'd call register_ttynull_console()
-from console_on_rootfs(). So now we register ttynull as preferred
-console; hence when another console attempts to register itself we
-don't set CON_CONSDEV on it, because of `has_preferred_console`.
-
-But I still don't understand why the initcall patch helped.
-Can you shed some light on it?
-
-	-ss
+Cheers,
+-- David
