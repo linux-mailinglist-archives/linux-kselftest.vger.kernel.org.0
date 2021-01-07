@@ -2,143 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 897812EBE45
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jan 2021 14:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83472EC85B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Jan 2021 03:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726508AbhAFNLA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jan 2021 08:11:00 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36072 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726059AbhAFNK5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jan 2021 08:10:57 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1609938610; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VJkshuYqelhBIzrUrkp1bA5AcTVqH/daZA8/FfQYMYk=;
-        b=XzHQwTh9k2wQUiYpt5f7rdXJJI78/N55zcmgonrIht3wsnjYF2DWv8Dfag4+MUOzT7NZHT
-        fyFcv85a0Wg1tNYNYBPNxelxJ5NtvQH2P+nMMXT8JQObxnka2pyVYl/+loNK5dcXC6xr6m
-        TvloWWpNKtura0iEmTs/a07hQDQlGGs=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C9439ABC4;
-        Wed,  6 Jan 2021 13:10:10 +0000 (UTC)
-Date:   Wed, 6 Jan 2021 14:10:10 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        linux-um <linux-um@lists.infradead.org>
-Subject: Re: kunit stopped working
-Message-ID: <X/W2sl7RMvfaV4Ru@alley>
-References: <20201221144302.GR4077@smile.fi.intel.com>
- <20201221144510.GS4077@smile.fi.intel.com>
- <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
- <20201221192757.GZ4077@smile.fi.intel.com>
- <20201221194008.GA4077@smile.fi.intel.com>
- <20201221200332.GB4077@smile.fi.intel.com>
- <CABVgOS=tz-611qhrn-pcgokyJeS_NStfxPRBnT60KpPhBVPGpA@mail.gmail.com>
- <X/SRA1P8t+ONZFKb@alley>
- <X/SYhBZyudfnKY1u@alley>
- <X/U26cwfHTMYJTtU@jagdpanzerIV.localdomain>
+        id S1725952AbhAGC6x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jan 2021 21:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbhAGC6x (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 6 Jan 2021 21:58:53 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EE6C0612EF;
+        Wed,  6 Jan 2021 18:58:13 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v1so637325pjr.2;
+        Wed, 06 Jan 2021 18:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8X40vIf/gpKwQMkcbcMolPGLTl59kxvsEazgqrASoDc=;
+        b=j4dowFCWD1Zey9ff/YNXBcagAzl3k4gv1KhT1OWchYz4tZ9xqLKxvRE13+bQO/CTzA
+         QZ5WN+bCrc33DHZ1RHerBxUSW/ltvGwQScWgMJ6aE2F5jsqZfB1OgN6cLh1z/JG6hsLc
+         LL3vy5SsteXT4i/MI0eHKmWyVmI8bBim67ET62kdjDZMQ1q4vlclbyAklAdC/HC6+yh3
+         x7WTwlFg4KT3toOoT8RL83W+4Js6/I4kuN+TnHdJKgRrD0EIXE+KvULhjW7KtcfgKwwk
+         ZfWy3WO81HX7ZwcDdzZs/iFqPbLppRDgJ6rJaDZVRhtHzoxZZde3jmbGEuY0IRVxVvRy
+         mC7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8X40vIf/gpKwQMkcbcMolPGLTl59kxvsEazgqrASoDc=;
+        b=eMHE+SUS0PUTnne3RbT6ojq6TzH1cDB86NVQfJviI1q/CMOGa7E62A6kE0wKzl/r7U
+         eKdLNGn7ntzBhxC+5UFdpCkFAqNyziLQEn43M+Pxy38HrJfePra2M9NDsRReQ2j/C2/c
+         H0v9iV+VYT7ohpU+bGsmq9E+e5wov2zhSAVoNYXtV+rk4Gy4dPk9QWeJG9bPPl8S0ZeF
+         e4T2nOmOmiqDKJX7enE5z+WiEBskZaouAV1jxyAuUDkSnzLao4MgHNnKM9oFcrMI2YT+
+         6oJf4LnjKnfhAfhU9lS5U6kkQjpgIgEPms6xkPjrgpBKa2JyG5qJ3GuwPlwujBUsSG1h
+         b4AQ==
+X-Gm-Message-State: AOAM532zDjT4aUlntjfadfp/AOGWrcsq0lEr8L6u2tcGMghsFOkmLo1b
+        dIQMa2Y0aggqgJ5/oy2CZ9SiHzQqbIixJA==
+X-Google-Smtp-Source: ABdhPJxdMyAI2pZYBRzvDxhZlUQ+bT8QedBEAUYVIRRnvjjiCvVD9UPnzmVPZk0xkTxgn9uBwKb5rg==
+X-Received: by 2002:a17:90a:68ca:: with SMTP id q10mr7412721pjj.15.1609988292339;
+        Wed, 06 Jan 2021 18:58:12 -0800 (PST)
+Received: from sol.lan (106-69-181-20.dyn.iinet.net.au. [106.69.181.20])
+        by smtp.gmail.com with ESMTPSA id x16sm3900120pfp.62.2021.01.06.18.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jan 2021 18:58:11 -0800 (PST)
+From:   Kent Gibson <warthog618@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bgolaszewski@baylibre.com,
+        linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com
+Cc:     Kent Gibson <warthog618@gmail.com>
+Subject: [PATCH v2 0/7] selftests: gpio: rework and port to GPIO uAPI v2
+Date:   Thu,  7 Jan 2021 10:57:24 +0800
+Message-Id: <20210107025731.226017-1-warthog618@gmail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X/U26cwfHTMYJTtU@jagdpanzerIV.localdomain>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed 2021-01-06 13:04:57, Sergey Senozhatsky wrote:
-> On (21/01/05 17:49), Petr Mladek wrote:
-> > The following change solved the problem for me as well. It causes
-> > that ttynull is initialized after stdiocons console.
-> > 
-> > diff --git a/drivers/tty/ttynull.c b/drivers/tty/ttynull.c
-> > index eced70ec54e1..602af4d30bd4 100644
-> > --- a/drivers/tty/ttynull.c
-> > +++ b/drivers/tty/ttynull.c
-> > @@ -121,7 +121,6 @@ static void __exit ttynull_exit(void)
-> >  	tty_port_destroy(&ttynull_port);
-> >  }
-> >  
-> > -module_init(ttynull_init);
-> > -module_exit(ttynull_exit);
-> > +late_initcall_sync(ttynull_init);
-> >  
-> >  MODULE_LICENSE("GPL v2");
-> > 
-> > But I am not completely sure that it is the right solution.
-> 
-> Wow, hmm, puzzled. Why does it help?
+Initially I just wanted to port the selftests to the latest GPIO uAPI,
+but on finding that, due to dependency issues, the selftests are not built
+for the buildroot environments that I do most of my GPIO testing in, I
+decided to take a closer look.
 
-I have been as well. But it seems that I got it, see below.
+The first patch is essentially a rewrite of the exising test suite.
+It uses a simplified abstraction of the uAPI interfaces to allow a common
+test suite to test the gpio-mockup using either of the uAPI interfaces.
+The simplified cdev interface is implemented in gpio-mockup.sh, with the
+actual driving of the uAPI implemented in gpio-mockup-cdev.c.
+The simplified sysfs interface replaces gpio-mockup-sysfs.sh and is
+loaded over the cdev implementation when selected.
 
-> > It is strange. Console should get registered only when
-> > it was added by add_preferred_console(). It means that
-> > ttynull_init() should not register by default.
-> [..]
-> > Some clue might be in stderr_console. It has
-> > to be explicitly unregistered to avoid staying as
-> > the default console, see unregister_stderr() in
-> > arch/um/drivers/stderr_console.c
-> 
-> Hmm... Some random thoughts:
-> 
-> Looking at arch/um/drivers/stderr_console.c - it doesn't have tty
-> driver and it doesn't register one.
+The new tests should also be simpler to extend to cover new mockup
+interfaces, such as the one Bart has been working on.
 
-stderr_console.c is used only during early boot.
+I have dropped support for testing modules other than gpio-mockup from
+the command line options, as the tests are very gpio-mockup specific so
+I didn't see any calling for it.
 
-stdio_console.c is the console that is supposed to print kunit
-test results. And it has tty driver.
+I have also tried to emphasise in the test output that the tests are
+covering the gpio-mockup itself.  They do perform some implicit testing
+of gpiolib and the uAPI interfaces, and so can be useful as smoke tests
+for those, but their primary focus is the gpio-mockup.
 
-> But I still don't understand why the initcall patch helped.
-> Can you shed some light on it?
+Patches 2 through 5 do some cleaning up that is now possible with the
+new implementation, including enabling building in buildroot environments.
+Patch 4 doesn't strictly clean up all the old gpio references that it
+could - the gpio was the only Level 1 test, so the Level 1 tests could
+potentially be removed, but I was unsure if there may be other
+implications to removing a whole test level, or that it may be useful
+as a placeholder in case other static LDLIBS tests are added in
+the future??
 
-The trick is that both stdio_init() and ttynull_init():
+Patch 6 finally gets around to porting the tests to the latest GPIO uAPI.
 
-  + call register_console()
-  + the console has tty driver
+And Patch 7 updates the config to set the CONFIG_GPIO_CDEV option that
+was added in v5.10.
 
-The first one is registered as a fallback when there is
-no preferred console (has_preferred_console()).
+Cheers,
+Kent.
 
-It means that late_initcall_sync(ttynull_init) makes sense.
-We need to call register_console() from ttynull_init() so that
-it is registered when defined on the command line. But it should
-be the last chance to register a fallback console with tty binding.
+Changes v1 -> v2 (all in patch 1 and gpio-mockup.sh unless stated
+ otherwise):
+ - reorder includes in gpio-mockup-cdev.c
+ - a multitude of improvements to gpio-mockup.sh and gpio-mockup-sysfs.sh
+   based on Andy's review comments
+ - improved cleanup to ensure all child processes are killed on exit
+ - added race condition prevention or mitigation including the wait in
+   release_line, the retries in assert_mock, the assert_mock in set_mock,
+   and the sleep in set_line
 
-Alternative solution is to ignore ttynull as the fallback console
-in register_console(). I mean the following:
+Kent Gibson (7):
+  selftests: gpio: rework and simplify test implementation
+  selftests: gpio: remove obsolete gpio-mockup-chardev.c
+  selftests: remove obsolete build restriction for gpio
+  selftests: remove obsolete gpio references from kselftest_deps.sh
+  tools: gpio: remove uAPI v1 code no longer used by selftests
+  selftests: gpio: port to GPIO uAPI v2
+  selftests: gpio: add CONFIG_GPIO_CDEV to config
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index ffdd0dc7ec6d..cdb77903b0af 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2816,8 +2816,12 @@ void register_console(struct console *newcon)
- 	 *	See if we want to use this console driver. If we
- 	 *	didn't select a console we take the first one
- 	 *	that registers here.
-+	 *
-+	 *	Ignore ttynull console. It should be used only
-+	 *	when explicitly configured or as an ultimate
-+	 *	fallback when no better console gets registered at all.
- 	 */
--	if (!has_preferred_console) {
-+	if (!has_preferred_console && strcmp(newcon->name, "ttynull") != 0) {
- 		if (newcon->index < 0)
- 			newcon->index = 0;
- 		if (newcon->setup == NULL ||
+ tools/gpio/gpio-utils.c                       |  89 ----
+ tools/gpio/gpio-utils.h                       |   6 -
+ tools/testing/selftests/Makefile              |   9 -
+ tools/testing/selftests/gpio/Makefile         |  26 +-
+ tools/testing/selftests/gpio/config           |   1 +
+ .../testing/selftests/gpio/gpio-mockup-cdev.c | 198 +++++++
+ .../selftests/gpio/gpio-mockup-chardev.c      | 323 ------------
+ .../selftests/gpio/gpio-mockup-sysfs.sh       | 168 ++----
+ tools/testing/selftests/gpio/gpio-mockup.sh   | 497 ++++++++++++------
+ tools/testing/selftests/kselftest_deps.sh     |   4 +-
+ 10 files changed, 603 insertions(+), 718 deletions(-)
+ create mode 100644 tools/testing/selftests/gpio/gpio-mockup-cdev.c
+ delete mode 100644 tools/testing/selftests/gpio/gpio-mockup-chardev.c
 
+-- 
+2.30.0
 
-Best Regards,
-Petr
