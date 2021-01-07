@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E992EC866
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Jan 2021 04:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103AD2EC86B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Jan 2021 04:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbhAGC74 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jan 2021 21:59:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S1726801AbhAGC75 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jan 2021 21:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbhAGC74 (ORCPT
+        with ESMTP id S1726771AbhAGC74 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 6 Jan 2021 21:59:56 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F849C0612F0;
-        Wed,  6 Jan 2021 18:58:28 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id r4so2694614pls.11;
-        Wed, 06 Jan 2021 18:58:28 -0800 (PST)
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171A4C0612F1;
+        Wed,  6 Jan 2021 18:58:37 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id q7so1908261pgm.5;
+        Wed, 06 Jan 2021 18:58:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MC0p3n74qN8QNIKPNTABMMS2qQ5pH5lB4d0fRlkcPZs=;
-        b=hrb6uwLd+DyaNvpaicd8ml1VTiMOJ/0jMBYbzvx6HANtfyqH5847WcDRY2li6HA9k7
-         gYue0KGH8vA+0SxREvdZlr5oabr0o9VwZsM5ObZGVVJdyxIL85acE7CfvNNqdTsghRd9
-         svAt6Iz5qtZHG3MvL7BSOuYJ1DM07sVCKN0OTM4s6o1T1/eB5ktZfasnQbtG5daXiEHl
-         asYyl1p86XWwpkUUKvzt+DhglQpXHv00o5UAMYduv0er/nJ2a2/TBFQy4F36hp4ib8yW
-         MXSQK6MG387F7HcYhKYScprBABHEyQyYwPlV8lZIN0rnmkBqIAEEUM43sHXWEzbFxgYC
-         neDg==
+        bh=hHIZlGSfUuczSVDjUPxY1V0FnUlIA+ur4GNSNrQi9ug=;
+        b=J4ME7Llyo8QsYParyZ5OEf1HdrMIDEgEZC/V9V/He8qualnr/e1ARsg3HVgYg9jfTG
+         am+AvXR4xZ5tmxUr1pOI6iiqVEkNQtD9akjkoqJjp1y1CxYRrlO49Q6k2I+6cLmtuREk
+         GB4pzV9V2kytTgx5WOoY8OXJcVZBwhxAi7ThC1I0HtH4MIdemytYeA/k37YpjhPOEE+t
+         sfHbhz7N3RtV1myXhGqRbmult8e2XHDPoD83nbtFaPHbBKiYdl04gm0PVDt+GLLXaE35
+         i2W1p0GOxGAjQb3NNmvGycCuj1AYuzB1qE5J7s+t2ddwp+5XNgVDUtI/OJb5uogFg2/C
+         vQcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MC0p3n74qN8QNIKPNTABMMS2qQ5pH5lB4d0fRlkcPZs=;
-        b=gjLw1nX8EkKTNjF0d0vCpBPKAY69lR9qLwP/dsTlug6MNSllEv7d7l8aYTUKCFpMvC
-         rxynQobVupB2z+WO7p5W7CpYwO0u4KcUa2wI2qVqkh/I23rgxRlibklQFazDLWqguSme
-         lnTHlsjEAx1tCIri8RJ6eCMuVfn6A2369+rD0xg9TV4aKzYy6lQ2r7GVLq4ih+zINttE
-         fHJaMUXj3snxejGDBAFs9MlIhQz13/vxobyQ2XiwhVkebbbdbRrxDcqkiQzuY/5zO1xn
-         hWd9eIs1p2nqn3u/xBd1GvReDmEFb2Dhk3BU3ECTqjsSzkJ8okpgIATatJKatfviDZUz
-         d/Yw==
-X-Gm-Message-State: AOAM5302z5X/bFjqourY7gQsrFmywL3+kaYWCQp0MjrQkxy6iIno666K
-        OCJmYW88Rhi8yg8dTP28fxtOg4KVWVbvrw==
-X-Google-Smtp-Source: ABdhPJxGpE7txBbwH+IsyeGr0X3jOxtFEVJQ4i+PNdOKE5L2+Iiua4K375mv0obY07C57xVswdKR/A==
-X-Received: by 2002:a17:90b:305:: with SMTP id ay5mr7360096pjb.4.1609988307184;
-        Wed, 06 Jan 2021 18:58:27 -0800 (PST)
+        bh=hHIZlGSfUuczSVDjUPxY1V0FnUlIA+ur4GNSNrQi9ug=;
+        b=IjbdHcY6eg4PcUw5lR3cVmrjWlqwXrpSEvdP9qjBCacWmzIul9b2kLsBtKRunNKMoO
+         h72NoS7PVgrqb8grDUxxTD8j4B0BR5qP5WtHA7F/EgmNGZW4plQkqcQNLSVqtFvc8Yuc
+         2BejZU+wsi+aGFw9x+YOVRkOOv8srMah1J8x4F5+58/GErS2Cz6Og62d7ABzfFzjO3F6
+         LA7CBcaODguQthXuylqAs+B5M0Ap73/aaak1QUsO0inQ5o3v3eP4zxOJAREqOWfyNOgI
+         L+RhOdXjkYxNLIaZdYQV44PLxatYbMB4j3HedjqhfWp8FxBwC4H1rVbOzwbMQkrg01T4
+         8nrw==
+X-Gm-Message-State: AOAM531i3p4t6U6m6+szSUJWYZzqhtdOlp0rWg2uwp8mzR4ADmseiHry
+        sIwZAc6hde8dE/NApeHV9lvV4E2g0vONAw==
+X-Google-Smtp-Source: ABdhPJzcogu0Kc8wPpJtUriIeTSdY2/prMe880UaebCWK+0Ph2MY4jnJyfDo3iSNReoqzJHU5lT+hQ==
+X-Received: by 2002:aa7:978c:0:b029:1a9:1989:a07 with SMTP id o12-20020aa7978c0000b02901a919890a07mr7091585pfp.30.1609988316088;
+        Wed, 06 Jan 2021 18:58:36 -0800 (PST)
 Received: from sol.lan (106-69-181-20.dyn.iinet.net.au. [106.69.181.20])
-        by smtp.gmail.com with ESMTPSA id x16sm3900120pfp.62.2021.01.06.18.58.23
+        by smtp.gmail.com with ESMTPSA id x16sm3900120pfp.62.2021.01.06.18.58.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 18:58:26 -0800 (PST)
+        Wed, 06 Jan 2021 18:58:35 -0800 (PST)
 From:   Kent Gibson <warthog618@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kselftest@vger.kernel.org, bgolaszewski@baylibre.com,
         linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com
 Cc:     Kent Gibson <warthog618@gmail.com>
-Subject: [PATCH v2 1/7] selftests: gpio: rework and simplify test implementation
-Date:   Thu,  7 Jan 2021 10:57:25 +0800
-Message-Id: <20210107025731.226017-2-warthog618@gmail.com>
+Subject: [PATCH v2 2/7] selftests: gpio: remove obsolete gpio-mockup-chardev.c
+Date:   Thu,  7 Jan 2021 10:57:26 +0800
+Message-Id: <20210107025731.226017-3-warthog618@gmail.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210107025731.226017-1-warthog618@gmail.com>
 References: <20210107025731.226017-1-warthog618@gmail.com>
@@ -65,960 +65,345 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The GPIO mockup selftests are overly complicated with separate
-implementations of the tests for sysfs and cdev uAPI, and with the cdev
-implementation being dependent on tools/gpio and libmount.
+GPIO selftests have changed to new gpio-mockup-cdev helper, so remove
+old gpio-mockup-chardev helper.
 
-Rework the test implementation to provide a common test suite with a
-simplified pluggable uAPI interface.  The cdev implementation utilises
-the GPIO uAPI directly to remove the dependence on tools/gpio.
-The simplified uAPI interface removes the need for any file system mount
-checks in C, and so removes the dependence on libmount.
-
-The rework also fixes the sysfs test implementation which has been broken
-since the device created in the multiple gpiochip case was split into
-separate devices.
-
-Fixes: commit 8a39f597bcfd ("gpio: mockup: rework device probing")
 Signed-off-by: Kent Gibson <warthog618@gmail.com>
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- tools/testing/selftests/gpio/Makefile         |  26 +-
- .../testing/selftests/gpio/gpio-mockup-cdev.c | 139 +++++
- .../selftests/gpio/gpio-mockup-sysfs.sh       | 168 ++----
- tools/testing/selftests/gpio/gpio-mockup.sh   | 490 ++++++++++++------
- 4 files changed, 535 insertions(+), 288 deletions(-)
- create mode 100644 tools/testing/selftests/gpio/gpio-mockup-cdev.c
+ .../selftests/gpio/gpio-mockup-chardev.c      | 323 ------------------
+ 1 file changed, 323 deletions(-)
+ delete mode 100644 tools/testing/selftests/gpio/gpio-mockup-chardev.c
 
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 32bdc978a711..e4363c64d40d 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -1,32 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--VAR_CFLAGS := $(shell pkg-config --cflags mount 2>/dev/null)
--VAR_LDLIBS := $(shell pkg-config --libs mount 2>/dev/null)
--ifeq ($(VAR_LDLIBS),)
--VAR_LDLIBS := -lmount -I/usr/include/libmount
--endif
+diff --git a/tools/testing/selftests/gpio/gpio-mockup-chardev.c b/tools/testing/selftests/gpio/gpio-mockup-chardev.c
+deleted file mode 100644
+index 73ead8828d3a..000000000000
+--- a/tools/testing/selftests/gpio/gpio-mockup-chardev.c
++++ /dev/null
+@@ -1,323 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * GPIO chardev test helper
+- *
+- * Copyright (C) 2016 Bamvor Jian Zhang
+- */
 -
--CFLAGS += -O2 -g -std=gnu99 -Wall -I../../../../usr/include/ $(VAR_CFLAGS)
--LDLIBS += $(VAR_LDLIBS)
+-#define _GNU_SOURCE
+-#include <unistd.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <errno.h>
+-#include <string.h>
+-#include <fcntl.h>
+-#include <getopt.h>
+-#include <sys/ioctl.h>
+-#include <libmount.h>
+-#include <err.h>
+-#include <dirent.h>
+-#include <linux/gpio.h>
+-#include "../../../gpio/gpio-utils.h"
 -
- TEST_PROGS := gpio-mockup.sh
- TEST_FILES := gpio-mockup-sysfs.sh
--TEST_PROGS_EXTENDED := gpio-mockup-chardev
+-#define CONSUMER	"gpio-selftest"
+-#define	GC_NUM		10
+-enum direction {
+-	OUT,
+-	IN
+-};
 -
--GPIODIR := $(realpath ../../../gpio)
--GPIOOBJ := gpio-utils.o
-+TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev
- 
--all: $(TEST_PROGS_EXTENDED)
--
--override define CLEAN
--	$(RM) $(TEST_PROGS_EXTENDED)
--	$(MAKE) -C $(GPIODIR) OUTPUT=$(GPIODIR)/ clean
--endef
--
--KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
--$(TEST_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
--
--$(GPIODIR)/$(GPIOOBJ):
--	$(MAKE) OUTPUT=$(GPIODIR)/ -C $(GPIODIR)
-diff --git a/tools/testing/selftests/gpio/gpio-mockup-cdev.c b/tools/testing/selftests/gpio/gpio-mockup-cdev.c
-new file mode 100644
-index 000000000000..3a7fc3ac1349
---- /dev/null
-+++ b/tools/testing/selftests/gpio/gpio-mockup-cdev.c
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * GPIO mockup cdev test helper
-+ *
-+ * Copyright (C) 2020 Kent Gibson
-+ */
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/ioctl.h>
-+#include <linux/gpio.h>
-+
-+#define CONSUMER	"gpio-mockup-cdev"
-+
-+static int request_line_v1(int cfd, unsigned int offset,
-+			   uint32_t flags, unsigned int val)
-+{
-+	struct gpiohandle_request req;
-+	int ret;
-+
-+	memset(&req, 0, sizeof(req));
-+	req.lines = 1;
-+	req.lineoffsets[0] = offset;
-+	req.flags = flags;
-+	strcpy(req.consumer_label, CONSUMER);
-+	if (flags & GPIOHANDLE_REQUEST_OUTPUT)
-+		req.default_values[0] = val;
-+
-+	ret = ioctl(cfd, GPIO_GET_LINEHANDLE_IOCTL, &req);
-+	if (ret == -1)
-+		return -errno;
-+	return req.fd;
-+}
-+
-+static int get_value_v1(int lfd)
-+{
-+	struct gpiohandle_data vals;
-+	int ret;
-+
-+	memset(&vals, 0, sizeof(vals));
-+	ret = ioctl(lfd, GPIOHANDLE_GET_LINE_VALUES_IOCTL, &vals);
-+	if (ret == -1)
-+		return -errno;
-+	return vals.values[0];
-+}
-+
-+static void usage(char *prog)
-+{
-+	printf("Usage: %s [-l] [-b <bias>] [-s <value>] [-u <uAPI>] <gpiochip> <offset>\n", prog);
-+	printf("        -b: set line bias to one of pull-down, pull-up, disabled\n");
-+	printf("               (default is to leave bias unchanged):\n");
-+	printf("        -l: set line active low (default is active high)\n");
-+	printf("        -s: set line value (default is to get line value)\n");
-+	exit(-1);
-+}
-+
-+static int wait_signal(void)
-+{
-+	int sig;
-+	sigset_t wset;
-+
-+	sigemptyset(&wset);
-+	sigaddset(&wset, SIGHUP);
-+	sigaddset(&wset, SIGINT);
-+	sigaddset(&wset, SIGTERM);
-+	sigwait(&wset, &sig);
-+
-+	return sig;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	char *chip;
-+	int opt, ret, cfd, lfd;
-+	unsigned int offset, val;
-+	uint32_t flags_v1;
-+
-+	ret = 0;
-+	flags_v1 = GPIOHANDLE_REQUEST_INPUT;
-+
-+	while ((opt = getopt(argc, argv, "lb:s:u:")) != -1) {
-+		switch (opt) {
-+		case 'l':
-+			flags_v1 |= GPIOHANDLE_REQUEST_ACTIVE_LOW;
-+			break;
-+		case 'b':
-+			if (strcmp("pull-up", optarg) == 0)
-+				flags_v1 |= GPIOHANDLE_REQUEST_BIAS_PULL_UP;
-+			else if (strcmp("pull-down", optarg) == 0)
-+				flags_v1 |= GPIOHANDLE_REQUEST_BIAS_PULL_DOWN;
-+			else if (strcmp("disabled", optarg) == 0)
-+				flags_v1 |= GPIOHANDLE_REQUEST_BIAS_DISABLE;
-+			break;
-+		case 's':
-+			val = atoi(optarg);
-+			flags_v1 &= ~GPIOHANDLE_REQUEST_INPUT;
-+			flags_v1 |= GPIOHANDLE_REQUEST_OUTPUT;
-+			break;
-+		default:
-+			usage(argv[0]);
-+		}
-+	}
-+
-+	if (argc < optind + 2)
-+		usage(argv[0]);
-+
-+	chip = argv[optind];
-+	offset = atoi(argv[optind + 1]);
-+
-+	cfd = open(chip, 0);
-+	if (cfd == -1) {
-+		fprintf(stderr, "Failed to open %s: %s\n", chip, strerror(errno));
-+		return -errno;
-+	}
-+
-+	lfd = request_line_v1(cfd, offset, flags_v1, val);
-+
-+	close(cfd);
-+
-+	if (lfd < 0) {
-+		fprintf(stderr, "Failed to request %s:%d: %s\n", chip, offset, strerror(-lfd));
-+		return lfd;
-+	}
-+
-+	if (flags_v1 & GPIOHANDLE_REQUEST_OUTPUT)
-+		wait_signal();
-+	else
-+		ret = get_value_v1(lfd);
-+
-+	close(lfd);
-+
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/gpio/gpio-mockup-sysfs.sh b/tools/testing/selftests/gpio/gpio-mockup-sysfs.sh
-index dd269d877562..2d2e5d8763b6 100755
---- a/tools/testing/selftests/gpio/gpio-mockup-sysfs.sh
-+++ b/tools/testing/selftests/gpio/gpio-mockup-sysfs.sh
-@@ -1,135 +1,77 @@
- 
- # SPDX-License-Identifier: GPL-2.0
--is_consistent()
+-static int get_debugfs(char **path)
 -{
--	val=
+-	struct libmnt_context *cxt;
+-	struct libmnt_table *tb;
+-	struct libmnt_iter *itr = NULL;
+-	struct libmnt_fs *fs;
+-	int found = 0, ret;
 -
--	active_low_sysfs=`cat $GPIO_SYSFS/gpio$nr/active_low`
--	val_sysfs=`cat $GPIO_SYSFS/gpio$nr/value`
--	dir_sysfs=`cat $GPIO_SYSFS/gpio$nr/direction`
- 
--	gpio_this_debugfs=`cat $GPIO_DEBUGFS |grep "gpio-$nr" | sed "s/(.*)//g"`
--	dir_debugfs=`echo $gpio_this_debugfs | awk '{print $2}'`
--	val_debugfs=`echo $gpio_this_debugfs | awk '{print $3}'`
--	if [ $val_debugfs = "lo" ]; then
--		val=0
--	elif [ $val_debugfs = "hi" ]; then
--		val=1
--	fi
-+# Overrides functions in gpio-mockup.sh to test using the GPIO SYSFS uAPI
- 
--	if [ $active_low_sysfs = "1" ]; then
--		if [ $val = "0" ]; then
--			val="1"
--		else
--			val="0"
--		fi
--	fi
-+SYSFS=`grep -w sysfs /proc/mounts | cut -f2 -d' '`
-+[ -d "$SYSFS" ] || skip "sysfs is not mounted"
- 
--	if [ $val_sysfs = $val ] && [ $dir_sysfs = $dir_debugfs ]; then
--		echo -n "."
--	else
--		echo "test fail, exit"
--		die
--	fi
+-	cxt = mnt_new_context();
+-	if (!cxt)
+-		err(EXIT_FAILURE, "libmount context allocation failed");
+-
+-	itr = mnt_new_iter(MNT_ITER_FORWARD);
+-	if (!itr)
+-		err(EXIT_FAILURE, "failed to initialize libmount iterator");
+-
+-	if (mnt_context_get_mtab(cxt, &tb))
+-		err(EXIT_FAILURE, "failed to read mtab");
+-
+-	while (mnt_table_next_fs(tb, itr, &fs) == 0) {
+-		const char *type = mnt_fs_get_fstype(fs);
+-
+-		if (!strcmp(type, "debugfs")) {
+-			found = 1;
+-			break;
+-		}
+-	}
+-	if (found) {
+-		ret = asprintf(path, "%s/gpio", mnt_fs_get_target(fs));
+-		if (ret < 0)
+-			err(EXIT_FAILURE, "failed to format string");
+-	}
+-
+-	mnt_free_iter(itr);
+-	mnt_free_context(cxt);
+-
+-	if (!found)
+-		return -1;
+-
+-	return 0;
 -}
-+GPIO_SYSFS="${SYSFS}/class/gpio"
-+[ -d "$GPIO_SYSFS" ] || skip "CONFIG_GPIO_SYSFS is not selected"
- 
--test_pin_logic()
+-
+-static int gpio_debugfs_get(const char *consumer, int *dir, int *value)
 -{
--	nr=$1
--	direction=$2
--	active_low=$3
--	value=$4
-+PLATFORM_SYSFS=$SYSFS/devices/platform
- 
--	echo $direction > $GPIO_SYSFS/gpio$nr/direction
--	echo $active_low > $GPIO_SYSFS/gpio$nr/active_low
--	if [ $direction = "out" ]; then
--		echo $value > $GPIO_SYSFS/gpio$nr/value
--	fi
--	is_consistent $nr
+-	char *debugfs;
+-	FILE *f;
+-	char *line = NULL;
+-	size_t len = 0;
+-	char *cur;
+-	int found = 0;
+-
+-	if (get_debugfs(&debugfs) != 0)
+-		err(EXIT_FAILURE, "debugfs is not mounted");
+-
+-	f = fopen(debugfs, "r");
+-	if (!f)
+-		err(EXIT_FAILURE, "read from gpio debugfs failed");
+-
+-	/*
+-	 * gpio-2   (                    |gpio-selftest               ) in  lo
+-	 */
+-	while (getline(&line, &len, f) != -1) {
+-		cur = strstr(line, consumer);
+-		if (cur == NULL)
+-			continue;
+-
+-		cur = strchr(line, ')');
+-		if (!cur)
+-			continue;
+-
+-		cur += 2;
+-		if (!strncmp(cur, "out", 3)) {
+-			*dir = OUT;
+-			cur += 4;
+-		} else if (!strncmp(cur, "in", 2)) {
+-			*dir = IN;
+-			cur += 4;
+-		}
+-
+-		if (!strncmp(cur, "hi", 2))
+-			*value = 1;
+-		else if (!strncmp(cur, "lo", 2))
+-			*value = 0;
+-
+-		found = 1;
+-		break;
+-	}
+-	free(debugfs);
+-	fclose(f);
+-	free(line);
+-
+-	if (!found)
+-		return -1;
+-
+-	return 0;
 -}
-+sysfs_nr=
-+sysfs_ldir=
- 
--test_one_pin()
-+# determine the sysfs GPIO number given the $chip and $offset
-+# e.g. gpiochip1:32
-+find_sysfs_nr()
- {
--	nr=$1
 -
--	echo -n "test pin<$nr>"
+-static struct gpiochip_info *list_gpiochip(const char *gpiochip_name, int *ret)
+-{
+-	struct gpiochip_info *cinfo;
+-	struct gpiochip_info *current;
+-	const struct dirent *ent;
+-	DIR *dp;
+-	char *chrdev_name;
+-	int fd;
+-	int i = 0;
 -
--	echo $nr > $GPIO_SYSFS/export 2>/dev/null
+-	cinfo = calloc(sizeof(struct gpiochip_info) * 4, GC_NUM + 1);
+-	if (!cinfo)
+-		err(EXIT_FAILURE, "gpiochip_info allocation failed");
 -
--	if [ X$? != X0 ]; then
--		echo "test GPIO pin $nr failed"
--		die
--	fi
+-	current = cinfo;
+-	dp = opendir("/dev");
+-	if (!dp) {
+-		*ret = -errno;
+-		goto error_out;
+-	} else {
+-		*ret = 0;
+-	}
 -
--	#"Checking if the sysfs is consistent with debugfs: "
--	is_consistent $nr
+-	while (ent = readdir(dp), ent) {
+-		if (check_prefix(ent->d_name, "gpiochip")) {
+-			*ret = asprintf(&chrdev_name, "/dev/%s", ent->d_name);
+-			if (*ret < 0)
+-				goto error_out;
 -
--	#"Checking the logic of active_low: "
--	test_pin_logic $nr out 1 1
--	test_pin_logic $nr out 1 0
--	test_pin_logic $nr out 0 1
--	test_pin_logic $nr out 0 0
+-			fd = open(chrdev_name, 0);
+-			if (fd == -1) {
+-				*ret = -errno;
+-				fprintf(stderr, "Failed to open %s\n",
+-					chrdev_name);
+-				goto error_close_dir;
+-			}
+-			*ret = ioctl(fd, GPIO_GET_CHIPINFO_IOCTL, current);
+-			if (*ret == -1) {
+-				perror("Failed to issue CHIPINFO IOCTL\n");
+-				goto error_close_dir;
+-			}
+-			close(fd);
+-			if (strcmp(current->label, gpiochip_name) == 0
+-			    || check_prefix(current->label, gpiochip_name)) {
+-				*ret = 0;
+-				current++;
+-				i++;
+-			}
+-		}
+-	}
 -
--	#"Checking the logic of direction: "
--	test_pin_logic $nr in 1 1
--	test_pin_logic $nr out 1 0
--	test_pin_logic $nr low 0 1
--	test_pin_logic $nr high 0 0
+-	if ((!*ret && i == 0) || *ret < 0) {
+-		free(cinfo);
+-		cinfo = NULL;
+-	}
+-	if (!*ret && i > 0) {
+-		cinfo = realloc(cinfo, sizeof(struct gpiochip_info) * 4 * i);
+-		*ret = i;
+-	}
 -
--	echo $nr > $GPIO_SYSFS/unexport
+-error_close_dir:
+-	closedir(dp);
+-error_out:
+-	if (*ret < 0)
+-		err(EXIT_FAILURE, "list gpiochip failed: %s", strerror(*ret));
 -
--	echo "successful"
-+	# e.g. /sys/devices/platform/gpio-mockup.1/gpiochip1
-+	local platform=$(find $PLATFORM_SYSFS -mindepth 2 -maxdepth 2 -type d -name $chip)
-+	[ "$platform" ] || fail "can't find platform of $chip"
-+	# e.g. /sys/devices/platform/gpio-mockup.1/gpio/gpiochip508/base
-+	local base=$(find ${platform%/*}/gpio/ -mindepth 2 -maxdepth 2 -type f -name base)
-+	[ "$base" ] || fail "can't find base of $chip"
-+	sysfs_nr=$(($(< "$base") + $offset))
-+	sysfs_ldir="$GPIO_SYSFS/gpio$sysfs_nr"
- }
- 
--test_one_pin_fail()
-+acquire_line()
- {
--	nr=$1
+-	return cinfo;
+-}
 -
--	echo $nr > $GPIO_SYSFS/export 2>/dev/null
+-int gpio_pin_test(struct gpiochip_info *cinfo, int line, int flag, int value)
+-{
+-	struct gpiohandle_data data;
+-	unsigned int lines[] = {line};
+-	int fd;
+-	int debugfs_dir = IN;
+-	int debugfs_value = 0;
+-	int ret;
 -
--	if [ X$? != X0 ]; then
--		echo "test invalid pin $nr successful"
+-	data.values[0] = value;
+-	ret = gpiotools_request_linehandle(cinfo->name, lines, 1, flag, &data,
+-					   CONSUMER);
+-	if (ret < 0)
+-		goto fail_out;
 -	else
--		echo "test invalid pin $nr failed"
--		echo $nr > $GPIO_SYSFS/unexport 2>/dev/null
--		die
--	fi
-+	[ "$sysfs_nr" ] && return
-+	find_sysfs_nr
-+	echo "$sysfs_nr" > "$GPIO_SYSFS/export"
- }
- 
--list_chip()
-+# The helpers being overridden...
-+get_line()
- {
--	echo `ls -d $GPIO_DRV_SYSFS/gpiochip* 2>/dev/null`
-+	[ -e "$sysfs_ldir/value" ] && echo $(< "$sysfs_ldir/value")
- }
- 
--test_chip()
-+set_line()
- {
--	chip=$1
--	name=`basename $chip`
--	base=`cat $chip/base`
--	ngpio=`cat $chip/ngpio`
--	printf "%-10s %-5s %-5s\n" $name $base $ngpio
--	if [ $ngpio = "0" ]; then
--		echo "number of gpio is zero is not allowed".
--	fi
--	test_one_pin $base
--	test_one_pin $(($base + $ngpio - 1))
--	test_one_pin $((( RANDOM % $ngpio )  + $base ))
-+	acquire_line
-+
-+	for option in $*; do
-+		case $option in
-+		active-high)
-+			echo 0 > "$sysfs_ldir/active_low"
-+			;;
-+		active-low)
-+			echo 1 > "$sysfs_ldir/active_low"
-+			;;
-+		input)
-+			echo "in" > "$sysfs_ldir/direction"
-+			;;
-+		0)
-+			echo "out" > "$sysfs_ldir/direction"
-+			echo 0 > "$sysfs_ldir/value"
-+			;;
-+		1)
-+			echo "out" > "$sysfs_ldir/direction"
-+			echo 1 > "$sysfs_ldir/value"
-+			;;
-+		esac
-+	done
- }
- 
--test_chips_sysfs()
-+release_line()
- {
--       gpiochip=`list_chip $module`
--       if [ X"$gpiochip" = X ]; then
--               if [ X"$valid" = Xfalse ]; then
--                       echo "successful"
--               else
--                       echo "fail"
--                       die
--               fi
--       else
--               for chip in $gpiochip; do
--                       test_chip $chip
--               done
--       fi
-+	[ "$sysfs_nr" ] || return 0
-+	echo "$sysfs_nr" > "$GPIO_SYSFS/unexport"
-+	sysfs_nr=
-+	sysfs_ldir=
- }
+-		fd = ret;
 -
-diff --git a/tools/testing/selftests/gpio/gpio-mockup.sh b/tools/testing/selftests/gpio/gpio-mockup.sh
-index 7f35b9880485..0aa8e4294de1 100755
---- a/tools/testing/selftests/gpio/gpio-mockup.sh
-+++ b/tools/testing/selftests/gpio/gpio-mockup.sh
-@@ -1,72 +1,55 @@
--#!/bin/bash
-+#!/bin/bash -efu
- # SPDX-License-Identifier: GPL-2.0
- 
- #exit status
--#1: Internal error
--#2: sysfs/debugfs not mount
--#3: insert module fail when gpio-mockup is a module.
--#4: Skip test including run as non-root user.
--#5: other reason.
+-	ret = gpio_debugfs_get(CONSUMER, &debugfs_dir, &debugfs_value);
+-	if (ret) {
+-		ret = -EINVAL;
+-		goto fail_out;
+-	}
+-	if (flag & GPIOHANDLE_REQUEST_INPUT) {
+-		if (debugfs_dir != IN) {
+-			errno = -EINVAL;
+-			ret = -errno;
+-		}
+-	} else if (flag & GPIOHANDLE_REQUEST_OUTPUT) {
+-		if (flag & GPIOHANDLE_REQUEST_ACTIVE_LOW)
+-			debugfs_value = !debugfs_value;
 -
--SYSFS=
--GPIO_SYSFS=
--GPIO_DRV_SYSFS=
-+#0: success
-+#1: fail
-+#4: skip test - including run as non-root user
-+
-+BASE=${0%/*}
- DEBUGFS=
- GPIO_DEBUGFS=
--dev_type=
--module=
-+dev_type="cdev"
-+module="gpio-mockup"
-+verbose=
-+full_test=
-+random=
-+active_opt=
-+bias_opt=
-+line_set_pid=
- 
--# Kselftest framework requirement - SKIP code is 4.
-+# Kselftest return codes
-+ksft_fail=1
- ksft_skip=4
- 
- usage()
- {
- 	echo "Usage:"
--	echo "$0 [-f] [-m name] [-t type]"
--	echo "-f:  full test. It maybe conflict with existence gpio device."
--	echo "-m:  module name, default name is gpio-mockup. It could also test"
--	echo "     other gpio device."
--	echo "-t:  interface type: chardev(char device) and sysfs(being"
--	echo "     deprecated). The first one is default"
--	echo ""
--	echo "$0 -h"
--	echo "This usage"
-+	echo "$0 [-frv] [-t type]"
-+	echo "-f:  full test (minimal set run by default)"
-+	echo "-r:  test random lines as well as fence posts"
-+	echo "-t:  interface type:"
-+	echo "      cdev (character device ABI) - default"
-+	echo "      sysfs (deprecated SYSFS ABI)"
-+	echo "-v:  verbose progress reporting"
-+	exit $ksft_fail
- }
- 
--prerequisite()
-+skip()
- {
--	msg="skip all tests:"
--	if [ $UID != 0 ]; then
--		echo $msg must be run as root >&2
--		exit $ksft_skip
--	fi
--	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
--	if [ ! -d "$SYSFS" ]; then
--		echo $msg sysfs is not mounted >&2
--		exit 2
--	fi
--	GPIO_SYSFS=`echo $SYSFS/class/gpio`
--	GPIO_DRV_SYSFS=`echo $SYSFS/devices/platform/$module/gpio`
--	DEBUGFS=`mount -t debugfs | head -1 | awk '{ print $3 }'`
--	if [ ! -d "$DEBUGFS" ]; then
--		echo $msg debugfs is not mounted >&2
--		exit 2
--	fi
--	GPIO_DEBUGFS=`echo $DEBUGFS/gpio`
--	source gpio-mockup-sysfs.sh
-+	echo "$*" >&2
-+	echo "GPIO $module test SKIP"
-+	exit $ksft_skip
- }
- 
--try_insert_module()
-+prerequisite()
- {
--	if [ -d "$GPIO_DRV_SYSFS" ]; then
--		echo "$GPIO_DRV_SYSFS exist. Skip insert module"
--	else
--		modprobe -q $module $1
--		if [ X$? != X0 ]; then
--			echo $msg insmod $module failed >&2
--			exit 3
--		fi
--	fi
-+	[ $(id -u) -eq 0 ] || skip "must be run as root"
-+
-+	DEBUGFS=$(grep -w debugfs /proc/mounts | cut -f2 -d' ')
-+	[ -d "$DEBUGFS" ] || skip "debugfs is not mounted"
-+
-+	GPIO_DEBUGFS=$DEBUGFS/$module
- }
- 
- remove_module()
-@@ -74,133 +57,340 @@ remove_module()
- 	modprobe -r -q $module
- }
- 
--die()
-+cleanup()
- {
-+	set +e
-+	release_line
- 	remove_module
--	exit 5
-+	jobs -p | xargs -r kill > /dev/null 2>&1
- }
- 
--test_chips()
-+fail()
- {
--	if [ X$dev_type = Xsysfs ]; then
--		echo "WARNING: sysfs ABI of gpio is going to deprecated."
--		test_chips_sysfs $*
--	else
--		$BASE/gpio-mockup-chardev $*
--	fi
-+	echo "test failed: $*" >&2
-+	echo "GPIO $module test FAIL"
-+	exit $ksft_fail
-+}
-+
-+try_insert_module()
-+{
-+	modprobe -q $module "$1" || fail "insert $module failed with error $?"
-+}
-+
-+log()
-+{
-+	[ -z "$verbose" ] || echo "$*"
- }
- 
--gpio_test()
-+# The following line helpers, release_Line, get_line and set_line, all
-+# make use of the global $chip and $offset variables.
-+#
-+# This implementation drives the GPIO character device (cdev) uAPI.
-+# Other implementations may override these to test different uAPIs.
-+
-+# Release any resources related to the line
-+release_line()
- {
--	param=$1
--	valid=$2
-+	[ "$line_set_pid" ] && kill $line_set_pid && wait $line_set_pid || true
-+	line_set_pid=
-+}
- 
--	if [ X"$param" = X ]; then
--		die
-+# Read the current value of the line
-+get_line()
-+{
-+	release_line
-+
-+	$BASE/gpio-mockup-cdev $active_opt /dev/$chip $offset
-+	echo $?
-+}
-+
-+# Set the state of the line
-+#
-+# Changes to line configuration are provided as parameters.
-+# The line is assumed to be an output if the line value 0 or 1 is
-+# specified, else an input.
-+set_line()
-+{
-+	local val=
-+
-+	release_line
-+
-+	# parse config options...
-+	for option in $*; do
-+		case $option in
-+		active-low)
-+			active_opt="-l "
-+			;;
-+		active-high)
-+			active_opt=
-+			;;
-+		bias-none)
-+			bias_opt=
-+			;;
-+		pull-down)
-+			bias_opt="-bpull-down "
-+			;;
-+		pull-up)
-+			bias_opt="-bpull-up "
-+			;;
-+		0)
-+			val=0
-+			;;
-+		1)
-+			val=1
-+			;;
-+		esac
-+	done
-+
-+	local cdev_opts=${active_opt}
-+	if [ "$val" ]; then
-+		$BASE/gpio-mockup-cdev $cdev_opts -s$val /dev/$chip $offset &
-+		# failure to set is detected by reading mockup and toggling values
-+		line_set_pid=$!
-+		# allow for gpio-mockup-cdev to launch and request line
-+		# (there is limited value in checking if line has been requested)
-+		sleep 0.01
-+	elif [ "$bias_opt" ]; then
-+		cdev_opts=${cdev_opts}${bias_opt}
-+		$BASE/gpio-mockup-cdev $cdev_opts /dev/$chip $offset || true
- 	fi
--	try_insert_module "gpio_mockup_ranges=$param"
--	echo -n "GPIO $module test with ranges: <"
--	echo "$param>: "
--	printf "%-10s %s\n" $param
--	test_chips $module $valid
--	remove_module
- }
- 
--BASE=`dirname $0`
-+assert_line()
-+{
-+	local val
-+	# don't need any retry here as set_mock allows for propagation
-+	val=$(get_line)
-+	[ "$val" = "$1" ] || fail "line value is ${val:-empty} when $1 was expected"
-+}
-+
-+# The following mockup helpers all make use of the $mock_line
-+assert_mock()
-+{
-+	local backoff_wait=10
-+	local retry=0
-+	local val
-+	# retry allows for set propagation from uAPI to mockup
-+	while true; do
-+		val=$(< $mock_line)
-+		[ "$val" = "$1" ] && break
-+		retry=$((retry + 1))
-+		[ $retry -lt 5 ] || fail "mockup $mock_line value ${val:-empty} when $1 expected"
-+		sleep $(printf "%0.2f" $((backoff_wait))e-3)
-+		backoff_wait=$((backoff_wait * 2))
-+	done
-+}
-+
-+set_mock()
-+{
-+	echo "$1" > $mock_line
-+	# allow for set propagation - so we won't be in a race with set_line
-+	assert_mock "$1"
-+}
- 
--dev_type=
--TEMP=`getopt -o fhm:t: -n '$0' -- "$@"`
-+# test the functionality of a line
-+#
-+# The line is set from the mockup side and is read from the userspace side
-+# (input), and is set from the userspace side and is read from the mockup side
-+# (output).
-+#
-+# Setting the mockup pull using the userspace interface bias settings is
-+# tested where supported by the userspace interface (cdev).
-+test_line()
-+{
-+	chip=$1
-+	offset=$2
-+	log "test_line $chip $offset"
-+	mock_line=$GPIO_DEBUGFS/$chip/$offset
-+	[ -e "$mock_line" ] || fail "missing line $chip:$offset"
- 
--if [ "$?" != "0" ]; then
--        echo "Parameter process failed, Terminating..." >&2
--        exit 1
--fi
-+	# test input active-high
-+	set_mock 1
-+	set_line input active-high
-+	assert_line 1
-+	set_mock 0
-+	assert_line 0
-+	set_mock 1
-+	assert_line 1
-+
-+	if [ "$full_test" ]; then
-+		if [ "$dev_type" != "sysfs" ]; then
-+			# test pulls
-+			set_mock 0
-+			set_line input pull-up
-+			assert_line 1
-+			set_mock 0
-+			assert_line 0
-+
-+			set_mock 1
-+			set_line input pull-down
-+			assert_line 0
-+			set_mock 1
-+			assert_line 1
-+
-+			set_line bias-none
-+		fi
-+
-+		# test input active-low
-+		set_mock 0
-+		set_line active-low
-+		assert_line 1
-+		set_mock 1
-+		assert_line 0
-+		set_mock 0
-+		assert_line 1
-+
-+		# test output active-high
-+		set_mock 1
-+		set_line active-high 0
-+		assert_mock 0
-+		set_line 1
-+		assert_mock 1
-+		set_line 0
-+		assert_mock 0
-+	fi
-+
-+	# test output active-low
-+	set_mock 0
-+	set_line active-low 0
-+	assert_mock 1
-+	set_line 1
-+	assert_mock 0
-+	set_line 0
-+	assert_mock 1
-+
-+	release_line
-+}
-+
-+test_no_line()
-+{
-+	log test_no_line "$*"
-+	[ ! -e "$GPIO_DEBUGFS/$1/$2" ] || fail "unexpected line $1:$2"
-+}
- 
--# Note the quotes around `$TEMP': they are essential!
--eval set -- "$TEMP"
-+# Load the module and check that the expected number of gpiochips, with the
-+# expected number of lines, are created and are functional.
-+#
-+# $1 is the gpio_mockup_ranges parameter for the module
-+# The remaining parameters are the number of lines, n, expected for each of
-+# the gpiochips expected to be created.
-+#
-+# For each gpiochip the fence post lines, 0 and n-1, are tested, and the
-+# line on the far side of the fence post, n, is tested to not exist.
-+#
-+# If the $random flag is set then a random line in the middle of the
-+# gpiochip is tested as well.
-+insmod_test()
-+{
-+	local ranges=
-+	local gc=
-+	local width=
- 
--while true; do
--	case $1 in
--	-f)
-+	[ "${1:-}" ] || fail "missing ranges"
-+	ranges=$1 ; shift
-+	try_insert_module "gpio_mockup_ranges=$ranges"
-+	log "GPIO $module test with ranges: <$ranges>:"
-+	# e.g. /sys/kernel/debug/gpio-mockup/gpiochip1
-+	gpiochip=$(find "$DEBUGFS/$module/" -name gpiochip* -type d | sort)
-+	for chip in $gpiochip; do
-+		gc=${chip##*/}
-+		[ "${1:-}" ] || fail "unexpected chip - $gc"
-+		width=$1 ; shift
-+		test_line $gc 0
-+		if [ "$random" -a $width -gt 2 ]; then
-+			test_line $gc $((RANDOM % ($width - 2) + 1))
-+		fi
-+		test_line $gc $(($width - 1))
-+		test_no_line $gc $width
-+	done
-+	[ "${1:-}" ] && fail "missing expected chip of width $1"
-+	remove_module || fail "failed to remove module with error $?"
-+}
-+
-+while getopts ":frvt:" opt; do
-+	case $opt in
-+	f)
- 		full_test=true
--		shift
--		;;
--	-h)
--		usage
--		exit
- 		;;
--	-m)
--		module=$2
--		shift 2
-+	r)
-+		random=true
- 		;;
--	-t)
--		dev_type=$2
--		shift 2
-+	t)
-+		dev_type=$OPTARG
- 		;;
--	--)
--		shift
--		break
-+	v)
-+		verbose=true
- 		;;
- 	*)
--		echo "Internal error!"
--		exit 1
-+		usage
- 		;;
- 	esac
- done
-+shift $((OPTIND - 1))
- 
--if [ X"$module" = X ]; then
--	module="gpio-mockup"
--fi
+-		if (!(debugfs_dir == OUT && value == debugfs_value)) {
+-			errno = -EINVAL;
+-			ret = -errno;
+-		}
+-	}
+-	gpiotools_release_linehandle(fd);
 -
--if [ X$dev_type != Xsysfs ]; then
--	dev_type="chardev"
--fi
-+[ "${1:-}" ] && fail "unknown argument '$1'"
- 
- prerequisite
- 
--echo "1.  Test dynamic allocation of gpio successful means insert gpiochip and"
--echo "    manipulate gpio pin successful"
--gpio_test "-1,32" true
--gpio_test "-1,32,-1,32" true
--gpio_test "-1,32,-1,32,-1,32" true
--if [ X$full_test = Xtrue ]; then
--	gpio_test "-1,32,32,64" true
--	gpio_test "-1,32,40,64,-1,5" true
--	gpio_test "-1,32,32,64,-1,32" true
--	gpio_test "0,32,32,64,-1,32,-1,32" true
--	gpio_test "-1,32,-1,32,0,32,32,64" true
--	echo "2.  Do basic test: successful means insert gpiochip and"
--	echo "    manipulate gpio pin successful"
--	gpio_test "0,32" true
--	gpio_test "0,32,32,64" true
--	gpio_test "0,32,40,64,64,96" true
-+trap 'exit $ksft_fail' SIGTERM SIGINT
-+trap cleanup EXIT
-+
-+case "$dev_type" in
-+sysfs)
-+	source $BASE/gpio-mockup-sysfs.sh
-+	echo "WARNING: gpio sysfs ABI is deprecated."
-+	;;
-+cdev)
-+	;;
-+*)
-+	fail "unknown interface type: $dev_type"
-+	;;
-+esac
-+
-+remove_module || fail "can't remove existing $module module"
-+
-+# manual gpio allocation tests fail if a physical chip already exists
-+[ "$full_test" -a -e "/dev/gpiochip0" ] && skip "full tests conflict with gpiochip0"
-+
-+echo "1.  Module load tests"
-+echo "1.1.  dynamic allocation of gpio"
-+insmod_test "-1,32" 32
-+insmod_test "-1,23,-1,32" 23 32
-+insmod_test "-1,23,-1,26,-1,32" 23 26 32
-+if [ "$full_test" ]; then
-+	echo "1.2.  manual allocation of gpio"
-+	insmod_test "0,32" 32
-+	insmod_test "0,32,32,60" 32 28
-+	insmod_test "0,32,40,64,64,96" 32 24 32
-+	echo "1.3.  dynamic and manual allocation of gpio"
-+	insmod_test "-1,32,32,62" 32 30
-+	insmod_test "-1,22,-1,23,0,24,32,64" 22 23 24 32
-+	insmod_test "-1,32,32,60,-1,29" 32 28 29
-+	insmod_test "-1,32,40,64,-1,5" 32 24 5
-+	insmod_test "0,32,32,44,-1,22,-1,31" 32 12 22 31
- fi
--echo "3.  Error test: successful means insert gpiochip failed"
--echo "3.1 Test number of gpio overflow"
--#Currently: The max number of gpio(1024) is defined in arm architecture.
--gpio_test "-1,32,-1,1024" false
--if [ X$full_test = Xtrue ]; then
--	echo "3.2 Test zero line of gpio"
--	gpio_test "0,0" false
--	echo "3.3 Test range overlap"
--	echo "3.3.1 Test corner case"
--	gpio_test "0,32,0,1" false
--	gpio_test "0,32,32,64,32,40" false
--	gpio_test "0,32,35,64,35,45" false
--	gpio_test "0,32,31,32" false
--	gpio_test "0,32,32,64,36,37" false
--	gpio_test "0,32,35,64,34,36" false
--	echo "3.3.2 Test inserting invalid second gpiochip"
--	gpio_test "0,32,30,35" false
--	gpio_test "0,32,1,5" false
--	gpio_test "10,32,9,14" false
--	gpio_test "10,32,30,35" false
--	echo "3.3.3 Test others"
--	gpio_test "0,32,40,56,39,45" false
--	gpio_test "0,32,40,56,30,33" false
--	gpio_test "0,32,40,56,30,41" false
--	gpio_test "0,32,40,56,20,21" false
-+echo "2.  Module load error tests"
-+echo "2.1 gpio overflow"
-+# Currently: The max number of gpio(1024) is defined in arm architecture.
-+insmod_test "-1,1024"
-+if [ "$full_test" ]; then
-+	echo "2.2 no lines defined"
-+	insmod_test "0,0"
-+	echo "2.3 ignore range overlap"
-+	insmod_test "0,32,0,1" 32
-+	insmod_test "0,32,1,5" 32
-+	insmod_test "0,32,30,35" 32
-+	insmod_test "0,32,31,32" 32
-+	insmod_test "10,32,30,35" 22
-+	insmod_test "10,32,9,14" 22
-+	insmod_test "0,32,20,21,40,56" 32 16
-+	insmod_test "0,32,32,64,32,40" 32 32
-+	insmod_test "0,32,32,64,36,37" 32 32
-+	insmod_test "0,32,35,64,34,36" 32 29
-+	insmod_test "0,30,35,64,35,45" 30 29
-+	insmod_test "0,32,40,56,30,33" 32 16
-+	insmod_test "0,32,40,56,30,41" 32 16
-+	insmod_test "0,32,40,56,39,45" 32 16
- fi
- 
--echo GPIO test PASS
+-fail_out:
+-	if (ret)
+-		err(EXIT_FAILURE, "gpio<%s> line<%d> test flag<0x%x> value<%d>",
+-		    cinfo->name, line, flag, value);
 -
-+echo "GPIO $module test PASS"
+-	return ret;
+-}
+-
+-void gpio_pin_tests(struct gpiochip_info *cinfo, unsigned int line)
+-{
+-	printf("line<%d>", line);
+-	gpio_pin_test(cinfo, line, GPIOHANDLE_REQUEST_OUTPUT, 0);
+-	printf(".");
+-	gpio_pin_test(cinfo, line, GPIOHANDLE_REQUEST_OUTPUT, 1);
+-	printf(".");
+-	gpio_pin_test(cinfo, line,
+-		      GPIOHANDLE_REQUEST_OUTPUT | GPIOHANDLE_REQUEST_ACTIVE_LOW,
+-		      0);
+-	printf(".");
+-	gpio_pin_test(cinfo, line,
+-		      GPIOHANDLE_REQUEST_OUTPUT | GPIOHANDLE_REQUEST_ACTIVE_LOW,
+-		      1);
+-	printf(".");
+-	gpio_pin_test(cinfo, line, GPIOHANDLE_REQUEST_INPUT, 0);
+-	printf(".");
+-}
+-
+-/*
+- * ./gpio-mockup-chardev gpio_chip_name_prefix is_valid_gpio_chip
+- * Return 0 if successful or exit with EXIT_FAILURE if test failed.
+- * gpio_chip_name_prefix: The prefix of gpiochip you want to test. E.g.
+- *			  gpio-mockup
+- * is_valid_gpio_chip:	  Whether the gpio_chip is valid. 1 means valid,
+- *			  0 means invalid which could not be found by
+- *			  list_gpiochip.
+- */
+-int main(int argc, char *argv[])
+-{
+-	char *prefix;
+-	int valid;
+-	struct gpiochip_info *cinfo;
+-	struct gpiochip_info *current;
+-	int i;
+-	int ret;
+-
+-	if (argc < 3) {
+-		printf("Usage: %s prefix is_valid", argv[0]);
+-		exit(EXIT_FAILURE);
+-	}
+-
+-	prefix = argv[1];
+-	valid = strcmp(argv[2], "true") == 0 ? 1 : 0;
+-
+-	printf("Test gpiochip %s: ", prefix);
+-	cinfo = list_gpiochip(prefix, &ret);
+-	if (!cinfo) {
+-		if (!valid && ret == 0) {
+-			printf("Invalid test successful\n");
+-			ret = 0;
+-			goto out;
+-		} else {
+-			ret = -EINVAL;
+-			goto out;
+-		}
+-	} else if (cinfo && !valid) {
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-	current = cinfo;
+-	for (i = 0; i < ret; i++) {
+-		gpio_pin_tests(current, 0);
+-		gpio_pin_tests(current, current->lines - 1);
+-		gpio_pin_tests(current, random() % current->lines);
+-		current++;
+-	}
+-	ret = 0;
+-	printf("successful\n");
+-
+-out:
+-	if (ret)
+-		fprintf(stderr, "gpio<%s> test failed\n", prefix);
+-
+-	if (cinfo)
+-		free(cinfo);
+-
+-	if (ret)
+-		exit(EXIT_FAILURE);
+-
+-	return ret;
+-}
 -- 
 2.30.0
 
