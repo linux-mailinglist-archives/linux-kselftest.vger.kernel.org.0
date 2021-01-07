@@ -2,154 +2,439 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F0D2ED674
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Jan 2021 19:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD1A2EE9EB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Jan 2021 00:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727749AbhAGSOi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Jan 2021 13:14:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S1727939AbhAGXtA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Jan 2021 18:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726386AbhAGSOh (ORCPT
+        with ESMTP id S1727722AbhAGXs7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Jan 2021 13:14:37 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C8C0612F4
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 Jan 2021 10:13:57 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id m23so7091783ioy.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Jan 2021 10:13:57 -0800 (PST)
+        Thu, 7 Jan 2021 18:48:59 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F6CC0612F4
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 Jan 2021 15:48:19 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id u14so5023078plx.23
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Jan 2021 15:48:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4v8W1olKibG+tkPSMxEvl9d5W+gvZovag0o/cdLJrG8=;
-        b=GCZA18IFXtiLsrpExdF4OWY6T3YUFQsZQ0pI5hzSxRum2HZd5PjWVTvB09K9noe0Sm
-         BDhb9/uNnsbErjeHpM/01JnESAsx2DWuVa4okzgHHTXiwk07GC/T0msMzWGR1glQKeVI
-         6iiPvOODQgMLzeUr6ixevqw7B98U4r6at747k=
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=3xYA4PyifiF7rZWRCzZkhoSQln0VfkbMj5LQ/ctQ6Mc=;
+        b=k58MXl/uokri5fQCPCdr5dKHxOeDawNRMMh3mQ6GmEgiun51bYPZ+/TTXVdaXK1rK5
+         WRM4gjeSwZ2WJtChG7L72rkTdqKwURZyzuus/+aR3K/dlIwZluxBmRA6OVj5mKDVbYlA
+         YRVzs2D4fI1v0n8scQG+oEfONHPLUqGfMyBH2KZXwtqhYBs/DS2kPY0rRKShAclZoWHE
+         qFw261eCgbFBGse2NyV/urcUGfLoJvdN/Miq7zzAwEyzqL4DlJquzSvFk4mdS1g2X1Em
+         FUbVISJkDLsk+ixJUrEOxii6U54OGo1BKysdwdTfEIH4GOkpmAO4+87Dqr2IXOE27g4V
+         03fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4v8W1olKibG+tkPSMxEvl9d5W+gvZovag0o/cdLJrG8=;
-        b=cM5WuN4aeHWVoQNmdbyifMYTdrmRiED62Zh8o4WrG0ORAo4FfgXik0nd5inIGmJgcr
-         3I5hWDIQvrsFX4CPNSKq+iJe7xpMc5d/jw1AJCOWcbLDS9RmdtRc6A/3E091bszU7NSS
-         w1z2gtnIm5x19GIwQt2J5xHyz7GAl5oqzLnYXS6aoT4lTd+A8rmv14C4IzWYIt7tlg35
-         0OEDEOa4gLNKlnLNNzfZG+1iYfzsN1L16TaboD4AGw9s2iixsq7LK+8Tviw11WZQ4X+S
-         gWeKzDE++XOww21IYYlJ7PWhxS/ld8QN2QrDA/D/4o/R1GtFnqJzvDFA286VcCMShtcn
-         d0ZQ==
-X-Gm-Message-State: AOAM530FdWfPwh+jZdwQww5QS9N1m9LhrOPKQpj5/nz+LC23VL5vF7Jx
-        BWvSJTMPjeH51FfoOKftwkVpJA==
-X-Google-Smtp-Source: ABdhPJydhQwgn1+aYSgV7WO5YZh9CjoWBndCSExiuxXNuitgYW+BkQs5Z5XIm6//UBosU4iI41llDg==
-X-Received: by 2002:a05:6602:59e:: with SMTP id v30mr2204902iox.37.1610043236697;
-        Thu, 07 Jan 2021 10:13:56 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id o7sm3502364iop.51.2021.01.07.10.13.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jan 2021 10:13:56 -0800 (PST)
-Subject: Re: [PATCH] kunit: tool: Force the use of the 'tty' console for UML
-To:     Petr Mladek <pmladek@suse.com>, David Gow <davidgow@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201222073900.3490607-1-davidgow@google.com>
- <20201222111102.GC4077@smile.fi.intel.com>
- <4ae7779c-15c5-0474-5840-44531dcf1d94@linuxfoundation.org>
- <X/SSJQ+I5zEMaYYJ@alley>
- <3828c7ee-52b0-42f9-5771-74ef9386756c@linuxfoundation.org>
- <20210105185731.GT4077@smile.fi.intel.com>
- <918b2d05-f51b-0866-89b3-19a016abdaa3@linuxfoundation.org>
- <CABVgOS=DZjv4-68fEweZwB1-=KB7Tb71iQEfHKHt46OTVWC94w@mail.gmail.com>
- <X/c8jQMyXbsJf85M@alley>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <578de82c-5119-78e4-4497-c8a8d642388d@linuxfoundation.org>
-Date:   Thu, 7 Jan 2021 11:13:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
-MIME-Version: 1.0
-In-Reply-To: <X/c8jQMyXbsJf85M@alley>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=3xYA4PyifiF7rZWRCzZkhoSQln0VfkbMj5LQ/ctQ6Mc=;
+        b=SG8p8MRq8Uuv3IDD/6lyRo4FEigF2AIivWr1HPdoCSyy7CCYzx+xOTbFpBHpBktjK0
+         rCIDRxSUdJaIincKfEJWXvuRLv/kfjD5M9e35WOtdvzi5tjYd5NvvZauLcO3n+YzVuNc
+         RPxhNYmWT1gVXnXowNDzR2nTv0GTbCdQRFRSwK78EYDjz56DKtcGy9qyI2vZIcZabnlm
+         tT2M2QylaYxKQKLxxyCG82CRer6n26JVw6CAGM4Bws1sw9h2qvUXqwB0CAd510mteANF
+         uExDy1KKyT0P2HZ7Eyk6ix+v93rFsyhz1Xpk1QFa75b60r5FbENUC1Bj8RgeIkZye+Ue
+         RzGw==
+X-Gm-Message-State: AOAM531RC2uH0l+TCJ78nkUFpKabF03jLxusewK/kFpoVRj81hnTAguj
+        QvyrUjuBA5AhTAITs9a/SZn8sg/s71yzYQ==
+X-Google-Smtp-Source: ABdhPJydAOMyUQtKMi/NelKPsJoVpBdjMGEAX7lrLuGxq6be7lNtgNwdi+mff3hk5LfDBl0Dhxl5FmwjDX/Szw==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
+ (user=dlatypov job=sendgmr) by 2002:aa7:83c2:0:b029:1a5:daa9:f22f with SMTP
+ id j2-20020aa783c20000b02901a5daa9f22fmr1051930pfn.48.1610063298795; Thu, 07
+ Jan 2021 15:48:18 -0800 (PST)
+Date:   Thu,  7 Jan 2021 15:48:01 -0800
+Message-Id: <20210107234803.1096592-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
+Subject: [PATCH v3 1/3] kunit: tool: surface and address more typing issues
+From:   Daniel Latypov <dlatypov@google.com>
+To:     davidgow@google.com, brendanhiggins@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/7/21 9:53 AM, Petr Mladek wrote:
-> On Wed 2021-01-06 12:29:12, David Gow wrote:
->> On Wed, Jan 6, 2021 at 3:52 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>
->>> On 1/5/21 11:57 AM, Andy Shevchenko wrote:
->>>> On Tue, Jan 05, 2021 at 09:34:33AM -0700, Shuah Khan wrote:
->>>>> On 1/5/21 9:21 AM, Petr Mladek wrote:
->>>>>> On Mon 2021-01-04 09:23:57, Shuah Khan wrote:
->>>>>>> On 12/22/20 4:11 AM, Andy Shevchenko wrote:
->>>>>>>> On Mon, Dec 21, 2020 at 11:39:00PM -0800, David Gow wrote:
->>>>>>>>> kunit_tool relies on the UML console outputting printk() output to the
->>>>>>>>> tty in order to get results. Since the default console driver could
->>>>>>>>> change, pass 'console=tty' to the kernel.
->>>>>>>>>
->>>>>>>>> This is triggered by a change[1] to use ttynull as a fallback console
->>>>>>>>> driver which -- by chance or by design -- seems to have changed the
->>>>>>>>> default console output on UML, breaking kunit_tool. While this may be
->>>>>>>>> fixed, we should be less fragile to such changes in the default.
->>>>>>>>>
->>>>>>>>> [1]:
->>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=757055ae8dedf5333af17b3b5b4b70ba9bc9da4e
->>>>>>>>
->>>>>>>> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>>>>>> Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>>>>>>>
->>>>>>>
->>>>>>> Thank you all. Now in linux-kselftest kunit-fixes branch.
->>>>>>>
->>>>>>> Will send this up for rc3.
->>>>>>>
->>>>>>> Sorry for the delay - have been away from the keyboard for a
->>>>>>> bit.
->>>>>>
->>>>>> JFYI, I am not sure that this is the right solution. I am
->>>>>> looking into it, see
->>>>>> https://lore.kernel.org/linux-kselftest/X%2FSRA1P8t+ONZFKb@alley/
->>>>>> for more details.
->>>>>>
->>>>>
->>>>> Thanks Petr. I will hold off on sending the patch up to Linus and
->>>>> let you find a the right solution.
->>>>
->>>> Please. leave it in Linux Next at least. Otherwise kunit will be broken for a
->>>> long time which is not good.
->>>>
->>>>
->>>
->>> Yes. That is the plan. It will be in there until real fix comes in.
-> 
-> The real fix would be too complicated for 5.11-rc3. Instead, I
-> proposed to revert the problematic commit, see
-> https://lore.kernel.org/lkml/20210107164400.17904-2-pmladek@suse.com/
-> I would like to push it for 5.11-rc3.
-> 
->> Personally, I think that this patch makes some sense to keep even if
->> the underlying issue with ttynull is resolved. Given that kunit.py
->> requires the console output, explicitly stating we want console=tty
->> set is probably worth doing rather than relying on it being the
->> default.
-> 
-> I agree that the patch makes sense on its own. kunit depends on the
-> particular console. Note that "tty" is actually the UML-specific
-> stdio console implemented in arch/um/drivers/stdio_console.c.
-> 
+The authors of this tool were more familiar with a different
+type-checker, https://github.com/google/pytype.
 
-The proposal sounds like revert the problem commit 
-https://lore.kernel.org/lkml/20210107164400.17904-2-pmladek@suse.com/
+That's open source, but mypy seems more prevalent (and runs faster).
+And unlike pytype, mypy doesn't try to infer types so it doesn't check
+unanotated functions.
 
-and also send kunit fix up. Sounds reasonable to me. I will send
-it for 5.11-rc3
+So annotate ~all functions in kunit tool to increase type-checking
+coverage.
+Note: per https://www.python.org/dev/peps/pep-0484/, `__init__()` should
+be annotated as `-> None`.
 
-thanks,
--- Shuah
+Doing so makes mypy discover a number of new violations.
+Exclude main() since we reuse `request` for the different types of
+requests, which mypy isn't happy about.
+
+This commit fixes all but one error, where `TestSuite.status` might be
+None.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+ tools/testing/kunit/kunit.py        | 14 ++++-----
+ tools/testing/kunit/kunit_config.py |  7 +++--
+ tools/testing/kunit/kunit_json.py   |  2 +-
+ tools/testing/kunit/kunit_kernel.py | 37 ++++++++++++-----------
+ tools/testing/kunit/kunit_parser.py | 46 ++++++++++++++---------------
+ 5 files changed, 54 insertions(+), 52 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 21516e293d17..5521e0a8201e 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -43,9 +43,9 @@ class KunitStatus(Enum):
+ 	BUILD_FAILURE = auto()
+ 	TEST_FAILURE = auto()
+ 
+-def get_kernel_root_path():
+-	parts = sys.argv[0] if not __file__ else __file__
+-	parts = os.path.realpath(parts).split('tools/testing/kunit')
++def get_kernel_root_path() -> str:
++	path = sys.argv[0] if not __file__ else __file__
++	parts = os.path.realpath(path).split('tools/testing/kunit')
+ 	if len(parts) != 2:
+ 		sys.exit(1)
+ 	return parts[0]
+@@ -171,7 +171,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 				exec_result.elapsed_time))
+ 	return parse_result
+ 
+-def add_common_opts(parser):
++def add_common_opts(parser) -> None:
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+ 			    'directory.',
+@@ -183,13 +183,13 @@ def add_common_opts(parser):
+ 			    help='Run all KUnit tests through allyesconfig',
+ 			    action='store_true')
+ 
+-def add_build_opts(parser):
++def add_build_opts(parser) -> None:
+ 	parser.add_argument('--jobs',
+ 			    help='As in the make command, "Specifies  the number of '
+ 			    'jobs (commands) to run simultaneously."',
+ 			    type=int, default=8, metavar='jobs')
+ 
+-def add_exec_opts(parser):
++def add_exec_opts(parser) -> None:
+ 	parser.add_argument('--timeout',
+ 			    help='maximum number of seconds to allow for all tests '
+ 			    'to run. This does not include time taken to build the '
+@@ -198,7 +198,7 @@ def add_exec_opts(parser):
+ 			    default=300,
+ 			    metavar='timeout')
+ 
+-def add_parse_opts(parser):
++def add_parse_opts(parser) -> None:
+ 	parser.add_argument('--raw_output', help='don\'t format output from kernel',
+ 			    action='store_true')
+ 	parser.add_argument('--json',
+diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
+index 02ffc3a3e5dc..bdd60230764b 100644
+--- a/tools/testing/kunit/kunit_config.py
++++ b/tools/testing/kunit/kunit_config.py
+@@ -8,6 +8,7 @@
+ 
+ import collections
+ import re
++from typing import List, Set
+ 
+ CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
+ CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
+@@ -30,10 +31,10 @@ class KconfigParseError(Exception):
+ class Kconfig(object):
+ 	"""Represents defconfig or .config specified using the Kconfig language."""
+ 
+-	def __init__(self):
+-		self._entries = []
++	def __init__(self) -> None:
++		self._entries = []  # type: List[KconfigEntry]
+ 
+-	def entries(self):
++	def entries(self) -> Set[KconfigEntry]:
+ 		return set(self._entries)
+ 
+ 	def add_entry(self, entry: KconfigEntry) -> None:
+diff --git a/tools/testing/kunit/kunit_json.py b/tools/testing/kunit/kunit_json.py
+index 624b31b2dbd6..f5cca5c38cac 100644
+--- a/tools/testing/kunit/kunit_json.py
++++ b/tools/testing/kunit/kunit_json.py
+@@ -13,7 +13,7 @@ import kunit_parser
+ 
+ from kunit_parser import TestStatus
+ 
+-def get_json_result(test_result, def_config, build_dir, json_path):
++def get_json_result(test_result, def_config, build_dir, json_path) -> str:
+ 	sub_groups = []
+ 
+ 	# Each test suite is mapped to a KernelCI sub_group
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 57c1724b7e5d..db7ed84ea410 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -11,6 +11,7 @@ import subprocess
+ import os
+ import shutil
+ import signal
++from typing import Iterator
+ 
+ from contextlib import ExitStack
+ 
+@@ -39,7 +40,7 @@ class BuildError(Exception):
+ class LinuxSourceTreeOperations(object):
+ 	"""An abstraction over command line operations performed on a source tree."""
+ 
+-	def make_mrproper(self):
++	def make_mrproper(self) -> None:
+ 		try:
+ 			subprocess.check_output(['make', 'mrproper'], stderr=subprocess.STDOUT)
+ 		except OSError as e:
+@@ -47,7 +48,7 @@ class LinuxSourceTreeOperations(object):
+ 		except subprocess.CalledProcessError as e:
+ 			raise ConfigError(e.output.decode())
+ 
+-	def make_olddefconfig(self, build_dir, make_options):
++	def make_olddefconfig(self, build_dir, make_options) -> None:
+ 		command = ['make', 'ARCH=um', 'olddefconfig']
+ 		if make_options:
+ 			command.extend(make_options)
+@@ -60,7 +61,7 @@ class LinuxSourceTreeOperations(object):
+ 		except subprocess.CalledProcessError as e:
+ 			raise ConfigError(e.output.decode())
+ 
+-	def make_allyesconfig(self, build_dir, make_options):
++	def make_allyesconfig(self, build_dir, make_options) -> None:
+ 		kunit_parser.print_with_timestamp(
+ 			'Enabling all CONFIGs for UML...')
+ 		command = ['make', 'ARCH=um', 'allyesconfig']
+@@ -82,7 +83,7 @@ class LinuxSourceTreeOperations(object):
+ 		kunit_parser.print_with_timestamp(
+ 			'Starting Kernel with all configs takes a few minutes...')
+ 
+-	def make(self, jobs, build_dir, make_options):
++	def make(self, jobs, build_dir, make_options) -> None:
+ 		command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
+ 		if make_options:
+ 			command.extend(make_options)
+@@ -100,7 +101,7 @@ class LinuxSourceTreeOperations(object):
+ 		if stderr:  # likely only due to build warnings
+ 			print(stderr.decode())
+ 
+-	def linux_bin(self, params, timeout, build_dir):
++	def linux_bin(self, params, timeout, build_dir) -> None:
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+ 		linux_bin = get_file_path(build_dir, 'linux')
+ 		outfile = get_outfile_path(build_dir)
+@@ -110,23 +111,23 @@ class LinuxSourceTreeOperations(object):
+ 						   stderr=subprocess.STDOUT)
+ 			process.wait(timeout)
+ 
+-def get_kconfig_path(build_dir):
++def get_kconfig_path(build_dir) -> str:
+ 	return get_file_path(build_dir, KCONFIG_PATH)
+ 
+-def get_kunitconfig_path(build_dir):
++def get_kunitconfig_path(build_dir) -> str:
+ 	return get_file_path(build_dir, KUNITCONFIG_PATH)
+ 
+-def get_outfile_path(build_dir):
++def get_outfile_path(build_dir) -> str:
+ 	return get_file_path(build_dir, OUTFILE_PATH)
+ 
+ class LinuxSourceTree(object):
+ 	"""Represents a Linux kernel source tree with KUnit tests."""
+ 
+-	def __init__(self):
++	def __init__(self) -> None:
+ 		self._ops = LinuxSourceTreeOperations()
+ 		signal.signal(signal.SIGINT, self.signal_handler)
+ 
+-	def clean(self):
++	def clean(self) -> bool:
+ 		try:
+ 			self._ops.make_mrproper()
+ 		except ConfigError as e:
+@@ -134,17 +135,17 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return True
+ 
+-	def create_kunitconfig(self, build_dir, defconfig=DEFAULT_KUNITCONFIG_PATH):
++	def create_kunitconfig(self, build_dir, defconfig=DEFAULT_KUNITCONFIG_PATH) -> None:
+ 		kunitconfig_path = get_kunitconfig_path(build_dir)
+ 		if not os.path.exists(kunitconfig_path):
+ 			shutil.copyfile(defconfig, kunitconfig_path)
+ 
+-	def read_kunitconfig(self, build_dir):
++	def read_kunitconfig(self, build_dir) -> None:
+ 		kunitconfig_path = get_kunitconfig_path(build_dir)
+ 		self._kconfig = kunit_config.Kconfig()
+ 		self._kconfig.read_from_file(kunitconfig_path)
+ 
+-	def validate_config(self, build_dir):
++	def validate_config(self, build_dir) -> bool:
+ 		kconfig_path = get_kconfig_path(build_dir)
+ 		validated_kconfig = kunit_config.Kconfig()
+ 		validated_kconfig.read_from_file(kconfig_path)
+@@ -158,7 +159,7 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return True
+ 
+-	def build_config(self, build_dir, make_options):
++	def build_config(self, build_dir, make_options) -> bool:
+ 		kconfig_path = get_kconfig_path(build_dir)
+ 		if build_dir and not os.path.exists(build_dir):
+ 			os.mkdir(build_dir)
+@@ -170,7 +171,7 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return self.validate_config(build_dir)
+ 
+-	def build_reconfig(self, build_dir, make_options):
++	def build_reconfig(self, build_dir, make_options) -> bool:
+ 		"""Creates a new .config if it is not a subset of the .kunitconfig."""
+ 		kconfig_path = get_kconfig_path(build_dir)
+ 		if os.path.exists(kconfig_path):
+@@ -186,7 +187,7 @@ class LinuxSourceTree(object):
+ 			print('Generating .config ...')
+ 			return self.build_config(build_dir, make_options)
+ 
+-	def build_um_kernel(self, alltests, jobs, build_dir, make_options):
++	def build_um_kernel(self, alltests, jobs, build_dir, make_options) -> bool:
+ 		try:
+ 			if alltests:
+ 				self._ops.make_allyesconfig(build_dir, make_options)
+@@ -197,7 +198,7 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return self.validate_config(build_dir)
+ 
+-	def run_kernel(self, args=[], build_dir='', timeout=None):
++	def run_kernel(self, args=[], build_dir='', timeout=None) -> Iterator[str]:
+ 		args.extend(['mem=1G'])
+ 		self._ops.linux_bin(args, timeout, build_dir)
+ 		outfile = get_outfile_path(build_dir)
+@@ -206,6 +207,6 @@ class LinuxSourceTree(object):
+ 			for line in file:
+ 				yield line
+ 
+-	def signal_handler(self, sig, frame):
++	def signal_handler(self, sig, frame) -> None:
+ 		logging.error('Build interruption occurred. Cleaning console.')
+ 		subprocess.call(['stty', 'sane'])
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 6614ec4d0898..8b5eb9507765 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -12,32 +12,32 @@ from collections import namedtuple
+ from datetime import datetime
+ from enum import Enum, auto
+ from functools import reduce
+-from typing import List, Optional, Tuple
++from typing import Iterator, List, Optional, Tuple
+ 
+ TestResult = namedtuple('TestResult', ['status','suites','log'])
+ 
+ class TestSuite(object):
+-	def __init__(self):
+-		self.status = None
+-		self.name = None
+-		self.cases = []
++	def __init__(self) -> None:
++		self.status = None  # type: Optional[TestStatus]
++		self.name = ''
++		self.cases = []  # type: List[TestCase]
+ 
+-	def __str__(self):
+-		return 'TestSuite(' + self.status + ',' + self.name + ',' + str(self.cases) + ')'
++	def __str__(self) -> str:
++		return 'TestSuite(' + str(self.status) + ',' + self.name + ',' + str(self.cases) + ')'
+ 
+-	def __repr__(self):
++	def __repr__(self) -> str:
+ 		return str(self)
+ 
+ class TestCase(object):
+-	def __init__(self):
+-		self.status = None
++	def __init__(self) -> None:
++		self.status = None  # type: Optional[TestStatus]
+ 		self.name = ''
+-		self.log = []
++		self.log = []  # type: List[str]
+ 
+-	def __str__(self):
+-		return 'TestCase(' + self.status + ',' + self.name + ',' + str(self.log) + ')'
++	def __str__(self) -> str:
++		return 'TestCase(' + str(self.status) + ',' + self.name + ',' + str(self.log) + ')'
+ 
+-	def __repr__(self):
++	def __repr__(self) -> str:
+ 		return str(self)
+ 
+ class TestStatus(Enum):
+@@ -51,7 +51,7 @@ kunit_start_re = re.compile(r'TAP version [0-9]+$')
+ kunit_end_re = re.compile('(List of all partitions:|'
+ 			  'Kernel panic - not syncing: VFS:)')
+ 
+-def isolate_kunit_output(kernel_output):
++def isolate_kunit_output(kernel_output) -> Iterator[str]:
+ 	started = False
+ 	for line in kernel_output:
+ 		line = line.rstrip()  # line always has a trailing \n
+@@ -64,7 +64,7 @@ def isolate_kunit_output(kernel_output):
+ 		elif started:
+ 			yield line[prefix_len:] if prefix_len > 0 else line
+ 
+-def raw_output(kernel_output):
++def raw_output(kernel_output) -> None:
+ 	for line in kernel_output:
+ 		print(line.rstrip())
+ 
+@@ -72,26 +72,26 @@ DIVIDER = '=' * 60
+ 
+ RESET = '\033[0;0m'
+ 
+-def red(text):
++def red(text) -> str:
+ 	return '\033[1;31m' + text + RESET
+ 
+-def yellow(text):
++def yellow(text) -> str:
+ 	return '\033[1;33m' + text + RESET
+ 
+-def green(text):
++def green(text) -> str:
+ 	return '\033[1;32m' + text + RESET
+ 
+-def print_with_timestamp(message):
++def print_with_timestamp(message) -> None:
+ 	print('[%s] %s' % (datetime.now().strftime('%H:%M:%S'), message))
+ 
+-def format_suite_divider(message):
++def format_suite_divider(message) -> str:
+ 	return '======== ' + message + ' ========'
+ 
+-def print_suite_divider(message):
++def print_suite_divider(message) -> None:
+ 	print_with_timestamp(DIVIDER)
+ 	print_with_timestamp(format_suite_divider(message))
+ 
+-def print_log(log):
++def print_log(log) -> None:
+ 	for m in log:
+ 		print_with_timestamp(m)
+ 
+
+base-commit: f5e6c330254ae691f6d7befe61c786eb5056007e
+-- 
+2.29.2.729.g45daf8777d-goog
+
