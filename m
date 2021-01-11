@@ -2,55 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 394122F219A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Jan 2021 22:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9F02F21AB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Jan 2021 22:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbhAKVQI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Jan 2021 16:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S1727984AbhAKVUh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Jan 2021 16:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726266AbhAKVQI (ORCPT
+        with ESMTP id S1727150AbhAKVUg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Jan 2021 16:16:08 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8891C061795
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Jan 2021 13:15:27 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id j13so314716pjz.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Jan 2021 13:15:27 -0800 (PST)
+        Mon, 11 Jan 2021 16:20:36 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775E0C061794
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Jan 2021 13:19:56 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id s15so179387plr.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Jan 2021 13:19:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mS2w+DBB5fq5FWrKRFlEi4QLtkNj5g+2gEs0VX75X7c=;
-        b=n9wWaEdHykBtIwCE4rgA2mQ2kNrhCBy2DCUqJ/kYfiJpUuXJ5WP/9o9mQJOo8QF96t
-         SmuqaEfeYNkLVoh4oxeVC+7gGDg449euxtpqecjwXks0O0OB/RkMeTNmhbcR1ti6v6k+
-         fRY4MxGv9Bx96adln74uEhMRyk7+Uyzv8OIB4UpcRkh2HabTkIYeUGVOxvddUg8XUMlG
-         UD5UhvdLAHVyr6kUmxZzUtUaDAz9eaWB1o7g0UOCaLp3Vfko/aSqyjct1AgSu6FwBVuE
-         amqPIvUWb+s/15N9WyXbYT7xw2vEu3NNJqPY2F22YOadO6yqIX8PgwTUATGWXKzHhS+F
-         OcaA==
+        bh=n97oZNXIEipHpRZCUvWuyIU1bjCU11iLeg9wFjnwI/U=;
+        b=bdIIFp6LYe4j4mymR82w+8TxiLK9PqLThqlRxlGzzrFLYp+xZ4Rsq4BCBASlq6x7uo
+         DdDLlWaRnx88/UwnnQ7HyEatlfF0+jnhCppOyhhrZkrI+y0WThEE8B31v5+K9Dgt0vXv
+         /tbTGdl3xVFN8RnbwknuMxY7IQC3f36ca9zifnBaOk08EVrajWHkUSs9oorOGNLGGnzZ
+         gB0iW+CpWkRWSI6L8P//tbk6N0KUomGy5hpr2PucqutFAX0I7VTHmcronVbvmyaFjJbn
+         QkebwHEoAYdpJP9De1OV859mAPwnvCbZ9NJRjtpTtYvWYq1Fs/k1yrctbVnI9VFSpcEr
+         K/Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mS2w+DBB5fq5FWrKRFlEi4QLtkNj5g+2gEs0VX75X7c=;
-        b=C9bN1zCmAqMWWXIvBpmCyS7AZeIGwZWC8lSPPDpSXLPtvKGVqqFhsai+tV2A2xDUJV
-         A9oORuTr/COlxWAOCRYAe/eN1N4jLbHbeOXiNuoxX+EPfqrSC1fe7p09PigichtLPwSZ
-         DRupbzpmrd2bAcNKhkMtJe8+lEAQ1PrIvE7MgRaKU9UXqhlc4X7KuOkBUZofwZBAYFrY
-         S7CClsinnZ53wxEykw/AC8QN+/RVyrSecZ5w8mri485SkeWaGSfY0cxnmBK2PfS2976u
-         RVgV8A5FIlqJg3m2NSS2vVM80cnk0R5CbD+ln4xAGjhIwWhdhnk8sTpEMP9q7A9PbOwu
-         K9wg==
-X-Gm-Message-State: AOAM531tEfyodqHHUhdgD7GqhRKLICZU98D5/fnUZiT4jPyVOvOLvWNF
-        fAeMECn9UTV17SDK8/SkVXDM5SZKnxCq11BVFwrpoA==
-X-Google-Smtp-Source: ABdhPJzE1mrw7DKtcQjeXzBPHlASp6nM1YDJMJYW41Elq59fts2qz6S0s858oobAohAIkz/AexgwIQwUcz+aE0pDOIU=
-X-Received: by 2002:a17:90a:de03:: with SMTP id m3mr867055pjv.20.1610399727186;
- Mon, 11 Jan 2021 13:15:27 -0800 (PST)
+        bh=n97oZNXIEipHpRZCUvWuyIU1bjCU11iLeg9wFjnwI/U=;
+        b=ShMtToL5E08YSIDhkDer4xO4AfNST0Jvw0YthCw/1JDe/1IL+Ua6RBTiXujBcFMy/n
+         fmdvymvjPoPCTYmmWiNXLHhjFNxKf4t05NBNmw3APYZJk10aqonSJn7bo2UiG72S17FH
+         T09NBE7X0lBHOL5JohA7YpexsjZI+qY1zVXec1dE/Qg6OaWh7Y6bnp9zOFovn0KPiVbN
+         b4Y2Nd4hyP1Xl2cdkqMV+KezeDu2+JNMGtKrKUeB12tG6y0YIK/S27LJubBQaDW4NvBf
+         I9B1rROmHqQvlUEJBh1AcfPSxRjJpCAsKHjmriPsutTsOrwvnzI9qrLd4SVyXb7GGS8r
+         D9qw==
+X-Gm-Message-State: AOAM532BI+VB2DDCW5cgA5cYzJ31eJIMBzSTRM6l5wfyX0GMb7qI9NyF
+        E4YiL+pOQYKaTVd1VUNlI6sC4dxc++MqsckzOIGXAw==
+X-Google-Smtp-Source: ABdhPJy2zuBFI2WxQFh+zswk7vvE1Ll9jQA8Ir6fK3ClgvLdL6voF0yNaP0jwxohL/w7CmFOXaK4xdaZlB928E/RPxU=
+X-Received: by 2002:a17:902:f686:b029:de:18c7:41f8 with SMTP id
+ l6-20020a170902f686b02900de18c741f8mr255538plg.65.1610399995802; Mon, 11 Jan
+ 2021 13:19:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20210107234803.1096592-1-dlatypov@google.com>
-In-Reply-To: <20210107234803.1096592-1-dlatypov@google.com>
+References: <20210107234803.1096592-1-dlatypov@google.com> <20210107234803.1096592-2-dlatypov@google.com>
+In-Reply-To: <20210107234803.1096592-2-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 11 Jan 2021 13:15:15 -0800
-Message-ID: <CAFd5g445jpTOThTaco3p9NGO8RaWK6tw2EZ8X-Czu0ErRo6EMg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] kunit: tool: surface and address more typing issues
+Date:   Mon, 11 Jan 2021 13:19:44 -0800
+Message-ID: <CAFd5g46HKkj3heY+jOYDZH9uaNwcDE6UsQwcC0gULBJD22Bv7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: tool: fix minor typing issue with None status
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     David Gow <davidgow@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -64,26 +65,17 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Thu, Jan 7, 2021 at 3:48 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> The authors of this tool were more familiar with a different
-> type-checker, https://github.com/google/pytype.
+> The code to handle aggregating statuses didn't check that the status
+> actually got set to some non-None value.
+> Default the value to SUCCESS instead of adding a bunch of `is None`
+> checks.
 >
-> That's open source, but mypy seems more prevalent (and runs faster).
-> And unlike pytype, mypy doesn't try to infer types so it doesn't check
-> unanotated functions.
+> This sorta follows the precedent in commit 3fc48259d525 ("kunit: Don't
+> fail test suites if one of them is empty").
 >
-> So annotate ~all functions in kunit tool to increase type-checking
-> coverage.
-> Note: per https://www.python.org/dev/peps/pep-0484/, `__init__()` should
-> be annotated as `-> None`.
->
-> Doing so makes mypy discover a number of new violations.
-> Exclude main() since we reuse `request` for the different types of
-> requests, which mypy isn't happy about.
->
-> This commit fixes all but one error, where `TestSuite.status` might be
-> None.
+> Also slightly simplify the code and add type annotations.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > Reviewed-by: David Gow <davidgow@google.com>
 
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
