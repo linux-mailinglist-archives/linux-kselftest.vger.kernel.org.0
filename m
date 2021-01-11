@@ -2,79 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01B02F0604
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Jan 2021 09:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A8B2F0F39
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Jan 2021 10:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbhAJIja (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 10 Jan 2021 03:39:30 -0500
-Received: from correo.us.es ([193.147.175.20]:38738 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726447AbhAJIja (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 10 Jan 2021 03:39:30 -0500
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 0C864D2AE1
-        for <linux-kselftest@vger.kernel.org>; Sun, 10 Jan 2021 09:38:07 +0100 (CET)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id F2A8BDA793
-        for <linux-kselftest@vger.kernel.org>; Sun, 10 Jan 2021 09:38:06 +0100 (CET)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id E7E6DDA78E; Sun, 10 Jan 2021 09:38:06 +0100 (CET)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WELCOMELIST,USER_IN_WHITELIST autolearn=disabled
-        version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id A38F6DA730;
-        Sun, 10 Jan 2021 09:38:04 +0100 (CET)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Sun, 10 Jan 2021 09:38:04 +0100 (CET)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 74006426CC84;
-        Sun, 10 Jan 2021 09:38:04 +0100 (CET)
-Date:   Sun, 10 Jan 2021 09:38:46 +0100
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     20210104110723.43564-1-yiche@redhat.com
-Cc:     Chen Yi <yiche@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Florian Westphal <fw@strlen.de>,
+        id S1728042AbhAKJgc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Jan 2021 04:36:32 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:40743 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728218AbhAKJgc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Jan 2021 04:36:32 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=abaci-bugfix@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0ULL1Qc0_1610357738;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:abaci-bugfix@linux.alibaba.com fp:SMTPD_---0ULL1Qc0_1610357738)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 11 Jan 2021 17:35:43 +0800
+From:   YANG LI <abaci-bugfix@linux.alibaba.com>
+To:     catalin.marinas@arm.com
+Cc:     will@kernel.org, shuah@kernel.org, amit.kachhap@arm.com,
+        vincenzo.frascino@arm.com, gabor.kertesz@arm.com,
+        linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Leo <liuhangbin@gmail.com>
-Subject: Re: [PATCH] selftests: netfilter: Pass family parameter "-f" to
- conntrack tool
-Message-ID: <20210110083846.GA28611@salvia>
-References: <20210105153120.42710-1-yiche@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210105153120.42710-1-yiche@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+        YANG LI <abaci-bugfix@linux.alibaba.com>
+Subject: [PATCH] arm64: mte: style: Simplify bool comparison
+Date:   Mon, 11 Jan 2021 17:35:37 +0800
+Message-Id: <1610357737-68678-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 05, 2021 at 11:31:20PM +0800, Chen Yi wrote:
-> Fix nft_conntrack_helper.sh false fail report:
-> 
-> 1) Conntrack tool need "-f ipv6" parameter to show out ipv6 traffic items.
-> 
-> 2) Sleep 1 second after background nc send packet, to make sure check
-> is after this statement executed.
-> 
-> False report:
-> FAIL: ns1-lkjUemYw did not show attached helper ip set via ruleset
-> PASS: ns1-lkjUemYw connection on port 2121 has ftp helper attached
-> ...
-> 
-> After fix:
-> PASS: ns1-2hUniwU2 connection on port 2121 has ftp helper attached
-> PASS: ns2-2hUniwU2 connection on port 2121 has ftp helper attached
-> ...
+Fix the following coccicheck warning:
+./tools/testing/selftests/arm64/mte/check_buffer_fill.c:84:12-35:
+WARNING: Comparison to bool
 
-Applied.
+Signed-off-by: YANG LI <abaci-bugfix@linux.alibaba.com>
+Reported-by: Abaci Robot<abaci@linux.alibaba.com>
+---
+ tools/testing/selftests/arm64/mte/check_buffer_fill.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/arm64/mte/check_buffer_fill.c b/tools/testing/selftests/arm64/mte/check_buffer_fill.c
+index c9fa141..75fc482 100644
+--- a/tools/testing/selftests/arm64/mte/check_buffer_fill.c
++++ b/tools/testing/selftests/arm64/mte/check_buffer_fill.c
+@@ -81,7 +81,7 @@ static int check_buffer_underflow_by_byte(int mem_type, int mode,
+ 		last_index = 0;
+ 		/* Set some value in tagged memory and make the buffer underflow */
+ 		for (j = sizes[i] - 1; (j >= -underflow_range) &&
+-				       (cur_mte_cxt.fault_valid == false); j--) {
++				       (!cur_mte_cxt.fault_valid); j--) {
+ 			ptr[j] = '1';
+ 			last_index = j;
+ 		}
+-- 
+1.8.3.1
+
