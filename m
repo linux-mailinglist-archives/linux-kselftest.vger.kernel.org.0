@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D9F2F2B02
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 10:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EB82F2B3E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 10:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389919AbhALJQx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jan 2021 04:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
+        id S2390337AbhALJ1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jan 2021 04:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389835AbhALJQw (ORCPT
+        with ESMTP id S2387783AbhALJ1K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jan 2021 04:16:52 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A050C061575;
-        Tue, 12 Jan 2021 01:16:12 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id r7so1655513wrc.5;
-        Tue, 12 Jan 2021 01:16:12 -0800 (PST)
+        Tue, 12 Jan 2021 04:27:10 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660FFC061575;
+        Tue, 12 Jan 2021 01:26:30 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id a12so1675520wrv.8;
+        Tue, 12 Jan 2021 01:26:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
         bh=VVyAtsTvxNsSXVa73xPOsWxQKIdaXYh6NzoQWrP8iMU=;
-        b=a5sC/Xt7w+Nen9ksD27vQHXFW2cCb6lihxiRy/Wk1tC/8hmD+8lbFalxfapKGXvIIm
-         s96ZufOi7ikg6vBJpco6seDgpovZk/AVr5RbbcWa8rUXplgFgajJ7V+za6WlffcwFE6h
-         bIpV/7UsrTul0r5v4ELEFT3WYGf6Jl0ARBHrDdqm2pyV4ROMSHFOrN7l8pg/ZJYmqIFl
-         7dfovF7qSZIPfpRLhWo2HwngPNv5yaVE3vPJ7XgmWwBQTce68hSoAAhYKU8DMAOd/SXh
-         pm9ACui8oSOij3DogAZRQv94sbEz+wmJmfh8JRoe+6JQUR2kd39CsxUQMwZ2UhFWWW3T
-         jZCg==
+        b=Z6Z875hkLRvzgWL/ZzG8QPQhpXx88/gJsvyRDwjO9AWQu8g/E+W0iuQykIMAUPtD1p
+         STKlbyB+ZxdWHbppxBA9ftAwTpxlFUHT8vHZsP0H2KwBxnJrZUX691fHPp2zJUXqU/bg
+         ceuMfaPnD+l/FcYEQ0yv0pKr/efYYsHzbRIg7nVxUi+Hgqt7YY+7jflmlB3P4Rlk75yj
+         xQ2QA4x6XPPY+CJKPc51gRVZLqK2uph8kDUccvm/lC95slKLXdbMgdFDCH1MzaoHCgZm
+         dtQqL4exinLIL0YA4Nj+hA0WCS63SR6LqlKwp6F5qUODeWaUhXkXmYqfskQJPW7LEfd1
+         mP1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
         bh=VVyAtsTvxNsSXVa73xPOsWxQKIdaXYh6NzoQWrP8iMU=;
-        b=tJfGbE4jhcLX+Q+IToy4ooZKImLm255jNUK3iMnRrVr/r676hscwA8yl2/qAGWs5sG
-         5V7XetUjw2hdfJmY5wKTnC35Ye80u+sgvJ/gTYnv9+8przoWPIFW3hgeqNGjBSXk0v/7
-         M4ueJSAVwxIzfXWkyDz9wUhgIHvZO+HFJFYxuKPaVMrVilPAx/dH5C3RR8/mF2qb15YJ
-         5FsP+sLTG9d/+e2G+imAP7kMArSvbHDcR7W3BCx2l6v3LGjUkhL1nTUOge6xcIDZmrly
-         N3Ff7Z6teMi3FOwqpFpHjDxnFRwJOmhwOCaLTvQuU+6bz+VoDIxxpBngC7OSpO/oc9Ou
-         OsRQ==
-X-Gm-Message-State: AOAM533KHat8Tdl8AK8/MfqOlPqKaagM5KRNIBXei2w9T4aV/oRGSnUi
-        fr6zk00bU49bXRjfVzB3I9iq/S1obnGlG5u6
-X-Google-Smtp-Source: ABdhPJyrbGVcaz+PXfql2/+s1kp6/CEJrYmqnU5p9MiAxAepQEQjmXm2Ii68yMygXKf18KElmCgaMQ==
-X-Received: by 2002:a5d:4682:: with SMTP id u2mr3163175wrq.265.1610442970895;
-        Tue, 12 Jan 2021 01:16:10 -0800 (PST)
+        b=bE1+XdzDrCXyUnp40r1Gl6fGBfaTZLlLQMwswFpa2EHP5y/n0Sf/5D3Hbx1eNAGwbG
+         Iq8wnQC2STN2tp5Y3XbP/HW8kS4pi85UAR/KrUicPW2a+dWAbnhLvXaSimzp7Abxt5Xk
+         ZWdXAZXIiF+4N+3iudqd3C1pl7+4Tk3kPFQPaJ8+8SKRgZSifdSXlmqvqaET/OyX6QuW
+         ZlWyHR6B6YTGf0b3An/BKDGyahXd0NaXlLsMlUYnqmn+Rj4eAWF1FM+Rf3DsZ7GnFRQC
+         Qpt9j/vjYacObuNCM1tdkND+3QrMbCj76fFKRB23h//L7hjvUmkJXvY2DM5zhNJwKhfX
+         BEoQ==
+X-Gm-Message-State: AOAM530Wx0bvPMKtEC6pA56Sqh16VoMyHE98B+3J34sO/MxVnnH7WJwC
+        O/ZUGIkIsOgGO5Ibu+AtPQTacZbYUEZlDsdy
+X-Google-Smtp-Source: ABdhPJywnImPJAdrTdhAhV+bV31DsHZJC4JdcFEKOo/L7jGJISmPPGX5t9ro50M1zxoNFS4Axiy/tA==
+X-Received: by 2002:a5d:4ad0:: with SMTP id y16mr3205828wrs.424.1610443588953;
+        Tue, 12 Jan 2021 01:26:28 -0800 (PST)
 Received: from ubuntu.localdomain (bzq-233-168-31-62.red.bezeqint.net. [31.168.233.62])
-        by smtp.googlemail.com with ESMTPSA id r82sm3073978wma.18.2021.01.12.01.16.09
+        by smtp.googlemail.com with ESMTPSA id c6sm3869923wrh.7.2021.01.12.01.26.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 01:16:10 -0800 (PST)
+        Tue, 12 Jan 2021 01:26:28 -0800 (PST)
 From:   Gilad Reti <gilad.reti@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     gilad.reti@gmail.com, Shuah Khan <shuah@kernel.org>,
@@ -59,10 +59,12 @@ Cc:     gilad.reti@gmail.com, Shuah Khan <shuah@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/bpf: add verifier test for PTR_TO_MEM spill
-Date:   Tue, 12 Jan 2021 11:15:43 +0200
-Message-Id: <20210112091545.10535-1-gilad.reti@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: add verifier test for PTR_TO_MEM spill
+Date:   Tue, 12 Jan 2021 11:26:14 +0200
+Message-Id: <20210112092615.10606-1-gilad.reti@gmail.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210112091403.10458-1-gilad.reti@gmail.com>
+References: <20210112091403.10458-1-gilad.reti@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
