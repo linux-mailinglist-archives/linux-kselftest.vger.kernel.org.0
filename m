@@ -2,171 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76EB82F2B3E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 10:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 384732F3125
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 14:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390337AbhALJ1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jan 2021 04:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387783AbhALJ1K (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jan 2021 04:27:10 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660FFC061575;
-        Tue, 12 Jan 2021 01:26:30 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id a12so1675520wrv.8;
-        Tue, 12 Jan 2021 01:26:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VVyAtsTvxNsSXVa73xPOsWxQKIdaXYh6NzoQWrP8iMU=;
-        b=Z6Z875hkLRvzgWL/ZzG8QPQhpXx88/gJsvyRDwjO9AWQu8g/E+W0iuQykIMAUPtD1p
-         STKlbyB+ZxdWHbppxBA9ftAwTpxlFUHT8vHZsP0H2KwBxnJrZUX691fHPp2zJUXqU/bg
-         ceuMfaPnD+l/FcYEQ0yv0pKr/efYYsHzbRIg7nVxUi+Hgqt7YY+7jflmlB3P4Rlk75yj
-         xQ2QA4x6XPPY+CJKPc51gRVZLqK2uph8kDUccvm/lC95slKLXdbMgdFDCH1MzaoHCgZm
-         dtQqL4exinLIL0YA4Nj+hA0WCS63SR6LqlKwp6F5qUODeWaUhXkXmYqfskQJPW7LEfd1
-         mP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VVyAtsTvxNsSXVa73xPOsWxQKIdaXYh6NzoQWrP8iMU=;
-        b=bE1+XdzDrCXyUnp40r1Gl6fGBfaTZLlLQMwswFpa2EHP5y/n0Sf/5D3Hbx1eNAGwbG
-         Iq8wnQC2STN2tp5Y3XbP/HW8kS4pi85UAR/KrUicPW2a+dWAbnhLvXaSimzp7Abxt5Xk
-         ZWdXAZXIiF+4N+3iudqd3C1pl7+4Tk3kPFQPaJ8+8SKRgZSifdSXlmqvqaET/OyX6QuW
-         ZlWyHR6B6YTGf0b3An/BKDGyahXd0NaXlLsMlUYnqmn+Rj4eAWF1FM+Rf3DsZ7GnFRQC
-         Qpt9j/vjYacObuNCM1tdkND+3QrMbCj76fFKRB23h//L7hjvUmkJXvY2DM5zhNJwKhfX
-         BEoQ==
-X-Gm-Message-State: AOAM530Wx0bvPMKtEC6pA56Sqh16VoMyHE98B+3J34sO/MxVnnH7WJwC
-        O/ZUGIkIsOgGO5Ibu+AtPQTacZbYUEZlDsdy
-X-Google-Smtp-Source: ABdhPJywnImPJAdrTdhAhV+bV31DsHZJC4JdcFEKOo/L7jGJISmPPGX5t9ro50M1zxoNFS4Axiy/tA==
-X-Received: by 2002:a5d:4ad0:: with SMTP id y16mr3205828wrs.424.1610443588953;
-        Tue, 12 Jan 2021 01:26:28 -0800 (PST)
-Received: from ubuntu.localdomain (bzq-233-168-31-62.red.bezeqint.net. [31.168.233.62])
-        by smtp.googlemail.com with ESMTPSA id c6sm3869923wrh.7.2021.01.12.01.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 01:26:28 -0800 (PST)
-From:   Gilad Reti <gilad.reti@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     gilad.reti@gmail.com, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: add verifier test for PTR_TO_MEM spill
-Date:   Tue, 12 Jan 2021 11:26:14 +0200
-Message-Id: <20210112092615.10606-1-gilad.reti@gmail.com>
+        id S1730765AbhALNQx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jan 2021 08:16:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390252AbhALM5a (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:57:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 115952311D;
+        Tue, 12 Jan 2021 12:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610456184;
+        bh=95LXqHmt/884FgYQTDIjCFnE0wpPj8HcF/6tCVxGgkI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ElMI112PpGZh0r1Z2RyLcxRzxNBx5cnNG0qPae7QL2COk8cuRM7f8Qr/Jg021d4Sb
+         V1eMTAuXY7EA+ggXO8RGge8LDuJL7KKNqjxoNUlP0Mv+qjZ95JUHR4Oj7zTAQc3fsb
+         lkTVBRz7LYZWpoj5agjLNd7WIYJhoQxjA736E6FffXIUZ+yJOIBav36mIpRDu84HN7
+         dXpqwFeX8e/xtA2Vs+rlbyYaiUyNLsfMXOo9QVFibLBOB5/wpaRyy9XL4CncuvBJVb
+         TQ4rQ2nYq/FdPuoXhjYPm6wPxmn8wobOVZe4P9iSjrfdU6ajvC1LPBnGDNUTYPtgMO
+         Tp2vnMGi2JrFw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 37/51] selftests: fix the return value for UDP GRO test
+Date:   Tue, 12 Jan 2021 07:55:19 -0500
+Message-Id: <20210112125534.70280-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210112091403.10458-1-gilad.reti@gmail.com>
-References: <20210112091403.10458-1-gilad.reti@gmail.com>
+In-Reply-To: <20210112125534.70280-1-sashal@kernel.org>
+References: <20210112125534.70280-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add test to check that the verifier is able to recognize spilling of
-PTR_TO_MEM registers.
+From: Po-Hsu Lin <po-hsu.lin@canonical.com>
 
-The patch was partially contibuted by CyberArk Software, Inc.
+[ Upstream commit 3503ee6c0bec5f173d606359e6384a5ef85492fb ]
 
-Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
+The udpgro.sh will always return 0 (unless the bpf selftest was not
+build first) even if there are some failed sub test-cases.
+
+Therefore the kselftest framework will report this case is OK.
+
+Check and return the exit status of each test to make it easier to
+spot real failures.
+
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_verifier.c   | 12 +++++++-
- .../selftests/bpf/verifier/spill_fill.c       | 30 +++++++++++++++++++
- 2 files changed, 41 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/udpgro.sh | 34 +++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 777a81404fdb..f8569f04064b 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -50,7 +50,7 @@
- #define MAX_INSNS	BPF_MAXINSNS
- #define MAX_TEST_INSNS	1000000
- #define MAX_FIXUPS	8
--#define MAX_NR_MAPS	20
-+#define MAX_NR_MAPS	21
- #define MAX_TEST_RUNS	8
- #define POINTER_VALUE	0xcafe4all
- #define TEST_DATA_LEN	64
-@@ -87,6 +87,7 @@ struct bpf_test {
- 	int fixup_sk_storage_map[MAX_FIXUPS];
- 	int fixup_map_event_output[MAX_FIXUPS];
- 	int fixup_map_reuseport_array[MAX_FIXUPS];
-+	int fixup_map_ringbuf[MAX_FIXUPS];
- 	const char *errstr;
- 	const char *errstr_unpriv;
- 	uint32_t insn_processed;
-@@ -640,6 +641,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 	int *fixup_sk_storage_map = test->fixup_sk_storage_map;
- 	int *fixup_map_event_output = test->fixup_map_event_output;
- 	int *fixup_map_reuseport_array = test->fixup_map_reuseport_array;
-+	int *fixup_map_ringbuf = test->fixup_map_ringbuf;
+diff --git a/tools/testing/selftests/net/udpgro.sh b/tools/testing/selftests/net/udpgro.sh
+index ac2a30be9b325..f8a19f548ae9d 100755
+--- a/tools/testing/selftests/net/udpgro.sh
++++ b/tools/testing/selftests/net/udpgro.sh
+@@ -5,6 +5,14 @@
  
- 	if (test->fill_helper) {
- 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
-@@ -817,6 +819,14 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 			fixup_map_reuseport_array++;
- 		} while (*fixup_map_reuseport_array);
- 	}
-+	if (*fixup_map_ringbuf) {
-+		map_fds[20] = create_map(BPF_MAP_TYPE_RINGBUF, 0,
-+					   0, 4096);
-+		do {
-+			prog[*fixup_map_ringbuf].imm = map_fds[20];
-+			fixup_map_ringbuf++;
-+		} while (*fixup_map_ringbuf);
-+	}
+ readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+ 
++# set global exit status, but never reset nonzero one.
++check_err()
++{
++	if [ $ret -eq 0 ]; then
++		ret=$1
++	fi
++}
++
+ cleanup() {
+ 	local -r jobs="$(jobs -p)"
+ 	local -r ns="$(ip netns list|grep $PEER_NS)"
+@@ -44,7 +52,9 @@ run_one() {
+ 	# Hack: let bg programs complete the startup
+ 	sleep 0.1
+ 	./udpgso_bench_tx ${tx_args}
++	ret=$?
+ 	wait $(jobs -p)
++	return $ret
  }
  
- struct libcap {
-diff --git a/tools/testing/selftests/bpf/verifier/spill_fill.c b/tools/testing/selftests/bpf/verifier/spill_fill.c
-index 45d43bf82f26..1833b6c730dd 100644
---- a/tools/testing/selftests/bpf/verifier/spill_fill.c
-+++ b/tools/testing/selftests/bpf/verifier/spill_fill.c
-@@ -28,6 +28,36 @@
- 	.result = ACCEPT,
- 	.result_unpriv = ACCEPT,
- },
-+{
-+	"check valid spill/fill, ptr to mem",
-+	.insns = {
-+	/* reserve 8 byte ringbuf memory */
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_MOV64_IMM(BPF_REG_2, 8),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_reserve),
-+	/* store a pointer to the reserved memory in R6 */
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
-+	/* check whether the reservation was successful */
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
-+	/* spill R6(mem) into the stack */
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, -8),
-+	/* fill it back in R7 */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, -8),
-+	/* should be able to access *(R7) = 0 */
-+	BPF_ST_MEM(BPF_DW, BPF_REG_7, 0, 0),
-+	/* submit the reserved rungbuf memory */
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_7),
-+	BPF_MOV64_IMM(BPF_REG_2, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_submit),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_ringbuf = { 1 },
-+	.result = ACCEPT,
-+	.result_unpriv = ACCEPT,
-+},
- {
- 	"check corrupted spill/fill",
- 	.insns = {
+ run_test() {
+@@ -87,8 +97,10 @@ run_one_nat() {
+ 
+ 	sleep 0.1
+ 	./udpgso_bench_tx ${tx_args}
++	ret=$?
+ 	kill -INT $pid
+ 	wait $(jobs -p)
++	return $ret
+ }
+ 
+ run_one_2sock() {
+@@ -110,7 +122,9 @@ run_one_2sock() {
+ 	sleep 0.1
+ 	# first UDP GSO socket should be closed at this point
+ 	./udpgso_bench_tx ${tx_args}
++	ret=$?
+ 	wait $(jobs -p)
++	return $ret
+ }
+ 
+ run_nat_test() {
+@@ -131,36 +145,54 @@ run_all() {
+ 	local -r core_args="-l 4"
+ 	local -r ipv4_args="${core_args} -4 -D 192.168.1.1"
+ 	local -r ipv6_args="${core_args} -6 -D 2001:db8::1"
++	ret=0
+ 
+ 	echo "ipv4"
+ 	run_test "no GRO" "${ipv4_args} -M 10 -s 1400" "-4 -n 10 -l 1400"
++	check_err $?
+ 
+ 	# explicitly check we are not receiving UDP_SEGMENT cmsg (-S -1)
+ 	# when GRO does not take place
+ 	run_test "no GRO chk cmsg" "${ipv4_args} -M 10 -s 1400" "-4 -n 10 -l 1400 -S -1"
++	check_err $?
+ 
+ 	# the GSO packets are aggregated because:
+ 	# * veth schedule napi after each xmit
+ 	# * segmentation happens in BH context, veth napi poll is delayed after
+ 	#   the transmission of the last segment
+ 	run_test "GRO" "${ipv4_args} -M 1 -s 14720 -S 0 " "-4 -n 1 -l 14720"
++	check_err $?
+ 	run_test "GRO chk cmsg" "${ipv4_args} -M 1 -s 14720 -S 0 " "-4 -n 1 -l 14720 -S 1472"
++	check_err $?
+ 	run_test "GRO with custom segment size" "${ipv4_args} -M 1 -s 14720 -S 500 " "-4 -n 1 -l 14720"
++	check_err $?
+ 	run_test "GRO with custom segment size cmsg" "${ipv4_args} -M 1 -s 14720 -S 500 " "-4 -n 1 -l 14720 -S 500"
++	check_err $?
+ 
+ 	run_nat_test "bad GRO lookup" "${ipv4_args} -M 1 -s 14720 -S 0" "-n 10 -l 1472"
++	check_err $?
+ 	run_2sock_test "multiple GRO socks" "${ipv4_args} -M 1 -s 14720 -S 0 " "-4 -n 1 -l 14720 -S 1472"
++	check_err $?
+ 
+ 	echo "ipv6"
+ 	run_test "no GRO" "${ipv6_args} -M 10 -s 1400" "-n 10 -l 1400"
++	check_err $?
+ 	run_test "no GRO chk cmsg" "${ipv6_args} -M 10 -s 1400" "-n 10 -l 1400 -S -1"
++	check_err $?
+ 	run_test "GRO" "${ipv6_args} -M 1 -s 14520 -S 0" "-n 1 -l 14520"
++	check_err $?
+ 	run_test "GRO chk cmsg" "${ipv6_args} -M 1 -s 14520 -S 0" "-n 1 -l 14520 -S 1452"
++	check_err $?
+ 	run_test "GRO with custom segment size" "${ipv6_args} -M 1 -s 14520 -S 500" "-n 1 -l 14520"
++	check_err $?
+ 	run_test "GRO with custom segment size cmsg" "${ipv6_args} -M 1 -s 14520 -S 500" "-n 1 -l 14520 -S 500"
++	check_err $?
+ 
+ 	run_nat_test "bad GRO lookup" "${ipv6_args} -M 1 -s 14520 -S 0" "-n 10 -l 1452"
++	check_err $?
+ 	run_2sock_test "multiple GRO socks" "${ipv6_args} -M 1 -s 14520 -S 0 " "-n 1 -l 14520 -S 1452"
++	check_err $?
++	return $ret
+ }
+ 
+ if [ ! -f ../bpf/xdp_dummy.o ]; then
+@@ -180,3 +212,5 @@ elif [[ $1 == "__subprocess_2sock" ]]; then
+ 	shift
+ 	run_one_2sock $@
+ fi
++
++exit $?
 -- 
 2.27.0
 
