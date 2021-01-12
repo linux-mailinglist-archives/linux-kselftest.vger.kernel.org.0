@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 384732F3125
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 14:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C873E2F30B9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 14:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730765AbhALNQx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jan 2021 08:16:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53818 "EHLO mail.kernel.org"
+        id S1726451AbhALNK0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jan 2021 08:10:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390252AbhALM5a (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jan 2021 07:57:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 115952311D;
-        Tue, 12 Jan 2021 12:56:22 +0000 (UTC)
+        id S2404610AbhALM6H (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:58:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 74C8523741;
+        Tue, 12 Jan 2021 12:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610456184;
+        s=k20201202; t=1610456234;
         bh=95LXqHmt/884FgYQTDIjCFnE0wpPj8HcF/6tCVxGgkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ElMI112PpGZh0r1Z2RyLcxRzxNBx5cnNG0qPae7QL2COk8cuRM7f8Qr/Jg021d4Sb
-         V1eMTAuXY7EA+ggXO8RGge8LDuJL7KKNqjxoNUlP0Mv+qjZ95JUHR4Oj7zTAQc3fsb
-         lkTVBRz7LYZWpoj5agjLNd7WIYJhoQxjA736E6FffXIUZ+yJOIBav36mIpRDu84HN7
-         dXpqwFeX8e/xtA2Vs+rlbyYaiUyNLsfMXOo9QVFibLBOB5/wpaRyy9XL4CncuvBJVb
-         TQ4rQ2nYq/FdPuoXhjYPm6wPxmn8wobOVZe4P9iSjrfdU6ajvC1LPBnGDNUTYPtgMO
-         Tp2vnMGi2JrFw==
+        b=tCYdSLEdEcFKsOY9xyw+U03DpaoSsvkDWmx7lKYOoyuDM6xuFFJdGda5Dhz8g7aTY
+         +oRH9LQQV907ZfPY16EE7nQGg3n8J1+SIVTwoNCXXfhYuQUrq56MeJ5O2nLh8DdJBw
+         IEjjNM6KiAThnbGuLChnu9YWTY0s4zzIXlvZ4mI8/BC4GBZyWcKFtsk52SCZ1W/suK
+         kjzBjKsmGqTpqcIsL8CXQRsczEpntkTlrLpMSz5b+cDxlgL61j0hIKwLvxLs/9SBHW
+         /W2nw8c7ab0SZQ55aaEcnnbQ2oV1h19z0YwkJuepcxzAF9IZ9XaO5q9e+zq2h8ZSfu
+         xj+kAwdfZ0J2w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Po-Hsu Lin <po-hsu.lin@canonical.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 37/51] selftests: fix the return value for UDP GRO test
-Date:   Tue, 12 Jan 2021 07:55:19 -0500
-Message-Id: <20210112125534.70280-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 21/28] selftests: fix the return value for UDP GRO test
+Date:   Tue, 12 Jan 2021 07:56:37 -0500
+Message-Id: <20210112125645.70739-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210112125534.70280-1-sashal@kernel.org>
-References: <20210112125534.70280-1-sashal@kernel.org>
+In-Reply-To: <20210112125645.70739-1-sashal@kernel.org>
+References: <20210112125645.70739-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
