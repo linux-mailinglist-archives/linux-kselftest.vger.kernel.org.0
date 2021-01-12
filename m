@@ -2,86 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B989F2F21BD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Jan 2021 22:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311D72F2661
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 03:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730799AbhAKVZX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Jan 2021 16:25:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
+        id S1726645AbhALCqa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Jan 2021 21:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727016AbhAKVZW (ORCPT
+        with ESMTP id S1726018AbhALCqa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Jan 2021 16:25:22 -0500
+        Mon, 11 Jan 2021 21:46:30 -0500
 Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479CBC06179F
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Jan 2021 13:24:42 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id j1so202061pld.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Jan 2021 13:24:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4099C061575;
+        Mon, 11 Jan 2021 18:45:49 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id y8so586977plp.8;
+        Mon, 11 Jan 2021 18:45:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hRm+BijPKOU/rUYvlIyBpR5Ozh0y7fiadDPD2OBagxc=;
-        b=AKpOd3qvdthJIPjjkuNyUdVd3bOcbZNJmvkB6r/Kz5XPDOJEsNxaElJe5XqEYMhJlG
-         PeZ57yRAgxnSEgai3ljCQHgTgKO4RAn2Yl3sDVUNHksKXT7aRB3OHlEmI5OlIWlYiRrC
-         9DVKmDPDQzZenC17YfJ0LsFR2/+BcnS8TEaN1lhUF09saumuieO7eFUVJKIh9tLdPTOP
-         e4V4q6UNmRSC7bZelnTzMPgODv/2HIvVCPWI/vNU3E81SW6jFXdqCb7NcGmH+rSMs0V4
-         aDDIMA4uu3NX5GoEmb7UAF5nDTtiZZzXVXdW4UJuJVFBP8WUUxrDS2m6uja+h8iqGvRd
-         jzhg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6XqupT+NjHhwRWSp24cJ/RUACqfVNalLw0wWMcvtN/s=;
+        b=MKz8QTsuq5hx1jBTfdZfZFryCt6qjG/egPDg+PNtbkEb/+6cV5ou5q04koQqkHqJqJ
+         HygQxno9CmSETwbMdEG6ExkB6+7bD8mtSiGgrNbP3cY8kA5pzJZUO/y0ojgqJmhiPjoN
+         M7UWNoMNmcnmdjBbZSxWEYe8wvLg+vUCg765nHY1R/LQiN0T4Je5C+HnnrS5Ve2o9ELu
+         zu7zYbJIPBCtyo4D1Aet2QEMPFGnNn519UKtik1dQvvZ6Hdfb1GUBWcgM5tQ4Hclb4JS
+         pus+wFExBLfQIi3cE+9u9ATE2JR9LiXXwdUbUxbL0GR0sHYETUPIF4+M/kzFlHbslsad
+         OZpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hRm+BijPKOU/rUYvlIyBpR5Ozh0y7fiadDPD2OBagxc=;
-        b=jOSLpQr2wrQITcqdE9O1zRsvOw3Clozf7UTNr5/LNBGL1e4VcqYAB5O/eIS0gN5ZsF
-         aP5mG4QwI3gwa3LyiKmEKIP82551BDdVv7H2VVF1rNYfwDSgvKWc2trRE7F447uPkk5J
-         Of9t5lMUIhzxNlW9nsoBDkV/2eWcJ566dCl7VsEhqU256WJ/8wta+yPdh4k3anf37PFF
-         AubBFqabZnN58o5Kc74lRzGIRIzHvuclPiNBSuIrVMZOOBAuZkD4DshAz8nnBF56s6fJ
-         u7bDYrdC45a7vX7UgTBAff1WgcpSf3s4ElpiLdlhvRMCg3y6Kmmehxr4K0pRUKKj6LsY
-         6DUA==
-X-Gm-Message-State: AOAM531um0sk40nI34L9pyyV9I8HBnegaTMQusTQkQajzMtacDv2OWYC
-        orrEdr2U/yOJd03vBqcag5z1kjaICdl8LlWT+bvMAQ==
-X-Google-Smtp-Source: ABdhPJxeVKpnDtUGqu2KNhL6FH5SFQMKtas8woPQeILYCP8KsYPmGSjZqchdZ1hUz7hzeIq6Ngwr3m+R4716BPFi3jE=
-X-Received: by 2002:a17:90a:de03:: with SMTP id m3mr901144pjv.20.1610400281705;
- Mon, 11 Jan 2021 13:24:41 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6XqupT+NjHhwRWSp24cJ/RUACqfVNalLw0wWMcvtN/s=;
+        b=U70AJWa7qftuY6ymXcJ/LRP8/XLN598HzU8Im3ynX06/+VSejklHG4f5jJsuKbmf+X
+         sWP9VPz/6xtjf8P+wb5JXjlOcE21p4k1Sxe0miCsg9herxJjU7KTO3b4CRAW5hwh9ZRK
+         MBORA0HcDymAzC4xubBMdX+nS543rRziq5UoAHs0I5vxmCZzF891YV8XkIFUOm8uORkJ
+         37+26B5G8RYgkdG7fAKQ2DF2zN4OPEWuEnp6jUf3ZiSQAyNkZ8Buuk0sN04O7p1rFk9H
+         m3ngH288/eMVVvKMcM6SwvaNkbdYScf7i9lZ2nv0JxjGAHse8DrytXx3lhvPmYk4DH3s
+         YP8Q==
+X-Gm-Message-State: AOAM532oB75Atqn/yrcoXjZAi6aq2+q5XTcjBHg//fPNYEPn14HSiUre
+        pYOObSbVm2ylqJ1uy1K4RzI=
+X-Google-Smtp-Source: ABdhPJw+FjmZm11u+d4zLb2iW1uRdyLev2FhsB+YK2Pu9miPRIeCui9VhNhfIeuGKVLZhnZfiv/pQg==
+X-Received: by 2002:a17:90b:1a86:: with SMTP id ng6mr1959703pjb.113.1610419549028;
+        Mon, 11 Jan 2021 18:45:49 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:400::5:3e79])
+        by smtp.gmail.com with ESMTPSA id x1sm977548pfn.48.2021.01.11.18.45.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 18:45:47 -0800 (PST)
+Date:   Mon, 11 Jan 2021 18:45:45 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: Re: [RFC PATCH bpf-next 0/2] bpf, libbpf: share BTF data show
+ functionality
+Message-ID: <20210112024545.spoxpownh5dybffa@ast-mbp>
+References: <1610386373-24162-1-git-send-email-alan.maguire@oracle.com>
 MIME-Version: 1.0
-References: <20210107234803.1096592-1-dlatypov@google.com> <20210107234803.1096592-3-dlatypov@google.com>
-In-Reply-To: <20210107234803.1096592-3-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 11 Jan 2021 13:24:30 -0800
-Message-ID: <CAFd5g463LHZmtwu4MwKBOK8b5_0rpBpGUFZEC00qVwxEJXgpRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] kunit: tool: move kunitconfig parsing into
- __init__, make it optional
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1610386373-24162-1-git-send-email-alan.maguire@oracle.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 7, 2021 at 3:48 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> LinuxSourceTree will unceremoniously crash if the user doesn't call
-> read_kunitconfig() first in a number of functions.
->
-> And currently every place we create an instance, the caller also calls
-> create_kunitconfig() and read_kunitconfig().
-> Move these instead into __init__() so they can't be forgotten and to
-> reduce copy-paste.
->
-> The https://github.com/google/pytype type-checker complained that
-> _config wasn't initialized. With this, kunit_tool now type checks
-> under both pytype and mypy.
->
-> Add an optional boolean that can be used to disable this for use cases
-> in the future where we might not need/want to load the config.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On Mon, Jan 11, 2021 at 05:32:51PM +0000, Alan Maguire wrote:
+> The BPF Type Format (BTF) can be used in conjunction with the helper
+> bpf_snprintf_btf() to display kernel data with type information.
+> 
+> This series generalizes that support and shares it with libbpf so
+> that libbpf can display typed data.  BTF display functionality is
+> factored out of kernel/bpf/btf.c into kernel/bpf/btf_show_common.c,
+> and that file is duplicated in tools/lib/bpf.  Similarly, common
+> definitions and inline functions needed for this support are
+> extracted into include/linux/btf_common.h and this header is again
+> duplicated in tools/lib/bpf.
 
-Very nice! This makes the code much more readable!
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+I think duplication will inevitable cause code to diverge.
+Could you keep a single copy?
+Take a look at kernel/bpf/disasm.[ch]
+It compiled once for the kernel and once for bpftool.
+So should be possible to do something similar for this case as well?
