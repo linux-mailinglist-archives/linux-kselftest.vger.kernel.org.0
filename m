@@ -2,438 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F62F2F292A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 08:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D9F2F2B02
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jan 2021 10:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392077AbhALHsw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jan 2021 02:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
+        id S2389919AbhALJQx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jan 2021 04:16:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728301AbhALHsw (ORCPT
+        with ESMTP id S2389835AbhALJQw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jan 2021 02:48:52 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA0EC061575;
-        Mon, 11 Jan 2021 23:48:12 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id b64so1322832ybg.7;
-        Mon, 11 Jan 2021 23:48:12 -0800 (PST)
+        Tue, 12 Jan 2021 04:16:52 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A050C061575;
+        Tue, 12 Jan 2021 01:16:12 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id r7so1655513wrc.5;
+        Tue, 12 Jan 2021 01:16:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YcLfCnFkCFGWqNG7C1xlG4SRRFGPLO1ziBvhVEIBzU4=;
-        b=hMerZohPneocubjf+TqYY1Ezu1NtCvumlGeHu/ONDPH7Y57juXIpY8cpaOQWGwx4Wk
-         QvNdSD/gGgBYG5qDURO3w9rJSFgS/gSVArSJMg4xRbXjsTt9jOOxV2ONapyjT2NY/fQn
-         PX512UwaYU28JUgD9sAj59rrsB959QgNMUFXIMQYah4oJzsFOuXEVev0N8OJ5Mw5uHGf
-         L/eg5V56AoFyq9I8yiC1LXwfgNdg0K2/kb04t7T1daSfQpI3Ro4zwNN0Hry1OUJXY2k3
-         JYME2wavpD/+NLFxd1j/USfPrDeCP1j6F5VcDqMPZTJJmD0XdvEbssLnf1ceLhqhD5/o
-         QHng==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VVyAtsTvxNsSXVa73xPOsWxQKIdaXYh6NzoQWrP8iMU=;
+        b=a5sC/Xt7w+Nen9ksD27vQHXFW2cCb6lihxiRy/Wk1tC/8hmD+8lbFalxfapKGXvIIm
+         s96ZufOi7ikg6vBJpco6seDgpovZk/AVr5RbbcWa8rUXplgFgajJ7V+za6WlffcwFE6h
+         bIpV/7UsrTul0r5v4ELEFT3WYGf6Jl0ARBHrDdqm2pyV4ROMSHFOrN7l8pg/ZJYmqIFl
+         7dfovF7qSZIPfpRLhWo2HwngPNv5yaVE3vPJ7XgmWwBQTce68hSoAAhYKU8DMAOd/SXh
+         pm9ACui8oSOij3DogAZRQv94sbEz+wmJmfh8JRoe+6JQUR2kd39CsxUQMwZ2UhFWWW3T
+         jZCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YcLfCnFkCFGWqNG7C1xlG4SRRFGPLO1ziBvhVEIBzU4=;
-        b=JT2MNZ/h1ljNoIrrYTcA01szkDpt4rNXOH2NThTf94NE689oNxJmtzi0OAyKjKBbVV
-         X0KBWCvnUSlUrdt3s+7xUW/qHhnS4PttjwGZ92A+QjX241fNrnmsqIan9cf10Yt+1VYn
-         d1WrSsQEQDNQJpGBQNeHhAPxK2ePbrQYrRZ/R8M1/B8VXdgM0LCTVtkpx5NjMZNUqENN
-         Ss12OxHFsENReU+hxFrj5rHnEP964T61edIsomVb4NmLCItGOcNROZwPi/0DqlQ1ucz0
-         nKa7QuC6A+rcvJw7zhEOoqtWtHqucpgrWq36b8fKdj9bpvDYqsbdSkNgVVRO0MoeuR+8
-         ybMg==
-X-Gm-Message-State: AOAM530+WTXaGnKmHDsSaDBgpBnb+E/KHW0Tmb6N2395vWdI6ar3ijLV
-        ilcVgI9bJ95lVZo1uAVc/ZlrnaIPxeSs2Lqytg0=
-X-Google-Smtp-Source: ABdhPJyP7TvhZ4e5e3kRWjc3P9+lJ57rocRUhiooJpgsyAauH/+NJOoy36HZA0AtKVeD7mGopc9wn/dvxsPbY3+PkqM=
-X-Received: by 2002:a25:f40e:: with SMTP id q14mr488245ybd.230.1610437691269;
- Mon, 11 Jan 2021 23:48:11 -0800 (PST)
-MIME-Version: 1.0
-References: <1610386373-24162-1-git-send-email-alan.maguire@oracle.com> <1610386373-24162-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1610386373-24162-2-git-send-email-alan.maguire@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 11 Jan 2021 23:48:00 -0800
-Message-ID: <CAEf4BzZu2MuNYs8rpObLo5Z4gkodY4H+8sbraAGYXJwVZC9mfg@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 1/2] bpf: share BTF "show" implementation
- between kernel and libbpf
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VVyAtsTvxNsSXVa73xPOsWxQKIdaXYh6NzoQWrP8iMU=;
+        b=tJfGbE4jhcLX+Q+IToy4ooZKImLm255jNUK3iMnRrVr/r676hscwA8yl2/qAGWs5sG
+         5V7XetUjw2hdfJmY5wKTnC35Ye80u+sgvJ/gTYnv9+8przoWPIFW3hgeqNGjBSXk0v/7
+         M4ueJSAVwxIzfXWkyDz9wUhgIHvZO+HFJFYxuKPaVMrVilPAx/dH5C3RR8/mF2qb15YJ
+         5FsP+sLTG9d/+e2G+imAP7kMArSvbHDcR7W3BCx2l6v3LGjUkhL1nTUOge6xcIDZmrly
+         N3Ff7Z6teMi3FOwqpFpHjDxnFRwJOmhwOCaLTvQuU+6bz+VoDIxxpBngC7OSpO/oc9Ou
+         OsRQ==
+X-Gm-Message-State: AOAM533KHat8Tdl8AK8/MfqOlPqKaagM5KRNIBXei2w9T4aV/oRGSnUi
+        fr6zk00bU49bXRjfVzB3I9iq/S1obnGlG5u6
+X-Google-Smtp-Source: ABdhPJyrbGVcaz+PXfql2/+s1kp6/CEJrYmqnU5p9MiAxAepQEQjmXm2Ii68yMygXKf18KElmCgaMQ==
+X-Received: by 2002:a5d:4682:: with SMTP id u2mr3163175wrq.265.1610442970895;
+        Tue, 12 Jan 2021 01:16:10 -0800 (PST)
+Received: from ubuntu.localdomain (bzq-233-168-31-62.red.bezeqint.net. [31.168.233.62])
+        by smtp.googlemail.com with ESMTPSA id r82sm3073978wma.18.2021.01.12.01.16.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jan 2021 01:16:10 -0800 (PST)
+From:   Gilad Reti <gilad.reti@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     gilad.reti@gmail.com, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] selftests/bpf: add verifier test for PTR_TO_MEM spill
+Date:   Tue, 12 Jan 2021 11:15:43 +0200
+Message-Id: <20210112091545.10535-1-gilad.reti@gmail.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 9:34 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> libbpf already supports a "dumper" API for dumping type information,
-> but there is currently no support for dumping typed _data_ via libbpf.
-> However this functionality does exist in the kernel, in part to
-> facilitate the bpf_snprintf_btf() helper which dumps a string
-> representation of the pointer passed in utilizing the BTF type id
-> of the data pointed to.  For example, the pair of a pointer to
-> a "struct sk_buff" and the BTF type id of "struct sk_buff" can be
-> used.
->
-> Here the kernel code is generalized into btf_show_common.c.  For the
-> most part, code is identical for userspace and kernel, beyond a few API
-> differences and missing functions.  The only significant differences are
->
->  - the "safe copy" logic used by the kernel to ensure we do not induce a
->    crash during BPF operation; and
->  - the BTF seq file support that is kernel-only.
->
-> The mechanics are to maintain identical btf_show_common.c files in
-> kernel/bpf and tools/lib/bpf , and a common header btf_common.h in
-> include/linux/ and tools/lib/bpf/.  This file duplication seems to
-> be the common practice with duplication between kernel and tools/
-> so it's the approach taken here.
->
-> The common code approach could likely be explored further, but here
-> the minimum common code required to support BTF show functionality is
-> used.
->
+Add test to check that the verifier is able to recognize spilling of
+PTR_TO_MEM registers.
 
-I don't think this approach will work. libbpf and kernel have
-considerably different restrictions and styles, I don't think it's
-appropriate to take kernel code and try to fit it into libbpf almost
-as is, with a bunch of #defines. It would be much cleaner, simpler,
-and more maintainable to just re-implement core logic for libbpf, IMO.
+The patch was partially contibuted by CyberArk Software, Inc.
 
-> Currently the only "show" function for userspace is to write the
-> representation of the typed data to a string via
->
-> LIBBPF_API int
-> btf__snprintf(struct btf *btf, char *buf, int len, __u32 id, void *obj,
->               __u64 flags);
->
-> ...but other approaches could be pursued including printf()-based
-> show, or even a callback mechanism could be supported to allow
-> user-defined show functions.
->
+Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
+---
+ tools/testing/selftests/bpf/test_verifier.c   | 12 +++++++-
+ .../selftests/bpf/verifier/spill_fill.c       | 30 +++++++++++++++++++
+ 2 files changed, 41 insertions(+), 1 deletion(-)
 
-It's strange that you saw btf_dump APIs, and yet decided to go with
-this API instead. snprintf() is not a natural "method" of struct btf.
-Using char buffer as an output is overly restrictive and inconvenient.
-It's appropriate for kernel and BPF program due to their restrictions,
-but there is no need to cripple libbpf APIs for that. I think it
-should follow btf_dump APIs with custom callback so that it's easy to
-just printf() everything, but also user can create whatever elaborate
-mechanism they need and that fits their use case.
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 777a81404fdb..f8569f04064b 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -50,7 +50,7 @@
+ #define MAX_INSNS	BPF_MAXINSNS
+ #define MAX_TEST_INSNS	1000000
+ #define MAX_FIXUPS	8
+-#define MAX_NR_MAPS	20
++#define MAX_NR_MAPS	21
+ #define MAX_TEST_RUNS	8
+ #define POINTER_VALUE	0xcafe4all
+ #define TEST_DATA_LEN	64
+@@ -87,6 +87,7 @@ struct bpf_test {
+ 	int fixup_sk_storage_map[MAX_FIXUPS];
+ 	int fixup_map_event_output[MAX_FIXUPS];
+ 	int fixup_map_reuseport_array[MAX_FIXUPS];
++	int fixup_map_ringbuf[MAX_FIXUPS];
+ 	const char *errstr;
+ 	const char *errstr_unpriv;
+ 	uint32_t insn_processed;
+@@ -640,6 +641,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 	int *fixup_sk_storage_map = test->fixup_sk_storage_map;
+ 	int *fixup_map_event_output = test->fixup_map_event_output;
+ 	int *fixup_map_reuseport_array = test->fixup_map_reuseport_array;
++	int *fixup_map_ringbuf = test->fixup_map_ringbuf;
+ 
+ 	if (test->fill_helper) {
+ 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
+@@ -817,6 +819,14 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 			fixup_map_reuseport_array++;
+ 		} while (*fixup_map_reuseport_array);
+ 	}
++	if (*fixup_map_ringbuf) {
++		map_fds[20] = create_map(BPF_MAP_TYPE_RINGBUF, 0,
++					   0, 4096);
++		do {
++			prog[*fixup_map_ringbuf].imm = map_fds[20];
++			fixup_map_ringbuf++;
++		} while (*fixup_map_ringbuf);
++	}
+ }
+ 
+ struct libcap {
+diff --git a/tools/testing/selftests/bpf/verifier/spill_fill.c b/tools/testing/selftests/bpf/verifier/spill_fill.c
+index 45d43bf82f26..1833b6c730dd 100644
+--- a/tools/testing/selftests/bpf/verifier/spill_fill.c
++++ b/tools/testing/selftests/bpf/verifier/spill_fill.c
+@@ -28,6 +28,36 @@
+ 	.result = ACCEPT,
+ 	.result_unpriv = ACCEPT,
+ },
++{
++	"check valid spill/fill, ptr to mem",
++	.insns = {
++	/* reserve 8 byte ringbuf memory */
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_MOV64_IMM(BPF_REG_2, 8),
++	BPF_MOV64_IMM(BPF_REG_3, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_reserve),
++	/* store a pointer to the reserved memory in R6 */
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	/* check whether the reservation was successful */
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
++	/* spill R6(mem) into the stack */
++	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, -8),
++	/* fill it back in R7 */
++	BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, -8),
++	/* should be able to access *(R7) = 0 */
++	BPF_ST_MEM(BPF_DW, BPF_REG_7, 0, 0),
++	/* submit the reserved rungbuf memory */
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_7),
++	BPF_MOV64_IMM(BPF_REG_2, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_submit),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_ringbuf = { 1 },
++	.result = ACCEPT,
++	.result_unpriv = ACCEPT,
++},
+ {
+ 	"check corrupted spill/fill",
+ 	.insns = {
+-- 
+2.27.0
 
-Code reuse is not the ultimate goal, it should facilitate
-maintainability, not harm it. There are times where sharing code
-introduces unnecessary coupling and maintainability issues. And I
-think this one is a very obvious case of that.
-
-See below a few comments as well. But overall it's really hard to
-review such a humongous patch, of course. So I so far just skimmed
-through it.
-
-> Here's an example usage, storing a string representation of
-> struct sk_buff *skb in buf:
->
->         struct btf *btf = libbpf_find_kernel_btf();
->         char buf[8192];
->         __s32 skb_id;
->
->         skb_id = btf__find_by_name_kind(btf, "sk_buff", BTF_KIND_STRUCT);
->         if (skb_id < 0)
->                 fprintf(stderr, "no skbuff, err %d\n", skb_id);
->         else
->                 btf__snprintf(btf, buf, sizeof(buf), skb_id, skb, 0);
->
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  include/linux/btf.h             |  121 +---
->  include/linux/btf_common.h      |  286 +++++++++
->  kernel/bpf/Makefile             |    2 +-
->  kernel/bpf/arraymap.c           |    1 +
->  kernel/bpf/bpf_struct_ops.c     |    1 +
->  kernel/bpf/btf.c                | 1215 +-------------------------------------
->  kernel/bpf/btf_show_common.c    | 1218 +++++++++++++++++++++++++++++++++++++++
->  kernel/bpf/core.c               |    1 +
->  kernel/bpf/hashtab.c            |    1 +
->  kernel/bpf/local_storage.c      |    1 +
->  kernel/bpf/verifier.c           |    1 +
->  kernel/trace/bpf_trace.c        |    1 +
->  tools/lib/bpf/Build             |    2 +-
->  tools/lib/bpf/btf.h             |    7 +
->  tools/lib/bpf/btf_common.h      |  286 +++++++++
->  tools/lib/bpf/btf_show_common.c | 1218 +++++++++++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.map        |    1 +
->  17 files changed, 3044 insertions(+), 1319 deletions(-)
->  create mode 100644 include/linux/btf_common.h
->  create mode 100644 kernel/bpf/btf_show_common.c
->  create mode 100644 tools/lib/bpf/btf_common.h
->  create mode 100644 tools/lib/bpf/btf_show_common.c
->
-
-[...]
-
-> +/* For kernel u64 is long long unsigned int... */
-> +#define FMT64          "ll"
-> +
-> +#else
-> +/* ...while for userspace it is long unsigned int.  These definitions avoid
-> + * format specifier warnings.
-> + */
-
-that's not true, it depends on the architecture
-
-> +#define FMT64          "l"
-> +
-> +/* libbpf names differ slightly to in-kernel function names. */
-> +#define btf_type_by_id         btf__type_by_id
-> +#define btf_name_by_offset     btf__name_by_offset
-> +#define btf_str_by_offset      btf__str_by_offset
-> +#define btf_resolve_size       btf__resolve_size
-
-ugh... good luck navigating the code in libbpf....
-
-> +
-> +#endif /* __KERNEL__ */
-> +/*
-> + * Options to control show behaviour.
-> + *     - BTF_SHOW_COMPACT: no formatting around type information
-> + *     - BTF_SHOW_NONAME: no struct/union member names/types
-> + *     - BTF_SHOW_PTR_RAW: show raw (unobfuscated) pointer values;
-> + *       equivalent to %px.
-> + *     - BTF_SHOW_ZERO: show zero-valued struct/union members; they
-> + *       are not displayed by default
-> + *     - BTF_SHOW_UNSAFE: skip use of bpf_probe_read() to safely read
-> + *       data before displaying it.
-> + */
-> +#define BTF_SHOW_COMPACT       BTF_F_COMPACT
-> +#define BTF_SHOW_NONAME                BTF_F_NONAME
-> +#define BTF_SHOW_PTR_RAW       BTF_F_PTR_RAW
-> +#define BTF_SHOW_ZERO          BTF_F_ZERO
-> +#define BTF_SHOW_UNSAFE                (1ULL << 4)
-
-this (or some subset of them) should be done as opts struct's bool
-fields for libbpf
-
-> +
-> +/*
-> + * Copy len bytes of string representation of obj of BTF type_id into buf.
-> + *
-> + * @btf: struct btf object
-> + * @type_id: type id of type obj points to
-> + * @obj: pointer to typed data
-> + * @buf: buffer to write to
-> + * @len: maximum length to write to buf
-> + * @flags: show options (see above)
-> + *
-> + * Return: length that would have been/was copied as per snprintf, or
-> + *        negative error.
-> + */
-> +int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
-> +                          char *buf, int len, u64 flags);
-> +
-> +#define for_each_member(i, struct_type, member)                        \
-> +       for (i = 0, member = btf_type_member(struct_type);      \
-> +            i < btf_type_vlen(struct_type);                    \
-> +            i++, member++)
-> +
-> +#define for_each_vsi(i, datasec_type, member)                  \
-> +       for (i = 0, member = btf_type_var_secinfo(datasec_type);        \
-> +            i < btf_type_vlen(datasec_type);                   \
-> +            i++, member++)
-> +
-> +static inline bool btf_type_is_ptr(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_KIND(t->info) == BTF_KIND_PTR;
-> +}
-> +
-> +static inline bool btf_type_is_int(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_KIND(t->info) == BTF_KIND_INT;
-> +}
-> +
-> +static inline bool btf_type_is_small_int(const struct btf_type *t)
-> +{
-> +       return btf_type_is_int(t) && t->size <= sizeof(u64);
-> +}
-> +
-> +static inline bool btf_type_is_enum(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_KIND(t->info) == BTF_KIND_ENUM;
-> +}
-> +
-> +static inline bool btf_type_is_typedef(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_KIND(t->info) == BTF_KIND_TYPEDEF;
-> +}
-> +
-> +static inline bool btf_type_is_func(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_KIND(t->info) == BTF_KIND_FUNC;
-> +}
-> +
-> +static inline bool btf_type_is_func_proto(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_KIND(t->info) == BTF_KIND_FUNC_PROTO;
-> +}
-> +
-> +static inline bool btf_type_is_var(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_KIND(t->info) == BTF_KIND_VAR;
-> +}
-> +
-> +/* union is only a special case of struct:
-> + * all its offsetof(member) == 0
-> + */
-> +static inline bool btf_type_is_struct(const struct btf_type *t)
-> +{
-> +       u8 kind = BTF_INFO_KIND(t->info);
-> +
-> +       return kind == BTF_KIND_STRUCT || kind == BTF_KIND_UNION;
-> +}
-> +
-> +static inline bool btf_type_is_modifier(const struct btf_type *t)
-> +{
-> +       /* Some of them is not strictly a C modifier
-> +        * but they are grouped into the same bucket
-> +        * for BTF concern:
-> +        *   A type (t) that refers to another
-> +        *   type through t->type AND its size cannot
-> +        *   be determined without following the t->type.
-> +        *
-> +        * ptr does not fall into this bucket
-> +        * because its size is always sizeof(void *).
-> +        */
-> +       switch (BTF_INFO_KIND(t->info)) {
-> +       case BTF_KIND_TYPEDEF:
-> +       case BTF_KIND_VOLATILE:
-> +       case BTF_KIND_CONST:
-> +       case BTF_KIND_RESTRICT:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
-> +static inline
-> +const struct btf_type *btf_type_skip_modifiers(const struct btf *btf,
-> +                                              u32 id, u32 *res_id)
-> +{
-> +       const struct btf_type *t = btf_type_by_id(btf, id);
-> +
-> +       while (btf_type_is_modifier(t)) {
-> +               id = t->type;
-> +               t = btf_type_by_id(btf, t->type);
-> +       }
-> +
-> +       if (res_id)
-> +               *res_id = id;
-> +
-> +       return t;
-> +}
-> +
-> +static inline u32 btf_type_int(const struct btf_type *t)
-> +{
-> +       return *(u32 *)(t + 1);
-> +}
-> +
-> +static inline const struct btf_array *btf_type_array(const struct btf_type *t)
-> +{
-> +       return (const struct btf_array *)(t + 1);
-> +}
-> +
-> +static inline const struct btf_enum *btf_type_enum(const struct btf_type *t)
-> +{
-> +       return (const struct btf_enum *)(t + 1);
-> +}
-> +
-> +static inline const struct btf_var *btf_type_var(const struct btf_type *t)
-> +{
-> +       return (const struct btf_var *)(t + 1);
-> +}
-> +
-> +static inline u16 btf_type_vlen(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_VLEN(t->info);
-> +}
-> +
-> +static inline u16 btf_func_linkage(const struct btf_type *t)
-> +{
-> +       return BTF_INFO_VLEN(t->info);
-> +}
-> +
-> +/* size can be used */
-> +static inline bool btf_type_has_size(const struct btf_type *t)
-> +{
-> +       switch (BTF_INFO_KIND(t->info)) {
-> +       case BTF_KIND_INT:
-> +       case BTF_KIND_STRUCT:
-> +       case BTF_KIND_UNION:
-> +       case BTF_KIND_ENUM:
-> +       case BTF_KIND_DATASEC:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
-> +static inline const struct btf_member *btf_type_member(const struct btf_type *t)
-> +{
-> +       return (const struct btf_member *)(t + 1);
-> +}
-> +
-> +static inline const struct btf_var_secinfo *btf_type_var_secinfo(
-> +               const struct btf_type *t)
-> +{
-> +       return (const struct btf_var_secinfo *)(t + 1);
-> +}
-> +
-> +static inline const char *__btf_name_by_offset(const struct btf *btf,
-> +                                              u32 offset)
-> +{
-> +       const char *name;
-> +
-> +       if (!offset)
-> +               return "(anon)";
-> +
-> +       name = btf_str_by_offset(btf, offset);
-> +       return name ?: "(invalid-name-offset)";
-> +}
-> +
-
-(almost?) all of the above helpers are already defined in libbpf's
-btf.h, no need to add all this duplication
-
-> +/* functions shared between btf.c and btf_show_common.c */
-> +void btf_type_ops_show(const struct btf *btf, const struct btf_type *t,
-> +                      __u32 type_id, void *obj, u8 bits_offset,
-> +                      struct btf_show *show);
-
-[...]
-
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 1c0fd2d..35bd9dc 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -346,6 +346,7 @@ LIBBPF_0.3.0 {
->                 btf__parse_split;
->                 btf__new_empty_split;
->                 btf__new_split;
-> +               btf__snprintf;
-
-It's LIBBPF_0.4.0 already, I or someone else should send a patch
-adding a new section in .map file.
-
->                 ring_buffer__epoll_fd;
->                 xsk_setup_xdp_prog;
->                 xsk_socket__update_xskmap;
-
-> --
-> 1.8.3.1
->
