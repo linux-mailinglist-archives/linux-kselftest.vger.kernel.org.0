@@ -2,98 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8E52F501F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jan 2021 17:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC39C2F532C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jan 2021 20:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbhAMQgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jan 2021 11:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S1728582AbhAMTP3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jan 2021 14:15:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727713AbhAMQgO (ORCPT
+        with ESMTP id S1728516AbhAMTP3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 11:36:14 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00261C0617A7
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:57 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id b9so4025911ejy.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:57 -0800 (PST)
+        Wed, 13 Jan 2021 14:15:29 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6423EC061575
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 11:14:48 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id 6so4679284ejz.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 11:14:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BdIvDbIaLfjihhRkhU5/HCzUvJ+o4x5+Y+DliwVMXI0=;
-        b=hxRotWBElbEIKPd54uMcTCedGp59nZYVMAeKuPhfY7dKVGEI7lk+k5HRAf5JslUYyd
-         vbFiqyIDHgKPfPUZde154fNm1GroSTz8+gqXxs5MAldGUsy0d8r25SRnnRBp51FUx4lS
-         hjStaBFfh2SmbOxvuJRjGvgs1HRwxB6hsd1LMie5HvPVBJ8vI5LkFdC3avjtmtZtcccy
-         RHWn8tbkEOMWD+W/7LHYCJ6fT0y6JvlSBsLY3cFI9YAakurrVZSPB3M9/o8u0PDNOKf5
-         S+fVjAY3aO2aqeSfdjuNPnwhhFsaOqqI2Z12SRuFv262uPbmwGRGZUbzQqE/5GbZmhpY
-         QxyA==
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5aTU8OrppExQUcP6FVeiibwynpQy0ibxwUp1/rbGZIk=;
+        b=Sv2HxDCmKXdyTqJ93g5cCHC3Kr+3XqkqB3PIINmwUzxMxz3rLg7O0Pve18wur4cvOH
+         q0p03maFJy0DMmSNRHJaKyFe9v+xXJyoC6n5p+lEGKIN/GAJ4J4wmBBXHuiZ8DtLcKba
+         KNhMl+iVZfSFWg7zudOzcZSqvldMoNqNHSixspx/r9eQF3/XwD4LOcrZmj7wybXwclGH
+         tKR7S5SAM6MMrp4PxFE3XyhdVn02FCB+5TviGD1HKox42sye33wyHtq037S3LkEb/Idh
+         i6CvY2oEbiaJLlctaIUe9/pLg7PAQ+CjO0cjYBX6nxK+FadK2tjf9J05wC1zQl1tKkXt
+         MJVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BdIvDbIaLfjihhRkhU5/HCzUvJ+o4x5+Y+DliwVMXI0=;
-        b=AeE3W5HfjfVNe4QCM8DkP7/CvI4T07YKREhnzLowXVkbtxWpZP8h8VRmH/Zgx27Jnt
-         6zJuTweDZsTXFauGzCli/2VXHSXyEH+yYvUYsG3BloSmv8PaPD2XMAtHHOjaYjTjZszq
-         1D7mu5frweM6w4k9uQGQ3ELFYzJ8E6vUATn2RleB3kQr5atJxiH8LeBhAdM0Mhdu8i6w
-         nRFrCeJXXtcTAJ4QqbD6meJOznIXspFw5jovga0trBbO2vMzQlFX/2kGf//SDUtrNlvf
-         OpkGjsa6JLWviuF8n+f45mvYMDh6uRrTyvQ+0gFyiDwMcJtadxDdEMmMCP1/c2Ne68+N
-         isJQ==
-X-Gm-Message-State: AOAM5308EixpZeyS370nQ3MiEDrpQCMAQnlocxPIzFnhir6hm44omJYi
-        ZGr5EGu8m1IiFxP/jVXC2ubVAA==
-X-Google-Smtp-Source: ABdhPJxIw5d98gY4xn2J6ZKW1T8RtHRaZ491RfwnxHENsukkA29IZJ+h0+kfMYsI2X45CmHKcS+J8Q==
-X-Received: by 2002:a17:906:bc9b:: with SMTP id lv27mr2079635ejb.505.1610555696700;
-        Wed, 13 Jan 2021 08:34:56 -0800 (PST)
-Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id g25sm923943ejf.15.2021.01.13.08.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 08:34:56 -0800 (PST)
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     bpf@vger.kernel.org
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Install btf_dump test cases
-Date:   Wed, 13 Jan 2021 17:33:20 +0100
-Message-Id: <20210113163319.1516382-6-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210113163319.1516382-1-jean-philippe@linaro.org>
-References: <20210113163319.1516382-1-jean-philippe@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5aTU8OrppExQUcP6FVeiibwynpQy0ibxwUp1/rbGZIk=;
+        b=HE0qqYvNUCpxFxj/BjexViF7DM1AW0D2RSSxx7bFDSVdrxpmtxVcjLrrT3QfoeTwGO
+         Cqw7QvsHIDDNnzY+SjmEwAkfwHJQEXw37kaZ/QbswMZXaKvnfvvcAFFoOQEdc/6hF4EE
+         wqBAVX6/klOuD4uWW1UI2oXw4FmfcY4W2aRbHql1pxk80/jvi3faxY4BLqhAz2RJxKYw
+         vEmzek8wubjesGhREytzVG8frhIww3NAMUktv/QLBk8s9fVpIfcVvIPlFso7P/Zhrvmk
+         XwyF2lDeQAzDQz8X69YU7SsmACf+ZsphnLriF/kXHNBcz9hHfP59eYpcAfrjjUCT7Xgf
+         JHng==
+X-Gm-Message-State: AOAM530c2eXsFFkhvlZBpmHlUzKNJjTJVEsJa+v6+sazpI2aBQAym/CF
+        6aD4T34WZPAh0M8art3JGca6wfdztxD6OeMXkzrUrg==
+X-Google-Smtp-Source: ABdhPJzN7cj8lor+g6eQXIJKxLe3OOGnVmi1MMEYtrIoJZ2nMFFGpb7NnFptxtpKrs9BIibDNfPkEmFPZXevSHQ0Too=
+X-Received: by 2002:a17:906:7d98:: with SMTP id v24mr2664891ejo.129.1610565287094;
+ Wed, 13 Jan 2021 11:14:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
+ <20201217185243.3288048-6-pasha.tatashin@soleen.com> <20201218094324.GT32193@dhcp22.suse.cz>
+ <CA+CK2bAKiWC5E4h4CZOqQrh4QzQQ-3_TUJgB=r4H23gu3cqvAA@mail.gmail.com> <20201218130825.GY32193@dhcp22.suse.cz>
+In-Reply-To: <20201218130825.GY32193@dhcp22.suse.cz>
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+Date:   Wed, 13 Jan 2021 14:14:11 -0500
+Message-ID: <CA+CK2bBLZu3X5P3qkaTV7To4qx2W79Y1MQdpJM3134LtkzkhXA@mail.gmail.com>
+Subject: Re: [PATCH v4 05/10] mm/gup: migrate pinned pages out of movable zone
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, mike.kravetz@oracle.com,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The btf_dump test cannot access the original source files for comparison
-when running the selftests out of tree, causing several failures:
+On Fri, Dec 18, 2020 at 8:08 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Fri 18-12-20 07:24:53, Pavel Tatashin wrote:
+> > On Fri, Dec 18, 2020 at 4:43 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Thu 17-12-20 13:52:38, Pavel Tatashin wrote:
+> > > > +      * 1. Pinned pages: (long-term) pinning of movable pages is avoided
+> > > > +      *    when pages are pinned and faulted, but it is still possible that
+> > > > +      *    address space already has pages in ZONE_MOVABLE at the time when
+> > > > +      *    pages are pinned (i.e. user has touches that memory before
+> > > > +      *    pinning). In such case we try to migrate them to a different zone,
+> > > > +      *    but if migration fails the pages can still end-up pinned in
+> > > > +      *    ZONE_MOVABLE. In such case, memory offlining might retry a long
+> > > > +      *    time and will only succeed once user application unpins pages.
+> > >
+> > > I still dislike this. Pinning can fail so there shouldn't be any reasons
+> > > to break MOVABLE constrain for something that can be handled. If
+> > > anything there should be a very good reasoning behind this decision
+> > > documented.
+> >
+> > This is basically current behaviour, after patch 8, we can never pin
+> > pages in the movable zone, so I will update this comment in that
+> > patch.
+>
+> Then it would be much easier for review to state that the existing
+> behavior is unchanged and do not update this comment just to remove it
+> in a later patch. Because this patch should be straightforward change of
+> the condition which pages to migrate (+some renaming which should be
+> reasonably easy to follow).
 
-awk: btf_dump_test_case_syntax.c: No such file or directory
-...
-
-Add those files to $(TEST_FILES) to have "make install" pick them up.
-
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
----
- tools/testing/selftests/bpf/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 0fafdc022ac3..7f8667ad113e 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -46,7 +46,8 @@ endif
- 
- TEST_GEN_FILES = test_lwt_ip_encap.o \
- 	test_tc_edt.o
--TEST_FILES = xsk_prereqs.sh
-+TEST_FILES = xsk_prereqs.sh \
-+	$(wildcard progs/btf_dump_test_case_*.c)
- 
- # Order correspond to 'make run_tests' order
- TEST_PROGS := test_kmod.sh \
--- 
-2.30.0
-
+Makes sense, I will update this comment correctly right away when the
+behaviour changes.
