@@ -2,44 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AFC2F57AF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 04:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809BC2F57B7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 04:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728294AbhANCEk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jan 2021 21:04:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45690 "EHLO mail.kernel.org"
+        id S1729366AbhANCFZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jan 2021 21:05:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45386 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729351AbhAMWbU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 17:31:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7910B23436
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 22:29:27 +0000 (UTC)
+        id S1726820AbhAMW3q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 Jan 2021 17:29:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 297BB233EA
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 22:29:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610576967;
-        bh=mHvKCEj3/7nBBxrW4tVVo0k16Rhddoa7YQd2OFic81Y=;
+        s=k20201202; t=1610576945;
+        bh=srLRPLK5YXTuhUWWEHIPjYvPj65Ukrwxe3nwgOVQ1H4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FVFcyxYuFODJwc1NmCq6dGYUEoqC8dzhGHg0FuoCqh5X/YZZkUMGkePdU8HMTwX/t
-         jfKtp1SjnptuInY/ZByd0inH/ALCBa4jES85UEPmrbobY0vm1aRGAjO1FX2Hjxu0yS
-         gLVKbjdZ8mBUhuVzF9QyrZVXqPKwznB+/+Qrgc6Zy0l6P1LiCMOyS3DX5e7yvD9Cgf
-         x8n3IsFITJilMRqyu8twyH4Ke/Wufmh+GciuVls7JYHwIcTqszFYFWxmznlp+cqVZC
-         Qow/5H0y6+He63QtAcrQ1Cb8GkDm5mUvGfJBTBt6UJVGX7xH0DJqn4bAlEud9gFEhx
-         a8xdjguWtOnYQ==
-Received: by mail-lj1-f174.google.com with SMTP id f11so4341780ljm.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 14:29:27 -0800 (PST)
-X-Gm-Message-State: AOAM533u4AmueeulQquYi1ZyO593jlSsYakn773nnH9vXZHARdbIbK0D
-        W6T/l4mWexmI/IxejbNPjuLogI5RYvPZjfj+WiGQ/Q==
-X-Google-Smtp-Source: ABdhPJwSFcQoW+n63mgov3Msp2haXfpDPP8xwUvqAEp/d3ESBqh434XmbQzSCR2/v+Bz6JmsJNnCb6xYp2oVwbjPD3g=
-X-Received: by 2002:a2e:b5dc:: with SMTP id g28mr1848338ljn.112.1610576965768;
- Wed, 13 Jan 2021 14:29:25 -0800 (PST)
+        b=BDH1F9rcJtI4Q0+49LL11CWjXcM8SruYfVwIiIGJerbKhGRLAxcKLSAt+qK2b9KFF
+         NwxaKjgnukIfeo109QKruQRNc66yXVrNVI1iY6hiWeIMR3u67hPoV7GA6VwA/jbk0J
+         7Y0ypCT/Z8AeZT1DJvGC7jd60dKJb9CtD/9GuYhTRypi/ZkLv3wW7QEe0XXvAQwSzj
+         GnNkrxSGKKlriE3ld8VSioPb8/BnIyB2ZNRXYYdxhYoZ3PCFcs/0szGB4aYVK7LstN
+         fpftl9LRQ3A+HKOKdQywPy+0zOSWRtlBJZxEtTeMVTa/5G/OGeiFpAL3FfK6XBiku5
+         6OrGLIfG73Q9g==
+Received: by mail-lj1-f180.google.com with SMTP id e7so4337111ljg.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 14:29:05 -0800 (PST)
+X-Gm-Message-State: AOAM531zW11k3lPVUefMoKFf1y50DXMK6n0/TUGXuYHxAi2lVz/QPgM+
+        pKZIfhscaZBqgd9LIBoDrmU7IzA5iTOPhdSbagOfjQ==
+X-Google-Smtp-Source: ABdhPJy1Ii5PE8b9neNCZi8w33t2B6xijbS6dW3x4eYy87VeFjivFp9gmChTGHBx06NwCCVvvuQ6Zbm2DUJmVRc5QZM=
+X-Received: by 2002:a2e:9b1a:: with SMTP id u26mr1828558lji.187.1610576943394;
+ Wed, 13 Jan 2021 14:29:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20210113053810.13518-1-gilad.reti@gmail.com>
-In-Reply-To: <20210113053810.13518-1-gilad.reti@gmail.com>
+References: <20210113053810.13518-1-gilad.reti@gmail.com> <20210113053810.13518-2-gilad.reti@gmail.com>
+ <c245e747-85e6-e9be-2dff-064f64555fd7@fb.com>
+In-Reply-To: <c245e747-85e6-e9be-2dff-064f64555fd7@fb.com>
 From:   KP Singh <kpsingh@kernel.org>
-Date:   Wed, 13 Jan 2021 23:29:16 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ5o7QBR1stFTqxGJv2gbS0qsVKZW6BJ3iBUagy5_S+N0w@mail.gmail.com>
-Message-ID: <CACYkzJ5o7QBR1stFTqxGJv2gbS0qsVKZW6BJ3iBUagy5_S+N0w@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: support PTR_TO_MEM{,_OR_NULL} register spilling
-To:     Gilad Reti <gilad.reti@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+Date:   Wed, 13 Jan 2021 23:28:53 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ5_6Tux12V5hSigmLRYLg8qzM_kbOypeYx3rXPad3ZMiw@mail.gmail.com>
+Message-ID: <CACYkzJ5_6Tux12V5hSigmLRYLg8qzM_kbOypeYx3rXPad3ZMiw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: add verifier test for
+ PTR_TO_MEM spill
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Gilad Reti <gilad.reti@gmail.com>, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -55,16 +57,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 6:38 AM Gilad Reti <gilad.reti@gmail.com> wrote:
+On Wed, Jan 13, 2021 at 5:05 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> Add support for pointer to mem register spilling, to allow the verifier
-> to track pointers to valid memory addresses. Such pointers are returned
-> for example by a successful call of the bpf_ringbuf_reserve helper.
 >
-> The patch was partially contributed by CyberArk Software, Inc.
 >
-> Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it")
-> Suggested-by: Yonghong Song <yhs@fb.com>
-> Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
+> On 1/12/21 9:38 PM, Gilad Reti wrote:
+> > Add a test to check that the verifier is able to recognize spilling of
+> > PTR_TO_MEM registers, by reserving a ringbuf buffer, forcing the spill
+> > of a pointer holding the buffer address to the stack, filling it back
+> > in from the stack and writing to the memory area pointed by it.
+> >
+> > The patch was partially contributed by CyberArk Software, Inc.
+> >
+> > Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
+>
+> I didn't verify result_unpriv = ACCEPT part. I think it is correct
+> by checking code.
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
+
+Thanks for the description!
 
 Acked-by: KP Singh <kpsingh@kernel.org>
