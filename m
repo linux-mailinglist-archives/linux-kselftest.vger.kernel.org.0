@@ -2,92 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 283552F456E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jan 2021 08:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F18A22F482B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jan 2021 11:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbhAMHl3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jan 2021 02:41:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23089 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726406AbhAMHl2 (ORCPT
+        id S1727012AbhAMKBB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jan 2021 05:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726987AbhAMKBA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 02:41:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610523602;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eIu5o0GBOvXP1rvJN72lDtnj2/36cMjeG3m4twLkzts=;
-        b=Xm9gIydf1wtvpMIC+H5nKX1ytm/QdScq273VkJi1lxT2L4/YTSbAC5aF1USNPEuIsDEijk
-        e+Em04qf89cjCBq+ovd1FTupJSSrmwj2Oe82wBPdZuJnZQ+2FBgCKJk/I5DGSGTmVHf5Zc
-        AWqUqk82pfWQeYf7IZlikFZSPvZdSls=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-444-T1d2lRqtMAqyBD-BnKBaDA-1; Wed, 13 Jan 2021 02:40:00 -0500
-X-MC-Unique: T1d2lRqtMAqyBD-BnKBaDA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0807FEC1A1;
-        Wed, 13 Jan 2021 07:39:59 +0000 (UTC)
-Received: from thuth.remote.csb (ovpn-112-122.ams2.redhat.com [10.36.112.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A38AC7369F;
-        Wed, 13 Jan 2021 07:39:53 +0000 (UTC)
-Subject: Re: [PATCH 3/6] KVM: selftests: Convert iterations to int in
- dirty_log_perf_test
-To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Jacob Xu <jacobhxu@google.com>,
-        Makarand Sonare <makarandsonare@google.com>
-References: <20210112214253.463999-1-bgardon@google.com>
- <20210112214253.463999-4-bgardon@google.com>
-From:   Thomas Huth <thuth@redhat.com>
-Message-ID: <e0f10f8a-795d-a878-0048-9da4d2a94518@redhat.com>
-Date:   Wed, 13 Jan 2021 08:39:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Wed, 13 Jan 2021 05:01:00 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C60C061794
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 02:00:20 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id i24so1218861edj.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 02:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mDq1RY5y4eEZgqb0bS7g6f+LXxKSwiLQTHiMJzxqexg=;
+        b=rTJbY8DRu648BZH/+lJK+72SkYHBVa+hiWmYAbvlx8UriOOwPx/nhb6g/F2+E38Jtb
+         ty02axbJTrYGm8k+f+x2YMHtejX4KSQuvKby8QXONWcTXzLJ1y+OY3UlyvIZIToONh01
+         zQlGXZfEwUDAqK0PZYG1ixLy2t1dhUdhWK30eNhZrjCuOGjd5Box/jA8ehqZ6lIGUNLE
+         LNGBhBUGbg7P/2rHpSHW8VZtzxkpSMUeaOSgfxo41WA9V08W1gTdRgxiP0v/NmJDva7J
+         SLYg3pPEqrm2v9OEoOxkTCX1xHJRu8rdZ25ZEUarVvoW2e9uhFvT+o+jRIxyJsX3kOhn
+         /L9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mDq1RY5y4eEZgqb0bS7g6f+LXxKSwiLQTHiMJzxqexg=;
+        b=dQfsqR90pbd7A8e06Enb122u31h2Cyd348IszDMBgHewukwSF7sQh1RKT2y7dzS2fu
+         pplLEk34iSzvs31lWqjeipUM5/HAy8nu9cho4IsJq3t0V2mQb5m2sdeucfkxJH4GfQJi
+         FmohbZ0vszY0VQXM3IKDz/E5O5+RRKldRGOSw7p+XY5EBIcf1dFXSevvVzfLR8joqEft
+         VXo63RG7PKgFJjfZCUvxvLxq3WZgbq+exRSxSYkqrwimnYp/k/pJWaP8PoBsizXnBYFj
+         Jk3S6yGsg4q6iPPFhSyeKWtX2hWJxwXP5EoYWi+mzSYK0IWWJXReozz/vtOjNSpYPDIs
+         aQfw==
+X-Gm-Message-State: AOAM532nGUxfYcYR+iwVd9Ph9lWwS0jOxZPRVpNXaX/uM6Io0kNe5MbQ
+        baXtt6saK40HHspkYesWShRIJQ==
+X-Google-Smtp-Source: ABdhPJxbCmKpaqxk0UgxgOAZXFennlSWV3/iUh9AppwiVn/Lh9NJIpYxeZHloQLMlOliNy4Fw4lmKg==
+X-Received: by 2002:aa7:cb16:: with SMTP id s22mr1158594edt.53.1610532018913;
+        Wed, 13 Jan 2021 02:00:18 -0800 (PST)
+Received: from myrica ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
+        by smtp.gmail.com with ESMTPSA id oq7sm516281ejb.63.2021.01.13.02.00.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jan 2021 02:00:17 -0800 (PST)
+Date:   Wed, 13 Jan 2021 10:59:59 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: Install btf_dump test cases
+Message-ID: <X/7En4i4NHTmLrQQ@myrica>
+References: <20210112135959.649075-1-jean-philippe@linaro.org>
+ <20210112135959.649075-6-jean-philippe@linaro.org>
+ <CAEf4BzZhDut7QAG-M7cxtVxehebM=bge6uckeU_aJ6yp+pSu9w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210112214253.463999-4-bgardon@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZhDut7QAG-M7cxtVxehebM=bge6uckeU_aJ6yp+pSu9w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/01/2021 22.42, Ben Gardon wrote:
-> In order to add an iteration -1 to indicate that the memory population
-> phase has not yet completed, convert the interations counters to ints.
+On Tue, Jan 12, 2021 at 12:55:02PM -0800, Andrii Nakryiko wrote:
+> > -TEST_FILES = xsk_prereqs.sh
+> > +TEST_FILES = xsk_prereqs.sh \
+> > +       progs/btf_dump_test_case_syntax.c \
+> > +       progs/btf_dump_test_case_ordering.c \
+> > +       progs/btf_dump_test_case_padding.c \
+> > +       progs/btf_dump_test_case_packing.c \
+> > +       progs/btf_dump_test_case_bitfields.c \
+> > +       progs/btf_dump_test_case_multidim.c \
+> > +       progs/btf_dump_test_case_namespacing.c
 > 
-> No functional change intended.
 > 
-> Reviewed-by: Jacob Xu <jacobhxu@google.com>
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->   .../selftests/kvm/dirty_log_perf_test.c       | 26 +++++++++----------
->   1 file changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> index 15a9c45bdb5f..3875f22d7283 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> @@ -28,8 +28,8 @@ static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
->   /* Host variables */
->   static u64 dirty_log_manual_caps;
->   static bool host_quit;
-> -static uint64_t iteration;
-> -static uint64_t vcpu_last_completed_iteration[KVM_MAX_VCPUS];
-> +static int iteration;
-> +static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
+> maybe wildcard(progs/btf_dump_test_case_*) instead? one less thing to
+> remember to update, if we ever add another test case
 
-Wouldn't it be better to use signed 64-bit variables instead? I.e. "int64_t" ?
+Sure, I'll send a v2
 
-  Thomas
-
+Thanks,
+Jean
