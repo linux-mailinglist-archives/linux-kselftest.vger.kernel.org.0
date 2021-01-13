@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F222F501D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jan 2021 17:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8E52F501F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jan 2021 17:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727661AbhAMQgN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jan 2021 11:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
+        id S1727720AbhAMQgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jan 2021 11:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727678AbhAMQgN (ORCPT
+        with ESMTP id S1727713AbhAMQgO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 11:36:13 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF00C0617A5
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:56 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id w1so3927600ejf.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:56 -0800 (PST)
+        Wed, 13 Jan 2021 11:36:14 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00261C0617A7
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:57 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id b9so4025911ejy.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jXQ6vMa7f3RRXc70uOmWKXVZ59ITEzz6ydYPgh3UHMU=;
-        b=Fs6aFm7FeMEyhEFtBLTnCCPm+UPC7JZRY20GjPnEBNQ0PXAkirddbeguIhxj3rgg1g
-         dHfbOhgYsvDN2q4fdgmr4g46+DiDnR+8T2Ef9V4YtSOU9U1ondfDaTGpDxU/B07rdQ5/
-         DJtbGcPX304Nyq1IsxCg1YdYLChvlzmdo2zq0M8n5111u4cXTeG1Mxx0jY0yKVeIXzd6
-         r3QZMaVuFkZ8v0ChFHBf5CslxlZ2KhrbcP/an0PPA2BTFrba7l/tz22a40QgYfqbHw8d
-         zIn8DhVGxXk00DZ5mNb24Y2MxlZukJ7YaMz2nrn6rRsN/Cvk+N2EIen7HctUv7R+hKrc
-         HJOA==
+        bh=BdIvDbIaLfjihhRkhU5/HCzUvJ+o4x5+Y+DliwVMXI0=;
+        b=hxRotWBElbEIKPd54uMcTCedGp59nZYVMAeKuPhfY7dKVGEI7lk+k5HRAf5JslUYyd
+         vbFiqyIDHgKPfPUZde154fNm1GroSTz8+gqXxs5MAldGUsy0d8r25SRnnRBp51FUx4lS
+         hjStaBFfh2SmbOxvuJRjGvgs1HRwxB6hsd1LMie5HvPVBJ8vI5LkFdC3avjtmtZtcccy
+         RHWn8tbkEOMWD+W/7LHYCJ6fT0y6JvlSBsLY3cFI9YAakurrVZSPB3M9/o8u0PDNOKf5
+         S+fVjAY3aO2aqeSfdjuNPnwhhFsaOqqI2Z12SRuFv262uPbmwGRGZUbzQqE/5GbZmhpY
+         QxyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jXQ6vMa7f3RRXc70uOmWKXVZ59ITEzz6ydYPgh3UHMU=;
-        b=NQnC9C1kjAtP62Le46yatN7Zac5EmMm7s4G8qoiQvb8iGSlz6l0yN4lGl/bqbBdM7B
-         OLW+qsMnBDuUiBnxq3S2ZChWjVBGA2bejnntrEVC85KLVnmoDDdpJIZjApgMXjDxahQY
-         HSgokRjHZDnA6JbUkhs9jFEH9gc6DI9X1XVmQ+bTWxP0raq5wgJOR5CbaoxjQaOgl7hd
-         1r6BWqtRdr6evMj4QTuSjJL0Gh8JWXNmev4rISgrVkFwqX/e4K2fVDR3E3zroF/TAvoX
-         AGgrv/WncB5nIRSST/RXIJZJRsC28uhp1rE/yX8OTt/TbgR0kzFak42V1eXFP7lNZPg3
-         phSg==
-X-Gm-Message-State: AOAM530245/uhXZCZdaV3vz1A037vrtKIZDd0XfPTgfaWGGhIZUlPXX7
-        1TC5jjVEoIE8f6lihH0vlu5xOhSbAfjBLg==
-X-Google-Smtp-Source: ABdhPJzNuHI7XdRTYgxqmmWaFsNDoP1WAofc8B682yrTxmEVHj14bMrSFLKbrV7oq+fH4/GitlPR2A==
-X-Received: by 2002:a17:906:39d5:: with SMTP id i21mr2066874eje.339.1610555695624;
-        Wed, 13 Jan 2021 08:34:55 -0800 (PST)
+        bh=BdIvDbIaLfjihhRkhU5/HCzUvJ+o4x5+Y+DliwVMXI0=;
+        b=AeE3W5HfjfVNe4QCM8DkP7/CvI4T07YKREhnzLowXVkbtxWpZP8h8VRmH/Zgx27Jnt
+         6zJuTweDZsTXFauGzCli/2VXHSXyEH+yYvUYsG3BloSmv8PaPD2XMAtHHOjaYjTjZszq
+         1D7mu5frweM6w4k9uQGQ3ELFYzJ8E6vUATn2RleB3kQr5atJxiH8LeBhAdM0Mhdu8i6w
+         nRFrCeJXXtcTAJ4QqbD6meJOznIXspFw5jovga0trBbO2vMzQlFX/2kGf//SDUtrNlvf
+         OpkGjsa6JLWviuF8n+f45mvYMDh6uRrTyvQ+0gFyiDwMcJtadxDdEMmMCP1/c2Ne68+N
+         isJQ==
+X-Gm-Message-State: AOAM5308EixpZeyS370nQ3MiEDrpQCMAQnlocxPIzFnhir6hm44omJYi
+        ZGr5EGu8m1IiFxP/jVXC2ubVAA==
+X-Google-Smtp-Source: ABdhPJxIw5d98gY4xn2J6ZKW1T8RtHRaZ491RfwnxHENsukkA29IZJ+h0+kfMYsI2X45CmHKcS+J8Q==
+X-Received: by 2002:a17:906:bc9b:: with SMTP id lv27mr2079635ejb.505.1610555696700;
+        Wed, 13 Jan 2021 08:34:56 -0800 (PST)
 Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id g25sm923943ejf.15.2021.01.13.08.34.54
+        by smtp.gmail.com with ESMTPSA id g25sm923943ejf.15.2021.01.13.08.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 08:34:54 -0800 (PST)
+        Wed, 13 Jan 2021 08:34:56 -0800 (PST)
 From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
 To:     bpf@vger.kernel.org
 Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
@@ -55,9 +55,9 @@ Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         john.fastabend@gmail.com, kpsingh@kernel.org,
         linux-kselftest@vger.kernel.org,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next v2 4/5] selftests/bpf: Fix installation of urandom_read
-Date:   Wed, 13 Jan 2021 17:33:19 +0100
-Message-Id: <20210113163319.1516382-5-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Install btf_dump test cases
+Date:   Wed, 13 Jan 2021 17:33:20 +0100
+Message-Id: <20210113163319.1516382-6-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210113163319.1516382-1-jean-philippe@linaro.org>
 References: <20210113163319.1516382-1-jean-philippe@linaro.org>
@@ -67,30 +67,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For out-of-tree builds, $(TEST_CUSTOM_PROGS) require the $(OUTPUT)
-prefix, otherwise the kselftest lib doesn't know how to install them:
+The btf_dump test cannot access the original source files for comparison
+when running the selftests out of tree, causing several failures:
 
-rsync: [sender] link_stat "tools/testing/selftests/bpf/urandom_read" failed: No such file or directory (2)
+awk: btf_dump_test_case_syntax.c: No such file or directory
+...
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Add those files to $(TEST_FILES) to have "make install" pick them up.
+
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 67cdf858f01f..0fafdc022ac3 100644
+index 0fafdc022ac3..7f8667ad113e 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -82,7 +82,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
- 	xdpxceiver
+@@ -46,7 +46,8 @@ endif
  
--TEST_CUSTOM_PROGS = urandom_read
-+TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
+ TEST_GEN_FILES = test_lwt_ip_encap.o \
+ 	test_tc_edt.o
+-TEST_FILES = xsk_prereqs.sh
++TEST_FILES = xsk_prereqs.sh \
++	$(wildcard progs/btf_dump_test_case_*.c)
  
- # Emit succinct information message describing current building step
- # $1 - generic step name (e.g., CC, LINK, etc);
+ # Order correspond to 'make run_tests' order
+ TEST_PROGS := test_kmod.sh \
 -- 
 2.30.0
 
