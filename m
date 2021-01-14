@@ -2,56 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EB82F6E19
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 23:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79BA2F6E27
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 23:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728311AbhANWX3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jan 2021 17:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S1730724AbhANWZN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jan 2021 17:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726880AbhANWX2 (ORCPT
+        with ESMTP id S1730356AbhANWZM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jan 2021 17:23:28 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF1DC061575
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 14:22:48 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id j1so3655695pld.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 14:22:48 -0800 (PST)
+        Thu, 14 Jan 2021 17:25:12 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E39C061575
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 14:24:32 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id n25so4748294pgb.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 14:24:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EPoRrdNOROxhDdivXc5/hBDstOmigIbTotdHJYVBUnc=;
-        b=Gl7VzU68aXvVthH+6Gl9dZWAF446iYZ2MmeURfD41BpkgfV0RubdRRjfrP+cT7vsZ7
-         0kSJfwjdx62rBTPtTzJJlhsItuv+deusw75OcuP968ghNGtG4e+28NKWKyBZT+/n3y/Q
-         xDgjn2GH5dtxvNJ9huFPtJNF2bhn3DsII1bEBkUnf8nJX5YJ3yYQKd9ILOyMELEVokVN
-         S2HIMDCBxBGx8xlyNkzQCIMKhO0eNdvhR2+WmfboxpN4UbOYRAXrkAY9uv8X+Q4L0EZu
-         jva2V+WGCggFVtGIF3CPoyleAMvDFgYdlojKA8GkThou1EyOmtJVDb/kPMWG6u4MmBhN
-         Mgdw==
+        bh=gRC5Pleb9dUxv3nJaqlApsE2Yyj1i5/5CS0p59ghBkc=;
+        b=NuA3EJ3p4xB56QjPMOsEQQMUhXG3PQ0y8iWnVaCIXTapcQ7PX3/QSUg5osssQ6nGaj
+         nXJUe4amtRfx6WBlML3wsytOVgXf5u3kqra+2KdixvTHv9z4lABT8g0mk1lW/SojZ+EK
+         PkMKhJ1T1u6iB1YcKAH8AE+8Gu9QaZ+l2SS3rakd67ORcNMQNvVx9KN2dJBgTVTgrAK8
+         JV11HngiDjErzuUzkePUoq+HBWMAR52Q6rYRdwVXEq/tpnvwFg8N9r0Ne1j8nKhdHvax
+         m9qmj+a0tvXZHGHElR23N6c2euo8y2gB7BYZCAGbPbnESrxtBxA/D52GWNDgkwbgA+Jp
+         u/FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EPoRrdNOROxhDdivXc5/hBDstOmigIbTotdHJYVBUnc=;
-        b=O4qWzu5crARAJ7glwBjSKhABV0EcXSr3yH7J604NRNF7A+fzW6ehV2JWKju4Jtre7U
-         wSZSiXXYTk4b2IJMRl6m/tBbP785GPNA962dHnQb4Fqr5mOfkszUeT94ymT8MCdLQ6NZ
-         4WKz4R+nnBSyvQXXotYOlFrmVLta6F7Vxf9wJrbmXIHoCdZAj1AxFieNMp7LlWaoEk4U
-         2733toBj5+XcguqABJIBlWIfWm1/EEz3b2A9QW1iWopu0uoavs8Ooj6m38ppy01W7VRM
-         5MAgvOSNyuCS++m5V7OmsAqmeBfAJjAX0MUSFWcIJeWtdFgzdzUCp4XfYxylRJxV7jQc
-         Mp5A==
-X-Gm-Message-State: AOAM531SDmqQeoGlk4TEaRtutl0+AySm4G1aqGLTigXBbfnfUnjbj4dZ
-        1UR5JGiWKyOkVufr8TZLABp3KgggKj0D0Dnb5WMXOYF+9qkoKg==
-X-Google-Smtp-Source: ABdhPJwDc0GflSHuCpK/boQQ7/hHPtQr9mbcFd52Lo7g2yixnRhfFKhYIAk5fu+WmHgfp85SbqmwSWC8+45NCWOUoLs=
-X-Received: by 2002:a17:902:fe87:b029:da:5d3b:4a84 with SMTP id
- x7-20020a170902fe87b02900da5d3b4a84mr9579301plm.51.1610662968164; Thu, 14 Jan
- 2021 14:22:48 -0800 (PST)
+        bh=gRC5Pleb9dUxv3nJaqlApsE2Yyj1i5/5CS0p59ghBkc=;
+        b=BfXpfMNL2PFvpdJzRfkLF8aW5RNASSZnB1wEJ2Z9AUO/KAlWSYZPYut/uda2DeaYUN
+         uiK7IMyJ5UURiwcIbFffk98+lpcCwPPqL8RQ5GVG5k66UsXgKzFKrQvyl4huFvWvU0u3
+         +CAcf/IscS9id+PxErzQZYjs4n6jS7eWrtgyLh2co9IjnX/A3YRcJGIqyFUKkmeqfwj5
+         a6dTnOkjcl1uUUjYMi0k3JX2JZ/gi5NGdgjB2Y9UntoJZuGsAf1lAC/IWeMnN2AzzrGS
+         X48h53XhiF+hm9tvOzmv/bz4igPFkIn1yJJinBUpuTW44j8f1pHhvuyo5gScb5FVc30j
+         0vmw==
+X-Gm-Message-State: AOAM5339UWXwYkpB+xk5DanKEZm9JYnUNm9r+DzsGdxmYZHg8xjNuBv4
+        ONMJPmFzIAbxzkR2BFm54UT6ZdBm19rV4rByRvXjZg==
+X-Google-Smtp-Source: ABdhPJxY9okKFIOu7O3uhTD28hz1VT6/8eJsX891SLMhHJQ2T++lZwV0wgQ+6dCV2/GwDFou+QUuaN6E2MdsZSWNbcY=
+X-Received: by 2002:a63:c84a:: with SMTP id l10mr9703913pgi.159.1610663071797;
+ Thu, 14 Jan 2021 14:24:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20201202190824.1309398-1-dlatypov@google.com> <20201202190824.1309398-2-dlatypov@google.com>
-In-Reply-To: <20201202190824.1309398-2-dlatypov@google.com>
+References: <20201202190824.1309398-1-dlatypov@google.com>
+In-Reply-To: <20201202190824.1309398-1-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 14 Jan 2021 14:22:37 -0800
-Message-ID: <CAFd5g47S7-0AFDWZy5qeZV+syT_6x3jeGEgZO6X9tVNweBS2eQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] kunit: tool: stop using bare asserts in unit test
+Date:   Thu, 14 Jan 2021 14:24:20 -0800
+Message-ID: <CAFd5g44+y-n3v_As8J2piVu+fyLCXCgHx1zmuo0mfb+VKkSUBQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] kunit: tool: fix unit test cleanup handling
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     David Gow <davidgow@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -65,15 +64,10 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Wed, Dec 2, 2020 at 11:09 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Use self.assertEqual/assertNotEqual() instead.
-> Besides being more appropriate in a unit test, it'll also give a better
-> error message by show the unexpected values.
->
-> Also
-> * Delete redundant check of exception types. self.assertRaises does this.
-> * s/kall/call. There's no reason to name it this way.
->   * This is probably a misunderstanding from the docs which uses it
->   since `mock.call` is in scope as `call`.
+> * Stop leaking file objects.
+> * Use self.addCleanup() to ensure we call cleanup functions even if
+> setUp() fails.
+> * use mock.patch.stopall instead of more error-prone manual approach
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
