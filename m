@@ -2,91 +2,237 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 477A52F59BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 05:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DAE2F5C14
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 09:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725902AbhANEDO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jan 2021 23:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbhANEDN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 23:03:13 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BBFC061575;
-        Wed, 13 Jan 2021 20:02:33 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id o19so6136256lfo.1;
-        Wed, 13 Jan 2021 20:02:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9zbOPoIi8TSOltOZ0lasCpcW26irh6vW30Vtu7ZvdrI=;
-        b=G9sHLPMOqgptKAZS7dyKhCRBvPXAF/JLHLzc5XarOLYayClSxWpLZP/mp068zjZle2
-         aJcguZB3t6UBWMYVPEYMNyp1HuNMOcXIDpUSuTUWmVo4L6RZiayW+HEMgtMkuQloc+wE
-         el14WFuLdU8mz6IJwsjhjIGkQ5DhPnEdUdQf0Jde00BtZQkjscj1PFJPUG8tSAvJ9T6N
-         nuiivM3yqX/7Md0SPfFxmk/A/n9ZKMvYw1kMCvdvM5yJsBBWMieL22QlpHT1SX7LJ0HL
-         XcKEXc4diPe5SIc3wn46C8a0NUUGlEBsKABT8FyrsQhPGDhaIa+BOxyKuP6DA6rdI5Tu
-         j4dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9zbOPoIi8TSOltOZ0lasCpcW26irh6vW30Vtu7ZvdrI=;
-        b=LhcVK+QsFFM5pbvvZ8XajRrdWSUwCgGgIW4cnMdWdKNm/ivVJvDuC/TfVBYcx/5FVg
-         Fxa+H8SP2BNpakaRvCxcUOo1FdsBmTL0WHi7UQgMxDmyhVEw0PRIFlWbe2TeSeIQ6r+t
-         NNCy2FYiuENIp/f6ZHIQ5Jg1ThgHXhORqUmzhxAq+cNHQ2/QdxBPFrJq/FfbS9lMawmz
-         0oYWJgpffyMm5903SYk0OTE0ZTXyJmRWO9oc6hX5l7GAL2gWNpij80IbmYBzS+wie32J
-         5I212uKjSK7bIdXdFqNkVgGHqmTVC1+W2lFGiDj/yu/eimCYfq3fFYMA1kh5Scf6K4wD
-         xtmA==
-X-Gm-Message-State: AOAM533r6mo2XiR62WwIxrHo89gpZyA1kHzpVJLyq3aKZMt1UjVxyCT7
-        Lhjf9aB1Z2GNn8q8kDR/lO3+7rulIIDGnPcFMQw=
-X-Google-Smtp-Source: ABdhPJzyqXQ9gidEN7na/gmJki+J0SdAv0wEhwst9rBKLK8u89tJETmG4Y1lxAZjEgtbBVxwY1gtFE8zlMwJs71GVKc=
-X-Received: by 2002:ac2:43c1:: with SMTP id u1mr2488353lfl.38.1610596951899;
- Wed, 13 Jan 2021 20:02:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20210113053810.13518-1-gilad.reti@gmail.com> <CACYkzJ5o7QBR1stFTqxGJv2gbS0qsVKZW6BJ3iBUagy5_S+N0w@mail.gmail.com>
-In-Reply-To: <CACYkzJ5o7QBR1stFTqxGJv2gbS0qsVKZW6BJ3iBUagy5_S+N0w@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 13 Jan 2021 20:02:20 -0800
-Message-ID: <CAADnVQKF=bEzc6UjaSCAyE6dUXsYRXcQe4qBBBczyr75HyVL8A@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: support PTR_TO_MEM{,_OR_NULL} register spilling
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Gilad Reti <gilad.reti@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
+        id S1728283AbhANIGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jan 2021 03:06:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59020 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728130AbhANIGX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 Jan 2021 03:06:23 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AFD9323A58;
+        Thu, 14 Jan 2021 08:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610611500;
+        bh=KzRA72DJ8FelN5FRPnISDXzhJWHYX6V5D7cnrrYqmns=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nOm4NqCaUWLg4HTBDeJeoBxDK1hE6KD6kwIaS5QUdGE5d95M0LOuBe17UH6ZhtxWj
+         2SIokKCq5OrWbc/QTRPFACCsP/28F9IHn5ydVSMGUJC9s2jP+tMN80H9tSZ77bm3FC
+         VuJGlQICCzi4qz/Gjt5ZVImWz1CaQcpPOemSSW2UY1plhyCBX0ffc8ZreB8SYwreWG
+         a2Wjqa/k8fmoxGbUlaKINA7quVFVGZDOIEdybff/MtPHwEQKCte3px4suSSxEJzxPs
+         ZezS17i65C2hxskblSDd8TCCCI/NNP1qdJmjaooHey/QEueJfY+BWtlFyEGbMsiuzC
+         o3DjiUV3zELfQ==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kzxcn-00EQ6N-K6; Thu, 14 Jan 2021 09:04:57 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Richard Gong <richard.gong@linux.intel.com>,
         Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Will Drewry <wad@chromium.org>,
+        Ying Xue <ying.xue@windriver.com>,
+        dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net
+Subject: [PATCH v6 00/16] Fix several bad kernel-doc markups
+Date:   Thu, 14 Jan 2021 09:04:36 +0100
+Message-Id: <cover.1610610937.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 2:29 PM KP Singh <kpsingh@kernel.org> wrote:
->
-> On Wed, Jan 13, 2021 at 6:38 AM Gilad Reti <gilad.reti@gmail.com> wrote:
-> >
-> > Add support for pointer to mem register spilling, to allow the verifier
-> > to track pointers to valid memory addresses. Such pointers are returned
-> > for example by a successful call of the bpf_ringbuf_reserve helper.
-> >
-> > The patch was partially contributed by CyberArk Software, Inc.
-> >
-> > Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it")
-> > Suggested-by: Yonghong Song <yhs@fb.com>
-> > Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
->
-> Acked-by: KP Singh <kpsingh@kernel.org>
+Hi Jon,
 
-It's a border line feature vs fix.
-Since the patch is trivial and it addresses a real problem I've
-applied to the bpf tree.
-Thanks!
+This series have three parts:
+
+1)  10 remaining fixup patches from the series I sent back on Dec, 1st:
+
+   parport: fix a kernel-doc markup
+   rapidio: fix kernel-doc a markup
+   fs: fix kernel-doc markups
+   pstore/zone: fix a kernel-doc markup
+   firmware: stratix10-svc: fix kernel-doc markups
+   connector: fix a kernel-doc markup
+   lib/crc7: fix a kernel-doc markup
+   memblock: fix kernel-doc markups
+   w1: fix a kernel-doc markup
+   selftests: kselftest_harness.h: partially fix kernel-doc markups
+
+2) The patch adding the new check to ensure that the kernel-doc
+   markup will be used for the right declaration;
+
+3) 5 additional patches, produced against next-20210114 with new
+   problems detected after the original series: 
+
+ net: tip: fix a couple kernel-doc markups
+ net: cfg80211: fix a kerneldoc markup
+ reset: core: fix a kernel-doc markup
+ drm: drm_crc: fix a kernel-doc markup
+ platform/surface: aggregator: fix a kernel-doc markup
+
+It probably makes sense to merge at least the first 11 patches
+via the doc tree, as they should apply cleanly there, and
+having the last 5 patches merged via each maintainer's tree.
+
+-
+
+Kernel-doc has always be limited to a probably bad documented
+rule:
+
+The kernel-doc markups should appear *imediatelly before* the
+function or data structure that it documents.
+
+On other words, if a C file would contain something like this:
+
+	/**
+	 * foo - function foo
+	 * @args: foo args
+	 */
+	static inline void bar(int args);
+
+	/**
+	 * bar - function bar
+	 * @args: foo args
+	 */
+	static inline void foo(void *args);
+
+
+The output (in ReST format) will be:
+
+	.. c:function:: void bar (int args)
+
+	   function foo
+
+	**Parameters**
+
+	``int args``
+	  foo args
+
+
+	.. c:function:: void foo (void *args)
+
+	   function bar
+
+	**Parameters**
+
+	``void *args``
+	  foo args
+
+Which is clearly a wrong result.  Before this changeset, 
+not even a warning is produced on such cases.
+
+As placing such markups just before the documented
+data is a common practice, on most cases this is fine.
+
+However, as patches touch things, identifiers may be
+renamed, and people may forget to update the kernel-doc
+markups to follow such changes.
+
+This has been happening for quite a while, as there are
+lots of files with kernel-doc problems.
+
+This series address those issues and add a file at the
+end that will enforce that the identifier will match the
+kernel-doc markup, avoiding this problem from
+keep happening as time goes by.
+
+This series is based on current upstream tree.
+
+@maintainers: feel free to pick the patches and
+apply them directly on your trees, as all patches on 
+this series are independent from the other ones.
+
+--
+
+v6:
+  - rebased on the top of next-20210114 and added a few extra fixes
+
+v5:
+  - The completion.h patch was replaced by another one which drops
+    an obsolete macro;
+  - Some typos got fixed and review tags got added;
+  - Dropped patches that were already merged at linux-next.
+
+v4:
+
+  - Patches got rebased and got some acks.
+
+Mauro Carvalho Chehab (16):
+  parport: fix a kernel-doc markup
+  rapidio: fix kernel-doc a markup
+  fs: fix kernel-doc markups
+  pstore/zone: fix a kernel-doc markup
+  firmware: stratix10-svc: fix kernel-doc markups
+  connector: fix a kernel-doc markup
+  lib/crc7: fix a kernel-doc markup
+  memblock: fix kernel-doc markups
+  w1: fix a kernel-doc markup
+  selftests: kselftest_harness.h: partially fix kernel-doc markups
+  scripts: kernel-doc: validate kernel-doc markup with the actual names
+  net: tip: fix a couple kernel-doc markups
+  net: cfg80211: fix a kerneldoc markup
+  reset: core: fix a kernel-doc markup
+  drm: drm_crc: fix a kernel-doc markup
+  platform/surface: aggregator: fix a kernel-doc markup
+
+ drivers/parport/share.c                       |  2 +-
+ .../surface/aggregator/ssh_request_layer.c    |  2 +-
+ drivers/rapidio/rio.c                         |  2 +-
+ drivers/reset/core.c                          |  4 +-
+ fs/dcache.c                                   | 73 ++++++++++---------
+ fs/inode.c                                    |  4 +-
+ fs/pstore/zone.c                              |  2 +-
+ fs/seq_file.c                                 |  5 +-
+ fs/super.c                                    | 12 +--
+ include/drm/drm_crtc.h                        |  2 +-
+ include/linux/connector.h                     |  2 +-
+ .../firmware/intel/stratix10-svc-client.h     | 10 +--
+ include/linux/memblock.h                      |  4 +-
+ include/linux/parport.h                       | 31 ++++++++
+ include/linux/w1.h                            |  2 +-
+ include/net/cfg80211.h                        |  2 +-
+ lib/crc7.c                                    |  2 +-
+ net/tipc/link.c                               |  2 +-
+ net/tipc/node.c                               |  2 +-
+ scripts/kernel-doc                            | 62 ++++++++++++----
+ tools/testing/selftests/kselftest_harness.h   | 26 ++++---
+ 21 files changed, 160 insertions(+), 93 deletions(-)
+
+-- 
+2.29.2
+
+
