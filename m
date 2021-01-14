@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC052F63AC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 16:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707DF2F63C0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 16:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725961AbhANPFb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jan 2021 10:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S1729239AbhANPF5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jan 2021 10:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729125AbhANPFa (ORCPT
+        with ESMTP id S1729232AbhANPF4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jan 2021 10:05:30 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EAFC0613D3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:04:49 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id d17so8601018ejy.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:04:49 -0800 (PST)
+        Thu, 14 Jan 2021 10:05:56 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17264C0613ED
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:05:10 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id c7so6033271edv.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:05:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DHncU0XWLrLTZ0f850njpy88wt0QOagTuf7R3b7bscY=;
-        b=fbiTmzvzYQgj/tGJyJ5NLYmx4S8J6DvRhV5R1yBrkw84G5va13npWJlqE5adrvg50N
-         FDO0rE3ZviHhtRezJckJrrw/b49nRoZMkjAFiS7/Obxy34SUR1NjMeSNdMmjay1+dt3e
-         OcWYwlz5HFCbudnBlT4anQ/9wb3FHRD9DgPLvg/9yy5AyyY0GmEG6iVrY5b4E8m1Mfml
-         BVjDa5ck3tcczdC0NkwAzcOff3C6lD3H2tQcp523j924X+dKez0Uch9pWCvfxRHZjuE6
-         Sp6p2cb22CN2SLMxg+CQXlLBslqhr4FYuLZBaTFAgj3SvhG3kOgQHGegni0IDLfNq8Yn
-         bTug==
+        bh=PoskbypxkT00wWzbYavGjYvgKHI4NdWsHemc342JeeU=;
+        b=MJgWudY8tusLtxhO0R5P4nglVm+iYs4ZCKhvUV8weiPu9I/CUO4DiiCloQLGYiTrW4
+         3dn98O65LVDWwVUo85UWnzEdGTlcKvxobyX5IdeGMJZnVCOWtyySIy8ECJ+3GoaDPTiC
+         Rv+U1nP22mWfN9X9uM7ZOWqPj619151+RfRGoggvxKbyGxUqdEdU/8WiSq5j9hmy0C2o
+         j02h4umBSDFTjJZpPK8VMJanmSZiZbvv2Mtk15YdWBOIDNHGmbr1ZmkYpR1sFb9j1zaO
+         Iks5ZTfWuZ3FIXC7PLTZ38Vdk6ae3GG/xX6tjpRzKm8JSJhkLkwtXrGqauKcSjCABb5Y
+         yIog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DHncU0XWLrLTZ0f850njpy88wt0QOagTuf7R3b7bscY=;
-        b=kth1c2nlHXyYdosypbPOASAlsPg84Sfl1RVwfeyiTOogsAdnZEz49vqEnBSKE/RTIn
-         MlClFOzWQJLXmdpiHcyo9cIlQCGT7HBzXTny89JzhWhkulgQZOt6qIycnhmSrftgoqtc
-         0jSELwAohKsV7qP8JZvh9hElrf1JkGJsayBjOZfuW187DwC3AgEAZZvZsrOUKxsgHdLv
-         VFgQDb09pUF9BmSjrNL/hXJR5WMQl4MDbpIiJCg2+RkZif6B8QaAgD1KXQGZs6TrZaVd
-         9QPTFAWbDEDHWuBNn2QsxYc1muaTe4XcVhriCriB/PiaBxtRW0BmVIZK7zp9+ewcJ6Ny
-         acYg==
-X-Gm-Message-State: AOAM530XC/tb1pHGS6dGiNNSmDkgGuw2XqOh6A+Hr0IHGsJFyZttK6pv
-        Zc6RJg33gmMgC+tciPAG/TMvR0qkKGmryw0JGg2ljA==
-X-Google-Smtp-Source: ABdhPJzXFPqR1B7US8btpRlcEiiF2CE+53QMk9IVpJn9QC+/vq9hs4X9BBcseaNg+/uqKLdfRoU0QjxbvwxWcj/lIvI=
-X-Received: by 2002:a17:906:3146:: with SMTP id e6mr5306780eje.363.1610636688700;
- Thu, 14 Jan 2021 07:04:48 -0800 (PST)
+        bh=PoskbypxkT00wWzbYavGjYvgKHI4NdWsHemc342JeeU=;
+        b=Ot3A5LN+kUcnneXzfqaaiqf5k4qZvNOIivSSvs3Z++UEEdsyLhNS4+YMCNQmKnbUrb
+         K3HtvVziIRIUFyDiAn681ep97ueIbdwA1ra/NUW5Vi/eCsRQLEqsEEXC7RZ+BKDT5dzw
+         TeAcb5FAu0Ck5Du4g1druCZBIVSvgXo/x2PHCn28GVoy2JRVup7LlkB13SlkwQ25dRhY
+         1VcAzhGTUv1uJPRbO74iE2vX7X1v3tnBf2cXiyFVL+ajnveB/VAVjmyTRV04Pla4lTIJ
+         0dcRzPyCcPYo/Tc6LLZXuKeJulL5FPbvraj0HZQ6rZ/t3sQnuJG0SlFuwtGza8zNAlu0
+         7KSQ==
+X-Gm-Message-State: AOAM532pFX/yymzbFyFVyTKXXMgimzyOC0TKfmlU6T/1KpjxcESZ2v14
+        /8HdDrczw7ns7UEhqpQl9BPZPxKDpO2JSzuJRgTrEw==
+X-Google-Smtp-Source: ABdhPJznyXcMdazCTppxUqqiAc22eXO9WHpkaSNq4DdnREGauj/0BxYboWWaRD4gX8RqeRFaz6+qk33S2b8hqzTfmhA=
+X-Received: by 2002:a50:b742:: with SMTP id g60mr5944200ede.113.1610636708850;
+ Thu, 14 Jan 2021 07:05:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20210107025731.226017-1-warthog618@gmail.com> <20210107025731.226017-3-warthog618@gmail.com>
-In-Reply-To: <20210107025731.226017-3-warthog618@gmail.com>
+References: <20210107025731.226017-1-warthog618@gmail.com> <20210107025731.226017-4-warthog618@gmail.com>
+In-Reply-To: <20210107025731.226017-4-warthog618@gmail.com>
 From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 14 Jan 2021 16:04:37 +0100
-Message-ID: <CAMpxmJWnN0HyC95KFty0rHThH0_-2LU_eiVB_g4Fvz6vyM8xew@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] selftests: gpio: remove obsolete gpio-mockup-chardev.c
+Date:   Thu, 14 Jan 2021 16:04:57 +0100
+Message-ID: <CAMpxmJUrkX-nM1pNSrtCx-KKG0edBD1FGuaaRvLKqXZhN4u=Vw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] selftests: remove obsolete build restriction for gpio
 To:     Kent Gibson <warthog618@gmail.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         linux-gpio <linux-gpio@vger.kernel.org>,
@@ -65,11 +65,37 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Thu, Jan 7, 2021 at 3:58 AM Kent Gibson <warthog618@gmail.com> wrote:
 >
-> GPIO selftests have changed to new gpio-mockup-cdev helper, so remove
-> old gpio-mockup-chardev helper.
+> Build restrictions related to the gpio-mockup-chardev helper are
+> no longer relevant so remove them.
 >
 > Signed-off-by: Kent Gibson <warthog618@gmail.com>
 > Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
+>  tools/testing/selftests/Makefile | 9 ---------
+>  1 file changed, 9 deletions(-)
+>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index d9c283503159..5411041e63a0 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -121,15 +121,6 @@ ARCH           ?= $(SUBARCH)
+>  export KSFT_KHDR_INSTALL_DONE := 1
+>  export BUILD
+>
+> -# build and run gpio when output directory is the src dir.
+> -# gpio has dependency on tools/gpio and builds tools/gpio
+> -# objects in the src directory in all cases making the src
+> -# repo dirty even when objects are relocated.
+> -ifneq (1,$(DEFAULT_INSTALL_HDR_PATH))
+> -       TMP := $(filter-out gpio, $(TARGETS))
+> -       TARGETS := $(TMP)
+> -endif
+> -
+>  # set default goal to all, so make without a target runs all, even when
+>  # all isn't the first target in the file.
+>  .DEFAULT_GOAL := all
+> --
+> 2.30.0
+>
 
 Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
