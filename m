@@ -2,80 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 809BC2F57B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 04:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5382F5902
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 04:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729366AbhANCFZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jan 2021 21:05:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45386 "EHLO mail.kernel.org"
+        id S1727839AbhANDLq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jan 2021 22:11:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53136 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726820AbhAMW3q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 17:29:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 297BB233EA
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 22:29:05 +0000 (UTC)
+        id S1727716AbhANDLZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 Jan 2021 22:11:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id C848B2389B;
+        Thu, 14 Jan 2021 03:10:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610576945;
-        bh=srLRPLK5YXTuhUWWEHIPjYvPj65Ukrwxe3nwgOVQ1H4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BDH1F9rcJtI4Q0+49LL11CWjXcM8SruYfVwIiIGJerbKhGRLAxcKLSAt+qK2b9KFF
-         NwxaKjgnukIfeo109QKruQRNc66yXVrNVI1iY6hiWeIMR3u67hPoV7GA6VwA/jbk0J
-         7Y0ypCT/Z8AeZT1DJvGC7jd60dKJb9CtD/9GuYhTRypi/ZkLv3wW7QEe0XXvAQwSzj
-         GnNkrxSGKKlriE3ld8VSioPb8/BnIyB2ZNRXYYdxhYoZ3PCFcs/0szGB4aYVK7LstN
-         fpftl9LRQ3A+HKOKdQywPy+0zOSWRtlBJZxEtTeMVTa/5G/OGeiFpAL3FfK6XBiku5
-         6OrGLIfG73Q9g==
-Received: by mail-lj1-f180.google.com with SMTP id e7so4337111ljg.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 14:29:05 -0800 (PST)
-X-Gm-Message-State: AOAM531zW11k3lPVUefMoKFf1y50DXMK6n0/TUGXuYHxAi2lVz/QPgM+
-        pKZIfhscaZBqgd9LIBoDrmU7IzA5iTOPhdSbagOfjQ==
-X-Google-Smtp-Source: ABdhPJy1Ii5PE8b9neNCZi8w33t2B6xijbS6dW3x4eYy87VeFjivFp9gmChTGHBx06NwCCVvvuQ6Zbm2DUJmVRc5QZM=
-X-Received: by 2002:a2e:9b1a:: with SMTP id u26mr1828558lji.187.1610576943394;
- Wed, 13 Jan 2021 14:29:03 -0800 (PST)
+        s=k20201202; t=1610593808;
+        bh=S668cCj4fETsQeEe9cTKRejO/WRsuE92yCik1z6NkBM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MM2ZN3vxoqQ9ITlcNrGNo48hXx4eUWPLVvoZxy2Rc2YYbbhyeQZzc7Ndjc5i5hwsq
+         PuqP8/IXPD8j6C1rWkKH5EVoan33Ua0njq64rFtPDoQtQC6NC3COFqSUnddXE74oB7
+         0wazS5Se6oqnZ/molCDUC6revjZw388u1kxe9t+gWV80VO9zkktcUv9LjYgPVRh6RV
+         LHSife85c7BLbq9SF4IhJTr8f4FtcSQ3xO81Uo60A8XB7tyC7eNFXhD5M2dB67rkLM
+         y0MDq8oYcfHbw/GBzw9tW++NymXrXXwyo0ja8T5PIhOirBdDgpuUrU2Ry55wMLbddB
+         e8ufNb+H0JWhA==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id B940B60105;
+        Thu, 14 Jan 2021 03:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20210113053810.13518-1-gilad.reti@gmail.com> <20210113053810.13518-2-gilad.reti@gmail.com>
- <c245e747-85e6-e9be-2dff-064f64555fd7@fb.com>
-In-Reply-To: <c245e747-85e6-e9be-2dff-064f64555fd7@fb.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Wed, 13 Jan 2021 23:28:53 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ5_6Tux12V5hSigmLRYLg8qzM_kbOypeYx3rXPad3ZMiw@mail.gmail.com>
-Message-ID: <CACYkzJ5_6Tux12V5hSigmLRYLg8qzM_kbOypeYx3rXPad3ZMiw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: add verifier test for
- PTR_TO_MEM spill
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Gilad Reti <gilad.reti@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/5] selftests/bpf: Some build fixes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161059380875.28478.11223446599120917979.git-patchwork-notify@kernel.org>
+Date:   Thu, 14 Jan 2021 03:10:08 +0000
+References: <20210113163319.1516382-1-jean-philippe@linaro.org>
+In-Reply-To: <20210113163319.1516382-1-jean-philippe@linaro.org>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     bpf@vger.kernel.org, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-kselftest@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 5:05 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 1/12/21 9:38 PM, Gilad Reti wrote:
-> > Add a test to check that the verifier is able to recognize spilling of
-> > PTR_TO_MEM registers, by reserving a ringbuf buffer, forcing the spill
-> > of a pointer holding the buffer address to the stack, filling it back
-> > in from the stack and writing to the memory area pointed by it.
-> >
-> > The patch was partially contributed by CyberArk Software, Inc.
-> >
-> > Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
->
-> I didn't verify result_unpriv = ACCEPT part. I think it is correct
-> by checking code.
->
-> Acked-by: Yonghong Song <yhs@fb.com>
+Hello:
 
-Thanks for the description!
+This series was applied to bpf/bpf-next.git (refs/heads/master):
 
-Acked-by: KP Singh <kpsingh@kernel.org>
+On Wed, 13 Jan 2021 17:33:15 +0100 you wrote:
+> A few fixes for cross-building the sefltests out of tree. This will
+> enable wider automated testing on various Arm hardware.
+> 
+> Changes since v1 [1]:
+> * Use wildcard in patch 5
+> * Move the MAKE_DIRS declaration in patch 1
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2,1/5] selftests/bpf: Enable cross-building
+    https://git.kernel.org/bpf/bpf-next/c/de11ae4f56fd
+  - [bpf-next,v2,2/5] selftests/bpf: Fix out-of-tree build
+    https://git.kernel.org/bpf/bpf-next/c/5837cedef6f3
+  - [bpf-next,v2,3/5] selftests/bpf: Move generated test files to $(TEST_GEN_FILES)
+    https://git.kernel.org/bpf/bpf-next/c/d6ac8cad50f0
+  - [bpf-next,v2,4/5] selftests/bpf: Fix installation of urandom_read
+    https://git.kernel.org/bpf/bpf-next/c/ca1e846711a8
+  - [bpf-next,v2,5/5] selftests/bpf: Install btf_dump test cases
+    https://git.kernel.org/bpf/bpf-next/c/b8d1cbef2ea4
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
