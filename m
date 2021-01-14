@@ -2,190 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B12872F5C15
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 09:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 762742F63A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 16:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbhANIGr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jan 2021 03:06:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59010 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728117AbhANIGX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jan 2021 03:06:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 498F923A21;
-        Thu, 14 Jan 2021 08:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610611500;
-        bh=lsHLlzifMdLeh1RjXgXq4YH0nFTVQMHUlzqRL8ytCbM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BVoPSYZeaO3+EqGZlYd47ZQh+7h2gGRbGYiMnF7O3RGWiop/ZL4bULR6Tj537YLtL
-         2uQRwbluVqEq4qyA7NJbCKAzUoBTwGoKhuPHGPUcgQwbhoyvbNUNru0VrpbR+kEYT+
-         hjKwjdupWkFlnmXj8Z0bVnSBQWq+o4z6OqCq2higqpK4jSZ7XOv8tF3DAicmp6zZCQ
-         eMj0t0MkxZsTPtWKAVe0F4tpTTyNkC/Zsf/TVsgRK89Ijkwutcax5Oa0NVnatprl/z
-         J6gxWLBrkLV0fx3dKG2MHKWIKs+NMxwHhgbyQa/qKu9wP4zNH6dURNHDphm3grayND
-         BtvwYA3/U7C7Q==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kzxco-00EQ6m-5l; Thu, 14 Jan 2021 09:04:58 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 10/16] selftests: kselftest_harness.h: partially fix kernel-doc markups
-Date:   Thu, 14 Jan 2021 09:04:46 +0100
-Message-Id: <8383758160fdb4fcbb2ac56beeb874ca6dffc6b9.1610610937.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1610610937.git.mchehab+huawei@kernel.org>
-References: <cover.1610610937.git.mchehab+huawei@kernel.org>
+        id S1729126AbhANPFQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jan 2021 10:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729103AbhANPFP (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 Jan 2021 10:05:15 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241CAC061575
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:04:35 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id by1so2235732ejc.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NcbbwuTIw0XOxXbx1OMAv/zQ0f55cTFOH0Nbkr3v9jQ=;
+        b=yEQItAvigUbfYWEhi52aXuHAPZ6tuAT+qCXXEz38nS35ib8OcfO7+gDDF4v51PSdqO
+         yK6DXZVx+k8ENzwUIBM3pCe8Qm5RXLMR99pctX2BGhzzUafnl2uPG9GR5xhVL5+iqTK6
+         psk+q8hQ2VVxs1H+G6MVFLuMxpX5BkoJoyngpGmNxk6jWom4qSIxmJMywtK5LW+OehTn
+         UoMfUhx+FUVFS0hHg91ARMaZMgJodjBwEVItDiQaF9Yd19jROYtqMzANthaPc1a39tmu
+         C7iDgYdZ9RgcNAwyDDxoJ56VIfbn0G8cL1pEgiN0QBjCgtrB08+wDIFoHccqiGHTuDbR
+         wJgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NcbbwuTIw0XOxXbx1OMAv/zQ0f55cTFOH0Nbkr3v9jQ=;
+        b=raeZAk8gJJjz/R+tqlk+VtOQlH0g2KjidtHH4CmM38dETJhvrD1J59qlFWo1USP2LW
+         7qny8MJQY7zgewrTd5NMmYy0ZLzVybu2W4nsHcoAU7u47szOywBHsWz8rpkyosPe/kXu
+         eeCT4wiGCj4bwWPTgLPPD2t4s63DXEqnKdBlzH6vFaX3S8YvONpIxRGf9DKPGnc5Hp7I
+         G1GcxlB8541AZ3JCKyAHOMBS135runuIgyDOFWaj2MtvkaRZAB4a/QikxOo+f6KUoQuK
+         el9gjl2+FlIUn1gRNw3DcT3gYkOF7FAx0foCXS2K6fYzrdPpH7O1OtOKIorpoFmUs/H/
+         KGEQ==
+X-Gm-Message-State: AOAM531nVG/qk5slF3ULiUz2XiT8S7wnOuPVmAjvAySZbSv/ALBD2qTu
+        IgEF8Cy/DQeUr1Oje3eQGwdEwY9x3e2PZ2SLkkicKw==
+X-Google-Smtp-Source: ABdhPJzfhHY7ArHTAP1cnKCI9FVF1ePtOXIVFPGTJb4hX8UeuqKZq4J5eTmoMo9wmuacHVDMDI66XIwVLCYvcqL1JVQ=
+X-Received: by 2002:a17:906:19c3:: with SMTP id h3mr5543469ejd.429.1610636673865;
+ Thu, 14 Jan 2021 07:04:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20210107025731.226017-1-warthog618@gmail.com> <20210107025731.226017-2-warthog618@gmail.com>
+In-Reply-To: <20210107025731.226017-2-warthog618@gmail.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Thu, 14 Jan 2021 16:04:23 +0100
+Message-ID: <CAMpxmJX151+boZkX8SJ7s66GFOfcRvBAvGVTs96Ce2J4ETmFpg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] selftests: gpio: rework and simplify test implementation
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Bamvor Jian Zhang <bamv2005@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kernel-doc markups on this file are weird: they don't
-follow what's specified at:
+On Thu, Jan 7, 2021 at 3:58 AM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> The GPIO mockup selftests are overly complicated with separate
+> implementations of the tests for sysfs and cdev uAPI, and with the cdev
+> implementation being dependent on tools/gpio and libmount.
+>
+> Rework the test implementation to provide a common test suite with a
+> simplified pluggable uAPI interface.  The cdev implementation utilises
+> the GPIO uAPI directly to remove the dependence on tools/gpio.
+> The simplified uAPI interface removes the need for any file system mount
+> checks in C, and so removes the dependence on libmount.
+>
+> The rework also fixes the sysfs test implementation which has been broken
+> since the device created in the multiple gpiochip case was split into
+> separate devices.
+>
+> Fixes: commit 8a39f597bcfd ("gpio: mockup: rework device probing")
+> Signed-off-by: Kent Gibson <warthog618@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-	Documentation/doc-guide/kernel-doc.rst
 
-In particular, markups should use this format:
-        identifier - description
+The C part looks good to me. For the shell part I would probably do a
+couple things differently but since we don't really have a coding
+style for shell scripts in the kernel, I don't want to block these
+patches, so:
 
-and not this:
-	identifier(args)
-
-The way the definitions are inside this file cause the
-parser to completely miss the identifier name of each
-function.
-
-This prevents improving the script to do some needed validation
-tests.
-
-Address this part. Yet, furter changes are needed in order
-for it to fully follow the specs.
-
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- tools/testing/selftests/kselftest_harness.h | 26 ++++++++++++---------
- 1 file changed, 15 insertions(+), 11 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index edce85420d19..ae0f0f33b2a6 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -79,7 +79,7 @@
- #endif
- 
- /**
-- * TH_LOG(fmt, ...)
-+ * TH_LOG()
-  *
-  * @fmt: format string
-  * @...: optional arguments
-@@ -113,12 +113,16 @@
- 			__FILE__, __LINE__, _metadata->name, ##__VA_ARGS__)
- 
- /**
-- * SKIP(statement, fmt, ...)
-+ * SKIP()
-  *
-  * @statement: statement to run after reporting SKIP
-  * @fmt: format string
-  * @...: optional arguments
-  *
-+ * .. code-block:: c
-+ *
-+ *     SKIP(statement, fmt, ...);
-+ *
-  * This forces a "pass" after reporting why something is being skipped
-  * and runs "statement", which is usually "return" or "goto skip".
-  */
-@@ -136,7 +140,7 @@
- } while (0)
- 
- /**
-- * TEST(test_name) - Defines the test function and creates the registration
-+ * TEST() - Defines the test function and creates the registration
-  * stub
-  *
-  * @test_name: test name
-@@ -155,7 +159,7 @@
- #define TEST(test_name) __TEST_IMPL(test_name, -1)
- 
- /**
-- * TEST_SIGNAL(test_name, signal)
-+ * TEST_SIGNAL()
-  *
-  * @test_name: test name
-  * @signal: signal number
-@@ -195,7 +199,7 @@
- 		struct __test_metadata __attribute__((unused)) *_metadata)
- 
- /**
-- * FIXTURE_DATA(datatype_name) - Wraps the struct name so we have one less
-+ * FIXTURE_DATA() - Wraps the struct name so we have one less
-  * argument to pass around
-  *
-  * @datatype_name: datatype name
-@@ -212,7 +216,7 @@
- #define FIXTURE_DATA(datatype_name) struct _test_data_##datatype_name
- 
- /**
-- * FIXTURE(fixture_name) - Called once per fixture to setup the data and
-+ * FIXTURE() - Called once per fixture to setup the data and
-  * register
-  *
-  * @fixture_name: fixture name
-@@ -239,7 +243,7 @@
- 	FIXTURE_DATA(fixture_name)
- 
- /**
-- * FIXTURE_SETUP(fixture_name) - Prepares the setup function for the fixture.
-+ * FIXTURE_SETUP() - Prepares the setup function for the fixture.
-  * *_metadata* is included so that EXPECT_* and ASSERT_* work correctly.
-  *
-  * @fixture_name: fixture name
-@@ -265,7 +269,7 @@
- 			__attribute__((unused)) *variant)
- 
- /**
-- * FIXTURE_TEARDOWN(fixture_name)
-+ * FIXTURE_TEARDOWN()
-  * *_metadata* is included so that EXPECT_* and ASSERT_* work correctly.
-  *
-  * @fixture_name: fixture name
-@@ -286,7 +290,7 @@
- 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
- 
- /**
-- * FIXTURE_VARIANT(fixture_name) - Optionally called once per fixture
-+ * FIXTURE_VARIANT() - Optionally called once per fixture
-  * to declare fixture variant
-  *
-  * @fixture_name: fixture name
-@@ -305,7 +309,7 @@
- #define FIXTURE_VARIANT(fixture_name) struct _fixture_variant_##fixture_name
- 
- /**
-- * FIXTURE_VARIANT_ADD(fixture_name, variant_name) - Called once per fixture
-+ * FIXTURE_VARIANT_ADD() - Called once per fixture
-  * variant to setup and register the data
-  *
-  * @fixture_name: fixture name
-@@ -339,7 +343,7 @@
- 		_##fixture_name##_##variant_name##_variant =
- 
- /**
-- * TEST_F(fixture_name, test_name) - Emits test registration and helpers for
-+ * TEST_F() - Emits test registration and helpers for
-  * fixture-based test cases
-  *
-  * @fixture_name: fixture name
--- 
-2.29.2
-
+Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
