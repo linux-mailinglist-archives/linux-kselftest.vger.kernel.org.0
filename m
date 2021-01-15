@@ -2,107 +2,217 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 968142F849B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Jan 2021 19:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A07D2F8768
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Jan 2021 22:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387584AbhAOSkt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Jan 2021 13:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732398AbhAOSkt (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Jan 2021 13:40:49 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2718CC0613D3
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Jan 2021 10:40:09 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id j26so6725358qtq.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Jan 2021 10:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7iqMaLM5ngsObMfPwH4GTR7fbydas+V1RNx2qyihbRE=;
-        b=OhxHt8mmLJBsBMtZBFbnzLbxdAsOB8Ka3zQhmpOBvqIxz1zjBrp/a47AIXhKA0t3km
-         YlHhKjdWMqC7jNahlHbUlRUPmkRb6aO3yRCF+8ADRWKYCO7qd059e5vvQyc9p7FxMpRy
-         yK6aElGVEG1rRRoH4i0ELby/mv6XobYfm7NJGIKaJEA8DWYgI7JeHVHHJ5l69RwW2WVM
-         MNIBWcLwwew5ASqQAc7q4SYDX9xA6MsERsWIb//cqdNkvQpmcUggFcLkB3zoFQMDBzw9
-         T/XsBb0QSqYdbXf3XNPHdZZtNVQ/dL8ZHqC6DmEFhEVb5SB5csXt7sqriqrmopJy8BxM
-         omLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7iqMaLM5ngsObMfPwH4GTR7fbydas+V1RNx2qyihbRE=;
-        b=EXoik4K8zs7cZx9sg+KDJdNGTPHeS89yJoZ1fLLiistSUXcUqy4Ec86+ETvYPHImPl
-         HmiP66U1i7BwPH0PfpQAZDWEldN8IzjSd+NKiVOOBMWHzAoLAJYCq1DTj71Nx9QWizn0
-         Qi8Jr234SJvbn/qy3nj5pLLjQaJ5nqQZ/WxmM9GE5yAbYm3RL+R8PmXnymr8SifHRPRK
-         3sBlfJlh3XRZzRAkZCS++OMrbT9cliDnUA2wrodRnGLku6ZJiycY3wwyOuJOjWUQwnb1
-         VHb3FtC3BbHsVrMDvmlaHeei+0iEDQ40GmMZnLXTFvfFs01UnEzJQW3gcy3c6u7NqpjO
-         mY1Q==
-X-Gm-Message-State: AOAM5314FpBQu6mOl4bBMqoFn1lQmiaMcHeB/IJJCaJZz6ybazv9hNP5
-        74MYXq941Qg9NZjm1jHosOVU/A==
-X-Google-Smtp-Source: ABdhPJwYvWXIvOLXd5qgmW2cmliLgAWyRNvV6PcZolMroOO0r5/CLLBELstEgOcEHd1noGRZeNtm8w==
-X-Received: by 2002:a05:622a:4d1:: with SMTP id q17mr7113455qtx.272.1610736008331;
-        Fri, 15 Jan 2021 10:40:08 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id u10sm1059825qtb.24.2021.01.15.10.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 10:40:07 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1l0U10-001hs5-Uq; Fri, 15 Jan 2021 14:40:06 -0400
-Date:   Fri, 15 Jan 2021 14:40:06 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, mike.kravetz@oracle.com,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
+        id S1726737AbhAOVQs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Jan 2021 16:16:48 -0500
+Received: from mga18.intel.com ([134.134.136.126]:45764 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726032AbhAOVQs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 15 Jan 2021 16:16:48 -0500
+IronPort-SDR: r5ipUybHlY3EcMBvelk83ESCGpfwhlp5fwAmgg7suYc/zhbDAZgqFOzlWeguuSf82bI6Noifi+
+ YYInTmu1GFTw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9865"; a="166277110"
+X-IronPort-AV: E=Sophos;i="5.79,350,1602572400"; 
+   d="scan'208";a="166277110"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2021 13:15:15 -0800
+IronPort-SDR: 40vyABUWaWhyy4NQfmGRrBAid59rOdBgKOB6fF8wFnweKcu15M6rqOW4vTMcaiD8N7j/ZJytLG
+ Vm5m/mct4GIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,350,1602572400"; 
+   d="scan'208";a="401418976"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Jan 2021 13:15:15 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, Borislav Petkov <bp@alien8.de>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 08/10] mm/gup: limit number of gup migration failures,
- honor failures
-Message-ID: <20210115184006.GH4605@ziepe.ca>
-References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
- <20201217185243.3288048-9-pasha.tatashin@soleen.com>
- <20201217205048.GL5487@ziepe.ca>
- <CA+CK2bA4F+SipkReJzFjCSC-8kZdK4yrwCQZM+TvCTrqV2CGHg@mail.gmail.com>
- <20201218141927.GM5487@ziepe.ca>
- <CA+CK2bDULopw649ndBybA-ST5EoRMHULwcfQcSQVKT9r8zAtwQ@mail.gmail.com>
- <20210113195528.GD4605@ziepe.ca>
- <CA+CK2bDDUMOeCH8rQBL7fBdHCAUZBOykyXNL2N=hmxq7xi0giQ@mail.gmail.com>
- <CA+CK2bC=o1-qW5+d-Lud9qN1937PC4Jxf_oyxwVrKby=mH5WyQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+CK2bC=o1-qW5+d-Lud9qN1937PC4Jxf_oyxwVrKby=mH5WyQ@mail.gmail.com>
+Subject: [PATCH v4 4/4] selftest/x86/signal: Include test cases for validating sigaltstack
+Date:   Fri, 15 Jan 2021 13:10:38 -0800
+Message-Id: <20210115211038.2072-5-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210115211038.2072-1-chang.seok.bae@intel.com>
+References: <20210115211038.2072-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 01:10:27PM -0500, Pavel Tatashin wrote:
+The test measures the kernel's signal delivery with different (enough vs.
+insufficient) stack sizes.
 
-> I've been thinking about this some more. Again, I am not sure this is
-> a bug. I understand split_huge_pmd() may split the PMD size page into
-> PTEs and leave the compound page intact. However, in order for pages[]
-> to have non sequential addresses in compound page, those PTEs must
-> also be migrated after split_huge_pmd(), 
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from v3:
+* Revised test messages again (Borislav Petkov)
 
-Why focus on migrated? Anything could happen to those PTEs: they could
-be COW'd, they could be mmap/munmap'd, etc.
+Changes from v2:
+* Revised test messages (Borislav Petkov)
+---
+ tools/testing/selftests/x86/Makefile      |   2 +-
+ tools/testing/selftests/x86/sigaltstack.c | 128 ++++++++++++++++++++++
+ 2 files changed, 129 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/sigaltstack.c
 
-Jason
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 6703c7906b71..e0c52e5ab49e 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			test_vdso test_vsyscall mov_ss_trap \
+-			syscall_arg_fault fsgsbase_restore
++			syscall_arg_fault fsgsbase_restore sigaltstack
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
+new file mode 100644
+index 000000000000..f689af75e979
+--- /dev/null
++++ b/tools/testing/selftests/x86/sigaltstack.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#define _GNU_SOURCE
++#include <signal.h>
++#include <stdio.h>
++#include <stdbool.h>
++#include <string.h>
++#include <err.h>
++#include <errno.h>
++#include <limits.h>
++#include <sys/mman.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <sys/resource.h>
++#include <setjmp.h>
++
++/* sigaltstack()-enforced minimum stack */
++#define ENFORCED_MINSIGSTKSZ	2048
++
++#ifndef AT_MINSIGSTKSZ
++#  define AT_MINSIGSTKSZ	51
++#endif
++
++static int nerrs;
++
++static bool sigalrm_expected;
++
++static unsigned long at_minstack_size;
++
++static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
++		       int flags)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_sigaction = handler;
++	sa.sa_flags = SA_SIGINFO | flags;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++static void clearhandler(int sig)
++{
++	struct sigaction sa;
++
++	memset(&sa, 0, sizeof(sa));
++	sa.sa_handler = SIG_DFL;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(sig, &sa, 0))
++		err(1, "sigaction");
++}
++
++static int setup_altstack(void *start, unsigned long size)
++{
++	stack_t ss;
++
++	memset(&ss, 0, sizeof(ss));
++	ss.ss_size = size;
++	ss.ss_sp = start;
++
++	return sigaltstack(&ss, NULL);
++}
++
++static jmp_buf jmpbuf;
++
++static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
++{
++	if (sigalrm_expected) {
++		printf("[FAIL]\tWrong signal delivered: SIGSEGV (expected SIGALRM).");
++		nerrs++;
++	} else {
++		printf("[OK]\tSIGSEGV signal delivered.\n");
++	}
++
++	siglongjmp(jmpbuf, 1);
++}
++
++static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
++{
++	if (!sigalrm_expected) {
++		printf("[FAIL]\tWrong signal delivered: SIGALRM (expected SIGSEGV).");
++		nerrs++;
++	} else {
++		printf("[OK]\tSIGALRM signal delivered.\n");
++	}
++}
++
++static void test_sigaltstack(void *altstack, unsigned long size)
++{
++	if (setup_altstack(altstack, size))
++		err(1, "sigaltstack()");
++
++	sigalrm_expected = (size > at_minstack_size) ? true : false;
++
++	sethandler(SIGSEGV, sigsegv, 0);
++	sethandler(SIGALRM, sigalrm, SA_ONSTACK);
++
++	if (!sigsetjmp(jmpbuf, 1)) {
++		printf("[RUN]\tTest an alternate signal stack of %ssufficient size.\n",
++		       sigalrm_expected ? "" : "in");
++		printf("\tRaise SIGALRM. %s is expected to be delivered.\n",
++		       sigalrm_expected ? "It" : "SIGSEGV");
++		raise(SIGALRM);
++	}
++
++	clearhandler(SIGALRM);
++	clearhandler(SIGSEGV);
++}
++
++int main(void)
++{
++	void *altstack;
++
++	at_minstack_size = getauxval(AT_MINSIGSTKSZ);
++
++	altstack = mmap(NULL, at_minstack_size + SIGSTKSZ, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
++	if (altstack == MAP_FAILED)
++		err(1, "mmap()");
++
++	if ((ENFORCED_MINSIGSTKSZ + 1) < at_minstack_size)
++		test_sigaltstack(altstack, ENFORCED_MINSIGSTKSZ + 1);
++
++	test_sigaltstack(altstack, at_minstack_size + SIGSTKSZ);
++
++	return nerrs == 0 ? 0 : 1;
++}
+-- 
+2.17.1
+
