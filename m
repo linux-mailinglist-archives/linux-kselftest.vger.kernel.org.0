@@ -2,190 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A2C2F6E72
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jan 2021 23:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D684F2F6F74
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Jan 2021 01:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730797AbhANWow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jan 2021 17:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S1731073AbhAOA1Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jan 2021 19:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730491AbhANWov (ORCPT
+        with ESMTP id S1728224AbhAOA1X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jan 2021 17:44:51 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDFDC0613D6
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 14:43:30 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id e7so8305623ljg.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 14:43:30 -0800 (PST)
+        Thu, 14 Jan 2021 19:27:23 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C427EC061575
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 16:26:43 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id c132so4915055pga.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 16:26:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=l0aLIrK9Ls3yChluxnDYpvoAFnbmuAeFSQRaGDSDK6s=;
-        b=Xp2UG1bDqZV6MWUIg3PXRWlOxm3AESTgyUaOByzy05KbBMIlWQTWhAjiAXqIJLco8n
-         CKATzDajP+/i7+U9T8QSEVzVCGM9KCooEF2Qog6oGaP7m4UbxqlPABfgxbuvEWJTi9CN
-         eqzQu31AW2vsl1w6jVkXxJ/M5h/fqc7PNe9pqO61lRW1/nWovu8unaTR5XmmIZkfZgwP
-         tr+Axa7VGzhhKFDPvqTzv2L+EqZ4C5BEDY31jsINoIDSNsVV2C0gKRsxVsVvX38Zs0wH
-         p15PatmNXOKYvYVm9VjZ1UxZrw3YprkBpqifeMBtnXs/ATFse8XhCqZ+GPH/cm/nlJcE
-         s4sQ==
+         :cc;
+        bh=VrR4pCt2QpQ9EObd7CgJ7W4oxOaFcsdsZorMfy/tWv0=;
+        b=tWHF9b7E+s658hVcVQWZ7xA7N39BrCFFPLzoS0ymT8X3+KazjEqdCiYhzgz9fN9qj+
+         5dWtOWUIgnrqGVT6/86ihJfKIkeqRsfBWheF6ZeIgyqkaBFkA2KzRM2PK8887qeFpz5h
+         hbajFFpi8WKfnzNsAv2zg3gIW3RTfGPf5Pvo47H7g+3eErORkbVzZI46rnsN5uxigBZ5
+         isJ8CIrkjq0spXsL0L8vpa3Nz6MwJDiKtgSKys9I8xD6q/PgAAvbWmWNmDYU7neWVaVm
+         iJ0WQbCPnbVPXPUR9CoOMJkSH1gk8xO58aKcdt1OWq9T5qYgLbhc3fQd+wFiQ5SkZivR
+         q2pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=l0aLIrK9Ls3yChluxnDYpvoAFnbmuAeFSQRaGDSDK6s=;
-        b=hHLf9fYFyDN1VfnyrRKzS3rqU15B1AVa8t/reK6vUyyUtMrPBIAdrlkiPCfWXR0PDO
-         RTUqQg8qjzc5/RDQwInZ7ehIt/o7e8CPtyjHR0+nESgqF5TJcIc4Di7p/EtJTHeHKM/b
-         PZb4vcYBiBf09r0tb2t9KKPdCK7MhYakV8XtuS75qFKzjLODiHH4xogQ9+PxEn8Fnns0
-         MmtJhTQkAuQhP+NeJrXh3wgwM5IE0Cc/3M5PMaGdoiJvMwz9HkRMyeYaOtvNtc7D8eIR
-         TwqbfpAlgtFvpCQEi6OH2QakY1MNMLaZGHAknXHfRTJtrNETjnzbCQW5pht+eTy55sY/
-         MKHA==
-X-Gm-Message-State: AOAM530PBg1ZGS2d3Cf+X2fFBC1utKij4ixIFaNGQCBTVSMQFpIRgRfU
-        JfKRrVuYYCul/pk7CQ5H27nyKh7jbKEGjBLerb1nxg==
-X-Google-Smtp-Source: ABdhPJwmu2cBfmtpdruzglhRIadtD3T+wRN+tSM4C2y7Zg3rHsx1RPPVdIX6GIoHvdQgt3ctrnlKrS5mVOsEqS6Krko=
-X-Received: by 2002:a2e:50c:: with SMTP id 12mr4154104ljf.226.1610664208863;
- Thu, 14 Jan 2021 14:43:28 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=VrR4pCt2QpQ9EObd7CgJ7W4oxOaFcsdsZorMfy/tWv0=;
+        b=bNjrkiSg5geHVb8KLBhmyxirBkMIUNQpJ2sTeHpNCYkE02jQdor7juXzBMAFhysFbv
+         sBLKRRUtiFYgOdAeLItfACnUttP7uvLYPJd08+/5pM/gQ/la3do8EhMmPo8ZK0AVs8+i
+         0Mjw0kLUdhDFPxJl7EiLDlw1yLCa8rOz4jSn3Vp069jw+upC8iMRaI4MXTmCxl24c+EJ
+         xFkpzS/RJayDhGD/klsikunsmOd9Hy+LIpA+3qmVzsyBAKcqXLLGeFzodH9mP5J+sr4B
+         e3tdntcpYRE2jgazbBs5iveV243ZNMmja2eK+rR1QAr4PIWx4kavmpQHZF2m41/LniRk
+         78yA==
+X-Gm-Message-State: AOAM532Pp78kZDURIlRwrjPilc7AMkwCYFjnpQrzD4WtKnTji3vkfwQI
+        j5Mopqr8asQu4wQlJj55mHyzQiXOq90EjadF6KAkQv44Wo851A==
+X-Google-Smtp-Source: ABdhPJxu3zfPxFZyoIathC3722ixEjnt64UfpFHbWXcvYgdgtrv91Naw97mNoXKEslKAcpYV6r3ZPMILsPZntqZb7R0=
+X-Received: by 2002:a63:5d7:: with SMTP id 206mr10239836pgf.384.1610670403049;
+ Thu, 14 Jan 2021 16:26:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20201209192839.1396820-1-mic@digikod.net> <20201209192839.1396820-8-mic@digikod.net>
- <CAG48ez1wbAQwU-eoC9DngHyUM_5F01MJQpRnLaJFvfRUrnXBdA@mail.gmail.com> <aeb3e152-8108-89d2-0577-4b130368f14f@digikod.net>
-In-Reply-To: <aeb3e152-8108-89d2-0577-4b130368f14f@digikod.net>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 14 Jan 2021 23:43:02 +0100
-Message-ID: <CAG48ez2HJCFvmFALDYDYnufE755Dqh3JquAMf-1mnzmRrdKaoQ@mail.gmail.com>
-Subject: Re: [PATCH v26 07/12] landlock: Support filesystem access-control
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
+References: <20201211223232.697679-1-davidgow@google.com>
+In-Reply-To: <20201211223232.697679-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 14 Jan 2021 16:26:32 -0800
+Message-ID: <CAFd5g45xaOE0KOeOoHzY9NsJRbtDUimto1rDs0+aD6hw4zbogw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Fix spelling of "diagnostic" in kunit_parser
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 7:54 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> On 14/01/2021 04:22, Jann Horn wrote:
-> > On Wed, Dec 9, 2020 at 8:28 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.ne=
-t> wrote:
-> >> Thanks to the Landlock objects and ruleset, it is possible to identify
-> >> inodes according to a process's domain.  To enable an unprivileged
-> >> process to express a file hierarchy, it first needs to open a director=
-y
-> >> (or a file) and pass this file descriptor to the kernel through
-> >> landlock_add_rule(2).  When checking if a file access request is
-> >> allowed, we walk from the requested dentry to the real root, following
-> >> the different mount layers.  The access to each "tagged" inodes are
-> >> collected according to their rule layer level, and ANDed to create
-> >> access to the requested file hierarchy.  This makes possible to identi=
-fy
-> >> a lot of files without tagging every inodes nor modifying the
-> >> filesystem, while still following the view and understanding the user
-> >> has from the filesystem.
-> >>
-> >> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
-> >> keep the same struct inodes for the same inodes whereas these inodes a=
-re
-> >> in use.
-> >>
-> >> This commit adds a minimal set of supported filesystem access-control
-> >> which doesn't enable to restrict all file-related actions.  This is th=
-e
-> >> result of multiple discussions to minimize the code of Landlock to eas=
-e
-> >> review.  Thanks to the Landlock design, extending this access-control
-> >> without breaking user space will not be a problem.  Moreover, seccomp
-> >> filters can be used to restrict the use of syscall families which may
-> >> not be currently handled by Landlock.
-> > [...]
-> >> +static bool check_access_path_continue(
-> >> +               const struct landlock_ruleset *const domain,
-> >> +               const struct path *const path, const u32 access_reques=
-t,
-> >> +               u64 *const layer_mask)
-> >> +{
-> > [...]
-> >> +       /*
-> >> +        * An access is granted if, for each policy layer, at least on=
-e rule
-> >> +        * encountered on the pathwalk grants the access, regardless o=
-f their
-> >> +        * position in the layer stack.  We must then check not-yet-se=
-en layers
-> >> +        * for each inode, from the last one added to the first one.
-> >> +        */
-> >> +       for (i =3D 0; i < rule->num_layers; i++) {
-> >> +               const struct landlock_layer *const layer =3D &rule->la=
-yers[i];
-> >> +               const u64 layer_level =3D BIT_ULL(layer->level - 1);
-> >> +
-> >> +               if (!(layer_level & *layer_mask))
-> >> +                       continue;
-> >> +               if ((layer->access & access_request) !=3D access_reque=
-st)
-> >> +                       return false;
-> >> +               *layer_mask &=3D ~layer_level;
-> >
-> > Hmm... shouldn't the last 5 lines be replaced by the following?
-> >
-> > if ((layer->access & access_request) =3D=3D access_request)
-> >     *layer_mask &=3D ~layer_level;
-> >
-> > And then, since this function would always return true, you could
-> > change its return type to "void".
-> >
-> >
-> > As far as I can tell, the current version will still, if a ruleset
-> > looks like this:
-> >
-> > /usr read+write
-> > /usr/lib/ read
-> >
-> > reject write access to /usr/lib, right?
+On Fri, Dec 11, 2020 at 2:32 PM David Gow <davidgow@google.com> wrote:
 >
-> If these two rules are from different layers, then yes it would work as
-> intended. However, if these rules are from the same layer the path walk
-> will not stop at /usr/lib but go down to /usr, which grants write
-> access.
+> Various helper functions were misspelling "diagnostic" in their names.
+> It finally got annoying, so fix it.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-I don't see why the code would do what you're saying it does. And an
-experiment seems to confirm what I said; I checked out landlock-v26,
-and the behavior I get is:
-
-user@vm:~/landlock$ dd if=3D/dev/null of=3D/tmp/aaa
-0+0 records in
-0+0 records out
-0 bytes copied, 0.00106365 s, 0.0 kB/s
-user@vm:~/landlock$ LL_FS_RO=3D'/lib' LL_FS_RW=3D'/' ./sandboxer dd
-if=3D/dev/null of=3D/tmp/aaa
-0+0 records in
-0+0 records out
-0 bytes copied, 0.000491814 s, 0.0 kB/s
-user@vm:~/landlock$ LL_FS_RO=3D'/tmp' LL_FS_RW=3D'/' ./sandboxer dd
-if=3D/dev/null of=3D/tmp/aaa
-dd: failed to open '/tmp/aaa': Permission denied
-user@vm:~/landlock$
-
-Granting read access to /tmp prevents writing to it, even though write
-access was granted to /.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
