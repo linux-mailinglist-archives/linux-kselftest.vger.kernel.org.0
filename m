@@ -2,265 +2,236 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDBD2F8CBB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jan 2021 10:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448632F8E2D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jan 2021 18:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725928AbhAPJzH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Jan 2021 04:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S1727470AbhAPRRa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Jan 2021 12:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbhAPJzG (ORCPT
+        with ESMTP id S1726883AbhAPRR2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Jan 2021 04:55:06 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A0CC061757;
-        Sat, 16 Jan 2021 01:54:25 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id w1so16752999ejf.11;
-        Sat, 16 Jan 2021 01:54:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wDYHl3JlkFkvKVmXlLVQ/hJ53dcP76tKCr7EU07xaz4=;
-        b=qCzdEmtmI8AgWl4YGS24bdmzOYiK1o6ZjNObuyR/riNjkoELeNsManXJ582Os9yW0j
-         v0Z5+MojEtytjbK2VDy98e1zJ+Fv0vFI2vaK3o74RD5DXdMtNtNFBpm0qipUfYmFElSr
-         EyaGiLU4ZSskbJI47prKEuRLhfse1k9fBEnL+OglPG635+j8H/dDTl9T6mjpjXsJafkM
-         14Jry7DtzuDN+IPd6rNKAj2oVu5SMfeks9jFkHSgJynjTAvalN0dJ30CUAZfko2RJY30
-         5NNZjYCtHeF/zOZEfYn/AK2/P4S98UyUoZorkmUKaUr8pjx9x0eFSQTsEZJb/rgKpROq
-         o8aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wDYHl3JlkFkvKVmXlLVQ/hJ53dcP76tKCr7EU07xaz4=;
-        b=JBzKyODdss2xILS187UtkVBcO/jwblv+9ESeBKGVUjkGXBY80oIUMG+9KV1/JJC2mz
-         ziGdjtXkejfjEhOrRUrvIxg5YjtSzCCCc+1tZzhraztFiPwrIqroWlyQAbPGJcZ1Aecm
-         JSiCnwvbTHyPgJNIajOCTbmTmEbkGX7kI+Z4dRquLAWLkStYcncFztkh847uvaVYLbAf
-         QEHYphZg5qgsCMyj7tNrfjHMKLlV59iMgXiXSE89TYSTkuokxI6yPH+IIKuhE8nQsSEr
-         HwiFiL5kgT4x5+C8v4OHFt/GGHKKAG1D3EK/LmP+BaV1YMknbZVO0+1VPfrcTIEZ0gRo
-         bekQ==
-X-Gm-Message-State: AOAM533mFUjSYR1OGOHksI0AD/32AGr4YeTEiIKgjz7TZ7NUdEIsGPiN
-        n1ePVGuYdNdZak6rJQJn+4M=
-X-Google-Smtp-Source: ABdhPJxwc1bTXXgC3FH942zjLoL+5k4sw9Rc2WllDo3fz+k4vuq6gcMleCggNZbzuBuU5G7tBoBU+w==
-X-Received: by 2002:a17:906:7842:: with SMTP id p2mr4576580ejm.412.1610790863713;
-        Sat, 16 Jan 2021 01:54:23 -0800 (PST)
-Received: from localhost.localdomain (ip-109-40-64-145.web.vodafone.de. [109.40.64.145])
-        by smtp.gmail.com with ESMTPSA id n22sm6810226edr.11.2021.01.16.01.54.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jan 2021 01:54:22 -0800 (PST)
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
+        Sat, 16 Jan 2021 12:17:28 -0500
+Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fa9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82556C061573
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Jan 2021 09:16:42 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DJ4Th0JkRzMqHHH;
+        Sat, 16 Jan 2021 18:16:40 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DJ4Tc5tpwzlh8TM;
+        Sat, 16 Jan 2021 18:16:36 +0100 (CET)
+Subject: Re: [PATCH v26 07/12] landlock: Support filesystem access-control
+To:     Jann Horn <jannh@google.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
         Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Yulia Kartseva <hex@fb.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Andrey Ignatov <rdna@fb.com>,
-        Thomas Hebb <tommyhebb@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Briana Oursler <briana.oursler@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH RFC] tools: Factor Clang, LLC and LLVM utils definitions
-Date:   Sat, 16 Jan 2021 10:54:04 +0100
-Message-Id: <20210116095413.72820-1-sedat.dilek@gmail.com>
-X-Mailer: git-send-email 2.30.0
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20201209192839.1396820-1-mic@digikod.net>
+ <20201209192839.1396820-8-mic@digikod.net>
+ <CAG48ez1wbAQwU-eoC9DngHyUM_5F01MJQpRnLaJFvfRUrnXBdA@mail.gmail.com>
+ <aeb3e152-8108-89d2-0577-4b130368f14f@digikod.net>
+ <CAG48ez2HJCFvmFALDYDYnufE755Dqh3JquAMf-1mnzmRrdKaoQ@mail.gmail.com>
+ <9be6481f-9c03-dd32-378f-20bc7c52315c@digikod.net>
+ <CAG48ez1O0VTwEiRd3KqexoF78WR+cmP5bGk5Kh5Cs7aPepiDVg@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <28d2a149-0fe0-764b-85b3-6f979d1dd931@digikod.net>
+Date:   Sat, 16 Jan 2021 18:16:57 +0100
+User-Agent: 
 MIME-Version: 1.0
+In-Reply-To: <CAG48ez1O0VTwEiRd3KqexoF78WR+cmP5bGk5Kh5Cs7aPepiDVg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
 
-While looking into the source code I found duplicate assignments
-in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
+On 15/01/2021 19:31, Jann Horn wrote:
+> On Fri, Jan 15, 2021 at 10:10 AM Mickaël Salaün <mic@digikod.net> wrote:
+>> On 14/01/2021 23:43, Jann Horn wrote:
+>>> On Thu, Jan 14, 2021 at 7:54 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>>> On 14/01/2021 04:22, Jann Horn wrote:
+>>>>> On Wed, Dec 9, 2020 at 8:28 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>>>>> Thanks to the Landlock objects and ruleset, it is possible to identify
+>>>>>> inodes according to a process's domain.  To enable an unprivileged
+>>>>>> process to express a file hierarchy, it first needs to open a directory
+>>>>>> (or a file) and pass this file descriptor to the kernel through
+>>>>>> landlock_add_rule(2).  When checking if a file access request is
+>>>>>> allowed, we walk from the requested dentry to the real root, following
+>>>>>> the different mount layers.  The access to each "tagged" inodes are
+>>>>>> collected according to their rule layer level, and ANDed to create
+>>>>>> access to the requested file hierarchy.  This makes possible to identify
+>>>>>> a lot of files without tagging every inodes nor modifying the
+>>>>>> filesystem, while still following the view and understanding the user
+>>>>>> has from the filesystem.
+>>>>>>
+>>>>>> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
+>>>>>> keep the same struct inodes for the same inodes whereas these inodes are
+>>>>>> in use.
+>>>>>>
+>>>>>> This commit adds a minimal set of supported filesystem access-control
+>>>>>> which doesn't enable to restrict all file-related actions.  This is the
+>>>>>> result of multiple discussions to minimize the code of Landlock to ease
+>>>>>> review.  Thanks to the Landlock design, extending this access-control
+>>>>>> without breaking user space will not be a problem.  Moreover, seccomp
+>>>>>> filters can be used to restrict the use of syscall families which may
+>>>>>> not be currently handled by Landlock.
+>>>>> [...]
+>>>>>> +static bool check_access_path_continue(
+>>>>>> +               const struct landlock_ruleset *const domain,
+>>>>>> +               const struct path *const path, const u32 access_request,
+>>>>>> +               u64 *const layer_mask)
+>>>>>> +{
+>>>>> [...]
+>>>>>> +       /*
+>>>>>> +        * An access is granted if, for each policy layer, at least one rule
+>>>>>> +        * encountered on the pathwalk grants the access, regardless of their
+>>>>>> +        * position in the layer stack.  We must then check not-yet-seen layers
+>>>>>> +        * for each inode, from the last one added to the first one.
+>>>>>> +        */
+>>>>>> +       for (i = 0; i < rule->num_layers; i++) {
+>>>>>> +               const struct landlock_layer *const layer = &rule->layers[i];
+>>>>>> +               const u64 layer_level = BIT_ULL(layer->level - 1);
+>>>>>> +
+>>>>>> +               if (!(layer_level & *layer_mask))
+>>>>>> +                       continue;
+>>>>>> +               if ((layer->access & access_request) != access_request)
+>>>>>> +                       return false;
+>>>>>> +               *layer_mask &= ~layer_level;
+>>>>>
+>>>>> Hmm... shouldn't the last 5 lines be replaced by the following?
+>>>>>
+>>>>> if ((layer->access & access_request) == access_request)
+>>>>>     *layer_mask &= ~layer_level;
+>>>>>
+>>>>> And then, since this function would always return true, you could
+>>>>> change its return type to "void".
+>>>>>
+>>>>>
+>>>>> As far as I can tell, the current version will still, if a ruleset
+>>>>> looks like this:
+>>>>>
+>>>>> /usr read+write
+>>>>> /usr/lib/ read
+>>>>>
+>>>>> reject write access to /usr/lib, right?
+>>>>
+>>>> If these two rules are from different layers, then yes it would work as
+>>>> intended. However, if these rules are from the same layer the path walk
+>>>> will not stop at /usr/lib but go down to /usr, which grants write
+>>>> access.
+>>>
+>>> I don't see why the code would do what you're saying it does. And an
+>>> experiment seems to confirm what I said; I checked out landlock-v26,
+>>> and the behavior I get is:
+>>
+>> There is a misunderstanding, I was responding to your proposition to
+>> modify check_access_path_continue(), not about the behavior of landlock-v26.
+>>
+>>>
+>>> user@vm:~/landlock$ dd if=/dev/null of=/tmp/aaa
+>>> 0+0 records in
+>>> 0+0 records out
+>>> 0 bytes copied, 0.00106365 s, 0.0 kB/s
+>>> user@vm:~/landlock$ LL_FS_RO='/lib' LL_FS_RW='/' ./sandboxer dd
+>>> if=/dev/null of=/tmp/aaa
+>>> 0+0 records in
+>>> 0+0 records out
+>>> 0 bytes copied, 0.000491814 s, 0.0 kB/s
+>>> user@vm:~/landlock$ LL_FS_RO='/tmp' LL_FS_RW='/' ./sandboxer dd
+>>> if=/dev/null of=/tmp/aaa
+>>> dd: failed to open '/tmp/aaa': Permission denied
+>>> user@vm:~/landlock$
+>>>
+>>> Granting read access to /tmp prevents writing to it, even though write
+>>> access was granted to /.
+>>>
+>>
+>> It indeed works like this with landlock-v26. However, with your above
+>> proposition, it would work like this:
+>>
+>> $ LL_FS_RO='/tmp' LL_FS_RW='/' ./sandboxer dd if=/dev/null of=/tmp/aaa
+>> 0+0 records in
+>> 0+0 records out
+>> 0 bytes copied, 0.000187265 s, 0.0 kB/s
+>>
+>> …which is not what users would expect I guess. :)
+> 
+> Ah, so we are disagreeing about what the right semantics are. ^^ To
+> me, that is exactly the behavior I would expect.
+> 
+> Imagine that someone wants to write a program that needs to be able to
+> load libraries from /usr/lib (including subdirectories) and needs to
+> be able to write output to some user-specified output directory. So
+> they use something like this to sandbox their program (plus error
+> handling):
+> 
+> static void add_fs_rule(int ruleset_fd, char *path, u64 allowed_access) {
+>   int fd = open(path, O_PATH);
+>   struct landlock_path_beneath_attr path_beneath = {
+>     .parent_fd = fd,
+>     .allowed_access = allowed_access
+>   };
+>   landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+>           &path_beneath, 0);
+>   close(fd);
+> }
+> int main(int argc, char **argv) {
+>   char *output_dir = argv[1];
+>   int ruleset_fd = landlock_create_ruleset(&ruleset_attr,
+> sizeof(ruleset_attr, 0);
+>   add_fs_rule(ruleset_fd, "/usr/lib", ACCESS_FS_ROUGHLY_READ);
+>   add_fs_rule(ruleset_fd, output_dir,
+> LANDLOCK_ACCESS_FS_WRITE_FILE|LANDLOCK_ACCESS_FS_MAKE_REG|LANDLOCK_ACCESS_FS_REMOVE_FILE);
+>   prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+>   landlock_enforce_ruleset_current(ruleset_fd, 0);
+> }
+> 
+> This will *almost* always work; but if the output directory is
+> /usr/lib/x86_64-linux-gnu/ , loading libraries from that directory
+> won't work anymore, right? So if userspace wanted this to *always*
+> works correctly, it would have to somehow figure out whether there is
+> a path upwards from the output directory (under any mount) that will
+> encounter /usr/lib, and set different permissions if that is the case.
+> That seems unnecessarily messy to me; and I think that this will make
+> it harder for generic commandline tools and such to adopt landlock.
+> 
+> 
+> If you do want to have the ability to deny access to subtrees of trees
+> to which access is permitted, I think that that should be made
+> explicit in the UAPI - e.g. you could (at a later point, after this
+> series has landed) introduce a new EXCLUDE flag for
+> landlock_add_rule() that means "I want to deny the access specified by
+> this rule", or something like that. (And you'd have to very carefully
+> document under which circumstances such rules are actually effective -
+> e.g. if someone grants full access to $HOME, but excludes $HOME/.ssh,
+> an attacker would still be able to rename $HOME/.ssh to $HOME/old_ssh,
+> and then if the program is later restarted and creates the ruleset
+> from scratch again, the old SSH folder will be accessible.)
+> 
 
-Move the Clang, LLC and/or LLVM utils definitions to
-tools/scripts/Makefile.include file and add missing
-includes where needed.
-Honestly, I was inspired by commit c8a950d0d3b9
-("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
-
-I tested with bpftool and perf on Debian/testing AMD64 and
-LLVM/Clang v11.1.0-rc1.
-
-Build instructions:
-
-[ make and make-options ]
-MAKE="make V=1"
-MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
-MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
-
-[ clean-up ]
-$MAKE $MAKE_OPTS -C tools/ clean
-
-[ bpftool ]
-$MAKE $MAKE_OPTS -C tools/bpf/bpftool/
-
-[ perf ]
-PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
-
-I was careful with respecting the user's wish to override custom compiler,
-linker, GNU/binutils and/or LLVM utils settings.
-
-Some personal notes:
-1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
-2. This patch is on top of Linux v5.11-rc3.
-
-I hope to get some feedback from especially Linux-bpf folks.
-
-Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
----
- tools/bpf/bpftool/Makefile                  | 2 --
- tools/bpf/runqslower/Makefile               | 3 ---
- tools/build/feature/Makefile                | 4 ++--
- tools/perf/Makefile.perf                    | 1 -
- tools/scripts/Makefile.include              | 7 +++++++
- tools/testing/selftests/bpf/Makefile        | 3 +--
- tools/testing/selftests/tc-testing/Makefile | 3 +--
- 7 files changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index f897cb5fb12d..71c14efa6e91 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -75,8 +75,6 @@ endif
- 
- INSTALL ?= install
- RM ?= rm -f
--CLANG ?= clang
--LLVM_STRIP ?= llvm-strip
- 
- FEATURE_USER = .bpftool
- FEATURE_TESTS = libbfd disassembler-four-args reallocarray zlib libcap \
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index 4d5ca54fcd4c..9d9fb6209be1 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -3,9 +3,6 @@ include ../../scripts/Makefile.include
- 
- OUTPUT ?= $(abspath .output)/
- 
--CLANG ?= clang
--LLC ?= llc
--LLVM_STRIP ?= llvm-strip
- BPFTOOL_OUTPUT := $(OUTPUT)bpftool/
- DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)bpftool
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 89ba522e377d..3e55edb3ea54 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -1,4 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
-+include ../../scripts/Makefile.include
-+
- FILES=                                          \
-          test-all.bin                           \
-          test-backtrace.bin                     \
-@@ -76,8 +78,6 @@ FILES=                                          \
- FILES := $(addprefix $(OUTPUT),$(FILES))
- 
- PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
--LLVM_CONFIG ?= llvm-config
--CLANG ?= clang
- 
- all: $(FILES)
- 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 62f3deb1d3a8..f4df7534026d 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -176,7 +176,6 @@ endef
- LD += $(EXTRA_LDFLAGS)
- 
- PKG_CONFIG = $(CROSS_COMPILE)pkg-config
--LLVM_CONFIG ?= llvm-config
- 
- RM      = rm -f
- LN      = ln -f
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index 1358e89cdf7d..4255e71f72b7 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -69,6 +69,13 @@ HOSTCC  ?= gcc
- HOSTLD  ?= ld
- endif
- 
-+# Some tools require Clang, LLC and/or LLVM utils
-+CLANG		?= clang
-+LLC		?= llc
-+LLVM_CONFIG	?= llvm-config
-+LLVM_OBJCOPY	?= llvm-objcopy
-+LLVM_STRIP	?= llvm-strip
-+
- ifeq ($(CC_NO_CLANG), 1)
- EXTRA_WARNINGS += -Wstrict-aliasing=3
- endif
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index c51df6b91bef..952e2bc5f3bc 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- include ../../../../scripts/Kbuild.include
- include ../../../scripts/Makefile.arch
-+include ../../../scripts/Makefile.include
- 
- CXX ?= $(CROSS_COMPILE)g++
- 
-@@ -18,8 +19,6 @@ ifneq ($(wildcard $(GENHDR)),)
-   GENFLAGS := -DHAVE_GENHDR
- endif
- 
--CLANG		?= clang
--LLVM_OBJCOPY	?= llvm-objcopy
- BPF_GCC		?= $(shell command -v bpf-gcc;)
- SAN_CFLAGS	?=
- CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS) $(SAN_CFLAGS)		\
-diff --git a/tools/testing/selftests/tc-testing/Makefile b/tools/testing/selftests/tc-testing/Makefile
-index 91fee5c43274..4d639279f41e 100644
---- a/tools/testing/selftests/tc-testing/Makefile
-+++ b/tools/testing/selftests/tc-testing/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+include ../../../scripts/Makefile.include
- 
- top_srcdir = $(abspath ../../../..)
- APIDIR := $(top_scrdir)/include/uapi
-@@ -7,8 +8,6 @@ TEST_GEN_FILES = action.o
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
--CLANG ?= clang
--LLC   ?= llc
- PROBE := $(shell $(LLC) -march=bpf -mcpu=probe -filetype=null /dev/null 2>&1)
- 
- ifeq ($(PROBE),)
--- 
-2.30.0
-
+OK, it's indeed a more pragmatic approach. I'll take your change and
+merge check_access_path_continue() with check_access_path(). Thanks!
