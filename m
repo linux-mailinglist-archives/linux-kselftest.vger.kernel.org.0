@@ -2,86 +2,265 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C5E2F89CD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jan 2021 01:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDBD2F8CBB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jan 2021 10:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbhAPALY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Jan 2021 19:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S1725928AbhAPJzH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Jan 2021 04:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726785AbhAPALX (ORCPT
+        with ESMTP id S1725917AbhAPJzG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Jan 2021 19:11:23 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E888C0613D3
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Jan 2021 16:10:43 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id y8so5532009plp.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Jan 2021 16:10:43 -0800 (PST)
+        Sat, 16 Jan 2021 04:55:06 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A0CC061757;
+        Sat, 16 Jan 2021 01:54:25 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id w1so16752999ejf.11;
+        Sat, 16 Jan 2021 01:54:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bie5cw6IgM1/wPZEPjLzAx0dXtWLAo5L5+QElnLZ0lw=;
-        b=JfcClhi8ThEbUx1xc/HweHvfS3oYjLxZglAOXkbN7XcScAUlZuDr2zU2+kD+vAp3/P
-         3smdJHqUkHCBuuwZ7pHK20OTvgE40/xcI+Ti4kpzD8Wzb2ozimVi06xdFbU3erOGivDF
-         MhuhsGC/a0f17cfDoXYVX3knC12e/7ZQylY/b4/tC5o9NdcA6FlMZwtdSxCi+u8n7xO5
-         cXP6ium5H5iHbmssgy46DfEZKNubp6qlIV+O32p2jbZL4hCN6XBQbt0YtJl+uCrdlu7U
-         UT6qGc8JOZuuYr0IBIs2+6dAcJa8ZA+cKaWnq8CWfErWLJLNMqwpN3ivxtEs7lO8LmZl
-         N/9A==
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wDYHl3JlkFkvKVmXlLVQ/hJ53dcP76tKCr7EU07xaz4=;
+        b=qCzdEmtmI8AgWl4YGS24bdmzOYiK1o6ZjNObuyR/riNjkoELeNsManXJ582Os9yW0j
+         v0Z5+MojEtytjbK2VDy98e1zJ+Fv0vFI2vaK3o74RD5DXdMtNtNFBpm0qipUfYmFElSr
+         EyaGiLU4ZSskbJI47prKEuRLhfse1k9fBEnL+OglPG635+j8H/dDTl9T6mjpjXsJafkM
+         14Jry7DtzuDN+IPd6rNKAj2oVu5SMfeks9jFkHSgJynjTAvalN0dJ30CUAZfko2RJY30
+         5NNZjYCtHeF/zOZEfYn/AK2/P4S98UyUoZorkmUKaUr8pjx9x0eFSQTsEZJb/rgKpROq
+         o8aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bie5cw6IgM1/wPZEPjLzAx0dXtWLAo5L5+QElnLZ0lw=;
-        b=EFxL3CNzsL0H2vFKWgBSYndO7u3OgtQRvlzIPhpAfq04BjGy7lUKMEZoDCEON1Rsu2
-         OeJSX4XKqqEf313zS3ND6ohUL+6vav3jvw8iOg5uEp+We3eKDjJRc9wtCORv7GuvRO4g
-         1dNIaLfQFCaWBax5virLM2XacNhMN9uY7h5Etfs83EzVAE/oKyeX2UzxCWx2/bFRK91b
-         xUP5X+W6XZwZFF6NiBb5ZnrclXtV11prRt3fC72C7+JkmHFIfnlTpj4NZ+Ls024S6gCr
-         RjzHBoij5r8JHkFPlf0bPEF4NPiQap/idQ56qFAykWRfYadyFAXv+x/7Q5Zya7Tq7IP8
-         w9fQ==
-X-Gm-Message-State: AOAM530FY0BiEAg4YCkCTBiNo6oYAO1/Kk7yQUItVVuZ/GEhoYmwmUh7
-        IRhAQkT5OFmq7mHvP6hLzX4H5uS86G1rWA==
-X-Google-Smtp-Source: ABdhPJzCO7p96Akm/DHojJzNSqrjomr1S9QiWXoQxgHDqKHRdHhi0EUQ8a3kodg1g7reFX41E2Lkhg==
-X-Received: by 2002:a17:90a:c8d:: with SMTP id v13mr13334657pja.75.1610755842662;
-        Fri, 15 Jan 2021 16:10:42 -0800 (PST)
-Received: from google.com ([2620:15c:f:10:1ea0:b8ff:fe73:50f5])
-        by smtp.gmail.com with ESMTPSA id l11sm9465799pgt.79.2021.01.15.16.10.41
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wDYHl3JlkFkvKVmXlLVQ/hJ53dcP76tKCr7EU07xaz4=;
+        b=JBzKyODdss2xILS187UtkVBcO/jwblv+9ESeBKGVUjkGXBY80oIUMG+9KV1/JJC2mz
+         ziGdjtXkejfjEhOrRUrvIxg5YjtSzCCCc+1tZzhraztFiPwrIqroWlyQAbPGJcZ1Aecm
+         JSiCnwvbTHyPgJNIajOCTbmTmEbkGX7kI+Z4dRquLAWLkStYcncFztkh847uvaVYLbAf
+         QEHYphZg5qgsCMyj7tNrfjHMKLlV59iMgXiXSE89TYSTkuokxI6yPH+IIKuhE8nQsSEr
+         HwiFiL5kgT4x5+C8v4OHFt/GGHKKAG1D3EK/LmP+BaV1YMknbZVO0+1VPfrcTIEZ0gRo
+         bekQ==
+X-Gm-Message-State: AOAM533mFUjSYR1OGOHksI0AD/32AGr4YeTEiIKgjz7TZ7NUdEIsGPiN
+        n1ePVGuYdNdZak6rJQJn+4M=
+X-Google-Smtp-Source: ABdhPJxwc1bTXXgC3FH942zjLoL+5k4sw9Rc2WllDo3fz+k4vuq6gcMleCggNZbzuBuU5G7tBoBU+w==
+X-Received: by 2002:a17:906:7842:: with SMTP id p2mr4576580ejm.412.1610790863713;
+        Sat, 16 Jan 2021 01:54:23 -0800 (PST)
+Received: from localhost.localdomain (ip-109-40-64-145.web.vodafone.de. [109.40.64.145])
+        by smtp.gmail.com with ESMTPSA id n22sm6810226edr.11.2021.01.16.01.54.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 16:10:41 -0800 (PST)
-Date:   Fri, 15 Jan 2021 16:10:35 -0800
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Huth <thuth@redhat.com>, Jacob Xu <jacobhxu@google.com>,
-        Makarand Sonare <makarandsonare@google.com>
-Subject: Re: [PATCH 6/6] KVM: selftests: Add memslot modification stress test
-Message-ID: <YAIu+7qu5OTRZXsT@google.com>
-References: <20210112214253.463999-1-bgardon@google.com>
- <20210112214253.463999-7-bgardon@google.com>
+        Sat, 16 Jan 2021 01:54:22 -0800 (PST)
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Yulia Kartseva <hex@fb.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Andrey Ignatov <rdna@fb.com>,
+        Thomas Hebb <tommyhebb@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Briana Oursler <briana.oursler@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH RFC] tools: Factor Clang, LLC and LLVM utils definitions
+Date:   Sat, 16 Jan 2021 10:54:04 +0100
+Message-Id: <20210116095413.72820-1-sedat.dilek@gmail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210112214253.463999-7-bgardon@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 12, 2021, Ben Gardon wrote:
-> Add a memslot modification stress test in which a memslot is repeatedly
-> created and removed while vCPUs access memory in another memslot. Most
-> userspaces do not create or remove memslots on running VMs which makes
-> it hard to test races in adding and removing memslots without a
-> dedicated test. Adding and removing a memslot also has the effect of
-> tearing down the entire paging structure, which leads to more page
-> faults and pressure on the page fault handling path than a one-and-done
-> memory population test.
+When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
 
-Would it make sense to integrate this with set_memory_region_test?  At a high
-level, they are doing very similar things.  Not sure how much code can be shared,
-but I assume there's some amount of overlap.
+While looking into the source code I found duplicate assignments
+in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
+
+Move the Clang, LLC and/or LLVM utils definitions to
+tools/scripts/Makefile.include file and add missing
+includes where needed.
+Honestly, I was inspired by commit c8a950d0d3b9
+("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
+
+I tested with bpftool and perf on Debian/testing AMD64 and
+LLVM/Clang v11.1.0-rc1.
+
+Build instructions:
+
+[ make and make-options ]
+MAKE="make V=1"
+MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
+MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
+
+[ clean-up ]
+$MAKE $MAKE_OPTS -C tools/ clean
+
+[ bpftool ]
+$MAKE $MAKE_OPTS -C tools/bpf/bpftool/
+
+[ perf ]
+PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
+
+I was careful with respecting the user's wish to override custom compiler,
+linker, GNU/binutils and/or LLVM utils settings.
+
+Some personal notes:
+1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
+2. This patch is on top of Linux v5.11-rc3.
+
+I hope to get some feedback from especially Linux-bpf folks.
+
+Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+---
+ tools/bpf/bpftool/Makefile                  | 2 --
+ tools/bpf/runqslower/Makefile               | 3 ---
+ tools/build/feature/Makefile                | 4 ++--
+ tools/perf/Makefile.perf                    | 1 -
+ tools/scripts/Makefile.include              | 7 +++++++
+ tools/testing/selftests/bpf/Makefile        | 3 +--
+ tools/testing/selftests/tc-testing/Makefile | 3 +--
+ 7 files changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index f897cb5fb12d..71c14efa6e91 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -75,8 +75,6 @@ endif
+ 
+ INSTALL ?= install
+ RM ?= rm -f
+-CLANG ?= clang
+-LLVM_STRIP ?= llvm-strip
+ 
+ FEATURE_USER = .bpftool
+ FEATURE_TESTS = libbfd disassembler-four-args reallocarray zlib libcap \
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index 4d5ca54fcd4c..9d9fb6209be1 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -3,9 +3,6 @@ include ../../scripts/Makefile.include
+ 
+ OUTPUT ?= $(abspath .output)/
+ 
+-CLANG ?= clang
+-LLC ?= llc
+-LLVM_STRIP ?= llvm-strip
+ BPFTOOL_OUTPUT := $(OUTPUT)bpftool/
+ DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)bpftool
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 89ba522e377d..3e55edb3ea54 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
++include ../../scripts/Makefile.include
++
+ FILES=                                          \
+          test-all.bin                           \
+          test-backtrace.bin                     \
+@@ -76,8 +78,6 @@ FILES=                                          \
+ FILES := $(addprefix $(OUTPUT),$(FILES))
+ 
+ PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+-LLVM_CONFIG ?= llvm-config
+-CLANG ?= clang
+ 
+ all: $(FILES)
+ 
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 62f3deb1d3a8..f4df7534026d 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -176,7 +176,6 @@ endef
+ LD += $(EXTRA_LDFLAGS)
+ 
+ PKG_CONFIG = $(CROSS_COMPILE)pkg-config
+-LLVM_CONFIG ?= llvm-config
+ 
+ RM      = rm -f
+ LN      = ln -f
+diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+index 1358e89cdf7d..4255e71f72b7 100644
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -69,6 +69,13 @@ HOSTCC  ?= gcc
+ HOSTLD  ?= ld
+ endif
+ 
++# Some tools require Clang, LLC and/or LLVM utils
++CLANG		?= clang
++LLC		?= llc
++LLVM_CONFIG	?= llvm-config
++LLVM_OBJCOPY	?= llvm-objcopy
++LLVM_STRIP	?= llvm-strip
++
+ ifeq ($(CC_NO_CLANG), 1)
+ EXTRA_WARNINGS += -Wstrict-aliasing=3
+ endif
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c51df6b91bef..952e2bc5f3bc 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ include ../../../../scripts/Kbuild.include
+ include ../../../scripts/Makefile.arch
++include ../../../scripts/Makefile.include
+ 
+ CXX ?= $(CROSS_COMPILE)g++
+ 
+@@ -18,8 +19,6 @@ ifneq ($(wildcard $(GENHDR)),)
+   GENFLAGS := -DHAVE_GENHDR
+ endif
+ 
+-CLANG		?= clang
+-LLVM_OBJCOPY	?= llvm-objcopy
+ BPF_GCC		?= $(shell command -v bpf-gcc;)
+ SAN_CFLAGS	?=
+ CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS) $(SAN_CFLAGS)		\
+diff --git a/tools/testing/selftests/tc-testing/Makefile b/tools/testing/selftests/tc-testing/Makefile
+index 91fee5c43274..4d639279f41e 100644
+--- a/tools/testing/selftests/tc-testing/Makefile
++++ b/tools/testing/selftests/tc-testing/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++include ../../../scripts/Makefile.include
+ 
+ top_srcdir = $(abspath ../../../..)
+ APIDIR := $(top_scrdir)/include/uapi
+@@ -7,8 +8,6 @@ TEST_GEN_FILES = action.o
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
+-CLANG ?= clang
+-LLC   ?= llc
+ PROBE := $(shell $(LLC) -march=bpf -mcpu=probe -filetype=null /dev/null 2>&1)
+ 
+ ifeq ($(PROBE),)
+-- 
+2.30.0
+
