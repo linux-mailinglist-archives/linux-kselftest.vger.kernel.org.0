@@ -2,330 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 896532F95E1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jan 2021 23:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540862F9673
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jan 2021 00:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730408AbhAQWWD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Jan 2021 17:22:03 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:55106 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730366AbhAQWVs (ORCPT
+        id S1728669AbhAQXzZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jan 2021 18:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbhAQXzY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jan 2021 17:21:48 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMKo8H075267;
-        Sun, 17 Jan 2021 22:20:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=aVLOHaoBygqp0kGdrn1OdqwsPVrpETXymT4FNLNKUF0=;
- b=pdXcSMkSNGmow881DUP6CJ7LIbt+03zQBA3dkJ5BbS7ML8spgf9+AF5q+imRg0ZH6CAD
- f/yQb9FGbCM44I3dOcSjLr53QIQ+XdaKekr++ryI839CdY7yXdS5wFtvhr01qykk3mpE
- kP43SM8hxd2JzpEKbOUCvJifR90vt7/nfDTjKTDChQY2hlTOHKUu0NbButQDHnYDx0Ov
- TSlrZKojtkjboaoZ/ghzHy8cM/H+eWb8+qM3ONXWKYqPt4uCDTDQFQoSePBMIUgBWRHd
- eqQ+fsd5ukB6IYgy6xBkB5+plqqlAfRqQGOWMcXI3fsyQECs0FlIt9JxjckPImcc8VXr kg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 363r3kjvrh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 17 Jan 2021 22:20:50 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMKnIc075485;
-        Sun, 17 Jan 2021 22:20:49 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 3649wnyxuj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 17 Jan 2021 22:20:49 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10HMKgvM028303;
-        Sun, 17 Jan 2021 22:20:42 GMT
-Received: from localhost.localdomain (/95.45.14.174)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 17 Jan 2021 14:20:42 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
-        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 4/4] selftests/bpf: add dump type data tests to btf dump tests
-Date:   Sun, 17 Jan 2021 22:16:04 +0000
-Message-Id: <1610921764-7526-5-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
-References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 bulkscore=0
- spamscore=0 phishscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101170140
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101170140
+        Sun, 17 Jan 2021 18:55:24 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B3AC061573;
+        Sun, 17 Jan 2021 15:54:44 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id s15so7661214plr.9;
+        Sun, 17 Jan 2021 15:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LmlVmr5QZIAuFyhAzTMtvc0ZpiTTs7C1V/Whdgh2hgY=;
+        b=NSDhOJH1IF0DMEv9C6jyJuFO25nj0Tc3RYbK7HP/Vfwt6QN8Nh92s1aJIc8byDsixl
+         1DoO23LH7OtXeCle5o6ochEmi8aWZOuHibBD7rNCeXqP26Pr0wxv2eWcth9/+KXpN1u4
+         w53+hlkr5jjSu+mRPOekDg74fpFiVE+0EBfBdyHWml58afKSjnQWaTr2TjrkULMSmp69
+         ORD6Nl3ryWGzFNLaoAIRbTY5vjoKZ9Txh1h155ocdBgbfJuqbHaFKVReGG4M3SQgEllN
+         9Iy1eHLNt9IO7Ajxwl/4fpl0MEmzo1YaSXrqXStLdbXwAqqkvaSzQk9OJr7Z+6eEzOLO
+         fogw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LmlVmr5QZIAuFyhAzTMtvc0ZpiTTs7C1V/Whdgh2hgY=;
+        b=U9UsbZpY11PoOTdPE3kebznHCLiTnciRFUp4KpNYCBfHgm4lki3qYa1SfCHVTvE4ri
+         MHZkl212BDa//qMBRU+prq/ZIUvTJvOwxuWjQyghzYRsbefcGhhrz83UFOGt0VqGjqdd
+         4tTdOn0QbnlklEA2Np7z/5/S12w494/vHZO3mc4YlnVe+7dKj5z1ZCcqMsXO4ujgFqmq
+         Pr78jwkk+fcRa9R18fR3GV8Is1+OTf+m50Cvmgs2WJr40CmxXAktIYP1YDyEOCGKvvXr
+         KEvsU1jNPjvDEneI67h+fzzqdc6H6+sEmh5eSlp7fx3spGJT58/0M6KJF20GtdhjTP81
+         E+8Q==
+X-Gm-Message-State: AOAM530cgLgy7I+ESVK99Jp5ROJ/y6o+WW2+5GJftS0huVy++qHvIMKh
+        IBQR6EgAQTCsy+SddFGKsXnQmsClc+A=
+X-Google-Smtp-Source: ABdhPJxOwST6O0eP6JbE8aOvb/Gk7fiF9noRUF63dyqYx3BwAhYIx8PTQveV0TD5wbMfO62e4OWw2g==
+X-Received: by 2002:a17:90a:8e84:: with SMTP id f4mr23427129pjo.129.1610927683402;
+        Sun, 17 Jan 2021 15:54:43 -0800 (PST)
+Received: from sol (106-69-181-154.dyn.iinet.net.au. [106.69.181.154])
+        by smtp.gmail.com with ESMTPSA id t6sm14245537pjg.49.2021.01.17.15.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jan 2021 15:54:42 -0800 (PST)
+Date:   Mon, 18 Jan 2021 07:54:37 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bgolaszewski@baylibre.com,
+        linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com
+Subject: Re: [PATCH v2 1/7] selftests: gpio: rework and simplify test
+ implementation
+Message-ID: <20210117235437.GA6841@sol>
+References: <20210107025731.226017-1-warthog618@gmail.com>
+ <20210107025731.226017-2-warthog618@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210107025731.226017-2-warthog618@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test various type data dumping operations by comparing expected
-format with the dumped string; an snprintf-style printf function
-is used to record the string dumped.
+On Thu, Jan 07, 2021 at 10:57:25AM +0800, Kent Gibson wrote:
+> The GPIO mockup selftests are overly complicated with separate
+> implementations of the tests for sysfs and cdev uAPI, and with the cdev
+> implementation being dependent on tools/gpio and libmount.
+> 
+> Rework the test implementation to provide a common test suite with a
+> simplified pluggable uAPI interface.  The cdev implementation utilises
+> the GPIO uAPI directly to remove the dependence on tools/gpio.
+> The simplified uAPI interface removes the need for any file system mount
+> checks in C, and so removes the dependence on libmount.
+> 
+> The rework also fixes the sysfs test implementation which has been broken
+> since the device created in the multiple gpiochip case was split into
+> separate devices.
+> 
+> Fixes: commit 8a39f597bcfd ("gpio: mockup: rework device probing")
+> Signed-off-by: Kent Gibson <warthog618@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 233 ++++++++++++++++++++++
- 1 file changed, 233 insertions(+)
+Just a note that the 'commit' should be removed from the Fixes tag.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index c60091e..262561f4 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -232,6 +232,237 @@ void test_btf_dump_incremental(void)
- 	btf__free(btf);
- }
- 
-+#define STRSIZE				2048
-+#define	EXPECTED_STRSIZE		256
-+
-+void btf_dump_snprintf(void *ctx, const char *fmt, va_list args)
-+{
-+	char *s = ctx, new[STRSIZE];
-+
-+	vsnprintf(new, STRSIZE, fmt, args);
-+	strncat(s, new, STRSIZE);
-+	vfprintf(ctx, fmt, args);
-+}
-+
-+/* skip "enum "/"struct " prefixes */
-+#define SKIP_PREFIX(_typestr, _prefix)					\
-+	do {								\
-+		if (strstr(_typestr, _prefix) == _typestr)		\
-+			_typestr += strlen(_prefix) + 1;		\
-+	} while (0)
-+
-+int btf_dump_data(struct btf *btf, struct btf_dump *d,
-+		  char *ptrtype, __u64 flags, void *ptr,
-+		  char *str, char *expectedval)
-+{
-+	struct btf_dump_emit_type_data_opts opts = { 0 };
-+	int ret = 0, cmp;
-+	__s32 type_id;
-+
-+	opts.sz = sizeof(opts);
-+	opts.compact = true;
-+	if (flags & BTF_F_NONAME)
-+		opts.noname = true;
-+	if (flags & BTF_F_ZERO)
-+		opts.zero = true;
-+	SKIP_PREFIX(ptrtype, "enum");
-+	SKIP_PREFIX(ptrtype, "struct");
-+	SKIP_PREFIX(ptrtype, "union");
-+	type_id = btf__find_by_name(btf, ptrtype);
-+	if (CHECK(type_id <= 0, "find type id",
-+		  "no '%s' in BTF: %d\n", ptrtype, type_id)) {
-+		ret = -ENOENT;
-+		goto err;
-+	}
-+	str[0] = '\0';
-+	ret = btf_dump__emit_type_data(d, type_id, &opts, ptr);
-+	if (CHECK(ret < 0, "btf_dump__emit_type_data",
-+		  "failed: %d\n", ret))
-+		goto err;
-+
-+	cmp = strncmp(str, expectedval, EXPECTED_STRSIZE);
-+	if (CHECK(cmp, "ensure expected/actual match",
-+		  "'%s' does not match expected '%s': %d\n",
-+		  str, expectedval, cmp))
-+		ret = -EFAULT;
-+
-+err:
-+	if (ret)
-+		btf_dump__free(d);
-+	return ret;
-+}
-+
-+#define TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _flags, _expected, ...)	\
-+	do {								\
-+		char _expectedval[EXPECTED_STRSIZE] = _expected;	\
-+		char __ptrtype[64] = #_type;				\
-+		char *_ptrtype = (char *)__ptrtype;			\
-+		static _type _ptrdata = __VA_ARGS__;			\
-+		void *_ptr = &_ptrdata;					\
-+									\
-+		if (btf_dump_data(_b, _d, _ptrtype, _flags, _ptr,	\
-+				  _str, _expectedval))			\
-+			return;						\
-+	} while (0)
-+
-+/* Use where expected data string matches its stringified declaration */
-+#define TEST_BTF_DUMP_DATA_C(_b, _d, _str, _type, _opts, ...)		\
-+	TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _opts,			\
-+			   "(" #_type ")" #__VA_ARGS__,	__VA_ARGS__)
-+
-+void test_btf_dump_data(void)
-+{
-+	struct btf *btf = libbpf_find_kernel_btf();
-+	char str[STRSIZE];
-+	struct btf_dump_opts opts = { .ctx = str };
-+	struct btf_dump *d;
-+
-+	if (CHECK(!btf, "get kernel BTF", "no kernel BTF found"))
-+		return;
-+
-+	d = btf_dump__new(btf, NULL, &opts, btf_dump_snprintf);
-+
-+	if (CHECK(!d, "new dump", "could not create BTF dump"))
-+		return;
-+
-+	/* Verify type display for various types. */
-+
-+	/* simple int */
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, int, 0, 1234);
-+	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME, "1234", 1234);
-+
-+	/* zero value should be printed at toplevel */
-+	TEST_BTF_DUMP_DATA(btf, d, str, int, 0, "(int)0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME, "0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_ZERO, "(int)0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME | BTF_F_ZERO,
-+			   "0", 0);
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, int, 0, -4567);
-+	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME, "-4567", -4567);
-+
-+	/* simple char */
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, char, 0, 100);
-+	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_NONAME, "100", 100);
-+	/* zero value should be printed at toplevel */
-+	TEST_BTF_DUMP_DATA(btf, d, str, char, 0, "(char)0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_NONAME, "0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_ZERO, "(char)0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_NONAME | BTF_F_ZERO,
-+			   "0", 0);
-+
-+	/* simple typedef */
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, uint64_t, 0, 100);
-+	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_NONAME, "1", 1);
-+	/* zero value should be printed at toplevel */
-+	TEST_BTF_DUMP_DATA(btf, d, str, u64, 0, "(u64)0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_NONAME, "0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_ZERO, "(u64)0", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_NONAME | BTF_F_ZERO,
-+			   "0", 0);
-+
-+	/* typedef struct */
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, atomic_t, 0, {.counter = (int)1,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_NONAME, "{1,}",
-+			   {.counter = 1,});
-+	/* typedef with 0 value should be printed at toplevel */
-+	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, 0, "(atomic_t){}",
-+			   {.counter = 0,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_NONAME, "{}",
-+			   {.counter = 0,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_ZERO,
-+			   "(atomic_t){.counter = (int)0,}",
-+			   {.counter = 0,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_NONAME | BTF_F_ZERO,
-+			   "{0,}", {.counter = 0,});
-+	/* enum where enum value does (and does not) exist */
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, enum bpf_cmd, 0, BPF_MAP_CREATE);
-+	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, 0,
-+			   "(enum bpf_cmd)BPF_MAP_CREATE", 0);
-+	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, BTF_F_NONAME,
-+			   "BPF_MAP_CREATE",
-+			   BPF_MAP_CREATE);
-+	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd,
-+			   BTF_F_NONAME | BTF_F_ZERO,
-+			   "BPF_MAP_CREATE", 0);
-+
-+	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, BTF_F_ZERO,
-+			   "(enum bpf_cmd)BPF_MAP_CREATE",
-+			   BPF_MAP_CREATE);
-+	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd,
-+			   BTF_F_NONAME | BTF_F_ZERO,
-+			   "BPF_MAP_CREATE", BPF_MAP_CREATE);
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, enum bpf_cmd, 0, 2000);
-+	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, BTF_F_NONAME,
-+			   "2000", 2000);
-+
-+	/* simple struct */
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, struct btf_enum, 0,
-+			     {.name_off = (__u32)3,.val = (__s32)-1,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_NONAME,
-+			   "{3,-1,}",
-+			   { .name_off = 3, .val = -1,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_NONAME, "{-1,}",
-+			   { .name_off = 0, .val = -1,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum,
-+			   BTF_F_NONAME | BTF_F_ZERO,
-+			   "{0,-1,}",
-+			   { .name_off = 0, .val = -1,});
-+	/* empty struct should be printed */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, 0,
-+			   "(struct btf_enum){}",
-+			   { .name_off = 0, .val = 0,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_NONAME, "{}",
-+			   { .name_off = 0, .val = 0,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_ZERO,
-+			   "(struct btf_enum){.name_off = (__u32)0,.val = (__s32)0,}",
-+			   { .name_off = 0, .val = 0,});
-+
-+	/* struct with pointers */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, 0,
-+			   "(struct list_head){.next = (struct list_head *)0x1,}",
-+			   { .next = (struct list_head *)1 });
-+	/* NULL pointer should not be displayed */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, 0,
-+			   "(struct list_head){}",
-+			   { .next = (struct list_head *)0 });
-+	/* struct with char array */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, 0,
-+			   "(struct bpf_prog_info){.name = (char[])['f','o','o',],}",
-+			   { .name = "foo",});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, BTF_F_NONAME,
-+			   "{['f','o','o',],}",
-+			   {.name = "foo",});
-+	/* leading null char means do not display string */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, 0,
-+			   "(struct bpf_prog_info){}",
-+			   {.name = {'\0', 'f', 'o', 'o'}});
-+	/* handle non-printable characters */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, 0,
-+			   "(struct bpf_prog_info){.name = (char[])[1,2,3,],}",
-+			   { .name = {1, 2, 3, 0}});
-+
-+	/* struct with non-char array */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, 0,
-+			   "(struct __sk_buff){.cb = (__u32[])[1,2,3,4,5,],}",
-+			   { .cb = {1, 2, 3, 4, 5,},});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, BTF_F_NONAME,
-+			   "{[1,2,3,4,5,],}",
-+			   { .cb = { 1, 2, 3, 4, 5},});
-+	/* For non-char, arrays, show non-zero values only */
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, 0,
-+			   "(struct __sk_buff){.cb = (__u32[])[1,],}",
-+			   { .cb = { 0, 0, 1, 0, 0},});
-+
-+	/* struct with bitfields */
-+	TEST_BTF_DUMP_DATA_C(btf, d, str, struct bpf_insn, 0,
-+		{.code = (__u8)1,.dst_reg = (__u8)0x2,.src_reg = (__u8)0x3,.off = (__s16)4,.imm = (__s32)5,});
-+	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_insn, BTF_F_NONAME,
-+			   "{1,0x2,0x3,4,5,}",
-+			   { .code = 1, .dst_reg = 0x2, .src_reg = 0x3, .off = 4,
-+			     .imm = 5,});
-+}
-+
-+
- void test_btf_dump() {
- 	int i;
- 
-@@ -245,4 +476,6 @@ void test_btf_dump() {
- 	}
- 	if (test__start_subtest("btf_dump: incremental"))
- 		test_btf_dump_incremental();
-+	if (test__start_subtest("btf_dump: data"))
-+		test_btf_dump_data();
- }
--- 
-1.8.3.1
+That will be fixed in v3.
 
+The patches have been reviewed from the gpio side - any feedback from the
+selftest side?
+
+Cheers,
+Kent.
