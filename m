@@ -2,192 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7FF2F93F2
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jan 2021 17:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAC62F95E7
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jan 2021 23:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729588AbhAQQT5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Jan 2021 11:19:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52837 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729382AbhAQQTz (ORCPT
+        id S1729944AbhAQWVa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jan 2021 17:21:30 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:59238 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728172AbhAQWV3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jan 2021 11:19:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610900307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=pd4vHRZ+JWsMgYXJ+/MXzVJZ5dZGqNEtTkFAu8s+Zps=;
-        b=Z+tYm7j4G4Jm9zkVWWnB+j84GfLRzpYXY5pBumBX4IlfSpqVi31yCye4No8meGPS+70jA+
-        69LwMZ3Xz/6f5HU7ptGe/ThogpCZvWQ65MinbnfmazuW9M4+Q6mpwYrLWJioC1DUKgA7z9
-        26NLUljT9qoe5gectsmP4whsewZpgAc=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-240-721M2c7hPrGcp0jUz-hD0g-1; Sun, 17 Jan 2021 11:18:25 -0500
-X-MC-Unique: 721M2c7hPrGcp0jUz-hD0g-1
-Received: by mail-qk1-f200.google.com with SMTP id w204so14481901qka.18
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 Jan 2021 08:18:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pd4vHRZ+JWsMgYXJ+/MXzVJZ5dZGqNEtTkFAu8s+Zps=;
-        b=dX9BJz6zB4w0NOMQhqPlmApqiRWbPPtBZkycWQTKlKZxTDp4vLPVMjXCtYZo+HE0yY
-         kn2C+aEQd7kTfiT/qv3iS0ChcAws2DeqFKJrssUiJDD9iuDFVBAClk1wu8YRSX+nKfdK
-         +nfUEPKs/4xICxEkqNe4SoJ9u53G2fs1mheoG50rta57p1ux5rwaJZ6eZFOpVGNEI/fU
-         RF+dojVvE/FX5i+N8hfyIDcYfmZPknbF2Xa+oycDm0Qu3Wdyo1CdaqateJYpeT33MiAT
-         Ma08zmBSsMUrcGXut+Q0iBwJDVOvEdf0cEMEZG3i2xt40ZTEGJKMrVShLgiXfa3LGTlH
-         DjYQ==
-X-Gm-Message-State: AOAM5337m7UVVPmSv0LnKbYihCf9Q734EUrYic7MhPDDke+AfudGLu0A
-        iOFQP4YuaUFviRIKD6SC7+u+XBZmlMpiZGfiqdTKjNv8bryEuMO+hmuy0BCD6nNwcqQWh0DbwJQ
-        /rHrX5TUrW6q2E+uymLHOfwLQEoS9
-X-Received: by 2002:ac8:6b0a:: with SMTP id w10mr19764229qts.224.1610900303863;
-        Sun, 17 Jan 2021 08:18:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz+kM1gexsua9DwpZxib3OZs35p/m5WmKtlUfgtMEYDw+N6CMDgeXGQk41qH5EeAy8ZFkJePQ==
-X-Received: by 2002:ac8:6b0a:: with SMTP id w10mr19764160qts.224.1610900302190;
-        Sun, 17 Jan 2021 08:18:22 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id i17sm8617874qtg.77.2021.01.17.08.18.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 08:18:21 -0800 (PST)
-From:   trix@redhat.com
-To:     shuah@kernel.org, mdf@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v3] selftests: drivers: fpga: A test for interrupt support
-Date:   Sun, 17 Jan 2021 08:18:15 -0800
-Message-Id: <20210117161815.514078-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 17 Jan 2021 17:21:29 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMKTLX188305;
+        Sun, 17 Jan 2021 22:20:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=aQXP7VaR4helTx5fp3TxcstYosj8Dr8qshg/Npy+5HE=;
+ b=dgT6IyMfYYDsofTr4x8Elmp4QLP2p/ghavxHC8fpP/3C3mzG3w5XGinkD+ZKyC1mvd1s
+ Vr1IRRx40pV44i3h7mjIapEDDellBRW7n4nZR6qIoAdnbpm0zx2jvPcOFZ8e4NAh1EiY
+ nuOXBW0Qs0lENhTyE5+42LUAq4RBSF/xHXEFEoSdYtJzVAHSVrRtgPHVcdN8NNT0MFgg
+ P1Br9xPcc7bU4EtZpGpYwylsaAsqBt9aasMNLlu2Ard4t8ZTmtC3NkNk322hffYuBcdb
+ 7KgbM+NCYqmpKe0krp8MmXTYMu5yfSjhMiptmJGXr8IEEgn6QGwNhb7UR9YL2x2inPj4 xA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 363xyhj8ey-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 17 Jan 2021 22:20:29 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMK2VJ160336;
+        Sun, 17 Jan 2021 22:20:28 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 364a1vp91x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 17 Jan 2021 22:20:28 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10HMKR1U028171;
+        Sun, 17 Jan 2021 22:20:27 GMT
+Received: from localhost.localdomain (/95.45.14.174)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sun, 17 Jan 2021 14:20:27 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
+        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 0/4] libbpf: BTF dumper support for typed data
+Date:   Sun, 17 Jan 2021 22:16:00 +0000
+Message-Id: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 adultscore=0
+ mlxscore=0 spamscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101170140
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501 spamscore=0
+ mlxscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101170140
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Add a libbpf dumper function that supports dumping a representation
+of data passed in using the BTF id associated with the data in a
+manner similar to the bpf_snprintf_btf helper.
 
-Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
-an expected result.
+Default output format is identical to that dumped by bpf_snprintf_btf(),
+for example a "struct sk_buff" representation would look like this:
 
-Tested on vf device 0xbcc1
+struct sk_buff){
+ (union){
+  (struct){
+   .next = (struct sk_buff *)0xffffffffffffffff,
+   .prev = (struct sk_buff *)0xffffffffffffffff,
+   (union){
+    .dev = (struct net_device *)0xffffffffffffffff,
+    .dev_scratch = (long unsigned int)18446744073709551615,
+   },
+  },
+...
 
-Sample run with
- # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
- ...
- TAP version 13
- 1..1
- # selftests: drivers/fpga: intr
- # TAP version 13
- # 1..1
- # # Starting 1 tests from 1 test cases.
- # #  RUN           global.afu_intr ...
- # #            OK  global.afu_intr
- # ok 1 global.afu_intr
- # # PASSED: 1 / 1 tests passed.
- # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
- ok 1 selftests: drivers/fpga: intr
+Patches 1 and 2 make functions available that are needed during
+dump operations.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v1: Convert to kselftest_harness.h framework
-v2: reverse xmas tree variables
----
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/drivers/fpga/Makefile |  7 ++++
- tools/testing/selftests/drivers/fpga/config   |  1 +
- tools/testing/selftests/drivers/fpga/intr.c   | 36 +++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
- create mode 100644 tools/testing/selftests/drivers/fpga/config
- create mode 100644 tools/testing/selftests/drivers/fpga/intr.c
+Patch 3 implements the dump functionality in a manner similar
+to that in kernel/bpf/btf.c, but with a view to fitting into
+libbpf more naturally.  For example, rather than using flags,
+boolean dump options are used to control output.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index de610a06cb5c..7ed3ce58d95e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6973,6 +6973,7 @@ F:	Documentation/driver-api/fpga/
- F:	Documentation/fpga/
- F:	drivers/fpga/
- F:	include/linux/fpga/
-+F:	tools/testing/selftests/drivers/fpga/
- 
- FPGA SECURITY MANAGER DRIVERS
- M:	Russ Weight <russell.h.weight@intel.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index afbab4aeef3c..aad4763ec348 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-+TARGETS += drivers/fpga
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
-new file mode 100644
-index 000000000000..eba35c405d5b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -I../../../../../usr/include/
-+CFLAGS += -I../../../../../include/uapi/
-+
-+TEST_GEN_PROGS := intr
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
-new file mode 100644
-index 000000000000..e2111b81d8d7
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/config
-@@ -0,0 +1 @@
-+CONFIG_FPGA_DFL_AFU=m
-diff --git a/tools/testing/selftests/drivers/fpga/intr.c b/tools/testing/selftests/drivers/fpga/intr.c
-new file mode 100644
-index 000000000000..927dcc757f0b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/intr.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/fcntl.h>
-+#include <sys/ioctl.h>
-+#include <linux/fpga-dfl.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+TEST(afu_intr)
-+{
-+	struct dfl_fpga_port_info port_info;
-+	uint32_t irq_num = UINT32_MAX;
-+	int devfd, status;
-+
-+	devfd = open("/dev/dfl-port.0", O_RDONLY);
-+	if (devfd < 0)
-+		SKIP(0, "no fpga afu device 0");
-+	/*
-+	 * From fpga-dl.h :
-+	 * Currently hardware supports up to 1 irq.
-+	 * Return: 0 on success, -errno on failure.
-+	 */
-+	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
-+	ASSERT_EQ(0, status) {
-+		TH_LOG("ioctl() failed to get the number irqs");
-+	}
-+	ASSERT_LT(irq_num, 256) {
-+		TH_LOG("unexpeced number of irqs");
-+	}
-+	close(devfd);
-+}
-+
-+TEST_HARNESS_MAIN
+Patch 4 is a selftest that utilizes a dump printf function
+to snprintf the dump output to a string for comparison with
+expected output.  Tests deliberately mirror those in
+snprintf_btf helper test to keep output consistent.
+
+Changes since RFC [1]
+
+- The initial approach explored was to share the kernel code
+  with libbpf using #defines to paper over the different needs;
+  however it makes more sense to try and fit in with libbpf
+  code style for maintenance.  A comment in the code points at
+  the implementation in kernel/bpf/btf.c and notes that any
+  issues found in it should be fixed there or vice versa;
+  mirroring the tests should help with this also
+  (Andrii)
+
+[1] https://lore.kernel.org/bpf/1610386373-24162-1-git-send-email-alan.maguire@oracle.com/T/#t
+
+Alan Maguire (4):
+  libbpf: add btf_has_size() and btf_int() inlines
+  libbpf: make skip_mods_and_typedefs available internally in libbpf
+  libbpf: BTF dumper support for typed data
+  selftests/bpf: add dump type data tests to btf dump tests
+
+ tools/lib/bpf/btf.h                               |  36 +
+ tools/lib/bpf/btf_dump.c                          | 974 ++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c                            |   4 +-
+ tools/lib/bpf/libbpf.map                          |   5 +
+ tools/lib/bpf/libbpf_internal.h                   |   2 +
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 233 ++++++
+ 6 files changed, 1251 insertions(+), 3 deletions(-)
+
 -- 
-2.27.0
+1.8.3.1
 
